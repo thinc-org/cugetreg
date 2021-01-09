@@ -32,7 +32,7 @@
     }
   },
   "lint-staged": {
-    "{components,pages}/**/*.{js,jsx,ts,tsx}": [
+    "{components,hooks,pages,utils}/**/*.{js,jsx,ts,tsx}": [
       "yarn prettier --write",
       "yarn eslint --fix"
     ]

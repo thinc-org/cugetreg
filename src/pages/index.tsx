@@ -4,9 +4,7 @@ export default function Home() {
   return (
     <>
       <h1>CU Get Reg</h1>
-      <p>
-        <SampleComponent />
-      </p>
+      <SampleComponent />
     </>
   )
 }

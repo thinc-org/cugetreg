@@ -1,17 +1,24 @@
 import { useEffect } from 'react'
 import { AppProps } from 'next/dist/next-server/lib/router/router'
-import { ThemeProvider, CssBaseline } from '@material-ui/core'
+import { ThemeProvider, CssBaseline, useMediaQuery } from '@material-ui/core'
 import Head from 'next/head'
 
 import '../styles/globals.css'
-import { lightTheme } from '../utils/theme'
+import { darkTheme, lightTheme } from '../utils/theme'
 
-function MyApp({ Component, pageProps }: AppProps) {
+function removeElement(id: string) {
+  const element = document.getElementById(id)
+  element?.parentElement?.removeChild(element)
+}
+
+function MyApp({ Component, pageProps, forceDark }: AppProps) {
+  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)', {
+    noSsr: true,
+  })
+
   useEffect(() => {
-    const jssStyles = document.querySelector('#jss-server-side')
-    if (jssStyles) {
-      jssStyles.parentElement?.removeChild(jssStyles)
-    }
+    removeElement('jss-server-side')
+    removeElement('cgr-dark')
   })
 
   return (
@@ -23,7 +30,9 @@ function MyApp({ Component, pageProps }: AppProps) {
           content="minimum-scale=1, initial-scale=1, width=device-width"
         />
       </Head>
-      <ThemeProvider theme={lightTheme}>
+      <ThemeProvider
+        theme={prefersDarkMode || forceDark ? darkTheme : lightTheme}
+      >
         <CssBaseline />
         <Component {...pageProps} />
       </ThemeProvider>

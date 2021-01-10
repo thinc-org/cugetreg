@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 import Document, {
   DocumentContext,
   Head,
@@ -7,6 +7,8 @@ import Document, {
   NextScript,
 } from 'next/document'
 import { ServerStyleSheets } from '@material-ui/core/styles'
+import environment from '../utils/environment'
+import { injectDarkStyle } from '../utils/darkStyleInjector'
 
 export default class MyDocument extends Document {
   render() {
@@ -29,20 +31,33 @@ export default class MyDocument extends Document {
 
 MyDocument.getInitialProps = async (ctx: DocumentContext) => {
   const sheets = new ServerStyleSheets()
+  const darkSheets = new ServerStyleSheets()
   const originalRenderPage = ctx.renderPage
 
-  ctx.renderPage = () =>
-    originalRenderPage({
+  ctx.renderPage = () => {
+    if (environment.production) {
+      originalRenderPage({
+        enhanceApp: (App) => (props) =>
+          darkSheets.collect(<App {...{ forceDark: true }} {...props} />),
+      })
+    }
+    return originalRenderPage({
       enhanceApp: (App) => (props) => sheets.collect(<App {...props} />),
     })
+  }
 
   const initialProps = await Document.getInitialProps(ctx)
+  let styleElement: ReactNode
+  if (environment.production) {
+    const lightStyle = sheets.toString()
+    const darkStyle = darkSheets.toString()
+    styleElement = injectDarkStyle(lightStyle, darkStyle)
+  } else {
+    styleElement = sheets.getStyleElement()
+  }
 
   return {
     ...initialProps,
-    styles: [
-      ...React.Children.toArray(initialProps.styles),
-      sheets.getStyleElement(),
-    ],
+    styles: [...React.Children.toArray(initialProps.styles), styleElement],
   }
 }

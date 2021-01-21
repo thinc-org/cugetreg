@@ -1,17 +1,17 @@
 import { PaletteOptions } from '@material-ui/core/styles/createPalette'
 
-export type PaletteRange = '10' | '30' | '50' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900'
+export type PaletteRange = 10 | 30 | 50 | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900
 
 export type PaletteRangeOptions = Record<PaletteRange, string>
 
 declare module '@material-ui/core/styles/createPalette' {
   interface Palette {
     primaryRange: PaletteRangeOptions
-    secondaryRange: Omit<PaletteRangeOptions, '10' | '30'>
+    secondaryRange: Omit<PaletteRangeOptions, 10 | 30>
   }
   interface PaletteOptions {
     primaryRange: PaletteRangeOptions
-    secondaryRange: Omit<PaletteRangeOptions, '10' | '30'>
+    secondaryRange: Omit<PaletteRangeOptions, 10 | 30>
   }
 }
 

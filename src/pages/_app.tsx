@@ -3,8 +3,8 @@ import { AppProps } from 'next/dist/next-server/lib/router/router'
 import { ThemeProvider, CssBaseline, useMediaQuery } from '@material-ui/core'
 import Head from 'next/head'
 
-import '../styles/globals.css'
-import { darkTheme, lightTheme } from '../utils/theme'
+import '@/styles/globals.css'
+import { darkTheme, lightTheme } from '@/utils/theme'
 
 function removeElement(id: string) {
   const element = document.getElementById(id)

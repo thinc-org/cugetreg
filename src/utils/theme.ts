@@ -1,5 +1,5 @@
 import { createMuiTheme, ThemeOptions } from '@material-ui/core'
-import { deepAssign } from './deepAssign'
+import { deepAssign } from '@/utils/deepAssign'
 
 const baseOptions: ThemeOptions = {
   palette: {

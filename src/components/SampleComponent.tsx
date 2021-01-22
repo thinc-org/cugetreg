@@ -1,5 +1,5 @@
 import { Button, makeStyles } from '@material-ui/core'
-import { useSampleHook } from '../hooks/useSampleHook'
+import { useSampleHook } from '@/hooks/useSampleHook'
 
 const useStyles = makeStyles((theme) => ({
   container: {

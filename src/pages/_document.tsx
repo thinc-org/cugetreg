@@ -7,8 +7,8 @@ import Document, {
   NextScript,
 } from 'next/document'
 import { ServerStyleSheets } from '@material-ui/core/styles'
-import environment from '../utils/environment'
-import { injectDarkStyle } from '../utils/darkStyleInjector'
+import environment from '@/utils/environment'
+import { injectDarkStyle } from '@/utils/darkStyleInjector'
 
 export default class MyDocument extends Document {
   render() {

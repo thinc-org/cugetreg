@@ -1,8 +1,9 @@
-import { createMuiTheme } from '@material-ui/core'
+import { deepAssign } from '@/utils/deepAssign'
+import { createMuiTheme, ThemeOptions } from '@material-ui/core'
 import responsiveFontSizes from './fontSize'
-import palette from './palette'
+import { lightPaletteOptions, darkPaletteOptions } from './palette'
 
-const defaultTheme = createMuiTheme({
+const themeBaseOptions: ThemeOptions = {
   breakpoints: {
     values: {
       // same as mui default breakpoints values, we need to change this later
@@ -13,7 +14,16 @@ const defaultTheme = createMuiTheme({
       xl: 1920,
     },
   },
-  palette,
+}
+
+const lightThemeOptions: ThemeOptions = deepAssign(themeBaseOptions, {
+  palette: lightPaletteOptions,
 })
 
-export default responsiveFontSizes(defaultTheme)
+const darkThemeOptions: ThemeOptions = deepAssign(themeBaseOptions, {
+  palette: darkPaletteOptions,
+})
+
+export const lightTheme = responsiveFontSizes(createMuiTheme(lightThemeOptions))
+
+export const darkTheme = responsiveFontSizes(createMuiTheme(darkThemeOptions))

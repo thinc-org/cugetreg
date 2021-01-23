@@ -4,7 +4,7 @@ import { ThemeProvider, CssBaseline, useMediaQuery } from '@material-ui/core'
 import Head from 'next/head'
 
 import '@/styles/globals.css'
-import { darkTheme, lightTheme } from '@/utils/theme'
+import { darkTheme, lightTheme } from '@/configs/theme'
 
 function removeElement(id: string) {
   const element = document.getElementById(id)
@@ -25,14 +25,9 @@ function MyApp({ Component, pageProps, forceDark }: AppProps) {
     <>
       <Head>
         <title>CU Get Reg</title>
-        <meta
-          name="viewport"
-          content="minimum-scale=1, initial-scale=1, width=device-width"
-        />
+        <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
       </Head>
-      <ThemeProvider
-        theme={prefersDarkMode || forceDark ? darkTheme : lightTheme}
-      >
+      <ThemeProvider theme={prefersDarkMode || forceDark ? darkTheme : lightTheme}>
         <CssBaseline />
         <Component {...pageProps} />
       </ThemeProvider>

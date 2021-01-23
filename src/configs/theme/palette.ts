@@ -1,3 +1,4 @@
+import { deepAssign } from '@/utils/deepAssign'
 import { PaletteOptions } from '@material-ui/core/styles/createPalette'
 
 export type PaletteRange = 10 | 30 | 50 | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900
@@ -10,21 +11,23 @@ declare module '@material-ui/core/styles/createPalette' {
     secondaryRange: Omit<PaletteRangeOptions, 10 | 30>
   }
   interface PaletteOptions {
-    primaryRange: PaletteRangeOptions
-    secondaryRange: Omit<PaletteRangeOptions, 10 | 30>
+    primaryRange?: PaletteRangeOptions
+    secondaryRange?: Omit<PaletteRangeOptions, 10 | 30>
   }
 }
 
-const palette: PaletteOptions = {
+const paletteBaseOptions: PaletteOptions = {
   primary: {
     light: '#E3E5F8',
     main: '#2A2D48',
     dark: '#0C0E1D',
+    contrastText: '#FAFAFF',
   },
   secondary: {
     light: '#E3E5F8',
     main: '#FED239',
     dark: '#FCDF7D',
+    contrastText: '#2A2D48',
   },
   error: {
     light: '#B10C0C',
@@ -62,4 +65,10 @@ const palette: PaletteOptions = {
   },
 }
 
-export default palette
+export const lightPaletteOptions: PaletteOptions = deepAssign(paletteBaseOptions, {
+  type: 'light',
+})
+
+export const darkPaletteOptions: PaletteOptions = deepAssign(paletteBaseOptions, {
+  type: 'dark',
+})

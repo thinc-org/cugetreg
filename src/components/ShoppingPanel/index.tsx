@@ -1,5 +1,6 @@
 import CourseList from './CourseList'
 import { Box } from '@material-ui/core'
+import { useEffect, useState } from 'react'
 
 const exampleCourse = {
   id: 12345,
@@ -11,29 +12,69 @@ const exampleCourse = {
 const exampleCourse2 = {
   id: 12345,
   name: 'URBAN ENVIRONMENT',
-  credit: 2,
+  credit: 1,
   color: 'green',
   category: null,
 }
+const exampleCourse3 = {
+  id: 43241234,
+  name: 'JAPANESE DESIGN CONCEPT',
+  credit: 3,
+  color: 'orange',
+  category: 'Humanity',
+}
+
+interface Course {
+  id: number
+  name: string
+  credit: number
+  color: string
+  category: string | null
+}
 
 const ShoppingPanel = () => {
+  const [credit, useCredit] = useState(0)
+  const [genedCourse, setGenedCourse] = useState<Course[]>([])
+  const [otherCourse, setOtherCourse] = useState<Course[]>([])
+
+  useEffect(() => {
+    const data = [exampleCourse, exampleCourse2, exampleCourse3] //TODO: - don't know what get pass; use mock data
+
+    data.map((course) => {
+      if (course.credit !== null) {
+        useCredit((prev) => {
+          return prev + course.credit
+        })
+      }
+      if (course.category !== null) {
+        setGenedCourse((prev) => {
+          return [...prev, course]
+        })
+      } else {
+        setOtherCourse((prev) => {
+          return [...prev, course]
+        })
+      }
+    })
+  }, [])
+
   return (
     <Box className="container" m={2}>
       <Box className="header" display="flex" alignItems="center" justifyContent="space-between">
         <h1>Selected Course</h1>
-        <h2>Total 17 credits</h2>
+        <h2>Total {credit} credits</h2>
       </Box>
       <Box className="gened-course">
         <h2>Gened Courses</h2>
-        <CourseList course={exampleCourse} />
-        <CourseList course={exampleCourse} />
-        <CourseList course={exampleCourse} />
+        {genedCourse.map((course) => (
+          <CourseList course={course} />
+        ))}
       </Box>
       <Box className="other-course">
         <h2>Other courses</h2>
-        <CourseList course={exampleCourse2} />
-        <CourseList course={exampleCourse2} />
-        <CourseList course={exampleCourse2} />
+        {otherCourse.map((course) => (
+          <CourseList course={course} />
+        ))}
       </Box>
     </Box>
   )

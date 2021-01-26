@@ -33,41 +33,31 @@ interface Course {
 }
 
 const ShoppingPanel = () => {
-  const [credit, useCredit] = useState(0)
-  const [genedCourse, setGenedCourse] = useState<Course[]>([])
-  const [otherCourse, setOtherCourse] = useState<Course[]>([])
+  const [credit, setCredit] = useState(0)
+  const [courses, setCourses] = useState<Course[]>([])
 
   useEffect(() => {
     const data = [exampleCourse, exampleCourse2, exampleCourse3] //TODO: - don't know what get pass; use mock data
+    setCourses(data)
+  }, [])
 
-    data.map((course) => {
+  useEffect(() => {
+    setCredit(0)
+    courses.map((course) => {
       if (course.credit !== null) {
-        useCredit((prev) => {
+        setCredit((prev) => {
           return prev + course.credit
         })
       }
-      if (course.category !== null) {
-        setGenedCourse((prev) => {
-          return [...prev, course]
-        })
-      } else {
-        setOtherCourse((prev) => {
-          return [...prev, course]
-        })
-      }
     })
-  }, [])
+  }, [courses])
 
   const deleteCourse = (id: number, gened: boolean) => {
-    if (gened) {
-      setGenedCourse(genedCourse.filter((item) => item.id !== id))
-    } else {
-      setOtherCourse(otherCourse.filter((item) => item.id !== id))
-    }
+    setCourses(courses.filter((item) => item.id !== id))
   }
 
   const makeSchedule = () => {
-    console.log(genedCourse, otherCourse)
+    console.log(courses)
   }
 
   return (
@@ -78,15 +68,25 @@ const ShoppingPanel = () => {
       </Box>
       <Box className="gened-course">
         <h2>GenEd Courses</h2>
-        {genedCourse.map((course) => (
+        {/* {genedCourse.map((course) => (
           <CourseList course={course} key={course.id} deleteCourse={deleteCourse} />
-        ))}
+        ))} */}
+        {courses.map((course) => {
+          if (course.category !== null) {
+            return <CourseList course={course} key={course.id} deleteCourse={deleteCourse} />
+          }
+        })}
       </Box>
       <Box className="other-course">
         <h2>Other Courses</h2>
-        {otherCourse.map((course) => (
+        {/* {otherCourse.map((course) => (
           <CourseList course={course} key={course.id} deleteCourse={deleteCourse} />
-        ))}
+        ))} */}
+        {courses.map((course) => {
+          if (course.category === null) {
+            return <CourseList course={course} key={course.id} deleteCourse={deleteCourse} />
+          }
+        })}
       </Box>
       <Box mt={6}>
         <Button fullWidth variant="contained" color="primary" onClick={makeSchedule}>

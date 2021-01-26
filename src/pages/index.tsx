@@ -1,7 +1,7 @@
 import SampleComponent from '@/components/SampleComponent'
 import { useTranslation } from 'react-i18next'
 // import SampleComponent from '@/components/SampleComponent'
-import ShoppingPanel from '@/components/ShoppingCart/ShoppingPanel'
+import ShoppingPanel from '@/components/ShoppingPanel'
 
 export default function Home() {
   const { t } = useTranslation()

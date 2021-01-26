@@ -1,6 +1,6 @@
 import { Box } from '@material-ui/core'
 import { Delete } from '@material-ui/icons'
-import CourseLabel from '@/components/ShoppingCart/CourseLabel'
+import CourseLabel from '@/components/ShoppingPanel/CourseLabel'
 
 interface PropsType {
   course: {

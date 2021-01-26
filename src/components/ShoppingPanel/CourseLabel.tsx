@@ -17,7 +17,7 @@ const CourseLabel = (props: PropsType) => {
         px={1.5}
         py={0.5}
         fontWeight="fontWeightMedium"
-        fontSize={12}
+        fontSize={10}
         hidden={category === null}
       >
         {category !== null ? category : ''}

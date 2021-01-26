@@ -65,20 +65,20 @@ const ShoppingPanel = () => {
         <h2>Total {credit} credits</h2>
       </Box>
       <Box className="gened-course">
-        <h2>Gened Courses</h2>
+        <h2>GenEd Courses</h2>
         {genedCourse.map((course) => (
           <CourseList course={course} key={course.id} />
         ))}
       </Box>
       <Box className="other-course">
-        <h2>Other courses</h2>
+        <h2>Other Courses</h2>
         {otherCourse.map((course) => (
           <CourseList course={course} key={course.id} />
         ))}
       </Box>
       <Box mt={6}>
         <Button fullWidth variant="contained" color="primary">
-          Arrange Schedule
+          Make Schedule
         </Button>
       </Box>
     </Box>

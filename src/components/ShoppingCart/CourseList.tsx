@@ -15,8 +15,8 @@ interface PropsType {
 const CourseList = (props: PropsType) => {
   const { id, name, credit, color, category } = props.course
   return (
-    <Box display="flex" justifyContent="space-between" alignItems="center" my={0.5}>
-      <Box>
+    <Box display="flex" alignItems="center" my={0.5} width={1}>
+      <Box display="flex" alignItems="center" justifyContent="space-between" width={3 / 4}>
         <Box mr={0.5}>
           <Delete />
         </Box>
@@ -25,7 +25,7 @@ const CourseList = (props: PropsType) => {
         <Box mx={0.5}>{credit} Credits</Box>
       </Box>
 
-      <Box ml={0.5}>
+      <Box display="flex" justifyContent="center" width={1 / 4} ml={0.5}>
         <CourseLabel color={color} category={category} />
       </Box>
     </Box>

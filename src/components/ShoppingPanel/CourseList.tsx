@@ -33,17 +33,19 @@ const CourseList = (props: PropsType) => {
   return (
     <Box my={1}>
       <Grid container alignItems="center">
-        <Grid item xs={1} sm={1} color="gray">
-          <Delete />
+        <Grid item xs={1} sm={1}>
+          <Box color="gray">
+            <Delete />
+          </Box>
         </Grid>
         <Grid item xs={5} sm={2}>
-          {id}
+          <Box fontSize={16}>{id}</Box>
         </Grid>
         <Grid item xs={6} sm={5}>
-          {name}
+          <Box fontSize={16}>{name}</Box>
         </Grid>
         <Grid item xs={6} sm={2}>
-          {credit} Credits
+          <Box fontSize={16}>{credit} Credits</Box>
         </Grid>
         <Grid container xs={6} sm={2}>
           <CourseLabel color={color} category={category} />

@@ -10,10 +10,12 @@ interface PropsType {
     color: string
     category: string | null
   }
+  deleteCourse: (id: number, gened: boolean) => void
 }
 
 const CourseList = (props: PropsType) => {
   const { id, name, credit, color, category } = props.course
+  const { deleteCourse } = props
   // return (
   //   <Box display="flex" alignItems="center" my={0.5} width={1}>
   //     <Box display="flex" alignItems="center" justifyContent="space-between" width={3 / 4}>
@@ -35,7 +37,7 @@ const CourseList = (props: PropsType) => {
       <Grid container alignItems="center">
         <Grid item xs={1} sm={1}>
           <Box color="gray">
-            <Delete />
+            <Delete onClick={() => deleteCourse(id, category !== null)} style={{ cursor: 'pointer' }} />
           </Box>
         </Grid>
         <Grid item xs={5} sm={2}>
@@ -47,7 +49,7 @@ const CourseList = (props: PropsType) => {
         <Grid item xs={6} sm={2}>
           <Box fontSize={16}>{credit} Credits</Box>
         </Grid>
-        <Grid container xs={6} sm={2}>
+        <Grid item={true} container xs={6} sm={2}>
           <CourseLabel color={color} category={category} />
         </Grid>
       </Grid>

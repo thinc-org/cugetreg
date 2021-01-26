@@ -58,8 +58,18 @@ const ShoppingPanel = () => {
     })
   }, [])
 
+  const deleteCourse = (id: number, gened: boolean) => {
+    if (gened) {
+      setGenedCourse(genedCourse.filter((item) => item.id !== id))
+    } else {
+      setOtherCourse(otherCourse.filter((item) => item.id !== id))
+    }
+  }
+
+  const makeSchedule = () => {}
+
   return (
-    <Box className="container" m={2}>
+    <Box className="container" p={2} bgcolor="white">
       <Box className="header" display="flex" alignItems="center" justifyContent="space-between">
         <h1>Selected Course</h1>
         <h2>Total {credit} credits</h2>
@@ -67,17 +77,17 @@ const ShoppingPanel = () => {
       <Box className="gened-course">
         <h2>GenEd Courses</h2>
         {genedCourse.map((course) => (
-          <CourseList course={course} key={course.id} />
+          <CourseList course={course} key={course.id} deleteCourse={deleteCourse} />
         ))}
       </Box>
       <Box className="other-course">
         <h2>Other Courses</h2>
         {otherCourse.map((course) => (
-          <CourseList course={course} key={course.id} />
+          <CourseList course={course} key={course.id} deleteCourse={deleteCourse} />
         ))}
       </Box>
       <Box mt={6}>
-        <Button fullWidth variant="contained" color="primary">
+        <Button fullWidth variant="contained" color="primary" onClick={() => makeSchedule}>
           Make Schedule
         </Button>
       </Box>

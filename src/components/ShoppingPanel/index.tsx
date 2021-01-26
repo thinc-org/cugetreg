@@ -10,7 +10,7 @@ const exampleCourse = {
   category: 'Social Studies',
 }
 const exampleCourse2 = {
-  id: 12345,
+  id: 123445,
   name: 'URBAN ENVIRONMENT',
   credit: 1,
   color: 'green',
@@ -67,13 +67,13 @@ const ShoppingPanel = () => {
       <Box className="gened-course">
         <h2>Gened Courses</h2>
         {genedCourse.map((course) => (
-          <CourseList course={course} />
+          <CourseList course={course} key={course.id} />
         ))}
       </Box>
       <Box className="other-course">
         <h2>Other courses</h2>
         {otherCourse.map((course) => (
-          <CourseList course={course} />
+          <CourseList course={course} key={course.id} />
         ))}
       </Box>
     </Box>

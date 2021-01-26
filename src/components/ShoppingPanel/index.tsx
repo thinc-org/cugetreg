@@ -1,5 +1,5 @@
 import CourseList from './CourseList'
-import { Box } from '@material-ui/core'
+import { Box, Button } from '@material-ui/core'
 import { useEffect, useState } from 'react'
 
 const exampleCourse = {
@@ -75,6 +75,11 @@ const ShoppingPanel = () => {
         {otherCourse.map((course) => (
           <CourseList course={course} key={course.id} />
         ))}
+      </Box>
+      <Box mt={6}>
+        <Button fullWidth variant="contained" color="primary">
+          Arrange Schedule
+        </Button>
       </Box>
     </Box>
   )

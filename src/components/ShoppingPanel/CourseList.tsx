@@ -17,7 +17,7 @@ const CourseList = (props: PropsType) => {
   return (
     <Box display="flex" alignItems="center" my={0.5} width={1}>
       <Box display="flex" alignItems="center" justifyContent="space-between" width={3 / 4}>
-        <Box mr={0.5}>
+        <Box mr={0.5} color="gray">
           <Delete />
         </Box>
         <Box mx={0.5}>{id}</Box>

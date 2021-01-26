@@ -66,7 +66,9 @@ const ShoppingPanel = () => {
     }
   }
 
-  const makeSchedule = () => {}
+  const makeSchedule = () => {
+    console.log(genedCourse, otherCourse)
+  }
 
   return (
     <Box className="container" p={2} bgcolor="white">
@@ -87,7 +89,7 @@ const ShoppingPanel = () => {
         ))}
       </Box>
       <Box mt={6}>
-        <Button fullWidth variant="contained" color="primary" onClick={() => makeSchedule}>
+        <Button fullWidth variant="contained" color="primary" onClick={makeSchedule}>
           Make Schedule
         </Button>
       </Box>

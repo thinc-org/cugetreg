@@ -52,7 +52,13 @@ MyDocument.getInitialProps = async (ctx: DocumentContext) => {
     const darkStyle = darkSheets.toString()
     styleElement = injectDarkStyle(lightStyle, darkStyle)
   } else {
-    styleElement = sheets.getStyleElement()
+    styleElement = (
+      <>
+        {sheets.getStyleElement()}
+        {/* Prevent FOUC */}
+        <script />
+      </>
+    )
   }
 
   return {

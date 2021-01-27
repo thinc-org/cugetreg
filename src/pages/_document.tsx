@@ -1,11 +1,5 @@
 import React, { ReactNode } from 'react'
-import Document, {
-  DocumentContext,
-  Head,
-  Html,
-  Main,
-  NextScript,
-} from 'next/document'
+import Document, { DocumentContext, Head, Html, Main, NextScript } from 'next/document'
 import { ServerStyleSheets } from '@material-ui/core/styles'
 import environment from '@/utils/environment'
 import { injectDarkStyle } from '@/utils/darkStyleInjector'
@@ -15,9 +9,14 @@ export default class MyDocument extends Document {
     return (
       <Html lang="en">
         <Head>
+          <link rel="preconnect" href="https://fonts.gstatic.com" />
           <link
+            href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;700&display=swap"
             rel="stylesheet"
-            href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+          />
+          <link
+            href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap"
+            rel="stylesheet"
           />
         </Head>
         <body>
@@ -37,8 +36,7 @@ MyDocument.getInitialProps = async (ctx: DocumentContext) => {
   ctx.renderPage = () => {
     if (environment.production) {
       originalRenderPage({
-        enhanceApp: (App) => (props) =>
-          darkSheets.collect(<App {...{ forceDark: true }} {...props} />),
+        enhanceApp: (App) => (props) => darkSheets.collect(<App {...{ forceDark: true }} {...props} />),
       })
     }
     return originalRenderPage({

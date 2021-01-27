@@ -1,16 +1,31 @@
-html,
-body {
-  padding: 0;
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+@font-face {
+  font-family: 'ChulaCharasNew';
+  src: local('ChulaCharasNew'), url('/fonts/ChulaCharasNewReg.ttf');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+@font-face {
+  font-family: 'ChulaCharasNew';
+  src: local('ChulaCharasNew Bold'), url('/fonts/ChulaCharasNewBold.ttf');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
 }
 
-* {
-  box-sizing: border-box;
+@font-face {
+  font-family: 'ChulaCharasNew';
+  src: local('ChulaCharasNew Italic'), url('/fonts/ChulaCharasNewRegIta.ttf');
+  font-weight: normal;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'ChulaCharasNew';
+  src: local('ChulaCharasNew Bold Italic'), url('/fonts/ChulaCharasNewBoldIta.ttf');
+  font-weight: bold;
+  font-style: italic;
+  font-display: swap;
 }

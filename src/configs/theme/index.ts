@@ -4,6 +4,9 @@ import responsiveFontSizes from './fontSize'
 import { lightPaletteOptions, darkPaletteOptions } from './palette'
 
 const themeBaseOptions: ThemeOptions = {
+  typography: {
+    fontFamily: 'Prompt, Poppins, sans-serif',
+  },
   breakpoints: {
     values: {
       // same as mui default breakpoints values, we need to change this later

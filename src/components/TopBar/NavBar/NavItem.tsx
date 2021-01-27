@@ -5,7 +5,7 @@ export const NavItem = styled('a')(({ theme }) => ({
   color: theme.palette.primary.main,
 
   // Extend hit target
-  padding: 8,
-  marginLeft: 16,
-  marginRight: -8,
+  padding: theme.spacing(1),
+  marginLeft: theme.spacing(2),
+  marginRight: theme.spacing(-1),
 }))

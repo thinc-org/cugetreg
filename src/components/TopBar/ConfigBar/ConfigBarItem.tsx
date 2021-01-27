@@ -6,6 +6,6 @@ export const ConfigBarItem = styled('span')(({ theme }) => ({
   color: theme.palette.primaryRange[10],
 
   // Extend hit target
-  padding: 8,
-  marginRight: -8,
+  padding: theme.spacing(1),
+  marginRight: theme.spacing(-1),
 }))

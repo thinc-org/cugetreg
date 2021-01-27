@@ -13,12 +13,7 @@ const useStyles = makeStyles({
   },
 })
 
-const Chip = ({
-  textColor,
-  category,
-  backgroundColor,
-  className,
-}: PropsType) => {
+const Chip = ({ textColor, category, backgroundColor, className }: PropsType) => {
   const styles = useStyles()
 
   return (

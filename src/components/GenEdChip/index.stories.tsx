@@ -12,9 +12,6 @@ export default {
 
 export const GenEdChipStory = () => (
   <ThemeProvider theme={lightTheme}>
-    <GenEdChip
-      color={color('color', '#EB9C03')}
-      category={text('category', 'หมวดวิทย์')}
-    />
+    <GenEdChip color={color('color', '#EB9C03')} category={text('category', 'หมวดวิทย์')} />
   </ThemeProvider>
 )

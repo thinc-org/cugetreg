@@ -7,14 +7,7 @@ interface PropsType {
 
 const GenedChip = ({ color, category }: PropsType) => {
   const BACKGROUND_COLOR = '#FFFFFF'
-  return (
-    <EnhancedChip
-      borderColor={color}
-      backgroundColor={BACKGROUND_COLOR}
-      textColor={color}
-      category={category}
-    />
-  )
+  return <EnhancedChip borderColor={color} backgroundColor={BACKGROUND_COLOR} textColor={color} category={category} />
 }
 
 export default GenedChip

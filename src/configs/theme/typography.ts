@@ -1,10 +1,7 @@
 import { Theme, TypographyVariant } from '@material-ui/core'
 import { TypographyStyleOptions } from '@material-ui/core/styles/createTypography'
 
-const baseTypographyVariantOptions: Record<
-  TypographyVariant,
-  TypographyStyleOptions
-> = {
+const baseTypographyVariantOptions: Record<TypographyVariant, TypographyStyleOptions> = {
   h1: {
     letterSpacing: 0,
     lineHeight: 'normal',
@@ -89,10 +86,7 @@ const baseTypographyVariantOptions: Record<
   },
 }
 
-const mobileTypographyVariantOptions: Record<
-  TypographyVariant,
-  TypographyStyleOptions
-> = {
+const mobileTypographyVariantOptions: Record<TypographyVariant, TypographyStyleOptions> = {
   h1: {},
   h2: {},
   h3: {},

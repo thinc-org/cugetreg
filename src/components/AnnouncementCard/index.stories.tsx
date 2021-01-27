@@ -1,20 +1,48 @@
 import React from 'react'
-import AnnouncementCard, { PropTypes } from '.'
-import { Meta, Story } from '@storybook/react/types-6-0'
+import AnnouncementCard from '.'
+import { Meta } from '@storybook/react/types-6-0'
 import { array, text, withKnobs } from '@storybook/addon-knobs'
 import { date } from '@storybook/addon-knobs'
+import { makeStyles, ThemeProvider } from '@material-ui/core'
+import { lightTheme } from '@/configs/theme'
 
 export default {
   title: 'Component/AnnouncementCard',
   decorators: [withKnobs],
 } as Meta
 
-export const Tempalte = () => (
-  <AnnouncementCard
-    date={new Date(date('date', new Date()))}
-    imageURL={text('imageURL', 'https://libreshot.com/wp-content/uploads/2018/10/thermo-camera.jpg')}
-    title={text('title', 'test')}
-    tags={array('tags', ['test1', 'test2'])}
-    body={text('body', 'lorem yipsum')}
-  />
-)
+const useStyles = makeStyles({
+  root: {
+    backgroundColor: '#2A2D48',
+    width: '100vw',
+    height: '100vh',
+    padding: '10px',
+  },
+})
+
+export const AnnouncementCardStory = () => {
+  const styles = useStyles()
+  return (
+    <ThemeProvider theme={lightTheme}>
+      <div className={styles.root}>
+        <AnnouncementCard
+          date={new Date(date('date', new Date()))}
+          imageURL={text(
+            'imageURL',
+            'https://foreignpolicy.com/wp-content/uploads/2020/07/Marine-Thailand-Exercise-GettyImages-1203838332.jpg'
+          )}
+          title={text(
+            'title',
+            'เปิดวิชาเรียนใหม่ 0201170 Military Science เสริมสร้างวินัยทหารในตัวคุณ'
+          )}
+          tags={array('tags', ['เปิดวิชา', 'เปิดวิชา'])}
+          geneds={array('tags', ['หมวดวิทย์'])}
+          body={text(
+            'body',
+            'เนื้อหาวิชา วิทยาการทหาร ยุทธศาสตร์ชาติ ประวัติศาสตร์การทหาร กองทัพบก กองทัพอากาศ กองทัพเรือ ...'
+          )}
+        />
+      </div>
+    </ThemeProvider>
+  )
+}

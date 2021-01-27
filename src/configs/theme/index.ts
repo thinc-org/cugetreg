@@ -1,15 +1,16 @@
 import { deepAssign } from '@/utils/deepAssign'
+import { lightPaletteOptions, darkPaletteOptions } from './palette'
 import { createMuiTheme, ThemeOptions } from '@material-ui/core'
 import responsiveFontSizes from './fontSize'
-import { lightPaletteOptions, darkPaletteOptions } from './palette'
+import overrides from './overrides'
 
 const themeBaseOptions: ThemeOptions = {
   typography: {
-    fontFamily: 'Prompt, Poppins, sans-serif',
+    htmlFontSize: 16,
+    fontFamily: ['Prompt', 'Poppins', 'sans-serif'].join(' '),
   },
   breakpoints: {
     values: {
-      // same as mui default breakpoints values, we need to change this later
       xs: 0,
       sm: 600,
       md: 960,
@@ -17,6 +18,7 @@ const themeBaseOptions: ThemeOptions = {
       xl: 1920,
     },
   },
+  overrides: overrides,
 }
 
 const lightThemeOptions: ThemeOptions = deepAssign(themeBaseOptions, {

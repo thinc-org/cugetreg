@@ -4,6 +4,7 @@ import { ThemeProvider, CssBaseline, useMediaQuery } from '@material-ui/core'
 import Head from 'next/head'
 
 import '@/styles/globals.css'
+import '@/i18n'
 import { darkTheme, lightTheme } from '@/configs/theme'
 
 function removeElement(id: string) {

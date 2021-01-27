@@ -1,8 +1,8 @@
 import React, { ReactNode } from 'react'
 import Document, { DocumentContext, Head, Html, Main, NextScript } from 'next/document'
 import { ServerStyleSheets } from '@material-ui/core/styles'
-import environment from '@/utils/environment'
 import { injectDarkStyle } from '@/utils/darkStyleInjector'
+import { enableDarkTheme, production } from '@/utils/environment'
 
 export default class MyDocument extends Document {
   render() {
@@ -32,9 +32,10 @@ MyDocument.getInitialProps = async (ctx: DocumentContext) => {
   const sheets = new ServerStyleSheets()
   const darkSheets = new ServerStyleSheets()
   const originalRenderPage = ctx.renderPage
+  const injectDarkTheme = enableDarkTheme && production
 
   ctx.renderPage = () => {
-    if (environment.production) {
+    if (injectDarkTheme) {
       originalRenderPage({
         enhanceApp: (App) => (props) => darkSheets.collect(<App {...{ forceDark: true }} {...props} />),
       })
@@ -46,7 +47,7 @@ MyDocument.getInitialProps = async (ctx: DocumentContext) => {
 
   const initialProps = await Document.getInitialProps(ctx)
   let styleElement: ReactNode
-  if (environment.production) {
+  if (injectDarkTheme) {
     const lightStyle = sheets.toString()
     const darkStyle = darkSheets.toString()
     styleElement = injectDarkStyle(lightStyle, darkStyle)

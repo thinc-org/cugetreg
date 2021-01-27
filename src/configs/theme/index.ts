@@ -1,8 +1,15 @@
 import { deepAssign } from '@/utils/deepAssign'
 import { lightPaletteOptions, darkPaletteOptions } from './palette'
-import { createMuiTheme, ThemeOptions } from '@material-ui/core'
-import responsiveFontSizes from './fontSize'
-import overrideTheme from './overrides'
+import { createMuiTheme, Theme, ThemeOptions } from '@material-ui/core'
+import overrideMuiTypography from './typography'
+import overrideMuiBaseComponent from './overrides'
+
+const buildTheme = (themeOptions: ThemeOptions): Theme => {
+  const theme = createMuiTheme(themeOptions)
+  overrideMuiTypography(theme)
+  overrideMuiBaseComponent(theme)
+  return theme
+}
 
 const themeBaseOptions: ThemeOptions = {
   typography: {
@@ -28,6 +35,5 @@ const darkThemeOptions: ThemeOptions = deepAssign(themeBaseOptions, {
   palette: darkPaletteOptions,
 })
 
-export const lightTheme = overrideTheme(responsiveFontSizes(createMuiTheme(lightThemeOptions)))
-
-export const darkTheme = overrideTheme(responsiveFontSizes(createMuiTheme(darkThemeOptions)))
+export const lightTheme = buildTheme(lightThemeOptions)
+export const darkTheme = buildTheme(darkThemeOptions)

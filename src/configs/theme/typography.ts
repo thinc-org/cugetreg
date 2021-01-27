@@ -1,7 +1,7 @@
 import { Theme, TypographyVariant } from '@material-ui/core'
 import { TypographyStyleOptions } from '@material-ui/core/styles/createTypography'
 
-const baseFontOptions: Record<TypographyVariant, TypographyStyleOptions> = {
+const baseTypographyVariantOptions: Record<TypographyVariant, TypographyStyleOptions> = {
   h1: {
     letterSpacing: 0,
     lineHeight: 'normal',
@@ -46,7 +46,7 @@ const baseFontOptions: Record<TypographyVariant, TypographyStyleOptions> = {
   },
   subtitle2: {
     letterSpacing: 0.1,
-    lineHeight: 24,
+    lineHeight: '24px',
     fontSize: 12,
     fontWeight: 400,
   },
@@ -86,7 +86,7 @@ const baseFontOptions: Record<TypographyVariant, TypographyStyleOptions> = {
   },
 }
 
-const mobileFontOptions: Record<TypographyVariant, TypographyStyleOptions> = {
+const mobileTypographyVariantOptions: Record<TypographyVariant, TypographyStyleOptions> = {
   h1: {},
   h2: {},
   h3: {},
@@ -102,14 +102,14 @@ const mobileFontOptions: Record<TypographyVariant, TypographyStyleOptions> = {
   overline: {},
 }
 
-const responsiveFontSizes = (defaultTheme: Theme): Theme => {
+const overrideMuiTypography = (defaultTheme: Theme): Theme => {
   const { breakpoints, typography } = defaultTheme
   const { pxToRem } = typography
 
-  Object.keys(baseFontOptions).forEach((key: string) => {
+  Object.keys(baseTypographyVariantOptions).forEach((key: string) => {
     const variant = key as TypographyVariant
-    const { ...baseStyle } = baseFontOptions[variant]
-    const { ...mobileStyle } = mobileFontOptions[variant]
+    const { ...baseStyle } = baseTypographyVariantOptions[variant]
+    const { ...mobileStyle } = mobileTypographyVariantOptions[variant]
     if (typeof baseStyle.fontSize === 'number') {
       baseStyle.fontSize = pxToRem(baseStyle.fontSize)
     }
@@ -126,4 +126,4 @@ const responsiveFontSizes = (defaultTheme: Theme): Theme => {
   return defaultTheme
 }
 
-export default responsiveFontSizes
+export default overrideMuiTypography

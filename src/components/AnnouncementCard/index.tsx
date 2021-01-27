@@ -1,10 +1,10 @@
-import { useCardStyles } from './styles'
+import { BoxContainer, Image, Tag } from './styles'
 import Chip from '@material-ui/core/Chip'
-import Typography from '@material-ui/core/Typography'
+import { Typography } from '@material-ui/core'
 import { format } from 'date-fns'
 import { th } from 'date-fns/locale'
 
-interface PropTypes {
+export interface PropTypes {
   date: Date
   imageURL: string
   title: string
@@ -12,9 +12,7 @@ interface PropTypes {
   body: string
 }
 
-export const AnnouncementCard = ({ date, imageURL, title, tags, body }: PropTypes) => {
-  const cardStyles = useCardStyles()
-
+const AnnouncementCard = ({ date, imageURL, title, tags, body }: PropTypes) => {
   const tag = tags.map((text) => {
     return <Chip key={text} label={text} />
   })
@@ -22,8 +20,8 @@ export const AnnouncementCard = ({ date, imageURL, title, tags, body }: PropType
   const dateText = format(date, 'dd/mm/yyyy hh:mm', { locale: th })
 
   return (
-    <div className={cardStyles.root}>
-      {imageURL && <img className={cardStyles.image} src={imageURL} alt="announcement Image" />}
+    <BoxContainer display="flex">
+      {imageURL && <Image src={imageURL} alt="announcement Image" />}
       <div>
         <div>
           <Typography variant="subtitle1">{dateText}</Typography>
@@ -31,9 +29,11 @@ export const AnnouncementCard = ({ date, imageURL, title, tags, body }: PropType
             {title}
           </Typography>
         </div>
-        <div className={cardStyles.tag}>{tag}</div>
+        <Tag>{tag}</Tag>
         <p>{body}</p>
       </div>
-    </div>
+    </BoxContainer>
   )
 }
+
+export default AnnouncementCard

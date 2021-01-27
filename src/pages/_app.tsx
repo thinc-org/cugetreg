@@ -6,6 +6,8 @@ import Head from 'next/head'
 import '@/styles/globals.css'
 import '@/i18n'
 import { darkTheme, lightTheme } from '@/configs/theme'
+import { TopBar } from '@/components/TopBar'
+import { Container } from '@/components/Container'
 
 function removeElement(id: string) {
   const element = document.getElementById(id)
@@ -30,7 +32,10 @@ function MyApp({ Component, pageProps, forceDark }: AppProps) {
       </Head>
       <ThemeProvider theme={prefersDarkMode || forceDark ? darkTheme : lightTheme}>
         <CssBaseline />
-        <Component {...pageProps} />
+        <TopBar />
+        <Container>
+          <Component {...pageProps} />
+        </Container>
       </ThemeProvider>
     </>
   )

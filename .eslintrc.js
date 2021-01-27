@@ -25,6 +25,15 @@ module.exports = {
     '@typescript-eslint/explicit-module-boundary-types': 0,
     'react-hooks/exhaustive-deps': 'warn',
     'react-hooks/rules-of-hooks': 'error',
+    '@typescript-eslint/ban-types': [
+      'error',
+      {
+        extendDefaults: true,
+        types: {
+          '{}': false,
+        },
+      },
+    ],
   },
   settings: {
     react: {

@@ -95,7 +95,6 @@ const responsiveFontSizes = (defaultTheme: Theme): Theme => {
       ...baseStyle,
       [breakpoints.down('md')]: mobileStyle,
     })
-    console.log(variant, typography[variant])
   })
 
   return defaultTheme

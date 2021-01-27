@@ -1,11 +1,10 @@
-import { styled } from '@material-ui/core'
+import { Button, styled } from '@material-ui/core'
 
-export const NavBarItem = styled('a')(({ theme }) => ({
+export const NavBarItem = styled(Button)(({ theme }) => ({
   ...theme.typography.h6,
   color: theme.palette.primary.main,
 
   // Extend hit target
-  padding: theme.spacing(1),
   marginLeft: theme.spacing(2),
   marginRight: theme.spacing(-1),
 }))

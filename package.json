@@ -8,8 +8,8 @@
     "start": "next start",
     "export": "yarn build && yarn next export",
     "ci": "yarn && yarn export && yarn build-storybook && mv storybook-static out/storybook",
-    "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "storybook": "start-storybook -s ./public -p 6006",
+    "build-storybook": "build-storybook -s ./public"
   },
   "dependencies": {
     "@material-ui/core": "^4.11.2",

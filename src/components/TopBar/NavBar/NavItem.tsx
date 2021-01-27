@@ -1,8 +1,8 @@
 import { styled } from '@material-ui/core'
 
 export const NavItem = styled('a')(({ theme }) => ({
+  ...theme.typography.h6,
   color: theme.palette.primary.main,
-  fontSize: 18,
 
   // Extend hit target
   padding: 8,

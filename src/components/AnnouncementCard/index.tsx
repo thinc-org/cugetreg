@@ -4,14 +4,7 @@ import GenEdChip from '@/components/GenEdChip'
 import { Typography, Box } from '@material-ui/core'
 import { format } from 'date-fns'
 import { th } from 'date-fns/locale'
-import {
-  BACKGROUND_COLOR,
-  BOX_BORDER_RADIUS,
-  CHIP_BG,
-  CHIP_TEXT,
-  GENED_CHIP_COLOR,
-  IMAGE_SIZE,
-} from './const'
+import { BACKGROUND_COLOR, BOX_BORDER_RADIUS, CHIP_BG, CHIP_TEXT, GENED_CHIP_COLOR, IMAGE_SIZE } from './const'
 
 export interface PropTypes {
   date: Date
@@ -22,14 +15,7 @@ export interface PropTypes {
   body: string
 }
 
-const AnnouncementCard = ({
-  date,
-  imageURL,
-  title,
-  tags,
-  geneds,
-  body,
-}: PropTypes) => {
+const AnnouncementCard = ({ date, imageURL, title, tags, geneds, body }: PropTypes) => {
   const styles = useStyles()
 
   const tagComponent = tags.map((text) => (
@@ -47,27 +33,11 @@ const AnnouncementCard = ({
   const dateText = format(date, 'dd/mm/yyyy hh:mm', { locale: th })
 
   return (
-    <BoxContainer
-      borderRadius={BOX_BORDER_RADIUS}
-      bgcolor={BACKGROUND_COLOR}
-      display="flex"
-      height={IMAGE_SIZE}
-    >
-      {imageURL && (
-        <Image
-          width={IMAGE_SIZE}
-          height={IMAGE_SIZE}
-          src={imageURL}
-          alt="announcement Image"
-        />
-      )}
+    <BoxContainer borderRadius={BOX_BORDER_RADIUS} bgcolor={BACKGROUND_COLOR} display="flex" height={IMAGE_SIZE}>
+      {imageURL && <Image width={IMAGE_SIZE} height={IMAGE_SIZE} src={imageURL} alt="announcement Image" />}
       <div>
         <div>
-          <Typography
-            key="subtitle1"
-            variant="subtitle1"
-            className={styles.date}
-          >
+          <Typography key="subtitle1" variant="subtitle1" className={styles.date}>
             {dateText}
           </Typography>
           <Typography key="h6" variant="h6">

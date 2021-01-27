@@ -11,21 +11,14 @@ function generateDarkModeScript(changes: ChangedLine[]) {
       if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
         var s = document.querySelector('#jss-server-side')
         var l = s.innerText.split('\\n')
-        ${changes
-          .map(
-            (change) => `l[${change.line}] = ${JSON.stringify(change.newValue)}`
-          )
-          .join('\n')}
+        ${changes.map((change) => `l[${change.line}] = ${JSON.stringify(change.newValue)}`).join('\n')}
         s.innerText = l.join('\\n')
       }
     })()
 `
 }
 
-export function injectDarkStyle(
-  lightStyle: string,
-  darkStyle: string
-): ReactNode {
+export function injectDarkStyle(lightStyle: string, darkStyle: string): ReactNode {
   const lightLines = lightStyle.split('\n')
   const darkLines = darkStyle.split('\n')
   if (lightLines.length !== darkLines.length) {
@@ -57,14 +50,8 @@ export function injectDarkStyle(
 
   return (
     <>
-      <style
-        id="jss-server-side"
-        dangerouslySetInnerHTML={{ __html: lightStyle }}
-      />
-      <script
-        id="cgr-dark"
-        dangerouslySetInnerHTML={{ __html: darkModeScript }}
-      />
+      <style id="jss-server-side" dangerouslySetInnerHTML={{ __html: lightStyle }} />
+      <script id="cgr-dark" dangerouslySetInnerHTML={{ __html: darkModeScript }} />
     </>
   )
 }

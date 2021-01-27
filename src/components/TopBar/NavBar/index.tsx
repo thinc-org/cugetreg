@@ -10,6 +10,7 @@ const useStyles = makeStyles((theme) => ({
   navBar: {
     width: '100%',
     height: 83,
+    backgroundColor: theme.palette.background.paper,
     color: theme.palette.primary.main,
   },
   logo: {

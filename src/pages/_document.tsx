@@ -56,7 +56,7 @@ MyDocument.getInitialProps = async (ctx: DocumentContext) => {
       <>
         {sheets.getStyleElement()}
         {/* Prevent FOUC */}
-        <script />
+        <script dangerouslySetInnerHTML={{ __html: '(function() {})()' }} />
       </>
     )
   }

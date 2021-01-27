@@ -3,57 +3,83 @@ import { TypographyStyleOptions } from '@material-ui/core/styles/createTypograph
 
 const baseFontOptions: Record<TypographyVariant, TypographyStyleOptions> = {
   h1: {
+    letterSpacing: 0,
+    lineHeight: 'auto',
     fontSize: 60,
     fontWeight: 700,
   },
   h2: {
+    letterSpacing: 0,
+    lineHeight: 'auto',
     fontSize: 48,
     fontWeight: 700,
   },
   h3: {
+    letterSpacing: 0,
+    lineHeight: 56,
     fontSize: 30,
     fontWeight: 700,
   },
   h4: {
+    letterSpacing: 0,
+    lineHeight: 36,
     fontSize: 24,
     fontWeight: 700,
   },
   h5: {
+    letterSpacing: 0.18,
+    lineHeight: 24,
     fontSize: 20,
     fontWeight: 700,
   },
   h6: {
+    letterSpacing: 0.15,
+    lineHeight: 24,
     fontSize: 18,
     fontWeight: 400,
   },
   subtitle1: {
+    letterSpacing: 0.18,
+    lineHeight: 24,
     fontSize: 14,
     fontWeight: 400,
   },
   subtitle2: {
+    letterSpacing: 0.1,
+    lineHeight: 24,
     fontSize: 12,
     fontWeight: 400,
   },
   body1: {
+    letterSpacing: 0.16,
+    lineHeight: 24,
     fontFamily: 'ChulaCharasNew',
     fontSize: 16,
     fontWeight: 400,
   },
   body2: {
+    letterSpacing: 0.25,
+    lineHeight: 20,
     fontFamily: 'ChulaCharasNew',
     fontSize: 14,
     fontWeight: 400,
   },
   button: {
+    letterSpacing: 0.4,
+    lineHeight: 16,
     fontSize: 12,
     fontWeight: 400,
     textTransform: 'uppercase',
   },
   caption: {
+    letterSpacing: 0.4,
+    lineHeight: 16,
     fontSize: 10,
     fontWeight: 400,
   },
   overline: {
+    letterSpacing: 0.4,
+    lineHeight: 16,
     fontSize: 8,
     fontWeight: 400,
     textTransform: 'uppercase',

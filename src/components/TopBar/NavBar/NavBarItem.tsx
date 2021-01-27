@@ -1,6 +1,6 @@
 import { styled } from '@material-ui/core'
 
-export const NavItem = styled('a')(({ theme }) => ({
+export const NavBarItem = styled('a')(({ theme }) => ({
   ...theme.typography.h6,
   color: theme.palette.primary.main,
 

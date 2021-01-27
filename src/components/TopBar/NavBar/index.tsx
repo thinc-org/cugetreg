@@ -2,7 +2,7 @@ import { makeStyles } from '@material-ui/core'
 import { useTranslation } from 'react-i18next'
 import Link from 'next/link'
 import logo from '@/assets/images/logo.svg'
-import { NavItem } from './NavItem'
+import { NavBarItem } from './NavBarItem'
 import { FlexOne } from '@/components/FlexOne'
 import { FlexContainer } from '../FlexContainer'
 
@@ -32,11 +32,11 @@ export function NavBar() {
           </a>
         </Link>
         {/* TODO: replace with actual links */}
-        <NavItem>{t('navBar:news')}</NavItem>
-        <NavItem>{t('navBar:searchCourses')}</NavItem>
-        <NavItem>{t('navBar:timetable')}</NavItem>
+        <NavBarItem>{t('navBar:news')}</NavBarItem>
+        <NavBarItem>{t('navBar:searchCourses')}</NavBarItem>
+        <NavBarItem>{t('navBar:timetable')}</NavBarItem>
         <FlexOne />
-        <NavItem>{t('navBar:signin')}</NavItem>
+        <NavBarItem>{t('navBar:signin')}</NavBarItem>
       </FlexContainer>
     </div>
   )

@@ -8,7 +8,7 @@ import '@/i18n'
 import { darkTheme, lightTheme } from '@/configs/theme'
 import { TopBar } from '@/components/TopBar'
 import { Container } from '@/components/Container'
-import { enableDarkTheme } from '@/utils/environment'
+import env from '@/utils/env/macro'
 
 function removeElement(id: string) {
   const element = document.getElementById(id)
@@ -17,7 +17,7 @@ function removeElement(id: string) {
 
 function MyApp({ Component, pageProps, forceDark }: AppProps) {
   const prefersDarkMode =
-    enableDarkTheme &&
+    env.features.darkTheme &&
     // features.darkTheme is a constant
     // eslint-disable-next-line react-hooks/rules-of-hooks
     useMediaQuery('(prefers-color-scheme: dark)', {
@@ -26,7 +26,7 @@ function MyApp({ Component, pageProps, forceDark }: AppProps) {
 
   useEffect(() => {
     removeElement('jss-server-side')
-    if (enableDarkTheme) {
+    if (env.features.darkTheme) {
       removeElement('cgr-dark')
     }
   })

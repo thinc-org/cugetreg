@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react'
 import Document, { DocumentContext, Head, Html, Main, NextScript } from 'next/document'
 import { ServerStyleSheets } from '@material-ui/core/styles'
 import { injectDarkStyle } from '@/utils/darkStyleInjector'
-import { enableDarkTheme, production } from '@/utils/environment'
+import env from '@/utils/env/macro'
 
 export default class MyDocument extends Document {
   render() {
@@ -32,7 +32,7 @@ MyDocument.getInitialProps = async (ctx: DocumentContext) => {
   const sheets = new ServerStyleSheets()
   const darkSheets = new ServerStyleSheets()
   const originalRenderPage = ctx.renderPage
-  const injectDarkTheme = enableDarkTheme && production
+  const injectDarkTheme = env.features.darkTheme && env.isProduction
 
   ctx.renderPage = () => {
     if (injectDarkTheme) {

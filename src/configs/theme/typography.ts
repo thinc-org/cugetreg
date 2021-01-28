@@ -66,7 +66,7 @@ const baseTypographyVariantOptions: Record<TypographyVariant, TypographyStyleOpt
   },
   button: {
     letterSpacing: 0.4,
-    lineHeight: '16px',
+    lineHeight: '28px',
     fontSize: 12,
     fontWeight: 400,
     textTransform: 'uppercase',

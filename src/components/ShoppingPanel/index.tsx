@@ -61,16 +61,13 @@ const ShoppingPanel = () => {
   }
 
   return (
-    <Box className="container" p={2} bgcolor="white">
+    <Box className="container" p={2} bgcolor="white" width="100%" maxWidth={650}>
       <Box className="header" display="flex" alignItems="center" justifyContent="space-between">
         <h1>Selected Course</h1>
         <h2>Total {credit} credits</h2>
       </Box>
       <Box className="gened-course">
         <h2>GenEd Courses</h2>
-        {/* {genedCourse.map((course) => (
-          <CourseList course={course} key={course.id} deleteCourse={deleteCourse} />
-        ))} */}
         {courses.map((course) => {
           if (course.category !== null) {
             return <CourseList course={course} key={course.id} deleteCourse={deleteCourse} />
@@ -79,9 +76,6 @@ const ShoppingPanel = () => {
       </Box>
       <Box className="other-course">
         <h2>Other Courses</h2>
-        {/* {otherCourse.map((course) => (
-          <CourseList course={course} key={course.id} deleteCourse={deleteCourse} />
-        ))} */}
         {courses.map((course) => {
           if (course.category === null) {
             return <CourseList course={course} key={course.id} deleteCourse={deleteCourse} />

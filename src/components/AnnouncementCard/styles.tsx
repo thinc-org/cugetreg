@@ -15,5 +15,4 @@ export const useStyles = makeStyles((theme) => ({
   date: {
     color: theme.palette.primaryRange['100'],
   },
-  chip: {},
 }))

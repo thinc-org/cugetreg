@@ -1,10 +1,11 @@
 import { BoxContainer, Image, useStyles } from './styles'
 import Chip from '@/components/Chip'
 import GenEdChip from '@/components/GenEdChip'
-import { Typography, Box } from '@material-ui/core'
+import { Typography, Box, useTheme } from '@material-ui/core'
 import { format } from 'date-fns'
 import { th } from 'date-fns/locale'
-import { BACKGROUND_COLOR, BOX_BORDER_RADIUS, CHIP_BG, CHIP_TEXT, GENED_CHIP_COLOR, IMAGE_SIZE } from './const'
+import { BACKGROUND_COLOR, BOX_BORDER_RADIUS, IMAGE_SIZE, TAG_INNER_MARGIN, TAG_VERTICAL_MARGIN } from './const'
+import { ThemeType } from '@/configs/theme'
 
 export interface PropTypes {
   date: Date
@@ -17,15 +18,20 @@ export interface PropTypes {
 
 const AnnouncementCard = ({ date, imageURL, title, tags, geneds, body }: PropTypes) => {
   const styles = useStyles()
+  const theme = useTheme<ThemeType>()
+
+  const CHIP_BG = theme.palette.primary.light
+  const CHIP_TEXT = theme.palette.secondary.contrastText
+  const GENED_CHIP_COLOR = theme.palette.secondaryRange['900']
 
   const tagComponent = tags.map((text) => (
-    <Box key={text} mr={2}>
+    <Box key={text} mr={TAG_INNER_MARGIN}>
       <Chip category={text} backgroundColor={CHIP_BG} textColor={CHIP_TEXT} />
     </Box>
   ))
 
   const genedsComponents = geneds.map((text) => (
-    <Box key={text} mr={2}>
+    <Box key={text} mr={TAG_INNER_MARGIN}>
       <GenEdChip category={text} color={GENED_CHIP_COLOR} />
     </Box>
   ))
@@ -44,7 +50,7 @@ const AnnouncementCard = ({ date, imageURL, title, tags, geneds, body }: PropTyp
             {title}
           </Typography>
         </div>
-        <Box display="flex" my={3}>
+        <Box display="flex" my={TAG_VERTICAL_MARGIN}>
           {tagComponent} {genedsComponents}
         </Box>
         <Typography key="body1" variant="body1" component="p">

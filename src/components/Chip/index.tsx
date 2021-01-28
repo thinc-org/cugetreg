@@ -27,7 +27,7 @@ const Chip = ({ textColor, category, backgroundColor, className }: PropsType) =>
       color={textColor}
       textAlign="center"
     >
-      <Typography key="overline" variant="overline" className={styles.font}>
+      <Typography variant="overline" className={styles.font}>
         {category}
       </Typography>
     </Box>

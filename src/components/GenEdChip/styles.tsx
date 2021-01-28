@@ -5,7 +5,7 @@ interface EnhancedChipProps {
   borderColor: string
 }
 
-export const EnhancedChip = styled(Chip)({
+export const EnhancedChip = styled<EnhancedChipProps>(Chip)({
   padding: '1px 12px',
   boxSizing: 'border-box',
   border: ({ borderColor }: EnhancedChipProps) => `1px solid ${borderColor}`,

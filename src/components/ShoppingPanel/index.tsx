@@ -1,6 +1,7 @@
 import CourseList from './CourseList'
-import { Box, Button } from '@material-ui/core'
+import { Box, Button, Typography } from '@material-ui/core'
 import useShoppingPanel from '@/hooks/useShoppingPanel.ts'
+import TableChartIcon from '@material-ui/icons/TableChart'
 
 const mockData = [
   {
@@ -32,17 +33,17 @@ const ShoppingPanel = () => {
   return (
     <Box className="container" p={2} bgcolor="white" width="100%" maxWidth={650}>
       <Box className="header" display="flex" alignItems="center" justifyContent="space-between">
-        <h1>Selected Course</h1>
-        <h2>Total {credit} credits</h2>
+        <Typography variant="h1">Selected Course</Typography>
+        <Typography variant="h2">Total {credit} Credits</Typography>
       </Box>
       <Box className="gened-course">
-        <h2>GenEd Courses</h2>
+        <Typography variant="h2">GenEd Courses</Typography>
         {courses.map((course) => {
           return course.category && <CourseList course={course} key={course.id} deleteCourse={deleteCourse} />
         })}
       </Box>
       <Box className="other-course">
-        <h2>Other Courses</h2>
+        <Typography variant="h2">Other Courses</Typography>
         {courses.map((course) => {
           return !course.category && <CourseList course={course} key={course.id} deleteCourse={deleteCourse} />
         })}

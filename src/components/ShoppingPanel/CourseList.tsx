@@ -1,4 +1,4 @@
-import { Box, Grid } from '@material-ui/core'
+import { Box, Grid, makeStyles } from '@material-ui/core'
 import { Delete } from '@material-ui/icons'
 import CourseLabel from '@/components/ShoppingPanel/CourseLabel'
 
@@ -12,14 +12,20 @@ interface PropsType {
   }
   deleteCourse: (id: number) => void
 }
+const useStyles = makeStyles({
+  root: {
+    cursor: 'pointer',
+  },
+})
 
 const CourseList = ({ course: { id, name, credit, color, category }, deleteCourse }: PropsType) => {
+  const classes = useStyles()
   return (
     <Box my={1}>
       <Grid container alignItems="center">
         <Grid item xs={1} sm={1}>
           <Box color="gray">
-            <Delete onClick={() => deleteCourse(id)} style={{ cursor: 'pointer' }} />
+            <Delete onClick={() => deleteCourse(id)} className={classes.root} />
           </Box>
         </Grid>
         <Grid item xs={5} sm={2}>

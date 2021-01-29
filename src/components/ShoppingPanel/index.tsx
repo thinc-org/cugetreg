@@ -1,64 +1,33 @@
 import CourseList from './CourseList'
 import { Box, Button } from '@material-ui/core'
-import { useEffect, useState } from 'react'
+import useShoppingPanel from '@/hooks/useShoppingPanel.ts'
 
-const exampleCourse = {
-  id: 12345,
-  name: 'URBAN ENVIRONMENT',
-  credit: 2,
-  color: 'green',
-  category: 'Social Studies',
-}
-const exampleCourse2 = {
-  id: 123445,
-  name: 'URBAN ENVIRONMENT',
-  credit: 1,
-  color: 'green',
-  category: null,
-}
-const exampleCourse3 = {
-  id: 43241234,
-  name: 'JAPANESE DESIGN CONCEPT',
-  credit: 3,
-  color: 'orange',
-  category: 'Humanity',
-}
-
-interface Course {
-  id: number
-  name: string
-  credit: number
-  color: string
-  category: string | null
-}
+const mockData = [
+  {
+    id: 12345,
+    name: 'URBAN ENVIRONMENT',
+    credit: 2,
+    color: 'green',
+    category: 'Social Studies',
+  },
+  {
+    id: 123445,
+    name: 'URBAN ENVIRONMENT',
+    credit: 1,
+    color: 'green',
+    category: null,
+  },
+  {
+    id: 43241234,
+    name: 'JAPANESE DESIGN CONCEPT',
+    credit: 3,
+    color: 'orange',
+    category: 'Humanity',
+  },
+]
 
 const ShoppingPanel = () => {
-  const [credit, setCredit] = useState(0)
-  const [courses, setCourses] = useState<Course[]>([])
-
-  useEffect(() => {
-    const data = [exampleCourse, exampleCourse2, exampleCourse3] //TODO: - don't know what get pass; use mock data
-    setCourses(data)
-  }, [])
-
-  useEffect(() => {
-    setCredit(0)
-    courses.map((course) => {
-      if (course.credit !== null) {
-        setCredit((prev) => {
-          return prev + course.credit
-        })
-      }
-    })
-  }, [courses])
-
-  const deleteCourse = (id: number) => {
-    setCourses(courses.filter((item) => item.id !== id))
-  }
-
-  const makeSchedule = () => {
-    console.log(courses)
-  }
+  const { credit, courses, deleteCourse, makeSchedule } = useShoppingPanel(mockData)
 
   return (
     <Box className="container" p={2} bgcolor="white" width="100%" maxWidth={650}>

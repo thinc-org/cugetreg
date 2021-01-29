@@ -12,11 +12,11 @@ export interface AnnouncementCardPropTypes {
   imageURL: string
   title: string
   tags: string[]
-  geneds: GenEd[]
+  genEds: GenEd[]
   body: string
 }
 
-const AnnouncementCard = ({ date, imageURL, title, tags, geneds, body }: AnnouncementCardPropTypes) => {
+const AnnouncementCard = ({ date, imageURL, title, tags, genEds, body }: AnnouncementCardPropTypes) => {
   const styles = useStyles()
   const theme = useTheme<Theme>()
 
@@ -29,9 +29,9 @@ const AnnouncementCard = ({ date, imageURL, title, tags, geneds, body }: Announc
     </Box>
   ))
 
-  const genedsComponents = geneds.map((gened) => (
-    <Box key={gened} mr={TAG_INNER_MARGIN}>
-      <GenEdChip category={gened} />
+  const genedsComponents = genEds.map((genEd) => (
+    <Box key={genEd} mr={TAG_INNER_MARGIN}>
+      <GenEdChip category={genEd} />
     </Box>
   ))
 

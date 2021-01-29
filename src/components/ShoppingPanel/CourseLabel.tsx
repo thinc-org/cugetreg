@@ -4,8 +4,7 @@ interface PropsType {
   color: string
   category: string | null
 }
-const CourseLabel = (props: PropsType) => {
-  const { color, category } = props
+const CourseLabel = ({ color, category }: PropsType) => {
   return (
     <>
       <Box

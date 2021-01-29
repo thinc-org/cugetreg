@@ -52,7 +52,7 @@ const ShoppingPanel = () => {
     })
   }, [courses])
 
-  const deleteCourse = (id: number, gened: boolean) => {
+  const deleteCourse = (id: number) => {
     setCourses(courses.filter((item) => item.id !== id))
   }
 

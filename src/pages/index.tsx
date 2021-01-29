@@ -1,11 +1,9 @@
 import SampleComponent from '@/components/SampleComponent'
 import ShoppingPanel from '@/components/ShoppingPanel'
-import { useTranslation } from 'react-i18next'
 import { Button, Modal, Box } from '@material-ui/core'
 import { useState } from 'react'
 
 export default function Home() {
-  const { t } = useTranslation()
   const [showModal, setShowModal] = useState(false)
 
   function handleClose(event: React.MouseEvent<HTMLElement>) {
@@ -17,9 +15,6 @@ export default function Home() {
 
   return (
     <>
-      <h1>{t('appName')}</h1>
-      <SampleComponent />
-      {/* <h1>CU Get Reg</h1> */}
       <SampleComponent />
 
       <Button onClick={() => setShowModal(true)} variant="contained" color="primary">
@@ -37,8 +32,6 @@ export default function Home() {
           <ShoppingPanel />
         </Box>
       </Modal>
-
-      {/* <h1>{t('appName')}</h1> */}
     </>
   )
 }

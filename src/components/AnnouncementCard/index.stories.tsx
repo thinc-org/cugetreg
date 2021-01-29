@@ -5,20 +5,21 @@ import { array, text, withKnobs } from '@storybook/addon-knobs'
 import { date } from '@storybook/addon-knobs'
 import { makeStyles, ThemeProvider } from '@material-ui/core'
 import { lightTheme } from '@/configs/theme'
+import { GenEd } from '@/utils/types'
 
 export default {
   title: 'Component/AnnouncementCard',
   decorators: [withKnobs],
 } as Meta
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   root: {
-    backgroundColor: '#2A2D48',
+    backgroundColor: theme.palette.primary.main,
     width: '100vw',
     height: '100vh',
-    padding: '10px',
+    padding: theme.spacing(1.25),
   },
-})
+}))
 
 export const AnnouncementCardStory = () => {
   const styles = useStyles()
@@ -33,7 +34,7 @@ export const AnnouncementCardStory = () => {
           )}
           title={text('title', 'เปิดวิชาเรียนใหม่ 0201170 Military Science เสริมสร้างวินัยทหารในตัวคุณ')}
           tags={array('tags', ['เปิดวิชา', 'เปิดวิชา'])}
-          geneds={array('tags', ['หมวดวิทย์'])}
+          geneds={array('geneds', [GenEd.HU]) as GenEd[]}
           body={text(
             'body',
             'เนื้อหาวิชา วิทยาการทหาร ยุทธศาสตร์ชาติ ประวัติศาสตร์การทหาร กองทัพบก กองทัพอากาศ กองทัพเรือ ...'

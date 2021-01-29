@@ -1,4 +1,5 @@
-import { Box, makeStyles, Typography } from '@material-ui/core'
+import { Theme, useTheme } from '@material-ui/core'
+import { EnhancedChip, useStyles } from './styles'
 
 interface PropsType {
   textColor: string
@@ -7,31 +8,20 @@ interface PropsType {
   className?: string
 }
 
-const useStyles = makeStyles({
-  font: {
-    fontWeight: 'bold',
-  },
-})
-
-const Chip = ({ textColor, category, backgroundColor, className }: PropsType) => {
+const ChipTemplate = ({ textColor, category, backgroundColor, className }: PropsType) => {
+  const theme = useTheme<Theme>()
   const styles = useStyles()
+  const padding = `${theme.spacing(0.25)}px ${theme.spacing(1)}px`
 
   return (
-    <Box
-      className={className}
-      display="inline-flex"
-      bgcolor={backgroundColor}
-      borderRadius={100}
-      px={2.5}
-      py={0.25}
-      color={textColor}
-      textAlign="center"
-    >
-      <Typography variant="overline" className={styles.font}>
-        {category}
-      </Typography>
-    </Box>
+    <EnhancedChip
+      className={`${className} ${styles.root}`}
+      textColor={textColor}
+      backgroundColor={backgroundColor}
+      padding={padding}
+      label={category}
+    />
   )
 }
 
-export default Chip
+export default ChipTemplate

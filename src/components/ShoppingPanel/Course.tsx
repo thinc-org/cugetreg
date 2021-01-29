@@ -1,6 +1,7 @@
 import { Box, Grid, makeStyles, useTheme, Typography } from '@material-ui/core'
 import { Delete } from '@material-ui/icons'
 import CourseLabel from '@/components/ShoppingPanel/CourseLabel'
+import { lightTheme } from '@/configs/theme'
 
 interface PropsType {
   course: {
@@ -18,10 +19,9 @@ const useStyles = makeStyles({
   },
 })
 
-const CourseList = ({ course: { id, name, credit, color, category }, deleteCourse }: PropsType) => {
+const Course = ({ course: { id, name, credit, color, category }, deleteCourse }: PropsType) => {
   const classes = useStyles()
-  const theme = useTheme<ThemeType>()
-  const TRASH_ICON_COLOR = theme.palette.primaryRange[100]
+  const TRASH_ICON_COLOR = lightTheme.palette.primaryRange[100]
 
   return (
     <Box my={1}>
@@ -33,7 +33,6 @@ const CourseList = ({ course: { id, name, credit, color, category }, deleteCours
         </Grid>
         <Grid item xs={5} sm={2}>
           <Typography variant="body1">{id}</Typography>
-          {/* <Box fontSize={BODY_FONT_SIZE}></Box> */}
         </Grid>
         <Grid item xs={6} sm={5}>
           <Typography variant="body1">{name}</Typography>
@@ -49,4 +48,4 @@ const CourseList = ({ course: { id, name, credit, color, category }, deleteCours
   )
 }
 
-export default CourseList
+export default Course

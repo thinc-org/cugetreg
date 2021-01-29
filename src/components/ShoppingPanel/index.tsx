@@ -1,4 +1,4 @@
-import CourseList from './CourseList'
+import Course from './Course'
 import { Box, Button, Typography } from '@material-ui/core'
 import useShoppingPanel from '@/hooks/useShoppingPanel.ts'
 import TableChartIcon from '@material-ui/icons/TableChart'
@@ -39,18 +39,21 @@ const ShoppingPanel = () => {
       <Box className="gened-course">
         <Typography variant="h2">GenEd Courses</Typography>
         {courses.map((course) => {
-          return course.category && <CourseList course={course} key={course.id} deleteCourse={deleteCourse} />
+          return course.category && <Course course={course} key={course.id} deleteCourse={deleteCourse} />
         })}
       </Box>
       <Box className="other-course">
         <Typography variant="h2">Other Courses</Typography>
         {courses.map((course) => {
-          return !course.category && <CourseList course={course} key={course.id} deleteCourse={deleteCourse} />
+          return !course.category && <Course course={course} key={course.id} deleteCourse={deleteCourse} />
         })}
       </Box>
       <Box mt={6}>
         <Button fullWidth variant="contained" color="primary" onClick={makeSchedule}>
-          Make Schedule
+          <TableChartIcon></TableChartIcon>
+          <Box ml={1}>
+            <Typography variant="body1">Make Schedule</Typography>
+          </Box>
         </Button>
       </Box>
     </Box>

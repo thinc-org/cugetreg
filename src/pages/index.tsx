@@ -8,7 +8,7 @@ export default function Home() {
   const { t } = useTranslation()
   const [showModal, setShowModal] = useState(false)
 
-  function handleClose(event: any) {
+  function handleClose(event: React.MouseEvent<HTMLElement>) {
     event.preventDefault()
     if (event.target === event.currentTarget) {
       setShowModal(false)

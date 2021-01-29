@@ -1,7 +1,6 @@
 import { Box, Grid, makeStyles, useTheme, Typography } from '@material-ui/core'
 import { Delete } from '@material-ui/icons'
 import CourseLabel from '@/components/ShoppingPanel/CourseLabel'
-import { ThemeType } from '@/configs/theme'
 
 interface PropsType {
   course: {

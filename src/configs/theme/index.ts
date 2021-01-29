@@ -39,4 +39,3 @@ const darkThemeOptions: ThemeOptions = deepAssign(themeBaseOptions, {
 
 export const lightTheme = buildTheme(lightThemeOptions)
 export const darkTheme = buildTheme(darkThemeOptions)
-export type ThemeType = typeof lightTheme

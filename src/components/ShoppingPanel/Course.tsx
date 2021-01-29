@@ -1,4 +1,4 @@
-import { Box, Grid, makeStyles, useTheme, Typography } from '@material-ui/core'
+import { Box, Grid, makeStyles, Typography } from '@material-ui/core'
 import { Delete } from '@material-ui/icons'
 import CourseLabel from '@/components/ShoppingPanel/CourseLabel'
 import { lightTheme } from '@/configs/theme'
@@ -14,21 +14,32 @@ interface PropsType {
   deleteCourse: (id: number) => void
 }
 const useStyles = makeStyles({
-  root: {
+  wrapper: {
+    margin: '6px 0px',
+  },
+  rootGrid: {
+    alignItems: 'center',
+  },
+  deleteButton: {
     cursor: 'pointer',
+    color: lightTheme.palette.primaryRange[100],
+  },
+  deleteButtonWrapper: {
+    display: 'flex',
+    justifyContent: 'start',
+    alighItems: 'center',
   },
 })
 
 const Course = ({ course: { id, name, credit, color, category }, deleteCourse }: PropsType) => {
   const classes = useStyles()
-  const TRASH_ICON_COLOR = lightTheme.palette.primaryRange[100]
 
   return (
-    <Box my={1}>
-      <Grid container alignItems="center">
+    <Box className={classes.wrapper}>
+      <Grid className={classes.rootGrid} container>
         <Grid item xs={1} sm={1}>
-          <Box color={TRASH_ICON_COLOR} display="flex" justifyContent="start" alignItems="center">
-            <Delete onClick={() => deleteCourse(id)} className={classes.root} />
+          <Box className={classes.deleteButtonWrapper}>
+            <Delete onClick={() => deleteCourse(id)} className={classes.deleteButton} />
           </Box>
         </Grid>
         <Grid item xs={5} sm={2}>

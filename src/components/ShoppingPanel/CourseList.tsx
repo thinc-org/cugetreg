@@ -1,4 +1,4 @@
-import { Box, Grid, makeStyles, useTheme } from '@material-ui/core'
+import { Box, Grid, makeStyles, useTheme, Typography } from '@material-ui/core'
 import { Delete } from '@material-ui/icons'
 import CourseLabel from '@/components/ShoppingPanel/CourseLabel'
 import { ThemeType } from '@/configs/theme'
@@ -23,6 +23,7 @@ const CourseList = ({ course: { id, name, credit, color, category }, deleteCours
   const classes = useStyles()
   const theme = useTheme<ThemeType>()
   const TRASH_ICON_COLOR = theme.palette.primaryRange[100]
+
   return (
     <Box my={1}>
       <Grid container alignItems="center">
@@ -32,13 +33,14 @@ const CourseList = ({ course: { id, name, credit, color, category }, deleteCours
           </Box>
         </Grid>
         <Grid item xs={5} sm={2}>
-          <Box fontSize={16}>{id}</Box>
+          <Typography variant="body1">{id}</Typography>
+          {/* <Box fontSize={BODY_FONT_SIZE}></Box> */}
         </Grid>
         <Grid item xs={6} sm={5}>
-          <Box fontSize={16}>{name}</Box>
+          <Typography variant="body1">{name}</Typography>
         </Grid>
         <Grid item xs={6} sm={2}>
-          <Box fontSize={16}>{credit} Credits</Box>
+          <Typography variant="body1">{credit} Credits</Typography>
         </Grid>
         <Grid item={true} container xs={6} sm={2}>
           <CourseLabel color={color} category={category} />

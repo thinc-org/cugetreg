@@ -31,7 +31,7 @@ const ShoppingPanel = () => {
   const { credit, courses, deleteCourse, makeSchedule } = useShoppingPanel(mockData)
 
   return (
-    <Box className="container" p={2} bgcolor="white" width="100%" maxWidth={650}>
+    <Box className="container" p={2} bgcolor="white" width="100%" maxWidth={650} borderRadius={4}>
       <Box className="header" display="flex" alignItems="center" justifyContent="space-between">
         <Typography variant="h1">Selected Course</Typography>
         <Typography variant="h2">Total {credit} Credits</Typography>

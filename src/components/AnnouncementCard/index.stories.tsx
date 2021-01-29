@@ -34,7 +34,7 @@ export const AnnouncementCardStory = () => {
           )}
           title={text('title', 'เปิดวิชาเรียนใหม่ 0201170 Military Science เสริมสร้างวินัยทหารในตัวคุณ')}
           tags={array('tags', ['เปิดวิชา', 'เปิดวิชา'])}
-          geneds={array('geneds', [GenEd.HU]) as GenEd[]}
+          geneds={array('geneds', [GenEd.HU, GenEd.IN]) as GenEd[]}
           body={text(
             'body',
             'เนื้อหาวิชา วิทยาการทหาร ยุทธศาสตร์ชาติ ประวัติศาสตร์การทหาร กองทัพบก กองทัพอากาศ กองทัพเรือ ...'

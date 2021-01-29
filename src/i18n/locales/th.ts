@@ -18,7 +18,7 @@ export const navBar = {
   signin: 'เข้าสู่ระบบ',
 }
 
-export const gened = {
+export const genEd = {
   [GenEd.HU]: 'หมวดมนุษย์',
   [GenEd.IN]: 'หมวดสหฯ',
   [GenEd.SC]: 'หมวดวิทย์',

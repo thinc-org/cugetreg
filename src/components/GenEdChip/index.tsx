@@ -11,7 +11,7 @@ interface GenedChipPropsType {
 
 const GenedChip = ({ category }: GenedChipPropsType) => {
   const theme = useTheme<Theme>()
-  const { t } = useTranslation('gened')
+  const { t } = useTranslation('genEd')
   const BACKGROUND_COLOR = theme.palette.background.paper
   const color = genedColorMapper(category, theme)
 

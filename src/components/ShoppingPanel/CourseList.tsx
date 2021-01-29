@@ -1,6 +1,7 @@
-import { Box, Grid, makeStyles } from '@material-ui/core'
+import { Box, Grid, makeStyles, useTheme } from '@material-ui/core'
 import { Delete } from '@material-ui/icons'
 import CourseLabel from '@/components/ShoppingPanel/CourseLabel'
+import { ThemeType } from '@/configs/theme'
 
 interface PropsType {
   course: {
@@ -20,11 +21,13 @@ const useStyles = makeStyles({
 
 const CourseList = ({ course: { id, name, credit, color, category }, deleteCourse }: PropsType) => {
   const classes = useStyles()
+  const theme = useTheme<ThemeType>()
+  const TRASH_ICON_COLOR = theme.palette.primaryRange[100]
   return (
     <Box my={1}>
       <Grid container alignItems="center">
         <Grid item xs={1} sm={1}>
-          <Box color="gray">
+          <Box color={TRASH_ICON_COLOR}>
             <Delete onClick={() => deleteCourse(id)} className={classes.root} />
           </Box>
         </Grid>

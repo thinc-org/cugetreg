@@ -13,9 +13,7 @@ interface PropsType {
   deleteCourse: (id: number, gened: boolean) => void
 }
 
-const CourseList = (props: PropsType) => {
-  const { id, name, credit, color, category } = props.course
-  const { deleteCourse } = props
+const CourseList = ({ course: { id, name, credit, color, category }, deleteCourse }: PropsType) => {
   // return (
   //   <Box display="flex" alignItems="center" my={0.5} width={1}>
   //     <Box display="flex" alignItems="center" justifyContent="space-between" width={3 / 4}>

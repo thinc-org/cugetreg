@@ -33,17 +33,17 @@ const ShoppingPanel = () => {
   return (
     <Box className="container" p={2} bgcolor="white" width="100%" maxWidth={650} borderRadius={4}>
       <Box className="header" display="flex" alignItems="center" justifyContent="space-between">
-        <Typography variant="h1">Selected Course</Typography>
-        <Typography variant="h2">Total {credit} Credits</Typography>
+        <Typography variant="h4">Selected Course</Typography>
+        <Typography variant="h6">Total {credit} Credits</Typography>
       </Box>
       <Box className="gened-course">
-        <Typography variant="h2">GenEd Courses</Typography>
+        <Typography variant="h6">GenEd Courses</Typography>
         {courses.map((course) => {
           return course.category && <Course course={course} key={course.id} deleteCourse={deleteCourse} />
         })}
       </Box>
       <Box className="other-course">
-        <Typography variant="h2">Other Courses</Typography>
+        <Typography variant="h6">Other Courses</Typography>
         {courses.map((course) => {
           return !course.category && <Course course={course} key={course.id} deleteCourse={deleteCourse} />
         })}

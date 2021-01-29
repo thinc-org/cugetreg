@@ -69,17 +69,13 @@ const ShoppingPanel = () => {
       <Box className="gened-course">
         <h2>GenEd Courses</h2>
         {courses.map((course) => {
-          if (course.category !== null) {
-            return <CourseList course={course} key={course.id} deleteCourse={deleteCourse} />
-          }
+          return course.category && <CourseList course={course} key={course.id} deleteCourse={deleteCourse} />
         })}
       </Box>
       <Box className="other-course">
         <h2>Other Courses</h2>
         {courses.map((course) => {
-          if (course.category === null) {
-            return <CourseList course={course} key={course.id} deleteCourse={deleteCourse} />
-          }
+          return !course.category && <CourseList course={course} key={course.id} deleteCourse={deleteCourse} />
         })}
       </Box>
       <Box mt={6}>

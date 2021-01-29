@@ -9,6 +9,9 @@ module.exports = {
     'plugin:react/recommended',
     'plugin:react-hooks/recommended',
     'plugin:@typescript-eslint/recommended',
+    'plugin:import/errors',
+    'plugin:import/warning',
+    'plugin:import/typescript',
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
@@ -18,7 +21,7 @@ module.exports = {
     ecmaVersion: 11,
     sourceType: 'module',
   },
-  plugins: ['react', '@typescript-eslint', 'prettier', 'react-hooks'],
+  plugins: ['react', '@typescript-eslint', 'prettier', 'react-hooks', 'import'],
   rules: {
     'react/prop-types': 0,
     'react/react-in-jsx-scope': 0,
@@ -34,8 +37,11 @@ module.exports = {
         },
       },
     ],
-    'no-use-before-define': 'off',
-    '@typescript-eslint/no-use-before-define': ['error', { functions: true, variables: true }],
+    'import/no-unresolved': [2, { commonjs: true, amd: true }],
+    'import/named': 2,
+    'import/namespace': 2,
+    'import/default': 2,
+    'import/export': 2,
   },
   settings: {
     react: {

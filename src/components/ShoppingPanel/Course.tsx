@@ -27,7 +27,7 @@ const Course = ({ course: { id, name, credit, color, category }, deleteCourse }:
     <Box my={1}>
       <Grid container alignItems="center">
         <Grid item xs={1} sm={1}>
-          <Box color={TRASH_ICON_COLOR}>
+          <Box color={TRASH_ICON_COLOR} display="flex" justifyContent="start" alignItems="center">
             <Delete onClick={() => deleteCourse(id)} className={classes.root} />
           </Box>
         </Grid>

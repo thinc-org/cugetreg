@@ -1,17 +1,23 @@
 import { EnhancedChip } from './styles'
 import { useTheme } from '@material-ui/styles'
-import { ThemeType } from '@/configs/theme'
+import { Theme } from '@material-ui/core'
+import { GenEd } from '@/utils/types'
+import { genedColorMapper } from './utils'
+import { useTranslation } from 'react-i18next'
 
-interface PropsType {
-  color: string
-  category: string
+interface GenedChipPropsType {
+  category: GenEd
 }
 
-const GenedChip = ({ color, category }: PropsType) => {
-  const theme = useTheme<ThemeType>()
+const GenedChip = ({ category }: GenedChipPropsType) => {
+  const theme = useTheme<Theme>()
+  const { t } = useTranslation('gened')
   const BACKGROUND_COLOR = theme.palette.background.paper
+  const color = genedColorMapper(category, theme)
 
-  return <EnhancedChip borderColor={color} backgroundColor={BACKGROUND_COLOR} textColor={color} category={category} />
+  return (
+    <EnhancedChip borderColor={color} backgroundColor={BACKGROUND_COLOR} textColor={color} category={t(category)} />
+  )
 }
 
 export default GenedChip

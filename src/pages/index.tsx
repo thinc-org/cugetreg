@@ -32,7 +32,7 @@ export default function Home() {
           display="flex"
           justifyContent="center"
           alignItems="center"
-          onClick={(e) => handleClose(e)}
+          onClick={handleClose}
         >
           <ShoppingPanel />
         </Box>

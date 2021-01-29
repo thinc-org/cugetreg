@@ -1,4 +1,4 @@
-import { Box } from '@material-ui/core'
+import { Box, Typography } from '@material-ui/core'
 
 interface PropsType {
   color: string
@@ -14,11 +14,9 @@ const CourseLabel = ({ color, category }: PropsType) => {
       borderRadius={12}
       px={1.5}
       py={0.5}
-      fontWeight="fontWeightBold"
-      fontSize={12}
       hidden={category === null}
     >
-      {category !== null ? category : ''}
+      <Typography variant="caption">{category !== null ? category : ''}</Typography>
     </Box>
   )
 }

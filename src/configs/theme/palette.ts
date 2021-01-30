@@ -2,7 +2,7 @@ import { PaletteOptions } from '@material-ui/core/styles/createPalette'
 
 export type PaletteRange = 10 | 30 | 50 | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900
 
-export type HighlightColor = 'pink' | 'red' | 'orange' | 'green' | 'blue' | 'purple'
+export type HighlightColor = 'pink' | 'red' | 'orange' | 'green' | 'blue' | 'purple' | 'yellow'
 
 export type PaletteRangeOptions = Record<PaletteRange, string>
 
@@ -96,6 +96,11 @@ const paletteBaseOptions: PaletteOptions = {
       300: '#F3D6FD',
       500: '#BF35EF',
       700: '#681A83',
+    },
+    yellow: {
+      300: '#FCDF7D',
+      500: '#FED239',
+      700: '#FDBC06',
     },
   },
 }

@@ -1,4 +1,4 @@
-import { Box, Typography, makeStyles, Theme } from '@material-ui/core'
+import { Typography, makeStyles, Theme } from '@material-ui/core'
 
 interface PropsType {
   color: string
@@ -20,9 +20,9 @@ const CourseLabel = (props: PropsType) => {
   const { category } = props
   const classes = useStyles(props)
   return (
-    <Box className={classes.container}>
+    <div className={classes.container}>
       <Typography variant="overline">{category !== null ? category : ''}</Typography>
-    </Box>
+    </div>
   )
 }
 

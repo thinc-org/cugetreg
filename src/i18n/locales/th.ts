@@ -27,4 +27,12 @@ export const genEd = {
 export const annuncementSearch = {
   search: 'ค้นหา',
   searchPlaceholder: 'ค้นหาหัวข้อ/เนื้อหา',
+// Shopping Panel
+export const shoppingPanel = {
+  selectedCourse: 'วิชาที่เลือก',
+  total: 'รวม',
+  credit: 'หน่วยกิต',
+  genedCourse: 'วิชา GenEd',
+  otherCourse: 'วิชาอื่น ๆ',
+  makeSchedule: 'จัดตารางเรียน',
 }

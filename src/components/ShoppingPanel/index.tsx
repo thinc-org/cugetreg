@@ -1,4 +1,5 @@
 import Course from './Course'
+import { useTranslation } from 'react-i18next'
 import { Box, Button, Typography, makeStyles } from '@material-ui/core'
 import useShoppingPanel from '@/hooks/useShoppingPanel.ts'
 import TableChartIcon from '@material-ui/icons/TableChart'
@@ -55,17 +56,17 @@ const useStyles = makeStyles((theme) => ({
 
 const ShoppingPanel = () => {
   const { credit, courses, deleteCourse, makeSchedule } = useShoppingPanel(mockData)
-
+  const { t } = useTranslation()
   const classes = useStyles()
   return (
     <Box className={classes.container}>
       <Box className={classes.header}>
-        <Typography variant="h4">Selected Course</Typography>
-        <Typography variant="h6">Total {credit} Credits</Typography>
+        <Typography variant="h4">{t('shoppingPanel:selectedCourse')}</Typography>
+        <Typography variant="h6"> {t('shoppingPanel:total') + ` ${credit} ` + t('shoppingPanel:credit')}</Typography>
       </Box>
       <Box>
         <Typography className={classes.course} variant="h6">
-          GenEd Courses
+          {t('shoppingPanel:genedCourse')}
         </Typography>
         {courses.map((course) => {
           return course.category && <Course course={course} key={course.id} deleteCourse={deleteCourse} />
@@ -73,7 +74,7 @@ const ShoppingPanel = () => {
       </Box>
       <Box>
         <Typography className={classes.course} variant="h6">
-          Other Courses
+          {t('shoppingPanel:otherCourse')}
         </Typography>
         {courses.map((course) => {
           return !course.category && <Course course={course} key={course.id} deleteCourse={deleteCourse} />

@@ -83,7 +83,7 @@ const ShoppingPanel = () => {
         <Button fullWidth variant="contained" color="primary" onClick={makeSchedule}>
           <TableChartIcon></TableChartIcon>
           <Box className={classes.makeScheduleText}>
-            <Typography variant="body1">Make Schedule</Typography>
+            <Typography variant="button">{t('shoppingPanel:makeSchedule')}</Typography>
           </Box>
         </Button>
       </Box>

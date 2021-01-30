@@ -2,16 +2,20 @@ import { PaletteOptions } from '@material-ui/core/styles/createPalette'
 
 export type PaletteRange = 10 | 30 | 50 | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900
 
+export type HighlightColor = 'pink' | 'red' | 'orange' | 'green' | 'blue' | 'purple'
+
 export type PaletteRangeOptions = Record<PaletteRange, string>
 
 declare module '@material-ui/core/styles/createPalette' {
   interface Palette {
     primaryRange: PaletteRangeOptions
     secondaryRange: Omit<PaletteRangeOptions, 10 | 30>
+    highlight: Record<HighlightColor, Pick<PaletteRangeOptions, 300 | 500 | 700>>
   }
   interface PaletteOptions {
     primaryRange: PaletteRangeOptions
     secondaryRange: Omit<PaletteRangeOptions, 10 | 30>
+    highlight: Record<HighlightColor, Pick<PaletteRangeOptions, 300 | 500 | 700>>
   }
 }
 
@@ -32,6 +36,9 @@ const paletteBaseOptions: PaletteOptions = {
     light: '#B10C0C',
     main: '#B10C0C',
     dark: '#B10C0C',
+  },
+  text: {
+    primary: '#2A2D48', // primary main
   },
   primaryRange: {
     10: '#FAFAFF',
@@ -59,8 +66,37 @@ const paletteBaseOptions: PaletteOptions = {
     800: '#F8AA14',
     900: '#EB9C03',
   },
-  text: {
-    primary: '#2A2D48', // primary main
+  highlight: {
+    pink: {
+      300: '#FDD8EE',
+      500: '#F339A8',
+      700: '#C7117F',
+    },
+    red: {
+      300: '#FDDBDB',
+      500: '#F96666',
+      700: '#B10C0C',
+    },
+    orange: {
+      300: '#FEE5CD',
+      500: '#FEA339',
+      700: '#D67F19',
+    },
+    green: {
+      300: '#D1FEB6',
+      500: '#85E14D',
+      700: '#4B991C',
+    },
+    blue: {
+      300: '#DAEFFE',
+      500: '#35A1EF',
+      700: '#0C5A93',
+    },
+    purple: {
+      300: '#F3D6FD',
+      500: '#BF35EF',
+      700: '#681A83',
+    },
   },
 }
 

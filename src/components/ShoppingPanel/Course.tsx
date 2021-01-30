@@ -1,4 +1,5 @@
 import { Box, Grid, makeStyles, Typography } from '@material-ui/core'
+import { useTranslation } from 'react-i18next'
 import { Delete } from '@material-ui/icons'
 import CourseLabel from '@/components/ShoppingPanel/CourseLabel'
 import { lightTheme } from '@/configs/theme'
@@ -33,6 +34,7 @@ const useStyles = makeStyles({
 
 const Course = ({ course: { id, name, credit, color, category }, deleteCourse }: PropsType) => {
   const classes = useStyles()
+  const { t } = useTranslation()
 
   return (
     <Box className={classes.wrapper}>
@@ -49,7 +51,7 @@ const Course = ({ course: { id, name, credit, color, category }, deleteCourse }:
           <Typography variant="body1">{name}</Typography>
         </Grid>
         <Grid item xs={6} sm={2}>
-          <Typography variant="body1">{credit} Credits</Typography>
+          <Typography variant="body1">{credit + ` ${t('shoppingPanel:credit')}`}</Typography>
         </Grid>
         <Grid item={true} container xs={6} sm={2}>
           <CourseLabel color={color} category={category} />

@@ -1,20 +1,20 @@
 import React from 'react'
 import Chip from '.'
 import { Meta } from '@storybook/react/types-6-0'
-import { text, select, withKnobs } from '@storybook/addon-knobs'
+import { color, text, withKnobs } from '@storybook/addon-knobs'
 import { ThemeProvider } from '@material-ui/core'
 import { lightTheme } from '@/configs/theme'
-import { ChipShade } from './const'
 
 export default {
-  title: 'Component/Chip/Default',
+  title: 'Component/Chip/TemplateChip',
   decorators: [withKnobs],
 } as Meta
 
 export const ChipStory = () => (
   <ThemeProvider theme={lightTheme}>
     <Chip
-      shade={select('shade', Object.keys(ChipShade), ChipShade.primaryRange) as ChipShade}
+      textColor={color('textColor', '#2A2D48')}
+      backgroundColor={color('backgroundColor', '#E3E5F8')}
       category={text('category', 'เปิดวิชา')}
     />
   </ThemeProvider>

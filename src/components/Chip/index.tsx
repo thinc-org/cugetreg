@@ -1,27 +1,21 @@
-import { Theme, useTheme } from '@material-ui/core'
-import { EnhancedChip, useStyles } from './styles'
+import { useTheme } from '@material-ui/core'
+import { ChipShade } from './const'
+import { shadeMapper } from './utils'
+import TemplateChip from '@/components/TemplateChip'
 
-interface PropsType {
-  textColor: string
-  backgroundColor: string
+interface ChipPropsType {
   category: string
   className?: string
+  shade: ChipShade
 }
 
-const ChipTemplate = ({ textColor, category, backgroundColor, className }: PropsType) => {
-  const theme = useTheme<Theme>()
-  const styles = useStyles()
-  const padding = theme.spacing(0.25, 1)
+const Chip = ({ category, className, shade }: ChipPropsType) => {
+  const theme = useTheme()
+  const { textColor, backgroundColor } = shadeMapper(shade, theme)
 
   return (
-    <EnhancedChip
-      className={`${className} ${styles.root}`}
-      textColor={textColor}
-      backgroundColor={backgroundColor}
-      padding={padding}
-      label={category}
-    />
+    <TemplateChip className={className} textColor={textColor} backgroundColor={backgroundColor} category={category} />
   )
 }
 
-export default ChipTemplate
+export default Chip

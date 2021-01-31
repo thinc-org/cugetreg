@@ -1,11 +1,12 @@
 import { AnnouncementContainer, Image, TagContainer, DateTitle, Tag } from './styles'
 import Chip from '@/components/Chip'
 import GenEdChip from '@/components/GenEdChip'
-import { Typography, useTheme, Theme } from '@material-ui/core'
+import { Typography } from '@material-ui/core'
 import { format } from 'date-fns'
 import { th } from 'date-fns/locale'
 import { IMAGE_SIZE } from './const'
 import { GenEd } from '@/utils/types'
+import { ChipShade } from '../Chip/const'
 
 export interface AnnouncementCardPropTypes {
   date: Date
@@ -17,14 +18,9 @@ export interface AnnouncementCardPropTypes {
 }
 
 const AnnouncementCard = ({ date, imageURL, title, tags, genEds, body }: AnnouncementCardPropTypes) => {
-  const theme = useTheme<Theme>()
-
-  const CHIP_BG = theme.palette.primary.light
-  const CHIP_TEXT = theme.palette.secondary.contrastText
-
   const tagComponent = tags.map((text) => (
     <Tag key={text}>
-      <Chip category={text} backgroundColor={CHIP_BG} textColor={CHIP_TEXT} />
+      <Chip category={text} shade={ChipShade.primaryRange} />
     </Tag>
   ))
 

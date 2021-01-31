@@ -1,4 +1,4 @@
-import Chip from '@/components/Chip'
+import Chip from '@/components/TemplateChip'
 import { styled, Theme } from '@material-ui/core'
 
 interface EnhancedChipProps {

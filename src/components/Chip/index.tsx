@@ -11,7 +11,7 @@ interface PropsType {
 const ChipTemplate = ({ textColor, category, backgroundColor, className }: PropsType) => {
   const theme = useTheme<Theme>()
   const styles = useStyles()
-  const padding = `${theme.spacing(0.25)}px ${theme.spacing(1)}px`
+  const padding = theme.spacing(0.25, 1)
 
   return (
     <EnhancedChip

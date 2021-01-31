@@ -1,10 +1,10 @@
-import { BoxContainer, Image, useStyles } from './styles'
+import { AnnouncementContainer, Image, TagContainer, DateTitle, Tag } from './styles'
 import Chip from '@/components/Chip'
 import GenEdChip from '@/components/GenEdChip'
-import { Typography, Box, useTheme, Theme } from '@material-ui/core'
+import { Typography, useTheme, Theme } from '@material-ui/core'
 import { format } from 'date-fns'
 import { th } from 'date-fns/locale'
-import { BACKGROUND_COLOR, BOX_BORDER_RADIUS, IMAGE_SIZE, TAG_INNER_MARGIN, TAG_VERTICAL_MARGIN } from './const'
+import { IMAGE_SIZE } from './const'
 import { GenEd } from '@/utils/types'
 
 export interface AnnouncementCardPropTypes {
@@ -17,44 +17,41 @@ export interface AnnouncementCardPropTypes {
 }
 
 const AnnouncementCard = ({ date, imageURL, title, tags, genEds, body }: AnnouncementCardPropTypes) => {
-  const styles = useStyles()
   const theme = useTheme<Theme>()
 
   const CHIP_BG = theme.palette.primary.light
   const CHIP_TEXT = theme.palette.secondary.contrastText
 
   const tagComponent = tags.map((text) => (
-    <Box key={text} mr={TAG_INNER_MARGIN}>
+    <Tag key={text}>
       <Chip category={text} backgroundColor={CHIP_BG} textColor={CHIP_TEXT} />
-    </Box>
+    </Tag>
   ))
 
   const genedsComponents = genEds.map((genEd) => (
-    <Box key={genEd} mr={TAG_INNER_MARGIN}>
+    <Tag key={genEd}>
       <GenEdChip category={genEd} />
-    </Box>
+    </Tag>
   ))
 
   const dateText = format(date, 'dd/mm/yyyy hh:mm', { locale: th })
 
   return (
-    <BoxContainer borderRadius={BOX_BORDER_RADIUS} bgcolor={BACKGROUND_COLOR} display="flex" height={IMAGE_SIZE}>
+    <AnnouncementContainer>
       {imageURL && <Image width={IMAGE_SIZE} height={IMAGE_SIZE} src={imageURL} alt="announcement Image" />}
       <div>
         <div>
-          <Typography variant="subtitle1" className={styles.date}>
-            {dateText}
-          </Typography>
+          <DateTitle variant="subtitle1">{dateText}</DateTitle>
           <Typography variant="h6">{title}</Typography>
         </div>
-        <Box display="flex" my={TAG_VERTICAL_MARGIN}>
+        <TagContainer>
           {tagComponent} {genedsComponents}
-        </Box>
+        </TagContainer>
         <Typography variant="body1" component="p">
           {body}
         </Typography>
       </div>
-    </BoxContainer>
+    </AnnouncementContainer>
   )
 }
 

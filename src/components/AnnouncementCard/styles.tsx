@@ -4,12 +4,12 @@ import { IMAGE_SIZE } from './const'
 
 export const Image = styled('img')(({ theme }) => ({
   marginRight: theme.spacing(3),
-  borderRadius: '4px',
+  borderRadius: theme.shape.borderRadius,
   objectFit: 'cover',
 }))
 
 export const AnnouncementContainer = styled('div')(({ theme }) => ({
-  borderRadius: '4px',
+  borderRadius: theme.shape.borderRadius,
   backgroundColor: theme.palette.background.paper,
   display: 'flex',
   height: IMAGE_SIZE,

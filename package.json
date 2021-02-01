@@ -12,7 +12,9 @@
     "build-storybook": "build-storybook -s ./public"
   },
   "dependencies": {
+    "@date-io/date-fns": "1.x",
     "@material-ui/core": "^4.11.2",
+    "@material-ui/icons": "^4.11.2",
     "@material-ui/pickers": "^3.2.10",
     "babel-plugin-macros": "^3.0.1",
     "date-fns": "^2.16.1",

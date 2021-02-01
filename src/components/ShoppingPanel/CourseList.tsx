@@ -1,5 +1,5 @@
 import { Grid, makeStyles, Typography } from '@material-ui/core'
-import { Course } from '@thinc-org/chula-courses-types'
+import { Course, GenEdType } from '@thinc-org/chula-courses-types'
 import GenedChip from '@/components/GenEdChip'
 import { GenEd } from '@/utils/types'
 import { useTranslation } from 'react-i18next'
@@ -8,6 +8,25 @@ import { Delete } from '@material-ui/icons'
 interface PropsType {
   course: Course
   deleteCourse: (id: string) => void
+}
+
+const mapCourseToGenedType = (type: GenEdType | undefined): GenEd => {
+  switch (type) {
+    case 'SO':
+      return GenEd.SO
+      break
+    case 'HU':
+      return GenEd.HU
+      break
+    case 'SC':
+      return GenEd.SC
+      break
+    case 'IN':
+      return GenEd.IN
+      break
+    default:
+      return GenEd.NOT_GENED
+  }
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -50,7 +69,7 @@ const CourseList = ({ course: { courseNo, abbrName, credit, genEdType }, deleteC
           <Typography variant="body1">{credit + ` ${t('shoppingPanel:credit')}`}</Typography>
         </Grid>
         <Grid item={true} container xs={6} sm={2}>
-          {genEdType !== null ? <GenedChip category={GenEd.HU} /> : ''}
+          {genEdType !== null ? <GenedChip category={mapCourseToGenedType(genEdType)} /> : ''}
         </Grid>
       </Grid>
     </div>

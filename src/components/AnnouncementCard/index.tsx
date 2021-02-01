@@ -1,6 +1,6 @@
 import { AnnouncementContainer, Image, TagContainer, DateTitle, Tag } from './styles'
 import Chip from '@/components/Chip'
-import GenEdChip from '@/components/GenEdChip'
+import { GenEdChip } from '@/components/GenEdChip'
 import { Typography } from '@material-ui/core'
 import { format } from 'date-fns'
 import { th } from 'date-fns/locale'

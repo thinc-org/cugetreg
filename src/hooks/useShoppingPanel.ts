@@ -1,11 +1,11 @@
 import { useState } from 'react'
+import { GenEd } from '@/utils/types'
 
 interface Course {
   id: number
   name: string
   credit: number
-  color: string
-  category: string | null
+  category: GenEd | null
 }
 
 const useShoppingPanel = (data: Course[]) => {

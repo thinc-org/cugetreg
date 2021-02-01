@@ -1,7 +1,8 @@
 import { Grid, makeStyles, Typography } from '@material-ui/core'
+import GenedChip from '@/components/GenEdChip'
+import { GenEd } from '@/utils/types'
 import { useTranslation } from 'react-i18next'
 import { Delete } from '@material-ui/icons'
-import CourseLabel from '@/components/ShoppingPanel/CourseLabel'
 import { lightTheme } from '@/configs/theme'
 
 interface PropsType {
@@ -9,8 +10,7 @@ interface PropsType {
     id: number
     name: string
     credit: number
-    color: string
-    category: string | null
+    category: GenEd | null
   }
   deleteCourse: (id: number) => void
 }
@@ -32,7 +32,7 @@ const useStyles = makeStyles({
   },
 })
 
-const Course = ({ course: { id, name, credit, color, category }, deleteCourse }: PropsType) => {
+const Course = ({ course: { id, name, credit, category }, deleteCourse }: PropsType) => {
   const classes = useStyles()
   const { t } = useTranslation()
 
@@ -54,7 +54,7 @@ const Course = ({ course: { id, name, credit, color, category }, deleteCourse }:
           <Typography variant="body1">{credit + ` ${t('shoppingPanel:credit')}`}</Typography>
         </Grid>
         <Grid item={true} container xs={6} sm={2}>
-          <CourseLabel color={color} category={category} />
+          {category !== null ? <GenedChip category={category} /> : ''}
         </Grid>
       </Grid>
     </div>

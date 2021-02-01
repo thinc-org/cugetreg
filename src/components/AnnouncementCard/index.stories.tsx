@@ -1,12 +1,15 @@
 import React from 'react'
-import AnnouncementCard, { AnnouncementCardPropTypes } from '.'
+import { AnnouncementCard, AnnouncementCardPropTypes } from '.'
 import { Meta, Story } from '@storybook/react/types-6-0'
-import { date } from '@storybook/addon-knobs'
 import { makeStyles, ThemeProvider } from '@material-ui/core'
 import { lightTheme } from '@/configs/theme'
 
 export default {
   title: 'Component/AnnouncementCard',
+  component: AnnouncementCard,
+  argTypes: {
+    date: { control: 'date' },
+  },
 } as Meta
 
 const useStyles = makeStyles((theme) => ({
@@ -18,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const AnnouncementCardStory: Story<AnnouncementCardPropTypes> = (args) => {
+export const AnnouncementCardStory: Story<AnnouncementCardPropTypes> = (args) => {
   const styles = useStyles()
   return (
     <ThemeProvider theme={lightTheme}>
@@ -30,7 +33,7 @@ const AnnouncementCardStory: Story<AnnouncementCardPropTypes> = (args) => {
 }
 
 AnnouncementCardStory.args = {
-  date: new Date(date('date', new Date())),
+  date: new Date(),
   imageURL: 'https://foreignpolicy.com/wp-content/uploads/2020/07/Marine-Thailand-Exercise-GettyImages-1203838332.jpg',
   title: 'เปิดวิชาเรียนใหม่ 0201170 Military Science เสริมสร้างวินัยทหารในตัวคุณ',
   tags: ['เปิดวิชา1', 'เปิดวิชา2'],

@@ -17,7 +17,7 @@ export interface AnnouncementCardPropTypes {
   body: string
 }
 
-const AnnouncementCard = ({ date, imageURL, title, tags, genEds, body }: AnnouncementCardPropTypes) => {
+export const AnnouncementCard = ({ date, imageURL, title, tags, genEds, body }: AnnouncementCardPropTypes) => {
   const tagComponent = tags.map((text) => (
     <Tag key={text}>
       <Chip category={text} shade={ChipShade.primaryRange} />
@@ -50,5 +50,3 @@ const AnnouncementCard = ({ date, imageURL, title, tags, genEds, body }: Announc
     </AnnouncementContainer>
   )
 }
-
-export default AnnouncementCard

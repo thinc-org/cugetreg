@@ -3,9 +3,10 @@ import { useTheme } from '@material-ui/styles'
 import { Theme } from '@material-ui/core'
 import { genedColorMapper } from './utils'
 import { useTranslation } from 'react-i18next'
+import { GenEdType } from '@thinc-org/chula-courses'
 
 export interface GenedChipPropsType {
-  category?: ChulaCourse.GenEdType
+  category?: GenEdType
 }
 
 export const GenEdChip: React.FC<GenedChipPropsType> = ({ category }) => {

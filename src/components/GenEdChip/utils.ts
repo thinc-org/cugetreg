@@ -1,11 +1,12 @@
 import { Theme } from '@material-ui/core'
+import { GenEdType } from '@thinc-org/chula-courses'
 
 /**
  *
  * @param theme theme object for retrieving colours
  * @param genEd Gened type. Null if not genEd
  */
-export const genedColorMapper = (theme: Theme, genEd?: ChulaCourse.GenEdType) => {
+export const genedColorMapper = (theme: Theme, genEd?: GenEdType) => {
   if (!genEd) {
     return theme.palette.primary.main
   }

@@ -6,13 +6,14 @@ import { format } from 'date-fns'
 import { th } from 'date-fns/locale'
 import { IMAGE_SIZE } from './const'
 import { ChipShade } from '../Chip/const'
+import { GenEdType } from '@thinc-org/chula-courses'
 
 export interface AnnouncementCardPropTypes {
   date: Date
   imageURL: string
   title: string
   tags: string[]
-  genEds: ChulaCourse.GenEdType[]
+  genEds: GenEdType[]
   body: string
 }
 

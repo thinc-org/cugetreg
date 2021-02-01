@@ -16,8 +16,8 @@ const TemplateChip = ({ textColor, category, backgroundColor, className }: Props
   return (
     <EnhancedChip
       className={`${className} ${styles.root}`}
-      textColor={textColor}
-      backgroundColor={backgroundColor}
+      textcolor={textColor}
+      backgroundcolor={backgroundColor}
       padding={padding}
       label={category}
     />

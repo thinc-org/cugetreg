@@ -1,5 +1,5 @@
 import React from 'react'
-import GenEdChip, { GenedChipPropsType } from '.'
+import { GenEdChip, GenedChipPropsType } from '.'
 import { Meta, Story } from '@storybook/react/types-6-0'
 import { ThemeProvider } from '@material-ui/core'
 import { lightTheme } from '@/configs/theme'
@@ -9,14 +9,16 @@ export default {
   component: GenEdChip,
 } as Meta
 
-const GenEdChipStory: Story<GenedChipPropsType> = (args) => (
+const Template: Story<GenedChipPropsType> = (args) => (
   <ThemeProvider theme={lightTheme}>
     <GenEdChip {...args} />
   </ThemeProvider>
 )
 
-export const Template = GenEdChipStory.bind({})
-Template.args = {
-  size: 'large',
+export const GenEd = Template.bind({})
+GenEd.args = {
   category: 'HU',
 }
+
+export const NoGeneed = Template.bind({})
+NoGeneed.args = {}

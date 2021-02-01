@@ -3,7 +3,6 @@ import GenedChip from '@/components/GenEdChip'
 import { GenEd } from '@/utils/types'
 import { useTranslation } from 'react-i18next'
 import { Delete } from '@material-ui/icons'
-import { lightTheme } from '@/configs/theme'
 
 interface PropsType {
   course: {
@@ -14,23 +13,23 @@ interface PropsType {
   }
   deleteCourse: (id: number) => void
 }
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   wrapper: {
-    margin: '6px 0px',
+    margin: theme.spacing(0.75, 0),
   },
   rootGrid: {
     alignItems: 'center',
   },
   deleteButton: {
     cursor: 'pointer',
-    color: lightTheme.palette.primaryRange[100],
+    color: theme.palette.primaryRange[100],
   },
   deleteButtonWrapper: {
     display: 'flex',
     justifyContent: 'start',
     alighItems: 'center',
   },
-})
+}))
 
 const Course = ({ course: { id, name, credit, category }, deleteCourse }: PropsType) => {
   const classes = useStyles()

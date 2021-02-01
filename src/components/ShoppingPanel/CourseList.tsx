@@ -14,16 +14,12 @@ const mapCourseToGenedType = (type: GenEdType | undefined): GenEd => {
   switch (type) {
     case 'SO':
       return GenEd.SO
-      break
     case 'HU':
       return GenEd.HU
-      break
     case 'SC':
       return GenEd.SC
-      break
     case 'IN':
       return GenEd.IN
-      break
     default:
       return GenEd.NOT_GENED
   }

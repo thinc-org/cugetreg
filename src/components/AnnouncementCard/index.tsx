@@ -5,7 +5,6 @@ import { Typography } from '@material-ui/core'
 import { format } from 'date-fns'
 import { th } from 'date-fns/locale'
 import { IMAGE_SIZE } from './const'
-import { GenEd } from '@/utils/types'
 import { ChipShade } from '../Chip/const'
 
 export interface AnnouncementCardPropTypes {
@@ -13,7 +12,7 @@ export interface AnnouncementCardPropTypes {
   imageURL: string
   title: string
   tags: string[]
-  genEds: GenEd[]
+  genEds: ChulaCourse.GenEdType[]
   body: string
 }
 

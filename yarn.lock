@@ -2036,6 +2036,11 @@
     resolve-from "^5.0.0"
     store2 "^2.7.1"
 
+"@thinc-org/chula-courses-types@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@thinc-org/chula-courses-types/-/chula-courses-types-1.1.0.tgz#452e7c2cc37263f55a0908733ccb5a608822ea9c"
+  integrity sha512-OTVgo2Py4Bv8Of5WsPWQBQBEWbDGfK+YP3XAypZgcTJRR6W0owXHMtsALBaIL1aq60VK4wryGprfIsVAtNd3LA==
+
 "@types/anymatch@*":
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/@types/anymatch/-/anymatch-1.3.1.tgz#336badc1beecb9dacc38bea2cf32adf627a8421a"
@@ -9381,7 +9386,7 @@ react-i18next@^11.8.5:
   dependencies:
     "@babel/runtime" "^7.3.1"
     html-parse-stringify2 "2.0.1"
-    
+
 react-input-autosize@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/react-input-autosize/-/react-input-autosize-3.0.0.tgz#6b5898c790d4478d69420b55441fcc31d5c50a85"

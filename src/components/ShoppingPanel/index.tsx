@@ -39,7 +39,7 @@ const ShoppingPanel = () => {
     <div className={classes.container}>
       <div className={classes.header}>
         <Typography variant="h4">{t('selectedCourse')}</Typography>
-        <Typography variant="h6"> {t('total') + ` ${credit} ` + t('credit')}</Typography>
+        <Typography variant="h6"> {t('totalCredit', { totalCredit: credit })}</Typography>
       </div>
       <div>
         <Typography className={classes.course} variant="h6">

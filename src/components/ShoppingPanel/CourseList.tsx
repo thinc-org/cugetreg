@@ -62,7 +62,7 @@ const CourseList = ({ course: { courseNo, abbrName, credit, genEdType }, deleteC
           <Typography variant="body1">{abbrName}</Typography>
         </Grid>
         <Grid item xs={6} sm={2}>
-          <Typography variant="body1">{credit + ` ${t('credit')}`}</Typography>
+          <Typography variant="body1">{t('credit', { credit: credit })}</Typography>
         </Grid>
         <Grid item={true} container xs={6} sm={2}>
           {genEdType !== null ? <GenedChip category={mapCourseToGenedType(genEdType)} /> : ''}

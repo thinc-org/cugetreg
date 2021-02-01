@@ -30,8 +30,8 @@ export const annuncementSearch = {
 // Shopping Panel
 export const shoppingPanel = {
   selectedCourse: 'วิชาที่เลือก',
-  total: 'รวม',
-  credit: 'หน่วยกิต',
+  totalCredit: 'รวม {{totalCredit}} หน่วยกิต',
+  credit: '{{credit}} หน่วยกิต',
   genedCourse: 'วิชา GenEd',
   otherCourse: 'วิชาอื่น ๆ',
   makeSchedule: 'จัดตารางเรียน',

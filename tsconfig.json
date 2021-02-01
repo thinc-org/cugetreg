@@ -18,7 +18,7 @@
     "paths": {
       "@/*": ["./*"]
     },
-    "types": ["@thinc-org/chula-courses-types"]
+    "types": ["@thinc-org/chula-courses"]
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]

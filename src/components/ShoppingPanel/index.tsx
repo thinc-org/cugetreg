@@ -28,11 +28,11 @@ const mockData = [
 
 const useStyles = makeStyles((theme) => ({
   container: {
-    padding: '50px 45px 30px 45px',
+    padding: theme.spacing(6.25, 5.625, 3.75, 5.625),
     backgroundColor: 'white',
     width: '100%',
-    maxWidth: 650,
-    borderRadius: 4,
+    maxWidth: theme.breakpoints.values.sm,
+    borderRadius: theme.shape.borderRadius,
     boxShadow: theme.shadows[2],
   },
   header: {
@@ -41,14 +41,14 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'space-between',
   },
   course: {
-    marginTop: 25,
-    marginBottom: 17,
+    marginTop: theme.spacing(3),
+    marginBottom: theme.spacing(2),
   },
   makeScheduleButton: {
-    marginTop: 70,
+    marginTop: theme.spacing(8.25),
   },
   makeScheduleText: {
-    marginLeft: 10,
+    marginLeft: theme.spacing(1.25),
   },
 }))
 

@@ -7,6 +7,7 @@ import '@/styles/globals.css'
 import '@/i18n'
 import { darkTheme, lightTheme } from '@/configs/theme'
 import { TopBar } from '@/components/TopBar'
+import { Footer } from '@/components/Footer'
 import { Container } from '@/components/Container'
 import env from '@/utils/env/macro'
 import { MuiPickersUtilsProvider } from '@material-ui/pickers'
@@ -49,6 +50,7 @@ function MyApp({ Component, pageProps, forceDark }: AppProps) {
             <Container>
               <Component {...pageProps} />
             </Container>
+            <Footer />
           </ThemeProvider>
         </MuiPickersUtilsProvider>
       </ApolloProvider>

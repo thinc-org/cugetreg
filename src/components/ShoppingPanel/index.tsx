@@ -2,6 +2,7 @@ import Course from './Course'
 import { useTranslation } from 'react-i18next'
 import { Button, Typography, makeStyles } from '@material-ui/core'
 import useShoppingPanel from '@/hooks/useShoppingPanel.ts'
+import { GenEd } from '@/utils/types'
 import TableChartIcon from '@material-ui/icons/TableChart'
 
 const mockData = [
@@ -9,22 +10,19 @@ const mockData = [
     id: 12345,
     name: 'URBAN ENVIRONMENT',
     credit: 2,
-    color: 'green',
-    category: 'Socials',
+    category: GenEd.HU,
   },
   {
     id: 123445,
     name: 'URBAN ENVIRONMENT',
     credit: 1,
-    color: 'green',
     category: null,
   },
   {
     id: 43241234,
     name: 'JAPANESE DESIGN CONCEPT',
     credit: 3,
-    color: 'orange',
-    category: 'Humanity',
+    category: GenEd.HU,
   },
 ]
 

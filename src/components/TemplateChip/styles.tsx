@@ -1,8 +1,8 @@
 import { Chip, makeStyles, styled, Theme } from '@material-ui/core'
 
 interface ChipProps {
-  backgroundColor: string
-  textColor: string
+  backgroundcolor: string
+  textcolor: string
   padding: string
 }
 
@@ -10,8 +10,8 @@ export const EnhancedChip = styled(Chip)<Theme, ChipProps>({
   borderRadius: '100px',
   height: '100%',
   padding: ({ padding }) => padding,
-  color: ({ textColor }) => textColor,
-  backgroundColor: ({ backgroundColor }) => backgroundColor,
+  color: ({ textcolor }) => textcolor,
+  backgroundColor: ({ backgroundcolor }) => backgroundcolor,
 })
 
 export const useStyles = makeStyles((theme) => ({

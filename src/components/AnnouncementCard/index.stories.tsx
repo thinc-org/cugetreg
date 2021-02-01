@@ -33,7 +33,7 @@ export const AnnouncementCardStory = () => {
             'https://foreignpolicy.com/wp-content/uploads/2020/07/Marine-Thailand-Exercise-GettyImages-1203838332.jpg'
           )}
           title={text('title', 'เปิดวิชาเรียนใหม่ 0201170 Military Science เสริมสร้างวินัยทหารในตัวคุณ')}
-          tags={array('tags', ['เปิดวิชา', 'เปิดวิชา'])}
+          tags={array('tags', ['เปิดวิชา1', 'เปิดวิชา2'])}
           genEds={array('geneds', [GenEd.HU, GenEd.IN]) as GenEd[]}
           body={text(
             'body',

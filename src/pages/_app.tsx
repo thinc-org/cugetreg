@@ -9,6 +9,8 @@ import { darkTheme, lightTheme } from '@/configs/theme'
 import { TopBar } from '@/components/TopBar'
 import { Container } from '@/components/Container'
 import env from '@/utils/env/macro'
+import { MuiPickersUtilsProvider } from '@material-ui/pickers'
+import DateFnsUtils from '@date-io/date-fns'
 
 function removeElement(id: string) {
   const element = document.getElementById(id)
@@ -37,13 +39,15 @@ function MyApp({ Component, pageProps, forceDark }: AppProps) {
         <title>CU Get Reg</title>
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
       </Head>
-      <ThemeProvider theme={prefersDarkMode || forceDark ? darkTheme : lightTheme}>
-        <CssBaseline />
-        <TopBar />
-        <Container>
-          <Component {...pageProps} />
-        </Container>
-      </ThemeProvider>
+      <MuiPickersUtilsProvider utils={DateFnsUtils}>
+        <ThemeProvider theme={prefersDarkMode || forceDark ? darkTheme : lightTheme}>
+          <CssBaseline />
+          <TopBar />
+          <Container>
+            <Component {...pageProps} />
+          </Container>
+        </ThemeProvider>
+      </MuiPickersUtilsProvider>
     </>
   )
 }

@@ -1,30 +1,9 @@
-import Course from './Course'
+import CourseList from './CourseList'
+import { mockData } from './mockData'
 import { useTranslation } from 'react-i18next'
 import { Button, Typography, makeStyles } from '@material-ui/core'
 import useShoppingPanel from '@/hooks/useShoppingPanel.ts'
-import { GenEd } from '@/utils/types'
 import TableChartIcon from '@material-ui/icons/TableChart'
-
-const mockData = [
-  {
-    id: 12345,
-    name: 'URBAN ENVIRONMENT',
-    credit: 2,
-    category: GenEd.HU,
-  },
-  {
-    id: 123445,
-    name: 'URBAN ENVIRONMENT',
-    credit: 1,
-    category: null,
-  },
-  {
-    id: 43241234,
-    name: 'JAPANESE DESIGN CONCEPT',
-    credit: 3,
-    category: GenEd.HU,
-  },
-]
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -67,7 +46,7 @@ const ShoppingPanel = () => {
           {t('shoppingPanel:genedCourse')}
         </Typography>
         {courses.map((course) => {
-          return course.category && <Course course={course} key={course.id} deleteCourse={deleteCourse} />
+          return course.genEdType && <CourseList course={course} key={course.courseNo} deleteCourse={deleteCourse} />
         })}
       </div>
       <div>
@@ -75,7 +54,7 @@ const ShoppingPanel = () => {
           {t('shoppingPanel:otherCourse')}
         </Typography>
         {courses.map((course) => {
-          return !course.category && <Course course={course} key={course.id} deleteCourse={deleteCourse} />
+          return !course.genEdType && <CourseList course={course} key={course.courseNo} deleteCourse={deleteCourse} />
         })}
       </div>
       <div className={classes.makeScheduleButton}>

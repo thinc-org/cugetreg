@@ -1,5 +1,3 @@
-import { GenEd } from '@/utils/types'
-
 // Default namespace
 export const translation = {
   appName: 'CU Get Reg',
@@ -19,9 +17,9 @@ export const navBar = {
 }
 
 export const genEd = {
-  [GenEd.HU]: 'หมวดมนุษย์',
-  [GenEd.IN]: 'หมวดสหฯ',
-  [GenEd.SC]: 'หมวดวิทย์',
-  [GenEd.SO]: 'หมวดสังคม',
-  [GenEd.NOT_GENED]: 'ไม่ใช่ GENED',
+  HU: 'หมวดมนุษย์',
+  IN: 'หมวดสหฯ',
+  SC: 'หมวดวิทย์',
+  SO: 'หมวดสังคม',
+  NOT_GENED: 'ไม่ใช่ GENED',
 }

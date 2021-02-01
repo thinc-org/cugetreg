@@ -1,18 +1,22 @@
 import React from 'react'
-import GenEdChip from '.'
-import { Meta } from '@storybook/react/types-6-0'
-import { select, withKnobs } from '@storybook/addon-knobs'
+import GenEdChip, { GenedChipPropsType } from '.'
+import { Meta, Story } from '@storybook/react/types-6-0'
 import { ThemeProvider } from '@material-ui/core'
 import { lightTheme } from '@/configs/theme'
-import { GenEd } from '@/utils/types'
 
 export default {
   title: 'Component/Chip/GenEdChip',
-  decorators: [withKnobs],
+  component: GenEdChip,
 } as Meta
 
-export const GenEdChipStory = () => (
+const GenEdChipStory: Story<GenedChipPropsType> = (args) => (
   <ThemeProvider theme={lightTheme}>
-    <GenEdChip category={select('category', Object.values(GenEd), GenEd.HU, GenEd.HU)} />
+    <GenEdChip {...args} />
   </ThemeProvider>
 )
+
+export const Template = GenEdChipStory.bind({})
+Template.args = {
+  size: 'large',
+  category: 'HU',
+}

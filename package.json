@@ -14,9 +14,9 @@
   "dependencies": {
     "@material-ui/core": "^4.11.2",
     "babel-plugin-macros": "^3.0.1",
+    "date-fns": "^2.16.1",
     "i18next": "^19.8.4",
     "imagemin-svgo": "^8.0.0",
-    "date-fns": "^2.16.1",
     "next": "10.0.5",
     "next-optimized-images": "^2.6.2",
     "react": "17.0.1",
@@ -30,6 +30,7 @@
     "@storybook/addon-knobs": "^6.1.15",
     "@storybook/addon-links": "^6.1.15",
     "@storybook/react": "^6.1.15",
+    "@thinc-org/chula-courses-types": "^1.1.0",
     "@types/babel-plugin-macros": "^2.8.4",
     "@types/node": "^14.14.20",
     "@types/react": "^17.0.0",

@@ -1,11 +1,18 @@
-import { GenEd } from '@/utils/types'
 import { Theme } from '@material-ui/core'
 
-export const genedColorMapper = (genEd: GenEd, theme: Theme) =>
-  ({
-    [GenEd.HU]: theme.palette.highlight.pink[700],
-    [GenEd.IN]: theme.palette.highlight.purple[700],
-    [GenEd.SC]: theme.palette.secondaryRange[900],
-    [GenEd.SO]: theme.palette.highlight.green[700],
-    [GenEd.NOT_GENED]: theme.palette.primary.main,
-  }[genEd])
+/**
+ *
+ * @param theme theme object for retrieving colours
+ * @param genEd Gened type. Null if not genEd
+ */
+export const genedColorMapper = (theme: Theme, genEd?: ChulaCourse.GenEdType) => {
+  if (!genEd) {
+    return theme.palette.primary.main
+  }
+  return {
+    HU: theme.palette.highlight.pink[700],
+    IN: theme.palette.highlight.purple[700],
+    SC: theme.palette.secondaryRange[900],
+    SO: theme.palette.highlight.green[700],
+  }[genEd]
+}

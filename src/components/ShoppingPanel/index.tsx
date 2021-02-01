@@ -8,7 +8,7 @@ import TableChartIcon from '@material-ui/icons/TableChart'
 const useStyles = makeStyles((theme) => ({
   container: {
     padding: theme.spacing(6.25, 5.625, 3.75, 5.625),
-    backgroundColor: 'white',
+    backgroundColor: theme.palette.background.paper,
     width: '100%',
     maxWidth: theme.breakpoints.values.sm,
     borderRadius: theme.shape.borderRadius,
@@ -33,17 +33,17 @@ const useStyles = makeStyles((theme) => ({
 
 const ShoppingPanel = () => {
   const { credit, courses, deleteCourse, makeSchedule } = useShoppingPanel(mockData)
-  const { t } = useTranslation()
+  const { t } = useTranslation('shoppingPanel')
   const classes = useStyles()
   return (
     <div className={classes.container}>
       <div className={classes.header}>
-        <Typography variant="h4">{t('shoppingPanel:selectedCourse')}</Typography>
-        <Typography variant="h6"> {t('shoppingPanel:total') + ` ${credit} ` + t('shoppingPanel:credit')}</Typography>
+        <Typography variant="h4">{t('selectedCourse')}</Typography>
+        <Typography variant="h6"> {t('total') + ` ${credit} ` + t('credit')}</Typography>
       </div>
       <div>
         <Typography className={classes.course} variant="h6">
-          {t('shoppingPanel:genedCourse')}
+          {t('genedCourse')}
         </Typography>
         {courses.map((course) => {
           return course.genEdType && <CourseList course={course} key={course.courseNo} deleteCourse={deleteCourse} />
@@ -51,7 +51,7 @@ const ShoppingPanel = () => {
       </div>
       <div>
         <Typography className={classes.course} variant="h6">
-          {t('shoppingPanel:otherCourse')}
+          {t('otherCourse')}
         </Typography>
         {courses.map((course) => {
           return !course.genEdType && <CourseList course={course} key={course.courseNo} deleteCourse={deleteCourse} />
@@ -59,9 +59,9 @@ const ShoppingPanel = () => {
       </div>
       <div className={classes.makeScheduleButton}>
         <Button fullWidth variant="contained" color="primary" onClick={makeSchedule}>
-          <TableChartIcon></TableChartIcon>
+          <TableChartIcon />
           <div className={classes.makeScheduleText}>
-            <Typography variant="button">{t('shoppingPanel:makeSchedule')}</Typography>
+            <Typography variant="button">{t('makeSchedule')}</Typography>
           </div>
         </Button>
       </div>

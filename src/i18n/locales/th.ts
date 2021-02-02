@@ -23,3 +23,7 @@ export const genEd = {
   SO: 'หมวดสังคม',
   NOT_GENED: 'ไม่ใช่ GENED',
 }
+
+export const annuncementSearch = {
+  search: 'ค้นหา',
+}

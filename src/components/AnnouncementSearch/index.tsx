@@ -8,6 +8,7 @@ import Input from '@material-ui/core/Input'
 import Button from '@material-ui/core/Button'
 import SearchIcon from '@material-ui/icons/Search'
 import { useSharedStyles } from '@/styles/shared'
+import { useTranslation } from 'react-i18next'
 
 export type OnSubmit = (keyword: string, date: Date | null, category: string, faculty: string) => void
 
@@ -31,6 +32,7 @@ export const AnnouncementSearch = ({ categories, faculties, onSubmit }: Announce
   } = useAnnouncementSearch(onSubmit)
   const classes = useStyles()
   const sharedClasses = useSharedStyles()
+  const { t } = useTranslation('annuncementSearch')
 
   return (
     <form noValidate onSubmit={submit}>
@@ -55,7 +57,7 @@ export const AnnouncementSearch = ({ categories, faculties, onSubmit }: Announce
         <Select name="categories" onChange={handleCategoryChange} items={categories} value={category} />
         <Select name="faculties" onChange={handleFacultyChange} items={faculties} value={faculty} />
         <Button variant="contained" color="primary" type="submit" className={classes.button}>
-          ค้นหา
+          {t('search')}
         </Button>
       </Container>
     </form>

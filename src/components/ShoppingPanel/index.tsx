@@ -1,5 +1,5 @@
 import CourseList from './CourseList'
-import { Course } from '@thinc-org/chula-courses-types'
+import { Course } from '@thinc-org/chula-courses'
 import { useTranslation } from 'react-i18next'
 import { Button, Typography, makeStyles } from '@material-ui/core'
 import useShoppingPanel from '@/hooks/useShoppingPanel.ts'

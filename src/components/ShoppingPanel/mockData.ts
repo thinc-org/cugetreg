@@ -1,10 +1,10 @@
-import { Course } from '@thinc-org/chula-courses-types'
+import { Course } from '@thinc-org/chula-courses'
 
 export const mockData: Course[] = [
   {
     studyProgram: 'S',
-    semester: 1,
-    academicYear: 2020,
+    semester: '1',
+    academicYear: '2020',
 
     // Course info
     courseNo: '123534645',
@@ -24,7 +24,7 @@ export const mockData: Course[] = [
     // Section
     sections: [
       {
-        sectionNo: 2,
+        sectionNo: '2',
         closed: false,
         capacity: {
           current: 13,
@@ -34,7 +34,7 @@ export const mockData: Course[] = [
         classes: [
           {
             type: 'LECT',
-            dayOfweek: 'MO',
+            dayOfWeek: 'MO',
             period: {
               start: '12',
               end: '14',
@@ -49,8 +49,8 @@ export const mockData: Course[] = [
   },
   {
     studyProgram: 'S',
-    semester: 1,
-    academicYear: 2020,
+    semester: '1',
+    academicYear: '2020',
 
     // Course info
     courseNo: '34124',
@@ -70,7 +70,7 @@ export const mockData: Course[] = [
     // Section
     sections: [
       {
-        sectionNo: 2,
+        sectionNo: '2',
         closed: false,
         capacity: {
           current: 13,
@@ -80,7 +80,7 @@ export const mockData: Course[] = [
         classes: [
           {
             type: 'LECT',
-            dayOfweek: 'MO',
+            dayOfWeek: 'MO',
             period: {
               start: '12',
               end: '14',
@@ -95,8 +95,8 @@ export const mockData: Course[] = [
   },
   {
     studyProgram: 'S',
-    semester: 1,
-    academicYear: 2020,
+    semester: '1',
+    academicYear: '2020',
 
     // Course info
     courseNo: '567345',
@@ -116,7 +116,7 @@ export const mockData: Course[] = [
     // Section
     sections: [
       {
-        sectionNo: 2,
+        sectionNo: '2',
         closed: false,
         capacity: {
           current: 13,
@@ -126,7 +126,7 @@ export const mockData: Course[] = [
         classes: [
           {
             type: 'LECT',
-            dayOfweek: 'MO',
+            dayOfWeek: 'MO',
             period: {
               start: '12',
               end: '14',
@@ -141,8 +141,8 @@ export const mockData: Course[] = [
   },
   {
     studyProgram: 'S',
-    semester: 1,
-    academicYear: 2020,
+    semester: '1',
+    academicYear: '2020',
 
     // Course info
     courseNo: '34543',
@@ -162,7 +162,7 @@ export const mockData: Course[] = [
     // Section
     sections: [
       {
-        sectionNo: 2,
+        sectionNo: '2',
         closed: false,
         capacity: {
           current: 13,
@@ -172,7 +172,7 @@ export const mockData: Course[] = [
         classes: [
           {
             type: 'LECT',
-            dayOfweek: 'MO',
+            dayOfWeek: 'MO',
             period: {
               start: '12',
               end: '14',

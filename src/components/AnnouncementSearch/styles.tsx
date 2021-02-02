@@ -10,6 +10,7 @@ export const useStyles = makeStyles((theme) => ({
   button: {
     padding: theme.spacing(0.75, 2),
     borderRadius: theme.spacing(0.5),
+    boxShadow: '0',
   },
 }))
 

@@ -1,6 +1,8 @@
 import { ApolloClient, InMemoryCache } from '@apollo/client'
 
+import env from '@/utils/env/macro'
+
 export const client = new ApolloClient({
-  uri: process.env.NEXT_PUBLIC_BACKEND_URL,
+  uri: env.backend.uri,
   cache: new InMemoryCache(),
 })

@@ -10,7 +10,7 @@ export const useStyles = makeStyles((theme) => ({
   button: {
     padding: theme.spacing(0.75, 2),
     borderRadius: theme.spacing(0.5),
-    boxShadow: '0',
+    boxShadow: 'none',
   },
 }))
 
@@ -20,5 +20,5 @@ export const Container = styled('div')(({ theme }) => ({
   '& > *': {
     marginTop: theme.spacing(4.5),
   },
-  width: 320,
+  width: 230,
 }))

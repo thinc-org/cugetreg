@@ -1,5 +1,5 @@
-import { useSharedStyles } from '@/styles/shared'
 import { FormControl, MenuItem, Select as MaterialSelect } from '@material-ui/core'
+import { useSharedStyles } from '@/styles/shared'
 
 import { useStyles } from './styles'
 

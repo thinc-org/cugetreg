@@ -1,6 +1,4 @@
-import MenuItem from '@material-ui/core/MenuItem'
-import FormControl from '@material-ui/core/FormControl'
-import { default as MaterialSelect } from '@material-ui/core/Select'
+import { MenuItem, FormControl, Select as MaterialSelect } from '@material-ui/core'
 import { useStyles } from './styles'
 import { useSharedStyles } from '@/styles/shared'
 

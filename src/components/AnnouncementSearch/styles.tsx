@@ -14,7 +14,7 @@ export const useStyles = makeStyles((theme) => ({
   },
 }))
 
-export const Container = styled('div')(({ theme }) => ({
+export const AnnouncementSearchContainer = styled('div')(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
   '& > *': {

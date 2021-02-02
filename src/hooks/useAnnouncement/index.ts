@@ -1,13 +1,13 @@
-import { Announcement } from '@/pages/announcement'
+import { AnnouncementProps } from '@/pages/announcement'
 import { useState, useMemo } from 'react'
 
 const useAnnouncement = () => {
-  const [announcements, setAnnouncements] = useState<Announcement[]>([])
+  const [announcements, setAnnouncements] = useState<AnnouncementProps[]>([])
 
   const search = () => {
     // searchKeyword
     console.log('search')
-    const mockResult: Announcement[] = []
+    const mockResult: AnnouncementProps[] = []
     setAnnouncements(mockResult)
   }
 

@@ -1,7 +1,6 @@
 import { Grid, makeStyles, Typography } from '@material-ui/core'
 import { Course, GenEdType } from '@thinc-org/chula-courses'
-import GenedChip from '@/components/GenEdChip'
-import { GenEd } from '@/utils/types'
+import { GenEdChip } from '@/components/GenEdChip'
 import { useTranslation } from 'react-i18next'
 import { Delete } from '@material-ui/icons'
 
@@ -10,20 +9,20 @@ interface PropsType {
   deleteCourse: (id: string) => void
 }
 
-const mapCourseToGenedType = (type: GenEdType | undefined): GenEd => {
-  switch (type) {
-    case 'SO':
-      return GenEd.SO
-    case 'HU':
-      return GenEd.HU
-    case 'SC':
-      return GenEd.SC
-    case 'IN':
-      return GenEd.IN
-    default:
-      return GenEd.NOT_GENED
-  }
-}
+// const mapCourseToGenedType = (type: GenEdType | undefined): GenEd => {
+//   switch (type) {
+//     case 'SO':
+//       return GenEd.SO
+//     case 'HU':
+//       return GenEd.HU
+//     case 'SC':
+//       return GenEd.SC
+//     case 'IN':
+//       return GenEd.IN
+//     default:
+//       return GenEd.NOT_GENED
+//   }
+// }
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
@@ -65,7 +64,7 @@ const CourseList = ({ course: { courseNo, abbrName, credit, genEdType }, deleteC
           <Typography variant="body1">{t('credit', { credit: credit })}</Typography>
         </Grid>
         <Grid item={true} container xs={6} sm={2}>
-          {genEdType !== null ? <GenedChip category={mapCourseToGenedType(genEdType)} /> : ''}
+          {genEdType !== null ? <GenEdChip category={genEdType} /> : ''}
         </Grid>
       </Grid>
     </div>

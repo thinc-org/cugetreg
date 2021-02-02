@@ -5,7 +5,7 @@ import { Button, Typography, makeStyles } from '@material-ui/core'
 import useShoppingPanel from '@/hooks/useShoppingPanel.ts'
 import TableChartIcon from '@material-ui/icons/TableChart'
 
-interface PropsType {
+export interface CoursePropsType {
   data: Course[]
 }
 
@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const ShoppingPanel = ({ data }: PropsType) => {
+const ShoppingPanel = ({ data }: CoursePropsType) => {
   const { credit, courses, deleteCourse, makeSchedule } = useShoppingPanel(data)
   const { t } = useTranslation('shoppingPanel')
   const classes = useStyles()

@@ -1,8 +1,9 @@
-import { KeyboardDatePicker } from '@material-ui/pickers'
-import DateRangeOutlinedIcon from '@material-ui/icons/DateRangeOutlined'
-import { useStyles } from './styles'
-import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date'
 import { useSharedStyles } from '@/styles/shared'
+import DateRangeOutlinedIcon from '@material-ui/icons/DateRangeOutlined'
+import { KeyboardDatePicker } from '@material-ui/pickers'
+import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date'
+
+import { useStyles } from './styles'
 
 export interface DatePickProps {
   value: Date | null
@@ -11,8 +12,8 @@ export interface DatePickProps {
 }
 
 export const DatePicker = ({ value, onChange, name }: DatePickProps) => {
-  const classes = useStyles()
   const sharedClasses = useSharedStyles()
+  const classes = useStyles()
 
   return (
     <KeyboardDatePicker

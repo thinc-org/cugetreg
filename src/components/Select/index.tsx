@@ -1,6 +1,7 @@
-import { MenuItem, FormControl, Select as MaterialSelect } from '@material-ui/core'
-import { useStyles } from './styles'
 import { useSharedStyles } from '@/styles/shared'
+import { FormControl, MenuItem, Select as MaterialSelect } from '@material-ui/core'
+
+import { useStyles } from './styles'
 
 export interface SelectProps {
   items: string[]
@@ -10,8 +11,8 @@ export interface SelectProps {
 }
 
 export const Select = ({ items, value, onChange, name }: SelectProps) => {
-  const classes = useStyles()
   const sharedClasses = useSharedStyles()
+  const classes = useStyles()
 
   const Items = items.map((item) => (
     <MenuItem key={item} value={item}>

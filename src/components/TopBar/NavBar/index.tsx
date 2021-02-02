@@ -5,6 +5,7 @@ import logo from '@/assets/images/logo.svg'
 import { NavBarItem } from './NavBarItem'
 import { FlexOne } from '@/components/FlexOne'
 import { FlexContainer } from '../FlexContainer'
+import { createRedirectUrl } from '@/utils/network/googleauth'
 
 const useStyles = makeStyles((theme) => ({
   navBar: {
@@ -37,7 +38,7 @@ export function NavBar() {
         <NavBarItem>{t('navBar:searchCourses')}</NavBarItem>
         <NavBarItem>{t('navBar:timetable')}</NavBarItem>
         <FlexOne />
-        <NavBarItem>{t('navBar:signin')}</NavBarItem>
+        <NavBarItem onClick={() => location.replace(createRedirectUrl())}>{t('navBar:signin')}</NavBarItem>
       </FlexContainer>
     </div>
   )

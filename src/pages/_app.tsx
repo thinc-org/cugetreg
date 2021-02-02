@@ -11,11 +11,18 @@ import { Container } from '@/components/Container'
 import env from '@/utils/env/macro'
 import { MuiPickersUtilsProvider } from '@material-ui/pickers'
 import DateFnsUtils from '@date-io/date-fns'
+import { ApolloClient, InMemoryCache } from '@apollo/client/core'
+import { ApolloProvider } from '@apollo/client'
 
 function removeElement(id: string) {
   const element = document.getElementById(id)
   element?.parentElement?.removeChild(element)
 }
+
+const client = new ApolloClient({
+  uri: process.env.NEXT_PUBLIC_BACKEND_URL,
+  cache: new InMemoryCache(),
+})
 
 function MyApp({ Component, pageProps, forceDark }: AppProps) {
   const prefersDarkMode =
@@ -39,15 +46,17 @@ function MyApp({ Component, pageProps, forceDark }: AppProps) {
         <title>CU Get Reg</title>
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
       </Head>
-      <MuiPickersUtilsProvider utils={DateFnsUtils}>
-        <ThemeProvider theme={prefersDarkMode || forceDark ? darkTheme : lightTheme}>
-          <CssBaseline />
-          <TopBar />
-          <Container>
-            <Component {...pageProps} />
-          </Container>
-        </ThemeProvider>
-      </MuiPickersUtilsProvider>
+      <ApolloProvider client={client}>
+        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+          <ThemeProvider theme={prefersDarkMode || forceDark ? darkTheme : lightTheme}>
+            <CssBaseline />
+            <TopBar />
+            <Container>
+              <Component {...pageProps} />
+            </Container>
+          </ThemeProvider>
+        </MuiPickersUtilsProvider>
+      </ApolloProvider>
     </>
   )
 }

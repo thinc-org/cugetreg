@@ -1,14 +1,13 @@
-import { useStyles, Container } from './styles'
-import useAnnouncementSearch from './useAnnouncementSearch'
-import { DatePicker } from '@/components/DatePicker'
-import FormControl from '@material-ui/core/FormControl'
-import { Select } from '@/components/Select'
-import InputAdornment from '@material-ui/core/InputAdornment'
-import Input from '@material-ui/core/Input'
-import Button from '@material-ui/core/Button'
-import SearchIcon from '@material-ui/icons/Search'
-import { useSharedStyles } from '@/styles/shared'
 import { useTranslation } from 'react-i18next'
+
+import { DatePicker } from '@/components/DatePicker'
+import { Select } from '@/components/Select'
+import { useSharedStyles } from '@/styles/shared'
+import { Button, FormControl, Input, InputAdornment } from '@material-ui/core'
+import SearchIcon from '@material-ui/icons/Search'
+
+import { AnnouncementSearchContainer, useStyles } from './styles'
+import useAnnouncementSearch from './useAnnouncementSearch'
 
 export type OnSubmit = (keyword: string, date: Date | null, category: string, faculty: string) => void
 
@@ -30,13 +29,13 @@ export const AnnouncementSearch = ({ categories, faculties, onSubmit }: Announce
     handleKeywordChange,
     submit,
   } = useAnnouncementSearch(onSubmit)
-  const classes = useStyles()
   const sharedClasses = useSharedStyles()
+  const classes = useStyles()
   const { t } = useTranslation('annuncementSearch')
 
   return (
     <form noValidate onSubmit={submit}>
-      <Container>
+      <AnnouncementSearchContainer>
         <FormControl className={sharedClasses.inputField}>
           <Input
             placeholder={t('searchPlaceholder')}
@@ -60,7 +59,7 @@ export const AnnouncementSearch = ({ categories, faculties, onSubmit }: Announce
         <Button variant="contained" color="primary" type="submit" className={classes.button}>
           {t('search')}
         </Button>
-      </Container>
+      </AnnouncementSearchContainer>
     </form>
   )
 }

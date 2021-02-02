@@ -2,7 +2,7 @@ import { AnnouncementCard } from '@/components/AnnouncementCard'
 import useAnnouncement from '@/hooks/useAnnouncement'
 import { GenEdType } from '@thinc-org/chula-courses'
 
-export interface Announcement {
+export interface AnnouncementProps {
   date: Date
   imageURL: string
   title: string

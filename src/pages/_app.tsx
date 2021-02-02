@@ -11,18 +11,13 @@ import { Container } from '@/components/Container'
 import env from '@/utils/env/macro'
 import { MuiPickersUtilsProvider } from '@material-ui/pickers'
 import DateFnsUtils from '@date-io/date-fns'
-import { ApolloClient, InMemoryCache } from '@apollo/client/core'
 import { ApolloProvider } from '@apollo/client'
+import { client } from '@/utils/network/apollo'
 
 function removeElement(id: string) {
   const element = document.getElementById(id)
   element?.parentElement?.removeChild(element)
 }
-
-const client = new ApolloClient({
-  uri: process.env.NEXT_PUBLIC_BACKEND_URL,
-  cache: new InMemoryCache(),
-})
 
 function MyApp({ Component, pageProps, forceDark }: AppProps) {
   const prefersDarkMode =

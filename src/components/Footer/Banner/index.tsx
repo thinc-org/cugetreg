@@ -45,15 +45,15 @@ export function Banner() {
   return (
     <FlexContainer className={classes.banner}>
       <Link href="/">
-        <img src={whiteLogo} alt={t('appName')} />
+        <img src={whiteLogo} />
       </Link>
 
       <div className={classes.bannerDetail}>
-        <img src={thincLogo} alt={t('appName')} />
-        <div className={classes.bannerSubtitle}>จุฬาลงกรณ์มหาวิทยาลัย</div>
+        <img src={thincLogo} />
+        <div className={classes.bannerSubtitle}>{t('footer:university')}</div>
         <Divider orientation="vertical" flexItem className={classes.divider} />
-        <div className={classes.bannerSubtitle}>Follow us on</div>
-        <img src={github} alt={t('appName')} />
+        <div className={classes.bannerSubtitle}>{t('footer:github')}</div>
+        <img src={github} />
       </div>
     </FlexContainer>
   )

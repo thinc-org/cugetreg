@@ -24,9 +24,14 @@ const useStyles = makeStyles((theme) => ({
 export function TopButton() {
   const classes = useStyles()
 
+  const scrollToTop = () => {
+    document.body.scrollTop = 0
+    document.documentElement.scrollTop = 0
+  }
+
   return (
     <FlexContainer className={classes.buttonContainer}>
-      <Button className={classes.button}>
+      <Button className={classes.button} onClick={scrollToTop}>
         กลับด้านบน
         <a className={classes.logo}>
           <img src={chevronUp} />

@@ -26,7 +26,6 @@ const useAnnouncementSearch = (onSubmit: OnSubmit) => {
   const submit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     onSubmit(keyword, date, category, faculty)
-    console.log(keyword, date, category, faculty)
   }
 
   return {

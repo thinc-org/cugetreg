@@ -16,6 +16,7 @@ export const DatePicker = ({ value, onChange, name }: DatePickProps) => {
 
   return (
     <KeyboardDatePicker
+      placeholder="dd/mm/yyyy"
       name={name}
       className={sharedClasses.inputField}
       keyboardIcon={<DateRangeOutlinedIcon />}

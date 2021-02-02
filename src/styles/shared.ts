@@ -11,5 +11,8 @@ export const useSharedStyles = makeStyles((theme) => ({
       fontWeight: 500,
       lineHeight: 'auto',
     },
+    '& input::placeholder': {
+      opacity: 1,
+    },
   },
 }))

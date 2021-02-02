@@ -1,5 +1,5 @@
 import { Grid, makeStyles, Typography } from '@material-ui/core'
-import { Course, GenEdType } from '@thinc-org/chula-courses'
+import { Course } from '@thinc-org/chula-courses'
 import { GenEdChip } from '@/components/GenEdChip'
 import { useTranslation } from 'react-i18next'
 import { Delete } from '@material-ui/icons'
@@ -8,21 +8,6 @@ export interface CourseListPropsType {
   course: Course
   deleteCourse: (id: string) => void
 }
-
-// const mapCourseToGenedType = (type: GenEdType | undefined): GenEd => {
-//   switch (type) {
-//     case 'SO':
-//       return GenEd.SO
-//     case 'HU':
-//       return GenEd.HU
-//     case 'SC':
-//       return GenEd.SC
-//     case 'IN':
-//       return GenEd.IN
-//     default:
-//       return GenEd.NOT_GENED
-//   }
-// }
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {

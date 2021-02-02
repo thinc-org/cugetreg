@@ -1,9 +1,13 @@
 import CourseList from './CourseList'
-import { mockData } from './mockData'
+import { Course } from '@thinc-org/chula-courses-types'
 import { useTranslation } from 'react-i18next'
 import { Button, Typography, makeStyles } from '@material-ui/core'
 import useShoppingPanel from '@/hooks/useShoppingPanel.ts'
 import TableChartIcon from '@material-ui/icons/TableChart'
+
+interface PropsType {
+  data: Course[]
+}
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -31,8 +35,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const ShoppingPanel = () => {
-  const { credit, courses, deleteCourse, makeSchedule } = useShoppingPanel(mockData)
+const ShoppingPanel = ({ data }: PropsType) => {
+  const { credit, courses, deleteCourse, makeSchedule } = useShoppingPanel(data)
   const { t } = useTranslation('shoppingPanel')
   const classes = useStyles()
   return (

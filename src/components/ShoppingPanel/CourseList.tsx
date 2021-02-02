@@ -1,5 +1,5 @@
 import { Grid, makeStyles, Typography } from '@material-ui/core'
-import { Course, GenEdType } from '@thinc-org/chula-courses-types'
+import { Course, GenEdType } from '@thinc-org/chula-courses'
 import GenedChip from '@/components/GenEdChip'
 import { GenEd } from '@/utils/types'
 import { useTranslation } from 'react-i18next'

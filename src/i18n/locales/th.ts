@@ -27,6 +27,7 @@ export const genEd = {
 export const annuncementSearch = {
   search: 'ค้นหา',
   searchPlaceholder: 'ค้นหาหัวข้อ/เนื้อหา',
+}
 // Shopping Panel
 export const shoppingPanel = {
   selectedCourse: 'วิชาที่เลือก',

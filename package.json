@@ -20,6 +20,7 @@
     "graphql": "^15.5.0",
     "@thinc-org/chula-courses": "^1.1.1",
     "@types/react-measure": "^2.0.6",
+    "axios": "^0.21.1",
     "babel-plugin-macros": "^3.0.1",
     "date-fns": "^2.16.1",
     "i18next": "^19.8.4",

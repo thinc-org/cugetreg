@@ -12,7 +12,8 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
-    height: 340,
+    alignItems: 'center',
+    height: '100%',
     backgroundColor: theme.palette.primary.dark,
     color: theme.palette.primary.contrastText,
   },
@@ -30,10 +31,11 @@ const useStyles = makeStyles((theme) => ({
   },
   bannerSubtitle: {
     ...theme.typography.subtitle1,
-    margin: '0px 12px',
+    margin: '0px 16px',
   },
   divider: {
     background: theme.palette.primary.contrastText,
+    margin: '0px 8px',
   },
 }))
 
@@ -43,9 +45,7 @@ export function Banner() {
   return (
     <FlexContainer className={classes.banner}>
       <Link href="/">
-        <a className={classes.logo}>
-          <img src={whiteLogo} alt={t('appName')} />
-        </a>
+        <img src={whiteLogo} alt={t('appName')} />
       </Link>
 
       <div className={classes.bannerDetail}>

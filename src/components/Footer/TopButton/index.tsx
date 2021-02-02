@@ -2,6 +2,7 @@ import { Button, makeStyles } from '@material-ui/core'
 import { FlexContainer } from '../FlexContainer'
 import chevronUp from '@/assets/images/chevronUp.svg'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -22,6 +23,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export function TopButton() {
+  const { t } = useTranslation()
   const classes = useStyles()
 
   const scrollToTop = () => {
@@ -32,7 +34,7 @@ export function TopButton() {
   return (
     <FlexContainer className={classes.buttonContainer}>
       <Button className={classes.button} onClick={scrollToTop}>
-        กลับด้านบน
+        {t('footer:topButton')}
         <a className={classes.logo}>
           <img src={chevronUp} />
         </a>

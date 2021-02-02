@@ -4,7 +4,7 @@ import { GenEdChip } from '@/components/GenEdChip'
 import { useTranslation } from 'react-i18next'
 import { Delete } from '@material-ui/icons'
 
-interface PropsType {
+export interface CourseListPropsType {
   course: Course
   deleteCourse: (id: string) => void
 }
@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const CourseList = ({ course: { courseNo, abbrName, credit, genEdType }, deleteCourse }: PropsType) => {
+const CourseList = ({ course: { courseNo, abbrName, credit, genEdType }, deleteCourse }: CourseListPropsType) => {
   const classes = useStyles()
   const { t } = useTranslation('shoppingPanel')
 

@@ -18,7 +18,7 @@ export const AnnouncementSearchContainer = styled('div')(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
   '& > *': {
-    marginTop: theme.spacing(4.5),
+    marginBottom: theme.spacing(4.5),
   },
   width: 230,
 }))

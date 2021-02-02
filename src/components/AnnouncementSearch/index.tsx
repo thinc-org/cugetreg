@@ -39,6 +39,7 @@ export const AnnouncementSearch = ({ categories, faculties, onSubmit }: Announce
       <Container>
         <FormControl className={sharedClasses.inputField}>
           <Input
+            placeholder={t('searchPlaceholder')}
             name="keyword"
             startAdornment={
               <InputAdornment position="start">

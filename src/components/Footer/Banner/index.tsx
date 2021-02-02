@@ -37,6 +37,12 @@ const useStyles = makeStyles((theme) => ({
     background: theme.palette.primary.contrastText,
     margin: '0px 8px',
   },
+  link: {
+    display: 'flex',
+    flexDirection: 'row',
+    textDecoration: 'none',
+    color: 'inherit',
+  },
 }))
 
 export function Banner() {
@@ -52,8 +58,12 @@ export function Banner() {
         <img src={thincLogo} />
         <div className={classes.bannerSubtitle}>{t('footer:university')}</div>
         <Divider orientation="vertical" flexItem className={classes.divider} />
-        <div className={classes.bannerSubtitle}>{t('footer:github')}</div>
-        <img src={github} />
+        <Link href="https://github.com/thinc-org">
+          <a className={classes.link}>
+            <div className={classes.bannerSubtitle}>{t('footer:github')}</div>
+            <img src={github} />
+          </a>
+        </Link>
       </div>
     </FlexContainer>
   )

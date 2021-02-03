@@ -1,14 +1,14 @@
+import { styledWithTheme } from '@/utils/styledWithTheme'
 import { Typography } from '@material-ui/core'
-import { styled } from '@material-ui/core/styles'
 import { IMAGE_SIZE } from './const'
 
-export const Image = styled('img')(({ theme }) => ({
+export const Image = styledWithTheme('img')((theme) => ({
   marginRight: theme.spacing(3),
   borderRadius: theme.shape.borderRadius,
   objectFit: 'cover',
 }))
 
-export const AnnouncementContainer = styled('div')(({ theme }) => ({
+export const AnnouncementContainer = styledWithTheme('div')((theme) => ({
   borderRadius: theme.shape.borderRadius,
   backgroundColor: theme.palette.background.paper,
   display: 'flex',
@@ -16,15 +16,15 @@ export const AnnouncementContainer = styled('div')(({ theme }) => ({
   padding: theme.spacing(3, 12, 3, 6),
 }))
 
-export const TagContainer = styled('div')(({ theme }) => ({
+export const TagContainer = styledWithTheme('div')((theme) => ({
   margin: theme.spacing(3, 0),
   display: 'flex',
 }))
 
-export const Tag = styled('div')(({ theme }) => ({
+export const Tag = styledWithTheme('div')((theme) => ({
   marginRight: theme.spacing(2),
 }))
 
-export const DateTitle = styled(Typography)(({ theme }) => ({
+export const DateTitle = styledWithTheme(Typography)((theme) => ({
   color: theme.palette.primaryRange['100'],
 }))

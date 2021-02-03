@@ -1,6 +1,6 @@
-import { styled } from '@material-ui/core'
+import { styledWithTheme } from '@/utils/styledWithTheme'
 
-export const ConfigBarItem = styled('span')(({ theme }) => ({
+export const ConfigBarItem = styledWithTheme('span')((theme) => ({
   ...theme.typography.subtitle2,
   marginLeft: 28,
   color: theme.palette.primaryRange[10],

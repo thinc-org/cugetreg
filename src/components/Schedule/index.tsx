@@ -1,12 +1,12 @@
 import { withContentRect } from 'react-measure'
-import { styled } from '@material-ui/core'
 import { Header } from './components/Header'
 import { DimensionsProvider, useDimensions } from './dimensions'
 import { Gutters } from './components/Gutters'
 import { TimetableClass, useScheduleClass } from './utils'
 import { ClassCard } from './components/ClassCard'
+import { styledWithTheme } from '@/utils/styledWithTheme'
 
-const ScheduleTable = styled('div')(({ theme }) => ({
+const ScheduleTable = styledWithTheme('div')((theme) => ({
   position: 'relative',
   background: theme.palette.background.paper,
   fontSize: 16,

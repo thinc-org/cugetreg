@@ -1,4 +1,5 @@
-import { makeStyles, styled } from '@material-ui/core'
+import { styledWithTheme } from '@/utils/styledWithTheme'
+import { makeStyles } from '@material-ui/core'
 
 export const useStyles = makeStyles((theme) => ({
   input: {
@@ -14,7 +15,7 @@ export const useStyles = makeStyles((theme) => ({
   },
 }))
 
-export const AnnouncementSearchContainer = styled('div')(({ theme }) => ({
+export const AnnouncementSearchContainer = styledWithTheme('div')((theme) => ({
   display: 'flex',
   flexDirection: 'column',
   '& > *': {

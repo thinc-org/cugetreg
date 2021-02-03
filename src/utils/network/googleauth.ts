@@ -5,16 +5,20 @@ import { ApolloClient, gql, makeVar } from '@apollo/client'
  * Auth flow
  *
  *    Client/Frontend     Backend     Google
- *       r------------------------------->
+ *       r-------------------------------> redirect to createRedirectionUrl() (Phase 1)
  *                          <------------r redirect to redirect_uri which just act as a code redirector
  *       <------------------r              code got redirected to state.return_uri
- *       o<---------------->o              GraphQL verify
+ *       o<---------------->o              GraphQL verify using authenticateByCode (Phase 2)
  *
  *   r--> is client redirect
  *   o<->o is graphql query
  */
 
-export function createRedirectUrl() {
+/**
+ * Create redirection url for redirecting to Google
+ * that will return the result to this client's origin.
+ */
+export function getRedirectUrl() {
   const queries = new URLSearchParams({
     client_id: env.googleauth.clientid,
     redirect_uri: env.googleauth.redirecturi,
@@ -28,6 +32,11 @@ export function createRedirectUrl() {
   return `https://accounts.google.com/o/oauth2/v2/auth?${queries.toString()}`
 }
 
+/**
+ * Query for exchanging Google OAuth code to JWT
+ *
+ * @see authenticateByCode
+ */
 const EXCHANGE_JWT = gql`
   mutation ExchangeJwtToken($code: String!, $redirectURI: String!) {
     verify(code: $code, redirectURI: $redirectURI) {
@@ -38,46 +47,28 @@ const EXCHANGE_JWT = gql`
   }
 `
 
+/**
+ * JWT Response from backend using EXCHANGE_JWT query
+ */
 interface ExchangeJwtResponse {
   verify: AuthData
 }
 
+/**
+ * User's authorization data for authenticating with the backend
+ */
 interface AuthData {
   accessToken: string
   _id: string
   firstName: string
 }
 
-export interface GetAuthData {
-  authData: AuthData
-}
-
-const AUTHDATA_LOCALSTORAGE_FIELD = 'authdata'
-
-function getAuthDataFromLocalStorage(): AuthData | null {
-  if (typeof localStorage == 'undefined') return null
-  const local = localStorage.getItem(AUTHDATA_LOCALSTORAGE_FIELD)
-  if (!local) return null
-
-  return JSON.parse(local)
-}
-
-export const authData = makeVar<AuthData | null>(getAuthDataFromLocalStorage())
-
-export const GET_AUTH_DATA = gql`
-  query GetAuthData {
-    authData @client
-  }
-`
-
-export const authDataFieldPolicy = {
-  authData: {
-    read() {
-      return authData()
-    },
-  },
-}
-
+/**
+ * Exchange Google OAuth code for JWT token and store it.
+ *
+ * @param client
+ * @param code
+ */
 // eslint-disable-next-line @typescript-eslint/ban-types
 export async function authenticateByCode(client: ApolloClient<object>, code: string) {
   const { data, errors } = await client.mutate<ExchangeJwtResponse>({
@@ -95,7 +86,49 @@ export async function authenticateByCode(client: ApolloClient<object>, code: str
   authData(data.verify)
 }
 
+/**
+ * User auth data when requested from Apollo
+ * @see GET_AUTH_DATA
+ */
+export interface GetAuthData {
+  authData: AuthData
+}
+
+/**
+ * Query to request user's auth data return {@link GetAuthData}
+ */
+export const GET_AUTH_DATA = gql`
+  query GetAuthData {
+    authData @client
+  }
+`
+
+/**
+ * Logging the user out
+ */
 export function logout() {
   localStorage.removeItem(AUTHDATA_LOCALSTORAGE_FIELD)
   authData(null)
+}
+
+// Apollo local state and caching ===============
+
+const AUTHDATA_LOCALSTORAGE_FIELD = 'authdata'
+
+function getAuthDataFromLocalStorage(): AuthData | null {
+  if (typeof localStorage == 'undefined') return null
+  const local = localStorage.getItem(AUTHDATA_LOCALSTORAGE_FIELD)
+  if (!local) return null
+
+  return JSON.parse(local)
+}
+
+export const authData = makeVar<AuthData | null>(getAuthDataFromLocalStorage())
+
+export const authDataFieldPolicy = {
+  authData: {
+    read() {
+      return authData()
+    },
+  },
 }

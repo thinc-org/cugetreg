@@ -9,29 +9,14 @@ import React from 'react'
 
 const useStyles = makeStyles((theme) => ({
   banner: {
-    display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
     height: '100%',
     backgroundColor: theme.palette.primary.dark,
     color: theme.palette.primary.contrastText,
   },
-  logo: {
-    // Extend horizontal hit target
-    marginLeft: -16,
-    paddingLeft: 16,
-    paddingRight: 16,
-  },
-  bannerDetail: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   bannerSubtitle: {
     ...theme.typography.subtitle1,
-    margin: '0px 16px',
+    margin: theme.spacing(0, 2),
   },
   divider: {
     background: theme.palette.primary.contrastText,
@@ -54,7 +39,7 @@ export function Banner() {
         <img src={whiteLogo} />
       </Link>
 
-      <div className={classes.bannerDetail}>
+      <FlexContainer>
         <img src={thincLogo} />
         <div className={classes.bannerSubtitle}>{t('footer:university')}</div>
         <Divider orientation="vertical" flexItem className={classes.divider} />
@@ -64,7 +49,7 @@ export function Banner() {
             <img src={github} />
           </a>
         </Link>
-      </div>
+      </FlexContainer>
     </FlexContainer>
   )
 }

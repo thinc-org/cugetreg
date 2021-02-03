@@ -1,4 +1,4 @@
-import { createRedirectUrl, GetAuthData, GET_AUTH_DATA, logout } from '@/utils/network/googleauth'
+import { getRedirectUrl, GetAuthData, GET_AUTH_DATA, logout } from '@/utils/network/googleauth'
 import { useQuery } from '@apollo/client'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -9,7 +9,7 @@ export default function UserButton() {
   const { data } = useQuery<GetAuthData>(GET_AUTH_DATA)
   const userName = data?.authData?.firstName
   const onLogin = useCallback(() => {
-    const uri = createRedirectUrl()
+    const uri = getRedirectUrl()
     location.replace(uri)
   }, [])
   const onLogout = useCallback(logout, [])

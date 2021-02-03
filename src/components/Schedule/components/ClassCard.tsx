@@ -1,9 +1,7 @@
 import { styled } from '@material-ui/core'
 import { DayOfWeek } from '@thinc-org/chula-courses'
-import { useMemo } from 'react'
-import { hourStart, useColorScheme } from '../constants'
 import { useDimensions } from '../dimensions'
-import { ScheduleClass } from '../types'
+import { ScheduleClass, useColorScheme } from '../utils'
 import { ScheduleTypography } from './ScheduleTypography'
 
 interface ClassCardProps {
@@ -28,14 +26,14 @@ const ClassCardTypography = styled(ScheduleTypography)({
 
 export function ClassCard({ scheduleClass }: ClassCardProps) {
   const { cellHeight, getPosition } = useDimensions()
-  const { courseNo, abbrName, genEdType, period, dayOfWeek, teacher, building, room } = scheduleClass
+  const { courseNo, abbrName, genEdType, position, dayOfWeek, teacher, building, room, hasOverlap } = scheduleClass
 
   // color
-  const colorScheme = useColorScheme(genEdType)
+  const colorScheme = useColorScheme(genEdType, hasOverlap ?? false)
 
   // position
-  const startPosition = useTimePosition(period.start)
-  const endPosition = useTimePosition(period.end)
+  const startPosition = position.start
+  const endPosition = position.end
   const y = getY(dayOfWeek)
   const { top, left } = getPosition(y, startPosition)
   const right = getPosition(y, endPosition).left
@@ -78,16 +76,4 @@ function getY(day: DayOfWeek) {
     default:
       throw new Error('Day must be Monday - Friday')
   }
-}
-
-function useTimePosition(time: string) {
-  return useMemo(() => {
-    const match = time.match(/(\d+):(\d+)/)
-    if (!match) {
-      throw new Error('Class time must be in format hh:mm')
-    }
-    const hour = parseInt(match[1]) - hourStart + 2
-    const minute = parseInt(match[2])
-    return hour + minute / 60
-  }, [time])
 }

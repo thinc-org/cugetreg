@@ -1,4 +1,4 @@
-import { ScheduleClass } from './types'
+import { TimetableClass } from './utils'
 
 const courseTemplate = {
   courseNo: '2110316',
@@ -8,7 +8,7 @@ const courseTemplate = {
   teacher: 'NNN',
 }
 
-export const mockClasses: ScheduleClass[] = [
+export const mockClasses: TimetableClass[] = [
   {
     ...courseTemplate,
     dayOfWeek: 'MO',

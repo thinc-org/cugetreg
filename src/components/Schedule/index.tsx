@@ -3,7 +3,7 @@ import { styled } from '@material-ui/core'
 import { Header } from './components/Header'
 import { DimensionsProvider, useDimensions } from './dimensions'
 import { Gutters } from './components/Gutters'
-import { ScheduleClass } from './types'
+import { TimetableClass, useScheduleClass } from './utils'
 import { ClassCard } from './components/ClassCard'
 
 const ScheduleTable = styled('div')(({ theme }) => ({
@@ -13,18 +13,22 @@ const ScheduleTable = styled('div')(({ theme }) => ({
 }))
 
 interface ScheduleProps {
-  classes: ScheduleClass[]
+  classes: TimetableClass[]
 }
 
-function Schedule({ classes }: ScheduleProps) {
+function Schedule({ classes: originalClasses }: ScheduleProps) {
   const { width, height, cellWidth } = useDimensions()
   const fontSize = (16 * cellWidth) / 77
+  const classes = useScheduleClass(originalClasses)
   return (
     <ScheduleTable style={{ width, height, fontSize }}>
       <Header />
       <Gutters />
       {classes.map((scheduleClass) => (
-        <ClassCard key={`${scheduleClass.courseNo}_${scheduleClass.period.start}`} scheduleClass={scheduleClass} />
+        <ClassCard
+          key={`${scheduleClass.courseNo}_${scheduleClass.dayOfWeek}_${scheduleClass.position.start}`}
+          scheduleClass={scheduleClass}
+        />
       ))}
     </ScheduleTable>
   )

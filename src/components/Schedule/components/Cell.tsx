@@ -14,6 +14,7 @@ const CellLayout = styled('div')(({ theme }) => ({
   justifyContent: 'center',
   backgroundColor: theme.palette.primaryRange[10],
   textAlign: 'center',
+  padding: '0.125em',
 }))
 
 export function Cell({ x, y, children }: CellProps) {

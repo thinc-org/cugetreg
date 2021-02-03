@@ -38,7 +38,7 @@ export function ClassCard({ scheduleClass }: ClassCardProps) {
   const endPosition = useTimePosition(period.end)
   const y = getY(dayOfWeek)
   const { top, left } = getPosition(y, startPosition)
-  const right = getPosition(y, endPosition).left - 1
+  const right = getPosition(y, endPosition).left
   const width = right - left
   const isWide = endPosition - startPosition >= 2
   return (

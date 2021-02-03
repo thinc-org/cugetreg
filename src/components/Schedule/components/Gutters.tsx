@@ -17,7 +17,7 @@ function Gutter({ x, y }: GutterProps) {
   const { left, top } = getPosition(y ?? 0, x ?? 0)
   const width = typeof y === 'number' ? tableWidth : 1
   const height = typeof x === 'number' ? tableHeight : 1
-  return <GutterElement style={{ left: left - 1, top: top - 1, width, height }} />
+  return <GutterElement style={{ left: left - 0.5, top: top - 0.5, width, height }} />
 }
 
 export function Gutters() {

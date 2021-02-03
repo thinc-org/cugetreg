@@ -15,8 +15,8 @@ const GutterElement = styled('span')(({ theme }) => ({
 function Gutter({ x, y }: GutterProps) {
   const { width: tableWidth, height: tableHeight, getPosition } = useDimensions()
   const { left, top } = getPosition(y ?? 0, x ?? 0)
-  const width = typeof y === 'number' ? tableWidth : 1
-  const height = typeof x === 'number' ? tableHeight : 1
+  const width = typeof y === 'number' ? tableWidth + 1 : 1
+  const height = typeof x === 'number' ? tableHeight + 1 : 1
   return <GutterElement style={{ left: left - 0.5, top: top - 0.5, width, height }} />
 }
 

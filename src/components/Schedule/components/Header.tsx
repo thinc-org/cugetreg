@@ -7,14 +7,13 @@ import { useDimensions } from '../dimensions'
 import { ScheduleTypography } from './ScheduleTypography'
 
 const HourTypography = styled(ScheduleTypography)({
-  textAlign: 'right',
+  textAlign: 'left',
 })
 
 function HourCell({ hour }: { hour: number }) {
   return (
     <Cell x={hour - hourStart + 1} y={0}>
-      {/* display next hour aligned to right */}
-      <HourTypography variant="subtitle2">{hour + 1}</HourTypography>
+      <HourTypography variant="subtitle2">{hour}</HourTypography>
     </Cell>
   )
 }
@@ -24,7 +23,7 @@ export function Header() {
   const { stubCellWidth } = useDimensions()
   const fontSize = (16 * stubCellWidth) / 77
   const hourCells = []
-  for (let hour = hourStart; hour <= hourEnd; hour++) {
+  for (let hour = hourStart + 1; hour <= hourEnd; hour++) {
     hourCells.push(<HourCell key={hour} hour={hour} />)
   }
   return (
@@ -33,6 +32,7 @@ export function Header() {
         <Cell x={0} y={0}>
           <ScheduleTypography variant="subtitle2">{t('dateTime')}</ScheduleTypography>
         </Cell>
+        <Cell x={1} y={0} />
         {days.map((day, index) => (
           <Cell key={day} x={0} y={index + 1}>
             <ScheduleTypography variant="subtitle2">{t(`days.${day}` as `days.${DayOfWeek}`)}</ScheduleTypography>

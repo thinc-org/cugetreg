@@ -37,7 +37,6 @@ function Schedule({ classes: originalClasses }: ScheduleProps) {
 const AutoScaleSchedule = withContentRect('bounds')<ScheduleProps>(({ measureRef, contentRect, ...props }) => (
   <>
     <div ref={measureRef} style={{ width: '100%' }} />
-    {/* <div ref={measureRef} style={{ width: 1001, transform: 'scale(0.343' }} /> */}
     {contentRect.bounds?.width ? (
       <DimensionsProvider width={contentRect.bounds.width}>
         <Schedule {...props} />

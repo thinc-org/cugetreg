@@ -55,5 +55,5 @@ export const schedule = {
 export const footer = {
   university: 'จุฬาลงกรณ์มหาวิทยาลัย',
   topButton: 'กลับด้านบน',
-  github: 'Follow us on',
+  github: 'Open Source on',
 }

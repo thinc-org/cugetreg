@@ -1,4 +1,4 @@
-import { Button, makeStyles } from '@material-ui/core'
+import { Button, makeStyles, useMediaQuery, useTheme } from '@material-ui/core'
 import { FlexContainer } from '../FlexContainer'
 import chevronUp from '@/assets/images/chevronUp.svg'
 import React from 'react'
@@ -12,7 +12,12 @@ const useStyles = makeStyles((theme) => ({
   buttonContainer: {
     position: 'absolute',
     top: 0,
-    padding: theme.spacing(2.5, 5),
+    [theme.breakpoints.up('md')]: {
+      padding: theme.spacing(2.5, 5),
+    },
+    [theme.breakpoints.down('sm')]: {
+      padding: theme.spacing(2.5, 1.5),
+    },
     flexDirection: 'row',
     justifyContent: 'flex-end',
   },
@@ -23,7 +28,9 @@ const useStyles = makeStyles((theme) => ({
 
 export function TopButton() {
   const { t } = useTranslation()
+  const theme = useTheme()
   const classes = useStyles()
+  const matches = useMediaQuery(theme.breakpoints.up('sm'))
 
   const scrollToTop = () => {
     window.scroll({
@@ -36,7 +43,7 @@ export function TopButton() {
   return (
     <FlexContainer className={classes.buttonContainer}>
       <Button className={classes.button} onClick={scrollToTop}>
-        {t('footer:topButton')}
+        {matches ? t('footer:topButton') : null}
         <a className={classes.logo}>
           <img src={chevronUp} />
         </a>

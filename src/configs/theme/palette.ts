@@ -6,16 +6,18 @@ export type HighlightColor = 'pink' | 'red' | 'orange' | 'green' | 'blue' | 'pur
 
 export type PaletteRangeOptions = Record<PaletteRange, string>
 
+export type HighlightColorRange = Pick<PaletteRangeOptions, 300 | 500 | 700>
+
 declare module '@material-ui/core/styles/createPalette' {
   interface Palette {
     primaryRange: PaletteRangeOptions
     secondaryRange: Omit<PaletteRangeOptions, 10 | 30>
-    highlight: Record<HighlightColor, Pick<PaletteRangeOptions, 300 | 500 | 700>>
+    highlight: Record<HighlightColor, HighlightColorRange>
   }
   interface PaletteOptions {
     primaryRange: PaletteRangeOptions
     secondaryRange: Omit<PaletteRangeOptions, 10 | 30>
-    highlight: Record<HighlightColor, Pick<PaletteRangeOptions, 300 | 500 | 700>>
+    highlight: Record<HighlightColor, HighlightColorRange>
   }
 }
 

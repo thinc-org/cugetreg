@@ -109,8 +109,8 @@ export function useColorScheme(genEdType: GenEdType | undefined, hasOverlap: boo
   const theme = useTheme()
   if (hasOverlap) {
     return {
-      background: theme.palette.error.main,
-      border: theme.palette.common.white,
+      background: theme.palette.highlight.red[700],
+      border: theme.palette.highlight.red[500],
       text: theme.palette.common.white,
     }
   }

@@ -21,7 +21,7 @@ export function getPosition(time: string) {
   if (!match) {
     throw new Error('Class time must be in format hh:mm')
   }
-  const hour = parseInt(match[1]) - hourStart + 2
+  const hour = parseInt(match[1]) - hourStart + 1
   const minute = parseInt(match[2])
   return hour + minute / 60
 }

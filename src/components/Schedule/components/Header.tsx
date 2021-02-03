@@ -13,7 +13,8 @@ const HourTypography = styled(ScheduleTypography)({
 function HourCell({ hour }: { hour: number }) {
   return (
     <Cell x={hour - hourStart + 1} y={0}>
-      <HourTypography variant="subtitle2">{hour}</HourTypography>
+      {/* display next hour aligned to right */}
+      <HourTypography variant="subtitle2">{hour + 1}</HourTypography>
     </Cell>
   )
 }

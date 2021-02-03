@@ -1,7 +1,7 @@
 import { DayOfWeek } from '@thinc-org/chula-courses'
 
-export const hourStart = 8
-export const hourEnd = 19
+export const hourStart = 7
+export const hourEnd = 18
 
 export const days: DayOfWeek[] = ['MO', 'TU', 'WE', 'TH', 'FR']
 

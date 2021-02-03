@@ -2098,10 +2098,6 @@
   dependencies:
     axios "^0.21.1"
     fs "^0.0.1-security"
-"@thinc-org/chula-courses-types@^1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@thinc-org/chula-courses-types/-/chula-courses-types-1.1.0.tgz#452e7c2cc37263f55a0908733ccb5a608822ea9c"
-  integrity sha512-OTVgo2Py4Bv8Of5WsPWQBQBEWbDGfK+YP3XAypZgcTJRR6W0owXHMtsALBaIL1aq60VK4wryGprfIsVAtNd3LA==
 
 "@types/anymatch@*":
   version "1.3.1"

@@ -1,4 +1,4 @@
-import { Divider, makeStyles } from '@material-ui/core'
+import { Divider, makeStyles, useMediaQuery, useTheme } from '@material-ui/core'
 import { useTranslation } from 'react-i18next'
 import Link from 'next/link'
 import whiteLogo from '@/assets/images/whiteLogo.svg'
@@ -14,13 +14,47 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.primary.dark,
     color: theme.palette.primary.contrastText,
   },
+  bannerDetail: {
+    [theme.breakpoints.down('xs')]: {
+      flexDirection: 'column',
+    },
+    [theme.breakpoints.up('md')]: {
+      flexDirection: 'row',
+    },
+  },
+  smallRow: {
+    flexGrow: 0,
+    width: 'auto',
+    padding: theme.spacing(0),
+    margin: theme.spacing(0),
+    justifyContent: 'flex-end',
+  },
   bannerSubtitle: {
     ...theme.typography.subtitle1,
-    margin: theme.spacing(0, 2),
+    [theme.breakpoints.down('xs')]: {
+      marginLeft: theme.spacing(2),
+    },
+    [theme.breakpoints.up('sm')]: {
+      margin: theme.spacing(0, 2),
+    },
   },
   divider: {
     background: theme.palette.primary.contrastText,
-    margin: '0px 8px',
+    [theme.breakpoints.down('xs')]: {
+      margin: theme.spacing(2, 0),
+      width: '90%',
+    },
+  },
+  logo: {
+    [theme.breakpoints.down('xs')]: {
+      marginLeft: theme.spacing(2),
+    },
+  },
+  bigLogo: {
+    [theme.breakpoints.down('sm')]: {
+      marginLeft: theme.spacing(2),
+      maxWidth: '60%',
+    },
   },
   link: {
     display: 'flex',
@@ -32,21 +66,26 @@ const useStyles = makeStyles((theme) => ({
 
 export function Banner() {
   const { t } = useTranslation()
+  const theme = useTheme()
   const classes = useStyles()
+  const matches = useMediaQuery(theme.breakpoints.down('xs'))
   return (
     <FlexContainer className={classes.banner}>
       <Link href="/">
-        <img src={whiteLogo} />
+        <img src={whiteLogo} className={classes.bigLogo} />
       </Link>
 
-      <FlexContainer>
-        <img src={thincLogo} />
-        <div className={classes.bannerSubtitle}>{t('footer:university')}</div>
-        <Divider orientation="vertical" flexItem className={classes.divider} />
+      <FlexContainer className={classes.bannerDetail}>
+        <FlexContainer className={classes.smallRow}>
+          <img src={thincLogo} />
+          <div className={classes.bannerSubtitle}>{t('footer:university')}</div>
+        </FlexContainer>
+        {!matches ? <Divider orientation="vertical" flexItem className={classes.divider} /> : null}
+        {matches ? <Divider className={classes.divider} /> : null}
         <Link href="https://github.com/thinc-org">
           <a className={classes.link}>
             <div className={classes.bannerSubtitle}>{t('footer:github')}</div>
-            <img src={github} />
+            <img className={classes.logo} src={github} />
           </a>
         </Link>
       </FlexContainer>

@@ -1,8 +1,7 @@
 import React from 'react'
 import { AnnouncementCard, AnnouncementCardPropTypes } from '.'
 import { Meta, Story } from '@storybook/react/types-6-0'
-import { makeStyles, ThemeProvider } from '@material-ui/core'
-import { lightTheme } from '@/configs/theme'
+import { makeStyles } from '@material-ui/core'
 
 export default {
   title: 'Component/AnnouncementCard',
@@ -24,11 +23,9 @@ const useStyles = makeStyles((theme) => ({
 export const AnnouncementCardStory: Story<AnnouncementCardPropTypes> = (args) => {
   const styles = useStyles()
   return (
-    <ThemeProvider theme={lightTheme}>
-      <div className={styles.root}>
-        <AnnouncementCard {...args} />
-      </div>
-    </ThemeProvider>
+    <div className={styles.root}>
+      <AnnouncementCard {...args} />
+    </div>
   )
 }
 

@@ -1,5 +1,4 @@
-import { lightTheme } from '@/configs/theme'
-import { ThemeProvider, Typography, TypographyVariant, WithTheme, withTheme } from '@material-ui/core'
+import { Typography, TypographyVariant, WithTheme, withTheme } from '@material-ui/core'
 import { Meta } from '@storybook/react/types-6-0'
 
 export default {
@@ -48,10 +47,10 @@ const TypographyPreview = withTheme(({ variant, theme }: { variant: TypographyVa
 
 export const TypographyStyles = () => {
   return (
-    <ThemeProvider theme={lightTheme}>
+    <>
       {variants.map((variant) => (
         <TypographyPreview key={variant} variant={variant} />
       ))}
-    </ThemeProvider>
+    </>
   )
 }

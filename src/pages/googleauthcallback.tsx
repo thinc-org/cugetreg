@@ -12,14 +12,18 @@ export default function GoogleAuthCallback() {
 
   useEffect(() => {
     if (typeof code !== 'string') {
-      setMsg('Invalid code query parameter')
       return
     }
 
-    authenticateByCode(client, code).catch((e) => {
-      setMsg(`Error during authentication: ${e.message}`)
-    })
-  }, [code])
+    authenticateByCode(client, code)
+      .then(() => {
+        setMsg('Redirecting')
+        router.push('/')
+      })
+      .catch((e) => {
+        setMsg(`Error during authentication: ${e.message}`)
+      })
+  }, [code, client, router])
 
   return (
     <Card>

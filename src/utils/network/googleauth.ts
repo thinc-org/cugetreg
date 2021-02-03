@@ -1,5 +1,5 @@
 import env from '@/utils/env/macro'
-import { ApolloClient, gql, InMemoryCache, makeVar } from '@apollo/client'
+import { ApolloClient, gql, makeVar } from '@apollo/client'
 
 /**
  * Auth flow
@@ -22,7 +22,7 @@ export function createRedirectUrl() {
     scope: 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email',
     access_type: 'online',
     include_granted_scopes: 'true',
-    state: `return_uri=${location.origin}/googleauthcallback`,
+    state: `returnURI=${location.origin}/googleauthcallback`,
   })
 
   return `https://accounts.google.com/o/oauth2/v2/auth?${queries.toString()}`
@@ -38,13 +38,31 @@ const EXCHANGE_JWT = gql`
   }
 `
 
-export interface JwtResponse {
+interface ExchangeJwtResponse {
+  verify: AuthData
+}
+
+interface AuthData {
   accessToken: string
   _id: string
   firstName: string
 }
 
-export const authData = makeVar<JwtResponse | null>(null)
+export interface GetAuthData {
+  authData: AuthData
+}
+
+const AUTHDATA_LOCALSTORAGE_FIELD = 'authdata'
+
+function getAuthDataFromLocalStorage(): AuthData | null {
+  if (typeof localStorage == 'undefined') return null
+  const local = localStorage.getItem(AUTHDATA_LOCALSTORAGE_FIELD)
+  if (!local) return null
+
+  return JSON.parse(local)
+}
+
+export const authData = makeVar<AuthData | null>(getAuthDataFromLocalStorage())
 
 export const GET_AUTH_DATA = gql`
   query GetAuthData {
@@ -60,8 +78,9 @@ export const authDataFieldPolicy = {
   },
 }
 
-export async function authenticateByCode(client: ApolloClient<Record<string, unknown>>, code: string) {
-  const { data, errors } = await client.mutate<JwtResponse>({
+// eslint-disable-next-line @typescript-eslint/ban-types
+export async function authenticateByCode(client: ApolloClient<object>, code: string) {
+  const { data, errors } = await client.mutate<ExchangeJwtResponse>({
     mutation: EXCHANGE_JWT,
     variables: {
       code,
@@ -70,6 +89,13 @@ export async function authenticateByCode(client: ApolloClient<Record<string, unk
   })
 
   if (errors) throw errors
+  if (!data?.verify) throw new Error('No verify result')
 
-  authData(data || null)
+  localStorage.setItem(AUTHDATA_LOCALSTORAGE_FIELD, JSON.stringify(data.verify))
+  authData(data.verify)
+}
+
+export function logout() {
+  localStorage.removeItem(AUTHDATA_LOCALSTORAGE_FIELD)
+  authData(null)
 }

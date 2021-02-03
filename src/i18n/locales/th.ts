@@ -24,6 +24,16 @@ export const genEd = {
   NO: 'ไม่ใช่ GENED',
 }
 
+export const dayOfWeek = {
+  MO: 'วันจันทร์',
+  TU: 'วันอังคาร',
+  WE: 'วันพุธ',
+  TH: 'พฤหัสบดี',
+  FR: 'วันศุกร์',
+  SA: 'วันเสาร์',
+  SU: 'วันอาทิตย์',
+}
+
 export const annuncementSearch = {
   search: 'ค้นหา',
   searchPlaceholder: 'ค้นหาหัวข้อ/เนื้อหา',

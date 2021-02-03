@@ -12,13 +12,12 @@ const useStyles = makeStyles((theme) => ({
   buttonContainer: {
     position: 'absolute',
     top: 0,
-    padding: '20px 40px',
-    display: 'flex',
+    padding: theme.spacing(2.5, 5),
     flexDirection: 'row',
     justifyContent: 'flex-end',
   },
   logo: {
-    marginLeft: '16px',
+    marginLeft: theme.spacing(2),
   },
 }))
 
@@ -28,10 +27,10 @@ export function TopButton() {
 
   const scrollToTop = () => {
     window.scroll({
-      top: 0, 
-      left: 0, 
-      behavior: 'smooth'
-    });
+      top: 0,
+      left: 0,
+      behavior: 'smooth',
+    })
   }
 
   return (

@@ -16,70 +16,70 @@ const baseTypographyVariantOptions: Record<TypographyVariant, TypographyStyleOpt
   },
   h3: {
     letterSpacing: 0,
-    lineHeight: '56px',
+    lineHeight: 56,
     fontSize: 30,
     fontWeight: 700,
   },
   h4: {
     letterSpacing: 0,
-    lineHeight: '36px',
+    lineHeight: 36,
     fontSize: 24,
     fontWeight: 700,
   },
   h5: {
     letterSpacing: 0.18,
-    lineHeight: '24px',
+    lineHeight: 24,
     fontSize: 20,
     fontWeight: 700,
   },
   h6: {
     letterSpacing: 0.15,
-    lineHeight: '24px',
+    lineHeight: 24,
     fontSize: 18,
     fontWeight: 400,
   },
   subtitle1: {
     letterSpacing: 0.18,
-    lineHeight: '24px',
+    lineHeight: 24,
     fontSize: 14,
     fontWeight: 400,
   },
   subtitle2: {
     letterSpacing: 0.1,
-    lineHeight: '24px',
+    lineHeight: 24,
     fontSize: 12,
     fontWeight: 400,
   },
   body1: {
     letterSpacing: 0.16,
-    lineHeight: '24px',
+    lineHeight: 24,
     fontFamily: 'ChulaCharasNew',
     fontSize: 16,
     fontWeight: 400,
   },
   body2: {
     letterSpacing: 0.25,
-    lineHeight: '20px',
+    lineHeight: 20,
     fontFamily: 'ChulaCharasNew',
     fontSize: 14,
     fontWeight: 400,
   },
   button: {
     letterSpacing: 0.4,
-    lineHeight: '28px',
+    lineHeight: 28,
     fontSize: 12,
     fontWeight: 400,
     textTransform: 'uppercase',
   },
   caption: {
     letterSpacing: 0.4,
-    lineHeight: '16px',
+    lineHeight: 16,
     fontSize: 10,
     fontWeight: 400,
   },
   overline: {
     letterSpacing: 0.4,
-    lineHeight: '16px',
+    lineHeight: 16,
     fontSize: 8,
     fontWeight: 400,
     textTransform: 'uppercase',
@@ -106,16 +106,21 @@ const overrideMuiTypography = (defaultTheme: Theme): Theme => {
   const { breakpoints, typography } = defaultTheme
   const { pxToRem } = typography
 
+  function convertToRem(options: TypographyStyleOptions) {
+    if (typeof options.fontSize === 'number') {
+      options.fontSize = pxToRem(options.fontSize)
+    }
+    if (typeof options.lineHeight === 'number') {
+      options.lineHeight = pxToRem(options.lineHeight)
+    }
+  }
+
   Object.keys(baseTypographyVariantOptions).forEach((key: string) => {
     const variant = key as TypographyVariant
     const { ...baseStyle } = baseTypographyVariantOptions[variant]
     const { ...mobileStyle } = mobileTypographyVariantOptions[variant]
-    if (typeof baseStyle.fontSize === 'number') {
-      baseStyle.fontSize = pxToRem(baseStyle.fontSize)
-    }
-    if (typeof mobileStyle.fontSize === 'number') {
-      mobileStyle.fontSize = pxToRem(mobileStyle.fontSize)
-    }
+    convertToRem(baseStyle)
+    convertToRem(mobileStyle)
 
     Object.assign(typography[variant], {
       ...baseStyle,

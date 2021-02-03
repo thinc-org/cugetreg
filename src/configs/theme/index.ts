@@ -15,7 +15,7 @@ const buildTheme = (themeOptions: ThemeOptions): Theme => {
 const themeBaseOptions: ThemeOptions = {
   typography: {
     htmlFontSize: 16,
-    fontFamily: ['Prompt', 'Poppins', 'sans-serif'].join(','),
+    fontFamily: ['Poppins', 'Prompt', 'sans-serif'].join(','),
   },
   breakpoints: {
     values: {

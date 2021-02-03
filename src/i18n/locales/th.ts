@@ -28,6 +28,7 @@ export const annuncementSearch = {
   search: 'ค้นหา',
   searchPlaceholder: 'ค้นหาหัวข้อ/เนื้อหา',
 }
+
 // Shopping Panel
 export const shoppingPanel = {
   selectedCourse: 'วิชาที่เลือก',
@@ -36,4 +37,17 @@ export const shoppingPanel = {
   genedCourse: 'วิชา GenEd',
   otherCourse: 'วิชาอื่น ๆ',
   makeSchedule: 'จัดตารางเรียน',
+}
+
+export const schedule = {
+  dateTime: 'วัน/เวลา',
+  days: {
+    MO: 'MON',
+    TU: 'TUE',
+    WE: 'WED',
+    TH: 'THU',
+    FR: 'FRI',
+    SA: 'SAT',
+    SU: 'SUN',
+  },
 }

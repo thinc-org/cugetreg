@@ -1,4 +1,4 @@
-import { authenticateByCode } from '@/utils/network/googleauth'
+import { authenticateByCode } from '@/utils/network/auth'
 import { useApolloClient } from '@apollo/client'
 import { Card, CardContent, LinearProgress } from '@material-ui/core'
 import { useRouter } from 'next/router'

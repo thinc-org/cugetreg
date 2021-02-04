@@ -23,6 +23,13 @@ function createStyled<Component extends ElementType>(
   }
 }
 
+/**
+ * Create a new component with a style attached to it
+ * Usage: const StyledComponent = styled(Component)(styles)
+ *
+ * @param Component the base component
+ * @param styles the styles to apply. can be CSSProperties or (theme: Theme) => CSSProperties
+ */
 export function styledWithTheme<Component extends ElementType>(Component: Component) {
   return (styles: StyledWithThemeRules) => createStyled(Component, styles)
 }

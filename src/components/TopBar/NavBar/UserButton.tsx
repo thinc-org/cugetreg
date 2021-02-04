@@ -10,7 +10,7 @@ export default function UserButton() {
   const userName = data?.authData?.firstName
   const onLogin = useCallback(() => {
     const uri = getRedirectUrl()
-    location.replace(uri)
+    location.assign(uri)
   }, [])
   const onLogout = useCallback(logout, [])
 

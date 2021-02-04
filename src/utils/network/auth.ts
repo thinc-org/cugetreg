@@ -21,19 +21,30 @@ import { ApolloClient, gql, makeVar } from '@apollo/client'
  * that will return the result to this client's origin.
  */
 export function getRedirectUrl() {
+  const clientId = env.googleauth.clientid
+  const callbackUrl = `${location.origin}/googleauthcallback`
+
+  if (typeof clientId !== 'string')
+    throw new Error(
+      "GoogleAuth client id environment is not a string (because it's not set?). Failed to generate redirect URL"
+    )
+
   const queries = new URLSearchParams({
-    client_id: env.googleauth.clientid,
+    client_id: clientId,
     response_type: 'code',
     scope: 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email',
     access_type: 'online',
     include_granted_scopes: 'true',
   })
 
-  const callbackUrl = `${location.origin}/googleauthcallback`
-
   if (env.isPrBuild) {
     // redirect_url unstable. use redirect redirector
-    queries.set('redirect_uri', env.googleauth.coderedirector)
+    const codeRedirector = env.googleauth.coderedirector
+    if (typeof codeRedirector !== 'string')
+      throw new Error(
+        "Auth CodeRedirector environment URL is not a string (because it's not set?). RenderPR requires it"
+      )
+    queries.set('redirect_uri', codeRedirector)
     queries.set('state', `returnURI=${callbackUrl}`)
   } else {
     queries.set('redirect_uri', callbackUrl)

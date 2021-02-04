@@ -5,7 +5,8 @@ import type { ComponentProps, ComponentType, ElementType } from 'react'
 type CSSPropertiesCallback = (theme: Theme) => CSSProperties
 type StyledWithThemeRules = CSSProperties | CSSPropertiesCallback
 
-type StyledProps<Component> = Omit<ComponentProps<Component>, 'className'> & { className?: string }
+type AllProps<Component extends ElementType> = JSX.LibraryManagedAttributes<Component, ComponentProps<Component>>
+type StyledProps<Component extends ElementType> = Omit<AllProps<Component>, 'className'> & { className?: string }
 
 function createStyled<Component extends ElementType>(
   Component: Component,
@@ -17,9 +18,9 @@ function createStyled<Component extends ElementType>(
   } else {
     useStyles = makeStyles({ root: styles })
   }
-  return function Styled({ className, ...props }: StyledProps<Component>) {
+  return function Styled({ className, ...props }) {
     const { root } = useStyles()
-    return <Component {...props} className={`${root}${className ? ` ${className}` : ''}`} />
+    return <Component {...(props as AllProps<Component>)} className={`${root}${className ? ` ${className}` : ''}`} />
   }
 }
 

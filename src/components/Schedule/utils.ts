@@ -105,7 +105,7 @@ function getPaletteRange(theme: Theme, genEdType: GenEdType): HighlightColorRang
   }
 }
 
-export function useColorScheme(genEdType: GenEdType | undefined, hasOverlap: boolean): ColorScheme {
+export function useColorScheme(genEdType: GenEdType, hasOverlap: boolean): ColorScheme {
   const theme = useTheme()
   if (hasOverlap) {
     return {
@@ -114,7 +114,7 @@ export function useColorScheme(genEdType: GenEdType | undefined, hasOverlap: boo
       text: theme.palette.common.white,
     }
   }
-  if (typeof genEdType === 'undefined') {
+  if (genEdType === 'NO') {
     return {
       background: theme.palette.primaryRange[10],
       border: theme.palette.primaryRange[50],

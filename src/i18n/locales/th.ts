@@ -21,7 +21,7 @@ export const genEd = {
   IN: 'หมวดสหฯ',
   SC: 'หมวดวิทย์',
   SO: 'หมวดสังคม',
-  NOT_GENED: 'ไม่ใช่ GENED',
+  NO: 'ไม่ใช่ GENED',
 }
 
 export const annuncementSearch = {

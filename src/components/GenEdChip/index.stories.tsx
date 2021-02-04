@@ -13,6 +13,3 @@ export const GenEd = Template.bind({})
 GenEd.args = {
   category: 'HU',
 }
-
-export const NoGeneed = Template.bind({})
-NoGeneed.args = {}

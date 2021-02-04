@@ -49,7 +49,7 @@ const CourseList = ({ course: { courseNo, abbrName, credit, genEdType }, deleteC
           <Typography variant="body1">{t('credit', { credit: credit })}</Typography>
         </Grid>
         <Grid item={true} container xs={6} sm={2}>
-          {genEdType !== null ? <GenEdChip category={genEdType} /> : ''}
+          {genEdType !== 'NO' ? <GenEdChip category={genEdType} /> : ''}
         </Grid>
       </Grid>
     </div>

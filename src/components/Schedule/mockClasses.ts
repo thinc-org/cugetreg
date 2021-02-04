@@ -5,7 +5,7 @@ const courseTemplate = {
   abbrName: 'PROG LANG PRIN',
   building: 'ENG3',
   room: '318',
-  teacher: 'NNN',
+  teachers: ['NNN'],
 }
 
 export const mockClasses: TimetableClass[] = [
@@ -21,6 +21,7 @@ export const mockClasses: TimetableClass[] = [
   {
     ...courseTemplate,
     dayOfWeek: 'MO',
+    genEdType: 'NO',
     period: {
       start: '12:30',
       end: '14:00',
@@ -29,6 +30,7 @@ export const mockClasses: TimetableClass[] = [
   {
     ...courseTemplate,
     dayOfWeek: 'MO',
+    genEdType: 'NO',
     period: {
       start: '14:00',
       end: '15:30',
@@ -46,6 +48,7 @@ export const mockClasses: TimetableClass[] = [
   {
     ...courseTemplate,
     dayOfWeek: 'WE',
+    genEdType: 'NO',
     period: {
       start: '8:00',
       end: '11:00',
@@ -54,6 +57,7 @@ export const mockClasses: TimetableClass[] = [
   {
     ...courseTemplate,
     dayOfWeek: 'WE',
+    genEdType: 'NO',
     period: {
       start: '11:30',
       end: '14:00',
@@ -62,6 +66,7 @@ export const mockClasses: TimetableClass[] = [
   {
     ...courseTemplate,
     dayOfWeek: 'WE',
+    genEdType: 'NO',
     period: {
       start: '13:30',
       end: '16:00',
@@ -70,6 +75,7 @@ export const mockClasses: TimetableClass[] = [
   {
     ...courseTemplate,
     dayOfWeek: 'TH',
+    genEdType: 'NO',
     period: {
       start: '12:00',
       end: '15:00',

@@ -2098,10 +2098,10 @@
     resolve-from "^5.0.0"
     store2 "^2.7.1"
 
-"@thinc-org/chula-courses@^1.1.1":
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@thinc-org/chula-courses/-/chula-courses-1.1.1.tgz#2b923a93224d98c9b4cd90a193b22b52ee43bef3"
-  integrity sha512-Us51Gdu9Mxas7G1xUgoi48Y+g/kaNevqGJsenmZFsVH884LCsbKytnHIArD316CaY4obFjWgDIG3khIOEtrZmw==
+"@thinc-org/chula-courses@^1.1.3":
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/@thinc-org/chula-courses/-/chula-courses-1.1.3.tgz#1b31b03a00c4b75af229627401a6a59ff62a7005"
+  integrity sha512-Ac+naccchZvaIo/rmUtH2DQ0t4NZ6o4iVrZxdw8TKX053Ru5AiLsgnhwiPAF9idCHHg2gjCbNmK1AAlRB/dgDg==
   dependencies:
     axios "^0.21.1"
     fs "^0.0.1-security"

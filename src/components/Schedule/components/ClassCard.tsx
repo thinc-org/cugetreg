@@ -26,7 +26,7 @@ const ClassCardTypography = styled(ScheduleTypography)({
 
 export function ClassCard({ scheduleClass }: ClassCardProps) {
   const { cellHeight, getPosition } = useDimensions()
-  const { courseNo, abbrName, genEdType, position, dayOfWeek, teacher, building, room, hasOverlap } = scheduleClass
+  const { courseNo, abbrName, genEdType, position, dayOfWeek, teachers, building, room, hasOverlap } = scheduleClass
 
   // color
   const colorScheme = useColorScheme(genEdType, hasOverlap ?? false)
@@ -55,7 +55,7 @@ export function ClassCard({ scheduleClass }: ClassCardProps) {
         {isWide && courseNo} {abbrName}
       </ClassCardTypography>
       <ClassCardTypography variant="caption">
-        {teacher} | {building} {room}
+        {teachers.join(', ')} | {building} {room}
       </ClassCardTypography>
     </ClassCardLayout>
   )

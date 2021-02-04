@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { GenEdType } from '@thinc-org/chula-courses'
 
 export interface GenedChipPropsType {
-  category?: GenEdType
+  category: GenEdType
 }
 
 export const GenEdChip: React.FC<GenedChipPropsType> = ({ category }) => {
@@ -14,7 +14,7 @@ export const GenEdChip: React.FC<GenedChipPropsType> = ({ category }) => {
   const { t } = useTranslation('genEd')
   const BACKGROUND_COLOR = theme.palette.background.paper
   const color = genedColorMapper(theme, category)
-  const genedType = category ? t(category) : t('NOT_GENED')
+  const genedType = t(category)
 
   return <EnhancedChip borderColor={color} backgroundColor={BACKGROUND_COLOR} textColor={color} category={genedType} />
 }

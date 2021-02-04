@@ -50,7 +50,11 @@ const ShoppingPanel = ({ data }: CoursePropsType) => {
           {t('genedCourse')}
         </Typography>
         {courses.map((course) => {
-          return course.genEdType && <CourseList course={course} key={course.courseNo} deleteCourse={deleteCourse} />
+          return (
+            course.genEdType !== 'NO' && (
+              <CourseList course={course} key={course.courseNo} deleteCourse={deleteCourse} />
+            )
+          )
         })}
       </div>
       <div>
@@ -58,7 +62,11 @@ const ShoppingPanel = ({ data }: CoursePropsType) => {
           {t('otherCourse')}
         </Typography>
         {courses.map((course) => {
-          return !course.genEdType && <CourseList course={course} key={course.courseNo} deleteCourse={deleteCourse} />
+          return (
+            course.genEdType === 'NO' && (
+              <CourseList course={course} key={course.courseNo} deleteCourse={deleteCourse} />
+            )
+          )
         })}
       </div>
       <div className={classes.makeScheduleButton}>

@@ -5,13 +5,15 @@ import { ApolloClient, gql, makeVar } from '@apollo/client'
  * Auth flow
  *
  *    Client/Frontend     Backend     Google
- *       r-------------------------------> redirect to createRedirectionUrl() (Phase 1)
- *                          <------------r redirect to redirect_uri which just act as a code redirector
- *       <------------------r              code got redirected to state.return_uri
- *       o<---------------->o              GraphQL verify using authenticateByCode (Phase 2)
+ *       r-------------------------------> redirect to createRedirectionUrl() (1)
+ *       <-------------------------------r code got redirected to return_uri (2)
+ *       o<---------------->o              GraphQL verify using authenticateByCode (3)
  *
  *   r--> is client redirect
  *   o<->o is graphql query
+ *
+ *  In case that the redirect_uri is unstable (for Render PR). use redirect redirector in the backend at $backend/auth/callback
+ *  during step (1) and attach the final redirection target as state.returnURI.
  */
 
 /**
@@ -21,13 +23,21 @@ import { ApolloClient, gql, makeVar } from '@apollo/client'
 export function getRedirectUrl() {
   const queries = new URLSearchParams({
     client_id: env.googleauth.clientid,
-    redirect_uri: env.googleauth.redirecturi,
     response_type: 'code',
     scope: 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email',
     access_type: 'online',
     include_granted_scopes: 'true',
-    state: `returnURI=${location.origin}/googleauthcallback`,
   })
+
+  const callbackUrl = `${location.origin}/googleauthcallback`
+
+  if (env.isPrBuild) {
+    // redirect_url unstable. use redirect redirector
+    queries.set('redirect_uri', env.googleauth.coderedirector)
+    queries.set('state', `returnURI=${callbackUrl}`)
+  } else {
+    queries.set('redirect_uri', callbackUrl)
+  }
 
   return `https://accounts.google.com/o/oauth2/v2/auth?${queries.toString()}`
 }
@@ -75,7 +85,7 @@ export async function authenticateByCode(client: ApolloClient<object>, code: str
     mutation: EXCHANGE_JWT,
     variables: {
       code,
-      redirectURI: env.googleauth.redirecturi,
+      redirectURI: new URLSearchParams(getRedirectUrl()).get('redirect_uri'),
     },
   })
 

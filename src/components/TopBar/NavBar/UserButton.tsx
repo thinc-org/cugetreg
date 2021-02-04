@@ -1,4 +1,4 @@
-import { getRedirectUrl, GetAuthData, GET_AUTH_DATA, logout } from '@/utils/network/googleauth'
+import { getRedirectUrl, GetAuthData, GET_AUTH_DATA, logout } from '@/utils/network/auth'
 import { useQuery } from '@apollo/client'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'

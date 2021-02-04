@@ -1,7 +1,7 @@
 import { ApolloClient, InMemoryCache } from '@apollo/client'
 
 import env from '@/utils/env/macro'
-import { authDataFieldPolicy } from './googleauth'
+import { authDataFieldPolicy } from './auth'
 
 const cache = new InMemoryCache({
   typePolicies: {

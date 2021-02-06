@@ -7,8 +7,5 @@ module.exports = withOptimizedImages({
     IS_PULL_REQUEST: process.env.IS_PULL_REQUEST,
   },
 })
-const withMDX = require('@next/mdx')({
-  extension: /\.mdx?$/,
-})
 
 module.exports = withOptimizedImages()

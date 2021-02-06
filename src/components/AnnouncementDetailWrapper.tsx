@@ -1,4 +1,5 @@
 import { makeStyles, Typography } from '@material-ui/core'
+import { ReactNode } from 'react'
 
 const useStyles = makeStyles({
   wrapper: {
@@ -11,25 +12,25 @@ const useStyles = makeStyles({
     padding: '24px 0',
   },
   update: {
-    marginBottom: 10,
+    marginBottom: 24,
   },
 })
 
 interface PropsType {
-  children: JSX.Element
+  children: ReactNode
   data: {
     title: string
-    update: string
+    updatedTime: string
   }
 }
-const AnnouncementDetailWrapper = ({ children, data: { title, update } }: PropsType) => {
+const AnnouncementDetailWrapper = ({ children, data: { title, updatedTime } }: PropsType) => {
   const classes = useStyles()
   return (
     <div className={classes.wrapper}>
       <Typography variant="h2">{title}</Typography>
       <div className={classes.gened}>Some genedclip here</div>
       <Typography variant="h6" className={classes.update}>
-        {update}
+        {updatedTime}
       </Typography>
       <article>{children}</article>
     </div>

@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
+// /* eslint-disable @typescript-eslint/no-var-requires */
 const withOptimizedImages = require('next-optimized-images')
 
 module.exports = withOptimizedImages({
@@ -11,8 +11,4 @@ const withMDX = require('@next/mdx')({
   extension: /\.mdx?$/,
 })
 
-module.exports = withOptimizedImages(
-  withMDX({
-    pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'md', 'mdx'],
-  })
-)
+module.exports = withOptimizedImages()

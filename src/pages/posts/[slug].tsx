@@ -18,13 +18,12 @@ interface Props {
   }
 }
 
-const Post = ({ mdxSource, metaData }: Props) => {
+const Post = ({ mdxSource, metaData: { title, updatedTime, gened } }: Props) => {
   const content = hydrate(mdxSource)
+  const date = new Date(updatedTime.trim() + ' GMT+0700')
 
   return (
-    <AnnouncementDetailWrapper
-      data={{ title: metaData.title, updatedTime: metaData.updatedTime, gened: metaData.gened }}
-    >
+    <AnnouncementDetailWrapper data={{ title: title, updatedTime: isNaN(date.getTime()) ? null : date, gened: gened }}>
       {content}
     </AnnouncementDetailWrapper>
   )

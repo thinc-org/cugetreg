@@ -3,20 +3,18 @@ import { ReactNode } from 'react'
 import { GenEdChip } from '@/components/GenEdChip'
 import { GenEdType } from '@thinc-org/chula-courses'
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   wrapper: {
-    maxWidth: 1000,
-    margin: 'auto',
-    marginTop: 90,
-    marginBottom: 90,
+    maxWidth: theme.breakpoints.values.md,
+    margin: theme.spacing(11, 'auto'),
   },
   gened: {
-    padding: '24px 0',
+    padding: theme.spacing(3, 0),
   },
   update: {
-    marginBottom: 24,
+    marginBottom: theme.spacing(3),
   },
-})
+}))
 
 interface PropsType {
   children: ReactNode

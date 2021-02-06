@@ -1,5 +1,7 @@
 import { makeStyles, Typography } from '@material-ui/core'
 import { ReactNode } from 'react'
+import { GenEdChip } from '@/components/GenEdChip'
+import { GenEdType } from '@thinc-org/chula-courses'
 
 const useStyles = makeStyles({
   wrapper: {
@@ -21,14 +23,18 @@ interface PropsType {
   data: {
     title: string
     updatedTime: string
+    gened: GenEdType
   }
 }
-const AnnouncementDetailWrapper = ({ children, data: { title, updatedTime } }: PropsType) => {
+const AnnouncementDetailWrapper = ({ children, data: { title, updatedTime, gened } }: PropsType) => {
   const classes = useStyles()
+
   return (
     <div className={classes.wrapper}>
       <Typography variant="h2">{title}</Typography>
-      <div className={classes.gened}>Some genedclip here</div>
+      <div className={classes.gened}>
+        <GenEdChip category={gened} />
+      </div>
       <Typography variant="h6" className={classes.update}>
         {updatedTime}
       </Typography>

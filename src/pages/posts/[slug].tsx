@@ -7,12 +7,14 @@ import AnnouncementDetailWrapper from '@/components/AnnouncementDetailWrapper'
 
 import { postFilePaths, POSTS_PATH } from '@/utils/mdxUtils'
 import { MdxRemote } from 'next-mdx-remote/types'
+import { GenEdType } from '@thinc-org/chula-courses'
 
 interface Props {
   mdxSource: MdxRemote.Source
   metaData: {
     title: string
     updatedTime: string
+    gened: GenEdType
   }
 }
 
@@ -20,7 +22,9 @@ const Post = ({ mdxSource, metaData }: Props) => {
   const content = hydrate(mdxSource)
 
   return (
-    <AnnouncementDetailWrapper data={{ title: metaData.title, updatedTime: metaData.updatedTime }}>
+    <AnnouncementDetailWrapper
+      data={{ title: metaData.title, updatedTime: metaData.updatedTime, gened: metaData.gened }}
+    >
       {content}
     </AnnouncementDetailWrapper>
   )

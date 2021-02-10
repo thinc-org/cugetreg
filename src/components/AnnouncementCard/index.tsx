@@ -13,20 +13,14 @@ export interface AnnouncementCardPropTypes {
   imageURL: string
   title: string
   tags: string[]
-  genEds: GenEdType[]
+  genEd: GenEdType
   body: string
 }
 
-export const AnnouncementCard = ({ date, imageURL, title, tags, genEds, body }: AnnouncementCardPropTypes) => {
+export const AnnouncementCard = ({ date, imageURL, title, tags, genEd, body }: AnnouncementCardPropTypes) => {
   const tagComponent = tags.map((text) => (
     <Tag key={text}>
       <Chip category={text} shade={ChipShade.primaryRange} />
-    </Tag>
-  ))
-
-  const genedsComponents = genEds.map((genEd) => (
-    <Tag key={genEd}>
-      <GenEdChip category={genEd} />
     </Tag>
   ))
 
@@ -41,7 +35,10 @@ export const AnnouncementCard = ({ date, imageURL, title, tags, genEds, body }: 
           <Typography variant="h6">{title}</Typography>
         </div>
         <TagContainer>
-          {tagComponent} {genedsComponents}
+          {tagComponent}{' '}
+          <Tag>
+            <GenEdChip category={genEd} />
+          </Tag>
         </TagContainer>
         <Typography variant="body1" component="p">
           {body}

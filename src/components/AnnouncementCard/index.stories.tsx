@@ -34,6 +34,6 @@ AnnouncementCardStory.args = {
   imageURL: 'https://foreignpolicy.com/wp-content/uploads/2020/07/Marine-Thailand-Exercise-GettyImages-1203838332.jpg',
   title: 'เปิดวิชาเรียนใหม่ 0201170 Military Science เสริมสร้างวินัยทหารในตัวคุณ',
   tags: ['เปิดวิชา1', 'เปิดวิชา2'],
-  genEds: ['SO', 'HU'],
+  genEd: 'SO',
   body: 'เนื้อหาวิชา วิทยาการทหาร ยุทธศาสตร์ชาติ ประวัติศาสตร์การทหาร กองทัพบก กองทัพอากาศ กองทัพเรือ ...',
 }

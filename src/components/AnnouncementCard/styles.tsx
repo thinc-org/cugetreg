@@ -1,6 +1,5 @@
 import { styledWithTheme } from '@/utils/styledWithTheme'
 import { Typography } from '@material-ui/core'
-import { IMAGE_SIZE } from './const'
 
 export const Image = styledWithTheme('img')((theme) => ({
   marginRight: theme.spacing(3),
@@ -12,7 +11,6 @@ export const AnnouncementContainer = styledWithTheme('div')((theme) => ({
   borderRadius: theme.shape.borderRadius,
   backgroundColor: theme.palette.background.paper,
   display: 'flex',
-  height: IMAGE_SIZE,
   padding: theme.spacing(3, 12, 3, 6),
 }))
 

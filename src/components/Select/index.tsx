@@ -5,7 +5,7 @@ import { useStyles } from './styles'
 
 interface Item {
   value: string
-  text: string
+  translatedText: string
 }
 
 export interface SelectProps {
@@ -21,7 +21,7 @@ export const Select = ({ items, value, onChange, name }: SelectProps) => {
 
   const Items = items.map((item) => (
     <MenuItem key={item.value} value={item.value}>
-      {item.text}
+      {item.translatedText}
     </MenuItem>
   ))
 

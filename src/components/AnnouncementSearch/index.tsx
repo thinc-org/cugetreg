@@ -2,13 +2,14 @@ import { useTranslation } from 'react-i18next'
 
 import { DatePicker } from '@/components/DatePicker'
 import { Select } from '@/components/Select'
+import { useSharedStyles } from '@/styles/shared'
+import { CategorySearchTag, Faculty } from '@/utils/type'
 import { Button, FormControl, Input, InputAdornment } from '@material-ui/core'
 import SearchIcon from '@material-ui/icons/Search'
-import { useSharedStyles } from '@/styles/shared'
 
-import { AnnouncementSearchContainer, useStyles } from './styles'
 import useAnnouncementSearch from './useAnnouncementSearch'
-import { CategorySearchTag, Faculty } from '@/utils/type'
+import { mapTextsToTranslatedItems } from './utils'
+import { AnnouncementSearchContainer, useStyles } from './styles'
 
 export type OnSubmit = (keyword: string, date: Date | null, category: CategorySearchTag, faculty: string) => void
 
@@ -33,11 +34,9 @@ export const AnnouncementSearch = ({ categories, faculties, onSubmit }: Announce
   const sharedClasses = useSharedStyles()
   const classes = useStyles()
   const { t } = useTranslation(['announcement', 'faculty', 'category'])
-  const facultiesTranslated = faculties.map((faculty) => ({ value: faculty, text: t(`faculty:${faculty}` as const) }))
-  const categoriesTranslated = categories.map((category) => ({
-    value: category,
-    text: t(`category:${category}` as const),
-  }))
+
+  const facultiesTranslated = mapTextsToTranslatedItems('category', faculties, t)
+  const categoriesTranslated = mapTextsToTranslatedItems('faculty', categories, t)
 
   return (
     <form noValidate onSubmit={submit}>

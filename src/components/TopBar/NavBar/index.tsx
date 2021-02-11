@@ -20,6 +20,9 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: 16,
     paddingRight: 16,
   },
+  link: {
+    textDecoration: 'none',
+  },
 }))
 
 export function NavBar() {
@@ -34,7 +37,12 @@ export function NavBar() {
           </a>
         </Link>
         {/* TODO: replace with actual links */}
-        <NavBarItem>{t('navBar:news')}</NavBarItem>
+
+        <Link href="/announcement">
+          <a className={classes.link}>
+            <NavBarItem>{t('navBar:news')}</NavBarItem>
+          </a>
+        </Link>
         <NavBarItem>{t('navBar:searchCourses')}</NavBarItem>
         <NavBarItem>{t('navBar:timetable')}</NavBarItem>
         <FlexOne />

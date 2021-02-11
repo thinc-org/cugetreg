@@ -1,18 +1,20 @@
+import { ALL_CATEGORIES, ALL_FACULTIES } from '@/hooks/useAnnouncement/const'
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date'
 import { FormEvent, useState } from 'react'
 import { OnSubmit } from '.'
+import { SearchTag } from './type'
 
 const useAnnouncementSearch = (onSubmit: OnSubmit) => {
   const [keyword, setKeyword] = useState('')
   const [date, setDate] = useState<Date | null>(null)
-  const [category, setCategory] = useState<string>('ทุกหมวดหมู่')
-  const [faculty, setFaculty] = useState<string>('ทุกคณะ')
+  const [category, setCategory] = useState<SearchTag>(ALL_CATEGORIES)
+  const [faculty, setFaculty] = useState<string>(ALL_FACULTIES)
 
   const handleDateChange = (date: MaterialUiPickersDate) => {
     setDate(new Date(date || ''))
   }
   const handleCategoryChange = (e: React.ChangeEvent<{ value: unknown }>) => {
-    setCategory(e.target.value as string)
+    setCategory(e.target.value as SearchTag)
   }
 
   const handleFacultyChange = (e: React.ChangeEvent<{ value: unknown }>) => {

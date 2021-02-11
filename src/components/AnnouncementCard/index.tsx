@@ -6,23 +6,37 @@ import { format } from 'date-fns'
 import { th } from 'date-fns/locale'
 import { IMAGE_SIZE } from './const'
 import { ChipShade } from '../Chip/const'
+import { TagType } from '@/hooks/useAnnouncement'
 import { GenEdType } from '@thinc-org/chula-courses'
+import { isGenEd } from './utils'
 
 export interface AnnouncementCardPropTypes {
   date: Date
   imageURL: string
   title: string
-  tags: string[]
-  genEd: GenEdType
+  tags: TagType[]
+  faculties: string[]
   body: string
 }
 
-export const AnnouncementCard = ({ date, imageURL, title, tags, genEd, body }: AnnouncementCardPropTypes) => {
-  const tagComponent = tags.map((text) => (
+export const AnnouncementCard = ({ date, imageURL, title, tags, faculties, body }: AnnouncementCardPropTypes) => {
+  const tagComponent = faculties.map((text) => (
     <Tag key={text}>
       <Chip category={text} shade={ChipShade.primaryRange} />
     </Tag>
   ))
+
+  const tagsComponents = tags.map((tag) =>
+    isGenEd(tag) ? (
+      <Tag key={tag}>
+        <GenEdChip category={tag as GenEdType} />
+      </Tag>
+    ) : (
+      <Tag key={tag}>
+        <Chip category={tag} shade={ChipShade.primaryRange} />
+      </Tag>
+    )
+  )
 
   const dateText = format(date, 'dd/mm/yyyy hh:mm', { locale: th })
 
@@ -35,10 +49,7 @@ export const AnnouncementCard = ({ date, imageURL, title, tags, genEd, body }: A
           <Typography variant="h6">{title}</Typography>
         </div>
         <TagContainer>
-          {tagComponent}{' '}
-          <Tag>
-            <GenEdChip category={genEd} />
-          </Tag>
+          {tagComponent} {tagsComponents}
         </TagContainer>
         <Typography variant="body1" component="p">
           {body}

@@ -1,6 +1,5 @@
 import { EnhancedChip } from './styles'
-import { useTheme } from '@material-ui/styles'
-import { Theme } from '@material-ui/core'
+import { Theme, useTheme } from '@material-ui/core'
 import { genedColorMapper } from './utils'
 import { useTranslation } from 'react-i18next'
 import { GenEdType } from '@thinc-org/chula-courses'

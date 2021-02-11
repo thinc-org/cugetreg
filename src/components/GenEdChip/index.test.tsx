@@ -3,9 +3,16 @@ import { render } from '@testing-library/react'
 import * as ChipType from '.'
 
 describe('Chip', () => {
-  const shadeMapperSpy = jest.fn().mockReturnValue({ textColor: '', backgroundColor: '' })
+  const useThemeSpy = jest.fn().mockReturnValue({ palette: { background: { paper: '' } } })
+  const EnhancedShipSpy = jest.fn().mockReturnValue(<div></div>)
+  const genedColorMapperSpy = jest.fn().mockReturnValue('')
+  const translateSpy = jest.fn().mockReturnValue('')
+  const useTranslationSpy = jest.fn().mockReturnValue({ t: translateSpy })
 
-  jest.doMock('./utils', () => ({ shadeMapper: shadeMapperSpy }))
+  jest.doMock('@material-ui/core', () => ({ useTheme: useThemeSpy }))
+  jest.doMock('./utils', () => ({ genedColorMapper: genedColorMapperSpy }))
+  jest.doMock('./styles', () => ({ EnhancedChip: EnhancedShipSpy }))
+  jest.doMock('react-i18next', () => ({ useTranslation: useTranslationSpy }))
 
   const { GenEdChip } = require('.') as typeof ChipType
 

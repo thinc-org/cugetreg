@@ -35,8 +35,8 @@ export const AnnouncementSearch = ({ categories, faculties, onSubmit }: Announce
   const classes = useStyles()
   const { t } = useTranslation(['announcement', 'faculty', 'category'])
 
-  const facultiesTranslated = mapTextsToTranslatedItems('category', faculties, t)
-  const categoriesTranslated = mapTextsToTranslatedItems('faculty', categories, t)
+  const facultiesTranslated = mapTextsToTranslatedItems('faculty', faculties, t)
+  const categoriesTranslated = mapTextsToTranslatedItems('category', categories, t)
 
   return (
     <form noValidate onSubmit={submit}>

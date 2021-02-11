@@ -1,12 +1,9 @@
-import { CategorySearchTag, Faculty } from '@/components/AnnouncementSearch/type'
-import { GENEDS } from '@/utils/const'
+import { category, faculty } from '@/i18n/locales/th'
+import { CategorySearchTag, Faculty } from '@/utils/type'
 import { Announcement } from '.'
 
-export const ALL_FACULTIES = 'all_faculties'
-export const ALL_CATEGORIES = 'all_catagories'
-
-export const FACULTIES = [ALL_FACULTIES, 'key1', 'key2'] as Faculty[]
-export const CATAGORIES = [ALL_CATEGORIES, 'open', 'close', 'chula', 'other'].concat(GENEDS) as CategorySearchTag[]
+export const FACULTIES = Object.keys(faculty) as Faculty[]
+export const CATAGORIES = Object.keys(category) as CategorySearchTag[]
 
 export const mockAnnouncements: Announcement[] = [
   {

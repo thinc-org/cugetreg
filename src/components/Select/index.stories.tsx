@@ -13,5 +13,9 @@ export const SelectPropsStory: Story<SelectProps> = (args) => {
 
 SelectPropsStory.args = {
   value: 'test1',
-  items: ['test1', 'test2', 'test3'],
+  items: [
+    { value: 'test1', text: 'test1' },
+    { value: 'test2', text: 'test2' },
+    { value: 'test3', text: 'test3' },
+  ],
 }

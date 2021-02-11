@@ -18,7 +18,8 @@ export const navBar = {
   signin: 'เข้าสู่ระบบ',
 }
 
-export const announcementSearch = {
+export const announcement = {
+  mainText: 'กระดานข่าวสาร',
   search: 'ค้นหา',
   searchPlaceholder: 'ค้นหาหัวข้อ/เนื้อหา',
 }

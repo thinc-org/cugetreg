@@ -14,4 +14,4 @@ export const OTHER_CATEGORIES = {
 }
 
 export const ALL_FACULTIES = 'all_faculties'
-export const ALL_CATEGORIES = 'all_catagories'
+export const ALL_CATEGORIES = 'all_categories'

@@ -6,10 +6,10 @@ import { format } from 'date-fns'
 import { th } from 'date-fns/locale'
 import { IMAGE_SIZE } from './const'
 import { ChipShade } from '../Chip/const'
-import { TagType } from '@/hooks/useAnnouncement'
 import { GenEdType } from '@thinc-org/chula-courses'
 import { isGenEd } from './utils'
 import { useTranslation } from 'react-i18next'
+import { TagType } from '@/hooks/useAnnouncement/type'
 
 export interface AnnouncementCardPropTypes {
   date: Date

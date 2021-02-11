@@ -32,7 +32,7 @@ export const AnnouncementSearch = ({ categories, faculties, onSubmit }: Announce
   } = useAnnouncementSearch(onSubmit)
   const sharedClasses = useSharedStyles()
   const classes = useStyles()
-  const { t } = useTranslation(['announcementSearch', 'faculty', 'category'])
+  const { t } = useTranslation(['announcement', 'faculty', 'category'])
   const facultiesTranslated = faculties.map((faculty) => ({ value: faculty, text: t(`faculty:${faculty}` as const) }))
   const categoriesTranslated = categories.map((category) => ({
     value: category,
@@ -44,7 +44,7 @@ export const AnnouncementSearch = ({ categories, faculties, onSubmit }: Announce
       <AnnouncementSearchContainer>
         <FormControl className={sharedClasses.inputField}>
           <Input
-            placeholder={t('announcementSearch:searchPlaceholder')}
+            placeholder={t('announcement:searchPlaceholder')}
             name="keyword"
             startAdornment={
               <InputAdornment position="start">
@@ -63,7 +63,7 @@ export const AnnouncementSearch = ({ categories, faculties, onSubmit }: Announce
         <Select name="categories" onChange={handleCategoryChange} items={categoriesTranslated} value={category} />
         <Select name="faculties" onChange={handleFacultyChange} items={facultiesTranslated} value={faculty} />
         <Button variant="contained" color="primary" type="submit" className={classes.button}>
-          {t('announcementSearch:search')}
+          {t('announcement:search')}
         </Button>
       </AnnouncementSearchContainer>
     </form>

@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { render } from '@testing-library/react'
-import { AppProps } from 'next/dist/next-server/lib/router/router'
 // import * as AppType from '@/pages/_app'
 // import MyApp from '@/pages/_app'
 
-describe('Chip', () => {
+describe('App component', () => {
   const useAppSpy = jest.fn()
 
   jest.doMock('@/hooks/useApp', () => useAppSpy)

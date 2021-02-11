@@ -1,3 +1,5 @@
+import { ALL_CATEGORIES, ALL_FACULTIES } from '@/hooks/useAnnouncement/const'
+
 // Default namespace
 export const translation = {
   appName: 'CU Get Reg',
@@ -16,15 +18,7 @@ export const navBar = {
   signin: 'เข้าสู่ระบบ',
 }
 
-export const genEd = {
-  HU: 'หมวดมนุษย์',
-  IN: 'หมวดสหฯ',
-  SC: 'หมวดวิทย์',
-  SO: 'หมวดสังคม',
-  NO: 'ไม่ใช่ GENED',
-}
-
-export const annuncementSearch = {
+export const announcementSearch = {
   search: 'ค้นหา',
   searchPlaceholder: 'ค้นหาหัวข้อ/เนื้อหา',
 }
@@ -50,4 +44,23 @@ export const schedule = {
     SA: 'SAT',
     SU: 'SUN',
   },
+}
+
+export const faculty = {
+  key1: 'value1',
+  key2: 'value2',
+  [ALL_FACULTIES]: 'ทุกคณะ',
+}
+
+export const category = {
+  open: 'เปิดวิชา',
+  close: 'ปิดวิชา',
+  chula: 'จุฬา',
+  other: 'อื่นๆ',
+  HU: 'หมวดมนุษย์',
+  IN: 'หมวดสหฯ',
+  SC: 'หมวดวิทย์',
+  SO: 'หมวดสังคม',
+  NO: 'ไม่ใช่ GENED',
+  [ALL_CATEGORIES]: 'ทุกประเภท',
 }

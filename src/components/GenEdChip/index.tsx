@@ -11,7 +11,7 @@ export interface GenedChipPropsType {
 
 export const GenEdChip: React.FC<GenedChipPropsType> = ({ category }) => {
   const theme = useTheme<Theme>()
-  const { t } = useTranslation('genEd')
+  const { t } = useTranslation('category')
   const BACKGROUND_COLOR = theme.palette.background.paper
   const color = genedColorMapper(theme, category)
   const genedType = t(category)

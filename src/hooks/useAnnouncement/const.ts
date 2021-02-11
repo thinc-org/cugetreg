@@ -1,12 +1,12 @@
+import { CategorySearchTag, Faculty } from '@/components/AnnouncementSearch/type'
 import { GENEDS } from '@/utils/const'
-
-import { Announcement } from './'
+import { Announcement } from '.'
 
 export const ALL_FACULTIES = 'all_faculties'
 export const ALL_CATEGORIES = 'all_catagories'
 
-export const FACULTIES = [ALL_FACULTIES, 'Faculty 2', 'Faculty 3']
-export const CATAGORIES = [ALL_CATEGORIES, 'open', 'close', 'chula', 'other'].concat(GENEDS)
+export const FACULTIES = [ALL_FACULTIES, 'key1', 'key2'] as Faculty[]
+export const CATAGORIES = [ALL_CATEGORIES, 'open', 'close', 'chula', 'other'].concat(GENEDS) as CategorySearchTag[]
 
 export const mockAnnouncements: Announcement[] = [
   {
@@ -16,7 +16,7 @@ export const mockAnnouncements: Announcement[] = [
     content: 'wefew',
     date: new Date(),
     tags: ['open', 'chula', 'HU'],
-    faculties: ['Faculty 2', 'Faculty 3'],
+    faculties: [],
     thumbnail: '',
   },
   {
@@ -26,7 +26,7 @@ export const mockAnnouncements: Announcement[] = [
     content: 'wasdefew',
     date: new Date(),
     tags: ['other'],
-    faculties: ['Faculty 2'],
+    faculties: ['key'],
     thumbnail: '',
   },
   {
@@ -36,7 +36,7 @@ export const mockAnnouncements: Announcement[] = [
     content: 'Hello my name is norapat',
     date: new Date(),
     tags: ['SC'],
-    faculties: ['Faculty 3'],
+    faculties: ['key'],
     thumbnail: '',
   },
 ]

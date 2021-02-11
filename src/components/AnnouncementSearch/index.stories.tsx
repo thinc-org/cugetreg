@@ -1,6 +1,7 @@
 import React from 'react'
 import { AnnouncementSearch, AnnouncementSearchProps } from '.'
 import { Meta, Story } from '@storybook/react/types-6-0'
+import { ALL_FACULTIES, ALL_CATEGORIES } from '@/utils/const'
 
 export default {
   title: 'Component/AnnouncementSearch',
@@ -12,6 +13,6 @@ export const AnnouncementSearchStory: Story<AnnouncementSearchProps> = (args) =>
 }
 
 AnnouncementSearchStory.args = {
-  categories: ['ทุกหมวดหมู่', 'test2'],
-  faculties: ['ทุกคณะ', 'test11'],
+  categories: [ALL_CATEGORIES, 'HU'],
+  faculties: [ALL_FACULTIES, 'key1'],
 }

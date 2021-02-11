@@ -14,7 +14,8 @@ export const mockAnnouncements: Announcement[] = [
     date: new Date(),
     tags: ['open', 'chula', 'HU'],
     faculties: [],
-    thumbnail: '',
+    thumbnail:
+      'https://foreignpolicy.com/wp-content/uploads/2020/07/Marine-Thailand-Exercise-GettyImages-1203838332.jpg',
   },
   {
     _id: '12d3',
@@ -24,7 +25,8 @@ export const mockAnnouncements: Announcement[] = [
     date: new Date(),
     tags: ['other'],
     faculties: ['key'],
-    thumbnail: '',
+    thumbnail:
+      'https://foreignpolicy.com/wp-content/uploads/2020/07/Marine-Thailand-Exercise-GettyImages-1203838332.jpg',
   },
   {
     _id: '1233',
@@ -34,6 +36,7 @@ export const mockAnnouncements: Announcement[] = [
     date: new Date(),
     tags: ['SC'],
     faculties: ['key'],
-    thumbnail: '',
+    thumbnail:
+      'https://foreignpolicy.com/wp-content/uploads/2020/07/Marine-Thailand-Exercise-GettyImages-1203838332.jpg',
   },
 ]

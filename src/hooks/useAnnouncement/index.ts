@@ -1,13 +1,11 @@
 import { OnSubmit } from '@/components/AnnouncementSearch'
-import { GenEdType } from '@thinc-org/chula-courses'
 import { useState } from 'react'
 import Fuse from 'fuse.js'
 import { FACULTIES, CATAGORIES, mockAnnouncements } from './const'
 
 import differenceInCalendarDays from 'date-fns/differenceInCalendarDays'
 import { ALL_CATEGORIES, ALL_FACULTIES } from '@/utils/const'
-
-export type TagType = GenEdType | 'open' | 'close' | 'chula' | 'other'
+import { TagType } from './type'
 
 export interface Announcement {
   _id: string

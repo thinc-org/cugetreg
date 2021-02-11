@@ -8,7 +8,7 @@ import { useSharedStyles } from '@/styles/shared'
 
 import { AnnouncementSearchContainer, useStyles } from './styles'
 import useAnnouncementSearch from './useAnnouncementSearch'
-import { CategorySearchTag, Faculty } from './type'
+import { CategorySearchTag, Faculty } from '@/utils/type'
 
 export type OnSubmit = (keyword: string, date: Date | null, category: CategorySearchTag, faculty: string) => void
 

@@ -1,4 +1,4 @@
-import { ALL_CATEGORIES, ALL_FACULTIES } from '@/hooks/useAnnouncement/const'
+import { ALL_CATEGORIES, ALL_FACULTIES, GENEDS, OTHER_CATEGORIES } from '@/utils/const'
 
 // Default namespace
 export const translation = {
@@ -53,14 +53,7 @@ export const faculty = {
 }
 
 export const category = {
-  open: 'เปิดวิชา',
-  close: 'ปิดวิชา',
-  chula: 'จุฬา',
-  other: 'อื่นๆ',
-  HU: 'หมวดมนุษย์',
-  IN: 'หมวดสหฯ',
-  SC: 'หมวดวิทย์',
-  SO: 'หมวดสังคม',
-  NO: 'ไม่ใช่ GENED',
   [ALL_CATEGORIES]: 'ทุกประเภท',
+  ...GENEDS,
+  ...OTHER_CATEGORIES,
 }

@@ -20,6 +20,6 @@ jobs:
         id: testCovergae
         uses: anuraag016/Jest-Coverage-Diff@V1.1
         with:
-          fullCoverageDiff: false // defaults to false, if made true whole coverage report is commented with the diff
+          fullCoverageDiff: false # defaults to false, if made true whole coverage report is commented with the diff
           runCommand: 'npx jest --collectCoverageFrom=''["src/**/*.{js,jsx,ts,tsx}"]'' --coverage --collectCoverage=true --coverageDirectory=''./'' --coverageReporters=''json-summary'' --forceExit --detectOpenHandles test/.*test.*'
           # delta: 0.5

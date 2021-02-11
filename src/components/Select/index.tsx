@@ -3,8 +3,13 @@ import { useSharedStyles } from '@/styles/shared'
 
 import { useStyles } from './styles'
 
+interface Item {
+  value: string
+  text: string
+}
+
 export interface SelectProps {
-  items: string[]
+  items: Item[]
   value: string
   name: string
   onChange: (e: React.ChangeEvent<{ value: unknown }>) => void
@@ -15,8 +20,8 @@ export const Select = ({ items, value, onChange, name }: SelectProps) => {
   const classes = useStyles()
 
   const Items = items.map((item) => (
-    <MenuItem key={item} value={item}>
-      {item}
+    <MenuItem key={item.value} value={item.value}>
+      {item.text}
     </MenuItem>
   ))
 

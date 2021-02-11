@@ -9,6 +9,7 @@ import { ChipShade } from '../Chip/const'
 import { TagType } from '@/hooks/useAnnouncement'
 import { GenEdType } from '@thinc-org/chula-courses'
 import { isGenEd } from './utils'
+import { useTranslation } from 'react-i18next'
 
 export interface AnnouncementCardPropTypes {
   date: Date
@@ -20,6 +21,7 @@ export interface AnnouncementCardPropTypes {
 }
 
 export const AnnouncementCard = ({ date, imageURL, title, tags, faculties, body }: AnnouncementCardPropTypes) => {
+  const { t } = useTranslation('category')
   const tagComponent = faculties.map((text) => (
     <Tag key={text}>
       <Chip category={text} shade={ChipShade.primaryRange} />
@@ -33,7 +35,7 @@ export const AnnouncementCard = ({ date, imageURL, title, tags, faculties, body 
       </Tag>
     ) : (
       <Tag key={tag}>
-        <Chip category={tag} shade={ChipShade.primaryRange} />
+        <Chip category={t(tag)} shade={ChipShade.primaryRange} />
       </Tag>
     )
   )

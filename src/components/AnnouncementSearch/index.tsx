@@ -8,13 +8,13 @@ import { useSharedStyles } from '@/styles/shared'
 
 import { AnnouncementSearchContainer, useStyles } from './styles'
 import useAnnouncementSearch from './useAnnouncementSearch'
-import { CategorySearchTag } from './type'
+import { CategorySearchTag, Faculty } from './type'
 
 export type OnSubmit = (keyword: string, date: Date | null, category: CategorySearchTag, faculty: string) => void
 
 export interface AnnouncementSearchProps {
-  categories: string[]
-  faculties: string[]
+  categories: CategorySearchTag[]
+  faculties: Faculty[]
   onSubmit: OnSubmit
 }
 
@@ -32,14 +32,19 @@ export const AnnouncementSearch = ({ categories, faculties, onSubmit }: Announce
   } = useAnnouncementSearch(onSubmit)
   const sharedClasses = useSharedStyles()
   const classes = useStyles()
-  const { t } = useTranslation('annuncementSearch')
+  const { t } = useTranslation(['announcementSearch', 'faculty', 'category'])
+  const facultiesTranslated = faculties.map((faculty) => ({ value: faculty, text: t(`faculty:${faculty}` as const) }))
+  const categoriesTranslated = categories.map((category) => ({
+    value: category,
+    text: t(`category:${category}` as const),
+  }))
 
   return (
     <form noValidate onSubmit={submit}>
       <AnnouncementSearchContainer>
         <FormControl className={sharedClasses.inputField}>
           <Input
-            placeholder={t('searchPlaceholder')}
+            placeholder={t('announcementSearch:searchPlaceholder')}
             name="keyword"
             startAdornment={
               <InputAdornment position="start">
@@ -55,10 +60,10 @@ export const AnnouncementSearch = ({ categories, faculties, onSubmit }: Announce
           />
         </FormControl>
         <DatePicker name="date" value={date} onChange={handleDateChange} />
-        <Select name="categories" onChange={handleCategoryChange} items={categories} value={category} />
-        <Select name="faculties" onChange={handleFacultyChange} items={faculties} value={faculty} />
+        <Select name="categories" onChange={handleCategoryChange} items={categoriesTranslated} value={category} />
+        <Select name="faculties" onChange={handleFacultyChange} items={facultiesTranslated} value={faculty} />
         <Button variant="contained" color="primary" type="submit" className={classes.button}>
-          {t('search')}
+          {t('announcementSearch:search')}
         </Button>
       </AnnouncementSearchContainer>
     </form>

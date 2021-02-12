@@ -1,5 +1,6 @@
 import { announcement, faculty } from '@/i18n/locales/th'
 import { CategorySearchTag, Faculty } from '@/utils/type'
+import Fuse from 'fuse.js'
 import { Announcement } from '.'
 
 export const FACULTIES = Object.keys(faculty) as Faculty[]
@@ -40,3 +41,8 @@ export const mockAnnouncements: Announcement[] = [
       'https://foreignpolicy.com/wp-content/uploads/2020/07/Marine-Thailand-Exercise-GettyImages-1203838332.jpg',
   },
 ]
+
+const options = {
+  keys: ['title', 'description', 'content'],
+}
+export const fuse = new Fuse(mockAnnouncements, options)

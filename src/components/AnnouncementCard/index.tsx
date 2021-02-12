@@ -10,21 +10,22 @@ import { GenEdType } from '@thinc-org/chula-courses'
 import { isGenEd } from './utils'
 import { useTranslation } from 'react-i18next'
 import { TagType } from '@/hooks/useAnnouncement/type'
+import { Faculty } from '@/utils/type'
 
 export interface AnnouncementCardPropTypes {
   date: Date
   imageURL: string
   title: string
   tags: TagType[]
-  faculties: string[]
+  faculties: Faculty[]
   body: string
 }
 
 export const AnnouncementCard = ({ date, imageURL, title, tags, faculties, body }: AnnouncementCardPropTypes) => {
-  const { t } = useTranslation('announcement')
-  const tagComponent = faculties.map((text) => (
-    <Tag key={text}>
-      <Chip category={text} shade={ChipShade.primaryRange} />
+  const { t } = useTranslation(['announcement', 'faculty'])
+  const facultiesComponent = faculties.map((faculty) => (
+    <Tag key={faculty}>
+      <Chip category={t(`faculty:${faculty}` as const)} shade={ChipShade.primaryRange} />
     </Tag>
   ))
 
@@ -35,7 +36,7 @@ export const AnnouncementCard = ({ date, imageURL, title, tags, faculties, body 
       </Tag>
     ) : (
       <Tag key={tag}>
-        <Chip category={t(`category.${tag}` as const)} shade={ChipShade.primaryRange} />
+        <Chip category={t(`announcement:category.${tag}` as const)} shade={ChipShade.primaryRange} />
       </Tag>
     )
   )
@@ -51,7 +52,7 @@ export const AnnouncementCard = ({ date, imageURL, title, tags, faculties, body 
           <Typography variant="h6">{title}</Typography>
         </div>
         <TagContainer>
-          {tagComponent} {tagsComponents}
+          {facultiesComponent} {tagsComponents}
         </TagContainer>
         <Typography variant="body1" component="p">
           {body}

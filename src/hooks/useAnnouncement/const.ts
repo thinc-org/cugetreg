@@ -24,7 +24,7 @@ export const mockAnnouncements: Announcement[] = [
     content: 'wasdefew',
     date: new Date(),
     tags: ['other'],
-    faculties: ['key'],
+    faculties: ['key2'],
     thumbnail:
       'https://foreignpolicy.com/wp-content/uploads/2020/07/Marine-Thailand-Exercise-GettyImages-1203838332.jpg',
   },
@@ -35,7 +35,7 @@ export const mockAnnouncements: Announcement[] = [
     content: 'Hello my name is norapat',
     date: new Date(),
     tags: ['SC'],
-    faculties: ['key'],
+    faculties: ['key1'],
     thumbnail:
       'https://foreignpolicy.com/wp-content/uploads/2020/07/Marine-Thailand-Exercise-GettyImages-1203838332.jpg',
   },

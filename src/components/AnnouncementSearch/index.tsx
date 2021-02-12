@@ -37,7 +37,6 @@ export const AnnouncementSearch = ({ categories, faculties, onSubmit }: Announce
 
   const facultiesTranslated = mapTextsToTranslatedItems('faculty', faculties, t)
   const categoriesTranslated = mapTextsToTranslatedItems('announcement', categories, t, 'category')
-
   return (
     <form noValidate onSubmit={submit}>
       <AnnouncementSearchContainer>

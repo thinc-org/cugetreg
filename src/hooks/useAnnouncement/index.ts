@@ -6,6 +6,7 @@ import { FACULTIES, CATAGORIES, mockAnnouncements } from './const'
 import differenceInCalendarDays from 'date-fns/differenceInCalendarDays'
 import { ALL_CATEGORIES, ALL_FACULTIES } from '@/utils/const'
 import { TagType } from './type'
+import { Faculty } from '@/utils/type'
 
 export interface Announcement {
   _id: string
@@ -14,7 +15,7 @@ export interface Announcement {
   content: string
   date: Date
   tags: TagType[]
-  faculties: string[]
+  faculties: Faculty[]
   thumbnail: string
 }
 

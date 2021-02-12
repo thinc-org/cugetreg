@@ -22,4 +22,4 @@ jobs:
         with:
           fullCoverageDiff: false # defaults to false, if made true whole coverage report is commented with the diff
           runCommand: 'yarn test:ci'
-          # delta: 0.5
+          # delta: 0.5 test

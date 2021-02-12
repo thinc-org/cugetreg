@@ -11,7 +11,7 @@ import useAnnouncementSearch from './useAnnouncementSearch'
 import mapTextsToTranslatedItems from './utils/mapTextsToTranslatedItems'
 import { AnnouncementSearchContainer, useStyles } from './styles'
 
-export type OnSubmit = (keyword: string, date: Date | null, category: CategorySearchTag, faculty: string) => void
+export type OnSubmit = (keyword: string, date: Date | null, category: CategorySearchTag, faculty: Faculty) => void
 
 export interface AnnouncementSearchProps {
   categories: CategorySearchTag[]

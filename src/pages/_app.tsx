@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import { AppProps } from 'next/dist/next-server/lib/router/router'
 import { ThemeProvider, CssBaseline, useMediaQuery } from '@material-ui/core'
 import Head from 'next/head'
@@ -13,11 +12,7 @@ import { MuiPickersUtilsProvider } from '@material-ui/pickers'
 import DateFnsUtils from '@date-io/date-fns'
 import { ApolloProvider } from '@apollo/client'
 import { client } from '@/utils/network/apollo'
-
-function removeElement(id: string) {
-  const element = document.getElementById(id)
-  element?.parentElement?.removeChild(element)
-}
+import useApp from '@/hooks/useApp'
 
 function MyApp({ Component, pageProps, forceDark }: AppProps) {
   const prefersDarkMode =
@@ -28,12 +23,7 @@ function MyApp({ Component, pageProps, forceDark }: AppProps) {
       noSsr: true,
     })
 
-  useEffect(() => {
-    removeElement('jss-server-side')
-    if (env.features.darkTheme) {
-      removeElement('cgr-dark')
-    }
-  })
+  useApp()
 
   return (
     <>

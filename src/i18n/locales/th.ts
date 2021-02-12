@@ -20,6 +20,11 @@ export const navBar = {
 
 export const announcement = {
   mainText: 'กระดานข่าวสาร',
+  category: {
+    [ALL_CATEGORIES]: 'ทุกประเภท',
+    ...GENEDS,
+    ...OTHER_CATEGORIES,
+  },
   search: 'ค้นหา',
   searchPlaceholder: 'ค้นหาหัวข้อ/เนื้อหา',
 }
@@ -51,10 +56,4 @@ export const faculty = {
   key1: 'value1',
   key2: 'value2',
   [ALL_FACULTIES]: 'ทุกคณะ',
-}
-
-export const category = {
-  [ALL_CATEGORIES]: 'ทุกประเภท',
-  ...GENEDS,
-  ...OTHER_CATEGORIES,
 }

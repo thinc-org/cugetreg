@@ -1,9 +1,9 @@
-import { category, faculty } from '@/i18n/locales/th'
+import { announcement, faculty } from '@/i18n/locales/th'
 import { CategorySearchTag, Faculty } from '@/utils/type'
 import { Announcement } from '.'
 
 export const FACULTIES = Object.keys(faculty) as Faculty[]
-export const CATAGORIES = Object.keys(category) as CategorySearchTag[]
+export const CATAGORIES = Object.keys(announcement.category) as CategorySearchTag[]
 
 export const mockAnnouncements: Announcement[] = [
   {

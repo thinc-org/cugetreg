@@ -8,7 +8,7 @@ import { Button, FormControl, Input, InputAdornment } from '@material-ui/core'
 import SearchIcon from '@material-ui/icons/Search'
 
 import useAnnouncementSearch from './useAnnouncementSearch'
-import { mapTextsToTranslatedItems } from './utils'
+import mapTextsToTranslatedItems from './utils/mapTextsToTranslatedItems'
 import { AnnouncementSearchContainer, useStyles } from './styles'
 
 export type OnSubmit = (keyword: string, date: Date | null, category: CategorySearchTag, faculty: string) => void
@@ -33,10 +33,10 @@ export const AnnouncementSearch = ({ categories, faculties, onSubmit }: Announce
   } = useAnnouncementSearch(onSubmit)
   const sharedClasses = useSharedStyles()
   const classes = useStyles()
-  const { t } = useTranslation(['announcement', 'faculty', 'category'])
+  const { t } = useTranslation(['announcement', 'faculty'])
 
   const facultiesTranslated = mapTextsToTranslatedItems('faculty', faculties, t)
-  const categoriesTranslated = mapTextsToTranslatedItems('category', categories, t)
+  const categoriesTranslated = mapTextsToTranslatedItems('announcement', categories, t, 'category')
 
   return (
     <form noValidate onSubmit={submit}>

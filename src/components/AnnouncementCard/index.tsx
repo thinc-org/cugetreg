@@ -21,7 +21,7 @@ export interface AnnouncementCardPropTypes {
 }
 
 export const AnnouncementCard = ({ date, imageURL, title, tags, faculties, body }: AnnouncementCardPropTypes) => {
-  const { t } = useTranslation('category')
+  const { t } = useTranslation('announcement')
   const tagComponent = faculties.map((text) => (
     <Tag key={text}>
       <Chip category={text} shade={ChipShade.primaryRange} />
@@ -35,7 +35,7 @@ export const AnnouncementCard = ({ date, imageURL, title, tags, faculties, body 
       </Tag>
     ) : (
       <Tag key={tag}>
-        <Chip category={t(tag)} shade={ChipShade.primaryRange} />
+        <Chip category={t(`category.${tag}` as const)} shade={ChipShade.primaryRange} />
       </Tag>
     )
   )

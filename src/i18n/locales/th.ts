@@ -61,3 +61,18 @@ export const schedule = {
     SU: 'SUN',
   },
 }
+
+export const courseCard = {
+  select: 'เลือก',
+  credit: '[{{credit}} หน่วยกิต]',
+  classDay: 'วันที่เรียน',
+  genEd: 'GenEd',
+  totalCapacity: 'จำนวนที่ว่างรวม',
+  rating: 'Rating',
+  condition: 'เงื่อนไข',
+  teacher: 'ผู้สอน',
+  time: 'เวลา',
+  classRoom: 'ห้องเรียน',
+  note: 'หมายเหตุ',
+  capacity: 'ที่ว่าง',
+}

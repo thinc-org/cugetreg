@@ -1,13 +1,11 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { render } from '@testing-library/react'
-// import * as AppType from '@/pages/_app'
-// import MyApp from '@/pages/_app'
+import renderWithTheme from '@/../__test__/utils/renderWithTheme'
 
 describe('Announcement page', () => {
   const { default: Announcement } = require('@/pages/announcement')
 
   it('shoulde be able to create', () => {
-    const chip = render(<Announcement />)
+    const chip = renderWithTheme(<Announcement />)
     expect(chip).toBeTruthy()
   })
 })

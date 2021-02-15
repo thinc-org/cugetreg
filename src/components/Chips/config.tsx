@@ -2,13 +2,10 @@ import { HighlightColor } from '@/configs/theme/palette'
 import { ChipProps } from '@material-ui/core'
 import { DayOfWeek, GenEdType } from '@thinc-org/chula-courses'
 
-export interface NecessaryChipProps {
+export interface ChipConfigProps {
+  label: string
   color: HighlightColor
   variant: ChipProps['variant']
-}
-
-export interface ChipConfigProps extends NecessaryChipProps {
-  label: string
 }
 
 export type GenEdChipKey = GenEdType

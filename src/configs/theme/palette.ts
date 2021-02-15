@@ -102,9 +102,9 @@ const paletteBaseOptions: PaletteOptions = {
       700: '#681A83',
     },
     yellow: {
-      300: '#FCDF7D',
+      300: '#FFF2C4',
       500: '#FED239',
-      700: '#FDBC06',
+      700: '#EB9C03',
     },
     deepGray: {
       300: '#E3E5F8',

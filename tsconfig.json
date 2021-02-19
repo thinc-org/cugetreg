@@ -15,6 +15,8 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "noImplicitAny": true,
+    "experimentalDecorators": true,
+    "useDefineForClassFields": true,
     "paths": {
       "@/*": ["./*"]
     }

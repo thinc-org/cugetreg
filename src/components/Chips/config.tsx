@@ -10,7 +10,7 @@ export interface ChipConfigProps {
 
 export type GenEdChipKey = GenEdType
 export type GenEdChipConfigProps = Record<GenEdType, ChipConfigProps>
-export const GenEdChipConfig: GenEdChipConfigProps = {
+export const genEdChipConfig: GenEdChipConfigProps = {
   SO: { label: 'หมวดสังคม', color: 'green', variant: 'outlined' },
   SC: { label: 'หมวดวิทย์', color: 'yellow', variant: 'outlined' },
   HU: { label: 'หมวดมนุษย์', color: 'pink', variant: 'outlined' },
@@ -20,7 +20,7 @@ export const GenEdChipConfig: GenEdChipConfigProps = {
 
 export type DayChipKey = DayOfWeek
 export type DayChipConfigProps = Record<DayOfWeek, ChipConfigProps>
-export const DayChipConfig: DayChipConfigProps = {
+export const dayChipConfig: DayChipConfigProps = {
   MO: { label: 'วันจันทร์', color: 'yellow', variant: 'default' },
   TU: { label: 'วันอังคาร', color: 'pink', variant: 'default' },
   WE: { label: 'วันพุธ', color: 'green', variant: 'default' },
@@ -38,7 +38,7 @@ const createDefaultChipConfig: (label: string) => ChipConfigProps = (label: stri
 
 export type OtherChipKey = 'open' | 'close' | 'chula' | 'other'
 export type OtherChipConfigProps = Record<OtherChipKey, ChipConfigProps>
-export const OtherChipConfig: OtherChipConfigProps = {
+export const otherChipConfig: OtherChipConfigProps = {
   open: createDefaultChipConfig('เปิด'),
   close: createDefaultChipConfig('ปิด'),
   chula: createDefaultChipConfig('เกี่ยวกับจุฬาฯ'),
@@ -47,8 +47,8 @@ export const OtherChipConfig: OtherChipConfigProps = {
 }
 
 export type ChipKey = GenEdChipKey | DayChipKey | OtherChipKey
-export const ChipConfig = {
-  ...GenEdChipConfig,
-  ...DayChipConfig,
-  ...OtherChipConfig,
+export const chipConfig = {
+  ...genEdChipConfig,
+  ...dayChipConfig,
+  ...otherChipConfig,
 }

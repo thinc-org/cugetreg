@@ -5,16 +5,18 @@ import AnnoucementChip from './catagories/AnnoucementChip'
 import DayChip from './catagories/DayChip'
 import GenEdChip from './catagories/GenEdChip'
 import {
-  ChipConfig,
-  DayChipConfig,
+  chipConfig,
+  ChipKey,
+  dayChipConfig,
   DayChipKey,
-  GenEdChipConfig,
+  genEdChipConfig,
   GenEdChipKey,
-  OtherChipConfig,
+  otherChipConfig,
   OtherChipKey,
 } from './config'
 
-type AllProps = CustomChipProps & {
+type AllProps = Omit<CustomChipProps, 'type'> & {
+  customChip: ChipKey
   genEdChip: GenEdChipKey
   dayChip: DayChipKey
   annoucementChip: GenEdChipKey | OtherChipKey
@@ -24,12 +26,12 @@ export default {
   title: 'Component/Chips',
   component: CustomChip,
   argTypes: {
-    type: {
+    customChip: {
       defaultValue: 'SO',
       description: 'Use to style chip from keyword from `ChipKey`. No need to style by yourselves',
       control: {
         type: 'select',
-        options: Object.keys(ChipConfig),
+        options: Object.keys(chipConfig),
       },
     },
     genEdChip: {
@@ -37,7 +39,7 @@ export default {
       description: 'Use to style chip from keyword from `ChipKey`. No need to style by yourselves',
       control: {
         type: 'select',
-        options: Object.keys(GenEdChipConfig),
+        options: Object.keys(genEdChipConfig),
       },
     },
     dayChip: {
@@ -45,7 +47,7 @@ export default {
       description: 'Use to style chip from keyword from `ChipKey`. No need to style by yourselves',
       control: {
         type: 'select',
-        options: Object.keys(DayChipConfig),
+        options: Object.keys(dayChipConfig),
       },
     },
     annoucementChip: {
@@ -53,7 +55,7 @@ export default {
       description: 'Use to style chip from keyword from `ChipKey`. No need to style by yourselves',
       control: {
         type: 'select',
-        options: Object.keys(OtherChipConfig).concat(Object.keys(GenEdChipConfig)),
+        options: Object.keys(otherChipConfig).concat(Object.keys(genEdChipConfig)),
       },
     },
     size: {
@@ -86,14 +88,14 @@ export default {
 } as Meta<AllProps>
 
 const Template: Story<AllProps> = (args) => {
-  const { avatar, onDelete, genEdChip, dayChip, annoucementChip, type, ...rest } = args
+  const { avatar, onDelete, genEdChip, dayChip, annoucementChip, customChip, ...rest } = args
   const mockFunction = () => console.log('Mock Function')
   return (
     <Box display="flex">
       <Box mr={2}>
         <CustomChip
-          type={type}
-          avatar={avatar ? <Avatar>{args.type.slice(0, 2).toUpperCase()}</Avatar> : undefined}
+          type={customChip}
+          avatar={avatar ? <Avatar>{customChip.slice(0, 2).toUpperCase()}</Avatar> : undefined}
           onDelete={onDelete ? mockFunction : undefined}
           {...rest}
         />

@@ -13,6 +13,10 @@ import DateFnsUtils from '@date-io/date-fns'
 import { ApolloProvider } from '@apollo/client'
 import { client } from '@/utils/network/apollo'
 import useApp from '@/hooks/useApp'
+import { mobxConfiguration } from '@/configs/mobx'
+import { ShoppingCartProvider } from '@/contexts/shoppingCart'
+
+mobxConfiguration()
 
 function MyApp({ Component, pageProps, forceDark }: AppProps) {
   const prefersDarkMode =
@@ -31,17 +35,19 @@ function MyApp({ Component, pageProps, forceDark }: AppProps) {
         <title>CU Get Reg</title>
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
       </Head>
-      <ApolloProvider client={client}>
-        <MuiPickersUtilsProvider utils={DateFnsUtils}>
-          <ThemeProvider theme={prefersDarkMode || forceDark ? darkTheme : lightTheme}>
-            <CssBaseline />
-            <TopBar />
-            <Container>
-              <Component {...pageProps} />
-            </Container>
-          </ThemeProvider>
-        </MuiPickersUtilsProvider>
-      </ApolloProvider>
+      <ShoppingCartProvider>
+        <ApolloProvider client={client}>
+          <MuiPickersUtilsProvider utils={DateFnsUtils}>
+            <ThemeProvider theme={prefersDarkMode || forceDark ? darkTheme : lightTheme}>
+              <CssBaseline />
+              <TopBar />
+              <Container>
+                <Component {...pageProps} />
+              </Container>
+            </ThemeProvider>
+          </MuiPickersUtilsProvider>
+        </ApolloProvider>
+      </ShoppingCartProvider>
     </>
   )
 }

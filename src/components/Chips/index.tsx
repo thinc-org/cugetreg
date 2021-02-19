@@ -1,5 +1,5 @@
 import { Chip, ChipProps } from '@material-ui/core'
-import { ChipConfig, ChipConfigProps, ChipKey } from './config'
+import { chipConfig, ChipConfigProps, ChipKey } from './config'
 
 export type CustomChipProps = Omit<ChipProps, keyof ChipConfigProps> & {
   type: ChipKey
@@ -14,7 +14,7 @@ export type CustomChipProps = Omit<ChipProps, keyof ChipConfigProps> & {
  */
 
 const CustomChip: React.FC<CustomChipProps> = ({ type, className, ...rest }) => {
-  const { color, variant, label } = ChipConfig[type]
+  const { color, variant, label } = chipConfig[type]
   return <Chip variant={variant} className={`${color} ${className ? className : ''}`} label={label} {...rest} />
 }
 

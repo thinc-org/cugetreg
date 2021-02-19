@@ -1,9 +1,9 @@
 import { render } from '@testing-library/react'
 import CustomChip from '.'
-import { ChipConfig, ChipKey } from './config'
+import { chipConfig, ChipKey } from './config'
 
 describe('Chip test', () => {
-  const typeList = Object.keys(ChipConfig) as ChipKey[]
+  const typeList = Object.keys(chipConfig) as ChipKey[]
 
   typeList.forEach((value) => {
     it(`Should be created using type=${value}`, () => {

@@ -31,6 +31,7 @@
     "imagemin-svgo": "^8.0.0",
     "mobx": "^6.1.7",
     "mobx-react": "^7.1.0",
+    "mobx-utils": "^6.0.3",
     "next": "10.0.5",
     "next-optimized-images": "^2.6.2",
     "react": "17.0.1",
@@ -40,6 +41,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",
+    "@babel/plugin-proposal-decorators": "^7.12.13",
     "@storybook/addon-actions": "^6.1.15",
     "@storybook/addon-essentials": "^6.1.15",
     "@storybook/addon-knobs": "^6.1.15",

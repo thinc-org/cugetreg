@@ -1,6 +1,6 @@
 import { configure } from 'mobx'
 
-// mobox's default configuration
+// mobx's default configuration
 export const mobxConfiguration = () =>
   configure({
     enforceActions: 'observed',

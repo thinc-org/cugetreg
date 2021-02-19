@@ -1,8 +1,7 @@
-import CustomChip from '..'
-import { ChipProps } from '@material-ui/core'
-import { ChipConfigProps, GenEdChipKey, OtherChipKey } from '../config'
+import CustomChip, { CustomChipProps } from '..'
+import { GenEdChipKey, OtherChipKey } from '../config'
 
-export type AnnoucementChipProps = Omit<ChipProps, keyof ChipConfigProps> & {
+export type AnnoucementChipProps = CustomChipProps & {
   type: GenEdChipKey | OtherChipKey
 }
 

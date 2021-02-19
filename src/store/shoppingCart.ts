@@ -1,3 +1,4 @@
+import { sortCourses } from '@/utils/course'
 import { Course } from '@thinc-org/chula-courses'
 import { action, computed, makeObservable, observable } from 'mobx'
 import { computedFn } from 'mobx-utils'
@@ -78,10 +79,12 @@ export class ShoppingCartStore implements ShoppingCartProps {
 
   @computed
   get allCourses(): Course[] {
-    return Object.keys(this.shopItems).reduce((accumulator, currentCourseNo) => {
+    const allCourses = Object.keys(this.shopItems).reduce((accumulator, currentCourseNo) => {
       const currentCourse = this.course(currentCourseNo)
       if (currentCourse) accumulator.push(currentCourse)
       return accumulator
     }, [] as Course[])
+    // Sort by `courseNo`
+    return sortCourses(allCourses, 'courseNo')
   }
 }

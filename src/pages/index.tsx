@@ -1,6 +1,7 @@
 import SampleComponent from '@/components/SampleComponent'
 import { mockData } from '@/components/ShoppingPanel/mockData'
 import { useShoppingCartContext } from '@/contexts/shoppingCart'
+import { sortCourses } from '@/utils/course'
 import { Box, Button } from '@material-ui/core'
 import { observer } from 'mobx-react'
 import { useState } from 'react'
@@ -32,7 +33,7 @@ const Home = observer(() => {
     <>
       <SampleComponent />
       <Box display="flex" flexDirection="column">
-        {shoppingCart.allCourses.map(({ courseNo, abbrName }, index) => (
+        {sortCourses(shoppingCart.allCourses, 'genEdType').map(({ courseNo, abbrName }, index) => (
           <Box mt={1} key={index}>
             <Button
               onClick={() => onSelectItem(courseNo)}

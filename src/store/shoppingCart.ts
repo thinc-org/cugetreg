@@ -52,16 +52,14 @@ export class ShoppingCartStore implements ShoppingCartProps {
   }
 
   @action
-  removeSelectedItem(courseNo: string) {
-    if (this.selectedShopItems[courseNo] && this.shopItems[courseNo]) {
-      delete this.selectedShopItems[courseNo]
-      delete this.shopItems[courseNo]
-    }
+  removeItem(courseNo: string) {
+    if (this.shopItems[courseNo]) delete this.shopItems[courseNo]
+    if (this.selectedShopItems[courseNo]) delete this.selectedShopItems[courseNo]
   }
 
   @action
   removeAllSelectedItem() {
-    Object.keys(this.selectedShopItems).forEach((courseNo) => this.removeSelectedItem(courseNo))
+    Object.keys(this.selectedShopItems).forEach((courseNo) => this.removeItem(courseNo))
     this.selectedShopItems = {}
   }
 

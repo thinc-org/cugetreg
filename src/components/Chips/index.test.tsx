@@ -1,5 +1,5 @@
 import { render } from '@testing-library/react'
-import CustomChip from '.'
+import GeneralChip from '.'
 import { chipConfig, ChipKey } from './config'
 
 describe('Chip test', () => {
@@ -7,8 +7,8 @@ describe('Chip test', () => {
 
   typeList.forEach((value) => {
     it(`Should be created using type=${value}`, () => {
-      const customChip = render(<CustomChip type={value} />)
-      expect(customChip).toBeTruthy()
+      const generalChip = render(<GeneralChip type={value} />)
+      expect(generalChip).toBeTruthy()
     })
   })
 })

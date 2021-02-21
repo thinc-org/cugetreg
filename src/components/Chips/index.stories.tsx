@@ -1,6 +1,6 @@
 import { Avatar, Box } from '@material-ui/core'
 import { Meta, Story } from '@storybook/react/types-6-0'
-import CustomChip, { CustomChipProps } from '.'
+import GeneralChip, { GeneralChipProps } from '.'
 import AnnoucementChip from './catagories/AnnoucementChip'
 import DayChip from './catagories/DayChip'
 import GenEdChip from './catagories/GenEdChip'
@@ -15,8 +15,8 @@ import {
   OtherChipKey,
 } from './config'
 
-type AllProps = Omit<CustomChipProps, 'type'> & {
-  customChip: ChipKey
+type AllProps = Omit<GeneralChipProps, 'type'> & {
+  generalChip: ChipKey
   genEdChip: GenEdChipKey
   dayChip: DayChipKey
   annoucementChip: GenEdChipKey | OtherChipKey
@@ -24,9 +24,9 @@ type AllProps = Omit<CustomChipProps, 'type'> & {
 
 export default {
   title: 'Component/Chips',
-  component: CustomChip,
+  component: GeneralChip,
   argTypes: {
-    customChip: {
+    generalChip: {
       defaultValue: 'SO',
       description: 'Use to style chip from keyword from `ChipKey`. No need to style by yourselves',
       control: {
@@ -88,14 +88,14 @@ export default {
 } as Meta<AllProps>
 
 const Template: Story<AllProps> = (args) => {
-  const { avatar, onDelete, genEdChip, dayChip, annoucementChip, customChip, ...rest } = args
+  const { avatar, onDelete, genEdChip, dayChip, annoucementChip, generalChip, ...rest } = args
   const mockFunction = () => console.log('Mock Function')
   return (
     <Box display="flex">
       <Box mr={2}>
-        <CustomChip
-          type={customChip}
-          avatar={avatar ? <Avatar>{customChip.slice(0, 2).toUpperCase()}</Avatar> : undefined}
+        <GeneralChip
+          type={generalChip}
+          avatar={avatar ? <Avatar>{generalChip.slice(0, 2).toUpperCase()}</Avatar> : undefined}
           onDelete={onDelete ? mockFunction : undefined}
           {...rest}
         />

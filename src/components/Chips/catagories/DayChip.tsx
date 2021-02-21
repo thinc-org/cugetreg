@@ -1,9 +1,9 @@
-import CustomChip, { CustomChipProps } from '..'
+import GeneralChip, { GeneralChipProps } from '..'
 import { DayChipKey } from '../config'
 
-export type DayChipProps = CustomChipProps & {
+export type DayChipProps = GeneralChipProps & {
   type: DayChipKey
 }
 
-const DayChip: React.FC<DayChipProps> = ({ type, ...props }) => <CustomChip type={type} {...props} />
+const DayChip: React.FC<DayChipProps> = ({ type, ...props }) => <GeneralChip type={type} {...props} />
 export default DayChip

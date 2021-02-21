@@ -1,9 +1,9 @@
-import CustomChip, { CustomChipProps } from '..'
+import GeneralChip, { GeneralChipProps } from '..'
 import { GenEdChipKey, OtherChipKey } from '../config'
 
-export type AnnoucementChipProps = CustomChipProps & {
+export type AnnoucementChipProps = GeneralChipProps & {
   type: GenEdChipKey | OtherChipKey
 }
 
-const AnnoucementChip: React.FC<AnnoucementChipProps> = ({ type, ...props }) => <CustomChip type={type} {...props} />
+const AnnoucementChip: React.FC<AnnoucementChipProps> = ({ type, ...props }) => <GeneralChip type={type} {...props} />
 export default AnnoucementChip

@@ -62,20 +62,24 @@ export const CourseCard = (props: CourseCardProps) => {
               <Grid item xs={12} sm="auto" component={Typography} variant="h6" className={classes.caption}>
                 {t('credit', { credit: course.credit })}
               </Grid>
+              {isGenEd && (
+                <Hidden xsDown>
+                  <Grid item xs="auto">
+                    <GenEdChip category={course.genEdType} />
+                  </Grid>
+                </Hidden>
+              )}
+            </Grid>
+            {isGenEd && (
               <Hidden xsDown>
-                <Grid item xs="auto">
-                  <GenEdChip category={course.genEdType} />
+                <Grid item xs>
+                  <Typography variant="h6" noWrap className={classes.textStar}>
+                    <Star />
+                    <span>{rating}</span>
+                  </Typography>
                 </Grid>
               </Hidden>
-            </Grid>
-            <Hidden xsDown>
-              <Grid item xs>
-                <Typography variant="h6" noWrap className={classes.textStar}>
-                  <Star />
-                  <span>{rating}</span>
-                </Typography>
-              </Grid>
-            </Hidden>
+            )}
           </Grid>
         }
         action={
@@ -86,20 +90,20 @@ export const CourseCard = (props: CourseCardProps) => {
       />
 
       <CardContent className={classes.body}>
-        <Grid container spacing={2}>
-          <Grid item container wrap="nowrap" spacing={2}>
-            <Grid item xs="auto" container>
-              <Grid item xs={12} container spacing={isMobile ? 2 : 4}>
-                <Grid item xs={6} sm="auto">
-                  <Label>{t('classDay')}</Label>
-                  <Grid container spacing={1}>
-                    {classDays.map((day) => (
-                      <Grid item key={day}>
-                        <DayChip category={day} />
-                      </Grid>
-                    ))}
-                  </Grid>
+        <Grid container wrap="nowrap" spacing={2}>
+          <Grid item xs="auto" container>
+            <Grid item container spacing={isMobile ? 2 : 4}>
+              <Grid item xs={6} sm="auto">
+                <Label>{t('classDay')}</Label>
+                <Grid container spacing={1}>
+                  {classDays.map((day) => (
+                    <Grid item key={day}>
+                      <DayChip category={day} />
+                    </Grid>
+                  ))}
                 </Grid>
+              </Grid>
+              {isGenEd && (
                 <Hidden smUp>
                   <Grid item xs={6} sm="auto">
                     <Label>{t('genEd')}</Label>
@@ -108,12 +112,23 @@ export const CourseCard = (props: CourseCardProps) => {
                     </div>
                   </Grid>
                 </Hidden>
-                <Grid item xs={6}>
-                  <Label>{t('totalCapacity')}</Label>
-                  <Typography variant="body1">
-                    GenEd {courseCapacity.current}/{courseCapacity.max}
-                  </Typography>
-                </Grid>
+              )}
+              <Grid item xs={6} sm="auto">
+                {isGenEd ? (
+                  <>
+                    <Label>{t('totalCapacity')}</Label>
+                    <Typography variant="body1">
+                      GenEd {courseCapacity.current}/{courseCapacity.max}
+                    </Typography>
+                  </>
+                ) : (
+                  <>
+                    <Label>{t('condition')}</Label>
+                    <Typography variant="body1">{course.courseCondition}</Typography>
+                  </>
+                )}
+              </Grid>
+              {isGenEd && (
                 <Hidden smUp>
                   <Grid item xs={6}>
                     <Label>{t('rating')}</Label>
@@ -122,94 +137,96 @@ export const CourseCard = (props: CourseCardProps) => {
                     </Typography>
                   </Grid>
                 </Hidden>
-              </Grid>
-
-              <Grid item xs={12}>
-                <Collapse in={isExpanded}>
-                  <Grid container spacing={isMobile ? 2 : 4} className={classes.detail}>
-                    <Hidden smUp>
-                      <Grid item xs={6} sm="auto">
-                        <Select
-                          items={sectionNumbers}
-                          value={selectedSectionNumber}
-                          onChange={(e) => setSectionNumber(e.target.value as string)}
-                          name="sectionNo"
-                        />
-                      </Grid>
-                    </Hidden>
-                    <Grid item xs={6} sm="auto">
-                      <Label>{t('teacher')}</Label>
-                      <Typography variant="body1">{teachers.join(', ')}</Typography>
-                    </Grid>
-                    <Grid item xs={6} sm="auto">
-                      <Label>{t('time')}</Label>
-                      <div>
-                        {selectedSection.classes.map((sectionClass, index) => (
-                          <Typography variant="body1" key={`${selectedSection.sectionNo}.${index}`}>
-                            {days[sectionClass.dayOfWeek]} {sectionClass.period.start}-{sectionClass.period.end}
-                          </Typography>
-                        ))}
-                      </div>
-                    </Grid>
-                    <Grid item xs={6} sm="auto">
-                      <Label>{t('classRoom')}</Label>
-                      <div>
-                        {selectedSection.classes.map((sectionClass, index) => (
-                          <Typography variant="body1" key={`${selectedSection.sectionNo}.${index}`}>
-                            {sectionClass.building} {sectionClass.room}
-                          </Typography>
-                        ))}
-                      </div>
-                    </Grid>
-                    <Grid item xs={6} sm="auto">
-                      <Label>{t('note')}</Label>
-                      <Typography variant="body1">{selectedSection.note}</Typography>
-                    </Grid>
-                    <Grid item xs={6} sm="auto">
-                      <Label>{t('capacity')}</Label>
-                      <Typography variant="body1">
-                        {selectedSection.capacity.current}/{selectedSection.capacity.max}
-                      </Typography>
-                    </Grid>
-                  </Grid>
-                </Collapse>
-              </Grid>
+              )}
             </Grid>
 
-            <Hidden xsDown>
-              <Grid item xs container direction="column" justify="space-between">
-                <Grid item component={Collapse} in={isExpanded}>
-                  <Select
-                    items={sectionNumbers}
-                    value={selectedSectionNumber}
-                    onChange={(e) => setSectionNumber(e.target.value as string)}
-                    name="sectionNo"
-                  />
+            <Grid item xs={12}>
+              <Collapse in={isExpanded}>
+                <Grid container spacing={isMobile ? 2 : 4} className={classes.detail}>
+                  <Hidden smUp>
+                    <Grid item xs={6} sm="auto">
+                      <Select
+                        items={sectionNumbers}
+                        value={selectedSectionNumber}
+                        onChange={(e) => setSectionNumber(e.target.value as string)}
+                        name="sectionNo"
+                      />
+                    </Grid>
+                  </Hidden>
+                  <Grid item xs={6} sm="auto">
+                    <Label>{t('teacher')}</Label>
+                    <Typography variant="body1">
+                      {teachers.map((teacher) => (
+                        <div key={teacher}>{teacher}</div>
+                      ))}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={6} sm="auto">
+                    <Label>{t('time')}</Label>
+                    <div>
+                      {selectedSection.classes.map((sectionClass, index) => (
+                        <Typography variant="body1" key={`${selectedSection.sectionNo}.${index}`}>
+                          {days[sectionClass.dayOfWeek]} {sectionClass.period.start}-{sectionClass.period.end}
+                        </Typography>
+                      ))}
+                    </div>
+                  </Grid>
+                  <Grid item xs={6} sm="auto">
+                    <Label>{t('classRoom')}</Label>
+                    <div>
+                      {selectedSection.classes.map((sectionClass, index) => (
+                        <Typography variant="body1" key={`${selectedSection.sectionNo}.${index}`}>
+                          {sectionClass.building} {sectionClass.room}
+                        </Typography>
+                      ))}
+                    </div>
+                  </Grid>
+                  <Grid item xs={6} sm="auto">
+                    <Label>{t('note')}</Label>
+                    <Typography variant="body1">{selectedSection.note}</Typography>
+                  </Grid>
+                  <Grid item xs={6} sm="auto">
+                    <Label>{t('capacity')}</Label>
+                    <Typography variant="body1">
+                      {selectedSection.capacity.current}/{selectedSection.capacity.max}
+                    </Typography>
+                  </Grid>
                 </Grid>
-                <Grid
-                  item
-                  component={Button}
-                  startIcon={<Add />}
-                  color="primary"
-                  variant="contained"
-                  fullWidth
-                  disableElevation
-                >
-                  {t('select')}
-                </Grid>
-              </Grid>
-            </Hidden>
+              </Collapse>
+            </Grid>
           </Grid>
+
+          <Hidden xsDown>
+            <Grid item xs container direction="column" justify="space-between">
+              <Grid item component={Collapse} in={isExpanded}>
+                <Select
+                  items={sectionNumbers}
+                  value={selectedSectionNumber}
+                  onChange={(e) => setSectionNumber(e.target.value as string)}
+                  name="sectionNo"
+                />
+              </Grid>
+              <Grid
+                item
+                component={Button}
+                startIcon={<Add />}
+                color="primary"
+                variant="contained"
+                fullWidth
+                disableElevation
+              >
+                {t('select')}
+              </Grid>
+            </Grid>
+          </Hidden>
         </Grid>
       </CardContent>
 
       <Hidden smUp>
         <CardActions className={classes.action}>
-          <Grid item xs={12}>
-            <Button startIcon={<Add />} color="primary" variant="contained" fullWidth disableElevation>
-              {t('select')}
-            </Button>
-          </Grid>
+          <Button startIcon={<Add />} color="primary" variant="contained" fullWidth disableElevation>
+            {t('select')}
+          </Button>
         </CardActions>
       </Hidden>
     </Card>

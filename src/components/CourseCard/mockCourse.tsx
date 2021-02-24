@@ -12,7 +12,7 @@ export const mockCourse: Course = {
   faculty: 'Engineer',
   credit: 3,
   creditHours: '3',
-  genEdType: 'SC',
+  genEdType: 'NO',
   courseCondition: 'PRER 2110200,2110211',
   midterm: {
     date: new Date('2020-09-21T06:06:27.182Z'),
@@ -73,7 +73,7 @@ export const mockCourse: Course = {
       classes: [
         {
           type: 'LECT',
-          dayOfWeek: 'WE',
+          dayOfWeek: 'TU',
           period: {
             start: '9:30',
             end: '11:00',

@@ -38,6 +38,9 @@ export const useStyles = makeStyles((theme) => ({
       margin: theme.spacing(0, 1, 0, 0),
     },
   },
+  // fullWidth: {
+  //   width: '100%',
+  // },
 }))
 
 export const Label = (props: TypographyProps) => {

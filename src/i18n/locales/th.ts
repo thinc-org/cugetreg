@@ -68,6 +68,7 @@ export const courseCard = {
   classDay: 'วันที่เรียน',
   genEd: 'GenEd',
   totalCapacity: 'จำนวนที่ว่างรวม',
+  condition: 'เงื่อนไข',
   rating: 'Rating',
   condition: 'เงื่อนไข',
   teacher: 'ผู้สอน',

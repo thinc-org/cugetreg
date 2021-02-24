@@ -4,7 +4,7 @@ import { sum, unique } from './utils'
 import { useState } from 'react'
 
 export function useCourseCard(course: Course) {
-  const isGenEd = !!course.genEdType
+  const isGenEd = course.genEdType !== 'NO'
 
   const activeDays = course.sections.flatMap((section) => section.classes.map((sectionClass) => sectionClass.dayOfWeek))
   const classDays = dayOfWeek.flatMap((day) => (activeDays.includes(day) ? [day] : []))

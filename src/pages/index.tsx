@@ -1,5 +1,5 @@
 import { CourseCard } from '@/components/CourseCard'
-import { mockCourse } from '@/components/CourseCard/mockCourse'
+import { mockNoGenEdCourse, mockGenEdCourse } from '@/components/CourseCard/mockCourse'
 import SampleComponent from '@/components/SampleComponent'
 import { mockData } from '@/components/ShoppingPanel/mockData'
 import { useShoppingCartContext } from '@/contexts/shoppingCart'

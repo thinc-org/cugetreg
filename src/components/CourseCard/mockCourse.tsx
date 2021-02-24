@@ -156,7 +156,7 @@ export const mockGenEdCourse: Course = {
           },
           building: 'ENG3',
           room: '303',
-          teachers: ['ATW', 'NNN', 'ATS'],
+          teachers: ['ATW', 'NNN', 'ATS', 'ATX', 'XXX', 'ATA'],
         },
         {
           type: 'LECT',

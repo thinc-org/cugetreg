@@ -155,12 +155,9 @@ export const CourseCard = (props: CourseCardProps) => {
                   </Hidden>
                   <Grid item xs={6} sm="auto">
                     <Label>{t('teacher')}</Label>
-                    {teachers.map((teacher) => (
-                      <div key={teacher}>
-                        <Typography variant="body1"></Typography>
-                        {teacher}
-                      </div>
-                    ))}
+                    <Typography variant="body1" className={classes.max15ch}>
+                      {teachers.join(', ')}
+                    </Typography>
                   </Grid>
                   <Grid item xs={6} sm="auto">
                     <Label>{t('time')}</Label>

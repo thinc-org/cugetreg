@@ -26,6 +26,9 @@ export const useStyles = makeStyles((theme) => ({
   // fullWidth: {
   //   width: '100%',
   // },
+  max15ch: {
+    maxWidth: '15ch',
+  },
 }))
 
 export const Label = (props: TypographyProps) => {

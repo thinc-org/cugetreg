@@ -155,11 +155,12 @@ export const CourseCard = (props: CourseCardProps) => {
                   </Hidden>
                   <Grid item xs={6} sm="auto">
                     <Label>{t('teacher')}</Label>
-                    <Typography variant="body1">
-                      {teachers.map((teacher) => (
-                        <div key={teacher}>{teacher}</div>
-                      ))}
-                    </Typography>
+                    {teachers.map((teacher) => (
+                      <div key={teacher}>
+                        <Typography variant="body1"></Typography>
+                        {teacher}
+                      </div>
+                    ))}
                   </Grid>
                   <Grid item xs={6} sm="auto">
                     <Label>{t('time')}</Label>

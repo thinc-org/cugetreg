@@ -2,6 +2,11 @@ import { HighlightColor } from '@/configs/theme/palette'
 import { ChipProps } from '@material-ui/core'
 import { DayOfWeek, GenEdType } from '@thinc-org/chula-courses'
 
+/*
+ * This configuration file provide the Chip's types.
+ * You add/remove the types by editing the `ChipKey` and `ChipConfig`.
+ */
+
 export interface ChipConfigProps {
   label: string
   color: HighlightColor

@@ -60,7 +60,7 @@ const enchanceMuiChipStyles = (
 }
 
 // This function is used for overriding Mui-Chip styles
-export default function overrideMuiChipStyles(theme: Theme): Partial<StyleRules<ChipClassKey, {}>> {
+export function overrideMuiChipStyles(theme: Theme): Partial<StyleRules<ChipClassKey, {}>> {
   // default Chip style using `deepGray` color.
   const highlight = highlightMapper('deepGray', theme)
   const defaultStyle: Partial<StyleRules<ChipClassKey, {}>> = {

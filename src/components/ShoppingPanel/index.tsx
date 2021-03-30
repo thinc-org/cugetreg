@@ -2,7 +2,7 @@ import CourseList from './CourseList'
 import { Course } from '@thinc-org/chula-courses'
 import { useTranslation } from 'react-i18next'
 import { Button, Typography, makeStyles } from '@material-ui/core'
-import useShoppingPanel from '@/hooks/useShoppingPanel.ts'
+import useShoppingPanel from '@/hooks/useShoppingPanel'
 import TableChartIcon from '@material-ui/icons/TableChart'
 
 export interface CoursePropsType {
@@ -49,10 +49,10 @@ const ShoppingPanel = ({ data }: CoursePropsType) => {
         <Typography className={classes.course} variant="h6">
           {t('genedCourse')}
         </Typography>
-        {courses.map((course) => {
+        {courses.map((course: Course) => {
           return (
             course.genEdType !== 'NO' && (
-              <CourseList course={course} key={course.courseNo} deleteCourse={deleteCourse} />
+              <CourseList key={course.courseNo} course={course} deleteCourse={deleteCourse} />
             )
           )
         })}
@@ -61,7 +61,7 @@ const ShoppingPanel = ({ data }: CoursePropsType) => {
         <Typography className={classes.course} variant="h6">
           {t('otherCourse')}
         </Typography>
-        {courses.map((course) => {
+        {courses.map((course: Course) => {
           return (
             course.genEdType === 'NO' && (
               <CourseList course={course} key={course.courseNo} deleteCourse={deleteCourse} />

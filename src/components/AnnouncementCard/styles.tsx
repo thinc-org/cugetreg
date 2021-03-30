@@ -21,10 +21,6 @@ export const TagContainer = styledWithTheme('div')((theme) => ({
   display: 'flex',
 }))
 
-export const Tag = styledWithTheme('div')((theme) => ({
-  marginRight: theme.spacing(2),
-}))
-
 export const DateTitle = styledWithTheme(Typography)((theme) => ({
   color: theme.palette.primaryRange['100'],
 }))

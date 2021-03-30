@@ -51,7 +51,7 @@ export const otherChipConfig: OtherChipConfigProps = {
   // Add more Chips here; don't forget to add key into `OtherChipKey` too
 }
 
-export type ChipKey = GenEdChipKey | DayChipKey | OtherChipKey
+export type GeneralChipKey = GenEdChipKey | DayChipKey | OtherChipKey
 export const chipConfig = {
   ...genEdChipConfig,
   ...dayChipConfig,

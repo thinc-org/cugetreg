@@ -6,7 +6,7 @@ import DayChip from './catagories/DayChip'
 import GenEdChip from './catagories/GenEdChip'
 import {
   chipConfig,
-  ChipKey,
+  GeneralChipKey,
   dayChipConfig,
   DayChipKey,
   genEdChipConfig,
@@ -16,7 +16,7 @@ import {
 } from './config'
 
 type AllProps = Omit<GeneralChipProps, 'type'> & {
-  generalChip: ChipKey
+  generalChip: GeneralChipKey
   genEdChip: GenEdChipKey
   dayChip: DayChipKey
   annoucementChip: GenEdChipKey | OtherChipKey

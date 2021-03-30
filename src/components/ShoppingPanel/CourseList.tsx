@@ -1,8 +1,8 @@
 import { Grid, makeStyles, Typography } from '@material-ui/core'
 import { Course } from '@thinc-org/chula-courses'
-import { GenEdChip } from '@/components/GenEdChip'
 import { useTranslation } from 'react-i18next'
 import { Delete } from '@material-ui/icons'
+import GenEdChip from '@/components/Chips/catagories/GenEdChip'
 
 export interface CourseListPropsType {
   course: Course
@@ -49,7 +49,7 @@ const CourseList = ({ course: { courseNo, abbrName, credit, genEdType }, deleteC
           <Typography variant="body1">{t('credit', { credit: credit })}</Typography>
         </Grid>
         <Grid item={true} container xs={6} sm={2}>
-          {genEdType !== 'NO' ? <GenEdChip category={genEdType} /> : ''}
+          {genEdType !== 'NO' ? <GenEdChip type={genEdType} /> : ''}
         </Grid>
       </Grid>
     </div>

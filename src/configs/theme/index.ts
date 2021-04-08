@@ -5,13 +5,6 @@ import overrideMuiTypography from './typography'
 import overrideMuiBaseComponent from './overrides'
 import shadows from './shadows'
 
-const buildTheme = (themeOptions: ThemeOptions): Theme => {
-  const theme = createMuiTheme(themeOptions)
-  overrideMuiTypography(theme)
-  overrideMuiBaseComponent(theme)
-  return theme
-}
-
 const themeBaseOptions: ThemeOptions = {
   typography: {
     htmlFontSize: 16,
@@ -36,6 +29,13 @@ const lightThemeOptions: ThemeOptions = deepAssign(themeBaseOptions, {
 const darkThemeOptions: ThemeOptions = deepAssign(themeBaseOptions, {
   palette: darkPaletteOptions,
 })
+
+const buildTheme = (themeOptions: ThemeOptions): Theme => {
+  const theme = createMuiTheme(themeOptions)
+  overrideMuiTypography(theme)
+  overrideMuiBaseComponent(theme)
+  return theme
+}
 
 export const lightTheme = buildTheme(lightThemeOptions)
 export const darkTheme = buildTheme(darkThemeOptions)

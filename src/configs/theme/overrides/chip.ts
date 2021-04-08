@@ -1,4 +1,4 @@
-import { ChipClassKey, emphasize, fade, StyleRules, Theme } from '@material-ui/core'
+import { ChipClassKey, emphasize, alpha, StyleRules, Theme } from '@material-ui/core'
 import { CSSProperties } from '@material-ui/styles'
 import { HighlightColorRange } from '../palette'
 import { highlightStyleGenerator, highlightMapper } from './utils'
@@ -18,13 +18,13 @@ const enchanceMuiChipStyles = (
     '& $icon': {
       color: highlight[700],
       '&:hover': {
-        color: fade(highlight[700], 0.7),
+        color: alpha(highlight[700], 0.7),
       },
     },
     '& $deleteIcon': {
       color: highlight[700],
       '&:hover': {
-        color: fade(highlight[700], 0.7),
+        color: alpha(highlight[700], 0.7),
       },
     },
   })
@@ -43,7 +43,7 @@ const enchanceMuiChipStyles = (
     backgroundColor: theme.palette.white,
     border: `1px solid ${highlight[700]}`,
     '$clickable&:hover, $clickable&:focus, $deletable&:focus': {
-      backgroundColor: fade(highlight[700], theme.palette.action.hoverOpacity),
+      backgroundColor: alpha(highlight[700], theme.palette.action.hoverOpacity),
     },
     '& $avatar': {
       color: theme.palette.white,
@@ -92,7 +92,7 @@ export function overrideMuiChipStyles(theme: Theme): Partial<StyleRules<ChipClas
       border: `1px solid ${theme.palette.highlight.deepGray[700]}`,
       transition: theme.transitions.create(['color', 'background-color']),
       '$clickable&:hover, $clickable&:focus, $deletable&:focus': {
-        backgroundColor: fade(theme.palette.secondary.main, theme.palette.action.hoverOpacity),
+        backgroundColor: alpha(theme.palette.secondary.main, theme.palette.action.hoverOpacity),
       },
     },
     clickable: {

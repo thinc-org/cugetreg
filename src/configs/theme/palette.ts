@@ -1,4 +1,4 @@
-import { PaletteOptions } from '@material-ui/core/styles/createPalette'
+import { PaletteOptions } from '@material-ui/core/styles'
 
 export type PaletteRange = 10 | 30 | 50 | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900
 
@@ -8,7 +8,7 @@ export type PaletteRangeOptions = Record<PaletteRange, string>
 
 export type HighlightColorRange = Pick<PaletteRangeOptions, 300 | 500 | 700>
 
-declare module '@material-ui/core/styles/createPalette' {
+declare module '@material-ui/core/styles' {
   interface Palette {
     white: string
     primaryRange: PaletteRangeOptions
@@ -117,10 +117,10 @@ const paletteBaseOptions: PaletteOptions = {
 
 export const lightPaletteOptions: PaletteOptions = {
   ...paletteBaseOptions,
-  type: 'light',
+  mode: 'light',
 }
 
 export const darkPaletteOptions: PaletteOptions = {
   ...paletteBaseOptions,
-  type: 'dark',
+  mode: 'dark',
 }

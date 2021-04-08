@@ -1,6 +1,7 @@
-import { Button, makeStyles } from '@material-ui/core'
+import { Button, makeStyles, Typography } from '@material-ui/core'
 import { useSampleHook } from '@/hooks/useSampleHook'
 import { TextField } from '@material-ui/core'
+import Link from 'next/link'
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -19,6 +20,10 @@ export default function SampleComponent() {
       <Button variant="contained" color="primary">
         {hello}
       </Button>
+      <Typography>wwwww</Typography>
+      <Link href="/course/2110211">
+        <a>Course Detail: 2110211</a>
+      </Link>
       <TextField variant="outlined" size="small" label="sample" />
     </div>
   )

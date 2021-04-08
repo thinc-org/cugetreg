@@ -10,7 +10,7 @@ import { DayOfWeek, GenEdType } from '@thinc-org/chula-courses'
 export interface ChipConfigProps {
   label: string
   color: HighlightColor
-  variant: ChipProps['variant']
+  variant?: ChipProps['variant']
 }
 
 export type GenEdChipKey = GenEdType
@@ -26,19 +26,18 @@ export const genEdChipConfig: GenEdChipConfigProps = {
 export type DayChipKey = DayOfWeek
 export type DayChipConfigProps = Record<DayOfWeek, ChipConfigProps>
 export const dayChipConfig: DayChipConfigProps = {
-  MO: { label: 'วันจันทร์', color: 'yellow', variant: 'default' },
-  TU: { label: 'วันอังคาร', color: 'pink', variant: 'default' },
-  WE: { label: 'วันพุธ', color: 'green', variant: 'default' },
-  TH: { label: 'วันพฤหัสบดี', color: 'orange', variant: 'default' },
-  FR: { label: 'วันศุกร์', color: 'blue', variant: 'default' },
-  SA: { label: 'วันเสาร์', color: 'purple', variant: 'default' },
-  SU: { label: 'วันอาทิตย์', color: 'red', variant: 'default' },
+  MO: { label: 'วันจันทร์', color: 'yellow' },
+  TU: { label: 'วันอังคาร', color: 'pink' },
+  WE: { label: 'วันพุธ', color: 'green' },
+  TH: { label: 'วันพฤหัสบดี', color: 'orange' },
+  FR: { label: 'วันศุกร์', color: 'blue' },
+  SA: { label: 'วันเสาร์', color: 'purple' },
+  SU: { label: 'วันอาทิตย์', color: 'red' },
 }
 
 const createDefaultChipConfig: (label: string) => ChipConfigProps = (label: string) => ({
   label: label,
   color: 'deepGray',
-  variant: 'default',
 })
 
 export type OtherChipKey = 'open' | 'close' | 'chula' | 'other'

@@ -108,10 +108,10 @@ const overrideMuiTypography = (defaultTheme: Theme): Theme => {
 
   function convertToRem(options: TypographyStyleOptions) {
     if (typeof options.fontSize === 'number') {
-      options.fontSize = pxToRem(options.fontSize)
+      options.fontSize = pxToRem(options.fontSize as number)
     }
     if (typeof options.lineHeight === 'number') {
-      options.lineHeight = pxToRem(options.lineHeight)
+      options.lineHeight = pxToRem(options.lineHeight as number)
     }
   }
 
@@ -121,7 +121,6 @@ const overrideMuiTypography = (defaultTheme: Theme): Theme => {
     const { ...mobileStyle } = mobileTypographyVariantOptions[variant]
     convertToRem(baseStyle)
     convertToRem(mobileStyle)
-
     Object.assign(typography[variant], {
       ...baseStyle,
       [breakpoints.down('md')]: mobileStyle,

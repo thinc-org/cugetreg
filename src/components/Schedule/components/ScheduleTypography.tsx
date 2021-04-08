@@ -18,7 +18,7 @@ export function ScheduleTypography({ variant, ...props }: ScheduleTypographyProp
     }
   }
   if (typeof lineHeight === 'string') {
-    const match = lineHeight.match(/(.*)rem/)
+    const match = (lineHeight as string).match(/(.*)rem/)
     if (match && typeof fontSizeRem !== 'undefined') {
       const lineHeightRem = parseFloat(match[1])
       style.lineHeight = `${lineHeightRem / fontSizeRem}em`

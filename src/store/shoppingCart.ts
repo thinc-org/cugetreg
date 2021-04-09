@@ -1,4 +1,3 @@
-import { sortCourses } from '@/utils/course'
 import { Course } from '@thinc-org/chula-courses'
 import { action, computed, makeObservable, observable } from 'mobx'
 import { computedFn } from 'mobx-utils'
@@ -11,100 +10,73 @@ export interface ShoppingCartItem extends Course {
 export type ShoppingCartState = 'default' | 'delete'
 
 export interface ShoppingCartProps {
-  shopItems: {
-    [key: string]: ShoppingCartItem // the key must be `courseNo`
-  }
-  selectedShopItems: {
-    [key: string]: ShoppingCartItem // the key must be `courseNo`
-  }
+  shopItems: ShoppingCartItem[]
   state: ShoppingCartState
 }
 
 export class ShoppingCartStore implements ShoppingCartProps {
-  @observable shopItems: { [key: string]: ShoppingCartItem } = {}
-  @observable selectedShopItems: { [key: string]: ShoppingCartItem } = {}
+  @observable shopItems: ShoppingCartItem[] = []
   @observable state: ShoppingCartState = 'default'
 
   constructor() {
     makeObservable(this)
   }
 
-  private createNewItem(course: Course, selectedSectionNo: string): ShoppingCartItem {
-    return { ...course, selectedSectionNo, isSelected: false }
+  private findFirstSectionNo(course: Course) {
+    const sections = course.sections.sort((sectionA, sectionB) => (sectionA.sectionNo < sectionB.sectionNo ? -1 : 1))
+    return sections[0].sectionNo
   }
 
-  private removeItem(courseNo: string) {
-    if (this.shopItems[courseNo]) delete this.shopItems[courseNo]
-    if (this.selectedShopItems[courseNo]) delete this.selectedShopItems[courseNo]
+  private convertToCourse(shopItem: ShoppingCartItem): Course {
+    const { selectedSectionNo, isSelected, ...rest } = shopItem // eslint-disable-line
+    return rest
   }
 
-  /**
-   * this method used for toggling selection state of the shopItems
-   * @param {string} courseNo - the course number
-   */
   @action
-  toggleItemSelection(courseNo: string) {
-    const shopItem = this.shopItems[courseNo]
-    shopItem.isSelected = !shopItem.isSelected
-    if (shopItem.isSelected) {
-      this.selectedShopItems[shopItem.courseNo] = shopItem
-      this.state = 'delete'
-    } else {
-      delete this.selectedShopItems[shopItem.courseNo]
-      this.state = Object.keys(this.selectedShopItems).length == 0 ? 'default' : 'delete'
-    }
+  addItem(course: Course, selectedSectionNo?: string): void {
+    if (!selectedSectionNo) selectedSectionNo = this.findFirstSectionNo(course)
+    const foundIndex = this.shopItems.findIndex((item) => item.courseNo == course.courseNo)
+    const newItem: ShoppingCartItem = { ...course, selectedSectionNo, isSelected: false }
+    if (foundIndex != -1) this.shopItems[foundIndex] = newItem
+    else this.shopItems.push(newItem)
   }
 
-  /**
-   * This method used for adding interested courses into the shopping cart
-   * @param {string} course - the course number
-   * @param {string} [selectedSectionNo=1] - the selected section of the course, default value is 1
-   */
   @action
-  addItem(course: Course, selectedSectionNo = '1') {
-    // TODO create a function that find the first course's section number
-    const shopItem = this.createNewItem(course, selectedSectionNo)
-    this.shopItems[shopItem.courseNo] = shopItem
+  toggleSelectedItem(courseNo: string): void {
+    const foundIndex = this.shopItems.findIndex((item) => item.courseNo == courseNo)
+    if (foundIndex == -1) return
+    this.shopItems[foundIndex].isSelected = !this.shopItems[foundIndex].isSelected
+    let hasSelectedItem = false
+    this.shopItems.forEach((item) => {
+      hasSelectedItem = hasSelectedItem || item.isSelected
+    })
+    this.state = hasSelectedItem ? 'delete' : 'default'
   }
 
-  /**
-   * This method used for removing the selected courses
-   */
   @action
-  removeSelectedItems() {
-    Object.keys(this.selectedShopItems).forEach((courseNo) => this.removeItem(courseNo))
-    this.selectedShopItems = {}
+  removeItems(): void {
+    if (this.state === 'default') return
+    this.shopItems = this.shopItems.filter((item) => item.isSelected === true)
+    this.state = 'default'
   }
 
-  /**
-   * This method used for getting one course from the shopping cart
-   * @param {string} course - the course number
-   */
+  @action
+  swapOrder(courseNoA: string, courseNoB: string) {
+    const indexA = this.shopItems.findIndex((item) => item.courseNo == courseNoA)
+    const indexB = this.shopItems.findIndex((item) => item.courseNo == courseNoB)
+    const temp = this.shopItems[indexA]
+    this.shopItems[indexA] = this.shopItems[indexB]
+    this.shopItems[indexB] = temp
+  }
+
   course = computedFn((courseNo: string): Course | undefined => {
-    const shopItem = this.shopItems[courseNo]
-    if (!shopItem) return undefined
-    return Object.keys(shopItem).reduce((accumulator, currentKey) => {
-      if (currentKey != 'selectedSectionNo' && currentKey != 'isSelected')
-        return {
-          ...accumulator,
-          [currentKey]: shopItem[currentKey as keyof Course],
-        }
-      else return { ...accumulator }
-    }, {}) as Course
+    const foundIndex = this.shopItems.findIndex((item) => item.courseNo == courseNo)
+    if (foundIndex == -1) return
+    return this.convertToCourse(this.shopItems[foundIndex])
   })
 
-  /**
-   * This method used for getting all courses from the shopping cart
-   * The courses is sorted by `courseNo`
-   */
   @computed
-  get allCourses(): Course[] {
-    const allCourses = Object.keys(this.shopItems).reduce((accumulator, currentCourseNo) => {
-      const currentCourse = this.course(currentCourseNo)
-      if (currentCourse) accumulator.push(currentCourse)
-      return accumulator
-    }, [] as Course[])
-    // Sort by `courseNo`
-    return sortCourses(allCourses, 'courseNo')
+  get courses(): Course[] {
+    return this.shopItems.map((item) => this.convertToCourse(item))
   }
 }

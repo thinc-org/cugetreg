@@ -64,6 +64,7 @@ export class ShoppingCartStore implements ShoppingCartProps {
   swapOrder(courseNoA: string, courseNoB: string) {
     const indexA = this.shopItems.findIndex((item) => item.courseNo == courseNoA)
     const indexB = this.shopItems.findIndex((item) => item.courseNo == courseNoB)
+    if (indexA == -1 || indexB == -1) return
     const temp = this.shopItems[indexA]
     this.shopItems[indexA] = this.shopItems[indexB]
     this.shopItems[indexB] = temp

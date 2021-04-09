@@ -22,22 +22,22 @@ const Home = observer(() => {
   }
 
   const onSelectItem = (courseNo: string) => {
-    shoppingCart.selectItem(courseNo)
+    shoppingCart.toggleSelectedItem(courseNo)
   }
 
   const onClearItems = () => {
-    shoppingCart.removeAllSelectedItem()
+    shoppingCart.removeItems()
   }
 
   return (
     <>
       <SampleComponent />
       <Box display="flex" flexDirection="column">
-        {sortCourses(shoppingCart.allCourses, 'genEdType').map(({ courseNo, abbrName }, index) => (
+        {sortCourses(shoppingCart.courses, 'genEdType').map(({ courseNo, abbrName }, index) => (
           <Box mt={1} key={index}>
             <Button
               onClick={() => onSelectItem(courseNo)}
-              style={{ background: shoppingCart.shopItems[courseNo].isSelected ? 'red' : 'transparent' }}
+              style={{ background: shoppingCart.item(courseNo)?.isSelected ? 'red' : 'transparent' }}
             >{`course: ${courseNo} ${abbrName}`}</Button>
           </Box>
         ))}

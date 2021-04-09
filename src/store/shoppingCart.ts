@@ -2,21 +2,22 @@ import { Course } from '@thinc-org/chula-courses'
 import { action, computed, makeObservable, observable } from 'mobx'
 import { computedFn } from 'mobx-utils'
 
-export interface ShoppingCartItem extends Course {
+export interface CourseCartItem extends Course {
   selectedSectionNo: string
   isSelected: boolean
+  isHidden: boolean
 }
 
-export type ShoppingCartState = 'default' | 'delete'
+export type CourseCartState = 'default' | 'delete'
 
-export interface ShoppingCartProps {
-  shopItems: ShoppingCartItem[]
-  state: ShoppingCartState
+export interface CourseCartProps {
+  shopItems: CourseCartItem[]
+  state: CourseCartState
 }
 
-export class ShoppingCartStore implements ShoppingCartProps {
-  @observable shopItems: ShoppingCartItem[] = []
-  @observable state: ShoppingCartState = 'default'
+export class CourseCart implements CourseCartProps {
+  @observable shopItems: CourseCartItem[] = []
+  @observable state: CourseCartState = 'default'
 
   constructor() {
     makeObservable(this)
@@ -32,10 +33,10 @@ export class ShoppingCartStore implements ShoppingCartProps {
   }
 
   /**
-   * Use to convert ShoppingCartItem to Course
+   * Use to convert CourseCartItem to Course
    * @param shopItem - the store's item
    */
-  private convertToCourse(shopItem: ShoppingCartItem): Course {
+  private convertToCourse(shopItem: CourseCartItem): Course {
     const { selectedSectionNo, isSelected, ...rest } = shopItem // eslint-disable-line
     return rest
   }
@@ -44,7 +45,7 @@ export class ShoppingCartStore implements ShoppingCartProps {
    * Use to get the shopping item by given courseNo.
    * @param courseNo - the unique course number
    */
-  item = computedFn((courseNo: string): ShoppingCartItem | undefined => {
+  item = computedFn((courseNo: string): CourseCartItem | undefined => {
     const foundIndex = this.shopItems.findIndex((item) => item.courseNo == courseNo)
     if (foundIndex != -1) return this.shopItems[foundIndex]
     return undefined
@@ -58,7 +59,7 @@ export class ShoppingCartStore implements ShoppingCartProps {
   @action
   addItem(course: Course, selectedSectionNo?: string): void {
     if (!selectedSectionNo) selectedSectionNo = this.findFirstSectionNo(course)
-    const newItem: ShoppingCartItem = { ...course, selectedSectionNo, isSelected: false }
+    const newItem: CourseCartItem = { ...course, selectedSectionNo, isSelected: false, isHidden: false }
     const foundIndex = this.shopItems.findIndex((item) => item.courseNo == course.courseNo)
     if (foundIndex != -1) this.shopItems[foundIndex] = newItem
     else this.shopItems.push(newItem)
@@ -78,6 +79,17 @@ export class ShoppingCartStore implements ShoppingCartProps {
       hasSelectedItem = hasSelectedItem || item.isSelected
     })
     this.state = hasSelectedItem ? 'delete' : 'default'
+  }
+
+  /**
+   * Use to hidden or show the items for timetable.
+   * @param courseNo - the unique course number
+   */
+  @action
+  toggleHiddenItem(courseNo: string): void {
+    const foundIndex = this.shopItems.findIndex((item) => item.courseNo == courseNo)
+    if (foundIndex == -1) return
+    this.shopItems[foundIndex].isHidden = !this.shopItems[foundIndex].isHidden
   }
 
   /**

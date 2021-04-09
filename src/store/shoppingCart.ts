@@ -32,11 +32,17 @@ export class ShoppingCartStore implements ShoppingCartProps {
     return rest
   }
 
+  item = computedFn((courseNo: string): ShoppingCartItem | undefined => {
+    const foundIndex = this.shopItems.findIndex((item) => item.courseNo == courseNo)
+    if (foundIndex != -1) return this.shopItems[foundIndex]
+    return undefined
+  })
+
   @action
   addItem(course: Course, selectedSectionNo?: string): void {
     if (!selectedSectionNo) selectedSectionNo = this.findFirstSectionNo(course)
-    const foundIndex = this.shopItems.findIndex((item) => item.courseNo == course.courseNo)
     const newItem: ShoppingCartItem = { ...course, selectedSectionNo, isSelected: false }
+    const foundIndex = this.shopItems.findIndex((item) => item.courseNo == course.courseNo)
     if (foundIndex != -1) this.shopItems[foundIndex] = newItem
     else this.shopItems.push(newItem)
   }
@@ -56,7 +62,7 @@ export class ShoppingCartStore implements ShoppingCartProps {
   @action
   removeItems(): void {
     if (this.state === 'default') return
-    this.shopItems = this.shopItems.filter((item) => item.isSelected === true)
+    this.shopItems = this.shopItems.filter((item) => item.isSelected === false)
     this.state = 'default'
   }
 

@@ -33,7 +33,7 @@ const Home = observer(() => {
     <>
       <SampleComponent />
       <Box display="flex" flexDirection="column">
-        {sortCourses(shoppingCart.courses, 'genEdType').map(({ courseNo, abbrName }, index) => (
+        {shoppingCart.courses.map(({ courseNo, abbrName }, index) => (
           <Box mt={1} key={index}>
             <Button
               onClick={() => onSelectItem(courseNo)}

@@ -204,7 +204,29 @@ export const mockGenEdCourse: Course = {
       classes: [
         {
           type: 'LECT',
-          dayOfWeek: 'TH',
+          dayOfWeek: 'WE',
+          period: {
+            start: '9:30',
+            end: '11:00',
+          },
+          building: 'ENG3',
+          room: '101',
+          teachers: ['ATS'],
+        },
+        {
+          type: 'LECT',
+          dayOfWeek: 'MO',
+          period: {
+            start: '9:30',
+            end: '11:00',
+          },
+          building: 'ENG3',
+          room: '101',
+          teachers: ['ATS'],
+        },
+        {
+          type: 'LECT',
+          dayOfWeek: 'FR',
           period: {
             start: '9:30',
             end: '11:00',

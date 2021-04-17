@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
   buttonContainer: {
     position: 'absolute',
     top: 0,
-    [theme.breakpoints.up('md')]: {
+    [theme.breakpoints.up('sm')]: {
       padding: theme.spacing(2.5, 5),
     },
     [theme.breakpoints.down('sm')]: {
@@ -43,7 +43,7 @@ export function TopButton() {
   return (
     <FlexContainer className={classes.buttonContainer}>
       <Button className={classes.button} onClick={scrollToTop}>
-        {matches ? t('footer:topButton') : null}
+        {matches && t('footer:topButton')}
         <a className={classes.logo}>
           <img src={chevronUp} />
         </a>

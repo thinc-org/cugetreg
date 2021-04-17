@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.primary.contrastText,
   },
   bannerDetail: {
-    [theme.breakpoints.down('xs')]: {
+    [theme.breakpoints.down('sm')]: {
       flexDirection: 'column',
     },
     [theme.breakpoints.up('md')]: {
@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
   },
   bannerSubtitle: {
     ...theme.typography.subtitle1,
-    [theme.breakpoints.down('xs')]: {
+    [theme.breakpoints.down('sm')]: {
       marginLeft: theme.spacing(2),
     },
     [theme.breakpoints.up('sm')]: {
@@ -40,13 +40,13 @@ const useStyles = makeStyles((theme) => ({
   },
   divider: {
     background: theme.palette.primary.contrastText,
-    [theme.breakpoints.down('xs')]: {
+    [theme.breakpoints.down('sm')]: {
       margin: theme.spacing(2, 0),
       width: '90%',
     },
   },
   logo: {
-    [theme.breakpoints.down('xs')]: {
+    [theme.breakpoints.down('sm')]: {
       marginLeft: theme.spacing(2),
     },
   },
@@ -68,7 +68,7 @@ export function Banner() {
   const { t } = useTranslation()
   const theme = useTheme()
   const classes = useStyles()
-  const matches = useMediaQuery(theme.breakpoints.down('xs'))
+  const matches = useMediaQuery(theme.breakpoints.down('sm'))
   return (
     <FlexContainer className={classes.banner}>
       <Link href="/">
@@ -80,8 +80,7 @@ export function Banner() {
           <img src={thincLogo} />
           <div className={classes.bannerSubtitle}>{t('footer:university')}</div>
         </FlexContainer>
-        {!matches ? <Divider orientation="vertical" flexItem className={classes.divider} /> : null}
-        {matches ? <Divider className={classes.divider} /> : null}
+        <Divider orientation={matches ? 'horizontal' : 'vertical'} className={classes.divider} />
         <Link href="https://github.com/thinc-org">
           <a className={classes.link}>
             <div className={classes.bannerSubtitle}>{t('footer:github')}</div>

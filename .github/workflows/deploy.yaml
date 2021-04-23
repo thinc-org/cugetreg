@@ -2,7 +2,7 @@ name: Deploy to Production
 
 on:
   push:
-    branches: [docker-setting]
+    branches: [master]
 
 jobs:
   deploy:
@@ -30,7 +30,7 @@ jobs:
         continue-on-error: true
 
       - name: Build Image
-        run: docker build --tag gcr.io/cu-get-reg/cugetreg-frontend -t cugetreg-frontend .
+        run: docker build --tag gcr.io/{{ secrets.GCP_PROJECT_ID }}/cugetreg-frontend -t cugetreg-frontend .
 
       - name: Push Image to Google Container Registry
         run: docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/cugetreg-frontend:latest
@@ -40,9 +40,10 @@ jobs:
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
-          password: ${{ secrets.SSH_PASSWORD }}
+          key: ${{ secrets.SSH_KEY }}
+          passphrase: ${{ secrets.SSH_PASSPHRASE }}
           script: |
-            docker pull gcr.io/cu-get-reg/cugetreg-frontend:latest &&
+            docker pull gcr.io/{{ secrets.GCP_PROJECT_ID }}/cugetreg-frontend:latest &&
             cd /home/sharedFolder/ &&
             docker-compose up -d &&
             docker rmi $(docker images --filter "dangling=true" -q)

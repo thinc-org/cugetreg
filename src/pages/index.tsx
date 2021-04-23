@@ -1,7 +1,6 @@
 import SampleComponent from '@/components/SampleComponent'
 import { mockData } from '@/components/ShoppingPanel/mockData'
 import { useShoppingCartContext } from '@/contexts/shoppingCart'
-import { sortCourses } from '@/utils/course'
 import { Box, Button } from '@material-ui/core'
 import { observer } from 'mobx-react'
 import { useState } from 'react'
@@ -50,6 +49,7 @@ const Home = observer(() => {
       <Button variant="outlined" onClick={onClearItems}>
         Remove Selected Item
       </Button>
+      <h1>Hello New World</h1>
     </>
   )
 })

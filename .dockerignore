@@ -8,6 +8,10 @@ node_modules
 .git
 .github
 .vscode
+dockerfile
+docker-compose.yaml
+.dockerignore
+.prettierrc
 
 # Test files
 **/*.test.ts
@@ -18,3 +22,6 @@ node_modules
 # Storybook files
 .storybook
 **/*.stories.tsx
+
+# Other files
+.DS_Store

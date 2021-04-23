@@ -49,6 +49,7 @@ const Home = observer(() => {
       <Button variant="outlined" onClick={onClearItems}>
         Remove Selected Item
       </Button>
+      <h1>Hello New World</h1>
     </>
   )
 })

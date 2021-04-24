@@ -10,7 +10,6 @@ COPY yarn.lock .
 
 # Install dependencies
 RUN yarn --frozen-lockfile
-RUN yarn global add pm2
 
 # Copy the rest files
 COPY . .
@@ -28,5 +27,5 @@ EXPOSE 3000
 # The node user is provided in the Node.js Alpine base image
 USER node
 
-# Staring script with pm2 
-CMD [	"pm2-runtime", "npm" ,"--", "start"]
+# Staring script
+CMD [	"yarn", "start"]

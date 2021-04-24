@@ -38,7 +38,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: ghcr.io/${{ github.repository }}/cugetreg-frontend:latest
+          tags: ghcr.io/thinc-org/cugetreg/cugetreg-frontend:latest
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
 
@@ -55,7 +55,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           passphrase: ${{ secrets.SSH_PASSPHRASE }}
           script: |
-            docker pull ghcr.io/${{ github.repository }}/cugetreg-frontend:latest &&
+            docker pull ghcr.io/thinc-org/cugetreg/cugetreg-frontend:latest &&
             cd /home/sharedFolder/ &&
             docker-compose up -d &&
             docker rmi $(docker images --filter "dangling=true" -q)

@@ -58,4 +58,7 @@ jobs:
             docker pull ghcr.io/thinc-org/cugetreg/cugetreg-frontend:latest &&
             cd /home/sharedFolder/ &&
             docker-compose up -d &&
-            docker rmi $(docker images --filter "dangling=true" -q)
+            if [[ "$(docker images --filter "dangling=true" -q)" == "" ]]; 
+              then echo "No image with <none> tag";
+              else docker rmi $(docker images --filter "dangling=true" -q);
+            fi

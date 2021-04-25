@@ -5,8 +5,7 @@ WORKDIR /var/www
 
 # Prepare for installing dependencies
 # Utilise Docker cache to save re-installing dependencies if unchanged
-COPY package.json .
-COPY yarn.lock .
+COPY ["package.json", "yarn.lock", "./"]
 
 # Install dependencies
 RUN yarn --frozen-lockfile

@@ -2,7 +2,7 @@ name: Deploy to Production
 
 on:
   push:
-    branches: [docker-setting]
+    branches: [ssh-vpn]
 
 jobs:
   deploy:
@@ -15,6 +15,17 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+
+      - name: Checkout submodules
+        run: |
+          git config --file .gitmodules --get-regexp url | while read url; do
+            git config --file=.gitmodules $(echo "$url" | sed -E "s/git@github.com:|https:\/\/github.com\//https:\/\/${{ secrets.GH_TOKEN }}:${{ secrets.GH_TOKEN }}@github.com\//")
+          done
+          git submodule sync
+          git submodule update --init --recursive
+
+      - name: Install openfortivpn
+        run: sudo apt-get install openfortivpn
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
@@ -41,11 +52,27 @@ jobs:
           tags: ghcr.io/thinc-org/cugetreg/cugetreg-frontend:latest
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
+          context: .
+          secrets: |
+            GIT_AUTH_TOKEN=${{ secrets.GH_TOKEN }}
 
       - name: Move cache
         run: |
           rm -rf /tmp/.buildx-cache
           mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+
+      - name: Connect SSLVPN
+        uses: ./openfortivpn-action
+        with:
+          host: ${{ secrets.SSLVPN_HOST }}
+          username: ${{ secrets.SSLVPN_USERNAME }}
+          password: ${{ secrets.SSLVPN_PASSWORD }}
+          trustedCert: ${{ secrets.SSLVPN_TRUSTED_CERT }}
+
+      - name: Check if VPN works
+        run: ping -c 4 $TEST_ADDRESS
+        env:
+          TEST_ADDRESS: ${{ secrets.TEST_ADDRESS }}
 
       - name: Deploy to VM
         uses: appleboy/ssh-action@master

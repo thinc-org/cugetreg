@@ -6,7 +6,9 @@ node_modules
 
 # Local setting
 .git
+.gitignore
 .github
+.gitmodules
 .vscode
 dockerfile
 docker-compose.yaml
@@ -25,3 +27,4 @@ docker-compose.yaml
 
 # Other files
 .DS_Store
+openfortivpn-action

@@ -1,4 +1,4 @@
-FROM node:14-alpine AS base
+FROM node:14-alpine AS build
 WORKDIR /build
 # Prepare for installing dependencies
 # Utilise Docker cache to save re-installing dependencies if unchanged
@@ -27,5 +27,4 @@ EXPOSE 3000
 USER node
 # Staring script
 CMD yarn start
-
 

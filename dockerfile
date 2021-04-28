@@ -12,7 +12,7 @@ RUN yarn build
 # Remove dev dependencies
 RUN npm prune --production
 
-FROM base AS production
+FROM node:14-alpine AS production
 ENV NODE_ENV production
 WORKDIR /app
 # Copy only necessary file for running app
@@ -27,6 +27,5 @@ EXPOSE 3000
 USER node
 # Staring script
 CMD yarn start
-
 
 

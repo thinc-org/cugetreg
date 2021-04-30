@@ -62,7 +62,7 @@ export const CourseCard = (props: CourseCardProps) => {
               </Grid>
               {isGenEd && (
                 <Grid item>
-                  <GenEdChip sx={{ display: { xs: 'none', sm: 'inline-flex' } }} size="small" type={course.genEdType} />
+                  <GenEdChip sx={{ display: { xs: 'none', sm: 'inline-flex' } }} type={course.genEdType} />
                 </Grid>
               )}
             </Grid>
@@ -90,7 +90,7 @@ export const CourseCard = (props: CourseCardProps) => {
                   <Typography variant="caption">{t('classDay')}</Typography>
                   <div>
                     {classDays.map((day) => (
-                      <DayChip type={day} size="small" key={day} sx={{ mb: 0.5, mr: 0.5 }} />
+                      <DayChip type={day} key={day} sx={{ mb: 0.5, mr: 0.5 }} />
                     ))}
                   </div>
                 </Stack>
@@ -99,7 +99,7 @@ export const CourseCard = (props: CourseCardProps) => {
                 <Grid item xs={6} sm="auto" sx={{ display: { xs: 'flex', sm: 'none' } }}>
                   <Stack spacing={0.5} alignItems="flex-start">
                     <Typography variant="caption">{t('genEd')}</Typography>
-                    <GenEdChip type={course.genEdType} size="small" />
+                    <GenEdChip type={course.genEdType} />
                   </Stack>
                 </Grid>
               )}
@@ -134,7 +134,7 @@ export const CourseCard = (props: CourseCardProps) => {
             </Grid>
 
             <Collapse in={isExpanded}>
-              <Grid container spacing={3} sx={{ pt: 4 }}>
+              <Grid container spacing={3} sx={{ mt: 0 }}>
                 <Grid item xs={6} sm="auto" sx={{ display: { xs: 'block', sm: 'none' } }}>
                   <Select
                     items={sectionNumbers}

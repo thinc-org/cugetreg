@@ -1,3 +1,4 @@
+import { ChipFilledHighlightColor, ChipOutlinedHighlightColor } from '@/configs/theme/overrides/chip'
 import { Chip, ChipProps } from '@material-ui/core'
 import { chipConfig, ChipConfigProps, GeneralChipKey } from './config'
 
@@ -13,9 +14,15 @@ export type GeneralChipProps = Omit<ChipProps, keyof ChipConfigProps> & {
  *  @description Overrided Chip Component; There are limited tag's types that declaring in `./config.ts`.
  */
 
-const GeneralChip: React.FC<GeneralChipProps> = ({ type, className, ...rest }) => {
+const GeneralChip: React.FC<GeneralChipProps> = ({ type, ...rest }) => {
   const { color, variant, label } = chipConfig[type]
-  return <Chip variant={variant} className={`${color} ${className ? className : ''}`} label={label} {...rest} />
+  return <Chip variant={variant} label={label} color={color} {...rest} />
+}
+
+declare module '@material-ui/core/Chip' {
+  interface ChipPropsColorOverrides
+    extends Record<ChipFilledHighlightColor, true>,
+      Record<ChipOutlinedHighlightColor, true> {}
 }
 
 export default GeneralChip

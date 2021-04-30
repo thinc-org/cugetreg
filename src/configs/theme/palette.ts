@@ -1,4 +1,10 @@
 import { PaletteOptions } from '@material-ui/core/styles'
+import {
+  ChipFilledHighlight,
+  ChipOutlinedHighlight,
+  makeChipFilledHighlight,
+  makeChipOutlinedHighlight,
+} from './overrides/chip'
 
 export type PaletteRange = 10 | 30 | 50 | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900
 
@@ -8,19 +14,64 @@ export type PaletteRangeOptions = Record<PaletteRange, string>
 
 export type HighlightColorRange = Pick<PaletteRangeOptions, 300 | 500 | 700>
 
+export type Highlight = Record<HighlightColor, HighlightColorRange>
+
 declare module '@material-ui/core/styles' {
-  interface Palette {
+  interface Palette extends ChipFilledHighlight, ChipOutlinedHighlight {
     white: string
     primaryRange: PaletteRangeOptions
     secondaryRange: Omit<PaletteRangeOptions, 10 | 30>
-    highlight: Record<HighlightColor, HighlightColorRange>
+    highlight: Highlight
   }
-  interface PaletteOptions {
+  interface PaletteOptions extends ChipFilledHighlight, ChipOutlinedHighlight {
     white: string
     primaryRange: PaletteRangeOptions
     secondaryRange: Omit<PaletteRangeOptions, 10 | 30>
-    highlight: Record<HighlightColor, HighlightColorRange>
+    highlight: Highlight
   }
+}
+
+export const highlight: Highlight = {
+  pink: {
+    300: '#FDD8EE',
+    500: '#F339A8',
+    700: '#C7117F',
+  },
+  red: {
+    300: '#FDDBDB',
+    500: '#F96666',
+    700: '#B10C0C',
+  },
+  orange: {
+    300: '#FEE5CD',
+    500: '#FEA339',
+    700: '#D67F19',
+  },
+  green: {
+    300: '#D1FEB6',
+    500: '#85E14D',
+    700: '#4B991C',
+  },
+  blue: {
+    300: '#DAEFFE',
+    500: '#35A1EF',
+    700: '#0C5A93',
+  },
+  purple: {
+    300: '#F3D6FD',
+    500: '#BF35EF',
+    700: '#681A83',
+  },
+  yellow: {
+    300: '#FFF2C4',
+    500: '#FED239',
+    700: '#EB9C03',
+  },
+  deepGray: {
+    300: '#E3E5F8',
+    500: '#7C7F9B',
+    700: '#2A2D48',
+  },
 }
 
 const paletteBaseOptions: PaletteOptions = {
@@ -70,48 +121,9 @@ const paletteBaseOptions: PaletteOptions = {
     800: '#F8AA14',
     900: '#EB9C03',
   },
-  highlight: {
-    pink: {
-      300: '#FDD8EE',
-      500: '#F339A8',
-      700: '#C7117F',
-    },
-    red: {
-      300: '#FDDBDB',
-      500: '#F96666',
-      700: '#B10C0C',
-    },
-    orange: {
-      300: '#FEE5CD',
-      500: '#FEA339',
-      700: '#D67F19',
-    },
-    green: {
-      300: '#D1FEB6',
-      500: '#85E14D',
-      700: '#4B991C',
-    },
-    blue: {
-      300: '#DAEFFE',
-      500: '#35A1EF',
-      700: '#0C5A93',
-    },
-    purple: {
-      300: '#F3D6FD',
-      500: '#BF35EF',
-      700: '#681A83',
-    },
-    yellow: {
-      300: '#FFF2C4',
-      500: '#FED239',
-      700: '#EB9C03',
-    },
-    deepGray: {
-      300: '#E3E5F8',
-      500: '#7C7F9B',
-      700: '#2A2D48',
-    },
-  },
+  highlight,
+  ...makeChipFilledHighlight(highlight),
+  ...makeChipOutlinedHighlight(highlight),
   white: '#FFFFFF',
 }
 

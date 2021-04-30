@@ -1,3 +1,4 @@
+import { ChipFilledHighlightColor, ChipOutlinedHighlightColor } from '@/configs/theme/overrides/chip'
 import { HighlightColor } from '@/configs/theme/palette'
 import { ChipProps } from '@material-ui/core'
 import { DayOfWeek, GenEdType } from '@thinc-org/chula-courses'
@@ -9,35 +10,35 @@ import { DayOfWeek, GenEdType } from '@thinc-org/chula-courses'
 
 export interface ChipConfigProps {
   label: string
-  color: HighlightColor
+  color?: ChipFilledHighlightColor | ChipOutlinedHighlightColor
   variant?: ChipProps['variant']
 }
 
 export type GenEdChipKey = GenEdType
 export type GenEdChipConfigProps = Record<GenEdType, ChipConfigProps>
 export const genEdChipConfig: GenEdChipConfigProps = {
-  SO: { label: 'หมวดสังคม', color: 'green', variant: 'outlined' },
-  SC: { label: 'หมวดวิทย์', color: 'yellow', variant: 'outlined' },
-  HU: { label: 'หมวดมนุษย์', color: 'pink', variant: 'outlined' },
-  IN: { label: 'หมวดสหฯ', color: 'purple', variant: 'outlined' },
-  NO: { label: 'ไม่ใช่ Gened', color: 'deepGray', variant: 'outlined' },
+  SO: { label: 'หมวดสังคม', color: 'greenOutlined', variant: 'outlined' },
+  SC: { label: 'หมวดวิทย์', color: 'yellowOutlined', variant: 'outlined' },
+  HU: { label: 'หมวดมนุษย์', color: 'pinkOutlined', variant: 'outlined' },
+  IN: { label: 'หมวดสหฯ', color: 'purpleOutlined', variant: 'outlined' },
+  NO: { label: 'ไม่ใช่ Gened', color: 'deepGrayOutlined', variant: 'outlined' },
 }
 
 export type DayChipKey = DayOfWeek
 export type DayChipConfigProps = Record<DayOfWeek, ChipConfigProps>
 export const dayChipConfig: DayChipConfigProps = {
-  MO: { label: 'วันจันทร์', color: 'yellow' },
-  TU: { label: 'วันอังคาร', color: 'pink' },
-  WE: { label: 'วันพุธ', color: 'green' },
-  TH: { label: 'วันพฤหัสบดี', color: 'orange' },
-  FR: { label: 'วันศุกร์', color: 'blue' },
-  SA: { label: 'วันเสาร์', color: 'purple' },
-  SU: { label: 'วันอาทิตย์', color: 'red' },
+  MO: { label: 'วันจันทร์', color: 'yellowFilled' },
+  TU: { label: 'วันอังคาร', color: 'pinkFilled' },
+  WE: { label: 'วันพุธ', color: 'greenFilled' },
+  TH: { label: 'วันพฤหัสบดี', color: 'orangeFilled' },
+  FR: { label: 'วันศุกร์', color: 'blueFilled' },
+  SA: { label: 'วันเสาร์', color: 'purpleFilled' },
+  SU: { label: 'วันอาทิตย์', color: 'redFilled' },
 }
 
-const createDefaultChipConfig: (label: string) => ChipConfigProps = (label: string) => ({
-  label: label,
-  color: 'deepGray',
+const createDefaultChipConfig = (label: string): ChipConfigProps => ({
+  label,
+  color: 'deepGrayFilled',
 })
 
 export type OtherChipKey = 'open' | 'close' | 'chula' | 'other'

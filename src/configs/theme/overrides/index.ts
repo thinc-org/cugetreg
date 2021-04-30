@@ -12,15 +12,22 @@ const overrideMuiBaseComponent = (defaultTheme: Theme): Theme => {
     MuiChip: {
       styleOverrides: overrideMuiChipStyles(defaultTheme),
     },
+    MuiTextField: {
+      defaultProps: {
+        size: 'small',
+        variant: 'outlined',
+      },
+    },
     MuiInputBase: {
+      defaultProps: { size: 'small' },
       styleOverrides: overrideMuiInputBase(defaultTheme),
     },
     MuiInputLabel: {
       styleOverrides: overrideMuiInputLabel(defaultTheme),
     },
-    MuiOutlinedInput: {
-      styleOverrides: overrideMuiOutlinedInput(defaultTheme),
-    },
+    // MuiOutlinedInput: {
+    //   styleOverrides: overrideMuiOutlinedInput(defaultTheme),
+    // },
     MuiMenuItem: {
       styleOverrides: overrideMuiMenuItem(defaultTheme),
     },

@@ -24,7 +24,7 @@ export default function SampleComponent() {
       <Link href="/course/2110211">
         <a>Course Detail: 2110211</a>
       </Link>
-      <TextField variant="outlined" size="small" label="sample" />
+      <TextField label="sample" />
     </div>
   )
 }

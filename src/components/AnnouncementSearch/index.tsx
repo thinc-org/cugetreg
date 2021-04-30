@@ -33,7 +33,6 @@ export const AnnouncementSearch = ({ categories, faculties, onSubmit }: Announce
       <Stack spacing={4.5} width={230}>
         <FormControl>
           <OutlinedInput
-            size="small"
             placeholder={t('searchPlaceholder')}
             name="keyword"
             startAdornment={

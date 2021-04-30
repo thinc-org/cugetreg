@@ -14,10 +14,7 @@ export type GeneralChipProps = Omit<ChipProps, keyof ChipConfigProps> & {
  *  @description Overrided Chip Component; There are limited tag's types that declaring in `./config.ts`.
  */
 
-const GeneralChip: React.FC<GeneralChipProps> = ({ type, ...rest }) => {
-  const { color, variant, label } = chipConfig[type]
-  return <Chip variant={variant} label={label} color={color} {...rest} />
-}
+const GeneralChip: React.FC<GeneralChipProps> = ({ type, ...rest }) => <Chip {...chipConfig[type]} {...rest} />
 
 declare module '@material-ui/core/Chip' {
   interface ChipPropsColorOverrides

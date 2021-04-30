@@ -1,15 +1,28 @@
 import React from 'react'
-import { CourseCard, CourseCardProps } from '.'
+import { CourseCard } from '.'
 import { Meta, Story } from '@storybook/react/types-6-0'
-import { mockGenEdCourse } from './mockCourse'
+import { mockGenEdCourse, mockNoGenEdCourse } from './mockCourse'
+
+type CourseCardStoryProps = { courseType: 'gened' | 'noGened'; rating: number }
 
 export default {
   title: 'Component/CourseCard',
   component: CourseCard,
-} as Meta
+  argTypes: {
+    courseType: {
+      name: 'Course Type',
+      defaultValue: 'gened',
+      control: {
+        type: 'radio',
+        options: ['gened', 'noGened'],
+      },
+    },
+  },
+} as Meta<CourseCardStoryProps>
 
-export const CourseCardStory: Story<CourseCardProps> = (args) => {
-  return <CourseCard {...args} />
+export const CourseCardStory: Story<CourseCardStoryProps> = (args) => {
+  const { courseType, rating } = args
+  return <CourseCard course={courseType === 'gened' ? mockGenEdCourse : mockNoGenEdCourse} rating={rating} />
 }
 
-CourseCardStory.args = { course: mockGenEdCourse, rating: 4.54 }
+CourseCardStory.args = { rating: 4.54 }

@@ -149,25 +149,25 @@ export const mockGenEdCourse: Course = {
       classes: [
         {
           type: 'LECT',
+          dayOfWeek: 'MO',
+          period: {
+            start: '9:30',
+            end: '11:00',
+          },
+          building: 'ENG3',
+          room: '101',
+          teachers: ['ATS'],
+        },
+        {
+          type: 'LECT',
           dayOfWeek: 'WE',
           period: {
             start: '9:30',
             end: '11:00',
           },
           building: 'ENG3',
-          room: '303',
-          teachers: ['ATW', 'NNN', 'ATS', 'ATX', 'XXX', 'ATA'],
-        },
-        {
-          type: 'LECT',
-          dayOfWeek: 'TH',
-          period: {
-            start: '9:30',
-            end: '11:00',
-          },
-          building: 'ENG3',
-          room: '303',
-          teachers: ['ATW'],
+          room: '101',
+          teachers: ['ATS'],
         },
       ],
     },
@@ -182,14 +182,25 @@ export const mockGenEdCourse: Course = {
       classes: [
         {
           type: 'LECT',
-          dayOfWeek: 'TU',
+          dayOfWeek: 'MO',
           period: {
             start: '9:30',
             end: '11:00',
           },
           building: 'ENG3',
-          room: 'AR',
-          teachers: ['NNN'],
+          room: '101',
+          teachers: ['ATS'],
+        },
+        {
+          type: 'LECT',
+          dayOfWeek: 'WE',
+          period: {
+            start: '9:30',
+            end: '11:00',
+          },
+          building: 'ENG3',
+          room: '101',
+          teachers: ['ATS'],
         },
       ],
     },
@@ -204,17 +215,6 @@ export const mockGenEdCourse: Course = {
       classes: [
         {
           type: 'LECT',
-          dayOfWeek: 'WE',
-          period: {
-            start: '9:30',
-            end: '11:00',
-          },
-          building: 'ENG3',
-          room: '101',
-          teachers: ['ATS'],
-        },
-        {
-          type: 'LECT',
           dayOfWeek: 'MO',
           period: {
             start: '9:30',
@@ -226,7 +226,7 @@ export const mockGenEdCourse: Course = {
         },
         {
           type: 'LECT',
-          dayOfWeek: 'FR',
+          dayOfWeek: 'WE',
           period: {
             start: '9:30',
             end: '11:00',

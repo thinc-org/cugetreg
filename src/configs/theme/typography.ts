@@ -36,7 +36,7 @@ const baseTypographyVariantOptions: Record<TypographyVariant, TypographyStyleOpt
     letterSpacing: 0.15,
     lineHeight: 24,
     fontSize: 18,
-    fontWeight: 400,
+    fontWeight: 500,
   },
   subtitle1: {
     letterSpacing: 0.18,

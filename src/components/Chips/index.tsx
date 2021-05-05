@@ -1,4 +1,3 @@
-import { ChipFilledHighlightColor, ChipOutlinedHighlightColor } from '@/configs/theme/overrides/chip'
 import { Chip, ChipProps } from '@material-ui/core'
 import { chipConfig, ChipConfigProps, GeneralChipKey } from './config'
 
@@ -15,11 +14,5 @@ export type GeneralChipProps = Omit<ChipProps, keyof ChipConfigProps> & {
  */
 
 const GeneralChip: React.FC<GeneralChipProps> = ({ type, ...rest }) => <Chip {...chipConfig[type]} {...rest} />
-
-declare module '@material-ui/core/Chip' {
-  interface ChipPropsColorOverrides
-    extends Record<ChipFilledHighlightColor, true>,
-      Record<ChipOutlinedHighlightColor, true> {}
-}
 
 export default GeneralChip

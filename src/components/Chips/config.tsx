@@ -1,5 +1,4 @@
 import { ChipFilledHighlightColor, ChipOutlinedHighlightColor } from '@/configs/theme/overrides/chip'
-import { HighlightColor } from '@/configs/theme/palette'
 import { ChipProps } from '@material-ui/core'
 import { DayOfWeek, GenEdType } from '@thinc-org/chula-courses'
 

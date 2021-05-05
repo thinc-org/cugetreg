@@ -178,3 +178,9 @@ export const makeChipOutlinedHighlight = (highlight: Highlight) =>
       { main: dark, dark: light, contrastText: light },
     ])
   ) as ChipOutlinedHighlight
+
+declare module '@material-ui/core/Chip' {
+  interface ChipPropsColorOverrides
+    extends Record<ChipFilledHighlightColor, true>,
+      Record<ChipOutlinedHighlightColor, true> {}
+}

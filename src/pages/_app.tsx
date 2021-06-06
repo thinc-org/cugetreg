@@ -6,6 +6,7 @@ import '@/styles/globals.css'
 import '@/i18n'
 import { darkTheme, lightTheme } from '@/configs/theme'
 import { TopBar } from '@/components/TopBar'
+import { Footer } from '@/components/Footer'
 import { Container } from '@/components/Container'
 import env from '@/utils/env/macro'
 
@@ -46,6 +47,7 @@ function MyApp({ Component, pageProps, forceDark }: AppProps) {
               <Container>
                 <Component {...pageProps} />
               </Container>
+              <Footer />
             </ThemeProvider>
           </LocalizationProvider>
         </ApolloProvider>

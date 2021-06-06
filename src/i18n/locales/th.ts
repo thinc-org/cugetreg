@@ -44,6 +44,7 @@ export const schedule = {
   },
 }
 
+
 export const courseCard = {
   select: 'เลือก',
   credit: '[{{credit}} หน่วยกิต]',
@@ -57,4 +58,10 @@ export const courseCard = {
   classRoom: 'ห้องเรียน',
   note: 'หมายเหตุ',
   capacity: 'ที่ว่าง',
+}
+
+export const footer = {
+  university: 'จุฬาลงกรณ์มหาวิทยาลัย',
+  topButton: 'กลับด้านบน',
+  github: 'Open Source on',
 }

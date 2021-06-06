@@ -9,7 +9,7 @@ import { DayOfWeek, GenEdType } from '@thinc-org/chula-courses'
 
 export interface ChipConfigProps {
   label: string
-  color?: ChipFilledHighlightColor | ChipOutlinedHighlightColor
+  color: ChipFilledHighlightColor | ChipOutlinedHighlightColor
   variant?: ChipProps['variant']
 }
 

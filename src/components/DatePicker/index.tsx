@@ -1,39 +1,24 @@
-import DateRangeOutlinedIcon from '@material-ui/icons/DateRangeOutlined'
-import { KeyboardDatePicker } from '@material-ui/pickers'
-import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date'
-import { useSharedStyles } from '@/styles/shared'
-
-import { useStyles } from './styles'
+import { TextField } from '@material-ui/core'
+import MuiDatePicker from '@material-ui/lab/DatePicker'
 
 export interface DatePickProps {
   value: Date | null
   name: string
-  onChange: (date: MaterialUiPickersDate) => void
+  onChange: (date: Date | null) => void
 }
 
 export const DatePicker = ({ value, onChange, name }: DatePickProps) => {
-  const sharedClasses = useSharedStyles()
-  const classes = useStyles()
-
   return (
-    <KeyboardDatePicker
-      placeholder="dd/mm/yyyy"
-      name={name}
-      className={sharedClasses.inputField}
-      keyboardIcon={<DateRangeOutlinedIcon />}
+    <MuiDatePicker
       value={value}
       disableFuture
       onChange={onChange}
-      inputProps={{
-        className: classes.input,
+      renderInput={(params) => <TextField name={name} {...params} helperText={null} />}
+      inputFormat="dd/MM/yyyy"
+      OpenPickerButtonProps={{
+        'aria-label': 'change date',
+        size: 'small',
       }}
-      InputProps={{
-        disableUnderline: true,
-      }}
-      KeyboardButtonProps={{
-        className: classes.dateIcon,
-      }}
-      format="dd/MM/yyyy"
     />
   )
 }

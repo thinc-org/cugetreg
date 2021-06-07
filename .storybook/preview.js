@@ -1,19 +1,20 @@
 import { CssBaseline, ThemeProvider } from '@material-ui/core'
-import { MuiPickersUtilsProvider } from '@material-ui/pickers'
-import DateFnsUtils from '@date-io/date-fns'
 import { lightTheme } from '../src/configs/theme'
+
+import AdapterDateFns from '@material-ui/lab/AdapterDateFns'
+import LocalizationProvider from '@material-ui/lab/LocalizationProvider'
 
 export const parameters = {
   actions: { argTypesRegex: '^on[A-Z].*' },
 }
 
 const themeDecorator = (Story) => (
-  <MuiPickersUtilsProvider utils={DateFnsUtils}>
+  <LocalizationProvider dateAdapter={AdapterDateFns}>
     <ThemeProvider theme={lightTheme}>
       <CssBaseline />
       <Story />
     </ThemeProvider>
-  </MuiPickersUtilsProvider>
+  </LocalizationProvider>
 )
 
 export const decorators = [themeDecorator]

@@ -1,3 +1,5 @@
+import { lightTheme } from '@/configs/theme'
+import { ThemeProvider } from '@material-ui/core'
 import { render } from '@testing-library/react'
 import GeneralChip from '.'
 import { chipConfig, GeneralChipKey } from './config'
@@ -7,7 +9,11 @@ describe('Chip test', () => {
 
   typeList.forEach((value) => {
     it(`Should be created using type=${value}`, () => {
-      const generalChip = render(<GeneralChip type={value} />)
+      const generalChip = render(
+        <ThemeProvider theme={lightTheme}>
+          <GeneralChip type={value} />
+        </ThemeProvider>
+      )
       expect(generalChip).toBeTruthy()
     })
   })

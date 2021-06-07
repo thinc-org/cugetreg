@@ -1,4 +1,3 @@
-import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date'
 import { FormEvent, useState } from 'react'
 import { OnSubmit } from '.'
 
@@ -8,7 +7,7 @@ const useAnnouncementSearch = (onSubmit: OnSubmit) => {
   const [category, setCategory] = useState<string>('ทุกหมวดหมู่')
   const [faculty, setFaculty] = useState<string>('ทุกคณะ')
 
-  const handleDateChange = (date: MaterialUiPickersDate) => {
+  const handleDateChange = (date: Date | null) => {
     setDate(new Date(date || ''))
   }
   const handleCategoryChange = (e: React.ChangeEvent<{ value: unknown }>) => {

@@ -9,13 +9,15 @@ import { TopBar } from '@/components/TopBar'
 import { Footer } from '@/components/Footer'
 import { Container } from '@/components/Container'
 import env from '@/utils/env/macro'
-import { MuiPickersUtilsProvider } from '@material-ui/pickers'
-import DateFnsUtils from '@date-io/date-fns'
+
 import { ApolloProvider } from '@apollo/client'
 import { client } from '@/utils/network/apollo'
 import useApp from '@/hooks/useApp'
 import { mobxConfiguration } from '@/configs/mobx'
 import { ShoppingCartProvider } from '@/contexts/shoppingCart'
+
+import AdapterDateFns from '@material-ui/lab/AdapterDateFns'
+import LocalizationProvider from '@material-ui/lab/LocalizationProvider'
 
 mobxConfiguration()
 
@@ -38,7 +40,7 @@ function MyApp({ Component, pageProps, forceDark }: AppProps) {
       </Head>
       <ShoppingCartProvider>
         <ApolloProvider client={client}>
-          <MuiPickersUtilsProvider utils={DateFnsUtils}>
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
             <ThemeProvider theme={prefersDarkMode || forceDark ? darkTheme : lightTheme}>
               <CssBaseline />
               <TopBar />
@@ -47,7 +49,7 @@ function MyApp({ Component, pageProps, forceDark }: AppProps) {
               </Container>
               <Footer />
             </ThemeProvider>
-          </MuiPickersUtilsProvider>
+          </LocalizationProvider>
         </ApolloProvider>
       </ShoppingCartProvider>
     </>

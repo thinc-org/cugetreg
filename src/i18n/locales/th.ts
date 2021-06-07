@@ -16,14 +16,6 @@ export const navBar = {
   signin: 'เข้าสู่ระบบ',
 }
 
-export const genEd = {
-  HU: 'หมวดมนุษย์',
-  IN: 'หมวดสหฯ',
-  SC: 'หมวดวิทย์',
-  SO: 'หมวดสังคม',
-  NO: 'ไม่ใช่ GENED',
-}
-
 export const annuncementSearch = {
   search: 'ค้นหา',
   searchPlaceholder: 'ค้นหาหัวข้อ/เนื้อหา',
@@ -50,6 +42,22 @@ export const schedule = {
     SA: 'SAT',
     SU: 'SUN',
   },
+}
+
+
+export const courseCard = {
+  select: 'เลือก',
+  credit: '[{{credit}} หน่วยกิต]',
+  classDay: 'วันที่เรียน',
+  genEd: 'GenEd',
+  totalCapacity: 'จำนวนที่ว่างรวม',
+  condition: 'เงื่อนไข',
+  rating: 'Rating',
+  teacher: 'ผู้สอน',
+  time: 'เวลา',
+  classRoom: 'ห้องเรียน',
+  note: 'หมายเหตุ',
+  capacity: 'ที่ว่าง',
 }
 
 export const footer = {

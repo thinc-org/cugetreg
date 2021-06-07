@@ -27,7 +27,7 @@ export default {
   component: GeneralChip,
   argTypes: {
     generalChip: {
-      defaultValue: 'SO',
+      defaultValue: 'other',
       description: 'Use to style chip from keyword from `ChipKey`. No need to style by yourselves',
       control: {
         type: 'select',
@@ -35,7 +35,7 @@ export default {
       },
     },
     genEdChip: {
-      defaultValue: 'SC',
+      defaultValue: 'HU',
       description: 'Use to style chip from keyword from `ChipKey`. No need to style by yourselves',
       control: {
         type: 'select',
@@ -43,7 +43,7 @@ export default {
       },
     },
     dayChip: {
-      defaultValue: 'MO',
+      defaultValue: 'TU',
       description: 'Use to style chip from keyword from `ChipKey`. No need to style by yourselves',
       control: {
         type: 'select',

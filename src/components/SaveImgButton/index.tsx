@@ -8,7 +8,6 @@ const SaveImgButton: React.FC<{ imageRef: MutableRefObject<null> }> = ({ imageRe
 
   const saveImage = useCallback(() => {
     takeScreenshot(imageRef.current)
-    console.log(image)
     const link = document.createElement('a')
     link.href = image
     link.download = 'schedule.png'

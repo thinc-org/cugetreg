@@ -30,6 +30,7 @@
     "babel-plugin-macros": "^3.0.1",
     "date-fns": "^2.16.1",
     "graphql": "^15.5.0",
+    "html2canvas": "^1.0.0-rc.7",
     "i18next": "^19.8.4",
     "imagemin-svgo": "^8.0.0",
     "mobx": "^6.1.7",
@@ -42,7 +43,8 @@
     "react-dom": "17.0.1",
     "react-i18next": "^11.8.5",
     "react-icons": "^4.2.0",
-    "react-measure": "^2.5.2"
+    "react-measure": "^2.5.2",
+    "use-react-screenshot": "^1.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",

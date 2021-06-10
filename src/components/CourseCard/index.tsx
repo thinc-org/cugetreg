@@ -21,7 +21,7 @@ import { Select } from '../Select'
 import { useCourseCard } from './useCourseCard'
 import GenEdChip from '../Chips/catagories/GenEdChip'
 import DayChip from '../Chips/catagories/DayChip'
-import { PropsWithChildren } from 'react'
+import { Caption } from './components/Caption'
 
 export interface CourseCardProps {
   course: Course
@@ -244,9 +244,3 @@ export const CourseCard = (props: CourseCardProps) => {
     </Card>
   )
 }
-
-export const Caption = ({ children }: PropsWithChildren<{}>) => (
-  <Typography variant="caption" color="primaryRange.100">
-    {children}
-  </Typography>
-)

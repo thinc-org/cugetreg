@@ -140,7 +140,7 @@ export const mockGenEdCourse: Course = {
   sections: [
     {
       sectionNo: '1',
-      closed: true,
+      closed: false,
       capacity: {
         current: 99,
         max: 99,

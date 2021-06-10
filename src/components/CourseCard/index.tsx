@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   Card,
   CardActions,
   CardContent,
@@ -22,6 +21,7 @@ import { useCourseCard } from './useCourseCard'
 import GenEdChip from '../Chips/catagories/GenEdChip'
 import DayChip from '../Chips/catagories/DayChip'
 import { Caption } from './components/Caption'
+import { CustomButton } from '../common/CustomButton'
 
 export interface CourseCardProps {
   course: Course
@@ -44,6 +44,11 @@ export const CourseCard = (props: CourseCardProps) => {
     selectedSectionNumber,
   } = useCourseCard(course)
 
+  const SelectButton = (
+    <CustomButton loading={false} startIcon={<Add />} color="primary" variant="contained" fullWidth disableElevation>
+      {t('select')}
+    </CustomButton>
+  )
   const CardHeading = (
     <CardHeader
       sx={{ p: 4, pb: 0, pt: 3 }}
@@ -134,7 +139,7 @@ export const CourseCard = (props: CourseCardProps) => {
   )
 
   const CardHiddenDescription = (
-    <Grid container spacing={3} sx={{ mt: 0 }}>
+    <Grid container spacing={3} sx={{ mt: 0, width: 'auto' }}>
       <Grid item xs={6} sm="auto" sx={{ display: { xs: 'block', sm: 'none' } }}>
         <Select
           items={sectionNumbers}
@@ -210,9 +215,7 @@ export const CourseCard = (props: CourseCardProps) => {
           name="sectionNo"
         />
       </Collapse>
-      <Button startIcon={<Add />} color="primary" variant="contained" fullWidth disableElevation>
-        {t('select')}
-      </Button>
+      {SelectButton}
     </Stack>
   )
 
@@ -228,13 +231,7 @@ export const CourseCard = (props: CourseCardProps) => {
     </CardContent>
   )
 
-  const CardFooter = (
-    <CardActions sx={{ p: 4, pt: 0, display: { sm: 'none' } }}>
-      <Button startIcon={<Add />} color="primary" variant="contained" fullWidth disableElevation>
-        {t('select')}
-      </Button>
-    </CardActions>
-  )
+  const CardFooter = <CardActions sx={{ p: 4, pt: 0, display: { sm: 'none' } }}>{SelectButton}</CardActions>
 
   return (
     <Card variant="outlined">

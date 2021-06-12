@@ -4,6 +4,7 @@ import {
   CardActions,
   CardContent,
   CardHeader,
+  Grid,
   Stack,
   Table,
   TableBody,
@@ -39,13 +40,19 @@ export const SectionCard = (props: SectionCardProps) => {
   return (
     <Card variant="outlined">
       <CardHeader
-        sx={{ p: 4, pb: 0, pt: 3 }}
+        sx={{ p: { xs: 2, sm: 4 }, pb: { xs: 0, sm: 0 }, pt: { xs: 2, sm: 3 } }}
         title={
           <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-            <Stack direction="row" spacing={{ xs: 1, sm: 2 }} alignItems="center">
-              <Typography variant="h5">{t('section', { sectionNo: section.sectionNo })}</Typography>
-              {course.genEdType !== 'NO' && <GenEdChip type={course.genEdType} />}
-            </Stack>
+            <Grid container spacing={1}>
+              <Grid item>
+                <Typography variant="h5">{t('section', { sectionNo: section.sectionNo })}</Typography>
+              </Grid>
+              {course.genEdType !== 'NO' && (
+                <Grid item>
+                  <GenEdChip type={course.genEdType} />
+                </Grid>
+              )}
+            </Grid>
             <SectionStatus
               capacity={section.capacity}
               status={
@@ -55,7 +62,7 @@ export const SectionCard = (props: SectionCardProps) => {
           </Box>
         }
       />
-      <CardContent sx={{ px: 4, py: 2 }}>
+      <CardContent sx={{ px: { xs: 2, sm: 4 }, py: 2, pt: { xs: 2, sm: 1 } }}>
         <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, justifyContent: 'space-between' }}>
           <Table
             sx={{
@@ -114,7 +121,9 @@ export const SectionCard = (props: SectionCardProps) => {
           </Stack>
         </Box>
       </CardContent>
-      <CardActions sx={{ p: 4, pt: 0, display: { sm: 'none' } }}>{SelectButton}</CardActions>
+      <CardActions sx={{ p: { xs: 2, sm: 4 }, pt: { xs: 0, sm: 0 }, display: { sm: 'none' } }}>
+        {SelectButton}
+      </CardActions>
     </Card>
   )
 }

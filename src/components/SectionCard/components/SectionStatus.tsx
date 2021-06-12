@@ -31,7 +31,10 @@ export const SectionStatus = (props: SectionStatusProps) => {
       sx={{
         px: 2,
         py: 0.5,
+        ml: 1,
         borderRadius: 1,
+        whiteSpace: 'nowrap',
+        height: 'fit-content',
         ...style[status],
         ...rest.sx,
       }}

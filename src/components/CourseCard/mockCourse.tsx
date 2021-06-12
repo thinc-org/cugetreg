@@ -31,10 +31,10 @@ export const mockNoGenEdCourse: Course = {
   sections: [
     {
       sectionNo: '1',
-      closed: true,
+      closed: false,
       capacity: {
-        current: 99,
-        max: 99,
+        current: 70,
+        max: 100,
       },
       note: '-',
       classes: [
@@ -66,8 +66,8 @@ export const mockNoGenEdCourse: Course = {
       sectionNo: '2',
       closed: false,
       capacity: {
-        current: 70,
-        max: 100,
+        current: 99,
+        max: 99,
       },
       note: '-',
       classes: [
@@ -86,7 +86,7 @@ export const mockNoGenEdCourse: Course = {
     },
     {
       sectionNo: '33',
-      closed: false,
+      closed: true,
       capacity: {
         current: 50,
         max: 68,
@@ -142,8 +142,8 @@ export const mockGenEdCourse: Course = {
       sectionNo: '1',
       closed: false,
       capacity: {
-        current: 99,
-        max: 99,
+        current: 70,
+        max: 100,
       },
       note: '-',
       classes: [
@@ -175,8 +175,8 @@ export const mockGenEdCourse: Course = {
       sectionNo: '2',
       closed: false,
       capacity: {
-        current: 70,
-        max: 100,
+        current: 99,
+        max: 99,
       },
       note: '-',
       classes: [
@@ -206,7 +206,7 @@ export const mockGenEdCourse: Course = {
     },
     {
       sectionNo: '33',
-      closed: false,
+      closed: true,
       capacity: {
         current: 50,
         max: 68,

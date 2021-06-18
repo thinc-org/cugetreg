@@ -24,7 +24,7 @@ jobs:
       - name: Checkout submodules
         run: |
           git config --file .gitmodules --get-regexp url | while read url; do
-            git config --file=.gitmodules $(echo "$url" | sed -E "s/git@github.com:|https:\/\/github.com\//https:\/\/${{ secrets.GITHUB_TOKEN }}:${{ secrets.GITHUB_TOKEN }}@github.com\//")
+            git config --file=.gitmodules $(echo "$url" | sed -E "s/git@github.com:|https:\/\/github.com\//https:\/\/${{ secrets.GH_TOKEN }}:${{ secrets.GH_TOKEN }}@github.com\//")
           done
           git submodule sync
           git submodule update --init --recursive
@@ -47,8 +47,8 @@ jobs:
         uses: docker/login-action@v1
         with:
           registry: ghcr.io
-          username: ${{ secrets.GITHUB_USERNAME }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          username: ${{ secrets.GH_USERNAME }}
+          password: ${{ secrets.GH_TOKEN }}
 
       - name: Push to GitHub Packages
         uses: docker/build-push-action@v2
@@ -59,7 +59,7 @@ jobs:
           cache-to: type=local,dest=/tmp/.buildx-cache-new
           context: .
           secrets: |
-            GIT_AUTH_TOKEN=${{ secrets.GITHUB_TOKEN }}
+            GIT_AUTH_TOKEN=${{ secrets.GH_TOKEN }}
 
       - name: Move cache
         run: |

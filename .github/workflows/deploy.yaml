@@ -2,7 +2,7 @@ name: Deploy to Production
 
 on:
   push:
-    branches: [ssh-vpn]
+    branches: [master]
 
 permissions:
   contents: read

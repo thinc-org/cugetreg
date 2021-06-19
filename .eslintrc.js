@@ -18,12 +18,23 @@ module.exports = {
     ecmaVersion: 11,
     sourceType: 'module',
   },
-  plugins: ['react', '@typescript-eslint', 'prettier'],
+  plugins: ['react', '@typescript-eslint', 'prettier', 'react-hooks'],
   rules: {
     'react/prop-types': 0,
     'react/react-in-jsx-scope': 0,
     '@typescript-eslint/explicit-module-boundary-types': 0,
     'react-hooks/exhaustive-deps': 'warn',
+    'react-hooks/rules-of-hooks': 'error',
+    '@typescript-eslint/ban-types': [
+      'error',
+      {
+        extendDefaults: true,
+        types: {
+          '{}': false,
+        },
+      },
+    ],
+    '@typescript-eslint/no-empty-interface': 'off',
   },
   settings: {
     react: {

@@ -14,7 +14,6 @@ import { ApolloProvider } from '@apollo/client'
 import { client } from '@/utils/network/apollo'
 import useApp from '@/hooks/useApp'
 import { mobxConfiguration } from '@/configs/mobx'
-import { ShoppingCartProvider } from '@/contexts/shoppingCart'
 
 import AdapterDateFns from '@material-ui/lab/AdapterDateFns'
 import LocalizationProvider from '@material-ui/lab/LocalizationProvider'
@@ -38,20 +37,18 @@ function MyApp({ Component, pageProps, forceDark }: AppProps) {
         <title>CU Get Reg</title>
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
       </Head>
-      <ShoppingCartProvider>
-        <ApolloProvider client={client}>
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <ThemeProvider theme={prefersDarkMode || forceDark ? darkTheme : lightTheme}>
-              <CssBaseline />
-              <TopBar />
-              <Container>
-                <Component {...pageProps} />
-              </Container>
-              <Footer />
-            </ThemeProvider>
-          </LocalizationProvider>
-        </ApolloProvider>
-      </ShoppingCartProvider>
+      <ApolloProvider client={client}>
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <ThemeProvider theme={prefersDarkMode || forceDark ? darkTheme : lightTheme}>
+            <CssBaseline />
+            <TopBar />
+            <Container>
+              <Component {...pageProps} />
+            </Container>
+            <Footer />
+          </ThemeProvider>
+        </LocalizationProvider>
+      </ApolloProvider>
     </>
   )
 }

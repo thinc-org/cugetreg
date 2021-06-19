@@ -3,6 +3,7 @@ import { Course, Class, DayOfWeek, GenEdType } from '@thinc-org/chula-courses'
 import { hourStart } from './constants'
 import { Theme, useTheme } from '@material-ui/core'
 import { HighlightColorRange } from '@/configs/theme/palette'
+import { CourseCartItem } from '@/store'
 
 export type TimetableClass = Pick<Course, 'courseNo' | 'abbrName' | 'genEdType'> &
   Omit<Class, 'type'> & {
@@ -19,7 +20,12 @@ export type ScheduleClass = Omit<TimetableClass, 'period'> & {
 export function getPosition(time: string) {
   const match = time.match(/(\d+):(\d+)/)
   if (!match) {
-    throw new Error('Class time must be in format hh:mm')
+    const match2 = time.match(/(\d+)/)
+    if (!match2) {
+      throw new Error('Class time must be in format hh:mm')
+    }
+    const hour = parseInt(match2[1]) - hourStart + 1
+    return hour
   }
   const hour = parseInt(match[1]) - hourStart + 1
   const minute = parseInt(match[2])
@@ -127,4 +133,31 @@ export function useColorScheme(genEdType: GenEdType, hasOverlap: boolean): Color
     border: range[700],
     text: range[700],
   }
+}
+
+export function useTimetableClasses(shopItems: CourseCartItem[]) {
+  return shopItems
+    .filter((item) => !item.isHidden)
+    .flatMap((item) => {
+      const { courseNo, abbrName, genEdType, selectedSectionNo } = item
+      const section = item.sections.find((section) => section.sectionNo === selectedSectionNo)
+      if (!section) {
+        return []
+      }
+      return section.classes.map(
+        (cls): TimetableClass => {
+          const { dayOfWeek, period, building, room, teachers } = cls
+          return {
+            courseNo,
+            abbrName,
+            genEdType,
+            dayOfWeek,
+            period,
+            building,
+            room,
+            teachers,
+          }
+        }
+      )
+    })
 }

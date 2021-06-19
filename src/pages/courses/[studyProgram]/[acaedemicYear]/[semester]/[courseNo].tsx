@@ -38,6 +38,25 @@ const GET_COURSE = gql`
       courseCondition
       genEdType
       rating
+      sections {
+        sectionNo
+        closed
+        capacity {
+          current
+          max
+        }
+        note
+        classes {
+          type
+          dayOfWeek
+          period {
+            start
+            end
+          }
+          building
+          teachers
+        }
+      }
     }
   }
 `
@@ -57,6 +76,13 @@ function parseVariablesFromQuery(q: any): GetCourseVars {
       semester: query.semester,
     },
   }
+}
+
+function courseTypeStringFromCourse(c: Course) {
+  const sec = c.sections
+  const t = sec.flatMap((s) => s.classes.map((c) => c.type))
+  const tu = t.filter((v, i) => t.indexOf(v) == i)
+  return tu.join('/')
 }
 
 function CourseDetailPage(props: { data: GetCourseResponse }) {
@@ -81,7 +107,7 @@ function CourseDetailPage(props: { data: GetCourseResponse }) {
         </Grid>
         <Grid item xs={6}>
           <Typography variant="subtitle1">รูปแบบรายวิชา</Typography>
-          ????
+          {courseTypeStringFromCourse(cData.course)}
         </Grid>
         <Grid item xs={6}>
           <Typography variant="subtitle1">สอบกลางภาค</Typography>
@@ -108,7 +134,6 @@ function CourseDetailPage(props: { data: GetCourseResponse }) {
             : 'TBA'}
         </Grid>
       </Grid>
-      TODOOOOO
     </>
   )
 }

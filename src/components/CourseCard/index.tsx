@@ -87,6 +87,7 @@ export const CourseCard = (props: CourseCardProps) => {
     />
   )
 
+  // TODO: fix typo
   const CardDiscription = (
     <Grid container spacing={3}>
       <Grid item xs={6} sm="auto">

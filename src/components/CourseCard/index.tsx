@@ -87,8 +87,7 @@ export const CourseCard = (props: CourseCardProps) => {
     />
   )
 
-  // TODO: fix typo
-  const CardDiscription = (
+  const CardDescription = (
     <Grid container spacing={3}>
       <Grid item xs={6} sm="auto">
         <Stack spacing={0.5}>
@@ -224,7 +223,7 @@ export const CourseCard = (props: CourseCardProps) => {
     <CardContent sx={{ px: 4, py: 2 }}>
       <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, justifyContent: 'space-between' }}>
         <Stack>
-          {CardDiscription}
+          {CardDescription}
           <Collapse in={isExpanded}>{CardHiddenDescription}</Collapse>
         </Stack>
         {CardSideActions}

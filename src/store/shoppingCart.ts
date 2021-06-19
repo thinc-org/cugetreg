@@ -135,3 +135,4 @@ export class CourseCart implements CourseCartProps {
     return this.shopItems.map((item) => this.convertToCourse(item))
   }
 }
+export const courseCartStore = new CourseCart()

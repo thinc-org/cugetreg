@@ -1,3 +1,4 @@
+import { Theme as MuiTheme } from '@material-ui/core'
 import { PaletteOptions } from '@material-ui/core/styles'
 import {
   ChipFilledHighlight,
@@ -29,6 +30,10 @@ declare module '@material-ui/core/styles' {
     secondaryRange: Omit<PaletteRangeOptions, 10 | 30>
     highlight: Highlight
   }
+}
+
+declare module '@emotion/react' {
+  interface Theme extends MuiTheme {}
 }
 
 export const highlight: Highlight = {

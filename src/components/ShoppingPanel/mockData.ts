@@ -82,7 +82,7 @@ export const mockData: Course[] = [
         classes: [
           {
             type: 'LECT',
-            dayOfWeek: 'MO',
+            dayOfWeek: 'TU',
             period: {
               start: '12',
               end: '14',
@@ -129,7 +129,7 @@ export const mockData: Course[] = [
         classes: [
           {
             type: 'LECT',
-            dayOfWeek: 'MO',
+            dayOfWeek: 'WE',
             period: {
               start: '12',
               end: '14',
@@ -176,7 +176,7 @@ export const mockData: Course[] = [
         classes: [
           {
             type: 'LECT',
-            dayOfWeek: 'MO',
+            dayOfWeek: 'TH',
             period: {
               start: '12',
               end: '14',

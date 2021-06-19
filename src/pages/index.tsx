@@ -1,56 +1,15 @@
-import SampleComponent from '@/components/SampleComponent'
-import { mockData } from '@/components/ShoppingPanel/mockData'
-import { useShoppingCartContext } from '@/contexts/shoppingCart'
-import { Box, Button } from '@material-ui/core'
-import { observer } from 'mobx-react'
-import { useState } from 'react'
+import { DEFAULT_STUDY_PROGRAM } from '@/constants/studyProgram'
+import { useRouter } from 'next/router'
+import { useEffect } from 'react'
 
-const Home = observer(() => {
-  const shoppingCart = useShoppingCartContext()
+function HomePage() {
+  const router = useRouter()
 
-  const [index, setIndex] = useState(0)
-  const getMockCourse = () => {
-    setIndex((value) => value + 1)
-    return mockData[index]
-  }
-  const onAddItem = () => {
-    if (index < 4) {
-      const mockCourse = getMockCourse()
-      shoppingCart.addItem(mockCourse, mockCourse.sections[0].sectionNo)
-    }
-  }
+  useEffect(() => {
+    router.push(`${DEFAULT_STUDY_PROGRAM}/courses`)
+  }, [router])
 
-  const onSelectItem = (courseNo: string) => {
-    shoppingCart.toggleSelectedItem(courseNo)
-  }
+  return null
+}
 
-  const onClearItems = () => {
-    shoppingCart.removeItems()
-  }
-
-  return (
-    <>
-      <SampleComponent />
-      <Box display="flex" flexDirection="column">
-        {shoppingCart.courses.map(({ courseNo, abbrName }, index) => (
-          <Box mt={1} key={index}>
-            <Button
-              onClick={() => onSelectItem(courseNo)}
-              style={{ background: shoppingCart.item(courseNo)?.isSelected ? 'red' : 'transparent' }}
-            >{`course: ${courseNo} ${abbrName}`}</Button>
-          </Box>
-        ))}
-      </Box>
-      {`shopping Cart State = ${shoppingCart.state}`}
-      <br />
-      <Button variant="outlined" onClick={onAddItem}>
-        Add Item
-      </Button>
-      <Button variant="outlined" onClick={onClearItems}>
-        Remove Selected Item
-      </Button>
-    </>
-  )
-})
-
-export default Home
+export default HomePage

@@ -7,7 +7,7 @@ function HomePage() {
 
   useEffect(() => {
     //router.push(`${DEFAULT_STUDY_PROGRAM}/courses`)
-    router.push(`courses/T/2021/2/2500000`)
+    router.push(`/T/courses?academicYear=2021&semester=2`)
   }, [router])
 
   return null

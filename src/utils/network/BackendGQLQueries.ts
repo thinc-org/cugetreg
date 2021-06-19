@@ -1,7 +1,7 @@
-import { Course, StudyProgram } from '@thinc-org/chula-courses'
+import { Course, DayOfWeek, GenEdType, StudyProgram } from '@thinc-org/chula-courses'
 import gql from 'graphql-tag'
 
-interface CourseGroup {
+export interface CourseGroup {
   semester: string
   academicYear: string
   studyProgram: StudyProgram
@@ -16,8 +16,7 @@ export interface GetCourseResponse {
   course: Course
 }
 
-const COURSE_DATE_QUERY = `
-{
+const COURSE_DATA_FIELDS = `
     studyProgram
     semester
     academicYear
@@ -50,12 +49,37 @@ const COURSE_DATE_QUERY = `
             teachers
         }
     }
-}`
+`
 
 export const GET_COURSE = gql`
 query GetCourseInfo($courseNo: String!, $courseGroup: CourseGroupInput!) {
-    course(courseNo: $courseNo, courseGroup: $courseGroup)
-    ${COURSE_DATE_QUERY}
+    course(courseNo: $courseNo, courseGroup: $courseGroup) {
+        ${COURSE_DATA_FIELDS}
+    }
 }
 `
+
+export const SEARCH_COURSE = gql`
+query Search($filter: FilterInput!, $courseGroup: CourseGroupInput!) {
+    search(filter: $filter, courseGroup: $courseGroup) {
+        ${COURSE_DATA_FIELDS}
+    }
+}
+`
+
+export interface SearchCourseVars {
+  filter: {
+    keyword?: string
+    genEdType?: GenEdType[]
+    dayOfWeeks?: DayOfWeek
+    limit?: number
+    offset?: number
+  }
+  courseGroup: CourseGroup
+}
+
+export interface SearchCourseResponse {
+  search: Course[]
+}
+
 export default undefined

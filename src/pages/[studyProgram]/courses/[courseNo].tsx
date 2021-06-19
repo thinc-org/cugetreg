@@ -7,21 +7,15 @@ import React from 'react'
 import { client } from '@/utils/network/apollo'
 import { Box, Grid, Typography } from '@material-ui/core'
 import { GetCourseResponse, GetCourseVars, GET_COURSE } from '@/utils/network/BackendGQLQueries'
+import { parseCourseGroupFromQuery } from '.'
 
 function parseVariablesFromQuery(q: any): GetCourseVars {
   const query = q as {
-    studyProgram: string
-    acaedemicYear: string
-    semester: string
     courseNo: string
   }
   return {
     courseNo: query.courseNo,
-    courseGroup: {
-      studyProgram: query.studyProgram as StudyProgram,
-      academicYear: query.acaedemicYear,
-      semester: query.semester,
-    },
+    courseGroup: parseCourseGroupFromQuery(q),
   }
 }
 

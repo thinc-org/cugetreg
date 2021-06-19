@@ -1,3 +1,4 @@
+import { mockData } from '@/components/ShoppingPanel/mockData'
 import { Course } from '@thinc-org/chula-courses'
 import { action, computed, makeObservable, observable } from 'mobx'
 import { computedFn } from 'mobx-utils'
@@ -21,6 +22,14 @@ export class CourseCart implements CourseCartProps {
 
   constructor() {
     makeObservable(this)
+    this.addMock(mockData[0])
+    this.addMock(mockData[1])
+    this.addMock(mockData[2])
+    this.addMock(mockData[3])
+  }
+
+  private addMock(course: Course) {
+    this.addItem(course, course.sections[0].sectionNo)
   }
 
   /**
@@ -63,6 +72,11 @@ export class CourseCart implements CourseCartProps {
     const foundIndex = this.shopItems.findIndex((item) => item.courseNo == course.courseNo)
     if (foundIndex != -1) this.shopItems[foundIndex] = newItem
     else this.shopItems.push(newItem)
+  }
+
+  @action
+  removeCourse(course: Course): void {
+    this.shopItems = this.shopItems.filter((item) => item.courseNo !== course.courseNo)
   }
 
   /**

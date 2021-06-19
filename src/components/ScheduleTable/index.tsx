@@ -10,7 +10,7 @@ export function ScheduleTable({ courseCart }: ScheduleTableProps) {
   return (
     <div>
       {items.map((item) => (
-        <ScheduleTableCard key={item.courseNo} cart={courseCart} item={item} />
+        <ScheduleTableCard key={item.courseNo} item={item} />
       ))}
     </div>
   )

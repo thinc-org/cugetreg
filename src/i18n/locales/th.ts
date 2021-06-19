@@ -40,6 +40,12 @@ export const schedulePage = {
   sumCredits: '{{credits}} หน่วยกิต',
 }
 
+export const scheduleTableCard = {
+  credits: '[{{credits}} หน่วยกิต]',
+  sectionLabel: 'Sec {{section}}',
+  delete: 'ลบ',
+}
+
 export const schedule = {
   dateTime: 'วัน/เวลา',
   days: {

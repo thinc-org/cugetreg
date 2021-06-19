@@ -2,8 +2,9 @@ import { Typography, TypographyProps } from '@material-ui/core'
 import { Capacity } from '@thinc-org/chula-courses'
 import { useTranslation } from 'react-i18next'
 
-interface SectionStatusProps extends TypographyProps {
-  status: 'avialable' | 'full' | 'closed'
+export type AvailableStatus = 'avialable' | 'full' | 'closed'
+export interface SectionStatusProps extends TypographyProps {
+  status: AvailableStatus
   capacity: Capacity
 }
 

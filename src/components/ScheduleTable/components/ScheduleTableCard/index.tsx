@@ -1,11 +1,13 @@
+import { Caption } from '@/components/CourseCard'
+import { days } from '@/components/CourseCard/const'
 import { CourseCartItem, courseCartStore } from '@/store'
-import { FormControl, IconButton, MenuItem, Select, Typography, useTheme } from '@material-ui/core'
+import { FormControl, Grid, IconButton, MenuItem, Select, Stack, Typography, useTheme } from '@material-ui/core'
 import { observer } from 'mobx-react'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
 import { MdDelete } from 'react-icons/md'
-import { CardLayout, HeaderLayout, RightPane, Spacer, VisibilityToggle } from './styled'
+import { CardLayout, GridSpacer, HeaderLayout, RightPane, Spacer, VisibilityToggle } from './styled'
 
 export interface ScheduleTableCardProps {
   item: CourseCartItem
@@ -23,6 +25,7 @@ export const ScheduleTableCard = observer(({ item }: ScheduleTableCardProps) => 
       </VisibilityToggle>
       <RightPane>
         <CardHeader item={item} />
+        <CardDetail item={item} />
       </RightPane>
     </CardLayout>
   )
@@ -56,5 +59,49 @@ function CardHeader({ item }: ScheduleTableCardProps) {
         <MdDelete />
       </IconButton>
     </HeaderLayout>
+  )
+}
+
+function CardDetail({ item }: ScheduleTableCardProps) {
+  const { t } = useTranslation('courseCard')
+  const section = item.sections.find((section) => section.sectionNo === item.selectedSectionNo)!
+  const teachers = section?.classes.flatMap((cls) => cls.teachers)
+  return (
+    <Grid container spacing={0} sx={{ mt: 0, mb: 2 }}>
+      <Grid item xs={6} sm="auto">
+        <Stack spacing={0.5}>
+          <Caption>{t('teacher')}</Caption>
+          <Typography variant="body1" sx={{ maxWidth: '15ch' }}>
+            {teachers.join(', ')}
+          </Typography>
+        </Stack>
+      </Grid>
+      <GridSpacer />
+      <Grid item xs={6} sm="auto">
+        <Stack spacing={0.5}>
+          <Caption>{t('time')}</Caption>
+          <Stack>
+            {section.classes.map((sectionClass, index) => (
+              <Typography variant="body1" key={`${section.sectionNo}.${index}`}>
+                {days[sectionClass.dayOfWeek]} {sectionClass.period.start}-{sectionClass.period.end}
+              </Typography>
+            ))}
+          </Stack>
+        </Stack>
+      </Grid>
+      <GridSpacer />
+      <Grid item xs={6} sm="auto">
+        <Stack spacing={0.5}>
+          <Caption>{t('classRoom')}</Caption>
+          <Stack>
+            {section.classes.map((sectionClass, index) => (
+              <Typography variant="body1" key={`${section.sectionNo}.${index}`}>
+                {sectionClass.building} {sectionClass.room}
+              </Typography>
+            ))}
+          </Stack>
+        </Stack>
+      </Grid>
+    </Grid>
   )
 }

@@ -60,3 +60,7 @@ export const HeaderLayout = styled.div`
 export const Spacer = styled.div`
   flex: 1;
 `
+
+export const GridSpacer = styled.div`
+  width: 24px;
+`

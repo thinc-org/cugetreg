@@ -147,7 +147,7 @@ export interface GetMeResponse {
   lastName?: string
   google: {
     accessToken: string
-    expireIn: Date
+    expiresIn: Date
   }
 }
 

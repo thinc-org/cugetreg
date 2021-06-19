@@ -10,7 +10,7 @@ export default function useStudyPromgram() {
     const splittedPathName = (router.pathname as string).split('/')
     splittedPathName[1] = program
     const newPathName = splittedPathName.join('/')
-    router.replace(newPathName)
+    router.push(newPathName)
   }
 
   return [studyProgram, setStudyProgram]

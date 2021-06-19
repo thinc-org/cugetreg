@@ -18,7 +18,7 @@ export function FilterBar() {
   const { checkboxes: specialCheckboxes } = useFilterBar(createSpecialCheckboxes)
 
   return (
-    <Paper className={classes.paper}>
+    <Paper className={classes.paper} variant="outlined">
       <Stack spacing={4}>
         <CheckboxGroup title="หมวดหมู่ GenEd" checkboxes={genEdCheckboxes} />
         <CheckboxGroup title="วันในสัปดาห์" checkboxes={dayOfWeekCheckboxes} />

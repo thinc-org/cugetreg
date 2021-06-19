@@ -2,12 +2,12 @@ import React from 'react'
 
 import { useSearchField } from '@/components/SearchField/hooks'
 import { useStyles } from '@/components/SearchField/styled'
-import { IconButton, InputBase, Paper, TextField } from '@material-ui/core'
+import { IconButton, InputBase, Paper } from '@material-ui/core'
 import SearchIcon from '@material-ui/icons/Search'
 
 export interface SeachFieldProp {}
 
-export const SearchField: React.FC<SeachFieldProp> = (props) => {
+export const SearchField: React.FC<SeachFieldProp> = () => {
   const classes = useStyles()
   const { inputRef, onSubmit } = useSearchField()
 

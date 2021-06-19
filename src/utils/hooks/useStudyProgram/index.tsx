@@ -13,5 +13,5 @@ export default function useStudyPromgram() {
     router.push(newPathName)
   }
 
-  return [studyProgram, setStudyProgram]
+  return { studyProgram, setStudyProgram }
 }

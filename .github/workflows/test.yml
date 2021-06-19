@@ -31,10 +31,4 @@ jobs:
 
       - run: yarn --fronzen-lockfile
 
-      - name: TestCoverage
-        id: testCovergae
-        uses: anuraag016/Jest-Coverage-Diff@V1.1
-        with:
-          fullCoverageDiff: false # defaults to false, if made true whole coverage report is commented with the diff
-          runCommand: 'yarn test:ci'
-          # delta: 0.5 test
+      - run: yarn build

@@ -1,5 +1,14 @@
-import { AnnouncementProps } from '@/pages/announcement'
+import { GenEdType } from '@thinc-org/chula-courses'
 import { useState, useMemo } from 'react'
+
+export interface AnnouncementProps {
+  date: Date
+  imageURL: string
+  title: string
+  tags: string[]
+  genEds: GenEdType[]
+  body: string
+}
 
 const useAnnouncement = () => {
   const [announcements, setAnnouncements] = useState<AnnouncementProps[]>([])

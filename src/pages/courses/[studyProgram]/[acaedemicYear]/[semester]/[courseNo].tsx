@@ -6,60 +6,7 @@ import { useRouter } from 'next/router'
 import React from 'react'
 import { client } from '@/utils/network/apollo'
 import { Box, Grid, Typography } from '@material-ui/core'
-
-interface CourseGroup {
-  semester: string
-  academicYear: string
-  studyProgram: StudyProgram
-}
-
-interface GetCourseVars {
-  courseNo: string
-  courseGroup: CourseGroup
-}
-
-interface GetCourseResponse {
-  course: Course
-}
-
-const GET_COURSE = gql`
-  query GetCourseInfo($courseNo: String!, $courseGroup: CourseGroupInput!) {
-    course(courseNo: $courseNo, courseGroup: $courseGroup) {
-      studyProgram
-      semester
-      academicYear
-      courseNo
-      abbrName
-      courseNameTh
-      courseNameEn
-      faculty
-      credit
-      creditHours
-      courseCondition
-      genEdType
-      rating
-      sections {
-        sectionNo
-        closed
-        capacity {
-          current
-          max
-        }
-        note
-        classes {
-          type
-          dayOfWeek
-          period {
-            start
-            end
-          }
-          building
-          teachers
-        }
-      }
-    }
-  }
-`
+import { GetCourseResponse, GetCourseVars, GET_COURSE } from '@/utils/network/BackendGQLQueries'
 
 function parseVariablesFromQuery(q: any): GetCourseVars {
   const query = q as {

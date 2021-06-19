@@ -63,11 +63,6 @@ jobs:
           password: ${{ secrets.SSLVPN_PASSWORD }}
           trustedCert: ${{ secrets.SSLVPN_TRUSTED_CERT }}
 
-      - name: Check if VPN works
-        run: ping -c 4 $TEST_ADDRESS
-        env:
-          TEST_ADDRESS: ${{ secrets.TEST_ADDRESS }}
-
       - name: Deploy to VM
         uses: appleboy/ssh-action@master
         with:

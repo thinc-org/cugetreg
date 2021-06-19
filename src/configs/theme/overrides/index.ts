@@ -31,11 +31,6 @@ const overrideMuiBaseComponent = (defaultTheme: Theme): Theme => {
     MuiMenuItem: {
       styleOverrides: overrideMuiMenuItem(defaultTheme),
     },
-    MuiButton: {
-      defaultProps: {
-        disableRipple: true,
-      },
-    },
   }
 
   defaultTheme.components = overrides

@@ -11,31 +11,31 @@ const baseTypographyVariantOptions: Record<TypographyVariant, TypographyStyleOpt
   h2: {
     letterSpacing: 0,
     lineHeight: 'normal',
-    fontSize: 48,
+    fontSize: 28,
     fontWeight: 700,
   },
   h3: {
     letterSpacing: 0,
     lineHeight: 56,
-    fontSize: 30,
+    fontSize: 24,
     fontWeight: 700,
   },
   h4: {
     letterSpacing: 0,
     lineHeight: 36,
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: 700,
   },
   h5: {
     letterSpacing: 0.18,
     lineHeight: 24,
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: 700,
   },
   h6: {
     letterSpacing: 0.15,
     lineHeight: 24,
-    fontSize: 18,
+    fontSize: 14,
     fontWeight: 500,
   },
   subtitle1: {
@@ -93,12 +93,27 @@ const mobileTypographyVariantOptions: Record<TypographyVariant, TypographyStyleO
   h4: {},
   h5: {},
   h6: {},
-  subtitle1: {},
-  subtitle2: {},
-  body1: {},
-  body2: {},
+  subtitle1: {
+    lineHeight: 24,
+    fontSize: 12,
+  },
+  subtitle2: {
+    lineHeight: 12,
+    fontSize: 9,
+  },
+  body1: {
+    lineHeight: 20,
+    fontSize: 12,
+  },
+  body2: {
+    lineHeight: 20,
+
+    fontSize: 12,
+  },
   button: {},
-  caption: {},
+  caption: {
+    fontSize: 8,
+  },
   overline: {},
 }
 

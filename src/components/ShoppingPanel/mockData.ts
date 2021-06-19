@@ -46,6 +46,28 @@ export const mockData: Course[] = [
           },
         ],
       },
+      {
+        sectionNo: '3',
+        closed: false,
+        capacity: {
+          current: 13,
+          max: 40,
+        },
+        note: 'No note',
+        classes: [
+          {
+            type: 'LECT',
+            dayOfWeek: 'MO',
+            period: {
+              start: '12',
+              end: '14',
+            },
+            building: 'ENG 3',
+            room: '2',
+            teachers: ['AJ'],
+          },
+        ],
+      },
     ],
   },
   {
@@ -82,7 +104,7 @@ export const mockData: Course[] = [
         classes: [
           {
             type: 'LECT',
-            dayOfWeek: 'MO',
+            dayOfWeek: 'TU',
             period: {
               start: '12',
               end: '14',
@@ -129,7 +151,7 @@ export const mockData: Course[] = [
         classes: [
           {
             type: 'LECT',
-            dayOfWeek: 'MO',
+            dayOfWeek: 'WE',
             period: {
               start: '12',
               end: '14',
@@ -176,7 +198,7 @@ export const mockData: Course[] = [
         classes: [
           {
             type: 'LECT',
-            dayOfWeek: 'MO',
+            dayOfWeek: 'TH',
             period: {
               start: '12',
               end: '14',

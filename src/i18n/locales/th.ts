@@ -31,6 +31,21 @@ export const shoppingPanel = {
   makeSchedule: 'จัดตารางเรียน',
 }
 
+export const schedulePage = {
+  title: 'จัดตารางเรียน',
+  downloadPng: 'PNG',
+  addToCalendar: 'Google Calendar',
+  showJorTor11: 'แสดง จท11',
+  sumCreditsDesc: 'หน่วยกิตรวมในตาราง',
+  sumCredits: '{{credits}} หน่วยกิต',
+}
+
+export const scheduleTableCard = {
+  credits: '[{{credits}} หน่วยกิต]',
+  sectionLabel: 'Sec {{section}}',
+  delete: 'ลบ',
+}
+
 export const schedule = {
   dateTime: 'วัน/เวลา',
   days: {
@@ -43,7 +58,6 @@ export const schedule = {
     SU: 'SUN',
   },
 }
-
 
 export const courseCard = {
   select: 'เลือก',

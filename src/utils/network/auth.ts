@@ -1,5 +1,5 @@
 import env from '@/utils/env/macro'
-import { ApolloClient, gql, makeVar } from '@apollo/client'
+import { ApolloClient, gql, makeVar, useQuery, useReactiveVar } from '@apollo/client'
 
 /**
  * Auth flow
@@ -32,23 +32,17 @@ export function getRedirectUrl() {
   const queries = new URLSearchParams({
     client_id: clientId,
     response_type: 'code',
-    scope: 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email',
-    access_type: 'online',
+    scope: 'openid profile email https://www.googleapis.com/auth/drive.appdata',
+    access_type: 'offline',
     include_granted_scopes: 'true',
   })
 
-  if (env.isPrBuild) {
-    // redirect_url unstable. use redirect redirector
-    const codeRedirector = env.googleauth.coderedirector
-    if (typeof codeRedirector !== 'string')
-      throw new Error(
-        "Auth CodeRedirector environment URL is not a string (because it's not set?). RenderPR requires it"
-      )
-    queries.set('redirect_uri', codeRedirector)
-    queries.set('state', `returnURI=${callbackUrl}`)
-  } else {
-    queries.set('redirect_uri', callbackUrl)
-  }
+  // use redirect redirector
+  const codeRedirector = env.googleauth.coderedirector
+  if (typeof codeRedirector !== 'string')
+    throw new Error("Auth CodeRedirector environment URL is not a string (because it's not set?). RenderPR requires it")
+  queries.set('redirect_uri', codeRedirector)
+  queries.set('state', `returnURI=${callbackUrl}`)
 
   return `https://accounts.google.com/o/oauth2/v2/auth?${queries.toString()}`
 }
@@ -108,23 +102,6 @@ export async function authenticateByCode(client: ApolloClient<object>, code: str
 }
 
 /**
- * User auth data when requested from Apollo
- * @see GET_AUTH_DATA
- */
-export interface GetAuthData {
-  authData: AuthData
-}
-
-/**
- * Query to request user's auth data return {@link GetAuthData}
- */
-export const GET_AUTH_DATA = gql`
-  query GetAuthData {
-    authData @client
-  }
-`
-
-/**
  * Logging the user out
  */
 export function logout() {
@@ -146,10 +123,51 @@ function getAuthDataFromLocalStorage(): AuthData | null {
 
 export const authData = makeVar<AuthData | null>(getAuthDataFromLocalStorage())
 
-export const authDataFieldPolicy = {
-  authData: {
-    read() {
-      return authData()
+// Get me
+
+const GET_ME = gql`
+  query GetMe {
+    me {
+      _id
+      email
+      firstName
+      lastName
+      google {
+        accessToken
+        expiresIn
+      }
+    }
+  }
+`
+
+export interface GetMeResponse {
+  _id: string
+  email: string
+  firstName?: string
+  lastName?: string
+  google: {
+    accessToken: string
+    expireIn: Date
+  }
+}
+
+/**
+ * Get my info.
+ */
+export function useMe(): { data?: GetMeResponse; error?: Error; loading: boolean } {
+  const ad = useReactiveVar(authData)
+
+  const { data, error, loading } = useQuery<{ me: GetMeResponse }>(GET_ME, {
+    context: {
+      headers: {
+        Authorization: `Bearer ${ad?.accessToken}`,
+      },
     },
-  },
+  })
+
+  if (!ad) {
+    return { loading: false, error: new Error('User is not logged in') }
+  }
+
+  return { data: data?.me, error, loading }
 }

@@ -16,11 +16,11 @@ import {
 import { Add } from '@material-ui/icons'
 import { Course, Section } from '@thinc-org/chula-courses'
 import { useTranslation } from 'react-i18next'
-import GenEdChip from '../Chips/catagories/GenEdChip'
-import { CustomButton } from '../common/CustomButton'
-import { Caption } from '../CourseCard/components/Caption'
-import { days } from '../CourseCard/const'
-import { SectionStatus } from './components/SectionStatus'
+import GenEdChip from '@/components/Chips/catagories/GenEdChip'
+import { CustomButton } from '@/components/common/CustomButton'
+import { Caption } from '@/components/CourseCard/components/Caption'
+import { days } from '@/components/CourseCard/const'
+import { SectionStatus } from '@/components/SectionCard/components/SectionStatus'
 
 interface SectionCardProps {
   section: Section

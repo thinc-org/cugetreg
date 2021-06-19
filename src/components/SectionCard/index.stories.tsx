@@ -1,7 +1,7 @@
 import React from 'react'
 import { Meta, Story } from '@storybook/react/types-6-0'
-import { SectionCard } from '.'
-import { mockGenEdCourse, mockNoGenEdCourse } from '../CourseCard/mockCourse'
+import { SectionCard } from '@/components/SectionCard'
+import { mockGenEdCourse, mockNoGenEdCourse } from '@/components/CourseCard/mockCourse'
 
 type CourseCardStoryProps = { courseType: 'gened' | 'noGened'; availability: 'available' | 'full' | 'closed' }
 

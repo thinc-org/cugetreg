@@ -5,6 +5,8 @@ import { observer } from 'mobx-react'
 import React, { useEffect } from 'react'
 import { CR11 } from '@/components/CR11'
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos'
+import { useTranslation } from 'react-i18next'
+import useStudyProgram from '@/utils/hooks/useStudyProgram'
 
 const useStyles = makeStyles((theme) => ({
   buttonMobile: {
@@ -65,7 +67,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   not: {
-    color: theme.palette.secondaryRange[500],
+    color: theme.palette.secondaryRange[900],
   },
   explanation: {
     fontWeight: 500,
@@ -77,14 +79,13 @@ const useStyles = makeStyles((theme) => ({
       color: theme.palette.primaryRange[500],
     },
   },
-  warning: {
-    textDecoration: 'underline',
-  },
 }))
 
 const Home = observer(() => {
   const shoppingCart = courseCartStore
   const classes = useStyles()
+  const { t } = useTranslation(['program', 'cr11'])
+  const { studyProgram } = useStudyProgram()
 
   useEffect(() => {
     // get mock data
@@ -107,22 +108,22 @@ const Home = observer(() => {
           variant="outlined"
           disableElevation
         >
-          กลับ
+          {t('cr11:back')}
         </Button>
         <IconButton className={`${classes.buttonMobile} ${classes.mobile}`} aria-label="back">
           <ArrowBackIosIcon />
         </IconButton>
         <Typography className={`${classes.semester} ${classes.mobile}`} variant="subtitle1">
-          ปีการศึกษา 2563/2 หลักสูตรนานาชาติ
+          {t('cr11:semester')} 2563/2 {t(`program:${studyProgram}` as any)}
         </Typography>
       </div>
       <div className={classes.title}>
         <div>
           <Typography className={classes.main} variant="h3">
-            รายวิชาที่ต้องการลงทะเบียนเรียน
+            {t('cr11:enrollingSubject')}
           </Typography>
           <Typography className={classes.subtitle} variant="subtitle1">
-            จำลองเอกสาร แสดงความจำนงขอลงทะเบียนเรียน (จท11)
+            {t('cr11:simulateDocument')}
           </Typography>
         </div>
         <Typography className={`${classes.semester} ${classes.desktop}`} variant="subtitle1">
@@ -131,13 +132,15 @@ const Home = observer(() => {
       </div>
       <CR11 courses={shoppingCart.courses} />
       <div className={classes.description}>
-        <Typography className={classes.warning} variant="h3">
-          ทั้งหมดนี้<span className={classes.not}>ไม่ใช่</span>การลงทะเบียนเรียนจริง
+        <Typography variant="h3">
+          {t('cr11:total')}
+          <span className={classes.not}>{t('cr11:not')}</span>
+          {t('cr11:realRegistration')}
         </Typography>
         <Typography variant="h5" className={classes.explanation}>
-          CU Get Reg เป็นเพียงแอปพลิเคชันที่ใช้อำนวยความสะดวกในการจัดตารางสอนเท่านั้น
+          {t('cr11:explanation')}
           <br />
-          คุณสามารถลงทะเบียนเรียนได้ที่{' '}
+          {t('cr11:explanation2')}
         </Typography>
         <Typography variant="h5" className={classes.website}>
           <a href="https://www2.reg.chula.ac.th/">https://www2.reg.chula.ac.th/</a>

@@ -73,3 +73,30 @@ export const footer = {
   topButton: 'กลับด้านบน',
   github: 'Open Source on',
 }
+
+export const program = {
+  i: 'นานาชาติ',
+  s: 'ทวิภาค',
+  t: 'ตรีภาค',
+}
+
+export const cr11 = {
+  back: 'กลับ',
+  semester: 'ปีการศึกษา',
+  enrollingSubject: 'รายวิชาที่ต้องการลงทะเบียนเรียน',
+  simulateDocument: 'จำลองเอกสาร แสดงความจำนงขอลงทะเบียนเรียน (จท11)',
+  total: 'ทั้งหมดนี้',
+  not: 'ไม่ใช้',
+  realRegistration: 'การลงทะเบียนเรียนจริง',
+  explanation: 'CU Get Reg เป็นเพียงแอปพลิเคชันที่ใช้อำนวยความสะดวกในการจัดตารางสอนเท่านั้น',
+  explanation2: 'คุณสามารถลงทะเบียนเรียนได้ที่',
+  only: 'เท่านั้น',
+  order: 'ลำดับที่',
+  courseNo: 'รหัสรายวิชา',
+  courseNoMobile: 'รหัสวิชา',
+  abbrName: 'ชื่อย่อรายวิชา',
+  section: 'ตอนเรียน',
+  credit: 'หน่วยกิต',
+  creditMobile: 'หน่วย',
+  totalCredit: 'หน่วยกิตรวม',
+}

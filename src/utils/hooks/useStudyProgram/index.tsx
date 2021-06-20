@@ -1,7 +1,7 @@
 import { StudyProgram } from '@thinc-org/chula-courses'
 import { useRouter } from 'next/router'
 
-export default function useStudyPromgram() {
+export default function useStudyProgram() {
   const router = useRouter()
 
   const studyProgram = (router.pathname as string).split('/')

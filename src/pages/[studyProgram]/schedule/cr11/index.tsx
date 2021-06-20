@@ -56,6 +56,30 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
+  description: {
+    marginTop: theme.spacing(16),
+    display: 'flex',
+    flexDirection: 'column',
+    '& *:not(:last-child)': {
+      marginBottom: theme.spacing(2),
+    },
+  },
+  not: {
+    color: theme.palette.secondaryRange[500],
+  },
+  explanation: {
+    fontWeight: 500,
+  },
+  website: {
+    fontWeight: 500,
+    textDecoration: 'underline',
+    '& a': {
+      color: theme.palette.primaryRange[500],
+    },
+  },
+  warning: {
+    textDecoration: 'underline',
+  },
 }))
 
 const Home = observer(() => {
@@ -106,6 +130,19 @@ const Home = observer(() => {
         </Typography>
       </div>
       <CR11 courses={shoppingCart.courses} />
+      <div className={classes.description}>
+        <Typography className={classes.warning} variant="h3">
+          ทั้งหมดนี้<span className={classes.not}>ไม่ใช่</span>การลงทะเบียนเรียนจริง
+        </Typography>
+        <Typography variant="h5" className={classes.explanation}>
+          CU Get Reg เป็นเพียงแอปพลิเคชันที่ใช้อำนวยความสะดวกในการจัดตารางสอนเท่านั้น
+          <br />
+          คุณสามารถลงทะเบียนเรียนได้ที่{' '}
+        </Typography>
+        <Typography variant="h5" className={classes.website}>
+          <a href="https://www2.reg.chula.ac.th/">https://www2.reg.chula.ac.th/</a>
+        </Typography>
+      </div>
     </div>
   )
 })

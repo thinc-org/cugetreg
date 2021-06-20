@@ -16,6 +16,12 @@ export const navBar = {
   signin: 'เข้าสู่ระบบ',
 }
 
+export const studyProgram = {
+  S: 'ทวิภาค',
+  T: 'ไตรภาค',
+  I: 'นานาชาติ',
+}
+
 export const annuncementSearch = {
   search: 'ค้นหา',
   searchPlaceholder: 'ค้นหาหัวข้อ/เนื้อหา',

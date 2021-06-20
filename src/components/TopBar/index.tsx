@@ -1,6 +1,7 @@
 import { makeStyles } from '@material-ui/core'
 import { NavBar } from './NavBar'
 import { ConfigBar } from './ConfigBar'
+import { Hidden } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
   topBar: {
@@ -12,7 +13,9 @@ export function TopBar() {
   const classes = useStyles()
   return (
     <div className={classes.topBar}>
-      <ConfigBar />
+      <Hidden smDown>
+        <ConfigBar />
+      </Hidden>
       <NavBar />
     </div>
   )

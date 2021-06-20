@@ -3,6 +3,7 @@ import { FlexOne } from '@/components/FlexOne'
 import { FlexContainer } from '../FlexContainer'
 import { ConfigBarItem } from './ConfigBarItem'
 import { useTranslation } from 'react-i18next'
+import StudyProgramDropdown from '../components/StudyProgramDropdown'
 
 const useStyles = makeStyles((theme) => ({
   configBar: {
@@ -21,7 +22,7 @@ export function ConfigBar() {
       <FlexContainer>
         <FlexOne />
         {/* TODO: implement the dropdowns */}
-        <ConfigBarItem>นานาชาติ</ConfigBarItem>
+        <StudyProgramDropdown />
         <ConfigBarItem>2563/2</ConfigBarItem>
         <ConfigBarItem>{t('reportAProblem')}</ConfigBarItem>
       </FlexContainer>

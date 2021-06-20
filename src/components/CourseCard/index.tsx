@@ -5,10 +5,14 @@ import {
   CardContent,
   CardHeader,
   Collapse,
+  FormControl,
   Grid,
   IconButton,
+  MenuItem,
+  Select,
   Stack,
   Typography,
+  useTheme,
 } from '@material-ui/core'
 import { KeyboardArrowDown, KeyboardArrowUp } from '@material-ui/icons'
 import { Course } from '@thinc-org/chula-courses'
@@ -16,12 +20,12 @@ import { Add, Star } from '@material-ui/icons'
 import { useTranslation } from 'react-i18next'
 import { days } from '@/components/CourseCard/const'
 import { useDisclosure } from '@/hooks/useDisclosure'
-import { Select } from '@/components/Select'
 import { useCourseCard } from '@/components/CourseCard/useCourseCard'
 import GenEdChip from '@/components/Chips/catagories/GenEdChip'
 import DayChip from '@/components/Chips/catagories/DayChip'
 import { Caption } from '@/components/CourseCard/components/Caption'
 import { CustomButton } from '@/components/common/CustomButton'
+import { useMediaQuery } from '@material-ui/core'
 
 export interface CourseCardProps {
   course: Course
@@ -49,6 +53,25 @@ export const CourseCard = (props: CourseCardProps) => {
       {t('select')}
     </CustomButton>
   )
+
+  const theme = useTheme()
+  const isDesktop = useMediaQuery(theme.breakpoints.up('sm'))
+  const SectionSelect = (
+    <FormControl fullWidth={isDesktop}>
+      <Select
+        value={selectedSectionNumber}
+        onChange={(e) => setSectionNumber(e.target.value as string)}
+        name="sectionNo"
+      >
+        {sectionNumbers.map((value) => (
+          <MenuItem key={value} value={value}>
+            Sec {value}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
+  )
+
   const CardHeading = (
     <CardHeader
       sx={{ p: 4, pb: 0, pt: 3 }}
@@ -141,12 +164,7 @@ export const CourseCard = (props: CourseCardProps) => {
   const CardHiddenDescription = (
     <Grid container spacing={3} sx={{ mt: 0, width: 'auto' }}>
       <Grid item xs={6} sm="auto" sx={{ display: { xs: 'block', sm: 'none' } }}>
-        <Select
-          items={sectionNumbers}
-          value={selectedSectionNumber}
-          onChange={(e) => setSectionNumber(e.target.value as string)}
-          name="sectionNo"
-        />
+        {SectionSelect}
       </Grid>
       <Grid item xs={6} sm="auto">
         <Stack spacing={0.5}>
@@ -207,14 +225,7 @@ export const CourseCard = (props: CourseCardProps) => {
         ml: 2,
       }}
     >
-      <Collapse in={isExpanded}>
-        <Select
-          items={sectionNumbers}
-          value={selectedSectionNumber}
-          onChange={(e) => setSectionNumber(e.target.value as string)}
-          name="sectionNo"
-        />
-      </Collapse>
+      <Collapse in={isExpanded}>{SectionSelect}</Collapse>
       {SelectButton}
     </Stack>
   )

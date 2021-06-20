@@ -1,7 +1,9 @@
+// TODO: use `StudyProgram` from chula-course
+
 export enum StudyProgram {
-  Semester = 's',
-  Trimester = 't',
-  International = 'i',
+  Semester = 'S',
+  Trimester = 'T',
+  International = 'I',
 }
 
 export const DEFAULT_STUDY_PROGRAM = StudyProgram.Semester

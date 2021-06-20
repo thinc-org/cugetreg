@@ -1,17 +1,18 @@
 import React from 'react'
 import styled from '@emotion/styled'
 
-import { Box, Button } from '@material-ui/core'
+import { Button, Chip } from '@material-ui/core'
 import { useTranslation } from 'react-i18next'
 import CalendarTodayIcon from '@material-ui/icons/CalendarToday'
 import { courseCartStore } from '@/store'
 
-const Number = styled.div`
+const Number = styled(Chip)`
+  z-index: 100;
   position: absolute;
   right: 0;
-  line-height: 0.2rem;
-  border-radius: 100%;
-  padding: ${({ theme }) => theme.spacing(1)};
+  top: 0;
+  margin: -8px;
+  padding: ${({ theme }) => theme.spacing(0)};
   background: ${({ theme }) => theme.palette.secondary.main};
 `
 
@@ -22,11 +23,14 @@ export const SelectedCoursesButton: React.FC<SelectedCoursesButtonProps> = () =>
   const coursesNumber = courseCartStore.shopItems.length
 
   return (
-    <Box sx={{ position: 'relative', maxWidth: 150, width: '100%' }}>
-      <Number>{coursesNumber}</Number>
-      <Button startIcon={<CalendarTodayIcon />} variant="outlined" fullWidth>
-        {t('main')}
-      </Button>
-    </Box>
+    <Button
+      startIcon={<CalendarTodayIcon />}
+      variant="outlined"
+      fullWidth
+      sx={{ position: 'relative', maxWidth: 150, width: '100%' }}
+    >
+      <Number label={coursesNumber} />
+      {t('main')}
+    </Button>
   )
 }

@@ -20,7 +20,7 @@ export const SearchField: React.FC<SeachFieldProp> = () => {
         margin="dense"
         className={classes.input}
       />
-      <IconButton type="submit" aria-label="search">
+      <IconButton type="submit" aria-label="search" className={classes.iconButton}>
         <SearchIcon />
       </IconButton>
     </Paper>

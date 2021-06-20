@@ -5,6 +5,7 @@ import { overrideMuiInputBase } from './inputBase'
 import { overrideMuiInputLabel } from './inputLabel'
 import { overrideMuiMenuItem } from './menuItem'
 import { overrideMuiOutlinedInput } from './outlinedInput'
+import { overrideMuiSelect } from './select'
 
 const overrideMuiBaseComponent = (defaultTheme: Theme): Theme => {
   const overrides: Components = {
@@ -30,6 +31,9 @@ const overrideMuiBaseComponent = (defaultTheme: Theme): Theme => {
     // },
     MuiMenuItem: {
       styleOverrides: overrideMuiMenuItem(defaultTheme),
+    },
+    MuiSelect: {
+      styleOverrides: overrideMuiSelect(defaultTheme),
     },
   }
 

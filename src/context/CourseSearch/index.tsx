@@ -1,11 +1,11 @@
 import React, { createContext, useState, useRef } from 'react'
 
+import useSemester from '@/utils/hooks/useSemester'
 import { DayChipKey, GenEdChipKey } from '@/components/Chips/config'
 import { DEFAULT_COURSE_SEARCH_CONTEXT_VALUE } from '@/context/CourseSearch/constants'
 import useStudyPromgram from '@/utils/hooks/useStudyProgram'
 import { SearchCourseResponse, SearchCourseVars, SEARCH_COURSE } from '@/utils/network/BackendGQLQueries'
 import { useQuery } from '@apollo/client'
-import usePeriod from '@/utils/hooks/usePeriod'
 
 export const CourseSearchContext = createContext(DEFAULT_COURSE_SEARCH_CONTEXT_VALUE)
 
@@ -13,7 +13,7 @@ export const CourseSearchProvider: React.FC = (props) => {
   const searchInputRef = useRef<HTMLInputElement>(null)
   const [openFilterBar, setOpenFilterBar] = useState<boolean>(false)
 
-  const { period } = usePeriod()
+  const { semester } = useSemester()
   const { studyProgram } = useStudyPromgram()
   const [tags, setTags] = useState<(GenEdChipKey | DayChipKey)[]>([])
 
@@ -21,8 +21,8 @@ export const CourseSearchProvider: React.FC = (props) => {
     variables: {
       courseGroup: {
         studyProgram: studyProgram,
-        academicYear: period.year,
-        semester: period.sem,
+        academicYear: semester.year,
+        semester: semester.sem,
       },
       filter: {
         keyword: searchInputRef.current?.value || '',
@@ -38,6 +38,11 @@ export const CourseSearchProvider: React.FC = (props) => {
     setTags((tags) => tags.filter((currentTag) => currentTag != tag))
   }
 
+  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    refetch()
+  }
+
   const value = {
     tags,
     addTag,
@@ -47,8 +52,8 @@ export const CourseSearchProvider: React.FC = (props) => {
     courses,
     loading,
     error,
-    refetch,
     searchInputRef,
+    onSubmit,
   }
 
   return <CourseSearchContext.Provider value={value} {...props} />

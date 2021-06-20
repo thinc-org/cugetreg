@@ -11,7 +11,8 @@ export interface CourseSearchProps {
   courses?: SearchCourseResponse
   loading: boolean
   error?: ApolloError
-  searchInputRef: null
+  searchInputRef: React.RefObject<HTMLInputElement> | null
+  onSubmit: (event: React.FormEvent<HTMLFormElement>) => void
 }
 
 export const DEFAULT_COURSE_SEARCH_CONTEXT_VALUE: CourseSearchProps = {
@@ -25,4 +26,5 @@ export const DEFAULT_COURSE_SEARCH_CONTEXT_VALUE: CourseSearchProps = {
   },
   loading: false,
   searchInputRef: null,
+  onSubmit: () => null,
 }

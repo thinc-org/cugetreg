@@ -1,21 +1,21 @@
-import React from 'react'
+import React, { useContext } from 'react'
 
-import { useSearchField } from '@/components/SearchField/hooks'
 import { useStyles } from '@/components/SearchField/styled'
 import { IconButton, InputBase, Paper } from '@material-ui/core'
 import SearchIcon from '@material-ui/icons/Search'
+import { CourseSearchContext } from '@/context/CourseSearch'
 
 export interface SeachFieldProp {}
 
 export const SearchField: React.FC<SeachFieldProp> = () => {
   const classes = useStyles()
-  const { inputRef, onSubmit } = useSearchField()
+  const { searchInputRef, onSubmit } = useContext(CourseSearchContext)
 
   return (
     <Paper component="form" className={classes.root} noValidate onSubmit={onSubmit} variant="outlined">
       <InputBase
         fullWidth
-        inputRef={inputRef}
+        inputRef={searchInputRef}
         placeholder="ค้นหารหัสวิชา / ชื่อวิชา"
         margin="dense"
         className={classes.input}

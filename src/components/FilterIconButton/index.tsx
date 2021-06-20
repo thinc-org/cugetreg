@@ -16,5 +16,13 @@ export const FilterIconButton: React.FC<FilterIconButtonProps> = () => {
     setOpenFilterBar((open) => !open)
   }
 
-  return <Button className={classes.button} startIcon={<FilterListIcon />} variant="outlined" onClick={onClick} />
+  return (
+    <Button
+      className={classes.button}
+      startIcon={<FilterListIcon />}
+      variant="outlined"
+      size="small"
+      onClick={onClick}
+    />
+  )
 }

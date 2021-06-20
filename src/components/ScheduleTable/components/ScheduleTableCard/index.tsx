@@ -1,7 +1,8 @@
+import { CustomSelect } from '@/components/common/CustomSelect'
 import { Caption } from '@/components/CourseCard/components/Caption'
 import { days } from '@/components/CourseCard/const'
 import { CourseCartItem, courseCartStore } from '@/store'
-import { FormControl, Grid, IconButton, MenuItem, Select, Stack, Typography, useTheme } from '@material-ui/core'
+import { Grid, Hidden, IconButton, Stack, Typography, useTheme } from '@material-ui/core'
 import { observer } from 'mobx-react'
 import { useCallback } from 'react'
 import { Draggable } from 'react-beautiful-dnd'
@@ -12,8 +13,10 @@ import {
   CardBorder,
   CardContent,
   CardLayout,
+  DeleteButton,
   GridSpacer,
   HeaderLayout,
+  LeftPane,
   RightPane,
   Spacer,
   VisibilityToggle,
@@ -38,9 +41,14 @@ export const ScheduleTableCard = observer(({ item, index }: ScheduleTableCardPro
       {(provided) => (
         <CardLayout ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
           <CardContent>
-            <VisibilityToggle checked={!isHidden} onClick={toggleVisibility}>
-              {isHidden ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
-            </VisibilityToggle>
+            <LeftPane>
+              <VisibilityToggle checked={!isHidden} onClick={toggleVisibility}>
+                {isHidden ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
+              </VisibilityToggle>
+              <DeleteButton onClick={() => courseCartStore.removeCourse(item)}>
+                <MdDelete />
+              </DeleteButton>
+            </LeftPane>
             <RightPane>
               <CardHeader item={item} />
               <CardDetail item={item} />
@@ -64,23 +72,32 @@ function CardHeader({ item }: CardComponentProps) {
       <Typography variant="h6" color={theme.palette.primaryRange[100]} style={{ marginRight: 32 }}>
         {t('credits', { credits: item.credit })}
       </Typography>
-      <FormControl size="small">
-        <Select
-          value={item.selectedSectionNo}
-          onChange={(e) => courseCartStore.addItem(item, e.target.value as string)}
-        >
-          {item.sections.map((sec) => (
-            <MenuItem key={sec.sectionNo} value={sec.sectionNo}>
-              {t('sectionLabel', { section: sec.sectionNo })}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-      <Spacer />
-      <IconButton aria-label={t('delete')} onClick={() => courseCartStore.removeCourse(item)}>
-        <MdDelete />
-      </IconButton>
+      <Hidden smDown>
+        <SectionSelect item={item} />
+        <Spacer />
+      </Hidden>
+      <Hidden mdDown>
+        <IconButton aria-label={t('delete')} onClick={() => courseCartStore.removeCourse(item)}>
+          <MdDelete />
+        </IconButton>
+      </Hidden>
     </HeaderLayout>
+  )
+}
+
+function SectionSelect({ item }: CardComponentProps) {
+  const { t } = useTranslation('scheduleTableCard')
+  return (
+    <CustomSelect
+      value={item.selectedSectionNo}
+      onChange={(e) => courseCartStore.addItem(item, e.target.value as string)}
+    >
+      {item.sections.map((sec) => (
+        <option key={sec.sectionNo} value={sec.sectionNo}>
+          {t('sectionLabel', { section: sec.sectionNo })}
+        </option>
+      ))}
+    </CustomSelect>
   )
 }
 
@@ -89,7 +106,12 @@ function CardDetail({ item }: CardComponentProps) {
   const section = item.sections.find((section) => section.sectionNo === item.selectedSectionNo)!
   const teachers = section?.classes.flatMap((cls) => cls.teachers)
   return (
-    <Grid container spacing={0} sx={{ mt: 0, mb: 2 }}>
+    <Grid container spacing={1} sx={{ mt: -1, mb: 2 }}>
+      <Hidden smUp>
+        <Grid item xs={6} style={{ display: 'flex', alignContent: 'center' }}>
+          <SectionSelect item={item} />
+        </Grid>
+      </Hidden>
       <Grid item xs={6} sm="auto">
         <Stack spacing={0.5}>
           <Caption>{t('teacher')}</Caption>

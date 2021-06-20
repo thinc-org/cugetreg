@@ -16,19 +16,38 @@ const Title = styled(Typography)`
   margin-bottom: 28px;
 `
 
+const InfoBar = styled.div`
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  margin-top: 24px;
+  margin-bottom: 36px;
+
+  ${({ theme }) => theme.breakpoints.down('sm')} {
+    flex-direction: column;
+    align-items: initial;
+  }
+`
+
 const ButtonBar = styled.div`
   display: flex;
   align-items: center;
-  margin-top: 24px;
-  margin-bottom: 48px;
 
   button + button {
     margin-left: 16px;
   }
+
+  ${({ theme }) => theme.breakpoints.down('sm')} {
+    margin-top: 16px;
+  }
 `
 
-const Spacer = styled.div`
+const InfoSpacer = styled.div`
   flex: 1;
+
+  ${({ theme }) => theme.breakpoints.down('sm')} {
+    display: none;
+  }
 `
 
 function SchedulePage() {
@@ -41,16 +60,20 @@ function SchedulePage() {
     <PageContainer>
       <Title variant="h2">{t('title')}</Title>
       <Schedule classes={classes} />
-      <ButtonBar>
-        <Button variant="outlined">{t('downloadPng')}</Button>
-        <Button variant="outlined">{t('addToCalendar')}</Button>
-        <Button variant="outlined">{t('showJorTor11')}</Button>
-        <Spacer />
-        <Typography variant="subtitle1" style={{ marginRight: 16 }}>
-          {t('sumCreditsDesc')}
-        </Typography>
-        <Typography variant="h6">{t('sumCredits', { credits })}</Typography>
-      </ButtonBar>
+      <InfoBar>
+        <div style={{ display: 'flex' }}>
+          <Typography variant="subtitle1" style={{ marginRight: 16 }}>
+            {t('sumCreditsDesc')}
+          </Typography>
+          <Typography variant="h6">{t('sumCredits', { credits })}</Typography>
+        </div>
+        <InfoSpacer />
+        <ButtonBar>
+          {/* <Button variant="outlined">{t('downloadPng')}</Button>
+          <Button variant="outlined">{t('addToCalendar')}</Button> */}
+          <Button variant="outlined">{t('showJorTor11')}</Button>
+        </ButtonBar>
+      </InfoBar>
       <ScheduleTable courseCart={courseCartStore} />
     </PageContainer>
   )

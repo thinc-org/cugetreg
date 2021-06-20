@@ -57,10 +57,10 @@ export const mockData: Course[] = [
         classes: [
           {
             type: 'LECT',
-            dayOfWeek: 'MO',
+            dayOfWeek: 'TU',
             period: {
-              start: '12',
-              end: '14',
+              start: '13',
+              end: '15',
             },
             building: 'ENG 3',
             room: '2',

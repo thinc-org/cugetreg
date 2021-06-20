@@ -11,9 +11,6 @@ export const CardLayout = styled.div`
   position: relative;
   margin-top: 24px;
   background: ${({ theme }) => theme.palette.background.default};
-  /* border: 1px solid ${primaryRange(50)}; */
-  /* background: green;s */
-  /* box-shadow: 0 0 0 1px ${primaryRange(50)}; */
   border-radius: 4px;
   overflow: hidden;
 
@@ -38,8 +35,6 @@ export const CardBorder = styled.div`
 `
 
 export const VisibilityToggle = styled(Button)<{ checked: boolean }>`
-  width: 88px;
-  font-size: 28px;
   color: ${primaryRange(100)};
   border-right: none;
   border-radius: 4px 0 0 4px;
@@ -62,13 +57,48 @@ export const VisibilityToggle = styled(Button)<{ checked: boolean }>`
       `
     }
   }}
+
+  ${({ theme }) => theme.breakpoints.down('md')} {
+    border-radius: 4px 0 0 0;
+  }
+`
+
+export const DeleteButton = styled(Button)`
+  color: white;
+  border-radius: 0 0 0 4px;
+
+  background-color: ${({ theme }) => theme.palette.highlight.red[500]};
+  &:hover {
+    background-color: ${({ theme }) => theme.palette.highlight.red[500]};
+  }
+
+  ${({ theme }) => theme.breakpoints.up('md')} {
+    display: none;
+  }
+`
+
+export const LeftPane = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  & button {
+    flex: 1;
+    width: 88px;
+    font-size: 28px;
+
+    ${({ theme }) => theme.breakpoints.down('md')} {
+      min-width: 40px;
+      width: 40px;
+      font-size: 20px;
+    }
+  }
 `
 
 export const RightPane = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1;
-  padding-left: 36px;
+  padding-left: 24px;
 `
 
 export const HeaderLayout = styled.div`
@@ -76,6 +106,18 @@ export const HeaderLayout = styled.div`
   height: 64px;
   padding-right: 16px;
   align-items: center;
+
+  ${({ theme }) => theme.breakpoints.down('sm')} {
+    height: initial;
+    padding-top: 16px;
+    flex-direction: column;
+    align-items: initial;
+
+    & h6 {
+      margin-top: 4px;
+      margin-bottom: 4px;
+    }
+  }
 `
 
 export const Spacer = styled.div`
@@ -83,5 +125,8 @@ export const Spacer = styled.div`
 `
 
 export const GridSpacer = styled.div`
-  width: 24px;
+  width: 16px;
+  ${({ theme }) => theme.breakpoints.down('sm')} {
+    display: none;
+  }
 `

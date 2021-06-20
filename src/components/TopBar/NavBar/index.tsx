@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/core'
 import { useTranslation } from 'react-i18next'
 import Link from 'next/link'
-import logo from '@/assets/images/logo.svg'
+import logo from '@/assets/images/cgrLogoDark.svg'
 import { NavBarItem } from './NavBarItem'
 import { FlexOne } from '@/components/FlexOne'
 import { FlexContainer } from '../FlexContainer'
@@ -19,6 +19,7 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: -16,
     paddingLeft: 16,
     paddingRight: 16,
+    height: 40,
   },
 }))
 
@@ -30,7 +31,7 @@ export function NavBar() {
       <FlexContainer>
         <Link href="/">
           <a className={classes.logo}>
-            <img src={logo} alt={t('appName')} />
+            <img src={logo} alt={t('appName')} height="40" />
           </a>
         </Link>
         {/* TODO: replace with actual links */}

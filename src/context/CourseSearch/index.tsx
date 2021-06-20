@@ -3,7 +3,7 @@ import React, { createContext, useState, useRef } from 'react'
 import useSemester from '@/utils/hooks/useSemester'
 import { DayChipKey, GenEdChipKey } from '@/components/Chips/config'
 import { DEFAULT_COURSE_SEARCH_CONTEXT_VALUE } from '@/context/CourseSearch/constants'
-import useStudyPromgram from '@/utils/hooks/useStudyProgram'
+import { useStudyProgram } from '@/utils/hooks/useStudyProgram'
 import { SearchCourseResponse, SearchCourseVars, SEARCH_COURSE } from '@/utils/network/BackendGQLQueries'
 import { useQuery } from '@apollo/client'
 
@@ -14,7 +14,7 @@ export const CourseSearchProvider: React.FC = (props) => {
   const [openFilterBar, setOpenFilterBar] = useState<boolean>(false)
 
   const { semester } = useSemester()
-  const { studyProgram } = useStudyPromgram()
+  const { studyProgram } = useStudyProgram()
   const [tags, setTags] = useState<(GenEdChipKey | DayChipKey)[]>([])
 
   const { data: courses, loading, error, refetch } = useQuery<SearchCourseResponse, SearchCourseVars>(SEARCH_COURSE, {

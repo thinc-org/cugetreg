@@ -131,6 +131,14 @@ export class CourseCart implements CourseCartProps {
     this.shopItems[indexB] = temp
   }
 
+  @action
+  reorder(from: number, to: number) {
+    const result = Array.from(this.shopItems)
+    const [removed] = result.splice(from, 1)
+    result.splice(to, 0, removed)
+    this.shopItems = result
+  }
+
   /**
    * get one course by the given courseNo. from the store
    * @param courseNo - the unique course number

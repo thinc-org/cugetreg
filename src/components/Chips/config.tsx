@@ -40,13 +40,14 @@ const createDefaultChipConfig = (label: string): ChipConfigProps => ({
   color: 'deepGrayFilled',
 })
 
-export type OtherChipKey = 'open' | 'close' | 'chula' | 'other'
+export type OtherChipKey = 'open' | 'close' | 'chula' | 'other' | 'noConflict'
 export type OtherChipConfigProps = Record<OtherChipKey, ChipConfigProps>
 export const otherChipConfig: OtherChipConfigProps = {
   open: createDefaultChipConfig('เปิด'),
   close: createDefaultChipConfig('ปิด'),
   chula: createDefaultChipConfig('เกี่ยวกับจุฬาฯ'),
   other: createDefaultChipConfig('อื่น ๆ'),
+  noConflict: createDefaultChipConfig('เวลาไม่ชนกับวิชาที่เลือก'),
   // Add more Chips here; don't forget to add key into `OtherChipKey` too
 }
 

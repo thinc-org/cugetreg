@@ -1,4 +1,4 @@
-import { Caption } from '@/components/CourseCard'
+import { Caption } from '@/components/CourseCard/components/Caption'
 import { days } from '@/components/CourseCard/const'
 import { CourseCartItem, courseCartStore } from '@/store'
 import { FormControl, Grid, IconButton, MenuItem, Select, Stack, Typography, useTheme } from '@material-ui/core'

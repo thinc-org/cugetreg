@@ -2,10 +2,10 @@ import React from 'react'
 import { Meta, Story } from '@storybook/react/types-6-0'
 
 import { TagList } from '.'
-import { FilteredTagContext } from '@/context/FilteredTag'
-import { FilteredTagProps, DEFAULT_FILTERED_TAG_CONTEXT_VALUE } from '@/context/FilteredTag/constants'
+import { CourseSearchContext } from '@/context/CourseSearch'
+import { CourseSearchProps, DEFAULT_COURSE_SEARCH_CONTEXT_VALUE } from '@/context/CourseSearch/constants'
 
-type StoryProps = FilteredTagProps
+type StoryProps = CourseSearchProps
 
 export default {
   title: 'Component/TagList',
@@ -14,9 +14,9 @@ export default {
 
 export const Default: Story<StoryProps> = (args) => {
   return (
-    <FilteredTagContext.Provider value={{ ...DEFAULT_FILTERED_TAG_CONTEXT_VALUE, tags: args.tags }}>
+    <CourseSearchContext.Provider value={{ ...DEFAULT_COURSE_SEARCH_CONTEXT_VALUE, tags: args.tags }}>
       <TagList />
-    </FilteredTagContext.Provider>
+    </CourseSearchContext.Provider>
   )
 }
 

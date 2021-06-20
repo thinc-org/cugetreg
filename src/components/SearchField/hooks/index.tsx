@@ -1,12 +1,14 @@
-import { createRef, useRef } from 'react'
+import { CourseSearchContext } from '@/context/CourseSearch'
+import { createRef, useContext } from 'react'
 
 export const useSearchField = () => {
   const inputRef = createRef<HTMLInputElement>()
+  const { refetch } = useContext(CourseSearchContext)
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const input = inputRef.current?.value
-    console.log(input)
+    refetch()
   }
 
   return { inputRef, onSubmit }

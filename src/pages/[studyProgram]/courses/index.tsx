@@ -1,14 +1,4 @@
-import {
-  Box,
-  Card,
-  CircularProgress,
-  Grid,
-  Icon,
-  IconButton,
-  makeStyles,
-  TextField,
-  Typography,
-} from '@material-ui/core'
+import { Box, Card, CircularProgress, Grid, TextField, Typography } from '@material-ui/core'
 import { CourseGroup, SearchCourseResponse, SearchCourseVars, SEARCH_COURSE } from '@/utils/network/BackendGQLQueries'
 import { StudyProgram } from '@thinc-org/chula-courses'
 import { useState } from 'react'
@@ -17,16 +7,17 @@ import ErrorIcon from '@material-ui/icons/Error'
 import { useRouter } from 'next/router'
 import { CourseCard } from '@/components/CourseCard'
 
-export function parseCourseGroupFromQuery(q: any): CourseGroup {
-  const query = q as {
-    studyProgram: string
-    academicYear: string
-    semester: string
-  }
+interface Query {
+  studyProgram: string
+  academicYear: string
+  semester: string
+}
+
+export function parseCourseGroupFromQuery(q: Query): CourseGroup {
   return {
-    studyProgram: query.studyProgram as StudyProgram,
-    academicYear: query.academicYear,
-    semester: query.semester,
+    studyProgram: q.studyProgram as StudyProgram,
+    academicYear: q.academicYear,
+    semester: q.semester,
   }
 }
 

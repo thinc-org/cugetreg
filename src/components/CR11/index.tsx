@@ -27,27 +27,29 @@ export function CR11({ courses }: PropTypes) {
 
   return (
     <table className={classes.table}>
-      <tr className={classes.header}>
-        <ColumnHeader variant="h6">{t('order')}</ColumnHeader>
-        <ColumnHeader variant="h6">
-          <span className={classes.desktop}>{t('courseNo')}</span>
-          <span className={classes.mobile}>{t('courseNoMobile')}</span>
-        </ColumnHeader>
-        <ColumnHeader variant="h6">{t('abbrName')}</ColumnHeader>
-        <ColumnHeader variant="h6">{t('section')}</ColumnHeader>
-        <ColumnHeader variant="h6">
-          <span className={classes.desktop}>{t('credit')}</span>
-          <span className={classes.mobile}>{t('creditMobile')}</span>
-        </ColumnHeader>
-      </tr>
-      {Items}
-      <tr className={classes.totalCredit}>
-        <td></td>
-        <td></td>
-        <td></td>
-        <Column variant="h6">{t('totalCredit')}</Column>
-        <Column variant="h6">{totalCredit}.0</Column>
-      </tr>
+      <tbody>
+        <tr className={classes.header}>
+          <ColumnHeader variant="h6">{t('order')}</ColumnHeader>
+          <ColumnHeader variant="h6">
+            <span className={classes.desktop}>{t('courseNo')}</span>
+            <span className={classes.mobile}>{t('courseNoMobile')}</span>
+          </ColumnHeader>
+          <ColumnHeader variant="h6">{t('abbrName')}</ColumnHeader>
+          <ColumnHeader variant="h6">{t('section')}</ColumnHeader>
+          <ColumnHeader variant="h6">
+            <span className={classes.desktop}>{t('credit')}</span>
+            <span className={classes.mobile}>{t('creditMobile')}</span>
+          </ColumnHeader>
+        </tr>
+        {Items}
+        <tr className={classes.totalCredit}>
+          <td></td>
+          <td></td>
+          <td></td>
+          <Column variant="h6">{t('totalCredit')}</Column>
+          <Column variant="h6">{totalCredit}.0</Column>
+        </tr>
+      </tbody>
     </table>
   )
 }

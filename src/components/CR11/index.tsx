@@ -1,6 +1,7 @@
 import { Course } from '@thinc-org/chula-courses'
 import { useTranslation } from 'react-i18next'
 import { useStyles, Column, ColumnHeader } from './styles'
+import { toNumberString } from './utils'
 
 interface PropTypes {
   courses?: Course[]
@@ -20,7 +21,7 @@ export function CR11({ courses }: PropTypes) {
         <Column variant="body1">
           {course.sections[0].sectionNo} {t('only')}
         </Column>
-        <Column variant="body1">{course.credit}.0</Column>
+        <Column variant="body1">{toNumberString(course.credit)}</Column>
       </tr>
     )
   })
@@ -47,7 +48,7 @@ export function CR11({ courses }: PropTypes) {
           <td></td>
           <td></td>
           <Column variant="h6">{t('totalCredit')}</Column>
-          <Column variant="h6">{totalCredit}.0</Column>
+          <Column variant="h6">{toNumberString(totalCredit)}</Column>
         </tr>
       </tbody>
     </table>

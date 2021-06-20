@@ -13,8 +13,8 @@ export interface FilterBarProps {}
 
 export function FilterBar() {
   const classes = useStyles()
-  const { checkboxes: genEdCheckboxes } = useFilterBar(createGenEdCheckboxes)
-  const { checkboxes: dayOfWeekCheckboxes } = useFilterBar(createDayOfWeekCheckboxes)
+  const { checkboxes: genEdCheckboxes } = useFilterBar(createGenEdCheckboxes, 'genEdTypes')
+  const { checkboxes: dayOfWeekCheckboxes } = useFilterBar(createDayOfWeekCheckboxes, 'dayOfWeeks')
   const { checkboxes: specialCheckboxes } = useFilterBar(createSpecialCheckboxes)
 
   return (

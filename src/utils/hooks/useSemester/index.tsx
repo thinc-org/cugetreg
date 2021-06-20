@@ -1,5 +1,6 @@
+import { CourseSearchContext } from '@/context/CourseSearch'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 
 interface Semester {
   year: string
@@ -11,12 +12,13 @@ interface QueryParams extends Partial<Semester> {}
 // TODO: dynamic year and semester
 const CURRENT_SEMESTER: Semester = {
   year: '2564',
-  sem: '1',
+  sem: '2',
 }
 
 export default function useSemester() {
   const router = useRouter()
   const [semester, setSemester] = useState(CURRENT_SEMESTER)
+  const { setSearchCourseVars } = useContext(CourseSearchContext)
 
   useEffect(() => {
     const params = router.query as QueryParams
@@ -28,10 +30,26 @@ export default function useSemester() {
 
   const changeSemester = (params: QueryParams) => {
     const currentPathName = router.pathname
+
+    const actualYear = params.year ? params.year : CURRENT_SEMESTER.year
+    const actualSem = params.sem ? params.sem : CURRENT_SEMESTER.sem
+
+    const yearParams = params.year === CURRENT_SEMESTER.year ? undefined : params.year
+    const semParams = params.sem === CURRENT_SEMESTER.sem ? undefined : params.sem
+
+    setSearchCourseVars((currentVars) => ({
+      ...currentVars,
+      courseGroup: {
+        ...currentVars.courseGroup,
+        academicYear: actualYear,
+        semester: actualSem,
+      },
+    }))
+
     router.push(currentPathName, {
       query: {
-        year: params.year === CURRENT_SEMESTER.year ? undefined : params.year,
-        sem: params.sem === CURRENT_SEMESTER.sem ? undefined : params.sem,
+        year: yearParams,
+        sem: semParams,
       },
     })
   }

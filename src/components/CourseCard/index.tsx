@@ -1,6 +1,5 @@
 import {
   Box,
-  Card,
   CardActions,
   CardContent,
   CardHeader,
@@ -9,6 +8,7 @@ import {
   Grid,
   IconButton,
   MenuItem,
+  Paper,
   Select,
   Stack,
   Typography,
@@ -245,10 +245,10 @@ export const CourseCard = (props: CourseCardProps) => {
   const CardFooter = <CardActions sx={{ p: 4, pt: 0, display: { sm: 'none' } }}>{SelectButton}</CardActions>
 
   return (
-    <Card variant="outlined">
+    <Paper variant="outlined" sx={{ width: '100%' }}>
       {CardHeading}
       {CardBody}
       {CardFooter}
-    </Card>
+    </Paper>
   )
 }

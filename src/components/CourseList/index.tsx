@@ -20,7 +20,7 @@ export const CourseList: React.FC<CourseListProps> = () => {
   }
 
   return (
-    <Stack spacing={2}>
+    <Stack spacing={2} sx={{ width: '100%' }}>
       {courses.search.map((result) => (
         <CourseCard key={result.courseNo} course={result} />
       ))}

@@ -74,6 +74,17 @@ export const courseCard = {
   capacity: 'ที่ว่าง',
 }
 
+export const sectionCard = {
+  select: 'เลือก',
+  section: 'Sec {{sectionNo}}',
+  teacher: 'ผู้สอน',
+  time: 'วันเวลาเรียน',
+  classRoom: 'อาคารเรียน',
+  closed: 'ปิด',
+  avialable: 'ว่าง {{current}}/{{max}}',
+  full: 'เต็ม {{current}}/{{max}}',
+}
+
 export const footer = {
   university: 'จุฬาลงกรณ์มหาวิทยาลัย',
   topButton: 'กลับด้านบน',

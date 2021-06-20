@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   Card,
   CardActions,
   CardContent,
@@ -15,13 +14,14 @@ import { KeyboardArrowDown, KeyboardArrowUp } from '@material-ui/icons'
 import { Course } from '@thinc-org/chula-courses'
 import { Add, Star } from '@material-ui/icons'
 import { useTranslation } from 'react-i18next'
-import { days } from './const'
+import { days } from '@/components/CourseCard/const'
 import { useDisclosure } from '@/hooks/useDisclosure'
-import { Select } from '../Select'
-import { useCourseCard } from './useCourseCard'
-import GenEdChip from '../Chips/catagories/GenEdChip'
-import DayChip from '../Chips/catagories/DayChip'
-import { PropsWithChildren } from 'react'
+import { Select } from '@/components/Select'
+import { useCourseCard } from '@/components/CourseCard/useCourseCard'
+import GenEdChip from '@/components/Chips/catagories/GenEdChip'
+import DayChip from '@/components/Chips/catagories/DayChip'
+import { Caption } from '@/components/CourseCard/components/Caption'
+import { CustomButton } from '@/components/common/CustomButton'
 
 export interface CourseCardProps {
   course: Course
@@ -44,6 +44,11 @@ export const CourseCard = (props: CourseCardProps) => {
     selectedSectionNumber,
   } = useCourseCard(course)
 
+  const SelectButton = (
+    <CustomButton loading={false} startIcon={<Add />} color="primary" variant="contained" fullWidth disableElevation>
+      {t('select')}
+    </CustomButton>
+  )
   const CardHeading = (
     <CardHeader
       sx={{ p: 4, pb: 0, pt: 3 }}
@@ -82,7 +87,7 @@ export const CourseCard = (props: CourseCardProps) => {
     />
   )
 
-  const CardDiscription = (
+  const CardDescription = (
     <Grid container spacing={3}>
       <Grid item xs={6} sm="auto">
         <Stack spacing={0.5}>
@@ -134,7 +139,7 @@ export const CourseCard = (props: CourseCardProps) => {
   )
 
   const CardHiddenDescription = (
-    <Grid container spacing={3} sx={{ mt: 0 }}>
+    <Grid container spacing={3} sx={{ mt: 0, width: 'auto' }}>
       <Grid item xs={6} sm="auto" sx={{ display: { xs: 'block', sm: 'none' } }}>
         <Select
           items={sectionNumbers}
@@ -210,9 +215,7 @@ export const CourseCard = (props: CourseCardProps) => {
           name="sectionNo"
         />
       </Collapse>
-      <Button startIcon={<Add />} color="primary" variant="contained" fullWidth disableElevation>
-        {t('select')}
-      </Button>
+      {SelectButton}
     </Stack>
   )
 
@@ -220,7 +223,7 @@ export const CourseCard = (props: CourseCardProps) => {
     <CardContent sx={{ px: 4, py: 2 }}>
       <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, justifyContent: 'space-between' }}>
         <Stack>
-          {CardDiscription}
+          {CardDescription}
           <Collapse in={isExpanded}>{CardHiddenDescription}</Collapse>
         </Stack>
         {CardSideActions}
@@ -228,13 +231,7 @@ export const CourseCard = (props: CourseCardProps) => {
     </CardContent>
   )
 
-  const CardFooter = (
-    <CardActions sx={{ p: 4, pt: 0, display: { sm: 'none' } }}>
-      <Button startIcon={<Add />} color="primary" variant="contained" fullWidth disableElevation>
-        {t('select')}
-      </Button>
-    </CardActions>
-  )
+  const CardFooter = <CardActions sx={{ p: 4, pt: 0, display: { sm: 'none' } }}>{SelectButton}</CardActions>
 
   return (
     <Card variant="outlined">
@@ -244,9 +241,3 @@ export const CourseCard = (props: CourseCardProps) => {
     </Card>
   )
 }
-
-export const Caption = ({ children }: PropsWithChildren<{}>) => (
-  <Typography variant="caption" color="primaryRange.100">
-    {children}
-  </Typography>
-)

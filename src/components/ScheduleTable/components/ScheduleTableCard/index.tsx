@@ -8,7 +8,16 @@ import { Draggable } from 'react-beautiful-dnd'
 import { useTranslation } from 'react-i18next'
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
 import { MdDelete } from 'react-icons/md'
-import { CardLayout, GridSpacer, HeaderLayout, RightPane, Spacer, VisibilityToggle } from './styled'
+import {
+  CardBorder,
+  CardContent,
+  CardLayout,
+  GridSpacer,
+  HeaderLayout,
+  RightPane,
+  Spacer,
+  VisibilityToggle,
+} from './styled'
 
 export interface ScheduleTableCardProps {
   item: CourseCartItem
@@ -28,13 +37,16 @@ export const ScheduleTableCard = observer(({ item, index }: ScheduleTableCardPro
     <Draggable key={item.courseNo} draggableId={item.courseNo} index={index}>
       {(provided) => (
         <CardLayout ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-          <VisibilityToggle checked={!isHidden} onClick={toggleVisibility}>
-            {isHidden ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
-          </VisibilityToggle>
-          <RightPane>
-            <CardHeader item={item} />
-            <CardDetail item={item} />
-          </RightPane>
+          <CardContent>
+            <VisibilityToggle checked={!isHidden} onClick={toggleVisibility}>
+              {isHidden ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
+            </VisibilityToggle>
+            <RightPane>
+              <CardHeader item={item} />
+              <CardDetail item={item} />
+            </RightPane>
+          </CardContent>
+          <CardBorder />
         </CardLayout>
       )}
     </Draggable>

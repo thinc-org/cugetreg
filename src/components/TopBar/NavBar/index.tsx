@@ -34,7 +34,6 @@ export function NavBar() {
           </a>
         </Link>
         {/* TODO: replace with actual links */}
-        <NavBarItem>{t('navBar:news')}</NavBarItem>
         <NavBarItem>{t('navBar:searchCourses')}</NavBarItem>
         <NavBarItem>{t('navBar:timetable')}</NavBarItem>
         <FlexOne />

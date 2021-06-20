@@ -3,6 +3,7 @@ import Document, { DocumentContext, Head, Html, Main, NextScript } from 'next/do
 import { ServerStyleSheets } from '@material-ui/core/styles'
 import { injectDarkStyle } from '@/utils/darkStyleInjector'
 import env from '@/utils/env/macro'
+import { resetServerContext } from 'react-beautiful-dnd'
 
 export default class MyDocument extends Document {
   render() {
@@ -35,6 +36,7 @@ MyDocument.getInitialProps = async (ctx: DocumentContext) => {
   const injectDarkTheme = env.features.darkTheme && env.isProduction
 
   ctx.renderPage = () => {
+    resetServerContext()
     if (injectDarkTheme) {
       originalRenderPage({
         enhanceApp: (App) => (props) => darkSheets.collect(<App {...{ forceDark: true }} {...props} />),

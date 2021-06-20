@@ -10,6 +10,12 @@ function primaryRange(lum: PaletteRange) {
 export const CardLayout = styled.div`
   display: flex;
   margin-top: 24px;
+  background: ${({ theme }) => theme.palette.background.default};
+  border-radius: 4px;
+
+  &:focus {
+    outline: none;
+  }
 `
 
 export const VisibilityToggle = styled(Button)<{ checked: boolean }>`

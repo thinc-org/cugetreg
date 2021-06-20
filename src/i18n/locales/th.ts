@@ -16,6 +16,12 @@ export const navBar = {
   signin: 'เข้าสู่ระบบ',
 }
 
+export const studyProgram = {
+  S: 'ทวิภาค',
+  T: 'ไตรภาค',
+  I: 'นานาชาติ',
+}
+
 export const annuncementSearch = {
   search: 'ค้นหา',
   searchPlaceholder: 'ค้นหาหัวข้อ/เนื้อหา',
@@ -38,6 +44,12 @@ export const schedulePage = {
   showJorTor11: 'แสดง จท11',
   sumCreditsDesc: 'หน่วยกิตรวมในตาราง',
   sumCredits: '{{credits}} หน่วยกิต',
+}
+
+export const scheduleTableCard = {
+  credits: '[{{credits}} หน่วยกิต]',
+  sectionLabel: 'Sec {{section}}',
+  delete: 'ลบ',
 }
 
 export const schedule = {
@@ -66,6 +78,17 @@ export const courseCard = {
   classRoom: 'ห้องเรียน',
   note: 'หมายเหตุ',
   capacity: 'ที่ว่าง',
+}
+
+export const sectionCard = {
+  select: 'เลือก',
+  section: 'Sec {{sectionNo}}',
+  teacher: 'ผู้สอน',
+  time: 'วันเวลาเรียน',
+  classRoom: 'อาคารเรียน',
+  closed: 'ปิด',
+  avialable: 'ว่าง {{current}}/{{max}}',
+  full: 'เต็ม {{current}}/{{max}}',
 }
 
 export const footer = {

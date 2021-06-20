@@ -46,6 +46,28 @@ export const mockData: Course[] = [
           },
         ],
       },
+      {
+        sectionNo: '3',
+        closed: false,
+        capacity: {
+          current: 13,
+          max: 40,
+        },
+        note: 'No note',
+        classes: [
+          {
+            type: 'LECT',
+            dayOfWeek: 'TU',
+            period: {
+              start: '13',
+              end: '15',
+            },
+            building: 'ENG 3',
+            room: '2',
+            teachers: ['AJ'],
+          },
+        ],
+      },
     ],
   },
   {

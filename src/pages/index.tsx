@@ -6,7 +6,8 @@ function HomePage() {
   const router = useRouter()
 
   useEffect(() => {
-    router.replace(`${DEFAULT_STUDY_PROGRAM}/courses`)
+    router.push(`/T/courses?academicYear=2021&semester=2`)
+    //router.replace(`${DEFAULT_STUDY_PROGRAM}/courses`)
   }, [router])
 
   return null

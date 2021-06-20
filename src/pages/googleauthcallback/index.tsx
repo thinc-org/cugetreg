@@ -17,7 +17,7 @@ export default function GoogleAuthCallback() {
 
     authenticateByCode(client, code)
       .then(() => {
-        setMsg('Redirecting')
+        setMsg('Redirecting...')
         router.push('/')
       })
       .catch((e) => {

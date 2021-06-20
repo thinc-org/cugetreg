@@ -1,6 +1,6 @@
 import { Capacity, Course, Section } from '@thinc-org/chula-courses'
-import { dayOfWeek } from './const'
-import { sum, unique } from './utils'
+import { dayOfWeek } from '@/components/CourseCard/const'
+import { sum, unique } from '@/components/CourseCard/utils'
 import { useState } from 'react'
 
 export function useCourseCard(course: Course) {

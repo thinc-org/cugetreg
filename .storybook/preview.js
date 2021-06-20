@@ -1,4 +1,4 @@
-import { CssBaseline, ThemeProvider } from '@material-ui/core'
+import { CssBaseline, StyledEngineProvider, ThemeProvider } from '@material-ui/core'
 import { lightTheme } from '../src/configs/theme'
 
 import AdapterDateFns from '@material-ui/lab/AdapterDateFns'
@@ -9,12 +9,14 @@ export const parameters = {
 }
 
 const themeDecorator = (Story) => (
-  <LocalizationProvider dateAdapter={AdapterDateFns}>
-    <ThemeProvider theme={lightTheme}>
-      <CssBaseline />
-      <Story />
-    </ThemeProvider>
-  </LocalizationProvider>
+  <StyledEngineProvider injectFirst>
+    <LocalizationProvider dateAdapter={AdapterDateFns}>
+      <ThemeProvider theme={lightTheme}>
+        <CssBaseline />
+        <Story />
+      </ThemeProvider>
+    </LocalizationProvider>
+  </StyledEngineProvider>
 )
 
 export const decorators = [themeDecorator]

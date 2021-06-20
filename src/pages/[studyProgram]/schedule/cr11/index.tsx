@@ -6,9 +6,14 @@ import React, { useEffect } from 'react'
 import { CR11 } from '@/components/CR11'
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos'
 import { useTranslation } from 'react-i18next'
-import useStudyProgram from '@/utils/hooks/useStudyProgram'
+import { useStudyProgram } from '@/utils/hooks/useStudyProgram'
+import useSemester from '@/utils/hooks/useSemester'
 
 const useStyles = makeStyles((theme) => ({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
   buttonMobile: {
     border: '1px solid #2A2D48',
     boxSizing: 'border-box',
@@ -16,10 +21,6 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'right',
     padding: '5px 8px',
     color: theme.palette.primaryRange[400],
-  },
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
   },
   semester: {
     fontWeight: 500,
@@ -86,6 +87,10 @@ const Home = observer(() => {
   const classes = useStyles()
   const { t } = useTranslation(['program', 'cr11'])
   const { studyProgram } = useStudyProgram()
+  const { semester } = useSemester()
+  const studyProgramText = `${t('cr11:semester')} ${semester.year}/${semester.sem} ${t(
+    `program:${studyProgram || 's'}` as any
+  )}`
 
   useEffect(() => {
     // get mock data
@@ -114,7 +119,7 @@ const Home = observer(() => {
           <ArrowBackIosIcon />
         </IconButton>
         <Typography className={`${classes.semester} ${classes.mobile}`} variant="subtitle1">
-          {t('cr11:semester')} 2563/2 {t(`program:${studyProgram}` as any)}
+          {studyProgramText}
         </Typography>
       </div>
       <div className={classes.title}>
@@ -127,7 +132,7 @@ const Home = observer(() => {
           </Typography>
         </div>
         <Typography className={`${classes.semester} ${classes.desktop}`} variant="subtitle1">
-          ปีการศึกษา 2563/2 หลักสูตรนานาชาติ
+          {studyProgramText}
         </Typography>
       </div>
       <CR11 courses={shoppingCart.courses} />

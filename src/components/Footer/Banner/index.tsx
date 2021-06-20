@@ -1,7 +1,7 @@
 import { Divider, makeStyles, useMediaQuery, useTheme } from '@material-ui/core'
 import { useTranslation } from 'react-i18next'
 import Link from 'next/link'
-import whiteLogo from '@/assets/images/whiteLogo.svg'
+import bigLogo from '@/assets/images/cgrLogoLight.svg'
 import thincLogo from '@/assets/images/thincLogo.svg'
 import github from '@/assets/images/github.svg'
 import { FlexContainer } from '../FlexContainer'
@@ -11,14 +11,14 @@ const useStyles = makeStyles((theme) => ({
   banner: {
     flexDirection: 'column',
     height: '100%',
-    backgroundColor: theme.palette.primary.dark,
+    backgroundColor: theme.palette.primary.main,
     color: theme.palette.primary.contrastText,
   },
   bannerDetail: {
     [theme.breakpoints.down('sm')]: {
       flexDirection: 'column',
     },
-    [theme.breakpoints.up('md')]: {
+    [theme.breakpoints.up('sm')]: {
       flexDirection: 'row',
     },
   },
@@ -52,8 +52,11 @@ const useStyles = makeStyles((theme) => ({
   },
   bigLogo: {
     [theme.breakpoints.down('sm')]: {
-      marginLeft: theme.spacing(2),
+      margin: theme.spacing(2),
       maxWidth: '60%',
+    },
+    [theme.breakpoints.up('sm')]: {
+      marginBottom: theme.spacing(4),
     },
   },
   link: {
@@ -72,7 +75,7 @@ export function Banner() {
   return (
     <FlexContainer className={classes.banner}>
       <Link href="/">
-        <img src={whiteLogo} className={classes.bigLogo} />
+        <img src={bigLogo} className={classes.bigLogo} height={matches ? '40' : '56'} />
       </Link>
 
       <FlexContainer className={classes.bannerDetail}>

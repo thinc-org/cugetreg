@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 export default function useStudyPromgram() {
   const router = useRouter()
 
-  const studyProgram = (router.pathname as string).split('/')
+  const studyProgram = router.pathname.split('/')[1] as StudyProgram
 
   const setStudyProgram = (program: StudyProgram) => {
     const splittedPathName = (router.pathname as string).split('/')

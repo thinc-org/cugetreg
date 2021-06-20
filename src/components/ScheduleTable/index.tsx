@@ -2,7 +2,7 @@ import { CourseCart } from '@/store'
 import styled from '@emotion/styled'
 import { useCallback } from 'react'
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd'
-import { ScheduleTableCard } from './components/ScheduleTableCard'
+// import { ScheduleTableCard } from './components/ScheduleTableCard'
 
 export interface ScheduleTableProps {
   courseCart: CourseCart
@@ -28,9 +28,9 @@ export function ScheduleTable({ courseCart }: ScheduleTableProps) {
       <Droppable droppableId="schedule">
         {(provided) => (
           <Layout {...provided.droppableProps} ref={provided.innerRef}>
-            {items.map((item, index) => (
+            {/* {items.map((item, index) => (
               <ScheduleTableCard key={item.courseNo} item={item} index={index} />
-            ))}
+            ))} */}
             {provided.placeholder}
           </Layout>
         )}

@@ -74,41 +74,39 @@ const Home = observer(() => {
   }, [shoppingCart])
 
   return (
-    <>
-      <div className={classes.container}>
-        <div className={classes.top}>
-          <Button
-            className={classes.desktop}
-            startIcon={<ArrowBackIosIcon />}
-            color="primary"
-            variant="outlined"
-            disableElevation
-          >
-            กลับ
-          </Button>
-          <IconButton className={`${classes.buttonMobile} ${classes.mobile}`} aria-label="back">
-            <ArrowBackIosIcon />
-          </IconButton>
-          <Typography className={`${classes.semester} ${classes.mobile}`} variant="subtitle1">
-            ปีการศึกษา 2563/2 หลักสูตรนานาชาติ
-          </Typography>
-        </div>
-        <div className={classes.title}>
-          <div>
-            <Typography className={classes.main} variant="h3">
-              รายวิชาที่ต้องการลงทะเบียนเรียน
-            </Typography>
-            <Typography className={classes.subtitle} variant="subtitle1">
-              จำลองเอกสาร แสดงความจำนงขอลงทะเบียนเรียน (จท11)
-            </Typography>
-          </div>
-          <Typography className={`${classes.semester} ${classes.desktop}`} variant="subtitle1">
-            ปีการศึกษา 2563/2 หลักสูตรนานาชาติ
-          </Typography>
-        </div>
-        <CR11 courses={shoppingCart.courses} />
+    <div className={classes.container}>
+      <div className={classes.top}>
+        <Button
+          className={classes.desktop}
+          startIcon={<ArrowBackIosIcon />}
+          color="primary"
+          variant="outlined"
+          disableElevation
+        >
+          กลับ
+        </Button>
+        <IconButton className={`${classes.buttonMobile} ${classes.mobile}`} aria-label="back">
+          <ArrowBackIosIcon />
+        </IconButton>
+        <Typography className={`${classes.semester} ${classes.mobile}`} variant="subtitle1">
+          ปีการศึกษา 2563/2 หลักสูตรนานาชาติ
+        </Typography>
       </div>
-    </>
+      <div className={classes.title}>
+        <div>
+          <Typography className={classes.main} variant="h3">
+            รายวิชาที่ต้องการลงทะเบียนเรียน
+          </Typography>
+          <Typography className={classes.subtitle} variant="subtitle1">
+            จำลองเอกสาร แสดงความจำนงขอลงทะเบียนเรียน (จท11)
+          </Typography>
+        </div>
+        <Typography className={`${classes.semester} ${classes.desktop}`} variant="subtitle1">
+          ปีการศึกษา 2563/2 หลักสูตรนานาชาติ
+        </Typography>
+      </div>
+      <CR11 courses={shoppingCart.courses} />
+    </div>
   )
 })
 

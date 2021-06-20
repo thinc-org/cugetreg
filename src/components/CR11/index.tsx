@@ -20,30 +20,28 @@ export function CR11({ courses }: PropTypes) {
     )
   })
   return (
-    <div>
-      <table className={classes.table}>
-        <tr className={classes.header}>
-          <ColumnHeader variant="h6">ลำดับที่</ColumnHeader>
-          <ColumnHeader variant="h6">
-            <span className={classes.desktop}>รหัสรายวิชา</span>
-            <span className={classes.mobile}>รหัสวิชา</span>
-          </ColumnHeader>
-          <ColumnHeader variant="h6">ชื่อย่อรายวิชา</ColumnHeader>
-          <ColumnHeader variant="h6">ตอนเรียน</ColumnHeader>
-          <ColumnHeader variant="h6">
-            <span className={classes.desktop}>หน่วยกิต</span>
-            <span className={classes.mobile}>หน่วย</span>
-          </ColumnHeader>
-        </tr>
-        {Items}
-        <tr className={classes.totalCredit}>
-          <td></td>
-          <td></td>
-          <td></td>
-          <Column variant="h6">หน่วยกิตรวม</Column>
-          <Column variant="h6">{totalCredit}.0</Column>
-        </tr>
-      </table>
-    </div>
+    <table className={classes.table}>
+      <tr className={classes.header}>
+        <ColumnHeader variant="h6">ลำดับที่</ColumnHeader>
+        <ColumnHeader variant="h6">
+          <span className={classes.desktop}>รหัสรายวิชา</span>
+          <span className={classes.mobile}>รหัสวิชา</span>
+        </ColumnHeader>
+        <ColumnHeader variant="h6">ชื่อย่อรายวิชา</ColumnHeader>
+        <ColumnHeader variant="h6">ตอนเรียน</ColumnHeader>
+        <ColumnHeader variant="h6">
+          <span className={classes.desktop}>หน่วยกิต</span>
+          <span className={classes.mobile}>หน่วย</span>
+        </ColumnHeader>
+      </tr>
+      {Items}
+      <tr className={classes.totalCredit}>
+        <td></td>
+        <td></td>
+        <td></td>
+        <Column variant="h6">หน่วยกิตรวม</Column>
+        <Column variant="h6">{totalCredit}.0</Column>
+      </tr>
+    </table>
   )
 }

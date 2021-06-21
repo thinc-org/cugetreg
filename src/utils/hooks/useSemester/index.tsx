@@ -11,8 +11,8 @@ interface QueryParams extends Partial<Semester> {}
 
 // TODO: dynamic year and semester
 const CURRENT_SEMESTER: Semester = {
-  year: '2564',
-  sem: '2',
+  year: '2563',
+  sem: '1',
 }
 
 export default function useSemester() {

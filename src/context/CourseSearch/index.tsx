@@ -7,7 +7,7 @@ import { useStudyProgram } from '@/utils/hooks/useStudyProgram'
 import { SearchCourseResponse, SearchCourseVars, SEARCH_COURSE } from '@/utils/network/BackendGQLQueries'
 import { useQuery } from '@apollo/client'
 
-export const LIMIT_CONSTANT = 10
+export const LIMIT_CONSTANT = 20
 
 export const CourseSearchContext = createContext(DEFAULT_COURSE_SEARCH_CONTEXT_VALUE)
 

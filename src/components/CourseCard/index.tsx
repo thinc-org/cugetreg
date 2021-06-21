@@ -180,7 +180,7 @@ export const CourseCard = (props: CourseCardProps) => {
           <Stack>
             {selectedSection.classes.map((sectionClass, index) => (
               <Typography variant="body1" key={`${selectedSection.sectionNo}.${index}`}>
-                {days[sectionClass.dayOfWeek]} {sectionClass.period.start}-{sectionClass.period.end}
+                {days[sectionClass.dayOfWeek]} {sectionClass.period?.start}-{sectionClass.period?.end}
               </Typography>
             ))}
           </Stack>

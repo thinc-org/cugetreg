@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 import { EnhancedCheckBoxProps } from '@/components/FilterBar/components/CheckboxGroup'
-import { CourseSearchContext } from '@/context/CourseSearch'
+import { CourseSearchContext, LIMIT_CONSTANT } from '@/context/CourseSearch'
 import { DayChipKey, GenEdChipKey, GeneralChipKey } from '@/components/Chips/config'
 import { SearchCourseVars } from '@/utils/network/BackendGQLQueries'
 
@@ -21,11 +21,11 @@ export function useFilterBar<TagValue extends GeneralChipKey = GeneralChipKey>(
 
     setSearchCourseVars((currentVars) => {
       if (type === 'genEdTypes') {
-        currentVars.filter.genEdTypes = newTags as GenEdChipKey[]
+        currentVars.filter.genEdTypes = newTags ? (newTags as GenEdChipKey[]) : undefined
       } else if (type == 'dayOfWeeks') {
-        currentVars.filter.dayOfWeeks = newTags as DayChipKey[]
+        currentVars.filter.dayOfWeeks = newTags ? (newTags as DayChipKey[]) : undefined
       }
-      currentVars.filter = { ...currentVars.filter, limit: 0, offset: 0 }
+      currentVars.filter = { ...currentVars.filter, limit: LIMIT_CONSTANT, offset: 0 }
       refetch(currentVars)
       return currentVars
     })

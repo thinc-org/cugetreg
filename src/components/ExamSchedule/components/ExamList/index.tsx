@@ -1,9 +1,8 @@
 import styled from '@emotion/styled'
-import { TimetableClass } from '@/components/Schedule/utils'
-import { ExamCard } from '../ExamCard'
+import { ExamCard, ExamClass } from '../ExamCard'
 
 interface ExamScheduleProps {
-  classes: TimetableClass[]
+  classes: ExamClass[]
   isFinal: boolean
 }
 

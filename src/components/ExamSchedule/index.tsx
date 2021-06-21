@@ -1,13 +1,14 @@
 import styled from '@emotion/styled'
-import { TimetableClass } from '../Schedule/utils'
 import { ExamList } from './components/ExamList'
 import { Typography, IconButton } from '@material-ui/core'
 import CachedIcon from '@material-ui/icons/Cached'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { ExamClass } from './components/ExamCard'
+import { sortExamSchedule } from './utils'
 
 interface ExamScheduleProps {
-  classes: TimetableClass[]
+  classes: ExamClass[]
 }
 
 const ExamScheduleContainer = styled.div`
@@ -44,6 +45,8 @@ const IconButtonRefresh = styled(IconButton)`
 export function ExamSchedule({ classes }: ExamScheduleProps) {
   const [isMidternMobile, setMidtermMobile] = useState(true)
   const { t } = useTranslation('examSchedule')
+  const midtermClasses = sortExamSchedule(classes, true)
+  const finalClasses = sortExamSchedule(classes, false)
   return (
     <>
       <ExamScheduleContainer>
@@ -58,7 +61,7 @@ export function ExamSchedule({ classes }: ExamScheduleProps) {
               <CachedIcon />
             </IconButtonRefresh>
           </ExamTitleContainer>
-          <ExamList isFinal={false} classes={classes} />
+          <ExamList isFinal={false} classes={midtermClasses} />
         </ExamListContainer>
         <ExamListContainer show={!isMidternMobile}>
           <ExamTitleContainer>
@@ -71,7 +74,7 @@ export function ExamSchedule({ classes }: ExamScheduleProps) {
               <CachedIcon />
             </IconButtonRefresh>
           </ExamTitleContainer>
-          <ExamList isFinal={true} classes={classes} />
+          <ExamList isFinal={true} classes={finalClasses} />
         </ExamListContainer>
       </ExamScheduleContainer>
     </>

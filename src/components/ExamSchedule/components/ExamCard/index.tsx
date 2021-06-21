@@ -32,6 +32,7 @@ const TextContainer = styled.div`
 `
 
 const CourseName = styled(Typography)`
+  text-align: left;
   font-weight: bold;
 `
 

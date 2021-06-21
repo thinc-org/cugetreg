@@ -7,7 +7,7 @@ export function getExamDate(scheduleClass: ExamClass, isFinal: boolean) {
     return 'TBA'
   }
 
-  return format(date as Date, 'dd mmm yyyy')
+  return format(date as Date, 'dd MMM yyyy').toUpperCase()
 }
 
 export function getExamPeriod(scheduleClass: ExamClass, isFinal: boolean) {

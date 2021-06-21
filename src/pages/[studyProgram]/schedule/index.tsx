@@ -126,7 +126,7 @@ function SchedulePage() {
         <Schedule classes={classes} />
       </ScheduleContainer>
       <ExamContainer enabled={isExamTable}>
-        <ExamSchedule classes={classes} />
+        <ExamSchedule classes={shopItems} />
       </ExamContainer>
       <InfoBar>
         <div style={{ display: 'flex' }}>

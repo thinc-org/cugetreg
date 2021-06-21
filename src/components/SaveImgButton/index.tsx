@@ -1,25 +1,20 @@
 import { Button } from '@material-ui/core'
 import GetAppRoundedIcon from '@material-ui/icons/GetAppRounded'
-import React, { MutableRefObject, useEffect } from 'react'
-import { useScreenshot, createFileName } from 'use-react-screenshot'
+import React, { RefObject, useCallback } from 'react'
+import { useScreenshot } from 'use-react-screenshot'
 
-const SaveImgButton: React.FC<{ imageRef: MutableRefObject<null> }> = ({ imageRef }) => {
+const SaveImgButton: React.FC<{ imageRef: RefObject<HTMLDivElement> }> = ({ imageRef }) => {
   const [image, takeScreenshot] = useScreenshot()
 
-  const download = (image: string, { name = 'Schedule', extension = 'png' } = {}) => {
-    const a = document.createElement('a')
-    a.href = image
-    a.download = createFileName(extension, name)
-    a.click()
-  }
-
-  const saveImage = () => takeScreenshot(imageRef.current)
-
-  useEffect(() => {
-    if (image) {
-      download(image, { name: 'Schedule', extension: 'png' })
-    }
-  }, [image])
+  const saveImage = useCallback(() => {
+    takeScreenshot(imageRef.current)
+    const link = document.createElement('a')
+    link.href = image
+    link.download = 'schedule.png'
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  }, [image, takeScreenshot, imageRef])
 
   return (
     <Button variant="outlined" onClick={saveImage}>

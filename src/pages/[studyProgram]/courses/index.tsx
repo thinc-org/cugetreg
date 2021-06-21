@@ -7,6 +7,16 @@ import { SelectedCoursesButton } from '@/components/SelectedCoursesButton'
 import { CourseSearchContext } from '@/context/CourseSearch'
 import { FilterBar } from '@/components/FilterBar'
 import styled from '@emotion/styled'
+import { CourseGroup } from '@/utils/network/BackendGQLQueries'
+import { StudyProgram } from '@thinc-org/chula-courses'
+
+export function parseCourseGroupFromQuery(q: any): CourseGroup {
+  return {
+    studyProgram: q.studyProgram as StudyProgram,
+    academicYear: q.academicYear,
+    semester: q.semester,
+  }
+}
 
 const Stack = styled(MuiStack)`
   margin-bottom: ${({ theme }) => theme.spacing(4)};

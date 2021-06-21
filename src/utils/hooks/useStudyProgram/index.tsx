@@ -1,17 +1,9 @@
-import { StudyProgram } from '@thinc-org/chula-courses'
-import { useRouter } from 'next/router'
+import { useCourseGroup } from '../useCourseGroup'
 
+/**
+ * @deprecated please switch to {@link useCourseGroup}
+ */
 export function useStudyProgram() {
-  const router = useRouter()
-
-  const studyProgram = router.asPath.split('/')[1] as StudyProgram
-
-  const setStudyProgram = (program: StudyProgram) => {
-    const splittedPathName = (router.pathname as string).split('/')
-    splittedPathName[1] = program
-    const newPathName = splittedPathName.join('/')
-    router.push(newPathName)
-  }
-
+  const { studyProgram, setStudyProgram } = useCourseGroup()
   return { studyProgram, setStudyProgram }
 }

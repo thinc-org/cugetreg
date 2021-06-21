@@ -34,7 +34,10 @@ export const shoppingPanel = {
   credit: '{{credit}} หน่วยกิต',
   genedCourse: 'วิชา GenEd',
   otherCourse: 'วิชาอื่น ๆ',
-  makeSchedule: 'จัดตารางเรียน',
+  makeSchedule: {
+    default: 'จัดตารางเรียน',
+    delete: 'นำออก {{number}} รายการ ',
+  },
 }
 
 export const schedulePage = {
@@ -129,4 +132,8 @@ export const cr11 = {
 export const examSchedule = {
   midterm: 'กลางภาค',
   final: 'ปลายภาค',
+}
+
+export const selectedCoursesButton = {
+  main: 'วิชาที่เลือก',
 }

@@ -1,5 +1,4 @@
 import ShoppingPanel from '@/components/ShoppingPanel'
-import { mockData } from './mockData'
 import { Meta } from '@storybook/react/types-6-0'
 
 export default {
@@ -7,4 +6,4 @@ export default {
   component: ShoppingPanel,
 } as Meta
 
-export const ShoppingPanelStory = () => <ShoppingPanel data={mockData} />
+export const ShoppingPanelStory = () => <ShoppingPanel />

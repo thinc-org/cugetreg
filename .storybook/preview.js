@@ -1,8 +1,11 @@
 import { CssBaseline, StyledEngineProvider, ThemeProvider } from '@material-ui/core'
 import { lightTheme } from '../src/configs/theme'
 
+import { withNextRouter } from 'storybook-addon-next-router'
 import AdapterDateFns from '@material-ui/lab/AdapterDateFns'
 import LocalizationProvider from '@material-ui/lab/LocalizationProvider'
+import { ApolloProvider } from '@apollo/client'
+import { client } from '@/utils/network/apollo'
 
 export const parameters = {
   actions: { argTypesRegex: '^on[A-Z].*' },
@@ -10,13 +13,15 @@ export const parameters = {
 
 const themeDecorator = (Story) => (
   <StyledEngineProvider injectFirst>
-    <LocalizationProvider dateAdapter={AdapterDateFns}>
-      <ThemeProvider theme={lightTheme}>
-        <CssBaseline />
-        <Story />
-      </ThemeProvider>
-    </LocalizationProvider>
+    <ApolloProvider client={client}>
+      <LocalizationProvider dateAdapter={AdapterDateFns}>
+        <ThemeProvider theme={lightTheme}>
+          <CssBaseline />
+          <Story />
+        </ThemeProvider>
+      </LocalizationProvider>
+    </ApolloProvider>
   </StyledEngineProvider>
 )
 
-export const decorators = [themeDecorator]
+export const decorators = [withNextRouter(), themeDecorator]

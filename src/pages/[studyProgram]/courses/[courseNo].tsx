@@ -1,21 +1,21 @@
 import { ApolloError, useQuery } from '@apollo/client'
-import { Course, StudyProgram } from '@thinc-org/chula-courses'
-import gql from 'graphql-tag'
+import { Course } from '@thinc-org/chula-courses'
 import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 import { useRouter } from 'next/router'
 import React from 'react'
 import { client } from '@/utils/network/apollo'
-import { Box, Grid, Typography } from '@material-ui/core'
+import { Grid, Typography } from '@material-ui/core'
 import { GetCourseResponse, GetCourseVars, GET_COURSE } from '@/utils/network/BackendGQLQueries'
-import { parseCourseGroupFromQuery } from '.'
+import { ParsedUrlQuery } from 'querystring'
+import { parseCourseGroup } from '@/utils/courseGroup'
 
-function parseVariablesFromQuery(q: any): GetCourseVars {
+function parseVariablesFromQuery(q: ParsedUrlQuery): GetCourseVars {
   const query = q as {
     courseNo: string
   }
   return {
     courseNo: query.courseNo,
-    courseGroup: parseCourseGroupFromQuery(q),
+    courseGroup: parseCourseGroup(q),
   }
 }
 

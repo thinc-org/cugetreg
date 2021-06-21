@@ -6,8 +6,7 @@ import React, { useEffect } from 'react'
 import { CR11 } from '@/components/CR11'
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos'
 import { useTranslation } from 'react-i18next'
-import { useStudyProgram } from '@/utils/hooks/useStudyProgram'
-import useSemester from '@/utils/hooks/useSemester'
+import { useCourseGroup } from '@/utils/hooks/useCourseGroup'
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -86,11 +85,9 @@ const Home = observer(() => {
   const shoppingCart = courseCartStore
   const classes = useStyles()
   const { t } = useTranslation(['program', 'cr11'])
-  const { studyProgram } = useStudyProgram()
-  const { semester } = useSemester()
-  const studyProgramText = `${t('cr11:semester')} ${semester.year}/${semester.sem} ${t(
-    `program:${studyProgram || 's'}` as any
-  )}`
+  const { studyProgram, academicYear: year, semester } = useCourseGroup()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const studyProgramText = `${t('cr11:semester')} ${year}/${semester} ${t(`program:${studyProgram || 's'}` as any)}`
 
   useEffect(() => {
     // get mock data

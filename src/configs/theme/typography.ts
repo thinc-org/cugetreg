@@ -48,7 +48,7 @@ const baseTypographyVariantOptions: Record<TypographyVariant, TypographyStyleOpt
     letterSpacing: 0.1,
     lineHeight: 24,
     fontSize: 12,
-    fontWeight: 400,
+    fontWeight: 500,
   },
   body1: {
     letterSpacing: 0.5,

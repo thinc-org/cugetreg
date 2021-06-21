@@ -6,8 +6,8 @@ import React from 'react'
 import { client } from '@/utils/network/apollo'
 import { Grid, Typography } from '@material-ui/core'
 import { GetCourseResponse, GetCourseVars, GET_COURSE } from '@/utils/network/BackendGQLQueries'
-import { parseCourseGroupFromQuery } from '.'
 import { ParsedUrlQuery } from 'querystring'
+import { parseCourseGroup } from '@/utils/courseGroup'
 
 function parseVariablesFromQuery(q: ParsedUrlQuery): GetCourseVars {
   const query = q as {
@@ -15,7 +15,7 @@ function parseVariablesFromQuery(q: ParsedUrlQuery): GetCourseVars {
   }
   return {
     courseNo: query.courseNo,
-    courseGroup: parseCourseGroupFromQuery(q),
+    courseGroup: parseCourseGroup(q),
   }
 }
 

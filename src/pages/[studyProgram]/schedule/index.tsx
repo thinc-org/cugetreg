@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, createRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button, Typography } from '@material-ui/core'
 import styled from '@emotion/styled'
@@ -9,6 +9,7 @@ import { observer } from 'mobx-react'
 import { Theme } from '@emotion/react'
 import { courseCartStore } from '@/store'
 import { ExamSchedule } from '@/components/ExamSchedule'
+import SaveImgButton from '@/components/SaveImgButton'
 
 const PageContainer = styled.div`
   padding-top: 32px;
@@ -98,6 +99,7 @@ function SchedulePage() {
   const classes = useTimetableClasses(shopItems)
   const [isExamTable, setExamTable] = useState(false)
   const credits = shopItems.reduce((credits, item) => credits + item.credit, 0)
+  const ref = createRef<HTMLDivElement>()
 
   return (
     <PageContainer>
@@ -122,7 +124,7 @@ function SchedulePage() {
           </TabButton>
         </TabContainer>
       </TitleContainer>
-      <ScheduleContainer enabled={!isExamTable}>
+      <ScheduleContainer enabled={!isExamTable} ref={ref}>
         <Schedule classes={classes} />
       </ScheduleContainer>
       <ExamContainer enabled={isExamTable}>
@@ -137,8 +139,8 @@ function SchedulePage() {
         </div>
         <InfoSpacer />
         <ButtonBar>
-          <Button variant="outlined">{t('downloadPng')}</Button>
-          <Button variant="outlined">{t('addToCalendar')}</Button>
+          <SaveImgButton imageRef={ref} />
+          {/*<Button variant="outlined">{t('addToCalendar')}</Button> */}
           <Button variant="outlined">{t('showJorTor11')}</Button>
         </ButtonBar>
       </InfoBar>

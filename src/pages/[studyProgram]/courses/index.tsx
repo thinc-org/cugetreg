@@ -12,6 +12,16 @@ const Stack = styled(MuiStack)`
   margin-bottom: ${({ theme }) => theme.spacing(4)};
 `
 
+const StickyStack = styled(Stack)`
+  position: sticky;
+  top: 32px;
+  z-index: 10;
+
+  button {
+    background: ${({ theme }) => theme.palette.background.default};
+  }
+`
+
 function CourseSearchPage() {
   const { openFilterBar } = useContext(CourseSearchContext)
 
@@ -20,11 +30,11 @@ function CourseSearchPage() {
       <Stack spacing={2} direction="row">
         <Typography variant="h2">ค้นหาวิชาเรียน</Typography>
       </Stack>
-      <Stack spacing={2} direction="row">
+      <StickyStack spacing={2} direction="row">
         <SearchField />
         <FilterIconButton />
         <SelectedCoursesButton />
-      </Stack>
+      </StickyStack>
       <Stack spacing={3} direction="row">
         <CourseList />
         {openFilterBar && <FilterBar />}

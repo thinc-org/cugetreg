@@ -5,7 +5,7 @@ const baseTypographyVariantOptions: Record<TypographyVariant, TypographyStyleOpt
   h1: {
     letterSpacing: 0,
     lineHeight: 'normal',
-    fontSize: 60,
+    fontSize: 40,
     fontWeight: 700,
   },
   h2: {
@@ -16,7 +16,7 @@ const baseTypographyVariantOptions: Record<TypographyVariant, TypographyStyleOpt
   },
   h3: {
     letterSpacing: 0,
-    lineHeight: 56,
+    lineHeight: 'normal',
     fontSize: 24,
     fontWeight: 700,
   },
@@ -27,7 +27,7 @@ const baseTypographyVariantOptions: Record<TypographyVariant, TypographyStyleOpt
     fontWeight: 700,
   },
   h5: {
-    letterSpacing: 0.18,
+    letterSpacing: 0,
     lineHeight: 24,
     fontSize: 18,
     fontWeight: 700,
@@ -39,7 +39,7 @@ const baseTypographyVariantOptions: Record<TypographyVariant, TypographyStyleOpt
     fontWeight: 500,
   },
   subtitle1: {
-    letterSpacing: 0.18,
+    letterSpacing: 0.15,
     lineHeight: 24,
     fontSize: 14,
     fontWeight: 400,
@@ -48,10 +48,10 @@ const baseTypographyVariantOptions: Record<TypographyVariant, TypographyStyleOpt
     letterSpacing: 0.1,
     lineHeight: 24,
     fontSize: 12,
-    fontWeight: 500,
+    fontWeight: 400,
   },
   body1: {
-    letterSpacing: 0.16,
+    letterSpacing: 0.5,
     lineHeight: 24,
     fontFamily: 'ChulaCharasNew',
     fontSize: 16,
@@ -65,7 +65,7 @@ const baseTypographyVariantOptions: Record<TypographyVariant, TypographyStyleOpt
     fontWeight: 400,
   },
   button: {
-    letterSpacing: 0.4,
+    letterSpacing: 1.25,
     lineHeight: 28,
     fontSize: 12,
     fontWeight: 400,
@@ -98,7 +98,7 @@ const mobileTypographyVariantOptions: Record<TypographyVariant, TypographyStyleO
     fontSize: 12,
   },
   subtitle2: {
-    lineHeight: 12,
+    lineHeight: 24,
     fontSize: 9,
   },
   body1: {
@@ -107,10 +107,12 @@ const mobileTypographyVariantOptions: Record<TypographyVariant, TypographyStyleO
   },
   body2: {
     lineHeight: 20,
-
     fontSize: 12,
   },
-  button: {},
+  button: {
+    lineHeight: 28,
+    fontSize: 10,
+  },
   caption: {
     fontSize: 8,
   },

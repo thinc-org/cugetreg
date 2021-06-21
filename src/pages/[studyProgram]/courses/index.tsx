@@ -9,12 +9,13 @@ import { FilterBar } from '@/components/FilterBar'
 import styled from '@emotion/styled'
 import { CourseGroup } from '@/utils/network/BackendGQLQueries'
 import { StudyProgram } from '@thinc-org/chula-courses'
+import { ParsedUrlQuery } from 'querystring'
 
-export function parseCourseGroupFromQuery(q: any): CourseGroup {
+export function parseCourseGroupFromQuery(q: ParsedUrlQuery): CourseGroup {
   return {
     studyProgram: q.studyProgram as StudyProgram,
-    academicYear: q.academicYear,
-    semester: q.semester,
+    academicYear: q.academicYear as string,
+    semester: q.semester as string,
   }
 }
 

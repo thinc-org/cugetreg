@@ -4,7 +4,6 @@ import { NativeSelect } from '@material-ui/core'
 export const ConfigBarSelect = styled(NativeSelect)`
   & {
     color: inherit;
-    margin-left: 28px;
     margin-right: -8px;
     font-size: 0.75rem;
     font-family: Poppins, Prompt, sans-serif;

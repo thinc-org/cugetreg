@@ -6,6 +6,7 @@ import { NavBarItem } from './NavBarItem'
 import { FlexOne } from '@/components/FlexOne'
 import { FlexContainer } from '../FlexContainer'
 import UserButton from './UserButton'
+import { useCourseGroup } from '@/utils/hooks/useCourseGroup'
 
 const useStyles = makeStyles((theme) => ({
   navBar: {
@@ -26,6 +27,7 @@ const useStyles = makeStyles((theme) => ({
 export function NavBar() {
   const { t } = useTranslation()
   const classes = useStyles()
+  const { studyProgram } = useCourseGroup()
   return (
     <div className={classes.navBar}>
       <FlexContainer>
@@ -34,9 +36,12 @@ export function NavBar() {
             <img src={logo} alt={t('appName')} height="40" />
           </a>
         </Link>
-        {/* TODO: replace with actual links */}
-        <NavBarItem>{t('navBar:searchCourses')}</NavBarItem>
-        <NavBarItem>{t('navBar:timetable')}</NavBarItem>
+        <Link href={`/${studyProgram}/courses`} passHref>
+          <NavBarItem>{t('navBar:searchCourses')}</NavBarItem>
+        </Link>
+        <Link href={`/${studyProgram}/schedule`} passHref>
+          <NavBarItem>{t('navBar:timetable')}</NavBarItem>
+        </Link>
         <FlexOne />
         <UserButton />
       </FlexContainer>

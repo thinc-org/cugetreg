@@ -1,6 +1,6 @@
 import { makeStyles, Theme } from '@material-ui/core'
 import type { ClassNameMap, CSSProperties } from '@material-ui/styles'
-import type { ComponentProps, ComponentType, ElementType } from 'react'
+import { ComponentProps, ComponentType, ElementType, forwardRef } from 'react'
 
 type CSSPropertiesCallback = (theme: Theme) => CSSProperties
 type StyledWithThemeRules = CSSProperties | CSSPropertiesCallback
@@ -18,10 +18,16 @@ function createStyled<Component extends ElementType>(
   } else {
     useStyles = makeStyles({ root: styles })
   }
-  return function Styled({ className, ...props }) {
+  return forwardRef(function Styled({ className, ...props }, ref) {
     const { root } = useStyles()
-    return <Component {...(props as AllProps<Component>)} className={`${root}${className ? ` ${className}` : ''}`} />
-  }
+    return (
+      <Component
+        ref={ref}
+        {...(props as AllProps<Component>)}
+        className={`${root}${className ? ` ${className}` : ''}`}
+      />
+    )
+  }) as ComponentType<StyledProps<Component>>
 }
 
 /**

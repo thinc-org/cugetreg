@@ -18,7 +18,7 @@ function createStyled<Component extends ElementType>(
   } else {
     useStyles = makeStyles({ root: styles })
   }
-  return forwardRef(function Styled({ className, ...props }, ref) {
+  return (forwardRef(function Styled({ className, ...props }: StyledProps<Component>, ref) {
     const { root } = useStyles()
     return (
       <Component
@@ -27,7 +27,7 @@ function createStyled<Component extends ElementType>(
         className={`${root}${className ? ` ${className}` : ''}`}
       />
     )
-  }) as ComponentType<StyledProps<Component>>
+  }) as unknown) as ComponentType<StyledProps<Component>>
 }
 
 /**

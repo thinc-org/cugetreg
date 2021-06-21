@@ -44,6 +44,8 @@ export const schedulePage = {
   showJorTor11: 'แสดง จท11',
   sumCreditsDesc: 'หน่วยกิตรวมในตาราง',
   sumCredits: '{{credits}} หน่วยกิต',
+  classSchedule: 'ตารางเรียน',
+  examSchedule: 'ตารางสอบ',
 }
 
 export const scheduleTableCard = {
@@ -122,4 +124,9 @@ export const cr11 = {
   credit: 'หน่วยกิต',
   creditMobile: 'หน่วย',
   totalCredit: 'หน่วยกิตรวม',
+}
+
+export const examSchedule = {
+  midterm: 'กลางภาค',
+  final: 'ปลายภาค',
 }

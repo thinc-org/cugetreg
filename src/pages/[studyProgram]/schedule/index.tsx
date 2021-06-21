@@ -2,19 +2,22 @@ import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button, Typography } from '@material-ui/core'
 import styled from '@emotion/styled'
-import { Schedule, ScheduleProps } from '@/components/Schedule'
+import { Schedule } from '@/components/Schedule'
 import { useTimetableClasses } from '@/components/Schedule/utils'
 import { ScheduleTable } from '@/components/ScheduleTable'
 import { observer } from 'mobx-react'
-import { Theme } from '@emotion'
+import { Theme } from '@emotion/react'
 import { courseCartStore } from '@/store'
+import { ExamSchedule } from '@/components/ExamSchedule'
 
 const PageContainer = styled.div`
   padding-top: 32px;
 `
 
 const Title = styled(Typography)`
-  margin-bottom: 28px;
+  ${({ theme }) => theme.breakpoints.down('sm')} {
+    margin-bottom: ${({ theme }) => theme.spacing(2)};
+  }
 `
 
 interface ScheduleContainerProps {
@@ -62,19 +65,31 @@ const InfoSpacer = styled.div`
 const TitleContainer = styled.div`
   display: flex;
   justify-content: space-between;
+  margin-bottom: ${({ theme }) => theme.spacing(3)};
+  ${({ theme }) => theme.breakpoints.down('sm')} {
+    flex-direction: column;
+  }
 `
 
-const ButtonContainer = styled.div`
-  /* display: flex; */
+const TabContainer = styled.div`
+  ${({ theme }) => theme.breakpoints.down('sm')} {
+    display: flex;
+    justify-content: center;
+  }
 `
 
 type TabButtonProps = {
-  currentTab: boolean
+  current: number
   theme?: Theme
 }
 
 const TabButton = styled(Button)`
-  ${({ currentTab, theme }: TabButtonProps) => currentTab && `background-color: ${theme.palette.primaryRange[10]}`}
+  width: 150px;
+  ${({ current, theme }: TabButtonProps) => current && `background-color: ${theme?.palette.primaryRange[10]}`};
+`
+
+const ExamContainer = styled.div<{ enabled: boolean }>`
+  display: ${({ enabled }) => (!enabled ? 'none' : 'block')};
 `
 
 function SchedulePage() {
@@ -88,28 +103,31 @@ function SchedulePage() {
     <PageContainer>
       <TitleContainer>
         <Title variant="h2">{t('title')}</Title>
-        <ButtonContainer>
+        <TabContainer>
           <TabButton
-            currentTab={isExamTable}
+            current={isExamTable ? 1 : 0}
             onClick={() => setExamTable(false)}
             variant={!isExamTable ? 'contained' : undefined}
             color={!isExamTable ? 'primary' : undefined}
           >
-            ตารางเรียน
+            {t('classSchedule')}
           </TabButton>
           <TabButton
-            currentTab={!isExamTable}
+            current={!isExamTable ? 1 : 0}
             onClick={() => setExamTable(true)}
             variant={isExamTable ? 'contained' : undefined}
             color={isExamTable ? 'primary' : undefined}
           >
-            ตารางสอบ
+            {t('examSchedule')}
           </TabButton>
-        </ButtonContainer>
+        </TabContainer>
       </TitleContainer>
       <ScheduleContainer enabled={!isExamTable}>
         <Schedule classes={classes} />
       </ScheduleContainer>
+      <ExamContainer enabled={isExamTable}>
+        <ExamSchedule classes={classes} />
+      </ExamContainer>
       <InfoBar>
         <div style={{ display: 'flex' }}>
           <Typography variant="subtitle1" style={{ marginRight: 16 }}>

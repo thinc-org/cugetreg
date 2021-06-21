@@ -1,9 +1,9 @@
 import { useMemo } from 'react'
 import { Course, Class, DayOfWeek, GenEdType } from '@thinc-org/chula-courses'
 import { hourStart } from './constants'
-import { Theme, useTheme } from '@material-ui/core'
-import { HighlightColorRange } from '@/configs/theme/palette'
+import { useTheme } from '@material-ui/core'
 import { CourseCartItem } from '@/store'
+import getPaletteRange from '@/utils/getPaletteRange'
 
 export type TimetableClass = Pick<Course, 'courseNo' | 'abbrName' | 'genEdType'> &
   Omit<Class, 'type'> & {
@@ -91,24 +91,6 @@ interface ColorScheme {
   background: string
   border: string
   text: string
-}
-
-function getPaletteRange(theme: Theme, genEdType: GenEdType): HighlightColorRange {
-  switch (genEdType) {
-    case 'HU':
-      return theme.palette.highlight.pink
-    case 'IN':
-      return theme.palette.highlight.purple
-    case 'SO':
-      return theme.palette.highlight.green
-  }
-  // gened sc
-  const secondary = theme.palette.secondaryRange
-  return {
-    300: secondary[100],
-    500: secondary[500],
-    700: secondary[900],
-  }
 }
 
 export function useColorScheme(genEdType: GenEdType, hasOverlap: boolean): ColorScheme {

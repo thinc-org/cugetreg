@@ -1,9 +1,10 @@
-import CourseList from './CourseList'
+import CourseList from './components/CourseList'
 import { Course } from '@thinc-org/chula-courses'
 import { useTranslation } from 'react-i18next'
-import { Button, Typography, makeStyles } from '@material-ui/core'
-import useShoppingPanel from '@/hooks/useShoppingPanel'
-import TableChartIcon from '@material-ui/icons/TableChart'
+import { Typography, makeStyles } from '@material-ui/core'
+import { useShoppingPanel } from '@/components/ShoppingPanel/hooks'
+import { CourseCartItem, courseCartStore } from '@/store'
+import { ActionButton } from '@/components/ShoppingPanel/components/ActionButton'
 
 export interface CoursePropsType {
   data: Course[]
@@ -24,35 +25,44 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'space-between',
   },
   course: {
-    marginTop: theme.spacing(3),
-    marginBottom: theme.spacing(2),
+    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(1),
   },
   makeScheduleButton: {
-    marginTop: theme.spacing(8.25),
+    marginTop: theme.spacing(3),
   },
   makeScheduleText: {
     marginLeft: theme.spacing(1.25),
   },
 }))
 
-const ShoppingPanel = ({ data }: CoursePropsType) => {
-  const { credit, courses, deleteCourse, makeSchedule } = useShoppingPanel(data)
-  const { t } = useTranslation('shoppingPanel')
+const ShoppingPanel = () => {
   const classes = useStyles()
+  const { shopItems } = courseCartStore
+  const { shoppingState, selectedCourses, removeAllSelectedCourses, onCheckboxChange } = useShoppingPanel()
+
+  const { t } = useTranslation('shoppingPanel')
+
+  const credits = shopItems.reduce((prev, { credit }) => prev + credit, 0)
+
+  const sortCourse = (courseA: CourseCartItem, courseB: CourseCartItem) => {
+    return courseA.courseNo.localeCompare(courseB.courseNo)
+  }
+
   return (
     <div className={classes.container}>
       <div className={classes.header}>
         <Typography variant="h4">{t('selectedCourse')}</Typography>
-        <Typography variant="h6"> {t('totalCredit', { totalCredit: credit })}</Typography>
+        <Typography variant="h6"> {t('totalCredit', { totalCredit: credits })}</Typography>
       </div>
       <div>
         <Typography className={classes.course} variant="h6">
           {t('genedCourse')}
         </Typography>
-        {courses.map((course: Course) => {
+        {shopItems.sort(sortCourse).map((course: CourseCartItem) => {
           return (
             course.genEdType !== 'NO' && (
-              <CourseList key={course.courseNo} course={course} deleteCourse={deleteCourse} />
+              <CourseList key={course.courseNo} course={course} onChange={onCheckboxChange} />
             )
           )
         })}
@@ -61,21 +71,20 @@ const ShoppingPanel = ({ data }: CoursePropsType) => {
         <Typography className={classes.course} variant="h6">
           {t('otherCourse')}
         </Typography>
-        {courses.map((course: Course) => {
+        {shopItems.sort(sortCourse).map((course: CourseCartItem) => {
           return (
             course.genEdType === 'NO' && (
-              <CourseList course={course} key={course.courseNo} deleteCourse={deleteCourse} />
+              <CourseList key={course.courseNo} course={course} onChange={onCheckboxChange} />
             )
           )
         })}
       </div>
       <div className={classes.makeScheduleButton}>
-        <Button fullWidth variant="contained" color="primary" onClick={makeSchedule}>
-          <TableChartIcon />
-          <div className={classes.makeScheduleText}>
-            <Typography variant="button">{t('makeSchedule')}</Typography>
-          </div>
-        </Button>
+        <ActionButton
+          status={shoppingState}
+          selectedCoursesNumnber={selectedCourses.length}
+          removeAllSelectedCourses={removeAllSelectedCourses}
+        />
       </div>
     </div>
   )

@@ -4,11 +4,11 @@ import { Typography, IconButton } from '@material-ui/core'
 import CachedIcon from '@material-ui/icons/Cached'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ExamClass } from './components/ExamCard'
-import { sortExamSchedule } from './utils'
+import { sortExamSchedule, findOverlap } from './utils'
+import { CourseCartItem } from '@/store/shoppingCart'
 
 interface ExamScheduleProps {
-  classes: ExamClass[]
+  classes: CourseCartItem[]
 }
 
 const ExamScheduleContainer = styled.div`
@@ -45,8 +45,13 @@ const IconButtonRefresh = styled(IconButton)`
 export function ExamSchedule({ classes }: ExamScheduleProps) {
   const [isMidternMobile, setMidtermMobile] = useState(true)
   const { t } = useTranslation('examSchedule')
-  const midtermClasses = sortExamSchedule(classes, true)
-  const finalClasses = sortExamSchedule(classes, false)
+
+  const midtermClassesSorted = sortExamSchedule(classes, true)
+  const midtermClasses = findOverlap(midtermClassesSorted, true)
+
+  const finalClassesSorted = sortExamSchedule(classes, false)
+  const finalClasses = findOverlap(finalClassesSorted, false)
+
   return (
     <>
       <ExamScheduleContainer>

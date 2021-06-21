@@ -1931,6 +1931,13 @@
     prop-types "^15.7.2"
     react-is "^17.0.0"
 
+"@maxim_mazurok/gapi.client.drive@latest":
+  version "3.0.20210612"
+  resolved "https://registry.yarnpkg.com/@maxim_mazurok/gapi.client.drive/-/gapi.client.drive-3.0.20210612.tgz#9360af0f504c750a4b560c1fed4aa869afafab66"
+  integrity sha512-CNU3/zRfA/ZaSeJ/0BfjMpi+L08d8u+r+Ja/jtj30s2n7D0+Hn8IBPSO8n0h3zpa1Isux+D/By6a6G8PvfM78Q==
+  dependencies:
+    "@types/gapi.client" "*"
+
 "@mdx-js/loader@^1.6.19":
   version "1.6.22"
   resolved "https://registry.yarnpkg.com/@mdx-js/loader/-/loader-1.6.22.tgz#d9e8fe7f8185ff13c9c8639c048b123e30d322c4"
@@ -2784,6 +2791,23 @@
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/@types/braces/-/braces-3.0.0.tgz#7da1c0d44ff1c7eb660a36ec078ea61ba7eb42cb"
   integrity sha512-TbH79tcyi9FHwbyboOKeRachRq63mSuWYXOflsNO9ZyE5ClQ/JaozNKl+aWUq87qPNsXasXxi2AbgfwIJ+8GQw==
+
+"@types/gapi.client.drive@^3.0.13":
+  version "3.0.13"
+  resolved "https://registry.yarnpkg.com/@types/gapi.client.drive/-/gapi.client.drive-3.0.13.tgz#5cdb97952890be17785dff7514b4c6b89df05313"
+  integrity sha512-JFkHqQj9RA8MpvfvwdX8VU0Sbu7FMGqBR9dAmkocekWdD/y5Z/a/A6Y37EEqKW/dT8t7F3RpgUDUPlhp3snAlw==
+  dependencies:
+    "@maxim_mazurok/gapi.client.drive" latest
+
+"@types/gapi.client@*":
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/@types/gapi.client/-/gapi.client-1.0.4.tgz#f766c9e30c17fc315d68039e3148f19bea19f643"
+  integrity sha512-MVC0ukq+bVfmQnrkaJdyFBJVuQ7W9QtqH4aGqQaEmLBj/fwsbQ7IMk8M6q2LffEoKlYBuJNpGz4nTnckthoIpg==
+
+"@types/gapi@^0.0.39":
+  version "0.0.39"
+  resolved "https://registry.yarnpkg.com/@types/gapi/-/gapi-0.0.39.tgz#bc7fa8cd0cb175b36e3609790fb2ed73a33f6881"
+  integrity sha512-R1TZeZbvvbIC60DBJMhuOEivQHzOQtzl3uMDOOENTYQTSSDB6oEMpJo8HVPOTWivdUTbyEcB5qQOVr/JCKRlCQ==
 
 "@types/glob-base@^0.3.0":
   version "0.3.0"

@@ -12,7 +12,7 @@ import StudyProgramDropdown from '../components/StudyProgramDropdown'
 import { ConfigBarItem } from '../ConfigBar/ConfigBarItem'
 import { MobileNavBar } from '../MobileNavBar'
 
-const NavBarLayout = styled.div`
+export const NavBarLayout = styled.div`
   width: 100%;
   height: 84px;
   background-color: ${({ theme }) => theme.palette.background.paper};

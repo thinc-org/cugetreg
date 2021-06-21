@@ -123,3 +123,7 @@ export const cr11 = {
   creditMobile: 'หน่วย',
   totalCredit: 'หน่วยกิตรวม',
 }
+
+export const selectedCoursesButton = {
+  main: 'วิชาที่เลือก',
+}

@@ -17,6 +17,7 @@ import { mobxConfiguration } from '@/configs/mobx'
 
 import AdapterDateFns from '@material-ui/lab/AdapterDateFns'
 import LocalizationProvider from '@material-ui/lab/LocalizationProvider'
+import { CourseSearchProvider } from '@/context/CourseSearch'
 
 mobxConfiguration()
 
@@ -39,14 +40,16 @@ function MyApp({ Component, pageProps, forceDark }: AppProps) {
       </Head>
       <ApolloProvider client={client}>
         <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <ThemeProvider theme={prefersDarkMode || forceDark ? darkTheme : lightTheme}>
-            <CssBaseline />
-            <TopBar />
-            <Container>
-              <Component {...pageProps} />
-            </Container>
-            <Footer />
-          </ThemeProvider>
+          <CourseSearchProvider>
+            <ThemeProvider theme={prefersDarkMode || forceDark ? darkTheme : lightTheme}>
+              <CssBaseline />
+              <TopBar />
+              <Container>
+                <Component {...pageProps} />
+              </Container>
+              <Footer />
+            </ThemeProvider>
+          </CourseSearchProvider>
         </LocalizationProvider>
       </ApolloProvider>
     </>

@@ -1,8 +1,9 @@
+import { DayChipKey, GenEdChipKey, OtherChipKey } from '@/components/Chips/config'
 import { CreateCheckbox } from '@/components/FilterBar/hooks'
 import { DayOfWeekEnum } from '@/constants/dayOfWeek'
 import { GenEdEnum } from '@/constants/genEd'
 
-export const createGenEdCheckboxes: CreateCheckbox[] = [
+export const createGenEdCheckboxes: CreateCheckbox<GenEdChipKey>[] = [
   {
     label: 'หมวดวิทย์',
     value: GenEdEnum.SC,
@@ -25,7 +26,7 @@ export const createGenEdCheckboxes: CreateCheckbox[] = [
   },
 ]
 
-export const createDayOfWeekCheckboxes: CreateCheckbox[] = [
+export const createDayOfWeekCheckboxes: CreateCheckbox<DayChipKey>[] = [
   {
     label: 'วันจันทร์',
     value: DayOfWeekEnum.Monday,
@@ -56,9 +57,9 @@ export const createDayOfWeekCheckboxes: CreateCheckbox[] = [
   },
 ]
 
-export const createSpecialCheckboxes: CreateCheckbox[] = [
+export const createSpecialCheckboxes: CreateCheckbox<OtherChipKey>[] = [
   {
     label: 'เวลาไม่ชนกับวิชาที่เลือก',
-    value: 'เวลาไม่ชนกับวิชาที่เลือก',
+    value: 'noConflict',
   },
 ]

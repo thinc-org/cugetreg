@@ -70,8 +70,8 @@ query Search($filter: FilterInput!, $courseGroup: CourseGroupInput!) {
 export interface SearchCourseVars {
   filter: {
     keyword?: string
-    genEdType?: GenEdType[]
-    dayOfWeeks?: DayOfWeek
+    genEdTypes?: GenEdType[]
+    dayOfWeeks?: DayOfWeek[]
     limit?: number
     offset?: number
   }

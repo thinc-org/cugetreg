@@ -3,7 +3,7 @@ import React, { createRef, useContext } from 'react'
 import { useStyles } from '@/components/SearchField/styled'
 import { IconButton, InputBase, Paper } from '@material-ui/core'
 import SearchIcon from '@material-ui/icons/Search'
-import { CourseSearchContext } from '@/context/CourseSearch'
+import { CourseSearchContext, LIMIT_CONSTANT } from '@/context/CourseSearch'
 
 export interface SeachFieldProp {}
 
@@ -16,7 +16,7 @@ export const SearchField: React.FC<SeachFieldProp> = () => {
     event.preventDefault()
     setSearchCourseVars((currentVars) => {
       const value = inputRef.current?.value || ''
-      currentVars.filter = { ...currentVars.filter, keyword: value, limit: 0, offset: 0 }
+      currentVars.filter = { ...currentVars.filter, keyword: value, limit: LIMIT_CONSTANT, offset: 0 }
       refetch(currentVars)
       return currentVars
     })

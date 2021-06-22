@@ -76,6 +76,10 @@ const TabContainer = styled.div`
   ${({ theme }) => theme.breakpoints.down('sm')} {
     display: flex;
     justify-content: center;
+
+    > button {
+      width: 50%;
+    }
   }
 `
 

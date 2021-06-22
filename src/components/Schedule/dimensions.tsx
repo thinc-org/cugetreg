@@ -22,15 +22,17 @@ interface Dimensions {
   getCell: (y: number, x: number) => CellStyles
 }
 
+export const heightRatio = (6 / 7 / colsCount) * (rowsCount - 0.3)
+
 function getDimensions(width: number): Dimensions {
   const availableWidth = width
   const cellWidth = Math.ceil(availableWidth / colsCount)
   const stubCellWidth = availableWidth - cellWidth * (colsCount - 1)
 
   const cellHeight = Math.ceil((cellWidth * 6) / 7)
-  const headerCellHeight = Math.floor(cellHeight / 2)
 
-  const height = headerCellHeight + (rowsCount - 1) * cellHeight
+  const height = availableWidth * heightRatio
+  const headerCellHeight = height - (rowsCount - 1) * cellHeight
 
   function getPosition(y: number, x: number): CellPosition {
     let top = 0

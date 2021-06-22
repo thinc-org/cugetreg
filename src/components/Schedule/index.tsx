@@ -1,10 +1,11 @@
 import { withContentRect } from 'react-measure'
 import { Header } from './components/Header'
-import { DimensionsProvider, useDimensions } from './dimensions'
+import { DimensionsProvider, heightRatio, useDimensions } from './dimensions'
 import { Gutters } from './components/Gutters'
 import { TimetableClass, useScheduleClass } from './utils'
 import { ClassCard } from './components/ClassCard'
 import { styledWithTheme } from '@/utils/styledWithTheme'
+import styled from '@emotion/styled'
 
 const ScheduleTable = styledWithTheme('div')((theme) => ({
   position: 'relative',
@@ -34,14 +35,26 @@ function Schedule({ classes: originalClasses }: ScheduleProps) {
   )
 }
 
+const ScheduleContainer = styled.div`
+  position: relative;
+  padding-top: ${heightRatio * 100}%;
+
+  > div {
+    position: absolute;
+    top: 0;
+  }
+`
+
 const AutoScaleSchedule = withContentRect('bounds')<ScheduleProps>(({ measureRef, contentRect, ...props }) => (
   <>
     <div ref={measureRef} style={{ width: '100%' }} />
-    {contentRect.bounds?.width ? (
-      <DimensionsProvider width={contentRect.bounds.width}>
-        <Schedule {...props} />
-      </DimensionsProvider>
-    ) : null}
+    <ScheduleContainer>
+      {contentRect.bounds?.width ? (
+        <DimensionsProvider width={contentRect.bounds.width}>
+          <Schedule {...props} />
+        </DimensionsProvider>
+      ) : null}
+    </ScheduleContainer>
   </>
 ))
 

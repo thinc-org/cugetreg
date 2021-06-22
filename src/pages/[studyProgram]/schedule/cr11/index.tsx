@@ -1,4 +1,3 @@
-import { mockData } from '@/components/ShoppingPanel/mockData'
 import { courseCartStore } from '@/store/shoppingCart'
 import { Button, Typography, IconButton, makeStyles } from '@material-ui/core'
 import { observer } from 'mobx-react'
@@ -7,6 +6,7 @@ import { CR11 } from '@/components/CR11'
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos'
 import { useTranslation } from 'react-i18next'
 import { useCourseGroup } from '@/utils/hooks/useCourseGroup'
+import { mockCourseData } from '@/__mock__/courses'
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -92,7 +92,7 @@ const Home = observer(() => {
   useEffect(() => {
     // get mock data
     const getMockCourse = (i: number) => {
-      return mockData[i]
+      return mockCourseData[i]
     }
     for (let i = 0; i < 4; i++) {
       const mockCourse = getMockCourse(i)

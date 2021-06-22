@@ -13,6 +13,11 @@ export interface ChipConfigProps {
   variant?: ChipProps['variant']
 }
 
+const createDefaultChipConfig = (label: string): ChipConfigProps => ({
+  label,
+  color: 'deepGrayFilled',
+})
+
 export type GenEdChipKey = GenEdType
 export type GenEdChipConfigProps = Record<GenEdType, ChipConfigProps>
 export const genEdChipConfig: GenEdChipConfigProps = {
@@ -33,12 +38,9 @@ export const dayChipConfig: DayChipConfigProps = {
   FR: { label: 'วันศุกร์', color: 'blueFilled' },
   SA: { label: 'วันเสาร์', color: 'purpleFilled' },
   SU: { label: 'วันอาทิตย์', color: 'redFilled' },
+  IA: createDefaultChipConfig('IA'),
+  AR: createDefaultChipConfig('AR'),
 }
-
-const createDefaultChipConfig = (label: string): ChipConfigProps => ({
-  label,
-  color: 'deepGrayFilled',
-})
 
 export type OtherChipKey = 'open' | 'close' | 'chula' | 'other' | 'noConflict'
 export type OtherChipConfigProps = Record<OtherChipKey, ChipConfigProps>

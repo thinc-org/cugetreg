@@ -15,10 +15,9 @@ import {
   useTheme,
 } from '@material-ui/core'
 import { KeyboardArrowDown, KeyboardArrowUp } from '@material-ui/icons'
-import { Course } from '@thinc-org/chula-courses'
+import { Course, DayOfWeek } from '@thinc-org/chula-courses'
 import { Add, Star } from '@material-ui/icons'
 import { useTranslation } from 'react-i18next'
-import { days } from '@/components/CourseCard/const'
 import { useDisclosure } from '@/hooks/useDisclosure'
 import { useCourseCard } from '@/components/CourseCard/useCourseCard'
 import GenEdChip from '@/components/Chips/catagories/GenEdChip'
@@ -26,6 +25,7 @@ import DayChip from '@/components/Chips/catagories/DayChip'
 import { Caption } from '@/components/CourseCard/components/Caption'
 import { CustomButton } from '@/components/common/CustomButton'
 import { useMediaQuery } from '@material-ui/core'
+import { dayOfWeekMapper } from '@/constants/dayOfWeek'
 
 export interface CourseCardProps {
   course: Course
@@ -116,7 +116,7 @@ export const CourseCard = (props: CourseCardProps) => {
         <Stack spacing={0.5}>
           <Caption>{t('classDay')}</Caption>
           <div>
-            {classDays.map((day) => (
+            {classDays.map((day: DayOfWeek) => (
               <DayChip type={day} key={day} sx={{ mb: 0.5, mr: 0.5 }} />
             ))}
           </div>
@@ -180,7 +180,8 @@ export const CourseCard = (props: CourseCardProps) => {
           <Stack>
             {selectedSection.classes.map((sectionClass, index) => (
               <Typography variant="body1" key={`${selectedSection.sectionNo}.${index}`}>
-                {days[sectionClass.dayOfWeek]} {sectionClass.period?.start}-{sectionClass.period?.end}
+                {sectionClass.dayOfWeek && dayOfWeekMapper[sectionClass.dayOfWeek]} {sectionClass.period?.start}-
+                {sectionClass.period?.end}
               </Typography>
             ))}
           </Stack>

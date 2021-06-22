@@ -68,6 +68,8 @@ export const schedule = {
     FR: 'FRI',
     SA: 'SAT',
     SU: 'SUN',
+    IA: 'IA',
+    AR: 'AR',
   },
 }
 

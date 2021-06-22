@@ -34,7 +34,7 @@ export function ClassCard({ scheduleClass }: ClassCardProps) {
   // position
   const startPosition = position.start
   const endPosition = position.end
-  const y = getY(dayOfWeek)
+  const y = getY(dayOfWeek || 'IA')
   const { top, left } = getPosition(y, startPosition)
   const right = getPosition(y, endPosition).left
   const width = right - left

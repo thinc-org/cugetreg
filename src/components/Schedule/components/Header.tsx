@@ -2,9 +2,10 @@ import { styled } from '@material-ui/core'
 import { DayOfWeek } from '@thinc-org/chula-courses'
 import { useTranslation } from 'react-i18next'
 import { Cell } from './Cell'
-import { days, hourEnd, hourStart } from '../constants'
+import { hourEnd, hourStart } from '../constants'
 import { useDimensions } from '../dimensions'
 import { ScheduleTypography } from './ScheduleTypography'
+import { dayOfWeekArray } from '@/constants/dayOfWeek'
 
 const HourTypography = styled(ScheduleTypography)({
   textAlign: 'left',
@@ -33,7 +34,7 @@ export function Header() {
           <ScheduleTypography variant="subtitle2">{t('dateTime')}</ScheduleTypography>
         </Cell>
         <Cell x={1} y={0} />
-        {days.map((day, index) => (
+        {dayOfWeekArray.slice(0, 7).map((day, index) => (
           <Cell key={day} x={0} y={index + 1}>
             <ScheduleTypography variant="subtitle2">{t(`days.${day}` as `days.${DayOfWeek}`)}</ScheduleTypography>
           </Cell>

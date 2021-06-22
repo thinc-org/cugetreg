@@ -1,4 +1,3 @@
-import { format } from 'date-fns'
 import { ExamClass } from '.'
 
 export function getExamDate(scheduleClass: ExamClass, isFinal: boolean) {
@@ -7,7 +6,7 @@ export function getExamDate(scheduleClass: ExamClass, isFinal: boolean) {
     return 'TBA'
   }
 
-  return format(date as Date, 'dd MMM yyyy').toUpperCase()
+  return date
 }
 
 export function getExamPeriod(scheduleClass: ExamClass, isFinal: boolean) {

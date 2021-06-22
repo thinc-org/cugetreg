@@ -19,8 +19,9 @@ import { useTranslation } from 'react-i18next'
 import GenEdChip from '@/components/Chips/catagories/GenEdChip'
 import { CustomButton } from '@/components/common/CustomButton'
 import { Caption } from '@/components/CourseCard/components/Caption'
-import { days } from '@/components/CourseCard/const'
+import { days } from '@/components/CourseCard/constants'
 import { SectionStatus } from '@/components/SectionCard/components/SectionStatus'
+import { dayOfWeekMapper } from '@/constants/dayOfWeek'
 
 interface SectionCardProps {
   section: Section
@@ -96,7 +97,8 @@ export const SectionCard = (props: SectionCardProps) => {
                   </TableCell>
                   <TableCell>
                     <Typography variant="body1" key={index}>
-                      {days[sectionClass.dayOfWeek]} {sectionClass.period.start}-{sectionClass.period.end}
+                      {sectionClass.dayOfWeek && dayOfWeekMapper[sectionClass.dayOfWeek]} {sectionClass.period?.start}-
+                      {sectionClass.period?.end}
                     </Typography>
                   </TableCell>
                   <TableCell>

@@ -1,5 +1,5 @@
-import { Capacity, Course, Section } from '@thinc-org/chula-courses'
-import { dayOfWeek } from '@/components/CourseCard/const'
+import { dayOfWeekMapper } from '@/constants/dayOfWeek'
+import { Capacity, Course, DayOfWeek, Section } from '@thinc-org/chula-courses'
 import { sum, unique } from '@/components/CourseCard/utils'
 import { useState } from 'react'
 
@@ -7,7 +7,11 @@ export function useCourseCard(course: Course) {
   const isGenEd = course.genEdType !== 'NO'
 
   const activeDays = course.sections.flatMap((section) => section.classes.map((sectionClass) => sectionClass.dayOfWeek))
-  const classDays = dayOfWeek.flatMap((day) => (activeDays.includes(day) ? [day] : []))
+
+  const classDays = (Object.keys(dayOfWeekMapper) as DayOfWeek[]).reduce((prev: DayOfWeek[], day: DayOfWeek) => {
+    prev.concat(activeDays.includes(day) ? [day] : [])
+    return prev
+  }, [])
 
   const courseCapacity: Capacity = {
     current: sum(course.sections.map((section) => section.capacity.current)),

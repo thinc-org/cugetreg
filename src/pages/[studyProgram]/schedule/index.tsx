@@ -10,6 +10,7 @@ import { Theme } from '@emotion/react'
 import { courseCartStore } from '@/store'
 import { ExamSchedule } from '@/components/ExamSchedule'
 import SaveImgButton from '@/components/SaveImgButton'
+import { useExamClasses } from '@/components/ExamSchedule/utils'
 
 const PageContainer = styled.div`
   padding-top: 32px;
@@ -102,7 +103,9 @@ function SchedulePage() {
   const shopItems = courseCartStore.shopItems
   const classes = useTimetableClasses(shopItems)
   const scheduleClasses = useScheduleClass(classes)
-  const overlappingCourses = useOverlappingCourses(scheduleClasses)
+  const { midtermClasses, finalClasses } = useExamClasses(shopItems)
+  const overlappingCourses = useOverlappingCourses(scheduleClasses, midtermClasses, finalClasses)
+
   const [isExamTable, setExamTable] = useState(false)
   const credits = shopItems.reduce((credits, item) => credits + item.credit, 0)
   const ref = createRef<HTMLDivElement>()
@@ -134,7 +137,7 @@ function SchedulePage() {
         <Schedule classes={scheduleClasses} />
       </ScheduleContainer>
       <ExamContainer enabled={isExamTable}>
-        <ExamSchedule classes={shopItems} />
+        <ExamSchedule midtermClasses={midtermClasses} finalClasses={finalClasses} />
       </ExamContainer>
       <InfoBar>
         <div style={{ display: 'flex' }}>

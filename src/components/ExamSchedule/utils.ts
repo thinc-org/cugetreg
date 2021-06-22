@@ -1,4 +1,5 @@
 import { CourseCartItem } from '@/store'
+import { useMemo } from 'react'
 import { ExamClass } from './components/ExamCard'
 
 function getExamPeriod(class_: CourseCartItem, isMidterm: boolean) {
@@ -67,4 +68,18 @@ export function findOverlap(sortedClasses: CourseCartItem[], isMidterm: boolean)
     const hasOverlap = overlapNumber.includes(index)
     return { courseNo, abbrName, genEdType, midterm, final, hasOverlap } as ExamClass
   })
+}
+
+export function useExamClasses(courses: CourseCartItem[]) {
+  const midtermClasses = useMemo(() => {
+    const midtermClassesSorted = sortExamSchedule(courses, true)
+    return findOverlap(midtermClassesSorted, true)
+  }, [courses])
+
+  const finalClasses = useMemo(() => {
+    const finalClassesSorted = sortExamSchedule(courses, false)
+    return findOverlap(finalClassesSorted, false)
+  }, [courses])
+
+  return { midtermClasses, finalClasses }
 }

@@ -140,7 +140,7 @@ function SchedulePage() {
         <InfoSpacer />
         <ButtonBar>
           <SaveImgButton imageRef={ref} />
-          {/*<Button variant="outlined">{t('addToCalendar')}</Button> */}
+          <Button variant="outlined">{t('addToCalendar')}</Button>
           <Button variant="outlined">{t('showJorTor11')}</Button>
         </ButtonBar>
       </InfoBar>

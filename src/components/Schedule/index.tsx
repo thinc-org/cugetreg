@@ -2,7 +2,7 @@ import { withContentRect } from 'react-measure'
 import { Header } from './components/Header'
 import { DimensionsProvider, heightRatio, useDimensions } from './dimensions'
 import { Gutters } from './components/Gutters'
-import { TimetableClass, useScheduleClass } from './utils'
+import { ScheduleClass } from './utils'
 import { ClassCard } from './components/ClassCard'
 import { styledWithTheme } from '@/utils/styledWithTheme'
 import styled from '@emotion/styled'
@@ -14,13 +14,12 @@ const ScheduleTable = styledWithTheme('div')((theme) => ({
 }))
 
 export interface ScheduleProps {
-  classes: TimetableClass[]
+  classes: ScheduleClass[]
 }
 
-function Schedule({ classes: originalClasses }: ScheduleProps) {
+function Schedule({ classes }: ScheduleProps) {
   const { width, height, cellWidth } = useDimensions()
   const fontSize = (16 * cellWidth) / 77
-  const classes = useScheduleClass(originalClasses)
   return (
     <ScheduleTable style={{ width, height, fontSize }}>
       <Header />

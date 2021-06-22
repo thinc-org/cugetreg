@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { Button, Typography } from '@material-ui/core'
 import styled from '@emotion/styled'
 import { Schedule } from '@/components/Schedule'
-import { useTimetableClasses } from '@/components/Schedule/utils'
+import { useScheduleClass, useTimetableClasses } from '@/components/Schedule/utils'
 import { ScheduleTable } from '@/components/ScheduleTable'
 import { observer } from 'mobx-react'
 import { Theme } from '@emotion/react'
@@ -101,6 +101,7 @@ function SchedulePage() {
   const { t } = useTranslation('schedulePage')
   const shopItems = courseCartStore.shopItems
   const classes = useTimetableClasses(shopItems)
+  const scheduleClasses = useScheduleClass(classes)
   const [isExamTable, setExamTable] = useState(false)
   const credits = shopItems.reduce((credits, item) => credits + item.credit, 0)
   const ref = createRef<HTMLDivElement>()
@@ -129,7 +130,7 @@ function SchedulePage() {
         </TabContainer>
       </TitleContainer>
       <ScheduleContainer enabled={!isExamTable} ref={ref}>
-        <Schedule classes={classes} />
+        <Schedule classes={scheduleClasses} />
       </ScheduleContainer>
       <ExamContainer enabled={isExamTable}>
         <ExamSchedule classes={shopItems} />

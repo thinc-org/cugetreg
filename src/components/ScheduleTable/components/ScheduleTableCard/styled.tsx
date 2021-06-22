@@ -34,6 +34,10 @@ export const CardBorder = styled.div`
   pointer-events: none;
 `
 
+export const OverlappingCardBorder = styled(CardBorder)`
+  border: 3px solid ${({ theme }) => theme.palette.highlight.red[500]};
+`
+
 export const VisibilityToggle = styled(Button)<{ checked: boolean }>`
   color: ${primaryRange(100)};
   border-right: none;

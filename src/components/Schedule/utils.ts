@@ -89,6 +89,22 @@ export function useScheduleClass(classes: TimetableClass[]) {
   }, [classes])
 }
 
+export interface CourseOverlapMap {
+  [courseNo: string]: boolean
+}
+
+export function useOverlappingCourses(classes: ScheduleClass[]) {
+  return useMemo(() => {
+    const courses: CourseOverlapMap = {}
+    classes.forEach((it) => {
+      if (it.hasOverlap === true) {
+        courses[it.courseNo] = true
+      }
+    })
+    return courses
+  }, [classes])
+}
+
 interface ColorScheme {
   background: string
   border: string

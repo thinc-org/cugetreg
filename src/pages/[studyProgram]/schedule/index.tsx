@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { Button, Typography } from '@material-ui/core'
 import styled from '@emotion/styled'
 import { Schedule } from '@/components/Schedule'
-import { useScheduleClass, useTimetableClasses } from '@/components/Schedule/utils'
+import { useOverlappingCourses, useScheduleClass, useTimetableClasses } from '@/components/Schedule/utils'
 import { ScheduleTable } from '@/components/ScheduleTable'
 import { observer } from 'mobx-react'
 import { Theme } from '@emotion/react'
@@ -102,6 +102,7 @@ function SchedulePage() {
   const shopItems = courseCartStore.shopItems
   const classes = useTimetableClasses(shopItems)
   const scheduleClasses = useScheduleClass(classes)
+  const overlappingCourses = useOverlappingCourses(scheduleClasses)
   const [isExamTable, setExamTable] = useState(false)
   const credits = shopItems.reduce((credits, item) => credits + item.credit, 0)
   const ref = createRef<HTMLDivElement>()
@@ -149,7 +150,7 @@ function SchedulePage() {
           <Button variant="outlined">{t('showJorTor11')}</Button>
         </ButtonBar>
       </InfoBar>
-      <ScheduleTable courseCart={courseCartStore} />
+      <ScheduleTable courseCart={courseCartStore} overlappingCourses={overlappingCourses} />
     </PageContainer>
   )
 }

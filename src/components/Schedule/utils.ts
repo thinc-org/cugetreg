@@ -4,6 +4,7 @@ import { hourStart } from './constants'
 import { useTheme } from '@material-ui/core'
 import { CourseCartItem } from '@/store'
 import getPaletteRange from '@/utils/getPaletteRange'
+import { ExamClass } from '../ExamSchedule/components/ExamCard'
 
 export type TimetableClass = Pick<Course, 'courseNo' | 'abbrName' | 'genEdType'> &
   Omit<Class, 'type'> & {
@@ -93,7 +94,11 @@ export interface CourseOverlapMap {
   [courseNo: string]: boolean
 }
 
-export function useOverlappingCourses(classes: ScheduleClass[]) {
+export function useOverlappingCourses(
+  classes: ScheduleClass[],
+  midtermClasses: ExamClass[],
+  finalClasses: ExamClass[]
+) {
   return useMemo(() => {
     const courses: CourseOverlapMap = {}
     classes.forEach((it) => {
@@ -101,8 +106,18 @@ export function useOverlappingCourses(classes: ScheduleClass[]) {
         courses[it.courseNo] = true
       }
     })
+    midtermClasses.forEach((it) => {
+      if (it.hasOverlap === true) {
+        courses[it.courseNo] = true
+      }
+    })
+    finalClasses.forEach((it) => {
+      if (it.hasOverlap === true) {
+        courses[it.courseNo] = true
+      }
+    })
     return courses
-  }, [classes])
+  }, [classes, midtermClasses, finalClasses])
 }
 
 interface ColorScheme {

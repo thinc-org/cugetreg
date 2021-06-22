@@ -7,13 +7,13 @@ const StickyContainer = styled.div`
   position: absolute;
   top: 0;
   width: 100%;
-  z-index: 100;
 `
 
 const TopBarLayout = styled.div`
   position: sticky;
   top: 0;
   box-shadow: ${({ theme }) => theme.shadows[4]};
+  z-index: 100;
 `
 
 const StickySpace = styled.div`

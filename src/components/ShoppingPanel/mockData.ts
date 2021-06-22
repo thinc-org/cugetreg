@@ -19,7 +19,7 @@ export const mockData: Course[] = [
     genEdType: 'SO', // Non GenEd is undefied
 
     // Exam
-    midterm: undefined,
+    midterm: { date: new Date(Date.now() - 3600 * 1000 * 24), period: { start: '10:20', end: '13:00' } },
     final: undefined,
 
     // Section
@@ -88,7 +88,7 @@ export const mockData: Course[] = [
     genEdType: 'HU', // Non GenEd is undefied
 
     // Exam
-    midterm: undefined,
+    midterm: { date: new Date(), period: { start: '11:20', end: '12:30' } },
     final: undefined,
 
     // Section
@@ -135,7 +135,7 @@ export const mockData: Course[] = [
     genEdType: 'SO', // Non GenEd is undefied
 
     // Exam
-    midterm: undefined,
+    midterm: { date: new Date(), period: { start: '10:30', end: '13:00' } },
     final: undefined,
 
     // Section

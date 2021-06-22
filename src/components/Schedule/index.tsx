@@ -12,7 +12,7 @@ const ScheduleTable = styledWithTheme('div')((theme) => ({
   fontSize: 16,
 }))
 
-interface ScheduleProps {
+export interface ScheduleProps {
   classes: TimetableClass[]
 }
 

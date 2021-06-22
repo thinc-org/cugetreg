@@ -14,7 +14,7 @@ interface ExamScheduleProps {
 const ExamScheduleContainer = styled.div`
   display: flex;
   ${({ theme }) => theme.breakpoints.up('sm')} {
-    > div:first-child {
+    > div:first-of-type {
       margin-right: ${({ theme }) => theme.spacing(4)};
     }
   }

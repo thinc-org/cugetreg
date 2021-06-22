@@ -1,28 +1,27 @@
 import { DayChipKey, GenEdChipKey, OtherChipKey } from '@/components/Chips/config'
 import { CreateCheckbox } from '@/components/FilterBar/hooks'
-import { DayOfWeekEnum } from '@/constants/dayOfWeek'
-import { GenEdEnum } from '@/constants/genEd'
+import { DayOfWeekEnum, GenEdTypeEnum } from '@thinc-org/chula-courses'
 
 export const createGenEdCheckboxes: CreateCheckbox<GenEdChipKey>[] = [
   {
     label: 'หมวดวิทย์',
-    value: GenEdEnum.SC,
+    value: GenEdTypeEnum.SC,
   },
   {
     label: 'หมวดสังคม',
-    value: GenEdEnum.SO,
+    value: GenEdTypeEnum.SO,
   },
   {
     label: 'หมวดมนุษย์',
-    value: GenEdEnum.HU,
+    value: GenEdTypeEnum.HU,
   },
   {
     label: 'หมวดสหฯ',
-    value: GenEdEnum.IN,
+    value: GenEdTypeEnum.IN,
   },
   {
     label: 'ไม่ใช่ GenEd',
-    value: GenEdEnum.NO,
+    value: GenEdTypeEnum.NO,
   },
 ]
 

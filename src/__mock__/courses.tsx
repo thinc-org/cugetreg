@@ -1,6 +1,6 @@
 import { Course } from '@thinc-org/chula-courses'
 
-export const mockData: Course[] = [
+export const mockCourseData: Course[] = [
   {
     studyProgram: 'S',
     semester: '1',
@@ -16,10 +16,10 @@ export const mockData: Course[] = [
     credit: 2,
     creditHours: '4',
     courseCondition: 'open',
-    genEdType: 'SO', // Non GenEd is undefied
+    genEdType: 'SO',
 
     // Exam
-    midterm: { date: new Date(Date.now() - 3600 * 1000 * 24), period: { start: '10:20', end: '13:00' } },
+    midterm: { date: '22/10/2020', period: { start: '10:20', end: '13:00' } },
     final: undefined,
 
     // Section
@@ -88,7 +88,7 @@ export const mockData: Course[] = [
     genEdType: 'HU', // Non GenEd is undefied
 
     // Exam
-    midterm: { date: new Date(), period: { start: '11:20', end: '12:30' } },
+    midterm: { date: '22/10/2020', period: { start: '11:20', end: '12:30' } },
     final: undefined,
 
     // Section
@@ -135,7 +135,7 @@ export const mockData: Course[] = [
     genEdType: 'SO', // Non GenEd is undefied
 
     // Exam
-    midterm: { date: new Date(), period: { start: '10:30', end: '13:00' } },
+    midterm: { date: '22/09/2020', period: { start: '10:30', end: '13:00' } },
     final: undefined,
 
     // Section

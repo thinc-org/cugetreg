@@ -1,4 +1,4 @@
-import { mockData } from '@/components/ShoppingPanel/mockData'
+import { mockCourseData } from '@/__mock__/courses'
 import { Course } from '@thinc-org/chula-courses'
 import { action, computed, makeObservable, observable } from 'mobx'
 import { computedFn } from 'mobx-utils'
@@ -23,10 +23,10 @@ export class CourseCart implements CourseCartProps {
 
   constructor() {
     makeObservable(this)
-    this.addMock(mockData[0])
-    this.addMock(mockData[1])
-    this.addMock(mockData[2])
-    this.addMock(mockData[3])
+    this.addMock(mockCourseData[0])
+    this.addMock(mockCourseData[1])
+    this.addMock(mockCourseData[2])
+    this.addMock(mockCourseData[3])
   }
 
   private addMock(course: Course) {

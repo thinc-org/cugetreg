@@ -1,9 +1,3 @@
-// TODO: use `StudyProgram` from chula-course
+import { StudyProgramEnum } from '@thinc-org/chula-courses'
 
-export enum StudyProgram {
-  Semester = 'S',
-  Trimester = 'T',
-  International = 'I',
-}
-
-export const DEFAULT_STUDY_PROGRAM = StudyProgram.Semester
+export const DEFAULT_STUDY_PROGRAM = StudyProgramEnum.Semester

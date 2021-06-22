@@ -2729,13 +2729,12 @@
     "@babel/runtime" "^7.12.5"
     "@testing-library/dom" "^7.28.1"
 
-"@thinc-org/chula-courses@^1.1.3":
-  version "1.1.3"
-  resolved "https://registry.yarnpkg.com/@thinc-org/chula-courses/-/chula-courses-1.1.3.tgz#1b31b03a00c4b75af229627401a6a59ff62a7005"
-  integrity sha512-Ac+naccchZvaIo/rmUtH2DQ0t4NZ6o4iVrZxdw8TKX053Ru5AiLsgnhwiPAF9idCHHg2gjCbNmK1AAlRB/dgDg==
+"@thinc-org/chula-courses@^1.1.8":
+  version "1.1.8"
+  resolved "https://registry.yarnpkg.com/@thinc-org/chula-courses/-/chula-courses-1.1.8.tgz#7dc9be5567d01404382faf67a7efffb289d80893"
+  integrity sha512-QBcHJaTKBtF1aYwIeiDB6zs1kh1pSCE4TMoRK6jVTkKnWeAXWUTJy+3Sp4IEMB+gLf5/8vbBJGP+Gq7gY5q4gQ==
   dependencies:
     axios "^0.21.1"
-    fs "^0.0.1-security"
 
 "@types/anymatch@*":
   version "1.3.1"
@@ -7023,11 +7022,6 @@ fs.realpath@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/fs.realpath/-/fs.realpath-1.0.0.tgz#1504ad2523158caa40db4a2787cb01411994ea4f"
   integrity sha1-FQStJSMVjKpA20onh8sBQRmU6k8=
-
-fs@^0.0.1-security:
-  version "0.0.1-security"
-  resolved "https://registry.yarnpkg.com/fs/-/fs-0.0.1-security.tgz#8a7bd37186b6dddf3813f23858b57ecaaf5e41d4"
-  integrity sha1-invTcYa23d84E/I4WLV+yq9eQdQ=
 
 fsevents@^1.2.7:
   version "1.2.13"

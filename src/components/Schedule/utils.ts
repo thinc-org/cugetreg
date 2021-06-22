@@ -56,12 +56,14 @@ export function useScheduleClass(classes: TimetableClass[]) {
       FR: [],
       SA: [],
       SU: [],
+      IA: [],
+      AR: [],
     }
     classes.forEach((scheduleClass) => {
       const { period, ...rest } = scheduleClass
-      const start = getPosition(period.start)
-      const end = getPosition(period.end)
-      classesByDay[scheduleClass.dayOfWeek].push({
+      const start = getPosition(period?.start || '')
+      const end = getPosition(period?.end || '')
+      classesByDay[scheduleClass.dayOfWeek || 'AR'].push({
         ...rest,
         position: { start, end },
       })

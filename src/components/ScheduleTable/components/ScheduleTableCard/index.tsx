@@ -1,6 +1,7 @@
 import { CustomSelect } from '@/components/common/CustomSelect'
 import { Caption } from '@/components/CourseCard/components/Caption'
-import { days } from '@/components/CourseCard/const'
+import { days } from '@/components/CourseCard/constants'
+import { dayOfWeekMapper } from '@/constants/dayOfWeek'
 import { CourseCartItem, courseCartStore } from '@/store'
 import { Grid, Hidden, IconButton, Stack, Typography, useTheme } from '@material-ui/core'
 import { observer } from 'mobx-react'
@@ -127,7 +128,8 @@ function CardDetail({ item }: CardComponentProps) {
           <Stack>
             {section.classes.map((sectionClass, index) => (
               <Typography variant="body1" key={`${section.sectionNo}.${index}`}>
-                {days[sectionClass.dayOfWeek]} {sectionClass.period.start}-{sectionClass.period.end}
+                {sectionClass.dayOfWeek && dayOfWeekMapper[sectionClass.dayOfWeek]} {sectionClass.period?.start}-
+                {sectionClass.period?.end}
               </Typography>
             ))}
           </Stack>

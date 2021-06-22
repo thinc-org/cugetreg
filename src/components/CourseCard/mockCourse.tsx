@@ -15,14 +15,14 @@ export const mockNoGenEdCourse: Course = {
   genEdType: 'NO',
   courseCondition: 'PRER 2110200,2110211',
   midterm: {
-    date: new Date('2020-09-21T06:06:27.182Z'),
+    date: '2020-09-21 06:06',
     period: {
       start: '8:00',
       end: '11:00',
     },
   },
   final: {
-    date: new Date('2021-07-06T03:27:38.501Z'),
+    date: '2021-07-06 3:27',
     period: {
       start: '13:00',
       end: '16:00',
@@ -124,14 +124,14 @@ export const mockGenEdCourse: Course = {
   genEdType: 'SC',
   courseCondition: 'PRER 2110200,2110211',
   midterm: {
-    date: new Date('2020-09-21T06:06:27.182Z'),
+    date: '2020-09-21 06:06',
     period: {
       start: '8:00',
       end: '11:00',
     },
   },
   final: {
-    date: new Date('2021-07-06T03:27:38.501Z'),
+    date: '2021-07-06 03:27',
     period: {
       start: '13:00',
       end: '16:00',

@@ -1,3 +1,5 @@
+import * as fs from 'fs'
+
 import { useContext } from 'react'
 import { Box, Stack as MuiStack, Typography } from '@material-ui/core'
 import { CourseList } from '@/components/CourseList'
@@ -21,6 +23,8 @@ const StickyStack = styled(Stack)`
     background: ${({ theme }) => theme.palette.background.default};
   }
 `
+
+console.log(fs)
 
 function CourseSearchPage() {
   const { openFilterBar } = useContext(CourseSearchContext)

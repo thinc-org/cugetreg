@@ -1,5 +1,8 @@
 import env from '@/utils/env/macro'
 import { ApolloClient, gql, makeVar, useQuery, useReactiveVar } from '@apollo/client'
+import { client } from './apollo'
+import { meStore } from '@/store/meStore'
+import { runInAction } from 'mobx'
 
 /**
  * Auth flow
@@ -23,6 +26,7 @@ import { ApolloClient, gql, makeVar, useQuery, useReactiveVar } from '@apollo/cl
 export function getRedirectUrl() {
   const clientId = env.googleauth.clientid
   const callbackUrl = `${location.origin}/googleauthcallback`
+  const currentPath = location.href
 
   if (typeof clientId !== 'string')
     throw new Error(
@@ -38,11 +42,16 @@ export function getRedirectUrl() {
   })
 
   // use redirect redirector
+  /*
   const codeRedirector = env.googleauth.coderedirector
   if (typeof codeRedirector !== 'string')
     throw new Error("Auth CodeRedirector environment URL is not a string (because it's not set?). RenderPR requires it")
   queries.set('redirect_uri', codeRedirector)
   queries.set('state', `returnURI=${callbackUrl}`)
+  */
+
+  queries.set('redirect_uri', callbackUrl)
+  queries.set('state', encodeURI(currentPath))
 
   return `https://accounts.google.com/o/oauth2/v2/auth?${queries.toString()}`
 }
@@ -99,6 +108,29 @@ export async function authenticateByCode(client: ApolloClient<object>, code: str
 
   localStorage.setItem(AUTHDATA_LOCALSTORAGE_FIELD, JSON.stringify(data.verify))
   authData(data.verify)
+
+  const me = await getMe()
+  runInAction(() => {
+    meStore.me = me
+  })
+}
+
+export function refreshAuthToken() {
+  return getMe()
+    .then((me) =>
+      runInAction(() => {
+        console.log('[AUTH] Refreshed new token')
+        meStore.me = me
+      })
+    )
+    .catch((e) => {
+      console.error('Failed to refreshAuthToken', e)
+    })
+}
+
+const AUTH_TOKEN_REFRESH_INTERVAL_MILLIS = 1000 * 60 * 10
+if (typeof window !== 'undefined') {
+  setInterval(refreshAuthToken, AUTH_TOKEN_REFRESH_INTERVAL_MILLIS)
 }
 
 /**
@@ -125,7 +157,7 @@ export const authData = makeVar<AuthData | null>(getAuthDataFromLocalStorage())
 
 // Get me
 
-const GET_ME = gql`
+export const GET_ME = gql`
   query GetMe {
     me {
       _id
@@ -170,4 +202,18 @@ export function useMe(): { data?: GetMeResponse; error?: Error; loading: boolean
   }
 
   return { data: data?.me, error, loading }
+}
+
+export async function getMe(): Promise<GetMeResponse> {
+  const aD = authData()
+  if (!aD) throw new Error('Not logged in')
+  const me = await client.query<{ me: GetMeResponse }>({
+    query: GET_ME,
+    context: {
+      headers: {
+        Authorization: `Bearer ${aD.accessToken}`,
+      },
+    },
+  })
+  return me.data.me
 }

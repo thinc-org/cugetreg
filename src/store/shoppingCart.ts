@@ -19,6 +19,7 @@ export interface CourseCartProps {
 export class CourseCart implements CourseCartProps {
   @observable shopItems: CourseCartItem[] = []
   @observable state: CourseCartState = 'default'
+  @observable isInitialized = false
 
   constructor() {
     makeObservable(this)

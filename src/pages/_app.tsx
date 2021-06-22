@@ -17,8 +17,13 @@ import { mobxConfiguration } from '@/configs/mobx'
 
 import AdapterDateFns from '@material-ui/lab/AdapterDateFns'
 import LocalizationProvider from '@material-ui/lab/LocalizationProvider'
-import { CourseSearchProvider } from '@/context/CourseSearch'
 
+import { useEffect } from 'react'
+import { loadGAPI, startGDriveSync } from '@/utils/network/gDriveSync'
+import { runInAction } from 'mobx'
+import { gDriveStore, GDriveSyncState } from '@/store/gDriveState'
+
+import { CourseSearchProvider } from '@/context/CourseSearch'
 mobxConfiguration()
 
 function MyApp({ Component, pageProps, forceDark }: AppProps) {
@@ -31,6 +36,21 @@ function MyApp({ Component, pageProps, forceDark }: AppProps) {
     })
 
   useApp()
+
+  useEffect(() => {
+    const fn = async () => {
+      try {
+        await loadGAPI()
+        await startGDriveSync()
+      } catch (e) {
+        console.error('[GDRIVE] Error while starting drive sync', e)
+        runInAction(() => {
+          gDriveStore.gDriveState = GDriveSyncState.FAIL
+        })
+      }
+    }
+    fn()
+  }, [])
 
   return (
     <>

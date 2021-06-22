@@ -18,6 +18,7 @@ import {
   GridSpacer,
   HeaderLayout,
   LeftPane,
+  OverlappingCardBorder,
   RightPane,
   Spacer,
   VisibilityToggle,
@@ -26,13 +27,14 @@ import {
 export interface ScheduleTableCardProps {
   item: CourseCartItem
   index: number
+  hasOverlap: boolean
 }
 
 export interface CardComponentProps {
   item: CourseCartItem
 }
 
-export const ScheduleTableCard = observer(({ item, index }: ScheduleTableCardProps) => {
+export const ScheduleTableCard = observer(({ item, index, hasOverlap }: ScheduleTableCardProps) => {
   const { courseNo, isHidden } = item
   const toggleVisibility = useCallback(() => {
     courseCartStore.toggleHiddenItem(courseNo)
@@ -55,7 +57,7 @@ export const ScheduleTableCard = observer(({ item, index }: ScheduleTableCardPro
               <CardDetail item={item} />
             </RightPane>
           </CardContent>
-          <CardBorder />
+          {hasOverlap ? <OverlappingCardBorder /> : <CardBorder />}
         </CardLayout>
       )}
     </Draggable>

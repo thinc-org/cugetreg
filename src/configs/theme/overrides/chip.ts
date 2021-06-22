@@ -48,7 +48,7 @@ export const makeChipFilledHighlight = (highlight: Highlight) =>
     ])
   ) as ChipFilledHighlight
 
-export type ChipOutlinedHighlight = Record<ChipFilledHighlightColor, SimplePaletteColorOptions>
+export type ChipOutlinedHighlight = Record<ChipOutlinedHighlightColor, SimplePaletteColorOptions>
 
 export type ChipOutlinedHighlightColor =
   | 'pinkOutlined'

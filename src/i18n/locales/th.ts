@@ -32,6 +32,7 @@ export const shoppingPanel = {
   selectedCourse: 'วิชาที่เลือก',
   totalCredit: 'รวม {{totalCredit}} หน่วยกิต',
   credit: '{{credit}} หน่วยกิต',
+  creditAbbr: '{{credit}} นก.',
   genedCourse: 'วิชา GenEd',
   otherCourse: 'วิชาอื่น ๆ',
   makeSchedule: {

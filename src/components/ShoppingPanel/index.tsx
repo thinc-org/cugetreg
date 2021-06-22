@@ -13,6 +13,9 @@ export interface CoursePropsType {
 const useStyles = makeStyles((theme) => ({
   container: {
     padding: theme.spacing(6.25, 5.625, 3.75, 5.625),
+    [theme.breakpoints.down('sm')]: {
+      padding: theme.spacing(2),
+    },
     backgroundColor: theme.palette.background.paper,
     width: '100%',
     maxWidth: theme.breakpoints.values.sm,

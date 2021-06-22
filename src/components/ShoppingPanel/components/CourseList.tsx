@@ -1,8 +1,9 @@
-import { Checkbox, Grid, makeStyles, Typography } from '@material-ui/core'
+import { Checkbox, Grid, Hidden, makeStyles, Typography, useMediaQuery, useTheme } from '@material-ui/core'
 import { Course } from '@thinc-org/chula-courses'
 import { useTranslation } from 'react-i18next'
 import GenEdChip from '@/components/Chips/catagories/GenEdChip'
 import { useState } from 'react'
+import { CourseName } from '@/components/ShoppingPanel/components/CourseName'
 
 export interface CourseListPropsType {
   course: Course
@@ -44,24 +45,31 @@ const CourseList = ({ course, onChange }: CourseListPropsType) => {
 
   const { t } = useTranslation('shoppingPanel')
 
+  const theme = useTheme()
+  const matches = useMediaQuery(theme.breakpoints.up('sm'))
+
   return (
     <div className={classes.wrapper}>
       <Grid className={classes.rootGrid} container>
         <Grid item xs={2} sm={1}>
-          <Checkbox checked={checked} onChange={handleChange} />
+          <Checkbox size="small" checked={checked} onChange={handleChange} />
         </Grid>
-        <Grid item xs={5} sm={3}>
+        <Grid item xs={3} sm={3}>
           <Typography variant="body1">{courseNo}</Typography>
         </Grid>
-        <Grid item xs={6} sm={3}>
-          <Typography variant="body1">{abbrName}</Typography>
+        <Grid item xs={4} sm={3}>
+          <CourseName type={genEdType} courseName={abbrName} />
         </Grid>
-        <Grid item xs={6} sm={2}>
-          <Typography variant="body1">{t('credit', { credit: credit })}</Typography>
+        <Grid item xs={2} sm={2}>
+          <Typography variant="body1">
+            {matches ? t('credit', { credit: credit }) : t('creditAbbr', { credit: credit })}
+          </Typography>
         </Grid>
-        <Grid item={true} container xs={6} sm={2}>
-          {genEdType !== 'NO' && <GenEdChip type={genEdType} />}
-        </Grid>
+        <Hidden smDown>
+          <Grid item={true} container xs={6} sm={2}>
+            {genEdType !== 'NO' && <GenEdChip type={genEdType} />}
+          </Grid>
+        </Hidden>
       </Grid>
     </div>
   )

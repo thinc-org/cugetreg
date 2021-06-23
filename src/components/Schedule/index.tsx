@@ -1,6 +1,6 @@
 import { withContentRect } from 'react-measure'
 import { Header } from './components/Header'
-import { DimensionsProvider, heightRatio, useDimensions } from './dimensions'
+import { DimensionsProvider, getHeightRatio, useDimensions } from './dimensions'
 import { Gutters } from './components/Gutters'
 import { ScheduleClass } from './utils'
 import { ClassCard } from './components/ClassCard'
@@ -36,7 +36,6 @@ function Schedule({ classes }: ScheduleProps) {
 
 const ScheduleContainer = styled.div`
   position: relative;
-  padding-top: ${heightRatio * 100}%;
 
   > div {
     position: absolute;
@@ -44,17 +43,23 @@ const ScheduleContainer = styled.div`
   }
 `
 
-const AutoScaleSchedule = withContentRect('bounds')<ScheduleProps>(({ measureRef, contentRect, ...props }) => (
-  <>
-    <div ref={measureRef} style={{ width: '100%' }} />
-    <ScheduleContainer>
-      {contentRect.bounds?.width ? (
-        <DimensionsProvider width={contentRect.bounds.width}>
-          <Schedule {...props} />
-        </DimensionsProvider>
-      ) : null}
-    </ScheduleContainer>
-  </>
-))
+export interface AutoScaleScheduleProps extends ScheduleProps {
+  daysCount: number
+}
+
+const AutoScaleSchedule = withContentRect('bounds')<AutoScaleScheduleProps>(
+  ({ measureRef, contentRect, daysCount, ...props }) => (
+    <>
+      <div ref={measureRef} style={{ width: '100%' }} />
+      <ScheduleContainer style={{ paddingTop: `${getHeightRatio(daysCount) * 100}%` }}>
+        {contentRect.bounds?.width ? (
+          <DimensionsProvider width={contentRect.bounds.width} daysCount={daysCount}>
+            <Schedule {...props} />
+          </DimensionsProvider>
+        ) : null}
+      </ScheduleContainer>
+    </>
+  )
+)
 
 export { AutoScaleSchedule as Schedule }

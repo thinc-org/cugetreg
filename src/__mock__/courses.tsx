@@ -198,7 +198,7 @@ export const mockCourseData: Course[] = [
         classes: [
           {
             type: 'LECT',
-            dayOfWeek: 'TH',
+            dayOfWeek: 'FR',
             period: {
               start: '12',
               end: '14',

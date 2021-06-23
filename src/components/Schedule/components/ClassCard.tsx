@@ -73,6 +73,10 @@ function getY(day: DayOfWeek) {
       return 4
     case 'FR':
       return 5
+    case 'SA':
+      return 6
+    case 'SU':
+      return 7
     default:
       throw new Error('Day must be Monday - Friday')
   }

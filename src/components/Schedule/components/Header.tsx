@@ -21,7 +21,7 @@ function HourCell({ hour }: { hour: number }) {
 
 export function Header() {
   const { t } = useTranslation('schedule')
-  const { stubCellWidth } = useDimensions()
+  const { stubCellWidth, daysCount } = useDimensions()
   const fontSize = (16 * stubCellWidth) / 77
   const hourCells = []
   for (let hour = hourStart + 1; hour <= hourEnd; hour++) {
@@ -34,7 +34,7 @@ export function Header() {
           <ScheduleTypography variant="subtitle2">{t('dateTime')}</ScheduleTypography>
         </Cell>
         <Cell x={1} y={0} />
-        {dayOfWeekArray.slice(0, 5).map((day, index) => (
+        {dayOfWeekArray.slice(0, daysCount).map((day, index) => (
           <Cell key={day} x={0} y={index + 1}>
             <ScheduleTypography variant="subtitle2">{t(`days.${day}` as `days.${DayOfWeek}`)}</ScheduleTypography>
           </Cell>

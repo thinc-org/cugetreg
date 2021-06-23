@@ -10,8 +10,6 @@ export const TagList: React.FC<TagListProps> = () => {
   const { filter } = searchCourseQueryParams
   const { genEdTypes, dayOfWeeks } = filter
 
-  console.log('TAGLIST', filter)
-
   return (
     <Stack spacing={2} direction="row">
       {genEdTypes?.map((tag) => (

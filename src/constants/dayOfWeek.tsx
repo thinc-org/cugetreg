@@ -14,4 +14,4 @@ export const dayOfWeekMapper: dayOfWeekMapperType = {
   AR: 'AR',
 }
 
-export const dayOfWeekArray: DayOfWeek[] = ['MO', 'TU', 'WE', 'WE', 'TH', 'FR', 'SA', 'SU', 'IA', 'AR']
+export const dayOfWeekArray: DayOfWeek[] = ['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU', 'IA', 'AR']

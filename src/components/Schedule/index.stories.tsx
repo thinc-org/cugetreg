@@ -11,5 +11,5 @@ export default {
 
 export const ScheduleStory = () => {
   const scheduleClasses = useScheduleClass(mockClasses)
-  return <Schedule classes={scheduleClasses} />
+  return <Schedule classes={scheduleClasses} daysCount={5} />
 }

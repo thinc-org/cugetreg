@@ -1,11 +1,9 @@
 import React from 'react'
 import { Meta, Story } from '@storybook/react/types-6-0'
 
-import { FilterIconButton } from '.'
-import { CourseSearchContext } from '@/context/CourseSearch'
-import { CourseSearchProps, DEFAULT_COURSE_SEARCH_CONTEXT_VALUE } from '@/context/CourseSearch/constants'
+import { FilterIconButton, FilterIconButtonProps } from '.'
 
-type StoryProps = CourseSearchProps
+type StoryProps = FilterIconButtonProps
 
 export default {
   title: 'Component/FilterIconButton',
@@ -13,11 +11,7 @@ export default {
 } as Meta<StoryProps>
 
 export const Default: Story<StoryProps> = () => {
-  return (
-    <CourseSearchContext.Provider value={DEFAULT_COURSE_SEARCH_CONTEXT_VALUE}>
-      <FilterIconButton />
-    </CourseSearchContext.Provider>
-  )
+  return <FilterIconButton onClick={() => 0} />
 }
 
 Default.args = {}

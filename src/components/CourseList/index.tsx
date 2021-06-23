@@ -7,7 +7,10 @@ import { CourseSearchContext } from '@/context/CourseSearch'
 export interface CourseListProps {}
 
 export const CourseList: React.FC<CourseListProps> = () => {
-  const { courses, loading, error } = useContext(CourseSearchContext)
+  const { courseSearchQuery } = useContext(CourseSearchContext)
+  if (!courseSearchQuery) return null
+
+  const { data, loading, error } = courseSearchQuery
 
   if (loading) {
     return <>loading</>
@@ -15,13 +18,13 @@ export const CourseList: React.FC<CourseListProps> = () => {
   if (error) {
     return <>error</>
   }
-  if (!courses) {
+  if (!data) {
     return <>NOT FOUND</>
   }
 
   return (
     <Stack spacing={2} sx={{ width: '100%' }}>
-      {courses.search.map((result) => (
+      {data.search.map((result) => (
         <CourseCard key={result.courseNo} course={result} />
       ))}
     </Stack>

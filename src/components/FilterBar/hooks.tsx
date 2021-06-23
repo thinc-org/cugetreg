@@ -33,9 +33,11 @@ export function useFilterBar<TagValue extends GeneralChipKey = GeneralChipKey>(
     const checked = (event.target as HTMLInputElement).checked
 
     if (type === 'genEdTypes') {
+      console.log('BEFORE', searchCourseQueryParams.filter.genEdTypes)
       const genEdTypes = checked
         ? (addTag(searchCourseQueryParams.filter.genEdTypes, tag) as GenEdChipKey[])
         : (removeTag(searchCourseQueryParams.filter.genEdTypes, tag) as GenEdChipKey[])
+      console.log('AFTER', genEdTypes)
 
       setFilter({ genEdTypes: genEdTypes })
     } else if (type == 'dayOfWeeks') {

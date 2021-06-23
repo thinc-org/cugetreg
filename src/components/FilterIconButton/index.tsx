@@ -1,20 +1,16 @@
-import React, { useContext } from 'react'
+import React from 'react'
 
 import { Button } from '@material-ui/core'
 import FilterListIcon from '@material-ui/icons/FilterList'
 
 import { useStyles } from '@/components/FilterIconButton/styled'
-import { CourseSearchContext } from '@/context/CourseSearch'
 
-export interface FilterIconButtonProps {}
+export interface FilterIconButtonProps {
+  onClick: () => void
+}
 
-export const FilterIconButton: React.FC<FilterIconButtonProps> = () => {
+export const FilterIconButton: React.FC<FilterIconButtonProps> = ({ onClick }) => {
   const classes = useStyles()
-  const { setOpenFilterBar } = useContext(CourseSearchContext)
-
-  const onClick = () => {
-    setOpenFilterBar((open) => !open)
-  }
 
   return (
     <Button

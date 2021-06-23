@@ -3,23 +3,22 @@ import React, { createRef, useContext } from 'react'
 import { useStyles } from '@/components/SearchField/styled'
 import { IconButton, InputBase, Paper } from '@material-ui/core'
 import SearchIcon from '@material-ui/icons/Search'
-import { CourseSearchContext, LIMIT_CONSTANT } from '@/context/CourseSearch'
+import { CourseSearchContext } from '@/context/CourseSearch'
+import { useFilter } from '@/utils/hooks/useFilter'
 
 export interface SeachFieldProp {}
 
 export const SearchField: React.FC<SeachFieldProp> = () => {
   const classes = useStyles()
-  const { setSearchCourseVars, refetch, setOffset } = useContext(CourseSearchContext)
+  const { setFilter } = useFilter()
   const inputRef = createRef<HTMLInputElement>()
+  const { setOffset } = useContext(CourseSearchContext)
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    setSearchCourseVars((currentVars) => {
-      const value = inputRef.current?.value || ''
-      currentVars.filter = { ...currentVars.filter, keyword: value, limit: LIMIT_CONSTANT, offset: 0 }
-      refetch(currentVars)
-      return currentVars
-    })
+    const keyword = inputRef.current?.value || ''
+
+    setFilter({ keyword: keyword })
     setOffset(0)
   }
 

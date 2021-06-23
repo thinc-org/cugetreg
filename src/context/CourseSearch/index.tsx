@@ -1,66 +1,28 @@
-import React, { createContext, useState } from 'react'
-
-import useSemester from '@/utils/hooks/useSemester'
-import { GeneralChipKey } from '@/components/Chips/config'
-import { DEFAULT_COURSE_SEARCH_CONTEXT_VALUE } from '@/context/CourseSearch/constants'
-import { useStudyProgram } from '@/utils/hooks/useStudyProgram'
-import { SearchCourseResponse, SearchCourseVars, SEARCH_COURSE } from '@/utils/network/BackendGQLQueries'
+import React, { createContext, useMemo, useState } from 'react'
+import { CourseSearchProps } from '@/context/CourseSearch/types'
 import { useQuery } from '@apollo/client'
+import { SearchCourseResponse, SearchCourseVars, SEARCH_COURSE } from '@/utils/network/BackendGQLQueries'
+import { useSearchCourseQueryParams } from '@/utils/hooks/useSearchCourseQueryParams'
+import { LIMIT_QUERY_CONSTANT } from '@/context/CourseSearch/constants'
 
-export const LIMIT_CONSTANT = 20
-
-export const CourseSearchContext = createContext(DEFAULT_COURSE_SEARCH_CONTEXT_VALUE)
+export const CourseSearchContext = createContext({} as CourseSearchProps)
 
 export const CourseSearchProvider: React.FC = (props) => {
   const [offset, setOffset] = useState(0)
-  const [openFilterBar, setOpenFilterBar] = useState<boolean>(false)
+  const searchCourseQueryParams = useSearchCourseQueryParams()
 
-  const { semester } = useSemester()
-  const { studyProgram } = useStudyProgram()
-  const [tags, setTags] = useState<GeneralChipKey[]>([])
-
-  const [searchCourseVars, setSearchCourseVars] = useState<SearchCourseVars>({
-    courseGroup: {
-      studyProgram: studyProgram,
-      academicYear: semester.year,
-      semester: semester.sem,
-    },
-    filter: {
-      limit: LIMIT_CONSTANT,
+  const courseSearchQuery = useQuery<SearchCourseResponse, SearchCourseVars>(SEARCH_COURSE, {
+    variables: {
+      ...searchCourseQueryParams,
+      filter: {
+        ...searchCourseQueryParams.filter,
+        limit: LIMIT_QUERY_CONSTANT,
+        offset: offset,
+      },
     },
   })
 
-  const { data: courses, loading, error, refetch } = useQuery<SearchCourseResponse, SearchCourseVars>(SEARCH_COURSE, {
-    variables: searchCourseVars,
-  })
-
-  function addTag<TagKey extends GeneralChipKey>(tag: TagKey) {
-    const newTags = [...tags, tag]
-    setTags(newTags)
-    return newTags
-  }
-
-  function removeTag<TagKey extends GeneralChipKey>(tag: TagKey) {
-    const newTags = tags.filter((currentTag) => currentTag != tag)
-    setTags(newTags)
-    return newTags
-  }
-
-  const value = {
-    tags,
-    addTag,
-    removeTag,
-    offset,
-    setOffset,
-    openFilterBar,
-    setOpenFilterBar,
-    courses,
-    loading,
-    error,
-    searchCourseVars,
-    setSearchCourseVars,
-    refetch,
-  }
+  const value = { offset, setOffset, courseSearchQuery }
 
   return <CourseSearchContext.Provider value={value} {...props} />
 }

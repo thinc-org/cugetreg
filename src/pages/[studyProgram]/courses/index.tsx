@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { Box, Stack as MuiStack, Typography } from '@material-ui/core'
 import { CourseList } from '@/components/CourseList'
 import { SearchField } from '@/components/SearchField'
@@ -7,6 +7,7 @@ import { SelectedCoursesButton } from '@/components/SelectedCoursesButton'
 import { CourseSearchContext } from '@/context/CourseSearch'
 import { FilterBar } from '@/components/FilterBar'
 import styled from '@emotion/styled'
+import { TagList } from '@/components/TagList'
 
 const Stack = styled(MuiStack)`
   margin-bottom: ${({ theme }) => theme.spacing(4)};
@@ -23,7 +24,7 @@ const StickyStack = styled(Stack)`
 `
 
 function CourseSearchPage() {
-  const { openFilterBar } = useContext(CourseSearchContext)
+  const [openFilterBar, setOpenFilterBar] = useState(false)
 
   return (
     <Box padding="2em">
@@ -32,9 +33,10 @@ function CourseSearchPage() {
       </Stack>
       <StickyStack spacing={2} direction="row">
         <SearchField />
-        <FilterIconButton />
+        <FilterIconButton onClick={() => setOpenFilterBar((open) => !open)} />
         <SelectedCoursesButton />
       </StickyStack>
+      <TagList />
       <Stack spacing={3} direction="row">
         <CourseList />
         {openFilterBar && <FilterBar />}

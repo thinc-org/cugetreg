@@ -1,11 +1,9 @@
 import React from 'react'
 import { Meta, Story } from '@storybook/react/types-6-0'
 
-import { TagList } from '.'
-import { CourseSearchContext } from '@/context/CourseSearch'
-import { CourseSearchProps, DEFAULT_COURSE_SEARCH_CONTEXT_VALUE } from '@/context/CourseSearch/constants'
+import { TagList, TagListProps } from '.'
 
-type StoryProps = CourseSearchProps
+type StoryProps = TagListProps
 
 export default {
   title: 'Component/TagList',
@@ -13,11 +11,7 @@ export default {
 } as Meta<StoryProps>
 
 export const Default: Story<StoryProps> = (args) => {
-  return (
-    <CourseSearchContext.Provider value={{ ...DEFAULT_COURSE_SEARCH_CONTEXT_VALUE, tags: args.tags }}>
-      <TagList />
-    </CourseSearchContext.Provider>
-  )
+  return <TagList />
 }
 
 Default.args = {

@@ -1,6 +1,5 @@
 import { CustomSelect } from '@/components/common/CustomSelect'
 import { Caption } from '@/components/CourseCard/components/Caption'
-import { days } from '@/components/CourseCard/constants'
 import { dayOfWeekMapper } from '@/constants/dayOfWeek'
 import { CourseCartItem, courseCartStore } from '@/store'
 import { Grid, Hidden, IconButton, Stack, Typography, useTheme } from '@material-ui/core'

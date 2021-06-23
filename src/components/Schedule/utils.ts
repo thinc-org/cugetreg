@@ -90,6 +90,23 @@ export function useScheduleClass(classes: TimetableClass[]) {
   }, [classes])
 }
 
+export function useDaysCount(classes: ScheduleClass[]): number {
+  let daysCount = 5
+  for (const cls of classes) {
+    switch (cls.dayOfWeek) {
+      case 'SA':
+        daysCount = Math.max(daysCount, 6)
+        break
+      case 'SU':
+        daysCount = 7
+        break
+      default:
+        break
+    }
+  }
+  return daysCount
+}
+
 export interface CourseOverlapMap {
   [courseNo: string]: boolean
 }

@@ -7,6 +7,7 @@ import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos'
 import { useTranslation } from 'react-i18next'
 import { useCourseGroup } from '@/utils/hooks/useCourseGroup'
 import { mockCourseData } from '@/__mock__/courses'
+import { BackButton } from '@/components/BackButton'
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -103,18 +104,7 @@ const Home = observer(() => {
   return (
     <div className={classes.container}>
       <div className={classes.top}>
-        <Button
-          className={classes.desktop}
-          startIcon={<ArrowBackIosIcon />}
-          color="primary"
-          variant="outlined"
-          disableElevation
-        >
-          {t('cr11:back')}
-        </Button>
-        <IconButton className={`${classes.buttonMobile} ${classes.mobile}`} aria-label="back">
-          <ArrowBackIosIcon />
-        </IconButton>
+        <BackButton />
         <Typography className={`${classes.semester} ${classes.mobile}`} variant="subtitle1">
           {studyProgramText}
         </Typography>

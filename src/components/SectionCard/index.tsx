@@ -19,17 +19,17 @@ import { useTranslation } from 'react-i18next'
 import GenEdChip from '@/components/Chips/catagories/GenEdChip'
 import { CustomButton } from '@/components/common/CustomButton'
 import { Caption } from '@/components/CourseCard/components/Caption'
-import { days } from '@/components/CourseCard/constants'
 import { SectionStatus } from '@/components/SectionCard/components/SectionStatus'
 import { dayOfWeekMapper } from '@/constants/dayOfWeek'
 
 interface SectionCardProps {
   section: Section
   course: Course
+  className?: string
 }
 
 export const SectionCard = (props: SectionCardProps) => {
-  const { section, course } = props
+  const { section, course, className } = props
   const { t } = useTranslation('sectionCard')
 
   const SelectButton = (
@@ -39,7 +39,7 @@ export const SectionCard = (props: SectionCardProps) => {
   )
 
   return (
-    <Card variant="outlined">
+    <Card variant="outlined" className={className}>
       <CardHeader
         sx={{ p: { xs: 2, sm: 4 }, pb: { xs: 0, sm: 0 }, pt: { xs: 2, sm: 3 } }}
         title={

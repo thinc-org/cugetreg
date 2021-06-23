@@ -8,6 +8,48 @@ import { Grid, Typography } from '@material-ui/core'
 import { GetCourseResponse, GetCourseVars, GET_COURSE } from '@/utils/network/BackendGQLQueries'
 import { ParsedUrlQuery } from 'querystring'
 import { parseCourseGroup } from '@/utils/courseGroup'
+import { SectionCard } from '@/components/SectionCard'
+import { groupBy } from '@/utils/groupBy'
+import styled from '@emotion/styled'
+import { BackButton } from '@/components/BackButton'
+
+const SectionCardLayout = styled(SectionCard)`
+  margin-top: ${({ theme }) => theme.spacing(3)};
+`
+
+const SectionContainer = styled.div`
+  margin-bottom: ${({ theme }) => theme.spacing(9)};
+  ${({ theme }) => theme.breakpoints.down('sm')} {
+    margin-bottom: ${({ theme }) => theme.spacing(4)};
+  }
+`
+
+const Title = styled(Typography)`
+  margin: ${({ theme }) => theme.spacing(2, 0, 2, 0)};
+`
+
+const DescriptionTitle = styled(Typography)`
+  color: ${({ theme }) => theme.palette.primaryRange['100']};
+`
+
+const GridContainer = styled(Grid)`
+  margin: ${({ theme }) => theme.spacing(4, 0, 6, 0)};
+  ${({ theme }) => theme.breakpoints.down('sm')} {
+    margin: ${({ theme }) => theme.spacing(3, 0, 2, 0)};
+  }
+  div {
+    padding-bottom: ${({ theme }) => theme.spacing(4)};
+    ${({ theme }) => theme.breakpoints.down('sm')} {
+      padding-bottom: ${({ theme }) => theme.spacing(1)};
+    }
+  }
+`
+
+const GridEnd = styled(Grid)`
+  ${({ theme }) => theme.breakpoints.down('sm')} {
+    padding-bottom: ${({ theme }) => theme.spacing(3)} !important;
+  }
+`
 
 function parseVariablesFromQuery(q: ParsedUrlQuery): GetCourseVars {
   const query = q as {
@@ -34,47 +76,65 @@ function CourseDetailPage(props: { data: GetCourseResponse }) {
   })
   const cData = props.data || data
 
+  const CourseList = groupBy(cData.course.sections, 'note', 'General').map((sectionGroup) => {
+    const SectionGroup = sectionGroup.value.map((section) => (
+      <SectionCardLayout key={section.sectionNo} section={section} course={cData.course} />
+    ))
+    return (
+      <SectionContainer key={sectionGroup.group}>
+        <Typography variant="h5">Group: {sectionGroup.group}</Typography>
+        {SectionGroup}
+      </SectionContainer>
+    )
+  })
+
   return (
     <>
-      <Typography variant="h2">
+      <BackButton />
+      <Title variant="h3">
         {cData.course.courseNo} {cData.course.abbrName}
-      </Typography>
-      <Typography variant="h4">{cData.course.courseNameTh}</Typography>
-      <Typography variant="h4">{cData.course.courseNameEn}</Typography>
-      <Grid container>
-        <Grid item xs={6}>
-          <Typography variant="subtitle1">คณะ</Typography>
-          {cData.course.faculty}
+      </Title>
+      <Typography variant="h5">{cData.course.courseNameTh}</Typography>
+      <Typography variant="h5">{cData.course.courseNameEn}</Typography>
+      <GridContainer container>
+        <Grid item xs={12} sm={6}>
+          <DescriptionTitle variant="subtitle1">คณะ</DescriptionTitle>
+          <Typography variant="h6">{cData.course.faculty}</Typography>
         </Grid>
-        <Grid item xs={6}>
-          <Typography variant="subtitle1">รูปแบบรายวิชา</Typography>
-          {courseTypeStringFromCourse(cData.course)}
+        <GridEnd item xs={12} sm={6}>
+          <DescriptionTitle variant="subtitle1">ภาควิชา/กลุ่มวิชา/สาขาวิชา</DescriptionTitle>
+          <Typography variant="h6">{cData.course.department || '-'}</Typography>
+        </GridEnd>
+        <Grid item xs={12} sm={6}>
+          <DescriptionTitle variant="subtitle1">รูปแบบรายวิชา</DescriptionTitle>
+          <Typography variant="h6">{courseTypeStringFromCourse(cData.course)}</Typography>
         </Grid>
-        <Grid item xs={6}>
-          <Typography variant="subtitle1">สอบกลางภาค</Typography>
-          {cData.course.midterm
-            ? `${cData.course.midterm.date} ${cData.course.midterm.period.start} - ${cData.course.midterm.period.end}`
-            : 'TBA'}
+        <GridEnd item xs={12} sm={6}>
+          <DescriptionTitle variant="subtitle1">หน่วยกิต</DescriptionTitle>
+          <Typography variant="h6">{cData.course.credit}</Typography>
+        </GridEnd>
+        <Grid item xs={12} sm={6}>
+          <DescriptionTitle variant="subtitle1">สอบกลางภาค</DescriptionTitle>
+          <Typography variant="h6">
+            {cData.course.midterm
+              ? `${cData.course.midterm.date} ${cData.course.midterm.period.start} - ${cData.course.midterm.period.end}`
+              : 'TBA'}
+          </Typography>
         </Grid>
-        <Grid item xs={6}>
-          <Typography variant="subtitle1">เงื่อนไขรายวิชา</Typography>
-          {cData.course.courseCondition}
+        <GridEnd item xs={12} sm={6}>
+          <DescriptionTitle variant="subtitle1">สอบปลายภาค</DescriptionTitle>
+          <Typography variant="h6">
+            {cData.course.final
+              ? `${cData.course.final.date} ${cData.course.final.period.start} - ${cData.course.final.period.end}`
+              : 'TBA'}
+          </Typography>
+        </GridEnd>
+        <Grid item xs={12} sm={6}>
+          <DescriptionTitle variant="subtitle1">เงื่อนไขรายวิชา</DescriptionTitle>
+          <Typography variant="h6">{cData.course.courseCondition}</Typography>
         </Grid>
-        <Grid item xs={6}>
-          <Typography variant="subtitle1">ภาควิชา/กลุ่มวิชา/สาขาวิชา</Typography>
-          {cData.course.department}
-        </Grid>
-        <Grid item xs={6}>
-          <Typography variant="subtitle1">หน่วยกิต</Typography>
-          {cData.course.credit}
-        </Grid>
-        <Grid item xs={6}>
-          <Typography variant="subtitle1">สอบปลายภาค</Typography>
-          {cData.course.final
-            ? `${cData.course.final.date} ${cData.course.final.period.start} - ${cData.course.final.period.end}`
-            : 'TBA'}
-        </Grid>
-      </Grid>
+      </GridContainer>
+      {CourseList}
     </>
   )
 }

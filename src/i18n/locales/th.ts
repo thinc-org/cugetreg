@@ -112,7 +112,6 @@ export const program = {
 }
 
 export const cr11 = {
-  back: 'กลับ',
   semester: 'ปีการศึกษา',
   enrollingSubject: 'รายวิชาที่ต้องการลงทะเบียนเรียน',
   simulateDocument: 'จำลองเอกสาร แสดงความจำนงขอลงทะเบียนเรียน (จท11)',
@@ -139,4 +138,8 @@ export const examSchedule = {
 
 export const selectedCoursesButton = {
   main: 'วิชาที่เลือก',
+}
+
+export const navigation = {
+  back: 'กลับ',
 }

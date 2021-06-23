@@ -34,7 +34,7 @@ export function Header() {
           <ScheduleTypography variant="subtitle2">{t('dateTime')}</ScheduleTypography>
         </Cell>
         <Cell x={1} y={0} />
-        {dayOfWeekArray.slice(0, 7).map((day, index) => (
+        {dayOfWeekArray.slice(0, 5).map((day, index) => (
           <Cell key={day} x={0} y={index + 1}>
             <ScheduleTypography variant="subtitle2">{t(`days.${day}` as `days.${DayOfWeek}`)}</ScheduleTypography>
           </Cell>

@@ -28,6 +28,16 @@ interface ScheduleContainerProps {
 
 const ScheduleContainer = styled.div`
   ${({ enabled }: ScheduleContainerProps) => !enabled && `display: none`};
+
+  @media (max-width: 747px) {
+    overflow-x: scroll;
+    overflow-y: hidden;
+  }
+
+  > div {
+    overflow: visible;
+    min-width: 700px;
+  }
 `
 
 const InfoBar = styled.div`
@@ -134,8 +144,10 @@ function SchedulePage() {
           </TabButton>
         </TabContainer>
       </TitleContainer>
-      <ScheduleContainer enabled={!isExamTable} ref={ref}>
-        <Schedule classes={scheduleClasses} daysCount={daysCount} />
+      <ScheduleContainer enabled={!isExamTable}>
+        <div ref={ref}>
+          <Schedule classes={scheduleClasses} daysCount={daysCount} />
+        </div>
       </ScheduleContainer>
       <ExamContainer enabled={isExamTable}>
         <ExamSchedule midtermClasses={midtermClasses} finalClasses={finalClasses} />

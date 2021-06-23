@@ -20,7 +20,9 @@ export const useFilter = () => {
 
   const setFilter = useCallback(
     (filterVars: SearchCourseVars['filter']) => {
+      console.log('IN FILTER', filterVars)
       const currentQuery = router.query as QueryParams
+      const currentPathname = router.pathname
 
       const query: QueryParams = {
         ...currentQuery,
@@ -28,6 +30,8 @@ export const useFilter = () => {
         genEdTypes: filterVars.genEdTypes?.join(','),
         dayOfWeeks: filterVars.dayOfWeeks?.join(','),
       }
+
+      console.log('PUSH', currentPathname, query)
 
       router.push({ pathname: router.pathname, query: removeUndefinedValue(query) })
     },

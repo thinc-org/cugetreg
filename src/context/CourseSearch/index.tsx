@@ -1,4 +1,4 @@
-import React, { createContext, useMemo, useState } from 'react'
+import React, { createContext, useState } from 'react'
 import { CourseSearchProps } from '@/context/CourseSearch/types'
 import { useQuery } from '@apollo/client'
 import { SearchCourseResponse, SearchCourseVars, SEARCH_COURSE } from '@/utils/network/BackendGQLQueries'
@@ -9,7 +9,7 @@ export const CourseSearchContext = createContext({} as CourseSearchProps)
 
 export const CourseSearchProvider: React.FC = (props) => {
   const [offset, setOffset] = useState(0)
-  const searchCourseQueryParams = useSearchCourseQueryParams()
+  const { searchCourseQueryParams } = useSearchCourseQueryParams()
 
   const courseSearchQuery = useQuery<SearchCourseResponse, SearchCourseVars>(SEARCH_COURSE, {
     variables: {

@@ -6,7 +6,7 @@ import { useSearchCourseQueryParams } from '@/utils/hooks/useSearchCourseQueryPa
 export interface TagListProps {}
 
 export const TagList: React.FC<TagListProps> = () => {
-  const searchCourseQueryParams = useSearchCourseQueryParams()
+  const { searchCourseQueryParams } = useSearchCourseQueryParams()
   const { filter } = searchCourseQueryParams
   const { genEdTypes, dayOfWeeks } = filter
 

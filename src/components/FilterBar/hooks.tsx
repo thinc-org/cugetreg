@@ -4,7 +4,6 @@ import { CourseSearchContext } from '@/context/CourseSearch'
 import { DayChipKey, GenEdChipKey, GeneralChipKey } from '@/components/Chips/config'
 import { SearchCourseVars } from '@/utils/network/BackendGQLQueries'
 import { useSearchCourseQueryParams } from '@/utils/hooks/useSearchCourseQueryParams'
-import { useFilter } from '@/utils/hooks/useFilter'
 
 export interface CreateCheckbox<Value> {
   label: string
@@ -15,8 +14,7 @@ export function useFilterBar<TagValue extends GeneralChipKey = GeneralChipKey>(
   initCheckboxes: CreateCheckbox<TagValue>[],
   type?: keyof Pick<SearchCourseVars['filter'], 'genEdTypes' | 'dayOfWeeks'>
 ) {
-  const { setFilter } = useFilter()
-  const searchCourseQueryParams = useSearchCourseQueryParams()
+  const { setFilter, searchCourseQueryParams } = useSearchCourseQueryParams()
   const { setOffset } = useContext(CourseSearchContext)
 
   const addTag = (array: string[] | undefined, tag: string) => {

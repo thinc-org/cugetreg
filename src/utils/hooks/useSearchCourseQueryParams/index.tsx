@@ -1,11 +1,10 @@
-import { useMemo } from 'react'
+import { useMemo, useCallback } from 'react'
 import { useRouter } from 'next/router'
 
 import { DEFAULT_STUDY_PROGRAM } from '@/constants/studyProgram'
 import { SearchCourseVars } from '@/utils/network/BackendGQLQueries'
 import { DayOfWeek, GenEdType, StudyProgram } from '@thinc-org/chula-courses'
 import { useCourseGroup } from '@/utils/hooks/useCourseGroup'
-import { LIMIT_QUERY_CONSTANT } from '@/context/CourseSearch/constants'
 
 const CURRENT_COURSE_GROUP = {
   semester: '1',
@@ -30,11 +29,11 @@ function removeUndefinedValue<T extends { [key: string]: any }>(obj: T): { [key:
   return obj
 }
 
-export const useSearchCourseQueryParams = (): SearchCourseVars => {
+export const useSearchCourseQueryParams = () => {
   const router = useRouter()
   const courseGroup = useCourseGroup()
 
-  const searchQueryParams: SearchCourseVars = useMemo<SearchCourseVars>(() => {
+  const searchCourseQueryParams: SearchCourseVars = useMemo<SearchCourseVars>(() => {
     const { keyword, genEdTypes, dayOfWeeks } = router.query as QueryParams
 
     const genEdTypeArray = genEdTypes ? genEdTypes.split(',') : undefined
@@ -49,5 +48,21 @@ export const useSearchCourseQueryParams = (): SearchCourseVars => {
     return { filter, courseGroup }
   }, [router.query, courseGroup])
 
-  return searchQueryParams
+  const setFilter = useCallback(
+    (filterVars: SearchCourseVars['filter']) => {
+      const currentQuery = router.query as QueryParams
+
+      const query: QueryParams = {
+        ...currentQuery,
+        keyword: filterVars.keyword,
+        genEdTypes: filterVars.genEdTypes?.join(','),
+        dayOfWeeks: filterVars.dayOfWeeks?.join(','),
+      }
+
+      router.push({ pathname: router.pathname, query: removeUndefinedValue(query) })
+    },
+    [router]
+  )
+
+  return { searchCourseQueryParams, setFilter }
 }

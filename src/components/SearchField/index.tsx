@@ -4,20 +4,19 @@ import { useStyles } from '@/components/SearchField/styled'
 import { IconButton, InputBase, Paper } from '@material-ui/core'
 import SearchIcon from '@material-ui/icons/Search'
 import { CourseSearchContext } from '@/context/CourseSearch'
-import { useFilter } from '@/utils/hooks/useFilter'
+import { useSearchCourseQueryParams } from '@/utils/hooks/useSearchCourseQueryParams'
 
 export interface SeachFieldProp {}
 
 export const SearchField: React.FC<SeachFieldProp> = () => {
   const classes = useStyles()
-  const { setFilter } = useFilter()
+  const { setFilter } = useSearchCourseQueryParams()
   const inputRef = createRef<HTMLInputElement>()
   const { setOffset } = useContext(CourseSearchContext)
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const keyword = inputRef.current?.value || ''
-
     setFilter({ keyword: keyword })
     setOffset(0)
   }

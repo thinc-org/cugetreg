@@ -3,6 +3,8 @@ import React, { useContext } from 'react'
 import { Stack } from '@material-ui/core'
 import { CourseCard } from '@/components/CourseCard'
 import { CourseSearchContext } from '@/context/CourseSearch'
+import { Loading } from '@/components/Loading'
+import { Error } from '@/components/Error'
 
 export interface CourseListProps {}
 
@@ -13,13 +15,13 @@ export const CourseList: React.FC<CourseListProps> = () => {
   const { data, loading, error } = courseSearchQuery
 
   if (loading) {
-    return <>loading</>
+    return <Loading />
   }
   if (error) {
-    return <>error</>
+    return <Error message={error.message} />
   }
-  if (!data) {
-    return <>NOT FOUND</>
+  if (!data?.search.length) {
+    return <Error message="NOT FOUND" />
   }
 
   return (

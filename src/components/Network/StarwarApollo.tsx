@@ -1,3 +1,5 @@
+import { Error } from '@/components/Error'
+import { Loading } from '@/components/Loading'
 import { gql, useQuery } from '@apollo/client'
 import { Card } from '@material-ui/core'
 
@@ -22,8 +24,8 @@ export interface FilmsData {
 export default function StarWar() {
   const { loading, error, data } = useQuery<FilmsData>(GET_FILMS)
 
-  if (loading) return <p>Loading</p>
-  if (error) return <p>`Error ${error.message}`</p>
+  if (loading) return <Loading />
+  if (error) return <Error message={error.message} />
 
   return (
     <Card>

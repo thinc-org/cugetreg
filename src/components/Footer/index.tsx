@@ -1,9 +1,10 @@
-import { Divider, makeStyles } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core'
 import { Banner } from './Banner'
 import { TopButton } from './TopButton'
 
 const useStyles = makeStyles((theme) => ({
   footer: {
+    marginTop: 'auto',
     boxShadow: theme.shadows[4],
     position: 'relative',
     [theme.breakpoints.down('sm')]: {

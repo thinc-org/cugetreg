@@ -30,6 +30,13 @@ const Box = styled.div`
   }
 `
 
+const Container = styled.div`
+  position: sticky;
+  top: 100px;
+  z-index: ${({ theme }) => theme.zIndex.appBar};
+  height: fit-content;
+`
+
 const Button = styled(MuiButton)`
   margin-top: ${({ theme }) => theme.spacing(2)}; ;
 `
@@ -53,7 +60,7 @@ export const FilterSection: React.FC<FilterSectionProps> = ({ open, setOpen }) =
   return (
     <>
       <Hidden mdDown>
-        <div>
+        <Container>
           <Paper className={classes.paper} variant="outlined">
             <Stack spacing={4}>
               <CheckboxGroup title="หมวดหมู่ GenEd" checkboxes={genEdCheckboxes} />
@@ -61,7 +68,7 @@ export const FilterSection: React.FC<FilterSectionProps> = ({ open, setOpen }) =
               <CheckboxGroup title="แสดงผลพิเศษ" checkboxes={specialCheckboxes} />
             </Stack>
           </Paper>
-        </div>
+        </Container>
       </Hidden>
       <Hidden mdUp>
         <Dialog open onClose={handleClose} maxWidth="xl">

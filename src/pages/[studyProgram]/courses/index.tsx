@@ -14,9 +14,10 @@ const Stack = styled(MuiStack)`
 
 const StickyStack = styled(Stack)`
   position: sticky;
-  top: 32px;
-  z-index: 10;
-
+  top: 0;
+  padding-top: ${({ theme }) => theme.spacing(4)};
+  z-index: ${({ theme }) => theme.zIndex.appBar + 1};
+  background: white;
   button {
     background: ${({ theme }) => theme.palette.background.default};
   }

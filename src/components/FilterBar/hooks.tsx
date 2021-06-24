@@ -35,13 +35,13 @@ export function useFilterBar<TagValue extends GeneralChipKey = GeneralChipKey>(
         ? (addTag(searchCourseQueryParams.filter.genEdTypes, tag) as GenEdChipKey[])
         : (removeTag(searchCourseQueryParams.filter.genEdTypes, tag) as GenEdChipKey[])
 
-      setFilter({ genEdTypes: genEdTypes })
+      setFilter({ ...searchCourseQueryParams.filter, genEdTypes: genEdTypes })
     } else if (type == 'dayOfWeeks') {
       const dayOfWeeks = checked
         ? (addTag(searchCourseQueryParams.filter.dayOfWeeks, tag) as DayChipKey[])
         : (removeTag(searchCourseQueryParams.filter.dayOfWeeks, tag) as DayChipKey[])
 
-      setFilter({ dayOfWeeks: dayOfWeeks })
+      setFilter({ ...searchCourseQueryParams.filter, dayOfWeeks: dayOfWeeks })
     }
 
     setOffset(0)

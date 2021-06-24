@@ -1,16 +1,15 @@
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import { Box, Stack as MuiStack, Typography } from '@material-ui/core'
 import { CourseList } from '@/components/CourseList'
 import { SearchField } from '@/components/SearchField'
 import { FilterIconButton } from '@/components/FilterIconButton'
 import { SelectedCoursesButton } from '@/components/SelectedCoursesButton'
-import { CourseSearchContext } from '@/context/CourseSearch'
 import { FilterBar } from '@/components/FilterBar'
 import styled from '@emotion/styled'
 import { TagList } from '@/components/TagList'
 
 const Stack = styled(MuiStack)`
-  margin-bottom: ${({ theme }) => theme.spacing(4)};
+  margin-bottom: ${({ theme }) => theme.spacing(2)};
 `
 
 const StickyStack = styled(Stack)`
@@ -36,7 +35,9 @@ function CourseSearchPage() {
         <FilterIconButton onClick={() => setOpenFilterBar((open) => !open)} />
         <SelectedCoursesButton />
       </StickyStack>
-      <TagList />
+      <Stack spacing={3} direction="row">
+        <TagList />
+      </Stack>
       <Stack spacing={3} direction="row">
         <CourseList />
         {openFilterBar && <FilterBar />}

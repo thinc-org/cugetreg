@@ -10,14 +10,14 @@ export interface SeachFieldProp {}
 
 export const SearchField: React.FC<SeachFieldProp> = () => {
   const classes = useStyles()
-  const { setFilter } = useSearchCourseQueryParams()
+  const { setFilter, searchCourseQueryParams } = useSearchCourseQueryParams()
   const inputRef = createRef<HTMLInputElement>()
   const { setOffset } = useContext(CourseSearchContext)
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const keyword = inputRef.current?.value || ''
-    setFilter({ keyword: keyword })
+    setFilter({ ...searchCourseQueryParams.filter, keyword: keyword })
     setOffset(0)
   }
 

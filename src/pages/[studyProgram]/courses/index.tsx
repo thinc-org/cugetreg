@@ -4,7 +4,7 @@ import { CourseList } from '@/components/CourseList'
 import { SearchField } from '@/components/SearchField'
 import { FilterIconButton } from '@/components/FilterIconButton'
 import { SelectedCoursesButton } from '@/components/SelectedCoursesButton'
-import { FilterBar } from '@/components/FilterSection'
+import { FilterSection } from '@/components/FilterSection'
 import styled from '@emotion/styled'
 import { TagList } from '@/components/TagList'
 
@@ -42,7 +42,7 @@ function CourseSearchPage() {
       </Stack>
       <Stack spacing={3} direction="row">
         <CourseList />
-        {openFilterBar && <FilterBar />}
+        {openFilterBar && <FilterSection />}
       </Stack>
     </Box>
   )

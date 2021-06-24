@@ -9,9 +9,9 @@ import { Hidden, Paper, Stack } from '@material-ui/core'
 import { useStyles } from '@/components/FilterSection/styled'
 import { CheckboxGroup } from '@/components/FilterSection/components/CheckboxGroup'
 
-export interface FilterBarProps {}
+export interface FilterSectionProps {}
 
-export function FilterBar() {
+export function FilterSection() {
   const classes = useStyles()
   const { checkboxes: genEdCheckboxes } = useFilterBar(createGenEdCheckboxes, 'genEdTypes')
   const { checkboxes: dayOfWeekCheckboxes } = useFilterBar(createDayOfWeekCheckboxes, 'dayOfWeeks')

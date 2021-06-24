@@ -1,10 +1,10 @@
 import { useState } from 'react'
-import { Box, Stack as MuiStack, Typography } from '@material-ui/core'
+import { Box, Hidden, Stack as MuiStack, Typography } from '@material-ui/core'
 import { CourseList } from '@/components/CourseList'
 import { SearchField } from '@/components/SearchField'
 import { FilterIconButton } from '@/components/FilterIconButton'
 import { SelectedCoursesButton } from '@/components/SelectedCoursesButton'
-import { FilterBar } from '@/components/FilterBar'
+import { FilterBar } from '@/components/FilterSection'
 import styled from '@emotion/styled'
 import { TagList } from '@/components/TagList'
 
@@ -33,7 +33,9 @@ function CourseSearchPage() {
       <StickyStack spacing={2} direction="row">
         <SearchField />
         <FilterIconButton onClick={() => setOpenFilterBar((open) => !open)} />
-        <SelectedCoursesButton />
+        <Hidden mdDown>
+          <SelectedCoursesButton />
+        </Hidden>
       </StickyStack>
       <Stack spacing={3} direction="row">
         <TagList />

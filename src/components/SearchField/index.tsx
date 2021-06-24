@@ -1,4 +1,4 @@
-import React, { createRef, useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 
 import { useStyles } from '@/components/SearchField/styled'
 import { IconButton, InputBase, Paper } from '@material-ui/core'
@@ -11,12 +11,20 @@ export interface SeachFieldProp {}
 export const SearchField: React.FC<SeachFieldProp> = () => {
   const classes = useStyles()
   const { setFilter, searchCourseQueryParams } = useSearchCourseQueryParams()
-  const inputRef = createRef<HTMLInputElement>()
   const { setOffset } = useContext(CourseSearchContext)
+  const [input, setInput] = useState(() => searchCourseQueryParams.filter.keyword || '')
+
+  useEffect(() => {
+    setInput(searchCourseQueryParams.filter.keyword || '')
+  }, [searchCourseQueryParams.filter.keyword])
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setInput(event.target.value)
+  }
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    const keyword = inputRef.current?.value || ''
+    const keyword = input
     setFilter({ ...searchCourseQueryParams.filter, keyword: keyword })
     setOffset(0)
   }
@@ -25,7 +33,8 @@ export const SearchField: React.FC<SeachFieldProp> = () => {
     <Paper component="form" className={classes.root} noValidate onSubmit={onSubmit} variant="outlined">
       <InputBase
         fullWidth
-        inputRef={inputRef}
+        value={input}
+        onChange={handleChange}
         placeholder="ค้นหารหัสวิชา / ชื่อวิชา"
         margin="dense"
         className={classes.input}

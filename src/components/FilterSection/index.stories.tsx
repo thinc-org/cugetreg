@@ -1,17 +1,17 @@
 import React from 'react'
-import { FilterBar, FilterBarProps } from '.'
+import { FilterSection, FilterSectionProps } from '.'
 import { Meta, Story } from '@storybook/react/types-6-0'
 
-type StoryProps = FilterBarProps
+type StoryProps = FilterSectionProps
 
 export default {
   title: 'Component/FilterBar',
-  component: FilterBar,
+  component: FilterSection,
   argTypes: {},
 } as Meta<StoryProps>
 
 export const Default: Story<StoryProps> = (args) => {
-  return <FilterBar {...args} />
+  return <FilterSection {...args} />
 }
 
 Default.args = {}

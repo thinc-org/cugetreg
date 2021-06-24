@@ -42,7 +42,7 @@ function CourseSearchPage() {
       </Stack>
       <Stack spacing={3} direction="row">
         <CourseList />
-        {openFilterBar && <FilterSection />}
+        <FilterSection open={openFilterBar} setOpen={setOpenFilterBar} />
       </Stack>
     </Box>
   )

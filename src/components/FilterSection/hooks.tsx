@@ -1,5 +1,5 @@
 import { useContext } from 'react'
-import { EnhancedCheckBoxProps } from '@/components/FilterBar/components/CheckboxGroup'
+import { EnhancedCheckBoxProps } from '@/components/FilterSection/components/CheckboxGroup'
 import { CourseSearchContext } from '@/context/CourseSearch'
 import { DayChipKey, GenEdChipKey, GeneralChipKey } from '@/components/Chips/config'
 import { SearchCourseVars } from '@/utils/network/BackendGQLQueries'

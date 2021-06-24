@@ -1,5 +1,5 @@
 import { DayChipKey, GenEdChipKey, OtherChipKey } from '@/components/Chips/config'
-import { CreateCheckbox } from '@/components/FilterBar/hooks'
+import { CreateCheckbox } from '@/components/FilterSection/hooks'
 import { DayOfWeekEnum, GenEdTypeEnum } from '@thinc-org/chula-courses'
 
 export const createGenEdCheckboxes: CreateCheckbox<GenEdChipKey>[] = [

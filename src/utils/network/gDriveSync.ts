@@ -4,7 +4,11 @@ import { meStore } from '@/store/meStore'
 import { action, reaction, runInAction } from 'mobx'
 import { GetMeResponse, refreshAuthToken } from './auth'
 
+let isGapiInit = false
+
 export async function loadGAPI(): Promise<void> {
+  if (isGapiInit) return
+  isGapiInit = true
   await new Promise((resolve, reject) => {
     if (typeof window === 'undefined') return reject('Not a browser')
     const s = document.createElement('script')
@@ -36,6 +40,8 @@ const setGState = (s: GDriveSyncState) =>
   runInAction(() => {
     gDriveStore.gDriveState = s
   })
+
+let gDriveSyncLock = false
 
 export async function startGDriveSync() {
   async function sync(me: GetMeResponse, items: CourseCartItem[], isInitialized: boolean) {
@@ -121,29 +127,41 @@ export async function startGDriveSync() {
     }
   }
 
-  const trackedSync = (fn: Promise<void>) => {
+  const trackedSync = (fn: () => Promise<void>) => {
+    if (gDriveSyncLock) return
+    gDriveSyncLock = true
     setGState(GDriveSyncState.SYNCING)
     console.log('[GDRIVE] Sync started')
-    fn.then(() => {
-      console.log('[GDRIVE] Synced')
-      setGState(GDriveSyncState.SYNCED)
-    }).catch((e) => {
-      console.error('[GDRIVE] Sync failed', e)
-      setGState(GDriveSyncState.SYNCERR)
-    })
+    fn()
+      .then(() => {
+        console.log('[GDRIVE] Synced')
+        setGState(GDriveSyncState.SYNCED)
+      })
+      .catch((e) => {
+        console.error('[GDRIVE] Sync failed', e)
+        setGState(GDriveSyncState.SYNCERR)
+      })
+      .finally(() => {
+        gDriveSyncLock = false
+      })
   }
 
   reaction(
     () => ({ me: meStore.me, cart: courseCartStore.shopItems, cartInit: courseCartStore.isInitialized }),
     (d) => {
-      if (!d.me) {
+      const me = d.me
+      if (!me) {
         console.log('[GDRIVE] Ignore. Not logged in')
         setGState(GDriveSyncState.IDLE)
       } else {
-        trackedSync(sync(d.me, d.cart, d.cartInit))
+        trackedSync(() => sync(me, d.cart, d.cartInit))
       }
     }
   )
   console.log('[GDRIVE] Store update handler registered')
-  await refreshAuthToken()
+  const me = meStore.me
+  if (me) {
+    console.log('[GDRIVE] Already logged-in. sync starting')
+    trackedSync(() => sync(me, courseCartStore.shopItems, courseCartStore.isInitialized))
+  }
 }

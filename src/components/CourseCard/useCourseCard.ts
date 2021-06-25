@@ -1,9 +1,20 @@
 import { dayOfWeekArray } from '@/constants/dayOfWeek'
-import { Capacity, Course, Section } from '@thinc-org/chula-courses'
+import { Capacity, Course, DayOfWeek, Section } from '@thinc-org/chula-courses'
 import { sum, unique } from '@/components/CourseCard/utils'
-import { useState } from 'react'
+import { createContext, useContext, useState } from 'react'
+interface CourseCardContextValue {
+  course: Course
+  isGenEd: boolean
+  classDays: DayOfWeek[]
+  courseCapacity: Capacity
+  sectionNumbers: string[]
+  selectedSectionNumber: string
+  setSectionNumber: (sectionNo: string) => void
+  selectedSection: Section
+  teachers: string[]
+}
 
-export function useCourseCard(course: Course) {
+export function useCourseCard(course: Course): CourseCardContextValue {
   const isGenEd = course.genEdType !== 'NO'
 
   const activeDays = course.sections.flatMap((section) => section.classes.map((sectionClass) => sectionClass.dayOfWeek))
@@ -20,6 +31,7 @@ export function useCourseCard(course: Course) {
   const teachers = unique(selectedSection.classes.flatMap((sectionClass) => sectionClass.teachers))
 
   return {
+    course,
     isGenEd,
     classDays,
     courseCapacity,
@@ -29,4 +41,10 @@ export function useCourseCard(course: Course) {
     selectedSection,
     teachers,
   }
+}
+
+export const CourseCardContext = createContext((null as unknown) as CourseCardContextValue)
+
+export function useCourseCardContext() {
+  return useContext(CourseCardContext)
 }

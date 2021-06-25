@@ -5,6 +5,7 @@ import { CourseCard } from '@/components/CourseCard'
 import { CourseSearchContext } from '@/context/CourseSearch'
 import { Loading } from '@/components/Loading'
 import { Error } from '@/components/Error'
+import { RenderOnIntersect } from '../RenderOnIntersect'
 
 export interface CourseListProps {}
 
@@ -27,7 +28,9 @@ export const CourseList: React.FC<CourseListProps> = () => {
   return (
     <Stack spacing={2} sx={{ width: '100%' }}>
       {data.search.map((result) => (
-        <CourseCard key={result.courseNo} course={result} />
+        <RenderOnIntersect key={result.courseNo} id={result.courseNo} initialHeight={158}>
+          <CourseCard key={result.courseNo} course={result} />
+        </RenderOnIntersect>
       ))}
     </Stack>
   )

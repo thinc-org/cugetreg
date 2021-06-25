@@ -1,4 +1,4 @@
-import { useCallback, useContext, useMemo, useState } from 'react'
+import { useCallback, useContext, useMemo } from 'react'
 import { EnhancedCheckBoxProps } from '@/components/FilterSection/components/CheckboxGroup'
 import { CourseSearchContext } from '@/context/CourseSearch'
 import { DayChipKey, GenEdChipKey, GeneralChipKey } from '@/components/Chips/config'
@@ -14,8 +14,8 @@ export function useFilterBar<TagValue extends GeneralChipKey = GeneralChipKey>(
   initCheckboxes: CreateCheckbox<TagValue>[],
   type?: keyof Pick<SearchCourseVars['filter'], 'genEdTypes' | 'dayOfWeeks'>
 ) {
-  const { setFilter, searchCourseQueryParams } = useSearchCourseQueryParams()
   const { setOffset } = useContext(CourseSearchContext)
+  const { setFilter, searchCourseQueryParams } = useSearchCourseQueryParams()
 
   const addTag = (array: string[] | undefined, tag: string) => {
     if (array) return [...array, tag]
@@ -50,24 +50,15 @@ export function useFilterBar<TagValue extends GeneralChipKey = GeneralChipKey>(
     [searchCourseQueryParams.filter, setFilter, setOffset, type]
   )
 
-  const hasValue = useCallback(
-    (tag: TagValue) => {
-      if (type === 'genEdTypes') return searchCourseQueryParams.filter?.genEdTypes?.includes(tag as GenEdChipKey)
-      return searchCourseQueryParams.filter?.dayOfWeeks?.includes(tag as DayChipKey)
-    },
-    [type, searchCourseQueryParams.filter]
-  )
-
   const checkboxes: EnhancedCheckBoxProps[] = useMemo(() => {
     return initCheckboxes.map(({ value, label, ...rest }) => ({
       ...rest,
-      value: value,
+      label,
+      value,
       name: label,
-      label: label,
-      checked: hasValue(value),
       onChange: onCheckboxChange(value),
     }))
-  }, [hasValue, onCheckboxChange, initCheckboxes])
+  }, [onCheckboxChange, initCheckboxes])
 
   return { checkboxes }
 }

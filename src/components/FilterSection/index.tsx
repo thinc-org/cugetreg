@@ -3,7 +3,7 @@ import { useFilterBar } from './hooks'
 import {
   createGenEdCheckboxes,
   createDayOfWeekCheckboxes,
-  createSpecialCheckboxes,
+  // createSpecialCheckboxes,
 } from '@/components/FilterSection/constants'
 import { Button as MuiButton, Dialog, DialogContent as MuiDialogContent, Hidden, Paper, Stack } from '@material-ui/core'
 import { useStyles } from '@/components/FilterSection/styled'
@@ -32,6 +32,7 @@ const Box = styled.div`
 `
 
 const Container = styled.div`
+  min-width: 220px;
   position: sticky;
   top: 100px;
   z-index: ${({ theme }) => theme.zIndex.appBar};
@@ -50,7 +51,7 @@ export const FilterSection: React.FC<FilterSectionProps> = ({ open, setOpen }) =
   const classes = useStyles()
   const { checkboxes: genEdCheckboxes } = useFilterBar<GenEdChipKey>(createGenEdCheckboxes, 'genEdTypes')
   const { checkboxes: dayOfWeekCheckboxes } = useFilterBar<DayChipKey>(createDayOfWeekCheckboxes, 'dayOfWeeks')
-  const { checkboxes: specialCheckboxes } = useFilterBar(createSpecialCheckboxes)
+  // const { checkboxes: specialCheckboxes } = useFilterBar(createSpecialCheckboxes)
 
   const handleClose = () => {
     setOpen(false)
@@ -66,7 +67,7 @@ export const FilterSection: React.FC<FilterSectionProps> = ({ open, setOpen }) =
             <Stack spacing={4}>
               <CheckboxGroup title="หมวดหมู่ GenEd" checkboxes={genEdCheckboxes} />
               <CheckboxGroup title="วันในสัปดาห์" checkboxes={dayOfWeekCheckboxes} />
-              <CheckboxGroup title="แสดงผลพิเศษ" checkboxes={specialCheckboxes} />
+              {/* <CheckboxGroup title="แสดงผลพิเศษ" checkboxes={specialCheckboxes} /> */}
             </Stack>
           </Paper>
         </Container>
@@ -78,7 +79,7 @@ export const FilterSection: React.FC<FilterSectionProps> = ({ open, setOpen }) =
               <CheckboxGroup title="หมวดหมู่ GenEd" checkboxes={genEdCheckboxes} />
               <CheckboxGroup title="วันในสัปดาห์" checkboxes={dayOfWeekCheckboxes} />
             </Box>
-            <CheckboxGroup title="แสดงผลพิเศษ" checkboxes={specialCheckboxes} />
+            {/* <CheckboxGroup title="แสดงผลพิเศษ" checkboxes={specialCheckboxes} /> */}
             <Button color="primary" variant="outlined" fullWidth onClick={handleClose}>
               เลือกตัวกรอง
             </Button>

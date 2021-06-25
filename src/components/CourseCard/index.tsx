@@ -26,7 +26,7 @@ export const CourseCard = memo(
             <CardHeading isExpanded={isExpanded} onToggle={onToggle} />
             <CardBody isExpanded={isExpanded} />
             <CardActions sx={{ p: 4, pt: 0, display: { sm: 'none' } }}>
-              <SelectButton course={course} selectedSectionNumber={courseCardContextValue.selectedSectionNumber} />
+              <SelectButton course={course} />
             </CardActions>
           </Paper>
         </div>

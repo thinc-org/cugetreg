@@ -5,13 +5,14 @@ import { CourseCardContext, useCourseCard } from '@/components/CourseCard/useCou
 import { SelectButton } from './components/SelectButton'
 import { CardBody } from './components/CardBody'
 import { CardHeading } from './components/CardHeading'
+import { memo } from 'react'
 
 export interface CourseCardProps {
   course: Course
   rating?: number
 }
 
-export const CourseCard = (props: CourseCardProps) => {
+const CourseCard = (props: CourseCardProps) => {
   const { course } = props
   const { isOpen: isExpanded, onToggle } = useDisclosure()
 
@@ -29,3 +30,7 @@ export const CourseCard = (props: CourseCardProps) => {
     </CourseCardContext.Provider>
   )
 }
+
+const MemoCourseCard = memo(CourseCard)
+
+export { MemoCourseCard as CourseCard }

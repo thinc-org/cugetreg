@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import GeneralChip from '@/components/Chips'
 import { Stack } from '@material-ui/core'
 import { useSearchCourseQueryParams } from '@/utils/hooks/useSearchCourseQueryParams'

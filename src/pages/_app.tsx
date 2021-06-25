@@ -24,6 +24,7 @@ import { runInAction } from 'mobx'
 import { gDriveStore, GDriveSyncState } from '@/store/gDriveState'
 
 import { CourseSearchProvider } from '@/context/CourseSearch'
+import { authData, refreshAuthToken } from '@/utils/network/auth'
 mobxConfiguration()
 
 function MyApp({ Component, pageProps, forceDark }: AppProps) {
@@ -39,9 +40,13 @@ function MyApp({ Component, pageProps, forceDark }: AppProps) {
 
   useEffect(() => {
     const fn = async () => {
+      if (typeof window === 'undefined') return
+
       try {
         await loadGAPI()
         await startGDriveSync()
+
+        if (authData()) await refreshAuthToken()
       } catch (e) {
         console.error('[GDRIVE] Error while starting drive sync', e)
         runInAction(() => {

@@ -19,15 +19,15 @@ export const Default: Story<StoryProps> = (args) => {
 const checkboxes: CheckboxGroupProps['checkboxes'] = [
   {
     label: 'หมวดวิทย์',
-    value: 'Exmaple 1',
+    value: 'SC',
   },
   {
     label: 'หมวดสังคม',
-    value: 'Exmaple 2',
+    value: 'SO',
   },
   {
     label: 'หมวดมนุษย์',
-    value: 'Exmaple 3',
+    value: 'HU',
   },
 ]
 

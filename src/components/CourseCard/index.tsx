@@ -26,13 +26,18 @@ import { Caption } from '@/components/CourseCard/components/Caption'
 import { CustomButton } from '@/components/common/CustomButton'
 import { useMediaQuery } from '@material-ui/core'
 import { dayOfWeekMapper } from '@/constants/dayOfWeek'
+import { useCallback } from 'react'
+import { runInAction } from 'mobx'
+import { courseCartStore } from '@/store'
+import { observer } from 'mobx-react'
+import { ImCheckmark, ImPlus } from 'react-icons/im'
 
 export interface CourseCardProps {
   course: Course
   rating?: number
 }
 
-export const CourseCard = (props: CourseCardProps) => {
+export const CourseCard = observer((props: CourseCardProps) => {
   const { course, rating } = props
   const { t } = useTranslation('courseCard')
   const { isOpen: isExpanded, onToggle } = useDisclosure()
@@ -48,8 +53,27 @@ export const CourseCard = (props: CourseCardProps) => {
     selectedSectionNumber,
   } = useCourseCard(course)
 
+  const isSelected = courseCartStore.item(course.courseNo)?.selectedSectionNo === selectedSectionNumber
+
+  const onClickSelectCourse = useCallback(
+    () =>
+      runInAction(() => {
+        if (!isSelected) courseCartStore.addItem(course, selectedSectionNumber)
+        else courseCartStore.removeCourse(course)
+      }),
+    [course, selectedSectionNumber, isSelected]
+  )
+
   const SelectButton = (
-    <CustomButton loading={false} startIcon={<Add />} color="primary" variant="contained" fullWidth disableElevation>
+    <CustomButton
+      loading={false}
+      startIcon={!isSelected ? <Add /> : <ImCheckmark />}
+      color="primary"
+      variant={!isSelected ? 'contained' : 'outlined'}
+      fullWidth
+      disableElevation
+      onClick={onClickSelectCourse}
+    >
       {t('select')}
     </CustomButton>
   )
@@ -252,4 +276,4 @@ export const CourseCard = (props: CourseCardProps) => {
       {CardFooter}
     </Paper>
   )
-}
+})

@@ -147,7 +147,7 @@ export async function startGDriveSync() {
   }
 
   reaction(
-    () => ({ me: meStore.me, cart: courseCartStore.shopItems, cartInit: courseCartStore.isInitialized }),
+    () => ({ me: meStore.me, cart: [...courseCartStore.shopItems], cartInit: courseCartStore.isInitialized }),
     (d) => {
       const me = d.me
       if (!me) {

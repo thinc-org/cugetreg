@@ -5,6 +5,7 @@ import { Button, Chip } from '@material-ui/core'
 import { useTranslation } from 'react-i18next'
 import CalendarTodayIcon from '@material-ui/icons/CalendarToday'
 import { courseCartStore } from '@/store'
+import { observer } from 'mobx-react'
 
 const Number = styled(Chip)`
   z-index: 100;
@@ -18,7 +19,7 @@ const Number = styled(Chip)`
 
 export interface SelectedCoursesButtonProps {}
 
-export const SelectedCoursesButton: React.FC<SelectedCoursesButtonProps> = () => {
+export const SelectedCoursesButton: React.FC<SelectedCoursesButtonProps> = observer(() => {
   const { t } = useTranslation('selectedCoursesButton')
   const coursesNumber = courseCartStore.shopItems.length
 
@@ -33,4 +34,4 @@ export const SelectedCoursesButton: React.FC<SelectedCoursesButtonProps> = () =>
       {t('main')}
     </Button>
   )
-}
+})

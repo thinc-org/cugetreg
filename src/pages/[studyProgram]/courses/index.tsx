@@ -71,7 +71,7 @@ function CourseSearchPage() {
         <CourseList />
         <FilterSection open={openFilterBar} setOpen={setOpenFilterBar} />
       </Stack>
-      <Dialog open={isOpen} onClose={onClose}>
+      <Dialog open={isOpen} onClose={onClose} fullWidth maxWidth="md">
         <DialogTitle>
           รายวิชาที่ถูกเลือก{' '}
           <IconButton onClick={onClose} className={modalSty.closeBtn}>

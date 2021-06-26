@@ -1,5 +1,5 @@
 import env from '@/utils/env/macro'
-import { gql } from '@apollo/client'
+import { FetchPolicy, gql } from '@apollo/client'
 import { client } from './apollo'
 import { AuthData, MeData } from '@/store/meStore'
 
@@ -125,6 +125,7 @@ export async function retrieveMeData(authData: AuthData): Promise<MeData> {
         Authorization: `Bearer ${authData.accessToken}`,
       },
     },
+    fetchPolicy: 'no-cache',
   })
   return me.data.me
 }

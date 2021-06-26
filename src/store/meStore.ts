@@ -88,7 +88,7 @@ export class AuthStore {
       runInAction(() => {
         this.me = data
       })
-    }, 1000 * 10)
+    }, 1000 * 60 * 5)
   }
 
   /** Logout */

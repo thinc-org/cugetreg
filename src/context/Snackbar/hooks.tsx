@@ -11,5 +11,9 @@ export function useSnackBar() {
     setOpen(true)
   }
 
-  return { action, emitMessage, message, open }
+  const close = () => {
+    setOpen(false)
+  }
+
+  return { action, emitMessage, message, open, close }
 }

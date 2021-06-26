@@ -53,7 +53,7 @@ function CourseSearchPage() {
   const modalSty = modalStyle()
 
   return (
-    <Box padding="2em">
+    <Box paddingTop="2em" paddingBottom="2em">
       <Stack spacing={2} direction="row">
         <Typography variant="h2">ค้นหาวิชาเรียน</Typography>
       </Stack>

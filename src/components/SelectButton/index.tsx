@@ -7,6 +7,8 @@ import { observer } from 'mobx-react'
 import React, { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ImCheckmark } from 'react-icons/im'
+import { useContext } from 'react'
+import { SnackbarContext } from '@/context/Snackbar'
 
 interface SelectButtonProps {
   course: Course
@@ -15,17 +17,17 @@ interface SelectButtonProps {
 
 export const SelectButton = observer(({ course, selectedSectionNumber }: SelectButtonProps) => {
   const { t } = useTranslation('courseCard')
+  const { emitMessage } = useContext(SnackbarContext)
 
   const isSelected = courseCartStore.item(course.courseNo)?.selectedSectionNo === selectedSectionNumber
 
-  const onClickSelectCourse = useCallback(
-    () =>
-      runInAction(() => {
-        if (!isSelected) courseCartStore.addItem(course, selectedSectionNumber)
-        else courseCartStore.removeCourse(course)
-      }),
-    [course, selectedSectionNumber, isSelected]
-  )
+  const onClickSelectCourse = useCallback(() => {
+    emitMessage('เพิ่มรายวิชาสำเร็จ', 'ดูวิชาทั้งหมด')
+    runInAction(() => {
+      if (!isSelected) courseCartStore.addItem(course, selectedSectionNumber)
+      else courseCartStore.removeCourse(course)
+    })
+  }, [course, selectedSectionNumber, isSelected, emitMessage])
 
   return (
     <CustomButton

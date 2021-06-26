@@ -1,5 +1,5 @@
 import { AppProps } from 'next/dist/next-server/lib/router/router'
-import { ThemeProvider, CssBaseline, useMediaQuery } from '@material-ui/core'
+import { ThemeProvider, CssBaseline, useMediaQuery, Button, Snackbar, Alert } from '@material-ui/core'
 import Head from 'next/head'
 
 import '@/styles/globals.css'
@@ -24,8 +24,17 @@ import { runInAction } from 'mobx'
 import { gDriveStore, GDriveSyncState } from '@/store/gDriveState'
 
 import { CourseSearchProvider } from '@/context/CourseSearch'
+import { SnackbarContextProvider } from '@/context/Snackbar'
 import { authData, refreshAuthToken } from '@/utils/network/auth'
+import { useSnackBar } from '@/context/Snackbar/hooks'
+import styled from '@emotion/styled'
 mobxConfiguration()
+
+const ToastAlert = styled(Alert)`
+  div:last-child {
+    padding: ${({ theme }) => theme.spacing(0, 0, 0, 2)};
+  }
+`
 
 function MyApp({ Component, pageProps, forceDark }: AppProps) {
   const prefersDarkMode =
@@ -57,6 +66,10 @@ function MyApp({ Component, pageProps, forceDark }: AppProps) {
     fn()
   }, [])
 
+  const { message, emitMessage, action: actionText, open } = useSnackBar()
+
+  const value = { message, emitMessage, action: actionText }
+
   return (
     <>
       <Head>
@@ -66,14 +79,28 @@ function MyApp({ Component, pageProps, forceDark }: AppProps) {
       <ApolloProvider client={client}>
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <CourseSearchProvider>
-            <ThemeProvider theme={prefersDarkMode || forceDark ? darkTheme : lightTheme}>
-              <CssBaseline />
-              <TopBar />
-              <Container>
-                <Component {...pageProps} />
-              </Container>
-              <Footer />
-            </ThemeProvider>
+            <SnackbarContextProvider value={value}>
+              <ThemeProvider theme={prefersDarkMode || forceDark ? darkTheme : lightTheme}>
+                <CssBaseline />
+                <TopBar />
+                <Container>
+                  <Component {...pageProps} />
+                </Container>
+                <Footer />
+                <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'center' }} open={open}>
+                  <ToastAlert
+                    severity="success"
+                    action={
+                      <Button size="small" color="inherit">
+                        {actionText}
+                      </Button>
+                    }
+                  >
+                    {message}
+                  </ToastAlert>
+                </Snackbar>
+              </ThemeProvider>
+            </SnackbarContextProvider>
           </CourseSearchProvider>
         </LocalizationProvider>
       </ApolloProvider>

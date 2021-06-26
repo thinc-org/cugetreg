@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { Course } from '@thinc-org/chula-courses'
 import { CourseCard } from '@/components/CourseCard'
 import { Typography } from '@material-ui/core'

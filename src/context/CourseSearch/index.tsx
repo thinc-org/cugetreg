@@ -1,4 +1,4 @@
-import React, { createContext, useMemo, useState } from 'react'
+import React, { createContext, useMemo, useState, useEffect } from 'react'
 import { useQuery } from '@apollo/client'
 import { SearchCourseResponse, SearchCourseVars, SEARCH_COURSE } from '@/utils/network/BackendGQLQueries'
 import { useSearchCourseQueryParams } from '@/utils/hooks/useSearchCourseQueryParams'
@@ -15,14 +15,16 @@ export const CourseSearchProvider: React.FC = (props) => {
   const courseSearchQuery = useQuery<SearchCourseResponse, SearchCourseVars>(SEARCH_COURSE, {
     notifyOnNetworkStatusChange: true,
     variables: {
-      ...searchCourseQueryParams,
+      courseGroup: searchCourseQueryParams.courseGroup,
       filter: {
-        ...searchCourseQueryParams.filter,
+        dayOfWeeks: searchCourseQueryParams.filter.dayOfWeeks,
         limit: LIMIT_QUERY_CONSTANT,
         offset: offset,
       },
     },
   })
+
+  useEffect(() => {}, [courseSearchQuery, searchCourseQueryParams.filter.dayOfWeeks])
 
   const fetchMoreCourses = async () => {
     if (!courseSearchQuery.loading) {

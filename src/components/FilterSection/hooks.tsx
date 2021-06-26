@@ -14,7 +14,6 @@ export function useFilterBar<TagValue extends GeneralChipKey = GeneralChipKey>(
   initCheckboxes: CreateCheckbox<TagValue>[],
   type?: keyof Pick<SearchCourseVars['filter'], 'genEdTypes' | 'dayOfWeeks'>
 ) {
-  const { resetOffset } = useContext(CourseSearchContext)
   const { setFilter, searchCourseQueryParams } = useSearchCourseQueryParams()
 
   const addTag = (array: string[] | undefined, tag: string) => {
@@ -44,10 +43,8 @@ export function useFilterBar<TagValue extends GeneralChipKey = GeneralChipKey>(
 
         setFilter({ ...searchCourseQueryParams.filter, dayOfWeeks: dayOfWeeks })
       }
-
-      resetOffset()
     },
-    [searchCourseQueryParams.filter, setFilter, resetOffset, type]
+    [searchCourseQueryParams.filter, setFilter, type]
   )
 
   const checkboxes: EnhancedCheckBoxProps[] = useMemo(() => {

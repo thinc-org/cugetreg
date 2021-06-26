@@ -1,4 +1,4 @@
-import React, { createContext, useState } from 'react'
+import React, { createContext, useMemo, useState } from 'react'
 import { useQuery } from '@apollo/client'
 import { SearchCourseResponse, SearchCourseVars, SEARCH_COURSE } from '@/utils/network/BackendGQLQueries'
 import { useSearchCourseQueryParams } from '@/utils/hooks/useSearchCourseQueryParams'
@@ -8,6 +8,8 @@ export const CourseSearchContext = createContext(DEFAULT_COURSE_SEARCH_CONTEXT_V
 
 export const CourseSearchProvider: React.FC = (props) => {
   const [offset, setOffset] = useState(0)
+  const pageIndex = useMemo(() => offset / LIMIT_QUERY_CONSTANT, [offset])
+
   const { searchCourseQueryParams } = useSearchCourseQueryParams()
 
   const courseSearchQuery = useQuery<SearchCourseResponse, SearchCourseVars>(SEARCH_COURSE, {
@@ -23,24 +25,26 @@ export const CourseSearchProvider: React.FC = (props) => {
   })
 
   const fetchMoreCourses = async () => {
-    await courseSearchQuery.fetchMore({
-      variables: {
-        ...searchCourseQueryParams,
-        filter: {
-          ...searchCourseQueryParams.filter,
-          limit: LIMIT_QUERY_CONSTANT,
-          offset: offset + LIMIT_QUERY_CONSTANT,
+    if (!courseSearchQuery.loading) {
+      await courseSearchQuery.fetchMore({
+        variables: {
+          ...searchCourseQueryParams,
+          filter: {
+            ...searchCourseQueryParams.filter,
+            limit: LIMIT_QUERY_CONSTANT,
+            offset: offset + LIMIT_QUERY_CONSTANT,
+          },
         },
-      },
-    })
-    setOffset(offset + LIMIT_QUERY_CONSTANT)
+      })
+      setOffset(offset + LIMIT_QUERY_CONSTANT)
+    }
   }
 
   const resetOffset = () => {
     setOffset(0)
   }
 
-  const value = { courseSearchQuery, fetchMoreCourses, resetOffset }
+  const value = { courseSearchQuery, fetchMoreCourses, resetOffset, pageIndex }
 
   return <CourseSearchContext.Provider value={value} {...props} />
 }

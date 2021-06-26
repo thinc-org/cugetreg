@@ -1,13 +1,13 @@
 import styled from '@emotion/styled'
-import { BoxProps, useTheme } from '@material-ui/core'
+import { useTheme } from '@material-ui/core'
 
 import { PulseLoader } from 'react-spinners'
 
-export interface LoadingProps extends BoxProps {
+export interface LoadingProps {
   loading: boolean
 }
 
-const Container = styled.span`
+const Container = styled.div`
   margin: ${({ theme }) => theme.spacing(2, 'auto', 0, 'auto')};
   width: 100%;
   min-height: 60px;
@@ -21,7 +21,11 @@ const Container = styled.span`
 export const Loading: React.FC<LoadingProps> = ({ loading }) => {
   const theme = useTheme()
 
+  if (!loading) return <Container />
+
   return (
-    <Container>{loading ? <PulseLoader size={8} margin={8} color={theme.palette.primary.main} /> : null}</Container>
+    <Container>
+      <PulseLoader size={8} margin={8} color={theme.palette.primary.main} />
+    </Container>
   )
 }

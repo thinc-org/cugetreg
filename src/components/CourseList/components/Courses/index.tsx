@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Course } from '@thinc-org/chula-courses'
 import { CourseCard } from '@/components/CourseCard'
 import { Typography } from '@material-ui/core'
@@ -17,8 +17,8 @@ export const Courses: React.FC<CoursesProps> = ({ courses, loading }) => {
 
   return (
     <>
-      {courses.map((result) => (
-        <CourseCard key={result.courseNo} course={result} />
+      {courses.map((course) => (
+        <CourseCard key={`${course.courseNo}`} course={course} />
       ))}
     </>
   )

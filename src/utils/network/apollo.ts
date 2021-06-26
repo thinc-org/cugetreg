@@ -1,6 +1,7 @@
 import { ApolloClient, InMemoryCache } from '@apollo/client'
 
 import env from '@/utils/env/macro'
+import { Course } from '@thinc-org/chula-courses'
 
 const cache = new InMemoryCache({
   typePolicies: {
@@ -11,7 +12,7 @@ const cache = new InMemoryCache({
           read(existing) {
             return existing
           },
-          merge(existing = [], incoming) {
+          merge(existing: Course[] = [], incoming: Course[]) {
             return [...existing, ...incoming]
           },
         },

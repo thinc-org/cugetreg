@@ -24,7 +24,8 @@ import { runInAction } from 'mobx'
 import { gDriveStore, GDriveSyncState } from '@/store/gDriveState'
 
 import { CourseSearchProvider } from '@/context/CourseSearch'
-import { authData, refreshAuthToken } from '@/utils/network/auth'
+import { authStore } from '@/store/meStore'
+
 mobxConfiguration()
 
 function MyApp({ Component, pageProps, forceDark }: AppProps) {
@@ -38,23 +39,19 @@ function MyApp({ Component, pageProps, forceDark }: AppProps) {
 
   useApp()
 
+  // Retoring AuthStore and Syncing coursecart
   useEffect(() => {
-    const fn = async () => {
-      if (typeof window === 'undefined') return
+    if (typeof window === 'undefined') return //Don't sync on the browser
 
-      try {
-        await loadGAPI()
-        await startGDriveSync()
-
-        if (authData()) await refreshAuthToken()
-      } catch (e) {
+    authStore.tryRestoreWithLocalStorage()
+    loadGAPI()
+      .then(startGDriveSync)
+      .catch((e) => {
         console.error('[GDRIVE] Error while starting drive sync', e)
         runInAction(() => {
           gDriveStore.gDriveState = GDriveSyncState.FAIL
         })
-      }
-    }
-    fn()
+      })
   }, [])
 
   return (

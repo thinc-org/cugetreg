@@ -18,7 +18,6 @@ const useStyles = makeStyles((theme) => ({
     },
     backgroundColor: theme.palette.background.paper,
     width: '100%',
-    maxWidth: theme.breakpoints.values.sm,
     borderRadius: theme.shape.borderRadius,
     boxShadow: theme.shadows[2],
   },

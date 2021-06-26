@@ -40,6 +40,7 @@ export function getRedirectUrl() {
     scope: 'openid profile email https://www.googleapis.com/auth/drive.appdata',
     access_type: 'offline',
     include_granted_scopes: 'true',
+    hd: 'student.chula.ac.th',
   })
 
   // use redirect redirector

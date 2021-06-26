@@ -56,6 +56,7 @@ export class AuthStore {
       this.me = meData
     })
     this.startRefreshTokenTimer()
+    localStorage.setItem(AUTHDATA_LOCALSTORAGE_FIELD, JSON.stringify(authData))
   }
 
   /** Try restoring AuthStore using localstorage. */

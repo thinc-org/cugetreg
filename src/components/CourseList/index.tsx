@@ -1,17 +1,21 @@
-import React, { useContext, useEffect } from 'react'
+import React from 'react'
 
 import { Stack } from '@material-ui/core'
-import { CourseCard } from '@/components/CourseCard'
-import { CourseSearchContext } from '@/context/CourseSearch'
 import { Loading } from '@/components/Loading'
 import { Error } from '@/components/Error'
+<<<<<<< refs/remotes/origin/dev
 import { RenderOnIntersect } from '../RenderOnIntersect'
 import { QueryResult } from '@apollo/client'
 import { SearchCourseResponse, SearchCourseVars } from '@/utils/network/BackendGQLQueries'
+=======
+import { useCourseList } from '@/components/CourseList/hooks'
+import { Courses } from '@/components/CourseList/components/Courses'
+>>>>>>> feat: infinite scroll with loading icon
 
 export interface CourseListProps {}
 
 export const CourseList: React.FC<CourseListProps> = () => {
+<<<<<<< refs/remotes/origin/dev
   const { courseSearchQuery, fetchMoreCourses } = useContext(CourseSearchContext)
 
   const { data, loading, error } = courseSearchQuery as QueryResult<SearchCourseResponse, SearchCourseVars>
@@ -55,5 +59,17 @@ export const CourseList: React.FC<CourseListProps> = () => {
       {loading && <Loading />}
       {error && <Error message={error.message} />}
     </Stack>
+=======
+  const { courses, loading, error } = useCourseList()
+
+  return (
+    <>
+      <Stack spacing={2} sx={{ width: '100%' }}>
+        <Courses loading={loading} courses={courses || []} />
+        <Loading loading={loading} />
+        {error && <Error message={error.message} />}
+      </Stack>
+    </>
+>>>>>>> feat: infinite scroll with loading icon
   )
 }

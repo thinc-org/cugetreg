@@ -2753,10 +2753,10 @@
     "@babel/runtime" "^7.12.5"
     "@testing-library/dom" "^7.28.1"
 
-"@thinc-org/chula-courses@^1.1.8":
-  version "1.1.8"
-  resolved "https://registry.yarnpkg.com/@thinc-org/chula-courses/-/chula-courses-1.1.8.tgz#7dc9be5567d01404382faf67a7efffb289d80893"
-  integrity sha512-QBcHJaTKBtF1aYwIeiDB6zs1kh1pSCE4TMoRK6jVTkKnWeAXWUTJy+3Sp4IEMB+gLf5/8vbBJGP+Gq7gY5q4gQ==
+"@thinc-org/chula-courses@^1.1.10":
+  version "1.1.10"
+  resolved "https://registry.yarnpkg.com/@thinc-org/chula-courses/-/chula-courses-1.1.10.tgz#0969783963c8e2f36b81f533caf8a1ad736b6e71"
+  integrity sha512-FgEmm4RFlF+oa6DvCBue3blO0hKm2wOVPq6xf53BD46LTO8oTaDe6tMXufdyFqTEmUvMfHFrs8VUxQRgQjdn0A==
   dependencies:
     axios "^0.21.1"
 

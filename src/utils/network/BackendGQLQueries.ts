@@ -25,6 +25,7 @@ const COURSE_DATA_FIELDS = `
     courseNameTh
     courseNameEn
     faculty
+    department
     credit
     creditHours
     courseCondition

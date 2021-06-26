@@ -1,14 +1,5 @@
-import { useState } from 'react'
-import {
-  Box,
-  Dialog,
-  DialogTitle,
-  Hidden,
-  IconButton,
-  makeStyles,
-  Stack as MuiStack,
-  Typography,
-} from '@material-ui/core'
+import { useState, useContext } from 'react'
+import { Box, Hidden, Stack as MuiStack, Typography } from '@material-ui/core'
 import { CourseList } from '@/components/CourseList'
 import { SearchField } from '@/components/SearchField'
 import { FilterIconButton } from '@/components/FilterIconButton'
@@ -16,11 +7,8 @@ import { SelectedCoursesButton } from '@/components/SelectedCoursesButton'
 import { FilterSection } from '@/components/FilterSection'
 import styled from '@emotion/styled'
 import { TagList } from '@/components/TagList'
-import { useDisclosure } from '@/hooks/useDisclosure'
 import React from 'react'
-import { ImCross } from 'react-icons/im'
-import ShoppingPanel from '@/components/ShoppingPanel'
-import { useStyles } from '@/components/CR11/styles'
+import { ShoppingCartModalContext } from '@/context/ShoppingCartModal'
 
 const Stack = styled(MuiStack)`
   margin-bottom: ${({ theme }) => theme.spacing(2)};
@@ -37,20 +25,10 @@ const StickyStack = styled(Stack)`
   }
 `
 
-const modalStyle = makeStyles(() => ({
-  closeBtn: {
-    position: 'absolute',
-    right: '1em',
-    top: '0em',
-  },
-}))
-
 function CourseSearchPage() {
   const [openFilterBar, setOpenFilterBar] = useState(false)
 
-  const { isOpen, onClose, onOpen } = useDisclosure()
-
-  const modalSty = modalStyle()
+  const { onOpen } = useContext(ShoppingCartModalContext)
 
   return (
     <Box paddingTop="2em" paddingBottom="2em">
@@ -71,15 +49,6 @@ function CourseSearchPage() {
         <CourseList />
         <FilterSection open={openFilterBar} setOpen={setOpenFilterBar} />
       </Stack>
-      <Dialog open={isOpen} onClose={onClose} fullWidth maxWidth="md">
-        <DialogTitle>
-          รายวิชาที่ถูกเลือก{' '}
-          <IconButton onClick={onClose} className={modalSty.closeBtn}>
-            <ImCross />
-          </IconButton>
-        </DialogTitle>
-        <ShoppingPanel />
-      </Dialog>
     </Box>
   )
 }

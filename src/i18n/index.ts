@@ -6,6 +6,10 @@ const resources = {
   th,
 }
 
+export enum Language {
+  th = 'th',
+}
+
 declare module 'react-i18next' {
   type DefaultResources = typeof th
   // eslint-disable-next-line @typescript-eslint/no-empty-interface
@@ -14,7 +18,7 @@ declare module 'react-i18next' {
 
 i18n.use(initReactI18next).init({
   resources,
-  lng: 'th',
+  lng: Language.th,
 
   interpolation: {
     escapeValue: false,

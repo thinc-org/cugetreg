@@ -1,5 +1,5 @@
 import { AppProps } from 'next/dist/next-server/lib/router/router'
-import { ThemeProvider, CssBaseline, useMediaQuery } from '@material-ui/core'
+import { ThemeProvider, CssBaseline, useMediaQuery, Button, Snackbar, Alert } from '@material-ui/core'
 import Head from 'next/head'
 
 import '@/styles/globals.css'
@@ -8,11 +8,13 @@ import { darkTheme, lightTheme } from '@/configs/theme'
 import { TopBar } from '@/components/TopBar'
 import { Footer } from '@/components/Footer'
 import { Container } from '@/components/Container'
+import { ShoppingCartModal } from '@/components/ShoppingCartModal'
 import env from '@/utils/env/macro'
 
 import { ApolloProvider } from '@apollo/client'
 import { client } from '@/utils/network/apollo'
 import useApp from '@/hooks/useApp'
+import { useDisclosure } from '@/context/ShoppingCartModal/hooks'
 import { mobxConfiguration } from '@/configs/mobx'
 
 import AdapterDateFns from '@material-ui/lab/AdapterDateFns'
@@ -24,9 +26,19 @@ import { runInAction } from 'mobx'
 import { gDriveStore, GDriveSyncState } from '@/store/gDriveState'
 
 import { CourseSearchProvider } from '@/context/CourseSearch'
+import { ShoppingCartModalProvider } from '@/context/ShoppingCartModal'
+import { SnackbarContextProvider } from '@/context/Snackbar'
+import { useSnackBar } from '@/context/Snackbar/hooks'
+import styled from '@emotion/styled'
 import { authStore } from '@/store/meStore'
 
 mobxConfiguration()
+
+const ToastAlert = styled(Alert)`
+  div:last-child {
+    padding: ${({ theme }) => theme.spacing(0, 0, 0, 2)};
+  }
+`
 
 function MyApp({ Component, pageProps, forceDark }: AppProps) {
   const prefersDarkMode =
@@ -54,6 +66,17 @@ function MyApp({ Component, pageProps, forceDark }: AppProps) {
       })
   }, [])
 
+  const { message, emitMessage, action: actionText, open, close } = useSnackBar()
+  const disclosureValue = useDisclosure()
+  const handleClose = (_: unknown, reason: string) => {
+    if (reason === 'clickaway') {
+      return
+    }
+    close()
+  }
+
+  const value = { message, emitMessage, action: actionText }
+
   return (
     <>
       <Head>
@@ -63,14 +86,36 @@ function MyApp({ Component, pageProps, forceDark }: AppProps) {
       <ApolloProvider client={client}>
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <CourseSearchProvider>
-            <ThemeProvider theme={prefersDarkMode || forceDark ? darkTheme : lightTheme}>
-              <CssBaseline />
-              <TopBar />
-              <Container>
-                <Component {...pageProps} />
-              </Container>
-              <Footer />
-            </ThemeProvider>
+            <SnackbarContextProvider value={value}>
+              <ShoppingCartModalProvider value={disclosureValue}>
+                <ThemeProvider theme={prefersDarkMode || forceDark ? darkTheme : lightTheme}>
+                  <CssBaseline />
+                  <TopBar />
+                  <Container>
+                    <Component {...pageProps} />
+                  </Container>
+                  <Footer />
+                  <Snackbar
+                    anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                    onClose={handleClose}
+                    autoHideDuration={6000}
+                    open={open}
+                  >
+                    <ToastAlert
+                      severity="success"
+                      action={
+                        <Button size="small" color="inherit" onClick={disclosureValue.onOpen}>
+                          {actionText}
+                        </Button>
+                      }
+                    >
+                      {message}
+                    </ToastAlert>
+                  </Snackbar>
+                  <ShoppingCartModal />
+                </ThemeProvider>
+              </ShoppingCartModalProvider>
+            </SnackbarContextProvider>
           </CourseSearchProvider>
         </LocalizationProvider>
       </ApolloProvider>

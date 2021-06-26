@@ -1,8 +1,8 @@
 import { CardActions, Paper } from '@material-ui/core'
 import { Course } from '@thinc-org/chula-courses'
-import { useDisclosure } from '@/hooks/useDisclosure'
+import { useDisclosure } from '@/context/ShoppingCartModal/hooks'
 import { CourseCardContext, useCourseCard } from '@/components/CourseCard/useCourseCard'
-import { SelectButton } from './components/SelectButton'
+import { SelectButton } from '@/components/SelectButton'
 import { CardBody } from './components/CardBody'
 import { CardHeading } from './components/CardHeading'
 import { forwardRef, memo } from 'react'
@@ -26,7 +26,7 @@ export const CourseCard = memo(
             <CardHeading isExpanded={isExpanded} onToggle={onToggle} />
             <CardBody isExpanded={isExpanded} />
             <CardActions sx={{ p: 4, pt: 0, display: { sm: 'none' } }}>
-              <SelectButton course={course} />
+              <SelectButton course={course} selectedSectionNumber={courseCardContextValue.selectedSectionNumber} />
             </CardActions>
           </Paper>
         </div>

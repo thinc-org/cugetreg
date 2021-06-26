@@ -45,10 +45,6 @@ export const CourseList: React.FC<CourseListProps> = () => {
 
   if (!courseSearchQuery) return null
 
-  // if (!data?.search.length) {
-  //   return <Error message="NOT FOUND" />
-  // }
-
   return (
     <Stack spacing={2} sx={{ width: '100%' }}>
       {data?.search.map((result) => (

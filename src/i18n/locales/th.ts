@@ -45,7 +45,7 @@ export const schedulePage = {
   title: 'จัดตารางเรียน',
   downloadPng: 'PNG',
   addToCalendar: 'Google Calendar',
-  showJorTor11: 'แสดง จท11',
+  showCR11: 'แสดง จท11',
   sumCreditsDesc: 'หน่วยกิตรวมในตาราง',
   sumCredits: '{{credits}} หน่วยกิต',
   classSchedule: 'ตารางเรียน',

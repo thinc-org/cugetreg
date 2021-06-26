@@ -11,6 +11,7 @@ export const CourseSearchProvider: React.FC = (props) => {
   const { searchCourseQueryParams } = useSearchCourseQueryParams()
 
   const courseSearchQuery = useQuery<SearchCourseResponse, SearchCourseVars>(SEARCH_COURSE, {
+    notifyOnNetworkStatusChange: true,
     variables: {
       ...searchCourseQueryParams,
       filter: {

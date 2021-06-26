@@ -11,7 +11,7 @@ export interface SeachFieldProp {}
 export const SearchField: React.FC<SeachFieldProp> = () => {
   const classes = useStyles()
   const { setFilter, searchCourseQueryParams } = useSearchCourseQueryParams()
-  const { setOffset } = useContext(CourseSearchContext)
+  const { resetOffset } = useContext(CourseSearchContext)
   const [input, setInput] = useState(() => searchCourseQueryParams.filter.keyword || '')
 
   useEffect(() => {
@@ -26,7 +26,7 @@ export const SearchField: React.FC<SeachFieldProp> = () => {
     event.preventDefault()
     const keyword = input
     setFilter({ ...searchCourseQueryParams.filter, keyword: keyword })
-    setOffset(0)
+    resetOffset()
   }
 
   return (

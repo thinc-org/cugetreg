@@ -7,7 +7,7 @@ export interface LoadingProps extends BoxProps {
   loading: boolean
 }
 
-const Container = styled.div`
+const Container = styled.span`
   margin: ${({ theme }) => theme.spacing(2, 'auto', 0, 'auto')};
   width: 100%;
   min-height: 60px;

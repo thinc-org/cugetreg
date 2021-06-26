@@ -7,6 +7,7 @@ import { getExamDate, getExamPeriod } from './utils'
 export type ExamClass = Pick<Course, 'courseNo' | 'abbrName' | 'genEdType' | 'midterm' | 'final'> &
   Omit<Class, 'type'> & {
     hasOverlap?: boolean
+    isHidden: boolean
   }
 
 interface ClassCardProps {
@@ -14,6 +15,7 @@ interface ClassCardProps {
   order: number
   isFinal: boolean
   className?: string
+  isHidden: boolean
 }
 
 const ClassCardLayout = styled.div`
@@ -41,10 +43,11 @@ const ExamTime = styled(Typography)`
 `
 
 const ExamDate = styled.div`
+  text-transform: uppercase;
   margin-right: ${({ theme }) => theme.spacing(4)}; ;
 `
 
-export function ExamCard({ scheduleClass, order, isFinal, className }: ClassCardProps) {
+export function ExamCard({ scheduleClass, order, isFinal, className, isHidden }: ClassCardProps) {
   const { courseNo, abbrName, genEdType, hasOverlap } = scheduleClass
   const colorScheme = useColorScheme(genEdType, hasOverlap ?? false)
 
@@ -55,6 +58,7 @@ export function ExamCard({ scheduleClass, order, isFinal, className }: ClassCard
     <ClassCardLayout
       className={className}
       style={{
+        opacity: isHidden ? 0.3 : 1,
         backgroundColor: colorScheme.background,
         border: `1px solid ${colorScheme.border}`,
         color: colorScheme.text,

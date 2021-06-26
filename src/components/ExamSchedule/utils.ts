@@ -17,6 +17,7 @@ function getHourMinuteFromPeriod(period: string) {
 export function sortExamSchedule(classes: CourseCartItem[], isMidterm: boolean) {
   const hasExamClasses: CourseCartItem[] = []
   const notHasExamClasses: CourseCartItem[] = []
+
   classes.forEach((class_) => {
     const examPeriod = getExamPeriod(class_, isMidterm)
     if (examPeriod) {
@@ -39,16 +40,29 @@ export function sortExamSchedule(classes: CourseCartItem[], isMidterm: boolean) 
     return dateCompare || hourCompare || minuteCompare
   })
 
-  return hasExamClassesSorted.concat(notHasExamClasses)
+  const sortedClasses = hasExamClassesSorted.concat(notHasExamClasses)
+
+  const hiddenClasses: CourseCartItem[] = []
+  const notHiddenClasses: CourseCartItem[] = []
+  sortedClasses.forEach((class_) => {
+    if (class_.isHidden) {
+      hiddenClasses.push(class_)
+    } else {
+      notHiddenClasses.push(class_)
+    }
+  })
+
+  return notHiddenClasses.concat(hiddenClasses)
 }
 
 export function findOverlap(sortedClasses: CourseCartItem[], isMidterm: boolean) {
   const overlapNumber: number[] = []
-  for (let i = 0; i < sortedClasses.length; i++) {
-    const exam = getExamPeriod(sortedClasses[i], isMidterm)
+  const classes = sortedClasses.filter((class_) => !class_.isHidden)
+  for (let i = 0; i < classes.length; i++) {
+    const exam = getExamPeriod(classes[i], isMidterm)
     if (exam) {
-      for (let j = i + 1; j < sortedClasses.length; j++) {
-        const examNext = getExamPeriod(sortedClasses[j], isMidterm)
+      for (let j = i + 1; j < classes.length; j++) {
+        const examNext = getExamPeriod(classes[j], isMidterm)
         if (examNext && exam.date === examNext.date) {
           const { hour, minute } = getHourMinuteFromPeriod(exam.period.end)
           const { hour: hourNext, minute: minuteNext } = getHourMinuteFromPeriod(examNext.period.start)
@@ -64,22 +78,25 @@ export function findOverlap(sortedClasses: CourseCartItem[], isMidterm: boolean)
   }
 
   return sortedClasses.map((class_, index) => {
-    const { courseNo, abbrName, genEdType, midterm, final } = class_
+    const { courseNo, abbrName, genEdType, midterm, final, isHidden } = class_
     const hasOverlap = overlapNumber.includes(index)
-    return { courseNo, abbrName, genEdType, midterm, final, hasOverlap } as ExamClass
+    return { courseNo, abbrName, genEdType, midterm, final, hasOverlap, isHidden } as ExamClass
   })
 }
 
 export function useExamClasses(courses: CourseCartItem[]) {
+  const courseDisplayLength = courses.filter((course) => !course.isHidden).length
   const midtermClasses = useMemo(() => {
     const midtermClassesSorted = sortExamSchedule(courses, true)
     return findOverlap(midtermClassesSorted, true)
-  }, [courses])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [courseDisplayLength, courses])
 
   const finalClasses = useMemo(() => {
     const finalClassesSorted = sortExamSchedule(courses, false)
     return findOverlap(finalClassesSorted, false)
-  }, [courses])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [courseDisplayLength, courses])
 
   return { midtermClasses, finalClasses }
 }

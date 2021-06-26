@@ -1,15 +1,16 @@
 import { courseCartStore } from '@/store/shoppingCart'
 import { Typography, makeStyles } from '@material-ui/core'
 import { observer } from 'mobx-react'
-import React, { useEffect } from 'react'
+import React from 'react'
 import { CR11 } from '@/components/CR11'
 import { useTranslation } from 'react-i18next'
 import { useCourseGroup } from '@/utils/hooks/useCourseGroup'
-import { mockCourseData } from '@/__mock__/courses'
 import { BackButton } from '@/components/BackButton'
+import Link from 'next/link'
 
 const useStyles = makeStyles((theme) => ({
   container: {
+    marginTop: theme.spacing(8),
     display: 'flex',
     flexDirection: 'column',
   },
@@ -89,21 +90,12 @@ const Home = observer(() => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const studyProgramText = `${t('cr11:semester')} ${year}/${semester} ${t(`program:${studyProgram || 's'}` as any)}`
 
-  useEffect(() => {
-    // get mock data
-    const getMockCourse = (i: number) => {
-      return mockCourseData[i]
-    }
-    for (let i = 0; i < 4; i++) {
-      const mockCourse = getMockCourse(i)
-      shoppingCart.addItem(mockCourse, mockCourse.sections[0].sectionNo)
-    }
-  }, [shoppingCart])
-
   return (
     <div className={classes.container}>
       <div className={classes.top}>
-        <BackButton />
+        <Link href={`/${studyProgram}/schedule`} passHref>
+          <BackButton />
+        </Link>
         <Typography className={`${classes.semester} ${classes.mobile}`} variant="subtitle1">
           {studyProgramText}
         </Typography>

@@ -103,7 +103,6 @@ export const SectionCard = (props: SectionCardProps) => {
               ))}
             </TableBody>
           </Table>
-
           <Stack
             sx={{
               display: { xs: 'none', sm: 'flex' },

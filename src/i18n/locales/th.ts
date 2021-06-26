@@ -86,6 +86,8 @@ export const courseCard = {
   classRoom: 'ห้องเรียน',
   note: 'หมายเหตุ',
   capacity: 'ที่ว่าง',
+  addSubjectSuccess: 'เพิ่มรายวิชาสำเร็จ',
+  viewAllSubject: 'ดูวิชาทั้งหมด',
 }
 
 export const sectionCard = {

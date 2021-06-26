@@ -71,15 +71,16 @@ export function findOverlap(sortedClasses: CourseCartItem[], isMidterm: boolean)
 }
 
 export function useExamClasses(courses: CourseCartItem[]) {
+  const courseFiltered = courses.filter((course) => course.isHidden)
   const midtermClasses = useMemo(() => {
-    const midtermClassesSorted = sortExamSchedule(courses, true)
+    const midtermClassesSorted = sortExamSchedule(courseFiltered, true)
     return findOverlap(midtermClassesSorted, true)
-  }, [courses])
+  }, [courseFiltered])
 
   const finalClasses = useMemo(() => {
-    const finalClassesSorted = sortExamSchedule(courses, false)
+    const finalClassesSorted = sortExamSchedule(courseFiltered, false)
     return findOverlap(finalClassesSorted, false)
-  }, [courses])
+  }, [courseFiltered])
 
   return { midtermClasses, finalClasses }
 }

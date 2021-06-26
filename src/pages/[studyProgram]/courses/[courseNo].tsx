@@ -1,5 +1,5 @@
 import { ApolloError, useQuery } from '@apollo/client'
-import { Course } from '@thinc-org/chula-courses'
+import { Course, getFaculty } from '@thinc-org/chula-courses'
 import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 import { useRouter } from 'next/router'
 import React from 'react'
@@ -12,6 +12,8 @@ import { SectionCard } from '@/components/SectionCard'
 import { groupBy } from '@/utils/groupBy'
 import styled from '@emotion/styled'
 import { BackButton } from '@/components/BackButton'
+import { useTranslation } from 'react-i18next'
+import { Language } from '@/i18n'
 
 const SectionCardLayout = styled(SectionCard)`
   margin-top: ${({ theme }) => theme.spacing(3)};
@@ -70,6 +72,7 @@ function courseTypeStringFromCourse(c: Course) {
 
 function CourseDetailPage(props: { data: GetCourseResponse }) {
   const router = useRouter()
+  const { i18n } = useTranslation()
 
   const { data } = useQuery<GetCourseResponse, GetCourseVars>(GET_COURSE, {
     variables: parseVariablesFromQuery(router.query),
@@ -88,6 +91,8 @@ function CourseDetailPage(props: { data: GetCourseResponse }) {
     )
   })
 
+  const faculty = getFaculty(cData.course.faculty)
+
   return (
     <>
       <BackButton />
@@ -99,7 +104,7 @@ function CourseDetailPage(props: { data: GetCourseResponse }) {
       <GridContainer container>
         <Grid item xs={12} sm={6}>
           <DescriptionTitle variant="subtitle1">คณะ</DescriptionTitle>
-          <Typography variant="h6">{cData.course.faculty}</Typography>
+          <Typography variant="h6">{i18n.language === Language.th ? faculty?.nameTh : faculty?.nameEn}</Typography>
         </Grid>
         <GridEnd item xs={12} sm={6}>
           <DescriptionTitle variant="subtitle1">ภาควิชา/กลุ่มวิชา/สาขาวิชา</DescriptionTitle>

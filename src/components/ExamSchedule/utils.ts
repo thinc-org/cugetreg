@@ -17,6 +17,7 @@ function getHourMinuteFromPeriod(period: string) {
 export function sortExamSchedule(classes: CourseCartItem[], isMidterm: boolean) {
   const hasExamClasses: CourseCartItem[] = []
   const notHasExamClasses: CourseCartItem[] = []
+
   classes.forEach((class_) => {
     const examPeriod = getExamPeriod(class_, isMidterm)
     if (examPeriod) {
@@ -39,7 +40,19 @@ export function sortExamSchedule(classes: CourseCartItem[], isMidterm: boolean) 
     return dateCompare || hourCompare || minuteCompare
   })
 
-  return hasExamClassesSorted.concat(notHasExamClasses)
+  const sortedClasses = hasExamClassesSorted.concat(notHasExamClasses)
+
+  const hiddenClasses: CourseCartItem[] = []
+  const notHiddenClasses: CourseCartItem[] = []
+  sortedClasses.forEach((class_) => {
+    if (class_.isHidden) {
+      hiddenClasses.push(class_)
+    } else {
+      notHiddenClasses.push(class_)
+    }
+  })
+
+  return notHiddenClasses.concat(hiddenClasses)
 }
 
 export function findOverlap(sortedClasses: CourseCartItem[], isMidterm: boolean) {

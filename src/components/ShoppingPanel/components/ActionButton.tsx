@@ -26,7 +26,7 @@ export const ActionButton: React.FC<ActionButtonProps> = ({
 }) => {
   const { t } = useTranslation('shoppingPanel')
   const { studyProgram } = useCourseGroup()
-  const href = `${studyProgram}/schedule`
+  const href = `/${studyProgram}/schedule`
 
   const defaultButtonProps: ButtonProps = {
     ...props,

@@ -41,6 +41,7 @@ export function getRedirectUrl() {
     access_type: 'offline',
     include_granted_scopes: 'true',
     hd: 'student.chula.ac.th',
+    prompt: 'consent',
   })
 
   // use redirect redirector

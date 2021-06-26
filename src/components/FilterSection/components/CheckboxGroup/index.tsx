@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React from 'react'
 import { Checkbox, CheckboxProps, FormControlLabel, makeStyles, Stack, Typography } from '@material-ui/core'
 import { useSearchCourseQueryParams } from '@/utils/hooks/useSearchCourseQueryParams'
 import { GeneralChipKey } from '@/components/Chips/config'
@@ -24,16 +24,12 @@ export const CheckboxGroup: React.FC<CheckboxGroupProps> = ({ title, checkboxes 
 
   const { searchCourseQueryParams } = useSearchCourseQueryParams()
 
-  const hasChecked = useCallback(
-    (tag: GeneralChipKey) => {
-      const genEdTags: string[] = searchCourseQueryParams.filter?.genEdTypes ?? []
-      const dayOfWeeks: string[] = searchCourseQueryParams.filter?.dayOfWeeks ?? []
-      const allTags = genEdTags.concat(dayOfWeeks)
+  const hasChecked = (tag: GeneralChipKey) => {
+    const genEdTags: string[] = searchCourseQueryParams.filter?.genEdTypes ?? []
+    const dayOfWeeks: string[] = searchCourseQueryParams.filter?.dayOfWeeks ?? []
 
-      return allTags.includes(tag)
-    },
-    [searchCourseQueryParams]
-  )
+    return genEdTags.includes(tag) || dayOfWeeks.includes(tag)
+  }
 
   return (
     <Stack>

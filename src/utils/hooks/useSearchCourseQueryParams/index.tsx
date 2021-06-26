@@ -1,16 +1,11 @@
-import { useMemo, useCallback } from 'react'
+import { useMemo, useCallback, useContext } from 'react'
 import { useRouter } from 'next/router'
 
-import { DEFAULT_STUDY_PROGRAM } from '@/constants/studyProgram'
 import { SearchCourseVars } from '@/utils/network/BackendGQLQueries'
 import { DayOfWeek, GenEdType, StudyProgram } from '@thinc-org/chula-courses'
 import { useCourseGroup } from '@/utils/hooks/useCourseGroup'
-
-const CURRENT_COURSE_GROUP = {
-  semester: '1',
-  academicYear: '2564',
-  studyProgram: DEFAULT_STUDY_PROGRAM,
-}
+import { CourseSearchContext } from '@/context/CourseSearch'
+import { LIMIT_QUERY_CONSTANT } from '@/context/CourseSearch/constants'
 
 export interface QueryParams {
   keyword?: string
@@ -33,6 +28,8 @@ export const useSearchCourseQueryParams = () => {
   const router = useRouter()
   const courseGroup = useCourseGroup()
 
+  const { resetOffset, courseSearchQuery } = useContext(CourseSearchContext)
+
   const searchCourseQueryParams: SearchCourseVars = useMemo<SearchCourseVars>(() => {
     const { keyword, genEdTypes, dayOfWeeks } = router.query as QueryParams
 
@@ -49,7 +46,7 @@ export const useSearchCourseQueryParams = () => {
   }, [router.query, courseGroup])
 
   const setFilter = useCallback(
-    (filterVars: SearchCourseVars['filter']) => {
+    async (filterVars: SearchCourseVars['filter']) => {
       const currentQuery = router.query as QueryParams
 
       const query: QueryParams = {
@@ -58,10 +55,14 @@ export const useSearchCourseQueryParams = () => {
         genEdTypes: filterVars.genEdTypes?.join(','),
         dayOfWeeks: filterVars.dayOfWeeks?.join(','),
       }
-
+      await courseSearchQuery?.refetch({
+        courseGroup: courseGroup,
+        filter: { ...filterVars, limit: LIMIT_QUERY_CONSTANT, offset: 0 },
+      })
+      resetOffset()
       router.push({ pathname: router.pathname, query: removeUndefinedValue(query) })
     },
-    [router]
+    [router, resetOffset, courseGroup, courseSearchQuery]
   )
 
   return { searchCourseQueryParams, setFilter }

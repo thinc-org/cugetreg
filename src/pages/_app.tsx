@@ -25,9 +25,10 @@ import { gDriveStore, GDriveSyncState } from '@/store/gDriveState'
 
 import { CourseSearchProvider } from '@/context/CourseSearch'
 import { SnackbarContextProvider } from '@/context/Snackbar'
-import { authData, refreshAuthToken } from '@/utils/network/auth'
 import { useSnackBar } from '@/context/Snackbar/hooks'
 import styled from '@emotion/styled'
+import { authStore } from '@/store/meStore'
+
 mobxConfiguration()
 
 const ToastAlert = styled(Alert)`
@@ -47,23 +48,19 @@ function MyApp({ Component, pageProps, forceDark }: AppProps) {
 
   useApp()
 
+  // Retoring AuthStore and Syncing coursecart
   useEffect(() => {
-    const fn = async () => {
-      if (typeof window === 'undefined') return
+    if (typeof window === 'undefined') return //Don't sync on the browser
 
-      try {
-        await loadGAPI()
-        await startGDriveSync()
-
-        if (authData()) await refreshAuthToken()
-      } catch (e) {
+    authStore.tryRestoreWithLocalStorage()
+    loadGAPI()
+      .then(startGDriveSync)
+      .catch((e) => {
         console.error('[GDRIVE] Error while starting drive sync', e)
         runInAction(() => {
           gDriveStore.gDriveState = GDriveSyncState.FAIL
         })
-      }
-    }
-    fn()
+      })
   }, [])
 
   const { message, emitMessage, action: actionText, open } = useSnackBar()

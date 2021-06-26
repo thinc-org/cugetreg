@@ -2,7 +2,8 @@ import { QueryResult } from '@apollo/client'
 import { SearchCourseResponse, SearchCourseVars } from '@/utils/network/BackendGQLQueries'
 
 export interface CourseSearchProps {
-  offset: number
-  setOffset: React.Dispatch<React.SetStateAction<number>>
+  fetchMoreCourses: () => void
+  resetOffset: () => void
   courseSearchQuery?: QueryResult<SearchCourseResponse, SearchCourseVars>
+  pageIndex: number
 }

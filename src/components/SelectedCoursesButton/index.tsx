@@ -17,9 +17,11 @@ const Number = styled(Chip)`
   background: ${({ theme }) => theme.palette.secondary.main};
 `
 
-export interface SelectedCoursesButtonProps {}
+export interface SelectedCoursesButtonProps {
+  onClick: () => void
+}
 
-export const SelectedCoursesButton: React.FC<SelectedCoursesButtonProps> = observer(() => {
+export const SelectedCoursesButton: React.FC<SelectedCoursesButtonProps> = observer(({ onClick }) => {
   const { t } = useTranslation('selectedCoursesButton')
   const coursesNumber = courseCartStore.shopItems.length
 
@@ -29,6 +31,7 @@ export const SelectedCoursesButton: React.FC<SelectedCoursesButtonProps> = obser
       variant="outlined"
       fullWidth
       sx={{ position: 'relative', maxWidth: 150, width: '100%' }}
+      onClick={onClick}
     >
       <Number label={coursesNumber} />
       {t('main')}

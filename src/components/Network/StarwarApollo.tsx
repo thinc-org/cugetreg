@@ -24,7 +24,7 @@ export interface FilmsData {
 export default function StarWar() {
   const { loading, error, data } = useQuery<FilmsData>(GET_FILMS)
 
-  if (loading) return <Loading />
+  if (loading) return <Loading loading={loading} />
   if (error) return <Error message={error.message} />
 
   return (

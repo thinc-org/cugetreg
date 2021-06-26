@@ -1,8 +1,7 @@
 import env from '@/utils/env/macro'
-import { ApolloClient, gql, makeVar, useQuery, useReactiveVar } from '@apollo/client'
+import { FetchPolicy, gql } from '@apollo/client'
 import { client } from './apollo'
-import { meStore } from '@/store/meStore'
-import { runInAction } from 'mobx'
+import { AuthData, MeData } from '@/store/meStore'
 
 /**
  * Auth flow
@@ -19,13 +18,15 @@ import { runInAction } from 'mobx'
  *  during step (1) and attach the final redirection target as state.returnURI.
  */
 
+const getCallbackUrl = () => `${location.origin}/googleauthcallback`
+
 /**
  * Create redirection url for redirecting to Google
  * that will return the result to this client's origin.
  */
 export function getRedirectUrl() {
   const clientId = env.googleauth.clientid
-  const callbackUrl = `${location.origin}/googleauthcallback`
+  const callbackUrl = getCallbackUrl()
   const currentPath = location.href
 
   if (typeof clientId !== 'string')
@@ -39,6 +40,7 @@ export function getRedirectUrl() {
     scope: 'openid profile email https://www.googleapis.com/auth/drive.appdata',
     access_type: 'offline',
     include_granted_scopes: 'true',
+    hd: 'student.chula.ac.th',
   })
 
   // use redirect redirector
@@ -79,84 +81,28 @@ interface ExchangeJwtResponse {
 }
 
 /**
- * User's authorization data for authenticating with the backend
- */
-interface AuthData {
-  accessToken: string
-  _id: string
-  firstName: string
-}
-
-/**
  * Exchange Google OAuth code for JWT token and store it.
  *
  * @param client
  * @param code
  */
 // eslint-disable-next-line @typescript-eslint/ban-types
-export async function authenticateByCode(client: ApolloClient<object>, code: string) {
+export async function retrieveAuthDataUsingCode(code: string): Promise<AuthData> {
   const { data, errors } = await client.mutate<ExchangeJwtResponse>({
     mutation: EXCHANGE_JWT,
     variables: {
       code,
-      redirectURI: new URLSearchParams(getRedirectUrl()).get('redirect_uri'),
+      redirectURI: getCallbackUrl(),
     },
   })
 
   if (errors) throw errors
-  if (!data?.verify) throw new Error('No verify result')
+  if (!data) throw new Error('No data returned from verify endpoint')
 
-  localStorage.setItem(AUTHDATA_LOCALSTORAGE_FIELD, JSON.stringify(data.verify))
-  authData(data.verify)
-
-  const me = await getMe()
-  runInAction(() => {
-    meStore.me = me
-  })
+  return data.verify
 }
 
-export function refreshAuthToken() {
-  return getMe()
-    .then((me) =>
-      runInAction(() => {
-        console.log('[AUTH] Refreshed new token')
-        meStore.me = me
-      })
-    )
-    .catch((e) => {
-      console.error('Failed to refreshAuthToken', e)
-    })
-}
-
-const AUTH_TOKEN_REFRESH_INTERVAL_MILLIS = 1000 * 60 * 10
-if (typeof window !== 'undefined') {
-  setInterval(refreshAuthToken, AUTH_TOKEN_REFRESH_INTERVAL_MILLIS)
-}
-
-/**
- * Logging the user out
- */
-export function logout() {
-  localStorage.removeItem(AUTHDATA_LOCALSTORAGE_FIELD)
-  authData(null)
-}
-
-// Apollo local state and caching ===============
-
-const AUTHDATA_LOCALSTORAGE_FIELD = 'authdata'
-
-function getAuthDataFromLocalStorage(): AuthData | null {
-  if (typeof localStorage == 'undefined') return null
-  const local = localStorage.getItem(AUTHDATA_LOCALSTORAGE_FIELD)
-  if (!local) return null
-
-  return JSON.parse(local)
-}
-
-export const authData = makeVar<AuthData | null>(getAuthDataFromLocalStorage())
-
-// Get me
-
+/** Query for retrieving MeData */
 export const GET_ME = gql`
   query GetMe {
     me {
@@ -172,48 +118,15 @@ export const GET_ME = gql`
   }
 `
 
-export interface GetMeResponse {
-  _id: string
-  email: string
-  firstName?: string
-  lastName?: string
-  google: {
-    accessToken: string
-    expiresIn: Date
-  }
-}
-
-/**
- * Get my info.
- */
-export function useMe(): { data?: GetMeResponse; error?: Error; loading: boolean } {
-  const ad = useReactiveVar(authData)
-
-  const { data, error, loading } = useQuery<{ me: GetMeResponse }>(GET_ME, {
-    context: {
-      headers: {
-        Authorization: `Bearer ${ad?.accessToken}`,
-      },
-    },
-  })
-
-  if (!ad) {
-    return { loading: false, error: new Error('User is not logged in') }
-  }
-
-  return { data: data?.me, error, loading }
-}
-
-export async function getMe(): Promise<GetMeResponse> {
-  const aD = authData()
-  if (!aD) throw new Error('Not logged in')
-  const me = await client.query<{ me: GetMeResponse }>({
+export async function retrieveMeData(authData: AuthData): Promise<MeData> {
+  const me = await client.query<{ me: MeData }>({
     query: GET_ME,
     context: {
       headers: {
-        Authorization: `Bearer ${aD.accessToken}`,
+        Authorization: `Bearer ${authData.accessToken}`,
       },
     },
+    fetchPolicy: 'no-cache',
   })
   return me.data.me
 }

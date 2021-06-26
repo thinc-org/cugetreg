@@ -44,7 +44,6 @@
     "react-i18next": "^11.8.5",
     "react-icons": "^4.2.0",
     "react-measure": "^2.5.2",
-    "react-spinners": "^0.11.0",
     "use-react-screenshot": "^1.0.2"
   },
   "devDependencies": {

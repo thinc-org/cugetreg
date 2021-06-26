@@ -38,7 +38,7 @@ export const useCourseList = () => {
   })
 
   return {
-    courses: data?.search,
+    courses: data?.search || [],
     loading,
     error,
   }

@@ -47,6 +47,13 @@ function checkOverlap(classes: ScheduleClass[]) {
   }
 }
 
+function isValidTime(time: string | undefined): boolean {
+  if (typeof time === 'undefined') {
+    return false
+  }
+  return time !== 'IA' && time !== 'AR'
+}
+
 export function useScheduleClass(classes: TimetableClass[]) {
   return useMemo(() => {
     const classesByDay: Record<DayOfWeek, ScheduleClass[]> = {
@@ -62,6 +69,9 @@ export function useScheduleClass(classes: TimetableClass[]) {
     }
     classes.forEach((scheduleClass) => {
       const { period, ...rest } = scheduleClass
+      if (!isValidTime(period?.start) || !isValidTime(period?.end)) {
+        return
+      }
       const start = getPosition(period?.start || '')
       const end = getPosition(period?.end || '')
       classesByDay[scheduleClass.dayOfWeek || 'AR'].push({

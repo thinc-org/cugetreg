@@ -5,7 +5,7 @@ import GenEdChip from '@/components/Chips/catagories/GenEdChip'
 import DayChip from '@/components/Chips/catagories/DayChip'
 import { Caption } from '@/components/CourseCard/components/Caption'
 import { dayOfWeekMapper } from '@/constants/dayOfWeek'
-import { SelectButton } from './SelectButton'
+import { SelectButton } from '@/components/SelectButton'
 import { SectionSelect } from './SectionSelect'
 import { useCourseCardContext } from '../useCourseCard'
 
@@ -145,7 +145,7 @@ function CardHiddenDescription() {
 }
 
 function CardSideActions({ isExpanded }: CardBodyProps) {
-  const { course } = useCourseCardContext()
+  const { course, selectedSectionNumber } = useCourseCardContext()
   return (
     <Stack
       sx={{
@@ -159,7 +159,7 @@ function CardSideActions({ isExpanded }: CardBodyProps) {
       <Collapse in={isExpanded}>
         <SectionSelect />
       </Collapse>
-      <SelectButton course={course} />
+      <SelectButton course={course} selectedSectionNumber={selectedSectionNumber} />
     </Stack>
   )
 }

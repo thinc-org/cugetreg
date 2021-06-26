@@ -7,16 +7,15 @@ import { observer } from 'mobx-react'
 import React, { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ImCheckmark } from 'react-icons/im'
-import { useCourseCardContext } from '../useCourseCard'
 
 interface SelectButtonProps {
   course: Course
+  selectedSectionNumber: string
 }
 
-export const SelectButton = observer(({ course }: SelectButtonProps) => {
+export const SelectButton = observer(({ course, selectedSectionNumber }: SelectButtonProps) => {
   const { t } = useTranslation('courseCard')
 
-  const { selectedSectionNumber } = useCourseCardContext()
   const isSelected = courseCartStore.item(course.courseNo)?.selectedSectionNo === selectedSectionNumber
 
   const onClickSelectCourse = useCallback(

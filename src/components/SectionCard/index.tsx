@@ -13,14 +13,13 @@ import {
   TableRow,
   Typography,
 } from '@material-ui/core'
-import { Add } from '@material-ui/icons'
 import { Course, Section } from '@thinc-org/chula-courses'
 import { useTranslation } from 'react-i18next'
 import GenEdChip from '@/components/Chips/catagories/GenEdChip'
-import { CustomButton } from '@/components/common/CustomButton'
 import { Caption } from '@/components/CourseCard/components/Caption'
 import { SectionStatus } from '@/components/SectionCard/components/SectionStatus'
 import { dayOfWeekMapper } from '@/constants/dayOfWeek'
+import { SelectButton } from '@/components/SelectButton'
 
 interface SectionCardProps {
   section: Section
@@ -31,12 +30,6 @@ interface SectionCardProps {
 export const SectionCard = (props: SectionCardProps) => {
   const { section, course, className } = props
   const { t } = useTranslation('sectionCard')
-
-  const SelectButton = (
-    <CustomButton loading={false} startIcon={<Add />} color="primary" variant="contained" fullWidth disableElevation>
-      {t('select')}
-    </CustomButton>
-  )
 
   return (
     <Card variant="outlined" className={className}>
@@ -119,12 +112,12 @@ export const SectionCard = (props: SectionCardProps) => {
               ml: 2,
             }}
           >
-            {SelectButton}
+            <SelectButton course={course} selectedSectionNumber={section.sectionNo} />
           </Stack>
         </Box>
       </CardContent>
       <CardActions sx={{ p: { xs: 2, sm: 4 }, pt: { xs: 0, sm: 0 }, display: { sm: 'none' } }}>
-        {SelectButton}
+        <SelectButton course={course} selectedSectionNumber={section.sectionNo} />
       </CardActions>
     </Card>
   )

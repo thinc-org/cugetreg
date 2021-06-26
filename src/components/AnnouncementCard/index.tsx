@@ -15,7 +15,7 @@ export interface AnnouncementCardPropTypes {
 }
 
 export const AnnouncementCard = ({ date, imageURL, title, tags, body }: AnnouncementCardPropTypes) => {
-  const tagComponent = tags.map((tag) => <GeneralChip key={'tag'} type={tag} />)
+  const tagComponent = tags.map((tag) => <GeneralChip key={tag} type={tag} />)
 
   const dateText = format(date, 'dd/mm/yyyy hh:mm', { locale: th })
 

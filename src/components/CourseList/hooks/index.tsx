@@ -4,7 +4,7 @@ import { SearchCourseResponse, SearchCourseVars } from '@/utils/network/BackendG
 import { QueryResult } from '@apollo/client'
 
 export const useCourseList = () => {
-  const BOTTOM_OFFSET = 700
+  const BOTTOM_OFFSET = 500
 
   const { courseSearchQuery, fetchMoreCourses } = useContext(CourseSearchContext)
 

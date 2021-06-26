@@ -5,4 +5,5 @@ export interface CourseSearchProps {
   fetchMoreCourses: () => void
   resetOffset: () => void
   courseSearchQuery?: QueryResult<SearchCourseResponse, SearchCourseVars>
+  pageIndex: number
 }

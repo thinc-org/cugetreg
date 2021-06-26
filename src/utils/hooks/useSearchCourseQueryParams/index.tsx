@@ -1,16 +1,9 @@
 import { useMemo, useCallback } from 'react'
 import { useRouter } from 'next/router'
 
-import { DEFAULT_STUDY_PROGRAM } from '@/constants/studyProgram'
 import { SearchCourseVars } from '@/utils/network/BackendGQLQueries'
 import { DayOfWeek, GenEdType, StudyProgram } from '@thinc-org/chula-courses'
 import { useCourseGroup } from '@/utils/hooks/useCourseGroup'
-
-const CURRENT_COURSE_GROUP = {
-  semester: '1',
-  academicYear: '2564',
-  studyProgram: DEFAULT_STUDY_PROGRAM,
-}
 
 export interface QueryParams {
   keyword?: string

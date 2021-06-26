@@ -1,4 +1,4 @@
-import { authenticateByCode, refreshAuthToken } from '@/utils/network/auth'
+import { authStore } from '@/store/meStore'
 import { useApolloClient } from '@apollo/client'
 import { Card, CardContent, LinearProgress } from '@material-ui/core'
 import { useRouter } from 'next/router'
@@ -12,7 +12,6 @@ export default function GoogleAuthCallback() {
   const error = router.query.error
 
   const nextUrl = decodeURI(router.query.state as string)
-  const client = useApolloClient()
 
   useEffect(() => {
     if (error) {
@@ -23,24 +22,24 @@ export default function GoogleAuthCallback() {
       return
     }
     if (typeof code !== 'string' || typeof nextUrl !== 'string') {
-      setMsg(`Page is loading. If you you wait for too long please try logging in again`)
+      setMsg(`Waiting for data. If you you waited for too long then please try logging in again`)
       setLoading(false)
       return
     }
+
     setLoading(true)
-    authenticateByCode(client, code)
+    setMsg('Authenticating...')
+    authStore
+      .authenticateWithCode(code)
       .then(() => {
-        setMsg('Authenticating...')
-        refreshAuthToken().then(() => {
-          setMsg('Redirecting...')
-          router.push(nextUrl)
-        })
+        setMsg('Redirecting...')
+        router.push(nextUrl)
       })
       .catch((e) => {
         setMsg(`Error during authentication: ${e.message}`)
       })
       .finally(() => setLoading(false))
-  }, [code, client, router, nextUrl])
+  }, [code, router, nextUrl])
 
   return (
     <Card>

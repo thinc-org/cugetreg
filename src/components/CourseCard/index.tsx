@@ -1,6 +1,6 @@
 import { CardActions, Paper } from '@material-ui/core'
 import { Course } from '@thinc-org/chula-courses'
-import { useDisclosure } from '@/hooks/useDisclosure'
+import { useDisclosure } from '@/context/ShoppingCartModal/hooks'
 import { CourseCardContext, useCourseCard } from '@/components/CourseCard/useCourseCard'
 import { SelectButton } from '@/components/SelectButton'
 import { CardBody } from './components/CardBody'

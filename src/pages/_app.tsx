@@ -8,11 +8,13 @@ import { darkTheme, lightTheme } from '@/configs/theme'
 import { TopBar } from '@/components/TopBar'
 import { Footer } from '@/components/Footer'
 import { Container } from '@/components/Container'
+import { ShoppingCartModal } from '@/components/ShoppingCartModal'
 import env from '@/utils/env/macro'
 
 import { ApolloProvider } from '@apollo/client'
 import { client } from '@/utils/network/apollo'
 import useApp from '@/hooks/useApp'
+import { useDisclosure } from '@/context/ShoppingCartModal/hooks'
 import { mobxConfiguration } from '@/configs/mobx'
 
 import AdapterDateFns from '@material-ui/lab/AdapterDateFns'
@@ -24,6 +26,7 @@ import { runInAction } from 'mobx'
 import { gDriveStore, GDriveSyncState } from '@/store/gDriveState'
 
 import { CourseSearchProvider } from '@/context/CourseSearch'
+import { ShoppingCartModalProvider } from '@/context/ShoppingCartModal'
 import { SnackbarContextProvider } from '@/context/Snackbar'
 import { useSnackBar } from '@/context/Snackbar/hooks'
 import styled from '@emotion/styled'
@@ -64,6 +67,7 @@ function MyApp({ Component, pageProps, forceDark }: AppProps) {
   }, [])
 
   const { message, emitMessage, action: actionText, open } = useSnackBar()
+  const disclosureValue = useDisclosure()
 
   const value = { message, emitMessage, action: actionText }
 
@@ -77,26 +81,33 @@ function MyApp({ Component, pageProps, forceDark }: AppProps) {
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <CourseSearchProvider>
             <SnackbarContextProvider value={value}>
-              <ThemeProvider theme={prefersDarkMode || forceDark ? darkTheme : lightTheme}>
-                <CssBaseline />
-                <TopBar />
-                <Container>
-                  <Component {...pageProps} />
-                </Container>
-                <Footer />
-                <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'center' }} open={open}>
-                  <ToastAlert
-                    severity="success"
-                    action={
-                      <Button size="small" color="inherit">
-                        {actionText}
-                      </Button>
-                    }
+              <ShoppingCartModalProvider value={disclosureValue}>
+                <ThemeProvider theme={prefersDarkMode || forceDark ? darkTheme : lightTheme}>
+                  <CssBaseline />
+                  <TopBar />
+                  <Container>
+                    <Component {...pageProps} />
+                  </Container>
+                  <Footer />
+                  <Snackbar
+                    anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                    autoHideDuration={6000}
+                    open={open}
                   >
-                    {message}
-                  </ToastAlert>
-                </Snackbar>
-              </ThemeProvider>
+                    <ToastAlert
+                      severity="success"
+                      action={
+                        <Button size="small" color="inherit" onClick={disclosureValue.onOpen}>
+                          {actionText}
+                        </Button>
+                      }
+                    >
+                      {message}
+                    </ToastAlert>
+                  </Snackbar>
+                  <ShoppingCartModal />
+                </ThemeProvider>
+              </ShoppingCartModalProvider>
             </SnackbarContextProvider>
           </CourseSearchProvider>
         </LocalizationProvider>

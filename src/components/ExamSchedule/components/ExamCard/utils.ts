@@ -1,4 +1,5 @@
 import { ExamClass } from '.'
+import { parseISO, format } from 'date-fns'
 
 export function getExamDate(scheduleClass: ExamClass, isFinal: boolean) {
   const date = isFinal ? scheduleClass.final?.date : scheduleClass.midterm?.date
@@ -6,7 +7,8 @@ export function getExamDate(scheduleClass: ExamClass, isFinal: boolean) {
     return 'TBA'
   }
 
-  return date
+  const dateObj = parseISO(date)
+  return format(dateObj, 'dd MMM yyyy')
 }
 
 export function getExamPeriod(scheduleClass: ExamClass, isFinal: boolean) {

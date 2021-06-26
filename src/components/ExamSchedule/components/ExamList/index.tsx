@@ -17,7 +17,15 @@ const ExamCardItem = styled(ExamCard)`
 
 export function ExamList({ classes, isFinal }: ExamScheduleProps) {
   const ExamList = classes.map((class_, index) => {
-    return <ExamCardItem isFinal={isFinal} key={class_.courseNo} scheduleClass={class_} order={index + 1} />
+    return (
+      <ExamCardItem
+        isHidden={class_.isHidden}
+        isFinal={isFinal}
+        key={class_.courseNo}
+        scheduleClass={class_}
+        order={index + 1}
+      />
+    )
   })
 
   return <ExamContainer>{ExamList}</ExamContainer>

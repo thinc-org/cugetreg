@@ -31,6 +31,20 @@ const COURSE_DATA_FIELDS = `
     courseCondition
     genEdType
     rating
+    midterm {
+      date
+      period {
+        start
+        end
+      }
+    }
+    final {
+      date
+      period {
+        start
+        end
+      }
+    }
     sections {
         sectionNo
         closed

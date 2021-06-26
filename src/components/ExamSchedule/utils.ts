@@ -44,11 +44,12 @@ export function sortExamSchedule(classes: CourseCartItem[], isMidterm: boolean) 
 
 export function findOverlap(sortedClasses: CourseCartItem[], isMidterm: boolean) {
   const overlapNumber: number[] = []
-  for (let i = 0; i < sortedClasses.length; i++) {
-    const exam = getExamPeriod(sortedClasses[i], isMidterm)
+  const classes = sortedClasses.filter((class_) => !class_.isHidden)
+  for (let i = 0; i < classes.length; i++) {
+    const exam = getExamPeriod(classes[i], isMidterm)
     if (exam) {
-      for (let j = i + 1; j < sortedClasses.length; j++) {
-        const examNext = getExamPeriod(sortedClasses[j], isMidterm)
+      for (let j = i + 1; j < classes.length; j++) {
+        const examNext = getExamPeriod(classes[j], isMidterm)
         if (examNext && exam.date === examNext.date) {
           const { hour, minute } = getHourMinuteFromPeriod(exam.period.end)
           const { hour: hourNext, minute: minuteNext } = getHourMinuteFromPeriod(examNext.period.start)
@@ -64,23 +65,25 @@ export function findOverlap(sortedClasses: CourseCartItem[], isMidterm: boolean)
   }
 
   return sortedClasses.map((class_, index) => {
-    const { courseNo, abbrName, genEdType, midterm, final } = class_
+    const { courseNo, abbrName, genEdType, midterm, final, isHidden } = class_
     const hasOverlap = overlapNumber.includes(index)
-    return { courseNo, abbrName, genEdType, midterm, final, hasOverlap } as ExamClass
+    return { courseNo, abbrName, genEdType, midterm, final, hasOverlap, isHidden } as ExamClass
   })
 }
 
 export function useExamClasses(courses: CourseCartItem[]) {
-  const courseFiltered = courses.filter((course) => course.isHidden)
+  const courseDisplayLength = courses.filter((course) => !course.isHidden).length
   const midtermClasses = useMemo(() => {
-    const midtermClassesSorted = sortExamSchedule(courseFiltered, true)
+    const midtermClassesSorted = sortExamSchedule(courses, true)
     return findOverlap(midtermClassesSorted, true)
-  }, [courseFiltered])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [courseDisplayLength, courses])
 
   const finalClasses = useMemo(() => {
-    const finalClassesSorted = sortExamSchedule(courseFiltered, false)
+    const finalClassesSorted = sortExamSchedule(courses, false)
     return findOverlap(finalClassesSorted, false)
-  }, [courseFiltered])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [courseDisplayLength, courses])
 
   return { midtermClasses, finalClasses }
 }

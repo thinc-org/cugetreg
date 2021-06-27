@@ -21,6 +21,8 @@ import { SectionStatus } from '@/components/SectionCard/components/SectionStatus
 import { dayOfWeekMapper } from '@/constants/dayOfWeek'
 import { SelectButton } from '@/components/SelectButton'
 import styled from '@emotion/styled'
+import { Analytics } from '@/context/analytics/components/Analytics'
+import { SUBJECT_SELECT_BUTTON_WITH_SECTION } from '@/context/analytics/components/const'
 
 const SectionTitle = styled(Typography)`
   margin-right: ${({ theme }) => theme.spacing(2)};
@@ -116,12 +118,16 @@ export const SectionCard = (props: SectionCardProps) => {
               ml: 2,
             }}
           >
-            <SelectButton course={course} selectedSectionNumber={section.sectionNo} />
+            <Analytics elementName={SUBJECT_SELECT_BUTTON_WITH_SECTION} pathId={course.courseNo}>
+              {({ log }) => <SelectButton onClick={log} course={course} selectedSectionNumber={section.sectionNo} />}
+            </Analytics>
           </Stack>
         </Box>
       </CardContent>
       <CardActions sx={{ p: { xs: 2, sm: 4 }, pt: { xs: 0, sm: 0 }, display: { sm: 'none' } }}>
-        <SelectButton course={course} selectedSectionNumber={section.sectionNo} />
+        <Analytics elementName={SUBJECT_SELECT_BUTTON_WITH_SECTION} pathId={course.courseNo}>
+          {({ log }) => <SelectButton onClick={log} course={course} selectedSectionNumber={section.sectionNo} />}
+        </Analytics>
       </CardActions>
     </Card>
   )

@@ -95,7 +95,7 @@ function MyApp({ Component, pageProps, forceDark, router }: AppProps) {
       detail: `${location.origin}-${router.pathname}`,
     })
   }, [router.pathname])
-  const { message, emitMessage, action: actionText, open, close, isWarning } = useSnackBar()
+  const { message, emitMessage, action: actionText, open, close, messageType } = useSnackBar()
   const disclosureValue = useDisclosure()
   const handleClose = (_: unknown, reason: string) => {
     if (reason === 'clickaway') {
@@ -132,7 +132,7 @@ function MyApp({ Component, pageProps, forceDark, router }: AppProps) {
                   open={open}
                 >
                   <ToastAlert
-                    severity={isWarning ? 'warning' : 'success'}
+                    severity={messageType}
                     action={
                       actionText ? (
                         <Button size="small" color="inherit" onClick={disclosureValue.onOpen}>

@@ -22,14 +22,18 @@ export const SelectButton = observer(({ course, selectedSectionNumber }: SelectB
   const isSelected = courseCartStore.item(course.courseNo)?.selectedSectionNo === selectedSectionNumber
 
   const onClickSelectCourse = useCallback(() => {
-    if (!isSelected) {
-      emitMessage(t('addSubjectSuccess'), t('viewAllSubject'))
-    } else {
-      emitMessage(t('removeSubjectSuccess'), t('viewAllSubject'), true)
-    }
     runInAction(() => {
-      if (!isSelected) courseCartStore.addItem(course, selectedSectionNumber)
-      else courseCartStore.removeCourse(course)
+      if (!isSelected) {
+        const addItemSuccess = courseCartStore.addItem(course, selectedSectionNumber)
+        if (!addItemSuccess) {
+          emitMessage(t('addSubjectFailed'), 'error', t('addSubjectFailedSolution'))
+        } else {
+          emitMessage(t('addSubjectSuccess'), 'success', t('viewAllSubject'))
+        }
+      } else {
+        courseCartStore.removeCourse(course)
+        emitMessage(t('removeSubjectSuccess'), 'warning', t('viewAllSubject'))
+      }
     })
   }, [course, selectedSectionNumber, isSelected, emitMessage, t])
 

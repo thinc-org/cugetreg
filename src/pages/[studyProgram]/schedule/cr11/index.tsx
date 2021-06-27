@@ -5,7 +5,7 @@ import React from 'react'
 import { CR11 } from '@/components/CR11'
 import { useTranslation } from 'react-i18next'
 import { useCourseGroup } from '@/utils/hooks/useCourseGroup'
-import { BackButton } from '@/components/BackButton'
+import { WithButton } from '@/components/BackButton'
 import Link from 'next/link'
 
 const useStyles = makeStyles((theme) => ({
@@ -98,12 +98,12 @@ const Home = observer(() => {
     `program:${shoppingCart.currentProgram || 's'}` as any
   )}`
 
+  const Back = WithButton(Link)
+
   return (
     <div className={classes.container}>
       <div className={classes.top}>
-        <Link href={`/${studyProgram}/schedule`} passHref>
-          <BackButton />
-        </Link>
+        <Back href={`/${studyProgram}/schedule`} />
         <Typography className={`${classes.semester} ${classes.mobile}`} variant="subtitle1">
           {studyProgramText}
         </Typography>

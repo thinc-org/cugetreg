@@ -6,6 +6,16 @@ import { useTranslation } from 'react-i18next'
 import Link from 'next/link'
 
 import { useCourseCardContext } from '../useCourseCard'
+import styled from '@emotion/styled'
+
+const StyledLink = styled.a`
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  transition: 0.5s ease;
+  :hover {
+    text-decoration-color: ${({ theme }) => theme.palette.primary.main};
+  }
+`
 
 interface CardHeadingProps {
   isExpanded: boolean
@@ -25,11 +35,11 @@ export function CardHeading({ isExpanded, onToggle }: CardHeadingProps) {
           <Grid container spacing={1}>
             <Grid item>
               <Link href={`/${studyProgram}/courses/${course.courseNo}`} passHref>
-                <a style={{ textDecoration: 'none' }}>
+                <StyledLink target="_blank">
                   <Typography variant="h5" color="primaryRange.500">
                     {course.courseNo} {course.abbrName}
                   </Typography>
-                </a>
+                </StyledLink>
               </Link>
             </Grid>
             <Grid item>

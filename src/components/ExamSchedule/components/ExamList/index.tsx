@@ -9,6 +9,7 @@ interface ExamScheduleProps {
 const ExamContainer = styled.div`
   display: flex;
   flex-direction: column;
+  overflow-anchor: none;
 `
 
 const ExamCardItem = styled(ExamCard)`

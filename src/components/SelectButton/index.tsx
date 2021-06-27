@@ -22,7 +22,11 @@ export const SelectButton = observer(({ course, selectedSectionNumber }: SelectB
   const isSelected = courseCartStore.item(course.courseNo)?.selectedSectionNo === selectedSectionNumber
 
   const onClickSelectCourse = useCallback(() => {
-    emitMessage(t('addSubjectSuccess'), t('viewAllSubject'))
+    if (!isSelected) {
+      emitMessage(t('addSubjectSuccess'), t('viewAllSubject'))
+    } else {
+      emitMessage(t('removeSubjectSuccess'), t('viewAllSubject'), true)
+    }
     runInAction(() => {
       if (!isSelected) courseCartStore.addItem(course, selectedSectionNumber)
       else courseCartStore.removeCourse(course)

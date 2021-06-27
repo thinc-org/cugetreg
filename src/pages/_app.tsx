@@ -66,7 +66,7 @@ function MyApp({ Component, pageProps, forceDark }: AppProps) {
       })
   }, [])
 
-  const { message, emitMessage, action: actionText, open, close } = useSnackBar()
+  const { message, emitMessage, action: actionText, open, close, isWarning } = useSnackBar()
   const disclosureValue = useDisclosure()
   const handleClose = (_: unknown, reason: string) => {
     if (reason === 'clickaway') {
@@ -101,7 +101,7 @@ function MyApp({ Component, pageProps, forceDark }: AppProps) {
                   open={open}
                 >
                   <ToastAlert
-                    severity="success"
+                    severity={isWarning ? 'warning' : 'success'}
                     action={
                       <Button size="small" color="inherit" onClick={disclosureValue.onOpen}>
                         {actionText}

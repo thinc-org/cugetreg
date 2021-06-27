@@ -9,4 +9,5 @@ export interface UserEvent {
   eventType: string
   pathname: string
   pathId?: string
+  timeStamp: Date
 }

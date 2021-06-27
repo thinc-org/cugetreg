@@ -14,7 +14,7 @@ export function Analytics({ children, elementName, elementId, pathId }: Analytic
   const { pathname } = useRouter()
   const { addEvent } = useContext(AnalyticsContext)
   const log = (_?: unknown, value?: string) => {
-    const event = { value, pathname, pathId, elementName, elementId, eventType: 'click' }
+    const event = { value, pathname, pathId, elementName, elementId, timeStamp: new Date(), eventType: 'click' }
     addEvent(event)
   }
 

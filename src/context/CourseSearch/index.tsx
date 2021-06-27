@@ -1,4 +1,4 @@
-import React, { createContext, useMemo, useState, useEffect } from 'react'
+import React, { createContext, useState, useEffect } from 'react'
 import { SearchCourseResponse, SearchCourseVars, SEARCH_COURSE } from '@/utils/network/BackendGQLQueries'
 import { useSearchCourseQueryParams } from '@/utils/hooks/useSearchCourseQueryParams'
 import { DEFAULT_COURSE_SEARCH_CONTEXT_VALUE, LIMIT_QUERY_CONSTANT } from '@/context/CourseSearch/constants'
@@ -10,7 +10,7 @@ export const CourseSearchContext = createContext(DEFAULT_COURSE_SEARCH_CONTEXT_V
 export const CourseSearchProvider: React.FC = (props) => {
   const router = useRouter()
   const [offset, setOffset] = useState(0)
-  const pageIndex = useMemo(() => offset / LIMIT_QUERY_CONSTANT, [offset])
+  const [isRefetching, setIsRefetching] = useState(false)
 
   const { searchCourseQueryParams } = useSearchCourseQueryParams()
 
@@ -43,6 +43,7 @@ export const CourseSearchProvider: React.FC = (props) => {
 
   useEffect(() => {
     const refetcher = async () => {
+      setIsRefetching(true)
       await courseSearchQuery.refetch({
         ...searchCourseQueryParams,
         filter: {
@@ -52,12 +53,14 @@ export const CourseSearchProvider: React.FC = (props) => {
         },
       })
       setOffset(0)
+      setIsRefetching(false)
     }
 
     refetcher()
-  }, [router])
+    // eslint-disable-next-line
+  }, [router.query])
 
-  const value = { courseSearchQuery, fetchMoreCourses, pageIndex }
+  const value = { courseSearchQuery, fetchMoreCourses, isRefetching }
 
   return <CourseSearchContext.Provider value={value} {...props} />
 }

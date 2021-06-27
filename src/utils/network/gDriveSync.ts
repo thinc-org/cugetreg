@@ -1,6 +1,6 @@
 import { CourseCartItem, courseCartStore } from '@/store'
 import { gDriveStore, GDriveSyncState } from '@/store/gDriveState'
-import { authStore, AuthStore } from '@/store/meStore'
+import { authStore } from '@/store/meStore'
 import { reaction, runInAction } from 'mobx'
 import { collectErrorLog } from './logging'
 
@@ -77,6 +77,7 @@ async function sync(items: CourseCartItem[], isInitialized: boolean) {
   }
 
   // No existing file, Upload a new file
+  console.log('sync with file id', fileId, isInitialized)
   if (!fileId) {
     console.log(`[GDRIVE] User don't have any saved cart, saving ${JSON.stringify(items)}`)
     const metaData = {

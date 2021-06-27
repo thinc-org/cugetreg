@@ -1,5 +1,5 @@
 import { ApolloError, useQuery } from '@apollo/client'
-import { Course } from '@thinc-org/chula-courses'
+import { Course, getFaculty } from '@thinc-org/chula-courses'
 import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 import { useRouter } from 'next/router'
 import React from 'react'
@@ -12,6 +12,11 @@ import { SectionCard } from '@/components/SectionCard'
 import { groupBy } from '@/utils/groupBy'
 import styled from '@emotion/styled'
 import { BackButton } from '@/components/BackButton'
+import { useTranslation } from 'react-i18next'
+import { Language } from '@/i18n'
+import { useCourseGroup } from '@/utils/hooks/useCourseGroup'
+import Link from 'next/link'
+import { getExamDate, getExamPeriod } from '@/components/ExamSchedule/components/ExamCard/utils'
 
 const SectionCardLayout = styled(SectionCard)`
   margin-top: ${({ theme }) => theme.spacing(3)};
@@ -70,6 +75,8 @@ function courseTypeStringFromCourse(c: Course) {
 
 function CourseDetailPage(props: { data: GetCourseResponse }) {
   const router = useRouter()
+  const { i18n } = useTranslation()
+  const { studyProgram } = useCourseGroup()
 
   const { data } = useQuery<GetCourseResponse, GetCourseVars>(GET_COURSE, {
     variables: parseVariablesFromQuery(router.query),
@@ -88,9 +95,17 @@ function CourseDetailPage(props: { data: GetCourseResponse }) {
     )
   })
 
+  const faculty = getFaculty(cData.course.faculty)
+  const finalDate = getExamDate(cData.course, true)
+  const midtermDate = getExamDate(cData.course, false)
+  const finalPeriod = getExamPeriod(cData.course, true)
+  const midtermPeriod = getExamPeriod(cData.course, false)
+
   return (
     <>
-      <BackButton />
+      <Link href={`/${studyProgram}/courses`} passHref>
+        <BackButton />
+      </Link>
       <Title variant="h3">
         {cData.course.courseNo} {cData.course.abbrName}
       </Title>
@@ -99,7 +114,7 @@ function CourseDetailPage(props: { data: GetCourseResponse }) {
       <GridContainer container>
         <Grid item xs={12} sm={6}>
           <DescriptionTitle variant="subtitle1">คณะ</DescriptionTitle>
-          <Typography variant="h6">{cData.course.faculty}</Typography>
+          <Typography variant="h6">{i18n.language === Language.th ? faculty?.nameTh : faculty?.nameEn}</Typography>
         </Grid>
         <GridEnd item xs={12} sm={6}>
           <DescriptionTitle variant="subtitle1">ภาควิชา/กลุ่มวิชา/สาขาวิชา</DescriptionTitle>
@@ -115,19 +130,11 @@ function CourseDetailPage(props: { data: GetCourseResponse }) {
         </GridEnd>
         <Grid item xs={12} sm={6}>
           <DescriptionTitle variant="subtitle1">สอบกลางภาค</DescriptionTitle>
-          <Typography variant="h6">
-            {cData.course.midterm
-              ? `${cData.course.midterm.date} ${cData.course.midterm.period.start} - ${cData.course.midterm.period.end}`
-              : 'TBA'}
-          </Typography>
+          <Typography variant="h6">{cData.course.midterm ? `${midtermDate} ${midtermPeriod}` : 'TBA'}</Typography>
         </Grid>
         <GridEnd item xs={12} sm={6}>
           <DescriptionTitle variant="subtitle1">สอบปลายภาค</DescriptionTitle>
-          <Typography variant="h6">
-            {cData.course.final
-              ? `${cData.course.final.date} ${cData.course.final.period.start} - ${cData.course.final.period.end}`
-              : 'TBA'}
-          </Typography>
+          <Typography variant="h6">{cData.course.final ? `${finalDate} ${finalPeriod}` : 'TBA'}</Typography>
         </GridEnd>
         <Grid item xs={12} sm={6}>
           <DescriptionTitle variant="subtitle1">เงื่อนไขรายวิชา</DescriptionTitle>

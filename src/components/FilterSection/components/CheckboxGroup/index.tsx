@@ -1,8 +1,11 @@
-import { Checkbox, CheckboxProps, FormControlLabel, makeStyles, Stack, Typography } from '@material-ui/core'
 import React from 'react'
+import { Checkbox, CheckboxProps, FormControlLabel, makeStyles, Stack, Typography } from '@material-ui/core'
+import { useSearchCourseQueryParams } from '@/utils/hooks/useSearchCourseQueryParams'
+import { GeneralChipKey } from '@/components/Chips/config'
 
 export interface EnhancedCheckBoxProps extends CheckboxProps {
   label: string
+  value: GeneralChipKey
 }
 
 export interface CheckboxGroupProps {
@@ -19,6 +22,15 @@ const useStyles = makeStyles((theme) => ({
 export const CheckboxGroup: React.FC<CheckboxGroupProps> = ({ title, checkboxes }) => {
   const classes = useStyles()
 
+  const { searchCourseQueryParams } = useSearchCourseQueryParams()
+
+  const hasChecked = (tag: GeneralChipKey) => {
+    const genEdTags: string[] = searchCourseQueryParams.filter?.genEdTypes ?? []
+    const dayOfWeeks: string[] = searchCourseQueryParams.filter?.dayOfWeeks ?? []
+
+    return genEdTags.includes(tag) || dayOfWeeks.includes(tag)
+  }
+
   return (
     <Stack>
       <Typography variant="button" className={classes.title}>
@@ -27,7 +39,7 @@ export const CheckboxGroup: React.FC<CheckboxGroupProps> = ({ title, checkboxes 
       {checkboxes.map(({ label, ...checkbox }) => (
         <FormControlLabel
           key={label}
-          control={<Checkbox sx={{ fontFamily: 'Prompt' }} {...checkbox} />}
+          control={<Checkbox sx={{ fontFamily: 'Prompt' }} checked={hasChecked(checkbox.value)} {...checkbox} />}
           label={<Typography variant="subtitle1">{label}</Typography>}
         />
       ))}

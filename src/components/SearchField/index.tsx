@@ -1,9 +1,8 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { useStyles } from '@/components/SearchField/styled'
 import { IconButton, InputBase, Paper } from '@material-ui/core'
 import SearchIcon from '@material-ui/icons/Search'
-import { CourseSearchContext } from '@/context/CourseSearch'
 import { useSearchCourseQueryParams } from '@/utils/hooks/useSearchCourseQueryParams'
 import { collectLogEvent } from '@/utils/network/logging'
 
@@ -12,7 +11,6 @@ export interface SeachFieldProp {}
 export const SearchField: React.FC<SeachFieldProp> = () => {
   const classes = useStyles()
   const { setFilter, searchCourseQueryParams } = useSearchCourseQueryParams()
-  const { setOffset } = useContext(CourseSearchContext)
   const [input, setInput] = useState(() => searchCourseQueryParams.filter.keyword || '')
 
   useEffect(() => {
@@ -27,7 +25,6 @@ export const SearchField: React.FC<SeachFieldProp> = () => {
     event.preventDefault()
     const keyword = input
     setFilter({ ...searchCourseQueryParams.filter, keyword: keyword })
-    setOffset(0)
     collectLogEvent({
       kind: 'track',
       message: 'user query course',

@@ -1,8 +1,8 @@
 import React from 'react'
 import GeneralChip from '@/components/Chips'
-import { Stack } from '@material-ui/core'
 import { useSearchCourseQueryParams } from '@/utils/hooks/useSearchCourseQueryParams'
 import { DayChipKey, GenEdChipKey } from '@/components/Chips/config'
+import { StyledStack } from '@/components/TagList/styled'
 
 export interface TagListProps {}
 
@@ -24,13 +24,13 @@ export const TagList: React.FC<TagListProps> = () => {
   }
 
   return (
-    <Stack spacing={2} direction="row">
+    <StyledStack spacing={2} direction="row">
       {genEdTypes?.map((tag) => (
         <GeneralChip key={tag} type={tag} onDelete={() => handleDeleteGenEdTag(tag)} />
       ))}
       {dayOfWeeks?.map((tag) => (
         <GeneralChip key={tag} type={tag} onDelete={() => handleDeleteDayOfWeekTag(tag)} />
       ))}
-    </Stack>
+    </StyledStack>
   )
 }

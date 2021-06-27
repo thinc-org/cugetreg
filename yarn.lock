@@ -2729,10 +2729,10 @@
     "@babel/runtime" "^7.12.5"
     "@testing-library/dom" "^7.28.1"
 
-"@thinc-org/chula-courses@^1.1.8":
-  version "1.1.8"
-  resolved "https://registry.yarnpkg.com/@thinc-org/chula-courses/-/chula-courses-1.1.8.tgz#7dc9be5567d01404382faf67a7efffb289d80893"
-  integrity sha512-QBcHJaTKBtF1aYwIeiDB6zs1kh1pSCE4TMoRK6jVTkKnWeAXWUTJy+3Sp4IEMB+gLf5/8vbBJGP+Gq7gY5q4gQ==
+"@thinc-org/chula-courses@^1.1.10":
+  version "1.1.10"
+  resolved "https://registry.yarnpkg.com/@thinc-org/chula-courses/-/chula-courses-1.1.10.tgz#0969783963c8e2f36b81f533caf8a1ad736b6e71"
+  integrity sha512-FgEmm4RFlF+oa6DvCBue3blO0hKm2wOVPq6xf53BD46LTO8oTaDe6tMXufdyFqTEmUvMfHFrs8VUxQRgQjdn0A==
   dependencies:
     axios "^0.21.1"
 
@@ -2884,6 +2884,11 @@
   version "7.0.6"
   resolved "https://registry.yarnpkg.com/@types/json-schema/-/json-schema-7.0.6.tgz#f4c7ec43e81b319a9815115031709f26987891f0"
   integrity sha512-3c+yGKvVP5Y9TYBEibGNR+kLtijnj7mYrXRg+WpFb2X9xm04g/DXYkfg4hmzJQosc9snFNUPkbYIhu+KAm6jJw==
+
+"@types/lodash@^4.14.170":
+  version "4.14.170"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.170.tgz#0d67711d4bf7f4ca5147e9091b847479b87925d6"
+  integrity sha512-bpcvu/MKHHeYX+qeEN8GE7DIravODWdACVA1ctevD8CN24RhPZIKMn9ntfAsrvLfSX3cR5RrBKAbYm9bGs0A+Q==
 
 "@types/markdown-to-jsx@^6.11.0":
   version "6.11.3"
@@ -9268,6 +9273,11 @@ lodash@^4.0.1, lodash@^4.17.11, lodash@^4.17.13, lodash@^4.17.15, lodash@^4.17.1
   version "4.17.20"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.20.tgz#b44a9b6297bcb698f1c51a3545a2b3b368d59c52"
   integrity sha512-PlhdFcillOINfeV7Ni6oF1TAEayyZBoZ8bcshTHqOYJYlrqzRK5hagpagky5o4HfCzzd1TRkXPMFq6cKk9rGmA==
+
+lodash@^4.17.21:
+  version "4.17.21"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
+  integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
 
 log-symbols@^4.0.0:
   version "4.0.0"

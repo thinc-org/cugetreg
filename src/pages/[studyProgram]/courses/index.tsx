@@ -1,14 +1,5 @@
-import { useState } from 'react'
-import {
-  Box,
-  Dialog,
-  DialogTitle,
-  Hidden,
-  IconButton,
-  makeStyles,
-  Stack as MuiStack,
-  Typography,
-} from '@material-ui/core'
+import { useState, useContext } from 'react'
+import { Button, Hidden, Stack as MuiStack, Typography } from '@material-ui/core'
 import { CourseList } from '@/components/CourseList'
 import { SearchField } from '@/components/SearchField'
 import { FilterIconButton } from '@/components/FilterIconButton'
@@ -16,20 +7,28 @@ import { SelectedCoursesButton } from '@/components/SelectedCoursesButton'
 import { FilterSection } from '@/components/FilterSection'
 import styled from '@emotion/styled'
 import { TagList } from '@/components/TagList'
-import { useDisclosure } from '@/hooks/useDisclosure'
 import React from 'react'
-import { ImCross } from 'react-icons/im'
-import ShoppingPanel from '@/components/ShoppingPanel'
-import { useStyles } from '@/components/CR11/styles'
+import { ShoppingCartModalContext } from '@/context/ShoppingCartModal'
+import { CourseSearchProvider } from '@/context/CourseSearch'
+
+const Container = styled.div`
+  margin-top: ${({ theme }) => theme.spacing(4)};
+`
+
+const TitleStack = styled(MuiStack)`
+  margin: 0;
+`
 
 const Stack = styled(MuiStack)`
   margin-bottom: ${({ theme }) => theme.spacing(2)};
 `
 
-const StickyStack = styled(Stack)`
+const StickyStack = styled(MuiStack)`
   position: sticky;
   top: 0;
-  padding-top: ${({ theme }) => theme.spacing(4)};
+  margin-bottom: 0;
+  padding-top: ${({ theme }) => theme.spacing(3)};
+  padding-bottom: ${({ theme }) => theme.spacing(2)};
   z-index: ${({ theme }) => theme.zIndex.appBar + 1};
   background: white;
   button {
@@ -37,51 +36,43 @@ const StickyStack = styled(Stack)`
   }
 `
 
-const modalStyle = makeStyles(() => ({
-  closeBtn: {
-    position: 'absolute',
-    right: '1em',
-    top: '0em',
-  },
-}))
-
 function CourseSearchPage() {
   const [openFilterBar, setOpenFilterBar] = useState(false)
 
-  const { isOpen, onClose, onOpen } = useDisclosure()
-
-  const modalSty = modalStyle()
+  const { onOpen } = useContext(ShoppingCartModalContext)
 
   return (
-    <Box padding="2em">
-      <Stack spacing={2} direction="row">
+    <Container>
+      <TitleStack spacing={2} direction="row" justifyContent="space-between">
         <Typography variant="h2">ค้นหาวิชาเรียน</Typography>
-      </Stack>
-      <StickyStack spacing={2} direction="row">
-        <SearchField />
-        <FilterIconButton onClick={() => setOpenFilterBar((open) => !open)} />
-        <Hidden mdDown>
+        <Hidden mdUp>
           <SelectedCoursesButton onClick={onOpen} />
         </Hidden>
-      </StickyStack>
-      <Stack spacing={3} direction="row">
+      </TitleStack>
+      <StickyStack alignItems="flex-start">
+        <Stack width="100%" spacing={2} direction="row">
+          <SearchField />
+          <FilterIconButton onClick={() => setOpenFilterBar((open) => !open)} />
+          <Hidden mdDown>
+            <SelectedCoursesButton onClick={onOpen} />
+          </Hidden>
+        </Stack>
         <TagList />
-      </Stack>
+      </StickyStack>
       <Stack spacing={3} direction="row">
         <CourseList />
         <FilterSection open={openFilterBar} setOpen={setOpenFilterBar} />
       </Stack>
-      <Dialog open={isOpen} onClose={onClose} fullWidth maxWidth="md">
-        <DialogTitle>
-          รายวิชาที่ถูกเลือก{' '}
-          <IconButton onClick={onClose} className={modalSty.closeBtn}>
-            <ImCross />
-          </IconButton>
-        </DialogTitle>
-        <ShoppingPanel />
-      </Dialog>
-    </Box>
+    </Container>
   )
 }
 
-export default CourseSearchPage
+const CourseSearchPageWithCourseSearchProvider = () => {
+  return (
+    <CourseSearchProvider>
+      <CourseSearchPage />
+    </CourseSearchProvider>
+  )
+}
+
+export default CourseSearchPageWithCourseSearchProvider

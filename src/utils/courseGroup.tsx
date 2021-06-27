@@ -16,7 +16,7 @@ const termPattern = /(\d\d\d\d)-(\d)/
 
 // TODO: dynamic year and semester
 const currentTerm: Term = {
-  academicYear: '2563',
+  academicYear: '2564',
   semester: '1',
 }
 

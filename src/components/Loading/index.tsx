@@ -1,21 +1,13 @@
-import { css } from '@emotion/react'
 import styled from '@emotion/styled'
-import { Box, BoxProps } from '@material-ui/core'
 
-export interface LoadingProps extends BoxProps {
-  fullWidth?: boolean
+export interface LoadingProps {
+  loading: boolean
 }
 
-interface ContainerProps {
-  $fullWidth?: boolean
-}
-
-const Container = styled(Box)<ContainerProps>`
-  ${({ $fullWidth }) =>
-    $fullWidth ??
-    css`
-      width: 100%;
-    `}
+const Container = styled.div`
+  margin: ${({ theme }) => theme.spacing(2, 'auto', 0, 'auto')};
+  width: 100%;
+  min-height: 60px;
   height: 100%;
   display: flex;
   justify-content: center;
@@ -23,10 +15,8 @@ const Container = styled(Box)<ContainerProps>`
   text-align: center;
 `
 
-export const Loading: React.FC<LoadingProps> = ({ fullWidth = false }) => {
-  return (
-    <Container $fullWidth={fullWidth} mr="auto">
-      loading
-    </Container>
-  )
+export const Loading: React.FC<LoadingProps> = ({ loading }) => {
+  if (!loading) return <Container />
+
+  return <Container>Loading</Container>
 }

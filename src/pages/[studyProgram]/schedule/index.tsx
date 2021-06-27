@@ -11,6 +11,8 @@ import { courseCartStore } from '@/store'
 import { ExamSchedule } from '@/components/ExamSchedule'
 import SaveImgButton from '@/components/SaveImgButton'
 import { useExamClasses } from '@/components/ExamSchedule/utils'
+import { useCourseGroup } from '@/utils/hooks/useCourseGroup'
+import Link from 'next/link'
 
 const PageContainer = styled.div`
   padding-top: 32px;
@@ -57,12 +59,17 @@ const ButtonBar = styled.div`
   display: flex;
   align-items: center;
 
-  button + button {
-    margin-left: 16px;
+  a,
+  button {
+    margin-right: 16px;
   }
 
   ${({ theme }) => theme.breakpoints.down('sm')} {
     margin-top: 16px;
+    a,
+    button {
+      margin-right: 8px;
+    }
   }
 `
 
@@ -121,6 +128,8 @@ function SchedulePage() {
   const credits = shopItems.reduce((credits, item) => credits + item.credit, 0)
   const ref = createRef<HTMLDivElement>()
 
+  const { studyProgram } = useCourseGroup()
+
   return (
     <PageContainer>
       <TitleContainer>
@@ -162,8 +171,14 @@ function SchedulePage() {
         <InfoSpacer />
         <ButtonBar>
           <SaveImgButton imageRef={ref} />
-          <Button variant="outlined">{t('addToCalendar')}</Button>
-          <Button variant="outlined">{t('showJorTor11')}</Button>
+          <Button variant="outlined" disabled>
+            {t('addToCalendar')}
+          </Button>
+          <Link href={`/${studyProgram}/schedule/cr11`} passHref>
+            <Button style={{ marginRight: 0 }} variant="outlined">
+              {t('showCR11')}
+            </Button>
+          </Link>
         </ButtonBar>
       </InfoBar>
       <ScheduleTable courseCart={courseCartStore} overlappingCourses={overlappingCourses} />

@@ -1,8 +1,11 @@
 import { Box, CardHeader, Grid, IconButton, Typography } from '@material-ui/core'
 import { KeyboardArrowDown, KeyboardArrowUp } from '@material-ui/icons'
 import GenEdChip from '@/components/Chips/catagories/GenEdChip'
-import { useCourseCardContext } from '../useCourseCard'
+import { useCourseGroup } from '@/utils/hooks/useCourseGroup'
 import { useTranslation } from 'react-i18next'
+import Link from 'next/link'
+
+import { useCourseCardContext } from '../useCourseCard'
 
 interface CardHeadingProps {
   isExpanded: boolean
@@ -12,6 +15,8 @@ interface CardHeadingProps {
 export function CardHeading({ isExpanded, onToggle }: CardHeadingProps) {
   const { t } = useTranslation('courseCard')
   const { course, isGenEd } = useCourseCardContext()
+  const { studyProgram } = useCourseGroup()
+
   return (
     <CardHeader
       sx={{ p: 4, pb: 0, pt: 3 }}
@@ -19,9 +24,13 @@ export function CardHeading({ isExpanded, onToggle }: CardHeadingProps) {
         <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
           <Grid container spacing={1}>
             <Grid item>
-              <Typography variant="h5">
-                {course.courseNo} {course.abbrName}
-              </Typography>
+              <Link href={`/${studyProgram}/courses/${course.courseNo}`} passHref>
+                <a style={{ textDecoration: 'none' }}>
+                  <Typography variant="h5" color="primaryRange.500">
+                    {course.courseNo} {course.abbrName}
+                  </Typography>
+                </a>
+              </Link>
             </Grid>
             <Grid item>
               <Typography variant="h6" color="primaryRange.100">

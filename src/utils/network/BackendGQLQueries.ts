@@ -25,11 +25,26 @@ const COURSE_DATA_FIELDS = `
     courseNameTh
     courseNameEn
     faculty
+    department
     credit
     creditHours
     courseCondition
     genEdType
     rating
+    midterm {
+      date
+      period {
+        start
+        end
+      }
+    }
+    final {
+      date
+      period {
+        start
+        end
+      }
+    }
     sections {
         sectionNo
         closed

@@ -21,17 +21,10 @@ export class CourseCart implements CourseCartProps {
   @observable shopItems: CourseCartItem[] = []
   @observable state: CourseCartState = 'default'
   @observable isInitialized = false
+  @observable isInitializedLocal = false
 
   constructor() {
     makeObservable(this)
-    this.addMock(mockCourseData[0])
-    this.addMock(mockCourseData[1])
-    this.addMock(mockCourseData[2])
-    this.addMock(mockCourseData[3])
-  }
-
-  private addMock(course: Course) {
-    this.addItem(course, course.sections[0].sectionNo)
   }
 
   /**

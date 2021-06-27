@@ -42,6 +42,7 @@ export const ActionButton: React.FC<ActionButtonProps> = ({
       </Button>
     )
   }
+
   return (
     <ErrorButton
       {...defaultButtonProps}

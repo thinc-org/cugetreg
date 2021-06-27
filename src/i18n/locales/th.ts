@@ -45,7 +45,7 @@ export const schedulePage = {
   title: 'จัดตารางเรียน',
   downloadPng: 'PNG',
   addToCalendar: 'Google Calendar',
-  showJorTor11: 'แสดง จท11',
+  showCR11: 'แสดง จท11',
   sumCreditsDesc: 'หน่วยกิตรวมในตาราง',
   sumCredits: '{{credits}} หน่วยกิต',
   classSchedule: 'ตารางเรียน',
@@ -86,6 +86,9 @@ export const courseCard = {
   classRoom: 'ห้องเรียน',
   note: 'หมายเหตุ',
   capacity: 'ที่ว่าง',
+  addSubjectSuccess: 'เพิ่มรายวิชาสำเร็จ',
+  removeSubjectSuccess: 'ลบรายวิชาสำเร็จ',
+  viewAllSubject: 'ดูวิชาทั้งหมด',
 }
 
 export const sectionCard = {
@@ -106,9 +109,9 @@ export const footer = {
 }
 
 export const program = {
-  i: 'นานาชาติ',
-  s: 'ทวิภาค',
-  t: 'ตรีภาค',
+  I: 'นานาชาติ',
+  S: 'ทวิภาค',
+  T: 'ตรีภาค',
 }
 
 export const cr11 = {

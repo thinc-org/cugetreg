@@ -94,7 +94,7 @@ export async function retrieveAuthDataUsingCode(code: string): Promise<AuthData>
     mutation: EXCHANGE_JWT,
     variables: {
       code,
-      redirectURI: getCallbackUrl(),
+      redirectURI: 'postmessage',
     },
   })
 

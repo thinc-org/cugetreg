@@ -1,28 +1,31 @@
 import { useContext } from 'react'
-import { Dialog, IconButton, DialogTitle, makeStyles } from '@material-ui/core'
+import { Dialog, IconButton, DialogTitle } from '@material-ui/core'
 import { MdClose } from 'react-icons/md'
 import ShoppingPanel from '@/components/ShoppingPanel'
 import { ShoppingCartModalContext } from '@/context/ShoppingCartModal'
+import styled from '@emotion/styled'
 
-const modalStyle = makeStyles(() => ({
-  closeBtn: {
-    position: 'absolute',
-    right: '1em',
-    top: '0em',
-  },
-}))
+const Title = styled.div`
+  display: flex;
+  align-items: center;
+  padding-right: 4px;
+`
+
+const FlexOne = styled.div`
+  flex: 1;
+`
 
 export function ShoppingCartModal() {
   const { isOpen, onClose } = useContext(ShoppingCartModalContext)
-  const modalSty = modalStyle()
   return (
     <Dialog open={isOpen} onClose={onClose} fullWidth maxWidth="md">
-      <DialogTitle>
-        รายวิชาที่ถูกเลือก{' '}
-        <IconButton onClick={onClose} className={modalSty.closeBtn}>
+      <Title>
+        <DialogTitle>รายวิชาที่ถูกเลือก</DialogTitle>
+        <FlexOne />
+        <IconButton onClick={onClose}>
           <MdClose />
         </IconButton>
-      </DialogTitle>
+      </Title>
       <ShoppingPanel />
     </Dialog>
   )

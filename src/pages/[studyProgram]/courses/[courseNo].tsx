@@ -19,7 +19,7 @@ import Link from 'next/link'
 import { getExamDate, getExamPeriod } from '@/components/ExamSchedule/components/ExamCard/utils'
 
 const SectionCardLayout = styled(SectionCard)`
-  margin-top: ${({ theme }) => theme.spacing(3)};
+  margin-top: ${({ theme }) => theme.spacing(10)};
 `
 
 const SectionContainer = styled.div`
@@ -53,6 +53,14 @@ const GridContainer = styled(Grid)`
 const GridEnd = styled(Grid)`
   ${({ theme }) => theme.breakpoints.down('sm')} {
     padding-bottom: ${({ theme }) => theme.spacing(3)} !important;
+  }
+`
+
+const Container = styled.div`
+  margin-top: ${({ theme }) => theme.spacing(10)};
+
+  ${({ theme }) => theme.breakpoints.down('sm')} {
+    margin-top: ${({ theme }) => theme.spacing(4)};
   }
 `
 
@@ -102,7 +110,7 @@ function CourseDetailPage(props: { data: GetCourseResponse }) {
   const midtermPeriod = getExamPeriod(cData.course, false)
 
   return (
-    <>
+    <Container>
       <Link href={`/${studyProgram}/courses`} passHref>
         <BackButton />
       </Link>
@@ -142,7 +150,7 @@ function CourseDetailPage(props: { data: GetCourseResponse }) {
         </Grid>
       </GridContainer>
       {CourseList}
-    </>
+    </Container>
   )
 }
 

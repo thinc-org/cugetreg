@@ -13,6 +13,7 @@ import env from '@/utils/env/macro'
 
 import { ApolloProvider } from '@apollo/client'
 import { client } from '@/utils/network/apollo'
+import { syncWithLocalStorage } from '@/utils/localstorage'
 import useApp from '@/hooks/useApp'
 import { useDisclosure } from '@/context/ShoppingCartModal/hooks'
 import { mobxConfiguration } from '@/configs/mobx'
@@ -22,15 +23,15 @@ import LocalizationProvider from '@material-ui/lab/LocalizationProvider'
 
 import { useEffect } from 'react'
 import { loadGAPI, startGDriveSync } from '@/utils/network/gDriveSync'
-import { runInAction } from 'mobx'
+import { reaction, runInAction } from 'mobx'
 import { gDriveStore, GDriveSyncState } from '@/store/gDriveState'
 
-import { CourseSearchProvider } from '@/context/CourseSearch'
 import { ShoppingCartModalProvider } from '@/context/ShoppingCartModal'
 import { SnackbarContextProvider } from '@/context/Snackbar'
 import { useSnackBar } from '@/context/Snackbar/hooks'
 import styled from '@emotion/styled'
 import { authStore } from '@/store/meStore'
+import { courseCartStore } from '@/store'
 
 mobxConfiguration()
 
@@ -53,7 +54,21 @@ function MyApp({ Component, pageProps, forceDark }: AppProps) {
 
   // Retoring AuthStore and Syncing coursecart
   useEffect(() => {
-    if (typeof window === 'undefined') return //Don't sync on the browser
+    if (typeof window === 'undefined') return //Don't sync on the server
+
+    reaction(
+      () => ({
+        isLoggedIn: authStore.isLoggedIn,
+        cart: [...courseCartStore.shopItems],
+        cartInitLocal: courseCartStore.isInitializedLocal,
+      }),
+      (d) => {
+        if (!d.isLoggedIn) {
+          syncWithLocalStorage(d.cart, d.cartInitLocal)
+        }
+      },
+      { fireImmediately: true, delay: 1000 }
+    )
 
     authStore.tryRestoreWithLocalStorage()
     loadGAPI()

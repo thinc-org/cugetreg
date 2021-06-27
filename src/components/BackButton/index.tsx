@@ -26,7 +26,6 @@ const ButtonDesktop = styled(Button)`
 `
 
 interface BackButtonProps {
-  onClick?: () => void
   href: string
   pathId?: string
 }
@@ -40,7 +39,7 @@ export function WithButton(Link: typeof LinkType) {
           {({ log }) => (
             <Link passHref href={props.href}>
               <ButtonDesktop
-                {...props}
+                href={props.href}
                 onClick={log}
                 startIcon={<ArrowBackIosIcon />}
                 color="primary"

@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react'
-import { Box, Hidden, Stack as MuiStack, Typography } from '@material-ui/core'
+import { Hidden, Stack as MuiStack, Typography } from '@material-ui/core'
 import { CourseList } from '@/components/CourseList'
 import { SearchField } from '@/components/SearchField'
 import { FilterIconButton } from '@/components/FilterIconButton'
@@ -10,14 +10,24 @@ import { TagList } from '@/components/TagList'
 import React from 'react'
 import { ShoppingCartModalContext } from '@/context/ShoppingCartModal'
 
+const Container = styled.div`
+  margin-top: ${({ theme }) => theme.spacing(4)};
+`
+
+const TitleStack = styled(MuiStack)`
+  margin: 0;
+`
+
 const Stack = styled(MuiStack)`
   margin-bottom: ${({ theme }) => theme.spacing(2)};
 `
 
-const StickyStack = styled(Stack)`
+const StickyStack = styled(MuiStack)`
   position: sticky;
   top: 0;
-  padding-top: ${({ theme }) => theme.spacing(4)};
+  margin-bottom: 0;
+  padding-top: ${({ theme }) => theme.spacing(3)};
+  padding-bottom: ${({ theme }) => theme.spacing(2)};
   z-index: ${({ theme }) => theme.zIndex.appBar + 1};
   background: white;
   button {
@@ -31,25 +41,25 @@ function CourseSearchPage() {
   const { onOpen } = useContext(ShoppingCartModalContext)
 
   return (
-    <Box paddingTop="2em" paddingBottom="2em">
-      <Stack spacing={2} direction="row">
+    <Container>
+      <TitleStack spacing={2} direction="row">
         <Typography variant="h2">ค้นหาวิชาเรียน</Typography>
-      </Stack>
-      <StickyStack spacing={2} direction="row">
-        <SearchField />
-        <FilterIconButton onClick={() => setOpenFilterBar((open) => !open)} />
-        <Hidden mdDown>
-          <SelectedCoursesButton onClick={onOpen} />
-        </Hidden>
-      </StickyStack>
-      <Stack spacing={3} direction="row">
+      </TitleStack>
+      <StickyStack alignItems="flex-start">
+        <Stack width="100%" spacing={2} direction="row">
+          <SearchField />
+          <FilterIconButton onClick={() => setOpenFilterBar((open) => !open)} />
+          <Hidden mdDown>
+            <SelectedCoursesButton onClick={onOpen} />
+          </Hidden>
+        </Stack>
         <TagList />
-      </Stack>
+      </StickyStack>
       <Stack spacing={3} direction="row">
         <CourseList />
         <FilterSection open={openFilterBar} setOpen={setOpenFilterBar} />
       </Stack>
-    </Box>
+    </Container>
   )
 }
 

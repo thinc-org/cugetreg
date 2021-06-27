@@ -35,7 +35,7 @@ const Container = styled.div`
   min-width: 220px;
   position: sticky;
   top: 100px;
-  z-index: ${({ theme }) => theme.zIndex.appBar};
+  z-index: ${({ theme }) => theme.zIndex.appBar + 2};
   height: fit-content;
 `
 

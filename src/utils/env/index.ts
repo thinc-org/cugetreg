@@ -10,3 +10,5 @@ export const googleauth_coderedirector = process.env.NEXT_PUBLIC_GOOGLEAUTH_CODE
 
 export const hotjar_clientid = parseInt(process.env.NEXT_PUBLIC_HOTJAR_CLIENTID || '')
 export const hotjar_snippet_version = parseInt(process.env.NEXT_PUBLIC_HOTJAR_SNIPPET_VERSION || '')
+
+export const ga_measurement_id = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID

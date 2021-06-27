@@ -10,8 +10,8 @@ interface AnalyticsProps {
 
 export function Analytics({ children, elementName, elementId, pathId }: AnalyticsProps) {
   const { pathname } = useRouter()
-  const log = () => {
-    console.log(pathname, pathId, elementName, elementId, navigator.userAgent)
+  const log = (_?: unknown, value?: string) => {
+    console.log(value, pathname, pathId, elementName, elementId, navigator.userAgent)
     // To DO put data into collectLogEvent
     // collectLogEvent({
     //   kind: 'track',

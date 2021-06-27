@@ -8,6 +8,8 @@ import { dayOfWeekMapper } from '@/constants/dayOfWeek'
 import { SelectButton } from '@/components/SelectButton'
 import { SectionSelect } from './SectionSelect'
 import { useCourseCardContext } from '../useCourseCard'
+import { Analytics } from '@/components/Analytics'
+import { SUBJECT_SELECT_BUTTON } from '@/components/Analytics/const'
 
 interface CardBodyProps {
   isExpanded: boolean
@@ -162,7 +164,9 @@ function CardSideActions({ isExpanded }: CardBodyProps) {
       <Collapse in={isExpanded}>
         <SectionSelect />
       </Collapse>
-      <SelectButton course={course} selectedSectionNumber={selectedSectionNumber} />
+      <Analytics elementName={SUBJECT_SELECT_BUTTON} elementId={course.courseNo}>
+        {({ log }) => <SelectButton course={course} selectedSectionNumber={selectedSectionNumber} onClick={log} />}
+      </Analytics>
     </Stack>
   )
 }

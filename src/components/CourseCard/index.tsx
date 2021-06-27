@@ -6,6 +6,8 @@ import { SelectButton } from '@/components/SelectButton'
 import { CardBody } from './components/CardBody'
 import { CardHeading } from './components/CardHeading'
 import { forwardRef, memo } from 'react'
+import { Analytics } from '@/components/Analytics'
+import { SUBJECT_SELECT_BUTTON } from '@/components/Analytics/const'
 
 export interface CourseCardProps {
   course: Course
@@ -26,7 +28,15 @@ export const CourseCard = memo(
             <CardHeading isExpanded={isExpanded} onToggle={onToggle} />
             <CardBody isExpanded={isExpanded} />
             <CardActions sx={{ p: 4, pt: 0, display: { sm: 'none' } }}>
-              <SelectButton course={course} selectedSectionNumber={courseCardContextValue.selectedSectionNumber} />
+              <Analytics elementName={SUBJECT_SELECT_BUTTON} elementId={course.courseNo}>
+                {({ log }) => (
+                  <SelectButton
+                    onClick={log}
+                    course={course}
+                    selectedSectionNumber={courseCardContextValue.selectedSectionNumber}
+                  />
+                )}
+              </Analytics>
             </CardActions>
           </Paper>
         </div>

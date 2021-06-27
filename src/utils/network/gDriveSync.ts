@@ -2,6 +2,7 @@ import { CourseCartItem, courseCartStore } from '@/store'
 import { gDriveStore, GDriveSyncState } from '@/store/gDriveState'
 import { authStore, AuthStore } from '@/store/meStore'
 import { reaction, runInAction } from 'mobx'
+import { collectErrorLog } from './logging'
 
 /** Lock to prevent GAPI from loading multiple time */
 let isGapiInit = false
@@ -65,6 +66,7 @@ async function sync(items: CourseCartItem[], isInitialized: boolean) {
   } else if (fileList.length > 1) {
     // Too many files. Unexpected. Erase all
     console.log('[GDRIVE] Too many files. Erasing.') //Probably a bad idea
+    collectErrorLog('gdrive contains too many files', fileList)
     await Promise.all(
       fileList.map((f) =>
         gapi.client.drive.files.delete({
@@ -150,6 +152,7 @@ export async function startGDriveSync() {
       })
       .catch((e) => {
         console.error('[GDRIVE] Sync failed', e)
+        collectErrorLog('GDrive sync failed', e)
         setGState(GDriveSyncState.SYNCERR)
       })
       .finally(() => {
@@ -165,7 +168,6 @@ export async function startGDriveSync() {
     }),
     (d) => {
       if (!d.isLoggedIn) {
-        console.log('[GDRIVE] Ignore. Not logged in')
         setGState(GDriveSyncState.IDLE)
       } else {
         trackedSync(() => sync(d.cart, d.cartInit))

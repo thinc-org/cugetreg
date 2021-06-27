@@ -26,6 +26,7 @@
     "@types/gapi.client.drive": "^3.0.13",
     "@types/react-beautiful-dnd": "^13.0.0",
     "@types/react-measure": "^2.0.6",
+    "@types/uuid": "^8.3.0",
     "axios": "^0.21.1",
     "babel-plugin-macros": "^3.0.1",
     "date-fns": "^2.16.1",
@@ -44,7 +45,8 @@
     "react-i18next": "^11.8.5",
     "react-icons": "^4.2.0",
     "react-measure": "^2.5.2",
-    "use-react-screenshot": "^1.0.2"
+    "use-react-screenshot": "^1.0.2",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",

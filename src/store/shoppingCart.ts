@@ -1,3 +1,4 @@
+import { collectLogEvent } from '@/utils/network/logging'
 import { mockCourseData } from '@/__mock__/courses'
 import { Course } from '@thinc-org/chula-courses'
 import { action, computed, makeObservable, observable } from 'mobx'
@@ -68,6 +69,11 @@ export class CourseCart implements CourseCartProps {
    */
   @action
   addItem(course: Course, selectedSectionNo?: string): void {
+    collectLogEvent({
+      kind: 'track',
+      message: 'user add course',
+    })
+
     if (!selectedSectionNo) selectedSectionNo = this.findFirstSectionNo(course)
     const newItem: CourseCartItem = { ...course, selectedSectionNo, isSelected: false, isHidden: false }
     const foundIndex = this.shopItems.findIndex((item) => item.courseNo == course.courseNo)
@@ -77,6 +83,11 @@ export class CourseCart implements CourseCartProps {
 
   @action
   removeCourse(course: Course): void {
+    collectLogEvent({
+      kind: 'track',
+      message: 'user remove course',
+    })
+
     this.shopItems = this.shopItems.filter((item) => item.courseNo !== course.courseNo)
   }
 

@@ -25,10 +25,12 @@ import { gDriveStore, GDriveSyncState } from '@/store/gDriveState'
 
 import { CourseSearchProvider } from '@/context/CourseSearch'
 import { authStore } from '@/store/meStore'
+import { collectLogEvent } from '@/utils/network/logging'
+import { ErrorBoundary } from '@/components/ErrorBoundary/ErrorBoundary'
 
 mobxConfiguration()
 
-function MyApp({ Component, pageProps, forceDark }: AppProps) {
+function MyApp({ Component, pageProps, forceDark, router }: AppProps) {
   const prefersDarkMode =
     env.features.darkTheme &&
     // features.darkTheme is a constant
@@ -43,6 +45,11 @@ function MyApp({ Component, pageProps, forceDark }: AppProps) {
   useEffect(() => {
     if (typeof window === 'undefined') return //Don't sync on the browser
 
+    collectLogEvent({
+      kind: 'track',
+      message: 'user visit site',
+    })
+
     authStore.tryRestoreWithLocalStorage()
     loadGAPI()
       .then(startGDriveSync)
@@ -53,6 +60,14 @@ function MyApp({ Component, pageProps, forceDark }: AppProps) {
         })
       })
   }, [])
+
+  useEffect(() => {
+    collectLogEvent({
+      kind: 'track',
+      message: `user change path`,
+      detail: `${location.origin}-${router.pathname}`,
+    })
+  }, [router.pathname])
 
   return (
     <>
@@ -66,9 +81,11 @@ function MyApp({ Component, pageProps, forceDark }: AppProps) {
             <ThemeProvider theme={prefersDarkMode || forceDark ? darkTheme : lightTheme}>
               <CssBaseline />
               <TopBar />
-              <Container>
-                <Component {...pageProps} />
-              </Container>
+              <ErrorBoundary>
+                <Container>
+                  <Component {...pageProps} />
+                </Container>
+              </ErrorBoundary>
               <Footer />
             </ThemeProvider>
           </CourseSearchProvider>

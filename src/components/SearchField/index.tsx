@@ -5,6 +5,7 @@ import { IconButton, InputBase, Paper } from '@material-ui/core'
 import SearchIcon from '@material-ui/icons/Search'
 import { CourseSearchContext } from '@/context/CourseSearch'
 import { useSearchCourseQueryParams } from '@/utils/hooks/useSearchCourseQueryParams'
+import { collectLogEvent } from '@/utils/network/logging'
 
 export interface SeachFieldProp {}
 
@@ -27,6 +28,11 @@ export const SearchField: React.FC<SeachFieldProp> = () => {
     const keyword = input
     setFilter({ ...searchCourseQueryParams.filter, keyword: keyword })
     setOffset(0)
+    collectLogEvent({
+      kind: 'track',
+      message: 'user query course',
+      detail: JSON.stringify({ ...searchCourseQueryParams.filter, keyword }),
+    })
   }
 
   return (

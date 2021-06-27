@@ -5,7 +5,13 @@ import { injectDarkStyle } from '@/utils/darkStyleInjector'
 import env from '@/utils/env/macro'
 import { resetServerContext } from 'react-beautiful-dnd'
 
+import { hotjar } from 'react-hotjar'
+import { hotjar_clientid, hotjar_snippet_version } from '@/utils/env'
+
 export default class MyDocument extends Document {
+  componentDidMount() {
+    hotjar.initialize(hotjar_clientid, hotjar_snippet_version)
+  }
   render() {
     return (
       <Html lang="en">
@@ -16,6 +22,7 @@ export default class MyDocument extends Document {
             href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&family=Prompt:wght@400;500;700&display=swap"
             rel="stylesheet"
           />
+          <script></script>
         </Head>
         <body>
           <Main />

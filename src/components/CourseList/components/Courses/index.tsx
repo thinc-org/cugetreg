@@ -5,12 +5,13 @@ import { Typography } from '@material-ui/core'
 
 export interface CoursesProps {
   loading: boolean
+  isRefetching: boolean
   courses: Course[]
 }
 
-export const Courses: React.FC<CoursesProps> = ({ courses, loading }) => {
-  if (!courses.length) {
-    if (loading) return null
+export const Courses: React.FC<CoursesProps> = ({ courses, loading, isRefetching }) => {
+  if (!courses.length || isRefetching) {
+    if (loading || isRefetching) return null
 
     return <Typography>404 Not Found</Typography>
   }

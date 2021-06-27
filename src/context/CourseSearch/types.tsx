@@ -4,5 +4,5 @@ import { SearchCourseResponse, SearchCourseVars } from '@/utils/network/BackendG
 export interface CourseSearchProps {
   fetchMoreCourses: () => void
   courseSearchQuery?: QueryResult<SearchCourseResponse, SearchCourseVars>
-  pageIndex: number
+  isRefetching: boolean
 }

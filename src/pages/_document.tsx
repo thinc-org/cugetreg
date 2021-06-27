@@ -16,11 +16,21 @@ export default class MyDocument extends Document {
     return (
       <Html lang="en">
         <Head>
-          <link rel="preconnect" href="https://fonts.googleapis.com" />
           <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true" />
           <link
-            href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&family=Prompt:wght@400;500;700&display=swap"
+            rel="preload"
+            href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;700&display=swap"
+            as="style"
+          />
+          <link
+            rel="preload"
+            href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap"
+            as="style"
+          />
+          <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;700&display=swap" />
+          <link
             rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap"
           />
           <script async src={`https://www.googletagmanager.com/gtag/js?id=${ga_measurement_id}`}></script>
           <script

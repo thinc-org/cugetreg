@@ -14,7 +14,7 @@ const cache = new InMemoryCache({
             return existing
           },
           merge(existing: Course[] = [], incoming: Course[], { args }) {
-            const offset = args?.filter.offset as SearchCourseVars
+            const offset = args?.filter.offset as SearchCourseVars['filter']['offset']
             if (!offset) return [...incoming]
             return [...existing, ...incoming]
           },

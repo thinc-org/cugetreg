@@ -9,6 +9,7 @@ import styled from '@emotion/styled'
 import { TagList } from '@/components/TagList'
 import React from 'react'
 import { ShoppingCartModalContext } from '@/context/ShoppingCartModal'
+import { CourseSearchProvider } from '@/context/CourseSearch'
 
 const Container = styled.div`
   margin-top: ${({ theme }) => theme.spacing(4)};
@@ -63,4 +64,12 @@ function CourseSearchPage() {
   )
 }
 
-export default CourseSearchPage
+const CourseSearchPageWithCourseSearchProvider = () => {
+  return (
+    <CourseSearchProvider>
+      <CourseSearchPage />
+    </CourseSearchProvider>
+  )
+}
+
+export default CourseSearchPageWithCourseSearchProvider

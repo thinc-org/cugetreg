@@ -32,13 +32,16 @@ export function CardBody({ isExpanded }: CardBodyProps) {
 function CardDescription() {
   const { t } = useTranslation('courseCard')
   const { course, isGenEd, classDays, courseCapacity } = useCourseCardContext()
+
+  const availableClassDays = classDays.filter((day) => day !== 'IA' && day !== 'AR')
+
   return (
     <Grid container spacing={3}>
       <Grid item xs={6} sm="auto">
         <Stack spacing={0.5}>
           <Caption>{t('classDay')}</Caption>
           <div>
-            {classDays.map((day: DayOfWeek) => (
+            {availableClassDays.map((day: DayOfWeek) => (
               <DayChip type={day} key={day} sx={{ mb: 0.5, mr: 0.5 }} />
             ))}
           </div>

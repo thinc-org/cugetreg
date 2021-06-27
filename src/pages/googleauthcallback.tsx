@@ -1,5 +1,4 @@
 import { authStore } from '@/store/meStore'
-import { useApolloClient } from '@apollo/client'
 import { Card, CardContent, LinearProgress } from '@material-ui/core'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
@@ -10,6 +9,10 @@ export default function GoogleAuthCallback() {
   const [loading, setLoading] = useState(false)
   const code = router.query.code
   const error = router.query.error
+
+  if (typeof window !== 'undefined' && location.hash.startsWith('#code')) {
+    router.replace(`/googleauthcallback?${location.hash.substring(1)}`)
+  }
 
   const nextUrl = decodeURI(router.query.state as string)
 

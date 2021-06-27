@@ -1,5 +1,4 @@
-import { getRedirectUrl } from '@/utils/network/auth'
-import { PropsWithChildren, useCallback, useMemo } from 'react'
+import { PropsWithChildren, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Tooltip, Typography } from '@material-ui/core'
 import { MdCloudDone, MdCloudQueue, MdCloudOff } from 'react-icons/md'
@@ -8,7 +7,8 @@ import { gDriveStore, GDriveSyncState } from '@/store/gDriveState'
 import { authStore } from '@/store/meStore'
 import styled from '@emotion/styled'
 import { NavBarItem } from '@/components/TopBar/NavBar/NavBarItem'
-import Link from 'next/link'
+import env from '@/utils/env/macro'
+import GoogleLogin from '@/lib/react-google-login/src'
 
 export const GDriveIndicator = observer(() => {
   const { t } = useTranslation('syncStatus')
@@ -82,7 +82,6 @@ export default observer(function UserButton() {
   const pending = authStore.pending
   const userName = authStore.auth?.firstName
 
-  const redirectUrl = useMemo(() => getRedirectUrl(), [])
   const onLogout = useCallback(() => authStore.clear(), [])
 
   const { t } = useTranslation('navBar')
@@ -105,9 +104,22 @@ export default observer(function UserButton() {
     )
   } else {
     return (
-      <Link href={redirectUrl} passHref>
-        <NavBarItem>{t('signin')}</NavBarItem>
-      </Link>
+      <GoogleLogin
+        clientId={env.googleauth.clientid!}
+        responseType="code"
+        scope="openid profile email https://www.googleapis.com/auth/drive.appdata"
+        accessType="offline"
+        hostedDomain="student.chula.ac.th"
+        prompt="consent"
+        redirectUri={`${location.origin}/googleauthcallback`}
+        render={(renderProps) => <NavBarItem {...renderProps}>{t('signin')}</NavBarItem>}
+        onSuccess={({ code }: { code: string }) => {
+          authStore.authenticateWithCode(code)
+        }}
+        onFailure={() => {
+          // do nothing
+        }}
+      />
     )
   }
 })

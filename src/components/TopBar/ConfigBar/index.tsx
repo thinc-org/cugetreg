@@ -32,11 +32,9 @@ export function ConfigBar() {
         <ConfigBarItem>
           {academicYear}/{semester}
         </ConfigBarItem>
-        <ConfigBarItem>
-          <Link href="www.google.com" target="_blank" style={{ color: 'white' }}>
-            {t('reportAProblem')}
-          </Link>
-        </ConfigBarItem>
+        <Link href="https://airtable.com/shruwAAfn1763TgMU" target="_blank" style={{ color: 'white' }}>
+          <ConfigBarItem>{t('reportAProblem')}</ConfigBarItem>
+        </Link>
       </FlexContainer>
     </ConfigBarLayout>
   )

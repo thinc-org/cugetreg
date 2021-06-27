@@ -10,7 +10,10 @@ import Link from 'next/link'
 
 const useStyles = makeStyles((theme) => ({
   container: {
-    marginTop: theme.spacing(8),
+    margin: theme.spacing(10, 0, 12, 0),
+    [theme.breakpoints.down('sm')]: {
+      margin: theme.spacing(4, 0, 10, 0),
+    },
     display: 'flex',
     flexDirection: 'column',
   },
@@ -61,6 +64,9 @@ const useStyles = makeStyles((theme) => ({
   },
   description: {
     marginTop: theme.spacing(16),
+    [theme.breakpoints.down('sm')]: {
+      marginTop: theme.spacing(4),
+    },
     display: 'flex',
     flexDirection: 'column',
     '& *:not(:last-child)': {

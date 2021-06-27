@@ -52,7 +52,7 @@ export function WithButton(Link: typeof LinkType) {
             </Link>
           )}
         </Analytics>{' '}
-        <Analytics elementName={GO_BACK_BUTTON}>
+        <Analytics elementName={GO_BACK_BUTTON} pathId={props.pathId}>
           {({ log }) => (
             <Link passHref href={props.href}>
               <ButtonMobile onClick={log} aria-label="back">

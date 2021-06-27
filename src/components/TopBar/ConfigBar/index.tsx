@@ -20,6 +20,8 @@ export const ConfigBarLayout = styled.div`
 
 const ConfigBarItemLink = ConfigBarItem.withComponent('a')
 
+export const reportProblemLink = 'https://airtable.com/shruwAAfn1763TgMU'
+
 export function ConfigBar() {
   const { t } = useTranslation('configBar')
 
@@ -33,7 +35,7 @@ export function ConfigBar() {
         <ConfigBarItem>
           {academicYear}/{semester}
         </ConfigBarItem>
-        <ConfigBarItemLink href="https://airtable.com/shruwAAfn1763TgMU" target="_blank" rel="noreferrer">
+        <ConfigBarItemLink href={reportProblemLink} target="_blank" rel="noreferrer">
           {t('reportAProblem')}
         </ConfigBarItemLink>
       </FlexContainer>

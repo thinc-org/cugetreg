@@ -59,7 +59,7 @@ export const scheduleTableCard = {
 }
 
 export const schedule = {
-  dateTime: 'วัน/เวลา',
+  dateTime: 'Day/Time',
   days: {
     MO: 'MON',
     TU: 'TUE',

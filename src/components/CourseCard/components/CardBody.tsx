@@ -41,9 +41,9 @@ function CardDescription() {
         <Stack spacing={0.5}>
           <Caption>{t('classDay')}</Caption>
           <div>
-            {availableClassDays.map((day: DayOfWeek) => (
-              <DayChip type={day} key={day} sx={{ mb: 0.5, mr: 0.5 }} />
-            ))}
+            {availableClassDays.length
+              ? availableClassDays.map((day: DayOfWeek) => <DayChip type={day} key={day} sx={{ mb: 0.5, mr: 0.5 }} />)
+              : '-'}
           </div>
         </Stack>
       </Grid>

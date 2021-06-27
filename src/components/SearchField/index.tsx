@@ -1,9 +1,8 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { useStyles } from '@/components/SearchField/styled'
 import { IconButton, InputBase, Paper } from '@material-ui/core'
 import SearchIcon from '@material-ui/icons/Search'
-import { CourseSearchContext } from '@/context/CourseSearch'
 import { useSearchCourseQueryParams } from '@/utils/hooks/useSearchCourseQueryParams'
 
 export interface SeachFieldProp {}

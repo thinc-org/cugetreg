@@ -1,0 +1,98 @@
+{
+  "name": "react-google-login",
+  "version": "5.1.3",
+  "description": "A Google Login Component for React",
+  "main": "dist/google-login.js",
+  "scripts": {
+    "start": "webpack-dev-server --config webpack/webpack.config.dev.js",
+    "dev": "npm run start",
+    "bundle": "webpack --config webpack/webpack.config.prod.js",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:generate-output": "jest --json --outputFile=.jest-test-results.json",
+    "lint": "eslint ./src",
+    "lint:fix": "eslint ./src --fix",
+    "fresh": "rm -rf node_modules dist docs; rm package-lock.json; npm i",
+    "storybook": "start-storybook -p 8080",
+    "build-storybook": "npm run test:generate-output; build-storybook -c .storybook -o docs",
+    "deploy-storybook": "storybook-to-ghpages --out=docs/",
+    "release": "release-it --ci --no-git.requireCleanWorkingDir"
+  },
+  "pre-commit": [
+    "test",
+    "lint"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anthonyjgrove/react-google-login.git"
+  },
+  "keywords": [
+    "react",
+    "reactjs",
+    "react-component",
+    "google-login",
+    "google-oAuth2",
+    "google-oAuth"
+  ],
+  "author": {
+    "name": "Anthony Grove",
+    "email": "anthony@th3legend.com"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/anthonyjgrove/react-google-login/issues"
+  },
+  "homepage": "https://github.com/anthonyjgrove/react-google-login",
+  "dependencies": {
+    "@types/react": "*",
+    "prop-types": "^15.6.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.4.3",
+    "@babel/plugin-proposal-object-rest-spread": "^7.4.3",
+    "@babel/plugin-transform-runtime": "^7.4.3",
+    "@babel/preset-env": "^7.4.3",
+    "@babel/preset-react": "^7.0.0",
+    "@storybook/addon-actions": "^5.2.1",
+    "@storybook/addon-jest": "^5.2.1",
+    "@storybook/addon-knobs": "^5.2.1",
+    "@storybook/addon-links": "^5.2.1",
+    "@storybook/addon-notes": "^5.2.1",
+    "@storybook/addons": "^5.2.1",
+    "@storybook/react": "^5.2.1",
+    "@storybook/storybook-deployer": "^2.8.1",
+    "autoprefixer": "^9.7.1",
+    "babel-core": "7.0.0-bridge.0",
+    "babel-jest": "^24.7.1",
+    "babel-loader": "^8.0.5",
+    "babel-plugin-transform-react-constant-elements": "^6.23.0",
+    "babel-plugin-transform-react-inline-elements": "^6.22.0",
+    "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
+    "enzyme": "^3.9.0",
+    "enzyme-adapter-react-16": "^1.11.2",
+    "eslint-config-ag": "^2.0.0",
+    "jest": "^24.7.1",
+    "pre-commit": "^1.2.2",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "react-fontawesome": "^1.6.1",
+    "react-hot-loader": "^4.8.2",
+    "react-test-renderer": "^16.8.6",
+    "release-it": "^13.5.5",
+    "uglifyjs-webpack-plugin": "^2.1.2",
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.3.10",
+    "webpack-dev-server": "^3.2.1"
+  },
+  "peerDependencies": {
+    "react": "^16 || ^17",
+    "react-dom": "^16 || ^17"
+  },
+  "types": "./index.d.ts",
+  "babel": {
+    "presets": [
+      "@babel/preset-env",
+      "@babel/preset-react"
+    ]
+  }
+}

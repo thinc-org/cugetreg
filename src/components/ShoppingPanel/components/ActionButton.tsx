@@ -6,7 +6,6 @@ import TableChartIcon from '@material-ui/icons/TableChart'
 import { useTranslation } from 'react-i18next'
 import { ShoppingState } from '@/components/ShoppingPanel/hooks'
 import { useCourseGroup } from '@/utils/hooks/useCourseGroup'
-import { useRouter } from 'next/router'
 
 const ErrorButton = styled(Button)`
   color: ${({ theme }) => theme.palette.error.main};
@@ -26,16 +25,8 @@ export const ActionButton: React.FC<ActionButtonProps> = ({
   ...props
 }) => {
   const { t } = useTranslation('shoppingPanel')
-  const router = useRouter()
   const { studyProgram } = useCourseGroup()
   const href = `/${studyProgram}/schedule`
-
-  const handleNewPage = () => {
-    router.push({
-      ...router,
-      pathname: href,
-    })
-  }
 
   const defaultButtonProps: ButtonProps = {
     ...props,
@@ -46,7 +37,7 @@ export const ActionButton: React.FC<ActionButtonProps> = ({
 
   if (status === ShoppingState.Default) {
     return (
-      <Button {...defaultButtonProps} startIcon={<TableChartIcon />} onClick={handleNewPage}>
+      <Button {...defaultButtonProps} startIcon={<TableChartIcon />} href={href}>
         {t('makeSchedule.default')}
       </Button>
     )

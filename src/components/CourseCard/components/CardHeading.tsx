@@ -35,7 +35,7 @@ export function CardHeading({ isExpanded, onToggle }: CardHeadingProps) {
           <Grid container spacing={1}>
             <Grid item>
               <Link href={`/${studyProgram}/courses/${course.courseNo}`} passHref>
-                <StyledLink target="_blank">
+                <StyledLink>
                   <Typography variant="h5" color="primaryRange.500">
                     {course.courseNo} {course.abbrName}
                   </Typography>

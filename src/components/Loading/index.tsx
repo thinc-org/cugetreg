@@ -1,7 +1,4 @@
 import styled from '@emotion/styled'
-import { useTheme } from '@material-ui/core'
-
-import { PulseLoader } from 'react-spinners'
 
 export interface LoadingProps {
   loading: boolean
@@ -19,13 +16,7 @@ const Container = styled.div`
 `
 
 export const Loading: React.FC<LoadingProps> = ({ loading }) => {
-  const theme = useTheme()
-
   if (!loading) return <Container />
 
-  return (
-    <Container>
-      <PulseLoader size={8} margin={8} color={theme.palette.primary.main} />
-    </Container>
-  )
+  return <Container>Loading</Container>
 }

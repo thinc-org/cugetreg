@@ -87,6 +87,7 @@ export const courseCard = {
   note: 'หมายเหตุ',
   capacity: 'ที่ว่าง',
   addSubjectSuccess: 'เพิ่มรายวิชาสำเร็จ',
+  removeSubjectSuccess: 'ลบรายวิชาสำเร็จ',
   viewAllSubject: 'ดูวิชาทั้งหมด',
 }
 

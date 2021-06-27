@@ -6,6 +6,7 @@ import styled from '@emotion/styled'
 import { useCourseGroup } from '@/utils/hooks/useCourseGroup'
 
 import StudyProgramDropdown from '../components/StudyProgramDropdown'
+import { Link } from '@material-ui/core'
 
 export const ConfigBarLayout = styled.div`
   width: 100%;
@@ -31,7 +32,11 @@ export function ConfigBar() {
         <ConfigBarItem>
           {academicYear}/{semester}
         </ConfigBarItem>
-        <ConfigBarItem>{t('reportAProblem')}</ConfigBarItem>
+        <ConfigBarItem>
+          <Link href="www.google.com" target="_blank" style={{ color: 'white' }}>
+            {t('reportAProblem')}
+          </Link>
+        </ConfigBarItem>
       </FlexContainer>
     </ConfigBarLayout>
   )

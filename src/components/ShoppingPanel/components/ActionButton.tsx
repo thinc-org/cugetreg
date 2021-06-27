@@ -7,8 +7,8 @@ import { useTranslation } from 'react-i18next'
 import { ShoppingState } from '@/components/ShoppingPanel/hooks'
 import { useCourseGroup } from '@/utils/hooks/useCourseGroup'
 import Link from 'next/link'
-import { Analytics } from '@/components/Analytics'
-import { SHOPPING_CART_BUTTON, SHOPPING_CART_REMOVE_COURSE } from '@/components/Analytics/const'
+import { Analytics } from '@/context/analytics/components/Analytics'
+import { SHOPPING_CART_BUTTON, SHOPPING_CART_REMOVE_COURSE } from '@/context/analytics/components/const'
 
 import { ShoppingCartModalContext } from '@/context/ShoppingCartModal'
 

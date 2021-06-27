@@ -10,8 +10,8 @@ import { TagList } from '@/components/TagList'
 import React from 'react'
 import { ShoppingCartModalContext } from '@/context/ShoppingCartModal'
 import { CourseSearchProvider } from '@/context/CourseSearch'
-import { Analytics } from '@/components/Analytics'
-import { FILTER_BUTTON, SELECTED_COURSES_BUTTON, OPEN_SHOPPING_CART_BUTTON } from '@/components/Analytics/const'
+import { Analytics } from '@/context/analytics/components/Analytics'
+import { FILTER_BUTTON, SELECTED_COURSES_BUTTON, OPEN_SHOPPING_CART_BUTTON } from '@/context/analytics/components/const'
 
 const Container = styled.div`
   margin-top: ${({ theme }) => theme.spacing(4)};

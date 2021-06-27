@@ -5,8 +5,8 @@ import { IconButton, InputBase, Paper } from '@material-ui/core'
 import SearchIcon from '@material-ui/icons/Search'
 import { useSearchCourseQueryParams } from '@/utils/hooks/useSearchCourseQueryParams'
 import { collectLogEvent } from '@/utils/network/logging'
-import { Analytics } from '@/components/Analytics'
-import { COURSE_SEARCH_BOX } from '@/components/Analytics/const'
+import { Analytics } from '@/context/analytics/components/Analytics'
+import { COURSE_SEARCH_BOX } from '@/context/analytics/components/const'
 
 export interface SeachFieldProp {}
 

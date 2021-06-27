@@ -1,4 +1,6 @@
+import { AnalyticsContext } from '@/context/analytics'
 import { useRouter } from 'next/router'
+import { useContext } from 'react'
 // import { collectLogEvent } from '@/utils/network/logging'
 
 interface AnalyticsProps {
@@ -10,13 +12,10 @@ interface AnalyticsProps {
 
 export function Analytics({ children, elementName, elementId, pathId }: AnalyticsProps) {
   const { pathname } = useRouter()
+  const { addEvent } = useContext(AnalyticsContext)
   const log = (_?: unknown, value?: string) => {
-    console.log(value, pathname, pathId, elementName, elementId, navigator.userAgent)
-    // To DO put data into collectLogEvent
-    // collectLogEvent({
-    //   kind: 'track',
-    //   message: event.value,
-    // })
+    const event = { value, pathname, pathId, elementName, elementId, eventType: 'click' }
+    addEvent(event)
   }
 
   return children({ log })

@@ -8,17 +8,21 @@ type StyledWithThemeRules = CSSProperties | CSSPropertiesCallback
 type AllProps<Component extends ElementType> = JSX.LibraryManagedAttributes<Component, ComponentProps<Component>>
 type StyledProps<Component extends ElementType> = Omit<AllProps<Component>, 'className'> & { className?: string }
 
+type StyledComponent<Component extends ElementType> = ComponentType<StyledProps<Component>> & {
+  withComponent: <NewComponent extends ElementType>(newComponent: NewComponent) => StyledComponent<NewComponent>
+}
+
 function createStyled<Component extends ElementType>(
   Component: Component,
   styles: StyledWithThemeRules
-): ComponentType<StyledProps<Component>> {
+): StyledComponent<Component> {
   let useStyles: () => ClassNameMap<'root'>
   if (typeof styles === 'function') {
     useStyles = makeStyles((theme) => ({ root: styles(theme) }))
   } else {
     useStyles = makeStyles({ root: styles })
   }
-  return (forwardRef(function Styled({ className, ...props }: StyledProps<Component>, ref) {
+  const outputComponent = (forwardRef(function Styled({ className, ...props }: StyledProps<Component>, ref) {
     const { root } = useStyles()
     return (
       <Component
@@ -27,7 +31,9 @@ function createStyled<Component extends ElementType>(
         className={`${root}${className ? ` ${className}` : ''}`}
       />
     )
-  }) as unknown) as ComponentType<StyledProps<Component>>
+  }) as unknown) as StyledComponent<Component>
+  outputComponent.withComponent = (newComponent) => createStyled(newComponent, styles)
+  return outputComponent
 }
 
 /**

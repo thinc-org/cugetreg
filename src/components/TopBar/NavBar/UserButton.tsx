@@ -3,7 +3,7 @@ import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import PersonIcon from '@material-ui/icons/Person'
 import { Box, Button, CircularProgress, Grid, Typography } from '@material-ui/core'
-import { ImWarning, ImGoogleDrive } from 'react-icons/im'
+import { MdCloudDone, MdCloudOff } from 'react-icons/md'
 import { observer } from 'mobx-react'
 import { gDriveStore, GDriveSyncState } from '@/store/gDriveState'
 import { authStore } from '@/store/meStore'
@@ -17,7 +17,7 @@ export const GDriveIndicator = observer(({ gdriveStore }: { gdriveStore: { gDriv
     [
       GDriveSyncState.FAIL,
       <>
-        <ImWarning size="2em" /> Can&apos;t connect to Google Drive. Data won&apos;t be saved
+        <MdCloudOff size="2em" /> Can&apos;t connect to Google Drive. Data won&apos;t be saved
       </>,
     ],
     [
@@ -29,13 +29,13 @@ export const GDriveIndicator = observer(({ gdriveStore }: { gdriveStore: { gDriv
     [
       GDriveSyncState.SYNCED,
       <>
-        <ImGoogleDrive size="2em" />
+        <MdCloudDone size="2em" />
       </>,
     ],
     [
       GDriveSyncState.SYNCERR,
       <>
-        <ImWarning size="2em" /> Sync failed. Data won&apos;t be saved
+        <MdCloudOff size="2em" /> Sync failed. Data won&apos;t be saved
       </>,
     ],
   ])

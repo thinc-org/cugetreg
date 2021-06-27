@@ -6,7 +6,7 @@ import { runInAction } from 'mobx'
 import { observer } from 'mobx-react'
 import React, { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ImCheckmark } from 'react-icons/im'
+import { MdCheck } from 'react-icons/md'
 import { useContext } from 'react'
 import { SnackbarContext } from '@/context/Snackbar'
 
@@ -36,7 +36,7 @@ export const SelectButton = observer(({ course, selectedSectionNumber }: SelectB
   return (
     <CustomButton
       loading={false}
-      startIcon={!isSelected ? <Add /> : <ImCheckmark />}
+      startIcon={!isSelected ? <Add /> : <MdCheck />}
       color="primary"
       variant={!isSelected ? 'contained' : 'outlined'}
       fullWidth

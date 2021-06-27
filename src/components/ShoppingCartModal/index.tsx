@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 import { Dialog, IconButton, DialogTitle, makeStyles } from '@material-ui/core'
-import { ImCross } from 'react-icons/im'
+import { MdClose } from 'react-icons/md'
 import ShoppingPanel from '@/components/ShoppingPanel'
 import { ShoppingCartModalContext } from '@/context/ShoppingCartModal'
 
@@ -20,7 +20,7 @@ export function ShoppingCartModal() {
       <DialogTitle>
         รายวิชาที่ถูกเลือก{' '}
         <IconButton onClick={onClose} className={modalSty.closeBtn}>
-          <ImCross />
+          <MdClose />
         </IconButton>
       </DialogTitle>
       <ShoppingPanel />

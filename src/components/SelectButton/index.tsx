@@ -13,9 +13,10 @@ import { SnackbarContext } from '@/context/Snackbar'
 interface SelectButtonProps {
   course: Course
   selectedSectionNumber: string
+  onClick: (_?: unknown, value?: string) => void
 }
 
-export const SelectButton = observer(({ course, selectedSectionNumber }: SelectButtonProps) => {
+export const SelectButton = observer(({ course, selectedSectionNumber, onClick }: SelectButtonProps) => {
   const { t } = useTranslation('courseCard')
   const { emitMessage } = useContext(SnackbarContext)
 
@@ -26,16 +27,19 @@ export const SelectButton = observer(({ course, selectedSectionNumber }: SelectB
       if (!isSelected) {
         const addItemSuccess = courseCartStore.addItem(course, selectedSectionNumber)
         if (!addItemSuccess) {
+          onClick(null, 'addSubjectFailed')
           emitMessage(t('addSubjectFailed'), 'error', t('addSubjectFailedSolution'))
         } else {
+          onClick(null, 'addSubjectSuccess')
           emitMessage(t('addSubjectSuccess'), 'success', t('viewAllSubject'))
         }
       } else {
         courseCartStore.removeCourse(course)
+        onClick(null, 'removeSubjectSuccess')
         emitMessage(t('removeSubjectSuccess'), 'warning', t('viewAllSubject'))
       }
     })
-  }, [course, selectedSectionNumber, isSelected, emitMessage, t])
+  }, [course, selectedSectionNumber, isSelected, emitMessage, t, onClick])
 
   return (
     <CustomButton

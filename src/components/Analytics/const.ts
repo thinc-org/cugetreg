@@ -1,2 +1,7 @@
 export const FILTER_BUTTON = 'filter_button'
 export const GO_BACK_BUTTON = 'back_button'
+export const COURSE_TITLE = 'course_title'
+export const EXPAND_BUTTON = 'expand_button'
+export const SECTION_SELECT = 'section_select'
+export const SUBJECT_SELECT_BUTTON = 'subject_select_button'
+export const COURSE_SEARCH_BOX = 'course_search_box'

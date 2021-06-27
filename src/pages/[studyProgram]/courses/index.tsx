@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react'
-import { Hidden, Stack as MuiStack, Typography } from '@material-ui/core'
+import { Button, Hidden, Stack as MuiStack, Typography } from '@material-ui/core'
 import { CourseList } from '@/components/CourseList'
 import { SearchField } from '@/components/SearchField'
 import { FilterIconButton } from '@/components/FilterIconButton'
@@ -43,8 +43,11 @@ function CourseSearchPage() {
 
   return (
     <Container>
-      <TitleStack spacing={2} direction="row">
+      <TitleStack spacing={2} direction="row" justifyContent="space-between">
         <Typography variant="h2">ค้นหาวิชาเรียน</Typography>
+        <Hidden mdUp>
+          <SelectedCoursesButton onClick={onOpen} />
+        </Hidden>
       </TitleStack>
       <StickyStack alignItems="flex-start">
         <Stack width="100%" spacing={2} direction="row">

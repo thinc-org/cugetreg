@@ -35,17 +35,11 @@ export const SearchField: React.FC<SeachFieldProp> = () => {
   }
 
   return (
-    <Analytics elementName={COURSE_SEARCH_BOX}>
-      {({ log }) => (
-        <Paper
-          onClick={log}
-          component="form"
-          className={classes.root}
-          noValidate
-          onSubmit={onSubmit}
-          variant="outlined"
-        >
+    <Paper component="form" className={classes.root} noValidate onSubmit={onSubmit} variant="outlined">
+      <Analytics elementName={COURSE_SEARCH_BOX}>
+        {({ log }) => (
           <InputBase
+            onClick={log}
             fullWidth
             value={input}
             onChange={handleChange}
@@ -53,11 +47,11 @@ export const SearchField: React.FC<SeachFieldProp> = () => {
             margin="dense"
             className={classes.input}
           />
-          <IconButton type="submit" aria-label="search" className={classes.iconButton}>
-            <SearchIcon />
-          </IconButton>
-        </Paper>
-      )}
-    </Analytics>
+        )}
+      </Analytics>
+      <IconButton type="submit" aria-label="search" className={classes.iconButton}>
+        <SearchIcon />
+      </IconButton>
+    </Paper>
   )
 }

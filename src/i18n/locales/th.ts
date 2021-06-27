@@ -14,6 +14,7 @@ export const navBar = {
   searchCourses: 'ค้นหาวิชาเรียน',
   timetable: 'จัดตารางเรียน',
   signin: 'เข้าสู่ระบบ',
+  signout: 'ออกจากระบบ',
 }
 
 export const studyProgram = {

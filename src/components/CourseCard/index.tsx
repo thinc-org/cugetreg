@@ -6,8 +6,8 @@ import { SelectButton } from '@/components/SelectButton'
 import { CardBody } from './components/CardBody'
 import { CardHeading } from './components/CardHeading'
 import { forwardRef, memo } from 'react'
-import { Analytics } from '@/components/Analytics'
-import { SUBJECT_SELECT_BUTTON } from '@/components/Analytics/const'
+import { Analytics } from '@/context/analytics/components/Analytics'
+import { SUBJECT_SELECT_BUTTON } from '@/context/analytics/components/const'
 
 export interface CourseCardProps {
   course: Course

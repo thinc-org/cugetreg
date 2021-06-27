@@ -8,8 +8,8 @@ import { dayOfWeekMapper } from '@/constants/dayOfWeek'
 import { SelectButton } from '@/components/SelectButton'
 import { SectionSelect } from './SectionSelect'
 import { useCourseCardContext } from '../useCourseCard'
-import { Analytics } from '@/components/Analytics'
-import { SUBJECT_SELECT_BUTTON } from '@/components/Analytics/const'
+import { Analytics } from '@/context/analytics/components/Analytics'
+import { SUBJECT_SELECT_BUTTON } from '@/context/analytics/components/const'
 
 interface CardBodyProps {
   isExpanded: boolean

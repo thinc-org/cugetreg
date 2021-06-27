@@ -11,8 +11,8 @@ import { CheckboxGroup } from '@/components/FilterSection/components/CheckboxGro
 import styled from '@emotion/styled'
 import { css } from '@emotion/react'
 import { DayChipKey, GenEdChipKey } from '@/components/Chips/config'
-import { Analytics } from '@/components/Analytics'
-import { DAY_FILTER, GENED_FILTER } from '@/components/Analytics/const'
+import { Analytics } from '@/context/analytics/components/Analytics'
+import { DAY_FILTER, GENED_FILTER } from '@/context/analytics/components/const'
 
 const DialogContent = styled(MuiDialogContent)`
   padding: ${({ theme }) => theme.spacing(4)};

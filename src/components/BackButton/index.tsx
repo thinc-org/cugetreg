@@ -4,8 +4,8 @@ import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos'
 import { useTranslation } from 'react-i18next'
 import { Button, IconButton } from '@material-ui/core'
 import LinkType from 'next/link'
-import { Analytics } from '@/components/Analytics'
-import { GO_BACK_BUTTON } from '@/components/Analytics/const'
+import { Analytics } from '@/context/analytics/components/Analytics'
+import { GO_BACK_BUTTON } from '@/context/analytics/components/const'
 
 const ButtonMobile = styled(IconButton)`
   border: 1px solid #2a2d48;

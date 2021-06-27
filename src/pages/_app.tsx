@@ -26,6 +26,8 @@ import { loadGAPI, startGDriveSync } from '@/utils/network/gDriveSync'
 import { reaction, runInAction } from 'mobx'
 import { gDriveStore, GDriveSyncState } from '@/store/gDriveState'
 
+import { AnalyticsProvider } from '@/context/analytics'
+import { useAnalytics } from '@/context/analytics/hooks'
 import { ShoppingCartModalProvider } from '@/context/ShoppingCartModal'
 import { SnackbarContextProvider } from '@/context/Snackbar'
 import { useSnackBar } from '@/context/Snackbar/hooks'
@@ -34,8 +36,8 @@ import { authStore } from '@/store/meStore'
 import { collectLogEvent } from '@/utils/network/logging'
 import { ErrorBoundary } from '@/components/ErrorBoundary/ErrorBoundary'
 import { courseCartStore } from '@/store'
-import { Analytics } from '@/components/Analytics'
-import { SNACKBAR_BUTTON } from '@/components/Analytics/const'
+import { Analytics } from '@/context/analytics/components/Analytics'
+import { SNACKBAR_BUTTON } from '@/context/analytics/components/const'
 
 mobxConfiguration()
 
@@ -96,6 +98,7 @@ function MyApp({ Component, pageProps, forceDark, router }: AppProps) {
     })
   }, [router.pathname])
   const { message, emitMessage, action: actionText, open, close, messageType } = useSnackBar()
+  const { addEvent } = useAnalytics()
   const disclosureValue = useDisclosure()
 
   const value = { handleClose: close, message, emitMessage, action: actionText }
@@ -108,53 +111,55 @@ function MyApp({ Component, pageProps, forceDark, router }: AppProps) {
       </Head>
       <ApolloProvider client={client}>
         <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <SnackbarContextProvider value={value}>
-            <ShoppingCartModalProvider value={disclosureValue}>
-              <ThemeProvider theme={prefersDarkMode || forceDark ? darkTheme : lightTheme}>
-                <CssBaseline />
-                <TopBar />
-                <Container>
-                  <ErrorBoundary>
-                    <Component {...pageProps} />
-                  </ErrorBoundary>
-                </Container>
-                <Footer />
-                <Snackbar
-                  anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-                  onClose={handleClose}
-                  autoHideDuration={3000}
-                  open={open}
-                  style={{ top: '60px' }}
-                >
-                  <ToastAlert
-                    severity={messageType}
-                    action={
-                      actionText ? (
-                        <Analytics elementName={SNACKBAR_BUTTON}>
-                          {({ log }) => (
-                            <Button
-                              size="small"
-                              color="inherit"
-                              onClick={() => {
-                                log(null, message)
-                                close()
-                                disclosureValue.onOpen()
-                              }}
-                            >
-                              {actionText}
-                            </Button>
-                          )}
-                        </Analytics>
-                      ) : null
-                    }
+          <AnalyticsProvider value={{ addEvent }}>
+            <SnackbarContextProvider value={value}>
+              <ShoppingCartModalProvider value={disclosureValue}>
+                <ThemeProvider theme={prefersDarkMode || forceDark ? darkTheme : lightTheme}>
+                  <CssBaseline />
+                  <TopBar />
+                  <Container>
+                    <ErrorBoundary>
+                      <Component {...pageProps} />
+                    </ErrorBoundary>
+                  </Container>
+                  <Footer />
+                  <Snackbar
+                    anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                    onClose={close}
+                    autoHideDuration={3000}
+                    open={open}
+                    style={{ top: '60px' }}
                   >
-                    {message}
-                  </ToastAlert>
-                </Snackbar>
-                <ShoppingCartModal />
-              </ThemeProvider>
-            </ShoppingCartModalProvider>
-          </SnackbarContextProvider>
+                    <ToastAlert
+                      severity={messageType}
+                      action={
+                        actionText ? (
+                          <Analytics elementName={SNACKBAR_BUTTON}>
+                            {({ log }) => (
+                              <Button
+                                size="small"
+                                color="inherit"
+                                onClick={() => {
+                                  log(null, message)
+                                  close()
+                                  disclosureValue.onOpen()
+                                }}
+                              >
+                                {actionText}
+                              </Button>
+                            )}
+                          </Analytics>
+                        ) : null
+                      }
+                    >
+                      {message}
+                    </ToastAlert>
+                  </Snackbar>
+                  <ShoppingCartModal />
+                </ThemeProvider>
+              </ShoppingCartModalProvider>
+            </SnackbarContextProvider>
+          </AnalyticsProvider>
         </LocalizationProvider>
       </ApolloProvider>
     </>

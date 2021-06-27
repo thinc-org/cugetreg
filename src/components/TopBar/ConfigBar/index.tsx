@@ -31,9 +31,11 @@ export function ConfigBar() {
         <ConfigBarItem>
           {academicYear}/{semester}
         </ConfigBarItem>
-        <a href="https://airtable.com/shruwAAfn1763TgMU" target="_blank" rel="noreferrer" style={{ color: 'white' }}>
-          <ConfigBarItem>{t('reportAProblem')}</ConfigBarItem>
-        </a>
+        <ConfigBarItem>
+          <a href="https://airtable.com/shruwAAfn1763TgMU" target="_blank" rel="noreferrer" style={{ color: 'white' }}>
+            {t('reportAProblem')}
+          </a>
+        </ConfigBarItem>
       </FlexContainer>
     </ConfigBarLayout>
   )

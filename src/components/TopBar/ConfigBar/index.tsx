@@ -6,7 +6,6 @@ import styled from '@emotion/styled'
 import { useCourseGroup } from '@/utils/hooks/useCourseGroup'
 
 import StudyProgramDropdown from '../components/StudyProgramDropdown'
-import { Link } from '@material-ui/core'
 
 export const ConfigBarLayout = styled.div`
   width: 100%;
@@ -32,9 +31,9 @@ export function ConfigBar() {
         <ConfigBarItem>
           {academicYear}/{semester}
         </ConfigBarItem>
-        <Link href="https://airtable.com/shruwAAfn1763TgMU" target="_blank" style={{ color: 'white' }}>
+        <a href="https://airtable.com/shruwAAfn1763TgMU" target="_blank" rel="noreferrer" style={{ color: 'white' }}>
           <ConfigBarItem>{t('reportAProblem')}</ConfigBarItem>
-        </Link>
+        </a>
       </FlexContainer>
     </ConfigBarLayout>
   )

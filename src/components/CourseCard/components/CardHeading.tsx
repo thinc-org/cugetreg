@@ -11,7 +11,7 @@ import styled from '@emotion/styled'
 const StyledLink = styled.a`
   text-decoration: underline;
   text-decoration-color: transparent;
-  transition: 0.5s ease;
+  transition: 0.2s ease-in-out;
   :hover {
     text-decoration-color: ${({ theme }) => theme.palette.primary.main};
   }

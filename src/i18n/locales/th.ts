@@ -109,9 +109,9 @@ export const footer = {
 }
 
 export const program = {
-  i: 'นานาชาติ',
-  s: 'ทวิภาค',
-  t: 'ตรีภาค',
+  I: 'นานาชาติ',
+  S: 'ทวิภาค',
+  T: 'ตรีภาค',
 }
 
 export const cr11 = {

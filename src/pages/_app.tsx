@@ -85,38 +85,36 @@ function MyApp({ Component, pageProps, forceDark }: AppProps) {
       </Head>
       <ApolloProvider client={client}>
         <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <CourseSearchProvider>
-            <SnackbarContextProvider value={value}>
-              <ShoppingCartModalProvider value={disclosureValue}>
-                <ThemeProvider theme={prefersDarkMode || forceDark ? darkTheme : lightTheme}>
-                  <CssBaseline />
-                  <TopBar />
-                  <Container>
-                    <Component {...pageProps} />
-                  </Container>
-                  <Footer />
-                  <Snackbar
-                    anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-                    onClose={handleClose}
-                    autoHideDuration={6000}
-                    open={open}
+          <SnackbarContextProvider value={value}>
+            <ShoppingCartModalProvider value={disclosureValue}>
+              <ThemeProvider theme={prefersDarkMode || forceDark ? darkTheme : lightTheme}>
+                <CssBaseline />
+                <TopBar />
+                <Container>
+                  <Component {...pageProps} />
+                </Container>
+                <Footer />
+                <Snackbar
+                  anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                  onClose={handleClose}
+                  autoHideDuration={6000}
+                  open={open}
+                >
+                  <ToastAlert
+                    severity="success"
+                    action={
+                      <Button size="small" color="inherit" onClick={disclosureValue.onOpen}>
+                        {actionText}
+                      </Button>
+                    }
                   >
-                    <ToastAlert
-                      severity="success"
-                      action={
-                        <Button size="small" color="inherit" onClick={disclosureValue.onOpen}>
-                          {actionText}
-                        </Button>
-                      }
-                    >
-                      {message}
-                    </ToastAlert>
-                  </Snackbar>
-                  <ShoppingCartModal />
-                </ThemeProvider>
-              </ShoppingCartModalProvider>
-            </SnackbarContextProvider>
-          </CourseSearchProvider>
+                    {message}
+                  </ToastAlert>
+                </Snackbar>
+                <ShoppingCartModal />
+              </ThemeProvider>
+            </ShoppingCartModalProvider>
+          </SnackbarContextProvider>
         </LocalizationProvider>
       </ApolloProvider>
     </>

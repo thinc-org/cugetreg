@@ -1,14 +1,14 @@
 import { getRedirectUrl } from '@/utils/network/auth'
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Typography } from '@material-ui/core'
 import { MdCloudDone, MdCloudQueue, MdCloudOff } from 'react-icons/md'
 import { observer } from 'mobx-react'
 import { gDriveStore, GDriveSyncState } from '@/store/gDriveState'
 import { authStore } from '@/store/meStore'
-import { useRouter } from 'next/router'
 import styled from '@emotion/styled'
 import { NavBarItem } from '@/components/TopBar/NavBar/NavBarItem'
+import Link from 'next/link'
 
 export const GDriveIndicator = observer(({ gdriveStore }: { gdriveStore: { gDriveState: GDriveSyncState } }) => {
   const mpr = new Map([
@@ -72,19 +72,15 @@ const UserContainer = styled.div`
 export default observer(function UserButton() {
   const pending = authStore.pending
   const userName = authStore.auth?.firstName
-  const router = useRouter()
 
-  const onLogin = useCallback(() => {
-    const uri = getRedirectUrl()
-    router.push(uri)
-  }, [])
+  const redirectUrl = useMemo(() => getRedirectUrl(), [])
   const onLogout = useCallback(() => authStore.clear(), [])
 
   const { t } = useTranslation('navBar')
 
   if (pending) return null
 
-  if (userName)
+  if (userName) {
     return (
       <NavBarItemDiv>
         <SyncContainer>
@@ -98,5 +94,11 @@ export default observer(function UserButton() {
         </NavBarItem>
       </NavBarItemDiv>
     )
-  else return <NavBarItem onClick={onLogin}>{t('signin')}</NavBarItem>
+  } else {
+    return (
+      <Link href={redirectUrl} passHref>
+        <NavBarItem>{t('signin')}</NavBarItem>
+      </Link>
+    )
+  }
 })

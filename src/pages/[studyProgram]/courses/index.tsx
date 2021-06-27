@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react'
-import { Button, Hidden, Stack as MuiStack, Typography } from '@material-ui/core'
+import { Hidden, Stack as MuiStack, Typography } from '@material-ui/core'
 import { CourseList } from '@/components/CourseList'
 import { SearchField } from '@/components/SearchField'
 import { FilterIconButton } from '@/components/FilterIconButton'
@@ -10,6 +10,8 @@ import { TagList } from '@/components/TagList'
 import React from 'react'
 import { ShoppingCartModalContext } from '@/context/ShoppingCartModal'
 import { CourseSearchProvider } from '@/context/CourseSearch'
+import { Analytics } from '@/components/Analytics'
+import { FILTER_BUTTON } from '@/components/Analytics/const'
 
 const Container = styled.div`
   margin-top: ${({ theme }) => theme.spacing(4)};
@@ -52,7 +54,16 @@ function CourseSearchPage() {
       <StickyStack alignItems="flex-start">
         <Stack width="100%" spacing={2} direction="row">
           <SearchField />
-          <FilterIconButton onClick={() => setOpenFilterBar((open) => !open)} />
+          <Analytics elementName={FILTER_BUTTON}>
+            {({ log }) => (
+              <FilterIconButton
+                onClick={() => {
+                  log()
+                  setOpenFilterBar((open) => !open)
+                }}
+              />
+            )}
+          </Analytics>
           <Hidden mdDown>
             <SelectedCoursesButton onClick={onOpen} />
           </Hidden>

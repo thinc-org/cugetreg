@@ -9,6 +9,7 @@ import { gDriveStore, GDriveSyncState } from '@/store/gDriveState'
 import { authStore } from '@/store/meStore'
 import { useRouter } from 'next/router'
 import styled from '@emotion/styled'
+import { NavBarItem } from '@/components/TopBar/NavBar/NavBarItem'
 
 export const GDriveIndicator = observer(({ gdriveStore }: { gdriveStore: { gDriveState: GDriveSyncState } }) => {
   const mpr = new Map([
@@ -41,7 +42,7 @@ export const GDriveIndicator = observer(({ gdriveStore }: { gdriveStore: { gDriv
   return <Box>{mpr.get(gdriveStore.gDriveState)}</Box>
 })
 
-const NavBarItem = styled.div`
+const NavBarItemDiv = styled.div`
   color: ${({ theme }) => theme.palette.primary.main};
 
   ${({ theme }) => theme.breakpoints.up('sm')} {
@@ -67,7 +68,7 @@ export default observer(function UserButton() {
 
   if (userName)
     return (
-      <NavBarItem>
+      <NavBarItemDiv>
         <Typography variant="h6">
           <Grid margin="1em" container>
             <Grid item paddingLeft="1em">
@@ -84,7 +85,7 @@ export default observer(function UserButton() {
             Logout
           </Button>
         </Typography>
-      </NavBarItem>
+      </NavBarItemDiv>
     )
   else return <NavBarItem onClick={onLogin}>{t('navBar:signin')}</NavBarItem>
 })

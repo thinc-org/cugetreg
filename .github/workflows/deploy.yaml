@@ -94,7 +94,7 @@ jobs:
 
       - name: Deploy to VM - Dev
         uses: appleboy/ssh-action@master
-        if: ${{ github.ref == 'refs/heads/yu/dev' }}
+        if: ${{ github.ref == 'refs/heads/dev' }}
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}

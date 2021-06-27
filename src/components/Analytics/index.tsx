@@ -2,7 +2,7 @@ import { useRouter } from 'next/router'
 // import { collectLogEvent } from '@/utils/network/logging'
 
 interface AnalyticsProps {
-  children: React.FC<{ log: () => void }>
+  children: React.FC<{ log: (_?: unknown, value?: string) => void }>
   elementName: string
   elementId?: string
   pathId?: string

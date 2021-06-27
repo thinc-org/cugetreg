@@ -34,6 +34,8 @@ import { authStore } from '@/store/meStore'
 import { collectLogEvent } from '@/utils/network/logging'
 import { ErrorBoundary } from '@/components/ErrorBoundary/ErrorBoundary'
 import { courseCartStore } from '@/store'
+import { Analytics } from '@/components/Analytics'
+import { SNACKBAR_BUTTON } from '@/components/Analytics/const'
 
 mobxConfiguration()
 
@@ -95,11 +97,8 @@ function MyApp({ Component, pageProps, forceDark, router }: AppProps) {
   }, [router.pathname])
   const { message, emitMessage, action: actionText, open, close, messageType } = useSnackBar()
   const disclosureValue = useDisclosure()
-  const handleClose = () => {
-    close()
-  }
 
-  const value = { handleClose, message, emitMessage, action: actionText }
+  const value = { handleClose: close, message, emitMessage, action: actionText }
 
   return (
     <>
@@ -131,16 +130,21 @@ function MyApp({ Component, pageProps, forceDark, router }: AppProps) {
                     severity={messageType}
                     action={
                       actionText ? (
-                        <Button
-                          size="small"
-                          color="inherit"
-                          onClick={() => {
-                            handleClose()
-                            disclosureValue.onOpen()
-                          }}
-                        >
-                          {actionText}
-                        </Button>
+                        <Analytics elementName={SNACKBAR_BUTTON}>
+                          {({ log }) => (
+                            <Button
+                              size="small"
+                              color="inherit"
+                              onClick={() => {
+                                log(null, message)
+                                close()
+                                disclosureValue.onOpen()
+                              }}
+                            >
+                              {actionText}
+                            </Button>
+                          )}
+                        </Analytics>
                       ) : null
                     }
                   >

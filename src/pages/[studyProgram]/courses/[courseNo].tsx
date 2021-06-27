@@ -19,7 +19,7 @@ import Link from 'next/link'
 import { getExamDate, getExamPeriod } from '@/components/ExamSchedule/components/ExamCard/utils'
 
 const SectionCardLayout = styled(SectionCard)`
-  margin-top: ${({ theme }) => theme.spacing(10)};
+  margin-top: ${({ theme }) => theme.spacing(2)};
 `
 
 const SectionContainer = styled.div`

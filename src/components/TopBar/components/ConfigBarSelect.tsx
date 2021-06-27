@@ -32,6 +32,10 @@ export const ConfigBarSelect = styled(NativeSelect)`
     }
   }
 
+  option {
+    background-color: ${({ theme }) => theme.palette.primary.main} !important;
+  }
+
   svg {
     margin-top: 4px;
     color: inherit;

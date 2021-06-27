@@ -11,7 +11,7 @@ import React from 'react'
 import { ShoppingCartModalContext } from '@/context/ShoppingCartModal'
 import { CourseSearchProvider } from '@/context/CourseSearch'
 import { Analytics } from '@/components/Analytics'
-import { FILTER_BUTTON } from '@/components/Analytics/const'
+import { FILTER_BUTTON, SELECTED_COURSES_BUTTON, OPEN_SHOPPING_CART_BUTTON } from '@/components/Analytics/const'
 
 const Container = styled.div`
   margin-top: ${({ theme }) => theme.spacing(4)};
@@ -48,7 +48,16 @@ function CourseSearchPage() {
       <TitleStack spacing={2} direction="row" justifyContent="space-between" alignItems="center">
         <Typography variant="h2">ค้นหาวิชาเรียน</Typography>
         <Hidden mdUp>
-          <SelectedCoursesButton onClick={onOpen} />
+          <Analytics elementName={OPEN_SHOPPING_CART_BUTTON}>
+            {({ log }) => (
+              <SelectedCoursesButton
+                onClick={() => {
+                  log()
+                  onOpen()
+                }}
+              />
+            )}
+          </Analytics>
         </Hidden>
       </TitleStack>
       <StickyStack alignItems="flex-start">
@@ -65,7 +74,16 @@ function CourseSearchPage() {
             )}
           </Analytics>
           <Hidden mdDown>
-            <SelectedCoursesButton onClick={onOpen} />
+            <Analytics elementName={SELECTED_COURSES_BUTTON}>
+              {({ log }) => (
+                <SelectedCoursesButton
+                  onClick={() => {
+                    onOpen()
+                    log()
+                  }}
+                />
+              )}
+            </Analytics>
           </Hidden>
         </Stack>
         <TagList />

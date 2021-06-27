@@ -11,6 +11,8 @@ import { CheckboxGroup } from '@/components/FilterSection/components/CheckboxGro
 import styled from '@emotion/styled'
 import { css } from '@emotion/react'
 import { DayChipKey, GenEdChipKey } from '@/components/Chips/config'
+import { Analytics } from '@/components/Analytics'
+import { DAY_FILTER, GENED_FILTER } from '@/components/Analytics/const'
 
 const DialogContent = styled(MuiDialogContent)`
   padding: ${({ theme }) => theme.spacing(4)};
@@ -65,8 +67,12 @@ export const FilterSection: React.FC<FilterSectionProps> = ({ open, setOpen }) =
         <Container>
           <Paper className={classes.paper} variant="outlined">
             <Stack spacing={4}>
-              <CheckboxGroup title="หมวดหมู่ GenEd" checkboxes={genEdCheckboxes} />
-              <CheckboxGroup title="วันในสัปดาห์" checkboxes={dayOfWeekCheckboxes} />
+              <Analytics elementName={GENED_FILTER}>
+                {({ log }) => <CheckboxGroup onClick={log} title="หมวดหมู่ GenEd" checkboxes={genEdCheckboxes} />}
+              </Analytics>
+              <Analytics elementName={DAY_FILTER}>
+                {({ log }) => <CheckboxGroup onClick={log} title="วันในสัปดาห์" checkboxes={dayOfWeekCheckboxes} />}
+              </Analytics>
               {/* <CheckboxGroup title="แสดงผลพิเศษ" checkboxes={specialCheckboxes} /> */}
             </Stack>
           </Paper>
@@ -76,8 +82,12 @@ export const FilterSection: React.FC<FilterSectionProps> = ({ open, setOpen }) =
         <Dialog open onClose={handleClose} maxWidth="xl">
           <DialogContent>
             <Box>
-              <CheckboxGroup title="หมวดหมู่ GenEd" checkboxes={genEdCheckboxes} />
-              <CheckboxGroup title="วันในสัปดาห์" checkboxes={dayOfWeekCheckboxes} />
+              <Analytics elementName={GENED_FILTER}>
+                {({ log }) => <CheckboxGroup onClick={log} title="หมวดหมู่ GenEd" checkboxes={genEdCheckboxes} />}
+              </Analytics>
+              <Analytics elementName={DAY_FILTER}>
+                {({ log }) => <CheckboxGroup onClick={log} title="วันในสัปดาห์" checkboxes={dayOfWeekCheckboxes} />}
+              </Analytics>
             </Box>
             {/* <CheckboxGroup title="แสดงผลพิเศษ" checkboxes={specialCheckboxes} /> */}
             <Button color="primary" variant="outlined" fullWidth onClick={handleClose}>

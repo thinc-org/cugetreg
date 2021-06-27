@@ -103,9 +103,11 @@ function MyApp({ Component, pageProps, forceDark }: AppProps) {
                   <ToastAlert
                     severity={isWarning ? 'warning' : 'success'}
                     action={
-                      <Button size="small" color="inherit" onClick={disclosureValue.onOpen}>
-                        {actionText}
-                      </Button>
+                      actionText ? (
+                        <Button size="small" color="inherit" onClick={disclosureValue.onOpen}>
+                          {actionText}
+                        </Button>
+                      ) : null
                     }
                   >
                     {message}

@@ -93,7 +93,7 @@ export default observer(function UserButton() {
     return (
       <NavBarItemDiv>
         <SyncContainer>
-          <GDriveIndicator gdriveStore={gDriveStore} />
+          <GDriveIndicator />
           <UserContainer>
             <Typography variant="h6">{userName}</Typography>
           </UserContainer>

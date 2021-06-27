@@ -70,6 +70,7 @@ const UserContainer = styled.div`
 `
 
 export default observer(function UserButton() {
+  const pending = authStore.pending
   const userName = authStore.auth?.firstName
   const router = useRouter()
 
@@ -80,6 +81,8 @@ export default observer(function UserButton() {
   const onLogout = useCallback(() => authStore.clear(), [])
 
   const { t } = useTranslation('navBar')
+
+  if (pending) return null
 
   if (userName)
     return (

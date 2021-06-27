@@ -21,6 +21,7 @@ export const CourseSearchProvider: React.FC = (props) => {
       filter: {
         dayOfWeeks: searchCourseQueryParams.filter.dayOfWeeks,
         limit: LIMIT_QUERY_CONSTANT,
+        offset: 0,
       },
     },
   })

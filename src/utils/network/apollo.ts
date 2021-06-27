@@ -3,6 +3,7 @@ import { ApolloClient, InMemoryCache } from '@apollo/client'
 import env from '@/utils/env/macro'
 import { Course } from '@thinc-org/chula-courses'
 import { SearchCourseVars } from '@/utils/network/BackendGQLQueries'
+import { uniqBy } from 'lodash'
 
 const cache = new InMemoryCache({
   typePolicies: {
@@ -16,7 +17,7 @@ const cache = new InMemoryCache({
           merge(existing: Course[] = [], incoming: Course[], { args }) {
             const offset = args?.filter.offset as SearchCourseVars['filter']['offset']
             if (!offset) return [...incoming]
-            return [...existing, ...incoming]
+            return uniqBy([...existing, ...incoming], 'courseNo')
           },
         },
       },

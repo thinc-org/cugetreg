@@ -19,7 +19,7 @@ const DialogContent = styled(MuiDialogContent)`
 const Box = styled.div`
   display: flex;
   justify-content: space-between;
-  div:first-child {
+  div:first-of-type {
     ${({ theme }) => {
       return css`
         margin-right: ${theme.spacing(12)};

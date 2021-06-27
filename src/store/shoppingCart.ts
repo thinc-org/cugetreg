@@ -1,5 +1,4 @@
 import { collectLogEvent } from '@/utils/network/logging'
-import { mockCourseData } from '@/__mock__/courses'
 import { Course } from '@thinc-org/chula-courses'
 import { action, computed, makeObservable, observable } from 'mobx'
 import { computedFn } from 'mobx-utils'
@@ -61,17 +60,22 @@ export class CourseCart implements CourseCartProps {
    * @param selectedSectionNo - the selected section of the course
    */
   @action
-  addItem(course: Course, selectedSectionNo?: string): void {
+  addItem(course: Course, selectedSectionNo?: string) {
     collectLogEvent({
       kind: 'track',
       message: 'user add course',
     })
+
+    if (this.currentProgram !== null && course.studyProgram !== this.currentProgram) {
+      return false
+    }
 
     if (!selectedSectionNo) selectedSectionNo = this.findFirstSectionNo(course)
     const newItem: CourseCartItem = { ...course, selectedSectionNo, isSelected: false, isHidden: false }
     const foundIndex = this.shopItems.findIndex((item) => item.courseNo == course.courseNo)
     if (foundIndex != -1) this.shopItems[foundIndex] = newItem
     else this.shopItems.push(newItem)
+    return true
   }
 
   @action
@@ -160,6 +164,14 @@ export class CourseCart implements CourseCartProps {
   @computed
   get courses(): Course[] {
     return this.shopItems.map((item) => this.convertToCourse(item))
+  }
+
+  /**
+   * get all course from the store
+   */
+  @computed
+  get currentProgram() {
+    return this.shopItems[0] ? this.shopItems[0].studyProgram : null
   }
 }
 export const courseCartStore = new CourseCart()

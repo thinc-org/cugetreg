@@ -88,6 +88,8 @@ export const courseCard = {
   note: 'หมายเหตุ',
   capacity: 'ที่ว่าง',
   addSubjectSuccess: 'เพิ่มรายวิชาสำเร็จ',
+  addSubjectFailed: 'โปรดลบวิชาจากแผนการเรียนอื่นออกก่อนเพื่อเพิมวิชาจากแผนการเรียนนี้',
+  addSubjectFailedSolution: 'แก้ไขวิชา',
   removeSubjectSuccess: 'ลบรายวิชาสำเร็จ',
   viewAllSubject: 'ดูวิชาทั้งหมด',
 }

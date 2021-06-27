@@ -94,7 +94,9 @@ const Home = observer(() => {
   const { t } = useTranslation(['program', 'cr11'])
   const { studyProgram, academicYear: year, semester } = useCourseGroup()
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const studyProgramText = `${t('cr11:semester')} ${year}/${semester} ${t(`program:${studyProgram || 's'}` as any)}`
+  const studyProgramText = `${t('cr11:semester')} ${year}/${semester} ${t(
+    `program:${shoppingCart.currentProgram || 's'}` as any
+  )}`
 
   return (
     <div className={classes.container}>

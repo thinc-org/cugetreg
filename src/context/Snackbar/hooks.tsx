@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { SnackbarProps } from './types'
 
 export function useSnackBar() {
   const [message, setMessage] = useState('')
@@ -6,7 +7,7 @@ export function useSnackBar() {
   const [open, setOpen] = useState(false)
   const [isWarning, setisWarning] = useState(false)
 
-  const emitMessage = (messageText: string, actionText?: string, _isWarning?: boolean) => {
+  const emitMessage: SnackbarProps['emitMessage'] = (messageText, actionText, _isWarning) => {
     setMessage(messageText)
     setAction(actionText || '')
     setisWarning(_isWarning || false)

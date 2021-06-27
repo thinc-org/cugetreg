@@ -56,7 +56,6 @@ const useGoogleLogin = ({
       const options = {
         hd: hostedDomain,
         prompt,
-        redirect_uri: redirectUri,
         scope: scope,
         state: encodeURI(location.href),
       }

@@ -16,6 +16,7 @@ import { useTranslation } from 'react-i18next'
 import { Language } from '@/i18n'
 import { useCourseGroup } from '@/utils/hooks/useCourseGroup'
 import Link from 'next/link'
+import { getExamDate, getExamPeriod } from '@/components/ExamSchedule/components/ExamCard/utils'
 
 const SectionCardLayout = styled(SectionCard)`
   margin-top: ${({ theme }) => theme.spacing(3)};
@@ -95,6 +96,10 @@ function CourseDetailPage(props: { data: GetCourseResponse }) {
   })
 
   const faculty = getFaculty(cData.course.faculty)
+  const finalDate = getExamDate(cData.course, true)
+  const midtermDate = getExamDate(cData.course, false)
+  const finalPeriod = getExamPeriod(cData.course, true)
+  const midtermPeriod = getExamPeriod(cData.course, false)
 
   return (
     <>
@@ -125,19 +130,11 @@ function CourseDetailPage(props: { data: GetCourseResponse }) {
         </GridEnd>
         <Grid item xs={12} sm={6}>
           <DescriptionTitle variant="subtitle1">สอบกลางภาค</DescriptionTitle>
-          <Typography variant="h6">
-            {cData.course.midterm
-              ? `${cData.course.midterm.date} ${cData.course.midterm.period.start} - ${cData.course.midterm.period.end}`
-              : 'TBA'}
-          </Typography>
+          <Typography variant="h6">{cData.course.midterm ? `${midtermDate} ${midtermPeriod}` : 'TBA'}</Typography>
         </Grid>
         <GridEnd item xs={12} sm={6}>
           <DescriptionTitle variant="subtitle1">สอบปลายภาค</DescriptionTitle>
-          <Typography variant="h6">
-            {cData.course.final
-              ? `${cData.course.final.date} ${cData.course.final.period.start} - ${cData.course.final.period.end}`
-              : 'TBA'}
-          </Typography>
+          <Typography variant="h6">{cData.course.final ? `${finalDate} ${finalPeriod}` : 'TBA'}</Typography>
         </GridEnd>
         <Grid item xs={12} sm={6}>
           <DescriptionTitle variant="subtitle1">เงื่อนไขรายวิชา</DescriptionTitle>

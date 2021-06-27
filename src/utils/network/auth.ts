@@ -1,8 +1,8 @@
 import env from '@/utils/env/macro'
-import { FetchPolicy, gql } from '@apollo/client'
+import { gql } from '@apollo/client'
 import { client } from './apollo'
 import { AuthData, MeData } from '@/store/meStore'
-import { collectErrorLog, collectLogEvent } from './logging'
+import { collectErrorLog } from './logging'
 
 /**
  * Auth flow

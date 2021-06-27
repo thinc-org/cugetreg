@@ -33,12 +33,14 @@ const AUTHDATA_LOCALSTORAGE_FIELD = 'authdata'
 export class AuthStore {
   auth: AuthData | null = null
   me: MeData | null = null
+  pending: boolean = true
   private refreshTimer: number | null = null
 
   constructor() {
     makeObservable(this, {
       auth: observable,
       me: observable,
+      pending: observable,
       isLoggedIn: computed,
       clear: action,
     })
@@ -60,6 +62,7 @@ export class AuthStore {
     runInAction(() => {
       this.auth = authData
       this.me = meData
+      this.pending = false
     })
     this.startRefreshTokenTimer()
     localStorage.setItem(AUTHDATA_LOCALSTORAGE_FIELD, JSON.stringify(authData))
@@ -74,7 +77,12 @@ export class AuthStore {
   async tryRestoreWithLocalStorage() {
     if (typeof localStorage == 'undefined') return
     const authDataJsonString = localStorage.getItem(AUTHDATA_LOCALSTORAGE_FIELD)
-    if (!authDataJsonString) return
+    if (!authDataJsonString) {
+      runInAction(() => {
+        this.pending = false
+      })
+      return
+    }
     const authData = JSON.parse(authDataJsonString) as AuthData
 
     try {
@@ -82,6 +90,7 @@ export class AuthStore {
       runInAction(() => {
         this.auth = authData
         this.me = meData
+        this.pending = false
       })
       this.startRefreshTokenTimer()
     } catch (e) {
@@ -108,6 +117,7 @@ export class AuthStore {
   clear() {
     this.auth = null
     this.me = null
+    this.pending = false
     if (this.refreshTimer) {
       clearInterval(this.refreshTimer)
       this.refreshTimer = null

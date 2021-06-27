@@ -6,7 +6,7 @@ import env from '@/utils/env/macro'
 import { resetServerContext } from 'react-beautiful-dnd'
 
 import { hotjar } from 'react-hotjar'
-import { hotjar_clientid, hotjar_snippet_version } from '@/utils/env'
+import { hotjar_clientid, hotjar_snippet_version, ga_measurement_id } from '@/utils/env'
 
 export default class MyDocument extends Document {
   componentDidMount() {
@@ -21,6 +21,18 @@ export default class MyDocument extends Document {
           <link
             href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&family=Prompt:wght@400;500;700&display=swap"
             rel="stylesheet"
+          />
+          <script async src={`https://www.googletagmanager.com/gtag/js?id=${ga_measurement_id}`}></script>
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+          
+            gtag('config', '${ga_measurement_id}');
+          `,
+            }}
           />
         </Head>
         <body>

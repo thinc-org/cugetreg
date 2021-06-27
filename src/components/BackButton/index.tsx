@@ -1,7 +1,9 @@
+import React from 'react'
 import styled from '@emotion/styled'
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos'
 import { useTranslation } from 'react-i18next'
 import { Button, IconButton } from '@material-ui/core'
+import LinkType from 'next/link'
 
 const ButtonMobile = styled(IconButton)`
   border: 1px solid #2a2d48;
@@ -23,18 +25,31 @@ const ButtonDesktop = styled(Button)`
 
 interface BackButtonProps {
   onClick?: () => void
+  href: string
 }
 
-export function BackButton(props: BackButtonProps) {
+export function WithButton(Link: typeof LinkType) {
   const { t } = useTranslation('navigation')
-  return (
-    <>
-      <ButtonDesktop {...props} startIcon={<ArrowBackIosIcon />} color="primary" variant="outlined" disableElevation>
-        {t('back')}
-      </ButtonDesktop>
-      <ButtonMobile aria-label="back">
-        <ArrowBackIosIcon />
-      </ButtonMobile>
-    </>
-  )
+  return (props: BackButtonProps) => {
+    return (
+      <>
+        <Link passHref href={props.href}>
+          <ButtonDesktop
+            {...props}
+            startIcon={<ArrowBackIosIcon />}
+            color="primary"
+            variant="outlined"
+            disableElevation
+          >
+            {t('back')}
+          </ButtonDesktop>
+        </Link>
+        <Link passHref href={props.href}>
+          <ButtonMobile aria-label="back">
+            <ArrowBackIosIcon />
+          </ButtonMobile>
+        </Link>
+      </>
+    )
+  }
 }

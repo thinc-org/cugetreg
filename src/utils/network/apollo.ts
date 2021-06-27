@@ -26,6 +26,6 @@ const cache = new InMemoryCache({
 })
 
 export const client = new ApolloClient({
-  uri: env.backend.uri,
+  uri: `${env.backend.uri}/graphql`,
   cache: cache,
 })

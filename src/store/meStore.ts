@@ -1,4 +1,5 @@
 import { retrieveAuthDataUsingCode, retrieveMeData } from '@/utils/network/auth'
+import { collectErrorLog, collectLogEvent } from '@/utils/network/logging'
 import { action, computed, makeObservable, observable, runInAction } from 'mobx'
 
 /**
@@ -49,6 +50,11 @@ export class AuthStore {
 
   /** Use Google OAuth2.0 Code to authenticate with the backend */
   async authenticateWithCode(code: string) {
+    collectLogEvent({
+      kind: 'track',
+      message: 'user attempting to authenticate',
+    })
+
     const authData = await retrieveAuthDataUsingCode(code)
     const meData = await retrieveMeData(authData)
     runInAction(() => {
@@ -57,6 +63,11 @@ export class AuthStore {
     })
     this.startRefreshTokenTimer()
     localStorage.setItem(AUTHDATA_LOCALSTORAGE_FIELD, JSON.stringify(authData))
+
+    collectLogEvent({
+      kind: 'track',
+      message: 'user authenticated',
+    })
   }
 
   /** Try restoring AuthStore using localstorage. */
@@ -76,6 +87,7 @@ export class AuthStore {
     } catch (e) {
       // Ignore
       console.log('[AuthStore] Failed to restore MeData', e)
+      collectErrorLog("can't retrieve me data from local storage auth, ignoring", e)
       return
     }
   }
@@ -104,6 +116,11 @@ export class AuthStore {
     if (localStorage) {
       localStorage.removeItem(AUTHDATA_LOCALSTORAGE_FIELD)
     }
+
+    collectLogEvent({
+      kind: 'track',
+      message: 'user logged out',
+    })
   }
 }
 

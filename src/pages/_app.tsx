@@ -31,6 +31,8 @@ import { SnackbarContextProvider } from '@/context/Snackbar'
 import { useSnackBar } from '@/context/Snackbar/hooks'
 import styled from '@emotion/styled'
 import { authStore } from '@/store/meStore'
+import { collectLogEvent } from '@/utils/network/logging'
+import { ErrorBoundary } from '@/components/ErrorBoundary/ErrorBoundary'
 import { courseCartStore } from '@/store'
 
 mobxConfiguration()
@@ -41,7 +43,7 @@ const ToastAlert = styled(Alert)`
   }
 `
 
-function MyApp({ Component, pageProps, forceDark }: AppProps) {
+function MyApp({ Component, pageProps, forceDark, router }: AppProps) {
   const prefersDarkMode =
     env.features.darkTheme &&
     // features.darkTheme is a constant
@@ -70,6 +72,11 @@ function MyApp({ Component, pageProps, forceDark }: AppProps) {
       { fireImmediately: true, delay: 1000 }
     )
 
+    collectLogEvent({
+      kind: 'track',
+      message: 'user visit site',
+    })
+
     authStore.tryRestoreWithLocalStorage()
     loadGAPI()
       .then(startGDriveSync)
@@ -81,6 +88,13 @@ function MyApp({ Component, pageProps, forceDark }: AppProps) {
       })
   }, [])
 
+  useEffect(() => {
+    collectLogEvent({
+      kind: 'track',
+      message: `user change path`,
+      detail: `${location.origin}-${router.pathname}`,
+    })
+  }, [router.pathname])
   const { message, emitMessage, action: actionText, open, close, isWarning } = useSnackBar()
   const disclosureValue = useDisclosure()
   const handleClose = (_: unknown, reason: string) => {
@@ -106,7 +120,9 @@ function MyApp({ Component, pageProps, forceDark }: AppProps) {
                 <CssBaseline />
                 <TopBar />
                 <Container>
-                  <Component {...pageProps} />
+                  <ErrorBoundary>
+                    <Component {...pageProps} />
+                  </ErrorBoundary>
                 </Container>
                 <Footer />
                 <Snackbar

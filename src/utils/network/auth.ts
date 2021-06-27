@@ -2,6 +2,7 @@ import env from '@/utils/env/macro'
 import { FetchPolicy, gql } from '@apollo/client'
 import { client } from './apollo'
 import { AuthData, MeData } from '@/store/meStore'
+import { collectErrorLog, collectLogEvent } from './logging'
 
 /**
  * Auth flow
@@ -97,8 +98,14 @@ export async function retrieveAuthDataUsingCode(code: string): Promise<AuthData>
     },
   })
 
-  if (errors) throw errors
-  if (!data) throw new Error('No data returned from verify endpoint')
+  if (errors) {
+    collectErrorLog('error from exchange code', errors)
+    throw errors
+  }
+  if (!data) {
+    collectErrorLog('error empty data in code exchange response', '')
+    throw new Error('No data returned from verify endpoint')
+  }
 
   return data.verify
 }

@@ -171,7 +171,9 @@ function SchedulePage() {
         <InfoSpacer />
         <ButtonBar>
           <SaveImgButton imageRef={ref} />
-          <Button variant="outlined">{t('addToCalendar')}</Button>
+          <Button variant="outlined" disabled>
+            {t('addToCalendar')}
+          </Button>
           <Link href={`/${studyProgram}/schedule/cr11`} passHref>
             <Button style={{ marginRight: 0 }} variant="outlined">
               {t('showCR11')}

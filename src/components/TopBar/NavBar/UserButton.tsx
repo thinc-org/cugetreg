@@ -54,6 +54,11 @@ const NavBarItemDiv = styled.div`
   }
 `
 
+const NavbarContainer = styled(Typography)`
+  display: flex;
+  align-items: center;
+`
+
 export default observer(function UserButton() {
   const userName = authStore.auth?.firstName
   const router = useRouter()
@@ -69,12 +74,12 @@ export default observer(function UserButton() {
   if (userName)
     return (
       <NavBarItemDiv>
-        <Typography variant="h6">
+        <NavbarContainer variant="h6">
           <Grid margin="1em" container>
             <Grid item paddingLeft="1em">
               <GDriveIndicator gdriveStore={gDriveStore} />
             </Grid>
-            <Grid padding="0.2em" item>
+            <Grid display="flex" alignItems="center" padding="0.2em" item>
               <PersonIcon />
             </Grid>
             <Grid item>
@@ -84,7 +89,7 @@ export default observer(function UserButton() {
           <Button variant="contained" color="primary" onClick={onLogout}>
             Logout
           </Button>
-        </Typography>
+        </NavbarContainer>
       </NavBarItemDiv>
     )
   else return <NavBarItem onClick={onLogin}>{t('navBar:signin')}</NavBarItem>

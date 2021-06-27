@@ -10,6 +10,7 @@ import { NavBarItem } from '../NavBar/NavBarItem'
 import UserButton from '../NavBar/UserButton'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
+import { reportProblemLink } from '../ConfigBar'
 
 const MoreButton = styled(IconButton)`
   margin-left: 12px;
@@ -66,7 +67,7 @@ export function MobileNavBar() {
           </div>
           <SectionSpacer />
           <div>
-            <NavBarItem>{t('configBar:reportAProblem')}</NavBarItem>
+            <NavBarItem href={reportProblemLink}>{t('configBar:reportAProblem')}</NavBarItem>
           </div>
           <div>
             <UserButton />

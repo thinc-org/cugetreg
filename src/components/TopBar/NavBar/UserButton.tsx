@@ -1,9 +1,8 @@
 import { getRedirectUrl } from '@/utils/network/auth'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
-import PersonIcon from '@material-ui/icons/Person'
-import { Box, Button, CircularProgress, Grid, Typography } from '@material-ui/core'
-import { MdCloudDone, MdCloudOff } from 'react-icons/md'
+import { Typography } from '@material-ui/core'
+import { MdCloudDone, MdCloudQueue, MdCloudOff } from 'react-icons/md'
 import { observer } from 'mobx-react'
 import { gDriveStore, GDriveSyncState } from '@/store/gDriveState'
 import { authStore } from '@/store/meStore'
@@ -17,46 +16,57 @@ export const GDriveIndicator = observer(({ gdriveStore }: { gdriveStore: { gDriv
     [
       GDriveSyncState.FAIL,
       <>
-        <MdCloudOff size="2em" /> Can&apos;t connect to Google Drive. Data won&apos;t be saved
+        <MdCloudOff /> Can&apos;t connect to Google Drive. Data won&apos;t be saved
       </>,
     ],
     [
       GDriveSyncState.SYNCING,
       <>
-        <CircularProgress />
+        <MdCloudQueue />
       </>,
     ],
     [
       GDriveSyncState.SYNCED,
       <>
-        <MdCloudDone size="2em" />
+        <MdCloudDone />
       </>,
     ],
     [
       GDriveSyncState.SYNCERR,
       <>
-        <MdCloudOff size="2em" /> Sync failed. Data won&apos;t be saved
+        <MdCloudOff /> Sync failed. Data won&apos;t be saved
       </>,
     ],
   ])
-  return <Box>{mpr.get(gdriveStore.gDriveState)}</Box>
+  return <>{mpr.get(gdriveStore.gDriveState)}</>
 })
 
 const NavBarItemDiv = styled.div`
   color: ${({ theme }) => theme.palette.primary.main};
 
-  ${({ theme }) => theme.breakpoints.up('sm')} {
-    margin: ${({ theme }) => theme.spacing(0, -1, 0, 2)};
-  }
+  font-size: 20px;
 
   ${({ theme }) => theme.breakpoints.up('sm')} {
-    margin-bottom: ${({ theme }) => theme.spacing(1.5)};
+    display: flex;
+    align-items: center;
   }
 `
 
-const NavbarContainer = styled(Typography)`
+const SyncContainer = styled.div`
   display: flex;
   align-items: center;
+
+  > * + * {
+    margin-left: 8px;
+  }
+
+  ${({ theme }) => theme.breakpoints.down('sm')} {
+    margin-left: 8px;
+  }
+`
+
+const UserContainer = styled.div`
+  margin-left: 8px;
 `
 
 export default observer(function UserButton() {
@@ -69,28 +79,21 @@ export default observer(function UserButton() {
   }, [])
   const onLogout = useCallback(() => authStore.clear(), [])
 
-  const { t } = useTranslation()
+  const { t } = useTranslation('navBar')
 
   if (userName)
     return (
       <NavBarItemDiv>
-        <NavbarContainer variant="h6">
-          <Grid margin="1em" container>
-            <Grid item paddingLeft="1em">
-              <GDriveIndicator gdriveStore={gDriveStore} />
-            </Grid>
-            <Grid display="flex" alignItems="center" padding="0.2em" item>
-              <PersonIcon />
-            </Grid>
-            <Grid item>
-              <Typography variant="h4">{userName}</Typography>
-            </Grid>
-          </Grid>
-          <Button variant="contained" color="primary" onClick={onLogout}>
-            Logout
-          </Button>
-        </NavbarContainer>
+        <SyncContainer>
+          <GDriveIndicator gdriveStore={gDriveStore} />
+          <UserContainer>
+            <Typography variant="h6">{userName}</Typography>
+          </UserContainer>
+        </SyncContainer>
+        <NavBarItem color="primary" onClick={onLogout}>
+          {t('signout')}
+        </NavBarItem>
       </NavBarItemDiv>
     )
-  else return <NavBarItem onClick={onLogin}>{t('navBar:signin')}</NavBarItem>
+  else return <NavBarItem onClick={onLogin}>{t('signin')}</NavBarItem>
 })

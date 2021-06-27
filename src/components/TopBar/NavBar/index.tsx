@@ -43,7 +43,7 @@ export function NavBar() {
   return (
     <NavBarLayout>
       <FlexContainer>
-        <Link href="/" passHref>
+        <Link href={`/${studyProgram}/courses`} passHref>
           <Logo>
             <img src={logo} alt={t('appName')} />
           </Logo>

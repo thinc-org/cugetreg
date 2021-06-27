@@ -170,7 +170,7 @@ function SchedulePage() {
         </div>
         <InfoSpacer />
         <ButtonBar>
-          <SaveImgButton imageRef={ref} />
+          {!isExamTable && <SaveImgButton imageRef={ref} />}
           <Button variant="outlined" disabled>
             {t('addToCalendar')}
           </Button>

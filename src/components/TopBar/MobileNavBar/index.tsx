@@ -56,12 +56,12 @@ export function MobileNavBar() {
           <Logo src={logo} alt={t('appName')} />
           <div>
             <Link href={`/${studyProgram}/courses`} passHref>
-              <NavBarItem>{t('navBar:searchCourses')}</NavBarItem>
+              <NavBarItem onClick={() => onClose()}>{t('navBar:searchCourses')}</NavBarItem>
             </Link>
           </div>
           <div>
             <Link href={`/${studyProgram}/schedule`} passHref>
-              <NavBarItem>{t('navBar:timetable')}</NavBarItem>
+              <NavBarItem onClick={() => onClose()}>{t('navBar:timetable')}</NavBarItem>
             </Link>
           </div>
           <SectionSpacer />

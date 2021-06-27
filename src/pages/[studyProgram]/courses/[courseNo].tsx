@@ -14,6 +14,8 @@ import styled from '@emotion/styled'
 import { BackButton } from '@/components/BackButton'
 import { useTranslation } from 'react-i18next'
 import { Language } from '@/i18n'
+import { useCourseGroup } from '@/utils/hooks/useCourseGroup'
+import Link from 'next/link'
 
 const SectionCardLayout = styled(SectionCard)`
   margin-top: ${({ theme }) => theme.spacing(3)};
@@ -73,6 +75,7 @@ function courseTypeStringFromCourse(c: Course) {
 function CourseDetailPage(props: { data: GetCourseResponse }) {
   const router = useRouter()
   const { i18n } = useTranslation()
+  const { studyProgram } = useCourseGroup()
 
   const { data } = useQuery<GetCourseResponse, GetCourseVars>(GET_COURSE, {
     variables: parseVariablesFromQuery(router.query),
@@ -95,7 +98,9 @@ function CourseDetailPage(props: { data: GetCourseResponse }) {
 
   return (
     <>
-      <BackButton />
+      <Link href={`/${studyProgram}/courses`} passHref>
+        <BackButton />
+      </Link>
       <Title variant="h3">
         {cData.course.courseNo} {cData.course.abbrName}
       </Title>

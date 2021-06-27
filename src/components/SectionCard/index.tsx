@@ -20,6 +20,11 @@ import { Caption } from '@/components/CourseCard/components/Caption'
 import { SectionStatus } from '@/components/SectionCard/components/SectionStatus'
 import { dayOfWeekMapper } from '@/constants/dayOfWeek'
 import { SelectButton } from '@/components/SelectButton'
+import styled from '@emotion/styled'
+
+const SectionTitle = styled(Typography)`
+  margin-right: ${({ theme }) => theme.spacing(2)};
+`
 
 interface SectionCardProps {
   section: Section
@@ -39,7 +44,7 @@ export const SectionCard = (props: SectionCardProps) => {
           <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
             <Grid container spacing={1}>
               <Grid item>
-                <Typography variant="h5">{t('section', { sectionNo: section.sectionNo })}</Typography>
+                <SectionTitle variant="h5">{t('section', { sectionNo: section.sectionNo })}</SectionTitle>
               </Grid>
               {course.genEdType !== 'NO' && (
                 <Grid item>

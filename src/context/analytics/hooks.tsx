@@ -15,11 +15,11 @@ export function useAnalytics() {
       setEvents([])
       clearTimeout(timeoutRef.current)
     }
-    if (events.length !== 0 || events.length >= 5) {
+    if (events.length !== 0 || events.length >= 10) {
       clearTimeout(timeoutRef.current)
       timeoutRef.current = window.setTimeout(() => {
         callApi()
-      }, 1000)
+      }, 2000)
       return () => clearTimeout(timeoutRef.current)
     }
   }, [events])

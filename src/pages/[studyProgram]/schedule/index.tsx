@@ -66,6 +66,10 @@ const ButtonBar = styled.div`
 
   ${({ theme }) => theme.breakpoints.down('sm')} {
     margin-top: 16px;
+    a,
+    button {
+      margin-right: 8px;
+    }
   }
 `
 

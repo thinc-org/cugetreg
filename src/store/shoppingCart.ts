@@ -19,6 +19,7 @@ export class CourseCart implements CourseCartProps {
   @observable shopItems: CourseCartItem[] = []
   @observable state: CourseCartState = 'default'
   @observable isInitialized = false
+  @observable isInitializedLocal = false
 
   constructor() {
     makeObservable(this)

@@ -2,6 +2,7 @@ import { CourseCartItem, courseCartStore } from '@/store'
 import { gDriveStore, GDriveSyncState } from '@/store/gDriveState'
 import { authStore, AuthStore } from '@/store/meStore'
 import { reaction, runInAction } from 'mobx'
+import { syncWithLocalStorage } from '../localstorage'
 
 /** Lock to prevent GAPI from loading multiple time */
 let isGapiInit = false
@@ -162,11 +163,13 @@ export async function startGDriveSync() {
       isLoggedIn: authStore.isLoggedIn,
       cart: [...courseCartStore.shopItems],
       cartInit: courseCartStore.isInitialized,
+      cartInitLocal: courseCartStore.isInitializedLocal,
     }),
     (d) => {
       if (!d.isLoggedIn) {
         console.log('[GDRIVE] Ignore. Not logged in')
         setGState(GDriveSyncState.IDLE)
+        syncWithLocalStorage(d.cart, d.cartInitLocal)
       } else {
         trackedSync(() => sync(d.cart, d.cartInit))
       }

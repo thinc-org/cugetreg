@@ -147,3 +147,10 @@ export const selectedCoursesButton = {
 export const navigation = {
   back: 'กลับ',
 }
+
+export const syncStatus = {
+  fail: 'ไม่สามารถเชื่อมต่อ Google Drive',
+  syncing: 'กำลังซิงค์',
+  synced: 'ซิงค์สำเร็จ',
+  syncerr: 'การซิงค์ล้มเหลว',
+}

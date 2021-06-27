@@ -1,7 +1,7 @@
 import { getRedirectUrl } from '@/utils/network/auth'
-import { useCallback, useMemo } from 'react'
+import { PropsWithChildren, useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Typography } from '@material-ui/core'
+import { Tooltip, Typography } from '@material-ui/core'
 import { MdCloudDone, MdCloudQueue, MdCloudOff } from 'react-icons/md'
 import { observer } from 'mobx-react'
 import { gDriveStore, GDriveSyncState } from '@/store/gDriveState'
@@ -10,36 +10,45 @@ import styled from '@emotion/styled'
 import { NavBarItem } from '@/components/TopBar/NavBar/NavBarItem'
 import Link from 'next/link'
 
-export const GDriveIndicator = observer(({ gdriveStore }: { gdriveStore: { gDriveState: GDriveSyncState } }) => {
-  const mpr = new Map([
-    [GDriveSyncState.IDLE, <></>],
-    [
-      GDriveSyncState.FAIL,
-      <>
-        <MdCloudOff /> Can&apos;t connect to Google Drive. Data won&apos;t be saved
-      </>,
-    ],
-    [
-      GDriveSyncState.SYNCING,
-      <>
-        <MdCloudQueue />
-      </>,
-    ],
-    [
-      GDriveSyncState.SYNCED,
-      <>
-        <MdCloudDone />
-      </>,
-    ],
-    [
-      GDriveSyncState.SYNCERR,
-      <>
-        <MdCloudOff /> Sync failed. Data won&apos;t be saved
-      </>,
-    ],
-  ])
-  return <>{mpr.get(gdriveStore.gDriveState)}</>
+export const GDriveIndicator = observer(() => {
+  const { t } = useTranslation('syncStatus')
+  switch (gDriveStore.gDriveState) {
+    case GDriveSyncState.IDLE:
+      return <></>
+    case GDriveSyncState.FAIL:
+      return (
+        <SyncStatus title={t('fail')}>
+          <MdCloudOff />
+        </SyncStatus>
+      )
+    case GDriveSyncState.SYNCING:
+      return (
+        <SyncStatus title={t('syncing')}>
+          <MdCloudQueue />
+        </SyncStatus>
+      )
+    case GDriveSyncState.SYNCED:
+      return (
+        <SyncStatus title={t('synced')}>
+          <MdCloudDone />
+        </SyncStatus>
+      )
+    case GDriveSyncState.SYNCERR:
+      return (
+        <SyncStatus title={t('syncerr')}>
+          <MdCloudOff />
+        </SyncStatus>
+      )
+  }
 })
+
+function SyncStatus({ title, children }: PropsWithChildren<{ title: string }>) {
+  return (
+    <Tooltip title={title}>
+      <span style={{ display: 'flex', alignItems: 'center' }}>{children}</span>
+    </Tooltip>
+  )
+}
 
 const NavBarItemDiv = styled.div`
   color: ${({ theme }) => theme.palette.primary.main};

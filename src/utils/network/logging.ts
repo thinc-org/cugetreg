@@ -15,8 +15,8 @@ interface ClientLogDto {
   kind: string //Actually arbitary
   message: string
   detail?: string
-  accesstoken?: string
-  deviceid: string
+  accessToken?: string
+  deviceId: string
 }
 
 export let sessionId: string | null = null
@@ -31,8 +31,8 @@ export function collectLogEvent(event: LogEvent) {
 
   const log: ClientLogDto = {
     ...event,
-    deviceid: sessionId,
-    accesstoken: authStore.auth?.accessToken,
+    deviceId: sessionId,
+    accessToken: authStore.auth?.accessToken,
   }
   axios
     .post(`${env.backend.uri}/clientlogging`, log)

@@ -32,15 +32,15 @@ interface BackButtonProps {
   pathId?: string
 }
 
-export function createAnalyticsButton(Link: typeof LinkType) {
+export function withButton(Link: typeof LinkType) {
   return (props: BackButtonProps) => {
     const router = useRouter()
     const { t } = useTranslation('navigation')
 
     const { histories } = useContext(HistoryContext)
 
-    const redirectToPreviousPage = (log: (_?: unknown, value?: string) => void) => (...args: any) => {
-      log(args)
+    const redirectToPreviousPage = (log: (_?: unknown, value?: string) => void) => () => {
+      log()
       router.back()
     }
 

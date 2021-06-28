@@ -5,7 +5,7 @@ import React from 'react'
 import { CR11 } from '@/components/CR11'
 import { useTranslation } from 'react-i18next'
 import { useCourseGroup } from '@/utils/hooks/useCourseGroup'
-import { WithButton } from '@/components/BackButton'
+import { createAnalyticsButton } from '@/components/BackButton'
 import Link from 'next/link'
 
 const useStyles = makeStyles((theme) => ({
@@ -92,18 +92,18 @@ const Home = observer(() => {
   const shoppingCart = courseCartStore
   const classes = useStyles()
   const { t } = useTranslation(['program', 'cr11'])
-  const { studyProgram, academicYear: year, semester } = useCourseGroup()
+  const { academicYear: year, semester } = useCourseGroup()
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const studyProgramText = `${t('cr11:semester')} ${year}/${semester} ${t(
     `program:${shoppingCart.currentProgram || 's'}` as any
   )}`
 
-  const Back = WithButton(Link)
+  const Back = createAnalyticsButton()
 
   return (
     <div className={classes.container}>
       <div className={classes.top}>
-        <Back href={`/${studyProgram}/schedule`} />
+        <Back />
         <Typography className={`${classes.semester} ${classes.mobile}`} variant="subtitle1">
           {studyProgramText}
         </Typography>

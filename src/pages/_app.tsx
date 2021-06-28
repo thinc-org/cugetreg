@@ -21,7 +21,7 @@ import { gDriveStore, GDriveSyncState } from '@/store/gDriveState'
 import { useSnackBar } from '@/context/Snackbar/hooks'
 import styled from '@emotion/styled'
 import { authStore } from '@/store/meStore'
-import { collectLogEvent } from '@/utils/network/logging'
+import { collectLogEvent, startLogging } from '@/utils/network/logging'
 import { ErrorBoundary } from '@/components/ErrorBoundary/ErrorBoundary'
 import { courseCartStore } from '@/store'
 import { Analytics } from '@/context/analytics/components/Analytics'
@@ -74,6 +74,8 @@ function MyApp({ Component, pageProps, forceDark }: AppProps) {
         })
       })
   }, [])
+
+  useEffect(startLogging, [])
 
   const { message, emitMessage, action: actionText, open, close, messageType } = useSnackBar()
   const disclosureValue = useDisclosure()

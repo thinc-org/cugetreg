@@ -6,32 +6,76 @@ import * as uuid from 'uuid'
 import { authStore } from '@/store/meStore'
 
 export interface LogEvent {
-  kind: 'track' | 'error'
+  kind: 'track' | 'error' | 'fine-tracking'
   message: string
   detail?: string
+  additionalData?: Record<string, string>
 }
 
 interface ClientLogDto {
-  kind: string //Actually arbitary
+  kind: string
   message: string
   detail?: string
   accessToken?: string
   deviceId: string
+  sessionId: string
+  additionalData?: Record<string, string>
 }
 
-export const sessionId = uuid.v4()
+function getDeviceId() {
+  if (localStorage) {
+    const v = localStorage.getItem(DEVICE_ID_LOCALSTORAGE_KEY)
+    if (v) {
+      return v
+    } else {
+      const nId = uuid.v4()
+      localStorage.setItem(DEVICE_ID_LOCALSTORAGE_KEY, nId)
+      return nId
+    }
+  } else {
+    return 'NO-LOCALSTORAGE'
+  }
+}
+
+export let sessionId = ''
+export let deviceId = ''
+
+const DEVICE_ID_LOCALSTORAGE_KEY = 'DEVICE_ID'
+
+let backlogLog: ClientLogDto[] = []
+
+function sendCollectedLog() {
+  const data = backlogLog
+  backlogLog = []
+  if (data.length == 0) return
+  axios
+    .post(`${env.backend.uri}/clientlogging`, data)
+    .catch((e) => console.error('Error while logging', e, 'Message', data))
+}
+
+export function startLogging(): () => void {
+  if (typeof window == 'undefined') return () => {}
+
+  sessionId = uuid.v4()
+  deviceId = getDeviceId()
+
+  console.log('[LOG] Started logging timer DEVID:SESSID', deviceId, sessionId)
+  const resetTimer = setInterval(() => {
+    sendCollectedLog()
+  }, 10000)
+  return () => {
+    window.clearInterval(resetTimer)
+  }
+}
 
 export function collectLogEvent(event: LogEvent) {
-  if (typeof window == 'undefined') return
-
   const log: ClientLogDto = {
     ...event,
-    deviceId: sessionId,
+    deviceId: deviceId,
+    sessionId: sessionId,
     accessToken: authStore.auth?.accessToken,
   }
-  axios
-    .post(`${env.backend.uri}/clientlogging`, log)
-    .catch((e) => console.error('Error while logging', e, 'Message', log))
+  backlogLog.push(log)
 }
 
 export function collectErrorLog(msg: string, err: any) {
@@ -48,4 +92,5 @@ export function collectErrorLog(msg: string, err: any) {
     message: msg,
     detail: JSON.stringify(obj),
   })
+  sendCollectedLog()
 }

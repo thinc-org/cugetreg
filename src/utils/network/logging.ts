@@ -76,6 +76,7 @@ export function collectLogEvent(event: LogEvent) {
     accessToken: authStore.auth?.accessToken,
   }
   backlogLog.push(log)
+  if (backlogLog.length >= 5) sendCollectedLog()
 }
 
 export function collectErrorLog(msg: string, err: any) {

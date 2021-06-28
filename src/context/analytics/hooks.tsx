@@ -11,8 +11,13 @@ export function useAnalytics() {
       kind: 'fine-tracking',
       message: `User performed ${e.eventType} on object ${e.pathname} at ${e.timeStamp}`,
       additionalData: {
-        ...e,
-        timeStamp: e.timeStamp.toISOString(),
+        value: e.value || '',
+        elementName: e.elementName || '',
+        elementId: e.elementId || '',
+        eventType: e.eventType,
+        pathname: e.pathname,
+        pathId: e.pathId || '',
+        ua: navigator?.userAgent || '',
       },
     })
 

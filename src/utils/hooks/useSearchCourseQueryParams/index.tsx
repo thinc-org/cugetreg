@@ -1,7 +1,7 @@
 import { useMemo, useCallback } from 'react'
 import { useRouter } from 'next/router'
 
-import { SearchCourseVars } from '@/utils/network/BackendGQLQueries'
+import { CourseGroup, SearchCourseVars } from '@/utils/network/BackendGQLQueries'
 import { DayOfWeek, GenEdType, StudyProgram } from '@thinc-org/chula-courses'
 import { useCourseGroup } from '@/utils/hooks/useCourseGroup'
 
@@ -22,24 +22,29 @@ function removeUndefinedValue<T extends { [key: string]: any }>(obj: T): { [key:
   return obj
 }
 
+export function extractSearchVarsFromQuery(query: QueryParams, courseGroup: CourseGroup): SearchCourseVars {
+  const { keyword, genEdTypes, dayOfWeeks } = query
+
+  const genEdTypeArray = genEdTypes ? genEdTypes.split(',') : undefined
+  const dayOfWeekArray = dayOfWeeks ? dayOfWeeks.split(',') : undefined
+
+  const filter = removeUndefinedValue({
+    keyword: keyword ? keyword : undefined,
+    genEdTypes: genEdTypeArray ? (genEdTypeArray as GenEdType[]) : undefined,
+    dayOfWeeks: dayOfWeekArray ? (dayOfWeekArray as DayOfWeek[]) : undefined,
+  })
+
+  return { filter, courseGroup }
+}
+
 export const useSearchCourseQueryParams = () => {
   const router = useRouter()
   const courseGroup = useCourseGroup()
 
-  const searchCourseQueryParams: SearchCourseVars = useMemo<SearchCourseVars>(() => {
-    const { keyword, genEdTypes, dayOfWeeks } = router.query as QueryParams
-
-    const genEdTypeArray = genEdTypes ? genEdTypes.split(',') : undefined
-    const dayOfWeekArray = dayOfWeeks ? dayOfWeeks.split(',') : undefined
-
-    const filter = removeUndefinedValue({
-      keyword: keyword ? keyword : undefined,
-      genEdTypes: genEdTypeArray ? (genEdTypeArray as GenEdType[]) : undefined,
-      dayOfWeeks: dayOfWeekArray ? (dayOfWeekArray as DayOfWeek[]) : undefined,
-    })
-
-    return { filter, courseGroup }
-  }, [router.query, courseGroup])
+  const searchCourseQueryParams: SearchCourseVars = useMemo<SearchCourseVars>(
+    () => extractSearchVarsFromQuery(router.query as QueryParams, courseGroup),
+    [router.query, courseGroup]
+  )
 
   const setFilter = useCallback(
     async (filterVars: SearchCourseVars['filter']) => {

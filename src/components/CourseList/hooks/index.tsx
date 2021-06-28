@@ -6,7 +6,7 @@ import { QueryResult } from '@apollo/client'
 export const useCourseList = () => {
   const BOTTOM_OFFSET = 500
 
-  const { courseSearchQuery, fetchMoreCourses, isRefetching } = useContext(CourseSearchContext)
+  const { courseSearchQuery, fetchMoreCourses } = useContext(CourseSearchContext)
 
   const { data, loading, error } = courseSearchQuery as QueryResult<SearchCourseResponse, SearchCourseVars>
 
@@ -41,6 +41,5 @@ export const useCourseList = () => {
     courses: data?.search || [],
     loading,
     error,
-    isRefetching,
   }
 }

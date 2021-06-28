@@ -65,6 +65,13 @@ export class CourseCart implements CourseCartProps {
     collectLogEvent({
       kind: 'track',
       message: 'user add course',
+      additionalData: {
+        courseNo: course.courseNo,
+        selectedSectionNo: selectedSectionNo || 'NONE',
+        acaedemicYear: course.academicYear,
+        semester: course.semester,
+        studyProgram: course.studyProgram,
+      },
     })
 
     if (this.currentProgram !== null && course.studyProgram !== this.currentProgram) {

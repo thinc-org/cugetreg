@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import nprogress from 'nprogress'
 import { Router } from 'next/router'
 import { useTheme } from '@material-ui/core'
@@ -16,6 +16,10 @@ export function LoadingProgress() {
 
   useEffect(() => {
     nprogress.configure({ showSpinner: false })
+    load()
+    setTimeout(() => {
+      stop()
+    }, 500)
     Router.events.on('routeChangeStart', load)
     Router.events.on('routeChangeComplete', stop)
     Router.events.on('routeChangeError', stop)

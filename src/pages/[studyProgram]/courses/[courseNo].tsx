@@ -1,10 +1,10 @@
+import React from 'react'
 import { ApolloError, useQuery } from '@apollo/client'
 import { Course, getFaculty } from '@thinc-org/chula-courses'
 import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 import { useRouter } from 'next/router'
-import React from 'react'
 import { client } from '@/utils/network/apollo'
-import { Grid, Typography } from '@material-ui/core'
+import { Grid, Typography, Container as MuiContainer } from '@material-ui/core'
 import { GetCourseResponse, GetCourseVars, GET_COURSE } from '@/utils/network/BackendGQLQueries'
 import { ParsedUrlQuery } from 'querystring'
 import { parseCourseGroup } from '@/utils/courseGroup'
@@ -56,7 +56,7 @@ const GridEnd = styled(Grid)`
   }
 `
 
-const Container = styled.div`
+const Container = styled(MuiContainer)`
   margin-top: ${({ theme }) => theme.spacing(10)};
 
   ${({ theme }) => theme.breakpoints.down('sm')} {
@@ -112,7 +112,7 @@ function CourseDetailPage(props: { data: GetCourseResponse }) {
   const Back = WithButton(Link)
 
   return (
-    <Container>
+    <Container maxWidth="md">
       <Back href={`/${studyProgram}/courses`} pathId={cData.course.courseNo} />
       <Title variant="h3">
         {cData.course.courseNo} {cData.course.abbrName}

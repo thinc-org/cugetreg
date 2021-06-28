@@ -18,12 +18,13 @@ export function LoadingProgress() {
   useEffect(() => {
     nprogress.configure({ showSpinner: false })
     load()
-    setTimeout(() => {
+    const timer = window.setTimeout(() => {
       stop()
     }, 500)
     Router.events.on('routeChangeStart', load)
     Router.events.on('routeChangeComplete', stop)
     Router.events.on('routeChangeError', stop)
+    return () => clearTimeout(timer)
   }, [])
 
   const cssCode = css`

@@ -26,9 +26,9 @@ import { ErrorBoundary } from '@/components/ErrorBoundary/ErrorBoundary'
 import { courseCartStore } from '@/store'
 import { Analytics } from '@/context/analytics/components/Analytics'
 import { SNACKBAR_BUTTON } from '@/context/analytics/components/const'
-import { useLog } from '@/context/analytics/components/useLog'
 import { AppProvider } from '@/components/AppProvider'
 import { useDisclosure } from '@/context/ShoppingCartModal/hooks'
+import { TrackPageChange } from '@/components/TrackPageChange'
 
 mobxConfiguration()
 
@@ -38,7 +38,7 @@ const ToastAlert = styled(Alert)`
   }
 `
 
-function MyApp({ Component, pageProps, forceDark, router }: AppProps) {
+function MyApp({ Component, pageProps, forceDark }: AppProps) {
   useApp()
 
   // Retoring AuthStore and Syncing coursecart
@@ -74,18 +74,6 @@ function MyApp({ Component, pageProps, forceDark, router }: AppProps) {
       })
   }, [])
 
-  const { log } = useLog('visit')
-
-  useEffect(() => {
-    // TO DO: remove collectLogEvent and use log() instead
-    collectLogEvent({
-      kind: 'track',
-      message: `user change path`,
-      detail: `${location.origin}-${router.pathname}`,
-    })
-    log()
-  }, [router.pathname, log])
-
   const { message, emitMessage, action: actionText, open, close, messageType } = useSnackBar()
   const disclosureValue = useDisclosure()
 
@@ -98,46 +86,49 @@ function MyApp({ Component, pageProps, forceDark, router }: AppProps) {
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
       </Head>
       <AppProvider disclosureValue={disclosureValue} snackBarContextValue={value} forceDark={forceDark}>
-        <CssBaseline />
-        <TopBar />
-        <Container>
-          <ErrorBoundary>
-            <Component {...pageProps} />
-          </ErrorBoundary>
-        </Container>
-        <Footer />
-        <Snackbar
-          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-          onClose={close}
-          autoHideDuration={6000}
-          open={open}
-        >
-          <ToastAlert
-            severity={messageType}
-            action={
-              actionText ? (
-                <Analytics elementName={SNACKBAR_BUTTON}>
-                  {({ log }) => (
-                    <Button
-                      size="small"
-                      color="inherit"
-                      onClick={() => {
-                        log(null, message)
-                        close()
-                        disclosureValue.onOpen()
-                      }}
-                    >
-                      {actionText}
-                    </Button>
-                  )}
-                </Analytics>
-              ) : null
-            }
+        <TrackPageChange>
+          <CssBaseline />
+          <TopBar />
+          <Container>
+            <ErrorBoundary>
+              <Component {...pageProps} />
+            </ErrorBoundary>
+          </Container>
+          <Footer />
+          <Snackbar
+            anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+            onClose={close}
+            autoHideDuration={3000}
+            open={open}
+            style={{ top: '60px' }}
           >
-            {message}
-          </ToastAlert>
-        </Snackbar>
-        <ShoppingCartModal />
+            <ToastAlert
+              severity={messageType}
+              action={
+                actionText ? (
+                  <Analytics elementName={SNACKBAR_BUTTON}>
+                    {({ log }) => (
+                      <Button
+                        size="small"
+                        color="inherit"
+                        onClick={() => {
+                          log(null, message)
+                          close()
+                          disclosureValue.onOpen()
+                        }}
+                      >
+                        {actionText}
+                      </Button>
+                    )}
+                  </Analytics>
+                ) : null
+              }
+            >
+              {message}
+            </ToastAlert>
+          </Snackbar>
+          <ShoppingCartModal />
+        </TrackPageChange>
       </AppProvider>
     </>
   )

@@ -95,10 +95,7 @@ function MyApp({ Component, pageProps, forceDark, router }: AppProps) {
   }, [router.pathname])
   const { message, emitMessage, action: actionText, open, close, messageType } = useSnackBar()
   const disclosureValue = useDisclosure()
-  const handleClose = (_: unknown, reason: string) => {
-    if (reason === 'clickaway') {
-      return
-    }
+  const handleClose = () => {
     close()
   }
 
@@ -126,7 +123,7 @@ function MyApp({ Component, pageProps, forceDark, router }: AppProps) {
                 <Snackbar
                   anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
                   onClose={handleClose}
-                  autoHideDuration={6000}
+                  autoHideDuration={2000}
                   open={open}
                 >
                   <ToastAlert

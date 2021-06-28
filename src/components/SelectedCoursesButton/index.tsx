@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from '@emotion/styled'
 
-import { Button, Chip } from '@material-ui/core'
+import { Button, Chip, Hidden, useMediaQuery, useTheme } from '@material-ui/core'
 import { useTranslation } from 'react-i18next'
 import CalendarTodayIcon from '@material-ui/icons/CalendarToday'
 import { courseCartStore } from '@/store'
@@ -32,16 +32,20 @@ export const SelectedCoursesButton: React.FC<SelectedCoursesButtonProps> = obser
   const { t } = useTranslation('selectedCoursesButton')
   const coursesNumber = courseCartStore.shopItems.length
 
+  const theme = useTheme()
+  const isDesktop = useMediaQuery(theme.breakpoints.up('sm'))
+
   return (
     <CoursesButton
       startIcon={<CalendarTodayIcon />}
       variant="outlined"
       fullWidth
-      sx={{ position: 'relative', maxWidth: 150, width: '100%' }}
+      sx={{ position: 'relative', maxWidth: isDesktop ? 150 : 100, width: '100%' }}
       onClick={onClick}
     >
       <Number label={coursesNumber} />
-      {t('main')}
+      <Hidden smDown>{t('main')}</Hidden>
+      <Hidden smUp>{t('mainShort')}</Hidden>
     </CoursesButton>
   )
 })

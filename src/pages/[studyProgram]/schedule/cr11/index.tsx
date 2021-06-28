@@ -6,7 +6,6 @@ import { CR11 } from '@/components/CR11'
 import { useTranslation } from 'react-i18next'
 import { useCourseGroup } from '@/utils/hooks/useCourseGroup'
 import { createAnalyticsButton } from '@/components/BackButton'
-import Link from 'next/link'
 
 const useStyles = makeStyles((theme) => ({
   container: {

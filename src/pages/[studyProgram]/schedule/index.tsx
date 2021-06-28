@@ -1,6 +1,6 @@
 import React, { useState, createRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Button, Typography } from '@material-ui/core'
+import { Button, Typography, useMediaQuery, useTheme } from '@material-ui/core'
 import styled from '@emotion/styled'
 import { Schedule } from '@/components/Schedule'
 import { useDaysCount, useOverlappingCourses, useScheduleClass, useTimetableClasses } from '@/components/Schedule/utils'
@@ -127,6 +127,8 @@ function SchedulePage() {
   const [isExamTable, setExamTable] = useState(false)
   const credits = shopItems.reduce((credits, item) => credits + item.credit, 0)
   const ref = createRef<HTMLDivElement>()
+  const theme = useTheme()
+  const isDesktop = useMediaQuery(theme.breakpoints.up('sm'))
 
   const { studyProgram } = useCourseGroup()
 
@@ -176,7 +178,7 @@ function SchedulePage() {
           </Button>
           <Link href={`/${studyProgram}/schedule/cr11`} passHref>
             <Button style={{ marginRight: 0 }} variant="outlined">
-              {t('showCR11')}
+              {isDesktop ? t('showCR11') : t('showCR11Mobile')}
             </Button>
           </Link>
         </ButtonBar>

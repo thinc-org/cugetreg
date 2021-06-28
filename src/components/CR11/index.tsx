@@ -12,20 +12,21 @@ export function CR11({ courses }: PropTypes) {
   const totalCredit = courses?.reduce((accumulator, course) => accumulator + course.credit, 0)
   const { t } = useTranslation('cr11')
 
-  console.log(courses, 'courses')
-  const Items = courses?.map((course, i) => {
-    return (
-      <tr key={course.courseNo}>
-        <Column variant="body1">{i + 1}</Column>
-        <Column variant="body1">{course.courseNo}</Column>
-        <Column variant="body1">{course.abbrName}</Column>
-        <Column variant="body1">
-          {course.selectedSectionNo} {t('only')}
-        </Column>
-        <Column variant="body1">{toNumberString(course.credit)}</Column>
-      </tr>
-    )
-  })
+  const Items = courses
+    ?.filter((course) => !course.isHidden)
+    .map((course, i) => {
+      return (
+        <tr key={course.courseNo}>
+          <Column variant="body1">{i + 1}</Column>
+          <Column variant="body1">{course.courseNo}</Column>
+          <Column variant="body1">{course.abbrName}</Column>
+          <Column variant="body1">
+            {course.selectedSectionNo} {t('only')}
+          </Column>
+          <Column variant="body1">{toNumberString(course.credit)}</Column>
+        </tr>
+      )
+    })
 
   return (
     <table className={classes.table}>

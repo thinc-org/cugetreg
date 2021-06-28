@@ -1,10 +1,10 @@
-import { Course } from '@thinc-org/chula-courses'
+import { CourseCartItem } from '@/store/shoppingCart'
 import { useTranslation } from 'react-i18next'
 import { useStyles, Column, ColumnHeader } from './styles'
 import { toNumberString } from './utils'
 
 interface PropTypes {
-  courses?: Course[]
+  courses?: CourseCartItem[]
 }
 
 export function CR11({ courses }: PropTypes) {
@@ -12,6 +12,7 @@ export function CR11({ courses }: PropTypes) {
   const totalCredit = courses?.reduce((accumulator, course) => accumulator + course.credit, 0)
   const { t } = useTranslation('cr11')
 
+  console.log(courses, 'courses')
   const Items = courses?.map((course, i) => {
     return (
       <tr key={course.courseNo}>
@@ -19,7 +20,7 @@ export function CR11({ courses }: PropTypes) {
         <Column variant="body1">{course.courseNo}</Column>
         <Column variant="body1">{course.abbrName}</Column>
         <Column variant="body1">
-          {course.sections[0].sectionNo} {t('only')}
+          {course.selectedSectionNo} {t('only')}
         </Column>
         <Column variant="body1">{toNumberString(course.credit)}</Column>
       </tr>

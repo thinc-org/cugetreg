@@ -121,7 +121,7 @@ const Home = observer(() => {
           {studyProgramText}
         </Typography>
       </div>
-      <CR11 courses={shoppingCart.courses} />
+      <CR11 courses={shoppingCart.shopItems} />
       <div className={classes.description}>
         <Typography variant="h3">
           {t('cr11:total')}

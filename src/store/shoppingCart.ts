@@ -61,6 +61,7 @@ export class CourseCart implements CourseCartProps {
    */
   @action
   addItem(course: Course, selectedSectionNo?: string) {
+    // TO DO: remove and use analytics instead
     collectLogEvent({
       kind: 'track',
       message: 'user add course',
@@ -80,6 +81,7 @@ export class CourseCart implements CourseCartProps {
 
   @action
   removeCourse(course: Course): void {
+    // TO DO: remove and use analytics instead
     collectLogEvent({
       kind: 'track',
       message: 'user remove course',

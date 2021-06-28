@@ -27,6 +27,7 @@ export const SearchField: React.FC<SeachFieldProp> = () => {
     event.preventDefault()
     const keyword = input
     setFilter({ ...searchCourseQueryParams.filter, keyword: keyword })
+    // TO DO: remove collectLogEvent and use log(null, JSON.stringify({ ...searchCourseQueryParams.filter, keyword })) instead
     collectLogEvent({
       kind: 'track',
       message: 'user query course',

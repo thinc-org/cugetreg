@@ -2,6 +2,7 @@ import { CustomSelect } from '@/components/common/CustomSelect'
 import { Caption } from '@/components/CourseCard/components/Caption'
 import { dayOfWeekMapper } from '@/constants/dayOfWeek'
 import { CourseCartItem, courseCartStore } from '@/store'
+import { useCourseGroup } from '@/utils/hooks/useCourseGroup'
 import { Grid, Hidden, IconButton, Stack, Typography, useTheme } from '@material-ui/core'
 import { observer } from 'mobx-react'
 import { useCallback } from 'react'
@@ -69,7 +70,7 @@ function CardHeader({ item }: CardComponentProps) {
   const theme = useTheme()
   return (
     <HeaderLayout>
-      <StyledLink href="www.google.com">
+      <StyledLink href={`/${item.studyProgram}/courses/${item.courseNo}`}>
         <Typography variant="h5" style={{ marginRight: 16 }}>
           {item.courseNo} {item.abbrName}
         </Typography>

@@ -2,6 +2,7 @@ import { CustomSelect } from '@/components/common/CustomSelect'
 import { Caption } from '@/components/CourseCard/components/Caption'
 import { dayOfWeekMapper } from '@/constants/dayOfWeek'
 import { CourseCartItem, courseCartStore } from '@/store'
+import { useCourseGroup } from '@/utils/hooks/useCourseGroup'
 import { Grid, Hidden, IconButton, Stack, Typography, useTheme } from '@material-ui/core'
 import { observer } from 'mobx-react'
 import { useCallback } from 'react'
@@ -21,6 +22,7 @@ import {
   RightPane,
   Spacer,
   VisibilityToggle,
+  StyledLink,
 } from './styled'
 
 export interface ScheduleTableCardProps {
@@ -68,9 +70,12 @@ function CardHeader({ item }: CardComponentProps) {
   const theme = useTheme()
   return (
     <HeaderLayout>
-      <Typography variant="h5" style={{ marginRight: 16 }}>
-        {item.courseNo} {item.abbrName}
-      </Typography>
+      <StyledLink href={`/${item.studyProgram}/courses/${item.courseNo}`}>
+        <Typography variant="h5" style={{ marginRight: 16 }}>
+          {item.courseNo} {item.abbrName}
+        </Typography>
+      </StyledLink>
+
       <Typography variant="h6" color={theme.palette.primaryRange[100]} style={{ marginRight: 32 }}>
         {t('credits', { credits: item.credit })}
       </Typography>

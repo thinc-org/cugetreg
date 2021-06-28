@@ -4,6 +4,8 @@ import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos'
 import { useTranslation } from 'react-i18next'
 import { Button, IconButton } from '@material-ui/core'
 import LinkType from 'next/link'
+import { Analytics } from '@/context/analytics/components/Analytics'
+import { GO_BACK_BUTTON } from '@/context/analytics/components/const'
 
 const ButtonMobile = styled(IconButton)`
   border: 1px solid #2a2d48;
@@ -24,8 +26,8 @@ const ButtonDesktop = styled(Button)`
 `
 
 interface BackButtonProps {
-  onClick?: () => void
   href: string
+  pathId?: string
 }
 
 export function WithButton(Link: typeof LinkType) {
@@ -33,22 +35,31 @@ export function WithButton(Link: typeof LinkType) {
   return (props: BackButtonProps) => {
     return (
       <>
-        <Link passHref href={props.href}>
-          <ButtonDesktop
-            {...props}
-            startIcon={<ArrowBackIosIcon />}
-            color="primary"
-            variant="outlined"
-            disableElevation
-          >
-            {t('back')}
-          </ButtonDesktop>
-        </Link>
-        <Link passHref href={props.href}>
-          <ButtonMobile aria-label="back">
-            <ArrowBackIosIcon />
-          </ButtonMobile>
-        </Link>
+        <Analytics elementName={GO_BACK_BUTTON} pathId={props.pathId}>
+          {({ log }) => (
+            <Link passHref href={props.href}>
+              <ButtonDesktop
+                href={props.href}
+                onClick={log}
+                startIcon={<ArrowBackIosIcon />}
+                color="primary"
+                variant="outlined"
+                disableElevation
+              >
+                {t('back')}
+              </ButtonDesktop>
+            </Link>
+          )}
+        </Analytics>{' '}
+        <Analytics elementName={GO_BACK_BUTTON} pathId={props.pathId}>
+          {({ log }) => (
+            <Link passHref href={props.href}>
+              <ButtonMobile onClick={log} aria-label="back">
+                <ArrowBackIosIcon />
+              </ButtonMobile>
+            </Link>
+          )}
+        </Analytics>
       </>
     )
   }

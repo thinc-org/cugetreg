@@ -113,7 +113,7 @@ function CourseDetailPage(props: { data: GetCourseResponse }) {
 
   return (
     <Container>
-      <Back href={`/${studyProgram}/courses`} />
+      <Back href={`/${studyProgram}/courses`} pathId={cData.course.courseNo} />
       <Title variant="h3">
         {cData.course.courseNo} {cData.course.abbrName}
       </Title>

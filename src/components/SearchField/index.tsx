@@ -5,6 +5,8 @@ import { IconButton, InputBase, Paper } from '@material-ui/core'
 import SearchIcon from '@material-ui/icons/Search'
 import { useSearchCourseQueryParams } from '@/utils/hooks/useSearchCourseQueryParams'
 import { collectLogEvent } from '@/utils/network/logging'
+import { Analytics } from '@/context/analytics/components/Analytics'
+import { COURSE_SEARCH_BOX } from '@/context/analytics/components/const'
 
 export interface SeachFieldProp {}
 
@@ -25,6 +27,7 @@ export const SearchField: React.FC<SeachFieldProp> = () => {
     event.preventDefault()
     const keyword = input
     setFilter({ ...searchCourseQueryParams.filter, keyword: keyword })
+    // TO DO: remove collectLogEvent and use log(null, JSON.stringify({ ...searchCourseQueryParams.filter, keyword })) instead
     collectLogEvent({
       kind: 'track',
       message: 'user query course',
@@ -34,14 +37,19 @@ export const SearchField: React.FC<SeachFieldProp> = () => {
 
   return (
     <Paper component="form" className={classes.root} noValidate onSubmit={onSubmit} variant="outlined">
-      <InputBase
-        fullWidth
-        value={input}
-        onChange={handleChange}
-        placeholder="ค้นหารหัสวิชา / ชื่อวิชา"
-        margin="dense"
-        className={classes.input}
-      />
+      <Analytics elementName={COURSE_SEARCH_BOX}>
+        {({ log }) => (
+          <InputBase
+            onClick={log}
+            fullWidth
+            value={input}
+            onChange={handleChange}
+            placeholder="ค้นหารหัสวิชา / ชื่อวิชา"
+            margin="dense"
+            className={classes.input}
+          />
+        )}
+      </Analytics>
       <IconButton type="submit" aria-label="search" className={classes.iconButton}>
         <SearchIcon />
       </IconButton>

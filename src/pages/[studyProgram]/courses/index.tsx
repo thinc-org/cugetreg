@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react'
-import { Button, Hidden, Stack as MuiStack, Typography } from '@material-ui/core'
+import { Hidden, Stack as MuiStack, Typography } from '@material-ui/core'
 import { CourseList } from '@/components/CourseList'
 import { SearchField } from '@/components/SearchField'
 import { FilterIconButton } from '@/components/FilterIconButton'
@@ -17,6 +17,8 @@ import { extractSearchVarsFromQuery } from '@/utils/hooks/useSearchCourseQueryPa
 import { currentTerm } from '@/utils/courseGroup'
 import { StudyProgram } from '@thinc-org/chula-courses'
 import { collectErrorLog } from '@/utils/network/logging'
+import { Analytics } from '@/context/analytics/components/Analytics'
+import { FILTER_BUTTON, SELECTED_COURSES_BUTTON, OPEN_SHOPPING_CART_BUTTON } from '@/context/analytics/components/const'
 
 const Container = styled.div`
   margin-top: ${({ theme }) => theme.spacing(4)};
@@ -50,18 +52,45 @@ function CourseSearchPage() {
 
   return (
     <Container>
-      <TitleStack spacing={2} direction="row" justifyContent="space-between">
+      <TitleStack spacing={2} direction="row" justifyContent="space-between" alignItems="center">
         <Typography variant="h2">ค้นหาวิชาเรียน</Typography>
         <Hidden mdUp>
-          <SelectedCoursesButton onClick={onOpen} />
+          <Analytics elementName={OPEN_SHOPPING_CART_BUTTON}>
+            {({ log }) => (
+              <SelectedCoursesButton
+                onClick={() => {
+                  log()
+                  onOpen()
+                }}
+              />
+            )}
+          </Analytics>
         </Hidden>
       </TitleStack>
       <StickyStack alignItems="flex-start">
         <Stack width="100%" spacing={2} direction="row">
           <SearchField />
-          <FilterIconButton onClick={() => setOpenFilterBar((open) => !open)} />
+          <Analytics elementName={FILTER_BUTTON}>
+            {({ log }) => (
+              <FilterIconButton
+                onClick={() => {
+                  log()
+                  setOpenFilterBar((open) => !open)
+                }}
+              />
+            )}
+          </Analytics>
           <Hidden mdDown>
-            <SelectedCoursesButton onClick={onOpen} />
+            <Analytics elementName={SELECTED_COURSES_BUTTON}>
+              {({ log }) => (
+                <SelectedCoursesButton
+                  onClick={() => {
+                    onOpen()
+                    log()
+                  }}
+                />
+              )}
+            </Analytics>
           </Hidden>
         </Stack>
         <TagList />

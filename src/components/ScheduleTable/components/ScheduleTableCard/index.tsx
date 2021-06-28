@@ -21,6 +21,7 @@ import {
   RightPane,
   Spacer,
   VisibilityToggle,
+  StyledLink,
 } from './styled'
 
 export interface ScheduleTableCardProps {
@@ -68,9 +69,12 @@ function CardHeader({ item }: CardComponentProps) {
   const theme = useTheme()
   return (
     <HeaderLayout>
-      <Typography variant="h5" style={{ marginRight: 16 }}>
-        {item.courseNo} {item.abbrName}
-      </Typography>
+      <StyledLink href="www.google.com">
+        <Typography variant="h5" style={{ marginRight: 16 }}>
+          {item.courseNo} {item.abbrName}
+        </Typography>
+      </StyledLink>
+
       <Typography variant="h6" color={theme.palette.primaryRange[100]} style={{ marginRight: 32 }}>
         {t('credits', { credits: item.credit })}
       </Typography>

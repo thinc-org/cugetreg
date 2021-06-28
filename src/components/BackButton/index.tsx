@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import styled from '@emotion/styled'
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos'
 import { useTranslation } from 'react-i18next'
@@ -6,6 +6,8 @@ import { Button, IconButton } from '@material-ui/core'
 import { Analytics } from '@/context/analytics/components/Analytics'
 import { GO_BACK_BUTTON } from '@/context/analytics/components/const'
 import { useRouter } from 'next/router'
+import LinkType from 'next/link'
+import { HistoryContext } from '@/context/History'
 
 const ButtonMobile = styled(IconButton)`
   border: 1px solid #2a2d48;
@@ -26,39 +28,49 @@ const ButtonDesktop = styled(Button)`
 `
 
 interface BackButtonProps {
+  href: string
   pathId?: string
 }
 
-export function createAnalyticsButton() {
+export function createAnalyticsButton(Link: typeof LinkType) {
   return (props: BackButtonProps) => {
     const router = useRouter()
     const { t } = useTranslation('navigation')
+
+    const { histories } = useContext(HistoryContext)
 
     const redirectToPreviousPage = (log: (_?: unknown, value?: string) => void) => (...args: any) => {
       log(args)
       router.back()
     }
 
+    const href = !histories.length ? props.href : histories[0]
+
     return (
       <>
         <Analytics elementName={GO_BACK_BUTTON} pathId={props.pathId}>
           {({ log }) => (
-            <ButtonDesktop
-              onClick={redirectToPreviousPage(log)}
-              startIcon={<ArrowBackIosIcon />}
-              color="primary"
-              variant="outlined"
-              disableElevation
-            >
-              {t('back')}
-            </ButtonDesktop>
+            <Link passHref href={href}>
+              <ButtonDesktop
+                href={href}
+                onClick={redirectToPreviousPage(log)}
+                startIcon={<ArrowBackIosIcon />}
+                color="primary"
+                variant="outlined"
+                disableElevation
+              >
+                {t('back')}
+              </ButtonDesktop>
+            </Link>
           )}
         </Analytics>
         <Analytics elementName={GO_BACK_BUTTON} pathId={props.pathId}>
           {({ log }) => (
-            <ButtonMobile onClick={redirectToPreviousPage(log)} aria-label="back">
-              <ArrowBackIosIcon />
-            </ButtonMobile>
+            <Link passHref href={href}>
+              <ButtonMobile onClick={redirectToPreviousPage(log)} aria-label="back">
+                <ArrowBackIosIcon />
+              </ButtonMobile>
+            </Link>
           )}
         </Analytics>
       </>

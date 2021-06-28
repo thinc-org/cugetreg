@@ -7,7 +7,7 @@ import shadows from './shadows'
 
 const themeBaseOptions: ThemeOptions = {
   typography: {
-    htmlFontSize: 16,
+    htmlFontSize: 18,
     fontFamily: ['Poppins', 'Prompt', 'sans-serif'].join(','),
   },
   breakpoints: {

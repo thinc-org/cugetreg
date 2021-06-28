@@ -21,7 +21,7 @@ export const Loading: React.FC<LoadingProps> = ({ loading }) => {
 
   return (
     <Container>
-      <CircularProgress color="primary" />
+      <CircularProgress color="primary" disableShrink sx={{ animationDuration: '500ms' }} />
     </Container>
   )
 }

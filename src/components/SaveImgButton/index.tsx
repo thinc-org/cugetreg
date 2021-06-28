@@ -7,6 +7,7 @@ const SaveImgButton: React.FC<{ imageRef: RefObject<HTMLDivElement> }> = ({ imag
   const [_, takeScreenshot] = useScreenshot()
 
   const saveImage = useCallback(async () => {
+    window.scrollTo(0, 0)
     const image = await takeScreenshot(imageRef.current)
     const link = document.createElement('a')
     link.href = image

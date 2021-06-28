@@ -4,7 +4,7 @@ export interface AnalyticsType {
 
 export interface UserEvent {
   value?: string
-  elementName: string
+  elementName?: string
   elementId?: string
   eventType: string
   pathname: string

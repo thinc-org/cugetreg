@@ -4,7 +4,7 @@ import { useLog } from './useLog'
 
 interface AnalyticsProps {
   children: React.FC<{ log: (_?: unknown, value?: string) => void }>
-  elementName: string
+  elementName?: string
   elementId?: string
   pathId?: string
 }

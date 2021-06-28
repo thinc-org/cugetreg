@@ -6,6 +6,7 @@ import { Button, IconButton } from '@material-ui/core'
 import LinkType from 'next/link'
 import { Analytics } from '@/context/analytics/components/Analytics'
 import { GO_BACK_BUTTON } from '@/context/analytics/components/const'
+import { useRouter } from 'next/router'
 
 const ButtonMobile = styled(IconButton)`
   border: 1px solid #2a2d48;
@@ -31,8 +32,15 @@ interface BackButtonProps {
 }
 
 export function WithButton(Link: typeof LinkType) {
+  const router = useRouter()
   const { t } = useTranslation('navigation')
+
   return (props: BackButtonProps) => {
+    const redirectToPreviousPage = (log: (_?: unknown, value?: string) => void) => (...args: any) => {
+      log(args)
+      router.back()
+    }
+
     return (
       <>
         <Analytics elementName={GO_BACK_BUTTON} pathId={props.pathId}>
@@ -40,7 +48,7 @@ export function WithButton(Link: typeof LinkType) {
             <Link passHref href={props.href}>
               <ButtonDesktop
                 href={props.href}
-                onClick={log}
+                onClick={redirectToPreviousPage(log)}
                 startIcon={<ArrowBackIosIcon />}
                 color="primary"
                 variant="outlined"
@@ -50,11 +58,11 @@ export function WithButton(Link: typeof LinkType) {
               </ButtonDesktop>
             </Link>
           )}
-        </Analytics>{' '}
+        </Analytics>
         <Analytics elementName={GO_BACK_BUTTON} pathId={props.pathId}>
           {({ log }) => (
             <Link passHref href={props.href}>
-              <ButtonMobile onClick={log} aria-label="back">
+              <ButtonMobile onClick={redirectToPreviousPage(log)} aria-label="back">
                 <ArrowBackIosIcon />
               </ButtonMobile>
             </Link>

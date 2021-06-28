@@ -6,6 +6,7 @@ import styled from '@emotion/styled'
 import { useCourseGroup } from '@/utils/hooks/useCourseGroup'
 
 import StudyProgramDropdown from '../components/StudyProgramDropdown'
+import { sessionId } from '@/utils/network/logging'
 
 export const ConfigBarLayout = styled.div`
   width: 100%;
@@ -20,7 +21,7 @@ export const ConfigBarLayout = styled.div`
 
 const ConfigBarItemLink = ConfigBarItem.withComponent('a')
 
-export const reportProblemLink = 'https://airtable.com/shruwAAfn1763TgMU'
+export const reportProblemLink = `https://airtable.com/shruwAAfn1763TgMU?prefill_Session_ID=${sessionId}`
 
 export function ConfigBar() {
   const { t } = useTranslation('configBar')

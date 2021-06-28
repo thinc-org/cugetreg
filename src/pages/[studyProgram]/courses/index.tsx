@@ -43,7 +43,7 @@ function CourseSearchPage() {
 
   return (
     <Container>
-      <TitleStack spacing={2} direction="row" justifyContent="space-between">
+      <TitleStack spacing={2} direction="row" justifyContent="space-between" alignItems="center">
         <Typography variant="h2">ค้นหาวิชาเรียน</Typography>
         <Hidden mdUp>
           <SelectedCoursesButton onClick={onOpen} />

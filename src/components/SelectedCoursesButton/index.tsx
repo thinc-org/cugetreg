@@ -8,13 +8,20 @@ import { courseCartStore } from '@/store'
 import { observer } from 'mobx-react'
 
 const Number = styled(Chip)`
-  z-index: 100;
+  z-index: 50;
   position: absolute;
   right: 0;
   top: 0;
   margin: -8px;
   padding: ${({ theme }) => theme.spacing(0)};
   background: ${({ theme }) => theme.palette.secondary.main};
+`
+
+const CoursesButton = styled(Button)`
+  ${({ theme }) => theme.breakpoints.down('sm')} {
+    padding: ${({ theme }) => theme.spacing(0.5, 0.5)};
+    margin-left: ${({ theme }) => theme.spacing(0.5)} !important;
+  }
 `
 
 export interface SelectedCoursesButtonProps {
@@ -26,7 +33,7 @@ export const SelectedCoursesButton: React.FC<SelectedCoursesButtonProps> = obser
   const coursesNumber = courseCartStore.shopItems.length
 
   return (
-    <Button
+    <CoursesButton
       startIcon={<CalendarTodayIcon />}
       variant="outlined"
       fullWidth
@@ -35,6 +42,6 @@ export const SelectedCoursesButton: React.FC<SelectedCoursesButtonProps> = obser
     >
       <Number label={coursesNumber} />
       {t('main')}
-    </Button>
+    </CoursesButton>
   )
 })

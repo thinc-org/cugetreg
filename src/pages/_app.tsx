@@ -99,7 +99,7 @@ function MyApp({ Component, pageProps, forceDark, router }: AppProps) {
     close()
   }
 
-  const value = { message, emitMessage, action: actionText }
+  const value = { handleClose, message, emitMessage, action: actionText }
 
   return (
     <>
@@ -123,14 +123,22 @@ function MyApp({ Component, pageProps, forceDark, router }: AppProps) {
                 <Snackbar
                   anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
                   onClose={handleClose}
-                  autoHideDuration={2000}
+                  autoHideDuration={3000}
                   open={open}
+                  style={{ top: '60px' }}
                 >
                   <ToastAlert
                     severity={messageType}
                     action={
                       actionText ? (
-                        <Button size="small" color="inherit" onClick={disclosureValue.onOpen}>
+                        <Button
+                          size="small"
+                          color="inherit"
+                          onClick={() => {
+                            handleClose()
+                            disclosureValue.onOpen()
+                          }}
+                        >
                           {actionText}
                         </Button>
                       ) : null

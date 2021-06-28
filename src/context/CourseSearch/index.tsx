@@ -2,8 +2,9 @@ import React, { createContext, useState, useEffect } from 'react'
 import { SearchCourseResponse, SearchCourseVars, SEARCH_COURSE } from '@/utils/network/BackendGQLQueries'
 import { useSearchCourseQueryParams } from '@/utils/hooks/useSearchCourseQueryParams'
 import { DEFAULT_COURSE_SEARCH_CONTEXT_VALUE, LIMIT_QUERY_CONSTANT } from '@/context/CourseSearch/constants'
-import { useQuery } from '@apollo/client'
+import { useApolloClient, useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
+import { Course } from '@thinc-org/chula-courses/types'
 
 export const CourseSearchContext = createContext(DEFAULT_COURSE_SEARCH_CONTEXT_VALUE)
 
@@ -17,9 +18,9 @@ export const CourseSearchProvider: React.FC = (props) => {
   const courseSearchQuery = useQuery<SearchCourseResponse, SearchCourseVars>(SEARCH_COURSE, {
     notifyOnNetworkStatusChange: true,
     variables: {
-      courseGroup: searchCourseQueryParams.courseGroup,
+      ...searchCourseQueryParams,
       filter: {
-        dayOfWeeks: searchCourseQueryParams.filter.dayOfWeeks,
+        ...searchCourseQueryParams.filter,
         limit: LIMIT_QUERY_CONSTANT,
         offset: 0,
       },
@@ -44,22 +45,27 @@ export const CourseSearchProvider: React.FC = (props) => {
 
   useEffect(() => {
     const refetcher = async () => {
-      setIsRefetching(true)
-      await courseSearchQuery.refetch({
+      const newQuery = {
         ...searchCourseQueryParams,
         filter: {
           ...searchCourseQueryParams.filter,
           limit: LIMIT_QUERY_CONSTANT,
           offset: 0,
         },
-      })
+      }
+      if (JSON.stringify(courseSearchQuery.variables) === JSON.stringify(newQuery)) {
+        return
+      }
+
+      setIsRefetching(true)
+      await courseSearchQuery.refetch(newQuery)
       setOffset(0)
       setIsRefetching(false)
     }
 
     refetcher()
     // eslint-disable-next-line
-  }, [router.query])
+  }, [router.query, courseSearchQuery.variables])
 
   const value = { courseSearchQuery, fetchMoreCourses, isRefetching }
 

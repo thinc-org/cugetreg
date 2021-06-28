@@ -27,9 +27,7 @@ const cache = new InMemoryCache({
           read(existing) {
             return existing
           },
-          merge(existing: Course[] = [], incoming: Course[], { args }) {
-            const offset = args?.filter.offset as SearchCourseVars['filter']['offset']
-            if (!offset) return [...incoming]
+          merge(existing: Course[] = [], incoming: Course[]) {
             return uniqBy([...existing, ...incoming], 'courseNo')
           },
         },

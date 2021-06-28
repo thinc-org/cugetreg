@@ -65,9 +65,7 @@ function MyApp({ Component, pageProps, forceDark, router }: AppProps) {
         cartInitLocal: courseCartStore.isInitializedLocal,
       }),
       (d) => {
-        if (!d.isLoggedIn) {
-          syncWithLocalStorage(d.cart, d.cartInitLocal)
-        }
+        syncWithLocalStorage(d.cart, d.cartInitLocal, !d.isLoggedIn)
       },
       { fireImmediately: true, delay: 1000 }
     )

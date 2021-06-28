@@ -145,6 +145,7 @@ export const examSchedule = {
 
 export const selectedCoursesButton = {
   main: 'วิชาที่เลือก',
+  mainShort: 'เลือก',
 }
 
 export const navigation = {

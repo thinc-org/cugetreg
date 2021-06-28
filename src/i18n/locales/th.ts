@@ -102,8 +102,8 @@ export const sectionCard = {
   time: 'วันเวลาเรียน',
   classRoom: 'อาคารเรียน',
   closed: 'ปิด',
-  avialable: 'ว่าง {{current}}/{{max}}',
-  full: 'เต็ม {{current}}/{{max}}',
+  avialable: '{{current}}/{{max}}',
+  full: '{{current}}/{{max}}',
 }
 
 export const footer = {

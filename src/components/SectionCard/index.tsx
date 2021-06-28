@@ -57,7 +57,7 @@ export const SectionCard = (props: SectionCardProps) => {
             <SectionStatus
               capacity={section.capacity}
               status={
-                section.closed ? 'closed' : section.capacity.current === section.capacity.max ? 'full' : 'avialable'
+                section.closed ? 'closed' : section.capacity.current >= section.capacity.max ? 'full' : 'avialable'
               }
             />
           </Box>

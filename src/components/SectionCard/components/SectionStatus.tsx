@@ -40,11 +40,7 @@ export const SectionStatus = (props: SectionStatusProps) => {
         ...rest.sx,
       }}
     >
-      {status === 'closed'
-        ? t('closed')
-        : status === 'full'
-        ? t('full', { ...capacity })
-        : t('avialable', { ...capacity })}
+      {t(status, capacity)}
     </Typography>
   )
 }

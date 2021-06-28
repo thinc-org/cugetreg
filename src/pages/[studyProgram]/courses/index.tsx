@@ -10,6 +10,13 @@ import { TagList } from '@/components/TagList'
 import React from 'react'
 import { ShoppingCartModalContext } from '@/context/ShoppingCartModal'
 import { CourseSearchProvider } from '@/context/CourseSearch'
+import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
+import { SearchCourseResponse, SearchCourseVars, SEARCH_COURSE } from '@/utils/network/BackendGQLQueries'
+import { client } from '@/utils/network/apollo'
+import { extractSearchVarsFromQuery } from '@/utils/hooks/useSearchCourseQueryParams'
+import { currentTerm } from '@/utils/courseGroup'
+import { StudyProgram } from '@thinc-org/chula-courses'
+import { collectErrorLog } from '@/utils/network/logging'
 import { Analytics } from '@/context/analytics/components/Analytics'
 import { FILTER_BUTTON, SELECTED_COURSES_BUTTON, OPEN_SHOPPING_CART_BUTTON } from '@/context/analytics/components/const'
 
@@ -96,12 +103,36 @@ function CourseSearchPage() {
   )
 }
 
-const CourseSearchPageWithCourseSearchProvider = () => {
+const CourseSearchPageWithCourseSearchProvider = (props: { prefetch?: SearchPagePrefetchData }) => {
   return (
-    <CourseSearchProvider>
+    <CourseSearchProvider cache={props.prefetch}>
       <CourseSearchPage />
     </CourseSearchProvider>
   )
+}
+
+export interface SearchPagePrefetchData {
+  vars: SearchCourseVars
+  data: SearchCourseResponse
+}
+
+export async function getServerSideProps(
+  context: GetServerSidePropsContext
+): Promise<GetServerSidePropsResult<{ prefetch?: SearchPagePrefetchData }>> {
+  try {
+    const vars: SearchCourseVars = extractSearchVarsFromQuery(context.query, {
+      ...currentTerm,
+      studyProgram: context.query.studyProgram as StudyProgram,
+    })
+    const result = await client.query<SearchCourseResponse, SearchCourseVars>({
+      query: SEARCH_COURSE,
+      variables: vars,
+    })
+    return { props: { prefetch: { data: result.data, vars } } }
+  } catch (e) {
+    collectErrorLog('Search Page SSR Fetch Failed', e)
+    return { props: {} }
+  }
 }
 
 export default CourseSearchPageWithCourseSearchProvider

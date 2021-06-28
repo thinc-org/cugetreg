@@ -15,7 +15,8 @@ export interface CourseGroup extends Term {
 const termPattern = /(\d\d\d\d)-(\d)/
 
 // TODO: dynamic year and semester
-const currentTerm: Term = {
+// Must sync with SearchCourse's SSR
+export const currentTerm: Term = {
   academicYear: '2564',
   semester: '1',
 }

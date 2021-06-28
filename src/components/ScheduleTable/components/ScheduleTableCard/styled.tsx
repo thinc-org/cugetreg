@@ -134,3 +134,13 @@ export const GridSpacer = styled.div`
     display: none;
   }
 `
+
+export const StyledLink = styled.a`
+  color: ${({ theme }) => theme.palette.primary.main};
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  transition: 0.2s ease-in-out;
+  :hover {
+    text-decoration-color: ${({ theme }) => theme.palette.primary.main};
+  }
+`

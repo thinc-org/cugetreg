@@ -15,7 +15,6 @@ import { createAnalyticsButton } from '@/components/BackButton'
 import { useTranslation } from 'react-i18next'
 import { Language } from '@/i18n'
 import { useCourseGroup } from '@/utils/hooks/useCourseGroup'
-import Link from 'next/link'
 import { getExamDate, getExamPeriod } from '@/components/ExamSchedule/components/ExamCard/utils'
 
 const SectionCardLayout = styled(SectionCard)`

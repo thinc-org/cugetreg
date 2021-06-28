@@ -27,15 +27,14 @@ const ButtonDesktop = styled(Button)`
 `
 
 interface BackButtonProps {
-  href: string
   pathId?: string
 }
 
-export function WithButton(Link: typeof LinkType) {
-  const router = useRouter()
-  const { t } = useTranslation('navigation')
-
+export function createAnalyticsButton() {
   return (props: BackButtonProps) => {
+    const router = useRouter()
+    const { t } = useTranslation('navigation')
+
     const redirectToPreviousPage = (log: (_?: unknown, value?: string) => void) => (...args: any) => {
       log(args)
       router.back()
@@ -45,27 +44,22 @@ export function WithButton(Link: typeof LinkType) {
       <>
         <Analytics elementName={GO_BACK_BUTTON} pathId={props.pathId}>
           {({ log }) => (
-            <Link passHref href={props.href}>
-              <ButtonDesktop
-                href={props.href}
-                onClick={redirectToPreviousPage(log)}
-                startIcon={<ArrowBackIosIcon />}
-                color="primary"
-                variant="outlined"
-                disableElevation
-              >
-                {t('back')}
-              </ButtonDesktop>
-            </Link>
+            <ButtonDesktop
+              onClick={redirectToPreviousPage(log)}
+              startIcon={<ArrowBackIosIcon />}
+              color="primary"
+              variant="outlined"
+              disableElevation
+            >
+              {t('back')}
+            </ButtonDesktop>
           )}
         </Analytics>
         <Analytics elementName={GO_BACK_BUTTON} pathId={props.pathId}>
           {({ log }) => (
-            <Link passHref href={props.href}>
-              <ButtonMobile onClick={redirectToPreviousPage(log)} aria-label="back">
-                <ArrowBackIosIcon />
-              </ButtonMobile>
-            </Link>
+            <ButtonMobile onClick={redirectToPreviousPage(log)} aria-label="back">
+              <ArrowBackIosIcon />
+            </ButtonMobile>
           )}
         </Analytics>
       </>

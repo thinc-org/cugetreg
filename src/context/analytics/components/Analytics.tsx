@@ -1,5 +1,3 @@
-// import { collectLogEvent } from '@/utils/network/logging'
-
 import { useLog } from './useLog'
 
 interface AnalyticsProps {

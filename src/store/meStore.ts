@@ -127,6 +127,7 @@ export class AuthStore {
       localStorage.removeItem(AUTHDATA_LOCALSTORAGE_FIELD)
     }
 
+    // TO DO: remove and use analytics instead
     collectLogEvent({
       kind: 'track',
       message: 'user logged out',

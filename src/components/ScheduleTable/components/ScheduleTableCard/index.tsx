@@ -9,6 +9,8 @@ import { Draggable } from 'react-beautiful-dnd'
 import { useTranslation } from 'react-i18next'
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
 import { MdDelete } from 'react-icons/md'
+import Link from 'next/link'
+import styled from '@emotion/styled'
 import {
   CardBorder,
   CardContent,
@@ -32,6 +34,15 @@ export interface ScheduleTableCardProps {
 export interface CardComponentProps {
   item: CourseCartItem
 }
+
+const StyledLink = styled.a`
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  transition: 0.2s ease-in-out;
+  :hover {
+    text-decoration-color: ${({ theme }) => theme.palette.primary.main};
+  }
+`
 
 export const ScheduleTableCard = observer(({ item, index, hasOverlap }: ScheduleTableCardProps) => {
   const { courseNo, isHidden } = item
@@ -68,9 +79,13 @@ function CardHeader({ item }: CardComponentProps) {
   const theme = useTheme()
   return (
     <HeaderLayout>
-      <Typography variant="h5" style={{ marginRight: 16 }}>
-        {item.courseNo} {item.abbrName}
-      </Typography>
+      <Link href={`/${item.studyProgram}/courses/${item.courseNo}`} passHref>
+        <StyledLink>
+          <Typography color="primaryRange.500" variant="h5" style={{ marginRight: 16 }}>
+            {item.courseNo} {item.abbrName}
+          </Typography>
+        </StyledLink>
+      </Link>
       <Typography variant="h6" color={theme.palette.primaryRange[100]} style={{ marginRight: 32 }}>
         {t('credits', { credits: item.credit })}
       </Typography>

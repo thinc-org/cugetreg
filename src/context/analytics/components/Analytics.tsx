@@ -1,7 +1,6 @@
-import { AnalyticsContext } from '@/context/analytics'
-import { useRouter } from 'next/router'
-import { useContext } from 'react'
 // import { collectLogEvent } from '@/utils/network/logging'
+
+import { useLog } from './useLog'
 
 interface AnalyticsProps {
   children: React.FC<{ log: (_?: unknown, value?: string) => void }>
@@ -11,12 +10,7 @@ interface AnalyticsProps {
 }
 
 export function Analytics({ children, elementName, elementId, pathId }: AnalyticsProps) {
-  const { pathname } = useRouter()
-  const { addEvent } = useContext(AnalyticsContext)
-  const log = (_?: unknown, value?: string) => {
-    const event = { value, pathname, pathId, elementName, elementId, timeStamp: new Date(), eventType: 'click' }
-    addEvent(event)
-  }
+  const { log } = useLog(elementName, elementId, pathId)
 
   return children({ log })
 }

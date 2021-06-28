@@ -19,15 +19,10 @@ interface ClientLogDto {
   deviceId: string
 }
 
-export let sessionId: string | null = null
+export const sessionId = uuid.v4()
 
 export function collectLogEvent(event: LogEvent) {
   if (typeof window == 'undefined') return
-
-  if (!sessionId) {
-    sessionId = uuid.v4()
-    console.log(`[LOG] New session with id ${sessionId}`)
-  }
 
   const log: ClientLogDto = {
     ...event,

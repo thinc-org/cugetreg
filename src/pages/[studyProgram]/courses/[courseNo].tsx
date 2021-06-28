@@ -1,4 +1,5 @@
 import React from 'react'
+import Link from 'next/link'
 import { ApolloError, useQuery } from '@apollo/client'
 import { Course, getFaculty } from '@thinc-org/chula-courses'
 import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
@@ -108,11 +109,11 @@ function CourseDetailPage(props: { data: GetCourseResponse }) {
   const finalPeriod = getExamPeriod(cData.course, true)
   const midtermPeriod = getExamPeriod(cData.course, false)
 
-  const Back = createAnalyticsButton()
+  const Back = createAnalyticsButton(Link)
 
   return (
     <Container>
-      <Back pathId={cData.course.courseNo} />
+      <Back href={`/${studyProgram}/courses`} pathId={cData.course.courseNo} />
       <Title variant="h3">
         {cData.course.courseNo} {cData.course.abbrName}
       </Title>

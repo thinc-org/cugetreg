@@ -1,7 +1,8 @@
+import React from 'react'
+import Link from 'next/link'
 import { courseCartStore } from '@/store/shoppingCart'
 import { Typography, makeStyles } from '@material-ui/core'
 import { observer } from 'mobx-react'
-import React from 'react'
 import { CR11 } from '@/components/CR11'
 import { useTranslation } from 'react-i18next'
 import { useCourseGroup } from '@/utils/hooks/useCourseGroup'
@@ -91,18 +92,18 @@ const Home = observer(() => {
   const shoppingCart = courseCartStore
   const classes = useStyles()
   const { t } = useTranslation(['program', 'cr11'])
-  const { academicYear: year, semester } = useCourseGroup()
+  const { studyProgram, academicYear: year, semester } = useCourseGroup()
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const studyProgramText = `${t('cr11:semester')} ${year}/${semester} ${t(
     `program:${shoppingCart.currentProgram || 's'}` as any
   )}`
 
-  const Back = createAnalyticsButton()
+  const Back = createAnalyticsButton(Link)
 
   return (
     <div className={classes.container}>
       <div className={classes.top}>
-        <Back />
+        <Back href={`/${studyProgram}/schedule`} />
         <Typography className={`${classes.semester} ${classes.mobile}`} variant="subtitle1">
           {studyProgramText}
         </Typography>

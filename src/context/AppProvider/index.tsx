@@ -15,6 +15,7 @@ import { useAnalytics } from '@/context/analytics/hooks'
 import env from '@/utils/env/macro'
 import { darkTheme, lightTheme } from '@/configs/theme'
 import { SnackbarProps } from '@/context/Snackbar/types'
+import { HistoryProvider } from '@/context/History'
 
 interface AppProviderProps {
   children: React.ReactNode
@@ -35,16 +36,18 @@ export function AppProvider({ children, snackBarContextValue, forceDark, disclos
   const { addEvent } = useAnalytics()
 
   return (
-    <ApolloProvider client={client}>
-      <LocalizationProvider dateAdapter={AdapterDateFns}>
-        <AnalyticsProvider value={{ addEvent }}>
-          <SnackbarContextProvider value={snackBarContextValue}>
-            <ShoppingCartModalProvider value={disclosureValue}>
-              <ThemeProvider theme={prefersDarkMode || forceDark ? darkTheme : lightTheme}>{children}</ThemeProvider>
-            </ShoppingCartModalProvider>
-          </SnackbarContextProvider>
-        </AnalyticsProvider>
-      </LocalizationProvider>
-    </ApolloProvider>
+    <HistoryProvider>
+      <ApolloProvider client={client}>
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <AnalyticsProvider value={{ addEvent }}>
+            <SnackbarContextProvider value={snackBarContextValue}>
+              <ShoppingCartModalProvider value={disclosureValue}>
+                <ThemeProvider theme={prefersDarkMode || forceDark ? darkTheme : lightTheme}>{children}</ThemeProvider>
+              </ShoppingCartModalProvider>
+            </SnackbarContextProvider>
+          </AnalyticsProvider>
+        </LocalizationProvider>
+      </ApolloProvider>
+    </HistoryProvider>
   )
 }

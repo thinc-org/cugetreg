@@ -12,7 +12,7 @@ import { parseCourseGroup } from '@/utils/courseGroup'
 import { SectionCard } from '@/components/SectionCard'
 import { groupBy } from '@/utils/groupBy'
 import styled from '@emotion/styled'
-import { createAnalyticsButton } from '@/components/BackButton'
+import { withButton } from '@/components/BackButton'
 import { useTranslation } from 'react-i18next'
 import { Language } from '@/i18n'
 import { useCourseGroup } from '@/utils/hooks/useCourseGroup'
@@ -109,7 +109,7 @@ function CourseDetailPage(props: { data: GetCourseResponse }) {
   const finalPeriod = getExamPeriod(cData.course, true)
   const midtermPeriod = getExamPeriod(cData.course, false)
 
-  const Back = createAnalyticsButton(Link)
+  const Back = withButton(Link)
 
   return (
     <Container>

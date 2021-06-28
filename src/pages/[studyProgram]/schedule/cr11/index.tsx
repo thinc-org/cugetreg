@@ -6,7 +6,7 @@ import { observer } from 'mobx-react'
 import { CR11 } from '@/components/CR11'
 import { useTranslation } from 'react-i18next'
 import { useCourseGroup } from '@/utils/hooks/useCourseGroup'
-import { createAnalyticsButton } from '@/components/BackButton'
+import { withButton } from '@/components/BackButton'
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -98,7 +98,7 @@ const Home = observer(() => {
     `program:${shoppingCart.currentProgram || 's'}` as any
   )}`
 
-  const Back = createAnalyticsButton(Link)
+  const Back = withButton(Link)
 
   return (
     <div className={classes.container}>

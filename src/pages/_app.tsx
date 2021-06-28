@@ -29,6 +29,7 @@ import { SNACKBAR_BUTTON } from '@/context/analytics/components/const'
 import { AppProvider } from '@/components/AppProvider'
 import { useDisclosure } from '@/context/ShoppingCartModal/hooks'
 import { TrackPageChange } from '@/components/TrackPageChange'
+import { LoadingProgress } from '@/components/LoadingProgress'
 
 mobxConfiguration()
 
@@ -94,6 +95,7 @@ function MyApp({ Component, pageProps, forceDark }: AppProps) {
       </Head>
       <AppProvider disclosureValue={disclosureValue} snackBarContextValue={value} forceDark={forceDark}>
         <TrackPageChange>
+          <LoadingProgress />
           <CssBaseline />
           <TopBar />
           <Container>

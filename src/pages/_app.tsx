@@ -76,8 +76,15 @@ function MyApp({ Component, pageProps, forceDark }: AppProps) {
 
   const { message, emitMessage, action: actionText, open, close, messageType } = useSnackBar()
   const disclosureValue = useDisclosure()
+  const handleClose = (_: unknown, reason: string) => {
+    if (reason === 'clickaway') {
+      return
+    }
 
-  const value = { handleClose: close, message, emitMessage, action: actionText }
+    close()
+  }
+
+  const value = { handleClose, message, emitMessage, action: actionText }
 
   return (
     <>
@@ -97,7 +104,7 @@ function MyApp({ Component, pageProps, forceDark }: AppProps) {
           <Footer />
           <Snackbar
             anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-            onClose={close}
+            onClose={handleClose}
             autoHideDuration={3000}
             open={open}
             style={{ top: '60px' }}

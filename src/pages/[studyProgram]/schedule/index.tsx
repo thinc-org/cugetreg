@@ -125,7 +125,7 @@ function SchedulePage() {
   const overlappingCourses = useOverlappingCourses(scheduleClasses, midtermClasses, finalClasses)
 
   const [isExamTable, setExamTable] = useState(false)
-  const credits = shopItems.reduce((credits, item) => credits + item.credit, 0)
+  const credits = shopItems.filter((course) => !course.isHidden).reduce((credits, item) => credits + item.credit, 0)
   const ref = createRef<HTMLDivElement>()
   const theme = useTheme()
   const isDesktop = useMediaQuery(theme.breakpoints.up('sm'))

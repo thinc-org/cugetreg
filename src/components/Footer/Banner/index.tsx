@@ -83,13 +83,13 @@ export function Banner() {
           <img src={thincLogo} />
           <div className={classes.bannerSubtitle}>{t('footer:university')}</div>
         </FlexContainer>
-        <Divider orientation={matches ? 'horizontal' : 'vertical'} className={classes.divider} />
+        {/* <Divider orientation={matches ? 'horizontal' : 'vertical'} className={classes.divider} />
         <Link href="https://github.com/thinc-org">
           <a className={classes.link}>
             <div className={classes.bannerSubtitle}>{t('footer:github')}</div>
             <img className={classes.logo} src={github} />
           </a>
-        </Link>
+        </Link> */}
       </FlexContainer>
     </FlexContainer>
   )

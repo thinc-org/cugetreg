@@ -38,7 +38,7 @@ export const SearchField: React.FC<SeachFieldProp> = () => {
     clearTimeout(timeoutRef.current)
     timeoutRef.current = window.setTimeout(() => {
       onSubmit()
-    }, 1000)
+    }, 2000)
     return () => {
       clearTimeout(timeoutRef.current)
     }

@@ -21,7 +21,7 @@ import { gDriveStore, GDriveSyncState } from '@/store/gDriveState'
 import { useSnackBar } from '@/context/Snackbar/hooks'
 import styled from '@emotion/styled'
 import { authStore } from '@/store/meStore'
-import { collectLogEvent, startLogging } from '@/utils/network/logging'
+import { startLogging } from '@/utils/network/logging'
 import { ErrorBoundary } from '@/components/ErrorBoundary/ErrorBoundary'
 import { courseCartStore } from '@/store'
 import { Analytics } from '@/context/analytics/components/Analytics'
@@ -57,12 +57,6 @@ function MyApp({ Component, pageProps, forceDark }: AppProps) {
       },
       { fireImmediately: true, delay: 1000 }
     )
-
-    // To DO: remove collectLogEvent because redundant with user change path
-    collectLogEvent({
-      kind: 'track',
-      message: 'user visit site',
-    })
 
     authStore.tryRestoreWithLocalStorage()
     loadGAPI()

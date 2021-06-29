@@ -12,9 +12,12 @@ export function SectionSelect() {
       <Analytics elementName={SECTION_SELECT} elementId={course.courseNo}>
         {({ log }) => (
           <Select
-            onClick={log}
             value={selectedSectionNumber}
-            onChange={(e) => setSectionNumber(e.target.value as string)}
+            onChange={(e) => {
+              const sectionNumber = e.target.value as string
+              log(null, sectionNumber)
+              setSectionNumber(sectionNumber)
+            }}
             name="sectionNo"
           >
             {sectionNumbers.map((value) => (

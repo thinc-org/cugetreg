@@ -3,10 +3,16 @@ import GetAppRoundedIcon from '@material-ui/icons/GetAppRounded'
 import React, { RefObject, useCallback } from 'react'
 import { useScreenshot } from 'use-react-screenshot'
 
-const SaveImgButton: React.FC<{ imageRef: RefObject<HTMLDivElement> }> = ({ imageRef }) => {
+interface SaveImgButtonProps {
+  imageRef: RefObject<HTMLDivElement>
+  onClick: () => void
+}
+
+const SaveImgButton: React.FC<SaveImgButtonProps> = ({ imageRef, onClick }) => {
   const [_, takeScreenshot] = useScreenshot()
 
   const saveImage = useCallback(async () => {
+    onClick()
     window.scrollTo(0, 0)
     const image = await takeScreenshot(imageRef.current)
     const link = document.createElement('a')
@@ -15,7 +21,7 @@ const SaveImgButton: React.FC<{ imageRef: RefObject<HTMLDivElement> }> = ({ imag
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)
-  }, [takeScreenshot, imageRef])
+  }, [takeScreenshot, imageRef, onClick])
 
   return (
     <Button variant="outlined" onClick={saveImage}>

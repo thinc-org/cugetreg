@@ -4,9 +4,10 @@ import { useStyles } from '@/components/SearchField/styled'
 import { IconButton, InputBase, Paper } from '@material-ui/core'
 import SearchIcon from '@material-ui/icons/Search'
 import { useSearchCourseQueryParams } from '@/utils/hooks/useSearchCourseQueryParams'
-import { collectLogEvent } from '@/utils/network/logging'
 import { Analytics } from '@/context/analytics/components/Analytics'
 import { COURSE_SEARCH_BOX } from '@/context/analytics/components/const'
+import { useLog } from '@/context/analytics/components/useLog'
+import { SEARCH_QUERY } from '@/context/analytics/components/const'
 
 export interface SeachFieldProp {}
 
@@ -14,6 +15,7 @@ export const SearchField: React.FC<SeachFieldProp> = () => {
   const classes = useStyles()
   const { setFilter, searchCourseQueryParams } = useSearchCourseQueryParams()
   const [input, setInput] = useState(() => searchCourseQueryParams.filter.keyword || '')
+  const { log } = useLog(SEARCH_QUERY)
 
   useEffect(() => {
     setInput(searchCourseQueryParams.filter.keyword || '')
@@ -27,12 +29,8 @@ export const SearchField: React.FC<SeachFieldProp> = () => {
     event.preventDefault()
     const keyword = input
     setFilter({ ...searchCourseQueryParams.filter, keyword: keyword })
-    // TO DO: remove collectLogEvent and use log(null, JSON.stringify({ ...searchCourseQueryParams.filter, keyword })) instead
-    collectLogEvent({
-      kind: 'track',
-      message: 'user query course',
-      detail: JSON.stringify({ ...searchCourseQueryParams.filter, keyword }),
-    })
+    const detail = JSON.stringify({ ...searchCourseQueryParams.filter, keyword })
+    log(null, detail)
   }
 
   return (

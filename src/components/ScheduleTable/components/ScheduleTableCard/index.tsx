@@ -9,6 +9,8 @@ import { Draggable } from 'react-beautiful-dnd'
 import { useTranslation } from 'react-i18next'
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
 import { MdDelete } from 'react-icons/md'
+import { Analytics } from '@/context/analytics/components/Analytics'
+import { HIDE_COURSE, DELETE_COURSE, SECTION_CHANGE } from '@/context/analytics/components/const'
 import {
   CardBorder,
   CardContent,
@@ -45,12 +47,31 @@ export const ScheduleTableCard = observer(({ item, index, hasOverlap }: Schedule
         <CardLayout ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
           <CardContent>
             <LeftPane>
-              <VisibilityToggle checked={!isHidden} onClick={toggleVisibility}>
-                {isHidden ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
-              </VisibilityToggle>
-              <DeleteButton onClick={() => courseCartStore.removeCourse(item)}>
-                <MdDelete />
-              </DeleteButton>
+              <Analytics elementId={courseNo} elementName={HIDE_COURSE}>
+                {({ log }) => (
+                  <VisibilityToggle
+                    checked={!isHidden}
+                    onClick={() => {
+                      log()
+                      toggleVisibility()
+                    }}
+                  >
+                    {isHidden ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
+                  </VisibilityToggle>
+                )}
+              </Analytics>
+              <Analytics elementId={courseNo} elementName={DELETE_COURSE}>
+                {({ log }) => (
+                  <DeleteButton
+                    onClick={() => {
+                      log()
+                      courseCartStore.removeCourse(item)
+                    }}
+                  >
+                    <MdDelete />
+                  </DeleteButton>
+                )}
+              </Analytics>
             </LeftPane>
             <RightPane>
               <CardHeader item={item} />
@@ -94,16 +115,24 @@ function CardHeader({ item }: CardComponentProps) {
 function SectionSelect({ item }: CardComponentProps) {
   const { t } = useTranslation('scheduleTableCard')
   return (
-    <CustomSelect
-      value={item.selectedSectionNo}
-      onChange={(e) => courseCartStore.addItem(item, e.target.value as string)}
-    >
-      {item.sections.map((sec) => (
-        <option key={sec.sectionNo} value={sec.sectionNo}>
-          {t('sectionLabel', { section: sec.sectionNo })}
-        </option>
-      ))}
-    </CustomSelect>
+    <Analytics elementName={SECTION_CHANGE} elementId={item.courseNo}>
+      {({ log }) => (
+        <CustomSelect
+          value={item.selectedSectionNo}
+          onChange={(e) => {
+            const sectionNumber = e.target.value as string
+            log(null, sectionNumber)
+            courseCartStore.addItem(item, sectionNumber)
+          }}
+        >
+          {item.sections.map((sec) => (
+            <option key={sec.sectionNo} value={sec.sectionNo}>
+              {t('sectionLabel', { section: sec.sectionNo })}
+            </option>
+          ))}
+        </CustomSelect>
+      )}
+    </Analytics>
   )
 }
 

@@ -1,11 +1,7 @@
 import { collectLogEvent } from '@/utils/network/logging'
-import { useEffect, useState, useRef } from 'react'
-import { UserEvent, AnalyticsType } from './types'
+import { AnalyticsType } from './types'
 
 export function useAnalytics() {
-  const [events, setEvents] = useState<UserEvent[]>([])
-  const timeoutRef = useRef<number>()
-
   const addEvent: AnalyticsType['addEvent'] = (e) =>
     collectLogEvent({
       kind: 'fine-tracking',

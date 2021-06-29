@@ -11,6 +11,8 @@ import { Hidden } from '@material-ui/core'
 import StudyProgramDropdown from '../components/StudyProgramDropdown'
 import { ConfigBarItem } from '../ConfigBar/ConfigBarItem'
 import { MobileNavBar } from '../MobileNavBar'
+import { Analytics } from '@/context/analytics/components/Analytics'
+import { GETREG_LOGO, NAVBAR_SEARCH_COURSE, NAVBAR_TIMETABLE } from '@/context/analytics/components/const'
 
 export const NavBarLayout = styled.div`
   width: 100%;
@@ -43,18 +45,30 @@ export function NavBar() {
   return (
     <NavBarLayout>
       <FlexContainer>
-        <Link href={`/${studyProgram}/courses`} passHref>
-          <Logo>
-            <img src={logo} alt={t('appName')} />
-          </Logo>
-        </Link>
+        <Analytics elementName={GETREG_LOGO}>
+          {({ log }) => (
+            <Link href={`/${studyProgram}/courses`} passHref>
+              <Logo onClick={log}>
+                <img src={logo} alt={t('appName')} />
+              </Logo>
+            </Link>
+          )}
+        </Analytics>
         <Hidden smDown>
-          <Link href={`/${studyProgram}/courses`} passHref>
-            <NavBarItem>{t('navBar:searchCourses')}</NavBarItem>
-          </Link>
-          <Link href={`/${studyProgram}/schedule`} passHref>
-            <NavBarItem>{t('navBar:timetable')}</NavBarItem>
-          </Link>
+          <Analytics elementName={NAVBAR_SEARCH_COURSE}>
+            {({ log }) => (
+              <Link href={`/${studyProgram}/courses`} passHref>
+                <NavBarItem onClick={log}>{t('navBar:searchCourses')}</NavBarItem>
+              </Link>
+            )}
+          </Analytics>
+          <Analytics elementName={NAVBAR_TIMETABLE}>
+            {({ log }) => (
+              <Link href={`/${studyProgram}/schedule`} passHref>
+                <NavBarItem onClick={log}>{t('navBar:timetable')}</NavBarItem>
+              </Link>
+            )}
+          </Analytics>
           <FlexOne />
           <UserButton />
         </Hidden>

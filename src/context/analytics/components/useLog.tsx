@@ -9,7 +9,7 @@ import { useContext } from 'react'
  * @param elementId
  * @returns
  */
-export function useLog(elementName?: string, pathId?: string, elementId?: string) {
+export function useLog(elementName?: string, elementId?: string, pathId?: string) {
   const { pathname } = useRouter()
   const { addEvent } = useContext(AnalyticsContext)
   const log = (_?: unknown, value?: string) => {

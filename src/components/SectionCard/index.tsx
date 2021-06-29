@@ -118,27 +118,23 @@ export const SectionCard = (props: SectionCardProps) => {
               ml: 2,
             }}
           >
-            <Analytics elementName={SUBJECT_SELECT_BUTTON_WITH_SECTION} pathId={course.courseNo}>
-              {({ log }) => (
-                <SelectButton
-                  onClick={() => log(null, section.sectionNo)}
-                  course={course}
-                  selectedSectionNumber={section.sectionNo}
-                />
-              )}
+            <Analytics
+              elementName={SUBJECT_SELECT_BUTTON_WITH_SECTION}
+              pathId={course.courseNo}
+              elementId={section.sectionNo}
+            >
+              {({ log }) => <SelectButton onClick={log} course={course} selectedSectionNumber={section.sectionNo} />}
             </Analytics>
           </Stack>
         </Box>
       </CardContent>
       <CardActions sx={{ p: { xs: 2, sm: 4 }, pt: { xs: 0, sm: 0 }, display: { sm: 'none' } }}>
-        <Analytics elementName={SUBJECT_SELECT_BUTTON_WITH_SECTION} pathId={course.courseNo}>
-          {({ log }) => (
-            <SelectButton
-              onClick={() => log(null, section.sectionNo)}
-              course={course}
-              selectedSectionNumber={section.sectionNo}
-            />
-          )}
+        <Analytics
+          elementName={SUBJECT_SELECT_BUTTON_WITH_SECTION}
+          pathId={course.courseNo}
+          elementId={section.sectionNo}
+        >
+          {({ log }) => <SelectButton onClick={log} course={course} selectedSectionNumber={section.sectionNo} />}
         </Analytics>
       </CardActions>
     </Card>

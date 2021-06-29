@@ -88,12 +88,6 @@ export class CourseCart implements CourseCartProps {
 
   @action
   removeCourse(course: Course): void {
-    // TO DO: remove and use analytics instead
-    collectLogEvent({
-      kind: 'track',
-      message: 'user remove course',
-    })
-
     this.shopItems = this.shopItems.filter((item) => item.courseNo !== course.courseNo)
   }
 

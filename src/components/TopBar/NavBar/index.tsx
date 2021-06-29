@@ -12,7 +12,12 @@ import StudyProgramDropdown from '../components/StudyProgramDropdown'
 import { ConfigBarItem } from '../ConfigBar/ConfigBarItem'
 import { MobileNavBar } from '../MobileNavBar'
 import { Analytics } from '@/context/analytics/components/Analytics'
-import { GETREG_LOGO, NAVBAR_SEARCH_COURSE, NAVBAR_TIMETABLE } from '@/context/analytics/components/const'
+import {
+  GETREG_LOGO,
+  NAVBAR_SEARCH_COURSE,
+  NAVBAR_TIMETABLE,
+  STUDY_PROGRAM_DROPDOWN,
+} from '@/context/analytics/components/const'
 
 export const NavBarLayout = styled.div`
   width: 100%;
@@ -74,7 +79,7 @@ export function NavBar() {
         </Hidden>
         <Hidden smUp>
           <FlexOne />
-          <StudyProgramDropdown />
+          <Analytics elementName={STUDY_PROGRAM_DROPDOWN}>{({ log }) => <StudyProgramDropdown log={log} />}</Analytics>
           <ConfigBarItem>
             {academicYear}/{semester}
           </ConfigBarItem>

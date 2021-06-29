@@ -10,6 +10,7 @@ export const CourseSearchContext = createContext(DEFAULT_COURSE_SEARCH_CONTEXT_V
 
 export const CourseSearchProvider: React.FC<{ cache?: SearchPagePrefetchData }> = (props) => {
   const router = useRouter()
+  const [isEmpty, setEmpty] = useState(false)
   const [offset, setOffset] = useState(0)
 
   const { searchCourseQueryParams } = useSearchCourseQueryParams()
@@ -40,8 +41,8 @@ export const CourseSearchProvider: React.FC<{ cache?: SearchPagePrefetchData }> 
   })
 
   const fetchMoreCourses = async () => {
-    if (!courseSearchQuery.loading) {
-      await courseSearchQuery.fetchMore({
+    if (!courseSearchQuery.loading && !isEmpty) {
+      const result = await courseSearchQuery.fetchMore({
         variables: {
           ...searchCourseQueryParams,
           filter: {
@@ -51,12 +52,14 @@ export const CourseSearchProvider: React.FC<{ cache?: SearchPagePrefetchData }> 
           },
         },
       })
+      if (!result.data.search.length) setEmpty(true)
       setOffset(offset + LIMIT_QUERY_CONSTANT)
     }
   }
 
   useEffect(() => {
     setOffset(0)
+    setEmpty(true)
     // eslint-disable-next-line
   }, [router.query, courseSearchQuery.variables])
 

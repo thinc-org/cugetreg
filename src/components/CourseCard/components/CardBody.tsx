@@ -165,7 +165,13 @@ function CardSideActions({ isExpanded }: CardBodyProps) {
         <SectionSelect />
       </Collapse>
       <Analytics elementName={SUBJECT_SELECT_BUTTON} elementId={course.courseNo}>
-        {({ log }) => <SelectButton course={course} selectedSectionNumber={selectedSectionNumber} onClick={log} />}
+        {({ log }) => (
+          <SelectButton
+            course={course}
+            selectedSectionNumber={selectedSectionNumber}
+            onClick={() => log(null, selectedSectionNumber)}
+          />
+        )}
       </Analytics>
     </Stack>
   )

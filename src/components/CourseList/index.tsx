@@ -3,7 +3,6 @@ import React from 'react'
 import { Stack } from '@material-ui/core'
 import { Loading } from '@/components/Loading'
 import { Error } from '@/components/Error'
-import { RenderOnIntersect } from '../RenderOnIntersect'
 import { useCourseList } from '@/components/CourseList/hooks'
 import { Courses } from '@/components/CourseList/components/Courses'
 

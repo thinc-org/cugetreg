@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next'
 import { Button, IconButton } from '@material-ui/core'
 import { Analytics } from '@/context/analytics/components/Analytics'
 import { GO_BACK_BUTTON } from '@/context/analytics/components/const'
-import { useRouter } from 'next/router'
 import LinkType from 'next/link'
 import { HistoryContext } from '@/context/History'
 
@@ -34,17 +33,11 @@ interface BackButtonProps {
 
 export function withButton(Link: typeof LinkType) {
   return (props: BackButtonProps) => {
-    const router = useRouter()
     const { t } = useTranslation('navigation')
 
     const { histories } = useContext(HistoryContext)
 
-    const redirectToPreviousPage = (log: (_?: unknown, value?: string) => void) => () => {
-      log()
-      router.back()
-    }
-
-    const href = !histories.length ? props.href : histories[0]
+    const href = histories.length <= 2 ? props.href : histories[1]
 
     return (
       <>
@@ -53,7 +46,7 @@ export function withButton(Link: typeof LinkType) {
             <Link passHref href={href}>
               <ButtonDesktop
                 href={href}
-                onClick={redirectToPreviousPage(log)}
+                onClick={log}
                 startIcon={<ArrowBackIosIcon />}
                 color="primary"
                 variant="outlined"
@@ -67,7 +60,7 @@ export function withButton(Link: typeof LinkType) {
         <Analytics elementName={GO_BACK_BUTTON} pathId={props.pathId}>
           {({ log }) => (
             <Link passHref href={href}>
-              <ButtonMobile onClick={redirectToPreviousPage(log)} aria-label="back">
+              <ButtonMobile onClick={log} aria-label="back">
                 <ArrowBackIosIcon />
               </ButtonMobile>
             </Link>

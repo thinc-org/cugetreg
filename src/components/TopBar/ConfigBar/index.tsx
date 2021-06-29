@@ -8,6 +8,9 @@ import { useCourseGroup } from '@/utils/hooks/useCourseGroup'
 import StudyProgramDropdown from '../components/StudyProgramDropdown'
 import { sessionId } from '@/utils/network/logging'
 
+import { Analytics } from '@/context/analytics/components/Analytics'
+import { REPORT_PROBLEM, STUDY_PROGRAM_DROPDOWN } from '@/context/analytics/components/const'
+
 export const ConfigBarLayout = styled.div`
   width: 100%;
   height: 40px;
@@ -31,14 +34,17 @@ export function ConfigBar() {
     <ConfigBarLayout>
       <FlexContainer>
         <FlexOne />
-        {/* TODO: implement the dropdowns */}
-        <StudyProgramDropdown />
+        <Analytics elementName={STUDY_PROGRAM_DROPDOWN}>{({ log }) => <StudyProgramDropdown log={log} />}</Analytics>
         <ConfigBarItem>
           {academicYear}/{semester}
         </ConfigBarItem>
-        <ConfigBarItemLink href={reportProblemLink} target="_blank" rel="noreferrer">
-          {t('reportAProblem')}
-        </ConfigBarItemLink>
+        <Analytics elementName={REPORT_PROBLEM}>
+          {({ log }) => (
+            <ConfigBarItemLink onClick={log} href={reportProblemLink} target="_blank" rel="noreferrer">
+              {t('reportAProblem')}
+            </ConfigBarItemLink>
+          )}
+        </Analytics>
       </FlexContainer>
     </ConfigBarLayout>
   )

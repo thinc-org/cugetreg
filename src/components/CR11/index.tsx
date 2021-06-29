@@ -9,24 +9,23 @@ interface PropTypes {
 
 export function CR11({ courses }: PropTypes) {
   const classes = useStyles()
-  const totalCredit = courses?.reduce((accumulator, course) => accumulator + course.credit, 0)
+  const filteredCourses = courses?.filter((course) => !course.isHidden)
+  const totalCredit = filteredCourses?.reduce((accumulator, course) => accumulator + course.credit, 0)
   const { t } = useTranslation('cr11')
 
-  const Items = courses
-    ?.filter((course) => !course.isHidden)
-    .map((course, i) => {
-      return (
-        <tr key={course.courseNo}>
-          <Column variant="body1">{i + 1}</Column>
-          <Column variant="body1">{course.courseNo}</Column>
-          <Column variant="body1">{course.abbrName}</Column>
-          <Column variant="body1">
-            {course.selectedSectionNo} {t('only')}
-          </Column>
-          <Column variant="body1">{toNumberString(course.credit)}</Column>
-        </tr>
-      )
-    })
+  const Items = filteredCourses?.map((course, i) => {
+    return (
+      <tr key={course.courseNo}>
+        <Column variant="body1">{i + 1}</Column>
+        <Column variant="body1">{course.courseNo}</Column>
+        <Column variant="body1">{course.abbrName}</Column>
+        <Column variant="body1">
+          {course.selectedSectionNo} {t('only')}
+        </Column>
+        <Column variant="body1">{toNumberString(course.credit)}</Column>
+      </tr>
+    )
+  })
 
   return (
     <table className={classes.table}>

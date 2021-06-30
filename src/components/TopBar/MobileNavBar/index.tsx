@@ -14,6 +14,7 @@ import { useEffect } from 'react'
 import { Analytics } from '@/context/analytics/components/Analytics'
 import { REPORT_PROBLEM, NAVBAR_SEARCH_COURSE, NAVBAR_TIMETABLE } from '@/context/analytics/components/const'
 import { observer } from 'mobx-react'
+import { sessionIdStore } from '@/store/sessionIdStore'
 
 const MoreButton = styled(IconButton)`
   margin-left: 12px;

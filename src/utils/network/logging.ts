@@ -4,6 +4,8 @@ import env from '@/utils/env/macro'
 
 import * as uuid from 'uuid'
 import { authStore } from '@/store/meStore'
+import { runInAction } from 'mobx'
+import { sessionIdStore } from '@/store/sessionIdStore'
 
 export interface LogEvent {
   kind: 'track' | 'error' | 'fine-tracking'
@@ -60,6 +62,11 @@ export function startLogging(): () => void {
   deviceId = getDeviceId()
 
   console.log('[LOG] Started logging timer DEVID:SESSID', deviceId, sessionId)
+
+  runInAction(() => {
+    sessionIdStore.sessionId = sessionId
+  })
+
   const resetTimer = setInterval(() => {
     sendCollectedLog()
   }, 10000)

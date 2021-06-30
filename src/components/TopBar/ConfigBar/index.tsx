@@ -7,6 +7,8 @@ import { useCourseGroup } from '@/utils/hooks/useCourseGroup'
 
 import StudyProgramDropdown from '../components/StudyProgramDropdown'
 import { sessionId } from '@/utils/network/logging'
+import { observer } from 'mobx-react'
+import { sessionIdStore } from '@/store/sessionIdStore'
 
 import { Analytics } from '@/context/analytics/components/Analytics'
 import { REPORT_PROBLEM, STUDY_PROGRAM_DROPDOWN } from '@/context/analytics/components/const'
@@ -24,12 +26,14 @@ export const ConfigBarLayout = styled.div`
 
 const ConfigBarItemLink = ConfigBarItem.withComponent('a')
 
-export const reportProblemLink = `https://airtable.com/shruwAAfn1763TgMU?prefill_Session_ID=${sessionId}`
-
-export function ConfigBar() {
+export const ConfigBar = observer(() => {
   const { t } = useTranslation('configBar')
 
   const { academicYear, semester } = useCourseGroup()
+
+  const sessionId = sessionIdStore.sessionId
+  const reportProblemLink = `https://airtable.com/shruwAAfn1763TgMU?prefill_Session_ID=${sessionId}`
+
   return (
     <ConfigBarLayout>
       <FlexContainer>
@@ -48,4 +52,4 @@ export function ConfigBar() {
       </FlexContainer>
     </ConfigBarLayout>
   )
-}
+})

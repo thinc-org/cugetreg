@@ -11,9 +11,9 @@ import { NavBarItem } from '../NavBar/NavBarItem'
 import UserButton from '../NavBar/UserButton'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
-import { reportProblemLink } from '../ConfigBar'
 import { Analytics } from '@/context/analytics/components/Analytics'
 import { REPORT_PROBLEM, NAVBAR_SEARCH_COURSE, NAVBAR_TIMETABLE } from '@/context/analytics/components/const'
+import { observer } from 'mobx-react'
 
 const MoreButton = styled(IconButton)`
   margin-left: 12px;
@@ -42,10 +42,13 @@ const SectionSpacer = styled.div`
 
 // const NavbarItemLink = NavBarItem.withComponent('a')
 
-export function MobileNavBar() {
+export const MobileNavBar = observer(() => {
   const { t } = useTranslation()
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { studyProgram } = useCourseGroup()
+
+  const sessionId = sessionIdStore.sessionId
+  const reportProblemLink = `https://airtable.com/shruwAAfn1763TgMU?prefill_Session_ID=${sessionId}`
 
   const { asPath } = useRouter()
   useEffect(() => {
@@ -109,4 +112,4 @@ export function MobileNavBar() {
       </Drawer>
     </>
   )
-}
+})

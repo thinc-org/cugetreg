@@ -4,27 +4,34 @@ import { Router } from 'next/router'
 import { useTheme } from '@material-ui/core'
 import { css, Global } from '@emotion/react'
 
+let startTimeout: NodeJS.Timeout | null = null
+
 export function LoadingProgress() {
   const theme = useTheme()
   const height = 3
   const load = () => {
-    nprogress.start()
+    if (startTimeout === null) {
+      startTimeout = setTimeout(() => {
+        startTimeout = null
+        nprogress.start()
+      }, 300)
+    }
   }
 
   const stop = () => {
+    if (startTimeout !== null) {
+      clearTimeout(startTimeout)
+      startTimeout = null
+    }
     nprogress.done()
   }
 
   useEffect(() => {
     nprogress.configure({ showSpinner: false })
-    load()
-    const timer = window.setTimeout(() => {
-      stop()
-    }, 500)
     Router.events.on('routeChangeStart', load)
     Router.events.on('routeChangeComplete', stop)
     Router.events.on('routeChangeError', stop)
-    return () => clearTimeout(timer)
+    return () => stop()
   }, [])
 
   const cssCode = css`

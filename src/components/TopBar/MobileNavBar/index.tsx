@@ -6,7 +6,6 @@ import { MdMenu } from 'react-icons/md'
 import logo from '@/assets/images/cgrLogoDark.svg'
 import { useTranslation } from 'react-i18next'
 import { useCourseGroup } from '@/utils/hooks/useCourseGroup'
-import Link from 'next/link'
 import { NavBarItem } from '../NavBar/NavBarItem'
 import UserButton from '../NavBar/UserButton'
 import { useRouter } from 'next/router'
@@ -15,6 +14,7 @@ import { Analytics } from '@/context/analytics/components/Analytics'
 import { REPORT_PROBLEM, NAVBAR_SEARCH_COURSE, NAVBAR_TIMETABLE } from '@/context/analytics/components/const'
 import { observer } from 'mobx-react'
 import { sessionIdStore } from '@/store/sessionIdStore'
+import { LinkWithAnalytics } from '@/context/analytics/components/LinkWithAnalytics'
 
 const MoreButton = styled(IconButton)`
   margin-left: 12px;
@@ -65,45 +65,21 @@ export const MobileNavBar = observer(() => {
         <DrawerContent>
           <Logo src={logo} alt={t('appName')} />
           <div>
-            <Analytics elementName={NAVBAR_SEARCH_COURSE}>
-              {({ log }) => (
-                <Link href={`/${studyProgram}/courses`} passHref>
-                  <NavBarItem
-                    onClick={() => {
-                      log()
-                      onClose()
-                    }}
-                  >
-                    {t('navBar:searchCourses')}
-                  </NavBarItem>
-                </Link>
-              )}
-            </Analytics>
+            <LinkWithAnalytics href={`/${studyProgram}/courses`} passHref elementName={NAVBAR_SEARCH_COURSE}>
+              <NavBarItem onClick={onClose}>{t('navBar:searchCourses')}</NavBarItem>
+            </LinkWithAnalytics>
           </div>
           <div>
-            <Analytics elementName={NAVBAR_TIMETABLE}>
-              {({ log }) => (
-                <Link href={`/${studyProgram}/schedule`} passHref>
-                  <NavBarItem
-                    onClick={() => {
-                      log()
-                      onClose()
-                    }}
-                  >
-                    {t('navBar:timetable')}
-                  </NavBarItem>
-                </Link>
-              )}
-            </Analytics>
+            <LinkWithAnalytics href={`/${studyProgram}/schedule`} passHref elementName={NAVBAR_TIMETABLE}>
+              <NavBarItem onClick={onClose}>{t('navBar:timetable')}</NavBarItem>
+            </LinkWithAnalytics>
           </div>
           <SectionSpacer />
           <div>
             <Analytics elementName={REPORT_PROBLEM}>
-              {({ log }) => (
-                <MaterialLink href={reportProblemLink} target="_blank" rel="noreferrer">
-                  <NavBarItem onClick={log}>{t('configBar:reportAProblem')}</NavBarItem>
-                </MaterialLink>
-              )}
+              <MaterialLink href={reportProblemLink} target="_blank" rel="noreferrer">
+                <NavBarItem>{t('configBar:reportAProblem')}</NavBarItem>
+              </MaterialLink>
             </Analytics>
           </div>
           <div>

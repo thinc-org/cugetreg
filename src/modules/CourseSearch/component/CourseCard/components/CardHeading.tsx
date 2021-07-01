@@ -4,12 +4,12 @@ import KeyboardArrowUp from '@material-ui/icons/KeyboardArrowUp'
 import GenEdChip from '@/components/Chips/catagories/GenEdChip'
 import { useCourseGroup } from '@/utils/hooks/useCourseGroup'
 import { useTranslation } from 'react-i18next'
-import Link from 'next/link'
 import { Analytics } from '@/context/analytics/components/Analytics'
 import { COURSE_TITLE, EXPAND_BUTTON } from '@/context/analytics/components/const'
 
 import { useCourseCardContext } from '../useCourseCard'
 import styled from '@emotion/styled'
+import { LinkWithAnalytics } from '@/context/analytics/components/LinkWithAnalytics'
 
 const StyledLink = styled.a`
   text-decoration: underline;
@@ -37,17 +37,18 @@ export function CardHeading({ isExpanded, onToggle }: CardHeadingProps) {
         <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
           <Grid container spacing={1}>
             <Grid item>
-              <Analytics elementName={COURSE_TITLE} elementId={course.courseNo}>
-                {({ log }) => (
-                  <Link href={`/${studyProgram}/courses/${course.courseNo}`} passHref>
-                    <StyledLink>
-                      <Typography onClick={log} variant="h5" color="primaryRange.500">
-                        {course.courseNo} {course.abbrName}
-                      </Typography>
-                    </StyledLink>
-                  </Link>
-                )}
-              </Analytics>
+              <LinkWithAnalytics
+                href={`/${studyProgram}/courses/${course.courseNo}`}
+                passHref
+                elementName={COURSE_TITLE}
+                elementId={course.courseNo}
+              >
+                <StyledLink>
+                  <Typography variant="h5" color="primaryRange.500">
+                    {course.courseNo} {course.abbrName}
+                  </Typography>
+                </StyledLink>
+              </LinkWithAnalytics>
             </Grid>
             <Grid item>
               <Typography variant="h6" color="primaryRange.100">
@@ -71,17 +72,9 @@ export function CardHeading({ isExpanded, onToggle }: CardHeadingProps) {
       }
       action={
         <Analytics elementName={EXPAND_BUTTON} elementId={course.courseNo}>
-          {({ log }) => (
-            <IconButton
-              onClick={() => {
-                onToggle()
-                log()
-              }}
-              color="primary"
-            >
-              {isExpanded ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
-            </IconButton>
-          )}
+          <IconButton onClick={onToggle} color="primary">
+            {isExpanded ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
+          </IconButton>
         </Analytics>
       }
     />

@@ -10,8 +10,7 @@ import { NavBarItem } from '@/components/TopBar/NavBar/NavBarItem'
 import env from '@/utils/env/macro'
 import GoogleLogin from '@/lib/react-google-login/src'
 import { Analytics } from '@/context/analytics/components/Analytics'
-import { LOGOUT_BUTTON } from '@/context/analytics/components/const'
-import { SigninButton } from './SigninButton'
+import { LOGIN_BUTTON, LOGOUT_BUTTON } from '@/context/analytics/components/const'
 
 export const GDriveIndicator = observer(() => {
   const { t } = useTranslation('syncStatus')
@@ -101,17 +100,9 @@ export default observer(function UserButton() {
           </UserContainer>
         </SyncContainer>
         <Analytics elementName={LOGOUT_BUTTON}>
-          {({ log }) => (
-            <NavBarItem
-              color="primary"
-              onClick={() => {
-                log()
-                onLogout()
-              }}
-            >
-              {t('signout')}
-            </NavBarItem>
-          )}
+          <NavBarItem color="primary" onClick={onLogout}>
+            {t('signout')}
+          </NavBarItem>
         </Analytics>
       </NavBarItemDiv>
     )
@@ -125,7 +116,11 @@ export default observer(function UserButton() {
         hostedDomain="student.chula.ac.th"
         prompt="consent"
         redirectUri={`${location.origin}/googleauthcallback`}
-        render={(renderProps) => <SigninButton {...renderProps} />}
+        render={(renderProps) => (
+          <Analytics elementName={LOGIN_BUTTON}>
+            <NavBarItem {...renderProps}>{t('signin')}</NavBarItem>
+          </Analytics>
+        )}
         onSuccess={({ code }: { code: string }) => {
           authStore.authenticateWithCode(code)
         }}

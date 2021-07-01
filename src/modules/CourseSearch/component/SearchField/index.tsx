@@ -8,7 +8,6 @@ import { Analytics } from '@/context/analytics/components/Analytics'
 import { COURSE_SEARCH_BOX } from '@/context/analytics/components/const'
 import { useLog } from '@/context/analytics/components/useLog'
 import { SEARCH_QUERY } from '@/context/analytics/components/const'
-import { collectLogEvent } from '@/utils/network/logging'
 
 export interface SeachFieldProp {}
 
@@ -51,17 +50,14 @@ export const SearchField: React.FC<SeachFieldProp> = () => {
   return (
     <Paper component="form" className={classes.root} noValidate onSubmit={onSubmit} variant="outlined">
       <Analytics elementName={COURSE_SEARCH_BOX}>
-        {({ log }) => (
-          <InputBase
-            onClick={log}
-            fullWidth
-            value={input}
-            onChange={handleChange}
-            placeholder="ค้นหารหัสวิชา / ชื่อวิชา"
-            margin="dense"
-            className={classes.input}
-          />
-        )}
+        <InputBase
+          fullWidth
+          value={input}
+          onChange={handleChange}
+          placeholder="ค้นหารหัสวิชา / ชื่อวิชา"
+          margin="dense"
+          className={classes.input}
+        />
       </Analytics>
       <IconButton type="submit" aria-label="search" className={classes.iconButton}>
         <SearchIcon />

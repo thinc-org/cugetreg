@@ -3,10 +3,9 @@ import styled from '@emotion/styled'
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos'
 import { useTranslation } from 'react-i18next'
 import { Button, IconButton } from '@material-ui/core'
-import { Analytics } from '@/context/analytics/components/Analytics'
 import { GO_BACK_BUTTON } from '@/context/analytics/components/const'
-import LinkType from 'next/link'
 import { HistoryContext } from '@/context/History'
+import { LinkWithAnalytics } from '@/context/analytics/components/LinkWithAnalytics'
 
 const ButtonMobile = styled(IconButton)`
   border: 1px solid #2a2d48;
@@ -31,42 +30,25 @@ interface BackButtonProps {
   pathId?: string
 }
 
-export function withButton(Link: typeof LinkType) {
-  return (props: BackButtonProps) => {
-    const { t } = useTranslation('navigation')
+export function BackButton(props: BackButtonProps) {
+  const { t } = useTranslation('navigation')
 
-    const { histories } = useContext(HistoryContext)
+  const { histories } = useContext(HistoryContext)
 
-    const href = histories.length <= 2 ? props.href : histories[1]
+  const href = histories.length <= 2 ? props.href : histories[1]
 
-    return (
-      <>
-        <Analytics elementName={GO_BACK_BUTTON} pathId={props.pathId}>
-          {({ log }) => (
-            <Link passHref href={href}>
-              <ButtonDesktop
-                href={href}
-                onClick={log}
-                startIcon={<ArrowBackIosIcon />}
-                color="primary"
-                variant="outlined"
-                disableElevation
-              >
-                {t('back')}
-              </ButtonDesktop>
-            </Link>
-          )}
-        </Analytics>
-        <Analytics elementName={GO_BACK_BUTTON} pathId={props.pathId}>
-          {({ log }) => (
-            <Link passHref href={href}>
-              <ButtonMobile onClick={log} aria-label="back">
-                <ArrowBackIosIcon />
-              </ButtonMobile>
-            </Link>
-          )}
-        </Analytics>
-      </>
-    )
-  }
+  return (
+    <>
+      <LinkWithAnalytics passHref href={href} elementName={GO_BACK_BUTTON} pathId={props.pathId}>
+        <ButtonDesktop href={href} startIcon={<ArrowBackIosIcon />} color="primary" variant="outlined" disableElevation>
+          {t('back')}
+        </ButtonDesktop>
+      </LinkWithAnalytics>
+      <LinkWithAnalytics passHref href={href} elementName={GO_BACK_BUTTON} pathId={props.pathId}>
+        <ButtonMobile aria-label="back">
+          <ArrowBackIosIcon />
+        </ButtonMobile>
+      </LinkWithAnalytics>
+    </>
+  )
 }

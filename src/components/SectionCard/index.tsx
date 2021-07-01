@@ -123,7 +123,7 @@ export const SectionCard = (props: SectionCardProps) => {
               pathId={course.courseNo}
               elementId={section.sectionNo}
             >
-              {({ log }) => <SelectButton onClick={log} course={course} selectedSectionNumber={section.sectionNo} />}
+              {({ log }) => <SelectButton log={log} course={course} selectedSectionNumber={section.sectionNo} />}
             </Analytics>
           </Stack>
         </Box>
@@ -134,7 +134,7 @@ export const SectionCard = (props: SectionCardProps) => {
           pathId={course.courseNo}
           elementId={section.sectionNo}
         >
-          {({ log }) => <SelectButton onClick={log} course={course} selectedSectionNumber={section.sectionNo} />}
+          {({ log }) => <SelectButton log={log} course={course} selectedSectionNumber={section.sectionNo} />}
         </Analytics>
       </CardActions>
     </Card>

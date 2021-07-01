@@ -68,10 +68,10 @@ export const FilterSection: React.FC<FilterSectionProps> = ({ open, setOpen }) =
           <Paper className={classes.paper} variant="outlined">
             <Stack spacing={4}>
               <Analytics elementName={GENED_FILTER}>
-                {({ log }) => <CheckboxGroup onClick={log} title="หมวดหมู่ GenEd" checkboxes={genEdCheckboxes} />}
+                {({ log }) => <CheckboxGroup log={log} title="หมวดหมู่ GenEd" checkboxes={genEdCheckboxes} />}
               </Analytics>
               <Analytics elementName={DAY_FILTER}>
-                {({ log }) => <CheckboxGroup onClick={log} title="วันในสัปดาห์" checkboxes={dayOfWeekCheckboxes} />}
+                {({ log }) => <CheckboxGroup log={log} title="วันในสัปดาห์" checkboxes={dayOfWeekCheckboxes} />}
               </Analytics>
               {/* <CheckboxGroup title="แสดงผลพิเศษ" checkboxes={specialCheckboxes} /> */}
             </Stack>
@@ -83,10 +83,10 @@ export const FilterSection: React.FC<FilterSectionProps> = ({ open, setOpen }) =
           <DialogContent>
             <Box>
               <Analytics elementName={GENED_FILTER}>
-                {({ log }) => <CheckboxGroup onClick={log} title="หมวดหมู่ GenEd" checkboxes={genEdCheckboxes} />}
+                {({ log }) => <CheckboxGroup log={log} title="หมวดหมู่ GenEd" checkboxes={genEdCheckboxes} />}
               </Analytics>
               <Analytics elementName={DAY_FILTER}>
-                {({ log }) => <CheckboxGroup onClick={log} title="วันในสัปดาห์" checkboxes={dayOfWeekCheckboxes} />}
+                {({ log }) => <CheckboxGroup log={log} title="วันในสัปดาห์" checkboxes={dayOfWeekCheckboxes} />}
               </Analytics>
             </Box>
             {/* <CheckboxGroup title="แสดงผลพิเศษ" checkboxes={specialCheckboxes} /> */}

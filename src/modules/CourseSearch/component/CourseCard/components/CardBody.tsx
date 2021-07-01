@@ -169,7 +169,7 @@ function CardSideActions({ isExpanded }: CardBodyProps) {
           <SelectButton
             course={course}
             selectedSectionNumber={selectedSectionNumber}
-            onClick={() => log(null, selectedSectionNumber)}
+            log={() => log(null, selectedSectionNumber)}
           />
         )}
       </Analytics>

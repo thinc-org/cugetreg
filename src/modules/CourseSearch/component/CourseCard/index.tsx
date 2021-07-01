@@ -31,7 +31,7 @@ export const CourseCard = memo(
               <Analytics elementName={SUBJECT_SELECT_BUTTON} elementId={course.courseNo}>
                 {({ log }) => (
                   <SelectButton
-                    onClick={log}
+                    log={log}
                     course={course}
                     selectedSectionNumber={courseCardContextValue.selectedSectionNumber}
                   />

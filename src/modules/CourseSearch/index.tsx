@@ -26,14 +26,7 @@ function CourseSearchPage() {
         <Typography variant="h2">ค้นหาวิชาเรียน</Typography>
         <Hidden mdUp>
           <Analytics elementName={OPEN_SHOPPING_CART_BUTTON}>
-            {({ log }) => (
-              <SelectedCoursesButton
-                onClick={() => {
-                  log()
-                  onOpen()
-                }}
-              />
-            )}
+            <SelectedCoursesButton onClick={onOpen} />
           </Analytics>
         </Hidden>
       </TitleStack>
@@ -41,25 +34,15 @@ function CourseSearchPage() {
         <Stack width="100%" spacing={2} direction="row">
           <SearchField />
           <Analytics elementName={FILTER_BUTTON}>
-            {({ log }) => (
-              <FilterIconButton
-                onClick={() => {
-                  log()
-                  setOpenFilterBar((open) => !open)
-                }}
-              />
-            )}
+            <FilterIconButton
+              onClick={() => {
+                setOpenFilterBar((open) => !open)
+              }}
+            />
           </Analytics>
           <Hidden mdDown>
             <Analytics elementName={SELECTED_COURSES_BUTTON}>
-              {({ log }) => (
-                <SelectedCoursesButton
-                  onClick={() => {
-                    onOpen()
-                    log()
-                  }}
-                />
-              )}
+              <SelectedCoursesButton onClick={onOpen} />
             </Analytics>
           </Hidden>
         </Stack>

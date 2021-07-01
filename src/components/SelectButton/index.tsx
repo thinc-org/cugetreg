@@ -13,10 +13,10 @@ import { SnackbarContext } from '@/context/Snackbar'
 interface SelectButtonProps {
   course: Course
   selectedSectionNumber: string
-  onClick: (_?: unknown, value?: string) => void
+  log: (_?: unknown, value?: string) => void
 }
 
-export const SelectButton = observer(({ course, selectedSectionNumber, onClick }: SelectButtonProps) => {
+export const SelectButton = observer(({ course, selectedSectionNumber, log }: SelectButtonProps) => {
   const { t } = useTranslation('courseCard')
   const { emitMessage } = useContext(SnackbarContext)
 
@@ -27,19 +27,19 @@ export const SelectButton = observer(({ course, selectedSectionNumber, onClick }
       if (!isSelected) {
         const addItemSuccess = courseCartStore.addItem(course, selectedSectionNumber)
         if (!addItemSuccess) {
-          onClick(null, 'addSubjectFailed')
+          log(null, 'addSubjectFailed')
           emitMessage(t('addSubjectFailed'), 'error', t('addSubjectFailedSolution'))
         } else {
-          onClick(null, 'addSubjectSuccess')
+          log(null, 'addSubjectSuccess')
           emitMessage(t('addSubjectSuccess'), 'success', t('viewAllSubject'))
         }
       } else {
         courseCartStore.removeCourse(course)
-        onClick(null, 'removeSubjectSuccess')
+        log(null, 'removeSubjectSuccess')
         emitMessage(t('removeSubjectSuccess'), 'warning', t('viewAllSubject'))
       }
     })
-  }, [course, selectedSectionNumber, isSelected, emitMessage, t, onClick])
+  }, [course, selectedSectionNumber, isSelected, emitMessage, t, log])
 
   return (
     <CustomButton

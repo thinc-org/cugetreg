@@ -48,29 +48,18 @@ export const ScheduleTableCard = observer(({ item, index, hasOverlap }: Schedule
           <CardContent>
             <LeftPane>
               <Analytics elementId={courseNo} elementName={HIDE_COURSE}>
-                {({ log }) => (
-                  <VisibilityToggle
-                    checked={!isHidden}
-                    onClick={() => {
-                      log()
-                      toggleVisibility()
-                    }}
-                  >
-                    {isHidden ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
-                  </VisibilityToggle>
-                )}
+                <VisibilityToggle checked={!isHidden} onClick={toggleVisibility}>
+                  {isHidden ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
+                </VisibilityToggle>
               </Analytics>
               <Analytics elementId={courseNo} elementName={DELETE_COURSE}>
-                {({ log }) => (
-                  <DeleteButton
-                    onClick={() => {
-                      log()
-                      courseCartStore.removeCourse(item)
-                    }}
-                  >
-                    <MdDelete />
-                  </DeleteButton>
-                )}
+                <DeleteButton
+                  onClick={() => {
+                    courseCartStore.removeCourse(item)
+                  }}
+                >
+                  <MdDelete />
+                </DeleteButton>
               </Analytics>
             </LeftPane>
             <RightPane>

@@ -6,7 +6,7 @@ import { observer } from 'mobx-react'
 import { CR11 } from '@/components/CR11'
 import { useTranslation } from 'react-i18next'
 import { useCourseGroup } from '@/utils/hooks/useCourseGroup'
-import { withButton } from '@/components/BackButton'
+import { BackButton } from '@/components/BackButton'
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -93,17 +93,15 @@ const Home = observer(() => {
   const classes = useStyles()
   const { t } = useTranslation(['program', 'cr11'])
   const { studyProgram, academicYear: year, semester } = useCourseGroup()
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const studyProgramText = `${t('cr11:semester')} ${year}/${semester} ${t(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     `program:${shoppingCart.currentProgram || 's'}` as any
   )}`
-
-  const Back = withButton(Link)
 
   return (
     <div className={classes.container}>
       <div className={classes.top}>
-        <Back href={`/${studyProgram}/schedule`} />
+        <BackButton href={`/${studyProgram}/schedule`} />
         <Typography className={`${classes.semester} ${classes.mobile}`} variant="subtitle1">
           {studyProgramText}
         </Typography>

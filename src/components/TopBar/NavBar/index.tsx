@@ -1,5 +1,4 @@
 import { useTranslation } from 'react-i18next'
-import Link from 'next/link'
 import logo from '@/assets/images/cgrLogoDark.svg'
 import { NavBarItem } from './NavBarItem'
 import { FlexOne } from '@/components/FlexOne'
@@ -18,6 +17,7 @@ import {
   NAVBAR_TIMETABLE,
   STUDY_PROGRAM_DROPDOWN,
 } from '@/context/analytics/components/const'
+import { LinkWithAnalytics } from '@/context/analytics/components/LinkWithAnalytics'
 
 export const NavBarLayout = styled.div`
   width: 100%;
@@ -50,30 +50,21 @@ export function NavBar() {
   return (
     <NavBarLayout>
       <FlexContainer>
-        <Analytics elementName={GETREG_LOGO}>
-          {({ log }) => (
-            <Link href={`/${studyProgram}/courses`} passHref>
-              <Logo onClick={log}>
-                <img src={logo} alt={t('appName')} />
-              </Logo>
-            </Link>
-          )}
-        </Analytics>
+        <LinkWithAnalytics href={`/${studyProgram}/courses`} passHref elementName={GETREG_LOGO}>
+          <Logo>
+            <img src={logo} alt={t('appName')} />
+          </Logo>
+        </LinkWithAnalytics>
+
         <Hidden smDown>
-          <Analytics elementName={NAVBAR_SEARCH_COURSE}>
-            {({ log }) => (
-              <Link href={`/${studyProgram}/courses`} passHref>
-                <NavBarItem onClick={log}>{t('navBar:searchCourses')}</NavBarItem>
-              </Link>
-            )}
-          </Analytics>
-          <Analytics elementName={NAVBAR_TIMETABLE}>
-            {({ log }) => (
-              <Link href={`/${studyProgram}/schedule`} passHref>
-                <NavBarItem onClick={log}>{t('navBar:timetable')}</NavBarItem>
-              </Link>
-            )}
-          </Analytics>
+          <LinkWithAnalytics href={`/${studyProgram}/courses`} passHref elementName={NAVBAR_SEARCH_COURSE}>
+            <NavBarItem>{t('navBar:searchCourses')}</NavBarItem>
+          </LinkWithAnalytics>
+
+          <LinkWithAnalytics href={`/${studyProgram}/schedule`} passHref elementName={NAVBAR_TIMETABLE}>
+            <NavBarItem>{t('navBar:timetable')}</NavBarItem>
+          </LinkWithAnalytics>
+
           <FlexOne />
           <UserButton />
         </Hidden>

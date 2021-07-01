@@ -12,9 +12,9 @@ import { ExamSchedule } from '@/components/ExamSchedule'
 import SaveImgButton from '@/components/SaveImgButton'
 import { useExamClasses } from '@/components/ExamSchedule/utils'
 import { useCourseGroup } from '@/utils/hooks/useCourseGroup'
-import Link from 'next/link'
 import { Analytics } from '@/context/analytics/components/Analytics'
-import { CR11_BUTTON, CLASS_TAB_BUTTON, EXAM_TAB_BUTTON, EXPORT_PNG_BUTTON } from '@/context/analytics/components/const'
+import { CR11_BUTTON, CLASS_TAB_BUTTON, EXAM_TAB_BUTTON } from '@/context/analytics/components/const'
+import { LinkWithAnalytics } from '@/context/analytics/components/LinkWithAnalytics'
 
 const PageContainer = styled.div`
   padding-top: 32px;
@@ -140,34 +140,28 @@ function SchedulePage() {
         <Title variant="h2">{t('title')}</Title>
         <TabContainer>
           <Analytics elementName={CLASS_TAB_BUTTON}>
-            {({ log }) => (
-              <TabButton
-                current={isExamTable ? 1 : 0}
-                onClick={() => {
-                  log()
-                  setExamTable(false)
-                }}
-                variant={!isExamTable ? 'contained' : undefined}
-                color={!isExamTable ? 'primary' : undefined}
-              >
-                {t('classSchedule')}
-              </TabButton>
-            )}
+            <TabButton
+              current={isExamTable ? 1 : 0}
+              onClick={() => {
+                setExamTable(false)
+              }}
+              variant={!isExamTable ? 'contained' : undefined}
+              color={!isExamTable ? 'primary' : undefined}
+            >
+              {t('classSchedule')}
+            </TabButton>
           </Analytics>
           <Analytics elementName={EXAM_TAB_BUTTON}>
-            {({ log }) => (
-              <TabButton
-                current={!isExamTable ? 1 : 0}
-                onClick={() => {
-                  log()
-                  setExamTable(true)
-                }}
-                variant={isExamTable ? 'contained' : undefined}
-                color={isExamTable ? 'primary' : undefined}
-              >
-                {t('examSchedule')}
-              </TabButton>
-            )}
+            <TabButton
+              current={!isExamTable ? 1 : 0}
+              onClick={() => {
+                setExamTable(true)
+              }}
+              variant={isExamTable ? 'contained' : undefined}
+              color={isExamTable ? 'primary' : undefined}
+            >
+              {t('examSchedule')}
+            </TabButton>
           </Analytics>
         </TabContainer>
       </TitleContainer>
@@ -188,23 +182,15 @@ function SchedulePage() {
         </div>
         <InfoSpacer />
         <ButtonBar>
-          {!isExamTable && (
-            <Analytics elementName={EXPORT_PNG_BUTTON}>
-              {({ log }) => <SaveImgButton onClick={log} imageRef={ref} />}
-            </Analytics>
-          )}
+          {!isExamTable && <SaveImgButton imageRef={ref} />}
           <Button variant="outlined" disabled>
             {t('addToCalendar')}
           </Button>
-          <Analytics elementName={CR11_BUTTON}>
-            {({ log }) => (
-              <Link href={`/${studyProgram}/schedule/cr11`} passHref>
-                <Button onClick={log} style={{ marginRight: 0 }} variant="outlined">
-                  {isDesktop ? t('showCR11') : t('showCR11Mobile')}
-                </Button>
-              </Link>
-            )}
-          </Analytics>
+          <LinkWithAnalytics href={`/${studyProgram}/schedule/cr11`} passHref elementName={CR11_BUTTON}>
+            <Button style={{ marginRight: 0 }} variant="outlined">
+              {isDesktop ? t('showCR11') : t('showCR11Mobile')}
+            </Button>
+          </LinkWithAnalytics>
         </ButtonBar>
       </InfoBar>
       <ScheduleTable courseCart={courseCartStore} overlappingCourses={overlappingCourses} />

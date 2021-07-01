@@ -6,7 +6,6 @@ import styled from '@emotion/styled'
 import { useCourseGroup } from '@/utils/hooks/useCourseGroup'
 
 import StudyProgramDropdown from '../components/StudyProgramDropdown'
-import { sessionId } from '@/utils/network/logging'
 import { observer } from 'mobx-react'
 import { sessionIdStore } from '@/store/sessionIdStore'
 
@@ -43,11 +42,9 @@ export const ConfigBar = observer(() => {
           {academicYear}/{semester}
         </ConfigBarItem>
         <Analytics elementName={REPORT_PROBLEM}>
-          {({ log }) => (
-            <ConfigBarItemLink onClick={log} href={reportProblemLink} target="_blank" rel="noreferrer">
-              {t('reportAProblem')}
-            </ConfigBarItemLink>
-          )}
+          <ConfigBarItemLink href={reportProblemLink} target="_blank" rel="noreferrer">
+            {t('reportAProblem')}
+          </ConfigBarItemLink>
         </Analytics>
       </FlexContainer>
     </ConfigBarLayout>

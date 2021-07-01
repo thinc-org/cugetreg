@@ -14,7 +14,6 @@ export function useLog(elementName?: string, elementId?: string, pathId?: string
   const { addEvent } = useContext(AnalyticsContext)
   const log = (_?: unknown, value?: string) => {
     const event = { value, pathname, pathId, elementName, elementId, timeStamp: new Date(), eventType: 'click' }
-    console.log(event)
     addEvent(event)
   }
 

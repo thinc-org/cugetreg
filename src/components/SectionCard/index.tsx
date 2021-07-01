@@ -16,7 +16,7 @@ import {
 import { Course, Section } from '@thinc-org/chula-courses'
 import { useTranslation } from 'react-i18next'
 import GenEdChip from '@/components/Chips/catagories/GenEdChip'
-import { Caption } from '@/components/CourseCard/components/Caption'
+import { Caption } from '@/modules/CourseSearch/component/CourseCard/components/Caption'
 import { SectionStatus } from '@/components/SectionCard/components/SectionStatus'
 import { dayOfWeekMapper } from '@/constants/dayOfWeek'
 import { SelectButton } from '@/components/SelectButton'

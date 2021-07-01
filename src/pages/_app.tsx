@@ -30,6 +30,7 @@ import { AppProvider } from '@/context/AppProvider'
 import { useDisclosure } from '@/context/ShoppingCartModal/hooks'
 import { TrackPageChange } from '@/components/TrackPageChange'
 import { LoadingProgress } from '@/components/LoadingProgress'
+import { StudyProgramEnum } from '@thinc-org/chula-courses'
 
 mobxConfiguration()
 
@@ -39,7 +40,7 @@ const ToastAlert = styled(Alert)`
   }
 `
 
-function MyApp({ Component, pageProps, forceDark }: AppProps) {
+function MyApp({ Component, pageProps, forceDark, router }: AppProps) {
   useApp()
 
   // Retoring AuthStore and Syncing coursecart
@@ -70,6 +71,14 @@ function MyApp({ Component, pageProps, forceDark }: AppProps) {
   }, [])
 
   useEffect(startLogging, [])
+
+  useEffect(() => {
+    const studyProgram = router.query.studyProgram as string
+    if (studyProgram && !(Object.values(StudyProgramEnum) as string[]).includes(studyProgram)) {
+      router.replace('/')
+    }
+    // eslint-disable-next-line
+  }, [router.query])
 
   const { message, emitMessage, action: actionText, open, close, messageType } = useSnackBar()
   const disclosureValue = useDisclosure()

@@ -8,12 +8,12 @@ export interface ErrorProps extends BoxProps {
 }
 
 interface ContainerProps {
-  $fullWidth?: boolean
+  $fullwidth?: boolean
 }
 
 const Container = styled(Box)<ContainerProps>`
-  ${({ $fullWidth }) =>
-    $fullWidth ??
+  ${({ $fullwidth }) =>
+    $fullwidth ??
     css`
       width: 100%;
     `}
@@ -26,7 +26,7 @@ const Container = styled(Box)<ContainerProps>`
 
 export const Error: React.FC<ErrorProps> = ({ fullWidth = false, message }) => {
   return (
-    <Container $fullWidth={fullWidth} mr="auto">
+    <Container $fullwidth={fullWidth} mr="auto">
       {message}
     </Container>
   )

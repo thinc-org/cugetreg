@@ -55,12 +55,8 @@ const GridEnd = styled(Grid)`
   }
 `
 
-const Container = styled(MuiContainer)`
-  margin-top: ${({ theme }) => theme.spacing(10)};
-
-  ${({ theme }) => theme.breakpoints.down('sm')} {
-    margin-top: ${({ theme }) => theme.spacing(4)};
-  }
+const Container = styled.div`
+  margin-top: ${({ theme }) => theme.spacing(4)};
 `
 
 function parseVariablesFromQuery(q: ParsedUrlQuery): GetCourseVars {

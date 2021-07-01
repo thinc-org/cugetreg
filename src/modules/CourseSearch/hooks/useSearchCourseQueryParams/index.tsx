@@ -57,6 +57,10 @@ export const useSearchCourseQueryParams = () => {
         dayOfWeeks: filterVars.dayOfWeeks?.join(','),
       }
 
+      if (query.keyword === '') {
+        delete query.keyword
+      }
+
       router.push({ pathname: router.pathname, query: removeUndefinedValue(query) })
     },
     [router]

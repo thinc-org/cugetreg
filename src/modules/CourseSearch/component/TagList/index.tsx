@@ -23,6 +23,10 @@ export const TagList: React.FC<TagListProps> = () => {
     setFilter({ ...searchCourseQueryParams.filter, dayOfWeeks: modifiedDayOfWeekTags })
   }
 
+  if (!genEdTypes?.length && !dayOfWeeks?.length) {
+    return null
+  }
+
   return (
     <StyledStack spacing={2} direction="row">
       {genEdTypes?.map((tag) => (
@@ -33,4 +37,19 @@ export const TagList: React.FC<TagListProps> = () => {
       ))}
     </StyledStack>
   )
+}
+
+export function useHasTags() {
+  const { searchCourseQueryParams } = useSearchCourseQueryParams()
+  const { filter } = searchCourseQueryParams
+  const { genEdTypes, dayOfWeeks } = filter
+  return !!(genEdTypes?.length || dayOfWeeks?.length)
+}
+
+export function NoTagListLayout() {
+  if (useHasTags()) {
+    return null
+  }
+
+  return <StyledStack />
 }

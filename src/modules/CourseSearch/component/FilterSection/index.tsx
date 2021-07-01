@@ -13,6 +13,7 @@ import { css } from '@emotion/react'
 import { DayChipKey, GenEdChipKey } from '@/components/Chips/config'
 import { Analytics } from '@/context/analytics/components/Analytics'
 import { DAY_FILTER, GENED_FILTER } from '@/context/analytics/components/const'
+import { useHasTags } from '../TagList'
 
 const DialogContent = styled(MuiDialogContent)`
   padding: ${({ theme }) => theme.spacing(4)};
@@ -33,10 +34,10 @@ const Box = styled.div`
   }
 `
 
-const Container = styled.div`
+const Container = styled.div<{ hasTags: boolean }>`
   min-width: 220px;
   position: sticky;
-  top: 100px;
+  top: ${({ hasTags }) => (hasTags ? '124px' : '100px')};
   z-index: ${({ theme }) => theme.zIndex.appBar + 2};
   height: fit-content;
 `
@@ -55,6 +56,8 @@ export const FilterSection: React.FC<FilterSectionProps> = ({ open, setOpen }) =
   const { checkboxes: dayOfWeekCheckboxes } = useFilterBar<DayChipKey>(createDayOfWeekCheckboxes, 'dayOfWeeks')
   // const { checkboxes: specialCheckboxes } = useFilterBar(createSpecialCheckboxes)
 
+  const hasTags = useHasTags()
+
   const handleClose = () => {
     setOpen(false)
   }
@@ -64,7 +67,7 @@ export const FilterSection: React.FC<FilterSectionProps> = ({ open, setOpen }) =
   return (
     <>
       <Hidden mdDown>
-        <Container>
+        <Container hasTags={hasTags}>
           <Paper className={classes.paper} variant="outlined">
             <Stack spacing={4}>
               <Analytics elementName={GENED_FILTER}>

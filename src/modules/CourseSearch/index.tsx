@@ -6,7 +6,7 @@ import { FilterIconButton } from '@/modules/CourseSearch/component/FilterIconBut
 import { SelectedCoursesButton } from '@/modules/CourseSearch/component/SelectedCoursesButton'
 import { FilterSection } from '@/modules/CourseSearch/component/FilterSection'
 
-import { TagList } from '@/modules/CourseSearch/component/TagList'
+import { NoTagListLayout, TagList } from '@/modules/CourseSearch/component/TagList'
 import React from 'react'
 import { ShoppingCartModalContext } from '@/context/ShoppingCartModal'
 import { CourseSearchProvider } from '@/modules/CourseSearch/context/CourseSearch'
@@ -48,6 +48,7 @@ function CourseSearchPage() {
         </Stack>
         <TagList />
       </StickyStack>
+      <NoTagListLayout />
       <Stack spacing={3} direction="row">
         <CourseList />
         <FilterSection open={openFilterBar} setOpen={setOpenFilterBar} />

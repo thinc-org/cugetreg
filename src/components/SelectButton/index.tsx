@@ -1,6 +1,6 @@
 import { CustomButton } from '@/components/common/CustomButton'
 import { courseCartStore } from '@/store'
-import { Add } from '@material-ui/icons'
+import Add from '@material-ui/icons/Add'
 import { Course } from '@thinc-org/chula-courses'
 import { runInAction } from 'mobx'
 import { observer } from 'mobx-react'

@@ -4,23 +4,8 @@ import { authStore } from '@/store/meStore'
 import { reaction, runInAction } from 'mobx'
 import { collectErrorLog } from './logging'
 
-/** Lock to prevent GAPI from loading multiple time */
-let isGapiInit = false
-
 /** Load Google API Client and setup token */
-export async function loadGAPI(): Promise<void> {
-  if (isGapiInit) return
-  isGapiInit = true
-  await new Promise((resolve, reject) => {
-    if (typeof window === 'undefined') return reject('Not a browser')
-    const s = document.createElement('script')
-    s.src = 'https://apis.google.com/js/api.js'
-    s.onload = () => resolve('')
-    s.onerror = () => reject('Script load failure')
-    s.defer = true
-    s.async = true
-    document.body.appendChild(s)
-  })
+export async function setupGAPI(): Promise<void> {
   await new Promise((resolve, _) => gapi.load('client:auth2', resolve))
   await gapi.client.load('drive', 'v3')
   await gapi.client.init({})

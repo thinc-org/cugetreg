@@ -13,8 +13,8 @@ import { syncWithLocalStorage } from '@/utils/localstorage'
 import useApp from '@/hooks/useApp'
 import { mobxConfiguration } from '@/configs/mobx'
 
-import { useEffect } from 'react'
-import { loadGAPI, startGDriveSync } from '@/utils/network/gDriveSync'
+import { useCallback, useEffect, useState } from 'react'
+import { setupGAPI, startGDriveSync } from '@/utils/network/gDriveSync'
 import { reaction, runInAction } from 'mobx'
 import { gDriveStore, GDriveSyncState } from '@/store/gDriveState'
 
@@ -60,14 +60,6 @@ function MyApp({ Component, pageProps, forceDark, router }: AppProps) {
     )
 
     authStore.tryRestoreWithLocalStorage()
-    loadGAPI()
-      .then(startGDriveSync)
-      .catch((e) => {
-        console.error('[GDRIVE] Error while starting drive sync', e)
-        runInAction(() => {
-          gDriveStore.gDriveState = GDriveSyncState.FAIL
-        })
-      })
   }, [])
 
   useEffect(startLogging, [])
@@ -92,11 +84,34 @@ function MyApp({ Component, pageProps, forceDark, router }: AppProps) {
 
   const value = { handleClose, message, emitMessage, action: actionText }
 
+  const [gapiLoaded, setGapiLoaded] = useState(false)
+
+  const gapiCallback = useCallback(() => {
+    if (gapiLoaded) {
+      console.log('[GAPI] Repeated initilization attempt detected')
+      return
+    }
+    console.log('[GAPI] Script loaded')
+    setGapiLoaded(true)
+    setupGAPI()
+      .then(startGDriveSync)
+      .catch((e) => {
+        console.error('[GDRIVE] Error while starting drive sync', e)
+        runInAction(() => {
+          gDriveStore.gDriveState = GDriveSyncState.FAIL
+        })
+      })
+  }, [gapiLoaded])
+  if (typeof window !== 'undefined' && !gapiLoaded) {
+    (window as any).gapiInit = gapiCallback
+  }
+
   return (
     <>
       <Head>
         <title>CU Get Reg</title>
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
+        {!gapiLoaded && <script async defer src={'https://apis.google.com/js/api.js?onload=gapiInit'} />}
       </Head>
       <AppProvider disclosureValue={disclosureValue} snackBarContextValue={value} forceDark={forceDark}>
         <TrackPageChange>

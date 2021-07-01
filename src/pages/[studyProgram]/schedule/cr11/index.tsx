@@ -1,5 +1,4 @@
 import React from 'react'
-import Link from 'next/link'
 import { courseCartStore } from '@/store/shoppingCart'
 import { Typography, makeStyles } from '@material-ui/core'
 import { observer } from 'mobx-react'
@@ -10,7 +9,7 @@ import { BackButton } from '@/components/BackButton'
 
 const useStyles = makeStyles((theme) => ({
   container: {
-    margin: theme.spacing(10, 0, 12, 0),
+    margin: theme.spacing(4, 0, 12, 0),
     [theme.breakpoints.down('sm')]: {
       margin: theme.spacing(4, 0, 10, 0),
     },

@@ -3,7 +3,7 @@ import { ApolloError, useQuery } from '@apollo/client'
 import { Course, getFaculty } from '@thinc-org/chula-courses'
 import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 import { useRouter } from 'next/router'
-import { client } from '@/utils/network/apollo'
+import { client, createApolloServerClient } from '@/utils/network/apollo'
 import { Grid, Typography } from '@material-ui/core'
 import { GetCourseResponse, GetCourseVars, GET_COURSE } from '@/utils/network/BackendGQLQueries'
 import { ParsedUrlQuery } from 'querystring'
@@ -151,6 +151,7 @@ export async function getServerSideProps(
   context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<{ data: GetCourseResponse }>> {
   try {
+    const client = createApolloServerClient()
     const { data } = await client.query<GetCourseResponse>({
       query: GET_COURSE,
       variables: parseVariablesFromQuery(context.query),

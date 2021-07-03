@@ -18,17 +18,16 @@ export const CourseSearchProvider: React.FC<{ cache?: CourseSearchPagePrefetchDa
 
   const { searchCourseQueryParams } = useSearchCourseQueryParams()
 
-  const [cacheInjected, setCacheInjected] = useState(false)
   const client = useApolloClient()
   const cache: CourseSearchPagePrefetchData | undefined = props.cache
 
-  if (!cacheInjected && cache) {
+  if (cache && !client.readQuery({ query: SEARCH_COURSE, variables: cache.vars })) {
+    console.log('[CACHE] Writing cache')
     client.writeQuery({
       query: SEARCH_COURSE,
       data: cache.data,
       variables: cache.vars,
     })
-    setCacheInjected(true)
   }
 
   const courseSearchQuery = useQuery<SearchCourseResponse, SearchCourseVars>(SEARCH_COURSE, {

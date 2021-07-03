@@ -1,6 +1,6 @@
 import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 import { SearchCourseResponse, SearchCourseVars, SEARCH_COURSE } from '@/utils/network/BackendGQLQueries'
-import { client } from '@/utils/network/apollo'
+import { createApolloServerClient } from '@/utils/network/apollo'
 import { extractSearchVarsFromQuery } from '@/modules/CourseSearch/hooks/useSearchCourseQueryParams'
 import { currentTerm } from '@/utils/courseGroup'
 import { StudyProgram } from '@thinc-org/chula-courses'
@@ -18,13 +18,14 @@ export async function getServerSideProps(
       ...currentTerm,
       studyProgram: context.query.studyProgram as StudyProgram,
     })
+    const client = createApolloServerClient()
     const result = await client.query<SearchCourseResponse, SearchCourseVars>({
       query: SEARCH_COURSE,
       variables: vars,
     })
     return { props: { prefetch: { data: result.data, vars } } }
   } catch (e) {
-    collectErrorLog('Search Page SSR Fetch Failed', e)
+    collectErrorLog(`Search Page SSR Fetch Failed for query ${context.query}`, e)
     return { props: {} }
   }
 }

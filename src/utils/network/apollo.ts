@@ -40,3 +40,10 @@ export const client = new ApolloClient({
   uri: `${env.backend.uri}/graphql`,
   cache: cache,
 })
+
+export function createApolloServerClient() {
+  return new ApolloClient({
+    uri: `${env.backend.uri}/graphql`,
+    cache: new InMemoryCache(),
+  })
+}

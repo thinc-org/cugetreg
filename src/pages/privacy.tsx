@@ -8,7 +8,7 @@ export default function PrivacyPolicy() {
         <Box padding="32px">
           <Typography variant="h1">Privacy Policy</Typography>
           <Typography variant="h2">1.Information we collect</Typography>
-          <Typography variant="h3">1.1 Information you provided to us</Typography>
+          <Typography variant="h3">1.1 Information you provide to us</Typography>
           <p>When you log in with Google. We collect your</p>
           <ul>
             <li>Name</li>

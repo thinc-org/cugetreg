@@ -18,7 +18,10 @@ export default function PrivacyPolicy() {
           <Typography variant="h3">1.2 Information we collect automatically</Typography>
           <p>When you use our website. We collect your interactions with the website, which include</p>
           <ul>
-            <li>Device ID (associated with the browser that you use and can be renewed by clearing the browser's Local Storage)</li>
+            <li>
+              Device ID (associated with the browser that you use and can be renewed by clearing the browser&apos;s
+              Local Storage)
+            </li>
             <li>Search Query</li>
             <li>Click Interaction</li>
             <li>Page Visit</li>
@@ -35,8 +38,12 @@ export default function PrivacyPolicy() {
 
           <p>We use third-party services to collect your interactions with the website, namely</p>
           <ul>
-            <li>Google Analytic (Term of Service)</li>
-            <li>Hotjar (Term of Service)</li>
+            <li>
+              Google Analytic <a href="https://policies.google.com/privacy">(Privacy Policy)</a>
+            </li>
+            <li>
+              Hotjar <a href="https://www.hotjar.com/legal/policies/privacy/">(Privacy Policy)</a>
+            </li>
           </ul>
           <p>
             By using this website, You must agree to the specified third-party’s Term of Service and Privacy Policy.
@@ -75,9 +82,9 @@ export default function PrivacyPolicy() {
           <Typography variant="h2">3. How we share your data</Typography>
           <p>
             Your data is shared within our website’s development team. In the future, We may share your anonymized data
-            with our partner who would collaborate with us to better meet our user’s needs. In the case that this project is
-            reorganized to other organizations within Chulalongkorn University, your data will be transferred along with
-            the website to them.
+            with our partner who would collaborate with us to better meet our user’s needs. In the case that this
+            project is reorganized to other organizations within Chulalongkorn University, your data will be transferred
+            along with the website to them.
           </p>
           <Typography variant="h2">4. Contact Information and Inquiry</Typography>
           <p>
@@ -87,8 +94,8 @@ export default function PrivacyPolicy() {
           <Typography variant="h1">About Us</Typography>
           <p>
             Thinc. is a student club organized under Engineering Student Council (ESC) of Chulalongkorn University. We
-            develop several products serving the Chulalongkorn University community such as CU Pop Bus and 
-            CUTUBall74 electronic ticket system.
+            develop several products serving the Chulalongkorn University community such as CU Pop Bus and CUTUBall74
+            electronic ticket system.
           </p>
         </Box>
       </Paper>

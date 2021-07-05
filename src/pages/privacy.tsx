@@ -31,8 +31,7 @@ export default function PrivacyPolicy() {
             <li>User Agent</li>
           </ul>
           <p>
-            When you submit the feedback form. The above information will be included in the submission if you leave the
-            Session ID field filled.
+            When you submit the feedback form, the above information will be included in the submission if you provide the Session ID.
           </p>
           <Typography variant="h3">1.3 Third-Party Information</Typography>
 

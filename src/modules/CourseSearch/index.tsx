@@ -14,6 +14,13 @@ import { Analytics } from '@/context/analytics/components/Analytics'
 import { FILTER_BUTTON, SELECTED_COURSES_BUTTON, OPEN_SHOPPING_CART_BUTTON } from '@/context/analytics/components/const'
 import { Container, Stack, TitleStack, StickyStack } from '@/modules/CourseSearch/styles'
 import { CourseSearchPagePrefetchData } from '@/modules/CourseSearch/types'
+import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
+import { extractSearchVarsFromQuery } from '@/modules/CourseSearch/hooks/useSearchCourseQueryParams'
+import { StudyProgram } from '@thinc-org/chula-courses'
+import { currentTerm } from '@/utils/courseGroup'
+import { SearchCourseResponse, SearchCourseVars, SEARCH_COURSE } from '@/utils/network/BackendGQLQueries'
+import { createApolloServerClient } from '@/utils/network/apollo'
+import { collectErrorLog } from '@/utils/network/logging'
 
 function CourseSearchPage() {
   const [openFilterBar, setOpenFilterBar] = useState(false)
@@ -66,3 +73,23 @@ const CourseSearchPageWithCourseSearchProvider = (props: { prefetch?: CourseSear
 }
 
 export default CourseSearchPageWithCourseSearchProvider
+
+export async function getServerSideProps(
+  context: GetServerSidePropsContext
+): Promise<GetServerSidePropsResult<{ prefetch?: CourseSearchPagePrefetchData }>> {
+  try {
+    const vars: SearchCourseVars = extractSearchVarsFromQuery(context.query, {
+      ...currentTerm,
+      studyProgram: context.query.studyProgram as StudyProgram,
+    })
+    const client = createApolloServerClient()
+    const result = await client.query<SearchCourseResponse, SearchCourseVars>({
+      query: SEARCH_COURSE,
+      variables: vars,
+    })
+    return { props: { prefetch: { data: result.data, vars } } }
+  } catch (e) {
+    collectErrorLog(`Search Page SSR Fetch Failed for query ${context.query}`, e)
+    return { props: {} }
+  }
+}

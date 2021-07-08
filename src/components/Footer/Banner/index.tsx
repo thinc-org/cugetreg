@@ -91,6 +91,11 @@ export function Banner() {
           </a>
         </Link> */}
       </FlexContainer>
+      <FlexContainer className={classes.smallRow}>
+        <Link href="/privacy">
+          <a className={classes.link}>Privacy Policy</a>
+        </Link>
+      </FlexContainer>
     </FlexContainer>
   )
 }

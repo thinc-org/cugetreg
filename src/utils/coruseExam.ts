@@ -1,4 +1,4 @@
-import { ExamClass } from '.'
+import { ExamClass } from '../components/ExamSchedule/components/ExamCard'
 import { parseISO, format } from 'date-fns'
 import { Course } from '@thinc-org/chula-courses/types'
 

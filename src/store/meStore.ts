@@ -90,7 +90,6 @@ export class AuthStore {
       runInAction(() => {
         this.auth = authData
         this.me = meData
-        this.pending = false
       })
       this.startRefreshTokenTimer()
     } catch (e) {
@@ -98,6 +97,10 @@ export class AuthStore {
       console.log('[AuthStore] Failed to restore MeData', e)
       collectErrorLog("can't retrieve me data from local storage auth, ignoring", e)
       return
+    } finally {
+      runInAction(() => {
+        this.pending = false
+      })
     }
   }
 

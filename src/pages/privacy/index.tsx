@@ -1,4 +1,4 @@
-import { Box, Card, Container, Paper, Typography } from '@material-ui/core'
+import { Box, Paper, Typography } from '@material-ui/core'
 import React from 'react'
 
 export default function PrivacyPolicy() {
@@ -31,7 +31,8 @@ export default function PrivacyPolicy() {
             <li>User Agent</li>
           </ul>
           <p>
-            When you submit the feedback form, the above information will be included in the submission if you provide the Session ID.
+            When you submit the feedback form, the above information will be included in the submission if you provide
+            the Session ID.
           </p>
           <Typography variant="h3">1.3 Third-Party Information</Typography>
 

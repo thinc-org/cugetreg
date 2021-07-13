@@ -10,11 +10,15 @@ export function syncWithLocalStorage(items: CourseCartItem[], isInitializedLocal
     localStorage.setItem(SHOPPING_CART_KEY, courses)
   } else if (!isInitializedLocal && isNotLoggedIn) {
     runInAction(() => {
-      courseCartStore.isInitializedLocal = true
       courseCartStore.shopItems = JSON.parse(shoppingCart)
     })
   } else {
     const courses = JSON.stringify(items)
     localStorage.setItem(SHOPPING_CART_KEY, courses)
+  }
+  if (isNotLoggedIn) {
+    runInAction(() => {
+      courseCartStore.isInitializedLocal = true
+    })
   }
 }

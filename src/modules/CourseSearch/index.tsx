@@ -21,6 +21,7 @@ import { currentTerm } from '@/utils/courseGroup'
 import { SearchCourseResponse, SearchCourseVars, SEARCH_COURSE } from '@/utils/network/BackendGQLQueries'
 import { createApolloServerClient } from '@/utils/network/apollo'
 import { collectErrorLog } from '@/utils/network/logging'
+import { PageMeta } from '@/components/PageMeta'
 
 function CourseSearchPage() {
   const [openFilterBar, setOpenFilterBar] = useState(false)
@@ -29,6 +30,7 @@ function CourseSearchPage() {
 
   return (
     <Container>
+      <PageMeta title="ค้นหาวิชาเรียน" />
       <TitleStack spacing={2} direction="row" justifyContent="space-between" alignItems="center">
         <Typography variant="h2">ค้นหาวิชาเรียน</Typography>
         <Hidden mdUp>

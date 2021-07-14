@@ -22,6 +22,7 @@ import {
   GridEnd,
 } from '@/modules/CourseDetail/styled'
 import { courseTypeStringFromCourse, parseVariablesFromQuery } from '@/modules/CourseDetail/utils'
+import { PageMeta } from '@/components/PageMeta'
 
 function CourseDetailPage(props: { data: GetCourseResponse }) {
   const router = useRouter()
@@ -53,6 +54,7 @@ function CourseDetailPage(props: { data: GetCourseResponse }) {
 
   return (
     <Container>
+      <PageMeta title={cData.course.abbrName} />
       <BackButton href={`/${studyProgram}/courses`} pathId={cData.course.courseNo} />
       <Title variant="h3">
         {cData.course.courseNo} {cData.course.abbrName}

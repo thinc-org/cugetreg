@@ -15,6 +15,7 @@ import { useCourseGroup } from '@/utils/hooks/useCourseGroup'
 import { Analytics } from '@/context/analytics/components/Analytics'
 import { CR11_BUTTON, CLASS_TAB_BUTTON, EXAM_TAB_BUTTON } from '@/context/analytics/components/const'
 import { LinkWithAnalytics } from '@/context/analytics/components/LinkWithAnalytics'
+import { PageMeta } from '@/components/PageMeta'
 
 const PageContainer = styled.div`
   padding-top: 32px;
@@ -136,6 +137,7 @@ function SchedulePage() {
 
   return (
     <PageContainer>
+      <PageMeta title={t('title')} />
       <TitleContainer>
         <Title variant="h2">{t('title')}</Title>
         <TabContainer>

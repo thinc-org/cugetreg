@@ -19,7 +19,7 @@ export const navBar = {
 
 export const studyProgram = {
   S: 'ทวิภาค',
-  T: 'ไตรภาค',
+  T: 'ตรีภาค',
   I: 'นานาชาติ',
 }
 

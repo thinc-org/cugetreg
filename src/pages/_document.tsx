@@ -16,6 +16,8 @@ export default class MyDocument extends Document {
     return (
       <Html lang="en">
         <Head>
+          <link rel="icon" type="image/png" href="/favicon.png" />
+          <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
           <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true" />
           <link
             rel="preload"

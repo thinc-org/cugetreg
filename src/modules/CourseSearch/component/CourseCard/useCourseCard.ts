@@ -22,7 +22,7 @@ export function useCourseCard(course: Course): CourseCardContextValue {
 
   const courseCapacity: Capacity = {
     current: sum(course.sections.map((section) => section.capacity.current)),
-    max: sum(course.sections.map((section) => section.capacity.max)),
+    max: sum(course.sections.filter((section) => !section.closed).map((section) => section.capacity.max)),
   }
 
   const sectionNumbers = course.sections.map((section) => section.sectionNo)

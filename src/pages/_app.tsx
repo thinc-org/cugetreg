@@ -22,7 +22,6 @@ import { useSnackBar } from '@/context/Snackbar/hooks'
 import styled from '@emotion/styled'
 import { authStore } from '@/store/meStore'
 import { startLogging } from '@/utils/network/logging'
-import { ErrorBoundary } from '@/context/ErrorBoundary'
 import { courseCartStore } from '@/store'
 import { Analytics } from '@/context/analytics/components/Analytics'
 import { SNACKBAR_BUTTON } from '@/context/analytics/components/const'
@@ -31,6 +30,7 @@ import { useDisclosure } from '@/context/ShoppingCartModal/hooks'
 import { TrackPageChange } from '@/components/TrackPageChange'
 import { LoadingProgress } from '@/components/LoadingProgress'
 import { StudyProgramEnum } from '@thinc-org/chula-courses'
+import { ErrorBoundary } from '@/components/ErrorBoundary'
 
 mobxConfiguration()
 

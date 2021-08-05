@@ -2,8 +2,8 @@ const path = require('path')
 const toPath = (filePath) => path.join(process.cwd(), filePath)
 
 module.exports = {
-  stories: ['../src/**/*.stories.mdx', '../src/**/*.stories.@(js|jsx|ts|tsx)'],
-  addons: ['@storybook/addon-knobs', '@storybook/addon-links', '@storybook/addon-essentials'],
+  stories: ['../src/!(lib)/**/*.stories.@(js|jsx|ts|tsx|mdx)'],
+  addons: ['@storybook/addon-knobs', '@storybook/addon-links', '@storybook/addon-essentials', '@storybook/addon-jest'],
   webpackFinal: async (config) => {
     config.resolve.alias['fs'] = path.resolve(__dirname, 'fsMock.js')
     config.resolve.alias['@'] = path.resolve('src')

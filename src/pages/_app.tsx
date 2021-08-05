@@ -40,6 +40,10 @@ const ToastAlert = styled(Alert)`
 function MyApp({ Component, pageProps, forceDark, router }: AppProps) {
   useApp()
 
+  useEffect(() => {
+    Tracker.init()
+  }, [])
+
   // Retoring AuthStore and Syncing coursecart
   useEffect(() => {
     if (typeof window === 'undefined') return //Don't sync on the server

@@ -2,6 +2,8 @@ import { NavBar, NavBarLayout } from './NavBar'
 import { ConfigBar, ConfigBarLayout } from './ConfigBar'
 import styled from '@emotion/styled'
 import { useRouter } from 'next/router'
+import { AnnouncementBar } from '@/components/TopBar/components/AnnouncementBar'
+import { useState } from 'react'
 
 const StickyContainer = styled.div`
   position: absolute;
@@ -22,6 +24,13 @@ const StickySpace = styled.div`
 
 export function TopBar() {
   const { pathname } = useRouter()
+
+  const [show, setShow] = useState(true)
+
+  const handleClose = () => {
+    setShow(false)
+  }
+
   if (pathname === '/[studyProgram]/courses') {
     return (
       <>
@@ -34,14 +43,18 @@ export function TopBar() {
           </TopBarLayout>
           <StickySpace />
         </StickyContainer>
+        <AnnouncementBar show={show} onClose={handleClose} />
       </>
     )
   }
 
   return (
-    <TopBarLayout>
-      <ConfigBar />
-      <NavBar />
-    </TopBarLayout>
+    <>
+      <TopBarLayout>
+        <ConfigBar />
+        <NavBar />
+      </TopBarLayout>
+      <AnnouncementBar show={show} onClose={handleClose} />
+    </>
   )
 }

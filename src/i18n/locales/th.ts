@@ -23,6 +23,11 @@ export const studyProgram = {
   I: 'นานาชาติ',
 }
 
+export const announcement = {
+  announcement:
+    'CU Get Reg เป็นเพียงเว็บไซต์ที่จัดทำโดยนิสิต ทีมงานไม่ได้มีส่วนเกี่ยวข้องกับเว็บไซต์ Reg Chula แต่อย่างใด',
+}
+
 export const annuncementSearch = {
   search: 'ค้นหา',
   searchPlaceholder: 'ค้นหาหัวข้อ/เนื้อหา',

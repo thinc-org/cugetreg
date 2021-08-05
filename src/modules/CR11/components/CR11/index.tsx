@@ -3,11 +3,11 @@ import { useTranslation } from 'react-i18next'
 import { useStyles, Column, ColumnHeader } from './styles'
 import { toNumberString } from './utils'
 
-interface PropTypes {
+interface CR11Props {
   courses?: CourseCartItem[]
 }
 
-export function CR11({ courses }: PropTypes) {
+export function CR11({ courses }: CR11Props) {
   const classes = useStyles()
   const filteredCourses = courses?.filter((course) => !course.isHidden)
   const totalCredit = filteredCourses?.reduce((accumulator, course) => accumulator + course.credit, 0)

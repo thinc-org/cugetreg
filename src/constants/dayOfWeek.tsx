@@ -9,7 +9,7 @@ export const dayOfWeekMapper: dayOfWeekMapperType = {
   TH: 'THU',
   FR: 'FRI',
   SA: 'SAT',
-  SU: 'SUM',
+  SU: 'SUN',
   IA: 'IA',
   AR: 'AR',
 }

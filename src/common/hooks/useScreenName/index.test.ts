@@ -24,10 +24,10 @@ describe('useScreenName', () => {
   `('should return courseSearch screen name', async ({ pathname, expectedScreenName }) => {
     jest.doMock('next/router', () => ({
       useRouter: useRouterSpy.mockReturnValue({
-        pathname: pathname,
+        asPath: pathname,
       }),
     }))
-    const { default: useScreenName } = await import('.')
+    const { useScreenName } = await import('.')
     const { result } = renderHook(() => useScreenName())
 
     expect(useRouterSpy).toBeCalledTimes(1)
@@ -43,10 +43,10 @@ describe('useScreenName', () => {
   `('should return courseSearch screen name with query params', async ({ pathname, expectedScreenName }) => {
     jest.doMock('next/router', () => ({
       useRouter: useRouterSpy.mockReturnValue({
-        pathname: `${pathname}?query="example"`,
+        asPath: `${pathname}?query="example"`,
       }),
     }))
-    const { default: useScreenName } = await import('.')
+    const { useScreenName } = await import('.')
     const { result } = renderHook(() => useScreenName())
 
     expect(useRouterSpy).toBeCalledTimes(1)

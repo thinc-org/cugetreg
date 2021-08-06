@@ -1,15 +1,12 @@
 import TagManager from 'react-gtm-module'
+
 import { google_tag_manager_container_id } from '@/utils/env'
 
 import { TrackCustomEventParams } from './types'
 
 class Tracker {
-  gtmContainerId: string = ''
-
   init() {
-    this.gtmContainerId = google_tag_manager_container_id || ''
-
-    TagManager.initialize({ gtmId: 'GTM-XXXXX' })
+    TagManager.initialize({ gtmId: google_tag_manager_container_id || '' })
   }
 
   trackPageView(url: string) {

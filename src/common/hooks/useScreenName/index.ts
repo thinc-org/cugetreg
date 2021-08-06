@@ -2,15 +2,19 @@ import { useRouter } from 'next/router'
 
 import { ScreenName } from './constants'
 
-function useScreenName(): ScreenName | undefined {
-  const { pathname } = useRouter()
+export function useScreenName(): ScreenName | undefined {
+  const { asPath } = useRouter()
 
-  if (pathname.match(/^\/S\/course\/\d+(\?)?/)) return ScreenName.CourseDetail
-  if (pathname.match(/^\/S\/course(\?)?/)) return ScreenName.CourseSearch
-  if (pathname.match(/^\/S\/schedule\/cr11(\?)?/)) return ScreenName.CR11
-  if (pathname.match(/^\/S\/schedule(\?)?/)) return ScreenName.Schedule
+  switch (true) {
+    case /^\/S\/course\/\d+(\?)?/.test(asPath):
+      return ScreenName.CourseDetail
+    case /^\/S\/course(\?)?/.test(asPath):
+      return ScreenName.CourseSearch
+    case /^\/S\/schedule\/cr11(\?)?/.test(asPath):
+      return ScreenName.CR11
+    case /^\/S\/schedule(\?)?/.test(asPath):
+      return ScreenName.Schedule
+  }
 
   return undefined
 }
-
-export default useScreenName

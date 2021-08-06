@@ -1,11 +1,11 @@
 import { useCallback } from 'react'
 
+import { useScreenName } from '@/common/hooks/useScreenName'
 import Tracker from '@/common/tracker'
-import useScreenName from '@/common/hooks/useScreenName'
 
 import { UseTrackEventProps } from './types'
 
-function useTrackEvent(trackParams: UseTrackEventProps) {
+export function useTrackEvent(trackParams: UseTrackEventProps) {
   const currentScreenName = useScreenName()
 
   const trackEvent = useCallback(() => {
@@ -22,5 +22,3 @@ function useTrackEvent(trackParams: UseTrackEventProps) {
 
   return trackEvent
 }
-
-export default useTrackEvent

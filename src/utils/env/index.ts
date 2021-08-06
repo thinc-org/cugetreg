@@ -8,8 +8,4 @@ export const backend_uri = process.env.NEXT_PUBLIC_BACKEND_URL
 export const googleauth_clientid = process.env.NEXT_PUBLIC_GOOGLEAUTH_CLIENTID
 export const googleauth_coderedirector = process.env.NEXT_PUBLIC_GOOGLEAUTH_CODEREDIRECTOR
 
-export const hotjar_clientid = parseInt(process.env.NEXT_PUBLIC_HOTJAR_CLIENTID || '')
-export const hotjar_snippet_version = parseInt(process.env.NEXT_PUBLIC_HOTJAR_SNIPPET_VERSION || '')
-
-export const ga_measurement_id = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID
 export const google_tag_manager_container_id = process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_CONTAINER_ID

@@ -7,6 +7,7 @@ describe('useScreenName', () => {
   const mockCourseDetailPath = '/[studyProgram]/courses/[courseNo]'
   const mockSchedulePath = '/[studyProgram]/schedule'
   const mockCR11Path = '/[studyProgram]/schedule/cr11'
+  const mockOther = '/other'
 
   const useRouterSpy = jest.fn()
 
@@ -21,6 +22,7 @@ describe('useScreenName', () => {
     ${mockCourseDetailPath} | ${ScreenName.CourseDetail}
     ${mockSchedulePath}     | ${ScreenName.Schedule}
     ${mockCR11Path}         | ${ScreenName.CR11}
+    ${mockOther}            | ${undefined}
   `('should return courseSearch screen name', async ({ pathname, expectedScreenName }) => {
     jest.doMock('next/router', () => ({
       useRouter: useRouterSpy.mockReturnValue({

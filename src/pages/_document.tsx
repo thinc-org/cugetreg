@@ -2,6 +2,8 @@ import { ServerStyleSheets } from '@material-ui/core/styles'
 import Document, { DocumentContext, Head, Html, Main, NextScript } from 'next/document'
 import React, { ReactNode } from 'react'
 import { resetServerContext } from 'react-beautiful-dnd'
+import Tracker from '@/common/tracker'
+
 import { hotjar } from 'react-hotjar'
 
 import { injectDarkStyle } from '@/utils/darkStyleInjector'
@@ -11,7 +13,9 @@ import env from '@/utils/env/macro'
 export default class MyDocument extends Document {
   componentDidMount() {
     hotjar.initialize(hotjar_clientid, hotjar_snippet_version)
+    Tracker.init()
   }
+
   render() {
     return (
       <Html lang="en">

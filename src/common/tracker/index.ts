@@ -1,7 +1,7 @@
 import TagManager from 'react-gtm-module'
 import { google_tag_manager_container_id } from '@/utils/env'
 
-import { TrackParams } from './types'
+import { TrackCustomEventParams } from './types'
 
 class Tracker {
   gtmContainerId: string = ''
@@ -21,13 +21,15 @@ class Tracker {
     })
   }
 
-  trackEvent({}: TrackParams) {
+  trackCustomEvent<T = {}>({ event, category, action, label, custom, screenName }: TrackCustomEventParams<T>) {
     TagManager.dataLayer({
       dataLayer: {
-        event: 'event',
-        category: '',
-        action: '',
-        label: '',
+        event,
+        category,
+        action,
+        label,
+        screenName,
+        custom,
       },
     })
   }

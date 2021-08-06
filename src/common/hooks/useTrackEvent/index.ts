@@ -3,14 +3,20 @@ import { useCallback } from 'react'
 import Tracker from '@/common/tracker'
 import useScreenName from '@/common/hooks/useScreenName'
 
-function useTrackEvent() {
+import { UseTrackEventProps } from './types'
+
+function useTrackEvent(trackParams: UseTrackEventProps) {
   const currentScreenName = useScreenName()
 
   const trackEvent = useCallback(() => {
-    Tracker.trackEvent({
-      screen: currentScreenName || '',
+    Tracker.trackCustomEvent({
+      ...trackParams,
+      screenName: currentScreenName,
+      custom: {
+        userId: '',
+      },
     })
-  }, [currentScreenName])
+  }, [trackParams, currentScreenName])
 
   if (!currentScreenName) return () => null
 

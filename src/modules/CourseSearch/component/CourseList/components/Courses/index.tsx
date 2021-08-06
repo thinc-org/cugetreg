@@ -1,7 +1,8 @@
-import React from 'react'
-import { Course } from '@thinc-org/chula-courses'
-import { CourseCard } from '@/modules/CourseSearch/component/CourseCard'
 import { Typography } from '@material-ui/core'
+import { Course } from '@thinc-org/chula-courses'
+import React from 'react'
+
+import { CourseCard } from '@/modules/CourseSearch/component/CourseCard'
 
 export interface CoursesProps {
   loading: boolean

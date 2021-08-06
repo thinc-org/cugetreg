@@ -1,7 +1,8 @@
-import { CourseGroup, parseCourseGroup } from '@/utils/courseGroup'
 import { StudyProgram } from '@thinc-org/chula-courses'
 import { useRouter } from 'next/router'
 import { useCallback, useRef } from 'react'
+
+import { CourseGroup, parseCourseGroup } from '@/utils/courseGroup'
 
 export interface CourseGroupResult extends CourseGroup {
   setStudyProgram: (newStudyProgram: StudyProgram) => void

@@ -1,7 +1,8 @@
-import { PaletteRange } from '@/configs/theme/palette'
 import { css, Theme } from '@emotion/react'
 import styled from '@emotion/styled'
 import { Button } from '@material-ui/core'
+
+import { PaletteRange } from '@/configs/theme/palette'
 
 function primaryRange(lum: PaletteRange) {
   return ({ theme }: { theme: Theme }) => theme.palette.primaryRange[lum]

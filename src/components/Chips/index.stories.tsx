@@ -1,5 +1,6 @@
 import { Avatar, Box } from '@material-ui/core'
 import { Meta, Story } from '@storybook/react/types-6-0'
+
 import GeneralChip, { GeneralChipProps } from '.'
 import AnnoucementChip from './catagories/AnnoucementChip'
 import DayChip from './catagories/DayChip'

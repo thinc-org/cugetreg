@@ -1,7 +1,9 @@
-import { dayOfWeekArray } from '@/constants/dayOfWeek'
 import { Capacity, Course, DayOfWeek, Section } from '@thinc-org/chula-courses'
-import { sum, unique } from '@/modules/CourseSearch/component/CourseCard/utils'
 import { createContext, useContext, useState } from 'react'
+
+import { dayOfWeekArray } from '@/constants/dayOfWeek'
+import { sum, unique } from '@/modules/CourseSearch/component/CourseCard/utils'
+
 interface CourseCardContextValue {
   course: Course
   isGenEd: boolean

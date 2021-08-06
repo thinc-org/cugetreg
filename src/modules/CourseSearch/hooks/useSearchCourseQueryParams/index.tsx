@@ -1,9 +1,9 @@
-import { useMemo, useCallback } from 'react'
-import { useRouter } from 'next/router'
-
-import { CourseGroup, SearchCourseVars } from '@/utils/network/BackendGQLQueries'
 import { DayOfWeek, GenEdType, StudyProgram } from '@thinc-org/chula-courses'
+import { useRouter } from 'next/router'
+import { useMemo, useCallback } from 'react'
+
 import { useCourseGroup } from '@/utils/hooks/useCourseGroup'
+import { CourseGroup, SearchCourseVars } from '@/utils/network/BackendGQLQueries'
 
 export interface QueryParams {
   keyword?: string

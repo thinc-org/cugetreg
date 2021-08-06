@@ -1,5 +1,7 @@
-import { CourseCartItem } from '@/store'
 import { useMemo } from 'react'
+
+import { CourseCartItem } from '@/store'
+
 import { ExamClass } from './components/ExamCard'
 
 function getExamPeriod(class_: CourseCartItem, isMidterm: boolean) {

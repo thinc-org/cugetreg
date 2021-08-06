@@ -1,6 +1,8 @@
-import { useCourseGroup } from '@/utils/hooks/useCourseGroup'
 import { StudyProgram } from '@thinc-org/chula-courses'
 import { useTranslation } from 'react-i18next'
+
+import { useCourseGroup } from '@/utils/hooks/useCourseGroup'
+
 import { ConfigBarSelect } from './ConfigBarSelect'
 
 interface StudyProgramDropdownProps {

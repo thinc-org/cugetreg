@@ -1,23 +1,25 @@
-import { useTranslation } from 'react-i18next'
-import logo from '@/assets/images/cgrLogoDark.svg'
-import { NavBarItem } from './NavBarItem'
-import { FlexOne } from '@/components/FlexOne'
-import { FlexContainer } from '../FlexContainer'
-import UserButton from './UserButton'
-import { useCourseGroup } from '@/utils/hooks/useCourseGroup'
 import styled from '@emotion/styled'
 import { Hidden } from '@material-ui/core'
-import StudyProgramDropdown from '../components/StudyProgramDropdown'
-import { ConfigBarItem } from '../ConfigBar/ConfigBarItem'
-import { MobileNavBar } from '../MobileNavBar'
+import { useTranslation } from 'react-i18next'
+
+import logo from '@/assets/images/cgrLogoDark.svg'
+import { FlexOne } from '@/components/FlexOne'
 import { Analytics } from '@/context/analytics/components/Analytics'
+import { LinkWithAnalytics } from '@/context/analytics/components/LinkWithAnalytics'
 import {
   GETREG_LOGO,
   NAVBAR_SEARCH_COURSE,
   NAVBAR_TIMETABLE,
   STUDY_PROGRAM_DROPDOWN,
 } from '@/context/analytics/components/const'
-import { LinkWithAnalytics } from '@/context/analytics/components/LinkWithAnalytics'
+import { useCourseGroup } from '@/utils/hooks/useCourseGroup'
+
+import { ConfigBarItem } from '../ConfigBar/ConfigBarItem'
+import { FlexContainer } from '../FlexContainer'
+import { MobileNavBar } from '../MobileNavBar'
+import StudyProgramDropdown from '../components/StudyProgramDropdown'
+import { NavBarItem } from './NavBarItem'
+import UserButton from './UserButton'
 
 export const NavBarLayout = styled.div`
   width: 100%;

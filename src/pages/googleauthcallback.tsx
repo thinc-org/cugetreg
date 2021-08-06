@@ -1,7 +1,8 @@
-import { authStore } from '@/store/meStore'
 import { Card, CardContent, LinearProgress } from '@material-ui/core'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
+
+import { authStore } from '@/store/meStore'
 
 export default function GoogleAuthCallback() {
   const router = useRouter()

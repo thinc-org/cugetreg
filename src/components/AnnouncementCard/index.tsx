@@ -1,10 +1,12 @@
-import { AnnouncementContainer, Image, TagContainer, DateTitle } from './styles'
 import { Typography } from '@material-ui/core'
 import { format } from 'date-fns'
 import { th } from 'date-fns/locale'
-import { IMAGE_SIZE } from './const'
+
 import GeneralChip from '@/components/Chips'
+
 import { GeneralChipKey } from '../Chips/config'
+import { IMAGE_SIZE } from './const'
+import { AnnouncementContainer, Image, TagContainer, DateTitle } from './styles'
 
 export interface AnnouncementCardPropTypes {
   date: Date

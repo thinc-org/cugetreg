@@ -1,6 +1,7 @@
-import React from 'react'
-import { CheckboxGroup, CheckboxGroupProps } from '.'
 import { Meta, Story } from '@storybook/react/types-6-0'
+import React from 'react'
+
+import { CheckboxGroup, CheckboxGroupProps } from '.'
 
 type StoryProps = CheckboxGroupProps
 

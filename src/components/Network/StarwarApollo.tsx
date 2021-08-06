@@ -1,7 +1,8 @@
-import { Error } from '@/components/Error'
-import { Loading } from '@/components/Loading'
 import { gql, useQuery } from '@apollo/client'
 import { Card } from '@material-ui/core'
+
+import { Error } from '@/components/Error'
+import { Loading } from '@/components/Loading'
 
 export const GET_FILMS = gql`
   {

@@ -1,4 +1,5 @@
 import { FormEvent, useState } from 'react'
+
 import { OnSubmit } from '.'
 
 const useAnnouncementSearch = (onSubmit: OnSubmit) => {

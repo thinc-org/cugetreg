@@ -1,12 +1,12 @@
-import React, { ReactNode } from 'react'
-import Document, { DocumentContext, Head, Html, Main, NextScript } from 'next/document'
 import { ServerStyleSheets } from '@material-ui/core/styles'
-import { injectDarkStyle } from '@/utils/darkStyleInjector'
-import env from '@/utils/env/macro'
+import Document, { DocumentContext, Head, Html, Main, NextScript } from 'next/document'
+import React, { ReactNode } from 'react'
 import { resetServerContext } from 'react-beautiful-dnd'
-
 import { hotjar } from 'react-hotjar'
+
+import { injectDarkStyle } from '@/utils/darkStyleInjector'
 import { hotjar_clientid, hotjar_snippet_version, ga_measurement_id } from '@/utils/env'
+import env from '@/utils/env/macro'
 
 export default class MyDocument extends Document {
   componentDidMount() {

@@ -1,5 +1,6 @@
 import Link, { LinkProps } from 'next/link'
 import { cloneElement, forwardRef, ReactElement } from 'react'
+
 import { useLog } from './useLog'
 
 interface LinkComponentProps {

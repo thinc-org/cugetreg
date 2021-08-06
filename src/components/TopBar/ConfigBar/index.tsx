@@ -1,16 +1,16 @@
-import { FlexOne } from '@/components/FlexOne'
-import { FlexContainer } from '../FlexContainer'
-import { ConfigBarItem } from './ConfigBarItem'
-import { useTranslation } from 'react-i18next'
 import styled from '@emotion/styled'
-import { useCourseGroup } from '@/utils/hooks/useCourseGroup'
-
-import StudyProgramDropdown from '../components/StudyProgramDropdown'
 import { observer } from 'mobx-react'
-import { sessionIdStore } from '@/store/sessionIdStore'
+import { useTranslation } from 'react-i18next'
 
+import { FlexOne } from '@/components/FlexOne'
 import { Analytics } from '@/context/analytics/components/Analytics'
 import { REPORT_PROBLEM, STUDY_PROGRAM_DROPDOWN } from '@/context/analytics/components/const'
+import { sessionIdStore } from '@/store/sessionIdStore'
+import { useCourseGroup } from '@/utils/hooks/useCourseGroup'
+
+import { FlexContainer } from '../FlexContainer'
+import StudyProgramDropdown from '../components/StudyProgramDropdown'
+import { ConfigBarItem } from './ConfigBarItem'
 
 export const ConfigBarLayout = styled.div`
   width: 100%;

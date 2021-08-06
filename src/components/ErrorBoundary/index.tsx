@@ -1,7 +1,8 @@
-import { authStore } from '@/store/meStore'
-import { collectErrorLog, sessionId } from '@/utils/network/logging'
 import { Card, Grid, Typography } from '@material-ui/core'
 import React from 'react'
+
+import { authStore } from '@/store/meStore'
+import { collectErrorLog, sessionId } from '@/utils/network/logging'
 
 export class ErrorBoundary extends React.Component<{}, { hasError: boolean }> {
   constructor(props: any) {

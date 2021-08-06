@@ -1,4 +1,5 @@
 import React, { createContext } from 'react'
+
 import { ModalProps } from './types'
 
 export const ShoppingCartModalContext = createContext({} as ModalProps)

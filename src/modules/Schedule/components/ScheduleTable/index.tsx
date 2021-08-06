@@ -1,7 +1,9 @@
-import { CourseCart } from '@/store'
 import styled from '@emotion/styled'
 import { useCallback } from 'react'
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd'
+
+import { CourseCart } from '@/store'
+
 import { CourseOverlapMap } from '../Schedule/utils'
 import { ScheduleTableCard } from './components/ScheduleTableCard'
 

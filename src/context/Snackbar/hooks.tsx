@@ -1,5 +1,6 @@
 import { Color } from '@material-ui/core/Alert'
 import { useState } from 'react'
+
 import { SnackbarProps } from './types'
 
 export function useSnackBar() {

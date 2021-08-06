@@ -1,4 +1,5 @@
 import { Chip, ChipProps } from '@material-ui/core'
+
 import { chipConfig, ChipConfigProps, GeneralChipKey } from './config'
 
 export type GeneralChipProps = Omit<ChipProps, keyof ChipConfigProps> & {

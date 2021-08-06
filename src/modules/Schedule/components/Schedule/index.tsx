@@ -1,11 +1,13 @@
+import styled from '@emotion/styled'
 import { withContentRect } from 'react-measure'
+
+import { styledWithTheme } from '@/utils/styledWithTheme'
+
+import { ClassCard } from './components/ClassCard'
+import { Gutters } from './components/Gutters'
 import { Header } from './components/Header'
 import { DimensionsProvider, getHeightRatio, useDimensions } from './dimensions'
-import { Gutters } from './components/Gutters'
 import { ScheduleClass } from './utils'
-import { ClassCard } from './components/ClassCard'
-import { styledWithTheme } from '@/utils/styledWithTheme'
-import styled from '@emotion/styled'
 
 const ScheduleTable = styledWithTheme('div')((theme) => ({
   position: 'relative',

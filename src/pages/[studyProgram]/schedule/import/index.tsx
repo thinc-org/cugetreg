@@ -1,15 +1,16 @@
-import { Loading } from '@/components/Loading'
-import { courseCartStore } from '@/store'
-import { parseCourseGroup } from '@/utils/courseGroup'
-import { useCourseGroup } from '@/utils/hooks/useCourseGroup'
-import { createApolloServerClient } from '@/utils/network/apollo'
-import { CourseGroup, GetCourseResponse, GET_COURSE } from '@/utils/network/BackendGQLQueries'
 import { ApolloClient, isApolloError, NormalizedCacheObject } from '@apollo/client'
 import { Course } from '@thinc-org/chula-courses'
 import { observer } from 'mobx-react'
 import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
+
+import { Loading } from '@/components/Loading'
+import { courseCartStore } from '@/store'
+import { parseCourseGroup } from '@/utils/courseGroup'
+import { useCourseGroup } from '@/utils/hooks/useCourseGroup'
+import { CourseGroup, GetCourseResponse, GET_COURSE } from '@/utils/network/BackendGQLQueries'
+import { createApolloServerClient } from '@/utils/network/apollo'
 
 interface RawScheduleItem {
   courseNo: string

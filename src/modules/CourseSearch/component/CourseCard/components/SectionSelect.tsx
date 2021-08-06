@@ -1,7 +1,9 @@
 import { FormControl, MenuItem, Select, useMediaQuery, useTheme } from '@material-ui/core'
-import { useCourseCardContext } from '../useCourseCard'
+
 import { Analytics } from '@/context/analytics/components/Analytics'
 import { SECTION_SELECT } from '@/context/analytics/components/const'
+
+import { useCourseCardContext } from '../useCourseCard'
 
 export function SectionSelect() {
   const theme = useTheme()

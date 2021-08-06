@@ -1,8 +1,8 @@
+import styled from '@emotion/styled'
+import { Hidden, Typography as MuiTypography } from '@material-ui/core'
 import React from 'react'
 
-import { Hidden, Typography as MuiTypography } from '@material-ui/core'
 import { genEdChipConfig, GenEdChipKey } from '@/components/Chips/config'
-import styled from '@emotion/styled'
 import { ChipFilledHighlightColor, ChipOutlinedHighlightColor } from '@/configs/theme/overrides/chip'
 
 export interface CourseNameProps {

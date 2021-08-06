@@ -1,8 +1,9 @@
 import React from 'react'
+
 import GeneralChip from '@/components/Chips'
-import { useSearchCourseQueryParams } from '@/modules/CourseSearch/hooks/useSearchCourseQueryParams'
 import { DayChipKey, GenEdChipKey } from '@/components/Chips/config'
 import { StyledStack } from '@/modules/CourseSearch/component/TagList/styled'
+import { useSearchCourseQueryParams } from '@/modules/CourseSearch/hooks/useSearchCourseQueryParams'
 
 export interface TagListProps {}
 

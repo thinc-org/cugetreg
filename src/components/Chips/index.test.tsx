@@ -1,6 +1,8 @@
-import { lightTheme } from '@/configs/theme'
 import { ThemeProvider } from '@material-ui/core'
 import { render } from '@testing-library/react'
+
+import { lightTheme } from '@/configs/theme'
+
 import GeneralChip from '.'
 import { chipConfig, GeneralChipKey } from './config'
 

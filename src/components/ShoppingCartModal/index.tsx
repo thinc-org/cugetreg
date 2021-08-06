@@ -1,9 +1,10 @@
-import { useContext } from 'react'
+import styled from '@emotion/styled'
 import { Dialog, IconButton, DialogTitle } from '@material-ui/core'
+import { useContext } from 'react'
 import { MdClose } from 'react-icons/md'
+
 import ShoppingPanel from '@/components/ShoppingPanel'
 import { ShoppingCartModalContext } from '@/context/ShoppingCartModal'
-import styled from '@emotion/styled'
 
 const Title = styled.div`
   display: flex;

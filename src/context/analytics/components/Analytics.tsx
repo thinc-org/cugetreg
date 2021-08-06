@@ -1,4 +1,5 @@
 import React, { ReactElement } from 'react'
+
 import { useLog } from './useLog'
 
 interface ClickableElementProps {

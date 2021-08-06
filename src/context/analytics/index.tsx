@@ -1,4 +1,5 @@
 import React, { createContext } from 'react'
+
 import { AnalyticsType } from './types'
 
 export const AnalyticsContext = createContext({} as AnalyticsType)

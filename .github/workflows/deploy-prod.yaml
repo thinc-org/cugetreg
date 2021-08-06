@@ -2,7 +2,7 @@ name: Deploy to Production
 
 on:
   push:
-    branches: [master, dev]
+    branches: [master]
 
 permissions:
   contents: read

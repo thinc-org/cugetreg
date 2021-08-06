@@ -1,11 +1,10 @@
 import axios from 'axios'
-
-import env from '@/utils/env/macro'
-
-import * as uuid from 'uuid'
-import { authStore } from '@/store/meStore'
 import { runInAction } from 'mobx'
+import * as uuid from 'uuid'
+
+import { authStore } from '@/store/meStore'
 import { sessionIdStore } from '@/store/sessionIdStore'
+import env from '@/utils/env/macro'
 
 export interface LogEvent {
   kind: 'track' | 'error' | 'fine-tracking'

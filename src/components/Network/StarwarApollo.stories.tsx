@@ -1,7 +1,8 @@
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client'
-import { Meta } from '@storybook/react/types-6-0'
-import StarWar, { FilmsData, GET_FILMS } from './StarwarApollo'
 import { MockedProvider, MockedResponse } from '@apollo/client/testing'
+import { Meta } from '@storybook/react/types-6-0'
+
+import StarWar, { FilmsData, GET_FILMS } from './StarwarApollo'
 
 export default {
   title: 'Network/ApolloTest',

@@ -1,15 +1,16 @@
+import styled from '@emotion/styled'
 import { Box, CardHeader, Grid, IconButton, Typography } from '@material-ui/core'
 import KeyboardArrowDown from '@material-ui/icons/KeyboardArrowDown'
 import KeyboardArrowUp from '@material-ui/icons/KeyboardArrowUp'
-import GenEdChip from '@/components/Chips/catagories/GenEdChip'
-import { useCourseGroup } from '@/utils/hooks/useCourseGroup'
 import { useTranslation } from 'react-i18next'
+
+import GenEdChip from '@/components/Chips/catagories/GenEdChip'
 import { Analytics } from '@/context/analytics/components/Analytics'
+import { LinkWithAnalytics } from '@/context/analytics/components/LinkWithAnalytics'
 import { COURSE_TITLE, EXPAND_BUTTON } from '@/context/analytics/components/const'
+import { useCourseGroup } from '@/utils/hooks/useCourseGroup'
 
 import { useCourseCardContext } from '../useCourseCard'
-import styled from '@emotion/styled'
-import { LinkWithAnalytics } from '@/context/analytics/components/LinkWithAnalytics'
 
 const StyledLink = styled.a`
   text-decoration: underline;

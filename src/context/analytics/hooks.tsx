@@ -1,4 +1,5 @@
 import { collectLogEvent } from '@/utils/network/logging'
+
 import { AnalyticsType } from './types'
 
 export function useAnalytics() {

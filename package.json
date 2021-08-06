@@ -65,6 +65,7 @@
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.7",
     "@testing-library/react-hooks": "^5.0.3",
+    "@trivago/prettier-plugin-sort-imports": "^2.0.2",
     "@types/babel-plugin-macros": "^2.8.4",
     "@types/jest": "^26.0.20",
     "@types/node": "^14.14.20",

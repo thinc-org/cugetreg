@@ -1,3 +1,4 @@
+import styled from '@emotion/styled'
 import {
   Box,
   Card,
@@ -15,14 +16,14 @@ import {
 } from '@material-ui/core'
 import { Course, Section } from '@thinc-org/chula-courses'
 import { useTranslation } from 'react-i18next'
+
 import GenEdChip from '@/components/Chips/catagories/GenEdChip'
-import { Caption } from '@/modules/CourseSearch/component/CourseCard/components/Caption'
 import { SectionStatus } from '@/components/SectionCard/components/SectionStatus'
-import { dayOfWeekMapper } from '@/constants/dayOfWeek'
 import { SelectButton } from '@/components/SelectButton'
-import styled from '@emotion/styled'
+import { dayOfWeekMapper } from '@/constants/dayOfWeek'
 import { Analytics } from '@/context/analytics/components/Analytics'
 import { SUBJECT_SELECT_BUTTON_WITH_SECTION } from '@/context/analytics/components/const'
+import { Caption } from '@/modules/CourseSearch/component/CourseCard/components/Caption'
 
 const SectionTitle = styled(Typography)`
   margin-right: ${({ theme }) => theme.spacing(2)};

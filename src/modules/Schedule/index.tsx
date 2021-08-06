@@ -1,6 +1,14 @@
+import { Button, Typography, useMediaQuery, useTheme } from '@material-ui/core'
+import { observer } from 'mobx-react'
 import React, { useState, createRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Button, Typography, useMediaQuery, useTheme } from '@material-ui/core'
+
+import { Analytics } from '@/context/analytics/components/Analytics'
+import { LinkWithAnalytics } from '@/context/analytics/components/LinkWithAnalytics'
+import { CR11_BUTTON, CLASS_TAB_BUTTON, EXAM_TAB_BUTTON } from '@/context/analytics/components/const'
+import { ExamSchedule } from '@/modules/Schedule/components/ExamSchedule'
+import { useExamClasses } from '@/modules/Schedule/components/ExamSchedule/utils'
+import SaveImgButton from '@/modules/Schedule/components/SaveImgButton'
 import { Schedule } from '@/modules/Schedule/components/Schedule'
 import {
   useDaysCount,
@@ -9,15 +17,8 @@ import {
   useTimetableClasses,
 } from '@/modules/Schedule/components/Schedule/utils'
 import { ScheduleTable } from '@/modules/Schedule/components/ScheduleTable'
-import { observer } from 'mobx-react'
 import { courseCartStore } from '@/store'
-import { ExamSchedule } from '@/modules/Schedule/components/ExamSchedule'
-import SaveImgButton from '@/modules/Schedule/components/SaveImgButton'
-import { useExamClasses } from '@/modules/Schedule/components/ExamSchedule/utils'
 import { useCourseGroup } from '@/utils/hooks/useCourseGroup'
-import { Analytics } from '@/context/analytics/components/Analytics'
-import { CR11_BUTTON, CLASS_TAB_BUTTON, EXAM_TAB_BUTTON } from '@/context/analytics/components/const'
-import { LinkWithAnalytics } from '@/context/analytics/components/LinkWithAnalytics'
 
 import {
   InfoBar,

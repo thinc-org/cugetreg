@@ -1,13 +1,13 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
-
-import { useStyles } from '@/modules/CourseSearch/component/SearchField/styled'
 import { IconButton, InputBase, Paper } from '@material-ui/core'
 import SearchIcon from '@material-ui/icons/Search'
-import { useSearchCourseQueryParams } from '@/modules/CourseSearch/hooks/useSearchCourseQueryParams'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
+
 import { Analytics } from '@/context/analytics/components/Analytics'
 import { COURSE_SEARCH_BOX } from '@/context/analytics/components/const'
-import { useLog } from '@/context/analytics/components/useLog'
 import { SEARCH_QUERY } from '@/context/analytics/components/const'
+import { useLog } from '@/context/analytics/components/useLog'
+import { useStyles } from '@/modules/CourseSearch/component/SearchField/styled'
+import { useSearchCourseQueryParams } from '@/modules/CourseSearch/hooks/useSearchCourseQueryParams'
 
 export interface SeachFieldProp {}
 

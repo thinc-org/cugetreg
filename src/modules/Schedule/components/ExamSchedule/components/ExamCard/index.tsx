@@ -1,8 +1,10 @@
 import styled from '@emotion/styled'
-import { useColorScheme } from './useColorScheme'
 import { Typography } from '@material-ui/core'
 import { Course, Class } from '@thinc-org/chula-courses'
+
 import { getExamDate, getExamPeriod } from '@/utils/coruseExam'
+
+import { useColorScheme } from './useColorScheme'
 
 export type ExamClass = Pick<Course, 'courseNo' | 'abbrName' | 'genEdType' | 'midterm' | 'final'> &
   Omit<Class, 'type'> & {

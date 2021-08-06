@@ -1,9 +1,11 @@
-import { NavBar, NavBarLayout } from './NavBar'
-import { ConfigBar, ConfigBarLayout } from './ConfigBar'
 import styled from '@emotion/styled'
 import { useRouter } from 'next/router'
-import { AnnouncementBar } from '@/components/TopBar/components/AnnouncementBar'
 import { useState } from 'react'
+
+import { AnnouncementBar } from '@/components/TopBar/components/AnnouncementBar'
+
+import { ConfigBar, ConfigBarLayout } from './ConfigBar'
+import { NavBar, NavBarLayout } from './NavBar'
 
 const StickyContainer = styled.div`
   position: absolute;
@@ -11,11 +13,15 @@ const StickyContainer = styled.div`
   width: 100%;
 `
 
-const TopBarLayout = styled.div`
+const TopBarContainer = styled.div`
+  z-index: 100;
   position: sticky;
   top: 0;
+`
+
+const TopBarLayout = styled.div`
+  position: relative;
   box-shadow: ${({ theme }) => theme.shadows[4]};
-  z-index: 100;
 `
 
 const StickySpace = styled.div`
@@ -49,12 +55,12 @@ export function TopBar() {
   }
 
   return (
-    <>
+    <TopBarContainer>
       <TopBarLayout>
         <ConfigBar />
         <NavBar />
       </TopBarLayout>
       <AnnouncementBar show={show} onClose={handleClose} />
-    </>
+    </TopBarContainer>
   )
 }

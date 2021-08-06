@@ -1,20 +1,18 @@
-import React from 'react'
-
 import { ApolloProvider } from '@apollo/client'
-import { client } from '@/utils/network/apollo'
-import { AnalyticsProvider } from '@/context/analytics'
-import { ShoppingCartModalProvider } from '@/context/ShoppingCartModal'
-import { SnackbarContextProvider } from '@/context/Snackbar'
-import { ModalProps } from '@/context/ShoppingCartModal/types'
+import { ThemeProvider, useMediaQuery } from '@material-ui/core'
 import AdapterDateFns from '@material-ui/lab/AdapterDateFns'
 import LocalizationProvider from '@material-ui/lab/LocalizationProvider'
-import { ThemeProvider, useMediaQuery } from '@material-ui/core'
+import React from 'react'
 
-import { useAnalytics } from '@/context/analytics/hooks'
-
-import env from '@/utils/env/macro'
 import { darkTheme, lightTheme } from '@/configs/theme'
+import { ShoppingCartModalProvider } from '@/context/ShoppingCartModal'
+import { ModalProps } from '@/context/ShoppingCartModal/types'
+import { SnackbarContextProvider } from '@/context/Snackbar'
 import { SnackbarProps } from '@/context/Snackbar/types'
+import { AnalyticsProvider } from '@/context/analytics'
+import { useAnalytics } from '@/context/analytics/hooks'
+import env from '@/utils/env/macro'
+import { client } from '@/utils/network/apollo'
 
 interface AppProviderProps {
   children: React.ReactNode

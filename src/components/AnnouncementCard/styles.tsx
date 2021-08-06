@@ -1,5 +1,7 @@
-import { styledWithTheme } from '@/utils/styledWithTheme'
 import { Typography } from '@material-ui/core'
+
+import { styledWithTheme } from '@/utils/styledWithTheme'
+
 import { IMAGE_SIZE } from './const'
 
 export const Image = styledWithTheme('img')((theme) => ({

@@ -1,11 +1,13 @@
 import { Divider, makeStyles, useMediaQuery, useTheme } from '@material-ui/core'
-import { useTranslation } from 'react-i18next'
 import Link from 'next/link'
-import bigLogo from '@/assets/images/cgrLogoLight.svg'
-import thincLogo from '@/assets/images/thincLogo.svg'
-import github from '@/assets/images/github.svg'
-import { FlexContainer } from '../FlexContainer'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
+
+import bigLogo from '@/assets/images/cgrLogoLight.svg'
+import github from '@/assets/images/github.svg'
+import thincLogo from '@/assets/images/thincLogo.svg'
+
+import { FlexContainer } from '../FlexContainer'
 
 const useStyles = makeStyles((theme) => ({
   banner: {

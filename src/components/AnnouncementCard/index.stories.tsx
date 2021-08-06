@@ -1,7 +1,8 @@
-import React from 'react'
-import { AnnouncementCard, AnnouncementCardPropTypes } from '.'
-import { Meta, Story } from '@storybook/react/types-6-0'
 import { makeStyles } from '@material-ui/core'
+import { Meta, Story } from '@storybook/react/types-6-0'
+import React from 'react'
+
+import { AnnouncementCard, AnnouncementCardPropTypes } from '.'
 
 export default {
   title: 'Component/AnnouncementCard',

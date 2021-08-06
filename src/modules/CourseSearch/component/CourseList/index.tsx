@@ -1,10 +1,10 @@
+import { Stack } from '@material-ui/core'
 import React from 'react'
 
-import { Stack } from '@material-ui/core'
-import { Loading } from '@/components/Loading'
 import { Error } from '@/components/Error'
-import { useCourseList } from '@/modules/CourseSearch/component/CourseList/hooks'
+import { Loading } from '@/components/Loading'
 import { Courses } from '@/modules/CourseSearch/component/CourseList/components/Courses'
+import { useCourseList } from '@/modules/CourseSearch/component/CourseList/hooks'
 
 export interface CourseListProps {}
 

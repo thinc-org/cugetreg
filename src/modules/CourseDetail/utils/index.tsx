@@ -1,8 +1,9 @@
-import { parseCourseGroup } from '@/utils/courseGroup'
-import { GetCourseVars } from '@/utils/network/BackendGQLQueries'
 import { Course } from '@thinc-org/chula-courses'
 import { uniq } from 'lodash'
 import { ParsedUrlQuery } from 'querystring'
+
+import { parseCourseGroup } from '@/utils/courseGroup'
+import { GetCourseVars } from '@/utils/network/BackendGQLQueries'
 
 export function parseVariablesFromQuery(q: ParsedUrlQuery): GetCourseVars {
   const query = q as {

@@ -1,19 +1,20 @@
-import React from 'react'
-import { useFilterBar } from './hooks'
-import {
-  createGenEdCheckboxes,
-  createDayOfWeekCheckboxes,
-  // createSpecialCheckboxes,
-} from '@/modules/CourseSearch/component/FilterSection/constants'
-import { Button as MuiButton, Dialog, DialogContent as MuiDialogContent, Hidden, Paper, Stack } from '@material-ui/core'
-import { useStyles } from '@/modules/CourseSearch/component/FilterSection/styled'
-import { CheckboxGroup } from '@/modules/CourseSearch/component/FilterSection/components/CheckboxGroup'
-import styled from '@emotion/styled'
 import { css } from '@emotion/react'
+import styled from '@emotion/styled'
+import { Button as MuiButton, Dialog, DialogContent as MuiDialogContent, Hidden, Paper, Stack } from '@material-ui/core'
+import React from 'react'
+
 import { DayChipKey, GenEdChipKey } from '@/components/Chips/config'
 import { Analytics } from '@/context/analytics/components/Analytics'
 import { DAY_FILTER, GENED_FILTER } from '@/context/analytics/components/const'
+import { CheckboxGroup } from '@/modules/CourseSearch/component/FilterSection/components/CheckboxGroup'
+import {
+  createGenEdCheckboxes,
+  createDayOfWeekCheckboxes, // createSpecialCheckboxes,
+} from '@/modules/CourseSearch/component/FilterSection/constants'
+import { useStyles } from '@/modules/CourseSearch/component/FilterSection/styled'
+
 import { useHasTags } from '../TagList'
+import { useFilterBar } from './hooks'
 
 const DialogContent = styled(MuiDialogContent)`
   padding: ${({ theme }) => theme.spacing(4)};

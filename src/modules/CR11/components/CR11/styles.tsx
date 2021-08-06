@@ -1,4 +1,5 @@
 import { makeStyles } from '@material-ui/core'
+
 import { withTypography } from '@/hoc/withTypography'
 
 export const useStyles = makeStyles((theme) => ({

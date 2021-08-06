@@ -1,10 +1,11 @@
 import styled from '@emotion/styled'
-import { ExamList } from './components/ExamList'
 import { Typography, IconButton } from '@material-ui/core'
 import CachedIcon from '@material-ui/icons/Cached'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+
 import { ExamClass } from './components/ExamCard'
+import { ExamList } from './components/ExamList'
 
 interface ExamScheduleProps {
   midtermClasses: ExamClass[]

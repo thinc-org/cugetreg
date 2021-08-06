@@ -1,5 +1,6 @@
-import { CourseCartItem, courseCartStore } from '@/store'
 import { runInAction } from 'mobx'
+
+import { CourseCartItem, courseCartStore } from '@/store'
 
 const SHOPPING_CART_KEY = 'SHOPPING_CART_KEY'
 

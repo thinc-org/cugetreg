@@ -1,7 +1,9 @@
-import env from '@/utils/env/macro'
 import { gql } from '@apollo/client'
-import { client } from './apollo'
+
 import { AuthData, MeData } from '@/store/meStore'
+import env from '@/utils/env/macro'
+
+import { client } from './apollo'
 import { collectErrorLog } from './logging'
 
 /**

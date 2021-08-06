@@ -1,16 +1,17 @@
+import styled from '@emotion/styled'
+import { Tooltip, Typography } from '@material-ui/core'
+import { observer } from 'mobx-react'
 import { PropsWithChildren, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Tooltip, Typography } from '@material-ui/core'
 import { MdCloudDone, MdCloudQueue, MdCloudOff } from 'react-icons/md'
-import { observer } from 'mobx-react'
-import { gDriveStore, GDriveSyncState } from '@/store/gDriveState'
-import { authStore } from '@/store/meStore'
-import styled from '@emotion/styled'
+
 import { NavBarItem } from '@/components/TopBar/NavBar/NavBarItem'
-import env from '@/utils/env/macro'
-import GoogleLogin from '@/lib/react-google-login/src'
 import { Analytics } from '@/context/analytics/components/Analytics'
 import { LOGIN_BUTTON, LOGOUT_BUTTON } from '@/context/analytics/components/const'
+import GoogleLogin from '@/lib/react-google-login/src'
+import { gDriveStore, GDriveSyncState } from '@/store/gDriveState'
+import { authStore } from '@/store/meStore'
+import env from '@/utils/env/macro'
 
 export const GDriveIndicator = observer(() => {
   const { t } = useTranslation('syncStatus')

@@ -1,5 +1,6 @@
 import { styled } from '@material-ui/core'
 import { DayOfWeek } from '@thinc-org/chula-courses'
+
 import { useDimensions } from '../dimensions'
 import { ScheduleClass, useColorScheme } from '../utils'
 import { ScheduleTypography } from './ScheduleTypography'

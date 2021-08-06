@@ -1,7 +1,3 @@
-import { CustomSelect } from '@/components/common/CustomSelect'
-import { Caption } from '@/modules/CourseSearch/component/CourseCard/components/Caption'
-import { dayOfWeekMapper } from '@/constants/dayOfWeek'
-import { CourseCartItem, courseCartStore } from '@/store'
 import { Grid, Hidden, IconButton, Stack, Typography, useTheme } from '@material-ui/core'
 import { observer } from 'mobx-react'
 import { useCallback } from 'react'
@@ -9,8 +5,14 @@ import { Draggable } from 'react-beautiful-dnd'
 import { useTranslation } from 'react-i18next'
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
 import { MdDelete } from 'react-icons/md'
+
+import { CustomSelect } from '@/components/common/CustomSelect'
+import { dayOfWeekMapper } from '@/constants/dayOfWeek'
 import { Analytics } from '@/context/analytics/components/Analytics'
 import { HIDE_COURSE, DELETE_COURSE, SECTION_CHANGE } from '@/context/analytics/components/const'
+import { Caption } from '@/modules/CourseSearch/component/CourseCard/components/Caption'
+import { CourseCartItem, courseCartStore } from '@/store'
+
 import {
   CardBorder,
   CardContent,

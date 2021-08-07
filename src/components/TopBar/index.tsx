@@ -61,17 +61,16 @@ export function TopBar() {
       <>
         <ConfigBarLayout />
         <NavBarLayout />
-        <AnnouncementBar show={show} onClose={handleClose} label={currentAnnoucement.label} />
         <StickyContainer>
           <TopBarLayout>
             <Container>
               <ConfigBar />
               <NavBar />
             </Container>
-            <AnnouncementBar show={show} onClose={handleClose} label={currentAnnoucement.label} />
           </TopBarLayout>
           <StickySpace />
         </StickyContainer>
+        <AnnouncementBar show={show} onClose={handleClose} label={currentAnnoucement.label} />
       </>
     )
   }

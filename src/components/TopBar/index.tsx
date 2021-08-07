@@ -18,10 +18,9 @@ const StickyContainer = styled.div`
 `
 
 const TopBarContainer = styled.div`
-  z-index: ${({ theme }) => theme.zIndex.drawer};
+  z-index: 100;
   position: sticky;
   top: 0;
-  box-shadow: ${({ theme }) => theme.shadows[4]};
 `
 
 const TopBarLayout = styled.div`
@@ -77,14 +76,12 @@ export function TopBar() {
   }
 
   return (
-    <>
-      <TopBarContainer>
-        <TopBarLayout>
-          <ConfigBar />
-          <NavBar />
-        </TopBarLayout>
-      </TopBarContainer>
+    <TopBarContainer>
+      <TopBarLayout>
+        <ConfigBar />
+        <NavBar />
+      </TopBarLayout>
       <AnnouncementBar show={show} onClose={handleClose} label={currentAnnoucement.label} />
-    </>
+    </TopBarContainer>
   )
 }

@@ -6,6 +6,7 @@ import { AppProps } from 'next/dist/next-server/lib/router/router'
 import Head from 'next/head'
 import { useCallback, useEffect, useState } from 'react'
 
+import Tracker from '@/common/tracker'
 import { Container } from '@/components/Container'
 import { ErrorBoundary } from '@/components/ErrorBoundary'
 import { Footer } from '@/components/Footer'
@@ -39,6 +40,10 @@ const ToastAlert = styled(Alert)`
 
 function MyApp({ Component, pageProps, forceDark, router }: AppProps) {
   useApp()
+
+  useEffect(() => {
+    Tracker.init()
+  }, [])
 
   // Retoring AuthStore and Syncing coursecart
   useEffect(() => {

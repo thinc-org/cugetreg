@@ -1,4 +1,5 @@
 import { IconButton, InputBase, Paper } from '@material-ui/core'
+import CloseIcon from '@material-ui/icons/Close'
 import SearchIcon from '@material-ui/icons/Search'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 
@@ -15,6 +16,7 @@ export const SearchField: React.FC<SeachFieldProp> = () => {
   const classes = useStyles()
   const { setFilter, searchCourseQueryParams } = useSearchCourseQueryParams()
   const [input, setInput] = useState(() => searchCourseQueryParams.filter.keyword || '')
+  const lastSubmittedInput = useRef(input)
   const { log } = useLog(SEARCH_QUERY)
   const timeoutRef = useRef<number>(0)
 
@@ -22,15 +24,25 @@ export const SearchField: React.FC<SeachFieldProp> = () => {
     setInput(searchCourseQueryParams.filter.keyword || '')
   }, [searchCourseQueryParams.filter.keyword])
 
-  const onSubmit = useCallback(
-    (event?: React.FormEvent<HTMLFormElement>) => {
-      event?.preventDefault()
-      const keyword = input
+  const submit = useCallback(
+    (keyword: string) => {
+      if (lastSubmittedInput.current === keyword) {
+        return
+      }
+      lastSubmittedInput.current = keyword
       setFilter({ ...searchCourseQueryParams.filter, keyword: keyword })
       const detail = JSON.stringify({ ...searchCourseQueryParams.filter, keyword })
       log(null, detail)
     },
-    [setFilter, searchCourseQueryParams.filter, input, log]
+    [setFilter, searchCourseQueryParams.filter, log]
+  )
+
+  const onSubmit = useCallback(
+    (event?: React.FormEvent<HTMLFormElement>) => {
+      event?.preventDefault()
+      submit(input)
+    },
+    [submit, input]
   )
 
   useEffect(() => {
@@ -43,9 +55,14 @@ export const SearchField: React.FC<SeachFieldProp> = () => {
     }
   }, [input])
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     setInput(event.target.value)
-  }
+  }, [])
+
+  const handleClear = useCallback(() => {
+    setInput('')
+    submit('')
+  }, [submit])
 
   return (
     <Paper component="form" className={classes.root} noValidate onSubmit={onSubmit} variant="outlined">
@@ -59,9 +76,15 @@ export const SearchField: React.FC<SeachFieldProp> = () => {
           className={classes.input}
         />
       </Analytics>
-      <IconButton type="submit" aria-label="search" className={classes.iconButton}>
-        <SearchIcon />
-      </IconButton>
+      {input ? (
+        <IconButton aria-label="clear" className={classes.iconButton} onClick={handleClear}>
+          <CloseIcon />
+        </IconButton>
+      ) : (
+        <IconButton type="submit" aria-label="search" className={classes.iconButton}>
+          <SearchIcon />
+        </IconButton>
+      )}
     </Paper>
   )
 }

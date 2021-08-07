@@ -1,11 +1,13 @@
 import { styled } from '@material-ui/core'
 import { DayOfWeek } from '@thinc-org/chula-courses'
 import { useTranslation } from 'react-i18next'
-import { Cell } from './Cell'
+
+import { dayOfWeekArray } from '@/constants/dayOfWeek'
+
 import { hourEnd, hourStart } from '../constants'
 import { useDimensions } from '../dimensions'
+import { Cell } from './Cell'
 import { ScheduleTypography } from './ScheduleTypography'
-import { dayOfWeekArray } from '@/constants/dayOfWeek'
 
 const HourTypography = styled(ScheduleTypography)({
   textAlign: 'left',

@@ -1,13 +1,14 @@
+import { useApolloClient, useQuery } from '@apollo/client'
+import { useRouter } from 'next/router'
 import React, { createContext, useState, useEffect } from 'react'
-import { SearchCourseResponse, SearchCourseVars, SEARCH_COURSE } from '@/utils/network/BackendGQLQueries'
-import { useSearchCourseQueryParams } from '@/modules/CourseSearch/hooks/useSearchCourseQueryParams'
+
 import {
   DEFAULT_COURSE_SEARCH_CONTEXT_VALUE,
   LIMIT_QUERY_CONSTANT,
 } from '@/modules/CourseSearch/context/CourseSearch/constants'
-import { useApolloClient, useQuery } from '@apollo/client'
-import { useRouter } from 'next/router'
+import { useSearchCourseQueryParams } from '@/modules/CourseSearch/hooks/useSearchCourseQueryParams'
 import { CourseSearchPagePrefetchData } from '@/modules/CourseSearch/types'
+import { SearchCourseResponse, SearchCourseVars, SEARCH_COURSE } from '@/utils/network/BackendGQLQueries'
 
 export const CourseSearchContext = createContext(DEFAULT_COURSE_SEARCH_CONTEXT_VALUE)
 

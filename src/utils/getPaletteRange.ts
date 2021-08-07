@@ -1,5 +1,6 @@
 import { Theme } from '@material-ui/core'
 import { GenEdType } from '@thinc-org/chula-courses'
+
 import { HighlightColorRange } from '@/configs/theme/palette'
 
 export default function getPaletteRange(theme: Theme, genEdType: GenEdType): HighlightColorRange {

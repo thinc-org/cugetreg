@@ -1,6 +1,7 @@
-import { AnalyticsContext } from '@/context/analytics'
 import { useRouter } from 'next/router'
 import { useContext } from 'react'
+
+import { AnalyticsContext } from '@/context/analytics'
 
 /**
  * useLog hooks for logging, only use if cannot use Analytics component only

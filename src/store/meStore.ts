@@ -1,6 +1,7 @@
+import { action, computed, makeObservable, observable, runInAction } from 'mobx'
+
 import { retrieveAuthDataUsingCode, retrieveMeData } from '@/utils/network/auth'
 import { collectErrorLog, collectLogEvent } from '@/utils/network/logging'
-import { action, computed, makeObservable, observable, runInAction } from 'mobx'
 
 /**
  * Authorization token for authenticating with the backend

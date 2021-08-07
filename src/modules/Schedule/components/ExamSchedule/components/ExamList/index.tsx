@@ -1,4 +1,5 @@
 import styled from '@emotion/styled'
+
 import { ExamCard, ExamClass } from '../ExamCard'
 
 interface ExamScheduleProps {

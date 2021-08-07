@@ -1,4 +1,5 @@
 import { createContext, PropsWithChildren, useContext, useMemo } from 'react'
+
 import { colsCount } from './constants'
 
 interface CellPosition {

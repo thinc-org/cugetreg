@@ -1,10 +1,12 @@
-import { useMemo } from 'react'
-import { Course, Class, DayOfWeek, GenEdType } from '@thinc-org/chula-courses'
-import { hourStart } from './constants'
 import { useTheme } from '@material-ui/core'
+import { Course, Class, DayOfWeek, GenEdType } from '@thinc-org/chula-courses'
+import { useMemo } from 'react'
+
 import { CourseCartItem } from '@/store'
 import getPaletteRange from '@/utils/getPaletteRange'
+
 import { ExamClass } from '../ExamSchedule/components/ExamCard'
+import { hourStart } from './constants'
 
 export type TimetableClass = Pick<Course, 'courseNo' | 'abbrName' | 'genEdType'> &
   Omit<Class, 'type'> & {

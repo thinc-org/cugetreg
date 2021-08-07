@@ -1,11 +1,12 @@
-import React, { useCallback } from 'react'
 import styled from '@emotion/styled'
-import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos'
-import { useTranslation } from 'react-i18next'
 import { Button, IconButton } from '@material-ui/core'
-import { GO_BACK_BUTTON } from '@/context/analytics/components/const'
-import { Analytics } from '@/context/analytics/components/Analytics'
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos'
 import { useRouter } from 'next/router'
+import React, { useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
+
+import { Analytics } from '@/context/analytics/components/Analytics'
+import { GO_BACK_BUTTON } from '@/context/analytics/components/const'
 
 const ButtonMobile = styled(IconButton)`
   border: 1px solid #2a2d48;

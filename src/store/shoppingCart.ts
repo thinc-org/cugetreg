@@ -1,7 +1,8 @@
-import { collectLogEvent } from '@/utils/network/logging'
 import { Course } from '@thinc-org/chula-courses'
 import { action, computed, makeObservable, observable } from 'mobx'
 import { computedFn } from 'mobx-utils'
+
+import { collectLogEvent } from '@/utils/network/logging'
 
 export interface CourseCartItem extends Course {
   selectedSectionNo: string

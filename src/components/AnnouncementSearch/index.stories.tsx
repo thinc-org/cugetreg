@@ -1,6 +1,7 @@
-import React from 'react'
-import { AnnouncementSearch, AnnouncementSearchProps } from '.'
 import { Meta, Story } from '@storybook/react/types-6-0'
+import React from 'react'
+
+import { AnnouncementSearch, AnnouncementSearchProps } from '.'
 
 export default {
   title: 'Component/AnnouncementSearch',

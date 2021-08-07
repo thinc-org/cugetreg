@@ -1,36 +1,34 @@
-import { AppProps } from 'next/dist/next-server/lib/router/router'
-import { CssBaseline, Button, Snackbar, Alert } from '@material-ui/core'
-import Head from 'next/head'
-
-import '@/styles/globals.css'
-import '@/i18n'
-import { TopBar } from '@/components/TopBar'
-import { Footer } from '@/components/Footer'
-import { Container } from '@/components/Container'
-import { ShoppingCartModal } from '@/components/ShoppingCartModal'
-
-import { syncWithLocalStorage } from '@/utils/localstorage'
-import useApp from '@/hooks/useApp'
-import { mobxConfiguration } from '@/configs/mobx'
-
-import { useCallback, useEffect, useState } from 'react'
-import { setupGAPI, startGDriveSync } from '@/utils/network/gDriveSync'
-import { reaction, runInAction } from 'mobx'
-import { gDriveStore, GDriveSyncState } from '@/store/gDriveState'
-
-import { useSnackBar } from '@/context/Snackbar/hooks'
 import styled from '@emotion/styled'
-import { authStore } from '@/store/meStore'
-import { startLogging } from '@/utils/network/logging'
-import { courseCartStore } from '@/store'
-import { Analytics } from '@/context/analytics/components/Analytics'
-import { SNACKBAR_BUTTON } from '@/context/analytics/components/const'
+import { CssBaseline, Button, Snackbar, Alert } from '@material-ui/core'
+import { StudyProgramEnum } from '@thinc-org/chula-courses'
+import { reaction, runInAction } from 'mobx'
+import { AppProps } from 'next/dist/next-server/lib/router/router'
+import Head from 'next/head'
+import { useCallback, useEffect, useState } from 'react'
+
+import Tracker from '@/common/tracker'
+import { Container } from '@/components/Container'
+import { ErrorBoundary } from '@/components/ErrorBoundary'
+import { Footer } from '@/components/Footer'
+import { LoadingProgress } from '@/components/LoadingProgress'
+import { ShoppingCartModal } from '@/components/ShoppingCartModal'
+import { TopBar } from '@/components/TopBar'
+import { TrackPageChange } from '@/components/TrackPageChange'
+import { mobxConfiguration } from '@/configs/mobx'
 import { AppProvider } from '@/context/AppProvider'
 import { useDisclosure } from '@/context/ShoppingCartModal/hooks'
-import { TrackPageChange } from '@/components/TrackPageChange'
-import { LoadingProgress } from '@/components/LoadingProgress'
-import { StudyProgramEnum } from '@thinc-org/chula-courses'
-import { ErrorBoundary } from '@/components/ErrorBoundary'
+import { useSnackBar } from '@/context/Snackbar/hooks'
+import { Analytics } from '@/context/analytics/components/Analytics'
+import { SNACKBAR_BUTTON } from '@/context/analytics/components/const'
+import useApp from '@/hooks/useApp'
+import '@/i18n'
+import { courseCartStore } from '@/store'
+import { gDriveStore, GDriveSyncState } from '@/store/gDriveState'
+import { authStore } from '@/store/meStore'
+import '@/styles/globals.css'
+import { syncWithLocalStorage } from '@/utils/localstorage'
+import { setupGAPI, startGDriveSync } from '@/utils/network/gDriveSync'
+import { startLogging } from '@/utils/network/logging'
 
 mobxConfiguration()
 
@@ -42,6 +40,10 @@ const ToastAlert = styled(Alert)`
 
 function MyApp({ Component, pageProps, forceDark, router }: AppProps) {
   useApp()
+
+  useEffect(() => {
+    Tracker.init()
+  }, [])
 
   // Retoring AuthStore and Syncing coursecart
   useEffect(() => {

@@ -1,5 +1,6 @@
 import { Theme } from '@material-ui/core'
 import { CSSProperties } from '@material-ui/styles'
+
 import { HighlightColor, HighlightColorRange } from '../palette'
 
 // This function is used for converting from `HighlightColor` to `palette.highlight`

@@ -1,6 +1,7 @@
-import { ChipFilledHighlightColor, ChipOutlinedHighlightColor } from '@/configs/theme/overrides/chip'
 import { ChipProps } from '@material-ui/core'
 import { DayOfWeek, GenEdType } from '@thinc-org/chula-courses'
+
+import { ChipFilledHighlightColor, ChipOutlinedHighlightColor } from '@/configs/theme/overrides/chip'
 
 /*
  * This configuration file provide the Chip's types.

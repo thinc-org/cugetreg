@@ -1,10 +1,10 @@
 import { ApolloClient, InMemoryCache } from '@apollo/client'
+import { getImageListItemBarUtilityClass } from '@material-ui/core'
+import { Course } from '@thinc-org/chula-courses'
+import { uniqBy } from 'lodash'
 
 import env from '@/utils/env/macro'
-import { Course } from '@thinc-org/chula-courses'
 import { SearchCourseVars } from '@/utils/network/BackendGQLQueries'
-import { uniqBy } from 'lodash'
-import { getImageListItemBarUtilityClass } from '@material-ui/core'
 
 const cache = new InMemoryCache({
   typePolicies: {

@@ -1,8 +1,9 @@
 import { Checkbox, Grid, Hidden, makeStyles, Typography, useMediaQuery, useTheme } from '@material-ui/core'
 import { Course } from '@thinc-org/chula-courses'
-import { useTranslation } from 'react-i18next'
-import GenEdChip from '@/components/Chips/catagories/GenEdChip'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
+
+import GenEdChip from '@/components/Chips/catagories/GenEdChip'
 import { CourseName } from '@/components/ShoppingPanel/components/CourseName'
 
 export interface CourseListPropsType {

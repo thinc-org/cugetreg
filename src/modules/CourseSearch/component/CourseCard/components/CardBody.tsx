@@ -1,15 +1,17 @@
 import { Box, CardContent, Collapse, Grid, Stack, Typography } from '@material-ui/core'
 import { DayOfWeek } from '@thinc-org/chula-courses'
 import { useTranslation } from 'react-i18next'
-import GenEdChip from '@/components/Chips/catagories/GenEdChip'
+
 import DayChip from '@/components/Chips/catagories/DayChip'
-import { Caption } from '@/modules/CourseSearch/component/CourseCard/components/Caption'
-import { dayOfWeekMapper } from '@/constants/dayOfWeek'
+import GenEdChip from '@/components/Chips/catagories/GenEdChip'
 import { SelectButton } from '@/components/SelectButton'
-import { SectionSelect } from './SectionSelect'
-import { useCourseCardContext } from '../useCourseCard'
+import { dayOfWeekMapper } from '@/constants/dayOfWeek'
 import { Analytics } from '@/context/analytics/components/Analytics'
 import { SUBJECT_SELECT_BUTTON } from '@/context/analytics/components/const'
+import { Caption } from '@/modules/CourseSearch/component/CourseCard/components/Caption'
+
+import { useCourseCardContext } from '../useCourseCard'
+import { SectionSelect } from './SectionSelect'
 
 interface CardBodyProps {
   isExpanded: boolean

@@ -1,5 +1,6 @@
-import React from 'react'
 import { Meta, Story } from '@storybook/react/types-6-0'
+import React from 'react'
+
 import { SectionCard } from '@/components/SectionCard'
 import { mockGenEdCourse, mockNoGenEdCourse } from '@/modules/CourseSearch/component/CourseCard/mockCourse'
 

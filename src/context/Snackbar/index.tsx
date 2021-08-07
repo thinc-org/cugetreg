@@ -1,4 +1,5 @@
 import React, { createContext } from 'react'
+
 import { SnackbarProps } from './types'
 
 export const SnackbarContext = createContext({} as SnackbarProps)

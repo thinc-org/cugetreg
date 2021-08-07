@@ -1,9 +1,10 @@
 import { useCallback, useContext, useMemo } from 'react'
+
+import { DayChipKey, GenEdChipKey, GeneralChipKey } from '@/components/Chips/config'
 import { EnhancedCheckBoxProps } from '@/modules/CourseSearch/component/FilterSection/components/CheckboxGroup'
 import { CourseSearchContext } from '@/modules/CourseSearch/context/CourseSearch'
-import { DayChipKey, GenEdChipKey, GeneralChipKey } from '@/components/Chips/config'
-import { SearchCourseVars } from '@/utils/network/BackendGQLQueries'
 import { useSearchCourseQueryParams } from '@/modules/CourseSearch/hooks/useSearchCourseQueryParams'
+import { SearchCourseVars } from '@/utils/network/BackendGQLQueries'
 
 export interface CreateCheckbox<Value> {
   label: string

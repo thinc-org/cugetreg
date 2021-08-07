@@ -1,17 +1,12 @@
-import React, { ReactNode } from 'react'
-import Document, { DocumentContext, Head, Html, Main, NextScript } from 'next/document'
 import { ServerStyleSheets } from '@material-ui/core/styles'
-import { injectDarkStyle } from '@/utils/darkStyleInjector'
-import env from '@/utils/env/macro'
+import Document, { DocumentContext, Head, Html, Main, NextScript } from 'next/document'
+import React, { ReactNode } from 'react'
 import { resetServerContext } from 'react-beautiful-dnd'
 
-import { hotjar } from 'react-hotjar'
-import { hotjar_clientid, hotjar_snippet_version, ga_measurement_id } from '@/utils/env'
+import { injectDarkStyle } from '@/utils/darkStyleInjector'
+import env from '@/utils/env/macro'
 
 export default class MyDocument extends Document {
-  componentDidMount() {
-    hotjar.initialize(hotjar_clientid, hotjar_snippet_version)
-  }
   render() {
     return (
       <Html lang="en">
@@ -33,18 +28,6 @@ export default class MyDocument extends Document {
           <link
             rel="stylesheet"
             href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap"
-          />
-          <script async src={`https://www.googletagmanager.com/gtag/js?id=${ga_measurement_id}`}></script>
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-          
-            gtag('config', '${ga_measurement_id}');
-          `,
-            }}
           />
         </Head>
         <body>

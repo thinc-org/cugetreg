@@ -1,6 +1,7 @@
-import { ExamClass } from '../modules/Schedule/components/ExamSchedule/components/ExamCard'
-import { parseISO, format } from 'date-fns'
 import { Course } from '@thinc-org/chula-courses/types'
+import { parseISO, format } from 'date-fns'
+
+import { ExamClass } from '../modules/Schedule/components/ExamSchedule/components/ExamCard'
 
 export function getExamDate(scheduleClass: ExamClass | Course, isFinal: boolean) {
   const date = isFinal ? scheduleClass.final?.date : scheduleClass.midterm?.date

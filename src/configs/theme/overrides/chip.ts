@@ -1,4 +1,5 @@
 import { ChipClassKey, StyleRules, Theme, SimplePaletteColorOptions } from '@material-ui/core'
+
 import { Highlight } from '../palette'
 
 export function overrideMuiChipStyles(theme: Theme): Partial<StyleRules<ChipClassKey, {}>> {

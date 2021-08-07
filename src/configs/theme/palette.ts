@@ -1,5 +1,6 @@
 import { Theme as MuiTheme } from '@material-ui/core'
 import { PaletteOptions } from '@material-ui/core/styles'
+
 import {
   ChipFilledHighlight,
   ChipOutlinedHighlight,

@@ -1,7 +1,8 @@
+import { QueryResult } from '@apollo/client'
 import { useContext, useEffect } from 'react'
+
 import { CourseSearchContext } from '@/modules/CourseSearch/context/CourseSearch'
 import { SearchCourseResponse, SearchCourseVars } from '@/utils/network/BackendGQLQueries'
-import { QueryResult } from '@apollo/client'
 
 export const useCourseList = () => {
   const BOTTOM_OFFSET = 500

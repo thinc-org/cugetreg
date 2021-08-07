@@ -1,3 +1,3 @@
 module.exports = {
-    readFileSync: () => 'mock',
+  readFileSync: () => 'mock',
 }

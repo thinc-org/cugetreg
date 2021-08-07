@@ -1,8 +1,10 @@
 import { Button, makeStyles, useMediaQuery, useTheme } from '@material-ui/core'
-import { FlexContainer } from '../FlexContainer'
-import chevronUp from '@/assets/images/chevronUp.svg'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+
+import chevronUp from '@/assets/images/chevronUp.svg'
+
+import { FlexContainer } from '../FlexContainer'
 
 const useStyles = makeStyles((theme) => ({
   button: {

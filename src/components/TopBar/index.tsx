@@ -59,7 +59,7 @@ export function TopBar() {
 
   if (pathname === '/[studyProgram]/courses') {
     return (
-      <>
+      <div>
         <ConfigBarLayout />
         <NavBarLayout />
         <StickyContainer>
@@ -71,20 +71,20 @@ export function TopBar() {
           </TopBarLayout>
           <StickySpace />
         </StickyContainer>
-        <AnnouncementBar show={show} onClose={handleClose} label={currentAnnoucement.label} />
-      </>
+        {show && <AnnouncementBar onClose={handleClose} label={currentAnnoucement.label} />}
+      </div>
     )
   }
 
   return (
-    <>
+    <div>
       <TopBarContainer>
         <TopBarLayout>
           <ConfigBar />
           <NavBar />
         </TopBarLayout>
       </TopBarContainer>
-      <AnnouncementBar show={show} onClose={handleClose} label={currentAnnoucement.label} />
-    </>
+      {show && <AnnouncementBar onClose={handleClose} label={currentAnnoucement.label} />}
+    </div>
   )
 }

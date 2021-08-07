@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import Storage from '@/common/storage'
 import { StorageKey } from '@/common/storage/constants'
@@ -31,18 +31,21 @@ const StickySpace = styled.div`
 export function TopBar() {
   const { pathname } = useRouter()
 
-  const storage = new Storage('localStorage')
-  const seenAnnoucements = storage.get<AnnoucementItem[]>(StorageKey.SeenAnnoucements)
   const currentAnnoucement = getCurrentAnnoucement()
 
-  const [show, setShow] = useState(() => {
-    console.log(seenAnnoucements, !seenAnnoucements?.find(({ id }) => id === currentAnnoucement.id))
-    return !seenAnnoucements?.find(({ id }) => id === currentAnnoucement.id)
-  })
+  const [show, setShow] = useState(false)
+
+  useEffect(() => {
+    const storage = new Storage('localStorage')
+    const seenAnnoucements = storage.get<AnnoucementItem[]>(StorageKey.SeenAnnoucements) ?? []
+    const seen = seenAnnoucements.some(({ id }) => id === currentAnnoucement.id)
+    setShow(!seen)
+  }, [currentAnnoucement])
 
   const handleClose = () => {
-    const prevAnnoucements = seenAnnoucements ?? []
-    storage.set<AnnoucementItem[]>(StorageKey.SeenAnnoucements, [...prevAnnoucements, currentAnnoucement])
+    const storage = new Storage('localStorage')
+    const seenAnnoucements = storage.get<AnnoucementItem[]>(StorageKey.SeenAnnoucements) ?? []
+    storage.set<AnnoucementItem[]>(StorageKey.SeenAnnoucements, [...seenAnnoucements, currentAnnoucement])
     setShow(false)
   }
 

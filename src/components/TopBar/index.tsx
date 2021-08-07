@@ -1,15 +1,10 @@
 import styled from '@emotion/styled'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
 
-import Storage from '@/common/storage'
-import { StorageKey } from '@/common/storage/constants'
+import { AnnouncementBar } from '@/components/AnnouncementBar'
 
 import { ConfigBar, ConfigBarLayout } from './ConfigBar'
 import { NavBar, NavBarLayout } from './NavBar'
-import { AnnouncementBar } from './components/AnnouncementBar'
-import { AnnoucementItem } from './types'
-import { getCurrentAnnoucement } from './utils'
 
 const StickyContainer = styled.div`
   position: absolute;
@@ -31,24 +26,6 @@ const StickySpace = styled.div`
 export function TopBar() {
   const { pathname } = useRouter()
 
-  const currentAnnoucement = getCurrentAnnoucement()
-
-  const [show, setShow] = useState(false)
-
-  useEffect(() => {
-    const storage = new Storage('localStorage')
-    const seenAnnoucements = storage.get<AnnoucementItem[]>(StorageKey.SeenAnnoucements) ?? []
-    const seen = seenAnnoucements.some(({ id }) => id === currentAnnoucement.id)
-    setShow(!seen)
-  }, [currentAnnoucement])
-
-  const handleClose = () => {
-    const storage = new Storage('localStorage')
-    const seenAnnoucements = storage.get<AnnoucementItem[]>(StorageKey.SeenAnnoucements) ?? []
-    storage.set<AnnoucementItem[]>(StorageKey.SeenAnnoucements, [...seenAnnoucements, currentAnnoucement])
-    setShow(false)
-  }
-
   if (pathname === '/[studyProgram]/courses') {
     return (
       <>
@@ -61,7 +38,7 @@ export function TopBar() {
           </TopBarLayout>
           <StickySpace />
         </StickyContainer>
-        <AnnouncementBar show={show} onClose={handleClose} label={currentAnnoucement.label} />
+        <AnnouncementBar />
       </>
     )
   }
@@ -72,7 +49,7 @@ export function TopBar() {
         <ConfigBar />
         <NavBar />
       </TopBarLayout>
-      <AnnouncementBar show={show} onClose={handleClose} label={currentAnnoucement.label} />
+      <AnnouncementBar />
     </>
   )
 }

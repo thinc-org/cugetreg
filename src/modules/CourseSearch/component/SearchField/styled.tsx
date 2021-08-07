@@ -8,8 +8,8 @@ export const useStyles = makeStyles((theme) => ({
     width: '100%',
   },
   input: {
-    paddingLeft: theme.spacing(1),
-    marginLeft: theme.spacing(1),
+    height: '100%',
+    paddingLeft: theme.spacing(2),
   },
   iconButton: {
     padding: theme.spacing(1),

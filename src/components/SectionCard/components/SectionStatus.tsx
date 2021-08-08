@@ -1,4 +1,4 @@
-import { Typography, TypographyProps } from '@material-ui/core'
+import { Stack, Typography, TypographyProps } from '@material-ui/core'
 import { Capacity } from '@thinc-org/chula-courses'
 import { useTranslation } from 'react-i18next'
 
@@ -42,9 +42,10 @@ export const SectionStatus = (props: SectionStatusProps) => {
         ...rest.sx,
       }}
     >
-      {/*t(status, capacity)*/}
-      {t('unknownSeat')}
-      <NoSeatIcon />
+      <Stack direction="row" spacing={0.5} alignItems="center">
+        <div>{t(status, capacity)}</div>
+        <NoSeatIcon sx={{ color: status === 'closed' ? 'white' : 'primary.main' }} />
+      </Stack>
     </Typography>
   )
 }

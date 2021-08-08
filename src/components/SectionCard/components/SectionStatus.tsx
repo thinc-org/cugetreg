@@ -2,6 +2,8 @@ import { Typography, TypographyProps } from '@material-ui/core'
 import { Capacity } from '@thinc-org/chula-courses'
 import { useTranslation } from 'react-i18next'
 
+import NoSeatIcon from '@/components/RegwarNotice/NoSeatInfoNotice'
+
 export type AvailableStatus = 'avialable' | 'full' | 'closed'
 export interface SectionStatusProps extends TypographyProps {
   status: AvailableStatus
@@ -40,7 +42,9 @@ export const SectionStatus = (props: SectionStatusProps) => {
         ...rest.sx,
       }}
     >
-      {t(status, capacity)}
+      {/*t(status, capacity)*/}
+      {t('unknownSeat')}
+      <NoSeatIcon />
     </Typography>
   )
 }

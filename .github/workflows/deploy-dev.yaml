@@ -39,7 +39,10 @@ jobs:
           username: ${{ secrets.GH_USERNAME }}
           password: ${{ secrets.GH_TOKEN }}
 
-      - name: Push to GitHub Packages
+      - name: Set beta env
+        run: mv .env.beta .env
+
+      - name: Build and push to GitHub Packages
         uses: docker/build-push-action@v2
         with:
           push: true

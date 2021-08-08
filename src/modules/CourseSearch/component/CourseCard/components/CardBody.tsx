@@ -65,7 +65,12 @@ function CardDescription() {
           {isGenEd ? (
             <>
               <Caption>{t('totalCapacity')}</Caption>
-              <Typography variant="body1">GenEd {/* {courseCapacity.current}/{courseCapacity.max} */}</Typography>
+              <Stack direction="row" spacing={0.5} alignItems="center">
+                <Typography variant="body1">
+                  GenEd {courseCapacity.current}/{courseCapacity.max}
+                </Typography>
+                <NoSeatIcon color="primary" />
+              </Stack>
             </>
           ) : (
             <>
@@ -141,13 +146,8 @@ function CardHiddenDescription() {
       <Grid item xs={6} sm="auto">
         <Stack spacing={0.5}>
           <Caption>{t('capacity')}</Caption>
-          {/*
           <Typography variant="body1">
             {selectedSection.capacity.current}/{selectedSection.capacity.max}
-          </Typography>
-          */}
-          <Typography variant="body1" alignItems="center" display="flex">
-            {t('unknownCount')} <NoSeatIcon />
           </Typography>
         </Stack>
       </Grid>

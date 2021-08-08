@@ -93,6 +93,7 @@ export const courseCard = {
   addSubjectFailedSolution: 'แก้ไขวิชา',
   removeSubjectSuccess: 'ลบรายวิชาสำเร็จ',
   viewAllSubject: 'ดูวิชาทั้งหมด',
+  unknownCount: 'ไม่ทราบจำนวน',
 }
 
 export const sectionCard = {
@@ -104,6 +105,7 @@ export const sectionCard = {
   closed: 'ปิด',
   avialable: '{{current}}/{{max}}',
   full: '{{current}}/{{max}}',
+  unknownSeat: 'ไม่ทราบจำนวนที่นั่ง',
 }
 
 export const footer = {
@@ -157,4 +159,8 @@ export const syncStatus = {
   syncing: 'กำลังซิงค์',
   synced: 'ซิงค์สำเร็จ',
   syncerr: 'การซิงค์ล้มเหลว',
+}
+
+export const regWarNotice = {
+  notice: 'จำนวนที่นั่งอาจล่าช้าจาก Reg Chula',
 }

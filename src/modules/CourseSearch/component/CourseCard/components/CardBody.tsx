@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 
 import DayChip from '@/components/Chips/catagories/DayChip'
 import GenEdChip from '@/components/Chips/catagories/GenEdChip'
+import NoSeatIcon from '@/components/RegwarNotice/NoSeatInfoNotice'
 import { SelectButton } from '@/components/SelectButton'
 import { dayOfWeekMapper } from '@/constants/dayOfWeek'
 import { Analytics } from '@/context/analytics/components/Analytics'
@@ -64,9 +65,12 @@ function CardDescription() {
           {isGenEd ? (
             <>
               <Caption>{t('totalCapacity')}</Caption>
-              <Typography variant="body1">
-                GenEd {courseCapacity.current}/{courseCapacity.max}
-              </Typography>
+              <Stack direction="row" spacing={0.5} alignItems="center">
+                <Typography variant="body1">
+                  GenEd {courseCapacity.current}/{courseCapacity.max}
+                </Typography>
+                <NoSeatIcon color="primary" />
+              </Stack>
             </>
           ) : (
             <>

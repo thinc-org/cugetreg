@@ -1,6 +1,6 @@
 import { IconButton, Popover, Typography, Container, IconButtonProps } from '@material-ui/core'
 import { ErrorOutline } from '@material-ui/icons'
-import { MouseEvent, useState } from 'react'
+import { MouseEvent, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useLog } from '@/context/analytics/components/useLog'
@@ -21,9 +21,12 @@ function NoSeatIcon(props: IconButtonProps) {
     setAnchorEl(null)
   }
 
+  const containerRef = useRef(null)
+
   return (
     <>
       <IconButton
+        ref={containerRef}
         size="small"
         onMouseEnter={onHover}
         onMouseLeave={onLeave}
@@ -48,6 +51,7 @@ function NoSeatIcon(props: IconButtonProps) {
           vertical: 'top',
           horizontal: 'left',
         }}
+        container={containerRef?.current}
       >
         <Container maxWidth="sm">
           <Typography variant="body1">

@@ -1,102 +1,153 @@
-import { Box, Paper, Typography } from '@material-ui/core'
+import { Box, Paper, Typography, Link, useTheme } from '@material-ui/core'
 import React from 'react'
 
+import { sessionIdStore } from '@/store/sessionIdStore'
+
 export default function PrivacyPolicy() {
+  const theme = useTheme()
+
+  const sessionId = sessionIdStore.sessionId
+  const reportProblemLink = `https://airtable.com/shruwAAfn1763TgMU?prefill_Session_ID=${sessionId}`
+
   return (
-    <Box marginTop="32px" marginBottom="32px">
-      <Paper>
+    <Box marginTop={4} marginBottom={4}>
+      <Paper variant="outlined">
         <Box padding="32px">
           <Typography variant="h1">Privacy Policy</Typography>
-          <Typography variant="h4">1. Information we collect</Typography>
-          <Typography variant="h6">1.1 Information you provide to us</Typography>
-          <p>When you log in with Google. We collect your</p>
+          <Typography variant="h4" component="h2" gutterBottom>
+            1. Information we collect
+          </Typography>
+          <Typography variant="h6" component="h3" gutterBottom>
+            1.1 Information you provide to us
+          </Typography>
+          <Typography variant="body1">When you log in with Google, we collect your</Typography>
           <ul>
             <li>Name</li>
             <li>Google User ID</li>
             <li>Google Drive App Data (Only the data associated with this app such as your course schedule) </li>
           </ul>
-          <Typography variant="h6">1.2 Information we collect automatically</Typography>
-          <p>When you use our website. We collect your interactions with the website, which include</p>
+          <Typography variant="h6" component="h3" gutterBottom>
+            1.2 Information we collect automatically
+          </Typography>
+          <Typography variant="body1">
+            When you use our website, we collect your interactions with the website, which includes
+          </Typography>
           <ul>
             <li>
               Device ID (associated with the browser that you use and can be renewed by clearing the browser&apos;s
-              Local Storage)
+              local storage)
             </li>
-            <li>Search Query</li>
-            <li>Click Interaction</li>
-            <li>Page Visit</li>
+            <li>Search query</li>
+            <li>Click interaction</li>
+            <li>Page visit</li>
             <li>Google User ID</li>
-            <li>Course you selected</li>
+            <li>Courses you selected</li>
             <li>IP address</li>
-            <li>User Agent</li>
+            <li>User agent</li>
           </ul>
-          <p>
+          <Typography variant="body1" paragraph>
             When you submit the feedback form, the above information will be included in the submission if you provide
             the Session ID.
-          </p>
-          <Typography variant="h6">1.3 Third-Party Information</Typography>
+          </Typography>
+          <Typography variant="h6" component="h3" gutterBottom>
+            1.3 Third-Party Information
+          </Typography>
 
-          <p>We use third-party services to collect your interactions with the website, namely</p>
+          <Typography variant="body1">
+            We use third-party services to collect your interactions with the website, namely
+          </Typography>
           <ul>
             <li>
-              Google Analytic <a href="https://policies.google.com/privacy">(Privacy Policy)</a>
+              Google Analytics{' '}
+              <Link
+                href="https://policies.google.com/privacy"
+                target="_blank"
+                rel="noreferrer"
+                color={theme.palette.secondaryRange[900]}
+              >
+                (Privacy Policy)
+              </Link>
             </li>
             <li>
-              Hotjar <a href="https://www.hotjar.com/legal/policies/privacy/">(Privacy Policy)</a>
+              Hotjar{' '}
+              <Link
+                href="https://www.hotjar.com/legal/policies/privacy/"
+                target="_blank"
+                rel="noreferrer"
+                color={theme.palette.secondaryRange[900]}
+              >
+                (Privacy Policy)
+              </Link>
             </li>
           </ul>
-          <p>
-            By using this website, You must agree to the specified third-party’s Term of Service and Privacy Policy.
-          </p>
-          <p>
-            Our website is hosted on the Office of the Registrar Chulalongkorn University’s server. They don’t endorse
+          <Typography variant="body1" paragraph>
+            By using this website, you must agree to the specified third-party’s Terms of Service and Privacy Policy.
+          </Typography>
+          <Typography variant="body1" paragraph>
+            Our website is hosted on the Office of the Registrar Chulalongkorn University’s server. They do not endorse
             us in any way including the correctness of the data. You must still follow their Terms of Service and
             associated university’s law.
-          </p>
-          <Typography variant="h4">2. How we use your data</Typography>
-          <p>We use your data for following purposes</p>
-          <Typography variant="h6">2.1 Core Functionality</Typography>
-          <p>
+          </Typography>
+          <Typography variant="h4" component="h2" gutterBottom>
+            2. How we use your information
+          </Typography>
+          <Typography variant="body1" paragraph>
+            We use your information for the following purposes:
+          </Typography>
+          <Typography variant="h6" component="h3" gutterBottom>
+            2.1 Core Functionality
+          </Typography>
+          <Typography variant="body1" paragraph>
             We use your search and the associated query and context to provide you with the correct ranking of the
-            search result. We also use your Google Drive App Data storage to provides multi-device course schedule
-            synchronization.
-          </p>
-          <Typography variant="h6">2.2 Functionality Enrichment</Typography>
-          <p>
-            In the future, We may use the information to provide you with customized search results and recommendations
+            search results. We also use your Google Drive App information storage to provide multi-device course
+            schedule synchronization.
+          </Typography>
+          <Typography variant="h6" component="h3" gutterBottom>
+            2.2 Functionality Enrichment
+          </Typography>
+          <Typography variant="body1" paragraph>
+            In the future, we may use the information to provide you with customized search results and recommendations
             to enhance your experience.
-          </p>
-          <Typography variant="h6">2.3 Research and Product Development</Typography>
-          <p>
-            We use your information to better understand our user’s interactions with the website. The information are
-            used for
-          </p>
+          </Typography>
+          <Typography variant="h6" component="h3" gutterBottom>
+            2.3 Research and Product Development
+          </Typography>
+          <Typography variant="body1">
+            We use your information to better understand our user’s interactions with the website. The information is
+            used to
+          </Typography>
           <ul>
-            <li>Research the user’s behaviour</li>
-            <li>Better understand our user’s needs and preferences</li>
-            <li>Improve this website and better manage the development team’s effort.</li>
-            <li>Create new products to further satisfy our user’s need</li>
+            <li>Research user behaviour</li>
+            <li>Better understand user needs and preferences</li>
+            <li>Improve this website and manage the release of future features</li>
+            <li>Create new products and/or features to further satisfy user needs</li>
           </ul>
-          <Typography variant="h6">2.4 Security</Typography>
-          <p>We collect the information to prevent our service against spam and security threats.</p>
-          <Typography variant="h4">3. How we share your data</Typography>
-          <p>
-            Your data is shared within our website’s development team. In the future, We may share your anonymized data
-            with our partner who would collaborate with us to better meet our user’s needs. In the case that this
-            project is reorganized to other organizations within Chulalongkorn University, your data will be transferred
-            along with the website to them.
-          </p>
-          <Typography variant="h4">4. Contact Information and Inquiry</Typography>
-          <p>
-            If you have any questions or concerns about our use of your data. Send us an email to “thinc.org at
-            gmail.com”, or more preferably, the report problem link on the top right corner of this page.
-          </p>
-          <Typography variant="h1">About Us</Typography>
-          <p>
-            Thinc. is a student club organized under Engineering Student Council (ESC) of Chulalongkorn University. We
-            develop several products serving the Chulalongkorn University community such as CU Pop Bus and CUTUBall74
-            electronic ticket system.
-          </p>
+          <Typography variant="h6" component="h3" gutterBottom>
+            2.4 Security
+          </Typography>
+          <Typography variant="body1" paragraph>
+            We collect the information to prevent our service against spam and security threats.
+          </Typography>
+          <Typography variant="h4" component="h2" gutterBottom>
+            3. How we share your information
+          </Typography>
+          <Typography variant="body1" paragraph>
+            Your information is shared within our website’s development team. In the future, We may share your
+            anonymized information with our partners who would collaborate with us to better meet our user’s needs. In
+            the case that this project is reorganized to other organizations within Chulalongkorn University, your
+            information will be transferred along with the website to them.
+          </Typography>
+          <Typography variant="h4" component="h2" gutterBottom>
+            4. Contact information and inquiry
+          </Typography>
+          <Typography variant="body1" paragraph>
+            If you have any questions or concerns about our use of your information, send us an email to “thinc.org at
+            gmail.com”, or more preferably, the{' '}
+            <Link href={reportProblemLink} target="_blank" rel="noreferrer" color={theme.palette.secondaryRange[900]}>
+              report problem
+            </Link>{' '}
+            link on the top right corner of this page.
+          </Typography>
         </Box>
       </Paper>
     </Box>

@@ -4,6 +4,6 @@ import { AnnoucementItem } from '@/components/AnnouncementBar/types'
 export function getCurrentAnnoucement(): AnnoucementItem {
   return {
     id: 'annoucement_1',
-    label: 'CU Get Reg เป็นเพียงเว็บไซต์ที่จัดทำโดยนิสิต ทีมงานไม่ได้มีส่วนเกี่ยวข้องกับเว็บไซต์ Reg Chula แต่อย่างใด',
+    label: 'CU Get Reg เป็นเว็บไซต์ที่จัดทำโดยนิสิต ซึ่งได้รับการสนับสนุนเซิฟเวอร์จาก Reg Chula',
   }
 }

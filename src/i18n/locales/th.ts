@@ -13,6 +13,7 @@ export const navBar = {
   news: 'ข่าวสาร',
   searchCourses: 'ค้นหาวิชาเรียน',
   timetable: 'จัดตารางเรียน',
+  about: 'เกี่ยวกับเรา',
   signin: 'เข้าสู่ระบบ',
   signout: 'ออกจากระบบ',
 }

@@ -66,27 +66,23 @@ export default function About() {
             และมุ่งที่จะสร้างเว็บไวต์นี้ให้เป็นพื้นที่สำหรับการแบ่งปันข้อมูลรายวิชาระหว่างนิสิตในอนาคต
           </Typography>
 
-          <Box marginBottom={3}>
-            <Card variant="outlined">
-              <Box margin={2}>
-                <Typography variant="body1">
-                  ทั้งนี้ CU Get Reg เป็นเพียงเครื่องมือที่ช่วยให้การวางแผนลงทะเบียนเรียนง่ายขึ้น{' '}
-                  <strong>
-                    แต่ไม่ใช่การลงทะเบียนเรียนจริง คุณสามารถลงทะเบียนเรียนได้ที่{' '}
-                    <Link
-                      href="https://www2.reg.chula.ac.th/"
-                      target="_blank"
-                      rel="noreferrer"
-                      color={theme.palette.secondaryRange[900]}
-                    >
-                      https://www2.reg.chula.ac.th/
-                    </Link>{' '}
-                    เพียงช่องทางเดียวเท่านั้น
-                  </strong>
-                </Typography>
-              </Box>
-            </Card>
-          </Box>
+          <Card variant="outlined" sx={{ marginBottom: 3, padding: 2 }}>
+            <Typography variant="body1">
+              ทั้งนี้ CU Get Reg เป็นเพียงเครื่องมือที่ช่วยให้การวางแผนลงทะเบียนเรียนง่ายขึ้น{' '}
+              <strong>
+                แต่ไม่ใช่การลงทะเบียนเรียนจริง คุณสามารถลงทะเบียนเรียนได้ที่{' '}
+                <Link
+                  href="https://www2.reg.chula.ac.th/"
+                  target="_blank"
+                  rel="noreferrer"
+                  color={theme.palette.secondaryRange[900]}
+                >
+                  https://www2.reg.chula.ac.th/
+                </Link>{' '}
+                เพียงช่องทางเดียวเท่านั้น
+              </strong>
+            </Typography>
+          </Card>
 
           <Typography variant="h6" component="h3" gutterBottom>
             CU Get Reg นำข้อมูลมาจากไหน?

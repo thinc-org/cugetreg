@@ -110,7 +110,7 @@ export default function About() {
             ที่เกี่ยวข้องกับการเข้าสู่ระบบเพิ่มขึ้น
           </Typography>
           <Typography variant="body1" paragraph>
-            ในการการเข้าสู่ระบบ สามารถใช้บัญชีอีเมลนิสิต (รหัสนิสิต@student.chula.ac.th) เท่านั้น
+            ในการเข้าสู่ระบบ สามารถใช้บัญชีอีเมลนิสิต (รหัสนิสิต@student.chula.ac.th) เท่านั้น
             เพื่อให้สามารถยืนยันตัวตนได้ว่าเป็นนิสิตจุฬาฯ
           </Typography>
           <Typography variant="body1" paragraph>

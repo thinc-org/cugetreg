@@ -8,6 +8,7 @@ import { Analytics } from '@/context/analytics/components/Analytics'
 import { LinkWithAnalytics } from '@/context/analytics/components/LinkWithAnalytics'
 import {
   GETREG_LOGO,
+  NAVBAR_ABOUT,
   NAVBAR_SEARCH_COURSE,
   NAVBAR_TIMETABLE,
   STUDY_PROGRAM_DROPDOWN,
@@ -65,6 +66,10 @@ export function NavBar() {
 
           <LinkWithAnalytics href={`/${studyProgram}/schedule`} passHref elementName={NAVBAR_TIMETABLE}>
             <NavBarItem>{t('navBar:timetable')}</NavBarItem>
+          </LinkWithAnalytics>
+
+          <LinkWithAnalytics href={`/about`} passHref elementName={NAVBAR_ABOUT}>
+            <NavBarItem>{t('navBar:about')}</NavBarItem>
           </LinkWithAnalytics>
 
           <FlexOne />

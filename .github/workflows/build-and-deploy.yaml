@@ -1,16 +1,20 @@
-name: Deploy to Production
+name: Build and Deploy
 
 on:
   push:
-    branches: [master]
+    branches: [beta, dev, master]
 
 permissions:
   contents: read
+  packages: write
   pull-requests: write
   repository-projects: read
 
+env:
+  IMAGE_REPO: ghcr.io/${{ github.repository }}
+
 jobs:
-  deploy:
+  build-and-deploy:
     strategy:
       matrix:
         node-version: [14.x]
@@ -28,17 +32,27 @@ jobs:
         uses: docker/login-action@v1
         with:
           registry: ghcr.io
-          username: ${{ secrets.GH_USERNAME }}
+          username: ${{ github.actor }}
           password: ${{ github.token }}
+
+      - name: Set beta env
+        if: ${{ github.ref == 'refs/heads/beta' || github.ref == 'refs/heads/dev' }}
+        run: mv .env.beta .env
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
+        with:
+          images: ${{ env.IMAGE_REPO }}
 
       - name: Build and push to GitHub Packages
         uses: docker/build-push-action@v2
-        if: ${{ github.ref == 'refs/heads/master' }}
         with:
           push: true
-          tags: ghcr.io/thinc-org/cugetreg/cugetreg-frontend:latest
-          cache-from: type=registry,ref=ghcr.io/thinc-org/cugetreg/cugetreg-frontend:buildcache
-          cache-to: type=registry,ref=ghcr.io/thinc-org/cugetreg/cugetreg-frontend:buildcache,mode=max
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=registry,ref=${{ env.IMAGE_REPO }}:buildcache
+          cache-to: type=registry,ref=${{ env.IMAGE_REPO }}:buildcache,mode=max
           context: .
 
       - name: Connect SSLVPN
@@ -51,16 +65,16 @@ jobs:
 
       - name: Deploy to VM
         uses: appleboy/ssh-action@master
-        if: ${{ github.ref == 'refs/heads/master' }}
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           passphrase: ${{ secrets.SSH_PASSPHRASE }}
           script: |
-            docker pull ghcr.io/thinc-org/cugetreg/cugetreg-frontend:latest
-            docker-compose up -d 
-            if [[ "$(docker images --filter "dangling=true" -q)" == "" ]]; 
-              then echo "No image with <none> tag";
-              else docker rmi $(docker images --filter "dangling=true" -q);
+            docker pull ${{ env.IMAGE_REPO }}:${{ steps.meta.outputs.version }}
+            docker-compose up -d
+            if [[ "$(docker images --filter "dangling=true" -q)" == "" ]]; then
+              echo "No image with <none> tag"
+            else
+              docker rmi $(docker images --filter "dangling=true" -q) || true
             fi

@@ -2,11 +2,11 @@ import styled from '@emotion/styled'
 import { Button, ButtonProps } from '@material-ui/core'
 import DeleteIcon from '@material-ui/icons/Delete'
 import TableChartIcon from '@material-ui/icons/TableChart'
-import React, { useContext } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { ShoppingState } from '@/components/ShoppingPanel/hooks'
-import { ShoppingCartModalContext } from '@/context/ShoppingCartModal'
+import { useShoppingCardModal } from '@/context/ShoppingCartModal'
 import { Analytics } from '@/context/analytics/components/Analytics'
 import { LinkWithAnalytics } from '@/context/analytics/components/LinkWithAnalytics'
 import { SHOPPING_CART_BUTTON, SHOPPING_CART_REMOVE_COURSE } from '@/context/analytics/components/const'
@@ -32,7 +32,7 @@ export const ActionButton: React.FC<ActionButtonProps> = ({
   const { t } = useTranslation('shoppingPanel')
   const { studyProgram } = useCourseGroup()
   const href = `/${studyProgram}/schedule`
-  const { onClose } = useContext(ShoppingCartModalContext)
+  const { onClose } = useShoppingCardModal()
 
   const defaultButtonProps: ButtonProps = {
     ...props,

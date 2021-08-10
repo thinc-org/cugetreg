@@ -8,10 +8,11 @@ import { MdCloudDone, MdCloudQueue, MdCloudOff } from 'react-icons/md'
 import { NavBarItem } from '@/components/TopBar/NavBar/NavBarItem'
 import { Analytics } from '@/context/analytics/components/Analytics'
 import { LOGIN_BUTTON, LOGOUT_BUTTON } from '@/context/analytics/components/const'
-import GoogleLogin from '@/lib/react-google-login/src'
 import { gDriveStore, GDriveSyncState } from '@/store/gDriveState'
-import { authStore } from '@/store/meStore'
+import { gapiStore } from '@/store/googleApiStore'
 import env from '@/utils/env/macro'
+import { login, logout } from '@/utils/googleapi'
+import { grantGdriveSync } from '@/utils/network/gDriveSync'
 
 export const GDriveIndicator = observer(() => {
   const { t } = useTranslation('syncStatus')
@@ -40,6 +41,12 @@ export const GDriveIndicator = observer(() => {
       return (
         <SyncStatus title={t('syncerr')}>
           <MdCloudOff />
+        </SyncStatus>
+      )
+    case GDriveSyncState.NOGRANT:
+      return (
+        <SyncStatus title={t('nogrant')}>
+          <MdCloudOff onClick={() => grantGdriveSync()} />
         </SyncStatus>
       )
   }
@@ -82,26 +89,27 @@ const UserContainer = styled.div`
 `
 
 export default observer(function UserButton() {
-  const pending = authStore.pending
-  const userName = authStore.auth?.firstName
-
-  const onLogout = useCallback(() => authStore.clear(), [])
+  const loaded = gapiStore.isLoaded
+  const user = gapiStore.currentUser
+  const isSignedIn = gapiStore.currentUser?.isSignedIn()
 
   const { t } = useTranslation('navBar')
 
-  if (pending) return null
+  if (!loaded) return null
 
-  if (userName) {
+  const onLogin = () => login()
+
+  if (user && isSignedIn) {
     return (
       <NavBarItemDiv>
         <SyncContainer>
           <GDriveIndicator />
           <UserContainer>
-            <Typography variant="h6">{userName}</Typography>
+            <Typography variant="h6">{user.getBasicProfile().getName()}</Typography>
           </UserContainer>
         </SyncContainer>
         <Analytics elementName={LOGOUT_BUTTON}>
-          <NavBarItem color="primary" onClick={onLogout}>
+          <NavBarItem color="primary" onClick={logout}>
             {t('signout')}
           </NavBarItem>
         </Analytics>
@@ -109,26 +117,9 @@ export default observer(function UserButton() {
     )
   } else {
     return (
-      <GoogleLogin
-        clientId={env.googleauth.clientid!}
-        responseType="code"
-        scope="openid profile email https://www.googleapis.com/auth/drive.appdata"
-        accessType="offline"
-        hostedDomain="student.chula.ac.th"
-        prompt="consent"
-        redirectUri={`${location.origin}/googleauthcallback`}
-        render={(renderProps) => (
-          <Analytics elementName={LOGIN_BUTTON}>
-            <NavBarItem {...renderProps}>{t('signin')}</NavBarItem>
-          </Analytics>
-        )}
-        onSuccess={({ code }: { code: string }) => {
-          authStore.authenticateWithCode(code)
-        }}
-        onFailure={() => {
-          // do nothing
-        }}
-      />
+      <Analytics elementName={LOGIN_BUTTON}>
+        <NavBarItem onClick={onLogin}>{t('signin')}</NavBarItem>
+      </Analytics>
     )
   }
 })

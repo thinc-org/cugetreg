@@ -1,4 +1,4 @@
-import { Checkbox, Grid, Hidden, makeStyles, Typography, useMediaQuery, useTheme } from '@material-ui/core'
+import { Checkbox, Grid, Hidden, Typography, useMediaQuery, useTheme } from '@material-ui/core'
 import { Course } from '@thinc-org/chula-courses'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -11,15 +11,8 @@ export interface CourseListPropsType {
   onChange: (checked: boolean, course: Course) => void
 }
 
-const useStyles = makeStyles((theme) => ({
-  rootGrid: {
-    alignItems: 'center',
-  },
-}))
-
 const CourseList = ({ course, onChange }: CourseListPropsType) => {
-  const classes = useStyles()
-  const { courseNo, abbrName, credit, genEdType } = course
+  const { courseNo, credit, genEdType } = course
 
   const [checked, setChecked] = useState(false)
 
@@ -35,7 +28,7 @@ const CourseList = ({ course, onChange }: CourseListPropsType) => {
   const matches = useMediaQuery(theme.breakpoints.up('sm'))
 
   return (
-    <Grid className={classes.rootGrid} container>
+    <Grid container alignItems="center">
       <Grid item xs="auto">
         <Checkbox size="small" checked={checked} onChange={handleChange} />
       </Grid>
@@ -43,7 +36,7 @@ const CourseList = ({ course, onChange }: CourseListPropsType) => {
         <Typography variant="body1">{courseNo}</Typography>
       </Grid>
       <Grid item xs>
-        <CourseName type={genEdType} courseName={abbrName} />
+        <CourseName course={course} />
       </Grid>
       <Grid item xs={2} sm={3}>
         <Typography variant="body1">{matches ? t('credit', { credit }) : t('creditAbbr', { credit })}</Typography>

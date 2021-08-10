@@ -1,4 +1,4 @@
-import { Typography, makeStyles, DialogTitle, DialogContent, DialogActions, Stack } from '@material-ui/core'
+import { Typography, makeStyles, DialogTitle, DialogContent, DialogActions, Stack, Box } from '@material-ui/core'
 import { Course } from '@thinc-org/chula-courses'
 import { useTranslation } from 'react-i18next'
 
@@ -13,37 +13,7 @@ export interface CoursePropsType {
   data: Course[]
 }
 
-const useStyles = makeStyles((theme) => ({
-  titleWrapper: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  title: {
-    padding: theme.spacing(4, 3, 2),
-    [theme.breakpoints.down('sm')]: {
-      padding: theme.spacing(2, 1.5, 1),
-    },
-  },
-  body: {
-    height: 350,
-    [theme.breakpoints.down('sm')]: {
-      padding: theme.spacing(1, 1.5),
-    },
-  },
-  actions: {
-    padding: theme.spacing(2, 3, 4),
-    [theme.breakpoints.down('sm')]: {
-      padding: theme.spacing(1, 1.5, 2),
-    },
-  },
-  category: {
-    marginBottom: theme.spacing(1),
-  },
-}))
-
 const ShoppingPanel = () => {
-  const classes = useStyles()
   const { shopItems } = courseCartStore
   const { shoppingState, selectedCourses, removeAllSelectedCourses, onCheckboxChange } = useShoppingPanel()
 
@@ -62,19 +32,19 @@ const ShoppingPanel = () => {
 
   return (
     <>
-      <DialogTitle className={classes.title}>
-        <div className={classes.titleWrapper}>
+      <DialogTitle sx={{ px: [2, 3], pt: [2, 4], pb: [1, 2] }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <Typography variant="h4">{t('selectedCourse')}</Typography>
           <Typography variant="h6">{t('totalCredit', { totalCredit })}</Typography>
-        </div>
+        </Box>
       </DialogTitle>
-      <DialogContent className={classes.body}>
+      <DialogContent sx={{ px: [2, 3], py: [1, 2], height: 350 }}>
         {sortedCourses.length === 0 && <EmptyList />}
         <Stack spacing={3}>
           {hasGenEdCourse && (
             <div>
               {shouldDisplayCategory && (
-                <Typography className={classes.category} variant="h6">
+                <Typography mb={1} variant="h6">
                   {t('genedCourse')}
                 </Typography>
               )}
@@ -86,7 +56,7 @@ const ShoppingPanel = () => {
           {hasNonGenEdCourse && (
             <div>
               {shouldDisplayCategory && (
-                <Typography className={classes.category} variant="h6">
+                <Typography mb={1} variant="h6">
                   {t('otherCourse')}
                 </Typography>
               )}
@@ -97,7 +67,7 @@ const ShoppingPanel = () => {
           )}
         </Stack>
       </DialogContent>
-      <DialogActions className={classes.actions}>
+      <DialogActions sx={{ px: [2, 3], pt: [1, 2], pb: [2, 4] }}>
         <ActionButton
           status={shoppingState}
           selectedCoursesNumnber={selectedCourses.length}

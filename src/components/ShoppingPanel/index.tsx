@@ -1,4 +1,4 @@
-import { Typography, makeStyles } from '@material-ui/core'
+import { Typography, makeStyles, DialogTitle, DialogContent, DialogActions, Stack } from '@material-ui/core'
 import { Course } from '@thinc-org/chula-courses'
 import { useTranslation } from 'react-i18next'
 
@@ -7,36 +7,38 @@ import { useShoppingPanel } from '@/components/ShoppingPanel/hooks'
 import { CourseCartItem, courseCartStore } from '@/store'
 
 import CourseList from './components/CourseList'
+import { EmptyList } from './components/EmptyList'
 
 export interface CoursePropsType {
   data: Course[]
 }
 
 const useStyles = makeStyles((theme) => ({
-  container: {
-    padding: theme.spacing(6.25, 5.625, 3.75, 5.625),
-    [theme.breakpoints.down('sm')]: {
-      padding: theme.spacing(2),
-    },
-    backgroundColor: theme.palette.background.paper,
-    width: '100%',
-    borderRadius: theme.shape.borderRadius,
-    boxShadow: theme.shadows[2],
-  },
-  header: {
+  titleWrapper: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-  course: {
-    marginTop: theme.spacing(2),
+  title: {
+    padding: theme.spacing(4, 3, 2),
+    [theme.breakpoints.down('sm')]: {
+      padding: theme.spacing(2, 1.5, 1),
+    },
+  },
+  body: {
+    height: 350,
+    [theme.breakpoints.down('sm')]: {
+      padding: theme.spacing(1, 1.5),
+    },
+  },
+  actions: {
+    padding: theme.spacing(2, 3, 4),
+    [theme.breakpoints.down('sm')]: {
+      padding: theme.spacing(1, 1.5, 2),
+    },
+  },
+  category: {
     marginBottom: theme.spacing(1),
-  },
-  makeScheduleButton: {
-    marginTop: theme.spacing(3),
-  },
-  makeScheduleText: {
-    marginLeft: theme.spacing(1.25),
   },
 }))
 
@@ -47,50 +49,62 @@ const ShoppingPanel = () => {
 
   const { t } = useTranslation('shoppingPanel')
 
-  const credits = shopItems.reduce((prev, { credit }) => prev + credit, 0)
+  const totalCredit = shopItems.reduce((prev, { credit }) => prev + credit, 0)
 
-  const sortCourse = (courseA: CourseCartItem, courseB: CourseCartItem) => {
-    return courseA.courseNo.localeCompare(courseB.courseNo)
-  }
+  const sortedCourses = shopItems.sort((courseA: CourseCartItem, courseB: CourseCartItem) =>
+    courseA.courseNo.localeCompare(courseB.courseNo)
+  )
+  const nonGenEdCourses = sortedCourses.filter((course) => course.genEdType === 'NO')
+  const genEdCourses = sortedCourses.filter((course) => course.genEdType !== 'NO')
+  const hasNonGenEdCourse = nonGenEdCourses.length > 0
+  const hasGenEdCourse = genEdCourses.length > 0
+  const shouldDisplayCategory = hasNonGenEdCourse && hasGenEdCourse
 
   return (
-    <div className={classes.container}>
-      <div className={classes.header}>
-        <Typography variant="h4">{t('selectedCourse')}</Typography>
-        <Typography variant="h6"> {t('totalCredit', { totalCredit: credits })}</Typography>
-      </div>
-      <div>
-        <Typography className={classes.course} variant="h6">
-          {t('genedCourse')}
-        </Typography>
-        {shopItems.sort(sortCourse).map((course: CourseCartItem) => {
-          return (
-            course.genEdType !== 'NO' && (
-              <CourseList key={course.courseNo} course={course} onChange={onCheckboxChange} />
-            )
-          )
-        })}
-      </div>
-      <div>
-        <Typography className={classes.course} variant="h6">
-          {t('otherCourse')}
-        </Typography>
-        {shopItems.sort(sortCourse).map((course: CourseCartItem) => {
-          return (
-            course.genEdType === 'NO' && (
-              <CourseList key={course.courseNo} course={course} onChange={onCheckboxChange} />
-            )
-          )
-        })}
-      </div>
-      <div className={classes.makeScheduleButton}>
+    <>
+      <DialogTitle className={classes.title}>
+        <div className={classes.titleWrapper}>
+          <Typography variant="h4">{t('selectedCourse')}</Typography>
+          <Typography variant="h6">{t('totalCredit', { totalCredit })}</Typography>
+        </div>
+      </DialogTitle>
+      <DialogContent className={classes.body}>
+        {sortedCourses.length === 0 && <EmptyList />}
+        <Stack spacing={3}>
+          {hasGenEdCourse && (
+            <div>
+              {shouldDisplayCategory && (
+                <Typography className={classes.category} variant="h6">
+                  {t('genedCourse')}
+                </Typography>
+              )}
+              {genEdCourses.map((course) => (
+                <CourseList key={course.courseNo} course={course} onChange={onCheckboxChange} />
+              ))}
+            </div>
+          )}
+          {hasNonGenEdCourse && (
+            <div>
+              {shouldDisplayCategory && (
+                <Typography className={classes.category} variant="h6">
+                  {t('otherCourse')}
+                </Typography>
+              )}
+              {nonGenEdCourses.map((course) => (
+                <CourseList key={course.courseNo} course={course} onChange={onCheckboxChange} />
+              ))}
+            </div>
+          )}
+        </Stack>
+      </DialogContent>
+      <DialogActions className={classes.actions}>
         <ActionButton
           status={shoppingState}
           selectedCoursesNumnber={selectedCourses.length}
           removeAllSelectedCourses={removeAllSelectedCourses}
         />
-      </div>
-    </div>
+      </DialogActions>
+    </>
   )
 }
 

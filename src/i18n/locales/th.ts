@@ -41,6 +41,7 @@ export const shoppingPanel = {
     default: 'จัดตารางเรียน',
     delete: 'นำออก {{number}} รายการ ',
   },
+  empty: 'คุณยังไม่ได้เลือกวิชา',
 }
 
 export const schedulePage = {

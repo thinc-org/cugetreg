@@ -1,4 +1,4 @@
-import { Typography, makeStyles, DialogTitle, DialogContent, DialogActions, Stack, Box } from '@material-ui/core'
+import { Typography, DialogTitle, DialogContent, DialogActions, Stack, Box } from '@material-ui/core'
 import { Course } from '@thinc-org/chula-courses'
 import { useTranslation } from 'react-i18next'
 
@@ -32,13 +32,13 @@ const ShoppingPanel = () => {
 
   return (
     <>
-      <DialogTitle sx={{ px: [2, 3], pt: [2, 4], pb: [1, 2] }}>
+      <DialogTitle sx={{ pt: [2, 4], pb: [1, 2] }}>
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <Typography variant="h4">{t('selectedCourse')}</Typography>
           <Typography variant="h6">{t('totalCredit', { totalCredit })}</Typography>
         </Box>
       </DialogTitle>
-      <DialogContent sx={{ px: [2, 3], py: [1, 2], height: 350 }}>
+      <DialogContent sx={{ py: 1, height: 350 }}>
         {sortedCourses.length === 0 && <EmptyList />}
         <Stack spacing={3}>
           {hasGenEdCourse && (
@@ -67,7 +67,7 @@ const ShoppingPanel = () => {
           )}
         </Stack>
       </DialogContent>
-      <DialogActions sx={{ px: [2, 3], pt: [1, 2], pb: [2, 4] }}>
+      <DialogActions sx={{ px: 3, pt: [1, 2], pb: [2, 4] }}>
         <ActionButton
           status={shoppingState}
           selectedCoursesNumnber={selectedCourses.length}

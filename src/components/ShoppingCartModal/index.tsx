@@ -1,5 +1,5 @@
 import { useTheme } from '@emotion/react'
-import { Dialog, Slide, useMediaQuery, makeStyles } from '@material-ui/core'
+import { Dialog, Slide, useMediaQuery } from '@material-ui/core'
 import { SlideProps } from '@material-ui/core'
 import { ForwardedRef, forwardRef, useContext } from 'react'
 
@@ -10,16 +10,7 @@ const Transition = forwardRef((props: SlideProps, ref: ForwardedRef<unknown>) =>
   return <Slide direction="up" ref={ref} {...props} />
 })
 
-const useStyles = makeStyles((theme) => ({
-  [theme.breakpoints.down('sm')]: {
-    topPaperScrollBody: {
-      verticalAlign: 'bottom',
-    },
-  },
-}))
-
 export function ShoppingCartModal() {
-  const classes = useStyles()
   const { isOpen, onClose } = useContext(ShoppingCartModalContext)
 
   const theme = useTheme()
@@ -27,14 +18,19 @@ export function ShoppingCartModal() {
 
   return (
     <Dialog
-      classes={{
-        paperScrollBody: classes.topPaperScrollBody,
-      }}
       open={isOpen}
       onClose={onClose}
       fullWidth
       scroll="body"
       TransitionComponent={isSm ? Transition : undefined}
+      sx={{
+        '& .MuiDialog-paperScrollBody': {
+          verticalAlign: ['bottom', 'middle'],
+          m: [2, 4],
+          width: (theme) => [`calc(100% - ${theme.spacing(4)})`, `calc(100% - ${theme.spacing(8)})`],
+          maxWidth: (theme) => [`calc(100% - ${theme.spacing(4)})`, theme.breakpoints.values.sm],
+        },
+      }}
     >
       <ShoppingPanel />
     </Dialog>

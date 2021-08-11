@@ -30,7 +30,7 @@ const CourseList = ({ course, onChange }: CourseListPropsType) => {
   return (
     <Grid container alignItems="center">
       <Grid item xs="auto">
-        <Checkbox size="small" checked={checked} onChange={handleChange} />
+        <Checkbox sx={{ ml: -1 }} size="small" checked={checked} onChange={handleChange} />
       </Grid>
       <Grid item xs={3} sm={2}>
         <Typography variant="body1">{courseNo}</Typography>

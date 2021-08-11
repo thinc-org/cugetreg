@@ -17,7 +17,6 @@ import { NoTagListLayout, TagList } from '@/modules/CourseSearch/component/TagLi
 import { CourseSearchProvider } from '@/modules/CourseSearch/context/CourseSearch'
 import { extractSearchVarsFromQuery } from '@/modules/CourseSearch/hooks/useSearchCourseQueryParams'
 import { Container, Stack, TitleStack, StickyStack } from '@/modules/CourseSearch/styles'
-import { CourseSearchPagePrefetchData } from '@/modules/CourseSearch/types'
 import { currentTerm } from '@/utils/courseGroup'
 import { SearchCourseResponse, SearchCourseVars, SEARCH_COURSE } from '@/utils/network/BackendGQLQueries'
 import { createApolloServerClient } from '@/utils/network/apollo'
@@ -66,32 +65,12 @@ function CourseSearchPage() {
   )
 }
 
-const CourseSearchPageWithCourseSearchProvider = (props: { prefetch?: CourseSearchPagePrefetchData }) => {
+const CourseSearchPageWithCourseSearchProvider = () => {
   return (
-    <CourseSearchProvider cache={props.prefetch}>
+    <CourseSearchProvider>
       <CourseSearchPage />
     </CourseSearchProvider>
   )
 }
 
 export default CourseSearchPageWithCourseSearchProvider
-
-export async function getServerSideProps(
-  context: GetServerSidePropsContext
-): Promise<GetServerSidePropsResult<{ prefetch?: CourseSearchPagePrefetchData }>> {
-  try {
-    const vars: SearchCourseVars = extractSearchVarsFromQuery(context.query, {
-      ...currentTerm,
-      studyProgram: context.query.studyProgram as StudyProgram,
-    })
-    const client = createApolloServerClient()
-    const result = await client.query<SearchCourseResponse, SearchCourseVars>({
-      query: SEARCH_COURSE,
-      variables: vars,
-    })
-    return { props: { prefetch: { data: result.data, vars } } }
-  } catch (e) {
-    collectErrorLog(`Search Page SSR Fetch Failed for query ${context.query}`, e)
-    return { props: {} }
-  }
-}

@@ -1,7 +1,7 @@
 import { Card, Grid, Typography } from '@material-ui/core'
 import React from 'react'
 
-import { authStore } from '@/store/meStore'
+import { gapiStore } from '@/store/googleApiStore'
 import { collectErrorLog, sessionId } from '@/utils/network/logging'
 
 export class ErrorBoundary extends React.Component<{}, { hasError: boolean }> {
@@ -27,7 +27,7 @@ export class ErrorBoundary extends React.Component<{}, { hasError: boolean }> {
           <Typography variant="h3">
             <p>Please contact the development team (upper right button)</p>
             <p>Session ID: {sessionId}</p>
-            <p>UID: {authStore.auth?._id}</p>
+            <p>UID: {gapiStore.currentUser?.getId()}</p>
           </Typography>
         </Grid>
       )

@@ -68,6 +68,7 @@
     "@testing-library/react-hooks": "^5.0.3",
     "@trivago/prettier-plugin-sort-imports": "^2.0.2",
     "@types/babel-plugin-macros": "^2.8.4",
+    "@types/gapi.auth2": "^0.0.55",
     "@types/jest": "^26.0.20",
     "@types/node": "^14.14.20",
     "@types/nprogress": "^0.2.0",

@@ -26,14 +26,9 @@ import { GetCourseResponse, GetCourseVars, GET_COURSE } from '@/utils/network/Ba
 import { createApolloServerClient } from '@/utils/network/apollo'
 
 function CourseDetailPage(props: { data: GetCourseResponse }) {
-  const router = useRouter()
   const { i18n } = useTranslation()
   const { studyProgram } = useCourseGroup()
-
-  const { data } = useQuery<GetCourseResponse, GetCourseVars>(GET_COURSE, {
-    variables: parseVariablesFromQuery(router.query),
-  })
-  const cData = props.data || data
+  const cData = props.data
 
   const CourseList = groupBy(cData.course.sections, 'note', 'General').map((sectionGroup) => {
     const SectionGroup = sectionGroup.value.map((section) => (

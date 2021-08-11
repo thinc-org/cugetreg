@@ -160,6 +160,7 @@ export const syncStatus = {
   syncing: 'กำลังซิงค์',
   synced: 'ซิงค์สำเร็จ',
   syncerr: 'การซิงค์ล้มเหลว',
+  nogrant: 'ไม่ได้รับสิทธ์ในการบันทึกตารางสอนลง Google Drive กดคลิกเพื่อขอสิทธิ์อีกครั้ง',
 }
 
 export const regWarNotice = {

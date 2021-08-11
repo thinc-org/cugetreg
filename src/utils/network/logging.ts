@@ -2,7 +2,7 @@ import axios from 'axios'
 import { runInAction } from 'mobx'
 import * as uuid from 'uuid'
 
-import { authStore } from '@/store/meStore'
+import { gapiStore } from '@/store/googleApiStore'
 import { sessionIdStore } from '@/store/sessionIdStore'
 import env from '@/utils/env/macro'
 
@@ -79,7 +79,7 @@ export function collectLogEvent(event: LogEvent) {
     ...event,
     deviceId: deviceId,
     sessionId: sessionId,
-    accessToken: authStore.auth?.accessToken,
+    accessToken: gapiStore.currentUser?.getAuthResponse().id_token,
   }
   backlogLog.push(log)
   if (backlogLog.length >= 5) sendCollectedLog()

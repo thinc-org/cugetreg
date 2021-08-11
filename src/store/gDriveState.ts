@@ -6,6 +6,7 @@ export enum GDriveSyncState {
   SYNCING,
   SYNCED,
   SYNCERR,
+  NOGRANT,
 }
 
 export const gDriveStore = observable({

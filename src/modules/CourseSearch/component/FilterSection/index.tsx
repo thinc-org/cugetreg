@@ -1,9 +1,10 @@
-import { css } from '@emotion/react'
+import { css, useTheme } from '@emotion/react'
 import styled from '@emotion/styled'
-import { Button as MuiButton, Dialog, DialogContent as MuiDialogContent, Hidden, Paper, Stack } from '@material-ui/core'
+import { Button as MuiButton, DialogContent as MuiDialogContent, Paper, Stack, useMediaQuery } from '@material-ui/core'
 import React from 'react'
 
 import { DayChipKey, GenEdChipKey } from '@/components/Chips/config'
+import { ResponsiveDialog } from '@/components/ResponsiveDialog'
 import { Analytics } from '@/context/analytics/components/Analytics'
 import { DAY_FILTER, GENED_FILTER } from '@/context/analytics/components/const'
 import { CheckboxGroup } from '@/modules/CourseSearch/component/FilterSection/components/CheckboxGroup'
@@ -63,43 +64,41 @@ export const FilterSection: React.FC<FilterSectionProps> = ({ open, setOpen }) =
     setOpen(false)
   }
 
-  if (!open) return null
+  const theme = useTheme()
+  const match = useMediaQuery(theme.breakpoints.up('sm'))
 
-  return (
-    <>
-      <Hidden mdDown>
-        <Container hasTags={hasTags}>
-          <Paper className={classes.paper} variant="outlined">
-            <Stack spacing={4}>
-              <Analytics elementName={GENED_FILTER}>
-                {({ log }) => <CheckboxGroup log={log} title="หมวดหมู่ GenEd" checkboxes={genEdCheckboxes} />}
-              </Analytics>
-              <Analytics elementName={DAY_FILTER}>
-                {({ log }) => <CheckboxGroup log={log} title="วันในสัปดาห์" checkboxes={dayOfWeekCheckboxes} />}
-              </Analytics>
-              {/* <CheckboxGroup title="แสดงผลพิเศษ" checkboxes={specialCheckboxes} /> */}
-            </Stack>
-          </Paper>
-        </Container>
-      </Hidden>
-      <Hidden mdUp>
-        <Dialog open onClose={handleClose} maxWidth="xl">
-          <DialogContent>
-            <Box>
-              <Analytics elementName={GENED_FILTER}>
-                {({ log }) => <CheckboxGroup log={log} title="หมวดหมู่ GenEd" checkboxes={genEdCheckboxes} />}
-              </Analytics>
-              <Analytics elementName={DAY_FILTER}>
-                {({ log }) => <CheckboxGroup log={log} title="วันในสัปดาห์" checkboxes={dayOfWeekCheckboxes} />}
-              </Analytics>
-            </Box>
+  return match ? (
+    open ? (
+      <Container hasTags={hasTags}>
+        <Paper className={classes.paper} variant="outlined">
+          <Stack spacing={4}>
+            <Analytics elementName={GENED_FILTER}>
+              {({ log }) => <CheckboxGroup log={log} title="หมวดหมู่ GenEd" checkboxes={genEdCheckboxes} />}
+            </Analytics>
+            <Analytics elementName={DAY_FILTER}>
+              {({ log }) => <CheckboxGroup log={log} title="วันในสัปดาห์" checkboxes={dayOfWeekCheckboxes} />}
+            </Analytics>
             {/* <CheckboxGroup title="แสดงผลพิเศษ" checkboxes={specialCheckboxes} /> */}
-            <Button color="primary" variant="outlined" fullWidth onClick={handleClose}>
-              เลือกตัวกรอง
-            </Button>
-          </DialogContent>
-        </Dialog>
-      </Hidden>
-    </>
+          </Stack>
+        </Paper>
+      </Container>
+    ) : null
+  ) : (
+    <ResponsiveDialog open={open} onClose={handleClose}>
+      <DialogContent>
+        <Box>
+          <Analytics elementName={GENED_FILTER}>
+            {({ log }) => <CheckboxGroup log={log} title="หมวดหมู่ GenEd" checkboxes={genEdCheckboxes} />}
+          </Analytics>
+          <Analytics elementName={DAY_FILTER}>
+            {({ log }) => <CheckboxGroup log={log} title="วันในสัปดาห์" checkboxes={dayOfWeekCheckboxes} />}
+          </Analytics>
+        </Box>
+        {/* <CheckboxGroup title="แสดงผลพิเศษ" checkboxes={specialCheckboxes} /> */}
+        <Button color="primary" variant="outlined" fullWidth onClick={handleClose}>
+          เลือกตัวกรอง
+        </Button>
+      </DialogContent>
+    </ResponsiveDialog>
   )
 }

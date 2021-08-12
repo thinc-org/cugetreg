@@ -1,5 +1,5 @@
 import Link, { LinkProps } from 'next/link'
-import { cloneElement, forwardRef, ReactElement } from 'react'
+import { cloneElement, ReactElement } from 'react'
 
 import { useLog } from './useLog'
 
@@ -24,27 +24,10 @@ export function LinkWithAnalytics({
   ...props
 }: LinkWithAnalyticsProps & { children: ReactElement<LinkComponentProps> }) {
   const { log } = useLog(elementName, elementId, pathId)
-  return (
-    <Link {...props}>
-      <CaptureProps>
-        {({ onClick, ...props }, ref) => {
-          const handleClick = (event: React.MouseEvent<Element, MouseEvent>) => {
-            log()
-            if (typeof onClick === 'function') {
-              onClick(event)
-            }
-          }
-          return cloneElement(children, { ref, onClick: handleClick, ...props })
-        }}
-      </CaptureProps>
-    </Link>
-  )
+  const childrenOnClick = children.props.onClick
+  const onClick = (event: React.MouseEvent<Element, MouseEvent>) => {
+    childrenOnClick?.(event)
+    log()
+  }
+  return <Link {...props}>{cloneElement(children, { onClick })}</Link>
 }
-
-interface CapturePropsProps extends LinkComponentProps {
-  children: (props: LinkComponentProps, ref: unknown) => ReactElement<LinkComponentProps>
-}
-
-const CaptureProps = forwardRef(function CaptureProps({ children, ...props }: CapturePropsProps, ref: unknown) {
-  return children(props, ref)
-})

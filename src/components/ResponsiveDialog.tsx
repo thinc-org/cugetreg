@@ -18,6 +18,9 @@ export const ResponsiveDialog = ({ sx, ...props }: DialogProps) => {
       TransitionComponent={match ? Transition : undefined}
       sx={deepAssign(
         {
+          '& .MuiDialog-container': {
+            pb: 'env(safe-area-inset-bottom)',
+          },
           '&& .MuiDialog-paperScrollBody': {
             verticalAlign: ['bottom', 'middle'],
           },

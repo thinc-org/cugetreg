@@ -1,9 +1,10 @@
-import { Box, CardHeader, Grid, IconButton, Link, Typography } from '@material-ui/core'
+import { CardHeader, Grid, IconButton, Link, Typography } from '@material-ui/core'
 import KeyboardArrowDown from '@material-ui/icons/KeyboardArrowDown'
 import KeyboardArrowUp from '@material-ui/icons/KeyboardArrowUp'
 import { useTranslation } from 'react-i18next'
 
 import GenEdChip from '@/components/Chips/catagories/GenEdChip'
+import { Flex } from '@/components/Flex'
 import { Analytics } from '@/context/analytics/components/Analytics'
 import { LinkWithAnalytics } from '@/context/analytics/components/LinkWithAnalytics'
 import { COURSE_TITLE, EXPAND_BUTTON } from '@/context/analytics/components/const'
@@ -25,7 +26,7 @@ export function CardHeading({ isExpanded, onToggle }: CardHeadingProps) {
     <CardHeader
       sx={{ p: 4, pb: 0, pt: 3 }}
       title={
-        <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+        <Flex justify="space-between">
           <Grid container spacing={1}>
             <Grid item>
               <LinkWithAnalytics
@@ -57,7 +58,7 @@ export function CardHeading({ isExpanded, onToggle }: CardHeadingProps) {
               <Typography variant="h6">{rating}</Typography>
             </Stack>
           )} */}
-        </Box>
+        </Flex>
       }
       action={
         <Analytics elementName={EXPAND_BUTTON} elementId={course.courseNo}>

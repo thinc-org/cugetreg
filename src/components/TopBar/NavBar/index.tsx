@@ -3,7 +3,7 @@ import { Hidden } from '@material-ui/core'
 import { useTranslation } from 'react-i18next'
 
 import logo from '@/assets/images/cgrLogoDark.svg'
-import { FlexOne } from '@/components/FlexOne'
+import { Spacer } from '@/components/Flex'
 import { Analytics } from '@/context/analytics/components/Analytics'
 import { LinkWithAnalytics } from '@/context/analytics/components/LinkWithAnalytics'
 import {
@@ -72,11 +72,11 @@ export function NavBar() {
             <NavBarItem>{t('navBar:about')}</NavBarItem>
           </LinkWithAnalytics>
 
-          <FlexOne />
+          <Spacer />
           <UserButton />
         </Hidden>
         <Hidden smUp>
-          <FlexOne />
+          <Spacer />
           <Analytics elementName={STUDY_PROGRAM_DROPDOWN}>{({ log }) => <StudyProgramDropdown log={log} />}</Analytics>
           <ConfigBarItem>
             {academicYear}/{semester}

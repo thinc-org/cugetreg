@@ -1,5 +1,4 @@
-import styled from '@emotion/styled'
-import { Box, CardHeader, Grid, IconButton, Typography } from '@material-ui/core'
+import { Box, CardHeader, Grid, IconButton, Link, Typography } from '@material-ui/core'
 import KeyboardArrowDown from '@material-ui/icons/KeyboardArrowDown'
 import KeyboardArrowUp from '@material-ui/icons/KeyboardArrowUp'
 import { useTranslation } from 'react-i18next'
@@ -11,15 +10,6 @@ import { COURSE_TITLE, EXPAND_BUTTON } from '@/context/analytics/components/cons
 import { useCourseGroup } from '@/utils/hooks/useCourseGroup'
 
 import { useCourseCardContext } from '../useCourseCard'
-
-const StyledLink = styled.a`
-  text-decoration: underline;
-  text-decoration-color: transparent;
-  transition: 0.2s ease-in-out;
-  :hover {
-    text-decoration-color: ${({ theme }) => theme.palette.primary.main};
-  }
-`
 
 interface CardHeadingProps {
   isExpanded: boolean
@@ -44,11 +34,9 @@ export function CardHeading({ isExpanded, onToggle }: CardHeadingProps) {
                 elementName={COURSE_TITLE}
                 elementId={course.courseNo}
               >
-                <StyledLink>
-                  <Typography variant="h5" color="primaryRange.500">
-                    {course.courseNo} {course.abbrName}
-                  </Typography>
-                </StyledLink>
+                <Typography variant="h5" color="primaryRange.500" component={Link}>
+                  {course.courseNo} {course.abbrName}
+                </Typography>
               </LinkWithAnalytics>
             </Grid>
             <Grid item>

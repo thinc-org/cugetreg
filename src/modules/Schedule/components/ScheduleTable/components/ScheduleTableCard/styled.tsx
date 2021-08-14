@@ -1,6 +1,7 @@
 import { css, Theme } from '@emotion/react'
 import styled from '@emotion/styled'
 import { Button } from '@material-ui/core'
+import { motion } from 'framer-motion'
 
 import { PaletteRange } from '@/configs/theme/palette'
 
@@ -20,8 +21,11 @@ export const CardLayout = styled.div`
   }
 `
 
-export const CardContent = styled.div`
+export const CardContent = styled(motion.div)`
   display: flex;
+  ${({ theme }) => theme.breakpoints.down('md')} {
+    width: calc(100% + 40px);
+  }
 `
 
 export const CardBorder = styled.div`
@@ -90,6 +94,7 @@ export const LeftPane = styled.div`
     flex: 1;
     width: 88px;
     font-size: 28px;
+    border-radius: 4px;
 
     ${({ theme }) => theme.breakpoints.down('md')} {
       min-width: 40px;
@@ -99,7 +104,7 @@ export const LeftPane = styled.div`
   }
 `
 
-export const RightPane = styled.div`
+export const MiddlePane = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1;

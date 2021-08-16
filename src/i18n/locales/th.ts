@@ -13,6 +13,7 @@ export const navBar = {
   news: 'ข่าวสาร',
   searchCourses: 'ค้นหาวิชาเรียน',
   timetable: 'จัดตารางเรียน',
+  about: 'เกี่ยวกับเรา',
   signin: 'เข้าสู่ระบบ',
   signout: 'ออกจากระบบ',
 }
@@ -40,6 +41,7 @@ export const shoppingPanel = {
     default: 'จัดตารางเรียน',
     delete: 'นำออก {{number}} รายการ ',
   },
+  empty: 'คุณยังไม่ได้เลือกวิชา',
 }
 
 export const schedulePage = {
@@ -159,6 +161,7 @@ export const syncStatus = {
   syncing: 'กำลังซิงค์',
   synced: 'ซิงค์สำเร็จ',
   syncerr: 'การซิงค์ล้มเหลว',
+  nogrant: 'ไม่ได้รับสิทธ์ในการบันทึกตารางสอนลง Google Drive กดคลิกเพื่อขอสิทธิ์อีกครั้ง',
 }
 
 export const regWarNotice = {

@@ -1,36 +1,33 @@
-import styled from '@emotion/styled'
-import { Hidden, Typography as MuiTypography } from '@material-ui/core'
+import { Link } from '@material-ui/core'
+import { Course } from '@thinc-org/chula-courses'
 import React from 'react'
 
-import { genEdChipConfig, GenEdChipKey } from '@/components/Chips/config'
-import { ChipFilledHighlightColor, ChipOutlinedHighlightColor } from '@/configs/theme/overrides/chip'
+import { genEdChipConfig } from '@/components/Chips/config'
+import { useShoppingCardModal } from '@/context/ShoppingCartModal'
+import { LinkWithAnalytics } from '@/context/analytics/components/LinkWithAnalytics'
+import { SELECTED_COURSE_TITLE } from '@/context/analytics/components/const'
+import { useCourseGroup } from '@/utils/hooks/useCourseGroup'
 
 export interface CourseNameProps {
-  courseName: string
-  type: GenEdChipKey
+  course: Course
 }
 
-interface TypographyProps {
-  $color: ChipFilledHighlightColor | ChipOutlinedHighlightColor
-}
+export const CourseName: React.FC<CourseNameProps> = ({ course }) => {
+  const { abbrName, genEdType, courseNo } = course
+  const color = genEdChipConfig[genEdType].color
+  const { onClose } = useShoppingCardModal()
 
-const Typography = styled(MuiTypography)<TypographyProps>`
-  color: ${({ $color, theme }) => theme.palette[$color].main};
-`
-
-export const CourseName: React.FC<CourseNameProps> = ({ courseName, type }) => {
-  const color = genEdChipConfig[type].color
-
+  const { studyProgram } = useCourseGroup()
   return (
-    <>
-      <Hidden smUp>
-        <Typography variant="body1" $color={color}>
-          {courseName}
-        </Typography>
-      </Hidden>
-      <Hidden smDown>
-        <MuiTypography variant="body1">{courseName}</MuiTypography>
-      </Hidden>
-    </>
+    <LinkWithAnalytics
+      href={`/${studyProgram}/courses/${courseNo}`}
+      passHref
+      elementName={SELECTED_COURSE_TITLE}
+      elementId={courseNo}
+    >
+      <Link color={{ xs: `${color}.main`, sm: 'primary.main' }} onClick={onClose}>
+        {abbrName}
+      </Link>
+    </LinkWithAnalytics>
   )
 }

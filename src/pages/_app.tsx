@@ -24,10 +24,10 @@ import useApp from '@/hooks/useApp'
 import '@/i18n'
 import { courseCartStore } from '@/store'
 import { gDriveStore, GDriveSyncState } from '@/store/gDriveState'
-import { authStore } from '@/store/meStore'
+import { gapiStore } from '@/store/googleApiStore'
 import '@/styles/globals.css'
+import { loadGapi } from '@/utils/googleapi'
 import { syncWithLocalStorage } from '@/utils/localstorage'
-import { setupGAPI, startGDriveSync } from '@/utils/network/gDriveSync'
 import { startLogging } from '@/utils/network/logging'
 
 mobxConfiguration()
@@ -51,7 +51,7 @@ function MyApp({ Component, pageProps, forceDark, router }: AppProps) {
 
     reaction(
       () => ({
-        isLoggedIn: authStore.isLoggedIn,
+        isLoggedIn: gapiStore.currentUser?.isSignedIn() && gDriveStore.gDriveState !== GDriveSyncState.NOGRANT,
         cart: [...courseCartStore.shopItems],
         cartInitLocal: courseCartStore.isInitializedLocal,
       }),
@@ -60,8 +60,6 @@ function MyApp({ Component, pageProps, forceDark, router }: AppProps) {
       },
       { fireImmediately: true, delay: 1000 }
     )
-
-    authStore.tryRestoreWithLocalStorage()
   }, [])
 
   useEffect(startLogging, [])
@@ -84,36 +82,18 @@ function MyApp({ Component, pageProps, forceDark, router }: AppProps) {
     close()
   }
 
+  //GAPI hook
+  useEffect(() => {
+    loadGapi()
+  }, [])
+
   const value = { handleClose, message, emitMessage, action: actionText }
-
-  const [gapiLoaded, setGapiLoaded] = useState(false)
-
-  const gapiCallback = useCallback(() => {
-    if (gapiLoaded) {
-      console.log('[GAPI] Repeated initilization attempt detected')
-      return
-    }
-    console.log('[GAPI] Script loaded')
-    setGapiLoaded(true)
-    setupGAPI()
-      .then(startGDriveSync)
-      .catch((e) => {
-        console.error('[GDRIVE] Error while starting drive sync', e)
-        runInAction(() => {
-          gDriveStore.gDriveState = GDriveSyncState.FAIL
-        })
-      })
-  }, [gapiLoaded])
-  if (typeof window !== 'undefined' && !gapiLoaded) {
-    (window as any).gapiInit = gapiCallback
-  }
 
   return (
     <>
       <Head>
         <title>CU Get Reg</title>
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
-        {!gapiLoaded && <script async defer src={'https://apis.google.com/js/api.js?onload=gapiInit'} />}
       </Head>
       <AppProvider disclosureValue={disclosureValue} snackBarContextValue={value} forceDark={forceDark}>
         <TrackPageChange>

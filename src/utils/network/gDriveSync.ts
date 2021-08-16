@@ -2,28 +2,9 @@ import { reaction, runInAction } from 'mobx'
 
 import { CourseCartItem, courseCartStore } from '@/store'
 import { gDriveStore, GDriveSyncState } from '@/store/gDriveState'
-import { authStore } from '@/store/meStore'
+import { gapiStore } from '@/store/googleApiStore'
 
 import { collectErrorLog } from './logging'
-
-/** Load Google API Client and setup token */
-export async function setupGAPI(): Promise<void> {
-  await new Promise((resolve, _) => gapi.load('client:auth2', resolve))
-  await gapi.client.load('drive', 'v3')
-  await gapi.client.init({})
-
-  reaction(
-    () => authStore.me?.google.accessToken,
-    (gapiToken) => {
-      if (gapiToken) {
-        console.log('[GAPI] Setting new token')
-        gapi.client.setToken({ access_token: gapiToken })
-      }
-    },
-    { fireImmediately: true }
-  )
-  console.log('[GAPI] Initialized')
-}
 
 const setGState = (s: GDriveSyncState) =>
   runInAction(() => {
@@ -128,6 +109,8 @@ let gDriveSyncLock = false
 
 /** Start reaction watchiing changes in coursecart then sync to GDrive and update sync UI */
 export async function startGDriveSync() {
+  await gapi.client.load('drive', 'v3')
+
   const trackedSync = (fn: () => Promise<void>) => {
     if (gDriveSyncLock) return
     gDriveSyncLock = true
@@ -150,7 +133,7 @@ export async function startGDriveSync() {
 
   reaction(
     () => ({
-      isLoggedIn: authStore.isLoggedIn,
+      isLoggedIn: gapiStore.currentUser?.isSignedIn(),
       cart: [...courseCartStore.shopItems],
       cartInit: courseCartStore.isInitialized,
     }),
@@ -164,4 +147,15 @@ export async function startGDriveSync() {
     { fireImmediately: true, delay: 1000 }
   )
   console.log('[GDRIVE] Store update handler registered')
+}
+
+export const GDRIVE_SCOPE = 'https://www.googleapis.com/auth/drive.appdata'
+
+export function grantGdriveSync() {
+  const user = gapi.auth2.getAuthInstance().currentUser.get()
+  user
+    .grant({
+      scope: GDRIVE_SCOPE,
+    })
+    .then(startGDriveSync)
 }

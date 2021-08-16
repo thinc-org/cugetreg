@@ -1,33 +1,23 @@
-import styled from '@emotion/styled'
-import { Dialog, IconButton, DialogTitle } from '@material-ui/core'
-import { useContext } from 'react'
-import { MdClose } from 'react-icons/md'
-
+import { ResponsiveDialog } from '@/components/ResponsiveDialog'
 import ShoppingPanel from '@/components/ShoppingPanel'
-import { ShoppingCartModalContext } from '@/context/ShoppingCartModal'
-
-const Title = styled.div`
-  display: flex;
-  align-items: center;
-  padding-right: 4px;
-`
-
-const FlexOne = styled.div`
-  flex: 1;
-`
+import { useShoppingCardModal } from '@/context/ShoppingCartModal'
 
 export function ShoppingCartModal() {
-  const { isOpen, onClose } = useContext(ShoppingCartModalContext)
+  const { isOpen, onClose } = useShoppingCardModal()
   return (
-    <Dialog open={isOpen} onClose={onClose} fullWidth maxWidth="md">
-      <Title>
-        <DialogTitle>รายวิชาที่ถูกเลือก</DialogTitle>
-        <FlexOne />
-        <IconButton onClick={onClose}>
-          <MdClose />
-        </IconButton>
-      </Title>
+    <ResponsiveDialog
+      open={isOpen}
+      onClose={onClose}
+      fullWidth
+      sx={{
+        '&& .MuiDialog-paperScrollBody': {
+          m: [2, 4],
+          width: (theme) => [`calc(100% - ${theme.spacing(4)})`, `calc(100% - ${theme.spacing(8)})`],
+          maxWidth: (theme) => [`calc(100% - ${theme.spacing(4)})`, theme.breakpoints.values.sm],
+        },
+      }}
+    >
       <ShoppingPanel />
-    </Dialog>
+    </ResponsiveDialog>
   )
 }

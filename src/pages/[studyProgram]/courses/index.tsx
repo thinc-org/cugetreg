@@ -1,1 +1,1 @@
-export { default, getServerSideProps } from '@/modules/CourseSearch'
+export { default } from '@/modules/CourseSearch'

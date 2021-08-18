@@ -31,6 +31,7 @@ import {
   RightPane,
 } from '@/modules/Schedule/components/ScheduleTable/components/ScheduleTableCard/styled'
 import { CourseCartItem, courseCartStore } from '@/store'
+import { unique } from '@/utils'
 
 export interface ScheduleTableCardProps {
   item: CourseCartItem
@@ -180,7 +181,7 @@ function SectionSelect({ item }: CardComponentProps) {
 function CardDetail({ item }: CardComponentProps) {
   const { t } = useTranslation('courseCard')
   const section = item.sections.find((section) => section.sectionNo === item.selectedSectionNo)!
-  const teachers = section?.classes.flatMap((cls) => cls.teachers)
+  const teachers = unique(section.classes.flatMap((cls) => cls.teachers))
   return (
     <Grid container spacing={1} sx={{ mt: -1, mb: 2 }}>
       <Hidden smUp>

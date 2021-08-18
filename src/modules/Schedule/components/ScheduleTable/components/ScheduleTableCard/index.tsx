@@ -15,8 +15,6 @@ import { dayOfWeekMapper } from '@/constants/dayOfWeek'
 import { Analytics } from '@/context/analytics/components/Analytics'
 import { HIDE_COURSE, DELETE_COURSE, SECTION_CHANGE } from '@/context/analytics/components/const'
 import { Caption } from '@/modules/CourseSearch/component/CourseCard/components/Caption'
-import { CourseCartItem, courseCartStore } from '@/store'
-
 import {
   CardBorder,
   CardContent,
@@ -30,7 +28,9 @@ import {
   Spacer,
   VisibilityToggle,
   StyledLink,
-} from './styled'
+  RightPane,
+} from '@/modules/Schedule/components/ScheduleTable/components/ScheduleTableCard/styled'
+import { CourseCartItem, courseCartStore } from '@/store'
 
 export interface ScheduleTableCardProps {
   item: CourseCartItem
@@ -48,13 +48,13 @@ export const ScheduleTableCard = observer(({ item, index, hasOverlap }: Schedule
     courseCartStore.toggleHiddenItem(courseNo)
   }, [courseNo])
 
-  const [show, setShow] = useState(false)
-  const x = show ? -40 : 0
   const theme = useTheme()
   const match = useMediaQuery(theme.breakpoints.up('md'))
+  const [swipped, setSwipped] = useState(false)
+  const x = match || swipped ? 0 : 40
   useEffect(() => {
     if (match) {
-      setShow(false)
+      setSwipped(false)
     }
   }, [match])
   const onDragEnd = (e: MouseEvent, { offset, point }: PanInfo) => {
@@ -62,13 +62,13 @@ export const ScheduleTableCard = observer(({ item, index, hasOverlap }: Schedule
     if (point.x == 0 && point.y == 0) {
       return
     }
-    if (show) {
+    if (swipped) {
       if (offset.x > 100) {
-        setShow(false)
+        setSwipped(false)
       }
     } else {
       if (offset.x < -100) {
-        setShow(true)
+        setSwipped(true)
       }
     }
   }
@@ -98,25 +98,27 @@ export const ScheduleTableCard = observer(({ item, index, hasOverlap }: Schedule
             dragDirectionLock
             onDragEnd={onDragEnd}
           >
-            <LeftPane>
-              <Analytics elementId={courseNo} elementName={HIDE_COURSE}>
-                <VisibilityToggle checked={!isHidden} onClick={toggleVisibility}>
-                  {isHidden ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
-                </VisibilityToggle>
-              </Analytics>
-            </LeftPane>
             <MiddlePane>
               <CardHeader item={item} />
               <CardDetail item={item} />
             </MiddlePane>
-            <LeftPane>
-              <Analytics elementId={courseNo} elementName={DELETE_COURSE}>
-                <DeleteButton onClick={() => courseCartStore.removeCourse(item)}>
-                  <MdDelete />
-                </DeleteButton>
-              </Analytics>
-            </LeftPane>
           </CardContent>
+
+          <LeftPane>
+            <Analytics elementId={courseNo} elementName={HIDE_COURSE}>
+              <VisibilityToggle checked={!isHidden} onClick={toggleVisibility}>
+                {isHidden ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
+              </VisibilityToggle>
+            </Analytics>
+          </LeftPane>
+
+          <RightPane>
+            <Analytics elementId={courseNo} elementName={DELETE_COURSE}>
+              <DeleteButton onClick={() => courseCartStore.removeCourse(item)}>
+                <MdDelete />
+              </DeleteButton>
+            </Analytics>
+          </RightPane>
           {hasOverlap ? <OverlappingCardBorder /> : <CardBorder />}
         </CardLayout>
       )}

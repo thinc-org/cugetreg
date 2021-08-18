@@ -22,14 +22,22 @@ export const CardLayout = styled.div`
 `
 
 export const CardContent = styled(motion.div)`
+  position: relative;
   display: flex;
+  z-index: 1;
+  background-color: white;
+  left: 88px;
+  width: calc(100% - 88px);
+  border-radius: 4px;
   ${({ theme }) => theme.breakpoints.down('md')} {
-    width: calc(100% + 40px);
+    width: calc(100% - 40px);
+    left: 0;
   }
 `
 
 export const CardBorder = styled.div`
   position: absolute;
+  z-index: 2;
   top: 0;
   left: 0;
   right: 0;
@@ -86,7 +94,12 @@ export const DeleteButton = styled(Button)`
   }
 `
 
-export const LeftPane = styled.div`
+export const Pane = styled.div`
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
   display: flex;
   flex-direction: column;
 
@@ -94,13 +107,26 @@ export const LeftPane = styled.div`
     flex: 1;
     width: 88px;
     font-size: 28px;
-    border-radius: 4px;
 
     ${({ theme }) => theme.breakpoints.down('md')} {
       min-width: 40px;
       width: 40px;
       font-size: 20px;
     }
+  }
+`
+
+export const LeftPane = styled(Pane)`
+  right: auto;
+  & button {
+    border-radius: 4px 0 0 4px;
+  }
+`
+
+export const RightPane = styled(Pane)`
+  left: auto;
+  & button {
+    border-radius: 0 4px 4px 0;
   }
 `
 

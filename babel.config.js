@@ -31,7 +31,7 @@ module.exports = {
   ],
   env: {
     production: {
-      plugins: ['transform-remove-console'],
+      plugins: ['transform-remove-console', { "exclude": ["error", "warn"] }],
     },
   },
 }

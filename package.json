@@ -21,6 +21,7 @@
     "@material-ui/core": "^5.0.0-alpha.32",
     "@material-ui/icons": "^4.11.2",
     "@material-ui/lab": "^5.0.0-alpha.32",
+    "@react-hook/google-optimize": "^1.2.1",
     "@thinc-org/chula-courses": "^1.1.10",
     "@types/gapi": "^0.0.39",
     "@types/gapi.client.drive": "^3.0.13",

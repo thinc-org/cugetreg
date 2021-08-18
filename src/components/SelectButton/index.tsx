@@ -44,7 +44,7 @@ export const SelectButton = observer(({ course, selectedSectionNumber, log }: Se
   }, [course, selectedSectionNumber, isSelected, emitMessage, t, log])
 
   const isExperimentColor = useGoogleOptimize('qS9_gAPPQjquNZru7DBBXQ', [false, true])
-  console.warn(isExperimentColor, 'hasYellow')
+  console.log(isExperimentColor, 'hasYellow')
 
   return (
     <CustomButton

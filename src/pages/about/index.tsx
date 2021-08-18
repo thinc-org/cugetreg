@@ -10,7 +10,7 @@ export default function About() {
   const theme = useTheme()
   const variant = useGoogleOptimize('1kXov07WRT-kitE9cvHAXQ', [false, true])
 
-  console.log(variant, 'variant')
+  console.warn(variant, 'variant')
 
   const sessionId = sessionIdStore.sessionId
   const reportProblemLink = `https://airtable.com/shruwAAfn1763TgMU?prefill_Session_ID=${sessionId}`

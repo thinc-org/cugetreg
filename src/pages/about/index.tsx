@@ -1,4 +1,5 @@
 import { Box, Paper, Card, Typography, Link, useTheme } from '@material-ui/core'
+import useGoogleOptimize from '@react-hook/google-optimize'
 import React from 'react'
 
 import { sessionIdStore } from '@/store/sessionIdStore'
@@ -7,6 +8,9 @@ import { sessionIdStore } from '@/store/sessionIdStore'
 
 export default function About() {
   const theme = useTheme()
+  const variant = useGoogleOptimize('1kXov07WRT-kitE9cvHAXQ', [false, true])
+
+  console.log(variant, 'variant')
 
   const sessionId = sessionIdStore.sessionId
   const reportProblemLink = `https://airtable.com/shruwAAfn1763TgMU?prefill_Session_ID=${sessionId}`

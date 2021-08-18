@@ -1,5 +1,6 @@
 import { Grid, Hidden, IconButton, Stack, Typography, useTheme } from '@material-ui/core'
 import { useMediaQuery } from '@material-ui/core'
+import { PanInfo } from 'framer-motion'
 import { observer } from 'mobx-react'
 import { useCallback } from 'react'
 import { useState } from 'react'
@@ -56,6 +57,21 @@ export const ScheduleTableCard = observer(({ item, index, hasOverlap }: Schedule
       setShow(false)
     }
   }, [match])
+  const onDragEnd = (e: MouseEvent, { offset, point }: PanInfo) => {
+    // cancelling drag event due to scrolling
+    if (point.x == 0 && point.y == 0) {
+      return
+    }
+    if (show) {
+      if (offset.x > 100) {
+        setShow(false)
+      }
+    } else {
+      if (offset.x < -100) {
+        setShow(true)
+      }
+    }
+  }
 
   return (
     <Draggable key={item.courseNo} draggableId={item.courseNo} index={index}>
@@ -80,19 +96,7 @@ export const ScheduleTableCard = observer(({ item, index, hasOverlap }: Schedule
             animate={{ x }}
             dragConstraints={{ left: x, right: x }}
             dragDirectionLock
-            onDragEnd={(e, { offset }) => {
-              if (show) {
-                if (offset.x > 40) {
-                  setShow(false)
-                  console.log('hidden')
-                }
-              } else {
-                if (offset.x < -40) {
-                  setShow(true)
-                  console.log('show')
-                }
-              }
-            }}
+            onDragEnd={onDragEnd}
           >
             <LeftPane>
               <Analytics elementId={courseNo} elementName={HIDE_COURSE}>

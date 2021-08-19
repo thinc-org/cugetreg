@@ -94,6 +94,7 @@ export const ScheduleTableCard = observer(({ item, index, hasOverlap }: Schedule
         >
           <CardContent
             drag={match ? false : 'x'}
+            initial={false}
             animate={{ x }}
             dragConstraints={{ left: x, right: x }}
             dragDirectionLock

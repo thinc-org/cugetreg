@@ -13,7 +13,6 @@ export const CardLayout = styled.div`
   position: relative;
   margin-top: 24px;
   background: ${({ theme }) => theme.palette.background.default};
-  border-radius: 4px;
   overflow: hidden;
 
   &:focus {
@@ -37,7 +36,7 @@ export const CardContent = styled(motion.div)`
 
 export const CardBorder = styled.div`
   position: absolute;
-  z-index: 2;
+  z-index: 1;
   top: 0;
   left: 0;
   right: 0;

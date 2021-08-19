@@ -58,7 +58,7 @@ export const ScheduleTableCard = observer(({ item, index, hasOverlap }: Schedule
       setSwipped(false)
     }
   }, [match])
-  const onDragEnd = (e: MouseEvent, { offset, point }: PanInfo) => {
+  const onDragEnd = (e: MouseEvent, { offset, point, ...rest }: PanInfo) => {
     // cancelling drag event due to scrolling
     if (point.x == 0 && point.y == 0) {
       return
@@ -94,7 +94,7 @@ export const ScheduleTableCard = observer(({ item, index, hasOverlap }: Schedule
         >
           <CardContent
             drag={match ? false : 'x'}
-            initial={false}
+            initial={{ x }}
             animate={{ x }}
             dragConstraints={{ left: x, right: x }}
             dragDirectionLock

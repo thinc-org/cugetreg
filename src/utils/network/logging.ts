@@ -51,7 +51,7 @@ function sendCollectedLog() {
   const data = backlogLog
   backlogLog = []
   if (data.length == 0) return
-  if (!isProduction) return
+  if (process.env.NODE_ENV === 'development') return
   axios
     .post(`${env.backend.uri}/clientlogging`, data)
     .catch((e) => console.error('Error while logging', e, 'Message', data))

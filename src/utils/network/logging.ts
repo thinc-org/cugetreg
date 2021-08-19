@@ -6,6 +6,8 @@ import { gapiStore } from '@/store/googleApiStore'
 import { sessionIdStore } from '@/store/sessionIdStore'
 import env from '@/utils/env/macro'
 
+import { isProduction } from '../env'
+
 export interface LogEvent {
   kind: 'track' | 'error' | 'fine-tracking'
   message: string
@@ -49,6 +51,7 @@ function sendCollectedLog() {
   const data = backlogLog
   backlogLog = []
   if (data.length == 0) return
+  if (!isProduction) return
   axios
     .post(`${env.backend.uri}/clientlogging`, data)
     .catch((e) => console.error('Error while logging', e, 'Message', data))

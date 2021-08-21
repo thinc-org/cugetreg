@@ -6,8 +6,6 @@ import { gapiStore } from '@/store/googleApiStore'
 import { sessionIdStore } from '@/store/sessionIdStore'
 import env from '@/utils/env/macro'
 
-import { isProduction } from '../env'
-
 export interface LogEvent {
   kind: 'track' | 'error' | 'fine-tracking'
   message: string

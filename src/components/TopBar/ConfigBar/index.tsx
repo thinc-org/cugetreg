@@ -2,7 +2,7 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react'
 import { useTranslation } from 'react-i18next'
 
-import { FlexOne } from '@/components/FlexOne'
+import { Spacer } from '@/components/Flex'
 import { Analytics } from '@/context/analytics/components/Analytics'
 import { REPORT_PROBLEM, STUDY_PROGRAM_DROPDOWN } from '@/context/analytics/components/const'
 import { sessionIdStore } from '@/store/sessionIdStore'
@@ -36,7 +36,7 @@ export const ConfigBar = observer(() => {
   return (
     <ConfigBarLayout>
       <FlexContainer>
-        <FlexOne />
+        <Spacer />
         <Analytics elementName={STUDY_PROGRAM_DROPDOWN}>{({ log }) => <StudyProgramDropdown log={log} />}</Analytics>
         <ConfigBarItem>
           {academicYear}/{semester}

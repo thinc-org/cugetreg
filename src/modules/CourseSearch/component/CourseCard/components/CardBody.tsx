@@ -1,9 +1,10 @@
-import { Box, CardContent, Collapse, Grid, Stack, Typography } from '@material-ui/core'
+import { CardContent, Collapse, Grid, Stack, Typography } from '@material-ui/core'
 import { DayOfWeek } from '@thinc-org/chula-courses'
 import { useTranslation } from 'react-i18next'
 
 import DayChip from '@/components/Chips/catagories/DayChip'
 import GenEdChip from '@/components/Chips/catagories/GenEdChip'
+import { Flex } from '@/components/Flex'
 import NoSeatIcon from '@/components/RegwarNotice/NoSeatInfoNotice'
 import { SelectButton } from '@/components/SelectButton'
 import { dayOfWeekMapper } from '@/constants/dayOfWeek'
@@ -21,7 +22,7 @@ interface CardBodyProps {
 export function CardBody({ isExpanded }: CardBodyProps) {
   return (
     <CardContent sx={{ px: 4, py: 2 }}>
-      <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, justifyContent: 'space-between' }}>
+      <Flex direction={['column', 'row']} justify="space-between">
         <Stack>
           <CardDescription />
           <Collapse in={isExpanded}>
@@ -29,7 +30,7 @@ export function CardBody({ isExpanded }: CardBodyProps) {
           </Collapse>
         </Stack>
         <CardSideActions isExpanded={isExpanded} />
-      </Box>
+      </Flex>
     </CardContent>
   )
 }
@@ -53,7 +54,7 @@ function CardDescription() {
         </Stack>
       </Grid>
       {isGenEd && (
-        <Grid item xs={6} sm="auto" sx={{ display: { xs: 'flex', sm: 'none' } }}>
+        <Grid item xs={6} sm="auto" display={['flex', 'none']}>
           <Stack spacing={0.5} alignItems="flex-start">
             <Caption>{t('genEd')}</Caption>
             <GenEdChip type={course.genEdType} />
@@ -82,7 +83,7 @@ function CardDescription() {
       </Grid>
       {/* rating is not implemented yet */}
       {/* {isGenEd && (
-        <Grid item xs={6} sm="auto" sx={{ display: { xs: 'flex', sm: 'none' } }}>
+        <Grid item xs={6} sm="auto" display={['flex', 'none']}>
           <Stack spacing={0.5}>
             <Caption>{t('rating')}</Caption>
             <Stack direction="row" spacing={0.25} color="primaryRange.100">
@@ -100,14 +101,14 @@ function CardHiddenDescription() {
   const { t } = useTranslation('courseCard')
   const { selectedSection, teachers } = useCourseCardContext()
   return (
-    <Grid container spacing={3} sx={{ mt: 0, width: 'auto' }}>
-      <Grid item xs={6} sm="auto" sx={{ display: { xs: 'block', sm: 'none' } }}>
+    <Grid container spacing={3} mt={0} width="auto">
+      <Grid item xs={6} sm="auto" display={['block', 'none']}>
         <SectionSelect />
       </Grid>
       <Grid item xs={6} sm="auto">
         <Stack spacing={0.5}>
           <Caption>{t('teacher')}</Caption>
-          <Typography variant="body1" sx={{ maxWidth: '15ch' }}>
+          <Typography variant="body1" maxWidth="15ch">
             {teachers.join(', ')}
           </Typography>
         </Stack>
@@ -158,15 +159,7 @@ function CardHiddenDescription() {
 function CardSideActions({ isExpanded }: CardBodyProps) {
   const { course, selectedSectionNumber } = useCourseCardContext()
   return (
-    <Stack
-      sx={{
-        display: { xs: 'none', sm: 'flex' },
-        flexBasis: 'auto',
-        justifyContent: 'space-between',
-        alignItems: 'stretch',
-        ml: 2,
-      }}
-    >
+    <Stack display={['none', 'flex']} flexBasis="auto" justifyContent="space-between" alignItems="stretch" ml={2}>
       <Collapse in={isExpanded}>
         <SectionSelect />
       </Collapse>

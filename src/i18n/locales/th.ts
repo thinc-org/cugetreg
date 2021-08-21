@@ -103,7 +103,7 @@ export const sectionCard = {
   section: 'Sec {{sectionNo}}',
   teacher: 'ผู้สอน',
   time: 'วันเวลาเรียน',
-  classRoom: 'อาคารเรียน',
+  classRoom: 'ห้องเรียน',
   closed: 'ปิด',
   avialable: '{{current}}/{{max}}',
   full: '{{current}}/{{max}}',

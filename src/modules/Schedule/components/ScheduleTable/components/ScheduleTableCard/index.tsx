@@ -1,6 +1,10 @@
 import { Grid, Hidden, IconButton, Stack, Typography, useTheme } from '@material-ui/core'
+import { useMediaQuery } from '@material-ui/core'
+import { PanInfo } from 'framer-motion'
 import { observer } from 'mobx-react'
 import { useCallback } from 'react'
+import { useState } from 'react'
+import { useEffect } from 'react'
 import { Draggable } from 'react-beautiful-dnd'
 import { useTranslation } from 'react-i18next'
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
@@ -11,8 +15,6 @@ import { dayOfWeekMapper } from '@/constants/dayOfWeek'
 import { Analytics } from '@/context/analytics/components/Analytics'
 import { HIDE_COURSE, DELETE_COURSE, SECTION_CHANGE } from '@/context/analytics/components/const'
 import { Caption } from '@/modules/CourseSearch/component/CourseCard/components/Caption'
-import { CourseCartItem, courseCartStore } from '@/store'
-
 import {
   CardBorder,
   CardContent,
@@ -22,11 +24,14 @@ import {
   HeaderLayout,
   LeftPane,
   OverlappingCardBorder,
-  RightPane,
+  MiddlePane,
   Spacer,
   VisibilityToggle,
   StyledLink,
-} from './styled'
+  RightPane,
+} from '@/modules/Schedule/components/ScheduleTable/components/ScheduleTableCard/styled'
+import { CourseCartItem, courseCartStore } from '@/store'
+import { unique } from '@/utils'
 
 export interface ScheduleTableCardProps {
   item: CourseCartItem
@@ -43,32 +48,79 @@ export const ScheduleTableCard = observer(({ item, index, hasOverlap }: Schedule
   const toggleVisibility = useCallback(() => {
     courseCartStore.toggleHiddenItem(courseNo)
   }, [courseNo])
+
+  const theme = useTheme()
+  const match = useMediaQuery(theme.breakpoints.up('md'))
+  const [swipped, setSwipped] = useState(false)
+  const x = match || swipped ? 0 : 40
+  useEffect(() => {
+    if (match) {
+      setSwipped(false)
+    }
+  }, [match])
+  const onDragEnd = (e: MouseEvent, { offset, point, ...rest }: PanInfo) => {
+    // cancelling drag event due to scrolling
+    if (point.x == 0 && point.y == 0) {
+      return
+    }
+    if (swipped) {
+      if (offset.x > 100) {
+        setSwipped(false)
+      }
+    } else {
+      if (offset.x < -100) {
+        setSwipped(true)
+      }
+    }
+  }
+
   return (
     <Draggable key={item.courseNo} draggableId={item.courseNo} index={index}>
       {(provided) => (
-        <CardLayout ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-          <CardContent>
-            <LeftPane>
-              <Analytics elementId={courseNo} elementName={HIDE_COURSE}>
-                <VisibilityToggle checked={!isHidden} onClick={toggleVisibility}>
-                  {isHidden ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
-                </VisibilityToggle>
-              </Analytics>
-              <Analytics elementId={courseNo} elementName={DELETE_COURSE}>
-                <DeleteButton
-                  onClick={() => {
-                    courseCartStore.removeCourse(item)
-                  }}
-                >
-                  <MdDelete />
-                </DeleteButton>
-              </Analytics>
-            </LeftPane>
-            <RightPane>
+        <CardLayout
+          ref={provided.innerRef}
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+          style={((style) => {
+            if (style?.transform) {
+              const axisLockY = `translate(0px, ${style.transform.split(',').pop()}`
+              return {
+                ...style,
+                transform: axisLockY,
+              }
+            }
+            return style
+          })(provided.draggableProps.style)}
+        >
+          <CardContent
+            drag={match ? false : 'x'}
+            initial={{ x }}
+            animate={{ x }}
+            dragConstraints={{ left: x, right: x }}
+            dragDirectionLock
+            onDragEnd={onDragEnd}
+          >
+            <MiddlePane>
               <CardHeader item={item} />
               <CardDetail item={item} />
-            </RightPane>
+            </MiddlePane>
           </CardContent>
+
+          <LeftPane>
+            <Analytics elementId={courseNo} elementName={HIDE_COURSE}>
+              <VisibilityToggle checked={!isHidden} onClick={toggleVisibility}>
+                {isHidden ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
+              </VisibilityToggle>
+            </Analytics>
+          </LeftPane>
+
+          <RightPane>
+            <Analytics elementId={courseNo} elementName={DELETE_COURSE}>
+              <DeleteButton onClick={() => courseCartStore.removeCourse(item)}>
+                <MdDelete />
+              </DeleteButton>
+            </Analytics>
+          </RightPane>
           {hasOverlap ? <OverlappingCardBorder /> : <CardBorder />}
         </CardLayout>
       )}
@@ -130,7 +182,7 @@ function SectionSelect({ item }: CardComponentProps) {
 function CardDetail({ item }: CardComponentProps) {
   const { t } = useTranslation('courseCard')
   const section = item.sections.find((section) => section.sectionNo === item.selectedSectionNo)!
-  const teachers = section?.classes.flatMap((cls) => cls.teachers)
+  const teachers = unique(section.classes.flatMap((cls) => cls.teachers))
   return (
     <Grid container spacing={1} sx={{ mt: -1, mb: 2 }}>
       <Hidden smUp>

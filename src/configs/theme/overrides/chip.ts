@@ -7,12 +7,14 @@ export function overrideMuiChipStyles(theme: Theme): Partial<StyleRules<ChipClas
     label: {
       ...theme.typography.overline,
       lineHeight: 'normal',
+      fontSize: 'inherit',
     },
     sizeSmall: {
       height: theme.spacing(2),
     },
     sizeMedium: {
-      height: theme.spacing(2.5),
+      fontSize: 12,
+      height: theme.spacing(3),
     },
     avatar: {
       width: theme.spacing(1.5),

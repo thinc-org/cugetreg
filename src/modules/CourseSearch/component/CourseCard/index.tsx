@@ -6,10 +6,11 @@ import { SelectButton } from '@/common/components/SelectButton'
 import { Analytics } from '@/context/Analytics/components/Analytics'
 import { SUBJECT_SELECT_BUTTON } from '@/context/Analytics/components/const'
 import { useDisclosure } from '@/context/ShoppingCartModal/hooks'
-import { CourseCardContext, useCourseCard } from '@/modules/CourseSearch/component/CourseCard/useCourseCard'
 
 import { CardBody } from './components/CardBody'
 import { CardHeading } from './components/CardHeading'
+import { CourseCardContext } from './context'
+import useCourseCard from './hooks/useCourseCard'
 
 export interface CourseCardProps {
   course: Course

@@ -6,7 +6,7 @@ import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 
 import { useCourseGroup } from '@/common/hooks/useCourseGroup'
-import { Loading } from '@/components/Loading'
+import { Loading } from '@/modules/CourseSearch/component/Loading'
 import { courseCartStore } from '@/store'
 import { parseCourseGroup } from '@/utils/courseGroup'
 import { CourseGroup, GetCourseResponse, GET_COURSE } from '@/utils/network/BackendGQLQueries'
@@ -87,7 +87,7 @@ export async function getServerSideProps(
         items,
       },
     }
-  } catch (e) {
+  } catch (e: any) {
     if (isApolloError(e)) {
       return {
         notFound: true,

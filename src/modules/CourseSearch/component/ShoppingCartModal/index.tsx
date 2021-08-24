@@ -1,4 +1,4 @@
-import { ResponsiveDialog } from '@/components/ResponsiveDialog'
+import { ResponsiveDialog } from '@/common/components/ResponsiveDialog'
 import { useShoppingCardModal } from '@/context/ShoppingCartModal'
 import ShoppingPanel from '@/modules/CourseSearch/component/ShoppingCartModal/components/ShoppingPanel'
 

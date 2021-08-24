@@ -10,9 +10,9 @@ import { Flex } from '@/components/Flex'
 import { dayOfWeekMapper } from '@/constants/dayOfWeek'
 import { Analytics } from '@/context/Analytics/components/Analytics'
 import { SUBJECT_SELECT_BUTTON } from '@/context/Analytics/components/const'
-import { Caption } from '@/modules/CourseSearch/component/CourseCard/components/Caption'
+import { Caption } from '@/modules/CourseSearch/components/CourseCard/components/Caption'
 
-import { useCourseCardContext } from '../useCourseCard'
+import { useCourseCardContext } from '../context'
 import { SectionSelect } from './SectionSelect'
 
 interface CardBodyProps {

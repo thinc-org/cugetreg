@@ -7,7 +7,7 @@ import { Analytics } from '@/context/Analytics/components/Analytics'
 import { COURSE_SEARCH_BOX } from '@/context/Analytics/components/const'
 import { SEARCH_QUERY } from '@/context/Analytics/components/const'
 import { useLog } from '@/context/Analytics/components/useLog'
-import { useStyles } from '@/modules/CourseSearch/component/SearchField/styled'
+import { useStyles } from '@/modules/CourseSearch/components/SearchField/styled'
 import { useSearchCourseQueryParams } from '@/modules/CourseSearch/hooks/useSearchCourseQueryParams'
 
 export interface SeachFieldProp {}

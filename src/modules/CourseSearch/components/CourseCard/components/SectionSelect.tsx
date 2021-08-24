@@ -3,7 +3,7 @@ import { FormControl, MenuItem, Select, useMediaQuery, useTheme } from '@materia
 import { Analytics } from '@/context/Analytics/components/Analytics'
 import { SECTION_SELECT } from '@/context/Analytics/components/const'
 
-import { useCourseCardContext } from '../useCourseCard'
+import { useCourseCardContext } from '../context'
 
 export function SectionSelect() {
   const theme = useTheme()

@@ -7,12 +7,12 @@ import { DayChipKey, GenEdChipKey } from '@/common/components/Chips/config'
 import { ResponsiveDialog } from '@/common/components/ResponsiveDialog'
 import { Analytics } from '@/context/Analytics/components/Analytics'
 import { DAY_FILTER, GENED_FILTER } from '@/context/Analytics/components/const'
-import { CheckboxGroup } from '@/modules/CourseSearch/component/FilterSection/components/CheckboxGroup'
+import { CheckboxGroup } from '@/modules/CourseSearch/components/FilterSection/components/CheckboxGroup'
 import {
   createGenEdCheckboxes,
   createDayOfWeekCheckboxes, // createSpecialCheckboxes,
-} from '@/modules/CourseSearch/component/FilterSection/constants'
-import { useStyles } from '@/modules/CourseSearch/component/FilterSection/styled'
+} from '@/modules/CourseSearch/components/FilterSection/constants'
+import { useStyles } from '@/modules/CourseSearch/components/FilterSection/styled'
 
 import { useHasTags } from '../TagList'
 import { useFilterBar } from './hooks'

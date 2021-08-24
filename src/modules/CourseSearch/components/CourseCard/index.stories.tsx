@@ -1,8 +1,8 @@
 import { Meta, Story } from '@storybook/react/types-6-0'
 import React from 'react'
 
-import { CourseCard } from '@/modules/CourseSearch/component/CourseCard'
-import { mockGenEdCourse, mockNoGenEdCourse } from '@/modules/CourseSearch/component/CourseCard/mockCourse'
+import { CourseCard } from '@/modules/CourseSearch/components/CourseCard'
+import { mockGenEdCourse, mockNoGenEdCourse } from '@/modules/CourseSearch/components/CourseCard/mockCourse'
 
 type CourseCardStoryProps = { courseType: 'gened' | 'noGened'; rating: number }
 

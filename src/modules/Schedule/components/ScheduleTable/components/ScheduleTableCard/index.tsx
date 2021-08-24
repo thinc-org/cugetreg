@@ -14,7 +14,7 @@ import { CustomSelect } from '@/components/common/CustomSelect'
 import { dayOfWeekMapper } from '@/constants/dayOfWeek'
 import { Analytics } from '@/context/Analytics/components/Analytics'
 import { HIDE_COURSE, DELETE_COURSE, SECTION_CHANGE } from '@/context/Analytics/components/const'
-import { Caption } from '@/modules/CourseSearch/component/CourseCard/components/Caption'
+import { Caption } from '@/modules/CourseSearch/components/CourseCard/components/Caption'
 import {
   CardBorder,
   CardContent,

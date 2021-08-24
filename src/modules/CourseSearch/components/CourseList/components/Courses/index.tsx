@@ -2,7 +2,7 @@ import { Typography } from '@material-ui/core'
 import { Course } from '@thinc-org/chula-courses'
 import React from 'react'
 
-import { CourseCard } from '@/modules/CourseSearch/component/CourseCard'
+import { CourseCard } from '@/modules/CourseSearch/components/CourseCard'
 
 export interface CoursesProps {
   loading: boolean

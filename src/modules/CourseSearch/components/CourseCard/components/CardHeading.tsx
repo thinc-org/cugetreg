@@ -10,7 +10,7 @@ import { Analytics } from '@/context/Analytics/components/Analytics'
 import { LinkWithAnalytics } from '@/context/Analytics/components/LinkWithAnalytics'
 import { COURSE_TITLE, EXPAND_BUTTON } from '@/context/Analytics/components/const'
 
-import { useCourseCardContext } from '../useCourseCard'
+import { useCourseCardContext } from '../context'
 
 interface CardHeadingProps {
   isExpanded: boolean

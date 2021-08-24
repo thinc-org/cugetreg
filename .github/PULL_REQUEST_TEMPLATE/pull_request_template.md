@@ -2,22 +2,24 @@
 
 ### Link for [Demo]()
 
-<br />
-
 ### Why do you do this PR
 
--
+## <hr/>
 
 ### What did you do
 
--
+## <hr/>
 
 ### Checklist
 
-- [ ] Merge this PR into [dev](https://github.com/thinc-org/cugetreg-frontend/tree/dev) for Demo
+<hr/>
+
+- [ ] Merged this PR into [dev](https://github.com/thinc-org/cugetreg-frontend/tree/dev) for Demo
 - [ ] Wrote coverage tests
 
 ### Browser Supported
+
+<hr/>
 
 - [x] Safari
 - [x] Google Chrome
@@ -25,5 +27,7 @@
 - [x] Microsoft Edge
 
 ### Other thing to tell us
+
+<hr/>
 
 -

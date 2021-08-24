@@ -1,5 +1,5 @@
 import { ChipProps } from '@material-ui/core'
-import { DayOfWeekEnum, GenEdTypeEnum } from '@thinc-org/chula-courses'
+import { DayOfWeek, GenEdType } from '@thinc-org/chula-courses'
 
 import { ChipFilledHighlightColor, ChipOutlinedHighlightColor } from '@/configs/theme/overrides/chip'
 
@@ -19,7 +19,7 @@ const createDefaultChipConfig = (label: string): ChipConfigProps => ({
   color: 'deepGrayFilled',
 })
 
-export type GenEdChipKey = GenEdTypeEnum
+export type GenEdChipKey = GenEdType
 export type GenEdChipConfigProps = Record<GenEdChipKey, ChipConfigProps>
 export const genEdChipConfig: GenEdChipConfigProps = {
   SO: { label: 'หมวดสังคม', color: 'greenOutlined', variant: 'outlined' },
@@ -29,7 +29,7 @@ export const genEdChipConfig: GenEdChipConfigProps = {
   NO: { label: 'ไม่ใช่ Gened', color: 'deepGrayOutlined', variant: 'outlined' },
 }
 
-export type DayChipKey = DayOfWeekEnum
+export type DayChipKey = DayOfWeek
 export type DayChipConfigProps = Record<DayChipKey, ChipConfigProps>
 export const dayChipConfig: DayChipConfigProps = {
   MO: { label: 'วันจันทร์', color: 'yellowFilled' },

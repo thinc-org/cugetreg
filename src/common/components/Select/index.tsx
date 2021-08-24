@@ -1,11 +1,6 @@
 import { FormControl, MenuItem, Select as MaterialSelect } from '@material-ui/core'
 
-export interface SelectProps {
-  items: string[]
-  value: string
-  name: string
-  onChange: (e: React.ChangeEvent<{ value: unknown }>) => void
-}
+import { SelectProps } from './types'
 
 export const Select = ({ items, value, onChange, name }: SelectProps) => {
   const Items = items.map((item) => (

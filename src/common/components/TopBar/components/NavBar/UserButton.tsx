@@ -5,7 +5,7 @@ import { PropsWithChildren } from 'react'
 import { useTranslation } from 'react-i18next'
 import { MdCloudDone, MdCloudQueue, MdCloudOff } from 'react-icons/md'
 
-import { NavBarItem } from '@/components/TopBar/components/NavBar/NavBarItem'
+import { NavBarItem } from '@/common/components/TopBar/components/NavBar/NavBarItem'
 import { Analytics } from '@/context/Analytics/components/Analytics'
 import { LOGIN_BUTTON, LOGOUT_BUTTON } from '@/context/Analytics/components/const'
 import { gDriveStore, GDriveSyncState } from '@/store/gDriveState'

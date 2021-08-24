@@ -2,11 +2,11 @@ import { Link } from '@material-ui/core'
 import { Course } from '@thinc-org/chula-courses'
 import React from 'react'
 
+import { useCourseGroup } from '@/common/hooks/useCourseGroup'
 import { genEdChipConfig } from '@/components/Chips/config'
 import { LinkWithAnalytics } from '@/context/Analytics/components/LinkWithAnalytics'
 import { SELECTED_COURSE_TITLE } from '@/context/Analytics/components/const'
 import { useShoppingCardModal } from '@/context/ShoppingCartModal'
-import { useCourseGroup } from '@/utils/hooks/useCourseGroup'
 
 export interface CourseNameProps {
   course: Course

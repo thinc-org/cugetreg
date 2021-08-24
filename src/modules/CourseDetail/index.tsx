@@ -6,6 +6,7 @@ import { useRouter } from 'next/router'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useCourseGroup } from '@/common/hooks/useCourseGroup'
 import { BackButton } from '@/components/BackButton'
 import { PageMeta } from '@/components/PageMeta'
 import { Language } from '@/i18n'
@@ -21,7 +22,6 @@ import {
 import { courseTypeStringFromCourse, parseVariablesFromQuery } from '@/modules/CourseDetail/utils'
 import { getExamDate, getExamPeriod } from '@/utils/coruseExam'
 import { groupBy } from '@/utils/groupBy'
-import { useCourseGroup } from '@/utils/hooks/useCourseGroup'
 import { GetCourseResponse, GetCourseVars, GET_COURSE } from '@/utils/network/BackendGQLQueries'
 import { createApolloServerClient } from '@/utils/network/apollo'
 

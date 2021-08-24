@@ -5,10 +5,10 @@ import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 
+import { useCourseGroup } from '@/common/hooks/useCourseGroup'
 import { Loading } from '@/components/Loading'
 import { courseCartStore } from '@/store'
 import { parseCourseGroup } from '@/utils/courseGroup'
-import { useCourseGroup } from '@/utils/hooks/useCourseGroup'
 import { CourseGroup, GetCourseResponse, GET_COURSE } from '@/utils/network/BackendGQLQueries'
 import { createApolloServerClient } from '@/utils/network/apollo'
 

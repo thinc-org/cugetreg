@@ -5,12 +5,12 @@ import TableChartIcon from '@material-ui/icons/TableChart'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useCourseGroup } from '@/common/hooks/useCourseGroup'
 import { ShoppingState } from '@/components/ShoppingPanel/hooks'
 import { Analytics } from '@/context/Analytics/components/Analytics'
 import { LinkWithAnalytics } from '@/context/Analytics/components/LinkWithAnalytics'
 import { SHOPPING_CART_BUTTON, SHOPPING_CART_REMOVE_COURSE } from '@/context/Analytics/components/const'
 import { useShoppingCardModal } from '@/context/ShoppingCartModal'
-import { useCourseGroup } from '@/utils/hooks/useCourseGroup'
 
 const ErrorButton = styled(Button)`
   color: ${({ theme }) => theme.palette.error.main};

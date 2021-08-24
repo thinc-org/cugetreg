@@ -3,6 +3,7 @@ import { observer } from 'mobx-react'
 import React, { useState, createRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useCourseGroup } from '@/common/hooks/useCourseGroup'
 import { Analytics } from '@/context/Analytics/components/Analytics'
 import { LinkWithAnalytics } from '@/context/Analytics/components/LinkWithAnalytics'
 import { CR11_BUTTON, CLASS_TAB_BUTTON, EXAM_TAB_BUTTON } from '@/context/Analytics/components/const'
@@ -18,7 +19,6 @@ import {
 } from '@/modules/Schedule/components/Schedule/utils'
 import { ScheduleTable } from '@/modules/Schedule/components/ScheduleTable'
 import { courseCartStore } from '@/store'
-import { useCourseGroup } from '@/utils/hooks/useCourseGroup'
 
 import {
   InfoBar,

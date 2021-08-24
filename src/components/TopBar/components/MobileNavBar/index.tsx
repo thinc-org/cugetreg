@@ -8,12 +8,12 @@ import { useTranslation } from 'react-i18next'
 import { MdMenu } from 'react-icons/md'
 
 import logo from '@/assets/images/cgrLogoDark.svg'
+import { useCourseGroup } from '@/common/hooks/useCourseGroup'
 import { Analytics } from '@/context/Analytics/components/Analytics'
 import { LinkWithAnalytics } from '@/context/Analytics/components/LinkWithAnalytics'
 import { REPORT_PROBLEM, NAVBAR_SEARCH_COURSE, NAVBAR_TIMETABLE } from '@/context/Analytics/components/const'
 import { useDisclosure } from '@/context/ShoppingCartModal/hooks'
 import { sessionIdStore } from '@/store/sessionIdStore'
-import { useCourseGroup } from '@/utils/hooks/useCourseGroup'
 
 import { NavBarItem } from '../NavBar/NavBarItem'
 import UserButton from '../NavBar/UserButton'

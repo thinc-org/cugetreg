@@ -3,12 +3,12 @@ import KeyboardArrowDown from '@material-ui/icons/KeyboardArrowDown'
 import KeyboardArrowUp from '@material-ui/icons/KeyboardArrowUp'
 import { useTranslation } from 'react-i18next'
 
+import { useCourseGroup } from '@/common/hooks/useCourseGroup'
 import GenEdChip from '@/components/Chips/catagories/GenEdChip'
 import { Flex } from '@/components/Flex'
 import { Analytics } from '@/context/Analytics/components/Analytics'
 import { LinkWithAnalytics } from '@/context/Analytics/components/LinkWithAnalytics'
 import { COURSE_TITLE, EXPAND_BUTTON } from '@/context/Analytics/components/const'
-import { useCourseGroup } from '@/utils/hooks/useCourseGroup'
 
 import { useCourseCardContext } from '../useCourseCard'
 

@@ -3,8 +3,8 @@ import { observer } from 'mobx-react'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { BackButton } from '@/common/components/BackButton'
 import { useCourseGroup } from '@/common/hooks/useCourseGroup'
-import { BackButton } from '@/components/BackButton'
 import { CR11 } from '@/modules/CR11/components/CR11'
 import { courseCartStore } from '@/store/shoppingCart'
 

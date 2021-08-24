@@ -1,10 +1,10 @@
 import styled from '@emotion/styled'
 import { useRouter } from 'next/router'
 
-import { AnnouncementBar } from '@/components/AnnouncementBar'
+import { AnnouncementBar } from '@/components/TopBar/components/AnnouncementBar'
 
-import { ConfigBar, ConfigBarLayout } from './ConfigBar'
-import { NavBar, NavBarLayout } from './NavBar'
+import { ConfigBar, ConfigBarLayout } from './components/ConfigBar'
+import { NavBar, NavBarLayout } from './components/NavBar'
 
 const StickyContainer = styled.div`
   position: absolute;

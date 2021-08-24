@@ -8,8 +8,8 @@ import { REPORT_PROBLEM, STUDY_PROGRAM_DROPDOWN } from '@/context/analytics/comp
 import { sessionIdStore } from '@/store/sessionIdStore'
 import { useCourseGroup } from '@/utils/hooks/useCourseGroup'
 
-import { FlexContainer } from '../FlexContainer'
-import StudyProgramDropdown from '../components/StudyProgramDropdown'
+import { FlexContainer } from '../../styled'
+import StudyProgramDropdown from '../StudyProgramDropdown'
 import { ConfigBarItem } from './ConfigBarItem'
 
 export const ConfigBarLayout = styled.div`

@@ -1,16 +1,15 @@
 import styled from '@emotion/styled'
 import { Tooltip, Typography } from '@material-ui/core'
 import { observer } from 'mobx-react'
-import { PropsWithChildren, useCallback } from 'react'
+import { PropsWithChildren } from 'react'
 import { useTranslation } from 'react-i18next'
 import { MdCloudDone, MdCloudQueue, MdCloudOff } from 'react-icons/md'
 
-import { NavBarItem } from '@/components/TopBar/NavBar/NavBarItem'
+import { NavBarItem } from '@/components/TopBar/components/NavBar/NavBarItem'
 import { Analytics } from '@/context/analytics/components/Analytics'
 import { LOGIN_BUTTON, LOGOUT_BUTTON } from '@/context/analytics/components/const'
 import { gDriveStore, GDriveSyncState } from '@/store/gDriveState'
 import { gapiStore } from '@/store/googleApiStore'
-import env from '@/utils/env/macro'
 import { login, logout } from '@/utils/googleapi'
 import { grantGdriveSync } from '@/utils/network/gDriveSync'
 

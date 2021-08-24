@@ -1,4 +1,4 @@
-import { AnnoucementItem } from '@/components/AnnouncementBar/types'
+import { AnnoucementItem } from '@/components/TopBar/components/AnnouncementBar/types'
 
 // TODO Admin should b able to change the annoucement
 export function getCurrentAnnoucement(): AnnoucementItem {

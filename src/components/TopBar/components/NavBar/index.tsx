@@ -15,10 +15,10 @@ import {
 } from '@/context/analytics/components/const'
 import { useCourseGroup } from '@/utils/hooks/useCourseGroup'
 
+import { FlexContainer } from '../../styled'
 import { ConfigBarItem } from '../ConfigBar/ConfigBarItem'
-import { FlexContainer } from '../FlexContainer'
 import { MobileNavBar } from '../MobileNavBar'
-import StudyProgramDropdown from '../components/StudyProgramDropdown'
+import StudyProgramDropdown from '../StudyProgramDropdown'
 import { NavBarItem } from './NavBarItem'
 import UserButton from './UserButton'
 

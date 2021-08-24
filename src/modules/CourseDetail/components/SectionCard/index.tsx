@@ -18,11 +18,11 @@ import { useTranslation } from 'react-i18next'
 
 import GenEdChip from '@/common/components/Chips/catagories/GenEdChip'
 import { Flex } from '@/components/Flex'
-import { SectionStatus } from '@/components/SectionCard/components/SectionStatus'
 import { SelectButton } from '@/components/SelectButton'
 import { dayOfWeekMapper } from '@/constants/dayOfWeek'
 import { Analytics } from '@/context/Analytics/components/Analytics'
 import { SUBJECT_SELECT_BUTTON_WITH_SECTION } from '@/context/Analytics/components/const'
+import { SectionStatus } from '@/modules/CourseDetail/components/SectionCard/components/SectionStatus'
 import { Caption } from '@/modules/CourseSearch/component/CourseCard/components/Caption'
 
 const SectionTitle = styled(Typography)`

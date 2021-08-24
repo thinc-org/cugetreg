@@ -9,6 +9,12 @@ import { useCourseGroup } from '@/common/hooks/useCourseGroup'
 import { Language } from '@/common/i18n'
 import { BackButton } from '@/components/BackButton'
 import { PageMeta } from '@/components/PageMeta'
+import { courseTypeStringFromCourse } from '@/modules/CourseDetail/utils/courseTypeStringFromCourse'
+import { parseVariablesFromQuery } from '@/modules/CourseDetail/utils/parseVariablesFromQuery'
+import { getExamDate, getExamPeriod } from '@/utils/coruseExam'
+import { GetCourseResponse, GET_COURSE } from '@/utils/network/BackendGQLQueries'
+import { createApolloServerClient } from '@/utils/network/apollo'
+
 import {
   Container,
   DescriptionTitle,
@@ -17,13 +23,7 @@ import {
   SectionContainer,
   Title,
   GridEnd,
-} from '@/modules/CourseDetail/styled'
-import { courseTypeStringFromCourse } from '@/modules/CourseDetail/utils/courseTypeStringFromCourse'
-import { parseVariablesFromQuery } from '@/modules/CourseDetail/utils/parseVariablesFromQuery'
-import { getExamDate, getExamPeriod } from '@/utils/coruseExam'
-import { GetCourseResponse, GET_COURSE } from '@/utils/network/BackendGQLQueries'
-import { createApolloServerClient } from '@/utils/network/apollo'
-
+} from './styled'
 import { groupBy } from './utils/groupBy'
 
 function CourseDetailPage(props: { data: GetCourseResponse }) {

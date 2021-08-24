@@ -2,13 +2,20 @@
 
 ### Link for [Demo]()
 
+- (Optional) Link for [Figma]()
+- (Optional) Other [Resources]()
+
 ### Why do you do this PR
 
 ## <hr/>
 
+-
+
 ### What did you do
 
 ## <hr/>
+
+-
 
 ### Checklist
 

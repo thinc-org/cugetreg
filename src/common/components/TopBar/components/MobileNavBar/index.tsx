@@ -9,10 +9,10 @@ import { MdMenu } from 'react-icons/md'
 
 import logo from '@/assets/images/cgrLogoDark.svg'
 import { useCourseGroup } from '@/common/hooks/useCourseGroup'
+import useDisclosure from '@/common/hooks/useDisclosure'
 import { Analytics } from '@/context/Analytics/components/Analytics'
 import { LinkWithAnalytics } from '@/context/Analytics/components/LinkWithAnalytics'
 import { REPORT_PROBLEM, NAVBAR_SEARCH_COURSE, NAVBAR_TIMETABLE } from '@/context/Analytics/components/const'
-import { useDisclosure } from '@/context/ShoppingCartModal/hooks'
 import { sessionIdStore } from '@/store/sessionIdStore'
 
 import { NavBarItem } from '../NavBar/NavBarItem'

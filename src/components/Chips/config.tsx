@@ -1,5 +1,5 @@
 import { ChipProps } from '@material-ui/core'
-import { DayOfWeek, GenEdType } from '@thinc-org/chula-courses'
+import { DayOfWeekEnum, GenEdTypeEnum } from '@thinc-org/chula-courses'
 
 import { ChipFilledHighlightColor, ChipOutlinedHighlightColor } from '@/configs/theme/overrides/chip'
 
@@ -19,8 +19,8 @@ const createDefaultChipConfig = (label: string): ChipConfigProps => ({
   color: 'deepGrayFilled',
 })
 
-export type GenEdChipKey = GenEdType
-export type GenEdChipConfigProps = Record<GenEdType, ChipConfigProps>
+export type GenEdChipKey = GenEdTypeEnum
+export type GenEdChipConfigProps = Record<GenEdChipKey, ChipConfigProps>
 export const genEdChipConfig: GenEdChipConfigProps = {
   SO: { label: 'หมวดสังคม', color: 'greenOutlined', variant: 'outlined' },
   SC: { label: 'หมวดวิทย์', color: 'yellowOutlined', variant: 'outlined' },
@@ -29,8 +29,8 @@ export const genEdChipConfig: GenEdChipConfigProps = {
   NO: { label: 'ไม่ใช่ Gened', color: 'deepGrayOutlined', variant: 'outlined' },
 }
 
-export type DayChipKey = DayOfWeek
-export type DayChipConfigProps = Record<DayOfWeek, ChipConfigProps>
+export type DayChipKey = DayOfWeekEnum
+export type DayChipConfigProps = Record<DayChipKey, ChipConfigProps>
 export const dayChipConfig: DayChipConfigProps = {
   MO: { label: 'วันจันทร์', color: 'yellowFilled' },
   TU: { label: 'วันอังคาร', color: 'pinkFilled' },
@@ -43,7 +43,14 @@ export const dayChipConfig: DayChipConfigProps = {
   AR: createDefaultChipConfig('AR'),
 }
 
-export type OtherChipKey = 'open' | 'close' | 'chula' | 'other' | 'noConflict'
+export enum OtherEnum {
+  open = 'open',
+  close = 'close',
+  chula = 'chula',
+  other = 'other',
+  noConflict = 'noConflict',
+}
+export type OtherChipKey = OtherEnum
 export type OtherChipConfigProps = Record<OtherChipKey, ChipConfigProps>
 export const otherChipConfig: OtherChipConfigProps = {
   open: createDefaultChipConfig('เปิด'),

@@ -1,6 +1,6 @@
 import { ResponsiveDialog } from '@/components/ResponsiveDialog'
-import ShoppingPanel from '@/components/ShoppingPanel'
 import { useShoppingCardModal } from '@/context/ShoppingCartModal'
+import ShoppingPanel from '@/modules/CourseSearch/component/ShoppingCartModal/components/ShoppingPanel'
 
 export function ShoppingCartModal() {
   const { isOpen, onClose } = useShoppingCardModal()

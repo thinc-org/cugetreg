@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import { Button as MuiButton, DialogContent as MuiDialogContent, Paper, Stack, useMediaQuery } from '@material-ui/core'
 import React from 'react'
 
-import { DayChipKey, GenEdChipKey } from '@/components/Chips/config'
+import { DayChipKey, GenEdChipKey } from '@/common/components/Chips/config'
 import { ResponsiveDialog } from '@/components/ResponsiveDialog'
 import { Analytics } from '@/context/Analytics/components/Analytics'
 import { DAY_FILTER, GENED_FILTER } from '@/context/Analytics/components/const'

@@ -2,8 +2,8 @@ import { CardContent, Collapse, Grid, Stack, Typography } from '@material-ui/cor
 import { DayOfWeek } from '@thinc-org/chula-courses'
 import { useTranslation } from 'react-i18next'
 
-import DayChip from '@/components/Chips/catagories/DayChip'
-import GenEdChip from '@/components/Chips/catagories/GenEdChip'
+import DayChip from '@/common/components/Chips/catagories/DayChip'
+import GenEdChip from '@/common/components/Chips/catagories/GenEdChip'
 import { Flex } from '@/components/Flex'
 import NoSeatIcon from '@/components/RegwarNotice/NoSeatInfoNotice'
 import { SelectButton } from '@/components/SelectButton'

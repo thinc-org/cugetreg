@@ -1,7 +1,7 @@
 import { Checkbox, CheckboxProps, FormControlLabel, makeStyles, Stack, Typography } from '@material-ui/core'
 import React from 'react'
 
-import { GeneralChipKey } from '@/components/Chips/config'
+import { GeneralChipKey } from '@/common/components/Chips/config'
 import { useSearchCourseQueryParams } from '@/modules/CourseSearch/hooks/useSearchCourseQueryParams'
 
 export interface EnhancedCheckBoxProps extends CheckboxProps {

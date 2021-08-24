@@ -2,9 +2,9 @@ import { Typography } from '@material-ui/core'
 import { format } from 'date-fns'
 import { th } from 'date-fns/locale'
 
-import GeneralChip from '@/components/Chips'
+import GeneralChip from '@/common/components/Chips'
 
-import { GeneralChipKey } from '../Chips/config'
+import { GeneralChipKey } from '../../common/components/Chips/config'
 import { IMAGE_SIZE } from './const'
 import { AnnouncementContainer, Image, TagContainer, DateTitle } from './styles'
 

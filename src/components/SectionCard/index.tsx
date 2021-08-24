@@ -16,7 +16,7 @@ import {
 import { Course, Section } from '@thinc-org/chula-courses'
 import { useTranslation } from 'react-i18next'
 
-import GenEdChip from '@/components/Chips/catagories/GenEdChip'
+import GenEdChip from '@/common/components/Chips/catagories/GenEdChip'
 import { Flex } from '@/components/Flex'
 import { SectionStatus } from '@/components/SectionCard/components/SectionStatus'
 import { SelectButton } from '@/components/SelectButton'

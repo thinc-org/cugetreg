@@ -1,15 +1,14 @@
-import { ApolloError, useQuery } from '@apollo/client'
+import { ApolloError } from '@apollo/client'
 import { Grid, Typography } from '@material-ui/core'
 import { getFaculty } from '@thinc-org/chula-courses'
 import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
-import { useRouter } from 'next/router'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useCourseGroup } from '@/common/hooks/useCourseGroup'
+import { Language } from '@/common/i18n'
 import { BackButton } from '@/components/BackButton'
 import { PageMeta } from '@/components/PageMeta'
-import { Language } from '@/i18n'
 import {
   Container,
   DescriptionTitle,
@@ -19,11 +18,13 @@ import {
   Title,
   GridEnd,
 } from '@/modules/CourseDetail/styled'
-import { courseTypeStringFromCourse, parseVariablesFromQuery } from '@/modules/CourseDetail/utils'
+import { courseTypeStringFromCourse } from '@/modules/CourseDetail/utils/courseTypeStringFromCourse'
+import { parseVariablesFromQuery } from '@/modules/CourseDetail/utils/parseVariablesFromQuery'
 import { getExamDate, getExamPeriod } from '@/utils/coruseExam'
-import { groupBy } from '@/utils/groupBy'
-import { GetCourseResponse, GetCourseVars, GET_COURSE } from '@/utils/network/BackendGQLQueries'
+import { GetCourseResponse, GET_COURSE } from '@/utils/network/BackendGQLQueries'
 import { createApolloServerClient } from '@/utils/network/apollo'
+
+import { groupBy } from './utils/groupBy'
 
 function CourseDetailPage(props: { data: GetCourseResponse }) {
   const { i18n } = useTranslation()

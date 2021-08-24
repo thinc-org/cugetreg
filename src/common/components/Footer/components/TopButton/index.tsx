@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 
 import chevronUp from '@/assets/images/chevronUp.svg'
 
-import { FlexContainer } from '../FlexContainer'
+import { FlexContainer } from '../../styled'
 
 const useStyles = makeStyles((theme) => ({
   button: {

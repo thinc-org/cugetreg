@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/core'
 
-import { Banner } from './Banner'
-import { TopButton } from './TopButton'
+import { Banner } from './components/Banner'
+import { TopButton } from './components/TopButton'
 
 const useStyles = makeStyles((theme) => ({
   footer: {

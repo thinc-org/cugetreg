@@ -7,7 +7,7 @@ import bigLogo from '@/assets/images/cgrLogoLight.svg'
 import github from '@/assets/images/github.svg'
 import thincLogo from '@/assets/images/thincLogo.svg'
 
-import { FlexContainer } from '../FlexContainer'
+import { FlexContainer } from '../../styled'
 
 const useStyles = makeStyles((theme) => ({
   banner: {

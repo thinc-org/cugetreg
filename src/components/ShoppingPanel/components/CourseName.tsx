@@ -3,9 +3,9 @@ import { Course } from '@thinc-org/chula-courses'
 import React from 'react'
 
 import { genEdChipConfig } from '@/components/Chips/config'
+import { LinkWithAnalytics } from '@/context/Analytics/components/LinkWithAnalytics'
+import { SELECTED_COURSE_TITLE } from '@/context/Analytics/components/const'
 import { useShoppingCardModal } from '@/context/ShoppingCartModal'
-import { LinkWithAnalytics } from '@/context/analytics/components/LinkWithAnalytics'
-import { SELECTED_COURSE_TITLE } from '@/context/analytics/components/const'
 import { useCourseGroup } from '@/utils/hooks/useCourseGroup'
 
 export interface CourseNameProps {

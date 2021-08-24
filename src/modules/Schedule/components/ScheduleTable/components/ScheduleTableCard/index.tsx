@@ -12,8 +12,8 @@ import { MdDelete } from 'react-icons/md'
 
 import { CustomSelect } from '@/components/common/CustomSelect'
 import { dayOfWeekMapper } from '@/constants/dayOfWeek'
-import { Analytics } from '@/context/analytics/components/Analytics'
-import { HIDE_COURSE, DELETE_COURSE, SECTION_CHANGE } from '@/context/analytics/components/const'
+import { Analytics } from '@/context/Analytics/components/Analytics'
+import { HIDE_COURSE, DELETE_COURSE, SECTION_CHANGE } from '@/context/Analytics/components/const'
 import { Caption } from '@/modules/CourseSearch/component/CourseCard/components/Caption'
 import {
   CardBorder,

@@ -5,8 +5,8 @@ import { useRouter } from 'next/router'
 import React, { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Analytics } from '@/context/analytics/components/Analytics'
-import { GO_BACK_BUTTON } from '@/context/analytics/components/const'
+import { Analytics } from '@/context/Analytics/components/Analytics'
+import { GO_BACK_BUTTON } from '@/context/Analytics/components/const'
 
 const ButtonMobile = styled(IconButton)`
   border: 1px solid #2a2d48;

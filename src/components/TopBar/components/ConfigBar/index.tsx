@@ -3,8 +3,8 @@ import { observer } from 'mobx-react'
 import { useTranslation } from 'react-i18next'
 
 import { Spacer } from '@/components/Flex'
-import { Analytics } from '@/context/analytics/components/Analytics'
-import { REPORT_PROBLEM, STUDY_PROGRAM_DROPDOWN } from '@/context/analytics/components/const'
+import { Analytics } from '@/context/Analytics/components/Analytics'
+import { REPORT_PROBLEM, STUDY_PROGRAM_DROPDOWN } from '@/context/Analytics/components/const'
 import { sessionIdStore } from '@/store/sessionIdStore'
 import { useCourseGroup } from '@/utils/hooks/useCourseGroup'
 

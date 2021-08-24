@@ -21,8 +21,8 @@ import { Flex } from '@/components/Flex'
 import { SectionStatus } from '@/components/SectionCard/components/SectionStatus'
 import { SelectButton } from '@/components/SelectButton'
 import { dayOfWeekMapper } from '@/constants/dayOfWeek'
-import { Analytics } from '@/context/analytics/components/Analytics'
-import { SUBJECT_SELECT_BUTTON_WITH_SECTION } from '@/context/analytics/components/const'
+import { Analytics } from '@/context/Analytics/components/Analytics'
+import { SUBJECT_SELECT_BUTTON_WITH_SECTION } from '@/context/Analytics/components/const'
 import { Caption } from '@/modules/CourseSearch/component/CourseCard/components/Caption'
 
 const SectionTitle = styled(Typography)`

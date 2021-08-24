@@ -3,9 +3,9 @@ import { Course } from '@thinc-org/chula-courses'
 import { forwardRef, memo } from 'react'
 
 import { SelectButton } from '@/components/SelectButton'
+import { Analytics } from '@/context/Analytics/components/Analytics'
+import { SUBJECT_SELECT_BUTTON } from '@/context/Analytics/components/const'
 import { useDisclosure } from '@/context/ShoppingCartModal/hooks'
-import { Analytics } from '@/context/analytics/components/Analytics'
-import { SUBJECT_SELECT_BUTTON } from '@/context/analytics/components/const'
 import { CourseCardContext, useCourseCard } from '@/modules/CourseSearch/component/CourseCard/useCourseCard'
 
 import { CardBody } from './components/CardBody'

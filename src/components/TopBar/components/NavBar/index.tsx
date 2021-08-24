@@ -4,15 +4,15 @@ import { useTranslation } from 'react-i18next'
 
 import logo from '@/assets/images/cgrLogoDark.svg'
 import { Spacer } from '@/components/Flex'
-import { Analytics } from '@/context/analytics/components/Analytics'
-import { LinkWithAnalytics } from '@/context/analytics/components/LinkWithAnalytics'
+import { Analytics } from '@/context/Analytics/components/Analytics'
+import { LinkWithAnalytics } from '@/context/Analytics/components/LinkWithAnalytics'
 import {
   GETREG_LOGO,
   NAVBAR_ABOUT,
   NAVBAR_SEARCH_COURSE,
   NAVBAR_TIMETABLE,
   STUDY_PROGRAM_DROPDOWN,
-} from '@/context/analytics/components/const'
+} from '@/context/Analytics/components/const'
 import { useCourseGroup } from '@/utils/hooks/useCourseGroup'
 
 import { FlexContainer } from '../../styled'

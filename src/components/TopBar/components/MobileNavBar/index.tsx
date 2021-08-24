@@ -8,10 +8,10 @@ import { useTranslation } from 'react-i18next'
 import { MdMenu } from 'react-icons/md'
 
 import logo from '@/assets/images/cgrLogoDark.svg'
+import { Analytics } from '@/context/Analytics/components/Analytics'
+import { LinkWithAnalytics } from '@/context/Analytics/components/LinkWithAnalytics'
+import { REPORT_PROBLEM, NAVBAR_SEARCH_COURSE, NAVBAR_TIMETABLE } from '@/context/Analytics/components/const'
 import { useDisclosure } from '@/context/ShoppingCartModal/hooks'
-import { Analytics } from '@/context/analytics/components/Analytics'
-import { LinkWithAnalytics } from '@/context/analytics/components/LinkWithAnalytics'
-import { REPORT_PROBLEM, NAVBAR_SEARCH_COURSE, NAVBAR_TIMETABLE } from '@/context/analytics/components/const'
 import { sessionIdStore } from '@/store/sessionIdStore'
 import { useCourseGroup } from '@/utils/hooks/useCourseGroup'
 

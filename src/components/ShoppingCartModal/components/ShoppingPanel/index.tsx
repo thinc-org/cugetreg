@@ -3,10 +3,10 @@ import { Course } from '@thinc-org/chula-courses'
 import { useTranslation } from 'react-i18next'
 
 import { Flex } from '@/components/Flex'
-import { ActionButton } from '@/components/ShoppingPanel/components/ActionButton'
-import CourseList from '@/components/ShoppingPanel/components/CourseList'
-import { EmptyList } from '@/components/ShoppingPanel/components/EmptyList'
-import { useShoppingPanel } from '@/components/ShoppingPanel/hooks'
+import { ActionButton } from '@/components/ShoppingCartModal/components/ShoppingPanel/components/ActionButton'
+import CourseList from '@/components/ShoppingCartModal/components/ShoppingPanel/components/CourseList'
+import { EmptyList } from '@/components/ShoppingCartModal/components/ShoppingPanel/components/EmptyList'
+import { useShoppingPanel } from '@/components/ShoppingCartModal/components/ShoppingPanel/hooks'
 import { CourseCartItem, courseCartStore } from '@/store'
 
 export interface CoursePropsType {

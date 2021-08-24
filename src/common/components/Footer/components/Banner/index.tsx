@@ -1,4 +1,5 @@
-import { Divider, makeStyles, useMediaQuery, useTheme } from '@material-ui/core'
+import { Divider, makeStyles, useMediaQuery, useTheme, Stack } from '@material-ui/core'
+import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
@@ -7,15 +8,9 @@ import bigLogo from '@/assets/images/cgrLogoLight.svg'
 import github from '@/assets/images/github.svg'
 import thincLogo from '@/assets/images/thincLogo.svg'
 
-import { FlexContainer } from '../../styled'
+import { BannerContaienr, PrivacyLink, GithubLink, BannerSubtitle } from './styled'
 
 const useStyles = makeStyles((theme) => ({
-  banner: {
-    flexDirection: 'column',
-    height: '100%',
-    backgroundColor: theme.palette.primary.main,
-    color: theme.palette.primary.contrastText,
-  },
   bannerDetail: {
     [theme.breakpoints.down('sm')]: {
       flexDirection: 'column',
@@ -74,30 +69,39 @@ export function Banner() {
   const theme = useTheme()
   const classes = useStyles()
   const matches = useMediaQuery(theme.breakpoints.down('sm'))
+
+  const showGithub = true
+
+  const rowOrColumns = matches ? 'column' : 'row'
+
   return (
-    <FlexContainer className={classes.banner}>
+    <BannerContaienr spacing={matches ? 1 : 3}>
       <Link href="/">
-        <img src={bigLogo} className={classes.bigLogo} height={matches ? '40' : '56'} />
+        <Image src={bigLogo} width="172" height={matches ? '40' : '56'} />
       </Link>
 
-      <FlexContainer className={classes.bannerDetail}>
-        <FlexContainer className={classes.smallRow}>
-          <img src={thincLogo} />
-          <div className={classes.bannerSubtitle}>{t('footer:university')}</div>
-        </FlexContainer>
-        {/* <Divider orientation={matches ? 'horizontal' : 'vertical'} className={classes.divider} />
-        <Link href="https://github.com/thinc-org">
-          <a className={classes.link}>
-            <div className={classes.bannerSubtitle}>{t('footer:github')}</div>
-            <img className={classes.logo} src={github} />
+      <Stack direction={rowOrColumns} alignItems="center" spacing={2}>
+        <Stack direction="row" alignItems="center" spacing={2}>
+          <a href="https://www.facebook.com/ThailandIncubator">
+            <Image src={thincLogo} width="78" height="32" />
           </a>
-        </Link> */}
-      </FlexContainer>
-      <FlexContainer className={classes.smallRow}>
-        <Link href="/privacy">
-          <a className={classes.link}>Privacy Policy</a>
-        </Link>
-      </FlexContainer>
-    </FlexContainer>
+          <BannerSubtitle>{t('footer:university')}</BannerSubtitle>
+        </Stack>
+        {showGithub && (
+          <>
+            <Divider orientation={matches ? 'horizontal' : 'vertical'} className={classes.divider} />
+            <Link href="https://github.com/thinc-org">
+              <GithubLink direction="row" alignItems="center">
+                <BannerSubtitle>{t('footer:github')}</BannerSubtitle>
+                <Image src={github} width="20" height="20" />
+              </GithubLink>
+            </Link>
+          </>
+        )}
+      </Stack>
+      <Link href="/privacy">
+        <PrivacyLink>Privacy Policy</PrivacyLink>
+      </Link>
+    </BannerContaienr>
   )
 }

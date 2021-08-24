@@ -1,10 +1,12 @@
 import styled from '@emotion/styled'
 
-import { Container } from '@/components/Container'
+export const FooterContainer = styled.div`
+  height: 340px;
+  margin-top: auto;
+  box-shadow: ${({ theme }) => theme.shadows[4]};
+  position: relative;
 
-export const FlexContainer = styled(Container)`
-  max-width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  ${({ theme }) => theme.breakpoints.down('sm')} {
+    height: 240px;
+  }
 `

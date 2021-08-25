@@ -8,10 +8,11 @@ import { useTranslation } from 'react-i18next'
 import { BackButton } from '@/common/components/BackButton'
 import { useCourseGroup } from '@/common/hooks/useCourseGroup'
 import { Language } from '@/common/i18n'
+import getExamDate from '@/common/utils/getExamData'
+import getExamPeriod from '@/common/utils/getExamPeriod'
 import { PageMeta } from '@/components/PageMeta'
 import { createApolloServerClient } from '@/services/apollo'
 import { GetCourseResponse, GET_COURSE } from '@/services/apollo/query/getCourse'
-import { getExamDate, getExamPeriod } from '@/utils/coruseExam'
 
 import {
   Container,

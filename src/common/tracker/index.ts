@@ -1,6 +1,6 @@
 import TagManager from 'react-gtm-module'
 
-import { google_tag_manager_container_id } from '@/env'
+import { google_tag_manager_container_id } from '@/utils/env'
 
 import { TrackCustomEventParams } from './types'
 

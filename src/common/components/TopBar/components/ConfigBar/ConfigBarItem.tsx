@@ -1,4 +1,4 @@
-import { styledWithTheme } from '@/utils/styledWithTheme'
+import { styledWithTheme } from '@/common/utils/styledWithTheme'
 
 export const ConfigBarItem = styledWithTheme('span')((theme) => ({
   ...theme.typography.subtitle2,

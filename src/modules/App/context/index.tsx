@@ -11,8 +11,8 @@ import { ModalProps } from '@/common/context/ShoppingCartModal/types'
 import { SnackbarContextProvider } from '@/common/context/Snackbar'
 import { SnackbarProps } from '@/common/context/Snackbar/types'
 import { darkTheme, lightTheme } from '@/configs/theme'
-import env from '@/env/macro'
 import { client } from '@/services/apollo'
+import env from '@/utils/env/macro'
 
 interface AppProviderProps {
   children: React.ReactNode

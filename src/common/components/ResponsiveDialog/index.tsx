@@ -2,7 +2,7 @@ import { useTheme } from '@emotion/react'
 import { Dialog, DialogProps, Slide, SlideProps, useMediaQuery } from '@material-ui/core'
 import { ForwardedRef, forwardRef } from 'react'
 
-import { deepAssign } from '@/utils/deepAssign'
+import { deepAssign } from '@/common/utils/deepAssign'
 
 const Transition = forwardRef((props: SlideProps, ref: ForwardedRef<unknown>) => {
   return <Slide direction="up" ref={ref} {...props} />

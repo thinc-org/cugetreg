@@ -1,6 +1,6 @@
 import { Button } from '@material-ui/core'
 
-import { styledWithTheme } from '@/utils/styledWithTheme'
+import { styledWithTheme } from '@/common/utils/styledWithTheme'
 
 export const NavBarItem = styledWithTheme(Button)((theme) => ({
   ...theme.typography.h6,

@@ -11,12 +11,13 @@ export default function getPaletteRange(theme: Theme, genEdType: GenEdType): Hig
       return theme.palette.highlight.purple
     case 'SO':
       return theme.palette.highlight.green
-  }
-  // gened sc
-  const secondary = theme.palette.secondaryRange
-  return {
-    300: secondary[100],
-    500: secondary[500],
-    700: secondary[900],
+    default: {
+      const secondary = theme.palette.secondaryRange
+      return {
+        300: secondary[100],
+        500: secondary[500],
+        700: secondary[900],
+      }
+    }
   }
 }

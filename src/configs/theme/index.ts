@@ -1,6 +1,6 @@
 import { createMuiTheme, Theme, ThemeOptions } from '@material-ui/core'
 
-import { deepAssign } from '@/utils/deepAssign'
+import { deepAssign } from '@/common/utils/deepAssign'
 
 import overrideMuiBaseComponent from './overrides'
 import { lightPaletteOptions, darkPaletteOptions } from './palette'

@@ -1,4 +1,4 @@
-import { styledWithTheme } from '@/utils/styledWithTheme'
+import { styledWithTheme } from '@/common/utils/styledWithTheme'
 
 import { colsCount } from '../constants'
 import { useDimensions } from '../dimensions'

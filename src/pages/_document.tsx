@@ -3,8 +3,8 @@ import Document, { DocumentContext, Head, Html, Main, NextScript } from 'next/do
 import React, { ReactNode } from 'react'
 import { resetServerContext } from 'react-beautiful-dnd'
 
-import env from '@/env/macro'
-import { injectDarkStyle } from '@/utils/darkStyleInjector'
+import { injectDarkStyle } from '@/common/utils/darkStyleInjector'
+import env from '@/utils/env/macro'
 
 export default class MyDocument extends Document {
   render() {

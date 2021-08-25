@@ -2,7 +2,7 @@ import { ApolloClient, InMemoryCache } from '@apollo/client'
 import { Course } from '@thinc-org/chula-courses'
 import { uniqBy } from 'lodash'
 
-import env from '@/utils/env/macro'
+import env from '@/env/macro'
 
 import { SearchCourseVars } from './query/searchCourse'
 

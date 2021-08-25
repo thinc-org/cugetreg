@@ -2,9 +2,9 @@ import axios from 'axios'
 import { runInAction } from 'mobx'
 import * as uuid from 'uuid'
 
+import env from '@/env/macro'
 import { gapiStore } from '@/store/googleApiStore'
 import { sessionIdStore } from '@/store/sessionIdStore'
-import env from '@/utils/env/macro'
 
 import { ClientLogDTO, LogEvent } from './types'
 

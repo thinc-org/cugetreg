@@ -3,7 +3,7 @@ import { Router } from 'next/router'
 import { useEffect } from 'react'
 
 import { useSnackBar } from '@/common/context/Snackbar/hooks'
-import env from '@/utils/env/macro'
+import env from '@/env/macro'
 
 import removeElement from '../../utils/removeElement'
 import useGapi from '../useGapi'

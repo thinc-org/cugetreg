@@ -10,11 +10,13 @@ import { useTranslation } from 'react-i18next'
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
 import { MdDelete } from 'react-icons/md'
 
-import { CustomSelect } from '@/components/common/CustomSelect'
 import { dayOfWeekMapper } from '@/constants/dayOfWeek'
 import { Analytics } from '@/context/Analytics/components/Analytics'
 import { HIDE_COURSE, DELETE_COURSE, SECTION_CHANGE } from '@/context/Analytics/components/const'
 import { Caption } from '@/modules/CourseSearch/components/CourseCard/components/Caption'
+import { CourseCartItem, courseCartStore } from '@/store'
+import { unique } from '@/utils'
+
 import {
   CardBorder,
   CardContent,
@@ -29,9 +31,8 @@ import {
   VisibilityToggle,
   StyledLink,
   RightPane,
-} from '@/modules/Schedule/components/ScheduleTable/components/ScheduleTableCard/styled'
-import { CourseCartItem, courseCartStore } from '@/store'
-import { unique } from '@/utils'
+  StyledNativeSelect,
+} from './styled'
 
 export interface ScheduleTableCardProps {
   item: CourseCartItem
@@ -160,7 +161,7 @@ function SectionSelect({ item }: CardComponentProps) {
   return (
     <Analytics elementName={SECTION_CHANGE} elementId={item.courseNo}>
       {({ log }) => (
-        <CustomSelect
+        <StyledNativeSelect
           value={item.selectedSectionNo}
           onChange={(e) => {
             const sectionNumber = e.target.value as string
@@ -173,7 +174,7 @@ function SectionSelect({ item }: CardComponentProps) {
               {t('sectionLabel', { section: sec.sectionNo })}
             </option>
           ))}
-        </CustomSelect>
+        </StyledNativeSelect>
       )}
     </Analytics>
   )

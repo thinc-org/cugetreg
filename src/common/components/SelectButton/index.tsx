@@ -1,4 +1,5 @@
 import Add from '@material-ui/icons/Add'
+import { LoadingButton } from '@material-ui/lab'
 import useGoogleOptimize from '@react-hook/google-optimize'
 import { Course } from '@thinc-org/chula-courses'
 import { runInAction } from 'mobx'
@@ -8,7 +9,6 @@ import { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 import { MdCheck } from 'react-icons/md'
 
-import { CustomButton } from '@/components/common/CustomButton'
 import { SnackbarContext } from '@/context/Snackbar'
 import { courseCartStore } from '@/store'
 
@@ -47,7 +47,7 @@ export const SelectButton = observer(({ course, selectedSectionNumber, log }: Se
   console.log(isExperimentColor, 'hasYellow')
 
   return (
-    <CustomButton
+    <LoadingButton
       loading={false}
       startIcon={!isSelected ? <Add /> : <MdCheck />}
       color={isExperimentColor ? 'secondary' : 'primary'}
@@ -57,6 +57,6 @@ export const SelectButton = observer(({ course, selectedSectionNumber, log }: Se
       onClick={onClickSelectCourse}
     >
       {t('select')}
-    </CustomButton>
+    </LoadingButton>
   )
 })

@@ -2,7 +2,7 @@ import { StudyProgramEnum } from '@thinc-org/chula-courses'
 import { Router } from 'next/router'
 import { useEffect } from 'react'
 
-import { useSnackBar } from '@/context/Snackbar/hooks'
+import { useSnackBar } from '@/common/context/Snackbar/hooks'
 import env from '@/utils/env/macro'
 
 import removeElement from '../../utils/removeElement'

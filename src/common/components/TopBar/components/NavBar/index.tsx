@@ -3,17 +3,17 @@ import { Hidden } from '@material-ui/core'
 import { useTranslation } from 'react-i18next'
 
 import logo from '@/assets/images/cgrLogoDark.svg'
-import { useCourseGroup } from '@/common/hooks/useCourseGroup'
-import { Spacer } from '@/components/Flex'
-import { Analytics } from '@/context/Analytics/components/Analytics'
-import { LinkWithAnalytics } from '@/context/Analytics/components/LinkWithAnalytics'
+import { Analytics } from '@/common/context/Analytics/components/Analytics'
+import { LinkWithAnalytics } from '@/common/context/Analytics/components/LinkWithAnalytics'
 import {
   GETREG_LOGO,
   NAVBAR_ABOUT,
   NAVBAR_SEARCH_COURSE,
   NAVBAR_TIMETABLE,
   STUDY_PROGRAM_DROPDOWN,
-} from '@/context/Analytics/components/const'
+} from '@/common/context/Analytics/components/const'
+import { useCourseGroup } from '@/common/hooks/useCourseGroup'
+import { Spacer } from '@/components/Flex'
 
 import { FlexContainer } from '../../styled'
 import { ConfigBarItem } from '../ConfigBar/ConfigBarItem'

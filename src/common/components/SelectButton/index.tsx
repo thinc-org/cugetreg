@@ -9,7 +9,7 @@ import { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 import { MdCheck } from 'react-icons/md'
 
-import { SnackbarContext } from '@/context/Snackbar'
+import { SnackbarContext } from '@/common/context/Snackbar'
 import { courseCartStore } from '@/store'
 
 interface SelectButtonProps {

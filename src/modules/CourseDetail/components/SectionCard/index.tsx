@@ -18,10 +18,10 @@ import { useTranslation } from 'react-i18next'
 
 import GenEdChip from '@/common/components/Chips/catagories/GenEdChip'
 import { SelectButton } from '@/common/components/SelectButton'
+import { dayOfWeekMapper } from '@/common/constants/dayOfWeek'
+import { Analytics } from '@/common/context/Analytics/components/Analytics'
+import { SUBJECT_SELECT_BUTTON_WITH_SECTION } from '@/common/context/Analytics/components/const'
 import { Flex } from '@/components/Flex'
-import { dayOfWeekMapper } from '@/constants/dayOfWeek'
-import { Analytics } from '@/context/Analytics/components/Analytics'
-import { SUBJECT_SELECT_BUTTON_WITH_SECTION } from '@/context/Analytics/components/const'
 import { SectionStatus } from '@/modules/CourseDetail/components/SectionCard/components/SectionStatus'
 import { Caption } from '@/modules/CourseSearch/components/CourseCard/components/Caption'
 

@@ -1,7 +1,7 @@
 import { FormControl, MenuItem, Select, useMediaQuery, useTheme } from '@material-ui/core'
 
-import { Analytics } from '@/context/Analytics/components/Analytics'
-import { SECTION_SELECT } from '@/context/Analytics/components/const'
+import { Analytics } from '@/common/context/Analytics/components/Analytics'
+import { SECTION_SELECT } from '@/common/context/Analytics/components/const'
 
 import { useCourseCardContext } from '../context'
 

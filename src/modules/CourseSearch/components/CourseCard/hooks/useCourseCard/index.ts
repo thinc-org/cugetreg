@@ -1,7 +1,7 @@
 import { Capacity, Course, Section } from '@thinc-org/chula-courses'
 import { useState } from 'react'
 
-import { dayOfWeekArray } from '@/constants/dayOfWeek'
+import { dayOfWeekArray } from '@/common/constants/dayOfWeek'
 
 import { CourseCardContextValue } from '../../context/types'
 import sum from '../../utils/sum'

@@ -5,8 +5,8 @@ import React from 'react'
 
 import { DayChipKey, GenEdChipKey } from '@/common/components/Chips/config'
 import { ResponsiveDialog } from '@/common/components/ResponsiveDialog'
-import { Analytics } from '@/context/Analytics/components/Analytics'
-import { DAY_FILTER, GENED_FILTER } from '@/context/Analytics/components/const'
+import { Analytics } from '@/common/context/Analytics/components/Analytics'
+import { DAY_FILTER, GENED_FILTER } from '@/common/context/Analytics/components/const'
 import { CheckboxGroup } from '@/modules/CourseSearch/components/FilterSection/components/CheckboxGroup'
 import {
   createGenEdCheckboxes,

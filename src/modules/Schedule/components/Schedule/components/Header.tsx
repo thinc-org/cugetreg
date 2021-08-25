@@ -2,7 +2,7 @@ import { styled } from '@material-ui/core'
 import { DayOfWeek } from '@thinc-org/chula-courses'
 import { useTranslation } from 'react-i18next'
 
-import { dayOfWeekArray } from '@/constants/dayOfWeek'
+import { dayOfWeekArray } from '@/common/constants/dayOfWeek'
 
 import { hourEnd, hourStart } from '../constants'
 import { useDimensions } from '../dimensions'

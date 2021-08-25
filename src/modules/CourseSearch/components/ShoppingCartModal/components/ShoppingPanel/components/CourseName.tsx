@@ -3,10 +3,10 @@ import { Course } from '@thinc-org/chula-courses'
 import React from 'react'
 
 import { genEdChipConfig } from '@/common/components/Chips/config'
+import { LinkWithAnalytics } from '@/common/context/Analytics/components/LinkWithAnalytics'
+import { SELECTED_COURSE_TITLE } from '@/common/context/Analytics/components/const'
+import { useShoppingCardModal } from '@/common/context/ShoppingCartModal'
 import { useCourseGroup } from '@/common/hooks/useCourseGroup'
-import { LinkWithAnalytics } from '@/context/Analytics/components/LinkWithAnalytics'
-import { SELECTED_COURSE_TITLE } from '@/context/Analytics/components/const'
-import { useShoppingCardModal } from '@/context/ShoppingCartModal'
 
 export interface CourseNameProps {
   course: Course

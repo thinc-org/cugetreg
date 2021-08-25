@@ -4,10 +4,14 @@ import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 import { useState, useContext } from 'react'
 import React from 'react'
 
+import { Analytics } from '@/common/context/Analytics/components/Analytics'
+import {
+  FILTER_BUTTON,
+  SELECTED_COURSES_BUTTON,
+  OPEN_SHOPPING_CART_BUTTON,
+} from '@/common/context/Analytics/components/const'
+import { ShoppingCartModalContext } from '@/common/context/ShoppingCartModal'
 import { PageMeta } from '@/components/PageMeta'
-import { Analytics } from '@/context/Analytics/components/Analytics'
-import { FILTER_BUTTON, SELECTED_COURSES_BUTTON, OPEN_SHOPPING_CART_BUTTON } from '@/context/Analytics/components/const'
-import { ShoppingCartModalContext } from '@/context/ShoppingCartModal'
 import { CourseList } from '@/modules/CourseSearch/components/CourseList'
 import { FilterIconButton } from '@/modules/CourseSearch/components/FilterIconButton'
 import { FilterSection } from '@/modules/CourseSearch/components/FilterSection'

@@ -4,11 +4,11 @@ import KeyboardArrowUp from '@material-ui/icons/KeyboardArrowUp'
 import { useTranslation } from 'react-i18next'
 
 import GenEdChip from '@/common/components/Chips/catagories/GenEdChip'
+import { Analytics } from '@/common/context/Analytics/components/Analytics'
+import { LinkWithAnalytics } from '@/common/context/Analytics/components/LinkWithAnalytics'
+import { COURSE_TITLE, EXPAND_BUTTON } from '@/common/context/Analytics/components/const'
 import { useCourseGroup } from '@/common/hooks/useCourseGroup'
 import { Flex } from '@/components/Flex'
-import { Analytics } from '@/context/Analytics/components/Analytics'
-import { LinkWithAnalytics } from '@/context/Analytics/components/LinkWithAnalytics'
-import { COURSE_TITLE, EXPAND_BUTTON } from '@/context/Analytics/components/const'
 
 import { useCourseCardContext } from '../context'
 

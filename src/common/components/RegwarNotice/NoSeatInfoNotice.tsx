@@ -3,7 +3,7 @@ import { ErrorOutline } from '@material-ui/icons'
 import { MouseEvent, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useLog } from '@/context/Analytics/components/useLog'
+import { useLog } from '@/common/context/Analytics/components/useLog'
 
 function NoSeatIcon(props: IconButtonProps) {
   const { t } = useTranslation('regWarNotice')

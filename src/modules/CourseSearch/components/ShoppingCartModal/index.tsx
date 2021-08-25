@@ -1,5 +1,5 @@
 import { ResponsiveDialog } from '@/common/components/ResponsiveDialog'
-import { useShoppingCardModal } from '@/context/ShoppingCartModal'
+import { useShoppingCardModal } from '@/common/context/ShoppingCartModal'
 import ShoppingPanel from '@/modules/CourseSearch/components/ShoppingCartModal/components/ShoppingPanel'
 
 export function ShoppingCartModal() {

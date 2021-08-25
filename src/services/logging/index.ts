@@ -6,22 +6,7 @@ import { gapiStore } from '@/store/googleApiStore'
 import { sessionIdStore } from '@/store/sessionIdStore'
 import env from '@/utils/env/macro'
 
-export interface LogEvent {
-  kind: 'track' | 'error' | 'fine-tracking'
-  message: string
-  detail?: string
-  additionalData?: Record<string, string>
-}
-
-interface ClientLogDto {
-  kind: string
-  message: string
-  detail?: string
-  accessToken?: string
-  deviceId: string
-  sessionId: string
-  additionalData?: Record<string, string>
-}
+import { ClientLogDTO, LogEvent } from './types'
 
 function getDeviceId() {
   if (localStorage) {
@@ -43,7 +28,7 @@ export let deviceId = ''
 
 const DEVICE_ID_LOCALSTORAGE_KEY = 'DEVICE_ID'
 
-let backlogLog: ClientLogDto[] = []
+let backlogLog: ClientLogDTO[] = []
 
 function sendCollectedLog() {
   const data = backlogLog
@@ -76,7 +61,7 @@ export function startLogging(): () => void {
 }
 
 export function collectLogEvent(event: LogEvent) {
-  const log: ClientLogDto = {
+  const log: ClientLogDTO = {
     ...event,
     deviceId: deviceId,
     sessionId: sessionId,

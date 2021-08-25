@@ -7,10 +7,10 @@ import { useEffect } from 'react'
 
 import { useCourseGroup } from '@/common/hooks/useCourseGroup'
 import { Loading } from '@/modules/CourseSearch/components/Loading'
+import { createApolloServerClient } from '@/services/apollo'
+import { GetCourseResponse, GET_COURSE } from '@/services/apollo/query'
 import { courseCartStore } from '@/store'
-import { parseCourseGroup } from '@/utils/courseGroup'
-import { CourseGroup, GetCourseResponse, GET_COURSE } from '@/utils/network/BackendGQLQueries'
-import { createApolloServerClient } from '@/utils/network/apollo'
+import { CourseGroup, parseCourseGroup } from '@/utils/courseGroup'
 
 interface RawScheduleItem {
   courseNo: string

@@ -1,9 +1,9 @@
 import { runInAction } from 'mobx'
 
+import { GDRIVE_SCOPE, startGDriveSync } from '@/services/googleDrive'
 import { gDriveStore, GDriveSyncState } from '@/store/gDriveState'
 import { gapiStore } from '@/store/googleApiStore'
 import { googleauth_clientid } from '@/utils/env'
-import { GDRIVE_SCOPE, startGDriveSync } from '@/utils/network/gDriveSync'
 
 export default function loadGapi() {
   if (typeof window === 'undefined') return

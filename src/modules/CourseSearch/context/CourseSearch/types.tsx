@@ -1,6 +1,6 @@
 import { QueryResult } from '@apollo/client'
 
-import { SearchCourseResponse, SearchCourseVars } from '@/utils/network/BackendGQLQueries'
+import { SearchCourseResponse, SearchCourseVars } from '@/services/apollo/query'
 
 export interface CourseSearchProps {
   fetchMoreCourses: () => void

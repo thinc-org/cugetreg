@@ -1,10 +1,9 @@
 import { reaction, runInAction } from 'mobx'
 
+import { collectErrorLog } from '@/services/logging'
 import { CourseCartItem, courseCartStore } from '@/store'
 import { gDriveStore, GDriveSyncState } from '@/store/gDriveState'
 import { gapiStore } from '@/store/googleApiStore'
-
-import { collectErrorLog } from './logging'
 
 const setGState = (s: GDriveSyncState) =>
   runInAction(() => {

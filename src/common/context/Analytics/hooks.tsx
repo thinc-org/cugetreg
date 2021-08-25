@@ -1,4 +1,4 @@
-import { collectLogEvent } from '@/utils/network/logging'
+import { collectLogEvent } from '@/services/logging'
 
 import { AnalyticsType } from './types'
 

@@ -9,11 +9,9 @@ import { BackButton } from '@/common/components/BackButton'
 import { useCourseGroup } from '@/common/hooks/useCourseGroup'
 import { Language } from '@/common/i18n'
 import { PageMeta } from '@/components/PageMeta'
-import { courseTypeStringFromCourse } from '@/modules/CourseDetail/utils/courseTypeStringFromCourse'
-import { parseVariablesFromQuery } from '@/modules/CourseDetail/utils/parseVariablesFromQuery'
+import { createApolloServerClient } from '@/services/apollo'
+import { GetCourseResponse, GET_COURSE } from '@/services/apollo/query'
 import { getExamDate, getExamPeriod } from '@/utils/coruseExam'
-import { GetCourseResponse, GET_COURSE } from '@/utils/network/BackendGQLQueries'
-import { createApolloServerClient } from '@/utils/network/apollo'
 
 import {
   Container,
@@ -24,7 +22,9 @@ import {
   Title,
   GridEnd,
 } from './styled'
+import { courseTypeStringFromCourse } from './utils/courseTypeStringFromCourse'
 import { groupBy } from './utils/groupBy'
+import { parseVariablesFromQuery } from './utils/parseVariablesFromQuery'
 
 function CourseDetailPage(props: { data: GetCourseResponse }) {
   const { i18n } = useTranslation()

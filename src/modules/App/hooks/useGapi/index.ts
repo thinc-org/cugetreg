@@ -1,10 +1,10 @@
 import { reaction } from 'mobx'
 import { useEffect } from 'react'
 
+import { loadGapi } from '@/services/googleAPI'
 import { courseCartStore } from '@/store'
 import { gDriveStore, GDriveSyncState } from '@/store/gDriveState'
 import { gapiStore } from '@/store/googleApiStore'
-import { loadGapi } from '@/utils/googleapi'
 import { syncWithLocalStorage } from '@/utils/localstorage'
 
 export default function useGapi() {

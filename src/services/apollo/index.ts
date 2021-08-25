@@ -2,8 +2,9 @@ import { ApolloClient, InMemoryCache } from '@apollo/client'
 import { Course } from '@thinc-org/chula-courses'
 import { uniqBy } from 'lodash'
 
-import { SearchCourseVars } from '@/services/apollo/query'
 import env from '@/utils/env/macro'
+
+import { SearchCourseVars } from './query/searchCourse'
 
 const cache = new InMemoryCache({
   typePolicies: {

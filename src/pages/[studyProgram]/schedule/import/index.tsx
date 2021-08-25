@@ -6,11 +6,12 @@ import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 
 import { useCourseGroup } from '@/common/hooks/useCourseGroup'
+import { CourseGroup } from '@/common/hooks/useCourseGroup/types'
+import { parseCourseGroup } from '@/common/hooks/useCourseGroup/utils/parseCourseGroup'
 import { Loading } from '@/modules/CourseSearch/components/Loading'
 import { createApolloServerClient } from '@/services/apollo'
-import { GetCourseResponse, GET_COURSE } from '@/services/apollo/query'
+import { GetCourseResponse, GET_COURSE } from '@/services/apollo/query/getCourse'
 import { courseCartStore } from '@/store'
-import { CourseGroup, parseCourseGroup } from '@/utils/courseGroup'
 
 interface RawScheduleItem {
   courseNo: string

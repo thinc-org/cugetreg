@@ -10,7 +10,7 @@ import { useCourseGroup } from '@/common/hooks/useCourseGroup'
 import { Language } from '@/common/i18n'
 import { PageMeta } from '@/components/PageMeta'
 import { createApolloServerClient } from '@/services/apollo'
-import { GetCourseResponse, GET_COURSE } from '@/services/apollo/query'
+import { GetCourseResponse, GET_COURSE } from '@/services/apollo/query/getCourse'
 import { getExamDate, getExamPeriod } from '@/utils/coruseExam'
 
 import {

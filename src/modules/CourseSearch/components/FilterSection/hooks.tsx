@@ -3,7 +3,7 @@ import { useCallback, useMemo } from 'react'
 import { DayChipKey, GenEdChipKey, GeneralChipKey } from '@/common/components/Chips/config'
 import { EnhancedCheckBoxProps } from '@/modules/CourseSearch/components/FilterSection/components/CheckboxGroup'
 import { useSearchCourseQueryParams } from '@/modules/CourseSearch/hooks/useSearchCourseQueryParams'
-import { SearchCourseVars } from '@/services/apollo/query'
+import { SearchCourseVars } from '@/services/apollo/query/searchCourse'
 
 export interface CreateCheckbox<Value> {
   label: string

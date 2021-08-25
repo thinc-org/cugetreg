@@ -3,7 +3,8 @@ import { useRouter } from 'next/router'
 import { useMemo, useCallback } from 'react'
 
 import { useCourseGroup } from '@/common/hooks/useCourseGroup'
-import { CourseGroup, SearchCourseVars } from '@/services/apollo/query'
+import { CourseGroup } from '@/common/hooks/useCourseGroup/types'
+import { SearchCourseVars } from '@/services/apollo/query/searchCourse'
 
 export interface QueryParams {
   keyword?: string

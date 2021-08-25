@@ -1,6 +1,5 @@
 import { styled } from '@material-ui/core'
-
-import { Container } from '@/components/Container'
+import { Container } from '@material-ui/core'
 
 export const FlexContainer = styled(Container)({
   height: '100%',

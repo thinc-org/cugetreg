@@ -1,4 +1,5 @@
 import { CssBaseline, Button, Snackbar } from '@material-ui/core'
+import { Container } from '@material-ui/core'
 import { AppProps } from 'next/dist/next-server/lib/router/router'
 import Head from 'next/head'
 
@@ -8,7 +9,6 @@ import { TopBar } from '@/common/components/TopBar'
 import useDisclosure from '@/common/hooks/useDisclosure'
 import '@/common/i18n'
 import { TrackPageChange } from '@/common/tracker/components/TrackPageChange'
-import { Container } from '@/components/Container'
 import { ErrorBoundary } from '@/components/ErrorBoundary'
 import { mobxConfiguration } from '@/configs/mobx'
 import { Analytics } from '@/context/Analytics/components/Analytics'

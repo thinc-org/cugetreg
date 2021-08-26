@@ -2,8 +2,6 @@ export default function mockAndShallowSpy(modulePath: string): [jest.Mock<JSX.El
   const componentSpy = jest.fn((props: any) => {
     const children = props?.children || modulePath
 
-    console.log('PROPS', props)
-
     return <div>{children}</div>
   })
 

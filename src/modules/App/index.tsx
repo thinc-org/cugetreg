@@ -52,6 +52,7 @@ function App({ Component, pageProps, forceDark, router }: AppProps) {
             </ErrorBoundary>
           </Container>
           <Footer />
+          {/* TODO: refactor the snackbar */}
           <Snackbar
             anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
             onClose={handleClose}
@@ -84,6 +85,7 @@ function App({ Component, pageProps, forceDark, router }: AppProps) {
               {snackbar.message}
             </ToastAlert>
           </Snackbar>
+          {/* END OF TODO */}
           <ShoppingCartModal />
         </TrackPageChange>
       </AppProvider>

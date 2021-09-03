@@ -88,7 +88,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const CR11Page = () => {
+export const CR11Page = observer(() => {
   const shoppingCart = courseCartStore
   const classes = useStyles()
   const { t } = useTranslation(['program', 'cr11'])
@@ -137,6 +137,4 @@ const CR11Page = () => {
       </div>
     </div>
   )
-}
-
-export default observer(CR11Page)
+})

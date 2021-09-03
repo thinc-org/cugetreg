@@ -27,7 +27,7 @@ import { courseTypeStringFromCourse } from './utils/courseTypeStringFromCourse'
 import { groupBy } from './utils/groupBy'
 import { parseVariablesFromQuery } from './utils/parseVariablesFromQuery'
 
-function CourseDetailPage(props: { data: GetCourseResponse }) {
+export function CourseDetailPage(props: { data: GetCourseResponse }) {
   const { i18n } = useTranslation()
   const { studyProgram } = useCourseGroup()
   const cData = props.data
@@ -116,5 +116,3 @@ export async function getServerSideProps(
     }
   }
 }
-
-export default CourseDetailPage

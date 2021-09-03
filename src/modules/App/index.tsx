@@ -22,7 +22,7 @@ import { ToastAlert } from './styled'
 
 mobxConfiguration()
 
-function App({ Component, pageProps, forceDark, router }: AppProps) {
+export function App({ Component, pageProps, forceDark, router }: AppProps) {
   useApp(router)
 
   const disclosureValue = useDisclosure()
@@ -92,5 +92,3 @@ function App({ Component, pageProps, forceDark, router }: AppProps) {
     </>
   )
 }
-
-export default App

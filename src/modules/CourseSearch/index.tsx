@@ -58,12 +58,10 @@ function CourseSearchPage() {
   )
 }
 
-const CourseSearchPageWithCourseSearchProvider = () => {
+export const CourseSearchPageWithCourseSearchProvider = () => {
   return (
     <CourseSearchProvider>
       <CourseSearchPage />
     </CourseSearchProvider>
   )
 }
-
-export default CourseSearchPageWithCourseSearchProvider

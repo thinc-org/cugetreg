@@ -1,3 +1,3 @@
 import '@/configs/globalStyles/index.css'
 
-export { default } from '@/modules/App'
+export { App as default } from '@/modules/App'

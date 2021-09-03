@@ -28,7 +28,7 @@ import {
   ExamContainer,
 } from './styled'
 
-function SchedulePage() {
+export const SchedulePage = observer(() => {
   const { t } = useTranslation('schedulePage')
   const shopItems = courseCartStore.shopItems
   const classes = useTimetableClasses(shopItems)
@@ -107,6 +107,4 @@ function SchedulePage() {
       <ScheduleTable courseCart={courseCartStore} overlappingCourses={overlappingCourses} />
     </PageContainer>
   )
-}
-
-export default observer(SchedulePage)
+})

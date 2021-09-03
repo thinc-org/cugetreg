@@ -1,1 +1,1 @@
-export { default } from '@/modules/CR11'
+export { CR11Page as default } from '@/modules/CR11'

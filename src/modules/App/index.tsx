@@ -30,7 +30,7 @@ export function App({ Component, pageProps, forceDark, router }: AppProps) {
 
   const handleClose = (_: unknown, reason: string) => {
     if (reason === 'clickaway') return
-    close()
+    snackbar.close()
   }
 
   const snackBarContextValue = { ...snackbar, handleClose }

@@ -2,25 +2,13 @@ import { StudyProgramEnum } from '@thinc-org/chula-courses'
 import { Router } from 'next/router'
 import { useEffect } from 'react'
 
-import { useSnackBar } from '@/common/context/Snackbar/hooks'
 import env from '@/utils/env/macro'
 
 import { removeElement } from '../../utils/removeElement'
 import { useGapi } from '../useGapi'
 import { useLogging } from '../useLogging'
-import { UseAppProps } from './types'
 
-export function useApp(router: Router): UseAppProps {
-  const { message, emitMessage, action: actionText, open, close, messageType } = useSnackBar()
-
-  const handleClose = (_: unknown, reason: string) => {
-    if (reason === 'clickaway') {
-      return
-    }
-
-    close()
-  }
-
+export function useApp(router: Router) {
   useGapi()
   useLogging()
 
@@ -38,13 +26,4 @@ export function useApp(router: Router): UseAppProps {
     }
     // eslint-disable-next-line
   }, [router.query])
-
-  return {
-    open,
-    message,
-    emitMessage,
-    handleClose,
-    messageType,
-    actionText,
-  }
 }

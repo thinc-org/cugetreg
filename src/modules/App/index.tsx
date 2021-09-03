@@ -8,6 +8,7 @@ import { LoadingProgress } from '@/common/components/LoadingProgress'
 import { TopBar } from '@/common/components/TopBar'
 import { Analytics } from '@/common/context/Analytics/components/Analytics'
 import { SNACKBAR_BUTTON } from '@/common/context/Analytics/constants'
+import { useSnackBar } from '@/common/context/Snackbar/hooks'
 import { useDisclosure } from '@/common/hooks/useDisclosure'
 import '@/common/i18n'
 import { TrackPageChange } from '@/common/tracker/components/TrackPageChange'
@@ -22,10 +23,17 @@ import { ToastAlert } from './styled'
 mobxConfiguration()
 
 function App({ Component, pageProps, forceDark, router }: AppProps) {
-  const value = useApp(router)
-  const disclosureValue = useDisclosure()
+  useApp(router)
 
-  const { message, open, handleClose, messageType, actionText } = value
+  const disclosureValue = useDisclosure()
+  const snackbar = useSnackBar()
+
+  const handleClose = (_: unknown, reason: string) => {
+    if (reason === 'clickaway') return
+    close()
+  }
+
+  const snackBarContextValue = { ...snackbar, handleClose }
 
   return (
     <>
@@ -33,7 +41,7 @@ function App({ Component, pageProps, forceDark, router }: AppProps) {
         <title>CU Get Reg</title>
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
       </Head>
-      <AppProvider disclosureValue={disclosureValue} snackBarContextValue={value} forceDark={forceDark}>
+      <AppProvider disclosureValue={disclosureValue} snackBarContextValue={snackBarContextValue} forceDark={forceDark}>
         <TrackPageChange>
           <LoadingProgress />
           <CssBaseline />
@@ -48,32 +56,32 @@ function App({ Component, pageProps, forceDark, router }: AppProps) {
             anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
             onClose={handleClose}
             autoHideDuration={3000}
-            open={open}
+            open={snackbar.open}
             style={{ top: '60px' }}
           >
             <ToastAlert
-              severity={messageType}
+              severity={snackbar.messageType}
               action={
-                actionText ? (
+                snackbar.action ? (
                   <Analytics elementName={SNACKBAR_BUTTON}>
                     {({ log }) => (
                       <Button
                         size="small"
                         color="inherit"
                         onClick={() => {
-                          log(null, message)
+                          log(null, snackbar.message)
                           close()
                           disclosureValue.onOpen()
                         }}
                       >
-                        {actionText}
+                        {snackbar.message}
                       </Button>
                     )}
                   </Analytics>
                 ) : null
               }
             >
-              {message}
+              {snackbar.message}
             </ToastAlert>
           </Snackbar>
           <ShoppingCartModal />

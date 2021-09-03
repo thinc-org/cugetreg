@@ -1,15 +1,19 @@
 import styled from '@emotion/styled'
-import { Stack, Typography } from '@material-ui/core'
+import { Divider, Stack, Typography } from '@material-ui/core'
 
-export const StyledStack = styled(Stack)`
+export const ResponsiveStack = styled(Stack)`
+  flex-direction: row;
+  ${({ theme }) => theme.breakpoints.down('sm')} {
+    flex-direction: column;
+  }
+`
+
+export const BannerContainer = styled(Stack)`
+  height: 100%;
   max-width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-`
-
-export const BannerContainer = styled(StyledStack)`
-  height: 100%;
   flex-direction: column;
   background: ${({ theme }) => theme.palette.primary.main};
   color: ${({ theme }) => theme.palette.primary.contrastText};
@@ -24,6 +28,14 @@ export const PrivacyLink = styled.div`
 
 export const GithubLink = styled(Stack)`
   cursor: pointer;
+`
+
+export const StyledDivider = styled(Divider)`
+  background: ${({ theme }) => theme.palette.primary.contrastText};
+  ${({ theme }) => theme.breakpoints.down('sm')} {
+    margin: ${({ theme }) => theme.spacing(2, 0)};
+    width: 90%;
+  }
 `
 
 export const BannerSubtitle = styled(Typography)`

@@ -14,6 +14,6 @@ export function parseTerm(term: string): Term {
   if (!match) {
     return currentTerm
   }
-  console.log(match)
+
   return currentTerm
 }

@@ -1,6 +1,13 @@
 import { useCallback, useState } from 'react'
 
-export function useDisclosure(defaultValue = false) {
+interface UseDisclosureProps {
+  isOpen: boolean
+  onOpen: () => void
+  onClose: () => void
+  onToggle: () => void
+}
+
+export function useDisclosure(defaultValue = false): UseDisclosureProps {
   const [isOpen, setOpen] = useState(defaultValue)
   const onOpen = useCallback(() => setOpen(true), [])
   const onClose = useCallback(() => setOpen(false), [])

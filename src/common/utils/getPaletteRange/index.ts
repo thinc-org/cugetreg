@@ -11,6 +11,7 @@ export function getPaletteRange(theme: Theme, genEdType: GenEdType): HighlightCo
       return theme.palette.highlight.purple
     case 'SO':
       return theme.palette.highlight.green
+    // GENED SC
     default: {
       const secondary = theme.palette.secondaryRange
       return {

@@ -1,6 +1,6 @@
 import { ParsedUrlQuery } from 'querystring'
 
-import { parseCourseGroup } from '@/common/hooks/useCourseGroup/utils/parseCourseGroup'
+import { parseCourseGroup } from '@/common/utils/parseCourseGroup'
 import { GetCourseVars } from '@/services/apollo/query/getCourse'
 
 export function parseVariablesFromQuery(q: ParsedUrlQuery): GetCourseVars {

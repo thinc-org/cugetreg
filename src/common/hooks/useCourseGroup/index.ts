@@ -2,8 +2,8 @@ import { StudyProgram } from '@thinc-org/chula-courses'
 import { useRouter } from 'next/router'
 import { useCallback, useRef } from 'react'
 
+import { parseCourseGroup } from '../../utils/parseCourseGroup'
 import { CourseGroupResult } from './types'
-import { parseCourseGroup } from './utils/parseCourseGroup'
 
 const notImplemented = () => {
   throw new Error('not implemented yet')

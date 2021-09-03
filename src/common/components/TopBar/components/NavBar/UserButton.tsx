@@ -5,13 +5,14 @@ import { PropsWithChildren } from 'react'
 import { useTranslation } from 'react-i18next'
 import { MdCloudDone, MdCloudQueue, MdCloudOff } from 'react-icons/md'
 
-import { NavBarItem } from '@/common/components/TopBar/components/NavBar/NavBarItem'
 import { Analytics } from '@/common/context/Analytics/components/Analytics'
 import { LOGIN_BUTTON, LOGOUT_BUTTON } from '@/common/context/Analytics/constants'
 import { login, logout } from '@/services/googleAPI'
 import { grantGdriveSync } from '@/services/googleDrive'
 import { gDriveStore, GDriveSyncState } from '@/store/gDriveState'
 import { gapiStore } from '@/store/googleApiStore'
+
+import { NavBarItem } from './NavBarItem'
 
 export const GDriveIndicator = observer(() => {
   const { t } = useTranslation('syncStatus')

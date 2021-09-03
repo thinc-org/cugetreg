@@ -4,7 +4,7 @@ import { DayChipKey, GenEdChipKey, GeneralChipKey } from '@/common/components/Ch
 import { useSearchCourseQueryParams } from '@/modules/CourseSearch/hooks/useSearchCourseQueryParams'
 import { SearchCourseVars } from '@/services/apollo/query/searchCourse'
 
-import { EnhancedCheckBoxProps } from './components/CheckboxGroup'
+import { EnhancedCheckBoxProps } from '../CheckboxGroup'
 
 export interface CreateCheckbox<Value> {
   label: string

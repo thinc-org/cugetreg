@@ -10,7 +10,8 @@ import { LinkWithAnalytics } from '@/common/context/Analytics/components/LinkWit
 import { SHOPPING_CART_BUTTON, SHOPPING_CART_REMOVE_COURSE } from '@/common/context/Analytics/constants'
 import { useShoppingCardModal } from '@/common/context/ShoppingCartModal'
 import { useCourseGroup } from '@/common/hooks/useCourseGroup'
-import { ShoppingState } from '@/modules/CourseSearch/components/ShoppingCartModal/components/ShoppingPanel/hooks/useShoppingPanel'
+
+import { ShoppingState } from '../hooks/useShoppingPanel'
 
 const ErrorButton = styled(Button)`
   color: ${({ theme }) => theme.palette.error.main};

@@ -42,6 +42,7 @@ function createStyled<Component extends ElementType>(
  *
  * @param Component the base component
  * @param styles the styles to apply. can be CSSProperties or (theme: Theme) => CSSProperties
+ * @deprecated use emotion instead
  */
 export function styledWithTheme<Component extends ElementType>(Component: Component) {
   return (styles: StyledWithThemeRules) => createStyled(Component, styles)

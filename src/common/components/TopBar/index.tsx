@@ -1,8 +1,7 @@
 import styled from '@emotion/styled'
 import { useRouter } from 'next/router'
 
-import { AnnouncementBar } from '@/common/components/TopBar/components/AnnouncementBar'
-
+import { AnnouncementBar } from './components/AnnouncementBar'
 import { ConfigBar, ConfigBarLayout } from './components/ConfigBar'
 import { NavBar, NavBarLayout } from './components/NavBar'
 

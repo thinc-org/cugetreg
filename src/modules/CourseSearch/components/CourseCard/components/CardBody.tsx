@@ -10,8 +10,8 @@ import { dayOfWeekMapper } from '@/common/constants/dayOfWeek'
 import { Analytics } from '@/common/context/Analytics/components/Analytics'
 import { SUBJECT_SELECT_BUTTON } from '@/common/context/Analytics/constants'
 import { Flex } from '@/components/Flex'
-import { Caption } from '@/modules/CourseSearch/components/CourseCard/components/Caption'
 
+import { Caption } from '../../../../../common/components/Caption'
 import { useCourseCardContext } from '../context'
 import { SectionSelect } from './SectionSelect'
 

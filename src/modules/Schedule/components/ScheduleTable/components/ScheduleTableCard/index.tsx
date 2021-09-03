@@ -10,11 +10,11 @@ import { useTranslation } from 'react-i18next'
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
 import { MdDelete } from 'react-icons/md'
 
+import { Caption } from '@/common/components/Caption'
 import { dayOfWeekMapper } from '@/common/constants/dayOfWeek'
 import { Analytics } from '@/common/context/Analytics/components/Analytics'
 import { HIDE_COURSE, DELETE_COURSE, SECTION_CHANGE } from '@/common/context/Analytics/constants'
 import { unique } from '@/common/utils/unique'
-import { Caption } from '@/modules/CourseSearch/components/CourseCard/components/Caption'
 import { CourseCartItem, courseCartStore } from '@/store'
 
 import {

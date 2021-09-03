@@ -4,7 +4,8 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { GenEdChip } from '@/common/components/Chips/catagories/GenEdChip'
-import { CourseName } from '@/modules/CourseSearch/components/ShoppingCartModal/components/ShoppingPanel/components/CourseName'
+
+import { CourseName } from './CourseName'
 
 export interface CourseListPropsType {
   course: Course

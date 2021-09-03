@@ -1,7 +1,7 @@
 import { StorageKey } from './constants'
 import { StorageType } from './types'
 
-class Storage {
+export class Storage {
   storage: typeof localStorage | undefined
 
   constructor(storageType: StorageType) {
@@ -40,5 +40,3 @@ class Storage {
     this.storage?.clear()
   }
 }
-
-export default Storage

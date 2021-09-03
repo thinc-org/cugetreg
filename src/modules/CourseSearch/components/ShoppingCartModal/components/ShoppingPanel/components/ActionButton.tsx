@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next'
 
 import { Analytics } from '@/common/context/Analytics/components/Analytics'
 import { LinkWithAnalytics } from '@/common/context/Analytics/components/LinkWithAnalytics'
-import { SHOPPING_CART_BUTTON, SHOPPING_CART_REMOVE_COURSE } from '@/common/context/Analytics/components/const'
+import { SHOPPING_CART_BUTTON, SHOPPING_CART_REMOVE_COURSE } from '@/common/context/Analytics/constants'
 import { useShoppingCardModal } from '@/common/context/ShoppingCartModal'
 import { useCourseGroup } from '@/common/hooks/useCourseGroup'
 import { ShoppingState } from '@/modules/CourseSearch/components/ShoppingCartModal/components/ShoppingPanel/hooks/useShoppingPanel'

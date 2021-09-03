@@ -1,4 +1,4 @@
-import GeneralChip, { GeneralChipProps } from '..'
+import { GeneralChip, GeneralChipProps } from '..'
 import { GenEdChipKey, OtherChipKey } from '../config'
 
 export type AnnoucementChipProps = GeneralChipProps & {

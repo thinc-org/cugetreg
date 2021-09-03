@@ -5,12 +5,12 @@ import { useEffect } from 'react'
 import { useSnackBar } from '@/common/context/Snackbar/hooks'
 import env from '@/utils/env/macro'
 
-import removeElement from '../../utils/removeElement'
-import useGapi from '../useGapi'
-import useLogging from '../useLogging'
+import { removeElement } from '../../utils/removeElement'
+import { useGapi } from '../useGapi'
+import { useLogging } from '../useLogging'
 import { UseAppProps } from './types'
 
-export default function useApp(router: Router): UseAppProps {
+export function useApp(router: Router): UseAppProps {
   const { message, emitMessage, action: actionText, open, close, messageType } = useSnackBar()
 
   const handleClose = (_: unknown, reason: string) => {

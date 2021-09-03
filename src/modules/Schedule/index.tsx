@@ -5,21 +5,16 @@ import { useTranslation } from 'react-i18next'
 
 import { Analytics } from '@/common/context/Analytics/components/Analytics'
 import { LinkWithAnalytics } from '@/common/context/Analytics/components/LinkWithAnalytics'
-import { CR11_BUTTON, CLASS_TAB_BUTTON, EXAM_TAB_BUTTON } from '@/common/context/Analytics/components/const'
+import { CR11_BUTTON, CLASS_TAB_BUTTON, EXAM_TAB_BUTTON } from '@/common/context/Analytics/constants'
 import { useCourseGroup } from '@/common/hooks/useCourseGroup'
-import { ExamSchedule } from '@/modules/Schedule/components/ExamSchedule'
-import { useExamClasses } from '@/modules/Schedule/components/ExamSchedule/utils'
-import SaveImgButton from '@/modules/Schedule/components/SaveImgButton'
-import { Schedule } from '@/modules/Schedule/components/Schedule'
-import {
-  useDaysCount,
-  useOverlappingCourses,
-  useScheduleClass,
-  useTimetableClasses,
-} from '@/modules/Schedule/components/Schedule/utils'
-import { ScheduleTable } from '@/modules/Schedule/components/ScheduleTable'
 import { courseCartStore } from '@/store'
 
+import { ExamSchedule } from './components/ExamSchedule'
+import { useExamClasses } from './components/ExamSchedule/utils'
+import { SaveImgButton } from './components/SaveImgButton'
+import { Schedule } from './components/Schedule'
+import { useDaysCount, useOverlappingCourses, useScheduleClass, useTimetableClasses } from './components/Schedule/utils'
+import { ScheduleTable } from './components/ScheduleTable'
 import {
   InfoBar,
   ButtonBar,

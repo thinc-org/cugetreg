@@ -4,7 +4,7 @@ import React from 'react'
 
 import { genEdChipConfig } from '@/common/components/Chips/config'
 import { LinkWithAnalytics } from '@/common/context/Analytics/components/LinkWithAnalytics'
-import { SELECTED_COURSE_TITLE } from '@/common/context/Analytics/components/const'
+import { SELECTED_COURSE_TITLE } from '@/common/context/Analytics/constants'
 import { useShoppingCardModal } from '@/common/context/ShoppingCartModal'
 import { useCourseGroup } from '@/common/hooks/useCourseGroup'
 

@@ -1,4 +1,4 @@
-export default function mockAndShallowSpy(modulePath: string): [jest.Mock<JSX.Element, [props: any]>, () => void] {
+export function mockAndShallowSpy(modulePath: string): [jest.Mock<JSX.Element, [props: any]>, () => void] {
   const componentSpy = jest.fn((props: any) => {
     const children = props?.children || modulePath
 

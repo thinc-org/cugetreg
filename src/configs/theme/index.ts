@@ -2,10 +2,10 @@ import { createMuiTheme, Theme, ThemeOptions } from '@material-ui/core'
 
 import { deepAssign } from '@/common/utils/deepAssign'
 
-import overrideMuiBaseComponent from './overrides'
+import { overrideMuiBaseComponent } from './overrides'
 import { lightPaletteOptions, darkPaletteOptions } from './palette'
-import shadows from './shadows'
-import overrideMuiTypography from './typography'
+import { shadows } from './shadows'
+import { overrideMuiTypography } from './typography'
 
 const themeBaseOptions: ThemeOptions = {
   typography: {

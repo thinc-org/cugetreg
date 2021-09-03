@@ -2,13 +2,13 @@ import { CardContent, Collapse, Grid, Stack, Typography } from '@material-ui/cor
 import { DayOfWeek } from '@thinc-org/chula-courses'
 import { useTranslation } from 'react-i18next'
 
-import DayChip from '@/common/components/Chips/catagories/DayChip'
-import GenEdChip from '@/common/components/Chips/catagories/GenEdChip'
-import NoSeatIcon from '@/common/components/RegwarNotice/NoSeatInfoNotice'
+import { DayChip } from '@/common/components/Chips/catagories/DayChip'
+import { GenEdChip } from '@/common/components/Chips/catagories/GenEdChip'
+import { NoSeatIcon } from '@/common/components/RegwarNotice/NoSeatInfoNotice'
 import { SelectButton } from '@/common/components/SelectButton'
 import { dayOfWeekMapper } from '@/common/constants/dayOfWeek'
 import { Analytics } from '@/common/context/Analytics/components/Analytics'
-import { SUBJECT_SELECT_BUTTON } from '@/common/context/Analytics/components/const'
+import { SUBJECT_SELECT_BUTTON } from '@/common/context/Analytics/constants'
 import { Flex } from '@/components/Flex'
 import { Caption } from '@/modules/CourseSearch/components/CourseCard/components/Caption'
 

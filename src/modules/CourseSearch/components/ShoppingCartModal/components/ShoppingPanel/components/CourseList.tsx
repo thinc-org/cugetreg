@@ -3,7 +3,7 @@ import { Course } from '@thinc-org/chula-courses'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import GenEdChip from '@/common/components/Chips/catagories/GenEdChip'
+import { GenEdChip } from '@/common/components/Chips/catagories/GenEdChip'
 import { CourseName } from '@/modules/CourseSearch/components/ShoppingCartModal/components/ShoppingPanel/components/CourseName'
 
 export interface CourseListPropsType {
@@ -11,7 +11,7 @@ export interface CourseListPropsType {
   onChange: (checked: boolean, course: Course) => void
 }
 
-const CourseList = ({ course, onChange }: CourseListPropsType) => {
+export const CourseList = ({ course, onChange }: CourseListPropsType) => {
   const { courseNo, credit, genEdType } = course
 
   const [checked, setChecked] = useState(false)
@@ -49,5 +49,3 @@ const CourseList = ({ course, onChange }: CourseListPropsType) => {
     </Grid>
   )
 }
-
-export default CourseList

@@ -16,11 +16,11 @@ import {
 import { Course, Section } from '@thinc-org/chula-courses'
 import { useTranslation } from 'react-i18next'
 
-import GenEdChip from '@/common/components/Chips/catagories/GenEdChip'
+import { GenEdChip } from '@/common/components/Chips/catagories/GenEdChip'
 import { SelectButton } from '@/common/components/SelectButton'
 import { dayOfWeekMapper } from '@/common/constants/dayOfWeek'
 import { Analytics } from '@/common/context/Analytics/components/Analytics'
-import { SUBJECT_SELECT_BUTTON_WITH_SECTION } from '@/common/context/Analytics/components/const'
+import { SUBJECT_SELECT_BUTTON_WITH_SECTION } from '@/common/context/Analytics/constants'
 import { Flex } from '@/components/Flex'
 import { SectionStatus } from '@/modules/CourseDetail/components/SectionCard/components/SectionStatus'
 import { Caption } from '@/modules/CourseSearch/components/CourseCard/components/Caption'

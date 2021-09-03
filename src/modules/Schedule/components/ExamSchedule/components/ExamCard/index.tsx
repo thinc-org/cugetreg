@@ -1,8 +1,8 @@
 import styled from '@emotion/styled'
 import { Typography } from '@material-ui/core'
 
-import getExamDate from '@/common/utils/getExamData'
-import getExamPeriod from '@/common/utils/getExamPeriod'
+import { getExamDate } from '@/common/utils/getExamData'
+import { getExamPeriod } from '@/common/utils/getExamPeriod'
 import { ExamClass } from '@/common/utils/types'
 
 import { useColorScheme } from './useColorScheme'

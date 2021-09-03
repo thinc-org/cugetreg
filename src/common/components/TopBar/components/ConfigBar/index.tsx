@@ -3,13 +3,13 @@ import { observer } from 'mobx-react'
 import { useTranslation } from 'react-i18next'
 
 import { Analytics } from '@/common/context/Analytics/components/Analytics'
-import { REPORT_PROBLEM, STUDY_PROGRAM_DROPDOWN } from '@/common/context/Analytics/components/const'
+import { REPORT_PROBLEM, STUDY_PROGRAM_DROPDOWN } from '@/common/context/Analytics/constants'
 import { useCourseGroup } from '@/common/hooks/useCourseGroup'
 import { Spacer } from '@/components/Flex'
 import { sessionIdStore } from '@/store/sessionIdStore'
 
 import { FlexContainer } from '../../styled'
-import StudyProgramDropdown from '../StudyProgramDropdown'
+import { StudyProgramDropdown } from '../StudyProgramDropdown'
 import { ConfigBarItem } from './ConfigBarItem'
 
 export const ConfigBarLayout = styled.div`

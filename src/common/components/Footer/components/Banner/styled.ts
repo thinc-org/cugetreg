@@ -8,7 +8,7 @@ export const StyledStack = styled(Stack)`
   align-items: center;
 `
 
-export const BannerContaienr = styled(StyledStack)`
+export const BannerContainer = styled(StyledStack)`
   height: 100%;
   flex-direction: column;
   background: ${({ theme }) => theme.palette.primary.main};

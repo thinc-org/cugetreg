@@ -4,13 +4,13 @@ import { forwardRef, memo } from 'react'
 
 import { SelectButton } from '@/common/components/SelectButton'
 import { Analytics } from '@/common/context/Analytics/components/Analytics'
-import { SUBJECT_SELECT_BUTTON } from '@/common/context/Analytics/components/const'
-import useDisclosure from '@/common/hooks/useDisclosure'
+import { SUBJECT_SELECT_BUTTON } from '@/common/context/Analytics/constants'
+import { useDisclosure } from '@/common/hooks/useDisclosure'
 
 import { CardBody } from './components/CardBody'
 import { CardHeading } from './components/CardHeading'
 import { CourseCardContext } from './context'
-import useCourseCard from './hooks/useCourseCard'
+import { useCourseCard } from './hooks/useCourseCard'
 
 export interface CourseCardProps {
   course: Course

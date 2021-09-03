@@ -1,6 +1,6 @@
 import React from 'react'
 
-import GeneralChip from '@/common/components/Chips'
+import { GeneralChip } from '@/common/components/Chips'
 import { DayChipKey, GenEdChipKey } from '@/common/components/Chips/config'
 import { StyledStack } from '@/modules/CourseSearch/components/TagList/styled'
 import { useSearchCourseQueryParams } from '@/modules/CourseSearch/hooks/useSearchCourseQueryParams'

@@ -8,7 +8,7 @@ import bigLogo from '@/assets/images/cgrLogoLight.svg'
 import github from '@/assets/images/github.svg'
 import thincLogo from '@/assets/images/thincLogo.svg'
 
-import { BannerContaienr, PrivacyLink, GithubLink, BannerSubtitle } from './styled'
+import { BannerContainer, PrivacyLink, GithubLink, BannerSubtitle } from './styled'
 
 const useStyles = makeStyles((theme) => ({
   bannerDetail: {
@@ -75,7 +75,7 @@ export function Banner() {
   const rowOrColumns = matches ? 'column' : 'row'
 
   return (
-    <BannerContaienr spacing={matches ? 1 : 3}>
+    <BannerContainer spacing={matches ? 1 : 3}>
       <Link href="/">
         <Image src={bigLogo} width="172" height={matches ? '40' : '56'} />
       </Link>
@@ -102,6 +102,6 @@ export function Banner() {
       <Link href="/privacy">
         <PrivacyLink>Privacy Policy</PrivacyLink>
       </Link>
-    </BannerContaienr>
+    </BannerContainer>
   )
 }

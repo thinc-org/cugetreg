@@ -3,7 +3,7 @@ import { Alert, Container } from '@material-ui/core'
 import React from 'react'
 import { useEffect, useState } from 'react'
 
-import Storage from '@/common/storage'
+import { Storage } from '@/common/storage'
 import { StorageKey } from '@/common/storage/constants'
 
 import { getCurrentAnnoucement } from './announcements'

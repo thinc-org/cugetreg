@@ -11,16 +11,16 @@ import {
   NAVBAR_SEARCH_COURSE,
   NAVBAR_TIMETABLE,
   STUDY_PROGRAM_DROPDOWN,
-} from '@/common/context/Analytics/components/const'
+} from '@/common/context/Analytics/constants'
 import { useCourseGroup } from '@/common/hooks/useCourseGroup'
 import { Spacer } from '@/components/Flex'
 
 import { FlexContainer } from '../../styled'
 import { ConfigBarItem } from '../ConfigBar/ConfigBarItem'
 import { MobileNavBar } from '../MobileNavBar'
-import StudyProgramDropdown from '../StudyProgramDropdown'
+import { StudyProgramDropdown } from '../StudyProgramDropdown'
 import { NavBarItem } from './NavBarItem'
-import UserButton from './UserButton'
+import { UserButton } from './UserButton'
 
 export const NavBarLayout = styled.div`
   width: 100%;

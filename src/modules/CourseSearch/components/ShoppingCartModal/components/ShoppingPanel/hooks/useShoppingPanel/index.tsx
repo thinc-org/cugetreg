@@ -8,7 +8,7 @@ export enum ShoppingState {
   Delete = 'delete',
 }
 
-export default function useShoppingPanel() {
+export function useShoppingPanel() {
   const [selectedCourses, setSeletedCourses] = useState<Course[]>([])
   const [shoppingState, setShoppingState] = useState<ShoppingState>(ShoppingState.Default)
 

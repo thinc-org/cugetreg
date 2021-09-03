@@ -2,7 +2,7 @@ import { useTheme } from '@material-ui/core'
 import { Course, Class, DayOfWeek, GenEdType } from '@thinc-org/chula-courses'
 import { useMemo } from 'react'
 
-import getPaletteRange from '@/common/utils/getPaletteRange'
+import { getPaletteRange } from '@/common/utils/getPaletteRange'
 import { ExamClass } from '@/common/utils/types'
 import { CourseCartItem } from '@/store'
 

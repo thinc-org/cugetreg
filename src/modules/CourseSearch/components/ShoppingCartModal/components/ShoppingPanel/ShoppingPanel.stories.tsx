@@ -1,6 +1,6 @@
 import { Meta } from '@storybook/react/types-6-0'
 
-import ShoppingPanel from '@/modules/CourseSearch/components/ShoppingCartModal/components/ShoppingPanel'
+import { ShoppingPanel } from '.'
 
 export default {
   title: 'Component/ShoppingPanel',

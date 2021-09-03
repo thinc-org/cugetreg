@@ -6,7 +6,7 @@ import React, { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Analytics } from '@/common/context/Analytics/components/Analytics'
-import { GO_BACK_BUTTON } from '@/common/context/Analytics/components/const'
+import { GO_BACK_BUTTON } from '@/common/context/Analytics/constants'
 
 const ButtonMobile = styled(IconButton)`
   border: 1px solid #2a2d48;

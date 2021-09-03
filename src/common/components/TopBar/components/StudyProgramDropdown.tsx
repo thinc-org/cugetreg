@@ -9,7 +9,7 @@ interface StudyProgramDropdownProps {
   log: (_: unknown, value: string) => void
 }
 
-export default function StudyProgramDropdown({ log }: StudyProgramDropdownProps) {
+export function StudyProgramDropdown({ log }: StudyProgramDropdownProps) {
   const { t } = useTranslation('studyProgram')
   const { studyProgram, setStudyProgram } = useCourseGroup()
   return (

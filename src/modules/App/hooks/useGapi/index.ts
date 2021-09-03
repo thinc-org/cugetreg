@@ -7,7 +7,7 @@ import { gDriveStore, GDriveSyncState } from '@/store/gDriveState'
 import { gapiStore } from '@/store/googleApiStore'
 import { syncWithLocalStorage } from '@/utils/localstorage'
 
-export default function useGapi() {
+export function useGapi() {
   // Retoring AuthStore and Syncing coursecart
   useEffect(() => {
     if (typeof window === 'undefined') return //Don't sync on the server

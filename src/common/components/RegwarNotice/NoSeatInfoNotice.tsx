@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 
 import { useLog } from '@/common/context/Analytics/components/useLog'
 
-function NoSeatIcon(props: IconButtonProps) {
+export function NoSeatIcon(props: IconButtonProps) {
   const { t } = useTranslation('regWarNotice')
   const [anchorEl, setAnchorEl] = useState<Element | null>(null)
   const open = Boolean(anchorEl)
@@ -62,5 +62,3 @@ function NoSeatIcon(props: IconButtonProps) {
     </>
   )
 }
-
-export default NoSeatIcon

@@ -2,12 +2,12 @@ import { Capacity, Course, Section } from '@thinc-org/chula-courses'
 import { useState } from 'react'
 
 import { dayOfWeekArray } from '@/common/constants/dayOfWeek'
+import { sum } from '@/common/utils/sum'
+import { unique } from '@/common/utils/unique'
 
 import { CourseCardContextValue } from '../../context/types'
-import sum from '../../utils/sum'
-import unique from '../../utils/unique'
 
-export default function useCourseCard(course: Course): CourseCardContextValue {
+export function useCourseCard(course: Course): CourseCardContextValue {
   const isGenEd = course.genEdType !== 'NO'
 
   const activeDays = course.sections.flatMap((section) => section.classes.map((sectionClass) => sectionClass.dayOfWeek))

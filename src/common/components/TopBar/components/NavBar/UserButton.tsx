@@ -7,7 +7,7 @@ import { MdCloudDone, MdCloudQueue, MdCloudOff } from 'react-icons/md'
 
 import { NavBarItem } from '@/common/components/TopBar/components/NavBar/NavBarItem'
 import { Analytics } from '@/common/context/Analytics/components/Analytics'
-import { LOGIN_BUTTON, LOGOUT_BUTTON } from '@/common/context/Analytics/components/const'
+import { LOGIN_BUTTON, LOGOUT_BUTTON } from '@/common/context/Analytics/constants'
 import { login, logout } from '@/services/googleAPI'
 import { grantGdriveSync } from '@/services/googleDrive'
 import { gDriveStore, GDriveSyncState } from '@/store/gDriveState'
@@ -87,7 +87,7 @@ const UserContainer = styled.div`
   margin-left: 8px;
 `
 
-export default observer(function UserButton() {
+export const UserButton = observer(function UserButton() {
   const loaded = gapiStore.isLoaded
   const user = gapiStore.currentUser
   const isSignedIn = gapiStore.currentUser?.isSignedIn()

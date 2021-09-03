@@ -25,7 +25,7 @@ describe('Chip', () => {
     ${DayOfWeekEnum.Saturday}
     ${DayOfWeekEnum.Sunday}
   `(`should return chips with filled color, $value.label`, async ({ value }: { value: GeneralChipProps['type'] }) => {
-    const { default: GeneralChip } = await import('.')
+    const { GeneralChip } = await import('.')
 
     render(
       <ThemeProvider theme={lightTheme}>
@@ -44,7 +44,7 @@ describe('Chip', () => {
     ${GenEdTypeEnum.HU}
     ${GenEdTypeEnum.IN}
   `(`should return chips with outlined color, $value.label`, async ({ value }: { value: GeneralChipKey }) => {
-    const { default: GeneralChip } = await import('.')
+    const { GeneralChip } = await import('.')
 
     render(
       <ThemeProvider theme={lightTheme}>

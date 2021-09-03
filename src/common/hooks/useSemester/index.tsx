@@ -3,7 +3,7 @@ import { useCourseGroup } from '../useCourseGroup'
 /**
  * @deprecated please switch to {@link useCourseGroup}
  */
-export default function useSemester() {
+export function useSemester() {
   const { academicYear, semester } = useCourseGroup()
   return {
     semester: {

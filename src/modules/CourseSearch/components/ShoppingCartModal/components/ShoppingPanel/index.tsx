@@ -6,15 +6,15 @@ import { Flex } from '@/components/Flex'
 import { CourseCartItem, courseCartStore } from '@/store'
 
 import { ActionButton } from './components/ActionButton'
-import CourseList from './components/CourseList'
+import { CourseList } from './components/CourseList'
 import { EmptyList } from './components/EmptyList'
-import useShoppingPanel from './hooks/useShoppingPanel'
+import { useShoppingPanel } from './hooks/useShoppingPanel'
 
 export interface CoursePropsType {
   data: Course[]
 }
 
-const ShoppingPanel = () => {
+export const ShoppingPanel = () => {
   const { shopItems } = courseCartStore
   const { shoppingState, selectedCourses, removeAllSelectedCourses, onCheckboxChange } = useShoppingPanel()
 
@@ -78,5 +78,3 @@ const ShoppingPanel = () => {
     </>
   )
 }
-
-export default ShoppingPanel

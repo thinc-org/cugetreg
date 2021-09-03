@@ -5,7 +5,7 @@ import { gDriveStore, GDriveSyncState } from '@/store/gDriveState'
 import { gapiStore } from '@/store/googleApiStore'
 import { googleauth_clientid } from '@/utils/env'
 
-export default function loadGapi() {
+export function loadGapi() {
   if (typeof window === 'undefined') return
   ;(window as any).onGapiLoad = () => {
     handleGapiLoad()

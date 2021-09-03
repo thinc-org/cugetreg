@@ -10,13 +10,13 @@ import { MdMenu } from 'react-icons/md'
 import logo from '@/assets/images/cgrLogoDark.svg'
 import { Analytics } from '@/common/context/Analytics/components/Analytics'
 import { LinkWithAnalytics } from '@/common/context/Analytics/components/LinkWithAnalytics'
-import { REPORT_PROBLEM, NAVBAR_SEARCH_COURSE, NAVBAR_TIMETABLE } from '@/common/context/Analytics/components/const'
+import { REPORT_PROBLEM, NAVBAR_SEARCH_COURSE, NAVBAR_TIMETABLE } from '@/common/context/Analytics/constants'
 import { useCourseGroup } from '@/common/hooks/useCourseGroup'
-import useDisclosure from '@/common/hooks/useDisclosure'
+import { useDisclosure } from '@/common/hooks/useDisclosure'
 import { sessionIdStore } from '@/store/sessionIdStore'
 
 import { NavBarItem } from '../NavBar/NavBarItem'
-import UserButton from '../NavBar/UserButton'
+import { UserButton } from '../NavBar/UserButton'
 
 const MoreButton = styled(IconButton)`
   margin-left: 12px;

@@ -3,7 +3,7 @@ import { parseISO, format } from 'date-fns'
 
 import { ExamClass } from '../types'
 
-export default function getExamDate(scheduleClass: ExamClass | Course, isFinal: boolean) {
+export function getExamDate(scheduleClass: ExamClass | Course, isFinal: boolean) {
   const date = isFinal ? scheduleClass.final?.date : scheduleClass.midterm?.date
   if (!date) {
     return 'TBA'

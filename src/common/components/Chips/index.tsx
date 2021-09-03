@@ -15,6 +15,4 @@ export type GeneralChipProps = Omit<ChipProps, keyof ChipConfigProps> & {
  *  @description Overrided Chip Component; There are limited tag's types that declaring in `./config.ts`.
  */
 
-const GeneralChip: React.FC<GeneralChipProps> = ({ type, ...rest }) => <Chip {...chipConfig[type]} {...rest} />
-
-export default GeneralChip
+export const GeneralChip: React.FC<GeneralChipProps> = ({ type, ...rest }) => <Chip {...chipConfig[type]} {...rest} />

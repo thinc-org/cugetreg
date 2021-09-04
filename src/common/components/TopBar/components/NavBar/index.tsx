@@ -1,5 +1,4 @@
-import styled from '@emotion/styled'
-import { Hidden } from '@material-ui/core'
+import { Hidden, Typography } from '@material-ui/core'
 import { useTranslation } from 'react-i18next'
 
 import logo from '@/assets/images/cgrLogoDark.svg'
@@ -15,41 +14,36 @@ import {
 import { useCourseGroup } from '@/common/hooks/useCourseGroup'
 import { Spacer } from '@/components/Spacer'
 
-import { FlexContainer } from '../../styled'
-import { ConfigBarItem } from '../ConfigBar/ConfigBarItem'
+import { ConfigBarItem } from '../ConfigBar/styled'
 import { MobileNavBar } from '../MobileNavBar'
+import { NavBarItem } from '../NavBarItem'
 import { StudyProgramDropdown } from '../StudyProgramDropdown'
-import { NavBarItem } from './NavBarItem'
-import { UserButton } from './UserButton'
-
-export const NavBarLayout = styled.div`
-  width: 100%;
-  height: 84px;
-  background-color: ${({ theme }) => theme.palette.background.paper};
-  color: ${({ theme }) => theme.palette.primary.main};
-
-  ${({ theme }) => theme.breakpoints.down('sm')} {
-    height: 60px;
-  }
-`
-
-const Logo = styled.a`
-  margin-left: -16px;
-  padding: 0 16px;
-
-  &,
-  img {
-    height: 40px;
-
-    ${({ theme }) => theme.breakpoints.down('sm')} {
-      height: 24px;
-    }
-  }
-`
+import { UserButton } from '../UserButton'
+import { FlexContainer } from '../styled'
+import { NavBarLayout, Logo } from './styled'
 
 export function NavBar() {
   const { t } = useTranslation()
   const { studyProgram, academicYear, semester } = useCourseGroup()
+
+  const navbarItems = [
+    {
+      href: `/${studyProgram}/courses`,
+      elementName: NAVBAR_SEARCH_COURSE,
+      label: t('navBar:searchCourses'),
+    },
+    {
+      href: `/${studyProgram}/courses`,
+      elementName: NAVBAR_TIMETABLE,
+      label: t('navBar:timetable'),
+    },
+    {
+      href: `/about`,
+      elementName: NAVBAR_ABOUT,
+      label: t('navBar:about'),
+    },
+  ]
+
   return (
     <NavBarLayout>
       <FlexContainer>
@@ -59,27 +53,22 @@ export function NavBar() {
           </Logo>
         </LinkWithAnalytics>
 
-        <Hidden smDown>
-          <LinkWithAnalytics href={`/${studyProgram}/courses`} passHref elementName={NAVBAR_SEARCH_COURSE}>
-            <NavBarItem>{t('navBar:searchCourses')}</NavBarItem>
-          </LinkWithAnalytics>
-
-          <LinkWithAnalytics href={`/${studyProgram}/schedule`} passHref elementName={NAVBAR_TIMETABLE}>
-            <NavBarItem>{t('navBar:timetable')}</NavBarItem>
-          </LinkWithAnalytics>
-
-          <LinkWithAnalytics href={`/about`} passHref elementName={NAVBAR_ABOUT}>
-            <NavBarItem>{t('navBar:about')}</NavBarItem>
-          </LinkWithAnalytics>
-
+        <Hidden mdDown>
+          {navbarItems.map(({ href, elementName, label }) => (
+            <LinkWithAnalytics key={elementName} href={href} passHref elementName={elementName}>
+              <NavBarItem>{label}</NavBarItem>
+            </LinkWithAnalytics>
+          ))}
           <Spacer />
           <UserButton />
         </Hidden>
-        <Hidden smUp>
+        <Hidden mdUp>
           <Spacer />
           <Analytics elementName={STUDY_PROGRAM_DROPDOWN}>{({ log }) => <StudyProgramDropdown log={log} />}</Analytics>
           <ConfigBarItem>
-            {academicYear}/{semester}
+            <Typography variant="subtitle2">
+              {academicYear}/{semester}
+            </Typography>
           </ConfigBarItem>
           <MobileNavBar />
         </Hidden>

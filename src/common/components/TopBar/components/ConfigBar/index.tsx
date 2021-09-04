@@ -1,4 +1,4 @@
-import styled from '@emotion/styled'
+import { Typography } from '@material-ui/core'
 import { observer } from 'mobx-react'
 import { useTranslation } from 'react-i18next'
 
@@ -8,22 +8,9 @@ import { useCourseGroup } from '@/common/hooks/useCourseGroup'
 import { Spacer } from '@/components/Spacer'
 import { sessionIdStore } from '@/store/sessionIdStore'
 
-import { FlexContainer } from '../../styled'
 import { StudyProgramDropdown } from '../StudyProgramDropdown'
-import { ConfigBarItem } from './ConfigBarItem'
-
-export const ConfigBarLayout = styled.div`
-  width: 100%;
-  height: 40px;
-  background-color: ${({ theme }) => theme.palette.primary.main};
-  color: ${({ theme }) => theme.palette.primaryRange[10]};
-
-  ${({ theme }) => theme.breakpoints.down('sm')} {
-    display: none;
-  }
-`
-
-const ConfigBarItemLink = ConfigBarItem.withComponent('a')
+import { FlexContainer } from '../styled'
+import { ConfigBarLayout, ConfigBarItem, ConfigBarItemLink } from './styled'
 
 export const ConfigBar = observer(() => {
   const { t } = useTranslation('configBar')
@@ -39,11 +26,13 @@ export const ConfigBar = observer(() => {
         <Spacer />
         <Analytics elementName={STUDY_PROGRAM_DROPDOWN}>{({ log }) => <StudyProgramDropdown log={log} />}</Analytics>
         <ConfigBarItem>
-          {academicYear}/{semester}
+          <Typography variant="subtitle2">
+            {academicYear}/{semester}
+          </Typography>
         </ConfigBarItem>
         <Analytics elementName={REPORT_PROBLEM}>
           <ConfigBarItemLink href={reportProblemLink} target="_blank" rel="noreferrer">
-            {t('reportAProblem')}
+            <Typography variant="subtitle2">{t('reportAProblem')}</Typography>
           </ConfigBarItemLink>
         </Analytics>
       </FlexContainer>

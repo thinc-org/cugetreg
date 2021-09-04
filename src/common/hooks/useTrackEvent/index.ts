@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 
 import { useScreenName } from '@/common/hooks/useScreenName'
-import Tracker from '@/common/tracker'
+import { Tracker } from '@/common/tracker'
 
 import { UseTrackEventProps } from './types'
 

@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import { Grid, Typography } from '@material-ui/core'
 
-import { SectionCard } from '@/components/SectionCard'
+import { SectionCard } from './components/SectionCard'
 
 export const SectionCardLayout = styled(SectionCard)`
   margin-top: ${({ theme }) => theme.spacing(2)};

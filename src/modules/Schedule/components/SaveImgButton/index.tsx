@@ -3,14 +3,14 @@ import GetAppRoundedIcon from '@material-ui/icons/GetAppRounded'
 import React, { RefObject, useCallback } from 'react'
 import { useScreenshot } from 'use-react-screenshot'
 
-import { Analytics } from '@/context/analytics/components/Analytics'
-import { EXPORT_PNG_BUTTON } from '@/context/analytics/components/const'
+import { Analytics } from '@/common/context/Analytics/components/Analytics'
+import { EXPORT_PNG_BUTTON } from '@/common/context/Analytics/constants'
 
 interface SaveImgButtonProps {
   imageRef: RefObject<HTMLDivElement>
 }
 
-const SaveImgButton: React.FC<SaveImgButtonProps> = ({ imageRef }) => {
+export const SaveImgButton: React.FC<SaveImgButtonProps> = ({ imageRef }) => {
   const [, takeScreenshot] = useScreenshot()
 
   const saveImage = useCallback(async () => {
@@ -33,5 +33,3 @@ const SaveImgButton: React.FC<SaveImgButtonProps> = ({ imageRef }) => {
     </Analytics>
   )
 }
-
-export default SaveImgButton

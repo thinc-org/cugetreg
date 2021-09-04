@@ -1,6 +1,6 @@
 import { PropsWithChildren } from 'react'
 
-import { styledWithTheme } from '@/utils/styledWithTheme'
+import { styledWithTheme } from '@/common/utils/styledWithTheme'
 
 import { useDimensions } from '../dimensions'
 

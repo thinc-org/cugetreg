@@ -3,10 +3,10 @@ import { observer } from 'mobx-react'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { BackButton } from '@/components/BackButton'
+import { BackButton } from '@/common/components/BackButton'
+import { useCourseGroup } from '@/common/hooks/useCourseGroup'
 import { CR11 } from '@/modules/CR11/components/CR11'
 import { courseCartStore } from '@/store/shoppingCart'
-import { useCourseGroup } from '@/utils/hooks/useCourseGroup'
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -88,7 +88,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const CR11Page = () => {
+export const CR11Page = observer(() => {
   const shoppingCart = courseCartStore
   const classes = useStyles()
   const { t } = useTranslation(['program', 'cr11'])
@@ -137,6 +137,4 @@ const CR11Page = () => {
       </div>
     </div>
   )
-}
-
-export default observer(CR11Page)
+})

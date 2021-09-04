@@ -1,14 +1,19 @@
-import { ApolloError, useQuery } from '@apollo/client'
+import { ApolloError } from '@apollo/client'
 import { Grid, Typography } from '@material-ui/core'
 import { getFaculty } from '@thinc-org/chula-courses'
 import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
-import { useRouter } from 'next/router'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { BackButton } from '@/components/BackButton'
+import { BackButton } from '@/common/components/BackButton'
+import { useCourseGroup } from '@/common/hooks/useCourseGroup'
+import { Language } from '@/common/i18n'
+import { getExamDate } from '@/common/utils/getExamData'
+import { getExamPeriod } from '@/common/utils/getExamPeriod'
 import { PageMeta } from '@/components/PageMeta'
-import { Language } from '@/i18n'
+import { createApolloServerClient } from '@/services/apollo'
+import { GetCourseResponse, GET_COURSE } from '@/services/apollo/query/getCourse'
+
 import {
   Container,
   DescriptionTitle,
@@ -17,15 +22,12 @@ import {
   SectionContainer,
   Title,
   GridEnd,
-} from '@/modules/CourseDetail/styled'
-import { courseTypeStringFromCourse, parseVariablesFromQuery } from '@/modules/CourseDetail/utils'
-import { getExamDate, getExamPeriod } from '@/utils/coruseExam'
-import { groupBy } from '@/utils/groupBy'
-import { useCourseGroup } from '@/utils/hooks/useCourseGroup'
-import { GetCourseResponse, GetCourseVars, GET_COURSE } from '@/utils/network/BackendGQLQueries'
-import { createApolloServerClient } from '@/utils/network/apollo'
+} from './styled'
+import { courseTypeStringFromCourse } from './utils/courseTypeStringFromCourse'
+import { groupBy } from './utils/groupBy'
+import { parseVariablesFromQuery } from './utils/parseVariablesFromQuery'
 
-function CourseDetailPage(props: { data: GetCourseResponse }) {
+export function CourseDetailPage(props: { data: GetCourseResponse }) {
   const { i18n } = useTranslation()
   const { studyProgram } = useCourseGroup()
   const cData = props.data
@@ -114,5 +116,3 @@ export async function getServerSideProps(
     }
   }
 }
-
-export default CourseDetailPage

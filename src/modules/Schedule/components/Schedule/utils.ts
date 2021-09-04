@@ -2,10 +2,10 @@ import { useTheme } from '@material-ui/core'
 import { Course, Class, DayOfWeek, GenEdType } from '@thinc-org/chula-courses'
 import { useMemo } from 'react'
 
+import { getPaletteRange } from '@/common/utils/getPaletteRange'
+import { ExamClass } from '@/common/utils/types'
 import { CourseCartItem } from '@/store'
-import getPaletteRange from '@/utils/getPaletteRange'
 
-import { ExamClass } from '../ExamSchedule/components/ExamCard'
 import { hourStart } from './constants'
 
 export type TimetableClass = Pick<Course, 'courseNo' | 'abbrName' | 'genEdType'> &

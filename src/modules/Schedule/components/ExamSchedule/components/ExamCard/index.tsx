@@ -1,16 +1,11 @@
 import styled from '@emotion/styled'
 import { Typography } from '@material-ui/core'
-import { Course, Class } from '@thinc-org/chula-courses'
 
-import { getExamDate, getExamPeriod } from '@/utils/coruseExam'
+import { getExamDate } from '@/common/utils/getExamData'
+import { getExamPeriod } from '@/common/utils/getExamPeriod'
+import { ExamClass } from '@/common/utils/types'
 
 import { useColorScheme } from './useColorScheme'
-
-export type ExamClass = Pick<Course, 'courseNo' | 'abbrName' | 'genEdType' | 'midterm' | 'final'> &
-  Omit<Class, 'type'> & {
-    hasOverlap?: boolean
-    isHidden: boolean
-  }
 
 interface ClassCardProps {
   scheduleClass: ExamClass

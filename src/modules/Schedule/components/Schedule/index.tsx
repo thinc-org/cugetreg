@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import { withContentRect } from 'react-measure'
 
-import { styledWithTheme } from '@/utils/styledWithTheme'
+import { styledWithTheme } from '@/common/utils/styledWithTheme'
 
 import { ClassCard } from './components/ClassCard'
 import { Gutters } from './components/Gutters'

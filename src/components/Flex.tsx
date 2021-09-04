@@ -15,6 +15,9 @@ export interface FlexProps extends BoxProps {
   shrink?: BoxProps['flexShrink']
 }
 
+/**
+ * @deprecated use MuiStack instead
+ */
 export const Flex = forwardRef((props: FlexProps, ref: ForwardedRef<'div'>) => {
   const { direction, align, justify, wrap, basis, grow, shrink, ...rest } = props
   const style = {

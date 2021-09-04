@@ -1,6 +1,6 @@
 import { css, Theme } from '@emotion/react'
 import styled from '@emotion/styled'
-import { Button } from '@material-ui/core'
+import { Button, NativeSelect } from '@material-ui/core'
 import { motion } from 'framer-motion'
 
 import { PaletteRange } from '@/configs/theme/palette'
@@ -173,5 +173,30 @@ export const StyledLink = styled.a`
   transition: 0.2s ease-in-out;
   :hover {
     text-decoration-color: ${({ theme }) => theme.palette.primary.main};
+  }
+`
+
+export const StyledNativeSelect = styled(NativeSelect)`
+  &&& select {
+    height: 24px;
+    padding: 4px 32px 4px 16px;
+    border: 1.5px solid ${({ theme }) => theme.palette.primaryRange[50]};
+    border-radius: 4px;
+
+    &:focus {
+      border-radius: 4px;
+      background: none;
+    }
+  }
+
+  svg {
+    margin-right: 8px;
+  }
+
+  &::before {
+    display: none;
+  }
+  &::after {
+    display: none;
   }
 `

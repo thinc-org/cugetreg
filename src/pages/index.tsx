@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 
-import { DEFAULT_STUDY_PROGRAM } from '@/constants/studyProgram'
+import { DEFAULT_STUDY_PROGRAM } from '@/common/constants/studyProgram'
 
 function HomePage() {
   const router = useRouter()

@@ -5,5 +5,6 @@ export type AnnoucementChipProps = GeneralChipProps & {
   type: GenEdChipKey | OtherChipKey
 }
 
-const AnnoucementChip: React.FC<AnnoucementChipProps> = ({ type, ...props }) => <GeneralChip type={type} {...props} />
-export default AnnoucementChip
+export const AnnoucementChip: React.FC<AnnoucementChipProps> = ({ type, ...props }) => (
+  <GeneralChip type={type} {...props} />
+)

@@ -18,8 +18,9 @@ module.exports = {
     ecmaVersion: 11,
     sourceType: 'module',
   },
-  plugins: ['react', '@typescript-eslint', 'prettier', 'react-hooks'],
+  plugins: ['react', '@typescript-eslint', 'prettier', 'react-hooks', 'import'],
   rules: {
+    'import/no-default-export': 2,
     'react/prop-types': 0,
     'react/react-in-jsx-scope': 0,
     '@typescript-eslint/explicit-module-boundary-types': 0,
@@ -46,4 +47,12 @@ module.exports = {
       version: 'detect',
     },
   },
+  overrides: [
+    {
+      files: ['src/pages/**/*.tsx', '**/*.stories*', '**/*.d.ts'],
+      rules: {
+        'import/no-default-export': 0,
+      },
+    },
+  ],
 }

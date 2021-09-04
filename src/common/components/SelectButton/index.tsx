@@ -1,50 +1,15 @@
 import Add from '@material-ui/icons/Add'
 import { LoadingButton } from '@material-ui/lab'
-import useGoogleOptimize from '@react-hook/google-optimize'
-import { Course } from '@thinc-org/chula-courses'
-import { runInAction } from 'mobx'
 import { observer } from 'mobx-react'
-import React, { useCallback } from 'react'
-import { useContext } from 'react'
-import { useTranslation } from 'react-i18next'
+import React from 'react'
 import { MdCheck } from 'react-icons/md'
 
-import { SnackbarContext } from '@/common/context/Snackbar'
-import { courseCartStore } from '@/store'
+import { useSelectButton } from '@/common/components/SelectButton/hooks/useSelectButton'
 
-interface SelectButtonProps {
-  course: Course
-  selectedSectionNumber: string
-  log: (_?: unknown, value?: string) => void
-}
+import { SelectButtonProps } from './types'
 
-export const SelectButton = observer(({ course, selectedSectionNumber, log }: SelectButtonProps) => {
-  const { t } = useTranslation('courseCard')
-  const { emitMessage } = useContext(SnackbarContext)
-
-  const isSelected = courseCartStore.item(course.courseNo)?.selectedSectionNo === selectedSectionNumber
-
-  const onClickSelectCourse = useCallback(() => {
-    runInAction(() => {
-      if (!isSelected) {
-        const addItemSuccess = courseCartStore.addItem(course, selectedSectionNumber)
-        if (!addItemSuccess) {
-          log(null, 'addSubjectFailed')
-          emitMessage(t('addSubjectFailed'), 'error', t('addSubjectFailedSolution'))
-        } else {
-          log(null, 'addSubjectSuccess')
-          emitMessage(t('addSubjectSuccess'), 'success', t('viewAllSubject'))
-        }
-      } else {
-        courseCartStore.removeCourse(course)
-        log(null, 'removeSubjectSuccess')
-        emitMessage(t('removeSubjectSuccess'), 'warning', t('viewAllSubject'))
-      }
-    })
-  }, [course, selectedSectionNumber, isSelected, emitMessage, t, log])
-
-  const isExperimentColor = useGoogleOptimize('qS9_gAPPQjquNZru7DBBXQ', [false, true])
-  console.log(isExperimentColor, 'hasYellow')
+export const SelectButton = observer((props: SelectButtonProps) => {
+  const { t, isSelected, isExperimentColor, onClickSelectCourse } = useSelectButton(props)
 
   return (
     <LoadingButton

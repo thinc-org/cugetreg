@@ -29,13 +29,16 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn-
 
+      - name: Install dependencies
       - run: yarn --fronzen-lockfile
 
-      # - run: yarn test:ci
-      - uses: artiomtr/jest-coverage-report-action@v2.0-rc.4
+      - name: Run test
+      - run: yarn test:ci
+
+      - name: Extract code coverage
+        uses: ArtiomTr/jest-coverage-report-action@v2.0-rc.4
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          # skip-step: install
+          skip-step: all
           package-manager: yarn
-          # test-script: yarn test:ci
-          #   threshold: 80 # optional parameter
+          annotations: failed-tests

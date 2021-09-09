@@ -1,4 +1,4 @@
-import { CardHeader, Grid, IconButton, Link, Typography } from '@material-ui/core'
+import { CardHeader, Grid, IconButton, Link, Typography, Stack } from '@material-ui/core'
 import KeyboardArrowDown from '@material-ui/icons/KeyboardArrowDown'
 import KeyboardArrowUp from '@material-ui/icons/KeyboardArrowUp'
 import { useTranslation } from 'react-i18next'
@@ -8,25 +8,18 @@ import { Analytics } from '@/common/context/Analytics/components/Analytics'
 import { LinkWithAnalytics } from '@/common/context/Analytics/components/LinkWithAnalytics'
 import { COURSE_TITLE, EXPAND_BUTTON } from '@/common/context/Analytics/constants'
 import { useCourseGroup } from '@/common/hooks/useCourseGroup'
-import { Flex } from '@/components/Flex'
+import { useCourseCard } from '@/modules/CourseSearch/components/CourseCard/context'
 
-import { useCourseCardContext } from '../context'
-
-interface CardHeadingProps {
-  isExpanded: boolean
-  onToggle: () => void
-}
-
-export function CardHeading({ isExpanded, onToggle }: CardHeadingProps) {
+export function CardHead() {
   const { t } = useTranslation('courseCard')
-  const { course, isGenEd } = useCourseCardContext()
+  const { course, isGenEd, isExpanded, onToggle } = useCourseCard()
   const { studyProgram } = useCourseGroup()
 
   return (
     <CardHeader
       sx={{ p: 4, pb: 0, pt: 3 }}
       title={
-        <Flex justify="space-between">
+        <Stack direction="row" justifyContent="space-between">
           <Grid container spacing={1}>
             <Grid item>
               <LinkWithAnalytics
@@ -58,7 +51,7 @@ export function CardHeading({ isExpanded, onToggle }: CardHeadingProps) {
               <Typography variant="h6">{rating}</Typography>
             </Stack>
           )} */}
-        </Flex>
+        </Stack>
       }
       action={
         <Analytics elementName={EXPAND_BUTTON} elementId={course.courseNo}>

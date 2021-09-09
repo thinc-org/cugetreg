@@ -2,13 +2,12 @@ import { FormControl, MenuItem, Select, useMediaQuery, useTheme } from '@materia
 
 import { Analytics } from '@/common/context/Analytics/components/Analytics'
 import { SECTION_SELECT } from '@/common/context/Analytics/constants'
-
-import { useCourseCardContext } from '../context'
+import { useCourseCard } from '@/modules/CourseSearch/components/CourseCard/context'
 
 export function SectionSelect() {
   const theme = useTheme()
   const isDesktop = useMediaQuery(theme.breakpoints.up('sm'))
-  const { selectedSectionNumber, setSectionNumber, sectionNumbers, course } = useCourseCardContext()
+  const { selectedSectionNumber, setSectionNumber, sectionNumbers, course } = useCourseCard()
   return (
     <FormControl fullWidth={isDesktop}>
       <Analytics elementName={SECTION_SELECT} elementId={course.courseNo}>

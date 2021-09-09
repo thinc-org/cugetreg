@@ -10,4 +10,6 @@ export interface CourseCardContextValue {
   setSectionNumber: (sectionNo: string) => void
   selectedSection: Section
   teachers: string[]
+  isExpanded: boolean
+  onToggle: () => void
 }

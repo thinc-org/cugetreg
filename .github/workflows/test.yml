@@ -36,4 +36,5 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           skip-step: install
+          test-script: yarn test:ci
           #   threshold: 80 # optional parameter

@@ -42,6 +42,7 @@ export const COURSE_DATA_FIELDS = `
                 start
                 end
             }
+            room
             building
             teachers
         }

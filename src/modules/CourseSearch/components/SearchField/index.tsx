@@ -4,9 +4,9 @@ import SearchIcon from '@material-ui/icons/Search'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 
 import { Analytics } from '@/common/context/Analytics/components/Analytics'
-import { useLog } from '@/common/context/Analytics/components/useLog'
 import { COURSE_SEARCH_BOX } from '@/common/context/Analytics/constants'
 import { SEARCH_QUERY } from '@/common/context/Analytics/constants'
+import { useLog } from '@/common/context/Analytics/hooks/useLog'
 import { useStyles } from '@/modules/CourseSearch/components/SearchField/styled'
 import { useSearchCourseQueryParams } from '@/modules/CourseSearch/hooks/useSearchCourseQueryParams'
 

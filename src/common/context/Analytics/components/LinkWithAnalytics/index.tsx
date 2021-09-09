@@ -1,20 +1,8 @@
-import Link, { LinkProps } from 'next/link'
+import Link from 'next/link'
 import { cloneElement, ReactElement } from 'react'
 
-import { useLog } from './useLog'
-
-interface LinkComponentProps {
-  onMouseEnter?: ((event: React.MouseEvent<Element, MouseEvent>) => void) | undefined
-  onClick?: (event: React.MouseEvent<Element, MouseEvent>) => void
-  href?: string | undefined
-  ref?: unknown
-}
-
-interface LinkWithAnalyticsProps extends LinkProps {
-  elementName?: string
-  elementId?: string
-  pathId?: string
-}
+import { useLog } from '../../hooks/useLog'
+import { LinkComponentProps, LinkWithAnalyticsProps } from './types'
 
 export function LinkWithAnalytics({
   children,

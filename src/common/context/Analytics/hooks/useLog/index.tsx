@@ -4,6 +4,9 @@ import { useContext } from 'react'
 import { AnalyticsContext } from '@/common/context/Analytics'
 
 /**
+ * TODO: Should move to common/tracker/hooks
+ */
+/**
  * useLog hooks for logging, only use if cannot use Analytics component only
  * @param elementName
  * @param pathId

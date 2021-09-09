@@ -1,6 +1,6 @@
 import { collectLogEvent } from '@/services/logging'
 
-import { AnalyticsType } from './types'
+import { AnalyticsType } from '../../types'
 
 export function useAnalytics() {
   const addEvent: AnalyticsType['addEvent'] = (e) =>

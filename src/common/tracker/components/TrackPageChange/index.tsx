@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 
-import { useLog } from '@/common/context/Analytics/components/useLog'
+import { useLog } from '@/common/context/Analytics/hooks/useLog'
 
 interface TrackPageChangeProps {
   children: React.ReactNode

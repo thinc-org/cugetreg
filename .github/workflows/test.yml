@@ -33,6 +33,6 @@ jobs:
 
       # - run: yarn test:ci
       - uses: artiomtr/jest-coverage-report-action@v2.0-rc.4
-              with:
-                  github-token: ${{ secrets.GITHUB_TOKEN }}
-                  #   threshold: 80 # optional parameter
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          #   threshold: 80 # optional parameter

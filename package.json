@@ -5,7 +5,6 @@
   "scripts": {
     "dev": "next dev",
     "test": "jest",
-    "test:ci": "jest --silent --ci --coverage --coverageReporters=\"text\" --coverageReporters=\"text-summary\"",
     "build": "next build",
     "start": "next start",
     "export": "yarn build && yarn next export",

@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { Caption } from '@/common/components/Caption'
 import { DayChip } from '@/common/components/Chips/catagories/DayChip'
 import { GenEdChip } from '@/common/components/Chips/catagories/GenEdChip'
-import { NoSeatIcon } from '@/common/components/RegwarNotice/NoSeatInfoNotice'
+import { NoSeatIcon } from '@/common/components/NoSeatIcon'
 import { useCourseCard } from '@/modules/CourseSearch/components/CourseCard/context'
 
 export function CardDescription() {

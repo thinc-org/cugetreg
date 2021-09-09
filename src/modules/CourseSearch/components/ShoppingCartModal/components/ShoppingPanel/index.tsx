@@ -2,7 +2,7 @@ import { Typography, DialogTitle, DialogContent, DialogActions, Stack } from '@m
 import { Course } from '@thinc-org/chula-courses'
 import { useTranslation } from 'react-i18next'
 
-import { Spacer } from '@/modules/Schedule/components/ScheduleTable/components/ScheduleTableCard/styled'
+import { Spacer } from '@/components/Spacer'
 import { CourseCartItem, courseCartStore } from '@/store'
 
 import { ActionButton } from './components/ActionButton'

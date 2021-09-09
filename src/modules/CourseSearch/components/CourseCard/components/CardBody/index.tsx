@@ -1,8 +1,8 @@
 import { CardContent, Collapse, Stack } from '@material-ui/core'
 
-import { CardDescription } from '@/modules/CourseSearch/components/CourseCard/components/CardBody/components/CardDescription'
-import { CardHiddenDescription } from '@/modules/CourseSearch/components/CourseCard/components/CardBody/components/CardHiddenDescription'
-import { CardSideActions } from '@/modules/CourseSearch/components/CourseCard/components/CardBody/components/CardSideActions'
+import { CardDescription } from '@/modules/CourseSearch/components/CourseCard/components/CardDescription'
+import { CardHiddenDescription } from '@/modules/CourseSearch/components/CourseCard/components/CardHiddenDescription'
+import { CardSideActions } from '@/modules/CourseSearch/components/CourseCard/components/CardSideActions'
 import { useCourseCard } from '@/modules/CourseSearch/components/CourseCard/context'
 
 export function CardBody() {

@@ -1,4 +1,4 @@
-name: Install depedencies and run test
+name: Dry build test
 
 on: pull_request
 
@@ -8,36 +8,35 @@ permissions:
   pull-requests: write
   repository-projects: read
 
-env:
-  IMAGE_REPO: ghcr.io/${{ github.repository }}
-
 jobs:
   build:
     strategy:
       matrix:
         node-version: [14.x]
         platform: [ubuntu-latest]
-
     runs-on: ${{ matrix.platform }}
-
     steps:
       - uses: actions/checkout@v2
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
-
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
         with:
-          images: ${{ env.IMAGE_REPO }}
+          node-version: ${{ matrix.node-version }}
 
-      - name: Build docker image
-        uses: docker/build-push-action@v2
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - uses: actions/cache@v2
+        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
         with:
-          push: false
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=registry,ref=${{ env.IMAGE_REPO }}:buildcache
-          cache-to: type=registry,ref=${{ env.IMAGE_REPO }}:buildcache,mode=max
-          context: .
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: Install dependencies
+        run: yarn --fronzen-lockfile
+
+      - name: Check if build successfully
+        run: yarn build

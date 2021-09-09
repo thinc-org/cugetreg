@@ -35,12 +35,13 @@ jobs:
       - name: Run test
         run: yarn test:ci
 
-      - name: Extract code coverage
-        uses: ArtiomTr/jest-coverage-report-action@v1.3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          skip_step: all
-          package_manager: yarn
-
       - name: Check if build successfully
         run: yarn build
+
+      - name: Extract code coverage
+        uses: ArtiomTr/jest-coverage-report-action@v2.0-rc.4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          skip-step: all
+          package-manager: yarn
+          annotations: failed-tests

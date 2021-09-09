@@ -1,7 +1,8 @@
 import { Meta, Story } from '@storybook/react/types-6-0'
 import React from 'react'
 
-import { FilterSection, FilterSectionProps } from '.'
+import { FilterSection } from '@/modules/CourseSearch/components/FilterSection'
+import { FilterSectionProps } from '@/modules/CourseSearch/components/FilterSection/types'
 
 type StoryProps = FilterSectionProps
 

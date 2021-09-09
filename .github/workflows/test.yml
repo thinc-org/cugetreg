@@ -31,4 +31,4 @@ jobs:
 
       - run: yarn --fronzen-lockfile
 
-      - run: yarn build
+      - run: yarn test:ci

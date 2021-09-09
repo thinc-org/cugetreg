@@ -35,7 +35,7 @@ jobs:
       - uses: artiomtr/jest-coverage-report-action@v2.0-rc.4
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          skip-step: install
-          # package-manager: yarn
+          # skip-step: install
+          package-manager: yarn
           test-script: npm run test:ci
           #   threshold: 80 # optional parameter

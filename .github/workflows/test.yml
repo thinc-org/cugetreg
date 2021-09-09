@@ -30,10 +30,10 @@ jobs:
             ${{ runner.os }}-yarn-
 
       - name: Install dependencies
-      - run: yarn --fronzen-lockfile
+        run: yarn --fronzen-lockfile
 
       - name: Run test
-      - run: yarn test:ci
+        run: yarn test:ci
 
       - name: Extract code coverage
         uses: ArtiomTr/jest-coverage-report-action@v2.0-rc.4
@@ -42,3 +42,6 @@ jobs:
           skip-step: all
           package-manager: yarn
           annotations: failed-tests
+
+      - name: Check if build successfully
+        run: yarn build

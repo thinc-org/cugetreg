@@ -1,6 +1,9 @@
 name: Install depedencies
 
-on: pull_request
+on:
+  pull_request:
+  push:
+    branches: [beta, dev, master]
 
 permissions:
   contents: read

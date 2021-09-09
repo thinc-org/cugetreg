@@ -4,8 +4,8 @@ on: pull_request
 
 permissions:
   contents: read
-  packages: write
-  pull-requests: write
+  packages: read
+  pull-requests: read
   repository-projects: read
 
 jobs:

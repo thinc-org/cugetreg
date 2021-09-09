@@ -10,14 +10,11 @@ export const NavBarItemDiv = styled.div`
   ${({ theme }) => theme.breakpoints.up('md')} {
     display: flex;
     align-items: center;
+    flex-direction: row;
   }
 `
 
 export const SyncContainer = styled(Stack)`
-  &:first-child {
-    margin-right: ${({ theme }) => theme.spacing(1)};
-  }
-
   ${({ theme }) => theme.breakpoints.down('md')} {
     margin-left: ${({ theme }) => theme.spacing(1)};
   }

@@ -1,5 +1,4 @@
-import styled from '@emotion/styled'
-import { Drawer, IconButton } from '@material-ui/core'
+import { Drawer } from '@material-ui/core'
 import { default as MaterialLink } from '@material-ui/core/Link'
 import { observer } from 'mobx-react'
 import { useRouter } from 'next/router'
@@ -15,45 +14,19 @@ import { useCourseGroup } from '@/common/hooks/useCourseGroup'
 import { useDisclosure } from '@/common/hooks/useDisclosure'
 import { sessionIdStore } from '@/store/sessionIdStore'
 
-import { NavBarItem } from '../NavBar/NavBarItem'
-import { UserButton } from '../NavBar/UserButton'
-
-const MoreButton = styled(IconButton)`
-  margin-left: 12px;
-  margin-right: -12px;
-  color: ${({ theme }) => theme.palette.primary.main};
-`
-
-const DrawerContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding-top: 48px;
-  padding-left: 28px;
-  padding-right: 56px;
-  padding-bottom: 48px;
-`
-
-const Logo = styled.img`
-  height: 40px;
-  margin-left: 8px;
-  margin-bottom: 42px;
-`
-
-const SectionSpacer = styled.div`
-  height: 24px;
-`
-
-// const NavbarItemLink = NavBarItem.withComponent('a')
+import { NavBarItem } from '../NavBarItem'
+import { UserButton } from '../UserButton'
+import { MoreButton, DrawerContent, SectionSpacer, Logo } from './styled'
 
 export const MobileNavBar = observer(() => {
   const { t } = useTranslation()
+  const { asPath } = useRouter()
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { studyProgram } = useCourseGroup()
 
   const sessionId = sessionIdStore.sessionId
   const reportProblemLink = `https://airtable.com/shruwAAfn1763TgMU?prefill_Session_ID=${sessionId}`
 
-  const { asPath } = useRouter()
   useEffect(() => {
     onClose()
   }, [asPath, onClose])

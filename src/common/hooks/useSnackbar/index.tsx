@@ -1,7 +1,7 @@
 import { Color } from '@material-ui/core/Alert'
 import { useState } from 'react'
 
-import { SnackbarProps } from './types'
+import { SnackbarProps } from '../../context/Snackbar/types'
 
 export function useSnackBar() {
   const [message, setMessage] = useState('')

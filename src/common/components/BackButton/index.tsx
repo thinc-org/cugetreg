@@ -1,5 +1,3 @@
-import styled from '@emotion/styled'
-import { Button, IconButton } from '@material-ui/core'
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos'
 import { useRouter } from 'next/router'
 import React, { useCallback } from 'react'
@@ -8,28 +6,8 @@ import { useTranslation } from 'react-i18next'
 import { Analytics } from '@/common/context/Analytics/components/Analytics'
 import { GO_BACK_BUTTON } from '@/common/context/Analytics/constants'
 
-const ButtonMobile = styled(IconButton)`
-  border: 1px solid #2a2d48;
-  box-sizing: border-box;
-  border-radius: 4px;
-  text-align: right;
-  padding: 5px 8px;
-  color: ${({ theme }) => theme.palette.primaryRange[400]};
-  ${({ theme }) => theme.breakpoints.up('sm')} {
-    display: none;
-  }
-`
-
-const ButtonDesktop = styled(Button)`
-  ${({ theme }) => theme.breakpoints.down('sm')} {
-    display: none;
-  }
-`
-
-interface BackButtonProps {
-  href: string
-  pathId?: string
-}
+import { ButtonDesktop, ButtonMobile } from './styled'
+import { BackButtonProps } from './types'
 
 export function BackButton({ href, pathId }: BackButtonProps) {
   const { t } = useTranslation('navigation')

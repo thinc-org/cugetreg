@@ -5,7 +5,7 @@ import LocalizationProvider from '@material-ui/lab/LocalizationProvider'
 import React from 'react'
 
 import { AnalyticsProvider } from '@/common/context/Analytics'
-import { useAnalytics } from '@/common/context/Analytics/hooks'
+import { useAnalytics } from '@/common/context/Analytics/hooks/useAnalytics'
 import { ShoppingCartModalProvider } from '@/common/context/ShoppingCartModal'
 import { ModalProps } from '@/common/context/ShoppingCartModal/types'
 import { SnackbarContextProvider } from '@/common/context/Snackbar'

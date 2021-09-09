@@ -10,7 +10,7 @@ permissions:
   checks: read
 
 jobs:
-  build:
+  test:
     strategy:
       matrix:
         node-version: [14.x]

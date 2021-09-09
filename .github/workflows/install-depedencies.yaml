@@ -9,7 +9,7 @@ permissions:
   repository-projects: read
 
 jobs:
-  build:
+  install-depedencies:
     strategy:
       matrix:
         node-version: [14.x]

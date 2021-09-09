@@ -13,7 +13,7 @@ import {
   STUDY_PROGRAM_DROPDOWN,
 } from '@/common/context/Analytics/constants'
 import { useCourseGroup } from '@/common/hooks/useCourseGroup'
-import { Spacer } from '@/components/Flex'
+import { Spacer } from '@/components/Spacer'
 
 import { FlexContainer } from '../../styled'
 import { ConfigBarItem } from '../ConfigBar/ConfigBarItem'

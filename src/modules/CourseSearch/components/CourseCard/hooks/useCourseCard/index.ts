@@ -1,13 +1,22 @@
 import { Capacity, Course, Section } from '@thinc-org/chula-courses'
+import { sum, uniq } from 'lodash'
 import { useState } from 'react'
 
 import { dayOfWeekArray } from '@/common/constants/dayOfWeek'
-import { sum } from '@/common/utils/sum'
-import { unique } from '@/common/utils/unique'
+import { useDisclosure } from '@/common/hooks/useDisclosure'
+import { CourseCardContextValue } from '@/modules/CourseSearch/components/CourseCard/context/types'
 
-import { CourseCardContextValue } from '../../context/types'
+export function useCourseCardContext(course: Course): CourseCardContextValue {
+  const courseCardValue = useCourseCardValue(course)
+  const { isOpen, onToggle } = useDisclosure()
+  return {
+    ...courseCardValue,
+    isExpanded: isOpen,
+    onToggle,
+  }
+}
 
-export function useCourseCard(course: Course): CourseCardContextValue {
+function useCourseCardValue(course: Course) {
   const isGenEd = course.genEdType !== 'NO'
 
   const activeDays = course.sections.flatMap((section) => section.classes.map((sectionClass) => sectionClass.dayOfWeek))
@@ -21,8 +30,7 @@ export function useCourseCard(course: Course): CourseCardContextValue {
   const sectionNumbers = course.sections.map((section) => section.sectionNo)
   const [selectedSectionNumber, setSectionNumber] = useState(sectionNumbers[0])
   const selectedSection = course.sections.find((section) => section.sectionNo === selectedSectionNumber) as Section
-  const teachers = unique(selectedSection.classes.flatMap((sectionClass) => sectionClass.teachers))
-
+  const teachers = uniq(selectedSection.classes.flatMap((sectionClass) => sectionClass.teachers))
   return {
     course,
     isGenEd,

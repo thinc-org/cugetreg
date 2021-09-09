@@ -1,7 +1,5 @@
-import { css, useTheme } from '@emotion/react'
-import styled from '@emotion/styled'
-import { Button as MuiButton, DialogContent as MuiDialogContent, Paper, Stack, useMediaQuery } from '@material-ui/core'
-import React from 'react'
+import { useTheme } from '@emotion/react'
+import { DialogContent, Stack, useMediaQuery } from '@material-ui/core'
 
 import { DayChipKey, GenEdChipKey } from '@/common/components/Chips/config'
 import { ResponsiveDialog } from '@/common/components/ResponsiveDialog'
@@ -12,48 +10,12 @@ import {
   createGenEdCheckboxes,
   createDayOfWeekCheckboxes, // createSpecialCheckboxes,
 } from '@/modules/CourseSearch/components/FilterSection/constants'
-import { useStyles } from '@/modules/CourseSearch/components/FilterSection/styled'
-
-import { useHasTags } from '../TagList'
-import { useFilterBar } from './hooks'
-
-const DialogContent = styled(MuiDialogContent)`
-  padding: ${({ theme }) => theme.spacing(4)};
-`
-
-const Box = styled.div`
-  display: flex;
-  justify-content: space-between;
-  div:first-of-type {
-    ${({ theme }) => {
-      return css`
-        margin-right: ${theme.spacing(12)};
-        ${theme.breakpoints.down('sm')} {
-          margin-right: ${theme.spacing(2)};
-        }
-      `
-    }};
-  }
-`
-
-const Container = styled.div<{ hasTags: boolean }>`
-  min-width: 220px;
-  position: sticky;
-  top: ${({ hasTags }) => (hasTags ? '124px' : '100px')};
-  z-index: ${({ theme }) => theme.zIndex.appBar + 2};
-  height: fit-content;
-`
-
-const Button = styled(MuiButton)`
-  margin-top: ${({ theme }) => theme.spacing(2)}; ;
-`
-export interface FilterSectionProps {
-  open: boolean
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>
-}
+import { useFilterBar } from '@/modules/CourseSearch/components/FilterSection/hooks'
+import { Button, StickyPaper, Box } from '@/modules/CourseSearch/components/FilterSection/styles'
+import { FilterSectionProps } from '@/modules/CourseSearch/components/FilterSection/types'
+import { useHasTags } from '@/modules/CourseSearch/components/TagList'
 
 export const FilterSection: React.FC<FilterSectionProps> = ({ open, setOpen }) => {
-  const classes = useStyles()
   const { checkboxes: genEdCheckboxes } = useFilterBar<GenEdChipKey>(createGenEdCheckboxes, 'genEdTypes')
   const { checkboxes: dayOfWeekCheckboxes } = useFilterBar<DayChipKey>(createDayOfWeekCheckboxes, 'dayOfWeeks')
   // const { checkboxes: specialCheckboxes } = useFilterBar(createSpecialCheckboxes)
@@ -69,19 +31,17 @@ export const FilterSection: React.FC<FilterSectionProps> = ({ open, setOpen }) =
 
   return match ? (
     open ? (
-      <Container hasTags={hasTags}>
-        <Paper className={classes.paper} variant="outlined">
-          <Stack spacing={4}>
-            <Analytics elementName={GENED_FILTER}>
-              {({ log }) => <CheckboxGroup log={log} title="หมวดหมู่ GenEd" checkboxes={genEdCheckboxes} />}
-            </Analytics>
-            <Analytics elementName={DAY_FILTER}>
-              {({ log }) => <CheckboxGroup log={log} title="วันในสัปดาห์" checkboxes={dayOfWeekCheckboxes} />}
-            </Analytics>
-            {/* <CheckboxGroup title="แสดงผลพิเศษ" checkboxes={specialCheckboxes} /> */}
-          </Stack>
-        </Paper>
-      </Container>
+      <StickyPaper hasTags={hasTags} variant="outlined">
+        <Stack spacing={4}>
+          <Analytics elementName={GENED_FILTER}>
+            {({ log }) => <CheckboxGroup log={log} title="หมวดหมู่ GenEd" checkboxes={genEdCheckboxes} />}
+          </Analytics>
+          <Analytics elementName={DAY_FILTER}>
+            {({ log }) => <CheckboxGroup log={log} title="วันในสัปดาห์" checkboxes={dayOfWeekCheckboxes} />}
+          </Analytics>
+          {/* <CheckboxGroup title="แสดงผลพิเศษ" checkboxes={specialCheckboxes} /> */}
+        </Stack>
+      </StickyPaper>
     ) : null
   ) : (
     <ResponsiveDialog open={open} onClose={handleClose}>

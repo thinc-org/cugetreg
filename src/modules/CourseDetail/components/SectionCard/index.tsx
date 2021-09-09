@@ -22,7 +22,6 @@ import { SelectButton } from '@/common/components/SelectButton'
 import { dayOfWeekMapper } from '@/common/constants/dayOfWeek'
 import { Analytics } from '@/common/context/Analytics/components/Analytics'
 import { SUBJECT_SELECT_BUTTON_WITH_SECTION } from '@/common/context/Analytics/constants'
-import { Flex } from '@/components/Flex'
 
 import { SectionStatus } from './components/SectionStatus'
 
@@ -45,7 +44,7 @@ export const SectionCard = (props: SectionCardProps) => {
       <CardHeader
         sx={{ p: { xs: 2, sm: 4 }, pb: { xs: 0, sm: 0 }, pt: { xs: 2, sm: 3 } }}
         title={
-          <Flex direction="row" justify="space-between">
+          <Stack direction="row" justifyContent="space-between">
             <Grid container spacing={1}>
               <Grid item>
                 <SectionTitle variant="h5">{t('section', { sectionNo: section.sectionNo })}</SectionTitle>
@@ -62,11 +61,11 @@ export const SectionCard = (props: SectionCardProps) => {
                 section.closed ? 'closed' : section.capacity.current >= section.capacity.max ? 'full' : 'avialable'
               }
             />
-          </Flex>
+          </Stack>
         }
       />
       <CardContent sx={{ px: { xs: 2, sm: 4 }, py: 2, pt: { xs: 2, sm: 1 } }}>
-        <Flex direction={['column', 'row']} justify="space-between">
+        <Stack direction={['column', 'row']} justifyContent="space-between">
           <Table
             sx={{
               width: { xs: '100%', sm: 'auto' },
@@ -128,7 +127,7 @@ export const SectionCard = (props: SectionCardProps) => {
               {({ log }) => <SelectButton log={log} course={course} selectedSectionNumber={section.sectionNo} />}
             </Analytics>
           </Stack>
-        </Flex>
+        </Stack>
       </CardContent>
       <CardActions sx={{ p: { xs: 2, sm: 4 }, pt: { xs: 0, sm: 0 }, display: { sm: 'none' } }}>
         <Analytics

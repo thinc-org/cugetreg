@@ -2,7 +2,7 @@ import { Typography, DialogTitle, DialogContent, DialogActions, Stack } from '@m
 import { Course } from '@thinc-org/chula-courses'
 import { useTranslation } from 'react-i18next'
 
-import { Flex } from '@/components/Flex'
+import { Spacer } from '@/components/Spacer'
 import { CourseCartItem, courseCartStore } from '@/store'
 
 import { ActionButton } from './components/ActionButton'
@@ -34,10 +34,11 @@ export const ShoppingPanel = () => {
   return (
     <>
       <DialogTitle sx={{ pt: [2, 4], pb: [1, 2] }}>
-        <Flex align="center" justify="space-between">
+        <Stack direction="row" alignItems="center">
           <Typography variant="h4">{t('selectedCourse')}</Typography>
+          <Spacer />
           <Typography variant="h6">{t('totalCredit', { totalCredit })}</Typography>
-        </Flex>
+        </Stack>
       </DialogTitle>
       <DialogContent sx={{ py: 1, height: 350 }}>
         {sortedCourses.length === 0 && <EmptyList />}

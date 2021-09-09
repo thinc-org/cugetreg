@@ -43,16 +43,18 @@ function CardDescription() {
 
   return (
     <Grid container spacing={3}>
-      <Grid item xs={6} sm="auto">
-        <Stack spacing={0.5}>
-          <Caption>{t('classDay')}</Caption>
-          <div>
-            {availableClassDays.length
-              ? availableClassDays.map((day: DayOfWeek) => <DayChip type={day} key={day} sx={{ mb: 0.5, mr: 0.5 }} />)
-              : '-'}
-          </div>
-        </Stack>
-      </Grid>
+      {availableClassDays.length > 0 && (
+        <Grid item xs={6} sm="auto">
+          <Stack spacing={0.5}>
+            <Caption>{t('classDay')}</Caption>
+            <div>
+              {availableClassDays.length
+                ? availableClassDays.map((day: DayOfWeek) => <DayChip type={day} key={day} sx={{ mb: 0.5, mr: 0.5 }} />)
+                : '-'}
+            </div>
+          </Stack>
+        </Grid>
+      )}
       {isGenEd && (
         <Grid item xs={6} sm="auto" display={['flex', 'none']}>
           <Stack spacing={0.5} alignItems="flex-start">
@@ -74,10 +76,12 @@ function CardDescription() {
               </Stack>
             </>
           ) : (
-            <>
-              <Caption>{t('condition')}</Caption>
-              <Typography variant="body1">{course.courseCondition}</Typography>
-            </>
+            course.courseCondition !== '-' && (
+              <>
+                <Caption>{t('condition')}</Caption>
+                <Typography variant="body1">{course.courseCondition}</Typography>
+              </>
+            )
           )}
         </Stack>
       </Grid>

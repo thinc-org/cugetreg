@@ -33,7 +33,7 @@ export function NavBar() {
       label: t('navBar:searchCourses'),
     },
     {
-      href: `/${studyProgram}/courses`,
+      href: `/${studyProgram}/schedule`,
       elementName: NAVBAR_TIMETABLE,
       label: t('navBar:timetable'),
     },

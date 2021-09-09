@@ -2,7 +2,7 @@ import { ThemeProvider } from '@material-ui/core'
 import { render } from '@testing-library/react'
 import { GenEdTypeEnum, DayOfWeekEnum } from '@thinc-org/chula-courses'
 
-import mockAndShallowSpy from '@/common/testing/mockAndShallowSpy'
+import { mockAndShallowSpy } from '@/common/testing/mockAndShallowSpy'
 import { lightTheme } from '@/configs/theme'
 
 import { GeneralChipProps } from '.'

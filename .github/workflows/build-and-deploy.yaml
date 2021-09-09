@@ -8,7 +8,7 @@ permissions:
   contents: read
   packages: write
   pull-requests: write
-  repository-projects: write
+  repository-projects: read
 
 env:
   IMAGE_REPO: ghcr.io/${{ github.repository }}

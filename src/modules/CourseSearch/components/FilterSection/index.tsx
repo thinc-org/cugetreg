@@ -39,9 +39,8 @@ const Box = styled.div`
 const Container = styled.div<{ hasTags: boolean }>`
   min-width: 220px;
   position: sticky;
-  top: ${({ hasTags }) => (hasTags ? '124px' : '100px')};
-  z-index: ${({ theme }) => theme.zIndex.appBar + 2};
-  height: fit-content;
+  top: ${({ hasTags }) => (hasTags ? '125px' : '101px')};
+  height: calc(100vh - ${({ hasTags }) => (hasTags ? '125px' : '101px')});
 `
 
 const Button = styled(MuiButton)`

@@ -111,7 +111,7 @@
   },
   "size-limit": [
     {
-      "path": "./.next/static/chunks/pages/_app.js"
+      "path": ".next/static/chunks/pages/_app.js"
     }
   ]
 }

@@ -20,12 +20,14 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Wait for install depedencies
-        uses: fountainhead/action-wait-for-check@v1.0.0
-        id: wait-for-install
+        uses: tomchv/wait-my-workflow@v1.1.0
+        id: wait-build
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           checkName: install-depedencies
-          ref: ${{ github.head_ref }}
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          intervalSeconds: 10
+          timeoutSeconds: 100
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1

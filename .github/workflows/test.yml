@@ -51,6 +51,7 @@ jobs:
 
       - name: Download a single artifact
         if: github.event_name == 'pull_request'
+        continue-on-error: true
         uses: actions/download-artifact@v2
         with:
           name: code-coverage-report-${github.base_ref}
@@ -63,4 +64,4 @@ jobs:
           package-manager: yarn
           annotations: failed-tests
           skip-step: all
-          base-coverage-file: ./base-coverage/report.json
+          # base-coverage-file: ./base-coverage/report.json

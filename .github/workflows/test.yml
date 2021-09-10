@@ -68,4 +68,4 @@ jobs:
           package-manager: yarn
           annotations: failed-tests
           skip-step: all
-          # base-coverage-file: ./base-coverage/report.json
+          base-coverage-file: ./base-coverage/report.json

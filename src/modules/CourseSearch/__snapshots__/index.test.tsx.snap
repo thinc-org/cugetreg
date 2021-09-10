@@ -1,0 +1,63 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CourseSearchPage Should match snapshot correctly 1`] = `
+<DocumentFragment>
+  <div
+    class="css-mgmyaz"
+  >
+    <div
+      class="css-hb0cq8-Stack-root"
+    >
+      <h2
+        class="MuiTypography-root MuiTypography-h2 css-gg35q5-MuiTypography-root"
+      >
+        ค้นหาวิชาเรียน
+      </h2>
+    </div>
+    <div
+      class="css-1kvpfxy-Stack-root"
+    >
+      <div
+        class="css-2mnqi0-Stack-root"
+      >
+        SearchField
+        <button
+          class="MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeSmall MuiButton-outlinedSizeSmall MuiButtonBase-root makeStyles-button-1 css-1bkoot9-MuiButtonBase-root-MuiButton-root"
+          tabindex="0"
+          type="button"
+        >
+          <span
+            class="MuiButton-label css-8xplcm-MuiButton-label"
+          >
+            <span
+              class="MuiButton-startIcon MuiButton-iconSizeSmall css-y6rp3m-MuiButton-startIcon"
+            >
+              <svg
+                aria-hidden="true"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-ukewf0-MuiSvgIcon-root"
+                data-testid="FilterListIcon"
+                focusable="false"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z"
+                />
+              </svg>
+            </span>
+          </span>
+          <span
+            class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+          />
+        </button>
+      </div>
+      TagList
+    </div>
+    NoTagListLayout
+    <div
+      class="css-rdjqb9-Stack-root"
+    >
+      CourseListFilterSection
+    </div>
+  </div>
+</DocumentFragment>
+`;

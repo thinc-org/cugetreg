@@ -6,9 +6,11 @@ import { LIMIT_QUERY_CONSTANT } from '@/modules/CourseSearch/context/CourseSearc
 import { useSearchCourseQueryParams } from '@/modules/CourseSearch/hooks/useSearchCourseQueryParams'
 import { SearchCourseResponse, SearchCourseVars, SEARCH_COURSE } from '@/services/apollo/query/searchCourse'
 
+import { useEmpty } from '../useEmpty'
+
 export const useCourseSearchProvider = () => {
   const router = useRouter()
-  const [isEmpty, setIsEmpty] = useState(false)
+  const { isEmpty, setIsEmpty } = useEmpty()
   const [offset, setOffset] = useState(0)
 
   const { searchCourseQueryParams } = useSearchCourseQueryParams()

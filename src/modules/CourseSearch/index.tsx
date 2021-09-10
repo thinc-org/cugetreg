@@ -10,11 +10,11 @@ import { SearchField } from '@/modules/CourseSearch/components/SearchField'
 import { SelectedCoursesButton } from '@/modules/CourseSearch/components/SelectedCoursesButton'
 import { NoTagListLayout, TagList } from '@/modules/CourseSearch/components/TagList'
 import { CourseSearchProvider } from '@/modules/CourseSearch/context/CourseSearch'
-import { useCourseSearch } from '@/modules/CourseSearch/hooks/useCourseSearch'
+import { useCourseSearchPage } from '@/modules/CourseSearch/hooks/useCourseSearchPage'
 import { Container, Stack, TitleStack, StickyStack } from '@/modules/CourseSearch/styles'
 
 function CourseSearchPage() {
-  const { openFilterBar, setOpenFilterBar, onOpen } = useCourseSearch()
+  const { openFilterBar, setOpenFilterBar, onOpen } = useCourseSearchPage()
 
   return (
     <Container>

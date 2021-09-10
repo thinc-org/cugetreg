@@ -5,7 +5,7 @@ on: pull_request
 permissions:
   contents: write
   packages: read
-  pull-requests: read
+  pull-requests: write
   repository-projects: read
 
 jobs:

@@ -52,40 +52,6 @@ export function App({ Component, pageProps, forceDark, router }: AppProps) {
             </ErrorBoundary>
           </Container>
           <Footer />
-          {/* TODO: refactor the snackbar */}
-          <Snackbar
-            anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-            onClose={handleClose}
-            autoHideDuration={3000}
-            open={snackbar.open}
-            style={{ top: '60px' }}
-          >
-            <ToastAlert
-              severity={snackbar.messageType}
-              action={
-                snackbar.action ? (
-                  <Analytics elementName={SNACKBAR_BUTTON}>
-                    {({ log }) => (
-                      <Button
-                        size="small"
-                        color="inherit"
-                        onClick={() => {
-                          log(null, snackbar.message)
-                          close()
-                          disclosureValue.onOpen()
-                        }}
-                      >
-                        {snackbar.message}
-                      </Button>
-                    )}
-                  </Analytics>
-                ) : null
-              }
-            >
-              {snackbar.message}
-            </ToastAlert>
-          </Snackbar>
-          {/* END OF TODO */}
           <ShoppingCartModal />
         </TrackPageChange>
       </AppProvider>

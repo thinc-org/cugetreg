@@ -41,31 +41,10 @@ jobs:
       - name: Collect test coverage
         run: yarn test:ci
 
-      - name: Set branch name
-        id: vars
-        run: echo ::set-output name=branch_name::${GITHUB_REF#refs/*/}
-
-      - name: Archive code coverage results
-        if: github.event_name == 'push'
-        uses: actions/upload-artifact@v2
-        with:
-          name: code-coverage-report-${{ steps.vars.outputs.branch_name }}
-          path: report.json
-
-      - name: Download a single artifact
-        if: github.event_name == 'pull_request'
-        continue-on-error: true
-        uses: actions/download-artifact@v2
-        with:
-          name: code-coverage-report-${{ github.base_ref }}
-          path: base-coverage
-
       - name: Extract code coverage
-        if: github.event_name == 'pull_request'
         uses: ArtiomTr/jest-coverage-report-action@v2.0-rc.4
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           package-manager: yarn
           annotations: failed-tests
           skip-step: all
-          base-coverage-file: ./base-coverage/report.json

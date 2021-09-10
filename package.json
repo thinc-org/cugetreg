@@ -111,7 +111,15 @@
   },
   "size-limit": [
     {
-      "path": ".next/static/chunks/pages/_app*.js"
+      "name": "Global Critical CSS",
+      "path": ".next/static/css/*.css"
+    },
+    {
+      "name": "First Load JS (shared by all pages)",
+      "path": [
+        ".next/static/chunks/*.js",
+        ".next/static/runtime/*.js"
+      ]
     }
   ]
 }

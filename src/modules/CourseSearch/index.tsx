@@ -9,9 +9,10 @@ import { FilterSection } from '@/modules/CourseSearch/components/FilterSection'
 import { SearchField } from '@/modules/CourseSearch/components/SearchField'
 import { SelectedCoursesButton } from '@/modules/CourseSearch/components/SelectedCoursesButton'
 import { NoTagListLayout, TagList } from '@/modules/CourseSearch/components/TagList'
-import { CourseSearchProvider } from '@/modules/CourseSearch/context/CourseSearch'
-import { useCourseSearchPage } from '@/modules/CourseSearch/hooks/useCourseSearchPage'
 import { Container, Stack, TitleStack, StickyStack } from '@/modules/CourseSearch/styles'
+
+import { CourseSearchProvider } from './context/CourseSearch'
+import { useCourseSearchPage } from './hooks/useCourseSearchPage'
 
 function CourseSearchPage() {
   const { openFilterBar, setOpenFilterBar, onOpen } = useCourseSearchPage()

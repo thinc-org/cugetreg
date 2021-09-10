@@ -1,9 +1,7 @@
 import { ThemeProvider } from '@material-ui/core'
 import { render } from '@testing-library/react'
 import React from 'react'
-import TestRenderer from 'react-test-renderer'
 
-import { mockAndShallowSpy } from '@/common/testing/mockAndShallowSpy'
 import { lightTheme } from '@/configs/theme'
 
 describe('CourseSearchPage', () => {

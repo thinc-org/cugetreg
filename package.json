@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "test": "jest",
-    "test:ci": "(yarn check --integrity || yarn --fronzen-lockfile) && jest --ci --coverage --testLocationInResults --json --outputFile=\"report.json\"",
+    "test:ci": "jest --ci --coverage --testLocationInResults --json --outputFile=\"report.json\"",
     "build": "next build",
     "start": "next start",
     "export": "yarn build && yarn next export",

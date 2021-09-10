@@ -59,14 +59,17 @@ jobs:
         if: steps.npm-cache.outputs.cache-hit != 'true'
         run: yarn --fronzen-lockfile
 
+      - name: Collect coverage
+        run: yarn test:ci
+
       - name: Extract code coverage
         uses: ArtiomTr/jest-coverage-report-action@v2.0-rc.4
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           package-manager: yarn
           annotations: failed-tests
-          skip-step: install
           test-script: yarn test:ci
+          coverage-file: ./report.json
 
   build:
     needs: [install-depedencies]

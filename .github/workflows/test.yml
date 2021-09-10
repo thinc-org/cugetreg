@@ -22,6 +22,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           checkName: install-depedencies
+          ref: ${{ github.pull_request.head.sha }}
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1

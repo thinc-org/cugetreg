@@ -11,7 +11,8 @@
     "export": "yarn build && yarn next export",
     "ci": "yarn && yarn export && yarn build-storybook && mv storybook-static out/storybook",
     "storybook": "start-storybook -s ./public -p 6006",
-    "build-storybook": "build-storybook -s ./public"
+    "build-storybook": "build-storybook -s ./public",
+    "size": "size-limit"
   },
   "dependencies": {
     "@apollo/client": "^3.3.7",
@@ -58,6 +59,7 @@
   "devDependencies": {
     "@babel/core": "^7.12.10",
     "@babel/plugin-proposal-decorators": "^7.12.13",
+    "@size-limit/preset-app": "^5.0.3",
     "@storybook/addon-actions": "^6.1.15",
     "@storybook/addon-essentials": "^6.1.15",
     "@storybook/addon-jest": "^6.3.6",
@@ -92,6 +94,7 @@
     "lint-staged": "^10.5.3",
     "prettier": "^2.2.1",
     "react-test-renderer": "^17.0.2",
+    "size-limit": "^5.0.3",
     "storybook-addon-next-router": "^2.0.4",
     "typescript": "^4.1.3"
   },
@@ -105,5 +108,10 @@
       "yarn prettier --write",
       "yarn eslint --fix"
     ]
-  }
+  },
+  "size-limit": [
+    {
+      "path": ".next/static/chunks/pages/_app.js"
+    }
+  ]
 }

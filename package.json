@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "test": "jest",
-    "test:ci": "jest --ci --coverage --testLocationInResults --json --outputFile=\"report.json\"",
+    "test:ci": "yarn && jest --ci --coverage --testLocationInResults --json --outputFile=\"report.json\"",
     "build": "next build",
     "start": "next start",
     "export": "yarn build && yarn next export",

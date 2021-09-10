@@ -1,9 +1,6 @@
 name: Run test coverage
 
-on:
-  pull_request:
-  push:
-    branches: [beta, dev, master]
+on: pull_request
 
 jobs:
   test:
@@ -16,7 +13,6 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Wait for install depedencies
-        if: github.event_name == 'pull_request'
         uses: tomchv/wait-my-workflow@v1.1.0
         id: wait-build
         with:
@@ -41,13 +37,11 @@ jobs:
         if: steps.npm-cache.outputs.cache-hit != 'true'
         run: yarn --fronzen-lockfile
 
-      - name: Collect test coverage
-        run: yarn test:ci
-
       - name: Extract code coverage
         uses: ArtiomTr/jest-coverage-report-action@v2.0-rc.4
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           package-manager: yarn
           annotations: failed-tests
-          skip-step: all
+          skip-step: install
+          test-script: yarn test:ci

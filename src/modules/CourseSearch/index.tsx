@@ -14,7 +14,7 @@ import { Container, Stack, TitleStack, StickyStack } from '@/modules/CourseSearc
 import { CourseSearchProvider } from './context/CourseSearch'
 import { useCourseSearchPage } from './hooks/useCourseSearchPage'
 
-function CourseSearchPage() {
+export function CourseSearchPage() {
   const { openFilterBar, setOpenFilterBar, onOpen } = useCourseSearchPage()
 
   return (

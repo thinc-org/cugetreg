@@ -22,6 +22,7 @@ describe('Chip', () => {
 
     expect(wrapper.find(Chip)).toBeDefined()
     expect(wrapper.find(Chip).prop('variant')).not.toBeDefined()
+    expect(wrapper).toMatchSnapshot()
   })
 
   it.each`
@@ -37,5 +38,6 @@ describe('Chip', () => {
 
     expect(wrapper.find(Chip)).toBeDefined()
     expect(wrapper.find(Chip).prop('variant')).toEqual('outlined')
+    expect(wrapper).toMatchSnapshot()
   })
 })

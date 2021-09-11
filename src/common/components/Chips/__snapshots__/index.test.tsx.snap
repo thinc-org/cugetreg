@@ -1,0 +1,82 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Chip should return chips with filled color, FR 1`] = `
+<ForwardRef(Chip)
+  color="blueFilled"
+  label="วันศุกร์"
+/>
+`;
+
+exports[`Chip should return chips with filled color, MO 1`] = `
+<ForwardRef(Chip)
+  color="yellowFilled"
+  label="วันจันทร์"
+/>
+`;
+
+exports[`Chip should return chips with filled color, SA 1`] = `
+<ForwardRef(Chip)
+  color="purpleFilled"
+  label="วันเสาร์"
+/>
+`;
+
+exports[`Chip should return chips with filled color, SU 1`] = `
+<ForwardRef(Chip)
+  color="redFilled"
+  label="วันอาทิตย์"
+/>
+`;
+
+exports[`Chip should return chips with filled color, TH 1`] = `
+<ForwardRef(Chip)
+  color="orangeFilled"
+  label="วันพฤหัสบดี"
+/>
+`;
+
+exports[`Chip should return chips with filled color, TU 1`] = `
+<ForwardRef(Chip)
+  color="pinkFilled"
+  label="วันอังคาร"
+/>
+`;
+
+exports[`Chip should return chips with filled color, WE 1`] = `
+<ForwardRef(Chip)
+  color="greenFilled"
+  label="วันพุธ"
+/>
+`;
+
+exports[`Chip should return chips with outlined color, HU 1`] = `
+<ForwardRef(Chip)
+  color="pinkOutlined"
+  label="หมวดมนุษย์"
+  variant="outlined"
+/>
+`;
+
+exports[`Chip should return chips with outlined color, IN 1`] = `
+<ForwardRef(Chip)
+  color="purpleOutlined"
+  label="หมวดสหฯ"
+  variant="outlined"
+/>
+`;
+
+exports[`Chip should return chips with outlined color, SC 1`] = `
+<ForwardRef(Chip)
+  color="yellowOutlined"
+  label="หมวดวิทย์"
+  variant="outlined"
+/>
+`;
+
+exports[`Chip should return chips with outlined color, SO 1`] = `
+<ForwardRef(Chip)
+  color="greenOutlined"
+  label="หมวดสังคม"
+  variant="outlined"
+/>
+`;

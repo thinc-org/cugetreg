@@ -15,7 +15,7 @@ import { CourseSearchProvider } from './context/CourseSearch'
 import { useCourseSearchPage } from './hooks/useCourseSearchPage'
 
 export function CourseSearchPage() {
-  const { openFilterBar, setOpenFilterBar, onOpen } = useCourseSearchPage()
+  const { openFilterBar, toggleFilterBar, onOpen, handleCloseFilterBar } = useCourseSearchPage()
 
   return (
     <Container>
@@ -32,11 +32,7 @@ export function CourseSearchPage() {
         <Stack width="100%" spacing={2} direction="row">
           <SearchField />
           <Analytics elementName={FILTER_BUTTON}>
-            <FilterIconButton
-              onClick={() => {
-                setOpenFilterBar((open) => !open)
-              }}
-            />
+            <FilterIconButton onClick={toggleFilterBar} />
           </Analytics>
           <Hidden mdDown>
             <Analytics elementName={SELECTED_COURSES_BUTTON}>
@@ -49,7 +45,7 @@ export function CourseSearchPage() {
       <NoTagListLayout />
       <Stack spacing={3} direction="row">
         <CourseList />
-        <FilterSection open={openFilterBar} setOpen={setOpenFilterBar} />
+        <FilterSection open={openFilterBar} handleClose={handleCloseFilterBar} />
       </Stack>
     </Container>
   )

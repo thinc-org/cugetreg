@@ -41,8 +41,7 @@ export function useFilterBar<TagValue extends GeneralChipKey = GeneralChipKey>(
   )
 
   const checkboxes: EnhancedCheckBoxProps[] = useMemo(() => {
-    return initCheckboxes.map(({ value, label, ...rest }) => ({
-      ...rest,
+    return initCheckboxes.map(({ value, label }) => ({
       label,
       value,
       name: label,

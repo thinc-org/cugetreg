@@ -19,7 +19,7 @@ describe('FilterSection', () => {
     },
   }))
   jest.doMock('@material-ui/core/useMediaQuery', () => mockUseMediaQuery)
-  jest.doMock('./hooks', () => ({ useFilterBar: mockUseFilterBar }))
+  jest.doMock('./hooks/useFilterBar', () => ({ useFilterBar: mockUseFilterBar }))
   jest.doMock('../TagList', () => ({ useHasTags: mockUseHasTags }))
   jest.doMock('@emotion/react', () => ({ ...jest.requireActual('@emotion/react'), useTheme: mockUseTheme }))
 

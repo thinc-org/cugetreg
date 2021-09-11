@@ -4,7 +4,9 @@ import { DayChipKey, GenEdChipKey, GeneralChipKey } from '@/common/components/Ch
 import { useSearchCourseQueryParams } from '@/modules/CourseSearch/hooks/useSearchCourseQueryParams'
 import { SearchCourseVars } from '@/services/apollo/query/searchCourse'
 
-import { EnhancedCheckBoxProps } from '../CheckboxGroup'
+import { EnhancedCheckBoxProps } from '../../../CheckboxGroup'
+import { addTag } from '../../utils/addTag'
+import { removeTag } from '../../utils/removeTag'
 
 export interface CreateCheckbox<Value> {
   label: string
@@ -16,16 +18,6 @@ export function useFilterBar<TagValue extends GeneralChipKey = GeneralChipKey>(
   type?: keyof Pick<SearchCourseVars['filter'], 'genEdTypes' | 'dayOfWeeks'>
 ) {
   const { setFilter, searchCourseQueryParams } = useSearchCourseQueryParams()
-
-  const addTag = (array: string[] | undefined, tag: string) => {
-    if (array) return [...array, tag]
-    return [tag]
-  }
-
-  const removeTag = (array: string[] | undefined, tag: string) => {
-    if (array) return array.filter((value) => value !== tag)
-    return [tag]
-  }
 
   const onCheckboxChange = useCallback(
     (tag: TagValue) => (event: React.ChangeEvent<HTMLInputElement>) => {

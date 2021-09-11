@@ -15,7 +15,7 @@ import { Button, StickyPaper, Box } from '@/modules/CourseSearch/components/Filt
 import { FilterSectionProps } from '@/modules/CourseSearch/components/FilterSection/types'
 
 import { useHasTags } from '../TagList'
-import { useFilterBar } from './hooks'
+import { useFilterBar } from './hooks/useFilterBar'
 
 export const FilterSection: React.FC<FilterSectionProps> = ({ open, handleClose }) => {
   const { checkboxes: genEdCheckboxes } = useFilterBar<GenEdChipKey>(createGenEdCheckboxes, 'genEdTypes')

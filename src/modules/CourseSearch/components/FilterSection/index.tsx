@@ -15,16 +15,12 @@ import { Button, StickyPaper, Box } from '@/modules/CourseSearch/components/Filt
 import { FilterSectionProps } from '@/modules/CourseSearch/components/FilterSection/types'
 import { useHasTags } from '@/modules/CourseSearch/components/TagList'
 
-export const FilterSection: React.FC<FilterSectionProps> = ({ open, setOpen }) => {
+export const FilterSection: React.FC<FilterSectionProps> = ({ open, handleClose }) => {
   const { checkboxes: genEdCheckboxes } = useFilterBar<GenEdChipKey>(createGenEdCheckboxes, 'genEdTypes')
   const { checkboxes: dayOfWeekCheckboxes } = useFilterBar<DayChipKey>(createDayOfWeekCheckboxes, 'dayOfWeeks')
   // const { checkboxes: specialCheckboxes } = useFilterBar(createSpecialCheckboxes)
 
   const hasTags = useHasTags()
-
-  const handleClose = () => {
-    setOpen(false)
-  }
 
   const theme = useTheme()
   const match = useMediaQuery(theme.breakpoints.up('sm'))

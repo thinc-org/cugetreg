@@ -7,5 +7,13 @@ export const useCourseSearchPage = () => {
 
   const { onOpen } = useContext(ShoppingCartModalContext)
 
-  return { openFilterBar, setOpenFilterBar, onOpen }
+  const toggleFilterBar = () => {
+    setOpenFilterBar((open) => !open)
+  }
+
+  const handleCloseFilterBar = () => {
+    setOpenFilterBar(false)
+  }
+
+  return { openFilterBar, toggleFilterBar, onOpen, handleCloseFilterBar }
 }

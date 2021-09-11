@@ -1,5 +1,6 @@
 import { useTheme } from '@emotion/react'
-import { DialogContent, Stack, useMediaQuery } from '@material-ui/core'
+import { DialogContent, Stack } from '@material-ui/core'
+import useMediaQuery from '@material-ui/core/useMediaQuery'
 
 import { DayChipKey, GenEdChipKey } from '@/common/components/Chips/config'
 import { ResponsiveDialog } from '@/common/components/ResponsiveDialog'
@@ -10,10 +11,11 @@ import {
   createGenEdCheckboxes,
   createDayOfWeekCheckboxes, // createSpecialCheckboxes,
 } from '@/modules/CourseSearch/components/FilterSection/constants'
-import { useFilterBar } from '@/modules/CourseSearch/components/FilterSection/hooks'
 import { Button, StickyPaper, Box } from '@/modules/CourseSearch/components/FilterSection/styles'
 import { FilterSectionProps } from '@/modules/CourseSearch/components/FilterSection/types'
-import { useHasTags } from '@/modules/CourseSearch/components/TagList'
+
+import { useHasTags } from '../TagList'
+import { useFilterBar } from './hooks'
 
 export const FilterSection: React.FC<FilterSectionProps> = ({ open, handleClose }) => {
   const { checkboxes: genEdCheckboxes } = useFilterBar<GenEdChipKey>(createGenEdCheckboxes, 'genEdTypes')

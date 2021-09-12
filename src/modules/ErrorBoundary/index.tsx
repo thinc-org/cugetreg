@@ -1,20 +1,20 @@
-import { Card, Grid, Typography } from '@material-ui/core'
+import { Grid, Typography } from '@material-ui/core'
 import React from 'react'
 
 import { collectErrorLog, sessionId } from '@/services/logging'
 import { gapiStore } from '@/store/googleApiStore'
 
 export class ErrorBoundary extends React.Component<{}, { hasError: boolean }> {
-  constructor(props: any) {
+  constructor(props: {} | Readonly<{}>) {
     super(props)
     this.state = { hasError: false }
   }
 
-  componentDidCatch(error: any, info: any) {
+  componentDidCatch(error: unknown) {
     collectErrorLog('React error boundary', error)
   }
 
-  static getDerivedStateFromError(error: any) {
+  static getDerivedStateFromError() {
     return { hasError: true }
   }
 

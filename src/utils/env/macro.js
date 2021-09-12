@@ -1,4 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 const { createMacro } = require('babel-plugin-macros')
 
 module.exports = createMacro(envMacros)

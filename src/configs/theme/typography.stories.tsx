@@ -31,7 +31,6 @@ const TypographyPreview = withTheme(({ variant, theme }: { variant: TypographyVa
     if (match) {
       const rem = parseFloat(match[1])
       // for some reasons, htmlFontSize is missing from the type definition
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const px = rem * (theme.typography as any).htmlFontSize
       fontSize = `${px}px`
     }

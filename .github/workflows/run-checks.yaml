@@ -58,6 +58,16 @@ jobs:
         if: steps.npm-cache.outputs.cache-hit != 'true'
         run: yarn --fronzen-lockfile
 
+      - name: Run linter
+        run: yarn lint:ci
+
+      - name: Annotate Code Linting Results
+        uses: ataylorme/eslint-annotate-action@1.2.0
+        if: always()
+        with:
+          repo-token: '${{ secrets.GITHUB_TOKEN }}'
+          report-json: 'eslint_report.json'
+
       - name: Collect coverage
         run: yarn test:ci
 

@@ -6,7 +6,8 @@ import { gapiStore } from '@/store/googleApiStore'
 import { googleauth_clientid } from '@/utils/env'
 
 export function loadGapi() {
-  if (typeof window === 'undefined') return // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  if (typeof window === 'undefined') return
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ;(window as any).onGapiLoad = () => {
     handleGapiLoad()
   }

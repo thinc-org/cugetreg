@@ -6,6 +6,7 @@
     "dev": "next dev",
     "test": "jest",
     "test:ci": "jest --ci --coverage --testLocationInResults --json --outputFile=\"report.json\"",
+    "lint:ci": "eslint --output-file eslint_report.json --format json src",
     "build": "next build",
     "start": "next start",
     "export": "yarn build && yarn next export",

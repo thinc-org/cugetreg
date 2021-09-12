@@ -7,6 +7,7 @@ permissions:
   packages: read
   pull-requests: write
   repository-projects: read
+  checks: write
 
 jobs:
   install-depedencies:

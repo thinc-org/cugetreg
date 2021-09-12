@@ -83,3 +83,51 @@ exports[`FilterSection Should matched snapshot correctly when matchSmallScreen=t
   </ForwardRef(Stack)>
 </Styled(Component)>
 `;
+
+exports[`FilterSection Should render CheckboxGroup of GenEds correctly when when matchSmallScreen=false and isExpandFilter=false 1`] = `
+<CheckboxGroup
+  checkboxes={Array []}
+  log={[Function]}
+  title="หมวดหมู่ GenEd"
+/>
+`;
+
+exports[`FilterSection Should render CheckboxGroup of GenEds correctly when when matchSmallScreen=false and isExpandFilter=true 1`] = `
+<CheckboxGroup
+  checkboxes={Array []}
+  log={[Function]}
+  title="หมวดหมู่ GenEd"
+/>
+`;
+
+exports[`FilterSection Should render CheckboxGroup of GenEds correctly when when matchSmallScreen=true and isExpandFilter=true 1`] = `
+<CheckboxGroup
+  checkboxes={Array []}
+  log={[Function]}
+  title="หมวดหมู่ GenEd"
+/>
+`;
+
+exports[`FilterSection Should render CheckboxGroup of days correctly when matchSmallScreen=false and isExpandFilter=false 1`] = `
+<CheckboxGroup
+  checkboxes={Array []}
+  log={[Function]}
+  title="วันในสัปดาห์"
+/>
+`;
+
+exports[`FilterSection Should render CheckboxGroup of days correctly when matchSmallScreen=false and isExpandFilter=true 1`] = `
+<CheckboxGroup
+  checkboxes={Array []}
+  log={[Function]}
+  title="วันในสัปดาห์"
+/>
+`;
+
+exports[`FilterSection Should render CheckboxGroup of days correctly when matchSmallScreen=true and isExpandFilter=true 1`] = `
+<CheckboxGroup
+  checkboxes={Array []}
+  log={[Function]}
+  title="วันในสัปดาห์"
+/>
+`;

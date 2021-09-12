@@ -2,6 +2,8 @@ import { DayOfWeekEnum, GenEdTypeEnum } from '@thinc-org/chula-courses'
 import { shallow } from 'enzyme'
 
 import { ResponsiveDialog } from '@/common/components/ResponsiveDialog'
+import { Analytics } from '@/common/context/Analytics/components/Analytics'
+import { DAY_FILTER, GENED_FILTER } from '@/common/context/Analytics/constants'
 import { Button, StickyPaper } from '@/modules/CourseSearch/components/FilterSection/styles'
 
 describe('FilterSection', () => {
@@ -39,7 +41,9 @@ describe('FilterSection', () => {
       const { FilterSection } = await import('.')
       const mockHandleClose = jest.fn()
       mockUseMediaQuery.mockReturnValue(matchSmallScreen)
+
       const wrapper = shallow(<FilterSection open={isExpandFilter} handleClose={mockHandleClose} />)
+
       expect(mockUseMediaQuery).toBeCalledWith(MOCK_QUERY)
       expect(mockUseTheme).toBeCalledTimes(1)
       expect(mockUseHasTags).toBeCalledTimes(1)
@@ -112,6 +116,46 @@ describe('FilterSection', () => {
       if (matchSmallScreen && isExpandFilter) {
         expect(wrapper.find(StickyPaper).prop('hasTags')).toBe(MOCK_HASTAG)
       }
+      expect(wrapper).toMatchSnapshot()
+    }
+  )
+
+  it.each`
+    matchSmallScreen | isExpandFilter
+    ${true}          | ${true}
+    ${false}         | ${true}
+    ${false}         | ${false}
+  `(
+    'Should render CheckboxGroup of GenEds correctly when when matchSmallScreen=$matchSmallScreen and isExpandFilter=$isExpandFilter',
+    async ({ matchSmallScreen, isExpandFilter }) => {
+      const { FilterSection } = await import('.')
+      const mockHandleClose = jest.fn()
+      mockUseMediaQuery.mockReturnValue(matchSmallScreen)
+
+      const wrapper = shallow(<FilterSection open={isExpandFilter} handleClose={mockHandleClose} />)
+        .find(Analytics)
+        .findWhere((n) => n.prop('elementName') === GENED_FILTER)
+        .renderProp('children')({ log: () => {} })
+      expect(wrapper).toMatchSnapshot()
+    }
+  )
+
+  it.each`
+    matchSmallScreen | isExpandFilter
+    ${true}          | ${true}
+    ${false}         | ${true}
+    ${false}         | ${false}
+  `(
+    'Should render CheckboxGroup of days correctly when matchSmallScreen=$matchSmallScreen and isExpandFilter=$isExpandFilter',
+    async ({ matchSmallScreen, isExpandFilter }) => {
+      const { FilterSection } = await import('.')
+      const mockHandleClose = jest.fn()
+      mockUseMediaQuery.mockReturnValue(matchSmallScreen)
+
+      const wrapper = shallow(<FilterSection open={isExpandFilter} handleClose={mockHandleClose} />)
+        .find(Analytics)
+        .findWhere((n) => n.prop('elementName') === DAY_FILTER)
+        .renderProp('children')({ log: () => {} })
       expect(wrapper).toMatchSnapshot()
     }
   )

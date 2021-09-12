@@ -10,7 +10,7 @@ export default {
   component: TagList,
 } as Meta<StoryProps>
 
-export const Default: Story<StoryProps> = (args) => {
+export const Default: Story<StoryProps> = () => {
   return <TagList />
 }
 

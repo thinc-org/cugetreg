@@ -71,7 +71,7 @@ export function collectLogEvent(event: LogEvent) {
   if (backlogLog.length >= 5) sendCollectedLog()
 }
 
-export function collectErrorLog(msg: string, err: any) {
+export function collectErrorLog(msg: string, err: unknown) {
   let obj = err
   if (obj instanceof Error) {
     obj = {

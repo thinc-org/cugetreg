@@ -88,8 +88,8 @@ export async function getServerSideProps(
         items,
       },
     }
-  } catch (e: any) {
-    if (isApolloError(e)) {
+  } catch (e: unknown) {
+    if (isApolloError(e as Error)) {
       return {
         notFound: true,
       }

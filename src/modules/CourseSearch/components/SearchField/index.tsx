@@ -53,6 +53,7 @@ export const SearchField: React.FC<SeachFieldProp> = () => {
     return () => {
       clearTimeout(timeoutRef.current)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [input])
 
   const handleChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {

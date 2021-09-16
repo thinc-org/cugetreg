@@ -36,16 +36,14 @@ describe('useFilterBar', () => {
     { label: 'label', value: 'value' },
     { label: 'label2', value: 'value2' },
   ]
+
   it.each`
     type            | checked  | initCheckboxes     | expectedCheckboxes
     ${'genEdTypes'} | ${false} | ${[]}              | ${[]}
     ${'genEdTypes'} | ${false} | ${INIT_CHECKBOXES} | ${EXPECTED_CHECKBOXES}
     ${'genEdTypes'} | ${true}  | ${INIT_CHECKBOXES} | ${EXPECTED_CHECKBOXES}
-    ${'dayOfWeeks'} | ${false} | ${INIT_CHECKBOXES} | ${EXPECTED_CHECKBOXES}
-    ${'dayOfWeeks'} | ${true}  | ${INIT_CHECKBOXES} | ${EXPECTED_CHECKBOXES}
-    ${undefined}    | ${false} | ${INIT_CHECKBOXES} | ${EXPECTED_CHECKBOXES}
   `(
-    'Should setFilter correctly when type is $type, check is $checked and initCheckboxes is $initCheckboxes',
+    'Should setFilter correctly when type is genEdTypes, check is $checked and initCheckboxes is $initCheckboxes',
     async ({ type, initCheckboxes, checked, expectedCheckboxes }) => {
       const { useFilterBar } = await import('.')
       const { result } = renderHook(() => useFilterBar<any>(initCheckboxes, type))
@@ -53,24 +51,57 @@ describe('useFilterBar', () => {
         act(() => {
           result.current.checkboxes[0].onChange!({ target: { checked } } as React.ChangeEvent<HTMLInputElement>)
         })
-        switch (type) {
-          case 'genEdTypes':
-            expect(mockSetFilter).toBeCalledTimes(1)
-            expect(mockSetFilter).toBeCalledWith({
-              ...MOCK_SEARCH_QEURY_PARAM.filter,
-              genEdTypes: checked ? MOCK_ADDED_TAG : MOCK_REMOVED_TAG,
-            })
-            break
-          case 'dayOfWeeks':
-            expect(mockSetFilter).toBeCalledTimes(1)
-            expect(mockSetFilter).toBeCalledWith({
-              ...MOCK_SEARCH_QEURY_PARAM.filter,
-              dayOfWeeks: checked ? MOCK_ADDED_TAG : MOCK_REMOVED_TAG,
-            })
-            break
-          default:
-            expect(mockSetFilter).not.toBeCalled()
-        }
+        expect(mockSetFilter).toBeCalledTimes(1)
+        expect(mockSetFilter).toBeCalledWith({
+          ...MOCK_SEARCH_QEURY_PARAM.filter,
+          genEdTypes: checked ? MOCK_ADDED_TAG : MOCK_REMOVED_TAG,
+        })
+      }
+      expect(result.current.checkboxes).toEqual(expectedCheckboxes)
+    }
+  )
+
+  it.each`
+    type            | checked  | initCheckboxes     | expectedCheckboxes
+    ${'dayOfWeeks'} | ${false} | ${[]}              | ${[]}
+    ${'dayOfWeeks'} | ${false} | ${INIT_CHECKBOXES} | ${EXPECTED_CHECKBOXES}
+    ${'dayOfWeeks'} | ${true}  | ${INIT_CHECKBOXES} | ${EXPECTED_CHECKBOXES}
+  `(
+    'Should setFilter correctly when type is dayOfWeeks, check is $checked and initCheckboxes is $initCheckboxes',
+    async ({ type, initCheckboxes, checked, expectedCheckboxes }) => {
+      const { useFilterBar } = await import('.')
+      const { result } = renderHook(() => useFilterBar<any>(initCheckboxes, type))
+      if (initCheckboxes.length !== 0) {
+        act(() => {
+          result.current.checkboxes[0].onChange!({ target: { checked } } as React.ChangeEvent<HTMLInputElement>)
+        })
+
+        expect(mockSetFilter).toBeCalledTimes(1)
+        expect(mockSetFilter).toBeCalledWith({
+          ...MOCK_SEARCH_QEURY_PARAM.filter,
+          dayOfWeeks: checked ? MOCK_ADDED_TAG : MOCK_REMOVED_TAG,
+        })
+      }
+      expect(result.current.checkboxes).toEqual(expectedCheckboxes)
+    }
+  )
+
+  it.each`
+    type         | checked  | initCheckboxes     | expectedCheckboxes
+    ${undefined} | ${false} | ${[]}              | ${[]}
+    ${undefined} | ${false} | ${INIT_CHECKBOXES} | ${EXPECTED_CHECKBOXES}
+    ${undefined} | ${true}  | ${INIT_CHECKBOXES} | ${EXPECTED_CHECKBOXES}
+  `(
+    'Should setFilter correctly when type is undefined, check is $checked and initCheckboxes is $initCheckboxes',
+    async ({ type, initCheckboxes, checked, expectedCheckboxes }) => {
+      const { useFilterBar } = await import('.')
+      const { result } = renderHook(() => useFilterBar<any>(initCheckboxes, type))
+      if (initCheckboxes.length !== 0) {
+        act(() => {
+          result.current.checkboxes[0].onChange!({ target: { checked } } as React.ChangeEvent<HTMLInputElement>)
+        })
+
+        expect(mockSetFilter).not.toBeCalled()
       }
       expect(result.current.checkboxes).toEqual(expectedCheckboxes)
     }

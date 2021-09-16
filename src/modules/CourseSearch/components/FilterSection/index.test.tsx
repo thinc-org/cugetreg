@@ -7,19 +7,21 @@ import { DAY_FILTER, GENED_FILTER } from '@/common/context/Analytics/constants'
 import { Button, StickyPaper } from '@/modules/CourseSearch/components/FilterSection/styles'
 
 describe('FilterSection', () => {
+  const MOCK_HASTAG = true
+  const MOCK_QUERY = 'query'
+
   const mockUseMediaQuery = jest.fn()
   const mockUseFilterBar = jest.fn(() => ({
     checkboxes: [],
   }))
-  const MOCK_HASTAG = true
   const mockUseHasTags = jest.fn(() => MOCK_HASTAG)
-
-  const MOCK_QUERY = 'query'
+  const mockHandleClose = jest.fn()
   const mockUseTheme = jest.fn(() => ({
     breakpoints: {
       up: jest.fn(() => MOCK_QUERY),
     },
   }))
+
   jest.doMock('@material-ui/core/useMediaQuery', () => mockUseMediaQuery)
   jest.doMock('./hooks/useFilterBar', () => ({ useFilterBar: mockUseFilterBar }))
   jest.doMock('../TagList', () => ({ useHasTags: mockUseHasTags }))
@@ -129,7 +131,6 @@ describe('FilterSection', () => {
     'Should render CheckboxGroup of GenEds correctly when when matchSmallScreen=$matchSmallScreen and isExpandFilter=$isExpandFilter',
     async ({ matchSmallScreen, isExpandFilter }) => {
       const { FilterSection } = await import('.')
-      const mockHandleClose = jest.fn()
       mockUseMediaQuery.mockReturnValue(matchSmallScreen)
 
       const wrapper = shallow(<FilterSection open={isExpandFilter} handleClose={mockHandleClose} />)
@@ -149,7 +150,6 @@ describe('FilterSection', () => {
     'Should render CheckboxGroup of days correctly when matchSmallScreen=$matchSmallScreen and isExpandFilter=$isExpandFilter',
     async ({ matchSmallScreen, isExpandFilter }) => {
       const { FilterSection } = await import('.')
-      const mockHandleClose = jest.fn()
       mockUseMediaQuery.mockReturnValue(matchSmallScreen)
 
       const wrapper = shallow(<FilterSection open={isExpandFilter} handleClose={mockHandleClose} />)

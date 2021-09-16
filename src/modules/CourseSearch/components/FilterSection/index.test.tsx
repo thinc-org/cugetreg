@@ -160,5 +160,3 @@ describe('FilterSection', () => {
     }
   )
 })
-
-shallow

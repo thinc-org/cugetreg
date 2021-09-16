@@ -1,14 +1,16 @@
 import { renderHook, act } from '@testing-library/react-hooks'
+import { stubFalse } from 'lodash'
 
 describe('useCourseSearchProvider', () => {
   const mockQuery = { text: 'text' }
   const mockQueryParam = { param: 'param', filter: { a: 'a' } }
-
   const mockFetchMoreResult = { data: { search: { length: 5 } } }
-  const mockFetchMore = jest.fn(() => mockFetchMoreResult)
-  const mockUseQueryResult = { loading: false, fetchMore: mockFetchMore, variables: { key: 'variables' } }
+
   const mockUseQuery = jest.fn(() => mockUseQueryResult)
   const mockSetIsEmpty = jest.fn()
+  const mockFetchMore = jest.fn(() => mockFetchMoreResult)
+
+  const mockUseQueryResult = { loading: false, fetchMore: mockFetchMore, variables: { key: 'variables' } }
   const mockUseEmptyResult = { isEmpty: false, setIsEmpty: mockSetIsEmpty }
 
   const LIMIT_FETCH_EXPECTED = 15
@@ -77,10 +79,10 @@ describe('useCourseSearchProvider', () => {
   })
 
   it.each`
-    loading | isEmpty
-    ${true} | ${true}
-    ${true} | ${false}
-    ${true} | ${true}
+    loading      | isEmpty
+    ${true}      | ${true}
+    ${true}      | ${false}
+    ${stubFalse} | ${true}
   `(
     'Should not fetch more course if result is empty or currently loading more courses (isEmpty: $isEmpty, loading: $loading)',
     async ({ loading, isEmpty }) => {

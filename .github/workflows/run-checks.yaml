@@ -1,6 +1,10 @@
 name: Run all checks
 
-on: pull_request
+on: 
+  pull_request:
+  push:
+    # branches: [beta, dev, master]
+    branches: [build/light-house]
 
 permissions:
   contents: write
@@ -63,6 +67,7 @@ jobs:
         run: yarn lint:ci
 
       - name: Annotate Code Linting Results
+        if: github.event_name == 'pull_request'
         uses: ataylorme/eslint-annotate-action@1.2.0
         if: always()
         with:
@@ -72,7 +77,25 @@ jobs:
       - name: Collect coverage
         run: yarn test:ci
 
+      - name: Upload coverage to artifact
+        if: github.event_name == 'push'
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ github.ref }}
+          path: ./report.json
+
+      - name: Download coverage of target branch
+        if: github.event_name == 'pull_request'
+        id: download
+        uses: actions/download-artifact@v2
+        with:
+          name: refs/heads/${{ github.base_ref }}
+          path: ./base-report.json
+        continue-on-error: true
+
       - name: Extract code coverage
+        if: github.event_name == 'pull_request'
+        if: steps.download.outcome != 'success'
         uses: ArtiomTr/jest-coverage-report-action@v2.0-rc.4
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -80,6 +103,18 @@ jobs:
           annotations: failed-tests
           test-script: yarn test:ci
           coverage-file: ./report.json
+      
+      - name: Extract code coverage
+        if: github.event_name == 'pull_request'
+        if: steps.download.outcome == 'success'
+        uses: ArtiomTr/jest-coverage-report-action@v2.0-rc.4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          package-manager: yarn
+          annotations: failed-tests
+          test-script: yarn test:ci
+          coverage-file: ./report.json
+          base-coverage-file: ./base-report.json
 
   lighthouse:
     needs: [install-depedencies]

@@ -85,16 +85,23 @@ jobs:
         env:
           GITHUB_REF: ${{ github.ref }}
 
+      - name: Get the current branch name
+        if: github.event_name == 'push'
+        shell: bash
+        run: mv ./report.json ./base-report.json
+        id: current
+        env:
+          GITHUB_REF: ${{ github.ref }}
+
       - name: Upload coverage to artifact
         if: github.event_name == 'push'
         uses: actions/upload-artifact@v2
         with:
           name: ${{ steps.current.outputs.branch }}
-          path: ./report.json
+          path: ./base-report.json
 
       - name: Download coverage of target branch
         if: github.event_name == 'pull_request'
-        id: download
         uses: dawidd6/action-download-artifact@v2
         continue-on-error: true
         with:
@@ -104,20 +111,10 @@ jobs:
           event: push
           name: ${{ github.base_ref }}
           branch: ${{ github.base_ref }}
-          # path: ./base-report.json
+          path: ./base-report.json
 
-      - name: Extract code coverage if no base report
-        if: github.event_name == 'pull_request' && steps.download.outcome != 'success'
-        uses: ArtiomTr/jest-coverage-report-action@v2.0-rc.4
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          package-manager: yarn
-          annotations: failed-tests
-          test-script: yarn test:ci
-          coverage-file: ./report.json
-
-      - name: Extract code coverage if have base report
-        if: github.event_name == 'pull_request' && steps.download.outcome == 'success'
+      - name: Extract code coverage
+        if: github.event_name == 'pull_request'
         uses: ArtiomTr/jest-coverage-report-action@v2.0-rc.4
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}

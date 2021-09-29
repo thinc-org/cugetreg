@@ -4,7 +4,7 @@ on:
   pull_request:
   push:
     # branches: [beta, dev, master]
-    branches: [build/light-house]
+    branches: [experiment-workflow]
 
 permissions:
   contents: write
@@ -77,9 +77,10 @@ jobs:
         run: yarn test:ci
 
       - name: Get the current branch name
+        if: github.event_name == 'push'
         shell: bash
         run: echo "::set-output name=branch::${GITHUB_REF#refs/heads/}"
-        id: myref
+        id: current
         env:
           GITHUB_REF: ${{ github.ref }}
 
@@ -87,7 +88,7 @@ jobs:
         if: github.event_name == 'push'
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ steps.myref.outputs.branch }}
+          name: ${{ steps.current.outputs.branch }}
           path: ./report.json
 
       - name: Download coverage of target branch

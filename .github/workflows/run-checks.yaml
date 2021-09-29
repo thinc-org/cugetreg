@@ -1,6 +1,6 @@
 name: Run all checks
 
-on: 
+on:
   pull_request:
   push:
     # branches: [beta, dev, master]
@@ -67,9 +67,8 @@ jobs:
         run: yarn lint:ci
 
       - name: Annotate Code Linting Results
-        if: github.event_name == 'pull_request'
+        if: github.event_name == 'pull_request' && always()
         uses: ataylorme/eslint-annotate-action@1.2.0
-        if: always()
         with:
           repo-token: '${{ secrets.GITHUB_TOKEN }}'
           report-json: 'eslint_report.json'
@@ -94,8 +93,7 @@ jobs:
         continue-on-error: true
 
       - name: Extract code coverage
-        if: github.event_name == 'pull_request'
-        if: steps.download.outcome != 'success'
+        if: github.event_name == 'pull_request' && steps.download.outcome != 'success'
         uses: ArtiomTr/jest-coverage-report-action@v2.0-rc.4
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -103,10 +101,9 @@ jobs:
           annotations: failed-tests
           test-script: yarn test:ci
           coverage-file: ./report.json
-      
+
       - name: Extract code coverage
-        if: github.event_name == 'pull_request'
-        if: steps.download.outcome == 'success'
+        if: github.event_name == 'pull_request' && steps.download.outcome == 'success'
         uses: ArtiomTr/jest-coverage-report-action@v2.0-rc.4
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}

@@ -77,18 +77,14 @@ jobs:
       - name: Collect coverage
         run: yarn test:ci
 
-      - name: Get the current branch name
+      - name: Rename report to base report
         if: github.event_name == 'push'
-        shell: bash
-        run: echo "::set-output name=branch::${GITHUB_REF#refs/heads/}"
-        id: current
-        env:
-          GITHUB_REF: ${{ github.ref }}
+        run: mv ./report.json ./base-report.json
 
       - name: Get the current branch name
         if: github.event_name == 'push'
         shell: bash
-        run: mv ./report.json ./base-report.json
+        run: echo "::set-output name=branch::${GITHUB_REF#refs/heads/}"
         id: current
         env:
           GITHUB_REF: ${{ github.ref }}

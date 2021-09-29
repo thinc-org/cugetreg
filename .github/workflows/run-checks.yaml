@@ -76,11 +76,18 @@ jobs:
       - name: Collect coverage
         run: yarn test:ci
 
+      - name: Get the current branch name
+        shell: bash
+        run: echo "::set-output name=branch::${GITHUB_REF#refs/heads/}"
+        id: myref
+        env:
+          GITHUB_REF: ${{ github.ref }}
+
       - name: Upload coverage to artifact
         if: github.event_name == 'push'
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ github.ref }}
+          name: ${{ steps.myref.outputs.branch }}
           path: ./report.json
 
       - name: Download coverage of target branch
@@ -88,7 +95,7 @@ jobs:
         id: download
         uses: actions/download-artifact@v2
         with:
-          name: refs/heads/${{ github.base_ref }}
+          name: ${{ github.base_ref }}
           path: ./base-report.json
         continue-on-error: true
 

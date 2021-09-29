@@ -77,10 +77,6 @@ jobs:
       - name: Collect coverage
         run: yarn test:ci
 
-      - name: Rename report to base report
-        if: github.event_name == 'push'
-        run: mv ./report.json ./base-report.json
-
       - name: Get the current branch name
         if: github.event_name == 'push'
         shell: bash
@@ -94,7 +90,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: ${{ steps.current.outputs.branch }}
-          path: ./base-report.json
+          path: ./report.json
 
       - name: Download coverage of target branch
         if: github.event_name == 'pull_request'
@@ -107,7 +103,7 @@ jobs:
           event: push
           name: ${{ github.base_ref }}
           branch: ${{ github.base_ref }}
-          path: ./base-report.json
+          path: base
 
       - name: Extract code coverage
         if: github.event_name == 'pull_request'
@@ -118,7 +114,7 @@ jobs:
           annotations: failed-tests
           test-script: yarn test:ci
           coverage-file: ./report.json
-          base-coverage-file: ./base-report.json
+          base-coverage-file: ./base/report.json
 
   lighthouse:
     needs: [install-depedencies]

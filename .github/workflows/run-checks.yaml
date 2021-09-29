@@ -111,8 +111,6 @@ jobs:
       - name: Build project
         run: yarn build
 
-      - run: sudo npm install -g @lhci/cli@0.8.x
-
-      - run: lhci autorun
+      - run: yarn lhci autorun
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}

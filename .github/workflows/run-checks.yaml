@@ -12,6 +12,7 @@ permissions:
   pull-requests: write
   repository-projects: read
   checks: write
+  repo: read
 
 jobs:
   install-depedencies:
@@ -95,6 +96,7 @@ jobs:
         if: github.event_name == 'pull_request'
         id: download
         uses: dawidd6/action-download-artifact@v2
+        continue-on-error: true
         with:
           github_token: ${{secrets.GITHUB_TOKEN}}
           workflow: run-checks.yml
@@ -102,8 +104,6 @@ jobs:
           event: push
           name: ${{ github.base_ref }}
           path: ./base-report.json
-          check_artifacts: true
-        continue-on-error: true
 
       - name: Extract code coverage if no base report
         if: github.event_name == 'pull_request' && steps.download.outcome != 'success'

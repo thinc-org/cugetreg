@@ -94,10 +94,15 @@ jobs:
       - name: Download coverage of target branch
         if: github.event_name == 'pull_request'
         id: download
-        uses: actions/download-artifact@v2
+        uses: dawidd6/action-download-artifact@v2
         with:
-          name: ${{ github.base_ref }}
-          path: ./base-report.json
+          github_token: ${{secrets.GITHUB_TOKEN}}
+        workflow: run-checks.yml
+        workflow_conclusion: success
+        event: push          
+        name: ${{ github.base_ref }}
+        path: ./base-report.json
+        check_artifacts:  true
         continue-on-error: true
 
       - name: Extract code coverage if no base report

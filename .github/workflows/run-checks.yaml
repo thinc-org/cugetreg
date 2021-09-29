@@ -10,8 +10,9 @@ permissions:
   contents: write
   packages: read
   pull-requests: write
-  repository-projects: write
+  repository-projects: read
   checks: write
+  actions: read
 
 jobs:
   install-depedencies:

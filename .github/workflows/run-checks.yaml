@@ -103,7 +103,7 @@ jobs:
           workflow_conclusion: success
           event: push
           name: ${{ github.base_ref }}
-          path: ./base-report.json
+          # path: ./base-report.json
 
       - name: Extract code coverage if no base report
         if: github.event_name == 'pull_request' && steps.download.outcome != 'success'

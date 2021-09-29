@@ -7,7 +7,9 @@ module.exports = {
             },
             numberOfRuns: 3,
             url: [
-                "http://127.0.0.1:3000/",
+                "http://127.0.0.1:3000/S/schedule",
+                "http://127.0.0.1:3000/S/courses",
+                "http://127.0.0.1:3000/S/courses/2021701",
             ],
             startServerCommand: "yarn start"
         },

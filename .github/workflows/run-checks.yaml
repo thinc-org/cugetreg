@@ -90,6 +90,8 @@ jobs:
     runs-on: ${{ matrix.platform }}
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
@@ -111,6 +113,6 @@ jobs:
 
       - run: sudo npm install -g @lhci/cli@0.8.x
 
-      - run: lhci autorun --collect.startServerCommand="yarn start" --chrome-flags='--ignore-certificate-errors'
+      - run: lhci autorun
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}

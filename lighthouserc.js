@@ -8,7 +8,8 @@ module.exports = {
             numberOfRuns: 3,
             url: [
                 "http://127.0.0.1:3000/",
-            ]
+            ],
+            startServerCommand: "yarn start"
         },
         upload: {
             //     target: "lhci",

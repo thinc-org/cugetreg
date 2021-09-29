@@ -3,8 +3,7 @@ name: Run all checks
 on:
   pull_request:
   push:
-    # branches: [beta, dev, master]
-    branches: [experiment-workflow]
+    branches: [beta, dev, master]
 
 permissions:
   contents: write

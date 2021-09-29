@@ -99,7 +99,7 @@ jobs:
         continue-on-error: true
         with:
           github_token: ${{secrets.GITHUB_TOKEN}}
-          workflow: run-checks.yml
+          workflow: run-checks.yaml
           workflow_conclusion: success
           event: push
           name: ${{ github.base_ref }}

@@ -10,7 +10,7 @@ permissions:
   contents: write
   packages: read
   pull-requests: write
-  repository-projects: push
+  repository-projects: write
   checks: write
 
 jobs:

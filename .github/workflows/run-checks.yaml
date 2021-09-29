@@ -81,7 +81,7 @@ jobs:
           test-script: yarn test:ci
           coverage-file: ./report.json
 
-  build:
+  lighthouse:
     needs: [install-depedencies]
     strategy:
       matrix:

@@ -103,6 +103,7 @@ jobs:
           workflow_conclusion: success
           event: push
           name: ${{ github.base_ref }}
+          branch: ${{ github.base_ref }}
           # path: ./base-report.json
 
       - name: Extract code coverage if no base report

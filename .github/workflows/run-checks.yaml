@@ -20,8 +20,6 @@ jobs:
         node-version: [14.x]
         platform: [ubuntu-latest]
     runs-on: ${{ matrix.platform }}
-    env:
-      LHCI_SERVER_TOKEN: ${{ secrets.LHCI_SERVER_TOKEN }}
     steps:
       - uses: actions/checkout@v2
 
@@ -124,6 +122,8 @@ jobs:
         node-version: [14.x]
         platform: [ubuntu-latest]
     runs-on: ${{ matrix.platform }}
+    env:
+      LHCI_SERVER_TOKEN: ${{ secrets.LHCI_SERVER_TOKEN }}
     steps:
       - uses: actions/checkout@v2
         with:

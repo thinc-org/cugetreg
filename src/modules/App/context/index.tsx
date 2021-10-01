@@ -6,22 +6,18 @@ import React from 'react'
 
 import { AnalyticsProvider } from '@/common/context/Analytics'
 import { useAnalytics } from '@/common/context/Analytics/hooks/useAnalytics'
-import { ShoppingCartModalProvider } from '@/common/context/ShoppingCartModal'
-import { ModalProps } from '@/common/context/ShoppingCartModal/types'
-import { SnackbarContextProvider } from '@/common/context/Snackbar'
-import { SnackbarProps } from '@/common/context/Snackbar/types'
 import { darkTheme, lightTheme } from '@/configs/theme'
+import { ShoppingCartModalContextProvider } from '@/modules/App/context/ShoppingCartModal'
+import { SnackbarContextProvider } from '@/modules/App/context/Snackbar'
 import { client } from '@/services/apollo'
 import env from '@/utils/env/macro'
 
 interface AppProviderProps {
   children: React.ReactNode
-  snackBarContextValue: SnackbarProps
   forceDark: boolean
-  disclosureValue: ModalProps
 }
 
-export function AppProvider({ children, snackBarContextValue, forceDark, disclosureValue }: AppProviderProps) {
+export function AppProvider({ children, forceDark }: AppProviderProps) {
   const prefersDarkMode =
     env.features.darkTheme &&
     // features.darkTheme is a constant
@@ -36,10 +32,10 @@ export function AppProvider({ children, snackBarContextValue, forceDark, disclos
     <ApolloProvider client={client}>
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <AnalyticsProvider value={{ addEvent }}>
-          <SnackbarContextProvider value={snackBarContextValue}>
-            <ShoppingCartModalProvider value={disclosureValue}>
-              <ThemeProvider theme={prefersDarkMode || forceDark ? darkTheme : lightTheme}>{children}</ThemeProvider>
-            </ShoppingCartModalProvider>
+          <SnackbarContextProvider>
+            <ThemeProvider theme={prefersDarkMode || forceDark ? darkTheme : lightTheme}>
+              <ShoppingCartModalContextProvider>{children}</ShoppingCartModalContextProvider>
+            </ThemeProvider>
           </SnackbarContextProvider>
         </AnalyticsProvider>
       </LocalizationProvider>

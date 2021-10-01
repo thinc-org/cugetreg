@@ -1,15 +1,13 @@
 import { Color } from '@material-ui/core/Alert'
 import { useState } from 'react'
 
-import { SnackbarProps } from '../../context/Snackbar/types'
-
 export function useSnackBar() {
   const [message, setMessage] = useState('')
   const [action, setAction] = useState<string | undefined>()
   const [open, setOpen] = useState(false)
   const [messageType, setMessageType] = useState<Color>('success')
 
-  const emitMessage: SnackbarProps['emitMessage'] = (messageText, type, actionText) => {
+  const emitMessage = (messageText: string, type: Color, actionText?: string) => {
     setMessage(messageText)
     setAction(actionText || '')
     setMessageType(type)
@@ -20,5 +18,10 @@ export function useSnackBar() {
     setOpen(false)
   }
 
-  return { action, emitMessage, message, open, close, messageType }
+  const handleClose = (_: unknown, reason: string) => {
+    if (reason === 'clickaway') return
+    close()
+  }
+
+  return { action, emitMessage, message, open, close, messageType, handleClose }
 }

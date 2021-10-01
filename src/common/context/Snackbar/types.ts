@@ -1,7 +1,3 @@
-import { Color } from '@material-ui/core/Alert'
+import { useSnackBar } from '@/common/hooks/useSnackbar'
 
-export interface SnackbarProps {
-  message: string
-  action?: string
-  emitMessage: (messageText: string, type: Color, actiontText?: string) => void
-}
+export type SnackbarProps = ReturnType<typeof useSnackBar>

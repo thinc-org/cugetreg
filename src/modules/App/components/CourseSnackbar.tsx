@@ -30,7 +30,7 @@ export const CourseSnackbar = () => {
                   color="inherit"
                   onClick={() => {
                     log(null, snackbar.message)
-                    close()
+                    snackbar.close()
                     onOpen()
                   }}
                 >

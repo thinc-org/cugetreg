@@ -3,7 +3,7 @@ name: Run all checks
 on:
   pull_request:
   push:
-    branches: [beta, dev, master]
+    branches: [beta, master]
 
 permissions:
   contents: write
@@ -20,6 +20,8 @@ jobs:
         node-version: [14.x]
         platform: [ubuntu-latest]
     runs-on: ${{ matrix.platform }}
+    env:
+      LHCI_SERVER_TOKEN: ${{ secrets.LHCI_SERVER_TOKEN }}
     steps:
       - uses: actions/checkout@v2
 

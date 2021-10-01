@@ -14,10 +14,9 @@ module.exports = {
             startServerCommand: "yarn start"
         },
         upload: {
-            //     target: "lhci",
-            //     serverBaseUrl: "https://lit-ocean-90649.herokuapp.com/",
-            //     token: process.env.LHCI_SERVER_TOKEN
-            target: 'temporary-public-storage',
+            target: "lhci",
+            serverBaseUrl: "https://lighthouse.cugetreg.com/",
+            token: process.env.LHCI_SERVER_TOKEN
         }
     }
 };

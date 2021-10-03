@@ -14,13 +14,10 @@ export function useApp(router: Router) {
 
   useEffect(() => {
     removeElement('jss-server-side')
-    console.log(env, env.features.darkTheme, 'env')
     if (env.features.darkTheme) {
-      console.log('remove 2')
       removeElement('cgr-dark')
     }
-    console.log(env.features.darkTheme, 'after')
-  }, [])
+  })
 
   useEffect(() => {
     const studyProgram = router.query.studyProgram as string

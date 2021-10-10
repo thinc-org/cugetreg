@@ -2353,13 +2353,6 @@
     prop-types "^15.6.1"
     react-lifecycles-compat "^3.0.4"
 
-"@react-hook/google-optimize@^1.2.1":
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/@react-hook/google-optimize/-/google-optimize-1.2.1.tgz#918e848b215f540be4a2b0acf4a1b82596184a9b"
-  integrity sha512-KGWF81Do50DyiPTR7XYDLwMqh6z72L5doEIhvzme6ous55tPCVx7a6whVsd1f4Fyr/9uWai9WlZQq5M5+x5MNw==
-  dependencies:
-    "@types/gtag.js" "^0.0.3"
-
 "@sinonjs/commons@^1.7.0":
   version "1.8.2"
   resolved "https://registry.yarnpkg.com/@sinonjs/commons/-/commons-1.8.2.tgz#858f5c4b48d80778fde4b9d541f27edc0d56488b"
@@ -3271,11 +3264,6 @@
   integrity sha512-mWA/4zFQhfvOA8zWkXobwJvBD7vzcxgrOQ0J5CH1votGqdq9m7+FwtGaqyCZqC3NyyBkc9z4m+iry4LlqcMWJg==
   dependencies:
     "@types/node" "*"
-
-"@types/gtag.js@^0.0.3":
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/@types/gtag.js/-/gtag.js-0.0.3.tgz#bbc414030b2143fc7874260ab825aac82c42928e"
-  integrity sha512-iRF/4Q3G1t0OTNMjK52tpGSQPgEsYzWQL1IdVXt9BywK6MUK3ypB7LaoEQa8sW9gPXENoU1xAyCxqJhMkB2rCA==
 
 "@types/hast@^2.0.0":
   version "2.3.1"

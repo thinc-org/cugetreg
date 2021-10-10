@@ -6,7 +6,7 @@ exports[`App module Should app component render preperly when forceDark=false 1`
     additionalMetaTags={
       Array [
         Object {
-          "content": "cu,chula,จุฬา,reg,getreg,regchula,ตารางเรียน,ตารางสอน,gened",
+          "content": "cu,chula,จุฬา,reg,getreg,regchula,ตารางเรียน,ตารางสอน,gened,CU Get Reg,ลงทะเบียนเรียน,อำนวยความสะดวก",
           "property": "keywords",
         },
         Object {
@@ -63,7 +63,7 @@ exports[`App module Should app component render preperly when forceDark=true 1`]
     additionalMetaTags={
       Array [
         Object {
-          "content": "cu,chula,จุฬา,reg,getreg,regchula,ตารางเรียน,ตารางสอน,gened",
+          "content": "cu,chula,จุฬา,reg,getreg,regchula,ตารางเรียน,ตารางสอน,gened,CU Get Reg,ลงทะเบียนเรียน,อำนวยความสะดวก",
           "property": "keywords",
         },
         Object {

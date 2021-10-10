@@ -40,7 +40,7 @@ jobs:
         run: mv .env.beta .env
 
       - name: Set dev env
-        if: github.ref == 'refs/heads/dev' }}
+        if: ${{ github.ref == 'refs/heads/dev' }}
         run: mv .env.dev .env
 
       - name: Extract metadata (tags, labels) for Docker

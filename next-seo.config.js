@@ -7,7 +7,7 @@ const options = {
   additionalMetaTags: [
     {
       property: 'keywords',
-      content: 'cu,chula,จุฬา,reg,getreg,regchula,ตารางเรียน,ตารางสอน,gened',
+      content: 'cu,chula,จุฬา,reg,getreg,regchula,ตารางเรียน,ตารางสอน,gened,CU Get Reg,ลงทะเบียนเรียน,อำนวยความสะดวก',
     },
     {
       name: 'application-name',

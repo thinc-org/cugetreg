@@ -1,6 +1,6 @@
-const siteUrl = process.env.SITE_URL || 'http://localhost:3000'
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
 
-module.exports = {
+const options = {
   titleTemplate: '%s | CU Get Reg',
   defaultTitle: 'CU Get Reg',
   description: 'เว็บไซต์เพื่ออำนวยความสะดวกในการลงทะเบียนเรียนให้กับนิสิตจุฬาฯ ทุกคน',
@@ -29,3 +29,5 @@ module.exports = {
     ],
   },
 }
+
+module.exports = options

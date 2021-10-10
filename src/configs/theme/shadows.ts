@@ -30,4 +30,4 @@ const shadowsAsObject = {
 
 const shadows = Object.values(shadowsAsObject) as Shadows
 
-export default shadows
+export { shadows }

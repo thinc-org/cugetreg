@@ -1,0 +1,19 @@
+import { Meta, Story } from '@storybook/react/types-6-0'
+import React from 'react'
+
+import { Select } from '.'
+import { SelectProps } from './types'
+
+export default {
+  title: 'Component/Select',
+  component: Select,
+} as Meta
+
+export const SelectPropsStory: Story<SelectProps> = (args) => {
+  return <Select {...args} />
+}
+
+SelectPropsStory.args = {
+  value: 'test1',
+  items: ['test1', 'test2', 'test3'],
+}

@@ -1,0 +1,133 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FilterSection Should matched snapshot correctly when matchSmallScreen=false and isExpandFilter=false 1`] = `
+<ResponsiveDialog
+  onClose={[MockFunction]}
+  open={false}
+>
+  <ForwardRef(DialogContent)>
+    <Styled(div)>
+      <Analytics
+        elementName="gened_search_filter"
+      >
+        <Component />
+      </Analytics>
+      <Analytics
+        elementName="day_search_filter"
+      >
+        <Component />
+      </Analytics>
+    </Styled(div)>
+    <Styled(Component)
+      color="primary"
+      fullWidth={true}
+      onClick={[MockFunction]}
+      variant="outlined"
+    >
+      เลือกตัวกรอง
+    </Styled(Component)>
+  </ForwardRef(DialogContent)>
+</ResponsiveDialog>
+`;
+
+exports[`FilterSection Should matched snapshot correctly when matchSmallScreen=false and isExpandFilter=true 1`] = `
+<ResponsiveDialog
+  onClose={[MockFunction]}
+  open={true}
+>
+  <ForwardRef(DialogContent)>
+    <Styled(div)>
+      <Analytics
+        elementName="gened_search_filter"
+      >
+        <Component />
+      </Analytics>
+      <Analytics
+        elementName="day_search_filter"
+      >
+        <Component />
+      </Analytics>
+    </Styled(div)>
+    <Styled(Component)
+      color="primary"
+      fullWidth={true}
+      onClick={[MockFunction]}
+      variant="outlined"
+    >
+      เลือกตัวกรอง
+    </Styled(Component)>
+  </ForwardRef(DialogContent)>
+</ResponsiveDialog>
+`;
+
+exports[`FilterSection Should matched snapshot correctly when matchSmallScreen=true and isExpandFilter=false 1`] = `""`;
+
+exports[`FilterSection Should matched snapshot correctly when matchSmallScreen=true and isExpandFilter=true 1`] = `
+<Styled(Component)
+  hasTags={true}
+  variant="outlined"
+>
+  <ForwardRef(Stack)
+    spacing={4}
+  >
+    <Analytics
+      elementName="gened_search_filter"
+    >
+      <Component />
+    </Analytics>
+    <Analytics
+      elementName="day_search_filter"
+    >
+      <Component />
+    </Analytics>
+  </ForwardRef(Stack)>
+</Styled(Component)>
+`;
+
+exports[`FilterSection Should render CheckboxGroup of GenEds correctly when when matchSmallScreen=false and isExpandFilter=false 1`] = `
+<CheckboxGroup
+  checkboxes={Array []}
+  log={[Function]}
+  title="หมวดหมู่ GenEd"
+/>
+`;
+
+exports[`FilterSection Should render CheckboxGroup of GenEds correctly when when matchSmallScreen=false and isExpandFilter=true 1`] = `
+<CheckboxGroup
+  checkboxes={Array []}
+  log={[Function]}
+  title="หมวดหมู่ GenEd"
+/>
+`;
+
+exports[`FilterSection Should render CheckboxGroup of GenEds correctly when when matchSmallScreen=true and isExpandFilter=true 1`] = `
+<CheckboxGroup
+  checkboxes={Array []}
+  log={[Function]}
+  title="หมวดหมู่ GenEd"
+/>
+`;
+
+exports[`FilterSection Should render CheckboxGroup of days correctly when matchSmallScreen=false and isExpandFilter=false 1`] = `
+<CheckboxGroup
+  checkboxes={Array []}
+  log={[Function]}
+  title="วันในสัปดาห์"
+/>
+`;
+
+exports[`FilterSection Should render CheckboxGroup of days correctly when matchSmallScreen=false and isExpandFilter=true 1`] = `
+<CheckboxGroup
+  checkboxes={Array []}
+  log={[Function]}
+  title="วันในสัปดาห์"
+/>
+`;
+
+exports[`FilterSection Should render CheckboxGroup of days correctly when matchSmallScreen=true and isExpandFilter=true 1`] = `
+<CheckboxGroup
+  checkboxes={Array []}
+  log={[Function]}
+  title="วันในสัปดาห์"
+/>
+`;

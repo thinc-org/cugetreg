@@ -1,1 +1,1 @@
-export { default } from '@/modules/Schedule'
+export { SchedulePage as default } from '@/modules/Schedule'

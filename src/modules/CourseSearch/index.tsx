@@ -1,31 +1,21 @@
 import { Hidden, Typography } from '@material-ui/core'
-import { StudyProgram } from '@thinc-org/chula-courses'
-import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
-import { useState, useContext } from 'react'
-import React from 'react'
 
+import { Analytics } from '@/common/context/Analytics/components/Analytics'
+import { FILTER_BUTTON, SELECTED_COURSES_BUTTON, OPEN_SHOPPING_CART_BUTTON } from '@/common/context/Analytics/constants'
 import { PageMeta } from '@/components/PageMeta'
-import { ShoppingCartModalContext } from '@/context/ShoppingCartModal'
-import { Analytics } from '@/context/analytics/components/Analytics'
-import { FILTER_BUTTON, SELECTED_COURSES_BUTTON, OPEN_SHOPPING_CART_BUTTON } from '@/context/analytics/components/const'
-import { CourseList } from '@/modules/CourseSearch/component/CourseList'
-import { FilterIconButton } from '@/modules/CourseSearch/component/FilterIconButton'
-import { FilterSection } from '@/modules/CourseSearch/component/FilterSection'
-import { SearchField } from '@/modules/CourseSearch/component/SearchField'
-import { SelectedCoursesButton } from '@/modules/CourseSearch/component/SelectedCoursesButton'
-import { NoTagListLayout, TagList } from '@/modules/CourseSearch/component/TagList'
-import { CourseSearchProvider } from '@/modules/CourseSearch/context/CourseSearch'
-import { extractSearchVarsFromQuery } from '@/modules/CourseSearch/hooks/useSearchCourseQueryParams'
+import { CourseList } from '@/modules/CourseSearch/components/CourseList'
+import { FilterIconButton } from '@/modules/CourseSearch/components/FilterIconButton'
+import { FilterSection } from '@/modules/CourseSearch/components/FilterSection'
+import { SearchField } from '@/modules/CourseSearch/components/SearchField'
+import { SelectedCoursesButton } from '@/modules/CourseSearch/components/SelectedCoursesButton'
+import { NoTagListLayout, TagList } from '@/modules/CourseSearch/components/TagList'
 import { Container, Stack, TitleStack, StickyStack } from '@/modules/CourseSearch/styles'
-import { currentTerm } from '@/utils/courseGroup'
-import { SearchCourseResponse, SearchCourseVars, SEARCH_COURSE } from '@/utils/network/BackendGQLQueries'
-import { createApolloServerClient } from '@/utils/network/apollo'
-import { collectErrorLog } from '@/utils/network/logging'
 
-function CourseSearchPage() {
-  const [openFilterBar, setOpenFilterBar] = useState(false)
+import { CourseSearchProvider } from './context/CourseSearch'
+import { useCourseSearchPage } from './hooks/useCourseSearchPage'
 
-  const { onOpen } = useContext(ShoppingCartModalContext)
+export function CourseSearchPage() {
+  const { openFilterBar, toggleFilterBar, onOpen, handleCloseFilterBar } = useCourseSearchPage()
 
   return (
     <Container>
@@ -42,11 +32,7 @@ function CourseSearchPage() {
         <Stack width="100%" spacing={2} direction="row">
           <SearchField />
           <Analytics elementName={FILTER_BUTTON}>
-            <FilterIconButton
-              onClick={() => {
-                setOpenFilterBar((open) => !open)
-              }}
-            />
+            <FilterIconButton onClick={toggleFilterBar} />
           </Analytics>
           <Hidden mdDown>
             <Analytics elementName={SELECTED_COURSES_BUTTON}>
@@ -59,18 +45,16 @@ function CourseSearchPage() {
       <NoTagListLayout />
       <Stack spacing={3} direction="row">
         <CourseList />
-        <FilterSection open={openFilterBar} setOpen={setOpenFilterBar} />
+        <FilterSection open={openFilterBar} handleClose={handleCloseFilterBar} />
       </Stack>
     </Container>
   )
 }
 
-const CourseSearchPageWithCourseSearchProvider = () => {
+export const CourseSearchPageWithCourseSearchProvider = () => {
   return (
     <CourseSearchProvider>
       <CourseSearchPage />
     </CourseSearchProvider>
   )
 }
-
-export default CourseSearchPageWithCourseSearchProvider

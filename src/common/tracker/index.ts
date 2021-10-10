@@ -4,7 +4,7 @@ import { google_tag_manager_container_id } from '@/utils/env'
 
 import { TrackCustomEventParams } from './types'
 
-class Tracker {
+class MasterTracker {
   init() {
     TagManager.initialize({ gtmId: google_tag_manager_container_id || '' })
   }
@@ -32,4 +32,6 @@ class Tracker {
   }
 }
 
-export default new Tracker()
+const Tracker = new MasterTracker()
+
+export { Tracker }

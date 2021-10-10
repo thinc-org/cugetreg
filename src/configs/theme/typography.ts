@@ -147,4 +147,4 @@ const overrideMuiTypography = (defaultTheme: Theme): Theme => {
   return defaultTheme
 }
 
-export default overrideMuiTypography
+export { overrideMuiTypography }

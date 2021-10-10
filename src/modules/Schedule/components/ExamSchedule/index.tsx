@@ -4,7 +4,8 @@ import CachedIcon from '@material-ui/icons/Cached'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { ExamClass } from './components/ExamCard'
+import { ExamClass } from '@/common/utils/types'
+
 import { ExamList } from './components/ExamList'
 
 interface ExamScheduleProps {

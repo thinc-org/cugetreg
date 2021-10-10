@@ -5,7 +5,7 @@ import { withNextRouter } from 'storybook-addon-next-router'
 import AdapterDateFns from '@material-ui/lab/AdapterDateFns'
 import LocalizationProvider from '@material-ui/lab/LocalizationProvider'
 import { ApolloProvider } from '@apollo/client'
-import { client } from '@/utils/network/apollo'
+import { client } from '../src/services/apollo'
 
 export const parameters = {
   actions: { argTypesRegex: '^on[A-Z].*' },

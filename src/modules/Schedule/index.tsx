@@ -3,23 +3,18 @@ import { observer } from 'mobx-react'
 import React, { useState, createRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Analytics } from '@/context/analytics/components/Analytics'
-import { LinkWithAnalytics } from '@/context/analytics/components/LinkWithAnalytics'
-import { CR11_BUTTON, CLASS_TAB_BUTTON, EXAM_TAB_BUTTON } from '@/context/analytics/components/const'
-import { ExamSchedule } from '@/modules/Schedule/components/ExamSchedule'
-import { useExamClasses } from '@/modules/Schedule/components/ExamSchedule/utils'
-import SaveImgButton from '@/modules/Schedule/components/SaveImgButton'
-import { Schedule } from '@/modules/Schedule/components/Schedule'
-import {
-  useDaysCount,
-  useOverlappingCourses,
-  useScheduleClass,
-  useTimetableClasses,
-} from '@/modules/Schedule/components/Schedule/utils'
-import { ScheduleTable } from '@/modules/Schedule/components/ScheduleTable'
+import { Analytics } from '@/common/context/Analytics/components/Analytics'
+import { LinkWithAnalytics } from '@/common/context/Analytics/components/LinkWithAnalytics'
+import { CR11_BUTTON, CLASS_TAB_BUTTON, EXAM_TAB_BUTTON } from '@/common/context/Analytics/constants'
+import { useCourseGroup } from '@/common/hooks/useCourseGroup'
 import { courseCartStore } from '@/store'
-import { useCourseGroup } from '@/utils/hooks/useCourseGroup'
 
+import { ExamSchedule } from './components/ExamSchedule'
+import { useExamClasses } from './components/ExamSchedule/utils'
+import { SaveImgButton } from './components/SaveImgButton'
+import { Schedule } from './components/Schedule'
+import { useDaysCount, useOverlappingCourses, useScheduleClass, useTimetableClasses } from './components/Schedule/utils'
+import { ScheduleTable } from './components/ScheduleTable'
 import {
   InfoBar,
   ButtonBar,
@@ -33,7 +28,7 @@ import {
   ExamContainer,
 } from './styled'
 
-function SchedulePage() {
+export const SchedulePage = observer(() => {
   const { t } = useTranslation('schedulePage')
   const shopItems = courseCartStore.shopItems
   const classes = useTimetableClasses(shopItems)
@@ -112,6 +107,4 @@ function SchedulePage() {
       <ScheduleTable courseCart={courseCartStore} overlappingCourses={overlappingCourses} />
     </PageContainer>
   )
-}
-
-export default observer(SchedulePage)
+})

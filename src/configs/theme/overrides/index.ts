@@ -5,10 +5,9 @@ import { overrideMuiChipStyles } from './chip'
 import { overrideMuiInputBase } from './inputBase'
 import { overrideMuiInputLabel } from './inputLabel'
 import { overrideMuiMenuItem } from './menuItem'
-import { overrideMuiOutlinedInput } from './outlinedInput'
 import { overrideMuiSelect } from './select'
 
-const overrideMuiBaseComponent = (defaultTheme: Theme): Theme => {
+export const overrideMuiBaseComponent = (defaultTheme: Theme): Theme => {
   const overrides: Components = {
     // override here
     MuiChip: {
@@ -41,5 +40,3 @@ const overrideMuiBaseComponent = (defaultTheme: Theme): Theme => {
   defaultTheme.components = overrides
   return defaultTheme
 }
-
-export default overrideMuiBaseComponent

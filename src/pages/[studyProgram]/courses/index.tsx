@@ -1,1 +1,1 @@
-export { default } from '@/modules/CourseSearch'
+export { CourseSearchPageWithCourseSearchProvider as default } from '@/modules/CourseSearch'

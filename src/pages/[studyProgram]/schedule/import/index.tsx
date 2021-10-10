@@ -5,12 +5,13 @@ import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 
-import { Loading } from '@/components/Loading'
+import { useCourseGroup } from '@/common/hooks/useCourseGroup'
+import { CourseGroup } from '@/common/hooks/useCourseGroup/types'
+import { parseCourseGroup } from '@/common/utils/parseCourseGroup'
+import { Loading } from '@/modules/CourseSearch/components/Loading'
+import { createApolloServerClient } from '@/services/apollo'
+import { GetCourseResponse, GET_COURSE } from '@/services/apollo/query/getCourse'
 import { courseCartStore } from '@/store'
-import { parseCourseGroup } from '@/utils/courseGroup'
-import { useCourseGroup } from '@/utils/hooks/useCourseGroup'
-import { CourseGroup, GetCourseResponse, GET_COURSE } from '@/utils/network/BackendGQLQueries'
-import { createApolloServerClient } from '@/utils/network/apollo'
 
 interface RawScheduleItem {
   courseNo: string
@@ -87,8 +88,8 @@ export async function getServerSideProps(
         items,
       },
     }
-  } catch (e) {
-    if (isApolloError(e)) {
+  } catch (e: unknown) {
+    if (isApolloError(e as Error)) {
       return {
         notFound: true,
       }

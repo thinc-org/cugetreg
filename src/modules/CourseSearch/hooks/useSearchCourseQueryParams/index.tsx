@@ -1,41 +1,12 @@
-import { DayOfWeek, GenEdType, StudyProgram } from '@thinc-org/chula-courses'
 import { useRouter } from 'next/router'
 import { useMemo, useCallback } from 'react'
 
-import { useCourseGroup } from '@/utils/hooks/useCourseGroup'
-import { CourseGroup, SearchCourseVars } from '@/utils/network/BackendGQLQueries'
+import { useCourseGroup } from '@/common/hooks/useCourseGroup'
+import { SearchCourseVars } from '@/services/apollo/query/searchCourse'
 
-export interface QueryParams {
-  keyword?: string
-  genEdTypes?: string
-  dayOfWeeks?: string
-  limit?: number
-  offset?: number
-  semester?: string
-  academicYear?: string
-  studyProgram?: StudyProgram
-}
-
-// eslint-disable-next-line
-function removeUndefinedValue<T extends { [key: string]: any }>(obj: T): { [key: string]: any } {
-  Object.keys(obj).forEach((key) => obj[key] === undefined && delete obj[key])
-  return obj
-}
-
-export function extractSearchVarsFromQuery(query: QueryParams, courseGroup: CourseGroup): SearchCourseVars {
-  const { keyword, genEdTypes, dayOfWeeks } = query
-
-  const genEdTypeArray = genEdTypes ? genEdTypes.split(',') : undefined
-  const dayOfWeekArray = dayOfWeeks ? dayOfWeeks.split(',') : undefined
-
-  const filter = removeUndefinedValue({
-    keyword: keyword ? keyword : undefined,
-    genEdTypes: genEdTypeArray ? (genEdTypeArray as GenEdType[]) : undefined,
-    dayOfWeeks: dayOfWeekArray ? (dayOfWeekArray as DayOfWeek[]) : undefined,
-  })
-
-  return { filter, courseGroup }
-}
+import { QueryParams } from './types'
+import { extractSearchVarsFromQuery } from './utils/extractSearchVarsFromQuery'
+import { removeUndefinedValue } from './utils/removeUndefinedValue'
 
 export const useSearchCourseQueryParams = () => {
   const router = useRouter()

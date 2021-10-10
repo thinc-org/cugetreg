@@ -1,1 +1,4 @@
-export { default, getServerSideProps } from '@/modules/CourseDetail'
+import { CourseDetailPage } from '@/modules/CourseDetail'
+
+export { getServerSideProps } from '@/modules/CourseDetail'
+export default CourseDetailPage

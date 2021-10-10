@@ -1,6 +1,8 @@
 import styled from '@emotion/styled'
 
-import { ExamCard, ExamClass } from '../ExamCard'
+import { ExamClass } from '@/common/utils/types'
+
+import { ExamCard } from '../ExamCard'
 
 interface ExamScheduleProps {
   classes: ExamClass[]

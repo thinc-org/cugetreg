@@ -47,6 +47,7 @@
     "next": "10.0.5",
     "next-optimized-images": "^2.6.2",
     "next-seo": "^4.28.1",
+    "next-sitemap": "^1.6.179",
     "nprogress": "^0.2.0",
     "react": "17.0.1",
     "react-beautiful-dnd": "^13.1.0",
@@ -99,7 +100,6 @@
     "identity-obj-proxy": "^3.0.0",
     "jest": "^27.0.6",
     "lint-staged": "^10.5.3",
-    "next-sitemap": "^1.6.179",
     "prettier": "^2.2.1",
     "storybook-addon-next-router": "^2.0.4",
     "typescript": "^4.1.3"

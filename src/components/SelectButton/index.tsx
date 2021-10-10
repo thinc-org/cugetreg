@@ -1,5 +1,4 @@
 import Add from '@material-ui/icons/Add'
-import useGoogleOptimize from '@react-hook/google-optimize'
 import { Course } from '@thinc-org/chula-courses'
 import { runInAction } from 'mobx'
 import { observer } from 'mobx-react'
@@ -43,14 +42,11 @@ export const SelectButton = observer(({ course, selectedSectionNumber, log }: Se
     })
   }, [course, selectedSectionNumber, isSelected, emitMessage, t, log])
 
-  const isExperimentColor = useGoogleOptimize('qS9_gAPPQjquNZru7DBBXQ', [false, true])
-  console.log(isExperimentColor, 'hasYellow')
-
   return (
     <CustomButton
       loading={false}
       startIcon={!isSelected ? <Add /> : <MdCheck />}
-      color={isExperimentColor ? 'secondary' : 'primary'}
+      color="primary"
       variant={!isSelected ? 'contained' : 'outlined'}
       fullWidth
       disableElevation

@@ -46,6 +46,7 @@
     "mobx-utils": "^6.0.3",
     "next": "10.0.5",
     "next-optimized-images": "^2.6.2",
+    "next-seo": "^4.28.1",
     "nprogress": "^0.2.0",
     "react": "17.0.1",
     "react-beautiful-dnd": "^13.1.0",

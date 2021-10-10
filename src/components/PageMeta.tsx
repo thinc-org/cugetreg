@@ -1,9 +1,7 @@
-import Head from 'next/head'
+import { NextSeo, NextSeoProps } from 'next-seo'
 
-interface PageMetaProps {
-  title?: string
-}
+interface PageMetaProps extends NextSeoProps {}
 
-export function PageMeta({ title }: PageMetaProps) {
-  return <Head>{title ? <title>{`${title} | CU Get Reg`}</title> : null}</Head>
+export function PageMeta(props: PageMetaProps) {
+  return <NextSeo titleTemplate="%s | CU Get Reg`" {...props} />
 }

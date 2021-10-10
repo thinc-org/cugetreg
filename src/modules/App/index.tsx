@@ -1,7 +1,7 @@
 import { CssBaseline } from '@material-ui/core'
 import { Container } from '@material-ui/core'
+import { DefaultSeo } from 'next-seo'
 import { AppProps } from 'next/dist/next-server/lib/router/router'
-import Head from 'next/head'
 
 import { Footer } from '@/common/components/Footer'
 import { LoadingProgress } from '@/common/components/LoadingProgress'
@@ -13,6 +13,7 @@ import { AppProvider } from '@/modules/App/context'
 import { ShoppingCartModal } from '@/modules/CourseSearch/components/ShoppingCartModal'
 import { ErrorBoundary } from '@/modules/ErrorBoundary'
 
+import SEO from '../../../next-seo.config'
 import { CourseSnackbar } from './components/CourseSnackbar'
 import { useApp } from './hooks/useApp'
 
@@ -23,10 +24,7 @@ export function App({ Component, pageProps, forceDark, router }: AppProps) {
 
   return (
     <>
-      <Head>
-        <title>CU Get Reg</title>
-        <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
-      </Head>
+      <DefaultSeo {...SEO} />
       <AppProvider forceDark={forceDark}>
         <TrackPageChange>
           <LoadingProgress />

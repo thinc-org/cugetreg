@@ -13,7 +13,8 @@
     "ci": "yarn && yarn export && yarn build-storybook && mv storybook-static out/storybook",
     "storybook": "start-storybook -s ./public -p 6006",
     "build-storybook": "build-storybook -s ./public",
-    "size": "size-limit"
+    "size": "size-limit",
+    "postbuild": "next-sitemap"
   },
   "dependencies": {
     "@apollo/client": "^3.3.7",
@@ -45,6 +46,8 @@
     "mobx-utils": "^6.0.3",
     "next": "10.0.5",
     "next-optimized-images": "^2.6.2",
+    "next-seo": "^4.28.1",
+    "next-sitemap": "^1.6.179",
     "nprogress": "^0.2.0",
     "react": "17.0.1",
     "react-beautiful-dnd": "^13.1.0",

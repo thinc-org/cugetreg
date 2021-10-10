@@ -2,15 +2,39 @@
 
 exports[`App module Should app component render preperly when forceDark=false 1`] = `
 <Fragment>
-  <Head>
-    <title>
-      CU Get Reg
-    </title>
-    <meta
-      content="minimum-scale=1, initial-scale=1, width=device-width"
-      name="viewport"
-    />
-  </Head>
+  <DefaultSeo
+    additionalMetaTags={
+      Array [
+        Object {
+          "content": "cu,chula,จุฬา,reg,getreg,regchula,ตารางเรียน,ตารางสอน,gened,CU Get Reg,ลงทะเบียนเรียน,อำนวยความสะดวก",
+          "property": "keywords",
+        },
+        Object {
+          "content": "CU Get Reg",
+          "name": "application-name",
+        },
+      ]
+    }
+    defaultTitle="CU Get Reg"
+    description="เว็บไซต์เพื่ออำนวยความสะดวกในการลงทะเบียนเรียนให้กับนิสิตจุฬาฯ ทุกคน"
+    openGraph={
+      Object {
+        "description": "เว็บไซต์เพื่ออำนวยความสะดวกในการลงทะเบียนเรียนให้กับนิสิตจุฬาฯ ทุกคน",
+        "images": Array [
+          Object {
+            "alt": "CU Get Reg",
+            "height": 600,
+            "url": "http://localhost:3000/cover.jpg",
+            "width": 800,
+          },
+        ],
+        "title": "CU Get Reg",
+        "type": "website",
+        "url": "http://localhost:3000",
+      }
+    }
+    titleTemplate="%s | CU Get Reg"
+  />
   <AppProvider
     forceDark={false}
   >
@@ -35,15 +59,39 @@ exports[`App module Should app component render preperly when forceDark=false 1`
 
 exports[`App module Should app component render preperly when forceDark=true 1`] = `
 <Fragment>
-  <Head>
-    <title>
-      CU Get Reg
-    </title>
-    <meta
-      content="minimum-scale=1, initial-scale=1, width=device-width"
-      name="viewport"
-    />
-  </Head>
+  <DefaultSeo
+    additionalMetaTags={
+      Array [
+        Object {
+          "content": "cu,chula,จุฬา,reg,getreg,regchula,ตารางเรียน,ตารางสอน,gened,CU Get Reg,ลงทะเบียนเรียน,อำนวยความสะดวก",
+          "property": "keywords",
+        },
+        Object {
+          "content": "CU Get Reg",
+          "name": "application-name",
+        },
+      ]
+    }
+    defaultTitle="CU Get Reg"
+    description="เว็บไซต์เพื่ออำนวยความสะดวกในการลงทะเบียนเรียนให้กับนิสิตจุฬาฯ ทุกคน"
+    openGraph={
+      Object {
+        "description": "เว็บไซต์เพื่ออำนวยความสะดวกในการลงทะเบียนเรียนให้กับนิสิตจุฬาฯ ทุกคน",
+        "images": Array [
+          Object {
+            "alt": "CU Get Reg",
+            "height": 600,
+            "url": "http://localhost:3000/cover.jpg",
+            "width": 800,
+          },
+        ],
+        "title": "CU Get Reg",
+        "type": "website",
+        "url": "http://localhost:3000",
+      }
+    }
+    titleTemplate="%s | CU Get Reg"
+  />
   <AppProvider
     forceDark={true}
   >

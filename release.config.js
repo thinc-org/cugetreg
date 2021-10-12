@@ -1,15 +1,6 @@
 // Release Configuration For [semantic-release](https://github.com/semantic-release/semantic-release/blob/master/docs/usage/configuration.md#configuration)
 module.exports = {
-  branches: [
-    {
-      name: 'master',
-    },
-    {
-      // TODO: remove this line
-      name: 'release',
-      prerelease: true,
-    },
-  ],
+  branches: [{ name: 'master' }],
   plugins: [
     [
       '@semantic-release/commit-analyzer',

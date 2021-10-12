@@ -3,12 +3,6 @@ name: Release Note
 on:
   workflow_dispatch:
 
-permissions:
-  contents: read
-  packages: write
-  pull-requests: write
-  repository-projects: read
-
 jobs:
   release:
     name: Release

@@ -6,7 +6,7 @@ module.exports = {
     },
     {
       // TODO: remove this line
-      name: 'yu/auto-release',
+      name: 'release',
       prerelease: true,
     },
   ],

@@ -7,6 +7,7 @@ module.exports = {
     {
       // TODO: remove this line
       name: 'yu/auto-release',
+      prerelease: 'yu/auto-release',
     },
   ],
   plugins: [

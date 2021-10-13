@@ -12,6 +12,7 @@ import { Loading } from '@/modules/CourseSearch/components/Loading'
 import { createApolloServerClient } from '@/services/apollo'
 import { GetCourseResponse, GET_COURSE } from '@/services/apollo/query/getCourse'
 import { courseCartStore } from '@/store'
+import { userStore } from '@/store/userStore'
 
 interface RawScheduleItem {
   courseNo: string
@@ -30,18 +31,19 @@ interface ImportPageProps {
 function ImportSchedulePage({ items }: ImportPageProps) {
   const router = useRouter()
   const { studyProgram } = useCourseGroup()
-  const { isInitialized, isInitializedLocal } = courseCartStore
-  const ready = isInitialized || isInitializedLocal
 
   useEffect(() => {
-    if (!ready) {
-      return
+    const fn = async () => {
+      await userStore.restoreSession()
+      await courseCartStore.upgradeSource()
+
+      items.forEach(({ course, sectionNo }) => {
+        courseCartStore.addItem(course, sectionNo)
+      })
+      router.replace(`/${studyProgram}/schedule`)
     }
-    items.forEach(({ course, sectionNo }) => {
-      courseCartStore.addItem(course, sectionNo)
-    })
-    router.replace(`/${studyProgram}/schedule`)
-  }, [items, router, studyProgram, ready])
+    fn()
+  }, [items, router, studyProgram])
 
   return <Loading loading />
 }

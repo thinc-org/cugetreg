@@ -34,6 +34,7 @@
     "@types/uuid": "^8.3.0",
     "axios": "^0.21.1",
     "babel-plugin-macros": "^3.0.1",
+    "broadcast-channel": "^4.2.0",
     "date-fns": "^2.16.1",
     "framer-motion": "^4.1.17",
     "graphql": "^15.5.0",

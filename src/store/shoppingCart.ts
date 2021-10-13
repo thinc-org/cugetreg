@@ -1,8 +1,13 @@
-import { Course } from '@thinc-org/chula-courses'
-import { action, computed, makeObservable, observable } from 'mobx'
+import { Course, GenEdType, Semester, StudyProgram } from '@thinc-org/chula-courses'
+import { BroadcastChannel } from 'broadcast-channel'
+import { action, computed, makeObservable, observable, runInAction } from 'mobx'
 import { computedFn } from 'mobx-utils'
 
-import { collectLogEvent } from '@/services/logging'
+import { client } from '@/services/apollo'
+import { GetCourseResponse, GetCourseVars, GET_COURSE } from '@/services/apollo/query/getCourse'
+import { GET_COURSE_CART, MODIFY_COURSE_CART } from '@/services/apollo/query/user'
+import { collectLogEvent, collectErrorLog } from '@/services/logging'
+import { userStore } from '@/store/userStore'
 
 export interface CourseCartItem extends Course {
   selectedSectionNo: string
@@ -17,14 +22,180 @@ export interface CourseCartProps {
   state: CourseCartState
 }
 
+interface CourseCartStoreItem {
+  studyProgram: string
+  academicYear: string
+  courseNo: string
+  semester: string
+  selectedSectionNo: string
+}
+
+export interface CourseCartStore {
+  syncToStore(items: CourseCartStoreItem[]): Promise<void>
+  syncFromStore(): Promise<CourseCartStoreItem[]>
+  online: boolean
+}
+
+class DummyCourseCartStore implements CourseCartStore {
+  online = false
+
+  async syncFromStore() {
+    return []
+  }
+  async syncToStore() {
+    return
+  }
+}
+
+class LocalStorageCourseCartStore implements CourseCartStore {
+  online = false
+
+  LOCALSTORAGE_SHOPPING_CART_KEY = 'SHOPPING_CART_KEY'
+
+  async syncToStore(items: CourseCartStoreItem[]) {
+    localStorage.setItem(this.LOCALSTORAGE_SHOPPING_CART_KEY, JSON.stringify(items))
+  }
+
+  async syncFromStore() {
+    const item = localStorage.getItem(this.LOCALSTORAGE_SHOPPING_CART_KEY)
+    console.log('LC', item)
+    return item ? JSON.parse(item) : []
+  }
+}
+
+class OnlineCourseCartStore implements CourseCartStore {
+  online = true
+
+  async syncToStore(items: CourseCartStoreItem[]) {
+    await client.mutate({ mutation: MODIFY_COURSE_CART, variables: { items } })
+  }
+
+  async syncFromStore() {
+    const { data } = await client.query<{ courseCart: CourseCartStoreItem[] }>({
+      query: GET_COURSE_CART,
+      fetchPolicy: 'network-only',
+    })
+    return data.courseCart
+  }
+}
+
 export class CourseCart implements CourseCartProps {
   @observable shopItems: CourseCartItem[] = []
   @observable state: CourseCartState = 'default'
-  @observable isInitialized = false
-  @observable isInitializedLocal = false
-
+  @observable source: CourseCartStore = new DummyCourseCartStore()
+  @observable syncState: 'syncing' | 'synced' | 'fail' | 'offline' = 'offline'
+  private channel: BroadcastChannel
   constructor() {
+    this.channel = new BroadcastChannel('coursecart-change')
+    this.channel.onmessage = () => this.pullFromStore()
+
     makeObservable(this)
+  }
+
+  @action
+  async upgradeSource() {
+    if (userStore.accessToken !== null) {
+      this.source = new OnlineCourseCartStore()
+      this.syncState = 'syncing'
+    } else if (localStorage) {
+      this.source = new LocalStorageCourseCartStore()
+      this.syncState = 'offline'
+    } else {
+      this.source = new DummyCourseCartStore()
+      this.syncState = 'offline'
+    }
+    await this.pullFromStore()
+  }
+
+  private async pullFromStore() {
+    runInAction(() => {
+      if (this.source.online) this.syncState = 'syncing'
+    })
+    try {
+      const course = await this.source.syncFromStore()
+      const fullCourse: (Course & { selectedSectionNo: string })[] = []
+      for (const x of course) {
+        let detail
+        try {
+          const { data } = await client.query<GetCourseResponse, GetCourseVars>({
+            query: GET_COURSE,
+            variables: {
+              courseNo: x.courseNo,
+              courseGroup: {
+                academicYear: x.academicYear,
+                studyProgram: x.studyProgram as StudyProgram,
+                semester: x.semester,
+              },
+            },
+          })
+          detail = { ...data.course, selectedSectionNo: x.selectedSectionNo }
+        } catch (e) {
+          detail = {
+            selectedSectionNo: x.selectedSectionNo,
+            studyProgram: x.studyProgram as StudyProgram,
+            semester: x.semester as Semester,
+            academicYear: x.academicYear,
+            courseNo: x.courseNo,
+            abbrName: 'UNK',
+            courseNameTh: 'UNK',
+            courseNameEn: 'UNK',
+            faculty: 'UNK',
+            department: 'UNK',
+            credit: -1,
+            creditHours: 'UNK',
+            courseCondition: 'UNK',
+            genEdType: 'NO' as GenEdType,
+            sections: [],
+          }
+        }
+        fullCourse.push(detail)
+      }
+      runInAction(() => {
+        this.shopItems = fullCourse.map((x) => ({ ...x, isSelected: false, isHidden: false }))
+      })
+      setTimeout(
+        action('Delayed sync icon', () => {
+          if (this.source.online) this.syncState = 'synced'
+        }),
+        1000
+      )
+    } catch (e) {
+      collectErrorLog('Fail to pull course cart', e)
+      console.error('Fail to pull course cart', e)
+      runInAction(() => {
+        if (this.source.online) this.syncState = 'fail'
+      })
+    }
+  }
+
+  private async onChange() {
+    runInAction(() => {
+      if (this.source.online) this.syncState = 'syncing'
+    })
+    try {
+      await this.source.syncToStore(
+        this.shopItems.map((x) => ({
+          studyProgram: x.studyProgram,
+          academicYear: x.academicYear,
+          semester: x.semester,
+          courseNo: x.courseNo,
+          selectedSectionNo: x.selectedSectionNo,
+        }))
+      )
+      setTimeout(
+        action('Delayed sync icon', () => {
+          if (this.source.online) this.syncState = 'synced'
+        }),
+        1000
+      )
+    } catch (e) {
+      collectErrorLog('Fail to push course cart', e)
+      console.error('Fail to push course cart', e)
+      runInAction(() => {
+        if (this.source.online) this.syncState = 'fail'
+      })
+    }
+    setTimeout(() => this.channel.postMessage('sync'), 5000)
   }
 
   /**
@@ -84,12 +255,16 @@ export class CourseCart implements CourseCartProps {
     const foundIndex = this.shopItems.findIndex((item) => item.courseNo == course.courseNo)
     if (foundIndex != -1) this.shopItems[foundIndex] = newItem
     else this.shopItems.push(newItem)
+
+    this.onChange()
     return true
   }
 
   @action
   removeCourse(course: Course): void {
     this.shopItems = this.shopItems.filter((item) => item.courseNo !== course.courseNo)
+
+    this.onChange()
   }
 
   /**
@@ -127,6 +302,8 @@ export class CourseCart implements CourseCartProps {
     if (this.state === 'default') return
     this.shopItems = this.shopItems.filter((item) => item.isSelected === false)
     this.state = 'default'
+
+    this.onChange()
   }
 
   /**

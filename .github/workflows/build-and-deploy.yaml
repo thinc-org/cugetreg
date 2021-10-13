@@ -6,9 +6,17 @@ on:
     branches: [beta, dev]
 
 permissions:
+  actions: read
+  checks: read
   contents: write
+  deployments: read
+  issues: read
+  discussions: read
   packages: write
   pull-requests: write
+  repository-projects: write
+  security-events: read
+  statuses: write
 
 env:
   IMAGE_REPO: ghcr.io/${{ github.repository }}

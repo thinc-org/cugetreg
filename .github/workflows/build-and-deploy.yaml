@@ -10,7 +10,7 @@ permissions:
   checks: read
   contents: write
   deployments: read
-  issues: read
+  issues: write
   discussions: read
   packages: write
   pull-requests: write

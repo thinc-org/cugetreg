@@ -3,6 +3,7 @@ import { BroadcastChannel } from 'broadcast-channel'
 import { action, computed, makeObservable, observable, runInAction } from 'mobx'
 import { computedFn } from 'mobx-utils'
 
+import { StorageKey } from '@/common/storage/constants'
 import { client } from '@/services/apollo'
 import { GetCourseResponse, GetCourseVars, GET_COURSE } from '@/services/apollo/query/getCourse'
 import { GET_COURSE_CART, MODIFY_COURSE_CART } from '@/services/apollo/query/user'
@@ -50,14 +51,12 @@ class DummyCourseCartStore implements CourseCartStore {
 class LocalStorageCourseCartStore implements CourseCartStore {
   online = false
 
-  LOCALSTORAGE_SHOPPING_CART_KEY = 'SHOPPING_CART_KEY'
-
   async syncToStore(items: CourseCartStoreItem[]) {
-    localStorage.setItem(this.LOCALSTORAGE_SHOPPING_CART_KEY, JSON.stringify(items))
+    localStorage.setItem(StorageKey.ShoppingCart, JSON.stringify(items))
   }
 
   async syncFromStore() {
-    const item = localStorage.getItem(this.LOCALSTORAGE_SHOPPING_CART_KEY)
+    const item = localStorage.getItem(StorageKey.ShoppingCart)
     console.log('LC', item)
     return item ? JSON.parse(item) : []
   }
@@ -79,11 +78,18 @@ class OnlineCourseCartStore implements CourseCartStore {
   }
 }
 
+export enum CourseCartSyncState {
+  SYNCING,
+  SYNCED,
+  FAIL,
+  OFFLINE,
+}
+
 export class CourseCart implements CourseCartProps {
   @observable shopItems: CourseCartItem[] = []
   @observable state: CourseCartState = 'default'
   @observable source: CourseCartStore = new DummyCourseCartStore()
-  @observable syncState: 'syncing' | 'synced' | 'fail' | 'offline' = 'offline'
+  @observable syncState: CourseCartSyncState = CourseCartSyncState.OFFLINE
   private channel: BroadcastChannel
   constructor() {
     this.channel = new BroadcastChannel('coursecart-change')
@@ -96,46 +102,46 @@ export class CourseCart implements CourseCartProps {
   async upgradeSource() {
     if (userStore.accessToken !== null) {
       this.source = new OnlineCourseCartStore()
-      this.syncState = 'syncing'
+      this.syncState = CourseCartSyncState.SYNCING
     } else if (localStorage) {
       this.source = new LocalStorageCourseCartStore()
-      this.syncState = 'offline'
+      this.syncState = CourseCartSyncState.OFFLINE
     } else {
       this.source = new DummyCourseCartStore()
-      this.syncState = 'offline'
+      this.syncState = CourseCartSyncState.OFFLINE
     }
     await this.pullFromStore()
   }
 
   private async pullFromStore() {
     runInAction(() => {
-      if (this.source.online) this.syncState = 'syncing'
+      if (this.source.online) this.syncState = CourseCartSyncState.SYNCING
     })
     try {
-      const course = await this.source.syncFromStore()
+      const courses = await this.source.syncFromStore()
       const fullCourse: (Course & { selectedSectionNo: string })[] = []
-      for (const x of course) {
+      for (const course of courses) {
         let detail
         try {
           const { data } = await client.query<GetCourseResponse, GetCourseVars>({
             query: GET_COURSE,
             variables: {
-              courseNo: x.courseNo,
+              courseNo: course.courseNo,
               courseGroup: {
-                academicYear: x.academicYear,
-                studyProgram: x.studyProgram as StudyProgram,
-                semester: x.semester,
+                academicYear: course.academicYear,
+                studyProgram: course.studyProgram as StudyProgram,
+                semester: course.semester,
               },
             },
           })
-          detail = { ...data.course, selectedSectionNo: x.selectedSectionNo }
+          detail = { ...data.course, selectedSectionNo: course.selectedSectionNo }
         } catch (e) {
           detail = {
-            selectedSectionNo: x.selectedSectionNo,
-            studyProgram: x.studyProgram as StudyProgram,
-            semester: x.semester as Semester,
-            academicYear: x.academicYear,
-            courseNo: x.courseNo,
+            selectedSectionNo: course.selectedSectionNo,
+            studyProgram: course.studyProgram as StudyProgram,
+            semester: course.semester as Semester,
+            academicYear: course.academicYear,
+            courseNo: course.courseNo,
             abbrName: 'UNK',
             courseNameTh: 'UNK',
             courseNameEn: 'UNK',
@@ -155,7 +161,7 @@ export class CourseCart implements CourseCartProps {
       })
       setTimeout(
         action('Delayed sync icon', () => {
-          if (this.source.online) this.syncState = 'synced'
+          if (this.source.online) this.syncState = CourseCartSyncState.SYNCED
         }),
         1000
       )
@@ -163,14 +169,14 @@ export class CourseCart implements CourseCartProps {
       collectErrorLog('Fail to pull course cart', e)
       console.error('Fail to pull course cart', e)
       runInAction(() => {
-        if (this.source.online) this.syncState = 'fail'
+        if (this.source.online) this.syncState = CourseCartSyncState.FAIL
       })
     }
   }
 
   private async onChange() {
     runInAction(() => {
-      if (this.source.online) this.syncState = 'syncing'
+      if (this.source.online) this.syncState = CourseCartSyncState.SYNCING
     })
     try {
       await this.source.syncToStore(
@@ -184,7 +190,7 @@ export class CourseCart implements CourseCartProps {
       )
       setTimeout(
         action('Delayed sync icon', () => {
-          if (this.source.online) this.syncState = 'synced'
+          if (this.source.online) this.syncState = CourseCartSyncState.SYNCED
         }),
         1000
       )
@@ -192,10 +198,10 @@ export class CourseCart implements CourseCartProps {
       collectErrorLog('Fail to push course cart', e)
       console.error('Fail to push course cart', e)
       runInAction(() => {
-        if (this.source.online) this.syncState = 'fail'
+        if (this.source.online) this.syncState = CourseCartSyncState.FAIL
       })
     }
-    setTimeout(() => this.channel.postMessage('sync'), 5000)
+    setTimeout(() => this.channel.postMessage('sync'), 1000)
   }
 
   /**

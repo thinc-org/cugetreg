@@ -2,11 +2,11 @@ import { StudyProgramEnum } from '@thinc-org/chula-courses'
 import { Router } from 'next/router'
 import { useEffect } from 'react'
 
+import { collectLogEvent } from '@/services/logging'
 import { courseCartStore } from '@/store'
 import { userStore } from '@/store/userStore'
 import env from '@/utils/env/macro'
 
-import { collectLogEvent } from '../../../../services/logging'
 import { removeElement } from '../../utils/removeElement'
 import { useLogging } from '../useLogging'
 

@@ -3,7 +3,7 @@ import { observer } from 'mobx-react'
 import { useTranslation } from 'react-i18next'
 import { MdCloudDone, MdCloudQueue, MdCloudOff } from 'react-icons/md'
 
-import { courseCartStore } from '@/store'
+import { courseCartStore, CourseCartSyncState } from '@/store'
 
 const SyncStatus: React.FC<{ title: string }> = ({ title, children }) => {
   return (
@@ -17,21 +17,21 @@ export const GDriveIndicator = observer(() => {
   const { t } = useTranslation('syncStatus')
   console.log('Sync state', courseCartStore.syncState)
   switch (courseCartStore.syncState) {
-    case 'offline':
+    case CourseCartSyncState.OFFLINE:
       return null
-    case 'fail':
+    case CourseCartSyncState.FAIL:
       return (
         <SyncStatus title={t('fail')}>
           <MdCloudOff />
         </SyncStatus>
       )
-    case 'syncing':
+    case CourseCartSyncState.SYNCING:
       return (
         <SyncStatus title={t('syncing')}>
           <MdCloudQueue />
         </SyncStatus>
       )
-    case 'synced':
+    case CourseCartSyncState.SYNCED:
       return (
         <SyncStatus title={t('synced')}>
           <MdCloudDone />

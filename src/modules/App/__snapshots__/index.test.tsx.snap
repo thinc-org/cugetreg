@@ -15,6 +15,126 @@ exports[`App module Should app component render preperly when forceDark=false 1`
         },
       ]
     }
+    dangerouslySetAllPagesToNoFollow={true}
+    dangerouslySetAllPagesToNoIndex={true}
+    defaultTitle="CU Get Reg"
+    description="เว็บไซต์เพื่ออำนวยความสะดวกในการลงทะเบียนเรียนให้กับนิสิตจุฬาฯ ทุกคน"
+    openGraph={
+      Object {
+        "description": "เว็บไซต์เพื่ออำนวยความสะดวกในการลงทะเบียนเรียนให้กับนิสิตจุฬาฯ ทุกคน",
+        "images": Array [
+          Object {
+            "alt": "CU Get Reg",
+            "height": 600,
+            "url": "http://localhost:3000/cover.jpg",
+            "width": 800,
+          },
+        ],
+        "title": "CU Get Reg",
+        "type": "website",
+        "url": "http://localhost:3000",
+      }
+    }
+    titleTemplate="%s | CU Get Reg"
+  />
+  <AppProvider
+    forceDark={false}
+  >
+    <TrackPageChange>
+      <LoadingProgress />
+      <CssBaseline />
+      <TopBar />
+      <ForwardRef(Container)>
+        <ErrorBoundary>
+          <mockComponent
+            test="test"
+          />
+        </ErrorBoundary>
+      </ForwardRef(Container)>
+      <Footer />
+      <CourseSnackbar />
+      <ShoppingCartModal />
+    </TrackPageChange>
+  </AppProvider>
+</Fragment>
+`;
+
+exports[`App module Should app component render preperly when forceDark=false 2`] = `
+<Fragment>
+  <DefaultSeo
+    additionalMetaTags={
+      Array [
+        Object {
+          "content": "cu,chula,จุฬา,reg,getreg,regchula,ตารางเรียน,ตารางสอน,gened,CU Get Reg,ลงทะเบียนเรียน,อำนวยความสะดวก",
+          "property": "keywords",
+        },
+        Object {
+          "content": "CU Get Reg",
+          "name": "application-name",
+        },
+      ]
+    }
+    dangerouslySetAllPagesToNoFollow={true}
+    dangerouslySetAllPagesToNoIndex={true}
+    defaultTitle="CU Get Reg"
+    description="เว็บไซต์เพื่ออำนวยความสะดวกในการลงทะเบียนเรียนให้กับนิสิตจุฬาฯ ทุกคน"
+    openGraph={
+      Object {
+        "description": "เว็บไซต์เพื่ออำนวยความสะดวกในการลงทะเบียนเรียนให้กับนิสิตจุฬาฯ ทุกคน",
+        "images": Array [
+          Object {
+            "alt": "CU Get Reg",
+            "height": 600,
+            "url": "http://localhost:3000/cover.jpg",
+            "width": 800,
+          },
+        ],
+        "title": "CU Get Reg",
+        "type": "website",
+        "url": "http://localhost:3000",
+      }
+    }
+    titleTemplate="%s | CU Get Reg"
+  />
+  <AppProvider
+    forceDark={false}
+  >
+    <TrackPageChange>
+      <LoadingProgress />
+      <CssBaseline />
+      <TopBar />
+      <ForwardRef(Container)>
+        <ErrorBoundary>
+          <mockComponent
+            test="test"
+          />
+        </ErrorBoundary>
+      </ForwardRef(Container)>
+      <Footer />
+      <CourseSnackbar />
+      <ShoppingCartModal />
+    </TrackPageChange>
+  </AppProvider>
+</Fragment>
+`;
+
+exports[`App module Should app component render preperly when forceDark=false 3`] = `
+<Fragment>
+  <DefaultSeo
+    additionalMetaTags={
+      Array [
+        Object {
+          "content": "cu,chula,จุฬา,reg,getreg,regchula,ตารางเรียน,ตารางสอน,gened,CU Get Reg,ลงทะเบียนเรียน,อำนวยความสะดวก",
+          "property": "keywords",
+        },
+        Object {
+          "content": "CU Get Reg",
+          "name": "application-name",
+        },
+      ]
+    }
+    dangerouslySetAllPagesToNoFollow={false}
+    dangerouslySetAllPagesToNoIndex={false}
     defaultTitle="CU Get Reg"
     description="เว็บไซต์เพื่ออำนวยความสะดวกในการลงทะเบียนเรียนให้กับนิสิตจุฬาฯ ทุกคน"
     openGraph={
@@ -72,6 +192,126 @@ exports[`App module Should app component render preperly when forceDark=true 1`]
         },
       ]
     }
+    dangerouslySetAllPagesToNoFollow={true}
+    dangerouslySetAllPagesToNoIndex={true}
+    defaultTitle="CU Get Reg"
+    description="เว็บไซต์เพื่ออำนวยความสะดวกในการลงทะเบียนเรียนให้กับนิสิตจุฬาฯ ทุกคน"
+    openGraph={
+      Object {
+        "description": "เว็บไซต์เพื่ออำนวยความสะดวกในการลงทะเบียนเรียนให้กับนิสิตจุฬาฯ ทุกคน",
+        "images": Array [
+          Object {
+            "alt": "CU Get Reg",
+            "height": 600,
+            "url": "http://localhost:3000/cover.jpg",
+            "width": 800,
+          },
+        ],
+        "title": "CU Get Reg",
+        "type": "website",
+        "url": "http://localhost:3000",
+      }
+    }
+    titleTemplate="%s | CU Get Reg"
+  />
+  <AppProvider
+    forceDark={true}
+  >
+    <TrackPageChange>
+      <LoadingProgress />
+      <CssBaseline />
+      <TopBar />
+      <ForwardRef(Container)>
+        <ErrorBoundary>
+          <mockComponent
+            test="test"
+          />
+        </ErrorBoundary>
+      </ForwardRef(Container)>
+      <Footer />
+      <CourseSnackbar />
+      <ShoppingCartModal />
+    </TrackPageChange>
+  </AppProvider>
+</Fragment>
+`;
+
+exports[`App module Should app component render preperly when forceDark=true 2`] = `
+<Fragment>
+  <DefaultSeo
+    additionalMetaTags={
+      Array [
+        Object {
+          "content": "cu,chula,จุฬา,reg,getreg,regchula,ตารางเรียน,ตารางสอน,gened,CU Get Reg,ลงทะเบียนเรียน,อำนวยความสะดวก",
+          "property": "keywords",
+        },
+        Object {
+          "content": "CU Get Reg",
+          "name": "application-name",
+        },
+      ]
+    }
+    dangerouslySetAllPagesToNoFollow={true}
+    dangerouslySetAllPagesToNoIndex={true}
+    defaultTitle="CU Get Reg"
+    description="เว็บไซต์เพื่ออำนวยความสะดวกในการลงทะเบียนเรียนให้กับนิสิตจุฬาฯ ทุกคน"
+    openGraph={
+      Object {
+        "description": "เว็บไซต์เพื่ออำนวยความสะดวกในการลงทะเบียนเรียนให้กับนิสิตจุฬาฯ ทุกคน",
+        "images": Array [
+          Object {
+            "alt": "CU Get Reg",
+            "height": 600,
+            "url": "http://localhost:3000/cover.jpg",
+            "width": 800,
+          },
+        ],
+        "title": "CU Get Reg",
+        "type": "website",
+        "url": "http://localhost:3000",
+      }
+    }
+    titleTemplate="%s | CU Get Reg"
+  />
+  <AppProvider
+    forceDark={true}
+  >
+    <TrackPageChange>
+      <LoadingProgress />
+      <CssBaseline />
+      <TopBar />
+      <ForwardRef(Container)>
+        <ErrorBoundary>
+          <mockComponent
+            test="test"
+          />
+        </ErrorBoundary>
+      </ForwardRef(Container)>
+      <Footer />
+      <CourseSnackbar />
+      <ShoppingCartModal />
+    </TrackPageChange>
+  </AppProvider>
+</Fragment>
+`;
+
+exports[`App module Should app component render preperly when forceDark=true 3`] = `
+<Fragment>
+  <DefaultSeo
+    additionalMetaTags={
+      Array [
+        Object {
+          "content": "cu,chula,จุฬา,reg,getreg,regchula,ตารางเรียน,ตารางสอน,gened,CU Get Reg,ลงทะเบียนเรียน,อำนวยความสะดวก",
+          "property": "keywords",
+        },
+        Object {
+          "content": "CU Get Reg",
+          "name": "application-name",
+        },
+      ]
+    }
+    dangerouslySetAllPagesToNoFollow={false}
+    dangerouslySetAllPagesToNoIndex={false}
     defaultTitle="CU Get Reg"
     description="เว็บไซต์เพื่ออำนวยความสะดวกในการลงทะเบียนเรียนให้กับนิสิตจุฬาฯ ทุกคน"
     openGraph={

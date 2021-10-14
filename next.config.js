@@ -18,7 +18,7 @@ module.exports = withOptimizedImages({
     return [
       {
         source: '/api/:path*',
-        destination: 'https://dev.cugetreg.com/api/:path*'
+        destination: `${process.env.NEXT_PUBLIC_BACKEND_URL}/:path*`
       }
     ]
   }

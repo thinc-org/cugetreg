@@ -3,6 +3,7 @@ import { BroadcastChannel } from 'broadcast-channel'
 import { action, computed, makeObservable, observable, runInAction } from 'mobx'
 import { computedFn } from 'mobx-utils'
 
+import { Storage } from '@/common/storage'
 import { StorageKey } from '@/common/storage/constants'
 import { client } from '@/services/apollo'
 import { GetCourseResponse, GetCourseVars, GET_COURSE } from '@/services/apollo/query/getCourse'
@@ -52,13 +53,11 @@ class LocalStorageCourseCartStore implements CourseCartStore {
   online = false
 
   async syncToStore(items: CourseCartStoreItem[]) {
-    localStorage.setItem(StorageKey.ShoppingCart, JSON.stringify(items))
+    new Storage('localStorage').set(StorageKey.ShoppingCart, items)
   }
 
   async syncFromStore() {
-    const item = localStorage.getItem(StorageKey.ShoppingCart)
-    console.log('LC', item)
-    return item ? JSON.parse(item) : []
+    return new Storage('localStorage').get<CourseCartItem[]>(StorageKey.ShoppingCart) || []
   }
 }
 
@@ -85,6 +84,23 @@ export enum CourseCartSyncState {
   OFFLINE,
 }
 
+const unknownCourse: Course = {
+  studyProgram: 'S',
+  semester: '1',
+  academicYear: '0',
+  courseNo: 'UNK',
+  abbrName: 'UNK',
+  courseNameTh: 'UNK',
+  courseNameEn: 'UNK',
+  faculty: 'UNK',
+  department: 'UNK',
+  credit: -1,
+  creditHours: 'UNK',
+  courseCondition: 'UNK',
+  genEdType: 'NO',
+  sections: [],
+}
+
 export class CourseCart implements CourseCartProps {
   @observable shopItems: CourseCartItem[] = []
   @observable state: CourseCartState = 'default'
@@ -92,7 +108,8 @@ export class CourseCart implements CourseCartProps {
   @observable syncState: CourseCartSyncState = CourseCartSyncState.OFFLINE
   private channel: BroadcastChannel
   constructor() {
-    this.channel = new BroadcastChannel('coursecart-change')
+    const COURSE_CART_CHANGES_CHANNEL = 'coursecart-change'
+    this.channel = new BroadcastChannel(COURSE_CART_CHANGES_CHANNEL)
     this.channel.onmessage = () => this.pullFromStore()
 
     makeObservable(this)
@@ -137,21 +154,12 @@ export class CourseCart implements CourseCartProps {
           detail = { ...data.course, selectedSectionNo: course.selectedSectionNo }
         } catch (e) {
           detail = {
+            ...unknownCourse,
             selectedSectionNo: course.selectedSectionNo,
             studyProgram: course.studyProgram as StudyProgram,
             semester: course.semester as Semester,
             academicYear: course.academicYear,
             courseNo: course.courseNo,
-            abbrName: 'UNK',
-            courseNameTh: 'UNK',
-            courseNameEn: 'UNK',
-            faculty: 'UNK',
-            department: 'UNK',
-            credit: -1,
-            creditHours: 'UNK',
-            courseCondition: 'UNK',
-            genEdType: 'NO' as GenEdType,
-            sections: [],
           }
         }
         fullCourse.push(detail)

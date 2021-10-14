@@ -1,19 +1,52 @@
 name: Build and Deploy
 
 on:
+  workflow_dispatch:
   push:
-    branches: [beta, dev, master]
+    branches: [beta, dev]
 
 permissions:
-  contents: read
+  actions: read
+  checks: read
+  contents: write
+  deployments: read
+  issues: write
+  discussions: read
   packages: write
   pull-requests: write
-  repository-projects: read
+  repository-projects: write
+  security-events: read
+  statuses: write
 
 env:
   IMAGE_REPO: ghcr.io/${{ github.repository }}
 
 jobs:
+  release-note:
+    name: Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - uses: actions/cache@v2
+        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+
+      - name: Install dependencies
+        if: steps.yarn-cache.outputs.cache-hit != 'true' && ${{ github.ref == 'refs/heads/beta' }}
+        run: yarn --fronzen-lockfile
+
+      - name: Release
+        if: ${{ github.ref == 'refs/heads/master' }}
+        run: npx semantic-release
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
   build-and-deploy:
     strategy:
       matrix:

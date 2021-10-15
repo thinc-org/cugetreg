@@ -136,7 +136,7 @@ export class CourseCart implements CourseCartProps {
     })
     try {
       const courses = await this.source.syncFromStore()
-      const fullCourse: (Course & { selectedSectionNo: string })[] = []
+      const fullCourses: (Course & { selectedSectionNo: string })[] = []
       for (const course of courses) {
         let detail
         try {
@@ -162,10 +162,10 @@ export class CourseCart implements CourseCartProps {
             courseNo: course.courseNo,
           }
         }
-        fullCourse.push(detail)
+        fullCourses.push(detail)
       }
       runInAction(() => {
-        this.shopItems = fullCourse.map((x) => ({ ...x, isSelected: false, isHidden: false }))
+        this.shopItems = fullCourses.map((course) => ({ ...course, isSelected: false, isHidden: false }))
       })
       setTimeout(
         action('Delayed sync icon', () => {
@@ -188,12 +188,12 @@ export class CourseCart implements CourseCartProps {
     })
     try {
       await this.source.syncToStore(
-        this.shopItems.map((x) => ({
-          studyProgram: x.studyProgram,
-          academicYear: x.academicYear,
-          semester: x.semester,
-          courseNo: x.courseNo,
-          selectedSectionNo: x.selectedSectionNo,
+        this.shopItems.map((item) => ({
+          studyProgram: item.studyProgram,
+          academicYear: item.academicYear,
+          semester: item.semester,
+          courseNo: item.courseNo,
+          selectedSectionNo: item.selectedSectionNo,
         }))
       )
       setTimeout(

@@ -1,7 +1,9 @@
-import { ApolloClient, InMemoryCache } from '@apollo/client'
+import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client'
+import { setContext } from '@apollo/client/link/context'
 import { Course } from '@thinc-org/chula-courses'
 import { uniqBy } from 'lodash'
 
+import { userStore } from '@/store/userStore'
 import env from '@/utils/env/macro'
 
 import { SearchCourseVars } from './query/searchCourse'
@@ -36,8 +38,21 @@ const cache = new InMemoryCache({
   },
 })
 
-export const client = new ApolloClient({
+const httpLink = createHttpLink({
   uri: `${env.backend.uri}/graphql`,
+})
+
+const authLink = setContext((_, { headers }) => {
+  return {
+    headers: {
+      ...headers,
+      authorization: userStore.accessToken ? `Bearer ${userStore.accessToken}` : '',
+    },
+  }
+})
+
+export const client = new ApolloClient({
+  link: authLink.concat(httpLink),
   cache: cache,
 })
 

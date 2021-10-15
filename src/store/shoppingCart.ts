@@ -1,4 +1,4 @@
-import { Course, GenEdType, Semester, StudyProgram } from '@thinc-org/chula-courses'
+import { Course, Semester, StudyProgram } from '@thinc-org/chula-courses'
 import { BroadcastChannel } from 'broadcast-channel'
 import { action, computed, makeObservable, observable, runInAction } from 'mobx'
 import { computedFn } from 'mobx-utils'

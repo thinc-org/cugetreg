@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { action, makeAutoObservable } from 'mobx'
-import { NextRouter, Router } from 'next/router'
+import { NextRouter } from 'next/router'
 
 import { courseCartStore } from '@/store'
 import env from '@/utils/env/macro'

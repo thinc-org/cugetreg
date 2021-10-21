@@ -1,6 +1,3 @@
-// import { CourseGroup } from '../../hooks/useCourseGroup/types'
-import { studyProgram } from '@/common/i18n/locales/th'
-
 import { DEFAULT_STUDY_PROGRAM } from '../../hooks/useCourseGroup/constants'
 
 describe('parseCourseGroup', () => {

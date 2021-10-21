@@ -39,7 +39,7 @@ describe('App module', () => {
     )
     expect(mockUseApp).toBeCalledWith(mockRouter)
     expect(wrapper.find(mockComponent).props()).toEqual(mockPageProps)
-    expect(wrapper.find(AppProvider).prop('forceDark')).toBe(false)
+    expect(wrapper.find(AppProvider).prop('forceDark')).toBe(forceDark)
     expect(wrapper.find(DefaultSeo).prop('dangerouslySetAllPagesToNoFollow')).toBe(environment !== 'production')
     expect(wrapper.find(DefaultSeo).prop('dangerouslySetAllPagesToNoIndex')).toBe(environment !== 'production')
     expect(wrapper).toMatchSnapshot()

@@ -1,0 +1,105 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`NoSeatIcon Should render correctly when open is false 1`] = `
+<Fragment>
+  <ForwardRef(IconButton)
+    aria-haspopup="true"
+    aria-owns="mouse-over-popover"
+    color="primary"
+    onMouseEnter={[MockFunction]}
+    onMouseLeave={[MockFunction]}
+    size="small"
+  >
+    <Memo(ForwardRef(ErrorOutlineIcon))
+      fontSize="inherit"
+    />
+  </ForwardRef(IconButton)>
+  <ForwardRef(Popover)
+    anchorEl={<a />}
+    anchorOrigin={
+      Object {
+        "horizontal": "left",
+        "vertical": "bottom",
+      }
+    }
+    container="current"
+    disableRestoreFocus={true}
+    id="mouse-over-popover"
+    onClose={[MockFunction]}
+    open={[MockFunction]}
+    sx={
+      Object {
+        "pointerEvents": "none",
+      }
+    }
+    transformOrigin={
+      Object {
+        "horizontal": "left",
+        "vertical": "top",
+      }
+    }
+  >
+    <ForwardRef(Container)
+      maxWidth="sm"
+    >
+      <ForwardRef(Typography)
+        variant="body1"
+      >
+        <p />
+      </ForwardRef(Typography)>
+    </ForwardRef(Container)>
+  </ForwardRef(Popover)>
+</Fragment>
+`;
+
+exports[`NoSeatIcon Should render correctly when open is true 1`] = `
+<Fragment>
+  <ForwardRef(IconButton)
+    aria-haspopup="true"
+    aria-owns="mouse-over-popover"
+    color="primary"
+    onMouseEnter={[MockFunction]}
+    onMouseLeave={[MockFunction]}
+    size="small"
+  >
+    <Memo(ForwardRef(ErrorOutlineIcon))
+      fontSize="inherit"
+    />
+  </ForwardRef(IconButton)>
+  <ForwardRef(Popover)
+    anchorEl={<a />}
+    anchorOrigin={
+      Object {
+        "horizontal": "left",
+        "vertical": "bottom",
+      }
+    }
+    container="current"
+    disableRestoreFocus={true}
+    id="mouse-over-popover"
+    onClose={[MockFunction]}
+    open={[MockFunction]}
+    sx={
+      Object {
+        "pointerEvents": "none",
+      }
+    }
+    transformOrigin={
+      Object {
+        "horizontal": "left",
+        "vertical": "top",
+      }
+    }
+  >
+    <ForwardRef(Container)
+      maxWidth="sm"
+    >
+      <ForwardRef(Typography)
+        variant="body1"
+      >
+        <p />
+      </ForwardRef(Typography)>
+    </ForwardRef(Container)>
+  </ForwardRef(Popover)>
+</Fragment>
+`;

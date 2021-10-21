@@ -74,7 +74,8 @@ jobs:
           report-json: 'eslint_report.json'
 
       - name: Collect coverage
-        run: yarn test:ci
+        timeout-minutes: 5 # Times out after 1 minute
+        run: yarn test:ci --detectOpenHandles --forceExit
 
       - name: Get the current branch name
         if: github.event_name == 'push'

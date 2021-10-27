@@ -1,11 +1,13 @@
+import { Term } from '@/common/types/term'
+
 import { DEFAULT_STUDY_PROGRAM } from '../../hooks/useCourseGroup/constants'
 
 describe('parseCourseGroup', () => {
-  const MOCK_TERM = {
+  const MOCK_TERM: Term = {
     academicYear: '2564',
     semester: '1',
   }
-  const MOCK_TERM_2 = {
+  const MOCK_TERM_2: Term = {
     academicYear: '2563',
     semester: '2',
   }

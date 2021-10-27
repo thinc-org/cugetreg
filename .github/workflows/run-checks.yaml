@@ -74,7 +74,7 @@ jobs:
           report-json: 'eslint_report.json'
 
       - name: Collect coverage
-        timeout-minutes: 5 # Times out after 1 minute
+        timeout-minutes: 5 # Times out after 5 minute
         run: yarn test:ci --detectOpenHandles --forceExit
 
       - name: Get the current branch name

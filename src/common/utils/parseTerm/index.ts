@@ -2,7 +2,7 @@ import { Term } from '@/common/types/term'
 
 import { getCurrentTerm } from '../getCurrentTerm'
 
-const termPattern = /(\d\d\d\d)\/(\d)/
+const termPattern = /^(\d\d\d\d)\/(\d)$/
 
 export function parseTerm(term: string): Term {
   const match = term.match(termPattern)

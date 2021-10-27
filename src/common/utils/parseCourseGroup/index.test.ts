@@ -15,7 +15,7 @@ describe('parseCourseGroup', () => {
     const isEmpty = term === ''
     return !isEmpty ? MOCK_TERM : MOCK_TERM_2
   })
-  jest.doMock('../../hooks/useCourseGroup/utils/parseTerm', () => ({ parseTerm: mockParseTerm }))
+  jest.doMock('@/common/utils/parseTerm', () => ({ parseTerm: mockParseTerm }))
 
   afterEach(() => {
     jest.clearAllMocks()

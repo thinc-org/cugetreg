@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next'
 
 import { Analytics } from '@/common/context/Analytics/components/Analytics'
 import { REPORT_PROBLEM, STUDY_PROGRAM_DROPDOWN } from '@/common/context/Analytics/constants'
-import { useCourseGroup } from '@/common/hooks/useCourseGroup'
 import { Spacer } from '@/components/Spacer'
 import { sessionIdStore } from '@/store/sessionIdStore'
 

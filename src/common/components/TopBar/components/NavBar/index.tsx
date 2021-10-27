@@ -1,4 +1,4 @@
-import { Hidden, Typography } from '@material-ui/core'
+import { Hidden } from '@material-ui/core'
 import { useTranslation } from 'react-i18next'
 
 import logo from '@/assets/images/cgrLogoDark.svg'
@@ -25,7 +25,7 @@ import { NavBarLayout, Logo } from './styled'
 
 export function NavBar() {
   const { t } = useTranslation()
-  const { studyProgram, academicYear, semester } = useCourseGroup()
+  const { studyProgram } = useCourseGroup()
 
   const navbarItems = [
     {

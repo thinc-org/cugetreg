@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 
 import { useCourseGroup } from '@/common/hooks/useCourseGroup'
 
-import { ConfigBarSelect } from './styled'
+import { ConfigBarSelect } from '../ConfigSelect'
 
 interface StudyProgramDropdownProps {
   log: (_: unknown, value: string) => void

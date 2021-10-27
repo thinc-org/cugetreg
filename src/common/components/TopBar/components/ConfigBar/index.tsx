@@ -9,13 +9,12 @@ import { Spacer } from '@/components/Spacer'
 import { sessionIdStore } from '@/store/sessionIdStore'
 
 import { StudyProgramDropdown } from '../StudyProgramDropdown'
+import { TermDropdown } from '../TermDropdown'
 import { FlexContainer } from '../styled'
 import { ConfigBarLayout, ConfigBarItem, ConfigBarItemLink } from './styled'
 
 export const ConfigBar = observer(() => {
   const { t } = useTranslation('configBar')
-
-  const { academicYear, semester } = useCourseGroup()
 
   const sessionId = sessionIdStore.sessionId
   const reportProblemLink = `https://airtable.com/shruwAAfn1763TgMU?prefill_Session_ID=${sessionId}`
@@ -26,9 +25,7 @@ export const ConfigBar = observer(() => {
         <Spacer />
         <Analytics elementName={STUDY_PROGRAM_DROPDOWN}>{({ log }) => <StudyProgramDropdown log={log} />}</Analytics>
         <ConfigBarItem>
-          <Typography variant="subtitle2">
-            {academicYear}/{semester}
-          </Typography>
+          <TermDropdown />
         </ConfigBarItem>
         <Analytics elementName={REPORT_PROBLEM}>
           <ConfigBarItemLink href={reportProblemLink} target="_blank" rel="noreferrer">

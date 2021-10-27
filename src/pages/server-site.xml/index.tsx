@@ -2,7 +2,7 @@ import { StudyProgram, StudyProgramEnum } from '@thinc-org/chula-courses'
 import { GetServerSideProps } from 'next'
 import { getServerSideSitemap, ISitemapField } from 'next-sitemap'
 
-import { currentTerm } from '@/common/hooks/useCourseGroup/utils/parseTerm'
+import { getCurrentTerm } from '@/common/utils/getCurrentTerm'
 import { createApolloServerClient } from '@/services/apollo'
 import { GetAllCoursesResponse, GET_ALL_COURSES } from '@/services/apollo/query/getAllCourses'
 import { site_url } from '@/utils/env'
@@ -17,8 +17,8 @@ async function getAllCoursesFromStudyProgram(studyProgram: StudyProgram): Promis
     variables: {
       courseGroup: {
         studyProgram: studyProgram,
-        academicYear: currentTerm.academicYear,
-        semester: currentTerm.semester,
+        academicYear: getCurrentTerm().academicYear,
+        semester: getCurrentTerm().semester,
       },
       filter: {
         offset: 0,

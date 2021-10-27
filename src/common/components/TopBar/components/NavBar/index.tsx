@@ -18,6 +18,7 @@ import { ConfigBarItem } from '../ConfigBar/styled'
 import { MobileNavBar } from '../MobileNavBar'
 import { NavBarItem } from '../NavBarItem'
 import { StudyProgramDropdown } from '../StudyProgramDropdown'
+import { TermDropdown } from '../TermDropdown'
 import { UserButton } from '../UserButton'
 import { FlexContainer } from '../styled'
 import { NavBarLayout, Logo } from './styled'
@@ -66,9 +67,7 @@ export function NavBar() {
           <Spacer />
           <Analytics elementName={STUDY_PROGRAM_DROPDOWN}>{({ log }) => <StudyProgramDropdown log={log} />}</Analytics>
           <ConfigBarItem>
-            <Typography variant="subtitle2">
-              {academicYear}/{semester}
-            </Typography>
+            <TermDropdown />
           </ConfigBarItem>
           <MobileNavBar />
         </Hidden>

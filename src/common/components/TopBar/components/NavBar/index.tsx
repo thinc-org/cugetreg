@@ -1,4 +1,4 @@
-import { Hidden, Typography } from '@material-ui/core'
+import { Hidden } from '@material-ui/core'
 import { useTranslation } from 'react-i18next'
 
 import logo from '@/assets/images/cgrLogoDark.svg'
@@ -18,13 +18,14 @@ import { ConfigBarItem } from '../ConfigBar/styled'
 import { MobileNavBar } from '../MobileNavBar'
 import { NavBarItem } from '../NavBarItem'
 import { StudyProgramDropdown } from '../StudyProgramDropdown'
+import { TermDropdown } from '../TermDropdown'
 import { UserButton } from '../UserButton'
 import { FlexContainer } from '../styled'
 import { NavBarLayout, Logo } from './styled'
 
 export function NavBar() {
   const { t } = useTranslation()
-  const { studyProgram, academicYear, semester } = useCourseGroup()
+  const { studyProgram } = useCourseGroup()
 
   const navbarItems = [
     {
@@ -66,9 +67,7 @@ export function NavBar() {
           <Spacer />
           <Analytics elementName={STUDY_PROGRAM_DROPDOWN}>{({ log }) => <StudyProgramDropdown log={log} />}</Analytics>
           <ConfigBarItem>
-            <Typography variant="subtitle2">
-              {academicYear}/{semester}
-            </Typography>
+            <TermDropdown />
           </ConfigBarItem>
           <MobileNavBar />
         </Hidden>

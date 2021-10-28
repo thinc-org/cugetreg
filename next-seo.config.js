@@ -1,9 +1,12 @@
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+const environment = process.env.NEXT_PUBLIC_ENVIRONMENT || 'dev'
 
 const options = {
   titleTemplate: '%s | CU Get Reg',
   defaultTitle: 'CU Get Reg',
   description: 'เว็บไซต์เพื่ออำนวยความสะดวกในการลงทะเบียนเรียนให้กับนิสิตจุฬาฯ ทุกคน',
+  dangerouslySetAllPagesToNoIndex: environment !== 'production',
+  dangerouslySetAllPagesToNoFollow: environment !== 'production',
   additionalMetaTags: [
     {
       property: 'keywords',

@@ -72,9 +72,9 @@ jobs:
         if: ${{ github.ref == 'refs/heads/beta' }}
         run: mv .env.beta .env
 
-      - name: Set dev env
-        if: ${{ github.ref == 'refs/heads/dev' }}
-        run: mv .env.dev .env
+      - name: Set prod env
+        if: ${{ github.ref == 'refs/heads/master' }}
+        run: mv .env.prod .env
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta

@@ -2,20 +2,21 @@ import axios from 'axios'
 import { runInAction } from 'mobx'
 import * as uuid from 'uuid'
 
-import { gapiStore } from '@/store/googleApiStore'
+import { StorageKey } from '@/common/storage/constants'
 import { sessionIdStore } from '@/store/sessionIdStore'
+import { userStore } from '@/store/userStore'
 import env from '@/utils/env/macro'
 
 import { ClientLogDTO, LogEvent } from './types'
 
 function getDeviceId() {
   if (localStorage) {
-    const v = localStorage.getItem(DEVICE_ID_LOCALSTORAGE_KEY)
+    const v = localStorage.getItem(StorageKey.DeviceId)
     if (v) {
       return v
     } else {
       const nId = uuid.v4()
-      localStorage.setItem(DEVICE_ID_LOCALSTORAGE_KEY, nId)
+      localStorage.setItem(StorageKey.DeviceId, nId)
       return nId
     }
   } else {
@@ -25,8 +26,6 @@ function getDeviceId() {
 
 export let sessionId = ''
 export let deviceId = ''
-
-const DEVICE_ID_LOCALSTORAGE_KEY = 'DEVICE_ID'
 
 let backlogLog: ClientLogDTO[] = []
 
@@ -65,7 +64,7 @@ export function collectLogEvent(event: LogEvent) {
     ...event,
     deviceId: deviceId,
     sessionId: sessionId,
-    accessToken: gapiStore.currentUser?.getAuthResponse().id_token,
+    accessToken: userStore.accessToken || undefined,
   }
   backlogLog.push(log)
   if (backlogLog.length >= 5) sendCollectedLog()

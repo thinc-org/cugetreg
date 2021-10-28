@@ -1,9 +1,6 @@
 import { StudyProgram } from '@thinc-org/chula-courses'
 
-export interface Term {
-  academicYear: string
-  semester: string
-}
+import { Term } from '@/common/types/term'
 
 export interface CourseGroup extends Term {
   studyProgram: StudyProgram
@@ -11,6 +8,5 @@ export interface CourseGroup extends Term {
 
 export interface CourseGroupResult extends CourseGroup {
   setStudyProgram: (newStudyProgram: StudyProgram) => void
-  setYear: (newYear: string) => void
-  setSemester: (newSemester: string) => void
+  setTerm: (term: string) => void
 }

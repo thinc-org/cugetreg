@@ -1,28 +1,10 @@
 import { IconButton, Popover, Typography, Container, IconButtonProps } from '@material-ui/core'
 import { ErrorOutline } from '@material-ui/icons'
-import { MouseEvent, useRef, useState } from 'react'
-import { useTranslation } from 'react-i18next'
 
-import { useLog } from '@/common/context/Analytics/hooks/useLog'
+import { useNoSeatIcon } from './hooks/useNoSeatIcon'
 
 export function NoSeatIcon(props: IconButtonProps) {
-  const containerRef = useRef(null)
-  const { t } = useTranslation('regWarNotice')
-
-  const [anchorEl, setAnchorEl] = useState<Element | null>(null)
-  const open = Boolean(anchorEl)
-
-  const { log } = useLog('regwarnotice')
-
-  const onHover = (e: MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(e.currentTarget)
-    log(null, 'see notice')
-  }
-
-  const onLeave = () => {
-    setAnchorEl(null)
-  }
-
+  const { anchorEl, onHover, onLeave, t, open, containerRef } = useNoSeatIcon()
   return (
     <>
       <IconButton

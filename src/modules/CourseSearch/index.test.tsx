@@ -12,6 +12,9 @@ describe('CourseSearchPage', () => {
   jest.doMock('./hooks/useCourseSearchPage', () => ({
     useCourseSearchPage: mockUseCourseSearchPage,
   }))
+  jest.doMock('@/services/apollo', () => ({
+    client: { mutate: jest.fn() },
+  }))
 
   it('Should match snapshot correctly', async () => {
     const { CourseSearchPage } = await import('.')

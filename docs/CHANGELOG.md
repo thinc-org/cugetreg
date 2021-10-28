@@ -1,3 +1,27 @@
+# [1.1.0](https://github.com/thinc-org/cugetreg-frontend/compare/v1.0.0...v1.1.0) (2021-10-28)
+
+
+### Bug Fixes
+
+* couseSearch test failed ([c0c36ba](https://github.com/thinc-org/cugetreg-frontend/commit/c0c36ba588ad7698522caa6757ba911c122a804f))
+* extract code coverage infinite loop ([b227693](https://github.com/thinc-org/cugetreg-frontend/commit/b227693ea3628714ee235fc532586dc4fd16e419))
+* remove unnecessary test ([1d44fd2](https://github.com/thinc-org/cugetreg-frontend/commit/1d44fd2ce647d91a39772a3fbf9c76973f126923))
+* requested changes ([dda8a98](https://github.com/thinc-org/cugetreg-frontend/commit/dda8a98907c9eeadcd1a49b05d5cbca62d62b876))
+* set noindex, nofollow for beta and dev environment ([f0456b2](https://github.com/thinc-org/cugetreg-frontend/commit/f0456b2f8776f7280519408177f363ffdaf4c2e7))
+* workflow permissions ([56aaf4d](https://github.com/thinc-org/cugetreg-frontend/commit/56aaf4d31c7ebe2ecce09986ee55232c0940d351))
+* workflow test error ([88b9858](https://github.com/thinc-org/cugetreg-frontend/commit/88b9858d580194b9ba9740d92ab4841b96568d9e))
+* workflow test error ([f03cd82](https://github.com/thinc-org/cugetreg-frontend/commit/f03cd821e4c18d679d354ab289eaa4b5051c7a9c))
+
+
+### Features
+
+* add term dropdown on topbar ([7faaab0](https://github.com/thinc-org/cugetreg-frontend/commit/7faaab05516aafa899d7cb480d69f666ab8d3a02))
+
+
+### Reverts
+
+* Revert "experiment: intentionally break test" ([f34ccf4](https://github.com/thinc-org/cugetreg-frontend/commit/f34ccf461969c18fdcc880def5f1affe5b3cd38e))
+
 # 1.0.0 (2021-10-13)
 
 

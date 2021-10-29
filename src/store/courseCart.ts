@@ -310,20 +310,29 @@ export class CourseCart implements CourseCartProps {
   }
 
   /**
-   * Use to get the shopping item by given courseNo.
-   * @param courseNo - the unique course number
+   * Get all items that are in the current course group
    */
   shopItemsByCourseGroup = computedFn((courseGroup: CourseGroup): CourseCartItem[] => {
     return this.shopItems.filter((item) => isInCourseGroup(item, courseGroup))
   })
 }
 
+/**
+ * Reorder the course group in the cart model so that the order match what the user sees.
+ * @param items - the items to be reordered
+ * @param courseGroup - the current course group
+ * @returns the reordered items
+ */
 function pullCourseGroupUp(items: CourseCartItem[], courseGroup: CourseGroup): CourseCartItem[] {
   const itemsInCurrentGroup = items.filter((item) => isInCourseGroup(item, courseGroup))
   const itemsInOtherGroups = items.filter((item) => !isInCourseGroup(item, courseGroup))
   return [...itemsInCurrentGroup, ...itemsInOtherGroups]
 }
 
+/**
+ * Checks if two course keys are the same
+ * @returns true if they are the same
+ */
 function isSameKey(a: CourseKey, b: CourseKey): boolean {
   return (
     a.courseNo == b.courseNo &&
@@ -333,6 +342,12 @@ function isSameKey(a: CourseKey, b: CourseKey): boolean {
   )
 }
 
+/**
+ * Checks if the course is in the given course group
+ * @param course the course to check
+ * @param courseGroup the course group to check
+ * @returns true if the course is in the given course group
+ */
 function isInCourseGroup(course: CourseKey, courseGroup: CourseGroup): boolean {
   return (
     course.studyProgram == courseGroup.studyProgram &&

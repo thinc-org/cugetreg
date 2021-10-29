@@ -7,6 +7,7 @@ import { Analytics } from '@/common/context/Analytics/components/Analytics'
 import { LinkWithAnalytics } from '@/common/context/Analytics/components/LinkWithAnalytics'
 import { CR11_BUTTON, CLASS_TAB_BUTTON, EXAM_TAB_BUTTON } from '@/common/context/Analytics/constants'
 import { useCourseGroup } from '@/common/hooks/useCourseGroup'
+import { useLinkBuilder } from '@/common/hooks/useLinkBuilder'
 import { courseCartStore } from '@/store'
 
 import { ExamSchedule } from './components/ExamSchedule'
@@ -44,7 +45,7 @@ export const SchedulePage = observer(() => {
 
   const theme = useTheme()
   const isDesktop = useMediaQuery(theme.breakpoints.up('sm'))
-  const { studyProgram } = useCourseGroup()
+  const { buildLink } = useLinkBuilder()
 
   return (
     <PageContainer>
@@ -98,7 +99,7 @@ export const SchedulePage = observer(() => {
           <Button variant="outlined" disabled>
             {t('addToCalendar')}
           </Button>
-          <LinkWithAnalytics href={`/${studyProgram}/schedule/cr11`} passHref elementName={CR11_BUTTON}>
+          <LinkWithAnalytics href={buildLink(`/schedule/cr11`)} passHref elementName={CR11_BUTTON}>
             <Button style={{ marginRight: 0 }} variant="outlined">
               {isDesktop ? t('showCR11') : t('showCR11Mobile')}
             </Button>

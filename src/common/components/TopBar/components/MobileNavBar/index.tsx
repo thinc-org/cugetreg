@@ -10,8 +10,8 @@ import logo from '@/assets/images/cgrLogoDark.svg'
 import { Analytics } from '@/common/context/Analytics/components/Analytics'
 import { LinkWithAnalytics } from '@/common/context/Analytics/components/LinkWithAnalytics'
 import { REPORT_PROBLEM, NAVBAR_SEARCH_COURSE, NAVBAR_TIMETABLE } from '@/common/context/Analytics/constants'
-import { useCourseGroup } from '@/common/hooks/useCourseGroup'
 import { useDisclosure } from '@/common/hooks/useDisclosure'
+import { useLinkBuilder } from '@/common/hooks/useLinkBuilder'
 import { sessionIdStore } from '@/store/sessionIdStore'
 
 import { NavBarItem } from '../NavBarItem'
@@ -22,7 +22,7 @@ export const MobileNavBar = observer(() => {
   const { t } = useTranslation()
   const { asPath } = useRouter()
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const { studyProgram } = useCourseGroup()
+  const { buildLink } = useLinkBuilder()
 
   const sessionId = sessionIdStore.sessionId
   const reportProblemLink = `https://airtable.com/shruwAAfn1763TgMU?prefill_Session_ID=${sessionId}`
@@ -40,12 +40,12 @@ export const MobileNavBar = observer(() => {
         <DrawerContent>
           <Logo src={logo} alt={t('appName')} />
           <div>
-            <LinkWithAnalytics href={`/${studyProgram}/courses`} passHref elementName={NAVBAR_SEARCH_COURSE}>
+            <LinkWithAnalytics href={buildLink(`/courses`)} passHref elementName={NAVBAR_SEARCH_COURSE}>
               <NavBarItem onClick={onClose}>{t('navBar:searchCourses')}</NavBarItem>
             </LinkWithAnalytics>
           </div>
           <div>
-            <LinkWithAnalytics href={`/${studyProgram}/schedule`} passHref elementName={NAVBAR_TIMETABLE}>
+            <LinkWithAnalytics href={buildLink(`/schedule`)} passHref elementName={NAVBAR_TIMETABLE}>
               <NavBarItem onClick={onClose}>{t('navBar:timetable')}</NavBarItem>
             </LinkWithAnalytics>
           </div>

@@ -9,7 +9,7 @@ import { Analytics } from '@/common/context/Analytics/components/Analytics'
 import { LinkWithAnalytics } from '@/common/context/Analytics/components/LinkWithAnalytics'
 import { SHOPPING_CART_BUTTON, SHOPPING_CART_REMOVE_COURSE } from '@/common/context/Analytics/constants'
 import { useShoppingCardModal } from '@/common/context/ShoppingCartModal'
-import { useCourseGroup } from '@/common/hooks/useCourseGroup'
+import { useLinkBuilder } from '@/common/hooks/useLinkBuilder'
 
 import { ShoppingState } from '../hooks/useShoppingPanel'
 
@@ -31,8 +31,8 @@ export const ActionButton: React.FC<ActionButtonProps> = ({
   ...props
 }) => {
   const { t } = useTranslation('shoppingPanel')
-  const { studyProgram } = useCourseGroup()
-  const href = `/${studyProgram}/schedule`
+  const { buildLink } = useLinkBuilder()
+  const href = buildLink(`/schedule`)
   const { onClose } = useShoppingCardModal()
 
   const defaultButtonProps: ButtonProps = {

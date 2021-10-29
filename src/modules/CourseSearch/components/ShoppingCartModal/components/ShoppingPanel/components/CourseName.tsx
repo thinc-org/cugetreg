@@ -6,7 +6,7 @@ import { genEdChipConfig } from '@/common/components/Chips/config'
 import { LinkWithAnalytics } from '@/common/context/Analytics/components/LinkWithAnalytics'
 import { SELECTED_COURSE_TITLE } from '@/common/context/Analytics/constants'
 import { useShoppingCardModal } from '@/common/context/ShoppingCartModal'
-import { useCourseGroup } from '@/common/hooks/useCourseGroup'
+import { useLinkBuilder } from '@/common/hooks/useLinkBuilder'
 
 export interface CourseNameProps {
   course: Course
@@ -17,10 +17,10 @@ export const CourseName: React.FC<CourseNameProps> = ({ course }) => {
   const color = genEdChipConfig[genEdType].color
   const { onClose } = useShoppingCardModal()
 
-  const { studyProgram } = useCourseGroup()
+  const { buildLink } = useLinkBuilder()
   return (
     <LinkWithAnalytics
-      href={`/${studyProgram}/courses/${courseNo}`}
+      href={buildLink(`/courses/${courseNo}`)}
       passHref
       elementName={SELECTED_COURSE_TITLE}
       elementId={courseNo}

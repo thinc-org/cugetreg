@@ -14,7 +14,7 @@ export const useSelectButton = ({ course, selectedSectionNumber, log }: SelectBu
   const { emitMessage } = useContext(SnackbarContext)
   const isExperimentColor = useGoogleOptimize(google_optimize, [false, true])
 
-  const isSelected = courseCartStore.item(course.courseNo)?.selectedSectionNo === selectedSectionNumber
+  const isSelected = courseCartStore.item(course)?.selectedSectionNo === selectedSectionNumber
 
   const onClickSelectCourse = useCallback(() => {
     runInAction(() => {

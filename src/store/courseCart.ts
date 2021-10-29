@@ -1,8 +1,9 @@
 import { Course, Semester, StudyProgram } from '@thinc-org/chula-courses'
 import { BroadcastChannel } from 'broadcast-channel'
-import { action, computed, makeObservable, observable, runInAction } from 'mobx'
+import { action, makeObservable, observable, runInAction } from 'mobx'
 import { computedFn } from 'mobx-utils'
 
+import { CourseGroup } from '@/common/hooks/useCourseGroup/types'
 import { Storage } from '@/common/storage'
 import { StorageKey } from '@/common/storage/constants'
 import { client } from '@/services/apollo'
@@ -21,7 +22,15 @@ export type CourseCartState = 'default' | 'delete'
 
 export interface CourseCartProps {
   shopItems: CourseCartItem[]
+  shopItemsByCourseGroup(courseGroup: CourseGroup): CourseCartItem[]
   state: CourseCartState
+}
+
+export interface CourseKey {
+  courseNo: string
+  studyProgram: StudyProgram
+  academicYear: string
+  semester: string
 }
 
 interface CourseCartStoreItem {
@@ -222,20 +231,11 @@ export class CourseCart implements CourseCartProps {
   }
 
   /**
-   * Use to convert CourseCartItem to Course
-   * @param shopItem - the store's item
-   */
-  private convertToCourse(shopItem: CourseCartItem): Course {
-    const { selectedSectionNo, isSelected, ...rest } = shopItem // eslint-disable-line
-    return rest
-  }
-
-  /**
    * Use to get the shopping item by given courseNo.
    * @param courseNo - the unique course number
    */
-  item = computedFn((courseNo: string): CourseCartItem | undefined => {
-    const foundIndex = this.shopItems.findIndex((item) => item.courseNo == courseNo)
+  item = computedFn((course: CourseKey): CourseCartItem | undefined => {
+    const foundIndex = this.shopItems.findIndex((item) => isSameKey(item, course))
     if (foundIndex != -1) return this.shopItems[foundIndex]
     return undefined
   })
@@ -260,13 +260,9 @@ export class CourseCart implements CourseCartProps {
       },
     })
 
-    if (this.currentProgram !== null && course.studyProgram !== this.currentProgram) {
-      return false
-    }
-
     if (!selectedSectionNo) selectedSectionNo = this.findFirstSectionNo(course)
     const newItem: CourseCartItem = { ...course, selectedSectionNo, isSelected: false, isHidden: false }
-    const foundIndex = this.shopItems.findIndex((item) => item.courseNo == course.courseNo)
+    const foundIndex = this.shopItems.findIndex((item) => isSameKey(item, newItem))
     if (foundIndex != -1) this.shopItems[foundIndex] = newItem
     else this.shopItems.push(newItem)
 
@@ -275,26 +271,10 @@ export class CourseCart implements CourseCartProps {
   }
 
   @action
-  removeCourse(course: Course): void {
-    this.shopItems = this.shopItems.filter((item) => item.courseNo !== course.courseNo)
+  removeCourse(course: CourseKey): void {
+    this.shopItems = this.shopItems.filter((item) => !isSameKey(item, course))
 
     this.onChange()
-  }
-
-  /**
-   * Use to select or deselect the items; select for removing the item from the store.
-   * @param courseNo - the unique course number
-   */
-  @action
-  toggleSelectedItem(courseNo: string): void {
-    const foundIndex = this.shopItems.findIndex((item) => item.courseNo == courseNo)
-    if (foundIndex == -1) return
-    this.shopItems[foundIndex].isSelected = !this.shopItems[foundIndex].isSelected
-    let hasSelectedItem = false
-    this.shopItems.forEach((item) => {
-      hasSelectedItem = hasSelectedItem || item.isSelected
-    })
-    this.state = hasSelectedItem ? 'delete' : 'default'
   }
 
   /**
@@ -302,8 +282,8 @@ export class CourseCart implements CourseCartProps {
    * @param courseNo - the unique course number
    */
   @action
-  toggleHiddenItem(courseNo: string): void {
-    const foundIndex = this.shopItems.findIndex((item) => item.courseNo == courseNo)
+  toggleHiddenItem(course: CourseKey): void {
+    const foundIndex = this.shopItems.findIndex((item) => isSameKey(item, course))
     if (foundIndex == -1) return
     this.shopItems[foundIndex].isHidden = !this.shopItems[foundIndex].isHidden
   }
@@ -320,21 +300,6 @@ export class CourseCart implements CourseCartProps {
     this.onChange()
   }
 
-  /**
-   * Use to swap the order of two courses
-   * @param courseNoA - the unique courseA number
-   * @param courseNoB - the unique courseB number
-   */
-  @action
-  swapOrder(courseNoA: string, courseNoB: string) {
-    const indexA = this.shopItems.findIndex((item) => item.courseNo == courseNoA)
-    const indexB = this.shopItems.findIndex((item) => item.courseNo == courseNoB)
-    if (indexA == -1 || indexB == -1) return
-    const temp = this.shopItems[indexA]
-    this.shopItems[indexA] = this.shopItems[indexB]
-    this.shopItems[indexB] = temp
-  }
-
   @action
   reorder(from: number, to: number) {
     const result = Array.from(this.shopItems)
@@ -344,29 +309,24 @@ export class CourseCart implements CourseCartProps {
   }
 
   /**
-   * get one course by the given courseNo. from the store
+   * Use to get the shopping item by given courseNo.
    * @param courseNo - the unique course number
    */
-  course = computedFn((courseNo: string): Course | undefined => {
-    const foundIndex = this.shopItems.findIndex((item) => item.courseNo == courseNo)
-    if (foundIndex == -1) return
-    return this.convertToCourse(this.shopItems[foundIndex])
+  shopItemsByCourseGroup = computedFn((courseGroup: CourseGroup): CourseCartItem[] => {
+    const { studyProgram, semester, academicYear } = courseGroup
+    return this.shopItems.filter((item) => {
+      return item.studyProgram == studyProgram && item.semester == semester && item.academicYear == academicYear
+    })
   })
-
-  /**
-   * get all course from the store
-   */
-  @computed
-  get courses(): Course[] {
-    return this.shopItems.map((item) => this.convertToCourse(item))
-  }
-
-  /**
-   * get all course from the store
-   */
-  @computed
-  get currentProgram() {
-    return this.shopItems[0] ? this.shopItems[0].studyProgram : null
-  }
 }
+
+function isSameKey(a: CourseKey, b: CourseKey): boolean {
+  return (
+    a.courseNo == b.courseNo &&
+    a.studyProgram == b.studyProgram &&
+    a.semester == b.semester &&
+    a.academicYear == b.academicYear
+  )
+}
+
 export const courseCartStore = new CourseCart()

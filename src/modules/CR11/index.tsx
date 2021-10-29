@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 
 import { BackButton } from '@/common/components/BackButton'
 import { useCourseGroup } from '@/common/hooks/useCourseGroup'
+import { useLinkBuilder } from '@/common/hooks/useLinkBuilder'
 import { CR11 } from '@/modules/CR11/components/CR11'
 import { courseCartStore } from '@/store/courseCart'
 
@@ -93,16 +94,17 @@ export const CR11Page = observer(() => {
   const classes = useStyles()
   const { t } = useTranslation(['program', 'cr11'])
   const courseGroup = useCourseGroup()
-  const { studyProgram, academicYear: year, semester } = courseGroup
+  const { academicYear: year, semester } = courseGroup
   const studyProgramText = `${t('cr11:semester')} ${year}/${semester} ${t(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     `program:${courseGroup.studyProgram || 's'}` as any
   )}`
+  const { buildLink } = useLinkBuilder()
 
   return (
     <div className={classes.container}>
       <div className={classes.top}>
-        <BackButton href={`/${studyProgram}/schedule`} />
+        <BackButton href={buildLink(`/schedule`)} />
         <Typography className={`${classes.semester} ${classes.mobile}`} variant="subtitle1">
           {studyProgramText}
         </Typography>

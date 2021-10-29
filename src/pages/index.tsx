@@ -1,14 +1,15 @@
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 
-import { DEFAULT_STUDY_PROGRAM } from '@/common/constants/studyProgram'
+import { useLinkBuilder } from '@/common/hooks/useLinkBuilder'
 
 function HomePage() {
   const router = useRouter()
+  const { buildLink } = useLinkBuilder()
 
   useEffect(() => {
-    router.replace(`${DEFAULT_STUDY_PROGRAM}/courses`)
-  }, [router])
+    router.replace(buildLink(`/courses`))
+  }, [router, buildLink])
 
   return null
 }

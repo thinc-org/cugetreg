@@ -1,15 +1,24 @@
 import { StudyProgram } from '@thinc-org/chula-courses'
 import { omit } from 'lodash'
 import { useRouter } from 'next/router'
-import { useCallback, useRef } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 
+import { DEFAULT_STUDY_PROGRAM } from '@/common/hooks/useCourseGroup/constants'
 import { parseCourseGroup } from '@/common/utils/parseCourseGroup'
 
 import { CourseGroupResult } from './types'
 
+let lastStudyProgram = DEFAULT_STUDY_PROGRAM
+if (typeof window !== 'undefined') {
+  const storedStudyProgram = localStorage.getItem('studyProgram') as StudyProgram | null
+  if (storedStudyProgram !== null) {
+    lastStudyProgram = storedStudyProgram
+  }
+}
+
 export function useCourseGroup(): CourseGroupResult {
   const router = useRouter()
-  const courseGroup = parseCourseGroup(router.query)
+  const courseGroup = parseCourseGroup(router.query, lastStudyProgram)
 
   const currentCourseGroup = useRef(courseGroup)
   currentCourseGroup.current = courseGroup
@@ -47,4 +56,12 @@ export function useCourseGroup(): CourseGroupResult {
     setStudyProgram,
     setTerm,
   }
+}
+
+export function useSaveStudyProgram() {
+  const { studyProgram } = useCourseGroup()
+  useEffect(() => {
+    lastStudyProgram = studyProgram
+    localStorage.setItem('studyProgram', studyProgram)
+  }, [studyProgram])
 }

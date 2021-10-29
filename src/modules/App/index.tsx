@@ -6,6 +6,7 @@ import { AppProps } from 'next/dist/next-server/lib/router/router'
 import { Footer } from '@/common/components/Footer'
 import { LoadingProgress } from '@/common/components/LoadingProgress'
 import { TopBar } from '@/common/components/TopBar'
+import { useSaveStudyProgram } from '@/common/hooks/useCourseGroup'
 import '@/common/i18n'
 import { TrackPageChange } from '@/common/tracker/components/TrackPageChange'
 import { mobxConfiguration } from '@/configs/mobx'
@@ -21,6 +22,7 @@ mobxConfiguration()
 
 export function App({ Component, pageProps, forceDark, router }: AppProps) {
   useApp(router)
+  useSaveStudyProgram()
 
   return (
     <>

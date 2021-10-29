@@ -11,6 +11,7 @@ export const COURSE_DATA_FIELDS = `
     credit
     creditHours
     courseCondition
+    courseDesc
     genEdType
     rating
     midterm {

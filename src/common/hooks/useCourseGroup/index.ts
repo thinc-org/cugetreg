@@ -27,7 +27,10 @@ export function useCourseGroup(): CourseGroupResult {
     (newStudyProgram: StudyProgram) => {
       const splittedPathname = (router.pathname as string).split('/')
       if (splittedPathname[1] !== '[studyProgram]') {
-        throw new Error('The first path is not [studyProgram]')
+        // we can't set it by changing path, so just set lastStudyProgram and trigger navigation
+        lastStudyProgram = newStudyProgram
+        router.replace(router.asPath)
+        return
       }
       const splittedAsPath = (router.asPath as string).split('/')
       splittedAsPath[1] = newStudyProgram

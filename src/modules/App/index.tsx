@@ -2,7 +2,7 @@ import { EmotionCache } from '@emotion/utils'
 import { CssBaseline } from '@mui/material'
 import { Container } from '@mui/material'
 import { DefaultSeo } from 'next-seo'
-import { AppProps } from 'next/dist/next-server/lib/router/router'
+import type { AppProps } from 'next/app'
 
 import { Footer } from '@/common/components/Footer'
 import { LoadingProgress } from '@/common/components/LoadingProgress'
@@ -25,10 +25,10 @@ mobxConfiguration()
 const clientSideEmotionCache = createEmotionCache()
 interface MyAppProps extends AppProps {
   emotionCache?: EmotionCache
+  forceDark: boolean
 }
 
-export function App(props: MyAppProps) {
-  const { Component, pageProps, forceDark, router, emotionCache = clientSideEmotionCache } = props
+export function App({ Component, pageProps, forceDark, router, emotionCache = clientSideEmotionCache }: MyAppProps) {
   useApp(router)
   useSaveStudyProgram()
 

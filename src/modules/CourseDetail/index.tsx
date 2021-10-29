@@ -88,10 +88,12 @@ export function CourseDetailPage(props: { data: GetCourseResponse }) {
           <DescriptionTitle variant="subtitle1">เงื่อนไขรายวิชา</DescriptionTitle>
           <Typography variant="h6">{cData.course.courseCondition}</Typography>
         </Grid>
-        <Grid item xs={12} sm={12}>
-          <DescriptionTitle variant="subtitle1">รายละเอียดวิชา</DescriptionTitle>
-          <Typography variant="h6">{cData.course.courseDesc ?? '-'}</Typography>
-        </Grid>
+        {cData.course.courseDesc && (
+          <Grid item xs={12} sm={12}>
+            <DescriptionTitle variant="subtitle1">รายละเอียดวิชา</DescriptionTitle>
+            <Typography variant="h6">{cData.course.courseDesc}</Typography>
+          </Grid>
+        )}
       </GridContainer>
       {CourseList}
     </Container>

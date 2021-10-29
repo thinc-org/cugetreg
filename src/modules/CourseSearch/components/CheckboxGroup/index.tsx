@@ -42,7 +42,14 @@ export const CheckboxGroup: React.FC<CheckboxGroupProps> = ({ title, checkboxes,
         <FormControlLabel
           key={label}
           onClick={() => log(null, label || '')}
-          control={<Checkbox sx={{ fontFamily: 'Prompt' }} checked={hasChecked(checkbox.value)} {...checkbox} />}
+          control={
+            <Checkbox
+              color="primary"
+              sx={{ fontFamily: 'Prompt' }}
+              checked={hasChecked(checkbox.value)}
+              {...checkbox}
+            />
+          }
           label={<Typography variant="subtitle1">{label}</Typography>}
         />
       ))}

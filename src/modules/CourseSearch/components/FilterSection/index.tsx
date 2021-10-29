@@ -15,6 +15,7 @@ import { Button, StickyPaper, Box } from '@/modules/CourseSearch/components/Filt
 import { FilterSectionProps } from '@/modules/CourseSearch/components/FilterSection/types'
 
 import { useHasTags } from '../TagList'
+import { SelectTime } from './components/SelectTime'
 import { useFilterBar } from './hooks/useFilterBar'
 
 export const FilterSection: React.FC<FilterSectionProps> = ({ open, handleClose }) => {
@@ -38,6 +39,7 @@ export const FilterSection: React.FC<FilterSectionProps> = ({ open, handleClose 
             {({ log }) => <CheckboxGroup log={log} title="วันในสัปดาห์" checkboxes={dayOfWeekCheckboxes} />}
           </Analytics>
           {/* <CheckboxGroup title="แสดงผลพิเศษ" checkboxes={specialCheckboxes} /> */}
+          <SelectTime />
         </Stack>
       </StickyPaper>
     ) : null

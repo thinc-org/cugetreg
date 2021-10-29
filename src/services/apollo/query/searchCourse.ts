@@ -1,4 +1,4 @@
-import { GenEdType, DayOfWeek, Course } from '@thinc-org/chula-courses'
+import { GenEdType, DayOfWeek, Course, Period } from '@thinc-org/chula-courses'
 import gql from 'graphql-tag'
 
 import { CourseGroup } from '@/common/hooks/useCourseGroup/types'
@@ -12,6 +12,7 @@ export interface SearchCourseVars {
     dayOfWeeks?: DayOfWeek[]
     limit?: number
     offset?: number
+    periodRange?: Period
   }
   courseGroup: CourseGroup
 }

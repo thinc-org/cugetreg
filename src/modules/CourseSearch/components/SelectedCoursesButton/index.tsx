@@ -5,6 +5,7 @@ import { observer } from 'mobx-react'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useCourseGroup } from '@/common/hooks/useCourseGroup'
 import { courseCartStore } from '@/store'
 
 const Number = styled(Chip)`
@@ -30,7 +31,8 @@ export interface SelectedCoursesButtonProps {
 
 export const SelectedCoursesButton: React.FC<SelectedCoursesButtonProps> = observer(({ onClick }) => {
   const { t } = useTranslation('selectedCoursesButton')
-  const coursesNumber = courseCartStore.shopItems.length
+  const courseGroup = useCourseGroup()
+  const coursesNumber = courseCartStore.shopItemsByCourseGroup(courseGroup).length
 
   const theme = useTheme()
   const isDesktop = useMediaQuery(theme.breakpoints.up('sm'))

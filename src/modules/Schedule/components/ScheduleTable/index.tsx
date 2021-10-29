@@ -2,6 +2,7 @@ import styled from '@emotion/styled'
 import { useCallback } from 'react'
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd'
 
+import { useCourseGroup } from '@/common/hooks/useCourseGroup'
 import { CourseCart } from '@/store'
 
 import { CourseOverlapMap } from '../Schedule/utils'
@@ -17,14 +18,15 @@ const Layout = styled.div`
 `
 
 export function ScheduleTable({ courseCart, overlappingCourses }: ScheduleTableProps) {
-  const items = courseCart.shopItems
+  const courseGroup = useCourseGroup()
+  const items = courseCart.shopItemsByCourseGroup(courseGroup)
 
   const handleDragEnd = useCallback(
     (result: DropResult) => {
       if (!result.destination) return
-      courseCart.reorder(result.source.index, result.destination.index)
+      courseCart.reorder(courseGroup, result.source.index, result.destination.index)
     },
-    [courseCart]
+    [courseCart, courseGroup]
   )
 
   return (

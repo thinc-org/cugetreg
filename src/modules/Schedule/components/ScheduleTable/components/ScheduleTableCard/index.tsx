@@ -47,8 +47,8 @@ export interface CardComponentProps {
 export const ScheduleTableCard = observer(({ item, index, hasOverlap }: ScheduleTableCardProps) => {
   const { courseNo, isHidden } = item
   const toggleVisibility = useCallback(() => {
-    courseCartStore.toggleHiddenItem(courseNo)
-  }, [courseNo])
+    courseCartStore.toggleHiddenItem(item)
+  }, [item])
 
   const theme = useTheme()
   const match = useMediaQuery(theme.breakpoints.up('md'))

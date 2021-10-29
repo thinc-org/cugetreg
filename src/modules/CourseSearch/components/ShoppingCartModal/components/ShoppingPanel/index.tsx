@@ -2,6 +2,7 @@ import { Typography, DialogTitle, DialogContent, DialogActions, Stack } from '@m
 import { Course } from '@thinc-org/chula-courses'
 import { useTranslation } from 'react-i18next'
 
+import { useCourseGroup } from '@/common/hooks/useCourseGroup'
 import { Spacer } from '@/components/Spacer'
 import { CourseCartItem, courseCartStore } from '@/store'
 
@@ -15,7 +16,8 @@ export interface CoursePropsType {
 }
 
 export const ShoppingPanel = () => {
-  const { shopItems } = courseCartStore
+  const courseGroup = useCourseGroup()
+  const shopItems = courseCartStore.shopItemsByCourseGroup(courseGroup)
   const { shoppingState, selectedCourses, removeAllSelectedCourses, onCheckboxChange } = useShoppingPanel()
 
   const { t } = useTranslation('shoppingPanel')

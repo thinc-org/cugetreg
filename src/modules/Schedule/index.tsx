@@ -30,7 +30,8 @@ import {
 
 export const SchedulePage = observer(() => {
   const { t } = useTranslation('schedulePage')
-  const shopItems = courseCartStore.shopItems
+  const courseGroup = useCourseGroup()
+  const shopItems = courseCartStore.shopItemsByCourseGroup(courseGroup)
   const classes = useTimetableClasses(shopItems)
   const scheduleClasses = useScheduleClass(classes)
   const daysCount = useDaysCount(scheduleClasses)

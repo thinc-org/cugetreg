@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { BackButton } from '@/common/components/BackButton'
 import { useCourseGroup } from '@/common/hooks/useCourseGroup'
 import { CR11 } from '@/modules/CR11/components/CR11'
-import { courseCartStore } from '@/store/shoppingCart'
+import { courseCartStore } from '@/store/courseCart'
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -92,10 +92,11 @@ export const CR11Page = observer(() => {
   const shoppingCart = courseCartStore
   const classes = useStyles()
   const { t } = useTranslation(['program', 'cr11'])
-  const { studyProgram, academicYear: year, semester } = useCourseGroup()
+  const courseGroup = useCourseGroup()
+  const { studyProgram, academicYear: year, semester } = courseGroup
   const studyProgramText = `${t('cr11:semester')} ${year}/${semester} ${t(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    `program:${shoppingCart.currentProgram || 's'}` as any
+    `program:${courseGroup.studyProgram || 's'}` as any
   )}`
 
   return (
@@ -119,7 +120,7 @@ export const CR11Page = observer(() => {
           {studyProgramText}
         </Typography>
       </div>
-      <CR11 courses={shoppingCart.shopItems} />
+      <CR11 courses={shoppingCart.shopItemsByCourseGroup(courseGroup)} />
       <div className={classes.description}>
         <Typography variant="h3">
           {t('cr11:total')}

@@ -3634,10 +3634,10 @@
     "@babel/runtime" "^7.12.5"
     "@testing-library/dom" "^7.28.1"
 
-"@thinc-org/chula-courses@^1.1.10":
-  version "1.1.10"
-  resolved "https://registry.yarnpkg.com/@thinc-org/chula-courses/-/chula-courses-1.1.10.tgz#0969783963c8e2f36b81f533caf8a1ad736b6e71"
-  integrity sha512-FgEmm4RFlF+oa6DvCBue3blO0hKm2wOVPq6xf53BD46LTO8oTaDe6tMXufdyFqTEmUvMfHFrs8VUxQRgQjdn0A==
+"@thinc-org/chula-courses@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@thinc-org/chula-courses/-/chula-courses-2.1.0.tgz#21dbbc6cefa3baccd139915f9cfdef61fbaa080d"
+  integrity sha512-GerDRSxX2JJFDck2WtxBcJNm/rKj/Giri4KiJ9vvpvga09UkCKPTLCA/qrkoBh5wyf5+4762QQKO/pL1YkMxPA==
   dependencies:
     axios "^0.21.1"
 
@@ -12697,14 +12697,6 @@ micromatch@^4.0.2:
   dependencies:
     braces "^3.0.1"
     picomatch "^2.0.5"
-
-micromatch@^4.0.4:
-  version "4.0.4"
-  resolved "https://registry.yarnpkg.com/micromatch/-/micromatch-4.0.4.tgz#896d519dfe9db25fce94ceb7a500919bf881ebf9"
-  integrity sha512-pRmzw/XUcwXGpD9aI9q/0XOwLNygjETJ8y0ao0wdqprrzDa4YnxLcz7fQRZr8voh8V10kGhABbNcHVk5wHgWwg==
-  dependencies:
-    braces "^3.0.1"
-    picomatch "^2.2.3"
 
 microseconds@0.2.0:
   version "0.2.0"

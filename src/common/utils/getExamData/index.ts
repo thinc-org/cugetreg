@@ -1,4 +1,4 @@
-import { Course } from '@thinc-org/chula-courses/types'
+import { Course } from '@thinc-org/chula-courses'
 import { parseISO, format } from 'date-fns'
 
 import { ExamClass } from '../types'

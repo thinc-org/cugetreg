@@ -10,6 +10,7 @@ module.exports = withPlugins([[withBundleAnalyzer], [withOptimizedImages]], {
   env: {
     IS_PULL_REQUEST: process.env.IS_PULL_REQUEST,
   },
+  swcMinify: true,
   async rewrites() {
     if (process.env.NODE_ENV === 'development') {
       return [

@@ -27,6 +27,11 @@ export const useCourseSearchProvider = () => {
     },
   })
 
+  useEffect(() => {
+    courseSearchQuery.refetch()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchCourseQueryParams.filter.periodRange?.start, searchCourseQueryParams.filter.periodRange?.end])
+
   const fetchMoreCourses = async () => {
     if (!courseSearchQuery.loading && !isEmpty) {
       const result = await courseSearchQuery.fetchMore({

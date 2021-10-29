@@ -10,7 +10,12 @@ describe('useCourseSearchProvider', () => {
   const mockSetIsEmpty = jest.fn()
   const mockFetchMore = jest.fn(() => mockFetchMoreResult)
 
-  const mockUseQueryResult = { loading: false, fetchMore: mockFetchMore, variables: { key: 'variables' } }
+  const mockUseQueryResult = {
+    loading: false,
+    fetchMore: mockFetchMore,
+    variables: { key: 'variables' },
+    refetch: jest.fn(),
+  }
   const mockUseEmptyResult = { isEmpty: false, setIsEmpty: mockSetIsEmpty }
 
   const LIMIT_FETCH_EXPECTED = 15
@@ -19,7 +24,7 @@ describe('useCourseSearchProvider', () => {
     useRouter: () => ({ query: mockQuery }),
   }))
   jest.doMock('@/modules/CourseSearch/hooks/useSearchCourseQueryParams', () => ({
-    useSearchCourseQueryParams: () => ({ searchCourseQueryParams: { query: mockQueryParam } }),
+    useSearchCourseQueryParams: () => ({ searchCourseQueryParams: { filter: {}, query: mockQueryParam } }),
   }))
   jest.doMock('@apollo/client', () => ({
     useQuery: mockUseQuery,

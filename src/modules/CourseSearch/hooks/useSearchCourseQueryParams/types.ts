@@ -9,4 +9,6 @@ export interface QueryParams {
   semester?: string
   academicYear?: string
   studyProgram?: StudyProgram
+  startTime?: string
+  endTime?: string
 }

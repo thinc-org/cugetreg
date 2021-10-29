@@ -23,6 +23,8 @@ export const useSearchCourseQueryParams = () => {
 
       const query: QueryParams = {
         ...currentQuery,
+        startTime: filterVars?.periodRange?.start,
+        endTime: filterVars?.periodRange?.end,
         keyword: filterVars.keyword,
         genEdTypes: filterVars.genEdTypes?.join(','),
         dayOfWeeks: filterVars.dayOfWeeks?.join(','),

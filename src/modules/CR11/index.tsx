@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { BackButton } from '@/common/components/BackButton'
 import { useCourseGroup } from '@/common/hooks/useCourseGroup'
 import { CR11 } from '@/modules/CR11/components/CR11'
-import { courseCartStore } from '@/store/shoppingCart'
+import { courseCartStore } from '@/store/courseCart'
 
 const useStyles = makeStyles((theme) => ({
   container: {

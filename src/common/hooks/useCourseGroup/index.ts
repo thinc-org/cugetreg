@@ -4,14 +4,18 @@ import { useRouter } from 'next/router'
 import { useCallback, useEffect, useRef } from 'react'
 
 import { DEFAULT_STUDY_PROGRAM } from '@/common/hooks/useCourseGroup/constants'
+import { Storage } from '@/common/storage'
+import { StorageKey } from '@/common/storage/constants'
 import { parseCourseGroup } from '@/common/utils/parseCourseGroup'
 
 import { CourseGroupResult } from './types'
 
+const storage = new Storage('localStorage')
+
 let lastStudyProgram = DEFAULT_STUDY_PROGRAM
 if (typeof window !== 'undefined') {
-  const storedStudyProgram = localStorage.getItem('studyProgram') as StudyProgram | null
-  if (storedStudyProgram !== null) {
+  const storedStudyProgram = storage.get<StudyProgram>(StorageKey.StudyProgram)
+  if (typeof storedStudyProgram !== 'undefined') {
     lastStudyProgram = storedStudyProgram
   }
 }
@@ -65,6 +69,6 @@ export function useSaveStudyProgram() {
   const { studyProgram } = useCourseGroup()
   useEffect(() => {
     lastStudyProgram = studyProgram
-    localStorage.setItem('studyProgram', studyProgram)
+    storage.set(StorageKey.StudyProgram, studyProgram)
   }, [studyProgram])
 }

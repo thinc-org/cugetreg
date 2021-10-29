@@ -24,9 +24,9 @@ export function ScheduleTable({ courseCart, overlappingCourses }: ScheduleTableP
   const handleDragEnd = useCallback(
     (result: DropResult) => {
       if (!result.destination) return
-      courseCart.reorder(result.source.index, result.destination.index)
+      courseCart.reorder(courseGroup, result.source.index, result.destination.index)
     },
-    [courseCart]
+    [courseCart, courseGroup]
   )
 
   return (

@@ -301,8 +301,9 @@ export class CourseCart implements CourseCartProps {
   }
 
   @action
-  reorder(from: number, to: number) {
-    const result = Array.from(this.shopItems)
+  reorder(courseGroup: CourseGroup, from: number, to: number) {
+    const items = Array.from(this.shopItems)
+    const result = pullCourseGroupUp(items, courseGroup)
     const [removed] = result.splice(from, 1)
     result.splice(to, 0, removed)
     this.shopItems = result
@@ -313,11 +314,14 @@ export class CourseCart implements CourseCartProps {
    * @param courseNo - the unique course number
    */
   shopItemsByCourseGroup = computedFn((courseGroup: CourseGroup): CourseCartItem[] => {
-    const { studyProgram, semester, academicYear } = courseGroup
-    return this.shopItems.filter((item) => {
-      return item.studyProgram == studyProgram && item.semester == semester && item.academicYear == academicYear
-    })
+    return this.shopItems.filter((item) => isInCourseGroup(item, courseGroup))
   })
+}
+
+function pullCourseGroupUp(items: CourseCartItem[], courseGroup: CourseGroup): CourseCartItem[] {
+  const itemsInCurrentGroup = items.filter((item) => isInCourseGroup(item, courseGroup))
+  const itemsInOtherGroups = items.filter((item) => !isInCourseGroup(item, courseGroup))
+  return [...itemsInCurrentGroup, ...itemsInOtherGroups]
 }
 
 function isSameKey(a: CourseKey, b: CourseKey): boolean {
@@ -326,6 +330,14 @@ function isSameKey(a: CourseKey, b: CourseKey): boolean {
     a.studyProgram == b.studyProgram &&
     a.semester == b.semester &&
     a.academicYear == b.academicYear
+  )
+}
+
+function isInCourseGroup(course: CourseKey, courseGroup: CourseGroup): boolean {
+  return (
+    course.studyProgram == courseGroup.studyProgram &&
+    course.semester == courseGroup.semester &&
+    course.academicYear == courseGroup.academicYear
   )
 }
 

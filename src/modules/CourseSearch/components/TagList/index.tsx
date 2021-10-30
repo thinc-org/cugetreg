@@ -1,4 +1,5 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { GeneralChip } from '@/common/components/Chips'
 import { DayChipKey, GenEdChipKey, OtherEnum } from '@/common/components/Chips/config'
@@ -11,6 +12,7 @@ export const TagList: React.FC<TagListProps> = () => {
   const { searchCourseQueryParams, setFilter } = useSearchCourseQueryParams()
   const { filter } = searchCourseQueryParams
   const { genEdTypes, dayOfWeeks, periodRange } = filter
+  const { t } = useTranslation('tagList')
 
   const handleDeleteGenEdTag = (tag: GenEdChipKey) => {
     if (!genEdTypes) return
@@ -44,7 +46,7 @@ export const TagList: React.FC<TagListProps> = () => {
         <GeneralChip
           key="periodRange"
           type={OtherEnum['other']}
-          label={`ในช่วง ${periodRange.start} - ${periodRange.end}`.replace(':', '.')}
+          label={`${t('fromTime')} ${periodRange.start} - ${periodRange.end}`.replace(':', '.')}
           onDelete={handleDeletePeriodRange}
         />
       )}

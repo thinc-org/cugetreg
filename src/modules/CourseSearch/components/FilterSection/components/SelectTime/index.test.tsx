@@ -1,6 +1,11 @@
+import { FormControlLabel } from '@material-ui/core'
 import { shallow } from 'enzyme'
 
+import { SelectTimeTitle } from './styled'
+
 describe('SelectTime', () => {
+  const I18N_NAME = 'filterBar'
+
   const mockOnCheckboxChange = jest.fn()
   const mockOnEndTimeChange = jest.fn()
   const mockOnStartTimeChange = jest.fn()
@@ -23,12 +28,23 @@ describe('SelectTime', () => {
   }))
   jest.doMock('./hooks/useSelectTime', () => ({ useSelectTime: mockUseSelectTime }))
 
+  const mockTranslate = jest.fn((text) => text)
+  const mockUseTranslation = jest.fn(() => ({ t: mockTranslate }))
+
+  jest.doMock('react-i18next', () => ({
+    useTranslation: mockUseTranslation,
+  }))
+
   it('Should render correctly', async () => {
     const { SelectTime } = await import('.')
 
     const wrapper = shallow(<SelectTime log={mockLog} />)
 
+    expect(mockUseTranslation).toBeCalledWith(I18N_NAME)
+    expect(mockUseTranslation).toBeCalledTimes(1)
+
+    expect(wrapper.find(SelectTimeTitle).text()).toMatch('periodRange')
+
     expect(wrapper).toMatchSnapshot()
-    // expect(wrapper.f)
   })
 })

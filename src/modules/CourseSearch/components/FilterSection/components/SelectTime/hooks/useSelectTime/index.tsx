@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react'
+import React, { useMemo } from 'react'
 
 import { useSearchCourseQueryParams } from '@/modules/CourseSearch/hooks/useSearchCourseQueryParams'
 
@@ -19,12 +19,6 @@ export const useSelectTime = (defaultStartTime: string, defaultEndTime: string) 
   const checked =
     !!searchCourseQueryParams.filter.periodRange?.start && !!searchCourseQueryParams.filter.periodRange?.end
 
-  console.log(
-    'checked',
-    checked,
-    searchCourseQueryParams.filter.periodRange?.start,
-    searchCourseQueryParams.filter.periodRange?.end
-  )
   const onCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const checked = event.target.checked
     if (!checked) {

@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { StyledStack, StyledKeyboardArrowUpIcon, StyledTypography } from './styled'
 
 export function TopButton() {
-  const { t } = useTranslation()
+  const { t } = useTranslation('footer')
   const theme = useTheme()
   const matches = useMediaQuery(theme.breakpoints.up('sm'))
 
@@ -17,7 +17,7 @@ export function TopButton() {
     })
   }
 
-  const label = matches && t('footer:topButton')
+  const label = matches && t('topButton')
 
   return (
     <StyledStack onClick={scrollToTop} spacing={2} direction="row">

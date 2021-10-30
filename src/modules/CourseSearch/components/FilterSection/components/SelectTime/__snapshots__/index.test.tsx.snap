@@ -5,7 +5,7 @@ exports[`SelectTime Should render correctly 1`] = `
   <Styled(Component)
     variant="button"
   >
-    เวลาเรียน
+    periodRange
   </Styled(Component)>
   <ForwardRef(FormControlLabel)
     control={
@@ -34,7 +34,7 @@ exports[`SelectTime Should render correctly 1`] = `
             mr={2}
             variant="subtitle1"
           >
-            ในช่วง
+            fromTime
           </ForwardRef(Typography)>
           <ForwardRef(Select)
             disabled={false}
@@ -78,7 +78,7 @@ exports[`SelectTime Should render correctly 1`] = `
             mr={2}
             variant="subtitle1"
           >
-            ถึง
+            toTime
           </ForwardRef(Typography)>
           <ForwardRef(Select)
             disabled={false}

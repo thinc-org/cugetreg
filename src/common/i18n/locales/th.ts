@@ -167,3 +167,13 @@ export const syncStatus = {
 export const regWarNotice = {
   notice: 'จำนวนที่นั่งอาจล่าช้าจาก Reg Chula',
 }
+
+export const filterBar = {
+  periodRange: 'เวลาเรียน',
+  fromTime: 'ในช่วง',
+  toTime: 'ถึง',
+}
+
+export const tagList = {
+  fromTime: 'ในช่วง',
+}

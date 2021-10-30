@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { GeneralChip } from '@/common/components/Chips'
-import { DayChipKey, GenEdChipKey } from '@/common/components/Chips/config'
+import { DayChipKey, GenEdChipKey, OtherEnum } from '@/common/components/Chips/config'
 import { StyledStack } from '@/modules/CourseSearch/components/TagList/styled'
 import { useSearchCourseQueryParams } from '@/modules/CourseSearch/hooks/useSearchCourseQueryParams'
 
@@ -10,7 +10,7 @@ export interface TagListProps {}
 export const TagList: React.FC<TagListProps> = () => {
   const { searchCourseQueryParams, setFilter } = useSearchCourseQueryParams()
   const { filter } = searchCourseQueryParams
-  const { genEdTypes, dayOfWeeks } = filter
+  const { genEdTypes, dayOfWeeks, periodRange } = filter
 
   const handleDeleteGenEdTag = (tag: GenEdChipKey) => {
     if (!genEdTypes) return
@@ -24,7 +24,11 @@ export const TagList: React.FC<TagListProps> = () => {
     setFilter({ ...searchCourseQueryParams.filter, dayOfWeeks: modifiedDayOfWeekTags })
   }
 
-  if (!genEdTypes?.length && !dayOfWeeks?.length) {
+  const handleDeletePeriodRange = () => {
+    setFilter({ ...searchCourseQueryParams.filter, periodRange: undefined })
+  }
+
+  if (!genEdTypes?.length && !dayOfWeeks?.length && !periodRange) {
     return null
   }
 
@@ -36,6 +40,14 @@ export const TagList: React.FC<TagListProps> = () => {
       {dayOfWeeks?.map((tag) => (
         <GeneralChip key={tag} type={tag} onDelete={() => handleDeleteDayOfWeekTag(tag)} />
       ))}
+      {periodRange && (
+        <GeneralChip
+          key="periodRange"
+          type={OtherEnum['other']}
+          label={`ในช่วง ${periodRange.start} - ${periodRange.end}`.replace(':', '.')}
+          onDelete={handleDeletePeriodRange}
+        />
+      )}
     </StyledStack>
   )
 }

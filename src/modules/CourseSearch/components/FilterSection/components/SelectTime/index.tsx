@@ -28,7 +28,7 @@ export const SelectTime = ({ log }: SelectTimeProps) => {
     <Stack>
       <SelectTimeTitle variant="button">{t('periodRange')}</SelectTimeTitle>
       <FormControlLabel
-        key="periodRange"
+        key="periodRangeFilter"
         onClick={() => log(null, 'periodRange')}
         sx={{
           display: 'flex',

@@ -37,12 +37,16 @@ export const FilterSection: React.FC<FilterSectionProps> = ({ open, handleClose 
         <Grid container spacing={4}>
           <Grid item sx={{ order: isExperimentOrder ? 3 : 1 }}>
             <Analytics elementName={GENED_FILTER}>
-              {({ log }) => <CheckboxGroup log={log} title="หมวดหมู่ GenEd" checkboxes={genEdCheckboxes} />}
+              {({ log }) => (
+                <CheckboxGroup log={log} id="GenEdFilter" title="หมวดหมู่ GenEd" checkboxes={genEdCheckboxes} />
+              )}
             </Analytics>
           </Grid>
           <Grid item sx={{ order: isExperimentOrder ? 1 : 2 }}>
             <Analytics elementName={DAY_FILTER}>
-              {({ log }) => <CheckboxGroup log={log} title="วันในสัปดาห์" checkboxes={dayOfWeekCheckboxes} />}
+              {({ log }) => (
+                <CheckboxGroup log={log} id="DayOfWeekFilter" title="วันในสัปดาห์" checkboxes={dayOfWeekCheckboxes} />
+              )}
             </Analytics>
           </Grid>
           {/* <CheckboxGroup title="แสดงผลพิเศษ" checkboxes={specialCheckboxes} /> */}
@@ -57,10 +61,14 @@ export const FilterSection: React.FC<FilterSectionProps> = ({ open, handleClose 
       <DialogContent>
         <Box>
           <Analytics elementName={GENED_FILTER}>
-            {({ log }) => <CheckboxGroup log={log} title="หมวดหมู่ GenEd" checkboxes={genEdCheckboxes} />}
+            {({ log }) => (
+              <CheckboxGroup id="GenEdFilter" log={log} title="หมวดหมู่ GenEd" checkboxes={genEdCheckboxes} />
+            )}
           </Analytics>
           <Analytics elementName={DAY_FILTER}>
-            {({ log }) => <CheckboxGroup log={log} title="วันในสัปดาห์" checkboxes={dayOfWeekCheckboxes} />}
+            {({ log }) => (
+              <CheckboxGroup id="DayOfWeekFilter" log={log} title="วันในสัปดาห์" checkboxes={dayOfWeekCheckboxes} />
+            )}
           </Analytics>
         </Box>
         {/* <CheckboxGroup title="แสดงผลพิเศษ" checkboxes={specialCheckboxes} /> */}

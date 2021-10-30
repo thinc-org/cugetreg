@@ -12,6 +12,7 @@ exports[`SelectTime Should render correctly 1`] = `
       <ForwardRef(Checkbox)
         checked={true}
         color="primary"
+        id="periodRange"
         name="periodRange"
         onChange={[MockFunction]}
         sx={
@@ -21,7 +22,7 @@ exports[`SelectTime Should render correctly 1`] = `
         }
       />
     }
-    key="periodRange"
+    key="periodRangeFilter"
     label={
       <div>
         <ForwardRef(Box)

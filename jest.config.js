@@ -8,6 +8,6 @@ module.exports = {
       '<rootDir>/__mocks__/fileMock.js',
     '^@/(.*)$': '<rootDir>/src/$1',
   },
-  collectCoverageFrom: ['src/**/*.{ts,tsx}', '!src/**/*.stories.tsx', '!src/**/styles.tsx'],
+  collectCoverageFrom: ['src/**/*.{ts,tsx}', '!src/**/*.stories.tsx', '!src/**/styles.tsx', '!src/**/styled.tsx'],
   snapshotSerializers: ["enzyme-to-json/serializer"]
 }

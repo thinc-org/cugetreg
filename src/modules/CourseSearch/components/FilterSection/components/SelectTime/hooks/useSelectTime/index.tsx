@@ -1,4 +1,3 @@
-import { SelectInputProps } from '@material-ui/core/Select/SelectInput'
 import React, { useMemo } from 'react'
 
 import { useSearchCourseQueryParams } from '@/modules/CourseSearch/hooks/useSearchCourseQueryParams'

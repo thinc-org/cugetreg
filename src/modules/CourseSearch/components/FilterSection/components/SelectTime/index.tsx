@@ -34,7 +34,7 @@ export const SelectTime = ({ log }: SelectTimeProps) => {
         control={
           <Checkbox
             color="primary"
-            name="เวลาเรียน"
+            name={t('periodRange')}
             sx={{ fontFamily: 'Prompt' }}
             checked={checked}
             onChange={onCheckboxChange}

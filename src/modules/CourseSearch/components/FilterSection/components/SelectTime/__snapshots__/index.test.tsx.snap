@@ -12,7 +12,7 @@ exports[`SelectTime Should render correctly 1`] = `
       <ForwardRef(Checkbox)
         checked={true}
         color="primary"
-        name="เวลาเรียน"
+        name="periodRange"
         onChange={[MockFunction]}
         sx={
           Object {

@@ -19,7 +19,7 @@ import { UserButton } from '../UserButton'
 import { MoreButton, DrawerContent, SectionSpacer, Logo } from './styled'
 
 export const MobileNavBar = observer(() => {
-  const { t } = useTranslation()
+  const { t } = useTranslation(['navBar', 'translation', 'configBar'])
   const { asPath } = useRouter()
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { buildLink } = useLinkBuilder()
@@ -38,7 +38,7 @@ export const MobileNavBar = observer(() => {
       </MoreButton>
       <Drawer anchor="right" open={isOpen} onClose={onClose}>
         <DrawerContent>
-          <Logo src={logo} alt={t('appName')} />
+          <Logo src={logo} alt={t('translation:appName')} />
           <div>
             <LinkWithAnalytics href={buildLink(`/courses`)} passHref elementName={NAVBAR_SEARCH_COURSE}>
               <NavBarItem onClick={onClose}>{t('navBar:searchCourses')}</NavBarItem>

@@ -24,7 +24,7 @@ import { FlexContainer } from '../styled'
 import { NavBarLayout, Logo } from './styled'
 
 export function NavBar() {
-  const { t } = useTranslation()
+  const { t } = useTranslation(['navBar', 'translation'])
   const { buildLink } = useLinkBuilder()
 
   const navbarItems = [
@@ -50,7 +50,7 @@ export function NavBar() {
       <FlexContainer>
         <LinkWithAnalytics href={buildLink(`/courses`)} passHref elementName={GETREG_LOGO}>
           <Logo>
-            <img src={logo} alt={t('appName')} />
+            <img src={logo} alt={t('translation:appName')} />
           </Logo>
         </LinkWithAnalytics>
 

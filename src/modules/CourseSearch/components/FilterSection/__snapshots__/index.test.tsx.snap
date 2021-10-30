@@ -67,25 +67,53 @@ exports[`FilterSection Should matched snapshot correctly when matchSmallScreen=t
   hasTags={true}
   variant="outlined"
 >
-  <ForwardRef(Stack)
+  <ForwardRef(Grid)
+    container={true}
     spacing={4}
   >
-    <Analytics
-      elementName="gened_search_filter"
+    <ForwardRef(Grid)
+      item={true}
+      sx={
+        Object {
+          "order": 1,
+        }
+      }
     >
-      <Component />
-    </Analytics>
-    <Analytics
-      elementName="day_search_filter"
+      <Analytics
+        elementName="gened_search_filter"
+      >
+        <Component />
+      </Analytics>
+    </ForwardRef(Grid)>
+    <ForwardRef(Grid)
+      item={true}
+      sx={
+        Object {
+          "order": 2,
+        }
+      }
     >
-      <Component />
-    </Analytics>
-    <Analytics
-      elementName="period_range_filter"
+      <Analytics
+        elementName="day_search_filter"
+      >
+        <Component />
+      </Analytics>
+    </ForwardRef(Grid)>
+    <ForwardRef(Grid)
+      item={true}
+      sx={
+        Object {
+          "order": 3,
+        }
+      }
     >
-      <Component />
-    </Analytics>
-  </ForwardRef(Stack)>
+      <Analytics
+        elementName="period_range_filter"
+      >
+        <Component />
+      </Analytics>
+    </ForwardRef(Grid)>
+  </ForwardRef(Grid)>
 </Styled(Component)>
 `;
 

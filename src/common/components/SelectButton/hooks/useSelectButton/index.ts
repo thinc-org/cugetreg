@@ -1,18 +1,15 @@
-import useGoogleOptimize from '@react-hook/google-optimize'
 import { runInAction } from 'mobx'
 import { useCallback, useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { SnackbarContext } from '@/common/context/Snackbar'
 import { courseCartStore } from '@/store'
-import { google_optimize } from '@/utils/env'
 
 import { SelectButtonProps } from '../../types'
 
 export const useSelectButton = ({ course, selectedSectionNumber, log }: SelectButtonProps) => {
   const { t } = useTranslation('courseCard')
   const { emitMessage } = useContext(SnackbarContext)
-  const isExperimentColor = useGoogleOptimize(google_optimize, [false, true])
 
   const isSelected = courseCartStore.item(course)?.selectedSectionNo === selectedSectionNumber
 
@@ -39,6 +36,5 @@ export const useSelectButton = ({ course, selectedSectionNumber, log }: SelectBu
     t,
     isSelected,
     onClickSelectCourse,
-    isExperimentColor,
   }
 }

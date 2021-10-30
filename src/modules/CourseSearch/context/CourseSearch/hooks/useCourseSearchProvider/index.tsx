@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 
 import { LIMIT_QUERY_CONSTANT } from '@/modules/CourseSearch/context/CourseSearch/constants'
 import { useSearchCourseQueryParams } from '@/modules/CourseSearch/hooks/useSearchCourseQueryParams'
@@ -12,21 +12,24 @@ export const useCourseSearchProvider = () => {
   const router = useRouter()
   const { isEmpty, setIsEmpty } = useEmpty()
   const [offset, setOffset] = useState(0)
-
   const { searchCourseQueryParams } = useSearchCourseQueryParams()
 
-  const courseSearchQuery = useQuery<SearchCourseResponse, SearchCourseVars>(SEARCH_COURSE, {
-    notifyOnNetworkStatusChange: true,
-    variables: {
+  const variables = useMemo(
+    () => ({
       ...searchCourseQueryParams,
       filter: {
         ...searchCourseQueryParams.filter,
         limit: LIMIT_QUERY_CONSTANT,
         offset: 0,
       },
-    },
-  })
+    }),
+    [searchCourseQueryParams]
+  )
 
+  const courseSearchQuery = useQuery<SearchCourseResponse, SearchCourseVars>(SEARCH_COURSE, {
+    notifyOnNetworkStatusChange: true,
+    variables,
+  })
   useEffect(() => {
     courseSearchQuery.refetch()
     // eslint-disable-next-line react-hooks/exhaustive-deps

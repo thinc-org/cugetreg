@@ -76,7 +76,7 @@ describe('useSelectTime', () => {
 
     const mockNewStartTime = '10:00'
     act(() => {
-      result.current.onStartTimeChange(mockNewStartTime)
+      result.current.onStartTimeChange({ target: { value: mockNewStartTime } } as any)
     })
 
     expect(mockSetFilter).toBeCalledWith({
@@ -97,7 +97,7 @@ describe('useSelectTime', () => {
 
     const mockNewEndTime = '12:00'
     act(() => {
-      result.current.onEndTimeChange(mockNewEndTime)
+      result.current.onEndTimeChange({ target: { value: mockNewEndTime } } as any)
     })
 
     expect(mockSetFilter).toBeCalledWith({

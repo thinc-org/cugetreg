@@ -1,3 +1,4 @@
+import { SelectInputProps } from '@material-ui/core/Select/SelectInput'
 import React, { useMemo } from 'react'
 
 import { useSearchCourseQueryParams } from '@/modules/CourseSearch/hooks/useSearchCourseQueryParams'
@@ -28,14 +29,16 @@ export const useSelectTime = (defaultStartTime: string, defaultEndTime: string) 
     }
   }
 
-  const onStartTimeChange = (startTime: string) => {
+  const onStartTimeChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    const startTime = event.target.value as string
     setFilter({
       ...searchCourseQueryParams.filter,
       periodRange: { start: startTime, end: selectedEndTime },
     })
   }
 
-  const onEndTimeChange = (endTime: string) => {
+  const onEndTimeChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    const endTime = event?.target.value as string
     setFilter({
       ...searchCourseQueryParams.filter,
       periodRange: { start: selectedStartTime, end: endTime },

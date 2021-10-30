@@ -6,33 +6,33 @@ import { SelectTimeTitle } from './styled'
 describe('SelectTime', () => {
   const I18N_NAME = 'filterBar'
 
-  const mockOnCheckboxChange = jest.fn()
-  const mockOnEndTimeChange = jest.fn()
-  const mockOnStartTimeChange = jest.fn()
-  const MOCK_START_CHOICES = ['10:30', '11:00', '11:30', '12:00', '12:30']
-  const MOCK_ENDTIME_CHOICES = ['11:30', '12:00', '12:30', '13:00', '13:30']
-  const MOCK_START_TIME = '11:30'
-  const MOCK_END_TIME = '11:30'
+  const onCheckboxChangeSpy = jest.fn()
+  const onEndTimeChangeSpy = jest.fn()
+  const onStartTimeChangeSpy = jest.fn()
+  const mockStartTimeChoices = ['10:30', '11:00', '11:30', '12:00', '12:30']
+  const mockEndTimeChoices = ['11:30', '12:00', '12:30', '13:00', '13:30']
+  const mockStartTime = '11:30'
+  const mockEndTime = '11:30'
 
   const mockLog = jest.fn()
 
   const mockUseSelectTime = jest.fn(() => ({
-    selectedStartTime: MOCK_START_TIME,
-    selectedEndTime: MOCK_END_TIME,
-    startTimeChoices: MOCK_START_CHOICES,
-    endTimeChoices: MOCK_ENDTIME_CHOICES,
-    onStartTimeChange: mockOnStartTimeChange,
-    onEndTimeChange: mockOnEndTimeChange,
+    selectedStartTime: mockStartTime,
+    selectedEndTime: mockEndTime,
+    startTimeChoices: mockStartTimeChoices,
+    endTimeChoices: mockEndTimeChoices,
+    onStartTimeChange: onStartTimeChangeSpy,
+    onEndTimeChange: onEndTimeChangeSpy,
     checked: true,
-    onCheckboxChange: mockOnCheckboxChange,
+    onCheckboxChange: onCheckboxChangeSpy,
   }))
   jest.doMock('./hooks/useSelectTime', () => ({ useSelectTime: mockUseSelectTime }))
 
-  const mockTranslate = jest.fn((text) => text)
-  const mockUseTranslation = jest.fn(() => ({ t: mockTranslate }))
+  const translateSpy = jest.fn((text) => text)
+  const useTranslationSpy = jest.fn(() => ({ t: translateSpy }))
 
   jest.doMock('react-i18next', () => ({
-    useTranslation: mockUseTranslation,
+    useTranslation: useTranslationSpy,
   }))
 
   it('Should render correctly', async () => {
@@ -40,8 +40,8 @@ describe('SelectTime', () => {
 
     const wrapper = shallow(<SelectTime log={mockLog} />)
 
-    expect(mockUseTranslation).toBeCalledWith(I18N_NAME)
-    expect(mockUseTranslation).toBeCalledTimes(1)
+    expect(useTranslationSpy).toBeCalledWith(I18N_NAME)
+    expect(useTranslationSpy).toBeCalledTimes(1)
 
     expect(wrapper.find(SelectTimeTitle).text()).toMatch('periodRange')
 

@@ -11,9 +11,7 @@ export function generateTimeAround(startTime: string, endTime: string) {
     if (currentTime === '23:30') {
       currentTime = '00:00'
     } else {
-      const currentTimeArray = currentTime.split(':')
-      const currentHour = currentTimeArray[0]
-      const currentMinute = currentTimeArray[1]
+      const [currentHour, currentMinute] = currentTime.split(':')
       if (currentMinute === '00') {
         currentTime = `${currentHour}:30`
       } else {

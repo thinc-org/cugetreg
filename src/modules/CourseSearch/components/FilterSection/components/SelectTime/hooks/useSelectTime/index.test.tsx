@@ -2,15 +2,15 @@ import { act, renderHook } from '@testing-library/react-hooks'
 import React from 'react'
 
 describe('useSelectTime', () => {
-  const mockSetFilter = jest.fn()
-  const mockUseSearchCourseQueryParams = jest.fn()
-  const MOCK_GENERATED_TIME = ['09:00', '09:30', '10:00', '10:30', '11:00']
-  const mockGenerateTimeAround = jest.fn(() => MOCK_GENERATED_TIME)
+  const setFilterSpy = jest.fn()
+  const useSearchCourseQueryParamsSpy = jest.fn()
+  const mockGeneratedTime = ['09:00', '09:30', '10:00', '10:30', '11:00']
+  const generateTimeAroundSpy = jest.fn(() => mockGeneratedTime)
   jest.doMock('@/modules/CourseSearch/hooks/useSearchCourseQueryParams', () => ({
-    useSearchCourseQueryParams: mockUseSearchCourseQueryParams,
+    useSearchCourseQueryParams: useSearchCourseQueryParamsSpy,
   }))
   jest.doMock('../../utils/generateTimeAround', () => ({
-    generateTimeAround: mockGenerateTimeAround,
+    generateTimeAround: generateTimeAroundSpy,
   }))
 
   afterEach(() => {
@@ -24,21 +24,21 @@ describe('useSelectTime', () => {
     const { useSelectTime } = await import('.')
 
     const mockSearchCourseQueryParams = { filter: { a: 'a' } }
-    mockUseSearchCourseQueryParams.mockImplementationOnce(() => ({
-      setFilter: mockSetFilter,
+    useSearchCourseQueryParamsSpy.mockImplementationOnce(() => ({
+      setFilter: setFilterSpy,
       searchCourseQueryParams: mockSearchCourseQueryParams,
     }))
     const { result } = renderHook(() => useSelectTime(mockDefaultStartTime, mockDefaultEndTime))
 
     expect(result.current.selectedStartTime).toEqual(mockDefaultStartTime)
     expect(result.current.selectedEndTime).toEqual(mockDefaultEndTime)
-    expect(result.current.startTimeChoices).toEqual(MOCK_GENERATED_TIME)
-    expect(result.current.endTimeChoices).toEqual(MOCK_GENERATED_TIME)
+    expect(result.current.startTimeChoices).toEqual(mockGeneratedTime)
+    expect(result.current.endTimeChoices).toEqual(mockGeneratedTime)
     expect(result.current.checked).toBe(false)
 
-    expect(mockGenerateTimeAround).toHaveBeenCalledWith(mockDefaultStartTime, mockDefaultEndTime)
-    expect(mockGenerateTimeAround).toHaveBeenCalledWith(mockDefaultStartTime, mockDefaultEndTime)
-    expect(mockGenerateTimeAround).toHaveBeenCalledTimes(2)
+    expect(generateTimeAroundSpy).toHaveBeenCalledWith(mockDefaultStartTime, mockDefaultEndTime)
+    expect(generateTimeAroundSpy).toHaveBeenCalledWith(mockDefaultStartTime, mockDefaultEndTime)
+    expect(generateTimeAroundSpy).toHaveBeenCalledTimes(2)
   })
 
   it('Should get start time and end time from query param if available and set checked to true', async () => {
@@ -47,29 +47,29 @@ describe('useSelectTime', () => {
     const mockStartTime = '10:00'
     const mockEndTime = '17:00'
     const mockSearchCourseQueryParams = { filter: { a: 'a', periodRange: { start: mockStartTime, end: mockEndTime } } }
-    mockUseSearchCourseQueryParams.mockImplementationOnce(() => ({
-      setFilter: mockSetFilter,
+    useSearchCourseQueryParamsSpy.mockImplementationOnce(() => ({
+      setFilter: setFilterSpy,
       searchCourseQueryParams: mockSearchCourseQueryParams,
     }))
     const { result } = renderHook(() => useSelectTime(mockDefaultStartTime, mockDefaultEndTime))
 
     expect(result.current.selectedStartTime).toEqual(mockStartTime)
     expect(result.current.selectedEndTime).toEqual(mockEndTime)
-    expect(result.current.startTimeChoices).toEqual(MOCK_GENERATED_TIME)
-    expect(result.current.endTimeChoices).toEqual(MOCK_GENERATED_TIME)
+    expect(result.current.startTimeChoices).toEqual(mockGeneratedTime)
+    expect(result.current.endTimeChoices).toEqual(mockGeneratedTime)
     expect(result.current.checked).toBe(true)
 
-    expect(mockGenerateTimeAround).toHaveBeenCalledWith(mockDefaultStartTime, mockEndTime)
-    expect(mockGenerateTimeAround).toHaveBeenCalledWith(mockStartTime, mockDefaultEndTime)
-    expect(mockGenerateTimeAround).toHaveBeenCalledTimes(2)
+    expect(generateTimeAroundSpy).toHaveBeenCalledWith(mockDefaultStartTime, mockEndTime)
+    expect(generateTimeAroundSpy).toHaveBeenCalledWith(mockStartTime, mockDefaultEndTime)
+    expect(generateTimeAroundSpy).toHaveBeenCalledTimes(2)
   })
 
   it('Should invoke onStartTimeChange correctly', async () => {
     const { useSelectTime } = await import('.')
 
     const mockSearchCourseQueryParams = { filter: { a: 'a' } }
-    mockUseSearchCourseQueryParams.mockImplementationOnce(() => ({
-      setFilter: mockSetFilter,
+    useSearchCourseQueryParamsSpy.mockImplementationOnce(() => ({
+      setFilter: setFilterSpy,
       searchCourseQueryParams: mockSearchCourseQueryParams,
     }))
     const { result } = renderHook(() => useSelectTime(mockDefaultStartTime, mockDefaultEndTime))
@@ -79,7 +79,7 @@ describe('useSelectTime', () => {
       result.current.onStartTimeChange({ target: { value: mockNewStartTime } } as any)
     })
 
-    expect(mockSetFilter).toBeCalledWith({
+    expect(setFilterSpy).toBeCalledWith({
       ...mockSearchCourseQueryParams.filter,
       periodRange: { start: mockNewStartTime, end: mockDefaultEndTime },
     })
@@ -89,8 +89,8 @@ describe('useSelectTime', () => {
     const { useSelectTime } = await import('.')
 
     const mockSearchCourseQueryParams = { filter: { a: 'a' } }
-    mockUseSearchCourseQueryParams.mockImplementationOnce(() => ({
-      setFilter: mockSetFilter,
+    useSearchCourseQueryParamsSpy.mockImplementationOnce(() => ({
+      setFilter: setFilterSpy,
       searchCourseQueryParams: mockSearchCourseQueryParams,
     }))
     const { result } = renderHook(() => useSelectTime(mockDefaultStartTime, mockDefaultEndTime))
@@ -100,7 +100,7 @@ describe('useSelectTime', () => {
       result.current.onEndTimeChange({ target: { value: mockNewEndTime } } as any)
     })
 
-    expect(mockSetFilter).toBeCalledWith({
+    expect(setFilterSpy).toBeCalledWith({
       ...mockSearchCourseQueryParams.filter,
       periodRange: { start: mockDefaultStartTime, end: mockNewEndTime },
     })
@@ -110,8 +110,8 @@ describe('useSelectTime', () => {
     const { useSelectTime } = await import('.')
 
     const mockSearchCourseQueryParams = { filter: { a: 'a' } }
-    mockUseSearchCourseQueryParams.mockImplementationOnce(() => ({
-      setFilter: mockSetFilter,
+    useSearchCourseQueryParamsSpy.mockImplementationOnce(() => ({
+      setFilter: setFilterSpy,
       searchCourseQueryParams: mockSearchCourseQueryParams,
     }))
     const { result } = renderHook(() => useSelectTime(mockDefaultStartTime, mockDefaultEndTime))
@@ -121,7 +121,7 @@ describe('useSelectTime', () => {
       result.current.onCheckboxChange(mockEvent as React.ChangeEvent<HTMLInputElement>)
     })
 
-    expect(mockSetFilter).toHaveBeenNthCalledWith(1, {
+    expect(setFilterSpy).toHaveBeenNthCalledWith(1, {
       ...mockSearchCourseQueryParams.filter,
       periodRange: { start: mockDefaultStartTime, end: mockDefaultEndTime },
     })
@@ -131,11 +131,11 @@ describe('useSelectTime', () => {
       result.current.onCheckboxChange(mockEvent2 as React.ChangeEvent<HTMLInputElement>)
     })
 
-    expect(mockSetFilter).toHaveBeenNthCalledWith(2, {
+    expect(setFilterSpy).toHaveBeenNthCalledWith(2, {
       ...mockSearchCourseQueryParams.filter,
       periodRange: undefined,
     })
 
-    expect(mockSetFilter).toBeCalledTimes(2)
+    expect(setFilterSpy).toBeCalledTimes(2)
   })
 })

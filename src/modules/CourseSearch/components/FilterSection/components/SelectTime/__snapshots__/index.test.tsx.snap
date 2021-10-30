@@ -23,7 +23,7 @@ exports[`SelectTime Should render correctly 1`] = `
     }
     key="periodRange"
     label={
-      <ForwardRef(Box)>
+      <div>
         <ForwardRef(Box)
           alignItems="center"
           display="flex"
@@ -113,7 +113,7 @@ exports[`SelectTime Should render correctly 1`] = `
             </ForwardRef(MenuItem)>
           </ForwardRef(Select)>
         </ForwardRef(Box)>
-      </ForwardRef(Box)>
+      </div>
     }
     onClick={[Function]}
     sx={

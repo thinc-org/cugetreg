@@ -5,7 +5,7 @@ import { useSearchCourseQueryParams } from '@/modules/CourseSearch/hooks/useSear
 import { generateTimeAround } from '../../utils/generateTimeAround'
 
 /**
- * format of defaultStartTime and defaultEndTime must be in `HH:MM` string. MM can only be `30` or `00`, HH is not padded by `0`, for example, `9:00`
+ * format of defaultStartTime and defaultEndTime must be in `HH:MM` string. MM can only be `30` or `00`, HH is not padded by `0`, for example, `09:00`
  * @param defaultStartTime
  * @param defaultEndTime
  * @returns

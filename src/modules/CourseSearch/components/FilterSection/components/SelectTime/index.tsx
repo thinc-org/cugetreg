@@ -8,6 +8,9 @@ interface SelectTimeProps {
   log: (_: unknown, value: string) => void
 }
 
+const DEFAULT_START_TIME = '06:00'
+const DEFAULT_END_TIME = '22:00'
+
 export const SelectTime = ({ log }: SelectTimeProps) => {
   const {
     selectedStartTime,
@@ -18,7 +21,7 @@ export const SelectTime = ({ log }: SelectTimeProps) => {
     onEndTimeChange,
     checked,
     onCheckboxChange,
-  } = useSelectTime('06:00', '22:00')
+  } = useSelectTime(DEFAULT_START_TIME, DEFAULT_END_TIME)
   const { t } = useTranslation('filterBar')
 
   return (
@@ -41,7 +44,7 @@ export const SelectTime = ({ log }: SelectTimeProps) => {
           />
         }
         label={
-          <Box>
+          <div>
             <Box mb={2} display="flex" alignItems="center" justifyContent="space-between">
               <Typography mr={2} variant="subtitle1">
                 {t('fromTime')}
@@ -66,7 +69,7 @@ export const SelectTime = ({ log }: SelectTimeProps) => {
                 ))}
               </Select>
             </Box>
-          </Box>
+          </div>
         }
       />
     </Stack>

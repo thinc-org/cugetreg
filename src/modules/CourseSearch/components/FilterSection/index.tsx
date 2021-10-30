@@ -11,12 +11,12 @@ import {
   createGenEdCheckboxes,
   createDayOfWeekCheckboxes, // createSpecialCheckboxes,
 } from '@/modules/CourseSearch/components/FilterSection/constants'
-import { Button, StickyPaper, Box } from '@/modules/CourseSearch/components/FilterSection/styles'
 import { FilterSectionProps } from '@/modules/CourseSearch/components/FilterSection/types'
 
 import { useHasTags } from '../TagList'
 import { SelectTime } from './components/SelectTime'
 import { useFilterBar } from './hooks/useFilterBar'
+import { Button, StickyPaper, Box } from './styled'
 
 export const FilterSection: React.FC<FilterSectionProps> = ({ open, handleClose }) => {
   const { checkboxes: genEdCheckboxes } = useFilterBar<GenEdChipKey>(createGenEdCheckboxes, 'genEdTypes')

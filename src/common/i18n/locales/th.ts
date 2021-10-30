@@ -175,5 +175,5 @@ export const filterBar = {
 }
 
 export const tagList = {
-  fromTime: 'ในช่วง',
+  inRange: 'ในช่วง',
 }

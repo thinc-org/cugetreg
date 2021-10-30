@@ -26,7 +26,7 @@ export const StickyPaper = styled(Paper)<{ hasTags: boolean }>`
   position: sticky;
   top: ${({ hasTags }) => (hasTags ? '125px' : '101px')};
 
-  padding: ${({ theme }) => theme.spacing(4)};
+  padding: ${({ theme }) => theme.spacing(4, 2, 4, 4)};
   overflow-y: auto;
   height: min-content;
   max-height: calc(100vh - ${({ hasTags }) => (hasTags ? '125px' : '101px')});

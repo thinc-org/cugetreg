@@ -5,7 +5,7 @@ import useMediaQuery from '@material-ui/core/useMediaQuery'
 import { DayChipKey, GenEdChipKey } from '@/common/components/Chips/config'
 import { ResponsiveDialog } from '@/common/components/ResponsiveDialog'
 import { Analytics } from '@/common/context/Analytics/components/Analytics'
-import { DAY_FILTER, GENED_FILTER } from '@/common/context/Analytics/constants'
+import { DAY_FILTER, GENED_FILTER, PERIOD_RANGE_FILTER } from '@/common/context/Analytics/constants'
 import { CheckboxGroup } from '@/modules/CourseSearch/components/CheckboxGroup'
 import {
   createGenEdCheckboxes,
@@ -39,7 +39,7 @@ export const FilterSection: React.FC<FilterSectionProps> = ({ open, handleClose 
             {({ log }) => <CheckboxGroup log={log} title="วันในสัปดาห์" checkboxes={dayOfWeekCheckboxes} />}
           </Analytics>
           {/* <CheckboxGroup title="แสดงผลพิเศษ" checkboxes={specialCheckboxes} /> */}
-          <SelectTime />
+          <Analytics elementName={PERIOD_RANGE_FILTER}>{({ log }) => <SelectTime log={log} />}</Analytics>
         </Stack>
       </StickyPaper>
     ) : null

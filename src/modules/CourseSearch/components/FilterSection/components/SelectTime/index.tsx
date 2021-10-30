@@ -1,4 +1,4 @@
-import { MenuItem, Select, Stack, Typography, makeStyles, Checkbox } from '@material-ui/core'
+import { MenuItem, Select, Stack, Typography, makeStyles, Checkbox, FormControlLabel, Box } from '@material-ui/core'
 
 import { useSelectTime } from './hooks/useSelectTime'
 
@@ -26,7 +26,7 @@ export const SelectTime = () => {
       <Typography variant="button" className={classes.title}>
         เวลาเรียน
       </Typography>
-      <div>
+      <Box display="flex" alignItems="flex-start">
         <Checkbox
           color="primary"
           name="เวลาเรียน"
@@ -34,44 +34,49 @@ export const SelectTime = () => {
           checked={checked}
           onChange={onCheckboxChange}
         />
-        <div>
-          ในช่วง
-          <Select
-            disabled={!checked}
-            value={selectedStartTime}
-            onChange={(e) => {
-              const startTime = e.target.value as string
-              onStartTimeChange(startTime)
-            }}
-            name="startTime"
-          >
-            {startTimeChoices.map((value) => (
-              <MenuItem key={value} value={value}>
-                {value}
-              </MenuItem>
-            ))}
-          </Select>
-        </div>
-
-        <div>
-          ถึง
-          <Select
-            disabled={!checked}
-            value={selectedEndTime}
-            onChange={(e) => {
-              const endTime = e.target.value as string
-              onEndTimeChange(endTime)
-            }}
-            name="endTime"
-          >
-            {endTimeChoices.map((value) => (
-              <MenuItem key={value} value={value}>
-                {value}
-              </MenuItem>
-            ))}
-          </Select>
-        </div>
-      </div>
+        <Box>
+          <Box mb={2} display="flex" alignItems="center" justifyContent="space-between">
+            <Typography mr={2} variant="subtitle1">
+              ในช่วง
+            </Typography>
+            <Select
+              disabled={!checked}
+              value={selectedStartTime}
+              onChange={(e) => {
+                const startTime = e.target.value as string
+                onStartTimeChange(startTime)
+              }}
+              name="startTime"
+            >
+              {startTimeChoices.map((value) => (
+                <MenuItem key={value} value={value}>
+                  {value}
+                </MenuItem>
+              ))}
+            </Select>
+          </Box>
+          <Box display="flex" alignItems="center" justifyContent="space-between">
+            <Typography mr={2} variant="subtitle1">
+              ถึง
+            </Typography>
+            <Select
+              disabled={!checked}
+              value={selectedEndTime}
+              onChange={(e) => {
+                const endTime = e.target.value as string
+                onEndTimeChange(endTime)
+              }}
+              name="endTime"
+            >
+              {endTimeChoices.map((value) => (
+                <MenuItem key={value} value={value}>
+                  {value}
+                </MenuItem>
+              ))}
+            </Select>
+          </Box>
+        </Box>
+      </Box>
     </Stack>
   )
 }

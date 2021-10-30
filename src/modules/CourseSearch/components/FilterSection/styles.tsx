@@ -22,7 +22,7 @@ export const Box = styled.div`
 `
 
 export const StickyPaper = styled(Paper)<{ hasTags: boolean }>`
-  min-width: 220px;
+  min-width: 280px;
   position: sticky;
   top: ${({ hasTags }) => (hasTags ? '125px' : '101px')};
 

@@ -46,7 +46,7 @@ export const TagList: React.FC<TagListProps> = () => {
         <GeneralChip
           key="periodRange"
           type={OtherEnum['other']}
-          label={`${t('fromTime')} ${periodRange.start} - ${periodRange.end}`.replace(':', '.')}
+          label={`${t('inRange')} ${periodRange.start} - ${periodRange.end}`.replace(':', '.')}
           onDelete={handleDeletePeriodRange}
         />
       )}

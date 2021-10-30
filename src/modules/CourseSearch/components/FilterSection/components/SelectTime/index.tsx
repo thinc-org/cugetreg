@@ -36,6 +36,7 @@ export const SelectTime = ({ log }: SelectTimeProps) => {
         }}
         control={
           <Checkbox
+            id="periodRange"
             color="primary"
             name={t('periodRange')}
             sx={{ fontFamily: 'Prompt' }}

@@ -44,6 +44,7 @@ export const CheckboxGroup: React.FC<CheckboxGroupProps> = ({ title, checkboxes,
           onClick={() => log(null, label || '')}
           control={
             <Checkbox
+              id={title}
               color="primary"
               sx={{ fontFamily: 'Prompt' }}
               checked={hasChecked(checkbox.value)}

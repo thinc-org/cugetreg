@@ -80,7 +80,11 @@ exports[`FilterSection Should matched snapshot correctly when matchSmallScreen=t
     >
       <Component />
     </Analytics>
-    <SelectTime />
+    <Analytics
+      elementName="period_range_filter"
+    >
+      <Component />
+    </Analytics>
   </ForwardRef(Stack)>
 </Styled(Component)>
 `;

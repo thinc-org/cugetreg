@@ -1,4 +1,5 @@
 import { collectLogEvent } from '@/services/logging'
+import { google_analytic_property } from '@/utils/env'
 
 import { AnalyticsType } from '../../types'
 
@@ -15,6 +16,8 @@ export function useAnalytics() {
         pathname: e.pathname,
         pathId: e.pathId || '',
         ua: navigator?.userAgent || '',
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        experiments: JSON.stringify((window as any)?.gaData[google_analytic_property]?.experiments),
       },
     })
 

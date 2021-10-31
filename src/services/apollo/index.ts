@@ -23,6 +23,7 @@ const cache = new InMemoryCache({
             const filter = a.filter
             hash += ':' + (filter.dayOfWeeks ? JSON.stringify(filter.dayOfWeeks) : '')
             hash += ':' + (filter.genEdTypes ? JSON.stringify(filter.genEdTypes) : '')
+            hash += ':' + (filter.periodRange ? JSON.stringify(filter.periodRange) : '')
             hash += ':' + (filter.keyword || '')
             return hash
           },

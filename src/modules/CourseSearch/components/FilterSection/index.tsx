@@ -62,12 +62,12 @@ export const FilterSection: React.FC<FilterSectionProps> = ({ open, handleClose 
         <Box>
           <Analytics elementName={GENED_FILTER}>
             {({ log }) => (
-              <CheckboxGroup id="GenEdFilter" log={log} title="หมวดหมู่ GenEd" checkboxes={genEdCheckboxes} />
+              <CheckboxGroup id="genEdFilter" log={log} title="หมวดหมู่ GenEd" checkboxes={genEdCheckboxes} />
             )}
           </Analytics>
           <Analytics elementName={DAY_FILTER}>
             {({ log }) => (
-              <CheckboxGroup id="DayOfWeekFilter" log={log} title="วันในสัปดาห์" checkboxes={dayOfWeekCheckboxes} />
+              <CheckboxGroup id="dayOfWeekFilter" log={log} title="วันในสัปดาห์" checkboxes={dayOfWeekCheckboxes} />
             )}
           </Analytics>
         </Box>

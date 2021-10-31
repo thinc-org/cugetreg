@@ -1,5 +1,5 @@
 import { collectLogEvent } from '@/services/logging'
-import { google_analytic_property } from '@/utils/env'
+import { environment, google_analytic_property } from '@/utils/env'
 
 import { AnalyticsType } from '../../types'
 
@@ -21,6 +21,7 @@ export function useAnalytics() {
         pathId: e.pathId || '',
         ua: navigator?.userAgent || '',
         experiments: JSON.stringify(experiments),
+        environment,
       },
     })
   }

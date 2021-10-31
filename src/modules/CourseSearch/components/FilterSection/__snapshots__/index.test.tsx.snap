@@ -138,7 +138,7 @@ exports[`FilterSection Should render CheckboxGroup of GenEds correctly when when
 exports[`FilterSection Should render CheckboxGroup of GenEds correctly when when matchSmallScreen=true and isExpandFilter=true 1`] = `
 <CheckboxGroup
   checkboxes={Array []}
-  id="GenEdFilter"
+  id="genEdFilter"
   log={[Function]}
   title="หมวดหมู่ GenEd"
 />
@@ -165,7 +165,7 @@ exports[`FilterSection Should render CheckboxGroup of days correctly when matchS
 exports[`FilterSection Should render CheckboxGroup of days correctly when matchSmallScreen=true and isExpandFilter=true 1`] = `
 <CheckboxGroup
   checkboxes={Array []}
-  id="DayOfWeekFilter"
+  id="dayOfWeekFilter"
   log={[Function]}
   title="วันในสัปดาห์"
 />

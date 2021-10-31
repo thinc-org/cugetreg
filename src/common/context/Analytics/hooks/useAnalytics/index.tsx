@@ -6,7 +6,7 @@ import { AnalyticsType } from '../../types'
 export function useAnalytics() {
   const addEvent: AnalyticsType['addEvent'] = (e) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const gaData = (window as any)?.gaData
+    const gaData = typeof window !== 'undefined' && (window as any).gaData
     const experiments = gaData && gaData[google_analytic_property]?.experiments
 
     return collectLogEvent({

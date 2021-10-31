@@ -38,14 +38,14 @@ export const FilterSection: React.FC<FilterSectionProps> = ({ open, handleClose 
           <Grid item sx={{ order: isExperimentOrder ? 3 : 1 }}>
             <Analytics elementName={GENED_FILTER}>
               {({ log }) => (
-                <CheckboxGroup log={log} id="GenEdFilter" title="หมวดหมู่ GenEd" checkboxes={genEdCheckboxes} />
+                <CheckboxGroup log={log} id="genEdFilter" title="หมวดหมู่ GenEd" checkboxes={genEdCheckboxes} />
               )}
             </Analytics>
           </Grid>
           <Grid item sx={{ order: isExperimentOrder ? 1 : 2 }}>
             <Analytics elementName={DAY_FILTER}>
               {({ log }) => (
-                <CheckboxGroup log={log} id="DayOfWeekFilter" title="วันในสัปดาห์" checkboxes={dayOfWeekCheckboxes} />
+                <CheckboxGroup log={log} id="dayOfWeekFilter" title="วันในสัปดาห์" checkboxes={dayOfWeekCheckboxes} />
               )}
             </Analytics>
           </Grid>

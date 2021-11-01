@@ -1,3 +1,44 @@
+# [1.2.0](https://github.com/thinc-org/cugetreg-frontend/compare/v1.1.0...v1.2.0) (2021-11-01)
+
+
+### Bug Fixes
+
+* add i18n for missing text in periodRage ([333ca48](https://github.com/thinc-org/cugetreg-frontend/commit/333ca488c889d62e9aed8ed6455cc79469ab0079))
+* add proper id to search filter ([89149a1](https://github.com/thinc-org/cugetreg-frontend/commit/89149a13a527322f23e630f973564332c8ae23a3))
+* add test for useSelectTime ([730bd87](https://github.com/thinc-org/cugetreg-frontend/commit/730bd8775a2436448a43ca1684888ebcb51d5d98))
+* build error i18n ([704919d](https://github.com/thinc-org/cugetreg-frontend/commit/704919d1532473aae1b1cc2cf89fd85dc1fa93b6))
+* cannot read property of undefined error ([54a8207](https://github.com/thinc-org/cugetreg-frontend/commit/54a8207d386fc1bd20891de3ac46d85fdb557002))
+* cannot read property of undefined error 2 ([7425969](https://github.com/thinc-org/cugetreg-frontend/commit/7425969301d5bff1492cf60d7ca649544772454a))
+* change color of checkbox in search filter to match design ([bd59cb3](https://github.com/thinc-org/cugetreg-frontend/commit/bd59cb3cd7a8ceeb6803145c05bc1fd7df6d24c5))
+* change files name from styles to styled ([cf52b80](https://github.com/thinc-org/cugetreg-frontend/commit/cf52b803775e506386a22335eca35a4bf304dfa5))
+* coverage test should not count styles.tsx ([f5fe7a7](https://github.com/thinc-org/cugetreg-frontend/commit/f5fe7a7c627de4675abf1eba0908b7127aaad1b6))
+* failed test on app.tsx ([e562911](https://github.com/thinc-org/cugetreg-frontend/commit/e56291142d435d94b51d00e7288357ecd1968b85))
+* i18n build error ([fb0b4e1](https://github.com/thinc-org/cugetreg-frontend/commit/fb0b4e1a3b0e5801dd5409f8ae4d5e12d5cb1f13))
+* id mismatch with google tag manager event ([ec21c64](https://github.com/thinc-org/cugetreg-frontend/commit/ec21c64c6197d55e4b18bd503e4cb65bdca1503f))
+* refetch not clear cache ([bc10985](https://github.com/thinc-org/cugetreg-frontend/commit/bc10985d19c2c3693bc79d269266d9f8efb715fe))
+* remove useMemo (no need) ([0c616b0](https://github.com/thinc-org/cugetreg-frontend/commit/0c616b08c091a1c737ce1d4ed44934fbc0e026bc))
+* rename periodRangeFilter ([50e2067](https://github.com/thinc-org/cugetreg-frontend/commit/50e2067b09d32d3a1a123534f4a302dc480c97f3))
+* requested changes ([611e6ea](https://github.com/thinc-org/cugetreg-frontend/commit/611e6ea51bb08f34de209cdd2c7a8fe5cb823b50))
+* requested changes in [#229](https://github.com/thinc-org/cugetreg-frontend/issues/229) ([df3f79a](https://github.com/thinc-org/cugetreg-frontend/commit/df3f79a0291ce5ab92e54030cd1f011201b08312))
+* restore apollo cahce properly ([094539b](https://github.com/thinc-org/cugetreg-frontend/commit/094539b52c261ed317868f3369c31845f21bf362))
+* title of description section ([806873b](https://github.com/thinc-org/cugetreg-frontend/commit/806873b38a72e86485855abb8414f27f84d762b0))
+* update test snapshot ([511bc2e](https://github.com/thinc-org/cugetreg-frontend/commit/511bc2e90fa45956d79f7769ba5a27284c8128f3))
+
+
+### Features
+
+* add environment to graylog ([9cafe73](https://github.com/thinc-org/cugetreg-frontend/commit/9cafe73e1393f03a8e617ce9fdff560615bdc1a5))
+* add i18n to periodRange ([a86f438](https://github.com/thinc-org/cugetreg-frontend/commit/a86f43895aadc28fbfad797e8731017d766d040f))
+* add logging and finish styling periodRange ([c0a5119](https://github.com/thinc-org/cugetreg-frontend/commit/c0a511932e2b7466685806f2ccd39106a9cb14f4))
+* add tagList for periodRange ([e02c245](https://github.com/thinc-org/cugetreg-frontend/commit/e02c245f85686279dc59f4eeb89e3c11838d331b))
+* add time filter in search ([8e5db9f](https://github.com/thinc-org/cugetreg-frontend/commit/8e5db9f63b81698b8bbcad8cc8be9d87e89002d5))
+* style periodRange checkbox ([7e7c62e](https://github.com/thinc-org/cugetreg-frontend/commit/7e7c62e6b4b949f575002363ea81c0eceb9f90c5))
+
+
+### Reverts
+
+* depedencies ([4f34a8c](https://github.com/thinc-org/cugetreg-frontend/commit/4f34a8c785d04473bf9d9afb8dd7a2b51edc70ca))
+
 # [1.1.0](https://github.com/thinc-org/cugetreg-frontend/compare/v1.0.0...v1.1.0) (2021-10-28)
 
 

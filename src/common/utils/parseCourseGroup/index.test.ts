@@ -12,6 +12,7 @@ describe('parseCourseGroup', () => {
     semester: '2',
   }
   const MOCK_STUDY_PROGRAM = 'T'
+  const MOCK_WRONG_STUDY_PROGRAM = 'D'
 
   const mockParseTerm = jest.fn((term: string) => {
     const isEmpty = term === ''
@@ -24,16 +25,19 @@ describe('parseCourseGroup', () => {
   })
 
   it.each`
-    studyProgram          | term         | expectedStudyProgram     | expectedTerm
-    ${null}               | ${null}      | ${DEFAULT_STUDY_PROGRAM} | ${MOCK_TERM_2}
-    ${null}               | ${undefined} | ${DEFAULT_STUDY_PROGRAM} | ${MOCK_TERM_2}
-    ${null}               | ${MOCK_TERM} | ${DEFAULT_STUDY_PROGRAM} | ${MOCK_TERM}
-    ${undefined}          | ${null}      | ${DEFAULT_STUDY_PROGRAM} | ${MOCK_TERM_2}
-    ${undefined}          | ${undefined} | ${DEFAULT_STUDY_PROGRAM} | ${MOCK_TERM_2}
-    ${undefined}          | ${MOCK_TERM} | ${DEFAULT_STUDY_PROGRAM} | ${MOCK_TERM}
-    ${MOCK_STUDY_PROGRAM} | ${null}      | ${MOCK_STUDY_PROGRAM}    | ${MOCK_TERM_2}
-    ${MOCK_STUDY_PROGRAM} | ${undefined} | ${MOCK_STUDY_PROGRAM}    | ${MOCK_TERM_2}
-    ${MOCK_STUDY_PROGRAM} | ${MOCK_TERM} | ${MOCK_STUDY_PROGRAM}    | ${MOCK_TERM}
+    studyProgram                | term         | expectedStudyProgram     | expectedTerm
+    ${null}                     | ${null}      | ${DEFAULT_STUDY_PROGRAM} | ${MOCK_TERM_2}
+    ${null}                     | ${undefined} | ${DEFAULT_STUDY_PROGRAM} | ${MOCK_TERM_2}
+    ${null}                     | ${MOCK_TERM} | ${DEFAULT_STUDY_PROGRAM} | ${MOCK_TERM}
+    ${undefined}                | ${null}      | ${DEFAULT_STUDY_PROGRAM} | ${MOCK_TERM_2}
+    ${undefined}                | ${undefined} | ${DEFAULT_STUDY_PROGRAM} | ${MOCK_TERM_2}
+    ${undefined}                | ${MOCK_TERM} | ${DEFAULT_STUDY_PROGRAM} | ${MOCK_TERM}
+    ${MOCK_STUDY_PROGRAM}       | ${null}      | ${MOCK_STUDY_PROGRAM}    | ${MOCK_TERM_2}
+    ${MOCK_STUDY_PROGRAM}       | ${undefined} | ${MOCK_STUDY_PROGRAM}    | ${MOCK_TERM_2}
+    ${MOCK_STUDY_PROGRAM}       | ${MOCK_TERM} | ${MOCK_STUDY_PROGRAM}    | ${MOCK_TERM}
+    ${MOCK_WRONG_STUDY_PROGRAM} | ${null}      | ${DEFAULT_STUDY_PROGRAM} | ${MOCK_TERM_2}
+    ${MOCK_WRONG_STUDY_PROGRAM} | ${undefined} | ${DEFAULT_STUDY_PROGRAM} | ${MOCK_TERM_2}
+    ${MOCK_WRONG_STUDY_PROGRAM} | ${MOCK_TERM} | ${DEFAULT_STUDY_PROGRAM} | ${MOCK_TERM}
   `(
     'Should parse correctly when studyProgram is $studyProgram and term is $term',
     async ({ studyProgram, term, expectedStudyProgram, expectedTerm }) => {

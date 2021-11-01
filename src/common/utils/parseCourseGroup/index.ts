@@ -1,4 +1,4 @@
-import { StudyProgram } from '@thinc-org/chula-courses'
+import { StudyProgram, StudyProgramEnum } from '@thinc-org/chula-courses'
 import { ParsedUrlQuery } from 'querystring'
 
 import { parseTerm } from '@/common/utils/parseTerm'
@@ -10,7 +10,9 @@ export function parseCourseGroup(
   query: ParsedUrlQuery,
   defaultStudyProgram: StudyProgram = DEFAULT_STUDY_PROGRAM
 ): CourseGroup {
-  const studyProgram = (query.studyProgram ?? defaultStudyProgram) as StudyProgram
+  const studyProgram = Object.values(StudyProgramEnum).includes(query.studyProgram as StudyProgramEnum)
+    ? (query.studyProgram as StudyProgramEnum)
+    : defaultStudyProgram
   const term = parseTerm((query.term ?? '') as string)
   return {
     studyProgram,

@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next'
 
-import { CourseCartItem } from '@/store/shoppingCart'
+import { CourseCartItem } from '@/store/courseCart'
 
-import { useStyles, Column, ColumnHeader } from './styles'
+import { useStyles, Column, ColumnHeader } from './styled'
 import { toNumberString } from './utils'
 
 interface CR11Props {

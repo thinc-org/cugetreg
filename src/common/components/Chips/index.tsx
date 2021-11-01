@@ -5,6 +5,7 @@ import { chipConfig, ChipConfigProps, GeneralChipKey } from './config'
 
 export type GeneralChipProps = Omit<ChipProps, keyof ChipConfigProps> & {
   type: GeneralChipKey
+  label?: string
 }
 
 /**

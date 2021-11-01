@@ -6,13 +6,17 @@ describe('App module', () => {
   const mockPageProps = { test: 'test' }
   const mockComponent = () => <div></div>
   const mockClient = jest.fn()
+  const mockUseSaveStudyProgram = jest.fn()
+
   jest.doMock('./hooks/useApp', () => ({ useApp: mockUseApp }))
+  jest.doMock('@/common/hooks/useCourseGroup', () => ({ useSaveStudyProgram: mockUseSaveStudyProgram }))
   jest.doMock('@/services/apollo', () => ({ client: mockClient }))
 
   const DEFAULT_ENV = process.env
 
   beforeEach(() => {
     jest.resetModules()
+    jest.clearAllMocks()
     process.env = { ...DEFAULT_ENV }
   })
 
@@ -38,6 +42,7 @@ describe('App module', () => {
       <App forceDark={forceDark} Component={mockComponent} router={mockRouter as any} pageProps={mockPageProps} />
     )
     expect(mockUseApp).toBeCalledWith(mockRouter)
+    expect(mockUseSaveStudyProgram).toBeCalledTimes(1)
     expect(wrapper.find(mockComponent).props()).toEqual(mockPageProps)
     expect(wrapper.find(AppProvider).prop('forceDark')).toBe(forceDark)
     expect(wrapper.find(DefaultSeo).prop('dangerouslySetAllPagesToNoFollow')).toBe(environment !== 'production')

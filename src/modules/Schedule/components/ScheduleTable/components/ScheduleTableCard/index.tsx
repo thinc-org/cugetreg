@@ -15,6 +15,7 @@ import { Caption } from '@/common/components/Caption'
 import { dayOfWeekMapper } from '@/common/constants/dayOfWeek'
 import { Analytics } from '@/common/context/Analytics/components/Analytics'
 import { HIDE_COURSE, DELETE_COURSE, SECTION_CHANGE } from '@/common/context/Analytics/constants'
+import { useLinkBuilderWithCourseGroup } from '@/common/hooks/useLinkBuilder'
 import { CourseCartItem, courseCartStore } from '@/store'
 
 import {
@@ -47,8 +48,8 @@ export interface CardComponentProps {
 export const ScheduleTableCard = observer(({ item, index, hasOverlap }: ScheduleTableCardProps) => {
   const { courseNo, isHidden } = item
   const toggleVisibility = useCallback(() => {
-    courseCartStore.toggleHiddenItem(courseNo)
-  }, [courseNo])
+    courseCartStore.toggleHiddenItem(item)
+  }, [item])
 
   const theme = useTheme()
   const match = useMediaQuery(theme.breakpoints.up('md'))
@@ -132,9 +133,10 @@ export const ScheduleTableCard = observer(({ item, index, hasOverlap }: Schedule
 function CardHeader({ item }: CardComponentProps) {
   const { t } = useTranslation('scheduleTableCard')
   const theme = useTheme()
+  const { buildLink } = useLinkBuilderWithCourseGroup(item)
   return (
     <HeaderLayout>
-      <StyledLink href={`/${item.studyProgram}/courses/${item.courseNo}`}>
+      <StyledLink href={buildLink(`/courses/${item.courseNo}`)}>
         <Typography variant="h5" style={{ marginRight: 16 }}>
           {item.courseNo} {item.abbrName}
         </Typography>

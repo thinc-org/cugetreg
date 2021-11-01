@@ -4,7 +4,8 @@ import { shallow } from 'enzyme'
 import { ResponsiveDialog } from '@/common/components/ResponsiveDialog'
 import { Analytics } from '@/common/context/Analytics/components/Analytics'
 import { DAY_FILTER, GENED_FILTER } from '@/common/context/Analytics/constants'
-import { Button, StickyPaper } from '@/modules/CourseSearch/components/FilterSection/styles'
+
+import { Button, StickyPaper } from './styled'
 
 describe('FilterSection', () => {
   const MOCK_HASTAG = true

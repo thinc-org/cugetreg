@@ -11,7 +11,7 @@ import {
   NAVBAR_TIMETABLE,
   STUDY_PROGRAM_DROPDOWN,
 } from '@/common/context/Analytics/constants'
-import { useCourseGroup } from '@/common/hooks/useCourseGroup'
+import { useLinkBuilder } from '@/common/hooks/useLinkBuilder'
 import { Spacer } from '@/components/Spacer'
 
 import { ConfigBarItem } from '../ConfigBar/styled'
@@ -24,22 +24,22 @@ import { FlexContainer } from '../styled'
 import { NavBarLayout, Logo } from './styled'
 
 export function NavBar() {
-  const { t } = useTranslation()
-  const { studyProgram } = useCourseGroup()
+  const { t } = useTranslation(['navBar', 'translation'])
+  const { buildLink } = useLinkBuilder()
 
   const navbarItems = [
     {
-      href: `/${studyProgram}/courses`,
+      href: buildLink(`/courses`),
       elementName: NAVBAR_SEARCH_COURSE,
       label: t('navBar:searchCourses'),
     },
     {
-      href: `/${studyProgram}/schedule`,
+      href: buildLink(`/schedule`),
       elementName: NAVBAR_TIMETABLE,
       label: t('navBar:timetable'),
     },
     {
-      href: `/about`,
+      href: buildLink(`/about`, {}, false),
       elementName: NAVBAR_ABOUT,
       label: t('navBar:about'),
     },
@@ -48,9 +48,9 @@ export function NavBar() {
   return (
     <NavBarLayout>
       <FlexContainer>
-        <LinkWithAnalytics href={`/${studyProgram}/courses`} passHref elementName={GETREG_LOGO}>
+        <LinkWithAnalytics href={buildLink(`/courses`)} passHref elementName={GETREG_LOGO}>
           <Logo>
-            <img src={logo} alt={t('appName')} />
+            <img src={logo} alt={t('translation:appName')} />
           </Logo>
         </LinkWithAnalytics>
 

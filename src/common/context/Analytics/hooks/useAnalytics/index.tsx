@@ -1,10 +1,15 @@
 import { collectLogEvent } from '@/services/logging'
+import { environment, google_analytic_property } from '@/utils/env'
 
 import { AnalyticsType } from '../../types'
 
 export function useAnalytics() {
-  const addEvent: AnalyticsType['addEvent'] = (e) =>
-    collectLogEvent({
+  const addEvent: AnalyticsType['addEvent'] = (e) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const gaData = typeof window !== 'undefined' && (window as any).gaData
+    const experiments = gaData && gaData[google_analytic_property]?.experiments
+
+    return collectLogEvent({
       kind: 'fine-tracking',
       message: `User performed ${e.eventType} on object ${e.pathname} at ${e.timeStamp}`,
       additionalData: {
@@ -15,8 +20,11 @@ export function useAnalytics() {
         pathname: e.pathname,
         pathId: e.pathId || '',
         ua: navigator?.userAgent || '',
+        experiments: JSON.stringify(experiments),
+        environment,
       },
     })
+  }
 
   return { addEvent }
 }

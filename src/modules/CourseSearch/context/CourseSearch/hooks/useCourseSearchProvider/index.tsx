@@ -12,7 +12,6 @@ export const useCourseSearchProvider = () => {
   const router = useRouter()
   const { isEmpty, setIsEmpty } = useEmpty()
   const [offset, setOffset] = useState(0)
-
   const { searchCourseQueryParams } = useSearchCourseQueryParams()
 
   const courseSearchQuery = useQuery<SearchCourseResponse, SearchCourseVars>(SEARCH_COURSE, {

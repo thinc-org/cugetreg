@@ -9,13 +9,13 @@ import { useSelectButton } from '@/common/components/SelectButton/hooks/useSelec
 import { SelectButtonProps } from './types'
 
 export const SelectButton = observer((props: SelectButtonProps) => {
-  const { t, isSelected, isExperimentColor, onClickSelectCourse } = useSelectButton(props)
+  const { t, isSelected, onClickSelectCourse } = useSelectButton(props)
 
   return (
     <LoadingButton
       loading={false}
       startIcon={!isSelected ? <Add /> : <MdCheck />}
-      color={isExperimentColor ? 'secondary' : 'primary'}
+      color="primary"
       variant={!isSelected ? 'contained' : 'outlined'}
       fullWidth
       disableElevation

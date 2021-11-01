@@ -17,7 +17,7 @@
     "postbuild": "next-sitemap"
   },
   "dependencies": {
-    "@apollo/client": "^3.3.7",
+    "@apollo/client": "^3.4.x",
     "@date-io/date-fns": "1.x",
     "@emotion/react": "^11.1.5",
     "@emotion/styled": "^11.3.0",

@@ -11,6 +11,7 @@ export interface EnhancedCheckBoxProps extends CheckboxProps {
 
 export interface CheckboxGroupProps {
   title: string
+  id: string
   checkboxes: EnhancedCheckBoxProps[]
   log: (_: unknown, value: string) => void
 }
@@ -21,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-export const CheckboxGroup: React.FC<CheckboxGroupProps> = ({ title, checkboxes, log }) => {
+export const CheckboxGroup: React.FC<CheckboxGroupProps> = ({ title, checkboxes, log, id }) => {
   const classes = useStyles()
 
   const { searchCourseQueryParams } = useSearchCourseQueryParams()
@@ -42,7 +43,15 @@ export const CheckboxGroup: React.FC<CheckboxGroupProps> = ({ title, checkboxes,
         <FormControlLabel
           key={label}
           onClick={() => log(null, label || '')}
-          control={<Checkbox sx={{ fontFamily: 'Prompt' }} checked={hasChecked(checkbox.value)} {...checkbox} />}
+          control={
+            <Checkbox
+              id={id}
+              color="primary"
+              sx={{ fontFamily: 'Prompt' }}
+              checked={hasChecked(checkbox.value)}
+              {...checkbox}
+            />
+          }
           label={<Typography variant="subtitle1">{label}</Typography>}
         />
       ))}

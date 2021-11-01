@@ -6,7 +6,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { BackButton } from '@/common/components/BackButton'
-import { useCourseGroup } from '@/common/hooks/useCourseGroup'
+import { useLinkBuilder } from '@/common/hooks/useLinkBuilder'
 import { Language } from '@/common/i18n'
 import { getExamDate } from '@/common/utils/getExamData'
 import { getExamPeriod } from '@/common/utils/getExamPeriod'
@@ -29,7 +29,7 @@ import { parseVariablesFromQuery } from './utils/parseVariablesFromQuery'
 
 export function CourseDetailPage(props: { data: GetCourseResponse }) {
   const { i18n } = useTranslation()
-  const { studyProgram } = useCourseGroup()
+  const { buildLink } = useLinkBuilder()
   const cData = props.data
 
   const CourseList = groupBy(cData.course.sections, 'note', 'General').map((sectionGroup) => {
@@ -53,7 +53,7 @@ export function CourseDetailPage(props: { data: GetCourseResponse }) {
   return (
     <Container>
       <PageMeta title={cData.course.abbrName} />
-      <BackButton href={`/${studyProgram}/courses`} pathId={cData.course.courseNo} />
+      <BackButton href={buildLink(`/courses`)} pathId={cData.course.courseNo} />
       <Title variant="h3">
         {cData.course.courseNo} {cData.course.abbrName}
       </Title>

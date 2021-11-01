@@ -22,11 +22,12 @@ export const Box = styled.div`
 `
 
 export const StickyPaper = styled(Paper)<{ hasTags: boolean }>`
-  min-width: 220px;
+  width: 320px;
+  box-sizing: content-box;
   position: sticky;
   top: ${({ hasTags }) => (hasTags ? '125px' : '101px')};
 
-  padding: ${({ theme }) => theme.spacing(4)};
+  padding: ${({ theme }) => theme.spacing(4, 0, 4, 4)};
   overflow-y: auto;
   height: min-content;
   max-height: calc(100vh - ${({ hasTags }) => (hasTags ? '125px' : '101px')});

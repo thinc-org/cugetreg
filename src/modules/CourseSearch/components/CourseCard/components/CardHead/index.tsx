@@ -7,13 +7,13 @@ import { GenEdChip } from '@/common/components/Chips/catagories/GenEdChip'
 import { Analytics } from '@/common/context/Analytics/components/Analytics'
 import { LinkWithAnalytics } from '@/common/context/Analytics/components/LinkWithAnalytics'
 import { COURSE_TITLE, EXPAND_BUTTON } from '@/common/context/Analytics/constants'
-import { useCourseGroup } from '@/common/hooks/useCourseGroup'
+import { useLinkBuilderWithCourseGroup } from '@/common/hooks/useLinkBuilder'
 import { useCourseCard } from '@/modules/CourseSearch/components/CourseCard/context'
 
 export function CardHead() {
   const { t } = useTranslation('courseCard')
   const { course, isGenEd, isExpanded, onToggle } = useCourseCard()
-  const { studyProgram } = useCourseGroup()
+  const { buildLink } = useLinkBuilderWithCourseGroup(course)
 
   return (
     <CardHeader
@@ -23,7 +23,7 @@ export function CardHead() {
           <Grid container spacing={1}>
             <Grid item>
               <LinkWithAnalytics
-                href={`/${studyProgram}/courses/${course.courseNo}`}
+                href={buildLink(`/courses/${course.courseNo}`)}
                 passHref
                 elementName={COURSE_TITLE}
                 elementId={course.courseNo}

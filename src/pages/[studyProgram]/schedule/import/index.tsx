@@ -5,8 +5,8 @@ import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 
-import { useCourseGroup } from '@/common/hooks/useCourseGroup'
 import { CourseGroup } from '@/common/hooks/useCourseGroup/types'
+import { useLinkBuilder } from '@/common/hooks/useLinkBuilder'
 import { parseCourseGroup } from '@/common/utils/parseCourseGroup'
 import { Loading } from '@/modules/CourseSearch/components/Loading'
 import { createApolloServerClient } from '@/services/apollo'
@@ -30,7 +30,7 @@ interface ImportPageProps {
 
 function ImportSchedulePage({ items }: ImportPageProps) {
   const router = useRouter()
-  const { studyProgram } = useCourseGroup()
+  const { buildLink } = useLinkBuilder()
 
   useEffect(() => {
     const fn = async () => {
@@ -40,10 +40,10 @@ function ImportSchedulePage({ items }: ImportPageProps) {
       items.forEach(({ course, sectionNo }) => {
         courseCartStore.addItem(course, sectionNo)
       })
-      router.replace(`/${studyProgram}/schedule`)
+      router.replace(buildLink(`/schedule`))
     }
     fn()
-  }, [items, router, studyProgram])
+  }, [items, router, buildLink])
 
   return <Loading loading />
 }

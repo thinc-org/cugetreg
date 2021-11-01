@@ -44,4 +44,4 @@ jobs:
       # - name: Build project
       #   run: yarn build
 
-      - run: yarn test --projects jest-puppeteer.config.js
+      - run: yarn test --projects jest.e2e.config.js

@@ -7,9 +7,6 @@ describe('Google', () => {
 
     it('should be able to switch to International program 2564/1', async () => {
         await expect(page).toMatch('ค้นหาวิชาเรียน')
-
-        const optionValue = await page.$$eval('option', options => options.find(o => o.value === "I")?.value)
-        console.log(optionValue, 'optionValue')
         await page.select('select:nth-of-type(1)', 'I');
 
         await page.evaluate(

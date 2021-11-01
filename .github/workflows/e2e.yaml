@@ -41,7 +41,7 @@ jobs:
         if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: yarn --fronzen-lockfile
 
-      - name: Build project
-        run: yarn build
+      # - name: Build project
+      #   run: yarn build
 
       - run: yarn test --projects jest-puppeteer.config.js

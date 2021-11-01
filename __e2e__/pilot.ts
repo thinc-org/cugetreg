@@ -10,12 +10,13 @@ describe('Google', () => {
         await page.select('select:nth-of-type(1)', 'I');
 
         await page.evaluate(
-            () => document.querySelectorAll('select')[1].id = 'rueylei'
+            () => document.querySelectorAll('select')[1].id = 'blank_id'
         );
-        await page.select('#rueylei', "2564/1");
+        await page.select('#blank_id', "2564/1");
         await expect(page).toMatch('0201172 SELF/CAREER MGT')
 
         await page.click("input[name='หมวดวิทย์']");
+        await page.waitForTimeout(500)
         await expect(page).not.toMatch('0201172 SELF/CAREER MGT')
         await expect(page).toMatch('0201287 MAP APPLN')
 

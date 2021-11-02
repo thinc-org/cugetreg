@@ -16,6 +16,7 @@ import { PageMeta } from '@/components/PageMeta'
 import { createApolloServerClient } from '@/services/apollo'
 import { GetCourseResponse, GET_COURSE } from '@/services/apollo/query/getCourse'
 
+import { ReviewForm } from './components/ReviewForm'
 import {
   Container,
   DescriptionTitle,
@@ -124,6 +125,7 @@ export function CourseDetailPage(props: { data: GetCourseResponse }) {
         )}
       </GridContainer>
       {CourseList}
+      <ReviewForm course={course} />
     </Container>
   )
 }

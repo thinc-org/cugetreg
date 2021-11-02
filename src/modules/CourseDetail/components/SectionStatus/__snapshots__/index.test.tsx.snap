@@ -1,0 +1,141 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SectionStatus Should match snapshot correctly' 1`] = `
+<ForwardRef(Typography)
+  ml={1}
+  px={2}
+  py={0.5}
+  sx={
+    Object {
+      "backgroundColor": "highlight.green.300",
+      "borderRadius": 1,
+      "color": "highlight.green.700",
+      "height": "fit-content",
+      "whiteSpace": "nowrap",
+    }
+  }
+  variant="h6"
+>
+  <ForwardRef(Stack)
+    alignItems="center"
+    direction="row"
+    spacing={0.5}
+  >
+    <div>
+      avialable
+    </div>
+    <NoSeatIcon
+      sx={
+        Object {
+          "color": "primary.main",
+        }
+      }
+    />
+  </ForwardRef(Stack)>
+</ForwardRef(Typography)>
+`;
+
+exports[`SectionStatus Should match snapshot correctly' 2`] = `
+<ForwardRef(Typography)
+  ml={1}
+  px={2}
+  py={0.5}
+  sx={
+    Object {
+      "backgroundColor": "highlight.red.300",
+      "borderRadius": 1,
+      "color": "highlight.red.700",
+      "height": "fit-content",
+      "whiteSpace": "nowrap",
+    }
+  }
+  variant="h6"
+>
+  <ForwardRef(Stack)
+    alignItems="center"
+    direction="row"
+    spacing={0.5}
+  >
+    <div>
+      full
+    </div>
+    <NoSeatIcon
+      sx={
+        Object {
+          "color": "primary.main",
+        }
+      }
+    />
+  </ForwardRef(Stack)>
+</ForwardRef(Typography)>
+`;
+
+exports[`SectionStatus Should match snapshot correctly' 3`] = `
+<ForwardRef(Typography)
+  ml={1}
+  px={2}
+  py={0.5}
+  sx={
+    Object {
+      "backgroundColor": "highlight.red.500",
+      "borderRadius": 1,
+      "color": "white",
+      "height": "fit-content",
+      "whiteSpace": "nowrap",
+    }
+  }
+  variant="h6"
+>
+  <ForwardRef(Stack)
+    alignItems="center"
+    direction="row"
+    spacing={0.5}
+  >
+    <div>
+      closed
+    </div>
+    <NoSeatIcon
+      sx={
+        Object {
+          "color": "white",
+        }
+      }
+    />
+  </ForwardRef(Stack)>
+</ForwardRef(Typography)>
+`;
+
+exports[`SectionStatus Should match snapshot correctly' 4`] = `
+<ForwardRef(Typography)
+  ml={1}
+  px={2}
+  py={0.5}
+  sx={
+    Object {
+      "backgroundColor": "highlight.red.500",
+      "borderRadius": 1,
+      "color": "white",
+      "height": "fit-content",
+      "whiteSpace": "nowrap",
+    }
+  }
+  variant="h6"
+>
+  <ForwardRef(Stack)
+    alignItems="center"
+    direction="row"
+    spacing={0.5}
+  >
+    <div>
+      closed
+    </div>
+    <NoSeatIcon
+      sx={
+        Object {
+          "color": "white",
+        }
+      }
+    />
+  </ForwardRef(Stack)>
+</ForwardRef(Typography)>
+`;

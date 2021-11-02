@@ -28,21 +28,23 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({ courseNo }) => {
   const { t } = useTranslation('review')
   const { emitMessage } = useContext(SnackbarContext)
   const { studyProgram } = useCourseGroup()
-  const [createReview] = useMutation<CreateReviewResponse, CreateReviewVars>(CREATE_REVIEW)
+  const [createReviewMutation] = useMutation<CreateReviewResponse, CreateReviewVars>(CREATE_REVIEW)
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     console.log('success', data)
     const ratingNumber = parseFloat(data.rating) * 2 // 1 - 10, 0 isn't accepted
     try {
       if (isLoggedIn()) {
-        await createReview({
+        await createReviewMutation({
           variables: {
-            rating: ratingNumber,
-            courseNo: courseNo,
-            semester: data.semester,
-            academicYear: data.academicYear,
-            studyProgram: studyProgram,
-            content: data.content,
+            createReviewInput: {
+              rating: ratingNumber,
+              courseNo: courseNo,
+              semester: data.semester,
+              academicYear: data.academicYear,
+              studyProgram: studyProgram,
+              content: data.content,
+            },
           },
         })
       }

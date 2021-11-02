@@ -183,3 +183,7 @@ export const filterBar = {
 export const tagList = {
   inRange: 'ในช่วง',
 }
+
+export const review = {
+  title: 'มาเขียนรีวิวรายวิชากันเถอะ!',
+}

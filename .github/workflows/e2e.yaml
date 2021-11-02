@@ -2,9 +2,7 @@ name: E2E test
 
 on:
   pull_request:
-  push:
-    # branches: [master]
-    branches: [master, beta]
+    branches: [master]
 
 permissions:
   contents: write

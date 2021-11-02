@@ -23,7 +23,7 @@ import { dayOfWeekMapper } from '@/common/constants/dayOfWeek'
 import { Analytics } from '@/common/context/Analytics/components/Analytics'
 import { SUBJECT_SELECT_BUTTON_WITH_SECTION } from '@/common/context/Analytics/constants'
 
-import { SectionStatus } from './components/SectionStatus'
+import { SectionStatus } from '../SectionStatus'
 
 const SectionTitle = styled(Typography)`
   margin-right: ${({ theme }) => theme.spacing(2)};
@@ -55,12 +55,7 @@ export const SectionCard = (props: SectionCardProps) => {
                 </Grid>
               )}
             </Grid>
-            <SectionStatus
-              capacity={section.capacity}
-              status={
-                section.closed ? 'closed' : section.capacity.current >= section.capacity.max ? 'full' : 'avialable'
-              }
-            />
+            <SectionStatus capacity={section.capacity} closed={section.closed} />
           </Stack>
         }
       />

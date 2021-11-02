@@ -37,17 +37,17 @@ export function CourseDetailPage(props: { data: GetCourseResponse }) {
   const SEOConfig: NextSeoProps = {
     ...defaultSEO,
     title: course.abbrName,
-    description: course.courseDesc || defaultSEO.description,
+    description: course.courseDesc ?? defaultSEO.description,
     openGraph: {
       title: `${course.abbrName} | CU Get Reg`,
-      description: course.courseDesc || defaultSEO.openGraph.description,
+      description: course.courseDesc ?? defaultSEO.openGraph.description,
     },
     additionalMetaTags: [
       ...defaultSEO.additionalMetaTags,
       {
         property: 'keywords',
         content:
-          defaultSEO.additionalMetaTags +
+          defaultSEO.additionalMetaTags[0].content +
           [course.abbrName, course.genEdType, course.academicYear, course.faculty, course.courseNo].join(','),
       },
     ],
@@ -109,10 +109,10 @@ export function CourseDetailPage(props: { data: GetCourseResponse }) {
           <DescriptionTitle variant="subtitle1">เงื่อนไขรายวิชา</DescriptionTitle>
           <Typography variant="h6">{course.courseCondition}</Typography>
         </Grid>
-        {cData.course.courseDesc && (
+        {course.courseDesc && (
           <Grid item xs={12} sm={12}>
             <DescriptionTitle variant="subtitle1">คำอธิบายรายวิชา</DescriptionTitle>
-            <Typography variant="h6">{cData.course.courseDesc}</Typography>
+            <Typography variant="h6">{course.courseDesc}</Typography>
           </Grid>
         )}
       </GridContainer>

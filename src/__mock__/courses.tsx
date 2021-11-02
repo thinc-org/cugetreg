@@ -67,7 +67,6 @@ export const mockCourseData: Course[] = [
         genEdType: 'IN',
         sectionNo: '1',
         closed: false,
-        genEdType: 'IN',
         capacity: {
           current: 0,
           max: 30,
@@ -113,7 +112,6 @@ export const mockCourseData: Course[] = [
         genEdType: 'IN',
         sectionNo: '2',
         closed: false,
-        genEdType: 'IN',
         capacity: {
           current: 0,
           max: 30,
@@ -191,7 +189,6 @@ export const mockCourseData: Course[] = [
         genEdType: 'HU',
         sectionNo: '1',
         closed: false,
-        genEdType: 'HU',
         capacity: {
           current: 0,
           max: 60,
@@ -237,7 +234,6 @@ export const mockCourseData: Course[] = [
         genEdType: 'HU',
         sectionNo: '2',
         closed: false,
-        genEdType: 'IN',
         capacity: {
           current: 0,
           max: 60,

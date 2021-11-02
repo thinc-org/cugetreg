@@ -41,7 +41,4 @@ jobs:
         if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: yarn --fronzen-lockfile
 
-      # - name: Build project
-      #   run: yarn build
-
       - run: yarn test:e2e

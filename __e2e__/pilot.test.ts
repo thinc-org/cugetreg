@@ -2,7 +2,7 @@ import { NETWORK_PRESETS } from './network'
 import { setDefaultOptions } from 'expect-puppeteer'
 import isCI from 'is-ci'
 
-describe('Google', () => {
+describe('API query', () => {
     jest.setTimeout(20000)
     beforeAll(async () => {
 
@@ -10,7 +10,6 @@ describe('Google', () => {
 
         await page.goto('https://beta.cugetreg.com')
 
-        console.log(`isCI ${isCI}`)
         if (!isCI) {
             // Set throttling property
             const client = await page.target().createCDPSession()
@@ -18,58 +17,76 @@ describe('Google', () => {
         }
     })
 
-    it('should be able to switch to International program 2564/1', async () => {
+    it('should be able query search by changing filter correctly', async () => {
+        const DEFAULT_SUBJECT = '0201172 SELF/CAREER MGT'
+        const SCIENCE_THURSDAY_SUBJECT = '0201287 MAP APPLN'
+        const NON_GENED_1617_SUBJECT = '2145490 AERO ENG SEM III'
+        const DEFAULT_1720_SUBJECT = '2145217 SCI PROG'
+        const DEFAULT_185215_SUBJECT = '2189570 ELEC MAT'
+
+        const SCIENCE_CHECKBOX_SELECTOR = "input[name='หมวดวิทย์']"
+        const NOT_GENED_SELECTOR = "input[name='ไม่ใช่ GenEd']"
+        const TUESDAY_CHECKBOX_SELECTOR = "input[name='วันอังคาร']"
+        const THRUSDAY_CHECKBOX_SELECTOR = "input[name='วันพฤหัสบดี']"
+        const PERIOD_RANGE_SELECTOR = "input[name='เวลาเรียน']"
+
         await expect(page).toMatch('ค้นหาวิชาเรียน')
         await page.select('select:nth-of-type(1)', 'I');
 
         await page.evaluate(
-            () => document.querySelectorAll('select')[1].id = 'blank_id'
+            () => document.querySelectorAll('select')[1].id = 'test_id'
         );
-        await page.select('#blank_id', "2564/1");
-        await expect(page).toMatch('0201172 SELF/CAREER MGT')
+        await page.select('#test_id', "2564/1");
+        await expect(page).toMatch(DEFAULT_SUBJECT)
 
-        await page.click("input[name='หมวดวิทย์']");
-        await expect(page).not.toMatch('0201172 SELF/CAREER MGT')
-        await expect(page).toMatch('0201287 MAP APPLN')
+        await page.click(SCIENCE_CHECKBOX_SELECTOR);
+        await expect(page).not.toMatch(DEFAULT_SUBJECT)
+        await expect(page).toMatch(SCIENCE_THURSDAY_SUBJECT)
 
-        await page.click("input[name='วันอังคาร']");
-        await expect(page).not.toMatch('0201172 SELF/CAREER MGT')
-        await expect(page).not.toMatch('0201287 MAP APPLN')
+        await page.click(TUESDAY_CHECKBOX_SELECTOR);
+        await expect(page).not.toMatch(DEFAULT_SUBJECT)
+        await expect(page).not.toMatch(SCIENCE_THURSDAY_SUBJECT)
 
-        await page.click("input[name='วันพฤหัสบดี']");
-        await expect(page).not.toMatch('0201172 SELF/CAREER MGT')
-        await expect(page).toMatch('0201287 MAP APPLN')
+        await page.click(THRUSDAY_CHECKBOX_SELECTOR);
+        await expect(page).not.toMatch(DEFAULT_SUBJECT)
+        await expect(page).toMatch(SCIENCE_THURSDAY_SUBJECT)
 
-        await page.click("input[name='เวลาเรียน']");
+        await page.click(PERIOD_RANGE_SELECTOR);
         await page.click("input[value='06:00']");
         await page.click(`li[data-value="15:30"]`);
-        await expect(page).not.toMatch('0201172 SELF/CAREER MGT')
-        await expect(page).not.toMatch('0201287 MAP APPLN')
+        await expect(page).not.toMatch(DEFAULT_SUBJECT)
+        await expect(page).not.toMatch(SCIENCE_THURSDAY_SUBJECT)
 
         await page.waitForTimeout(500)
-        await page.click("input[name='ไม่ใช่ GenEd']");
-        await expect(page).toMatch('2145490 AERO ENG SEM III')
-        await expect(page).not.toMatch('0201172 SELF/CAREER MGT')
-        await expect(page).not.toMatch('0201287 MAP APPLN')
+        await page.click(NOT_GENED_SELECTOR);
+        await expect(page).toMatch(NON_GENED_1617_SUBJECT)
+        await expect(page).not.toMatch(DEFAULT_SUBJECT)
+        await expect(page).not.toMatch(SCIENCE_THURSDAY_SUBJECT)
 
 
-        await page.click("input[name='ไม่ใช่ GenEd']");
-        await page.click("input[name='วันพฤหัสบดี']");
-        await page.click("input[name='วันอังคาร']");
-        await page.click("input[name='หมวดวิทย์']");
-        await expect(page).not.toMatch('2145490 AERO ENG SEM III')
-        await expect(page).not.toMatch('0201172 SELF/CAREER MGT')
-        await expect(page).not.toMatch('0201287 MAP APPLN')
-        await expect(page).toMatch('2145217 SCI PROG')
+        await page.click(NOT_GENED_SELECTOR);
+        await page.click(THRUSDAY_CHECKBOX_SELECTOR);
+        await page.click(TUESDAY_CHECKBOX_SELECTOR);
+        await page.click(SCIENCE_CHECKBOX_SELECTOR);
+        await expect(page).not.toMatch(NON_GENED_1617_SUBJECT)
+        await expect(page).not.toMatch(DEFAULT_SUBJECT)
+        await expect(page).not.toMatch(SCIENCE_THURSDAY_SUBJECT)
+        await expect(page).toMatch(DEFAULT_1720_SUBJECT)
 
 
         await expect(page).toClick("input[value='15:30']");
         await expect(page).toClick(`li[data-value="18:00"]`);
-        await expect(page).not.toMatch('2145490 AERO ENG SEM III')
-        await expect(page).not.toMatch('0201172 SELF/CAREER MGT')
-        await expect(page).not.toMatch('0201287 MAP APPLN')
-        await expect(page).not.toMatch('2141491 RES METHODO')
-        await expect(page).toMatch('2189570 ELEC MAT')
+        await expect(page).not.toMatch(NON_GENED_1617_SUBJECT)
+        await expect(page).not.toMatch(DEFAULT_SUBJECT)
+        await expect(page).not.toMatch(SCIENCE_THURSDAY_SUBJECT)
+        await expect(page).not.toMatch(DEFAULT_1720_SUBJECT)
+        await expect(page).toMatch(DEFAULT_185215_SUBJECT)
+
+        await page.click(PERIOD_RANGE_SELECTOR);
+        await expect(page).not.toMatch(NON_GENED_1617_SUBJECT)
+        await expect(page).toMatch(DEFAULT_SUBJECT)
+        await expect(page).not.toMatch(DEFAULT_1720_SUBJECT)
+        await expect(page).not.toMatch(DEFAULT_185215_SUBJECT)
 
     })
 })

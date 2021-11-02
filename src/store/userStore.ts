@@ -39,6 +39,10 @@ class UserStore {
         })
       )
       .catch((e) => console.error('Fail to restore auth session', e))
+
+  isLoggedIn = () => {
+    return userStore.accessToken !== null
+  }
 }
 
 export const userStore = new UserStore()

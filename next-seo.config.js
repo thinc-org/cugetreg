@@ -10,7 +10,20 @@ const options = {
   additionalMetaTags: [
     {
       property: 'keywords',
-      content: 'cu,chula,จุฬา,reg,getreg,regchula,ตารางเรียน,ตารางสอน,gened,CU Get Reg,ลงทะเบียนเรียน,อำนวยความสะดวก',
+      content: [
+        'cu',
+        'chula',
+        'จุฬา',
+        'reg',
+        'getreg',
+        'regchula',
+        'ตารางเรียน',
+        'ตารางสอน',
+        'gened',
+        'CU Get Reg',
+        'ลงทะเบียนเรียน',
+        'อำนวยความสะดวก',
+      ].join(','),
     },
     {
       name: 'application-name',

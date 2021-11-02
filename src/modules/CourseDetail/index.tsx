@@ -125,7 +125,7 @@ export function CourseDetailPage(props: { data: GetCourseResponse }) {
         )}
       </GridContainer>
       {CourseList}
-      <ReviewForm course={course} />
+      <ReviewForm courseNo={course.courseNo} />
     </Container>
   )
 }

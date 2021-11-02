@@ -23,7 +23,6 @@ export const mockCourseData: Course[] = [
         genEdType: 'IN',
         sectionNo: '1',
         closed: false,
-        genEdType: 'IN',
         capacity: {
           current: 0,
           max: 80,

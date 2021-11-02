@@ -3,68 +3,42 @@ import { Course } from '@thinc-org/chula-courses'
 export const mockCourseData: Course[] = [
   {
     studyProgram: 'S',
-    semester: '1',
-    academicYear: '2020',
-
-    // Course info
-    courseNo: '123534645',
-    abbrName: 'URBAN LIVING',
-    courseNameTh: 'Thai name',
-    courseNameEn: 'English Name',
-    faculty: '21',
-    department: '-',
-    credit: 2,
-    creditHours: '4',
-    courseCondition: 'open',
-    genEdType: 'SO',
-
-    // Exam
-    midterm: { date: '22/10/2020', period: { start: '10:20', end: '13:00' } },
-    final: undefined,
-
-    // Section
+    semester: '2',
+    academicYear: '2564',
+    courseNo: '0201122',
+    abbrName: 'MGT PUB DISASTER',
+    courseNameTh: 'การจัดการสาธารณภัย',
+    courseNameEn: 'MANAGEMENT OF PUBLIC DISASTER',
+    faculty: '02',
+    department: 'ศูนย์การศึกษาทั่วไป',
+    credit: 3,
+    creditHours: 'LECT 3.0 CR(LECT 3.0 HR)',
+    courseCondition: '-',
+    courseDesc: null,
+    genEdType: 'IN',
+    midterm: null,
+    final: null,
     sections: [
       {
-        sectionNo: '2',
+        genEdType: 'IN',
+        sectionNo: '1',
         closed: false,
         capacity: {
-          current: 13,
-          max: 40,
+          current: 0,
+          max: 80,
         },
-        note: 'No note',
-        classes: [
-          {
-            type: 'LECT',
-            dayOfWeek: 'MO',
-            period: {
-              start: '12',
-              end: '14',
-            },
-            building: 'ENG 3',
-            room: '2',
-            teachers: ['AJ'],
-          },
-        ],
-      },
-      {
-        sectionNo: '3',
-        closed: false,
-        capacity: {
-          current: 13,
-          max: 40,
-        },
-        note: 'No note',
+        note: 'GENED-IN',
         classes: [
           {
             type: 'LECT',
             dayOfWeek: 'TU',
             period: {
-              start: '13',
-              end: '15',
+              start: '13:00',
+              end: '16:00',
             },
-            building: 'ENG 3',
-            room: '2',
-            teachers: ['AJ'],
+            room: '309',
+            building: 'CUP13',
+            teachers: ['STAFF'],
           },
         ],
       },
@@ -72,93 +46,109 @@ export const mockCourseData: Course[] = [
   },
   {
     studyProgram: 'S',
-    semester: '1',
-    academicYear: '2020',
-
-    // Course info
-    courseNo: '34124',
-    abbrName: 'URBAN LIVING',
-    courseNameTh: 'Thai name',
-    courseNameEn: 'English Name',
-    faculty: '21',
-    department: '-',
-    credit: 2,
-    creditHours: '4',
-    courseCondition: 'open',
-    genEdType: 'HU', // Non GenEd is undefied
-
-    // Exam
-    midterm: { date: '22/10/2020', period: { start: '11:20', end: '12:30' } },
-    final: undefined,
-
-    // Section
+    semester: '2',
+    academicYear: '2564',
+    courseNo: '0201107',
+    abbrName: 'LRN STUD ACT',
+    courseNameTh: 'การเรียนรู้ผ่านกิจกรรมนิสิต',
+    courseNameEn: 'LEARNING THROUGH STUDENT ACTIVITIES',
+    faculty: '02',
+    department: 'ศูนย์การศึกษาทั่วไป',
+    credit: 3,
+    creditHours: 'LECT 1.0 CR + NL36 2.0 CR(LECT 1.0 HR + FWK 6.0 HR)',
+    courseCondition: '-',
+    courseDesc: null,
+    genEdType: 'IN',
+    midterm: null,
+    final: null,
     sections: [
       {
-        sectionNo: '2',
+        genEdType: 'IN',
+        sectionNo: '1',
         closed: false,
         capacity: {
-          current: 13,
-          max: 40,
+          current: 0,
+          max: 30,
         },
-        note: 'No note',
-        classes: [
-          {
-            type: 'LECT',
-            dayOfWeek: 'TU',
-            period: {
-              start: '12',
-              end: '14',
-            },
-            building: 'ENG 3',
-            room: '2',
-            teachers: ['AJ'],
-          },
-        ],
-      },
-    ],
-  },
-  {
-    studyProgram: 'S',
-    semester: '1',
-    academicYear: '2020',
-
-    // Course info
-    courseNo: '567345',
-    abbrName: 'URBAN LIVING',
-    courseNameTh: 'Thai name',
-    courseNameEn: 'English Name',
-    faculty: '21',
-    department: '-',
-    credit: 2,
-    creditHours: '4',
-    courseCondition: 'open',
-    genEdType: 'SO', // Non GenEd is undefied
-
-    // Exam
-    midterm: { date: '22/09/2020', period: { start: '10:30', end: '13:00' } },
-    final: undefined,
-
-    // Section
-    sections: [
-      {
-        sectionNo: '2',
-        closed: false,
-        capacity: {
-          current: 13,
-          max: 40,
-        },
-        note: 'No note',
+        note: 'GENED-IN',
         classes: [
           {
             type: 'LECT',
             dayOfWeek: 'WE',
             period: {
-              start: '12',
-              end: '14',
+              start: '13:00',
+              end: '14:00',
             },
-            building: 'ENG 3',
-            room: '2',
-            teachers: ['AJ'],
+            room: '202',
+            building: 'MAHIT',
+            teachers: ['STAFF'],
+          },
+          {
+            type: 'FWK',
+            dayOfWeek: 'WE',
+            period: {
+              start: '14:00',
+              end: '16:00',
+            },
+            room: '202',
+            building: 'MAHIT',
+            teachers: ['STAFF'],
+          },
+          {
+            type: 'FWK',
+            dayOfWeek: 'IA',
+            period: {
+              start: 'IA',
+              end: 'IA',
+            },
+            room: null,
+            building: null,
+            teachers: ['STAFF'],
+          },
+        ],
+      },
+      {
+        genEdType: 'IN',
+        sectionNo: '2',
+        closed: false,
+        capacity: {
+          current: 0,
+          max: 30,
+        },
+        note: 'GENED-IN',
+        classes: [
+          {
+            type: 'LECT',
+            dayOfWeek: 'WE',
+            period: {
+              start: '13:00',
+              end: '14:00',
+            },
+            room: '202',
+            building: 'MAHIT',
+            teachers: ['STAFF'],
+          },
+          {
+            type: 'FWK',
+            dayOfWeek: 'WE',
+            period: {
+              start: '14:00',
+              end: '16:00',
+            },
+            room: '202',
+            building: 'MAHIT',
+            teachers: ['STAFF'],
+          },
+          {
+            type: 'FWK',
+            dayOfWeek: 'IA',
+            period: {
+              start: 'IA',
+              end: 'IA',
+            },
+            room: null,
+            building: null,
+            teachers: ['STAFF'],
           },
         ],
       },
@@ -166,46 +156,301 @@ export const mockCourseData: Course[] = [
   },
   {
     studyProgram: 'S',
-    semester: '1',
-    academicYear: '2020',
-
-    // Course info
-    courseNo: '34543',
-    abbrName: 'URBAN LIVING',
-    courseNameTh: 'Thai name',
-    courseNameEn: 'English Name',
-    faculty: '21',
-    department: '-',
-    credit: 2,
-    creditHours: '4',
-    courseCondition: 'open',
-    genEdType: 'NO',
-
-    // Exam
-    midterm: undefined,
-    final: undefined,
-
-    // Section
+    semester: '2',
+    academicYear: '2564',
+    courseNo: '0123104',
+    abbrName: 'UNIV THAI READING',
+    courseNameTh: 'การอ่านภาษาไทยระดับอุดมศึกษา',
+    courseNameEn: 'UNIVERSITY LEVEL OF THAI READING',
+    faculty: '01',
+    department: 'สถาบันภาษาไทยสิรินธร',
+    credit: 3,
+    creditHours: 'LECT 1.0 CR + NL23 2.0 CR(LECT 1.0 HR + PRAC 4.0 HR)',
+    courseCondition: '-',
+    courseDesc: null,
+    genEdType: 'HU',
+    midterm: {
+      date: '2565-03-09T00:00:00.000Z',
+      period: {
+        start: '16:00',
+        end: '19:00',
+      },
+    },
+    final: {
+      date: '2565-05-11T00:00:00.000Z',
+      period: {
+        start: '16:00',
+        end: '19:00',
+      },
+    },
     sections: [
       {
-        sectionNo: '2',
+        genEdType: 'HU',
+        sectionNo: '1',
         closed: false,
         capacity: {
-          current: 13,
-          max: 40,
+          current: 0,
+          max: 60,
         },
-        note: 'No note',
+        note: 'GENED-HU (E-LEARNING)',
         classes: [
           {
             type: 'LECT',
-            dayOfWeek: 'FR',
+            dayOfWeek: 'WE',
             period: {
-              start: '12',
-              end: '14',
+              start: '16:00',
+              end: '17:00',
             },
-            building: 'ENG 3',
-            room: '2',
-            teachers: ['AJ'],
+            room: '201',
+            building: 'MAHIT',
+            teachers: ['WSN'],
+          },
+          {
+            type: 'PRAC',
+            dayOfWeek: 'WE',
+            period: {
+              start: '17:00',
+              end: '19:00',
+            },
+            room: '201',
+            building: 'MAHIT',
+            teachers: ['WSN'],
+          },
+          {
+            type: 'PRAC',
+            dayOfWeek: 'IA',
+            period: {
+              start: 'IA',
+              end: 'IA',
+            },
+            room: null,
+            building: null,
+            teachers: ['WSN'],
+          },
+        ],
+      },
+      {
+        genEdType: 'HU',
+        sectionNo: '2',
+        closed: false,
+        capacity: {
+          current: 0,
+          max: 60,
+        },
+        note: 'GENED-HU (E-LEARNING)',
+        classes: [
+          {
+            type: 'LECT',
+            dayOfWeek: 'WE',
+            period: {
+              start: '16:00',
+              end: '17:00',
+            },
+            room: '202',
+            building: 'MAHIT',
+            teachers: ['NSP'],
+          },
+          {
+            type: 'PRAC',
+            dayOfWeek: 'WE',
+            period: {
+              start: '17:00',
+              end: '19:00',
+            },
+            room: '202',
+            building: 'MAHIT',
+            teachers: ['NSP'],
+          },
+          {
+            type: 'PRAC',
+            dayOfWeek: 'IA',
+            period: {
+              start: 'IA',
+              end: 'IA',
+            },
+            room: null,
+            building: null,
+            teachers: ['NSP'],
+          },
+        ],
+      },
+      {
+        genEdType: 'HU',
+        sectionNo: '3',
+        closed: false,
+        capacity: {
+          current: 0,
+          max: 60,
+        },
+        note: 'GENED-HU (E-LEARNING)',
+        classes: [
+          {
+            type: 'LECT',
+            dayOfWeek: 'WE',
+            period: {
+              start: '16:00',
+              end: '17:00',
+            },
+            room: '401',
+            building: 'MAHIT',
+            teachers: ['NPR'],
+          },
+          {
+            type: 'PRAC',
+            dayOfWeek: 'WE',
+            period: {
+              start: '17:00',
+              end: '19:00',
+            },
+            room: '401',
+            building: 'MAHIT',
+            teachers: ['NPR'],
+          },
+          {
+            type: 'PRAC',
+            dayOfWeek: 'IA',
+            period: {
+              start: 'IA',
+              end: 'IA',
+            },
+            room: null,
+            building: null,
+            teachers: ['NPR'],
+          },
+        ],
+      },
+      {
+        genEdType: 'HU',
+        sectionNo: '4',
+        closed: false,
+        capacity: {
+          current: 0,
+          max: 60,
+        },
+        note: 'GENED-HU (E-LEARNING)',
+        classes: [
+          {
+            type: 'LECT',
+            dayOfWeek: 'WE',
+            period: {
+              start: '16:00',
+              end: '17:00',
+            },
+            room: '402',
+            building: 'MAHIT',
+            teachers: ['SCW'],
+          },
+          {
+            type: 'PRAC',
+            dayOfWeek: 'WE',
+            period: {
+              start: '17:00',
+              end: '19:00',
+            },
+            room: '402',
+            building: 'MAHIT',
+            teachers: ['SCW'],
+          },
+          {
+            type: 'PRAC',
+            dayOfWeek: 'IA',
+            period: {
+              start: 'IA',
+              end: 'IA',
+            },
+            room: null,
+            building: null,
+            teachers: ['SCW'],
+          },
+        ],
+      },
+      {
+        genEdType: 'HU',
+        sectionNo: '5',
+        closed: false,
+        capacity: {
+          current: 0,
+          max: 60,
+        },
+        note: 'GENED-HU (E-LEARNING)',
+        classes: [
+          {
+            type: 'LECT',
+            dayOfWeek: 'WE',
+            period: {
+              start: '16:00',
+              end: '17:00',
+            },
+            room: '412',
+            building: 'MAHIT',
+            teachers: ['SSN'],
+          },
+          {
+            type: 'PRAC',
+            dayOfWeek: 'WE',
+            period: {
+              start: '17:00',
+              end: '19:00',
+            },
+            room: '412',
+            building: 'MAHIT',
+            teachers: ['SSN'],
+          },
+          {
+            type: 'PRAC',
+            dayOfWeek: 'IA',
+            period: {
+              start: 'IA',
+              end: 'IA',
+            },
+            room: null,
+            building: null,
+            teachers: ['SSN'],
+          },
+        ],
+      },
+      {
+        genEdType: 'HU',
+        sectionNo: '6',
+        closed: true,
+        capacity: {
+          current: 0,
+          max: 60,
+        },
+        note: 'GENED-HU (E-LEARNING)',
+        classes: [
+          {
+            type: 'LECT',
+            dayOfWeek: 'WE',
+            period: {
+              start: '16:00',
+              end: '17:00',
+            },
+            room: '412',
+            building: 'MAHIT',
+            teachers: ['WSN'],
+          },
+          {
+            type: 'PRAC',
+            dayOfWeek: 'WE',
+            period: {
+              start: '17:00',
+              end: '19:00',
+            },
+            room: '412',
+            building: 'MAHIT',
+            teachers: ['WSN'],
+          },
+          {
+            type: 'PRAC',
+            dayOfWeek: 'IA',
+            period: {
+              start: 'IA',
+              end: 'IA',
+            },
+            room: null,
+            building: null,
+            teachers: ['WSN'],
           },
         ],
       },

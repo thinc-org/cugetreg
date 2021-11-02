@@ -11,8 +11,8 @@ export const COURSE_DATA_FIELDS = `
     credit
     creditHours
     courseCondition
+    courseDesc
     genEdType
-    rating
     midterm {
       date
       period {
@@ -28,6 +28,7 @@ export const COURSE_DATA_FIELDS = `
       }
     }
     sections {
+        genEdType
         sectionNo
         closed
         capacity {

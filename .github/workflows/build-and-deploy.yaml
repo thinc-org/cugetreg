@@ -39,7 +39,7 @@ jobs:
 
       - name: Install dependencies
         if: steps.yarn-cache.outputs.cache-hit != 'true' && ${{ github.ref == 'refs/heads/beta' }}
-        run: yarn --fronzen-lockfile
+        run: yarn --fronzen-lockfile --ingore-optional
 
       - name: Release
         if: ${{ github.ref == 'refs/heads/master' }}

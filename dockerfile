@@ -4,7 +4,7 @@ WORKDIR /build
 # Utilise Docker cache to save re-installing dependencies if unchanged
 COPY package.json yarn.lock ./
 # Install dependencies
-RUN yarn --frozen-lockfile
+RUN yarn --frozen-lockfile --ingore-optional
 # Copy the rest files
 COPY . .
 # Build applciation

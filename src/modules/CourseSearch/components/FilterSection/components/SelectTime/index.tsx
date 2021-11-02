@@ -47,7 +47,7 @@ export const SelectTime = ({ log }: SelectTimeProps) => {
         label={
           <div>
             <Box mb={2} display="flex" alignItems="center" justifyContent="space-between">
-              <Typography mr={2} variant="subtitle1">
+              <Typography mr={1} variant="subtitle1" noWrap>
                 {t('fromTime')}
               </Typography>
               <Select disabled={!checked} value={selectedStartTime} onChange={onStartTimeChange} name="startTime">
@@ -59,7 +59,7 @@ export const SelectTime = ({ log }: SelectTimeProps) => {
               </Select>
             </Box>
             <Box display="flex" alignItems="center" justifyContent="space-between">
-              <Typography mr={2} variant="subtitle1">
+              <Typography mr={1} variant="subtitle1">
                 {t('toTime')}
               </Typography>
               <Select disabled={!checked} value={selectedEndTime} onChange={onEndTimeChange} name="endTime">

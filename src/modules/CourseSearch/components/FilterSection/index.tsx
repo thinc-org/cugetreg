@@ -1,5 +1,5 @@
 import { useTheme } from '@emotion/react'
-import { DialogContent, Grid } from '@material-ui/core'
+import { DialogContent, Grid, Box } from '@material-ui/core'
 import useMediaQuery from '@material-ui/core/useMediaQuery'
 import useGoogleOptimize from '@react-hook/google-optimize'
 
@@ -18,7 +18,7 @@ import { google_optimize_filter_order } from '@/utils/env'
 import { useHasTags } from '../TagList'
 import { SelectTime } from './components/SelectTime'
 import { useFilterBar } from './hooks/useFilterBar'
-import { Button, StickyPaper, Box } from './styled'
+import { Button, StickyPaper } from './styled'
 
 export const FilterSection: React.FC<FilterSectionProps> = ({ open, handleClose }) => {
   const { checkboxes: genEdCheckboxes } = useFilterBar<GenEdChipKey>(createGenEdCheckboxes, 'genEdTypes')
@@ -34,26 +34,28 @@ export const FilterSection: React.FC<FilterSectionProps> = ({ open, handleClose 
   return match ? (
     open ? (
       <StickyPaper hasTags={hasTags} variant="outlined">
-        <Grid container spacing={4}>
-          <Grid item sx={{ order: isExperimentOrder ? 3 : 1 }}>
-            <Analytics elementName={GENED_FILTER}>
-              {({ log }) => (
-                <CheckboxGroup log={log} id="genEdFilter" title="หมวดหมู่ GenEd" checkboxes={genEdCheckboxes} />
-              )}
-            </Analytics>
+        <Box p={4} pr={2} overflow="auto">
+          <Grid container spacing={4} direction="column">
+            <Grid item sx={{ order: isExperimentOrder ? 3 : 1 }}>
+              <Analytics elementName={GENED_FILTER}>
+                {({ log }) => (
+                  <CheckboxGroup log={log} id="genEdFilter" title="หมวดหมู่ GenEd" checkboxes={genEdCheckboxes} />
+                )}
+              </Analytics>
+            </Grid>
+            <Grid item sx={{ order: isExperimentOrder ? 1 : 2 }}>
+              <Analytics elementName={DAY_FILTER}>
+                {({ log }) => (
+                  <CheckboxGroup log={log} id="dayOfWeekFilter" title="วันในสัปดาห์" checkboxes={dayOfWeekCheckboxes} />
+                )}
+              </Analytics>
+            </Grid>
+            {/* <CheckboxGroup title="แสดงผลพิเศษ" checkboxes={specialCheckboxes} /> */}
+            <Grid item sx={{ order: isExperimentOrder ? 2 : 3 }}>
+              <Analytics elementName={PERIOD_RANGE_FILTER}>{({ log }) => <SelectTime log={log} />}</Analytics>
+            </Grid>
           </Grid>
-          <Grid item sx={{ order: isExperimentOrder ? 1 : 2 }}>
-            <Analytics elementName={DAY_FILTER}>
-              {({ log }) => (
-                <CheckboxGroup log={log} id="dayOfWeekFilter" title="วันในสัปดาห์" checkboxes={dayOfWeekCheckboxes} />
-              )}
-            </Analytics>
-          </Grid>
-          {/* <CheckboxGroup title="แสดงผลพิเศษ" checkboxes={specialCheckboxes} /> */}
-          <Grid item sx={{ order: isExperimentOrder ? 2 : 3 }}>
-            <Analytics elementName={PERIOD_RANGE_FILTER}>{({ log }) => <SelectTime log={log} />}</Analytics>
-          </Grid>
-        </Grid>
+        </Box>
       </StickyPaper>
     ) : null
   ) : (

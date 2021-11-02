@@ -35,7 +35,6 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({ courseNo }) => {
     const ratingNumber = parseFloat(data.rating) * 2 // 1 - 10, 0 isn't accepted
     try {
       if (isLoggedIn()) {
-        console.log('sent data')
         await createReview({
           variables: {
             rating: ratingNumber,

@@ -2,7 +2,7 @@ import { NETWORK_PRESETS } from './network'
 import { setDefaultOptions } from 'expect-puppeteer'
 import isCI from 'is-ci'
 
-describe('API query', () => {
+describe('Course query', () => {
     jest.setTimeout(20000)
     beforeAll(async () => {
 
@@ -87,6 +87,5 @@ describe('API query', () => {
         await expect(page).toMatch(DEFAULT_SUBJECT)
         await expect(page).not.toMatch(DEFAULT_1720_SUBJECT)
         await expect(page).not.toMatch(DEFAULT_185215_SUBJECT)
-
     })
 })

@@ -35,6 +35,7 @@ import {
   RightPane,
   StyledNativeSelect,
 } from './styled'
+import { useOverlapWarning } from './utils'
 
 export interface ScheduleTableCardProps {
   item: CourseCartItem
@@ -191,6 +192,7 @@ function CardDetail({ item, overlaps }: CardDetailProps) {
   const { t } = useTranslation('scheduleTableCard')
   const section = item.sections.find((section) => section.sectionNo === item.selectedSectionNo)!
   const teachers = uniq(section.classes.flatMap((cls) => cls.teachers))
+  const warning = useOverlapWarning(overlaps)
   return (
     <Grid container spacing={1} sx={{ mt: -1, mb: 2 }}>
       <Hidden smUp>
@@ -236,10 +238,7 @@ function CardDetail({ item, overlaps }: CardDetailProps) {
       <GridSpacer />
       <Grid item xs alignSelf="flex-end">
         <Typography variant="subtitle1" color="highlight.red.500" textAlign={{ xs: 'left', sm: 'right' }}>
-          {[
-            ...(overlaps && overlaps.classes.length ? [`เวลาเรียนชนกับ ${overlaps.classes.join(', ')}`] : []),
-            ...(overlaps && overlaps.exams.length ? [`เวลาสอบชนกับ ${overlaps.exams.join(', ')}`] : []),
-          ].join(` ${t('and')}`)}
+          {warning}
         </Typography>
       </Grid>
     </Grid>

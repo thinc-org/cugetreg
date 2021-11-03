@@ -64,6 +64,8 @@ export const scheduleTableCard = {
   time: 'เวลา',
   classRoom: 'ห้องเรียน',
   and: 'และ',
+  classOverlap: 'เวลาเรียนชนกับ',
+  examOverlap: 'เวลาสอบชนกับ',
 }
 
 export const schedule = {

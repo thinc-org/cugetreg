@@ -47,11 +47,10 @@ export interface CardComponentProps {
 }
 
 export interface CardDetailProps extends CardComponentProps {
-  overlaps: CourseOverlap
+  overlaps?: CourseOverlap
 }
 
 export const ScheduleTableCard = observer(({ item, index, overlaps }: ScheduleTableCardProps) => {
-  const { hasOverlap } = overlaps
   const { courseNo, isHidden } = item
   const toggleVisibility = useCallback(() => {
     courseCartStore.toggleHiddenItem(item)
@@ -129,7 +128,7 @@ export const ScheduleTableCard = observer(({ item, index, overlaps }: ScheduleTa
               </DeleteButton>
             </Analytics>
           </RightPane>
-          {hasOverlap ? <OverlappingCardBorder /> : <CardBorder />}
+          {overlaps?.hasOverlap ? <OverlappingCardBorder /> : <CardBorder />}
         </CardLayout>
       )}
     </Draggable>
@@ -189,7 +188,7 @@ function SectionSelect({ item }: CardComponentProps) {
 }
 
 function CardDetail({ item, overlaps }: CardDetailProps) {
-  const { t } = useTranslation('courseCard')
+  const { t } = useTranslation('scheduleTableCard')
   const section = item.sections.find((section) => section.sectionNo === item.selectedSectionNo)!
   const teachers = uniq(section.classes.flatMap((cls) => cls.teachers))
   return (
@@ -237,9 +236,10 @@ function CardDetail({ item, overlaps }: CardDetailProps) {
       <GridSpacer />
       <Grid item xs alignSelf="flex-end">
         <Typography variant="subtitle1" color="highlight.red.500" textAlign={{ xs: 'left', sm: 'right' }}>
-          {(overlaps.classes.length > 0 && `เวลาเรียนชนกับ ${overlaps.classes.join(', ')}`) ||
-            (overlaps.exams.length > 0 && `เวลาสอบชนกับ ${overlaps.exams.join(', ')}`) ||
-            ''}
+          {[
+            ...(overlaps && overlaps.classes.length ? [`เวลาเรียนชนกับ ${overlaps.classes.join(', ')}`] : []),
+            ...(overlaps && overlaps.exams.length ? [`เวลาสอบชนกับ ${overlaps.exams.join(', ')}`] : []),
+          ].join(` ${t('and')}`)}
         </Typography>
       </Grid>
     </Grid>

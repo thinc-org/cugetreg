@@ -60,6 +60,10 @@ export const scheduleTableCard = {
   credits: '[{{credits}} หน่วยกิต]',
   sectionLabel: 'Sec {{section}}',
   delete: 'ลบ',
+  teacher: 'ผู้สอน',
+  time: 'เวลา',
+  classRoom: 'ห้องเรียน',
+  and: 'และ',
 }
 
 export const schedule = {

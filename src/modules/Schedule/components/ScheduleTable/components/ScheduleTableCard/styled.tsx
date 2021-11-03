@@ -133,7 +133,7 @@ export const MiddlePane = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1;
-  padding: ${({ theme }) => theme.spacing(0, 3)};
+  padding-left: ${({ theme }) => theme.spacing(3)};
 `
 
 export const HeaderLayout = styled.div`

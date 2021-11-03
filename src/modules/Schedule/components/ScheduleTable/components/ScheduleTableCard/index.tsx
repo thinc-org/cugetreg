@@ -236,7 +236,7 @@ function CardDetail({ item, overlaps }: CardDetailProps) {
         </Stack>
       </Grid>
       <GridSpacer />
-      <Grid item xs alignSelf="flex-end">
+      <Grid item xs alignSelf="flex-end" sx={{ pr: { sm: 3 } }}>
         <Typography variant="subtitle1" color="highlight.red.500" textAlign={{ xs: 'left', sm: 'right' }}>
           {warning}
         </Typography>

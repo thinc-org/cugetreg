@@ -134,6 +134,7 @@ export const MiddlePane = styled.div`
   flex-direction: column;
   flex: 1;
   padding-left: 24px;
+  padding-right: 24px;
 `
 
 export const HeaderLayout = styled.div`

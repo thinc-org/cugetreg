@@ -57,7 +57,7 @@ export function sortExamSchedule(classes: CourseCartItem[], isMidterm: boolean) 
 }
 
 export function findOverlap(sortedClasses: CourseCartItem[], isMidterm: boolean) {
-  const overlapNumber: number[] = []
+  const mapOverlap: Record<number, number[]> = {}
   const classes = sortedClasses.filter((class_) => !class_.isHidden)
   for (let i = 0; i < classes.length; i++) {
     const exam = getExamPeriod(classes[i], isMidterm)
@@ -68,10 +68,8 @@ export function findOverlap(sortedClasses: CourseCartItem[], isMidterm: boolean)
           const { hour, minute } = getHourMinuteFromPeriod(exam.period.end)
           const { hour: hourNext, minute: minuteNext } = getHourMinuteFromPeriod(examNext.period.start)
           if (hour > hourNext || (hour === hourNext && minute > minuteNext)) {
-            overlapNumber.push(i)
-            overlapNumber.push(j)
-          } else {
-            break
+            mapOverlap[i] = [...(mapOverlap[i] ?? []), j]
+            mapOverlap[j] = [...(mapOverlap[j] ?? []), i]
           }
         }
       }
@@ -80,8 +78,9 @@ export function findOverlap(sortedClasses: CourseCartItem[], isMidterm: boolean)
 
   return sortedClasses.map((class_, index) => {
     const { courseNo, abbrName, genEdType, midterm, final, isHidden } = class_
-    const hasOverlap = overlapNumber.includes(index)
-    return { courseNo, abbrName, genEdType, midterm, final, hasOverlap, isHidden } as ExamClass
+    const hasOverlap = !!mapOverlap[index]
+    const overlaps = mapOverlap[index]?.map((i) => sortedClasses[i].abbrName) || []
+    return { courseNo, abbrName, genEdType, midterm, final, hasOverlap, isHidden, overlaps } as ExamClass
   })
 }
 

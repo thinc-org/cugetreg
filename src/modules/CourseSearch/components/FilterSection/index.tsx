@@ -1,5 +1,5 @@
 import { useTheme } from '@emotion/react'
-import { DialogContent, Box, Stack } from '@material-ui/core'
+import { DialogContent, Box, Stack, DialogActions } from '@material-ui/core'
 import useMediaQuery from '@material-ui/core/useMediaQuery'
 import useGoogleOptimize from '@react-hook/google-optimize'
 
@@ -57,21 +57,24 @@ export const FilterSection: React.FC<FilterSectionProps> = ({ open, handleClose 
       </StickyPaper>
     ) : null
   ) : (
-    <ResponsiveDialog open={open} onClose={handleClose}>
+    <ResponsiveDialog open={open} onClose={handleClose} fullWidth>
       <DialogContent>
-        <Box>
-          <Analytics elementName={GENED_FILTER}>
-            {({ log }) => (
-              <CheckboxGroup id="genEdFilter" log={log} title="หมวดหมู่ GenEd" checkboxes={genEdCheckboxes} />
-            )}
-          </Analytics>
-          <Analytics elementName={DAY_FILTER}>
-            {({ log }) => (
-              <CheckboxGroup id="dayOfWeekFilter" log={log} title="วันในสัปดาห์" checkboxes={dayOfWeekCheckboxes} />
-            )}
-          </Analytics>
-        </Box>
-        {/* <CheckboxGroup title="แสดงผลพิเศษ" checkboxes={specialCheckboxes} /> */}
+        <Stack>
+          <Stack direction="row" justifyContent="space-between">
+            <Analytics elementName={GENED_FILTER}>
+              {({ log }) => (
+                <CheckboxGroup id="genEdFilter" log={log} title="หมวดหมู่ GenEd" checkboxes={genEdCheckboxes} />
+              )}
+            </Analytics>
+            <Analytics elementName={DAY_FILTER}>
+              {({ log }) => (
+                <CheckboxGroup id="dayOfWeekFilter" log={log} title="วันในสัปดาห์" checkboxes={dayOfWeekCheckboxes} />
+              )}
+            </Analytics>
+          </Stack>
+          <Analytics elementName={PERIOD_RANGE_FILTER}>{({ log }) => <SelectTime log={log} />}</Analytics>
+          {/* <CheckboxGroup title="แสดงผลพิเศษ" checkboxes={specialCheckboxes} /> */}
+        </Stack>
         <Button color="primary" variant="outlined" fullWidth onClick={handleClose}>
           เลือกตัวกรอง
         </Button>

@@ -23,6 +23,9 @@ export const ResponsiveDialog = ({ sx, ...props }: DialogProps) => {
           },
           '&& .MuiDialog-paperScrollBody': {
             verticalAlign: ['bottom', 'middle'],
+            m: [2, 4],
+            width: (theme) => [`calc(100% - ${theme.spacing(4)})`, `calc(100% - ${theme.spacing(8)})`],
+            maxWidth: (theme) => [`calc(100% - ${theme.spacing(4)})`, theme.breakpoints.values.sm],
           },
         },
         sx

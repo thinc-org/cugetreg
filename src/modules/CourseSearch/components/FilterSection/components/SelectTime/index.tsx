@@ -45,7 +45,7 @@ export const SelectTime = ({ log }: SelectTimeProps) => {
           />
         }
         label={
-          <Stack spacing={2} direction={{ xs: 'row', sm: 'column' }}>
+          <Stack spacing={2} direction={{ xs: 'row', sm: 'column' }} sx={{ mt: { xs: 0.5, sm: 0 } }}>
             <Stack direction="row" alignItems="center" spacing={1} justifyContent="space-between">
               <Typography variant="subtitle1" noWrap>
                 {t('fromTime')}

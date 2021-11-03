@@ -32,6 +32,14 @@ exports[`SelectTime Should render correctly 1`] = `
           }
         }
         spacing={2}
+        sx={
+          Object {
+            "mt": Object {
+              "sm": 0,
+              "xs": 0.5,
+            },
+          }
+        }
       >
         <ForwardRef(Stack)
           alignItems="center"

@@ -95,45 +95,24 @@ exports[`FilterSection Should matched snapshot correctly when matchSmallScreen=t
     pr={2}
     spacing={4}
   >
-    <ForwardRef(Box)
-      sx={
-        Object {
-          "order": 1,
-        }
-      }
+    <Analytics
+      elementName="gened_search_filter"
+      key="1"
     >
-      <Analytics
-        elementName="gened_search_filter"
-      >
-        <Component />
-      </Analytics>
-    </ForwardRef(Box)>
-    <ForwardRef(Box)
-      sx={
-        Object {
-          "order": 2,
-        }
-      }
+      <Component />
+    </Analytics>
+    <Analytics
+      elementName="day_search_filter"
+      key="2"
     >
-      <Analytics
-        elementName="day_search_filter"
-      >
-        <Component />
-      </Analytics>
-    </ForwardRef(Box)>
-    <ForwardRef(Box)
-      sx={
-        Object {
-          "order": 3,
-        }
-      }
+      <Component />
+    </Analytics>
+    <Analytics
+      elementName="period_range_filter"
+      key="3"
     >
-      <Analytics
-        elementName="period_range_filter"
-      >
-        <Component />
-      </Analytics>
-    </ForwardRef(Box)>
+      <Component />
+    </Analytics>
   </ForwardRef(Stack)>
 </Styled(Component)>
 `;

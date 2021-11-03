@@ -24,15 +24,23 @@ exports[`SelectTime Should render correctly 1`] = `
     }
     key="periodRange"
     label={
-      <div>
-        <ForwardRef(Box)
+      <ForwardRef(Stack)
+        direction={
+          Object {
+            "sm": "column",
+            "xs": "row",
+          }
+        }
+        spacing={2}
+      >
+        <ForwardRef(Stack)
           alignItems="center"
-          display="flex"
+          direction="row"
           justifyContent="space-between"
-          mb={2}
+          spacing={1}
         >
           <ForwardRef(Typography)
-            mr={2}
+            noWrap={true}
             variant="subtitle1"
           >
             fromTime
@@ -69,14 +77,14 @@ exports[`SelectTime Should render correctly 1`] = `
               12:30
             </ForwardRef(MenuItem)>
           </ForwardRef(Select)>
-        </ForwardRef(Box)>
-        <ForwardRef(Box)
+        </ForwardRef(Stack)>
+        <ForwardRef(Stack)
           alignItems="center"
-          display="flex"
+          direction="row"
           justifyContent="space-between"
+          spacing={1}
         >
           <ForwardRef(Typography)
-            mr={2}
             variant="subtitle1"
           >
             toTime
@@ -113,8 +121,8 @@ exports[`SelectTime Should render correctly 1`] = `
               13:30
             </ForwardRef(MenuItem)>
           </ForwardRef(Select)>
-        </ForwardRef(Box)>
-      </div>
+        </ForwardRef(Stack)>
+      </ForwardRef(Stack)>
     }
     onClick={[Function]}
     sx={

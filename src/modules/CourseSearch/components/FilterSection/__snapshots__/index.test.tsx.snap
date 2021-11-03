@@ -2,22 +2,33 @@
 
 exports[`FilterSection Should matched snapshot correctly when matchSmallScreen=false and isExpandFilter=false 1`] = `
 <ResponsiveDialog
+  fullWidth={true}
   onClose={[MockFunction]}
   open={false}
 >
   <ForwardRef(DialogContent)>
-    <Styled(div)>
+    <ForwardRef(Stack)>
+      <ForwardRef(Stack)
+        direction="row"
+        justifyContent="space-between"
+      >
+        <Analytics
+          elementName="gened_search_filter"
+        >
+          <Component />
+        </Analytics>
+        <Analytics
+          elementName="day_search_filter"
+        >
+          <Component />
+        </Analytics>
+      </ForwardRef(Stack)>
       <Analytics
-        elementName="gened_search_filter"
+        elementName="period_range_filter"
       >
         <Component />
       </Analytics>
-      <Analytics
-        elementName="day_search_filter"
-      >
-        <Component />
-      </Analytics>
-    </Styled(div)>
+    </ForwardRef(Stack)>
     <Styled(Component)
       color="primary"
       fullWidth={true}
@@ -32,22 +43,33 @@ exports[`FilterSection Should matched snapshot correctly when matchSmallScreen=f
 
 exports[`FilterSection Should matched snapshot correctly when matchSmallScreen=false and isExpandFilter=true 1`] = `
 <ResponsiveDialog
+  fullWidth={true}
   onClose={[MockFunction]}
   open={true}
 >
   <ForwardRef(DialogContent)>
-    <Styled(div)>
+    <ForwardRef(Stack)>
+      <ForwardRef(Stack)
+        direction="row"
+        justifyContent="space-between"
+      >
+        <Analytics
+          elementName="gened_search_filter"
+        >
+          <Component />
+        </Analytics>
+        <Analytics
+          elementName="day_search_filter"
+        >
+          <Component />
+        </Analytics>
+      </ForwardRef(Stack)>
       <Analytics
-        elementName="gened_search_filter"
+        elementName="period_range_filter"
       >
         <Component />
       </Analytics>
-      <Analytics
-        elementName="day_search_filter"
-      >
-        <Component />
-      </Analytics>
-    </Styled(div)>
+    </ForwardRef(Stack)>
     <Styled(Component)
       color="primary"
       fullWidth={true}
@@ -67,12 +89,13 @@ exports[`FilterSection Should matched snapshot correctly when matchSmallScreen=t
   hasTags={true}
   variant="outlined"
 >
-  <ForwardRef(Grid)
-    container={true}
+  <ForwardRef(Stack)
+    overflow="auto"
+    p={4}
+    pr={2}
     spacing={4}
   >
-    <ForwardRef(Grid)
-      item={true}
+    <ForwardRef(Box)
       sx={
         Object {
           "order": 1,
@@ -84,9 +107,8 @@ exports[`FilterSection Should matched snapshot correctly when matchSmallScreen=t
       >
         <Component />
       </Analytics>
-    </ForwardRef(Grid)>
-    <ForwardRef(Grid)
-      item={true}
+    </ForwardRef(Box)>
+    <ForwardRef(Box)
       sx={
         Object {
           "order": 2,
@@ -98,9 +120,8 @@ exports[`FilterSection Should matched snapshot correctly when matchSmallScreen=t
       >
         <Component />
       </Analytics>
-    </ForwardRef(Grid)>
-    <ForwardRef(Grid)
-      item={true}
+    </ForwardRef(Box)>
+    <ForwardRef(Box)
       sx={
         Object {
           "order": 3,
@@ -112,8 +133,8 @@ exports[`FilterSection Should matched snapshot correctly when matchSmallScreen=t
       >
         <Component />
       </Analytics>
-    </ForwardRef(Grid)>
-  </ForwardRef(Grid)>
+    </ForwardRef(Box)>
+  </ForwardRef(Stack)>
 </Styled(Component)>
 `;
 

@@ -1,6 +1,6 @@
 import { useTheme } from '@material-ui/core'
 import { Course, Class, DayOfWeek, GenEdType } from '@thinc-org/chula-courses'
-import { union, uniq } from 'lodash'
+import { uniq } from 'lodash'
 import { useMemo } from 'react'
 
 import { getPaletteRange } from '@/common/utils/getPaletteRange'

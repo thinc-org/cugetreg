@@ -12,7 +12,7 @@ export default function PrivacyPolicy() {
 
   return (
     <Box marginTop={4} marginBottom={4}>
-      <Box sx={{ p: 4, maxWidth: '960px' }}>
+      <Box sx={{ p: 4, maxWidth: '720px', margin: 'auto' }}>
         <Typography variant="h1">Privacy Policy</Typography>
         <Typography variant="h4" component="h2" gutterBottom>
           1. Information we collect

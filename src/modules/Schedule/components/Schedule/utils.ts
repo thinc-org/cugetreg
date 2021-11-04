@@ -124,6 +124,15 @@ export function useDaysCount(classes: ScheduleClass[]): number {
   return daysCount
 }
 
+export function useHourEnd(classes: ScheduleClass[]): number {
+  let rightmostPosition = 0
+  for (const cls of classes) {
+    rightmostPosition = Math.max(rightmostPosition, cls.position.end)
+  }
+  const coursesHourEnd = Math.ceil(rightmostPosition + hourStart) - 2
+  return Math.max(coursesHourEnd, 18)
+}
+
 export type CourseOverlap = {
   hasOverlap: boolean
   classes: string[]

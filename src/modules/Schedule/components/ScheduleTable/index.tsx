@@ -39,7 +39,7 @@ export function ScheduleTable({ courseCart, overlappingCourses }: ScheduleTableP
                 key={item.courseNo}
                 item={item}
                 index={index}
-                hasOverlap={overlappingCourses[item.courseNo] === true}
+                overlaps={overlappingCourses[item.courseNo]}
               />
             ))}
             {provided.placeholder}

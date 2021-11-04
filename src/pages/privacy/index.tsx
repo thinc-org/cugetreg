@@ -1,7 +1,7 @@
 import { Box, Paper, Typography, Link, useTheme } from '@material-ui/core'
 import React from 'react'
 
-import { StyledArticleBody } from '@/pages/privacy/styled'
+import { StyledArticleBody } from '@/configs/theme/articletext'
 import { sessionIdStore } from '@/store/sessionIdStore'
 
 export default function PrivacyPolicy() {

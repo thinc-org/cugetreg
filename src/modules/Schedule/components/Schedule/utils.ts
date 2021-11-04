@@ -161,7 +161,7 @@ export function useOverlappingCourses(
         courses[it.courseNo].exams = [...courses[it.courseNo].exams, ...it.overlaps]
       }
     })
-    Object.entries(courses).forEach(([courseNo, course]) => {
+    Object.entries(courses).forEach(([, course]) => {
       course.classes = uniq(course.classes)
       course.exams = uniq(course.exams)
       course.hasOverlap = course.classes.length > 0 || course.exams.length > 0

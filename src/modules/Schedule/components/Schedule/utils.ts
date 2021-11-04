@@ -144,22 +144,27 @@ export function useOverlappingCourses(
     classes.forEach((it) => {
       courses[it.courseNo] = {
         hasOverlap: false,
-        classes: uniq(it.overlaps),
+        classes: [],
         exams: [],
       }
     })
+    classes.forEach((it) => {
+      courses[it.courseNo].classes = [...courses[it.courseNo].classes, ...it.overlaps]
+    })
     midtermClasses.forEach((it) => {
       if (it.hasOverlap === true) {
-        courses[it.courseNo].exams = it.overlaps
+        courses[it.courseNo].exams = [...courses[it.courseNo].exams, ...it.overlaps]
       }
     })
     finalClasses.forEach((it) => {
       if (it.hasOverlap === true) {
-        courses[it.courseNo].exams = uniq([...courses[it.courseNo].exams, ...it.overlaps])
+        courses[it.courseNo].exams = [...courses[it.courseNo].exams, ...it.overlaps]
       }
     })
     Object.entries(courses).forEach(([courseNo, course]) => {
-      courses[courseNo].hasOverlap = course.classes.length > 0 || course.exams.length > 0
+      course.classes = uniq(course.classes)
+      course.exams = uniq(course.exams)
+      course.hasOverlap = course.classes.length > 0 || course.exams.length > 0
     })
     return courses
   }, [classes, midtermClasses, finalClasses])

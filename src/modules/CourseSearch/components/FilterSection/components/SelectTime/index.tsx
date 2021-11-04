@@ -1,4 +1,4 @@
-import { MenuItem, Select, Stack, Typography, Checkbox, FormControlLabel, Box } from '@material-ui/core'
+import { MenuItem, Select, Stack, Typography, Checkbox, FormControlLabel } from '@material-ui/core'
 import { useTranslation } from 'react-i18next'
 
 import { useSelectTime } from './hooks/useSelectTime'
@@ -45,9 +45,9 @@ export const SelectTime = ({ log }: SelectTimeProps) => {
           />
         }
         label={
-          <div>
-            <Box mb={2} display="flex" alignItems="center" justifyContent="space-between">
-              <Typography mr={2} variant="subtitle1">
+          <Stack spacing={2} direction={{ xs: 'row', sm: 'column' }} sx={{ mt: { xs: 0.5, sm: 0 } }}>
+            <Stack direction="row" alignItems="center" spacing={1} justifyContent="space-between">
+              <Typography variant="subtitle1" noWrap>
                 {t('fromTime')}
               </Typography>
               <Select disabled={!checked} value={selectedStartTime} onChange={onStartTimeChange} name="startTime">
@@ -57,11 +57,9 @@ export const SelectTime = ({ log }: SelectTimeProps) => {
                   </MenuItem>
                 ))}
               </Select>
-            </Box>
-            <Box display="flex" alignItems="center" justifyContent="space-between">
-              <Typography mr={2} variant="subtitle1">
-                {t('toTime')}
-              </Typography>
+            </Stack>
+            <Stack direction="row" alignItems="center" spacing={1} justifyContent="space-between">
+              <Typography variant="subtitle1">{t('toTime')}</Typography>
               <Select disabled={!checked} value={selectedEndTime} onChange={onEndTimeChange} name="endTime">
                 {endTimeChoices.map((value) => (
                   <MenuItem key={value} value={value}>
@@ -69,8 +67,8 @@ export const SelectTime = ({ log }: SelectTimeProps) => {
                   </MenuItem>
                 ))}
               </Select>
-            </Box>
-          </div>
+            </Stack>
+          </Stack>
         }
       />
     </Stack>

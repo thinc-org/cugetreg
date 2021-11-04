@@ -1,5 +1,6 @@
 import { useTheme } from '@material-ui/core'
 import { Course, Class, DayOfWeek, GenEdType } from '@thinc-org/chula-courses'
+import { uniq } from 'lodash'
 import { useMemo } from 'react'
 
 import { getPaletteRange } from '@/common/utils/getPaletteRange'
@@ -14,6 +15,7 @@ export type TimetableClass = Pick<Course, 'courseNo' | 'abbrName' | 'genEdType'>
   }
 
 export type ScheduleClass = Omit<TimetableClass, 'period'> & {
+  overlaps: string[]
   position: {
     start: number
     end: number
@@ -44,6 +46,8 @@ function checkOverlap(classes: ScheduleClass[]) {
       if (a.position.start < b.position.end) {
         a.hasOverlap = true
         b.hasOverlap = true
+        a.overlaps.push(b.abbrName)
+        b.overlaps.push(a.abbrName)
       }
     }
   }
@@ -78,6 +82,7 @@ export function useScheduleClass(classes: TimetableClass[]) {
       const end = getPosition(period?.end || '')
       classesByDay[scheduleClass.dayOfWeek || 'AR'].push({
         ...rest,
+        overlaps: [],
         position: { start, end },
       })
     })
@@ -119,8 +124,14 @@ export function useDaysCount(classes: ScheduleClass[]): number {
   return daysCount
 }
 
+export type CourseOverlap = {
+  hasOverlap: boolean
+  classes: string[]
+  exams: string[]
+}
+
 export interface CourseOverlapMap {
-  [courseNo: string]: boolean
+  [courseNo: string]: CourseOverlap
 }
 
 export function useOverlappingCourses(
@@ -131,19 +142,24 @@ export function useOverlappingCourses(
   return useMemo(() => {
     const courses: CourseOverlapMap = {}
     classes.forEach((it) => {
-      if (it.hasOverlap === true) {
-        courses[it.courseNo] = true
+      courses[it.courseNo] = {
+        hasOverlap: false,
+        classes: uniq(it.overlaps),
+        exams: [],
       }
     })
     midtermClasses.forEach((it) => {
       if (it.hasOverlap === true) {
-        courses[it.courseNo] = true
+        courses[it.courseNo].exams = it.overlaps
       }
     })
     finalClasses.forEach((it) => {
       if (it.hasOverlap === true) {
-        courses[it.courseNo] = true
+        courses[it.courseNo].exams = uniq([...courses[it.courseNo].exams, ...it.overlaps])
       }
+    })
+    Object.entries(courses).forEach(([courseNo, course]) => {
+      courses[courseNo].hasOverlap = course.classes.length > 0 || course.exams.length > 0
     })
     return courses
   }, [classes, midtermClasses, finalClasses])

@@ -2,9 +2,11 @@ import { ApolloError } from '@apollo/client'
 import { Grid, Typography } from '@material-ui/core'
 import { getFaculty } from '@thinc-org/chula-courses'
 import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
+import { NextSeoProps } from 'next-seo/lib/types'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
+import defaultSEO from '@/../next-seo.config'
 import { BackButton } from '@/common/components/BackButton'
 import { useLinkBuilder } from '@/common/hooks/useLinkBuilder'
 import { Language } from '@/common/i18n'
@@ -30,11 +32,30 @@ import { parseVariablesFromQuery } from './utils/parseVariablesFromQuery'
 export function CourseDetailPage(props: { data: GetCourseResponse }) {
   const { i18n } = useTranslation()
   const { buildLink } = useLinkBuilder()
-  const cData = props.data
+  const { course } = props.data
 
-  const CourseList = groupBy(cData.course.sections, 'note', 'General').map((sectionGroup) => {
+  const SEOConfig: NextSeoProps = {
+    ...defaultSEO,
+    title: course.abbrName,
+    description: course.courseDesc ?? defaultSEO.description,
+    openGraph: {
+      title: `${course.abbrName} | CU Get Reg`,
+      description: course.courseDesc ?? defaultSEO.openGraph.description,
+    },
+    additionalMetaTags: [
+      ...defaultSEO.additionalMetaTags,
+      {
+        property: 'keywords',
+        content:
+          defaultSEO.additionalMetaTags[0].content +
+          [course.abbrName, course.genEdType, course.academicYear, course.faculty, course.courseNo].join(','),
+      },
+    ],
+  }
+
+  const CourseList = groupBy(course.sections, 'note', 'General').map((sectionGroup) => {
     const SectionGroup = sectionGroup.value.map((section) => (
-      <SectionCardLayout key={section.sectionNo} section={section} course={cData.course} />
+      <SectionCardLayout key={section.sectionNo} section={section} course={course} />
     ))
     return (
       <SectionContainer key={sectionGroup.group}>
@@ -44,21 +65,21 @@ export function CourseDetailPage(props: { data: GetCourseResponse }) {
     )
   })
 
-  const faculty = getFaculty(cData.course.faculty)
-  const finalDate = getExamDate(cData.course, true)
-  const midtermDate = getExamDate(cData.course, false)
-  const finalPeriod = getExamPeriod(cData.course, true)
-  const midtermPeriod = getExamPeriod(cData.course, false)
+  const faculty = getFaculty(course.faculty)
+  const finalDate = getExamDate(course, true)
+  const midtermDate = getExamDate(course, false)
+  const finalPeriod = getExamPeriod(course, true)
+  const midtermPeriod = getExamPeriod(course, false)
 
   return (
     <Container>
-      <PageMeta title={cData.course.abbrName} />
-      <BackButton href={buildLink(`/courses`)} pathId={cData.course.courseNo} />
+      <PageMeta {...SEOConfig} />
+      <BackButton href={buildLink(`/courses`)} pathId={course.courseNo} />
       <Title variant="h3">
-        {cData.course.courseNo} {cData.course.abbrName}
+        {course.courseNo} {course.abbrName}
       </Title>
-      <Typography variant="h5">{cData.course.courseNameTh}</Typography>
-      <Typography variant="h5">{cData.course.courseNameEn}</Typography>
+      <Typography variant="h5">{course.courseNameTh}</Typography>
+      <Typography variant="h5">{course.courseNameEn}</Typography>
       <GridContainer container>
         <Grid item xs={12} sm={6}>
           <DescriptionTitle variant="subtitle1">คณะ</DescriptionTitle>
@@ -66,32 +87,32 @@ export function CourseDetailPage(props: { data: GetCourseResponse }) {
         </Grid>
         <GridEnd item xs={12} sm={6}>
           <DescriptionTitle variant="subtitle1">ภาควิชา/กลุ่มวิชา/สาขาวิชา</DescriptionTitle>
-          <Typography variant="h6">{cData.course.department || '-'}</Typography>
+          <Typography variant="h6">{course.department || '-'}</Typography>
         </GridEnd>
         <Grid item xs={12} sm={6}>
           <DescriptionTitle variant="subtitle1">รูปแบบรายวิชา</DescriptionTitle>
-          <Typography variant="h6">{courseTypeStringFromCourse(cData.course)}</Typography>
+          <Typography variant="h6">{courseTypeStringFromCourse(course)}</Typography>
         </Grid>
         <GridEnd item xs={12} sm={6}>
           <DescriptionTitle variant="subtitle1">หน่วยกิต</DescriptionTitle>
-          <Typography variant="h6">{cData.course.credit}</Typography>
+          <Typography variant="h6">{course.credit}</Typography>
         </GridEnd>
         <Grid item xs={12} sm={6}>
           <DescriptionTitle variant="subtitle1">สอบกลางภาค</DescriptionTitle>
-          <Typography variant="h6">{cData.course.midterm ? `${midtermDate} ${midtermPeriod}` : 'TBA'}</Typography>
+          <Typography variant="h6">{course.midterm ? `${midtermDate} ${midtermPeriod}` : 'TBA'}</Typography>
         </Grid>
         <GridEnd item xs={12} sm={6}>
           <DescriptionTitle variant="subtitle1">สอบปลายภาค</DescriptionTitle>
-          <Typography variant="h6">{cData.course.final ? `${finalDate} ${finalPeriod}` : 'TBA'}</Typography>
+          <Typography variant="h6">{course.final ? `${finalDate} ${finalPeriod}` : 'TBA'}</Typography>
         </GridEnd>
         <Grid item xs={12} sm={12}>
           <DescriptionTitle variant="subtitle1">เงื่อนไขรายวิชา</DescriptionTitle>
-          <Typography variant="h6">{cData.course.courseCondition}</Typography>
+          <Typography variant="h6">{course.courseCondition}</Typography>
         </Grid>
-        {cData.course.courseDesc && (
+        {course.courseDesc && (
           <Grid item xs={12} sm={12}>
             <DescriptionTitle variant="subtitle1">คำอธิบายรายวิชา</DescriptionTitle>
-            <Typography variant="h6">{cData.course.courseDesc}</Typography>
+            <Typography variant="h6">{course.courseDesc}</Typography>
           </Grid>
         )}
       </GridContainer>

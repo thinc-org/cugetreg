@@ -1,13 +1,13 @@
 import { useTheme } from '@material-ui/core'
 import { Course, Class, DayOfWeek, GenEdType } from '@thinc-org/chula-courses'
-import { uniq } from 'lodash'
 import { useMemo } from 'react'
 
 import { getPaletteRange } from '@/common/utils/getPaletteRange'
 import { ExamClass } from '@/common/utils/types'
 import { CourseCartItem } from '@/store'
 
-import { hourStart } from './constants'
+import { hourStart } from '../constants'
+import { getOverlappingCourses } from './getOverlappingCourses/.'
 
 export type TimetableClass = Pick<Course, 'courseNo' | 'abbrName' | 'genEdType'> &
   Omit<Class, 'type'> & {
@@ -148,35 +148,11 @@ export function useOverlappingCourses(
   midtermClasses: ExamClass[],
   finalClasses: ExamClass[]
 ) {
-  return useMemo(() => {
-    const courses: CourseOverlapMap = {}
-    classes.forEach((it) => {
-      courses[it.courseNo] = {
-        hasOverlap: false,
-        classes: [],
-        exams: [],
-      }
-    })
-    classes.forEach((it) => {
-      courses[it.courseNo].classes = [...courses[it.courseNo].classes, ...it.overlaps]
-    })
-    midtermClasses.forEach((it) => {
-      if (it.hasOverlap === true) {
-        courses[it.courseNo].exams = [...courses[it.courseNo].exams, ...it.overlaps]
-      }
-    })
-    finalClasses.forEach((it) => {
-      if (it.hasOverlap === true) {
-        courses[it.courseNo].exams = [...courses[it.courseNo].exams, ...it.overlaps]
-      }
-    })
-    Object.entries(courses).forEach(([, course]) => {
-      course.classes = uniq(course.classes)
-      course.exams = uniq(course.exams)
-      course.hasOverlap = course.classes.length > 0 || course.exams.length > 0
-    })
-    return courses
-  }, [classes, midtermClasses, finalClasses])
+  return useMemo(() => getOverlappingCourses(classes, midtermClasses, finalClasses), [
+    classes,
+    midtermClasses,
+    finalClasses,
+  ])
 }
 
 interface ColorScheme {

@@ -47,15 +47,16 @@ const ScheduleContainer = styled.div`
 
 export interface AutoScaleScheduleProps extends ScheduleProps {
   daysCount: number
+  hourEnd: number
 }
 
 const AutoScaleSchedule = withContentRect('bounds')<AutoScaleScheduleProps>(
-  ({ measureRef, contentRect, daysCount, ...props }) => (
+  ({ measureRef, contentRect, daysCount, hourEnd, ...props }) => (
     <>
       <div ref={measureRef} style={{ width: '100%' }} />
-      <ScheduleContainer style={{ paddingTop: `${getHeightRatio(daysCount) * 100}%` }}>
+      <ScheduleContainer style={{ paddingTop: `${getHeightRatio(daysCount, hourEnd) * 100}%` }}>
         {contentRect.bounds?.width ? (
-          <DimensionsProvider width={contentRect.bounds.width} daysCount={daysCount}>
+          <DimensionsProvider width={contentRect.bounds.width} daysCount={daysCount} hourEnd={hourEnd}>
             <Schedule {...props} />
           </DimensionsProvider>
         ) : null}

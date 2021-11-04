@@ -1,3 +1,20 @@
+# [1.3.0](https://github.com/thinc-org/cugetreg-frontend/compare/v1.2.0...v1.3.0) (2021-11-04)
+
+
+### Bug Fixes
+
+* adjust logo aspect ratio ([c336f85](https://github.com/thinc-org/cugetreg-frontend/commit/c336f857d90805b56fb17bb6f7bbd8db680a527d))
+* logo height ([43c8fb2](https://github.com/thinc-org/cugetreg-frontend/commit/43c8fb27f89fb46e6e9026eaaf31bb8c93995ba2))
+* preserve logo aspect ratio ([8fb1d68](https://github.com/thinc-org/cugetreg-frontend/commit/8fb1d68744d2ef5d6443db8fa59a47f160a715a0))
+* wrong path looping ([19f5978](https://github.com/thinc-org/cugetreg-frontend/commit/19f597819eeb07759057eddcf505fd1f1743de40))
+
+
+### Features
+
+* add overlapping course warning ([#240](https://github.com/thinc-org/cugetreg-frontend/issues/240)) ([61dee81](https://github.com/thinc-org/cugetreg-frontend/commit/61dee81a5b193d76b7ffa2726dcffae4a4c2ffe0))
+* add time filter for mobile ([#239](https://github.com/thinc-org/cugetreg-frontend/issues/239)) ([020d3d9](https://github.com/thinc-org/cugetreg-frontend/commit/020d3d9c3daf25007bda498be04387cef5da46c5))
+* improve SEO with dynamic config ([#238](https://github.com/thinc-org/cugetreg-frontend/issues/238)) ([58c6693](https://github.com/thinc-org/cugetreg-frontend/commit/58c6693bf53868940b906979c5063eb76a9d4422))
+
 # [1.2.0](https://github.com/thinc-org/cugetreg-frontend/compare/v1.1.0...v1.2.0) (2021-11-01)
 
 

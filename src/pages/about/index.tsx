@@ -149,6 +149,18 @@ export default function About() {
                 (Facebook Page: Gen อย่าได้ Ed)
               </Link>
             </li>
+            <li>
+              <strong>ศูนย์การศึกษาทั่วไป (GenEd Chula):</strong> CU Get Reg
+              ได้รับการสนับสนุนจากศูนย์การศึกษาทั่วไปในด้านข้อมูลรายวิชาศึกษาทั่วไป (GenEd){' '}
+              <Link
+                href="https://www.gened.chula.ac.th/c/"
+                target="_blank"
+                rel="noreferrer"
+                color={theme.palette.secondaryRange[900]}
+              >
+                (เว็บไซต์ ศูนย์การศึกษาทั่วไป)
+              </Link>
+            </li>
           </ul>
         </StyledArticleBody>
 

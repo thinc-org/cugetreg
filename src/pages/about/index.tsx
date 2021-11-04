@@ -1,4 +1,4 @@
-import { Box, Paper, Card, Typography, Link, useTheme } from '@material-ui/core'
+import { Box, Card, Typography, Link, useTheme } from '@material-ui/core'
 import React from 'react'
 
 import { StyledArticleBody } from '@/configs/theme/articletext'

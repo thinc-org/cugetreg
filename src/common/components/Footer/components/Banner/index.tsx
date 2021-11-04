@@ -20,7 +20,7 @@ export function Banner() {
   return (
     <BannerContainer spacing={matches ? 1 : 3}>
       <Link href="/">
-        <Image src={bigLogo} width="172" height={matches ? '40' : '56'} />
+        <Image src={bigLogo} width="172.75" height="56.31" />
       </Link>
 
       <ResponsiveStack alignItems="center" spacing={2}>

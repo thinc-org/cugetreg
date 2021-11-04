@@ -16,6 +16,7 @@ import { dayOfWeekMapper } from '@/common/constants/dayOfWeek'
 import { Analytics } from '@/common/context/Analytics/components/Analytics'
 import { HIDE_COURSE, DELETE_COURSE, SECTION_CHANGE } from '@/common/context/Analytics/constants'
 import { useLinkBuilderWithCourseGroup } from '@/common/hooks/useLinkBuilder'
+import { CourseOverlap } from '@/modules/Schedule/components/Schedule/utils'
 import { CourseCartItem, courseCartStore } from '@/store'
 
 import {
@@ -34,18 +35,23 @@ import {
   RightPane,
   StyledNativeSelect,
 } from './styled'
+import { useOverlapWarning } from './utils'
 
 export interface ScheduleTableCardProps {
   item: CourseCartItem
   index: number
-  hasOverlap: boolean
+  overlaps: CourseOverlap
 }
 
 export interface CardComponentProps {
   item: CourseCartItem
 }
 
-export const ScheduleTableCard = observer(({ item, index, hasOverlap }: ScheduleTableCardProps) => {
+export interface CardDetailProps extends CardComponentProps {
+  overlaps?: CourseOverlap
+}
+
+export const ScheduleTableCard = observer(({ item, index, overlaps }: ScheduleTableCardProps) => {
   const { courseNo, isHidden } = item
   const toggleVisibility = useCallback(() => {
     courseCartStore.toggleHiddenItem(item)
@@ -104,7 +110,7 @@ export const ScheduleTableCard = observer(({ item, index, hasOverlap }: Schedule
           >
             <MiddlePane>
               <CardHeader item={item} />
-              <CardDetail item={item} />
+              <CardDetail item={item} overlaps={overlaps} />
             </MiddlePane>
           </CardContent>
 
@@ -123,7 +129,7 @@ export const ScheduleTableCard = observer(({ item, index, hasOverlap }: Schedule
               </DeleteButton>
             </Analytics>
           </RightPane>
-          {hasOverlap ? <OverlappingCardBorder /> : <CardBorder />}
+          {overlaps?.hasOverlap ? <OverlappingCardBorder /> : <CardBorder />}
         </CardLayout>
       )}
     </Draggable>
@@ -182,10 +188,11 @@ function SectionSelect({ item }: CardComponentProps) {
   )
 }
 
-function CardDetail({ item }: CardComponentProps) {
-  const { t } = useTranslation('courseCard')
+function CardDetail({ item, overlaps }: CardDetailProps) {
+  const { t } = useTranslation('scheduleTableCard')
   const section = item.sections.find((section) => section.sectionNo === item.selectedSectionNo)!
   const teachers = uniq(section.classes.flatMap((cls) => cls.teachers))
+  const warning = useOverlapWarning(overlaps)
   return (
     <Grid container spacing={1} sx={{ mt: -1, mb: 2 }}>
       <Hidden smUp>
@@ -227,6 +234,12 @@ function CardDetail({ item }: CardComponentProps) {
             ))}
           </Stack>
         </Stack>
+      </Grid>
+      <GridSpacer />
+      <Grid item xs alignSelf="flex-end" sx={{ pr: { sm: 3 } }}>
+        <Typography variant="subtitle1" color="highlight.red.500" textAlign={{ xs: 'left', sm: 'right' }}>
+          {warning}
+        </Typography>
       </Grid>
     </Grid>
   )

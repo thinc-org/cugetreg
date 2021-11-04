@@ -1,120 +1,141 @@
-import { ExamClass } from '@/common/utils/types'
+import {
+  expectedOverlappingBoth,
+  expectedOverlappingCourses,
+  mockOverlappingCourses,
+  mockOverlappingExams,
+} from '@/__mock__/overlap'
 
-import { CourseOverlap, CourseOverlapMap, ScheduleClass } from '..'
-
-const courseTemplate: ScheduleClass = {
-  courseNo: '2110316',
-  abbrName: 'PROG LANG PRIN',
-  genEdType: 'NO',
-  building: 'ENG3',
-  room: '318',
-  teachers: ['NNN'],
-  position: {
-    start: 0,
-    end: 0,
-  },
-
-  hasOverlap: false,
-  overlaps: [],
-}
-
-const examTemplate: ExamClass = {
-  courseNo: '2110316',
-  abbrName: 'PROG LANG PRIN',
-  genEdType: 'NO',
-  teachers: ['NNN'],
-  midterm: {
-    date: '',
-    period: { start: '', end: '' },
-  },
-  final: {
-    date: '',
-    period: { start: '', end: '' },
-  },
-  isHidden: false,
-
-  hasOverlap: false,
-  overlaps: [],
-}
-
-const notOverlap: CourseOverlap = { hasOverlap: false, classes: [], exams: [] }
-
-function createMockCourse(courseNo: string, overlaps: string[] | null): ScheduleClass[] {
-  if (overlaps === null) {
-    return []
-  }
-  const hasOverlap = overlaps.length > 0
-  return [{ ...courseTemplate, courseNo, overlaps, hasOverlap }]
-}
-
-function createMockExam(courseNo: string, overlaps: string[] | null): ExamClass[] {
-  if (overlaps === null) {
-    return []
-  }
-  const hasOverlap = overlaps.length > 0
-  return [{ ...examTemplate, courseNo, overlaps, hasOverlap }]
-}
-
-function createExpectedOverlap(
-  overlaps: string[] | null,
-  isClassOverlap: boolean,
-  isExamOverlap: boolean
-): CourseOverlap | undefined {
-  if (overlaps === null) {
-    return undefined
-  }
-  const hasOverlap = overlaps.length > 0
-  if (hasOverlap) {
-    return {
-      classes: isClassOverlap ? overlaps : [],
-      exams: isExamOverlap ? overlaps : [],
-      hasOverlap,
-    }
-  }
-  return notOverlap
-}
+import { getOverlappingCourses } from '.'
 
 describe('getOverlappingCourses', () => {
-  it.each`
-    overlaps1               | overlaps2     | overlaps3     | expectedOverlap1 | expectedOverlap2 | expectedOverlap3
-    ${null}                 | ${null}       | ${null}       | ${null}          | ${null}          | ${null}
-    ${[]}                   | ${null}       | ${null}       | ${[]}            | ${null}          | ${null}
-    ${[]}                   | ${[]}         | ${[]}         | ${[]}            | ${[]}            | ${[]}
-    ${['2']}                | ${['1']}      | ${null}       | ${['2']}         | ${['1']}         | ${null}
-    ${['2', '2']}           | ${['1', '1']} | ${[]}         | ${['2']}         | ${['1']}         | ${[]}
-    ${['2', '2', '3', '3']} | ${['1', '1']} | ${['1', '1']} | ${['2', '3']}    | ${['1']}         | ${['1']}
-  `('', async ({ overlaps1, overlaps2, overlaps3, expectedOverlap1, expectedOverlap2, expectedOverlap3 }) => {
-    const { getOverlappingCourses } = await import('.')
-
-    const mockCourse = [
-      ...createMockCourse('1', overlaps1),
-      ...createMockCourse('2', overlaps2),
-      ...createMockCourse('3', overlaps3),
-    ]
-    const mockExam = [
-      ...createMockExam('1', overlaps1),
-      ...createMockExam('2', overlaps2),
-      ...createMockExam('3', overlaps3),
-    ]
-
-    const result1: CourseOverlapMap = getOverlappingCourses(mockCourse, [], [])
-    expect(result1).toEqual({
-      '1': createExpectedOverlap(expectedOverlap1, true, false),
-      '2': createExpectedOverlap(expectedOverlap2, true, false),
-      '3': createExpectedOverlap(expectedOverlap3, true, false),
+  test('No course selected should return nothing', () => {
+    const result = getOverlappingCourses([], [], [])
+    expect(result).toEqual({})
+  })
+  test('Course selected exactly once should return no overlap', () => {
+    const result = getOverlappingCourses(
+      [mockOverlappingCourses['200000']],
+      [mockOverlappingExams['200000']],
+      [mockOverlappingExams['200000']]
+    )
+    expect(result).toEqual({ '200000': expectedOverlappingCourses['200000'] })
+  })
+  test('3 selected courses but not overlapping should return non-overlapping each ', () => {
+    const result = getOverlappingCourses(
+      [mockOverlappingCourses['200000'], mockOverlappingCourses['200001'], mockOverlappingCourses['200002']],
+      [],
+      []
+    )
+    expect(result).toEqual({
+      '200000': expectedOverlappingCourses['200000'],
+      '200001': expectedOverlappingCourses['200001'],
+      '200002': expectedOverlappingCourses['200002'],
     })
-
-    const result2: CourseOverlapMap = getOverlappingCourses(mockCourse, mockExam, [])
-    const result3: CourseOverlapMap = getOverlappingCourses(mockCourse, [], mockExam)
-    const result4: CourseOverlapMap = getOverlappingCourses(mockCourse, mockExam, mockExam)
-
-    const expectedResult2 = {
-      '1': createExpectedOverlap(expectedOverlap1, true, true),
-      '2': createExpectedOverlap(expectedOverlap2, true, true),
-      '3': createExpectedOverlap(expectedOverlap3, true, true),
-    }
-    expect(result2).toEqual(expectedResult2)
-    expect(result3).toEqual(expectedResult2)
-    expect(result4).toEqual(expectedResult2)
+  })
+  test('2 classes are overlapping should return overlap for each other', () => {
+    const result = getOverlappingCourses([mockOverlappingCourses['200003'], mockOverlappingCourses['200004']], [], [])
+    expect(result).toEqual({
+      '200003': expectedOverlappingCourses['200003'],
+      '200004': expectedOverlappingCourses['200004'],
+    })
+  })
+  test('2 classes are overlapping but 1 is not should return overlap and no overlap', () => {
+    const result = getOverlappingCourses(
+      [mockOverlappingCourses['200000'], mockOverlappingCourses['200003'], mockOverlappingCourses['200004']],
+      [],
+      []
+    )
+    expect(result).toEqual({
+      '200000': expectedOverlappingCourses['200000'],
+      '200003': expectedOverlappingCourses['200003'],
+      '200004': expectedOverlappingCourses['200004'],
+    })
+  })
+  test('2 classes are overlapping twice should return overlap only once', () => {
+    const result = getOverlappingCourses([mockOverlappingCourses['200005'], mockOverlappingCourses['200006']], [], [])
+    expect(result).toEqual({
+      '200005': expectedOverlappingCourses['200005'],
+      '200006': expectedOverlappingCourses['200006'],
+    })
+  })
+  test('A class is overlapping with 2 classes twice should return two unique overlaps', () => {
+    const result = getOverlappingCourses(
+      [mockOverlappingCourses['200007'], mockOverlappingCourses['200008'], mockOverlappingCourses['200009']],
+      [],
+      []
+    )
+    expect(result).toEqual({
+      '200007': expectedOverlappingCourses['200007'],
+      '200008': expectedOverlappingCourses['200008'],
+      '200009': expectedOverlappingCourses['200009'],
+    })
+  })
+  test('2 classes and midterm exams are overlapping should return both exam and class overlaps', () => {
+    const result = getOverlappingCourses(
+      [mockOverlappingCourses['200003'], mockOverlappingCourses['200004']],
+      [mockOverlappingExams['200003'], mockOverlappingExams['200004']],
+      []
+    )
+    expect(result).toEqual({
+      '200003': expectedOverlappingBoth['200003'],
+      '200004': expectedOverlappingBoth['200004'],
+    })
+  })
+  test('2 classes and final exams are overlapping return both exam and class overlaps', () => {
+    const result = getOverlappingCourses(
+      [mockOverlappingCourses['200003'], mockOverlappingCourses['200004']],
+      [],
+      [mockOverlappingExams['200003'], mockOverlappingExams['200004']]
+    )
+    expect(result).toEqual({
+      '200003': expectedOverlappingBoth['200003'],
+      '200004': expectedOverlappingBoth['200004'],
+    })
+  })
+  test('2 classes and both midterm and final exams are overlapping should return both exam and class overlaps only once', () => {
+    const result = getOverlappingCourses(
+      [mockOverlappingCourses['200003'], mockOverlappingCourses['200004']],
+      [mockOverlappingExams['200003'], mockOverlappingExams['200004']],
+      [mockOverlappingExams['200003'], mockOverlappingExams['200004']]
+    )
+    expect(result).toEqual({
+      '200003': expectedOverlappingBoth['200003'],
+      '200004': expectedOverlappingBoth['200004'],
+    })
+  })
+  test('2 classes and exams are overlapping but 1 is not should return overlap and no overlap', () => {
+    const result = getOverlappingCourses(
+      [mockOverlappingCourses['200000'], mockOverlappingCourses['200003'], mockOverlappingCourses['200004']],
+      [mockOverlappingExams['200000'], mockOverlappingExams['200003'], mockOverlappingExams['200004']],
+      [mockOverlappingExams['200000'], mockOverlappingExams['200003'], mockOverlappingExams['200004']]
+    )
+    expect(result).toEqual({
+      '200000': expectedOverlappingBoth['200000'],
+      '200003': expectedOverlappingBoth['200003'],
+      '200004': expectedOverlappingBoth['200004'],
+    })
+  })
+  test('2 classes and exams are overlapping twice should return both exam and class overlaps only once', () => {
+    const result = getOverlappingCourses(
+      [mockOverlappingCourses['200005'], mockOverlappingCourses['200006']],
+      [mockOverlappingExams['200005'], mockOverlappingExams['200006']],
+      [mockOverlappingExams['200005'], mockOverlappingExams['200006']]
+    )
+    expect(result).toEqual({
+      '200005': expectedOverlappingBoth['200005'],
+      '200006': expectedOverlappingBoth['200006'],
+    })
+  })
+  test('A class and exam are both overlapping with 2 other classes twice should return two unique both exams and classes', () => {
+    const result = getOverlappingCourses(
+      [mockOverlappingCourses['200007'], mockOverlappingCourses['200008'], mockOverlappingCourses['200009']],
+      [mockOverlappingExams['200007'], mockOverlappingExams['200008'], mockOverlappingExams['200009']],
+      [mockOverlappingExams['200007'], mockOverlappingExams['200008'], mockOverlappingExams['200009']]
+    )
+    expect(result).toEqual({
+      '200007': expectedOverlappingBoth['200007'],
+      '200008': expectedOverlappingBoth['200008'],
+      '200009': expectedOverlappingBoth['200009'],
+    })
   })
 })

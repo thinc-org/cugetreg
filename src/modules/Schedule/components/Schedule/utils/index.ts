@@ -7,7 +7,7 @@ import { ExamClass } from '@/common/utils/types'
 import { CourseCartItem } from '@/store'
 
 import { hourStart } from '../constants'
-import { getOverlappingCourses } from './getOverlappingCourses/.'
+import { getOverlappingCourses } from './getOverlappingCourses'
 
 export type TimetableClass = Pick<Course, 'courseNo' | 'abbrName' | 'genEdType'> &
   Omit<Class, 'type'> & {

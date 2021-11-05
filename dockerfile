@@ -9,15 +9,14 @@ RUN yarn --frozen-lockfile
 COPY . .
 # Build applciation
 RUN yarn build
-# Remove dev dependencies
-RUN npm prune --production
 
 FROM node:14-alpine AS production
 ENV NODE_ENV production
 WORKDIR /app
 # Copy only necessary file for running app
 COPY --from=build /build/package.json ./package.json
-COPY --from=build /build/node_modules ./node_modules
+# Install prod dependencies
+RUN yarn --prod
 COPY --from=build /build/.next ./.next
 COPY --from=build /build/public ./public
 # Expose listening port

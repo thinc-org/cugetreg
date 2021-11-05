@@ -32,6 +32,7 @@ export const GET_COURSE_CART = gql`
       courseNo
       semester
       selectedSectionNo
+      isHidden
     }
   }
 `

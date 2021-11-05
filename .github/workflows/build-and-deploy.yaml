@@ -24,6 +24,7 @@ env:
 jobs:
   release-note:
     name: Release
+    if: ${{ github.ref == 'refs/heads/master' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -42,7 +43,6 @@ jobs:
         run: yarn --fronzen-lockfile
 
       - name: Release
-        if: ${{ github.ref == 'refs/heads/master' }}
         run: npx semantic-release
         env:
           GITHUB_TOKEN: ${{ github.token }}

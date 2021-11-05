@@ -4,6 +4,15 @@ import { ExamClass } from '@/common/utils/types'
 
 import { ScheduleClass, CourseOverlapMap } from '..'
 
+/**
+ * get a course overlap map which tells that for each course (key),
+ * what other courses are overlapping with it in terms of classes and exams (value)
+ * for the purpose of showing overlaps warning
+ * @param classes a list of class which have been checked for overlapping
+ * @param midtermClasses a list of midterm exams which have been checked for overlapping
+ * @param finalClasses a list of final exams which have been checked for overlapping
+ * @returns A record of key `courseNo` and value `CourseOverlap`
+ */
 export function getOverlappingCourses(
   classes: ScheduleClass[],
   midtermClasses: ExamClass[],

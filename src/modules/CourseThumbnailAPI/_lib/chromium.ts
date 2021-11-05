@@ -5,12 +5,19 @@ import { FileType } from './types'
 
 let _page: core.Page | null
 
+const browserWSEndpoint = process.env.BROWSERLESS_URL
+
 async function getPage(isDev: boolean) {
   if (_page) {
     return _page
   }
-  const options = await getOptions(isDev)
-  const browser = await core.launch(options)
+  let browser: core.Browser
+  if (typeof browserWSEndpoint !== 'undefined') {
+    browser = await core.connect({ browserWSEndpoint })
+  } else {
+    const options = await getOptions(isDev)
+    browser = await core.launch(options)
+  }
   _page = await browser.newPage()
   return _page
 }

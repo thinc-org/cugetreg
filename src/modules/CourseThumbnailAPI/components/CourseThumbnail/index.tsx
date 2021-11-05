@@ -1,5 +1,8 @@
 import { Global, css } from '@emotion/react'
+import { ThemeProvider } from '@material-ui/core'
 
+import { GenEdChip } from '@/common/components/Chips/catagories/GenEdChip'
+import { lightTheme } from '@/configs/theme'
 import { CourseThumbnailData } from '@/services/apollo/query/getCourse'
 
 import { ThumbnailLayout } from './styled'
@@ -10,7 +13,7 @@ export interface CourseThumbnailProps {
 
 export function CourseThumbnail({ course }: CourseThumbnailProps) {
   return (
-    <>
+    <ThemeProvider theme={lightTheme}>
       <Global
         styles={css`
           body {
@@ -24,8 +27,8 @@ export function CourseThumbnail({ course }: CourseThumbnailProps) {
         <p>{course.abbrName}</p>
         <p>{course.courseNameTh}</p>
         <p>{course.courseNameEn}</p>
-        <p>{course.genEdType}</p>
+        {course.genEdType !== 'NO' ? <GenEdChip type={course.genEdType} /> : null}
       </ThumbnailLayout>
-    </>
+    </ThemeProvider>
   )
 }

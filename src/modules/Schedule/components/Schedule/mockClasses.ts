@@ -6,6 +6,7 @@ const courseTemplate = {
   building: 'ENG3',
   room: '318',
   teachers: ['NNN'],
+  sectionNo: '1',
 }
 
 export const mockClasses: TimetableClass[] = [

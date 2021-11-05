@@ -1,5 +1,5 @@
 import { useTheme } from '@mui/material'
-import { Course, Class, DayOfWeek, GenEdType } from '@thinc-org/chula-courses'
+import { Course, Class, DayOfWeek, GenEdType, Section } from '@thinc-org/chula-courses'
 import { useMemo } from 'react'
 
 import { getPaletteRange } from '@/common/utils/getPaletteRange'
@@ -10,7 +10,8 @@ import { hourStart } from '../constants'
 import { getOverlappingCourses } from './getOverlappingCourses'
 
 export type TimetableClass = Pick<Course, 'courseNo' | 'abbrName' | 'genEdType'> &
-  Omit<Class, 'type'> & {
+  Omit<Class, 'type'> &
+  Pick<Section, 'sectionNo'> & {
     classIndex: number
     hasOverlap?: boolean
   }
@@ -207,6 +208,7 @@ export function useTimetableClasses(shopItems: CourseCartItem[]) {
           building,
           room,
           teachers,
+          sectionNo: section.sectionNo,
         }
       })
     })

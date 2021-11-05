@@ -19,11 +19,11 @@ import {
 import { getOverlappingCourses } from '.'
 
 describe('getOverlappingCourses', () => {
-  test('No course selected should return nothing', () => {
+  it('No course selected should return nothing', () => {
     const result = getOverlappingCourses([], [], [])
     expect(result).toEqual({})
   })
-  test('Course selected exactly once should return no overlap', () => {
+  it('Course selected exactly once should return no overlap', () => {
     const result = getOverlappingCourses(
       [mockNonOverlappingCourses[0]],
       [mockNonOverlappingExams[0]],
@@ -31,38 +31,38 @@ describe('getOverlappingCourses', () => {
     )
     expect(result).toEqual({ '200000': expectedNonOverlappingCourses['200000'] })
   })
-  test('3 selected courses but not overlapping should return non-overlapping each ', () => {
+  it('3 non-overlapping courses should return non-overlapping each ', () => {
     const result = getOverlappingCourses(mockNonOverlappingCourses, [], [])
     expect(result).toEqual(expectedNonOverlappingCourses)
   })
-  test('2 classes are overlapping should return overlap for each other', () => {
+  it('2 overlapping classes should return overlap for each other', () => {
     const result = getOverlappingCourses(mockTwoOverlappingCourses_1, [], [])
     expect(result).toEqual(expectedTwoOverlappingCourses_1)
   })
-  test('2 classes are overlapping but 1 is not should return overlap and no overlap', () => {
+  it('2 overlapping classes and 1 non-overlapping class should return overlap and no overlap', () => {
     const result1 = getOverlappingCourses([mockNonOverlappingCourses[0], ...mockNonOverlappingCourses], [], [])
     const result2 = getOverlappingCourses([...mockNonOverlappingCourses, mockNonOverlappingCourses[0]], [], [])
     const expectedResult = { '200000': expectedNonOverlappingCourses['200000'], ...expectedNonOverlappingCourses }
     expect(result1).toEqual(expectedResult)
     expect(result2).toEqual(expectedResult)
   })
-  test('2 classes are overlapping twice should return overlap only once', () => {
+  it('2 double overlapping classes should return overlap only once', () => {
     const result = getOverlappingCourses(mockTwoOverlappingCourses_2, [], [])
     expect(result).toEqual(expectedTwoOverlappingCourses_2)
   })
-  test('A class is overlapping with 2 classes twice should return two unique overlaps', () => {
+  it('A class, overlapping with 2 other classes twice, should return two unique overlaps', () => {
     const result = getOverlappingCourses(mockThreeOverlappingCourses, [], [])
     expect(result).toEqual(expectedThreeOverlappingCourses)
   })
-  test('2 classes and midterm exams are overlapping should return both exam and class overlaps', () => {
+  it('2 overlapping classes and midterm exams should return both exam and class overlaps', () => {
     const result = getOverlappingCourses(mockTwoOverlappingCourses_1, mockTwoOverlappingExams_1, [])
     expect(result).toEqual(expectedTwoOverlappingClassesAndExams_1)
   })
-  test('2 classes and final exams are overlapping return both exam and class overlaps', () => {
+  it('2 overlapping classes and final exams return both exam and class overlaps', () => {
     const result = getOverlappingCourses(mockTwoOverlappingCourses_1, [], mockTwoOverlappingExams_1)
     expect(result).toEqual(expectedTwoOverlappingClassesAndExams_1)
   })
-  test('2 classes and both midterm and final exams are overlapping should return both exam and class overlaps only once', () => {
+  it('2 overlapping both midterm and final exams should return both exam and class overlaps only once', () => {
     const result = getOverlappingCourses(
       mockTwoOverlappingCourses_1,
       mockTwoOverlappingExams_1,
@@ -70,7 +70,7 @@ describe('getOverlappingCourses', () => {
     )
     expect(result).toEqual(expectedTwoOverlappingClassesAndExams_1)
   })
-  test('2 classes and exams are overlapping but 1 is not should return overlap and no overlap', () => {
+  it('2 overlapping exams with 1 non-overlapping exam should return overlap and no overlap', () => {
     const result1 = getOverlappingCourses(
       [mockNonOverlappingCourses[0], ...mockTwoOverlappingCourses_1],
       [mockNonOverlappingExams[0], ...mockTwoOverlappingExams_1],
@@ -88,7 +88,7 @@ describe('getOverlappingCourses', () => {
     expect(result1).toEqual(expectedResult)
     expect(result2).toEqual(expectedResult)
   })
-  test('2 classes and exams are overlapping twice should return both exam and class overlaps only once', () => {
+  it('2 double overlapping exams should return exam class overlap only once', () => {
     const result = getOverlappingCourses(
       mockTwoOverlappingCourses_2,
       mockTwoOverlappingExams_2,
@@ -96,7 +96,7 @@ describe('getOverlappingCourses', () => {
     )
     expect(result).toEqual(expectedTwoOverlappingClassesAndExams_2)
   })
-  test('A class and exam are both overlapping with 2 other classes twice should return two unique both exams and classes', () => {
+  it('An exam, overlapping with 2 other exams twice, should return two unique overlaps', () => {
     const result = getOverlappingCourses(
       mockThreeOverlappingCourses,
       mockThreeOverlappingExams,

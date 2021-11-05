@@ -19,11 +19,15 @@ module.exports = withPlugins([[withBundleAnalyzer], [withOptimizedImages]], {
     return config
   },
   async rewrites() {
-    return [
-      {
-        source: '/apiProxy/:path*',
-        destination: `${process.env.NEXT_PUBLIC_BACKEND_URL}/:path*`,
-      },
-    ]
+    if (process.env.NODE_ENV === 'development') {
+      return [
+        {
+          source: '/apiProxy/:path*',
+          destination: `${process.env.NEXT_PUBLIC_BACKEND_URL}/:path*`,
+        },
+      ]
+    } else {
+      return []
+    }
   },
 })

@@ -1,23 +1,39 @@
-import { styled } from '@mui/material'
+import { styled, Box, BoxProps } from '@mui/material'
 import { DayOfWeek } from '@thinc-org/chula-courses'
 
+import { deepAssign } from '@/common/utils/deepAssign'
+import { ColorPicker } from '@/modules/Schedule/components/ColorPicker'
+import { useColor } from '@/modules/Schedule/components/ColorPicker/hooks/useColor'
+import { useColorPicker } from '@/modules/Schedule/components/ColorPicker/hooks/useColorPicker'
+
 import { useDimensions } from '../dimensions'
-import { ScheduleClass, useColorScheme } from '../utils'
+import { ScheduleClass } from '../utils'
 import { ScheduleTypography } from './ScheduleTypography'
 
 interface ClassCardProps {
   scheduleClass: ScheduleClass
 }
 
-const ClassCardLayout = styled('div')({
-  position: 'absolute',
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'center',
-  borderRadius: '0.25em',
-  padding: '0.5em',
-  textAlign: 'center',
-})
+export const ClassCardLayout = ({ sx, ...props }: BoxProps) => {
+  return (
+    <Box
+      sx={deepAssign(
+        {
+          position: 'absolute',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          borderRadius: '0.25em',
+          padding: '0.5em',
+          textAlign: 'center',
+          cursor: 'pointer',
+        },
+        sx
+      )}
+      {...props}
+    />
+  )
+}
 
 const ClassCardTypography = styled(ScheduleTypography)({
   overflow: 'hidden',
@@ -27,10 +43,11 @@ const ClassCardTypography = styled(ScheduleTypography)({
 
 export function ClassCard({ scheduleClass }: ClassCardProps) {
   const { cellHeight, getPosition } = useDimensions()
-  const { courseNo, abbrName, genEdType, position, dayOfWeek, teachers, sectionNo, hasOverlap } = scheduleClass
+  const { courseNo, abbrName, position, dayOfWeek, teachers, sectionNo, hasOverlap, color } = scheduleClass
 
+  const { handleClick, ...colorPickerProps } = useColorPicker(scheduleClass)
   // color
-  const colorScheme = useColorScheme(genEdType, hasOverlap ?? false)
+  const colorScheme = useColor(color, hasOverlap ?? false)
 
   // position
   const startPosition = position.start
@@ -40,25 +57,30 @@ export function ClassCard({ scheduleClass }: ClassCardProps) {
   const right = getPosition(y, endPosition).left
   const width = right - left
   const isWide = endPosition - startPosition >= 2
+
   return (
-    <ClassCardLayout
-      style={{
-        top,
-        left,
-        width,
-        height: cellHeight,
-        backgroundColor: colorScheme.background,
-        border: `1px solid ${colorScheme.border}`,
-        color: colorScheme.text,
-      }}
-    >
-      <ClassCardTypography variant="subtitle2">
-        {isWide && courseNo} {abbrName}
-      </ClassCardTypography>
-      <ClassCardTypography variant="caption">
-        Sec {sectionNo} - {teachers.join(', ')}
-      </ClassCardTypography>
-    </ClassCardLayout>
+    <>
+      <ColorPicker scheduleClass={scheduleClass} {...colorPickerProps} />
+      <ClassCardLayout
+        onClick={handleClick}
+        sx={{
+          top,
+          left,
+          width,
+          height: cellHeight,
+          backgroundColor: colorScheme.background,
+          border: `1px solid ${colorScheme.border}`,
+          color: colorScheme.text,
+        }}
+      >
+        <ClassCardTypography variant="subtitle2">
+          {isWide && courseNo} {abbrName}
+        </ClassCardTypography>
+        <ClassCardTypography variant="caption">
+          Sec {sectionNo} - {teachers.join(', ')}
+        </ClassCardTypography>
+      </ClassCardLayout>
+    </>
   )
 }
 

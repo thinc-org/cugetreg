@@ -183,3 +183,8 @@ export const filterBar = {
 export const tagList = {
   inRange: 'ในช่วง',
 }
+
+export const colorPicker = {
+  selectColorFor: 'เลือกสีในตาราง วิชา {{abbrName}}',
+  select: 'เลือกสี',
+}

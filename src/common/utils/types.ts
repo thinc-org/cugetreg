@@ -1,6 +1,8 @@
-import { Course, Class } from '@thinc-org/chula-courses'
+import { Class } from '@thinc-org/chula-courses'
 
-export type ExamClass = Pick<Course, 'courseNo' | 'abbrName' | 'genEdType' | 'midterm' | 'final'> &
+import { CourseCartItem } from '@/store'
+
+export type ExamClass = Pick<CourseCartItem, 'courseNo' | 'abbrName' | 'genEdType' | 'midterm' | 'final' | 'color'> &
   Omit<Class, 'type'> & {
     overlaps: string[]
     hasOverlap?: boolean

@@ -77,10 +77,10 @@ export function findOverlap(sortedClasses: CourseCartItem[], isMidterm: boolean)
   }
 
   return sortedClasses.map((class_, index) => {
-    const { courseNo, abbrName, genEdType, midterm, final, isHidden } = class_
+    const { courseNo, abbrName, genEdType, midterm, final, isHidden, color } = class_
     const hasOverlap = !!mapOverlap[index]
     const overlaps = mapOverlap[index]?.map((i) => sortedClasses[i].abbrName) || []
-    return { courseNo, abbrName, genEdType, midterm, final, hasOverlap, isHidden, overlaps } as ExamClass
+    return { courseNo, abbrName, genEdType, midterm, final, hasOverlap, isHidden, overlaps, color } as ExamClass
   })
 }
 

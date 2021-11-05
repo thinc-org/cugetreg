@@ -10,7 +10,17 @@ import {
 
 export type PaletteRange = 10 | 30 | 50 | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900
 
-export type HighlightColor = 'pink' | 'red' | 'orange' | 'green' | 'blue' | 'purple' | 'yellow' | 'deepGray'
+export type HighlightColor =
+  | 'pink'
+  | 'red'
+  | 'orange'
+  | 'green'
+  | 'teal'
+  | 'blue'
+  | 'purple'
+  | 'yellow'
+  | 'indigo'
+  | 'deepGray'
 
 export type PaletteRangeOptions = Record<PaletteRange, string>
 
@@ -58,10 +68,20 @@ export const highlight: Highlight = {
     500: '#85E14D',
     700: '#4B991C',
   },
+  teal: {
+    300: '#D9FFF6',
+    500: '#2BD6AD',
+    700: '#349A82',
+  },
   blue: {
     300: '#DAEFFE',
     500: '#35A1EF',
     700: '#0C5A93',
+  },
+  indigo: {
+    300: '#DCD7FF',
+    500: '#8170F1',
+    700: '#211090',
   },
   purple: {
     300: '#F3D6FD',

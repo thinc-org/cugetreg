@@ -9,7 +9,10 @@ import { CourseCartItem } from '@/store'
 import { hourStart } from '../constants'
 import { getOverlappingCourses } from './getOverlappingCourses'
 
-export type TimetableClass = Pick<Course, 'courseNo' | 'abbrName' | 'genEdType'> &
+export type TimetableClass = Pick<
+  CourseCartItem,
+  'courseNo' | 'studyProgram' | 'academicYear' | 'semester' | 'abbrName' | 'genEdType' | 'color'
+> &
   Omit<Class, 'type'> &
   Pick<Section, 'sectionNo'> & {
     classIndex: number
@@ -191,7 +194,7 @@ export function useTimetableClasses(shopItems: CourseCartItem[]) {
   return shopItems
     .filter((item) => !item.isHidden)
     .flatMap((item) => {
-      const { courseNo, abbrName, genEdType, selectedSectionNo } = item
+      const { courseNo, abbrName, genEdType, selectedSectionNo, studyProgram, academicYear, semester } = item
       const section = item.sections.find((section) => section.sectionNo === selectedSectionNo)
       if (!section) {
         return []
@@ -208,6 +211,10 @@ export function useTimetableClasses(shopItems: CourseCartItem[]) {
           building,
           room,
           teachers,
+          studyProgram,
+          academicYear,
+          semester,
+          color: item.color,
           sectionNo: section.sectionNo,
         }
       })

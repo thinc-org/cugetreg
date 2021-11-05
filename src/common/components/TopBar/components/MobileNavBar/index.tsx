@@ -9,7 +9,12 @@ import { MdMenu } from 'react-icons/md'
 import logo from '@/assets/images/cgrLogoDark.svg'
 import { Analytics } from '@/common/context/Analytics/components/Analytics'
 import { LinkWithAnalytics } from '@/common/context/Analytics/components/LinkWithAnalytics'
-import { REPORT_PROBLEM, NAVBAR_SEARCH_COURSE, NAVBAR_TIMETABLE } from '@/common/context/Analytics/constants'
+import {
+  REPORT_PROBLEM,
+  NAVBAR_SEARCH_COURSE,
+  NAVBAR_TIMETABLE,
+  NAVBAR_ABOUT,
+} from '@/common/context/Analytics/constants'
 import { useDisclosure } from '@/common/hooks/useDisclosure'
 import { useLinkBuilder } from '@/common/hooks/useLinkBuilder'
 import { sessionIdStore } from '@/store/sessionIdStore'
@@ -47,6 +52,11 @@ export const MobileNavBar = observer(() => {
           <div>
             <LinkWithAnalytics href={buildLink(`/schedule`)} passHref elementName={NAVBAR_TIMETABLE}>
               <NavBarItem onClick={onClose}>{t('navBar:timetable')}</NavBarItem>
+            </LinkWithAnalytics>
+          </div>
+          <div>
+            <LinkWithAnalytics href={buildLink(`/about`, {}, false)} passHref elementName={NAVBAR_ABOUT}>
+              <NavBarItem onClick={onClose}>{t('navBar:about')}</NavBarItem>
             </LinkWithAnalytics>
           </div>
           <SectionSpacer />

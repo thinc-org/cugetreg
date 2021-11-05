@@ -14,7 +14,6 @@ import { userStore } from '@/store/userStore'
 
 export interface CourseCartItem extends Course {
   selectedSectionNo: string
-  isSelected: boolean
   isHidden: boolean
 }
 
@@ -39,6 +38,7 @@ interface CourseCartStoreItem {
   courseNo: string
   semester: string
   selectedSectionNo: string
+  isHidden: boolean
 }
 
 export interface CourseCartStore {
@@ -145,9 +145,9 @@ export class CourseCart implements CourseCartProps {
     })
     try {
       const courses = await this.source.syncFromStore()
-      const fullCourses: (Course & { selectedSectionNo: string })[] = []
+      const fullCourses: CourseCartItem[] = []
       for (const course of courses) {
-        let detail
+        let detail: CourseCartItem
         try {
           const { data } = await client.query<GetCourseResponse, GetCourseVars>({
             query: GET_COURSE,
@@ -160,11 +160,12 @@ export class CourseCart implements CourseCartProps {
               },
             },
           })
-          detail = { ...data.course, selectedSectionNo: course.selectedSectionNo }
+          detail = { ...data.course, selectedSectionNo: course.selectedSectionNo, isHidden: course.isHidden }
         } catch (e) {
           detail = {
             ...unknownCourse,
             selectedSectionNo: course.selectedSectionNo,
+            isHidden: course.isHidden,
             studyProgram: course.studyProgram as StudyProgram,
             semester: course.semester as Semester,
             academicYear: course.academicYear,
@@ -174,7 +175,7 @@ export class CourseCart implements CourseCartProps {
         fullCourses.push(detail)
       }
       runInAction(() => {
-        this.shopItems = fullCourses.map((course) => ({ ...course, isSelected: false, isHidden: false }))
+        this.shopItems = fullCourses.map((course) => ({ ...course }))
       })
       setTimeout(
         action('Delayed sync icon', () => {
@@ -203,6 +204,7 @@ export class CourseCart implements CourseCartProps {
           semester: item.semester,
           courseNo: item.courseNo,
           selectedSectionNo: item.selectedSectionNo,
+          isHidden: item.isHidden,
         }))
       )
       setTimeout(
@@ -261,7 +263,7 @@ export class CourseCart implements CourseCartProps {
     })
 
     if (!selectedSectionNo) selectedSectionNo = this.findFirstSectionNo(course)
-    const newItem: CourseCartItem = { ...course, selectedSectionNo, isSelected: false, isHidden: false }
+    const newItem: CourseCartItem = { ...course, selectedSectionNo, isHidden: false }
     const foundIndex = this.shopItems.findIndex((item) => isSameKey(item, newItem))
     if (foundIndex != -1) this.shopItems[foundIndex] = newItem
     else this.shopItems.push(newItem)
@@ -286,17 +288,6 @@ export class CourseCart implements CourseCartProps {
     const foundIndex = this.shopItems.findIndex((item) => isSameKey(item, course))
     if (foundIndex == -1) return
     this.shopItems[foundIndex].isHidden = !this.shopItems[foundIndex].isHidden
-  }
-
-  /**
-   * Use to remove all selected items
-   */
-  @action
-  removeItems(): void {
-    if (this.state === 'default') return
-    this.shopItems = this.shopItems.filter((item) => item.isSelected === false)
-    this.state = 'default'
-
     this.onChange()
   }
 

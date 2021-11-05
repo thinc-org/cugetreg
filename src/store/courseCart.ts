@@ -298,6 +298,7 @@ export class CourseCart implements CourseCartProps {
     const [removed] = result.splice(from, 1)
     result.splice(to, 0, removed)
     this.shopItems = result
+    this.onChange()
   }
 
   /**

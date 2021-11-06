@@ -206,8 +206,7 @@ export async function getServerSideProps(
       id: generateThumbnailId(course),
       courseNo: course.courseNo,
       studyProgram: course.studyProgram,
-      academicYear: course.academicYear,
-      semester: course.semester,
+      term: `${course.academicYear}/${course.semester}`,
     })
     return {
       props: {

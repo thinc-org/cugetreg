@@ -1,6 +1,6 @@
 import { css, Theme } from '@emotion/react'
 import styled from '@emotion/styled'
-import { Button, NativeSelect } from '@mui/material'
+import { Button, ButtonProps, NativeSelect } from '@mui/material'
 import { motion } from 'framer-motion'
 
 import { PaletteRange } from '@/configs/theme/palette'
@@ -200,3 +200,18 @@ export const StyledNativeSelect = styled(NativeSelect)`
     display: none;
   }
 `
+
+export const ColorPickerButton = (props: ButtonProps) => {
+  return (
+    <Button
+      sx={{
+        whiteSpace: 'nowrap',
+        marginLeft: 1,
+        height: { xs: 48, md: 'fit-content' },
+        minWidth: { xs: 48, md: 'fit-content' },
+        backgroundColor: { md: 'primaryRange.10' },
+      }}
+      {...props}
+    />
+  )
+}

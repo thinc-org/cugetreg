@@ -1,7 +1,7 @@
 import { Box, Button, ButtonProps, Popover, Stack, Typography, useTheme } from '@material-ui/core'
 import { useTranslation } from 'react-i18next'
 
-import { ScheduleClass } from '@/modules/Schedule/components/Schedule/utils'
+import { ColorClassKey } from '@/modules/Schedule/components/ColorPicker/hooks/useColorPicker'
 
 import { ScheduleColor, SCHEDULE_COLORS } from './constants'
 import { useColor } from './hooks/useColor'
@@ -9,7 +9,7 @@ import { useColor } from './hooks/useColor'
 interface ColorPickerProps {
   open: boolean
   handleClose: () => void
-  scheduleClass: ScheduleClass
+  scheduleClass: ColorClassKey
   anchorEl: HTMLElement | null
   setColor: (color: ScheduleColor) => void
   selectedColor: ScheduleColor | undefined
@@ -25,7 +25,11 @@ export const ColorPicker = (props: ColorPickerProps) => {
       onClose={handleClose}
       anchorOrigin={{
         vertical: 'bottom',
-        horizontal: 'left',
+        horizontal: 'right',
+      }}
+      transformOrigin={{
+        vertical: 'top',
+        horizontal: 'right',
       }}
     >
       <Stack p={2} spacing={3} maxWidth={340}>
@@ -77,6 +81,8 @@ export const Circle = ({ color, size = 40 }: CircleProps) => {
       sx={{
         width: size,
         height: size,
+        minWidth: size,
+        minHeight: size,
         background: scheme.background,
         border: `1px solid ${scheme.border}`,
         borderRadius: 100,

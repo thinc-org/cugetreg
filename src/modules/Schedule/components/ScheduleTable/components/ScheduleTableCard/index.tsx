@@ -1,4 +1,4 @@
-import { Grid, Hidden, IconButton, Stack, Typography, useTheme } from '@mui/material'
+import { Box, Grid, Hidden, IconButton, Stack, Typography, useTheme } from '@mui/material'
 import { useMediaQuery } from '@mui/material'
 import { PanInfo } from 'framer-motion'
 import { uniq } from 'lodash'
@@ -16,6 +16,8 @@ import { dayOfWeekMapper } from '@/common/constants/dayOfWeek'
 import { Analytics } from '@/common/context/Analytics/components/Analytics'
 import { HIDE_COURSE, DELETE_COURSE, SECTION_CHANGE } from '@/common/context/Analytics/constants'
 import { useLinkBuilderWithCourseGroup } from '@/common/hooks/useLinkBuilder'
+import { Circle, ColorPicker } from '@/modules/Schedule/components/ColorPicker'
+import { useColorPicker } from '@/modules/Schedule/components/ColorPicker/hooks/useColorPicker'
 import { CourseOverlap } from '@/modules/Schedule/components/Schedule/utils'
 import { CourseCartItem, courseCartStore } from '@/store'
 
@@ -25,7 +27,6 @@ import {
   CardLayout,
   DeleteButton,
   GridSpacer,
-  HeaderLayout,
   LeftPane,
   OverlappingCardBorder,
   MiddlePane,
@@ -34,6 +35,7 @@ import {
   StyledLink,
   RightPane,
   StyledNativeSelect,
+  ColorPickerButton,
 } from './styled'
 import { useOverlapWarning } from './utils'
 
@@ -140,27 +142,42 @@ function CardHeader({ item }: CardComponentProps) {
   const { t } = useTranslation('scheduleTableCard')
   const theme = useTheme()
   const { buildLink } = useLinkBuilderWithCourseGroup(item)
+  const { handleClick, ...colorPickerProps } = useColorPicker(item)
   return (
-    <HeaderLayout>
-      <StyledLink href={buildLink(`/courses/${item.courseNo}`)}>
-        <Typography variant="h5" style={{ marginRight: 16 }}>
-          {item.courseNo} {item.abbrName}
-        </Typography>
-      </StyledLink>
-
-      <Typography variant="h6" color={theme.palette.primaryRange[100]} style={{ marginRight: 32 }}>
-        {t('credits', { credits: item.credit })}
-      </Typography>
-      <Hidden smDown>
-        <SectionSelect item={item} />
-        <Spacer />
-      </Hidden>
+    <Stack direction="row" sx={{ paddingTop: { xs: 2, sm: 1 }, marginY: { xs: 0.5, sm: 0 }, paddingRight: 2 }}>
+      <Stack direction="row" flex={1} justifyContent="space-between" alignItems="center">
+        <Grid container columnGap={2} alignItems="center">
+          <Grid item>
+            <StyledLink href={buildLink(`/courses/${item.courseNo}`)}>
+              <Typography variant="h5">
+                {item.courseNo} {item.abbrName}
+              </Typography>
+            </StyledLink>
+          </Grid>
+          <Grid item>
+            <Typography variant="h6" color={theme.palette.primaryRange[100]}>
+              {t('credits', { credits: item.credit })}
+            </Typography>
+          </Grid>
+          <Grid item>
+            <Hidden smDown>
+              <SectionSelect item={item} />
+              <Spacer />
+            </Hidden>
+          </Grid>
+        </Grid>
+        <ColorPicker scheduleClass={item} {...colorPickerProps} />
+        <ColorPickerButton onClick={handleClick}>
+          <Box sx={{ display: { xs: 'none', md: 'inline' }, mr: 1 }}>สีในตาราง</Box>
+          <Circle color={item.color} size={24} />
+        </ColorPickerButton>
+      </Stack>
       <Hidden mdDown>
         <IconButton aria-label={t('delete')} onClick={() => courseCartStore.removeCourse(item)}>
           <MdDelete />
         </IconButton>
       </Hidden>
-    </HeaderLayout>
+    </Stack>
   )
 }
 

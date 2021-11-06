@@ -2,9 +2,7 @@ import { styled, Box, BoxProps } from '@mui/material'
 import { DayOfWeek } from '@thinc-org/chula-courses'
 
 import { deepAssign } from '@/common/utils/deepAssign'
-import { ColorPicker } from '@/modules/Schedule/components/ColorPicker'
 import { useColor } from '@/modules/Schedule/components/ColorPicker/hooks/useColor'
-import { useColorPicker } from '@/modules/Schedule/components/ColorPicker/hooks/useColorPicker'
 
 import { useDimensions } from '../dimensions'
 import { ScheduleClass } from '../utils'
@@ -45,7 +43,6 @@ export function ClassCard({ scheduleClass }: ClassCardProps) {
   const { cellHeight, getPosition } = useDimensions()
   const { courseNo, abbrName, position, dayOfWeek, teachers, sectionNo, hasOverlap, color } = scheduleClass
 
-  const { handleClick, ...colorPickerProps } = useColorPicker(scheduleClass)
   // color
   const colorScheme = useColor(color, hasOverlap ?? false)
 
@@ -59,28 +56,24 @@ export function ClassCard({ scheduleClass }: ClassCardProps) {
   const isWide = endPosition - startPosition >= 2
 
   return (
-    <>
-      <ColorPicker scheduleClass={scheduleClass} {...colorPickerProps} />
-      <ClassCardLayout
-        onClick={handleClick}
-        sx={{
-          top,
-          left,
-          width,
-          height: cellHeight,
-          backgroundColor: colorScheme.background,
-          border: `1px solid ${colorScheme.border}`,
-          color: colorScheme.text,
-        }}
-      >
-        <ClassCardTypography variant="subtitle2">
-          {isWide && courseNo} {abbrName}
-        </ClassCardTypography>
-        <ClassCardTypography variant="caption">
-          Sec {sectionNo} - {teachers.join(', ')}
-        </ClassCardTypography>
-      </ClassCardLayout>
-    </>
+    <ClassCardLayout
+      sx={{
+        top,
+        left,
+        width,
+        height: cellHeight,
+        backgroundColor: colorScheme.background,
+        border: `1px solid ${colorScheme.border}`,
+        color: colorScheme.text,
+      }}
+    >
+      <ClassCardTypography variant="subtitle2">
+        {isWide && courseNo} {abbrName}
+      </ClassCardTypography>
+      <ClassCardTypography variant="caption">
+        Sec {sectionNo} - {teachers.join(', ')}
+      </ClassCardTypography>
+    </ClassCardLayout>
   )
 }
 

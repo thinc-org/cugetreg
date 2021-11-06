@@ -1,8 +1,12 @@
+import { ThemeProvider } from '@material-ui/core'
 import { NextApiRequest, NextApiResponse } from 'next'
 import ReactDOMServer from 'react-dom/server'
+import { I18nextProvider } from 'react-i18next'
 
 import { CourseGroup } from '@/common/hooks/useCourseGroup/types'
+import { i18n } from '@/common/i18n'
 import { parseCourseNoFromQuery } from '@/common/utils/parseCourseNoFromQuery'
+import { lightTheme } from '@/configs/theme'
 import { CourseThumbnail } from '@/modules/CourseThumbnailAPI/components/CourseThumbnail'
 import { createApolloServerClient } from '@/services/apollo'
 import { GetCourseForThumbnailResponse, GET_COURSE_FOR_THUMBNAIL } from '@/services/apollo/query/getCourse'
@@ -40,10 +44,12 @@ async function getHtml(courseNo: string, courseGroup: CourseGroup): Promise<stri
     variables: { courseNo, courseGroup },
   })
   return ReactDOMServer.renderToString(
-    <>
-      <ThumbnailHeader />
-      <CourseThumbnail course={data.course} />
-    </>
+    <I18nextProvider i18n={i18n}>
+      <ThemeProvider theme={lightTheme}>
+        <ThumbnailHeader />
+        <CourseThumbnail course={data.course} />
+      </ThemeProvider>
+    </I18nextProvider>
   )
 }
 

@@ -18,6 +18,7 @@ async function getPage(isDev: boolean) {
     const options = await getOptions(isDev)
     browser = await core.launch(options)
   }
+  browser.on('disconnected', () => (_page = null))
   _page = await browser.newPage()
   return _page
 }

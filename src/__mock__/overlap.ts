@@ -7,6 +7,11 @@ export const courseTemplate: Omit<ScheduleClass, 'classIndex'> = {
   genEdType: 'NO',
   building: 'ENG3',
   room: '318',
+  academicYear: '2564',
+  color: 'pink',
+  sectionNo: '1',
+  semester: '1',
+  studyProgram: 'S',
   teachers: ['NNN'],
   position: {
     start: 0,
@@ -30,7 +35,7 @@ export const examTemplate: ExamClass = {
     period: { start: '', end: '' },
   },
   isHidden: false,
-
+  color: 'pink',
   hasOverlap: false,
   overlaps: [],
 }

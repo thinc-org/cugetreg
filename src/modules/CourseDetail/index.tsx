@@ -64,6 +64,7 @@ export function CourseDetailPage({ course, reviews, ogImageUrl }: CourseDetailPa
     title: course.abbrName,
     description: courseDesc || defaultSEO.description,
     openGraph: {
+      url: `${site_url}${buildLink(`/courses/${course.courseNo}`)}`,
       title: `${course.abbrName} | CU Get Reg`,
       description: courseDesc || defaultSEO.openGraph.description,
       images: [

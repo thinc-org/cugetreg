@@ -8,6 +8,7 @@ import { Storage } from '@/common/storage'
 import { StorageKey } from '@/common/storage/constants'
 import { CourseKey } from '@/common/utils/types'
 import { ScheduleColor } from '@/modules/Schedule/components/ColorPicker/constants'
+import { getNewColor } from '@/modules/Schedule/components/ColorPicker/utils/getNewColor'
 import { client } from '@/services/apollo'
 import { GetCourseResponse, GetCourseVars, GET_COURSE } from '@/services/apollo/query/getCourse'
 import { GET_COURSE_CART, MODIFY_COURSE_CART } from '@/services/apollo/query/user'
@@ -271,8 +272,7 @@ export class CourseCart implements CourseCartProps {
       ...course,
       selectedSectionNo,
       isHidden: false,
-      // TODO: get random color
-      color: 'primary',
+      color: getNewColor(this.shopItems, course),
     }
     const foundIndex = this.shopItems.findIndex((item) => isSameKey(item, newItem))
     if (foundIndex != -1) this.shopItems[foundIndex] = { ...this.shopItems[foundIndex], selectedSectionNo }

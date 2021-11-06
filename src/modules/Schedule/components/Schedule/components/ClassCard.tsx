@@ -24,7 +24,6 @@ export const ClassCardLayout = ({ sx, ...props }: BoxProps) => {
           borderRadius: '0.25em',
           padding: '0.5em',
           textAlign: 'center',
-          cursor: 'pointer',
         },
         sx
       )}

@@ -68,20 +68,31 @@ export const ScheduleTableCard = observer(({ item, index, overlaps }: ScheduleTa
       setSwipped(false)
     }
   }, [match])
-  const onDragEnd = (e: MouseEvent, { offset, point }: PanInfo) => {
+
+  function onDragEnd(e: MouseEvent, { offset, point }: PanInfo) {
     // cancelling drag event due to scrolling
     if (point.x == 0 && point.y == 0) {
       return
     }
+    const DRAG_THRESHHOLD = 25
     if (swipped) {
-      if (offset.x > 100) {
+      if (offset.x > DRAG_THRESHHOLD) {
         setSwipped(false)
       }
     } else {
-      if (offset.x < -100) {
+      if (offset.x < -DRAG_THRESHHOLD) {
         setSwipped(true)
       }
     }
+  }
+
+  /* fixed axis drag hack */
+  function getStyle(style: React.CSSProperties | undefined) {
+    if (style?.transform) {
+      const axisLockY = `translate(0px, ${style.transform.split(',').pop()}`
+      return { ...style, transform: axisLockY }
+    }
+    return style
   }
 
   return (
@@ -91,16 +102,7 @@ export const ScheduleTableCard = observer(({ item, index, overlaps }: ScheduleTa
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          style={((style) => {
-            if (style?.transform) {
-              const axisLockY = `translate(0px, ${style.transform.split(',').pop()}`
-              return {
-                ...style,
-                transform: axisLockY,
-              }
-            }
-            return style
-          })(provided.draggableProps.style)}
+          style={getStyle(provided.draggableProps.style)}
         >
           <CardContent
             drag={match ? false : 'x'}
@@ -253,7 +255,7 @@ function CardDetail({ item, overlaps }: CardDetailProps) {
         </Stack>
       </Grid>
       <GridSpacer />
-      <Grid item xs alignSelf="flex-end" sx={{ pr: { sm: 3 } }}>
+      <Grid item xs alignSelf="flex-end" sx={{ pr: { xs: 2, sm: 3 } }}>
         <Typography variant="subtitle1" color="highlight.red.500" textAlign={{ xs: 'left', sm: 'right' }}>
           {warning}
         </Typography>

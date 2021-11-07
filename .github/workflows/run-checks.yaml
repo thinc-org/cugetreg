@@ -116,38 +116,38 @@ jobs:
           coverage-file: ./report.json
           base-coverage-file: ./base/report.json
 
-  lighthouse:
-    needs: [install-depedencies]
-    strategy:
-      matrix:
-        node-version: [14.x]
-        platform: [ubuntu-latest]
-    runs-on: ${{ matrix.platform }}
-    env:
-      LHCI_SERVER_TOKEN: ${{ secrets.LHCI_SERVER_TOKEN }}
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
+#   lighthouse:
+#     needs: [install-depedencies]
+#     strategy:
+#       matrix:
+#         node-version: [14.x]
+#         platform: [ubuntu-latest]
+#     runs-on: ${{ matrix.platform }}
+#     env:
+#       LHCI_SERVER_TOKEN: ${{ secrets.LHCI_SERVER_TOKEN }}
+#     steps:
+#       - uses: actions/checkout@v2
+#         with:
+#           fetch-depth: 0
 
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node-version }}
+#       - name: Use Node.js ${{ matrix.node-version }}
+#         uses: actions/setup-node@v1
+#         with:
+#           node-version: ${{ matrix.node-version }}
 
-      - uses: actions/cache@v2
-        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
-        with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+#       - uses: actions/cache@v2
+#         id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+#         with:
+#           path: '**/node_modules'
+#           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
 
-      - name: Install dependencies
-        if: steps.yarn-cache.outputs.cache-hit != 'true'
-        run: yarn --fronzen-lockfile
+#       - name: Install dependencies
+#         if: steps.yarn-cache.outputs.cache-hit != 'true'
+#         run: yarn --fronzen-lockfile
 
-      - name: Build project
-        run: yarn build
+#       - name: Build project
+#         run: yarn build
 
-      - run: yarn lhci autorun
-        env:
-          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+#       - run: yarn lhci autorun
+#         env:
+#           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}

@@ -6,6 +6,7 @@ import { computedFn } from 'mobx-utils'
 import { CourseGroup } from '@/common/hooks/useCourseGroup/types'
 import { Storage } from '@/common/storage'
 import { StorageKey } from '@/common/storage/constants'
+import { CourseKey } from '@/common/utils/types'
 import { client } from '@/services/apollo'
 import { GetCourseResponse, GetCourseVars, GET_COURSE } from '@/services/apollo/query/getCourse'
 import { GET_COURSE_CART, MODIFY_COURSE_CART } from '@/services/apollo/query/user'
@@ -23,13 +24,6 @@ export interface CourseCartProps {
   shopItems: CourseCartItem[]
   shopItemsByCourseGroup(courseGroup: CourseGroup): CourseCartItem[]
   state: CourseCartState
-}
-
-export interface CourseKey {
-  courseNo: string
-  studyProgram: StudyProgram
-  academicYear: string
-  semester: string
 }
 
 interface CourseCartStoreItem {

@@ -1,6 +1,5 @@
 import { styledWithTheme } from '@/common/utils/styledWithTheme'
 
-import { colsCount } from '../constants'
 import { useDimensions } from '../dimensions'
 
 interface GutterProps {
@@ -22,7 +21,7 @@ function Gutter({ x, y }: GutterProps) {
 }
 
 export function Gutters() {
-  const { daysCount } = useDimensions()
+  const { daysCount, colsCount } = useDimensions()
   const gutters = []
   for (let x = 0; x <= colsCount; x++) {
     gutters.push(<Gutter key={`x${x}`} x={x} />)

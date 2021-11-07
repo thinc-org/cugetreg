@@ -1,6 +1,6 @@
 import { createContext, PropsWithChildren, useContext, useMemo } from 'react'
 
-import { colsCount } from './constants'
+import { hourStart } from './constants'
 
 interface CellPosition {
   top: number
@@ -16,6 +16,9 @@ interface Dimensions {
   width: number
   height: number
   daysCount: number
+  colsCount: number
+  hourStart: number
+  hourEnd: number
   cellWidth: number
   cellHeight: number
   stubCellWidth: number
@@ -24,18 +27,24 @@ interface Dimensions {
   getCell: (y: number, x: number) => CellStyles
 }
 
-export function getHeightRatio(daysCount: number) {
-  return (6 / 7 / colsCount) * (daysCount + 0.7)
+export function getColsCount(hourEnd: number) {
+  return hourEnd - hourStart + 2
 }
 
-function getDimensions(width: number, daysCount: number): Dimensions {
+export function getHeightRatio(daysCount: number, hourEnd: number) {
+  return (6 / 7 / getColsCount(hourEnd)) * (daysCount + 0.7)
+}
+
+function getDimensions(width: number, daysCount: number, hourEnd: number): Dimensions {
+  const colsCount = getColsCount(hourEnd)
+
   const availableWidth = width
   const cellWidth = Math.ceil(availableWidth / colsCount)
   const stubCellWidth = availableWidth - cellWidth * (colsCount - 1)
 
   const cellHeight = Math.ceil((cellWidth * 6) / 7)
 
-  const height = availableWidth * getHeightRatio(daysCount)
+  const height = availableWidth * getHeightRatio(daysCount, hourEnd)
   const headerCellHeight = height - daysCount * cellHeight
 
   function getPosition(y: number, x: number): CellPosition {
@@ -60,7 +69,20 @@ function getDimensions(width: number, daysCount: number): Dimensions {
     }
   }
 
-  return { width, height, daysCount, cellWidth, cellHeight, stubCellWidth, headerCellHeight, getPosition, getCell }
+  return {
+    width,
+    height,
+    daysCount,
+    colsCount,
+    hourStart,
+    hourEnd,
+    cellWidth,
+    cellHeight,
+    stubCellWidth,
+    headerCellHeight,
+    getPosition,
+    getCell,
+  }
 }
 
 const DimensionsContext = createContext({} as Dimensions)
@@ -72,9 +94,10 @@ export function useDimensions() {
 type DimensionsProviderProps = PropsWithChildren<{
   width: number
   daysCount: number
+  hourEnd: number
 }>
 
-export function DimensionsProvider({ width, daysCount, children }: DimensionsProviderProps) {
-  const dimensions = useMemo(() => getDimensions(width, daysCount), [width, daysCount])
+export function DimensionsProvider({ width, daysCount, hourEnd, children }: DimensionsProviderProps) {
+  const dimensions = useMemo(() => getDimensions(width, daysCount, hourEnd), [width, daysCount, hourEnd])
   return <DimensionsContext.Provider value={dimensions}>{children}</DimensionsContext.Provider>
 }

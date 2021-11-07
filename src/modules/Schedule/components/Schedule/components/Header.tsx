@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 
 import { dayOfWeekArray } from '@/common/constants/dayOfWeek'
 
-import { hourEnd, hourStart } from '../constants'
+import { hourStart } from '../constants'
 import { useDimensions } from '../dimensions'
 import { Cell } from './Cell'
 import { ScheduleTypography } from './ScheduleTypography'
@@ -23,7 +23,7 @@ function HourCell({ hour }: { hour: number }) {
 
 export function Header() {
   const { t } = useTranslation('schedule')
-  const { stubCellWidth, daysCount } = useDimensions()
+  const { stubCellWidth, daysCount, hourStart, hourEnd } = useDimensions()
   const fontSize = (16 * stubCellWidth) / 77
   const hourCells = []
   for (let hour = hourStart + 1; hour <= hourEnd; hour++) {

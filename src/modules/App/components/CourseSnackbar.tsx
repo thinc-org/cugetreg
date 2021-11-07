@@ -34,7 +34,7 @@ export const CourseSnackbar = () => {
                     onOpen()
                   }}
                 >
-                  {snackbar.message}
+                  {snackbar.action}
                 </Button>
               )}
             </Analytics>

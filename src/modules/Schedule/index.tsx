@@ -14,7 +14,13 @@ import { ExamSchedule } from './components/ExamSchedule'
 import { useExamClasses } from './components/ExamSchedule/utils'
 import { SaveImgButton } from './components/SaveImgButton'
 import { Schedule } from './components/Schedule'
-import { useDaysCount, useOverlappingCourses, useScheduleClass, useTimetableClasses } from './components/Schedule/utils'
+import {
+  useDaysCount,
+  useHourEnd,
+  useOverlappingCourses,
+  useScheduleClass,
+  useTimetableClasses,
+} from './components/Schedule/utils'
 import { ScheduleTable } from './components/ScheduleTable'
 import {
   InfoBar,
@@ -36,6 +42,7 @@ export const SchedulePage = observer(() => {
   const classes = useTimetableClasses(shopItems)
   const scheduleClasses = useScheduleClass(classes)
   const daysCount = useDaysCount(scheduleClasses)
+  const hourEnd = useHourEnd(scheduleClasses)
   const { midtermClasses, finalClasses } = useExamClasses(shopItems)
   const overlappingCourses = useOverlappingCourses(scheduleClasses, midtermClasses, finalClasses)
 
@@ -80,7 +87,7 @@ export const SchedulePage = observer(() => {
       </TitleContainer>
       <ScheduleContainer enabled={!isExamTable}>
         <div ref={ref}>
-          <Schedule classes={scheduleClasses} daysCount={daysCount} />
+          <Schedule classes={scheduleClasses} daysCount={daysCount} hourEnd={hourEnd} />
         </div>
       </ScheduleContainer>
       <ExamContainer enabled={isExamTable}>

@@ -2,8 +2,8 @@ name: Run all checks
 
 on:
   pull_request:
-  push:
-    branches: [beta, master]
+#   push:
+#     branches: [beta, master]
 
 permissions:
   contents: write

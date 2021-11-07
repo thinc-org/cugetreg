@@ -1,3 +1,12 @@
+## [1.3.1](https://github.com/thinc-org/cugetreg-frontend/compare/v1.3.0...v1.3.1) (2021-11-07)
+
+
+### Bug Fixes
+
+* about page ([#247](https://github.com/thinc-org/cugetreg-frontend/issues/247)) ([839fe8d](https://github.com/thinc-org/cugetreg-frontend/commit/839fe8d1aa3412faa1009ca0cbeb9e90f9981a49))
+* snackbar action text ([#248](https://github.com/thinc-org/cugetreg-frontend/issues/248)) ([6e6d45a](https://github.com/thinc-org/cugetreg-frontend/commit/6e6d45a4a1292d5fb90e0a21446ba12feec0d4ca))
+* some overlaps warning is missing ([#246](https://github.com/thinc-org/cugetreg-frontend/issues/246)) ([1d099d6](https://github.com/thinc-org/cugetreg-frontend/commit/1d099d6e62f81afb94c55f5e03170602be135c72))
+
 # [1.3.0](https://github.com/thinc-org/cugetreg-frontend/compare/v1.2.0...v1.3.0) (2021-11-04)
 
 

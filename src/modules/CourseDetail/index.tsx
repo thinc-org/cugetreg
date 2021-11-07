@@ -22,7 +22,6 @@ import { scrollToReviewForm } from '@/modules/CourseDetail/components/ReviewForm
 import { ReviewList } from '@/modules/CourseDetail/components/ReviewList'
 import { ReviewProvider } from '@/modules/CourseDetail/context/Review'
 import { thumbnailVersion } from '@/modules/CourseThumbnailAPI/constants'
-import { getCapacityInfo } from '@/modules/CourseThumbnailAPI/utils/getCapacityInfo'
 import { createApolloServerClient } from '@/services/apollo'
 import { GetCourseResponse, GET_COURSE } from '@/services/apollo/query/getCourse'
 import { GetReviewsResponse, GetReviewsVars, GET_REVIEWS } from '@/services/apollo/query/getReviews'
@@ -227,16 +226,11 @@ export async function getServerSideProps(
 }
 
 function generateThumbnailId(course: Course): string {
-  const { current, max, closed, status } = getCapacityInfo(course)
-
   let contents = ''
   contents += course.courseNo
   contents += course.abbrName
   contents += course.courseNameEn
   contents += course.courseNameTh
-  contents += `${current}/${max}`
-  contents += `${closed}`
-  contents += status
   contents += `v${thumbnailVersion}`
 
   return md5(contents)

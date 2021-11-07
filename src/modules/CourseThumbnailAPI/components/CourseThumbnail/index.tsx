@@ -1,13 +1,9 @@
 import { Global, css } from '@emotion/react'
-import { useTranslation } from 'react-i18next'
-import { MdPerson } from 'react-icons/md'
 
-import { getCapacityInfo } from '@/modules/CourseThumbnailAPI/utils/getCapacityInfo'
 import { CourseThumbnailData } from '@/services/apollo/query/getCourse'
 
 import {
   ThumbnailLayout,
-  Capacity,
   CourseInfo,
   CourseNo,
   CourseAbbr,
@@ -22,9 +18,6 @@ export interface CourseThumbnailProps {
 }
 
 export function CourseThumbnail({ course }: CourseThumbnailProps) {
-  const { t } = useTranslation('courseThumbnail')
-  const { current, max, status } = getCapacityInfo(course)
-
   return (
     <>
       <Global
@@ -36,10 +29,6 @@ export function CourseThumbnail({ course }: CourseThumbnailProps) {
         `}
       />
       <ThumbnailLayout>
-        <Capacity status={status}>
-          <MdPerson />
-          <span>{t(status, { current, max })}</span>
-        </Capacity>
         <CourseInfo>
           <CourseNo>{course.courseNo}</CourseNo>
           <CourseAbbr>

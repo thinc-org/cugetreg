@@ -1,7 +1,6 @@
 import { ApolloError } from '@apollo/client'
 import { Button, Grid, Stack, Typography } from '@mui/material'
 import { Course, getFaculty } from '@thinc-org/chula-courses'
-import md5 from 'md5'
 import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 import { NextSeoProps } from 'next-seo/lib/types'
 import dynamic from 'next/dynamic'
@@ -21,7 +20,7 @@ import { PageMeta } from '@/components/PageMeta'
 import { scrollToReviewForm } from '@/modules/CourseDetail/components/ReviewForm/functions'
 import { ReviewList } from '@/modules/CourseDetail/components/ReviewList'
 import { ReviewProvider } from '@/modules/CourseDetail/context/Review'
-import { thumbnailVersion } from '@/modules/CourseThumbnailAPI/constants'
+import { generateThumbnailId } from '@/modules/CourseThumbnailAPI/utils/generateThumbnailId'
 import { createApolloServerClient } from '@/services/apollo'
 import { GetCourseResponse, GET_COURSE } from '@/services/apollo/query/getCourse'
 import { GetReviewsResponse, GetReviewsVars, GET_REVIEWS } from '@/services/apollo/query/getReviews'
@@ -223,15 +222,4 @@ export async function getServerSideProps(
       throw e
     }
   }
-}
-
-function generateThumbnailId(course: Course): string {
-  let contents = ''
-  contents += course.courseNo
-  contents += course.abbrName
-  contents += course.courseNameEn
-  contents += course.courseNameTh
-  contents += `v${thumbnailVersion}`
-
-  return md5(contents)
 }

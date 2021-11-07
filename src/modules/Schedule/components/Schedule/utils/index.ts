@@ -43,7 +43,7 @@ function checkOverlap(classes: ScheduleClass[]) {
     for (let j = i + 1; j < classes.length; j++) {
       const a = classes[i]
       const b = classes[j]
-      if (a.position.start < b.position.end) {
+      if (a.courseNo !== b.courseNo && a.position.start < b.position.end) {
         a.hasOverlap = true
         b.hasOverlap = true
         a.overlaps.push(b.abbrName)

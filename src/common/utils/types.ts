@@ -6,3 +6,5 @@ export type ExamClass = Pick<Course, 'courseNo' | 'abbrName' | 'genEdType' | 'mi
     hasOverlap?: boolean
     isHidden: boolean
   }
+
+export type CourseKey = Pick<Course, 'courseNo' | 'studyProgram' | 'academicYear' | 'semester'>

@@ -16,7 +16,7 @@ WORKDIR /app
 # Copy only necessary file for running app
 COPY --from=build /build/package.json ./package.json
 # Install prod dependencies
-RUN yarn --prod
+RUN yarn --prod --frozen-lockfile
 COPY --from=build /build/.next ./.next
 COPY --from=build /build/public ./public
 # Expose listening port

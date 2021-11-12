@@ -1,3 +1,13 @@
+## [1.3.2](https://github.com/thinc-org/cugetreg-frontend/compare/v1.3.1...v1.3.2) (2021-11-12)
+
+
+### Bug Fixes
+
+* app crashing when switching semesters ([c350714](https://github.com/thinc-org/cugetreg-frontend/commit/c350714c5d94b9df2f8c62969e541c11a22c77a1))
+* generate a unique key for each class in a session ([227919e](https://github.com/thinc-org/cugetreg-frontend/commit/227919eab21e136273cd08be6088d3ec724044cd)), closes [#245](https://github.com/thinc-org/cugetreg-frontend/issues/245)
+* run yarn prov with frozen lock file ([633c823](https://github.com/thinc-org/cugetreg-frontend/commit/633c823384fd46f0dc71d0f5395c2efbf2560b7e))
+* temporary remove check on push ([879116f](https://github.com/thinc-org/cugetreg-frontend/commit/879116fb86e84fbee8ad06f8e93ac0e3295f6609))
+
 ## [1.3.1](https://github.com/thinc-org/cugetreg-frontend/compare/v1.3.0...v1.3.1) (2021-11-07)
 
 

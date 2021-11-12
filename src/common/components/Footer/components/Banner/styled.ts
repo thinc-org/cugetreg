@@ -29,8 +29,13 @@ export const PrivacyLink = styled.div`
   color: ${({ theme }) => theme.palette.primary.contrastText};
 `
 
-export const GithubLink = styled(Stack)`
-  cursor: pointer;
+export const GithubLink = styled.a`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  text-decoration: none;
+  color: ${({ theme }) => theme.palette.primary.contrastText};
 `
 
 export const StyledDivider = styled(Divider)`

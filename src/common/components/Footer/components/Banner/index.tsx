@@ -29,12 +29,10 @@ export function Banner() {
           <BannerSubtitle>{t('university')}</BannerSubtitle>
         </Stack>
         <StyledDivider orientation={'vertical'} />
-        <Link href="https://github.com/thinc-org">
-          <GithubLink direction="row" alignItems="center">
-            <BannerSubtitle>{t('github')}</BannerSubtitle>
-            <Image src={github} width="20" height="20" />
-          </GithubLink>
-        </Link>
+        <GithubLink href="https://github.com/thinc-org">
+          <BannerSubtitle>{t('github')}</BannerSubtitle>
+          <Image src={github} width="20" height="20" />
+        </GithubLink>
       </ResponsiveStack>
       <Link href="/privacy">
         <PrivacyLink>Privacy Policy</PrivacyLink>

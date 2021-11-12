@@ -7,6 +7,7 @@ export const ResponsiveStack = styled.div`
   align-items: center;
   ${({ theme }) => theme.breakpoints.down('sm')} {
     flex-direction: column;
+    padding: ${({ theme }) => theme.spacing(2, 0)};
   }
 `
 
@@ -36,7 +37,7 @@ export const StyledDivider = styled(Divider)`
   background: ${({ theme }) => theme.palette.primary.contrastText};
   margin: ${({ theme }) => theme.spacing(2)};
   ${({ theme }) => theme.breakpoints.down('sm')} {
-    width: 90%;
+    display: none;
   }
 `
 

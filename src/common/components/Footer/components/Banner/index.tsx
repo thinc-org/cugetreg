@@ -13,10 +13,10 @@ import { BannerContainer, PrivacyLink, GithubLink, BannerSubtitle, ResponsiveSta
 export function Banner() {
   const { t } = useTranslation('footer')
   const theme = useTheme()
-  const matches = useMediaQuery(theme.breakpoints.down('sm'))
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
 
   return (
-    <BannerContainer spacing={matches ? 1 : 3}>
+    <BannerContainer spacing={isMobile ? 1 : 3}>
       <Link href="/">
         <Image src={bigLogo} width="172.75" height="56.31" />
       </Link>
@@ -28,7 +28,7 @@ export function Banner() {
           </a>
           <BannerSubtitle>{t('university')}</BannerSubtitle>
         </Stack>
-        <StyledDivider orientation={matches ? 'horizontal' : 'vertical'} />
+        <StyledDivider orientation={'vertical'} />
         <Link href="https://github.com/thinc-org">
           <GithubLink direction="row" alignItems="center">
             <BannerSubtitle>{t('github')}</BannerSubtitle>

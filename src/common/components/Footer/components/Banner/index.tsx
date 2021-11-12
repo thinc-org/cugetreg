@@ -23,7 +23,7 @@ export function Banner() {
 
       <ResponsiveStack>
         <Stack direction="row" alignItems="center" spacing={2}>
-          <a href="https://www.facebook.com/ThailandIncubator">
+          <a href="https://www.facebook.com/ThailandIncubator" style={{ height: 35 }}>
             <Image src={thincLogo} width="78" height="32" />
           </a>
           <BannerSubtitle>{t('university')}</BannerSubtitle>

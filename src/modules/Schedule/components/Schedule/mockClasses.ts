@@ -11,6 +11,7 @@ const courseTemplate = {
 export const mockClasses: TimetableClass[] = [
   {
     ...courseTemplate,
+    classIndex: 0,
     dayOfWeek: 'MO',
     genEdType: 'HU',
     period: {
@@ -20,6 +21,7 @@ export const mockClasses: TimetableClass[] = [
   },
   {
     ...courseTemplate,
+    classIndex: 1,
     dayOfWeek: 'MO',
     genEdType: 'NO',
     period: {
@@ -29,6 +31,7 @@ export const mockClasses: TimetableClass[] = [
   },
   {
     ...courseTemplate,
+    classIndex: 2,
     dayOfWeek: 'MO',
     genEdType: 'NO',
     period: {
@@ -38,6 +41,7 @@ export const mockClasses: TimetableClass[] = [
   },
   {
     ...courseTemplate,
+    classIndex: 2,
     dayOfWeek: 'TU',
     genEdType: 'SC',
     period: {
@@ -47,6 +51,7 @@ export const mockClasses: TimetableClass[] = [
   },
   {
     ...courseTemplate,
+    classIndex: 3,
     dayOfWeek: 'WE',
     genEdType: 'NO',
     period: {
@@ -56,6 +61,7 @@ export const mockClasses: TimetableClass[] = [
   },
   {
     ...courseTemplate,
+    classIndex: 4,
     dayOfWeek: 'WE',
     genEdType: 'NO',
     period: {
@@ -65,6 +71,7 @@ export const mockClasses: TimetableClass[] = [
   },
   {
     ...courseTemplate,
+    classIndex: 5,
     dayOfWeek: 'WE',
     genEdType: 'NO',
     period: {
@@ -74,6 +81,7 @@ export const mockClasses: TimetableClass[] = [
   },
   {
     ...courseTemplate,
+    classIndex: 6,
     dayOfWeek: 'TH',
     genEdType: 'NO',
     period: {
@@ -83,6 +91,7 @@ export const mockClasses: TimetableClass[] = [
   },
   {
     ...courseTemplate,
+    classIndex: 7,
     dayOfWeek: 'FR',
     genEdType: 'SO',
     period: {
@@ -92,6 +101,7 @@ export const mockClasses: TimetableClass[] = [
   },
   {
     ...courseTemplate,
+    classIndex: 8,
     dayOfWeek: 'FR',
     genEdType: 'IN',
     period: {

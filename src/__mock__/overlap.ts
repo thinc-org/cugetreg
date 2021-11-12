@@ -1,7 +1,7 @@
 import { ExamClass } from '@/common/utils/types'
 import { CourseOverlap, CourseOverlapMap, ScheduleClass } from '@/modules/Schedule/components/Schedule/utils'
 
-export const courseTemplate: ScheduleClass = {
+export const courseTemplate: Omit<ScheduleClass, 'classIndex'> = {
   courseNo: '2110316',
   abbrName: 'PROG LANG PRIN',
   genEdType: 'NO',
@@ -44,23 +44,24 @@ export const noOverlap: CourseOverlap = { hasOverlap: false, classes: [], exams:
  * 200010 are overlapping with each 200008 and 200009 twice
  */
 export const mockNonOverlappingCourses: ScheduleClass[] = [
-  { ...courseTemplate, courseNo: '200000' },
-  { ...courseTemplate, courseNo: '200001' },
-  { ...courseTemplate, courseNo: '200002' },
+  { ...courseTemplate, classIndex: 0, courseNo: '200000' },
+  { ...courseTemplate, classIndex: 1, courseNo: '200001' },
+  { ...courseTemplate, classIndex: 2, courseNo: '200002' },
 ]
 export const mockTwoOverlappingCourses_1: ScheduleClass[] = [
-  { ...courseTemplate, courseNo: '200003', hasOverlap: true, overlaps: ['200004'] },
-  { ...courseTemplate, courseNo: '200004', hasOverlap: true, overlaps: ['200003'] },
+  { ...courseTemplate, classIndex: 0, courseNo: '200003', hasOverlap: true, overlaps: ['200004'] },
+  { ...courseTemplate, classIndex: 1, courseNo: '200004', hasOverlap: true, overlaps: ['200003'] },
 ]
 export const mockTwoOverlappingCourses_2: ScheduleClass[] = [
-  { ...courseTemplate, courseNo: '200005', hasOverlap: true, overlaps: ['200006', '200006'] },
-  { ...courseTemplate, courseNo: '200006', hasOverlap: true, overlaps: ['200005', '200005'] },
+  { ...courseTemplate, classIndex: 0, courseNo: '200005', hasOverlap: true, overlaps: ['200006', '200006'] },
+  { ...courseTemplate, classIndex: 1, courseNo: '200006', hasOverlap: true, overlaps: ['200005', '200005'] },
 ]
 export const mockThreeOverlappingCourses: ScheduleClass[] = [
-  { ...courseTemplate, courseNo: '200007', hasOverlap: true, overlaps: ['200009', '200009'] },
-  { ...courseTemplate, courseNo: '200008', hasOverlap: true, overlaps: ['200009', '200009'] },
+  { ...courseTemplate, classIndex: 0, courseNo: '200007', hasOverlap: true, overlaps: ['200009', '200009'] },
+  { ...courseTemplate, classIndex: 1, courseNo: '200008', hasOverlap: true, overlaps: ['200009', '200009'] },
   {
     ...courseTemplate,
+    classIndex: 2,
     courseNo: '200009',
     hasOverlap: true,
     overlaps: ['200007', '200007', '200008', '200008'],

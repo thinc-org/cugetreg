@@ -2,6 +2,7 @@ import { Typography } from '@material-ui/core'
 import { Course } from '@thinc-org/chula-courses'
 import React from 'react'
 
+import { getCourseKeyString } from '@/common/utils/getCourseKeyString'
 import { CourseCard } from '@/modules/CourseSearch/components/CourseCard'
 
 export interface CoursesProps {
@@ -19,7 +20,7 @@ export const Courses: React.FC<CoursesProps> = ({ courses, loading }) => {
   return (
     <>
       {courses.map((course) => (
-        <CourseCard key={`${course.courseNo}`} course={course} />
+        <CourseCard key={getCourseKeyString(course)} course={course} />
       ))}
     </>
   )

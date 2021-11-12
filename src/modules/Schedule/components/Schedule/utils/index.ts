@@ -11,10 +11,12 @@ import { getOverlappingCourses } from './getOverlappingCourses'
 
 export type TimetableClass = Pick<Course, 'courseNo' | 'abbrName' | 'genEdType'> &
   Omit<Class, 'type'> & {
+    classIndex: number
     hasOverlap?: boolean
   }
 
 export type ScheduleClass = Omit<TimetableClass, 'period'> & {
+  classIndex: number
   overlaps: string[]
   position: {
     start: number
@@ -195,9 +197,10 @@ export function useTimetableClasses(shopItems: CourseCartItem[]) {
         return []
       }
       return section.classes.map(
-        (cls): TimetableClass => {
+        (cls, index): TimetableClass => {
           const { dayOfWeek, period, building, room, teachers } = cls
           return {
+            classIndex: index,
             courseNo,
             abbrName,
             genEdType,

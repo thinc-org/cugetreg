@@ -27,10 +27,7 @@ function Schedule({ classes }: ScheduleProps) {
       <Header />
       <Gutters />
       {classes.map((scheduleClass) => (
-        <ClassCard
-          key={`${scheduleClass.courseNo}_${scheduleClass.dayOfWeek}_${scheduleClass.position.start}`}
-          scheduleClass={scheduleClass}
-        />
+        <ClassCard key={`${scheduleClass.courseNo}-${scheduleClass.classIndex}`} scheduleClass={scheduleClass} />
       ))}
     </ScheduleTable>
   )

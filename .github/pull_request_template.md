@@ -1,30 +1,19 @@
-# [Related Task]()
-
-## Link for [Demo]()
-
-- (Optional) Link for [Figma]()
-- (Optional) Other [Resources]()
-
-## Why do you do this PR
-
--
+## Why did you create this PR
+- 
 
 ## What did you do
+- 
 
--
+## Demo
+[https://dev.cugetreg.com](https://dev.cugetreg.com)
 
 ## Checklist
-
-- [ ] Merged this PR into [dev](https://github.com/thinc-org/cugetreg-frontend/tree/dev) for Demo
+- [ ] Deploy a demo
+- [ ] Check browsers compatibility
 - [ ] Wrote coverage tests
 
-## Browser Supported
-
-- [x] Safari
-- [x] Google Chrome
-- [x] Firefox
-- [x] Microsoft Edge
-
-## Other thing to tell us
-
+<!-- 
+## Related links
 -
+-->
+ 

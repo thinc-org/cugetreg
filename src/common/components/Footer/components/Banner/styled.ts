@@ -23,7 +23,7 @@ export const BannerContainer = styled(Stack)`
   padding: ${({ theme }) => theme.spacing(3)};
 `
 
-export const PrivacyLink = styled.div`
+export const PrivacyLink = styled.a`
   cursor: pointer;
   text-decoration: none;
   color: ${({ theme }) => theme.palette.primary.contrastText};

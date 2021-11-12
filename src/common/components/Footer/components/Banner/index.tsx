@@ -34,7 +34,7 @@ export function Banner() {
           <Image src={github} width="20" height="20" />
         </GithubLink>
       </ResponsiveStack>
-      <Link href="/privacy">
+      <Link href="/privacy" passHref>
         <PrivacyLink>Privacy Policy</PrivacyLink>
       </Link>
     </BannerContainer>

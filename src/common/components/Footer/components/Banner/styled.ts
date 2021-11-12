@@ -1,8 +1,10 @@
 import styled from '@emotion/styled'
 import { Divider, Stack, Typography } from '@material-ui/core'
 
-export const ResponsiveStack = styled(Stack)`
+export const ResponsiveStack = styled.div`
+  display: flex;
   flex-direction: row;
+  align-items: center;
   ${({ theme }) => theme.breakpoints.down('sm')} {
     flex-direction: column;
   }
@@ -32,8 +34,8 @@ export const GithubLink = styled(Stack)`
 
 export const StyledDivider = styled(Divider)`
   background: ${({ theme }) => theme.palette.primary.contrastText};
+  margin: ${({ theme }) => theme.spacing(2)};
   ${({ theme }) => theme.breakpoints.down('sm')} {
-    margin: ${({ theme }) => theme.spacing(2, 0)};
     width: 90%;
   }
 `

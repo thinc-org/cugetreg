@@ -15,32 +15,26 @@ export function Banner() {
   const theme = useTheme()
   const matches = useMediaQuery(theme.breakpoints.down('sm'))
 
-  const showGithub = false
-
   return (
     <BannerContainer spacing={matches ? 1 : 3}>
       <Link href="/">
         <Image src={bigLogo} width="172.75" height="56.31" />
       </Link>
 
-      <ResponsiveStack alignItems="center" spacing={2}>
+      <ResponsiveStack>
         <Stack direction="row" alignItems="center" spacing={2}>
           <a href="https://www.facebook.com/ThailandIncubator">
             <Image src={thincLogo} width="78" height="32" />
           </a>
           <BannerSubtitle>{t('university')}</BannerSubtitle>
         </Stack>
-        {showGithub && (
-          <>
-            <StyledDivider orientation={matches ? 'horizontal' : 'vertical'} />
-            <Link href="https://github.com/thinc-org">
-              <GithubLink direction="row" alignItems="center">
-                <BannerSubtitle>{t('github')}</BannerSubtitle>
-                <Image src={github} width="20" height="20" />
-              </GithubLink>
-            </Link>
-          </>
-        )}
+        <StyledDivider orientation={matches ? 'horizontal' : 'vertical'} />
+        <Link href="https://github.com/thinc-org">
+          <GithubLink direction="row" alignItems="center">
+            <BannerSubtitle>{t('github')}</BannerSubtitle>
+            <Image src={github} width="20" height="20" />
+          </GithubLink>
+        </Link>
       </ResponsiveStack>
       <Link href="/privacy">
         <PrivacyLink>Privacy Policy</PrivacyLink>

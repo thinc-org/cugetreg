@@ -1,4 +1,4 @@
-import { useMediaQuery, useTheme, Stack } from '@material-ui/core'
+import { Stack } from '@material-ui/core'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
@@ -12,11 +12,9 @@ import { BannerContainer, PrivacyLink, GithubLink, BannerSubtitle, ResponsiveSta
 
 export function Banner() {
   const { t } = useTranslation('footer')
-  const theme = useTheme()
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
 
   return (
-    <BannerContainer spacing={isMobile ? 1 : 3}>
+    <BannerContainer spacing={[1, 3]}>
       <Link href="/">
         <Image src={bigLogo} width="172.75" height="56.31" />
       </Link>

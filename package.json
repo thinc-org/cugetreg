@@ -17,7 +17,9 @@
   "dependencies": {
     "@apollo/client": "^3.4.x",
     "@date-io/date-fns": "1.x",
+    "@emotion/cache": "^11.5.0",
     "@emotion/react": "^11.5.0",
+    "@emotion/server": "^11.4.0",
     "@emotion/styled": "^11.3.0",
     "@mui/icons-material": "^5.1.0",
     "@mui/lab": "^5.0.0-alpha.54",

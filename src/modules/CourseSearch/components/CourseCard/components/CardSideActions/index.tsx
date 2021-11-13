@@ -1,4 +1,4 @@
-import { Collapse, Stack } from '@material-ui/core'
+import { Collapse, Stack } from '@mui/material'
 
 import { SelectButton } from '@/common/components/SelectButton'
 import { Analytics } from '@/common/context/Analytics/components/Analytics'

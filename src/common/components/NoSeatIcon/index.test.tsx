@@ -1,4 +1,4 @@
-import { IconButton, Popover, Typography, Container, IconButtonProps } from '@material-ui/core'
+import { IconButton, Popover, Typography, Container, IconButtonProps } from '@mui/material'
 import { shallow } from 'enzyme'
 
 describe('NoSeatIcon', () => {

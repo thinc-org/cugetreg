@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { CircularProgress } from '@material-ui/core'
+import { CircularProgress } from '@mui/material'
 
 export interface LoadingProps {
   loading: boolean

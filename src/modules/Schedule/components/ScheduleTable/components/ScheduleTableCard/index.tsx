@@ -1,5 +1,5 @@
-import { Grid, Hidden, IconButton, Stack, Typography, useTheme } from '@material-ui/core'
-import { useMediaQuery } from '@material-ui/core'
+import { Grid, Hidden, IconButton, Stack, Typography, useTheme } from '@mui/material'
+import { useMediaQuery } from '@mui/material'
 import { PanInfo } from 'framer-motion'
 import { uniq } from 'lodash'
 import { observer } from 'mobx-react'

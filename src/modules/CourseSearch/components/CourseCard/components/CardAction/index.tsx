@@ -1,4 +1,4 @@
-import { CardActions } from '@material-ui/core'
+import { CardActions } from '@mui/material'
 
 import { SelectButton } from '@/common/components/SelectButton'
 import { Analytics } from '@/common/context/Analytics/components/Analytics'

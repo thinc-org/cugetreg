@@ -1,13 +1,13 @@
-import { Color } from '@material-ui/core/Alert'
+import { AlertColor } from '@mui/material/Alert'
 import { useState } from 'react'
 
 export function useSnackBar() {
   const [message, setMessage] = useState('')
   const [action, setAction] = useState<string | undefined>()
   const [open, setOpen] = useState(false)
-  const [messageType, setMessageType] = useState<Color>('success')
+  const [messageType, setMessageType] = useState<AlertColor>('success')
 
-  const emitMessage = (messageText: string, type: Color, actionText?: string) => {
+  const emitMessage = (messageText: string, type: AlertColor, actionText?: string) => {
     setMessage(messageText)
     setAction(actionText || '')
     setMessageType(type)

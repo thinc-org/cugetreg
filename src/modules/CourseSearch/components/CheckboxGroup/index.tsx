@@ -1,4 +1,4 @@
-import { Checkbox, CheckboxProps, FormControlLabel, makeStyles, Stack, Typography } from '@material-ui/core'
+import { Checkbox, CheckboxProps, FormControlLabel, Stack, Typography } from '@mui/material'
 import React from 'react'
 
 import { GeneralChipKey } from '@/common/components/Chips/config'
@@ -16,15 +16,7 @@ export interface CheckboxGroupProps {
   log: (_: unknown, value: string) => void
 }
 
-const useStyles = makeStyles((theme) => ({
-  title: {
-    color: theme.palette.primaryRange[100],
-  },
-}))
-
 export const CheckboxGroup: React.FC<CheckboxGroupProps> = ({ title, checkboxes, log, id }) => {
-  const classes = useStyles()
-
   const { searchCourseQueryParams } = useSearchCourseQueryParams()
 
   const hasChecked = (tag: GeneralChipKey) => {
@@ -36,7 +28,7 @@ export const CheckboxGroup: React.FC<CheckboxGroupProps> = ({ title, checkboxes,
 
   return (
     <Stack>
-      <Typography variant="button" className={classes.title}>
+      <Typography variant="button" color="primaryRange.100">
         {title}
       </Typography>
       {checkboxes.map(({ label, ...checkbox }) => (

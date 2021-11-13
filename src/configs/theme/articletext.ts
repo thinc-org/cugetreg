@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { Typography } from '@material-ui/core'
+import { Typography } from '@mui/material'
 
 export const StyledArticleBody = styled(Typography)`
   font-size: 18px;

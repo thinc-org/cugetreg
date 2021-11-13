@@ -49,7 +49,7 @@ module.exports = {
   },
   overrides: [
     {
-      files: ['src/pages/**/*.tsx', '**/*.stories*', '**/*.d.ts'],
+      files: ['src/pages/**/*.tsx', '**/*.d.ts'],
       rules: {
         'import/no-default-export': 0,
       },

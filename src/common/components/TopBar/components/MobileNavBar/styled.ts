@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { IconButton } from '@material-ui/core'
+import { IconButton } from '@mui/material'
 
 export const MoreButton = styled(IconButton)`
   margin-left: 12px;

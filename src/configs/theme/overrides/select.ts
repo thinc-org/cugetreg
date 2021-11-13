@@ -1,8 +1,9 @@
-import { InputLabelClassKey, StyleRules, Theme } from '@material-ui/core'
+import { InputLabelClassKey, Theme } from '@mui/material'
+import { OverridesStyleRules } from '@mui/material/styles/overrides'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function overrideMuiSelect(theme: Theme): Partial<StyleRules<InputLabelClassKey, {}>> {
-  const defaultStyle: Partial<StyleRules<InputLabelClassKey, {}>> = {
+export function overrideMuiSelect(theme: Theme): Partial<OverridesStyleRules<InputLabelClassKey>> {
+  const defaultStyle: Partial<OverridesStyleRules<InputLabelClassKey>> = {
     root: {
       lineHeight: 'normal',
     },

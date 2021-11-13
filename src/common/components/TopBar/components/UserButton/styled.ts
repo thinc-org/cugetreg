@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { Stack } from '@material-ui/core'
+import { Stack } from '@mui/material'
 
 export const NavBarItemDiv = styled.div`
   color: ${({ theme }) => theme.palette.primary.main};

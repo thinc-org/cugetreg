@@ -1,4 +1,3 @@
-import { FormControlLabel } from '@material-ui/core'
 import { shallow } from 'enzyme'
 
 import { SelectTimeTitle } from './styled'

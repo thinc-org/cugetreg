@@ -1,4 +1,4 @@
-import { Grid, Stack, Typography } from '@material-ui/core'
+import { Grid, Stack, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
 import { Caption } from '@/common/components/Caption'

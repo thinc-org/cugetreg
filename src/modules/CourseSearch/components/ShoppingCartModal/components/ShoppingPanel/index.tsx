@@ -1,4 +1,4 @@
-import { Typography, DialogTitle, DialogContent, DialogActions, Stack } from '@material-ui/core'
+import { Typography, DialogTitle, DialogContent, DialogActions, Stack } from '@mui/material'
 import { Course } from '@thinc-org/chula-courses'
 import { useTranslation } from 'react-i18next'
 

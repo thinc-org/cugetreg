@@ -2,7 +2,7 @@ import { act, renderHook } from '@testing-library/react-hooks'
 
 describe('useCourseSearchPage', () => {
   const mockUseMeiaQuery = jest.fn()
-  jest.doMock('@material-ui/core', () => ({
+  jest.doMock('@mui/material', () => ({
     useMediaQuery: mockUseMeiaQuery,
     useTheme: jest.fn(() => ({ breakpoints: { up: jest.fn() } })),
   }))

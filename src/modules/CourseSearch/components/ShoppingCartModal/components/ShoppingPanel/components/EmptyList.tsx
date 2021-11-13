@@ -1,5 +1,5 @@
-import { Stack, Typography } from '@material-ui/core'
-import BookmarkBorderIcon from '@material-ui/icons/BookmarkBorder'
+import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder'
+import { Stack, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
 export const EmptyList = () => {

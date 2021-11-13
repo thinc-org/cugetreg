@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
-import { Button, Chip, Hidden, useMediaQuery, useTheme } from '@material-ui/core'
-import CalendarTodayIcon from '@material-ui/icons/CalendarToday'
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday'
+import { Button, Chip, Hidden, useMediaQuery, useTheme } from '@mui/material'
 import { observer } from 'mobx-react'
 import React from 'react'
 import { useTranslation } from 'react-i18next'

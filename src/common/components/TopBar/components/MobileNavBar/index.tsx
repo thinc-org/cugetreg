@@ -1,5 +1,5 @@
-import { Drawer } from '@material-ui/core'
-import { default as MaterialLink } from '@material-ui/core/Link'
+import { Drawer } from '@mui/material'
+import { default as MaterialLink } from '@mui/material/Link'
 import { observer } from 'mobx-react'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'

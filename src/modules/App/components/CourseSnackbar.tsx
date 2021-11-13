@@ -1,4 +1,4 @@
-import { Button, Snackbar } from '@material-ui/core'
+import { Button, Snackbar } from '@mui/material'
 import { useContext } from 'react'
 
 import { Analytics } from '@/common/context/Analytics/components/Analytics'

@@ -1,5 +1,5 @@
 import { ApolloError } from '@apollo/client'
-import { Grid, Typography } from '@material-ui/core'
+import { Grid, Typography } from '@mui/material'
 import { getFaculty } from '@thinc-org/chula-courses'
 import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 import { NextSeoProps } from 'next-seo/lib/types'

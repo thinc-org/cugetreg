@@ -1,4 +1,4 @@
-import { useMediaQuery, useTheme } from '@material-ui/core'
+import { useMediaQuery, useTheme } from '@mui/material'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 

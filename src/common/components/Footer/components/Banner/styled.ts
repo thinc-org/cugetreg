@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { Divider, Stack, Typography } from '@material-ui/core'
+import { Divider, Stack, Typography } from '@mui/material'
 
 export const ResponsiveStack = styled.div`
   display: flex;

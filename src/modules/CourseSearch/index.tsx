@@ -1,4 +1,4 @@
-import { Hidden, Typography } from '@material-ui/core'
+import { Hidden, Typography } from '@mui/material'
 
 import { Analytics } from '@/common/context/Analytics/components/Analytics'
 import { FILTER_BUTTON, SELECTED_COURSES_BUTTON, OPEN_SHOPPING_CART_BUTTON } from '@/common/context/Analytics/constants'

@@ -1,4 +1,4 @@
-import Chip from '@material-ui/core/Chip'
+import Chip from '@mui/material/Chip'
 import { GenEdTypeEnum, DayOfWeekEnum } from '@thinc-org/chula-courses'
 import { shallow } from 'enzyme'
 

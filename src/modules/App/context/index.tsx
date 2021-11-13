@@ -1,7 +1,7 @@
 import { ApolloProvider } from '@apollo/client'
-import { ThemeProvider, useMediaQuery } from '@material-ui/core'
-import AdapterDateFns from '@material-ui/lab/AdapterDateFns'
-import LocalizationProvider from '@material-ui/lab/LocalizationProvider'
+import AdapterDateFns from '@mui/lab/AdapterDateFns'
+import LocalizationProvider from '@mui/lab/LocalizationProvider'
+import { ThemeProvider, useMediaQuery } from '@mui/material'
 import React from 'react'
 
 import { AnalyticsProvider } from '@/common/context/Analytics'

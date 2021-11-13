@@ -1,4 +1,4 @@
-import { Typography, TypographyProps, TypographyVariant, useTheme } from '@material-ui/core'
+import { Typography, TypographyProps, TypographyVariant, useTheme } from '@mui/material'
 import { CSSProperties } from 'react'
 
 type ScheduleTypographyProps = TypographyProps & {

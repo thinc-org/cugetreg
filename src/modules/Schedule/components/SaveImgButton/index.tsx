@@ -1,5 +1,5 @@
-import { Button } from '@material-ui/core'
-import GetAppRoundedIcon from '@material-ui/icons/GetAppRounded'
+import GetAppRoundedIcon from '@mui/icons-material/GetAppRounded'
+import { Button } from '@mui/material'
 import React, { RefObject, useCallback } from 'react'
 import { useScreenshot } from 'use-react-screenshot'
 

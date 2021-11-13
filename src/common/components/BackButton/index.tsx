@@ -1,4 +1,4 @@
-import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos'
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos'
 import { useRouter } from 'next/router'
 import React, { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'

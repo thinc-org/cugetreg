@@ -1,4 +1,4 @@
-import { useMediaQuery, useTheme, Stack } from '@material-ui/core'
+import { useMediaQuery, useTheme, Stack } from '@mui/material'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'

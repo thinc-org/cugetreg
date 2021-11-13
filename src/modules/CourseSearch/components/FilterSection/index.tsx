@@ -1,6 +1,6 @@
 import { useTheme } from '@emotion/react'
-import { DialogContent, Stack } from '@material-ui/core'
-import useMediaQuery from '@material-ui/core/useMediaQuery'
+import { DialogContent, Stack } from '@mui/material'
+import useMediaQuery from '@mui/material/useMediaQuery'
 import useGoogleOptimize from '@react-hook/google-optimize'
 import { tail } from 'lodash'
 

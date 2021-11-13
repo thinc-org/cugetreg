@@ -1,4 +1,4 @@
-import { CardContent, Collapse, Stack } from '@material-ui/core'
+import { CardContent, Collapse, Stack } from '@mui/material'
 
 import { CardDescription } from '@/modules/CourseSearch/components/CourseCard/components/CardDescription'
 import { CardHiddenDescription } from '@/modules/CourseSearch/components/CourseCard/components/CardHiddenDescription'

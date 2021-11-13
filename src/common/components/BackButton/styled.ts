@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { Button, IconButton } from '@material-ui/core'
+import { Button, IconButton } from '@mui/material'
 
 export const ButtonMobile = styled(IconButton)`
   border: 1px solid #2a2d48;

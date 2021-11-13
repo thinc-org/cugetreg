@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { Button, ButtonProps, Typography } from '@material-ui/core'
+import { Button, ButtonProps, Typography } from '@mui/material'
 
 const Item = styled(Button)`
   color: ${({ theme }) => theme.palette.primary.main};

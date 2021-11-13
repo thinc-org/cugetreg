@@ -1,5 +1,5 @@
-import { InputLabelClassKey, Theme } from '@material-ui/core'
-import { OverridesStyleRules } from '@material-ui/core/styles/overrides'
+import { InputLabelClassKey, Theme } from '@mui/material'
+import { OverridesStyleRules } from '@mui/material/styles/overrides'
 
 export function overrideMuiInputLabel(theme: Theme): Partial<OverridesStyleRules<InputLabelClassKey>> {
   const defaultStyle: Partial<OverridesStyleRules<InputLabelClassKey>> = {

@@ -1,4 +1,4 @@
-import { Typography, Stack, Link } from '@material-ui/core'
+import { Typography, Stack, Link } from '@mui/material'
 import { observer } from 'mobx-react'
 import { useTranslation } from 'react-i18next'
 

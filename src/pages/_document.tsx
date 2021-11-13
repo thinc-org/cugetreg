@@ -1,10 +1,5 @@
-// import { ServerStyleSheets } from '@material-ui/core/styles'
-import Document, { DocumentContext, Head, Html, Main, NextScript } from 'next/document'
-import React, { ReactNode } from 'react'
-import { resetServerContext } from 'react-beautiful-dnd'
-
-// import { injectDarkStyle } from '@/common/utils/darkStyleInjector'
-// import env from '@/utils/env/macro'
+import Document, { Head, Html, Main, NextScript } from 'next/document'
+import React from 'react'
 
 export default class MyDocument extends Document {
   render() {

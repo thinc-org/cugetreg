@@ -1,4 +1,4 @@
-import { Tooltip, Stack } from '@material-ui/core'
+import { Tooltip, Stack } from '@mui/material'
 import { observer } from 'mobx-react'
 import { useTranslation } from 'react-i18next'
 import { MdCloudDone, MdCloudQueue, MdCloudOff } from 'react-icons/md'

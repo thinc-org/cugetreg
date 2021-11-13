@@ -1,4 +1,4 @@
-import { styled } from '@material-ui/system'
+import { styled } from '@mui/system'
 import { withContentRect } from 'react-measure'
 
 import { ClassCard } from './components/ClassCard'

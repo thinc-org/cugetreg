@@ -1,4 +1,4 @@
-import { styled } from '@material-ui/system'
+import { styled } from '@mui/system'
 import { PropsWithChildren } from 'react'
 
 import { useDimensions } from '../dimensions'

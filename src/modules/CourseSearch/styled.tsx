@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { Stack as MuiStack } from '@material-ui/core'
+import { Stack as MuiStack } from '@mui/material'
 
 export const Container = styled.div`
   margin-top: ${({ theme }) => theme.spacing(4)};

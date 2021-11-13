@@ -1,4 +1,4 @@
-import { Checkbox, CheckboxProps, FormControlLabel, Stack, Typography } from '@material-ui/core'
+import { Checkbox, CheckboxProps, FormControlLabel, Stack, Typography } from '@mui/material'
 import React from 'react'
 
 import { GeneralChipKey } from '@/common/components/Chips/config'

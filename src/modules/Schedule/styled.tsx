@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { Button, Theme, Typography } from '@material-ui/core'
+import { Button, Theme, Typography } from '@mui/material'
 
 export const PageContainer = styled.div`
   padding-top: ${({ theme }) => theme.spacing(4)};

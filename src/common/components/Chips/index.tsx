@@ -1,5 +1,5 @@
-import { ChipProps } from '@material-ui/core'
-import Chip from '@material-ui/core/Chip'
+import { ChipProps } from '@mui/material'
+import Chip from '@mui/material/Chip'
 
 import { chipConfig, ChipConfigProps, GeneralChipKey } from './config'
 

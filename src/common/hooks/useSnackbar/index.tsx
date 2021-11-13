@@ -1,4 +1,4 @@
-import { AlertColor } from '@material-ui/core/Alert'
+import { AlertColor } from '@mui/material/Alert'
 import { useState } from 'react'
 
 export function useSnackBar() {

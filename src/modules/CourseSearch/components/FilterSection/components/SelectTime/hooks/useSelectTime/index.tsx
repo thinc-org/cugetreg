@@ -1,4 +1,4 @@
-import { SelectChangeEvent } from '@material-ui/core'
+import { SelectChangeEvent } from '@mui/material'
 import React, { useMemo } from 'react'
 
 import { useSearchCourseQueryParams } from '@/modules/CourseSearch/hooks/useSearchCourseQueryParams'

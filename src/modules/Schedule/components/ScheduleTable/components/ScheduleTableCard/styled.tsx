@@ -1,6 +1,6 @@
 import { css, Theme } from '@emotion/react'
 import styled from '@emotion/styled'
-import { Button, NativeSelect } from '@material-ui/core'
+import { Button, NativeSelect } from '@mui/material'
 import { motion } from 'framer-motion'
 
 import { PaletteRange } from '@/configs/theme/palette'

@@ -12,7 +12,7 @@ import {
   TableHead,
   TableRow,
   Typography,
-} from '@material-ui/core'
+} from '@mui/material'
 import { Course, Section } from '@thinc-org/chula-courses'
 import { useTranslation } from 'react-i18next'
 

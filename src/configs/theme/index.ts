@@ -1,4 +1,4 @@
-import { createTheme, Theme, ThemeOptions } from '@material-ui/core'
+import { createTheme, Theme, ThemeOptions } from '@mui/material'
 
 import { deepAssign } from '@/common/utils/deepAssign'
 

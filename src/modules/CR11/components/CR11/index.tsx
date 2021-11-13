@@ -1,4 +1,4 @@
-import { Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@material-ui/core'
+import { Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
 import { CourseCartItem } from '@/store/courseCart'

@@ -1,5 +1,5 @@
-import { Button } from '@material-ui/core'
-import FilterListIcon from '@material-ui/icons/FilterList'
+import FilterListIcon from '@mui/icons-material/FilterList'
+import { Button } from '@mui/material'
 import React from 'react'
 
 export interface FilterIconButtonProps {

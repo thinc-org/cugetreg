@@ -1,4 +1,4 @@
-import { ChipProps } from '@material-ui/core'
+import { ChipProps } from '@mui/material'
 import { DayOfWeek, GenEdType } from '@thinc-org/chula-courses'
 
 import { ChipFilledHighlightColor, ChipOutlinedHighlightColor } from '@/configs/theme/overrides/chip'

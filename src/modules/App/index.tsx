@@ -1,5 +1,5 @@
-import { CssBaseline } from '@material-ui/core'
-import { Container } from '@material-ui/core'
+import { CssBaseline } from '@mui/material'
+import { Container } from '@mui/material'
 import { DefaultSeo } from 'next-seo'
 import { AppProps } from 'next/dist/next-server/lib/router/router'
 

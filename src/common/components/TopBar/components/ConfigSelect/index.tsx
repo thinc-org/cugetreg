@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { NativeSelect } from '@material-ui/core'
+import { NativeSelect } from '@mui/material'
 
 export const ConfigBarSelect = styled(NativeSelect)`
   & {

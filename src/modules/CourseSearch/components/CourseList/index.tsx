@@ -1,4 +1,4 @@
-import { Stack } from '@material-ui/core'
+import { Stack } from '@mui/material'
 import React from 'react'
 
 import { Error } from '@/common/components/Error'

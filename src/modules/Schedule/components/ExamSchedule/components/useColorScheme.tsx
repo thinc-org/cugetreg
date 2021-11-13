@@ -1,4 +1,4 @@
-import { useTheme } from '@material-ui/core'
+import { useTheme } from '@mui/material'
 import { GenEdType } from '@thinc-org/chula-courses'
 
 import { getPaletteRange } from '@/common/utils/getPaletteRange'

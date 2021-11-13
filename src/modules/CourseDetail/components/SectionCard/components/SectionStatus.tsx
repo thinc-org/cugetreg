@@ -1,4 +1,4 @@
-import { Stack, Typography, TypographyProps } from '@material-ui/core'
+import { Stack, Typography, TypographyProps } from '@mui/material'
 import { Capacity } from '@thinc-org/chula-courses'
 import { useTranslation } from 'react-i18next'
 

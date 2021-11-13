@@ -1,5 +1,5 @@
-import Add from '@material-ui/icons/Add'
-import { LoadingButton } from '@material-ui/lab'
+import Add from '@mui/icons-material/Add'
+import { LoadingButton } from '@mui/lab'
 import { observer } from 'mobx-react'
 import React from 'react'
 import { MdCheck } from 'react-icons/md'

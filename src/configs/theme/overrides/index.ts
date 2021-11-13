@@ -1,5 +1,5 @@
-import { Theme } from '@material-ui/core'
-import { Components } from '@material-ui/core/styles/components'
+import { Theme } from '@mui/material'
+import { Components } from '@mui/material/styles'
 
 import { overrideMuiChipStyles } from './chip'
 import { overrideMuiInputBase } from './inputBase'
@@ -16,7 +16,6 @@ export const overrideMuiBaseComponent = (defaultTheme: Theme): Theme => {
     MuiTextField: {
       defaultProps: {
         size: 'small',
-        variant: 'outlined',
       },
     },
     MuiInputBase: {

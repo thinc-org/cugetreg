@@ -1,5 +1,5 @@
-import { OutlinedInputClassKey, Theme } from '@material-ui/core'
-import { OverridesStyleRules } from '@material-ui/core/styles/overrides'
+import { OutlinedInputClassKey, Theme } from '@mui/material'
+import { OverridesStyleRules } from '@mui/material/styles/overrides'
 
 export function overrideMuiOutlinedInput(theme: Theme): Partial<OverridesStyleRules<OutlinedInputClassKey>> {
   const borderColor = theme.palette.primaryRange[100]

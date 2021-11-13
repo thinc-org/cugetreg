@@ -1,4 +1,4 @@
-import { useTheme } from '@material-ui/core'
+import { useTheme } from '@mui/material'
 import { Course, Class, DayOfWeek, GenEdType } from '@thinc-org/chula-courses'
 import { useMemo } from 'react'
 
@@ -150,11 +150,10 @@ export function useOverlappingCourses(
   midtermClasses: ExamClass[],
   finalClasses: ExamClass[]
 ) {
-  return useMemo(() => getOverlappingCourses(classes, midtermClasses, finalClasses), [
-    classes,
-    midtermClasses,
-    finalClasses,
-  ])
+  return useMemo(
+    () => getOverlappingCourses(classes, midtermClasses, finalClasses),
+    [classes, midtermClasses, finalClasses]
+  )
 }
 
 interface ColorScheme {
@@ -196,21 +195,19 @@ export function useTimetableClasses(shopItems: CourseCartItem[]) {
       if (!section) {
         return []
       }
-      return section.classes.map(
-        (cls, index): TimetableClass => {
-          const { dayOfWeek, period, building, room, teachers } = cls
-          return {
-            classIndex: index,
-            courseNo,
-            abbrName,
-            genEdType,
-            dayOfWeek,
-            period,
-            building,
-            room,
-            teachers,
-          }
+      return section.classes.map((cls, index): TimetableClass => {
+        const { dayOfWeek, period, building, room, teachers } = cls
+        return {
+          classIndex: index,
+          courseNo,
+          abbrName,
+          genEdType,
+          dayOfWeek,
+          period,
+          building,
+          room,
+          teachers,
         }
-      )
+      })
     })
 }

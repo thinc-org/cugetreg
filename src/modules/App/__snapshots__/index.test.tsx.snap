@@ -38,6 +38,26 @@ exports[`App module Should app component render preperly when forceDark=false 1`
     titleTemplate="%s | CU Get Reg"
   />
   <AppProvider
+    emotionCache={
+      Object {
+        "insert": [Function],
+        "inserted": Object {},
+        "key": "css",
+        "nonce": undefined,
+        "registered": Object {},
+        "sheet": StyleSheet {
+          "_insertTag": [Function],
+          "before": null,
+          "container": <head />,
+          "ctr": 0,
+          "isSpeedy": false,
+          "key": "css",
+          "nonce": undefined,
+          "prepend": undefined,
+          "tags": Array [],
+        },
+      }
+    }
     forceDark={false}
   >
     <TrackPageChange>
@@ -97,6 +117,26 @@ exports[`App module Should app component render preperly when forceDark=false 2`
     titleTemplate="%s | CU Get Reg"
   />
   <AppProvider
+    emotionCache={
+      Object {
+        "insert": [Function],
+        "inserted": Object {},
+        "key": "css",
+        "nonce": undefined,
+        "registered": Object {},
+        "sheet": StyleSheet {
+          "_insertTag": [Function],
+          "before": null,
+          "container": <head />,
+          "ctr": 0,
+          "isSpeedy": false,
+          "key": "css",
+          "nonce": undefined,
+          "prepend": undefined,
+          "tags": Array [],
+        },
+      }
+    }
     forceDark={false}
   >
     <TrackPageChange>
@@ -156,6 +196,26 @@ exports[`App module Should app component render preperly when forceDark=false 3`
     titleTemplate="%s | CU Get Reg"
   />
   <AppProvider
+    emotionCache={
+      Object {
+        "insert": [Function],
+        "inserted": Object {},
+        "key": "css",
+        "nonce": undefined,
+        "registered": Object {},
+        "sheet": StyleSheet {
+          "_insertTag": [Function],
+          "before": null,
+          "container": <head />,
+          "ctr": 0,
+          "isSpeedy": false,
+          "key": "css",
+          "nonce": undefined,
+          "prepend": undefined,
+          "tags": Array [],
+        },
+      }
+    }
     forceDark={false}
   >
     <TrackPageChange>
@@ -215,6 +275,26 @@ exports[`App module Should app component render preperly when forceDark=true 1`]
     titleTemplate="%s | CU Get Reg"
   />
   <AppProvider
+    emotionCache={
+      Object {
+        "insert": [Function],
+        "inserted": Object {},
+        "key": "css",
+        "nonce": undefined,
+        "registered": Object {},
+        "sheet": StyleSheet {
+          "_insertTag": [Function],
+          "before": null,
+          "container": <head />,
+          "ctr": 0,
+          "isSpeedy": false,
+          "key": "css",
+          "nonce": undefined,
+          "prepend": undefined,
+          "tags": Array [],
+        },
+      }
+    }
     forceDark={true}
   >
     <TrackPageChange>
@@ -274,6 +354,26 @@ exports[`App module Should app component render preperly when forceDark=true 2`]
     titleTemplate="%s | CU Get Reg"
   />
   <AppProvider
+    emotionCache={
+      Object {
+        "insert": [Function],
+        "inserted": Object {},
+        "key": "css",
+        "nonce": undefined,
+        "registered": Object {},
+        "sheet": StyleSheet {
+          "_insertTag": [Function],
+          "before": null,
+          "container": <head />,
+          "ctr": 0,
+          "isSpeedy": false,
+          "key": "css",
+          "nonce": undefined,
+          "prepend": undefined,
+          "tags": Array [],
+        },
+      }
+    }
     forceDark={true}
   >
     <TrackPageChange>
@@ -333,6 +433,26 @@ exports[`App module Should app component render preperly when forceDark=true 3`]
     titleTemplate="%s | CU Get Reg"
   />
   <AppProvider
+    emotionCache={
+      Object {
+        "insert": [Function],
+        "inserted": Object {},
+        "key": "css",
+        "nonce": undefined,
+        "registered": Object {},
+        "sheet": StyleSheet {
+          "_insertTag": [Function],
+          "before": null,
+          "container": <head />,
+          "ctr": 0,
+          "isSpeedy": false,
+          "key": "css",
+          "nonce": undefined,
+          "prepend": undefined,
+          "tags": Array [],
+        },
+      }
+    }
     forceDark={true}
   >
     <TrackPageChange>

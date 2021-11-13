@@ -1,6 +1,5 @@
+import { styled } from '@material-ui/system'
 import { PropsWithChildren } from 'react'
-
-import { styledWithTheme } from '@/common/utils/styledWithTheme'
 
 import { useDimensions } from '../dimensions'
 
@@ -9,7 +8,7 @@ type CellProps = PropsWithChildren<{
   y: number
 }>
 
-const CellLayout = styledWithTheme('div')((theme) => ({
+const CellLayout = styled('div')(({ theme }) => ({
   position: 'absolute',
   display: 'flex',
   flexDirection: 'column',

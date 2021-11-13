@@ -32,8 +32,8 @@ export const SectionStatus = (props: SectionStatusProps) => {
     <Typography
       variant="h6"
       sx={{
-        px: 2,
-        py: 0.5,
+        px: 1.75,
+        py: 0.25,
         ml: 1,
         borderRadius: 1,
         whiteSpace: 'nowrap',

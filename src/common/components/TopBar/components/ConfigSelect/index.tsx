@@ -39,7 +39,6 @@ export const ConfigBarSelect = styled(NativeSelect)`
   }
 
   svg {
-    margin-top: 4px;
     color: inherit;
     font-size: 16px;
   }

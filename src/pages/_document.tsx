@@ -1,10 +1,10 @@
-import { ServerStyleSheets } from '@material-ui/core/styles'
+// import { ServerStyleSheets } from '@material-ui/core/styles'
 import Document, { DocumentContext, Head, Html, Main, NextScript } from 'next/document'
 import React, { ReactNode } from 'react'
 import { resetServerContext } from 'react-beautiful-dnd'
 
-import { injectDarkStyle } from '@/common/utils/darkStyleInjector'
-import env from '@/utils/env/macro'
+// import { injectDarkStyle } from '@/common/utils/darkStyleInjector'
+// import env from '@/utils/env/macro'
 
 export default class MyDocument extends Document {
   render() {
@@ -39,42 +39,46 @@ export default class MyDocument extends Document {
   }
 }
 
-MyDocument.getInitialProps = async (ctx: DocumentContext) => {
-  const sheets = new ServerStyleSheets()
-  const darkSheets = new ServerStyleSheets()
-  const originalRenderPage = ctx.renderPage
-  const injectDarkTheme = env.features.darkTheme && env.isProduction
+/**
+ * Migrating to MUIv5:
+ * Commented since we don't have dark theme
+ */
+// MyDocument.getInitialProps = async (ctx: DocumentContext) => {
+//   const sheets = new ServerStyleSheets()
+//   const darkSheets = new ServerStyleSheets()
+//   const originalRenderPage = ctx.renderPage
+//   const injectDarkTheme = env.features.darkTheme && env.isProduction
 
-  ctx.renderPage = () => {
-    resetServerContext()
-    if (injectDarkTheme) {
-      originalRenderPage({
-        enhanceApp: (App) => (props) => darkSheets.collect(<App {...{ forceDark: true }} {...props} />),
-      })
-    }
-    return originalRenderPage({
-      enhanceApp: (App) => (props) => sheets.collect(<App {...props} />),
-    })
-  }
+//   ctx.renderPage = () => {
+//     resetServerContext()
+//     if (injectDarkTheme) {
+//       originalRenderPage({
+//         enhanceApp: (App) => (props) => darkSheets.collect(<App {...{ forceDark: true }} {...props} />),
+//       })
+//     }
+//     return originalRenderPage({
+//       enhanceApp: (App) => (props) => sheets.collect(<App {...props} />),
+//     })
+//   }
 
-  const initialProps = await Document.getInitialProps(ctx)
-  let styleElement: ReactNode
-  if (injectDarkTheme) {
-    const lightStyle = sheets.toString()
-    const darkStyle = darkSheets.toString()
-    styleElement = injectDarkStyle(lightStyle, darkStyle)
-  } else {
-    styleElement = (
-      <>
-        {sheets.getStyleElement()}
-        {/* Prevent FOUC */}
-        <script dangerouslySetInnerHTML={{ __html: '(function() {})()' }} />
-      </>
-    )
-  }
+//   const initialProps = await Document.getInitialProps(ctx)
+//   let styleElement: ReactNode
+//   if (injectDarkTheme) {
+//     const lightStyle = sheets.toString()
+//     const darkStyle = darkSheets.toString()
+//     styleElement = injectDarkStyle(lightStyle, darkStyle)
+//   } else {
+//     styleElement = (
+//       <>
+//         {sheets.getStyleElement()}
+//         {/* Prevent FOUC */}
+//         <script dangerouslySetInnerHTML={{ __html: '(function() {})()' }} />
+//       </>
+//     )
+//   }
 
-  return {
-    ...initialProps,
-    styles: [...React.Children.toArray(initialProps.styles), styleElement],
-  }
-}
+//   return {
+//     ...initialProps,
+//     styles: [...React.Children.toArray(initialProps.styles), styleElement],
+//   }
+// }

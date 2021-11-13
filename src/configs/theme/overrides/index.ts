@@ -35,6 +35,9 @@ export const overrideMuiBaseComponent = (defaultTheme: Theme): Theme => {
     MuiSelect: {
       styleOverrides: overrideMuiSelect(defaultTheme),
     },
+    MuiLink: {
+      defaultProps: { underline: 'hover' },
+    },
   }
 
   defaultTheme.components = overrides

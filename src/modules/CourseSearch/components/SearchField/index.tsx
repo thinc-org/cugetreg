@@ -1,4 +1,4 @@
-import { IconButton, InputBase, Paper } from '@material-ui/core'
+import { IconButton, OutlinedInput, Paper } from '@material-ui/core'
 import CloseIcon from '@material-ui/icons/Close'
 import SearchIcon from '@material-ui/icons/Search'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
@@ -7,13 +7,11 @@ import { Analytics } from '@/common/context/Analytics/components/Analytics'
 import { COURSE_SEARCH_BOX } from '@/common/context/Analytics/constants'
 import { SEARCH_QUERY } from '@/common/context/Analytics/constants'
 import { useLog } from '@/common/context/Analytics/hooks/useLog'
-import { useStyles } from '@/modules/CourseSearch/components/SearchField/styled'
 import { useSearchCourseQueryParams } from '@/modules/CourseSearch/hooks/useSearchCourseQueryParams'
 
 export interface SeachFieldProp {}
 
 export const SearchField: React.FC<SeachFieldProp> = () => {
-  const classes = useStyles()
   const { setFilter, searchCourseQueryParams } = useSearchCourseQueryParams()
   const [input, setInput] = useState(() => searchCourseQueryParams.filter.keyword || '')
   const lastSubmittedInput = useRef(input)
@@ -66,26 +64,27 @@ export const SearchField: React.FC<SeachFieldProp> = () => {
   }, [submit])
 
   return (
-    <Paper component="form" className={classes.root} noValidate onSubmit={onSubmit} variant="outlined">
+    <Paper component="form" noValidate onSubmit={onSubmit} elevation={0} sx={{ width: '100%' }}>
       <Analytics elementName={COURSE_SEARCH_BOX}>
-        <InputBase
+        <OutlinedInput
+          sx={{ pr: 0.5 }}
           fullWidth
           value={input}
           onChange={handleChange}
           placeholder="ค้นหารหัสวิชา / ชื่อวิชา"
-          margin="dense"
-          className={classes.input}
+          endAdornment={
+            input ? (
+              <IconButton aria-label="clear" onClick={handleClear}>
+                <CloseIcon />
+              </IconButton>
+            ) : (
+              <IconButton type="submit" aria-label="search">
+                <SearchIcon />
+              </IconButton>
+            )
+          }
         />
       </Analytics>
-      {input ? (
-        <IconButton aria-label="clear" className={classes.iconButton} onClick={handleClear}>
-          <CloseIcon />
-        </IconButton>
-      ) : (
-        <IconButton type="submit" aria-label="search" className={classes.iconButton}>
-          <SearchIcon />
-        </IconButton>
-      )}
     </Paper>
   )
 }

@@ -10,9 +10,7 @@
     "build": "next build",
     "start": "next start",
     "export": "yarn build && yarn next export",
-    "ci": "yarn && yarn export && yarn build-storybook && mv storybook-static out/storybook",
-    "storybook": "start-storybook -s ./public -p 6006",
-    "build-storybook": "build-storybook -s ./public",
+    "ci": "yarn && yarn export",
     "size": "size-limit",
     "postbuild": "next-sitemap"
   },
@@ -70,12 +68,6 @@
     "@semantic-release/git": "^10.0.0",
     "@semantic-release/github": "^8.0.1",
     "@semantic-release/release-notes-generator": "^10.0.2",
-    "@storybook/addon-actions": "^6.1.15",
-    "@storybook/addon-essentials": "^6.1.15",
-    "@storybook/addon-jest": "^6.3.6",
-    "@storybook/addon-knobs": "^6.1.15",
-    "@storybook/addon-links": "^6.1.15",
-    "@storybook/react": "^6.1.15",
     "@testing-library/dom": "^7.29.4",
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.7",
@@ -108,7 +100,6 @@
     "lint-staged": "^10.5.3",
     "prettier": "^2.2.1",
     "semantic-release": "^18.0.0",
-    "storybook-addon-next-router": "^2.0.4",
     "typescript": "^4.4.4"
   },
   "husky": {

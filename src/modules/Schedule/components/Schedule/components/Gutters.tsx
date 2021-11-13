@@ -1,4 +1,4 @@
-import { styledWithTheme } from '@/common/utils/styledWithTheme'
+import { styled } from '@material-ui/system'
 
 import { useDimensions } from '../dimensions'
 
@@ -7,7 +7,7 @@ interface GutterProps {
   y?: number
 }
 
-const GutterElement = styledWithTheme('span')((theme) => ({
+const GutterElement = styled('span')(({ theme }) => ({
   position: 'absolute',
   backgroundColor: theme.palette.primaryRange[30],
 }))

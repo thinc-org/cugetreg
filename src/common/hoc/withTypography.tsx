@@ -1,15 +1,9 @@
-import { Typography, TypographyVariant } from '@material-ui/core'
-import React from 'react'
-
-interface PropTypes {
-  variant: TypographyVariant
-  children: React.ReactNode
-}
+import { Typography, TypographyProps } from '@material-ui/core'
 
 export const withTypography = (Component: React.FC) => {
-  const ComponentWithTypoGraphy = (props: PropTypes) => (
+  const ComponentWithTypoGraphy = (props: TypographyProps) => (
     <Component>
-      <Typography variant={props.variant}>{props.children}</Typography>
+      <Typography {...props} />
     </Component>
   )
   return ComponentWithTypoGraphy

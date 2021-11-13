@@ -1,4 +1,4 @@
-import { createMuiTheme, Theme, ThemeOptions } from '@material-ui/core'
+import { createTheme, Theme, ThemeOptions } from '@material-ui/core'
 
 import { deepAssign } from '@/common/utils/deepAssign'
 
@@ -33,7 +33,7 @@ const darkThemeOptions: ThemeOptions = deepAssign(themeBaseOptions, {
 })
 
 const buildTheme = (themeOptions: ThemeOptions): Theme => {
-  const theme = createMuiTheme(themeOptions)
+  const theme = createTheme(themeOptions)
   overrideMuiTypography(theme)
   overrideMuiBaseComponent(theme)
   return theme

@@ -1,8 +1,9 @@
-import { OutlinedInputClassKey, StyleRules, Theme } from '@material-ui/core'
+import { OutlinedInputClassKey, Theme } from '@material-ui/core'
+import { OverridesStyleRules } from '@material-ui/core/styles/overrides'
 
-export function overrideMuiOutlinedInput(theme: Theme): Partial<StyleRules<OutlinedInputClassKey, {}>> {
+export function overrideMuiOutlinedInput(theme: Theme): Partial<OverridesStyleRules<OutlinedInputClassKey>> {
   const borderColor = theme.palette.primaryRange[100]
-  const defaultStyle: Partial<StyleRules<OutlinedInputClassKey, {}>> = {
+  const defaultStyle: Partial<OverridesStyleRules<OutlinedInputClassKey>> = {
     root: {
       borderRadius: theme.spacing(0.5),
       '&:hover $notchedOutline': {

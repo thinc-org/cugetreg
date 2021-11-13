@@ -1,10 +1,13 @@
 import styled from '@emotion/styled'
 import { Divider, Stack, Typography } from '@mui/material'
 
-export const ResponsiveStack = styled(Stack)`
+export const ResponsiveStack = styled.div`
+  display: flex;
   flex-direction: row;
+  align-items: center;
   ${({ theme }) => theme.breakpoints.down('sm')} {
     flex-direction: column;
+    padding: ${({ theme }) => theme.spacing(2, 0)};
   }
 `
 
@@ -20,21 +23,26 @@ export const BannerContainer = styled(Stack)`
   padding: ${({ theme }) => theme.spacing(3)};
 `
 
-export const PrivacyLink = styled.div`
+export const PrivacyLink = styled.a`
   cursor: pointer;
   text-decoration: none;
   color: ${({ theme }) => theme.palette.primary.contrastText};
 `
 
-export const GithubLink = styled(Stack)`
-  cursor: pointer;
+export const GithubLink = styled.a`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  text-decoration: none;
+  color: ${({ theme }) => theme.palette.primary.contrastText};
 `
 
 export const StyledDivider = styled(Divider)`
   background: ${({ theme }) => theme.palette.primary.contrastText};
+  margin: ${({ theme }) => theme.spacing(2)};
   ${({ theme }) => theme.breakpoints.down('sm')} {
-    margin: ${({ theme }) => theme.spacing(2, 0)};
-    width: 90%;
+    display: none;
   }
 `
 

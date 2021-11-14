@@ -10,6 +10,7 @@ import { lightTheme } from '@/configs/theme'
 import { CourseThumbnail } from '@/modules/CourseThumbnailAPI/components/CourseThumbnail'
 import { createApolloServerClient } from '@/services/apollo'
 import { GetCourseForThumbnailResponse, GET_COURSE_FOR_THUMBNAIL } from '@/services/apollo/query/getCourse'
+import { getCachedImage } from '@/utils/imageCache'
 
 import { getScreenshot } from './_lib/chromium'
 
@@ -18,23 +19,36 @@ const isHtmlDebug = false
 export async function CourseThumbnailAPI(req: NextApiRequest, res: NextApiResponse) {
   try {
     const { courseNo, courseGroup } = parseCourseNoFromQuery(req.query)
-    const html = await getHtml(courseNo, courseGroup)
     if (isHtmlDebug) {
+      const html = await getHtml(courseNo, courseGroup)
       res.setHeader('Content-Type', 'text/html')
       res.end(html)
       return
     }
-    const file = await getScreenshot(html, 'png', true)
+    const key = `${courseNo}-${courseGroup.studyProgram}-${courseGroup.academicYear}-${courseGroup.semester}`
+    if (!key.match(/^\d{7}-[STI]-\d{4}-\d$/)) {
+      throw new Error('Invalid courseNo')
+    }
+    const imageBuffer = await getCachedImage(
+      `courseThumbnail`,
+      `${key}.png`,
+      async () => await generateThumbnail(courseNo, courseGroup)
+    )
     res.statusCode = 200
     res.setHeader('Content-Type', `image/png`)
     res.setHeader('Cache-Control', `public, immutable, no-transform, s-maxage=31536000, max-age=31536000`)
-    res.end(file)
+    res.end(imageBuffer)
   } catch (e) {
     res.statusCode = 500
     res.setHeader('Content-Type', 'text/html')
     res.end('<h1>Internal Error</h1><p>Sorry, there was a problem</p>')
     console.error(e)
   }
+}
+
+async function generateThumbnail(courseNo: string, courseGroup: CourseGroup) {
+  const html = await getHtml(courseNo, courseGroup)
+  return await getScreenshot(html, 'png', true)
 }
 
 async function getHtml(courseNo: string, courseGroup: CourseGroup): Promise<string> {

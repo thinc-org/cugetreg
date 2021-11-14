@@ -146,9 +146,9 @@ function CardHeader({ item }: CardComponentProps) {
   const { buildLink } = useLinkBuilderWithCourseGroup(item)
   const { handleClick, ...colorPickerProps } = useColorPicker(item)
   return (
-    <Stack direction="row" sx={{ paddingTop: { xs: 2, sm: 1 }, marginY: { xs: 0.5, sm: 0 }, paddingRight: 2 }}>
-      <Stack direction="row" flex={1} justifyContent="space-between" alignItems="center">
-        <Grid container columnGap={2} alignItems="center">
+    <Stack direction="row" pt={1} my={0.5} pr={2}>
+      <Stack direction="row" flex={1} justifyContent="space-between" alignItems="flex-start">
+        <Grid container columnGap={2} alignItems="center" py={0.5}>
           <Grid item>
             <StyledLink href={buildLink(`/courses/${item.courseNo}`)}>
               <Typography variant="h5">
@@ -169,8 +169,10 @@ function CardHeader({ item }: CardComponentProps) {
           </Grid>
         </Grid>
         <ColorPicker scheduleClass={item} {...colorPickerProps} />
-        <ColorPickerButton onClick={handleClick}>
-          <Box sx={{ display: { xs: 'none', md: 'inline' }, mr: 1 }}>สีในตาราง</Box>
+        <ColorPickerButton onClick={handleClick} sx={{ mr: { xs: 0, md: 1 } }}>
+          <Box display={{ xs: 'none', md: 'inline' }} mr={1}>
+            สีในตาราง
+          </Box>
           <Circle color={item.color} size={24} />
         </ColorPickerButton>
       </Stack>

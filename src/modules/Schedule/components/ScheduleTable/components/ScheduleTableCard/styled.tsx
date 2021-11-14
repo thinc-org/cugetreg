@@ -3,6 +3,7 @@ import styled from '@emotion/styled'
 import { Button, ButtonProps, NativeSelect } from '@mui/material'
 import { motion } from 'framer-motion'
 
+import { deepAssign } from '@/common/utils/deepAssign'
 import { PaletteRange } from '@/configs/theme/palette'
 
 function primaryRange(lum: PaletteRange) {
@@ -201,16 +202,19 @@ export const StyledNativeSelect = styled(NativeSelect)`
   }
 `
 
-export const ColorPickerButton = (props: ButtonProps) => {
+export const ColorPickerButton = ({ sx, ...props }: ButtonProps) => {
   return (
     <Button
-      sx={{
-        whiteSpace: 'nowrap',
-        marginLeft: 1,
-        height: { xs: 48, md: 'fit-content' },
-        minWidth: { xs: 48, md: 'fit-content' },
-        backgroundColor: { md: 'primaryRange.10' },
-      }}
+      sx={deepAssign(
+        {
+          whiteSpace: 'nowrap',
+          marginLeft: 1,
+          height: { xs: 48, md: 'fit-content' },
+          minWidth: { xs: 48, md: 'fit-content' },
+          backgroundColor: { md: 'primaryRange.10' },
+        },
+        sx
+      )}
       {...props}
     />
   )

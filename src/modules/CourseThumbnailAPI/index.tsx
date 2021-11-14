@@ -30,8 +30,7 @@ export async function CourseThumbnailAPI(req: NextApiRequest, res: NextApiRespon
       throw new Error('Invalid courseNo')
     }
     const imageBuffer = await getCachedImage(
-      `courseThumbnail`,
-      `${key}.png`,
+      `courseThumbnail-${key}.png`,
       async () => await generateThumbnail(courseNo, courseGroup)
     )
     res.statusCode = 200

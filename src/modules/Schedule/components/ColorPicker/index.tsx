@@ -1,4 +1,4 @@
-import { Box, Button, ButtonProps, Popover, Stack, Typography, useTheme } from '@material-ui/core'
+import { Box, Button, ButtonProps, Popover, Stack, Typography, useTheme } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
 import { ColorClassKey } from '@/modules/Schedule/components/ColorPicker/hooks/useColorPicker'
@@ -62,7 +62,13 @@ export const ColorButton = ({ isActive, scheduleColor, ...buttonProps }: ColorBu
   return (
     <Button
       variant="text"
-      sx={{ minWidth: 0, background: isActive ? `${theme.palette.primaryRange[30]}` : undefined }}
+      sx={{
+        minWidth: 0,
+        background: isActive ? theme.palette.primaryRange[30] : undefined,
+        ':hover': {
+          background: theme.palette.primaryRange[30],
+        },
+      }}
       {...buttonProps}
     >
       <Circle color={scheduleColor} />

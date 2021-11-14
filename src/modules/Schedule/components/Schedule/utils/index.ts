@@ -1,5 +1,5 @@
 import { useTheme } from '@mui/material'
-import { Course, Class, DayOfWeek, GenEdType, Section } from '@thinc-org/chula-courses'
+import { Class, DayOfWeek, GenEdType, Section } from '@thinc-org/chula-courses'
 import { useMemo } from 'react'
 
 import { getPaletteRange } from '@/common/utils/getPaletteRange'

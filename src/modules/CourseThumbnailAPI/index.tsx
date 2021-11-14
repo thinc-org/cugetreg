@@ -1,4 +1,4 @@
-import { ThemeProvider } from '@material-ui/core'
+import { ThemeProvider } from '@mui/material'
 import { NextApiRequest, NextApiResponse } from 'next'
 import ReactDOMServer from 'react-dom/server'
 import { I18nextProvider } from 'react-i18next'

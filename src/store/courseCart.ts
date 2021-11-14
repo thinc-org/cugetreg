@@ -162,7 +162,7 @@ export class CourseCart implements CourseCartProps {
             ...data.course,
             selectedSectionNo: course.selectedSectionNo,
             isHidden: course.isHidden,
-            color: course.color,
+            color: course.color ?? getNewColor(fullCourses, data.course),
           }
         } catch (e) {
           detail = {

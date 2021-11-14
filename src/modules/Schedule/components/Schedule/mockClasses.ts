@@ -1,6 +1,7 @@
 import { TimetableClass } from './utils'
 
 const courseTemplate: TimetableClass = {
+  classIndex: 0,
   courseNo: '2110316',
   abbrName: 'PROG LANG PRIN',
   building: 'ENG3',

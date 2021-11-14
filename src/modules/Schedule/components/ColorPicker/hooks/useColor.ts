@@ -1,7 +1,5 @@
 import { useTheme } from '@emotion/react'
-import { Theme } from '@material-ui/core'
 
-import { HighlightColorRange } from '@/configs/theme/palette'
 import { ScheduleColor } from '@/modules/Schedule/components/ColorPicker/constants'
 
 interface ColorScheme {

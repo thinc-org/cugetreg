@@ -1,4 +1,4 @@
-import { Class } from '@thinc-org/chula-courses'
+import { Class, Course } from '@thinc-org/chula-courses'
 
 import { CourseCartItem } from '@/store'
 

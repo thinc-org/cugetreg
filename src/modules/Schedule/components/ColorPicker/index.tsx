@@ -80,6 +80,7 @@ interface CircleProps {
   color: ScheduleColor
   size?: number
 }
+
 export const Circle = ({ color, size = 40 }: CircleProps) => {
   const scheme = useColor(color)
   return (

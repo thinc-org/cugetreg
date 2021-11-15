@@ -14,7 +14,14 @@ import { MdDelete } from 'react-icons/md'
 import { Caption } from '@/common/components/Caption'
 import { dayOfWeekMapper } from '@/common/constants/dayOfWeek'
 import { Analytics } from '@/common/context/Analytics/components/Analytics'
-import { HIDE_COURSE, DELETE_COURSE, SECTION_CHANGE } from '@/common/context/Analytics/constants'
+import { LinkWithAnalytics } from '@/common/context/Analytics/components/LinkWithAnalytics'
+import {
+  HIDE_COURSE,
+  DELETE_COURSE,
+  SECTION_CHANGE,
+  COURSE_TITLE_SCHEDULE_CARD,
+  COLOR_PICKER_BUTTON,
+} from '@/common/context/Analytics/constants'
 import { useLinkBuilderWithCourseGroup } from '@/common/hooks/useLinkBuilder'
 import { Circle, ColorPicker } from '@/modules/Schedule/components/ColorPicker'
 import { useColorPicker } from '@/modules/Schedule/components/ColorPicker/hooks/useColorPicker'
@@ -32,7 +39,6 @@ import {
   MiddlePane,
   Spacer,
   VisibilityToggle,
-  StyledLink,
   RightPane,
   StyledNativeSelect,
   ColorPickerButton,
@@ -150,11 +156,16 @@ function CardHeader({ item }: CardComponentProps) {
       <Stack direction="row" flex={1} justifyContent="space-between" alignItems="flex-start">
         <Grid container columnGap={2} alignItems="center" py={0.5}>
           <Grid item>
-            <StyledLink href={buildLink(`/courses/${item.courseNo}`)}>
+            <LinkWithAnalytics
+              href={buildLink(`/courses/${item.courseNo}`)}
+              passHref
+              elementName={COURSE_TITLE_SCHEDULE_CARD}
+              elementId={item.courseNo}
+            >
               <Typography variant="h5">
                 {item.courseNo} {item.abbrName}
               </Typography>
-            </StyledLink>
+            </LinkWithAnalytics>
           </Grid>
           <Grid item>
             <Typography variant="h6" color={theme.palette.primaryRange[100]}>
@@ -169,12 +180,14 @@ function CardHeader({ item }: CardComponentProps) {
           </Grid>
         </Grid>
         <ColorPicker scheduleClass={item} {...colorPickerProps} />
-        <ColorPickerButton onClick={handleClick} sx={{ mr: { xs: 0, md: 1 } }}>
-          <Box display={{ xs: 'none', md: 'inline' }} mr={1}>
-            สีในตาราง
-          </Box>
-          <Circle color={item.color} size={24} />
-        </ColorPickerButton>
+        <Analytics elementName={COLOR_PICKER_BUTTON} elementId={item.courseNo}>
+          <ColorPickerButton onClick={handleClick} sx={{ mr: { xs: 0, md: 1 } }}>
+            <Box display={{ xs: 'none', md: 'inline' }} mr={1}>
+              สีในตาราง
+            </Box>
+            <Circle color={item.color} size={24} />
+          </ColorPickerButton>
+        </Analytics>
       </Stack>
       <Hidden mdDown>
         <IconButton aria-label={t('delete')} onClick={() => courseCartStore.removeCourse(item)}>

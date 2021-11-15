@@ -53,6 +53,15 @@ export interface CardDetailProps extends CardComponentProps {
   overlaps?: CourseOverlap
 }
 
+/* fixed axis drag hack */
+function getStyle(style: React.CSSProperties | undefined) {
+  if (style?.transform) {
+    const axisLockY = `translate(0px, ${style.transform.split(',').pop()}`
+    return { ...style, transform: axisLockY }
+  }
+  return style
+}
+
 export const ScheduleTableCard = observer(({ item, index, overlaps }: ScheduleTableCardProps) => {
   const { courseNo, isHidden } = item
   const toggleVisibility = useCallback(() => {
@@ -84,15 +93,6 @@ export const ScheduleTableCard = observer(({ item, index, overlaps }: ScheduleTa
         setSwipped(true)
       }
     }
-  }
-
-  /* fixed axis drag hack */
-  function getStyle(style: React.CSSProperties | undefined) {
-    if (style?.transform) {
-      const axisLockY = `translate(0px, ${style.transform.split(',').pop()}`
-      return { ...style, transform: axisLockY }
-    }
-    return style
   }
 
   return (

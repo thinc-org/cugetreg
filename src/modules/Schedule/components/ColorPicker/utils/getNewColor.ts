@@ -5,6 +5,17 @@ import { CourseCartItem } from '@/store'
 
 import { OTHER_COLORS } from '../constants'
 
+/**
+ * This function returns a randomly picked color for the new selected course.
+ * It is also used when user have undefined color.
+ * `GENED_COLORS` are always reserved for GenEd courses otherwise `OTHER_COLORS` will be used.
+ * The colors that are not intersected with `currentItems` will be picked first.
+ * In other case it will return a random color from other than reserved colors.
+ * @param currentItems Courses that are currently in the cart
+ * @param newCourse The new course that will be added
+ * @returns One of `SCHEDULE_COLORS` string
+ */
+
 export function getNewColor(currentItems: CourseCartItem[], newCourse: Course) {
   switch (newCourse.genEdType) {
     case 'HU':

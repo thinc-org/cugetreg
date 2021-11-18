@@ -1,34 +1,83 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+![cover](https://user-images.githubusercontent.com/33742791/142388797-fa14bcfa-b01e-45ab-a271-bfdeeb26285f.png)
 
-## Getting Started
+<!--- insert badge here --->
 
-First, run the development server:
+[CU Get Reg](https://cugetreg.com) เว็บไซต์ที่จะช่วยอำนวยความสะดวกให้กับนิสิตจุฬาลงกรณ์มหาวิทยาลัยทุกคนในการค้นหาวิชาเรียนและวางแผนจัดตารางเรียนล่วงหน้าก่อนการลงทะเบียนจริง พัฒนาโดยชมรม [Thinc.](https://thinc.in.th)
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+## สารบัญ
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- [จุดเริ่มต้นของ CU Get Reg](#beginning-of-cu-get-reg)
+- [โครงการที่เกี่ยวข้อง](#related-repositories)
+- [ร่วมพัฒนาระบบกับเรา](#contribution)
+- [Roadmap](#roadmap)
+- [ทีมผู้พัฒนา](#developers)
+- [ติดต่อเรา](#contacts)
+- [ผู้สนับสนุน](#sponsers)
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+<div id="beginning-of-cu-get-reg"></div>
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+## จุดเริ่มต้นของ CU Get Reg
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+    "GenEd เทอมนี้เราจะลงวิชาอะไรดีนะ?"
 
-## Learn More
+    "GenEd ที่เราเลือกลงไปเวลาจะไปทับกับวิชาบังคับหรือเปล่านะ?"
 
-To learn more about Next.js, take a look at the following resources:
+    "จัดตารางเรียนอย่างไรดีนะ? วันเรียนในแต่ละ section ก็ไม่เหมือนกันอีก สับสนมาก ๆ"
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+และอีกสารพัดคำถามมากมายท่ามกลางความสับสนว่าจะวางแผนการเรียนอย่างไรดีในภาคการศึกษานี้ แน่นอนว่า [ทีมผู้พัฒนา](#developers) ก็เป็นหนึ่งในนั้น
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+ในการวางแผนการเรียนก่อนหน้านี้นั้นยุ่งยากและเสียเวลามาก ข้อมูลและรายละเอียดของวิชาเรียนกระจัดกระจายโดยเฉพาะวิชา GenEd ที่หาวิชาที่ใช่และไม่ซ้อนทับกับวิชาหลักยากมาก ๆ
 
-## Deploy on Vercel
+การวางแผนลงทะเบียนในแต่ละเทอมเมื่อก่อนยุ่งยากและเสียเวลามาก ๆ ข้อมูลวิชาเรียนกระจัดกระจาย โดยเฉพาะอย่างยิ่งวิชา GenEd การจะหาวิชา GenEd ที่ใช่ เวลาเรียนที่ลงตัว ต้องหาข้อมูลจากหลากหลายแหล่งเพื่อประกอบการตัดสินใจ อีกทั้งยังมีเรื่องที่นั่งและความนิยมของวิชา GenEd เป็นปัจจัยสำคัญต่อการตัดสินใจ แต่ข้อมูลเหล่านั้นกลับเข้าถึงได้ยาก ทำให้วางแผนได้ยากลำบาก
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/import?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+[ทีมผู้พัฒนา](#developers) เห็นถึงปัญหานี้ จึงได้วางแผนจัดทำเว็บไซต์เพื่ออำนวยความสะดวกในการวางแผนลงทะเบียนขึ้นมา
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+<div id="related-repositories"></div>
+
+## โครงการที่เกี่ยวข้อง
+
+- [cugetreg-frontend](https://github.com/thinc-org/cugetreg-frontend) เว็บไซต์ CU Get Reg
+- [cugetreg-backend](https://github.com/thinc-org/cugetreg-backend) ระบบหลังบ้านของเว็บไซต์ CU Get Reg
+- [cugetreg-scraper](https://github.com/thinc-org/cugetreg-scraper) ระบบคัดลอกข้อมูลวิชาเรียนแบบสาธารณะจาก [Reg Chula](https://cas.reg.chula.ac.th/cu/cs/QueryCourseScheduleNew/index.html)
+- [chula-courses](https://github.com/thinc-org/chula-courses) Schema ส่วนกลางของข้อมูลรายวิชา
+
+<div id="contribution"></div>
+
+## ร่วมพัฒนาระบบกับเรา
+
+พวกเรา [ทีมผู้พัฒนา](#developers) ยินดีต้อนรับนักฑัฒนาทุกคน เพื่อมาเป็นส่วนหนึ่งในการพัฒนาสังคมของจุฬาลงกรณ์วิทยาลัยให้ดียิ่ง ๆ ขึ้นไปอีก! หากคุณส่วนรู้สึกสนใจที่จะมีส่วนร่วม คุณสามารถเริ่มต้นได้ที่
+
+- [Contribution Guides](#https://github.com/thinc-org/cugetreg-frontend/wiki/Contribution-Guides)
+- [Set up your local environments](https://github.com/thinc-org/cugetreg-frontend/wiki/Contribution-Guides)
+- [Explore issues](https://github.com/thinc-org/cugetreg-frontend/issues)
+- [Our Roadmap](https://github.com/thinc-org/cugetreg-frontend/wiki/Contribution-Guides)
+
+หากคุณยังรู้สึกลังเล คุณสามารถ [ติดต่อเรา](#contacts) เพื่อปรึกษาก่อนได้นะ
+
+## Roadmap
+
+อ่านเพิ่มเติมได้ที่ [Roadmap](https://github.com/thinc-org/cugetreg-frontend/wiki/Contribution-Guides)
+
+<div id="developers"></div>
+
+## ทีมผู้พัฒนา
+
+TODO
+
+<div id="contacts"></div>
+
+## ติดต่อเรา
+
+คุณสามารถติดต่อเราได้ทุกเรื่องตลอดเวลาที่
+
+- Facebook Page: [Thinc.](https://www.facebook.com/ThailandIncubator)
+- LinkedIn: [CU Get Reg](https://www.linkedin.com/company/cugetreg)
+- Discord: เร็ว ๆ นี้
+
+<div id="sponsers"></div>
+
+## ผู้สนับสนุน
+
+1. [สำนักงานการทะเบียน จุฬาลงกรณ์มหาวิทยาลัย](https://www.reg.chula.ac.th) - ผู้อำนวย Server ให้กับเว็บไซต์ CU Get Reg
+
+2. [ศูนย์การศึกษาทั่ว จุฬาลงกรณ์มหาวิทยาลัย](https://www.gened.chula.ac.th) - ผู้ให้ข้อมูลคำอธิบายรายวิชา GenEd

@@ -22,7 +22,7 @@
 
     "GenEd ที่เราเลือกลงไปเวลาจะไปทับกับวิชาบังคับหรือเปล่านะ?"
 
-    "จัดตารางเรียนอย่างไรดีนะ? วันเรียนในแต่ละ section ก็ไม่เหมือนกันอีก สับสนมาก ๆ"
+    "จัดตารางเรียนยังไรดีนะ? วันเรียนในแต่ละ Section ก็ไม่เหมือนกันอีก สับสนมาก ๆ"
 
 และอีกสารพัดคำถามมากมายท่ามกลางความสับสนว่าจะวางแผนการเรียนอย่างไรดีในภาคการศึกษานี้ แน่นอนว่า [ทีมผู้พัฒนา](#developers) ก็เป็นหนึ่งในนั้น
 
@@ -48,11 +48,8 @@
 พวกเรา [ทีมผู้พัฒนา](#developers) ยินดีต้อนรับนักพัฒนาทุกคน! มาร่วมเป็นส่วนหนึ่งในการพัฒนาสังคมของจุฬาลงกรณ์วิทยาลัยให้ดียิ่ง ๆ ขึ้นไปอีก! หากคุณส่วนรู้สึกสนใจที่จะมีส่วนร่วมกับเราแล้ว คุณสามารถเริ่มได้ที่นี่ได้เลย
 
 - [Contribution Guides](#https://github.com/thinc-org/cugetreg-frontend/wiki/Contribution-Guides)
-
 - [Set up your local environments](https://github.com/thinc-org/cugetreg-frontend/wiki/Contribution-Guides)
-
 - [Explore issues](https://github.com/thinc-org/cugetreg-frontend/issues)
-
 - [Our Roadmap](https://github.com/thinc-org/cugetreg-frontend/wiki/Contribution-Guides)
 
 หากคุณยังรู้สึกลังเล คุณสามารถ [ติดต่อเรา](#contacts) เพื่อปรึกษาก่อนได้นะ
@@ -86,3 +83,5 @@ TODO
 1. [สำนักงานการทะเบียน จุฬาลงกรณ์มหาวิทยาลัย](https://www.reg.chula.ac.th) - ผู้สนับสนุน Server ให้กับเว็บไซต์ CU Get Reg
 
 2. [ศูนย์การศึกษาทั่ว จุฬาลงกรณ์มหาวิทยาลัย](https://www.gened.chula.ac.th) - ผู้สนับสนุนข้อมูลคำอธิบายรายวิชา GenEd
+
+3. [Gen อย่าได้ Ed](https://www.facebook.com/genedahs) - ร่วมมือกับ CU Get Reg ในการประชาสัมพันธ์เว็บไซต์ให้กับนิสิตจุฬาฯ

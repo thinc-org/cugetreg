@@ -12,7 +12,7 @@
 - [Roadmap](#roadmap)
 - [ทีมผู้พัฒนา](#developers)
 - [ติดต่อเรา](#contacts)
-- [ผู้สนับสนุน](#sponsers)
+- [ผู้สนับสนุน](#sponsors)
 
 <div id="beginning-of-cu-get-reg"></div>
 
@@ -74,12 +74,12 @@ TODO
 - LinkedIn: [CU Get Reg](https://www.linkedin.com/company/cugetreg)
 - Discord: เร็ว ๆ นี้
 
-<div id="sponsers"></div>
+<div id="sponsors"></div>
 
 ## ผู้สนับสนุน
 
 1. [สำนักงานการทะเบียน จุฬาลงกรณ์มหาวิทยาลัย](https://www.reg.chula.ac.th) - ผู้สนับสนุน Server ให้กับเว็บไซต์ CU Get Reg
 
-2. [ศูนย์การศึกษาทั่ว จุฬาลงกรณ์มหาวิทยาลัย](https://www.gened.chula.ac.th) - ผู้สนับสนุนข้อมูลคำอธิบายรายวิชา GenEd
+2. [ศูนย์การศึกษาทั่วไป จุฬาลงกรณ์มหาวิทยาลัย](https://www.gened.chula.ac.th) - ผู้สนับสนุนข้อมูลคำอธิบายรายวิชา GenEd และเป็นผู้สนับสนุนข้อมูลตอนเรียนวิชา GenEd
 
 3. [Gen อย่าได้ Ed](https://www.facebook.com/genedahs) - ร่วมมือกับ CU Get Reg ในการประชาสัมพันธ์เว็บไซต์ให้กับนิสิตจุฬาฯ

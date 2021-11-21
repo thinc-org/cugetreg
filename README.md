@@ -66,7 +66,7 @@ TODO
 
 ## Contacts
 
-You can contact us anytime at
+You can contact us anytime via
 
 - Facebook Page: [Thinc.](https://www.facebook.com/ThailandIncubator)
 - LinkedIn: [CU Get Reg](https://www.linkedin.com/company/cugetreg)

@@ -24,7 +24,7 @@ Have no idea what courses to take? Don't know what this course is about? We got 
 
     "Each section of this course is taught on different days. How do I choose?"
 
-And many other questions from many students trying to make their study plan for the semester. And we are one of them.
+And many other problems students face when planning their timetable for the semester. We, the CU Get Reg team, are no different.
 
 Picking courses and sections in each semester is a very complicated and time-consuming process. The course information are scattered, espescially GenEd courses. When trying to find the right GenEd, you have to consider many factors such as course contents, available seats, and popularity. But those information are hard to access, which makes planning very hard.
 

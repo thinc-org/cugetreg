@@ -18,7 +18,7 @@ Have no idea what courses to take? Don't know what this course is about? We got 
 
 ## The beginning of CU Get Reg
 
-    "Which GenEd course do I enroll this semester?"
+    "Which GenEd courses should I enroll this semester?"
 
     "Will this GenEd course conflict with my compulsary courses?"
 

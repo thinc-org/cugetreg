@@ -20,7 +20,7 @@ Have no idea what courses to take? Don't know what this course is about? We got 
 
     "Which GenEd courses should I enroll this semester?"
 
-    "Will this GenEd course conflict with my compulsary courses?"
+    "Will this course conflict with my other courses?"
 
     "This course is taught on different day in each section. How do I choose?"
 

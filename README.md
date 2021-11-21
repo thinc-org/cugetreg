@@ -35,7 +35,7 @@ We saw this problem and built [CU Get Reg](https://cugetreg.com) to make this pl
 ## Related repositories
 
 - [cugetreg-frontend](https://github.com/thinc-org/cugetreg-frontend) The web interface, powered by React
-- [cugetreg-backend](https://github.com/thinc-org/cugetreg-backend) The system that powers this site
+- [cugetreg-backend](https://github.com/thinc-org/cugetreg-backend) The core API, powered by GraphQL and NestJS
 - [cugetreg-scraper](https://github.com/thinc-org/cugetreg-scraper) The system that fetches public course data from [Reg Chula](https://cas.reg.chula.ac.th/cu/cs/QueryCourseScheduleNew/index.html)
 - [chula-courses](https://github.com/thinc-org/chula-courses) Data schema
 

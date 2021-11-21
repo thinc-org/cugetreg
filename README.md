@@ -10,7 +10,7 @@ Have no idea what courses to take? Don't know what this course is about? We got 
 - [Related repositories](#related-repositories)
 - [Contribution](#contribution)
 - [Roadmap](#roadmap)
-- [Developers](#developers)
+- [Contributors](#contributors)
 - [Contacts](#contacts)
 - [Sponsors](#sponsors)
 
@@ -56,9 +56,9 @@ CU Get Reg is open source - we welcome all developers. If you want to be a part 
 
 Read more at [Roadmap](https://github.com/thinc-org/cugetreg-frontend/wiki/Contribution-Guides)
 
-<div id="developers"></div>
+<div id="contributors"></div>
 
-## Developers
+## Contributors
 
 TODO
 

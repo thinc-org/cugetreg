@@ -78,4 +78,4 @@ You can contact us anytime at
 
 1. [Office of the Registrar - Chulalongkorn University](https://www.reg.chula.ac.th) - provides the infrastructure for CU Get Reg
 2. [General Education Center - Chulalongkorn University](https://www.gened.chula.ac.th) - provides course description for GenEd courses
-3. [Gen อย่าได้ Ed](https://www.facebook.com/genedahs) - helps promote our website
+3. [Gen อย่าได้ Ed](https://www.facebook.com/genedahs) - helps promote our website and provides data on GenEd courses

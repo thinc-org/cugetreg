@@ -28,7 +28,7 @@ And many other problems students face when planning their timetable for the seme
 
 Picking courses and sections in each semester is a very complicated and time-consuming process. Course information is scattered, espescially GenEd courses. When trying to find the right GenEd, you have to consider many factors such as course contents, available seats, and popularity. However, that information is hard to access which makes planning very difficult.
 
-We saw this problem and built [CU Get Reg](https://cugetreg.com) to make this planning process a breeze.
+We saw this problem and built [CU Get Reg](https://cugetreg.com) to make this planning process a breeze!
 
 <div id="related-repositories"></div>
 

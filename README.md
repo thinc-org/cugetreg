@@ -2,84 +2,80 @@
 
 <!--- insert badge here --->
 
-[CU Get Reg](https://cugetreg.com) เว็บไซต์ที่จะช่วยอำนวยความสะดวกให้กับนิสิตจุฬาลงกรณ์มหาวิทยาลัยทุกคนในการค้นหาวิชาเรียนและวางแผนจัดตารางเรียนล่วงหน้าก่อนการลงทะเบียนจริง พัฒนาโดยชมรม [Thinc.](https://thinc.in.th)
+Have no idea what courses to take? Don't know what this course is about? We got it covered. With [CU Get Reg](https://cugetreg.com), we put all kinds of course data together so that you don't have to.
 
-## สารบัญ
+## Contents
 
-- [จุดเริ่มต้นของ CU Get Reg](#beginning-of-cu-get-reg)
-- [โครงการที่เกี่ยวข้อง](#related-repositories)
-- [มาเป็นส่วนหนึ่งกับเรา](#contribution)
+- [The beginning of CU Get Reg](#beginning-of-cu-get-reg)
+- [Related repositories](#related-repositories)
+- [Contribution](#contribution)
 - [Roadmap](#roadmap)
-- [ทีมผู้พัฒนา](#developers)
-- [ติดต่อเรา](#contacts)
-- [ผู้สนับสนุน](#sponsors)
+- [Contributors](#contributors)
+- [Contacts](#contacts)
+- [Sponsors](#sponsors)
 
 <div id="beginning-of-cu-get-reg"></div>
 
-## จุดเริ่มต้นของ CU Get Reg
+## The beginning of CU Get Reg
 
-    "GenEd เทอมนี้เราจะลงวิชาอะไรดีนะ?"
+    "Which GenEd courses should I enroll this semester?"
 
-    "GenEd ที่เราเลือกลงไปเวลาจะไปทับกับวิชาบังคับหรือเปล่านะ?"
+    "Will this course conflict with my other courses?"
 
-    "จัดตารางเรียนยังไรดีนะ? วันเรียนในแต่ละ Section ก็ไม่เหมือนกันอีก สับสนมาก ๆ"
+    "Each section of this course is taught on different days. How do I choose?"
 
-และอีกสารพัดคำถามมากมายท่ามกลางความสับสนว่าจะวางแผนการเรียนอย่างไรดีในภาคการศึกษานี้ แน่นอนว่า [ทีมผู้พัฒนา](#developers) ก็เป็นหนึ่งในนั้น
+And many other problems students face when planning their timetable for the semester. We, the CU Get Reg team, are no different.
 
-การวางแผนลงทะเบียนในแต่ละเทอมเมื่อก่อนยุ่งยากและเสียเวลามาก ๆ ข้อมูลวิชาเรียนกระจัดกระจาย โดยเฉพาะอย่างยิ่งวิชา GenEd การจะหาวิชา GenEd ที่ใช่ เวลาเรียนที่ลงตัว ต้องหาข้อมูลจากหลากหลายแหล่งเพื่อประกอบการตัดสินใจ อีกทั้งยังมีเรื่องที่นั่งและความนิยมของวิชา GenEd เป็นปัจจัยสำคัญต่อการตัดสินใจ แต่ข้อมูลเหล่านั้นกลับเข้าถึงได้ยาก ทำให้วางแผนได้ยากลำบาก
+Picking courses and sections in each semester is a very complicated and time-consuming process. Course information is scattered, especially GenEd courses. When trying to find the right GenEd, you have to consider many factors such as course contents, available seats, and popularity. However, that information is hard to access which makes planning very difficult.
 
-[ทีมผู้พัฒนา](#developers) เห็นถึงปัญหานี้ จึงได้วางแผนจัดทำเว็บไซต์เพื่ออำนวยความสะดวกในการวางแผนลงทะเบียนขึ้นมา
+We saw this problem and built [CU Get Reg](https://cugetreg.com) to make this planning process a breeze!
 
 <div id="related-repositories"></div>
 
-## โปรเจคที่เกี่ยวข้อง
+## Related repositories
 
-- [cugetreg-frontend](https://github.com/thinc-org/cugetreg-frontend) เว็บไซต์ CU Get Reg
-- [cugetreg-backend](https://github.com/thinc-org/cugetreg-backend) ระบบหลังบ้านของเว็บไซต์ CU Get Reg
-- [cugetreg-scraper](https://github.com/thinc-org/cugetreg-scraper) ระบบคัดลอกข้อมูลวิชาเรียนแบบสาธารณะจาก [Reg Chula](https://cas.reg.chula.ac.th/cu/cs/QueryCourseScheduleNew/index.html)
-- [chula-courses](https://github.com/thinc-org/chula-courses) Schema ส่วนกลางของข้อมูลรายวิชา
+- [cugetreg-frontend](https://github.com/thinc-org/cugetreg-frontend) The web interface, powered by React
+- [cugetreg-backend](https://github.com/thinc-org/cugetreg-backend) The core API, powered by GraphQL and NestJS
+- [cugetreg-scraper](https://github.com/thinc-org/cugetreg-scraper) The system that fetches public course data from [Reg Chula](https://cas.reg.chula.ac.th/cu/cs/QueryCourseScheduleNew/index.html)
+- [chula-courses](https://github.com/thinc-org/chula-courses) Data schema
 
 <div id="contribution"></div>
 
-## มาเป็นส่วนหนึ่งกับเรา
+## Contribution
 
-พวกเรา [ทีมผู้พัฒนา](#developers) ยินดีต้อนรับนักพัฒนาทุกคน! มาร่วมเป็นส่วนหนึ่งในการพัฒนาสังคมของจุฬาลงกรณ์วิทยาลัยให้ดียิ่ง ๆ ขึ้นไปอีก! หากคุณส่วนรู้สึกสนใจที่จะมีส่วนร่วมกับเราแล้ว คุณสามารถเริ่มได้ที่นี่ได้เลย
+CU Get Reg is open source - we welcome all developers. If you want to be a part of CU Get Reg and improve Chulalongkorn University society, you can start here!
 
 - [Contribution Guides](#https://github.com/thinc-org/cugetreg-frontend/wiki/Contribution-Guides)
 - [Set up your local environments](https://github.com/thinc-org/cugetreg-frontend/wiki/Contribution-Guides)
 - [Explore issues](https://github.com/thinc-org/cugetreg-frontend/issues)
 - [Our Roadmap](https://github.com/thinc-org/cugetreg-frontend/wiki/Contribution-Guides)
 
-หากคุณยังรู้สึกลังเล คุณสามารถ [ติดต่อเรา](#contacts) เพื่อปรึกษาก่อนได้นะ
-
 <div id="roadmap"></div>
 
 ## Roadmap
 
-อ่านเพิ่มเติมได้ที่ [Roadmap](https://github.com/thinc-org/cugetreg-frontend/wiki/Contribution-Guides)
+Read more at [Roadmap](https://github.com/thinc-org/cugetreg-frontend/wiki/Contribution-Guides)
 
-<div id="developers"></div>
+<div id="contributors"></div>
 
-## ทีมผู้พัฒนา
+## Contributors
 
 TODO
 
 <div id="contacts"></div>
 
-## ติดต่อเรา
+## Contacts
 
-คุณสามารถติดต่อเราได้ทุกเรื่องตลอดเวลาที่
+You can contact us anytime via
 
 - Facebook Page: [Thinc.](https://www.facebook.com/ThailandIncubator)
 - LinkedIn: [CU Get Reg](https://www.linkedin.com/company/cugetreg)
-- Discord: เร็ว ๆ นี้
+- Discord: Coming soon
 
 <div id="sponsors"></div>
 
-## ผู้สนับสนุน
+## Sponsors
 
-1. [สำนักงานการทะเบียน จุฬาลงกรณ์มหาวิทยาลัย](https://www.reg.chula.ac.th) - ผู้สนับสนุน Server ให้กับเว็บไซต์ CU Get Reg
-
-2. [ศูนย์การศึกษาทั่วไป จุฬาลงกรณ์มหาวิทยาลัย](https://www.gened.chula.ac.th) - ผู้สนับสนุนข้อมูลคำอธิบายรายวิชา GenEd และเป็นผู้สนับสนุนข้อมูลตอนเรียนวิชา GenEd
-
-3. [Gen อย่าได้ Ed](https://www.facebook.com/genedahs) - ร่วมมือกับ CU Get Reg ในการประชาสัมพันธ์เว็บไซต์ให้กับนิสิตจุฬาฯ
+1. [Office of the Registrar - Chulalongkorn University](https://www.reg.chula.ac.th) - provides the infrastructure for CU Get Reg
+2. [General Education Center - Chulalongkorn University](https://www.gened.chula.ac.th) - provides course description for GenEd courses
+3. [Gen อย่าได้ Ed](https://www.facebook.com/genedahs) - helps promote our website and provides data on GenEd courses

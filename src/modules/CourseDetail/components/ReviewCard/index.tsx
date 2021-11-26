@@ -30,8 +30,6 @@ export const ReviewCard: React.FC<ReviewCardProps> = (data) => {
     reportReview(data._id)
   }
 
-  console.warn(data)
-
   return (
     <Card direction="column" spacing={2}>
       <Stack direction="row" justifyContent="space-between">

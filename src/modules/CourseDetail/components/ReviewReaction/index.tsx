@@ -23,19 +23,15 @@ export const ReviewReaction: React.FC<ReviewReactionProps> = ({ type, pressed, r
   }
 
   const SelectedIcon = (props: IconBaseProps) => {
-    const color = theme.palette.primaryRange[50]
+    const color = getColor()
     const modifiedProps: IconBaseProps = { ...props, color, size: 20 }
     switch (type) {
       case ReviewInteraction.Like:
-        return !pressed ? <MdThumbUpOffAlt {...modifiedProps} /> : <MdThumbUp {...modifiedProps} color={getColor()} />
+        return !pressed ? <MdThumbUpOffAlt {...modifiedProps} /> : <MdThumbUp {...modifiedProps} />
       case ReviewInteraction.Dislike:
-        return !pressed ? (
-          <MdThumbDownOffAlt {...modifiedProps} />
-        ) : (
-          <MdThumbDown {...modifiedProps} color={getColor()} />
-        )
+        return !pressed ? <MdThumbDownOffAlt {...modifiedProps} /> : <MdThumbDown {...modifiedProps} />
       default:
-        return !pressed ? <MdThumbUpOffAlt {...modifiedProps} /> : <MdThumbUp {...modifiedProps} color={getColor()} />
+        return !pressed ? <MdThumbUpOffAlt {...modifiedProps} /> : <MdThumbUp {...modifiedProps} />
     }
   }
 

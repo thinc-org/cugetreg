@@ -3,7 +3,7 @@ import { MdFlag, MdOutlineStar } from 'react-icons/md'
 
 import { GeneralChip } from '@/common/components/Chips'
 import { ReviewInteraction } from '@/common/types/reviews'
-import { getSemesterName } from '@/common/utils/getSemesterNname'
+import { getSemesterName } from '@/common/utils/getSemesterName'
 import { ReviewReaction } from '@/modules/CourseDetail/components/ReviewReaction'
 
 import { Card, CardTerm, CardContent, CardRating, CardMaxRating } from './styled'

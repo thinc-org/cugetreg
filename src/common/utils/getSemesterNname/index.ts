@@ -1,6 +1,6 @@
-import { SemesterEnum } from '@thinc-org/chula-courses'
+import { Semester, SemesterEnum } from '@thinc-org/chula-courses'
 
-export const getSemesterName = (semester: SemesterEnum) => {
+export const getSemesterName = (semester: SemesterEnum | Semester) => {
   switch (semester) {
     case SemesterEnum.First:
       return 'ภาคต้น'

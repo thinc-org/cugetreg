@@ -1,11 +1,5 @@
-import { SemesterEnum } from '@thinc-org/chula-courses'
+import { Review } from '@/common/types/reviews'
 
-export interface ReviewCardProps {
-  semester: SemesterEnum
-  academicYear: string
-  content: string
-  rating: number
-  like: number
-  dislike: number
+export interface ReviewCardProps extends Review {
   pending?: boolean
 }

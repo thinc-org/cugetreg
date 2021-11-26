@@ -4,7 +4,9 @@ import { useState } from 'react'
 import { IconBaseProps } from 'react-icons/lib'
 import { MdThumbUpOffAlt, MdThumbUp, MdThumbDownOffAlt, MdThumbDown } from 'react-icons/md'
 
-import { ReviewReactionProps, ReviewReactionType } from './types'
+import { ReviewInteraction } from '@/common/types/reviews'
+
+import { ReviewReactionProps } from './types'
 
 export const ReviewReaction: React.FC<ReviewReactionProps> = ({ type, defaultPressed, reactionCount }) => {
   const theme = useTheme()
@@ -18,9 +20,9 @@ export const ReviewReaction: React.FC<ReviewReactionProps> = ({ type, defaultPre
   const getColor = () => {
     if (pressed) {
       switch (type) {
-        case ReviewReactionType.Like:
+        case ReviewInteraction.Like:
           return theme.palette.highlight.green[500]
-        case ReviewReactionType.Dislike:
+        case ReviewInteraction.Dislike:
           return theme.palette.highlight.red[500]
       }
     }
@@ -31,9 +33,9 @@ export const ReviewReaction: React.FC<ReviewReactionProps> = ({ type, defaultPre
     const color = theme.palette.primaryRange[50]
     const modifiedProps: IconBaseProps = { ...props, color, size: 20 }
     switch (type) {
-      case ReviewReactionType.Like:
+      case ReviewInteraction.Like:
         return !pressed ? <MdThumbUpOffAlt {...modifiedProps} /> : <MdThumbUp {...modifiedProps} color={getColor()} />
-      case ReviewReactionType.Dislike:
+      case ReviewInteraction.Dislike:
         return !pressed ? (
           <MdThumbDownOffAlt {...modifiedProps} />
         ) : (

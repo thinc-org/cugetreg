@@ -1,10 +1,7 @@
+import { ReviewInteraction } from '@/common/types/reviews'
+
 export interface ReviewReactionProps {
-  type: ReviewReactionType
+  type: ReviewInteraction
   defaultPressed: boolean
   reactionCount: number
-}
-
-export enum ReviewReactionType {
-  Like = 'like',
-  Dislike = 'dislike',
 }

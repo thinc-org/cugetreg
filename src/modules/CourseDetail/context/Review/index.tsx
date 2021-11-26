@@ -1,8 +1,10 @@
 import { useMutation, useQuery } from '@apollo/client'
 import { remove, unionBy } from 'lodash'
-import React, { createContext, useEffect } from 'react'
+import React, { createContext, useContext, useEffect } from 'react'
 
+import { SnackbarContext } from '@/common/context/Snackbar'
 import { useCourseGroup } from '@/common/hooks/useCourseGroup'
+import { useLoginGuard } from '@/common/hooks/useLoginGuard'
 import { Review, ReviewInteraction } from '@/common/types/reviews'
 import {
   GetMyPendingReviewsResponse,
@@ -24,6 +26,8 @@ export const ReviewContext = createContext<ReviewContextValues>(DEFAULT_REVIEW_C
 
 export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, children }) => {
   const { studyProgram } = useCourseGroup()
+  const { isLoggedIn, Dialog } = useLoginGuard()
+  const { emitMessage } = useContext(SnackbarContext)
 
   const reviewQuery = useQuery<GetReviewsResponse, GetReviewsVars>(GET_REVIEWS, {
     variables: {
@@ -57,15 +61,19 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
   }, [myPendingReviewQuery.data])
 
   const setInteraction = async (reviewId: string, interaction: ReviewInteraction) => {
-    const response = await setInteractionMutaion({
-      variables: {
-        reviewId,
-        interaction,
-      },
-    })
-    if (!response.errors && response.data) {
-      const newReview = response.data.setInteraction
-      setReviews((reviews) => unionBy(reviews, [newReview], '_id'))
+    try {
+      const response = await setInteractionMutaion({
+        variables: {
+          reviewId,
+          interaction,
+        },
+      })
+      if (!response.errors && response.data) {
+        const newReview = response.data.setInteraction
+        setReviews((reviews) => unionBy(reviews, [newReview], '_id'))
+      }
+    } catch (err) {
+      emitMessage((err as Error).message, 'error')
     }
   }
 
@@ -74,14 +82,20 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
   }
 
   const deleteMyPendingReview = async (reviewId: string) => {
-    const response = await removeReivewMutation({
-      variables: {
-        reviewId,
-      },
-    })
-    if (!response.errors && response.data) {
-      const reviewId = response.data.removeReview._id
-      setReviews((reviews) => remove(reviews, (data) => data._id === reviewId))
+    try {
+      if (isLoggedIn()) {
+        const response = await removeReivewMutation({
+          variables: {
+            reviewId,
+          },
+        })
+        if (!response.errors && response.data) {
+          const reviewId = response.data.removeReview._id
+          setReviews((reviews) => remove(reviews, (data) => data._id === reviewId))
+        }
+      }
+    } catch (err) {
+      emitMessage((err as Error).message, 'error')
     }
   }
 
@@ -93,5 +107,10 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
     deleteMyPendingReview,
   }
 
-  return <ReviewContext.Provider value={value}>{children}</ReviewContext.Provider>
+  return (
+    <ReviewContext.Provider value={value}>
+      <Dialog />
+      {children}
+    </ReviewContext.Provider>
+  )
 }

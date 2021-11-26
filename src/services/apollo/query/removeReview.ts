@@ -1,6 +1,7 @@
 import gql from 'graphql-tag'
 
 import { Review } from '@/common/types/reviews'
+import { REVIEW_DATA_FIELDS } from '@/services/apollo/query/reviewDataField'
 
 export interface RemoveReviewVars {
   reviewId: string
@@ -13,17 +14,7 @@ export interface RemoveReviewResponse {
 export const REMOVE_REVIEW = gql`
   mutation removeReview($reviewId: String!) {
     removeReview(reviewId: $reviewId) {
-      _id
-      rating
-      courseNo
-      semester
-      academicYear
-      studyProgram
-      content
-      likeCount
-      dislikeCount
-      hasLiked
-      hasDisliked
+      ${REVIEW_DATA_FIELDS}
     }
   }
 `

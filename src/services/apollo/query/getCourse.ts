@@ -17,7 +17,7 @@ export interface GetCourseResponse {
 export const GET_COURSE = gql`
 query GetCourseInfo($courseNo: String!, $courseGroup: CourseGroupInput!) {
     course(courseNo: $courseNo, courseGroup: $courseGroup) {
-        ${COURSE_DATA_FIELDS}
+      ${COURSE_DATA_FIELDS}
     }
 }
 `

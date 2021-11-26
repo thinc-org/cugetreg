@@ -1,6 +1,7 @@
 import gql from 'graphql-tag'
 
 import { Review, ReviewInteraction } from '@/common/types/reviews'
+import { REVIEW_DATA_FIELDS } from '@/services/apollo/query/reviewDataField'
 
 export interface SetReviewInteractionVars {
   reviewId: string
@@ -14,16 +15,7 @@ export interface SetReviewInteractionResponse {
 export const SET_REVIEW_INTERACTION = gql`
   mutation setInteraction($reviewId: String!, $interaction: Interaction!) {
     setInteraction(reviewId: $reviewId, interaction: $interaction) {
-      _id
-      rating
-      courseNo
-      semester
-      academicYear
-      studyProgram
-      content
-      likeCount
-      dislikeCount
-      myInteraction
+      ${REVIEW_DATA_FIELDS}
     }
   }
 `

@@ -5,9 +5,9 @@ import { MdFlag, MdOutlineStar } from 'react-icons/md'
 import { GeneralChip } from '@/common/components/Chips'
 import { ReviewInteraction } from '@/common/types/reviews'
 import { getSemesterName } from '@/common/utils/getSemesterName'
-import { ReviewReaction } from '@/modules/CourseDetail/components/ReviewReaction'
 import { ReviewContext } from '@/modules/CourseDetail/context/Review'
 
+import { ReviewReaction } from '../ReviewReaction'
 import { Card, CardTerm, CardContent, CardRating, CardMaxRating } from './styled'
 import { ReviewCardProps } from './types'
 
@@ -29,6 +29,8 @@ export const ReviewCard: React.FC<ReviewCardProps> = (data) => {
   const handleReportClick = () => {
     reportReview(data._id)
   }
+
+  console.warn(data)
 
   return (
     <Card direction="column" spacing={2}>

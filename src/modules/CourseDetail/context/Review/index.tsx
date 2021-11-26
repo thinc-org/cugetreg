@@ -1,4 +1,5 @@
 import { useMutation, useQuery } from '@apollo/client'
+import { FormControlUnstyledContext } from '@mui/material'
 import { remove, unionBy } from 'lodash'
 import React, { createContext, useContext, useEffect } from 'react'
 
@@ -62,15 +63,18 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
 
   const setInteraction = async (reviewId: string, interaction: ReviewInteraction) => {
     try {
-      const response = await setInteractionMutaion({
-        variables: {
-          reviewId,
-          interaction,
-        },
-      })
-      if (!response.errors && response.data) {
-        const newReview = response.data.setInteraction
-        setReviews((reviews) => unionBy(reviews, [newReview], '_id'))
+      if (isLoggedIn()) {
+        console.warn('TRY TO SET', reviewId, interaction)
+        const response = await setInteractionMutaion({
+          variables: {
+            reviewId,
+            interaction,
+          },
+        })
+        if (!response.errors && response.data) {
+          const newReview = response.data.setInteraction
+          setReviews((reviews) => unionBy(reviews, [newReview], '_id'))
+        }
       }
     } catch (err) {
       emitMessage((err as Error).message, 'error')

@@ -1,0 +1,69 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ReviewReaction should render ReviewReaction type dislike like correctly when defaultPressed=false  1`] = `
+<ForwardRef(Stack)
+  alignItems="center"
+  direction="row"
+  onClick={[Function]}
+  spacing={1}
+>
+  <SelectedIcon />
+  <ForwardRef(Typography)
+    color="primaryRange.50"
+    variant="h6"
+  >
+    42
+  </ForwardRef(Typography)>
+</ForwardRef(Stack)>
+`;
+
+exports[`ReviewReaction should render ReviewReaction type dislike like correctly when defaultPressed=true  1`] = `
+<ForwardRef(Stack)
+  alignItems="center"
+  direction="row"
+  onClick={[Function]}
+  spacing={1}
+>
+  <SelectedIcon />
+  <ForwardRef(Typography)
+    color="primaryRange.50"
+    variant="h6"
+  >
+    42
+  </ForwardRef(Typography)>
+</ForwardRef(Stack)>
+`;
+
+exports[`ReviewReaction should render ReviewReaction type like like correctly when defaultPressed=false  1`] = `
+<ForwardRef(Stack)
+  alignItems="center"
+  direction="row"
+  onClick={[Function]}
+  spacing={1}
+>
+  <SelectedIcon />
+  <ForwardRef(Typography)
+    color="primaryRange.50"
+    variant="h6"
+  >
+    42
+  </ForwardRef(Typography)>
+</ForwardRef(Stack)>
+`;
+
+exports[`ReviewReaction should render ReviewReaction type like like correctly when defaultPressed=true  1`] = `
+<ForwardRef(Stack)
+  alignItems="center"
+  direction="row"
+  onClick={[Function]}
+  spacing={1}
+>
+  <SelectedIcon />
+  <ForwardRef(Typography)
+    color="primaryRange.50"
+    variant="h6"
+  >
+    42
+  </ForwardRef(Typography)>
+</ForwardRef(Stack)>
+`;

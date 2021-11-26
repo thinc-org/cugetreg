@@ -13,6 +13,7 @@ import { Language } from '@/common/i18n'
 import { getExamDate } from '@/common/utils/getExamData'
 import { getExamPeriod } from '@/common/utils/getExamPeriod'
 import { PageMeta } from '@/components/PageMeta'
+import { ReviewProvider } from '@/modules/CourseDetail/context/Review'
 import { createApolloServerClient } from '@/services/apollo'
 import { GetCourseResponse, GET_COURSE } from '@/services/apollo/query/getCourse'
 
@@ -126,7 +127,9 @@ export function CourseDetailPage(props: { data: GetCourseResponse }) {
         )}
       </GridContainer>
       {CourseList}
-      <ReviewList course={course} />
+      <ReviewProvider courseNo={course.courseNo}>
+        <ReviewList />
+      </ReviewProvider>
       <ReviewForm courseNo={course.courseNo} />
     </Container>
   )

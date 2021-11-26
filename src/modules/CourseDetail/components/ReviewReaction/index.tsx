@@ -1,6 +1,5 @@
 import { Stack, Typography } from '@mui/material'
 import { useTheme } from '@mui/system'
-import { useState } from 'react'
 import { IconBaseProps } from 'react-icons/lib'
 import { MdThumbUpOffAlt, MdThumbUp, MdThumbDownOffAlt, MdThumbDown } from 'react-icons/md'
 
@@ -8,14 +7,8 @@ import { ReviewInteraction } from '@/common/types/reviews'
 
 import { ReviewReactionProps } from './types'
 
-export const ReviewReaction: React.FC<ReviewReactionProps> = ({ type, defaultPressed, reactionCount }) => {
+export const ReviewReaction: React.FC<ReviewReactionProps> = ({ type, pressed, reactionCount, onClick }) => {
   const theme = useTheme()
-  const [pressed, setPressed] = useState(defaultPressed)
-
-  const handleClick = () => {
-    // TODO: send the result to server
-    setPressed(!pressed)
-  }
 
   const getColor = () => {
     if (pressed) {
@@ -47,7 +40,7 @@ export const ReviewReaction: React.FC<ReviewReactionProps> = ({ type, defaultPre
   }
 
   return (
-    <Stack spacing={1} direction="row" onClick={handleClick} alignItems="center">
+    <Stack spacing={1} direction="row" alignItems="center" onClick={onClick}>
       <SelectedIcon />
       <Typography variant="h6" color={getColor()}>
         {reactionCount}

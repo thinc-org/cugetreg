@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@apollo/client'
-import { remove, unionBy } from 'lodash'
+import { filter, unionBy } from 'lodash'
 import React, { createContext, useContext, useEffect } from 'react'
 
 import { SnackbarContext } from '@/common/context/Snackbar'
@@ -110,8 +110,8 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
       })
       if (!response.errors && response.data) {
         const reviewId = response.data.removeReview._id
-        setReviews((reviews) => remove(reviews, (data) => data._id === reviewId))
-        setMyPendingReviews((reviews) => remove(reviews, (data) => data._id === reviewId))
+        setReviews((reviews) => filter(reviews, (data) => data._id !== reviewId))
+        setMyPendingReviews((reviews) => filter(reviews, (data) => data._id !== reviewId))
       }
     } catch (err) {
       emitMessage((err as Error).message, 'error')

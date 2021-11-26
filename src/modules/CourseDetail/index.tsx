@@ -3,6 +3,7 @@ import { Grid, Typography } from '@mui/material'
 import { getFaculty } from '@thinc-org/chula-courses'
 import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 import { NextSeoProps } from 'next-seo/lib/types'
+import dynamic from 'next/dynamic'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -13,12 +14,9 @@ import { Language } from '@/common/i18n'
 import { getExamDate } from '@/common/utils/getExamData'
 import { getExamPeriod } from '@/common/utils/getExamPeriod'
 import { PageMeta } from '@/components/PageMeta'
-import { ReviewProvider } from '@/modules/CourseDetail/context/Review'
 import { createApolloServerClient } from '@/services/apollo'
 import { GetCourseResponse, GET_COURSE } from '@/services/apollo/query/getCourse'
 
-import { ReviewForm } from './components/ReviewForm'
-import { ReviewList } from './components/ReviewList'
 import {
   Container,
   DescriptionTitle,
@@ -31,6 +29,10 @@ import {
 import { courseTypeStringFromCourse } from './utils/courseTypeStringFromCourse'
 import { groupBy } from './utils/groupBy'
 import { parseVariablesFromQuery } from './utils/parseVariablesFromQuery'
+
+const DynamicReviewProvider = dynamic(async () => (await import('./context/Review')).ReviewProvider, { ssr: false })
+const DynamicReviewForm = dynamic(async () => (await import('./components/ReviewForm')).ReviewForm, { ssr: false })
+const DynamicReviewList = dynamic(async () => (await import('./components/ReviewList')).ReviewList, { ssr: false })
 
 export function CourseDetailPage(props: { data: GetCourseResponse }) {
   const { i18n } = useTranslation()
@@ -127,10 +129,10 @@ export function CourseDetailPage(props: { data: GetCourseResponse }) {
         )}
       </GridContainer>
       {CourseList}
-      <ReviewProvider courseNo={course.courseNo}>
-        <ReviewList />
-        <ReviewForm />
-      </ReviewProvider>
+      <DynamicReviewProvider courseNo={course.courseNo}>
+        <DynamicReviewList />
+        <DynamicReviewForm />
+      </DynamicReviewProvider>
     </Container>
   )
 }

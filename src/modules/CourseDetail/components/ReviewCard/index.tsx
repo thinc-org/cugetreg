@@ -54,24 +54,26 @@ export const ReviewCard: React.FC<ReviewCardProps> = (data) => {
       </Stack>
       <CardContent>{data.content}</CardContent>
       <Stack direction="row" justifyContent="space-between" alignItems="center">
-        <Stack direction="row" spacing={4}>
-          <ReviewReaction
-            type={ReviewInteraction.Like}
-            pressed={data.myInteraction === ReviewInteraction.Like}
-            reactionCount={data.likeCount}
-            onClick={handleLikeClick}
-          />
-          <ReviewReaction
-            type={ReviewInteraction.Dislike}
-            pressed={data.myInteraction === ReviewInteraction.Dislike}
-            reactionCount={data.dislikeCount}
-            onClick={handleDislikeClick}
-          />
-        </Stack>
         {data.pending ? (
-          <MdDeleteOutline {...actionIconProps} onClick={handleDeleteClick} />
+          <MdDeleteOutline {...actionIconProps} onClick={handleDeleteClick} style={{ marginLeft: 'auto' }} />
         ) : (
-          <MdFlag {...actionIconProps} onClick={handleReportClick} />
+          <>
+            <Stack direction="row" spacing={4}>
+              <ReviewReaction
+                type={ReviewInteraction.Like}
+                pressed={data.myInteraction === ReviewInteraction.Like}
+                reactionCount={data.likeCount}
+                onClick={handleLikeClick}
+              />
+              <ReviewReaction
+                type={ReviewInteraction.Dislike}
+                pressed={data.myInteraction === ReviewInteraction.Dislike}
+                reactionCount={data.dislikeCount}
+                onClick={handleDislikeClick}
+              />
+            </Stack>
+            <MdFlag {...actionIconProps} onClick={handleReportClick} />
+          </>
         )}
       </Stack>
     </Card>

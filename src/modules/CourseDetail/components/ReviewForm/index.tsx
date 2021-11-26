@@ -1,4 +1,3 @@
-import { useMutation } from '@apollo/client'
 import { Rating, Select, Stack, MenuItem, Typography, Button } from '@mui/material'
 import { SemesterEnum } from '@thinc-org/chula-courses'
 import { useContext } from 'react'
@@ -7,12 +6,8 @@ import { useTranslation } from 'react-i18next'
 
 import { MultiplelineTextField } from '@/common/components/MultiplelineTextField'
 import { SnackbarContext } from '@/common/context/Snackbar'
-import { useCourseGroup } from '@/common/hooks/useCourseGroup'
-import { useLoginGuard } from '@/common/hooks/useLoginGuard'
 import { getCurrentTerm } from '@/common/utils/getCurrentTerm'
-import { CREATE_REVIEW, CreateReviewResponse, CreateReviewVars } from '@/services/apollo/query/createReview'
-
-import { ReviewFormProps } from './types'
+import { ReviewContext } from '@/modules/CourseDetail/context/Review'
 
 interface FormValues {
   academicYear: string
@@ -21,36 +16,21 @@ interface FormValues {
   content: string
 }
 
-export const ReviewForm: React.FC<ReviewFormProps> = ({ courseNo }) => {
-  const { isLoggedIn, Dialog } = useLoginGuard()
+export const ReviewForm: React.FC = () => {
   const { register, handleSubmit, control } = useForm<FormValues>()
   const { academicYear, semester } = getCurrentTerm()
   const { t } = useTranslation('review')
   const { emitMessage } = useContext(SnackbarContext)
-  const { studyProgram } = useCourseGroup()
-  const [createReviewMutation] = useMutation<CreateReviewResponse, CreateReviewVars>(CREATE_REVIEW)
+
+  const { submitReview } = useContext(ReviewContext)
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    console.log('success', data)
-    const ratingNumber = parseFloat(data.rating) * 2 // 1 - 10, 0 isn't accepted
-    try {
-      if (isLoggedIn()) {
-        await createReviewMutation({
-          variables: {
-            createReviewInput: {
-              rating: ratingNumber,
-              courseNo: courseNo,
-              semester: data.semester,
-              academicYear: data.academicYear,
-              studyProgram: studyProgram,
-              content: data.content,
-            },
-          },
-        })
-      }
-    } catch (err) {
-      emitMessage((err as Error).message, 'error')
-    }
+    submitReview({
+      academicYear: data.academicYear,
+      semester: data.semester,
+      rating: parseFloat(data.rating) as number,
+      content: data.content,
+    })
   }
 
   const onError: SubmitErrorHandler<FormValues> = (errors) => {
@@ -60,7 +40,6 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({ courseNo }) => {
 
   return (
     <>
-      <Dialog />
       <Typography variant="h4" mt={5}>
         {t('title')}
       </Typography>

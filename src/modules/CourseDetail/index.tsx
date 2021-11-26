@@ -129,8 +129,8 @@ export function CourseDetailPage(props: { data: GetCourseResponse }) {
       {CourseList}
       <ReviewProvider courseNo={course.courseNo}>
         <ReviewList />
+        <ReviewForm />
       </ReviewProvider>
-      <ReviewForm courseNo={course.courseNo} />
     </Container>
   )
 }

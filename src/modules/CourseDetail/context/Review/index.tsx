@@ -6,6 +6,7 @@ import { SnackbarContext } from '@/common/context/Snackbar'
 import { useCourseGroup } from '@/common/hooks/useCourseGroup'
 import { useLoginGuard } from '@/common/hooks/useLoginGuard'
 import { Review, ReviewInteraction } from '@/common/types/reviews'
+import { CreateReviewResponse, CreateReviewVars, CREATE_REVIEW } from '@/services/apollo/query/createReview'
 import {
   GetMyPendingReviewsResponse,
   GetMyPendingReviewsVars,
@@ -49,6 +50,8 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
 
   const [removeReivewMutation] = useMutation<RemoveReviewResponse, RemoveReviewVars>(REMOVE_REVIEW)
 
+  const [createReviewMutation] = useMutation<CreateReviewResponse, CreateReviewVars>(CREATE_REVIEW)
+
   const [reviews, setReviews] = React.useState<Review[]>([])
   const [myPendingReviews, setMyPendingReviews] = React.useState<Review[]>([])
 
@@ -60,42 +63,81 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
     if (myPendingReviewQuery.data) setMyPendingReviews(myPendingReviewQuery.data.myPendingReviews)
   }, [myPendingReviewQuery.data])
 
+  /**
+   * Use this function to set the interaction of a review
+   * @param reviewId - id of the review to be changed the user's interaction
+   * @param interaction - the new interaction
+   */
   const setInteraction = async (reviewId: string, interaction: ReviewInteraction) => {
     try {
-      if (isLoggedIn()) {
-        const response = await setInteractionMutaion({
-          variables: {
-            reviewId,
-            interaction,
-          },
-        })
-        if (!response.errors && response.data) {
-          const newReview = response.data.setInteraction
-          setReviews((reviews) => unionBy(reviews, [newReview], '_id'))
-        }
+      if (!isLoggedIn()) return
+      const response = await setInteractionMutaion({
+        variables: {
+          reviewId,
+          interaction,
+        },
+      })
+      if (!response.errors && response.data) {
+        const newReview = response.data.setInteraction
+        setReviews((reviews) => unionBy(reviews, [newReview], '_id'))
       }
     } catch (err) {
       emitMessage((err as Error).message, 'error')
     }
   }
 
+  /**
+   * User can report others reviews
+   * @param reviewId - id of the review to be reported
+   */
   const reportReview = async (reviewId: string) => {
-    alert('comming soon feature')
+    alert('comming soon')
   }
 
+  /**
+   * User can delete their own pending review
+   * @param reviewId - id of the review to be deleted
+   */
   const deleteMyPendingReview = async (reviewId: string) => {
     try {
-      if (isLoggedIn()) {
-        const response = await removeReivewMutation({
-          variables: {
-            reviewId,
-          },
-        })
-        if (!response.errors && response.data) {
-          const reviewId = response.data.removeReview._id
-          setReviews((reviews) => remove(reviews, (data) => data._id === reviewId))
-        }
+      if (!isLoggedIn()) return
+      const confirm = window.confirm('คุณต้องการลบรีวิวนี้หรือไม่?')
+      if (!confirm) return
+      const response = await removeReivewMutation({
+        variables: {
+          reviewId,
+        },
+      })
+      if (!response.errors && response.data) {
+        const reviewId = response.data.removeReview._id
+        setReviews((reviews) => remove(reviews, (data) => data._id === reviewId))
       }
+    } catch (err) {
+      emitMessage((err as Error).message, 'error')
+    }
+  }
+
+  /**
+   * Use this function to submit a review for each course
+   * @param review - a review object with rating, academicYear, semester, content
+   */
+  const submitReview = async (review: Pick<Review, 'rating' | 'academicYear' | 'semester' | 'content'>) => {
+    const ratingNumber = review.rating * 2 // 1 - 10, 0 isn't accepted
+    try {
+      if (!isLoggedIn()) return
+      await createReviewMutation({
+        variables: {
+          createReviewInput: {
+            courseNo: courseNo,
+            studyProgram: studyProgram,
+            rating: ratingNumber,
+            semester: review.semester,
+            academicYear: review.academicYear,
+            content: review.content,
+          },
+        },
+      })
+      await myPendingReviewQuery.refetch()
     } catch (err) {
       emitMessage((err as Error).message, 'error')
     }
@@ -107,6 +149,7 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
     setInteraction,
     reportReview,
     deleteMyPendingReview,
+    submitReview,
   }
 
   return (

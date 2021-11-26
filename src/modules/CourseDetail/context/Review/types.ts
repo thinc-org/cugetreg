@@ -6,4 +6,5 @@ export interface ReviewContextValues {
   setInteraction: (reviewId: string, interaction: ReviewInteraction) => void
   reportReview: (reviewId: string) => void
   deleteMyPendingReview: (reviewId: string) => void
+  submitReview: (review: Pick<Review, 'rating' | 'academicYear' | 'semester' | 'content'>) => void
 }

@@ -17,7 +17,7 @@ export const ReviewList: React.FC = () => {
         ความคิดเห็น
       </Typography>
       {myPendingReviews.map((review) => (
-        <ReviewCard key={review._id} {...review} />
+        <ReviewCard key={review._id} {...review} pending />
       ))}
       {reviews.map((review) => (
         <ReviewCard key={review._id} {...review} />

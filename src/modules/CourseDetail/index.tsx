@@ -17,6 +17,7 @@ import { createApolloServerClient } from '@/services/apollo'
 import { GetCourseResponse, GET_COURSE } from '@/services/apollo/query/getCourse'
 
 import { ReviewForm } from './components/ReviewForm'
+import { ReviewList } from './components/ReviewList'
 import {
   Container,
   DescriptionTitle,
@@ -125,6 +126,7 @@ export function CourseDetailPage(props: { data: GetCourseResponse }) {
         )}
       </GridContainer>
       {CourseList}
+      <ReviewList course={course} />
       <ReviewForm courseNo={course.courseNo} />
     </Container>
   )

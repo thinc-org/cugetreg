@@ -6,6 +6,7 @@ export enum ReviewInteraction {
 }
 
 export interface Review {
+  _id: string
   rating: number
   courseNo: string
   semester: Semester

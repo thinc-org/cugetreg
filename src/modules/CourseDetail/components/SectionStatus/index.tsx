@@ -1,4 +1,4 @@
-import { Stack, Typography } from '@material-ui/core'
+import { Stack, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
 import { NoSeatIcon } from '@/common/components/NoSeatIcon'

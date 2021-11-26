@@ -1,5 +1,5 @@
 import { useMutation } from '@apollo/client'
-import { Rating, Select, Stack, MenuItem, Typography, Button } from '@material-ui/core'
+import { Rating, Select, Stack, MenuItem, Typography, Button } from '@mui/material'
 import { SemesterEnum } from '@thinc-org/chula-courses'
 import { useContext } from 'react'
 import { Controller, SubmitHandler, SubmitErrorHandler, useForm } from 'react-hook-form'
@@ -61,7 +61,9 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({ courseNo }) => {
   return (
     <>
       <Dialog />
-      <Typography variant="h4">{t('title')}</Typography>
+      <Typography variant="h4" mt={5}>
+        {t('title')}
+      </Typography>
       <form onSubmit={handleSubmit(onSubmit, onError)}>
         <Stack
           direction={{ xs: 'column-reverse', sm: 'row' }}

@@ -1,4 +1,4 @@
-import { TypographyProps } from '@material-ui/core'
+import { TypographyProps } from '@mui/material'
 import { Capacity } from '@thinc-org/chula-courses'
 
 export type AvailableStatus = 'avialable' | 'full' | 'closed'

@@ -1,6 +1,6 @@
 import { Stack, useTheme } from '@mui/material'
 import { useContext } from 'react'
-import { MdFlag, MdOutlineStar } from 'react-icons/md'
+import { MdFlag, MdDeleteOutline, MdOutlineStar } from 'react-icons/md'
 
 import { GeneralChip } from '@/common/components/Chips'
 import { ReviewInteraction } from '@/common/types/reviews'
@@ -16,7 +16,12 @@ export const ReviewCard: React.FC<ReviewCardProps> = (data) => {
 
   const term = `${data.academicYear} ${getSemesterName(data.semester)}`
 
-  const { setInteraction, reportReview } = useContext(ReviewContext)
+  const actionIconProps = {
+    size: 24,
+    color: theme.palette.primaryRange[50],
+  }
+
+  const { setInteraction, reportReview, deleteMyPendingReview } = useContext(ReviewContext)
 
   const handleLikeClick = () => {
     setInteraction(data._id, ReviewInteraction.Like)
@@ -28,6 +33,10 @@ export const ReviewCard: React.FC<ReviewCardProps> = (data) => {
 
   const handleReportClick = () => {
     reportReview(data._id)
+  }
+
+  const handleDeleteClick = () => {
+    deleteMyPendingReview(data._id)
   }
 
   return (
@@ -59,7 +68,11 @@ export const ReviewCard: React.FC<ReviewCardProps> = (data) => {
             onClick={handleDislikeClick}
           />
         </Stack>
-        <MdFlag size={24} color={theme.palette.primaryRange[50]} onClick={handleReportClick} />
+        {data.pending ? (
+          <MdDeleteOutline {...actionIconProps} onClick={handleDeleteClick} />
+        ) : (
+          <MdFlag {...actionIconProps} onClick={handleReportClick} />
+        )}
       </Stack>
     </Card>
   )

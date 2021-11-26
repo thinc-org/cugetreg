@@ -14,8 +14,8 @@ export interface GetMyPendingReviewsResponse {
 }
 
 export const GET_MY_PENDING_REVIEWS = gql`
-  query myPendingReviews($courseNo: string, $studyProgram: StudyProgram) {
-    myPendingReviews($courseNo: string, $studyProgram: StudyProgram) {
+  query myPendingReviews($courseNo: String!, $studyProgram: StudyProgram!) {
+    myPendingReviews(courseNo: $courseNo, studyProgram: $studyProgram) {
       ${REVIEW_DATA_FIELDS}
     }
   }

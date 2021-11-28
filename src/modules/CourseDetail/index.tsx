@@ -24,7 +24,6 @@ import {
   SectionContainer,
   Title,
   GridEnd,
-  CourseDescription,
 } from './styled'
 import { courseTypeStringFromCourse } from './utils/courseTypeStringFromCourse'
 import { groupBy } from './utils/groupBy'
@@ -35,16 +34,14 @@ export function CourseDetailPage(props: { data: GetCourseResponse }) {
   const { buildLink } = useLinkBuilder()
   const { course } = props.data
 
+  const courseDesc = [course.courseDescTh, course.courseDescEn].filter((desc) => !!desc).join('\n')
   const SEOConfig: NextSeoProps = {
     ...defaultSEO,
     title: course.abbrName,
-    description:
-      [course.courseDescTh, course.courseDescEn].filter((desc) => !!desc).join('\n') || defaultSEO.description,
+    description: courseDesc || defaultSEO.description,
     openGraph: {
       title: `${course.abbrName} | CU Get Reg`,
-      description:
-        [course.courseDescTh, course.courseDescEn].filter((desc) => !!desc).join('\n') ??
-        defaultSEO.openGraph.description,
+      description: courseDesc ?? defaultSEO.openGraph.description,
     },
     additionalMetaTags: [
       ...defaultSEO.additionalMetaTags,

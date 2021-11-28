@@ -25,7 +25,7 @@
     "@mui/lab": "^5.0.0-alpha.54",
     "@mui/material": "^5.1.0",
     "@react-hook/google-optimize": "^1.2.1",
-    "@thinc-org/chula-courses": "^2.1.0",
+    "@thinc-org/chula-courses": "^2.3.0",
     "@types/gapi": "^0.0.39",
     "@types/gapi.client.drive": "^3.0.13",
     "@types/lodash": "^4.14.170",

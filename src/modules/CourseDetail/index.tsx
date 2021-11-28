@@ -41,7 +41,7 @@ export function CourseDetailPage(props: { data: GetCourseResponse }) {
     description: courseDesc || defaultSEO.description,
     openGraph: {
       title: `${course.abbrName} | CU Get Reg`,
-      description: courseDesc ?? defaultSEO.openGraph.description,
+      description: courseDesc || defaultSEO.openGraph.description,
     },
     additionalMetaTags: [
       ...defaultSEO.additionalMetaTags,

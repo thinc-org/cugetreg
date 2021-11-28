@@ -1,7 +1,7 @@
-import axios from 'axios'
 import { action, makeAutoObservable } from 'mobx'
 import { NextRouter } from 'next/router'
 
+import { apiUrl, httpClient } from '@/services/httpClient'
 import { courseCartStore } from '@/store'
 import env from '@/utils/env/macro'
 
@@ -14,18 +14,25 @@ class UserStore {
   }
 
   login = (router: NextRouter) => {
-    router.push(`${env.backend.uri}/auth/google`)
+    const isLocal = env.environment === 'local'
+    const urlParams = new URLSearchParams({
+      returnUrl: (isLocal ? window.location.origin : '') + router.asPath,
+    })
+    if (isLocal) {
+      urlParams.set('backendUrl', apiUrl ?? '')
+    }
+    window.location.href = `${apiUrl}/auth/google?${urlParams.toString()}`
   }
 
   logout = () => {
     this.accessToken = null
-    axios.post(`${env.backend.uri}/auth/logout`)
+    httpClient.post(`/auth/logout`)
     courseCartStore.upgradeSource()
   }
 
   restoreSession = () =>
-    axios
-      .post(`${env.backend.uri}/auth/refreshtoken`)
+    httpClient
+      .post(`/auth/refreshtoken`)
       .then(
         action('setAccessToken', (res) => {
           userStore.accessToken = res.data.accessToken

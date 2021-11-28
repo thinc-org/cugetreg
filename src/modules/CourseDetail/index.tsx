@@ -42,7 +42,9 @@ export function CourseDetailPage(props: { data: GetCourseResponse }) {
       [course.courseDescTh, course.courseDescEn].filter((desc) => !!desc).join('\n') || defaultSEO.description,
     openGraph: {
       title: `${course.abbrName} | CU Get Reg`,
-      description: course.courseDescTh + '\n' + course.courseDescEn ?? defaultSEO.openGraph.description,
+      description:
+        [course.courseDescTh, course.courseDescEn].filter((desc) => !!desc).join('\n') ??
+        defaultSEO.openGraph.description,
     },
     additionalMetaTags: [
       ...defaultSEO.additionalMetaTags,

@@ -38,7 +38,7 @@ export function CourseDetailPage(props: { data: GetCourseResponse }) {
   const SEOConfig: NextSeoProps = {
     ...defaultSEO,
     title: course.abbrName,
-    description: course.courseDescTh ?? course.courseDescEn ?? defaultSEO.description,
+    description: course.courseDescTh + '\n' + course.courseDescEn ?? defaultSEO.description,
     openGraph: {
       title: `${course.abbrName} | CU Get Reg`,
       description: course.courseDescTh + '\n' + course.courseDescEn ?? defaultSEO.openGraph.description,

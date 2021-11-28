@@ -22,6 +22,13 @@ export const DescriptionTitle = styled(Typography)`
   color: ${({ theme }) => theme.palette.primaryRange['100']};
 `
 
+export const CourseDescription = styled(Typography)`
+  margin-bottom: ${({ theme }) => theme.spacing(2)};
+  :last-child {
+    margin-bottom: 0;
+  }
+`
+
 export const GridContainer = styled(Grid)`
   margin: ${({ theme }) => theme.spacing(4, 0, 6, 0)};
   ${({ theme }) => theme.breakpoints.down('sm')} {

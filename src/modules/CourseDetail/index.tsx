@@ -24,6 +24,7 @@ import {
   SectionContainer,
   Title,
   GridEnd,
+  CourseDescription,
 } from './styled'
 import { courseTypeStringFromCourse } from './utils/courseTypeStringFromCourse'
 import { groupBy } from './utils/groupBy'
@@ -37,10 +38,10 @@ export function CourseDetailPage(props: { data: GetCourseResponse }) {
   const SEOConfig: NextSeoProps = {
     ...defaultSEO,
     title: course.abbrName,
-    description: course.courseDesc ?? defaultSEO.description,
+    description: course.courseDescTh ?? course.courseDescEn ?? defaultSEO.description,
     openGraph: {
       title: `${course.abbrName} | CU Get Reg`,
-      description: course.courseDesc ?? defaultSEO.openGraph.description,
+      description: course.courseDescTh ?? course.courseDescEn ?? defaultSEO.openGraph.description,
     },
     additionalMetaTags: [
       ...defaultSEO.additionalMetaTags,
@@ -109,10 +110,11 @@ export function CourseDetailPage(props: { data: GetCourseResponse }) {
           <DescriptionTitle variant="subtitle1">เงื่อนไขรายวิชา</DescriptionTitle>
           <Typography variant="h6">{course.courseCondition}</Typography>
         </Grid>
-        {course.courseDesc && (
+        {(course.courseDescTh || course.courseDescEn) && (
           <Grid item xs={12} sm={12}>
             <DescriptionTitle variant="subtitle1">คำอธิบายรายวิชา</DescriptionTitle>
-            <Typography variant="h6">{course.courseDesc}</Typography>
+            {course.courseDescTh && <CourseDescription variant="h6">{course.courseDescTh}</CourseDescription>}
+            {course.courseDescEn && <CourseDescription variant="h6">{course.courseDescEn}</CourseDescription>}
           </Grid>
         )}
       </GridContainer>

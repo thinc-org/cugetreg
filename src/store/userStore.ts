@@ -1,5 +1,4 @@
 import { action, makeAutoObservable } from 'mobx'
-import { NextRouter } from 'next/router'
 
 import { apiUrl, httpClient } from '@/services/httpClient'
 import { courseCartStore } from '@/store'
@@ -13,10 +12,10 @@ class UserStore {
     makeAutoObservable(this)
   }
 
-  login = (router: NextRouter) => {
+  login = () => {
     const isLocal = env.environment === 'local'
     const urlParams = new URLSearchParams({
-      returnUrl: (isLocal ? window.location.origin : '') + router.asPath,
+      returnUrl: window.location.href,
     })
     if (isLocal) {
       urlParams.set('backendUrl', apiUrl ?? '')

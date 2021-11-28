@@ -38,7 +38,8 @@ export function CourseDetailPage(props: { data: GetCourseResponse }) {
   const SEOConfig: NextSeoProps = {
     ...defaultSEO,
     title: course.abbrName,
-    description: [course.courseDescTh, course.courseDescEn].filter(desc => !!desc).join('\n') || defaultSEO.description,
+    description:
+      [course.courseDescTh, course.courseDescEn].filter((desc) => !!desc).join('\n') || defaultSEO.description,
     openGraph: {
       title: `${course.abbrName} | CU Get Reg`,
       description: course.courseDescTh + '\n' + course.courseDescEn ?? defaultSEO.openGraph.description,
@@ -110,11 +111,16 @@ export function CourseDetailPage(props: { data: GetCourseResponse }) {
           <DescriptionTitle variant="subtitle1">เงื่อนไขรายวิชา</DescriptionTitle>
           <Typography variant="h6">{course.courseCondition}</Typography>
         </Grid>
-        {(course.courseDescTh || course.courseDescEn) && (
+        {course.courseDescTh && (
           <Grid item xs={12} sm={12}>
-            <DescriptionTitle variant="subtitle1">คำอธิบายรายวิชา</DescriptionTitle>
-            {course.courseDescTh && <CourseDescription variant="h6">{course.courseDescTh}</CourseDescription>}
-            {course.courseDescEn && <CourseDescription variant="h6">{course.courseDescEn}</CourseDescription>}
+            <DescriptionTitle variant="subtitle1">คำอธิบายรายวิชา (ภาษาไทย)</DescriptionTitle>
+            <Typography variant="h6">{course.courseDescTh}</Typography>
+          </Grid>
+        )}
+        {course.courseDescEn && (
+          <Grid item xs={12} sm={12}>
+            <DescriptionTitle variant="subtitle1">คำอธิบายรายวิชา (ภาษาอังกฤษ)</DescriptionTitle>
+            <Typography variant="h6">{course.courseDescEn}</Typography>
           </Grid>
         )}
       </GridContainer>

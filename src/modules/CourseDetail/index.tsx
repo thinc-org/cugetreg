@@ -34,13 +34,14 @@ export function CourseDetailPage(props: { data: GetCourseResponse }) {
   const { buildLink } = useLinkBuilder()
   const { course } = props.data
 
+  const courseDesc = [course.courseDescTh, course.courseDescEn].filter((desc) => !!desc).join('\n')
   const SEOConfig: NextSeoProps = {
     ...defaultSEO,
     title: course.abbrName,
-    description: course.courseDesc ?? defaultSEO.description,
+    description: courseDesc || defaultSEO.description,
     openGraph: {
       title: `${course.abbrName} | CU Get Reg`,
-      description: course.courseDesc ?? defaultSEO.openGraph.description,
+      description: courseDesc || defaultSEO.openGraph.description,
     },
     additionalMetaTags: [
       ...defaultSEO.additionalMetaTags,
@@ -109,10 +110,16 @@ export function CourseDetailPage(props: { data: GetCourseResponse }) {
           <DescriptionTitle variant="subtitle1">เงื่อนไขรายวิชา</DescriptionTitle>
           <Typography variant="h6">{course.courseCondition}</Typography>
         </Grid>
-        {course.courseDesc && (
+        {course.courseDescTh && (
           <Grid item xs={12} sm={12}>
-            <DescriptionTitle variant="subtitle1">คำอธิบายรายวิชา</DescriptionTitle>
-            <Typography variant="h6">{course.courseDesc}</Typography>
+            <DescriptionTitle variant="subtitle1">คำอธิบายรายวิชา (ภาษาไทย)</DescriptionTitle>
+            <Typography variant="h6">{course.courseDescTh}</Typography>
+          </Grid>
+        )}
+        {course.courseDescEn && (
+          <Grid item xs={12} sm={12}>
+            <DescriptionTitle variant="subtitle1">คำอธิบายรายวิชา (ภาษาอังกฤษ)</DescriptionTitle>
+            <Typography variant="h6">{course.courseDescEn}</Typography>
           </Grid>
         )}
       </GridContainer>

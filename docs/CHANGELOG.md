@@ -1,3 +1,18 @@
+# [1.4.0](https://github.com/thinc-org/cugetreg-frontend/compare/v1.3.2...v1.4.0) (2021-11-29)
+
+
+### Bug Fixes
+
+* comment ([30eed34](https://github.com/thinc-org/cugetreg-frontend/commit/30eed349fe985433e27593074acd29590cb102df))
+* remove jss dependency ([#265](https://github.com/thinc-org/cugetreg-frontend/issues/265)) ([11ee52d](https://github.com/thinc-org/cugetreg-frontend/commit/11ee52d30a6fc92c1d2d1c4117be8fd4e8b40f9c))
+* use courseDescTh and courseDescEn instead of courseDesc ([0429b21](https://github.com/thinc-org/cugetreg-frontend/commit/0429b2162582240ac10f24d1084985f7b2acb7e0))
+* use join for seo desc ([aeb7fba](https://github.com/thinc-org/cugetreg-frontend/commit/aeb7fbacbdf323621098c1bc60c45a3bbc323aec))
+
+
+### Features
+
+* split course descriptions into two components ([2263d83](https://github.com/thinc-org/cugetreg-frontend/commit/2263d83db835d818ddba84b92f3aaaf97e1f8867))
+
 ## [1.3.2](https://github.com/thinc-org/cugetreg-frontend/compare/v1.3.1...v1.3.2) (2021-11-12)
 
 

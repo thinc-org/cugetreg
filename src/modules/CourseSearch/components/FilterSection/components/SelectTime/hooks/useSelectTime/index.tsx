@@ -1,3 +1,4 @@
+import { SelectChangeEvent } from '@mui/material'
 import React, { useMemo } from 'react'
 
 import { useSearchCourseQueryParams } from '@/modules/CourseSearch/hooks/useSearchCourseQueryParams'
@@ -28,30 +29,30 @@ export const useSelectTime = (defaultStartTime: string, defaultEndTime: string) 
     }
   }
 
-  const onStartTimeChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    const startTime = event.target.value as string
+  const onStartTimeChange = (event: SelectChangeEvent) => {
+    const startTime = event.target.value
     setFilter({
       ...searchCourseQueryParams.filter,
       periodRange: { start: startTime, end: selectedEndTime },
     })
   }
 
-  const onEndTimeChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    const endTime = event?.target.value as string
+  const onEndTimeChange = (event: SelectChangeEvent) => {
+    const endTime = event.target.value
     setFilter({
       ...searchCourseQueryParams.filter,
       periodRange: { start: selectedStartTime, end: endTime },
     })
   }
 
-  const startTimeChoices = useMemo(() => generateTimeAround(defaultStartTime, selectedEndTime), [
-    defaultStartTime,
-    selectedEndTime,
-  ])
-  const endTimeChoices = useMemo(() => generateTimeAround(selectedStartTime, defaultEndTime), [
-    defaultEndTime,
-    selectedStartTime,
-  ])
+  const startTimeChoices = useMemo(
+    () => generateTimeAround(defaultStartTime, selectedEndTime),
+    [defaultStartTime, selectedEndTime]
+  )
+  const endTimeChoices = useMemo(
+    () => generateTimeAround(selectedStartTime, defaultEndTime),
+    [defaultEndTime, selectedStartTime]
+  )
 
   return {
     selectedStartTime,

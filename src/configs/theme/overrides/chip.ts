@@ -1,9 +1,10 @@
-import { ChipClassKey, StyleRules, Theme, SimplePaletteColorOptions } from '@material-ui/core'
+import { ChipClassKey, Theme, SimplePaletteColorOptions } from '@mui/material'
+import { OverridesStyleRules } from '@mui/material/styles/overrides'
 
 import { Highlight } from '../palette'
 
-export function overrideMuiChipStyles(theme: Theme): Partial<StyleRules<ChipClassKey, {}>> {
-  const defaultStyle: Partial<StyleRules<ChipClassKey, {}>> = {
+export function overrideMuiChipStyles(theme: Theme): Partial<OverridesStyleRules<ChipClassKey>> {
+  const defaultStyle: Partial<OverridesStyleRules<ChipClassKey>> = {
     label: {
       ...theme.typography.overline,
       lineHeight: 'normal',
@@ -71,7 +72,7 @@ export const makeChipOutlinedHighlight = (highlight: Highlight) =>
     ])
   ) as ChipOutlinedHighlight
 
-declare module '@material-ui/core/Chip' {
+declare module '@mui/material/Chip' {
   interface ChipPropsColorOverrides
     extends Record<ChipFilledHighlightColor, true>,
       Record<ChipOutlinedHighlightColor, true> {}

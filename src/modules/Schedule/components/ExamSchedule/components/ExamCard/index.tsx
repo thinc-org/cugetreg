@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { Typography } from '@material-ui/core'
+import { Typography } from '@mui/material'
 
 import { getExamDate } from '@/common/utils/getExamData'
 import { getExamPeriod } from '@/common/utils/getExamPeriod'

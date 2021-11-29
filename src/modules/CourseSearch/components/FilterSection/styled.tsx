@@ -1,6 +1,6 @@
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
-import { Button as MuiButton, DialogContent as MuiDialogContent, Paper } from '@material-ui/core'
+import { Button as MuiButton, DialogContent as MuiDialogContent, Paper } from '@mui/material'
 
 export const DialogContent = styled(MuiDialogContent)`
   padding: ${({ theme }) => theme.spacing(4)};

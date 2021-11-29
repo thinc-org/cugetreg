@@ -1,5 +1,5 @@
-import { Theme, TypographyVariant } from '@material-ui/core'
-import { TypographyStyleOptions } from '@material-ui/core/styles/createTypography'
+import { Theme, TypographyVariant } from '@mui/material'
+import { TypographyStyleOptions } from '@mui/material/styles/createTypography'
 
 const baseTypographyVariantOptions: Record<TypographyVariant, TypographyStyleOptions> = {
   h1: {

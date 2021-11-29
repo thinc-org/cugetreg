@@ -1,4 +1,4 @@
-import { useMediaQuery, useTheme, Stack } from '@material-ui/core'
+import { Stack } from '@mui/material'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
@@ -12,37 +12,27 @@ import { BannerContainer, PrivacyLink, GithubLink, BannerSubtitle, ResponsiveSta
 
 export function Banner() {
   const { t } = useTranslation('footer')
-  const theme = useTheme()
-  const matches = useMediaQuery(theme.breakpoints.down('sm'))
-
-  const showGithub = false
 
   return (
-    <BannerContainer spacing={matches ? 1 : 3}>
+    <BannerContainer spacing={[1, 3]}>
       <Link href="/">
         <Image src={bigLogo} width="172.75" height="56.31" />
       </Link>
 
-      <ResponsiveStack alignItems="center" spacing={2}>
+      <ResponsiveStack>
         <Stack direction="row" alignItems="center" spacing={2}>
-          <a href="https://www.facebook.com/ThailandIncubator">
+          <a href="https://www.facebook.com/ThailandIncubator" style={{ height: 35 }}>
             <Image src={thincLogo} width="78" height="32" />
           </a>
           <BannerSubtitle>{t('university')}</BannerSubtitle>
         </Stack>
-        {showGithub && (
-          <>
-            <StyledDivider orientation={matches ? 'horizontal' : 'vertical'} />
-            <Link href="https://github.com/thinc-org">
-              <GithubLink direction="row" alignItems="center">
-                <BannerSubtitle>{t('github')}</BannerSubtitle>
-                <Image src={github} width="20" height="20" />
-              </GithubLink>
-            </Link>
-          </>
-        )}
+        <StyledDivider orientation={'vertical'} />
+        <GithubLink href="https://github.com/thinc-org">
+          <BannerSubtitle>{t('github')}</BannerSubtitle>
+          <Image src={github} width="20" height="20" />
+        </GithubLink>
       </ResponsiveStack>
-      <Link href="/privacy">
+      <Link href="/privacy" passHref>
         <PrivacyLink>Privacy Policy</PrivacyLink>
       </Link>
     </BannerContainer>

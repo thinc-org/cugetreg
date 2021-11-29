@@ -1,4 +1,4 @@
-import { Hidden } from '@material-ui/core'
+import { Hidden } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
 import logo from '@/assets/images/cgrLogoDark.svg'

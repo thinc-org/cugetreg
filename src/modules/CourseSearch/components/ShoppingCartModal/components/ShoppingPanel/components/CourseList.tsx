@@ -1,4 +1,4 @@
-import { Checkbox, Grid, Hidden, Typography, useMediaQuery, useTheme } from '@material-ui/core'
+import { Checkbox, Grid, Hidden, Typography, useMediaQuery, useTheme } from '@mui/material'
 import { Course } from '@thinc-org/chula-courses'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'

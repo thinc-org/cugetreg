@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
-import { Typography, IconButton } from '@material-ui/core'
-import CachedIcon from '@material-ui/icons/Cached'
+import CachedIcon from '@mui/icons-material/Cached'
+import { Typography, IconButton } from '@mui/material'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 

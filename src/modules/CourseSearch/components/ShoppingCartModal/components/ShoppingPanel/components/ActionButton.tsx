@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
-import { Button, ButtonProps } from '@material-ui/core'
-import DeleteIcon from '@material-ui/icons/Delete'
-import TableChartIcon from '@material-ui/icons/TableChart'
+import DeleteIcon from '@mui/icons-material/Delete'
+import TableChartIcon from '@mui/icons-material/TableChart'
+import { Button, ButtonProps } from '@mui/material'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 

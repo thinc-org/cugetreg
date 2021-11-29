@@ -1,5 +1,5 @@
-import { Theme as MuiTheme } from '@material-ui/core'
-import { PaletteOptions } from '@material-ui/core/styles'
+import { Theme as MuiTheme } from '@mui/material'
+import { PaletteOptions } from '@mui/material/styles'
 
 import {
   ChipFilledHighlight,
@@ -18,7 +18,7 @@ export type HighlightColorRange = Pick<PaletteRangeOptions, 300 | 500 | 700>
 
 export type Highlight = Record<HighlightColor, HighlightColorRange>
 
-declare module '@material-ui/core/styles' {
+declare module '@mui/material/styles' {
   interface Palette extends ChipFilledHighlight, ChipOutlinedHighlight {
     white: string
     primaryRange: PaletteRangeOptions

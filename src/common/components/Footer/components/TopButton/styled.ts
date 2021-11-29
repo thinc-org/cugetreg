@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
-import { Typography, Stack } from '@material-ui/core'
-import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp'
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
+import { Typography, Stack } from '@mui/material'
 
 export const StyledStack = styled(Stack)`
   display: flex;

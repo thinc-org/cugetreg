@@ -1,4 +1,4 @@
-import { MenuItem, Select, Stack, Typography, Checkbox, FormControlLabel } from '@material-ui/core'
+import { MenuItem, Select, Stack, Typography, Checkbox, FormControlLabel } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
 import { useSelectTime } from './hooks/useSelectTime'

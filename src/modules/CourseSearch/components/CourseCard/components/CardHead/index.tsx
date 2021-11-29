@@ -1,6 +1,6 @@
-import { CardHeader, Grid, IconButton, Link, Typography, Stack } from '@material-ui/core'
-import KeyboardArrowDown from '@material-ui/icons/KeyboardArrowDown'
-import KeyboardArrowUp from '@material-ui/icons/KeyboardArrowUp'
+import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown'
+import KeyboardArrowUp from '@mui/icons-material/KeyboardArrowUp'
+import { CardHeader, Grid, IconButton, Link, Typography, Stack } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
 import { GenEdChip } from '@/common/components/Chips/catagories/GenEdChip'

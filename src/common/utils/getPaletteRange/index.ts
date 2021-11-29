@@ -1,4 +1,4 @@
-import { Theme } from '@material-ui/core'
+import { Theme } from '@mui/material'
 import { GenEdType } from '@thinc-org/chula-courses'
 
 import { HighlightColorRange } from '@/configs/theme/palette'

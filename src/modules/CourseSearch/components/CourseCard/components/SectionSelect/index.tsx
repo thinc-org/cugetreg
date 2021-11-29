@@ -1,4 +1,4 @@
-import { FormControl, MenuItem, Select, useMediaQuery, useTheme } from '@material-ui/core'
+import { FormControl, MenuItem, Select, useMediaQuery, useTheme } from '@mui/material'
 
 import { Analytics } from '@/common/context/Analytics/components/Analytics'
 import { SECTION_SELECT } from '@/common/context/Analytics/constants'

@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client'
-import { Typography } from '@material-ui/core'
+import { Typography } from '@mui/material'
 import { observer } from 'mobx-react'
 import { useRouter } from 'next/router'
 import { useCallback } from 'react'

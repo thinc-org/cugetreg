@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { Typography as MuiTypography } from '@material-ui/core'
+import { Typography as MuiTypography } from '@mui/material'
 import { PropsWithChildren } from 'react'
 
 const Typography = styled(MuiTypography)`

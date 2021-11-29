@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { NativeSelect } from '@material-ui/core'
+import { NativeSelect } from '@mui/material'
 
 export const ConfigBarSelect = styled(NativeSelect)`
   & {
@@ -39,7 +39,6 @@ export const ConfigBarSelect = styled(NativeSelect)`
   }
 
   svg {
-    margin-top: 4px;
     color: inherit;
     font-size: 16px;
   }

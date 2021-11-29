@@ -1,5 +1,5 @@
 import { useTheme } from '@emotion/react'
-import { Dialog, DialogProps, Slide, SlideProps, useMediaQuery } from '@material-ui/core'
+import { Dialog, DialogProps, Slide, SlideProps, useMediaQuery } from '@mui/material'
 import { ForwardedRef, forwardRef } from 'react'
 
 import { deepAssign } from '@/common/utils/deepAssign'

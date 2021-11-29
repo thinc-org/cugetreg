@@ -1,4 +1,4 @@
-import { Typography } from '@material-ui/core'
+import { Typography } from '@mui/material'
 import { Course } from '@thinc-org/chula-courses'
 import React from 'react'
 

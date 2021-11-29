@@ -5,16 +5,16 @@ import * as th from './locales/th'
 
 const resources = {
   th,
-}
+} as const
 
 export enum Language {
   th = 'th',
 }
 
 declare module 'react-i18next' {
-  type DefaultResources = typeof th
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface
-  interface Resources extends DefaultResources {}
+  interface CustomTypeOptions {
+    resources: typeof resources['th']
+  }
 }
 
 i18n.use(initReactI18next).init({

@@ -1,4 +1,4 @@
-import { Paper } from '@material-ui/core'
+import { Paper } from '@mui/material'
 import { forwardRef, memo } from 'react'
 
 import { CardAction } from './components/CardAction'

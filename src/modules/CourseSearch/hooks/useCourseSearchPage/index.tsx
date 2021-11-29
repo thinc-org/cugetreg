@@ -1,4 +1,4 @@
-import { useMediaQuery, useTheme } from '@material-ui/core'
+import { useMediaQuery, useTheme } from '@mui/material'
 import { useContext, useEffect, useState } from 'react'
 
 import { ShoppingCartModalContext } from '@/common/context/ShoppingCartModal'

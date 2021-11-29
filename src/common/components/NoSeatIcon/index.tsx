@@ -1,5 +1,5 @@
-import { IconButton, Popover, Typography, Container, IconButtonProps } from '@material-ui/core'
-import { ErrorOutline } from '@material-ui/icons'
+import { ErrorOutline } from '@mui/icons-material'
+import { IconButton, Popover, Typography, Container, IconButtonProps } from '@mui/material'
 
 import { useNoSeatIcon } from './hooks/useNoSeatIcon'
 

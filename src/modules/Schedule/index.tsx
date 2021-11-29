@@ -1,4 +1,4 @@
-import { Button, Typography, useMediaQuery, useTheme } from '@material-ui/core'
+import { Button, Typography, useMediaQuery, useTheme } from '@mui/material'
 import { observer } from 'mobx-react'
 import React, { useState, createRef } from 'react'
 import { useTranslation } from 'react-i18next'

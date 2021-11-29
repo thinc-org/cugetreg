@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { Alert } from '@material-ui/core'
+import { Alert } from '@mui/material'
 
 export const ToastAlert = styled(Alert)`
   div:last-child {

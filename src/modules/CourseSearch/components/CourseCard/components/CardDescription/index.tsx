@@ -1,4 +1,4 @@
-import { Grid, Stack, Typography } from '@material-ui/core'
+import { Grid, Stack, Typography } from '@mui/material'
 import { DayOfWeek } from '@thinc-org/chula-courses'
 import { useTranslation } from 'react-i18next'
 

@@ -1,7 +1,5 @@
-import styled from '@emotion/styled'
+import { styled } from '@mui/system'
 import { withContentRect } from 'react-measure'
-
-import { styledWithTheme } from '@/common/utils/styledWithTheme'
 
 import { ClassCard } from './components/ClassCard'
 import { Gutters } from './components/Gutters'
@@ -9,7 +7,7 @@ import { Header } from './components/Header'
 import { DimensionsProvider, getHeightRatio, useDimensions } from './dimensions'
 import { ScheduleClass } from './utils'
 
-const ScheduleTable = styledWithTheme('div')((theme) => ({
+const ScheduleTable = styled('div')(({ theme }) => ({
   position: 'relative',
   background: theme.palette.background.paper,
   fontSize: 16,
@@ -33,7 +31,7 @@ function Schedule({ classes }: ScheduleProps) {
   )
 }
 
-const ScheduleContainer = styled.div`
+const ScheduleContainer = styled('div')`
   position: relative;
 
   > div {

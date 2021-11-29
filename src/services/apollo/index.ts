@@ -5,7 +5,6 @@ import { uniqBy } from 'lodash'
 
 import { apiUrl } from '@/services/httpClient'
 import { userStore } from '@/store/userStore'
-import env from '@/utils/env/macro'
 
 import { SearchCourseVars } from './query/searchCourse'
 

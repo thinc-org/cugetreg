@@ -1,8 +1,6 @@
 import { useQuery } from '@apollo/client'
 import { Typography } from '@mui/material'
 import { observer } from 'mobx-react'
-import { useRouter } from 'next/router'
-import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Analytics } from '@/common/context/Analytics/components/Analytics'
@@ -18,8 +16,6 @@ export const UserButton = observer(function UserButton() {
   const isLoggedIn = userStore.accessToken !== null
 
   const { t } = useTranslation('navBar')
-  const router = useRouter()
-  const onLogin = useCallback(() => userStore.login(router), [router])
   const { data } = useQuery<MeResponse>(ME, { skip: !isLoggedIn })
 
   if (isLoggedIn) {
@@ -41,7 +37,7 @@ export const UserButton = observer(function UserButton() {
   } else {
     return (
       <Analytics elementName={LOGIN_BUTTON}>
-        <NavBarItem onClick={onLogin}>{t('signin')}</NavBarItem>
+        <NavBarItem onClick={userStore.login}>{t('signin')}</NavBarItem>
       </Analytics>
     )
   }

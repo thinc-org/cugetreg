@@ -17,9 +17,9 @@ module.exports = withOptimizedImages({
   async rewrites() {
     return [
       {
-        source: '/api/:path*',
-        destination: `${process.env.NEXT_PUBLIC_BACKEND_URL}/:path*`
-      }
+        source: '/apiProxy/:path*',
+        destination: `${process.env.NEXT_PUBLIC_BACKEND_URL}/:path*`,
+      },
     ]
-  }
+  },
 })

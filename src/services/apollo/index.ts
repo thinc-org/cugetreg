@@ -3,8 +3,8 @@ import { setContext } from '@apollo/client/link/context'
 import { Course } from '@thinc-org/chula-courses'
 import { uniqBy } from 'lodash'
 
+import { apiUrl } from '@/services/httpClient'
 import { userStore } from '@/store/userStore'
-import env from '@/utils/env/macro'
 
 import { SearchCourseVars } from './query/searchCourse'
 
@@ -40,7 +40,7 @@ const cache = new InMemoryCache({
 })
 
 const httpLink = createHttpLink({
-  uri: `${env.backend.uri}/graphql`,
+  uri: `${apiUrl}/graphql`,
 })
 
 const authLink = setContext((_, { headers }) => {
@@ -59,7 +59,7 @@ export const client = new ApolloClient({
 
 export function createApolloServerClient() {
   return new ApolloClient({
-    uri: `${env.backend.uri}/graphql`,
+    uri: `${apiUrl}/graphql`,
     cache: new InMemoryCache(),
   })
 }

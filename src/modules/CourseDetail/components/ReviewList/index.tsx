@@ -12,7 +12,7 @@ export const ReviewList: React.FC = () => {
   if (!hasReviews) return null
 
   return (
-    <Stack spacing={2}>
+    <Stack spacing={2} mb={6}>
       <Typography variant="h4" mt={2}>
         ความคิดเห็น
       </Typography>

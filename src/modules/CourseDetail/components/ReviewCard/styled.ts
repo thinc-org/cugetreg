@@ -2,9 +2,12 @@ import styled from '@emotion/styled'
 import { Typography, Stack } from '@mui/material'
 
 export const Card = styled(Stack)`
-  padding: ${({ theme }) => theme.spacing(4)};
   border-radius: ${({ theme }) => theme.shape.borderRadius}px;
   border: 1px solid ${({ theme }) => theme.palette.divider};
+  padding: ${({ theme }) => theme.spacing(4)};
+  ${({ theme }) => theme.breakpoints.down('sm')} {
+    padding: ${({ theme }) => theme.spacing(2)};
+  }
 `
 
 const MainTypography = styled(Typography)`

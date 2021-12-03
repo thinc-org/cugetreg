@@ -130,8 +130,8 @@ export function CourseDetailPage(props: { data: GetCourseResponse }) {
       </GridContainer>
       {CourseList}
       <DynamicReviewProvider courseNo={course.courseNo}>
-        <DynamicReviewList />
         <DynamicReviewForm />
+        <DynamicReviewList />
       </DynamicReviewProvider>
     </Container>
   )

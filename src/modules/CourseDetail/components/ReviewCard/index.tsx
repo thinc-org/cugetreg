@@ -1,6 +1,6 @@
 import { Stack, useTheme } from '@mui/material'
 import { useContext } from 'react'
-import { MdFlag, MdDeleteOutline, MdOutlineStar } from 'react-icons/md'
+import { MdFlag, MdDeleteOutline, MdOutlineStar, MdEdit } from 'react-icons/md'
 
 import { GeneralChip } from '@/common/components/Chips'
 import { OtherChipKey } from '@/common/components/Chips/config'
@@ -52,6 +52,8 @@ export const ReviewCard: React.FC<ReviewCardProps> = (data) => {
     deleteMyPendingReview(data._id)
   }
 
+  const handleEditClick = () => {}
+
   return (
     <Card direction="column" spacing={2}>
       <Stack direction="row" justifyContent="space-between">
@@ -68,7 +70,12 @@ export const ReviewCard: React.FC<ReviewCardProps> = (data) => {
       <CardContent>{data.content}</CardContent>
       <Stack direction="row" justifyContent="space-between" alignItems="center">
         {getChipType() ? (
-          <MdDeleteOutline {...actionIconProps} onClick={handleDeleteClick} style={{ marginLeft: 'auto' }} />
+          <>
+            <Stack direction="row" spacing={2}>
+              <MdDeleteOutline {...actionIconProps} onClick={handleDeleteClick} style={{ marginLeft: 'auto' }} />
+              <MdEdit {...actionIconProps} onClick={handleEditClick} style={{ marginLeft: 'auto' }} />
+            </Stack>
+          </>
         ) : (
           <>
             <Stack direction="row" spacing={4}>

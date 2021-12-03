@@ -71,7 +71,7 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
   }, [reviewQuery.data])
   useEffect(() => {
     if (myPendingReviewQuery.data) setMyPendingReviews(myPendingReviewQuery.data.myPendingReviews)
-  }, [myPendingReviewQuery.data])
+  }, [myPendingReviewQuery])
 
   /**
    * Normal React state
@@ -159,7 +159,7 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
     try {
       if (!isLoggedIn()) return
       const review = methods.getValues()
-      const ratingNumber = review.rating * 2 // 1 - 10, 0 isn't accepted
+      const ratingNumber = parseRating(review.rating) * 2 // 1 - 10, 0 isn't accepted
       const response = await createReviewMutation({
         variables: {
           createReviewInput: {
@@ -190,7 +190,7 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
   const submitEditedReview = async (reviewId: string) => {
     try {
       const review = methods.getValues()
-      const ratingNumber = review.rating * 2 // 1 - 10, 0 isn't accepted
+      const ratingNumber = parseRating(review.rating) * 2 // 1 - 10, 0 isn't accepted
       const response = await editMyPendingReviewMutation({
         variables: {
           reviewId,
@@ -213,7 +213,13 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
 
   const clearForm = () => {
     methods.setValue('content', '')
-    methods.setValue('rating', 0)
+    /* eslint-disable-next-line @typescript-eslint/ban-ts-comment*/
+    /* @ts-ignore */
+    methods.setValue('rating', null)
+  }
+
+  const parseRating = (rating: string | number) => {
+    return typeof rating === 'string' ? parseFloat(rating) : rating
   }
 
   const value: ReviewContextValues = {

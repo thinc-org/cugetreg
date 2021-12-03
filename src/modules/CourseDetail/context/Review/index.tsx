@@ -174,7 +174,6 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
       })
       await myPendingReviewQuery.refetch()
       methods.reset()
-      setEditingReviewId(undefined)
     } catch (err) {
       emitMessage((err as Error).message, 'error')
     }
@@ -186,14 +185,24 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
    * @param review - a review object with rating, academicYear, semester, content
    */
   const submitEditedReview = async (reviewId: string) => {
-    await editMyPendingReviewMutation({
-      variables: {
-        reviewId,
-        review: methods.getValues(),
-      },
-    })
-    await myPendingReviewQuery.refetch()
-    methods.reset()
+    try {
+      const review = methods.getValues()
+      const ratingNumber = review.rating * 2 // 1 - 10, 0 isn't accepted
+      await editMyPendingReviewMutation({
+        variables: {
+          reviewId,
+          review: {
+            ...review,
+            rating: ratingNumber,
+          },
+        },
+      })
+      await myPendingReviewQuery.refetch()
+      methods.reset()
+      setEditingReviewId(undefined)
+    } catch (err) {
+      emitMessage((err as Error).message, 'error')
+    }
   }
 
   const value: ReviewContextValues = {

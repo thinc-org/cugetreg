@@ -24,7 +24,7 @@
     "@emotion/styled": "^11.3.0",
     "@mui/icons-material": "^5.1.0",
     "@mui/lab": "^5.0.0-alpha.54",
-    "@mui/material": "^5.1.0",
+    "@mui/material": "^5.2.2",
     "@react-hook/google-optimize": "^1.2.1",
     "@thinc-org/chula-courses": "^2.3.0",
     "@types/gapi": "^0.0.39",

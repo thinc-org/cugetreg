@@ -73,7 +73,7 @@ export const ReviewCard: React.FC<ReviewCardProps> = (data) => {
       <Stack direction="row" justifyContent="space-between" alignItems="center">
         {getChipType() ? (
           <>
-            <Stack direction="row" spacing={4} ml="auto">
+            <Stack direction="row" spacing={3} ml="auto">
               <MdEdit {...actionIconProps} onClick={handleEditClick} />
               <MdDeleteOutline {...actionIconProps} onClick={handleDeleteClick} />
             </Stack>

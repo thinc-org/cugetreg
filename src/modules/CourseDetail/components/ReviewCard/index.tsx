@@ -34,7 +34,7 @@ export const ReviewCard: React.FC<ReviewCardProps> = (data) => {
 
   const chipType = getChipType()
 
-  const { setInteraction, reportReview, deleteMyPendingReview } = useContext(ReviewContext)
+  const { setInteraction, reportReview, deleteMyPendingReview, editMyPendingReview } = useContext(ReviewContext)
 
   const handleLikeClick = () => {
     setInteraction(data._id, ReviewInteraction.Like)
@@ -52,7 +52,9 @@ export const ReviewCard: React.FC<ReviewCardProps> = (data) => {
     deleteMyPendingReview(data._id)
   }
 
-  const handleEditClick = () => {}
+  const handleEditClick = () => {
+    editMyPendingReview(data._id)
+  }
 
   return (
     <Card direction="column" spacing={2}>
@@ -71,9 +73,9 @@ export const ReviewCard: React.FC<ReviewCardProps> = (data) => {
       <Stack direction="row" justifyContent="space-between" alignItems="center">
         {getChipType() ? (
           <>
-            <Stack direction="row" spacing={2}>
-              <MdDeleteOutline {...actionIconProps} onClick={handleDeleteClick} style={{ marginLeft: 'auto' }} />
-              <MdEdit {...actionIconProps} onClick={handleEditClick} style={{ marginLeft: 'auto' }} />
+            <Stack direction="row" spacing={4} ml="auto">
+              <MdEdit {...actionIconProps} onClick={handleEditClick} />
+              <MdDeleteOutline {...actionIconProps} onClick={handleDeleteClick} />
             </Stack>
           </>
         ) : (

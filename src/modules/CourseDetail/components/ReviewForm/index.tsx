@@ -19,7 +19,6 @@ export const ReviewForm: React.FC = () => {
   const onSubmit: SubmitHandler<ReviewState> = async () => {
     if (editingReviewId) await submitEditedReview(editingReviewId)
     else await submitReview()
-    emitMessage(`เพิ่มความคิดเห็นของคุณแล้ว`, 'success')
   }
 
   const onError: SubmitErrorHandler<ReviewState> = (errors) => {

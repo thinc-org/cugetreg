@@ -174,6 +174,7 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
       })
       await myPendingReviewQuery.refetch()
       methods.reset()
+      emitMessage(`เพิ่มความคิดเห็นของคุณแล้ว`, 'success')
     } catch (err) {
       emitMessage((err as Error).message, 'error')
     }
@@ -199,6 +200,7 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
       })
       await myPendingReviewQuery.refetch()
       methods.reset()
+      emitMessage(`ความคิดเห็นของคุณถูกแก้ไขแล้ว`, 'success')
       setEditingReviewId(undefined)
     } catch (err) {
       emitMessage((err as Error).message, 'error')

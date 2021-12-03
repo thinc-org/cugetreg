@@ -172,8 +172,8 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
           },
         },
       })
-      if (response.data) {
-        await myPendingReviewQuery.refetch()
+      if (!response.errors && response.data) {
+        setMyPendingReviews(response.data.createReview)
         clearForm()
         emitMessage(`เพิ่มความคิดเห็นของคุณแล้ว`, 'success')
       }
@@ -200,8 +200,8 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
           },
         },
       })
-      if (response.data) {
-        await myPendingReviewQuery.refetch()
+      if (!response.errors && response.data) {
+        setMyPendingReviews(response.data.editMyPendingReview)
         clearForm()
         emitMessage(`ความคิดเห็นของคุณถูกแก้ไขแล้ว`, 'success')
         setEditingReviewId(undefined)

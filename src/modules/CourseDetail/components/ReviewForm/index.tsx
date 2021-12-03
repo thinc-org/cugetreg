@@ -89,7 +89,7 @@ export const ReviewForm: React.FC = () => {
           control={control}
           rules={{ required: 'need to write at least 1 character' }}
           render={({ field }) => (
-            <MultiplelineTextField fullWidth placeholder="คุณคิดว่าวิชานี้เป็นอย่างไรบ้าง?!" {...field} />
+            <MultiplelineTextField fullWidth placeholder="คิดว่าวิชานี้เป็นอย่างไรบ้าง?" {...field} />
           )}
         />
         <Stack mt={2} mb={4}>

@@ -1,7 +1,6 @@
 import { Rating, Select, Stack, MenuItem, Typography, Button } from '@mui/material'
-import { SemesterEnum } from '@thinc-org/chula-courses'
 import { useContext } from 'react'
-import { Controller, SubmitHandler, SubmitErrorHandler, useForm, useFormContext } from 'react-hook-form'
+import { Controller, SubmitHandler, SubmitErrorHandler, useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
 import { MultiplelineTextField } from '@/common/components/MultiplelineTextField'

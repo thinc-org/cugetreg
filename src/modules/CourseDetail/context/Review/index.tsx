@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from '@apollo/client'
 import { filter, unionBy } from 'lodash'
 import React, { createContext, useContext, useEffect } from 'react'
-import { FormProvider, useFormContext } from 'react-hook-form'
+import { FormProvider, useForm } from 'react-hook-form'
 
 import { SnackbarContext } from '@/common/context/Snackbar'
 import { useCourseGroup } from '@/common/hooks/useCourseGroup'
@@ -32,7 +32,7 @@ import { ReviewContextValues, ReviewState } from './types'
 export const ReviewContext = createContext<ReviewContextValues>(DEFAULT_REVIEW_CONTEXT_VALUE)
 
 export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, children }) => {
-  const methods = useFormContext<ReviewState>()
+  const methods = useForm<ReviewState>()
   const { studyProgram } = useCourseGroup()
   const { isLoggedIn, Dialog } = useLoginGuard()
   const { emitMessage } = useContext(SnackbarContext)

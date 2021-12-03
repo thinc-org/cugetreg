@@ -13,8 +13,8 @@ export interface EditMyPendingReviewResponse {
 }
 
 export const EDIT_MY_PENDING_REVIEW = gql`
-  mutation editMyPendingReview(reviewId: String!, review: EditReviewInput!) {
-    editMyPendingReview(reviewId: $reviewIdm, review: $review) {
+  mutation editMyPendingReview($reviewId: String!, $review: EditReviewInput!) {
+    editMyPendingReview(reviewId: $reviewId, review: $review) {
       ${REVIEW_DATA_FIELDS}
     }
   }

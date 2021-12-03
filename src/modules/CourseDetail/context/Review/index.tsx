@@ -160,7 +160,7 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
       if (!isLoggedIn()) return
       const review = methods.getValues()
       const ratingNumber = review.rating * 2 // 1 - 10, 0 isn't accepted
-      await createReviewMutation({
+      const response = await createReviewMutation({
         variables: {
           createReviewInput: {
             courseNo: courseNo,
@@ -172,9 +172,11 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
           },
         },
       })
-      await myPendingReviewQuery.refetch()
-      methods.reset()
-      emitMessage(`เพิ่มความคิดเห็นของคุณแล้ว`, 'success')
+      if (response.data) {
+        await myPendingReviewQuery.refetch()
+        clearForm()
+        emitMessage(`เพิ่มความคิดเห็นของคุณแล้ว`, 'success')
+      }
     } catch (err) {
       emitMessage((err as Error).message, 'error')
     }
@@ -189,7 +191,7 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
     try {
       const review = methods.getValues()
       const ratingNumber = review.rating * 2 // 1 - 10, 0 isn't accepted
-      await editMyPendingReviewMutation({
+      const response = await editMyPendingReviewMutation({
         variables: {
           reviewId,
           review: {
@@ -198,13 +200,20 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
           },
         },
       })
-      await myPendingReviewQuery.refetch()
-      methods.reset()
-      emitMessage(`ความคิดเห็นของคุณถูกแก้ไขแล้ว`, 'success')
-      setEditingReviewId(undefined)
+      if (response.data) {
+        await myPendingReviewQuery.refetch()
+        clearForm()
+        emitMessage(`ความคิดเห็นของคุณถูกแก้ไขแล้ว`, 'success')
+        setEditingReviewId(undefined)
+      }
     } catch (err) {
       emitMessage((err as Error).message, 'error')
     }
+  }
+
+  const clearForm = () => {
+    methods.setValue('content', '')
+    methods.setValue('rating', 0)
   }
 
   const value: ReviewContextValues = {

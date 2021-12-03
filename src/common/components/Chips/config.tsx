@@ -47,6 +47,7 @@ export enum OtherEnum {
   open = 'open',
   close = 'close',
   reviewPending = 'reviewPending',
+  reviewRejected = 'reviewRejected',
   chula = 'chula',
   other = 'other',
 }
@@ -56,6 +57,7 @@ export const otherChipConfig: OtherChipConfigProps = {
   open: createDefaultChipConfig('เปิด'),
   close: createDefaultChipConfig('ปิด'),
   reviewPending: { label: 'รอการอนุมัติ', color: 'yellowFilled' },
+  reviewRejected: { label: 'ไม่ได้รับการอนุมัติ', color: 'redFilled' },
   chula: createDefaultChipConfig('เกี่ยวกับจุฬาฯ'),
   other: createDefaultChipConfig('อื่น ๆ'),
   // Add more Chips here; don't forget to add key into `OtherChipKey` too

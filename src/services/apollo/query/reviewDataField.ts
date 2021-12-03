@@ -9,4 +9,5 @@ export const REVIEW_DATA_FIELDS = `
   likeCount
   dislikeCount
   myInteraction
+  status
 `

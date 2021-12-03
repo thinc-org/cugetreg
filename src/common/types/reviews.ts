@@ -5,6 +5,12 @@ export enum ReviewInteraction {
   Dislike = 'D',
 }
 
+export enum ReviewStatus {
+  Approved = 'APPROVED',
+  Rejected = 'REJECTED',
+  Pending = 'PENDING',
+}
+
 export interface Review {
   _id: string
   rating: number
@@ -16,4 +22,5 @@ export interface Review {
   likeCount: number
   dislikeCount: number
   myInteraction: ReviewInteraction
+  status: ReviewStatus
 }

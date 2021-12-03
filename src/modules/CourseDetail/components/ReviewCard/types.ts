@@ -1,5 +1,3 @@
 import { Review } from '@/common/types/reviews'
 
-export interface ReviewCardProps extends Review {
-  pending?: boolean
-}
+export interface ReviewCardProps extends Review {}

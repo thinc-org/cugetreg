@@ -28,7 +28,7 @@ export const ReviewForm: React.FC = () => {
 
   return (
     <>
-      <Typography variant="h4" mt={5}>
+      <Typography variant="h4" mt={5} id="review-title">
         {t('title')}
       </Typography>
       <form onSubmit={handleSubmit(onSubmit, onError)}>
@@ -73,13 +73,10 @@ export const ReviewForm: React.FC = () => {
             )}
           />
         </Stack>
-        <Controller
-          name="content"
-          control={control}
-          rules={{ required: 'need to write at least 1 character' }}
-          render={({ field }) => (
-            <MultiplelineTextField fullWidth placeholder="คิดว่าวิชานี้เป็นอย่างไรบ้าง?" {...field} />
-          )}
+        <MultiplelineTextField
+          fullWidth
+          placeholder="คิดว่าวิชานี้เป็นอย่างไรบ้าง?"
+          {...register('content', { required: 'need to write at least 1 character' })}
         />
         <Stack mt={2} mb={4}>
           <Button variant="contained" fullWidth type="submit">

@@ -53,7 +53,26 @@ export const ReviewCard: React.FC<ReviewCardProps> = (data) => {
   }
 
   const handleEditClick = () => {
+    const srollToElement = document.getElementById('review-title')
+    if (srollToElement) {
+      const offset = 100
+      const offsetTop = srollToElement.offsetTop
+      window.scrollTo({ top: offsetTop - offset, behavior: 'smooth' })
+    }
     editMyPendingReview(data._id)
+  }
+
+  const OwnerIconAction = () => {
+    return (
+      <Stack direction="row" spacing={1} ml="auto">
+        <IconButton size="small">
+          <MdEdit {...actionIconProps} onClick={handleEditClick} />
+        </IconButton>
+        <IconButton size="small">
+          <MdDeleteOutline {...actionIconProps} onClick={handleDeleteClick} />
+        </IconButton>
+      </Stack>
+    )
   }
 
   return (
@@ -77,14 +96,7 @@ export const ReviewCard: React.FC<ReviewCardProps> = (data) => {
             {data.status === ReviewStatus.Rejected && (
               <CardRejectedMessage>กรุณาแก้ไข ก่อนส่งความคิดเห็นอีกครั้ง</CardRejectedMessage>
             )}
-            <Stack direction="row" spacing={1} ml="auto">
-              <IconButton size="small">
-                <MdEdit {...actionIconProps} onClick={handleEditClick} />
-              </IconButton>
-              <IconButton size="small">
-                <MdDeleteOutline {...actionIconProps} onClick={handleDeleteClick} />
-              </IconButton>
-            </Stack>
+            <OwnerIconAction />
           </>
         ) : (
           <>
@@ -103,7 +115,7 @@ export const ReviewCard: React.FC<ReviewCardProps> = (data) => {
               />
             </Stack>
             <IconButton size="small">
-              <MdFlag {...actionIconProps} onClick={handleReportClick} />
+              {data.isOwner ? <OwnerIconAction /> : <MdFlag {...actionIconProps} onClick={handleReportClick} />}
             </IconButton>
           </>
         )}

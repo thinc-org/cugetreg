@@ -31,6 +31,9 @@ export const CardMaxRating = styled(Typography)`
   align-self: flex-end;
   line-height: 24px;
   color: ${({ theme }) => theme.palette.primaryRange[100]};
+  ${({ theme }) => theme.breakpoints.down('sm')} {
+    display: none;
+  }
 `
 CardMaxRating.defaultProps = { variant: 'subtitle2' }
 

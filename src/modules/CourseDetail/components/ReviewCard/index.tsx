@@ -1,4 +1,4 @@
-import { Stack, useTheme } from '@mui/material'
+import { IconButton, Stack, useTheme } from '@mui/material'
 import { useContext } from 'react'
 import { MdFlag, MdDeleteOutline, MdOutlineStar, MdEdit } from 'react-icons/md'
 
@@ -58,8 +58,8 @@ export const ReviewCard: React.FC<ReviewCardProps> = (data) => {
 
   return (
     <Card direction="column" spacing={2}>
-      <Stack direction="row" justifyContent="space-between">
-        <Stack direction="row" spacing={1} alignItems="center">
+      <Stack direction="row" justifyContent="space-between" gap={1} flexWrap="wrap">
+        <Stack direction="row" spacing={2} alignItems="center">
           <CardTerm>{term}</CardTerm>
           {chipType && <GeneralChip type={chipType} />}
         </Stack>
@@ -77,14 +77,18 @@ export const ReviewCard: React.FC<ReviewCardProps> = (data) => {
             {data.status === ReviewStatus.Rejected && (
               <CardRejectedMessage>กรุณาแก้ไข ก่อนส่งความคิดเห็นอีกครั้ง</CardRejectedMessage>
             )}
-            <Stack direction="row" spacing={3} ml="auto">
-              <MdEdit {...actionIconProps} onClick={handleEditClick} />
-              <MdDeleteOutline {...actionIconProps} onClick={handleDeleteClick} />
+            <Stack direction="row" spacing={1} ml="auto">
+              <IconButton size="small">
+                <MdEdit {...actionIconProps} onClick={handleEditClick} />
+              </IconButton>
+              <IconButton size="small">
+                <MdDeleteOutline {...actionIconProps} onClick={handleDeleteClick} />
+              </IconButton>
             </Stack>
           </>
         ) : (
           <>
-            <Stack direction="row" spacing={4}>
+            <Stack direction="row" spacing={3}>
               <ReviewReaction
                 type={ReviewInteraction.Like}
                 pressed={data.myInteraction === ReviewInteraction.Like}
@@ -98,7 +102,9 @@ export const ReviewCard: React.FC<ReviewCardProps> = (data) => {
                 onClick={handleDislikeClick}
               />
             </Stack>
-            <MdFlag {...actionIconProps} onClick={handleReportClick} />
+            <IconButton size="small">
+              <MdFlag {...actionIconProps} onClick={handleReportClick} />
+            </IconButton>
           </>
         )}
       </Stack>

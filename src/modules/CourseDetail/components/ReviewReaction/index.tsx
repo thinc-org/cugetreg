@@ -1,4 +1,4 @@
-import { Stack, Typography } from '@mui/material'
+import { IconButton, Stack, Typography } from '@mui/material'
 import { useTheme } from '@mui/system'
 import { IconBaseProps } from 'react-icons/lib'
 import { MdThumbUpOffAlt, MdThumbUp, MdThumbDownOffAlt, MdThumbDown } from 'react-icons/md'
@@ -36,8 +36,10 @@ export const ReviewReaction: React.FC<ReviewReactionProps> = ({ type, pressed, r
   }
 
   return (
-    <Stack spacing={1} direction="row" alignItems="center" onClick={onClick}>
-      <SelectedIcon />
+    <Stack spacing={0.5} direction="row" alignItems="center" onClick={onClick}>
+      <IconButton size="small">
+        <SelectedIcon />
+      </IconButton>
       <Typography variant="h6" color={getColor()}>
         {reactionCount}
       </Typography>

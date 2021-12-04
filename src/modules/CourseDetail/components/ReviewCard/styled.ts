@@ -18,6 +18,7 @@ CardTerm.defaultProps = { variant: 'h5' }
 
 export const CardContent = styled(MainTypography)`
   text-align: justify;
+  font-family: 'ChulaCharasNew';
 `
 CardContent.defaultProps = { variant: 'body1' }
 

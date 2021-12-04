@@ -9,7 +9,7 @@ import { getSemesterName } from '@/common/utils/getSemesterName'
 import { ReviewContext } from '@/modules/CourseDetail/context/Review'
 
 import { ReviewReaction } from '../ReviewReaction'
-import { Card, CardTerm, CardContent, CardRating, CardMaxRating } from './styled'
+import { Card, CardTerm, CardContent, CardRating, CardMaxRating, CardRejectedMessage } from './styled'
 import { ReviewCardProps } from './types'
 
 export const ReviewCard: React.FC<ReviewCardProps> = (data) => {
@@ -70,9 +70,13 @@ export const ReviewCard: React.FC<ReviewCardProps> = (data) => {
         </Stack>
       </Stack>
       <CardContent>{data.content}</CardContent>
+
       <Stack direction="row" justifyContent="space-between" alignItems="center">
         {getChipType() ? (
           <>
+            {data.status === ReviewStatus.Rejected && (
+              <CardRejectedMessage>กรุณาแก้ไข ก่อนส่งความคิดเห็นอีกครั้ง</CardRejectedMessage>
+            )}
             <Stack direction="row" spacing={3} ml="auto">
               <MdEdit {...actionIconProps} onClick={handleEditClick} />
               <MdDeleteOutline {...actionIconProps} onClick={handleDeleteClick} />

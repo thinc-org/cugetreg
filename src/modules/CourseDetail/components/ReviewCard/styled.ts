@@ -32,3 +32,8 @@ export const CardMaxRating = styled(Typography)`
   color: ${({ theme }) => theme.palette.primaryRange[100]};
 `
 CardMaxRating.defaultProps = { variant: 'subtitle2' }
+
+export const CardRejectedMessage = styled(Typography)`
+  color: ${({ theme }) => theme.palette.highlight.red[500]};
+`
+CardRejectedMessage.defaultProps = { variant: 'subtitle2' }

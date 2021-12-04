@@ -60,6 +60,23 @@ export const mockReviews: Review[] = [
   },
 ]
 
+export const mockMyReviews: Review[] = [
+  {
+    _id: '61ab376cea2d0aeded10dc2b',
+    rating: 8,
+    courseNo: '0201109',
+    semester: '2',
+    academicYear: '2564',
+    studyProgram: 'S',
+    content: 'เหนื่อยากเลยค่าแงงงงง',
+    likeCount: 0,
+    dislikeCount: 0,
+    myInteraction: null,
+    status: 'APPROVED' as Review['status'],
+    isOwner: true,
+  },
+]
+
 export const mockMyPendingReviews: Review[] = [
   {
     _id: '61ab59632d5b971a45ca3238',
@@ -73,6 +90,23 @@ export const mockMyPendingReviews: Review[] = [
     dislikeCount: 0,
     myInteraction: 'L' as Review['myInteraction'],
     status: 'PENDING' as Review['status'],
+    isOwner: true,
+  },
+]
+
+export const mockMyRejectedReviews: Review[] = [
+  {
+    _id: '61ab59632d5b971a45ca3238',
+    rating: 3,
+    courseNo: '0201109',
+    semester: '2',
+    academicYear: '2564',
+    studyProgram: 'S',
+    content: 'เขียนดี ๆ แล้ว อิอิ',
+    likeCount: 1,
+    dislikeCount: 0,
+    myInteraction: 'L' as Review['myInteraction'],
+    status: 'REJECTED' as Review['status'],
     isOwner: true,
   },
 ]

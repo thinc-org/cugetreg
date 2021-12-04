@@ -7,6 +7,7 @@ export const DEFAULT_REVIEW_CONTEXT_VALUE: ReviewContextValues = {
   reportReview: () => {},
   deleteMyPendingReview: () => {},
   editMyReview: () => {},
+  cancelEditReview: () => {},
   submitReview: () => {},
   submitEditedReview: () => {},
 }

@@ -132,6 +132,11 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
     setEditingReviewId(reviewId)
   }
 
+  const cancelEditReview = () => {
+    clearReviewForm()
+    setEditingReviewId(undefined)
+  }
+
   /**
    * Use this function to submit a review for each course
    * @param review - a review object with rating, academicYear, semester, content
@@ -190,9 +195,8 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
 
   const postSubmitReview = () => {
     console.log('POST SUBMIT REVIEW')
-    clearReviewForm()
+    cancelEditReview()
     emitMessage(`เพิ่มความคิดเห็นของคุณแล้ว`, 'success')
-    setEditingReviewId(undefined)
   }
 
   const storeLocalReviewForm = () => {
@@ -237,6 +241,7 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
     reportReview,
     deleteMyPendingReview,
     editMyReview,
+    cancelEditReview,
     submitReview,
     submitEditedReview,
     editingReviewId,

@@ -9,6 +9,7 @@ export interface ReviewContextValues {
   reportReview: (reviewId: string) => void
   deleteMyPendingReview: (reviewId: string) => void
   editMyReview: (reviewId: string) => void
+  cancelEditReview: () => void
   submitReview: () => void
   submitEditedReview: (reviewId: string) => void
   editingReviewId?: string

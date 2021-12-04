@@ -14,7 +14,7 @@ export const ReviewForm: React.FC = () => {
   const { academicYear, semester } = getCurrentTerm()
   const { t } = useTranslation('review')
   const { emitMessage } = useContext(SnackbarContext)
-  const { submitReview, submitEditedReview, editingReviewId } = useContext(ReviewContext)
+  const { submitReview, submitEditedReview, editingReviewId, cancelEditReview } = useContext(ReviewContext)
 
   const onSubmit: SubmitHandler<ReviewState> = async () => {
     if (editingReviewId) await submitEditedReview(editingReviewId)
@@ -78,7 +78,12 @@ export const ReviewForm: React.FC = () => {
           placeholder="คิดว่าวิชานี้เป็นอย่างไรบ้าง?"
           {...register('content', { required: 'need to write at least 1 character' })}
         />
-        <Stack mt={2} mb={4}>
+        <Stack mt={2} mb={4} direction="row" spacing={2}>
+          {editingReviewId && (
+            <Button variant="outlined" fullWidth onClick={cancelEditReview}>
+              ยกเลิก
+            </Button>
+          )}
           <Button variant="contained" fullWidth type="submit">
             ส่งรีวิว
           </Button>

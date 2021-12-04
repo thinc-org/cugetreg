@@ -7,7 +7,7 @@ import { useCourseGroup } from '@/common/hooks/useCourseGroup'
 import { useLoginGuard } from '@/common/hooks/useLoginGuard'
 import { Storage } from '@/common/storage'
 import { StorageKey } from '@/common/storage/constants'
-import { Review, ReviewInteraction } from '@/common/types/reviews'
+import { Review, ReviewInteractionType } from '@/common/types/reviews'
 import { CreateReviewResponse, CreateReviewVars, CREATE_REVIEW } from '@/services/apollo/query/createReview'
 import { EditMyReviewResponse, EditMyReviewVars, EDIT_MY_REVIEW } from '@/services/apollo/query/editMyReview'
 import {
@@ -77,7 +77,7 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
    * @param reviewId - id of the review to be changed the user's interaction
    * @param interaction - the new interaction
    */
-  const setInteraction = async (reviewId: string, interaction: ReviewInteraction) => {
+  const setInteraction = async (reviewId: string, interaction: ReviewInteractionType) => {
     try {
       if (!loginGuard()) return
       await setInteractionMutaion({

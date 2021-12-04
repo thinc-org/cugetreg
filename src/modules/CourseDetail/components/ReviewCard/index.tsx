@@ -4,7 +4,7 @@ import { MdFlag, MdDeleteOutline, MdOutlineStar, MdEdit } from 'react-icons/md'
 
 import { GeneralChip } from '@/common/components/Chips'
 import { OtherChipKey } from '@/common/components/Chips/config'
-import { ReviewInteraction, ReviewStatus } from '@/common/types/reviews'
+import { ReviewInteractionType, ReviewStatus } from '@/common/types/reviews'
 import { getSemesterName } from '@/common/utils/getSemesterName'
 import { ReviewContext } from '@/modules/CourseDetail/context/Review'
 
@@ -37,11 +37,11 @@ export const ReviewCard: React.FC<ReviewCardProps> = (data) => {
   const { setInteraction, reportReview, deleteMyPendingReview, editMyReview } = useContext(ReviewContext)
 
   const handleLikeClick = () => {
-    setInteraction(data._id, ReviewInteraction.Like)
+    setInteraction(data._id, ReviewInteractionType.Like)
   }
 
   const handleDislikeClick = () => {
-    setInteraction(data._id, ReviewInteraction.Dislike)
+    setInteraction(data._id, ReviewInteractionType.Dislike)
   }
 
   const handleReportClick = () => {
@@ -97,14 +97,14 @@ export const ReviewCard: React.FC<ReviewCardProps> = (data) => {
         ) : (
           <Stack direction="row" spacing={3}>
             <ReviewReaction
-              type={ReviewInteraction.Like}
-              pressed={data.myInteraction === ReviewInteraction.Like}
+              type={ReviewInteractionType.Like}
+              pressed={data.myInteraction === ReviewInteractionType.Like}
               reactionCount={data.likeCount}
               onClick={handleLikeClick}
             />
             <ReviewReaction
-              type={ReviewInteraction.Dislike}
-              pressed={data.myInteraction === ReviewInteraction.Dislike}
+              type={ReviewInteractionType.Dislike}
+              pressed={data.myInteraction === ReviewInteractionType.Dislike}
               reactionCount={data.dislikeCount}
               onClick={handleDislikeClick}
             />

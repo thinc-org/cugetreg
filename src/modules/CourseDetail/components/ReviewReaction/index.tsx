@@ -3,7 +3,7 @@ import { useTheme } from '@mui/system'
 import { IconBaseProps } from 'react-icons/lib'
 import { MdThumbUpOffAlt, MdThumbUp, MdThumbDownOffAlt, MdThumbDown } from 'react-icons/md'
 
-import { ReviewInteraction } from '@/common/types/reviews'
+import { ReviewInteractionType } from '@/common/types/reviews'
 
 import { ReviewReactionProps } from './types'
 
@@ -13,9 +13,9 @@ export const ReviewReaction: React.FC<ReviewReactionProps> = ({ type, pressed, r
   const getColor = () => {
     if (pressed) {
       switch (type) {
-        case ReviewInteraction.Like:
+        case ReviewInteractionType.Like:
           return theme.palette.highlight.green[500]
-        case ReviewInteraction.Dislike:
+        case ReviewInteractionType.Dislike:
           return theme.palette.highlight.red[500]
       }
     }
@@ -26,9 +26,9 @@ export const ReviewReaction: React.FC<ReviewReactionProps> = ({ type, pressed, r
     const color = getColor()
     const modifiedProps: IconBaseProps = { ...props, color, size: 20 }
     switch (type) {
-      case ReviewInteraction.Like:
+      case ReviewInteractionType.Like:
         return !pressed ? <MdThumbUpOffAlt {...modifiedProps} /> : <MdThumbUp {...modifiedProps} />
-      case ReviewInteraction.Dislike:
+      case ReviewInteractionType.Dislike:
         return !pressed ? <MdThumbDownOffAlt {...modifiedProps} /> : <MdThumbDown {...modifiedProps} />
       default:
         return !pressed ? <MdThumbUpOffAlt {...modifiedProps} /> : <MdThumbUp {...modifiedProps} />

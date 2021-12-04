@@ -1,11 +1,11 @@
 import gql from 'graphql-tag'
 
-import { Review, ReviewInteraction } from '@/common/types/reviews'
+import { Review, ReviewInteractionType } from '@/common/types/reviews'
 import { REVIEW_DATA_FIELDS } from '@/services/apollo/query/reviewDataField'
 
 export interface SetReviewInteractionVars {
   reviewId: string
-  interaction: ReviewInteraction
+  interaction: ReviewInteractionType
 }
 
 export interface SetReviewInteractionResponse {

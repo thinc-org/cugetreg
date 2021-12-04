@@ -1,6 +1,6 @@
 import { Semester, StudyProgram } from '@thinc-org/chula-courses'
 
-export enum ReviewInteraction {
+export enum ReviewInteractionType {
   Like = 'L',
   Dislike = 'D',
 }
@@ -21,7 +21,7 @@ export interface Review {
   content: string
   likeCount: number
   dislikeCount: number
-  myInteraction: ReviewInteraction
+  myInteraction: ReviewInteractionType
   status: ReviewStatus
   isOwner: boolean
 }

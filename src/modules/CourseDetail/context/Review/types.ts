@@ -1,11 +1,11 @@
-import { Review, ReviewInteraction } from '@/common/types/reviews'
+import { Review, ReviewInteractionType } from '@/common/types/reviews'
 
 export type ReviewState = Pick<Review, 'rating' | 'academicYear' | 'semester' | 'content'>
 
 export interface ReviewContextValues {
   reviews: Review[]
   myPendingReviews: Review[]
-  setInteraction: (reviewId: string, interaction: ReviewInteraction) => void
+  setInteraction: (reviewId: string, interaction: ReviewInteractionType) => void
   reportReview: (reviewId: string) => void
   deleteMyPendingReview: (reviewId: string) => void
   editMyReview: (reviewId: string) => void

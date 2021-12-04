@@ -1,8 +1,8 @@
-import { ReviewInteraction } from '@/common/types/reviews'
+import { ReviewInteractionType } from '@/common/types/reviews'
 
 export interface ReviewReactionProps {
-  type: ReviewInteraction
+  type: ReviewInteractionType
   pressed: boolean
   reactionCount: number
-  onClick: () => void
+  onClick?: () => void
 }

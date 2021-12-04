@@ -12,6 +12,7 @@ export const useLoginGuard = () => {
   const [open, setOpen] = useState(false)
   const [onConfirm, setOnConfirm] = useState(() => () => {})
 
+  // TODO better way to handle this?
   const Dialog = () => (
     <LoginGuardDialog
       open={open}

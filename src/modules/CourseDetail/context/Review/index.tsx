@@ -65,7 +65,6 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
   useEffect(() => {
     reviewQuery.refetch()
     myPendingReviewQuery.refetch()
-    console.log('TRIGGER NONE')
     restoreLocalReviewForm()
   }, [])
 

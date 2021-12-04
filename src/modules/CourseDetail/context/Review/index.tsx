@@ -28,6 +28,8 @@ import { ReviewContextValues, ReviewState } from './types'
 
 export const ReviewContext = createContext<ReviewContextValues>(DEFAULT_REVIEW_CONTEXT_VALUE)
 
+export const useReviewContext = () => useContext(ReviewContext)
+
 export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, children }) => {
   const localStorage = new Storage('localStorage')
   const methods = useForm<ReviewState>()
@@ -100,10 +102,10 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
   }
 
   /**
-   * User can delete their own pending review
+   * User can delete their own review
    * @param reviewId - id of the review to be deleted
    */
-  const deleteMyPendingReview = async (reviewId: string) => {
+  const deleteMyReview = async (reviewId: string) => {
     try {
       if (!loginGuard()) return
       const confirm = window.confirm('คุณต้องการลบรีวิวนี้หรือไม่?')
@@ -239,7 +241,7 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
     myPendingReviews: filterDisplayedReviews(myPendingReviewQuery.data?.myPendingReviews || []),
     setInteraction,
     reportReview,
-    deleteMyPendingReview,
+    deleteMyReview,
     editMyReview,
     cancelEditReview,
     submitReview,

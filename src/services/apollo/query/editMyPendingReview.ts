@@ -9,7 +9,7 @@ export interface EditMyPendingReviewVars {
 }
 
 export interface EditMyPendingReviewResponse {
-  editMyPendingReview: Review[]
+  editMyPendingReview: Review
 }
 
 export const EDIT_MY_PENDING_REVIEW = gql`

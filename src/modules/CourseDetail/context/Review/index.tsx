@@ -1,5 +1,4 @@
 import { useMutation, useQuery } from '@apollo/client'
-import { filter, unionBy } from 'lodash'
 import React, { createContext, useContext, useEffect } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
@@ -71,7 +70,7 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
   }, [reviewQuery.data])
   useEffect(() => {
     if (myPendingReviewQuery.data) setMyPendingReviews(myPendingReviewQuery.data.myPendingReviews)
-  }, [myPendingReviewQuery])
+  }, [myPendingReviewQuery.data])
 
   /**
    * Normal React state
@@ -94,7 +93,7 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
       })
       if (!response.errors && response.data) {
         const newReview = response.data.setInteraction
-        setReviews((reviews) => unionBy(reviews, [newReview], '_id'))
+        setReviews((reviews) => reviews.map((data) => (data._id === newReview._id ? newReview : data)))
       }
     } catch (err) {
       emitMessage((err as Error).message, 'error')
@@ -125,8 +124,8 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
       })
       if (!response.errors && response.data) {
         const reviewId = response.data.removeReview._id
-        setReviews((reviews) => filter(reviews, (data) => data._id !== reviewId))
-        setMyPendingReviews((reviews) => filter(reviews, (data) => data._id !== reviewId))
+        setReviews((reviews) => reviews.filter((data) => data._id !== reviewId))
+        setMyPendingReviews((reviews) => reviews.filter((data) => data._id !== reviewId))
       }
     } catch (err) {
       emitMessage((err as Error).message, 'error')
@@ -173,7 +172,7 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
         },
       })
       if (!response.errors && response.data) {
-        setMyPendingReviews(response.data.createReview)
+        setMyPendingReviews([response.data.createReview])
         clearForm()
         emitMessage(`เพิ่มความคิดเห็นของคุณแล้ว`, 'success')
       }
@@ -201,7 +200,7 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
         },
       })
       if (!response.errors && response.data) {
-        setMyPendingReviews(response.data.editMyPendingReview)
+        setMyPendingReviews([response.data.editMyPendingReview])
         clearForm()
         emitMessage(`ความคิดเห็นของคุณถูกแก้ไขแล้ว`, 'success')
         setEditingReviewId(undefined)

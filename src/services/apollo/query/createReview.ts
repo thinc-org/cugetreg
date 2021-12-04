@@ -15,7 +15,7 @@ export interface CreateReviewVars {
 }
 
 export interface CreateReviewResponse {
-  createReview: Review[]
+  createReview: Review
 }
 
 export const CREATE_REVIEW = gql`

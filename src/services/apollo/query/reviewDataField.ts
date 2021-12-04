@@ -10,4 +10,5 @@ export const REVIEW_DATA_FIELDS = `
   dislikeCount
   myInteraction
   status
+  isOwner
 `

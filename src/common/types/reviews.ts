@@ -23,4 +23,5 @@ export interface Review {
   dislikeCount: number
   myInteraction: ReviewInteraction
   status: ReviewStatus
+  isOwner: boolean
 }

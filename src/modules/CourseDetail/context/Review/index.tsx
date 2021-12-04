@@ -58,20 +58,12 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
   const [editMyReviewMutation] = useMutation<EditMyReviewResponse, EditMyReviewVars>(EDIT_MY_REVIEW)
 
   /**
-   * React state for local caching
-   */
-  const [reviewsCache, setReviewsCache] = React.useState<Review[]>([])
-  const [myPendingReviewsCache, setMyPendingReviewsCache] = React.useState<Review[]>([])
-  /**
    * Initialize context values and form state
    */
   useEffect(() => {
-    if (reviewQuery.data) setReviewsCache(reviewQuery.data.reviews)
-  }, [reviewQuery.data])
-  useEffect(() => {
-    if (myPendingReviewQuery.data) setMyPendingReviewsCache(myPendingReviewQuery.data.myPendingReviews)
-  }, [myPendingReviewQuery.data])
-  useEffect(() => {
+    reviewQuery.refetch()
+    myPendingReviewQuery.refetch()
+    console.log('TRIGGER NONE')
     restoreLocalReviewForm()
   }, [])
 
@@ -88,16 +80,12 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
   const setInteraction = async (reviewId: string, interaction: ReviewInteraction) => {
     try {
       if (!loginGuard()) return
-      const response = await setInteractionMutaion({
+      await setInteractionMutaion({
         variables: {
           reviewId,
           interaction,
         },
       })
-      if (!response.errors && response.data) {
-        const newReview = response.data.setInteraction
-        setReviewsCache((reviews) => updatedReviewCacheCallback(reviews, newReview))
-      }
     } catch (err) {
       emitMessage((err as Error).message, 'error')
     }
@@ -120,16 +108,11 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
       if (!loginGuard()) return
       const confirm = window.confirm('คุณต้องการลบรีวิวนี้หรือไม่?')
       if (!confirm) return
-      const response = await removeReivewMutation({
+      await removeReivewMutation({
         variables: {
           reviewId,
         },
       })
-      if (!response.errors && response.data) {
-        const reviewId = response.data.removeReview._id
-        setReviewsCache((reviews) => removeReviewCacheCallback(reviews, reviewId))
-        setMyPendingReviewsCache((reviews) => removeReviewCacheCallback(reviews, reviewId))
-      }
     } catch (err) {
       emitMessage((err as Error).message, 'error')
     }
@@ -139,16 +122,13 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
    * Use this function to edit a pending review
    * @param reviewId
    */
-  const editMyPendingReview = async (reviewId: string) => {
+  const editMyReview = async (reviewId: string) => {
     const findAndSetReviewFormCallback = (reviews: Review[]) => {
-      // find a review and set a form
       const review = reviews.find((data) => data._id === reviewId)
       if (review) setReviewForm(review)
-      // remove editing review from cache
-      return removeReviewCacheCallback(reviews, reviewId)
     }
-    setReviewsCache(findAndSetReviewFormCallback)
-    setMyPendingReviewsCache(findAndSetReviewFormCallback)
+    findAndSetReviewFormCallback(reviewQuery.data?.reviews || [])
+    findAndSetReviewFormCallback(myPendingReviewQuery.data?.myPendingReviews || [])
     setEditingReviewId(reviewId)
   }
 
@@ -174,7 +154,7 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
         },
       })
       if (!response.errors && response.data) {
-        postSubmitReview(response.data.createReview)
+        postSubmitReview()
       }
     } catch (err) {
       emitMessage((err as Error).message, 'error')
@@ -201,28 +181,18 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
         },
       })
       if (!response.errors && response.data) {
-        postSubmitReview(response.data.editMyReview)
+        postSubmitReview()
       }
     } catch (err) {
       emitMessage((err as Error).message, 'error')
     }
   }
 
-  const postSubmitReview = (newReview: Review) => {
-    const updatedReviewsCallback = (reviews: Review[]) => updatedReviewCacheCallback(reviews, newReview)
-    setReviewsCache(updatedReviewsCallback)
-    setMyPendingReviewsCache(updatedReviewsCallback)
+  const postSubmitReview = () => {
+    console.log('POST SUBMIT REVIEW')
     clearReviewForm()
     emitMessage(`เพิ่มความคิดเห็นของคุณแล้ว`, 'success')
     setEditingReviewId(undefined)
-  }
-
-  const updatedReviewCacheCallback = (reviews: Review[], newReview: Review) => {
-    return reviews.map((data) => (data._id === newReview._id ? newReview : data))
-  }
-
-  const removeReviewCacheCallback = (reviews: Review[], reviewId: string) => {
-    return reviews.filter((data) => data._id !== reviewId)
   }
 
   const storeLocalReviewForm = () => {
@@ -256,13 +226,17 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
     methods.setValue('rating', 0)
   }
 
+  const filterDisplayedReviews = (reviews: Review[]): Review[] => {
+    return reviews.filter((data) => data._id !== editingReviewId)
+  }
+
   const value: ReviewContextValues = {
-    reviews: reviewsCache,
-    myPendingReviews: myPendingReviewsCache,
+    reviews: filterDisplayedReviews(reviewQuery.data?.reviews || []),
+    myPendingReviews: filterDisplayedReviews(myPendingReviewQuery.data?.myPendingReviews || []),
     setInteraction,
     reportReview,
     deleteMyPendingReview,
-    editMyPendingReview,
+    editMyReview,
     submitReview,
     submitEditedReview,
     editingReviewId,

@@ -34,7 +34,7 @@ export const ReviewCard: React.FC<ReviewCardProps> = (data) => {
 
   const chipType = getChipType()
 
-  const { setInteraction, reportReview, deleteMyPendingReview, editMyPendingReview } = useContext(ReviewContext)
+  const { setInteraction, reportReview, deleteMyPendingReview, editMyReview } = useContext(ReviewContext)
 
   const handleLikeClick = () => {
     setInteraction(data._id, ReviewInteraction.Like)
@@ -55,21 +55,21 @@ export const ReviewCard: React.FC<ReviewCardProps> = (data) => {
   const handleEditClick = () => {
     const srollToElement = document.getElementById('review-title')
     if (srollToElement) {
-      const offset = 100
+      const offset = document.documentElement.clientHeight * 0.35
       const offsetTop = srollToElement.offsetTop
       window.scrollTo({ top: offsetTop - offset, behavior: 'smooth' })
     }
-    editMyPendingReview(data._id)
+    editMyReview(data._id)
   }
 
   const OwnerIconAction = () => {
     return (
       <Stack direction="row" spacing={1} ml="auto">
-        <IconButton size="small">
-          <MdEdit {...actionIconProps} onClick={handleEditClick} />
+        <IconButton size="small" onClick={handleEditClick}>
+          <MdEdit {...actionIconProps} />
         </IconButton>
-        <IconButton size="small">
-          <MdDeleteOutline {...actionIconProps} onClick={handleDeleteClick} />
+        <IconButton size="small" onClick={handleDeleteClick}>
+          <MdDeleteOutline {...actionIconProps} />
         </IconButton>
       </Stack>
     )
@@ -115,8 +115,8 @@ export const ReviewCard: React.FC<ReviewCardProps> = (data) => {
         {data.isOwner ? (
           <OwnerIconAction />
         ) : (
-          <IconButton size="small">
-            <MdFlag {...actionIconProps} onClick={handleReportClick} />{' '}
+          <IconButton size="small" onClick={handleReportClick}>
+            <MdFlag {...actionIconProps} />
           </IconButton>
         )}
       </Stack>

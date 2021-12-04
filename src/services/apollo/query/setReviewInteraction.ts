@@ -13,7 +13,7 @@ export interface SetReviewInteractionResponse {
 }
 
 export const SET_REVIEW_INTERACTION = gql`
-  mutation setInteraction($reviewId: String!, $interaction: Interaction!) {
+  mutation setInteraction($reviewId: String!, $interaction: ReviewInteractionType!) {
     setInteraction(reviewId: $reviewId, interaction: $interaction) {
       ${REVIEW_DATA_FIELDS}
     }

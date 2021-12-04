@@ -66,8 +66,11 @@ export const ReviewForm: React.FC = () => {
           <Controller
             name="rating"
             control={control}
+            defaultValue={0}
             rules={{ required: 'rating should more than 0', validate: (value) => value > 0 }}
-            render={({ field: { value, ...rest } }) => <Rating {...rest} value={value} precision={0.5} size="large" />}
+            render={({ field: { value, onChange } }) => (
+              <Rating onChange={(_, value) => onChange(value)} value={value} precision={0.5} size="large" />
+            )}
           />
         </Stack>
         <Controller

@@ -1,0 +1,368 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ReviewCard should render correctly if this is not your review 1`] = `
+<Card
+  direction="column"
+  spacing={2}
+>
+  <ForwardRef(Stack)
+    direction="row"
+    flexWrap="wrap"
+    gap={1}
+    justifyContent="space-between"
+  >
+    <ForwardRef(Stack)
+      alignItems="center"
+      direction="row"
+      spacing={2}
+    >
+      <CardTerm
+        variant="h5"
+      >
+        2564 ภาคปลาย
+      </CardTerm>
+    </ForwardRef(Stack)>
+    <ForwardRef(Stack)
+      alignItems="center"
+      direction="row"
+      spacing={1}
+    >
+      <MdOutlineStar
+        size={20}
+      />
+      <CardRating
+        variant="h5"
+      >
+        4
+      </CardRating>
+      <CardMaxRating
+        variant="subtitle2"
+      >
+        จาก 5
+      </CardMaxRating>
+    </ForwardRef(Stack)>
+  </ForwardRef(Stack)>
+  <CardContent
+    variant="body1"
+  >
+    เหนื่อยากเลยค่าแงงงงง
+  </CardContent>
+  <ForwardRef(Stack)
+    alignItems="center"
+    direction="row"
+    justifyContent="space-between"
+  >
+    <ForwardRef(Stack)
+      direction="row"
+      spacing={3}
+    >
+      <ReviewReaction
+        onClick={[Function]}
+        pressed={false}
+        reactionCount={0}
+        type="L"
+      />
+      <ReviewReaction
+        onClick={[Function]}
+        pressed={false}
+        reactionCount={0}
+        type="D"
+      />
+    </ForwardRef(Stack)>
+    <ForwardRef(IconButton)
+      onClick={[Function]}
+      size="small"
+    >
+      <MdFlag
+        color="#C9CCE4"
+        size={24}
+      />
+    </ForwardRef(IconButton)>
+  </ForwardRef(Stack)>
+</Card>
+`;
+
+exports[`ReviewCard should render correctly if this is your approved review 1`] = `
+<Card
+  direction="column"
+  spacing={2}
+>
+  <ForwardRef(Stack)
+    direction="row"
+    flexWrap="wrap"
+    gap={1}
+    justifyContent="space-between"
+  >
+    <ForwardRef(Stack)
+      alignItems="center"
+      direction="row"
+      spacing={2}
+    >
+      <CardTerm
+        variant="h5"
+      >
+        2564 ภาคปลาย
+      </CardTerm>
+    </ForwardRef(Stack)>
+    <ForwardRef(Stack)
+      alignItems="center"
+      direction="row"
+      spacing={1}
+    >
+      <MdOutlineStar
+        size={20}
+      />
+      <CardRating
+        variant="h5"
+      >
+        4
+      </CardRating>
+      <CardMaxRating
+        variant="subtitle2"
+      >
+        จาก 5
+      </CardMaxRating>
+    </ForwardRef(Stack)>
+  </ForwardRef(Stack)>
+  <CardContent
+    variant="body1"
+  >
+    เหนื่อยากเลยค่าแงงงงง
+  </CardContent>
+  <ForwardRef(Stack)
+    alignItems="center"
+    direction="row"
+    justifyContent="space-between"
+  >
+    <ForwardRef(Stack)
+      direction="row"
+      spacing={3}
+    >
+      <ReviewReaction
+        onClick={[Function]}
+        pressed={false}
+        reactionCount={0}
+        type="L"
+      />
+      <ReviewReaction
+        onClick={[Function]}
+        pressed={false}
+        reactionCount={0}
+        type="D"
+      />
+    </ForwardRef(Stack)>
+    <ForwardRef(Stack)
+      direction="row"
+      ml="auto"
+      spacing={1}
+    >
+      <ForwardRef(IconButton)
+        onClick={[Function]}
+        size="small"
+      >
+        <MdEdit
+          color="#C9CCE4"
+          size={24}
+        />
+      </ForwardRef(IconButton)>
+      <ForwardRef(IconButton)
+        onClick={[Function]}
+        size="small"
+      >
+        <MdDeleteOutline
+          color="#C9CCE4"
+          size={24}
+        />
+      </ForwardRef(IconButton)>
+    </ForwardRef(Stack)>
+  </ForwardRef(Stack)>
+</Card>
+`;
+
+exports[`ReviewCard should render correctly if this is your pending review 1`] = `
+<Card
+  direction="column"
+  spacing={2}
+>
+  <ForwardRef(Stack)
+    direction="row"
+    flexWrap="wrap"
+    gap={1}
+    justifyContent="space-between"
+  >
+    <ForwardRef(Stack)
+      alignItems="center"
+      direction="row"
+      spacing={2}
+    >
+      <CardTerm
+        variant="h5"
+      >
+        2564 ภาคปลาย
+      </CardTerm>
+      <GeneralChip
+        type="reviewPending"
+      />
+    </ForwardRef(Stack)>
+    <ForwardRef(Stack)
+      alignItems="center"
+      direction="row"
+      spacing={1}
+    >
+      <MdOutlineStar
+        size={20}
+      />
+      <CardRating
+        variant="h5"
+      >
+        1.5
+      </CardRating>
+      <CardMaxRating
+        variant="subtitle2"
+      >
+        จาก 5
+      </CardMaxRating>
+    </ForwardRef(Stack)>
+  </ForwardRef(Stack)>
+  <CardContent
+    variant="body1"
+  >
+    เขียนดี ๆ แล้ว อิอิ
+  </CardContent>
+  <ForwardRef(Stack)
+    alignItems="center"
+    direction="row"
+    justifyContent="space-between"
+  >
+    <ForwardRef(Stack)
+      direction="row"
+      spacing={3}
+    >
+      <ReviewReaction
+        onClick={[Function]}
+        pressed={true}
+        reactionCount={1}
+        type="L"
+      />
+      <ReviewReaction
+        onClick={[Function]}
+        pressed={false}
+        reactionCount={0}
+        type="D"
+      />
+    </ForwardRef(Stack)>
+    <ForwardRef(Stack)
+      direction="row"
+      ml="auto"
+      spacing={1}
+    >
+      <ForwardRef(IconButton)
+        onClick={[Function]}
+        size="small"
+      >
+        <MdEdit
+          color="#C9CCE4"
+          size={24}
+        />
+      </ForwardRef(IconButton)>
+      <ForwardRef(IconButton)
+        onClick={[Function]}
+        size="small"
+      >
+        <MdDeleteOutline
+          color="#C9CCE4"
+          size={24}
+        />
+      </ForwardRef(IconButton)>
+    </ForwardRef(Stack)>
+  </ForwardRef(Stack)>
+</Card>
+`;
+
+exports[`ReviewCard should render correctly if this is your rejected review 1`] = `
+<Card
+  direction="column"
+  spacing={2}
+>
+  <ForwardRef(Stack)
+    direction="row"
+    flexWrap="wrap"
+    gap={1}
+    justifyContent="space-between"
+  >
+    <ForwardRef(Stack)
+      alignItems="center"
+      direction="row"
+      spacing={2}
+    >
+      <CardTerm
+        variant="h5"
+      >
+        2564 ภาคปลาย
+      </CardTerm>
+      <GeneralChip
+        type="reviewRejected"
+      />
+    </ForwardRef(Stack)>
+    <ForwardRef(Stack)
+      alignItems="center"
+      direction="row"
+      spacing={1}
+    >
+      <MdOutlineStar
+        size={20}
+      />
+      <CardRating
+        variant="h5"
+      >
+        1.5
+      </CardRating>
+      <CardMaxRating
+        variant="subtitle2"
+      >
+        จาก 5
+      </CardMaxRating>
+    </ForwardRef(Stack)>
+  </ForwardRef(Stack)>
+  <CardContent
+    variant="body1"
+  >
+    เขียนดี ๆ แล้ว อิอิ
+  </CardContent>
+  <ForwardRef(Stack)
+    alignItems="center"
+    direction="row"
+    justifyContent="space-between"
+  >
+    <CardRejectedMessage
+      variant="subtitle2"
+    >
+      กรุณาแก้ไข ก่อนส่งความคิดเห็นอีกครั้ง
+    </CardRejectedMessage>
+    <ForwardRef(Stack)
+      direction="row"
+      ml="auto"
+      spacing={1}
+    >
+      <ForwardRef(IconButton)
+        onClick={[Function]}
+        size="small"
+      >
+        <MdEdit
+          color="#C9CCE4"
+          size={24}
+        />
+      </ForwardRef(IconButton)>
+      <ForwardRef(IconButton)
+        onClick={[Function]}
+        size="small"
+      >
+        <MdDeleteOutline
+          color="#C9CCE4"
+          size={24}
+        />
+      </ForwardRef(IconButton)>
+    </ForwardRef(Stack)>
+  </ForwardRef(Stack)>
+</Card>
+`;

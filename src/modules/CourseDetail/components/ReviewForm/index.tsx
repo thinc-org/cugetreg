@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { MultiplelineTextField } from '@/common/components/MultiplelineTextField'
 import { SnackbarContext } from '@/common/context/Snackbar'
 import { getCurrentTerm } from '@/common/utils/getCurrentTerm'
-import { ReviewContext } from '@/modules/CourseDetail/context/Review'
+import { useReviewContext } from '@/modules/CourseDetail/context/Review'
 import { ReviewState } from '@/modules/CourseDetail/context/Review/types'
 
 export const ReviewForm: React.FC = () => {
@@ -14,7 +14,7 @@ export const ReviewForm: React.FC = () => {
   const { academicYear, semester } = getCurrentTerm()
   const { t } = useTranslation('review')
   const { emitMessage } = useContext(SnackbarContext)
-  const { submitReview, submitEditedReview, editingReviewId, cancelEditReview } = useContext(ReviewContext)
+  const { submitReview, submitEditedReview, editingReviewId, cancelEditReview } = useReviewContext()
 
   const onSubmit: SubmitHandler<ReviewState> = async () => {
     if (editingReviewId) await submitEditedReview(editingReviewId)

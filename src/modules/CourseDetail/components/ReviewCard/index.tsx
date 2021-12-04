@@ -1,12 +1,11 @@
 import { IconButton, Stack, useTheme } from '@mui/material'
-import { useContext } from 'react'
 import { MdFlag, MdDeleteOutline, MdOutlineStar, MdEdit } from 'react-icons/md'
 
 import { GeneralChip } from '@/common/components/Chips'
 import { OtherChipKey } from '@/common/components/Chips/config'
 import { ReviewInteractionType, ReviewStatus } from '@/common/types/reviews'
 import { getSemesterName } from '@/common/utils/getSemesterName'
-import { ReviewContext } from '@/modules/CourseDetail/context/Review'
+import { useReviewContext } from '@/modules/CourseDetail/context/Review'
 
 import { ReviewReaction } from '../ReviewReaction'
 import { Card, CardTerm, CardContent, CardRating, CardMaxRating, CardRejectedMessage } from './styled'
@@ -34,7 +33,7 @@ export const ReviewCard: React.FC<ReviewCardProps> = (data) => {
 
   const chipType = getChipType()
 
-  const { setInteraction, reportReview, deleteMyPendingReview, editMyReview } = useContext(ReviewContext)
+  const { setInteraction, reportReview, deleteMyReview, editMyReview } = useReviewContext()
 
   const handleLikeClick = () => {
     setInteraction(data._id, ReviewInteractionType.Like)
@@ -49,7 +48,7 @@ export const ReviewCard: React.FC<ReviewCardProps> = (data) => {
   }
 
   const handleDeleteClick = () => {
-    deleteMyPendingReview(data._id)
+    deleteMyReview(data._id)
   }
 
   const handleEditClick = () => {
@@ -60,19 +59,6 @@ export const ReviewCard: React.FC<ReviewCardProps> = (data) => {
       window.scrollTo({ top: offsetTop - offset, behavior: 'smooth' })
     }
     editMyReview(data._id)
-  }
-
-  const OwnerIconAction = () => {
-    return (
-      <Stack direction="row" spacing={1} ml="auto">
-        <IconButton size="small" onClick={handleEditClick}>
-          <MdEdit {...actionIconProps} />
-        </IconButton>
-        <IconButton size="small" onClick={handleDeleteClick}>
-          <MdDeleteOutline {...actionIconProps} />
-        </IconButton>
-      </Stack>
-    )
   }
 
   return (
@@ -113,7 +99,14 @@ export const ReviewCard: React.FC<ReviewCardProps> = (data) => {
 
         {/** Right side */}
         {data.isOwner ? (
-          <OwnerIconAction />
+          <Stack direction="row" spacing={1} ml="auto">
+            <IconButton size="small" onClick={handleEditClick}>
+              <MdEdit {...actionIconProps} />
+            </IconButton>
+            <IconButton size="small" onClick={handleDeleteClick}>
+              <MdDeleteOutline {...actionIconProps} />
+            </IconButton>
+          </Stack>
         ) : (
           <IconButton size="small" onClick={handleReportClick}>
             <MdFlag {...actionIconProps} />

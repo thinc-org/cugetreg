@@ -7,7 +7,7 @@ export interface ReviewContextValues {
   myPendingReviews: Review[]
   setInteraction: (reviewId: string, interaction: ReviewInteractionType) => void
   reportReview: (reviewId: string) => void
-  deleteMyPendingReview: (reviewId: string) => void
+  deleteMyReview: (reviewId: string) => void
   editMyReview: (reviewId: string) => void
   cancelEditReview: () => void
   submitReview: () => void

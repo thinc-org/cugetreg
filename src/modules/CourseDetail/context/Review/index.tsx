@@ -36,7 +36,7 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
   const localStorage = new Storage('localStorage')
   const methods = useForm<ReviewState>()
   const { studyProgram } = useCourseGroup()
-  const { loginGuard } = useLoginGuard()
+  const { loginGuard, Dialog } = useLoginGuard()
   const { emitMessage } = useContext(SnackbarContext)
 
   /**
@@ -252,7 +252,10 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
 
   return (
     <FormProvider {...methods}>
-      <ReviewContext.Provider value={value}>{children}</ReviewContext.Provider>
+      <ReviewContext.Provider value={value}>
+        <Dialog />
+        {children}
+      </ReviewContext.Provider>
     </FormProvider>
   )
 }

@@ -1,6 +1,7 @@
 import dynamic from 'next/dynamic'
 import { useState } from 'react'
 
+import { LoginGuardDialogProps } from '@/common/components/LoginGuardDialog/types'
 import { userStore } from '@/store/userStore'
 
 const LoginGuardDialog = dynamic(async () => (await import('@/common/components/LoginGuardDialog')).LoginGuardDialog, {
@@ -9,16 +10,27 @@ const LoginGuardDialog = dynamic(async () => (await import('@/common/components/
 
 export const useLoginGuard = () => {
   const [open, setOpen] = useState(false)
+  const [onConfirm, setOnConfirm] = useState(() => () => {})
 
-  const Dialog = () => <LoginGuardDialog open={open} setOpen={setOpen} onConfirm={() => userStore.login()} />
+  const Dialog = () => (
+    <LoginGuardDialog
+      open={open}
+      setOpen={setOpen}
+      onConfirm={() => {
+        onConfirm()
+        userStore.login()
+      }}
+    />
+  )
 
-  const isLoggedIn = () => {
+  const loginGuard = (onConfirm?: LoginGuardDialogProps['onConfirm']) => {
     if (!userStore.isLoggedIn()) {
       setOpen(true)
+      setOnConfirm(() => onConfirm)
       return false
     }
     return true
   }
 
-  return { isLoggedIn, Dialog }
+  return { loginGuard, Dialog }
 }

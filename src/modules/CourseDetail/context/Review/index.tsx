@@ -5,6 +5,8 @@ import { FormProvider, useForm } from 'react-hook-form'
 import { SnackbarContext } from '@/common/context/Snackbar'
 import { useCourseGroup } from '@/common/hooks/useCourseGroup'
 import { useLoginGuard } from '@/common/hooks/useLoginGuard'
+import { Storage } from '@/common/storage'
+import { StorageKey } from '@/common/storage/constants'
 import { Review, ReviewInteraction } from '@/common/types/reviews'
 import { CreateReviewResponse, CreateReviewVars, CREATE_REVIEW } from '@/services/apollo/query/createReview'
 import {
@@ -31,9 +33,10 @@ import { ReviewContextValues, ReviewState } from './types'
 export const ReviewContext = createContext<ReviewContextValues>(DEFAULT_REVIEW_CONTEXT_VALUE)
 
 export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, children }) => {
+  const localStorage = new Storage('localStorage')
   const methods = useForm<ReviewState>()
   const { studyProgram } = useCourseGroup()
-  const { isLoggedIn, Dialog } = useLoginGuard()
+  const { loginGuard } = useLoginGuard()
   const { emitMessage } = useContext(SnackbarContext)
 
   /**
@@ -63,14 +66,20 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
   /**
    * React state for local caching
    */
-  const [reviews, setReviews] = React.useState<Review[]>([])
-  const [myPendingReviews, setMyPendingReviews] = React.useState<Review[]>([])
+  const [reviewsCache, setReviewsCache] = React.useState<Review[]>([])
+  const [myPendingReviewsCache, setMyPendingReviewsCache] = React.useState<Review[]>([])
+  /**
+   * Initialize context values and form state
+   */
   useEffect(() => {
-    if (reviewQuery.data) setReviews(reviewQuery.data.reviews)
+    if (reviewQuery.data) setReviewsCache(reviewQuery.data.reviews)
   }, [reviewQuery.data])
   useEffect(() => {
-    if (myPendingReviewQuery.data) setMyPendingReviews(myPendingReviewQuery.data.myPendingReviews)
+    if (myPendingReviewQuery.data) setMyPendingReviewsCache(myPendingReviewQuery.data.myPendingReviews)
   }, [myPendingReviewQuery.data])
+  useEffect(() => {
+    restoreLocalReviewForm()
+  }, [])
 
   /**
    * Normal React state
@@ -84,7 +93,7 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
    */
   const setInteraction = async (reviewId: string, interaction: ReviewInteraction) => {
     try {
-      if (!isLoggedIn()) return
+      if (!loginGuard()) return
       const response = await setInteractionMutaion({
         variables: {
           reviewId,
@@ -93,7 +102,7 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
       })
       if (!response.errors && response.data) {
         const newReview = response.data.setInteraction
-        setReviews((reviews) => reviews.map((data) => (data._id === newReview._id ? newReview : data)))
+        setReviewsCache((reviews) => reviews.map((data) => (data._id === newReview._id ? newReview : data)))
       }
     } catch (err) {
       emitMessage((err as Error).message, 'error')
@@ -114,7 +123,7 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
    */
   const deleteMyPendingReview = async (reviewId: string) => {
     try {
-      if (!isLoggedIn()) return
+      if (!loginGuard()) return
       const confirm = window.confirm('คุณต้องการลบรีวิวนี้หรือไม่?')
       if (!confirm) return
       const response = await removeReivewMutation({
@@ -124,8 +133,8 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
       })
       if (!response.errors && response.data) {
         const reviewId = response.data.removeReview._id
-        setReviews((reviews) => reviews.filter((data) => data._id !== reviewId))
-        setMyPendingReviews((reviews) => reviews.filter((data) => data._id !== reviewId))
+        setReviewsCache((reviews) => reviews.filter((data) => data._id !== reviewId))
+        setMyPendingReviewsCache((reviews) => reviews.filter((data) => data._id !== reviewId))
       }
     } catch (err) {
       emitMessage((err as Error).message, 'error')
@@ -137,14 +146,9 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
    * @param reviewId
    */
   const editMyPendingReview = async (reviewId: string) => {
-    setMyPendingReviews((reviews) => {
+    setMyPendingReviewsCache((reviews) => {
       const review = reviews.find((data) => data._id === reviewId)
-      if (review) {
-        methods.setValue('academicYear', review.academicYear)
-        methods.setValue('content', review.content)
-        methods.setValue('rating', review.rating / 2)
-        methods.setValue('semester', review.semester)
-      }
+      if (review) setReviewForm(review)
       return reviews.filter((data) => data._id !== reviewId)
     })
     setEditingReviewId(reviewId)
@@ -156,7 +160,7 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
    */
   const submitReview = async () => {
     try {
-      if (!isLoggedIn()) return
+      if (!loginGuard(storeLocalReviewForm)) return
       const review = methods.getValues()
       const ratingNumber = review.rating * 2 // 1 - 10, 0 isn't accepted
       const response = await createReviewMutation({
@@ -172,8 +176,8 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
         },
       })
       if (!response.errors && response.data) {
-        setMyPendingReviews([response.data.createReview])
-        clearForm()
+        setMyPendingReviewsCache([response.data.createReview])
+        clearReviewForm()
         emitMessage(`เพิ่มความคิดเห็นของคุณแล้ว`, 'success')
       }
     } catch (err) {
@@ -200,8 +204,8 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
         },
       })
       if (!response.errors && response.data) {
-        setMyPendingReviews([response.data.editMyPendingReview])
-        clearForm()
+        setMyPendingReviewsCache([response.data.editMyPendingReview])
+        clearReviewForm()
         emitMessage(`ความคิดเห็นของคุณถูกแก้ไขแล้ว`, 'success')
         setEditingReviewId(undefined)
       }
@@ -210,14 +214,33 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
     }
   }
 
-  const clearForm = () => {
+  const storeLocalReviewForm = () => {
+    localStorage.set<ReviewState>(StorageKey.ReviewForm, methods.getValues())
+  }
+
+  const restoreLocalReviewForm = () => {
+    const reviewForm = localStorage.get<ReviewState>(StorageKey.ReviewForm)
+    if (reviewForm) {
+      setReviewForm(reviewForm)
+      localStorage.remove(StorageKey.ReviewForm)
+    }
+  }
+
+  const setReviewForm = (form: Partial<ReviewState>) => {
+    if (form.academicYear) methods.setValue('academicYear', form.academicYear)
+    if (form.content) methods.setValue('content', form.content)
+    if (form.rating) methods.setValue('rating', form.rating / 2)
+    if (form.semester) methods.setValue('semester', form.semester)
+  }
+
+  const clearReviewForm = () => {
     methods.setValue('content', '')
     methods.setValue('rating', 0)
   }
 
   const value: ReviewContextValues = {
-    reviews,
-    myPendingReviews,
+    reviews: reviewsCache,
+    myPendingReviews: myPendingReviewsCache,
     setInteraction,
     reportReview,
     deleteMyPendingReview,
@@ -229,10 +252,7 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
 
   return (
     <FormProvider {...methods}>
-      <ReviewContext.Provider value={value}>
-        <Dialog />
-        {children}
-      </ReviewContext.Provider>
+      <ReviewContext.Provider value={value}>{children}</ReviewContext.Provider>
     </FormProvider>
   )
 }

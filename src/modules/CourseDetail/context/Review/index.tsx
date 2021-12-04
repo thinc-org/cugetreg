@@ -9,11 +9,7 @@ import { Storage } from '@/common/storage'
 import { StorageKey } from '@/common/storage/constants'
 import { Review, ReviewInteraction } from '@/common/types/reviews'
 import { CreateReviewResponse, CreateReviewVars, CREATE_REVIEW } from '@/services/apollo/query/createReview'
-import {
-  EditMyPendingReviewResponse,
-  EditMyPendingReviewVars,
-  EDIT_MY_PENDING_REVIEW,
-} from '@/services/apollo/query/editMyPendingReview'
+import { EditMyReviewResponse, EditMyReviewVars, EDIT_MY_REVIEW } from '@/services/apollo/query/editMyReview'
 import {
   GetMyPendingReviewsResponse,
   GetMyPendingReviewsVars,
@@ -59,9 +55,7 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
   )
   const [removeReivewMutation] = useMutation<RemoveReviewResponse, RemoveReviewVars>(REMOVE_REVIEW)
   const [createReviewMutation] = useMutation<CreateReviewResponse, CreateReviewVars>(CREATE_REVIEW)
-  const [editMyPendingReviewMutation] = useMutation<EditMyPendingReviewResponse, EditMyPendingReviewVars>(
-    EDIT_MY_PENDING_REVIEW
-  )
+  const [editMyReviewMutation] = useMutation<EditMyReviewResponse, EditMyReviewVars>(EDIT_MY_REVIEW)
 
   /**
    * React state for local caching
@@ -102,7 +96,7 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
       })
       if (!response.errors && response.data) {
         const newReview = response.data.setInteraction
-        setReviewsCache((reviews) => reviews.map((data) => (data._id === newReview._id ? newReview : data)))
+        setReviewsCache((reviews) => updatedReviewCacheCallback(reviews, newReview))
       }
     } catch (err) {
       emitMessage((err as Error).message, 'error')
@@ -133,8 +127,8 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
       })
       if (!response.errors && response.data) {
         const reviewId = response.data.removeReview._id
-        setReviewsCache((reviews) => reviews.filter((data) => data._id !== reviewId))
-        setMyPendingReviewsCache((reviews) => reviews.filter((data) => data._id !== reviewId))
+        setReviewsCache((reviews) => removeReviewCacheCallback(reviews, reviewId))
+        setMyPendingReviewsCache((reviews) => removeReviewCacheCallback(reviews, reviewId))
       }
     } catch (err) {
       emitMessage((err as Error).message, 'error')
@@ -146,11 +140,15 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
    * @param reviewId
    */
   const editMyPendingReview = async (reviewId: string) => {
-    setMyPendingReviewsCache((reviews) => {
+    const findAndSetReviewFormCallback = (reviews: Review[]) => {
+      // find a review and set a form
       const review = reviews.find((data) => data._id === reviewId)
       if (review) setReviewForm(review)
-      return reviews.filter((data) => data._id !== reviewId)
-    })
+      // remove editing review from cache
+      return removeReviewCacheCallback(reviews, reviewId)
+    }
+    setReviewsCache(findAndSetReviewFormCallback)
+    setMyPendingReviewsCache(findAndSetReviewFormCallback)
     setEditingReviewId(reviewId)
   }
 
@@ -176,9 +174,7 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
         },
       })
       if (!response.errors && response.data) {
-        setMyPendingReviewsCache([response.data.createReview])
-        clearReviewForm()
-        emitMessage(`เพิ่มความคิดเห็นของคุณแล้ว`, 'success')
+        postSubmitReview(response.data.createReview)
       }
     } catch (err) {
       emitMessage((err as Error).message, 'error')
@@ -192,9 +188,10 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
    */
   const submitEditedReview = async (reviewId: string) => {
     try {
+      if (!loginGuard(storeLocalReviewForm)) return
       const review = methods.getValues()
       const ratingNumber = review.rating * 2 // 1 - 10, 0 isn't accepted
-      const response = await editMyPendingReviewMutation({
+      const response = await editMyReviewMutation({
         variables: {
           reviewId,
           review: {
@@ -204,25 +201,46 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
         },
       })
       if (!response.errors && response.data) {
-        setMyPendingReviewsCache([response.data.editMyPendingReview])
-        clearReviewForm()
-        emitMessage(`ความคิดเห็นของคุณถูกแก้ไขแล้ว`, 'success')
-        setEditingReviewId(undefined)
+        postSubmitReview(response.data.editMyReview)
       }
     } catch (err) {
       emitMessage((err as Error).message, 'error')
     }
   }
 
+  const postSubmitReview = (newReview: Review) => {
+    const updatedReviewsCallback = (reviews: Review[]) => updatedReviewCacheCallback(reviews, newReview)
+    setReviewsCache(updatedReviewsCallback)
+    setMyPendingReviewsCache(updatedReviewsCallback)
+    clearReviewForm()
+    emitMessage(`เพิ่มความคิดเห็นของคุณแล้ว`, 'success')
+    setEditingReviewId(undefined)
+  }
+
+  const updatedReviewCacheCallback = (reviews: Review[], newReview: Review) => {
+    return reviews.map((data) => (data._id === newReview._id ? newReview : data))
+  }
+
+  const removeReviewCacheCallback = (reviews: Review[], reviewId: string) => {
+    return reviews.filter((data) => data._id !== reviewId)
+  }
+
   const storeLocalReviewForm = () => {
-    localStorage.set<ReviewState>(StorageKey.ReviewForm, methods.getValues())
+    const formValues = methods.getValues()
+    const oldFormValuesSet = localStorage.get<Record<string, ReviewState>>(StorageKey.ReviewForm)
+    const newFormValuesSet: Record<string, ReviewState> = {
+      ...oldFormValuesSet,
+      [courseNo]: formValues,
+    }
+    localStorage.set<Record<string, ReviewState>>(StorageKey.ReviewForm, newFormValuesSet)
   }
 
   const restoreLocalReviewForm = () => {
-    const reviewForm = localStorage.get<ReviewState>(StorageKey.ReviewForm)
-    if (reviewForm) {
-      setReviewForm(reviewForm)
-      localStorage.remove(StorageKey.ReviewForm)
+    const formValuesSet = localStorage.get<Record<string, ReviewState>>(StorageKey.ReviewForm)
+    if (formValuesSet && formValuesSet[courseNo]) {
+      setReviewForm(formValuesSet[courseNo])
+      delete formValuesSet[courseNo]
+      localStorage.set<Record<string, ReviewState>>(StorageKey.ReviewForm, formValuesSet)
     }
   }
 

@@ -91,33 +91,33 @@ export const ReviewCard: React.FC<ReviewCardProps> = (data) => {
       <CardContent>{data.content}</CardContent>
 
       <Stack direction="row" justifyContent="space-between" alignItems="center">
-        {getChipType() ? (
-          <>
-            {data.status === ReviewStatus.Rejected && (
-              <CardRejectedMessage>กรุณาแก้ไข ก่อนส่งความคิดเห็นอีกครั้ง</CardRejectedMessage>
-            )}
-            <OwnerIconAction />
-          </>
+        {/** Left side */}
+        {data.status === ReviewStatus.Rejected ? (
+          <CardRejectedMessage>กรุณาแก้ไข ก่อนส่งความคิดเห็นอีกครั้ง</CardRejectedMessage>
         ) : (
-          <>
-            <Stack direction="row" spacing={3}>
-              <ReviewReaction
-                type={ReviewInteraction.Like}
-                pressed={data.myInteraction === ReviewInteraction.Like}
-                reactionCount={data.likeCount}
-                onClick={handleLikeClick}
-              />
-              <ReviewReaction
-                type={ReviewInteraction.Dislike}
-                pressed={data.myInteraction === ReviewInteraction.Dislike}
-                reactionCount={data.dislikeCount}
-                onClick={handleDislikeClick}
-              />
-            </Stack>
-            <IconButton size="small">
-              {data.isOwner ? <OwnerIconAction /> : <MdFlag {...actionIconProps} onClick={handleReportClick} />}
-            </IconButton>
-          </>
+          <Stack direction="row" spacing={3}>
+            <ReviewReaction
+              type={ReviewInteraction.Like}
+              pressed={data.myInteraction === ReviewInteraction.Like}
+              reactionCount={data.likeCount}
+              onClick={handleLikeClick}
+            />
+            <ReviewReaction
+              type={ReviewInteraction.Dislike}
+              pressed={data.myInteraction === ReviewInteraction.Dislike}
+              reactionCount={data.dislikeCount}
+              onClick={handleDislikeClick}
+            />
+          </Stack>
+        )}
+
+        {/** Right side */}
+        {data.isOwner ? (
+          <OwnerIconAction />
+        ) : (
+          <IconButton size="small">
+            <MdFlag {...actionIconProps} onClick={handleReportClick} />{' '}
+          </IconButton>
         )}
       </Stack>
     </Card>

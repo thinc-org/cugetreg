@@ -5,6 +5,7 @@ import { uniqBy } from 'lodash'
 
 import { apiUrl } from '@/services/httpClient'
 import { userStore } from '@/store/userStore'
+import env from '@/utils/env/macro'
 
 import { SearchCourseVars } from './query/searchCourse'
 
@@ -55,11 +56,13 @@ const authLink = setContext((_, { headers }) => {
 export const client = new ApolloClient({
   link: authLink.concat(httpLink),
   cache: cache,
+  connectToDevTools: env.environment !== 'production',
 })
 
 export function createApolloServerClient() {
   return new ApolloClient({
     uri: `${apiUrl}/graphql`,
     cache: new InMemoryCache(),
+    connectToDevTools: env.environment !== 'production',
   })
 }

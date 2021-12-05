@@ -5,16 +5,16 @@ import { REVIEW_DATA_FIELDS } from '@/services/apollo/query/reviewDataField'
 
 export interface SetReviewInteractionVars {
   reviewId: string
-  interaction: ReviewInteractionType
+  interactionType: ReviewInteractionType
 }
 
 export interface SetReviewInteractionResponse {
-  setInteraction: Review
+  setReviewInteraction: Review
 }
 
 export const SET_REVIEW_INTERACTION = gql`
-  mutation setInteraction($reviewId: String!, $interaction: ReviewInteractionType!) {
-    setInteraction(reviewId: $reviewId, interaction: $interaction) {
+  mutation setReviewInteraction($reviewId: String!, $interactionType: ReviewInteractionType!) {
+    setReviewInteraction(reviewId: $reviewId, interactionType: $interactionType) {
       ${REVIEW_DATA_FIELDS}
     }
   }

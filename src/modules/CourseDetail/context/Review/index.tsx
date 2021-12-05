@@ -78,13 +78,13 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
    * @param reviewId - id of the review to be changed the user's interaction
    * @param interaction - the new interaction
    */
-  const setInteraction = async (reviewId: string, interaction: ReviewInteractionType) => {
+  const setInteraction = async (reviewId: string, interactionType: ReviewInteractionType) => {
     try {
       if (!loginGuard()) return
       await setInteractionMutaion({
         variables: {
           reviewId,
-          interaction,
+          interactionType,
         },
       })
     } catch (err) {

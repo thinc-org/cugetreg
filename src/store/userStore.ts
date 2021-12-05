@@ -33,6 +33,7 @@ class UserStore {
 
   private restoreSession = async () => {
     try {
+      if (typeof window === 'undefined') return
       const res = await httpClient.post(`/auth/refreshtoken`)
       this.setAccessToken(res.data.accessToken)
       console.info('Auth session restored')

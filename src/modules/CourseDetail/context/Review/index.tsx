@@ -37,27 +37,56 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
   const { loginGuard, Dialog } = useLoginGuard()
   const { emitMessage } = useContext(SnackbarContext)
 
+  const queryVariables = {
+    courseNo: courseNo,
+    studyProgram: studyProgram,
+  }
+
   /**
    * GraphQL queries
    */
   const reviewQuery = useQuery<GetReviewsResponse, GetReviewsVars>(GET_REVIEWS, {
-    variables: {
-      courseNo: courseNo,
-      studyProgram: studyProgram,
-    },
+    variables: queryVariables,
   })
   const myPendingReviewQuery = useQuery<GetMyPendingReviewsResponse, GetMyPendingReviewsVars>(GET_MY_PENDING_REVIEWS, {
-    variables: {
-      courseNo: courseNo,
-      studyProgram: studyProgram,
-    },
+    variables: queryVariables,
   })
+  const [editMyReviewMutation] = useMutation<EditMyReviewResponse, EditMyReviewVars>(EDIT_MY_REVIEW)
   const [setInteractionMutaion] = useMutation<SetReviewInteractionResponse, SetReviewInteractionVars>(
     SET_REVIEW_INTERACTION
   )
-  const [removeReivewMutation] = useMutation<RemoveReviewResponse, RemoveReviewVars>(REMOVE_REVIEW)
-  const [createReviewMutation] = useMutation<CreateReviewResponse, CreateReviewVars>(CREATE_REVIEW)
-  const [editMyReviewMutation] = useMutation<EditMyReviewResponse, EditMyReviewVars>(EDIT_MY_REVIEW)
+  const [removeReivewMutation] = useMutation<RemoveReviewResponse, RemoveReviewVars>(REMOVE_REVIEW, {
+    update: (cache, { data, errors }) => {
+      if (errors || !data) return
+      const mutatedData = data.removeReview
+      const existingReviews =
+        cache.readQuery<GetReviewsResponse, GetReviewsVars>({
+          query: GET_REVIEWS,
+          variables: queryVariables,
+        })?.reviews ?? []
+      const existingMyPendingReviews =
+        cache.readQuery<GetMyPendingReviewsResponse, GetMyPendingReviewsVars>({
+          query: GET_MY_PENDING_REVIEWS,
+          variables: queryVariables,
+        })?.myPendingReviews ?? []
+      const newReviews = existingReviews
+        .concat(existingMyPendingReviews)
+        .filter((review) => review._id !== mutatedData._id)
+      cache.writeQuery({
+        query: GET_MY_PENDING_REVIEWS,
+        variables: queryVariables,
+        data: { myPendingReviews: newReviews },
+      })
+    },
+  })
+  const [createReviewMutation] = useMutation<CreateReviewResponse, CreateReviewVars>(CREATE_REVIEW, {
+    refetchQueries: [
+      {
+        query: GET_MY_PENDING_REVIEWS,
+        variables: queryVariables,
+      },
+    ],
+  })
 
   /**
    * Initialize context values and form state
@@ -195,7 +224,6 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
   }
 
   const postSubmitReview = () => {
-    console.log('POST SUBMIT REVIEW')
     cancelEditReview()
     emitMessage(`เพิ่มความคิดเห็นของคุณแล้ว`, 'success')
   }

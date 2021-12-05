@@ -24,24 +24,28 @@ class UserStore {
   }
 
   logout = () => {
-    this.accessToken = null
+    this.setAccessToken(null)
     httpClient.post(`/auth/logout`)
     courseCartStore.upgradeSource()
   }
 
-  restoreSession = () =>
-    httpClient
-      .post(`/auth/refreshtoken`)
-      .then(
-        action('setAccessToken', (res) => {
-          userStore.accessToken = res.data.accessToken
-          console.info('Auth session restored')
-        })
-      )
-      .catch((e) => console.error('Fail to restore auth session', e))
+  restoreSession = async () => {
+    try {
+      const res = await httpClient.post(`/auth/refreshtoken`)
+      this.setAccessToken(res.data.accessToken)
+      console.info('Auth session restored')
+    } catch (e) {
+      console.error('Fail to restore auth session', e)
+    }
+  }
 
   isLoggedIn = () => {
     return userStore.accessToken !== null
+  }
+
+  @action
+  private setAccessToken = (accessToken: string | null) => {
+    this.accessToken = accessToken
   }
 }
 

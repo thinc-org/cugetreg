@@ -44,11 +44,12 @@ const httpLink = createHttpLink({
   uri: `${apiUrl}/graphql`,
 })
 
-const authLink = setContext((_, { headers }) => {
+const authLink = setContext(async (_, { headers }) => {
+  const accessToken = await userStore.getAccessToken()
   return {
     headers: {
       ...headers,
-      authorization: userStore.accessToken ? `Bearer ${userStore.accessToken}` : '',
+      authorization: accessToken ? `Bearer ${accessToken}` : '',
     },
   }
 })

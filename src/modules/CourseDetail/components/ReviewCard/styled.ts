@@ -1,13 +1,14 @@
 import styled from '@emotion/styled'
-import { Typography, Stack } from '@mui/material'
+import { Typography, Stack, StackProps } from '@mui/material'
 
-export const Card = styled(Stack)`
+export const Card = styled(Stack)<StackProps & { pending?: boolean }>`
   border-radius: ${({ theme }) => theme.shape.borderRadius}px;
   border: 1px solid ${({ theme }) => theme.palette.divider};
   padding: ${({ theme }) => theme.spacing(4)};
   ${({ theme }) => theme.breakpoints.down('sm')} {
     padding: ${({ theme }) => theme.spacing(2)};
   }
+  opacity: ${({ pending }) => (pending ? 0.6 : 1)};
 `
 
 const MainTypography = styled(Typography)`

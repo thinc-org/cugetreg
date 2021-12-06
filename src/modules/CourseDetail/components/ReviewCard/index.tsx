@@ -62,7 +62,7 @@ export const ReviewCard: React.FC<ReviewCardProps> = (data) => {
   }
 
   return (
-    <Card direction="column" spacing={2}>
+    <Card direction="column" spacing={2} pending={data.status !== ReviewStatus.Approved}>
       <Stack direction="row" justifyContent="space-between" gap={1} flexWrap="wrap">
         <Stack direction="row" spacing={2} alignItems="center">
           <CardTerm>{term}</CardTerm>

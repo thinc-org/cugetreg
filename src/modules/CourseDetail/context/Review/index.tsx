@@ -1,4 +1,5 @@
 import { useMutation, useQuery } from '@apollo/client'
+
 import React, { createContext, useContext, useEffect } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
@@ -8,6 +9,7 @@ import { useLoginGuard } from '@/common/hooks/useLoginGuard'
 import { Storage } from '@/common/storage'
 import { StorageKey } from '@/common/storage/constants'
 import { Review, ReviewInteractionType } from '@/common/types/reviews'
+import { INITIAL_CONTENT } from '@/modules/RichText/constants'
 import { CreateReviewResponse, CreateReviewVars, CREATE_REVIEW } from '@/services/apollo/query/createReview'
 import { EditMyReviewResponse, EditMyReviewVars, EDIT_MY_REVIEW } from '@/services/apollo/query/editMyReview'
 import {
@@ -159,8 +161,7 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
     const findAndSetReviewFormCallback = (reviews: Review[]) => {
       const review = reviews.find((data) => data._id === reviewId)
       if (review) {
-        review.rating = review.rating / 2
-        setReviewForm(review)
+        setReviewForm({ ...review, rating: review.rating / 2 })
       }
     }
     findAndSetReviewFormCallback(reviewQuery.data?.reviews || [])
@@ -261,7 +262,7 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
   }
 
   const clearReviewForm = () => {
-    methods.setValue('content', '')
+    methods.setValue('content', JSON.stringify(INITIAL_CONTENT))
     methods.setValue('rating', 0)
   }
 

@@ -1,9 +1,11 @@
+import { Button } from '@mui/material'
 import { createEditor, Descendant } from 'slate'
 import { Editor } from 'slate'
 import { withHistory } from 'slate-history'
 import { Slate, withReact, Editable } from 'slate-react'
 
 import { useState, useRef, useCallback } from 'react'
+import { Controller, useFormContext, useWatch } from 'react-hook-form'
 import { CgFormatHeading } from 'react-icons/cg'
 import {
   MdCode,
@@ -20,10 +22,12 @@ import {
 } from 'react-icons/md'
 
 import { Spacer } from '@/components/Spacer'
+import { ReviewState } from '@/modules/CourseDetail/context/Review/types'
 
 import { IconButton } from './components/IconButton'
 import { RichTextElement } from './components/RichTextElement'
 import { RichTextLeaf } from './components/RichTextLeaf'
+import { INITIAL_CONTENT } from './constants'
 import { Toolbar, StyledEditable, VerticalDivider } from './styled'
 import {
   RichTextEditorProps,
@@ -33,31 +37,24 @@ import {
   RichTextRendererProps,
 } from './types'
 
-export const RichTextEditor: React.FC<RichTextEditorProps> = ({ onChange }) => {
+export const RichTextEditor: React.FC<RichTextEditorProps> = ({ control, name, onChange }) => {
   /**
    * Workaround for Slate's editor bug: https://stackoverflow.com/a/67126823
    */
   const editorRef = useRef<Editor>()
+  const value = useWatch({ control, name, defaultValue: JSON.stringify(INITIAL_CONTENT) })
   if (!editorRef.current) editorRef.current = withHistory(withReact(createEditor()))
   const editor = editorRef.current
-
-  const [value, setValue] = useState<Descendant[]>([
-    {
-      type: 'paragraph',
-      children: [{ text: '' }],
-    },
-  ])
 
   const renderElement = useCallback((props) => <RichTextElement {...props} />, [])
   const renderLeaf = useCallback((props) => <RichTextLeaf {...props} />, [])
 
   const handleChange = (newValue: Descendant[]) => {
-    setValue(newValue)
     onChange(JSON.stringify(newValue))
   }
 
   return (
-    <Slate editor={editor} value={value} onChange={handleChange}>
+    <Slate editor={editor} value={JSON.parse(value as string)} onChange={handleChange}>
       <Toolbar>
         <IconButton format={RichTextFormatType.BOLD} icon={MdFormatBold} />
         <IconButton format={RichTextFormatType.ITALIC} icon={MdFormatItalic} />

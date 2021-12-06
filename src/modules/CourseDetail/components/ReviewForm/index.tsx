@@ -30,6 +30,7 @@ export const ReviewForm: React.FC = () => {
 
   const handleRichTextChange = (newContent: string) => {
     setValue('content', newContent)
+    console.log(newContent)
   }
 
   const onSubmit: SubmitHandler<ReviewState> = async (data) => {
@@ -103,7 +104,7 @@ export const ReviewForm: React.FC = () => {
             )}
           />
         </Stack>
-        <RichTextEditor onChange={handleRichTextChange} />
+        <RichTextEditor control={control} name="content" onChange={handleRichTextChange} />
         <Stack mt={2} mb={4} direction="row" spacing={2}>
           {editingReviewId && (
             <Button variant="outlined" fullWidth onClick={cancelEditReview}>

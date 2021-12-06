@@ -2,6 +2,10 @@ import { BaseEditor, Descendant } from 'slate'
 import { HistoryEditor } from 'slate-history'
 import { ReactEditor } from 'slate-react'
 
+import { Control } from 'react-hook-form'
+
+import { ReviewState } from '@/modules/CourseDetail/context/Review/types'
+
 export const RichTextFormatType = {
   BOLD: 'bold',
   ITALIC: 'italic',
@@ -52,7 +56,10 @@ declare module 'slate' {
 }
 
 export interface RichTextEditorProps {
-  onChange: (newValue: string) => void
+  /* eslint-disable */
+  control: Control<ReviewState, object>
+  name: keyof ReviewState
+  onChange: (value: string) => void
 }
 
 export interface RichTextRendererProps {

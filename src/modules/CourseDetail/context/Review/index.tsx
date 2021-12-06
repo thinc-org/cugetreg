@@ -228,7 +228,7 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
 
   const postSubmitReview = () => {
     cancelEditReview()
-    emitMessage(`เพิ่มความคิดเห็นของคุณแล้ว`, 'success')
+    emitMessage(`เพิ่มรีวิวรายวิชานี้ของคุณแล้ว`, 'success')
   }
 
   const storeLocalReviewForm = () => {

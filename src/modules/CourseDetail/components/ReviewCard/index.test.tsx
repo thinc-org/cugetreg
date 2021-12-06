@@ -64,7 +64,7 @@ describe('ReviewCard', () => {
 
   it('should render correctly if this is your rejected review', async () => {
     const wrapper = await customShallow(mockMyRejectedReviewData)
-    expect(wrapper.text().includes('กรุณาแก้ไข ก่อนส่งความคิดเห็นอีกครั้ง')).toBeTruthy()
+    expect(wrapper.text().includes('กรุณาแก้ไข ก่อนส่งรีวิวรายวิชาอีกครั้ง')).toBeTruthy()
     expect(wrapper).toMatchSnapshot()
   })
 
@@ -84,11 +84,11 @@ describe('ReviewCard', () => {
 
   it('should not have rejected message if this is not a rejected review', async () => {
     let wrapper = await customShallow(mockReviewData)
-    expect(wrapper.text().includes('กรุณาแก้ไข ก่อนส่งความคิดเห็นอีกครั้ง')).toBeFalsy()
+    expect(wrapper.text().includes('กรุณาแก้ไข ก่อนส่งรีวิวรายวิชาอีกครั้ง')).toBeFalsy()
     wrapper = await customShallow(mockMyReviewData)
-    expect(wrapper.text().includes('กรุณาแก้ไข ก่อนส่งความคิดเห็นอีกครั้ง')).toBeFalsy()
+    expect(wrapper.text().includes('กรุณาแก้ไข ก่อนส่งรีวิวรายวิชาอีกครั้ง')).toBeFalsy()
     wrapper = await customShallow(mockMyPendingReviewData)
-    expect(wrapper.text().includes('กรุณาแก้ไข ก่อนส่งความคิดเห็นอีกครั้ง')).toBeFalsy()
+    expect(wrapper.text().includes('กรุณาแก้ไข ก่อนส่งรีวิวรายวิชาอีกครั้ง')).toBeFalsy()
   })
 
   it('should call setInteraction with like interaction if we click like', async () => {

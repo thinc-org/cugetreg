@@ -79,7 +79,7 @@ export const ReviewCard: React.FC<ReviewCardProps> = (data) => {
       <Stack direction="row" justifyContent="space-between" alignItems="center">
         {/** Left side */}
         {data.status === ReviewStatus.Rejected ? (
-          <CardRejectedMessage>กรุณาแก้ไข ก่อนส่งความคิดเห็นอีกครั้ง</CardRejectedMessage>
+          <CardRejectedMessage>กรุณาแก้ไข ก่อนส่งรีวิวรายวิชาอีกครั้ง</CardRejectedMessage>
         ) : (
           <Stack direction="row" spacing={3}>
             <ReviewReaction

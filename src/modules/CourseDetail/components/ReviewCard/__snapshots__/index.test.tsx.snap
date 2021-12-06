@@ -337,7 +337,7 @@ exports[`ReviewCard should render correctly if this is your rejected review 1`] 
     <CardRejectedMessage
       variant="subtitle2"
     >
-      กรุณาแก้ไข ก่อนส่งความคิดเห็นอีกครั้ง
+      กรุณาแก้ไข ก่อนส่งรีวิวรายวิชาอีกครั้ง
     </CardRejectedMessage>
     <ForwardRef(Stack)
       direction="row"

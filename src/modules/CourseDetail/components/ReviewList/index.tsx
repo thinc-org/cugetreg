@@ -13,7 +13,7 @@ export const ReviewList: React.FC = () => {
   return (
     <Stack spacing={2} mb={6}>
       <Typography variant="h4" mt={2}>
-        ความคิดเห็น
+        รีวิวของรายวิชานี้
       </Typography>
       {myPendingReviews.map((review) => (
         <ReviewCard key={review._id} {...review} />

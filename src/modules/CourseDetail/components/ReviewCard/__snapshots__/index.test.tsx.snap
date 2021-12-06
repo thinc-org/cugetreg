@@ -169,7 +169,7 @@ exports[`ReviewCard should render correctly if this is your approved review 1`] 
         onClick={[Function]}
         size="small"
       >
-        <MdDeleteOutline
+        <MdDelete
           color="#C9CCE4"
           size={24}
         />
@@ -269,7 +269,7 @@ exports[`ReviewCard should render correctly if this is your pending review 1`] =
         onClick={[Function]}
         size="small"
       >
-        <MdDeleteOutline
+        <MdDelete
           color="#C9CCE4"
           size={24}
         />
@@ -357,7 +357,7 @@ exports[`ReviewCard should render correctly if this is your rejected review 1`] 
         onClick={[Function]}
         size="small"
       >
-        <MdDeleteOutline
+        <MdDelete
           color="#C9CCE4"
           size={24}
         />

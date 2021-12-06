@@ -1,5 +1,5 @@
 import { IconButton, Stack, useTheme } from '@mui/material'
-import { MdFlag, MdDeleteOutline, MdOutlineStar, MdEdit } from 'react-icons/md'
+import { MdFlag, MdDelete, MdOutlineStar, MdEdit } from 'react-icons/md'
 
 import { GeneralChip } from '@/common/components/Chips'
 import { OtherChipKey } from '@/common/components/Chips/config'
@@ -104,7 +104,7 @@ export const ReviewCard: React.FC<ReviewCardProps> = (data) => {
               <MdEdit {...actionIconProps} />
             </IconButton>
             <IconButton size="small" onClick={handleDeleteClick}>
-              <MdDeleteOutline {...actionIconProps} />
+              <MdDelete {...actionIconProps} />
             </IconButton>
           </Stack>
         ) : (

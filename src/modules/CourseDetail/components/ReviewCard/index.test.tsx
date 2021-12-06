@@ -1,6 +1,6 @@
 import { ThemeProvider } from '@mui/material'
 import { shallow } from 'enzyme'
-import { MdDeleteOutline, MdEdit, MdFlag } from 'react-icons/md'
+import { MdDelete, MdEdit, MdFlag } from 'react-icons/md'
 
 import { mockMyPendingReviews, mockMyRejectedReviews, mockMyReviews, mockReviews } from '@/__mock__/review'
 import { ReviewInteractionType } from '@/common/types/reviews'
@@ -70,14 +70,14 @@ describe('ReviewCard', () => {
 
   it('should not have edit icon and delete icon but report icon if this is not your review', async () => {
     const wrapper = await customShallow(mockReviewData)
-    expect(wrapper.find(MdDeleteOutline)).toHaveLength(0)
+    expect(wrapper.find(MdDelete)).toHaveLength(0)
     expect(wrapper.find(MdEdit)).toHaveLength(0)
     expect(wrapper.find(MdFlag)).toHaveLength(1)
   })
 
   it('should not have report icon but edit icon and delete icon but have report icon if this is your review', async () => {
     const wrapper = await customShallow(mockMyReviewData)
-    expect(wrapper.find(MdDeleteOutline)).toHaveLength(1)
+    expect(wrapper.find(MdDelete)).toHaveLength(1)
     expect(wrapper.find(MdEdit)).toHaveLength(1)
     expect(wrapper.find(MdFlag)).toHaveLength(0)
   })
@@ -109,7 +109,7 @@ describe('ReviewCard', () => {
 
   it('should call deleteMyReview when click delete icon', async () => {
     const wrapper = await customShallow(mockMyReviewData)
-    const deleteIcon = wrapper.find(MdDeleteOutline).at(0).parent()
+    const deleteIcon = wrapper.find(MdDelete).at(0).parent()
     deleteIcon.simulate('click')
     expect(deleteMyReviewSpy).toHaveBeenCalledTimes(1)
     expect(deleteMyReviewSpy).toHaveBeenCalledWith(mockMyReviewData._id)
@@ -117,7 +117,7 @@ describe('ReviewCard', () => {
 
   it('should call reportReview when click report icon', async () => {
     const wrapper = await customShallow(mockMyReviewData)
-    const reportIcon = wrapper.find(MdDeleteOutline).at(0).parent()
+    const reportIcon = wrapper.find(MdDelete).at(0).parent()
     reportIcon.simulate('click')
     expect(deleteMyReviewSpy).toHaveBeenCalledTimes(1)
     expect(deleteMyReviewSpy).toHaveBeenCalledWith(mockMyReviewData._id)

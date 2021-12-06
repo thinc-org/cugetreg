@@ -158,7 +158,10 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
   const editMyReview = async (reviewId: string) => {
     const findAndSetReviewFormCallback = (reviews: Review[]) => {
       const review = reviews.find((data) => data._id === reviewId)
-      if (review) setReviewForm(review)
+      if (review) {
+        review.rating = review.rating / 2
+        setReviewForm(review)
+      }
     }
     findAndSetReviewFormCallback(reviewQuery.data?.reviews || [])
     findAndSetReviewFormCallback(myPendingReviewQuery.data?.myPendingReviews || [])
@@ -253,7 +256,7 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
   const setReviewForm = (form: Partial<ReviewState>) => {
     if (form.academicYear) methods.setValue('academicYear', form.academicYear)
     if (form.content) methods.setValue('content', form.content)
-    if (form.rating) methods.setValue('rating', form.rating / 2)
+    if (form.rating) methods.setValue('rating', form.rating)
     if (form.semester) methods.setValue('semester', form.semester)
   }
 

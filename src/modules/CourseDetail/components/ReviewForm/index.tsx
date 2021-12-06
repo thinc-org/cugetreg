@@ -1,4 +1,6 @@
-import { Rating, Select, Stack, MenuItem, Typography, Button } from '@mui/material'
+import { Rating, Select, Stack, MenuItem, Typography, Button, Alert } from '@mui/material'
+import { endOfDay, format } from 'date-fns'
+import Link from 'next/link'
 import { useContext } from 'react'
 import { Controller, SubmitHandler, SubmitErrorHandler, useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -9,12 +11,21 @@ import { getCurrentTerm } from '@/common/utils/getCurrentTerm'
 import { useReviewContext } from '@/modules/CourseDetail/context/Review'
 import { ReviewState } from '@/modules/CourseDetail/context/Review/types'
 
+import { YEAR_SIZE } from './constants'
+
 export const ReviewForm: React.FC = () => {
   const { register, handleSubmit, control } = useFormContext<ReviewState>()
   const { academicYear, semester } = getCurrentTerm()
   const { t } = useTranslation('review')
   const { emitMessage } = useContext(SnackbarContext)
   const { submitReview, submitEditedReview, editingReviewId, cancelEditReview } = useReviewContext()
+
+  const getYearList = (size: number): number[] => {
+    const currentYear = parseInt(format(endOfDay(new Date()), 'yyyy')) + 543
+    return Array(size)
+      .fill(0)
+      .map((_, index) => currentYear - index)
+  }
 
   const onSubmit: SubmitHandler<ReviewState> = async () => {
     if (editingReviewId) await submitEditedReview(editingReviewId)
@@ -28,9 +39,20 @@ export const ReviewForm: React.FC = () => {
 
   return (
     <>
-      <Typography variant="h4" mt={5} id="review-title">
+      <Alert severity="info" sx={{ mb: 2 }}>
+        <Stack direction="row" gap={1} flexWrap="wrap">
+          นโยบายรักษาความเป็นส่วนตัวของการรีวิวรายวิชา
+          {/** TODO change link */}
+          <Link href="https://google.com">อ่านเพิ่มเติม</Link>
+        </Stack>
+      </Alert>
+      <Typography variant="h4" component="span" id="review-title" mr={2} sx={{ display: ['block', 'inline'] }}>
         {t('title')}
       </Typography>
+      <Typography variant="subtitle1" component="span" color="primaryRange.100">
+        {t('subtitle')}
+      </Typography>
+
       <form onSubmit={handleSubmit(onSubmit, onError)}>
         <Stack
           direction={{ xs: 'column-reverse', sm: 'row' }}
@@ -48,8 +70,11 @@ export const ReviewForm: React.FC = () => {
               sx={{ minWidth: 120 }}
               fullWidth
             >
-              <MenuItem value="2564">2564</MenuItem>
-              <MenuItem value="2563">2563</MenuItem>
+              {getYearList(YEAR_SIZE).map((year) => (
+                <MenuItem key={year} value={`${year}`}>
+                  {year}
+                </MenuItem>
+              ))}
             </Select>
             <Select
               {...register('semester', { required: 'semester required' })}
@@ -81,11 +106,11 @@ export const ReviewForm: React.FC = () => {
         <Stack mt={2} mb={4} direction="row" spacing={2}>
           {editingReviewId && (
             <Button variant="outlined" fullWidth onClick={cancelEditReview}>
-              ยกเลิก
+              {t('cancel')}
             </Button>
           )}
           <Button variant="contained" fullWidth type="submit">
-            ส่งรีวิว
+            {t('submit')}
           </Button>
         </Stack>
       </form>

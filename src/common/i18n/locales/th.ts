@@ -186,4 +186,7 @@ export const tagList = {
 
 export const review = {
   title: 'มาเขียนรีวิวรายวิชากันเถอะ!',
+  subtitle: '*การรีวิวนี้จะเป็นการรีวิวแบบไม่ระบุตัวตน',
+  cancel: 'ยกเลิก',
+  submit: 'ส่งรีวิว',
 }

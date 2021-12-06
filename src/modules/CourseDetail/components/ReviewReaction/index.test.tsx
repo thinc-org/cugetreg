@@ -14,6 +14,17 @@ describe('ReviewReaction', () => {
     reactionCount: 42,
   }
 
+  const useThemeSpy = jest.fn(() => lightTheme)
+
+  jest.doMock('@mui/material', () => ({
+    ...jest.requireActual('@mui/material'),
+    useTheme: useThemeSpy,
+  }))
+
+  afterEach(() => {
+    jest.clearAllMocks()
+  })
+
   it.each`
     type                             | defaultPressed | expectedIcon
     ${ReviewInteractionType.Like}    | ${false}       | ${MdThumbUpOffAlt}
@@ -24,11 +35,10 @@ describe('ReviewReaction', () => {
     'should render ReviewReaction type $type like correctly when defaultPressed=$defaultPressed ',
     async ({ type, expectedIcon, defaultPressed }) => {
       const { ReviewReaction } = await import('.')
-      const wrapper = shallow(
-        <ThemeProvider theme={lightTheme}>
-          <ReviewReaction {...mockProps} type={type} pressed={defaultPressed} />
-        </ThemeProvider>
-      )
+      const wrapper = shallow(<ReviewReaction {...mockProps} type={type} pressed={defaultPressed} />, {
+        wrappingComponent: ThemeProvider,
+        wrappingComponentProps: { theme: lightTheme },
+      })
       expect(wrapper.find(expectedIcon)).toBeTruthy()
       expect(wrapper).toMatchSnapshot()
     }
@@ -42,11 +52,10 @@ describe('ReviewReaction', () => {
     'should change icon when the component was clicked, type=$type',
     async ({ type, expectedUnpressedIcon, expectedPressedIcon }) => {
       const { ReviewReaction } = await import('.')
-      const wrapper = shallow(
-        <ThemeProvider theme={lightTheme}>
-          <ReviewReaction {...mockProps} type={type} />
-        </ThemeProvider>
-      )
+      const wrapper = shallow(<ReviewReaction {...mockProps} type={type} />, {
+        wrappingComponent: ThemeProvider,
+        wrappingComponentProps: { theme: lightTheme },
+      })
       expect(wrapper.find(expectedUnpressedIcon)).toBeTruthy()
       wrapper.simulate('click')
       expect(wrapper.find(expectedPressedIcon)).toBeTruthy()

@@ -1,5 +1,4 @@
-import { IconButton, Stack, Typography } from '@mui/material'
-import { useTheme } from '@mui/system'
+import { IconButton, Stack, Typography, useTheme } from '@mui/material'
 import { IconBaseProps } from 'react-icons/lib'
 import { MdThumbUpOffAlt, MdThumbUp, MdThumbDownOffAlt, MdThumbDown } from 'react-icons/md'
 

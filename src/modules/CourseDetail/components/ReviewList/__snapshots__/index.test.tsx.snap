@@ -9,7 +9,7 @@ exports[`ReviewList should list of reviews 1`] = `
     mt={2}
     variant="h4"
   >
-    ความคิดเห็น
+    รีวิวของรายวิชานี้
   </ForwardRef(Typography)>
   <ReviewCard
     _id="61ab59632d5b971a45ca3238"

@@ -69,13 +69,17 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
           query: GET_MY_PENDING_REVIEWS,
           variables: queryVariables,
         })?.myPendingReviews ?? []
-      const newReviews = existingReviews
-        .concat(existingMyPendingReviews)
-        .filter((review) => review._id !== mutatedData._id)
+      const newReviews = existingReviews.filter((review) => review._id !== mutatedData._id)
+      const newMyPendingReviews = existingMyPendingReviews.filter((review) => review._id !== mutatedData._id)
+      cache.writeQuery({
+        query: GET_REVIEWS,
+        variables: queryVariables,
+        data: { reviews: newReviews },
+      })
       cache.writeQuery({
         query: GET_MY_PENDING_REVIEWS,
         variables: queryVariables,
-        data: { myPendingReviews: newReviews },
+        data: { myPendingReviews: newMyPendingReviews },
       })
     },
   })
@@ -92,9 +96,8 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
    * Initialize context values and form state
    */
   useEffect(() => {
-    reviewQuery.refetch()
-    myPendingReviewQuery.refetch()
     restoreLocalReviewForm()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   /**

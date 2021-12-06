@@ -1,7 +1,10 @@
+import isPropValid from '@emotion/is-prop-valid'
 import styled from '@emotion/styled'
 import { Typography, Stack, StackProps } from '@mui/material'
 
-export const Card = styled(Stack)<StackProps & { pending?: boolean }>`
+import { RichTextRenderer } from '@/modules/RichText'
+
+export const Card = styled(Stack, { shouldForwardProp: isPropValid })<StackProps & { pending?: boolean }>`
   border-radius: ${({ theme }) => theme.shape.borderRadius}px;
   border: 1px solid ${({ theme }) => theme.palette.divider};
   padding: ${({ theme }) => theme.spacing(4)};
@@ -17,11 +20,7 @@ const MainTypography = styled(Typography)`
 export const CardTerm = styled(MainTypography)``
 CardTerm.defaultProps = { variant: 'h5' }
 
-export const CardContent = styled(MainTypography)`
-  text-align: justify;
-  font-family: 'ChulaCharasNew';
-`
-CardContent.defaultProps = { variant: 'body1' }
+export const CardContent = styled(RichTextRenderer)``
 
 export const CardRating = styled(MainTypography)`
   align-self: flex-end;

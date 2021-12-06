@@ -60,6 +60,9 @@
     "react-icons": "^4.2.0",
     "react-loading": "^2.0.3",
     "react-measure": "^2.5.2",
+    "slate": "^0.71.0",
+    "slate-history": "^0.66.0",
+    "slate-react": "^0.71.0",
     "use-react-screenshot": "^1.0.2",
     "uuid": "^8.3.2"
   },
@@ -76,7 +79,7 @@
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.7",
     "@testing-library/react-hooks": "^5.0.3",
-    "@trivago/prettier-plugin-sort-imports": "^2.0.2",
+    "@trivago/prettier-plugin-sort-imports": "^3.1.1",
     "@types/babel-plugin-macros": "^2.8.4",
     "@types/enzyme": "^3.10.9",
     "@types/gapi.auth2": "^0.0.55",

@@ -1,20 +1,21 @@
 import { Rating, Select, Stack, MenuItem, Typography, Button, Alert } from '@mui/material'
 import { endOfDay, format } from 'date-fns'
 import Link from 'next/link'
+
 import { useContext } from 'react'
 import { Controller, SubmitHandler, SubmitErrorHandler, useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
-import { MultiplelineTextField } from '@/common/components/MultiplelineTextField'
 import { SnackbarContext } from '@/common/context/Snackbar'
 import { getCurrentTerm } from '@/common/utils/getCurrentTerm'
 import { useReviewContext } from '@/modules/CourseDetail/context/Review'
 import { ReviewState } from '@/modules/CourseDetail/context/Review/types'
 
+import { RichTextEditor } from '../../../RichText'
 import { YEAR_SIZE } from './constants'
 
 export const ReviewForm: React.FC = () => {
-  const { register, handleSubmit, control } = useFormContext<ReviewState>()
+  const { register, handleSubmit, control, setValue } = useFormContext<ReviewState>()
   const { academicYear, semester } = getCurrentTerm()
   const { t } = useTranslation('review')
   const { emitMessage } = useContext(SnackbarContext)
@@ -27,9 +28,14 @@ export const ReviewForm: React.FC = () => {
       .map((_, index) => currentYear - index)
   }
 
-  const onSubmit: SubmitHandler<ReviewState> = async () => {
+  const handleRichTextChange = (newContent: string) => {
+    setValue('content', newContent)
+  }
+
+  const onSubmit: SubmitHandler<ReviewState> = async (data) => {
     if (editingReviewId) await submitEditedReview(editingReviewId)
     else await submitReview()
+    console.log(data)
   }
 
   const onError: SubmitErrorHandler<ReviewState> = (errors) => {
@@ -97,11 +103,7 @@ export const ReviewForm: React.FC = () => {
             )}
           />
         </Stack>
-        <MultiplelineTextField
-          fullWidth
-          placeholder="คิดว่าวิชานี้เป็นอย่างไรบ้าง?"
-          {...register('content', { required: 'need to write at least 1 character' })}
-        />
+        <RichTextEditor onChange={handleRichTextChange} />
         <Stack mt={2} mb={4} direction="row" spacing={2}>
           {editingReviewId && (
             <Button variant="outlined" fullWidth onClick={cancelEditReview}>

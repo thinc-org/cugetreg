@@ -42,8 +42,7 @@ export const ReviewForm: React.FC = () => {
       <Alert severity="info" sx={{ mb: 2 }}>
         <Stack direction="row" gap={1} flexWrap="wrap">
           นโยบายรักษาความเป็นส่วนตัวของการรีวิวรายวิชา
-          {/** TODO change link */}
-          <Link href="https://google.com">อ่านเพิ่มเติม</Link>
+          <Link href="/privacy">อ่านเพิ่มเติม</Link>
         </Stack>
       </Alert>
       <Typography variant="h4" component="span" id="review-title" mr={2} sx={{ display: ['block', 'inline'] }}>

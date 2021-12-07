@@ -1,4 +1,5 @@
 import { Hidden, Typography } from '@mui/material'
+import useGoogleOptimize from '@react-hook/google-optimize'
 
 import { Analytics } from '@/common/context/Analytics/components/Analytics'
 import { FILTER_BUTTON, SELECTED_COURSES_BUTTON, OPEN_SHOPPING_CART_BUTTON } from '@/common/context/Analytics/constants'
@@ -6,6 +7,7 @@ import { PageMeta } from '@/components/PageMeta'
 import { CourseList } from '@/modules/CourseSearch/components/CourseList'
 import { FilterIconButton } from '@/modules/CourseSearch/components/FilterIconButton'
 import { FilterSection } from '@/modules/CourseSearch/components/FilterSection'
+import { RecommendationText } from '@/modules/CourseSearch/components/RecommendationText'
 import { SearchField } from '@/modules/CourseSearch/components/SearchField'
 import { SelectedCoursesButton } from '@/modules/CourseSearch/components/SelectedCoursesButton'
 import { NoTagListLayout, TagList } from '@/modules/CourseSearch/components/TagList'
@@ -16,6 +18,7 @@ import { Container, Stack, TitleStack, StickyStack } from './styled'
 
 export function CourseSearchPage() {
   const { openFilterBar, toggleFilterBar, onOpen, handleCloseFilterBar } = useCourseSearchPage()
+  const recommendationVariant = useGoogleOptimize('KZLly-4DQ1CHxWOlVwOJ4g', ['NONE', 'RANDOM', 'COSINE']) || 'NONE'
 
   return (
     <Container>
@@ -43,6 +46,7 @@ export function CourseSearchPage() {
         <TagList />
       </StickyStack>
       <NoTagListLayout />
+      {recommendationVariant !== 'NONE' && <RecommendationText variant={recommendationVariant} />}
       <Stack spacing={3} direction="row">
         <CourseList />
         <FilterSection open={openFilterBar} handleClose={handleCloseFilterBar} />

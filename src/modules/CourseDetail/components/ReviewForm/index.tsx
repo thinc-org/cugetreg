@@ -11,7 +11,7 @@ import { getCurrentTerm } from '@/common/utils/getCurrentTerm'
 import { useReviewContext } from '@/modules/CourseDetail/context/Review'
 import { ReviewState } from '@/modules/CourseDetail/context/Review/types'
 
-import { RichTextEditor } from '../../../RichText'
+import { RichTextEditor } from '../../../../common/components/RichText'
 import { YEAR_SIZE } from './constants'
 
 export const ReviewForm: React.FC = () => {

@@ -2,7 +2,7 @@ import isPropValid from '@emotion/is-prop-valid'
 import styled from '@emotion/styled'
 import { Typography, Stack, StackProps } from '@mui/material'
 
-import { RichTextRenderer } from '@/modules/RichText'
+import { RichTextRenderer } from '@/common/components/RichText'
 
 export const Card = styled(Stack, { shouldForwardProp: isPropValid })<StackProps & { pending?: boolean }>`
   border-radius: ${({ theme }) => theme.shape.borderRadius}px;

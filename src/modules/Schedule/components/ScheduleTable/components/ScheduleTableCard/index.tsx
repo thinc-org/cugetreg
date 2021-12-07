@@ -2,10 +2,10 @@ import { ClickAwayListener, Grid, Hidden, IconButton, Stack, Typography, useThem
 import { useMediaQuery } from '@mui/material'
 import { PanInfo } from 'framer-motion'
 import { observer } from 'mobx-react'
+
 import { useCallback } from 'react'
 import { useState } from 'react'
 import { useEffect } from 'react'
-import { Draggable } from 'react-beautiful-dnd'
 import { useTranslation } from 'react-i18next'
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
 import { MdDelete } from 'react-icons/md'
@@ -34,7 +34,6 @@ import { uniq } from '@/utils/uniq'
 import {
   CardBorder,
   CardContent,
-  CardLayout,
   DeleteButton,
   GridSpacer,
   LeftPane,
@@ -49,7 +48,6 @@ import { useOverlapWarning } from './utils'
 
 export interface ScheduleTableCardProps {
   item: CourseCartItem
-  index: number
   overlaps: CourseOverlap
 }
 
@@ -61,16 +59,7 @@ export interface CardDetailProps extends CardComponentProps {
   overlaps?: CourseOverlap
 }
 
-/* fixed axis drag hack */
-function getStyle(style: React.CSSProperties | undefined) {
-  if (style?.transform) {
-    const axisLockY = `translate(0px, ${style.transform.split(',').pop()}`
-    return { ...style, transform: axisLockY }
-  }
-  return style
-}
-
-export const ScheduleTableCard = observer(({ item, index, overlaps }: ScheduleTableCardProps) => {
+export const ScheduleTableCard = observer(({ item, overlaps }: ScheduleTableCardProps) => {
   const { courseNo, isHidden } = item
   const toggleVisibility = useCallback(() => {
     courseCartStore.toggleHiddenItem(item)
@@ -104,47 +93,38 @@ export const ScheduleTableCard = observer(({ item, index, overlaps }: ScheduleTa
   }
 
   return (
-    <Draggable key={item.courseNo} draggableId={item.courseNo} index={index}>
-      {(provided) => (
-        <CardLayout
-          ref={provided.innerRef}
-          {...provided.draggableProps}
-          {...provided.dragHandleProps}
-          style={getStyle(provided.draggableProps.style)}
-        >
-          <CardContent
-            drag={match ? false : 'x'}
-            initial={{ x }}
-            animate={{ x }}
-            dragConstraints={{ left: x, right: x }}
-            dragDirectionLock
-            onDragEnd={onDragEnd}
-          >
-            <MiddlePane>
-              <CardHeader item={item} />
-              <CardDetail item={item} overlaps={overlaps} />
-            </MiddlePane>
-          </CardContent>
+    <>
+      <CardContent
+        drag={match ? false : 'x'}
+        initial={{ x }}
+        animate={{ x }}
+        dragConstraints={{ left: x, right: x }}
+        dragDirectionLock
+        onDragEnd={onDragEnd}
+      >
+        <MiddlePane>
+          <CardHeader item={item} />
+          <CardDetail item={item} overlaps={overlaps} />
+        </MiddlePane>
+      </CardContent>
 
-          <LeftPane>
-            <Analytics elementId={courseNo} elementName={HIDE_COURSE}>
-              <VisibilityToggle checked={!isHidden} onClick={toggleVisibility}>
-                {isHidden ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
-              </VisibilityToggle>
-            </Analytics>
-          </LeftPane>
+      <LeftPane>
+        <Analytics elementId={courseNo} elementName={HIDE_COURSE}>
+          <VisibilityToggle checked={!isHidden} onClick={toggleVisibility}>
+            {isHidden ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
+          </VisibilityToggle>
+        </Analytics>
+      </LeftPane>
 
-          <RightPane>
-            <Analytics elementId={courseNo} elementName={DELETE_COURSE}>
-              <DeleteButton onClick={() => courseCartStore.removeCourse(item)}>
-                <MdDelete />
-              </DeleteButton>
-            </Analytics>
-          </RightPane>
-          {overlaps?.hasOverlap ? <OverlappingCardBorder /> : <CardBorder />}
-        </CardLayout>
-      )}
-    </Draggable>
+      <RightPane>
+        <Analytics elementId={courseNo} elementName={DELETE_COURSE}>
+          <DeleteButton onClick={() => courseCartStore.removeCourse(item)}>
+            <MdDelete />
+          </DeleteButton>
+        </Analytics>
+      </RightPane>
+      {overlaps?.hasOverlap ? <OverlappingCardBorder /> : <CardBorder />}
+    </>
   )
 })
 

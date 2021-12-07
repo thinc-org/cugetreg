@@ -1,11 +1,11 @@
 import { includes } from 'lodash'
 import { Editor, Transforms, Element as SlateElement } from 'slate'
 
-import { RichTextElementType } from '../../types'
+import { RichTextBlockType } from '../../types'
 import { isBlockActive } from '../isBlockActive'
 
-export const toggleBlock = (editor: Editor, format: RichTextElementType) => {
-  const LIST_TYPES = [RichTextElementType.ORDER_LIST, RichTextElementType.UNORDER_LIST]
+export const toggleBlock = (editor: Editor, format: RichTextBlockType) => {
+  const LIST_TYPES = [RichTextBlockType.ORDER_LIST, RichTextBlockType.UNORDER_LIST]
 
   const isActive = isBlockActive(editor, format)
   const isList = includes(LIST_TYPES, format)
@@ -15,7 +15,7 @@ export const toggleBlock = (editor: Editor, format: RichTextElementType) => {
     split: true,
   })
   const newProperties: Partial<SlateElement> = {
-    type: isActive ? RichTextElementType.PARAGRAPH : isList ? RichTextElementType.LIST : format,
+    type: isActive ? RichTextBlockType.PARAGRAPH : isList ? RichTextBlockType.LIST_ITEM : format,
   }
   Transforms.setNodes<SlateElement>(editor, newProperties)
 

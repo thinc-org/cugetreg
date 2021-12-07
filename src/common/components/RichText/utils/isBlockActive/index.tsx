@@ -1,8 +1,8 @@
 import { Editor, Element as SlateElement } from 'slate'
 
-import { RichTextElementType } from '../../types'
+import { RichTextBlockType } from '../../types'
 
-export const isBlockActive = (editor: Editor, format: RichTextElementType): boolean => {
+export const isBlockActive = (editor: Editor, format: RichTextBlockType): boolean => {
   const { selection } = editor
   if (!selection) return false
 

@@ -4,6 +4,7 @@ import { getFaculty } from '@thinc-org/chula-courses'
 import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 import { NextSeoProps } from 'next-seo/lib/types'
 import dynamic from 'next/dynamic'
+
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 

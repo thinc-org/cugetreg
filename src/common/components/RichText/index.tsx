@@ -1,15 +1,12 @@
-import { Button } from '@mui/material'
 import { createEditor, Descendant } from 'slate'
 import { Editor } from 'slate'
 import { withHistory } from 'slate-history'
 import { Slate, withReact, Editable } from 'slate-react'
 
-import { useState, useRef, useCallback } from 'react'
-import { Controller, useFormContext, useWatch } from 'react-hook-form'
+import { useRef, useCallback } from 'react'
 import { CgFormatHeading } from 'react-icons/cg'
 import {
   MdCode,
-  MdFileCopy,
   MdFormatBold,
   MdFormatItalic,
   MdFormatListBulleted,
@@ -22,27 +19,25 @@ import {
 } from 'react-icons/md'
 
 import { Spacer } from '@/components/Spacer'
-import { ReviewState } from '@/modules/CourseDetail/context/Review/types'
 
 import { IconButton } from './components/IconButton'
 import { RichTextElement } from './components/RichTextElement'
 import { RichTextLeaf } from './components/RichTextLeaf'
-import { INITIAL_CONTENT } from './constants'
+import { serializer } from './serializer'
 import { Toolbar, StyledEditable, VerticalDivider } from './styled'
 import {
   RichTextEditorProps,
-  RichTextFormatType,
-  RichTextElementType,
+  RichTextMarkType,
+  RichTextBlockType,
   RichTextActionType,
   RichTextRendererProps,
 } from './types'
 
-export const RichTextEditor: React.FC<RichTextEditorProps> = ({ control, name, onChange }) => {
+export const RichTextEditor: React.FC<RichTextEditorProps> = ({ value, onChange }) => {
   /**
    * Workaround for Slate's editor bug: https://stackoverflow.com/a/67126823
    */
   const editorRef = useRef<Editor>()
-  const value = useWatch({ control, name, defaultValue: JSON.stringify(INITIAL_CONTENT) })
   if (!editorRef.current) editorRef.current = withHistory(withReact(createEditor()))
   const editor = editorRef.current
 
@@ -51,27 +46,29 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({ control, name, o
 
   const handleChange = (newValue: Descendant[]) => {
     onChange(JSON.stringify(newValue))
+    const sel = serializer.serialize(newValue)
+    console.log('serialize', sel)
+    const delsel = serializer.deserialize(sel.split('\n').join(''))
+    console.log('deserialize', JSON.stringify(delsel, null, 2))
   }
 
   return (
-    <Slate editor={editor} value={JSON.parse(value as string)} onChange={handleChange}>
+    <Slate editor={editor} value={JSON.parse(value)} onChange={handleChange}>
       <Toolbar>
-        <IconButton format={RichTextFormatType.BOLD} icon={MdFormatBold} />
-        <IconButton format={RichTextFormatType.ITALIC} icon={MdFormatItalic} />
-        <IconButton format={RichTextFormatType.UNDERLINE} icon={MdFormatUnderlined} />
-        <IconButton format={RichTextFormatType.STRIKETHROUGH} icon={MdStrikethroughS} />
-        <IconButton format={RichTextFormatType.CODE} icon={MdCode} />
+        <IconButton format={RichTextMarkType.BOLD} icon={MdFormatBold} />
+        <IconButton format={RichTextMarkType.ITALIC} icon={MdFormatItalic} />
+        <IconButton format={RichTextMarkType.UNDERLINE} icon={MdFormatUnderlined} />
+        <IconButton format={RichTextMarkType.STRIKETHROUGH} icon={MdStrikethroughS} />
+        <IconButton format={RichTextMarkType.CODE} icon={MdCode} />
         <VerticalDivider />
-        <IconButton format={RichTextElementType.HEADING} icon={CgFormatHeading} />
-        <IconButton format={RichTextElementType.SUB_HEADING} icon={CgFormatHeading} />
-        <IconButton format={RichTextElementType.ORDER_LIST} icon={MdFormatListBulleted} />
-        <IconButton format={RichTextElementType.UNORDER_LIST} icon={MdFormatListNumberedRtl} />
-        <VerticalDivider />
-        <IconButton format={RichTextElementType.BLOCK_QUOTE} icon={MdFormatQuote} />
+        <IconButton format={RichTextBlockType.HEADING} icon={CgFormatHeading} />
+        <IconButton format={RichTextBlockType.SUB_HEADING} icon={CgFormatHeading} />
+        <IconButton format={RichTextBlockType.ORDER_LIST} icon={MdFormatListBulleted} />
+        <IconButton format={RichTextBlockType.UNORDER_LIST} icon={MdFormatListNumberedRtl} />
+        <IconButton format={RichTextBlockType.BLOCK_QUOTE} icon={MdFormatQuote} />
         <Spacer />
         <IconButton format={RichTextActionType.UNDO} icon={MdUndo} />
         <IconButton format={RichTextActionType.REDO} icon={MdRedo} />
-        <IconButton format={RichTextActionType.COPY} icon={MdFileCopy} />
       </Toolbar>
       <StyledEditable
         renderElement={renderElement}

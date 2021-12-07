@@ -2,7 +2,7 @@ import { useTheme } from '@mui/material'
 import { includes } from 'lodash'
 import { useSlate } from 'slate-react'
 
-import { RichTextFormatType, RichTextElementType, RichTextActionType } from '../../types'
+import { RichTextMarkType, RichTextBlockType, RichTextActionType } from '../../types'
 import { isBlockActive } from '../../utils/isBlockActive'
 import { isMarkActive } from '../../utils/isMarkActive'
 import { toggleBlock } from '../../utils/toggleBlock'
@@ -16,20 +16,20 @@ export const IconButton: React.FC<IconButtonProps> = ({ format, icon: Icon, ...p
 
   const handleMouseDown: React.MouseEventHandler<HTMLButtonElement> = (event) => {
     event.preventDefault()
-    if (includes(Object.values(RichTextFormatType), format)) {
-      toggleMark(editor, format as RichTextFormatType)
-    } else if (includes(Object.values(RichTextElementType), format)) {
-      toggleBlock(editor, format as RichTextElementType)
+    if (includes(Object.values(RichTextMarkType), format)) {
+      toggleMark(editor, format as RichTextMarkType)
+    } else if (includes(Object.values(RichTextBlockType), format)) {
+      toggleBlock(editor, format as RichTextBlockType)
     } else if (includes(Object.values(RichTextActionType), format)) {
       // toggleMark(editor, format as RichTextFormatType)
     }
   }
 
   let active = false
-  if (includes(Object.values(RichTextFormatType), format)) {
-    active = isMarkActive(editor, format as RichTextFormatType)
-  } else if (includes(Object.values(RichTextElementType), format)) {
-    active = isBlockActive(editor, format as RichTextElementType)
+  if (includes(Object.values(RichTextMarkType), format)) {
+    active = isMarkActive(editor, format as RichTextMarkType)
+  } else if (includes(Object.values(RichTextBlockType), format)) {
+    active = isBlockActive(editor, format as RichTextBlockType)
   } else if (includes(Object.values(RichTextActionType), format)) {
     active = false
   }

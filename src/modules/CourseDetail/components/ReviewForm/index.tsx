@@ -6,6 +6,7 @@ import { useContext } from 'react'
 import { Controller, SubmitHandler, SubmitErrorHandler, useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
+import { INITIAL_CONTENT } from '@/common/components/RichText/constants'
 import { SnackbarContext } from '@/common/context/Snackbar'
 import { getCurrentTerm } from '@/common/utils/getCurrentTerm'
 import { useReviewContext } from '@/modules/CourseDetail/context/Review'
@@ -26,11 +27,6 @@ export const ReviewForm: React.FC = () => {
     return Array(size)
       .fill(0)
       .map((_, index) => currentYear - index)
-  }
-
-  const handleRichTextChange = (newContent: string) => {
-    setValue('content', newContent)
-    console.log(newContent)
   }
 
   const onSubmit: SubmitHandler<ReviewState> = async (data) => {
@@ -104,7 +100,13 @@ export const ReviewForm: React.FC = () => {
             )}
           />
         </Stack>
-        <RichTextEditor control={control} name="content" onChange={handleRichTextChange} />
+        <Controller
+          name="content"
+          control={control}
+          defaultValue={JSON.stringify(INITIAL_CONTENT)}
+          render={({ field: { value, onChange } }) => <RichTextEditor value={value} onChange={onChange} />}
+        />
+
         <Stack mt={2} mb={4} direction="row" spacing={2}>
           {editingReviewId && (
             <Button variant="outlined" fullWidth onClick={cancelEditReview}>

@@ -2,10 +2,10 @@ import { IconButtonProps as MuiIconButtonProps } from '@mui/material'
 
 import { IconType } from 'react-icons'
 
-import { RichTextFormatType, RichTextElementType, RichTextActionType } from '../../types'
+import { RichTextMarkType, RichTextBlockType, RichTextActionType } from '../../types'
 
 export interface IconButtonProps extends MuiIconButtonProps {
-  format: RichTextFormatType | RichTextElementType | RichTextActionType
+  format: RichTextMarkType | RichTextBlockType | RichTextActionType
   icon: IconType
   active?: boolean
 }

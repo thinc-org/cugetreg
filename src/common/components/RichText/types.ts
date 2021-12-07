@@ -1,49 +1,64 @@
-import { BaseEditor, Descendant } from 'slate'
+import { BaseEditor } from 'slate'
 import { HistoryEditor } from 'slate-history'
 import { ReactEditor } from 'slate-react'
 
-import { Control } from 'react-hook-form'
-
-import { ReviewState } from '@/modules/CourseDetail/context/Review/types'
-
-export const RichTextFormatType = {
+export const RichTextMarkType = {
   BOLD: 'bold',
   ITALIC: 'italic',
   UNDERLINE: 'underline',
   STRIKETHROUGH: 'strike through',
   CODE: 'code',
 } as const
-export type RichTextFormatType = ValueOf<typeof RichTextFormatType>
+export type RichTextMarkType = ValueOf<typeof RichTextMarkType>
 
-export const RichTextElementType = {
+export const RichTextMarkTag: Record<keyof typeof RichTextMarkType, string> = {
+  BOLD: 'b',
+  ITALIC: 'i',
+  UNDERLINE: 'u',
+  STRIKETHROUGH: 's',
+  CODE: 'code',
+} as const
+export type RichTextMarkTag = ValueOf<typeof RichTextMarkTag>
+
+export const RichTextBlockType = {
   PARAGRAPH: 'paragraph',
   HEADING: 'heading',
   SUB_HEADING: 'sub heading',
   BLOCK_QUOTE: 'block quote',
   ORDER_LIST: 'order list',
   UNORDER_LIST: 'unorder list',
-  LIST: 'list',
+  LIST_ITEM: 'list',
 } as const
-export type RichTextElementType = ValueOf<typeof RichTextElementType>
+export type RichTextBlockType = ValueOf<typeof RichTextBlockType>
+
+export const RichTextBlockTag: Record<keyof typeof RichTextBlockType, string> = {
+  PARAGRAPH: 'p',
+  HEADING: 'h1',
+  SUB_HEADING: 'h2',
+  BLOCK_QUOTE: 'blockquote',
+  ORDER_LIST: 'ol',
+  UNORDER_LIST: 'ul',
+  LIST_ITEM: 'li',
+} as const
+export type RichTextBlockTag = ValueOf<typeof RichTextBlockTag>
 
 export const RichTextActionType = {
   UNDO: 'undo',
   REDO: 'redo',
-  COPY: 'copy',
 } as const
 export type RichTextActionType = ValueOf<typeof RichTextActionType>
 
 export type CustomText = {
   text: string
-  [RichTextFormatType.BOLD]?: boolean
-  [RichTextFormatType.ITALIC]?: boolean
-  [RichTextFormatType.UNDERLINE]?: boolean
-  [RichTextFormatType.STRIKETHROUGH]?: boolean
-  [RichTextFormatType.CODE]?: boolean
+  [RichTextMarkType.BOLD]?: boolean
+  [RichTextMarkType.ITALIC]?: boolean
+  [RichTextMarkType.UNDERLINE]?: boolean
+  [RichTextMarkType.STRIKETHROUGH]?: boolean
+  [RichTextMarkType.CODE]?: boolean
 }
 
 export type CustomElement = {
-  type: RichTextFormatType | RichTextElementType
+  type: RichTextMarkType | RichTextBlockType
   children: CustomText[]
 }
 
@@ -57,8 +72,7 @@ declare module 'slate' {
 
 export interface RichTextEditorProps {
   /* eslint-disable */
-  control: Control<ReviewState, object>
-  name: keyof ReviewState
+  value: string
   onChange: (value: string) => void
 }
 

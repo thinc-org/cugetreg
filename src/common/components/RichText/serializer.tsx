@@ -108,21 +108,21 @@ class serializer {
     if (node.nodeType === Node.TEXT_NODE) {
       return { text: node.textContent }
     }
-    let leaf = {}
+    let leaf: any = { text: '' }
     if (node.nodeName === 'B') {
-      leaf = { [RichTextMarkType.BOLD]: true }
+      leaf = { [RichTextMarkType.BOLD]: true, ...leaf }
     }
     if (node.nodeName === 'EM') {
-      leaf = { [RichTextMarkType.ITALIC]: true }
+      leaf = { [RichTextMarkType.ITALIC]: true, ...leaf }
     }
     if (node.nodeName === 'U') {
-      leaf = { [RichTextMarkType.UNDERLINE]: true }
+      leaf = { [RichTextMarkType.UNDERLINE]: true, ...leaf }
     }
     if (node.nodeName === 'S') {
-      leaf = { [RichTextMarkType.STRIKETHROUGH]: true }
+      leaf = { [RichTextMarkType.STRIKETHROUGH]: true, ...leaf }
     }
     if (node.nodeName === 'CODE') {
-      leaf = { [RichTextMarkType.CODE]: true }
+      leaf = { [RichTextMarkType.CODE]: true, ...leaf }
     }
     leaf = { ...leaf, ...this.deserializeTextNode(node.firstChild) }
     return leaf

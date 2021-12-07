@@ -15,10 +15,10 @@ class serializer {
     }
     let children = ''
     if (Array.isArray(node)) {
-      children = node.map((n) => this.serialize(n as any)).join('\n')
+      children = node.map((n) => this.serialize(n as any)).join('')
     }
     if (Element.isElement(node)) {
-      children = node.children.map((n) => this.serialize(n as any)).join('\n')
+      children = node.children.map((n) => this.serialize(n as any)).join('')
       return this.serializeElement(node, children)
     }
     return children
@@ -110,24 +110,25 @@ class serializer {
     }
     let leaf = {}
     if (node.nodeName === 'B') {
-      leaf = { [RichTextMarkType.BOLD]: true, ...this.deserializeTextNode(node.firstChild) }
+      leaf = { [RichTextMarkType.BOLD]: true }
     }
     if (node.nodeName === 'EM') {
-      leaf = { [RichTextMarkType.ITALIC]: true, ...this.deserializeTextNode(node.firstChild) }
+      leaf = { [RichTextMarkType.ITALIC]: true }
     }
     if (node.nodeName === 'U') {
-      leaf = { [RichTextMarkType.UNDERLINE]: true, ...this.deserializeTextNode(node.firstChild) }
+      leaf = { [RichTextMarkType.UNDERLINE]: true }
     }
     if (node.nodeName === 'S') {
-      leaf = { [RichTextMarkType.STRIKETHROUGH]: true, ...this.deserializeTextNode(node.firstChild) }
+      leaf = { [RichTextMarkType.STRIKETHROUGH]: true }
     }
     if (node.nodeName === 'CODE') {
-      leaf = { [RichTextMarkType.CODE]: true, ...this.deserializeTextNode(node.firstChild) }
+      leaf = { [RichTextMarkType.CODE]: true }
     }
+    leaf = { ...leaf, ...this.deserializeTextNode(node.firstChild) }
     return leaf
   }
 
-  private generateTag(mark: RichTextMarkTag | RichTextBlockTag, text: string) {
+  private generateTag(mark: RichTextMarkTag | RichTextBlockTag, text: string): string {
     return `<${mark}>${text}</${mark}>`
   }
 }

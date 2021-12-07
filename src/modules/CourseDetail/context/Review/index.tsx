@@ -262,7 +262,7 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
   }
 
   const clearReviewForm = () => {
-    methods.setValue('content', JSON.stringify(INITIAL_CONTENT))
+    methods.setValue('content', '<p></p>')
     methods.setValue('rating', 0)
   }
 

@@ -103,7 +103,7 @@ export const ReviewForm: React.FC = () => {
         <Controller
           name="content"
           control={control}
-          defaultValue={JSON.stringify(INITIAL_CONTENT)}
+          defaultValue={'<p></p>'}
           render={({ field: { value, onChange } }) => <RichTextEditor value={value} onChange={onChange} />}
         />
 

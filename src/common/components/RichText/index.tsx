@@ -45,15 +45,15 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({ value, onChange 
   const renderLeaf = useCallback((props) => <RichTextLeaf {...props} />, [])
 
   const handleChange = (newValue: Descendant[]) => {
-    onChange(JSON.stringify(newValue))
-    const sel = serializer.serialize(newValue)
-    console.log('serialize', sel)
-    const delsel = serializer.deserialize(sel.split('\n').join(''))
-    console.log('deserialize', JSON.stringify(delsel, null, 2))
+    onChange(serializer.serialize(newValue))
+    // const sel = serializer.serialize(newValue)
+    // console.log('serialize', sel)
+    // const delsel = serializer.deserialize(sel.split('\n').join(''))
+    // console.log('deserialize', JSON.stringify(delsel, null, 2))
   }
 
   return (
-    <Slate editor={editor} value={JSON.parse(value)} onChange={handleChange}>
+    <Slate editor={editor} value={serializer.deserialize(value)} onChange={handleChange}>
       <Toolbar>
         <IconButton format={RichTextMarkType.BOLD} icon={MdFormatBold} />
         <IconButton format={RichTextMarkType.ITALIC} icon={MdFormatItalic} />
@@ -91,7 +91,7 @@ export const RichTextRenderer: React.FC<RichTextRendererProps> = ({ value }) => 
   const renderLeaf = useCallback((props) => <RichTextLeaf {...props} />, [])
 
   return (
-    <Slate editor={editor} value={JSON.parse(value)} onChange={() => {}}>
+    <Slate editor={editor} value={serializer.deserialize(value)} onChange={() => {}}>
       <Editable renderElement={renderElement} renderLeaf={renderLeaf} readOnly />
     </Slate>
   )

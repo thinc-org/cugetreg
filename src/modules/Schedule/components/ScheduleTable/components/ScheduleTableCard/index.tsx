@@ -60,7 +60,7 @@ export const ScheduleTableCard = observer(({ item, index, overlaps }: ScheduleTa
   const theme = useTheme()
   const match = useMediaQuery(theme.breakpoints.up('md'))
   const [swipped, setSwipped] = useState(false)
-  const x = match || swipped ? 0 : 40
+  const x = swipped ? -40 : 0
   useEffect(() => {
     if (match) {
       setSwipped(false)

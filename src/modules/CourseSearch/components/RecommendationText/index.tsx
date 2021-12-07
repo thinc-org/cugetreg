@@ -107,6 +107,7 @@ export const RecommendationText: React.FC<{variant: string}> = observer((props: 
               elementId={`RecommendationLink/${variant}/${course.key.semesterKey.studyProgram}/courses/${course.key.courseNo}`}
             >
               <RecommendationItem
+                id={`RecommendationLink/${variant}/${course.key.semesterKey.studyProgram}/courses/${course.key.courseNo}`}
                 target="_blank"
                 href={`/${course.key.semesterKey.studyProgram}/courses/${course.key.courseNo}`}
               >

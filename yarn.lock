@@ -13396,11 +13396,6 @@ use-memo-one@^1.1.1:
   resolved "https://registry.yarnpkg.com/use-memo-one/-/use-memo-one-1.1.2.tgz#0c8203a329f76e040047a35a1197defe342fab20"
   integrity sha512-u2qFKtxLsia/r8qG0ZKkbytbztzRb317XCkT7yP8wxL0tZ/CzK2G+WWie5vWvpyeP7+YoPIwbJoIHJ4Ba4k0oQ==
 
-use-react-screenshot@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/use-react-screenshot/-/use-react-screenshot-1.0.2.tgz#a563a6c756086ebc975e7307d14f100dce9dc74c"
-  integrity sha512-dEloUgNs7tt187Qdmnce848uIL/QEpw7d/g4QmVif3daygrnMWbcpS+Lq5F2KlEjuKJIS4Ws1zxVACO5T5lo5Q==
-
 use-subscription@1.5.1:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/use-subscription/-/use-subscription-1.5.1.tgz#73501107f02fad84c6dd57965beb0b75c68c42d1"

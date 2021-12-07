@@ -84,7 +84,6 @@
     "slate-hyperscript": "^0.67.0",
     "slate-react": "0.72.1",
     "styled-components": "^5.3.3",
-    "use-react-screenshot": "^1.0.2",
     "uuid": "^8.3.2"
   },
   "devDependencies": {

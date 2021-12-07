@@ -62,6 +62,7 @@
     "react-measure": "^2.5.2",
     "slate": "^0.71.0",
     "slate-history": "^0.66.0",
+    "slate-html-serializer": "^0.8.13",
     "slate-react": "^0.71.0",
     "use-react-screenshot": "^1.0.2",
     "uuid": "^8.3.2"

@@ -2,8 +2,9 @@ import { gql, useQuery } from '@apollo/client'
 import styled from '@emotion/styled'
 import { Link, Typography } from '@mui/material'
 import { Box } from '@mui/system'
+import useGoogleOptimize from '@react-hook/google-optimize'
 import { observer } from 'mobx-react'
-import { useEffect } from 'react'
+import { FC, useEffect } from 'react'
 
 import { Analytics } from '@/common/context/Analytics/components/Analytics'
 import { useCourseGroup } from '@/common/hooks/useCourseGroup'
@@ -60,7 +61,7 @@ interface RecommendationResponse {
   }
 }
 
-export const RecommendationText = observer((props: { variant: string }) => {
+export const RecommendationText: React.FC<{variant: string}> = observer((props: { variant: string })  => {
   const variant = props.variant
   const courseGroup = useCourseGroup()
   const { data } = useQuery<RecommendationResponse, RecommendationParam>(RECOMMENDATION_QUERY, {
@@ -117,6 +118,15 @@ export const RecommendationText = observer((props: { variant: string }) => {
       </Box>
     )
   } else {
-    return null
+    return <></>
   }
 })
+
+export default function ExperimentalRecommendationText() {
+  const recommendationVariant = useGoogleOptimize('KZLly-4DQ1CHxWOlVwOJ4g', ['NONE', 'RANDOM', 'COSINE']) || 'NONE'
+  console.log('Variant ', recommendationVariant)
+  if (recommendationVariant !== 'NONE')
+    return <RecommendationText variant={recommendationVariant} /> 
+  else
+    return <></>
+}

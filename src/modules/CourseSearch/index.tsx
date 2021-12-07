@@ -1,5 +1,6 @@
 import { Hidden, Typography } from '@mui/material'
 import useGoogleOptimize from '@react-hook/google-optimize'
+import dynamic from 'next/dynamic'
 
 import { Analytics } from '@/common/context/Analytics/components/Analytics'
 import { FILTER_BUTTON, SELECTED_COURSES_BUTTON, OPEN_SHOPPING_CART_BUTTON } from '@/common/context/Analytics/constants'
@@ -16,9 +17,10 @@ import { CourseSearchProvider } from './context/CourseSearch'
 import { useCourseSearchPage } from './hooks/useCourseSearchPage'
 import { Container, Stack, TitleStack, StickyStack } from './styled'
 
+const ExperimentalRecommendationText = dynamic(() => import('@/modules/CourseSearch/components/RecommendationText'), { ssr: false })
+
 export function CourseSearchPage() {
   const { openFilterBar, toggleFilterBar, onOpen, handleCloseFilterBar } = useCourseSearchPage()
-  const recommendationVariant = useGoogleOptimize('KZLly-4DQ1CHxWOlVwOJ4g', ['NONE', 'RANDOM', 'COSINE']) || 'NONE'
 
   return (
     <Container>
@@ -46,7 +48,7 @@ export function CourseSearchPage() {
         <TagList />
       </StickyStack>
       <NoTagListLayout />
-      {recommendationVariant !== 'NONE' && <RecommendationText variant={recommendationVariant} />}
+      <ExperimentalRecommendationText />
       <Stack spacing={3} direction="row">
         <CourseList />
         <FilterSection open={openFilterBar} handleClose={handleCloseFilterBar} />

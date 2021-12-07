@@ -1,6 +1,5 @@
-import { uniq } from 'lodash'
-
 import { ExamClass } from '@/common/utils/types'
+import { uniq } from '@/utils/uniq'
 
 import { ScheduleClass, CourseOverlapMap } from '..'
 

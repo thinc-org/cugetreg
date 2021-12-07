@@ -1,5 +1,6 @@
 import { renderHook, act } from '@testing-library/react-hooks'
-import { stubFalse } from 'lodash'
+
+import { stubFalse } from '@/utils/stubFalse'
 
 describe('useCourseSearchProvider', () => {
   const mockQuery = { text: 'text' }

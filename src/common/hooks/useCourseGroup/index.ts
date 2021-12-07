@@ -1,5 +1,4 @@
 import { StudyProgram } from '@thinc-org/chula-courses'
-import { omit } from 'lodash'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useRef } from 'react'
 
@@ -46,13 +45,14 @@ export function useCourseGroup(): CourseGroupResult {
 
   const setTerm = useCallback(
     (term: string) => {
+      const { studyProgram, ...routerQuery } = router.query
       const query = {
-        ...router.query,
+        ...routerQuery,
         term: term,
       }
       router.push({
         pathname: router.asPath.split('?')[0],
-        query: omit(query, ['studyProgram']),
+        query,
       })
     },
     [router]

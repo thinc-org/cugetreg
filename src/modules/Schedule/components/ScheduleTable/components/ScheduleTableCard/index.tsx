@@ -1,7 +1,6 @@
 import { ClickAwayListener, Grid, Hidden, IconButton, Stack, Typography, useTheme } from '@mui/material'
 import { useMediaQuery } from '@mui/material'
 import { PanInfo } from 'framer-motion'
-import { uniq } from 'lodash'
 import { observer } from 'mobx-react'
 import { useCallback } from 'react'
 import { useState } from 'react'
@@ -30,6 +29,7 @@ import { ColorPicker } from '@/modules/Schedule/components/ColorPicker'
 import { useColorPickerPopper } from '@/modules/Schedule/components/ColorPicker/hooks/useColorPicker'
 import { CourseOverlap } from '@/modules/Schedule/components/Schedule/utils'
 import { CourseCartItem, courseCartStore } from '@/store'
+import { uniq } from '@/utils/uniq'
 
 import {
   CardBorder,

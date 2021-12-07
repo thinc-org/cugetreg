@@ -63,8 +63,8 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({ value, onChange 
         <VerticalDivider />
         <IconButton format={RichTextBlockType.HEADING} icon={CgFormatHeading} />
         <IconButton format={RichTextBlockType.SUB_HEADING} icon={CgFormatHeading} />
-        <IconButton format={RichTextBlockType.ORDER_LIST} icon={MdFormatListBulleted} />
-        <IconButton format={RichTextBlockType.UNORDER_LIST} icon={MdFormatListNumberedRtl} />
+        <IconButton format={RichTextBlockType.UNORDER_LIST} icon={MdFormatListBulleted} />
+        <IconButton format={RichTextBlockType.ORDER_LIST} icon={MdFormatListNumberedRtl} />
         <IconButton format={RichTextBlockType.BLOCK_QUOTE} icon={MdFormatQuote} />
         <Spacer />
         <IconButton format={RichTextActionType.UNDO} icon={MdUndo} />

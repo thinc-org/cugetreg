@@ -40,8 +40,6 @@ class serializer {
         return this.generateTag(RichTextBlockTag.PARAGRAPH, children)
       case RichTextBlockType.HEADING:
         return this.generateTag(RichTextBlockTag.HEADING, children)
-      case RichTextBlockType.SUB_HEADING:
-        return this.generateTag(RichTextBlockTag.SUB_HEADING, children)
       case RichTextBlockType.BLOCK_QUOTE:
         return this.generateTag(RichTextBlockTag.BLOCK_QUOTE, children)
       case RichTextBlockType.ORDER_LIST:
@@ -88,8 +86,6 @@ class serializer {
         return { type: RichTextBlockType.PARAGRAPH, children }
       case RichTextBlockTag.HEADING:
         return { type: RichTextBlockType.HEADING, children }
-      case RichTextBlockTag.SUB_HEADING:
-        return { type: RichTextBlockType.SUB_HEADING, children }
       case RichTextBlockTag.BLOCK_QUOTE:
         return { type: RichTextBlockType.BLOCK_QUOTE, children }
       case RichTextBlockTag.ORDER_LIST:
@@ -109,20 +105,22 @@ class serializer {
       return { text: node.textContent }
     }
     let leaf: any = { text: '' }
-    if (node.nodeName === 'B') {
-      leaf = { [RichTextMarkType.BOLD]: true, ...leaf }
-    }
-    if (node.nodeName === 'EM') {
-      leaf = { [RichTextMarkType.ITALIC]: true, ...leaf }
-    }
-    if (node.nodeName === 'U') {
-      leaf = { [RichTextMarkType.UNDERLINE]: true, ...leaf }
-    }
-    if (node.nodeName === 'S') {
-      leaf = { [RichTextMarkType.STRIKETHROUGH]: true, ...leaf }
-    }
-    if (node.nodeName === 'CODE') {
-      leaf = { [RichTextMarkType.CODE]: true, ...leaf }
+    switch (node.nodeName.toLowerCase()) {
+      case RichTextMarkTag.BOLD:
+        leaf = { [RichTextMarkType.BOLD]: true, ...leaf }
+        break
+      case RichTextMarkTag.ITALIC:
+        leaf = { [RichTextMarkType.ITALIC]: true, ...leaf }
+        break
+      case RichTextMarkTag.UNDERLINE:
+        leaf = { [RichTextMarkType.UNDERLINE]: true, ...leaf }
+        break
+      case RichTextMarkTag.STRIKETHROUGH:
+        leaf = { [RichTextMarkType.STRIKETHROUGH]: true, ...leaf }
+        break
+      case RichTextMarkTag.CODE:
+        leaf = { [RichTextMarkType.CODE]: true, ...leaf }
+        break
     }
     leaf = { ...leaf, ...this.deserializeTextNode(node.firstChild) }
     return leaf

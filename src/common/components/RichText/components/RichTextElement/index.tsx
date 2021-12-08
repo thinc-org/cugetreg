@@ -5,8 +5,6 @@ export const RichTextElement: React.FC<RichTextElementProps> = ({ attributes, ch
   switch (element.type) {
     case RichTextBlockType.HEADING:
       return <h1 {...attributes}>{children}</h1>
-    case RichTextBlockType.SUB_HEADING:
-      return <h2 {...attributes}>{children}</h2>
     case RichTextBlockType.BLOCK_QUOTE:
       return <blockquote {...attributes}>{children}</blockquote>
     case RichTextBlockType.ORDER_LIST:

@@ -23,7 +23,6 @@ export type RichTextMarkTag = ValueOf<typeof RichTextMarkTag>
 export const RichTextBlockType = {
   PARAGRAPH: 'paragraph',
   HEADING: 'heading',
-  SUB_HEADING: 'sub heading',
   BLOCK_QUOTE: 'block quote',
   ORDER_LIST: 'order list',
   UNORDER_LIST: 'unorder list',
@@ -34,7 +33,6 @@ export type RichTextBlockType = ValueOf<typeof RichTextBlockType>
 export const RichTextBlockTag: Record<keyof typeof RichTextBlockType, string> = {
   PARAGRAPH: 'p',
   HEADING: 'h1',
-  SUB_HEADING: 'h2',
   BLOCK_QUOTE: 'blockquote',
   ORDER_LIST: 'ol',
   UNORDER_LIST: 'ul',

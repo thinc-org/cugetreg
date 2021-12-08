@@ -1,17 +1,22 @@
+import { RichTextMarkType } from '@/common/components/RichText/types'
+
 import { RichTextLeafProps } from './types'
 
 export const RichTextLeaf: React.FC<RichTextLeafProps> = ({ attributes, children, leaf }) => {
-  if (leaf.bold) {
-    children = <strong>{children}</strong>
+  if (leaf[RichTextMarkType.BOLD]) {
+    children = <b>{children}</b>
   }
-  if (leaf.code) {
-    children = <code>{children}</code>
+  if (leaf[RichTextMarkType.ITALIC]) {
+    children = <i>{children}</i>
   }
-  if (leaf.italic) {
-    children = <em>{children}</em>
-  }
-  if (leaf.underline) {
+  if (leaf[RichTextMarkType.UNDERLINE]) {
     children = <u>{children}</u>
+  }
+  if (leaf[RichTextMarkType.STRIKETHROUGH]) {
+    children = <s>{children}</s>
+  }
+  if (leaf[RichTextMarkType.CODE]) {
+    children = <code>{children}</code>
   }
   return <span {...attributes}>{children}</span>
 }

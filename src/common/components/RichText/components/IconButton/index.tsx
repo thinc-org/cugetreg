@@ -20,8 +20,10 @@ export const IconButton: React.FC<IconButtonProps> = ({ format, icon: Icon, ...p
       toggleMark(editor, format as RichTextMarkType)
     } else if (includes(Object.values(RichTextBlockType), format)) {
       toggleBlock(editor, format as RichTextBlockType)
-    } else if (includes(Object.values(RichTextActionType), format)) {
-      // toggleMark(editor, format as RichTextFormatType)
+    } else if (format === RichTextActionType.UNDO) {
+      editor.undo()
+    } else if (format === RichTextActionType.REDO) {
+      editor.redo()
     }
   }
 

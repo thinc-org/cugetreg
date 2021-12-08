@@ -24,7 +24,7 @@ import { IconButton } from './components/IconButton'
 import { RichTextElement } from './components/RichTextElement'
 import { RichTextLeaf } from './components/RichTextLeaf'
 import { serializer } from './serializer'
-import { Toolbar, StyledEditable, VerticalDivider } from './styled'
+import { Toolbar, StyledEditable, VerticalDivider, Wrapper } from './styled'
 import {
   RichTextEditorProps,
   RichTextMarkType,
@@ -46,10 +46,11 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({ value, onChange 
 
   const handleChange = (newValue: Descendant[]) => {
     onChange(serializer.serialize(newValue))
-    // const sel = serializer.serialize(newValue)
-    // console.log('serialize', sel)
-    // const delsel = serializer.deserialize(sel.split('\n').join(''))
-    // console.log('deserialize', JSON.stringify(delsel, null, 2))
+    const sel = serializer.serialize(newValue)
+    console.log(JSON.stringify(newValue, null, 2))
+    console.log('serialize', sel)
+    const delsel = serializer.deserialize(sel.split('\n').join(''))
+    console.log('deserialize', JSON.stringify(delsel, null, 2))
   }
 
   return (
@@ -62,7 +63,6 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({ value, onChange 
         <IconButton format={RichTextMarkType.CODE} icon={MdCode} />
         <VerticalDivider />
         <IconButton format={RichTextBlockType.HEADING} icon={CgFormatHeading} />
-        <IconButton format={RichTextBlockType.SUB_HEADING} icon={CgFormatHeading} />
         <IconButton format={RichTextBlockType.UNORDER_LIST} icon={MdFormatListBulleted} />
         <IconButton format={RichTextBlockType.ORDER_LIST} icon={MdFormatListNumberedRtl} />
         <IconButton format={RichTextBlockType.BLOCK_QUOTE} icon={MdFormatQuote} />
@@ -70,11 +70,13 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({ value, onChange 
         <IconButton format={RichTextActionType.UNDO} icon={MdUndo} />
         <IconButton format={RichTextActionType.REDO} icon={MdRedo} />
       </Toolbar>
-      <StyledEditable
-        renderElement={renderElement}
-        renderLeaf={renderLeaf}
-        placeholder="คุณคิดว่าวิชานี้เป็นอย่างไรบ้าง?"
-      />
+      <Wrapper>
+        <StyledEditable
+          renderElement={renderElement}
+          renderLeaf={renderLeaf}
+          placeholder="คุณคิดว่าวิชานี้เป็นอย่างไรบ้าง?"
+        />
+      </Wrapper>
     </Slate>
   )
 }
@@ -92,7 +94,9 @@ export const RichTextRenderer: React.FC<RichTextRendererProps> = ({ value }) => 
 
   return (
     <Slate editor={editor} value={serializer.deserialize(value)} onChange={() => {}}>
-      <Editable renderElement={renderElement} renderLeaf={renderLeaf} readOnly />
+      <Wrapper>
+        <Editable renderElement={renderElement} renderLeaf={renderLeaf} readOnly />
+      </Wrapper>
     </Slate>
   )
 }

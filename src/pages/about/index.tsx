@@ -88,7 +88,7 @@ export default function About() {
         <StyledArticleBody variant="body1" paragraph>
           <ul>
             <li>
-              <u>ข้อมูลรายวิชาและข้อมูลตอนเรียน</u> นำมาจากหน้า{' '}
+              <strong>ข้อมูลรายวิชาและข้อมูลตอนเรียน:</strong> นำมาจากหน้า{' '}
               <Link
                 href="https://cas.reg.chula.ac.th/cu/cs/QueryCourseScheduleNew/index.html"
                 target="_blank"
@@ -101,10 +101,10 @@ export default function About() {
               ทีมงานกำลังประสานงานกับสำนักงานการทะเบียนเพื่อเข้าถึงข้อมูลรายวิชาโดยตรง เพื่อให้ไม่พบปัญหาดังกล่าว
             </li>
             <li>
-              <u>ข้อมูลตอนเรียนรายวิชา GenEd</u> ได้รับข้อมูลจาก Gen อย่าได้ Ed และศูนย์การศึกษาทั่วไป
+              <strong>ข้อมูลตอนเรียนรายวิชา GenEd:</strong> ได้รับข้อมูลจาก Gen อย่าได้ Ed และศูนย์การศึกษาทั่วไป
             </li>
             <li>
-              <u>คำอธิบายรายวิชา</u> นำมาจาก{' '}
+              <strong>คำอธิบายรายวิชา:</strong> นำมาจาก{' '}
               <Link
                 href="http://www.academic.chula.ac.th/search/search.asp"
                 target="_blank"

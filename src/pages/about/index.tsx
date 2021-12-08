@@ -86,17 +86,36 @@ export default function About() {
           CU Get Reg นำข้อมูลมาจากไหน?
         </Typography>
         <StyledArticleBody variant="body1" paragraph>
-          ข้อมูลรายวิชาของ CU Get Reg นำมาจากหน้า{' '}
-          <Link
-            href="https://cas.reg.chula.ac.th/cu/cs/QueryCourseScheduleNew/index.html"
-            target="_blank"
-            rel="noreferrer"
-            color={theme.palette.secondaryRange[900]}
-          >
-            สอบถามตารางสอนตารางสอบ
-          </Link>{' '}
-          ของสำนักงานการทะเบียนทั้งหมด ในปัจจุบัน ข้อมูลจากหน้านี้อาจล่าช้าจากข้อมูลภายในระบบ Reg Chula ไป 1 วัน ทั้งนี้
-          ทีมงานกำลังประสานงานกับสำนักงานการทะเบียนเพื่อเข้าถึงข้อมูลรายวิชาโดยตรง เพื่อให้ไม่พบปัญหาดังกล่าว
+          <ul>
+            <li>
+              <u>ข้อมูลรายวิชาและข้อมูลตอนเรียน</u> นำมาจากหน้า{' '}
+              <Link
+                href="https://cas.reg.chula.ac.th/cu/cs/QueryCourseScheduleNew/index.html"
+                target="_blank"
+                rel="noreferrer"
+                color={theme.palette.secondaryRange[900]}
+              >
+                สอบถามตารางสอนตารางสอบ
+              </Link>{' '}
+              ของสำนักงานการทะเบียน ในปัจจุบัน ข้อมูลจากหน้านี้อาจล่าช้าจากข้อมูลภายในระบบ Reg Chula ไป 1 วัน ทั้งนี้
+              ทีมงานกำลังประสานงานกับสำนักงานการทะเบียนเพื่อเข้าถึงข้อมูลรายวิชาโดยตรง เพื่อให้ไม่พบปัญหาดังกล่าว
+            </li>
+            <li>
+              <u>ข้อมูลตอนเรียนรายวิชา GenEd</u> ได้รับข้อมูลจาก Gen อย่าได้ Ed และศูนย์การศึกษาทั่วไป
+            </li>
+            <li>
+              <u>คำอธิบายรายวิชา</u> นำมาจาก{' '}
+              <Link
+                href="http://www.academic.chula.ac.th/search/search.asp"
+                target="_blank"
+                rel="noreferrer"
+                color={theme.palette.secondaryRange[900]}
+              >
+                ระบบค้นหาคำอธิบายรายวิชา
+              </Link>{' '}
+              ของสำนักบริหารวิชาการ จุฬาฯ
+            </li>
+          </ul>
         </StyledArticleBody>
 
         <Typography variant="h6" component="h3" gutterBottom>
@@ -104,8 +123,8 @@ export default function About() {
         </Typography>
         <StyledArticleBody variant="body1" paragraph>
           เมื่อคุณเข้าสู่ระบบ ระบบจะบันทึกข้อมูลตารางเรียนไว้ในบัญชี Google ของคุณ
-          ทำให้สามารถเข้าสู่ระบบเพื่อดูข้อมูลตารางเรียนที่เลือกไว้ข้ามอุปกรณ์ได้ ทั้งนี้ ในอนาคตอาจมีฟีเจอร์อื่น ๆ
-          ที่เกี่ยวข้องกับการเข้าสู่ระบบเพิ่มขึ้น
+          ทำให้สามารถเข้าสู่ระบบเพื่อดูข้อมูลตารางเรียนที่เลือกไว้ข้ามอุปกรณ์ได้
+          รวมถึงเป็นการยืนยันตัวตนเพื่อเขียนรีวิวรายวิชาที่คุณเรียนมา
         </StyledArticleBody>
         <StyledArticleBody variant="body1" paragraph>
           ในการเข้าสู่ระบบ สามารถใช้บัญชีอีเมลนิสิต (รหัสนิสิต@student.chula.ac.th) เท่านั้น

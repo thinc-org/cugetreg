@@ -6,7 +6,7 @@ import { useContext } from 'react'
 import { Controller, SubmitHandler, SubmitErrorHandler, useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
-import { INITIAL_CONTENT } from '@/common/components/RichText/constants'
+import { RichTextEditorV2 } from '@/common/components/RichTextV2'
 import { SnackbarContext } from '@/common/context/Snackbar'
 import { getCurrentTerm } from '@/common/utils/getCurrentTerm'
 import { useReviewContext } from '@/modules/CourseDetail/context/Review'
@@ -100,6 +100,7 @@ export const ReviewForm: React.FC = () => {
             )}
           />
         </Stack>
+        <RichTextEditorV2 />
         <Controller
           name="content"
           control={control}

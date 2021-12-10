@@ -9,7 +9,6 @@ import {
   createStrikethroughPlugin,
   createCodePlugin,
   createResetNodePlugin,
-  createDeserializeMdPlugin,
   createExitBreakPlugin,
   createSoftBreakPlugin,
   createAutoformatPlugin,
@@ -38,12 +37,10 @@ export const plugins = createPlugins(
     createStrikethroughPlugin(),
     createCodePlugin(),
     /* *Other */
-    createDeserializeMdPlugin(),
     createExitBreakPlugin({ options: exitBreakOptions }),
     createResetNodePlugin({ options: resetNodeOptions }),
     createSoftBreakPlugin({ options: softBreakOptions }),
     createAutoformatPlugin({ options: autoformatOptions }),
-    // createResetNodePlugin()
   ],
   {
     components: createPlateUI(),

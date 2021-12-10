@@ -9,7 +9,7 @@ import { getSemesterName } from '@/common/utils/getSemesterName'
 import { useReviewContext } from '@/modules/CourseDetail/context/Review'
 
 import { ReviewReaction } from '../ReviewReaction'
-import { Card, CardTerm, CardContent, CardRating, CardMaxRating, CardRejectedMessage } from './styled'
+import { Card, CardTerm, CardRating, CardMaxRating, CardRejectedMessage } from './styled'
 import { ReviewCardProps } from './types'
 
 export const ReviewCard: React.FC<ReviewCardProps> = (data) => {
@@ -75,7 +75,7 @@ export const ReviewCard: React.FC<ReviewCardProps> = (data) => {
           <CardMaxRating>จาก 5</CardMaxRating>
         </Stack>
       </Stack>
-      <CardContent value={data.content} />
+      <div dangerouslySetInnerHTML={{ __html: data.content }} />
       <Stack direction="row" justifyContent="space-between" alignItems="center">
         {/** Left side */}
         {data.status === ReviewStatus.Rejected ? (

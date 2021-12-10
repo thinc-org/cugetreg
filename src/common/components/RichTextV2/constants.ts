@@ -58,20 +58,20 @@ export const RichTextBlockType = {
 export type RichTextBlockType = ValueOf<typeof RichTextBlockType>
 
 export const RichTextBlockHotkey: Record<RichTextBlockType, string> = {
-  [RichTextBlockType.PARAGRAPH]: '(ctrl+b)',
-  [RichTextBlockType.H1]: '(ctrl+i)',
-  [RichTextBlockType.BLOCK_QUOTE]: '(ctrl+u)',
-  [RichTextBlockType.ORDER_LIST]: '(ctrl+s)',
-  [RichTextBlockType.UNORDER_LIST]: '(ctrl+c)',
-  [RichTextBlockType.CODE_BLOCK]: '(ctrl+c)',
+  [RichTextBlockType.PARAGRAPH]: '',
+  [RichTextBlockType.H1]: '',
+  [RichTextBlockType.BLOCK_QUOTE]: '',
+  [RichTextBlockType.ORDER_LIST]: '',
+  [RichTextBlockType.UNORDER_LIST]: '',
+  [RichTextBlockType.CODE_BLOCK]: '',
 } as const
 
 export const RichTextBlockTooltip: Record<RichTextBlockType, string> = {
   [RichTextBlockType.PARAGRAPH]: `paragraph ${RichTextBlockHotkey[RichTextBlockType.PARAGRAPH]}`,
   [RichTextBlockType.H1]: `h1 ${RichTextBlockHotkey[RichTextBlockType.H1]}`,
   [RichTextBlockType.BLOCK_QUOTE]: `block quote ${RichTextBlockHotkey[RichTextBlockType.BLOCK_QUOTE]}`,
-  [RichTextBlockType.ORDER_LIST]: `order list ${RichTextBlockHotkey[RichTextBlockType.ORDER_LIST]}`,
-  [RichTextBlockType.UNORDER_LIST]: `unorder list ${RichTextBlockHotkey[RichTextBlockType.UNORDER_LIST]}`,
+  [RichTextBlockType.ORDER_LIST]: `ordered list ${RichTextBlockHotkey[RichTextBlockType.ORDER_LIST]}`,
+  [RichTextBlockType.UNORDER_LIST]: `unordered list ${RichTextBlockHotkey[RichTextBlockType.UNORDER_LIST]}`,
   [RichTextBlockType.CODE_BLOCK]: `code block ${RichTextBlockHotkey[RichTextBlockType.CODE_BLOCK]}`,
 } as const
 export type RichTextBlockTooltip = ValueOf<typeof RichTextBlockTooltip>

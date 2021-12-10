@@ -1,5 +1,5 @@
 import { Rating, Select, Stack, MenuItem, Typography, Button, Alert } from '@mui/material'
-import { createPlateEditor, serializeHtml } from '@udecode/plate'
+import { TNode } from '@udecode/plate'
 import { format } from 'date-fns'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
@@ -8,14 +8,12 @@ import { useContext } from 'react'
 import { Controller, SubmitHandler, SubmitErrorHandler, useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
-import { plugins } from '@/common/components/RichTextV2/plugins'
 import { SnackbarContext } from '@/common/context/Snackbar'
 import { getCurrentTerm } from '@/common/utils/getCurrentTerm'
 import { useReviewContext } from '@/modules/CourseDetail/context/Review'
 import { REVIEW_FORM_ID } from '@/modules/CourseDetail/context/Review/constants'
 import { ReviewState } from '@/modules/CourseDetail/context/Review/types'
 
-import { RichTextEditor } from '../../../../common/components/RichText'
 import { YEAR_SIZE } from './constants'
 
 const RichTextEditorV2 = dynamic(async () => (await import('@/common/components/RichTextV2')).RichTextEditorV2, {
@@ -28,6 +26,15 @@ export const ReviewForm: React.FC = () => {
   const { t } = useTranslation('review')
   const { emitMessage } = useContext(SnackbarContext)
   const { submitReview, submitEditedReview, editingReviewId, cancelEditReview } = useReviewContext()
+
+  const validateContent = (value: TNode[] | TNode | null): boolean => {
+    if (!value) return false
+    const isEmpty: boolean = value.reduce((prev: boolean, cur: TNode) => {
+      if (cur.type) return prev && validateContent(cur.children)
+      return prev && !!cur.text
+    }, true)
+    return !isEmpty
+  }
 
   const getYearList = (size: number): number[] => {
     const currentYear = parseInt(format(new Date(), 'yyyy')) + 543
@@ -110,14 +117,17 @@ export const ReviewForm: React.FC = () => {
         <Controller
           name="content"
           control={control}
-          render={({ field: { onChange } }) => <RichTextEditorV2 id={REVIEW_FORM_ID} onChange={onChange} />}
+          rules={{ required: 'content should not empty', validate: validateContent }}
+          render={({ field: { onChange } }) => (
+            <RichTextEditorV2
+              id={REVIEW_FORM_ID}
+              onChange={(val) => {
+                console.log(JSON.stringify(val, null, 2))
+                onChange(val)
+              }}
+            />
+          )}
         />
-        {/* <Controller
-          name="content"
-          control={control}
-          defaultValue={'<p></p>'}
-          render={({ field: { value, onChange } }) => <RichTextEditor value={value} onChange={onChange} />}
-        /> */}
         <Stack mt={2} mb={4} direction="row" spacing={2}>
           {editingReviewId && (
             <Button variant="outlined" fullWidth onClick={cancelEditReview}>

@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@apollo/client'
-import { createPlateEditor, deserializeHtml, serializeHtml, usePlateActions } from '@udecode/plate'
+import { createPlateEditor, deserializeHtml, serializeHtml, TNode, usePlateActions } from '@udecode/plate'
 
 import React, { createContext, useContext, useEffect } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
@@ -256,7 +256,7 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
     const oldFormValuesSet = localStorage.get<Record<string, ReviewState>>(StorageKey.ReviewForm)
     const newFormValuesSet: Record<string, ReviewState> = {
       ...oldFormValuesSet,
-      [courseNo]: formValues,
+      [courseNo]: { ...formValues, content: formValues.content as TNode[] },
     }
     localStorage.set<Record<string, ReviewState>>(StorageKey.ReviewForm, newFormValuesSet)
   }
@@ -274,6 +274,11 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
     if (form.academicYear) methods.setValue('academicYear', form.academicYear)
     if (form.rating) methods.setValue('rating', form.rating)
     if (form.semester) methods.setValue('semester', form.semester)
+    if (form.content) {
+      methods.setValue('content', form.content)
+      setValue(form.content, REVIEW_FORM_ID)
+      resetEditor(REVIEW_FORM_ID)
+    }
   }
 
   const clearReviewForm = () => {

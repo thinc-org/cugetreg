@@ -1,6 +1,6 @@
-import { TElement } from '@udecode/plate'
+import { TNode } from '@udecode/plate'
 
 export interface RichTextEditorV2Props {
   id: string
-  onChange?: (newValue: TElement[]) => void
+  onChange?: (newValue: TNode[]) => void
 }

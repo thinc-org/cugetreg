@@ -1,14 +1,3 @@
-import { IconButton } from '@mui/material'
-import {
-  getPluginType as getPlatePluginType,
-  usePlateEditorRef,
-  PlateEditor,
-  MarkToolbarButton,
-  BlockToolbarButton,
-  ListToolbarButton,
-} from '@udecode/plate'
-
-import { IconType } from 'react-icons'
 import { CgFormatHeading } from 'react-icons/cg'
 import {
   MdCode,
@@ -25,61 +14,27 @@ import {
 
 import { Spacer } from '@/components/Spacer'
 
-import { RichTextBlockType, RichTextMarkType } from '../../types'
-import { StyledHeadingToolbar, ToolbarButtonWrapper, VerticalDivider } from './styled'
+import { RichTextBlockType, RichTextMarkType, RichTextActionType } from '../../constants'
+import { ToolbarButton } from '../ToolbarButton'
+import { StyledHeadingToolbar, VerticalDivider } from './styled'
 
 export const Toolbar = () => {
-  const editor = usePlateEditorRef()
-
-  const getPluginType = (editor: PlateEditor<{}> | undefined, type: RichTextBlockType | RichTextMarkType): string => {
-    return getPlatePluginType(editor as PlateEditor<{}>, type)
-  }
-
-  const withIconButton = (Component: IconType, onClick?: () => void) => {
-    return (
-      <IconButton size="small" disableRipple onClick={onClick}>
-        <Component fontSize="0.9em" />
-      </IconButton>
-    )
-  }
-
   return (
-    <ToolbarButtonWrapper>
-      <StyledHeadingToolbar>
-        <MarkToolbarButton type={getPluginType(editor, RichTextMarkType.BOLD)} icon={withIconButton(MdFormatBold)} />
-        <MarkToolbarButton
-          type={getPluginType(editor, RichTextMarkType.ITALIC)}
-          icon={withIconButton(MdFormatItalic)}
-        />
-        <MarkToolbarButton
-          type={getPluginType(editor, RichTextMarkType.UNDERLINE)}
-          icon={withIconButton(MdFormatUnderlined)}
-        />
-        <MarkToolbarButton
-          type={getPluginType(editor, RichTextMarkType.STRIKETHROUGH)}
-          icon={withIconButton(MdStrikethroughS)}
-        />
-        <MarkToolbarButton type={getPluginType(editor, RichTextMarkType.CODE)} icon={withIconButton(MdCode)} />
-        <VerticalDivider />
-        <BlockToolbarButton type={getPluginType(editor, RichTextBlockType.H1)} icon={withIconButton(CgFormatHeading)} />
-        <BlockToolbarButton
-          type={getPluginType(editor, RichTextBlockType.BLOCK_QUOTE)}
-          icon={withIconButton(MdFormatQuote)}
-        />
-        <BlockToolbarButton type={getPluginType(editor, RichTextBlockType.CODE_BLOCK)} icon={withIconButton(MdCode)} />
-        <ListToolbarButton
-          type={getPluginType(editor, RichTextBlockType.ORDER_LIST)}
-          icon={withIconButton(MdFormatListNumberedRtl)}
-        />
-        <ListToolbarButton
-          type={getPluginType(editor, RichTextBlockType.UNORDER_LIST)}
-          icon={withIconButton(MdFormatListBulleted)}
-        />
-
-        <Spacer />
-        {withIconButton(MdUndo, () => editor?.undo())}
-        {withIconButton(MdRedo, () => editor?.redo())}
-      </StyledHeadingToolbar>
-    </ToolbarButtonWrapper>
+    <StyledHeadingToolbar>
+      <ToolbarButton mode="mark" type={RichTextMarkType.BOLD} icon={MdFormatBold} />
+      <ToolbarButton mode="mark" type={RichTextMarkType.ITALIC} icon={MdFormatItalic} />
+      <ToolbarButton mode="mark" type={RichTextMarkType.UNDERLINE} icon={MdFormatUnderlined} />
+      <ToolbarButton mode="mark" type={RichTextMarkType.STRIKETHROUGH} icon={MdStrikethroughS} />
+      <ToolbarButton mode="mark" type={RichTextMarkType.CODE} icon={MdCode} />
+      <VerticalDivider />
+      <ToolbarButton mode="block" type={RichTextBlockType.H1} icon={CgFormatHeading} />
+      <ToolbarButton mode="block" type={RichTextBlockType.BLOCK_QUOTE} icon={MdFormatQuote} />
+      <ToolbarButton mode="block" type={RichTextBlockType.CODE_BLOCK} icon={MdCode} />
+      <ToolbarButton mode="list" type={RichTextBlockType.ORDER_LIST} icon={MdFormatListNumberedRtl} />
+      <ToolbarButton mode="list" type={RichTextBlockType.UNORDER_LIST} icon={MdFormatListBulleted} />
+      <Spacer />
+      <ToolbarButton mode="none" type={RichTextActionType.UNDO} icon={MdUndo} />
+      <ToolbarButton mode="none" type={RichTextActionType.REDO} icon={MdRedo} />
+    </StyledHeadingToolbar>
   )
 }

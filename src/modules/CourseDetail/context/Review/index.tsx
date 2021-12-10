@@ -1,9 +1,11 @@
 import { useMutation, useQuery } from '@apollo/client'
+import { createPlateEditor, deserializeHtml, serializeHtml, usePlateActions } from '@udecode/plate'
 
 import React, { createContext, useContext, useEffect } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
-import { INITIAL_CONTENT } from '@/common/components/RichText/constants'
+import { INITIAL_CONTENT } from '@/common/components/RichTextV2/constants'
+import { plugins } from '@/common/components/RichTextV2/plugins'
 import { SnackbarContext } from '@/common/context/Snackbar'
 import { useCourseGroup } from '@/common/hooks/useCourseGroup'
 import { useLoginGuard } from '@/common/hooks/useLoginGuard'
@@ -25,7 +27,7 @@ import {
   SET_REVIEW_INTERACTION,
 } from '@/services/apollo/query/setReviewInteraction'
 
-import { DEFAULT_REVIEW_CONTEXT_VALUE } from './constants'
+import { DEFAULT_REVIEW_CONTEXT_VALUE, REVIEW_FORM_ID } from './constants'
 import { ReviewContextValues, ReviewState } from './types'
 
 export const ReviewContext = createContext<ReviewContextValues>(DEFAULT_REVIEW_CONTEXT_VALUE)
@@ -39,14 +41,23 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
   const { loginGuard, Dialog } = useLoginGuard()
   const { emitMessage } = useContext(SnackbarContext)
 
-  const queryVariables = {
-    courseNo: courseNo,
-    studyProgram: studyProgram,
-  }
+  /**
+   * Rich Text editor hook
+   */
+
+  const editor = createPlateEditor({
+    plugins: plugins,
+  })
+
+  const { resetEditor, setValue } = usePlateActions(REVIEW_FORM_ID)
 
   /**
    * GraphQL queries
    */
+  const queryVariables = {
+    courseNo: courseNo,
+    studyProgram: studyProgram,
+  }
   const reviewQuery = useQuery<GetReviewsResponse, GetReviewsVars>(GET_REVIEWS, {
     variables: queryVariables,
   })
@@ -161,7 +172,11 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
     const findAndSetReviewFormCallback = (reviews: Review[]) => {
       const review = reviews.find((data) => data._id === reviewId)
       if (review) {
-        setReviewForm({ ...review, rating: review.rating / 2 })
+        setReviewForm({
+          ...review,
+          rating: review.rating / 2,
+          content: deserializeHtml(editor, { element: review.content }),
+        })
       }
     }
     findAndSetReviewFormCallback(reviewQuery.data?.reviews || [])
@@ -191,7 +206,7 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
             rating: ratingNumber,
             semester: review.semester,
             academicYear: review.academicYear,
-            content: review.content,
+            content: serializeHtml(editor, { nodes: review.content }),
           },
         },
       })
@@ -219,6 +234,7 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
           review: {
             ...review,
             rating: ratingNumber,
+            content: serializeHtml(editor, { nodes: review.content }),
           },
         },
       })
@@ -256,13 +272,14 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
 
   const setReviewForm = (form: Partial<ReviewState>) => {
     if (form.academicYear) methods.setValue('academicYear', form.academicYear)
-    if (form.content) methods.setValue('content', form.content)
     if (form.rating) methods.setValue('rating', form.rating)
     if (form.semester) methods.setValue('semester', form.semester)
   }
 
   const clearReviewForm = () => {
-    methods.setValue('content', '<p></p>')
+    methods.setValue('content', INITIAL_CONTENT as any)
+    setValue(INITIAL_CONTENT, REVIEW_FORM_ID)
+    resetEditor(REVIEW_FORM_ID)
     methods.setValue('rating', 0)
   }
 
@@ -287,6 +304,14 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
     <FormProvider {...methods}>
       <ReviewContext.Provider value={value}>
         <Dialog />
+        <button
+          onClick={() => {
+            setValue(INITIAL_CONTENT, REVIEW_FORM_ID)
+            resetEditor(REVIEW_FORM_ID)
+          }}
+        >
+          Reset
+        </button>
         {children}
       </ReviewContext.Provider>
     </FormProvider>

@@ -1,7 +1,7 @@
 import { AutoformatRule, MARK_BOLD, MARK_CODE, MARK_ITALIC, MARK_STRIKETHROUGH, MARK_UNDERLINE } from '@udecode/plate'
 
 /**
- * Copy from
+ * Reference
  * https://github.com/udecode/plate/blob/main/docs/src/live/config/autoformat/autoformatMarks.ts
  */
 export const autoformatMarks: AutoformatRule[] = [

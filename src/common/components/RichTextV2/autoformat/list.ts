@@ -3,7 +3,7 @@ import { AutoformatRule, ELEMENT_LI, ELEMENT_OL, ELEMENT_UL } from '@udecode/pla
 import { clearBlockFormat, formatList } from './utils'
 
 /**
- * Copy from
+ * Reference
  * https://github.com/udecode/plate/blob/main/docs/src/live/config/autoformat/autoformatLists.ts
  */
 export const autoformatLists: AutoformatRule[] = [

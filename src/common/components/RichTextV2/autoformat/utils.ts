@@ -1,5 +1,5 @@
 /**
- * Copy from
+ * Reference
  * https://github.com/udecode/plate/blob/main/docs/src/live/config/autoformat/autoformatUtils.ts
  */
 import {

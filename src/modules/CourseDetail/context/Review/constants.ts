@@ -11,3 +11,5 @@ export const DEFAULT_REVIEW_CONTEXT_VALUE: ReviewContextValues = {
   submitReview: () => {},
   submitEditedReview: () => {},
 }
+
+export const REVIEW_FORM_ID = 'REVIEW_FORM'

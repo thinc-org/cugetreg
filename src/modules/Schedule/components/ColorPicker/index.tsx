@@ -1,12 +1,12 @@
-import { Box, Button, ButtonProps, Popover, Stack, Typography, useTheme } from '@mui/material'
+import { Button, Popover, Stack, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
+import { ColorButton } from '@/modules/Schedule/components/ColorButton'
 import { ColorClassKey } from '@/modules/Schedule/components/ColorPicker/hooks/useColorPicker'
 
 import { ScheduleColor, SCHEDULE_COLORS } from './constants'
-import { useColor } from './hooks/useColor'
 
-interface ColorPickerProps {
+export interface ColorPickerProps {
   open: boolean
   handleClose: () => void
   scheduleClass: ColorClassKey
@@ -49,51 +49,5 @@ export const ColorPicker = (props: ColorPickerProps) => {
         </Button>
       </Stack>
     </Popover>
-  )
-}
-
-interface ColorButtonProps extends ButtonProps {
-  isActive: boolean
-  scheduleColor: ScheduleColor
-}
-
-export const ColorButton = ({ isActive, scheduleColor, ...buttonProps }: ColorButtonProps) => {
-  const theme = useTheme()
-  return (
-    <Button
-      variant="text"
-      sx={{
-        minWidth: 0,
-        background: isActive ? theme.palette.primaryRange[30] : undefined,
-        ':hover': {
-          background: theme.palette.primaryRange[30],
-        },
-      }}
-      {...buttonProps}
-    >
-      <Circle color={scheduleColor} />
-    </Button>
-  )
-}
-
-interface CircleProps {
-  color: ScheduleColor
-  size?: number
-}
-
-export const Circle = ({ color, size = 40 }: CircleProps) => {
-  const scheme = useColor(color)
-  return (
-    <Box
-      sx={{
-        width: size,
-        height: size,
-        minWidth: size,
-        minHeight: size,
-        background: scheme.background,
-        border: `1px solid ${scheme.border}`,
-        borderRadius: 100,
-      }}
-    />
   )
 }

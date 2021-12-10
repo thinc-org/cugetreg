@@ -2,7 +2,7 @@ import { useTheme } from '@emotion/react'
 
 import { ScheduleColor } from '@/modules/Schedule/components/ColorPicker/constants'
 
-interface ColorScheme {
+export interface ColorScheme {
   background: string
   border: string
   text: string

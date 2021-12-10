@@ -23,7 +23,8 @@ import {
   COLOR_PICKER_BUTTON,
 } from '@/common/context/Analytics/constants'
 import { useLinkBuilderWithCourseGroup } from '@/common/hooks/useLinkBuilder'
-import { Circle, ColorPicker } from '@/modules/Schedule/components/ColorPicker'
+import { ColorCircle } from '@/modules/Schedule/components/ColorCircle'
+import { ColorPicker } from '@/modules/Schedule/components/ColorPicker'
 import { useColorPicker } from '@/modules/Schedule/components/ColorPicker/hooks/useColorPicker'
 import { CourseOverlap } from '@/modules/Schedule/components/Schedule/utils'
 import { CourseCartItem, courseCartStore } from '@/store'
@@ -185,7 +186,7 @@ function CardHeader({ item }: CardComponentProps) {
             <Box display={{ xs: 'none', md: 'inline' }} mr={1}>
               สีในตาราง
             </Box>
-            <Circle color={item.color} size={24} />
+            <ColorCircle color={item.color} size={24} />
           </ColorPickerButton>
         </Analytics>
       </Stack>

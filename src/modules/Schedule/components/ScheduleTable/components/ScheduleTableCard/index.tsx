@@ -230,11 +230,11 @@ function CardDetail({ item, overlaps }: CardDetailProps) {
   return (
     <Grid container spacing={1} sx={{ mt: -1, mb: 2 }}>
       <Hidden smUp>
-        <Grid item xs={6} style={{ display: 'flex', alignContent: 'center' }}>
+        <Grid item xs={5} style={{ display: 'flex', alignContent: 'center' }}>
           <SectionSelect item={item} />
         </Grid>
       </Hidden>
-      <Grid item xs={6} sm="auto">
+      <Grid item xs={7} sm="auto">
         <Stack spacing={0.5}>
           <Caption>{t('teacher')}</Caption>
           <Typography variant="body1" sx={{ maxWidth: '15ch' }}>
@@ -243,7 +243,7 @@ function CardDetail({ item, overlaps }: CardDetailProps) {
         </Stack>
       </Grid>
       <GridSpacer />
-      <Grid item xs={6} sm="auto">
+      <Grid item xs={5} sm="auto">
         <Stack spacing={0.5}>
           <Caption>{t('time')}</Caption>
           <Stack>
@@ -257,13 +257,26 @@ function CardDetail({ item, overlaps }: CardDetailProps) {
         </Stack>
       </Grid>
       <GridSpacer />
-      <Grid item xs={6} sm="auto">
+      <Grid item xs={4} sm="auto">
         <Stack spacing={0.5}>
           <Caption>{t('classRoom')}</Caption>
           <Stack>
             {section.classes.map((sectionClass, index) => (
               <Typography variant="body1" key={`${section.sectionNo}.${index}`}>
                 {sectionClass.building} {sectionClass.room}
+              </Typography>
+            ))}
+          </Stack>
+        </Stack>
+      </Grid>
+      <GridSpacer />
+      <Grid item xs={3} sm="auto">
+        <Stack spacing={0.5}>
+          <Caption>{t('classType')}</Caption>
+          <Stack>
+            {section.classes.map((sectionClass, index) => (
+              <Typography variant="body1" key={`${section.sectionNo}.${index}`}>
+                {sectionClass.type}
               </Typography>
             ))}
           </Stack>

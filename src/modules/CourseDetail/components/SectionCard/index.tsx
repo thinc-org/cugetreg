@@ -86,6 +86,9 @@ export const SectionCard = (props: SectionCardProps) => {
                 <TableCell>
                   <Caption>{t('classRoom')}</Caption>
                 </TableCell>
+                <TableCell>
+                  <Caption>{t('classType')}</Caption>
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -105,6 +108,11 @@ export const SectionCard = (props: SectionCardProps) => {
                   <TableCell>
                     <Typography variant="body1" key={index}>
                       {sectionClass.building} {sectionClass.room}
+                    </Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography variant="body1" key={index}>
+                      {sectionClass.type}
                     </Typography>
                   </TableCell>
                 </TableRow>

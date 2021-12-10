@@ -14,8 +14,8 @@ import { RichTextTooltip, RichTextActionType } from '../../constants'
 import { BootstrapTooltip, SpanWrapper } from './styled'
 import { ToolbarButtonProps } from './types'
 
-export const ToolbarButton: React.FC<ToolbarButtonProps> = ({ mode, type, icon }) => {
-  const editor = usePlateEditorRef()
+export const ToolbarButton: React.FC<ToolbarButtonProps> = ({ id, mode, type, icon }) => {
+  const editor = usePlateEditorRef(id)
 
   const tooltipProps: Omit<TooltipProps, 'children'> = {
     title: RichTextTooltip[type],

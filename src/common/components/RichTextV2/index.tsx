@@ -41,7 +41,7 @@ export const RichTextEditorV2: React.FC<RichTextEditorV2Props> = ({ id, onChange
       plugins={plugins}
     >
       {JSON.stringify(debug, null, 2)}
-      <Toolbar />
+      <Toolbar id={id} />
     </Plate>
   )
 }

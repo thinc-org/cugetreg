@@ -18,23 +18,23 @@ import { RichTextBlockType, RichTextMarkType, RichTextActionType } from '../../c
 import { ToolbarButton } from '../ToolbarButton'
 import { StyledHeadingToolbar, VerticalDivider } from './styled'
 
-export const Toolbar = () => {
+export const Toolbar: React.FC<{ id: string }> = ({ id }) => {
   return (
     <StyledHeadingToolbar>
-      <ToolbarButton mode="mark" type={RichTextMarkType.BOLD} icon={MdFormatBold} />
-      <ToolbarButton mode="mark" type={RichTextMarkType.ITALIC} icon={MdFormatItalic} />
-      <ToolbarButton mode="mark" type={RichTextMarkType.UNDERLINE} icon={MdFormatUnderlined} />
-      <ToolbarButton mode="mark" type={RichTextMarkType.STRIKETHROUGH} icon={MdStrikethroughS} />
-      <ToolbarButton mode="mark" type={RichTextMarkType.CODE} icon={MdCode} />
+      <ToolbarButton id={id} mode="mark" type={RichTextMarkType.BOLD} icon={MdFormatBold} />
+      <ToolbarButton id={id} mode="mark" type={RichTextMarkType.ITALIC} icon={MdFormatItalic} />
+      <ToolbarButton id={id} mode="mark" type={RichTextMarkType.UNDERLINE} icon={MdFormatUnderlined} />
+      <ToolbarButton id={id} mode="mark" type={RichTextMarkType.STRIKETHROUGH} icon={MdStrikethroughS} />
+      <ToolbarButton id={id} mode="mark" type={RichTextMarkType.CODE} icon={MdCode} />
       <VerticalDivider />
-      <ToolbarButton mode="block" type={RichTextBlockType.H1} icon={CgFormatHeading} />
-      <ToolbarButton mode="block" type={RichTextBlockType.BLOCK_QUOTE} icon={MdFormatQuote} />
-      <ToolbarButton mode="block" type={RichTextBlockType.CODE_BLOCK} icon={MdCode} />
-      <ToolbarButton mode="list" type={RichTextBlockType.ORDER_LIST} icon={MdFormatListNumberedRtl} />
-      <ToolbarButton mode="list" type={RichTextBlockType.UNORDER_LIST} icon={MdFormatListBulleted} />
+      <ToolbarButton id={id} mode="block" type={RichTextBlockType.H1} icon={CgFormatHeading} />
+      <ToolbarButton id={id} mode="block" type={RichTextBlockType.BLOCK_QUOTE} icon={MdFormatQuote} />
+      <ToolbarButton id={id} mode="block" type={RichTextBlockType.CODE_BLOCK} icon={MdCode} />
+      <ToolbarButton id={id} mode="list" type={RichTextBlockType.ORDER_LIST} icon={MdFormatListNumberedRtl} />
+      <ToolbarButton id={id} mode="list" type={RichTextBlockType.UNORDER_LIST} icon={MdFormatListBulleted} />
       <Spacer />
-      <ToolbarButton mode="none" type={RichTextActionType.UNDO} icon={MdUndo} />
-      <ToolbarButton mode="none" type={RichTextActionType.REDO} icon={MdRedo} />
+      <ToolbarButton id={id} mode="none" type={RichTextActionType.UNDO} icon={MdUndo} />
+      <ToolbarButton id={id} mode="none" type={RichTextActionType.REDO} icon={MdRedo} />
     </StyledHeadingToolbar>
   )
 }

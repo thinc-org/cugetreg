@@ -59,7 +59,7 @@ export const highlight: Highlight = {
     700: '#B10C0C',
   },
   orange: {
-    300: '#FEE5CD',
+    300: '#FFE2BF',
     500: '#FEA339',
     700: '#D67F19',
   },

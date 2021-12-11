@@ -9,6 +9,7 @@ import { INITIAL_CONTENT } from '@/common/components/RichTextV2/constants'
 import { plugins } from '@/common/components/RichTextV2/plugins'
 import { SnackbarContext } from '@/common/context/Snackbar'
 import { useCourseGroup } from '@/common/hooks/useCourseGroup'
+import { useDialog } from '@/common/hooks/useDialog'
 import { useLoginGuard } from '@/common/hooks/useLoginGuard'
 import { Storage } from '@/common/storage'
 import { StorageKey } from '@/common/storage/constants'
@@ -39,7 +40,13 @@ export const ReviewProvider: React.FC<ReviewProviderProps> = ({ courseNo, initia
   const localStorage = new Storage('localStorage')
   const methods = useForm<ReviewState>()
   const { studyProgram } = useCourseGroup()
-  const { loginGuard, Dialog } = useLoginGuard()
+  const { loginGuard, Dialog: LoginDialog } = useLoginGuard()
+  const { activate, Dialog } = useDialog({
+    heading: 'คุณต้องการลบรีวิวนี้หรือไม่?',
+    content: 'หากลบรีวิวนี้แล้วจะไม่สามารถกู้ข้อมูลกลับคืนมาได้อีก',
+    primaryButtonText: 'ยืนยัน',
+    secondaryButtonText: 'ยกเลิก',
+  })
   const { emitMessage } = useContext(SnackbarContext)
 
   /**
@@ -152,11 +159,13 @@ export const ReviewProvider: React.FC<ReviewProviderProps> = ({ courseNo, initia
   const deleteMyReview = async (reviewId: string) => {
     try {
       if (!loginGuard()) return
-      const confirm = window.confirm('คุณต้องการลบรีวิวนี้หรือไม่?')
-      if (!confirm) return
-      await removeReivewMutation({
-        variables: {
-          reviewId,
+      activate({
+        onConfirm: async () => {
+          await removeReivewMutation({
+            variables: {
+              reviewId,
+            },
+          })
         },
       })
     } catch (err) {
@@ -286,7 +295,6 @@ export const ReviewProvider: React.FC<ReviewProviderProps> = ({ courseNo, initia
     if (form.semester) methods.setValue('semester', form.semester)
     if (form.content) {
       methods.setValue('content', form.content)
-      console.log(setValue)
       setValue(form.content, REVIEW_FORM_ID)
       resetEditor(REVIEW_FORM_ID)
     }
@@ -326,6 +334,7 @@ export const ReviewProvider: React.FC<ReviewProviderProps> = ({ courseNo, initia
   return (
     <FormProvider {...methods}>
       <ReviewContext.Provider value={value}>
+        <LoginDialog />
         <Dialog />
         {children}
       </ReviewContext.Provider>

@@ -1,3 +1,6 @@
+import { mockCourseData } from '@/__mock__/courses'
+import { mockItem } from '@/__mock__/overlap'
+
 import { TimetableClass } from './utils'
 
 const courseTemplate: TimetableClass = {
@@ -18,6 +21,8 @@ const courseTemplate: TimetableClass = {
     start: '8:30',
     end: '11:30',
   },
+  item: mockItem,
+  section: mockCourseData[0].sections[0],
 }
 
 export const mockClasses: TimetableClass[] = [

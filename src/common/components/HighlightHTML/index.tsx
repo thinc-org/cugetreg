@@ -28,7 +28,11 @@ export const HighlightHTML = styled.div`
     background: rgba(0, 0, 0, 0.1);
   }
   .slate-blockquote {
+    font-size: ${({ theme }) => theme.typography.h6.fontSize};
+    line-height: ${({ theme }) => theme.typography.h4.lineHeight};
     color: ${({ theme }) => theme.palette.primaryRange[100]};
+    margin: ${({ theme }) => theme.spacing(1, 0)};
+    padding: ${({ theme }) => theme.spacing(0, 2)};
     border-left: 2px solid ${({ theme }) => theme.palette.primaryRange[50]};
   }
 `

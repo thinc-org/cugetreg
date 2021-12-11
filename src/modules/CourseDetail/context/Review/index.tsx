@@ -29,13 +29,13 @@ import {
 } from '@/services/apollo/query/setReviewInteraction'
 
 import { DEFAULT_REVIEW_CONTEXT_VALUE, REVIEW_FORM_ID } from './constants'
-import { ReviewContextValues, ReviewState } from './types'
+import { ReviewContextValues, ReviewState, ReviewProviderProps } from './types'
 
 export const ReviewContext = createContext<ReviewContextValues>(DEFAULT_REVIEW_CONTEXT_VALUE)
 
 export const useReviewContext = () => useContext(ReviewContext)
 
-export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, children }) => {
+export const ReviewProvider: React.FC<ReviewProviderProps> = ({ courseNo, initialReviews, children }) => {
   const localStorage = new Storage('localStorage')
   const methods = useForm<ReviewState>()
   const { studyProgram } = useCourseGroup()
@@ -311,7 +311,7 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
   }
 
   const value: ReviewContextValues = {
-    reviews: filterDisplayedReviews(reviewQuery.data?.reviews || []),
+    reviews: filterDisplayedReviews(reviewQuery.data?.reviews || initialReviews),
     myPendingReviews: filterDisplayedReviews(myPendingReviewQuery.data?.myPendingReviews || []),
     setInteraction,
     reportReview,

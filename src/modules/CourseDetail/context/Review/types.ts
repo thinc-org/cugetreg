@@ -18,3 +18,8 @@ export interface ReviewContextValues {
   submitEditedReview: (reviewId: string) => void
   editingReviewId?: string
 }
+
+export interface ReviewProviderProps {
+  courseNo: string
+  initialReviews: Review[]
+}

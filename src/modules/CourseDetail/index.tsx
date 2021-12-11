@@ -1,9 +1,10 @@
 import { ApolloError } from '@apollo/client'
 import { Grid, Typography } from '@mui/material'
-import { getFaculty } from '@thinc-org/chula-courses'
+import { Course, getFaculty, StudyProgram } from '@thinc-org/chula-courses'
 import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 import { NextSeoProps } from 'next-seo/lib/types'
 import dynamic from 'next/dynamic'
+import { ParsedUrlQuery } from 'querystring'
 
 import React from 'react'
 import { useTranslation } from 'react-i18next'
@@ -12,12 +13,16 @@ import defaultSEO from '@/../next-seo.config'
 import { BackButton } from '@/common/components/BackButton'
 import { useLinkBuilder } from '@/common/hooks/useLinkBuilder'
 import { Language } from '@/common/i18n'
+import { Review } from '@/common/types/reviews'
 import { getExamDate } from '@/common/utils/getExamData'
 import { getExamPeriod } from '@/common/utils/getExamPeriod'
 import { PageMeta } from '@/components/PageMeta'
 import { createApolloServerClient } from '@/services/apollo'
 import { GetCourseResponse, GET_COURSE } from '@/services/apollo/query/getCourse'
+import { GetReviewsResponse, GetReviewsVars, GET_REVIEWS } from '@/services/apollo/query/getReviews'
 
+import { ReviewList } from './components/ReviewList'
+import { ReviewProvider } from './context/Review'
 import {
   Container,
   DescriptionTitle,
@@ -31,14 +36,25 @@ import { courseTypeStringFromCourse } from './utils/courseTypeStringFromCourse'
 import { groupBy } from './utils/groupBy'
 import { parseVariablesFromQuery } from './utils/parseVariablesFromQuery'
 
-const DynamicReviewProvider = dynamic(async () => (await import('./context/Review')).ReviewProvider, { ssr: false })
-const DynamicReviewForm = dynamic(async () => (await import('./components/ReviewForm')).ReviewForm, { ssr: false })
-const DynamicReviewList = dynamic(async () => (await import('./components/ReviewList')).ReviewList, { ssr: true })
+const DynamicReviewForm = dynamic(
+  async () =>
+    (
+      await import(
+        /** webpackChunkName: ReviewForm  */
+        './components/ReviewForm'
+      )
+    ).ReviewForm,
+  { ssr: false }
+)
 
-export function CourseDetailPage(props: { data: GetCourseResponse }) {
+interface CourseDetailPageProps {
+  course: Course
+  reviews: Review[]
+}
+
+export function CourseDetailPage({ course, reviews }: CourseDetailPageProps) {
   const { i18n } = useTranslation()
   const { buildLink } = useLinkBuilder()
-  const { course } = props.data
 
   const courseDesc = [course.courseDescTh, course.courseDescEn].filter((desc) => !!desc).join('\n')
   const SEOConfig: NextSeoProps = {
@@ -130,25 +146,38 @@ export function CourseDetailPage(props: { data: GetCourseResponse }) {
         )}
       </GridContainer>
       {CourseList}
-      <DynamicReviewProvider courseNo={course.courseNo}>
+      <ReviewProvider courseNo={course.courseNo} initialReviews={reviews}>
         <DynamicReviewForm />
-        <DynamicReviewList />
-      </DynamicReviewProvider>
+        <ReviewList />
+      </ReviewProvider>
     </Container>
   )
 }
 
+interface IParams extends ParsedUrlQuery {
+  courseNo: string
+  studyProgram: StudyProgram
+}
+
 export async function getServerSideProps(
   context: GetServerSidePropsContext
-): Promise<GetServerSidePropsResult<{ data: GetCourseResponse }>> {
+): Promise<GetServerSidePropsResult<CourseDetailPageProps>> {
   try {
+    const { courseNo, studyProgram } = context.query as IParams
     const client = createApolloServerClient()
-    const { data } = await client.query<GetCourseResponse>({
+    const { data: courseData } = await client.query<GetCourseResponse>({
       query: GET_COURSE,
       variables: parseVariablesFromQuery(context.query),
     })
+    const { data: reviewsData } = await client.query<GetReviewsResponse, GetReviewsVars>({
+      query: GET_REVIEWS,
+      variables: {
+        courseNo,
+        studyProgram,
+      },
+    })
     return {
-      props: { data },
+      props: { course: courseData.course, reviews: reviewsData.reviews },
     }
   } catch (e) {
     if (e instanceof ApolloError) {

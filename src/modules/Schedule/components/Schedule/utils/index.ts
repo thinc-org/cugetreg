@@ -12,8 +12,10 @@ import { getOverlappingCourses } from './getOverlappingCourses'
 export type TimetableClass = Pick<
   CourseCartItem,
   'courseNo' | 'studyProgram' | 'academicYear' | 'semester' | 'abbrName' | 'genEdType' | 'color'
-> &
-  Omit<Class, 'type'> &
+> & {
+  item: CourseCartItem
+  section: Section
+} & Omit<Class, 'type'> &
   Pick<Section, 'sectionNo'> & {
     classIndex: number
     hasOverlap?: boolean
@@ -214,6 +216,8 @@ export function useTimetableClasses(shopItems: CourseCartItem[]) {
           studyProgram,
           academicYear,
           semester,
+          item,
+          section,
           color: item.color,
           sectionNo: section.sectionNo,
         }

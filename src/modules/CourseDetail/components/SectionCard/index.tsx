@@ -19,6 +19,7 @@ import { useTranslation } from 'react-i18next'
 import { Caption } from '@/common/components/Caption'
 import { GenEdChip } from '@/common/components/Chips/catagories/GenEdChip'
 import { SelectButton } from '@/common/components/SelectButton'
+import { UnstyledTable } from '@/common/components/UnstyledTable'
 import { dayOfWeekMapper } from '@/common/constants/dayOfWeek'
 import { Analytics } from '@/common/context/Analytics/components/Analytics'
 import { SUBJECT_SELECT_BUTTON_WITH_SECTION } from '@/common/context/Analytics/constants'
@@ -66,15 +67,7 @@ export const SectionCard = (props: SectionCardProps) => {
       />
       <CardContent sx={{ px: { xs: 2, sm: 4 }, py: 2, pt: { xs: 2, sm: 1 } }}>
         <Stack direction={['column', 'row']} justifyContent="space-between">
-          <Table
-            sx={{
-              width: { xs: '100%', sm: 'auto' },
-              'td, th': { border: 0, p: 0 },
-              'td ~ td, th ~ th': {
-                pl: { xs: 2, sm: 5 },
-              },
-            }}
-          >
+          <UnstyledTable>
             <TableHead>
               <TableRow>
                 <TableCell>
@@ -101,8 +94,8 @@ export const SectionCard = (props: SectionCardProps) => {
                   </TableCell>
                   <TableCell>
                     <Typography variant="body1" key={index}>
-                      {sectionClass.dayOfWeek && dayOfWeekMapper[sectionClass.dayOfWeek]} {sectionClass.period?.start}-
-                      {sectionClass.period?.end}
+                      {sectionClass.dayOfWeek && dayOfWeekMapper[sectionClass.dayOfWeek]}{' '}
+                      {sectionClass.period && [`${sectionClass.period.start}`, `${sectionClass.period.end}`].join('-')}
                     </Typography>
                   </TableCell>
                   <TableCell>
@@ -118,7 +111,7 @@ export const SectionCard = (props: SectionCardProps) => {
                 </TableRow>
               ))}
             </TableBody>
-          </Table>
+          </UnstyledTable>
           <Stack
             sx={{
               display: { xs: 'none', sm: 'flex' },

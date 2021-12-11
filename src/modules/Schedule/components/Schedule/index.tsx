@@ -1,11 +1,15 @@
 import { styled } from '@mui/system'
 import { withContentRect } from 'react-measure'
 
+import { courseCartStore } from '@/store'
+
+import { CourseDialog } from '../CourseDialog'
+import { useCourseDialogDisclosure } from '../CourseDialog/hooks/useCourseDialogDisclosure'
 import { ClassCard } from './components/ClassCard'
 import { Gutters } from './components/Gutters'
 import { Header } from './components/Header'
 import { DimensionsProvider, getHeightRatio, useDimensions } from './dimensions'
-import { ScheduleClass } from './utils'
+import { ScheduleClass, CourseOverlapMap } from './utils'
 
 const ScheduleTable = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -15,17 +19,32 @@ const ScheduleTable = styled('div')(({ theme }) => ({
 
 export interface ScheduleProps {
   classes: ScheduleClass[]
+  overlappingCourses: CourseOverlapMap
 }
 
-function Schedule({ classes }: ScheduleProps) {
+function Schedule({ classes, overlappingCourses }: ScheduleProps) {
   const { width, height, cellWidth } = useDimensions()
   const fontSize = (16 * cellWidth) / 77
+  const { open, onClose, onOpen, onRemove, selectedClasssetDialog } = useCourseDialogDisclosure()
   return (
     <ScheduleTable style={{ width, height, fontSize }}>
       <Header />
       <Gutters />
+      {selectedClasssetDialog && (
+        <CourseDialog
+          item={courseCartStore.item(selectedClasssetDialog.item)!}
+          open={open}
+          onClose={onClose}
+          onRemove={onRemove}
+          overlaps={overlappingCourses[selectedClasssetDialog.courseNo]}
+        />
+      )}
       {classes.map((scheduleClass) => (
-        <ClassCard key={`${scheduleClass.courseNo}-${scheduleClass.classIndex}`} scheduleClass={scheduleClass} />
+        <ClassCard
+          key={`${scheduleClass.courseNo}-${scheduleClass.classIndex}`}
+          scheduleClass={scheduleClass}
+          onClick={() => onOpen(scheduleClass)}
+        />
       ))}
     </ScheduleTable>
   )

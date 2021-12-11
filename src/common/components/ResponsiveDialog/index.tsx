@@ -9,7 +9,7 @@ const Transition = forwardRef((props: SlideProps, ref: ForwardedRef<unknown>) =>
 })
 
 export interface ResposiveDialogProps extends DialogProps {
-  shouldExpand: boolean
+  shouldExpand?: boolean
 }
 
 export const ResponsiveDialog = (props: ResposiveDialogProps) => {
@@ -29,10 +29,11 @@ export const ResponsiveDialog = (props: ResposiveDialogProps) => {
           '&& .MuiDialog-paperScrollBody': {
             verticalAlign: ['bottom', 'middle'],
             ...(shouldExpand && {
-              m: [2, 4],
+              mx: [2, 4],
               width: (theme) => [`calc(100% - ${theme.spacing(4)})`, `calc(100% - ${theme.spacing(8)})`],
               maxWidth: (theme) => [`calc(100% - ${theme.spacing(4)})`, theme.breakpoints.values.sm],
             }),
+            mt: 8,
           },
         },
         sx

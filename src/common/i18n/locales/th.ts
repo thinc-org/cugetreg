@@ -69,6 +69,16 @@ export const scheduleTableCard = {
   examOverlap: 'เวลาสอบชนกับ',
 }
 
+export const courseDialog = {
+  ...scheduleTableCard,
+  midtermExam: 'สอบกลางภาค',
+  finalExam: 'สอบปลายภาค',
+  selectColor: 'เลือกสีในตาราง',
+  hide: 'ซ่อนจากตาราง',
+  show: 'แสดงในตาราง',
+  remove: 'นำออกจากวิชาที่เลือก',
+}
+
 export const schedule = {
   dateTime: 'Day/Time',
   days: {

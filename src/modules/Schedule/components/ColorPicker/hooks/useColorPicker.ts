@@ -10,11 +10,16 @@ export type ColorClassKey = Pick<
 >
 
 export function useColorPicker(classKey: ColorClassKey) {
-  const { isOpen: open, onOpen: handleClick, onClose: handleClose } = useDisclosure()
   const { log } = useLog(COLOR_BUTTON, classKey.courseNo)
   const setColor = (scheduleColor: ScheduleColor) => {
     log(null, scheduleColor)
     courseCartStore.changeColor(classKey, scheduleColor)
   }
-  return { open, handleClick, handleClose, setColor, selectedColor: classKey.color }
+  return { setColor, selectedColor: classKey.color }
+}
+
+export function useColorPickerModal(classKey: ColorClassKey) {
+  const { isOpen: open, onOpen: handleClick, onClose: handleClose } = useDisclosure()
+  const colorPickerProps = useColorPicker(classKey)
+  return { open, handleClick, handleClose, ...colorPickerProps }
 }

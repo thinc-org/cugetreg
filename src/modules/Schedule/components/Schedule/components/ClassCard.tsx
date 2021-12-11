@@ -1,7 +1,6 @@
-import { styled, Box, BoxProps } from '@mui/material'
+import { styled } from '@mui/material'
 import { DayOfWeek } from '@thinc-org/chula-courses'
 
-import { deepAssign } from '@/common/utils/deepAssign'
 import { useColor } from '@/modules/Schedule/components/ColorPicker/hooks/useColor'
 
 import { useDimensions } from '../dimensions'
@@ -10,27 +9,25 @@ import { ScheduleTypography } from './ScheduleTypography'
 
 interface ClassCardProps {
   scheduleClass: ScheduleClass
+  onClick: () => void
 }
 
-export const ClassCardLayout = ({ sx, ...props }: BoxProps) => {
-  return (
-    <Box
-      sx={deepAssign(
-        {
-          position: 'absolute',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          borderRadius: '0.25em',
-          padding: '0.5em',
-          textAlign: 'center',
-        },
-        sx
-      )}
-      {...props}
-    />
-  )
-}
+export const ClassCardLayout = styled('div')({
+  position: 'absolute',
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  borderRadius: '0.25em',
+  padding: '0.5em',
+  textAlign: 'center',
+  ':hover': {
+    filter: 'brightness(94%)',
+    cursor: 'pointer',
+  },
+  ':active': {
+    filter: 'brightness(85%)',
+  },
+})
 
 const ClassCardTypography = styled(ScheduleTypography)({
   overflow: 'hidden',
@@ -38,7 +35,7 @@ const ClassCardTypography = styled(ScheduleTypography)({
   whiteSpace: 'nowrap',
 })
 
-export function ClassCard({ scheduleClass }: ClassCardProps) {
+export function ClassCard({ scheduleClass, onClick }: ClassCardProps) {
   const { cellHeight, getPosition } = useDimensions()
   const { courseNo, abbrName, position, dayOfWeek, teachers, sectionNo, hasOverlap, color } = scheduleClass
 
@@ -65,6 +62,7 @@ export function ClassCard({ scheduleClass }: ClassCardProps) {
         border: `1px solid ${colorScheme.border}`,
         color: colorScheme.text,
       }}
+      onClick={onClick}
     >
       <ClassCardTypography variant="subtitle2">
         {isWide && courseNo} {abbrName}

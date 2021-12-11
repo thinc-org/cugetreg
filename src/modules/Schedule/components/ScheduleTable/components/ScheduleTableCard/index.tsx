@@ -25,7 +25,7 @@ import {
 import { useLinkBuilderWithCourseGroup } from '@/common/hooks/useLinkBuilder'
 import { ColorCircle } from '@/modules/Schedule/components/ColorCircle'
 import { ColorPicker } from '@/modules/Schedule/components/ColorPicker'
-import { useColorPicker } from '@/modules/Schedule/components/ColorPicker/hooks/useColorPicker'
+import { useColorPickerModal } from '@/modules/Schedule/components/ColorPicker/hooks/useColorPicker'
 import { CourseOverlap } from '@/modules/Schedule/components/Schedule/utils'
 import { CourseCartItem, courseCartStore } from '@/store'
 
@@ -151,7 +151,7 @@ function CardHeader({ item }: CardComponentProps) {
   const { t } = useTranslation('scheduleTableCard')
   const theme = useTheme()
   const { buildLink } = useLinkBuilderWithCourseGroup(item)
-  const { handleClick, ...colorPickerProps } = useColorPicker(item)
+  const { handleClick, ...colorPickerProps } = useColorPickerModal(item)
   return (
     <Stack direction="row" pt={1} my={0.5} pr={2}>
       <Stack direction="row" flex={1} justifyContent="space-between" alignItems="flex-start">

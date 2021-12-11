@@ -100,7 +100,7 @@ export default function PrivacyPolicy() {
         <StyledArticleBody variant="body1" paragraph>
           We use your search and the associated query and context to provide you with the correct ranking of the search
           results. If you are logged in, we will also use your user ID to store selected courses between multiple
-          devices. Users are also required to login using their student email before writing a course review to confirm
+          devices. Users are also required to login using their student email before writing and interacting with course reviews, to confirm
           that they are a Chula student.
         </StyledArticleBody>
         <Typography variant="h6" component="h3" gutterBottom>

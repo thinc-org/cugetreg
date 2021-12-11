@@ -1,5 +1,5 @@
 import { ApolloError } from '@apollo/client'
-import { Grid, Typography } from '@mui/material'
+import { Button, Grid, Chip, Stack, Typography } from '@mui/material'
 import { Course, getFaculty, StudyProgram } from '@thinc-org/chula-courses'
 import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 import { NextSeoProps } from 'next-seo/lib/types'
@@ -8,6 +8,7 @@ import { ParsedUrlQuery } from 'querystring'
 
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import { MdEdit, MdStar } from 'react-icons/md'
 
 import defaultSEO from '@/../next-seo.config'
 import { BackButton } from '@/common/components/BackButton'
@@ -76,6 +77,15 @@ export function CourseDetailPage({ course, reviews }: CourseDetailPageProps) {
   const { i18n } = useTranslation()
   const { buildLink } = useLinkBuilder()
 
+  const scrollToReview = () => {
+    const srollToElement = document.getElementById('review-title')
+    if (srollToElement) {
+      const offset = document.documentElement.clientHeight * 0.35
+      const offsetTop = srollToElement.offsetTop
+      window.scrollTo({ top: offsetTop - offset, behavior: 'smooth' })
+    }
+  }
+
   const courseDesc = [course.courseDescTh, course.courseDescEn].filter((desc) => !!desc).join('\n')
   const SEOConfig: NextSeoProps = {
     ...defaultSEO,
@@ -117,7 +127,20 @@ export function CourseDetailPage({ course, reviews }: CourseDetailPageProps) {
   return (
     <Container>
       <PageMeta {...SEOConfig} />
-      <BackButton href={buildLink(`/courses`)} pathId={course.courseNo} />
+      <Stack direction="row" justifyContent="space-between">
+        <BackButton href={buildLink(`/courses`)} pathId={course.courseNo} />
+        <Stack direction="row" spacing={4} alignItems="center">
+          <Stack direction="row" spacing={1} alignItems="center">
+            <MdStar size={24} />
+            <Typography color="primary" variant="h5" sx={{ display: 'inline-block' }}>
+              4.58
+            </Typography>
+          </Stack>
+          <Button variant="outlined" onClick={scrollToReview} startIcon={<MdEdit />}>
+            เขียนรีวิว
+          </Button>
+        </Stack>
+      </Stack>
       <Title variant="h3">
         {course.courseNo} {course.abbrName}
       </Title>

@@ -222,7 +222,7 @@ export const ReviewProvider: React.FC<ReviewProviderProps> = ({ courseNo, initia
         postSubmitReview()
       }
     } catch (err) {
-      emitMessage((err as Error).message, 'error')
+      emitMessage('คุณได้รีวิววิชานี้แล้ว กรุณาแก้ไขรีวิวเดิมหากต้องการเพิ่มเติมเนื้อหา', 'error')
     }
   }
 

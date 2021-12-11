@@ -33,7 +33,7 @@ import { parseVariablesFromQuery } from './utils/parseVariablesFromQuery'
 
 const DynamicReviewProvider = dynamic(async () => (await import('./context/Review')).ReviewProvider, { ssr: false })
 const DynamicReviewForm = dynamic(async () => (await import('./components/ReviewForm')).ReviewForm, { ssr: false })
-const DynamicReviewList = dynamic(async () => (await import('./components/ReviewList')).ReviewList, { ssr: false })
+const DynamicReviewList = dynamic(async () => (await import('./components/ReviewList')).ReviewList, { ssr: true })
 
 export function CourseDetailPage(props: { data: GetCourseResponse }) {
   const { i18n } = useTranslation()

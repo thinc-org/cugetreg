@@ -1,13 +1,13 @@
 import { Rating, Select, Stack, MenuItem, Typography, Button, Alert } from '@mui/material'
 import { TNode } from '@udecode/plate'
 import { format } from 'date-fns'
-import dynamic from 'next/dynamic'
 import Link from 'next/link'
 
 import { useContext } from 'react'
 import { Controller, SubmitHandler, SubmitErrorHandler, useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
+import { RichTextEditorV2 } from '@/common/components/RichTextV2'
 import { SnackbarContext } from '@/common/context/Snackbar'
 import { getCurrentTerm } from '@/common/utils/getCurrentTerm'
 import { useReviewContext } from '@/modules/CourseDetail/context/Review'
@@ -15,10 +15,6 @@ import { REVIEW_FORM_ID } from '@/modules/CourseDetail/context/Review/constants'
 import { ReviewState } from '@/modules/CourseDetail/context/Review/types'
 
 import { YEAR_SIZE } from './constants'
-
-const RichTextEditorV2 = dynamic(async () => (await import('@/common/components/RichTextV2')).RichTextEditorV2, {
-  ssr: false,
-})
 
 export const ReviewForm: React.FC = () => {
   const { register, handleSubmit, control } = useFormContext<ReviewState>()
@@ -118,14 +114,8 @@ export const ReviewForm: React.FC = () => {
           name="content"
           control={control}
           rules={{ required: 'content should not empty', validate: validateContent }}
-          render={({ field: { onChange } }) => (
-            <RichTextEditorV2
-              id={REVIEW_FORM_ID}
-              onChange={(val) => {
-                console.log(JSON.stringify(val, null, 2))
-                onChange(val)
-              }}
-            />
+          render={({ field: { value, onChange } }) => (
+            <RichTextEditorV2 id={REVIEW_FORM_ID} defaultValue={value as TNode[]} onChange={onChange} />
           )}
         />
         <Stack mt={2} mb={4} direction="row" spacing={2}>

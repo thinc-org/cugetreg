@@ -1,5 +1,6 @@
 import { useMutation, useQuery } from '@apollo/client'
 import { createPlateEditor, deserializeHtml, serializeHtml, TNode, usePlateActions } from '@udecode/plate'
+import escapeHTML from 'escape-html'
 
 import React, { createContext, useContext, useEffect } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
@@ -48,7 +49,6 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
   const editor = createPlateEditor({
     plugins: plugins,
   })
-
   const { resetEditor, setValue } = usePlateActions(REVIEW_FORM_ID)
 
   /**
@@ -184,8 +184,14 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
     setEditingReviewId(reviewId)
   }
 
+  /**
+   * Use this function to cancel editing review
+   */
   const cancelEditReview = () => {
-    clearReviewForm()
+    methods.setValue('content', INITIAL_CONTENT as TNode[])
+    setValue(INITIAL_CONTENT, REVIEW_FORM_ID)
+    resetEditor(REVIEW_FORM_ID)
+    methods.setValue('rating', 0)
     setEditingReviewId(undefined)
   }
 
@@ -198,6 +204,8 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
       if (!loginGuard(storeLocalReviewForm)) return
       const review = methods.getValues()
       const ratingNumber = review.rating * 2 // 1 - 10, 0 isn't accepted
+      const modifiedNode = applyEscapedText(review.content as TNode[])
+      const html = serializeHtml(editor, { nodes: modifiedNode })
       const response = await createReviewMutation({
         variables: {
           createReviewInput: {
@@ -206,7 +214,7 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
             rating: ratingNumber,
             semester: review.semester,
             academicYear: review.academicYear,
-            content: serializeHtml(editor, { nodes: review.content }),
+            content: html,
           },
         },
       })
@@ -228,13 +236,15 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
       if (!loginGuard(storeLocalReviewForm)) return
       const review = methods.getValues()
       const ratingNumber = review.rating * 2 // 1 - 10, 0 isn't accepted
+      const modifiedNode = applyEscapedText(review.content as TNode[])
+      const html = serializeHtml(editor, { nodes: modifiedNode })
       const response = await editMyReviewMutation({
         variables: {
           reviewId,
           review: {
             ...review,
             rating: ratingNumber,
-            content: serializeHtml(editor, { nodes: review.content }),
+            content: html,
           },
         },
       })
@@ -276,16 +286,24 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
     if (form.semester) methods.setValue('semester', form.semester)
     if (form.content) {
       methods.setValue('content', form.content)
+      console.log(setValue)
       setValue(form.content, REVIEW_FORM_ID)
       resetEditor(REVIEW_FORM_ID)
     }
   }
 
-  const clearReviewForm = () => {
-    methods.setValue('content', INITIAL_CONTENT as any)
-    setValue(INITIAL_CONTENT, REVIEW_FORM_ID)
-    resetEditor(REVIEW_FORM_ID)
-    methods.setValue('rating', 0)
+  /**
+   * Convert some syntax to escaped html. For example ">" to "&gt". To prevent XSS attack from user's review input
+   * @param value - Plate's TNode
+   * @returns
+   */
+  const applyEscapedText = (value: TNode[] | null): TNode[] => {
+    if (!value) return []
+    const html = value.map((node: TNode) => {
+      if (node.type) return { ...node, children: applyEscapedText(node.children) }
+      return { ...node, text: escapeHTML(node.text) }
+    }, true)
+    return html
   }
 
   const filterDisplayedReviews = (reviews: Review[]): Review[] => {
@@ -309,14 +327,6 @@ export const ReviewProvider: React.FC<{ courseNo: string }> = ({ courseNo, child
     <FormProvider {...methods}>
       <ReviewContext.Provider value={value}>
         <Dialog />
-        <button
-          onClick={() => {
-            setValue(INITIAL_CONTENT, REVIEW_FORM_ID)
-            resetEditor(REVIEW_FORM_ID)
-          }}
-        >
-          Reset
-        </button>
         {children}
       </ReviewContext.Provider>
     </FormProvider>

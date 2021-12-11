@@ -4,6 +4,7 @@ import {
   ELEMENT_H1,
   ELEMENT_OL,
   ELEMENT_PARAGRAPH,
+  ELEMENT_TODO_LI,
   ELEMENT_UL,
   MARK_BOLD,
   MARK_CODE,
@@ -28,19 +29,19 @@ export const RichTextMarkType = {
 export type RichTextMarkType = ValueOf<typeof RichTextMarkType>
 
 export const RichTextMarkHotkey: Record<RichTextMarkType, string> = {
-  [RichTextMarkType.BOLD]: '(ctrl+b)',
-  [RichTextMarkType.ITALIC]: '(ctrl+i)',
-  [RichTextMarkType.UNDERLINE]: '(ctrl+u)',
-  [RichTextMarkType.STRIKETHROUGH]: '(ctrl+s)',
-  [RichTextMarkType.CODE]: '(ctrl+c)',
+  [RichTextMarkType.BOLD]: 'mod+b',
+  [RichTextMarkType.ITALIC]: 'mod+i',
+  [RichTextMarkType.UNDERLINE]: 'mod+u',
+  [RichTextMarkType.STRIKETHROUGH]: 'mod+l',
+  [RichTextMarkType.CODE]: 'mod+k',
 } as const
 
 export const RichTextMarkTooltip: Record<RichTextMarkType, string> = {
-  [RichTextMarkType.BOLD]: `bold ${RichTextMarkHotkey[RichTextMarkType.BOLD]}`,
-  [RichTextMarkType.ITALIC]: `italic ${RichTextMarkHotkey[RichTextMarkType.ITALIC]}`,
-  [RichTextMarkType.UNDERLINE]: `underline ${RichTextMarkHotkey[RichTextMarkType.UNDERLINE]}`,
-  [RichTextMarkType.STRIKETHROUGH]: `strike through ${RichTextMarkHotkey[RichTextMarkType.STRIKETHROUGH]}`,
-  [RichTextMarkType.CODE]: `code ${RichTextMarkHotkey[RichTextMarkType.CODE]}`,
+  [RichTextMarkType.BOLD]: `bold <${RichTextMarkHotkey[RichTextMarkType.BOLD]}>`,
+  [RichTextMarkType.ITALIC]: `italic <${RichTextMarkHotkey[RichTextMarkType.ITALIC]}>`,
+  [RichTextMarkType.UNDERLINE]: `underline <${RichTextMarkHotkey[RichTextMarkType.UNDERLINE]}>`,
+  [RichTextMarkType.STRIKETHROUGH]: `strike through <${RichTextMarkHotkey[RichTextMarkType.STRIKETHROUGH]}>`,
+  [RichTextMarkType.CODE]: `code <${RichTextMarkHotkey[RichTextMarkType.CODE]}>`,
 } as const
 export type RichTextMarkTooltip = ValueOf<typeof RichTextMarkTooltip>
 
@@ -53,26 +54,23 @@ export const RichTextBlockType = {
   BLOCK_QUOTE: ELEMENT_BLOCKQUOTE,
   ORDER_LIST: ELEMENT_OL,
   UNORDER_LIST: ELEMENT_UL,
-  CODE_BLOCK: ELEMENT_CODE_BLOCK,
 } as const
 export type RichTextBlockType = ValueOf<typeof RichTextBlockType>
 
 export const RichTextBlockHotkey: Record<RichTextBlockType, string> = {
-  [RichTextBlockType.PARAGRAPH]: '',
-  [RichTextBlockType.H1]: '',
-  [RichTextBlockType.BLOCK_QUOTE]: '',
+  [RichTextBlockType.PARAGRAPH]: 'mod+opt+0',
+  [RichTextBlockType.H1]: 'mod+opt+1',
+  [RichTextBlockType.BLOCK_QUOTE]: 'mod+opt+.',
   [RichTextBlockType.ORDER_LIST]: '',
   [RichTextBlockType.UNORDER_LIST]: '',
-  [RichTextBlockType.CODE_BLOCK]: '',
 } as const
 
 export const RichTextBlockTooltip: Record<RichTextBlockType, string> = {
-  [RichTextBlockType.PARAGRAPH]: `paragraph ${RichTextBlockHotkey[RichTextBlockType.PARAGRAPH]}`,
-  [RichTextBlockType.H1]: `h1 ${RichTextBlockHotkey[RichTextBlockType.H1]}`,
-  [RichTextBlockType.BLOCK_QUOTE]: `block quote ${RichTextBlockHotkey[RichTextBlockType.BLOCK_QUOTE]}`,
-  [RichTextBlockType.ORDER_LIST]: `ordered list ${RichTextBlockHotkey[RichTextBlockType.ORDER_LIST]}`,
-  [RichTextBlockType.UNORDER_LIST]: `unordered list ${RichTextBlockHotkey[RichTextBlockType.UNORDER_LIST]}`,
-  [RichTextBlockType.CODE_BLOCK]: `code block ${RichTextBlockHotkey[RichTextBlockType.CODE_BLOCK]}`,
+  [RichTextBlockType.PARAGRAPH]: `paragraph <${RichTextBlockHotkey[RichTextBlockType.PARAGRAPH]}>`,
+  [RichTextBlockType.H1]: `h1 <${RichTextBlockHotkey[RichTextBlockType.H1]}>`,
+  [RichTextBlockType.BLOCK_QUOTE]: `blockquote <${RichTextBlockHotkey[RichTextBlockType.BLOCK_QUOTE]}>`,
+  [RichTextBlockType.ORDER_LIST]: `ordered list <${RichTextBlockHotkey[RichTextBlockType.ORDER_LIST]}>`,
+  [RichTextBlockType.UNORDER_LIST]: `unordered list <${RichTextBlockHotkey[RichTextBlockType.UNORDER_LIST]}>`,
 } as const
 export type RichTextBlockTooltip = ValueOf<typeof RichTextBlockTooltip>
 
@@ -86,14 +84,14 @@ export const RichTextActionType = {
 export type RichTextActionType = ValueOf<typeof RichTextActionType>
 
 export const RichTextActionHotkey: Record<RichTextActionType, string> = {
-  [RichTextActionType.UNDO]: '(ctrl+z)',
-  [RichTextActionType.REDO]: '(ctrl+shift+z)',
+  [RichTextActionType.UNDO]: 'ctrl+z',
+  [RichTextActionType.REDO]: 'ctrl+shift+z',
 } as const
 export type RichTextActionHotkey = ValueOf<typeof RichTextActionHotkey>
 
 export const RichTextActionTooltip: Record<RichTextActionType, string> = {
-  [RichTextActionType.UNDO]: `undo ${RichTextActionHotkey[RichTextActionType.UNDO]}`,
-  [RichTextActionType.REDO]: `redo ${RichTextActionHotkey[RichTextActionType.REDO]}`,
+  [RichTextActionType.UNDO]: `undo <${RichTextActionHotkey[RichTextActionType.UNDO]}>`,
+  [RichTextActionType.REDO]: `redo <${RichTextActionHotkey[RichTextActionType.REDO]}>`,
 }
 
 /**

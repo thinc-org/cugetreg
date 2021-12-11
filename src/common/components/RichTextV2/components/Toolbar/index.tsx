@@ -3,8 +3,6 @@ import {
   MdCode,
   MdFormatBold,
   MdFormatItalic,
-  MdFormatListBulleted,
-  MdFormatListNumberedRtl,
   MdFormatQuote,
   MdFormatUnderlined,
   MdRedo,
@@ -29,9 +27,9 @@ export const Toolbar: React.FC<{ id: string }> = ({ id }) => {
       <VerticalDivider />
       <ToolbarButton id={id} mode="block" type={RichTextBlockType.H1} icon={CgFormatHeading} />
       <ToolbarButton id={id} mode="block" type={RichTextBlockType.BLOCK_QUOTE} icon={MdFormatQuote} />
-      <ToolbarButton id={id} mode="block" type={RichTextBlockType.CODE_BLOCK} icon={MdCode} />
-      <ToolbarButton id={id} mode="list" type={RichTextBlockType.ORDER_LIST} icon={MdFormatListNumberedRtl} />
-      <ToolbarButton id={id} mode="list" type={RichTextBlockType.UNORDER_LIST} icon={MdFormatListBulleted} />
+      {/** Temporary hide because of bug https://github.com/udecode/plate/issues/1300 */}
+      {/* <ToolbarButton id={id} mode="list" type={RichTextBlockType.ORDER_LIST} icon={MdFormatListNumberedRtl} />
+      <ToolbarButton id={id} mode="list" type={RichTextBlockType.UNORDER_LIST} icon={MdFormatListBulleted} /> */}
       <Spacer />
       <ToolbarButton id={id} mode="none" type={RichTextActionType.UNDO} icon={MdUndo} />
       <ToolbarButton id={id} mode="none" type={RichTextActionType.REDO} icon={MdRedo} />

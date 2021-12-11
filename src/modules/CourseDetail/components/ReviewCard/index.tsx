@@ -1,9 +1,11 @@
 import { IconButton, Stack, useTheme } from '@mui/material'
+import DOMPurify from 'isomorphic-dompurify'
 
 import { MdFlag, MdDelete, MdOutlineStar, MdEdit } from 'react-icons/md'
 
 import { GeneralChip } from '@/common/components/Chips'
 import { OtherChipKey } from '@/common/components/Chips/config'
+import { HighlightHTML } from '@/common/components/HighlightHTML'
 import { ReviewInteractionType, ReviewStatus } from '@/common/types/reviews'
 import { getSemesterName } from '@/common/utils/getSemesterName'
 import { useReviewContext } from '@/modules/CourseDetail/context/Review'
@@ -75,7 +77,7 @@ export const ReviewCard: React.FC<ReviewCardProps> = (data) => {
           <CardMaxRating>จาก 5</CardMaxRating>
         </Stack>
       </Stack>
-      <div dangerouslySetInnerHTML={{ __html: data.content }} />
+      <HighlightHTML dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(data.content) }} />
       <Stack direction="row" justifyContent="space-between" alignItems="center">
         {/** Left side */}
         {data.status === ReviewStatus.Rejected ? (

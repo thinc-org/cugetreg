@@ -6,7 +6,7 @@ import { RichTextMarkType, RichTextBlockType, RichTextActionType } from '../../c
 
 export interface ToolbarButtonProps extends MarkToolbarButtonProps, BlockToolbarButtonProps {
   id: string
-  mode: 'mark' | 'block' | 'list' | 'none'
+  mode: 'mark' | 'block' | 'code_block' | 'list' | 'none'
   type: RichTextMarkType | RichTextBlockType | RichTextActionType
   icon: IconType
 }

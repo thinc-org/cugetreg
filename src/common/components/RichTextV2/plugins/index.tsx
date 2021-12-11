@@ -14,8 +14,12 @@ import {
   createAutoformatPlugin,
   createPlugins,
   createPlateUI,
-  createTodoListPlugin,
+  createIndentPlugin,
+  ELEMENT_PARAGRAPH,
+  ELEMENT_H1,
 } from '@udecode/plate'
+
+import { RichTextBlockHotkey, RichTextMarkHotkey } from '@/common/components/RichTextV2/constants'
 
 import { autoformatOptions } from '../configs/autoformatRules'
 import { exitBreakOptions } from '../configs/exitBreakOptions'
@@ -25,17 +29,41 @@ import { softBreakOptions } from '../configs/softExitOptions'
 export const plugins = createPlugins(
   [
     /** Element */
-    createParagraphPlugin(),
-    createHeadingPlugin(),
-    createBlockquotePlugin(),
+    createParagraphPlugin({
+      options: { hotkey: RichTextBlockHotkey.p },
+    }),
+    createHeadingPlugin({
+      options: {
+        levels: 1,
+      },
+    }),
+    createBlockquotePlugin({
+      options: { hotkey: RichTextBlockHotkey.blockquote },
+    }),
     createListPlugin(),
-    createTodoListPlugin(),
+    createIndentPlugin({
+      inject: {
+        props: {
+          validTypes: [ELEMENT_PARAGRAPH, ELEMENT_H1],
+        },
+      },
+    }),
     /** Mark */
-    createBoldPlugin(),
-    createItalicPlugin(),
-    createUnderlinePlugin(),
-    createStrikethroughPlugin(),
-    createCodePlugin(),
+    createBoldPlugin({
+      options: { hotkey: RichTextMarkHotkey.bold },
+    }),
+    createItalicPlugin({
+      options: { hotkey: RichTextMarkHotkey.italic },
+    }),
+    createUnderlinePlugin({
+      options: { hotkey: RichTextMarkHotkey.underline },
+    }),
+    createStrikethroughPlugin({
+      options: { hotkey: RichTextMarkHotkey.strikethrough },
+    }),
+    createCodePlugin({
+      options: { hotkey: RichTextMarkHotkey.code },
+    }),
     /* *Other */
     createExitBreakPlugin({ options: exitBreakOptions }),
     createResetNodePlugin({ options: resetNodeOptions }),

@@ -4,6 +4,7 @@ import {
   getPluginType as getPlatePluginType,
   ListToolbarButton,
   MarkToolbarButton,
+  CodeBlockToolbarButton,
   PlateEditor,
   usePlateEditorRef,
 } from '@udecode/plate'
@@ -55,6 +56,14 @@ export const ToolbarButton: React.FC<ToolbarButtonProps> = ({ id, mode, type, ic
         <BootstrapTooltip {...tooltipProps}>
           <SpanWrapper>
             <BlockToolbarButton type={getPluginType(editor, type)} icon={withIconButton(icon)} />
+          </SpanWrapper>
+        </BootstrapTooltip>
+      )
+    case 'code_block':
+      return (
+        <BootstrapTooltip {...tooltipProps}>
+          <SpanWrapper>
+            <CodeBlockToolbarButton type={getPluginType(editor, type)} icon={withIconButton(icon)} />
           </SpanWrapper>
         </BootstrapTooltip>
       )

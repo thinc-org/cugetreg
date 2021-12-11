@@ -1,4 +1,4 @@
-import { Stack, useMediaQuery, useTheme } from '@mui/material'
+import { useMediaQuery, useTheme } from '@mui/material'
 
 import { CgFormatHeading } from 'react-icons/cg'
 import {

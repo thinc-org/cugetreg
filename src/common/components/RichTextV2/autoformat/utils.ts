@@ -17,6 +17,7 @@ import {
 
 export const clearBlockFormat: AutoformatBlockRule['preFormat'] = (editor) => unwrapList(editor as PlateEditor)
 
+// eslint-disable-next-line
 export const format = (editor: TEditor, customFormatting: any) => {
   if (editor.selection) {
     const parentEntry = getParent(editor, editor.selection)

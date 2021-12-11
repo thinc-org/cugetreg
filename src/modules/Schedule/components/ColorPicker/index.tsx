@@ -1,6 +1,7 @@
-import { Button, Popover, Stack, Typography } from '@mui/material'
+import { Button, Stack, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
+import { ResponsiveDialog } from '@/common/components/ResponsiveDialog'
 import { ColorButton } from '@/modules/Schedule/components/ColorButton'
 import { ColorClassKey } from '@/modules/Schedule/components/ColorPicker/hooks/useColorPicker'
 
@@ -10,31 +11,18 @@ export interface ColorPickerProps {
   open: boolean
   handleClose: () => void
   scheduleClass: ColorClassKey
-  anchorEl: HTMLElement | null
   setColor: (color: ScheduleColor) => void
   selectedColor: ScheduleColor | undefined
 }
 
 export const ColorPicker = (props: ColorPickerProps) => {
-  const { open, handleClose, scheduleClass, anchorEl, setColor, selectedColor = 'primary' } = props
+  const { open, handleClose, scheduleClass, setColor, selectedColor = 'primary' } = props
   const { t } = useTranslation('colorPicker')
   return (
-    <Popover
-      open={open}
-      anchorEl={anchorEl}
-      onClose={handleClose}
-      anchorOrigin={{
-        vertical: 'bottom',
-        horizontal: 'right',
-      }}
-      transformOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
-    >
-      <Stack p={2} spacing={3} maxWidth={340}>
+    <ResponsiveDialog open={open} onClose={handleClose} shouldExpand={false} maxWidth="xs">
+      <Stack p={3} spacing={3}>
         <Typography variant="h4">{t('selectColorFor', scheduleClass)}</Typography>
-        <Stack direction="row" flexWrap="wrap">
+        <Stack direction="row" flexWrap="wrap" gap={0.5}>
           {SCHEDULE_COLORS.map((color) => (
             <ColorButton
               key={color}
@@ -48,6 +36,6 @@ export const ColorPicker = (props: ColorPickerProps) => {
           {t('select')}
         </Button>
       </Stack>
-    </Popover>
+    </ResponsiveDialog>
   )
 }

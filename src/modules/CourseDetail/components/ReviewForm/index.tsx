@@ -3,12 +3,11 @@ import { TNode } from '@udecode/plate-core'
 import { format } from 'date-fns'
 import Link from 'next/link'
 
-import { useContext } from 'react'
 import { Controller, SubmitHandler, SubmitErrorHandler, useFormContext } from 'react-hook-form'
+import toast from 'react-hot-toast'
 import { useTranslation } from 'react-i18next'
 
 import { RichTextEditorV2 } from '@/common/components/RichTextV2'
-import { SnackbarContext } from '@/common/context/Snackbar'
 import { getCurrentTerm } from '@/common/utils/getCurrentTerm'
 import { useReviewContext } from '@/modules/CourseDetail/context/Review'
 import { REVIEW_FORM_ID } from '@/modules/CourseDetail/context/Review/constants'
@@ -20,7 +19,6 @@ export const ReviewForm: React.FC = () => {
   const { register, handleSubmit, control } = useFormContext<ReviewState>()
   const { academicYear, semester } = getCurrentTerm()
   const { t } = useTranslation('review')
-  const { emitMessage } = useContext(SnackbarContext)
   const { submitReview, submitEditedReview, editingReviewId, cancelEditReview } = useReviewContext()
 
   const validateContent = (value: TNode[] | TNode | null): boolean => {
@@ -54,7 +52,7 @@ export const ReviewForm: React.FC = () => {
     const allErros = Object.keys(errors)
       .map((error) => errorMessageMapping[error as 'rating' | 'content'])
       .join(', ')
-    emitMessage(`คุณยังกรอกข้อมูลไม่ครบ ${allErros}`, 'error')
+    toast.error(`กรุณากรอก ${allErros}`)
   }
 
   return (

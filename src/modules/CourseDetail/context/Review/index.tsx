@@ -4,10 +4,10 @@ import escapeHTML from 'escape-html'
 
 import React, { createContext, useContext, useEffect } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
 
 import { INITIAL_CONTENT } from '@/common/components/RichTextV2/constants'
 import { plugins } from '@/common/components/RichTextV2/plugins'
-import { SnackbarContext } from '@/common/context/Snackbar'
 import { useCourseGroup } from '@/common/hooks/useCourseGroup'
 import { useDialog } from '@/common/hooks/useDialog'
 import { useLoginGuard } from '@/common/hooks/useLoginGuard'
@@ -47,7 +47,6 @@ export const ReviewProvider: React.FC<ReviewProviderProps> = ({ courseNo, initia
     primaryButtonText: 'ยืนยัน',
     secondaryButtonText: 'ยกเลิก',
   })
-  const { emitMessage } = useContext(SnackbarContext)
 
   /**
    * Rich Text editor hook
@@ -140,7 +139,7 @@ export const ReviewProvider: React.FC<ReviewProviderProps> = ({ courseNo, initia
         },
       })
     } catch (err) {
-      emitMessage((err as Error).message, 'error')
+      toast.error((err as Error).message)
     }
   }
 
@@ -169,7 +168,7 @@ export const ReviewProvider: React.FC<ReviewProviderProps> = ({ courseNo, initia
         },
       })
     } catch (err) {
-      emitMessage((err as Error).message, 'error')
+      toast.error((err as Error).message)
     }
   }
 
@@ -231,7 +230,7 @@ export const ReviewProvider: React.FC<ReviewProviderProps> = ({ courseNo, initia
         postSubmitReview()
       }
     } catch (err) {
-      emitMessage('คุณได้รีวิววิชานี้แล้ว กรุณาแก้ไขรีวิวเดิมหากต้องการเพิ่มเติมเนื้อหา', 'error')
+      toast.error('คุณได้รีวิววิชานี้แล้ว กรุณาแก้ไขรีวิวเดิมหากต้องการเพิ่มเติมเนื้อหา')
     }
   }
 
@@ -261,13 +260,13 @@ export const ReviewProvider: React.FC<ReviewProviderProps> = ({ courseNo, initia
         postSubmitReview()
       }
     } catch (err) {
-      emitMessage((err as Error).message, 'error')
+      toast.error((err as Error).message)
     }
   }
 
   const postSubmitReview = () => {
     cancelEditReview()
-    emitMessage(`เพิ่มรีวิวรายวิชานี้ของคุณแล้ว`, 'success')
+    toast.success(`เพิ่มรีวิวรายวิชานี้ของคุณแล้ว`)
   }
 
   const storeLocalReviewForm = () => {

@@ -4,6 +4,7 @@ import { EmotionCache } from '@emotion/utils'
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import LocalizationProvider from '@mui/lab/LocalizationProvider'
 import { ThemeProvider, useMediaQuery } from '@mui/material'
+
 import React from 'react'
 
 import { AnalyticsProvider } from '@/common/context/Analytics'

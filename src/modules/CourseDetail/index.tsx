@@ -21,8 +21,6 @@ import { createApolloServerClient } from '@/services/apollo'
 import { GetCourseResponse, GET_COURSE } from '@/services/apollo/query/getCourse'
 import { GetReviewsResponse, GetReviewsVars, GET_REVIEWS } from '@/services/apollo/query/getReviews'
 
-import { ReviewList } from './components/ReviewList'
-import { ReviewProvider } from './context/Review'
 import {
   Container,
   DescriptionTitle,
@@ -35,6 +33,28 @@ import {
 import { courseTypeStringFromCourse } from './utils/courseTypeStringFromCourse'
 import { groupBy } from './utils/groupBy'
 import { parseVariablesFromQuery } from './utils/parseVariablesFromQuery'
+
+const DynamicReviewProvider = dynamic(
+  async () =>
+    (
+      await import(
+        /* webpackChunkName: "ReviewProvider" */
+        './context/Review'
+      )
+    ).ReviewProvider,
+  { ssr: false }
+)
+
+const DynamicReviewList = dynamic(
+  async () =>
+    (
+      await import(
+        /* webpackChunkName: "ReviewList" */
+        './components/ReviewList'
+      )
+    ).ReviewList,
+  { ssr: false }
+)
 
 const DynamicReviewForm = dynamic(
   async () =>
@@ -146,10 +166,10 @@ export function CourseDetailPage({ course, reviews }: CourseDetailPageProps) {
         )}
       </GridContainer>
       {CourseList}
-      <ReviewProvider courseNo={course.courseNo} initialReviews={reviews}>
+      <DynamicReviewProvider courseNo={course.courseNo} initialReviews={reviews}>
         <DynamicReviewForm />
-        <ReviewList />
-      </ReviewProvider>
+        <DynamicReviewList />
+      </DynamicReviewProvider>
     </Container>
   )
 }

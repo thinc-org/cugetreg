@@ -165,6 +165,7 @@ export const ReviewProvider: React.FC<ReviewProviderProps> = ({ courseNo, initia
               reviewId,
             },
           })
+          toast.success('ลบรีวิวสำเร็จ')
         },
       })
     } catch (err) {
@@ -227,7 +228,8 @@ export const ReviewProvider: React.FC<ReviewProviderProps> = ({ courseNo, initia
         },
       })
       if (!response.errors && response.data) {
-        postSubmitReview()
+        cancelEditReview()
+        toast.success('เพิ่มรีวิวสำเร็จ')
       }
     } catch (err) {
       toast.error('คุณได้รีวิววิชานี้แล้ว กรุณาแก้ไขรีวิวเดิมหากต้องการเพิ่มเติมเนื้อหา')
@@ -257,16 +259,12 @@ export const ReviewProvider: React.FC<ReviewProviderProps> = ({ courseNo, initia
         },
       })
       if (!response.errors && response.data) {
-        postSubmitReview()
+        cancelEditReview()
+        toast.success('แก้ไขรีวิวสำเร็จ')
       }
     } catch (err) {
       toast.error((err as Error).message)
     }
-  }
-
-  const postSubmitReview = () => {
-    cancelEditReview()
-    toast.success(`เพิ่มรีวิวรายวิชานี้ของคุณแล้ว`)
   }
 
   const storeLocalReviewForm = () => {

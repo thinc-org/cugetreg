@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@apollo/client'
-import { createPlateEditor, deserializeHtml, serializeHtml, TNode, usePlateActions } from '@udecode/plate'
+import { createPlateEditor, deserializeHtml, serializeHtml, TNode, usePlateActions } from '@udecode/plate-core'
 import escapeHTML from 'escape-html'
 
 import React, { createContext, useContext, useEffect } from 'react'

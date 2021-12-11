@@ -2,18 +2,9 @@
  * Reference
  * https://github.com/udecode/plate/blob/main/docs/src/live/config/autoformat/autoformatUtils.ts
  */
-import {
-  AutoformatBlockRule,
-  ELEMENT_CODE_BLOCK,
-  ELEMENT_CODE_LINE,
-  getParent,
-  isElement,
-  isType,
-  PlateEditor,
-  TEditor,
-  toggleList,
-  unwrapList,
-} from '@udecode/plate'
+import { AutoformatBlockRule } from '@udecode/plate-autoformat'
+import { getParent, isElement, PlateEditor, TEditor } from '@udecode/plate-core'
+import { toggleList, unwrapList } from '@udecode/plate-list'
 
 export const clearBlockFormat: AutoformatBlockRule['preFormat'] = (editor) => unwrapList(editor as PlateEditor)
 
@@ -23,11 +14,7 @@ export const format = (editor: TEditor, customFormatting: any) => {
     const parentEntry = getParent(editor, editor.selection)
     if (!parentEntry) return
     const [node] = parentEntry
-    if (
-      isElement(node) &&
-      !isType(editor as PlateEditor, node, ELEMENT_CODE_BLOCK) &&
-      !isType(editor as PlateEditor, node, ELEMENT_CODE_LINE)
-    ) {
+    if (isElement(node)) {
       customFormatting()
     }
   }

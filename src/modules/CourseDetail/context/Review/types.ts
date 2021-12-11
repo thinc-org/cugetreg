@@ -1,4 +1,4 @@
-import { TNode } from '@udecode/plate'
+import { TNode } from '@udecode/plate-core'
 
 import { Review, ReviewInteractionType } from '@/common/types/reviews'
 

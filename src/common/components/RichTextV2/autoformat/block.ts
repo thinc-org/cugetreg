@@ -1,4 +1,6 @@
-import { AutoformatRule, ELEMENT_BLOCKQUOTE, ELEMENT_H1 } from '@udecode/plate'
+import { AutoformatRule } from '@udecode/plate-autoformat'
+import { ELEMENT_BLOCKQUOTE } from '@udecode/plate-block-quote'
+import { ELEMENT_H1 } from '@udecode/plate-heading'
 
 import { clearBlockFormat } from './utils'
 

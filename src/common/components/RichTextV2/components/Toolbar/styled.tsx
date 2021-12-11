@@ -1,5 +1,5 @@
 import { styled } from '@mui/material'
-import { HeadingToolbar } from '@udecode/plate'
+import { HeadingToolbar } from '@udecode/plate-toolbar'
 
 export const StyledHeadingToolbar = styled(HeadingToolbar)`
   margin: 0 !important;
@@ -11,6 +11,7 @@ export const StyledHeadingToolbar = styled(HeadingToolbar)`
   border-bottom: 0 !important;
   padding: ${({ theme }) => theme.spacing(1, 2)}!important;
   gap: 8px;
+  display: flex;
 `
 
 export const VerticalDivider = styled('div')`

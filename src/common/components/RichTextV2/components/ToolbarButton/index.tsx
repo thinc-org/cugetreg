@@ -1,13 +1,8 @@
 import { IconButton, TooltipProps } from '@mui/material'
-import {
-  BlockToolbarButton,
-  getPluginType as getPlatePluginType,
-  ListToolbarButton,
-  MarkToolbarButton,
-  CodeBlockToolbarButton,
-  PlateEditor,
-  usePlateEditorRef,
-} from '@udecode/plate'
+import { CodeBlockToolbarButton } from '@udecode/plate-code-block-ui'
+import { getPluginType as getPlatePluginType, PlateEditor, usePlateEditorRef } from '@udecode/plate-core'
+import { ListToolbarButton } from '@udecode/plate-list-ui'
+import { MarkToolbarButton, BlockToolbarButton } from '@udecode/plate-toolbar'
 
 import { ReactNode } from 'react'
 import { IconType } from 'react-icons'

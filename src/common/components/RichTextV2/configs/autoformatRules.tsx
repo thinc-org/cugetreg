@@ -1,4 +1,4 @@
-import { autoformatArrow, autoformatLegalHtml, autoformatMath, AutoformatPlugin } from '@udecode/plate'
+import { autoformatArrow, autoformatLegalHtml, autoformatMath, AutoformatPlugin } from '@udecode/plate-autoformat'
 
 import { autoformatBlocks } from '../autoformat/block'
 import { autoformatLists } from '../autoformat/list'

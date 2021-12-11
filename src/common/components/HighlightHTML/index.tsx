@@ -20,9 +20,11 @@ export const HighlightHTML = styled.div`
     margin: ${({ theme }) => theme.spacing(1, 0)};
   }
   .slate-code {
-    background: rgba(0, 0, 0, 0.1);
-  }
-  .slate-code_block {
+    font-size: 85%;
+    font-family: monospace;
+    border-radius: 2px;
+    padding: 0.2em 0.4em;
+    line-height: normal;
     background: rgba(0, 0, 0, 0.1);
   }
   .slate-blockquote {

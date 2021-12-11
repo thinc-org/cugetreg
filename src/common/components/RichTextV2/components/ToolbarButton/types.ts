@@ -1,4 +1,4 @@
-import { BlockToolbarButtonProps, MarkToolbarButtonProps } from '@udecode/plate'
+import { BlockToolbarButtonProps, MarkToolbarButtonProps } from '@udecode/plate-toolbar'
 
 import { IconType } from 'react-icons'
 

@@ -1,4 +1,5 @@
-import { ELEMENT_BLOCKQUOTE, ELEMENT_CODE_BLOCK, ELEMENT_TD, SoftBreakPlugin } from '@udecode/plate'
+import { ELEMENT_BLOCKQUOTE } from '@udecode/plate-block-quote'
+import { SoftBreakPlugin } from '@udecode/plate-break'
 
 export const softBreakOptions: SoftBreakPlugin = {
   rules: [
@@ -6,7 +7,7 @@ export const softBreakOptions: SoftBreakPlugin = {
     {
       hotkey: 'enter',
       query: {
-        allow: [ELEMENT_CODE_BLOCK, ELEMENT_BLOCKQUOTE, ELEMENT_TD],
+        allow: [ELEMENT_BLOCKQUOTE],
       },
     },
   ],

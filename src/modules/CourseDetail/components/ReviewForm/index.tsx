@@ -1,5 +1,5 @@
 import { Rating, Select, Stack, MenuItem, Typography, Button, Alert } from '@mui/material'
-import { TNode } from '@udecode/plate'
+import { TNode } from '@udecode/plate-core'
 import { format } from 'date-fns'
 import Link from 'next/link'
 
@@ -76,8 +76,8 @@ export const ReviewForm: React.FC = () => {
         <Stack
           direction={{ xs: 'column-reverse', sm: 'row' }}
           alignItems="center"
-          justifyContent="space-between"
-          gap={1}
+          justifyContent="flex-start"
+          gap={4}
           mt={1}
           mb={2}
         >

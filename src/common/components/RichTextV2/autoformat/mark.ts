@@ -1,4 +1,5 @@
-import { AutoformatRule, MARK_BOLD, MARK_CODE, MARK_ITALIC, MARK_STRIKETHROUGH, MARK_UNDERLINE } from '@udecode/plate'
+import { AutoformatRule } from '@udecode/plate-autoformat'
+import { MARK_BOLD, MARK_CODE, MARK_ITALIC, MARK_STRIKETHROUGH, MARK_UNDERLINE } from '@udecode/plate-basic-marks'
 
 /**
  * Reference

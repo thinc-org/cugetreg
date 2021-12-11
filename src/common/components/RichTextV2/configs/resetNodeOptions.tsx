@@ -1,14 +1,10 @@
-import {
-  ELEMENT_BLOCKQUOTE,
-  ELEMENT_PARAGRAPH,
-  ELEMENT_TODO_LI,
-  isBlockAboveEmpty,
-  isSelectionAtBlockStart,
-  ResetNodePlugin,
-} from '@udecode/plate'
+import { ELEMENT_BLOCKQUOTE } from '@udecode/plate-block-quote'
+import { isBlockAboveEmpty, isSelectionAtBlockStart } from '@udecode/plate-core'
+import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph'
+import { ResetNodePlugin } from '@udecode/plate-reset-node'
 
 const resetBlockTypesCommonRule = {
-  types: [ELEMENT_BLOCKQUOTE, ELEMENT_TODO_LI],
+  types: [ELEMENT_BLOCKQUOTE],
   defaultType: ELEMENT_PARAGRAPH,
 }
 

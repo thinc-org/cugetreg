@@ -1,5 +1,5 @@
 import { useTheme } from '@mui/material'
-import { Plate, TNode } from '@udecode/plate'
+import { Plate, TNode } from '@udecode/plate-core'
 import { EditableProps } from 'slate-react/dist/components/editable'
 
 import React, { useState } from 'react'

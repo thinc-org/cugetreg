@@ -23,8 +23,8 @@ export default function PrivacyPolicy() {
         <StyledArticleBody variant="body1">When you log in with Google, we collect your</StyledArticleBody>
         <ul>
           <li>Name</li>
+          <li>Student Email</li>
           <li>Google User ID</li>
-          <li>Google Drive App Data (Only the data associated with this app such as your course schedule) </li>
         </ul>
         <Typography variant="h6" component="h3" gutterBottom>
           1.2 Information we collect automatically
@@ -99,8 +99,9 @@ export default function PrivacyPolicy() {
         </Typography>
         <StyledArticleBody variant="body1" paragraph>
           We use your search and the associated query and context to provide you with the correct ranking of the search
-          results. We also use your Google Drive App information storage to provide multi-device course schedule
-          synchronization.
+          results. If you are logged in, we will also use your user ID to store selected courses between multiple
+          devices. Users are also required to login using their student email before writing a course review to confirm
+          that they are a Chula student.
         </StyledArticleBody>
         <Typography variant="h6" component="h3" gutterBottom>
           2.2 Functionality Enrichment

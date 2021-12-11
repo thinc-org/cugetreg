@@ -30,7 +30,7 @@ export const CardContent = styled(motion.div)`
   border-radius: 4px;
   ${({ theme }) => theme.breakpoints.down('md')} {
     width: calc(100% - 40px);
-    left: 0;
+    left: 40px;
   }
 `
 

@@ -9,6 +9,7 @@ import {
   usePlateEditorRef,
 } from '@udecode/plate'
 
+import { ReactNode } from 'react'
 import { IconType } from 'react-icons'
 
 import { RichTextTooltip, RichTextActionType } from '../../constants'
@@ -42,40 +43,32 @@ export const ToolbarButton: React.FC<ToolbarButtonProps> = ({ id, mode, type, ic
     )
   }
 
+  const withWrapper = (component: ReactNode) => {
+    return (
+      <BootstrapTooltip {...tooltipProps}>
+        <SpanWrapper>{component}</SpanWrapper>
+      </BootstrapTooltip>
+    )
+  }
+
+  let children: ReactNode = null
   switch (mode) {
     case 'mark':
-      return (
-        <BootstrapTooltip {...tooltipProps}>
-          <SpanWrapper>
-            <MarkToolbarButton type={getPluginType(editor, type)} icon={withIconButton(icon)} />
-          </SpanWrapper>
-        </BootstrapTooltip>
-      )
+      children = <MarkToolbarButton type={getPluginType(editor, type)} icon={withIconButton(icon)} />
+      break
     case 'block':
-      return (
-        <BootstrapTooltip {...tooltipProps}>
-          <SpanWrapper>
-            <BlockToolbarButton type={getPluginType(editor, type)} icon={withIconButton(icon)} />
-          </SpanWrapper>
-        </BootstrapTooltip>
-      )
+      children = <BlockToolbarButton type={getPluginType(editor, type)} icon={withIconButton(icon)} />
+      break
     case 'code_block':
-      return (
-        <BootstrapTooltip {...tooltipProps}>
-          <SpanWrapper>
-            <CodeBlockToolbarButton type={getPluginType(editor, type)} icon={withIconButton(icon)} />
-          </SpanWrapper>
-        </BootstrapTooltip>
-      )
+      children = <CodeBlockToolbarButton type={getPluginType(editor, type)} icon={withIconButton(icon)} />
+      break
     case 'list':
-      return (
-        <BootstrapTooltip {...tooltipProps}>
-          <SpanWrapper>
-            <ListToolbarButton type={getPluginType(editor, type)} icon={withIconButton(icon)} />
-          </SpanWrapper>
-        </BootstrapTooltip>
-      )
+      children = <ListToolbarButton type={getPluginType(editor, type)} icon={withIconButton(icon)} />
+      break
     default:
-      return <BootstrapTooltip {...tooltipProps}>{withIconButton(icon, createOnMouseDown(type))}</BootstrapTooltip>
+      children = <span>{withIconButton(icon, createOnMouseDown(type))}</span>
+      break
   }
+
+  return withWrapper(children)
 }

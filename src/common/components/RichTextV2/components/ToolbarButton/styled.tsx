@@ -1,8 +1,8 @@
 import { Tooltip, tooltipClasses, styled, TooltipProps } from '@mui/material'
 
 export const SpanWrapper = styled('span')`
-  span[data-testid='ToolbarButton'] {
-    & svg {
+  span {
+    svg {
       color: ${({ theme }) => theme.palette.primaryRange[200]};
     }
     &.slate-ToolbarButton-active button {

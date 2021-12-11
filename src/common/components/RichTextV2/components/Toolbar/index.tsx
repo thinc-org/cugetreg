@@ -1,3 +1,5 @@
+import { Stack, useMediaQuery, useTheme } from '@mui/material'
+
 import { CgFormatHeading } from 'react-icons/cg'
 import {
   MdCode,
@@ -17,6 +19,9 @@ import { ToolbarButton } from '../ToolbarButton'
 import { StyledHeadingToolbar, VerticalDivider } from './styled'
 
 export const Toolbar: React.FC<{ id: string }> = ({ id }) => {
+  const theme = useTheme()
+  const isSmUp = useMediaQuery(theme.breakpoints.up('sm'))
+
   return (
     <StyledHeadingToolbar>
       <ToolbarButton id={id} mode="mark" type={RichTextMarkType.BOLD} icon={MdFormatBold} />
@@ -31,8 +36,8 @@ export const Toolbar: React.FC<{ id: string }> = ({ id }) => {
       {/* <ToolbarButton id={id} mode="list" type={RichTextBlockType.ORDER_LIST} icon={MdFormatListNumberedRtl} />
       <ToolbarButton id={id} mode="list" type={RichTextBlockType.UNORDER_LIST} icon={MdFormatListBulleted} /> */}
       <Spacer />
-      <ToolbarButton id={id} mode="none" type={RichTextActionType.UNDO} icon={MdUndo} />
-      <ToolbarButton id={id} mode="none" type={RichTextActionType.REDO} icon={MdRedo} />
+      {isSmUp && <ToolbarButton id={id} mode="none" type={RichTextActionType.UNDO} icon={MdUndo} />}
+      {isSmUp && <ToolbarButton id={id} mode="none" type={RichTextActionType.REDO} icon={MdRedo} />}
     </StyledHeadingToolbar>
   )
 }

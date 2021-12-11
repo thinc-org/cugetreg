@@ -3,6 +3,7 @@
 exports[`ReviewCard should render correctly if this is not your review 1`] = `
 <Card
   direction="column"
+  pending={false}
   spacing={2}
 >
   <ForwardRef(Stack)
@@ -42,11 +43,13 @@ exports[`ReviewCard should render correctly if this is not your review 1`] = `
       </CardMaxRating>
     </ForwardRef(Stack)>
   </ForwardRef(Stack)>
-  <CardContent
-    variant="body1"
-  >
-    เหนื่อยากเลยค่าแงงงงง
-  </CardContent>
+  <HighlightHTML
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "เหนื่อยากเลยค่าแงงงงง",
+      }
+    }
+  />
   <ForwardRef(Stack)
     alignItems="center"
     direction="row"
@@ -85,6 +88,7 @@ exports[`ReviewCard should render correctly if this is not your review 1`] = `
 exports[`ReviewCard should render correctly if this is your approved review 1`] = `
 <Card
   direction="column"
+  pending={false}
   spacing={2}
 >
   <ForwardRef(Stack)
@@ -124,11 +128,13 @@ exports[`ReviewCard should render correctly if this is your approved review 1`] 
       </CardMaxRating>
     </ForwardRef(Stack)>
   </ForwardRef(Stack)>
-  <CardContent
-    variant="body1"
-  >
-    เหนื่อยากเลยค่าแงงงงง
-  </CardContent>
+  <HighlightHTML
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "เหนื่อยากเลยค่าแงงงงง",
+      }
+    }
+  />
   <ForwardRef(Stack)
     alignItems="center"
     direction="row"
@@ -182,6 +188,7 @@ exports[`ReviewCard should render correctly if this is your approved review 1`] 
 exports[`ReviewCard should render correctly if this is your pending review 1`] = `
 <Card
   direction="column"
+  pending={true}
   spacing={2}
 >
   <ForwardRef(Stack)
@@ -224,11 +231,13 @@ exports[`ReviewCard should render correctly if this is your pending review 1`] =
       </CardMaxRating>
     </ForwardRef(Stack)>
   </ForwardRef(Stack)>
-  <CardContent
-    variant="body1"
-  >
-    เขียนดี ๆ แล้ว อิอิ
-  </CardContent>
+  <HighlightHTML
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "เขียนดี ๆ แล้ว อิอิ",
+      }
+    }
+  />
   <ForwardRef(Stack)
     alignItems="center"
     direction="row"
@@ -282,6 +291,7 @@ exports[`ReviewCard should render correctly if this is your pending review 1`] =
 exports[`ReviewCard should render correctly if this is your rejected review 1`] = `
 <Card
   direction="column"
+  pending={true}
   spacing={2}
 >
   <ForwardRef(Stack)
@@ -324,11 +334,13 @@ exports[`ReviewCard should render correctly if this is your rejected review 1`] 
       </CardMaxRating>
     </ForwardRef(Stack)>
   </ForwardRef(Stack)>
-  <CardContent
-    variant="body1"
-  >
-    เขียนดี ๆ แล้ว อิอิ
-  </CardContent>
+  <HighlightHTML
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "เขียนดี ๆ แล้ว อิอิ",
+      }
+    }
+  />
   <ForwardRef(Stack)
     alignItems="center"
     direction="row"

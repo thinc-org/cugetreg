@@ -46,7 +46,14 @@ export const ReviewForm: React.FC = () => {
   }
 
   const onError: SubmitErrorHandler<ReviewState> = (errors) => {
-    const allErros = Object.keys(errors).join(', ')
+    const errorMessageMapping: Record<keyof Pick<ReviewState, 'rating' | 'content'>, string> = {
+      content: 'รีวิว',
+      rating: 'คะแนน',
+    }
+
+    const allErros = Object.keys(errors)
+      .map((error) => errorMessageMapping[error as 'rating' | 'content'])
+      .join(', ')
     emitMessage(`คุณยังกรอกข้อมูลไม่ครบ ${allErros}`, 'error')
   }
 

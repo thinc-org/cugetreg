@@ -40,7 +40,7 @@ const DynamicReviewForm = dynamic(
   async () =>
     (
       await import(
-        /** webpackChunkName: ReviewForm  */
+        /* webpackChunkName: "ReviewForm" */
         './components/ReviewForm'
       )
     ).ReviewForm,

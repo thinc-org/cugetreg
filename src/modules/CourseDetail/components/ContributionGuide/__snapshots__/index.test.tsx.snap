@@ -5,10 +5,10 @@ exports[`ContributionGuide should match snapshot 1`] = `
   action={
     <ForwardRef(IconButton)
       onClick={[Function]}
-      size="small"
+      size="medium"
     >
       <MdKeyboardArrowDown
-        color="#2A2D48"
+        color="#0C5A93"
       />
     </ForwardRef(IconButton)>
   }
@@ -16,13 +16,13 @@ exports[`ContributionGuide should match snapshot 1`] = `
   severity="info"
   sx={
     Object {
-      "mb": 2,
-      "px": 2,
+      "mb": 3,
+      "px": 4,
     }
   }
 >
   <ForwardRef(Typography)
-    ml={1}
+    color="#0C5A93"
     variant="h6"
   >
     แนวทางในการเขียนรีวิว
@@ -32,20 +32,23 @@ exports[`ContributionGuide should match snapshot 1`] = `
   >
     <StyledOL>
       <ForwardRef(Typography)
+        color="#0C5A93"
         component="li"
-        variant="body2"
+        variant="body1"
       >
         สามารถเล่าประสบการณ์การเรียนในรายวิชาได้ในทุกด้าน เช่น การลงทะเบียน การเรียน การสอบ สิ่งที่อยากจะแนะนำคนอื่น เป็นต้น
       </ForwardRef(Typography)>
       <ForwardRef(Typography)
+        color="#0C5A93"
         component="li"
-        variant="body2"
+        variant="body1"
       >
         เมื่อรีวิวผ่านการอนุมัติโดยทีมงาน จะปรากฎให้ผู้อื่นเห็นโดยทันที
       </ForwardRef(Typography)>
       <ForwardRef(Typography)
+        color="#0C5A93"
         component="li"
-        variant="body2"
+        variant="body1"
       >
         ผู้เขียนรีวืวจำเป็นต้องเข้าสู่ระบบด้วยอีเมลนิสิตเพื่อยืนยันความเป็นนิสิตก่อนการรีวิว สามารถดูนโยบายรักษาความเป็นส่วนตัวได้ที่ 
         <Link
@@ -56,8 +59,9 @@ exports[`ContributionGuide should match snapshot 1`] = `
          ทั้งนี้ การรีวิวจะเป็นแบบไม่เปิดเผยตัวตนสู่สาธารณะ
       </ForwardRef(Typography)>
       <ForwardRef(Typography)
+        color="#0C5A93"
         component="li"
-        variant="body2"
+        variant="body1"
       >
         รีวิวที่มีการพูดโจมตีบุคคลอื่น ๆ ด้วยคำพูดหยาบคาย หรือรีวิวที่ทีมงานตัดสินว่ามีลักษณะเป็นสแปม จะไม่ได้รับการอนุมัติ ขอให้แก้ไขเนื้อหาอีกครั้ง
       </ForwardRef(Typography)>

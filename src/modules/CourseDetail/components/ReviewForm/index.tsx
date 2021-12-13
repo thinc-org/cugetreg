@@ -56,14 +56,13 @@ export const ReviewForm = () => {
 
   return (
     <>
-      <ContributionGuide />
       <Typography variant="h4" component="span" id="review-title" mr={2} sx={{ display: ['block', 'inline'] }}>
         {t('title')}
       </Typography>
       <Typography variant="subtitle1" component="span" color="primaryRange.100">
         {t('subtitle')}
       </Typography>
-
+      <ContributionGuide />
       <form onSubmit={handleSubmit(onSubmit, onError)}>
         <Stack
           direction={{ xs: 'column-reverse', sm: 'row' }}

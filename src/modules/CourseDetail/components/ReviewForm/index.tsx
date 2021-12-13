@@ -1,6 +1,5 @@
-import { Rating, Select, Stack, MenuItem, Typography, Button, Alert } from '@mui/material'
+import { Rating, Select, Stack, MenuItem, Typography, Button } from '@mui/material'
 import { TNode } from '@udecode/plate-core'
-import Link from 'next/link'
 
 import { Controller, SubmitHandler, SubmitErrorHandler, useFormContext } from 'react-hook-form'
 import toast from 'react-hot-toast'
@@ -8,13 +7,14 @@ import { useTranslation } from 'react-i18next'
 
 import { RichTextEditor } from '@/common/components/RichTextEditor'
 import { getCurrentTerm } from '@/common/utils/getCurrentTerm'
-import { useReviewContext } from '@/modules/CourseDetail/context/Review'
-import { REVIEW_FORM_ID } from '@/modules/CourseDetail/context/Review/constants'
-import { ReviewState } from '@/modules/CourseDetail/context/Review/types'
 
+import { ContributionGuide } from '../../components/ContributionGuide'
+import { useReviewContext } from '../../context/Review'
+import { REVIEW_FORM_ID } from '../../context/Review/constants'
+import { ReviewState } from '../../context/Review/types'
 import { YEAR_SIZE } from './constants'
 
-export const ReviewForm: React.FC = () => {
+export const ReviewForm = () => {
   const { register, handleSubmit, control } = useFormContext<ReviewState>()
   const { academicYear, semester } = getCurrentTerm()
   const { t } = useTranslation('review')
@@ -56,12 +56,7 @@ export const ReviewForm: React.FC = () => {
 
   return (
     <>
-      <Alert severity="info" sx={{ mb: 2 }}>
-        <Stack direction="row" gap={1} flexWrap="wrap">
-          นโยบายรักษาความเป็นส่วนตัวของการรีวิวรายวิชา
-          <Link href="/privacy">อ่านเพิ่มเติม</Link>
-        </Stack>
-      </Alert>
+      <ContributionGuide />
       <Typography variant="h4" component="span" id="review-title" mr={2} sx={{ display: ['block', 'inline'] }}>
         {t('title')}
       </Typography>

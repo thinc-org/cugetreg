@@ -1,7 +1,6 @@
 import { Stack, Typography } from '@mui/material'
 
-import { useReviewContext } from '@/modules/CourseDetail/context/Review'
-
+import { useReviewContext } from '../../context/Review'
 import { ReviewCard } from '../ReviewCard'
 
 export const ReviewList: React.FC = () => {

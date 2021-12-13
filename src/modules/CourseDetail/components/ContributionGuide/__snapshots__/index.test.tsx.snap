@@ -1,0 +1,67 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ContributionGuide should match snapshot 1`] = `
+<ForwardRef(Alert)
+  action={
+    <ForwardRef(IconButton)
+      onClick={[Function]}
+      size="small"
+    >
+      <MdKeyboardArrowDown
+        color="#7C7F9B"
+      />
+    </ForwardRef(IconButton)>
+  }
+  icon={false}
+  severity="info"
+  sx={
+    Object {
+      "mb": 2,
+      "px": 2,
+    }
+  }
+>
+  <ForwardRef(Typography)
+    ml={1}
+    variant="h6"
+  >
+    แนวทางในการเขียนรีวิว
+  </ForwardRef(Typography)>
+  <ForwardRef(Collapse)
+    in={false}
+  >
+    <StyledOL>
+      <ForwardRef(Typography)
+        component="li"
+        variant="body2"
+      >
+        สามารถเล่าประสบการณ์การเรียนในรายวิชาได้ในทุกด้าน เช่น การลงทะเบียน การเรียน การสอบ สิ่งที่อยากจะแนะนำคนอื่น เป็นต้น
+      </ForwardRef(Typography)>
+      <ForwardRef(Typography)
+        component="li"
+        variant="body2"
+      >
+        เมื่อรีวิวผ่านการอนุมัติโดยทีมงาน จะปรากฎให้ผู้อื่นเห็นโดยทันที
+      </ForwardRef(Typography)>
+      <ForwardRef(Typography)
+        component="li"
+        variant="body2"
+      >
+        ผู้เขียนรีวืวจำเป็นต้องเข้าสู่ระบบด้วยอีเมลนิสิตเพื่อยืนยันความเป็นนิสิตก่อนการรีวิว สามารถดูนโยบายรักษาความเป็นส่วนตัวได้ที่ 
+        <Link
+          href="/privacy"
+        >
+          Privacy Policy
+        </Link>
+         ทั้งนี้ การรีวิวจะเป็นแบบไม่เปิดเผยตัวตนสู่สาธารณะ
+      </ForwardRef(Typography)>
+      <ForwardRef(Typography)
+        component="li"
+        variant="body2"
+      >
+        ทั้งนี้ การรีวิวจะเป็นแบบไม่เปิดเผยตัวตนสู่สาธารณะ
+      </ForwardRef(Typography)>
+    </StyledOL>
+  </ForwardRef(Collapse)>
+</ForwardRef(Alert)>
+`;

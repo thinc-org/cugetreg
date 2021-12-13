@@ -1,4 +1,4 @@
-import { Course, Section } from '@thinc-org/chula-courses'
+import { Course } from '@thinc-org/chula-courses'
 import gql from 'graphql-tag'
 
 import { CourseGroup } from '@/common/hooks/useCourseGroup/types'

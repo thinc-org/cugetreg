@@ -14,6 +14,17 @@ import { ReviewReaction } from '../ReviewReaction'
 import { Card, CardTerm, CardRating, CardMaxRating, CardRejectedMessage } from './styled'
 import { ReviewCardProps } from './types'
 
+const getChipType = (status: ReviewStatus): OtherChipKey | null => {
+  switch (status) {
+    case ReviewStatus.Pending:
+      return 'reviewPending'
+    case ReviewStatus.Rejected:
+      return 'reviewRejected'
+    default:
+      return null
+  }
+}
+
 export const ReviewCard: React.FC<ReviewCardProps> = (data) => {
   const theme = useTheme()
   const actionIconProps = {
@@ -23,18 +34,7 @@ export const ReviewCard: React.FC<ReviewCardProps> = (data) => {
 
   const term = `${data.academicYear} ${getSemesterName(data.semester)}`
 
-  const getChipType = (): OtherChipKey | null => {
-    switch (data.status) {
-      case ReviewStatus.Pending:
-        return 'reviewPending'
-      case ReviewStatus.Rejected:
-        return 'reviewRejected'
-      default:
-        return null
-    }
-  }
-
-  const chipType = getChipType()
+  const chipType = getChipType(data.status)
 
   const { setInteraction, reportReview, deleteMyReview, editMyReview } = useReviewContext()
 

@@ -45,28 +45,6 @@ const DynamicReviewProvider = dynamic(
   { ssr: false }
 )
 
-const DynamicReviewList = dynamic(
-  async () =>
-    (
-      await import(
-        /* webpackChunkName: "ReviewList" */
-        './components/ReviewList'
-      )
-    ).ReviewList,
-  { ssr: false }
-)
-
-const DynamicReviewForm = dynamic(
-  async () =>
-    (
-      await import(
-        /* webpackChunkName: "ReviewForm" */
-        './components/ReviewForm'
-      )
-    ).ReviewForm,
-  { ssr: false }
-)
-
 interface CourseDetailPageProps {
   course: Course
   reviews: Review[]
@@ -128,7 +106,7 @@ export function CourseDetailPage({ course, reviews }: CourseDetailPageProps) {
       <PageMeta {...SEOConfig} />
       <Stack direction="row" justifyContent="space-between">
         <BackButton href={buildLink(`/courses`)} pathId={course.courseNo} />
-        <Stack direction="row" spacing={4} alignItems="center">
+        <Stack direction="row" spacing={[2, 4]} alignItems="center">
           {course.rating && (
             <Stack direction="row" spacing={1} alignItems="center">
               <MdStar size={24} />
@@ -190,10 +168,7 @@ export function CourseDetailPage({ course, reviews }: CourseDetailPageProps) {
         )}
       </GridContainer>
       {CourseList}
-      <DynamicReviewProvider courseNo={course.courseNo} initialReviews={reviews}>
-        <DynamicReviewForm />
-        <DynamicReviewList />
-      </DynamicReviewProvider>
+      <DynamicReviewProvider courseNo={course.courseNo} initialReviews={reviews} />
     </Container>
   )
 }

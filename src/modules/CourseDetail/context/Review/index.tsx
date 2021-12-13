@@ -14,6 +14,8 @@ import { StorageKey } from '@/common/storage/constants'
 import { Review, ReviewInteractionType } from '@/common/types/reviews'
 import { loginGuard } from '@/common/utils/loginGuard'
 import { dialog, DialogOptions } from '@/lib/dialog'
+import { ReviewForm } from '@/modules/CourseDetail/components/ReviewForm'
+import { ReviewList } from '@/modules/CourseDetail/components/ReviewList'
 import { CreateReviewResponse, CreateReviewVars, CREATE_REVIEW } from '@/services/apollo/query/createReview'
 import { EditMyReviewResponse, EditMyReviewVars, EDIT_MY_REVIEW } from '@/services/apollo/query/editMyReview'
 import {
@@ -331,7 +333,10 @@ export const ReviewProvider: React.FC<ReviewProviderProps> = ({ courseNo, initia
 
   return (
     <FormProvider {...methods}>
-      <ReviewContext.Provider value={value}>{children}</ReviewContext.Provider>
+      <ReviewContext.Provider value={value}>
+        <ReviewForm />
+        <ReviewList />
+      </ReviewContext.Provider>
     </FormProvider>
   )
 }

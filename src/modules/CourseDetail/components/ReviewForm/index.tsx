@@ -74,7 +74,7 @@ export const ReviewForm: React.FC = () => {
           direction={{ xs: 'column-reverse', sm: 'row' }}
           alignItems="center"
           justifyContent="flex-start"
-          gap={4}
+          gap={[2, 4]}
           mt={1}
           mb={2}
         >

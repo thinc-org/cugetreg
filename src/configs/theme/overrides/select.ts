@@ -1,11 +1,13 @@
-import { InputLabelClassKey, Theme } from '@mui/material'
+import { SelectClassKey, Theme } from '@mui/material'
 import { OverridesStyleRules } from '@mui/material/styles/overrides'
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function overrideMuiSelect(theme: Theme): Partial<OverridesStyleRules<InputLabelClassKey>> {
-  const defaultStyle: Partial<OverridesStyleRules<InputLabelClassKey>> = {
+export function overrideMuiSelect(theme: Theme): Partial<OverridesStyleRules<SelectClassKey>> {
+  const defaultStyle: Partial<OverridesStyleRules<SelectClassKey>> = {
     root: {
       lineHeight: 'normal',
+    },
+    icon: {
+      color: theme.palette.primaryRange[100],
     },
   }
   return defaultStyle

@@ -3,7 +3,7 @@ import { Alert, Collapse, IconButton, Typography, useTheme } from '@mui/material
 import Link from 'next/link'
 
 import { useState } from 'react'
-import { MdKeyboardArrowDown } from 'react-icons/md'
+import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md'
 
 const StyledOL = styled.ol`
   li {
@@ -21,7 +21,11 @@ export const ContributionGuide = () => {
       sx={{ mb: 2, px: 2 }}
       action={
         <IconButton size="small" onClick={() => setOpenCollapse((prev) => !prev)}>
-          <MdKeyboardArrowDown color={theme.palette.primaryRange[200]} />
+          {!openCollapse ? (
+            <MdKeyboardArrowDown color={theme.palette.primaryRange[500]} />
+          ) : (
+            <MdKeyboardArrowUp color={theme.palette.primaryRange[500]} />
+          )}
         </IconButton>
       }
     >
@@ -43,7 +47,8 @@ export const ContributionGuide = () => {
             การรีวิวจะเป็นแบบไม่เปิดเผยตัวตนสู่สาธารณะ
           </Typography>
           <Typography variant="body2" component="li">
-            ทั้งนี้ การรีวิวจะเป็นแบบไม่เปิดเผยตัวตนสู่สาธารณะ
+            รีวิวที่มีการพูดโจมตีบุคคลอื่น ๆ ด้วยคำพูดหยาบคาย หรือรีวิวที่ทีมงานตัดสินว่ามีลักษณะเป็นสแปม
+            จะไม่ได้รับการอนุมัติ ขอให้แก้ไขเนื้อหาอีกครั้ง
           </Typography>
         </StyledOL>
       </Collapse>

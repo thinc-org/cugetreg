@@ -8,7 +8,7 @@ exports[`ContributionGuide should match snapshot 1`] = `
       size="small"
     >
       <MdKeyboardArrowDown
-        color="#7C7F9B"
+        color="#2A2D48"
       />
     </ForwardRef(IconButton)>
   }
@@ -59,7 +59,7 @@ exports[`ContributionGuide should match snapshot 1`] = `
         component="li"
         variant="body2"
       >
-        ทั้งนี้ การรีวิวจะเป็นแบบไม่เปิดเผยตัวตนสู่สาธารณะ
+        รีวิวที่มีการพูดโจมตีบุคคลอื่น ๆ ด้วยคำพูดหยาบคาย หรือรีวิวที่ทีมงานตัดสินว่ามีลักษณะเป็นสแปม จะไม่ได้รับการอนุมัติ ขอให้แก้ไขเนื้อหาอีกครั้ง
       </ForwardRef(Typography)>
     </StyledOL>
   </ForwardRef(Collapse)>

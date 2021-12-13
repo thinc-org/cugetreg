@@ -18,7 +18,7 @@ export const ContributionGuide = () => {
     <Alert
       severity="info"
       icon={false}
-      sx={{ mb: 3, px: 4 }}
+      sx={{ px: 4 }}
       action={
         <IconButton size="medium" onClick={() => setOpenCollapse((prev) => !prev)}>
           {!openCollapse ? (

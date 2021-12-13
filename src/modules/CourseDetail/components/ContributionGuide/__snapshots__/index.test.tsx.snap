@@ -16,7 +16,6 @@ exports[`ContributionGuide should match snapshot 1`] = `
   severity="info"
   sx={
     Object {
-      "mb": 3,
       "px": 4,
     }
   }

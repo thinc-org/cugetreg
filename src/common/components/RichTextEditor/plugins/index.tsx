@@ -23,7 +23,7 @@ import { ELEMENT_PARAGRAPH, createParagraphPlugin } from '@udecode/plate-paragra
 import { createResetNodePlugin } from '@udecode/plate-reset-node'
 import { StyledElement, StyledLeaf } from '@udecode/plate-styled-components'
 
-import { RichTextBlockHotkey, RichTextMarkHotkey } from '@/common/components/RichTextV2/constants'
+import { RichTextBlockHotkey, RichTextMarkHotkey } from '@/common/components/RichTextEditor/constants'
 
 import { autoformatOptions } from '../configs/autoformatRules'
 import { exitBreakOptions } from '../configs/exitBreakOptions'

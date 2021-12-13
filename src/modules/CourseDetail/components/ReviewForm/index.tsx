@@ -7,7 +7,7 @@ import { Controller, SubmitHandler, SubmitErrorHandler, useFormContext } from 'r
 import toast from 'react-hot-toast'
 import { useTranslation } from 'react-i18next'
 
-import { RichTextEditorV2 } from '@/common/components/RichTextV2'
+import { RichTextEditor } from '@/common/components/RichTextEditor'
 import { getCurrentTerm } from '@/common/utils/getCurrentTerm'
 import { useReviewContext } from '@/modules/CourseDetail/context/Review'
 import { REVIEW_FORM_ID } from '@/modules/CourseDetail/context/Review/constants'
@@ -120,7 +120,7 @@ export const ReviewForm: React.FC = () => {
           control={control}
           rules={{ required: 'content should not empty', validate: validateContent }}
           render={({ field: { value, onChange } }) => (
-            <RichTextEditorV2 id={REVIEW_FORM_ID} defaultValue={value as TNode[]} onChange={onChange} />
+            <RichTextEditor id={REVIEW_FORM_ID} defaultValue={value as TNode[]} onChange={onChange} />
           )}
         />
         <Stack mt={2} mb={4} direction="row" spacing={2}>

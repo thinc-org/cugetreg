@@ -23,7 +23,7 @@ export function CardHiddenDescription() {
           </Typography>
         </Stack>
       </Grid>
-      <Grid item xs={6} sm="auto">
+      <Grid item sm="auto">
         <Stack spacing={0.5}>
           <Caption>{t('time')}</Caption>
           <Stack>
@@ -35,7 +35,7 @@ export function CardHiddenDescription() {
           </Stack>
         </Stack>
       </Grid>
-      <Grid item xs={6} sm="auto">
+      <Grid item sm="auto">
         <Stack spacing={0.5}>
           <Caption>{t('classRoom')}</Caption>
           <Stack>
@@ -47,6 +47,19 @@ export function CardHiddenDescription() {
           </Stack>
         </Stack>
       </Grid>
+      <Grid item sm="auto">
+        <Stack spacing={0.5}>
+          <Caption>{t('type')}</Caption>
+          <Stack>
+            {selectedSection.classes.map((sectionClass, index) => (
+              <Typography variant="body1" key={`${selectedSection.sectionNo}.${index}`}>
+                {sectionClass.type}
+              </Typography>
+            ))}
+          </Stack>
+        </Stack>
+      </Grid>
+
       <Grid item xs={6} sm="auto">
         <Stack spacing={0.5}>
           <Caption>{t('note')}</Caption>

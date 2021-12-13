@@ -106,6 +106,7 @@ export const courseCard = {
   teacher: 'ผู้สอน',
   time: 'เวลา',
   classRoom: 'ห้องเรียน',
+  type: 'รูปแบบ',
   note: 'หมายเหตุ',
   capacity: 'ที่ว่าง',
   addSubjectSuccess: 'เพิ่มรายวิชาสำเร็จ',

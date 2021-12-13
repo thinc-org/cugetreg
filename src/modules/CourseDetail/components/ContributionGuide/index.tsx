@@ -18,9 +18,9 @@ export const ContributionGuide = () => {
     <Alert
       severity="info"
       icon={false}
-      sx={{ mb: 2, px: 2 }}
+      sx={{ mb: 3, px: 4 }}
       action={
-        <IconButton size="small" onClick={() => setOpenCollapse((prev) => !prev)}>
+        <IconButton size="medium" onClick={() => setOpenCollapse((prev) => !prev)}>
           {!openCollapse ? (
             <MdKeyboardArrowDown color={theme.palette.primaryRange[500]} />
           ) : (
@@ -29,24 +29,22 @@ export const ContributionGuide = () => {
         </IconButton>
       }
     >
-      <Typography variant="h6" ml={1}>
-        แนวทางในการเขียนรีวิว
-      </Typography>
+      <Typography variant="h5">แนวทางในการเขียนรีวิว</Typography>
       <Collapse in={openCollapse}>
         <StyledOL>
-          <Typography variant="body2" component="li">
+          <Typography variant="body1" component="li">
             สามารถเล่าประสบการณ์การเรียนในรายวิชาได้ในทุกด้าน เช่น การลงทะเบียน การเรียน การสอบ สิ่งที่อยากจะแนะนำคนอื่น
             เป็นต้น
           </Typography>
-          <Typography variant="body2" component="li">
+          <Typography variant="body1" component="li">
             เมื่อรีวิวผ่านการอนุมัติโดยทีมงาน จะปรากฎให้ผู้อื่นเห็นโดยทันที
           </Typography>
-          <Typography variant="body2" component="li">
+          <Typography variant="body1" component="li">
             ผู้เขียนรีวืวจำเป็นต้องเข้าสู่ระบบด้วยอีเมลนิสิตเพื่อยืนยันความเป็นนิสิตก่อนการรีวิว
             สามารถดูนโยบายรักษาความเป็นส่วนตัวได้ที่ <Link href="/privacy">Privacy Policy</Link> ทั้งนี้
             การรีวิวจะเป็นแบบไม่เปิดเผยตัวตนสู่สาธารณะ
           </Typography>
-          <Typography variant="body2" component="li">
+          <Typography variant="body1" component="li">
             รีวิวที่มีการพูดโจมตีบุคคลอื่น ๆ ด้วยคำพูดหยาบคาย หรือรีวิวที่ทีมงานตัดสินว่ามีลักษณะเป็นสแปม
             จะไม่ได้รับการอนุมัติ ขอให้แก้ไขเนื้อหาอีกครั้ง
           </Typography>

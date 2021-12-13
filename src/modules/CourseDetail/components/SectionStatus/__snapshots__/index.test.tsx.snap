@@ -22,7 +22,7 @@ exports[`SectionStatus Should match snapshot correctly' 1`] = `
     spacing={0.5}
   >
     <div>
-      avialable
+      available
     </div>
     <NoSeatIcon
       sx={

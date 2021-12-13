@@ -8,7 +8,7 @@ import { useColorPicker } from '@/modules/Schedule/components/ColorPicker/hooks/
 import { useCourseDialog } from '../context'
 
 export function CourseDialogColorPicker() {
-  const { item } = useCourseDialog()
+  const { item, onClose } = useCourseDialog()
   const { t } = useTranslation('courseDialog')
   const { setColor, selectedColor } = useColorPicker(item)
 
@@ -21,7 +21,10 @@ export function CourseDialogColorPicker() {
             key={color}
             isActive={color === selectedColor}
             scheduleColor={color}
-            onClick={() => setColor(color)}
+            onClick={() => {
+              setColor(color)
+              onClose()
+            }}
           />
         ))}
       </Stack>

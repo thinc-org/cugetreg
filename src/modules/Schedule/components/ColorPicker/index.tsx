@@ -1,4 +1,4 @@
-import { Button, Popover, Stack, Typography } from '@mui/material'
+import { Button, Fade, Paper, Popper, Stack, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
 import { ColorButton } from '@/modules/Schedule/components/ColorButton'
@@ -19,36 +19,41 @@ export const ColorPicker = (props: ColorPickerProps) => {
   const { open, handleClose, scheduleClass, anchorEl, setColor, selectedColor = 'primary' } = props
   const { t } = useTranslation('colorPicker')
   return (
-    <Popover
+    <Popper
       open={open}
       anchorEl={anchorEl}
-      onClose={handleClose}
-      anchorOrigin={{
-        vertical: 'bottom',
-        horizontal: 'right',
-      }}
-      transformOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
-      disableScrollLock={true}
+      placement="bottom-end"
+      transition
+      modifiers={[
+        {
+          name: 'flip',
+          enabled: false,
+        },
+      ]}
+      style={{ zIndex: 50 }}
     >
-      <Stack p={3} spacing={3} maxWidth={344}>
-        <Typography variant="h4">{t('selectColorFor', scheduleClass)}</Typography>
-        <Stack direction="row" flexWrap="wrap" gap={0.5}>
-          {SCHEDULE_COLORS.map((color) => (
-            <ColorButton
-              key={color}
-              isActive={color === selectedColor}
-              scheduleColor={color}
-              onClick={() => setColor(color)}
-            />
-          ))}
-        </Stack>
-        <Button variant="outlined" onClick={handleClose}>
-          {t('select')}
-        </Button>
-      </Stack>
-    </Popover>
+      {({ TransitionProps }) => (
+        <Fade {...TransitionProps}>
+          <Paper elevation={8}>
+            <Stack p={3} spacing={3} maxWidth={344}>
+              <Typography variant="h4">{t('selectColorFor', scheduleClass)}</Typography>
+              <Stack direction="row" flexWrap="wrap" gap={0.5}>
+                {SCHEDULE_COLORS.map((color) => (
+                  <ColorButton
+                    key={color}
+                    isActive={color === selectedColor}
+                    scheduleColor={color}
+                    onClick={() => setColor(color)}
+                  />
+                ))}
+              </Stack>
+              <Button variant="outlined" onClick={handleClose}>
+                {t('select')}
+              </Button>
+            </Stack>
+          </Paper>
+        </Fade>
+      )}
+    </Popper>
   )
 }

@@ -1,4 +1,4 @@
-import { Grid, Hidden, IconButton, Stack, Typography, useTheme } from '@mui/material'
+import { ClickAwayListener, Grid, Hidden, IconButton, Stack, Typography, useTheme } from '@mui/material'
 import { useMediaQuery } from '@mui/material'
 import { PanInfo } from 'framer-motion'
 import { uniq } from 'lodash'
@@ -26,7 +26,7 @@ import { useLinkBuilderWithCourseGroup } from '@/common/hooks/useLinkBuilder'
 import { getClassPeriod } from '@/common/utils/getClassPeriod'
 import { ColorCircle } from '@/modules/Schedule/components/ColorCircle'
 import { ColorPicker } from '@/modules/Schedule/components/ColorPicker'
-import { useColorPickerModal } from '@/modules/Schedule/components/ColorPicker/hooks/useColorPicker'
+import { useColorPickerPopper } from '@/modules/Schedule/components/ColorPicker/hooks/useColorPicker'
 import { CourseOverlap } from '@/modules/Schedule/components/Schedule/utils'
 import { CourseCartItem, courseCartStore } from '@/store'
 
@@ -152,7 +152,7 @@ function CardHeader({ item }: CardComponentProps) {
   const { t } = useTranslation('scheduleTableCard')
   const theme = useTheme()
   const { buildLink } = useLinkBuilderWithCourseGroup(item)
-  const { handleClick, ...colorPickerProps } = useColorPickerModal(item)
+  const { handleClick, handleClose, anchorElRef, ...colorPickerProps } = useColorPickerPopper(item)
   return (
     <Stack direction="row" pt={1} my={0.5} pr={2}>
       <Stack direction="row" flex={1} justifyContent="space-between" alignItems="flex-start">
@@ -181,15 +181,24 @@ function CardHeader({ item }: CardComponentProps) {
             </Hidden>
           </Grid>
         </Grid>
-        <ColorPicker scheduleClass={item} {...colorPickerProps} />
-        <Analytics elementName={COLOR_PICKER_BUTTON} elementId={item.courseNo}>
-          <ColorPickerButton onClick={handleClick} sx={{ mr: { xs: 0, md: 1 } }}>
-            <Typography variant="subtitle1" display={{ xs: 'none', md: 'inline' }} mr={1} color="primaryRange.200">
-              {t('selectColor')}
-            </Typography>
-            <ColorCircle color={item.color} size={24} />
-          </ColorPickerButton>
-        </Analytics>
+        <ClickAwayListener onClickAway={handleClose}>
+          <div>
+            <ColorPicker
+              scheduleClass={item}
+              handleClose={handleClose}
+              anchorEl={anchorElRef.current}
+              {...colorPickerProps}
+            />
+            <Analytics elementName={COLOR_PICKER_BUTTON} elementId={item.courseNo}>
+              <ColorPickerButton onClick={handleClick} ref={anchorElRef} sx={{ mr: { xs: 0, md: 1 } }}>
+                <Typography variant="subtitle1" display={{ xs: 'none', md: 'inline' }} mr={1} color="primaryRange.200">
+                  {t('selectColor')}
+                </Typography>
+                <ColorCircle color={item.color} size={24} />
+              </ColorPickerButton>
+            </Analytics>
+          </div>
+        </ClickAwayListener>
       </Stack>
       <Hidden mdDown>
         <IconButton aria-label={t('delete')} onClick={() => courseCartStore.removeCourse(item)}>

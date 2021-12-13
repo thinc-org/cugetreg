@@ -2,6 +2,7 @@ import { css, Theme } from '@emotion/react'
 import styled from '@emotion/styled'
 import { Button, ButtonProps, NativeSelect } from '@mui/material'
 import { motion } from 'framer-motion'
+import { forwardRef } from 'react'
 
 import { deepAssign } from '@/common/utils/deepAssign'
 import { PaletteRange } from '@/configs/theme/palette'
@@ -192,9 +193,13 @@ export const StyledNativeSelect = styled(NativeSelect)`
   }
 `
 
-export const ColorPickerButton = ({ sx, ...props }: ButtonProps) => {
+export const ColorPickerButton = forwardRef<HTMLButtonElement, ButtonProps>(function ColorPickerButton(
+  { sx, ...props },
+  ref
+) {
   return (
     <Button
+      ref={ref}
       sx={deepAssign(
         {
           whiteSpace: 'nowrap',
@@ -208,4 +213,4 @@ export const ColorPickerButton = ({ sx, ...props }: ButtonProps) => {
       {...props}
     />
   )
-}
+})

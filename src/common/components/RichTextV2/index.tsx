@@ -1,8 +1,8 @@
 import { useTheme } from '@mui/material'
-import { Plate, TNode } from '@udecode/plate-core'
+import { Plate } from '@udecode/plate-core'
 import { EditableProps } from 'slate-react/dist/components/editable'
 
-import React, { useState } from 'react'
+import React from 'react'
 
 import { HighlightHTML } from '../HighlightHTML'
 import { Toolbar } from './components/Toolbar'
@@ -12,7 +12,6 @@ import { RichTextEditorV2Props } from './types'
 
 export const RichTextEditorV2: React.FC<RichTextEditorV2Props> = ({ id, defaultValue = INITIAL_CONTENT, onChange }) => {
   const theme = useTheme()
-  const [debug, setDebug] = useState<TNode[]>(defaultValue)
 
   const editableProps: EditableProps = {
     id,
@@ -32,17 +31,7 @@ export const RichTextEditorV2: React.FC<RichTextEditorV2Props> = ({ id, defaultV
 
   return (
     <HighlightHTML>
-      <Plate
-        id={id}
-        editableProps={editableProps}
-        initialValue={defaultValue}
-        onChange={(newValue) => {
-          setDebug(newValue)
-          onChange?.(newValue)
-        }}
-        plugins={plugins}
-      >
-        {JSON.stringify(debug, null, 2)}
+      <Plate id={id} editableProps={editableProps} initialValue={defaultValue} onChange={onChange} plugins={plugins}>
         <Toolbar id={id} />
       </Plate>
     </HighlightHTML>

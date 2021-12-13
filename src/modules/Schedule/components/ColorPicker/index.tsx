@@ -31,8 +31,9 @@ export const ColorPicker = (props: ColorPickerProps) => {
         vertical: 'top',
         horizontal: 'right',
       }}
+      disableScrollLock={true}
     >
-      <Stack p={3} spacing={3} maxWidth={340}>
+      <Stack p={3} spacing={3} maxWidth={344}>
         <Typography variant="h4">{t('selectColorFor', scheduleClass)}</Typography>
         <Stack direction="row" flexWrap="wrap" gap={0.5}>
           {SCHEDULE_COLORS.map((color) => (

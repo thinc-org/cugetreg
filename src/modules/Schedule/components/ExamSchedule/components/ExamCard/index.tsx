@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import { Typography } from '@mui/material'
 
-import { getExamDate } from '@/common/utils/getExamData'
+import { getExamDate } from '@/common/utils/getExamDate'
 import { getExamPeriod } from '@/common/utils/getExamPeriod'
 import { ExamClass } from '@/common/utils/types'
 import { useColor } from '@/modules/Schedule/components/ColorPicker/hooks/useColor'

@@ -6,7 +6,6 @@ import {
   CardHeader,
   Grid,
   Stack,
-  Table,
   TableBody,
   TableCell,
   TableHead,
@@ -23,6 +22,7 @@ import { UnstyledTable } from '@/common/components/UnstyledTable'
 import { dayOfWeekMapper } from '@/common/constants/dayOfWeek'
 import { Analytics } from '@/common/context/Analytics/components/Analytics'
 import { SUBJECT_SELECT_BUTTON_WITH_SECTION } from '@/common/context/Analytics/constants'
+import { getClassPeriod } from '@/common/utils/getClassPeriod'
 
 import { SectionStatus } from './components/SectionStatus'
 
@@ -94,8 +94,7 @@ export const SectionCard = (props: SectionCardProps) => {
                   </TableCell>
                   <TableCell>
                     <Typography variant="body1" key={index}>
-                      {sectionClass.dayOfWeek && dayOfWeekMapper[sectionClass.dayOfWeek]}{' '}
-                      {sectionClass.period && [`${sectionClass.period.start}`, `${sectionClass.period.end}`].join('-')}
+                      {sectionClass.dayOfWeek && dayOfWeekMapper[sectionClass.dayOfWeek]} {getClassPeriod(sectionClass)}
                     </Typography>
                   </TableCell>
                   <TableCell>

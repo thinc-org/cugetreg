@@ -5,7 +5,8 @@ import { Caption } from '@/common/components/Caption'
 import { GenEdChip } from '@/common/components/Chips/catagories/GenEdChip'
 import { UnstyledTable } from '@/common/components/UnstyledTable'
 import { dayOfWeekMapper } from '@/common/constants/dayOfWeek'
-import { getExamDate } from '@/common/utils/getExamData'
+import { getClassPeriod } from '@/common/utils/getClassPeriod'
+import { getExamDate } from '@/common/utils/getExamDate'
 import { getExamPeriod } from '@/common/utils/getExamPeriod'
 import { SectionStatus } from '@/modules/CourseDetail/components/SectionCard/components/SectionStatus'
 import { useOverlapWarning } from '@/modules/Schedule/components/ScheduleTable/components/ScheduleTableCard/utils'
@@ -19,6 +20,9 @@ export function CourseDialogDetail() {
   const section = courseCartStore.item(item)!.sections.find((section) => section.sectionNo === item.selectedSectionNo)!
   const warning = useOverlapWarning(overlaps)
   const { t } = useTranslation('courseDialog')
+
+  const { midtermDate, finalDate } = getExamDate(item)
+  const { midtermPeriod, finalPeriod } = getExamPeriod(item)
 
   return (
     <Stack spacing={2}>
@@ -64,8 +68,7 @@ export function CourseDialogDetail() {
               </TableCell>
               <TableCell>
                 <Typography variant="subtitle1">
-                  {sectionClass.dayOfWeek && dayOfWeekMapper[sectionClass.dayOfWeek]}{' '}
-                  {sectionClass.period && [`${sectionClass.period.start}`, `${sectionClass.period.end}`].join('-')}
+                  {sectionClass.dayOfWeek && dayOfWeekMapper[sectionClass.dayOfWeek]} {getClassPeriod(sectionClass)}
                 </Typography>
               </TableCell>
               <TableCell>
@@ -85,13 +88,13 @@ export function CourseDialogDetail() {
         <Stack spacing={0.5}>
           <Caption>{t('midtermExam')}</Caption>
           <Typography variant="subtitle1">
-            {getExamPeriod(item, false)} {getExamDate(item, false)}
+            {midtermPeriod} {midtermDate}
           </Typography>
         </Stack>
         <Stack spacing={0.5}>
           <Caption>{t('finalExam')}</Caption>
           <Typography variant="subtitle1">
-            {getExamPeriod(item, true)} {getExamDate(item, true)}
+            {finalPeriod} {finalDate}
           </Typography>
         </Stack>
       </Stack>

@@ -23,6 +23,7 @@ import {
   COLOR_PICKER_BUTTON,
 } from '@/common/context/Analytics/constants'
 import { useLinkBuilderWithCourseGroup } from '@/common/hooks/useLinkBuilder'
+import { getClassPeriod } from '@/common/utils/getClassPeriod'
 import { ColorCircle } from '@/modules/Schedule/components/ColorCircle'
 import { ColorPicker } from '@/modules/Schedule/components/ColorPicker'
 import { useColorPickerModal } from '@/modules/Schedule/components/ColorPicker/hooks/useColorPicker'
@@ -250,8 +251,7 @@ function CardDetail({ item, overlaps }: CardDetailProps) {
           <Stack>
             {section.classes.map((sectionClass, index) => (
               <Typography variant="body1" key={`${section.sectionNo}.${index}`}>
-                {sectionClass.dayOfWeek && dayOfWeekMapper[sectionClass.dayOfWeek]} {sectionClass.period?.start}-
-                {sectionClass.period?.end}
+                {sectionClass.dayOfWeek && dayOfWeekMapper[sectionClass.dayOfWeek]} {getClassPeriod(sectionClass)}
               </Typography>
             ))}
           </Stack>

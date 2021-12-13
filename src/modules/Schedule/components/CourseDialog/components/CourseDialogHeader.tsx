@@ -1,9 +1,9 @@
 import { ChevronRight } from '@mui/icons-material'
-import { IconButton, Stack, Typography } from '@mui/material'
+import { IconButton, Link, Stack, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
 import { LinkWithAnalytics } from '@/common/context/Analytics/components/LinkWithAnalytics'
-import { COURSE_DIALOG_CHEVRON } from '@/common/context/Analytics/constants'
+import { COURSE_DIALOG_CHEVRON, COURSE_DIALOG_TITLE } from '@/common/context/Analytics/constants'
 import { useLinkBuilder } from '@/common/hooks/useLinkBuilder'
 import { useCourseDialog } from '@/modules/Schedule/components/CourseDialog/context'
 
@@ -16,9 +16,16 @@ export function CourseDialogHeader() {
     <Stack spacing={[0.5, 1]}>
       <Stack justifyContent="space-between" direction="row" flex={1} alignItems="flex-start">
         <Stack flexWrap="wrap" direction="row" alignItems="center" columnGap={2}>
-          <Typography variant="h4">
-            {courseNo} {abbrName}
-          </Typography>
+          <LinkWithAnalytics
+            href={buildLink(`/courses/${courseNo}`)}
+            passHref
+            elementName={COURSE_DIALOG_TITLE}
+            elementId={courseNo}
+          >
+            <Typography variant="h4" component={Link}>
+              {courseNo} {abbrName}
+            </Typography>
+          </LinkWithAnalytics>
           <Typography variant="h6" color="primaryRange.100">
             {t('credits', { credits })}
           </Typography>

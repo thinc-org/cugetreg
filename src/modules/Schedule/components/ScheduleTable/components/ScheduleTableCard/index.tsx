@@ -1,4 +1,4 @@
-import { Box, Grid, Hidden, IconButton, Stack, Typography, useTheme } from '@mui/material'
+import { Grid, Hidden, IconButton, Stack, Typography, useTheme } from '@mui/material'
 import { useMediaQuery } from '@mui/material'
 import { PanInfo } from 'framer-motion'
 import { uniq } from 'lodash'
@@ -184,9 +184,9 @@ function CardHeader({ item }: CardComponentProps) {
         <ColorPicker scheduleClass={item} {...colorPickerProps} />
         <Analytics elementName={COLOR_PICKER_BUTTON} elementId={item.courseNo}>
           <ColorPickerButton onClick={handleClick} sx={{ mr: { xs: 0, md: 1 } }}>
-            <Box display={{ xs: 'none', md: 'inline' }} mr={1}>
-              สีในตาราง
-            </Box>
+            <Typography variant="subtitle1" display={{ xs: 'none', md: 'inline' }} mr={1} color="primaryRange.200">
+              {t('selectColor')}
+            </Typography>
             <ColorCircle color={item.color} size={24} />
           </ColorPickerButton>
         </Analytics>

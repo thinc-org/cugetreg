@@ -1,6 +1,7 @@
+import { useState } from 'react'
+
 import { COLOR_BUTTON } from '@/common/context/Analytics/constants'
 import { useLog } from '@/common/context/Analytics/hooks/useLog'
-import { useDisclosure } from '@/common/hooks/useDisclosure'
 import { ScheduleColor } from '@/modules/Schedule/components/ColorPicker/constants'
 import { CourseCartItem, courseCartStore } from '@/store'
 
@@ -19,7 +20,14 @@ export function useColorPicker(classKey: ColorClassKey) {
 }
 
 export function useColorPickerModal(classKey: ColorClassKey) {
-  const { isOpen: open, onOpen: handleClick, onClose: handleClose } = useDisclosure()
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget)
+  }
+  const open = !!anchorEl
+  const handleClose = () => {
+    setAnchorEl(null)
+  }
   const colorPickerProps = useColorPicker(classKey)
-  return { open, handleClick, handleClose, ...colorPickerProps }
+  return { open, handleClick, handleClose, anchorEl, ...colorPickerProps }
 }

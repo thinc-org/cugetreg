@@ -67,6 +67,7 @@ export const scheduleTableCard = {
   and: 'และ',
   classOverlap: 'เวลาเรียนชนกับ',
   examOverlap: 'เวลาสอบชนกับ',
+  selectColor: 'สีในตาราง',
 }
 
 export const courseDialog = {

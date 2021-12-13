@@ -111,7 +111,7 @@ export const sectionCard = {
   time: 'วันเวลาเรียน',
   classRoom: 'ห้องเรียน',
   closed: 'ปิด',
-  avialable: '{{current}}/{{max}}',
+  available: '{{current}}/{{max}}',
   full: '{{current}}/{{max}}',
   unknownSeat: 'ไม่ทราบจำนวนที่นั่ง',
 }

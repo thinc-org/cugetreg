@@ -1,6 +1,5 @@
 import { Rating, Select, Stack, MenuItem, Typography, Button, Alert } from '@mui/material'
 import { TNode } from '@udecode/plate-core'
-import { format } from 'date-fns'
 import Link from 'next/link'
 
 import { Controller, SubmitHandler, SubmitErrorHandler, useFormContext } from 'react-hook-form'
@@ -31,7 +30,7 @@ export const ReviewForm: React.FC = () => {
   }
 
   const getYearList = (size: number): number[] => {
-    const currentYear = parseInt(format(new Date(), 'yyyy')) + 543
+    const currentYear = parseInt(getCurrentTerm().academicYear)
     return Array(size)
       .fill(0)
       .map((_, index) => currentYear - index)
@@ -51,8 +50,8 @@ export const ReviewForm: React.FC = () => {
 
     const allErros = Object.keys(errors)
       .map((error) => errorMessageMapping[error as 'rating' | 'content'])
-      .join(', ')
-    toast.error(`กรุณากรอก ${allErros}`)
+      .join('และ')
+    toast.error(`กรุณากรอก${allErros}`)
   }
 
   return (

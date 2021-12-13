@@ -1,4 +1,5 @@
 import { Stack, Typography } from '@mui/material'
+
 import { useTranslation } from 'react-i18next'
 
 import { NoSeatIcon } from '@/common/components/NoSeatIcon'
@@ -6,7 +7,7 @@ import { NoSeatIcon } from '@/common/components/NoSeatIcon'
 import { SectionStatusProps } from './types'
 
 const style = {
-  avialable: {
+  available: {
     backgroundColor: 'highlight.green.300',
     color: 'highlight.green.700',
   },
@@ -23,7 +24,7 @@ const style = {
 export const SectionStatus = ({ closed, capacity, ...rest }: SectionStatusProps) => {
   const { t } = useTranslation('sectionCard')
 
-  const status = closed ? 'closed' : capacity.current >= capacity.max ? 'full' : 'avialable'
+  const status = closed ? 'closed' : capacity.current >= capacity.max ? 'full' : 'available'
   const seatColor = status === 'closed' ? 'white' : 'primary.main'
 
   return (

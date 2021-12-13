@@ -1,10 +1,9 @@
 import { ApolloError } from '@apollo/client'
-import { Button, Grid, Chip, Stack, Typography } from '@mui/material'
-import { Course, getFaculty, StudyProgram } from '@thinc-org/chula-courses'
+import { Button, Grid, Stack, Typography } from '@mui/material'
+import { Course, getFaculty } from '@thinc-org/chula-courses'
 import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 import { NextSeoProps } from 'next-seo/lib/types'
 import dynamic from 'next/dynamic'
-import { ParsedUrlQuery } from 'querystring'
 
 import React from 'react'
 import { useTranslation } from 'react-i18next'
@@ -199,26 +198,24 @@ export function CourseDetailPage({ course, reviews }: CourseDetailPageProps) {
   )
 }
 
-interface IParams extends ParsedUrlQuery {
-  courseNo: string
-  studyProgram: StudyProgram
-}
-
 export async function getServerSideProps(
   context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<CourseDetailPageProps>> {
   try {
-    const { courseNo, studyProgram } = context.query as IParams
+    const { courseNo, courseGroup } = parseVariablesFromQuery(context.query)
     const client = createApolloServerClient()
     const { data: courseData } = await client.query<GetCourseResponse>({
       query: GET_COURSE,
-      variables: parseVariablesFromQuery(context.query),
+      variables: {
+        courseNo,
+        courseGroup,
+      },
     })
     const { data: reviewsData } = await client.query<GetReviewsResponse, GetReviewsVars>({
       query: GET_REVIEWS,
       variables: {
         courseNo,
-        studyProgram,
+        studyProgram: courseGroup.studyProgram,
       },
     })
     return {

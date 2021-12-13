@@ -130,12 +130,14 @@ export function CourseDetailPage({ course, reviews }: CourseDetailPageProps) {
       <Stack direction="row" justifyContent="space-between">
         <BackButton href={buildLink(`/courses`)} pathId={course.courseNo} />
         <Stack direction="row" spacing={4} alignItems="center">
-          <Stack direction="row" spacing={1} alignItems="center">
-            <MdStar size={24} />
-            <Typography color="primary" variant="h5" sx={{ display: 'inline-block' }}>
-              4.58
-            </Typography>
-          </Stack>
+          {course.rating && (
+            <Stack direction="row" spacing={1} alignItems="center">
+              <MdStar size={24} />
+              <Typography color="primary" variant="h5" sx={{ display: 'inline-block' }}>
+                {course.rating}
+              </Typography>
+            </Stack>
+          )}
           <Button variant="outlined" onClick={scrollToReview} startIcon={<MdEdit />}>
             เขียนรีวิว
           </Button>

@@ -4,8 +4,6 @@ import { Container } from '@mui/material'
 import { DefaultSeo } from 'next-seo'
 import { AppProps } from 'next/dist/next-server/lib/router/router'
 
-import { Toaster, ToastOptions } from 'react-hot-toast'
-
 import { Footer } from '@/common/components/Footer'
 import { LoadingProgress } from '@/common/components/LoadingProgress'
 import { TopBar } from '@/common/components/TopBar'
@@ -34,20 +32,9 @@ export function App(props: MyAppProps) {
   useApp(router)
   useSaveStudyProgram()
 
-  const toastOptions: ToastOptions = {
-    style: {
-      top: 20,
-      fontSize: '0.9rem',
-      fontFamily: 'prompt',
-      borderRadius: 4,
-      padding: 12,
-    },
-  }
-
   return (
     <>
       <DefaultSeo {...SEO} />
-      <Toaster position="top-center" toastOptions={toastOptions} gutter={16} />
       <AppProvider forceDark={forceDark} emotionCache={emotionCache}>
         <TrackPageChange>
           <LoadingProgress />

@@ -9,11 +9,11 @@ import toast from 'react-hot-toast'
 import { INITIAL_CONTENT } from '@/common/components/RichTextV2/constants'
 import { plugins } from '@/common/components/RichTextV2/plugins'
 import { useCourseGroup } from '@/common/hooks/useCourseGroup'
-import { useDialog } from '@/common/hooks/useDialog'
-import { useLoginGuard } from '@/common/hooks/useLoginGuard'
 import { Storage } from '@/common/storage'
 import { StorageKey } from '@/common/storage/constants'
 import { Review, ReviewInteractionType } from '@/common/types/reviews'
+import { loginGuard } from '@/common/utils/loginGuard'
+import { dialog, DialogOptions } from '@/lib/dialog'
 import { CreateReviewResponse, CreateReviewVars, CREATE_REVIEW } from '@/services/apollo/query/createReview'
 import { EditMyReviewResponse, EditMyReviewVars, EDIT_MY_REVIEW } from '@/services/apollo/query/editMyReview'
 import {
@@ -40,18 +40,17 @@ export const ReviewProvider: React.FC<ReviewProviderProps> = ({ courseNo, initia
   const localStorage = new Storage('localStorage')
   const methods = useForm<ReviewState>()
   const { studyProgram } = useCourseGroup()
-  const { loginGuard, Dialog: LoginDialog } = useLoginGuard()
-  const { activate, Dialog } = useDialog({
+
+  const deleteConfirmationDialogOptions: DialogOptions = {
     heading: 'คุณต้องการลบรีวิวนี้หรือไม่?',
     content: 'หากลบรีวิวนี้แล้วจะไม่สามารถกู้ข้อมูลกลับคืนมาได้อีก',
     primaryButtonText: 'ยืนยัน',
     secondaryButtonText: 'ยกเลิก',
-  })
+  }
 
   /**
    * Rich Text editor hook
    */
-
   const editor = createPlateEditor({
     plugins: plugins,
   })
@@ -158,15 +157,17 @@ export const ReviewProvider: React.FC<ReviewProviderProps> = ({ courseNo, initia
   const deleteMyReview = async (reviewId: string) => {
     try {
       if (!loginGuard()) return
-      activate({
-        onConfirm: async () => {
-          await removeReivewMutation({
-            variables: {
-              reviewId,
-            },
-          })
-          toast.success('ลบรีวิวสำเร็จ')
-        },
+      const onConfirm = async () => {
+        await removeReivewMutation({
+          variables: {
+            reviewId,
+          },
+        })
+        toast.success('ลบรีวิวสำเร็จ')
+      }
+      dialog({
+        ...deleteConfirmationDialogOptions,
+        onPrimaryButtonClick: onConfirm,
       })
     } catch (err) {
       toast.error((err as Error).message)
@@ -330,11 +331,7 @@ export const ReviewProvider: React.FC<ReviewProviderProps> = ({ courseNo, initia
 
   return (
     <FormProvider {...methods}>
-      <ReviewContext.Provider value={value}>
-        <LoginDialog />
-        <Dialog />
-        {children}
-      </ReviewContext.Provider>
+      <ReviewContext.Provider value={value}>{children}</ReviewContext.Provider>
     </FormProvider>
   )
 }

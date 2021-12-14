@@ -203,7 +203,6 @@ export const ColorPickerButton = forwardRef<HTMLButtonElement, ButtonProps>(func
       sx={deepAssign(
         {
           whiteSpace: 'nowrap',
-          marginLeft: 1,
           height: { xs: 48, md: 'fit-content' },
           minWidth: { xs: 48, md: 'fit-content' },
           backgroundColor: { md: 'primaryRange.10' },

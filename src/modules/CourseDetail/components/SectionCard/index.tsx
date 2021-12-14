@@ -50,9 +50,9 @@ export const SectionCard = (props: SectionCardProps) => {
               <Grid item>
                 <SectionTitle variant="h5">{t('section', { sectionNo: section.sectionNo })}</SectionTitle>
               </Grid>
-              {course.genEdType !== 'NO' && (
+              {section.genEdType !== 'NO' && (
                 <Grid item>
-                  <GenEdChip type={course.genEdType} />
+                  <GenEdChip type={section.genEdType} />
                 </Grid>
               )}
             </Grid>

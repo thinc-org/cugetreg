@@ -12,6 +12,7 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
 import { MdDelete } from 'react-icons/md'
 
 import { Caption } from '@/common/components/Caption'
+import { GenEdChip } from '@/common/components/Chips/catagories/GenEdChip'
 import { dayOfWeekMapper } from '@/common/constants/dayOfWeek'
 import { Analytics } from '@/common/context/Analytics/components/Analytics'
 import { LinkWithAnalytics } from '@/common/context/Analytics/components/LinkWithAnalytics'
@@ -39,7 +40,6 @@ import {
   LeftPane,
   OverlappingCardBorder,
   MiddlePane,
-  Spacer,
   VisibilityToggle,
   RightPane,
   StyledNativeSelect,
@@ -150,14 +150,14 @@ export const ScheduleTableCard = observer(({ item, index, overlaps }: ScheduleTa
 
 function CardHeader({ item }: CardComponentProps) {
   const { t } = useTranslation('scheduleTableCard')
-  const theme = useTheme()
   const { buildLink } = useLinkBuilderWithCourseGroup(item)
   const { handleClick, handleClose, anchorElRef, ...colorPickerProps } = useColorPickerPopper(item)
+  const section = item.sections.find((section) => section.sectionNo === item.selectedSectionNo)!
   return (
     <Stack direction="row" pt={1} my={0.5} pr={2}>
-      <Stack direction="row" flex={1} justifyContent="space-between" alignItems="flex-start">
-        <Grid container columnGap={2} alignItems="center" py={0.5}>
-          <Grid item>
+      <Stack direction="row" flex={1} justifyContent="space-between">
+        <Stack direction="row" columnGap={2} py={0.5} alignItems="center">
+          <Stack direction={{ xs: 'column', md: 'row' }} columnGap={2} rowGap={0.5} alignItems={{ md: 'center' }}>
             <LinkWithAnalytics
               href={buildLink(`/courses/${item.courseNo}`)}
               passHref
@@ -168,19 +168,19 @@ function CardHeader({ item }: CardComponentProps) {
                 {item.courseNo} {item.abbrName}
               </Typography>
             </LinkWithAnalytics>
-          </Grid>
-          <Grid item>
-            <Typography variant="h6" color={theme.palette.primaryRange[100]}>
-              {t('credits', { credits: item.credit })}
-            </Typography>
-          </Grid>
-          <Grid item>
-            <Hidden smDown>
-              <SectionSelect item={item} />
-              <Spacer />
-            </Hidden>
-          </Grid>
-        </Grid>
+            <Stack direction="row" columnGap={2} alignItems="center">
+              <Typography variant="h6" color="primaryRange.100">
+                {t('credits', { credits: item.credit })}
+              </Typography>
+              <Hidden smDown>
+                <Stack direction="row" columnGap={2} rowGap={0.5}>
+                  <SectionSelect item={item} />
+                </Stack>
+              </Hidden>
+              {section.genEdType !== 'NO' && <GenEdChip type={section.genEdType} size="small" />}
+            </Stack>
+          </Stack>
+        </Stack>
         <ClickAwayListener onClickAway={handleClose}>
           <div>
             <ColorPicker

@@ -163,6 +163,7 @@ exports[`ReviewCard should render correctly if this is your approved review 1`] 
       spacing={1}
     >
       <ForwardRef(IconButton)
+        disabled={true}
         onClick={[Function]}
         size="small"
       >
@@ -266,6 +267,7 @@ exports[`ReviewCard should render correctly if this is your pending review 1`] =
       spacing={1}
     >
       <ForwardRef(IconButton)
+        disabled={true}
         onClick={[Function]}
         size="small"
       >
@@ -357,6 +359,7 @@ exports[`ReviewCard should render correctly if this is your rejected review 1`] 
       spacing={1}
     >
       <ForwardRef(IconButton)
+        disabled={true}
         onClick={[Function]}
         size="small"
       >

@@ -1,4 +1,3 @@
-import axios from 'axios'
 import { runInAction } from 'mobx'
 import * as uuid from 'uuid'
 
@@ -6,7 +5,6 @@ import { StorageKey } from '@/common/storage/constants'
 import { httpClient } from '@/services/httpClient'
 import { sessionIdStore } from '@/store/sessionIdStore'
 import { userStore } from '@/store/userStore'
-import env from '@/utils/env/macro'
 
 import { ClientLogDTO, LogEvent } from './types'
 

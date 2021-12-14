@@ -1,4 +1,5 @@
 import { Stack, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material'
+
 import { useTranslation } from 'react-i18next'
 
 import { Caption } from '@/common/components/Caption'
@@ -8,7 +9,7 @@ import { dayOfWeekMapper } from '@/common/constants/dayOfWeek'
 import { getClassPeriod } from '@/common/utils/getClassPeriod'
 import { getExamDate } from '@/common/utils/getExamDate'
 import { getExamPeriod } from '@/common/utils/getExamPeriod'
-import { SectionStatus } from '@/modules/CourseDetail/components/SectionCard/components/SectionStatus'
+import { SectionStatus } from '@/modules/CourseDetail/components/SectionStatus'
 import { useOverlapWarning } from '@/modules/Schedule/components/ScheduleTable/components/ScheduleTableCard/utils'
 import { courseCartStore } from '@/store'
 
@@ -31,10 +32,7 @@ export function CourseDialogDetail() {
           <SectionSelect />
           {item.genEdType !== 'NO' && <GenEdChip type={item.genEdType} size="small" />}
         </Stack>
-        <SectionStatus
-          capacity={section.capacity}
-          status={section.closed ? 'closed' : section.capacity.current >= section.capacity.max ? 'full' : 'avialable'}
-        />
+        <SectionStatus capacity={section.capacity} closed={section.closed} />
       </Stack>
 
       <Typography variant="subtitle1" color="highlight.red.500">

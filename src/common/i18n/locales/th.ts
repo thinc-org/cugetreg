@@ -125,7 +125,7 @@ export const sectionCard = {
   classRoom: 'ห้องเรียน',
   classType: 'รูปแบบ',
   closed: 'ปิด',
-  avialable: '{{current}}/{{max}}',
+  available: '{{current}}/{{max}}',
   full: '{{current}}/{{max}}',
   unknownSeat: 'ไม่ทราบจำนวนที่นั่ง',
 }
@@ -196,6 +196,13 @@ export const filterBar = {
 
 export const tagList = {
   inRange: 'ในช่วง',
+}
+
+export const review = {
+  title: 'มาเขียนรีวิวรายวิชากันเถอะ!',
+  subtitle: '*การรีวิวนี้จะเป็นแบบไม่ระบุตัวตน',
+  cancel: 'ยกเลิก',
+  submit: 'ส่งรีวิว',
 }
 
 export const colorPicker = {

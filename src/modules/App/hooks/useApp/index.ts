@@ -19,7 +19,7 @@ export function useApp(router: Router) {
       message: 'Session started',
     })
     courseCartStore.upgradeSource()
-    userStore.restoreSession().then(() => courseCartStore.upgradeSource())
+    userStore.waitUntilInitialized().then(() => courseCartStore.upgradeSource())
   }, [])
 
   useEffect(() => {

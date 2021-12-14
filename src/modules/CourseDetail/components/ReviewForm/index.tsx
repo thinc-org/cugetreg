@@ -39,7 +39,6 @@ export const ReviewForm = () => {
   const onSubmit: SubmitHandler<ReviewState> = async (data) => {
     if (editingReviewId) await submitEditedReview(editingReviewId)
     else await submitReview()
-    console.log(data)
   }
 
   const onError: SubmitErrorHandler<ReviewState> = (errors) => {

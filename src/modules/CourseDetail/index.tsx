@@ -5,7 +5,6 @@ import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 import { NextSeoProps } from 'next-seo/lib/types'
 import dynamic from 'next/dynamic'
 
-import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { MdEdit, MdStar } from 'react-icons/md'
 
@@ -14,7 +13,7 @@ import { BackButton } from '@/common/components/BackButton'
 import { useLinkBuilder } from '@/common/hooks/useLinkBuilder'
 import { Language } from '@/common/i18n'
 import { Review } from '@/common/types/reviews'
-import { getExamDate } from '@/common/utils/getExamData'
+import { getExamDate } from '@/common/utils/getExamDate'
 import { getExamPeriod } from '@/common/utils/getExamPeriod'
 import { PageMeta } from '@/components/PageMeta'
 import { createApolloServerClient } from '@/services/apollo'
@@ -96,10 +95,8 @@ export function CourseDetailPage({ course, reviews }: CourseDetailPageProps) {
   })
 
   const faculty = getFaculty(course.faculty)
-  const finalDate = getExamDate(course, true)
-  const midtermDate = getExamDate(course, false)
-  const finalPeriod = getExamPeriod(course, true)
-  const midtermPeriod = getExamPeriod(course, false)
+  const { finalDate, midtermDate } = getExamDate(course)
+  const { midtermPeriod, finalPeriod } = getExamPeriod(course)
 
   return (
     <Container>

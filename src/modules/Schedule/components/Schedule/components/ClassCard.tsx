@@ -1,15 +1,18 @@
 import { styled } from '@mui/material'
 import { DayOfWeek } from '@thinc-org/chula-courses'
 
+import { useColor } from '@/modules/Schedule/components/ColorPicker/hooks/useColor'
+
 import { useDimensions } from '../dimensions'
-import { ScheduleClass, useColorScheme } from '../utils'
+import { ScheduleClass } from '../utils'
 import { ScheduleTypography } from './ScheduleTypography'
 
 interface ClassCardProps {
   scheduleClass: ScheduleClass
+  onClick: () => void
 }
 
-const ClassCardLayout = styled('div')({
+export const ClassCardLayout = styled('div')({
   position: 'absolute',
   display: 'flex',
   flexDirection: 'column',
@@ -17,6 +20,13 @@ const ClassCardLayout = styled('div')({
   borderRadius: '0.25em',
   padding: '0.5em',
   textAlign: 'center',
+  ':hover': {
+    filter: 'brightness(94%)',
+    cursor: 'pointer',
+  },
+  ':active': {
+    filter: 'brightness(85%)',
+  },
 })
 
 const ClassCardTypography = styled(ScheduleTypography)({
@@ -25,12 +35,12 @@ const ClassCardTypography = styled(ScheduleTypography)({
   whiteSpace: 'nowrap',
 })
 
-export function ClassCard({ scheduleClass }: ClassCardProps) {
+export function ClassCard({ scheduleClass, onClick }: ClassCardProps) {
   const { cellHeight, getPosition } = useDimensions()
-  const { courseNo, abbrName, genEdType, position, dayOfWeek, teachers, building, room, hasOverlap } = scheduleClass
+  const { courseNo, abbrName, position, dayOfWeek, teachers, sectionNo, hasOverlap, color } = scheduleClass
 
   // color
-  const colorScheme = useColorScheme(genEdType, hasOverlap ?? false)
+  const colorScheme = useColor(color, hasOverlap ?? false)
 
   // position
   const startPosition = position.start
@@ -40,9 +50,10 @@ export function ClassCard({ scheduleClass }: ClassCardProps) {
   const right = getPosition(y, endPosition).left
   const width = right - left
   const isWide = endPosition - startPosition >= 2
+
   return (
     <ClassCardLayout
-      style={{
+      sx={{
         top,
         left,
         width,
@@ -51,12 +62,13 @@ export function ClassCard({ scheduleClass }: ClassCardProps) {
         border: `1px solid ${colorScheme.border}`,
         color: colorScheme.text,
       }}
+      onClick={onClick}
     >
       <ClassCardTypography variant="subtitle2">
         {isWide && courseNo} {abbrName}
       </ClassCardTypography>
       <ClassCardTypography variant="caption">
-        {teachers.join(', ')} | {building} {room}
+        Sec {sectionNo} - {teachers.join(', ')}
       </ClassCardTypography>
     </ClassCardLayout>
   )

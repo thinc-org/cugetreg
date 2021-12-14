@@ -1,19 +1,32 @@
+import { mockCourseData } from '@/__mock__/courses'
 import { ExamClass } from '@/common/utils/types'
 import { CourseOverlap, CourseOverlapMap, ScheduleClass } from '@/modules/Schedule/components/Schedule/utils'
 
+const mockCourse = mockCourseData[0]
+export const mockItem = {
+  ...mockCourse,
+  color: 'pink',
+  isHidden: false,
+  selectedSectionNo: '1',
+} as const
 export const courseTemplate: Omit<ScheduleClass, 'classIndex'> = {
-  courseNo: '2110316',
-  abbrName: 'PROG LANG PRIN',
-  genEdType: 'NO',
-  building: 'ENG3',
-  room: '318',
-  teachers: ['NNN'],
+  courseNo: mockCourse.courseNo,
+  abbrName: mockCourse.abbrName,
+  studyProgram: mockCourse.studyProgram,
+  academicYear: mockCourse.academicYear,
+  semester: mockCourse.semester,
+  genEdType: mockCourse.genEdType,
+  teachers: [],
+  sectionNo: '1',
+  section: mockCourse.sections[0],
+  color: 'pink',
   position: {
     start: 0,
     end: 0,
   },
   hasOverlap: false,
   overlaps: [],
+  item: mockItem,
 }
 
 export const examTemplate: ExamClass = {
@@ -30,7 +43,7 @@ export const examTemplate: ExamClass = {
     period: { start: '', end: '' },
   },
   isHidden: false,
-
+  color: 'pink',
   hasOverlap: false,
   overlaps: [],
 }

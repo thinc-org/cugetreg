@@ -6,7 +6,6 @@ import {
   CardHeader,
   Grid,
   Stack,
-  Table,
   TableBody,
   TableCell,
   TableHead,
@@ -19,9 +18,11 @@ import { useTranslation } from 'react-i18next'
 import { Caption } from '@/common/components/Caption'
 import { GenEdChip } from '@/common/components/Chips/catagories/GenEdChip'
 import { SelectButton } from '@/common/components/SelectButton'
+import { UnstyledTable } from '@/common/components/UnstyledTable'
 import { dayOfWeekMapper } from '@/common/constants/dayOfWeek'
 import { Analytics } from '@/common/context/Analytics/components/Analytics'
 import { SUBJECT_SELECT_BUTTON_WITH_SECTION } from '@/common/context/Analytics/constants'
+import { getClassPeriod } from '@/common/utils/getClassPeriod'
 
 import { SectionStatus } from '../SectionStatus'
 
@@ -49,9 +50,9 @@ export const SectionCard = (props: SectionCardProps) => {
               <Grid item>
                 <SectionTitle variant="h5">{t('section', { sectionNo: section.sectionNo })}</SectionTitle>
               </Grid>
-              {course.genEdType !== 'NO' && (
+              {section.genEdType !== 'NO' && (
                 <Grid item>
-                  <GenEdChip type={course.genEdType} />
+                  <GenEdChip type={section.genEdType} />
                 </Grid>
               )}
             </Grid>
@@ -61,15 +62,7 @@ export const SectionCard = (props: SectionCardProps) => {
       />
       <CardContent sx={{ px: { xs: 2, sm: 4 }, py: 2, pt: { xs: 2, sm: 1 } }}>
         <Stack direction={['column', 'row']} justifyContent="space-between">
-          <Table
-            sx={{
-              width: { xs: '100%', sm: 'auto' },
-              'td, th': { border: 0, p: 0 },
-              'td ~ td, th ~ th': {
-                pl: { xs: 2, sm: 5 },
-              },
-            }}
-          >
+          <UnstyledTable>
             <TableHead>
               <TableRow>
                 <TableCell>
@@ -80,6 +73,9 @@ export const SectionCard = (props: SectionCardProps) => {
                 </TableCell>
                 <TableCell>
                   <Caption>{t('classRoom')}</Caption>
+                </TableCell>
+                <TableCell>
+                  <Caption>{t('classType')}</Caption>
                 </TableCell>
               </TableRow>
             </TableHead>
@@ -93,8 +89,7 @@ export const SectionCard = (props: SectionCardProps) => {
                   </TableCell>
                   <TableCell>
                     <Typography variant="body1" key={index}>
-                      {sectionClass.dayOfWeek && dayOfWeekMapper[sectionClass.dayOfWeek]} {sectionClass.period?.start}-
-                      {sectionClass.period?.end}
+                      {sectionClass.dayOfWeek && dayOfWeekMapper[sectionClass.dayOfWeek]} {getClassPeriod(sectionClass)}
                     </Typography>
                   </TableCell>
                   <TableCell>
@@ -102,10 +97,15 @@ export const SectionCard = (props: SectionCardProps) => {
                       {sectionClass.building} {sectionClass.room}
                     </Typography>
                   </TableCell>
+                  <TableCell>
+                    <Typography variant="body1" key={index}>
+                      {sectionClass.type}
+                    </Typography>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
-          </Table>
+          </UnstyledTable>
           <Stack
             sx={{
               display: { xs: 'none', sm: 'flex' },

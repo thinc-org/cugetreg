@@ -18,7 +18,7 @@ export const InfoBar = styled.div`
   margin-top: ${({ theme }) => theme.spacing(3)};
   margin-bottom: ${({ theme }) => theme.spacing(4)};
 
-  ${({ theme }) => theme.breakpoints.down('sm')} {
+  ${({ theme }) => theme.breakpoints.down('md')} {
     flex-direction: column;
     align-items: initial;
   }
@@ -33,7 +33,7 @@ export const ButtonBar = styled.div`
     margin-right: ${({ theme }) => theme.spacing(2)};
   }
 
-  ${({ theme }) => theme.breakpoints.down('sm')} {
+  ${({ theme }) => theme.breakpoints.down('md')} {
     margin-top: ${({ theme }) => theme.spacing(2)};
     a,
     button {
@@ -45,7 +45,7 @@ export const ButtonBar = styled.div`
 export const InfoSpacer = styled.div`
   flex: 1;
 
-  ${({ theme }) => theme.breakpoints.down('sm')} {
+  ${({ theme }) => theme.breakpoints.down('md')} {
     display: none;
   }
 `
@@ -54,13 +54,13 @@ export const TitleContainer = styled.div`
   display: flex;
   justify-content: space-between;
   margin-bottom: ${({ theme }) => theme.spacing(3)};
-  ${({ theme }) => theme.breakpoints.down('sm')} {
+  ${({ theme }) => theme.breakpoints.down('md')} {
     flex-direction: column;
   }
 `
 
 export const TabContainer = styled.div`
-  ${({ theme }) => theme.breakpoints.down('sm')} {
+  ${({ theme }) => theme.breakpoints.down('md')} {
     display: flex;
     justify-content: center;
 

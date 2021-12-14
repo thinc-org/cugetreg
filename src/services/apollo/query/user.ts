@@ -33,6 +33,7 @@ export const GET_COURSE_CART = gql`
       semester
       selectedSectionNo
       isHidden
+      color
     }
   }
 `

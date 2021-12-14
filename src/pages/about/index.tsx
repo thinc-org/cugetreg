@@ -1,4 +1,5 @@
 import { Box, Card, Typography, Link, useTheme } from '@mui/material'
+
 import React from 'react'
 
 import { StyledArticleBody } from '@/configs/theme/articletext'
@@ -25,8 +26,17 @@ export default function About() {
         <StyledArticleBody variant="body1">
           ผลงานที่ผ่านมาของชมรม Thinc. เช่น
           <ul>
+            <li>
+              <Link
+                href="https://book.cusc.chula.ac.th"
+                target="_blank"
+                rel="noreferrer"
+                color={theme.palette.secondaryRange[900]}
+              >
+                ระบบจองสนามกีฬา CU Sports Center
+              </Link>
+            </li>
             <li>แอปพลิเคชัน CU Pop Bus</li>
-            <li>ระบบจองสนามกีฬา CU Sport Complex (เปิดใช้งานเร็ว ๆ นี้)</li>
             <li>ระบบลงทะเบียนขึ้นสแตนด์แปรอักษรฝั่งจุฬาฯ งานฟุตบอลประเพณีจุฬาฯ-ธรรมศาสตร์ ครั้งที่ 74</li>
             <li>Companion App ในงาน JavaScript Bangkok 1.0.0</li>
           </ul>

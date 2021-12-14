@@ -124,6 +124,9 @@ export const ReviewProvider: React.FC<ReviewProviderProps> = ({ courseNo, initia
     ],
   })
 
+  const reviews = reviewQuery.data?.reviews || initialReviews
+  const myPendingReviews = myPendingReviewQuery.data?.myPendingReviews || []
+
   /**
    * Initialize context values and form state
    */
@@ -193,18 +196,11 @@ export const ReviewProvider: React.FC<ReviewProviderProps> = ({ courseNo, initia
    * @param reviewId
    */
   const editMyReview = async (reviewId: string) => {
-    const findAndSetReviewFormCallback = async (reviews: Review[]) => {
-      const review = reviews.find((data) => data._id === reviewId)
-      if (review) {
-        setReviewForm({
-          ...review,
-          rating: review.rating / 2,
-          content: getEditor().deserializeHtml(review.content),
-        })
-      }
-    }
-    await findAndSetReviewFormCallback(reviewQuery.data?.reviews || [])
-    await findAndSetReviewFormCallback(myPendingReviewQuery.data?.myPendingReviews || [])
+    const allReviews = [...reviews, ...myPendingReviews]
+    const review = allReviews.find((data) => data._id === reviewId)
+    if (!review) return
+
+    setReviewForm({ ...review, rating: review.rating / 2, content: getEditor().deserializeHtml(review.content) })
     setEditingReviewId(reviewId)
   }
 
@@ -329,8 +325,8 @@ export const ReviewProvider: React.FC<ReviewProviderProps> = ({ courseNo, initia
   }
 
   const value: ReviewContextValues = {
-    reviews: filterDisplayedReviews(reviewQuery.data?.reviews || initialReviews),
-    myPendingReviews: filterDisplayedReviews(myPendingReviewQuery.data?.myPendingReviews || []),
+    reviews: filterDisplayedReviews(reviews),
+    myPendingReviews: filterDisplayedReviews(myPendingReviews),
     setInteraction,
     reportReview,
     deleteMyReview,

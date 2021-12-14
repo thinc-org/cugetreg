@@ -1,21 +1,19 @@
 import { useMutation, useQuery } from '@apollo/client'
-import { createPlateEditor, deserializeHtml, serializeHtml, TNode, usePlateActions } from '@udecode/plate-core'
+import type { TNode } from '@udecode/plate-core'
 import escapeHTML from 'escape-html'
 
-import React, { createContext, useContext, useEffect } from 'react'
+import React, { createContext, useCallback, useContext, useEffect, useRef } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 
-import { INITIAL_CONTENT } from '@/common/components/RichTextEditor/constants'
-import { plugins } from '@/common/components/RichTextEditor/plugins'
+import { INITIAL_CONTENT } from '@/common/components/RichTextEditor/initialContent'
+import type { RichTextEditorRef } from '@/common/components/RichTextEditor/types'
 import { useCourseGroup } from '@/common/hooks/useCourseGroup'
 import { Storage } from '@/common/storage'
 import { StorageKey } from '@/common/storage/constants'
 import { Review, ReviewInteractionType } from '@/common/types/reviews'
 import { loginGuard } from '@/common/utils/loginGuard'
 import { dialog, DialogOptions } from '@/lib/dialog'
-import { ReviewForm } from '@/modules/CourseDetail/components/ReviewForm'
-import { ReviewList } from '@/modules/CourseDetail/components/ReviewList'
 import { CreateReviewResponse, CreateReviewVars, CREATE_REVIEW } from '@/services/apollo/query/createReview'
 import { EditMyReviewResponse, EditMyReviewVars, EDIT_MY_REVIEW } from '@/services/apollo/query/editMyReview'
 import {
@@ -31,14 +29,14 @@ import {
   SET_REVIEW_INTERACTION,
 } from '@/services/apollo/query/setReviewInteraction'
 
-import { DEFAULT_REVIEW_CONTEXT_VALUE, REVIEW_FORM_ID } from './constants'
+import { DEFAULT_REVIEW_CONTEXT_VALUE } from './constants'
 import { ReviewContextValues, ReviewState, ReviewProviderProps } from './types'
 
 export const ReviewContext = createContext<ReviewContextValues>(DEFAULT_REVIEW_CONTEXT_VALUE)
 
 export const useReviewContext = () => useContext(ReviewContext)
 
-export const ReviewProvider: React.FC<ReviewProviderProps> = ({ courseNo, initialReviews }) => {
+export const ReviewProvider: React.FC<ReviewProviderProps> = ({ courseNo, initialReviews, children }) => {
   const localStorage = new Storage('localStorage')
   const methods = useForm<ReviewState>()
   const { studyProgram } = useCourseGroup()
@@ -53,10 +51,24 @@ export const ReviewProvider: React.FC<ReviewProviderProps> = ({ courseNo, initia
   /**
    * Rich Text editor hook
    */
-  const editor = createPlateEditor({
-    plugins: plugins,
-  })
-  const { resetEditor, setValue } = usePlateActions(REVIEW_FORM_ID)
+  const editorRef = useRef<RichTextEditorRef>()
+  const getEditor = useCallback(() => editorRef.current!, [])
+  const editorLoaded = typeof getEditor() !== 'undefined'
+
+  const pendingSetValue = useRef<TNode[]>()
+  const setEditorValue = useCallback((newValue: TNode[]) => {
+    const currentEditor = editorRef.current
+    if (typeof currentEditor === 'undefined') {
+      pendingSetValue.current = newValue
+      return
+    }
+    currentEditor.setValue(newValue)
+  }, [])
+
+  if (editorLoaded && typeof pendingSetValue.current !== 'undefined') {
+    setEditorValue(pendingSetValue.current)
+    pendingSetValue.current = undefined
+  }
 
   /**
    * GraphQL queries
@@ -181,18 +193,18 @@ export const ReviewProvider: React.FC<ReviewProviderProps> = ({ courseNo, initia
    * @param reviewId
    */
   const editMyReview = async (reviewId: string) => {
-    const findAndSetReviewFormCallback = (reviews: Review[]) => {
+    const findAndSetReviewFormCallback = async (reviews: Review[]) => {
       const review = reviews.find((data) => data._id === reviewId)
       if (review) {
         setReviewForm({
           ...review,
           rating: review.rating / 2,
-          content: deserializeHtml(editor, { element: review.content }),
+          content: getEditor().deserializeHtml(review.content),
         })
       }
     }
-    findAndSetReviewFormCallback(reviewQuery.data?.reviews || [])
-    findAndSetReviewFormCallback(myPendingReviewQuery.data?.myPendingReviews || [])
+    await findAndSetReviewFormCallback(reviewQuery.data?.reviews || [])
+    await findAndSetReviewFormCallback(myPendingReviewQuery.data?.myPendingReviews || [])
     setEditingReviewId(reviewId)
   }
 
@@ -201,8 +213,7 @@ export const ReviewProvider: React.FC<ReviewProviderProps> = ({ courseNo, initia
    */
   const cancelEditReview = () => {
     methods.setValue('content', INITIAL_CONTENT as TNode[])
-    setValue(INITIAL_CONTENT, REVIEW_FORM_ID)
-    resetEditor(REVIEW_FORM_ID)
+    setEditorValue(INITIAL_CONTENT)
     methods.setValue('rating', 0)
     setEditingReviewId(undefined)
   }
@@ -217,7 +228,7 @@ export const ReviewProvider: React.FC<ReviewProviderProps> = ({ courseNo, initia
       const review = methods.getValues()
       const ratingNumber = review.rating * 2 // 1 - 10, 0 isn't accepted
       const modifiedNode = applyEscapedText(review.content as TNode[])
-      const html = serializeHtml(editor, { nodes: modifiedNode })
+      const html = getEditor().serializeHtml(modifiedNode)
       const response = await createReviewMutation({
         variables: {
           createReviewInput: {
@@ -250,7 +261,7 @@ export const ReviewProvider: React.FC<ReviewProviderProps> = ({ courseNo, initia
       const review = methods.getValues()
       const ratingNumber = review.rating * 2 // 1 - 10, 0 isn't accepted
       const modifiedNode = applyEscapedText(review.content as TNode[])
-      const html = serializeHtml(editor, { nodes: modifiedNode })
+      const html = getEditor().serializeHtml(modifiedNode)
       const response = await editMyReviewMutation({
         variables: {
           reviewId,
@@ -295,8 +306,7 @@ export const ReviewProvider: React.FC<ReviewProviderProps> = ({ courseNo, initia
     if (form.semester) methods.setValue('semester', form.semester)
     if (form.content) {
       methods.setValue('content', form.content)
-      setValue(form.content, REVIEW_FORM_ID)
-      resetEditor(REVIEW_FORM_ID)
+      setEditorValue(form.content)
     }
   }
 
@@ -329,14 +339,12 @@ export const ReviewProvider: React.FC<ReviewProviderProps> = ({ courseNo, initia
     submitReview,
     submitEditedReview,
     editingReviewId,
+    editorRef,
   }
 
   return (
     <FormProvider {...methods}>
-      <ReviewContext.Provider value={value}>
-        <ReviewForm />
-        <ReviewList />
-      </ReviewContext.Provider>
+      <ReviewContext.Provider value={value}>{children}</ReviewContext.Provider>
     </FormProvider>
   )
 }

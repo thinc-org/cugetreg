@@ -18,7 +18,7 @@ export const ReviewForm = () => {
   const { register, handleSubmit, control } = useFormContext<ReviewState>()
   const { academicYear, semester } = getCurrentTerm()
   const { t } = useTranslation('review')
-  const { submitReview, submitEditedReview, editingReviewId, cancelEditReview } = useReviewContext()
+  const { submitReview, submitEditedReview, editingReviewId, cancelEditReview, editorRef } = useReviewContext()
 
   const validateContent = (value: TNode[] | TNode | null): boolean => {
     if (!value) return false
@@ -36,9 +36,9 @@ export const ReviewForm = () => {
       .map((_, index) => currentYear - index)
   }
 
-  const onSubmit: SubmitHandler<ReviewState> = async () => {
-    if (editingReviewId) await submitEditedReview(editingReviewId)
-    else await submitReview()
+  const onSubmit: SubmitHandler<ReviewState> = () => {
+    if (editingReviewId) submitEditedReview(editingReviewId)
+    else submitReview()
   }
 
   const onError: SubmitErrorHandler<ReviewState> = (errors) => {
@@ -112,7 +112,7 @@ export const ReviewForm = () => {
           control={control}
           rules={{ required: 'content should not empty', validate: validateContent }}
           render={({ field: { value, onChange } }) => (
-            <RichTextEditor id={REVIEW_FORM_ID} defaultValue={value as TNode[]} onChange={onChange} />
+            <RichTextEditor ref={editorRef} id={REVIEW_FORM_ID} defaultValue={value as TNode[]} onChange={onChange} />
           )}
         />
         <Stack mt={2} mb={4} direction="row" spacing={2}>

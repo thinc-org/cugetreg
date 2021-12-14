@@ -36,7 +36,7 @@ export const ReviewForm = () => {
       .map((_, index) => currentYear - index)
   }
 
-  const onSubmit: SubmitHandler<ReviewState> = async (data) => {
+  const onSubmit: SubmitHandler<ReviewState> = async () => {
     if (editingReviewId) await submitEditedReview(editingReviewId)
     else await submitReview()
   }
@@ -88,7 +88,7 @@ export const ReviewForm = () => {
             <Select
               {...register('semester', { required: 'semester required' })}
               // label="ภาคการศึกษา"
-              defaultValue={semester}
+              defaultValue="1"
               sx={{ minWidth: 120 }}
               fullWidth
             >

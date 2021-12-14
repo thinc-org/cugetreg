@@ -38,7 +38,7 @@ export const ReviewContext = createContext<ReviewContextValues>(DEFAULT_REVIEW_C
 
 export const useReviewContext = () => useContext(ReviewContext)
 
-export const ReviewProvider: React.FC<ReviewProviderProps> = ({ courseNo, initialReviews, children }) => {
+export const ReviewProvider: React.FC<ReviewProviderProps> = ({ courseNo, initialReviews }) => {
   const localStorage = new Storage('localStorage')
   const methods = useForm<ReviewState>()
   const { studyProgram } = useCourseGroup()

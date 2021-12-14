@@ -275,7 +275,7 @@ export class CourseCart implements CourseCartProps {
       color: getNewColor(this.shopItems, course),
     }
     const foundIndex = this.shopItems.findIndex((item) => isSameKey(item, newItem))
-    if (foundIndex != -1) this.shopItems[foundIndex] = { ...this.shopItems[foundIndex], selectedSectionNo }
+    if (foundIndex !== -1) this.shopItems[foundIndex] = { ...this.shopItems[foundIndex], selectedSectionNo }
     else this.shopItems.push(newItem)
 
     this.onChange()

@@ -1,3 +1,19 @@
+# [1.5.0](https://github.com/thinc-org/cugetreg-frontend/compare/v1.4.0...v1.5.0) (2021-12-14)
+
+
+### Bug Fixes
+
+* comment ([2e6b164](https://github.com/thinc-org/cugetreg-frontend/commit/2e6b164f473da7ae107485901058c6bb4f4e60c1))
+* update about page ([eb65264](https://github.com/thinc-org/cugetreg-frontend/commit/eb6526474f0b63d917d10d001d59b3e495066b3d))
+* update privacy policy ([a3b0c33](https://github.com/thinc-org/cugetreg-frontend/commit/a3b0c337abe333a228bf4c4a9eb2748e76be6a41))
+* user login after activate loginGuard ([#282](https://github.com/thinc-org/cugetreg-frontend/issues/282)) ([75205e3](https://github.com/thinc-org/cugetreg-frontend/commit/75205e3fe1de647ac2883ca477c0cab7e1967720))
+
+
+### Features
+
+* add RichText for review ([6d36292](https://github.com/thinc-org/cugetreg-frontend/commit/6d36292c40afb47d32445a14bea214ffa4ec0342))
+* update about, add course description source ([984adef](https://github.com/thinc-org/cugetreg-frontend/commit/984adef26fd63392de5ee3d6030f8461ed2ce2a6))
+
 # [1.4.0](https://github.com/thinc-org/cugetreg-frontend/compare/v1.3.2...v1.4.0) (2021-11-29)
 
 

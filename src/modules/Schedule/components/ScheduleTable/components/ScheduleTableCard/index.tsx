@@ -1,4 +1,4 @@
-import { Grid, Hidden, IconButton, Stack, Typography, useTheme } from '@mui/material'
+import { ClickAwayListener, Grid, Hidden, IconButton, Stack, Typography, useTheme } from '@mui/material'
 import { useMediaQuery } from '@mui/material'
 import { PanInfo } from 'framer-motion'
 import { uniq } from 'lodash'
@@ -12,10 +12,22 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
 import { MdDelete } from 'react-icons/md'
 
 import { Caption } from '@/common/components/Caption'
+import { GenEdChip } from '@/common/components/Chips/catagories/GenEdChip'
 import { dayOfWeekMapper } from '@/common/constants/dayOfWeek'
 import { Analytics } from '@/common/context/Analytics/components/Analytics'
-import { HIDE_COURSE, DELETE_COURSE, SECTION_CHANGE } from '@/common/context/Analytics/constants'
+import { LinkWithAnalytics } from '@/common/context/Analytics/components/LinkWithAnalytics'
+import {
+  HIDE_COURSE,
+  DELETE_COURSE,
+  SECTION_CHANGE,
+  COURSE_TITLE_SCHEDULE_CARD,
+  COLOR_PICKER_BUTTON,
+} from '@/common/context/Analytics/constants'
 import { useLinkBuilderWithCourseGroup } from '@/common/hooks/useLinkBuilder'
+import { getClassPeriod } from '@/common/utils/getClassPeriod'
+import { ColorCircle } from '@/modules/Schedule/components/ColorCircle'
+import { ColorPicker } from '@/modules/Schedule/components/ColorPicker'
+import { useColorPickerPopper } from '@/modules/Schedule/components/ColorPicker/hooks/useColorPicker'
 import { CourseOverlap } from '@/modules/Schedule/components/Schedule/utils'
 import { CourseCartItem, courseCartStore } from '@/store'
 
@@ -25,15 +37,13 @@ import {
   CardLayout,
   DeleteButton,
   GridSpacer,
-  HeaderLayout,
   LeftPane,
   OverlappingCardBorder,
   MiddlePane,
-  Spacer,
   VisibilityToggle,
-  StyledLink,
   RightPane,
   StyledNativeSelect,
+  ColorPickerButton,
 } from './styled'
 import { useOverlapWarning } from './utils'
 
@@ -51,6 +61,15 @@ export interface CardDetailProps extends CardComponentProps {
   overlaps?: CourseOverlap
 }
 
+/* fixed axis drag hack */
+function getStyle(style: React.CSSProperties | undefined) {
+  if (style?.transform) {
+    const axisLockY = `translate(0px, ${style.transform.split(',').pop()}`
+    return { ...style, transform: axisLockY }
+  }
+  return style
+}
+
 export const ScheduleTableCard = observer(({ item, index, overlaps }: ScheduleTableCardProps) => {
   const { courseNo, isHidden } = item
   const toggleVisibility = useCallback(() => {
@@ -60,23 +79,25 @@ export const ScheduleTableCard = observer(({ item, index, overlaps }: ScheduleTa
   const theme = useTheme()
   const match = useMediaQuery(theme.breakpoints.up('md'))
   const [swipped, setSwipped] = useState(false)
-  const x = match || swipped ? 0 : 40
+  const x = swipped ? -40 : 0
   useEffect(() => {
     if (match) {
       setSwipped(false)
     }
   }, [match])
-  const onDragEnd = (e: MouseEvent, { offset, point }: PanInfo) => {
+
+  function onDragEnd(e: MouseEvent, { offset, point }: PanInfo) {
     // cancelling drag event due to scrolling
     if (point.x == 0 && point.y == 0) {
       return
     }
+    const DRAG_THRESHHOLD = 25
     if (swipped) {
-      if (offset.x > 100) {
+      if (offset.x > DRAG_THRESHHOLD) {
         setSwipped(false)
       }
     } else {
-      if (offset.x < -100) {
+      if (offset.x < -DRAG_THRESHHOLD) {
         setSwipped(true)
       }
     }
@@ -89,16 +110,7 @@ export const ScheduleTableCard = observer(({ item, index, overlaps }: ScheduleTa
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          style={((style) => {
-            if (style?.transform) {
-              const axisLockY = `translate(0px, ${style.transform.split(',').pop()}`
-              return {
-                ...style,
-                transform: axisLockY,
-              }
-            }
-            return style
-          })(provided.draggableProps.style)}
+          style={getStyle(provided.draggableProps.style)}
         >
           <CardContent
             drag={match ? false : 'x'}
@@ -138,29 +150,62 @@ export const ScheduleTableCard = observer(({ item, index, overlaps }: ScheduleTa
 
 function CardHeader({ item }: CardComponentProps) {
   const { t } = useTranslation('scheduleTableCard')
-  const theme = useTheme()
   const { buildLink } = useLinkBuilderWithCourseGroup(item)
+  const { handleClick, handleClose, anchorElRef, ...colorPickerProps } = useColorPickerPopper(item)
+  const section = item.sections.find((section) => section.sectionNo === item.selectedSectionNo)!
   return (
-    <HeaderLayout>
-      <StyledLink href={buildLink(`/courses/${item.courseNo}`)}>
-        <Typography variant="h5" style={{ marginRight: 16 }}>
-          {item.courseNo} {item.abbrName}
-        </Typography>
-      </StyledLink>
-
-      <Typography variant="h6" color={theme.palette.primaryRange[100]} style={{ marginRight: 32 }}>
-        {t('credits', { credits: item.credit })}
-      </Typography>
-      <Hidden smDown>
-        <SectionSelect item={item} />
-        <Spacer />
-      </Hidden>
+    <Stack direction="row" pt={1} my={0.5} pr={2}>
+      <Stack direction="row" flex={1} justifyContent="space-between">
+        <Stack direction="row" columnGap={2} py={0.5} alignItems="center">
+          <Stack direction={{ xs: 'column', md: 'row' }} columnGap={2} rowGap={0.5} alignItems={{ md: 'center' }}>
+            <LinkWithAnalytics
+              href={buildLink(`/courses/${item.courseNo}`)}
+              passHref
+              elementName={COURSE_TITLE_SCHEDULE_CARD}
+              elementId={item.courseNo}
+            >
+              <Typography variant="h5">
+                {item.courseNo} {item.abbrName}
+              </Typography>
+            </LinkWithAnalytics>
+            <Stack direction="row" columnGap={2} alignItems="center">
+              <Typography variant="h6" color="primaryRange.100">
+                {t('credits', { credits: item.credit })}
+              </Typography>
+              <Hidden smDown>
+                <Stack direction="row" columnGap={2} rowGap={0.5}>
+                  <SectionSelect item={item} />
+                </Stack>
+              </Hidden>
+              {section.genEdType !== 'NO' && <GenEdChip type={section.genEdType} size="small" />}
+            </Stack>
+          </Stack>
+        </Stack>
+        <ClickAwayListener onClickAway={handleClose}>
+          <div>
+            <ColorPicker
+              scheduleClass={item}
+              handleClose={handleClose}
+              anchorEl={anchorElRef.current}
+              {...colorPickerProps}
+            />
+            <Analytics elementName={COLOR_PICKER_BUTTON} elementId={item.courseNo}>
+              <ColorPickerButton onClick={handleClick} ref={anchorElRef} sx={{ mr: { xs: 0, md: 1 } }}>
+                <Typography variant="subtitle1" display={{ xs: 'none', md: 'inline' }} mr={1} color="primaryRange.200">
+                  {t('selectColor')}
+                </Typography>
+                <ColorCircle color={item.color} size={24} />
+              </ColorPickerButton>
+            </Analytics>
+          </div>
+        </ClickAwayListener>
+      </Stack>
       <Hidden mdDown>
         <IconButton aria-label={t('delete')} onClick={() => courseCartStore.removeCourse(item)}>
           <MdDelete />
         </IconButton>
       </Hidden>
-    </HeaderLayout>
+    </Stack>
   )
 }
 
@@ -196,11 +241,11 @@ function CardDetail({ item, overlaps }: CardDetailProps) {
   return (
     <Grid container spacing={1} sx={{ mt: -1, mb: 2 }}>
       <Hidden smUp>
-        <Grid item xs={6} style={{ display: 'flex', alignContent: 'center' }}>
+        <Grid item xs={5} style={{ display: 'flex', alignContent: 'center' }}>
           <SectionSelect item={item} />
         </Grid>
       </Hidden>
-      <Grid item xs={6} sm="auto">
+      <Grid item xs={7} sm="auto">
         <Stack spacing={0.5}>
           <Caption>{t('teacher')}</Caption>
           <Typography variant="body1" sx={{ maxWidth: '15ch' }}>
@@ -209,21 +254,20 @@ function CardDetail({ item, overlaps }: CardDetailProps) {
         </Stack>
       </Grid>
       <GridSpacer />
-      <Grid item xs={6} sm="auto">
+      <Grid item xs={5} sm="auto">
         <Stack spacing={0.5}>
           <Caption>{t('time')}</Caption>
           <Stack>
             {section.classes.map((sectionClass, index) => (
               <Typography variant="body1" key={`${section.sectionNo}.${index}`}>
-                {sectionClass.dayOfWeek && dayOfWeekMapper[sectionClass.dayOfWeek]} {sectionClass.period?.start}-
-                {sectionClass.period?.end}
+                {sectionClass.dayOfWeek && dayOfWeekMapper[sectionClass.dayOfWeek]} {getClassPeriod(sectionClass)}
               </Typography>
             ))}
           </Stack>
         </Stack>
       </Grid>
       <GridSpacer />
-      <Grid item xs={6} sm="auto">
+      <Grid item xs={4} sm="auto">
         <Stack spacing={0.5}>
           <Caption>{t('classRoom')}</Caption>
           <Stack>
@@ -236,7 +280,20 @@ function CardDetail({ item, overlaps }: CardDetailProps) {
         </Stack>
       </Grid>
       <GridSpacer />
-      <Grid item xs alignSelf="flex-end" sx={{ pr: { sm: 3 } }}>
+      <Grid item xs={3} sm="auto">
+        <Stack spacing={0.5}>
+          <Caption>{t('classType')}</Caption>
+          <Stack>
+            {section.classes.map((sectionClass, index) => (
+              <Typography variant="body1" key={`${section.sectionNo}.${index}`}>
+                {sectionClass.type}
+              </Typography>
+            ))}
+          </Stack>
+        </Stack>
+      </Grid>
+      <GridSpacer />
+      <Grid item xs alignSelf="flex-end" sx={{ pr: { xs: 2, sm: 3 } }}>
         <Typography variant="subtitle1" color="highlight.red.500" textAlign={{ xs: 'left', sm: 'right' }}>
           {warning}
         </Typography>

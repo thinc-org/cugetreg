@@ -1,11 +1,10 @@
-import axios from 'axios'
 import { runInAction } from 'mobx'
 import * as uuid from 'uuid'
 
 import { StorageKey } from '@/common/storage/constants'
+import { httpClient } from '@/services/httpClient'
 import { sessionIdStore } from '@/store/sessionIdStore'
 import { userStore } from '@/store/userStore'
-import env from '@/utils/env/macro'
 
 import { ClientLogDTO, LogEvent } from './types'
 
@@ -34,9 +33,7 @@ function sendCollectedLog() {
   backlogLog = []
   if (data.length == 0) return
   if (process.env.NODE_ENV === 'development') return
-  axios
-    .post(`${env.backend.uri}/clientlogging`, data)
-    .catch((e) => console.error('Error while logging', e, 'Message', data))
+  httpClient.post(`/clientlogging`, data).catch((e) => console.error('Error while logging', e, 'Message', data))
 }
 
 export function startLogging(): () => void {

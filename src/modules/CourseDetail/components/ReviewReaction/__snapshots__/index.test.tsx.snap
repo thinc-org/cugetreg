@@ -1,0 +1,81 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ReviewReaction should render ReviewReaction type D like correctly when defaultPressed=false  1`] = `
+<ForwardRef(Stack)
+  alignItems="center"
+  direction="row"
+  spacing={0.5}
+>
+  <ForwardRef(IconButton)
+    size="small"
+  >
+    <SelectedIcon />
+  </ForwardRef(IconButton)>
+  <ForwardRef(Typography)
+    color="#C9CCE4"
+    variant="h6"
+  >
+    42
+  </ForwardRef(Typography)>
+</ForwardRef(Stack)>
+`;
+
+exports[`ReviewReaction should render ReviewReaction type D like correctly when defaultPressed=true  1`] = `
+<ForwardRef(Stack)
+  alignItems="center"
+  direction="row"
+  spacing={0.5}
+>
+  <ForwardRef(IconButton)
+    size="small"
+  >
+    <SelectedIcon />
+  </ForwardRef(IconButton)>
+  <ForwardRef(Typography)
+    color="#F96666"
+    variant="h6"
+  >
+    42
+  </ForwardRef(Typography)>
+</ForwardRef(Stack)>
+`;
+
+exports[`ReviewReaction should render ReviewReaction type L like correctly when defaultPressed=false  1`] = `
+<ForwardRef(Stack)
+  alignItems="center"
+  direction="row"
+  spacing={0.5}
+>
+  <ForwardRef(IconButton)
+    size="small"
+  >
+    <SelectedIcon />
+  </ForwardRef(IconButton)>
+  <ForwardRef(Typography)
+    color="#C9CCE4"
+    variant="h6"
+  >
+    42
+  </ForwardRef(Typography)>
+</ForwardRef(Stack)>
+`;
+
+exports[`ReviewReaction should render ReviewReaction type L like correctly when defaultPressed=true  1`] = `
+<ForwardRef(Stack)
+  alignItems="center"
+  direction="row"
+  spacing={0.5}
+>
+  <ForwardRef(IconButton)
+    size="small"
+  >
+    <SelectedIcon />
+  </ForwardRef(IconButton)>
+  <ForwardRef(Typography)
+    color="#85E14D"
+    variant="h6"
+  >
+    42
+  </ForwardRef(Typography)>
+</ForwardRef(Stack)>
+`;

@@ -87,7 +87,12 @@ export const SchedulePage = observer(() => {
       </TitleContainer>
       <ScheduleContainer enabled={!isExamTable}>
         <div ref={ref}>
-          <Schedule classes={scheduleClasses} daysCount={daysCount} hourEnd={hourEnd} />
+          <Schedule
+            classes={scheduleClasses}
+            daysCount={daysCount}
+            hourEnd={hourEnd}
+            overlappingCourses={overlappingCourses}
+          />
         </div>
       </ScheduleContainer>
       <ExamContainer enabled={isExamTable}>

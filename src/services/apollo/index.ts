@@ -3,6 +3,7 @@ import { setContext } from '@apollo/client/link/context'
 import { Course } from '@thinc-org/chula-courses'
 import { uniqBy } from 'lodash'
 
+import { apiUrl } from '@/services/httpClient'
 import { userStore } from '@/store/userStore'
 import env from '@/utils/env/macro'
 
@@ -40,14 +41,15 @@ const cache = new InMemoryCache({
 })
 
 const httpLink = createHttpLink({
-  uri: `${env.backend.uri}/graphql`,
+  uri: `${apiUrl}/graphql`,
 })
 
-const authLink = setContext((_, { headers }) => {
+const authLink = setContext(async (_, { headers }) => {
+  const accessToken = await userStore.getAccessToken()
   return {
     headers: {
       ...headers,
-      authorization: userStore.accessToken ? `Bearer ${userStore.accessToken}` : '',
+      authorization: accessToken ? `Bearer ${accessToken}` : '',
     },
   }
 })
@@ -55,11 +57,13 @@ const authLink = setContext((_, { headers }) => {
 export const client = new ApolloClient({
   link: authLink.concat(httpLink),
   cache: cache,
+  connectToDevTools: env.environment !== 'production',
 })
 
 export function createApolloServerClient() {
   return new ApolloClient({
-    uri: `${env.backend.uri}/graphql`,
+    uri: `${apiUrl}/graphql`,
     cache: new InMemoryCache(),
+    connectToDevTools: env.environment !== 'production',
   })
 }

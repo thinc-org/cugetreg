@@ -1,17 +1,13 @@
-import { Stack, Typography, TypographyProps } from '@mui/material'
-import { Capacity } from '@thinc-org/chula-courses'
+import { Stack, Typography } from '@mui/material'
+
 import { useTranslation } from 'react-i18next'
 
 import { NoSeatIcon } from '@/common/components/NoSeatIcon'
 
-export type AvailableStatus = 'avialable' | 'full' | 'closed'
-export interface SectionStatusProps extends TypographyProps {
-  status: AvailableStatus
-  capacity: Capacity
-}
+import { SectionStatusProps } from './types'
 
 const style = {
-  avialable: {
+  available: {
     backgroundColor: 'highlight.green.300',
     color: 'highlight.green.700',
   },
@@ -25,16 +21,19 @@ const style = {
   },
 }
 
-export const SectionStatus = (props: SectionStatusProps) => {
-  const { status, capacity, ...rest } = props
+export const SectionStatus = ({ closed, capacity, ...rest }: SectionStatusProps) => {
   const { t } = useTranslation('sectionCard')
+
+  const status = closed ? 'closed' : capacity.current >= capacity.max ? 'full' : 'available'
+  const seatColor = status === 'closed' ? 'white' : 'primary.main'
+
   return (
     <Typography
       variant="h6"
+      ml={1}
+      px={2}
+      py={0.5}
       sx={{
-        px: 1.75,
-        py: 0.25,
-        ml: 1,
         borderRadius: 1,
         whiteSpace: 'nowrap',
         height: 'fit-content',
@@ -44,7 +43,7 @@ export const SectionStatus = (props: SectionStatusProps) => {
     >
       <Stack direction="row" spacing={0.5} alignItems="center">
         <div>{t(status, capacity)}</div>
-        <NoSeatIcon sx={{ color: status === 'closed' ? 'white' : 'primary.main' }} />
+        <NoSeatIcon sx={{ color: seatColor }} />
       </Stack>
     </Typography>
   )

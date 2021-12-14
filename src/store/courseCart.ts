@@ -7,6 +7,8 @@ import { CourseGroup } from '@/common/hooks/useCourseGroup/types'
 import { Storage } from '@/common/storage'
 import { StorageKey } from '@/common/storage/constants'
 import { CourseKey } from '@/common/utils/types'
+import { ScheduleColor } from '@/modules/Schedule/components/ColorPicker/constants'
+import { getNewColor } from '@/modules/Schedule/components/ColorPicker/utils/getNewColor'
 import { client } from '@/services/apollo'
 import { GetCourseResponse, GetCourseVars, GET_COURSE } from '@/services/apollo/query/getCourse'
 import { GET_COURSE_CART, MODIFY_COURSE_CART } from '@/services/apollo/query/user'
@@ -16,6 +18,7 @@ import { userStore } from '@/store/userStore'
 export interface CourseCartItem extends Course {
   selectedSectionNo: string
   isHidden: boolean
+  color: ScheduleColor
 }
 
 export type CourseCartState = 'default' | 'delete'
@@ -33,6 +36,7 @@ interface CourseCartStoreItem {
   semester: string
   selectedSectionNo: string
   isHidden: boolean
+  color: ScheduleColor
 }
 
 export interface CourseCartStore {
@@ -154,7 +158,12 @@ export class CourseCart implements CourseCartProps {
               },
             },
           })
-          detail = { ...data.course, selectedSectionNo: course.selectedSectionNo, isHidden: course.isHidden }
+          detail = {
+            ...data.course,
+            selectedSectionNo: course.selectedSectionNo,
+            isHidden: course.isHidden,
+            color: course.color ?? getNewColor(fullCourses, data.course),
+          }
         } catch (e) {
           detail = {
             ...unknownCourse,
@@ -164,6 +173,7 @@ export class CourseCart implements CourseCartProps {
             semester: course.semester as Semester,
             academicYear: course.academicYear,
             courseNo: course.courseNo,
+            color: course.color,
           }
         }
         fullCourses.push(detail)
@@ -199,6 +209,7 @@ export class CourseCart implements CourseCartProps {
           courseNo: item.courseNo,
           selectedSectionNo: item.selectedSectionNo,
           isHidden: item.isHidden,
+          color: item.color,
         }))
       )
       setTimeout(
@@ -257,9 +268,14 @@ export class CourseCart implements CourseCartProps {
     })
 
     if (!selectedSectionNo) selectedSectionNo = this.findFirstSectionNo(course)
-    const newItem: CourseCartItem = { ...course, selectedSectionNo, isHidden: false }
+    const newItem: CourseCartItem = {
+      ...course,
+      selectedSectionNo,
+      isHidden: false,
+      color: getNewColor(this.shopItems, course),
+    }
     const foundIndex = this.shopItems.findIndex((item) => isSameKey(item, newItem))
-    if (foundIndex != -1) this.shopItems[foundIndex] = newItem
+    if (foundIndex !== -1) this.shopItems[foundIndex] = { ...this.shopItems[foundIndex], selectedSectionNo }
     else this.shopItems.push(newItem)
 
     this.onChange()
@@ -292,6 +308,16 @@ export class CourseCart implements CourseCartProps {
     const [removed] = result.splice(from, 1)
     result.splice(to, 0, removed)
     this.shopItems = result
+    this.onChange()
+  }
+
+  /**
+   * Use to change color of the course
+   */
+  @action
+  changeColor(course: CourseKey, color: ScheduleColor) {
+    const index = this.shopItems.findIndex((item) => isSameKey(item, course))
+    this.shopItems[index].color = color
     this.onChange()
   }
 

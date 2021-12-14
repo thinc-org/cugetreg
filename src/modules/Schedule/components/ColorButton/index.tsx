@@ -1,0 +1,28 @@
+import { Button, ButtonProps, useTheme } from '@mui/material'
+
+import { ColorCircle } from '@/modules/Schedule/components/ColorCircle'
+import { ScheduleColor } from '@/modules/Schedule/components/ColorPicker/constants'
+
+interface ColorButtonProps extends ButtonProps {
+  isActive: boolean
+  scheduleColor: ScheduleColor
+}
+
+export const ColorButton = ({ isActive, scheduleColor, ...buttonProps }: ColorButtonProps) => {
+  const theme = useTheme()
+  return (
+    <Button
+      variant="text"
+      sx={{
+        minWidth: 0,
+        background: isActive ? theme.palette.primaryRange[30] : undefined,
+        ':hover': {
+          background: theme.palette.primaryRange[30],
+        },
+      }}
+      {...buttonProps}
+    >
+      <ColorCircle color={scheduleColor} />
+    </Button>
+  )
+}

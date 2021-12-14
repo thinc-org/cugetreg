@@ -63,9 +63,21 @@ export const scheduleTableCard = {
   teacher: 'ผู้สอน',
   time: 'เวลา',
   classRoom: 'ห้องเรียน',
+  classType: 'รูปแบบ',
   and: 'และ',
   classOverlap: 'เวลาเรียนชนกับ',
   examOverlap: 'เวลาสอบชนกับ',
+  selectColor: 'สีในตาราง',
+}
+
+export const courseDialog = {
+  ...scheduleTableCard,
+  midtermExam: 'สอบกลางภาค',
+  finalExam: 'สอบปลายภาค',
+  selectColor: 'เลือกสีในตาราง',
+  hide: 'ซ่อนจากตาราง',
+  show: 'แสดงในตาราง',
+  remove: 'นำออกจากวิชาที่เลือก',
 }
 
 export const schedule = {
@@ -94,6 +106,7 @@ export const courseCard = {
   teacher: 'ผู้สอน',
   time: 'เวลา',
   classRoom: 'ห้องเรียน',
+  type: 'รูปแบบ',
   note: 'หมายเหตุ',
   capacity: 'ที่ว่าง',
   addSubjectSuccess: 'เพิ่มรายวิชาสำเร็จ',
@@ -110,8 +123,9 @@ export const sectionCard = {
   teacher: 'ผู้สอน',
   time: 'วันเวลาเรียน',
   classRoom: 'ห้องเรียน',
+  classType: 'รูปแบบ',
   closed: 'ปิด',
-  avialable: '{{current}}/{{max}}',
+  available: '{{current}}/{{max}}',
   full: '{{current}}/{{max}}',
   unknownSeat: 'ไม่ทราบจำนวนที่นั่ง',
 }
@@ -182,4 +196,16 @@ export const filterBar = {
 
 export const tagList = {
   inRange: 'ในช่วง',
+}
+
+export const review = {
+  title: 'มาเขียนรีวิวรายวิชากันเถอะ!',
+  subtitle: '*การรีวิวนี้จะเป็นแบบไม่ระบุตัวตน',
+  cancel: 'ยกเลิก',
+  submit: 'ส่งรีวิว',
+}
+
+export const colorPicker = {
+  selectColorFor: 'เลือกสีในตาราง วิชา {{abbrName}}',
+  select: 'เลือกสี',
 }

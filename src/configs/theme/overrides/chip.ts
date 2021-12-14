@@ -11,7 +11,8 @@ export function overrideMuiChipStyles(theme: Theme): Partial<OverridesStyleRules
       fontSize: 'inherit',
     },
     sizeSmall: {
-      height: theme.spacing(2),
+      fontSize: 10,
+      height: theme.spacing(3),
     },
     sizeMedium: {
       fontSize: 12,

@@ -1,19 +1,13 @@
 import { useMutation, useQuery } from '@apollo/client'
-import type { TNode } from '@udecode/plate-core'
-import escapeHTML from 'escape-html'
 
-import React, { createContext, useCallback, useContext, useEffect, useRef } from 'react'
-import { FormProvider, useForm } from 'react-hook-form'
+import React, { createContext, useCallback, useContext, useRef, useState } from 'react'
 import toast from 'react-hot-toast'
 
-import { INITIAL_CONTENT } from '@/common/components/RichTextEditor/initialContent'
-import type { RichTextEditorRef } from '@/common/components/RichTextEditor/types'
 import { useCourseGroup } from '@/common/hooks/useCourseGroup'
-import { Storage } from '@/common/storage'
-import { StorageKey } from '@/common/storage/constants'
 import { Review, ReviewInteractionType } from '@/common/types/reviews'
 import { loginGuard } from '@/common/utils/loginGuard'
 import { dialog, DialogOptions } from '@/lib/dialog'
+import { ReviewFormRef } from '@/modules/CourseDetail/components/ReviewForm/types'
 import { CreateReviewResponse, CreateReviewVars, CREATE_REVIEW } from '@/services/apollo/query/createReview'
 import { EditMyReviewResponse, EditMyReviewVars, EDIT_MY_REVIEW } from '@/services/apollo/query/editMyReview'
 import {
@@ -30,15 +24,13 @@ import {
 } from '@/services/apollo/query/setReviewInteraction'
 
 import { DEFAULT_REVIEW_CONTEXT_VALUE } from './constants'
-import { ReviewContextValues, ReviewState, ReviewProviderProps } from './types'
+import { ReviewContextValues, ReviewProviderProps } from './types'
 
 export const ReviewContext = createContext<ReviewContextValues>(DEFAULT_REVIEW_CONTEXT_VALUE)
 
 export const useReviewContext = () => useContext(ReviewContext)
 
 export const ReviewProvider: React.FC<ReviewProviderProps> = ({ courseNo, initialReviews, children }) => {
-  const localStorage = new Storage('localStorage')
-  const methods = useForm<ReviewState>()
   const { studyProgram } = useCourseGroup()
 
   const deleteConfirmationDialogOptions: DialogOptions = {
@@ -48,27 +40,11 @@ export const ReviewProvider: React.FC<ReviewProviderProps> = ({ courseNo, initia
     secondaryButtonText: 'ยกเลิก',
   }
 
-  /**
-   * Rich Text editor hook
-   */
-  const editorRef = useRef<RichTextEditorRef>()
-  const getEditor = useCallback(() => editorRef.current!, [])
-  const editorLoaded = typeof getEditor() !== 'undefined'
+  const [formLoaded, setFormLoaded] = useState(false)
+  const onFormLoad = useCallback(() => setFormLoaded(true), [])
 
-  const pendingSetValue = useRef<TNode[]>()
-  const setEditorValue = useCallback((newValue: TNode[]) => {
-    const currentEditor = editorRef.current
-    if (typeof currentEditor === 'undefined') {
-      pendingSetValue.current = newValue
-      return
-    }
-    currentEditor.setValue(newValue)
-  }, [])
-
-  if (editorLoaded && typeof pendingSetValue.current !== 'undefined') {
-    setEditorValue(pendingSetValue.current)
-    pendingSetValue.current = undefined
-  }
+  const formRef = useRef<ReviewFormRef>()
+  const getForm = useCallback(() => formRef.current!, [])
 
   /**
    * GraphQL queries
@@ -128,14 +104,6 @@ export const ReviewProvider: React.FC<ReviewProviderProps> = ({ courseNo, initia
   const myPendingReviews = myPendingReviewQuery.data?.myPendingReviews || []
 
   /**
-   * Initialize context values and form state
-   */
-  useEffect(() => {
-    restoreLocalReviewForm()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  /**
    * Normal React state
    */
   const [editingReviewId, setEditingReviewId] = React.useState<string | undefined>(undefined)
@@ -163,6 +131,7 @@ export const ReviewProvider: React.FC<ReviewProviderProps> = ({ courseNo, initia
    * User can report others reviews
    * @param reviewId - id of the review to be reported
    */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const reportReview = async (reviewId: string) => {
     alert('coming soon')
   }
@@ -200,7 +169,7 @@ export const ReviewProvider: React.FC<ReviewProviderProps> = ({ courseNo, initia
     const review = allReviews.find((data) => data._id === reviewId)
     if (!review) return
 
-    setReviewForm({ ...review, rating: review.rating / 2, content: getEditor().deserializeHtml(review.content) })
+    getForm().applyFromReview(review)
     setEditingReviewId(reviewId)
   }
 
@@ -208,9 +177,7 @@ export const ReviewProvider: React.FC<ReviewProviderProps> = ({ courseNo, initia
    * Use this function to cancel editing review
    */
   const cancelEditReview = () => {
-    methods.setValue('content', INITIAL_CONTENT as TNode[])
-    setEditorValue(INITIAL_CONTENT)
-    methods.setValue('rating', 0)
+    getForm().clearEditor()
     setEditingReviewId(undefined)
   }
 
@@ -220,20 +187,14 @@ export const ReviewProvider: React.FC<ReviewProviderProps> = ({ courseNo, initia
    */
   const submitReview = async () => {
     try {
-      if (!loginGuard(storeLocalReviewForm)) return
-      const review = methods.getValues()
-      const ratingNumber = review.rating * 2 // 1 - 10, 0 isn't accepted
-      const modifiedNode = applyEscapedText(review.content as TNode[])
-      const html = getEditor().serializeHtml(modifiedNode)
+      if (!loginGuard(getForm().storeLocalReviewForm)) return
+      const review = getForm().toReview()
       const response = await createReviewMutation({
         variables: {
           createReviewInput: {
-            courseNo: courseNo,
-            studyProgram: studyProgram,
-            rating: ratingNumber,
-            semester: review.semester,
-            academicYear: review.academicYear,
-            content: html,
+            courseNo,
+            studyProgram,
+            ...review,
           },
         },
       })
@@ -253,19 +214,12 @@ export const ReviewProvider: React.FC<ReviewProviderProps> = ({ courseNo, initia
    */
   const submitEditedReview = async (reviewId: string) => {
     try {
-      if (!loginGuard(storeLocalReviewForm)) return
-      const review = methods.getValues()
-      const ratingNumber = review.rating * 2 // 1 - 10, 0 isn't accepted
-      const modifiedNode = applyEscapedText(review.content as TNode[])
-      const html = getEditor().serializeHtml(modifiedNode)
+      if (!loginGuard(getForm().storeLocalReviewForm)) return
+      const review = getForm().toReview()
       const response = await editMyReviewMutation({
         variables: {
           reviewId,
-          review: {
-            ...review,
-            rating: ratingNumber,
-            content: html,
-          },
+          review,
         },
       })
       if (!response.errors && response.data) {
@@ -277,54 +231,12 @@ export const ReviewProvider: React.FC<ReviewProviderProps> = ({ courseNo, initia
     }
   }
 
-  const storeLocalReviewForm = () => {
-    const formValues = methods.getValues()
-    const oldFormValuesSet = localStorage.get<Record<string, ReviewState>>(StorageKey.ReviewForm)
-    const newFormValuesSet: Record<string, ReviewState> = {
-      ...oldFormValuesSet,
-      [courseNo]: { ...formValues, content: formValues.content as TNode[] },
-    }
-    localStorage.set<Record<string, ReviewState>>(StorageKey.ReviewForm, newFormValuesSet)
-  }
-
-  const restoreLocalReviewForm = () => {
-    const formValuesSet = localStorage.get<Record<string, ReviewState>>(StorageKey.ReviewForm)
-    if (formValuesSet && formValuesSet[courseNo]) {
-      setReviewForm(formValuesSet[courseNo])
-      delete formValuesSet[courseNo]
-      localStorage.set<Record<string, ReviewState>>(StorageKey.ReviewForm, formValuesSet)
-    }
-  }
-
-  const setReviewForm = (form: Partial<ReviewState>) => {
-    if (form.academicYear) methods.setValue('academicYear', form.academicYear)
-    if (form.rating) methods.setValue('rating', form.rating)
-    if (form.semester) methods.setValue('semester', form.semester)
-    if (form.content) {
-      methods.setValue('content', form.content)
-      setEditorValue(form.content)
-    }
-  }
-
-  /**
-   * Convert some syntax to escaped html. For example ">" to "&gt". To prevent XSS attack from user's review input
-   * @param value - Plate's TNode
-   * @returns
-   */
-  const applyEscapedText = (value: TNode[] | null): TNode[] => {
-    if (!value) return []
-    const html = value.map((node: TNode) => {
-      if (node.type) return { ...node, children: applyEscapedText(node.children) }
-      return { ...node, text: escapeHTML(node.text) }
-    }, true)
-    return html
-  }
-
   const filterDisplayedReviews = (reviews: Review[]): Review[] => {
     return reviews.filter((data) => data._id !== editingReviewId)
   }
 
   const value: ReviewContextValues = {
+    courseNo,
     reviews: filterDisplayedReviews(reviews),
     myPendingReviews: filterDisplayedReviews(myPendingReviews),
     setInteraction,
@@ -335,12 +247,10 @@ export const ReviewProvider: React.FC<ReviewProviderProps> = ({ courseNo, initia
     submitReview,
     submitEditedReview,
     editingReviewId,
-    editorRef,
+    formRef,
+    formLoaded,
+    onFormLoad,
   }
 
-  return (
-    <FormProvider {...methods}>
-      <ReviewContext.Provider value={value}>{children}</ReviewContext.Provider>
-    </FormProvider>
-  )
+  return <ReviewContext.Provider value={value}>{children}</ReviewContext.Provider>
 }

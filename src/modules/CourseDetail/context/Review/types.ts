@@ -2,14 +2,15 @@ import { TNode } from '@udecode/plate-core'
 
 import { RefObject } from 'react'
 
-import { RichTextEditorRef } from '@/common/components/RichTextEditor/types'
 import { Review, ReviewInteractionType } from '@/common/types/reviews'
+import { ReviewFormRef } from '@/modules/CourseDetail/components/ReviewForm/types'
 
 export type ReviewState = Pick<Review, 'rating' | 'academicYear' | 'semester'> & {
   content: TNode[]
 }
 
 export interface ReviewContextValues {
+  courseNo: string
   reviews: Review[]
   myPendingReviews: Review[]
   setInteraction: (reviewId: string, interaction: ReviewInteractionType) => void
@@ -20,7 +21,9 @@ export interface ReviewContextValues {
   submitReview: () => void
   submitEditedReview: (reviewId: string) => void
   editingReviewId?: string
-  editorRef: RefObject<RichTextEditorRef | undefined>
+  formRef: RefObject<ReviewFormRef | undefined>
+  formLoaded: boolean
+  onFormLoad: () => void
 }
 
 export interface ReviewProviderProps {

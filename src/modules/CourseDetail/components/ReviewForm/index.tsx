@@ -1,24 +1,132 @@
 import { Rating, Select, Stack, MenuItem, Typography, Button } from '@mui/material'
 import { TNode } from '@udecode/plate-core'
 
-import { Controller, SubmitHandler, SubmitErrorHandler, useFormContext } from 'react-hook-form'
+import { useCallback, useEffect, useImperativeHandle, useRef } from 'react'
+import { Controller, SubmitHandler, SubmitErrorHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { useTranslation } from 'react-i18next'
 
 import { RichTextEditor } from '@/common/components/RichTextEditor'
+import { INITIAL_CONTENT } from '@/common/components/RichTextEditor/initialContent'
+import { RichTextEditorRef } from '@/common/components/RichTextEditor/types'
+import { Storage } from '@/common/storage'
+import { StorageKey } from '@/common/storage/constants'
+import { Review } from '@/common/types/reviews'
 import { getCurrentTerm } from '@/common/utils/getCurrentTerm'
+import { ReviewEditables } from '@/modules/CourseDetail/components/ReviewForm/types'
 
 import { ContributionGuide } from '../../components/ContributionGuide'
 import { useReviewContext } from '../../context/Review'
 import { REVIEW_FORM_ID } from '../../context/Review/constants'
 import { ReviewState } from '../../context/Review/types'
 import { YEAR_SIZE } from './constants'
+import { applyEscapedText } from './functions'
 
-export const ReviewForm = () => {
-  const { register, handleSubmit, control } = useFormContext<ReviewState>()
-  const { academicYear, semester } = getCurrentTerm()
+const localStorage = new Storage('localStorage')
+
+export function ReviewForm() {
+  const { academicYear } = getCurrentTerm()
   const { t } = useTranslation('review')
-  const { submitReview, submitEditedReview, editingReviewId, cancelEditReview, editorRef } = useReviewContext()
+  const { courseNo, submitReview, submitEditedReview, editingReviewId, cancelEditReview, formRef, onFormLoad } =
+    useReviewContext()
+
+  useEffect(() => onFormLoad(), [onFormLoad])
+
+  const methods = useForm<ReviewState>()
+  const { register, handleSubmit, control } = methods
+
+  /**
+   * Rich Text editor hook
+   */
+  const editorRef = useRef<RichTextEditorRef>()
+  const getEditor = useCallback(() => editorRef.current!, [])
+  const editorLoaded = typeof getEditor() !== 'undefined'
+
+  const pendingSetValue = useRef<TNode[]>()
+  const setEditorValue = useCallback((newValue: TNode[]) => {
+    const currentEditor = editorRef.current
+    if (typeof currentEditor === 'undefined') {
+      pendingSetValue.current = newValue
+      return
+    }
+    currentEditor.setValue(newValue)
+  }, [])
+
+  if (editorLoaded && typeof pendingSetValue.current !== 'undefined') {
+    setEditorValue(pendingSetValue.current)
+    pendingSetValue.current = undefined
+  }
+
+  /**
+   * Use this function to cancel editing review
+   */
+  function clearEditor() {
+    methods.setValue('content', INITIAL_CONTENT as TNode[])
+    setEditorValue(INITIAL_CONTENT)
+    methods.setValue('rating', 0)
+  }
+
+  /**
+   * Initialize context values and form state
+   */
+  useEffect(() => {
+    restoreLocalReviewForm()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  function restoreFormState(form: Partial<ReviewState>) {
+    if (form.academicYear) methods.setValue('academicYear', form.academicYear)
+    if (form.rating) methods.setValue('rating', form.rating)
+    if (form.semester) methods.setValue('semester', form.semester)
+    if (form.content) {
+      methods.setValue('content', form.content)
+      setEditorValue(form.content)
+    }
+  }
+
+  function applyFromReview(review: Review) {
+    restoreFormState({ ...review, rating: review.rating / 2, content: getEditor().deserializeHtml(review.content) })
+  }
+
+  function storeLocalReviewForm() {
+    const formValues = methods.getValues()
+    const oldFormValuesSet = localStorage.get<Record<string, ReviewState>>(StorageKey.ReviewForm)
+    const newFormValuesSet: Record<string, ReviewState> = {
+      ...oldFormValuesSet,
+      [courseNo]: { ...formValues, content: formValues.content as TNode[] },
+    }
+    localStorage.set<Record<string, ReviewState>>(StorageKey.ReviewForm, newFormValuesSet)
+  }
+
+  function restoreLocalReviewForm() {
+    const formValuesSet = localStorage.get<Record<string, ReviewState>>(StorageKey.ReviewForm)
+    if (formValuesSet && formValuesSet[courseNo]) {
+      restoreFormState(formValuesSet[courseNo])
+      delete formValuesSet[courseNo]
+      localStorage.set<Record<string, ReviewState>>(StorageKey.ReviewForm, formValuesSet)
+    }
+  }
+
+  function toReview(): ReviewEditables {
+    const review = methods.getValues()
+    const ratingNumber = review.rating * 2 // 1 - 10, 0 isn't accepted
+    const modifiedNode = applyEscapedText(review.content as TNode[])
+    const html = getEditor().serializeHtml(modifiedNode)
+    return {
+      rating: ratingNumber,
+      semester: review.semester,
+      academicYear: review.academicYear,
+      content: html,
+    }
+  }
+
+  useImperativeHandle(formRef, () => ({
+    clearEditor,
+    storeLocalReviewForm,
+    restoreFormState,
+    applyFromReview,
+    toReview,
+  }))
 
   const validateContent = (value: TNode[] | TNode | null): boolean => {
     if (!value) return false

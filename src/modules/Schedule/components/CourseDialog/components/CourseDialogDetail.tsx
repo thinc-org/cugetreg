@@ -30,7 +30,7 @@ export function CourseDialogDetail() {
       <Stack direction="row" justifyContent="space-between" alignItems="center">
         <Stack direction="row" gap={2} alignItems="center" flexWrap="wrap">
           <SectionSelect />
-          {item.genEdType !== 'NO' && <GenEdChip type={item.genEdType} size="small" />}
+          {section.genEdType !== 'NO' && <GenEdChip type={section.genEdType} size="small" />}
         </Stack>
         <SectionStatus capacity={section.capacity} closed={section.closed} />
       </Stack>

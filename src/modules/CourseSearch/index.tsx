@@ -1,7 +1,8 @@
-import { Hidden, Typography } from '@mui/material'
+import { Hidden, Typography, Select, MenuItem, SelectChangeEvent, Stack as MuiStack } from '@mui/material'
 
 import { Analytics } from '@/common/context/Analytics/components/Analytics'
 import { FILTER_BUTTON, SELECTED_COURSES_BUTTON, OPEN_SHOPPING_CART_BUTTON } from '@/common/context/Analytics/constants'
+import { useCourseGroup } from '@/common/hooks/useCourseGroup'
 import { PageMeta } from '@/components/PageMeta'
 import { CourseList } from '@/modules/CourseSearch/components/CourseList'
 import { FilterIconButton } from '@/modules/CourseSearch/components/FilterIconButton'
@@ -17,11 +18,24 @@ import { Container, Stack, TitleStack, StickyStack } from './styled'
 export function CourseSearchPage() {
   const { openFilterBar, toggleFilterBar, onOpen, handleCloseFilterBar } = useCourseSearchPage()
 
+  const { academicYear, semester, setTerm } = useCourseGroup()
+
+  const handleChange = (e: SelectChangeEvent<string>) => {
+    const term = e.target.value as string
+    setTerm(term)
+  }
+
   return (
     <Container>
       <PageMeta title="ค้นหาวิชาเรียน" />
-      <TitleStack spacing={2} direction="row" justifyContent="space-between" alignItems="center">
-        <Typography variant="h2">ค้นหาวิชาเรียน</Typography>
+      <TitleStack spacing={2} direction="row" alignItems="center" justifyContent="space-between">
+        <MuiStack direction="row" spacing={2} alignItems="center">
+          <Typography variant="h2">ค้นหาวิชาเรียน</Typography>
+          <Select defaultValue={`${academicYear}/${semester}`} onChange={handleChange}>
+            <MenuItem value="2564/2">2564/2</MenuItem>
+            <MenuItem value="2564/1">2564/1</MenuItem>
+          </Select>
+        </MuiStack>
         <Hidden mdUp>
           <Analytics elementName={OPEN_SHOPPING_CART_BUTTON}>
             <SelectedCoursesButton onClick={onOpen} />

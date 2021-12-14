@@ -19,7 +19,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({ id, defaultValue
     autoComplete: 'off',
     autoCorrect: 'off',
     spellCheck: false,
-    placeholder: 'Type..',
+    placeholder: 'คุณคิดว่าวิชานี้เป็นอย่างไรบ้าง?',
     style: {
       padding: theme.spacing(2),
       marginBottom: theme.spacing(2),

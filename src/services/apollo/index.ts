@@ -64,7 +64,7 @@ export const client = new ApolloClient({
 
 export function createApolloServerClient() {
   return new ApolloClient({
-    uri: createHttpLink(),
+    link: createHttpLink(),
     cache: new InMemoryCache(),
     connectToDevTools: env.environment !== 'production',
   })

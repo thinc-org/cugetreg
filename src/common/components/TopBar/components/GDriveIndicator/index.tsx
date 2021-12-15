@@ -1,5 +1,6 @@
 import { Tooltip, Stack } from '@mui/material'
 import { observer } from 'mobx-react'
+
 import { useTranslation } from 'react-i18next'
 import { MdCloudDone, MdCloudQueue, MdCloudOff } from 'react-icons/md'
 
@@ -21,7 +22,7 @@ export const GDriveIndicator = observer(() => {
       return null
     case CourseCartSyncState.FAIL:
       return (
-        <SyncStatus title={t('fail')}>
+        <SyncStatus title={t('syncerr')}>
           <MdCloudOff />
         </SyncStatus>
       )

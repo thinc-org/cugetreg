@@ -133,7 +133,7 @@ export const ReviewProvider: React.FC<ReviewProviderProps> = ({ courseNo, initia
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const reportReview = async (reviewId: string) => {
-    alert('coming soon')
+    // TODO
   }
 
   /**

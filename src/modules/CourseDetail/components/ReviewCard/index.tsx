@@ -110,9 +110,10 @@ export const ReviewCard: React.FC<ReviewCardProps> = (data) => {
             </IconButton>
           </Stack>
         ) : (
-          <IconButton size="small" onClick={handleReportClick}>
-            <MdFlag {...actionIconProps} />
-          </IconButton>
+          // <IconButton size="small" onClick={handleReportClick}>
+          //   <MdFlag {...actionIconProps} />
+          // </IconButton>
+          <></>
         )}
       </Stack>
     </Card>

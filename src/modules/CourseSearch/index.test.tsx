@@ -1,19 +1,32 @@
 import { shallow } from 'enzyme'
+
 import React from 'react'
 
 describe('CourseSearchPage', () => {
   const mockOpenFilterBar = false
-  const mockSetOpenFilterBar = jest.fn()
-  const mockUseCourseSearchPage = jest.fn(() => ({
+  const mockAcademicYear = '2564'
+  const mockSemester = '1'
+
+  const setTermSpy = jest.fn()
+  const setOpenFilterBarSpy = jest.fn()
+  const useCourseSearchPageSpy = jest.fn(() => ({
     openFilterBar: mockOpenFilterBar,
-    setOpenFilterBar: mockSetOpenFilterBar,
+    setOpenFilterBar: setOpenFilterBarSpy,
     onOpen: jest.fn(),
   }))
+
   jest.doMock('./hooks/useCourseSearchPage', () => ({
-    useCourseSearchPage: mockUseCourseSearchPage,
+    useCourseSearchPage: useCourseSearchPageSpy,
   }))
   jest.doMock('@/services/apollo', () => ({
     client: { mutate: jest.fn() },
+  }))
+  jest.doMock('@/common/hooks/useCourseGroup', () => ({
+    useCourseGroup: () => ({
+      academicYear: mockAcademicYear,
+      semester: mockSemester,
+      setTerm: setTermSpy,
+    }),
   }))
 
   it('Should match snapshot correctly', async () => {

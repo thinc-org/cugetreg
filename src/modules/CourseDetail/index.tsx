@@ -15,13 +15,16 @@ import { Language } from '@/common/i18n'
 import { Review } from '@/common/types/reviews'
 import { getExamDate } from '@/common/utils/getExamDate'
 import { getExamPeriod } from '@/common/utils/getExamPeriod'
+import { parseCourseNoFromQuery } from '@/common/utils/parseCourseNoFromQuery'
 import { PageMeta } from '@/components/PageMeta'
 import { scrollToReviewForm } from '@/modules/CourseDetail/components/ReviewForm/functions'
 import { ReviewList } from '@/modules/CourseDetail/components/ReviewList'
 import { ReviewProvider } from '@/modules/CourseDetail/context/Review'
+import { generateThumbnailId } from '@/modules/CourseThumbnailAPI/utils/generateThumbnailId'
 import { createApolloServerClient } from '@/services/apollo'
 import { GetCourseResponse, GET_COURSE } from '@/services/apollo/query/getCourse'
 import { GetReviewsResponse, GetReviewsVars, GET_REVIEWS } from '@/services/apollo/query/getReviews'
+import { enableCourseThumbnail, site_url } from '@/utils/env'
 
 import {
   Container,
@@ -34,7 +37,6 @@ import {
 } from './styled'
 import { courseTypeStringFromCourse } from './utils/courseTypeStringFromCourse'
 import { groupBy } from './utils/groupBy'
-import { parseVariablesFromQuery } from './utils/parseVariablesFromQuery'
 
 const ReviewForm = dynamic(
   async () =>
@@ -50,9 +52,10 @@ const ReviewForm = dynamic(
 interface CourseDetailPageProps {
   course: Course
   reviews: Review[]
+  ogImageUrl: string
 }
 
-export function CourseDetailPage({ course, reviews }: CourseDetailPageProps) {
+export function CourseDetailPage({ course, reviews, ogImageUrl }: CourseDetailPageProps) {
   const { i18n } = useTranslation()
   const { buildLink } = useLinkBuilder()
 
@@ -62,8 +65,19 @@ export function CourseDetailPage({ course, reviews }: CourseDetailPageProps) {
     title: course.abbrName,
     description: courseDesc || defaultSEO.description,
     openGraph: {
+      url: `${site_url}${buildLink(`/courses/${course.courseNo}`)}`,
       title: `${course.abbrName} | CU Get Reg`,
       description: courseDesc || defaultSEO.openGraph.description,
+      images: enableCourseThumbnail
+        ? [
+            {
+              url: ogImageUrl,
+              width: 1200,
+              height: 630,
+              alt: course.abbrName,
+            },
+          ]
+        : undefined,
     },
     additionalMetaTags: [
       ...defaultSEO.additionalMetaTags,
@@ -171,7 +185,7 @@ export async function getServerSideProps(
   context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<CourseDetailPageProps>> {
   try {
-    const { courseNo, courseGroup } = parseVariablesFromQuery(context.query)
+    const { courseNo, courseGroup } = parseCourseNoFromQuery(context.query)
     const client = createApolloServerClient()
     const { data: courseData } = await client.query<GetCourseResponse>({
       query: GET_COURSE,
@@ -187,8 +201,19 @@ export async function getServerSideProps(
         studyProgram: courseGroup.studyProgram,
       },
     })
+    const course = courseData.course
+    const urlParams = new URLSearchParams({
+      id: generateThumbnailId(course),
+      courseNo: course.courseNo,
+      studyProgram: course.studyProgram,
+      term: `${course.academicYear}/${course.semester}`,
+    })
     return {
-      props: { course: courseData.course, reviews: reviewsData.reviews },
+      props: {
+        course: course,
+        reviews: reviewsData.reviews,
+        ogImageUrl: `${site_url}/api/courseThumbnail?${urlParams.toString()}`,
+      },
     }
   } catch (e) {
     if (e instanceof ApolloError) {

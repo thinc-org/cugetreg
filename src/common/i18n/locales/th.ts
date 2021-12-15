@@ -196,6 +196,12 @@ export const tagList = {
   inRange: 'ในช่วง',
 }
 
+export const courseThumbnail = {
+  closed: 'ปิดทุกเซค',
+  available: '{{current}}/{{max}}',
+  full: '{{current}}/{{max}}',
+}
+
 export const review = {
   title: 'มาเขียนรีวิวรายวิชากันเถอะ!',
   subtitle: '*การรีวิวนี้จะเป็นแบบไม่ระบุตัวตน',

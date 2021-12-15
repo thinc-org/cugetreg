@@ -1,3 +1,4 @@
+import styled from '@emotion/styled'
 import { runInAction } from 'mobx'
 
 import { useCallback } from 'react'
@@ -11,6 +12,12 @@ import { courseCartStore } from '@/store'
 import { SelectButtonProps } from '../../types'
 
 let lastToastId = ''
+
+const DeleteIcon = styled(MdDelete)`
+  width: 20px;
+  height: 20px;
+  color: ${({ theme }) => theme.palette.highlight.red[500]};
+`
 
 export const useSelectButton = ({ course, selectedSectionNumber, log }: SelectButtonProps) => {
   const { t } = useTranslation('courseCard')
@@ -34,7 +41,7 @@ export const useSelectButton = ({ course, selectedSectionNumber, log }: SelectBu
         courseCartStore.removeCourse(course)
         log(null, 'removeSubjectSuccess')
         lastToastId = toast(<SelectButtonToast message="removeSubjectSuccess" action="viewAllSubject" />, {
-          icon: <MdDelete style={{ width: 20, height: 20 }} />,
+          icon: <DeleteIcon />,
         })
       }
     })

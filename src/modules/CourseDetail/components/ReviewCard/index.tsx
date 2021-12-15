@@ -1,7 +1,7 @@
 import { IconButton, Stack, useTheme } from '@mui/material'
 import DOMPurify from 'isomorphic-dompurify'
 
-import { MdFlag, MdDelete, MdOutlineStar, MdEdit } from 'react-icons/md'
+import { MdDelete, MdOutlineStar, MdEdit } from 'react-icons/md'
 
 import { GeneralChip } from '@/common/components/Chips'
 import { OtherChipKey } from '@/common/components/Chips/config'
@@ -37,7 +37,7 @@ export const ReviewCard: React.FC<ReviewCardProps> = (data) => {
 
   const chipType = getChipType(data.status)
 
-  const { setInteraction, reportReview, deleteMyReview, editMyReview, formLoaded } = useReviewContext()
+  const { setInteraction, deleteMyReview, editMyReview, formLoaded } = useReviewContext()
 
   const handleLikeClick = () => {
     setInteraction(data._id, ReviewInteractionType.Like)
@@ -45,10 +45,6 @@ export const ReviewCard: React.FC<ReviewCardProps> = (data) => {
 
   const handleDislikeClick = () => {
     setInteraction(data._id, ReviewInteractionType.Dislike)
-  }
-
-  const handleReportClick = () => {
-    reportReview(data._id)
   }
 
   const handleDeleteClick = () => {

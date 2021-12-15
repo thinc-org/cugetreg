@@ -78,7 +78,6 @@ exports[`App module Should app component render preperly when forceDark=false 1`
         </ErrorBoundary>
       </ForwardRef(Container)>
       <Footer />
-      <CourseSnackbar />
       <ShoppingCartModal />
     </TrackPageChange>
   </AppProvider>
@@ -163,7 +162,6 @@ exports[`App module Should app component render preperly when forceDark=false 2`
         </ErrorBoundary>
       </ForwardRef(Container)>
       <Footer />
-      <CourseSnackbar />
       <ShoppingCartModal />
     </TrackPageChange>
   </AppProvider>
@@ -248,7 +246,6 @@ exports[`App module Should app component render preperly when forceDark=false 3`
         </ErrorBoundary>
       </ForwardRef(Container)>
       <Footer />
-      <CourseSnackbar />
       <ShoppingCartModal />
     </TrackPageChange>
   </AppProvider>
@@ -333,7 +330,6 @@ exports[`App module Should app component render preperly when forceDark=true 1`]
         </ErrorBoundary>
       </ForwardRef(Container)>
       <Footer />
-      <CourseSnackbar />
       <ShoppingCartModal />
     </TrackPageChange>
   </AppProvider>
@@ -418,7 +414,6 @@ exports[`App module Should app component render preperly when forceDark=true 2`]
         </ErrorBoundary>
       </ForwardRef(Container)>
       <Footer />
-      <CourseSnackbar />
       <ShoppingCartModal />
     </TrackPageChange>
   </AppProvider>
@@ -503,7 +498,6 @@ exports[`App module Should app component render preperly when forceDark=true 3`]
         </ErrorBoundary>
       </ForwardRef(Container)>
       <Footer />
-      <CourseSnackbar />
       <ShoppingCartModal />
     </TrackPageChange>
   </AppProvider>

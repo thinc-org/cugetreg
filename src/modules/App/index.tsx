@@ -17,7 +17,6 @@ import { ShoppingCartModal } from '@/modules/CourseSearch/components/ShoppingCar
 import { ErrorBoundary } from '@/modules/ErrorBoundary'
 
 import SEO from '../../../next-seo.config'
-import { CourseSnackbar } from './components/CourseSnackbar'
 import { useApp } from './hooks/useApp'
 
 mobxConfiguration()
@@ -46,9 +45,6 @@ export function App(props: MyAppProps) {
             </ErrorBoundary>
           </Container>
           <Footer />
-          {/* TODO: refactor the snackbar */}
-          <CourseSnackbar />
-          {/* END OF TODO */}
           <ShoppingCartModal />
         </TrackPageChange>
       </AppProvider>

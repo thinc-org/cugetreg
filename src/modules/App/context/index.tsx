@@ -11,7 +11,6 @@ import { useAnalytics } from '@/common/context/Analytics/hooks/useAnalytics'
 import { darkTheme, lightTheme } from '@/configs/theme'
 import { Dialog } from '@/lib/dialog'
 import { ShoppingCartModalContextProvider } from '@/modules/App/context/ShoppingCartModal'
-import { SnackbarContextProvider } from '@/modules/App/context/Snackbar'
 import { client } from '@/services/apollo'
 import env from '@/utils/env/macro'
 
@@ -46,13 +45,13 @@ export function AppProvider({ children, forceDark, emotionCache }: AppProviderPr
     <ApolloProvider client={client}>
       <CacheProvider value={emotionCache}>
         <AnalyticsProvider value={{ addEvent }}>
-          <SnackbarContextProvider>
-            <ThemeProvider theme={prefersDarkMode || forceDark ? darkTheme : lightTheme}>
+          <ThemeProvider theme={prefersDarkMode || forceDark ? darkTheme : lightTheme}>
+            <ShoppingCartModalContextProvider>
               <Dialog />
               <Toaster position="top-center" toastOptions={toastOptions} gutter={16} />
-              <ShoppingCartModalContextProvider>{children}</ShoppingCartModalContextProvider>
-            </ThemeProvider>
-          </SnackbarContextProvider>
+              {children}
+            </ShoppingCartModalContextProvider>
+          </ThemeProvider>
         </AnalyticsProvider>
       </CacheProvider>
     </ApolloProvider>

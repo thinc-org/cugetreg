@@ -1,22 +1,22 @@
-FROM node:14-alpine AS base
+FROM node:14-buster-slim AS base
 WORKDIR /build
+
 # Prepare for installing dependencies
 # Utilise Docker cache to save re-installing dependencies if unchanged
 COPY package.json yarn.lock ./
-# Install dependencies
 RUN yarn --frozen-lockfile
 
 FROM base as build
 # Copy the rest files
 COPY . .
-# Build applciation
+# Build application
 RUN yarn build
 
 FROM base as prod-deps
 # Prune unused dependencies
 RUN npm prune --production
 
-FROM node:14-alpine AS production
+FROM node:14-buster-slim AS production
 ENV NODE_ENV production
 WORKDIR /app
 # Copy only necessary file for running app

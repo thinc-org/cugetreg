@@ -1,4 +1,4 @@
-import { Rating, Select, Stack, MenuItem, Typography, Button } from '@mui/material'
+import { Rating, Stack, MenuItem, Typography, Button, Box } from '@mui/material'
 import { TNode } from '@udecode/plate-core'
 
 import { useCallback, useEffect, useImperativeHandle, useRef } from 'react'
@@ -13,6 +13,7 @@ import { Storage } from '@/common/storage'
 import { StorageKey } from '@/common/storage/constants'
 import { Review } from '@/common/types/reviews'
 import { getCurrentTerm } from '@/common/utils/getCurrentTerm'
+import { ControlledSelect } from '@/modules/CourseDetail/components/ControlledSelect'
 import { ReviewEditables } from '@/modules/CourseDetail/components/ReviewForm/types'
 
 import { ContributionGuide } from '../../components/ContributionGuide'
@@ -24,16 +25,22 @@ import { applyEscapedText } from './functions'
 
 const localStorage = new Storage('localStorage')
 
+const defaultValues: ReviewState = {
+  academicYear: getCurrentTerm().academicYear,
+  semester: '1',
+  rating: 0,
+  content: INITIAL_CONTENT,
+}
+
 export function ReviewForm() {
-  const { academicYear } = getCurrentTerm()
   const { t } = useTranslation('review')
   const { courseNo, submitReview, submitEditedReview, editingReviewId, cancelEditReview, formRef, onFormLoad } =
     useReviewContext()
 
   useEffect(() => onFormLoad(), [onFormLoad])
 
-  const methods = useForm<ReviewState>()
-  const { register, handleSubmit, control } = methods
+  const methods = useForm({ defaultValues })
+  const { handleSubmit, control } = methods
 
   /**
    * Rich Text editor hook
@@ -60,10 +67,9 @@ export function ReviewForm() {
   /**
    * Use this function to cancel editing review
    */
-  function clearEditor() {
-    methods.setValue('content', INITIAL_CONTENT as TNode[])
+  function clearForm() {
+    methods.reset()
     setEditorValue(INITIAL_CONTENT)
-    methods.setValue('rating', 0)
   }
 
   /**
@@ -121,7 +127,7 @@ export function ReviewForm() {
   }
 
   useImperativeHandle(formRef, () => ({
-    clearEditor,
+    clearForm,
     storeLocalReviewForm,
     restoreFormState,
     applyFromReview,
@@ -163,12 +169,14 @@ export function ReviewForm() {
 
   return (
     <>
-      <Typography variant="h4" component="span" id="review-title" mr={2} sx={{ display: ['block', 'inline'] }}>
-        {t('title')}
-      </Typography>
-      <Typography variant="subtitle1" component="span" color="primaryRange.100">
-        {t('subtitle')}
-      </Typography>
+      <Box mb={0.5}>
+        <Typography variant="h4" component="span" id="review-title" mr={2} sx={{ display: ['block', 'inline'] }}>
+          {t('title')}
+        </Typography>
+        <Typography variant="subtitle1" component="span" color="primaryRange.100">
+          {t('subtitle')}
+        </Typography>
+      </Box>
       <ContributionGuide />
       <form onSubmit={handleSubmit(onSubmit, onError)}>
         <Stack
@@ -176,14 +184,14 @@ export function ReviewForm() {
           alignItems="center"
           justifyContent="flex-start"
           gap={[2, 4]}
-          mt={1}
-          mb={2}
+          my={2}
         >
           <Stack direction="row" gap={4} sx={{ width: ['100%', 'auto'] }}>
-            <Select
-              {...register('academicYear', { required: 'academicYear required' })}
+            <ControlledSelect
+              name="academicYear"
+              control={control}
+              rules={{ required: 'academicYear required' }}
               // label="ปีการศึกษา"
-              defaultValue={academicYear}
               sx={{ minWidth: 120 }}
               fullWidth
             >
@@ -192,18 +200,19 @@ export function ReviewForm() {
                   {year}
                 </MenuItem>
               ))}
-            </Select>
-            <Select
-              {...register('semester', { required: 'semester required' })}
+            </ControlledSelect>
+            <ControlledSelect
+              name="semester"
+              control={control}
+              rules={{ required: 'semester required' }}
               // label="ภาคการศึกษา"
-              defaultValue="1"
               sx={{ minWidth: 120 }}
               fullWidth
             >
               <MenuItem value="1">ภาคต้น</MenuItem>
               <MenuItem value="2">ภาคปลาย</MenuItem>
               <MenuItem value="3">ฤดูร้อน</MenuItem>
-            </Select>
+            </ControlledSelect>
           </Stack>
           <Controller
             name="rating"

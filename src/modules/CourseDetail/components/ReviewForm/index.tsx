@@ -1,4 +1,4 @@
-import { Rating, Stack, MenuItem, Typography, Button } from '@mui/material'
+import { Rating, Stack, MenuItem, Typography, Button, Box } from '@mui/material'
 import { TNode } from '@udecode/plate-core'
 
 import { useCallback, useEffect, useImperativeHandle, useRef } from 'react'
@@ -170,12 +170,14 @@ export function ReviewForm() {
 
   return (
     <>
-      <Typography variant="h4" component="span" id="review-title" mr={2} sx={{ display: ['block', 'inline'] }}>
-        {t('title')}
-      </Typography>
-      <Typography variant="subtitle1" component="span" color="primaryRange.100">
-        {t('subtitle')}
-      </Typography>
+      <Box mb={0.5}>
+        <Typography variant="h4" component="span" id="review-title" mr={2} sx={{ display: ['block', 'inline'] }}>
+          {t('title')}
+        </Typography>
+        <Typography variant="subtitle1" component="span" color="primaryRange.100">
+          {t('subtitle')}
+        </Typography>
+      </Box>
       <ContributionGuide />
       <form onSubmit={handleSubmit(onSubmit, onError)}>
         <Stack
@@ -183,8 +185,7 @@ export function ReviewForm() {
           alignItems="center"
           justifyContent="flex-start"
           gap={[2, 4]}
-          mt={1}
-          mb={2}
+          my={2}
         >
           <Stack direction="row" gap={4} sx={{ width: ['100%', 'auto'] }}>
             <ControlledSelect

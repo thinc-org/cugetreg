@@ -5,3 +5,9 @@ export interface RichTextEditorProps {
   defaultValue?: TNode[]
   onChange?: (newValue: TNode[]) => void
 }
+
+export interface RichTextEditorRef {
+  setValue: (nodes: TNode[]) => void
+  deserializeHtml: (html: string) => TNode[]
+  serializeHtml: (nodes: TNode[]) => string
+}

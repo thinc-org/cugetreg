@@ -1,10 +1,11 @@
 import { Capacity, Course, Section } from '@thinc-org/chula-courses'
-import { sum, uniq } from 'lodash'
 import { useState } from 'react'
 
 import { dayOfWeekArray } from '@/common/constants/dayOfWeek'
 import { useDisclosure } from '@/common/hooks/useDisclosure'
 import { CourseCardContextValue } from '@/modules/CourseSearch/components/CourseCard/context/types'
+import { sum } from '@/utils/sum'
+import { uniq } from '@/utils/uniq'
 
 export function useCourseCardContext(course: Course): CourseCardContextValue {
   const courseCardValue = useCourseCardValue(course)

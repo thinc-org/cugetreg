@@ -36,7 +36,7 @@ export const ReviewCard: React.FC<ReviewCardProps> = (data) => {
 
   const chipType = getChipType(data.status)
 
-  const { setInteraction, reportReview, deleteMyReview, editMyReview } = useReviewContext()
+  const { setInteraction, reportReview, deleteMyReview, editMyReview, formLoaded } = useReviewContext()
 
   const handleLikeClick = () => {
     setInteraction(data._id, ReviewInteractionType.Like)
@@ -102,7 +102,7 @@ export const ReviewCard: React.FC<ReviewCardProps> = (data) => {
         {/** Right side */}
         {data.isOwner ? (
           <Stack direction="row" spacing={1} ml="auto">
-            <IconButton size="small" onClick={handleEditClick}>
+            <IconButton size="small" onClick={handleEditClick} disabled={!formLoaded}>
               <MdEdit {...actionIconProps} />
             </IconButton>
             <IconButton size="small" onClick={handleDeleteClick}>

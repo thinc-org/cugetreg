@@ -1,11 +1,10 @@
 import { MARK_BOLD, MARK_ITALIC, MARK_UNDERLINE, MARK_STRIKETHROUGH, MARK_CODE } from '@udecode/plate-basic-marks'
 import { ELEMENT_BLOCKQUOTE } from '@udecode/plate-block-quote'
-import { TNode } from '@udecode/plate-core'
 import { ELEMENT_H1 } from '@udecode/plate-heading'
 import { ELEMENT_OL, ELEMENT_UL } from '@udecode/plate-list'
 import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph'
 
-export const INITIAL_CONTENT: TNode[] = [{ type: ELEMENT_PARAGRAPH, children: [{ text: '' }] }]
+export { INITIAL_CONTENT } from './initialContent'
 
 /**
  * Mark type

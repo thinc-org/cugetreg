@@ -77,23 +77,27 @@ export const Dialog: React.FC<DialogOptions> = (props) => {
       )}
       {content && (
         <StyledMuiDialogContent>
-          <MuiTypography variant="body2" align="center">
+          <MuiTypography variant="body2" align="center" sx={{ width: '100%' }}>
             {content}
           </MuiTypography>
         </StyledMuiDialogContent>
       )}
-      <StyledMuiDialogActions>
-        <Stack direction="row" spacing={2} sx={{ width: '100%' }}>
-          {secondaryButtonText && (
-            <MuiButton onClick={handleSecondaryClick} variant="outlined" fullWidth {...primaryButtonProps}>
-              {secondaryButtonText}
-            </MuiButton>
-          )}
-          <MuiButton onClick={handlePrimaryClick} variant="contained" fullWidth {...secondaryButtonProps}>
-            {primaryButtonText}
-          </MuiButton>
-        </Stack>
-      </StyledMuiDialogActions>
+      {(primaryButtonText || secondaryButtonText) && (
+        <StyledMuiDialogActions>
+          <Stack direction="row" spacing={2} sx={{ width: '100%' }}>
+            {secondaryButtonText && (
+              <MuiButton onClick={handleSecondaryClick} variant="outlined" fullWidth {...primaryButtonProps}>
+                {secondaryButtonText}
+              </MuiButton>
+            )}
+            {primaryButtonText && (
+              <MuiButton onClick={handlePrimaryClick} variant="contained" fullWidth {...secondaryButtonProps}>
+                {primaryButtonText}
+              </MuiButton>
+            )}
+          </Stack>
+        </StyledMuiDialogActions>
+      )}
     </MuiDialog>
   )
 }

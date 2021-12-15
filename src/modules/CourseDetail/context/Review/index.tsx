@@ -149,7 +149,7 @@ export const ReviewProvider: React.FC<ReviewProviderProps> = ({ courseNo, initia
    * @param reviewId - id of the review to be reported
    */
   const reportReview = async (reviewId: string) => {
-    alert('coming soon')
+    // TODO
   }
 
   /**

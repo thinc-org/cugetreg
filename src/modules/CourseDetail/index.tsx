@@ -16,6 +16,7 @@ import { Review } from '@/common/types/reviews'
 import { getExamDate } from '@/common/utils/getExamDate'
 import { getExamPeriod } from '@/common/utils/getExamPeriod'
 import { PageMeta } from '@/components/PageMeta'
+import { scrollToReviewForm } from '@/modules/CourseDetail/components/ReviewForm/functions'
 import { ReviewList } from '@/modules/CourseDetail/components/ReviewList'
 import { ReviewProvider } from '@/modules/CourseDetail/context/Review'
 import { createApolloServerClient } from '@/services/apollo'
@@ -54,15 +55,6 @@ interface CourseDetailPageProps {
 export function CourseDetailPage({ course, reviews }: CourseDetailPageProps) {
   const { i18n } = useTranslation()
   const { buildLink } = useLinkBuilder()
-
-  const scrollToReview = () => {
-    const srollToElement = document.getElementById('review-title')
-    if (srollToElement) {
-      const offset = document.documentElement.clientHeight * 0.35
-      const offsetTop = srollToElement.offsetTop
-      window.scrollTo({ top: offsetTop - offset, behavior: 'smooth' })
-    }
-  }
 
   const courseDesc = [course.courseDescTh, course.courseDescEn].filter((desc) => !!desc).join('\n')
   const SEOConfig: NextSeoProps = {
@@ -114,7 +106,7 @@ export function CourseDetailPage({ course, reviews }: CourseDetailPageProps) {
               </Typography>
             </Stack>
           )}
-          <Button variant="outlined" onClick={scrollToReview} startIcon={<MdEdit />}>
+          <Button variant="outlined" onClick={scrollToReviewForm} startIcon={<MdEdit />}>
             เขียนรีวิว
           </Button>
         </Stack>

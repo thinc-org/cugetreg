@@ -14,3 +14,12 @@ export function applyEscapedText(value: TNode[] | null): TNode[] {
   }, true)
   return html
 }
+
+export function scrollToReviewForm() {
+  const reviewTitle = document.getElementById('review-title')
+  if (reviewTitle) {
+    const offset = 124 + 16
+    const offsetTop = reviewTitle.offsetTop
+    window.scrollTo({ top: offsetTop - offset, behavior: 'smooth' })
+  }
+}

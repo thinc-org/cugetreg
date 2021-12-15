@@ -8,6 +8,7 @@ import { OtherChipKey } from '@/common/components/Chips/config'
 import { HighlightHTML } from '@/common/components/HighlightHTML'
 import { ReviewInteractionType, ReviewStatus } from '@/common/types/reviews'
 import { getSemesterName } from '@/common/utils/getSemesterName'
+import { scrollToReviewForm } from '@/modules/CourseDetail/components/ReviewForm/functions'
 
 import { useReviewContext } from '../../context/Review'
 import { ReviewReaction } from '../ReviewReaction'
@@ -55,12 +56,7 @@ export const ReviewCard: React.FC<ReviewCardProps> = (data) => {
   }
 
   const handleEditClick = () => {
-    const srollToElement = document.getElementById('review-title')
-    if (srollToElement) {
-      const offset = document.documentElement.clientHeight * 0.35
-      const offsetTop = srollToElement.offsetTop
-      window.scrollTo({ top: offsetTop - offset, behavior: 'smooth' })
-    }
+    scrollToReviewForm()
     editMyReview(data._id)
   }
 

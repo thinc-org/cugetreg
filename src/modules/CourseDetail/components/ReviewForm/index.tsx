@@ -25,10 +25,12 @@ import { applyEscapedText } from './functions'
 
 const localStorage = new Storage('localStorage')
 
-const { academicYear: defaultAcademicYear } = getCurrentTerm()
-const defaultSemester = '1'
-const defaultRating = 0
-const defaultContent = INITIAL_CONTENT
+const defaultValues: ReviewState = {
+  academicYear: getCurrentTerm().academicYear,
+  semester: '1',
+  rating: 0,
+  content: INITIAL_CONTENT,
+}
 
 export function ReviewForm() {
   const { t } = useTranslation('review')
@@ -37,7 +39,7 @@ export function ReviewForm() {
 
   useEffect(() => onFormLoad(), [onFormLoad])
 
-  const methods = useForm<ReviewState>()
+  const methods = useForm({ defaultValues })
   const { handleSubmit, control } = methods
 
   /**
@@ -66,11 +68,8 @@ export function ReviewForm() {
    * Use this function to cancel editing review
    */
   function clearForm() {
-    methods.setValue('academicYear', defaultAcademicYear)
-    methods.setValue('semester', defaultSemester)
-    methods.setValue('rating', defaultRating)
-    methods.setValue('content', defaultContent)
-    setEditorValue(defaultContent)
+    methods.reset()
+    setEditorValue(INITIAL_CONTENT)
   }
 
   /**
@@ -193,7 +192,6 @@ export function ReviewForm() {
               control={control}
               rules={{ required: 'academicYear required' }}
               // label="ปีการศึกษา"
-              defaultValue={defaultAcademicYear}
               sx={{ minWidth: 120 }}
               fullWidth
             >
@@ -208,7 +206,6 @@ export function ReviewForm() {
               control={control}
               rules={{ required: 'semester required' }}
               // label="ภาคการศึกษา"
-              defaultValue={defaultSemester}
               sx={{ minWidth: 120 }}
               fullWidth
             >

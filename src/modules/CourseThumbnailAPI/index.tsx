@@ -1,5 +1,6 @@
 import { ThemeProvider } from '@mui/material'
 import { NextApiRequest, NextApiResponse } from 'next'
+
 import ReactDOMServer from 'react-dom/server'
 import { I18nextProvider } from 'react-i18next'
 
@@ -10,6 +11,7 @@ import { lightTheme } from '@/configs/theme'
 import { CourseThumbnail } from '@/modules/CourseThumbnailAPI/components/CourseThumbnail'
 import { createApolloServerClient } from '@/services/apollo'
 import { GetCourseForThumbnailResponse, GET_COURSE_FOR_THUMBNAIL } from '@/services/apollo/query/getCourse'
+import { enableCourseThumbnail } from '@/utils/env'
 import { getCachedImage } from '@/utils/imageCache'
 
 import { getScreenshot } from './_lib/chromium'
@@ -17,6 +19,9 @@ import { getScreenshot } from './_lib/chromium'
 const isHtmlDebug = false
 
 export async function CourseThumbnailAPI(req: NextApiRequest, res: NextApiResponse) {
+  if (!enableCourseThumbnail) {
+    throw new Error('Course thumbnail is disabled')
+  }
   try {
     const { courseNo, courseGroup } = parseCourseNoFromQuery(req.query)
     if (isHtmlDebug) {

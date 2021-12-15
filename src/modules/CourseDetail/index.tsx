@@ -24,7 +24,7 @@ import { generateThumbnailId } from '@/modules/CourseThumbnailAPI/utils/generate
 import { createApolloServerClient } from '@/services/apollo'
 import { GetCourseResponse, GET_COURSE } from '@/services/apollo/query/getCourse'
 import { GetReviewsResponse, GetReviewsVars, GET_REVIEWS } from '@/services/apollo/query/getReviews'
-import { site_url } from '@/utils/env'
+import { enableCourseThumbnail, site_url } from '@/utils/env'
 
 import {
   Container,
@@ -68,14 +68,16 @@ export function CourseDetailPage({ course, reviews, ogImageUrl }: CourseDetailPa
       url: `${site_url}${buildLink(`/courses/${course.courseNo}`)}`,
       title: `${course.abbrName} | CU Get Reg`,
       description: courseDesc || defaultSEO.openGraph.description,
-      images: [
-        {
-          url: ogImageUrl,
-          width: 1200,
-          height: 630,
-          alt: course.abbrName,
-        },
-      ],
+      images: enableCourseThumbnail
+        ? [
+            {
+              url: ogImageUrl,
+              width: 1200,
+              height: 630,
+              alt: course.abbrName,
+            },
+          ]
+        : undefined,
     },
     additionalMetaTags: [
       ...defaultSEO.additionalMetaTags,

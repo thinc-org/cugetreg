@@ -3,6 +3,7 @@ import styled from '@emotion/styled'
 import { useCallback } from 'react'
 import toast from 'react-hot-toast'
 import { useTranslation } from 'react-i18next'
+import { MdUndo } from 'react-icons/md'
 import { MdDelete } from 'react-icons/md'
 
 import { ToastAction, ToastLayout, useCurrentToast } from '@/common/components/Toast'
@@ -39,7 +40,13 @@ export function RemoveCourseToast({ item }: RemoveCourseButtonProps) {
   }, [item, dismiss])
 
   return (
-    <ToastLayout actions={<ToastAction onClick={handleUndo}>{t('undo')}</ToastAction>}>
+    <ToastLayout
+      actions={
+        <ToastAction onClick={handleUndo}>
+          <MdUndo />
+        </ToastAction>
+      }
+    >
       {t('removeSubjectSuccess')}
     </ToastLayout>
   )

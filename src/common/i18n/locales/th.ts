@@ -200,6 +200,10 @@ export const courseThumbnail = {
   closed: 'ปิดทุกเซค',
   available: '{{current}}/{{max}}',
   full: '{{current}}/{{max}}',
+  SO: 'หมวดสังคม',
+  SC: 'หมวดวิทย์',
+  HU: 'หมวดมนุษย์',
+  IN: 'หมวดสหฯ',
 }
 
 export const review = {

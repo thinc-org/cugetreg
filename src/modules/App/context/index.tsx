@@ -1,8 +1,6 @@
 import { ApolloProvider } from '@apollo/client'
 import { CacheProvider } from '@emotion/react'
 import { EmotionCache } from '@emotion/utils'
-import AdapterDateFns from '@mui/lab/AdapterDateFns'
-import LocalizationProvider from '@mui/lab/LocalizationProvider'
 import { ThemeProvider, useMediaQuery } from '@mui/material'
 
 import React from 'react'
@@ -47,17 +45,15 @@ export function AppProvider({ children, forceDark, emotionCache }: AppProviderPr
   return (
     <ApolloProvider client={client}>
       <CacheProvider value={emotionCache}>
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <AnalyticsProvider value={{ addEvent }}>
-            <SnackbarContextProvider>
-              <ThemeProvider theme={prefersDarkMode || forceDark ? darkTheme : lightTheme}>
-                <Dialog />
-                <Toaster position="top-center" toastOptions={toastOptions} gutter={16} />
-                <ShoppingCartModalContextProvider>{children}</ShoppingCartModalContextProvider>
-              </ThemeProvider>
-            </SnackbarContextProvider>
-          </AnalyticsProvider>
-        </LocalizationProvider>
+        <AnalyticsProvider value={{ addEvent }}>
+          <SnackbarContextProvider>
+            <ThemeProvider theme={prefersDarkMode || forceDark ? darkTheme : lightTheme}>
+              <Dialog />
+              <Toaster position="top-center" toastOptions={toastOptions} gutter={16} />
+              <ShoppingCartModalContextProvider>{children}</ShoppingCartModalContextProvider>
+            </ThemeProvider>
+          </SnackbarContextProvider>
+        </AnalyticsProvider>
       </CacheProvider>
     </ApolloProvider>
   )

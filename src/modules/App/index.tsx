@@ -33,23 +33,21 @@ export function App(props: MyAppProps) {
   useSaveStudyProgram()
 
   return (
-    <>
-      <DefaultSeo {...SEO} />
-      <AppProvider forceDark={forceDark} emotionCache={emotionCache}>
-        <TrackPageChange>
-          <LoadingProgress />
-          <CssBaseline />
-          <TopBar />
-          <Container>
-            <ErrorBoundary>
-              <Component {...pageProps} />
-            </ErrorBoundary>
-          </Container>
-          <Footer />
-          <ShoppingCartModal />
-          <CustomToaster />
-        </TrackPageChange>
-      </AppProvider>
-    </>
+    <AppProvider forceDark={forceDark} emotionCache={emotionCache}>
+      <TrackPageChange>
+        <DefaultSeo {...SEO} />
+        <LoadingProgress />
+        <CssBaseline />
+        <TopBar />
+        <Container>
+          <ErrorBoundary>
+            <Component {...pageProps} />
+          </ErrorBoundary>
+        </Container>
+        <Footer />
+        <ShoppingCartModal />
+        <CustomToaster />
+      </TrackPageChange>
+    </AppProvider>
   )
 }

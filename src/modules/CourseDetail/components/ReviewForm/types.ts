@@ -4,7 +4,7 @@ import { ReviewState } from '@/modules/CourseDetail/context/Review/types'
 export type ReviewEditables = Pick<Review, 'rating' | 'academicYear' | 'semester' | 'content'>
 
 export interface ReviewFormRef {
-  clearEditor: () => void
+  clearForm: () => void
   storeLocalReviewForm: () => void
   restoreFormState: (form: Partial<ReviewState>) => void
   applyFromReview: (review: Review) => void

@@ -1,4 +1,4 @@
-import { Rating, Select, Stack, MenuItem, Typography, Button } from '@mui/material'
+import { Rating, Stack, MenuItem, Typography, Button } from '@mui/material'
 import { TNode } from '@udecode/plate-core'
 
 import { useCallback, useEffect, useImperativeHandle, useRef } from 'react'
@@ -13,6 +13,7 @@ import { Storage } from '@/common/storage'
 import { StorageKey } from '@/common/storage/constants'
 import { Review } from '@/common/types/reviews'
 import { getCurrentTerm } from '@/common/utils/getCurrentTerm'
+import { ControlledSelect } from '@/modules/CourseDetail/components/ControlledSelect'
 import { ReviewEditables } from '@/modules/CourseDetail/components/ReviewForm/types'
 
 import { ContributionGuide } from '../../components/ContributionGuide'
@@ -24,8 +25,12 @@ import { applyEscapedText } from './functions'
 
 const localStorage = new Storage('localStorage')
 
+const { academicYear: defaultAcademicYear } = getCurrentTerm()
+const defaultSemester = '1'
+const defaultRating = 0
+const defaultContent = INITIAL_CONTENT
+
 export function ReviewForm() {
-  const { academicYear } = getCurrentTerm()
   const { t } = useTranslation('review')
   const { courseNo, submitReview, submitEditedReview, editingReviewId, cancelEditReview, formRef, onFormLoad } =
     useReviewContext()
@@ -33,7 +38,7 @@ export function ReviewForm() {
   useEffect(() => onFormLoad(), [onFormLoad])
 
   const methods = useForm<ReviewState>()
-  const { register, handleSubmit, control } = methods
+  const { handleSubmit, control } = methods
 
   /**
    * Rich Text editor hook
@@ -60,10 +65,12 @@ export function ReviewForm() {
   /**
    * Use this function to cancel editing review
    */
-  function clearEditor() {
-    methods.setValue('content', INITIAL_CONTENT as TNode[])
-    setEditorValue(INITIAL_CONTENT)
-    methods.setValue('rating', 0)
+  function clearForm() {
+    methods.setValue('academicYear', defaultAcademicYear)
+    methods.setValue('semester', defaultSemester)
+    methods.setValue('rating', defaultRating)
+    methods.setValue('content', defaultContent)
+    setEditorValue(defaultContent)
   }
 
   /**
@@ -121,7 +128,7 @@ export function ReviewForm() {
   }
 
   useImperativeHandle(formRef, () => ({
-    clearEditor,
+    clearForm,
     storeLocalReviewForm,
     restoreFormState,
     applyFromReview,
@@ -180,10 +187,12 @@ export function ReviewForm() {
           mb={2}
         >
           <Stack direction="row" gap={4} sx={{ width: ['100%', 'auto'] }}>
-            <Select
-              {...register('academicYear', { required: 'academicYear required' })}
+            <ControlledSelect
+              name="academicYear"
+              control={control}
+              rules={{ required: 'academicYear required' }}
               // label="ปีการศึกษา"
-              defaultValue={academicYear}
+              defaultValue={defaultAcademicYear}
               sx={{ minWidth: 120 }}
               fullWidth
             >
@@ -192,18 +201,20 @@ export function ReviewForm() {
                   {year}
                 </MenuItem>
               ))}
-            </Select>
-            <Select
-              {...register('semester', { required: 'semester required' })}
+            </ControlledSelect>
+            <ControlledSelect
+              name="semester"
+              control={control}
+              rules={{ required: 'semester required' }}
               // label="ภาคการศึกษา"
-              defaultValue="1"
+              defaultValue={defaultSemester}
               sx={{ minWidth: 120 }}
               fullWidth
             >
               <MenuItem value="1">ภาคต้น</MenuItem>
               <MenuItem value="2">ภาคปลาย</MenuItem>
               <MenuItem value="3">ฤดูร้อน</MenuItem>
-            </Select>
+            </ControlledSelect>
           </Stack>
           <Controller
             name="rating"

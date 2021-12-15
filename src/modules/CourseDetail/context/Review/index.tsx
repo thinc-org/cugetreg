@@ -177,7 +177,7 @@ export const ReviewProvider: React.FC<ReviewProviderProps> = ({ courseNo, initia
    * Use this function to cancel editing review
    */
   const cancelEditReview = () => {
-    getForm().clearEditor()
+    getForm().clearForm()
     setEditingReviewId(undefined)
   }
 

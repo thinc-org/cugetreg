@@ -12,6 +12,7 @@ import '@/common/i18n'
 import { TrackPageChange } from '@/common/tracker/components/TrackPageChange'
 import { createEmotionCache } from '@/configs/createEmotionCache'
 import { mobxConfiguration } from '@/configs/mobx'
+import { CustomToaster } from '@/modules/App/components/CustomToaster'
 import { AppProvider } from '@/modules/App/context'
 import { ShoppingCartModal } from '@/modules/CourseSearch/components/ShoppingCartModal'
 import { ErrorBoundary } from '@/modules/ErrorBoundary'
@@ -46,6 +47,7 @@ export function App(props: MyAppProps) {
           </Container>
           <Footer />
           <ShoppingCartModal />
+          <CustomToaster />
         </TrackPageChange>
       </AppProvider>
     </>

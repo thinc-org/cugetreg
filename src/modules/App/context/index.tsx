@@ -4,7 +4,6 @@ import { EmotionCache } from '@emotion/utils'
 import { ThemeProvider, useMediaQuery } from '@mui/material'
 
 import React from 'react'
-import { Toaster, ToastOptions } from 'react-hot-toast'
 
 import { AnalyticsProvider } from '@/common/context/Analytics'
 import { useAnalytics } from '@/common/context/Analytics/hooks/useAnalytics'
@@ -31,16 +30,6 @@ export function AppProvider({ children, forceDark, emotionCache }: AppProviderPr
 
   const { addEvent } = useAnalytics()
 
-  const toastOptions: ToastOptions = {
-    style: {
-      top: 20,
-      fontSize: '0.9rem',
-      fontFamily: 'prompt',
-      borderRadius: 4,
-      padding: 12,
-    },
-  }
-
   return (
     <ApolloProvider client={client}>
       <CacheProvider value={emotionCache}>
@@ -48,7 +37,6 @@ export function AppProvider({ children, forceDark, emotionCache }: AppProviderPr
           <ThemeProvider theme={prefersDarkMode || forceDark ? darkTheme : lightTheme}>
             <ShoppingCartModalContextProvider>
               <Dialog />
-              <Toaster position="top-center" toastOptions={toastOptions} gutter={16} />
               {children}
             </ShoppingCartModalContextProvider>
           </ThemeProvider>

@@ -54,6 +54,8 @@ export const schedulePage = {
   sumCredits: '{{credits}} หน่วยกิต',
   classSchedule: 'ตารางเรียน',
   examSchedule: 'ตารางสอบ',
+  removeSubjectSuccess: 'ลบรายวิชาสำเร็จ',
+  undo: 'เลิกทำ',
 }
 
 export const scheduleTableCard = {

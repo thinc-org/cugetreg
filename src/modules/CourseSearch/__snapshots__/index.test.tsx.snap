@@ -11,11 +11,17 @@ exports[`CourseSearchPage Should match snapshot correctly 1`] = `
     justifyContent="space-between"
     spacing={2}
   >
-    <ForwardRef(Typography)
-      variant="h2"
+    <ForwardRef(Stack)
+      alignItems="center"
+      direction="row"
+      spacing={2}
     >
-      ค้นหาวิชาเรียน
-    </ForwardRef(Typography)>
+      <ForwardRef(Typography)
+        variant="h2"
+      >
+        ค้นหาวิชาเรียน
+      </ForwardRef(Typography)>
+    </ForwardRef(Stack)>
     <Hidden
       mdUp={true}
     >

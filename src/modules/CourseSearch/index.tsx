@@ -1,4 +1,13 @@
-import { Hidden, Typography, Select, MenuItem, SelectChangeEvent, Stack as MuiStack } from '@mui/material'
+import {
+  Hidden,
+  Typography,
+  Select,
+  MenuItem,
+  SelectChangeEvent,
+  Stack as MuiStack,
+  useTheme,
+  useMediaQuery,
+} from '@mui/material'
 
 import { Analytics } from '@/common/context/Analytics/components/Analytics'
 import { FILTER_BUTTON, SELECTED_COURSES_BUTTON, OPEN_SHOPPING_CART_BUTTON } from '@/common/context/Analytics/constants'
@@ -19,6 +28,8 @@ export function CourseSearchPage() {
   const { openFilterBar, toggleFilterBar, onOpen, handleCloseFilterBar } = useCourseSearchPage()
 
   const { academicYear, semester, setTerm } = useCourseGroup()
+  const theme = useTheme()
+  const isSmUp = useMediaQuery(theme.breakpoints.up('sm'))
 
   const handleChange = (e: SelectChangeEvent<string>) => {
     const term = e.target.value as string
@@ -31,10 +42,12 @@ export function CourseSearchPage() {
       <TitleStack spacing={2} direction="row" alignItems="center" justifyContent="space-between">
         <MuiStack direction="row" spacing={2} alignItems="center">
           <Typography variant="h2">ค้นหาวิชาเรียน</Typography>
-          <Select defaultValue={`${academicYear}/${semester}`} onChange={handleChange}>
-            <MenuItem value="2564/2">2564/2</MenuItem>
-            <MenuItem value="2564/1">2564/1</MenuItem>
-          </Select>
+          {isSmUp && (
+            <Select defaultValue={`${academicYear}/${semester}`} onChange={handleChange}>
+              <MenuItem value="2564/2">2564/2</MenuItem>
+              <MenuItem value="2564/1">2564/1</MenuItem>
+            </Select>
+          )}
         </MuiStack>
         <Hidden mdUp>
           <Analytics elementName={OPEN_SHOPPING_CART_BUTTON}>

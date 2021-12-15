@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { MdUndo } from 'react-icons/md'
 import { MdDelete } from 'react-icons/md'
 
-import { ToastAction, ToastLayout, useCurrentToast } from '@/common/components/Toast'
+import { AnimatedIconWrapper, ToastAction, ToastLayout, useCurrentToast } from '@/common/components/Toast'
 import { CourseCartItem, courseCartStore } from '@/store'
 
 export interface RemoveCourseButtonProps {
@@ -27,7 +27,13 @@ export function useRemoveCourse(item: CourseCartItem) {
       toast.dismiss(lastToastId)
     }
     courseCartStore.removeCourse(item)
-    lastToastId = toast(<RemoveCourseToast item={item} />, { icon: <DeleteIcon /> })
+    lastToastId = toast(<RemoveCourseToast item={item} />, {
+      icon: (
+        <AnimatedIconWrapper>
+          <DeleteIcon />
+        </AnimatedIconWrapper>
+      ),
+    })
   }, [item])
 }
 

@@ -27,6 +27,7 @@ export function CustomToaster() {
         <Toaster
           position="top-center"
           toastOptions={{
+            duration: 99999,
             className: css(toastStyles(theme)),
           }}
           gutter={16}

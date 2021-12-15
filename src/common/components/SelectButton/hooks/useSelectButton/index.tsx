@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next'
 import { MdDelete } from 'react-icons/md'
 
 import { SelectButtonToast } from '@/common/components/SelectButtonToast'
+import { AnimatedIconWrapper } from '@/common/components/Toast'
 import { courseCartStore } from '@/store'
 
 import { SelectButtonProps } from '../../types'
@@ -41,7 +42,11 @@ export const useSelectButton = ({ course, selectedSectionNumber, log }: SelectBu
         courseCartStore.removeCourse(course)
         log(null, 'removeSubjectSuccess')
         lastToastId = toast(<SelectButtonToast message="removeSubjectSuccess" action="viewAllSubject" />, {
-          icon: <DeleteIcon />,
+          icon: (
+            <AnimatedIconWrapper>
+              <DeleteIcon />
+            </AnimatedIconWrapper>
+          ),
         })
       }
     })

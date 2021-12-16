@@ -50,7 +50,7 @@ declare module '@emotion/react' {
 export const highlight: Highlight = {
   pink: {
     300: '#FDD8EE',
-    500: '#F339A8',
+    500: '#F57FC6',
     700: '#C7117F',
   },
   red: {
@@ -65,7 +65,7 @@ export const highlight: Highlight = {
   },
   green: {
     300: '#D1FEB6',
-    500: '#85E14D',
+    500: '#6CD62B',
     700: '#4B991C',
   },
   teal: {
@@ -85,7 +85,7 @@ export const highlight: Highlight = {
   },
   purple: {
     300: '#F3D6FD',
-    500: '#BF35EF',
+    500: '#C865EA',
     700: '#681A83',
   },
   yellow: {

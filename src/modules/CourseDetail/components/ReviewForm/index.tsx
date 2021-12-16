@@ -9,7 +9,6 @@ import { useTranslation } from 'react-i18next'
 import { RichTextEditor } from '@/common/components/RichTextEditor'
 import { INITIAL_CONTENT } from '@/common/components/RichTextEditor/initialContent'
 import { RichTextEditorRef } from '@/common/components/RichTextEditor/types'
-import { ToastLayout } from '@/common/components/Toast'
 import { Storage } from '@/common/storage'
 import { StorageKey } from '@/common/storage/constants'
 import { Review } from '@/common/types/reviews'
@@ -165,7 +164,7 @@ export function ReviewForm() {
     const allErrors = Object.keys(errors)
       .map((error) => errorMessageMapping[error as 'rating' | 'content'])
       .join('และ')
-    toast.error(<ToastLayout>กรุณากรอก{allErrors}</ToastLayout>)
+    toast.error(`กรุณากรอก${allErrors}`)
   }
 
   return (

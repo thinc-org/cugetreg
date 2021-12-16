@@ -14,10 +14,6 @@ const toastStyles = (theme: Theme) => css`
   padding: 0;
   padding-left: 10px;
   border: 1px solid ${theme.palette.divider};
-
-  div[role='status'] {
-    margin: 0;
-  }
 `
 
 export function CustomToaster() {

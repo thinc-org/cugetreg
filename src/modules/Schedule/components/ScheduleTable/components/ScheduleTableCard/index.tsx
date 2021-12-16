@@ -28,6 +28,7 @@ import { ColorCircle } from '@/modules/Schedule/components/ColorCircle'
 import { ColorPicker } from '@/modules/Schedule/components/ColorPicker'
 import { useColorPickerPopper } from '@/modules/Schedule/components/ColorPicker/hooks/useColorPicker'
 import { CourseOverlap } from '@/modules/Schedule/components/Schedule/utils'
+import { useRemoveCourse } from '@/modules/Schedule/hooks/useRemoveCourse'
 import { CourseCartItem, courseCartStore } from '@/store'
 import { uniq } from '@/utils/uniq'
 
@@ -61,6 +62,7 @@ export interface CardDetailProps extends CardComponentProps {
 
 export const ScheduleTableCard = observer(({ item, overlaps }: ScheduleTableCardProps) => {
   const { courseNo, isHidden } = item
+  const handleRemove = useRemoveCourse(item)
   const toggleVisibility = useCallback(() => {
     courseCartStore.toggleHiddenItem(item)
   }, [item])
@@ -118,7 +120,7 @@ export const ScheduleTableCard = observer(({ item, overlaps }: ScheduleTableCard
 
       <RightPane>
         <Analytics elementId={courseNo} elementName={DELETE_COURSE}>
-          <DeleteButton onClick={() => courseCartStore.removeCourse(item)}>
+          <DeleteButton onClick={handleRemove}>
             <MdDelete />
           </DeleteButton>
         </Analytics>
@@ -133,6 +135,7 @@ function CardHeader({ item }: CardComponentProps) {
   const { buildLink } = useLinkBuilderWithCourseGroup(item)
   const { handleClick, handleClose, anchorElRef, ...colorPickerProps } = useColorPickerPopper(item)
   const section = item.sections.find((section) => section.sectionNo === item.selectedSectionNo)!
+  const handleRemove = useRemoveCourse(item)
   return (
     <Stack direction="row" pt={1} my={0.5} pr={2}>
       <Stack direction="row" flex={1} justifyContent="space-between">
@@ -181,7 +184,7 @@ function CardHeader({ item }: CardComponentProps) {
         </ClickAwayListener>
       </Stack>
       <Hidden mdDown>
-        <IconButton aria-label={t('delete')} onClick={() => courseCartStore.removeCourse(item)}>
+        <IconButton aria-label={t('delete')} onClick={handleRemove}>
           <MdDelete />
         </IconButton>
       </Hidden>

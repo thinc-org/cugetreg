@@ -9,8 +9,9 @@ import { MdDelete } from 'react-icons/md'
 import { AnimatedIconWrapper, ToastAction, ToastLayout, useCurrentToast } from '@/common/components/Toast'
 import { CourseCartItem, courseCartStore } from '@/store'
 
-export interface RemoveCourseButtonProps {
+interface RemoveCourseToastProps {
   item: CourseCartItem
+  index: number
 }
 
 let lastToastId = ''
@@ -26,8 +27,11 @@ export function useRemoveCourse(item: CourseCartItem) {
     if (lastToastId) {
       toast.dismiss(lastToastId)
     }
+    const items = courseCartStore.shopItemsByCourseGroup(item)
+    const index = items.indexOf(item)
+    if (index === -1) return
     courseCartStore.removeCourse(item)
-    lastToastId = toast(<RemoveCourseToast item={item} />, {
+    lastToastId = toast(<RemoveCourseToast item={item} index={index} />, {
       icon: (
         <AnimatedIconWrapper>
           <DeleteIcon />
@@ -37,13 +41,17 @@ export function useRemoveCourse(item: CourseCartItem) {
   }, [item])
 }
 
-export function RemoveCourseToast({ item }: RemoveCourseButtonProps) {
+export function RemoveCourseToast({ item, index }: RemoveCourseToastProps) {
   const { t } = useTranslation('schedulePage')
   const { dismiss } = useCurrentToast()
+
   const handleUndo = useCallback(() => {
+    const items = courseCartStore.shopItemsByCourseGroup(item)
+    if (items.some((i) => i.courseNo === item.courseNo)) return
     courseCartStore.addItem(item, item.selectedSectionNo)
+    courseCartStore.reorder(item, items.length, index)
     dismiss()
-  }, [item, dismiss])
+  }, [item, index, dismiss])
 
   return (
     <ToastLayout

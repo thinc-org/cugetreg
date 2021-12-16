@@ -16,4 +16,4 @@ export const site_url = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:30
 export const environment = process.env.NEXT_PUBLIC_ENVIRONMENT || 'dev'
 
 export const enableCourseThumbnail = process.env.NEXT_PUBLIC_ENABLE_COURSE_THUMBNAIL === 'true'
-export const browserlessUrl = isProduction ? process.env.BROWSERLESS_URL : null
+export const enableDaysOfWeekInThumbnail = true

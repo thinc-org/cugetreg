@@ -3,7 +3,10 @@ import { Canvas, loadImage, NodeCanvasRenderingContext2D, registerFont } from 'c
 import { i18n } from '@/common/i18n'
 import { getPaletteRange } from '@/common/utils/getPaletteRange'
 import { lightTheme } from '@/configs/theme'
+import { getDayColor } from '@/modules/CourseThumbnailAPI/utils/getDayColor'
+import { getDaysOfWeek } from '@/modules/CourseThumbnailAPI/utils/getDaysOfWeek'
 import { CourseThumbnailData } from '@/services/apollo/query/getCourse'
+import { enableDaysOfWeekInThumbnail } from '@/utils/env'
 
 registerFont('public/fonts/Poppins-Bold.ttf', { family: 'Poppins Bold' })
 registerFont('public/fonts/Prompt-Bold.ttf', { family: 'Prompt Bold' })
@@ -14,25 +17,28 @@ const theme = lightTheme
 const width = 1200
 const height = 630
 
-export async function drawThumbnail(
-  canvas: Canvas,
-  { courseNo, abbrName, courseNameTh, courseNameEn, genEdType }: CourseThumbnailData
-) {
+export async function drawThumbnail(canvas: Canvas, course: CourseThumbnailData) {
+  const { courseNo, abbrName, courseNameTh, courseNameEn, genEdType } = course
   const ctx = canvas.getContext('2d')
 
   ctx.drawImage(await background, 0, 0, width, height)
 
-  drawText(ctx, courseNo, 64, 217, 'Poppins Bold', 36, theme.palette.primaryRange[100])
-  drawText(ctx, abbrName, 64, 266, 'Poppins Bold', 60, theme.palette.primary.main)
+  setTextStyle(ctx, 'Poppins Bold', 36, theme.palette.primaryRange[100])
+  drawText(ctx, courseNo, 64, 253)
+  setTextStyle(ctx, 'Poppins Bold', 60, theme.palette.primary.main)
+  drawText(ctx, abbrName, 64, 326)
   const abbrNameMetrics = ctx.measureText(abbrName)
 
-  drawText(ctx, courseNameTh, 64, 372, 'Prompt Bold', 30, theme.palette.primary.main)
-  drawText(ctx, courseNameEn, 64, 417, 'Poppins Bold', 30, theme.palette.primary.main)
+  setTextStyle(ctx, 'Prompt Bold', 30, theme.palette.primary.main)
+  drawText(ctx, courseNameTh, 64, 402)
+  setTextStyle(ctx, 'Poppins Bold', 30, theme.palette.primary.main)
+  drawText(ctx, courseNameEn, 64, 447)
 
   if (genEdType !== 'NO') {
     const genEdColor = getPaletteRange(theme, genEdType)[700]
     const genEdText = i18n.t(genEdType, { ns: 'courseThumbnail' })
-    drawText(ctx, genEdText, 64 + abbrNameMetrics.width + 57, 288, 'Prompt Medium', 24, genEdColor)
+    setTextStyle(ctx, 'Prompt Medium', 24, genEdColor)
+    drawText(ctx, genEdText, 64 + abbrNameMetrics.width + 57, 312)
 
     const genEdMetrics = ctx.measureText(genEdText)
     drawRoundRect(ctx, 64 + abbrNameMetrics.width + 27, 285, genEdMetrics.width + 60, 40, 24)
@@ -43,21 +49,30 @@ export async function drawThumbnail(
     ctx.fillStyle = genEdColor
     ctx.fillRect(0, height - 56, width, 56)
   }
+
+  if (enableDaysOfWeekInThumbnail) {
+    let offset = 0
+    getDaysOfWeek(course).forEach((dayOfWeek) => {
+      ctx.fillStyle = getDayColor(theme, dayOfWeek)
+      drawRoundRect(ctx, 64 + offset, 116, 48, 48, 24)
+      ctx.fill()
+
+      setTextStyle(ctx, 'Poppins Bold', 24, 'white')
+      const dayOfWeekMetrics = ctx.measureText(dayOfWeek)
+      const centerOffset = (48 - dayOfWeekMetrics.width) / 2
+      drawText(ctx, dayOfWeek, 64 + offset + centerOffset, 149)
+      offset += 64
+    })
+  }
 }
 
-function drawText(
-  ctx: NodeCanvasRenderingContext2D,
-  text: string,
-  x: number,
-  y: number,
-  font: string,
-  size: number,
-  color: string
-) {
+function setTextStyle(ctx: NodeCanvasRenderingContext2D, font: string, size: number, color: string) {
   ctx.font = `${size}px "${font}"`
   ctx.fillStyle = color
+}
 
-  ctx.fillText(text, x, y + size)
+function drawText(ctx: NodeCanvasRenderingContext2D, text: string, x: number, y: number) {
+  ctx.fillText(text, x, y)
 }
 
 function drawRoundRect(ctx: NodeCanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number) {

@@ -7,7 +7,7 @@ import { MdUndo } from 'react-icons/md'
 import { MdDelete } from 'react-icons/md'
 
 import { AnimatedIconWrapper, ToastAction, ToastLayout, useCurrentToast } from '@/common/components/Toast'
-import { CourseCartItem, courseCartStore } from '@/store'
+import { CourseCartItem, courseCartStore, isSameKey } from '@/store'
 
 interface RemoveCourseToastProps {
   item: CourseCartItem
@@ -28,7 +28,7 @@ export function useRemoveCourse(item: CourseCartItem) {
       toast.dismiss(lastToastId)
     }
     const items = courseCartStore.shopItemsByCourseGroup(item)
-    const index = items.indexOf(item)
+    const index = items.findIndex((i) => isSameKey(i, item))
     if (index === -1) return
     courseCartStore.removeCourse(item)
     lastToastId = toast(<RemoveCourseToast item={item} index={index} />, {
@@ -47,7 +47,7 @@ export function RemoveCourseToast({ item, index }: RemoveCourseToastProps) {
 
   const handleUndo = useCallback(() => {
     const items = courseCartStore.shopItemsByCourseGroup(item)
-    if (items.some((i) => i.courseNo === item.courseNo)) return
+    if (items.some((i) => isSameKey(i, item))) return
     courseCartStore.addItem(item, item.selectedSectionNo)
     courseCartStore.reorder(item, items.length, index)
     dismiss()

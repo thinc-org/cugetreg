@@ -345,7 +345,7 @@ function pullCourseGroupUp(items: CourseCartItem[], courseGroup: CourseGroup): C
  * Checks if two course keys are the same
  * @returns true if they are the same
  */
-function isSameKey(a: CourseKey, b: CourseKey): boolean {
+export function isSameKey(a: CourseKey, b: CourseKey): boolean {
   return (
     a.courseNo == b.courseNo &&
     a.studyProgram == b.studyProgram &&

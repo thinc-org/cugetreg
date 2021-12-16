@@ -72,7 +72,7 @@ exports[`ReviewReaction should render ReviewReaction type L like correctly when 
     <SelectedIcon />
   </ForwardRef(IconButton)>
   <ForwardRef(Typography)
-    color="#85E14D"
+    color="#6CD62B"
     variant="h6"
   >
     42

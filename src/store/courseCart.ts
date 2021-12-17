@@ -143,9 +143,7 @@ export class CourseCart implements CourseCartProps {
     })
     try {
       const courses = await this.source.syncFromStore()
-      const fullCourses: CourseCartItem[] = []
-      for (const course of courses) {
-        let detail: CourseCartItem
+      const fullCourses: CourseCartItem[] = await Promise.all(courses.map(async course => {
         try {
           const { data } = await client.query<GetCourseResponse, GetCourseVars>({
             query: GET_COURSE,
@@ -158,14 +156,14 @@ export class CourseCart implements CourseCartProps {
               },
             },
           })
-          detail = {
+          return {
             ...data.course,
             selectedSectionNo: course.selectedSectionNo,
             isHidden: course.isHidden,
-            color: course.color ?? getNewColor(fullCourses, data.course),
+            color: course.color,
           }
         } catch (e) {
-          detail = {
+          return {
             ...unknownCourse,
             selectedSectionNo: course.selectedSectionNo,
             isHidden: course.isHidden,
@@ -176,8 +174,10 @@ export class CourseCart implements CourseCartProps {
             color: course.color,
           }
         }
-        fullCourses.push(detail)
-      }
+      }))
+      fullCourses.forEach(course => {
+        course.color = course.color ?? getNewColor(fullCourses, course)
+      })
       runInAction(() => {
         this.shopItems = fullCourses.map((course) => ({ ...course }))
       })

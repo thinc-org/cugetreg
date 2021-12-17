@@ -1,8 +1,10 @@
 import { ClassNames, css, Theme, useTheme } from '@emotion/react'
 
-import { ToastBar, Toaster } from 'react-hot-toast'
+import { Toaster } from 'react-hot-toast'
 
 import { ToastContextProvider } from '@/common/components/Toast'
+
+import { CustomToastBar } from '../CustomToastBar'
 
 const toastStyles = (theme: Theme) => css`
   top: 20px;
@@ -12,10 +14,6 @@ const toastStyles = (theme: Theme) => css`
   padding: 0;
   padding-left: 10px;
   border: 1px solid ${theme.palette.divider};
-
-  div[role='status'] {
-    margin: 0;
-  }
 `
 
 export function CustomToaster() {
@@ -33,7 +31,7 @@ export function CustomToaster() {
         >
           {(t) => (
             <ToastContextProvider toast={t}>
-              <ToastBar toast={t} />
+              <CustomToastBar />
             </ToastContextProvider>
           )}
         </Toaster>

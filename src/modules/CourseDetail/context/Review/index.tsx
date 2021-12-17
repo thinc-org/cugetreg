@@ -3,7 +3,6 @@ import { useMutation, useQuery } from '@apollo/client'
 import React, { createContext, useCallback, useContext, useRef, useState } from 'react'
 import toast from 'react-hot-toast'
 
-import { ToastLayout } from '@/common/components/Toast'
 import { useCourseGroup } from '@/common/hooks/useCourseGroup'
 import { Review, ReviewInteractionType } from '@/common/types/reviews'
 import { loginGuard } from '@/common/utils/loginGuard'
@@ -124,7 +123,7 @@ export const ReviewProvider: React.FC<ReviewProviderProps> = ({ courseNo, initia
         },
       })
     } catch (err) {
-      toast.error(<ToastLayout>(err as Error).message</ToastLayout>)
+      toast.error((err as Error).message)
     }
   }
 
@@ -150,14 +149,14 @@ export const ReviewProvider: React.FC<ReviewProviderProps> = ({ courseNo, initia
             reviewId,
           },
         })
-        toast.success(<ToastLayout>ลบรีวิวสำเร็จ</ToastLayout>)
+        toast.success('ลบรีวิวสำเร็จ')
       }
       dialog({
         ...deleteConfirmationDialogOptions,
         onPrimaryButtonClick: onConfirm,
       })
     } catch (err) {
-      toast.error(<ToastLayout>(err as Error).message</ToastLayout>)
+      toast.error((err as Error).message)
     }
   }
 
@@ -201,10 +200,10 @@ export const ReviewProvider: React.FC<ReviewProviderProps> = ({ courseNo, initia
       })
       if (!response.errors && response.data) {
         cancelEditReview()
-        toast.success(<ToastLayout>เพิ่มรีวิวสำเร็จ</ToastLayout>)
+        toast.success('เพิ่มรีวิวสำเร็จ')
       }
     } catch (err) {
-      toast.error(<ToastLayout>คุณได้รีวิววิชานี้แล้ว กรุณาแก้ไขรีวิวเดิมหากต้องการเพิ่มเติมเนื้อหา</ToastLayout>)
+      toast.error('คุณได้รีวิววิชานี้แล้ว กรุณาแก้ไขรีวิวเดิมหากต้องการเพิ่มเติมเนื้อหา')
     }
   }
 
@@ -225,10 +224,10 @@ export const ReviewProvider: React.FC<ReviewProviderProps> = ({ courseNo, initia
       })
       if (!response.errors && response.data) {
         cancelEditReview()
-        toast.success(<ToastLayout>แก้ไขรีวิวสำเร็จ</ToastLayout>)
+        toast.success('แก้ไขรีวิวสำเร็จ')
       }
     } catch (err) {
-      toast.error(<ToastLayout>(err as Error).message</ToastLayout>)
+      toast.error((err as Error).message)
     }
   }
 

@@ -3,13 +3,17 @@ import md5 from 'md5'
 import { thumbnailVersion } from '@/modules/CourseThumbnailAPI/constants'
 import { CourseThumbnailData } from '@/services/apollo/query/getCourse'
 
-export function generateThumbnailId(course: CourseThumbnailData): string {
-  let contents = ''
-  contents += course.courseNo
-  contents += course.abbrName
-  contents += course.courseNameEn
-  contents += course.courseNameTh
-  contents += `v${thumbnailVersion}`
+import { getDaysOfWeek } from './getDaysOfWeek'
 
-  return md5(contents)
+export function generateThumbnailId(course: CourseThumbnailData): string {
+  return md5(
+    JSON.stringify({
+      courseNo: course.courseNo,
+      abbrName: course.abbrName,
+      courseNameEn: course.courseNameEn,
+      courseNameTh: course.courseNameTh,
+      daysOfWeek: getDaysOfWeek(course),
+      version: thumbnailVersion,
+    })
+  )
 }

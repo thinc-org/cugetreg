@@ -1,1 +1,1 @@
-export const thumbnailVersion = 1
+export const thumbnailVersion = 3

@@ -1,4 +1,4 @@
-import { Course, Section } from '@thinc-org/chula-courses'
+import { Class, Course, Section } from '@thinc-org/chula-courses'
 import gql from 'graphql-tag'
 
 import { CourseGroup } from '@/common/hooks/useCourseGroup/types'
@@ -22,7 +22,10 @@ query GetCourseInfo($courseNo: String!, $courseGroup: CourseGroupInput!) {
 }
 `
 
-export type SectionThumbnailData = Pick<Section, 'genEdType' | 'closed' | 'capacity'>
+export type ClassThumbnailData = Pick<Class, 'dayOfWeek'>
+export type SectionThumbnailData = Pick<Section, never> & {
+  classes: ClassThumbnailData[]
+}
 export type CourseThumbnailData = Pick<
   Course,
   'courseNo' | 'abbrName' | 'courseNameTh' | 'courseNameEn' | 'genEdType'
@@ -43,11 +46,8 @@ export const GET_COURSE_FOR_THUMBNAIL = gql`
       courseNameEn
       genEdType
       sections {
-        genEdType
-        closed
-        capacity {
-          current
-          max
+        classes {
+          dayOfWeek
         }
       }
     }

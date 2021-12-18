@@ -1,5 +1,5 @@
+import { env } from '@/env'
 import { collectLogEvent } from '@/services/logging'
-import { environment, google_analytic_property } from '@/utils/env'
 
 import { AnalyticsType } from '../../types'
 
@@ -7,7 +7,7 @@ export function useAnalytics() {
   const addEvent: AnalyticsType['addEvent'] = (e) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const gaData = typeof window !== 'undefined' && (window as any).gaData
-    const experiments = gaData && gaData[google_analytic_property]?.experiments
+    const experiments = gaData && gaData[env.googleAnalytic.propertyId]?.experiments
 
     return collectLogEvent({
       kind: 'fine-tracking',
@@ -21,7 +21,7 @@ export function useAnalytics() {
         pathId: e.pathId || '',
         ua: navigator?.userAgent || '',
         experiments: JSON.stringify(experiments),
-        environment,
+        environment: env.environment,
       },
     })
   }

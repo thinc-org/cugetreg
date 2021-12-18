@@ -17,6 +17,7 @@ import { getExamDate } from '@/common/utils/getExamDate'
 import { getExamPeriod } from '@/common/utils/getExamPeriod'
 import { parseCourseNoFromQuery } from '@/common/utils/parseCourseNoFromQuery'
 import { PageMeta } from '@/components/PageMeta'
+import { env } from '@/env'
 import { scrollToReviewForm } from '@/modules/CourseDetail/components/ReviewForm/functions'
 import { ReviewList } from '@/modules/CourseDetail/components/ReviewList'
 import { ReviewProvider } from '@/modules/CourseDetail/context/Review'
@@ -24,7 +25,6 @@ import { generateThumbnailId } from '@/modules/CourseThumbnailAPI/utils/generate
 import { createApolloServerClient } from '@/services/apollo'
 import { GetCourseResponse, GET_COURSE } from '@/services/apollo/query/getCourse'
 import { GetReviewsResponse, GetReviewsVars, GET_REVIEWS } from '@/services/apollo/query/getReviews'
-import { enableCourseThumbnail, site_url } from '@/utils/env'
 
 import {
   Container,
@@ -65,10 +65,10 @@ export function CourseDetailPage({ course, reviews, ogImageUrl }: CourseDetailPa
     title: course.abbrName,
     description: courseDesc || defaultSEO.description,
     openGraph: {
-      url: `${site_url}${buildLink(`/courses/${course.courseNo}`)}`,
+      url: `${env.siteUrl}${buildLink(`/courses/${course.courseNo}`)}`,
       title: `${course.abbrName} | CU Get Reg`,
       description: courseDesc || defaultSEO.openGraph.description,
-      images: enableCourseThumbnail
+      images: env.enable.courseThumbnail
         ? [
             {
               url: ogImageUrl,
@@ -212,7 +212,7 @@ export async function getServerSideProps(
       props: {
         course: course,
         reviews: reviewsData.reviews,
-        ogImageUrl: `${site_url}/api/courseThumbnail?${urlParams.toString()}`,
+        ogImageUrl: `${env.siteUrl}/api/courseThumbnail?${urlParams.toString()}`,
       },
     }
   } catch (e) {

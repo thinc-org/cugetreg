@@ -3,9 +3,9 @@ import { BatchHttpLink } from '@apollo/client/link/batch-http'
 import { setContext } from '@apollo/client/link/context'
 import { Course } from '@thinc-org/chula-courses'
 
+import { env } from '@/env'
 import { apiUrl } from '@/services/httpClient'
 import { userStore } from '@/store/userStore'
-import env from '@/utils/env/macro'
 import { uniqBy } from '@/utils/uniqBy'
 
 import { SearchCourseVars } from './query/searchCourse'

@@ -3,10 +3,10 @@ import { Canvas, loadImage, NodeCanvasRenderingContext2D, registerFont } from 'c
 import { i18n } from '@/common/i18n'
 import { getPaletteRange } from '@/common/utils/getPaletteRange'
 import { lightTheme } from '@/configs/theme'
+import { env } from '@/env'
 import { getDayColor } from '@/modules/CourseThumbnailAPI/utils/getDayColor'
 import { getDaysOfWeek } from '@/modules/CourseThumbnailAPI/utils/getDaysOfWeek'
 import { CourseThumbnailData } from '@/services/apollo/query/getCourse'
-import { enableDaysOfWeekInThumbnail } from '@/utils/env'
 
 registerFont('public/fonts/Poppins-Bold.ttf', { family: 'Poppins Bold' })
 registerFont('public/fonts/Prompt-Bold.ttf', { family: 'Prompt Bold' })
@@ -50,7 +50,7 @@ export async function drawThumbnail(canvas: Canvas, course: CourseThumbnailData)
     ctx.fillRect(0, height - 56, width, 56)
   }
 
-  if (enableDaysOfWeekInThumbnail) {
+  if (env.enable.daysOfWeekInThumbnail) {
     let offset = 0
     getDaysOfWeek(course).forEach((dayOfWeek) => {
       ctx.fillStyle = getDayColor(theme, dayOfWeek)

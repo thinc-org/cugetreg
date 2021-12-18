@@ -8,12 +8,10 @@ export const MoreButton = styled(IconButton)`
 `
 
 export const DrawerContent = styled.div`
+  width: 215px;
   display: flex;
   flex-direction: column;
-  padding-top: 48px;
-  padding-left: 28px;
-  padding-right: 56px;
-  padding-bottom: 48px;
+  padding: 48px 28px;
 `
 
 export const Logo = styled.img`

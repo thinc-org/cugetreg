@@ -1,24 +1,138 @@
-import { Rating, Select, Stack, MenuItem, Typography, Button } from '@mui/material'
+import { Rating, Stack, MenuItem, Typography, Button, Box } from '@mui/material'
 import { TNode } from '@udecode/plate-core'
 
-import { Controller, SubmitHandler, SubmitErrorHandler, useFormContext } from 'react-hook-form'
+import { useCallback, useEffect, useImperativeHandle, useRef } from 'react'
+import { Controller, SubmitHandler, SubmitErrorHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { useTranslation } from 'react-i18next'
 
 import { RichTextEditor } from '@/common/components/RichTextEditor'
+import { INITIAL_CONTENT } from '@/common/components/RichTextEditor/initialContent'
+import { RichTextEditorRef } from '@/common/components/RichTextEditor/types'
+import { Storage } from '@/common/storage'
+import { StorageKey } from '@/common/storage/constants'
+import { Review } from '@/common/types/reviews'
 import { getCurrentTerm } from '@/common/utils/getCurrentTerm'
+import { ControlledSelect } from '@/modules/CourseDetail/components/ControlledSelect'
+import { ReviewEditables } from '@/modules/CourseDetail/components/ReviewForm/types'
 
 import { ContributionGuide } from '../../components/ContributionGuide'
 import { useReviewContext } from '../../context/Review'
 import { REVIEW_FORM_ID } from '../../context/Review/constants'
 import { ReviewState } from '../../context/Review/types'
 import { YEAR_SIZE } from './constants'
+import { applyEscapedText } from './functions'
 
-export const ReviewForm = () => {
-  const { register, handleSubmit, control } = useFormContext<ReviewState>()
-  const { academicYear, semester } = getCurrentTerm()
+const localStorage = new Storage('localStorage')
+
+const defaultValues: ReviewState = {
+  academicYear: getCurrentTerm().academicYear,
+  semester: '1',
+  rating: 0,
+  content: INITIAL_CONTENT,
+}
+
+export function ReviewForm() {
   const { t } = useTranslation('review')
-  const { submitReview, submitEditedReview, editingReviewId, cancelEditReview } = useReviewContext()
+  const { courseNo, submitReview, submitEditedReview, editingReviewId, cancelEditReview, formRef, onFormLoad } =
+    useReviewContext()
+
+  useEffect(() => onFormLoad(), [onFormLoad])
+
+  const methods = useForm({ defaultValues })
+  const { handleSubmit, control } = methods
+
+  /**
+   * Rich Text editor hook
+   */
+  const editorRef = useRef<RichTextEditorRef>()
+  const getEditor = useCallback(() => editorRef.current!, [])
+  const editorLoaded = typeof getEditor() !== 'undefined'
+
+  const pendingSetValue = useRef<TNode[]>()
+  const setEditorValue = useCallback((newValue: TNode[]) => {
+    const currentEditor = editorRef.current
+    if (typeof currentEditor === 'undefined') {
+      pendingSetValue.current = newValue
+      return
+    }
+    currentEditor.setValue(newValue)
+  }, [])
+
+  if (editorLoaded && typeof pendingSetValue.current !== 'undefined') {
+    setEditorValue(pendingSetValue.current)
+    pendingSetValue.current = undefined
+  }
+
+  /**
+   * Use this function to cancel editing review
+   */
+  function clearForm() {
+    methods.reset()
+    setEditorValue(INITIAL_CONTENT)
+  }
+
+  /**
+   * Initialize context values and form state
+   */
+  useEffect(() => {
+    restoreLocalReviewForm()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  function restoreFormState(form: Partial<ReviewState>) {
+    if (form.academicYear) methods.setValue('academicYear', form.academicYear)
+    if (form.rating) methods.setValue('rating', form.rating)
+    if (form.semester) methods.setValue('semester', form.semester)
+    if (form.content) {
+      methods.setValue('content', form.content)
+      setEditorValue(form.content)
+    }
+  }
+
+  function applyFromReview(review: Review) {
+    restoreFormState({ ...review, rating: review.rating / 2, content: getEditor().deserializeHtml(review.content) })
+  }
+
+  function storeLocalReviewForm() {
+    const formValues = methods.getValues()
+    const oldFormValuesSet = localStorage.get<Record<string, ReviewState>>(StorageKey.ReviewForm)
+    const newFormValuesSet: Record<string, ReviewState> = {
+      ...oldFormValuesSet,
+      [courseNo]: { ...formValues, content: formValues.content as TNode[] },
+    }
+    localStorage.set<Record<string, ReviewState>>(StorageKey.ReviewForm, newFormValuesSet)
+  }
+
+  function restoreLocalReviewForm() {
+    const formValuesSet = localStorage.get<Record<string, ReviewState>>(StorageKey.ReviewForm)
+    if (formValuesSet && formValuesSet[courseNo]) {
+      restoreFormState(formValuesSet[courseNo])
+      delete formValuesSet[courseNo]
+      localStorage.set<Record<string, ReviewState>>(StorageKey.ReviewForm, formValuesSet)
+    }
+  }
+
+  function toReview(): ReviewEditables {
+    const review = methods.getValues()
+    const ratingNumber = review.rating * 2 // 1 - 10, 0 isn't accepted
+    const modifiedNode = applyEscapedText(review.content as TNode[])
+    const html = getEditor().serializeHtml(modifiedNode)
+    return {
+      rating: ratingNumber,
+      semester: review.semester,
+      academicYear: review.academicYear,
+      content: html,
+    }
+  }
+
+  useImperativeHandle(formRef, () => ({
+    clearForm,
+    storeLocalReviewForm,
+    restoreFormState,
+    applyFromReview,
+    toReview,
+  }))
 
   const validateContent = (value: TNode[] | TNode | null): boolean => {
     if (!value) return false
@@ -36,9 +150,9 @@ export const ReviewForm = () => {
       .map((_, index) => currentYear - index)
   }
 
-  const onSubmit: SubmitHandler<ReviewState> = async () => {
-    if (editingReviewId) await submitEditedReview(editingReviewId)
-    else await submitReview()
+  const onSubmit: SubmitHandler<ReviewState> = () => {
+    if (editingReviewId) submitEditedReview(editingReviewId)
+    else submitReview()
   }
 
   const onError: SubmitErrorHandler<ReviewState> = (errors) => {
@@ -47,20 +161,22 @@ export const ReviewForm = () => {
       rating: 'คะแนน',
     }
 
-    const allErros = Object.keys(errors)
+    const allErrors = Object.keys(errors)
       .map((error) => errorMessageMapping[error as 'rating' | 'content'])
       .join('และ')
-    toast.error(`กรุณากรอก${allErros}`)
+    toast.error(`กรุณากรอก${allErrors}`)
   }
 
   return (
     <>
-      <Typography variant="h4" component="span" id="review-title" mr={2} sx={{ display: ['block', 'inline'] }}>
-        {t('title')}
-      </Typography>
-      <Typography variant="subtitle1" component="span" color="primaryRange.100">
-        {t('subtitle')}
-      </Typography>
+      <Box mb={0.5}>
+        <Typography variant="h4" component="span" id="review-title" mr={2} sx={{ display: ['block', 'inline'] }}>
+          {t('title')}
+        </Typography>
+        <Typography variant="subtitle1" component="span" color="primaryRange.100">
+          {t('subtitle')}
+        </Typography>
+      </Box>
       <ContributionGuide />
       <form onSubmit={handleSubmit(onSubmit, onError)}>
         <Stack
@@ -68,14 +184,14 @@ export const ReviewForm = () => {
           alignItems="center"
           justifyContent="flex-start"
           gap={[2, 4]}
-          mt={1}
-          mb={2}
+          my={2}
         >
           <Stack direction="row" gap={4} sx={{ width: ['100%', 'auto'] }}>
-            <Select
-              {...register('academicYear', { required: 'academicYear required' })}
+            <ControlledSelect
+              name="academicYear"
+              control={control}
+              rules={{ required: 'academicYear required' }}
               // label="ปีการศึกษา"
-              defaultValue={academicYear}
               sx={{ minWidth: 120 }}
               fullWidth
             >
@@ -84,18 +200,19 @@ export const ReviewForm = () => {
                   {year}
                 </MenuItem>
               ))}
-            </Select>
-            <Select
-              {...register('semester', { required: 'semester required' })}
+            </ControlledSelect>
+            <ControlledSelect
+              name="semester"
+              control={control}
+              rules={{ required: 'semester required' }}
               // label="ภาคการศึกษา"
-              defaultValue="1"
               sx={{ minWidth: 120 }}
               fullWidth
             >
               <MenuItem value="1">ภาคต้น</MenuItem>
               <MenuItem value="2">ภาคปลาย</MenuItem>
               <MenuItem value="3">ฤดูร้อน</MenuItem>
-            </Select>
+            </ControlledSelect>
           </Stack>
           <Controller
             name="rating"
@@ -112,7 +229,7 @@ export const ReviewForm = () => {
           control={control}
           rules={{ required: 'content should not empty', validate: validateContent }}
           render={({ field: { value, onChange } }) => (
-            <RichTextEditor id={REVIEW_FORM_ID} defaultValue={value as TNode[]} onChange={onChange} />
+            <RichTextEditor ref={editorRef} id={REVIEW_FORM_ID} defaultValue={value as TNode[]} onChange={onChange} />
           )}
         />
         <Stack mt={2} mb={4} direction="row" spacing={2}>

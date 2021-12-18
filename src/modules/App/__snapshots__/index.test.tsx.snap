@@ -1,511 +1,499 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`App module Should app component render preperly when forceDark=false 1`] = `
-<Fragment>
-  <DefaultSeo
-    additionalMetaTags={
-      Array [
-        Object {
-          "content": "cu,chula,จุฬา,reg,getreg,regchula,ตารางเรียน,ตารางสอน,gened,CU Get Reg,ลงทะเบียนเรียน,อำนวยความสะดวก",
-          "property": "keywords",
-        },
-        Object {
-          "content": "CU Get Reg",
-          "name": "application-name",
-        },
-      ]
-    }
-    dangerouslySetAllPagesToNoFollow={true}
-    dangerouslySetAllPagesToNoIndex={true}
-    defaultTitle="CU Get Reg"
-    description="เว็บไซต์เพื่ออำนวยความสะดวกในการลงทะเบียนเรียนให้กับนิสิตจุฬาฯ ทุกคน"
-    openGraph={
-      Object {
-        "description": "เว็บไซต์เพื่ออำนวยความสะดวกในการลงทะเบียนเรียนให้กับนิสิตจุฬาฯ ทุกคน",
-        "images": Array [
-          Object {
-            "alt": "CU Get Reg",
-            "height": 600,
-            "url": "http://localhost:3000/cover.jpg",
-            "width": 800,
-          },
-        ],
-        "title": "CU Get Reg",
-        "type": "website",
-        "url": "http://localhost:3000",
-      }
-    }
-    titleTemplate="%s | CU Get Reg"
-  />
-  <AppProvider
-    emotionCache={
-      Object {
-        "insert": [Function],
-        "inserted": Object {},
+<AppProvider
+  emotionCache={
+    Object {
+      "insert": [Function],
+      "inserted": Object {},
+      "key": "css",
+      "nonce": undefined,
+      "registered": Object {},
+      "sheet": StyleSheet {
+        "_insertTag": [Function],
+        "before": null,
+        "container": <head>
+          <style
+            id="_goober"
+          >
+             @keyframes go2264125279{from{transform:scale(0) rotate(45deg);opacity:0;}to{transform:scale(1) rotate(45deg);opacity:1;}}@keyframes go3020080000{from{transform:scale(0);opacity:0;}to{transform:scale(1);opacity:1;}}@keyframes go463499852{from{transform:scale(0) rotate(90deg);opacity:0;}to{transform:scale(1) rotate(90deg);opacity:1;}}@keyframes go1268368563{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}@keyframes go1310225428{from{transform:scale(0) rotate(45deg);opacity:0;}to{transform:scale(1) rotate(45deg);opacity:1;}}@keyframes go651618207{0%{height:0;width:0;opacity:0;}40%{height:0;width:6px;opacity:1;}100%{opacity:1;height:10px;}}@keyframes go901347462{from{transform:scale(0.6);opacity:0.4;}to{transform:scale(1);opacity:1;}}.go4109123758{z-index:9999;}.go4109123758 &gt; *{pointer-events:auto;}
+          </style>
+        </head>,
+        "ctr": 0,
+        "isSpeedy": false,
         "key": "css",
         "nonce": undefined,
-        "registered": Object {},
-        "sheet": StyleSheet {
-          "_insertTag": [Function],
-          "before": null,
-          "container": <head>
-            <style
-              id="_goober"
-            >
-               @keyframes go2264125279{from{transform:scale(0) rotate(45deg);opacity:0;}to{transform:scale(1) rotate(45deg);opacity:1;}}@keyframes go3020080000{from{transform:scale(0);opacity:0;}to{transform:scale(1);opacity:1;}}@keyframes go463499852{from{transform:scale(0) rotate(90deg);opacity:0;}to{transform:scale(1) rotate(90deg);opacity:1;}}@keyframes go1268368563{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}@keyframes go1310225428{from{transform:scale(0) rotate(45deg);opacity:0;}to{transform:scale(1) rotate(45deg);opacity:1;}}@keyframes go651618207{0%{height:0;width:0;opacity:0;}40%{height:0;width:6px;opacity:1;}100%{opacity:1;height:10px;}}@keyframes go901347462{from{transform:scale(0.6);opacity:0.4;}to{transform:scale(1);opacity:1;}}.go4109123758{z-index:9999;}.go4109123758 &gt; *{pointer-events:auto;}
-            </style>
-          </head>,
-          "ctr": 0,
-          "isSpeedy": false,
-          "key": "css",
-          "nonce": undefined,
-          "prepend": undefined,
-          "tags": Array [],
-        },
-      }
+        "prepend": undefined,
+        "tags": Array [],
+      },
     }
-    forceDark={false}
-  >
-    <TrackPageChange>
-      <LoadingProgress />
-      <CssBaseline />
-      <TopBar />
-      <ForwardRef(Container)>
-        <ErrorBoundary>
-          <mockComponent
-            test="test"
-          />
-        </ErrorBoundary>
-      </ForwardRef(Container)>
-      <Footer />
-      <CourseSnackbar />
-      <ShoppingCartModal />
-    </TrackPageChange>
-  </AppProvider>
-</Fragment>
+  }
+  forceDark={false}
+>
+  <TrackPageChange>
+    <DefaultSeo
+      additionalMetaTags={
+        Array [
+          Object {
+            "content": "cu,chula,จุฬา,reg,getreg,regchula,ตารางเรียน,ตารางสอน,gened,CU Get Reg,ลงทะเบียนเรียน,อำนวยความสะดวก",
+            "property": "keywords",
+          },
+          Object {
+            "content": "CU Get Reg",
+            "name": "application-name",
+          },
+        ]
+      }
+      dangerouslySetAllPagesToNoFollow={true}
+      dangerouslySetAllPagesToNoIndex={true}
+      defaultTitle="CU Get Reg"
+      description="เว็บไซต์เพื่ออำนวยความสะดวกในการลงทะเบียนเรียนให้กับนิสิตจุฬาฯ ทุกคน"
+      openGraph={
+        Object {
+          "description": "เว็บไซต์เพื่ออำนวยความสะดวกในการลงทะเบียนเรียนให้กับนิสิตจุฬาฯ ทุกคน",
+          "images": Array [
+            Object {
+              "alt": "CU Get Reg",
+              "height": 600,
+              "url": "http://localhost:3000/cover.jpg",
+              "width": 800,
+            },
+          ],
+          "title": "CU Get Reg",
+          "type": "website",
+          "url": "http://localhost:3000",
+        }
+      }
+      titleTemplate="%s | CU Get Reg"
+    />
+    <LoadingProgress />
+    <CssBaseline />
+    <TopBar />
+    <ForwardRef(Container)>
+      <ErrorBoundary>
+        <mockComponent
+          test="test"
+        />
+      </ErrorBoundary>
+    </ForwardRef(Container)>
+    <Footer />
+    <ShoppingCartModal />
+    <CustomToaster />
+  </TrackPageChange>
+</AppProvider>
 `;
 
 exports[`App module Should app component render preperly when forceDark=false 2`] = `
-<Fragment>
-  <DefaultSeo
-    additionalMetaTags={
-      Array [
-        Object {
-          "content": "cu,chula,จุฬา,reg,getreg,regchula,ตารางเรียน,ตารางสอน,gened,CU Get Reg,ลงทะเบียนเรียน,อำนวยความสะดวก",
-          "property": "keywords",
-        },
-        Object {
-          "content": "CU Get Reg",
-          "name": "application-name",
-        },
-      ]
-    }
-    dangerouslySetAllPagesToNoFollow={true}
-    dangerouslySetAllPagesToNoIndex={true}
-    defaultTitle="CU Get Reg"
-    description="เว็บไซต์เพื่ออำนวยความสะดวกในการลงทะเบียนเรียนให้กับนิสิตจุฬาฯ ทุกคน"
-    openGraph={
-      Object {
-        "description": "เว็บไซต์เพื่ออำนวยความสะดวกในการลงทะเบียนเรียนให้กับนิสิตจุฬาฯ ทุกคน",
-        "images": Array [
-          Object {
-            "alt": "CU Get Reg",
-            "height": 600,
-            "url": "http://localhost:3000/cover.jpg",
-            "width": 800,
-          },
-        ],
-        "title": "CU Get Reg",
-        "type": "website",
-        "url": "http://localhost:3000",
-      }
-    }
-    titleTemplate="%s | CU Get Reg"
-  />
-  <AppProvider
-    emotionCache={
-      Object {
-        "insert": [Function],
-        "inserted": Object {},
+<AppProvider
+  emotionCache={
+    Object {
+      "insert": [Function],
+      "inserted": Object {},
+      "key": "css",
+      "nonce": undefined,
+      "registered": Object {},
+      "sheet": StyleSheet {
+        "_insertTag": [Function],
+        "before": null,
+        "container": <head>
+          <style
+            id="_goober"
+          >
+             @keyframes go2264125279{from{transform:scale(0) rotate(45deg);opacity:0;}to{transform:scale(1) rotate(45deg);opacity:1;}}@keyframes go3020080000{from{transform:scale(0);opacity:0;}to{transform:scale(1);opacity:1;}}@keyframes go463499852{from{transform:scale(0) rotate(90deg);opacity:0;}to{transform:scale(1) rotate(90deg);opacity:1;}}@keyframes go1268368563{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}@keyframes go1310225428{from{transform:scale(0) rotate(45deg);opacity:0;}to{transform:scale(1) rotate(45deg);opacity:1;}}@keyframes go651618207{0%{height:0;width:0;opacity:0;}40%{height:0;width:6px;opacity:1;}100%{opacity:1;height:10px;}}@keyframes go901347462{from{transform:scale(0.6);opacity:0.4;}to{transform:scale(1);opacity:1;}}.go4109123758{z-index:9999;}.go4109123758 &gt; *{pointer-events:auto;}
+          </style>
+        </head>,
+        "ctr": 0,
+        "isSpeedy": false,
         "key": "css",
         "nonce": undefined,
-        "registered": Object {},
-        "sheet": StyleSheet {
-          "_insertTag": [Function],
-          "before": null,
-          "container": <head>
-            <style
-              id="_goober"
-            >
-               @keyframes go2264125279{from{transform:scale(0) rotate(45deg);opacity:0;}to{transform:scale(1) rotate(45deg);opacity:1;}}@keyframes go3020080000{from{transform:scale(0);opacity:0;}to{transform:scale(1);opacity:1;}}@keyframes go463499852{from{transform:scale(0) rotate(90deg);opacity:0;}to{transform:scale(1) rotate(90deg);opacity:1;}}@keyframes go1268368563{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}@keyframes go1310225428{from{transform:scale(0) rotate(45deg);opacity:0;}to{transform:scale(1) rotate(45deg);opacity:1;}}@keyframes go651618207{0%{height:0;width:0;opacity:0;}40%{height:0;width:6px;opacity:1;}100%{opacity:1;height:10px;}}@keyframes go901347462{from{transform:scale(0.6);opacity:0.4;}to{transform:scale(1);opacity:1;}}.go4109123758{z-index:9999;}.go4109123758 &gt; *{pointer-events:auto;}
-            </style>
-          </head>,
-          "ctr": 0,
-          "isSpeedy": false,
-          "key": "css",
-          "nonce": undefined,
-          "prepend": undefined,
-          "tags": Array [],
-        },
-      }
+        "prepend": undefined,
+        "tags": Array [],
+      },
     }
-    forceDark={false}
-  >
-    <TrackPageChange>
-      <LoadingProgress />
-      <CssBaseline />
-      <TopBar />
-      <ForwardRef(Container)>
-        <ErrorBoundary>
-          <mockComponent
-            test="test"
-          />
-        </ErrorBoundary>
-      </ForwardRef(Container)>
-      <Footer />
-      <CourseSnackbar />
-      <ShoppingCartModal />
-    </TrackPageChange>
-  </AppProvider>
-</Fragment>
+  }
+  forceDark={false}
+>
+  <TrackPageChange>
+    <DefaultSeo
+      additionalMetaTags={
+        Array [
+          Object {
+            "content": "cu,chula,จุฬา,reg,getreg,regchula,ตารางเรียน,ตารางสอน,gened,CU Get Reg,ลงทะเบียนเรียน,อำนวยความสะดวก",
+            "property": "keywords",
+          },
+          Object {
+            "content": "CU Get Reg",
+            "name": "application-name",
+          },
+        ]
+      }
+      dangerouslySetAllPagesToNoFollow={true}
+      dangerouslySetAllPagesToNoIndex={true}
+      defaultTitle="CU Get Reg"
+      description="เว็บไซต์เพื่ออำนวยความสะดวกในการลงทะเบียนเรียนให้กับนิสิตจุฬาฯ ทุกคน"
+      openGraph={
+        Object {
+          "description": "เว็บไซต์เพื่ออำนวยความสะดวกในการลงทะเบียนเรียนให้กับนิสิตจุฬาฯ ทุกคน",
+          "images": Array [
+            Object {
+              "alt": "CU Get Reg",
+              "height": 600,
+              "url": "http://localhost:3000/cover.jpg",
+              "width": 800,
+            },
+          ],
+          "title": "CU Get Reg",
+          "type": "website",
+          "url": "http://localhost:3000",
+        }
+      }
+      titleTemplate="%s | CU Get Reg"
+    />
+    <LoadingProgress />
+    <CssBaseline />
+    <TopBar />
+    <ForwardRef(Container)>
+      <ErrorBoundary>
+        <mockComponent
+          test="test"
+        />
+      </ErrorBoundary>
+    </ForwardRef(Container)>
+    <Footer />
+    <ShoppingCartModal />
+    <CustomToaster />
+  </TrackPageChange>
+</AppProvider>
 `;
 
 exports[`App module Should app component render preperly when forceDark=false 3`] = `
-<Fragment>
-  <DefaultSeo
-    additionalMetaTags={
-      Array [
-        Object {
-          "content": "cu,chula,จุฬา,reg,getreg,regchula,ตารางเรียน,ตารางสอน,gened,CU Get Reg,ลงทะเบียนเรียน,อำนวยความสะดวก",
-          "property": "keywords",
-        },
-        Object {
-          "content": "CU Get Reg",
-          "name": "application-name",
-        },
-      ]
-    }
-    dangerouslySetAllPagesToNoFollow={false}
-    dangerouslySetAllPagesToNoIndex={false}
-    defaultTitle="CU Get Reg"
-    description="เว็บไซต์เพื่ออำนวยความสะดวกในการลงทะเบียนเรียนให้กับนิสิตจุฬาฯ ทุกคน"
-    openGraph={
-      Object {
-        "description": "เว็บไซต์เพื่ออำนวยความสะดวกในการลงทะเบียนเรียนให้กับนิสิตจุฬาฯ ทุกคน",
-        "images": Array [
-          Object {
-            "alt": "CU Get Reg",
-            "height": 600,
-            "url": "http://localhost:3000/cover.jpg",
-            "width": 800,
-          },
-        ],
-        "title": "CU Get Reg",
-        "type": "website",
-        "url": "http://localhost:3000",
-      }
-    }
-    titleTemplate="%s | CU Get Reg"
-  />
-  <AppProvider
-    emotionCache={
-      Object {
-        "insert": [Function],
-        "inserted": Object {},
+<AppProvider
+  emotionCache={
+    Object {
+      "insert": [Function],
+      "inserted": Object {},
+      "key": "css",
+      "nonce": undefined,
+      "registered": Object {},
+      "sheet": StyleSheet {
+        "_insertTag": [Function],
+        "before": null,
+        "container": <head>
+          <style
+            id="_goober"
+          >
+             @keyframes go2264125279{from{transform:scale(0) rotate(45deg);opacity:0;}to{transform:scale(1) rotate(45deg);opacity:1;}}@keyframes go3020080000{from{transform:scale(0);opacity:0;}to{transform:scale(1);opacity:1;}}@keyframes go463499852{from{transform:scale(0) rotate(90deg);opacity:0;}to{transform:scale(1) rotate(90deg);opacity:1;}}@keyframes go1268368563{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}@keyframes go1310225428{from{transform:scale(0) rotate(45deg);opacity:0;}to{transform:scale(1) rotate(45deg);opacity:1;}}@keyframes go651618207{0%{height:0;width:0;opacity:0;}40%{height:0;width:6px;opacity:1;}100%{opacity:1;height:10px;}}@keyframes go901347462{from{transform:scale(0.6);opacity:0.4;}to{transform:scale(1);opacity:1;}}.go4109123758{z-index:9999;}.go4109123758 &gt; *{pointer-events:auto;}
+          </style>
+        </head>,
+        "ctr": 0,
+        "isSpeedy": false,
         "key": "css",
         "nonce": undefined,
-        "registered": Object {},
-        "sheet": StyleSheet {
-          "_insertTag": [Function],
-          "before": null,
-          "container": <head>
-            <style
-              id="_goober"
-            >
-               @keyframes go2264125279{from{transform:scale(0) rotate(45deg);opacity:0;}to{transform:scale(1) rotate(45deg);opacity:1;}}@keyframes go3020080000{from{transform:scale(0);opacity:0;}to{transform:scale(1);opacity:1;}}@keyframes go463499852{from{transform:scale(0) rotate(90deg);opacity:0;}to{transform:scale(1) rotate(90deg);opacity:1;}}@keyframes go1268368563{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}@keyframes go1310225428{from{transform:scale(0) rotate(45deg);opacity:0;}to{transform:scale(1) rotate(45deg);opacity:1;}}@keyframes go651618207{0%{height:0;width:0;opacity:0;}40%{height:0;width:6px;opacity:1;}100%{opacity:1;height:10px;}}@keyframes go901347462{from{transform:scale(0.6);opacity:0.4;}to{transform:scale(1);opacity:1;}}.go4109123758{z-index:9999;}.go4109123758 &gt; *{pointer-events:auto;}
-            </style>
-          </head>,
-          "ctr": 0,
-          "isSpeedy": false,
-          "key": "css",
-          "nonce": undefined,
-          "prepend": undefined,
-          "tags": Array [],
-        },
-      }
+        "prepend": undefined,
+        "tags": Array [],
+      },
     }
-    forceDark={false}
-  >
-    <TrackPageChange>
-      <LoadingProgress />
-      <CssBaseline />
-      <TopBar />
-      <ForwardRef(Container)>
-        <ErrorBoundary>
-          <mockComponent
-            test="test"
-          />
-        </ErrorBoundary>
-      </ForwardRef(Container)>
-      <Footer />
-      <CourseSnackbar />
-      <ShoppingCartModal />
-    </TrackPageChange>
-  </AppProvider>
-</Fragment>
+  }
+  forceDark={false}
+>
+  <TrackPageChange>
+    <DefaultSeo
+      additionalMetaTags={
+        Array [
+          Object {
+            "content": "cu,chula,จุฬา,reg,getreg,regchula,ตารางเรียน,ตารางสอน,gened,CU Get Reg,ลงทะเบียนเรียน,อำนวยความสะดวก",
+            "property": "keywords",
+          },
+          Object {
+            "content": "CU Get Reg",
+            "name": "application-name",
+          },
+        ]
+      }
+      dangerouslySetAllPagesToNoFollow={false}
+      dangerouslySetAllPagesToNoIndex={false}
+      defaultTitle="CU Get Reg"
+      description="เว็บไซต์เพื่ออำนวยความสะดวกในการลงทะเบียนเรียนให้กับนิสิตจุฬาฯ ทุกคน"
+      openGraph={
+        Object {
+          "description": "เว็บไซต์เพื่ออำนวยความสะดวกในการลงทะเบียนเรียนให้กับนิสิตจุฬาฯ ทุกคน",
+          "images": Array [
+            Object {
+              "alt": "CU Get Reg",
+              "height": 600,
+              "url": "http://localhost:3000/cover.jpg",
+              "width": 800,
+            },
+          ],
+          "title": "CU Get Reg",
+          "type": "website",
+          "url": "http://localhost:3000",
+        }
+      }
+      titleTemplate="%s | CU Get Reg"
+    />
+    <LoadingProgress />
+    <CssBaseline />
+    <TopBar />
+    <ForwardRef(Container)>
+      <ErrorBoundary>
+        <mockComponent
+          test="test"
+        />
+      </ErrorBoundary>
+    </ForwardRef(Container)>
+    <Footer />
+    <ShoppingCartModal />
+    <CustomToaster />
+  </TrackPageChange>
+</AppProvider>
 `;
 
 exports[`App module Should app component render preperly when forceDark=true 1`] = `
-<Fragment>
-  <DefaultSeo
-    additionalMetaTags={
-      Array [
-        Object {
-          "content": "cu,chula,จุฬา,reg,getreg,regchula,ตารางเรียน,ตารางสอน,gened,CU Get Reg,ลงทะเบียนเรียน,อำนวยความสะดวก",
-          "property": "keywords",
-        },
-        Object {
-          "content": "CU Get Reg",
-          "name": "application-name",
-        },
-      ]
-    }
-    dangerouslySetAllPagesToNoFollow={true}
-    dangerouslySetAllPagesToNoIndex={true}
-    defaultTitle="CU Get Reg"
-    description="เว็บไซต์เพื่ออำนวยความสะดวกในการลงทะเบียนเรียนให้กับนิสิตจุฬาฯ ทุกคน"
-    openGraph={
-      Object {
-        "description": "เว็บไซต์เพื่ออำนวยความสะดวกในการลงทะเบียนเรียนให้กับนิสิตจุฬาฯ ทุกคน",
-        "images": Array [
-          Object {
-            "alt": "CU Get Reg",
-            "height": 600,
-            "url": "http://localhost:3000/cover.jpg",
-            "width": 800,
-          },
-        ],
-        "title": "CU Get Reg",
-        "type": "website",
-        "url": "http://localhost:3000",
-      }
-    }
-    titleTemplate="%s | CU Get Reg"
-  />
-  <AppProvider
-    emotionCache={
-      Object {
-        "insert": [Function],
-        "inserted": Object {},
+<AppProvider
+  emotionCache={
+    Object {
+      "insert": [Function],
+      "inserted": Object {},
+      "key": "css",
+      "nonce": undefined,
+      "registered": Object {},
+      "sheet": StyleSheet {
+        "_insertTag": [Function],
+        "before": null,
+        "container": <head>
+          <style
+            id="_goober"
+          >
+             @keyframes go2264125279{from{transform:scale(0) rotate(45deg);opacity:0;}to{transform:scale(1) rotate(45deg);opacity:1;}}@keyframes go3020080000{from{transform:scale(0);opacity:0;}to{transform:scale(1);opacity:1;}}@keyframes go463499852{from{transform:scale(0) rotate(90deg);opacity:0;}to{transform:scale(1) rotate(90deg);opacity:1;}}@keyframes go1268368563{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}@keyframes go1310225428{from{transform:scale(0) rotate(45deg);opacity:0;}to{transform:scale(1) rotate(45deg);opacity:1;}}@keyframes go651618207{0%{height:0;width:0;opacity:0;}40%{height:0;width:6px;opacity:1;}100%{opacity:1;height:10px;}}@keyframes go901347462{from{transform:scale(0.6);opacity:0.4;}to{transform:scale(1);opacity:1;}}.go4109123758{z-index:9999;}.go4109123758 &gt; *{pointer-events:auto;}
+          </style>
+        </head>,
+        "ctr": 0,
+        "isSpeedy": false,
         "key": "css",
         "nonce": undefined,
-        "registered": Object {},
-        "sheet": StyleSheet {
-          "_insertTag": [Function],
-          "before": null,
-          "container": <head>
-            <style
-              id="_goober"
-            >
-               @keyframes go2264125279{from{transform:scale(0) rotate(45deg);opacity:0;}to{transform:scale(1) rotate(45deg);opacity:1;}}@keyframes go3020080000{from{transform:scale(0);opacity:0;}to{transform:scale(1);opacity:1;}}@keyframes go463499852{from{transform:scale(0) rotate(90deg);opacity:0;}to{transform:scale(1) rotate(90deg);opacity:1;}}@keyframes go1268368563{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}@keyframes go1310225428{from{transform:scale(0) rotate(45deg);opacity:0;}to{transform:scale(1) rotate(45deg);opacity:1;}}@keyframes go651618207{0%{height:0;width:0;opacity:0;}40%{height:0;width:6px;opacity:1;}100%{opacity:1;height:10px;}}@keyframes go901347462{from{transform:scale(0.6);opacity:0.4;}to{transform:scale(1);opacity:1;}}.go4109123758{z-index:9999;}.go4109123758 &gt; *{pointer-events:auto;}
-            </style>
-          </head>,
-          "ctr": 0,
-          "isSpeedy": false,
-          "key": "css",
-          "nonce": undefined,
-          "prepend": undefined,
-          "tags": Array [],
-        },
-      }
+        "prepend": undefined,
+        "tags": Array [],
+      },
     }
-    forceDark={true}
-  >
-    <TrackPageChange>
-      <LoadingProgress />
-      <CssBaseline />
-      <TopBar />
-      <ForwardRef(Container)>
-        <ErrorBoundary>
-          <mockComponent
-            test="test"
-          />
-        </ErrorBoundary>
-      </ForwardRef(Container)>
-      <Footer />
-      <CourseSnackbar />
-      <ShoppingCartModal />
-    </TrackPageChange>
-  </AppProvider>
-</Fragment>
+  }
+  forceDark={true}
+>
+  <TrackPageChange>
+    <DefaultSeo
+      additionalMetaTags={
+        Array [
+          Object {
+            "content": "cu,chula,จุฬา,reg,getreg,regchula,ตารางเรียน,ตารางสอน,gened,CU Get Reg,ลงทะเบียนเรียน,อำนวยความสะดวก",
+            "property": "keywords",
+          },
+          Object {
+            "content": "CU Get Reg",
+            "name": "application-name",
+          },
+        ]
+      }
+      dangerouslySetAllPagesToNoFollow={true}
+      dangerouslySetAllPagesToNoIndex={true}
+      defaultTitle="CU Get Reg"
+      description="เว็บไซต์เพื่ออำนวยความสะดวกในการลงทะเบียนเรียนให้กับนิสิตจุฬาฯ ทุกคน"
+      openGraph={
+        Object {
+          "description": "เว็บไซต์เพื่ออำนวยความสะดวกในการลงทะเบียนเรียนให้กับนิสิตจุฬาฯ ทุกคน",
+          "images": Array [
+            Object {
+              "alt": "CU Get Reg",
+              "height": 600,
+              "url": "http://localhost:3000/cover.jpg",
+              "width": 800,
+            },
+          ],
+          "title": "CU Get Reg",
+          "type": "website",
+          "url": "http://localhost:3000",
+        }
+      }
+      titleTemplate="%s | CU Get Reg"
+    />
+    <LoadingProgress />
+    <CssBaseline />
+    <TopBar />
+    <ForwardRef(Container)>
+      <ErrorBoundary>
+        <mockComponent
+          test="test"
+        />
+      </ErrorBoundary>
+    </ForwardRef(Container)>
+    <Footer />
+    <ShoppingCartModal />
+    <CustomToaster />
+  </TrackPageChange>
+</AppProvider>
 `;
 
 exports[`App module Should app component render preperly when forceDark=true 2`] = `
-<Fragment>
-  <DefaultSeo
-    additionalMetaTags={
-      Array [
-        Object {
-          "content": "cu,chula,จุฬา,reg,getreg,regchula,ตารางเรียน,ตารางสอน,gened,CU Get Reg,ลงทะเบียนเรียน,อำนวยความสะดวก",
-          "property": "keywords",
-        },
-        Object {
-          "content": "CU Get Reg",
-          "name": "application-name",
-        },
-      ]
-    }
-    dangerouslySetAllPagesToNoFollow={true}
-    dangerouslySetAllPagesToNoIndex={true}
-    defaultTitle="CU Get Reg"
-    description="เว็บไซต์เพื่ออำนวยความสะดวกในการลงทะเบียนเรียนให้กับนิสิตจุฬาฯ ทุกคน"
-    openGraph={
-      Object {
-        "description": "เว็บไซต์เพื่ออำนวยความสะดวกในการลงทะเบียนเรียนให้กับนิสิตจุฬาฯ ทุกคน",
-        "images": Array [
-          Object {
-            "alt": "CU Get Reg",
-            "height": 600,
-            "url": "http://localhost:3000/cover.jpg",
-            "width": 800,
-          },
-        ],
-        "title": "CU Get Reg",
-        "type": "website",
-        "url": "http://localhost:3000",
-      }
-    }
-    titleTemplate="%s | CU Get Reg"
-  />
-  <AppProvider
-    emotionCache={
-      Object {
-        "insert": [Function],
-        "inserted": Object {},
+<AppProvider
+  emotionCache={
+    Object {
+      "insert": [Function],
+      "inserted": Object {},
+      "key": "css",
+      "nonce": undefined,
+      "registered": Object {},
+      "sheet": StyleSheet {
+        "_insertTag": [Function],
+        "before": null,
+        "container": <head>
+          <style
+            id="_goober"
+          >
+             @keyframes go2264125279{from{transform:scale(0) rotate(45deg);opacity:0;}to{transform:scale(1) rotate(45deg);opacity:1;}}@keyframes go3020080000{from{transform:scale(0);opacity:0;}to{transform:scale(1);opacity:1;}}@keyframes go463499852{from{transform:scale(0) rotate(90deg);opacity:0;}to{transform:scale(1) rotate(90deg);opacity:1;}}@keyframes go1268368563{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}@keyframes go1310225428{from{transform:scale(0) rotate(45deg);opacity:0;}to{transform:scale(1) rotate(45deg);opacity:1;}}@keyframes go651618207{0%{height:0;width:0;opacity:0;}40%{height:0;width:6px;opacity:1;}100%{opacity:1;height:10px;}}@keyframes go901347462{from{transform:scale(0.6);opacity:0.4;}to{transform:scale(1);opacity:1;}}.go4109123758{z-index:9999;}.go4109123758 &gt; *{pointer-events:auto;}
+          </style>
+        </head>,
+        "ctr": 0,
+        "isSpeedy": false,
         "key": "css",
         "nonce": undefined,
-        "registered": Object {},
-        "sheet": StyleSheet {
-          "_insertTag": [Function],
-          "before": null,
-          "container": <head>
-            <style
-              id="_goober"
-            >
-               @keyframes go2264125279{from{transform:scale(0) rotate(45deg);opacity:0;}to{transform:scale(1) rotate(45deg);opacity:1;}}@keyframes go3020080000{from{transform:scale(0);opacity:0;}to{transform:scale(1);opacity:1;}}@keyframes go463499852{from{transform:scale(0) rotate(90deg);opacity:0;}to{transform:scale(1) rotate(90deg);opacity:1;}}@keyframes go1268368563{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}@keyframes go1310225428{from{transform:scale(0) rotate(45deg);opacity:0;}to{transform:scale(1) rotate(45deg);opacity:1;}}@keyframes go651618207{0%{height:0;width:0;opacity:0;}40%{height:0;width:6px;opacity:1;}100%{opacity:1;height:10px;}}@keyframes go901347462{from{transform:scale(0.6);opacity:0.4;}to{transform:scale(1);opacity:1;}}.go4109123758{z-index:9999;}.go4109123758 &gt; *{pointer-events:auto;}
-            </style>
-          </head>,
-          "ctr": 0,
-          "isSpeedy": false,
-          "key": "css",
-          "nonce": undefined,
-          "prepend": undefined,
-          "tags": Array [],
-        },
-      }
+        "prepend": undefined,
+        "tags": Array [],
+      },
     }
-    forceDark={true}
-  >
-    <TrackPageChange>
-      <LoadingProgress />
-      <CssBaseline />
-      <TopBar />
-      <ForwardRef(Container)>
-        <ErrorBoundary>
-          <mockComponent
-            test="test"
-          />
-        </ErrorBoundary>
-      </ForwardRef(Container)>
-      <Footer />
-      <CourseSnackbar />
-      <ShoppingCartModal />
-    </TrackPageChange>
-  </AppProvider>
-</Fragment>
+  }
+  forceDark={true}
+>
+  <TrackPageChange>
+    <DefaultSeo
+      additionalMetaTags={
+        Array [
+          Object {
+            "content": "cu,chula,จุฬา,reg,getreg,regchula,ตารางเรียน,ตารางสอน,gened,CU Get Reg,ลงทะเบียนเรียน,อำนวยความสะดวก",
+            "property": "keywords",
+          },
+          Object {
+            "content": "CU Get Reg",
+            "name": "application-name",
+          },
+        ]
+      }
+      dangerouslySetAllPagesToNoFollow={true}
+      dangerouslySetAllPagesToNoIndex={true}
+      defaultTitle="CU Get Reg"
+      description="เว็บไซต์เพื่ออำนวยความสะดวกในการลงทะเบียนเรียนให้กับนิสิตจุฬาฯ ทุกคน"
+      openGraph={
+        Object {
+          "description": "เว็บไซต์เพื่ออำนวยความสะดวกในการลงทะเบียนเรียนให้กับนิสิตจุฬาฯ ทุกคน",
+          "images": Array [
+            Object {
+              "alt": "CU Get Reg",
+              "height": 600,
+              "url": "http://localhost:3000/cover.jpg",
+              "width": 800,
+            },
+          ],
+          "title": "CU Get Reg",
+          "type": "website",
+          "url": "http://localhost:3000",
+        }
+      }
+      titleTemplate="%s | CU Get Reg"
+    />
+    <LoadingProgress />
+    <CssBaseline />
+    <TopBar />
+    <ForwardRef(Container)>
+      <ErrorBoundary>
+        <mockComponent
+          test="test"
+        />
+      </ErrorBoundary>
+    </ForwardRef(Container)>
+    <Footer />
+    <ShoppingCartModal />
+    <CustomToaster />
+  </TrackPageChange>
+</AppProvider>
 `;
 
 exports[`App module Should app component render preperly when forceDark=true 3`] = `
-<Fragment>
-  <DefaultSeo
-    additionalMetaTags={
-      Array [
-        Object {
-          "content": "cu,chula,จุฬา,reg,getreg,regchula,ตารางเรียน,ตารางสอน,gened,CU Get Reg,ลงทะเบียนเรียน,อำนวยความสะดวก",
-          "property": "keywords",
-        },
-        Object {
-          "content": "CU Get Reg",
-          "name": "application-name",
-        },
-      ]
-    }
-    dangerouslySetAllPagesToNoFollow={false}
-    dangerouslySetAllPagesToNoIndex={false}
-    defaultTitle="CU Get Reg"
-    description="เว็บไซต์เพื่ออำนวยความสะดวกในการลงทะเบียนเรียนให้กับนิสิตจุฬาฯ ทุกคน"
-    openGraph={
-      Object {
-        "description": "เว็บไซต์เพื่ออำนวยความสะดวกในการลงทะเบียนเรียนให้กับนิสิตจุฬาฯ ทุกคน",
-        "images": Array [
-          Object {
-            "alt": "CU Get Reg",
-            "height": 600,
-            "url": "http://localhost:3000/cover.jpg",
-            "width": 800,
-          },
-        ],
-        "title": "CU Get Reg",
-        "type": "website",
-        "url": "http://localhost:3000",
-      }
-    }
-    titleTemplate="%s | CU Get Reg"
-  />
-  <AppProvider
-    emotionCache={
-      Object {
-        "insert": [Function],
-        "inserted": Object {},
+<AppProvider
+  emotionCache={
+    Object {
+      "insert": [Function],
+      "inserted": Object {},
+      "key": "css",
+      "nonce": undefined,
+      "registered": Object {},
+      "sheet": StyleSheet {
+        "_insertTag": [Function],
+        "before": null,
+        "container": <head>
+          <style
+            id="_goober"
+          >
+             @keyframes go2264125279{from{transform:scale(0) rotate(45deg);opacity:0;}to{transform:scale(1) rotate(45deg);opacity:1;}}@keyframes go3020080000{from{transform:scale(0);opacity:0;}to{transform:scale(1);opacity:1;}}@keyframes go463499852{from{transform:scale(0) rotate(90deg);opacity:0;}to{transform:scale(1) rotate(90deg);opacity:1;}}@keyframes go1268368563{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}@keyframes go1310225428{from{transform:scale(0) rotate(45deg);opacity:0;}to{transform:scale(1) rotate(45deg);opacity:1;}}@keyframes go651618207{0%{height:0;width:0;opacity:0;}40%{height:0;width:6px;opacity:1;}100%{opacity:1;height:10px;}}@keyframes go901347462{from{transform:scale(0.6);opacity:0.4;}to{transform:scale(1);opacity:1;}}.go4109123758{z-index:9999;}.go4109123758 &gt; *{pointer-events:auto;}
+          </style>
+        </head>,
+        "ctr": 0,
+        "isSpeedy": false,
         "key": "css",
         "nonce": undefined,
-        "registered": Object {},
-        "sheet": StyleSheet {
-          "_insertTag": [Function],
-          "before": null,
-          "container": <head>
-            <style
-              id="_goober"
-            >
-               @keyframes go2264125279{from{transform:scale(0) rotate(45deg);opacity:0;}to{transform:scale(1) rotate(45deg);opacity:1;}}@keyframes go3020080000{from{transform:scale(0);opacity:0;}to{transform:scale(1);opacity:1;}}@keyframes go463499852{from{transform:scale(0) rotate(90deg);opacity:0;}to{transform:scale(1) rotate(90deg);opacity:1;}}@keyframes go1268368563{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}@keyframes go1310225428{from{transform:scale(0) rotate(45deg);opacity:0;}to{transform:scale(1) rotate(45deg);opacity:1;}}@keyframes go651618207{0%{height:0;width:0;opacity:0;}40%{height:0;width:6px;opacity:1;}100%{opacity:1;height:10px;}}@keyframes go901347462{from{transform:scale(0.6);opacity:0.4;}to{transform:scale(1);opacity:1;}}.go4109123758{z-index:9999;}.go4109123758 &gt; *{pointer-events:auto;}
-            </style>
-          </head>,
-          "ctr": 0,
-          "isSpeedy": false,
-          "key": "css",
-          "nonce": undefined,
-          "prepend": undefined,
-          "tags": Array [],
-        },
-      }
+        "prepend": undefined,
+        "tags": Array [],
+      },
     }
-    forceDark={true}
-  >
-    <TrackPageChange>
-      <LoadingProgress />
-      <CssBaseline />
-      <TopBar />
-      <ForwardRef(Container)>
-        <ErrorBoundary>
-          <mockComponent
-            test="test"
-          />
-        </ErrorBoundary>
-      </ForwardRef(Container)>
-      <Footer />
-      <CourseSnackbar />
-      <ShoppingCartModal />
-    </TrackPageChange>
-  </AppProvider>
-</Fragment>
+  }
+  forceDark={true}
+>
+  <TrackPageChange>
+    <DefaultSeo
+      additionalMetaTags={
+        Array [
+          Object {
+            "content": "cu,chula,จุฬา,reg,getreg,regchula,ตารางเรียน,ตารางสอน,gened,CU Get Reg,ลงทะเบียนเรียน,อำนวยความสะดวก",
+            "property": "keywords",
+          },
+          Object {
+            "content": "CU Get Reg",
+            "name": "application-name",
+          },
+        ]
+      }
+      dangerouslySetAllPagesToNoFollow={false}
+      dangerouslySetAllPagesToNoIndex={false}
+      defaultTitle="CU Get Reg"
+      description="เว็บไซต์เพื่ออำนวยความสะดวกในการลงทะเบียนเรียนให้กับนิสิตจุฬาฯ ทุกคน"
+      openGraph={
+        Object {
+          "description": "เว็บไซต์เพื่ออำนวยความสะดวกในการลงทะเบียนเรียนให้กับนิสิตจุฬาฯ ทุกคน",
+          "images": Array [
+            Object {
+              "alt": "CU Get Reg",
+              "height": 600,
+              "url": "http://localhost:3000/cover.jpg",
+              "width": 800,
+            },
+          ],
+          "title": "CU Get Reg",
+          "type": "website",
+          "url": "http://localhost:3000",
+        }
+      }
+      titleTemplate="%s | CU Get Reg"
+    />
+    <LoadingProgress />
+    <CssBaseline />
+    <TopBar />
+    <ForwardRef(Container)>
+      <ErrorBoundary>
+        <mockComponent
+          test="test"
+        />
+      </ErrorBoundary>
+    </ForwardRef(Container)>
+    <Footer />
+    <ShoppingCartModal />
+    <CustomToaster />
+  </TrackPageChange>
+</AppProvider>
 `;

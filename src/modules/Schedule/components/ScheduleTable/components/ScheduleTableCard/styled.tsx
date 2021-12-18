@@ -1,7 +1,8 @@
 import { css, Theme } from '@emotion/react'
 import styled from '@emotion/styled'
 import { Button, ButtonProps, NativeSelect } from '@mui/material'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
+
 import { forwardRef } from 'react'
 
 import { deepAssign } from '@/common/utils/deepAssign'
@@ -22,7 +23,7 @@ export const CardLayout = styled.div`
   }
 `
 
-export const CardContent = styled(motion.div)`
+export const CardContent = styled(m.div)`
   position: relative;
   display: flex;
   z-index: 1;

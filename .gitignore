@@ -39,3 +39,6 @@ public/sitemap.xml
 
 # Test Report
 report.json
+
+# Cache directory
+cache

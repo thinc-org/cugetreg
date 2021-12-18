@@ -1,13 +1,14 @@
 import { IconButton, Stack, useTheme } from '@mui/material'
 import DOMPurify from 'isomorphic-dompurify'
 
-import { MdFlag, MdDelete, MdOutlineStar, MdEdit } from 'react-icons/md'
+import { MdDelete, MdOutlineStar, MdEdit } from 'react-icons/md'
 
 import { GeneralChip } from '@/common/components/Chips'
 import { OtherChipKey } from '@/common/components/Chips/config'
 import { HighlightHTML } from '@/common/components/HighlightHTML'
 import { ReviewInteractionType, ReviewStatus } from '@/common/types/reviews'
 import { getSemesterName } from '@/common/utils/getSemesterName'
+import { scrollToReviewForm } from '@/modules/CourseDetail/components/ReviewForm/functions'
 
 import { useReviewContext } from '../../context/Review'
 import { ReviewReaction } from '../ReviewReaction'
@@ -36,7 +37,7 @@ export const ReviewCard: React.FC<ReviewCardProps> = (data) => {
 
   const chipType = getChipType(data.status)
 
-  const { setInteraction, reportReview, deleteMyReview, editMyReview } = useReviewContext()
+  const { setInteraction, deleteMyReview, editMyReview, formLoaded } = useReviewContext()
 
   const handleLikeClick = () => {
     setInteraction(data._id, ReviewInteractionType.Like)
@@ -46,21 +47,12 @@ export const ReviewCard: React.FC<ReviewCardProps> = (data) => {
     setInteraction(data._id, ReviewInteractionType.Dislike)
   }
 
-  const handleReportClick = () => {
-    reportReview(data._id)
-  }
-
   const handleDeleteClick = () => {
     deleteMyReview(data._id)
   }
 
   const handleEditClick = () => {
-    const srollToElement = document.getElementById('review-title')
-    if (srollToElement) {
-      const offset = document.documentElement.clientHeight * 0.35
-      const offsetTop = srollToElement.offsetTop
-      window.scrollTo({ top: offsetTop - offset, behavior: 'smooth' })
-    }
+    scrollToReviewForm()
     editMyReview(data._id)
   }
 
@@ -102,7 +94,7 @@ export const ReviewCard: React.FC<ReviewCardProps> = (data) => {
         {/** Right side */}
         {data.isOwner ? (
           <Stack direction="row" spacing={1} ml="auto">
-            <IconButton size="small" onClick={handleEditClick}>
+            <IconButton size="small" onClick={handleEditClick} disabled={!formLoaded}>
               <MdEdit {...actionIconProps} />
             </IconButton>
             <IconButton size="small" onClick={handleDeleteClick}>

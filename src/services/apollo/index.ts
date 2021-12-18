@@ -1,11 +1,12 @@
-import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client'
+import { ApolloClient, InMemoryCache } from '@apollo/client'
+import { BatchHttpLink } from '@apollo/client/link/batch-http'
 import { setContext } from '@apollo/client/link/context'
 import { Course } from '@thinc-org/chula-courses'
-import { uniqBy } from 'lodash'
 
 import { apiUrl } from '@/services/httpClient'
 import { userStore } from '@/store/userStore'
 import env from '@/utils/env/macro'
+import { uniqBy } from '@/utils/uniqBy'
 
 import { SearchCourseVars } from './query/searchCourse'
 
@@ -32,7 +33,7 @@ const cache = new InMemoryCache({
             return existing
           },
           merge(existing: Course[] = [], incoming: Course[]) {
-            return uniqBy([...existing, ...incoming], 'courseNo')
+            return uniqBy([...existing, ...incoming], (course) => course.courseNo)
           },
         },
       },
@@ -40,9 +41,10 @@ const cache = new InMemoryCache({
   },
 })
 
-const httpLink = createHttpLink({
-  uri: `${apiUrl}/graphql`,
-})
+const createHttpLink = () =>
+  new BatchHttpLink({
+    uri: `${apiUrl}/graphql`,
+  })
 
 const authLink = setContext(async (_, { headers }) => {
   const accessToken = await userStore.getAccessToken()
@@ -55,14 +57,14 @@ const authLink = setContext(async (_, { headers }) => {
 })
 
 export const client = new ApolloClient({
-  link: authLink.concat(httpLink),
+  link: authLink.concat(createHttpLink()),
   cache: cache,
   connectToDevTools: env.environment !== 'production',
 })
 
 export function createApolloServerClient() {
   return new ApolloClient({
-    uri: `${apiUrl}/graphql`,
+    link: createHttpLink(),
     cache: new InMemoryCache(),
     connectToDevTools: env.environment !== 'production',
   })

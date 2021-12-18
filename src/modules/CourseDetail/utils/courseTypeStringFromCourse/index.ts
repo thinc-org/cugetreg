@@ -1,5 +1,6 @@
 import { Course } from '@thinc-org/chula-courses'
-import { uniq } from 'lodash'
+
+import { uniq } from '@/utils/uniq'
 
 export function courseTypeStringFromCourse(course: Course) {
   const { sections } = course

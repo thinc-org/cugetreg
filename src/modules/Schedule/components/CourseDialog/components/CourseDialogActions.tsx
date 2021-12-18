@@ -1,8 +1,10 @@
 import { Delete, Visibility, VisibilityOff } from '@mui/icons-material'
 import { Stack, Button, useMediaQuery } from '@mui/material'
 import { useTheme } from '@mui/system'
+
 import { useTranslation } from 'react-i18next'
 
+import { useRemoveCourse } from '@/modules/Schedule/hooks/useRemoveCourse'
 import { courseCartStore } from '@/store'
 
 import { useCourseDialog } from '../context'
@@ -14,10 +16,11 @@ export function CourseDialogActions() {
   const toggleVisible = () => {
     courseCartStore.toggleHiddenItem(item)
   }
+  const removeCourse = useRemoveCourse(item)
   const handleRemove = () => {
     onRemove()
     onClose()
-    courseCartStore.removeCourse(item)
+    removeCourse()
   }
   const theme = useTheme()
   const match = useMediaQuery(theme.breakpoints.up('sm'))

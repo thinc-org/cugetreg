@@ -14,3 +14,6 @@ export const google_analytic_property = process.env.NEXT_PUBLIC_GOOGLE_ANALYTIC_
 
 export const site_url = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
 export const environment = process.env.NEXT_PUBLIC_ENVIRONMENT || 'dev'
+
+export const enableCourseThumbnail = process.env.NEXT_PUBLIC_ENABLE_COURSE_THUMBNAIL === 'true'
+export const enableDaysOfWeekInThumbnail = true

@@ -54,6 +54,8 @@ export const schedulePage = {
   sumCredits: '{{credits}} หน่วยกิต',
   classSchedule: 'ตารางเรียน',
   examSchedule: 'ตารางสอบ',
+  removeSubjectSuccess: 'ลบรายวิชาสำเร็จ',
+  undo: 'เลิกทำ',
 }
 
 export const scheduleTableCard = {
@@ -177,11 +179,9 @@ export const navigation = {
 }
 
 export const syncStatus = {
-  fail: 'ไม่สามารถเชื่อมต่อ Google Drive',
   syncing: 'กำลังซิงค์',
   synced: 'ซิงค์สำเร็จ',
   syncerr: 'การซิงค์ล้มเหลว',
-  nogrant: 'ไม่ได้รับสิทธ์ในการบันทึกตารางสอนลง Google Drive กดคลิกเพื่อขอสิทธิ์อีกครั้ง',
 }
 
 export const regWarNotice = {
@@ -196,6 +196,16 @@ export const filterBar = {
 
 export const tagList = {
   inRange: 'ในช่วง',
+}
+
+export const courseThumbnail = {
+  closed: 'ปิดทุกเซค',
+  available: '{{current}}/{{max}}',
+  full: '{{current}}/{{max}}',
+  SO: 'หมวดสังคม',
+  SC: 'หมวดวิทย์',
+  HU: 'หมวดมนุษย์',
+  IN: 'หมวดสหฯ',
 }
 
 export const review = {

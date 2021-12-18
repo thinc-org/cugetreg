@@ -1,18 +1,17 @@
 import GetAppRoundedIcon from '@mui/icons-material/GetAppRounded'
 import { Button } from '@mui/material'
 import React, { RefObject, useCallback } from 'react'
-import { useScreenshot } from 'use-react-screenshot'
 
 import { Analytics } from '@/common/context/Analytics/components/Analytics'
 import { EXPORT_PNG_BUTTON } from '@/common/context/Analytics/constants'
+
+import { takeScreenshot } from './takeScreenshot'
 
 interface SaveImgButtonProps {
   imageRef: RefObject<HTMLDivElement>
 }
 
 export const SaveImgButton: React.FC<SaveImgButtonProps> = ({ imageRef }) => {
-  const [, takeScreenshot] = useScreenshot()
-
   const saveImage = useCallback(async () => {
     window.scrollTo(0, 0)
     const image = await takeScreenshot(imageRef.current)
@@ -22,7 +21,7 @@ export const SaveImgButton: React.FC<SaveImgButtonProps> = ({ imageRef }) => {
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)
-  }, [takeScreenshot, imageRef])
+  }, [imageRef])
 
   return (
     <Analytics elementName={EXPORT_PNG_BUTTON}>

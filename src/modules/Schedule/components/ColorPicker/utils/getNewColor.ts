@@ -1,9 +1,10 @@
 import { Course } from '@thinc-org/chula-courses'
-import { difference, random } from 'lodash'
 
 import { CourseCartItem } from '@/store'
+import { difference } from '@/utils/difference'
+import { randomInt } from '@/utils/randomInt'
 
-import { OTHER_COLORS } from '../constants'
+import { OTHER_COLORS, ScheduleColor } from '../constants'
 
 /**
  * This function returns a randomly picked color for the new selected course.
@@ -28,9 +29,9 @@ export function getNewColor(currentItems: CourseCartItem[], newCourse: Course) {
       return 'secondary'
   }
   const currentColors = currentItems.map((item) => item.color)
-  const newColor = difference(OTHER_COLORS, currentColors)[0]
+  const newColor = difference(OTHER_COLORS as readonly ScheduleColor[], currentColors)[0]
   if (newColor) {
     return newColor
   }
-  return OTHER_COLORS[random(0, OTHER_COLORS.length)]
+  return OTHER_COLORS[randomInt(0, OTHER_COLORS.length)]
 }

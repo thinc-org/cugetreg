@@ -68,6 +68,10 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ github.token }}
 
+      - name: Set dev env
+        if: ${{ github.ref == 'refs/heads/dev' }}
+        run: mv .env.dev .env
+
       - name: Set beta env
         if: ${{ github.ref == 'refs/heads/beta' }}
         run: mv .env.beta .env

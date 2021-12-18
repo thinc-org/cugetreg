@@ -2,6 +2,7 @@ import { Box, Card, Typography, Link, useTheme } from '@mui/material'
 
 import React from 'react'
 
+import { PageMeta } from '@/components/PageMeta'
 import { StyledArticleBody } from '@/configs/theme/articletext'
 import { sessionIdStore } from '@/store/sessionIdStore'
 
@@ -14,6 +15,7 @@ export default function About() {
   return (
     <Box marginTop={4} marginBottom={4}>
       <Box sx={{ p: 4, maxWidth: '720px', margin: 'auto' }}>
+        <PageMeta title="เกี่ยวกับเรา" />
         <Typography variant="h1">เกี่ยวกับเรา</Typography>
         <Typography variant="h4" component="h2" gutterBottom>
           ชมรม Thinc. จุฬาลงกรณ์มหาวิทยาลัย

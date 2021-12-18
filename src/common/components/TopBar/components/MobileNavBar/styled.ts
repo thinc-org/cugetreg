@@ -15,6 +15,7 @@ export const DrawerContent = styled.div`
 `
 
 export const Logo = styled.img`
+  width: 123px;
   height: 40px;
   margin-left: 8px;
   margin-bottom: 42px;

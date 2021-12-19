@@ -253,7 +253,7 @@ export class CourseCart implements CourseCartProps {
    * @param selectedSectionNo - the selected section of the course
    */
   @action
-  addItem(course: Course, selectedSectionNo?: string) {
+  addItem(course: Course, selectedSectionNo?: string, sync: boolean = true) {
     // TO DO: remove and use analytics instead
     collectLogEvent({
       kind: 'track',
@@ -278,7 +278,9 @@ export class CourseCart implements CourseCartProps {
     if (foundIndex !== -1) this.shopItems[foundIndex] = { ...this.shopItems[foundIndex], selectedSectionNo }
     else this.shopItems.push(newItem)
 
-    this.onChange()
+    if (sync) {
+      this.onChange()
+    }
     return true
   }
 

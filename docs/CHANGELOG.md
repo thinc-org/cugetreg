@@ -1,3 +1,11 @@
+## [1.5.1](https://github.com/thinc-org/cugetreg-frontend/compare/v1.5.0...v1.5.1) (2021-12-20)
+
+
+### Bug Fixes
+
+* midterm exam date display final exam date ([#299](https://github.com/thinc-org/cugetreg-frontend/issues/299)) ([4ddc2dc](https://github.com/thinc-org/cugetreg-frontend/commit/4ddc2dc35de13bc13a07cc5c3f4c08b8b59b88e7))
+* Remove babel-plugin-macros ([#297](https://github.com/thinc-org/cugetreg-frontend/issues/297)) ([8471386](https://github.com/thinc-org/cugetreg-frontend/commit/8471386e2d194814707f8feb2fa9760b3d13d8ef))
+
 # [1.5.0](https://github.com/thinc-org/cugetreg-frontend/compare/v1.4.0...v1.5.0) (2021-12-14)
 
 

@@ -11,10 +11,10 @@ export function getExamDate(scheduleClass: ExamClass | Course): {
 export function getExamDate(scheduleClass: ExamClass | Course, isFinal: boolean): string
 export function getExamDate(scheduleClass: ExamClass | Course, isFinal?: boolean) {
   if (typeof isFinal === 'boolean') {
-    return isFinal ? getFinalExamDate(scheduleClass) : getFinalExamDate(scheduleClass)
+    return isFinal ? getFinalExamDate(scheduleClass) : getMidtermExamDate(scheduleClass)
   }
   return {
-    midtermDate: getFinalExamDate(scheduleClass),
+    midtermDate: getMidtermExamDate(scheduleClass),
     finalDate: getFinalExamDate(scheduleClass),
   }
 }

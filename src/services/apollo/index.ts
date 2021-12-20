@@ -3,9 +3,9 @@ import { BatchHttpLink } from '@apollo/client/link/batch-http'
 import { setContext } from '@apollo/client/link/context'
 import { Course } from '@thinc-org/chula-courses'
 
+import { ENVIRONMENT } from '@/env'
 import { apiUrl } from '@/services/httpClient'
 import { userStore } from '@/store/userStore'
-import env from '@/utils/env/macro'
 import { uniqBy } from '@/utils/uniqBy'
 
 import { SearchCourseVars } from './query/searchCourse'
@@ -59,13 +59,13 @@ const authLink = setContext(async (_, { headers }) => {
 export const client = new ApolloClient({
   link: authLink.concat(createHttpLink()),
   cache: cache,
-  connectToDevTools: env.environment !== 'production',
+  connectToDevTools: ENVIRONMENT !== 'production',
 })
 
 export function createApolloServerClient() {
   return new ApolloClient({
     link: createHttpLink(),
     cache: new InMemoryCache(),
-    connectToDevTools: env.environment !== 'production',
+    connectToDevTools: ENVIRONMENT !== 'production',
   })
 }

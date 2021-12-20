@@ -1,8 +1,8 @@
 import { action, makeAutoObservable, when } from 'mobx'
 
+import { ENVIRONMENT } from '@/env'
 import { apiUrl, httpClient } from '@/services/httpClient'
 import { courseCartStore } from '@/store'
-import env from '@/utils/env/macro'
 
 class UserStore {
   private isInitialized: boolean = false
@@ -15,11 +15,10 @@ class UserStore {
   }
 
   login = () => {
-    const isLocal = env.environment === 'local'
     const urlParams = new URLSearchParams({
       returnUrl: window.location.href,
     })
-    if (isLocal) {
+    if (ENVIRONMENT === "local") {
       urlParams.set('backendUrl', apiUrl ?? '')
     }
     window.location.href = `${apiUrl}/auth/google?${urlParams.toString()}`

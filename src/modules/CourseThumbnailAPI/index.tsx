@@ -3,14 +3,14 @@ import { NextApiRequest, NextApiResponse } from 'next'
 
 import { CourseGroup } from '@/common/hooks/useCourseGroup/types'
 import { parseCourseNoFromQuery } from '@/common/utils/parseCourseNoFromQuery'
-import { env } from '@/env'
+import { ENABLE_COURSE_THUMBNAIL } from '@/env'
 import { drawThumbnail } from '@/modules/CourseThumbnailAPI/drawThumbnail'
 import { createApolloServerClient } from '@/services/apollo'
 import { GetCourseForThumbnailResponse, GET_COURSE_FOR_THUMBNAIL } from '@/services/apollo/query/getCourse'
 import { getCachedImage } from '@/utils/imageCache'
 
 export async function CourseThumbnailAPI(req: NextApiRequest, res: NextApiResponse) {
-  if (!env.enable.courseThumbnail) {
+  if (!ENABLE_COURSE_THUMBNAIL) {
     throw new Error('Course thumbnail is disabled')
   }
   try {

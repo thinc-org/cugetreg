@@ -7,7 +7,7 @@ import { DayChipKey, GenEdChipKey } from '@/common/components/Chips/config'
 import { ResponsiveDialog } from '@/common/components/ResponsiveDialog'
 import { Analytics } from '@/common/context/Analytics/components/Analytics'
 import { DAY_FILTER, GENED_FILTER, PERIOD_RANGE_FILTER } from '@/common/context/Analytics/constants'
-import { env } from '@/env'
+import { GOOGLE_OPTIMIZA_FILTER_ORDER } from '@/env'
 import { CheckboxGroup } from '@/modules/CourseSearch/components/CheckboxGroup'
 import {
   createGenEdCheckboxes,
@@ -30,7 +30,7 @@ export const FilterSection: React.FC<FilterSectionProps> = ({ open, handleClose 
 
   const theme = useTheme()
   const match = useMediaQuery(theme.breakpoints.up('sm'))
-  const isExperimentOrder = useGoogleOptimize(env.googleOptimize.filterOrder, [false, true])
+  const isExperimentOrder = useGoogleOptimize(GOOGLE_OPTIMIZA_FILTER_ORDER, [false, true])
 
   const filters = [
     <Analytics key={1} elementName={GENED_FILTER}>

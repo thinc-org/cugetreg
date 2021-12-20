@@ -8,7 +8,7 @@ import React from 'react'
 import { AnalyticsProvider } from '@/common/context/Analytics'
 import { useAnalytics } from '@/common/context/Analytics/hooks/useAnalytics'
 import { darkTheme, lightTheme } from '@/configs/theme'
-import { env } from '@/env'
+import { ENABLE_DARK_THEME } from '@/env'
 import { Dialog } from '@/lib/dialog'
 import { ShoppingCartModalContextProvider } from '@/modules/App/context/ShoppingCartModal'
 import { client } from '@/services/apollo'
@@ -21,7 +21,7 @@ interface AppProviderProps {
 
 export function AppProvider({ children, forceDark, emotionCache }: AppProviderProps) {
   const prefersDarkMode =
-    env.enable.darkTheme &&
+    ENABLE_DARK_THEME &&
     // features.darkTheme is a constant
     // eslint-disable-next-line react-hooks/rules-of-hooks
     useMediaQuery('(prefers-color-scheme: dark)', {

@@ -1,10 +1,10 @@
 import axios from 'axios'
 
-import { env } from '@/env'
+import { BACKEND_URI, ENVIRONMENT, SITE_URL } from '@/env'
 
 const isClient = typeof window !== 'undefined'
 
-export const apiUrl = env.environment === 'local' && isClient ? `${env.siteUrl}/apiProxy` : env.backendUri
+export const apiUrl = ENVIRONMENT === 'local' && isClient ? `${SITE_URL}/apiProxy` : BACKEND_URI
 
 export const httpClient = axios.create({
   baseURL: apiUrl,

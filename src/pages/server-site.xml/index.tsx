@@ -3,7 +3,7 @@ import { GetServerSideProps } from 'next'
 import { getServerSideSitemap, ISitemapField } from 'next-sitemap'
 
 import { getCurrentTerm } from '@/common/utils/getCurrentTerm'
-import { env } from '@/env'
+import { SITE_URL } from '@/env'
 import { createApolloServerClient } from '@/services/apollo'
 import { GetAllCoursesResponse, GET_ALL_COURSES } from '@/services/apollo/query/getAllCourses'
 
@@ -29,7 +29,7 @@ async function getAllCoursesFromStudyProgram(studyProgram: StudyProgram): Promis
 
   return data.search.map(
     ({ courseNo }): ISitemapField => ({
-      loc: `${env.siteUrl}/${studyProgram}/courses/${courseNo}`,
+      loc: `${SITE_URL}/${studyProgram}/courses/${courseNo}`,
       changefreq: 'monthly',
       priority: 0.7,
       lastmod: new Date().toISOString(),

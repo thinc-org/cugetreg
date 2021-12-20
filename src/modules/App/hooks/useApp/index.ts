@@ -3,7 +3,7 @@ import { Router } from 'next/router'
 
 import { useEffect } from 'react'
 
-import { env } from '@/env'
+import { ENABLE_DARK_THEME } from '@/env'
 import { collectLogEvent } from '@/services/logging'
 import { courseCartStore } from '@/store'
 import { userStore } from '@/store/userStore'
@@ -25,7 +25,7 @@ export function useApp(router: Router) {
 
   useEffect(() => {
     removeElement('jss-server-side')
-    if (env.enable.darkTheme) {
+    if (ENABLE_DARK_THEME) {
       removeElement('cgr-dark')
     }
   })

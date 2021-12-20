@@ -17,7 +17,7 @@ import { getExamDate } from '@/common/utils/getExamDate'
 import { getExamPeriod } from '@/common/utils/getExamPeriod'
 import { parseCourseNoFromQuery } from '@/common/utils/parseCourseNoFromQuery'
 import { PageMeta } from '@/components/PageMeta'
-import { env } from '@/env'
+import { SITE_URL, ENABLE_COURSE_THUMBNAIL } from '@/env'
 import { scrollToReviewForm } from '@/modules/CourseDetail/components/ReviewForm/functions'
 import { ReviewList } from '@/modules/CourseDetail/components/ReviewList'
 import { ReviewProvider } from '@/modules/CourseDetail/context/Review'
@@ -65,10 +65,10 @@ export function CourseDetailPage({ course, reviews, ogImageUrl }: CourseDetailPa
     title: course.abbrName,
     description: courseDesc || defaultSEO.description,
     openGraph: {
-      url: `${env.siteUrl}${buildLink(`/courses/${course.courseNo}`)}`,
+      url: `${SITE_URL}${buildLink(`/courses/${course.courseNo}`)}`,
       title: `${course.abbrName} | CU Get Reg`,
       description: courseDesc || defaultSEO.openGraph.description,
-      images: env.enable.courseThumbnail
+      images: ENABLE_COURSE_THUMBNAIL
         ? [
             {
               url: ogImageUrl,
@@ -212,7 +212,7 @@ export async function getServerSideProps(
       props: {
         course: course,
         reviews: reviewsData.reviews,
-        ogImageUrl: `${env.siteUrl}/api/courseThumbnail?${urlParams.toString()}`,
+        ogImageUrl: `${SITE_URL}/api/courseThumbnail?${urlParams.toString()}`,
       },
     }
   } catch (e) {

@@ -48,7 +48,7 @@ export function RemoveCourseToast({ item, index }: RemoveCourseToastProps) {
   const handleUndo = useCallback(() => {
     const items = courseCartStore.shopItemsByCourseGroup(item)
     if (items.some((i) => isSameKey(i, item))) return
-    courseCartStore.addItem(item, item.selectedSectionNo)
+    courseCartStore.addItem(item, item.selectedSectionNo, false)
     courseCartStore.reorder(item, items.length, index)
     dismiss()
   }, [item, index, dismiss])

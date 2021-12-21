@@ -16,7 +16,6 @@ import { PageMeta } from '@/components/PageMeta'
 import { CourseList } from '@/modules/CourseSearch/components/CourseList'
 import { FilterIconButton } from '@/modules/CourseSearch/components/FilterIconButton'
 import { FilterSection } from '@/modules/CourseSearch/components/FilterSection'
-import { RecommendationText } from '@/modules/CourseSearch/components/RecommendationText'
 import { SearchField } from '@/modules/CourseSearch/components/SearchField'
 import { SelectedCoursesButton } from '@/modules/CourseSearch/components/SelectedCoursesButton'
 import { NoTagListLayout, TagList } from '@/modules/CourseSearch/components/TagList'
@@ -24,8 +23,9 @@ import { NoTagListLayout, TagList } from '@/modules/CourseSearch/components/TagL
 import { CourseSearchProvider } from './context/CourseSearch'
 import { useCourseSearchPage } from './hooks/useCourseSearchPage'
 import { Container, Stack, TitleStack, StickyStack } from './styled'
+import dynamic from 'next/dynamic'
 
-const ExperimentalRecommendationText = dynamic(() => import('@/modules/CourseSearch/components/RecommendationText'), { ssr: false })
+const ExperimentalRecommendationText = dynamic<{}>(() => import('@/modules/CourseSearch/components/RecommendationText').then(m => m.ExperimentalRecommendationText), { ssr: false })
 
 export function CourseSearchPage() {
   const { openFilterBar, toggleFilterBar, onOpen, handleCloseFilterBar } = useCourseSearchPage()

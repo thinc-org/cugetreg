@@ -1,5 +1,5 @@
 import { useTheme } from '@mui/material'
-import { Course, Class, DayOfWeek, GenEdType } from '@thinc-org/chula-courses'
+import { Class, DayOfWeek, GenEdType, Section } from '@thinc-org/chula-courses'
 import { useMemo } from 'react'
 
 import { getPaletteRange } from '@/common/utils/getPaletteRange'
@@ -9,8 +9,14 @@ import { CourseCartItem } from '@/store'
 import { hourStart } from '../constants'
 import { getOverlappingCourses } from './getOverlappingCourses'
 
-export type TimetableClass = Pick<Course, 'courseNo' | 'abbrName' | 'genEdType'> &
-  Omit<Class, 'type'> & {
+export type TimetableClass = Pick<
+  CourseCartItem,
+  'courseNo' | 'studyProgram' | 'academicYear' | 'semester' | 'abbrName' | 'genEdType' | 'color'
+> & {
+  item: CourseCartItem
+  section: Section
+} & Omit<Class, 'type'> &
+  Pick<Section, 'sectionNo'> & {
     classIndex: number
     hasOverlap?: boolean
   }
@@ -190,7 +196,7 @@ export function useTimetableClasses(shopItems: CourseCartItem[]) {
   return shopItems
     .filter((item) => !item.isHidden)
     .flatMap((item) => {
-      const { courseNo, abbrName, genEdType, selectedSectionNo } = item
+      const { courseNo, abbrName, genEdType, selectedSectionNo, studyProgram, academicYear, semester } = item
       const section = item.sections.find((section) => section.sectionNo === selectedSectionNo)
       if (!section) {
         return []
@@ -207,6 +213,13 @@ export function useTimetableClasses(shopItems: CourseCartItem[]) {
           building,
           room,
           teachers,
+          studyProgram,
+          academicYear,
+          semester,
+          item,
+          section,
+          color: item.color,
+          sectionNo: section.sectionNo,
         }
       })
     })

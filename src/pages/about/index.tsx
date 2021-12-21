@@ -1,6 +1,8 @@
 import { Box, Card, Typography, Link, useTheme } from '@mui/material'
+
 import React from 'react'
 
+import { PageMeta } from '@/components/PageMeta'
 import { StyledArticleBody } from '@/configs/theme/articletext'
 import { sessionIdStore } from '@/store/sessionIdStore'
 
@@ -13,6 +15,7 @@ export default function About() {
   return (
     <Box marginTop={4} marginBottom={4}>
       <Box sx={{ p: 4, maxWidth: '720px', margin: 'auto' }}>
+        <PageMeta title="เกี่ยวกับเรา" />
         <Typography variant="h1">เกี่ยวกับเรา</Typography>
         <Typography variant="h4" component="h2" gutterBottom>
           ชมรม Thinc. จุฬาลงกรณ์มหาวิทยาลัย
@@ -25,8 +28,17 @@ export default function About() {
         <StyledArticleBody variant="body1">
           ผลงานที่ผ่านมาของชมรม Thinc. เช่น
           <ul>
+            <li>
+              <Link
+                href="https://book.cusc.chula.ac.th"
+                target="_blank"
+                rel="noreferrer"
+                color={theme.palette.secondaryRange[900]}
+              >
+                ระบบจองสนามกีฬา CU Sports Center
+              </Link>
+            </li>
             <li>แอปพลิเคชัน CU Pop Bus</li>
-            <li>ระบบจองสนามกีฬา CU Sport Complex (เปิดใช้งานเร็ว ๆ นี้)</li>
             <li>ระบบลงทะเบียนขึ้นสแตนด์แปรอักษรฝั่งจุฬาฯ งานฟุตบอลประเพณีจุฬาฯ-ธรรมศาสตร์ ครั้งที่ 74</li>
             <li>Companion App ในงาน JavaScript Bangkok 1.0.0</li>
           </ul>
@@ -86,17 +98,36 @@ export default function About() {
           CU Get Reg นำข้อมูลมาจากไหน?
         </Typography>
         <StyledArticleBody variant="body1" paragraph>
-          ข้อมูลรายวิชาของ CU Get Reg นำมาจากหน้า{' '}
-          <Link
-            href="https://cas.reg.chula.ac.th/cu/cs/QueryCourseScheduleNew/index.html"
-            target="_blank"
-            rel="noreferrer"
-            color={theme.palette.secondaryRange[900]}
-          >
-            สอบถามตารางสอนตารางสอบ
-          </Link>{' '}
-          ของสำนักงานการทะเบียนทั้งหมด ในปัจจุบัน ข้อมูลจากหน้านี้อาจล่าช้าจากข้อมูลภายในระบบ Reg Chula ไป 1 วัน ทั้งนี้
-          ทีมงานกำลังประสานงานกับสำนักงานการทะเบียนเพื่อเข้าถึงข้อมูลรายวิชาโดยตรง เพื่อให้ไม่พบปัญหาดังกล่าว
+          <ul>
+            <li>
+              <strong>ข้อมูลรายวิชาและข้อมูลตอนเรียน:</strong> นำมาจากหน้า{' '}
+              <Link
+                href="https://cas.reg.chula.ac.th/cu/cs/QueryCourseScheduleNew/index.html"
+                target="_blank"
+                rel="noreferrer"
+                color={theme.palette.secondaryRange[900]}
+              >
+                สอบถามตารางสอนตารางสอบ
+              </Link>{' '}
+              ของสำนักงานการทะเบียน ในปัจจุบัน ข้อมูลจากหน้านี้อาจล่าช้าจากข้อมูลภายในระบบ Reg Chula ไป 1 วัน ทั้งนี้
+              ทีมงานกำลังประสานงานกับสำนักงานการทะเบียนเพื่อเข้าถึงข้อมูลรายวิชาโดยตรง เพื่อให้ไม่พบปัญหาดังกล่าว
+            </li>
+            <li>
+              <strong>ข้อมูลตอนเรียนรายวิชา GenEd:</strong> ได้รับข้อมูลจาก Gen อย่าได้ Ed และศูนย์การศึกษาทั่วไป
+            </li>
+            <li>
+              <strong>คำอธิบายรายวิชา:</strong> นำมาจาก{' '}
+              <Link
+                href="http://www.academic.chula.ac.th/search/search.asp"
+                target="_blank"
+                rel="noreferrer"
+                color={theme.palette.secondaryRange[900]}
+              >
+                ระบบค้นหาคำอธิบายรายวิชา
+              </Link>{' '}
+              ของสำนักบริหารวิชาการ จุฬาฯ
+            </li>
+          </ul>
         </StyledArticleBody>
 
         <Typography variant="h6" component="h3" gutterBottom>
@@ -104,8 +135,8 @@ export default function About() {
         </Typography>
         <StyledArticleBody variant="body1" paragraph>
           เมื่อคุณเข้าสู่ระบบ ระบบจะบันทึกข้อมูลตารางเรียนไว้ในบัญชี Google ของคุณ
-          ทำให้สามารถเข้าสู่ระบบเพื่อดูข้อมูลตารางเรียนที่เลือกไว้ข้ามอุปกรณ์ได้ ทั้งนี้ ในอนาคตอาจมีฟีเจอร์อื่น ๆ
-          ที่เกี่ยวข้องกับการเข้าสู่ระบบเพิ่มขึ้น
+          ทำให้สามารถเข้าสู่ระบบเพื่อดูข้อมูลตารางเรียนที่เลือกไว้ข้ามอุปกรณ์ได้
+          รวมถึงเป็นการยืนยันตัวตนเพื่อเขียนรีวิวรายวิชาที่คุณเรียนมา
         </StyledArticleBody>
         <StyledArticleBody variant="body1" paragraph>
           ในการเข้าสู่ระบบ สามารถใช้บัญชีอีเมลนิสิต (รหัสนิสิต@student.chula.ac.th) เท่านั้น

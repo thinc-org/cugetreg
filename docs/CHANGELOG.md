@@ -1,3 +1,70 @@
+# [1.5.0](https://github.com/thinc-org/cugetreg-frontend/compare/v1.4.0...v1.5.0) (2021-12-14)
+
+
+### Bug Fixes
+
+* comment ([2e6b164](https://github.com/thinc-org/cugetreg-frontend/commit/2e6b164f473da7ae107485901058c6bb4f4e60c1))
+* update about page ([eb65264](https://github.com/thinc-org/cugetreg-frontend/commit/eb6526474f0b63d917d10d001d59b3e495066b3d))
+* update privacy policy ([a3b0c33](https://github.com/thinc-org/cugetreg-frontend/commit/a3b0c337abe333a228bf4c4a9eb2748e76be6a41))
+* user login after activate loginGuard ([#282](https://github.com/thinc-org/cugetreg-frontend/issues/282)) ([75205e3](https://github.com/thinc-org/cugetreg-frontend/commit/75205e3fe1de647ac2883ca477c0cab7e1967720))
+
+
+### Features
+
+* add RichText for review ([6d36292](https://github.com/thinc-org/cugetreg-frontend/commit/6d36292c40afb47d32445a14bea214ffa4ec0342))
+* update about, add course description source ([984adef](https://github.com/thinc-org/cugetreg-frontend/commit/984adef26fd63392de5ee3d6030f8461ed2ce2a6))
+
+# [1.4.0](https://github.com/thinc-org/cugetreg-frontend/compare/v1.3.2...v1.4.0) (2021-11-29)
+
+
+### Bug Fixes
+
+* comment ([30eed34](https://github.com/thinc-org/cugetreg-frontend/commit/30eed349fe985433e27593074acd29590cb102df))
+* remove jss dependency ([#265](https://github.com/thinc-org/cugetreg-frontend/issues/265)) ([11ee52d](https://github.com/thinc-org/cugetreg-frontend/commit/11ee52d30a6fc92c1d2d1c4117be8fd4e8b40f9c))
+* use courseDescTh and courseDescEn instead of courseDesc ([0429b21](https://github.com/thinc-org/cugetreg-frontend/commit/0429b2162582240ac10f24d1084985f7b2acb7e0))
+* use join for seo desc ([aeb7fba](https://github.com/thinc-org/cugetreg-frontend/commit/aeb7fbacbdf323621098c1bc60c45a3bbc323aec))
+
+
+### Features
+
+* split course descriptions into two components ([2263d83](https://github.com/thinc-org/cugetreg-frontend/commit/2263d83db835d818ddba84b92f3aaaf97e1f8867))
+
+## [1.3.2](https://github.com/thinc-org/cugetreg-frontend/compare/v1.3.1...v1.3.2) (2021-11-12)
+
+
+### Bug Fixes
+
+* app crashing when switching semesters ([c350714](https://github.com/thinc-org/cugetreg-frontend/commit/c350714c5d94b9df2f8c62969e541c11a22c77a1))
+* generate a unique key for each class in a session ([227919e](https://github.com/thinc-org/cugetreg-frontend/commit/227919eab21e136273cd08be6088d3ec724044cd)), closes [#245](https://github.com/thinc-org/cugetreg-frontend/issues/245)
+* run yarn prov with frozen lock file ([633c823](https://github.com/thinc-org/cugetreg-frontend/commit/633c823384fd46f0dc71d0f5395c2efbf2560b7e))
+* temporary remove check on push ([879116f](https://github.com/thinc-org/cugetreg-frontend/commit/879116fb86e84fbee8ad06f8e93ac0e3295f6609))
+
+## [1.3.1](https://github.com/thinc-org/cugetreg-frontend/compare/v1.3.0...v1.3.1) (2021-11-07)
+
+
+### Bug Fixes
+
+* about page ([#247](https://github.com/thinc-org/cugetreg-frontend/issues/247)) ([839fe8d](https://github.com/thinc-org/cugetreg-frontend/commit/839fe8d1aa3412faa1009ca0cbeb9e90f9981a49))
+* snackbar action text ([#248](https://github.com/thinc-org/cugetreg-frontend/issues/248)) ([6e6d45a](https://github.com/thinc-org/cugetreg-frontend/commit/6e6d45a4a1292d5fb90e0a21446ba12feec0d4ca))
+* some overlaps warning is missing ([#246](https://github.com/thinc-org/cugetreg-frontend/issues/246)) ([1d099d6](https://github.com/thinc-org/cugetreg-frontend/commit/1d099d6e62f81afb94c55f5e03170602be135c72))
+
+# [1.3.0](https://github.com/thinc-org/cugetreg-frontend/compare/v1.2.0...v1.3.0) (2021-11-04)
+
+
+### Bug Fixes
+
+* adjust logo aspect ratio ([c336f85](https://github.com/thinc-org/cugetreg-frontend/commit/c336f857d90805b56fb17bb6f7bbd8db680a527d))
+* logo height ([43c8fb2](https://github.com/thinc-org/cugetreg-frontend/commit/43c8fb27f89fb46e6e9026eaaf31bb8c93995ba2))
+* preserve logo aspect ratio ([8fb1d68](https://github.com/thinc-org/cugetreg-frontend/commit/8fb1d68744d2ef5d6443db8fa59a47f160a715a0))
+* wrong path looping ([19f5978](https://github.com/thinc-org/cugetreg-frontend/commit/19f597819eeb07759057eddcf505fd1f1743de40))
+
+
+### Features
+
+* add overlapping course warning ([#240](https://github.com/thinc-org/cugetreg-frontend/issues/240)) ([61dee81](https://github.com/thinc-org/cugetreg-frontend/commit/61dee81a5b193d76b7ffa2726dcffae4a4c2ffe0))
+* add time filter for mobile ([#239](https://github.com/thinc-org/cugetreg-frontend/issues/239)) ([020d3d9](https://github.com/thinc-org/cugetreg-frontend/commit/020d3d9c3daf25007bda498be04387cef5da46c5))
+* improve SEO with dynamic config ([#238](https://github.com/thinc-org/cugetreg-frontend/issues/238)) ([58c6693](https://github.com/thinc-org/cugetreg-frontend/commit/58c6693bf53868940b906979c5063eb76a9d4422))
+
 # [1.2.0](https://github.com/thinc-org/cugetreg-frontend/compare/v1.1.0...v1.2.0) (2021-11-01)
 
 

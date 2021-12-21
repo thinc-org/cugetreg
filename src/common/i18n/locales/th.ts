@@ -54,6 +54,8 @@ export const schedulePage = {
   sumCredits: '{{credits}} หน่วยกิต',
   classSchedule: 'ตารางเรียน',
   examSchedule: 'ตารางสอบ',
+  removeSubjectSuccess: 'ลบรายวิชาสำเร็จ',
+  undo: 'เลิกทำ',
 }
 
 export const scheduleTableCard = {
@@ -63,9 +65,21 @@ export const scheduleTableCard = {
   teacher: 'ผู้สอน',
   time: 'เวลา',
   classRoom: 'ห้องเรียน',
+  classType: 'รูปแบบ',
   and: 'และ',
   classOverlap: 'เวลาเรียนชนกับ',
   examOverlap: 'เวลาสอบชนกับ',
+  selectColor: 'สีในตาราง',
+}
+
+export const courseDialog = {
+  ...scheduleTableCard,
+  midtermExam: 'สอบกลางภาค',
+  finalExam: 'สอบปลายภาค',
+  selectColor: 'เลือกสีในตาราง',
+  hide: 'ซ่อนจากตาราง',
+  show: 'แสดงในตาราง',
+  remove: 'นำออกจากวิชาที่เลือก',
 }
 
 export const schedule = {
@@ -94,6 +108,7 @@ export const courseCard = {
   teacher: 'ผู้สอน',
   time: 'เวลา',
   classRoom: 'ห้องเรียน',
+  type: 'รูปแบบ',
   note: 'หมายเหตุ',
   capacity: 'ที่ว่าง',
   addSubjectSuccess: 'เพิ่มรายวิชาสำเร็จ',
@@ -110,8 +125,9 @@ export const sectionCard = {
   teacher: 'ผู้สอน',
   time: 'วันเวลาเรียน',
   classRoom: 'ห้องเรียน',
+  classType: 'รูปแบบ',
   closed: 'ปิด',
-  avialable: '{{current}}/{{max}}',
+  available: '{{current}}/{{max}}',
   full: '{{current}}/{{max}}',
   unknownSeat: 'ไม่ทราบจำนวนที่นั่ง',
 }
@@ -163,11 +179,9 @@ export const navigation = {
 }
 
 export const syncStatus = {
-  fail: 'ไม่สามารถเชื่อมต่อ Google Drive',
   syncing: 'กำลังซิงค์',
   synced: 'ซิงค์สำเร็จ',
   syncerr: 'การซิงค์ล้มเหลว',
-  nogrant: 'ไม่ได้รับสิทธ์ในการบันทึกตารางสอนลง Google Drive กดคลิกเพื่อขอสิทธิ์อีกครั้ง',
 }
 
 export const regWarNotice = {
@@ -182,4 +196,26 @@ export const filterBar = {
 
 export const tagList = {
   inRange: 'ในช่วง',
+}
+
+export const courseThumbnail = {
+  closed: 'ปิดทุกเซค',
+  available: '{{current}}/{{max}}',
+  full: '{{current}}/{{max}}',
+  SO: 'หมวดสังคม',
+  SC: 'หมวดวิทย์',
+  HU: 'หมวดมนุษย์',
+  IN: 'หมวดสหฯ',
+}
+
+export const review = {
+  title: 'มาเขียนรีวิวรายวิชากันเถอะ!',
+  subtitle: '*การรีวิวนี้จะเป็นแบบไม่ระบุตัวตน',
+  cancel: 'ยกเลิก',
+  submit: 'ส่งรีวิว',
+}
+
+export const colorPicker = {
+  selectColorFor: 'เลือกสีในตาราง วิชา {{abbrName}}',
+  select: 'เลือกสี',
 }

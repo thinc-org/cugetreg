@@ -15,11 +15,20 @@ export const NavBarItemDiv = styled.div`
 `
 
 export const SyncContainer = styled(Stack)`
+  display: flex;
   ${({ theme }) => theme.breakpoints.down('md')} {
     margin-left: ${({ theme }) => theme.spacing(1)};
   }
 `
 
 export const UserContainer = styled.div`
+  flex: 1;
   margin-left: ${({ theme }) => theme.spacing(1)};
+  overflow: hidden;
+
+  h6 {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 `

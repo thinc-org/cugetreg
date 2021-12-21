@@ -1,51 +1,43 @@
-import styled from '@emotion/styled'
-import { useCallback } from 'react'
-import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd'
+import { lazy, Suspense, useEffect, useState } from 'react'
 
 import { useCourseGroup } from '@/common/hooks/useCourseGroup'
 import { CourseCart } from '@/store'
 
 import { CourseOverlapMap } from '../Schedule/utils'
 import { ScheduleTableCard } from './components/ScheduleTableCard'
+import { CardLayout } from './components/ScheduleTableCard/styled'
+import { Layout } from './styled'
 
 export interface ScheduleTableProps {
   courseCart: CourseCart
   overlappingCourses: CourseOverlapMap
 }
 
-const Layout = styled.div`
-  padding-bottom: 100px;
-`
+const InteractiveScheduleTable = lazy(() => import('./InteractiveScheduleTable'))
 
 export function ScheduleTable({ courseCart, overlappingCourses }: ScheduleTableProps) {
+  const [shouldRender, setShouldRender] = useState(false)
+  useEffect(() => setShouldRender(true), [])
+  if (!shouldRender) return null
+
+  return (
+    <Suspense fallback={<BasicScheduleTable courseCart={courseCart} overlappingCourses={overlappingCourses} />}>
+      <InteractiveScheduleTable courseCart={courseCart} overlappingCourses={overlappingCourses} />
+    </Suspense>
+  )
+}
+
+export function BasicScheduleTable({ courseCart, overlappingCourses }: ScheduleTableProps) {
   const courseGroup = useCourseGroup()
   const items = courseCart.shopItemsByCourseGroup(courseGroup)
 
-  const handleDragEnd = useCallback(
-    (result: DropResult) => {
-      if (!result.destination) return
-      courseCart.reorder(courseGroup, result.source.index, result.destination.index)
-    },
-    [courseCart, courseGroup]
-  )
-
   return (
-    <DragDropContext onDragEnd={handleDragEnd}>
-      <Droppable droppableId="schedule">
-        {(provided) => (
-          <Layout {...provided.droppableProps} ref={provided.innerRef}>
-            {items.map((item, index) => (
-              <ScheduleTableCard
-                key={item.courseNo}
-                item={item}
-                index={index}
-                overlaps={overlappingCourses[item.courseNo]}
-              />
-            ))}
-            {provided.placeholder}
-          </Layout>
-        )}
-      </Droppable>
-    </DragDropContext>
+    <Layout>
+      {items.map((item) => (
+        <CardLayout key={item.courseNo}>
+          <ScheduleTableCard item={item} overlaps={overlappingCourses[item.courseNo]} />
+        </CardLayout>
+      ))}
+    </Layout>
   )
 }

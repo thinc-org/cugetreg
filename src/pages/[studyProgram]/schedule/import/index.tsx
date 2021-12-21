@@ -34,7 +34,7 @@ function ImportSchedulePage({ items }: ImportPageProps) {
 
   useEffect(() => {
     const fn = async () => {
-      await userStore.restoreSession()
+      await userStore.waitUntilInitialized()
       await courseCartStore.upgradeSource()
 
       items.forEach(({ course, sectionNo }) => {

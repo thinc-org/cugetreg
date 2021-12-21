@@ -1,5 +1,6 @@
 import { Button, Typography, useMediaQuery, useTheme } from '@mui/material'
 import { observer } from 'mobx-react'
+
 import React, { useState, createRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -8,6 +9,7 @@ import { LinkWithAnalytics } from '@/common/context/Analytics/components/LinkWit
 import { CR11_BUTTON, CLASS_TAB_BUTTON, EXAM_TAB_BUTTON } from '@/common/context/Analytics/constants'
 import { useCourseGroup } from '@/common/hooks/useCourseGroup'
 import { useLinkBuilder } from '@/common/hooks/useLinkBuilder'
+import { PageMeta } from '@/components/PageMeta'
 import { courseCartStore } from '@/store'
 
 import { ExamSchedule } from './components/ExamSchedule'
@@ -56,6 +58,7 @@ export const SchedulePage = observer(() => {
 
   return (
     <PageContainer>
+      <PageMeta title={t('title')} />
       <TitleContainer>
         <Title variant="h2">{t('title')}</Title>
         <TabContainer>
@@ -87,7 +90,12 @@ export const SchedulePage = observer(() => {
       </TitleContainer>
       <ScheduleContainer enabled={!isExamTable}>
         <div ref={ref}>
-          <Schedule classes={scheduleClasses} daysCount={daysCount} hourEnd={hourEnd} />
+          <Schedule
+            classes={scheduleClasses}
+            daysCount={daysCount}
+            hourEnd={hourEnd}
+            overlappingCourses={overlappingCourses}
+          />
         </div>
       </ScheduleContainer>
       <ExamContainer enabled={isExamTable}>

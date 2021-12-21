@@ -1,11 +1,10 @@
 import styled from '@emotion/styled'
 import { Typography } from '@mui/material'
 
-import { getExamDate } from '@/common/utils/getExamData'
+import { getExamDate } from '@/common/utils/getExamDate'
 import { getExamPeriod } from '@/common/utils/getExamPeriod'
 import { ExamClass } from '@/common/utils/types'
-
-import { useColorScheme } from './useColorScheme'
+import { useColor } from '@/modules/Schedule/components/ColorPicker/hooks/useColor'
 
 interface ClassCardProps {
   scheduleClass: ExamClass
@@ -45,8 +44,8 @@ const ExamDate = styled.div`
 `
 
 export function ExamCard({ scheduleClass, order, isFinal, className, isHidden }: ClassCardProps) {
-  const { courseNo, abbrName, genEdType, hasOverlap } = scheduleClass
-  const colorScheme = useColorScheme(genEdType, hasOverlap ?? false)
+  const { courseNo, abbrName, hasOverlap, color } = scheduleClass
+  const colorScheme = useColor(color, hasOverlap)
 
   const examDate = getExamDate(scheduleClass, isFinal)
   const examPeriod = getExamPeriod(scheduleClass, isFinal)
@@ -56,9 +55,9 @@ export function ExamCard({ scheduleClass, order, isFinal, className, isHidden }:
       className={className}
       style={{
         opacity: isHidden ? 0.3 : 1,
-        backgroundColor: colorScheme.background,
         border: `1px solid ${colorScheme.border}`,
-        color: colorScheme.text,
+        color: hasOverlap ? colorScheme.text : undefined,
+        backgroundColor: hasOverlap ? colorScheme.background : undefined,
       }}
     >
       <Typography

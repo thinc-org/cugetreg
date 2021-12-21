@@ -1,20 +1,30 @@
 import { ApolloError } from '@apollo/client'
-import { Grid, Typography } from '@mui/material'
-import { getFaculty } from '@thinc-org/chula-courses'
+import { Button, Grid, Stack, Typography } from '@mui/material'
+import { Course, getFaculty } from '@thinc-org/chula-courses'
 import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 import { NextSeoProps } from 'next-seo/lib/types'
-import React from 'react'
+import dynamic from 'next/dynamic'
+
 import { useTranslation } from 'react-i18next'
+import { MdEdit, MdStar } from 'react-icons/md'
 
 import defaultSEO from '@/../next-seo.config'
 import { BackButton } from '@/common/components/BackButton'
 import { useLinkBuilder } from '@/common/hooks/useLinkBuilder'
 import { Language } from '@/common/i18n'
-import { getExamDate } from '@/common/utils/getExamData'
+import { Review } from '@/common/types/reviews'
+import { getExamDate } from '@/common/utils/getExamDate'
 import { getExamPeriod } from '@/common/utils/getExamPeriod'
+import { parseCourseNoFromQuery } from '@/common/utils/parseCourseNoFromQuery'
 import { PageMeta } from '@/components/PageMeta'
+import { SITE_URL, ENABLE_COURSE_THUMBNAIL } from '@/env'
+import { scrollToReviewForm } from '@/modules/CourseDetail/components/ReviewForm/functions'
+import { ReviewList } from '@/modules/CourseDetail/components/ReviewList'
+import { ReviewProvider } from '@/modules/CourseDetail/context/Review'
+import { generateThumbnailId } from '@/modules/CourseThumbnailAPI/utils/generateThumbnailId'
 import { createApolloServerClient } from '@/services/apollo'
 import { GetCourseResponse, GET_COURSE } from '@/services/apollo/query/getCourse'
+import { GetReviewsResponse, GetReviewsVars, GET_REVIEWS } from '@/services/apollo/query/getReviews'
 
 import {
   Container,
@@ -27,12 +37,27 @@ import {
 } from './styled'
 import { courseTypeStringFromCourse } from './utils/courseTypeStringFromCourse'
 import { groupBy } from './utils/groupBy'
-import { parseVariablesFromQuery } from './utils/parseVariablesFromQuery'
 
-export function CourseDetailPage(props: { data: GetCourseResponse }) {
+const ReviewForm = dynamic(
+  async () =>
+    (
+      await import(
+        /* webpackChunkName: "ReviewForm" */
+        '@/modules/CourseDetail/components/ReviewForm'
+      )
+    ).ReviewForm,
+  { ssr: false }
+)
+
+interface CourseDetailPageProps {
+  course: Course
+  reviews: Review[]
+  ogImageUrl: string
+}
+
+export function CourseDetailPage({ course, reviews, ogImageUrl }: CourseDetailPageProps) {
   const { i18n } = useTranslation()
   const { buildLink } = useLinkBuilder()
-  const { course } = props.data
 
   const courseDesc = [course.courseDescTh, course.courseDescEn].filter((desc) => !!desc).join('\n')
   const SEOConfig: NextSeoProps = {
@@ -40,8 +65,19 @@ export function CourseDetailPage(props: { data: GetCourseResponse }) {
     title: course.abbrName,
     description: courseDesc || defaultSEO.description,
     openGraph: {
+      url: `${SITE_URL}${buildLink(`/courses/${course.courseNo}`)}`,
       title: `${course.abbrName} | CU Get Reg`,
       description: courseDesc || defaultSEO.openGraph.description,
+      images: ENABLE_COURSE_THUMBNAIL
+        ? [
+            {
+              url: ogImageUrl,
+              width: 1200,
+              height: 630,
+              alt: course.abbrName,
+            },
+          ]
+        : undefined,
     },
     additionalMetaTags: [
       ...defaultSEO.additionalMetaTags,
@@ -67,15 +103,28 @@ export function CourseDetailPage(props: { data: GetCourseResponse }) {
   })
 
   const faculty = getFaculty(course.faculty)
-  const finalDate = getExamDate(course, true)
-  const midtermDate = getExamDate(course, false)
-  const finalPeriod = getExamPeriod(course, true)
-  const midtermPeriod = getExamPeriod(course, false)
+  const { finalDate, midtermDate } = getExamDate(course)
+  const { midtermPeriod, finalPeriod } = getExamPeriod(course)
 
   return (
     <Container>
       <PageMeta {...SEOConfig} />
-      <BackButton href={buildLink(`/courses`)} pathId={course.courseNo} />
+      <Stack direction="row" justifyContent="space-between">
+        <BackButton href={buildLink(`/courses`)} pathId={course.courseNo} />
+        <Stack direction="row" spacing={[2, 4]} alignItems="center">
+          {course.rating && (
+            <Stack direction="row" spacing={1} alignItems="center">
+              <MdStar size={24} />
+              <Typography color="primary" variant="h5" sx={{ display: 'inline-block' }}>
+                {course.rating}
+              </Typography>
+            </Stack>
+          )}
+          <Button variant="outlined" onClick={scrollToReviewForm} startIcon={<MdEdit />}>
+            เขียนรีวิว
+          </Button>
+        </Stack>
+      </Stack>
       <Title variant="h3">
         {course.courseNo} {course.abbrName}
       </Title>
@@ -124,21 +173,47 @@ export function CourseDetailPage(props: { data: GetCourseResponse }) {
         )}
       </GridContainer>
       {CourseList}
+      <ReviewProvider courseNo={course.courseNo} initialReviews={reviews}>
+        <ReviewForm />
+        <ReviewList />
+      </ReviewProvider>
     </Container>
   )
 }
 
 export async function getServerSideProps(
   context: GetServerSidePropsContext
-): Promise<GetServerSidePropsResult<{ data: GetCourseResponse }>> {
+): Promise<GetServerSidePropsResult<CourseDetailPageProps>> {
   try {
+    const { courseNo, courseGroup } = parseCourseNoFromQuery(context.query)
     const client = createApolloServerClient()
-    const { data } = await client.query<GetCourseResponse>({
+    const { data: courseData } = await client.query<GetCourseResponse>({
       query: GET_COURSE,
-      variables: parseVariablesFromQuery(context.query),
+      variables: {
+        courseNo,
+        courseGroup,
+      },
+    })
+    const { data: reviewsData } = await client.query<GetReviewsResponse, GetReviewsVars>({
+      query: GET_REVIEWS,
+      variables: {
+        courseNo,
+        studyProgram: courseGroup.studyProgram,
+      },
+    })
+    const course = courseData.course
+    const urlParams = new URLSearchParams({
+      id: generateThumbnailId(course),
+      courseNo: course.courseNo,
+      studyProgram: course.studyProgram,
+      term: `${course.academicYear}/${course.semester}`,
     })
     return {
-      props: { data },
+      props: {
+        course: course,
+        reviews: reviewsData.reviews,
+        ogImageUrl: `${SITE_URL}/api/courseThumbnail?${urlParams.toString()}`,
+      },
     }
   } catch (e) {
     if (e instanceof ApolloError) {

@@ -1,21 +1,27 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`CourseSearchPage Should match snapshot correctly 1`] = `
-<Styled(div)>
+<Container>
   <PageMeta
     title="ค้นหาวิชาเรียน"
   />
-  <Styled(Component)
+  <TitleStack
     alignItems="center"
     direction="row"
     justifyContent="space-between"
     spacing={2}
   >
-    <ForwardRef(Typography)
-      variant="h2"
+    <ForwardRef(Stack)
+      alignItems="center"
+      direction="row"
+      spacing={2}
     >
-      ค้นหาวิชาเรียน
-    </ForwardRef(Typography)>
+      <ForwardRef(Typography)
+        variant="h2"
+      >
+        ค้นหาวิชาเรียน
+      </ForwardRef(Typography)>
+    </ForwardRef(Stack)>
     <Hidden
       mdUp={true}
     >
@@ -27,11 +33,11 @@ exports[`CourseSearchPage Should match snapshot correctly 1`] = `
         />
       </Analytics>
     </Hidden>
-  </Styled(Component)>
-  <Styled(Component)
+  </TitleStack>
+  <StickyStack
     alignItems="flex-start"
   >
-    <Styled(Component)
+    <Stack
       direction="row"
       spacing={2}
       width="100%"
@@ -53,11 +59,11 @@ exports[`CourseSearchPage Should match snapshot correctly 1`] = `
           />
         </Analytics>
       </Hidden>
-    </Styled(Component)>
+    </Stack>
     <TagList />
-  </Styled(Component)>
+  </StickyStack>
   <NoTagListLayout />
-  <Styled(Component)
+  <Stack
     direction="row"
     spacing={3}
   >
@@ -65,6 +71,6 @@ exports[`CourseSearchPage Should match snapshot correctly 1`] = `
     <FilterSection
       open={false}
     />
-  </Styled(Component)>
-</Styled(div)>
+  </Stack>
+</Container>
 `;

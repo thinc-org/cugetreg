@@ -8,7 +8,12 @@ const Transition = forwardRef((props: SlideProps, ref: ForwardedRef<unknown>) =>
   return <Slide direction="up" ref={ref} {...props} />
 })
 
-export const ResponsiveDialog = ({ sx, ...props }: DialogProps) => {
+export interface ResposiveDialogProps extends DialogProps {
+  shouldExpand?: boolean
+}
+
+export const ResponsiveDialog = (props: ResposiveDialogProps) => {
+  const { sx, shouldExpand = true, ...rest } = props
   const theme = useTheme()
   const match = useMediaQuery(theme.breakpoints.down('sm'))
 
@@ -23,14 +28,17 @@ export const ResponsiveDialog = ({ sx, ...props }: DialogProps) => {
           },
           '&& .MuiDialog-paperScrollBody': {
             verticalAlign: ['bottom', 'middle'],
-            m: [2, 4],
-            width: (theme) => [`calc(100% - ${theme.spacing(4)})`, `calc(100% - ${theme.spacing(8)})`],
-            maxWidth: (theme) => [`calc(100% - ${theme.spacing(4)})`, theme.breakpoints.values.sm],
+            ...(shouldExpand && {
+              mx: [2, 4],
+              width: (theme) => [`calc(100% - ${theme.spacing(4)})`, `calc(100% - ${theme.spacing(8)})`],
+              maxWidth: (theme) => [`calc(100% - ${theme.spacing(4)})`, theme.breakpoints.values.sm],
+            }),
+            mt: 8,
           },
         },
         sx
       )}
-      {...props}
+      {...rest}
     />
   )
 }

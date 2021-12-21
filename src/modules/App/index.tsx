@@ -12,12 +12,12 @@ import '@/common/i18n'
 import { TrackPageChange } from '@/common/tracker/components/TrackPageChange'
 import { createEmotionCache } from '@/configs/createEmotionCache'
 import { mobxConfiguration } from '@/configs/mobx'
+import { CustomToaster } from '@/modules/App/components/CustomToaster'
 import { AppProvider } from '@/modules/App/context'
 import { ShoppingCartModal } from '@/modules/CourseSearch/components/ShoppingCartModal'
 import { ErrorBoundary } from '@/modules/ErrorBoundary'
 
 import SEO from '../../../next-seo.config'
-import { CourseSnackbar } from './components/CourseSnackbar'
 import { useApp } from './hooks/useApp'
 
 mobxConfiguration()
@@ -33,25 +33,21 @@ export function App(props: MyAppProps) {
   useSaveStudyProgram()
 
   return (
-    <>
-      <DefaultSeo {...SEO} />
-      <AppProvider forceDark={forceDark} emotionCache={emotionCache}>
-        <TrackPageChange>
-          <LoadingProgress />
-          <CssBaseline />
-          <TopBar />
-          <Container>
-            <ErrorBoundary>
-              <Component {...pageProps} />
-            </ErrorBoundary>
-          </Container>
-          <Footer />
-          {/* TODO: refactor the snackbar */}
-          <CourseSnackbar />
-          {/* END OF TODO */}
-          <ShoppingCartModal />
-        </TrackPageChange>
-      </AppProvider>
-    </>
+    <AppProvider forceDark={forceDark} emotionCache={emotionCache}>
+      <TrackPageChange>
+        <DefaultSeo {...SEO} />
+        <LoadingProgress />
+        <CssBaseline />
+        <TopBar />
+        <Container>
+          <ErrorBoundary>
+            <Component {...pageProps} />
+          </ErrorBoundary>
+        </Container>
+        <Footer />
+        <ShoppingCartModal />
+        <CustomToaster />
+      </TrackPageChange>
+    </AppProvider>
   )
 }

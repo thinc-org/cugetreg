@@ -1,8 +1,11 @@
 import { css, Theme } from '@emotion/react'
 import styled from '@emotion/styled'
-import { Button, NativeSelect } from '@mui/material'
-import { motion } from 'framer-motion'
+import { Button, ButtonProps, NativeSelect } from '@mui/material'
+import { m } from 'framer-motion'
 
+import { forwardRef } from 'react'
+
+import { deepAssign } from '@/common/utils/deepAssign'
 import { PaletteRange } from '@/configs/theme/palette'
 
 function primaryRange(lum: PaletteRange) {
@@ -20,7 +23,7 @@ export const CardLayout = styled.div`
   }
 `
 
-export const CardContent = styled(motion.div)`
+export const CardContent = styled(m.div)`
   position: relative;
   display: flex;
   z-index: 1;
@@ -30,7 +33,7 @@ export const CardContent = styled(motion.div)`
   border-radius: 4px;
   ${({ theme }) => theme.breakpoints.down('md')} {
     width: calc(100% - 40px);
-    left: 0;
+    left: 40px;
   }
 `
 
@@ -166,16 +169,6 @@ export const GridSpacer = styled.div`
   }
 `
 
-export const StyledLink = styled.a`
-  color: ${({ theme }) => theme.palette.primary.main};
-  text-decoration: underline;
-  text-decoration-color: transparent;
-  transition: 0.2s ease-in-out;
-  :hover {
-    text-decoration-color: ${({ theme }) => theme.palette.primary.main};
-  }
-`
-
 export const StyledNativeSelect = styled(NativeSelect)`
   &&& select {
     height: 24px;
@@ -200,3 +193,24 @@ export const StyledNativeSelect = styled(NativeSelect)`
     display: none;
   }
 `
+
+export const ColorPickerButton = forwardRef<HTMLButtonElement, ButtonProps>(function ColorPickerButton(
+  { sx, ...props },
+  ref
+) {
+  return (
+    <Button
+      ref={ref}
+      sx={deepAssign(
+        {
+          whiteSpace: 'nowrap',
+          height: { xs: 48, md: 'fit-content' },
+          minWidth: { xs: 48, md: 'fit-content' },
+          backgroundColor: { md: 'primaryRange.10' },
+        },
+        sx
+      )}
+      {...props}
+    />
+  )
+})

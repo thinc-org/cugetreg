@@ -10,7 +10,17 @@ import {
 
 export type PaletteRange = 10 | 30 | 50 | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900
 
-export type HighlightColor = 'pink' | 'red' | 'orange' | 'green' | 'blue' | 'purple' | 'yellow' | 'deepGray'
+export type HighlightColor =
+  | 'pink'
+  | 'red'
+  | 'orange'
+  | 'green'
+  | 'teal'
+  | 'blue'
+  | 'purple'
+  | 'yellow'
+  | 'indigo'
+  | 'deepGray'
 
 export type PaletteRangeOptions = Record<PaletteRange, string>
 
@@ -40,7 +50,7 @@ declare module '@emotion/react' {
 export const highlight: Highlight = {
   pink: {
     300: '#FDD8EE',
-    500: '#F339A8',
+    500: '#F57FC6',
     700: '#C7117F',
   },
   red: {
@@ -49,23 +59,33 @@ export const highlight: Highlight = {
     700: '#B10C0C',
   },
   orange: {
-    300: '#FEE5CD',
+    300: '#FFE2BF',
     500: '#FEA339',
     700: '#D67F19',
   },
   green: {
     300: '#D1FEB6',
-    500: '#85E14D',
+    500: '#6CD62B',
     700: '#4B991C',
+  },
+  teal: {
+    300: '#D9FFF6',
+    500: '#2BD6AD',
+    700: '#349A82',
   },
   blue: {
     300: '#DAEFFE',
     500: '#35A1EF',
     700: '#0C5A93',
   },
+  indigo: {
+    300: '#DCD7FF',
+    500: '#8170F1',
+    700: '#211090',
+  },
   purple: {
     300: '#F3D6FD',
-    500: '#BF35EF',
+    500: '#C865EA',
     700: '#681A83',
   },
   yellow: {

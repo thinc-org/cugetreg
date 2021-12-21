@@ -46,18 +46,20 @@ export const dayChipConfig: DayChipConfigProps = {
 export enum OtherEnum {
   open = 'open',
   close = 'close',
+  reviewPending = 'reviewPending',
+  reviewRejected = 'reviewRejected',
   chula = 'chula',
   other = 'other',
-  noConflict = 'noConflict',
 }
-export type OtherChipKey = OtherEnum
+export type OtherChipKey = keyof typeof OtherEnum
 export type OtherChipConfigProps = Record<OtherChipKey, ChipConfigProps>
 export const otherChipConfig: OtherChipConfigProps = {
   open: createDefaultChipConfig('เปิด'),
   close: createDefaultChipConfig('ปิด'),
+  reviewPending: { label: 'รอการอนุมัติ', color: 'yellowFilled' },
+  reviewRejected: { label: 'ไม่ได้รับการอนุมัติ', color: 'redFilled' },
   chula: createDefaultChipConfig('เกี่ยวกับจุฬาฯ'),
   other: createDefaultChipConfig('อื่น ๆ'),
-  noConflict: createDefaultChipConfig('เวลาไม่ชนกับวิชาที่เลือก'),
   // Add more Chips here; don't forget to add key into `OtherChipKey` too
 }
 

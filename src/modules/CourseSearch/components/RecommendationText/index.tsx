@@ -1,4 +1,4 @@
-import { useLazyQuery, useQuery } from '@apollo/client'
+import { useLazyQuery } from '@apollo/client'
 import styled from '@emotion/styled'
 import { Link, Typography } from '@mui/material'
 import useGoogleOptimize from '@react-hook/google-optimize'
@@ -13,6 +13,7 @@ import { RecommendationParam, RecommendationResponse, RECOMMENDATION_QUERY } fro
 import { useTheme } from '@emotion/react'
 import { useCourseSearchProvider } from '@/modules/CourseSearch/context/CourseSearch/hooks/useCourseSearchProvider'
 import { SearchCourseVars } from '@/services/apollo/query/searchCourse'
+import { useSearchCourseQueryParams } from '@/modules/CourseSearch/hooks/useSearchCourseQueryParams'
 
 const RecommendationItem = styled(Link)`
   color: ${({theme}) => theme.palette.highlight.indigo[700]};
@@ -31,6 +32,7 @@ const RecommendationText: React.FC<{variant: string}> = observer((props: { varia
     },
   }))
   const {courseSearchQuery} = useCourseSearchProvider()
+  const {setFilter} = useSearchCourseQueryParams()
   const [lastSearchQuery, setLastSearchQuery] = useState<SearchCourseVars | undefined>(undefined)
   const [fetchRecommendation, { data }] = useLazyQuery<RecommendationResponse, RecommendationParam>(RECOMMENDATION_QUERY)
 
@@ -61,7 +63,6 @@ const RecommendationText: React.FC<{variant: string}> = observer((props: { varia
       },
     })
     setLastSearchQuery(courseSearchQuery.variables)
-    console.log("HH")
   }, [courseSearchQuery, selectedCourses])
 
   if (!visibleRecommendation)
@@ -80,8 +81,7 @@ const RecommendationText: React.FC<{variant: string}> = observer((props: { varia
           >
             <RecommendationItem
               id={`RecommendationLink/${variant}/${course.key.semesterKey.studyProgram}/courses/${course.key.courseNo}`}
-              target="_blank"
-              href={`/${course.key.semesterKey.studyProgram}/courses/${course.key.courseNo}`}
+              onClick={() => setFilter({keyword: course.key.courseNo})}
             >
               {course.key.courseNo} {course.courseNameEn}
             </RecommendationItem>

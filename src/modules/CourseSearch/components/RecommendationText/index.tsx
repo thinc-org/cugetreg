@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import { Link, Typography } from '@mui/material'
 import useGoogleOptimize from '@react-hook/google-optimize'
 import { observer } from 'mobx-react'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 import { Analytics } from '@/common/context/Analytics/components/Analytics'
 import { useCourseGroup } from '@/common/hooks/useCourseGroup'
@@ -23,7 +23,7 @@ const RecommendationItem = styled(Link)`
 const RecommendationText: React.FC<{variant: string}> = observer((props: { variant: string })  => {
   const variant = props.variant
   const courseGroup = useCourseGroup()
-  const selectedCourses =courseCartStore.shopItems.map((item) => ({
+  const selectedCourses = courseCartStore.shopItems.map((item) => ({
     courseNo: item.courseNo,
     semesterKey: {
       semester: item.semester,
@@ -36,7 +36,7 @@ const RecommendationText: React.FC<{variant: string}> = observer((props: { varia
   const [lastSearchQuery, setLastSearchQuery] = useState<SearchCourseVars | undefined>(undefined)
   const [fetchRecommendation, { data }] = useLazyQuery<RecommendationResponse, RecommendationParam>(RECOMMENDATION_QUERY)
 
-  const visibleRecommendation = data?.recommend?.courses?.slice(0, 6) ?? []
+  const visibleRecommendation = useMemo(() => data?.recommend?.courses?.slice(0, 6) ?? [], [data])
 
   useEffect(() => {
     const visibleRecommendation = data && data.recommend.courses.length > 0 ? data.recommend.courses.slice(0, 6) : null
@@ -63,7 +63,7 @@ const RecommendationText: React.FC<{variant: string}> = observer((props: { varia
       },
     })
     setLastSearchQuery(courseSearchQuery.variables)
-  }, [courseSearchQuery, selectedCourses])
+  }, [courseSearchQuery.variables, selectedCourses])
 
   if (!visibleRecommendation)
     return null
@@ -73,20 +73,23 @@ const RecommendationText: React.FC<{variant: string}> = observer((props: { varia
   return (
       <Typography marginBottom="1em" color={theme.palette.highlight.indigo[500]} variant="subtitle1">
         คุณอาจสนใจวิชาเหล่านี้:
-        {visibleRecommendation.map((course) => (
-          <Analytics
+        {visibleRecommendation.map((course) => {
+          const {semesterKey, courseNo} = course.key
+          const {studyProgram, academicYear, semester} = semesterKey
+
+          return <Analytics
             key={course.key.courseNo}
             elementName="RecommendationLink"
-            elementId={`RecommendationLink/${variant}/${course.key.semesterKey.studyProgram}/${course.key.semesterKey.academicYear}/${course.key.semesterKey.semester}/courses/${course.key.courseNo}`}
+            elementId={`RecommendationLink/${variant}/${studyProgram}/${academicYear}/${semester}/courses/${courseNo}`}
           >
             <RecommendationItem
-              id={`RecommendationLink/${variant}/${course.key.semesterKey.studyProgram}/courses/${course.key.courseNo}`}
-              onClick={() => setFilter({keyword: course.key.courseNo})}
+              id={`RecommendationLink/${variant}/${studyProgram}/courses/${courseNo}`}
+              onClick={() => setFilter({keyword: courseNo})}
             >
-              {course.key.courseNo} {course.courseNameEn}
+              {courseNo} {course.courseNameEn}
             </RecommendationItem>
           </Analytics>
-        ))}
+          })}
       </Typography>
   )
 })

@@ -36,7 +36,7 @@ const RecommendationText: React.FC<{variant: string}> = observer((props: { varia
   const [lastSearchQuery, setLastSearchQuery] = useState<SearchCourseVars | undefined>(undefined)
   const [fetchRecommendation, { data }] = useLazyQuery<RecommendationResponse, RecommendationParam>(RECOMMENDATION_QUERY)
 
-  const visibleRecommendation = data && data.recommend.courses.length > 0 ? data.recommend.courses.slice(0, 6) : null
+  const visibleRecommendation = data?.recommend?.courses?.slice(0, 6) ?? []
 
   useEffect(() => {
     const visibleRecommendation = data && data.recommend.courses.length > 0 ? data.recommend.courses.slice(0, 6) : null

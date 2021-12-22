@@ -1,4 +1,4 @@
-import { useQuery } from '@apollo/client'
+import { useLazyQuery, useQuery } from '@apollo/client'
 import styled from '@emotion/styled'
 import { Link, Typography } from '@mui/material'
 import useGoogleOptimize from '@react-hook/google-optimize'
@@ -12,6 +12,7 @@ import { courseCartStore } from '@/store'
 import { RecommendationParam, RecommendationResponse, RECOMMENDATION_QUERY } from '@/services/apollo/query/recommendation'
 import { useTheme } from '@emotion/react'
 import { useCourseSearchProvider } from '@/modules/CourseSearch/context/CourseSearch/hooks/useCourseSearchProvider'
+import { SearchCourseVars } from '@/services/apollo/query/searchCourse'
 
 const RecommendationItem = styled(Link)`
   color: ${({theme}) => theme.palette.highlight.indigo[700]};
@@ -29,17 +30,9 @@ const RecommendationText: React.FC<{variant: string}> = observer((props: { varia
       academicYear: item.academicYear,
     },
   }))
-  const courseSearch = useCourseSearchProvider()
-  const [freezedSelectedCourse, setFreezedSelectedCourse] = useState(selectedCourses)
-  const { data } = useQuery<RecommendationResponse, RecommendationParam>(RECOMMENDATION_QUERY, {
-    variables: {
-      req: {
-        variant,
-        semesterKey: courseGroup,
-        selectedCourses: freezedSelectedCourse,
-      },
-    },
-  })
+  const {courseSearchQuery} = useCourseSearchProvider()
+  const [lastSearchQuery, setLastSearchQuery] = useState<SearchCourseVars | undefined>(undefined)
+  const [fetchRecommendation, { data }] = useLazyQuery<RecommendationResponse, RecommendationParam>(RECOMMENDATION_QUERY)
 
   const visibleRecommendation = data && data.recommend.courses.length > 0 ? data.recommend.courses.slice(0, 6) : null
 
@@ -56,8 +49,20 @@ const RecommendationText: React.FC<{variant: string}> = observer((props: { varia
   }, [data, variant])
 
   useEffect(() => {
-    setFreezedSelectedCourse(selectedCourses)
-  }, [courseSearch.courseSearchQuery])
+    if (JSON.stringify(courseSearchQuery.variables) === JSON.stringify(lastSearchQuery)) 
+      return
+    fetchRecommendation({
+      variables: {
+        req: {
+          variant,
+          semesterKey: courseGroup,
+          selectedCourses: selectedCourses,
+        },
+      },
+    })
+    setLastSearchQuery(courseSearchQuery.variables)
+    console.log("HH")
+  }, [courseSearchQuery, selectedCourses])
 
   if (!visibleRecommendation)
     return null
@@ -87,7 +92,7 @@ const RecommendationText: React.FC<{variant: string}> = observer((props: { varia
 })
 
 export function ExperimentalRecommendationText() {
-  const recommendationVariant = useGoogleOptimize('KZLly-4DQ1CHxWOlVwOJ4g', ['NONE', 'RANDOM', 'COSINE']) || 'NONE'
+  const recommendationVariant = useGoogleOptimize('KZLly-4DQ1CHxWOlVwOJ4g', ['NONE', 'RANDOM', 'COSINE']) || 'RANDOM'
   if (recommendationVariant !== 'NONE')
     return <RecommendationText variant={recommendationVariant} /> 
   else

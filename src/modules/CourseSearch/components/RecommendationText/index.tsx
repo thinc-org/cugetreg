@@ -92,7 +92,7 @@ const RecommendationText: React.FC<{variant: string}> = observer((props: { varia
 })
 
 export function ExperimentalRecommendationText() {
-  const recommendationVariant = useGoogleOptimize('KZLly-4DQ1CHxWOlVwOJ4g', ['NONE', 'RANDOM', 'COSINE']) || 'RANDOM'
+  const recommendationVariant = useGoogleOptimize('KZLly-4DQ1CHxWOlVwOJ4g', ['NONE', 'RANDOM', 'COSINE']) || 'NONE'
   if (recommendationVariant !== 'NONE')
     return <RecommendationText variant={recommendationVariant} /> 
   else

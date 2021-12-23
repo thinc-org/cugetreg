@@ -63,6 +63,7 @@ exports[`CourseSearchPage Should match snapshot correctly 1`] = `
     <TagList />
   </StickyStack>
   <NoTagListLayout />
+  <ForwardRef(LoadableComponent) />
   <Stack
     direction="row"
     spacing={3}

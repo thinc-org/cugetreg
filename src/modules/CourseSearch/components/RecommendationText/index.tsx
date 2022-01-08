@@ -20,22 +20,23 @@ import { SearchCourseVars } from '@/services/apollo/query/searchCourse'
 import { collectLogEvent } from '@/services/logging'
 import { courseCartStore } from '@/store'
 
+import { SelectedCourse } from './types'
+
 const RecommendationItem = styled(Link)`
   color: ${({ theme }) => theme.palette.highlight.indigo[700]};
   margin-left: 1em;
 `
 
-const RecommendationText: React.FC<{ variant: string }> = observer((props: { variant: string }) => {
+interface RecommendationTextProps {
+  variant: string
+  selectedCourses: SelectedCourse[]
+}
+
+const RecommendationText: React.FC<RecommendationTextProps> = (props: RecommendationTextProps) => {
   const variant = props.variant
+  const selectedCourses = props.selectedCourses
   const courseGroup = useCourseGroup()
-  const selectedCourses = courseCartStore.shopItems.map((item) => ({
-    courseNo: item.courseNo,
-    semesterKey: {
-      semester: item.semester,
-      studyProgram: item.studyProgram,
-      academicYear: item.academicYear,
-    },
-  }))
+
   const { courseSearchQuery } = useCourseSearchProvider()
   const { setFilter } = useSearchCourseQueryParams()
   const [lastSearchQuery, setLastSearchQuery] = useState<SearchCourseVars | undefined>(undefined)
@@ -44,6 +45,7 @@ const RecommendationText: React.FC<{ variant: string }> = observer((props: { var
   )
 
   const visibleRecommendation = useMemo(() => data?.recommend?.courses?.slice(0, 6) ?? [], [data])
+  const theme = useTheme()
 
   useEffect(() => {
     const visibleRecommendation = data && data.recommend.courses.length > 0 ? data.recommend.courses.slice(0, 6) : null
@@ -71,9 +73,7 @@ const RecommendationText: React.FC<{ variant: string }> = observer((props: { var
     setLastSearchQuery(courseSearchQuery.variables)
   }, [courseSearchQuery.variables, selectedCourses, courseGroup, fetchRecommendation, lastSearchQuery, variant])
 
-  if (!visibleRecommendation) return null
-
-  const theme = useTheme()
+  if (!visibleRecommendation || visibleRecommendation.length === 0) return null
 
   return (
     <Typography marginBottom="1em" color={theme.palette.highlight.indigo[500]} variant="subtitle1">
@@ -99,10 +99,20 @@ const RecommendationText: React.FC<{ variant: string }> = observer((props: { var
       })}
     </Typography>
   )
-})
-
-export function ExperimentalRecommendationText() {
-  const recommendationVariant = useGoogleOptimize('KZLly-4DQ1CHxWOlVwOJ4g', ['NONE', 'RANDOM', 'COSINE']) || 'NONE'
-  if (recommendationVariant !== 'NONE') return <RecommendationText variant={recommendationVariant} />
-  else return <></>
 }
+
+export const ExperimentalRecommendationText = observer(() => {
+  const recommendationVariant = useGoogleOptimize('KZLly-4DQ1CHxWOlVwOJ4g', ['NONE', 'RANDOM', 'COSINE']) || 'NONE'
+  const selectedCourses = courseCartStore.shopItems.map((item) => ({
+    courseNo: item.courseNo,
+    semesterKey: {
+      semester: item.semester,
+      studyProgram: item.studyProgram,
+      academicYear: item.academicYear,
+    },
+  }))
+
+  if (!selectedCourses || selectedCourses.length === 0 || recommendationVariant === 'NONE') return null
+
+  return <RecommendationText variant={recommendationVariant} selectedCourses={selectedCourses} />
+})

@@ -71,7 +71,7 @@ const RecommendationText: React.FC<{ variant: string }> = observer((props: { var
     setLastSearchQuery(courseSearchQuery.variables)
   }, [courseSearchQuery.variables, selectedCourses, courseGroup, fetchRecommendation, lastSearchQuery, variant])
 
-  if (!visibleRecommendation) return null
+  if (!visibleRecommendation || visibleRecommendation.length === 0) return null
 
   const theme = useTheme()
 

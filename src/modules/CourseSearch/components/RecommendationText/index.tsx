@@ -112,9 +112,7 @@ export const ExperimentalRecommendationText = observer(() => {
     },
   }))
 
-  if (!selectedCourses || selectedCourses.length === 0) return null
+  if (!selectedCourses || selectedCourses.length === 0 || recommendationVariant === 'NONE') return null
 
-  if (recommendationVariant !== 'NONE')
-    return <RecommendationText variant={recommendationVariant} selectedCourses={selectedCourses} />
-  else return <></>
+  return <RecommendationText variant={recommendationVariant} selectedCourses={selectedCourses} />
 })

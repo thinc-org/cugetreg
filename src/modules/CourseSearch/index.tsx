@@ -8,6 +8,7 @@ import {
   useTheme,
   useMediaQuery,
 } from '@mui/material'
+import dynamic from 'next/dynamic'
 
 import { Analytics } from '@/common/context/Analytics/components/Analytics'
 import { FILTER_BUTTON, SELECTED_COURSES_BUTTON, OPEN_SHOPPING_CART_BUTTON } from '@/common/context/Analytics/constants'
@@ -23,6 +24,11 @@ import { NoTagListLayout, TagList } from '@/modules/CourseSearch/components/TagL
 import { CourseSearchProvider } from './context/CourseSearch'
 import { useCourseSearchPage } from './hooks/useCourseSearchPage'
 import { Container, Stack, TitleStack, StickyStack } from './styled'
+
+const ExperimentalRecommendationText = dynamic<{}>(
+  () => import('@/modules/CourseSearch/components/RecommendationText').then((m) => m.ExperimentalRecommendationText),
+  { ssr: false }
+)
 
 export function CourseSearchPage() {
   const { openFilterBar, toggleFilterBar, onOpen, handleCloseFilterBar } = useCourseSearchPage()
@@ -70,6 +76,7 @@ export function CourseSearchPage() {
         <TagList />
       </StickyStack>
       <NoTagListLayout />
+      <ExperimentalRecommendationText />
       <Stack spacing={3} direction="row">
         <CourseList />
         <FilterSection open={openFilterBar} handleClose={handleCloseFilterBar} />

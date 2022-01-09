@@ -1,9 +1,15 @@
 const noteTransform = (commit, context) => {
   let discard = true
   const issues = []
+  const url = context.repository ? `${context.host}/${context.owner}/${context.repository}` : context.repoUrl
+  const issueUrl = `${url}/issues/`
 
   // For debugging
   // console.log('commit', commit)
+
+  if (commit.mergeId) {
+    commit.subject = `${commit.subject} (#${commit.mergeId})`
+  }
 
   commit.notes.forEach((note) => {
     note.title = 'BREAKING CHANGES'
@@ -43,29 +49,22 @@ const noteTransform = (commit, context) => {
   }
 
   if (typeof commit.subject === 'string') {
-    let url = context.repository
-      ? `${context.host}/${context.owner}/${context.repository}`
-      : context.repoUrl
     if (url) {
-      url = `${url}/issues/`
       // Issue URLs.
       commit.subject = commit.subject.replace(/#([0-9]+)/g, (_, issue) => {
         issues.push(issue)
-        return `[#${issue}](${url}${issue})`
+        return `[#${issue}](${issueUrl}${issue})`
       })
     }
     if (context.host) {
       // User URLs.
-      commit.subject = commit.subject.replace(
-        /\B@([a-z0-9](?:-?[a-z0-9/]){0,38})/g,
-        (_, username) => {
-          if (username.includes('/')) {
-            return `@${username}`
-          }
-
-          return `[@${username}](${context.host}/${username})`
+      commit.subject = commit.subject.replace(/\B@([a-z0-9](?:-?[a-z0-9/]){0,38})/g, (_, username) => {
+        if (username.includes('/')) {
+          return `@${username}`
         }
-      )
+
+        return `[@${username}](${context.host}/${username})`
+      })
     }
   }
 

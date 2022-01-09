@@ -79,7 +79,7 @@ const noteTransform = (commit, context) => {
 // Release Configuration For [semantic-release](https://github.com/semantic-release/semantic-release/blob/master/docs/usage/configuration.md#configuration)
 
 module.exports = {
-  branches: [{ name: 'main' }],
+  branches: [{ name: 'master' }],
   plugins: [
     '@semantic-release/commit-analyzer',
     [

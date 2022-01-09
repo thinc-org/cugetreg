@@ -1,3 +1,11 @@
+## [1.5.2](https://github.com/thinc-org/cugetreg-frontend/compare/v1.5.1...v1.5.2) (2022-01-09)
+
+
+### Bug Fixes
+
+* race condition and recommendation appear when no course selected bugs ([ba9229e](https://github.com/thinc-org/cugetreg-frontend/commit/ba9229e4f0946f81b966f794efd714c64f9b8c6e))
+* recommendation text show when there are no recommendation ([24203d6](https://github.com/thinc-org/cugetreg-frontend/commit/24203d6f4ac94f0fde0aa50b57196bceb29ce561))
+
 ## [1.5.1](https://github.com/thinc-org/cugetreg-frontend/compare/v1.5.0...v1.5.1) (2021-12-20)
 
 

@@ -19,6 +19,7 @@ export function TermDropdown() {
 
   return (
     <ConfigBarSelect value={`${academicYear}/${semester}`} onChange={handleChange}>
+      <option value="2564/3">2564/ฤดูร้อน</option>
       <option value="2564/2">2564/2</option>
       <option value="2564/1">2564/1</option>
     </ConfigBarSelect>

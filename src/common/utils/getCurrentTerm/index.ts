@@ -1,11 +1,8 @@
+import { termOptions } from '@/common/constants/terms'
 import { Term } from '@/common/types/term'
 
-export function getCurrentTerm() {
+export function getCurrentTerm(): Term {
   // TODO: dynamic year and semester
   // Must sync with SearchCourse's SSR
-  const currentTerm: Term = {
-    academicYear: '2564',
-    semester: '3',
-  }
-  return currentTerm
+  return termOptions[0]
 }

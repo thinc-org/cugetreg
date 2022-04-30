@@ -10,6 +10,7 @@ import {
 } from '@mui/material'
 import dynamic from 'next/dynamic'
 
+import { termOptions } from '@/common/constants/terms'
 import { Analytics } from '@/common/context/Analytics/components/Analytics'
 import { FILTER_BUTTON, SELECTED_COURSES_BUTTON, OPEN_SHOPPING_CART_BUTTON } from '@/common/context/Analytics/constants'
 import { useCourseGroup } from '@/common/hooks/useCourseGroup'
@@ -50,8 +51,11 @@ export function CourseSearchPage() {
           <Typography variant="h2">ค้นหาวิชาเรียน</Typography>
           {isSmUp && (
             <Select defaultValue={`${academicYear}/${semester}`} onChange={handleChange}>
-              <MenuItem value="2564/2">2564/2</MenuItem>
-              <MenuItem value="2564/1">2564/1</MenuItem>
+              {termOptions.map(({ academicYear, semester, label }) => (
+                <MenuItem key={`${academicYear}/${semester}`} value={`${academicYear}/${semester}`}>
+                  {label}
+                </MenuItem>
+              ))}
             </Select>
           )}
         </MuiStack>

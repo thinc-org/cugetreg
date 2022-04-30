@@ -101,8 +101,7 @@ const RecommendationText: React.FC<RecommendationTextProps> = (props: Recommenda
   )
 }
 
-export const ExperimentalRecommendationText = observer(() => {
-  const recommendationVariant = useGoogleOptimize('KZLly-4DQ1CHxWOlVwOJ4g', ['NONE', 'RANDOM', 'COSINE']) || 'NONE'
+export const WrappedRecommendationText = observer(() => {
   const selectedCourses = courseCartStore.shopItems.map((item) => ({
     courseNo: item.courseNo,
     semesterKey: {
@@ -112,7 +111,7 @@ export const ExperimentalRecommendationText = observer(() => {
     },
   }))
 
-  if (!selectedCourses || selectedCourses.length === 0 || recommendationVariant === 'NONE') return null
+  if (!selectedCourses || selectedCourses.length === 0) return null
 
-  return <RecommendationText variant={recommendationVariant} selectedCourses={selectedCourses} />
+  return <RecommendationText variant="COSINE" selectedCourses={selectedCourses} />
 })

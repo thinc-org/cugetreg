@@ -56,6 +56,7 @@ const baseTypographyVariantOptions: Record<TypographyVariant, TypographyStyleOpt
     fontFamily: 'ChulaCharasNew',
     fontSize: 16,
     fontWeight: 400,
+    fontFeatureSettings: '"liga" on',
   },
   body2: {
     letterSpacing: 0.25,
@@ -63,6 +64,7 @@ const baseTypographyVariantOptions: Record<TypographyVariant, TypographyStyleOpt
     fontFamily: 'ChulaCharasNew',
     fontSize: 14,
     fontWeight: 400,
+    fontFeatureSettings: '"liga" on',
   },
   button: {
     letterSpacing: 1.25,

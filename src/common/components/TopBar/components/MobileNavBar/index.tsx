@@ -2,11 +2,11 @@ import { Drawer } from '@mui/material'
 import { default as MaterialLink } from '@mui/material/Link'
 import { observer } from 'mobx-react'
 import { useRouter } from 'next/router'
+
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { MdMenu } from 'react-icons/md'
 
-import logo from '@/assets/images/cgrLogoDark.svg'
 import { Analytics } from '@/common/context/Analytics/components/Analytics'
 import { LinkWithAnalytics } from '@/common/context/Analytics/components/LinkWithAnalytics'
 import {
@@ -43,7 +43,7 @@ export const MobileNavBar = observer(() => {
       </MoreButton>
       <Drawer anchor="right" open={isOpen} onClose={onClose}>
         <DrawerContent>
-          <Logo src={logo} alt={t('translation:appName')} />
+          <Logo src="/assets/images/cgrLogoDark.svg" alt={t('translation:appName')} />
           <div>
             <LinkWithAnalytics href={buildLink(`/courses`)} passHref elementName={NAVBAR_SEARCH_COURSE}>
               <NavBarItem onClick={onClose}>{t('navBar:searchCourses')}</NavBarItem>

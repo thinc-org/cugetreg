@@ -1,5 +1,6 @@
 import styled from '@emotion/styled'
 import { IconButton } from '@mui/material'
+import Image from 'next/image'
 
 export const MoreButton = styled(IconButton)`
   margin-left: 12px;
@@ -14,7 +15,7 @@ export const DrawerContent = styled.div`
   padding: 48px 28px;
 `
 
-export const Logo = styled.img`
+export const Logo = styled(Image)`
   width: 123px;
   height: 40px;
   margin-left: 8px;

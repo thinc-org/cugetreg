@@ -4,6 +4,7 @@ import { Container } from '@mui/material'
 import { DefaultSeo } from 'next-seo'
 import type { AppProps } from 'next/app'
 
+import { AnnouncementBar } from '@/common/components/AnnouncementBar'
 import { Footer } from '@/common/components/Footer'
 import { LoadingProgress } from '@/common/components/LoadingProgress'
 import { TopBar } from '@/common/components/TopBar'
@@ -33,13 +34,14 @@ export function App({ Component, pageProps, forceDark, router, emotionCache = cl
   useSaveStudyProgram()
 
   return (
-    <AppProvider forceDark={forceDark} emotionCache={emotionCache}>
+    <AppProvider forceDark={forceDark} emotionCache={emotionCache} pageProps={pageProps}>
       <TrackPageChange>
         <DefaultSeo {...SEO} />
         <LoadingProgress />
         <CssBaseline />
         <TopBar />
-        <Container>
+        <AnnouncementBar />
+        <Container sx={{ display: 'flex', flexGrow: 1, my: 2 }}>
           <ErrorBoundary>
             <Component {...pageProps} />
           </ErrorBoundary>

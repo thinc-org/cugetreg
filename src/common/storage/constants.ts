@@ -1,5 +1,5 @@
 export enum StorageKey {
-  SeenAnnoucements = 'seenAnnoucements',
+  SeenAnnouncements = 'seenAnnouncements',
   ShoppingCart = 'SHOPPING_CART_KEY',
   DeviceId = 'DEVICE_ID',
   StudyProgram = 'studyProgram',

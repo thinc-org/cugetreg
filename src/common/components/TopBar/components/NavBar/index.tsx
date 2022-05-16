@@ -1,12 +1,14 @@
 import { Hidden } from '@mui/material'
+import Image from 'next/image'
+
 import { useTranslation } from 'react-i18next'
 
-import logo from '@/assets/images/cgrLogoDark.svg'
 import { Analytics } from '@/common/context/Analytics/components/Analytics'
 import { LinkWithAnalytics } from '@/common/context/Analytics/components/LinkWithAnalytics'
 import {
   GETREG_LOGO,
   NAVBAR_ABOUT,
+  NAVBAR_ANNOUNCEMENT,
   NAVBAR_SEARCH_COURSE,
   NAVBAR_TIMETABLE,
   STUDY_PROGRAM_DROPDOWN,
@@ -39,6 +41,11 @@ export function NavBar() {
       label: t('navBar:timetable'),
     },
     {
+      href: buildLink(`/announcement`, {}, false),
+      elementName: NAVBAR_ANNOUNCEMENT,
+      label: t('navBar:announcement'),
+    },
+    {
       href: buildLink(`/about`, {}, false),
       elementName: NAVBAR_ABOUT,
       label: t('navBar:about'),
@@ -50,7 +57,7 @@ export function NavBar() {
       <FlexContainer>
         <LinkWithAnalytics href={buildLink(`/courses`)} passHref elementName={GETREG_LOGO}>
           <Logo>
-            <img src={logo} alt={t('translation:appName')} />
+            <img src="/assets/images/cgrLogoDark.svg" alt={t('translation:appName')} />
           </Logo>
         </LinkWithAnalytics>
 

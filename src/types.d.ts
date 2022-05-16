@@ -1,4 +1,12 @@
+export {}
+
 type ValueOf<T> = T[keyof T]
+
+declare global {
+  interface Window {
+    __APOLLO_STATE__: any
+  }
+}
 
 declare module '*.svg' {
   const content: string

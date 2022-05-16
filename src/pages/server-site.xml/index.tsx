@@ -4,14 +4,14 @@ import { getServerSideSitemap, ISitemapField } from 'next-sitemap'
 
 import { getCurrentTerm } from '@/common/utils/getCurrentTerm'
 import { SITE_URL } from '@/env'
-import { createApolloServerClient } from '@/services/apollo'
+import { initializeApollo } from '@/services/apollo'
 import { GetAllCoursesResponse, GET_ALL_COURSES } from '@/services/apollo/query/getAllCourses'
 
 // TODO: dynamic this varaibles
 const MAX_COURSES = 1000000
 
 async function getAllCoursesFromStudyProgram(studyProgram: StudyProgram): Promise<ISitemapField[]> {
-  const client = createApolloServerClient()
+  const client = initializeApollo()
   const { data } = await client.query<GetAllCoursesResponse>({
     query: GET_ALL_COURSES,
     variables: {

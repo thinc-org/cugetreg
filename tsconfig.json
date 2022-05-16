@@ -2,7 +2,10 @@
   "compilerOptions": {
     "baseUrl": "./src",
     "target": "ES2019",
-    "lib": ["dom", "esnext"],
+    "lib": [
+      "dom",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -18,11 +21,22 @@
     "experimentalDecorators": true,
     "useDefineForClassFields": true,
     "paths": {
-      "@/*": ["./*"]
+      "@/*": [
+        "./*"
+      ]
     },
-    "incremental": true,
-    "typeRoots": ["./node_modules/@types", "./src/global.d.ts"]
+    "typeRoots": [
+      "./node_modules/@types",
+      "./src/global.d.ts"
+    ],
+    "incremental": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules"]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

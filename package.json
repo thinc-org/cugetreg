@@ -145,5 +145,8 @@
       "yarn prettier --write",
       "yarn eslint --fix"
     ]
+  },
+  "resolutions": {
+    "@types/react": "17.0.40"
   }
 }

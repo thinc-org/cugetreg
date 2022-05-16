@@ -21,7 +21,7 @@
       "@/*": ["./*"]
     },
     "incremental": true,
-    "typeRoots": ["./node_modules/@types", "./src/types.d.ts"]
+    "typeRoots": ["./node_modules/@types", "./src/global.d.ts"]
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]

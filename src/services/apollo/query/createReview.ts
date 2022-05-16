@@ -2,7 +2,7 @@ import { gql } from '@apollo/client'
 import { Semester, StudyProgram } from '@thinc-org/chula-courses'
 
 import { Review } from '@/common/types/reviews'
-import { REVIEW_DATA_FIELDS } from '@/services/apollo/query/reviewDataField'
+import { REVIEW_DATA_FIELDS } from '@/services/apollo/template/reviewDataField'
 
 export interface CreateReviewVars {
   createReviewInput: {

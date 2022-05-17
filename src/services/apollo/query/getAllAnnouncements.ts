@@ -13,12 +13,22 @@ export interface GetAllAnnouncementsVars {
 
 export interface GetAllAnnouncementsResponse {
   announcements: Announcement[]
+  announcementsConnection: {
+    aggregate: {
+      totalCount: number
+    }
+  }
 }
 
 export const GET_ALL_ANNOUNCEMENTS = gql`
   query announcement($limit: Int!, $start: Int!) {
     announcements(limit: $limit, start: $start) {
       ${ANNOUNCEMENT_DATA_FIELDS}
+    }
+    announcementsConnection {
+      aggregate {
+        totalCount
+      }
     }
   }
 `

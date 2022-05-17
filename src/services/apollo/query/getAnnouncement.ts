@@ -15,7 +15,7 @@ export interface GetAnnouncementResponse {
 
 export const GET_ANNOUNCEMENT = gql`
   query announcement($title: String, $pin: Boolean) {
-    announcements(where: { title: $title, pin: $pin }) {
+    announcements(where: { title: $title, pin: $pin }, sort: "created_at:desc") {
       ${ANNOUNCEMENT_DATA_FIELDS}
     }
   }

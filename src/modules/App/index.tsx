@@ -41,7 +41,7 @@ export function App({ Component, pageProps, forceDark, router, emotionCache = cl
         <CssBaseline />
         <TopBar />
         <AnnouncementBar />
-        <Container sx={{ display: 'flex', flexGrow: 1, my: 2 }}>
+        <Container sx={{ display: 'flex', flexGrow: 1, my: 2, '& > *': { flexGrow: 1 } }}>
           <ErrorBoundary>
             <Component {...pageProps} />
           </ErrorBoundary>

@@ -8,7 +8,7 @@ import { LinkWithAnalytics } from '@/common/context/Analytics/components/LinkWit
 import {
   GETREG_LOGO,
   NAVBAR_ABOUT,
-  NAVBAR_ANNOUNCEMENT,
+  NAVBAR_ANNOUNCEMENTS,
   NAVBAR_SEARCH_COURSE,
   NAVBAR_TIMETABLE,
   STUDY_PROGRAM_DROPDOWN,
@@ -41,9 +41,9 @@ export function NavBar() {
       label: t('navBar:timetable'),
     },
     {
-      href: buildLink(`/announcement`, {}, false),
-      elementName: NAVBAR_ANNOUNCEMENT,
-      label: t('navBar:announcement'),
+      href: buildLink(`/announcements`, {}, false),
+      elementName: NAVBAR_ANNOUNCEMENTS,
+      label: t('navBar:announcements'),
     },
     {
       href: buildLink(`/about`, {}, false),

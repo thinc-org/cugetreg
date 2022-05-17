@@ -1,6 +1,7 @@
 import { Drawer } from '@mui/material'
 import { default as MaterialLink } from '@mui/material/Link'
 import { observer } from 'mobx-react'
+import Image from 'next/image'
 import { useRouter } from 'next/router'
 
 import { useEffect } from 'react'
@@ -14,6 +15,7 @@ import {
   NAVBAR_SEARCH_COURSE,
   NAVBAR_TIMETABLE,
   NAVBAR_ABOUT,
+  NAVBAR_ANNOUNCEMENTS,
 } from '@/common/context/Analytics/constants'
 import { useDisclosure } from '@/common/hooks/useDisclosure'
 import { useLinkBuilder } from '@/common/hooks/useLinkBuilder'
@@ -43,7 +45,14 @@ export const MobileNavBar = observer(() => {
       </MoreButton>
       <Drawer anchor="right" open={isOpen} onClose={onClose}>
         <DrawerContent>
-          <Logo src="/assets/images/cgrLogoDark.svg" alt={t('translation:appName')} />
+          <Logo>
+            <Image
+              src="/assets/images/cgrLogoDark.svg"
+              layout="fill"
+              objectFit="contain"
+              alt={t('translation:appName')}
+            />
+          </Logo>
           <div>
             <LinkWithAnalytics href={buildLink(`/courses`)} passHref elementName={NAVBAR_SEARCH_COURSE}>
               <NavBarItem onClick={onClose}>{t('navBar:searchCourses')}</NavBarItem>
@@ -52,6 +61,15 @@ export const MobileNavBar = observer(() => {
           <div>
             <LinkWithAnalytics href={buildLink(`/schedule`)} passHref elementName={NAVBAR_TIMETABLE}>
               <NavBarItem onClick={onClose}>{t('navBar:timetable')}</NavBarItem>
+            </LinkWithAnalytics>
+          </div>
+          <div>
+            <LinkWithAnalytics
+              href={buildLink(`/announcements`, {}, false)}
+              passHref
+              elementName={NAVBAR_ANNOUNCEMENTS}
+            >
+              <NavBarItem onClick={onClose}>{t('navBar:announcements')}</NavBarItem>
             </LinkWithAnalytics>
           </div>
           <div>

@@ -12,9 +12,20 @@ import { Announcement, AnnouncementComponentType } from '@/services/apollo/types
 import { MediaContent } from './components/MediaContent'
 import { ParagraphContent } from './components/ParagraphContent'
 
-interface AnnouncementPageProps extends Announcement {}
+interface AnnouncementPageProps {
+  announcement?: Announcement
+}
 
-export const AnnouncementPage: React.FC<AnnouncementPageProps> = ({ title, created_at, contents }) => {
+export const AnnouncementPage: React.FC<AnnouncementPageProps> = ({ announcement }) => {
+  if (!announcement) {
+    return (
+      <Stack alignItems="center" justifyContent="center" flexGrow={1}>
+        <Typography variant="h5">ไม่พบประกาศ</Typography>
+      </Stack>
+    )
+  }
+
+  const { title, created_at, contents } = announcement
   const createdAt = formatRelative(new Date(created_at), new Date())
 
   return (
@@ -59,7 +70,7 @@ export const getServerSideProps: GetServerSideProps<AnnouncementPageProps> = asy
   // store into the apollo cache
   return addApolloState(apolloClient, {
     props: {
-      ...data.announcements?.[0],
+      announcement: data.announcements?.[0] ?? null,
     },
   })
 }

@@ -26,8 +26,6 @@ export const AnnounceCard = memo(({ title, created_at, contents }: AnnounceCardP
     return mediaContent?.media
   }, [contents])
 
-  console.log(firstMedia)
-
   return (
     <Link href={`/announcements/${encodeURIComponent(title)}`} passHref>
       <Card p={[2, 3]} boxShadow={2} borderRadius={1} gap={2}>

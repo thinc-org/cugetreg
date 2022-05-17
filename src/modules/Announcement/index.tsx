@@ -4,7 +4,7 @@ import { formatRelative } from 'date-fns'
 import { GetServerSideProps } from 'next'
 import { IGetPlaiceholderReturn } from 'plaiceholder'
 
-import { Fragment } from 'react'
+import { Fragment, useMemo } from 'react'
 
 import { PageMeta } from '@/components/PageMeta'
 import { CMS_URL, SITE_URL } from '@/env'
@@ -28,7 +28,18 @@ interface AnnouncementPageProps {
   blurMedias: BlurMediaMap
 }
 
+const capitalize = (sentence: string) => {
+  const [firstWord, ...rest] = sentence.split(' ')
+  const capitalizedFirstWord = `${firstWord.charAt(0).toUpperCase()}${firstWord.slice(1)}`
+  return `${capitalizedFirstWord} ${rest.join(' ')}`
+}
+
 export const AnnouncementPage: React.FC<AnnouncementPageProps> = ({ announcement, blurMedias }) => {
+  const createdAt = useMemo(() => {
+    if (!announcement?.created_at) return null
+    return capitalize(formatRelative(new Date(announcement.created_at), new Date()))
+  }, [announcement?.created_at])
+
   if (!announcement) {
     return (
       <Stack alignItems="center" justifyContent="center" flexGrow={1}>
@@ -37,8 +48,7 @@ export const AnnouncementPage: React.FC<AnnouncementPageProps> = ({ announcement
     )
   }
 
-  const { title, created_at, contents } = announcement
-  const createdAt = formatRelative(new Date(created_at), new Date())
+  const { title, contents } = announcement
 
   return (
     <Stack sx={{ maxWidth: '720px' }} flexGrow={1} mt={4} mb={12} mx="auto">

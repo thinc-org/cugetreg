@@ -26,4 +26,7 @@ module.exports = withPlugins([[withBundleAnalyzer], [withOptimizedImages]], {
     domains: ['cms.cugetreg.com'],
     formats: ['image/avif', 'image/webp'],
   },
+  experimental: {
+    outputStandalone: true,
+  },
 })

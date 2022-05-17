@@ -65,7 +65,7 @@
     "mobx": "^6.1.7",
     "mobx-react": "^7.1.0",
     "mobx-utils": "^6.0.3",
-    "next": "^12.0.1",
+    "next": "^12.1.6",
     "next-compose-plugins": "^2.2.1",
     "next-mdx-remote": "^4.0.3",
     "next-optimized-images": "^2.6.2",

@@ -1,12 +1,13 @@
 import { Divider, Stack, Typography } from '@mui/material'
+import axios from 'axios'
 import { formatRelative } from 'date-fns'
 import { GetServerSideProps } from 'next'
-import { getPlaiceholder, IGetPlaiceholderReturn } from 'plaiceholder'
+import { IGetPlaiceholderReturn } from 'plaiceholder'
 
 import { Fragment } from 'react'
 
 import { PageMeta } from '@/components/PageMeta'
-import { CMS_URL } from '@/env'
+import { CMS_URL, SITE_URL } from '@/env'
 import { initializeApollo, addApolloState } from '@/services/apollo'
 import { GetAnnouncementResponse, GET_ANNOUNCEMENT, GetAnnouncementVars } from '@/services/apollo/query/getAnnouncement'
 import { Announcement, AnnouncementComponentType } from '@/services/apollo/types/announcement'
@@ -15,15 +16,16 @@ import { MediaContent } from './components/MediaContent'
 import { ParagraphContent } from './components/ParagraphContent'
 
 interface BlurMedia {
-  [contentId: string]: {
-    base64: string
-    img: IGetPlaiceholderReturn['img']
-  }
+  base64: string
+  img: IGetPlaiceholderReturn['img']
+}
+interface BlurMediaMap {
+  [contentId: string]: BlurMedia
 }
 
 interface AnnouncementPageProps {
   announcement?: Announcement
-  blurMedias: BlurMedia
+  blurMedias: BlurMediaMap
 }
 
 export const AnnouncementPage: React.FC<AnnouncementPageProps> = ({ announcement, blurMedias }) => {
@@ -86,7 +88,10 @@ export const getServerSideProps: GetServerSideProps<AnnouncementPageProps> = asy
   const plaiceholders = await Promise.all(
     announcement.contents.map(async (content) => {
       if (content.__typename === AnnouncementComponentType.Media) {
-        const { base64, img } = await getPlaiceholder(`${CMS_URL}${content.media.url}`)
+        const { data } = await axios.post<BlurMedia>(`${SITE_URL}/api/plaiceholder`, {
+          url: `${CMS_URL}${content.media.url}`,
+        })
+        const { base64, img } = data
         return { contentId: content.id, base64, img }
       }
       return undefined
@@ -96,7 +101,7 @@ export const getServerSideProps: GetServerSideProps<AnnouncementPageProps> = asy
   const blurMedias = plaiceholders.reduce((prev, curr) => {
     if (curr) prev[curr.contentId] = curr
     return prev
-  }, {} as BlurMedia)
+  }, {} as BlurMediaMap)
 
   // store into the apollo cache
   return addApolloState(apolloClient, {

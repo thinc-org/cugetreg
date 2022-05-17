@@ -1,3 +1,4 @@
+import { gql } from '@apollo/client'
 import { StudyProgram, StudyProgramEnum } from '@thinc-org/chula-courses'
 import { GetServerSideProps } from 'next'
 import { getServerSideSitemap, ISitemapField } from 'next-sitemap'
@@ -37,12 +38,37 @@ async function getAllCoursesFromStudyProgram(studyProgram: StudyProgram): Promis
   )
 }
 
+async function getAllAnnouncements(): Promise<ISitemapField[]> {
+  const client = initializeApollo()
+  const { data } = await client.query<{ announcements: { title: string; updated_at: string }[] }>({
+    query: gql`
+      query announcement {
+        announcements {
+          title
+          updated_at
+        }
+      }
+    `,
+  })
+  return data.announcements.map(
+    ({ title, updated_at }): ISitemapField => ({
+      loc: `${SITE_URL}/announcements/${title}`,
+      changefreq: 'monthly',
+      priority: 0.7,
+      lastmod: new Date(updated_at).toISOString(),
+    })
+  )
+}
+
 export const getServerSideProps: GetServerSideProps = async (context) => {
   try {
-    const field1 = await getAllCoursesFromStudyProgram(StudyProgramEnum.Semester)
-    const field2 = await getAllCoursesFromStudyProgram(StudyProgramEnum.Trisemter)
-    const field3 = await getAllCoursesFromStudyProgram(StudyProgramEnum.International)
-    const fields = [...field1, ...field2, ...field3]
+    const [field1, field2, field3, field4] = await Promise.all([
+      await getAllCoursesFromStudyProgram(StudyProgramEnum.Semester),
+      await getAllCoursesFromStudyProgram(StudyProgramEnum.Trisemter),
+      await getAllCoursesFromStudyProgram(StudyProgramEnum.International),
+      await getAllAnnouncements(),
+    ])
+    const fields = [...field1, ...field2, ...field3, ...field4]
 
     return getServerSideSitemap(context, fields)
   } catch (err) {

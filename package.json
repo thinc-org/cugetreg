@@ -12,7 +12,10 @@
     "export": "yarn build && yarn next export",
     "ci": "yarn && yarn export",
     "size": "size-limit",
-    "postbuild": "next-sitemap"
+    "postbuild": "next-sitemap",
+    "analyze": "cross-env ANALYZE=true next build",
+    "analyze:server": "cross-env BUNDLE_ANALYZE=server next build",
+    "analyze:browser": "cross-env BUNDLE_ANALYZE=browser next build"
   },
   "dependencies": {
     "@apollo/client": "^3.4.x",
@@ -25,7 +28,6 @@
     "@mui/icons-material": "^5.1.0",
     "@mui/lab": "^5.0.0-alpha.54",
     "@mui/material": "5.1.0",
-    "@next/bundle-analyzer": "^12.0.7",
     "@react-hook/google-optimize": "^1.2.1",
     "@thinc-org/chula-courses": "^2.3.0",
     "@types/gapi": "^0.0.39",
@@ -95,6 +97,7 @@
     "@babel/core": "^7.12.10",
     "@babel/plugin-proposal-decorators": "^7.12.13",
     "@lhci/cli": "0.8.x",
+    "@next/bundle-analyzer": "^12.1.6",
     "@semantic-release/changelog": "^6.0.0",
     "@semantic-release/commit-analyzer": "^9.0.1",
     "@semantic-release/git": "^10.0.0",
@@ -122,6 +125,7 @@
     "babel-jest": "^26.6.3",
     "babel-loader": "^8.2.2",
     "babel-plugin-transform-remove-console": "^6.9.4",
+    "cross-env": "^7.0.3",
     "enzyme": "^3.11.0",
     "enzyme-to-json": "^3.6.2",
     "eslint": "^7.17.0",

@@ -3,6 +3,7 @@ import { CssBaseline } from '@mui/material'
 import { Container } from '@mui/material'
 import { DefaultSeo } from 'next-seo'
 import type { AppProps } from 'next/app'
+import Script from 'next/script'
 
 import { AnnouncementBar } from '@/common/components/AnnouncementBar'
 import { Footer } from '@/common/components/Footer'
@@ -13,6 +14,7 @@ import '@/common/i18n'
 import { TrackPageChange } from '@/common/tracker/components/TrackPageChange'
 import { createEmotionCache } from '@/configs/createEmotionCache'
 import { mobxConfiguration } from '@/configs/mobx'
+import { GOOGLE_TAG_MANAGER_CONTAINER_ID } from '@/env'
 import { CustomToaster } from '@/modules/App/components/CustomToaster'
 import { AppProvider } from '@/modules/App/context'
 import { ShoppingCartModal } from '@/modules/CourseSearch/components/ShoppingCartModal'
@@ -50,6 +52,27 @@ export function App({ Component, pageProps, forceDark, router, emotionCache = cl
         <ShoppingCartModal />
         <CustomToaster />
       </TrackPageChange>
+      <Script
+        strategy="afterInteractive"
+        id="your-id"
+        dangerouslySetInnerHTML={{
+          __html: `
+    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer', '${GOOGLE_TAG_MANAGER_CONTAINER_ID}');
+  `,
+        }}
+      />
+      <noscript>
+        <iframe
+          src={`https://www.googletagmanager.com/ns.html?id=${GOOGLE_TAG_MANAGER_CONTAINER_ID}"`}
+          height="0"
+          width="0"
+          style={{ display: 'none', visibility: 'hidden' }}
+        />
+      </noscript>
     </AppProvider>
   )
 }

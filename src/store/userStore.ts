@@ -1,7 +1,7 @@
 import { action, makeAutoObservable, when } from 'mobx'
 
-import { ENVIRONMENT } from '@/env'
-import { apiUrl, httpClient } from '@/services/httpClient'
+import { BACKEND_URI, ENVIRONMENT } from '@/env'
+import { httpClient } from '@/services/httpClient'
 import { courseCartStore } from '@/store'
 
 class UserStore {
@@ -19,9 +19,9 @@ class UserStore {
       returnUrl: window.location.href,
     })
     if (ENVIRONMENT === "local") {
-      urlParams.set('backendUrl', apiUrl ?? '')
+      urlParams.set('backendUrl', BACKEND_URI ?? '')
     }
-    window.location.href = `${apiUrl}/auth/google?${urlParams.toString()}`
+    window.location.href = `${BACKEND_URI}/auth/google?${urlParams.toString()}`
   }
 
   logout = () => {

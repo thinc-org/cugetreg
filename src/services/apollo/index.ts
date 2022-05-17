@@ -14,8 +14,7 @@ import { isEqual } from 'lodash-es'
 
 import { useMemo } from 'react'
 
-import { CMS_URL, ENVIRONMENT } from '@/env'
-import { apiUrl } from '@/services/httpClient'
+import { BACKEND_URI, CMS_URL, ENVIRONMENT } from '@/env'
 import { userStore } from '@/store/userStore'
 import { uniqBy } from '@/utils/uniqBy'
 
@@ -51,7 +50,7 @@ const fieldPolicy: Record<string, FieldPolicy | FieldReadFunction> = {
 }
 
 const backendLink = new BatchHttpLink({
-  uri: `${apiUrl}/graphql`,
+  uri: `${BACKEND_URI}/graphql`,
 })
 
 const cmsLink = new BatchHttpLink({

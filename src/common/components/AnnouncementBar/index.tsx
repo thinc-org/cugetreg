@@ -59,7 +59,7 @@ export const AnnouncementBar: React.FC = () => {
       <Alert
         severity="info"
         action={
-          <Link passHref href={`/announcement/${encodeURIComponent(data.title)}`}>
+          <Link passHref href={`/announcements/${encodeURIComponent(data.title)}`}>
             <Button color="inherit" size="small" onClick={handleClick}>
               View
             </Button>

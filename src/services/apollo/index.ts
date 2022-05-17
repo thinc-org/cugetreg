@@ -3,8 +3,7 @@ import { BatchHttpLink } from '@apollo/client/link/batch-http'
 import { setContext } from '@apollo/client/link/context'
 import { Course } from '@thinc-org/chula-courses'
 
-import { ENVIRONMENT } from '@/env'
-import { apiUrl } from '@/services/httpClient'
+import { BACKEND_URI, ENVIRONMENT } from '@/env'
 import { userStore } from '@/store/userStore'
 import { uniqBy } from '@/utils/uniqBy'
 
@@ -43,7 +42,7 @@ const cache = new InMemoryCache({
 
 const createHttpLink = () =>
   new BatchHttpLink({
-    uri: `${apiUrl}/graphql`,
+    uri: `${BACKEND_URI}/graphql`,
   })
 
 const authLink = setContext(async (_, { headers }) => {

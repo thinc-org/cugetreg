@@ -1,10 +1,12 @@
 import { Divider, Stack, Typography } from '@mui/material'
 import { formatRelative } from 'date-fns'
 import { GetServerSideProps } from 'next'
+import { getPlaiceholder, IGetPlaiceholderReturn } from 'plaiceholder'
 
 import { Fragment } from 'react'
 
 import { PageMeta } from '@/components/PageMeta'
+import { CMS_URL } from '@/env'
 import { initializeApollo, addApolloState } from '@/services/apollo'
 import { GetAnnouncementResponse, GET_ANNOUNCEMENT, GetAnnouncementVars } from '@/services/apollo/query/getAnnouncement'
 import { Announcement, AnnouncementComponentType } from '@/services/apollo/types/announcement'
@@ -12,11 +14,19 @@ import { Announcement, AnnouncementComponentType } from '@/services/apollo/types
 import { MediaContent } from './components/MediaContent'
 import { ParagraphContent } from './components/ParagraphContent'
 
-interface AnnouncementPageProps {
-  announcement?: Announcement
+interface BlurMedia {
+  [contentId: string]: {
+    base64: string
+    img: IGetPlaiceholderReturn['img']
+  }
 }
 
-export const AnnouncementPage: React.FC<AnnouncementPageProps> = ({ announcement }) => {
+interface AnnouncementPageProps {
+  announcement?: Announcement
+  blurMedias: BlurMedia
+}
+
+export const AnnouncementPage: React.FC<AnnouncementPageProps> = ({ announcement, blurMedias }) => {
   if (!announcement) {
     return (
       <Stack alignItems="center" justifyContent="center" flexGrow={1}>
@@ -34,7 +44,7 @@ export const AnnouncementPage: React.FC<AnnouncementPageProps> = ({ announcement
       <Stack gap={2} flexGrow={1}>
         <Typography variant="h2">{title}</Typography>
         <Divider />
-        <Stack direction="column" gap={2} alignItems="flex-end" flexGrow={1}>
+        <Stack direction="column" gap={2} alignItems="flex-end">
           <Typography variant="caption" color="primaryRange.100">
             {createdAt}
           </Typography>
@@ -42,7 +52,7 @@ export const AnnouncementPage: React.FC<AnnouncementPageProps> = ({ announcement
         {contents.map((content) => (
           <Fragment key={content.id}>
             {content.__typename === AnnouncementComponentType.Media ? (
-              <MediaContent {...content} />
+              <MediaContent {...content} base64={blurMedias[content.id].base64} img={blurMedias[content.id].img} />
             ) : (
               <ParagraphContent {...content} />
             )}
@@ -67,10 +77,32 @@ export const getServerSideProps: GetServerSideProps<AnnouncementPageProps> = asy
     },
   })
 
+  const announcement = data.announcements?.[0] ?? null
+
+  if (!announcement) {
+    return { props: {} }
+  }
+
+  const plaiceholders = await Promise.all(
+    announcement.contents.map(async (content) => {
+      if (content.__typename === AnnouncementComponentType.Media) {
+        const { base64, img } = await getPlaiceholder(`${CMS_URL}${content.media.url}`)
+        return { contentId: content.id, base64, img }
+      }
+      return undefined
+    })
+  )
+
+  const blurMedias = plaiceholders.reduce((prev, curr) => {
+    if (curr) prev[curr.contentId] = curr
+    return prev
+  }, {} as BlurMedia)
+
   // store into the apollo cache
   return addApolloState(apolloClient, {
     props: {
       announcement: data.announcements?.[0] ?? null,
+      blurMedias,
     },
   })
 }

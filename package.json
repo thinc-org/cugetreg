@@ -72,6 +72,7 @@
     "next-seo": "^4.28.1",
     "next-sitemap": "^1.6.179",
     "nprogress": "^0.2.0",
+    "plaiceholder": "^2.3.0",
     "react": "17.0.1",
     "react-beautiful-dnd": "^13.1.0",
     "react-dom": "17.0.1",
@@ -149,5 +150,8 @@
   },
   "resolutions": {
     "@types/react": "17.0.40"
+  },
+  "browser": {
+    "child_process": false
   }
 }

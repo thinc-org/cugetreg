@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`CourseSearchPage Should match snapshot correctly 1`] = `
-<Container>
+<ForwardRef(Container)>
   <PageMeta
     title="ค้นหาวิชาเรียน"
   />
@@ -17,6 +17,7 @@ exports[`CourseSearchPage Should match snapshot correctly 1`] = `
       spacing={2}
     >
       <ForwardRef(Typography)
+        mt={2}
         variant="h2"
       >
         ค้นหาวิชาเรียน
@@ -73,5 +74,5 @@ exports[`CourseSearchPage Should match snapshot correctly 1`] = `
       open={false}
     />
   </Stack>
-</Container>
+</ForwardRef(Container)>
 `;

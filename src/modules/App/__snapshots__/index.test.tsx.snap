@@ -29,6 +29,11 @@ exports[`App module Should app component render preperly when forceDark=false 1`
     }
   }
   forceDark={false}
+  pageProps={
+    Object {
+      "test": "test",
+    }
+  }
 >
   <TrackPageChange>
     <DefaultSeo
@@ -69,7 +74,19 @@ exports[`App module Should app component render preperly when forceDark=false 1`
     <LoadingProgress />
     <CssBaseline />
     <TopBar />
-    <ForwardRef(Container)>
+    <AnnouncementBar />
+    <ForwardRef(Container)
+      sx={
+        Object {
+          "& > *": Object {
+            "flexGrow": 1,
+          },
+          "display": "flex",
+          "flexGrow": 1,
+          "my": 2,
+        }
+      }
+    >
       <ErrorBoundary>
         <mockComponent
           test="test"
@@ -112,6 +129,11 @@ exports[`App module Should app component render preperly when forceDark=false 2`
     }
   }
   forceDark={false}
+  pageProps={
+    Object {
+      "test": "test",
+    }
+  }
 >
   <TrackPageChange>
     <DefaultSeo
@@ -152,7 +174,19 @@ exports[`App module Should app component render preperly when forceDark=false 2`
     <LoadingProgress />
     <CssBaseline />
     <TopBar />
-    <ForwardRef(Container)>
+    <AnnouncementBar />
+    <ForwardRef(Container)
+      sx={
+        Object {
+          "& > *": Object {
+            "flexGrow": 1,
+          },
+          "display": "flex",
+          "flexGrow": 1,
+          "my": 2,
+        }
+      }
+    >
       <ErrorBoundary>
         <mockComponent
           test="test"
@@ -195,6 +229,11 @@ exports[`App module Should app component render preperly when forceDark=false 3`
     }
   }
   forceDark={false}
+  pageProps={
+    Object {
+      "test": "test",
+    }
+  }
 >
   <TrackPageChange>
     <DefaultSeo
@@ -235,7 +274,19 @@ exports[`App module Should app component render preperly when forceDark=false 3`
     <LoadingProgress />
     <CssBaseline />
     <TopBar />
-    <ForwardRef(Container)>
+    <AnnouncementBar />
+    <ForwardRef(Container)
+      sx={
+        Object {
+          "& > *": Object {
+            "flexGrow": 1,
+          },
+          "display": "flex",
+          "flexGrow": 1,
+          "my": 2,
+        }
+      }
+    >
       <ErrorBoundary>
         <mockComponent
           test="test"
@@ -278,6 +329,11 @@ exports[`App module Should app component render preperly when forceDark=true 1`]
     }
   }
   forceDark={true}
+  pageProps={
+    Object {
+      "test": "test",
+    }
+  }
 >
   <TrackPageChange>
     <DefaultSeo
@@ -318,7 +374,19 @@ exports[`App module Should app component render preperly when forceDark=true 1`]
     <LoadingProgress />
     <CssBaseline />
     <TopBar />
-    <ForwardRef(Container)>
+    <AnnouncementBar />
+    <ForwardRef(Container)
+      sx={
+        Object {
+          "& > *": Object {
+            "flexGrow": 1,
+          },
+          "display": "flex",
+          "flexGrow": 1,
+          "my": 2,
+        }
+      }
+    >
       <ErrorBoundary>
         <mockComponent
           test="test"
@@ -361,6 +429,11 @@ exports[`App module Should app component render preperly when forceDark=true 2`]
     }
   }
   forceDark={true}
+  pageProps={
+    Object {
+      "test": "test",
+    }
+  }
 >
   <TrackPageChange>
     <DefaultSeo
@@ -401,7 +474,19 @@ exports[`App module Should app component render preperly when forceDark=true 2`]
     <LoadingProgress />
     <CssBaseline />
     <TopBar />
-    <ForwardRef(Container)>
+    <AnnouncementBar />
+    <ForwardRef(Container)
+      sx={
+        Object {
+          "& > *": Object {
+            "flexGrow": 1,
+          },
+          "display": "flex",
+          "flexGrow": 1,
+          "my": 2,
+        }
+      }
+    >
       <ErrorBoundary>
         <mockComponent
           test="test"
@@ -444,6 +529,11 @@ exports[`App module Should app component render preperly when forceDark=true 3`]
     }
   }
   forceDark={true}
+  pageProps={
+    Object {
+      "test": "test",
+    }
+  }
 >
   <TrackPageChange>
     <DefaultSeo
@@ -484,7 +574,19 @@ exports[`App module Should app component render preperly when forceDark=true 3`]
     <LoadingProgress />
     <CssBaseline />
     <TopBar />
-    <ForwardRef(Container)>
+    <AnnouncementBar />
+    <ForwardRef(Container)
+      sx={
+        Object {
+          "& > *": Object {
+            "flexGrow": 1,
+          },
+          "display": "flex",
+          "flexGrow": 1,
+          "my": 2,
+        }
+      }
+    >
       <ErrorBoundary>
         <mockComponent
           test="test"

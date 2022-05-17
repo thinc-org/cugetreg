@@ -5,12 +5,13 @@ describe('App module', () => {
   const mockUseApp = jest.fn()
   const mockPageProps = { test: 'test' }
   const mockComponent = () => <div></div>
-  const mockClient = jest.fn()
   const mockUseSaveStudyProgram = jest.fn()
 
   jest.doMock('./hooks/useApp', () => ({ useApp: mockUseApp }))
   jest.doMock('@/common/hooks/useCourseGroup', () => ({ useSaveStudyProgram: mockUseSaveStudyProgram }))
-  jest.doMock('@/services/apollo', () => ({ client: mockClient }))
+  jest.doMock('@/services/apollo', () => ({
+    initializeApollo: jest.fn(),
+  }))
 
   const DEFAULT_ENV = process.env
 

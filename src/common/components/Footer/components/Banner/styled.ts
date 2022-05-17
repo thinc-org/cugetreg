@@ -14,13 +14,14 @@ export const ResponsiveStack = styled.div`
 export const BannerContainer = styled(Stack)`
   height: 100%;
   max-width: 100%;
+  box-sizing: border-box;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   background: ${({ theme }) => theme.palette.primary.main};
   color: ${({ theme }) => theme.palette.primary.contrastText};
-  padding: ${({ theme }) => theme.spacing(3)};
+  padding: ${({ theme }) => theme.spacing(5)};
 `
 
 export const PrivacyLink = styled.a`

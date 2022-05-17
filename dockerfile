@@ -1,33 +1,54 @@
-FROM node:14-buster-slim AS base
-WORKDIR /build
-
-# Prepare for installing dependencies
-# Utilise Docker cache to save re-installing dependencies if unchanged
+# Install dependencies only when needed
+FROM node:14-buster-slim AS deps
+WORKDIR /app
 COPY package.json yarn.lock ./
 RUN yarn --frozen-lockfile
 
-FROM base as build
-# Copy the rest files
+# If using npm with a `package-lock.json` comment out above and use below instead
+# COPY package.json package-lock.json ./ 
+# RUN npm ci
+
+# Rebuild the source code only when needed
+FROM node:14-buster-slim AS builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-# Build application
+
+# Next.js collects completely anonymous telemetry data about general usage.
+# Learn more here: https://nextjs.org/telemetry
+# Uncomment the following line in case you want to disable telemetry during the build.
+# ENV NEXT_TELEMETRY_DISABLED 1
+
 RUN yarn build
 
-FROM base as prod-deps
-# Prune unused dependencies
-RUN npm prune --production
+# If using npm comment out above and use below instead
+# RUN npm run build
 
-FROM node:14-buster-slim AS production
-ENV NODE_ENV production
+# Production image, copy all the files and run next
+FROM node:14-buster-slim AS runner
 WORKDIR /app
-# Copy only necessary file for running app
-COPY --from=prod-deps /build/package.json ./package.json
-COPY --from=prod-deps /build/node_modules ./node_modules
-COPY --from=build /build/.next ./.next
-COPY --from=build /build/public ./public
-# Expose listening port
+
+ENV NODE_ENV production
+# Uncomment the following line in case you want to disable telemetry during runtime.
+# ENV NEXT_TELEMETRY_DISABLED 1
+
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+
+# You only need to copy next.config.js if you are NOT using the default configuration
+COPY --from=builder /app/next.config.js ./
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/package.json ./package.json
+
+# Automatically leverage output traces to reduce image size 
+# https://nextjs.org/docs/advanced-features/output-file-tracing
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+USER nextjs
+
 EXPOSE 3000
-# Run container as non-root (unprivileged) user
-# The node user is provided in the Node.js Alpine base image
-USER node
-# Staring script
-CMD yarn start
+
+ENV PORT 3000
+
+CMD ["node", "server.js"]

@@ -3,13 +3,14 @@ import { Course } from '@thinc-org/chula-courses'
 import { observer } from 'mobx-react'
 import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 import { useRouter } from 'next/router'
+
 import { useEffect } from 'react'
 
 import { CourseGroup } from '@/common/hooks/useCourseGroup/types'
 import { useLinkBuilder } from '@/common/hooks/useLinkBuilder'
 import { parseCourseGroup } from '@/common/utils/parseCourseGroup'
 import { Loading } from '@/modules/CourseSearch/components/Loading'
-import { createApolloServerClient } from '@/services/apollo'
+import { initializeApollo } from '@/services/apollo'
 import { GetCourseResponse, GET_COURSE } from '@/services/apollo/query/getCourse'
 import { courseCartStore } from '@/store'
 import { userStore } from '@/store/userStore'
@@ -64,7 +65,7 @@ export async function getServerSideProps(
     }
   }
   try {
-    const client = createApolloServerClient()
+    const client = initializeApollo()
     const q = context.query
     const courseGroup = parseCourseGroup(q)
     const itemsQuery = (q.items as string) ?? ''

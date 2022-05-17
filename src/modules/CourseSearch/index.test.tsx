@@ -19,7 +19,7 @@ describe('CourseSearchPage', () => {
     useCourseSearchPage: useCourseSearchPageSpy,
   }))
   jest.doMock('@/services/apollo', () => ({
-    client: { mutate: jest.fn() },
+    initializeApollo: jest.fn(),
   }))
   jest.doMock('@/common/hooks/useCourseGroup', () => ({
     useCourseGroup: () => ({

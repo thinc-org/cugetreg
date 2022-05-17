@@ -1,5 +1,6 @@
-import { ThemeProvider } from '@mui/system'
+import { ThemeProvider } from '@mui/material'
 import { shallow } from 'enzyme'
+
 import { MdThumbUpOffAlt, MdThumbUp, MdThumbDownOffAlt, MdThumbDown } from 'react-icons/md'
 
 import { ReviewInteractionType } from '@/common/types/reviews'

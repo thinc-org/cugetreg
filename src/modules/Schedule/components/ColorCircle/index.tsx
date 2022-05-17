@@ -1,4 +1,4 @@
-import { styled } from '@mui/system'
+import { styled } from '@mui/material'
 
 import { ScheduleColor } from '@/modules/Schedule/components/ColorPicker/constants'
 import { ColorScheme, useColor } from '@/modules/Schedule/components/ColorPicker/hooks/useColor'

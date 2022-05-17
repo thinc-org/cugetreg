@@ -50,11 +50,11 @@ exports[`ContributionGuide should match snapshot 1`] = `
         variant="body1"
       >
         ผู้เขียนรีวิวจำเป็นต้องเข้าสู่ระบบด้วยอีเมลนิสิตเพื่อยืนยันความเป็นนิสิตก่อนการรีวิว สามารถดูนโยบายรักษาความเป็นส่วนตัวได้ที่ 
-        <Link
+        <ForwardRef
           href="/privacy"
         >
           Privacy Policy
-        </Link>
+        </ForwardRef>
          ทั้งนี้ การรีวิวจะเป็นแบบไม่เปิดเผยตัวตนสู่สาธารณะ
       </ForwardRef(Typography)>
       <ForwardRef(Typography)

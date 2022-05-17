@@ -1,6 +1,6 @@
 import { Delete, Visibility, VisibilityOff } from '@mui/icons-material'
 import { Stack, Button, useMediaQuery } from '@mui/material'
-import { useTheme } from '@mui/system'
+import { useTheme } from '@mui/material'
 
 import { useTranslation } from 'react-i18next'
 

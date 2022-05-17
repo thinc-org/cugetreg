@@ -24,7 +24,12 @@
       "@/*": [
         "./*"
       ]
-    }
+    },
+    "typeRoots": [
+      "./node_modules/@types",
+      "./src/global.d.ts"
+    ],
+    "incremental": true
   },
   "include": [
     "next-env.d.ts",

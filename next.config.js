@@ -10,14 +10,6 @@ module.exports = withPlugins([[withBundleAnalyzer], [withOptimizedImages]], {
   env: {
     IS_PULL_REQUEST: process.env.IS_PULL_REQUEST,
   },
-  webpack: (config, { isServer }) => {
-    if (!isServer) {
-      config.node = {
-        fs: 'empty',
-      }
-    }
-    return config
-  },
   async rewrites() {
     if (process.env.NODE_ENV === 'development') {
       return [
@@ -29,5 +21,12 @@ module.exports = withPlugins([[withBundleAnalyzer], [withOptimizedImages]], {
     } else {
       return []
     }
+  },
+  images: {
+    domains: ['cms.cugetreg.com'],
+    formats: ['image/avif', 'image/webp'],
+  },
+  experimental: {
+    outputStandalone: true,
   },
 })

@@ -2,7 +2,7 @@ import { StudyProgram } from '@thinc-org/chula-courses'
 import gql from 'graphql-tag'
 
 import { Review } from '@/common/types/reviews'
-import { REVIEW_DATA_FIELDS } from '@/services/apollo/query/reviewDataField'
+import { REVIEW_DATA_FIELDS } from '@/services/apollo/template/reviewDataField'
 
 export interface GetMyPendingReviewsVars {
   courseNo: string

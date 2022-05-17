@@ -3,6 +3,7 @@ import { Button, Theme, Typography } from '@mui/material'
 
 export const PageContainer = styled.div`
   padding-top: ${({ theme }) => theme.spacing(4)};
+  flex-grow: 1;
 `
 
 export const Title = styled(Typography)`

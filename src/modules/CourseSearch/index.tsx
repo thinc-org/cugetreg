@@ -7,8 +7,8 @@ import {
   Stack as MuiStack,
   useTheme,
   useMediaQuery,
+  Container,
 } from '@mui/material'
-import dynamic from 'next/dynamic'
 
 import { termOptions } from '@/common/constants/terms'
 import { Analytics } from '@/common/context/Analytics/components/Analytics'
@@ -25,7 +25,7 @@ import { NoTagListLayout, TagList } from '@/modules/CourseSearch/components/TagL
 
 import { CourseSearchProvider } from './context/CourseSearch'
 import { useCourseSearchPage } from './hooks/useCourseSearchPage'
-import { Container, Stack, TitleStack, StickyStack } from './styled'
+import { Stack, TitleStack, StickyStack } from './styled'
 
 export function CourseSearchPage() {
   const { openFilterBar, toggleFilterBar, onOpen, handleCloseFilterBar } = useCourseSearchPage()
@@ -44,7 +44,9 @@ export function CourseSearchPage() {
       <PageMeta title="ค้นหาวิชาเรียน" />
       <TitleStack spacing={2} direction="row" alignItems="center" justifyContent="space-between">
         <MuiStack direction="row" spacing={2} alignItems="center">
-          <Typography variant="h2">ค้นหาวิชาเรียน</Typography>
+          <Typography variant="h2" mt={2}>
+            ค้นหาวิชาเรียน
+          </Typography>
           {isSmUp && (
             <Select defaultValue={`${academicYear}/${semester}`} onChange={handleChange}>
               {termOptions.map(({ academicYear, semester, label }) => (

@@ -2,8 +2,9 @@ import { EmotionCache } from '@emotion/utils'
 import { CssBaseline } from '@mui/material'
 import { Container } from '@mui/material'
 import { DefaultSeo } from 'next-seo'
-import { AppProps } from 'next/dist/next-server/lib/router/router'
+import type { AppProps } from 'next/app'
 
+import { AnnouncementBar } from '@/common/components/AnnouncementBar'
 import { Footer } from '@/common/components/Footer'
 import { LoadingProgress } from '@/common/components/LoadingProgress'
 import { TopBar } from '@/common/components/TopBar'
@@ -25,21 +26,22 @@ mobxConfiguration()
 const clientSideEmotionCache = createEmotionCache()
 interface MyAppProps extends AppProps {
   emotionCache?: EmotionCache
+  forceDark: boolean
 }
 
-export function App(props: MyAppProps) {
-  const { Component, pageProps, forceDark, router, emotionCache = clientSideEmotionCache } = props
+export function App({ Component, pageProps, forceDark, router, emotionCache = clientSideEmotionCache }: MyAppProps) {
   useApp(router)
   useSaveStudyProgram()
 
   return (
-    <AppProvider forceDark={forceDark} emotionCache={emotionCache}>
+    <AppProvider forceDark={forceDark} emotionCache={emotionCache} pageProps={pageProps}>
       <TrackPageChange>
         <DefaultSeo {...SEO} />
         <LoadingProgress />
         <CssBaseline />
         <TopBar />
-        <Container>
+        <AnnouncementBar />
+        <Container sx={{ display: 'flex', flexGrow: 1, my: 2, '& > *': { flexGrow: 1 } }}>
           <ErrorBoundary>
             <Component {...pageProps} />
           </ErrorBoundary>

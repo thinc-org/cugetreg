@@ -1,4 +1,5 @@
 import { Box, Typography, Link, useTheme } from '@mui/material'
+
 import React from 'react'
 
 import { StyledArticleBody } from '@/configs/theme/articletext'
@@ -11,7 +12,7 @@ export default function PrivacyPolicy() {
   const reportProblemLink = `https://airtable.com/shruwAAfn1763TgMU?prefill_Session_ID=${sessionId}`
 
   return (
-    <Box marginTop={4} marginBottom={4}>
+    <Box marginTop={4} marginBottom={4} flexGrow={1}>
       <Box sx={{ p: 4, maxWidth: '720px', margin: 'auto' }}>
         <Typography variant="h1">Privacy Policy</Typography>
         <Typography variant="h4" component="h2" gutterBottom>
@@ -100,8 +101,8 @@ export default function PrivacyPolicy() {
         <StyledArticleBody variant="body1" paragraph>
           We use your search and the associated query and context to provide you with the correct ranking of the search
           results. If you are logged in, we will also use your user ID to store selected courses between multiple
-          devices. Users are also required to login using their student email before writing and interacting with course reviews, to confirm
-          that they are a Chula student.
+          devices. Users are also required to login using their student email before writing and interacting with course
+          reviews, to confirm that they are a Chula student.
         </StyledArticleBody>
         <Typography variant="h6" component="h3" gutterBottom>
           2.2 Functionality Enrichment

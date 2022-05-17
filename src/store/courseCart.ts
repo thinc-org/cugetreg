@@ -9,11 +9,12 @@ import { StorageKey } from '@/common/storage/constants'
 import { CourseKey } from '@/common/utils/types'
 import { ScheduleColor } from '@/modules/Schedule/components/ColorPicker/constants'
 import { getNewColor } from '@/modules/Schedule/components/ColorPicker/utils/getNewColor'
-import { client } from '@/services/apollo'
+import { initializeApollo } from '@/services/apollo'
 import { GetCourseResponse, GetCourseVars, GET_COURSE } from '@/services/apollo/query/getCourse'
 import { GET_COURSE_CART, MODIFY_COURSE_CART } from '@/services/apollo/query/user'
 import { collectLogEvent, collectErrorLog } from '@/services/logging'
 import { userStore } from '@/store/userStore'
+import { ApolloClient, NormalizedCacheObject } from '@apollo/client'
 
 export interface CourseCartItem extends Course {
   selectedSectionNo: string
@@ -41,7 +42,7 @@ interface CourseCartStoreItem {
 
 export interface CourseCartStore {
   syncToStore(items: CourseCartStoreItem[]): Promise<void>
-  syncFromStore(): Promise<CourseCartStoreItem[]>
+  syncFromStore(): Promise<CourseCartStoreItem[] > 
   online: boolean
 }
 
@@ -70,13 +71,18 @@ class LocalStorageCourseCartStore implements CourseCartStore {
 
 class OnlineCourseCartStore implements CourseCartStore {
   online = true
+  private client: ApolloClient<NormalizedCacheObject>
+
+  constructor() {
+    this.client = initializeApollo()
+  }
 
   async syncToStore(items: CourseCartStoreItem[]) {
-    await client.mutate({ mutation: MODIFY_COURSE_CART, variables: { items } })
+    await this.client.mutate({ mutation: MODIFY_COURSE_CART, variables: { items } })
   }
 
   async syncFromStore() {
-    const { data } = await client.query<{ courseCart: CourseCartStoreItem[] }>({
+    const { data } = await this.client.query<{ courseCart: CourseCartStoreItem[] }>({
       query: GET_COURSE_CART,
       fetchPolicy: 'network-only',
     })
@@ -114,11 +120,12 @@ export class CourseCart implements CourseCartProps {
   @observable source: CourseCartStore = new DummyCourseCartStore()
   @observable syncState: CourseCartSyncState = CourseCartSyncState.OFFLINE
   private channel: BroadcastChannel
+  private client: ApolloClient<NormalizedCacheObject>
   constructor() {
     const COURSE_CART_CHANGES_CHANNEL = 'coursecart-change'
     this.channel = new BroadcastChannel(COURSE_CART_CHANGES_CHANNEL)
     this.channel.onmessage = () => this.pullFromStore()
-
+    this.client = initializeApollo()
     makeObservable(this)
   }
 
@@ -145,7 +152,8 @@ export class CourseCart implements CourseCartProps {
       const courses = await this.source.syncFromStore()
       const fullCourses: CourseCartItem[] = await Promise.all(courses.map(async course => {
         try {
-          const { data } = await client.query<GetCourseResponse, GetCourseVars>({
+          
+          const { data } = await this.client.query<GetCourseResponse, GetCourseVars>({
             query: GET_COURSE,
             variables: {
               courseNo: course.courseNo,

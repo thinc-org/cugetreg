@@ -1,6 +1,5 @@
 import { useRouter } from 'next/router'
 
-import { AnnouncementBar } from './components/AnnouncementBar'
 import { ConfigBar } from './components/ConfigBar'
 import { ConfigBarLayout } from './components/ConfigBar/styled'
 import { NavBar } from './components/NavBar'
@@ -22,7 +21,6 @@ export function TopBar() {
           </TopBarLayout>
           <StickySpace />
         </StickyContainer>
-        <AnnouncementBar />
       </>
     )
   }
@@ -33,7 +31,6 @@ export function TopBar() {
         <ConfigBar />
         <NavBar />
       </TopBarLayout>
-      <AnnouncementBar />
     </>
   )
 }

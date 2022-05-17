@@ -11,15 +11,16 @@ import { darkTheme, lightTheme } from '@/configs/theme'
 import { ENABLE_DARK_THEME } from '@/env'
 import { Dialog } from '@/lib/dialog'
 import { ShoppingCartModalContextProvider } from '@/modules/App/context/ShoppingCartModal'
-import { client } from '@/services/apollo'
+import { useApollo } from '@/services/apollo'
 
 interface AppProviderProps {
+  pageProps: any
   children: React.ReactNode
   forceDark: boolean
   emotionCache: EmotionCache
 }
 
-export function AppProvider({ children, forceDark, emotionCache }: AppProviderProps) {
+export function AppProvider({ children, forceDark, emotionCache, pageProps }: AppProviderProps) {
   const prefersDarkMode =
     ENABLE_DARK_THEME &&
     // features.darkTheme is a constant
@@ -29,9 +30,10 @@ export function AppProvider({ children, forceDark, emotionCache }: AppProviderPr
     })
 
   const { addEvent } = useAnalytics()
+  const apolloClient = useApollo(pageProps)
 
   return (
-    <ApolloProvider client={client}>
+    <ApolloProvider client={apolloClient}>
       <CacheProvider value={emotionCache}>
         <AnalyticsProvider value={{ addEvent }}>
           <ThemeProvider theme={prefersDarkMode || forceDark ? darkTheme : lightTheme}>

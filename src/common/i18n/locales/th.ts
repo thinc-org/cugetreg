@@ -16,6 +16,7 @@ export const navBar = {
   about: 'เกี่ยวกับเรา',
   signin: 'เข้าสู่ระบบ',
   signout: 'ออกจากระบบ',
+  announcements: 'ประกาศ',
 }
 
 export const studyProgram = {

@@ -1,4 +1,5 @@
 import { Grid, Typography } from '@mui/material'
+
 import React from 'react'
 
 import { collectErrorLog, sessionId } from '@/services/logging'

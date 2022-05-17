@@ -52,6 +52,7 @@
     "broadcast-channel": "^4.2.0",
     "canvas": "^2.8.0",
     "date-fns": "^2.16.1",
+    "deepmerge": "^4.2.2",
     "escape-html": "^1.0.3",
     "framer-motion": "^4.1.17",
     "graphql": "^15.5.0",
@@ -59,16 +60,19 @@
     "i18next": "^19.8.4",
     "imagemin-svgo": "^8.0.0",
     "isomorphic-dompurify": "^0.17.0",
+    "lodash-es": "^4.17.21",
     "md5": "^2.3.0",
     "mobx": "^6.1.7",
     "mobx-react": "^7.1.0",
     "mobx-utils": "^6.0.3",
-    "next": "10.0.5",
+    "next": "^12.1.6",
     "next-compose-plugins": "^2.2.1",
+    "next-mdx-remote": "^4.0.3",
     "next-optimized-images": "^2.6.2",
     "next-seo": "^4.28.1",
     "next-sitemap": "^1.6.179",
     "nprogress": "^0.2.0",
+    "plaiceholder": "^2.3.0",
     "react": "17.0.1",
     "react-beautiful-dnd": "^13.1.0",
     "react-dom": "17.0.1",
@@ -79,6 +83,7 @@
     "react-icons": "^4.2.0",
     "react-loading": "^2.0.3",
     "react-measure": "^2.5.2",
+    "sharp": "^0.30.4",
     "slate": "^0.72.0",
     "slate-history": "^0.66.0",
     "slate-hyperscript": "^0.67.0",
@@ -105,6 +110,7 @@
     "@types/escape-html": "^1.0.1",
     "@types/gapi.auth2": "^0.0.55",
     "@types/jest": "^27.0.1",
+    "@types/lodash-es": "^4.17.6",
     "@types/md5": "^2.3.1",
     "@types/node": "^14.14.20",
     "@types/nprogress": "^0.2.0",
@@ -141,5 +147,11 @@
       "yarn prettier --write",
       "yarn eslint --fix"
     ]
+  },
+  "resolutions": {
+    "@types/react": "17.0.40"
+  },
+  "browser": {
+    "child_process": false
   }
 }

@@ -22,7 +22,7 @@ import { scrollToReviewForm } from '@/modules/CourseDetail/components/ReviewForm
 import { ReviewList } from '@/modules/CourseDetail/components/ReviewList'
 import { ReviewProvider } from '@/modules/CourseDetail/context/Review'
 import { generateThumbnailId } from '@/modules/CourseThumbnailAPI/utils/generateThumbnailId'
-import { createApolloServerClient } from '@/services/apollo'
+import { initializeApollo } from '@/services/apollo'
 import { GetCourseResponse, GET_COURSE } from '@/services/apollo/query/getCourse'
 import { GetReviewsResponse, GetReviewsVars, GET_REVIEWS } from '@/services/apollo/query/getReviews'
 
@@ -186,7 +186,7 @@ export async function getServerSideProps(
 ): Promise<GetServerSidePropsResult<CourseDetailPageProps>> {
   try {
     const { courseNo, courseGroup } = parseCourseNoFromQuery(context.query)
-    const client = createApolloServerClient()
+    const client = initializeApollo()
     const { data: courseData } = await client.query<GetCourseResponse>({
       query: GET_COURSE,
       variables: {

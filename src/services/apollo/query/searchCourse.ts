@@ -3,7 +3,7 @@ import gql from 'graphql-tag'
 
 import { CourseGroup } from '@/common/hooks/useCourseGroup/types'
 
-import { COURSE_DATA_FIELDS } from './courseDataField'
+import { COURSE_DATA_FIELDS } from '../template/courseDataField'
 
 export interface SearchCourseVars {
   filter: {

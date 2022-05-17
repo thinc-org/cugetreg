@@ -5,7 +5,7 @@ import { CourseGroup } from '@/common/hooks/useCourseGroup/types'
 import { parseCourseNoFromQuery } from '@/common/utils/parseCourseNoFromQuery'
 import { ENABLE_COURSE_THUMBNAIL } from '@/env'
 import { drawThumbnail } from '@/modules/CourseThumbnailAPI/drawThumbnail'
-import { createApolloServerClient } from '@/services/apollo'
+import { initializeApollo } from '@/services/apollo'
 import { GetCourseForThumbnailResponse, GET_COURSE_FOR_THUMBNAIL } from '@/services/apollo/query/getCourse'
 import { getCachedImage } from '@/utils/imageCache'
 
@@ -36,7 +36,7 @@ export async function CourseThumbnailAPI(req: NextApiRequest, res: NextApiRespon
 }
 
 async function generateThumbnail(courseNo: string, courseGroup: CourseGroup): Promise<Buffer> {
-  const client = createApolloServerClient()
+  const client = initializeApollo()
   const { data } = await client.query<GetCourseForThumbnailResponse>({
     query: GET_COURSE_FOR_THUMBNAIL,
     variables: { courseNo, courseGroup },

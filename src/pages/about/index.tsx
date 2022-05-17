@@ -13,7 +13,7 @@ export default function About() {
   const reportProblemLink = `https://airtable.com/shruwAAfn1763TgMU?prefill_Session_ID=${sessionId}`
 
   return (
-    <Box marginTop={4} marginBottom={4}>
+    <Box marginTop={4} marginBottom={4} flexGrow={1}>
       <Box sx={{ p: 4, maxWidth: '720px', margin: 'auto' }}>
         <PageMeta title="เกี่ยวกับเรา" />
         <Typography variant="h1">เกี่ยวกับเรา</Typography>

@@ -1,14 +1,9 @@
-import TagManager from 'react-gtm-module'
-
 import { TrackCustomEventParams } from './types'
 
 class MasterTracker {
-  init() {
-    // TagManager.initialize({ gtmId: GOOGLE_TAG_MANAGER_CONTAINER_ID })
-  }
-
   trackPageView(url: string) {
-    TagManager.dataLayer({
+    if (!window?.dataLayer) return
+    window.dataLayer.push({
       dataLayer: {
         event: 'pageView',
         url: url,
@@ -17,7 +12,8 @@ class MasterTracker {
   }
 
   trackCustomEvent<T = {}>({ event, category, action, label, custom, screenName }: TrackCustomEventParams<T>) {
-    TagManager.dataLayer({
+    if (!window?.dataLayer) return
+    window.dataLayer.push({
       dataLayer: {
         event,
         category,

@@ -1,4 +1,4 @@
-import { Stack, Typography } from '@mui/material'
+import { Typography } from '@mui/material'
 import { formatRelative } from 'date-fns'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -12,7 +12,7 @@ import {
   AnnouncementComponentArticleMedia,
 } from '@/services/apollo/types/announcement'
 
-import { Card, SkeletonImage, ImageContainer } from './styled'
+import { Card, ImageContainer, Content } from './styled'
 
 interface AnnounceCardProps extends Announcement {}
 
@@ -26,9 +26,11 @@ export const AnnounceCard = memo(({ title, created_at, contents }: AnnounceCardP
     return mediaContent?.media
   }, [contents])
 
+  console.log(title, firstMedia)
+
   return (
     <Link href={`/announcements/${encodeURIComponent(title)}`} passHref>
-      <Card p={[2, 3]} boxShadow={2} borderRadius={1} gap={2}>
+      <Card>
         {firstMedia ? (
           <ImageContainer>
             <Image
@@ -36,15 +38,18 @@ export const AnnounceCard = memo(({ title, created_at, contents }: AnnounceCardP
               alt={title}
               width={firstMedia.width}
               height={firstMedia.height}
+              layout="responsive"
             />
           </ImageContainer>
         ) : (
-          <SkeletonImage />
+          <ImageContainer>
+            <Image src="/cover2.jpg" alt={title} width={480} height={240} layout="responsive" />
+          </ImageContainer>
         )}
-        <Typography variant="h5">{title}</Typography>
-        <Stack alignItems="flex-end">
-          <Typography variant="body2">created {createdAt}</Typography>
-        </Stack>
+        <Content>
+          <Typography variant="h5">{title}</Typography>
+          <Typography variant="body2">Created {createdAt}</Typography>
+        </Content>
       </Card>
     </Link>
   )

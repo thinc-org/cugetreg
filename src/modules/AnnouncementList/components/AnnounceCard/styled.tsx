@@ -1,26 +1,22 @@
-import { styled, Stack } from '@mui/material'
+import { styled } from '@mui/material'
 
-export const Card = styled(Stack)`
-  width: 100%;
-  cursor: pointer;
+export const Card = styled('div')`
+  min-height: 240px;
+  padding: ${({ theme }) => theme.spacing(2)};
+  border-radius: ${({ theme }) => theme.shape.borderRadius}px;
+  border: 1px solid ${({ theme }) => theme.palette.highlight.deepGray[300]};
   transition: ${({ theme }) => theme.transitions.create('background-color')};
   &:hover {
     background-color: #fafafa; // TODO: configure palette to have some kind of hover color
   }
 `
 
-export const SkeletonImage = styled('div')`
-  background-color: #f0f0f0; // TODO: configure palette to have some kind of hover color
-  width: 100%;
-  height: auto;
+export const ImageContainer = styled('div')`
   display: block;
   position: relative;
-  border-radius: ${({ theme }) => theme.shape.borderRadius}px;
+  margin-bottom: ${({ theme }) => theme.spacing(3)};
 `
 
-export const ImageContainer = styled(SkeletonImage)`
-  background: none;
-  img {
-    object-fit: cover;
-  }
+export const Content = styled('div')`
+  height: 50px;
 `

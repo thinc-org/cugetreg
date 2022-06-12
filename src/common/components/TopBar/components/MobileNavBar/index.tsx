@@ -15,7 +15,6 @@ import {
   NAVBAR_SEARCH_COURSE,
   NAVBAR_TIMETABLE,
   NAVBAR_ABOUT,
-  NAVBAR_ANNOUNCEMENTS,
 } from '@/common/context/Analytics/constants'
 import { useDisclosure } from '@/common/hooks/useDisclosure'
 import { useLinkBuilder } from '@/common/hooks/useLinkBuilder'
@@ -63,7 +62,7 @@ export const MobileNavBar = observer(() => {
               <NavBarItem onClick={onClose}>{t('navBar:timetable')}</NavBarItem>
             </LinkWithAnalytics>
           </div>
-          <div>
+          {/* <div>
             <LinkWithAnalytics
               href={buildLink(`/announcements`, {}, false)}
               passHref
@@ -71,7 +70,7 @@ export const MobileNavBar = observer(() => {
             >
               <NavBarItem onClick={onClose}>{t('navBar:announcements')}</NavBarItem>
             </LinkWithAnalytics>
-          </div>
+          </div> */}
           <div>
             <LinkWithAnalytics href={buildLink(`/about`, {}, false)} passHref elementName={NAVBAR_ABOUT}>
               <NavBarItem onClick={onClose}>{t('navBar:about')}</NavBarItem>

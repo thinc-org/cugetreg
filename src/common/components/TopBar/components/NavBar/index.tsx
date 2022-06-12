@@ -40,11 +40,11 @@ export function NavBar() {
       elementName: NAVBAR_TIMETABLE,
       label: t('navBar:timetable'),
     },
-    {
-      href: buildLink(`/announcements`, {}, false),
-      elementName: NAVBAR_ANNOUNCEMENTS,
-      label: t('navBar:announcements'),
-    },
+    // {
+    //   href: buildLink(`/announcements`, {}, false),
+    //   elementName: NAVBAR_ANNOUNCEMENTS,
+    //   label: t('navBar:announcements'),
+    // },
     {
       href: buildLink(`/about`, {}, false),
       elementName: NAVBAR_ABOUT,

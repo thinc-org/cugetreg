@@ -22,6 +22,7 @@
     "@emotion/react": "^11.5.0",
     "@emotion/server": "^11.4.0",
     "@emotion/styled": "^11.3.0",
+    "@mui/base": "^5.0.0-alpha.84",
     "@mui/icons-material": "^5.1.0",
     "@mui/lab": "^5.0.0-alpha.54",
     "@mui/material": "^5.8.3",

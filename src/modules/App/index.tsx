@@ -4,6 +4,7 @@ import { Container } from '@mui/material'
 import { DefaultSeo } from 'next-seo'
 import { AppProps } from 'next/dist/next-server/lib/router/router'
 
+import { CookieBanner } from '@/common/components/CookieBanner'
 import { Footer } from '@/common/components/Footer'
 import { LoadingProgress } from '@/common/components/LoadingProgress'
 import { TopBar } from '@/common/components/TopBar'
@@ -47,6 +48,7 @@ export function App(props: MyAppProps) {
         <Footer />
         <ShoppingCartModal />
         <CustomToaster />
+        <CookieBanner />
       </TrackPageChange>
     </AppProvider>
   )

@@ -19,7 +19,7 @@ export const CookieBanner = () => {
   const [consents, setConsents] = useState<Consents>()
   const [show, setShow] = useState<boolean>(() => {
     const consents = JSON.parse((getCookie(CookieKey.CONSENTS) as string) ?? '{}') as Consents
-    return !consents.checked
+    return 'checked' in consents ? !consents.checked : false
   })
 
   const setConsentsSetting = useCallback((value: Consents) => {

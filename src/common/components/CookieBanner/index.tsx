@@ -2,7 +2,7 @@ import { Button, Link as MuiLink, Stack, Typography } from '@mui/material'
 import { getCookie, setCookies } from 'cookies-next'
 import Link from 'next/link'
 
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 
 import { CookieSettings } from './components/CookieSettings'
 import { CookieKey } from './constants'
@@ -19,7 +19,7 @@ export const CookieBanner = () => {
   const [consents, setConsents] = useState<Consents>()
   const [show, setShow] = useState<boolean>(() => {
     const consents = JSON.parse((getCookie(CookieKey.CONSENTS) as string) ?? '{}') as Consents
-    return 'checked' in consents ? !consents.checked : false
+    return 'checked' in consents ? !consents.checked : true
   })
 
   const setConsentsSetting = useCallback((value: Consents) => {
@@ -42,16 +42,6 @@ export const CookieBanner = () => {
   const handleOpenSettings = () => {
     setShowSettings(true)
   }
-
-  useEffect(() => {
-    const consents = JSON.parse((getCookie(CookieKey.CONSENTS) as string) ?? '{}') as Consents
-    if (!consents?.checked) {
-      setConsentsSetting({
-        [ConsentMode.AD_STORAGE]: true,
-        [ConsentMode.ANALYTICS_STORAGE]: true,
-      })
-    }
-  }, [setConsentsSetting])
 
   if (!show) return null
 

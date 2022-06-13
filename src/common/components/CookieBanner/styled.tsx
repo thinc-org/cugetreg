@@ -5,6 +5,7 @@ export const FixedContainer = styled(Stack)`
   z-index: ${({ theme }) => theme.zIndex.modal};
   width: 100%;
   bottom: 15px;
+  padding: ${({ theme }) => theme.spacing(0, 2)};
 `
 
 export const Container = styled(Stack)`

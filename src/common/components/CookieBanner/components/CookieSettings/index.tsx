@@ -1,7 +1,7 @@
 import { DialogProps, DialogTitle, Fade, Dialog, DialogContent, Button } from '@mui/material'
 import { TransitionProps } from '@mui/material/transitions'
 
-import { ChangeEventHandler, forwardRef } from 'react'
+import { ChangeEventHandler, forwardRef, MouseEventHandler } from 'react'
 
 import { ConsentMode } from '@/common/constants/consents'
 import { Consents } from '@/common/types/consents'
@@ -29,8 +29,7 @@ export const CookieSettings = ({ consents, setConsents, ...props }: CookieSettin
       setConsents({ ...consents, [mode]: event.target.checked })
     }
 
-  const handleClose = (event: {}, reason: 'backdropClick' | 'escapeKeyDown') => {
-    if (reason === 'backdropClick') return
+  const handleClose: MouseEventHandler = (event) => {
     setConsents({ ...consents, checked: true })
     props.onClose?.(event, 'escapeKeyDown')
   }
@@ -38,7 +37,6 @@ export const CookieSettings = ({ consents, setConsents, ...props }: CookieSettin
   return (
     <Dialog
       {...props}
-      onClose={handleClose}
       TransitionComponent={Transition}
       PaperProps={{
         sx: { width: '100%', maxWidth: '500px' },
@@ -70,7 +68,7 @@ export const CookieSettings = ({ consents, setConsents, ...props }: CookieSettin
           ปรับปรุงและพัฒนาประสบการณ์ที่ดีในการใช้งานเว็บไซต์ ถ้าหากท่านไม่ยินยอมให้เราใช้คุกกี้นี้เราจะไม่สามารถวัดผล
           ปรังปรุงและพัฒนาเว็บไซต์ได้
         </SettingBlock>
-        <Button onClick={(event) => handleClose(event, 'escapeKeyDown')} variant="contained" fullWidth>
+        <Button onClick={handleClose} variant="contained" fullWidth>
           ยืนยัน
         </Button>
       </DialogContent>

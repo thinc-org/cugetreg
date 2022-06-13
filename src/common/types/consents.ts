@@ -1,4 +1,4 @@
-import { ConsentMode } from '.'
+import { ConsentMode } from '../constants/consents'
 
 export interface Consents {
   [ConsentMode.AD_STORAGE]?: boolean

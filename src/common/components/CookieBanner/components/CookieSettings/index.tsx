@@ -3,8 +3,9 @@ import { TransitionProps } from '@mui/material/transitions'
 
 import { ChangeEventHandler, forwardRef } from 'react'
 
-import { ConsentMode } from '../..'
-import { Consents } from '../../types'
+import { ConsentMode } from '@/common/constants/consents'
+import { Consents } from '@/common/types/consents'
+
 import { SettingBlock } from '../SettingBlock'
 
 interface CookieSettingsProps extends DialogProps {

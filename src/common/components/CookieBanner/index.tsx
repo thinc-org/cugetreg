@@ -1,18 +1,16 @@
 import { Button, Link as MuiLink, Stack, Typography } from '@mui/material'
-import { getCookie, setCookies } from 'cookies-next'
+import { getCookie } from 'cookies-next'
 import Link from 'next/link'
 
 import { useCallback, useState } from 'react'
 
-import { CookieSettings } from './components/CookieSettings'
-import { CookieKey } from './constants'
-import { Container, FixedContainer } from './styled'
-import { Consents } from './types'
+import { ConsentMode } from '@/common/constants/consents'
+import { CookieKey } from '@/common/constants/cookie'
+import { Tracker } from '@/common/tracker'
 
-export enum ConsentMode {
-  AD_STORAGE = 'ad_storage',
-  ANALYTICS_STORAGE = 'analytics_storage',
-}
+import { Consents } from '../../types/consents'
+import { CookieSettings } from './components/CookieSettings'
+import { Container, FixedContainer } from './styled'
 
 export const CookieBanner = () => {
   const [showSettings, setShowSettings] = useState<boolean>(false)
@@ -22,21 +20,22 @@ export const CookieBanner = () => {
     return 'checked' in consents ? !consents.checked : true
   })
 
-  const setConsentsSetting = useCallback((value: Consents) => {
-    setConsents((consents) => {
-      const data = { ...consents, ...value }
-      setCookies(CookieKey.CONSENTS, JSON.stringify(data))
-      return data
+  const setConsentsSetting = useCallback((newConsents: Consents) => {
+    setConsents((oldConsents) => {
+      const selectedConsents = { ...oldConsents, ...newConsents }
+      Tracker.consents(selectedConsents)
+      return selectedConsents
     })
   }, [])
 
   const handleConsentAll = () => {
-    setConsentsSetting({
+    const selectedConsents: Consents = {
       [ConsentMode.AD_STORAGE]: true,
       [ConsentMode.ANALYTICS_STORAGE]: true,
       checked: true,
-    })
-    setShow(false)
+    }
+    setConsentsSetting(selectedConsents)
+    Tracker.consents(selectedConsents)
   }
 
   const handleOpenSettings = () => {

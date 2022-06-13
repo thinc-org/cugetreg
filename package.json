@@ -86,7 +86,8 @@
     "slate-hyperscript": "^0.67.0",
     "slate-react": "0.72.1",
     "styled-components": "^5.3.3",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "zustand": "^4.0.0-rc.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",

@@ -1,32 +1,28 @@
 import { Button, Link as MuiLink, Stack, Typography } from '@mui/material'
-import { getCookie } from 'cookies-next'
 import Link from 'next/link'
 
-import { useCallback, useState } from 'react'
-
 import { ConsentMode } from '@/common/constants/consents'
-import { CookieKey } from '@/common/constants/cookie'
-import { Tracker } from '@/common/tracker'
+import { useConsentsStore } from '@/store/consents'
 
 import { Consents } from '../../types/consents'
 import { CookieSettings } from './components/CookieSettings'
 import { Container, FixedContainer } from './styled'
 
 export const CookieBanner = () => {
-  const [showSettings, setShowSettings] = useState<boolean>(false)
-  const [consents, setConsents] = useState<Consents>()
-  const [show, setShow] = useState<boolean>(() => {
-    const consents = JSON.parse((getCookie(CookieKey.CONSENTS) as string) ?? '{}') as Consents
-    return 'checked' in consents ? !consents.checked : true
-  })
+  const { consents, openBanner, openSettings, setOpenSettings, setOpenBanner, setConsents } = useConsentsStore()
 
-  const setConsentsSetting = useCallback((newConsents: Consents) => {
-    setConsents((oldConsents) => {
-      const selectedConsents = { ...oldConsents, ...newConsents }
-      Tracker.consents(selectedConsents)
-      return selectedConsents
-    })
-  }, [])
+  const setConsentsSetting = (newConsents: Consents) => {
+    setConsents(newConsents)
+  }
+
+  const handleOpenSettings = () => {
+    setOpenSettings(true)
+  }
+
+  const handleCloseSettings = () => {
+    setOpenBanner(false)
+    setOpenSettings(false)
+  }
 
   const handleConsentAll = () => {
     const selectedConsents: Consents = {
@@ -34,15 +30,10 @@ export const CookieBanner = () => {
       [ConsentMode.ANALYTICS_STORAGE]: true,
       checked: true,
     }
-    setConsentsSetting(selectedConsents)
-    Tracker.consents(selectedConsents)
+    setConsents(selectedConsents)
   }
 
-  const handleOpenSettings = () => {
-    setShowSettings(true)
-  }
-
-  if (!show) return null
+  if (!openBanner) return null
 
   return (
     <FixedContainer>
@@ -64,11 +55,8 @@ export const CookieBanner = () => {
         </Stack>
       </Container>
       <CookieSettings
-        open={showSettings}
-        onClose={() => {
-          setShowSettings(false)
-          setShow(false)
-        }}
+        open={openSettings}
+        onClose={handleCloseSettings}
         consents={consents}
         setConsents={setConsentsSetting}
       />

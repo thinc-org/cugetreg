@@ -32,7 +32,7 @@ class MasterTracker {
     })
   }
 
-  consents(consents: Consents) {
+  updateConsents(consents: Consents) {
     TagManager.dataLayer({
       dataLayer: {
         event: 'consentUpdate',

@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/thinc-org/cugetreg-frontend/compare/v1.5.2...v1.6.0) (2022-06-16)
+
+
+### Features
+
+* add 2565/1 ([55776df](https://github.com/thinc-org/cugetreg-frontend/commit/55776df7e2a4d3ea1355c86d3683ee57f60099d2))
+
 ## [1.5.2](https://github.com/thinc-org/cugetreg-frontend/compare/v1.5.1...v1.5.2) (2022-01-09)
 
 

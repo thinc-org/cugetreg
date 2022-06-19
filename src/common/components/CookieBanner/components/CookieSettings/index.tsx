@@ -11,6 +11,7 @@ import { SettingBlock } from '../SettingBlock'
 interface CookieSettingsProps extends DialogProps {
   consents?: Consents
   setConsents: (consents: Consents) => void
+  submitConsents: () => void
 }
 
 const Transition = forwardRef(function Transition(
@@ -22,7 +23,7 @@ const Transition = forwardRef(function Transition(
   return <Fade ref={ref} {...props} />
 })
 
-export const CookieSettings = ({ consents, setConsents, ...props }: CookieSettingsProps) => {
+export const CookieSettings = ({ consents, setConsents, submitConsents, onClose, ...props }: CookieSettingsProps) => {
   const handleConsentChange =
     (mode: ConsentMode): ChangeEventHandler<HTMLInputElement> =>
     (event) => {
@@ -30,8 +31,8 @@ export const CookieSettings = ({ consents, setConsents, ...props }: CookieSettin
     }
 
   const handleClose: MouseEventHandler = (event) => {
-    setConsents({ ...consents, checked: true })
-    props.onClose?.(event, 'escapeKeyDown')
+    submitConsents()
+    onClose?.(event, 'escapeKeyDown')
   }
 
   return (
@@ -53,7 +54,7 @@ export const CookieSettings = ({ consents, setConsents, ...props }: CookieSettin
         <SettingBlock
           title="คุกกี้โฆษณาและการตลาด"
           onChange={handleConsentChange(ConsentMode.AD_STORAGE)}
-          checked={consents?.[ConsentMode.AD_STORAGE]}
+          checked={consents?.[ConsentMode.AD_STORAGE] ?? false}
         >
           คุกกี้ประเภทนี้จะทำการจัดเก็บตัวเลือกการเข้าถึงเว็บไซต์ของผู้ใช้
           เพื่อใช้เป็นพื้นฐานในการปรับแต่งหน้าของเว็บไซต์เพื่อนำเสนอโฆษณาที่เหมาะสมกับคุณมากที่สุด
@@ -62,7 +63,7 @@ export const CookieSettings = ({ consents, setConsents, ...props }: CookieSettin
         <SettingBlock
           title="คุกกี้เพื่อการวิเคราะห์"
           onChange={handleConsentChange(ConsentMode.ANALYTICS_STORAGE)}
-          checked={consents?.[ConsentMode.ANALYTICS_STORAGE]}
+          checked={consents?.[ConsentMode.ANALYTICS_STORAGE] ?? false}
         >
           คุกกี้ประเภทนี้จะทำการเก็บข้อมูลการใช้งานเว็บไซต์ของคุณ เพื่อเป็นประโยชน์ในการวัดผล
           ปรับปรุงและพัฒนาประสบการณ์ที่ดีในการใช้งานเว็บไซต์ ถ้าหากท่านไม่ยินยอมให้เราใช้คุกกี้นี้เราจะไม่สามารถวัดผล

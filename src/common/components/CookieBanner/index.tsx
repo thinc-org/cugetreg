@@ -9,7 +9,8 @@ import { CookieSettings } from './components/CookieSettings'
 import { Container, FixedContainer } from './styled'
 
 export const CookieBanner = () => {
-  const { consents, openBanner, openSettings, setOpenSettings, setOpenBanner, setConsents } = useConsentsStore()
+  const { consents, openBanner, openSettings, setOpenSettings, setOpenBanner, setConsents, submitConsents } =
+    useConsentsStore()
 
   const setConsentsSetting = (newConsents: Consents) => {
     setConsents(newConsents)
@@ -33,33 +34,36 @@ export const CookieBanner = () => {
     setConsents(selectedConsents)
   }
 
-  if (!openBanner) return null
-
   return (
-    <FixedContainer>
-      <Container>
-        <Typography variant="body1" mb={2}>
-          เราใช้คุกกี้เพื่อพัฒนาประสิทธิภาพ และประสบการณ์ที่ดีในการใช้เว็บไซต์ของคุณ คุณสามารถศึกษารายละเอียดได้ที่{' '}
-          <Link href="/privacy" passHref>
-            <MuiLink sx={{ textDecoration: 'underline' }}>นโยบายความเป็นส่วนตัว</MuiLink>
-          </Link>{' '}
-          และสามารถจัดการความเป็นส่วนตัวเองได้ของคุณได้เองโดยคลิกที่ตั้งค่า
-        </Typography>
-        <Stack direction="row" gap={2}>
-          <Button onClick={handleOpenSettings} variant="outlined" fullWidth>
-            ตั้งค่า
-          </Button>
-          <Button onClick={handleConsentAll} variant="contained" fullWidth>
-            ยืนยัน
-          </Button>
-        </Stack>
-      </Container>
+    <>
+      {openBanner && (
+        <FixedContainer>
+          <Container>
+            <Typography variant="body1" mb={2}>
+              เราใช้คุกกี้เพื่อพัฒนาประสิทธิภาพ และประสบการณ์ที่ดีในการใช้เว็บไซต์ของคุณ คุณสามารถศึกษารายละเอียดได้ที่{' '}
+              <Link href="/privacy" passHref>
+                <MuiLink sx={{ textDecoration: 'underline' }}>นโยบายความเป็นส่วนตัว</MuiLink>
+              </Link>{' '}
+              และสามารถจัดการความเป็นส่วนตัวเองได้ของคุณได้เองโดยคลิกที่ตั้งค่า
+            </Typography>
+            <Stack direction="row" gap={2}>
+              <Button onClick={handleOpenSettings} variant="outlined" fullWidth>
+                ตั้งค่า
+              </Button>
+              <Button onClick={handleConsentAll} variant="contained" fullWidth>
+                ยืนยัน
+              </Button>
+            </Stack>
+          </Container>
+        </FixedContainer>
+      )}
       <CookieSettings
         open={openSettings}
         onClose={handleCloseSettings}
         consents={consents}
         setConsents={setConsentsSetting}
+        submitConsents={submitConsents}
       />
-    </FixedContainer>
+    </>
   )
 }

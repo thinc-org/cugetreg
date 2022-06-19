@@ -36,7 +36,7 @@ class MasterTracker {
     TagManager.dataLayer({
       dataLayer: {
         event: 'consentUpdate',
-        consents,
+        ...consents,
       },
     })
   }

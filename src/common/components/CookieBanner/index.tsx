@@ -32,6 +32,7 @@ export const CookieBanner = () => {
       checked: true,
     }
     setConsents(selectedConsents)
+    setOpenBanner(false)
   }
 
   return (

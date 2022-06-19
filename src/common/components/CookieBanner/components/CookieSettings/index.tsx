@@ -63,7 +63,7 @@ export const CookieSettings = ({ consents, setConsents, submitConsents, onClose,
         <SettingBlock
           title="คุกกี้เพื่อการวิเคราะห์"
           onChange={handleConsentChange(ConsentMode.ANALYTICS_STORAGE)}
-          checked={consents?.[ConsentMode.ANALYTICS_STORAGE] ?? false}
+          checked={consents?.[ConsentMode.ANALYTICS_STORAGE] ?? true}
         >
           คุกกี้ประเภทนี้จะทำการเก็บข้อมูลการใช้งานเว็บไซต์ของคุณ เพื่อเป็นประโยชน์ในการวัดผล
           ปรับปรุงและพัฒนาประสบการณ์ที่ดีในการใช้งานเว็บไซต์ ถ้าหากท่านไม่ยินยอมให้เราใช้คุกกี้นี้เราจะไม่สามารถวัดผล

@@ -11,8 +11,6 @@ interface SettingBlockProps {
 }
 
 export const SettingBlock: React.FC<SettingBlockProps> = ({ title, children, onChange, checked }) => {
-  console.log(title, checked)
-
   return (
     <div>
       <Stack direction="row" justifyContent="space-between" alignItems="center">

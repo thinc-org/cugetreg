@@ -5,33 +5,33 @@ import { ConsentMode } from '@/common/constants/consents'
 import { useConsentsStore } from '@/store/consents'
 
 import { Consents } from '../../types/consents'
-// import { CookieSettings } from './components/CookieSettings'
+import { CookieSettings } from './components/CookieSettings'
 import { Container, FixedContainer } from './styled'
 
 export const CookieBanner = () => {
-  const { openBanner, setConsents, setOpenBanner } = useConsentsStore()
+  const { consents, openBanner, openSettings, setOpenSettings, setOpenBanner, setConsents, submitConsents } =
+    useConsentsStore()
 
-  // const setConsentsSetting = (newConsents: Consents) => {
-  //   setConsents(newConsents)
-  // }
+  const setConsentsSetting = (newConsents: Consents) => {
+    setConsents(newConsents)
+  }
 
-  // const handleOpenSettings = () => {
-  //   setOpenSettings(true)
-  // }
+  const handleOpenSettings = () => {
+    setOpenSettings(true)
+  }
 
-  // const handleCloseSettings = () => {
-  //   setOpenBanner(false)
-  //   setOpenSettings(false)
-  // }
+  const handleCloseSettings = () => {
+    setOpenBanner(false)
+    setOpenSettings(false)
+  }
 
   const handleConsentAll = () => {
     const selectedConsents: Consents = {
-      [ConsentMode.AD_STORAGE]: true,
+      // [ConsentMode.AD_STORAGE]: true,
       [ConsentMode.ANALYTICS_STORAGE]: true,
       checked: true,
     }
     setConsents(selectedConsents)
-    setOpenBanner(false)
   }
 
   return (
@@ -47,10 +47,9 @@ export const CookieBanner = () => {
               และสามารถจัดการความเป็นส่วนตัวเองได้ของคุณได้เองโดยคลิกที่ตั้งค่า
             </Typography>
             <Stack direction="row" gap={2}>
-              {/**TODO: There is only one setting `analytics_storage` if we have more consent mode, we would uncomment the code below */}
-              {/* <Button onClick={handleOpenSettings} variant="outlined" fullWidth>
+              <Button onClick={handleOpenSettings} variant="outlined" fullWidth>
                 ตั้งค่า
-              </Button> */}
+              </Button>
               <Button onClick={handleConsentAll} variant="contained" fullWidth>
                 ยืนยัน
               </Button>
@@ -58,13 +57,13 @@ export const CookieBanner = () => {
           </Container>
         </FixedContainer>
       )}
-      {/* <CookieSettings
+      <CookieSettings
         open={openSettings}
         onClose={handleCloseSettings}
         consents={consents}
         setConsents={setConsentsSetting}
         submitConsents={submitConsents}
-      /> */}
+      />
     </>
   )
 }

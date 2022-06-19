@@ -3,6 +3,7 @@ import * as uuid from 'uuid'
 
 import { StorageKey } from '@/common/storage/constants'
 import { ENABLE_LOGGING } from '@/env'
+import { consentStore } from '@/modules/CourseSearch/components/HackConsentForm'
 import { httpClient } from '@/services/httpClient'
 import { sessionIdStore } from '@/store/sessionIdStore'
 import { userStore } from '@/store/userStore'
@@ -34,7 +35,7 @@ function sendCollectedLog() {
   backlogLog = []
   if (data.length == 0) return
   if (process.env.NODE_ENV === 'development') return
-  if (!ENABLE_LOGGING) return
+  if (!consentStore.consent.consentAdditionalV1) return
   httpClient.post(`/clientlogging`, data).catch((e) => console.error('Error while logging', e, 'Message', data))
 }
 

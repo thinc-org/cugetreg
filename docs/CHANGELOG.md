@@ -1,3 +1,10 @@
+# [1.7.0](https://github.com/thinc-org/cugetreg-frontend/compare/v1.6.0...v1.7.0) (2022-06-19)
+
+
+### Features
+
+* Add Cookie Banner ([#332](https://github.com/thinc-org/cugetreg-frontend/issues/332)) ([6f423e6](https://github.com/thinc-org/cugetreg-frontend/commit/6f423e6bf02d23a4ffee902ee3aed3ea6c2f875f))
+
 # [1.6.0](https://github.com/thinc-org/cugetreg-frontend/compare/v1.5.2...v1.6.0) (2022-06-16)
 
 

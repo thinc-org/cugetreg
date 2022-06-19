@@ -1,7 +1,6 @@
-import styled from '@emotion/styled'
-import { Divider, Stack, Typography } from '@mui/material'
+import { Divider, Stack, Typography, styled } from '@mui/material'
 
-export const ResponsiveStack = styled.div`
+export const ResponsiveStack = styled('div')`
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -23,13 +22,19 @@ export const BannerContainer = styled(Stack)`
   padding: ${({ theme }) => theme.spacing(3)};
 `
 
-export const PrivacyLink = styled.a`
+export const PrivacyLink = styled('a')`
   cursor: pointer;
-  text-decoration: none;
+  text-decoration: underline;
   color: ${({ theme }) => theme.palette.primary.contrastText};
 `
 
-export const GithubLink = styled.a`
+export const CookieSetting = styled('span')`
+  cursor: pointer;
+  text-decoration: underline;
+  color: ${({ theme }) => theme.palette.primary.contrastText};
+`
+
+export const GithubLink = styled('a')`
   display: flex;
   flex-direction: row;
   align-items: center;

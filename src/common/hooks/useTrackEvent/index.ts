@@ -9,7 +9,7 @@ export function useTrackEvent(trackParams: UseTrackEventProps) {
   const currentScreenName = useScreenName()
 
   const trackEvent = useCallback(() => {
-    Tracker.trackCustomEvent({
+    Tracker?.trackCustomEvent({
       ...trackParams,
       screenName: currentScreenName,
       custom: {

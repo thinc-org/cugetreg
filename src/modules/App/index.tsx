@@ -3,6 +3,7 @@ import { CssBaseline } from '@mui/material'
 import { Container } from '@mui/material'
 import { DefaultSeo } from 'next-seo'
 import { AppProps } from 'next/dist/next-server/lib/router/router'
+import dynamic from 'next/dynamic'
 
 import { Footer } from '@/common/components/Footer'
 import { LoadingProgress } from '@/common/components/LoadingProgress'
@@ -19,6 +20,17 @@ import { ErrorBoundary } from '@/modules/ErrorBoundary'
 
 import SEO from '../../../next-seo.config'
 import { useApp } from './hooks/useApp'
+
+const CookieBanner = dynamic(
+  async () =>
+    (
+      await import(
+        /* webpackChunkName: "CookieBanner" */
+        '@/common/components/CookieBanner'
+      )
+    ).CookieBanner,
+  { ssr: false }
+)
 
 mobxConfiguration()
 
@@ -47,6 +59,7 @@ export function App(props: MyAppProps) {
         <Footer />
         <ShoppingCartModal />
         <CustomToaster />
+        <CookieBanner />
       </TrackPageChange>
     </AppProvider>
   )

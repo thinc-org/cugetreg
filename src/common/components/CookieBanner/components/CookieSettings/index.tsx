@@ -51,7 +51,7 @@ export const CookieSettings = ({ consents, setConsents, submitConsents, onClose,
           คุกกี้มีความจำเป็นสำหรับการทำงานของเว็บไซต์ เพื่อให้คุณสามารถใช้ได้อย่างเป็นปกติ และเข้าชมเว็บไซต์
           คุณไม่สามารถปิดการทำงานของคุกกี้นี้ในระบบเว็บไซต์ของเราได้
         </SettingBlock>
-        <SettingBlock
+        {/* <SettingBlock
           title="คุกกี้โฆษณาและการตลาด"
           onChange={handleConsentChange(ConsentMode.AD_STORAGE)}
           checked={consents?.[ConsentMode.AD_STORAGE] ?? false}
@@ -59,7 +59,7 @@ export const CookieSettings = ({ consents, setConsents, submitConsents, onClose,
           คุกกี้ประเภทนี้จะทำการจัดเก็บตัวเลือกการเข้าถึงเว็บไซต์ของผู้ใช้
           เพื่อใช้เป็นพื้นฐานในการปรับแต่งหน้าของเว็บไซต์เพื่อนำเสนอโฆษณาที่เหมาะสมกับคุณมากที่สุด
           การป้องกันหรือจำกัดจำนวนครั้งที่โฆษณาจะปรากฏบนหน้าเว็บไซต์เพื่อให้สามารถประเมินประสิทธิภาพของโฆษณาได้ดียิ่งขึ้น
-        </SettingBlock>
+        </SettingBlock> */}
         <SettingBlock
           title="คุกกี้เพื่อการวิเคราะห์"
           onChange={handleConsentChange(ConsentMode.ANALYTICS_STORAGE)}

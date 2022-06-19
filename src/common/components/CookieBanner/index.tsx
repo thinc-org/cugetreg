@@ -27,7 +27,7 @@ export const CookieBanner = () => {
 
   const handleConsentAll = () => {
     const selectedConsents: Consents = {
-      [ConsentMode.AD_STORAGE]: true,
+      // [ConsentMode.AD_STORAGE]: true,
       [ConsentMode.ANALYTICS_STORAGE]: true,
       checked: true,
     }

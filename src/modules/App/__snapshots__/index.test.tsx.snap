@@ -78,6 +78,7 @@ exports[`App module Should app component render preperly when forceDark=false 1`
     </ForwardRef(Container)>
     <Footer />
     <ShoppingCartModal />
+    <Memo(wrappedComponent) />
     <CustomToaster />
   </TrackPageChange>
 </AppProvider>
@@ -161,6 +162,7 @@ exports[`App module Should app component render preperly when forceDark=false 2`
     </ForwardRef(Container)>
     <Footer />
     <ShoppingCartModal />
+    <Memo(wrappedComponent) />
     <CustomToaster />
   </TrackPageChange>
 </AppProvider>
@@ -244,6 +246,7 @@ exports[`App module Should app component render preperly when forceDark=false 3`
     </ForwardRef(Container)>
     <Footer />
     <ShoppingCartModal />
+    <Memo(wrappedComponent) />
     <CustomToaster />
   </TrackPageChange>
 </AppProvider>
@@ -327,6 +330,7 @@ exports[`App module Should app component render preperly when forceDark=true 1`]
     </ForwardRef(Container)>
     <Footer />
     <ShoppingCartModal />
+    <Memo(wrappedComponent) />
     <CustomToaster />
   </TrackPageChange>
 </AppProvider>
@@ -410,6 +414,7 @@ exports[`App module Should app component render preperly when forceDark=true 2`]
     </ForwardRef(Container)>
     <Footer />
     <ShoppingCartModal />
+    <Memo(wrappedComponent) />
     <CustomToaster />
   </TrackPageChange>
 </AppProvider>
@@ -493,6 +498,7 @@ exports[`App module Should app component render preperly when forceDark=true 3`]
     </ForwardRef(Container)>
     <Footer />
     <ShoppingCartModal />
+    <Memo(wrappedComponent) />
     <CustomToaster />
   </TrackPageChange>
 </AppProvider>

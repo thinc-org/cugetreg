@@ -82,7 +82,10 @@ const PDPAForm = observer(({ consentStore }: { consentStore: ConsentStore }) => 
           <h3>Consent Form</h3>
           <Stack>
             <Stack sx={{ border: 'solid' }} direction="row">
-              <Checkbox {...register('coreCheckbox', { required: true })} />{' '}
+              <Checkbox
+                {...register('coreCheckbox', { required: true })}
+                defaultChecked={consentStore.consent.consentCore}
+              />
               <p>
                 <p>
                   I Agree to allow CUGetReg team and its affiliates to collect, store. publish and process following
@@ -119,7 +122,10 @@ const PDPAForm = observer(({ consentStore }: { consentStore: ConsentStore }) => 
               </p>
             </Stack>
             <Stack sx={{ border: 'solid' }} direction="row">
-              <Checkbox {...register('additaionV1Checkbox')} />
+              <Checkbox
+                {...register('additaionV1Checkbox')}
+                defaultChecked={consentStore.consent.consentAdditionalV1}
+              />
               <p>
                 I agree to allow CUGetReg team and its affiliates to collect, store, process and publish following data
                 <ul>

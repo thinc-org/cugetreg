@@ -19,6 +19,7 @@ export function TopBar() {
         <StickyContainer>
           <TopBarLayout>
             <ConfigBar />
+            <NavBar />
           </TopBarLayout>
           <StickySpace />
         </StickyContainer>

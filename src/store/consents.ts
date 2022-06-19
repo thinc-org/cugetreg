@@ -1,4 +1,4 @@
-import { getCookie } from 'cookies-next'
+import { getCookie, setCookies } from 'cookies-next'
 import create from 'zustand'
 
 import { CookieKey } from '@/common/constants/cookie'
@@ -34,7 +34,9 @@ export const useConsentsStore = create<ConsentsStoreProps>((set, get) => {
   }
 
   const submitConsents = () => {
-    Tracker?.updateConsents(get().consents)
+    const c = get().consents
+    Tracker?.updateConsents(c)
+    setCookies(CookieKey.CONSENTS, JSON.stringify(c), { maxAge: 365 * 24 * 60 * 60 }) // 1 year
   }
 
   return {

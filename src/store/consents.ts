@@ -12,7 +12,7 @@ interface ConsentsStoreProps {
   setOpenBanner: (openBanner: boolean) => void
   setOpenSettings: (openSettings: boolean) => void
   setConsents: (consents: Consents) => void
-  submitConsents: () => void
+  submitConsents: (consents?: Consents) => void
 }
 
 export const useConsentsStore = create<ConsentsStoreProps>((set, get) => {
@@ -33,8 +33,8 @@ export const useConsentsStore = create<ConsentsStoreProps>((set, get) => {
     })
   }
 
-  const submitConsents = () => {
-    const c = get().consents
+  const submitConsents = (consents?: Consents) => {
+    const c = consents ? consents : get().consents
     Tracker?.updateConsents(c)
     setCookies(CookieKey.CONSENTS, JSON.stringify(c), { maxAge: 365 * 24 * 60 * 60 }) // 1 year
   }

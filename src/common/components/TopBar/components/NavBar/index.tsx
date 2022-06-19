@@ -1,4 +1,5 @@
 import { Hidden } from '@mui/material'
+
 import { useTranslation } from 'react-i18next'
 
 import logo from '@/assets/images/cgrLogoDark.svg'
@@ -13,6 +14,7 @@ import {
 } from '@/common/context/Analytics/constants'
 import { useLinkBuilder } from '@/common/hooks/useLinkBuilder'
 import { Spacer } from '@/components/Spacer'
+import { consentStore } from '@/modules/CourseSearch/components/HackConsentForm'
 
 import { ConfigBarItem } from '../ConfigBar/styled'
 import { MobileNavBar } from '../MobileNavBar'
@@ -60,6 +62,7 @@ export function NavBar() {
               <NavBarItem>{label}</NavBarItem>
             </LinkWithAnalytics>
           ))}
+          <NavBarItem onClick={() => (consentStore.dialogOpen = true)}>Privacy Consent</NavBarItem>
           <Spacer />
           <UserButton />
         </Hidden>

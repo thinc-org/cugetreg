@@ -1,3 +1,4 @@
+import { Button } from '@mui/material'
 import { useRouter } from 'next/router'
 
 import { AnnouncementBar } from './components/AnnouncementBar'
@@ -18,7 +19,6 @@ export function TopBar() {
         <StickyContainer>
           <TopBarLayout>
             <ConfigBar />
-            <NavBar />
           </TopBarLayout>
           <StickySpace />
         </StickyContainer>

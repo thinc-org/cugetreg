@@ -14,6 +14,7 @@ import { createEmotionCache } from '@/configs/createEmotionCache'
 import { mobxConfiguration } from '@/configs/mobx'
 import { CustomToaster } from '@/modules/App/components/CustomToaster'
 import { AppProvider } from '@/modules/App/context'
+import { HackPDPAForm } from '@/modules/CourseSearch/components/HackConsentForm'
 import { ShoppingCartModal } from '@/modules/CourseSearch/components/ShoppingCartModal'
 import { ErrorBoundary } from '@/modules/ErrorBoundary'
 
@@ -46,6 +47,7 @@ export function App(props: MyAppProps) {
         </Container>
         <Footer />
         <ShoppingCartModal />
+        <HackPDPAForm />
         <CustomToaster />
       </TrackPageChange>
     </AppProvider>

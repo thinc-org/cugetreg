@@ -2,6 +2,7 @@ import TagManager from 'react-gtm-module'
 
 import { GOOGLE_TAG_MANAGER_CONTAINER_ID, ENABLE_LOGGING } from '@/env'
 
+import { Consents } from '../types/consents'
 import { TrackCustomEventParams } from './types'
 
 class MasterTracker {
@@ -30,16 +31,17 @@ class MasterTracker {
       },
     })
   }
+
+  updateConsents(consents: Consents) {
+    TagManager.dataLayer({
+      dataLayer: {
+        event: 'consentUpdate',
+        ...consents,
+      },
+    })
+  }
 }
 
-class NoOpTracker {
-  init() {}
-
-  trackPageView(url: string) {}
-
-  trackCustomEvent<T = {}>({ event, category, action, label, custom, screenName }: TrackCustomEventParams<T>) {}
-}
-
-const Tracker = ENABLE_LOGGING ? new MasterTracker() : new NoOpTracker()
+const Tracker = ENABLE_LOGGING ? new MasterTracker() : null
 
 export { Tracker }

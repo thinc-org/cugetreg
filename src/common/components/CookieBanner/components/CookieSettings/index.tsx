@@ -33,7 +33,6 @@ export const CookieSettings = ({ consents, setConsents, submitConsents, onClose,
         [ConsentMode.ANALYTICS_STORAGE]: true,
       })
     }
-    console.log(consents)
     setDefaultConsentsRef.current = false
   }, [])
 

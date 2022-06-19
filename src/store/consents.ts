@@ -34,7 +34,7 @@ export const useConsentsStore = create<ConsentsStoreProps>((set, get) => {
   }
 
   const submitConsents = () => {
-    Tracker.updateConsents(get().consents)
+    Tracker?.updateConsents(get().consents)
   }
 
   return {

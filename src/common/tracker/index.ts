@@ -42,14 +42,6 @@ class MasterTracker {
   }
 }
 
-class NoOpTracker {
-  init() {}
-
-  trackPageView(url: string) {}
-
-  trackCustomEvent<T = {}>({ event, category, action, label, custom, screenName }: TrackCustomEventParams<T>) {}
-}
-
-const Tracker = ENABLE_LOGGING ? new MasterTracker() : new NoOpTracker()
+const Tracker = ENABLE_LOGGING ? new MasterTracker() : null
 
 export { Tracker }

@@ -1,7 +1,7 @@
 import { DialogProps, DialogTitle, Fade, Dialog, DialogContent, Button } from '@mui/material'
 import { TransitionProps } from '@mui/material/transitions'
 
-import { ChangeEventHandler, forwardRef, MouseEventHandler } from 'react'
+import { ChangeEventHandler, forwardRef, MouseEventHandler, useEffect, useRef } from 'react'
 
 import { ConsentMode } from '@/common/constants/consents'
 import { Consents } from '@/common/types/consents'
@@ -24,6 +24,18 @@ const Transition = forwardRef(function Transition(
 })
 
 export const CookieSettings = ({ consents, setConsents, submitConsents, onClose, ...props }: CookieSettingsProps) => {
+  const setDefaultConsentsRef = useRef(false)
+
+  useEffect(() => {
+    if (!setDefaultConsentsRef.current) {
+      setConsents({
+        // [ConsentMode.AD_STORAGE]: true,
+        [ConsentMode.ANALYTICS_STORAGE]: true,
+      })
+    }
+    setDefaultConsentsRef.current = false
+  }, [])
+
   const handleConsentChange =
     (mode: ConsentMode): ChangeEventHandler<HTMLInputElement> =>
     (event) => {
@@ -63,7 +75,7 @@ export const CookieSettings = ({ consents, setConsents, submitConsents, onClose,
         <SettingBlock
           title="คุกกี้เพื่อการวิเคราะห์"
           onChange={handleConsentChange(ConsentMode.ANALYTICS_STORAGE)}
-          checked={consents?.[ConsentMode.ANALYTICS_STORAGE] ?? true}
+          checked={consents?.[ConsentMode.ANALYTICS_STORAGE] ?? false}
         >
           คุกกี้ประเภทนี้จะทำการเก็บข้อมูลการใช้งานเว็บไซต์ของคุณ เพื่อเป็นประโยชน์ในการวัดผล
           ปรับปรุงและพัฒนาประสบการณ์ที่ดีในการใช้งานเว็บไซต์ ถ้าหากท่านไม่ยินยอมให้เราใช้คุกกี้นี้เราจะไม่สามารถวัดผล

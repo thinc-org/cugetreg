@@ -1,7 +1,10 @@
+import { getCookie } from 'cookies-next'
 import { runInAction } from 'mobx'
 import * as uuid from 'uuid'
 
+import { CookieKey } from '@/common/constants/cookie'
 import { StorageKey } from '@/common/storage/constants'
+import { Consents } from '@/common/types/consents'
 import { ENABLE_LOGGING } from '@/env'
 import { httpClient } from '@/services/httpClient'
 import { sessionIdStore } from '@/store/sessionIdStore'
@@ -35,6 +38,8 @@ function sendCollectedLog() {
   if (data.length == 0) return
   if (process.env.NODE_ENV === 'development') return
   if (!ENABLE_LOGGING) return
+  const consents = JSON.parse((getCookie(CookieKey.CONSENTS) as string) ?? '{}') as Consents
+  if (!consents?.analytics_storage) return
   httpClient.post(`/clientlogging`, data).catch((e) => console.error('Error while logging', e, 'Message', data))
 }
 

@@ -7,6 +7,7 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 
 module.exports = withPlugins([[withBundleAnalyzer], [withOptimizedImages]], {
   // other options here
+  productionBrowserSourceMaps: true,
   env: {
     IS_PULL_REQUEST: process.env.IS_PULL_REQUEST,
   },

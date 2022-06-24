@@ -18,8 +18,12 @@ export function getOverlappingCourses(
   finalClasses: ExamClass[]
 ) {
   const courses: CourseOverlapMap = {}
-  classes.forEach((it) => {
-    courses[it.courseNo] = {
+  const courseNosFromClasses = classes.map((c) => c.courseNo)
+  const courseNosFromMidterms = midtermClasses.map((c) => c.courseNo)
+  const courseNosFromFinals = finalClasses.map((c) => c.courseNo)
+  const courseNos = uniq([...courseNosFromClasses, ...courseNosFromMidterms, ...courseNosFromFinals])
+  courseNos.forEach((courseNo) => {
+    courses[courseNo] = {
       hasOverlap: false,
       classes: [],
       exams: [],

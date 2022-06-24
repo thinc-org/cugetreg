@@ -104,4 +104,9 @@ describe('getOverlappingCourses', () => {
     )
     expect(result).toEqual(expectedThreeOverlappingClassesAndExams)
   })
+  it('A course with overlapping exams but no classes, should not crash', () => {
+    expect(() => {
+      getOverlappingCourses([], mockTwoOverlappingExams_1, mockTwoOverlappingExams_1)
+    }).not.toThrow()
+  })
 })

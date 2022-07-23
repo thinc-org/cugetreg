@@ -1,4 +1,4 @@
-import { Canvas, loadImage, NodeCanvasRenderingContext2D, registerFont } from 'canvas'
+import { Canvas, loadImage, CanvasRenderingContext2D, registerFont } from 'canvas'
 
 import { i18n } from '@/common/i18n'
 import { getPaletteRange } from '@/common/utils/getPaletteRange'
@@ -66,16 +66,16 @@ export async function drawThumbnail(canvas: Canvas, course: CourseThumbnailData)
   }
 }
 
-function setTextStyle(ctx: NodeCanvasRenderingContext2D, font: string, size: number, color: string) {
+function setTextStyle(ctx: CanvasRenderingContext2D, font: string, size: number, color: string) {
   ctx.font = `${size}px "${font}"`
   ctx.fillStyle = color
 }
 
-function drawText(ctx: NodeCanvasRenderingContext2D, text: string, x: number, y: number) {
+function drawText(ctx: CanvasRenderingContext2D, text: string, x: number, y: number) {
   ctx.fillText(text, x, y)
 }
 
-function drawRoundRect(ctx: NodeCanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number) {
+function drawRoundRect(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number) {
   r = Math.min(r, w / 2)
   r = Math.min(r, h / 2)
 

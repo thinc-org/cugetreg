@@ -20,6 +20,7 @@ exports[`App module Should app component render preperly when forceDark=false 1`
           </style>
         </head>,
         "ctr": 0,
+        "insertionPoint": undefined,
         "isSpeedy": false,
         "key": "css",
         "nonce": undefined,
@@ -104,6 +105,7 @@ exports[`App module Should app component render preperly when forceDark=false 2`
           </style>
         </head>,
         "ctr": 0,
+        "insertionPoint": undefined,
         "isSpeedy": false,
         "key": "css",
         "nonce": undefined,
@@ -188,6 +190,7 @@ exports[`App module Should app component render preperly when forceDark=false 3`
           </style>
         </head>,
         "ctr": 0,
+        "insertionPoint": undefined,
         "isSpeedy": false,
         "key": "css",
         "nonce": undefined,
@@ -272,6 +275,7 @@ exports[`App module Should app component render preperly when forceDark=true 1`]
           </style>
         </head>,
         "ctr": 0,
+        "insertionPoint": undefined,
         "isSpeedy": false,
         "key": "css",
         "nonce": undefined,
@@ -356,6 +360,7 @@ exports[`App module Should app component render preperly when forceDark=true 2`]
           </style>
         </head>,
         "ctr": 0,
+        "insertionPoint": undefined,
         "isSpeedy": false,
         "key": "css",
         "nonce": undefined,
@@ -440,6 +445,7 @@ exports[`App module Should app component render preperly when forceDark=true 3`]
           </style>
         </head>,
         "ctr": 0,
+        "insertionPoint": undefined,
         "isSpeedy": false,
         "key": "css",
         "nonce": undefined,

@@ -1,4 +1,5 @@
-import { Hidden } from '@mui/material'
+import { useMediaQuery, useTheme } from '@mui/material'
+
 import { useTranslation } from 'react-i18next'
 
 import logo from '@/assets/images/cgrLogoDark.svg'
@@ -26,6 +27,8 @@ import { NavBarLayout, Logo } from './styled'
 export function NavBar() {
   const { t } = useTranslation(['navBar', 'translation'])
   const { buildLink } = useLinkBuilder()
+  const theme = useTheme()
+  const isLargeScreen = useMediaQuery(theme.breakpoints.up('md'))
 
   const navbarItems = [
     {
@@ -53,24 +56,28 @@ export function NavBar() {
             <img src={logo} alt={t('translation:appName')} />
           </Logo>
         </LinkWithAnalytics>
-
-        <Hidden mdDown>
-          {navbarItems.map(({ href, elementName, label }) => (
-            <LinkWithAnalytics key={elementName} href={href} passHref elementName={elementName}>
-              <NavBarItem>{label}</NavBarItem>
-            </LinkWithAnalytics>
-          ))}
-          <Spacer />
-          <UserButton />
-        </Hidden>
-        <Hidden mdUp>
-          <Spacer />
-          <Analytics elementName={STUDY_PROGRAM_DROPDOWN}>{({ log }) => <StudyProgramDropdown log={log} />}</Analytics>
-          <ConfigBarItem>
-            <TermDropdown />
-          </ConfigBarItem>
-          <MobileNavBar />
-        </Hidden>
+        {isLargeScreen ? (
+          <>
+            {navbarItems.map(({ href, elementName, label }) => (
+              <LinkWithAnalytics key={elementName} href={href} passHref elementName={elementName}>
+                <NavBarItem>{label}</NavBarItem>
+              </LinkWithAnalytics>
+            ))}
+            <Spacer />
+            <UserButton />
+          </>
+        ) : (
+          <>
+            <Spacer />
+            <Analytics elementName={STUDY_PROGRAM_DROPDOWN}>
+              {({ log }) => <StudyProgramDropdown log={log} />}
+            </Analytics>
+            <ConfigBarItem>
+              <TermDropdown />
+            </ConfigBarItem>
+            <MobileNavBar />
+          </>
+        )}
       </FlexContainer>
     </NavBarLayout>
   )

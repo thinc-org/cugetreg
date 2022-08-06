@@ -5,6 +5,7 @@ import { DefaultSeo } from 'next-seo'
 import { AppProps } from 'next/dist/next-server/lib/router/router'
 import dynamic from 'next/dynamic'
 
+import { DocumentTransition } from '@/common/components/DocumentTransition'
 import { Footer } from '@/common/components/Footer'
 import { LoadingProgress } from '@/common/components/LoadingProgress'
 import { TopBar } from '@/common/components/TopBar'
@@ -53,7 +54,7 @@ export function App(props: MyAppProps) {
         <TopBar />
         <Container>
           <ErrorBoundary>
-            <Component {...pageProps} />
+            <DocumentTransition Component={Component} pageProps={pageProps} />
           </ErrorBoundary>
         </Container>
         <Footer />

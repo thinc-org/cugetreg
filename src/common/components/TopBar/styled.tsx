@@ -9,8 +9,10 @@ export const StickyContainer = styled.div`
 export const TopBarLayout = styled.div`
   position: sticky;
   top: 0;
-  box-shadow: ${({ theme }) => theme.shadows[4]};
+  /* box-shadow: ${({ theme }) => theme.shadows[4]}; */
   z-index: 100;
+  page-transition-tag: main-header;
+  contain: paint;
 `
 
 export const StickySpace = styled.div`

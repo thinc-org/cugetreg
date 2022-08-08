@@ -70,7 +70,7 @@ export function ClassCard({ scheduleClass, onClick }: ClassCardProps) {
         {isWide && courseNo} {abbrName}
       </ClassCardTypography>
       <ClassCardTypography variant="caption">
-        Sec {sectionNo}{buildingAndRoom && ` - ${buildingAndRoom}`}
+        {buildingAndRoom && `${buildingAndRoom} | `}Sec {sectionNo}
       </ClassCardTypography>
     </ClassCardLayout>
   )

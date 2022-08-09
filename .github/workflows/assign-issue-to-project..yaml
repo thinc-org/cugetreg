@@ -1,0 +1,32 @@
+name: Add issue and pull request to Project
+
+on:
+  issues:
+    types:
+      - opened
+  pull_request:
+    types:
+      - ready_to_review
+
+permissions:
+  actions: read
+  checks: read
+  contents: write
+  deployments: read
+  issues: write
+  discussions: read
+  packages: write
+  pull-requests: write
+  repository-projects: write
+  security-events: read
+  statuses: write
+
+jobs:
+  add-to-project:
+    name: Add issue to project
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/add-to-project@v0.3.0
+        with:
+          project-url: https://github.com/orgs/thinc-org/projects/3
+          github-token: ${{ github.token }}

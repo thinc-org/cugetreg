@@ -6,7 +6,7 @@ on:
       - opened
   pull_request:
     types:
-      - ready_to_review
+      - opened
 
 jobs:
   add-to-project:

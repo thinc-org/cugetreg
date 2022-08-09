@@ -8,23 +8,11 @@ on:
     types:
       - ready_to_review
 
-permissions:
-  actions: read
-  checks: read
-  contents: write
-  deployments: read
-  issues: write
-  discussions: read
-  packages: write
-  pull-requests: write
-  repository-projects: write
-  security-events: read
-  statuses: write
-
 jobs:
   add-to-project:
     name: Add issue to project
     runs-on: ubuntu-latest
+    permissions: write-all
     steps:
       - uses: actions/add-to-project@v0.3.0
         with:

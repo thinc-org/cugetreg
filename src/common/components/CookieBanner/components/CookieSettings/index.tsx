@@ -1,7 +1,7 @@
 import { DialogProps, DialogTitle, Fade, Dialog, DialogContent, Button } from '@mui/material'
 import { TransitionProps } from '@mui/material/transitions'
 
-import { ChangeEventHandler, forwardRef, MouseEventHandler, useEffect, useRef } from 'react'
+import { ChangeEventHandler, forwardRef, MouseEventHandler } from 'react'
 
 import { ConsentMode } from '@/common/constants/consents'
 import { Consents } from '@/common/types/consents'
@@ -24,18 +24,6 @@ const Transition = forwardRef(function Transition(
 })
 
 export const CookieSettings = ({ consents, setConsents, submitConsents, onClose, ...props }: CookieSettingsProps) => {
-  const setDefaultConsentsRef = useRef(false)
-
-  useEffect(() => {
-    if (!setDefaultConsentsRef.current) {
-      setConsents({
-        // [ConsentMode.AD_STORAGE]: true,
-        [ConsentMode.ANALYTICS_STORAGE]: true,
-      })
-    }
-    setDefaultConsentsRef.current = false
-  }, [])
-
   const handleConsentChange =
     (mode: ConsentMode): ChangeEventHandler<HTMLInputElement> =>
     (event) => {
@@ -50,6 +38,7 @@ export const CookieSettings = ({ consents, setConsents, submitConsents, onClose,
   return (
     <Dialog
       {...props}
+      onClose={handleClose}
       TransitionComponent={Transition}
       PaperProps={{
         sx: { width: '100%', maxWidth: '500px' },

@@ -1,3 +1,10 @@
+# [1.8.0](https://github.com/thinc-org/cugetreg-frontend/compare/v1.7.0...v1.8.0) (2022-08-10)
+
+
+### Features
+
+* Add Github project assigning automation ([#356](https://github.com/thinc-org/cugetreg-frontend/issues/356)) ([43faee5](https://github.com/thinc-org/cugetreg-frontend/commit/43faee5814ee7ef20479eb56fae22007e172d154))
+
 # [1.7.0](https://github.com/thinc-org/cugetreg-frontend/compare/v1.6.0...v1.7.0) (2022-06-19)
 
 

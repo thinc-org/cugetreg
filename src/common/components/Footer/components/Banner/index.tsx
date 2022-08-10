@@ -47,7 +47,7 @@ export function Banner() {
         <Link href="/privacy" passHref>
           <PrivacyLink>Privacy Policy</PrivacyLink>
         </Link>
-        <CookieSetting onClick={() => setOpenSettings(true)}>Privacy Preference</CookieSetting>
+        <CookieSetting onClick={() => setOpenSettings(true)}>Privacy Preferences</CookieSetting>
       </Stack>
     </BannerContainer>
   )

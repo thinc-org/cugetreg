@@ -1,0 +1,40 @@
+type GoogleCredential {
+  accessToken: String
+  expiresIn: Date
+}
+
+type User {
+  _id: String!
+  name: String!
+}
+
+type CourseCartItem {
+  studyProgram: String!
+  academicYear: String!
+  courseNo: String!
+  semester: String!
+  selectedSectionNo: String!
+  isHidden: Boolean!
+  color: String
+}
+
+input CourseCartItemInput {
+  studyProgram: String!
+  academicYear: String!
+  courseNo: String!
+  semester: String!
+  selectedSectionNo: String!
+  isHidden: Boolean!
+  color: String
+}
+
+type Query {
+  me: User
+  courseCart: [CourseCartItem!]
+  calendarId: String
+}
+
+type Mutation {
+  modifyCourseCart(newContent: [CourseCartItemInput!]!): [CourseCartItem!]
+  modifyCalendarId(newCalendarId: String): String
+}

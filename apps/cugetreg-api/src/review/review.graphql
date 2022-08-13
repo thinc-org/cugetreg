@@ -1,0 +1,55 @@
+enum ReviewInteractionType {
+  L
+  D
+}
+
+enum ReviewStatus {
+  APPROVED
+  REJECTED
+  PENDING
+}
+
+type Review {
+  _id: String!
+  rating: Int!
+  courseNo: String!
+  semester: String!
+  academicYear: String!
+  studyProgram: StudyProgram!
+  content: String
+  likeCount: Int!
+  dislikeCount: Int!
+  myInteraction: ReviewInteractionType
+  status: ReviewStatus
+  isOwner: Boolean!
+}
+
+input CreateReviewInput {
+  rating: Int!
+  courseNo: String!
+  semester: String!
+  academicYear: String!
+  studyProgram: StudyProgram!
+  content: String
+}
+
+input EditReviewInput {
+  rating: Int
+  semester: String
+  academicYear: String
+  content: String
+}
+
+type Query {
+  reviews(courseNo: String!, studyProgram: StudyProgram!): [Review!]!
+  myPendingReviews(courseNo: String!, studyProgram: StudyProgram!): [Review!]!
+  pendingReviews: [Review!]!
+}
+
+type Mutation {
+  createReview(createReviewInput: CreateReviewInput!): Review!
+  removeReview(reviewId: String!): Review!
+  editMyReview(reviewId: String!, review: EditReviewInput!): Review!
+  setReviewInteraction(reviewId: String!, interactionType: ReviewInteractionType!): Review!
+  setReviewStatus(reviewId: String!, status: ReviewStatus!): String!
+}

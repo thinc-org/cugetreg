@@ -1,0 +1,27 @@
+name: Continuous Integration
+on:
+  push:
+    branches:
+      - main
+      - beta
+  pull_request:
+
+jobs:
+  ci:
+    name: Nx Cloud - Main Job
+    uses: nrwl/ci/.github/workflows/nx-cloud-main.yml@v0.6
+    with:
+      number-of-agents: 3
+      parallel-commands: |
+        npx nx-cloud record -- npx nx workspace-lint
+        npx nx-cloud record -- npx nx format:check
+      parallel-commands-on-agents: |
+        npx nx affected --target=lint --parallel=3 --base=${{ github.base_ref }} --head=${{ github.ref }}
+        npx nx affected --target=test --parallel=3 --ci --code-coverage --base=${{ github.base_ref }} --head=${{ github.ref }}
+        npx nx affected --target=build --parallel=3 --base=${{ github.base_ref }} --head=${{ github.ref }}
+
+  agents:
+    name: Nx Cloud - Agents
+    uses: nrwl/ci/.github/workflows/nx-cloud-agents.yml@v0.6
+    with:
+      number-of-agents: 3

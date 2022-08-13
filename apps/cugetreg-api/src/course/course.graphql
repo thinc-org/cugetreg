@@ -1,0 +1,98 @@
+type Period {
+  start: String!
+  end: String!
+}
+
+type ExamPeriod {
+  date: String!
+  period: Period!
+}
+
+type Capacity {
+  current: Int!
+  max: Int!
+}
+
+type Class {
+  type: String!
+  dayOfWeek: DayOfWeek
+  period: Period
+  building: String
+  room: String
+  teachers: [String!]!
+}
+
+type Section {
+  sectionNo: String!
+  closed: Boolean!
+  capacity: Capacity!
+  note: String
+  classes: [Class!]!
+  genEdType: GenEdType!
+}
+
+type Course {
+  # General info
+  studyProgram: StudyProgram!
+  semester: String!
+  academicYear: String!
+
+  # Course info
+  courseNo: String!
+  courseDescTh: String
+  courseDescEn: String
+  abbrName: String!
+  courseNameTh: String!
+  courseNameEn: String!
+  faculty: String!
+  department: String!
+  credit: Float!
+  creditHours: String!
+  courseCondition: String!
+  genEdType: GenEdType!
+
+  # Exam
+  midterm: ExamPeriod
+  final: ExamPeriod
+
+  # Section
+  sections: [Section!]!
+
+  # Rating
+  rating: String
+
+  # Deprecated
+  courseDesc: String @deprecated(reason: "Use courseDescTh or courseDescEn instead")
+}
+
+input PeriodRangeInput {
+  start: String!
+  end: String!
+}
+
+input FilterInput {
+  keyword: String
+  genEdTypes: [GenEdType!]
+  dayOfWeeks: [DayOfWeek!]
+  limit: Int
+  offset: Int
+  periodRange: PeriodRangeInput
+}
+
+input CourseGroupInput {
+  semester: String!
+  academicYear: String!
+  studyProgram: StudyProgram!
+}
+
+type CourseNosOutput {
+  S: [String!]!
+  T: [String!]!
+  I: [String!]!
+}
+
+type Query {
+  courseNos: CourseNosOutput
+  course(courseNo: String!, courseGroup: CourseGroupInput!): Course!
+  search(filter: FilterInput!, courseGroup: CourseGroupInput!): [Course!]!
+}

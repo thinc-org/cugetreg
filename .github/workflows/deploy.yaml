@@ -68,7 +68,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --prefer-offline
 
-      - name: Set  dev web env
+      - name: Set dev web env
         if: ${{ github.ref == 'refs/heads/dev' }}
         run: mv apps/cugetreg-web/.env.dev apps/cugetreg-web/.env
 
@@ -92,4 +92,4 @@ jobs:
 
       - name: Publish Docker images
         run: |
-          npx nx run-many --target=docker-build:${{ github.ref_name }} --parallel
+          npx nx run-many --target=docker-build:${{ github.ref_name }} --parallel --base=${{ github.event.before }} --head=${{ github.sha }}

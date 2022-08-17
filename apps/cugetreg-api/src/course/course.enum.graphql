@@ -6,39 +6,58 @@ enum DayOfWeek {
   FR
   SA
   SU
+
+  """
+  Individually Arranged (Different for each student)
+  """
   IA
+
+  """
+  To be Arranged (Faculty will announce later)
+  """
   AR
 }
 
 enum StudyProgram {
+  """
+  Semester
+  """
   S
+
+  """
+  Trimester
+  """
   T
+
+  """
+  International
+  """
   I
 }
 
-enum ClassType {
-  LECT
-  LAB
-  DISC
-  FWK
-  PRAC
-  IDPS
-  SMNA
-  STU
-  "L/T"
-  IA
-  OTHER
-  IDVS
-  AR
-  CLIN
-  TUT
-  REFL
-}
-
 enum GenEdType {
+  """
+  Social Science
+  """
   SO
-  SC
+
+  """
+  Humanities
+  """
   HU
+
+  """
+  Science-Mathematics
+  """
+  SC
+
+  """
+  Interdisciplinary
+  """
   IN
+
+  """
+  Not GenEd
+  """
   NO
 }

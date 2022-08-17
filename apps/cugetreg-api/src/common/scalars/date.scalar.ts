@@ -4,7 +4,8 @@ import { Kind, ValueNode } from 'graphql'
 
 @Scalar('Date')
 export class DateScalar implements CustomScalar<string, Date> {
-  description = 'Date custom scalar type'
+  description =
+    'Date custom scalar type, for (de)serializing Date values from/to ISO8601 representation.'
 
   parseValue(value: string): Date {
     return new Date(value) // value from the client

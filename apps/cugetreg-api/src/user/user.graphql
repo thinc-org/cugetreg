@@ -1,8 +1,3 @@
-type GoogleCredential {
-  accessToken: String
-  expiresIn: Date
-}
-
 type User {
   _id: String!
   name: String!
@@ -13,6 +8,10 @@ type CourseCartItem {
   academicYear: String!
   courseNo: String!
   semester: String!
+
+  """
+  The section no. that user selected for this course.
+  """
   selectedSectionNo: String!
   isHidden: Boolean!
   color: String
@@ -23,18 +22,36 @@ input CourseCartItemInput {
   academicYear: String!
   courseNo: String!
   semester: String!
+
+  """
+  The section no. that user selected for this course.
+  """
   selectedSectionNo: String!
   isHidden: Boolean!
   color: String
 }
 
 type Query {
+  """
+  Returns current user.
+  Requires user authentication.
+  """
   me: User
+
+  """
+  Returns current user's course cart.
+
+  Requires user authentication.
+  """
   courseCart: [CourseCartItem!]
-  calendarId: String
+
+  calendarId: String @deprecated(reason: "Will be redesigned.")
 }
 
 type Mutation {
+  """
+  Modifies current user's course cart.
+  """
   modifyCourseCart(newContent: [CourseCartItemInput!]!): [CourseCartItem!]
-  modifyCalendarId(newCalendarId: String): String
+  modifyCalendarId(newCalendarId: String): String @deprecated(reason: "Will be redesigned.")
 }

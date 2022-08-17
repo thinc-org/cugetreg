@@ -1,9 +1,18 @@
+"""
+Pair of start and end time. Format is `HH:MM`.
+"""
 type Period {
   start: String!
   end: String!
 }
 
+"""
+Pair of exam date and period.
+"""
 type ExamPeriod {
+  """
+  Date of the exam. The value is formatted as ISO8601 representation: `YYYY-MM-DDT00:00:00.000Z`.
+  """
   date: String!
   period: Period!
 }
@@ -28,6 +37,9 @@ type Section {
   capacity: Capacity!
   note: String
   classes: [Class!]!
+  """
+  `GenEdType` of this section. If this section is not a GenEd section, the value will be `NO`.
+  """
   genEdType: GenEdType!
 }
 
@@ -49,6 +61,9 @@ type Course {
   credit: Float!
   creditHours: String!
   courseCondition: String!
+  """
+  `GenEdType` of this course. If this course is not a GenEd course, the value will be `NO`.
+  """
   genEdType: GenEdType!
 
   # Exam
@@ -64,27 +79,63 @@ type Course {
   # Deprecated
   courseDesc: String @deprecated(reason: "Use courseDescTh or courseDescEn instead")
 }
-
+"""
+Filter for searching courses that have class inside the given time period.
+"""
 input PeriodRangeInput {
   start: String!
   end: String!
 }
-
+"""
+Filters for searching courses. If a filter is not specified, it will not be used in the search.
+"""
 input FilterInput {
+  """
+  Keyword to search for courses. This filter is passed IF any of  `courseNo`, `abbrName`,
+  `courseNameTh`, or `courseNameEn` contains the keyword as a substring (except for `courseNo`
+  which checks if value **starts with** the keyword).
+  """
   keyword: String
+
+  """
+  List of `GenEdTypes`. This filter is passed IF the course's `genEdType` matches ANY of the `genEdTypes` in the list.
+  """
   genEdTypes: [GenEdType!]
+
+  """
+  List of `DayOfWeeks`. This filter is passed IF ANY of the course's sections have class in ANY of the `dayOfWeeks` in the list.
+  """
   dayOfWeeks: [DayOfWeek!]
-  limit: Int
-  offset: Int
+
+  """
+  Range of the classes' period. This filter is passed IF ANY of the course's sections
+  have class that intersects with the `periodRange`.
+  """
   periodRange: PeriodRangeInput
+
+  """
+  Number of courses to return in this query. Used for pagination.
+  """
+  limit: Int
+
+  """
+  Number of courses to skip through. Used for pagination.
+  """
+  offset: Int
 }
 
+"""
+Combination of `semester`, `academicYear`, and `studyProgram`. Used to differentiate courses between time periods and program.
+"""
 input CourseGroupInput {
   semester: String!
   academicYear: String!
   studyProgram: StudyProgram!
 }
 
+"""
+List of all course nos. in all `studyPrograms`.
+"""
 type CourseNosOutput {
   S: [String!]!
   T: [String!]!
@@ -92,7 +143,18 @@ type CourseNosOutput {
 }
 
 type Query {
+  """
+  Returns a list of all course nos.
+  """
   courseNos: CourseNosOutput
+
+  """
+  Find a course and returns it
+  """
   course(courseNo: String!, courseGroup: CourseGroupInput!): Course!
+
+  """
+  Search courses using the given course filters. Supports pagination with limit and offset fields in `FilterInput`.
+  """
   search(filter: FilterInput!, courseGroup: CourseGroupInput!): [Course!]!
 }

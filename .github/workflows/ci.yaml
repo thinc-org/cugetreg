@@ -16,9 +16,9 @@ jobs:
         npx nx-cloud record -- npx nx workspace-lint
         npx nx-cloud record -- npx nx format:check
       parallel-commands-on-agents: |
-        npx nx affected --target=lint --parallel=3 --base=${{ github.event.before || github.base.sha }} --head=${{ github.sha }}
-        npx nx affected --target=test --parallel=3 --ci --code-coverage --base=${{ github.event.before || github.base.sha }} --head=${{ github.sha }}
-        npx nx affected --target=build --parallel=3 --base=${{ github.event.before || github.base.sha }} --head=${{ github.sha }}
+        npx nx affected --target=lint --parallel=3 --base=${{ github.event.before || github.base.sha }} --head=HEAD
+        npx nx affected --target=test --parallel=3 --ci --code-coverage --base=${{ github.event.before || github.base.sha }} --head=HEAD
+        npx nx affected --target=build --parallel=3 --base=${{ github.event.before || github.base.sha }} --head=HEAD
       main-branch-name: master
 
   agents:

@@ -1,90 +1,81 @@
-# Cugetreg
+![cover](https://user-images.githubusercontent.com/33742791/142388797-fa14bcfa-b01e-45ab-a271-bfdeeb26285f.png)
 
-This project was generated using [Nx](https://nx.dev).
+<!--- insert badge here --->
 
-<p style="text-align: center;"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="450"></p>
+Have no idea what courses to take? Don't know what this course is about? We got it covered. With [CU Get Reg](https://cugetreg.com), we put all kinds of course data together so that you don't have to.
 
-🔎 **Smart, Fast and Extensible Build System**
+## Contents
 
-## Adding capabilities to your workspace
+- [The beginning of CU Get Reg](#beginning-of-cu-get-reg)
+- [Related repositories](#related-repositories)
+- [Contribution](#contribution)
+- [Roadmap](#roadmap)
+- [Contributors](#contributors)
+- [Contacts](#contacts)
+- [Sponsors](#sponsors)
 
-Nx supports many plugins which add capabilities for developing different types of applications and different tools.
+<div id="beginning-of-cu-get-reg"></div>
 
-These capabilities include generating applications, libraries, etc as well as the devtools to test, and build projects as well.
+## The beginning of CU Get Reg
 
-Below are our core plugins:
+    "Which GenEd courses should I enroll this semester?"
 
-- [React](https://reactjs.org)
-  - `npm install --save-dev @nrwl/react`
-- Web (no framework frontends)
-  - `npm install --save-dev @nrwl/web`
-- [Angular](https://angular.io)
-  - `npm install --save-dev @nrwl/angular`
-- [Nest](https://nestjs.com)
-  - `npm install --save-dev @nrwl/nest`
-- [Express](https://expressjs.com)
-  - `npm install --save-dev @nrwl/express`
-- [Node](https://nodejs.org)
-  - `npm install --save-dev @nrwl/node`
+    "Will this course conflict with my other courses?"
 
-There are also many [community plugins](https://nx.dev/community) you could add.
+    "Each section of this course is taught on different days. How do I choose?"
 
-## Generate an application
+And many other problems students face when planning their timetable for the semester. We, the CU Get Reg team, are no different.
 
-Run `nx g @nrwl/react:app my-app` to generate an application.
+Picking courses and sections in each semester is a very complicated and time-consuming process. Course information is scattered, especially GenEd courses. When trying to find the right GenEd, you have to consider many factors such as course contents, available seats, and popularity. However, that information is hard to access which makes planning very difficult.
 
-> You can use any of the plugins above to generate applications as well.
+We saw this problem and built [CU Get Reg](https://cugetreg.com) to make this planning process a breeze!
 
-When using Nx, you can create multiple applications and libraries in the same workspace.
+<div id="related-repositories"></div>
 
-## Generate a library
+## Related repositories
 
-Run `nx g @nrwl/react:lib my-lib` to generate a library.
+- [cugetreg-frontend](https://github.com/thinc-org/cugetreg-frontend) The web interface, powered by React
+- [cugetreg-backend](https://github.com/thinc-org/cugetreg-backend) The core API, powered by GraphQL and NestJS
+- [cugetreg-scraper](https://github.com/thinc-org/cugetreg-scraper) The system that fetches public course data from [Reg Chula](https://cas.reg.chula.ac.th/cu/cs/QueryCourseScheduleNew/index.html)
+- [chula-courses](https://github.com/thinc-org/chula-courses) Data schema
 
-> You can also use any of the plugins above to generate libraries as well.
+<div id="contribution"></div>
 
-Libraries are shareable across libraries and applications. They can be imported from `@cugetreg/mylib`.
+## Contribution
 
-## Development server
+CU Get Reg is open source - we welcome all developers. If you want to be a part of CU Get Reg and improve Chulalongkorn University society, you can start here!
 
-Run `nx serve my-app` for a dev server. Navigate to http://localhost:4200/. The app will automatically reload if you change any of the source files.
+- [Contribution Guides](#https://github.com/thinc-org/cugetreg-frontend/wiki/Contribution-Guides)
+- [Set up your local environments](https://github.com/thinc-org/cugetreg-frontend/wiki/Contribution-Guides)
+- [Explore issues](https://github.com/thinc-org/cugetreg-frontend/issues)
+- [Our Roadmap](https://github.com/thinc-org/cugetreg-frontend/wiki/Contribution-Guides)
 
-## Code scaffolding
+<div id="roadmap"></div>
 
-Run `nx g @nrwl/react:component my-component --project=my-app` to generate a new component.
+## Roadmap
 
-## Build
+Read more at [Roadmap](https://github.com/thinc-org/cugetreg-frontend/wiki/Contribution-Guides)
 
-Run `nx build my-app` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+<div id="contributors"></div>
 
-## Running unit tests
+## Contributors
 
-Run `nx test my-app` to execute the unit tests via [Jest](https://jestjs.io).
+TODO
 
-Run `nx affected:test` to execute the unit tests affected by a change.
+<div id="contacts"></div>
 
-## Running end-to-end tests
+## Contacts
 
-Run `nx e2e my-app` to execute the end-to-end tests via [Cypress](https://www.cypress.io).
+You can contact us anytime via
 
-Run `nx affected:e2e` to execute the end-to-end tests affected by a change.
+- Facebook Page: [Thinc.](https://www.facebook.com/ThailandIncubator)
+- LinkedIn: [CU Get Reg](https://www.linkedin.com/company/cugetreg)
+- Discord: Coming soon
 
-## Understand your workspace
+<div id="sponsors"></div>
 
-Run `nx graph` to see a diagram of the dependencies of your projects.
+## Sponsors
 
-## Further help
-
-Visit the [Nx Documentation](https://nx.dev) to learn more.
-
-## ☁ Nx Cloud
-
-### Distributed Computation Caching & Distributed Task Execution
-
-<p style="text-align: center;"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-cloud-card.png"></p>
-
-Nx Cloud pairs with Nx in order to enable you to build and test code more rapidly, by up to 10 times. Even teams that are new to Nx can connect to Nx Cloud and start saving time instantly.
-
-Teams using Nx gain the advantage of building full-stack applications with their preferred framework alongside Nx’s advanced code generation and project dependency graph, plus a unified experience for both frontend and backend developers.
-
-Visit [Nx Cloud](https://nx.app/) to learn more.
+1. [Office of the Registrar - Chulalongkorn University](https://www.reg.chula.ac.th) - provides the infrastructure for CU Get Reg
+2. [General Education Center - Chulalongkorn University](https://www.gened.chula.ac.th) - provides course description for GenEd courses
+3. [Gen อย่าได้ Ed](https://www.facebook.com/genedahs) - helps promote our website and provides data on GenEd courses

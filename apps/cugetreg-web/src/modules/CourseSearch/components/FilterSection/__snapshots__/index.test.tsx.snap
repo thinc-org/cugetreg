@@ -29,14 +29,14 @@ exports[`FilterSection Should matched snapshot correctly when matchSmallScreen=f
         <Component />
       </Analytics>
     </ForwardRef(Stack)>
-    <Button
+    <Styled(ForwardRef(Button))
       color="primary"
       fullWidth={true}
       onClick={[MockFunction]}
       variant="outlined"
     >
       เลือกตัวกรอง
-    </Button>
+    </Styled(ForwardRef(Button))>
   </ForwardRef(DialogContent)>
 </ResponsiveDialog>
 `;
@@ -70,14 +70,14 @@ exports[`FilterSection Should matched snapshot correctly when matchSmallScreen=f
         <Component />
       </Analytics>
     </ForwardRef(Stack)>
-    <Button
+    <Styled(ForwardRef(Button))
       color="primary"
       fullWidth={true}
       onClick={[MockFunction]}
       variant="outlined"
     >
       เลือกตัวกรอง
-    </Button>
+    </Styled(ForwardRef(Button))>
   </ForwardRef(DialogContent)>
 </ResponsiveDialog>
 `;
@@ -85,7 +85,7 @@ exports[`FilterSection Should matched snapshot correctly when matchSmallScreen=f
 exports[`FilterSection Should matched snapshot correctly when matchSmallScreen=true and isExpandFilter=false 1`] = `""`;
 
 exports[`FilterSection Should matched snapshot correctly when matchSmallScreen=true and isExpandFilter=true 1`] = `
-<StickyPaper
+<Styled(ForwardRef(Paper))
   hasTags={true}
   variant="outlined"
 >
@@ -114,7 +114,7 @@ exports[`FilterSection Should matched snapshot correctly when matchSmallScreen=t
       <Component />
     </Analytics>
   </ForwardRef(Stack)>
-</StickyPaper>
+</Styled(ForwardRef(Paper))>
 `;
 
 exports[`FilterSection Should render CheckboxGroup of GenEds correctly when when matchSmallScreen=false and isExpandFilter=false 1`] = `

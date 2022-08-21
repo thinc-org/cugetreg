@@ -56,13 +56,13 @@ exports[`App module Should app component render preperly when forceDark=false 1`
             Object {
               "alt": "CU Get Reg",
               "height": 600,
-              "url": "http://localhost:3000/cover.jpg",
+              "url": "http://localhost:4200/cover.jpg",
               "width": 800,
             },
           ],
           "title": "CU Get Reg",
           "type": "website",
-          "url": "http://localhost:3000",
+          "url": "http://localhost:4200",
         }
       }
       titleTemplate="%s | CU Get Reg"
@@ -141,13 +141,13 @@ exports[`App module Should app component render preperly when forceDark=false 2`
             Object {
               "alt": "CU Get Reg",
               "height": 600,
-              "url": "http://localhost:3000/cover.jpg",
+              "url": "http://localhost:4200/cover.jpg",
               "width": 800,
             },
           ],
           "title": "CU Get Reg",
           "type": "website",
-          "url": "http://localhost:3000",
+          "url": "http://localhost:4200",
         }
       }
       titleTemplate="%s | CU Get Reg"
@@ -226,13 +226,13 @@ exports[`App module Should app component render preperly when forceDark=false 3`
             Object {
               "alt": "CU Get Reg",
               "height": 600,
-              "url": "http://localhost:3000/cover.jpg",
+              "url": "http://localhost:4200/cover.jpg",
               "width": 800,
             },
           ],
           "title": "CU Get Reg",
           "type": "website",
-          "url": "http://localhost:3000",
+          "url": "http://localhost:4200",
         }
       }
       titleTemplate="%s | CU Get Reg"
@@ -311,13 +311,13 @@ exports[`App module Should app component render preperly when forceDark=true 1`]
             Object {
               "alt": "CU Get Reg",
               "height": 600,
-              "url": "http://localhost:3000/cover.jpg",
+              "url": "http://localhost:4200/cover.jpg",
               "width": 800,
             },
           ],
           "title": "CU Get Reg",
           "type": "website",
-          "url": "http://localhost:3000",
+          "url": "http://localhost:4200",
         }
       }
       titleTemplate="%s | CU Get Reg"
@@ -396,13 +396,13 @@ exports[`App module Should app component render preperly when forceDark=true 2`]
             Object {
               "alt": "CU Get Reg",
               "height": 600,
-              "url": "http://localhost:3000/cover.jpg",
+              "url": "http://localhost:4200/cover.jpg",
               "width": 800,
             },
           ],
           "title": "CU Get Reg",
           "type": "website",
-          "url": "http://localhost:3000",
+          "url": "http://localhost:4200",
         }
       }
       titleTemplate="%s | CU Get Reg"
@@ -481,13 +481,13 @@ exports[`App module Should app component render preperly when forceDark=true 3`]
             Object {
               "alt": "CU Get Reg",
               "height": 600,
-              "url": "http://localhost:3000/cover.jpg",
+              "url": "http://localhost:4200/cover.jpg",
               "width": 800,
             },
           ],
           "title": "CU Get Reg",
           "type": "website",
-          "url": "http://localhost:3000",
+          "url": "http://localhost:4200",
         }
       }
       titleTemplate="%s | CU Get Reg"

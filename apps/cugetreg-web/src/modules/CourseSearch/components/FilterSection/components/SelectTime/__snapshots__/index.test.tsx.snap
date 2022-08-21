@@ -2,11 +2,11 @@
 
 exports[`SelectTime Should render correctly 1`] = `
 <ForwardRef(Stack)>
-  <SelectTimeTitle
+  <Styled(ForwardRef(Typography))
     variant="button"
   >
     periodRange
-  </SelectTimeTitle>
+  </Styled(ForwardRef(Typography))>
   <ForwardRef(FormControlLabel)
     control={
       <ForwardRef(Checkbox)

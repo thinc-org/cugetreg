@@ -1,4 +1,4 @@
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:4200'
 const environment = process.env.NEXT_PUBLIC_ENVIRONMENT || 'dev'
 
 const options = {

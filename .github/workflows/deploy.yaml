@@ -93,3 +93,30 @@ jobs:
       - name: Publish Docker images
         run: |
           npx nx run-many --target=docker-build:${{ github.ref_name }} --parallel --base=${{ github.event.before }} --head=${{ github.sha }}
+
+      - name: Connect SSLVPN
+        uses: thinc-org/openfortivpn-action@master
+        with:
+          host: ${{ secrets.SSLVPN_HOST }}
+          username: ${{ secrets.SSLVPN_USERNAME }}
+          password: ${{ secrets.SSLVPN_PASSWORD }}
+          trustedCert: ${{ secrets.SSLVPN_TRUSTED_CERT }}
+
+      - name: Deploy to VM
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            docker pull ghcr.io/thinc-org/cugetreg/cugetreg-api:dev
+            docker pull ghcr.io/thinc-org/cugetreg/cugetreg-api:beta
+            docker pull ghcr.io/thinc-org/cugetreg/cugetreg-api:latest
+            docker pull ghcr.io/thinc-org/cugetreg/cugetreg-web:dev
+            docker pull ghcr.io/thinc-org/cugetreg/cugetreg-web:beta
+            docker pull ghcr.io/thinc-org/cugetreg/cugetreg-web:latest
+            docker-compose up -d
+            if [[ "$(docker images --filter "dangling=true" -q)" == "" ]];
+              then echo "No image with <none> tag";
+              else docker rmi $(docker images --filter "dangling=true" -q);
+            fi

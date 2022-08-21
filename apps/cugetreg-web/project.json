@@ -18,6 +18,12 @@
         "production": {}
       }
     },
+    "postbuild": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [{ "command": "next-sitemap --config apps/cugetreg-web/next-sitemap.js" }]
+      }
+    },
     "serve": {
       "executor": "@nrwl/next:server",
       "defaultConfiguration": "development",
@@ -68,6 +74,7 @@
       "options": {
         "commands": [
           { "command": "nx run cugetreg-web:build", "forwardAllArgs": false },
+          { "command": "nx run cugetreg-web:postbuild", "forwardAllArgs": false },
           {
             "command": "nx run cugetreg-web:docker --push={args.push} --tags={args.tags}",
             "forwardAllArgs": false

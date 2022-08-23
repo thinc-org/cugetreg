@@ -7,4 +7,6 @@ module.exports = {
   robotsTxtOptions: {
     additionalSitemaps: [`${siteUrl}/server-sitemap.xml`],
   },
+  sourceDir: 'dist/apps/cugetreg-web/.next',
+  outDir: 'dist/apps/cugetreg-web/public',
 }

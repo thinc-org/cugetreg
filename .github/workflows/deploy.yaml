@@ -92,7 +92,7 @@ jobs:
 
       - name: Publish Docker images
         run: |
-          npx nx run-many --target=docker-build:${{ github.ref_name }} --parallel --base=${{ github.event.before }} --head=${{ github.sha }}
+          npx nx run-many --target=docker-build --configuration=${{ github.ref_name }} --parallel --base=${{ github.event.before }} --head=${{ github.sha }}
 
       - name: Connect SSLVPN
         uses: thinc-org/openfortivpn-action@master

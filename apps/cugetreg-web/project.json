@@ -21,7 +21,9 @@
     "postbuild": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "commands": [{ "command": "next-sitemap --config apps/cugetreg-web/next-sitemap.js" }]
+        "commands": [
+          { "command": "next-sitemap --config apps/cugetreg-web/next-sitemap.config.js" }
+        ]
       }
     },
     "serve": {

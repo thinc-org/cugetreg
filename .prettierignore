@@ -1,1 +1,8 @@
+# Add files here to ignore them from prettier formatting
+/dist
+/coverage
+
+# Next.js
 .next
+
+pnpm-lock.yaml

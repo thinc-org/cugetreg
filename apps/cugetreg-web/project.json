@@ -1,0 +1,102 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/cugetreg-web",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/next:build",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "root": "apps/cugetreg-web",
+        "outputPath": "dist/apps/cugetreg-web"
+      },
+      "configurations": {
+        "development": {
+          "outputPath": "apps/cugetreg-web"
+        },
+        "production": {}
+      }
+    },
+    "postbuild": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [{ "command": "next-sitemap --config apps/cugetreg-web/next-sitemap.js" }]
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/next:server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "cugetreg-web:build",
+        "dev": true
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "cugetreg-web:build:development",
+          "dev": true
+        },
+        "production": {
+          "buildTarget": "cugetreg-web:build:production",
+          "dev": false
+        }
+      }
+    },
+    "export": {
+      "executor": "@nrwl/next:export",
+      "options": {
+        "buildTarget": "cugetreg-web:build:production"
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/apps/cugetreg-web"],
+      "options": {
+        "jestConfig": "apps/cugetreg-web/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/cugetreg-web/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "docker": {
+      "executor": "@nx-tools/nx-docker:build",
+      "options": {
+        "tags": ["ghcr.io/thinc-org/cugetreg-web:latest"]
+      }
+    },
+    "docker-build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          { "command": "nx run cugetreg-web:build", "forwardAllArgs": false },
+          { "command": "nx run cugetreg-web:postbuild", "forwardAllArgs": false },
+          {
+            "command": "nx run cugetreg-web:docker --push={args.push} --tags={args.tags}",
+            "forwardAllArgs": false
+          }
+        ],
+        "parallel": false
+      },
+      "configurations": {
+        "local": {
+          "args": "--push=false --tags=ghcr.io/thinc-org/cugetreg-web:latest"
+        },
+        "dev": {
+          "args": "--push=true --tags=ghcr.io/thinc-org/cugetreg-web:dev"
+        },
+        "beta": {
+          "args": "--push=true --tags=ghcr.io/thinc-org/cugetreg-web:beta"
+        },
+        "master": {
+          "args": "--push=true --tags=ghcr.io/thinc-org/cugetreg-web:latest"
+        }
+      }
+    }
+  },
+  "tags": []
+}

@@ -28,9 +28,9 @@ import { AppService } from './app.service'
     }),
     GraphQLModule.forRootAsync({
       useFactory: (configService: ConfigService) => ({
-        typePaths: ['./**/*.graphql'],
+        typePaths: ['apps/cugetreg-api/**/*.graphql'],
         definitions: {
-          path: join(process.cwd(), 'src/graphql.ts'),
+          path: join(process.cwd(), 'apps/cugetreg-api/src/graphql.ts'),
           outputAs: 'class',
         },
         playground: true,

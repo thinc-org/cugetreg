@@ -6,11 +6,19 @@
     "build": {
       "executor": "@nrwl/node:webpack",
       "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
       "options": {
         "outputPath": "dist/apps/cugetreg-api",
         "main": "apps/cugetreg-api/src/main.ts",
         "tsConfig": "apps/cugetreg-api/tsconfig.app.json",
-        "assets": ["apps/cugetreg-api/src/assets"],
+        "assets": [
+          "apps/cugetreg-api/src/assets",
+          {
+            "glob": "**/*.graphql",
+            "input": "apps/cugetreg-api/src",
+            "output": "assets/graphql"
+          }
+        ],
         "generatePackageJson": true
       },
       "configurations": {
@@ -55,6 +63,7 @@
     },
     "docker-build": {
       "executor": "nx:run-commands",
+      "defaultConfiguration": "local",
       "options": {
         "commands": [
           { "command": "nx run cugetreg-api:build", "forwardAllArgs": false },

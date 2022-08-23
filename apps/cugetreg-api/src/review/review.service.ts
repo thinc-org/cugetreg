@@ -32,6 +32,13 @@ export class ReviewService {
     { courseNo, semester, academicYear, studyProgram, rating, content }: CreateReviewInput,
     userId: string
   ): Promise<Review> {
+    if (rating < 0 || rating > 10) {
+      throw new BadRequestException({
+        reason: 'RATING_OUT_OF_BOUND',
+        message: `Rating must be between 0 and 10. Got ${rating}`,
+      })
+    }
+
     const review = await this.reviewModel.findOne({
       ownerId: userId,
       courseNo,
@@ -99,7 +106,20 @@ export class ReviewService {
     reviewInput: EditReviewInput,
     userId: string
   ): Promise<Review> {
+    if (reviewInput.rating != null && (reviewInput.rating < 0 || reviewInput.rating > 10)) {
+      throw new BadRequestException({
+        reason: 'RATING_OUT_OF_BOUND',
+        message: `Rating must be between 0 and 10. Got ${reviewInput.rating}`,
+      })
+    }
+
     const review = await this.reviewModel.findById(reviewId)
+    if (!review) {
+      throw new NotFoundException({
+        reason: 'REVIEW_NOT_FOUND',
+        message: 'Review with the given id does not exist.',
+      })
+    }
     if (!review.ownerId.equals(userId)) {
       throw new BadRequestException({
         reason: 'INVALID_USER',

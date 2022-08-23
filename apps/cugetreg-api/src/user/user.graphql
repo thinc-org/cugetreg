@@ -44,8 +44,6 @@ type Query {
   Requires user authentication.
   """
   courseCart: [CourseCartItem!]
-
-  calendarId: String @deprecated(reason: "Will be redesigned.")
 }
 
 type Mutation {
@@ -53,5 +51,4 @@ type Mutation {
   Modifies current user's course cart.
   """
   modifyCourseCart(newContent: [CourseCartItemInput!]!): [CourseCartItem!]
-  modifyCalendarId(newCalendarId: String): String @deprecated(reason: "Will be redesigned.")
 }

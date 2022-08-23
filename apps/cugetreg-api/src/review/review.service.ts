@@ -32,7 +32,7 @@ export class ReviewService {
     { courseNo, semester, academicYear, studyProgram, rating, content }: CreateReviewInput,
     userId: string
   ): Promise<Review> {
-    if (rating) {
+    if (rating < 0 || rating > 10) {
       throw new BadRequestException({
         reason: 'RATING_OUT_OF_BOUND',
         message: `Rating must be between 0 and 10. Got ${rating}`,
@@ -106,7 +106,7 @@ export class ReviewService {
     reviewInput: EditReviewInput,
     userId: string
   ): Promise<Review> {
-    if (reviewInput.rating) {
+    if (reviewInput.rating != null && (reviewInput.rating < 0 || reviewInput.rating > 10)) {
       throw new BadRequestException({
         reason: 'RATING_OUT_OF_BOUND',
         message: `Rating must be between 0 and 10. Got ${reviewInput.rating}`,

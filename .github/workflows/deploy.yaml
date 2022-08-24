@@ -18,8 +18,8 @@ permissions:
   statuses: write
 
 jobs:
-  deploy:
-    name: Deploy
+  publish-docker-image:
+    name: Publish Docker image
     strategy:
       matrix:
         node-version: [16.x]
@@ -108,6 +108,36 @@ jobs:
         if: ${{ env.AFFECTED_APPS }}
         run: |
           AFFECTED_APPS="${{ env.AFFECTED_APPS }}" TAG=${{ env.TAG }} ./tools/tag-push-images
+
+  deploy:
+    name: Deploy
+    strategy:
+      matrix:
+        node-version: [16.x]
+        platform: [ubuntu-latest]
+
+    runs-on: ${{ matrix.platform }}
+
+    steps:
+      - uses: actions/checkout@v2
+        name: Checkout [Pull Request]
+        if: ${{ github.event_name == 'pull_request' }}
+        with:
+          # By default, PRs will be checked-out based on the Merge Commit, but we want the actual branch HEAD.
+          ref: ${{ github.event.pull_request.head.sha }}
+          # We need to fetch all branches and commits so that Nx affected has a base to compare against.
+          fetch-depth: 0
+
+      - uses: actions/checkout@v2
+        name: Checkout [Default Branch]
+        if: ${{ github.event_name != 'pull_request' }}
+        with:
+          # We need to fetch all branches and commits so that Nx affected has a base to compare against.
+          fetch-depth: 0
+
+      - name: Set affected apps env
+        run: |
+          AFFECTED_BASE=${{ github.event.before }} ./tools/set-affected-apps-env
 
       - name: Connect SSLVPN
         uses: thinc-org/openfortivpn-action@master

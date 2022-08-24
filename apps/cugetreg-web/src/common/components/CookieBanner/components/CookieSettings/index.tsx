@@ -12,6 +12,7 @@ interface CookieSettingsProps extends DialogProps {
   consents?: Consents
   setConsents: (consents: Consents) => void
   submitConsents: () => void
+  onCloseBanner: () => void
 }
 
 const Transition = forwardRef(function Transition(
@@ -28,17 +29,25 @@ export const CookieSettings = ({
   setConsents,
   submitConsents,
   onClose,
+  onCloseBanner,
   ...props
 }: CookieSettingsProps) => {
-  const handleConsentChange =
-    (mode: ConsentMode): ChangeEventHandler<HTMLInputElement> =>
-    (event) => {
-      setConsents({ ...consents, [mode]: event.target.checked })
-    }
+  const onConsentChange = (mode: ConsentMode) => (newValue: boolean) => {
+    setConsents({ ...consents, [mode]: newValue })
+  }
+
+  const analyticsStorageChecked = consents?.[ConsentMode.ANALYTICS_STORAGE] ?? false
+  const onAnalyticsStorageChange = onConsentChange(ConsentMode.ANALYTICS_STORAGE)
 
   const handleClose: MouseEventHandler = (event) => {
-    submitConsents()
     onClose?.(event, 'escapeKeyDown')
+  }
+
+  const handleConfirm: MouseEventHandler = (event) => {
+    onAnalyticsStorageChange(analyticsStorageChecked)
+    handleClose(event)
+    submitConsents()
+    onCloseBanner()
   }
 
   return (
@@ -69,14 +78,14 @@ export const CookieSettings = ({
         </SettingBlock> */}
         <SettingBlock
           title="คุกกี้เพื่อการวิเคราะห์"
-          onChange={handleConsentChange(ConsentMode.ANALYTICS_STORAGE)}
-          checked={consents?.[ConsentMode.ANALYTICS_STORAGE] ?? false}
+          onChange={(e) => onAnalyticsStorageChange(e.target.checked)}
+          checked={analyticsStorageChecked}
         >
           คุกกี้ประเภทนี้จะทำการเก็บข้อมูลการใช้งานเว็บไซต์ของคุณ เพื่อเป็นประโยชน์ในการวัดผล
           ปรับปรุงและพัฒนาประสบการณ์ที่ดีในการใช้งานเว็บไซต์
           ถ้าหากท่านไม่ยินยอมให้เราใช้คุกกี้นี้เราจะไม่สามารถวัดผล ปรังปรุงและพัฒนาเว็บไซต์ได้
         </SettingBlock>
-        <Button onClick={handleClose} variant="contained" fullWidth>
+        <Button onClick={handleConfirm} variant="contained" fullWidth>
           ยืนยัน
         </Button>
       </DialogContent>

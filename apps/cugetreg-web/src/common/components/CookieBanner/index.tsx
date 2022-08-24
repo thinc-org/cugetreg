@@ -31,6 +31,10 @@ export const CookieBanner = () => {
     setSettingsOpen(false)
   }
 
+  const handleCloseBanner = () => {
+    setBannerOpen(false)
+  }
+
   const handleConsentAll = () => {
     const selectedConsents: Consents = {
       // [ConsentMode.AD_STORAGE]: true,
@@ -68,6 +72,7 @@ export const CookieBanner = () => {
       <CookieSettings
         open={settingsOpen}
         onClose={handleCloseSettings}
+        onCloseBanner={handleCloseBanner}
         consents={consents}
         setConsents={setConsentsSetting}
         submitConsents={submitConsents}

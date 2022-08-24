@@ -146,7 +146,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           passphrase: ${{ secrets.SSH_PASSPHRASE }}
           script: |
-            export AFFECTED_APPS=${{ needs.publish-docker-image.outputs.affected-apps }}
+            export AFFECTED_APPS="${{ needs.publish-docker-image.outputs.affected-apps }}"
             export TAG=${{ needs.publish-docker-image.outputs.tags }}
             for APP in $AFFECTED_APPS
             do

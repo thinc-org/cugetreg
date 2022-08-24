@@ -27,6 +27,9 @@ jobs:
 
     runs-on: ${{ matrix.platform }}
 
+    outputs:
+      affected-apps: ${{ steps.affected-apps.outputs.AFFECTED_APPS }}
+
     steps:
       - uses: actions/checkout@v2
         name: Checkout [Pull Request]
@@ -106,8 +109,10 @@ jobs:
 
       - name: Tag and push Docker images
         if: ${{ env.AFFECTED_APPS }}
+        id: affected-apps
         run: |
           AFFECTED_APPS="${{ env.AFFECTED_APPS }}" TAG=${{ env.TAG }} ./tools/tag-push-images
+          echo '::set-output name=AFFECTED_APPS::${{ env.AFFECTED_APPS }}'
 
   deploy:
     name: Deploy
@@ -118,31 +123,10 @@ jobs:
         platform: [ubuntu-latest]
 
     runs-on: ${{ matrix.platform }}
-
+    if: ${{ env.AFFECTED_APPS }}
     steps:
-      - uses: actions/checkout@v2
-        name: Checkout [Pull Request]
-        if: ${{ github.event_name == 'pull_request' }}
-        with:
-          # By default, PRs will be checked-out based on the Merge Commit, but we want the actual branch HEAD.
-          ref: ${{ github.event.pull_request.head.sha }}
-          # We need to fetch all branches and commits so that Nx affected has a base to compare against.
-          fetch-depth: 0
-
-      - uses: actions/checkout@v2
-        name: Checkout [Default Branch]
-        if: ${{ github.event_name != 'pull_request' }}
-        with:
-          # We need to fetch all branches and commits so that Nx affected has a base to compare against.
-          fetch-depth: 0
-
-      - name: Set affected apps env
-        run: |
-          AFFECTED_BASE=${{ github.event.before }} ./tools/set-affected-apps-env
-
       - name: Connect SSLVPN
         uses: thinc-org/openfortivpn-action@master
-        if: ${{ env.AFFECTED_APPS }}
         with:
           host: ${{ secrets.SSLVPN_HOST }}
           username: ${{ secrets.SSLVPN_USERNAME }}
@@ -151,7 +135,6 @@ jobs:
 
       - name: Deploy to VM
         uses: appleboy/ssh-action@master
-        if: ${{ env.AFFECTED_APPS }}
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}

@@ -74,12 +74,6 @@ jobs:
         run: |
           AFFECTED_BASE=${{ github.event.before }} ./tools/set-affected-apps-env
 
-      - name: Extract output
-        id: extracted-output
-        run: |
-          echo '::set-output name=AFFECTED_APPS::${{ env.AFFECTED_APPS }}'
-          echo '::set-output name=TAGS::${{ env.TAGS }}'
-
       - name: Set default env to dev
         run: |
           echo "TAG=dev" >> $GITHUB_ENV
@@ -108,6 +102,12 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ github.token }}
+
+      - name: Extract output
+        id: extracted-output
+        run: |
+          echo '::set-output name=AFFECTED_APPS::${{ env.AFFECTED_APPS }}'
+          echo '::set-output name=TAGS::${{ env.TAGS }}'
 
       - name: Build Docker images
         if: ${{ env.NX_AFFECTED_APPS }}
@@ -146,7 +146,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           passphrase: ${{ secrets.SSH_PASSPHRASE }}
           script: |
-            export AFFECTED_APPS="${{ needs.publish-docker-image.outputs.affected-apps }}:
+            export AFFECTED_APPS=${{ needs.publish-docker-image.outputs.affected-apps }}
             export TAG=${{ needs.publish-docker-image.outputs.tags }}
             for APP in $AFFECTED_APPS
             do

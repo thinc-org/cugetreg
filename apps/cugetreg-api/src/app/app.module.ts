@@ -20,6 +20,9 @@ import { UserModule } from '../user/user.module'
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
 
+console.log(join(__dirname, '/../**/*.graphql'))
+console.log(join(__dirname, '../graphql.ts'))
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -28,11 +31,15 @@ import { AppService } from './app.service'
     }),
     GraphQLModule.forRootAsync({
       useFactory: (configService: ConfigService) => ({
-        typePaths: ['apps/cugetreg-api/**/*.graphql'],
-        definitions: {
-          path: join(process.cwd(), 'apps/cugetreg-api/src/graphql.ts'),
-          outputAs: 'class',
-        },
+        // needed in production, to make apollo server work
+        typePaths: [join(__dirname, '/../**/*.graphql')],
+        definitions:
+          configService.get<string>('env') === 'development'
+            ? {
+                path: join(process.cwd(), 'apps/cugetreg-api/src/graphql.ts'),
+                outputAs: 'class',
+              }
+            : null,
         playground: true,
         introspection: true,
         cors: {

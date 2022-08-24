@@ -4,7 +4,7 @@ import { join } from 'path'
 
 const definitionsFactory = new GraphQLDefinitionsFactory()
 definitionsFactory.generate({
-  typePaths: ['apps/cugetreg-api/src/**/*.graphql'],
-  path: join(process.cwd(), 'apps/cugetreg-api/src/graphql.ts'),
+  typePaths: [join(__dirname, '/**/*.graphql')],
+  path: join(__dirname, '/graphql.ts'),
   outputAs: 'class',
 })

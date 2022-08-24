@@ -107,7 +107,7 @@ jobs:
         id: extracted-output
         run: |
           echo '::set-output name=AFFECTED_APPS::${{ env.AFFECTED_APPS }}'
-          echo '::set-output name=TAGS::${{ env.TAGS }}'
+          echo '::set-output name=TAGS::${{ env.TAG }}'
 
       - name: Build Docker images
         if: ${{ env.NX_AFFECTED_APPS }}

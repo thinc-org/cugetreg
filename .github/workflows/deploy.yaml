@@ -28,8 +28,8 @@ jobs:
     runs-on: ${{ matrix.platform }}
 
     outputs:
-      affected-apps: ${{ steps.affected-apps.outputs.AFFECTED_APPS }}
-      tags: ${{ steps.affected-apps.outputs.TAGS }}
+      affected-apps: ${{ steps.extracted-output.outputs.AFFECTED_APPS }}
+      tags: ${{ steps.extracted-output.outputs.TAGS }}
 
     steps:
       - uses: actions/checkout@v2
@@ -74,8 +74,8 @@ jobs:
         run: |
           AFFECTED_BASE=${{ github.event.before }} ./tools/set-affected-apps-env
 
-      - name: Store affected apps output
-        id: affected-apps
+      - name: Extract output
+        id: extracted-output
         run: |
           echo '::set-output name=AFFECTED_APPS::${{ env.AFFECTED_APPS }}'
           echo '::set-output name=TAGS::${{ env.TAGS }}'

@@ -7,7 +7,7 @@ import { default as MaterialLink } from '@mui/material/Link'
 import { observer } from 'mobx-react'
 import { useRouter } from 'next/router'
 
-import logo from '@web/assets/images/cgrLogoDark.svg'
+import cgrLogoDark from '@web/assets/images/cgrLogoDark.svg'
 import { Analytics } from '@web/common/context/Analytics/components/Analytics'
 import { LinkWithAnalytics } from '@web/common/context/Analytics/components/LinkWithAnalytics'
 import {
@@ -44,7 +44,7 @@ export const MobileNavBar = observer(() => {
       </MoreButton>
       <Drawer anchor="right" open={isOpen} onClose={onClose}>
         <DrawerContent>
-          <Logo src={logo} alt={t('translation:appName')} />
+          <Logo src={cgrLogoDark} alt={t('translation:appName')} />
           <div style={{ marginTop: '2rem' }}>
             <LinkWithAnalytics
               href={buildLink(`/courses`)}

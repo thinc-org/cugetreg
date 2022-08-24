@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next'
 
 import { useMediaQuery, useTheme } from '@mui/material'
 
-import logo from '@web/assets/images/cgrLogoDark.svg'
+import cgrLogoDark from '@web/assets/images/cgrLogoDark.svg'
 import { Analytics } from '@web/common/context/Analytics/components/Analytics'
 import { LinkWithAnalytics } from '@web/common/context/Analytics/components/LinkWithAnalytics'
 import {
@@ -53,7 +53,7 @@ export function NavBar() {
       <FlexContainer>
         <LinkWithAnalytics href={buildLink(`/courses`)} passHref elementName={GETREG_LOGO}>
           <Logo>
-            <img src={logo} alt={t('translation:appName')} />
+            <img src={cgrLogoDark} alt={t('translation:appName')} />
           </Logo>
         </LinkWithAnalytics>
         {isLargeScreen ? (

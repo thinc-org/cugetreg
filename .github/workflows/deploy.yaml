@@ -29,6 +29,7 @@ jobs:
 
     outputs:
       affected-apps: ${{ steps.affected-apps.outputs.AFFECTED_APPS }}
+      tags: ${{ steps.affected-apps.outputs.TAGS }}
 
     steps:
       - uses: actions/checkout@v2
@@ -77,6 +78,7 @@ jobs:
         id: affected-apps
         run: |
           echo '::set-output name=AFFECTED_APPS::${{ env.AFFECTED_APPS }}'
+          echo '::set-output name=TAGS::${{ env.TAGS }}'
 
       - name: Set default env to dev
         run: |
@@ -144,8 +146,8 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           passphrase: ${{ secrets.SSH_PASSPHRASE }}
           script: |
-            export AFFECTED_APPS=${{ env.AFFECTED_APPS }}
-            export TAG=${{ env.TAG }}
+            export AFFECTED_APPS=${{ needs.publish-docker-image.outputs.affected-apps }}
+            export TAG=${{ needs.publish-docker-image.outputs.tags }}
             for APP in $AFFECTED_APPS
             do
               TARGET_IMAGE="ghcr.io/thinc-org/$APP:$TAG"

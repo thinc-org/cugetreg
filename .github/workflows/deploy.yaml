@@ -130,6 +130,7 @@ jobs:
     steps:
       - name: Connect SSLVPN
         uses: thinc-org/openfortivpn-action@master
+        if: ${{ env.AFFECTED_APPS }}
         with:
           host: ${{ secrets.SSLVPN_HOST }}
           username: ${{ secrets.SSLVPN_USERNAME }}
@@ -138,6 +139,7 @@ jobs:
 
       - name: Deploy to VM
         uses: appleboy/ssh-action@master
+        if: ${{ env.AFFECTED_APPS }}
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}

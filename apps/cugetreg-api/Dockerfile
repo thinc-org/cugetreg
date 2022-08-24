@@ -15,4 +15,6 @@ RUN pnpm install -r --prod --prefer-offline
 
 COPY dist/apps/cugetreg-api .
 
+EXPOSE 3333
+
 CMD ["node", "main.js"]

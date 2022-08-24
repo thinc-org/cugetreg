@@ -21,7 +21,7 @@ import {
 
 export function Banner() {
   const { t } = useTranslation('footer')
-  const { setOpenSettings } = useConsentsStore()
+  const { setSettingsOpen } = useConsentsStore()
 
   return (
     <BannerContainer spacing={[1, 3]}>
@@ -46,7 +46,7 @@ export function Banner() {
         <Link href="/privacy" passHref>
           <PrivacyLink>Privacy Policy</PrivacyLink>
         </Link>
-        <CookieSetting onClick={() => setOpenSettings(true)}>Privacy Preferences</CookieSetting>
+        <CookieSetting onClick={() => setSettingsOpen(true)}>Privacy Preferences</CookieSetting>
       </Stack>
     </BannerContainer>
   )

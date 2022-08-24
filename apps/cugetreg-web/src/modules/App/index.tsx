@@ -45,6 +45,8 @@ export function App(props: MyAppProps) {
   useApp(router)
   useSaveStudyProgram()
 
+  console.log('test')
+
   return (
     <AppProvider forceDark={forceDark} emotionCache={emotionCache}>
       <TrackPageChange>

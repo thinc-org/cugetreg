@@ -4,5 +4,6 @@ for APP in $AFFECTED_APPS
 do
   SOURCE_IMAGE=$APP
   TARGET_IMAGE="ghcr.io/thinc-org/$APP:$TAG"
+  echo "Tag $TARGET_IMAGE -> $SOURCE_IMAGE"
   docker image tag $SOURCE_IMAGE $TARGET_IMAGE
 done

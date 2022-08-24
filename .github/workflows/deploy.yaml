@@ -107,7 +107,7 @@ jobs:
       - name: Tag and push Docker images
         if: ${{ env.AFFECTED_APPS }}
         run: |
-          AFFECTED_APPS=${{ env.AFFECTED_APPS }} TAG=${{ env.TAG }} ./tools/tag-push-images
+          AFFECTED_APPS=$"{{ env.AFFECTED_APPS }}" TAG=${{ env.TAG }} ./tools/tag-push-images
 
       - name: Connect SSLVPN
         uses: thinc-org/openfortivpn-action@master

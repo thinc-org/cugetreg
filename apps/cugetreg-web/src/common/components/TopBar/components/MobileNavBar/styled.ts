@@ -13,6 +13,13 @@ export const DrawerContent = styled('div')`
   padding: 48px 28px;
 `
 
+export const Logo = styled('img')`
+  width: 123px;
+  height: 40px;
+  margin-left: 8px;
+  margin-bottom: 42px;
+`
+
 export const SectionSpacer = styled('div')`
   height: 24px;
 `

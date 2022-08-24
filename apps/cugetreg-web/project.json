@@ -73,6 +73,7 @@
     },
     "docker-build": {
       "executor": "nx:run-commands",
+      "defaultConfiguration": "local",
       "options": {
         "commands": [
           { "command": "nx run cugetreg-web:build", "forwardAllArgs": false },

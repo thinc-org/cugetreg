@@ -1,5 +1,5 @@
 FROM node:14-alpine
-WORKDIR /app
+WORKDIR /usr/app
 
 ENV NODE_ENV production
 RUN npm install -g pnpm

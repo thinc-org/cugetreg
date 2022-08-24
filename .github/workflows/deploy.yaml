@@ -2,7 +2,7 @@ name: Deploy
 on:
   push:
     branches:
-      - feat/better-deploy
+      - feat/improve-deploy
 
 permissions:
   actions: read

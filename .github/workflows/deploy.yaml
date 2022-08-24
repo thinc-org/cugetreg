@@ -70,8 +70,10 @@ jobs:
         run: pnpm install --frozen-lockfile --prefer-offline
 
       - name: Set affected apps env
+        id: affected-apps
         run: |
           AFFECTED_BASE=${{ github.event.before }} ./tools/set-affected-apps-env
+          echo '::set-output name=AFFECTED_APPS::${{ env.AFFECTED_APPS }}'
 
       - name: Set default env to dev
         run: |
@@ -109,10 +111,8 @@ jobs:
 
       - name: Tag and push Docker images
         if: ${{ env.AFFECTED_APPS }}
-        id: affected-apps
         run: |
           AFFECTED_APPS="${{ env.AFFECTED_APPS }}" TAG=${{ env.TAG }} ./tools/tag-push-images
-          echo '::set-output name=AFFECTED_APPS::${{ env.AFFECTED_APPS }}'
 
   deploy:
     name: Deploy
@@ -123,7 +123,7 @@ jobs:
         platform: [ubuntu-latest]
 
     runs-on: ${{ matrix.platform }}
-    if: ${{ env.AFFECTED_APPS }}
+    if: ${{ needs.publish-docker-image.outputs.affected-apps }}
     steps:
       - name: Connect SSLVPN
         uses: thinc-org/openfortivpn-action@master

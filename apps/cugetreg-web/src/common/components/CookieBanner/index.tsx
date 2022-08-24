@@ -28,7 +28,6 @@ export const CookieBanner = () => {
   }
 
   const handleCloseSettings = () => {
-    setBannerOpen(false)
     setSettingsOpen(false)
   }
 

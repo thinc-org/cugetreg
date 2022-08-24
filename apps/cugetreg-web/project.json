@@ -88,14 +88,8 @@
         "local": {
           "args": "--tags=ghcr.io/thinc-org/cugetreg-web:latest"
         },
-        "dev": {
-          "args": "--tags=ghcr.io/thinc-org/cugetreg-web:dev"
-        },
-        "beta": {
-          "args": "--tags=ghcr.io/thinc-org/cugetreg-web:beta"
-        },
-        "master": {
-          "args": "--tags=ghcr.io/thinc-org/cugetreg-web:latest"
+        "deploy": {
+          "args": "--tags=cugetreg-web"
         }
       }
     }

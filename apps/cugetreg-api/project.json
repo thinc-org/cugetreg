@@ -74,14 +74,8 @@
         "local": {
           "args": "--tags=ghcr.io/thinc-org/cugetreg-api:latest"
         },
-        "dev": {
-          "args": "--tags=ghcr.io/thinc-org/cugetreg-api:dev"
-        },
-        "beta": {
-          "args": "--tags=ghcr.io/thinc-org/cugetreg-api:beta"
-        },
-        "master": {
-          "args": "--tags=ghcr.io/thinc-org/cugetreg-api:latest"
+        "deploy": {
+          "args": "--tags=cugetreg-api"
         }
       }
     }

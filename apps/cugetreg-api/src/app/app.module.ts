@@ -20,9 +20,6 @@ import { UserModule } from '../user/user.module'
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
 
-console.log(join(__dirname, '/../**/*.graphql'))
-console.log(join(__dirname, '../graphql.ts'))
-
 @Module({
   imports: [
     ConfigModule.forRoot({

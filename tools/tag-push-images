@@ -7,3 +7,10 @@ do
   echo "Tag $TARGET_IMAGE -> $SOURCE_IMAGE"
   docker image tag $SOURCE_IMAGE $TARGET_IMAGE
 done
+
+for APP in $AFFECTED_APPS
+do
+  TARGET_IMAGE="ghcr.io/thinc-org/$APP:$TAG"
+  echo "Pushing $TARGET_IMAGE"
+  docker push $TARGET_IMAGE
+done

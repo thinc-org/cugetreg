@@ -6,4 +6,3 @@ do
   echo "Pushing $TARGET_IMAGE"
   docker push $TARGET_IMAGE
 done
-

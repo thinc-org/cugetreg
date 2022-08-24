@@ -1,8 +1,8 @@
 name: Deploy
 on:
+  workflow_dispatch:
   push:
-    branches:
-      - feat/improve-deploy
+    branches: [beta, dev]
 
 permissions:
   actions: read
@@ -66,17 +66,22 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --prefer-offline
 
-      # - name: Set dev web env
-      #   if: ${{ github.ref == 'refs/heads/dev' }}
-      #   run: mv apps/cugetreg-web/.env.dev apps/cugetreg-web/.env
+      - name: Set default env to dev
+        run: |
+          echo "TAG=dev" >> $GITHUB_ENV
+          mv apps/cugetreg-web/.env.dev apps/cugetreg-web/.env
 
-      # - name: Set beta web env
-      #   if: ${{ github.ref == 'refs/heads/beta' }}
-      #   run: mv apps/cugetreg-web/.env.beta apps/cugetreg-web/.env
+      - name: Set beta web env
+        if: ${{ github.ref == 'refs/heads/beta' }}
+        run: |
+          echo "TAG=beta" >> $GITHUB_ENV
+          mv apps/cugetreg-web/.env.beta apps/cugetreg-web/.env
 
-      # - name: Set prod web env
-      #   if: ${{ github.ref == 'refs/heads/master' }}
-      #   run: mv apps/cugetreg-web/.env.prod apps/cugetreg-web/.env
+      - name: Set prod web env
+        if: ${{ github.ref == 'refs/heads/master' }}
+        run: |
+          echo "TAG=latest" >> $GITHUB_ENV
+          mv apps/cugetreg-web/.env.prod apps/cugetreg-web/.env
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
@@ -100,37 +105,39 @@ jobs:
       - name: Tag Docker images
         if: ${{ env.AFFECTED_APPS }}
         run: |
-          AFFECTED_APPS=${{ env.AFFECTED_APPS }} TAG=dev ./tools/tag-images
+          AFFECTED_APPS=${{ env.AFFECTED_APPS }} TAG=${{ env.TAG }} ./tools/tag-images
 
       - name: Push Docker images
         if: ${{ env.AFFECTED_APPS }}
         run: |
-          AFFECTED_APPS=${{ env.AFFECTED_APPS }} TAG=dev ./tools/push-images
+          AFFECTED_APPS=${{ env.AFFECTED_APPS }} TAG=${{ env.TAG }} ./tools/push-images
 
-      # - name: Connect SSLVPN
-      #   uses: thinc-org/openfortivpn-action@master
-      #   with:
-      #     host: ${{ secrets.SSLVPN_HOST }}
-      #     username: ${{ secrets.SSLVPN_USERNAME }}
-      #     password: ${{ secrets.SSLVPN_PASSWORD }}
-      #     trustedCert: ${{ secrets.SSLVPN_TRUSTED_CERT }}
+      - name: Connect SSLVPN
+        uses: thinc-org/openfortivpn-action@master
+        with:
+          host: ${{ secrets.SSLVPN_HOST }}
+          username: ${{ secrets.SSLVPN_USERNAME }}
+          password: ${{ secrets.SSLVPN_PASSWORD }}
+          trustedCert: ${{ secrets.SSLVPN_TRUSTED_CERT }}
 
-      # - name: Deploy to VM
-      #   uses: appleboy/ssh-action@master
-      #   with:
-      #     host: ${{ secrets.SSH_HOST }}
-      #     username: ${{ secrets.SSH_USERNAME }}
-      #     key: ${{ secrets.SSH_KEY }}
-      #     passphrase: ${{ secrets.SSH_PASSPHRASE }}
-      #     script: |
-      #       docker pull ghcr.io/thinc-org/cugetreg/cugetreg-api:dev
-      #       docker pull ghcr.io/thinc-org/cugetreg/cugetreg-api:beta
-      #       docker pull ghcr.io/thinc-org/cugetreg/cugetreg-api:latest
-      #       docker pull ghcr.io/thinc-org/cugetreg/cugetreg-web:dev
-      #       docker pull ghcr.io/thinc-org/cugetreg/cugetreg-web:beta
-      #       docker pull ghcr.io/thinc-org/cugetreg/cugetreg-web:latest
-      #       docker-compose up -d
-      #       if [[ "$(docker images --filter "dangling=true" -q)" == "" ]];
-      #         then echo "No image with <none> tag";
-      #         else docker rmi $(docker images --filter "dangling=true" -q);
-      #       fi
+      - name: Deploy to VM
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          passphrase: ${{ secrets.SSH_PASSPHRASE }}
+          script: |
+            export AFFECTED_APPS=${{ env.AFFECTED_APPS }}
+            export TAG=${{ env.TAG }}
+            for APP in $AFFECTED_APPS
+            do
+              TARGET_IMAGE="ghcr.io/thinc-org/$APP:$TAG"
+              echo "Pulling $TARGET_IMAGE"
+              docker pull $TARGET_IMAGE
+            done
+            docker-compose up -d
+            if [[ "$(docker images --filter "dangling=true" -q)" == "" ]];
+              then echo "No image with <none> tag";
+              else docker rmi $(docker images --filter "dangling=true" -q);
+            fi

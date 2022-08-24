@@ -63,7 +63,6 @@
     },
     "docker-build": {
       "executor": "nx:run-commands",
-      "defaultConfiguration": "local",
       "options": {
         "commands": [
           { "command": "nx run cugetreg-api:build", "forwardAllArgs": false },
@@ -73,19 +72,11 @@
           },
           { "command": "cp .npmrc dist/apps/cugetreg-api/.npmrc", "forwardAllArgs": false },
           {
-            "command": "nx run cugetreg-api:docker --push=false --tags={args.tags} --load",
+            "command": "nx run cugetreg-api:docker --push=false --tags=cugetreg-api:latest --load",
             "forwardAllArgs": false
           }
         ],
         "parallel": false
-      },
-      "configurations": {
-        "local": {
-          "args": "--tags=ghcr.io/thinc-org/cugetreg-api:latest"
-        },
-        "deploy": {
-          "args": "--tags=cugetreg-api:latest"
-        }
       }
     }
   },

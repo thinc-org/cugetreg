@@ -73,25 +73,16 @@
     },
     "docker-build": {
       "executor": "nx:run-commands",
-      "defaultConfiguration": "local",
       "options": {
         "commands": [
           { "command": "nx run cugetreg-web:build", "forwardAllArgs": false },
           { "command": "nx run cugetreg-web:postbuild", "forwardAllArgs": false },
           {
-            "command": "nx run cugetreg-web:docker --push=false --tags={args.tags} --load",
+            "command": "nx run cugetreg-web:docker --push=false --tags=cugetreg-web:latest --load",
             "forwardAllArgs": false
           }
         ],
         "parallel": false
-      },
-      "configurations": {
-        "local": {
-          "args": "--tags=ghcr.io/thinc-org/cugetreg-web:latest"
-        },
-        "deploy": {
-          "args": "--tags=cugetreg-web:latest"
-        }
       }
     }
   },

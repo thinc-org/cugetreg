@@ -102,7 +102,7 @@ jobs:
       - name: Build Docker images
         if: ${{ env.NX_AFFECTED_APPS }}
         run: |
-          npx nx run-many --target=docker-build --configuration=deploy --projects=${{ env.NX_AFFECTED_APPS }}
+          npx nx run-many --target=docker-build --projects=${{ env.NX_AFFECTED_APPS }}
 
       - name: Tag and push Docker images
         if: ${{ env.AFFECTED_APPS }}

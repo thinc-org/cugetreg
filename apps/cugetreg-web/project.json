@@ -89,7 +89,7 @@
           "args": "--tags=ghcr.io/thinc-org/cugetreg-web:latest"
         },
         "deploy": {
-          "args": "--tags=cugetreg-web"
+          "args": "--tags=cugetreg-web:latest"
         }
       }
     }

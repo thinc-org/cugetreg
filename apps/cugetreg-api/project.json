@@ -75,7 +75,7 @@
           "args": "--tags=ghcr.io/thinc-org/cugetreg-api:latest"
         },
         "deploy": {
-          "args": "--tags=cugetreg-api"
+          "args": "--tags=cugetreg-api:latest"
         }
       }
     }

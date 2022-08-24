@@ -2,11 +2,15 @@
 
 # A simple script to output the list of affected apps
 
-if AFFECTED_APPS=$(npx nx affected:apps --base=${AFFECTED_BASE} --plain | tail -1); then
-  NX_AFFECTED_APPS=$(echo $AFFECTED_APPS | tr " " ",")
-  echo "AFFECTED_APPS=$AFFECTED_APPS" >> $GITHUB_ENV
-  echo "NX_AFFECTED_APPS=$AFFECTED_APPS" >> $GITHUB_ENV
-  echo "Affected apps: $AFFECTED_APPS"
-  exit 0
-fi
-exit 1
+# Mock affected apps
+echo "AFFECTED_APPS=cugetreg-web" >> $GITHUB_ENV
+echo "NX_AFFECTED_APPS=cugetreg-web" >> $GITHUB_ENV
+
+# if AFFECTED_APPS=$(npx nx affected:apps --base=${AFFECTED_BASE} --plain | tail -1); then
+#   NX_AFFECTED_APPS=$(echo $AFFECTED_APPS | tr " " ",")
+#   echo "AFFECTED_APPS=$AFFECTED_APPS" >> $GITHUB_ENV
+#   echo "NX_AFFECTED_APPS=$AFFECTED_APPS" >> $GITHUB_ENV
+#   echo "Affected apps: $AFFECTED_APPS"
+#   exit 0
+# fi
+# exit 1

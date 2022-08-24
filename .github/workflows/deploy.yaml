@@ -110,12 +110,12 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           passphrase: ${{ secrets.SSH_PASSPHRASE }}
           script: |
-            docker pull ghcr.io/thinc-org/cugetreg/cugetreg-api:dev
-            docker pull ghcr.io/thinc-org/cugetreg/cugetreg-api:beta
-            docker pull ghcr.io/thinc-org/cugetreg/cugetreg-api:latest
-            docker pull ghcr.io/thinc-org/cugetreg/cugetreg-web:dev
-            docker pull ghcr.io/thinc-org/cugetreg/cugetreg-web:beta
-            docker pull ghcr.io/thinc-org/cugetreg/cugetreg-web:latest
+            docker pull ghcr.io/thinc-org/cugetreg-api:dev
+            docker pull ghcr.io/thinc-org/cugetreg-api:beta
+            docker pull ghcr.io/thinc-org/cugetreg-api:latest
+            docker pull ghcr.io/thinc-org/cugetreg-web:dev
+            docker pull ghcr.io/thinc-org/cugetreg-web:beta
+            docker pull ghcr.io/thinc-org/cugetreg-web:latest
             docker-compose up -d
             if [[ "$(docker images --filter "dangling=true" -q)" == "" ]];
               then echo "No image with <none> tag";

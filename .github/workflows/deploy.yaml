@@ -111,6 +111,7 @@ jobs:
 
   deploy:
     name: Deploy
+    needs: [publish-docker-image]
     strategy:
       matrix:
         node-version: [16.x]

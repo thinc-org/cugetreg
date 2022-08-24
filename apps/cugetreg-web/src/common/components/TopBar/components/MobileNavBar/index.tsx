@@ -5,9 +5,9 @@ import { MdMenu } from 'react-icons/md'
 import { Drawer } from '@mui/material'
 import { default as MaterialLink } from '@mui/material/Link'
 import { observer } from 'mobx-react'
-import Image from 'next/image'
 import { useRouter } from 'next/router'
 
+import cgrLogoDark from '@web/assets/images/cgrLogoDark.svg'
 import { Analytics } from '@web/common/context/Analytics/components/Analytics'
 import { LinkWithAnalytics } from '@web/common/context/Analytics/components/LinkWithAnalytics'
 import {
@@ -22,7 +22,7 @@ import { sessionIdStore } from '@web/store/sessionIdStore'
 
 import { NavBarItem } from '../NavBarItem'
 import { UserButton } from '../UserButton'
-import { DrawerContent, MoreButton, SectionSpacer } from './styled'
+import { DrawerContent, Logo, MoreButton, SectionSpacer } from './styled'
 
 export const MobileNavBar = observer(() => {
   const { t } = useTranslation(['navBar', 'translation', 'configBar'])
@@ -44,12 +44,7 @@ export const MobileNavBar = observer(() => {
       </MoreButton>
       <Drawer anchor="right" open={isOpen} onClose={onClose}>
         <DrawerContent>
-          <Image
-            src="/images/cgrLogoDark.svg"
-            alt={t('translation:appName')}
-            width="123"
-            height="40"
-          />
+          <Logo src={cgrLogoDark} alt={t('translation:appName')} />
           <div style={{ marginTop: '2rem' }}>
             <LinkWithAnalytics
               href={buildLink(`/courses`)}

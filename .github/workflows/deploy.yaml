@@ -2,7 +2,7 @@ name: Deploy
 on:
   workflow_dispatch:
   push:
-    branches: [beta, dev, feat/improve-deploy]
+    branches: [beta, dev]
 
 permissions:
   actions: read

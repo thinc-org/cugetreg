@@ -78,7 +78,7 @@
           { "command": "nx run cugetreg-web:build", "forwardAllArgs": false },
           { "command": "nx run cugetreg-web:postbuild", "forwardAllArgs": false },
           {
-            "command": "nx run cugetreg-web:docker --push=false --tags={args.tags}",
+            "command": "nx run cugetreg-web:docker --push=false --tags={args.tags} --load",
             "forwardAllArgs": false
           }
         ],

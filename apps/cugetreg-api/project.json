@@ -64,7 +64,7 @@
           },
           { "command": "cp .npmrc dist/apps/cugetreg-api/.npmrc", "forwardAllArgs": false },
           {
-            "command": "nx run cugetreg-api:docker --push=false --tags={args.tags}",
+            "command": "nx run cugetreg-api:docker --push=false --tags={args.tags} --load",
             "forwardAllArgs": false
           }
         ],

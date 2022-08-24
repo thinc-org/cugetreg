@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# A simple script to output the list of affected apps
+
+if AFFECTED_APPS=$(nx affected:apps --base=${AFFECTED_BASE} --plain | tail -1 | tr " " ,); then
+  echo "AFFECTED_APPS=$AFFECTED_APPS" >> $GITHUB_ENV
+  exit 0
+fi
+exit 1

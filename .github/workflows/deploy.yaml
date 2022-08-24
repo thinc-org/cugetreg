@@ -127,7 +127,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           passphrase: ${{ secrets.SSH_PASSPHRASE }}
           script: |
-            export AFFECTED_APPS=${{ env.AFFECTED_APPS }}
+            export AFFECTED_APPS="${{ env.AFFECTED_APPS }}"
             export TAG=${{ env.TAG }}
             for APP in $AFFECTED_APPS
             do

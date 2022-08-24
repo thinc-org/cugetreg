@@ -66,9 +66,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --prefer-offline
 
-      - name: Affected apps
+      - name: Set affected apps env
         run: |
-          AFFECTED_BASE=${{ github.event.before }} ./tools/affected-apps
+          AFFECTED_BASE=${{ github.event.before }} ./tools/set-affected-apps-env
 
       - name: Set default env to dev
         run: |

@@ -70,9 +70,12 @@ jobs:
         run: pnpm install --frozen-lockfile --prefer-offline
 
       - name: Set affected apps env
-        id: affected-apps
         run: |
           AFFECTED_BASE=${{ github.event.before }} ./tools/set-affected-apps-env
+
+      - name: Store affected apps output
+        id: affected-apps
+        run: |
           echo '::set-output name=AFFECTED_APPS::${{ env.AFFECTED_APPS }}'
 
       - name: Set default env to dev

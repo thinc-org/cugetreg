@@ -92,13 +92,9 @@ jobs:
         run: |
           AFFECTED_BASE=${{ github.event.before }} ./tools/affected-apps
 
-      - name: Debug
+      - name: Build Docker images
         run: |
-          echo ${{ env.AFFECTED_APPS }}
-
-      # - name: Publish Docker images
-      #   run: |
-      #     npx nx run-many --target=docker-build --configuration=${{ github.ref_name }} --parallel --base=${{ github.event.before }} --head=${{ github.sha }}
+          npx nx run-many --target=docker-build --configuration=${{ github.ref_name }} --parallel --projects=${{ env.AFFECTED_APPS }}
 
       # - name: Connect SSLVPN
       #   uses: thinc-org/openfortivpn-action@master

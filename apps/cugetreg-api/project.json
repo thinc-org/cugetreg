@@ -64,7 +64,7 @@
           },
           { "command": "cp .npmrc dist/apps/cugetreg-api/.npmrc", "forwardAllArgs": false },
           {
-            "command": "nx run cugetreg-api:docker --push={args.push} --tags={args.tags}",
+            "command": "nx run cugetreg-api:docker --push=false --tags={args.tags}",
             "forwardAllArgs": false
           }
         ],
@@ -72,16 +72,16 @@
       },
       "configurations": {
         "local": {
-          "args": "--push=false --tags=ghcr.io/thinc-org/cugetreg-api:latest"
+          "args": "--tags=ghcr.io/thinc-org/cugetreg-api:latest"
         },
         "dev": {
-          "args": "--push=true --tags=ghcr.io/thinc-org/cugetreg-api:dev"
+          "args": "--tags=ghcr.io/thinc-org/cugetreg-api:dev"
         },
         "beta": {
-          "args": "--push=true --tags=ghcr.io/thinc-org/cugetreg-api:beta"
+          "args": "--tags=ghcr.io/thinc-org/cugetreg-api:beta"
         },
         "master": {
-          "args": "--push=true --tags=ghcr.io/thinc-org/cugetreg-api:latest"
+          "args": "--tags=ghcr.io/thinc-org/cugetreg-api:latest"
         }
       }
     }

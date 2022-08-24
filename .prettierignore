@@ -6,3 +6,5 @@
 .next
 
 pnpm-lock.yaml
+
+apps/cugetreg-api/src/graphql.ts

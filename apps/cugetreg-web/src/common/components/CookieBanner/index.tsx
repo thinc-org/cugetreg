@@ -11,10 +11,10 @@ import { Container, FixedContainer } from './styled'
 export const CookieBanner = () => {
   const {
     consents,
-    openBanner,
-    openSettings,
-    setOpenSettings,
-    setOpenBanner,
+    bannerOpen,
+    settingsOpen,
+    setBannerOpen,
+    setSettingsOpen,
     setConsents,
     submitConsents,
   } = useConsentsStore()
@@ -24,12 +24,15 @@ export const CookieBanner = () => {
   }
 
   const handleOpenSettings = () => {
-    setOpenSettings(true)
+    setSettingsOpen(true)
   }
 
   const handleCloseSettings = () => {
-    setOpenBanner(false)
-    setOpenSettings(false)
+    setSettingsOpen(false)
+  }
+
+  const handleCloseBanner = () => {
+    setBannerOpen(false)
   }
 
   const handleConsentAll = () => {
@@ -39,12 +42,12 @@ export const CookieBanner = () => {
     }
     setConsents(selectedConsents)
     submitConsents(selectedConsents)
-    setOpenBanner(false)
+    setBannerOpen(false)
   }
 
   return (
     <>
-      {openBanner && (
+      {bannerOpen && (
         <FixedContainer>
           <Container>
             <Typography variant="body1" mb={2}>
@@ -67,8 +70,9 @@ export const CookieBanner = () => {
         </FixedContainer>
       )}
       <CookieSettings
-        open={openSettings}
+        open={settingsOpen}
         onClose={handleCloseSettings}
+        onCloseBanner={handleCloseBanner}
         consents={consents}
         setConsents={setConsentsSetting}
         submitConsents={submitConsents}

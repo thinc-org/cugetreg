@@ -7,10 +7,10 @@ import { Consents } from '@web/common/types/consents'
 
 interface ConsentsStoreProps {
   consents: Consents
-  openBanner: boolean
-  openSettings: boolean
-  setOpenBanner: (openBanner: boolean) => void
-  setOpenSettings: (openSettings: boolean) => void
+  bannerOpen: boolean
+  settingsOpen: boolean
+  setBannerOpen: (bannerOpen: boolean) => void
+  setSettingsOpen: (settingsOpen: boolean) => void
   setConsents: (consents: Consents) => void
   submitConsents: (consents?: Consents) => void
 }
@@ -18,12 +18,12 @@ interface ConsentsStoreProps {
 export const useConsentsStore = create<ConsentsStoreProps>((set, get) => {
   const initialConsents = JSON.parse((getCookie(CookieKey.CONSENTS) as string) ?? '{}') as Consents
 
-  const setOpenBanner = (openBanner: boolean) => {
-    set((state) => ({ ...state, openBanner }))
+  const setBannerOpen = (bannerOpen: boolean) => {
+    set((state) => ({ ...state, bannerOpen }))
   }
 
-  const setOpenSettings = (openSettings: boolean) => {
-    set((state) => ({ ...state, openSettings }))
+  const setSettingsOpen = (settingsOpen: boolean) => {
+    set((state) => ({ ...state, settingsOpen }))
   }
 
   const setConsents = (consents: Partial<Consents>) => {
@@ -41,10 +41,10 @@ export const useConsentsStore = create<ConsentsStoreProps>((set, get) => {
 
   return {
     consents: initialConsents || {},
-    openBanner: !Object.keys(initialConsents).length,
-    openSettings: false,
-    setOpenBanner,
-    setOpenSettings,
+    bannerOpen: !Object.keys(initialConsents).length,
+    settingsOpen: false,
+    setBannerOpen,
+    setSettingsOpen,
     setConsents,
     submitConsents,
   }

@@ -1,0 +1,161 @@
+name: Deploy
+on:
+  workflow_dispatch:
+  push:
+    branches: [beta, dev]
+
+permissions:
+  actions: read
+  checks: read
+  contents: write
+  deployments: read
+  issues: write
+  discussions: read
+  packages: write
+  pull-requests: write
+  repository-projects: write
+  security-events: read
+  statuses: write
+
+jobs:
+  publish-docker-image:
+    name: Publish Docker image
+    strategy:
+      matrix:
+        node-version: [16.x]
+        platform: [ubuntu-latest]
+
+    runs-on: ${{ matrix.platform }}
+
+    outputs:
+      affected-apps: ${{ steps.extracted-output.outputs.AFFECTED_APPS }}
+      tag: ${{ steps.extracted-output.outputs.TAG }}
+
+    steps:
+      - uses: actions/checkout@v2
+        name: Checkout [Pull Request]
+        if: ${{ github.event_name == 'pull_request' }}
+        with:
+          # By default, PRs will be checked-out based on the Merge Commit, but we want the actual branch HEAD.
+          ref: ${{ github.event.pull_request.head.sha }}
+          # We need to fetch all branches and commits so that Nx affected has a base to compare against.
+          fetch-depth: 0
+
+      - uses: actions/checkout@v2
+        name: Checkout [Default Branch]
+        if: ${{ github.event_name != 'pull_request' }}
+        with:
+          # We need to fetch all branches and commits so that Nx affected has a base to compare against.
+          fetch-depth: 0
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2.0.1
+        id: pnpm-install
+        with:
+          version: 7
+          run_install: false
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        run: |
+          echo "::set-output name=pnpm_cache_dir::$(pnpm store path)"
+      - uses: actions/cache@v3
+        name: Setup pnpm cache
+        with:
+          path: ${{ steps.pnpm-cache.outputs.pnpm_cache_dir }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --prefer-offline
+
+      - name: Set affected apps env
+        run: |
+          AFFECTED_BASE=${{ github.event.before }} ./tools/set-affected-apps-env
+
+      - name: Set default env to dev
+        run: |
+          echo "TAG=dev" >> $GITHUB_ENV
+          mv apps/cugetreg-web/.env.dev apps/cugetreg-web/.env
+
+      - name: Set beta web env
+        if: ${{ github.ref == 'refs/heads/beta' }}
+        run: |
+          echo "TAG=beta" >> $GITHUB_ENV
+          mv apps/cugetreg-web/.env.beta apps/cugetreg-web/.env
+
+      - name: Set prod web env
+        if: ${{ github.ref == 'refs/heads/master' }}
+        run: |
+          echo "TAG=latest" >> $GITHUB_ENV
+          mv apps/cugetreg-web/.env.prod apps/cugetreg-web/.env
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+        if: ${{ env.NX_AFFECTED_APPS }}
+
+      - name: Docker login
+        uses: docker/login-action@v1
+        if: ${{ env.NX_AFFECTED_APPS }}
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
+
+      - name: Extract output
+        id: extracted-output
+        run: |
+          echo '::set-output name=AFFECTED_APPS::${{ env.AFFECTED_APPS }}'
+          echo '::set-output name=TAG::${{ env.TAG }}'
+
+      - name: Build Docker images
+        if: ${{ env.NX_AFFECTED_APPS }}
+        run: |
+          npx nx run-many --target=docker-build --projects=${{ env.NX_AFFECTED_APPS }}
+
+      - name: Tag and push Docker images
+        if: ${{ env.AFFECTED_APPS }}
+        run: |
+          AFFECTED_APPS="${{ env.AFFECTED_APPS }}" TAG=${{ env.TAG }} ./tools/tag-push-images
+
+  deploy:
+    name: Deploy
+    needs: [publish-docker-image]
+    strategy:
+      matrix:
+        node-version: [16.x]
+        platform: [ubuntu-latest]
+
+    runs-on: ${{ matrix.platform }}
+    if: ${{ needs.publish-docker-image.outputs.affected-apps }}
+    steps:
+      - name: Connect SSLVPN
+        uses: thinc-org/openfortivpn-action@master
+        with:
+          host: ${{ secrets.SSLVPN_HOST }}
+          username: ${{ secrets.SSLVPN_USERNAME }}
+          password: ${{ secrets.SSLVPN_PASSWORD }}
+          trustedCert: ${{ secrets.SSLVPN_TRUSTED_CERT }}
+
+      - name: Deploy to VM
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          passphrase: ${{ secrets.SSH_PASSPHRASE }}
+          script: |
+            export AFFECTED_APPS="${{ needs.publish-docker-image.outputs.affected-apps }}"
+            export TAG=${{ needs.publish-docker-image.outputs.tag }}
+            for APP in $AFFECTED_APPS
+            do
+              TARGET_IMAGE="ghcr.io/thinc-org/$APP:$TAG"
+              echo "Pulling $TARGET_IMAGE"
+              docker pull $TARGET_IMAGE
+            done
+            docker-compose up -d
+            if [[ "$(docker images --filter "dangling=true" -q)" == "" ]];
+              then echo "No image with <none> tag";
+              else docker rmi $(docker images --filter "dangling=true" -q);
+            fi

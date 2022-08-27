@@ -1,0 +1,22 @@
+import { dialog } from '@web/lib/dialog'
+import { userStore } from '@web/store/userStore'
+
+const loginGuard = (onConfirm?: () => void) => {
+  if (!userStore.isLoggedIn()) {
+    dialog({
+      heading: 'คุณยังไม่ได้เข้าสู่ระบบ',
+      content:
+        'คุณจะสามารถเขียนรีวิว กดไลก์ และรายงานรีวิวของผู้อื่นได้เมื่อเข้าสู่ระบบแล้วเท่านั้น',
+      primaryButtonText: 'เข้าสู่ระบบ',
+      secondaryButtonText: 'ยกเลิก',
+      onPrimaryButtonClick: () => {
+        onConfirm?.()
+        userStore.login()
+      },
+    })
+    return false
+  }
+  return true
+}
+
+export { loginGuard }

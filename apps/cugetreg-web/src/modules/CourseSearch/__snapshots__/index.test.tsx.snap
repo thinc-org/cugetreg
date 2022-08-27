@@ -1,0 +1,77 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CourseSearchPage Should match snapshot correctly 1`] = `
+<Styled(div)>
+  <PageMeta
+    title="ค้นหาวิชาเรียน"
+  />
+  <Styled(ForwardRef(Stack))
+    alignItems="center"
+    direction="row"
+    justifyContent="space-between"
+    spacing={2}
+  >
+    <ForwardRef(Stack)
+      alignItems="center"
+      direction="row"
+      spacing={2}
+    >
+      <ForwardRef(Typography)
+        variant="h2"
+      >
+        ค้นหาวิชาเรียน
+      </ForwardRef(Typography)>
+    </ForwardRef(Stack)>
+    <Hidden
+      mdUp={true}
+    >
+      <Analytics
+        elementName="open_shopping_cart_button"
+      >
+        <Memo(observerComponent)
+          onClick={[MockFunction]}
+        />
+      </Analytics>
+    </Hidden>
+  </Styled(ForwardRef(Stack))>
+  <Styled(ForwardRef(Stack))
+    alignItems="flex-start"
+  >
+    <Styled(ForwardRef(Stack))
+      direction="row"
+      spacing={2}
+      width="100%"
+    >
+      <SearchField />
+      <Analytics
+        elementName="filter_button"
+      >
+        <FilterIconButton />
+      </Analytics>
+      <Hidden
+        mdDown={true}
+      >
+        <Analytics
+          elementName="selected_courses_button"
+        >
+          <Memo(observerComponent)
+            onClick={[MockFunction]}
+          />
+        </Analytics>
+      </Hidden>
+    </Styled(ForwardRef(Stack))>
+    <TagList />
+  </Styled(ForwardRef(Stack))>
+  <NoTagListLayout />
+  <Memo(observerComponent) />
+  <Styled(ForwardRef(Stack))
+    direction="row"
+    spacing={3}
+  >
+    <CourseList />
+    <FilterSection
+      open={false}
+    />
+  </Styled(ForwardRef(Stack))>
+</Styled(div)>
+`;

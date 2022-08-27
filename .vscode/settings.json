@@ -1,6 +1,8 @@
 {
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "typescript.tsdk": "node_modules/typescript/lib",
-  "typescript.preferences.importModuleSpecifier": "shortest"
+  "typescript.preferences.importModuleSpecifier": "shortest",
+  "[proto3]": {
+    "editor.defaultFormatter": "zxh404.vscode-proto3"
+  }
 }

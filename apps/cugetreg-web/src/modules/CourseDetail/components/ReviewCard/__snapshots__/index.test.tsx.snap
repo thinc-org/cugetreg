@@ -1,0 +1,374 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ReviewCard should render correctly if this is not your review 1`] = `
+<Styled(ForwardRef(Stack))
+  direction="column"
+  pending={false}
+  spacing={2}
+>
+  <ForwardRef(Stack)
+    direction="row"
+    flexWrap="wrap"
+    gap={1}
+    justifyContent="space-between"
+  >
+    <ForwardRef(Stack)
+      alignItems="center"
+      direction="row"
+      spacing={2}
+    >
+      <Styled(Styled(ForwardRef(Typography)))
+        variant="h5"
+      >
+        2564 ภาคปลาย
+      </Styled(Styled(ForwardRef(Typography)))>
+    </ForwardRef(Stack)>
+    <ForwardRef(Stack)
+      alignItems="center"
+      direction="row"
+      spacing={1}
+    >
+      <MdOutlineStar
+        size={20}
+      />
+      <Styled(Styled(ForwardRef(Typography)))
+        variant="h5"
+      >
+        4
+      </Styled(Styled(ForwardRef(Typography)))>
+      <Styled(ForwardRef(Typography))
+        variant="subtitle2"
+      >
+        จาก 5
+      </Styled(ForwardRef(Typography))>
+    </ForwardRef(Stack)>
+  </ForwardRef(Stack)>
+  <Styled(div)
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "เหนื่อยากเลยค่าแงงงงง",
+      }
+    }
+  />
+  <ForwardRef(Stack)
+    alignItems="center"
+    direction="row"
+    justifyContent="space-between"
+  >
+    <ForwardRef(Stack)
+      direction="row"
+      spacing={3}
+    >
+      <ReviewReaction
+        onClick={[Function]}
+        pressed={false}
+        reactionCount={0}
+        type="L"
+      />
+      <ReviewReaction
+        onClick={[Function]}
+        pressed={false}
+        reactionCount={0}
+        type="D"
+      />
+    </ForwardRef(Stack)>
+  </ForwardRef(Stack)>
+</Styled(ForwardRef(Stack))>
+`;
+
+exports[`ReviewCard should render correctly if this is your approved review 1`] = `
+<Styled(ForwardRef(Stack))
+  direction="column"
+  pending={false}
+  spacing={2}
+>
+  <ForwardRef(Stack)
+    direction="row"
+    flexWrap="wrap"
+    gap={1}
+    justifyContent="space-between"
+  >
+    <ForwardRef(Stack)
+      alignItems="center"
+      direction="row"
+      spacing={2}
+    >
+      <Styled(Styled(ForwardRef(Typography)))
+        variant="h5"
+      >
+        2564 ภาคปลาย
+      </Styled(Styled(ForwardRef(Typography)))>
+    </ForwardRef(Stack)>
+    <ForwardRef(Stack)
+      alignItems="center"
+      direction="row"
+      spacing={1}
+    >
+      <MdOutlineStar
+        size={20}
+      />
+      <Styled(Styled(ForwardRef(Typography)))
+        variant="h5"
+      >
+        4
+      </Styled(Styled(ForwardRef(Typography)))>
+      <Styled(ForwardRef(Typography))
+        variant="subtitle2"
+      >
+        จาก 5
+      </Styled(ForwardRef(Typography))>
+    </ForwardRef(Stack)>
+  </ForwardRef(Stack)>
+  <Styled(div)
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "เหนื่อยากเลยค่าแงงงงง",
+      }
+    }
+  />
+  <ForwardRef(Stack)
+    alignItems="center"
+    direction="row"
+    justifyContent="space-between"
+  >
+    <ForwardRef(Stack)
+      direction="row"
+      spacing={3}
+    >
+      <ReviewReaction
+        onClick={[Function]}
+        pressed={false}
+        reactionCount={0}
+        type="L"
+      />
+      <ReviewReaction
+        onClick={[Function]}
+        pressed={false}
+        reactionCount={0}
+        type="D"
+      />
+    </ForwardRef(Stack)>
+    <ForwardRef(Stack)
+      direction="row"
+      ml="auto"
+      spacing={1}
+    >
+      <ForwardRef(IconButton)
+        disabled={true}
+        onClick={[Function]}
+        size="small"
+      >
+        <MdEdit
+          color="#C9CCE4"
+          size={24}
+        />
+      </ForwardRef(IconButton)>
+      <ForwardRef(IconButton)
+        onClick={[Function]}
+        size="small"
+      >
+        <MdDelete
+          color="#C9CCE4"
+          size={24}
+        />
+      </ForwardRef(IconButton)>
+    </ForwardRef(Stack)>
+  </ForwardRef(Stack)>
+</Styled(ForwardRef(Stack))>
+`;
+
+exports[`ReviewCard should render correctly if this is your pending review 1`] = `
+<Styled(ForwardRef(Stack))
+  direction="column"
+  pending={true}
+  spacing={2}
+>
+  <ForwardRef(Stack)
+    direction="row"
+    flexWrap="wrap"
+    gap={1}
+    justifyContent="space-between"
+  >
+    <ForwardRef(Stack)
+      alignItems="center"
+      direction="row"
+      spacing={2}
+    >
+      <Styled(Styled(ForwardRef(Typography)))
+        variant="h5"
+      >
+        2564 ภาคปลาย
+      </Styled(Styled(ForwardRef(Typography)))>
+      <GeneralChip
+        type="reviewPending"
+      />
+    </ForwardRef(Stack)>
+    <ForwardRef(Stack)
+      alignItems="center"
+      direction="row"
+      spacing={1}
+    >
+      <MdOutlineStar
+        size={20}
+      />
+      <Styled(Styled(ForwardRef(Typography)))
+        variant="h5"
+      >
+        1.5
+      </Styled(Styled(ForwardRef(Typography)))>
+      <Styled(ForwardRef(Typography))
+        variant="subtitle2"
+      >
+        จาก 5
+      </Styled(ForwardRef(Typography))>
+    </ForwardRef(Stack)>
+  </ForwardRef(Stack)>
+  <Styled(div)
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "เขียนดี ๆ แล้ว อิอิ",
+      }
+    }
+  />
+  <ForwardRef(Stack)
+    alignItems="center"
+    direction="row"
+    justifyContent="space-between"
+  >
+    <ForwardRef(Stack)
+      direction="row"
+      spacing={3}
+    >
+      <ReviewReaction
+        onClick={[Function]}
+        pressed={true}
+        reactionCount={1}
+        type="L"
+      />
+      <ReviewReaction
+        onClick={[Function]}
+        pressed={false}
+        reactionCount={0}
+        type="D"
+      />
+    </ForwardRef(Stack)>
+    <ForwardRef(Stack)
+      direction="row"
+      ml="auto"
+      spacing={1}
+    >
+      <ForwardRef(IconButton)
+        disabled={true}
+        onClick={[Function]}
+        size="small"
+      >
+        <MdEdit
+          color="#C9CCE4"
+          size={24}
+        />
+      </ForwardRef(IconButton)>
+      <ForwardRef(IconButton)
+        onClick={[Function]}
+        size="small"
+      >
+        <MdDelete
+          color="#C9CCE4"
+          size={24}
+        />
+      </ForwardRef(IconButton)>
+    </ForwardRef(Stack)>
+  </ForwardRef(Stack)>
+</Styled(ForwardRef(Stack))>
+`;
+
+exports[`ReviewCard should render correctly if this is your rejected review 1`] = `
+<Styled(ForwardRef(Stack))
+  direction="column"
+  pending={true}
+  spacing={2}
+>
+  <ForwardRef(Stack)
+    direction="row"
+    flexWrap="wrap"
+    gap={1}
+    justifyContent="space-between"
+  >
+    <ForwardRef(Stack)
+      alignItems="center"
+      direction="row"
+      spacing={2}
+    >
+      <Styled(Styled(ForwardRef(Typography)))
+        variant="h5"
+      >
+        2564 ภาคปลาย
+      </Styled(Styled(ForwardRef(Typography)))>
+      <GeneralChip
+        type="reviewRejected"
+      />
+    </ForwardRef(Stack)>
+    <ForwardRef(Stack)
+      alignItems="center"
+      direction="row"
+      spacing={1}
+    >
+      <MdOutlineStar
+        size={20}
+      />
+      <Styled(Styled(ForwardRef(Typography)))
+        variant="h5"
+      >
+        1.5
+      </Styled(Styled(ForwardRef(Typography)))>
+      <Styled(ForwardRef(Typography))
+        variant="subtitle2"
+      >
+        จาก 5
+      </Styled(ForwardRef(Typography))>
+    </ForwardRef(Stack)>
+  </ForwardRef(Stack)>
+  <Styled(div)
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "เขียนดี ๆ แล้ว อิอิ",
+      }
+    }
+  />
+  <ForwardRef(Stack)
+    alignItems="center"
+    direction="row"
+    justifyContent="space-between"
+  >
+    <Styled(ForwardRef(Typography))
+      variant="subtitle2"
+    >
+      กรุณาแก้ไข ก่อนส่งรีวิวรายวิชาอีกครั้ง
+    </Styled(ForwardRef(Typography))>
+    <ForwardRef(Stack)
+      direction="row"
+      ml="auto"
+      spacing={1}
+    >
+      <ForwardRef(IconButton)
+        disabled={true}
+        onClick={[Function]}
+        size="small"
+      >
+        <MdEdit
+          color="#C9CCE4"
+          size={24}
+        />
+      </ForwardRef(IconButton)>
+      <ForwardRef(IconButton)
+        onClick={[Function]}
+        size="small"
+      >
+        <MdDelete
+          color="#C9CCE4"
+          size={24}
+        />
+      </ForwardRef(IconButton)>
+    </ForwardRef(Stack)>
+  </ForwardRef(Stack)>
+</Styled(ForwardRef(Stack))>
+`;

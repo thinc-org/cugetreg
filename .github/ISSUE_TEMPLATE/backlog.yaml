@@ -1,6 +1,6 @@
 name: Backlog
 description: Create a new task
-title: '[BACKLOG]: '
+title: '[BACKLOG] '
 body:
   - type: checkboxes
     id: teams

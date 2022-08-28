@@ -67,13 +67,13 @@ export class CourseService {
       academicYear,
       studyProgram,
     } as FilterQuery<CourseDocument>
-    keyword = keyword.trim()
+    const escapedKeyword = escapeRegExpString(keyword.trim())
     if (keyword) {
       query.$or = [
-        { courseNo: new RegExp('^' + escapeRegExpString(keyword), 'i') },
-        { abbrName: new RegExp(escapeRegExpString(keyword), 'i') },
-        { courseNameTh: new RegExp(escapeRegExpString(keyword), 'i') },
-        { courseNameEn: new RegExp(escapeRegExpString(keyword), 'i') },
+        { courseNo: new RegExp('^' + escapedKeyword, 'i') },
+        { abbrName: new RegExp(escapedKeyword, 'i') },
+        { courseNameTh: new RegExp(escapedKeyword, 'i') },
+        { courseNameEn: new RegExp(escapedKeyword, 'i') },
       ]
     }
 

@@ -3,7 +3,7 @@ import React from 'react'
 import { Box, Card, Link, Typography, useTheme } from '@mui/material'
 
 import { PageMeta } from '@web/components/PageMeta'
-import { StyledArticleBody } from '@web/configs/theme/articletext'
+import { StyledArticleBody, StyledArticleBox } from '@web/configs/theme/articletext'
 import { sessionIdStore } from '@web/store/sessionIdStore'
 
 export default function About() {
@@ -25,7 +25,7 @@ export default function About() {
           (กวศ.) มีวัตถุประสงค์เพื่อฝึกฝนและฟูมฟักผู้มีความสนใจในการออกแบบและพัฒนาซอฟต์แวร์
           ผ่านการทำโปรเจคพัฒนาซอฟต์แวร์เพื่อสังคมจุฬาฯ
         </StyledArticleBody>
-        <StyledArticleBody variant="body1">
+        <StyledArticleBox>
           ผลงานที่ผ่านมาของชมรม Thinc. เช่น
           <ul>
             <li>
@@ -44,7 +44,7 @@ export default function About() {
             </li>
             <li>Companion App ในงาน JavaScript Bangkok 1.0.0</li>
           </ul>
-        </StyledArticleBody>
+        </StyledArticleBox>
         <StyledArticleBody variant="body1" paragraph>
           สามารถติดตามชมรม Thinc. ได้ทาง{' '}
           <Link
@@ -102,7 +102,7 @@ export default function About() {
         <Typography variant="h6" component="h3" gutterBottom>
           CU Get Reg นำข้อมูลมาจากไหน?
         </Typography>
-        <StyledArticleBody variant="body1" paragraph>
+        <StyledArticleBox>
           <ul>
             <li>
               <strong>ข้อมูลรายวิชาและข้อมูลตอนเรียน:</strong> นำมาจากหน้า{' '}
@@ -136,7 +136,7 @@ export default function About() {
               ของสำนักบริหารวิชาการ จุฬาฯ
             </li>
           </ul>
-        </StyledArticleBody>
+        </StyledArticleBox>
 
         <Typography variant="h6" component="h3" gutterBottom>
           การเข้าสู่ระบบ มีประโยชน์อย่างไรบ้าง?
@@ -166,7 +166,7 @@ export default function About() {
         <Typography variant="h6" component="h3" gutterBottom>
           ความร่วมมือกับหน่วยงานอื่น ๆ
         </Typography>
-        <StyledArticleBody variant="body1" paragraph>
+        <StyledArticleBox>
           CU Get Reg มีความร่วมมือกับหน่วยงานอื่นภายในจุฬาฯ ได้แก่
           <ul>
             <li>
@@ -208,7 +208,7 @@ export default function About() {
               </Link>
             </li>
           </ul>
-        </StyledArticleBody>
+        </StyledArticleBox>
 
         <Typography variant="h4" component="h2" gutterBottom>
           ติดต่อทีมงาน

@@ -1,0 +1,44 @@
+name: Backlog
+description: Create a new task
+title: '[BACKLOG]: '
+body:
+  - type: checkboxes
+    id: teams
+    attributes:
+      label: Related Teams
+      description: What teams are related to this task?
+      options:
+        - label: Frontend
+        - label: Backend
+        - label: Data
+        - label: Design
+        - label: Infra
+        - label: QA
+  - type: input
+    id: problem
+    attributes:
+      label: Problem
+      description: What's the reason behind this task?
+    validations:
+      required: false
+  - type: textarea
+    id: description
+    attributes:
+      label: Task Description
+      description: What do you want the assignees to do?
+    validations:
+      required: true
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: What should the assignees know, if they take this task?
+    validations:
+      required: false
+  - type: input
+    id: advisor
+    attributes:
+      label: Task Advisor
+      description: Who's the task advisor?
+    validations:
+      required: false

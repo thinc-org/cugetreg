@@ -5,8 +5,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        ## If this task is part of an **Epic**, do not forget to add label in the format `Epic: <epic name>`. 
-        Ex: `Epic: Scraper Optimization`
+        ### If this task is part of an **Epic**, do not forget to add label in the format `Epic: <epic name>`. Ex: `Epic: Scraper Optimization`
   - type: textarea
     id: problem
     attributes:

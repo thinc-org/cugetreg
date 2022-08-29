@@ -14,9 +14,9 @@ export const Stack = styled(MuiStack)`
 
 export const StickyStack = styled(MuiStack)`
   position: sticky;
-  top: 0;
+  top: -1px;
   margin-bottom: 0;
-  padding-top: ${({ theme }) => theme.spacing(3)};
+  padding-top: calc(${({ theme }) => theme.spacing(3)} + 1px);
   padding-bottom: ${({ theme }) => theme.spacing(2)};
   z-index: ${({ theme }) => theme.zIndex.appBar + 1};
   background: white;

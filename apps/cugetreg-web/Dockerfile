@@ -1,4 +1,4 @@
-FROM node:14-buster
+FROM node:16.17.0-buster
 WORKDIR /app
 
 ENV NODE_ENV production

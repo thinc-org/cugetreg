@@ -1,4 +1,4 @@
-FROM node:14-alpine
+FROM node:16.17.0-alpine
 WORKDIR /usr/app
 
 ENV NODE_ENV production

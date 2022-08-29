@@ -1,0 +1,84 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/cugetreg-api/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/node:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "outputPath": "dist/apps/cugetreg-api",
+        "main": "apps/cugetreg-api/src/main.ts",
+        "tsConfig": "apps/cugetreg-api/tsconfig.app.json",
+        "assets": [
+          "apps/cugetreg-api/src/assets",
+          {
+            "glob": "**/*.graphql",
+            "input": "apps/cugetreg-api/src",
+            "output": "assets/graphql"
+          }
+        ],
+        "generatePackageJson": true
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "extractLicenses": true,
+          "inspect": false
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/node:node",
+      "options": {
+        "buildTarget": "cugetreg-api:build"
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "cugetreg-api:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/cugetreg-api/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/apps/cugetreg-api"],
+      "options": {
+        "jestConfig": "apps/cugetreg-api/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "docker": {
+      "executor": "@nx-tools/nx-docker:build",
+      "options": {
+        "tags": ["ghcr.io/thinc-org/cugetreg-api:latest"]
+      }
+    },
+    "docker-build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          { "command": "nx run cugetreg-api:build", "forwardAllArgs": false },
+          {
+            "command": "cp pnpm-lock.yaml dist/apps/cugetreg-api/pnpm-lock.yaml",
+            "forwardAllArgs": false
+          },
+          { "command": "cp .npmrc dist/apps/cugetreg-api/.npmrc", "forwardAllArgs": false },
+          {
+            "command": "nx run cugetreg-api:docker --push=false --tags=cugetreg-api:latest --load",
+            "forwardAllArgs": false
+          }
+        ],
+        "parallel": false
+      }
+    }
+  },
+  "tags": []
+}

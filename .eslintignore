@@ -1,2 +1,5 @@
-/src/lib
-**/*.test.*
+# Next.js
+.next
+
+# Dist
+dist

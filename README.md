@@ -1,12 +1,14 @@
 ![cover](https://user-images.githubusercontent.com/33742791/142388797-fa14bcfa-b01e-45ab-a271-bfdeeb26285f.png)
 
 <!--- insert badge here --->
+<!-- we need badge -->
 
 Have no idea what courses to take? Don't know what this course is about? We got it covered. With [CU Get Reg](https://cugetreg.com), we put all kinds of course data together so that you don't have to.
 
 ## Contents
 
-- [The beginning of CU Get Reg](#beginning-of-cu-get-reg)
+- [Contents](#contents)
+- [The beginning of CU Get Reg](#the-beginning-of-cu-get-reg)
 - [Related repositories](#related-repositories)
 - [Contribution](#contribution)
 - [Roadmap](#roadmap)

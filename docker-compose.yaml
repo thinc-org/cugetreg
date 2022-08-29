@@ -1,16 +1,13 @@
 version: '3.9'
 
 services:
-  frontend:
-    build: ./
-    image: cugetreg-frontend:latest
-    container_name: cugetreg-frontend
+  mongo:
+    image: mongo:5.0.10
+    container_name: cugetreg-mongo
     restart: unless-stopped
+    volumes:
+      - ./volumes/mongo:/data/db
     ports:
-      - 3000:3000
+      - 27017:27017
     networks:
       - cugetreg-network
-
-networks:
-  cugetreg-network:
-    name: cugetreg-network

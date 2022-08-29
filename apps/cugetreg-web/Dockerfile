@@ -1,4 +1,4 @@
-FROM node:14-alpine
+FROM node:14-buster
 WORKDIR /app
 
 ENV NODE_ENV production

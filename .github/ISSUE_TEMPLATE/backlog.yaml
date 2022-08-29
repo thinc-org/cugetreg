@@ -40,9 +40,9 @@ body:
         - label: Infra
         - label: QA
   - type: textarea
-    id: advisor
+    id: advisors
     attributes:
-      label: Task Advisor
-      description: Who's the task advisor?
+      label: Task Advisors
+      description: Who are the task advisors?
     validations:
       required: false

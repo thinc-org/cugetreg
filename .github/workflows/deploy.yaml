@@ -22,7 +22,7 @@ jobs:
     name: Publish Docker image
     strategy:
       matrix:
-        node-version: [16.x]
+        node-version: [16.17.0]
         platform: [ubuntu-latest]
 
     runs-on: ${{ matrix.platform }}

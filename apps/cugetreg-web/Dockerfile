@@ -1,4 +1,4 @@
-FROM node:14-alpine AS builder
+FROM node:16.17.0-buster
 WORKDIR /app
 
 ENV NODE_ENV production
@@ -11,25 +11,6 @@ COPY dist/apps/cugetreg-web/next.config.js ./
 COPY dist/apps/cugetreg-web/.next/standalone ./
 COPY dist/apps/cugetreg-web/public ./apps/cugetreg-web/public
 COPY dist/apps/cugetreg-web/.next/static ./dist/apps/cugetreg-web/.next/static
-
-# # Generate Prisma Client
-# RUN npm install -g prisma
-# COPY apps/cugetreg-web-backend/src/prisma/schema.prisma ./schema.prisma
-# RUN npx prisma generate --schema=schema.prisma
-
-FROM node:14-alpine AS runner
-WORKDIR /app
-
-ENV NODE_ENV production
-# Uncomment the following line in case you want to disable telemetry during runtime.
-# ENV NEXT_TELEMETRY_DISABLED 1
-
-COPY --from=builder /app .
-
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
-
-USER nextjs
 
 EXPOSE 4200
 ENV PORT 4200

@@ -2,25 +2,18 @@ name: Backlog
 description: Create a new task
 title: '[BACKLOG] '
 body:
-  - type: checkboxes
-    id: teams
+  - type: markdown
     attributes:
-      label: Related Teams
-      description: What teams are related to this task?
-      options:
-        - label: Frontend
-        - label: Backend
-        - label: Data
-        - label: Design
-        - label: Infra
-        - label: QA
-  - type: input
+      value: |
+        ## If this task is part of an **Epic**, do not forget to add label in the format `Epic: <epic name>`. 
+        Ex: `Epic: Scraper Optimization`
+  - type: textarea
     id: problem
     attributes:
       label: Problem
       description: What's the reason behind this task?
     validations:
-      required: false
+      required: true
   - type: textarea
     id: description
     attributes:
@@ -35,7 +28,19 @@ body:
       description: What should the assignees know, if they take this task?
     validations:
       required: false
-  - type: input
+  - type: checkboxes
+    id: teams
+    attributes:
+      label: Related Teams
+      description: What teams are related to this task?
+      options:
+        - label: Frontend
+        - label: Backend
+        - label: Data
+        - label: Design
+        - label: Infra
+        - label: QA
+  - type: textarea
     id: advisor
     attributes:
       label: Task Advisor

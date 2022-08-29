@@ -4,6 +4,8 @@ import { InjectModel } from '@nestjs/mongoose'
 import { Semester, StudyProgram } from '@thinc-org/chula-courses'
 import { FilterQuery, Model } from 'mongoose'
 
+import { escapeRegExpString } from '@api/util/functions'
+
 import { Course } from '../common/types/course.type'
 import { CourseGroupInput, FilterInput } from '../graphql'
 import { CourseDocument } from '../schemas/course.schema'
@@ -65,13 +67,13 @@ export class CourseService {
       academicYear,
       studyProgram,
     } as FilterQuery<CourseDocument>
-    keyword = keyword.trim()
+    const escapedKeyword = escapeRegExpString(keyword.trim())
     if (keyword) {
       query.$or = [
-        { courseNo: new RegExp('^' + keyword, 'i') },
-        { abbrName: new RegExp(keyword, 'i') },
-        { courseNameTh: new RegExp(keyword, 'i') },
-        { courseNameEn: new RegExp(keyword, 'i') },
+        { courseNo: new RegExp('^' + escapedKeyword, 'i') },
+        { abbrName: new RegExp(escapedKeyword, 'i') },
+        { courseNameTh: new RegExp(escapedKeyword, 'i') },
+        { courseNameEn: new RegExp(escapedKeyword, 'i') },
       ]
     }
 

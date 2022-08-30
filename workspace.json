@@ -4,6 +4,7 @@
   "projects": {
     "cugetreg-api": "apps/cugetreg-api",
     "cugetreg-web": "apps/cugetreg-web",
-    "cugetreg-web-e2e": "apps/cugetreg-web-e2e"
+    "cugetreg-web-e2e": "apps/cugetreg-web-e2e",
+    "cugetreg-build": "tools/cugetreg-build"
   }
 }

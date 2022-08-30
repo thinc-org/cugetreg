@@ -72,18 +72,7 @@
       }
     },
     "docker-build": {
-      "executor": "nx:run-commands",
-      "options": {
-        "commands": [
-          { "command": "nx run cugetreg-web:build", "forwardAllArgs": false },
-          { "command": "nx run cugetreg-web:postbuild", "forwardAllArgs": false },
-          {
-            "command": "nx run cugetreg-web:docker --push=false --tags=cugetreg-web:latest --load",
-            "forwardAllArgs": false
-          }
-        ],
-        "parallel": false
-      }
+      "executor": "./tools/cugetreg-build/dist:docker"
     }
   },
   "tags": []

@@ -1,0 +1,15 @@
+.DS_Store
+.dockerignore
+.editorconfig
+.git
+.github
+.gitignore
+.vscode
+README.md
+build
+dist
+docker-compose.yaml
+*/Dockerfile
+node_modules
+tmp
+tools

@@ -1,0 +1,5 @@
+{
+  "cli": "nx",
+  "id": "cugetreg-build:docker",
+  "description": "build docker image from project"
+}

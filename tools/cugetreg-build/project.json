@@ -1,0 +1,35 @@
+{
+  "sourceRoot": "tools/cugetreg-build/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "tools/cugetreg-build/dist",
+        "tsConfig": "tools/cugetreg-build/tsconfig.lib.json",
+        "packageJson": "./tools/cugetreg-build/package.json",
+        "main": "tools/cugetreg-build/src/index.ts",
+        "assets": [
+          "tools/cugetreg-build/*.md",
+          {
+            "input": "./tools/cugetreg-build/src",
+            "glob": "**/!(*.ts)",
+            "output": "./src"
+          },
+          {
+            "input": "./tools/cugetreg-build/src",
+            "glob": "**/*.d.ts",
+            "output": "./src"
+          },
+          {
+            "input": "./tools/cugetreg-build",
+            "glob": "executors.json",
+            "output": "."
+          }
+        ]
+      }
+    }
+  },
+  "tags": []
+}

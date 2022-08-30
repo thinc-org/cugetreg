@@ -62,13 +62,26 @@ export class CourseService {
     }: FilterInput,
     { semester, academicYear, studyProgram }: CourseGroupInput
   ): Promise<Course[]> {
+    const query = await this.createQuery(
+      { keyword, genEdTypes, dayOfWeeks, periodRange },
+      { semester, academicYear, studyProgram }
+    )
+    const courses = await this.courseModel.find(query).limit(limit).skip(offset).lean()
+    return courses
+  }
+
+  async createQuery(
+    filter: FilterInput,
+    courseInput: CourseGroupInput
+  ): Promise<FilterQuery<CourseDocument>> {
     const query = {
-      semester,
-      academicYear,
-      studyProgram,
+      semester: courseInput.semester,
+      academicYear: courseInput.academicYear,
+      studyProgram: courseInput.studyProgram,
     } as FilterQuery<CourseDocument>
-    const escapedKeyword = escapeRegExpString(keyword.trim())
-    if (keyword) {
+
+    const escapedKeyword = escapeRegExpString(filter.keyword.trim())
+    if (filter.keyword) {
       query.$or = [
         { courseNo: new RegExp('^' + escapedKeyword, 'i') },
         { abbrName: new RegExp(escapedKeyword, 'i') },
@@ -77,16 +90,16 @@ export class CourseService {
       ]
     }
 
-    if (genEdTypes.length > 0) {
-      query.genEdType = { $in: genEdTypes }
+    if (filter.genEdTypes.length > 0) {
+      query.genEdType = { $in: filter.genEdTypes }
     }
 
-    if (dayOfWeeks.length > 0) {
-      query['sections.classes.dayOfWeek'] = { $in: dayOfWeeks }
+    if (filter.dayOfWeeks.length > 0) {
+      query['sections.classes.dayOfWeek'] = { $in: filter.dayOfWeeks }
     }
 
-    if (periodRange) {
-      const { start, end } = periodRange
+    if (filter.periodRange) {
+      const { start, end } = filter.periodRange
       if (!isTime(start) || !isTime(end)) {
         throw new BadRequestException({
           reason: 'INVALID_PERIOD_RANGE',
@@ -107,8 +120,7 @@ export class CourseService {
       }
     }
 
-    const courses = await this.courseModel.find(query).limit(limit).skip(offset).lean()
-    return courses
+    return query
   }
 }
 

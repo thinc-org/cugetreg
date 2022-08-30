@@ -36,6 +36,10 @@ input OverrideInput {
   genEd: GenEdOverrideInput
 }
 
+type Query {
+  overrides: [Override!]!
+}
+
 type Mutation {
   """
   Create a new override. If override already exists, update it.

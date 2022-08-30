@@ -13,7 +13,6 @@ import { OverrideService } from './override.service'
 export class OverrideResolver {
   constructor(private readonly overrideService: OverrideService) {}
 
-  @UseGuards(AdminAuthGuard)
   @Query('overrides')
   getOverrides(): Promise<Override[]> {
     return this.overrideService.getOverrides()

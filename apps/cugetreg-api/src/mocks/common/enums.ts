@@ -1,9 +1,4 @@
-import {
-  ClassType,
-  DayOfWeekEnum,
-  GenEdTypeEnum,
-  StudyProgramEnum,
-} from '@thinc-org/chula-courses'
+import { ClassType, DayOfWeekEnum, GenEdTypeEnum, StudyProgramEnum } from '@thinc-org/chula-courses'
 
 export const genEdTypes = [
   GenEdTypeEnum.IN,

@@ -3,9 +3,18 @@ import { getModelToken } from '@nestjs/mongoose'
 import { Test, TestingModule } from '@nestjs/testing'
 
 import { faker } from '@faker-js/faker'
-import { SemesterEnum, StudyProgram } from '@thinc-org/chula-courses/dist/types'
+import {
+  DayOfWeekEnum,
+  GenEdTypeEnum,
+  SemesterEnum,
+  StudyProgram,
+} from '@thinc-org/chula-courses/dist/types'
+import { FilterQuery } from 'mongoose'
+
+import { CourseDocument } from '@api/schemas/course.schema'
 
 import { Course } from '../common/types/course.type'
+import { StudyProgram as StudyProgramGQL } from '../graphql'
 import { classTypes, dayOfWeeks, genEdTypes, studyPrograms } from '../mocks/common/enums'
 import { CourseService } from './course.service'
 
@@ -13,6 +22,8 @@ const MockCourseModel = {
   find: jest.fn(),
   findOne: jest.fn(),
   aggregate: jest.fn(),
+  limit: jest.fn(),
+  skip: jest.fn(),
   lean: jest.fn(),
 }
 
@@ -76,6 +87,16 @@ const createCourse = (): Course => {
       },
     ],
   }
+}
+
+const createCourseList = (): Course[] => {
+  const result: Course[] = []
+
+  for (let i = 0; i < 100; i++) {
+    result.push(createCourse())
+  }
+
+  return result
 }
 
 const createCourseNos = () => {
@@ -193,11 +214,63 @@ describe('CourseService', () => {
 
       expect(actual).toStrictEqual(want)
     })
-    // it('should throw error if not found', async () => {})
   })
 
   describe('search', () => {
-    // it('should return the course if no error', async () => {})
-    // it('should throw error if not found', async () => {})
+    it('should return the course if no error (limit = $limit, offset = $offset)', async () => {
+      const courses = createCourseList()
+      const query = {
+        semester: courses[0].semester,
+        academicYear: courses[0].academicYear,
+        studyProgram: courses[0].studyProgram as StudyProgramGQL,
+      } as FilterQuery<CourseDocument>
+
+      const want = courses
+
+      MockCourseModel.find.mockReturnThis()
+      MockCourseModel.limit.mockReturnThis()
+      MockCourseModel.skip.mockReturnThis()
+      MockCourseModel.lean.mockResolvedValue(courses)
+      jest.spyOn(service, 'createQuery').mockResolvedValue(query)
+
+      const actual = await service.search(
+        {
+          limit: 100,
+          offset: 0,
+        },
+        {
+          academicYear: query.academicYear,
+          semester: query.semester,
+          studyProgram: query.studyProgram,
+        }
+      )
+
+      expect(MockCourseModel.find).toHaveBeenCalledTimes(1)
+      expect(MockCourseModel.limit).toHaveBeenCalledTimes(1)
+      expect(MockCourseModel.skip).toHaveBeenCalledTimes(1)
+      expect(MockCourseModel.lean).toHaveBeenCalledTimes(1)
+      expect(MockCourseModel.find).toHaveBeenCalledWith(query)
+      expect(MockCourseModel.limit).toHaveBeenCalledWith(100)
+      expect(MockCourseModel.skip).toHaveBeenCalledWith(0)
+
+      expect(actual).toStrictEqual(want)
+    })
+  })
+
+  describe('createQuery', () => {
+    //     it.each`
+    //       keyword | genEdType             | dayOfWeeks                | periordRange                                                | expect
+    //       ${'keyword'} | ${[]} | ${[]} | ${undefined} | ${{
+    //   $or: [{ courseNo: new RegExp('^' + 'keyword', 'i') }, { abbrName: new RegExp('keyword', 'i') }, { courseNameTh: new RegExp('keyword', 'i') }, { courseNameEn: new RegExp('keyword', 'i') }],
+    // }}
+    //       ${''}   | ${[GenEdTypeEnum.HU]} | ${[]}                     | ${undefined}                                                | ${{ genEdType: { $in: [GenEdTypeEnum.HU] } }}
+    //       ${''}   | ${[GenEdTypeEnum.HU]} | ${[DayOfWeekEnum.Monday]} | ${{ start: faker.date.future(), end: faker.date.future() }} | ${{}}
+    //       ${''}   | ${[GenEdTypeEnum.HU]} | ${[DayOfWeekEnum.Monday]} | ${{ start: faker.date.future(), end: faker.date.future() }} | ${{}}
+    //       ${''}   | ${[GenEdTypeEnum.HU]} | ${[DayOfWeekEnum.Monday]} | ${{ start: faker.date.future(), end: faker.date.future() }} | ${{}}
+    //     `(
+    //       'should successfully create the query from filter',
+    //       (keyword, genEdTypes, dayOfWeeks, periodRange, expect) => {}
+    //     )
+    // it('should throw error if invalid input', () => {})
   })
 })

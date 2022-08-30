@@ -1,0 +1,8 @@
+#!/bin/sh
+
+PROJECT=$1
+OUTDIR=./dist/$PROJECT
+
+mkdir -p $OUTDIR
+cat ./Dockerfile.base > $OUTDIR/Dockerfile
+cat $PROJECT/Dockerfile >> $OUTDIR/Dockerfile

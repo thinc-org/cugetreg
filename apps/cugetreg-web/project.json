@@ -65,24 +65,20 @@
         "lintFilePatterns": ["apps/cugetreg-web/**/*.{ts,tsx,js,jsx}"]
       }
     },
-    "docker": {
-      "executor": "@nx-tools/nx-docker:build",
-      "options": {
-        "tags": ["ghcr.io/thinc-org/cugetreg-web:latest"]
-      }
-    },
-    "docker-build": {
+    "dockerfile": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": [
-          { "command": "nx run cugetreg-web:build", "forwardAllArgs": false },
-          { "command": "nx run cugetreg-web:postbuild", "forwardAllArgs": false },
-          {
-            "command": "nx run cugetreg-web:docker --push=false --tags=cugetreg-web:latest --load",
-            "forwardAllArgs": false
-          }
-        ],
-        "parallel": false
+        "command": "./tools/create-dockerfile apps/cugetreg-web"
+      }
+    },
+    "docker": {
+      "executor": "@nx-tools/nx-docker:build",
+      "dependsOn": ["dockerfile"],
+      "options": {
+        "file": "dist/apps/cugetreg-web/Dockerfile",
+        "tags": ["cugetreg-web:latest"],
+        "push": false,
+        "load": true
       }
     }
   },

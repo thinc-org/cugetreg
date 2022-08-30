@@ -1,0 +1,17 @@
+.DS_Store
+.dockerignore
+.editorconfig
+.git
+.github
+.gitignore
+.vscode
+README.md
+build
+dist
+docker-compose.yaml
+apps/cugetreg-api/Dockerfile
+apps/cugetreg-web/Dockerfile
+Dockerfile.base
+node_modules
+tmp
+tools

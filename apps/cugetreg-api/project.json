@@ -55,28 +55,20 @@
         "passWithNoTests": true
       }
     },
-    "docker": {
-      "executor": "@nx-tools/nx-docker:build",
-      "options": {
-        "tags": ["ghcr.io/thinc-org/cugetreg-api:latest"]
-      }
-    },
-    "docker-build": {
+    "dockerfile": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": [
-          { "command": "nx run cugetreg-api:build", "forwardAllArgs": false },
-          {
-            "command": "cp pnpm-lock.yaml dist/apps/cugetreg-api/pnpm-lock.yaml",
-            "forwardAllArgs": false
-          },
-          { "command": "cp .npmrc dist/apps/cugetreg-api/.npmrc", "forwardAllArgs": false },
-          {
-            "command": "nx run cugetreg-api:docker --push=false --tags=cugetreg-api:latest --load",
-            "forwardAllArgs": false
-          }
-        ],
-        "parallel": false
+        "command": "./tools/create-dockerfile apps/cugetreg-api"
+      }
+    },
+    "docker": {
+      "executor": "@nx-tools/nx-docker:build",
+      "dependsOn": ["dockerfile"],
+      "options": {
+        "file": "dist/apps/cugetreg-api/Dockerfile",
+        "tags": ["cugetreg-api:latest"],
+        "push": false,
+        "load": true
       }
     }
   },

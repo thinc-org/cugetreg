@@ -1,19 +1,21 @@
-FROM node:16.17.0-alpine
-WORKDIR /usr/app
+FROM cugetreg-base AS builder
+
+COPY . .
+
+RUN pnpm nx build cugetreg-api
+
+FROM node:16.17.0-buster
+WORKDIR /app
 
 ENV NODE_ENV production
 RUN npm install -g pnpm
 
-COPY dist/apps/cugetreg-api/.npmrc .
-COPY dist/apps/cugetreg-api/pnpm-lock.yaml .
-COPY dist/apps/cugetreg-api/package.json .
+COPY --from=builder /app/dist/apps/cugetreg-api/package.json .
+COPY .npmrc pnpm-lock.yaml ./
+
 RUN pnpm install -r --prod --prefer-offline
 
-# Generate Prisma Client
-# RUN npm install -g prisma
-# RUN npx prisma generate --schema=apps/cugetreg-api/src/prisma/schema.prisma
-
-COPY dist/apps/cugetreg-api .
+COPY --from=builder /app/dist/apps/cugetreg-api .
 
 EXPOSE 3333
 

@@ -38,3 +38,11 @@ export function findAvgRating(reviews: Review[]): string {
   }
   return (total / (2 * reviews.length)).toFixed(2)
 }
+
+/**
+ * Escapes a string to be safely used in a regex query.
+ * @param str The string to be escaped
+ */
+export function escapeRegExpString(str: string): string {
+  return str.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&')
+}

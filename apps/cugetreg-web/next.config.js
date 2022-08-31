@@ -17,6 +17,11 @@ const nextConfig = {
   env: {
     IS_PULL_REQUEST: process.env.IS_PULL_REQUEST,
   },
+  compiler: {
+    removeConsole: {
+      exclude: ['error', 'warn'],
+    },
+  },
   webpack: (config, { isServer }) => {
     if (!isServer) config.resolve.fallback.fs = false
     return config

@@ -245,7 +245,7 @@ export class Override {
 export abstract class IMutation {
     abstract createOrUpdateOverride(override: OverrideInput): Override | Promise<Override>;
 
-    abstract deleteOverride(courseNo: string, studyProgram: StudyProgram): Override | Promise<Override>;
+    abstract deleteOverride(courseNo: string, courseGroup: CourseGroupInput): Override | Promise<Override>;
 
     abstract createReview(createReviewInput: CreateReviewInput): Review | Promise<Review>;
 

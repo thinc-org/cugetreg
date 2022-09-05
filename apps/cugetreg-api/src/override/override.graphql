@@ -52,5 +52,5 @@ type Mutation {
 
   Requires admin authentication.
   """
-  deleteOverride(courseNo: String!, studyProgram: StudyProgram!): Override
+  deleteOverride(courseNo: String!, courseGroup: CourseGroupInput!): Override
 }

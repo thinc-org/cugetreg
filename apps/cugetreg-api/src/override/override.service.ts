@@ -25,6 +25,8 @@ export class OverrideService {
         {
           courseNo: override.courseNo,
           studyProgram: override.studyProgram,
+          academicYear: override.academicYear,
+          semester: override.semester,
         },
         override,
         {
@@ -36,10 +38,17 @@ export class OverrideService {
     return result
   }
 
-  async deleteOverride(courseNo: string, studyProgram: StudyProgram): Promise<Override> {
+  async deleteOverride(
+    courseNo: string,
+    studyProgram: StudyProgram,
+    academicYear: string,
+    semester: string
+  ): Promise<Override> {
     const result = await this.overrideModel.findOneAndDelete({
       courseNo,
       studyProgram,
+      academicYear,
+      semester,
     })
     return result
   }

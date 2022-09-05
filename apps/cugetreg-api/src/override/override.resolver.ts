@@ -1,8 +1,6 @@
 import { UseGuards } from '@nestjs/common'
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
 
-import { StudyProgram } from '@thinc-org/chula-courses'
-
 import { AdminAuthGuard } from '@api/auth/admin.guard'
 import { CourseGroupInput, OverrideInput } from '@api/graphql'
 import { Override } from '@api/schemas/override.schema'

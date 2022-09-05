@@ -32,6 +32,8 @@ export const ReviewSchema = new mongoose.Schema({
   },
 })
 
+ReviewSchema.index({ studyProgram: 1, courseNo: 1 })
+
 export interface ReviewInteraction {
   userId: mongoose.Types.ObjectId
   type: ReviewInteractionType

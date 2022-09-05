@@ -88,4 +88,7 @@ export const CourseSchema = new mongoose.Schema({
   rating: { type: String },
 })
 
+CourseSchema.index({ studyProgram: 1, academicYear: 1, semester: 1, courseNo: 1 })
+CourseSchema.index({ studyProgram: 1, academicYear: 1, semester: 1, abbrName: 1 })
+
 export type CourseDocument = Course & mongoose.Document

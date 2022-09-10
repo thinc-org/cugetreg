@@ -1,0 +1,35 @@
+mutation CreateReview($createReviewInput: CreateReviewInput!) {
+  createReview(createReviewInput: $createReviewInput) {
+    ...ReviewDataFields
+  }
+}
+
+mutation EditMyReview($reviewId: String!, $review: EditReviewInput!) {
+  editMyReview(reviewId: $reviewId, review: $review) {
+    ...ReviewDataFields
+  }
+}
+
+query GetMyPendingReviews($courseNo: String!, $studyProgram: StudyProgram!) {
+  myPendingReviews(courseNo: $courseNo, studyProgram: $studyProgram) {
+    ...ReviewDataFields
+  }
+}
+
+query GetReviews($courseNo: String!, $studyProgram: StudyProgram!) {
+  reviews(courseNo: $courseNo, studyProgram: $studyProgram) {
+    ...ReviewDataFields
+  }
+}
+
+mutation RemoveReview($reviewId: String!) {
+  removeReview(reviewId: $reviewId) {
+    ...ReviewDataFields
+  }
+}
+
+mutation SetReviewInteraction($reviewId: String!, $interactionType: ReviewInteractionType!) {
+  setReviewInteraction(reviewId: $reviewId, interactionType: $interactionType) {
+    ...ReviewDataFields
+  }
+}

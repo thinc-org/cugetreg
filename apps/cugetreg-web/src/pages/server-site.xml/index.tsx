@@ -1,4 +1,10 @@
-import { SearchDocument, SearchQuery, SearchQueryVariables, StudyProgram } from '@cugetreg/codegen'
+import {
+  SearchCourseDocument,
+  SearchCourseQuery,
+  SearchCourseQueryVariables,
+  StudyProgram,
+} from '@cugetreg/codegen'
+
 import { GetServerSideProps } from 'next'
 import { ISitemapField, getServerSideSitemap } from 'next-sitemap'
 
@@ -11,8 +17,8 @@ const MAX_COURSES = 1000000
 
 async function getAllCoursesFromStudyProgram(studyProgram: StudyProgram): Promise<ISitemapField[]> {
   const client = createApolloServerClient()
-  const { data } = await client.query<SearchQuery, SearchQueryVariables>({
-    query: SearchDocument,
+  const { data } = await client.query<SearchCourseQuery, SearchCourseQueryVariables>({
+    query: SearchCourseDocument,
     variables: {
       courseGroup: {
         studyProgram: studyProgram,

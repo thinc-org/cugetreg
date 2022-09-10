@@ -501,33 +501,183 @@ export type GetCourseInfoQueryVariables = Exact<{
 }>;
 
 
-export type GetCourseInfoQuery = { __typename?: 'Query', course: { __typename?: 'Course', courseNo: string, abbrName: string, courseNameTh: string, courseNameEn: string, genEdType: GenEdType, sections: Array<{ __typename?: 'Section', classes: Array<{ __typename?: 'Class', dayOfWeek?: DayOfWeek | null }> }> } };
+export type GetCourseInfoQuery = { __typename?: 'Query', course: { __typename?: 'Course', studyProgram: StudyProgram, semester: string, academicYear: string, courseNo: string, abbrName: string, courseNameTh: string, courseNameEn: string, faculty: string, department: string, credit: number, creditHours: string, courseCondition: string, courseDescTh?: string | null, courseDescEn?: string | null, genEdType: GenEdType, midterm?: { __typename?: 'ExamPeriod', date: string, period: { __typename?: 'Period', start: string, end: string } } | null, final?: { __typename?: 'ExamPeriod', date: string, period: { __typename?: 'Period', start: string, end: string } } | null, sections: Array<{ __typename?: 'Section', genEdType: GenEdType, sectionNo: string, closed: boolean, note?: string | null, capacity: { __typename?: 'Capacity', current: number, max: number }, classes: Array<{ __typename?: 'Class', type: string, dayOfWeek?: DayOfWeek | null, room?: string | null, building?: string | null, teachers: Array<string>, period?: { __typename?: 'Period', start: string, end: string } | null }> }> } };
 
-export type SearchQueryVariables = Exact<{
+export type GetCourseForThumbnailQueryVariables = Exact<{
+  courseNo: Scalars['String'];
+  courseGroup: CourseGroupInput;
+}>;
+
+
+export type GetCourseForThumbnailQuery = { __typename?: 'Query', course: { __typename?: 'Course', courseNo: string, abbrName: string, courseNameTh: string, courseNameEn: string, genEdType: GenEdType, sections: Array<{ __typename?: 'Section', classes: Array<{ __typename?: 'Class', dayOfWeek?: DayOfWeek | null }> }> } };
+
+export type RecommendCourseTextQueryVariables = Exact<{
+  req: CourseRecommendationRequest;
+}>;
+
+
+export type RecommendCourseTextQuery = { __typename?: 'Query', recommend: { __typename?: 'CourseRecommendationResponse', courses: Array<{ __typename?: 'CourseDetail', courseNameEn: string, key: { __typename?: 'CourseKey', courseNo: string, semesterKey: { __typename?: 'SemesterKey', semester: string, studyProgram: string } } }> } };
+
+export type CourseDataFieldsFragment = { __typename?: 'Course', studyProgram: StudyProgram, semester: string, academicYear: string, courseNo: string, abbrName: string, courseNameTh: string, courseNameEn: string, faculty: string, department: string, credit: number, creditHours: string, courseCondition: string, courseDescTh?: string | null, courseDescEn?: string | null, genEdType: GenEdType, midterm?: { __typename?: 'ExamPeriod', date: string, period: { __typename?: 'Period', start: string, end: string } } | null, final?: { __typename?: 'ExamPeriod', date: string, period: { __typename?: 'Period', start: string, end: string } } | null, sections: Array<{ __typename?: 'Section', genEdType: GenEdType, sectionNo: string, closed: boolean, note?: string | null, capacity: { __typename?: 'Capacity', current: number, max: number }, classes: Array<{ __typename?: 'Class', type: string, dayOfWeek?: DayOfWeek | null, room?: string | null, building?: string | null, teachers: Array<string>, period?: { __typename?: 'Period', start: string, end: string } | null }> }> };
+
+export type ReviewDataFieldsFragment = { __typename?: 'Review', _id: string, rating: number, courseNo: string, semester: string, academicYear: string, studyProgram: StudyProgram, content?: string | null, likeCount: number, dislikeCount: number, myInteraction?: ReviewInteractionType | null, status?: ReviewStatus | null, isOwner: boolean };
+
+export type CreateReviewMutationVariables = Exact<{
+  createReviewInput: CreateReviewInput;
+}>;
+
+
+export type CreateReviewMutation = { __typename?: 'Mutation', createReview: { __typename?: 'Review', _id: string, rating: number, courseNo: string, semester: string, academicYear: string, studyProgram: StudyProgram, content?: string | null, likeCount: number, dislikeCount: number, myInteraction?: ReviewInteractionType | null, status?: ReviewStatus | null, isOwner: boolean } };
+
+export type EditMyReviewMutationVariables = Exact<{
+  reviewId: Scalars['String'];
+  review: EditReviewInput;
+}>;
+
+
+export type EditMyReviewMutation = { __typename?: 'Mutation', editMyReview: { __typename?: 'Review', _id: string, rating: number, courseNo: string, semester: string, academicYear: string, studyProgram: StudyProgram, content?: string | null, likeCount: number, dislikeCount: number, myInteraction?: ReviewInteractionType | null, status?: ReviewStatus | null, isOwner: boolean } };
+
+export type GetMyPendingReviewsQueryVariables = Exact<{
+  courseNo: Scalars['String'];
+  studyProgram: StudyProgram;
+}>;
+
+
+export type GetMyPendingReviewsQuery = { __typename?: 'Query', myPendingReviews: Array<{ __typename?: 'Review', _id: string, rating: number, courseNo: string, semester: string, academicYear: string, studyProgram: StudyProgram, content?: string | null, likeCount: number, dislikeCount: number, myInteraction?: ReviewInteractionType | null, status?: ReviewStatus | null, isOwner: boolean }> };
+
+export type GetReviewsQueryVariables = Exact<{
+  courseNo: Scalars['String'];
+  studyProgram: StudyProgram;
+}>;
+
+
+export type GetReviewsQuery = { __typename?: 'Query', reviews: Array<{ __typename?: 'Review', _id: string, rating: number, courseNo: string, semester: string, academicYear: string, studyProgram: StudyProgram, content?: string | null, likeCount: number, dislikeCount: number, myInteraction?: ReviewInteractionType | null, status?: ReviewStatus | null, isOwner: boolean }> };
+
+export type RemoveReviewMutationVariables = Exact<{
+  reviewId: Scalars['String'];
+}>;
+
+
+export type RemoveReviewMutation = { __typename?: 'Mutation', removeReview: { __typename?: 'Review', _id: string, rating: number, courseNo: string, semester: string, academicYear: string, studyProgram: StudyProgram, content?: string | null, likeCount: number, dislikeCount: number, myInteraction?: ReviewInteractionType | null, status?: ReviewStatus | null, isOwner: boolean } };
+
+export type SetReviewInteractionMutationVariables = Exact<{
+  reviewId: Scalars['String'];
+  interactionType: ReviewInteractionType;
+}>;
+
+
+export type SetReviewInteractionMutation = { __typename?: 'Mutation', setReviewInteraction: { __typename?: 'Review', _id: string, rating: number, courseNo: string, semester: string, academicYear: string, studyProgram: StudyProgram, content?: string | null, likeCount: number, dislikeCount: number, myInteraction?: ReviewInteractionType | null, status?: ReviewStatus | null, isOwner: boolean } };
+
+export type GetAllCourseNoQueryVariables = Exact<{
   filter: FilterInput;
   courseGroup: CourseGroupInput;
 }>;
 
 
-export type SearchQuery = { __typename?: 'Query', search: Array<{ __typename?: 'Course', courseNo: string }> };
+export type GetAllCourseNoQuery = { __typename?: 'Query', search: Array<{ __typename?: 'Course', courseNo: string }> };
+
+export type SearchCourseQueryVariables = Exact<{
+  filter: FilterInput;
+  courseGroup: CourseGroupInput;
+}>;
 
 
-export const GetCourseInfoDocument = gql`
-    query GetCourseInfo($courseNo: String!, $courseGroup: CourseGroupInput!) {
-  course(courseNo: $courseNo, courseGroup: $courseGroup) {
-    courseNo
-    abbrName
-    courseNameTh
-    courseNameEn
+export type SearchCourseQuery = { __typename?: 'Query', search: Array<{ __typename?: 'Course', studyProgram: StudyProgram, semester: string, academicYear: string, courseNo: string, abbrName: string, courseNameTh: string, courseNameEn: string, faculty: string, department: string, credit: number, creditHours: string, courseCondition: string, courseDescTh?: string | null, courseDescEn?: string | null, genEdType: GenEdType, midterm?: { __typename?: 'ExamPeriod', date: string, period: { __typename?: 'Period', start: string, end: string } } | null, final?: { __typename?: 'ExamPeriod', date: string, period: { __typename?: 'Period', start: string, end: string } } | null, sections: Array<{ __typename?: 'Section', genEdType: GenEdType, sectionNo: string, closed: boolean, note?: string | null, capacity: { __typename?: 'Capacity', current: number, max: number }, classes: Array<{ __typename?: 'Class', type: string, dayOfWeek?: DayOfWeek | null, room?: string | null, building?: string | null, teachers: Array<string>, period?: { __typename?: 'Period', start: string, end: string } | null }> }> }> };
+
+export type MeQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'User', _id: string, name: string } | null };
+
+export type PushCourseCartMutationVariables = Exact<{
+  items: Array<CourseCartItemInput> | CourseCartItemInput;
+}>;
+
+
+export type PushCourseCartMutation = { __typename?: 'Mutation', modifyCourseCart?: Array<{ __typename?: 'CourseCartItem', courseNo: string }> | null };
+
+export type GetCourseCartQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetCourseCartQuery = { __typename?: 'Query', courseCart?: Array<{ __typename?: 'CourseCartItem', studyProgram: string, academicYear: string, courseNo: string, semester: string, selectedSectionNo: string, isHidden: boolean, color?: string | null }> | null };
+
+export const CourseDataFieldsFragmentDoc = gql`
+    fragment CourseDataFields on Course {
+  studyProgram
+  semester
+  academicYear
+  courseNo
+  abbrName
+  courseNameTh
+  courseNameEn
+  faculty
+  department
+  credit
+  creditHours
+  courseCondition
+  courseDescTh
+  courseDescEn
+  genEdType
+  midterm {
+    date
+    period {
+      start
+      end
+    }
+  }
+  final {
+    date
+    period {
+      start
+      end
+    }
+  }
+  sections {
     genEdType
-    sections {
-      classes {
-        dayOfWeek
+    sectionNo
+    closed
+    capacity {
+      current
+      max
+    }
+    note
+    classes {
+      type
+      dayOfWeek
+      period {
+        start
+        end
       }
+      room
+      building
+      teachers
     }
   }
 }
     `;
+export const ReviewDataFieldsFragmentDoc = gql`
+    fragment ReviewDataFields on Review {
+  _id
+  rating
+  courseNo
+  semester
+  academicYear
+  studyProgram
+  content
+  likeCount
+  dislikeCount
+  myInteraction
+  status
+  isOwner
+}
+    `;
+export const GetCourseInfoDocument = gql`
+    query GetCourseInfo($courseNo: String!, $courseGroup: CourseGroupInput!) {
+  course(courseNo: $courseNo, courseGroup: $courseGroup) {
+    ...CourseDataFields
+  }
+}
+    ${CourseDataFieldsFragmentDoc}`;
 
 /**
  * __useGetCourseInfoQuery__
@@ -557,8 +707,303 @@ export function useGetCourseInfoLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
 export type GetCourseInfoQueryHookResult = ReturnType<typeof useGetCourseInfoQuery>;
 export type GetCourseInfoLazyQueryHookResult = ReturnType<typeof useGetCourseInfoLazyQuery>;
 export type GetCourseInfoQueryResult = Apollo.QueryResult<GetCourseInfoQuery, GetCourseInfoQueryVariables>;
-export const SearchDocument = gql`
-    query Search($filter: FilterInput!, $courseGroup: CourseGroupInput!) {
+export const GetCourseForThumbnailDocument = gql`
+    query GetCourseForThumbnail($courseNo: String!, $courseGroup: CourseGroupInput!) {
+  course(courseNo: $courseNo, courseGroup: $courseGroup) {
+    courseNo
+    abbrName
+    courseNameTh
+    courseNameEn
+    genEdType
+    sections {
+      classes {
+        dayOfWeek
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetCourseForThumbnailQuery__
+ *
+ * To run a query within a React component, call `useGetCourseForThumbnailQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCourseForThumbnailQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCourseForThumbnailQuery({
+ *   variables: {
+ *      courseNo: // value for 'courseNo'
+ *      courseGroup: // value for 'courseGroup'
+ *   },
+ * });
+ */
+export function useGetCourseForThumbnailQuery(baseOptions: Apollo.QueryHookOptions<GetCourseForThumbnailQuery, GetCourseForThumbnailQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetCourseForThumbnailQuery, GetCourseForThumbnailQueryVariables>(GetCourseForThumbnailDocument, options);
+      }
+export function useGetCourseForThumbnailLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCourseForThumbnailQuery, GetCourseForThumbnailQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetCourseForThumbnailQuery, GetCourseForThumbnailQueryVariables>(GetCourseForThumbnailDocument, options);
+        }
+export type GetCourseForThumbnailQueryHookResult = ReturnType<typeof useGetCourseForThumbnailQuery>;
+export type GetCourseForThumbnailLazyQueryHookResult = ReturnType<typeof useGetCourseForThumbnailLazyQuery>;
+export type GetCourseForThumbnailQueryResult = Apollo.QueryResult<GetCourseForThumbnailQuery, GetCourseForThumbnailQueryVariables>;
+export const RecommendCourseTextDocument = gql`
+    query RecommendCourseText($req: CourseRecommendationRequest!) {
+  recommend(req: $req) {
+    courses {
+      courseNameEn
+      key {
+        semesterKey {
+          semester
+          studyProgram
+        }
+        courseNo
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useRecommendCourseTextQuery__
+ *
+ * To run a query within a React component, call `useRecommendCourseTextQuery` and pass it any options that fit your needs.
+ * When your component renders, `useRecommendCourseTextQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useRecommendCourseTextQuery({
+ *   variables: {
+ *      req: // value for 'req'
+ *   },
+ * });
+ */
+export function useRecommendCourseTextQuery(baseOptions: Apollo.QueryHookOptions<RecommendCourseTextQuery, RecommendCourseTextQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<RecommendCourseTextQuery, RecommendCourseTextQueryVariables>(RecommendCourseTextDocument, options);
+      }
+export function useRecommendCourseTextLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<RecommendCourseTextQuery, RecommendCourseTextQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<RecommendCourseTextQuery, RecommendCourseTextQueryVariables>(RecommendCourseTextDocument, options);
+        }
+export type RecommendCourseTextQueryHookResult = ReturnType<typeof useRecommendCourseTextQuery>;
+export type RecommendCourseTextLazyQueryHookResult = ReturnType<typeof useRecommendCourseTextLazyQuery>;
+export type RecommendCourseTextQueryResult = Apollo.QueryResult<RecommendCourseTextQuery, RecommendCourseTextQueryVariables>;
+export const CreateReviewDocument = gql`
+    mutation CreateReview($createReviewInput: CreateReviewInput!) {
+  createReview(createReviewInput: $createReviewInput) {
+    ...ReviewDataFields
+  }
+}
+    ${ReviewDataFieldsFragmentDoc}`;
+export type CreateReviewMutationFn = Apollo.MutationFunction<CreateReviewMutation, CreateReviewMutationVariables>;
+
+/**
+ * __useCreateReviewMutation__
+ *
+ * To run a mutation, you first call `useCreateReviewMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateReviewMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createReviewMutation, { data, loading, error }] = useCreateReviewMutation({
+ *   variables: {
+ *      createReviewInput: // value for 'createReviewInput'
+ *   },
+ * });
+ */
+export function useCreateReviewMutation(baseOptions?: Apollo.MutationHookOptions<CreateReviewMutation, CreateReviewMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateReviewMutation, CreateReviewMutationVariables>(CreateReviewDocument, options);
+      }
+export type CreateReviewMutationHookResult = ReturnType<typeof useCreateReviewMutation>;
+export type CreateReviewMutationResult = Apollo.MutationResult<CreateReviewMutation>;
+export type CreateReviewMutationOptions = Apollo.BaseMutationOptions<CreateReviewMutation, CreateReviewMutationVariables>;
+export const EditMyReviewDocument = gql`
+    mutation EditMyReview($reviewId: String!, $review: EditReviewInput!) {
+  editMyReview(reviewId: $reviewId, review: $review) {
+    ...ReviewDataFields
+  }
+}
+    ${ReviewDataFieldsFragmentDoc}`;
+export type EditMyReviewMutationFn = Apollo.MutationFunction<EditMyReviewMutation, EditMyReviewMutationVariables>;
+
+/**
+ * __useEditMyReviewMutation__
+ *
+ * To run a mutation, you first call `useEditMyReviewMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEditMyReviewMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [editMyReviewMutation, { data, loading, error }] = useEditMyReviewMutation({
+ *   variables: {
+ *      reviewId: // value for 'reviewId'
+ *      review: // value for 'review'
+ *   },
+ * });
+ */
+export function useEditMyReviewMutation(baseOptions?: Apollo.MutationHookOptions<EditMyReviewMutation, EditMyReviewMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<EditMyReviewMutation, EditMyReviewMutationVariables>(EditMyReviewDocument, options);
+      }
+export type EditMyReviewMutationHookResult = ReturnType<typeof useEditMyReviewMutation>;
+export type EditMyReviewMutationResult = Apollo.MutationResult<EditMyReviewMutation>;
+export type EditMyReviewMutationOptions = Apollo.BaseMutationOptions<EditMyReviewMutation, EditMyReviewMutationVariables>;
+export const GetMyPendingReviewsDocument = gql`
+    query GetMyPendingReviews($courseNo: String!, $studyProgram: StudyProgram!) {
+  myPendingReviews(courseNo: $courseNo, studyProgram: $studyProgram) {
+    ...ReviewDataFields
+  }
+}
+    ${ReviewDataFieldsFragmentDoc}`;
+
+/**
+ * __useGetMyPendingReviewsQuery__
+ *
+ * To run a query within a React component, call `useGetMyPendingReviewsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMyPendingReviewsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMyPendingReviewsQuery({
+ *   variables: {
+ *      courseNo: // value for 'courseNo'
+ *      studyProgram: // value for 'studyProgram'
+ *   },
+ * });
+ */
+export function useGetMyPendingReviewsQuery(baseOptions: Apollo.QueryHookOptions<GetMyPendingReviewsQuery, GetMyPendingReviewsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetMyPendingReviewsQuery, GetMyPendingReviewsQueryVariables>(GetMyPendingReviewsDocument, options);
+      }
+export function useGetMyPendingReviewsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetMyPendingReviewsQuery, GetMyPendingReviewsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetMyPendingReviewsQuery, GetMyPendingReviewsQueryVariables>(GetMyPendingReviewsDocument, options);
+        }
+export type GetMyPendingReviewsQueryHookResult = ReturnType<typeof useGetMyPendingReviewsQuery>;
+export type GetMyPendingReviewsLazyQueryHookResult = ReturnType<typeof useGetMyPendingReviewsLazyQuery>;
+export type GetMyPendingReviewsQueryResult = Apollo.QueryResult<GetMyPendingReviewsQuery, GetMyPendingReviewsQueryVariables>;
+export const GetReviewsDocument = gql`
+    query GetReviews($courseNo: String!, $studyProgram: StudyProgram!) {
+  reviews(courseNo: $courseNo, studyProgram: $studyProgram) {
+    ...ReviewDataFields
+  }
+}
+    ${ReviewDataFieldsFragmentDoc}`;
+
+/**
+ * __useGetReviewsQuery__
+ *
+ * To run a query within a React component, call `useGetReviewsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetReviewsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetReviewsQuery({
+ *   variables: {
+ *      courseNo: // value for 'courseNo'
+ *      studyProgram: // value for 'studyProgram'
+ *   },
+ * });
+ */
+export function useGetReviewsQuery(baseOptions: Apollo.QueryHookOptions<GetReviewsQuery, GetReviewsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetReviewsQuery, GetReviewsQueryVariables>(GetReviewsDocument, options);
+      }
+export function useGetReviewsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetReviewsQuery, GetReviewsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetReviewsQuery, GetReviewsQueryVariables>(GetReviewsDocument, options);
+        }
+export type GetReviewsQueryHookResult = ReturnType<typeof useGetReviewsQuery>;
+export type GetReviewsLazyQueryHookResult = ReturnType<typeof useGetReviewsLazyQuery>;
+export type GetReviewsQueryResult = Apollo.QueryResult<GetReviewsQuery, GetReviewsQueryVariables>;
+export const RemoveReviewDocument = gql`
+    mutation RemoveReview($reviewId: String!) {
+  removeReview(reviewId: $reviewId) {
+    ...ReviewDataFields
+  }
+}
+    ${ReviewDataFieldsFragmentDoc}`;
+export type RemoveReviewMutationFn = Apollo.MutationFunction<RemoveReviewMutation, RemoveReviewMutationVariables>;
+
+/**
+ * __useRemoveReviewMutation__
+ *
+ * To run a mutation, you first call `useRemoveReviewMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveReviewMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeReviewMutation, { data, loading, error }] = useRemoveReviewMutation({
+ *   variables: {
+ *      reviewId: // value for 'reviewId'
+ *   },
+ * });
+ */
+export function useRemoveReviewMutation(baseOptions?: Apollo.MutationHookOptions<RemoveReviewMutation, RemoveReviewMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RemoveReviewMutation, RemoveReviewMutationVariables>(RemoveReviewDocument, options);
+      }
+export type RemoveReviewMutationHookResult = ReturnType<typeof useRemoveReviewMutation>;
+export type RemoveReviewMutationResult = Apollo.MutationResult<RemoveReviewMutation>;
+export type RemoveReviewMutationOptions = Apollo.BaseMutationOptions<RemoveReviewMutation, RemoveReviewMutationVariables>;
+export const SetReviewInteractionDocument = gql`
+    mutation SetReviewInteraction($reviewId: String!, $interactionType: ReviewInteractionType!) {
+  setReviewInteraction(reviewId: $reviewId, interactionType: $interactionType) {
+    ...ReviewDataFields
+  }
+}
+    ${ReviewDataFieldsFragmentDoc}`;
+export type SetReviewInteractionMutationFn = Apollo.MutationFunction<SetReviewInteractionMutation, SetReviewInteractionMutationVariables>;
+
+/**
+ * __useSetReviewInteractionMutation__
+ *
+ * To run a mutation, you first call `useSetReviewInteractionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetReviewInteractionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setReviewInteractionMutation, { data, loading, error }] = useSetReviewInteractionMutation({
+ *   variables: {
+ *      reviewId: // value for 'reviewId'
+ *      interactionType: // value for 'interactionType'
+ *   },
+ * });
+ */
+export function useSetReviewInteractionMutation(baseOptions?: Apollo.MutationHookOptions<SetReviewInteractionMutation, SetReviewInteractionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SetReviewInteractionMutation, SetReviewInteractionMutationVariables>(SetReviewInteractionDocument, options);
+      }
+export type SetReviewInteractionMutationHookResult = ReturnType<typeof useSetReviewInteractionMutation>;
+export type SetReviewInteractionMutationResult = Apollo.MutationResult<SetReviewInteractionMutation>;
+export type SetReviewInteractionMutationOptions = Apollo.BaseMutationOptions<SetReviewInteractionMutation, SetReviewInteractionMutationVariables>;
+export const GetAllCourseNoDocument = gql`
+    query GetAllCourseNo($filter: FilterInput!, $courseGroup: CourseGroupInput!) {
   search(filter: $filter, courseGroup: $courseGroup) {
     courseNo
   }
@@ -566,30 +1011,174 @@ export const SearchDocument = gql`
     `;
 
 /**
- * __useSearchQuery__
+ * __useGetAllCourseNoQuery__
  *
- * To run a query within a React component, call `useSearchQuery` and pass it any options that fit your needs.
- * When your component renders, `useSearchQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetAllCourseNoQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAllCourseNoQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useSearchQuery({
+ * const { data, loading, error } = useGetAllCourseNoQuery({
  *   variables: {
  *      filter: // value for 'filter'
  *      courseGroup: // value for 'courseGroup'
  *   },
  * });
  */
-export function useSearchQuery(baseOptions: Apollo.QueryHookOptions<SearchQuery, SearchQueryVariables>) {
+export function useGetAllCourseNoQuery(baseOptions: Apollo.QueryHookOptions<GetAllCourseNoQuery, GetAllCourseNoQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<SearchQuery, SearchQueryVariables>(SearchDocument, options);
+        return Apollo.useQuery<GetAllCourseNoQuery, GetAllCourseNoQueryVariables>(GetAllCourseNoDocument, options);
       }
-export function useSearchLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SearchQuery, SearchQueryVariables>) {
+export function useGetAllCourseNoLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAllCourseNoQuery, GetAllCourseNoQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<SearchQuery, SearchQueryVariables>(SearchDocument, options);
+          return Apollo.useLazyQuery<GetAllCourseNoQuery, GetAllCourseNoQueryVariables>(GetAllCourseNoDocument, options);
         }
-export type SearchQueryHookResult = ReturnType<typeof useSearchQuery>;
-export type SearchLazyQueryHookResult = ReturnType<typeof useSearchLazyQuery>;
-export type SearchQueryResult = Apollo.QueryResult<SearchQuery, SearchQueryVariables>;
+export type GetAllCourseNoQueryHookResult = ReturnType<typeof useGetAllCourseNoQuery>;
+export type GetAllCourseNoLazyQueryHookResult = ReturnType<typeof useGetAllCourseNoLazyQuery>;
+export type GetAllCourseNoQueryResult = Apollo.QueryResult<GetAllCourseNoQuery, GetAllCourseNoQueryVariables>;
+export const SearchCourseDocument = gql`
+    query SearchCourse($filter: FilterInput!, $courseGroup: CourseGroupInput!) {
+  search(filter: $filter, courseGroup: $courseGroup) {
+    ...CourseDataFields
+  }
+}
+    ${CourseDataFieldsFragmentDoc}`;
+
+/**
+ * __useSearchCourseQuery__
+ *
+ * To run a query within a React component, call `useSearchCourseQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchCourseQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSearchCourseQuery({
+ *   variables: {
+ *      filter: // value for 'filter'
+ *      courseGroup: // value for 'courseGroup'
+ *   },
+ * });
+ */
+export function useSearchCourseQuery(baseOptions: Apollo.QueryHookOptions<SearchCourseQuery, SearchCourseQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SearchCourseQuery, SearchCourseQueryVariables>(SearchCourseDocument, options);
+      }
+export function useSearchCourseLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SearchCourseQuery, SearchCourseQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SearchCourseQuery, SearchCourseQueryVariables>(SearchCourseDocument, options);
+        }
+export type SearchCourseQueryHookResult = ReturnType<typeof useSearchCourseQuery>;
+export type SearchCourseLazyQueryHookResult = ReturnType<typeof useSearchCourseLazyQuery>;
+export type SearchCourseQueryResult = Apollo.QueryResult<SearchCourseQuery, SearchCourseQueryVariables>;
+export const MeDocument = gql`
+    query Me {
+  me {
+    _id
+    name
+  }
+}
+    `;
+
+/**
+ * __useMeQuery__
+ *
+ * To run a query within a React component, call `useMeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMeQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useMeQuery(baseOptions?: Apollo.QueryHookOptions<MeQuery, MeQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<MeQuery, MeQueryVariables>(MeDocument, options);
+      }
+export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery, MeQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<MeQuery, MeQueryVariables>(MeDocument, options);
+        }
+export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
+export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
+export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
+export const PushCourseCartDocument = gql`
+    mutation PushCourseCart($items: [CourseCartItemInput!]!) {
+  modifyCourseCart(newContent: $items) {
+    courseNo
+  }
+}
+    `;
+export type PushCourseCartMutationFn = Apollo.MutationFunction<PushCourseCartMutation, PushCourseCartMutationVariables>;
+
+/**
+ * __usePushCourseCartMutation__
+ *
+ * To run a mutation, you first call `usePushCourseCartMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `usePushCourseCartMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [pushCourseCartMutation, { data, loading, error }] = usePushCourseCartMutation({
+ *   variables: {
+ *      items: // value for 'items'
+ *   },
+ * });
+ */
+export function usePushCourseCartMutation(baseOptions?: Apollo.MutationHookOptions<PushCourseCartMutation, PushCourseCartMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<PushCourseCartMutation, PushCourseCartMutationVariables>(PushCourseCartDocument, options);
+      }
+export type PushCourseCartMutationHookResult = ReturnType<typeof usePushCourseCartMutation>;
+export type PushCourseCartMutationResult = Apollo.MutationResult<PushCourseCartMutation>;
+export type PushCourseCartMutationOptions = Apollo.BaseMutationOptions<PushCourseCartMutation, PushCourseCartMutationVariables>;
+export const GetCourseCartDocument = gql`
+    query GetCourseCart {
+  courseCart {
+    studyProgram
+    academicYear
+    courseNo
+    semester
+    selectedSectionNo
+    isHidden
+    color
+  }
+}
+    `;
+
+/**
+ * __useGetCourseCartQuery__
+ *
+ * To run a query within a React component, call `useGetCourseCartQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCourseCartQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCourseCartQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetCourseCartQuery(baseOptions?: Apollo.QueryHookOptions<GetCourseCartQuery, GetCourseCartQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetCourseCartQuery, GetCourseCartQueryVariables>(GetCourseCartDocument, options);
+      }
+export function useGetCourseCartLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCourseCartQuery, GetCourseCartQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetCourseCartQuery, GetCourseCartQueryVariables>(GetCourseCartDocument, options);
+        }
+export type GetCourseCartQueryHookResult = ReturnType<typeof useGetCourseCartQuery>;
+export type GetCourseCartLazyQueryHookResult = ReturnType<typeof useGetCourseCartLazyQuery>;
+export type GetCourseCartQueryResult = Apollo.QueryResult<GetCourseCartQuery, GetCourseCartQueryVariables>;

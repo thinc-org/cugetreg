@@ -1,4 +1,4 @@
-import { Course } from '@thinc-org/chula-courses'
+import { Course } from '@cugetreg/codegen'
 
 export interface SelectButtonProps {
   course: Course

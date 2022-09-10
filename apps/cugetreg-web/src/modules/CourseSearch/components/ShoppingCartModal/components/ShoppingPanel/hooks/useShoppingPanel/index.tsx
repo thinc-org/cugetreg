@@ -1,6 +1,6 @@
-import { useState } from 'react'
+import { Course } from '@cugetreg/codegen'
 
-import { Course } from '@thinc-org/chula-courses'
+import { useState } from 'react'
 
 import { courseCartStore } from '@web/store'
 

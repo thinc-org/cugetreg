@@ -1,4 +1,4 @@
-import { Course } from '@thinc-org/chula-courses'
+import { Course } from '@cugetreg/codegen'
 
 import { CourseCartItem } from '@web/store'
 import { difference } from '@web/utils/difference'

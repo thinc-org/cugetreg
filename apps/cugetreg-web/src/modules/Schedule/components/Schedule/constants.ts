@@ -1,4 +1,4 @@
-import { DayOfWeek } from '@thinc-org/chula-courses'
+import { DayOfWeek } from '@cugetreg/codegen'
 
 export const hourStart = 7
 

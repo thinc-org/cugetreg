@@ -1,4 +1,5 @@
-import { Course } from '@thinc-org/chula-courses'
+import { Course } from '@cugetreg/codegen'
+
 import { format, parseISO } from 'date-fns'
 import { th } from 'date-fns/locale'
 

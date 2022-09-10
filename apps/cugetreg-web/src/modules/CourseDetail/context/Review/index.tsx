@@ -1,43 +1,26 @@
+import {
+  GetMyPendingReviewsDocument,
+  GetMyPendingReviewsQuery,
+  GetMyPendingReviewsQueryVariables,
+  GetReviewsDocument,
+  GetReviewsQuery,
+  GetReviewsQueryVariables,
+  useCreateReviewMutation,
+  useEditMyReviewMutation,
+  useGetMyPendingReviewsQuery,
+  useGetReviewsQuery,
+  useRemoveReviewMutation,
+  useSetReviewInteractionMutation,
+} from '@cugetreg/codegen'
+
 import React, { createContext, useCallback, useContext, useRef, useState } from 'react'
 import toast from 'react-hot-toast'
-
-import { useMutation, useQuery } from '@apollo/client'
 
 import { useCourseGroup } from '@web/common/hooks/useCourseGroup'
 import { Review, ReviewInteractionType } from '@web/common/types/reviews'
 import { loginGuard } from '@web/common/utils/loginGuard'
 import { DialogOptions, dialog } from '@web/lib/dialog'
 import { ReviewFormRef } from '@web/modules/CourseDetail/components/ReviewForm/types'
-import {
-  CREATE_REVIEW,
-  CreateReviewResponse,
-  CreateReviewVars,
-} from '@web/services/apollo/query/createReview'
-import {
-  EDIT_MY_REVIEW,
-  EditMyReviewResponse,
-  EditMyReviewVars,
-} from '@web/services/apollo/query/editMyReview'
-import {
-  GET_MY_PENDING_REVIEWS,
-  GetMyPendingReviewsResponse,
-  GetMyPendingReviewsVars,
-} from '@web/services/apollo/query/getMyPendingReview'
-import {
-  GET_REVIEWS,
-  GetReviewsResponse,
-  GetReviewsVars,
-} from '@web/services/apollo/query/getReviews'
-import {
-  REMOVE_REVIEW,
-  RemoveReviewResponse,
-  RemoveReviewVars,
-} from '@web/services/apollo/query/removeReview'
-import {
-  SET_REVIEW_INTERACTION,
-  SetReviewInteractionResponse,
-  SetReviewInteractionVars,
-} from '@web/services/apollo/query/setReviewInteraction'
 
 import { DEFAULT_REVIEW_CONTEXT_VALUE } from './constants'
 import { ReviewContextValues, ReviewProviderProps } from './types'
@@ -73,64 +56,54 @@ export const ReviewProvider: React.FC<ReviewProviderProps> = ({
     courseNo: courseNo,
     studyProgram: studyProgram,
   }
-  const reviewQuery = useQuery<GetReviewsResponse, GetReviewsVars>(GET_REVIEWS, {
+
+  const reviewQuery = useGetReviewsQuery({
     variables: queryVariables,
   })
-  const myPendingReviewQuery = useQuery<GetMyPendingReviewsResponse, GetMyPendingReviewsVars>(
-    GET_MY_PENDING_REVIEWS,
-    {
-      variables: queryVariables,
-    }
-  )
-  const [editMyReviewMutation] = useMutation<EditMyReviewResponse, EditMyReviewVars>(EDIT_MY_REVIEW)
-  const [setInteractionMutaion] = useMutation<
-    SetReviewInteractionResponse,
-    SetReviewInteractionVars
-  >(SET_REVIEW_INTERACTION)
-  const [removeReivewMutation] = useMutation<RemoveReviewResponse, RemoveReviewVars>(
-    REMOVE_REVIEW,
-    {
-      update: (cache, { data, errors }) => {
-        if (errors || !data) return
-        const mutatedData = data.removeReview
-        const existingReviews =
-          cache.readQuery<GetReviewsResponse, GetReviewsVars>({
-            query: GET_REVIEWS,
-            variables: queryVariables,
-          })?.reviews ?? []
-        const existingMyPendingReviews =
-          cache.readQuery<GetMyPendingReviewsResponse, GetMyPendingReviewsVars>({
-            query: GET_MY_PENDING_REVIEWS,
-            variables: queryVariables,
-          })?.myPendingReviews ?? []
-        const newReviews = existingReviews.filter((review) => review._id !== mutatedData._id)
-        const newMyPendingReviews = existingMyPendingReviews.filter(
-          (review) => review._id !== mutatedData._id
-        )
-        cache.writeQuery({
-          query: GET_REVIEWS,
+  const myPendingReviewQuery = useGetMyPendingReviewsQuery({
+    variables: queryVariables,
+  })
+
+  const [editMyReviewMutation] = useEditMyReviewMutation()
+  const [setInteractionMutaion] = useSetReviewInteractionMutation()
+
+  const [removeReviewMutation] = useRemoveReviewMutation({
+    update: (cache, { data, errors }) => {
+      if (errors || !data) return
+
+      const mutatedData = data.removeReview
+
+      const existingReviews =
+        cache.readQuery<GetReviewsQuery, GetReviewsQueryVariables>({
+          query: GetReviewsDocument,
           variables: queryVariables,
-          data: { reviews: newReviews },
-        })
-        cache.writeQuery({
-          query: GET_MY_PENDING_REVIEWS,
+        })?.reviews ?? []
+
+      const existingMyPendingReviews =
+        cache.readQuery<GetMyPendingReviewsQuery, GetMyPendingReviewsQueryVariables>({
+          query: GetMyPendingReviewsDocument,
           variables: queryVariables,
-          data: { myPendingReviews: newMyPendingReviews },
-        })
-      },
-    }
-  )
-  const [createReviewMutation] = useMutation<CreateReviewResponse, CreateReviewVars>(
-    CREATE_REVIEW,
-    {
-      refetchQueries: [
-        {
-          query: GET_MY_PENDING_REVIEWS,
-          variables: queryVariables,
-        },
-      ],
-    }
-  )
+        })?.myPendingReviews ?? []
+
+      const newReviews = existingReviews.filter((review) => review._id !== mutatedData._id)
+      const newMyPendingReviews = existingMyPendingReviews.filter(
+        (review) => review._id !== mutatedData._id
+      )
+
+      cache.writeQuery({
+        query: GetReviewsDocument,
+        variables: queryVariables,
+        data: { reviews: newReviews },
+      })
+      cache.writeQuery({
+        query: GetMyPendingReviewsDocument,
+        variables: queryVariables,
+        data: { myPendingReviews: newMyPendingReviews },
+      })
+    },
+  })
+
+  const [createReviewMutation] = useCreateReviewMutation()
 
   const reviews = reviewQuery.data?.reviews || initialReviews
   const myPendingReviews = myPendingReviewQuery.data?.myPendingReviews || []
@@ -176,7 +149,7 @@ export const ReviewProvider: React.FC<ReviewProviderProps> = ({
     try {
       if (!loginGuard()) return
       const onConfirm = async () => {
-        await removeReivewMutation({
+        await removeReviewMutation({
           variables: {
             reviewId,
           },

@@ -1,7 +1,8 @@
+import { Course } from '@cugetreg/codegen'
+
 import { useTranslation } from 'react-i18next'
 
 import { DialogActions, DialogContent, DialogTitle, Stack, Typography } from '@mui/material'
-import { Course } from '@thinc-org/chula-courses'
 
 import { useCourseGroup } from '@web/common/hooks/useCourseGroup'
 import { Spacer } from '@web/components/Spacer'

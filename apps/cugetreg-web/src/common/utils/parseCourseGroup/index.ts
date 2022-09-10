@@ -1,4 +1,5 @@
-import { StudyProgram, StudyProgramEnum } from '@thinc-org/chula-courses'
+import { StudyProgram } from '@cugetreg/codegen'
+
 import { ParsedUrlQuery } from 'querystring'
 
 import { parseTerm } from '@web/common/utils/parseTerm'
@@ -10,10 +11,8 @@ export function parseCourseGroup(
   query: ParsedUrlQuery,
   defaultStudyProgram: StudyProgram = DEFAULT_STUDY_PROGRAM
 ): CourseGroup {
-  const studyProgram = Object.values(StudyProgramEnum).includes(
-    query.studyProgram as StudyProgramEnum
-  )
-    ? (query.studyProgram as StudyProgramEnum)
+  const studyProgram = Object.values(StudyProgram).includes(query.studyProgram as StudyProgram)
+    ? (query.studyProgram as StudyProgram)
     : defaultStudyProgram
   const term = parseTerm((query.term ?? '') as string)
   return {

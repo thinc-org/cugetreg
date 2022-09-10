@@ -1,7 +1,7 @@
+import { StudyProgram } from '@cugetreg/codegen'
+
 import { ChangeEvent } from 'react'
 import { useTranslation } from 'react-i18next'
-
-import { StudyProgram } from '@thinc-org/chula-courses'
 
 import { useCourseGroup } from '@web/common/hooks/useCourseGroup'
 

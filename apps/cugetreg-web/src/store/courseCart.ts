@@ -1,4 +1,17 @@
-import type { Course, Semester, StudyProgram } from '@thinc-org/chula-courses'
+import type { Course } from '@cugetreg/codegen'
+import {
+  GenEdType,
+  GetCourseCartDocument,
+  GetCourseInfoDocument,
+  GetCourseInfoQuery,
+  GetCourseInfoQueryVariables,
+  PushCourseCartDocument,
+  PushCourseCartMutation,
+  PushCourseCartMutationVariables,
+  StudyProgram,
+} from '@cugetreg/codegen'
+import { Semester } from '@cugetreg/codegen/future'
+
 import { BroadcastChannel } from 'broadcast-channel'
 import { action, makeObservable, observable, runInAction } from 'mobx'
 import { computedFn } from 'mobx-utils'
@@ -10,8 +23,6 @@ import type { CourseKey } from '@web/common/utils/types'
 import type { ScheduleColor } from '@web/modules/Schedule/components/ColorPicker/constants'
 import { getNewColor } from '@web/modules/Schedule/components/ColorPicker/utils/getNewColor'
 import { client } from '@web/services/apollo'
-import { GET_COURSE, GetCourseResponse, GetCourseVars } from '@web/services/apollo/query/getCourse'
-import { GET_COURSE_CART, MODIFY_COURSE_CART } from '@web/services/apollo/query/user'
 import { collectErrorLog, collectLogEvent } from '@web/services/logging'
 import { userStore } from '@web/store/userStore'
 
@@ -72,12 +83,15 @@ class OnlineCourseCartStore implements CourseCartStore {
   online = true
 
   async syncToStore(items: CourseCartStoreItem[]) {
-    await client.mutate({ mutation: MODIFY_COURSE_CART, variables: { items } })
+    await client.mutate<PushCourseCartMutation, PushCourseCartMutationVariables>({
+      mutation: PushCourseCartDocument,
+      variables: { items },
+    })
   }
 
   async syncFromStore() {
     const { data } = await client.query<{ courseCart: CourseCartStoreItem[] }>({
-      query: GET_COURSE_CART,
+      query: GetCourseCartDocument,
       fetchPolicy: 'network-only',
     })
     return data.courseCart
@@ -92,7 +106,7 @@ export enum CourseCartSyncState {
 }
 
 const unknownCourse: Course = {
-  studyProgram: 'S',
+  studyProgram: StudyProgram.S,
   semester: '1',
   academicYear: '0',
   courseNo: 'UNK',
@@ -104,7 +118,7 @@ const unknownCourse: Course = {
   credit: -1,
   creditHours: 'UNK',
   courseCondition: 'UNK',
-  genEdType: 'NO',
+  genEdType: GenEdType.No,
   sections: [],
 }
 
@@ -146,8 +160,8 @@ export class CourseCart implements CourseCartProps {
       const fullCourses: CourseCartItem[] = await Promise.all(
         courses.map(async (course) => {
           try {
-            const { data } = await client.query<GetCourseResponse, GetCourseVars>({
-              query: GET_COURSE,
+            const { data } = await client.query<GetCourseInfoQuery, GetCourseInfoQueryVariables>({
+              query: GetCourseInfoDocument,
               variables: {
                 courseNo: course.courseNo,
                 courseGroup: {

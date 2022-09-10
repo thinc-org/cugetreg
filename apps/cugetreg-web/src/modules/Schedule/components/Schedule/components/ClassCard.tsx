@@ -1,5 +1,6 @@
+import { DayOfWeek } from '@cugetreg/codegen'
+
 import { styled } from '@mui/material'
-import { DayOfWeek } from '@thinc-org/chula-courses'
 
 import { useColor } from '@web/modules/Schedule/components/ColorPicker/hooks/useColor'
 
@@ -46,7 +47,7 @@ export function ClassCard({ scheduleClass, onClick }: ClassCardProps) {
   // position
   const startPosition = position.start
   const endPosition = position.end
-  const y = getY(dayOfWeek || 'IA')
+  const y = getY(dayOfWeek || DayOfWeek.Ia)
   const { top, left } = getPosition(y, startPosition)
   const right = getPosition(y, endPosition).left
   const width = right - left

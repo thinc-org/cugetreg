@@ -1,6 +1,7 @@
+import { StudyProgram } from '@cugetreg/codegen'
+
 import { useEffect } from 'react'
 
-import { StudyProgramEnum } from '@thinc-org/chula-courses'
 import { Router } from 'next/router'
 
 import { ENABLE_DARK_THEME } from '@web/env'
@@ -32,7 +33,7 @@ export function useApp(router: Router) {
 
   useEffect(() => {
     const studyProgram = router.query.studyProgram as string
-    if (studyProgram && !(Object.values(StudyProgramEnum) as string[]).includes(studyProgram)) {
+    if (studyProgram && !(Object.values(StudyProgram) as string[]).includes(studyProgram)) {
       router.replace('/')
     }
     // eslint-disable-next-line

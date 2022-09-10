@@ -1,8 +1,9 @@
+import { Course } from '@cugetreg/codegen'
+
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Checkbox, Grid, Hidden, Typography, useMediaQuery, useTheme } from '@mui/material'
-import { Course } from '@thinc-org/chula-courses'
 
 import { GenEdChip } from '@web/common/components/Chips/catagories/GenEdChip'
 

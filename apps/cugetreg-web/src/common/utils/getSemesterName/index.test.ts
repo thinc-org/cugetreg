@@ -1,11 +1,11 @@
-import { SemesterEnum } from '@thinc-org/chula-courses'
+import { Semester } from '@cugetreg/codegen/future'
 
 describe('getSemesterName', () => {
   it.each`
-    semester               | expectedName
-    ${SemesterEnum.First}  | ${'ภาคต้น'}
-    ${SemesterEnum.Second} | ${'ภาคปลาย'}
-    ${SemesterEnum.Third}  | ${'ภาคฤดูร้อน'}
+    semester           | expectedName
+    ${Semester.First}  | ${'ภาคต้น'}
+    ${Semester.Second} | ${'ภาคปลาย'}
+    ${Semester.Third}  | ${'ภาคฤดูร้อน'}
   `('should return result correctly', async ({ semester, expectedName }) => {
     const { getSemesterName } = await import('.')
     expect(getSemesterName(semester)).toBe(expectedName)

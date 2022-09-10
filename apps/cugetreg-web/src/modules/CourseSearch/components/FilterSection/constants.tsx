@@ -1,4 +1,4 @@
-import { DayOfWeekEnum, GenEdTypeEnum } from '@thinc-org/chula-courses'
+import { DayOfWeek, GenEdType } from '@cugetreg/codegen'
 
 import { DayChipKey, GenEdChipKey } from '@web/common/components/Chips/config'
 import { CreateCheckbox } from '@web/modules/CourseSearch/components/FilterSection/hooks/useFilterBar'
@@ -6,53 +6,53 @@ import { CreateCheckbox } from '@web/modules/CourseSearch/components/FilterSecti
 export const createGenEdCheckboxes: CreateCheckbox<GenEdChipKey>[] = [
   {
     label: 'หมวดวิทย์',
-    value: GenEdTypeEnum.SC,
+    value: GenEdType.Sc,
   },
   {
     label: 'หมวดสังคม',
-    value: GenEdTypeEnum.SO,
+    value: GenEdType.So,
   },
   {
     label: 'หมวดมนุษย์',
-    value: GenEdTypeEnum.HU,
+    value: GenEdType.Hu,
   },
   {
     label: 'หมวดสหฯ',
-    value: GenEdTypeEnum.IN,
+    value: GenEdType.In,
   },
   {
     label: 'ไม่ใช่ GenEd',
-    value: GenEdTypeEnum.NO,
+    value: GenEdType.No,
   },
 ]
 
 export const createDayOfWeekCheckboxes: CreateCheckbox<DayChipKey>[] = [
   {
     label: 'วันจันทร์',
-    value: DayOfWeekEnum.Monday,
+    value: DayOfWeek.Mo,
   },
   {
     label: 'วันอังคาร',
-    value: DayOfWeekEnum.Tuesday,
+    value: DayOfWeek.Tu,
   },
   {
     label: 'วันพุธ',
-    value: DayOfWeekEnum.Wednesday,
+    value: DayOfWeek.We,
   },
   {
     label: 'วันพฤหัสบดี',
-    value: DayOfWeekEnum.Thursday,
+    value: DayOfWeek.Th,
   },
   {
     label: 'วันศุกร์',
-    value: DayOfWeekEnum.Friday,
+    value: DayOfWeek.Fr,
   },
   {
     label: 'วันเสาร์',
-    value: DayOfWeekEnum.Saturday,
+    value: DayOfWeek.Sa,
   },
   {
     label: 'วันอาทิตย์',
-    value: DayOfWeekEnum.Sunday,
+    value: DayOfWeek.Su,
   },
 ]

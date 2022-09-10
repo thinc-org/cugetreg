@@ -1,4 +1,4 @@
-import { StudyProgram } from '@thinc-org/chula-courses'
+import { StudyProgram } from '@cugetreg/codegen'
 
 import { Term } from '@web/common/types/term'
 

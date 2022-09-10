@@ -16,7 +16,8 @@
     "baseUrl": ".",
     "paths": {
       "@api/*": ["apps/cugetreg-api/src/*"],
-      "@cugetreg/codegen": ["libs/codegen/src/index.ts"],
+      "@cugetreg/codegen": ["libs/codegen/src"],
+      "@cugetreg/codegen/future": ["libs/codegen/src/future"],
       "@web/*": ["apps/cugetreg-web/src/*"]
     }
   },

@@ -1,4 +1,5 @@
-import { Capacity } from '@thinc-org/chula-courses'
+import { Capacity } from '@cugetreg/codegen'
+
 import { shallow } from 'enzyme'
 
 describe('SectionStatus', () => {

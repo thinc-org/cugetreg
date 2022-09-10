@@ -1,8 +1,8 @@
-import { Course } from '@thinc-org/chula-courses'
+import { Course, DayOfWeek, GenEdType, StudyProgram } from '@cugetreg/codegen'
 
 export const mockCourseData: Course[] = [
   {
-    studyProgram: 'S',
+    studyProgram: StudyProgram.S,
     semester: '2',
     academicYear: '2564',
     courseNo: '0201122',
@@ -16,12 +16,12 @@ export const mockCourseData: Course[] = [
     courseCondition: '-',
     courseDescTh: null,
     courseDescEn: null,
-    genEdType: 'IN',
+    genEdType: GenEdType.In,
     midterm: null,
     final: null,
     sections: [
       {
-        genEdType: 'IN',
+        genEdType: GenEdType.In,
         sectionNo: '1',
         closed: false,
         capacity: {
@@ -32,7 +32,7 @@ export const mockCourseData: Course[] = [
         classes: [
           {
             type: 'LECT',
-            dayOfWeek: 'TU',
+            dayOfWeek: DayOfWeek.Tu,
             period: {
               start: '13:00',
               end: '16:00',
@@ -46,7 +46,7 @@ export const mockCourseData: Course[] = [
     ],
   },
   {
-    studyProgram: 'S',
+    studyProgram: StudyProgram.S,
     semester: '2',
     academicYear: '2564',
     courseNo: '0201107',
@@ -60,12 +60,12 @@ export const mockCourseData: Course[] = [
     courseCondition: '-',
     courseDescTh: null,
     courseDescEn: null,
-    genEdType: 'IN',
+    genEdType: GenEdType.In,
     midterm: null,
     final: null,
     sections: [
       {
-        genEdType: 'IN',
+        genEdType: GenEdType.In,
         sectionNo: '1',
         closed: false,
         capacity: {
@@ -76,7 +76,7 @@ export const mockCourseData: Course[] = [
         classes: [
           {
             type: 'LECT',
-            dayOfWeek: 'WE',
+            dayOfWeek: DayOfWeek.We,
             period: {
               start: '13:00',
               end: '14:00',
@@ -87,7 +87,7 @@ export const mockCourseData: Course[] = [
           },
           {
             type: 'FWK',
-            dayOfWeek: 'WE',
+            dayOfWeek: DayOfWeek.We,
             period: {
               start: '14:00',
               end: '16:00',
@@ -98,10 +98,10 @@ export const mockCourseData: Course[] = [
           },
           {
             type: 'FWK',
-            dayOfWeek: 'IA',
+            dayOfWeek: DayOfWeek.Ia,
             period: {
-              start: 'IA',
-              end: 'IA',
+              start: DayOfWeek.Ia,
+              end: DayOfWeek.Ia,
             },
             room: null,
             building: null,
@@ -110,7 +110,7 @@ export const mockCourseData: Course[] = [
         ],
       },
       {
-        genEdType: 'IN',
+        genEdType: GenEdType.In,
         sectionNo: '2',
         closed: false,
         capacity: {
@@ -121,7 +121,7 @@ export const mockCourseData: Course[] = [
         classes: [
           {
             type: 'LECT',
-            dayOfWeek: 'WE',
+            dayOfWeek: DayOfWeek.We,
             period: {
               start: '13:00',
               end: '14:00',
@@ -132,7 +132,7 @@ export const mockCourseData: Course[] = [
           },
           {
             type: 'FWK',
-            dayOfWeek: 'WE',
+            dayOfWeek: DayOfWeek.We,
             period: {
               start: '14:00',
               end: '16:00',
@@ -143,10 +143,10 @@ export const mockCourseData: Course[] = [
           },
           {
             type: 'FWK',
-            dayOfWeek: 'IA',
+            dayOfWeek: DayOfWeek.Ia,
             period: {
-              start: 'IA',
-              end: 'IA',
+              start: DayOfWeek.Ia,
+              end: DayOfWeek.Ia,
             },
             room: null,
             building: null,
@@ -157,7 +157,7 @@ export const mockCourseData: Course[] = [
     ],
   },
   {
-    studyProgram: 'S',
+    studyProgram: StudyProgram.S,
     semester: '2',
     academicYear: '2564',
     courseNo: '0123104',
@@ -171,7 +171,7 @@ export const mockCourseData: Course[] = [
     courseCondition: '-',
     courseDescTh: null,
     courseDescEn: null,
-    genEdType: 'HU',
+    genEdType: GenEdType.Hu,
     midterm: {
       date: '2565-03-09T00:00:00.000Z',
       period: {
@@ -188,7 +188,7 @@ export const mockCourseData: Course[] = [
     },
     sections: [
       {
-        genEdType: 'HU',
+        genEdType: GenEdType.Hu,
         sectionNo: '1',
         closed: false,
         capacity: {
@@ -199,7 +199,7 @@ export const mockCourseData: Course[] = [
         classes: [
           {
             type: 'LECT',
-            dayOfWeek: 'WE',
+            dayOfWeek: DayOfWeek.We,
             period: {
               start: '16:00',
               end: '17:00',
@@ -210,7 +210,7 @@ export const mockCourseData: Course[] = [
           },
           {
             type: 'PRAC',
-            dayOfWeek: 'WE',
+            dayOfWeek: DayOfWeek.We,
             period: {
               start: '17:00',
               end: '19:00',
@@ -221,10 +221,10 @@ export const mockCourseData: Course[] = [
           },
           {
             type: 'PRAC',
-            dayOfWeek: 'IA',
+            dayOfWeek: DayOfWeek.Ia,
             period: {
-              start: 'IA',
-              end: 'IA',
+              start: DayOfWeek.Ia,
+              end: DayOfWeek.Ia,
             },
             room: null,
             building: null,
@@ -233,7 +233,7 @@ export const mockCourseData: Course[] = [
         ],
       },
       {
-        genEdType: 'HU',
+        genEdType: GenEdType.Hu,
         sectionNo: '2',
         closed: false,
         capacity: {
@@ -244,7 +244,7 @@ export const mockCourseData: Course[] = [
         classes: [
           {
             type: 'LECT',
-            dayOfWeek: 'WE',
+            dayOfWeek: DayOfWeek.We,
             period: {
               start: '16:00',
               end: '17:00',
@@ -255,7 +255,7 @@ export const mockCourseData: Course[] = [
           },
           {
             type: 'PRAC',
-            dayOfWeek: 'WE',
+            dayOfWeek: DayOfWeek.We,
             period: {
               start: '17:00',
               end: '19:00',
@@ -266,10 +266,10 @@ export const mockCourseData: Course[] = [
           },
           {
             type: 'PRAC',
-            dayOfWeek: 'IA',
+            dayOfWeek: DayOfWeek.Ia,
             period: {
-              start: 'IA',
-              end: 'IA',
+              start: DayOfWeek.Ia,
+              end: DayOfWeek.Ia,
             },
             room: null,
             building: null,
@@ -278,7 +278,7 @@ export const mockCourseData: Course[] = [
         ],
       },
       {
-        genEdType: 'HU',
+        genEdType: GenEdType.Hu,
         sectionNo: '3',
         closed: false,
         capacity: {
@@ -289,7 +289,7 @@ export const mockCourseData: Course[] = [
         classes: [
           {
             type: 'LECT',
-            dayOfWeek: 'WE',
+            dayOfWeek: DayOfWeek.We,
             period: {
               start: '16:00',
               end: '17:00',
@@ -300,7 +300,7 @@ export const mockCourseData: Course[] = [
           },
           {
             type: 'PRAC',
-            dayOfWeek: 'WE',
+            dayOfWeek: DayOfWeek.We,
             period: {
               start: '17:00',
               end: '19:00',
@@ -311,10 +311,10 @@ export const mockCourseData: Course[] = [
           },
           {
             type: 'PRAC',
-            dayOfWeek: 'IA',
+            dayOfWeek: DayOfWeek.Ia,
             period: {
-              start: 'IA',
-              end: 'IA',
+              start: DayOfWeek.Ia,
+              end: DayOfWeek.Ia,
             },
             room: null,
             building: null,
@@ -323,7 +323,7 @@ export const mockCourseData: Course[] = [
         ],
       },
       {
-        genEdType: 'HU',
+        genEdType: GenEdType.Hu,
         sectionNo: '4',
         closed: false,
         capacity: {
@@ -334,7 +334,7 @@ export const mockCourseData: Course[] = [
         classes: [
           {
             type: 'LECT',
-            dayOfWeek: 'WE',
+            dayOfWeek: DayOfWeek.We,
             period: {
               start: '16:00',
               end: '17:00',
@@ -345,7 +345,7 @@ export const mockCourseData: Course[] = [
           },
           {
             type: 'PRAC',
-            dayOfWeek: 'WE',
+            dayOfWeek: DayOfWeek.We,
             period: {
               start: '17:00',
               end: '19:00',
@@ -356,10 +356,10 @@ export const mockCourseData: Course[] = [
           },
           {
             type: 'PRAC',
-            dayOfWeek: 'IA',
+            dayOfWeek: DayOfWeek.Ia,
             period: {
-              start: 'IA',
-              end: 'IA',
+              start: DayOfWeek.Ia,
+              end: DayOfWeek.Ia,
             },
             room: null,
             building: null,
@@ -368,7 +368,7 @@ export const mockCourseData: Course[] = [
         ],
       },
       {
-        genEdType: 'HU',
+        genEdType: GenEdType.Hu,
         sectionNo: '5',
         closed: false,
         capacity: {
@@ -379,7 +379,7 @@ export const mockCourseData: Course[] = [
         classes: [
           {
             type: 'LECT',
-            dayOfWeek: 'WE',
+            dayOfWeek: DayOfWeek.We,
             period: {
               start: '16:00',
               end: '17:00',
@@ -390,7 +390,7 @@ export const mockCourseData: Course[] = [
           },
           {
             type: 'PRAC',
-            dayOfWeek: 'WE',
+            dayOfWeek: DayOfWeek.We,
             period: {
               start: '17:00',
               end: '19:00',
@@ -401,10 +401,10 @@ export const mockCourseData: Course[] = [
           },
           {
             type: 'PRAC',
-            dayOfWeek: 'IA',
+            dayOfWeek: DayOfWeek.Ia,
             period: {
-              start: 'IA',
-              end: 'IA',
+              start: DayOfWeek.Ia,
+              end: DayOfWeek.Ia,
             },
             room: null,
             building: null,
@@ -413,7 +413,7 @@ export const mockCourseData: Course[] = [
         ],
       },
       {
-        genEdType: 'HU',
+        genEdType: GenEdType.Hu,
         sectionNo: '6',
         closed: true,
         capacity: {
@@ -424,7 +424,7 @@ export const mockCourseData: Course[] = [
         classes: [
           {
             type: 'LECT',
-            dayOfWeek: 'WE',
+            dayOfWeek: DayOfWeek.We,
             period: {
               start: '16:00',
               end: '17:00',
@@ -435,7 +435,7 @@ export const mockCourseData: Course[] = [
           },
           {
             type: 'PRAC',
-            dayOfWeek: 'WE',
+            dayOfWeek: DayOfWeek.We,
             period: {
               start: '17:00',
               end: '19:00',
@@ -446,10 +446,10 @@ export const mockCourseData: Course[] = [
           },
           {
             type: 'PRAC',
-            dayOfWeek: 'IA',
+            dayOfWeek: DayOfWeek.Ia,
             period: {
-              start: 'IA',
-              end: 'IA',
+              start: DayOfWeek.Ia,
+              end: DayOfWeek.Ia,
             },
             room: null,
             building: null,

@@ -1,4 +1,4 @@
-import { Course, Period } from '@thinc-org/chula-courses'
+import { Course, Period } from '@cugetreg/codegen'
 
 import { ExamClass } from '../types'
 

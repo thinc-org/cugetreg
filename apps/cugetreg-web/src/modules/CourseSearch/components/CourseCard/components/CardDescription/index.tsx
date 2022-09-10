@@ -1,7 +1,8 @@
+import { DayOfWeek, GenEdType } from '@cugetreg/codegen'
+
 import { useTranslation } from 'react-i18next'
 
 import { Grid, Stack, Typography } from '@mui/material'
-import { DayOfWeek } from '@thinc-org/chula-courses'
 
 import { Caption } from '@web/common/components/Caption'
 import { DayChip } from '@web/common/components/Chips/catagories/DayChip'
@@ -35,7 +36,7 @@ export function CardDescription() {
         <Grid item xs={6} sm="auto" display={['flex', 'none']}>
           <Stack spacing={0.5} alignItems="flex-start">
             <Caption>{t('genEd')}</Caption>
-            <GenEdChip type={course.genEdType} />
+            <GenEdChip type={course.genEdType as GenEdType} />
           </Stack>
         </Grid>
       )}

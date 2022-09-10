@@ -1,6 +1,6 @@
-import { useState } from 'react'
+import { Capacity, Course, Section } from '@cugetreg/codegen'
 
-import { Capacity, Course, Section } from '@thinc-org/chula-courses'
+import { useState } from 'react'
 
 import { dayOfWeekArray } from '@web/common/constants/dayOfWeek'
 import { useDisclosure } from '@web/common/hooks/useDisclosure'

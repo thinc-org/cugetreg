@@ -1,4 +1,4 @@
-import { DayOfWeek } from '@thinc-org/chula-courses'
+import { DayOfWeek } from '@cugetreg/codegen'
 
 type dayOfWeekMapperType = Record<DayOfWeek, string>
 

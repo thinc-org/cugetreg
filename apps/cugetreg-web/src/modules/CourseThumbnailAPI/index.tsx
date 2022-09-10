@@ -1,3 +1,9 @@
+import {
+  GetCourseForThumbnailDocument,
+  GetCourseForThumbnailQuery,
+  GetCourseForThumbnailQueryVariables,
+} from '@cugetreg/codegen'
+
 import { createCanvas } from 'canvas'
 import { NextApiRequest, NextApiResponse } from 'next'
 
@@ -6,10 +12,6 @@ import { parseCourseNoFromQuery } from '@web/common/utils/parseCourseNoFromQuery
 import { ENABLE_COURSE_THUMBNAIL } from '@web/env'
 import { drawThumbnail } from '@web/modules/CourseThumbnailAPI/drawThumbnail'
 import { createApolloServerClient } from '@web/services/apollo'
-import {
-  GET_COURSE_FOR_THUMBNAIL,
-  GetCourseForThumbnailResponse,
-} from '@web/services/apollo/query/getCourse'
 import { getCachedImage } from '@web/utils/imageCache'
 
 export async function CourseThumbnailAPI(req: NextApiRequest, res: NextApiResponse) {
@@ -43,8 +45,11 @@ export async function CourseThumbnailAPI(req: NextApiRequest, res: NextApiRespon
 
 async function generateThumbnail(courseNo: string, courseGroup: CourseGroup): Promise<Buffer> {
   const client = createApolloServerClient()
-  const { data } = await client.query<GetCourseForThumbnailResponse>({
-    query: GET_COURSE_FOR_THUMBNAIL,
+  const { data } = await client.query<
+    GetCourseForThumbnailQuery,
+    GetCourseForThumbnailQueryVariables
+  >({
+    query: GetCourseForThumbnailDocument,
     variables: { courseNo, courseGroup },
   })
   const canvas = createCanvas(1200, 630)

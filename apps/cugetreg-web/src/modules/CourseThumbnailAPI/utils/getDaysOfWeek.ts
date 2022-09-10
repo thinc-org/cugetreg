@@ -1,4 +1,4 @@
-import { DayOfWeek } from '@thinc-org/chula-courses'
+import { DayOfWeek } from '@cugetreg/codegen'
 
 import { CourseThumbnailData, SectionThumbnailData } from '@web/services/apollo/query/getCourse'
 import { uniq } from '@web/utils/uniq'

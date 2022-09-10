@@ -1,5 +1,6 @@
+import { GenEdType } from '@cugetreg/codegen'
+
 import { Theme } from '@mui/material'
-import { GenEdType } from '@thinc-org/chula-courses'
 
 import { HighlightColorRange } from '@web/configs/theme/palette'
 

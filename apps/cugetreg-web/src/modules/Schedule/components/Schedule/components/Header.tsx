@@ -1,7 +1,8 @@
+import { DayOfWeek } from '@cugetreg/codegen'
+
 import { useTranslation } from 'react-i18next'
 
 import { styled } from '@mui/material'
-import { DayOfWeek } from '@thinc-org/chula-courses'
 
 import { dayOfWeekArray } from '@web/common/constants/dayOfWeek'
 

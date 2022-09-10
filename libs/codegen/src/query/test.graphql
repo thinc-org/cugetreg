@@ -1,0 +1,20 @@
+query GetCourseInfo($courseNo: String!, $courseGroup: CourseGroupInput!) {
+  course(courseNo: $courseNo, courseGroup: $courseGroup) {
+    courseNo
+    abbrName
+    courseNameTh
+    courseNameEn
+    genEdType
+    sections {
+      classes {
+        dayOfWeek
+      }
+    }
+  }
+}
+
+query Search($filter: FilterInput!, $courseGroup: CourseGroupInput!) {
+  search(filter: $filter, courseGroup: $courseGroup) {
+    courseNo
+  }
+}

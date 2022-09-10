@@ -1,19 +1,18 @@
-import { StudyProgram, StudyProgramEnum } from '@thinc-org/chula-courses'
+import { SearchDocument, SearchQuery, SearchQueryVariables, StudyProgram } from '@cugetreg/codegen'
 import { GetServerSideProps } from 'next'
 import { ISitemapField, getServerSideSitemap } from 'next-sitemap'
 
 import { getCurrentTerm } from '@web/common/utils/getCurrentTerm'
 import { SITE_URL } from '@web/env'
 import { createApolloServerClient } from '@web/services/apollo'
-import { GET_ALL_COURSES, GetAllCoursesResponse } from '@web/services/apollo/query/getAllCourses'
 
 // TODO: dynamic this varaibles
 const MAX_COURSES = 1000000
 
 async function getAllCoursesFromStudyProgram(studyProgram: StudyProgram): Promise<ISitemapField[]> {
   const client = createApolloServerClient()
-  const { data } = await client.query<GetAllCoursesResponse>({
-    query: GET_ALL_COURSES,
+  const { data } = await client.query<SearchQuery, SearchQueryVariables>({
+    query: SearchDocument,
     variables: {
       courseGroup: {
         studyProgram: studyProgram,
@@ -39,9 +38,9 @@ async function getAllCoursesFromStudyProgram(studyProgram: StudyProgram): Promis
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   try {
-    const field1 = await getAllCoursesFromStudyProgram(StudyProgramEnum.Semester)
-    const field2 = await getAllCoursesFromStudyProgram(StudyProgramEnum.Trisemter)
-    const field3 = await getAllCoursesFromStudyProgram(StudyProgramEnum.International)
+    const field1 = await getAllCoursesFromStudyProgram(StudyProgram.S)
+    const field2 = await getAllCoursesFromStudyProgram(StudyProgram.T)
+    const field3 = await getAllCoursesFromStudyProgram(StudyProgram.I)
     const fields = [...field1, ...field2, ...field3]
 
     return getServerSideSitemap(context, fields)
@@ -51,4 +50,5 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 }
 
 // Default export to prevent next.js errors
-export default () => <div />
+const Sitemap = () => <div />
+export default Sitemap

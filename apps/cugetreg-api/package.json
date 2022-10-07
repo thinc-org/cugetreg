@@ -1,4 +1,6 @@
 {
+  "name": "cugetreg-api",
+  "version": "1.0.0",
   "dependencies": {
     "apollo-server-express": "2.19.2"
   }

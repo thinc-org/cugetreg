@@ -1,3 +1,5 @@
+import { GenEdType } from '@cugetreg/codegen'
+
 import { mockCourseData } from '@web/__mock__/courses'
 import { ExamClass } from '@web/common/utils/types'
 import {
@@ -36,7 +38,7 @@ export const courseTemplate: Omit<ScheduleClass, 'classIndex'> = {
 export const examTemplate: ExamClass = {
   courseNo: '2110316',
   abbrName: 'PROG LANG PRIN',
-  genEdType: 'NO',
+  genEdType: GenEdType.No,
   teachers: ['NNN'],
   midterm: {
     date: '',

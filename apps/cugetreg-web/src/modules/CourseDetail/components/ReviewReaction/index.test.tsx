@@ -10,7 +10,7 @@ import { ReviewReactionProps } from './types'
 
 describe('ReviewReaction', () => {
   const mockProps: ReviewReactionProps = {
-    type: ReviewInteractionType.Like,
+    type: ReviewInteractionType.L,
     pressed: false,
     reactionCount: 42,
   }
@@ -27,11 +27,11 @@ describe('ReviewReaction', () => {
   })
 
   it.each`
-    type                             | defaultPressed | expectedIcon
-    ${ReviewInteractionType.Like}    | ${false}       | ${MdThumbUpOffAlt}
-    ${ReviewInteractionType.Dislike} | ${false}       | ${MdThumbDownOffAlt}
-    ${ReviewInteractionType.Like}    | ${true}        | ${MdThumbUp}
-    ${ReviewInteractionType.Dislike} | ${true}        | ${MdThumbDown}
+    type                       | defaultPressed | expectedIcon
+    ${ReviewInteractionType.L} | ${false}       | ${MdThumbUpOffAlt}
+    ${ReviewInteractionType.D} | ${false}       | ${MdThumbDownOffAlt}
+    ${ReviewInteractionType.L} | ${true}        | ${MdThumbUp}
+    ${ReviewInteractionType.D} | ${true}        | ${MdThumbDown}
   `(
     'should render ReviewReaction type $type like correctly when defaultPressed=$defaultPressed ',
     async ({ type, expectedIcon, defaultPressed }) => {
@@ -49,9 +49,9 @@ describe('ReviewReaction', () => {
   )
 
   it.each`
-    type                             | expectedUnpressedIcon | expectedPressedIcon
-    ${ReviewInteractionType.Like}    | ${MdThumbUpOffAlt}    | ${MdThumbUp}
-    ${ReviewInteractionType.Dislike} | ${MdThumbDownOffAlt}  | ${MdThumbDown}
+    type                       | expectedUnpressedIcon | expectedPressedIcon
+    ${ReviewInteractionType.L} | ${MdThumbUpOffAlt}    | ${MdThumbUp}
+    ${ReviewInteractionType.D} | ${MdThumbDownOffAlt}  | ${MdThumbDown}
   `(
     'should change icon when the component was clicked, type=$type',
     async ({ type, expectedUnpressedIcon, expectedPressedIcon }) => {

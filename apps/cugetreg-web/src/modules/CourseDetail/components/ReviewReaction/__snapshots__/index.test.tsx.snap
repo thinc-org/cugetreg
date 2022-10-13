@@ -79,3 +79,83 @@ exports[`ReviewReaction should render ReviewReaction type L like correctly when 
   </ForwardRef(Typography)>
 </ForwardRef(Stack)>
 `;
+
+exports[`ReviewReaction should render ReviewReaction type undefined like correctly when defaultPressed=false  1`] = `
+<ForwardRef(Stack)
+  alignItems="center"
+  direction="row"
+  spacing={0.5}
+>
+  <ForwardRef(IconButton)
+    size="small"
+  >
+    <SelectedIcon />
+  </ForwardRef(IconButton)>
+  <ForwardRef(Typography)
+    color="#C9CCE4"
+    variant="h6"
+  >
+    42
+  </ForwardRef(Typography)>
+</ForwardRef(Stack)>
+`;
+
+exports[`ReviewReaction should render ReviewReaction type undefined like correctly when defaultPressed=false  2`] = `
+<ForwardRef(Stack)
+  alignItems="center"
+  direction="row"
+  spacing={0.5}
+>
+  <ForwardRef(IconButton)
+    size="small"
+  >
+    <SelectedIcon />
+  </ForwardRef(IconButton)>
+  <ForwardRef(Typography)
+    color="#C9CCE4"
+    variant="h6"
+  >
+    42
+  </ForwardRef(Typography)>
+</ForwardRef(Stack)>
+`;
+
+exports[`ReviewReaction should render ReviewReaction type undefined like correctly when defaultPressed=true  1`] = `
+<ForwardRef(Stack)
+  alignItems="center"
+  direction="row"
+  spacing={0.5}
+>
+  <ForwardRef(IconButton)
+    size="small"
+  >
+    <SelectedIcon />
+  </ForwardRef(IconButton)>
+  <ForwardRef(Typography)
+    color="#6CD62B"
+    variant="h6"
+  >
+    42
+  </ForwardRef(Typography)>
+</ForwardRef(Stack)>
+`;
+
+exports[`ReviewReaction should render ReviewReaction type undefined like correctly when defaultPressed=true  2`] = `
+<ForwardRef(Stack)
+  alignItems="center"
+  direction="row"
+  spacing={0.5}
+>
+  <ForwardRef(IconButton)
+    size="small"
+  >
+    <SelectedIcon />
+  </ForwardRef(IconButton)>
+  <ForwardRef(Typography)
+    color="#6CD62B"
+    variant="h6"
+  >
+    42
+  </ForwardRef(Typography)>
+</ForwardRef(Stack)>
+`;

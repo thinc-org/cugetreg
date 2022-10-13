@@ -11,3 +11,4 @@ generates:
     config:
       withHooks: true
       useTypeImports: true
+      gqlImport: graphql-tag

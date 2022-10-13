@@ -1,9 +1,17 @@
 import { DayOfWeek } from '@cugetreg/codegen'
+import { CourseThumbnailData, SectionThumbnailData } from '@cugetreg/course-utils'
 
-import { CourseThumbnailData, SectionThumbnailData } from '@web/services/apollo/query/getCourse'
 import { uniq } from '@web/utils/uniq'
 
-const sortedDaysOfWeek: DayOfWeek[] = ['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU']
+const sortedDaysOfWeek: DayOfWeek[] = [
+  DayOfWeek.Mo,
+  DayOfWeek.Tu,
+  DayOfWeek.We,
+  DayOfWeek.Th,
+  DayOfWeek.Fr,
+  DayOfWeek.Sa,
+  DayOfWeek.Su,
+]
 
 export function getDaysOfWeek(course: CourseThumbnailData): DayOfWeek[] {
   const indices = course.sections.map(daysInSection).flat()

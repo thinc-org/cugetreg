@@ -1,5 +1,2 @@
-export interface Faculty {
-  code: string
-  nameEn: string
-  nameTh: string
-}
+export * from './chula-courses'
+export * from './thumbnail'

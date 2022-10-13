@@ -1,3 +1,5 @@
+import { CourseThumbnailData } from '@cugetreg/course-utils'
+
 import { Canvas, CanvasRenderingContext2D, loadImage, registerFont } from 'canvas'
 
 import { i18n } from '@web/common/i18n'
@@ -6,7 +8,6 @@ import { lightTheme } from '@web/configs/theme'
 import { ENABLE_DAY_OF_WEEK_THUMBNAIL } from '@web/env'
 import { getDayColor } from '@web/modules/CourseThumbnailAPI/utils/getDayColor'
 import { getDaysOfWeek } from '@web/modules/CourseThumbnailAPI/utils/getDaysOfWeek'
-import { CourseThumbnailData } from '@web/services/apollo/query/getCourse'
 
 registerFont('public/fonts/Poppins-Bold.ttf', { family: 'Poppins Bold' })
 registerFont('public/fonts/Prompt-Bold.ttf', { family: 'Prompt Bold' })

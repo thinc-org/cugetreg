@@ -1,19 +1,15 @@
+import { SearchCourseQueryResult } from '@cugetreg/codegen'
+
 import { useContext, useEffect } from 'react'
 
-import { QueryResult } from '@apollo/client'
-
 import { CourseSearchContext } from '@web/modules/CourseSearch/context/CourseSearch'
-import { SearchCourseResponse, SearchCourseVars } from '@web/services/apollo/query/searchCourse'
 
 export const useCourseList = () => {
   const BOTTOM_OFFSET = 500
 
   const { courseSearchQuery, fetchMoreCourses } = useContext(CourseSearchContext)
 
-  const { data, loading, error } = courseSearchQuery as QueryResult<
-    SearchCourseResponse,
-    SearchCourseVars
-  >
+  const { data, loading, error } = courseSearchQuery as SearchCourseQueryResult
 
   const handleReachedBottom = async () => {
     try {

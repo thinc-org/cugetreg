@@ -1,9 +1,10 @@
+import { GetCourseInfoQueryVariables } from '@cugetreg/codegen'
+
 import { ParsedUrlQuery } from 'querystring'
 
 import { parseCourseGroup } from '@web/common/utils/parseCourseGroup'
-import { GetCourseVars } from '@web/services/apollo/query/getCourse'
 
-export function parseCourseNoFromQuery(q: ParsedUrlQuery): GetCourseVars {
+export function parseCourseNoFromQuery(q: ParsedUrlQuery): GetCourseInfoQueryVariables {
   const query = q as {
     courseNo: string
   }

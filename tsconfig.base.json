@@ -18,6 +18,7 @@
       "@api/*": ["apps/cugetreg-api/src/*"],
       "@cugetreg/codegen": ["libs/codegen/src"],
       "@cugetreg/codegen/future": ["libs/codegen/src/future"],
+      "@cugetreg/course-utils": ["libs/course-utils/src/index.ts"],
       "@web/*": ["apps/cugetreg-web/src/*"]
     }
   },

@@ -30,7 +30,7 @@ export const ToolbarButton: React.FC<ToolbarButtonProps> = ({ id, mode, type, ic
   }
 
   const getPluginType = (
-    editor: PlateEditor<any> | undefined,
+    editor: PlateEditor | undefined,
     type: ToolbarButtonProps['type']
   ): string => {
     if (!editor) return ''

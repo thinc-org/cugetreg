@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 import requests
 import csv
 import argparse
+import pathlib
 
 s = requests.Session()
 
@@ -29,10 +30,11 @@ args = vars(parser.parse_args())
 study_programs = args["study_programs"]
 semester = args["semester"]
 academic_year = args["academic_year"]
-
 GENED_NAME = ["", "SO", "HU", "SC", "IN"]
-os.makedirs("output", exist_ok=True)
-with open("output/gened_courses.csv", mode="w", encoding="utf8") as outFile:
+
+output_dir = os.path.join(os.path.dirname(__file__), 'output')
+os.makedirs(output_dir, exist_ok=True)
+with open(f"{output_dir}/gened_courses.csv", mode="w", encoding="utf8") as outFile:
   writer = csv.DictWriter(outFile, fieldnames=["courseNo","abbrName","genEdType","studyProgram","academicYear","semester","sections"])
   writer.writeheader()
   for study_program in study_programs:
@@ -56,3 +58,4 @@ with open("output/gened_courses.csv", mode="w", encoding="utf8") as outFile:
           "semester": semester,
           "sections": ""
         })
+  outFile.write("") # newline EOF

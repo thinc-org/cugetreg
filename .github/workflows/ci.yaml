@@ -13,12 +13,12 @@ jobs:
     with:
       number-of-agents: 3
       parallel-commands: |
-        npx nx-cloud record -- npx nx workspace-lint
-        npx nx-cloud record -- npx nx format:check
+        npx nx-cloud@14.5.5 record -- npx nx@14.5.5 workspace-lint
+        npx nx-cloud@14.5.5 record -- npx nx@14.5.5 format:check
       parallel-commands-on-agents: |
-        npx nx affected --target=lint --parallel=3 --base=${{ github.event.before || github.base.sha }} --head=HEAD
-        npx nx affected --target=test --parallel=3 --ci --code-coverage --base=${{ github.event.before || github.base.sha }} --head=HEAD
-        npx nx affected --target=build --parallel=3 --base=${{ github.event.before || github.base.sha }} --head=HEAD
+        npx nx@14.5.5 affected --target=lint --parallel=3 --base=${{ github.event.before || github.base.sha }} --head=HEAD
+        npx nx@14.5.5 affected --target=test --parallel=3 --ci --code-coverage --base=${{ github.event.before || github.base.sha }} --head=HEAD
+        npx nx@14.5.5 affected --target=build --parallel=3 --base=${{ github.event.before || github.base.sha }} --head=HEAD
       main-branch-name: master
 
   agents:

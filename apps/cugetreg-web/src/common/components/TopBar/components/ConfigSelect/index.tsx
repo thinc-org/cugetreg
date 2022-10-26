@@ -32,7 +32,7 @@ export const ConfigBarSelect = styled(NativeSelect)`
   }
 
   option {
-    ${({ theme }) => theme.breakpoints.up('sm')} {
+    ${({ theme }) => theme.breakpoints.up('md')} {
       background-color: ${({ theme }) => theme.palette.primary.main} !important;
     }
   }

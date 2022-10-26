@@ -127,6 +127,8 @@ export abstract class IQuery {
 
     abstract search(filter: FilterInput, courseGroup: CourseGroupInput): Course[] | Promise<Course[]>;
 
+    abstract overrides(): Override[] | Promise<Override[]>;
+
     abstract reviews(courseNo: string, studyProgram: StudyProgram): Review[] | Promise<Review[]>;
 
     abstract myPendingReviews(courseNo: string, studyProgram: StudyProgram): Review[] | Promise<Review[]>;
@@ -243,7 +245,7 @@ export class Override {
 export abstract class IMutation {
     abstract createOrUpdateOverride(override: OverrideInput): Override | Promise<Override>;
 
-    abstract deleteOverride(courseNo: string, studyProgram: StudyProgram): Override | Promise<Override>;
+    abstract deleteOverride(courseNo: string, courseGroup: CourseGroupInput): Override | Promise<Override>;
 
     abstract createReview(createReviewInput: CreateReviewInput): Review | Promise<Review>;
 

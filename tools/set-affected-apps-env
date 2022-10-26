@@ -6,6 +6,7 @@ if OUTPUT=$(npx nx affected:apps --base=${AFFECTED_BASE} --plain 2> /dev/null); 
   AFFECTED_APPS=$(echo $OUTPUT | tail -1)
 else
   # TODO: replace with list of all apps
+  echo "Could not find ref ${AFFECTED_BASE}, using all apps"
   AFFECTED_APPS="cugetreg-api cugetreg-web"
 fi
 

@@ -1,4 +1,4 @@
-import { ChangeEventHandler, MouseEventHandler, forwardRef } from 'react'
+import { MouseEventHandler, forwardRef } from 'react'
 
 import { Button, Dialog, DialogContent, DialogProps, DialogTitle, Fade } from '@mui/material'
 import { TransitionProps } from '@mui/material/transitions'

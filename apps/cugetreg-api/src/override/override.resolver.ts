@@ -1,15 +1,20 @@
 import { UseGuards } from '@nestjs/common'
-import { Args, Mutation, Resolver } from '@nestjs/graphql'
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
 
-import { StudyProgram } from '@thinc-org/chula-courses'
+import { AdminAuthGuard } from '@api/auth/admin.guard'
+import { CourseGroupInput, OverrideInput } from '@api/graphql'
+import { Override } from '@api/schemas/override.schema'
 
-import { AdminAuthGuard } from '../auth/admin.guard'
-import { OverrideInput } from '../graphql'
 import { OverrideService } from './override.service'
 
 @Resolver('Override')
 export class OverrideResolver {
   constructor(private readonly overrideService: OverrideService) {}
+
+  @Query('overrides')
+  getOverrides(): Promise<Override[]> {
+    return this.overrideService.getOverrides()
+  }
 
   @UseGuards(AdminAuthGuard)
   @Mutation('createOrUpdateOverride')
@@ -21,8 +26,9 @@ export class OverrideResolver {
   @Mutation('deleteOverride')
   deleteOverride(
     @Args('courseNo') courseNo: string,
-    @Args('studyProgram') studyProgram: StudyProgram
+    @Args('courseGroup') courseGroup: CourseGroupInput
   ) {
-    return this.overrideService.deleteOverride(courseNo, studyProgram)
+    const { studyProgram, academicYear, semester } = courseGroup
+    return this.overrideService.deleteOverride(courseNo, studyProgram, academicYear, semester)
   }
 }

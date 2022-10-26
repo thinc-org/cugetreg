@@ -42,7 +42,7 @@ const RenderOnIntersect: React.FC<RenderOnIntersectProps> = ({ id, initialHeight
 
   const onResize = useCallback(
     (contentRect: ContentRect) => {
-      heightCache[id] = contentRect.bounds!.height
+      contentRect.bounds && (heightCache[id] = contentRect.bounds.height)
     },
     [id]
   )

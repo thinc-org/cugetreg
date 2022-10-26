@@ -5,3 +5,5 @@
 .env.production
 .env.local.development
 .env.local.production
+
+generate-typings.js

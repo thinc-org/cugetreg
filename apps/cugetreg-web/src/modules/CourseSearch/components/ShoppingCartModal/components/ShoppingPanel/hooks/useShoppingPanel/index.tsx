@@ -1,6 +1,6 @@
-import { Course } from '@cugetreg/codegen'
-
 import { useState } from 'react'
+
+import { Course } from '@cugetreg/codegen'
 
 import { courseCartStore } from '@web/store'
 

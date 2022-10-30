@@ -1,6 +1,6 @@
-import { DayOfWeek } from '@cugetreg/codegen'
-
 import { styled } from '@mui/material'
+
+import { DayOfWeek } from '@cugetreg/codegen'
 
 import { useColor } from '@web/modules/Schedule/components/ColorPicker/hooks/useColor'
 

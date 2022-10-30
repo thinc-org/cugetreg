@@ -1,11 +1,11 @@
+import { createCanvas } from 'canvas'
+import { NextApiRequest, NextApiResponse } from 'next'
+
 import {
   GetCourseForThumbnailDocument,
   GetCourseForThumbnailQuery,
   GetCourseForThumbnailQueryVariables,
 } from '@cugetreg/codegen'
-
-import { createCanvas } from 'canvas'
-import { NextApiRequest, NextApiResponse } from 'next'
 
 import { CourseGroup } from '@web/common/hooks/useCourseGroup/types'
 import { parseCourseNoFromQuery } from '@web/common/utils/parseCourseNoFromQuery'

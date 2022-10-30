@@ -1,7 +1,7 @@
-import { Course } from '@cugetreg/codegen'
-
 import { format, parseISO } from 'date-fns'
 import { th } from 'date-fns/locale'
+
+import { Course } from '@cugetreg/codegen'
 
 import { ExamClass } from '../types'
 

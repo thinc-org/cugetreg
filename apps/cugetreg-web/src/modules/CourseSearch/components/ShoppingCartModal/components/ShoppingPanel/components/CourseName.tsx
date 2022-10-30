@@ -1,8 +1,8 @@
-import { Course } from '@cugetreg/codegen'
-
 import React from 'react'
 
 import { Link } from '@mui/material'
+
+import { Course } from '@cugetreg/codegen'
 
 import { genEdChipConfig } from '@web/common/components/Chips/config'
 import { LinkWithAnalytics } from '@web/common/context/Analytics/components/LinkWithAnalytics'

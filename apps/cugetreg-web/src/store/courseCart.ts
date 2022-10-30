@@ -1,3 +1,7 @@
+import { BroadcastChannel } from 'broadcast-channel'
+import { action, makeObservable, observable, runInAction } from 'mobx'
+import { computedFn } from 'mobx-utils'
+
 import type { Course } from '@cugetreg/codegen'
 import {
   GenEdType,
@@ -11,10 +15,6 @@ import {
   StudyProgram,
 } from '@cugetreg/codegen'
 import { Semester } from '@cugetreg/codegen/future'
-
-import { BroadcastChannel } from 'broadcast-channel'
-import { action, makeObservable, observable, runInAction } from 'mobx'
-import { computedFn } from 'mobx-utils'
 
 import type { CourseGroup } from '@web/common/hooks/useCourseGroup/types'
 import { Storage } from '@web/common/storage'

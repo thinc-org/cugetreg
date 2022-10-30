@@ -1,12 +1,12 @@
+import { GetServerSideProps } from 'next'
+import { ISitemapField, getServerSideSitemap } from 'next-sitemap'
+
 import {
   SearchCourseDocument,
   SearchCourseQuery,
   SearchCourseQueryVariables,
   StudyProgram,
 } from '@cugetreg/codegen'
-
-import { GetServerSideProps } from 'next'
-import { ISitemapField, getServerSideSitemap } from 'next-sitemap'
 
 import { getCurrentTerm } from '@web/common/utils/getCurrentTerm'
 import { SITE_URL } from '@web/env'

@@ -1,3 +1,12 @@
+import { useTranslation } from 'react-i18next'
+import { MdEdit, MdStar } from 'react-icons/md'
+
+import { ApolloError } from '@apollo/client'
+import { Button, Grid, Stack, Typography } from '@mui/material'
+import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
+import { NextSeoProps } from 'next-seo/lib/types'
+import dynamic from 'next/dynamic'
+
 import {
   Course,
   GetCourseInfoDocument,
@@ -8,15 +17,6 @@ import {
   GetReviewsQueryVariables,
 } from '@cugetreg/codegen'
 import { getFaculty } from '@cugetreg/course-utils'
-
-import { useTranslation } from 'react-i18next'
-import { MdEdit, MdStar } from 'react-icons/md'
-
-import { ApolloError } from '@apollo/client'
-import { Button, Grid, Stack, Typography } from '@mui/material'
-import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
-import { NextSeoProps } from 'next-seo/lib/types'
-import dynamic from 'next/dynamic'
 
 import defaultSEO from '@web/../next-seo.config'
 import { BackButton } from '@web/common/components/BackButton'

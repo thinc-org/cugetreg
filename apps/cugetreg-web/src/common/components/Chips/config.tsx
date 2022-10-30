@@ -1,6 +1,6 @@
-import { DayOfWeek, GenEdType } from '@cugetreg/codegen'
-
 import { ChipProps } from '@mui/material'
+
+import { DayOfWeek, GenEdType } from '@cugetreg/codegen'
 
 import {
   ChipFilledHighlightColor,

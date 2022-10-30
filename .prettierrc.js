@@ -5,10 +5,10 @@ module.exports = {
   tabWidth: 2,
   trailingComma: 'es5',
   importOrder: [
-    '^@cugetreg*',
     '^react*',
     '^@nestjs*',
     '<THIRD_PARTY_MODULES>',
+    '^@cugetreg/(.*)$',
     '^@api/(.*)$',
     '^@web/(.*)$',
     '^[./]',

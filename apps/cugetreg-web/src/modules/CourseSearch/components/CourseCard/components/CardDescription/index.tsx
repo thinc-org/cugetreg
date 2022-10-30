@@ -1,8 +1,8 @@
-import { DayOfWeek, GenEdType } from '@cugetreg/codegen'
-
 import { useTranslation } from 'react-i18next'
 
 import { Grid, Stack, Typography } from '@mui/material'
+
+import { DayOfWeek, GenEdType } from '@cugetreg/codegen'
 
 import { Caption } from '@web/common/components/Caption'
 import { DayChip } from '@web/common/components/Chips/catagories/DayChip'

@@ -1,6 +1,6 @@
-import { CourseThumbnailData } from '@cugetreg/course-utils'
-
 import { Canvas, CanvasRenderingContext2D, loadImage, registerFont } from 'canvas'
+
+import { CourseThumbnailData } from '@cugetreg/course-utils'
 
 import { i18n } from '@web/common/i18n'
 import { getPaletteRange } from '@web/common/utils/getPaletteRange'

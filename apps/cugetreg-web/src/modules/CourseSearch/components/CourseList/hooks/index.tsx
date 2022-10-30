@@ -1,6 +1,6 @@
-import { SearchCourseQueryResult } from '@cugetreg/codegen'
-
 import { useContext, useEffect } from 'react'
+
+import { SearchCourseQueryResult } from '@cugetreg/codegen'
 
 import { CourseSearchContext } from '@web/modules/CourseSearch/context/CourseSearch'
 

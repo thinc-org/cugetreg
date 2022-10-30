@@ -1,5 +1,3 @@
-import { Course, Section } from '@cugetreg/codegen'
-
 import { useTranslation } from 'react-i18next'
 
 import {
@@ -16,6 +14,8 @@ import {
   Typography,
   styled,
 } from '@mui/material'
+
+import { Course, Section } from '@cugetreg/codegen'
 
 import { Caption } from '@web/common/components/Caption'
 import { GenEdChip } from '@web/common/components/Chips/catagories/GenEdChip'

@@ -1,6 +1,6 @@
-import { StudyProgram } from '@cugetreg/codegen'
-
 import { ParsedUrlQuery } from 'querystring'
+
+import { StudyProgram } from '@cugetreg/codegen'
 
 import { parseTerm } from '@web/common/utils/parseTerm'
 

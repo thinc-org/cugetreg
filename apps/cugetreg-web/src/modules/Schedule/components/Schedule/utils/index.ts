@@ -1,8 +1,8 @@
-import { Class, DayOfWeek, GenEdType, Section } from '@cugetreg/codegen'
-
 import { useMemo } from 'react'
 
 import { useTheme } from '@mui/material'
+
+import { Class, DayOfWeek, GenEdType, Section } from '@cugetreg/codegen'
 
 import { getPaletteRange } from '@web/common/utils/getPaletteRange'
 import { ExamClass } from '@web/common/utils/types'

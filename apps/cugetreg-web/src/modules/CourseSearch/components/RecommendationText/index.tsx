@@ -1,9 +1,9 @@
-import { SearchCourseQueryVariables, useRecommendCourseTextLazyQuery } from '@cugetreg/codegen'
-
 import { useEffect, useMemo, useState } from 'react'
 
 import { Link, Typography, styled, useTheme } from '@mui/material'
 import { observer } from 'mobx-react'
+
+import { SearchCourseQueryVariables, useRecommendCourseTextLazyQuery } from '@cugetreg/codegen'
 
 import { Analytics } from '@web/common/context/Analytics/components/Analytics'
 import { useCourseGroup } from '@web/common/hooks/useCourseGroup'

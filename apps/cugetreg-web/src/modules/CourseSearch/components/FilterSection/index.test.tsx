@@ -1,6 +1,6 @@
-import { DayOfWeek, GenEdType } from '@cugetreg/codegen'
-
 import { shallow } from 'enzyme'
+
+import { DayOfWeek, GenEdType } from '@cugetreg/codegen'
 
 import { ResponsiveDialog } from '@web/common/components/ResponsiveDialog'
 import { Analytics } from '@web/common/context/Analytics/components/Analytics'

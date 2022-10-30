@@ -1,6 +1,6 @@
-import { CourseThumbnailData } from '@cugetreg/course-utils'
-
 import md5 from 'md5'
+
+import { CourseThumbnailData } from '@cugetreg/course-utils'
 
 import { thumbnailVersion } from '@web/modules/CourseThumbnailAPI/constants'
 

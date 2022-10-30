@@ -1,6 +1,6 @@
-import { GenEdType } from '@cugetreg/codegen'
-
 import { Theme } from '@mui/material'
+
+import { GenEdType } from '@cugetreg/codegen'
 
 import { HighlightColorRange } from '@web/configs/theme/palette'
 

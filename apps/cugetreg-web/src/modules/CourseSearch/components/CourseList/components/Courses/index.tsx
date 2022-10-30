@@ -1,8 +1,8 @@
-import { Course } from '@cugetreg/codegen'
-
 import React from 'react'
 
 import { Typography } from '@mui/material'
+
+import { Course } from '@cugetreg/codegen'
 
 import { getCourseKeyString } from '@web/common/utils/getCourseKeyString'
 import { CourseCard } from '@web/modules/CourseSearch/components/CourseCard'

@@ -1,8 +1,8 @@
-import { Course, SearchCourseQueryVariables } from '@cugetreg/codegen'
-
 import { ApolloClient, InMemoryCache } from '@apollo/client'
 import { BatchHttpLink } from '@apollo/client/link/batch-http'
 import { setContext } from '@apollo/client/link/context'
+
+import { Course, SearchCourseQueryVariables } from '@cugetreg/codegen'
 
 import { ENVIRONMENT } from '@web/env'
 import { apiUrl } from '@web/services/httpClient'

@@ -1,7 +1,7 @@
-import { DayOfWeek, GenEdType } from '@cugetreg/codegen'
-
 import Chip from '@mui/material/Chip'
 import { shallow } from 'enzyme'
+
+import { DayOfWeek, GenEdType } from '@cugetreg/codegen'
 
 import { GeneralChipProps } from '.'
 import { GeneralChipKey } from './config'

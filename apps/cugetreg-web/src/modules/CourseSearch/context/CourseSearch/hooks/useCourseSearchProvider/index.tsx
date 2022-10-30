@@ -1,8 +1,8 @@
-import { useSearchCourseQuery } from '@cugetreg/codegen'
-
 import { useEffect, useState } from 'react'
 
 import { useRouter } from 'next/router'
+
+import { useSearchCourseQuery } from '@cugetreg/codegen'
 
 import { LIMIT_QUERY_CONSTANT } from '@web/modules/CourseSearch/context/CourseSearch/constants'
 import { useSearchCourseQueryParams } from '@web/modules/CourseSearch/hooks/useSearchCourseQueryParams'

@@ -1,16 +1,16 @@
-import {
-  Course,
-  GetCourseInfoDocument,
-  GetCourseInfoQuery,
-  GetCourseInfoQueryVariables,
-} from '@cugetreg/codegen'
-
 import { useEffect } from 'react'
 
 import { ApolloClient, NormalizedCacheObject, isApolloError } from '@apollo/client'
 import { observer } from 'mobx-react'
 import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 import { useRouter } from 'next/router'
+
+import {
+  Course,
+  GetCourseInfoDocument,
+  GetCourseInfoQuery,
+  GetCourseInfoQueryVariables,
+} from '@cugetreg/codegen'
 
 import { CourseGroup } from '@web/common/hooks/useCourseGroup/types'
 import { useLinkBuilder } from '@web/common/hooks/useLinkBuilder'

@@ -1,6 +1,6 @@
-import { Capacity } from '@cugetreg/codegen'
-
 import { shallow } from 'enzyme'
+
+import { Capacity } from '@cugetreg/codegen'
 
 describe('SectionStatus', () => {
   const mockCapacity: Capacity = {

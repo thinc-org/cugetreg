@@ -1,9 +1,9 @@
-import { Semester } from '@cugetreg/codegen/future'
-
 import { MdDelete, MdEdit, MdOutlineStar } from 'react-icons/md'
 
 import { IconButton, Stack, useTheme } from '@mui/material'
 import DOMPurify from 'isomorphic-dompurify'
+
+import { Semester } from '@cugetreg/codegen/future'
 
 import { GeneralChip } from '@web/common/components/Chips'
 import { OtherChipKey } from '@web/common/components/Chips/config'

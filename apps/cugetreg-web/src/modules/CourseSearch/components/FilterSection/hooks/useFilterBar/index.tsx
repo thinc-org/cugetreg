@@ -1,6 +1,6 @@
-import { SearchCourseQueryVariables } from '@cugetreg/codegen'
-
 import { useCallback, useMemo } from 'react'
+
+import { SearchCourseQueryVariables } from '@cugetreg/codegen'
 
 import { DayChipKey, GenEdChipKey, GeneralChipKey } from '@web/common/components/Chips/config'
 import { useSearchCourseQueryParams } from '@web/modules/CourseSearch/hooks/useSearchCourseQueryParams'

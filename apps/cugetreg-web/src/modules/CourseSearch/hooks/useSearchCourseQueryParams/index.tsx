@@ -1,8 +1,8 @@
-import { SearchCourseQueryVariables } from '@cugetreg/codegen'
-
 import { useCallback, useMemo } from 'react'
 
 import { useRouter } from 'next/router'
+
+import { SearchCourseQueryVariables } from '@cugetreg/codegen'
 
 import { useCourseGroup } from '@web/common/hooks/useCourseGroup'
 

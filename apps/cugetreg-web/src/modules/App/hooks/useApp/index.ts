@@ -1,8 +1,8 @@
-import { StudyProgram } from '@cugetreg/codegen'
-
 import { useEffect } from 'react'
 
 import { Router } from 'next/router'
+
+import { StudyProgram } from '@cugetreg/codegen'
 
 import { ENABLE_DARK_THEME } from '@web/env'
 import { collectLogEvent } from '@web/services/logging'

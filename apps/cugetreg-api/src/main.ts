@@ -42,3 +42,5 @@ async function bootstrap() {
 
 // Run main application
 bootstrap()
+
+// Hello World

@@ -13,3 +13,5 @@ declare module '*.png' {
 declare module 'use-react-screenshot' {
   export const useScreenshot
 }
+
+// Hello World

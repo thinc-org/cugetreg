@@ -12,7 +12,7 @@ jobs:
       matrix:
         node-version: [16.17.0]
         platform: [ubuntu-latest]
-    uses: ./.github/workflows/reuseable-ci.yaml
+    uses: ./.github/workflows/reusable-ci.yaml
 
   lint:
     strategy:
@@ -20,7 +20,7 @@ jobs:
         node-version: [16.17.0]
         platform: [ubuntu-latest]
     needs: install-deps
-    uses: ./.github/workflows/reuseable-ci.yaml
+    uses: ./.github/workflows/reusable-ci.yaml
     with:
       target: lint
       runs-on: ${{ matrix.platform }}
@@ -31,7 +31,7 @@ jobs:
         node-version: [16.17.0]
         platform: [ubuntu-latest]
     needs: install-deps
-    uses: ./.github/workflows/reuseable-ci.yaml
+    uses: ./.github/workflows/reusable-ci.yaml
     with:
       target: test
       runs-on: ${{ matrix.platform }}
@@ -42,7 +42,7 @@ jobs:
         node-version: [16.17.0]
         platform: [ubuntu-latest]
     needs: install-deps
-    uses: ./.github/workflows/reuseable-ci.yaml
+    uses: ./.github/workflows/reusable-ci.yaml
     with:
       target: build
       runs-on: ${{ matrix.platform }}

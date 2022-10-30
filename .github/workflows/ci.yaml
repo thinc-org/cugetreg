@@ -7,53 +7,44 @@ on:
   pull_request:
 
 jobs:
-  ci:
-    name: CI
+  install-deps:
     strategy:
       matrix:
         node-version: [16.17.0]
         platform: [ubuntu-latest]
+
     runs-on: ${{ matrix.platform }}
-    steps:
-      - uses: actions/checkout@v2
-        name: Checkout Before
-        with:
-          ref: ${{ github.event.before }}
-          fetch-depth: 0
+    uses: ./.github/workflows/reuseable-ci.yaml
 
-      - uses: actions/checkout@v2
-        name: Checkout
-        with:
-          # We need to fetch all branches and commits so that Nx affected has a base to compare against.
-          fetch-depth: 0
+  lint:
+    strategy:
+      matrix:
+        node-version: [16.17.0]
+        platform: [ubuntu-latest]
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2.0.1
-        id: pnpm-install
-        with:
-          version: 7
-          run_install: false
+    runs-on: ${{ matrix.platform }}
+    uses: ./.github/workflows/reuseable-ci.yaml
+    with:
+      target: lint
 
-      - name: Get pnpm store directory
-        id: pnpm-cache
-        run: |
-          echo "::set-output name=pnpm_cache_dir::$(pnpm store path)"
-      - uses: actions/cache@v3
-        name: Setup pnpm cache
-        with:
-          path: ${{ steps.pnpm-cache.outputs.pnpm_cache_dir }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
+  test:
+    strategy:
+      matrix:
+        node-version: [16.17.0]
+        platform: [ubuntu-latest]
 
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile --prefer-offline
+    runs-on: ${{ matrix.platform }}
+    uses: ./.github/workflows/reuseable-ci.yaml
+    with:
+      target: test
 
-      - name: Lint
-        run: npx nx affected --target=lint --parallel=3 --base=${{ github.event.before || github.base.sha }} --head=HEAD
+  build:
+    strategy:
+      matrix:
+        node-version: [16.17.0]
+        platform: [ubuntu-latest]
 
-      - name: Test
-        run: npx nx affected --target=test --parallel=3 --base=${{ github.event.before || github.base.sha }} --head=HEAD
-
-      - name: Build
-        run: npx nx affected --target=build --parallel=3 --base=${{ github.event.before || github.base.sha }} --head=HEAD
+    runs-on: ${{ matrix.platform }}
+    uses: ./.github/workflows/reuseable-ci.yaml
+    with:
+      target: build

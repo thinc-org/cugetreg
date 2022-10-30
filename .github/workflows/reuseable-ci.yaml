@@ -1,5 +1,5 @@
+# Reusable CI workflow, install dependencies and run Nx target provied by projecy.json for each app
 name: Reusable CI
-description: Reusable CI workflow, install dependencies and run Nx target provied by projecy.json for each app
 
 on:
   workflow_call:
@@ -45,4 +45,4 @@ jobs:
 
       - name: Lint
         if: ${{ inputs.target }}
-        run: npx nx affected --target=${{ input.target }} --parallel=3 --base=${{ github.event.before || github.base.sha }} --head=HEAD
+        run: npx nx affected --target=${{ inputs.target }} --parallel=3 --base=${{ github.event.before || github.base.sha }} --head=HEAD

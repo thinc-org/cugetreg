@@ -516,7 +516,7 @@ export type RecommendCourseTextQueryVariables = Exact<{
 }>;
 
 
-export type RecommendCourseTextQuery = { __typename?: 'Query', recommend: { __typename?: 'CourseRecommendationResponse', courses: Array<{ __typename?: 'CourseDetail', courseNameEn: string, key: { __typename?: 'CourseKey', courseNo: string, semesterKey: { __typename?: 'SemesterKey', semester: string, studyProgram: string } } }> } };
+export type RecommendCourseTextQuery = { __typename?: 'Query', recommend: { __typename?: 'CourseRecommendationResponse', courses: Array<{ __typename?: 'CourseDetail', courseNameEn: string, key: { __typename?: 'CourseKey', courseNo: string, semesterKey: { __typename?: 'SemesterKey', academicYear: string, semester: string, studyProgram: string } } }> } };
 
 export type CourseDataFieldsFragment = { __typename?: 'Course', studyProgram: StudyProgram, semester: string, academicYear: string, courseNo: string, abbrName: string, courseNameTh: string, courseNameEn: string, faculty: string, department: string, credit: number, creditHours: string, courseCondition: string, courseDescTh?: string | null, courseDescEn?: string | null, genEdType: GenEdType, midterm?: { __typename?: 'ExamPeriod', date: string, period: { __typename?: 'Period', start: string, end: string } } | null, final?: { __typename?: 'ExamPeriod', date: string, period: { __typename?: 'Period', start: string, end: string } } | null, sections: Array<{ __typename?: 'Section', genEdType: GenEdType, sectionNo: string, closed: boolean, note?: string | null, capacity: { __typename?: 'Capacity', current: number, max: number }, classes: Array<{ __typename?: 'Class', type: string, dayOfWeek?: DayOfWeek | null, room?: string | null, building?: string | null, teachers: Array<string>, period?: { __typename?: 'Period', start: string, end: string } | null }> }> };
 
@@ -759,6 +759,7 @@ export const RecommendCourseTextDocument = gql`
       courseNameEn
       key {
         semesterKey {
+          academicYear
           semester
           studyProgram
         }

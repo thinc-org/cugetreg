@@ -114,5 +114,7 @@ export const WrappedRecommendationText = observer(() => {
 
   if (!selectedCourses || selectedCourses.length === 0) return null
 
-  return <RecommendationText variant="COSINE" selectedCourses={selectedCourses} />
+  return (
+    <RecommendationText variant="COSINE" selectedCourses={selectedCourses as SelectedCourse[]} />
+  )
 })

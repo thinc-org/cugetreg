@@ -14,9 +14,8 @@ export interface Review {
   rating: number
   courseNo: string
   /**
-   * TODO: If we want to use typed `Semester` (`"1" | "2" | "3"`),
-   * we need to convert our graphql types in backend too!
-   * */
+   * TODO: In order to type `Semester` we need breaking backend changes
+   */
   semester: string
   // semester: Semester
   academicYear: string

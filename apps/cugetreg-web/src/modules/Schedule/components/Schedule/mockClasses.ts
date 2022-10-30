@@ -1,3 +1,5 @@
+import { DayOfWeek, GenEdType, StudyProgram } from '@cugetreg/codegen'
+
 import { mockCourseData } from '@web/__mock__/courses'
 import { mockItem } from '@web/__mock__/overlap'
 
@@ -14,9 +16,9 @@ const courseTemplate: TimetableClass = {
   academicYear: 'S',
   color: 'pink',
   semester: '1',
-  studyProgram: 'S',
-  dayOfWeek: 'MO',
-  genEdType: 'HU',
+  studyProgram: StudyProgram.S,
+  dayOfWeek: DayOfWeek.Mo,
+  genEdType: GenEdType.Hu,
   period: {
     start: '8:30',
     end: '11:30',
@@ -29,8 +31,8 @@ export const mockClasses: TimetableClass[] = [
   {
     ...courseTemplate,
     classIndex: 0,
-    dayOfWeek: 'MO',
-    genEdType: 'HU',
+    dayOfWeek: DayOfWeek.Mo,
+    genEdType: GenEdType.Hu,
     period: {
       start: '8:30',
       end: '11:30',
@@ -39,8 +41,8 @@ export const mockClasses: TimetableClass[] = [
   {
     ...courseTemplate,
     classIndex: 1,
-    dayOfWeek: 'MO',
-    genEdType: 'NO',
+    dayOfWeek: DayOfWeek.Mo,
+    genEdType: GenEdType.No,
     period: {
       start: '12:30',
       end: '14:00',
@@ -49,8 +51,8 @@ export const mockClasses: TimetableClass[] = [
   {
     ...courseTemplate,
     classIndex: 2,
-    dayOfWeek: 'MO',
-    genEdType: 'NO',
+    dayOfWeek: DayOfWeek.Mo,
+    genEdType: GenEdType.No,
     period: {
       start: '14:00',
       end: '15:30',
@@ -59,8 +61,8 @@ export const mockClasses: TimetableClass[] = [
   {
     ...courseTemplate,
     classIndex: 2,
-    dayOfWeek: 'TU',
-    genEdType: 'SC',
+    dayOfWeek: DayOfWeek.Tu,
+    genEdType: GenEdType.Sc,
     period: {
       start: '8:00',
       end: '9:00',
@@ -69,8 +71,8 @@ export const mockClasses: TimetableClass[] = [
   {
     ...courseTemplate,
     classIndex: 3,
-    dayOfWeek: 'WE',
-    genEdType: 'NO',
+    dayOfWeek: DayOfWeek.We,
+    genEdType: GenEdType.No,
     period: {
       start: '8:00',
       end: '11:00',
@@ -79,8 +81,8 @@ export const mockClasses: TimetableClass[] = [
   {
     ...courseTemplate,
     classIndex: 4,
-    dayOfWeek: 'WE',
-    genEdType: 'NO',
+    dayOfWeek: DayOfWeek.We,
+    genEdType: GenEdType.No,
     period: {
       start: '11:30',
       end: '14:00',
@@ -89,8 +91,8 @@ export const mockClasses: TimetableClass[] = [
   {
     ...courseTemplate,
     classIndex: 5,
-    dayOfWeek: 'WE',
-    genEdType: 'NO',
+    dayOfWeek: DayOfWeek.We,
+    genEdType: GenEdType.No,
     period: {
       start: '13:30',
       end: '16:00',
@@ -99,8 +101,8 @@ export const mockClasses: TimetableClass[] = [
   {
     ...courseTemplate,
     classIndex: 6,
-    dayOfWeek: 'TH',
-    genEdType: 'NO',
+    dayOfWeek: DayOfWeek.Th,
+    genEdType: GenEdType.No,
     period: {
       start: '12:00',
       end: '15:00',
@@ -109,8 +111,8 @@ export const mockClasses: TimetableClass[] = [
   {
     ...courseTemplate,
     classIndex: 7,
-    dayOfWeek: 'FR',
-    genEdType: 'SO',
+    dayOfWeek: DayOfWeek.Fr,
+    genEdType: GenEdType.So,
     period: {
       start: '8:00',
       end: '10:30',
@@ -119,8 +121,8 @@ export const mockClasses: TimetableClass[] = [
   {
     ...courseTemplate,
     classIndex: 8,
-    dayOfWeek: 'FR',
-    genEdType: 'IN',
+    dayOfWeek: DayOfWeek.Fr,
+    genEdType: GenEdType.In,
     period: {
       start: '11:00',
       end: '15:00',

@@ -25,6 +25,7 @@ query RecommendCourseText($req: CourseRecommendationRequest!) {
       courseNameEn
       key {
         semesterKey {
+          academicYear
           semester
           studyProgram
         }

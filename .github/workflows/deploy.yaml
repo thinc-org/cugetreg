@@ -67,7 +67,7 @@ jobs:
 
       - name: Set affected apps env
         run: |
-          AFFECTED_BASE=${{ github.event.before }} ./tools/set-affected-apps-env
+          AFFECTED_BASE=${{ github.event.before }} ./tools/workflow/set-affected-apps-env
 
       - name: Set default env to dev
         run: |
@@ -112,7 +112,7 @@ jobs:
       - name: Tag and push Docker images
         if: ${{ env.AFFECTED_APPS }}
         run: |
-          AFFECTED_APPS="${{ env.AFFECTED_APPS }}" TAG=${{ env.TAG }} ./tools/tag-push-images
+          AFFECTED_APPS="${{ env.AFFECTED_APPS }}" TAG=${{ env.TAG }} ./tools/workflow/tag-push-images
 
   deploy:
     name: Deploy

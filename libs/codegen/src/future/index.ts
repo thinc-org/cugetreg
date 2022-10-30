@@ -1,8 +1,7 @@
 /**
- * `@cugetreg/codegen/future` are types that we use
- * but does not available yet in backend's GraphQL.
+ * `@cugetreg/codegen/future` are temporary types.
  *
- * TODO: Wait for backend to implement these types into GraphQL
+ * `Semester` enum will be typed from backend soon.
  */
 
 export enum Semester {

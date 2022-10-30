@@ -18,5 +18,9 @@ export function LinkWithAnalytics({
     childrenOnClick?.(event)
     log()
   }
-  return <Link {...props}>{cloneElement(children, { onClick })}</Link>
+  return (
+    <Link {...props} legacyBehavior>
+      {cloneElement(children, { onClick })}
+    </Link>
+  )
 }

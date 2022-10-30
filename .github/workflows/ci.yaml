@@ -8,21 +8,52 @@ on:
 
 jobs:
   ci:
-    name: Nx Cloud - Main Job
-    uses: nrwl/ci/.github/workflows/nx-cloud-main.yml@v0.6
-    with:
-      number-of-agents: 3
-      parallel-commands: |
-        npx nx-cloud record -- npx nx workspace-lint
-        npx nx-cloud record -- npx nx format:check
-      parallel-commands-on-agents: |
-        npx nx affected --target=lint --parallel=3 --base=${{ github.event.before || github.base.sha }} --head=HEAD
-        npx nx affected --target=test --parallel=3 --ci --code-coverage --base=${{ github.event.before || github.base.sha }} --head=HEAD
-        npx nx affected --target=build --parallel=3 --base=${{ github.event.before || github.base.sha }} --head=HEAD
-      main-branch-name: master
+    name: CI
+    strategy:
+      matrix:
+        node-version: [16.17.0]
+        platform: [ubuntu-latest]
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - uses: actions/checkout@v2
+        name: Checkout Before
+        with:
+          ref: ${{ github.event.before }}
+          fetch-depth: 0
 
-  agents:
-    name: Nx Cloud - Agents
-    uses: nrwl/ci/.github/workflows/nx-cloud-agents.yml@v0.6
-    with:
-      number-of-agents: 3
+      - uses: actions/checkout@v2
+        name: Checkout
+        with:
+          # We need to fetch all branches and commits so that Nx affected has a base to compare against.
+          fetch-depth: 0
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2.0.1
+        id: pnpm-install
+        with:
+          version: 7
+          run_install: false
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        run: |
+          echo "::set-output name=pnpm_cache_dir::$(pnpm store path)"
+      - uses: actions/cache@v3
+        name: Setup pnpm cache
+        with:
+          path: ${{ steps.pnpm-cache.outputs.pnpm_cache_dir }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --prefer-offline
+
+      - name: Lint
+        run: npx nx affected --target=lint --parallel=3 --base=${{ github.event.before || github.base.sha }} --head=HEAD
+
+      - name: Test
+        run: npx nx affected --target=test --parallel=3 --base=${{ github.event.before || github.base.sha }} --head=HEAD
+
+      - name: Build
+        run: npx nx affected --target=build --parallel=3 --base=${{ github.event.before || github.base.sha }} --head=HEAD

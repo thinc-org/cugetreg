@@ -24,7 +24,7 @@ jobs:
 
     runs-on: ${{ matrix.platform }}
     needs: install-deps
-    uses: ./.github/workflows/re
+    uses: ./.github/workflows/reuseable-ci.yaml
     with:
       target: lint
 

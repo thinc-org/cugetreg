@@ -15,9 +15,7 @@ export interface SeachFieldProp {}
 export const SearchField: React.FC<SeachFieldProp> = () => {
   const { setFilter, searchCourseQueryParams } = useSearchCourseQueryParams()
   const [input, setInput] = useState(() => searchCourseQueryParams.filter.keyword || '')
-  const lastSubmittedInput = useRef(input)
   const { log } = useLog(SEARCH_QUERY)
-  const timeoutRef = useRef<number>(0)
 
   useEffect(() => {
     setInput(searchCourseQueryParams.filter.keyword || '')
@@ -25,10 +23,6 @@ export const SearchField: React.FC<SeachFieldProp> = () => {
 
   const submit = useCallback(
     (keyword: string) => {
-      if (lastSubmittedInput.current === keyword) {
-        return
-      }
-      lastSubmittedInput.current = keyword
       setFilter({ ...searchCourseQueryParams.filter, keyword: keyword })
       const detail = JSON.stringify({ ...searchCourseQueryParams.filter, keyword })
       log(null, detail)
@@ -43,17 +37,6 @@ export const SearchField: React.FC<SeachFieldProp> = () => {
     },
     [submit, input]
   )
-
-  useEffect(() => {
-    clearTimeout(timeoutRef.current)
-    timeoutRef.current = window.setTimeout(() => {
-      onSubmit()
-    }, 500)
-    return () => {
-      clearTimeout(timeoutRef.current)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [input])
 
   const handleChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     setInput(event.target.value)

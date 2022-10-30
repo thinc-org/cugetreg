@@ -89,7 +89,7 @@ specifiers:
   cookies-next: ^2.1.1
   core-js: ^3.24.1
   csstype: ^3.0.10
-  cypress: ^10.4.0
+  cypress: ^10.7.0
   date-fns: ^2.29.1
   dotenv: ^16.0.1
   enzyme: ^3.11.0
@@ -184,7 +184,7 @@ dependencies:
   '@nestjs/passport': 7.1.5_dmueulop52nydmpvnlnw57odqm
   '@nestjs/platform-express': 9.0.9_k52hpfebgtl2kt6drmxlyq3gwe
   '@nestjs/schedule': 1.0.2_ac5kpodkfjj4txbcuwlvaffele
-  '@nrwl/next': 15.0.4_yjuzsjpohsql2qbiaf53wrytcu
+  '@nrwl/next': 15.0.4_4emjpphpi4w7fbzlgmc4whwl6e
   '@react-hook/google-optimize': 1.2.1_react@18.2.0
   '@slack/webhook': 6.0.0
   '@thinc-org/chula-courses': 2.3.0
@@ -264,7 +264,7 @@ devDependencies:
   '@next/bundle-analyzer': 12.2.5
   '@next/env': 12.2.5
   '@nrwl/cli': 15.0.4
-  '@nrwl/cypress': 15.0.4_owzs7nd665bzclg6cqa7t4byn4
+  '@nrwl/cypress': 15.0.4_qob7qqova4vfaiszlur5zxrlru
   '@nrwl/devkit': 15.0.4_nx@15.0.4+typescript@4.8.4
   '@nrwl/eslint-plugin-nx': 15.0.4_3rkp5uprxxmo3npyv73aytgwdu
   '@nrwl/jest': 15.0.4_boikixqrdvrzlmir3krcx5b4em
@@ -272,8 +272,8 @@ devDependencies:
   '@nrwl/nest': 15.0.4_j2y7b4vi7yxe26xh7wbsgc3g5y
   '@nrwl/node': 15.0.4_j2y7b4vi7yxe26xh7wbsgc3g5y
   '@nrwl/nx-cloud': 15.0.0
-  '@nrwl/react': 15.0.4_owzs7nd665bzclg6cqa7t4byn4
-  '@nrwl/web': 15.0.4_owzs7nd665bzclg6cqa7t4byn4
+  '@nrwl/react': 15.0.4_qob7qqova4vfaiszlur5zxrlru
+  '@nrwl/web': 15.0.4_qob7qqova4vfaiszlur5zxrlru
   '@nrwl/workspace': 15.0.4_7p4kftbl4xdiv7pp73ecrv754e
   '@nx-tools/nx-docker': 3.0.3_vqi37k2angssil7tm5lh4vysum
   '@popperjs/core': 2.11.6
@@ -295,7 +295,7 @@ devDependencies:
   '@typescript-eslint/parser': 5.41.0_oy7hgmlo6357d5kkcjbkfgtg4q
   '@zarconontol/enzyme-adapter-react-18': 0.7.3_todk22eekuihjg65rlnudp4qdi
   csstype: 3.1.0
-  cypress: 10.4.0
+  cypress: 10.11.0
   dotenv: 16.0.1
   enzyme: 3.11.0
   enzyme-to-json: 3.6.2_enzyme@3.11.0
@@ -3302,7 +3302,7 @@ packages:
       - '@swc/core'
       - debug
 
-  /@nrwl/cypress/15.0.4_owzs7nd665bzclg6cqa7t4byn4:
+  /@nrwl/cypress/15.0.4_qob7qqova4vfaiszlur5zxrlru:
     resolution: {integrity: sha512-kGNdL+qSgDW3a02Lj+yG7hQxVtXcXKr3bxuo+uNF6p0T4rz7xGxFBYUJU74WZnSmDiHXpvJcb1NuxPMYHGDd9A==}
     peerDependencies:
       cypress: '>= 3 < 11'
@@ -3319,7 +3319,7 @@ packages:
       '@phenomnomnominal/tsquery': 4.1.1_typescript@4.8.4
       babel-loader: 8.2.5_xc6oct4hcywdrbo4ned6ytbybm
       chalk: 4.1.0
-      cypress: 10.4.0
+      cypress: 10.11.0
       dotenv: 10.0.0
       fork-ts-checker-webpack-plugin: 7.2.13_qqxisngxjbp7lstdk7boexbu3e
       semver: 7.3.4
@@ -3506,17 +3506,17 @@ packages:
       - webpack-cli
     dev: true
 
-  /@nrwl/next/15.0.4_yjuzsjpohsql2qbiaf53wrytcu:
+  /@nrwl/next/15.0.4_4emjpphpi4w7fbzlgmc4whwl6e:
     resolution: {integrity: sha512-zRaGG5cOnIvDyIaM4xDOsHwvCPmTWsOfGIxLCfct4+xMnx00zvjtH5h2TkPvas5GV+O+Fhl+gSMAOrZ6+XWjIQ==}
     peerDependencies:
       next: ^12.1.0
     dependencies:
       '@babel/plugin-proposal-decorators': 7.18.10_@babel+core@7.18.10
-      '@nrwl/cypress': 15.0.4_owzs7nd665bzclg6cqa7t4byn4
+      '@nrwl/cypress': 15.0.4_qob7qqova4vfaiszlur5zxrlru
       '@nrwl/devkit': 15.0.4_nx@15.0.4+typescript@4.8.4
       '@nrwl/jest': 15.0.4_boikixqrdvrzlmir3krcx5b4em
       '@nrwl/linter': 15.0.4_6bvy3djy6esm64tr6fz4cuweme
-      '@nrwl/react': 15.0.4_owzs7nd665bzclg6cqa7t4byn4
+      '@nrwl/react': 15.0.4_qob7qqova4vfaiszlur5zxrlru
       '@nrwl/webpack': 15.0.4_6fz7oyrxtqhbfffj77kus555nq
       '@nrwl/workspace': 15.0.4_7p4kftbl4xdiv7pp73ecrv754e
       '@svgr/webpack': 6.3.1
@@ -3624,18 +3624,18 @@ packages:
       - debug
     dev: true
 
-  /@nrwl/react/15.0.4_owzs7nd665bzclg6cqa7t4byn4:
+  /@nrwl/react/15.0.4_qob7qqova4vfaiszlur5zxrlru:
     resolution: {integrity: sha512-AhKfU0+n8lj137ok8/PCNa1nkgwapARe/L/YfcpGunXrgfZvm86WUXUnzT/E0ODAcDnV+Mvjtuy7PkrJdzcVzw==}
     dependencies:
       '@babel/core': 7.18.10
       '@babel/preset-react': 7.18.6_@babel+core@7.18.10
-      '@nrwl/cypress': 15.0.4_owzs7nd665bzclg6cqa7t4byn4
+      '@nrwl/cypress': 15.0.4_qob7qqova4vfaiszlur5zxrlru
       '@nrwl/devkit': 15.0.4_nx@15.0.4+typescript@4.8.4
       '@nrwl/jest': 15.0.4_boikixqrdvrzlmir3krcx5b4em
       '@nrwl/js': 15.0.4_l6s2fe2vyzs6osffems46eb66u
       '@nrwl/linter': 15.0.4_6bvy3djy6esm64tr6fz4cuweme
-      '@nrwl/storybook': 15.0.4_owzs7nd665bzclg6cqa7t4byn4
-      '@nrwl/web': 15.0.4_owzs7nd665bzclg6cqa7t4byn4
+      '@nrwl/storybook': 15.0.4_qob7qqova4vfaiszlur5zxrlru
+      '@nrwl/web': 15.0.4_qob7qqova4vfaiszlur5zxrlru
       '@nrwl/webpack': 15.0.4_6fz7oyrxtqhbfffj77kus555nq
       '@nrwl/workspace': 15.0.4_7p4kftbl4xdiv7pp73ecrv754e
       '@phenomnomnominal/tsquery': 4.1.1_typescript@4.8.4
@@ -3727,10 +3727,10 @@ packages:
       - ts-node
       - typescript
 
-  /@nrwl/storybook/15.0.4_owzs7nd665bzclg6cqa7t4byn4:
+  /@nrwl/storybook/15.0.4_qob7qqova4vfaiszlur5zxrlru:
     resolution: {integrity: sha512-U1UPCJIHT/1KSI2ui/yXu3L7epvfqI8oWJTOQhjp8nnJHjzxLbDtGIKvS5vN0syYfml1W6u+oDJV2GWmn3yw8g==}
     dependencies:
-      '@nrwl/cypress': 15.0.4_owzs7nd665bzclg6cqa7t4byn4
+      '@nrwl/cypress': 15.0.4_qob7qqova4vfaiszlur5zxrlru
       '@nrwl/devkit': 15.0.4_nx@15.0.4+typescript@4.8.4
       '@nrwl/linter': 15.0.4_6bvy3djy6esm64tr6fz4cuweme
       '@nrwl/workspace': 15.0.4_7p4kftbl4xdiv7pp73ecrv754e
@@ -3764,7 +3764,7 @@ packages:
       - '@swc/core'
       - debug
 
-  /@nrwl/web/15.0.4_owzs7nd665bzclg6cqa7t4byn4:
+  /@nrwl/web/15.0.4_qob7qqova4vfaiszlur5zxrlru:
     resolution: {integrity: sha512-MLPuHd2AMW1uI1bpJYLA18ipm+bK+Emt6kSURdF7W4r7rpR+nBDrfaLxIO2uuT9jtqzsIZVQ9tVqI8rk1W/dkg==}
     dependencies:
       '@babel/core': 7.18.10
@@ -3774,7 +3774,7 @@ packages:
       '@babel/preset-env': 7.18.10_@babel+core@7.18.10
       '@babel/preset-typescript': 7.18.6_@babel+core@7.18.10
       '@babel/runtime': 7.18.9
-      '@nrwl/cypress': 15.0.4_owzs7nd665bzclg6cqa7t4byn4
+      '@nrwl/cypress': 15.0.4_qob7qqova4vfaiszlur5zxrlru
       '@nrwl/devkit': 15.0.4_nx@15.0.4+typescript@4.8.4
       '@nrwl/jest': 15.0.4_boikixqrdvrzlmir3krcx5b4em
       '@nrwl/js': 15.0.4_l6s2fe2vyzs6osffems46eb66u
@@ -7899,8 +7899,8 @@ packages:
     resolution: {integrity: sha512-cO1I/zmz4w2dcKHVvpCr7JVRu8/FymG5OEpmvsZYlccYolPBLoVGKUHgNoc4ZGkFeFlWGEDmMyBM+TTqRdW/wg==}
     dev: true
 
-  /cypress/10.4.0:
-    resolution: {integrity: sha512-OM7F8MRE01SHQRVVzunid1ZK1m90XTxYnl+7uZfIrB4CYqUDCrZEeSyCXzIbsS6qcaijVCAhqDL60SxG8N6hew==}
+  /cypress/10.11.0:
+    resolution: {integrity: sha512-lsaE7dprw5DoXM00skni6W5ElVVLGAdRUUdZjX2dYsGjbY/QnpzWZ95Zom1mkGg0hAaO/QVTZoFVS7Jgr/GUPA==}
     engines: {node: '>=12.0.0'}
     hasBin: true
     requiresBuild: true
@@ -9086,7 +9086,7 @@ packages:
       - supports-color
 
   /extsprintf/1.3.0:
-    resolution: {integrity: sha1-lpGEQOMEGnpBT4xS48V06zw+HgU=}
+    resolution: {integrity: sha512-11Ndz7Nv+mvAC1j0ktTa7fAb0vLyGGX+rMHNBYQviQDGU0Hw7lhctJANqbPhu9nV9/izT/IntTgZ7Im/9LJs9g==}
     engines: {'0': node >=0.6.0}
 
   /fast-deep-equal/3.1.3:
@@ -13489,7 +13489,7 @@ packages:
       ipaddr.js: 1.9.1
 
   /proxy-from-env/1.0.0:
-    resolution: {integrity: sha1-M8UDmPcOp+uW0h97gXYwpVeRx+4=}
+    resolution: {integrity: sha512-F2JHgJQ1iqwnHDcQjVBsq3n/uoaFL+iPW/eAeL7kVxy/2RrWaN4WroKjjvbsoRtv0ftelNyC01bjRhn/bhcf4A==}
 
   /proxy-from-env/1.1.0:
     resolution: {integrity: sha512-D+zkORCbA9f1tdWRK0RaCR3GPv50cMxcrz4X8k5LTSUD1Dkw47mKJEZQNunItRTkWwgtaUSo1RVFRIG9ZXiFYg==}
@@ -15736,7 +15736,7 @@ packages:
     engines: {node: '>= 0.8'}
 
   /verror/1.10.0:
-    resolution: {integrity: sha1-OhBcoXBTr1XW4nDB+CiGguGNpAA=}
+    resolution: {integrity: sha512-ZZKSmDAEFOijERBLkmYfJ+vmk3w+7hOLYDNkRCuRuMJGEmqYNCNLyBBFwWKVMhfwaEF3WOd0Zlw86U/WC/+nYw==}
     engines: {'0': node >=0.6.0}
     dependencies:
       assert-plus: 1.0.0

@@ -4,7 +4,7 @@
   "projectType": "application",
   "targets": {
     "build": {
-      "executor": "@nrwl/node:webpack",
+      "executor": "@nrwl/webpack:webpack",
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
@@ -19,7 +19,9 @@
             "output": "assets/graphql"
           }
         ],
-        "generatePackageJson": true
+        "generatePackageJson": true,
+        "target": "node",
+        "compiler": "tsc"
       },
       "configurations": {
         "production": {
@@ -49,7 +51,7 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/apps/cugetreg-api"],
+      "outputs": ["{workspaceRoot}/coverage/apps/cugetreg-api"],
       "options": {
         "jestConfig": "apps/cugetreg-api/jest.config.ts",
         "passWithNoTests": true
@@ -65,12 +67,18 @@
       "executor": "nx:run-commands",
       "options": {
         "commands": [
-          { "command": "nx run cugetreg-api:build", "forwardAllArgs": false },
+          {
+            "command": "nx run cugetreg-api:build",
+            "forwardAllArgs": false
+          },
           {
             "command": "cp pnpm-lock.yaml dist/apps/cugetreg-api/pnpm-lock.yaml",
             "forwardAllArgs": false
           },
-          { "command": "cp .npmrc dist/apps/cugetreg-api/.npmrc", "forwardAllArgs": false },
+          {
+            "command": "cp .npmrc dist/apps/cugetreg-api/.npmrc",
+            "forwardAllArgs": false
+          },
           {
             "command": "nx run cugetreg-api:docker --push=false --tags=cugetreg-api:latest --load",
             "forwardAllArgs": false

@@ -145,7 +145,7 @@
     "@typescript-eslint/parser": "5.41.0",
     "@zarconontol/enzyme-adapter-react-18": "^0.7.3",
     "csstype": "^3.0.10",
-    "cypress": "^10.4.0",
+    "cypress": "^10.7.0",
     "dotenv": "^16.0.1",
     "enzyme": "^3.11.0",
     "enzyme-to-json": "^3.6.2",

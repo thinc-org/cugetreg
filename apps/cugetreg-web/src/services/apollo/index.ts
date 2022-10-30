@@ -1,5 +1,4 @@
-import { Course } from '@cugetreg/codegen'
-import { SearchCourseQueryVariables } from '@cugetreg/codegen'
+import { Course, SearchCourseQueryVariables } from '@cugetreg/codegen'
 
 import { ApolloClient, InMemoryCache } from '@apollo/client'
 import { BatchHttpLink } from '@apollo/client/link/batch-http'

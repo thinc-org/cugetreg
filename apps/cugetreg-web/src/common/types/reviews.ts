@@ -1,7 +1,4 @@
-import { ReviewInteractionType } from '@cugetreg/codegen'
-import { StudyProgram } from '@cugetreg/codegen'
-
-export { ReviewInteractionType } from '@cugetreg/codegen'
+import { ReviewInteractionType, StudyProgram } from '@cugetreg/codegen'
 
 export enum ReviewStatus {
   Approved = 'APPROVED',

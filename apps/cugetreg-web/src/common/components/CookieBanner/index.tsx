@@ -53,7 +53,7 @@ export const CookieBanner = () => {
             <Typography variant="body1" mb={2}>
               เราใช้คุกกี้เพื่อพัฒนาประสิทธิภาพ และประสบการณ์ที่ดีในการใช้เว็บไซต์ของคุณ
               คุณสามารถศึกษารายละเอียดได้ที่{' '}
-              <Link href="/privacy" passHref>
+              <Link href="/privacy" passHref legacyBehavior>
                 <MuiLink sx={{ textDecoration: 'underline' }}>นโยบายความเป็นส่วนตัว</MuiLink>
               </Link>{' '}
               และสามารถจัดการความเป็นส่วนตัวเองได้ของคุณได้เองโดยคลิกที่ตั้งค่า

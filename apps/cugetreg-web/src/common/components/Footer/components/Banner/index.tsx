@@ -43,7 +43,7 @@ export function Banner() {
         </GithubLink>
       </ResponsiveStack>
       <Stack gap={2} direction="row">
-        <Link href="/privacy" passHref>
+        <Link href="/privacy" passHref legacyBehavior>
           <PrivacyLink>Privacy Policy</PrivacyLink>
         </Link>
         <CookieSetting onClick={() => setSettingsOpen(true)}>Privacy Preferences</CookieSetting>

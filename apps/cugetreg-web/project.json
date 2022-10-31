@@ -19,10 +19,12 @@
       }
     },
     "postbuild": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "commands": [
-          { "command": "next-sitemap --config apps/cugetreg-web/next-sitemap.config.js" }
+          {
+            "command": "next-sitemap --config apps/cugetreg-web/next-sitemap.config.js"
+          }
         ]
       }
     },
@@ -52,7 +54,7 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/apps/cugetreg-web"],
+      "outputs": ["{workspaceRoot}/coverage/apps/cugetreg-web"],
       "options": {
         "jestConfig": "apps/cugetreg-web/jest.config.ts",
         "passWithNoTests": true
@@ -75,8 +77,14 @@
       "executor": "nx:run-commands",
       "options": {
         "commands": [
-          { "command": "nx run cugetreg-web:build", "forwardAllArgs": false },
-          { "command": "nx run cugetreg-web:postbuild", "forwardAllArgs": false },
+          {
+            "command": "nx run cugetreg-web:build",
+            "forwardAllArgs": false
+          },
+          {
+            "command": "nx run cugetreg-web:postbuild",
+            "forwardAllArgs": false
+          },
           {
             "command": "nx run cugetreg-web:docker --push=false --tags=cugetreg-web:latest --load",
             "forwardAllArgs": false

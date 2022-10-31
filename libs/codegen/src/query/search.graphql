@@ -1,0 +1,11 @@
+query GetAllCourseNo($filter: FilterInput!, $courseGroup: CourseGroupInput!) {
+  search(filter: $filter, courseGroup: $courseGroup) {
+    courseNo
+  }
+}
+
+query SearchCourse($filter: FilterInput!, $courseGroup: CourseGroupInput!) {
+  search(filter: $filter, courseGroup: $courseGroup) {
+    ...CourseDataFields
+  }
+}

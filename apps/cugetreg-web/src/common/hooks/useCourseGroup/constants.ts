@@ -1,3 +1,3 @@
-import { StudyProgram } from '@thinc-org/chula-courses'
+import { StudyProgram } from '@libs/codegen'
 
-export const DEFAULT_STUDY_PROGRAM: StudyProgram = 'S'
+export const DEFAULT_STUDY_PROGRAM = StudyProgram.S

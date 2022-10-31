@@ -1,5 +1,6 @@
-import { Capacity } from '@thinc-org/chula-courses'
 import { shallow } from 'enzyme'
+
+import { Capacity } from '@libs/codegen'
 
 describe('SectionStatus', () => {
   const mockCapacity: Capacity = {

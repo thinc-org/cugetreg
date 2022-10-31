@@ -2,6 +2,8 @@
   "$schema": "./node_modules/nx/schemas/workspace-schema.json",
   "version": 2,
   "projects": {
+    "codegen": "libs/codegen",
+    "course-utils": "libs/course-utils",
     "cugetreg-api": "apps/cugetreg-api",
     "cugetreg-web": "apps/cugetreg-web",
     "cugetreg-web-e2e": "apps/cugetreg-web-e2e"

@@ -2,8 +2,10 @@ import { RefObject } from 'react'
 
 import { TNode } from '@udecode/plate-core'
 
-import { Review, ReviewInteractionType } from '@web/common/types/reviews'
+import { Review } from '@web/common/types/reviews'
 import { ReviewFormRef } from '@web/modules/CourseDetail/components/ReviewForm/types'
+
+import { ReviewInteractionType } from '@libs/codegen'
 
 export type ReviewState = Pick<Review, 'rating' | 'academicYear' | 'semester'> & {
   content: TNode[]

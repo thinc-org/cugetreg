@@ -1,4 +1,4 @@
-import { Capacity, Course, DayOfWeek, Section } from '@thinc-org/chula-courses'
+import { Capacity, Course, DayOfWeek, Section } from '@libs/codegen'
 
 export interface CourseCardContextValue {
   course: Course

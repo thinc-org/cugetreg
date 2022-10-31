@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
 
-import { useLazyQuery } from '@apollo/client'
 import { Link, Typography, styled, useTheme } from '@mui/material'
 import { observer } from 'mobx-react'
 
@@ -8,14 +7,10 @@ import { Analytics } from '@web/common/context/Analytics/components/Analytics'
 import { useCourseGroup } from '@web/common/hooks/useCourseGroup'
 import { useCourseSearchProvider } from '@web/modules/CourseSearch/context/CourseSearch/hooks/useCourseSearchProvider'
 import { useSearchCourseQueryParams } from '@web/modules/CourseSearch/hooks/useSearchCourseQueryParams'
-import {
-  RECOMMENDATION_QUERY,
-  RecommendationParam,
-  RecommendationResponse,
-} from '@web/services/apollo/query/recommendation'
-import { SearchCourseVars } from '@web/services/apollo/query/searchCourse'
 import { collectLogEvent } from '@web/services/logging'
 import { courseCartStore } from '@web/store'
+
+import { SearchCourseQueryVariables, useRecommendCourseTextLazyQuery } from '@libs/codegen'
 
 import { SelectedCourse } from './types'
 
@@ -36,10 +31,11 @@ const RecommendationText: React.FC<RecommendationTextProps> = (props: Recommenda
 
   const { courseSearchQuery } = useCourseSearchProvider()
   const { setFilter } = useSearchCourseQueryParams()
-  const [lastSearchQuery, setLastSearchQuery] = useState<SearchCourseVars | undefined>(undefined)
-  const [fetchRecommendation, { data }] = useLazyQuery<RecommendationResponse, RecommendationParam>(
-    RECOMMENDATION_QUERY
+  const [lastSearchQuery, setLastSearchQuery] = useState<SearchCourseQueryVariables | undefined>(
+    undefined
   )
+
+  const [fetchRecommendation, { data }] = useRecommendCourseTextLazyQuery()
 
   const visibleRecommendation = useMemo(() => data?.recommend?.courses?.slice(0, 6) ?? [], [data])
   const theme = useTheme()
@@ -118,5 +114,7 @@ export const WrappedRecommendationText = observer(() => {
 
   if (!selectedCourses || selectedCourses.length === 0) return null
 
-  return <RecommendationText variant="COSINE" selectedCourses={selectedCourses} />
+  return (
+    <RecommendationText variant="COSINE" selectedCourses={selectedCourses as SelectedCourse[]} />
+  )
 })

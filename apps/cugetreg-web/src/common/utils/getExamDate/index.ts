@@ -1,6 +1,7 @@
-import { Course } from '@thinc-org/chula-courses'
 import { format, parseISO } from 'date-fns'
 import { th } from 'date-fns/locale'
+
+import { Course } from '@libs/codegen'
 
 import { ExamClass } from '../types'
 

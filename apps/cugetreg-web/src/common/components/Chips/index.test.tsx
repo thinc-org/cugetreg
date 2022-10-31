@@ -1,6 +1,7 @@
 import Chip from '@mui/material/Chip'
-import { DayOfWeekEnum, GenEdTypeEnum } from '@thinc-org/chula-courses'
 import { shallow } from 'enzyme'
+
+import { DayOfWeek, GenEdType } from '@libs/codegen'
 
 import { GeneralChipProps } from '.'
 import { GeneralChipKey } from './config'
@@ -8,13 +9,13 @@ import { GeneralChipKey } from './config'
 describe('Chip', () => {
   it.each`
     value
-    ${DayOfWeekEnum.Monday}
-    ${DayOfWeekEnum.Tuesday}
-    ${DayOfWeekEnum.Wednesday}
-    ${DayOfWeekEnum.Thursday}
-    ${DayOfWeekEnum.Friday}
-    ${DayOfWeekEnum.Saturday}
-    ${DayOfWeekEnum.Sunday}
+    ${DayOfWeek.Mo}
+    ${DayOfWeek.Tu}
+    ${DayOfWeek.We}
+    ${DayOfWeek.Th}
+    ${DayOfWeek.Fr}
+    ${DayOfWeek.Sa}
+    ${DayOfWeek.Su}
   `(
     `should return chips with filled color, $value.label`,
     async ({ value }: { value: GeneralChipProps['type'] }) => {
@@ -30,10 +31,10 @@ describe('Chip', () => {
 
   it.each`
     value
-    ${GenEdTypeEnum.SO}
-    ${GenEdTypeEnum.SC}
-    ${GenEdTypeEnum.HU}
-    ${GenEdTypeEnum.IN}
+    ${GenEdType.So}
+    ${GenEdType.Sc}
+    ${GenEdType.Hu}
+    ${GenEdType.In}
   `(
     `should return chips with outlined color, $value.label`,
     async ({ value }: { value: GeneralChipKey }) => {

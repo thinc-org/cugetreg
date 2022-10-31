@@ -1,4 +1,4 @@
-import { StudyProgram } from '@thinc-org/chula-courses'
+import { StudyProgram } from '@libs/codegen'
 
 export interface QueryParams {
   keyword?: string

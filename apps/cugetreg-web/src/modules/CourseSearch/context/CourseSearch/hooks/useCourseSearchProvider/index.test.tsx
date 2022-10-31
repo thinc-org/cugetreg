@@ -112,7 +112,7 @@ describe('useCourseSearchProvider', () => {
   it('Should set empty to prevent fetching more courses when there is no anymore result', async () => {
     mockUseQueryResult.loading = false
     mockUseEmptyResult.isEmpty = false
-    mockFetchMoreResult.data.search.length = false as any
+    mockFetchMoreResult.data.search.length = false as unknown as number
     const { useCourseSearchProvider } = await import('.')
     const { result, waitForNextUpdate } = renderHook(() => useCourseSearchProvider())
 

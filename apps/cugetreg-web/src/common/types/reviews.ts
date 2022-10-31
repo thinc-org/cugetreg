@@ -1,9 +1,4 @@
-import { Semester, StudyProgram } from '@thinc-org/chula-courses'
-
-export enum ReviewInteractionType {
-  Like = 'L',
-  Dislike = 'D',
-}
+import { ReviewInteractionType, StudyProgram } from '@libs/codegen'
 
 export enum ReviewStatus {
   Approved = 'APPROVED',
@@ -15,13 +10,17 @@ export interface Review {
   _id: string
   rating: number
   courseNo: string
-  semester: Semester
+  /**
+   * TODO: In order to type `Semester` we need breaking backend changes
+   */
+  semester: string
+  // semester: Semester
   academicYear: string
   studyProgram: StudyProgram
-  content: string
+  content?: string
   likeCount: number
   dislikeCount: number
-  myInteraction: ReviewInteractionType | null
-  status: ReviewStatus
+  myInteraction?: ReviewInteractionType
+  status?: ReviewStatus
   isOwner: boolean
 }

@@ -1,9 +1,10 @@
-import { DayOfWeekEnum, GenEdTypeEnum } from '@thinc-org/chula-courses'
 import { shallow } from 'enzyme'
 
 import { ResponsiveDialog } from '@web/common/components/ResponsiveDialog'
 import { Analytics } from '@web/common/context/Analytics/components/Analytics'
 import { DAY_FILTER, GENED_FILTER } from '@web/common/context/Analytics/constants'
+
+import { DayOfWeek, GenEdType } from '@libs/codegen'
 
 import { Button, StickyPaper } from './styled'
 
@@ -27,7 +28,7 @@ describe('FilterSection', () => {
   jest.doMock('./hooks/useFilterBar', () => ({ useFilterBar: mockUseFilterBar }))
   jest.doMock('../TagList', () => ({ useHasTags: mockUseHasTags }))
   jest.doMock('@mui/material', () => ({
-    ...(jest.requireActual('@mui/material') as any),
+    ...(jest.requireActual('@mui/material') as Record<string, unknown>),
     useTheme: mockUseTheme,
   }))
 
@@ -59,23 +60,23 @@ describe('FilterSection', () => {
         [
           {
             label: 'หมวดวิทย์',
-            value: GenEdTypeEnum.SC,
+            value: GenEdType.Sc,
           },
           {
             label: 'หมวดสังคม',
-            value: GenEdTypeEnum.SO,
+            value: GenEdType.So,
           },
           {
             label: 'หมวดมนุษย์',
-            value: GenEdTypeEnum.HU,
+            value: GenEdType.Hu,
           },
           {
             label: 'หมวดสหฯ',
-            value: GenEdTypeEnum.IN,
+            value: GenEdType.In,
           },
           {
             label: 'ไม่ใช่ GenEd',
-            value: GenEdTypeEnum.NO,
+            value: GenEdType.No,
           },
         ],
         'genEdTypes'
@@ -85,31 +86,31 @@ describe('FilterSection', () => {
         [
           {
             label: 'วันจันทร์',
-            value: DayOfWeekEnum.Monday,
+            value: DayOfWeek.Mo,
           },
           {
             label: 'วันอังคาร',
-            value: DayOfWeekEnum.Tuesday,
+            value: DayOfWeek.Tu,
           },
           {
             label: 'วันพุธ',
-            value: DayOfWeekEnum.Wednesday,
+            value: DayOfWeek.We,
           },
           {
             label: 'วันพฤหัสบดี',
-            value: DayOfWeekEnum.Thursday,
+            value: DayOfWeek.Th,
           },
           {
             label: 'วันศุกร์',
-            value: DayOfWeekEnum.Friday,
+            value: DayOfWeek.Fr,
           },
           {
             label: 'วันเสาร์',
-            value: DayOfWeekEnum.Saturday,
+            value: DayOfWeek.Sa,
           },
           {
             label: 'วันอาทิตย์',
-            value: DayOfWeekEnum.Sunday,
+            value: DayOfWeek.Su,
           },
         ],
         'dayOfWeeks'

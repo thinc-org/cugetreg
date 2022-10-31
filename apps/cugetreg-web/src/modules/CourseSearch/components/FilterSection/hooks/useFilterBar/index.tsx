@@ -2,7 +2,8 @@ import { useCallback, useMemo } from 'react'
 
 import { DayChipKey, GenEdChipKey, GeneralChipKey } from '@web/common/components/Chips/config'
 import { useSearchCourseQueryParams } from '@web/modules/CourseSearch/hooks/useSearchCourseQueryParams'
-import { SearchCourseVars } from '@web/services/apollo/query/searchCourse'
+
+import { SearchCourseQueryVariables } from '@libs/codegen'
 
 import { EnhancedCheckBoxProps } from '../../../CheckboxGroup'
 import { addTag } from '../../utils/addTag'
@@ -15,7 +16,7 @@ export interface CreateCheckbox<Value> {
 
 export function useFilterBar<TagValue extends GeneralChipKey = GeneralChipKey>(
   initCheckboxes: CreateCheckbox<TagValue>[],
-  type?: keyof Pick<SearchCourseVars['filter'], 'genEdTypes' | 'dayOfWeeks'>
+  type?: keyof Pick<SearchCourseQueryVariables['filter'], 'genEdTypes' | 'dayOfWeeks'>
 ) {
   const { setFilter, searchCourseQueryParams } = useSearchCourseQueryParams()
 

@@ -1,4 +1,4 @@
-import { ReviewInteractionType } from '@web/common/types/reviews'
+import { ReviewInteractionType } from '@libs/codegen'
 
 export interface ReviewReactionProps {
   type: ReviewInteractionType

@@ -3,7 +3,6 @@ import { MdEdit, MdStar } from 'react-icons/md'
 
 import { ApolloError } from '@apollo/client'
 import { Button, Grid, Stack, Typography } from '@mui/material'
-import { Course, getFaculty } from '@thinc-org/chula-courses'
 import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 import { NextSeoProps } from 'next-seo/lib/types'
 import dynamic from 'next/dynamic'
@@ -23,12 +22,17 @@ import { ReviewList } from '@web/modules/CourseDetail/components/ReviewList'
 import { ReviewProvider } from '@web/modules/CourseDetail/context/Review'
 import { generateThumbnailId } from '@web/modules/CourseThumbnailAPI/utils/generateThumbnailId'
 import { createApolloServerClient } from '@web/services/apollo'
-import { GET_COURSE, GetCourseResponse } from '@web/services/apollo/query/getCourse'
+
 import {
-  GET_REVIEWS,
-  GetReviewsResponse,
-  GetReviewsVars,
-} from '@web/services/apollo/query/getReviews'
+  Course,
+  GetCourseInfoDocument,
+  GetCourseInfoQuery,
+  GetCourseInfoQueryVariables,
+  GetReviewsDocument,
+  GetReviewsQuery,
+  GetReviewsQueryVariables,
+} from '@libs/codegen'
+import { getFaculty } from '@libs/course-utils'
 
 import {
   Container,
@@ -203,15 +207,18 @@ export async function getServerSideProps(
   try {
     const { courseNo, courseGroup } = parseCourseNoFromQuery(context.query)
     const client = createApolloServerClient()
-    const { data: courseData } = await client.query<GetCourseResponse>({
-      query: GET_COURSE,
+    const { data: courseData } = await client.query<
+      GetCourseInfoQuery,
+      GetCourseInfoQueryVariables
+    >({
+      query: GetCourseInfoDocument,
       variables: {
         courseNo,
         courseGroup,
       },
     })
-    const { data: reviewsData } = await client.query<GetReviewsResponse, GetReviewsVars>({
-      query: GET_REVIEWS,
+    const { data: reviewsData } = await client.query<GetReviewsQuery, GetReviewsQueryVariables>({
+      query: GetReviewsDocument,
       variables: {
         courseNo,
         studyProgram: courseGroup.studyProgram,

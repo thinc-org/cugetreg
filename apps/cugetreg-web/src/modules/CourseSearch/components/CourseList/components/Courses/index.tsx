@@ -1,10 +1,11 @@
 import React from 'react'
 
 import { Typography } from '@mui/material'
-import { Course } from '@thinc-org/chula-courses'
 
 import { getCourseKeyString } from '@web/common/utils/getCourseKeyString'
 import { CourseCard } from '@web/modules/CourseSearch/components/CourseCard'
+
+import { Course } from '@libs/codegen'
 
 export interface CoursesProps {
   loading: boolean

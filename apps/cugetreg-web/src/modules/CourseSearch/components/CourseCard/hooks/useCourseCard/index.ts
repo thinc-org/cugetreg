@@ -1,12 +1,12 @@
 import { useState } from 'react'
 
-import { Capacity, Course, Section } from '@thinc-org/chula-courses'
-
 import { dayOfWeekArray } from '@web/common/constants/dayOfWeek'
 import { useDisclosure } from '@web/common/hooks/useDisclosure'
 import { CourseCardContextValue } from '@web/modules/CourseSearch/components/CourseCard/context/types'
 import { sum } from '@web/utils/sum'
 import { uniq } from '@web/utils/uniq'
+
+import { Capacity, Course, Section } from '@libs/codegen'
 
 export function useCourseCardContext(course: Course): CourseCardContextValue {
   const courseCardValue = useCourseCardValue(course)

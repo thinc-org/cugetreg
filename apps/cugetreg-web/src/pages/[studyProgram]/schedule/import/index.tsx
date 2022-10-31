@@ -1,7 +1,6 @@
 import { useEffect } from 'react'
 
 import { ApolloClient, NormalizedCacheObject, isApolloError } from '@apollo/client'
-import { Course } from '@thinc-org/chula-courses'
 import { observer } from 'mobx-react'
 import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 import { useRouter } from 'next/router'
@@ -11,9 +10,15 @@ import { useLinkBuilder } from '@web/common/hooks/useLinkBuilder'
 import { parseCourseGroup } from '@web/common/utils/parseCourseGroup'
 import { Loading } from '@web/modules/CourseSearch/components/Loading'
 import { createApolloServerClient } from '@web/services/apollo'
-import { GET_COURSE, GetCourseResponse } from '@web/services/apollo/query/getCourse'
 import { courseCartStore } from '@web/store'
 import { userStore } from '@web/store/userStore'
+
+import {
+  Course,
+  GetCourseInfoDocument,
+  GetCourseInfoQuery,
+  GetCourseInfoQueryVariables,
+} from '@libs/codegen'
 
 interface RawScheduleItem {
   courseNo: string
@@ -110,8 +115,8 @@ async function fetchItem(
   const { courseNo, sectionNo } = item
   const {
     data: { course },
-  } = await client.query<GetCourseResponse>({
-    query: GET_COURSE,
+  } = await client.query<GetCourseInfoQuery, GetCourseInfoQueryVariables>({
+    query: GetCourseInfoDocument,
     variables: {
       courseNo: courseNo,
       courseGroup,

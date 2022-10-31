@@ -10,6 +10,7 @@ module.exports = {
     '<THIRD_PARTY_MODULES>',
     '^@api/(.*)$',
     '^@web/(.*)$',
+    '^@libs/(.*)$',
     '^[./]',
   ],
   importOrderSeparation: true,

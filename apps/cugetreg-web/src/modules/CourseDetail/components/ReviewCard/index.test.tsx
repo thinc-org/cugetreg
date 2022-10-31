@@ -9,10 +9,11 @@ import {
   mockMyReviews,
   mockReviews,
 } from '@web/__mock__/review'
-import { ReviewInteractionType } from '@web/common/types/reviews'
 import { lightTheme } from '@web/configs/theme'
 import { ReviewCardProps } from '@web/modules/CourseDetail/components/ReviewCard/types'
 import { ReviewReaction } from '@web/modules/CourseDetail/components/ReviewReaction'
+
+import { ReviewInteractionType } from '@libs/codegen'
 
 describe('ReviewCard', () => {
   const mockReviewData = mockReviews[0]
@@ -37,7 +38,7 @@ describe('ReviewCard', () => {
   }))
 
   jest.doMock('@mui/material', () => ({
-    ...jest.requireActual('@mui/material'),
+    ...(jest.requireActual('@mui/material') as Record<string, unknown>),
     useTheme: useThemeSpy,
   }))
 
@@ -102,7 +103,7 @@ describe('ReviewCard', () => {
     const likeButton = wrapper.find(ReviewReaction).at(0)
     likeButton.simulate('click')
     expect(setInteractionSpy).toHaveBeenCalledTimes(1)
-    expect(setInteractionSpy).toHaveBeenCalledWith(mockReviewData._id, ReviewInteractionType.Like)
+    expect(setInteractionSpy).toHaveBeenCalledWith(mockReviewData._id, ReviewInteractionType.L)
   })
 
   it('should call setInteraction with dislike interaction if we click dislike', async () => {
@@ -110,10 +111,7 @@ describe('ReviewCard', () => {
     const dislikeButton = wrapper.find(ReviewReaction).at(1)
     dislikeButton.simulate('click')
     expect(setInteractionSpy).toHaveBeenCalledTimes(1)
-    expect(setInteractionSpy).toHaveBeenCalledWith(
-      mockReviewData._id,
-      ReviewInteractionType.Dislike
-    )
+    expect(setInteractionSpy).toHaveBeenCalledWith(mockReviewData._id, ReviewInteractionType.D)
   })
 
   it('should call deleteMyReview when click delete icon', async () => {

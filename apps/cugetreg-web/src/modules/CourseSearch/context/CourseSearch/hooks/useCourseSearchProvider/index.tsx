@@ -1,15 +1,11 @@
 import { useEffect, useState } from 'react'
 
-import { useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
 
 import { LIMIT_QUERY_CONSTANT } from '@web/modules/CourseSearch/context/CourseSearch/constants'
 import { useSearchCourseQueryParams } from '@web/modules/CourseSearch/hooks/useSearchCourseQueryParams'
-import {
-  SEARCH_COURSE,
-  SearchCourseResponse,
-  SearchCourseVars,
-} from '@web/services/apollo/query/searchCourse'
+
+import { useSearchCourseQuery } from '@libs/codegen'
 
 import { useEmpty } from '../useEmpty'
 
@@ -19,7 +15,7 @@ export const useCourseSearchProvider = () => {
   const [offset, setOffset] = useState(0)
   const { searchCourseQueryParams } = useSearchCourseQueryParams()
 
-  const courseSearchQuery = useQuery<SearchCourseResponse, SearchCourseVars>(SEARCH_COURSE, {
+  const courseSearchQuery = useSearchCourseQuery({
     notifyOnNetworkStatusChange: true,
     variables: {
       ...searchCourseQueryParams,

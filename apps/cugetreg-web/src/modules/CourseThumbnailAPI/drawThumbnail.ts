@@ -6,7 +6,8 @@ import { lightTheme } from '@web/configs/theme'
 import { ENABLE_DAY_OF_WEEK_THUMBNAIL } from '@web/env'
 import { getDayColor } from '@web/modules/CourseThumbnailAPI/utils/getDayColor'
 import { getDaysOfWeek } from '@web/modules/CourseThumbnailAPI/utils/getDaysOfWeek'
-import { CourseThumbnailData } from '@web/services/apollo/query/getCourse'
+
+import { CourseThumbnailData } from '@libs/course-utils'
 
 registerFont('public/fonts/Poppins-Bold.ttf', { family: 'Poppins Bold' })
 registerFont('public/fonts/Prompt-Bold.ttf', { family: 'Prompt Bold' })

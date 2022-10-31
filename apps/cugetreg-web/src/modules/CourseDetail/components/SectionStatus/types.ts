@@ -1,5 +1,6 @@
 import { TypographyProps } from '@mui/material'
-import { Capacity } from '@thinc-org/chula-courses'
+
+import { Capacity } from '@libs/codegen'
 
 export type AvailableStatus = 'available' | 'full' | 'closed'
 export interface SectionStatusProps extends TypographyProps {

@@ -7,22 +7,42 @@ on:
   pull_request:
 
 jobs:
-  ci:
-    name: Nx Cloud - Main Job
-    uses: nrwl/ci/.github/workflows/nx-cloud-main.yml@v0.6
-    with:
-      number-of-agents: 3
-      parallel-commands: |
-        npx nx-cloud record -- npx nx workspace-lint
-        npx nx-cloud record -- npx nx format:check
-      parallel-commands-on-agents: |
-        npx nx affected --target=lint --parallel=3 --base=${{ github.event.before || github.base.sha }} --head=HEAD
-        npx nx affected --target=test --parallel=3 --ci --code-coverage --base=${{ github.event.before || github.base.sha }} --head=HEAD
-        npx nx affected --target=build --parallel=3 --base=${{ github.event.before || github.base.sha }} --head=HEAD
-      main-branch-name: master
+  install-deps:
+    strategy:
+      matrix:
+        node-version: [16.17.0]
+        platform: [ubuntu-latest]
+    uses: ./.github/workflows/reusable-ci.yaml
 
-  agents:
-    name: Nx Cloud - Agents
-    uses: nrwl/ci/.github/workflows/nx-cloud-agents.yml@v0.6
+  lint:
+    strategy:
+      matrix:
+        node-version: [16.17.0]
+        platform: [ubuntu-latest]
+    needs: install-deps
+    uses: ./.github/workflows/reusable-ci.yaml
     with:
-      number-of-agents: 3
+      target: lint
+      runs-on: ${{ matrix.platform }}
+
+  test:
+    strategy:
+      matrix:
+        node-version: [16.17.0]
+        platform: [ubuntu-latest]
+    needs: install-deps
+    uses: ./.github/workflows/reusable-ci.yaml
+    with:
+      target: test
+      runs-on: ${{ matrix.platform }}
+
+  build:
+    strategy:
+      matrix:
+        node-version: [16.17.0]
+        platform: [ubuntu-latest]
+    needs: install-deps
+    uses: ./.github/workflows/reusable-ci.yaml
+    with:
+      target: build
+      runs-on: ${{ matrix.platform }}

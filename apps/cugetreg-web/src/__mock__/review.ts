@@ -1,6 +1,6 @@
-import { StudyProgram } from '@cugetreg/codegen'
-
 import { Review } from '@web/common/types/reviews'
+
+import { StudyProgram } from '@libs/codegen'
 
 export const mockReviews: Review[] = [
   {

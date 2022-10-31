@@ -2,20 +2,6 @@ import { BroadcastChannel } from 'broadcast-channel'
 import { action, makeObservable, observable, runInAction } from 'mobx'
 import { computedFn } from 'mobx-utils'
 
-import type { Course } from '@cugetreg/codegen'
-import {
-  GenEdType,
-  GetCourseCartDocument,
-  GetCourseInfoDocument,
-  GetCourseInfoQuery,
-  GetCourseInfoQueryVariables,
-  PushCourseCartDocument,
-  PushCourseCartMutation,
-  PushCourseCartMutationVariables,
-  StudyProgram,
-} from '@cugetreg/codegen'
-import { Semester } from '@cugetreg/codegen/future'
-
 import type { CourseGroup } from '@web/common/hooks/useCourseGroup/types'
 import { Storage } from '@web/common/storage'
 import { StorageKey } from '@web/common/storage/constants'
@@ -25,6 +11,20 @@ import { getNewColor } from '@web/modules/Schedule/components/ColorPicker/utils/
 import { client } from '@web/services/apollo'
 import { collectErrorLog, collectLogEvent } from '@web/services/logging'
 import { userStore } from '@web/store/userStore'
+
+import type { Course } from '@libs/codegen'
+import {
+  GenEdType,
+  GetCourseCartDocument,
+  GetCourseInfoDocument,
+  GetCourseInfoQuery,
+  GetCourseInfoQueryVariables,
+  PushCourseCartDocument,
+  PushCourseCartMutation,
+  PushCourseCartMutationVariables,
+  Semester,
+  StudyProgram,
+} from '@libs/codegen'
 
 export interface CourseCartItem extends Course {
   selectedSectionNo: string

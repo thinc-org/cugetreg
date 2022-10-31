@@ -2,12 +2,12 @@ import { ApolloClient, InMemoryCache } from '@apollo/client'
 import { BatchHttpLink } from '@apollo/client/link/batch-http'
 import { setContext } from '@apollo/client/link/context'
 
-import { Course, SearchCourseQueryVariables } from '@cugetreg/codegen'
-
 import { ENVIRONMENT } from '@web/env'
 import { apiUrl } from '@web/services/httpClient'
 import { userStore } from '@web/store/userStore'
 import { uniqBy } from '@web/utils/uniqBy'
+
+import { Course, SearchCourseQueryVariables } from '@libs/codegen'
 
 const cache = new InMemoryCache({
   typePolicies: {

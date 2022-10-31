@@ -1,6 +1,12 @@
 import React, { createContext, useCallback, useContext, useRef, useState } from 'react'
 import toast from 'react-hot-toast'
 
+import { useCourseGroup } from '@web/common/hooks/useCourseGroup'
+import { Review } from '@web/common/types/reviews'
+import { loginGuard } from '@web/common/utils/loginGuard'
+import { DialogOptions, dialog } from '@web/lib/dialog'
+import { ReviewFormRef } from '@web/modules/CourseDetail/components/ReviewForm/types'
+
 import {
   GetMyPendingReviewsDocument,
   GetMyPendingReviewsQuery,
@@ -8,19 +14,14 @@ import {
   GetReviewsDocument,
   GetReviewsQuery,
   GetReviewsQueryVariables,
+  ReviewInteractionType,
   useCreateReviewMutation,
   useEditMyReviewMutation,
   useGetMyPendingReviewsQuery,
   useGetReviewsQuery,
   useRemoveReviewMutation,
   useSetReviewInteractionMutation,
-} from '@cugetreg/codegen'
-
-import { useCourseGroup } from '@web/common/hooks/useCourseGroup'
-import { Review, ReviewInteractionType } from '@web/common/types/reviews'
-import { loginGuard } from '@web/common/utils/loginGuard'
-import { DialogOptions, dialog } from '@web/lib/dialog'
-import { ReviewFormRef } from '@web/modules/CourseDetail/components/ReviewForm/types'
+} from '@libs/codegen'
 
 import { DEFAULT_REVIEW_CONTEXT_VALUE } from './constants'
 import { ReviewContextValues, ReviewProviderProps } from './types'

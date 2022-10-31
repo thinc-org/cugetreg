@@ -1,6 +1,6 @@
-import { DayOfWeek, GenEdType, SearchCourseQueryVariables } from '@cugetreg/codegen'
-
 import { CourseGroup } from '@web/common/hooks/useCourseGroup/types'
+
+import { DayOfWeek, GenEdType, SearchCourseQueryVariables } from '@libs/codegen'
 
 import { QueryParams } from '../../types'
 import { removeUndefinedValue } from '../removeUndefinedValue'

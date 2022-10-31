@@ -1,4 +1,4 @@
-import { DayOfWeek } from '@cugetreg/codegen'
+import { DayOfWeek } from '@libs/codegen'
 
 export const hourStart = 7
 

@@ -2,11 +2,11 @@ import { useMemo } from 'react'
 
 import { useTheme } from '@mui/material'
 
-import { Class, DayOfWeek, GenEdType, Section } from '@cugetreg/codegen'
-
 import { getPaletteRange } from '@web/common/utils/getPaletteRange'
 import { ExamClass } from '@web/common/utils/types'
 import { CourseCartItem } from '@web/store'
+
+import { Class, DayOfWeek, GenEdType, Section } from '@libs/codegen'
 
 import { hourStart } from '../constants'
 import { getOverlappingCourses } from './getOverlappingCourses'

@@ -1,7 +1,7 @@
-import { DayOfWeek, GenEdType, StudyProgram } from '@cugetreg/codegen'
-
 import { mockCourseData } from '@web/__mock__/courses'
 import { mockItem } from '@web/__mock__/overlap'
+
+import { DayOfWeek, GenEdType, StudyProgram } from '@libs/codegen'
 
 import { TimetableClass } from './utils'
 

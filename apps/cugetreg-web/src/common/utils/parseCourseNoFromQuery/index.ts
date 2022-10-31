@@ -1,8 +1,8 @@
 import { ParsedUrlQuery } from 'querystring'
 
-import { GetCourseInfoQueryVariables } from '@cugetreg/codegen'
-
 import { parseCourseGroup } from '@web/common/utils/parseCourseGroup'
+
+import { GetCourseInfoQueryVariables } from '@libs/codegen'
 
 export function parseCourseNoFromQuery(q: ParsedUrlQuery): GetCourseInfoQueryVariables {
   const query = q as {

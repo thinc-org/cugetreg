@@ -1,8 +1,8 @@
 import { useTheme } from '@mui/material'
 
-import { GenEdType } from '@cugetreg/codegen'
-
 import { getPaletteRange } from '@web/common/utils/getPaletteRange'
+
+import { GenEdType } from '@libs/codegen'
 
 interface ColorScheme {
   background: string

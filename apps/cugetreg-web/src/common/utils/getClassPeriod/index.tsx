@@ -1,4 +1,4 @@
-import { Class } from '@cugetreg/codegen'
+import { Class } from '@libs/codegen'
 
 export function getClassPeriod(sectionClass: Class) {
   const period = sectionClass.period

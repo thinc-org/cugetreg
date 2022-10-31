@@ -15,8 +15,6 @@ import {
   styled,
 } from '@mui/material'
 
-import { Course, Section } from '@cugetreg/codegen'
-
 import { Caption } from '@web/common/components/Caption'
 import { GenEdChip } from '@web/common/components/Chips/catagories/GenEdChip'
 import { SelectButton } from '@web/common/components/SelectButton'
@@ -25,6 +23,8 @@ import { dayOfWeekMapper } from '@web/common/constants/dayOfWeek'
 import { Analytics } from '@web/common/context/Analytics/components/Analytics'
 import { SUBJECT_SELECT_BUTTON_WITH_SECTION } from '@web/common/context/Analytics/constants'
 import { getClassPeriod } from '@web/common/utils/getClassPeriod'
+
+import { Course, Section } from '@libs/codegen'
 
 import { SectionStatus } from '../SectionStatus'
 

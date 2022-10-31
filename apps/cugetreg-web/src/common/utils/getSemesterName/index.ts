@@ -1,4 +1,4 @@
-import { Semester } from '@cugetreg/codegen/future'
+import { Semester } from '@libs/codegen'
 
 export const getSemesterName = (semester: Semester) => {
   switch (semester) {

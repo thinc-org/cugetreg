@@ -1,5 +1,5 @@
 /**
- * `@cugetreg/codegen/future` are temporary types.
+ * Future are temporary types.
  *
  * `Semester` enum will be typed from backend soon.
  */

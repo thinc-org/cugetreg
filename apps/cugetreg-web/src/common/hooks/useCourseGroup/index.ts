@@ -2,12 +2,12 @@ import { useCallback, useEffect, useRef } from 'react'
 
 import { useRouter } from 'next/router'
 
-import { StudyProgram } from '@cugetreg/codegen'
-
 import { DEFAULT_STUDY_PROGRAM } from '@web/common/hooks/useCourseGroup/constants'
 import { Storage } from '@web/common/storage'
 import { StorageKey } from '@web/common/storage/constants'
 import { parseCourseGroup } from '@web/common/utils/parseCourseGroup'
+
+import { StudyProgram } from '@libs/codegen'
 
 import { CourseGroupResult } from './types'
 

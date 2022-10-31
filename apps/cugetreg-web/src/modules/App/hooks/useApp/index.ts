@@ -2,12 +2,12 @@ import { useEffect } from 'react'
 
 import { Router } from 'next/router'
 
-import { StudyProgram } from '@cugetreg/codegen'
-
 import { ENABLE_DARK_THEME } from '@web/env'
 import { collectLogEvent } from '@web/services/logging'
 import { courseCartStore } from '@web/store'
 import { userStore } from '@web/store/userStore'
+
+import { StudyProgram } from '@libs/codegen'
 
 import { removeElement } from '../../utils/removeElement'
 import { useLogging } from '../useLogging'

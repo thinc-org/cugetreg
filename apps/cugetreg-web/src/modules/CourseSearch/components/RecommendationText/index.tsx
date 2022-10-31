@@ -3,14 +3,14 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link, Typography, styled, useTheme } from '@mui/material'
 import { observer } from 'mobx-react'
 
-import { SearchCourseQueryVariables, useRecommendCourseTextLazyQuery } from '@cugetreg/codegen'
-
 import { Analytics } from '@web/common/context/Analytics/components/Analytics'
 import { useCourseGroup } from '@web/common/hooks/useCourseGroup'
 import { useCourseSearchProvider } from '@web/modules/CourseSearch/context/CourseSearch/hooks/useCourseSearchProvider'
 import { useSearchCourseQueryParams } from '@web/modules/CourseSearch/hooks/useSearchCourseQueryParams'
 import { collectLogEvent } from '@web/services/logging'
 import { courseCartStore } from '@web/store'
+
+import { SearchCourseQueryVariables, useRecommendCourseTextLazyQuery } from '@libs/codegen'
 
 import { SelectedCourse } from './types'
 

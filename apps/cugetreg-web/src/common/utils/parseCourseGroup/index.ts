@@ -1,8 +1,8 @@
 import { ParsedUrlQuery } from 'querystring'
 
-import { StudyProgram } from '@cugetreg/codegen'
-
 import { parseTerm } from '@web/common/utils/parseTerm'
+
+import { StudyProgram } from '@libs/codegen'
 
 import { DEFAULT_STUDY_PROGRAM } from '../../hooks/useCourseGroup/constants'
 import { CourseGroup } from '../../hooks/useCourseGroup/types'

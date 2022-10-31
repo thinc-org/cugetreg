@@ -1,5 +1,3 @@
-import { GenEdType } from '@cugetreg/codegen'
-
 import { mockCourseData } from '@web/__mock__/courses'
 import { ExamClass } from '@web/common/utils/types'
 import {
@@ -7,6 +5,8 @@ import {
   CourseOverlapMap,
   ScheduleClass,
 } from '@web/modules/Schedule/components/Schedule/utils'
+
+import { GenEdType } from '@libs/codegen'
 
 const mockCourse = mockCourseData[0]
 export const mockItem = {

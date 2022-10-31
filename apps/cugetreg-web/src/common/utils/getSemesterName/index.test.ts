@@ -1,4 +1,4 @@
-import { Semester } from '@cugetreg/codegen/future'
+import { Semester } from '@libs/codegen'
 
 describe('getSemesterName', () => {
   it.each`

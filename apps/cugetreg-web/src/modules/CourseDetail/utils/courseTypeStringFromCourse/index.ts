@@ -1,6 +1,6 @@
-import { Course } from '@cugetreg/codegen'
-
 import { uniq } from '@web/utils/uniq'
+
+import { Course } from '@libs/codegen'
 
 export function courseTypeStringFromCourse(course: Course) {
   const { sections } = course

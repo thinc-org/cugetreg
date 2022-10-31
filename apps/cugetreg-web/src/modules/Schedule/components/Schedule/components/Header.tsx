@@ -2,9 +2,9 @@ import { useTranslation } from 'react-i18next'
 
 import { styled } from '@mui/material'
 
-import { DayOfWeek } from '@cugetreg/codegen'
-
 import { dayOfWeekArray } from '@web/common/constants/dayOfWeek'
+
+import { DayOfWeek } from '@libs/codegen'
 
 import { hourStart } from '../constants'
 import { useDimensions } from '../dimensions'

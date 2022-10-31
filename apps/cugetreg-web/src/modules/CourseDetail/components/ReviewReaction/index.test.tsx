@@ -3,8 +3,9 @@ import { MdThumbDown, MdThumbDownOffAlt, MdThumbUp, MdThumbUpOffAlt } from 'reac
 import { ThemeProvider } from '@mui/material'
 import { shallow } from 'enzyme'
 
-import { ReviewInteractionType } from '@web/common/types/reviews'
 import { lightTheme } from '@web/configs/theme'
+
+import { ReviewInteractionType } from '@libs/codegen'
 
 import { ReviewReactionProps } from './types'
 

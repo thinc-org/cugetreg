@@ -2,9 +2,9 @@ import { useCallback, useMemo } from 'react'
 
 import { useRouter } from 'next/router'
 
-import { SearchCourseQueryVariables } from '@cugetreg/codegen'
-
 import { useCourseGroup } from '@web/common/hooks/useCourseGroup'
+
+import { SearchCourseQueryVariables } from '@libs/codegen'
 
 import { QueryParams } from './types'
 import { extractSearchVarsFromQuery } from './utils/extractSearchVarsFromQuery'

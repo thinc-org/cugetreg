@@ -1,8 +1,8 @@
-import { Course } from '@cugetreg/codegen'
-
 import { CourseCartItem } from '@web/store'
 import { difference } from '@web/utils/difference'
 import { randomInt } from '@web/utils/randomInt'
+
+import { Course } from '@libs/codegen'
 
 import { OTHER_COLORS, ScheduleColor } from '../constants'
 

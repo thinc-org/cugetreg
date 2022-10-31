@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next'
 
 import { Checkbox, Grid, Hidden, Typography, useMediaQuery, useTheme } from '@mui/material'
 
-import { Course } from '@cugetreg/codegen'
-
 import { GenEdChip } from '@web/common/components/Chips/catagories/GenEdChip'
+
+import { Course } from '@libs/codegen'
 
 import { CourseName } from './CourseName'
 

@@ -1,4 +1,4 @@
-import { Course } from '@cugetreg/codegen'
+import { Course } from '@libs/codegen'
 
 export interface CourseCardProps {
   course: Course

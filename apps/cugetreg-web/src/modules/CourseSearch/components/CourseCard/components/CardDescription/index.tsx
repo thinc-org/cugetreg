@@ -2,13 +2,13 @@ import { useTranslation } from 'react-i18next'
 
 import { Grid, Stack, Typography } from '@mui/material'
 
-import { DayOfWeek, GenEdType } from '@cugetreg/codegen'
-
 import { Caption } from '@web/common/components/Caption'
 import { DayChip } from '@web/common/components/Chips/catagories/DayChip'
 import { GenEdChip } from '@web/common/components/Chips/catagories/GenEdChip'
 import { NoSeatIcon } from '@web/common/components/NoSeatIcon'
 import { useCourseCard } from '@web/modules/CourseSearch/components/CourseCard/context'
+
+import { DayOfWeek, GenEdType } from '@libs/codegen'
 
 export function CardDescription() {
   const { t } = useTranslation('courseCard')

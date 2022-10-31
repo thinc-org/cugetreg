@@ -1,5 +1,4 @@
-import { StudyProgram } from '@cugetreg/codegen'
-import { Semester } from '@cugetreg/codegen/future'
+import { Semester, StudyProgram } from '@libs/codegen'
 
 export interface SelectedCourse {
   courseNo: string

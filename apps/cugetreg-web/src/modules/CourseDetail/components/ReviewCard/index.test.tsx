@@ -9,10 +9,11 @@ import {
   mockMyReviews,
   mockReviews,
 } from '@web/__mock__/review'
-import { ReviewInteractionType } from '@web/common/types/reviews'
 import { lightTheme } from '@web/configs/theme'
 import { ReviewCardProps } from '@web/modules/CourseDetail/components/ReviewCard/types'
 import { ReviewReaction } from '@web/modules/CourseDetail/components/ReviewReaction'
+
+import { ReviewInteractionType } from '@libs/codegen'
 
 describe('ReviewCard', () => {
   const mockReviewData = mockReviews[0]

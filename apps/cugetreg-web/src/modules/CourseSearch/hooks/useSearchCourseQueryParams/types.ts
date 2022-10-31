@@ -1,4 +1,4 @@
-import { StudyProgram } from '@cugetreg/codegen'
+import { StudyProgram } from '@libs/codegen'
 
 export interface QueryParams {
   keyword?: string

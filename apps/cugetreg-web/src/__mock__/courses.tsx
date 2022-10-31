@@ -1,4 +1,4 @@
-import { Course, DayOfWeek, GenEdType, StudyProgram } from '@cugetreg/codegen'
+import { Course, DayOfWeek, GenEdType, StudyProgram } from '@libs/codegen'
 
 export const mockCourseData: Course[] = [
   {

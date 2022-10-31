@@ -1,4 +1,4 @@
-import { Capacity, Course, DayOfWeek, Section } from '@cugetreg/codegen'
+import { Capacity, Course, DayOfWeek, Section } from '@libs/codegen'
 
 export interface CourseCardContextValue {
   course: Course

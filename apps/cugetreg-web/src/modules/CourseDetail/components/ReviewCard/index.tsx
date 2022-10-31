@@ -3,14 +3,14 @@ import { MdDelete, MdEdit, MdOutlineStar } from 'react-icons/md'
 import { IconButton, Stack, useTheme } from '@mui/material'
 import DOMPurify from 'isomorphic-dompurify'
 
-import { Semester } from '@cugetreg/codegen/future'
-
 import { GeneralChip } from '@web/common/components/Chips'
 import { OtherChipKey } from '@web/common/components/Chips/config'
 import { HighlightHTML } from '@web/common/components/HighlightHTML'
-import { ReviewInteractionType, ReviewStatus } from '@web/common/types/reviews'
+import { ReviewStatus } from '@web/common/types/reviews'
 import { getSemesterName } from '@web/common/utils/getSemesterName'
 import { scrollToReviewForm } from '@web/modules/CourseDetail/components/ReviewForm/functions'
+
+import { ReviewInteractionType, Semester } from '@libs/codegen'
 
 import { useReviewContext } from '../../context/Review'
 import { ReviewReaction } from '../ReviewReaction'

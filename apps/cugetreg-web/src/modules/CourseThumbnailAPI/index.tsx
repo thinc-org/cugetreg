@@ -1,18 +1,18 @@
 import { createCanvas } from 'canvas'
 import { NextApiRequest, NextApiResponse } from 'next'
 
-import {
-  GetCourseForThumbnailDocument,
-  GetCourseForThumbnailQuery,
-  GetCourseForThumbnailQueryVariables,
-} from '@cugetreg/codegen'
-
 import { CourseGroup } from '@web/common/hooks/useCourseGroup/types'
 import { parseCourseNoFromQuery } from '@web/common/utils/parseCourseNoFromQuery'
 import { ENABLE_COURSE_THUMBNAIL } from '@web/env'
 import { drawThumbnail } from '@web/modules/CourseThumbnailAPI/drawThumbnail'
 import { createApolloServerClient } from '@web/services/apollo'
 import { getCachedImage } from '@web/utils/imageCache'
+
+import {
+  GetCourseForThumbnailDocument,
+  GetCourseForThumbnailQuery,
+  GetCourseForThumbnailQueryVariables,
+} from '@libs/codegen'
 
 export async function CourseThumbnailAPI(req: NextApiRequest, res: NextApiResponse) {
   if (!ENABLE_COURSE_THUMBNAIL) {

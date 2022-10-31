@@ -3,7 +3,7 @@ import { MdThumbDown, MdThumbDownOffAlt, MdThumbUp, MdThumbUpOffAlt } from 'reac
 
 import { IconButton, Stack, Typography, useTheme } from '@mui/material'
 
-import { ReviewInteractionType } from '@web/common/types/reviews'
+import { ReviewInteractionType } from '@libs/codegen'
 
 import { ReviewReactionProps } from './types'
 

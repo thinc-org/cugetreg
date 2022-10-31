@@ -1,8 +1,8 @@
 import md5 from 'md5'
 
-import { CourseThumbnailData } from '@cugetreg/course-utils'
-
 import { thumbnailVersion } from '@web/modules/CourseThumbnailAPI/constants'
+
+import { CourseThumbnailData } from '@libs/course-utils'
 
 import { getDaysOfWeek } from './getDaysOfWeek'
 

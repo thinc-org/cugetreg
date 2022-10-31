@@ -1,4 +1,4 @@
-import { Class, Course, Section } from '@cugetreg/codegen'
+import { Class, Course, Section } from '@libs/codegen'
 
 export type ClassThumbnailData = Pick<Class, 'dayOfWeek'>
 

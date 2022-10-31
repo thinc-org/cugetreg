@@ -1,0 +1,73 @@
+name: Versioning
+
+on:
+  push:
+    branches: [master]
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  release:
+    name: Versioning
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.17.0
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2.2.2
+        id: pnpm-install
+        with:
+          version: 7
+          run_install: false
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        run: |
+          echo "::set-output name=pnpm_cache_dir::$(pnpm store path)"
+      - name: Setup pnpm cache
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.pnpm-cache.outputs.pnpm_cache_dir }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --prefer-offline
+
+      - name: Create Versioning Pull Request
+        id: changesets
+        uses: changesets/action@v1.3.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Deploy Key
+        uses: webfactory/ssh-agent@v0.5.4
+        if: steps.changesets.outputs.hasChangesets == 'false'
+        with:
+          ssh-private-key: ${{ secrets.VERSIONING_DEPLOY_KEY }}
+
+      - name: Publish
+        if: steps.changesets.outputs.hasChangesets == 'false'
+        run: |
+          for APP in "cugetreg-web" "cugetreg-api"
+          do
+            PACKAGE_VERSION=$(cat ./apps/$APP/package.json \
+                  | grep version \
+                  | head -1 \
+                  | awk -F: '{ print $2 }' \
+                  | sed 's/[", ]//g')
+            TAG=$APP@$PACKAGE_VERSION
+
+            if ! git rev-parse "$TAG" > /dev/null 2>&1; then
+              git tag $APP@$PACKAGE_VERSION
+              git push origin $APP@$PACKAGE_VERSION
+            fi 
+          done

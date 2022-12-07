@@ -96,7 +96,7 @@
             "forwardAllArgs": false
           },
           {
-            "command": "nx run web:docker --push=false --tags=web:latest --load",
+            "command": "nx run web:docker --push=false --tags=cugetreg-web:latest --load",
             "forwardAllArgs": false
           }
         ],

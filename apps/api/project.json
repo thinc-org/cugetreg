@@ -90,7 +90,7 @@
             "forwardAllArgs": false
           },
           {
-            "command": "nx run api:docker --push=false --tags=api:latest --load",
+            "command": "nx run api:docker --push=false --tags=cugetreg-api:latest --load",
             "forwardAllArgs": false
           }
         ],

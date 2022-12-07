@@ -1,7 +1,8 @@
 import { useTheme } from '@mui/material'
-import { GenEdType } from '@thinc-org/chula-courses'
 
 import { getPaletteRange } from '@web/common/utils/getPaletteRange'
+
+import { GenEdType } from '@libs/codegen'
 
 interface ColorScheme {
   background: string

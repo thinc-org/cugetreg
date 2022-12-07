@@ -3,7 +3,8 @@ import { useCallback, useMemo } from 'react'
 import { useRouter } from 'next/router'
 
 import { useCourseGroup } from '@web/common/hooks/useCourseGroup'
-import { SearchCourseVars } from '@web/services/apollo/query/searchCourse'
+
+import { SearchCourseQueryVariables } from '@libs/codegen'
 
 import { QueryParams } from './types'
 import { extractSearchVarsFromQuery } from './utils/extractSearchVarsFromQuery'
@@ -13,13 +14,13 @@ export const useSearchCourseQueryParams = () => {
   const router = useRouter()
   const courseGroup = useCourseGroup()
 
-  const searchCourseQueryParams: SearchCourseVars = useMemo<SearchCourseVars>(
+  const searchCourseQueryParams: SearchCourseQueryVariables = useMemo<SearchCourseQueryVariables>(
     () => extractSearchVarsFromQuery(router.query as QueryParams, courseGroup),
     [router.query, courseGroup]
   )
 
   const setFilter = useCallback(
-    async (filterVars: SearchCourseVars['filter']) => {
+    async (filterVars: SearchCourseQueryVariables['filter']) => {
       const currentQuery = router.query as QueryParams
 
       const query: QueryParams = {

@@ -14,7 +14,6 @@ import {
   Typography,
   styled,
 } from '@mui/material'
-import { Course, Section } from '@thinc-org/chula-courses'
 
 import { Caption } from '@web/common/components/Caption'
 import { GenEdChip } from '@web/common/components/Chips/catagories/GenEdChip'
@@ -24,6 +23,8 @@ import { dayOfWeekMapper } from '@web/common/constants/dayOfWeek'
 import { Analytics } from '@web/common/context/Analytics/components/Analytics'
 import { SUBJECT_SELECT_BUTTON_WITH_SECTION } from '@web/common/context/Analytics/constants'
 import { getClassPeriod } from '@web/common/utils/getClassPeriod'
+
+import { Course, Section } from '@libs/codegen'
 
 import { SectionStatus } from '../SectionStatus'
 

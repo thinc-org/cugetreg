@@ -1,12 +1,12 @@
-import { Semester, SemesterEnum } from '@thinc-org/chula-courses'
+import { Semester } from '@libs/codegen'
 
-export const getSemesterName = (semester: SemesterEnum | Semester) => {
+export const getSemesterName = (semester: Semester) => {
   switch (semester) {
-    case SemesterEnum.First:
+    case Semester.First:
       return 'ภาคต้น'
-    case SemesterEnum.Second:
+    case Semester.Second:
       return 'ภาคปลาย'
-    case SemesterEnum.Third:
+    case Semester.Third:
       return 'ภาคฤดูร้อน'
   }
 }

@@ -1,11 +1,12 @@
 import { useTranslation } from 'react-i18next'
 
 import { DialogActions, DialogContent, DialogTitle, Stack, Typography } from '@mui/material'
-import { Course } from '@thinc-org/chula-courses'
 
 import { useCourseGroup } from '@web/common/hooks/useCourseGroup'
 import { Spacer } from '@web/components/Spacer'
 import { CourseCartItem, courseCartStore } from '@web/store'
+
+import { Course } from '@libs/codegen'
 
 import { ActionButton } from './components/ActionButton'
 import { CourseList } from './components/CourseList'

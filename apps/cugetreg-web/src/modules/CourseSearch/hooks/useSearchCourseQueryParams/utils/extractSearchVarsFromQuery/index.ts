@@ -1,7 +1,6 @@
-import { DayOfWeek, GenEdType } from '@thinc-org/chula-courses'
-
 import { CourseGroup } from '@web/common/hooks/useCourseGroup/types'
-import { SearchCourseVars } from '@web/services/apollo/query/searchCourse'
+
+import { DayOfWeek, GenEdType, SearchCourseQueryVariables } from '@libs/codegen'
 
 import { QueryParams } from '../../types'
 import { removeUndefinedValue } from '../removeUndefinedValue'
@@ -9,7 +8,7 @@ import { removeUndefinedValue } from '../removeUndefinedValue'
 export function extractSearchVarsFromQuery(
   query: QueryParams,
   courseGroup: CourseGroup
-): SearchCourseVars {
+): SearchCourseQueryVariables {
   const { keyword, genEdTypes, dayOfWeeks, startTime, endTime } = query
 
   const genEdTypeArray = genEdTypes ? genEdTypes.split(',') : undefined

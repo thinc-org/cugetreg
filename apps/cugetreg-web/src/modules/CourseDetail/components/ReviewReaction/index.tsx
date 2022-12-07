@@ -3,7 +3,7 @@ import { MdThumbDown, MdThumbDownOffAlt, MdThumbUp, MdThumbUpOffAlt } from 'reac
 
 import { IconButton, Stack, Typography, useTheme } from '@mui/material'
 
-import { ReviewInteractionType } from '@web/common/types/reviews'
+import { ReviewInteractionType } from '@libs/codegen'
 
 import { ReviewReactionProps } from './types'
 
@@ -18,9 +18,9 @@ export const ReviewReaction: React.FC<ReviewReactionProps> = ({
   const getColor = () => {
     if (pressed) {
       switch (type) {
-        case ReviewInteractionType.Like:
+        case ReviewInteractionType.L:
           return theme.palette.highlight.green[500]
-        case ReviewInteractionType.Dislike:
+        case ReviewInteractionType.D:
           return theme.palette.highlight.red[500]
       }
     }
@@ -31,9 +31,9 @@ export const ReviewReaction: React.FC<ReviewReactionProps> = ({
     const color = getColor()
     const modifiedProps: IconBaseProps = { ...props, color, size: 20 }
     switch (type) {
-      case ReviewInteractionType.Like:
+      case ReviewInteractionType.L:
         return !pressed ? <MdThumbUpOffAlt {...modifiedProps} /> : <MdThumbUp {...modifiedProps} />
-      case ReviewInteractionType.Dislike:
+      case ReviewInteractionType.D:
         return !pressed ? (
           <MdThumbDownOffAlt {...modifiedProps} />
         ) : (

@@ -1,4 +1,4 @@
-import { Course } from '@thinc-org/chula-courses'
+import { Course } from '@libs/codegen'
 
 export interface CourseCardProps {
   course: Course

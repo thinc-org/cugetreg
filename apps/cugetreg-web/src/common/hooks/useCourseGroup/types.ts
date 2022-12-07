@@ -1,6 +1,6 @@
-import { StudyProgram } from '@thinc-org/chula-courses'
-
 import { Term } from '@web/common/types/term'
+
+import { StudyProgram } from '@libs/codegen'
 
 export interface CourseGroup extends Term {
   studyProgram: StudyProgram

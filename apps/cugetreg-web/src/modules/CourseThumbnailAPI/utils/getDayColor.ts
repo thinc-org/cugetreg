@@ -1,5 +1,6 @@
 import { Theme } from '@mui/material'
-import { DayOfWeek } from '@thinc-org/chula-courses'
+
+import { DayOfWeek } from '@libs/codegen'
 
 export function getDayColor(theme: Theme, day: DayOfWeek): string {
   switch (day) {

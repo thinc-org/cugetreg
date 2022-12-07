@@ -1,3 +1,3 @@
-import { StudyProgramEnum } from '@thinc-org/chula-courses'
+import { StudyProgram } from '@libs/codegen'
 
-export const DEFAULT_STUDY_PROGRAM = StudyProgramEnum.Semester
+export const DEFAULT_STUDY_PROGRAM = StudyProgram.S

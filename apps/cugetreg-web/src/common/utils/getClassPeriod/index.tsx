@@ -1,4 +1,4 @@
-import { Class } from '@thinc-org/chula-courses'
+import { Class } from '@libs/codegen'
 
 export function getClassPeriod(sectionClass: Class) {
   const period = sectionClass.period

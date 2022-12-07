@@ -1,8 +1,6 @@
-import { QueryResult } from '@apollo/client'
-
-import { SearchCourseResponse, SearchCourseVars } from '@web/services/apollo/query/searchCourse'
+import { SearchCourseQueryResult } from '@libs/codegen'
 
 export interface CourseSearchProps {
   fetchMoreCourses: () => void
-  courseSearchQuery?: QueryResult<SearchCourseResponse, SearchCourseVars>
+  courseSearchQuery?: SearchCourseQueryResult
 }

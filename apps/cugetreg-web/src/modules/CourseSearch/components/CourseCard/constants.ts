@@ -1,6 +1,12 @@
-import { DayOfWeek } from '@thinc-org/chula-courses'
+import { DayOfWeek } from '@libs/codegen'
 
-export const dayOfWeek: DayOfWeek[] = ['MO', 'TU', 'WE', 'TH', 'FR']
+export const dayOfWeek: DayOfWeek[] = [
+  DayOfWeek.Mo,
+  DayOfWeek.Tu,
+  DayOfWeek.We,
+  DayOfWeek.Th,
+  DayOfWeek.Fr,
+]
 
 export const days = {
   MO: 'MON',

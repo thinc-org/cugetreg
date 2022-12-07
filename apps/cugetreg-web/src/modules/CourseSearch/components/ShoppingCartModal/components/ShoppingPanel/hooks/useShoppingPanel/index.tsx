@@ -1,8 +1,8 @@
 import { useState } from 'react'
 
-import { Course } from '@thinc-org/chula-courses'
-
 import { courseCartStore } from '@web/store'
+
+import { Course } from '@libs/codegen'
 
 export enum ShoppingState {
   Default = 'default',

@@ -1,7 +1,8 @@
 import md5 from 'md5'
 
 import { thumbnailVersion } from '@web/modules/CourseThumbnailAPI/constants'
-import { CourseThumbnailData } from '@web/services/apollo/query/getCourse'
+
+import { CourseThumbnailData } from '@libs/course-utils'
 
 import { getDaysOfWeek } from './getDaysOfWeek'
 

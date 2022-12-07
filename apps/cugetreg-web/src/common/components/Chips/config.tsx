@@ -1,10 +1,11 @@
 import { ChipProps } from '@mui/material'
-import { DayOfWeek, GenEdType } from '@thinc-org/chula-courses'
 
 import {
   ChipFilledHighlightColor,
   ChipOutlinedHighlightColor,
 } from '@web/configs/theme/overrides/chip'
+
+import { DayOfWeek, GenEdType } from '@libs/codegen'
 
 /*
  * This configuration file provide the Chip's types.

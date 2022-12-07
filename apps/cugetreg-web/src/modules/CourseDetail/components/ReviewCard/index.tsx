@@ -6,9 +6,11 @@ import DOMPurify from 'isomorphic-dompurify'
 import { GeneralChip } from '@web/common/components/Chips'
 import { OtherChipKey } from '@web/common/components/Chips/config'
 import { HighlightHTML } from '@web/common/components/HighlightHTML'
-import { ReviewInteractionType, ReviewStatus } from '@web/common/types/reviews'
+import { ReviewStatus } from '@web/common/types/reviews'
 import { getSemesterName } from '@web/common/utils/getSemesterName'
 import { scrollToReviewForm } from '@web/modules/CourseDetail/components/ReviewForm/functions'
+
+import { ReviewInteractionType, Semester } from '@libs/codegen'
 
 import { useReviewContext } from '../../context/Review'
 import { ReviewReaction } from '../ReviewReaction'
@@ -33,18 +35,18 @@ export const ReviewCard: React.FC<ReviewCardProps> = (data) => {
     color: theme.palette.primaryRange[50],
   }
 
-  const term = `${data.academicYear} ${getSemesterName(data.semester)}`
+  const term = `${data.academicYear} ${getSemesterName(data.semester as Semester)}`
 
   const chipType = getChipType(data.status)
 
   const { setInteraction, deleteMyReview, editMyReview, formLoaded } = useReviewContext()
 
   const handleLikeClick = () => {
-    setInteraction(data._id, ReviewInteractionType.Like)
+    setInteraction(data._id, ReviewInteractionType.L)
   }
 
   const handleDislikeClick = () => {
-    setInteraction(data._id, ReviewInteractionType.Dislike)
+    setInteraction(data._id, ReviewInteractionType.D)
   }
 
   const handleDeleteClick = () => {
@@ -77,14 +79,14 @@ export const ReviewCard: React.FC<ReviewCardProps> = (data) => {
         ) : (
           <Stack direction="row" spacing={3}>
             <ReviewReaction
-              type={ReviewInteractionType.Like}
-              pressed={data.myInteraction === ReviewInteractionType.Like}
+              type={ReviewInteractionType.L}
+              pressed={data.myInteraction === ReviewInteractionType.L}
               reactionCount={data.likeCount}
               onClick={handleLikeClick}
             />
             <ReviewReaction
-              type={ReviewInteractionType.Dislike}
-              pressed={data.myInteraction === ReviewInteractionType.Dislike}
+              type={ReviewInteractionType.D}
+              pressed={data.myInteraction === ReviewInteractionType.D}
               reactionCount={data.dislikeCount}
               onClick={handleDislikeClick}
             />

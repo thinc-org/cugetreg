@@ -1,0 +1,14 @@
+overwrite: true
+schema: apps/cugetreg-api/**/*.graphql
+documents: libs/codegen/src/query/*.graphql
+
+generates:
+  libs/codegen/src/generated/index.tsx:
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-react-apollo
+    config:
+      withHooks: true
+      useTypeImports: true
+      gqlImport: graphql-tag

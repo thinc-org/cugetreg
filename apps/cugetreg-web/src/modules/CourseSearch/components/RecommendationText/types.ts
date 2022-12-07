@@ -1,4 +1,4 @@
-import { Semester, StudyProgram } from '@thinc-org/chula-courses'
+import { Semester, StudyProgram } from '@libs/codegen'
 
 export interface SelectedCourse {
   courseNo: string

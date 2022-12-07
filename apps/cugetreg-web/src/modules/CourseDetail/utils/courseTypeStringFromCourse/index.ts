@@ -1,6 +1,6 @@
-import { Course } from '@thinc-org/chula-courses'
-
 import { uniq } from '@web/utils/uniq'
+
+import { Course } from '@libs/codegen'
 
 export function courseTypeStringFromCourse(course: Course) {
   const { sections } = course

@@ -6,6 +6,8 @@ import {
   ScheduleClass,
 } from '@web/modules/Schedule/components/Schedule/utils'
 
+import { GenEdType } from '@libs/codegen'
+
 const mockCourse = mockCourseData[0]
 export const mockItem = {
   ...mockCourse,
@@ -36,7 +38,7 @@ export const courseTemplate: Omit<ScheduleClass, 'classIndex'> = {
 export const examTemplate: ExamClass = {
   courseNo: '2110316',
   abbrName: 'PROG LANG PRIN',
-  genEdType: 'NO',
+  genEdType: GenEdType.No,
   teachers: ['NNN'],
   midterm: {
     date: '',

@@ -1,21 +1,23 @@
 {
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/cugetreg-api/src",
+  "sourceRoot": "apps/api/src",
   "projectType": "application",
   "targets": {
     "build": {
       "executor": "@nrwl/webpack:webpack",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "defaultConfiguration": "production",
       "options": {
-        "outputPath": "dist/apps/cugetreg-api",
-        "main": "apps/cugetreg-api/src/main.ts",
-        "tsConfig": "apps/cugetreg-api/tsconfig.app.json",
+        "outputPath": "dist/apps/api",
+        "main": "apps/api/src/main.ts",
+        "tsConfig": "apps/api/tsconfig.app.json",
         "assets": [
-          "apps/cugetreg-api/src/assets",
+          "apps/api/src/assets",
           {
             "glob": "**/*.graphql",
-            "input": "apps/cugetreg-api/src",
+            "input": "apps/api/src",
             "output": "assets/graphql"
           }
         ],
@@ -34,33 +36,41 @@
     "serve": {
       "executor": "@nrwl/node:node",
       "options": {
-        "buildTarget": "cugetreg-api:build"
+        "buildTarget": "api:build"
       },
       "configurations": {
         "production": {
-          "buildTarget": "cugetreg-api:build:production"
+          "buildTarget": "api:build:production"
         }
       }
     },
     "lint": {
       "executor": "@nrwl/linter:eslint",
-      "outputs": ["{options.outputFile}"],
+      "outputs": [
+        "{options.outputFile}"
+      ],
       "options": {
-        "lintFilePatterns": ["apps/cugetreg-api/**/*.ts"]
+        "lintFilePatterns": [
+          "apps/api/**/*.ts"
+        ]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/apps/cugetreg-api"],
+      "outputs": [
+        "{workspaceRoot}/coverage/apps/api"
+      ],
       "options": {
-        "jestConfig": "apps/cugetreg-api/jest.config.ts",
+        "jestConfig": "apps/api/jest.config.ts",
         "passWithNoTests": true
       }
     },
     "docker": {
       "executor": "@nx-tools/nx-docker:build",
       "options": {
-        "tags": ["ghcr.io/thinc-org/cugetreg-api:latest"]
+        "tags": [
+          "ghcr.io/thinc-org/api:latest"
+        ]
       }
     },
     "docker-build": {
@@ -68,19 +78,19 @@
       "options": {
         "commands": [
           {
-            "command": "nx run cugetreg-api:build",
+            "command": "nx run api:build",
             "forwardAllArgs": false
           },
           {
-            "command": "cp pnpm-lock.yaml dist/apps/cugetreg-api/pnpm-lock.yaml",
+            "command": "cp pnpm-lock.yaml dist/apps/api/pnpm-lock.yaml",
             "forwardAllArgs": false
           },
           {
-            "command": "cp .npmrc dist/apps/cugetreg-api/.npmrc",
+            "command": "cp .npmrc dist/apps/api/.npmrc",
             "forwardAllArgs": false
           },
           {
-            "command": "nx run cugetreg-api:docker --push=false --tags=cugetreg-api:latest --load",
+            "command": "nx run api:docker --push=false --tags=api:latest --load",
             "forwardAllArgs": false
           }
         ],

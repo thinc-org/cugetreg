@@ -1,6 +1,6 @@
 /* eslint-disable */
 export default {
-  displayName: 'cugetreg-web',
+  displayName: 'web',
   preset: '../../jest.preset.js',
   setupFilesAfterEnv: ['./jest.setup.ts'],
   testEnvironment: './custom-test-env.js',
@@ -13,6 +13,6 @@ export default {
       '<rootDir>/src/__mock__/fileMock.js',
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
-  coverageDirectory: '../../coverage/apps/cugetreg-web',
+  coverageDirectory: '../../coverage/apps/web',
   snapshotSerializers: ['enzyme-to-json/serializer'],
 }

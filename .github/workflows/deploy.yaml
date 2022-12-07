@@ -72,19 +72,19 @@ jobs:
       - name: Set default env to dev
         run: |
           echo "TAG=dev" >> $GITHUB_ENV
-          mv apps/cugetreg-web/.env.dev apps/cugetreg-web/.env
+          mv apps/web/.env.dev apps/web/.env
 
       - name: Set beta web env
         if: ${{ github.ref == 'refs/heads/beta' }}
         run: |
           echo "TAG=beta" >> $GITHUB_ENV
-          mv apps/cugetreg-web/.env.beta apps/cugetreg-web/.env
+          mv apps/web/.env.beta apps/web/.env
 
       - name: Set prod web env
         if: ${{ github.ref == 'refs/heads/master' }}
         run: |
           echo "TAG=latest" >> $GITHUB_ENV
-          mv apps/cugetreg-web/.env.prod apps/cugetreg-web/.env
+          mv apps/web/.env.prod apps/web/.env
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1

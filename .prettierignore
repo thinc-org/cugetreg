@@ -7,6 +7,6 @@
 
 pnpm-lock.yaml
 
-apps/cugetreg-api/src/graphql.ts
+apps/api/src/graphql.ts
 
 libs/codegen/src/generated/**/*

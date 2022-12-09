@@ -30,9 +30,9 @@
       "@libs/course-utils": [
         "libs/course-utils/src/index.ts"
       ],
-      "@lib/react-ui": [
+      "@libs/react-ui": [
         "libs/react-ui/src/index.ts"
-      ],
+      ]
     }
   },
   "exclude": [

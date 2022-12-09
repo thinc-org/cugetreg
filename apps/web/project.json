@@ -1,19 +1,21 @@
 {
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/cugetreg-web",
+  "sourceRoot": "apps/web",
   "projectType": "application",
   "targets": {
     "build": {
       "executor": "@nrwl/next:build",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "defaultConfiguration": "production",
       "options": {
-        "root": "apps/cugetreg-web",
-        "outputPath": "dist/apps/cugetreg-web"
+        "root": "apps/web",
+        "outputPath": "dist/apps/web"
       },
       "configurations": {
         "development": {
-          "outputPath": "apps/cugetreg-web"
+          "outputPath": "apps/web"
         },
         "production": {}
       }
@@ -23,7 +25,7 @@
       "options": {
         "commands": [
           {
-            "command": "next-sitemap --config apps/cugetreg-web/next-sitemap.config.js"
+            "command": "next-sitemap --config apps/web/next-sitemap.config.js"
           }
         ]
       }
@@ -32,16 +34,16 @@
       "executor": "@nrwl/next:server",
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "cugetreg-web:build",
+        "buildTarget": "web:build",
         "dev": true
       },
       "configurations": {
         "development": {
-          "buildTarget": "cugetreg-web:build:development",
+          "buildTarget": "web:build:development",
           "dev": true
         },
         "production": {
-          "buildTarget": "cugetreg-web:build:production",
+          "buildTarget": "web:build:production",
           "dev": false
         }
       }
@@ -49,28 +51,36 @@
     "export": {
       "executor": "@nrwl/next:export",
       "options": {
-        "buildTarget": "cugetreg-web:build:production"
+        "buildTarget": "web:build:production"
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/apps/cugetreg-web"],
+      "outputs": [
+        "{workspaceRoot}/coverage/apps/web"
+      ],
       "options": {
-        "jestConfig": "apps/cugetreg-web/jest.config.ts",
+        "jestConfig": "apps/web/jest.config.ts",
         "passWithNoTests": true
       }
     },
     "lint": {
       "executor": "@nrwl/linter:eslint",
-      "outputs": ["{options.outputFile}"],
+      "outputs": [
+        "{options.outputFile}"
+      ],
       "options": {
-        "lintFilePatterns": ["apps/cugetreg-web/**/*.{ts,tsx,js,jsx}"]
+        "lintFilePatterns": [
+          "apps/web/**/*.{ts,tsx,js,jsx}"
+        ]
       }
     },
     "docker": {
       "executor": "@nx-tools/nx-docker:build",
       "options": {
-        "tags": ["ghcr.io/thinc-org/cugetreg-web:latest"]
+        "tags": [
+          "ghcr.io/thinc-org/web:latest"
+        ]
       }
     },
     "docker-build": {
@@ -78,15 +88,15 @@
       "options": {
         "commands": [
           {
-            "command": "nx run cugetreg-web:build",
+            "command": "nx run web:build",
             "forwardAllArgs": false
           },
           {
-            "command": "nx run cugetreg-web:postbuild",
+            "command": "nx run web:postbuild",
             "forwardAllArgs": false
           },
           {
-            "command": "nx run cugetreg-web:docker --push=false --tags=cugetreg-web:latest --load",
+            "command": "nx run web:docker --push=false --tags=cugetreg-web:latest --load",
             "forwardAllArgs": false
           }
         ],

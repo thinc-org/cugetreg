@@ -1,29 +1,35 @@
 {
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/cugetreg-web-e2e/src",
+  "sourceRoot": "apps/web-e2e/src",
   "projectType": "application",
   "targets": {
     "e2e": {
       "executor": "@nrwl/cypress:cypress",
       "options": {
-        "cypressConfig": "apps/cugetreg-web-e2e/cypress.config.ts",
-        "devServerTarget": "cugetreg-web:serve:development",
+        "cypressConfig": "apps/web-e2e/cypress.config.ts",
+        "devServerTarget": "web:serve:development",
         "testingType": "e2e"
       },
       "configurations": {
         "production": {
-          "devServerTarget": "cugetreg-web:serve:production"
+          "devServerTarget": "web:serve:production"
         }
       }
     },
     "lint": {
       "executor": "@nrwl/linter:eslint",
-      "outputs": ["{options.outputFile}"],
+      "outputs": [
+        "{options.outputFile}"
+      ],
       "options": {
-        "lintFilePatterns": ["apps/cugetreg-web-e2e/**/*.{js,ts}"]
+        "lintFilePatterns": [
+          "apps/web-e2e/**/*.{js,ts}"
+        ]
       }
     }
   },
   "tags": [],
-  "implicitDependencies": ["cugetreg-web"]
+  "implicitDependencies": [
+    "web"
+  ]
 }

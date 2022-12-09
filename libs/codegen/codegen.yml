@@ -1,5 +1,5 @@
 overwrite: true
-schema: apps/cugetreg-api/**/*.graphql
+schema: apps/api/**/*.graphql
 documents: libs/codegen/src/query/*.graphql
 
 generates:

@@ -4,8 +4,8 @@
   "projects": {
     "codegen": "libs/codegen",
     "course-utils": "libs/course-utils",
-    "cugetreg-api": "apps/cugetreg-api",
-    "cugetreg-web": "apps/cugetreg-web",
-    "cugetreg-web-e2e": "apps/cugetreg-web-e2e"
+    "api": "apps/api",
+    "web": "apps/web",
+    "web-e2e": "apps/web-e2e"
   }
 }

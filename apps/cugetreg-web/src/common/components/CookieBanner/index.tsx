@@ -1,9 +1,10 @@
-import { Button } from '@lib/react-ui'
 import { Link as MuiLink, Stack, Typography } from '@mui/material'
 import Link from 'next/link'
 
 import { ConsentMode } from '@web/common/constants/consents'
 import { useConsentsStore } from '@web/store/consents'
+
+import { Button } from '@libs/react-ui'
 
 import { Consents } from '../../types/consents'
 import { CookieSettings } from './components/CookieSettings'

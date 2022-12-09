@@ -2,7 +2,6 @@ import { useTranslation } from 'react-i18next'
 import { MdEdit, MdStar } from 'react-icons/md'
 
 import { ApolloError } from '@apollo/client'
-import { Button } from '@lib/react-ui'
 import { Grid, Stack, Typography } from '@mui/material'
 import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 import { NextSeoProps } from 'next-seo/lib/types'
@@ -34,6 +33,7 @@ import {
   GetReviewsQueryVariables,
 } from '@libs/codegen'
 import { getFaculty } from '@libs/course-utils'
+import { Button } from '@libs/react-ui'
 
 import {
   Container,

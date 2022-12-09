@@ -1,10 +1,11 @@
 import { useTranslation } from 'react-i18next'
 
-import { Button } from '@lib/react-ui'
 import { Fade, Paper, Popper, Stack, Typography } from '@mui/material'
 
 import { ColorButton } from '@web/modules/Schedule/components/ColorButton'
 import { ColorClassKey } from '@web/modules/Schedule/components/ColorPicker/hooks/useColorPicker'
+
+import { Button } from '@libs/react-ui'
 
 import { SCHEDULE_COLORS, ScheduleColor } from './constants'
 

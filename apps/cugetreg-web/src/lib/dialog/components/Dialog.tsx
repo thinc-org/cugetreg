@@ -1,4 +1,3 @@
-import { Button } from '@lib/react-ui'
 import {
   Dialog as MuiDialog,
   DialogActions as MuiDialogActions,
@@ -10,6 +9,8 @@ import {
   css,
   styled,
 } from '@mui/material'
+
+import { Button } from '@libs/react-ui'
 
 import { DialogOptions, useDialog } from '../core'
 

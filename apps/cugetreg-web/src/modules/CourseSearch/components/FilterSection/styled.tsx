@@ -1,5 +1,6 @@
-import { Button } from '@lib/react-ui'
 import { DialogContent as MuiDialogContent, Paper, css, styled } from '@mui/material'
+
+import { Button } from '@libs/react-ui'
 
 export const DialogContent = styled(MuiDialogContent)`
   padding: ${({ theme }) => theme.spacing(4)};

@@ -1,7 +1,6 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Button, ButtonProps } from '@lib/react-ui'
 import DeleteIcon from '@mui/icons-material/Delete'
 import TableChartIcon from '@mui/icons-material/TableChart'
 import { styled } from '@mui/material'
@@ -14,6 +13,8 @@ import {
 } from '@web/common/context/Analytics/constants'
 import { useShoppingCardModal } from '@web/common/context/ShoppingCartModal'
 import { useLinkBuilder } from '@web/common/hooks/useLinkBuilder'
+
+import { Button, ButtonProps } from '@libs/react-ui'
 
 import { ShoppingState } from '../hooks/useShoppingPanel'
 

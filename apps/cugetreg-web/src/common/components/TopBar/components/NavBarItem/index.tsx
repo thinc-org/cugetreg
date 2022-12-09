@@ -1,5 +1,6 @@
-import { Button, ButtonProps } from '@lib/react-ui'
 import { Typography, styled } from '@mui/material'
+
+import { Button, ButtonProps } from '@libs/react-ui'
 
 const Item = styled(Button)`
   color: ${({ theme }) => theme.palette.primary.main};

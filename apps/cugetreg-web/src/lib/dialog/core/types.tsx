@@ -1,5 +1,6 @@
-import { ButtonProps } from '@lib/react-ui'
 import { DialogProps as MuiDialogProps } from '@mui/material'
+
+import { ButtonProps } from '@libs/react-ui'
 
 export interface DialogOptions {
   id?: string

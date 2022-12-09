@@ -33,7 +33,7 @@ import { AppService } from './app.service'
         definitions:
           configService.get<string>('env') === 'development'
             ? {
-                path: join(process.cwd(), 'apps/cugetreg-api/src/graphql.ts'),
+                path: join(process.cwd(), 'apps/api/src/graphql.ts'),
                 outputAs: 'class',
               }
             : null,

@@ -10,33 +10,17 @@
     "importHelpers": true,
     "target": "es2015",
     "module": "esnext",
-    "lib": [
-      "es2017",
-      "dom"
-    ],
+    "lib": ["es2017", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@api/*": [
-        "apps/cugetreg-api/src/*"
-      ],
-      "@web/*": [
-        "apps/cugetreg-web/src/*"
-      ],
-      "@libs/codegen": [
-        "libs/codegen/src"
-      ],
-      "@libs/course-utils": [
-        "libs/course-utils/src/index.ts"
-      ],
-      "@libs/react-ui": [
-        "libs/react-ui/src/index.ts"
-      ]
+      "@api/*": ["apps/api/src/*"],
+      "@web/*": ["apps/web/src/*"],
+      "@libs/codegen": ["libs/codegen/src"],
+      "@libs/course-utils": ["libs/course-utils/src/index.ts"],
+      "@libs/react-ui": ["libs/react-ui/src/index.ts"]
     }
   },
-  "exclude": [
-    "node_modules",
-    "tmp"
-  ]
+  "exclude": ["node_modules", "tmp"]
 }

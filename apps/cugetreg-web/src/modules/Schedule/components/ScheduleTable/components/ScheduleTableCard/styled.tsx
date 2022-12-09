@@ -1,6 +1,7 @@
 import { forwardRef } from 'react'
 
-import { Button, ButtonProps, NativeSelect, Theme, css, styled } from '@mui/material'
+import { Button, ButtonProps } from '@lib/react-ui'
+import { NativeSelect, Theme, css, styled } from '@mui/material'
 import { m } from 'framer-motion'
 
 import { deepAssign } from '@web/common/utils/deepAssign'

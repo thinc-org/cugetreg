@@ -1,7 +1,7 @@
 import React, { RefObject, useCallback } from 'react'
 
+import { Button } from '@lib/react-ui'
 import GetAppRoundedIcon from '@mui/icons-material/GetAppRounded'
-import { Button } from '@mui/material'
 
 import { Analytics } from '@web/common/context/Analytics/components/Analytics'
 import { EXPORT_PNG_BUTTON } from '@web/common/context/Analytics/constants'

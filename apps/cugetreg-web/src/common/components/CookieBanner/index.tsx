@@ -1,4 +1,5 @@
-import { Button, Link as MuiLink, Stack, Typography } from '@mui/material'
+import { Button } from '@lib/react-ui'
+import { Link as MuiLink, Stack, Typography } from '@mui/material'
 import Link from 'next/link'
 
 import { ConsentMode } from '@web/common/constants/consents'

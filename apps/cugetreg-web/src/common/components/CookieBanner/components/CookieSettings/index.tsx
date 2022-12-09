@@ -1,6 +1,7 @@
 import { MouseEventHandler, forwardRef } from 'react'
 
-import { Button, Dialog, DialogContent, DialogProps, DialogTitle, Fade } from '@mui/material'
+import { Button } from '@lib/react-ui'
+import { Dialog, DialogContent, DialogProps, DialogTitle, Fade } from '@mui/material'
 import { TransitionProps } from '@mui/material/transitions'
 
 import { ConsentMode } from '@web/common/constants/consents'

@@ -3,7 +3,8 @@ import { Controller, SubmitErrorHandler, SubmitHandler, useForm } from 'react-ho
 import toast from 'react-hot-toast'
 import { useTranslation } from 'react-i18next'
 
-import { Box, Button, MenuItem, Rating, Stack, Typography } from '@mui/material'
+import { Button } from '@lib/react-ui'
+import { Box, MenuItem, Rating, Stack, Typography } from '@mui/material'
 import { TNode } from '@udecode/plate-core'
 
 import { RichTextEditor } from '@web/common/components/RichTextEditor'

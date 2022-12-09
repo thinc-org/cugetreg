@@ -1,7 +1,8 @@
-import React, { createRef, useState } from 'react'
+import { createRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Button, Typography, useMediaQuery, useTheme } from '@mui/material'
+import { Button } from '@lib/react-ui'
+import { Typography, useMediaQuery, useTheme } from '@mui/material'
 import { observer } from 'mobx-react'
 
 import { Analytics } from '@web/common/context/Analytics/components/Analytics'

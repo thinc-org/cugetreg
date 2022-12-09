@@ -1,5 +1,5 @@
+import { Button } from '@lib/react-ui'
 import {
-  Button as MuiButton,
   Dialog as MuiDialog,
   DialogActions as MuiDialogActions,
   DialogContent as MuiDialogContent,
@@ -86,24 +86,24 @@ export const Dialog: React.FC<DialogOptions> = (props) => {
         <StyledMuiDialogActions>
           <Stack direction="row" spacing={2} sx={{ width: '100%' }}>
             {secondaryButtonText && (
-              <MuiButton
+              <Button
                 onClick={handleSecondaryClick}
                 variant="outlined"
                 fullWidth
                 {...primaryButtonProps}
               >
                 {secondaryButtonText}
-              </MuiButton>
+              </Button>
             )}
             {primaryButtonText && (
-              <MuiButton
+              <Button
                 onClick={handlePrimaryClick}
                 variant="contained"
                 fullWidth
                 {...secondaryButtonProps}
               >
                 {primaryButtonText}
-              </MuiButton>
+              </Button>
             )}
           </Stack>
         </StyledMuiDialogActions>

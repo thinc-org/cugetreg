@@ -22,7 +22,7 @@ import { tail } from '@web/utils/tail'
 import { useHasTags } from '../TagList'
 import { SelectTime } from './components/SelectTime'
 import { useFilterBar } from './hooks/useFilterBar'
-import { Button, StickyPaper } from './styled'
+import { StickyPaper, StyledButton } from './styled'
 
 export const FilterSection: React.FC<FilterSectionProps> = ({ open, handleClose }) => {
   const { checkboxes: genEdCheckboxes } = useFilterBar<GenEdChipKey>(
@@ -108,9 +108,9 @@ export const FilterSection: React.FC<FilterSectionProps> = ({ open, handleClose 
           </Analytics>
           {/* <CheckboxGroup title="แสดงผลพิเศษ" checkboxes={specialCheckboxes} /> */}
         </Stack>
-        <Button color="primary" variant="outlined" fullWidth onClick={handleClose}>
+        <StyledButton color="primary" variant="outlined" fullWidth onClick={handleClose}>
           เลือกตัวกรอง
-        </Button>
+        </StyledButton>
       </DialogContent>
     </ResponsiveDialog>
   )

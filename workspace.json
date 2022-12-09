@@ -6,6 +6,7 @@
     "course-utils": "libs/course-utils",
     "cugetreg-api": "apps/cugetreg-api",
     "cugetreg-web": "apps/cugetreg-web",
-    "cugetreg-web-e2e": "apps/cugetreg-web-e2e"
+    "cugetreg-web-e2e": "apps/cugetreg-web-e2e",
+    "react-ui": "libs/react-ui"
   }
 }

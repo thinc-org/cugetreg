@@ -6,7 +6,7 @@ import { DAY_FILTER, GENED_FILTER } from '@web/common/context/Analytics/constant
 
 import { DayOfWeek, GenEdType } from '@libs/codegen'
 
-import { Button, StickyPaper } from './styled'
+import { StickyPaper, StyledButton } from './styled'
 
 describe('FilterSection', () => {
   const MOCK_HASTAG = true
@@ -118,7 +118,7 @@ describe('FilterSection', () => {
 
       if (!matchSmallScreen) {
         expect(wrapper.find(ResponsiveDialog).prop('onClose')).toBe(mockHandleClose)
-        expect(wrapper.find(Button).prop('onClick')).toBe(mockHandleClose)
+        expect(wrapper.find(StyledButton).prop('onClick')).toBe(mockHandleClose)
       }
       if (matchSmallScreen && isExpandFilter) {
         expect(wrapper.find(StickyPaper).prop('hasTags')).toBe(MOCK_HASTAG)

@@ -1,9 +1,10 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { Button, ButtonProps } from '@lib/react-ui'
 import DeleteIcon from '@mui/icons-material/Delete'
 import TableChartIcon from '@mui/icons-material/TableChart'
-import { Button, ButtonProps, styled } from '@mui/material'
+import { styled } from '@mui/material'
 
 import { Analytics } from '@web/common/context/Analytics/components/Analytics'
 import { LinkWithAnalytics } from '@web/common/context/Analytics/components/LinkWithAnalytics'

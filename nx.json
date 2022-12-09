@@ -30,7 +30,9 @@
   },
   "generators": {
     "@nrwl/react": {
-      "application": {}
+      "application": {
+        "babel": true
+      }
     },
     "@nrwl/next": {
       "application": {

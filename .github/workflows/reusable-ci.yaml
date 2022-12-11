@@ -43,6 +43,13 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --prefer-offline
 
+      - name: Get branch name
+        id: branch-name
+        uses: tj-actions/branch-names@v6
+
+      - name: Echo base branch name
+        run: echo ${{ steps.branch-name.outputs.base_ref_branch || 'master' }}
+
       - name: Target
         if: ${{ inputs.target }}
-        run: npx nx affected --target=${{ inputs.target }} --parallel=3 --base=${{ github.event.before || github.base.sha }} --head=HEAD
+        run: npx nx affected --target=${{ inputs.target }} --parallel=3 --base=origin/${{ steps.branch-name.outputs.base_ref_branch || 'master' }} --head=HEAD

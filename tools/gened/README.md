@@ -21,6 +21,7 @@ python3 upload_override_gened_sections.py -e {production,beta,dev} -f FILE -t TO
 Ex.
 
 ```bash
+# can specify multiple environments
 # assume working directory in this location
-python3 upload_override_gened_sections.py -e beta -f ./sections/gened_sections_2_65.csv -t YOUR_ADMIN_TOKEN_HERE
+python3 upload_override_gened_sections.py -e dev beta production -f ./sections/gened_sections_2_65.csv -t YOUR_ADMIN_TOKEN_HERE
 ```

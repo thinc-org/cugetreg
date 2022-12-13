@@ -6,7 +6,6 @@ import { AppProps } from 'next/app'
 import dynamic from 'next/dynamic'
 
 import { Footer } from '@web/common/components/Footer'
-import { LoadingProgress } from '@web/common/components/LoadingProgress'
 import { TopBar } from '@web/common/components/TopBar'
 import { useSaveStudyProgram } from '@web/common/hooks/useCourseGroup'
 import '@web/common/i18n'
@@ -17,6 +16,8 @@ import { CustomToaster } from '@web/modules/App/components/CustomToaster'
 import { AppProvider } from '@web/modules/App/context'
 import { ShoppingCartModal } from '@web/modules/CourseSearch/components/ShoppingCartModal'
 import { ErrorBoundary } from '@web/modules/ErrorBoundary'
+
+import { LoadingProgress } from '@libs/react-ui'
 
 import SEO from '../../../next-seo.config'
 import { useApp } from './hooks/useApp'

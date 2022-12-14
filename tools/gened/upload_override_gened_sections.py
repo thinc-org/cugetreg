@@ -9,7 +9,7 @@ parser.add_argument(
     nargs="+",
     choices=["production", "beta", "dev", "local"],
     required=True,
-    help="environments to upload overrides to. Can be 'production', 'beta', or 'dev'. Can specify multiple environments.",
+    help="environments to upload overrides to. Can be 'production', 'beta', 'dev' or 'local'. Can specify multiple environments.",
 )
 parser.add_argument(
     "-f", "--file", required=True, help="sections file to upload overrides from"

@@ -15,7 +15,7 @@ python3 fetch_gened_courses_in_semester.py -sp S I -s 2 -y 2565
 ## Upload gened override to cugetreg api
 
 ```bash
-python3 upload_override_gened_sections.py -e {production,beta,dev} -f FILE -t TOKEN
+python3 upload_override_gened_sections.py -e {production,beta,dev,local} -f FILE -t TOKEN
 ```
 
 Ex.

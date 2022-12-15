@@ -1,5 +1,11 @@
 # Python tools for gened
 
+## Installation
+
+```bash
+pip3 install -r requirement.txt
+```
+
 ## Fetch base data from reg chula for gened override (need to fill in section number)
 
 ```bash

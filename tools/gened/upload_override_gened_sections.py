@@ -7,9 +7,9 @@ parser.add_argument(
     "-e",
     "--envs",
     nargs="+",
-    choices=["production", "beta", "dev"],
+    choices=["production", "beta", "dev", "local"],
     required=True,
-    help="environments to upload overrides to. Can be 'production', 'beta', or 'dev'. Can specify multiple environments.",
+    help="environments to upload overrides to. Can be 'production', 'beta', 'dev' or 'local'. Can specify multiple environments.",
 )
 parser.add_argument(
     "-f", "--file", required=True, help="sections file to upload overrides from"
@@ -17,18 +17,23 @@ parser.add_argument(
 parser.add_argument(
     "-t", "--token", required=True, help="admin token to authenticate with"
 )
+parser.add_argument(
+    "-p", "--port", required=False, default="3333", help="localhost port"
+)
 args = vars(parser.parse_args())
 
 envs: list[str] = args["envs"]
 sections_file: str = args["file"]
 admin_token: str = args["token"]
+local_port: str = args["port"]
 api_urls = {
     "production": "https://cugetreg.com/_api/graphql",
     "beta": "https://beta.cugetreg.com/_api/graphql",
     "dev": "https://dev.cugetreg.com/_api/graphql",
+    "local": "http://localhost:"+local_port+"/_api/graphql",
 }
 for env in envs:
-    if env not in ["production", "beta", "dev"]:
+    if env not in ["production", "beta", "dev", "local"]:
         raise Exception("Invalid environment: " + env)
     print("Uploading overrides to", api_urls[env])
 

@@ -85,7 +85,7 @@ export class ReviewResolver {
   async setStatus(
     @Args('reviewId') reviewId: string,
     @Args('status') status: ReviewStatus,
-    @Args('rejectionReason') rejectionReason?: ReviewStatus
+    @Args('rejectionReason') rejectionReason?: string
   ): Promise<string> {
     return this.reviewService.setStatus(reviewId, status, rejectionReason)
   }

@@ -321,6 +321,7 @@ export type MutationSetReviewInteractionArgs = {
 
 
 export type MutationSetReviewStatusArgs = {
+  rejectionReason?: InputMaybe<Scalars['String']>;
   reviewId: Scalars['String'];
   status: ReviewStatus;
 };
@@ -439,6 +440,7 @@ export type Review = {
   /** Interaction type of current user on this review. `null` if user is not logged in. */
   myInteraction?: Maybe<ReviewInteractionType>;
   rating: Scalars['Int'];
+  rejectionReason?: Maybe<Scalars['String']>;
   semester: Scalars['String'];
   status?: Maybe<ReviewStatus>;
   studyProgram: StudyProgram;
@@ -520,14 +522,14 @@ export type RecommendCourseTextQuery = { __typename?: 'Query', recommend: { __ty
 
 export type CourseDataFieldsFragment = { __typename?: 'Course', studyProgram: StudyProgram, semester: string, academicYear: string, courseNo: string, abbrName: string, courseNameTh: string, courseNameEn: string, faculty: string, department: string, credit: number, creditHours: string, courseCondition: string, courseDescTh?: string | null, courseDescEn?: string | null, genEdType: GenEdType, midterm?: { __typename?: 'ExamPeriod', date: string, period: { __typename?: 'Period', start: string, end: string } } | null, final?: { __typename?: 'ExamPeriod', date: string, period: { __typename?: 'Period', start: string, end: string } } | null, sections: Array<{ __typename?: 'Section', genEdType: GenEdType, sectionNo: string, closed: boolean, note?: string | null, capacity: { __typename?: 'Capacity', current: number, max: number }, classes: Array<{ __typename?: 'Class', type: string, dayOfWeek?: DayOfWeek | null, room?: string | null, building?: string | null, teachers: Array<string>, period?: { __typename?: 'Period', start: string, end: string } | null }> }> };
 
-export type ReviewDataFieldsFragment = { __typename?: 'Review', _id: string, rating: number, courseNo: string, semester: string, academicYear: string, studyProgram: StudyProgram, content?: string | null, likeCount: number, dislikeCount: number, myInteraction?: ReviewInteractionType | null, status?: ReviewStatus | null, isOwner: boolean };
+export type ReviewDataFieldsFragment = { __typename?: 'Review', _id: string, rating: number, courseNo: string, semester: string, academicYear: string, studyProgram: StudyProgram, content?: string | null, likeCount: number, dislikeCount: number, myInteraction?: ReviewInteractionType | null, status?: ReviewStatus | null, rejectionReason?: string | null, isOwner: boolean };
 
 export type CreateReviewMutationVariables = Exact<{
   createReviewInput: CreateReviewInput;
 }>;
 
 
-export type CreateReviewMutation = { __typename?: 'Mutation', createReview: { __typename?: 'Review', _id: string, rating: number, courseNo: string, semester: string, academicYear: string, studyProgram: StudyProgram, content?: string | null, likeCount: number, dislikeCount: number, myInteraction?: ReviewInteractionType | null, status?: ReviewStatus | null, isOwner: boolean } };
+export type CreateReviewMutation = { __typename?: 'Mutation', createReview: { __typename?: 'Review', _id: string, rating: number, courseNo: string, semester: string, academicYear: string, studyProgram: StudyProgram, content?: string | null, likeCount: number, dislikeCount: number, myInteraction?: ReviewInteractionType | null, status?: ReviewStatus | null, rejectionReason?: string | null, isOwner: boolean } };
 
 export type EditMyReviewMutationVariables = Exact<{
   reviewId: Scalars['String'];
@@ -535,7 +537,7 @@ export type EditMyReviewMutationVariables = Exact<{
 }>;
 
 
-export type EditMyReviewMutation = { __typename?: 'Mutation', editMyReview: { __typename?: 'Review', _id: string, rating: number, courseNo: string, semester: string, academicYear: string, studyProgram: StudyProgram, content?: string | null, likeCount: number, dislikeCount: number, myInteraction?: ReviewInteractionType | null, status?: ReviewStatus | null, isOwner: boolean } };
+export type EditMyReviewMutation = { __typename?: 'Mutation', editMyReview: { __typename?: 'Review', _id: string, rating: number, courseNo: string, semester: string, academicYear: string, studyProgram: StudyProgram, content?: string | null, likeCount: number, dislikeCount: number, myInteraction?: ReviewInteractionType | null, status?: ReviewStatus | null, rejectionReason?: string | null, isOwner: boolean } };
 
 export type GetMyPendingReviewsQueryVariables = Exact<{
   courseNo: Scalars['String'];
@@ -543,7 +545,7 @@ export type GetMyPendingReviewsQueryVariables = Exact<{
 }>;
 
 
-export type GetMyPendingReviewsQuery = { __typename?: 'Query', myPendingReviews: Array<{ __typename?: 'Review', _id: string, rating: number, courseNo: string, semester: string, academicYear: string, studyProgram: StudyProgram, content?: string | null, likeCount: number, dislikeCount: number, myInteraction?: ReviewInteractionType | null, status?: ReviewStatus | null, isOwner: boolean }> };
+export type GetMyPendingReviewsQuery = { __typename?: 'Query', myPendingReviews: Array<{ __typename?: 'Review', _id: string, rating: number, courseNo: string, semester: string, academicYear: string, studyProgram: StudyProgram, content?: string | null, likeCount: number, dislikeCount: number, myInteraction?: ReviewInteractionType | null, status?: ReviewStatus | null, rejectionReason?: string | null, isOwner: boolean }> };
 
 export type GetReviewsQueryVariables = Exact<{
   courseNo: Scalars['String'];
@@ -551,14 +553,14 @@ export type GetReviewsQueryVariables = Exact<{
 }>;
 
 
-export type GetReviewsQuery = { __typename?: 'Query', reviews: Array<{ __typename?: 'Review', _id: string, rating: number, courseNo: string, semester: string, academicYear: string, studyProgram: StudyProgram, content?: string | null, likeCount: number, dislikeCount: number, myInteraction?: ReviewInteractionType | null, status?: ReviewStatus | null, isOwner: boolean }> };
+export type GetReviewsQuery = { __typename?: 'Query', reviews: Array<{ __typename?: 'Review', _id: string, rating: number, courseNo: string, semester: string, academicYear: string, studyProgram: StudyProgram, content?: string | null, likeCount: number, dislikeCount: number, myInteraction?: ReviewInteractionType | null, status?: ReviewStatus | null, rejectionReason?: string | null, isOwner: boolean }> };
 
 export type RemoveReviewMutationVariables = Exact<{
   reviewId: Scalars['String'];
 }>;
 
 
-export type RemoveReviewMutation = { __typename?: 'Mutation', removeReview: { __typename?: 'Review', _id: string, rating: number, courseNo: string, semester: string, academicYear: string, studyProgram: StudyProgram, content?: string | null, likeCount: number, dislikeCount: number, myInteraction?: ReviewInteractionType | null, status?: ReviewStatus | null, isOwner: boolean } };
+export type RemoveReviewMutation = { __typename?: 'Mutation', removeReview: { __typename?: 'Review', _id: string, rating: number, courseNo: string, semester: string, academicYear: string, studyProgram: StudyProgram, content?: string | null, likeCount: number, dislikeCount: number, myInteraction?: ReviewInteractionType | null, status?: ReviewStatus | null, rejectionReason?: string | null, isOwner: boolean } };
 
 export type SetReviewInteractionMutationVariables = Exact<{
   reviewId: Scalars['String'];
@@ -566,7 +568,7 @@ export type SetReviewInteractionMutationVariables = Exact<{
 }>;
 
 
-export type SetReviewInteractionMutation = { __typename?: 'Mutation', setReviewInteraction: { __typename?: 'Review', _id: string, rating: number, courseNo: string, semester: string, academicYear: string, studyProgram: StudyProgram, content?: string | null, likeCount: number, dislikeCount: number, myInteraction?: ReviewInteractionType | null, status?: ReviewStatus | null, isOwner: boolean } };
+export type SetReviewInteractionMutation = { __typename?: 'Mutation', setReviewInteraction: { __typename?: 'Review', _id: string, rating: number, courseNo: string, semester: string, academicYear: string, studyProgram: StudyProgram, content?: string | null, likeCount: number, dislikeCount: number, myInteraction?: ReviewInteractionType | null, status?: ReviewStatus | null, rejectionReason?: string | null, isOwner: boolean } };
 
 export type GetAllCourseNoQueryVariables = Exact<{
   filter: FilterInput;
@@ -668,6 +670,7 @@ export const ReviewDataFieldsFragmentDoc = gql`
   dislikeCount
   myInteraction
   status
+  rejectionReason
   isOwner
 }
     `;

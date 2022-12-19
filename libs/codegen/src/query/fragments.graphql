@@ -63,5 +63,6 @@ fragment ReviewDataFields on Review {
   dislikeCount
   myInteraction
   status
+  rejectionReason
   isOwner
 }

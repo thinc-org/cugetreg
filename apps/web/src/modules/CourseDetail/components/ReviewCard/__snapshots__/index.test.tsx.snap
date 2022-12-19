@@ -342,6 +342,10 @@ exports[`ReviewCard should render correctly if this is your rejected review 1`] 
     <Styled(ForwardRef(Typography))
       variant="subtitle2"
     >
+      รีวิวของคุณไม่ได้รับอนุมัติเนื่องจาก 
+      มีการพาดพิงถึงบุคคลที่ 42
+       
+      <br />
       กรุณาแก้ไข ก่อนส่งรีวิวรายวิชาอีกครั้ง
     </Styled(ForwardRef(Typography))>
     <ForwardRef(Stack)

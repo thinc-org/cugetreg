@@ -109,6 +109,7 @@ export const mockMyRejectedReviews: Review[] = [
     dislikeCount: 0,
     myInteraction: 'L' as Review['myInteraction'],
     status: 'REJECTED' as Review['status'],
+    rejectionReason: 'มีการพาดพิงถึงบุคคลที่ 42',
     isOwner: true,
   },
 ]

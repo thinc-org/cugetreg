@@ -145,7 +145,7 @@ jobs:
             export TAG=${{ needs.publish-docker-image.outputs.tag }}
             for APP in $AFFECTED_APPS
             do
-              TARGET_IMAGE="ghcr.io/thinc-org/$APP:$TAG"
+              TARGET_IMAGE="ghcr.io/thinc-org/cugetreg-$APP:$TAG"
               echo "Pulling $TARGET_IMAGE"
               docker pull $TARGET_IMAGE
             done

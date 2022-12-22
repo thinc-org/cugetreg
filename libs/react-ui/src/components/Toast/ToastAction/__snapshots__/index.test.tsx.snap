@@ -1,0 +1,57 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ToastAction Should render correctly 1`] = `
+<Fragment>
+  <Insertion
+    cache={
+      Object {
+        "insert": [Function],
+        "inserted": Object {},
+        "key": "css",
+        "nonce": undefined,
+        "registered": Object {},
+        "sheet": StyleSheet {
+          "_insertTag": [Function],
+          "before": null,
+          "container": <head />,
+          "ctr": 0,
+          "insertionPoint": undefined,
+          "isSpeedy": false,
+          "key": "css",
+          "nonce": undefined,
+          "prepend": undefined,
+          "tags": Array [],
+        },
+      }
+    }
+    isStringTag={false}
+    serialized={
+      Object {
+        "map": undefined,
+        "name": "3o8730",
+        "next": undefined,
+        "styles": "
+  min-width: 0;
+  height: 100%;
+  padding: 0 16px;
+  border: none;
+  border-left: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 0;
+
+  &:last-child {
+    border-radius: 0 3px 3px 0;
+  }
+",
+        "toString": [Function],
+      }
+    }
+  />
+  <ForwardRef(Button)
+    className="css-3o8730"
+  >
+    <div>
+      children
+    </div>
+  </ForwardRef(Button)>
+</Fragment>
+`;

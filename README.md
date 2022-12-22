@@ -39,7 +39,7 @@ We saw this problem and built [CU Get Reg](https://cugetreg.com) to make this pl
 This is a monorepo repository containing almost everything of cugetreg
 
 - apps/api - The backend API, powered by NestJS and GraphQL
-- apps/web - The web interface, powered by Next
+- apps/web - The web interface, powered by Next.js
 - apps/web-e2e - E2E test for apps/web (Coming Soon)
 
 - libs/codegen - GraphQL Codegen

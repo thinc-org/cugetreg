@@ -47,9 +47,8 @@ We saw this problem and built [CU Get Reg](https://cugetreg.com) to make this pl
 
 CU Get Reg is open source - we welcome all developers. If you want to be a part of CU Get Reg and improve Chulalongkorn University society, you can start here!
 
-- [Contribution Guides](https://github.com/thinc-org/cugetreg/wiki/Contribution-Guide)
-- [Set up your local environments](https://github.com/thinc-org/cugetreg/wiki/Contribution-Guide)
-- [Explore issues](https://github.com/thinc-org/cugetreg-frontend/issues)
+- [Contribution Guide](https://github.com/thinc-org/cugetreg/wiki/Contribution-Guide)
+- [Explore issues](https://github.com/thinc-org/cugetreg/issues)
 - [Our Roadmap](https://github.com/thinc-org/cugetreg/wiki/Contribution-Guide)
 
 <div id="roadmap"></div>

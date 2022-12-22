@@ -84,8 +84,9 @@ export class ReviewResolver {
   @Mutation('setReviewStatus')
   async setStatus(
     @Args('reviewId') reviewId: string,
-    @Args('status') status: ReviewStatus
+    @Args('status') status: ReviewStatus,
+    @Args('rejectionReason') rejectionReason?: string
   ): Promise<string> {
-    return this.reviewService.setStatus(reviewId, status)
+    return this.reviewService.setStatus(reviewId, status, rejectionReason)
   }
 }

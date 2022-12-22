@@ -57,6 +57,7 @@ type Review {
   """
   myInteraction: ReviewInteractionType
   status: ReviewStatus
+  rejectionReason: String
   isOwner: Boolean!
 }
 """
@@ -142,5 +143,5 @@ type Mutation {
 
   Requires admin authentication.
   """
-  setReviewStatus(reviewId: String!, status: ReviewStatus!): String!
+  setReviewStatus(reviewId: String!, status: ReviewStatus!, rejectionReason: String): String!
 }

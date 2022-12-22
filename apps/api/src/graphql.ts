@@ -255,7 +255,7 @@ export abstract class IMutation {
 
     abstract setReviewInteraction(reviewId: string, interactionType: ReviewInteractionType): Review | Promise<Review>;
 
-    abstract setReviewStatus(reviewId: string, status: ReviewStatus): string | Promise<string>;
+    abstract setReviewStatus(reviewId: string, status: ReviewStatus, rejectionReason?: string): string | Promise<string>;
 
     abstract modifyCourseCart(newContent: CourseCartItemInput[]): CourseCartItem[] | Promise<CourseCartItem[]>;
 
@@ -274,6 +274,7 @@ export class Review {
     dislikeCount: number;
     myInteraction?: ReviewInteractionType;
     status?: ReviewStatus;
+    rejectionReason?: string;
     isOwner: boolean;
 }
 

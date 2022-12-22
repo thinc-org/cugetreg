@@ -30,6 +30,7 @@ export const ReviewSchema = new mongoose.Schema({
     enum: Object.values(ReviewStatus),
     default: ReviewStatus.PENDING,
   },
+  rejectionReason: { type: String },
 })
 
 ReviewSchema.index({ studyProgram: 1, courseNo: 1 })
@@ -51,6 +52,7 @@ export interface Review {
   content?: string
   interactions: mongoose.Types.DocumentArray<ReviewInteractionDocument>
   status: ReviewStatus
+  rejectionReason?: string
 }
 
 export type ReviewDocument = Review & mongoose.Document

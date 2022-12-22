@@ -71,6 +71,9 @@ describe('ReviewCard', () => {
 
   it('should render correctly if this is your rejected review', async () => {
     const wrapper = await customShallow(mockMyRejectedReviewData)
+    expect(
+      wrapper.text().includes('รีวิวของคุณไม่ได้รับอนุมัติเนื่องจาก มีการพาดพิงถึงบุคคลที่ 42')
+    ).toBeTruthy()
     expect(wrapper.text().includes('กรุณาแก้ไข ก่อนส่งรีวิวรายวิชาอีกครั้ง')).toBeTruthy()
     expect(wrapper).toMatchSnapshot()
   })

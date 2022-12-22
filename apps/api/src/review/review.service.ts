@@ -154,7 +154,11 @@ export class ReviewService {
   }
 
   // TODO: hide reviews?
-  async setStatus(reviewId: string, status: ReviewStatus): Promise<string> {
+  async setStatus(
+    reviewId: string,
+    status: ReviewStatus,
+    rejectionReason: string = null
+  ): Promise<string> {
     if (status !== ReviewStatus.APPROVED && status !== ReviewStatus.REJECTED) {
       throw new BadRequestException({
         reason: 'INVALID_STATUS',
@@ -164,6 +168,7 @@ export class ReviewService {
     const review = await this.reviewModel.findByIdAndUpdate(reviewId, {
       $set: {
         status,
+        rejectionReason,
       },
     })
     if (!review) {
@@ -224,6 +229,7 @@ export class ReviewService {
       dislikeCount: dislikeCount,
       myInteraction: interactionType,
       status: rawReview.status,
+      rejectionReason: rawReview.rejectionReason,
       isOwner: rawReview.ownerId.equals(userId),
     }
   }

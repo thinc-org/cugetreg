@@ -12,8 +12,7 @@
         "compiler": "tsc",
         "outputPath": "dist/apps/discord-bot",
         "main": "apps/discord-bot/src/main.ts",
-        "tsConfig": "apps/discord-bot/tsconfig.app.json",
-        "assets": ["apps/discord-bot/src/assets"]
+        "tsConfig": "apps/discord-bot/tsconfig.app.json"
       },
       "configurations": {
         "production": {

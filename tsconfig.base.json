@@ -15,8 +15,10 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@api/*": ["apps/cugetreg-api/src/*"],
-      "@web/*": ["apps/cugetreg-web/src/*"]
+      "@api/*": ["apps/api/src/*"],
+      "@web/*": ["apps/web/src/*"],
+      "@libs/codegen": ["libs/codegen/src"],
+      "@libs/course-utils": ["libs/course-utils/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

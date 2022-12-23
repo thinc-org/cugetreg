@@ -1,0 +1,68 @@
+fragment CourseDataFields on Course {
+  studyProgram
+  semester
+  academicYear
+  courseNo
+  abbrName
+  courseNameTh
+  courseNameEn
+  faculty
+  department
+  credit
+  creditHours
+  courseCondition
+  courseDescTh
+  courseDescEn
+  genEdType
+  midterm {
+    date
+    period {
+      start
+      end
+    }
+  }
+  final {
+    date
+    period {
+      start
+      end
+    }
+  }
+  sections {
+    genEdType
+    sectionNo
+    closed
+    capacity {
+      current
+      max
+    }
+    note
+    classes {
+      type
+      dayOfWeek
+      period {
+        start
+        end
+      }
+      room
+      building
+      teachers
+    }
+  }
+}
+
+fragment ReviewDataFields on Review {
+  _id
+  rating
+  courseNo
+  semester
+  academicYear
+  studyProgram
+  content
+  likeCount
+  dislikeCount
+  myInteraction
+  status
+  rejectionReason
+  isOwner
+}

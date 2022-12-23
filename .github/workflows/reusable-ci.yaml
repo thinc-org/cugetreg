@@ -1,0 +1,55 @@
+# Reusable CI workflow, install dependencies and run Nx target provied by projecy.json for each app
+name: Reusable CI
+
+on:
+  workflow_call:
+    inputs:
+      target: # The target command to run via Nx, if not provided, it'll only install dependencies and then cache
+        type: string
+        required: false
+      runs-on:
+        type: string
+        required: false
+        default: ubuntu-latest
+
+jobs:
+  run:
+    runs-on: ${{ inputs.runs-on }}
+    steps:
+      - uses: actions/checkout@v2
+        name: Checkout
+        with:
+          fetch-depth: 0
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2.0.1
+        id: pnpm-install
+        with:
+          version: 7
+          run_install: false
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        run: |
+          echo "::set-output name=pnpm_cache_dir::$(pnpm store path)"
+      - uses: actions/cache@v3
+        name: Setup pnpm cache
+        with:
+          path: ${{ steps.pnpm-cache.outputs.pnpm_cache_dir }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --prefer-offline
+
+      - name: Get branch name
+        id: branch-name
+        uses: tj-actions/branch-names@v6
+
+      - name: Echo base branch name
+        run: echo ${{ steps.branch-name.outputs.base_ref_branch || 'master' }}
+
+      - name: Target
+        if: ${{ inputs.target }}
+        run: npx nx affected --target=${{ inputs.target }} --parallel=3 --base=origin/${{ steps.branch-name.outputs.base_ref_branch || 'master' }} --head=HEAD

@@ -67,24 +67,24 @@ jobs:
 
       - name: Set affected apps env
         run: |
-          AFFECTED_BASE=${{ github.event.before }} ./tools/set-affected-apps-env
+          AFFECTED_BASE=${{ github.event.before }} ./tools/workflow/set-affected-apps-env
 
       - name: Set default env to dev
         run: |
           echo "TAG=dev" >> $GITHUB_ENV
-          mv apps/cugetreg-web/.env.dev apps/cugetreg-web/.env
+          mv apps/web/.env.dev apps/web/.env
 
       - name: Set beta web env
         if: ${{ github.ref == 'refs/heads/beta' }}
         run: |
           echo "TAG=beta" >> $GITHUB_ENV
-          mv apps/cugetreg-web/.env.beta apps/cugetreg-web/.env
+          mv apps/web/.env.beta apps/web/.env
 
       - name: Set prod web env
         if: ${{ github.ref == 'refs/heads/master' }}
         run: |
           echo "TAG=latest" >> $GITHUB_ENV
-          mv apps/cugetreg-web/.env.prod apps/cugetreg-web/.env
+          mv apps/web/.env.prod apps/web/.env
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
@@ -112,7 +112,7 @@ jobs:
       - name: Tag and push Docker images
         if: ${{ env.AFFECTED_APPS }}
         run: |
-          AFFECTED_APPS="${{ env.AFFECTED_APPS }}" TAG=${{ env.TAG }} ./tools/tag-push-images
+          AFFECTED_APPS="${{ env.AFFECTED_APPS }}" TAG=${{ env.TAG }} ./tools/workflow/tag-push-images
 
   deploy:
     name: Deploy
@@ -145,7 +145,7 @@ jobs:
             export TAG=${{ needs.publish-docker-image.outputs.tag }}
             for APP in $AFFECTED_APPS
             do
-              TARGET_IMAGE="ghcr.io/thinc-org/$APP:$TAG"
+              TARGET_IMAGE="ghcr.io/thinc-org/cugetreg-$APP:$TAG"
               echo "Pulling $TARGET_IMAGE"
               docker pull $TARGET_IMAGE
             done

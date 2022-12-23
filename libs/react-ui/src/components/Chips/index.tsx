@@ -19,3 +19,6 @@ export type GeneralChipProps = Omit<ChipProps, keyof ChipConfigProps> & {
 export const GeneralChip: React.FC<GeneralChipProps> = ({ type, ...rest }) => (
   <Chip {...chipConfig[type]} {...rest} />
 )
+
+export * from './catagories'
+export * from './config'

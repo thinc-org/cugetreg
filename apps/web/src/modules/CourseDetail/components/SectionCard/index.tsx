@@ -16,7 +16,6 @@ import {
 } from '@mui/material'
 
 import { Caption } from '@web/common/components/Caption'
-import { GenEdChip } from '@web/common/components/Chips/catagories/GenEdChip'
 import { SelectButton } from '@web/common/components/SelectButton'
 import { UnstyledTable } from '@web/common/components/UnstyledTable'
 import { dayOfWeekMapper } from '@web/common/constants/dayOfWeek'
@@ -25,6 +24,7 @@ import { SUBJECT_SELECT_BUTTON_WITH_SECTION } from '@web/common/context/Analytic
 import { getClassPeriod } from '@web/common/utils/getClassPeriod'
 
 import { Course, Section } from '@libs/codegen'
+import { GenEdChip } from '@libs/react-ui'
 
 import { SectionStatus } from '../SectionStatus'
 

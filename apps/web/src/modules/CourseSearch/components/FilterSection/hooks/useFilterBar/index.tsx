@@ -1,9 +1,9 @@
 import { useCallback, useMemo } from 'react'
 
-import { DayChipKey, GenEdChipKey, GeneralChipKey } from '@web/common/components/Chips/config'
 import { useSearchCourseQueryParams } from '@web/modules/CourseSearch/hooks/useSearchCourseQueryParams'
 
 import { SearchCourseQueryVariables } from '@libs/codegen'
+import { DayChipKey, GenEdChipKey, GeneralChipKey } from '@libs/react-ui'
 
 import { EnhancedCheckBoxProps } from '../../../CheckboxGroup'
 import { addTag } from '../../utils/addTag'

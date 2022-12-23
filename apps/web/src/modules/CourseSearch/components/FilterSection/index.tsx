@@ -2,7 +2,6 @@ import { DialogContent, Stack, useTheme } from '@mui/material'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import useGoogleOptimize from '@react-hook/google-optimize'
 
-import { DayChipKey, GenEdChipKey } from '@web/common/components/Chips/config'
 import { ResponsiveDialog } from '@web/common/components/ResponsiveDialog'
 import { Analytics } from '@web/common/context/Analytics/components/Analytics'
 import {
@@ -18,6 +17,8 @@ import {
 } from '@web/modules/CourseSearch/components/FilterSection/constants'
 import { FilterSectionProps } from '@web/modules/CourseSearch/components/FilterSection/types'
 import { tail } from '@web/utils/tail'
+
+import { DayChipKey, GenEdChipKey } from '@libs/react-ui'
 
 import { useHasTags } from '../TagList'
 import { SelectTime } from './components/SelectTime'

@@ -9,7 +9,7 @@ Have no idea what courses to take? Don't know what this course is about? We got 
 
 - [Contents](#contents)
 - [The beginning of CU Get Reg](#the-beginning-of-cu-get-reg)
-- [Related repositories](#related-repositories)
+- [This repository](#this-repository)
 - [Contribution](#contribution)
 - [Roadmap](#roadmap)
 - [Contributors](#contributors)
@@ -34,12 +34,16 @@ We saw this problem and built [CU Get Reg](https://cugetreg.com) to make this pl
 
 <div id="related-repositories"></div>
 
-## Related repositories
+## This repository
 
-- [cugetreg-frontend](https://github.com/thinc-org/cugetreg-frontend) The web interface, powered by React
-- [cugetreg-backend](https://github.com/thinc-org/cugetreg-backend) The core API, powered by GraphQL and NestJS
-- [cugetreg-scraper](https://github.com/thinc-org/cugetreg-scraper) The system that fetches public course data from [Reg Chula](https://cas.reg.chula.ac.th/cu/cs/QueryCourseScheduleNew/index.html)
-- [chula-courses](https://github.com/thinc-org/chula-courses) Data schema
+This is a monorepo repository containing almost everything of cugetreg
+
+- apps/api - The backend API, powered by NestJS and GraphQL
+- apps/web - The web interface, powered by Next.js
+- apps/web-e2e - E2E test for apps/web (Coming Soon)
+
+- libs/codegen - GraphQL Codegen
+- libs/course-utils - Utilities/Data for courses and some extra type definition.
 
 <div id="contribution"></div>
 

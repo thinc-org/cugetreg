@@ -4,7 +4,8 @@ export default {
   preset: '../../jest.preset.js',
   setupFilesAfterEnv: ['./jest.setup.ts'],
   transform: {
-    '^.+\\.[tj]sx?$': 'babel-jest',
+    // '^(?!.*\\.(js|jsx|ts|tsx|css|json)$)': '@nrwl/react/plugins/jest',
+    '^.+\\.[tj]sx?$': ['babel-jest', { presets: ['@nrwl/next/babel'] }],
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
   coverageDirectory: '../../coverage/libs/react-ui',

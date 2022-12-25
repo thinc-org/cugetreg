@@ -1,9 +1,10 @@
-import { Client } from 'discord.js'
+import { Events } from 'discord.js'
 
-export default (client: Client): void => {
-  client.on('ready', async () => {
-    if (client.user && client.application) {
-      console.log(`${client.user.username} Online!`)
-    }
+import { CUGetReg } from '../core/CUGetReg'
+import { HookFunction } from './hook'
+
+export const ReadyHook: HookFunction = (client: CUGetReg): void => {
+  client.once(Events.ClientReady, async () => {
+    console.log(`${client.user.username} Online!`)
   })
 }

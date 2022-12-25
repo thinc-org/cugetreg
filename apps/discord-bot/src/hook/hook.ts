@@ -1,1 +1,3 @@
-export { default as ReadyHook } from './ready'
+import { CUGetReg } from '../core/CUGetReg'
+
+export type HookFunction = (client: CUGetReg) => void

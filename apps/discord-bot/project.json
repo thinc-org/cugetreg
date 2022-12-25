@@ -39,6 +39,12 @@
         }
       }
     },
+    "deploy-commands": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "ts-node --project ./apps/discord-bot/tsconfig.app.json ./apps/discord-bot/src/deploy-commands.ts"
+      }
+    },
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],

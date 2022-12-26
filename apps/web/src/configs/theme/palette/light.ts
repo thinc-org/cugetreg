@@ -1,48 +1,9 @@
 import { PaletteOptions } from '@mui/material/styles'
 
-import {
-  ChipFilledHighlight,
-  ChipOutlinedHighlight,
-  makeChipFilledHighlight,
-  makeChipOutlinedHighlight,
-} from './overrides/chip'
+import { Highlight } from '.'
+import { makeChipFilledHighlight, makeChipOutlinedHighlight } from '../overrides/chip'
 
-export type PaletteRange = 10 | 30 | 50 | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900
-
-export type HighlightColor =
-  | 'pink'
-  | 'red'
-  | 'orange'
-  | 'green'
-  | 'teal'
-  | 'blue'
-  | 'purple'
-  | 'yellow'
-  | 'indigo'
-  | 'deepGray'
-
-export type PaletteRangeOptions = Record<PaletteRange, string>
-
-export type HighlightColorRange = Pick<PaletteRangeOptions, 300 | 500 | 700>
-
-export type Highlight = Record<HighlightColor, HighlightColorRange>
-
-declare module '@mui/material/styles' {
-  interface Palette extends ChipFilledHighlight, ChipOutlinedHighlight {
-    white: string
-    primaryRange: PaletteRangeOptions
-    secondaryRange: Omit<PaletteRangeOptions, 10 | 30>
-    highlight: Highlight
-  }
-  interface PaletteOptions extends ChipFilledHighlight, ChipOutlinedHighlight {
-    white: string
-    primaryRange: PaletteRangeOptions
-    secondaryRange: Omit<PaletteRangeOptions, 10 | 30>
-    highlight: Highlight
-  }
-}
-
-export const highlight: Highlight = {
+const highlight: Highlight = {
   pink: {
     300: '#FDD8EE',
     500: '#F57FC6',
@@ -95,7 +56,7 @@ export const highlight: Highlight = {
   },
 }
 
-const paletteBaseOptions: PaletteOptions = {
+export const paletteLightBaseOptions: PaletteOptions = {
   primary: {
     light: '#E3E5F8',
     main: '#2A2D48',
@@ -146,14 +107,4 @@ const paletteBaseOptions: PaletteOptions = {
   ...makeChipFilledHighlight(highlight),
   ...makeChipOutlinedHighlight(highlight),
   white: '#FFFFFF',
-}
-
-export const lightPaletteOptions: PaletteOptions = {
-  ...paletteBaseOptions,
-  mode: 'light',
-}
-
-export const darkPaletteOptions: PaletteOptions = {
-  ...paletteBaseOptions,
-  mode: 'dark',
 }

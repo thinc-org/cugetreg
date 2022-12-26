@@ -23,3 +23,13 @@ export const Logo = styled('img')`
 export const SectionSpacer = styled('div')`
   height: 24px;
 `
+
+export const ThemeToggleButtonContainer = styled('div')`
+  ${({ theme }) => theme.breakpoints.up('sm')} {
+    margin-left: ${({ theme }) => theme.spacing(2)};
+  }
+
+  ${({ theme }) => theme.breakpoints.down('sm')} {
+    margin-bottom: ${({ theme }) => theme.spacing(1.5)};
+  }
+`

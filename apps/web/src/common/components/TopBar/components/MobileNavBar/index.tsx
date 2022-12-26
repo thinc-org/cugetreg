@@ -21,8 +21,15 @@ import { useLinkBuilder } from '@web/common/hooks/useLinkBuilder'
 import { sessionIdStore } from '@web/store/sessionIdStore'
 
 import { NavBarItem } from '../NavBarItem'
+import ThemeToggleButton from '../ThemeToggleButton'
 import { UserButton } from '../UserButton'
-import { DrawerContent, Logo, MoreButton, SectionSpacer } from './styled'
+import {
+  DrawerContent,
+  Logo,
+  MoreButton,
+  SectionSpacer,
+  ThemeToggleButtonContainer,
+} from './styled'
 
 export const MobileNavBar = observer(() => {
   const { t } = useTranslation(['navBar', 'translation', 'configBar'])
@@ -83,6 +90,9 @@ export const MobileNavBar = observer(() => {
           <div>
             <UserButton />
           </div>
+          <ThemeToggleButtonContainer>
+            <ThemeToggleButton variant="text" />
+          </ThemeToggleButtonContainer>
         </DrawerContent>
       </Drawer>
     </>

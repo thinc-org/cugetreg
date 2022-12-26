@@ -20,6 +20,7 @@ import { MobileNavBar } from '../MobileNavBar'
 import { NavBarItem } from '../NavBarItem'
 import { StudyProgramDropdown } from '../StudyProgramDropdown'
 import { TermDropdown } from '../TermDropdown'
+import ThemeToggleButton from '../ThemeToggleButton'
 import { UserButton } from '../UserButton'
 import { FlexContainer } from '../styled'
 import { Logo, NavBarLayout } from './styled'
@@ -64,6 +65,7 @@ export function NavBar() {
               </LinkWithAnalytics>
             ))}
             <Spacer />
+            <ThemeToggleButton variant="icon" />
             <UserButton />
           </>
         ) : (

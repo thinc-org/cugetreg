@@ -9,7 +9,7 @@ import { IThemeContext, ThemeProviderProps, ThemeType } from './types'
 
 export const ThemeContext = createContext<IThemeContext>({} as IThemeContext)
 
-export const useTheme = () => useContext(ThemeContext)
+export const useThemeType = () => useContext(ThemeContext)
 
 export const ThemeProvider = ({ children, forceDark }: ThemeProviderProps) => {
   const prefersDarkMode =

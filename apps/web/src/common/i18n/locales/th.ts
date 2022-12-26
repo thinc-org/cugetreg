@@ -18,6 +18,11 @@ export const navBar = {
   signout: 'ออกจากระบบ',
 }
 
+export const theme = {
+  light: 'กลางวัน',
+  dark: 'กลางคืน',
+}
+
 export const studyProgram = {
   S: 'ทวิภาค',
   T: 'ตรีภาค',

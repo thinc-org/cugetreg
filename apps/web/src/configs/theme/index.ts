@@ -4,7 +4,7 @@ import { deepAssign } from '@web/common/utils/deepAssign'
 
 import { overrideMuiBaseComponent } from './overrides'
 import { darkPaletteOptions, lightPaletteOptions } from './palette'
-import { shadows } from './shadows'
+import { darkShadows, lightShadows } from './shadows'
 import { overrideMuiTypography } from './typography'
 
 const themeBaseOptions: ThemeOptions = {
@@ -21,15 +21,16 @@ const themeBaseOptions: ThemeOptions = {
       xl: 1920,
     },
   },
-  shadows: shadows,
 }
 
 const lightThemeOptions: ThemeOptions = deepAssign(themeBaseOptions, {
   palette: lightPaletteOptions,
+  shadows: lightShadows,
 })
 
 const darkThemeOptions: ThemeOptions = deepAssign(themeBaseOptions, {
   palette: darkPaletteOptions,
+  shadows: darkShadows,
 })
 
 const buildTheme = (themeOptions: ThemeOptions): Theme => {

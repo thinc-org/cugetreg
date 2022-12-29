@@ -59,7 +59,7 @@
     "apollo-server-express": "2.19.2",
     "axios": "0.23.0",
     "broadcast-channel": "4.2.0",
-    "canvas": "^2.9.3",
+    "canvas": "^2.11.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
     "cookie-parser": "^1.4.6",

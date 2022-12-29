@@ -23,15 +23,11 @@ import { ELEMENT_PARAGRAPH, createParagraphPlugin } from '@udecode/plate-paragra
 import { createResetNodePlugin } from '@udecode/plate-reset-node'
 import { StyledElement, StyledLeaf } from '@udecode/plate-styled-components'
 
-import {
-  RichTextBlockHotkey,
-  RichTextMarkHotkey,
-} from '@web/common/components/RichTextEditor/constants'
-
 import { autoformatOptions } from '../configs/autoformatRules'
 import { exitBreakOptions } from '../configs/exitBreakOptions'
 import { resetNodeOptions } from '../configs/resetNodeOptions'
 import { softBreakOptions } from '../configs/softExitOptions'
+import { RichTextBlockHotkey, RichTextMarkHotkey } from '../constants'
 
 export const plugins = createPlugins(
   [

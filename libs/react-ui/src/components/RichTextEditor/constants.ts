@@ -6,11 +6,13 @@ import {
   MARK_UNDERLINE,
 } from '@udecode/plate-basic-marks'
 import { ELEMENT_BLOCKQUOTE } from '@udecode/plate-block-quote'
+import { TNode } from '@udecode/plate-core'
 import { ELEMENT_H1 } from '@udecode/plate-heading'
 import { ELEMENT_OL, ELEMENT_UL } from '@udecode/plate-list'
 import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph'
 
-export { INITIAL_CONTENT } from './initialContent'
+// TODO use this type from type-utils
+type ValueOf<T> = T[keyof T]
 
 /**
  * Mark type
@@ -109,3 +111,5 @@ export const RichTextTooltip: Record<
   ...RichTextBlockTooltip,
   ...RichTextActionTooltip,
 } as const
+
+export const INITIAL_CONTENT: TNode[] = [{ type: 'p', children: [{ text: '' }] }]

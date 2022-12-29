@@ -6,9 +6,6 @@ import { useTranslation } from 'react-i18next'
 import { Box, MenuItem, Rating, Stack, Typography } from '@mui/material'
 import { TNode } from '@udecode/plate-core'
 
-import { RichTextEditor } from '@web/common/components/RichTextEditor'
-import { INITIAL_CONTENT } from '@web/common/components/RichTextEditor/initialContent'
-import { RichTextEditorRef } from '@web/common/components/RichTextEditor/types'
 import { Storage } from '@web/common/storage'
 import { StorageKey } from '@web/common/storage/constants'
 import { Review } from '@web/common/types/reviews'
@@ -16,7 +13,7 @@ import { getCurrentTerm } from '@web/common/utils/getCurrentTerm'
 import { ControlledSelect } from '@web/modules/CourseDetail/components/ControlledSelect'
 import { ReviewEditables } from '@web/modules/CourseDetail/components/ReviewForm/types'
 
-import { Button } from '@libs/react-ui'
+import { Button, INITIAL_CONTENT, RichTextEditor, RichTextEditorRef } from '@libs/react-ui'
 
 import { ContributionGuide } from '../../components/ContributionGuide'
 import { useReviewContext } from '../../context/Review'

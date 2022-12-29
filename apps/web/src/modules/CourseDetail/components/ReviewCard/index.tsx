@@ -3,13 +3,12 @@ import { MdDelete, MdEdit, MdOutlineStar } from 'react-icons/md'
 import { IconButton, Stack, useTheme } from '@mui/material'
 import DOMPurify from 'isomorphic-dompurify'
 
-import { HighlightHTML } from '@web/common/components/HighlightHTML'
 import { ReviewStatus } from '@web/common/types/reviews'
 import { getSemesterName } from '@web/common/utils/getSemesterName'
 import { scrollToReviewForm } from '@web/modules/CourseDetail/components/ReviewForm/functions'
 
 import { ReviewInteractionType, Semester } from '@libs/codegen'
-import { GeneralChip, OtherChipKey } from '@libs/react-ui'
+import { GeneralChip, HighlightHTML, OtherChipKey } from '@libs/react-ui'
 
 import { useReviewContext } from '../../context/Review'
 import { ReviewReaction } from '../ReviewReaction'

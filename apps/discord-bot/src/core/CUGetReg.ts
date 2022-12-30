@@ -1,11 +1,14 @@
 import { Client, GatewayIntentBits, TextChannel } from 'discord.js'
+import * as cron from 'node-cron'
 
 import { ICommand } from '../command/ICommand'
 import { IDatabase } from '../database/IDatabase'
 import { HookFunction } from '../hook/hook'
+import { IScheduler } from '../scheduler/IScheduler'
 import { CUGetRegCommands } from './CUGetRegCommands'
 import { CUGetRegDatabase } from './CUGetRegDatabase'
 import { CUGetRegHooks } from './CUGetRegHooks'
+import { CUGetRegScheduler } from './CUGetRegScheduler'
 
 export class CUGetReg extends Client {
   private commandList = new Map<string, ICommand>()
@@ -16,6 +19,7 @@ export class CUGetReg extends Client {
     this.login(token)
     this.addHook(CUGetRegHooks)
     this.registerCommand(CUGetRegCommands)
+    this.registerScheduler(CUGetRegScheduler)
   }
 
   addHook(hookFunctions: HookFunction[]): void {
@@ -25,6 +29,12 @@ export class CUGetReg extends Client {
   registerCommand(commands: ICommand[]): void {
     commands.forEach((command) => {
       this.commandList.set(command.name, command)
+    })
+  }
+
+  registerScheduler(schedulers: IScheduler[]) {
+    schedulers.forEach((scheduler) => {
+      cron.schedule(scheduler.cronTime, () => scheduler.callbackFunction(this))
     })
   }
 

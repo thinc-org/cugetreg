@@ -86,6 +86,7 @@
     "next": "13.0.0",
     "next-seo": "4.29.0",
     "next-sitemap": "^3.1.43",
+    "node-cron": "^3.0.2",
     "nprogress": "0.2.0",
     "passport": "^0.6.0",
     "passport-jwt": "4.0.0",

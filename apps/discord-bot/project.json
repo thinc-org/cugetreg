@@ -45,6 +45,13 @@
         "command": "ts-node --project ./apps/discord-bot/tsconfig.app.json ./apps/discord-bot/src/deploy-commands.ts"
       }
     },
+    "prisma-migrate-dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cd {args.db} && npx prisma migrate dev",
+        "cwd": "apps/discord-bot/src/database"
+      }
+    },
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],

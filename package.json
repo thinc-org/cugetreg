@@ -19,6 +19,7 @@
     "@emotion/server": "11.10.0",
     "@emotion/styled": "11.10.4",
     "@emotion/utils": "^1.2.0",
+    "@google-analytics/data": "^3.1.2",
     "@grpc/grpc-js": "1.4.4",
     "@grpc/proto-loader": "0.6.7",
     "@mui/base": "5.0.0-alpha.92",

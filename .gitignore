@@ -44,3 +44,5 @@ Thumbs.db
 
 # SQLite
 **/*.sqlite
+
+google_application_credentials.json

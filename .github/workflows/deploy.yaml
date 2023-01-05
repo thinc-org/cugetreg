@@ -114,43 +114,43 @@ jobs:
         run: |
           AFFECTED_APPS="${{ env.AFFECTED_APPS }}" TAG=${{ env.TAG }} ./tools/workflow/tag-push-images
 
-  deploy:
-    name: Deploy
-    needs: [publish-docker-image]
-    strategy:
-      matrix:
-        node-version: [16.x]
-        platform: [ubuntu-latest]
+  # deploy:
+  #   name: Deploy
+  #   needs: [publish-docker-image]
+  #   strategy:
+  #     matrix:
+  #       node-version: [16.x]
+  #       platform: [ubuntu-latest]
 
-    runs-on: ${{ matrix.platform }}
-    if: ${{ needs.publish-docker-image.outputs.affected-apps }}
-    steps:
-      - name: Connect SSLVPN
-        uses: thinc-org/openfortivpn-action@master
-        with:
-          host: ${{ secrets.SSLVPN_HOST }}
-          username: ${{ secrets.SSLVPN_USERNAME }}
-          password: ${{ secrets.SSLVPN_PASSWORD }}
-          trustedCert: ${{ secrets.SSLVPN_TRUSTED_CERT }}
+  #   runs-on: ${{ matrix.platform }}
+  #   if: ${{ needs.publish-docker-image.outputs.affected-apps }}
+  #   steps:
+  #     - name: Connect SSLVPN
+  #       uses: thinc-org/openfortivpn-action@master
+  #       with:
+  #         host: ${{ secrets.SSLVPN_HOST }}
+  #         username: ${{ secrets.SSLVPN_USERNAME }}
+  #         password: ${{ secrets.SSLVPN_PASSWORD }}
+  #         trustedCert: ${{ secrets.SSLVPN_TRUSTED_CERT }}
 
-      - name: Deploy to VM
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          key: ${{ secrets.SSH_KEY }}
-          passphrase: ${{ secrets.SSH_PASSPHRASE }}
-          script: |
-            export AFFECTED_APPS="${{ needs.publish-docker-image.outputs.affected-apps }}"
-            export TAG=${{ needs.publish-docker-image.outputs.tag }}
-            for APP in $AFFECTED_APPS
-            do
-              TARGET_IMAGE="ghcr.io/thinc-org/cugetreg-$APP:$TAG"
-              echo "Pulling $TARGET_IMAGE"
-              docker pull $TARGET_IMAGE
-            done
-            docker-compose up -d
-            if [[ "$(docker images --filter "dangling=true" -q)" == "" ]];
-              then echo "No image with <none> tag";
-              else docker rmi $(docker images --filter "dangling=true" -q);
-            fi
+  #     - name: Deploy to VM
+  #       uses: appleboy/ssh-action@master
+  #       with:
+  #         host: ${{ secrets.SSH_HOST }}
+  #         username: ${{ secrets.SSH_USERNAME }}
+  #         key: ${{ secrets.SSH_KEY }}
+  #         passphrase: ${{ secrets.SSH_PASSPHRASE }}
+  #         script: |
+  #           export AFFECTED_APPS="${{ needs.publish-docker-image.outputs.affected-apps }}"
+  #           export TAG=${{ needs.publish-docker-image.outputs.tag }}
+  #           for APP in $AFFECTED_APPS
+  #           do
+  #             TARGET_IMAGE="ghcr.io/thinc-org/cugetreg-$APP:$TAG"
+  #             echo "Pulling $TARGET_IMAGE"
+  #             docker pull $TARGET_IMAGE
+  #           done
+  #           docker-compose up -d
+  #           if [[ "$(docker images --filter "dangling=true" -q)" == "" ]];
+  #             then echo "No image with <none> tag";
+  #             else docker rmi $(docker images --filter "dangling=true" -q);
+  #           fi

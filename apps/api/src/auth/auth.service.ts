@@ -110,7 +110,7 @@ export class AuthService {
         googleId: userInfo.id,
         hasMigratedGDrive: false,
       }
-      user.save()
+      await user.save()
       this.logger.log('Created new user with Google Auth', { user })
     }
 
@@ -155,7 +155,7 @@ export class AuthService {
         })
       } finally {
         user.google.hasMigratedGDrive = true
-        user.save()
+        await user.save()
       }
     }
 

@@ -46,6 +46,7 @@ specifiers:
   '@nrwl/web': 15.0.4
   '@nrwl/workspace': 15.0.4
   '@nx-tools/nx-docker': ^3.0.3
+  '@opensearch-project/opensearch': ^2.1.0
   '@popperjs/core': ^2.0.0
   '@react-hook/google-optimize': ^1.2.1
   '@slack/webhook': 6.0.0
@@ -189,6 +190,7 @@ dependencies:
   '@nestjs/platform-express': 9.0.9_k52hpfebgtl2kt6drmxlyq3gwe
   '@nestjs/schedule': 1.0.2_ac5kpodkfjj4txbcuwlvaffele
   '@nrwl/next': 15.0.4_72vwcposybjzu53zmrevcig4he
+  '@opensearch-project/opensearch': 2.1.0
   '@react-hook/google-optimize': 1.2.1_react@18.2.0
   '@slack/webhook': 6.0.0
   '@thinc-org/chula-courses': 2.3.0
@@ -5007,6 +5009,7 @@ packages:
   /@nx-tools/docker-metadata/3.0.8_q3prupbf3emhuxrg4r4frp5axm:
     resolution: {integrity: sha512-gCiEqjnC4cLBSx5hwbDZGiJ9c4i0sKmbUQZPLOcXKFQG/FByWsgbTL8XOsEkSJWD/N94tDQwKUYI0NEe4Y10BQ==}
     engines: {node: '>=14'}
+    deprecated: '@nx-tools/nx-docker and @nx-tools/docker-metadata are no longer supported... Please migrate to @nx-tools/nx-container and @nx-tools/container-metadata to build OCI containers with Docker, Podman or Kaniko engines.'
     requiresBuild: true
     peerDependencies:
       '@nrwl/devkit': ^12.0.0 || ^13.0.0 || ^14.0.0 || ^15.0.0
@@ -5145,6 +5148,19 @@ packages:
       '@octokit/openapi-types': 12.11.0
     dev: true
     optional: true
+
+  /@opensearch-project/opensearch/2.1.0:
+    resolution: {integrity: sha512-iM2u63j2IlUOuMSbcw1TZFpRqjK6qMwVhb3jLLa/x4aATxdKOiO1i17mgzfkeepqj85efNzXBZzN+jkq1/EXhQ==}
+    engines: {node: '>=10', yarn: ^1.22.10}
+    dependencies:
+      aws4: 1.11.0
+      debug: 4.3.4
+      hpagent: 0.1.2
+      ms: 2.1.3
+      secure-json-parse: 2.7.0
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
 
   /@parcel/watcher/2.0.4:
     resolution: {integrity: sha512-cTDi+FUDBIUOBKEtj+nhiJ71AZVlkAsQFuGQTun5tV9mwQBQgZvhCzG+URPQc8myeN32yRVZEfVAPCs1RW+Jvg==}
@@ -11183,6 +11199,10 @@ packages:
       readable-stream: 2.3.7
       wbuf: 1.7.3
 
+  /hpagent/0.1.2:
+    resolution: {integrity: sha512-ePqFXHtSQWAFXYmj+JtOTHr84iNrII4/QRlAAPPE+zqnKy4xJo7Ie1Y4kC7AdB+LxLxSTTzBMASsEcy0q8YyvQ==}
+    dev: false
+
   /html-element-map/1.3.1:
     resolution: {integrity: sha512-6XMlxrAFX4UEEGxctfFnmrFaaZFNf9i5fNuV5wZ3WWQ4FVaNP1aX1LkX9j2mfEx1NpjeE/rL3nmgEn23GdFmrg==}
     dependencies:
@@ -15494,6 +15514,10 @@ packages:
 
   /secure-compare/3.0.1:
     resolution: {integrity: sha512-AckIIV90rPDcBcglUwXPF3kg0P0qmPsPXAj6BBEENQE1p5yA1xfmDJzfi1Tappj37Pv2mVbKpL3Z1T+Nn7k1Qw==}
+
+  /secure-json-parse/2.7.0:
+    resolution: {integrity: sha512-6aU+Rwsezw7VR8/nyvKTx8QpWH9FrcYiXXlqC4z5d5XQBDRqtbfsRjnwGyqbi3gddNtWHuEk9OANUotL26qKUw==}
+    dev: false
 
   /select-hose/2.0.0:
     resolution: {integrity: sha512-mEugaLK+YfkijB4fx0e6kImuJdCIt2LxCRcbEYPqRGCs4F2ogyfZU5IAZRdjCP8JPq2AtdNoC/Dux63d9Kiryg==}

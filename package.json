@@ -36,6 +36,7 @@
     "@nestjs/platform-express": "^9.0.0",
     "@nestjs/schedule": "1.0.2",
     "@nrwl/next": "15.0.4",
+    "@opensearch-project/opensearch": "^2.1.0",
     "@react-hook/google-optimize": "^1.2.1",
     "@slack/webhook": "6.0.0",
     "@thinc-org/chula-courses": "^2.3.0",

@@ -19,7 +19,7 @@ async function bootstrap() {
     logger: WinstonModule.createLogger({
       transports: [
         new winston.transports.Console({format: winston.format.simple()}),
-        new winston.transports.File({filename: "app.log"}),
+        new winston.transports.File({filename: "log/app.log"}),
       ]
     })
   })

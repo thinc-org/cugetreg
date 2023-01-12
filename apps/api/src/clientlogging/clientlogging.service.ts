@@ -7,8 +7,8 @@ import { hostname } from 'os'
 export interface GelfLogEntry {
   short_message: string
   full_message?: string
-  _kind: string
-  _app: 'frontend-client' | 'backend'
+  kind: string
+  app: 'frontend-client' | 'backend'
 }
 
 const CLIENTLOGGING_INDEX = "cgr-clientlogging"

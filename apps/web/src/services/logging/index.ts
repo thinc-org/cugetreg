@@ -71,6 +71,7 @@ export function collectLogEvent(event: LogEvent) {
     deviceId: deviceId,
     sessionId: sessionId,
     accessToken: userStore.accessToken || undefined,
+    localTimestamp: new Date().toISOString(),
   }
   backlogLog.push(log)
   if (backlogLog.length >= 5) sendCollectedLog()

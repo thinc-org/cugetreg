@@ -15,6 +15,7 @@ class ClientLogDto {
   deviceId: string
   sessionId: string
   additionalData?: Record<string, string>
+  localTimestamp: string
 }
 
 const clientLogDtoArraySchema = {
@@ -22,6 +23,9 @@ const clientLogDtoArraySchema = {
   items: {
     type: 'object',
     properties: {
+      localTimestamp: {
+        type: 'string',
+      },
       kind: {
         type: 'string',
       },
@@ -84,6 +88,7 @@ export class ClientLoggingController {
         _user_id: accessToken?._id || undefined,
         _session_id: dto.sessionId,
         _device_id: dto.deviceId,
+        _local_timestamp: dto.localTimestamp,
       }
 
       if (dto.additionalData)

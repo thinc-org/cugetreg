@@ -1,13 +1,15 @@
-import { Injectable, Logger } from "@nestjs/common"
-import { ConfigService } from "@nestjs/config"
-import { Cron } from "@nestjs/schedule"
-import { OverrideService } from "override/override.service"
-import { QueueStoreService } from "stores/queue-store/queue-store.service"
-import { QueueProducerService } from "./queue-producer/queue-producer.service"
+import { Injectable, Logger } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
+import { Cron } from '@nestjs/schedule'
+
+import { OverrideService } from '@scraper/override/override.service'
+import { QueueStoreService } from '@scraper/stores/queue-store/queue-store.service'
+
+import { QueueProducerService } from './queue-producer/queue-producer.service'
 
 @Injectable()
 export class ScraperService {
-  private logger: Logger = new Logger("ScraperService")
+  private logger: Logger = new Logger('ScraperService')
 
   private isScraping = false
 
@@ -16,25 +18,27 @@ export class ScraperService {
     private readonly queueStoreService: QueueStoreService,
     private readonly overrideService: OverrideService,
     private readonly configService: ConfigService
-  ) { }
+  ) {}
 
   getIsScraping() {
     return this.isScraping
   }
 
-  @Cron("0 0 */3 * * *", {
-    timeZone: "Asia/Bangkok",
+  @Cron('0 0 */3 * * *', {
+    timeZone: 'Asia/Bangkok',
   })
   async scrape() {
     const start = new Date()
     if (this.isScraping) {
-      this.logger.error("Received attempt to scrape via scheduler while already in progress. Rejected.")
+      this.logger.error(
+        'Received attempt to scrape via scheduler while already in progress. Rejected.'
+      )
       return
     }
     this.isScraping = true
 
     const maxRequestsPerJob = this.queueStoreService.maxRequestsPerJob
-    const cycleDurationMs = this.configService.get<number>("rateLimit.cycleDurationMs")
+    const cycleDurationMs = this.configService.get<number>('rateLimit.cycleDurationMs')
     this.logger.log(
       `[Starting] Starting scrape, ${maxRequestsPerJob} courses every ${cycleDurationMs} ms`
     )
@@ -42,12 +46,12 @@ export class ScraperService {
     await Promise.all([
       this.queueProducerService.removeOldQueueData(),
       this.overrideService.reset(),
-      this.queueStoreService.reset()
+      this.queueStoreService.reset(),
     ])
 
-    const academicYears = this.configService.get<string[]>("scraper.academicYears")
-    const studyPrograms = this.configService.get<string[]>("scraper.studyPrograms")
-    const semesters = this.configService.get<string[]>("scraper.semesters")
+    const academicYears = this.configService.get<string[]>('scraper.academicYears')
+    const studyPrograms = this.configService.get<string[]>('scraper.studyPrograms')
+    const semesters = this.configService.get<string[]>('scraper.semesters')
     this.logger.log(
       `[Starting] Academic years: [${academicYears}], studyPrograms: [${studyPrograms}], semesters: [${semesters}]`
     )

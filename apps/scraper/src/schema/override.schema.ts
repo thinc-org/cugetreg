@@ -1,5 +1,5 @@
-import { GenEdType, GenEdTypeEnum, StudyProgram, StudyProgramEnum } from "@thinc-org/chula-courses"
-import * as mongoose from "mongoose"
+import { GenEdType, GenEdTypeEnum, StudyProgram, StudyProgramEnum } from '@thinc-org/chula-courses'
+import * as mongoose from 'mongoose'
 
 export const GenEdSchema = new mongoose.Schema({
   genEdType: {

@@ -1,25 +1,27 @@
-import { InjectQueue, Process, Processor } from "@nestjs/bull"
-import { Logger } from "@nestjs/common"
-import { InjectModel } from "@nestjs/mongoose"
-import { Course } from "@thinc-org/chula-courses"
-import { Job, Queue } from "bull"
-import { Model } from "mongoose"
-import { OverrideService } from "override/override.service"
-import { CourseDocument } from "schema/course.schema"
-import { courseRequest } from "scraper/request/course.request"
-import CourseFetchJob from "scraper/types/CourseFetchJob"
-import { QueueStoreService } from "stores/queue-store/queue-store.service"
+import { InjectQueue, Process, Processor } from '@nestjs/bull'
+import { Logger } from '@nestjs/common'
+import { InjectModel } from '@nestjs/mongoose'
+
+import { Course } from '@thinc-org/chula-courses'
+import { Job, Queue } from 'bull'
+import { Model } from 'mongoose'
+
+import { OverrideService } from '@scraper/override/override.service'
+import { CourseDocument } from '@scraper/schema/course.schema'
+import { courseRequest } from '@scraper/scraper/request/course.request'
+import CourseFetchJob from '@scraper/scraper/types/CourseFetchJob'
+import { QueueStoreService } from '@scraper/stores/queue-store/queue-store.service'
 
 @Processor({
-  name: "fetch",
+  name: 'fetch',
 })
 export class QueueConsumerService {
-  private logger: Logger = new Logger("QueueConsumer")
+  private logger: Logger = new Logger('QueueConsumer')
 
   constructor(
     private overrideService: OverrideService,
-    @InjectModel("course") private courseModel: Model<CourseDocument>,
-    @InjectQueue("fetch")
+    @InjectModel('course') private courseModel: Model<CourseDocument>,
+    @InjectQueue('fetch')
     private fetchQueue: Queue<CourseFetchJob>,
     private queueStoreService: QueueStoreService
   ) {}
@@ -66,7 +68,7 @@ export class QueueConsumerService {
       const results = await Promise.allSettled(mongoosePromises)
 
       for (const index in results) {
-        if (results[index].status == "rejected") {
+        if (results[index].status == 'rejected') {
           const result = results[index] as PromiseRejectedResult
           this.logger.error(
             `[Error] Saving Courses ${courses[index].courseNo} of ${studyProgram}-${semester}/${academicYear} failed: ${result.reason}`

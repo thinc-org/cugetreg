@@ -1,5 +1,5 @@
-import { Course } from "@thinc-org/chula-courses"
-import * as mongoose from "mongoose"
+import { Course } from '@thinc-org/chula-courses'
+import * as mongoose from 'mongoose'
 
 const period = {
   start: { type: String, required: true },
@@ -16,28 +16,28 @@ const classSchema = {
     type: String,
     required: true,
     enum: [
-      "LECT",
-      "LAB",
-      "DISC",
-      "FWK",
-      "PRAC",
-      "IDPS",
-      "SMNA",
-      "STU",
-      "L/T",
-      "IA",
-      "OTHER",
-      "IDVS",
-      "AR",
-      "CLIN",
-      "TUT",
-      "REFL",
+      'LECT',
+      'LAB',
+      'DISC',
+      'FWK',
+      'PRAC',
+      'IDPS',
+      'SMNA',
+      'STU',
+      'L/T',
+      'IA',
+      'OTHER',
+      'IDVS',
+      'AR',
+      'CLIN',
+      'TUT',
+      'REFL',
     ],
   },
   dayOfWeek: {
     type: String,
     required: true,
-    enum: ["IA", "AR", "MO", "TU", "WE", "TH", "FR", "SA", "SU"],
+    enum: ['IA', 'AR', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU'],
   },
   period: period,
   building: { type: String },
@@ -59,14 +59,14 @@ const section = {
   genEdType: {
     type: String,
     required: true,
-    enum: ["SC", "SO", "HU", "IN", "NO"],
+    enum: ['SC', 'SO', 'HU', 'IN', 'NO'],
   },
 }
 
 export const CourseSchema = new mongoose.Schema(
   {
-    studyProgram: { type: String, required: true, enum: ["S", "T", "I"] },
-    semester: { type: String, required: true, enum: ["1", "2", "3"] },
+    studyProgram: { type: String, required: true, enum: ['S', 'T', 'I'] },
+    semester: { type: String, required: true, enum: ['1', '2', '3'] },
     academicYear: { type: String, required: true },
     courseNo: { type: String, required: true },
     courseDescTh: { type: String },
@@ -82,7 +82,7 @@ export const CourseSchema = new mongoose.Schema(
     genEdType: {
       type: String,
       required: true,
-      enum: ["SC", "SO", "HU", "IN", "NO"],
+      enum: ['SC', 'SO', 'HU', 'IN', 'NO'],
     },
     midterm: examPeriod,
     final: examPeriod,

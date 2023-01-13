@@ -1,20 +1,22 @@
-import { BullModule } from "@nestjs/bull"
-import { Module } from "@nestjs/common"
-import { MongooseModule } from "@nestjs/mongoose"
-import { OverrideModule } from "override/override.module"
-import { CourseSchema } from "schema/course.schema"
-import { QueueStoreModule } from "stores/queue-store/queue-store.module"
-import { QueueProducerService } from "./queue-producer.service"
+import { BullModule } from '@nestjs/bull'
+import { Module } from '@nestjs/common'
+import { MongooseModule } from '@nestjs/mongoose'
+
+import { OverrideModule } from '@scraper/override/override.module'
+import { CourseSchema } from '@scraper/schema/course.schema'
+import { QueueStoreModule } from '@scraper/stores/queue-store/queue-store.module'
+
+import { QueueProducerService } from './queue-producer.service'
 
 @Module({
   providers: [QueueProducerService],
   exports: [QueueProducerService],
   imports: [
-    MongooseModule.forFeature([{ name: "course", schema: CourseSchema }]),
+    MongooseModule.forFeature([{ name: 'course', schema: CourseSchema }]),
     OverrideModule,
     QueueProducerModule,
     BullModule.registerQueue({
-      name: "fetch",
+      name: 'fetch',
     }),
     QueueStoreModule,
   ],

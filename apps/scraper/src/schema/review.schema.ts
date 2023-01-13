@@ -1,16 +1,16 @@
-import { StudyProgram } from "@thinc-org/chula-courses"
-import * as mongoose from "mongoose"
+import { StudyProgram } from '@thinc-org/chula-courses'
+import * as mongoose from 'mongoose'
 
 export const InteractionSchema = new mongoose.Schema({
-  userId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: "user" },
-  type: { type: String, required: true, enum: ["L", "D"] },
+  userId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'user' },
+  type: { type: String, required: true, enum: ['L', 'D'] },
 })
 
 export const ReviewSchema = new mongoose.Schema({
   ownerId: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
-    ref: "user",
+    ref: 'user',
   },
   courseNo: { type: String, required: true },
   semester: { type: String, required: true },
@@ -19,11 +19,11 @@ export const ReviewSchema = new mongoose.Schema({
   rating: { type: Number, required: true },
   content: { type: String },
   interactions: [InteractionSchema],
-  status: { type: String, default: "PENDING" },
+  status: { type: String, default: 'PENDING' },
 })
 
-export type ReviewInteractionType = "L" | "D"
-export type ReviewStatus = "PENDING" | "APPROVED" | "HIDDEN"
+export type ReviewInteractionType = 'L' | 'D'
+export type ReviewStatus = 'PENDING' | 'APPROVED' | 'HIDDEN'
 
 export interface ReviewInteraction {
   userId: mongoose.Types.ObjectId

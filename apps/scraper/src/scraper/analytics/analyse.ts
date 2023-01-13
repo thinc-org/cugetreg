@@ -1,14 +1,14 @@
-import { Course } from "@thinc-org/chula-courses"
-import fs from "fs"
+import { Course } from '@thinc-org/chula-courses'
+import * as fs from 'fs'
 
-const studyPrograms = ["S", "T", "I"]
-const acadyears = ["2563"]
+const studyPrograms = ['S', 'T', 'I']
+const acadyears = ['2563']
 
-const dirName = "./courses/"
+const dirName = './courses/'
 
 async function main() {
-  fs.mkdir("./analytics", () => {
-    console.log("analytics directory already exists")
+  fs.mkdir('./analytics', () => {
+    console.log('analytics directory already exists')
   })
   for (const studyProgram of studyPrograms) {
     for (const acadyear of acadyears) {
@@ -17,7 +17,7 @@ async function main() {
 
         // read file
         const fileName = `${studyProgram}-${semester}-${acadyear}.json`
-        const rawData = fs.readFileSync(dirName + fileName, "utf-8")
+        const rawData = fs.readFileSync(dirName + fileName, 'utf-8')
         const courses = (await JSON.parse(rawData)) as Course[]
 
         // initiate results
@@ -26,9 +26,9 @@ async function main() {
         let sectionCount = 0
         let classCount = 0
         let weekendClass = 0
-        let earliestTime = "24:00"
+        let earliestTime = '24:00'
         let earliestCourse: string[] = []
-        let latestTime = "00:00"
+        let latestTime = '00:00'
         let latestCourse: string[] = []
 
         for (const course of courses) {
@@ -47,10 +47,10 @@ async function main() {
               // check if period exist
               if (period) {
                 // get start and end time
-                const start = ("0" + period.start).slice(-5)
-                const end = ("0" + period.end).slice(-5)
+                const start = ('0' + period.start).slice(-5)
+                const end = ('0' + period.end).slice(-5)
 
-                if (start && end && start <= "24:59" && end <= "24:59") {
+                if (start && end && start <= '24:59' && end <= '24:59') {
                   // add period
                   timeSet.add(start.slice(-2))
                   timeSet.add(end.slice(-2))
@@ -74,7 +74,7 @@ async function main() {
 
               //get day of week
               const dayOfWeek = courseClass.dayOfWeek
-              if (dayOfWeek === "SA" || dayOfWeek === "SU") {
+              if (dayOfWeek === 'SA' || dayOfWeek === 'SU') {
                 weekendClass += 1
               }
             }
@@ -94,7 +94,7 @@ async function main() {
           timeSlot,
         }
         //save result
-        fs.writeFileSync("./analytics/" + fileName, JSON.stringify(result))
+        fs.writeFileSync('./analytics/' + fileName, JSON.stringify(result))
       }
     }
   }

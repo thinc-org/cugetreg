@@ -1,5 +1,5 @@
-import { Logger } from "@nestjs/common"
-import { ConfigService } from "@nestjs/config"
+import { Logger } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
 
 export interface Configuration {
   mongoURI: string
@@ -25,7 +25,7 @@ export const configuration = (): Configuration => ({
   redisURL: process.env.REDIS_URL,
   redisKeyPrefix: process.env.REDIS_KEY_PREFIX,
   port: parseInt(process.env.PORT, 10) || 3000,
-  logDebug: process.env.LOG_DEBUG === "true",
+  logDebug: process.env.LOG_DEBUG === 'true',
   courseDescPath: process.env.COURSE_DESC_PATH,
   rateLimit: {
     maxRequestsPerJob: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS_PER_JOB) || 25,
@@ -33,10 +33,10 @@ export const configuration = (): Configuration => ({
     maxJobs: parseInt(process.env.RATE_LIMIT_MAX_JOBS) || 1,
   },
   scraper: {
-    academicYears: process.env.SCRAPER_ACADEMIC_YEARS?.split(","),
-    studyPrograms: process.env.SCRAPER_STUDY_PROGRAMS?.split(","),
-    semesters: process.env.SCRAPER_SEMESTERS?.split(","),
-  }
+    academicYears: process.env.SCRAPER_ACADEMIC_YEARS?.split(','),
+    studyPrograms: process.env.SCRAPER_STUDY_PROGRAMS?.split(','),
+    semesters: process.env.SCRAPER_SEMESTERS?.split(','),
+  },
 })
 
 const requiredConfigs = [
@@ -60,6 +60,8 @@ export function validateConfig(configService: ConfigService<Configuration>): voi
   }
   if (missingKeys.length > 0) {
     logger.error(`Config keys [${missingKeys}] is undefined.`)
-    throw new Error(`Required config keys [${missingKeys}] are missing. Please recheck environment variables.`)
+    throw new Error(
+      `Required config keys [${missingKeys}] are missing. Please recheck environment variables.`
+    )
   }
 }

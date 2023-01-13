@@ -1,17 +1,20 @@
-import { Injectable, Logger } from "@nestjs/common"
-import { ConfigService } from "@nestjs/config"
-import { InjectModel } from "@nestjs/mongoose"
-import { Course, StudyProgram } from "@thinc-org/chula-courses"
-import { parse } from "csv-parse"
-import fs from "fs"
-import { Model } from "mongoose"
-import { Override, OverrideDocument } from "schema/override.schema"
-import { ReviewDocument } from "schema/review.schema"
-import { findAvgRating } from "./override.util"
+import { Injectable, Logger } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
+import { InjectModel } from '@nestjs/mongoose'
+
+import { Course, StudyProgram } from '@thinc-org/chula-courses'
+import { parse } from 'csv-parse'
+import * as fs from 'fs'
+import { Model } from 'mongoose'
+
+import { Override, OverrideDocument } from '@scraper/schema/override.schema'
+import { ReviewDocument } from '@scraper/schema/review.schema'
+
+import { findAvgRating } from './override.util'
 
 @Injectable()
 export class OverrideService {
-  private logger: Logger = new Logger("OverrideService")
+  private logger: Logger = new Logger('OverrideService')
 
   private _isLoaded = false
 
@@ -38,8 +41,8 @@ export class OverrideService {
 
   constructor(
     private configService: ConfigService,
-    @InjectModel("override") private overrideModel: Model<OverrideDocument>,
-    @InjectModel("review") private reviewModel: Model<ReviewDocument>
+    @InjectModel('override') private overrideModel: Model<OverrideDocument>,
+    @InjectModel('review') private reviewModel: Model<ReviewDocument>
   ) {}
 
   public get isLoaded(): boolean {
@@ -48,7 +51,7 @@ export class OverrideService {
 
   applyOverrides(course: Course): Course {
     if (this._isLoaded == false) {
-      throw new Error("Overrides are not loaded yet")
+      throw new Error('Overrides are not loaded yet')
     }
     course.courseDescTh = this.courseDescriptions[course.courseNo]?.th
     course.courseDescEn = this.courseDescriptions[course.courseNo]?.en
@@ -68,13 +71,13 @@ export class OverrideService {
       course.genEdType = genEdType
 
       for (const section of course.sections) {
-        section.genEdType = genEdSections.includes(section.sectionNo) ? genEdType : "NO"
+        section.genEdType = genEdSections.includes(section.sectionNo) ? genEdType : 'NO'
       }
     } else {
       // only use genEdType from override
-      course.genEdType = "NO"
+      course.genEdType = 'NO'
       for (const section of course.sections) {
-        section.genEdType = "NO"
+        section.genEdType = 'NO'
       }
     }
     return course
@@ -91,18 +94,18 @@ export class OverrideService {
     if (Object.keys(this.courseDescriptions).length != 0) {
       return
     }
-    const path = this.configService.get<string>("courseDescPath")
+    const path = this.configService.get<string>('courseDescPath')
     if (!path) {
-      this.logger.warn("Course descriptions path not found. Skipping loading.")
+      this.logger.warn('Course descriptions path not found. Skipping loading.')
       return
     }
-    const parser = fs.createReadStream(path, { encoding: "utf8" }).pipe(parse({ columns: true }))
+    const parser = fs.createReadStream(path, { encoding: 'utf8' }).pipe(parse({ columns: true }))
     for await (const record of parser) {
       this.courseDescriptions[record.course_no] = {}
-      if (record.description_thai != "-") {
+      if (record.description_thai != '-') {
         this.courseDescriptions[record.course_no].th = record.description_thai
       }
-      if (record.description != "-") {
+      if (record.description != '-') {
         this.courseDescriptions[record.course_no].en = record.description
       }
     }

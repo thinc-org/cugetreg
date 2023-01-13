@@ -1,5 +1,5 @@
-import { ClassType, Course, GenEdType, Section, Semester } from "@thinc-org/chula-courses"
-import cheerio from "cheerio"
+import { ClassType, Course, GenEdType, Section, Semester } from '@thinc-org/chula-courses'
+import cheerio from 'cheerio'
 import {
   capacityParser,
   daysOfWeekParser,
@@ -11,7 +11,7 @@ import {
   studyProgramParser,
   teachersParser,
   updateGenEd,
-} from "../parser"
+} from '@scraper/scraper/parser'
 
 export async function courseSelector(
   courseHtml: string,
@@ -25,13 +25,12 @@ export async function courseSelector(
   const list1: string[] = []
   //query and append value to list
   $(`font[face="Tahoma,Verdana,Arial,Helvetica"][color="#660000"]`).each((_, e) => {
-    list1.push($(e).text().trim().replace(/\s+/g, " "))
+    list1.push($(e).text().trim().replace(/\s+/g, ' '))
   })
   if (list1.length === 0) {
     throw new Error("Can't parse course")
   }
-    
-  
+
   //assign value to course
   const courseNo = list1[0]
   const abbrName = list1[1]
@@ -57,22 +56,22 @@ export async function courseSelector(
   const midterm = examDateParser(list2[3])
   const final = examDateParser(list2[4])
   // initialize genEd type
-  let genEdType: GenEdType = "NO"
+  let genEdType: GenEdType = 'NO'
   // ceate empty section array
   const sections: Section[] = []
 
   //initialize section
   let currentSection: Section = {
-    sectionNo: "0",
+    sectionNo: '0',
     closed: true,
     capacity: {
       current: 0,
       max: 0,
     },
     classes: [],
-    genEdType: "NO",
+    genEdType: 'NO',
   }
-  const table = $("#Table3").get(0).children[1]
+  const table = $('#Table3').get(0).children[1]
   $(table)
     .children()
     .each((idx, e) => {
@@ -83,7 +82,7 @@ export async function courseSelector(
       $(e)
         .children()
         .each((_, e) => {
-          row.push($(e).text().trim().replace(/\s+/g, " "))
+          row.push($(e).text().trim().replace(/\s+/g, ' '))
         })
       //check if selected row is Section (row[1] is string of number)
       const isSection = row[1].match(/^\d+/)
@@ -91,11 +90,11 @@ export async function courseSelector(
       //if it is new section , push last section and generate new section
       if (isSection) {
         const sectionNo = row[1]
-        const closed = row[0] !== ""
+        const closed = row[0] !== ''
         if (sectionNo !== currentSection.sectionNo) {
-          if (currentSection.sectionNo !== "0") sections.push(currentSection)
+          if (currentSection.sectionNo !== '0') sections.push(currentSection)
           const note = noteParser(row[8])
-          if (genEdType === "NO") {
+          if (genEdType === 'NO') {
             genEdType = updateGenEd(note)
           }
           currentSection = {
@@ -124,7 +123,7 @@ export async function courseSelector(
           teachers,
         })
       } else {
-        days.forEach(day => {
+        days.forEach((day) => {
           //push class into current section
           currentSection.classes.push({
             type,
@@ -159,7 +158,7 @@ export async function courseSelector(
     sections,
   }
   if (course === undefined) {
-    console.log("NULL")
+    console.log('NULL')
   }
   // return course
   return course

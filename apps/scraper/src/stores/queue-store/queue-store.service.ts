@@ -1,5 +1,5 @@
-import { Injectable } from "@nestjs/common"
-import { ConfigService } from "@nestjs/config"
+import { Injectable } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
 
 @Injectable()
 export class QueueStoreService {
@@ -10,7 +10,7 @@ export class QueueStoreService {
   maxRequestsPerJob: number
 
   constructor(private readonly configService: ConfigService) {
-    this.maxRequestsPerJob = this.configService.get<number>("rateLimit.maxRequestsPerJob")
+    this.maxRequestsPerJob = this.configService.get<number>('rateLimit.maxRequestsPerJob')
   }
 
   isQueueFetchFinished = false
@@ -30,13 +30,13 @@ export class QueueStoreService {
     this._current += count
 
     if (this._current >= this.length) {
-      this._roundFinishCbs.forEach(cb => cb())
+      this._roundFinishCbs.forEach((cb) => cb())
     }
   }
 
   public onRoundFinished(callback: () => void): Promise<void> {
     this._roundFinishCbs.push(callback)
-    return new Promise<void>(resolve => {
+    return new Promise<void>((resolve) => {
       this._roundFinishCbs.push(resolve)
     })
   }

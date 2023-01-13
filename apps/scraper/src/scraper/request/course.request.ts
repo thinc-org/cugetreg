@@ -1,11 +1,12 @@
-import { Logger } from "@nestjs/common"
-import { Course, Semester } from "@thinc-org/chula-courses"
-import { instance } from "../instance"
-import { courseParam } from "../params/course.param"
-import { courseSelector } from "../selector/course.selector"
+import { Logger } from '@nestjs/common'
+import { Course, Semester } from '@thinc-org/chula-courses'
+import { instance } from '@scraper/scraper/instance'
 
-const path = "/servlet/com.dtm.chula.cs.servlet.QueryCourseScheduleNew.CourseScheduleDtlNewServlet"
-const logger = new Logger("CourseRequest")
+import { courseParam } from '@scraper/scraper/params/course.param'
+import { courseSelector } from '@scraper/scraper/selector/course.selector'
+
+const path = '/servlet/com.dtm.chula.cs.servlet.QueryCourseScheduleNew.CourseScheduleDtlNewServlet'
+const logger = new Logger('CourseRequest')
 const MAX_TRY = 10
 
 export async function courseRequest(
@@ -29,7 +30,7 @@ export async function courseRequest(
         `[Running] On ${studyProgram}-${semester}/${academicYear}: Fetched Course No. ${courseNo}`
       )
       if (!response.data) {
-        throw new Error("empty response data")
+        throw new Error('empty response data')
       }
       logger.debug(
         `[Running] On ${studyProgram}-${semester}/${academicYear}: Selecting Course No. ${courseNo}`
@@ -44,5 +45,5 @@ export async function courseRequest(
       )
     }
   }
-  throw new Error("Retry count exceed")
+  throw new Error('Retry count exceed')
 }

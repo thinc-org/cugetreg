@@ -1,11 +1,13 @@
-import { InjectQueue } from "@nestjs/bull"
-import { Injectable, Logger } from "@nestjs/common"
-import { Queue } from "bull"
-import { searchRequest } from "scraper/request/search.request"
-import CourseFetchJob from "scraper/types/CourseFetchJob"
-import { QueueStoreService } from "stores/queue-store/queue-store.service"
+import { InjectQueue } from '@nestjs/bull'
+import { Injectable, Logger } from '@nestjs/common'
 
-const logger: Logger = new Logger("QueueProducer")
+import { Queue } from 'bull'
+
+import { searchRequest } from '@scraper/scraper/request/search.request'
+import CourseFetchJob from '@scraper/scraper/types/CourseFetchJob'
+import { QueueStoreService } from '@scraper/stores/queue-store/queue-store.service'
+
+const logger: Logger = new Logger('QueueProducer')
 
 function groupBy<T>(array: T[], count: number): T[][] {
   const result = []
@@ -20,7 +22,7 @@ const MAX_TRY = 5
 @Injectable()
 export class QueueProducerService {
   constructor(
-    @InjectQueue("fetch")
+    @InjectQueue('fetch')
     private fetchQueue: Queue<CourseFetchJob>,
     private queueStoreService: QueueStoreService
   ) {}
@@ -38,10 +40,10 @@ export class QueueProducerService {
           `[Starting With Producer] On ${studyProgram}-${semester}/${academicYear} Round ${round}: Scraping Course Nos...`
         )
         const res = (await searchRequest(studyProgram, semester, academicYear)).filter(
-          course => course !== ""
+          (course) => course !== ''
         )
         groupBy(res, this.queueStoreService.maxRequestsPerJob)
-          .map<CourseFetchJob>(courses => {
+          .map<CourseFetchJob>((courses) => {
             return {
               courses,
               studyProgram,
@@ -50,7 +52,7 @@ export class QueueProducerService {
               tryCount: 0,
             }
           })
-          .forEach(courses => {
+          .forEach((courses) => {
             this.fetchQueue.add(courses)
           })
 

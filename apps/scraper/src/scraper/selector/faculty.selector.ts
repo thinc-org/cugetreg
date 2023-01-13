@@ -1,4 +1,4 @@
-import cheerio from "cheerio"
+import cheerio from 'cheerio'
 
 export async function facultySelector(response: string) {
   // declare faculties
@@ -6,7 +6,7 @@ export async function facultySelector(response: string) {
 
   // add faculties
   const $ = await cheerio.load(response)
-  $("#faculty")
+  $('#faculty')
     .children()
     .each((_, child) => {
       faculties.push(child.attribs.value)

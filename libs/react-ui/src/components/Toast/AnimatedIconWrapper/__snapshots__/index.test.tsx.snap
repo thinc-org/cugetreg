@@ -1,0 +1,67 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AnimatedIconWrapper Should render correctly 1`] = `
+<Fragment>
+  <Insertion
+    cache={
+      Object {
+        "insert": [Function],
+        "inserted": Object {},
+        "key": "css",
+        "nonce": undefined,
+        "registered": Object {},
+        "sheet": StyleSheet {
+          "_insertTag": [Function],
+          "before": null,
+          "container": <head />,
+          "ctr": 0,
+          "insertionPoint": undefined,
+          "isSpeedy": false,
+          "key": "css",
+          "nonce": undefined,
+          "prepend": undefined,
+          "tags": Array [],
+        },
+      }
+    }
+    isStringTag={true}
+    serialized={
+      Object {
+        "map": undefined,
+        "name": "j4d3wm",
+        "next": Object {
+          "name": "animation-1dnifoi",
+          "next": undefined,
+          "styles": "@keyframes animation-1dnifoi{
+from {
+  transform: scale(0.6);
+  opacity: 0.4;
+}
+to {
+  transform: scale(1);
+  opacity: 1;
+}}",
+        },
+        "styles": "
+  display: flex;
+  align-items: center;
+
+  position: relative;
+  transform: scale(0.6);
+  opacity: 0.4;
+  min-width: 20px;
+  animation: animation-1dnifoi 0.3s 0.12s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+",
+        "toString": [Function],
+      }
+    }
+  />
+  <div
+    className="css-j4d3wm"
+  >
+    <div>
+      icon
+    </div>
+  </div>
+</Fragment>
+`;

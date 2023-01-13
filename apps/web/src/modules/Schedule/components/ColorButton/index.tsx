@@ -1,7 +1,9 @@
-import { Button, ButtonProps, useTheme } from '@mui/material'
+import { useTheme } from '@mui/material'
 
 import { ColorCircle } from '@web/modules/Schedule/components/ColorCircle'
 import { ScheduleColor } from '@web/modules/Schedule/components/ColorPicker/constants'
+
+import { Button, ButtonProps } from '@libs/react-ui'
 
 interface ColorButtonProps extends ButtonProps {
   isActive: boolean

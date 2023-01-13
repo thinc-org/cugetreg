@@ -6,13 +6,9 @@ import { MdDelete } from 'react-icons/md'
 
 import { styled } from '@mui/material'
 
-import {
-  AnimatedIconWrapper,
-  ToastAction,
-  ToastLayout,
-  useCurrentToast,
-} from '@web/common/components/Toast'
 import { CourseCartItem, courseCartStore, isSameKey } from '@web/store'
+
+import { AnimatedIconWrapper, ToastAction, ToastLayout, useCurrentToast } from '@libs/react-ui'
 
 interface RemoveCourseToastProps {
   item: CourseCartItem

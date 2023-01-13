@@ -1,7 +1,7 @@
-import React, { createRef, useState } from 'react'
+import { createRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Button, Typography, useMediaQuery, useTheme } from '@mui/material'
+import { Typography, useMediaQuery, useTheme } from '@mui/material'
 import { observer } from 'mobx-react'
 
 import { Analytics } from '@web/common/context/Analytics/components/Analytics'
@@ -15,6 +15,8 @@ import { useCourseGroup } from '@web/common/hooks/useCourseGroup'
 import { useLinkBuilder } from '@web/common/hooks/useLinkBuilder'
 import { PageMeta } from '@web/components/PageMeta'
 import { courseCartStore } from '@web/store'
+
+import { Button } from '@libs/react-ui'
 
 import { ExamSchedule } from './components/ExamSchedule'
 import { useExamClasses } from './components/ExamSchedule/utils'

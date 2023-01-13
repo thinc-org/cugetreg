@@ -1,10 +1,10 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { GeneralChip } from '@web/common/components/Chips'
-import { DayChipKey, GenEdChipKey, OtherEnum } from '@web/common/components/Chips/config'
 import { StyledStack } from '@web/modules/CourseSearch/components/TagList/styled'
 import { useSearchCourseQueryParams } from '@web/modules/CourseSearch/hooks/useSearchCourseQueryParams'
+
+import { DayChipKey, GenEdChipKey, GeneralChip, OtherEnum } from '@libs/react-ui'
 
 export interface TagListProps {}
 

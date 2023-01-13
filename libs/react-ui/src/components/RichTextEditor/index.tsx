@@ -21,6 +21,9 @@ const editor = createPlateEditor({
   plugins: plugins,
 })
 
+export { INITIAL_CONTENT }
+export type { RichTextEditorProps, RichTextEditorRef }
+
 export const RichTextEditor = forwardRef<RichTextEditorRef | undefined, RichTextEditorProps>(
   ({ id, defaultValue = INITIAL_CONTENT, onChange }, ref) => {
     const theme = useTheme()

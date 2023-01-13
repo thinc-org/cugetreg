@@ -29,14 +29,14 @@ exports[`FilterSection Should matched snapshot correctly when matchSmallScreen=f
         <Component />
       </Analytics>
     </ForwardRef(Stack)>
-    <Styled(ForwardRef(Button))
+    <Styled(ForwardRef)
       color="primary"
       fullWidth={true}
       onClick={[MockFunction]}
       variant="outlined"
     >
       เลือกตัวกรอง
-    </Styled(ForwardRef(Button))>
+    </Styled(ForwardRef)>
   </ForwardRef(DialogContent)>
 </ResponsiveDialog>
 `;
@@ -70,14 +70,14 @@ exports[`FilterSection Should matched snapshot correctly when matchSmallScreen=f
         <Component />
       </Analytics>
     </ForwardRef(Stack)>
-    <Styled(ForwardRef(Button))
+    <Styled(ForwardRef)
       color="primary"
       fullWidth={true}
       onClick={[MockFunction]}
       variant="outlined"
     >
       เลือกตัวกรอง
-    </Styled(ForwardRef(Button))>
+    </Styled(ForwardRef)>
   </ForwardRef(DialogContent)>
 </ResponsiveDialog>
 `;

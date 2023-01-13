@@ -7,8 +7,9 @@ import { styled } from '@mui/material'
 import { runInAction } from 'mobx'
 
 import { SelectButtonToast } from '@web/common/components/SelectButtonToast'
-import { AnimatedIconWrapper } from '@web/common/components/Toast'
 import { courseCartStore } from '@web/store'
+
+import { AnimatedIconWrapper } from '@libs/react-ui'
 
 import { SelectButtonProps } from '../../types'
 

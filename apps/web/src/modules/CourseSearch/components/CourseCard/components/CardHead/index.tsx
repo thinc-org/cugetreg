@@ -4,12 +4,13 @@ import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown'
 import KeyboardArrowUp from '@mui/icons-material/KeyboardArrowUp'
 import { CardHeader, Grid, IconButton, Link, Stack, Typography } from '@mui/material'
 
-import { GenEdChip } from '@web/common/components/Chips/catagories/GenEdChip'
 import { Analytics } from '@web/common/context/Analytics/components/Analytics'
 import { LinkWithAnalytics } from '@web/common/context/Analytics/components/LinkWithAnalytics'
 import { COURSE_TITLE, EXPAND_BUTTON } from '@web/common/context/Analytics/constants'
 import { useLinkBuilderWithCourseGroup } from '@web/common/hooks/useLinkBuilder'
 import { useCourseCard } from '@web/modules/CourseSearch/components/CourseCard/context'
+
+import { GenEdChip } from '@libs/react-ui'
 
 export function CardHead() {
   const { t } = useTranslation('courseCard')

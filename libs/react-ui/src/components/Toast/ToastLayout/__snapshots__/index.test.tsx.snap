@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ToastLayout Should render correctly 1`] = `
+<Styled(div)>
+  <Styled(div)>
+    <div>
+      children
+    </div>
+  </Styled(div)>
+  <div>
+    action
+  </div>
+</Styled(div)>
+`;

@@ -2,7 +2,7 @@ import { ToastBar, resolveValue } from 'react-hot-toast'
 
 import { styled } from '@mui/material'
 
-import { ToastLayout, useCurrentToast } from '@web/common/components/Toast'
+import { ToastLayout, useCurrentToast } from '@libs/react-ui'
 
 const Message = styled('div')`
   display: flex;

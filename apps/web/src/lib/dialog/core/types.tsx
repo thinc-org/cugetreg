@@ -1,4 +1,6 @@
-import { ButtonProps as MuiButtonProps, DialogProps as MuiDialogProps } from '@mui/material'
+import { DialogProps as MuiDialogProps } from '@mui/material'
+
+import { ButtonProps } from '@libs/react-ui'
 
 export interface DialogOptions {
   id?: string
@@ -8,8 +10,8 @@ export interface DialogOptions {
   secondaryButtonText?: string
   onPrimaryButtonClick?: () => void
   onSecondaryButtonClick?: () => void
-  primaryButtonProps?: Pick<MuiButtonProps, 'variant' | 'color' | 'size'>
-  secondaryButtonProps?: Pick<MuiButtonProps, 'variant' | 'color' | 'size'>
+  primaryButtonProps?: Pick<ButtonProps, 'variant' | 'color' | 'size'>
+  secondaryButtonProps?: Pick<ButtonProps, 'variant' | 'color' | 'size'>
 }
 
 export interface DialogProps extends DialogOptions, Omit<MuiDialogProps, 'open'> {

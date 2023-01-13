@@ -1,10 +1,6 @@
-import {
-  Button as MuiButton,
-  DialogContent as MuiDialogContent,
-  Paper,
-  css,
-  styled,
-} from '@mui/material'
+import { DialogContent as MuiDialogContent, Paper, css, styled } from '@mui/material'
+
+import { Button } from '@libs/react-ui'
 
 export const DialogContent = styled(MuiDialogContent)`
   padding: ${({ theme }) => theme.spacing(4)};
@@ -34,6 +30,6 @@ export const StickyPaper = styled(Paper)<{ hasTags: boolean }>`
   max-height: calc(100vh - ${({ hasTags }) => (hasTags ? '125px' : '101px')} - 24px);
 `
 
-export const Button = styled(MuiButton)`
+export const StyledButton = styled(Button)`
   margin-top: ${({ theme }) => theme.spacing(2)};
 `

@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next'
 import { Stack, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material'
 
 import { Caption } from '@web/common/components/Caption'
-import { GenEdChip } from '@web/common/components/Chips/catagories/GenEdChip'
 import { UnstyledTable } from '@web/common/components/UnstyledTable'
 import { dayOfWeekMapper } from '@web/common/constants/dayOfWeek'
 import { getClassPeriod } from '@web/common/utils/getClassPeriod'
@@ -12,6 +11,8 @@ import { getExamPeriod } from '@web/common/utils/getExamPeriod'
 import { SectionStatus } from '@web/modules/CourseDetail/components/SectionStatus'
 import { useOverlapWarning } from '@web/modules/Schedule/components/ScheduleTable/components/ScheduleTableCard/utils'
 import { courseCartStore } from '@web/store'
+
+import { GenEdChip } from '@libs/react-ui'
 
 import { useCourseDialog } from '../context'
 import { SectionSelect } from './SectionSelect'

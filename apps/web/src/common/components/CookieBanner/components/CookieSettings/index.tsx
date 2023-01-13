@@ -1,10 +1,12 @@
 import { MouseEventHandler, forwardRef } from 'react'
 
-import { Button, Dialog, DialogContent, DialogProps, DialogTitle, Fade } from '@mui/material'
+import { Dialog, DialogContent, DialogProps, DialogTitle, Fade } from '@mui/material'
 import { TransitionProps } from '@mui/material/transitions'
 
 import { ConsentMode } from '@web/common/constants/consents'
 import { Consents } from '@web/common/types/consents'
+
+import { Button } from '@libs/react-ui'
 
 import { SettingBlock } from '../SettingBlock'
 
@@ -83,7 +85,7 @@ export const CookieSettings = ({
         >
           คุกกี้ประเภทนี้จะทำการเก็บข้อมูลการใช้งานเว็บไซต์ของคุณ เพื่อเป็นประโยชน์ในการวัดผล
           ปรับปรุงและพัฒนาประสบการณ์ที่ดีในการใช้งานเว็บไซต์
-          ถ้าหากท่านไม่ยินยอมให้เราใช้คุกกี้นี้เราจะไม่สามารถวัดผล ปรังปรุงและพัฒนาเว็บไซต์ได้
+          ถ้าหากท่านไม่ยินยอมให้เราใช้คุกกี้นี้เราจะไม่สามารถวัดผล ปรับปรุง และพัฒนาเว็บไซต์ได้
         </SettingBlock>
         <Button onClick={handleConfirm} variant="contained" fullWidth>
           ยืนยัน

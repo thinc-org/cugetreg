@@ -2,13 +2,13 @@ import React from 'react'
 
 import { Link } from '@mui/material'
 
-import { genEdChipConfig } from '@web/common/components/Chips/config'
 import { LinkWithAnalytics } from '@web/common/context/Analytics/components/LinkWithAnalytics'
 import { SELECTED_COURSE_TITLE } from '@web/common/context/Analytics/constants'
 import { useShoppingCardModal } from '@web/common/context/ShoppingCartModal'
 import { useLinkBuilder } from '@web/common/hooks/useLinkBuilder'
 
 import { Course } from '@libs/codegen'
+import { genEdChipConfig } from '@libs/react-ui'
 
 export interface CourseNameProps {
   course: Course

@@ -15,4 +15,5 @@ export interface ClientLogDTO {
   deviceId: string
   sessionId: string
   additionalData?: Record<string, string>
+  localTimestamp: string
 }

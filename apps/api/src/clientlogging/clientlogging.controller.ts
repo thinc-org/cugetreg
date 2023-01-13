@@ -15,6 +15,7 @@ class ClientLogDto {
   deviceId: string
   sessionId: string
   additionalData?: Record<string, string>
+  localTimestamp: string
 }
 
 const clientLogDtoArraySchema = {
@@ -22,6 +23,9 @@ const clientLogDtoArraySchema = {
   items: {
     type: 'object',
     properties: {
+      localTimestamp: {
+        type: 'string',
+      },
       kind: {
         type: 'string',
       },
@@ -78,16 +82,17 @@ export class ClientLoggingController {
       const logEntry: GelfLogEntry & Record<string, string> = {
         short_message: dto.message,
         full_message: dto.detail,
-        _kind: dto.kind,
-        _app: 'frontend-client',
-        _source_ip: req.ip,
-        _user_id: accessToken?._id || undefined,
-        _session_id: dto.sessionId,
-        _device_id: dto.deviceId,
+        kind: dto.kind,
+        app: 'frontend-client',
+        source_ip: req.ip,
+        user_id: accessToken?._id || undefined,
+        session_id: dto.sessionId,
+        device_id: dto.deviceId,
+        local_timestamp: dto.localTimestamp,
       }
 
       if (dto.additionalData)
-        Object.entries(dto.additionalData).forEach(([k, v]) => (logEntry[`_a_${k}`] = v))
+        Object.entries(dto.additionalData).forEach(([k, v]) => (logEntry[`a_${k}`] = v))
 
       await this.loggingService.sendLogEntry(logEntry)
     }

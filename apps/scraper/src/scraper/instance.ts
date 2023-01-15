@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from 'axios'
+import axios from 'axios'
 import axiosCookieJarSupport from 'axios-cookiejar-support'
 import * as https from 'https'
 import * as iconv from 'iconv-lite'
@@ -15,7 +15,7 @@ export const instance = axios.create({
 })
 // decode data using TIS-620
 instance.interceptors.response.use(function (response) {
-  response.data = iconv.decode(response.data as any, 'TIS-620')
+  response.data = iconv.decode(response.data as unknown as Buffer, 'TIS-620')
   return response
 })
 

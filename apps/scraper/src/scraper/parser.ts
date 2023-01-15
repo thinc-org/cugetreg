@@ -6,8 +6,8 @@ import {
   Period,
   StudyProgram,
 } from '@thinc-org/chula-courses'
-import { th } from 'date-fns/locale'
 import { parse } from 'date-fns'
+import { th } from 'date-fns/locale'
 
 export function examDateParser(dateTh: string): ExamPeriod | undefined {
   if (dateTh[0] === 'T') return undefined

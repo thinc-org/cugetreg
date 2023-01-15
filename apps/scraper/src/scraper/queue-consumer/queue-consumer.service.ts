@@ -24,7 +24,7 @@ export class QueueConsumerService {
     @InjectQueue('fetch')
     private fetchQueue: Queue<CourseFetchJob>,
     private queueStoreService: QueueStoreService
-  ) { }
+  ) {}
 
   async saveCourse(course: Course): Promise<CourseDocument> {
     const result = await this.courseModel.findOneAndUpdate(

@@ -44,7 +44,9 @@ export async function courseRequest(
       return course
     } catch (err) {
       logger.error(
-        `[Error] On ${studyProgram}-${semester}/${academicYear}: Can't fetch Course No. ${courseNo}: ${err}, retry = ${i + 1}`
+        `[Error] On ${studyProgram}-${semester}/${academicYear}: Can't fetch Course No. ${courseNo}: ${err}, retry = ${
+          i + 1
+        }`
       )
     }
   }

@@ -1,4 +1,3 @@
-import { HttpModule } from '@nestjs/axios'
 import { Module, forwardRef, Provider } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { Client } from "@opensearch-project/opensearch"
@@ -28,4 +27,4 @@ const elasticProvider: Provider<Client> = {
   imports: [forwardRef(() => AuthModule)],
   exports: [ClientLoggingService],
 })
-export class ClientLoggingModule {}
+export class ClientLoggingModule { }

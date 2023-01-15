@@ -79,10 +79,10 @@ function capacityParser(capacity: string): Capacity {
 }
 
 function daysOfWeekParser(days: string): DayOfWeek[] {
-  return days.split(' ').map((day) => <DayOfWeek>day)
+  return days.split(' ').map((day) => day as DayOfWeek)
 }
 
-function roomAndBuildingParser(name: string): string | undefined {
+function roomAndBuildingParser(name: string): string {
   if (name === 'IA') return undefined
   return name
 }
@@ -104,7 +104,7 @@ function updateGenEd(note: string | undefined): GenEdType {
       return 'NO'
     }
     if (['SO', 'SC', 'HU', 'IN'].includes(result[1])) {
-      return <GenEdType>result[1]
+      return result[1] as GenEdType
     }
     // edge case
     if (['SCI', 'SCIENCE'].includes(result[1])) {

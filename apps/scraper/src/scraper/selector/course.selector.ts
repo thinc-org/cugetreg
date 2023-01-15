@@ -1,5 +1,6 @@
 import { ClassType, Course, GenEdType, Section, Semester } from '@thinc-org/chula-courses'
 import cheerio from 'cheerio'
+
 import {
   capacityParser,
   daysOfWeekParser,
@@ -108,7 +109,7 @@ export async function courseSelector(
         }
       }
       // assign value to class
-      const type = <ClassType>row[add + 1]
+      const type = row[add + 1] as ClassType
       const days = daysOfWeekParser(row[add + 2])
       const period = periodParser(row[add + 3])
       const building = roomAndBuildingParser(row[add + 4])

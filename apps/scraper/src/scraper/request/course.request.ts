@@ -1,7 +1,8 @@
 import { Logger } from '@nestjs/common'
-import { Course, Semester } from '@thinc-org/chula-courses'
-import { instance } from '@scraper/scraper/instance'
 
+import { Course, Semester } from '@thinc-org/chula-courses'
+
+import { instance } from '@scraper/scraper/instance'
 import { courseParam } from '@scraper/scraper/params/course.param'
 import { courseSelector } from '@scraper/scraper/selector/course.selector'
 
@@ -36,7 +37,7 @@ export async function courseRequest(
         `[Running] On ${studyProgram}-${semester}/${academicYear}: Selecting Course No. ${courseNo}`
       )
 
-      return courseSelector(response.data, academicYear, <Semester>semester)
+      return courseSelector(response.data, academicYear, semester as Semester)
     } catch (err) {
       logger.error(
         `[Error] On ${studyProgram}-${semester}/${academicYear}: Can't fetch Course No. ${courseNo}: ${err}, retry = ${

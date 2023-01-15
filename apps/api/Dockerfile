@@ -15,6 +15,6 @@ RUN pnpm install -r --prod --prefer-offline
 
 COPY dist/apps/api .
 
-EXPOSE 3333
+EXPOSE 3000
 
 CMD ["node", "main.js"]

@@ -7,9 +7,9 @@ import {
   StudyProgram,
 } from '@thinc-org/chula-courses'
 import { th } from 'date-fns/locale'
-import parse from 'date-fns/parse'
+import { parse } from 'date-fns'
 
-function examDateParser(dateTh: string): ExamPeriod | undefined {
+export function examDateParser(dateTh: string): ExamPeriod | undefined {
   if (dateTh[0] === 'T') return undefined
   //setting up date
   const dateSplit = dateTh.split(' ')
@@ -28,7 +28,7 @@ function examDateParser(dateTh: string): ExamPeriod | undefined {
   }
 }
 
-function studyProgramParser(studyProgram: string): StudyProgram {
+export function studyProgramParser(studyProgram: string): StudyProgram {
   switch (studyProgram) {
     case 'ทวิภาค':
       return 'S'
@@ -41,11 +41,11 @@ function studyProgramParser(studyProgram: string): StudyProgram {
   }
 }
 
-function departmentParser(faculty: string): string {
+export function departmentParser(faculty: string): string {
   return faculty.split('(')[1].split(')')[0].trim()
 }
 
-function periodParser(periodString: string): Period {
+export function periodParser(periodString: string): Period {
   if (periodString == 'IA' || periodString == 'AR') {
     return {
       start: periodString,
@@ -67,7 +67,7 @@ function periodParser(periodString: string): Period {
     end,
   }
 }
-function capacityParser(capacity: string): Capacity {
+export function capacityParser(capacity: string): Capacity {
   //split current and max
   const [current, max] = capacity.split('/')
 
@@ -78,25 +78,25 @@ function capacityParser(capacity: string): Capacity {
   }
 }
 
-function daysOfWeekParser(days: string): DayOfWeek[] {
+export function daysOfWeekParser(days: string): DayOfWeek[] {
   return days.split(' ').map((day) => day as DayOfWeek)
 }
 
-function roomAndBuildingParser(name: string): string {
+export function roomAndBuildingParser(name: string): string {
   if (name === 'IA') return undefined
   return name
 }
 
-function teachersParser(names: string): string[] {
+export function teachersParser(names: string): string[] {
   return names.split(',')
 }
 
-function noteParser(note: string): string | undefined {
+export function noteParser(note: string): string | undefined {
   if (note === '') return undefined
   return note.replace(/\s+/g, ' ')
 }
 
-function updateGenEd(note: string | undefined): GenEdType {
+export function updateGenEd(note: string | undefined): GenEdType {
   if (note === undefined) return 'NO'
   if (note.includes('GENED')) {
     const result = note.match(/GENED-(\w+)/)
@@ -113,16 +113,4 @@ function updateGenEd(note: string | undefined): GenEdType {
     return 'NO'
   }
   return 'NO'
-}
-export {
-  examDateParser,
-  studyProgramParser,
-  departmentParser,
-  periodParser,
-  capacityParser,
-  daysOfWeekParser,
-  roomAndBuildingParser,
-  teachersParser,
-  noteParser,
-  updateGenEd,
 }

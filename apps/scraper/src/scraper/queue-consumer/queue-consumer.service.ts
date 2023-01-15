@@ -24,7 +24,7 @@ export class QueueConsumerService {
     @InjectQueue('fetch')
     private fetchQueue: Queue<CourseFetchJob>,
     private queueStoreService: QueueStoreService
-  ) {}
+  ) { }
 
   async saveCourse(course: Course): Promise<CourseDocument> {
     const result = await this.courseModel.findOneAndUpdate(
@@ -66,19 +66,18 @@ export class QueueConsumerService {
         mongoosePromises.push(this.saveCourse(course))
       }
       const results = await Promise.allSettled(mongoosePromises)
-
       for (const index in results) {
         if (results[index].status == 'rejected') {
           const result = results[index] as PromiseRejectedResult
           this.logger.error(
-            `[Error] Saving Courses ${courses[index].courseNo} of ${studyProgram}-${semester}/${academicYear} failed: ${result.reason}`
+            `[Error] On ${studyProgram}-${semester}/${academicYear}: Saving Courses ${courses[index].courseNo} failed: ${result.reason}`
           )
         }
       }
     } catch (error) {
       if (tryCount >= 1) {
         this.logger.error(
-          `[Error] Retrieving Courses failed: ${error.message}, will discard this job.`
+          `[Error] On ${studyProgram}-${semester}/${academicYear}: Retrieving Courses failed: ${error.message}, will discard this job.`
         )
         return
       }

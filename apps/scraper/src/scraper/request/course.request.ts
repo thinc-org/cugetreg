@@ -37,12 +37,14 @@ export async function courseRequest(
         `[Running] On ${studyProgram}-${semester}/${academicYear}: Selecting Course No. ${courseNo}`
       )
 
-      return courseSelector(response.data, academicYear, semester as Semester)
+      const course = await courseSelector(response.data, academicYear, semester as Semester)
+      logger.debug(
+        `[Running] On ${studyProgram}-${semester}/${academicYear}: Selected Course No. ${courseNo}`
+      )
+      return course
     } catch (err) {
       logger.error(
-        `[Error] On ${studyProgram}-${semester}/${academicYear}: Can't fetch Course No. ${courseNo}: ${err}, retry = ${
-          i + 1
-        }`
+        `[Error] On ${studyProgram}-${semester}/${academicYear}: Can't fetch Course No. ${courseNo}: ${err}, retry = ${i + 1}`
       )
     }
   }

@@ -5,7 +5,7 @@ import * as iconv from 'iconv-lite'
 import * as tough from 'tough-cookie'
 
 // make instance for collecting cookie
-const instance = axios.create({
+export const instance = axios.create({
   baseURL: 'https://www2.reg.chula.ac.th',
   withCredentials: true,
   responseType: 'arraybuffer',
@@ -22,6 +22,3 @@ instance.interceptors.response.use(function (response) {
 //setup cookie jar
 axiosCookieJarSupport(instance)
 instance.defaults.jar = new tough.CookieJar()
-
-//export instance
-export { instance }

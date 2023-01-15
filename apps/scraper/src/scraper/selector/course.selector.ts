@@ -1,5 +1,5 @@
 import { ClassType, Course, GenEdType, Section, Semester } from '@thinc-org/chula-courses'
-import cheerio from 'cheerio'
+import * as cheerio from 'cheerio'
 
 import {
   capacityParser,
@@ -20,7 +20,7 @@ export async function courseSelector(
   semester: Semester
 ): Promise<Course> {
   // load html
-  const $ = await cheerio.load(courseHtml)
+  const $ = cheerio.load(courseHtml)
 
   //This list contain courseNo, abbrName, courseNameEn, credit, creditHour and courseCondition
   const list1: string[] = []

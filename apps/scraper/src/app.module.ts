@@ -22,7 +22,6 @@ import { AppService } from './app.service'
     MongooseModule.forRootAsync({
       useFactory: async (configService: ConfigService) => ({
         uri: configService.get<string>('mongoURI'),
-        useFindAndModify: false,
       }),
       inject: [ConfigService],
     }),
@@ -47,4 +46,4 @@ import { AppService } from './app.service'
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }

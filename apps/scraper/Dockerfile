@@ -1,36 +1,16 @@
-FROM node:14-alpine AS base
+FROM node:16.17.0-alpine
+WORKDIR /usr/app
 
-# Initialize working directory
-WORKDIR /usr/src/app
-
-# Prepare for installing dependencies
-# Utilise Docker cache to save re-installing dependencies if unchanged
-COPY ["package.json", "yarn.lock", "./"]
-
-# Install dependencies
-RUN yarn --frozen-lockfile
-
-# Set env to production
 ENV NODE_ENV production
+RUN npm install -g pnpm
 
+COPY dist/apps/scraper/.npmrc .
+COPY dist/apps/scraper/pnpm-lock.yaml .
+COPY dist/apps/scraper/package.json .
+RUN pnpm install -r --prod --prefer-offline
 
-FROM base AS build
+COPY dist/apps/scraper .
 
-# Copy the rest files
-COPY . .
-
-# Build applciation
-RUN yarn build
-
-
-FROM base
-
-# Copy the previous build file to this image
-COPY --from=build /usr/src/app/dist /usr/src/app/dist
-COPY --from=build /usr/src/app/src /usr/src/app/src
-
-# Expose listening port
 EXPOSE 3000
 
-# Starting scripts
-CMD node dist/main
+CMD ["node", "main.js"]

@@ -4,5 +4,8 @@
   "typescript.preferences.importModuleSpecifier": "shortest",
   "[proto3]": {
     "editor.defaultFormatter": "zxh404.vscode-proto3"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   }
 }

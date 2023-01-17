@@ -1,6 +1,6 @@
 {
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/api/src",
+  "sourceRoot": "apps/reg-scraper/src",
   "projectType": "application",
   "targets": {
     "build": {
@@ -8,17 +8,9 @@
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
-        "outputPath": "dist/apps/api",
-        "main": "apps/api/src/main.ts",
-        "tsConfig": "apps/api/tsconfig.app.json",
-        "assets": [
-          "apps/api/src/assets",
-          {
-            "glob": "**/*.graphql",
-            "input": "apps/api/src",
-            "output": "assets/graphql"
-          }
-        ],
+        "outputPath": "dist/apps/reg-scraper",
+        "main": "apps/reg-scraper/src/main.ts",
+        "tsConfig": "apps/reg-scraper/tsconfig.app.json",
         "generatePackageJson": true,
         "target": "node",
         "compiler": "tsc"
@@ -34,11 +26,11 @@
     "serve": {
       "executor": "@nrwl/node:node",
       "options": {
-        "buildTarget": "api:build"
+        "buildTarget": "reg-scraper:build"
       },
       "configurations": {
         "production": {
-          "buildTarget": "api:build:production"
+          "buildTarget": "reg-scraper:build:production"
         }
       }
     },
@@ -46,21 +38,21 @@
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["apps/api/**/*.ts"]
+        "lintFilePatterns": ["apps/reg-scraper/**/*.ts"]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/apps/api"],
+      "outputs": ["{workspaceRoot}/coverage/apps/reg-scraper"],
       "options": {
-        "jestConfig": "apps/api/jest.config.ts",
+        "jestConfig": "apps/reg-scraper/jest.config.ts",
         "passWithNoTests": true
       }
     },
     "docker": {
       "executor": "@nx-tools/nx-docker:build",
       "options": {
-        "tags": ["ghcr.io/thinc-org/cugetreg-api:latest"]
+        "tags": ["ghcr.io/thinc-org/cugetreg-reg-scraper:latest"]
       }
     },
     "docker-build": {
@@ -68,19 +60,19 @@
       "options": {
         "commands": [
           {
-            "command": "nx run api:build",
+            "command": "nx run reg-scraper:build",
             "forwardAllArgs": false
           },
           {
-            "command": "cp pnpm-lock.yaml dist/apps/api/pnpm-lock.yaml",
+            "command": "cp pnpm-lock.yaml dist/apps/reg-scraper/pnpm-lock.yaml",
             "forwardAllArgs": false
           },
           {
-            "command": "cp .npmrc dist/apps/api/.npmrc",
+            "command": "cp .npmrc dist/apps/reg-scraper/.npmrc",
             "forwardAllArgs": false
           },
           {
-            "command": "nx run api:docker --push=false --tags=cugetreg-api:latest --load",
+            "command": "nx run reg-scraper:docker --push=false --tags=cugetreg-reg-scraper:latest --load",
             "forwardAllArgs": false
           }
         ],

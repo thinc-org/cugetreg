@@ -1,6 +1,6 @@
 /* eslint-disable */
 export default {
-  displayName: 'scraper',
+  displayName: 'reg-scraper',
   preset: '../../jest.preset.js',
   globals: {
     'ts-jest': {
@@ -12,5 +12,5 @@ export default {
     '^.+\\.[tj]s$': 'ts-jest',
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
-  coverageDirectory: '../../coverage/apps/scraper',
+  coverageDirectory: '../../coverage/apps/reg-scraper',
 }

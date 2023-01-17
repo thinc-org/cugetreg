@@ -17,7 +17,7 @@
     "paths": {
       "@api/*": ["apps/api/src/*"],
       "@web/*": ["apps/web/src/*"],
-      "@scraper/*": ["apps/scraper/src/*"],
+      "@reg-scraper/*": ["apps/reg-scraper/src/*"],
       "@libs/codegen": ["libs/codegen/src"],
       "@libs/course-utils": ["libs/course-utils/src/index.ts"]
     }

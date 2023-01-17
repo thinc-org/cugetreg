@@ -1,6 +1,6 @@
 {
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/scraper/src",
+  "sourceRoot": "apps/reg-scraper/src",
   "projectType": "application",
   "targets": {
     "build": {
@@ -8,9 +8,9 @@
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
-        "outputPath": "dist/apps/scraper",
-        "main": "apps/scraper/src/main.ts",
-        "tsConfig": "apps/scraper/tsconfig.app.json",
+        "outputPath": "dist/apps/reg-scraper",
+        "main": "apps/reg-scraper/src/main.ts",
+        "tsConfig": "apps/reg-scraper/tsconfig.app.json",
         "generatePackageJson": true,
         "target": "node",
         "compiler": "tsc"
@@ -26,11 +26,11 @@
     "serve": {
       "executor": "@nrwl/node:node",
       "options": {
-        "buildTarget": "scraper:build"
+        "buildTarget": "reg-scraper:build"
       },
       "configurations": {
         "production": {
-          "buildTarget": "scraper:build:production"
+          "buildTarget": "reg-scraper:build:production"
         }
       }
     },
@@ -38,21 +38,21 @@
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["apps/scraper/**/*.ts"]
+        "lintFilePatterns": ["apps/reg-scraper/**/*.ts"]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/apps/scraper"],
+      "outputs": ["{workspaceRoot}/coverage/apps/reg-scraper"],
       "options": {
-        "jestConfig": "apps/scraper/jest.config.ts",
+        "jestConfig": "apps/reg-scraper/jest.config.ts",
         "passWithNoTests": true
       }
     },
     "docker": {
       "executor": "@nx-tools/nx-docker:build",
       "options": {
-        "tags": ["ghcr.io/thinc-org/cugetreg-scraper:latest"]
+        "tags": ["ghcr.io/thinc-org/cugetreg-reg-scraper:latest"]
       }
     },
     "docker-build": {
@@ -60,19 +60,19 @@
       "options": {
         "commands": [
           {
-            "command": "nx run scraper:build",
+            "command": "nx run reg-scraper:build",
             "forwardAllArgs": false
           },
           {
-            "command": "cp pnpm-lock.yaml dist/apps/scraper/pnpm-lock.yaml",
+            "command": "cp pnpm-lock.yaml dist/apps/reg-scraper/pnpm-lock.yaml",
             "forwardAllArgs": false
           },
           {
-            "command": "cp .npmrc dist/apps/scraper/.npmrc",
+            "command": "cp .npmrc dist/apps/reg-scraper/.npmrc",
             "forwardAllArgs": false
           },
           {
-            "command": "nx run scraper:docker --push=false --tags=cugetreg-scraper:latest --load",
+            "command": "nx run reg-scraper:docker --push=false --tags=cugetreg-reg-scraper:latest --load",
             "forwardAllArgs": false
           }
         ],

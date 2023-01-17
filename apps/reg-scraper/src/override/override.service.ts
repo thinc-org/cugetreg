@@ -7,8 +7,8 @@ import { parse } from 'csv-parse'
 import * as fs from 'fs'
 import { Model } from 'mongoose'
 
-import { Override, OverrideDocument } from '@scraper/schema/override.schema'
-import { ReviewDocument } from '@scraper/schema/review.schema'
+import { Override, OverrideDocument } from '@reg-scraper/schema/override.schema'
+import { ReviewDocument } from '@reg-scraper/schema/review.schema'
 
 import { findAvgRating } from './override.util'
 

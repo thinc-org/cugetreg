@@ -2,8 +2,8 @@ import { Injectable, Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { Cron } from '@nestjs/schedule'
 
-import { OverrideService } from '@scraper/override/override.service'
-import { QueueStoreService } from '@scraper/stores/queue-store/queue-store.service'
+import { OverrideService } from '@reg-scraper/override/override.service'
+import { QueueStoreService } from '@reg-scraper/stores/queue-store/queue-store.service'
 
 import { QueueProducerService } from './queue-producer/queue-producer.service'
 

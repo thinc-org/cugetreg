@@ -7,7 +7,7 @@ if OUTPUT=$(npx nx affected:apps --base=${AFFECTED_BASE} --plain 2> /dev/null); 
 else
   # TODO: replace with list of all apps
   echo "Could not find ref ${AFFECTED_BASE}, using all apps"
-  AFFECTED_APPS="api web"
+  AFFECTED_APPS="api web reg-scraper"
 fi
 
 NX_AFFECTED_APPS=$(echo $AFFECTED_APPS | tr " " ",")

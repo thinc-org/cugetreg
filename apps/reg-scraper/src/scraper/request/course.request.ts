@@ -2,9 +2,9 @@ import { Logger } from '@nestjs/common'
 
 import { Course, Semester } from '@thinc-org/chula-courses'
 
-import { instance } from '@scraper/scraper/instance'
-import { courseParam } from '@scraper/scraper/params/course.param'
-import { courseSelector } from '@scraper/scraper/selector/course.selector'
+import { instance } from '@reg-scraper/scraper/instance'
+import { courseParam } from '@reg-scraper/scraper/params/course.param'
+import { courseSelector } from '@reg-scraper/scraper/selector/course.selector'
 
 const path = '/servlet/com.dtm.chula.cs.servlet.QueryCourseScheduleNew.CourseScheduleDtlNewServlet'
 const logger = new Logger('CourseRequest')

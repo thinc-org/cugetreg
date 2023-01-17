@@ -6,11 +6,11 @@ import { Course } from '@thinc-org/chula-courses'
 import { Job, Queue } from 'bull'
 import { Model } from 'mongoose'
 
-import { OverrideService } from '@scraper/override/override.service'
-import { CourseDocument } from '@scraper/schema/course.schema'
-import { courseRequest } from '@scraper/scraper/request/course.request'
-import CourseFetchJob from '@scraper/scraper/types/CourseFetchJob'
-import { QueueStoreService } from '@scraper/stores/queue-store/queue-store.service'
+import { OverrideService } from '@reg-scraper/override/override.service'
+import { CourseDocument } from '@reg-scraper/schema/course.schema'
+import { courseRequest } from '@reg-scraper/scraper/request/course.request'
+import CourseFetchJob from '@reg-scraper/scraper/types/CourseFetchJob'
+import { QueueStoreService } from '@reg-scraper/stores/queue-store/queue-store.service'
 
 @Processor({
   name: 'fetch',

@@ -3,9 +3,9 @@ import { Injectable, Logger } from '@nestjs/common'
 
 import { Queue } from 'bull'
 
-import { searchRequest } from '@scraper/scraper/request/search.request'
-import CourseFetchJob from '@scraper/scraper/types/CourseFetchJob'
-import { QueueStoreService } from '@scraper/stores/queue-store/queue-store.service'
+import { searchRequest } from '@reg-scraper/scraper/request/search.request'
+import CourseFetchJob from '@reg-scraper/scraper/types/CourseFetchJob'
+import { QueueStoreService } from '@reg-scraper/stores/queue-store/queue-store.service'
 
 const logger: Logger = new Logger('QueueProducer')
 

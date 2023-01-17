@@ -1,8 +1,8 @@
 import { Logger } from '@nestjs/common'
 
-import { instance } from '@scraper/scraper/instance'
-import { searchParam } from '@scraper/scraper/params/search.param'
-import { searchSelector } from '@scraper/scraper/selector/search.selector'
+import { instance } from '@reg-scraper/scraper/instance'
+import { searchParam } from '@reg-scraper/scraper/params/search.param'
+import { searchSelector } from '@reg-scraper/scraper/selector/search.selector'
 
 const path = '/servlet/com.dtm.chula.cs.servlet.QueryCourseScheduleNew.CourseListNewServlet'
 

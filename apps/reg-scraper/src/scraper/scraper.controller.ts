@@ -1,6 +1,6 @@
 import { ConflictException, Controller, Logger, Post } from '@nestjs/common'
 
-import { QueueStoreService } from '@scraper/stores/queue-store/queue-store.service'
+import { QueueStoreService } from '@reg-scraper/stores/queue-store/queue-store.service'
 
 import { ScraperService } from './scraper.service'
 

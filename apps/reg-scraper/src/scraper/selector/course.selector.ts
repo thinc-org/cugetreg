@@ -12,7 +12,7 @@ import {
   studyProgramParser,
   teachersParser,
   updateGenEd,
-} from '@scraper/scraper/parser'
+} from '@reg-scraper/scraper/parser'
 
 export async function courseSelector(
   courseHtml: string,

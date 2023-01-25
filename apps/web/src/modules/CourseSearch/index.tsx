@@ -24,7 +24,7 @@ import { FilterSection } from '@web/modules/CourseSearch/components/FilterSectio
 import { WrappedRecommendationText } from '@web/modules/CourseSearch/components/RecommendationText'
 import { SearchField } from '@web/modules/CourseSearch/components/SearchField'
 import { SelectedCoursesButton } from '@web/modules/CourseSearch/components/SelectedCoursesButton'
-import { NoTagListLayout, TagList } from '@web/modules/CourseSearch/components/TagList'
+import { TagList } from '@web/modules/CourseSearch/components/TagList'
 
 import { CourseSearchProvider } from './context/CourseSearch'
 import { useCourseSearchPage } from './hooks/useCourseSearchPage'
@@ -78,7 +78,6 @@ export function CourseSearchPage() {
         </Stack>
         <TagList />
       </StickyStack>
-      <NoTagListLayout />
       <WrappedRecommendationText />
       <Stack spacing={3} direction="row">
         <CourseList />

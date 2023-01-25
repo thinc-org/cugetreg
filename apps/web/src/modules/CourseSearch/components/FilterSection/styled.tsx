@@ -25,13 +25,12 @@ export const Box = styled('div')`
   }
 `
 
-export const StickyPaper = styled(Paper)<{ hasTags: boolean }>`
+export const StickyPaper = styled(Paper)`
   display: flex;
   position: sticky;
   width: fit-content;
   height: fit-content;
-  top: ${({ hasTags }) => (hasTags ? '125px' : '101px')};
-  max-height: calc(100vh - ${({ hasTags }) => (hasTags ? '125px' : '101px')} - 24px);
+  top: 100px;
 `
 
 export const Button = styled(MuiButton)`

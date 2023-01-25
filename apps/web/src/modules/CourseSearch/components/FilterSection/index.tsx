@@ -19,7 +19,6 @@ import {
 import { FilterSectionProps } from '@web/modules/CourseSearch/components/FilterSection/types'
 import { tail } from '@web/utils/tail'
 
-import { useHasTags } from '../TagList'
 import { SelectTime } from './components/SelectTime'
 import { useFilterBar } from './hooks/useFilterBar'
 import { Button, StickyPaper } from './styled'
@@ -34,8 +33,6 @@ export const FilterSection: React.FC<FilterSectionProps> = ({ open, handleClose 
     'dayOfWeeks'
   )
   // const { checkboxes: specialCheckboxes } = useFilterBar(createSpecialCheckboxes)
-
-  const hasTags = useHasTags()
 
   const theme = useTheme()
   const match = useMediaQuery(theme.breakpoints.up('sm'))
@@ -70,7 +67,7 @@ export const FilterSection: React.FC<FilterSectionProps> = ({ open, handleClose 
 
   return match ? (
     open ? (
-      <StickyPaper hasTags={hasTags} variant="outlined">
+      <StickyPaper variant="outlined">
         <Stack spacing={4} p={4} pr={2} overflow="auto">
           {orderedFilters}
           {/* <CheckboxGroup title="แสดงผลพิเศษ" checkboxes={specialCheckboxes} /> */}

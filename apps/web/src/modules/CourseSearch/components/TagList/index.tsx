@@ -53,3 +53,10 @@ export const TagList: React.FC<TagListProps> = () => {
     </StyledStack>
   )
 }
+
+export function useHasTags() {
+  const { searchCourseQueryParams } = useSearchCourseQueryParams()
+  const { filter } = searchCourseQueryParams
+  const { genEdTypes, dayOfWeeks } = filter
+  return !!(genEdTypes?.length || dayOfWeeks?.length)
+}

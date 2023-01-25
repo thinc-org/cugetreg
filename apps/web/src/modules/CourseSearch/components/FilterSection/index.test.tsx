@@ -6,7 +6,7 @@ import { DAY_FILTER, GENED_FILTER } from '@web/common/context/Analytics/constant
 
 import { DayOfWeek, GenEdType } from '@libs/codegen'
 
-import { Button, StickyPaper } from './styled'
+import { Button } from './styled'
 
 describe('FilterSection', () => {
   const MOCK_QUERY = 'query'

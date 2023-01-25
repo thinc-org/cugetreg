@@ -86,7 +86,6 @@ exports[`FilterSection Should matched snapshot correctly when matchSmallScreen=t
 
 exports[`FilterSection Should matched snapshot correctly when matchSmallScreen=true and isExpandFilter=true 1`] = `
 <Styled(ForwardRef(Paper))
-  hasTags={true}
   variant="outlined"
 >
   <ForwardRef(Stack)

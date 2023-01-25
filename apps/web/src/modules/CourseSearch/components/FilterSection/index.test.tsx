@@ -9,14 +9,12 @@ import { DayOfWeek, GenEdType } from '@libs/codegen'
 import { Button, StickyPaper } from './styled'
 
 describe('FilterSection', () => {
-  const MOCK_HASTAG = true
   const MOCK_QUERY = 'query'
 
   const mockUseMediaQuery = jest.fn()
   const mockUseFilterBar = jest.fn(() => ({
     checkboxes: [],
   }))
-  const mockUseHasTags = jest.fn(() => MOCK_HASTAG)
   const mockHandleClose = jest.fn()
   const mockUseTheme = jest.fn(() => ({
     breakpoints: {
@@ -26,7 +24,6 @@ describe('FilterSection', () => {
 
   jest.doMock('@mui/material/useMediaQuery', () => mockUseMediaQuery)
   jest.doMock('./hooks/useFilterBar', () => ({ useFilterBar: mockUseFilterBar }))
-  jest.doMock('../TagList', () => ({ useHasTags: mockUseHasTags }))
   jest.doMock('@mui/material', () => ({
     ...(jest.requireActual('@mui/material') as Record<string, unknown>),
     useTheme: mockUseTheme,
@@ -53,7 +50,6 @@ describe('FilterSection', () => {
 
       expect(mockUseMediaQuery).toBeCalledWith(MOCK_QUERY)
       expect(mockUseTheme).toBeCalledTimes(1)
-      expect(mockUseHasTags).toBeCalledTimes(1)
       expect(mockUseFilterBar).toBeCalledTimes(2)
       expect(mockUseFilterBar).toHaveBeenNthCalledWith(
         1,
@@ -119,9 +115,6 @@ describe('FilterSection', () => {
       if (!matchSmallScreen) {
         expect(wrapper.find(ResponsiveDialog).prop('onClose')).toBe(mockHandleClose)
         expect(wrapper.find(Button).prop('onClick')).toBe(mockHandleClose)
-      }
-      if (matchSmallScreen && isExpandFilter) {
-        expect(wrapper.find(StickyPaper).prop('hasTags')).toBe(MOCK_HASTAG)
       }
       expect(wrapper).toMatchSnapshot()
     }

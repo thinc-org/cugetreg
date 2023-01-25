@@ -1,51 +1,38 @@
-import { HttpService } from '@nestjs/axios'
 import { Injectable, InternalServerErrorException, Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
+import { Client } from '@opensearch-project/opensearch'
 
-import * as http from 'http'
-import * as https from 'https'
 import { hostname } from 'os'
 
 export interface GelfLogEntry {
   short_message: string
   full_message?: string
-  _kind: string
-  _app: 'frontend-client' | 'backend'
+  kind: string
+  app: 'frontend-client' | 'backend'
 }
+
+const CLIENTLOGGING_INDEX = "cgr-clientlogging"
 
 @Injectable()
 export class ClientLoggingService {
-  httpAg: http.Agent
-  httpsAg: https.Agent
 
-  constructor(readonly configService: ConfigService, readonly httpService: HttpService) {
-    this.httpAg = new http.Agent({
-      keepAlive: true,
-    })
-    this.httpsAg = new https.Agent({
-      keepAlive: true,
-    })
-  }
+  constructor(readonly configService: ConfigService, private readonly elasticClient: Client) {}
 
   async sendLogEntry(entry: GelfLogEntry & Record<string, string>) {
-    try {
-      const res = await this.httpService
-        .post(
-          this.configService.get('clientLoggerUrl'),
-          {
-            ...entry,
-            version: '1.1',
-            host: hostname(),
-          },
-          {
-            httpAgent: this.httpAg,
-            httpsAgent: this.httpsAg,
-          }
-        )
-        .toPromise()
-      return res.data
+    try { 
+      const record = {
+        ...entry,
+        timestamp: new Date(),
+        host: hostname(),
+      }
+
+      await this.elasticClient.index({
+        index: CLIENTLOGGING_INDEX,
+        body: record,
+        refresh: true
+      })
     } catch (e) {
-      Logger.warn('Failed to send log to log collector', entry)
+      Logger.error("Failed to send log to logging service", e)
       throw new InternalServerErrorException("Can't send log to log collector")
     }
   }

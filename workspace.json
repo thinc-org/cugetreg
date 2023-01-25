@@ -7,6 +7,7 @@
     "course-utils": "libs/course-utils",
     "discord-bot": "apps/discord-bot",
     "web": "apps/web",
+    "reg-scraper": "apps/reg-scraper",
     "web-e2e": "apps/web-e2e"
   }
 }

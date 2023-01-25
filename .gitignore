@@ -45,4 +45,11 @@ Thumbs.db
 # SQLite
 **/*.sqlite
 
+# Google Analytics API
 google_application_credentials.json
+
+# cgr-api log
+log/
+
+# Scraper data source (local)
+data/

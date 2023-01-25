@@ -16,9 +16,10 @@
     "baseUrl": ".",
     "paths": {
       "@api/*": ["apps/api/src/*"],
+      "@web/*": ["apps/web/src/*"],
+      "@reg-scraper/*": ["apps/reg-scraper/src/*"],
       "@libs/codegen": ["libs/codegen/src"],
-      "@libs/course-utils": ["libs/course-utils/src/index.ts"],
-      "@web/*": ["apps/web/src/*"]
+      "@libs/course-utils": ["libs/course-utils/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

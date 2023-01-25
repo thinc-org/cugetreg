@@ -12,6 +12,7 @@ import { CourseRecommendationRequest, CourseRecommendationResponse } from '../gr
 export class ComputationResolver {
   private metadata: grpc.Metadata
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private courseRecommendation: any
 
   constructor(configService: ConfigService) {
@@ -37,6 +38,7 @@ export class ComputationResolver {
       )
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     this.courseRecommendation = new (descriptor.CourseRecommendation as any)(...clientArgs)
   }
 

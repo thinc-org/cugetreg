@@ -1,4 +1,5 @@
 import { BetaAnalyticsDataClient } from '@google-analytics/data'
+import { google } from '@google-analytics/data/build/protos/protos'
 
 import { configuration as config } from '../config/config'
 import { googleAnalyticDimensions, googleAnalyticMetrics } from './type'
@@ -10,6 +11,40 @@ export class GoogleAnalyticData {
   constructor() {
     this.analyticsDataClient = new BetaAnalyticsDataClient()
     this.property = `properties/${config.googleAnalytic.GA4_PROPERTY_ID}`
+  }
+
+  sortByDimentionValue(data: google.analytics.data.v1beta.IRow[]) {
+    data.sort((i, j) => {
+      return parseInt(i.dimensionValues[0].value) - parseInt(j.dimensionValues[0].value)
+    })
+    return data
+  }
+
+  extractMetricValue(data: google.analytics.data.v1beta.IRow[]): string[] {
+    return data.map((e) => e.metricValues[0].value)
+  }
+
+  extractMetricValueAsInt(data: google.analytics.data.v1beta.IRow[]): number[] {
+    return data.map((e) => parseInt(e.metricValues[0].value))
+  }
+
+  extractDimensionValue(data: google.analytics.data.v1beta.IRow[]): string[] {
+    return data.map((e) => e.dimensionValues[0].value)
+  }
+
+  extractDimensionValueAsDate(data: google.analytics.data.v1beta.IRow[]): number[] {
+    return this.extractDimensionValue(data).map((e) =>
+      Date.parse(e.slice(0, 4) + '-' + e.slice(4, 6) + '-' + e.slice(6, 8))
+    )
+  }
+
+  extractDimensionValueAsDayMonthDate(data: google.analytics.data.v1beta.IRow[]): string[] {
+    return this.extractDimensionValue(data).map((e) => {
+      return new Date(e.slice(0, 4) + '-' + e.slice(4, 6) + '-' + e.slice(6, 8)).toLocaleString(
+        'default',
+        { month: 'short', day: 'numeric' }
+      )
+    })
   }
 
   async getMetric(

@@ -5,6 +5,10 @@ export class GoogleAnalyticDataExtended extends GoogleAnalyticData {
     return this.getMetric(['activeUsers'], ['date'])
   }
 
+  async getByDate7Days() {
+    return this.getMetric(['activeUsers'], ['date'], '7daysAgo', 'yesterday')
+  }
+
   async getByDayOfWeek() {
     return this.getMetric(['activeUsers'], ['dayOfWeek'], '7daysAgo', 'yesterday')
   }

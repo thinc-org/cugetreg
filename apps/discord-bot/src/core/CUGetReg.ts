@@ -1,4 +1,4 @@
-import { Client, GatewayIntentBits, TextChannel } from 'discord.js'
+import { AttachmentBuilder, Client, GatewayIntentBits, TextChannel } from 'discord.js'
 import * as cron from 'node-cron'
 
 import { ICommand } from '../command/ICommand'
@@ -42,6 +42,13 @@ export class CUGetReg extends Client {
     const textChannel = this.channels.cache.get(channelID) as TextChannel
 
     textChannel.send(message)
+  }
+
+  sendImage(channelID: string, imgBuffer: Buffer): void {
+    const textChannel = this.channels.cache.get(channelID) as TextChannel
+    const attachment = new AttachmentBuilder(imgBuffer)
+
+    textChannel.send({ files: [attachment] })
   }
 
   get commands(): Map<string, ICommand> {

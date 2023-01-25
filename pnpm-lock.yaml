@@ -56,6 +56,7 @@ specifiers:
   '@thinc-org/chula-courses': ^2.3.0
   '@trivago/prettier-plugin-sort-imports': ^3.4.0
   '@typegoose/typegoose': 9.1.0
+  '@types/chart.js': ^2.9.37
   '@types/escape-html': ^1.0.2
   '@types/express': ^4.17.15
   '@types/jest': 28.1.8
@@ -89,6 +90,7 @@ specifiers:
   axios: 0.23.0
   broadcast-channel: 4.2.0
   canvas: ^2.11.0
+  chartjs-to-image: ^1.1.0
   class-transformer: ^0.5.1
   class-validator: ^0.13.2
   cookie-parser: ^1.4.6
@@ -220,6 +222,7 @@ dependencies:
   axios: 0.23.0
   broadcast-channel: 4.2.0
   canvas: 2.11.0
+  chartjs-to-image: 1.1.0
   class-transformer: 0.5.1
   class-validator: 0.13.2
   cookie-parser: 1.4.6
@@ -301,6 +304,7 @@ devDependencies:
   '@testing-library/react': 13.4.0_biqbaboplfbrettd7655fr4n2y
   '@testing-library/react-hooks': 8.0.1_pimovsjg5ibagkm3zmb5gxxeui
   '@trivago/prettier-plugin-sort-imports': 3.4.0_prettier@2.8.1
+  '@types/chart.js': 2.9.37
   '@types/escape-html': 1.0.2
   '@types/express': 4.17.15
   '@types/jest': 28.1.8
@@ -6325,6 +6329,12 @@ packages:
     dependencies:
       '@types/node': 18.7.18
 
+  /@types/chart.js/2.9.37:
+    resolution: {integrity: sha512-9bosRfHhkXxKYfrw94EmyDQcdjMaQPkU1fH2tDxu8DWXxf1mjzWQAV4laJF51ZbC2ycYwNDvIm1rGez8Bug0vg==}
+    dependencies:
+      moment: 2.29.4
+    dev: true
+
   /@types/cheerio/0.22.31:
     resolution: {integrity: sha512-Kt7Cdjjdi2XWSfrZ53v4Of0wG3ZcmaegFXjMmz9tfNrZSkzzo36G0AL1YqSdcIA78Etjt6E609pt5h1xnQkPUw==}
     dependencies:
@@ -8500,6 +8510,14 @@ packages:
       - debug
     dev: false
 
+  /axios/0.24.0:
+    resolution: {integrity: sha512-Q6cWsys88HoPgAaFAVUb0WpPk0O8iTeisR9IMqy9G8AbO4NlpVknrnQS03zzF9PGAWgO3cgletO3VjV/P7VztA==}
+    dependencies:
+      follow-redirects: 1.15.2
+    transitivePeerDependencies:
+      - debug
+    dev: false
+
   /axios/1.2.1:
     resolution: {integrity: sha512-I88cFiGu9ryt/tfVEi4kX2SITsvDddTajXTOFmt2uK1ZVA8LytjtdeyefdQWEf5PU8w+4SSJDoYnggflB5tW4A==}
     dependencies:
@@ -9123,6 +9141,15 @@ packages:
 
   /charenc/0.0.2:
     resolution: {integrity: sha512-yrLQ/yVUFXkzg7EDQsPieE/53+0RlaWTs+wBrvW36cyilJ2SaDWfl4Yj7MtLTXleV9uEKefbAGUPv2/iWSooRA==}
+
+  /chartjs-to-image/1.1.0:
+    resolution: {integrity: sha512-F20qRkAZA42XOU0Ipc/hUVmk06cO59pueeqbVSlJKSvTlTKR67HV8DUuZupCCyusQ9VkXIoiwg39iYIjzI+RcQ==}
+    dependencies:
+      axios: 0.24.0
+      javascript-stringify: 2.1.0
+    transitivePeerDependencies:
+      - debug
+    dev: false
 
   /check-more-types/2.24.0:
     resolution: {integrity: sha512-Pj779qHxV2tuapviy1bSZNEL1maXr13bPYpsvSDB68HlYcYuhlDrmGd63i0JHMCLKzc7rUSNIrpdJlhVlNwrxA==}
@@ -12881,6 +12908,10 @@ packages:
   /javascript-natural-sort/0.7.1:
     resolution: {integrity: sha512-nO6jcEfZWQXDhOiBtG2KvKyEptz7RVbpGP4vTD2hLBdmNQSsCiicO2Ioinv6UI4y9ukqnBpy+XZ9H6uLNgJTlw==}
     dev: true
+
+  /javascript-stringify/2.1.0:
+    resolution: {integrity: sha512-JVAfqNPTvNq3sB/VHQJAFxN/sPgKnsKrCwyRt15zwNCdrMMJDdcEOdubuy+DuJYYdm0ox1J4uzEuYKkN+9yhVg==}
+    dev: false
 
   /jest-changed-files/28.1.3:
     resolution: {integrity: sha512-esaOfUWJXk2nfZt9SPyC8gA1kNfdKLkQWyzsMlqq8msYSlNKfmZxfRgZn4Cd4MGVUF+7v6dBs0d5TOAKa7iIiA==}

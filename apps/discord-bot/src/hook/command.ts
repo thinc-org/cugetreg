@@ -1,7 +1,7 @@
 import { ChatInputCommandInteraction, Events } from 'discord.js'
 
 import { CUGetReg } from '../core/CUGetReg'
-import { HookFunction } from './hook'
+import { HookFunction } from './type'
 
 export const CommandHook: HookFunction = (client: CUGetReg): void => {
   client.on(Events.InteractionCreate, async (interaction: ChatInputCommandInteraction) => {

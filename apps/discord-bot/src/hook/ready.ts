@@ -1,7 +1,7 @@
 import { Events } from 'discord.js'
 
 import { CUGetReg } from '../core/CUGetReg'
-import { HookFunction } from './hook'
+import { HookFunction } from './type'
 
 export const ReadyHook: HookFunction = (client: CUGetReg): void => {
   client.once(Events.ClientReady, async () => {

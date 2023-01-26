@@ -1,5 +1,5 @@
 import { CommandHook } from './command'
-import { HookFunction } from './hook'
 import { ReadyHook } from './ready'
+import { HookFunction } from './type'
 
 export const hooks: HookFunction[] = [ReadyHook, CommandHook]

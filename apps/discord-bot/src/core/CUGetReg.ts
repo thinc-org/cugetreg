@@ -6,7 +6,7 @@ import { ICommand } from '../command/ICommand'
 import { database } from '../database'
 import { IDatabase } from '../database/IDatabase'
 import { hooks } from '../hook'
-import { HookFunction } from '../hook/hook'
+import { HookFunction } from '../hook/type'
 import { scheduler } from '../scheduler'
 import { IScheduler } from '../scheduler/IScheduler'
 

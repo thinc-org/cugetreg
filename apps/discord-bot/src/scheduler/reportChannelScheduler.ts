@@ -1,5 +1,5 @@
 import { CUGetReg } from '../core/CUGetReg'
-import { googleAnalyticDataExtended as googleAnalytic } from '../google-analytic/google-analytic-extended'
+import { googleAnalyticsDataExtended as googleAnalytics } from '../google-analytics/google-analytics-extended'
 import { lineChart } from '../utilities/generateChart'
 import { IScheduler } from './IScheduler'
 
@@ -9,9 +9,9 @@ export const ReportChannelScheduler: IScheduler = {
   callbackFunction: async (client: CUGetReg) => {
     try {
       const allReportChannels = await client.db.getAllReportChannels()
-      // const data = await googleAnalytic.getByDate().then((res) => res.rows[0])
-      const data = googleAnalytic.sortByDimentionValue(
-        await googleAnalytic.getByDate7Days().then((res) => res.rows)
+      // const data = await googleAnalytics.getByDate().then((res) => res.rows[0])
+      const data = googleAnalytics.sortByDimentionValue(
+        await googleAnalytics.getByDate7Days().then((res) => res.rows)
       )
 
       allReportChannels.forEach(async (reportChannel) => {
@@ -22,9 +22,9 @@ export const ReportChannelScheduler: IScheduler = {
         client.sendImage(
           reportChannel,
           await lineChart(
-            googleAnalytic.extractDimensionValueAsDayMonthDate(data),
+            googleAnalytics.extractDimensionValueAsDayMonthDate(data),
             'Active Users',
-            googleAnalytic.extractMetricValueAsInt(data),
+            googleAnalytics.extractMetricValueAsInt(data),
             'CU Get Reg',
             'Date',
             'Users'

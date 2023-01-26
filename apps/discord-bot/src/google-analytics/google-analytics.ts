@@ -1,16 +1,16 @@
 import { BetaAnalyticsDataClient } from '@google-analytics/data'
 import { google } from '@google-analytics/data/build/protos/protos'
 
-import { configuration as config } from '../config/config'
-import { googleAnalyticDimensions, googleAnalyticMetrics } from './type'
+import { configuration as config } from '../config'
+import { googleAnalyticsDimensions, googleAnalyticsMetrics } from './type'
 
-export class GoogleAnalyticData {
+export class GoogleAnalyticsData {
   private analyticsDataClient: BetaAnalyticsDataClient
   private property: string
 
   constructor() {
     this.analyticsDataClient = new BetaAnalyticsDataClient()
-    this.property = `properties/${config.googleAnalytic.GA4_PROPERTY_ID}`
+    this.property = `properties/${config.googleAnalytics.GA4_PROPERTY_ID}`
   }
 
   sortByDimentionValue(data: google.analytics.data.v1beta.IRow[]) {
@@ -48,8 +48,8 @@ export class GoogleAnalyticData {
   }
 
   async getMetric(
-    metrics: googleAnalyticMetrics[],
-    dimensions: googleAnalyticDimensions[],
+    metrics: googleAnalyticsMetrics[],
+    dimensions: googleAnalyticsDimensions[],
     startDate = 'yesterday',
     endDate = 'yesterday'
   ) {

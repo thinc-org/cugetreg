@@ -122,7 +122,9 @@
     "styled-components": "^5.3.6",
     "tslib": "^2.4.1",
     "uuid": "^8.3.2",
-    "zustand": "^4.1.5"
+    "zustand": "^4.1.5",
+    "tough-cookie": "^4.0.0",
+    "winston": "^3.8.2"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^2.16.2",
@@ -133,12 +135,6 @@
     "@nestjs/testing": "^9.2.1",
     "@next/bundle-analyzer": "^13.1.1",
     "@next/env": "^13.1.1",
-    "slate-react": "^0.82.0",
-    "styled-components": "^5.3.5",
-    "tough-cookie": "^4.0.0",
-    "tslib": "^2.4.0",
-    "uuid": "^8.3.2",
-    "winston": "^3.8.2",
     "zustand": "^4.0.0",
     "@nrwl/cli": "15.0.4",
     "@nrwl/cypress": "15.0.4",

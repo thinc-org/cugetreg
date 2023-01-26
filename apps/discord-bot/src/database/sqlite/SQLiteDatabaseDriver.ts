@@ -1,9 +1,10 @@
 import { open } from 'sqlite'
 import * as sqlite3 from 'sqlite3'
 
+import { configuration } from '../../config'
 import { IDatabase } from '../IDatabase'
 
-const DB_FILE_NAME = 'database.sqlite'
+const DB_FILE_NAME = configuration.database.connectionURL
 
 type ReportChannel = {
   guild_id?: string

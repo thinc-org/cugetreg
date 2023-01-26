@@ -1,7 +1,7 @@
 import { REST, Routes, SlashCommandBuilder } from 'discord.js'
 
-import { configuration as config } from './config/config'
-import { CUGetRegCommands } from './core/CUGetRegCommands'
+import { commands as CUGetRegCommands } from './command'
+import { configuration as config } from './config'
 
 const commands = CUGetRegCommands.map((command) => {
   return new SlashCommandBuilder()

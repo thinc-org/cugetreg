@@ -1,25 +1,25 @@
 import { AttachmentBuilder, Client, GatewayIntentBits, TextChannel } from 'discord.js'
 import * as cron from 'node-cron'
 
+import { commands } from '../command'
 import { ICommand } from '../command/ICommand'
+import { database } from '../database'
 import { IDatabase } from '../database/IDatabase'
+import { hooks } from '../hook'
 import { HookFunction } from '../hook/hook'
+import { scheduler } from '../scheduler'
 import { IScheduler } from '../scheduler/IScheduler'
-import { CUGetRegCommands } from './CUGetRegCommands'
-import { CUGetRegDatabase } from './CUGetRegDatabase'
-import { CUGetRegHooks } from './CUGetRegHooks'
-import { CUGetRegScheduler } from './CUGetRegScheduler'
 
 export class CUGetReg extends Client {
-  private commandList = new Map<string, ICommand>()
-  private database: IDatabase = CUGetRegDatabase
+  private _commandList = new Map<string, ICommand>()
+  private _database: IDatabase = database
 
   constructor(token: string) {
     super({ intents: [GatewayIntentBits.Guilds] })
     this.login(token)
-    this.addHook(CUGetRegHooks)
-    this.registerCommand(CUGetRegCommands)
-    this.registerScheduler(CUGetRegScheduler)
+    this.addHook(hooks)
+    this.registerCommand(commands)
+    this.registerScheduler(scheduler)
   }
 
   addHook(hookFunctions: HookFunction[]): void {
@@ -28,7 +28,7 @@ export class CUGetReg extends Client {
 
   registerCommand(commands: ICommand[]): void {
     commands.forEach((command) => {
-      this.commandList.set(command.name, command)
+      this._commandList.set(command.name, command)
     })
   }
 
@@ -52,10 +52,10 @@ export class CUGetReg extends Client {
   }
 
   get commands(): Map<string, ICommand> {
-    return this.commandList
+    return this._commandList
   }
 
   get db(): IDatabase {
-    return this.database
+    return this._database
   }
 }

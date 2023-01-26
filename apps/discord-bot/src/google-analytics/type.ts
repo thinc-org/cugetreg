@@ -1,5 +1,5 @@
-export type googleAnalyticMetrics = 'activeUsers' | 'newUsers' | 'totalUsers'
-export type googleAnalyticDimensions =
+export type googleAnalyticsMetrics = 'activeUsers' | 'newUsers' | 'totalUsers'
+export type googleAnalyticsDimensions =
   | 'city'
   | 'contentType'
   | 'country'

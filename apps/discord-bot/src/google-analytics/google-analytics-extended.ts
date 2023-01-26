@@ -1,6 +1,6 @@
-import { GoogleAnalyticData } from './google-analytic'
+import { GoogleAnalyticsData } from './google-analytics'
 
-export class GoogleAnalyticDataExtended extends GoogleAnalyticData {
+export class GoogleAnalyticsDataExtended extends GoogleAnalyticsData {
   async getByDate() {
     return this.getMetric(['activeUsers'], ['date'])
   }
@@ -50,4 +50,4 @@ export class GoogleAnalyticDataExtended extends GoogleAnalyticData {
   }
 }
 
-export const googleAnalyticDataExtended = new GoogleAnalyticDataExtended()
+export const googleAnalyticsDataExtended = new GoogleAnalyticsDataExtended()

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import axiosCookieJarSupport from 'axios-cookiejar-support'
+import { wrapper } from 'axios-cookiejar-support'
 import * as https from 'https'
 import * as iconv from 'iconv-lite'
 import * as tough from 'tough-cookie'
@@ -20,5 +20,5 @@ instance.interceptors.response.use(function (response) {
 })
 
 //setup cookie jar
-axiosCookieJarSupport(instance)
+wrapper(instance)
 instance.defaults.jar = new tough.CookieJar()

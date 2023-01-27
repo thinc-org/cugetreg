@@ -3,7 +3,7 @@ import { Logger } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 
 import { Course } from '@thinc-org/chula-courses'
-import { Job, Queue } from 'bull'
+import type { Job, Queue } from 'bull'
 import { Model } from 'mongoose'
 
 import { OverrideService } from '@reg-scraper/override/override.service'
@@ -75,15 +75,19 @@ export class QueueConsumerService {
         }
       }
     } catch (error) {
-      if (tryCount >= 1) {
+      if (error instanceof Error) {
+        if (tryCount >= 1) {
+          this.logger.error(
+            `[Error] On ${studyProgram}-${semester}/${academicYear}: Retrieving Courses failed: ${error.message}, will discard this job.`
+          )
+          return
+        }
         this.logger.error(
-          `[Error] On ${studyProgram}-${semester}/${academicYear}: Retrieving Courses failed: ${error.message}, will discard this job.`
+          `[Error] Retrieving Courses failed: ${error.message as string}, requeueing`
         )
-        return
+        this.fetchQueue.add({ ...job.data, tryCount: job.data.tryCount + 1 })
+        this.queueStoreService.length += job.data.courses.length
       }
-      this.logger.error(`[Error] Retrieving Courses failed: ${error.message}, requeueing`)
-      this.fetchQueue.add({ ...job.data, tryCount: job.data.tryCount + 1 })
-      this.queueStoreService.length += job.data.courses.length
     } finally {
       this.queueStoreService.increment(job.data.courses.length)
     }

@@ -60,11 +60,3 @@ export function useHasTags() {
   const { genEdTypes, dayOfWeeks } = filter
   return !!(genEdTypes?.length || dayOfWeeks?.length)
 }
-
-export function NoTagListLayout() {
-  if (useHasTags()) {
-    return null
-  }
-
-  return <StyledStack />
-}

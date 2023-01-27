@@ -17,6 +17,7 @@ import { SelectedCourse } from './types'
 const RecommendationItem = styled(Link)`
   color: ${({ theme }) => theme.palette.highlight.indigo[700]};
   margin-left: 1em;
+  cursor: pointer;
 `
 
 interface RecommendationTextProps {

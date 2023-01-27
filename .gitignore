@@ -46,3 +46,6 @@ Thumbs.db
 log/
 # Scraper data source (local)
 data/
+
+# turbo log
+.turbo

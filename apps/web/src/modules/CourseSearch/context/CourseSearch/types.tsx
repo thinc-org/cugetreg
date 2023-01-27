@@ -1,4 +1,4 @@
-import { SearchCourseQueryResult } from '@libs/codegen'
+import { SearchCourseQueryResult } from '@cgr/codegen'
 
 export interface CourseSearchProps {
   fetchMoreCourses: () => void

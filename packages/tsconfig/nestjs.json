@@ -1,0 +1,30 @@
+{
+    "$schema": "https://json.schemastore.org/tsconfig",
+    "display": "Nest.js",
+    "extends": "./base.json",
+    "compilerOptions": {
+      "module": "esnext",
+      "target": "es6",
+      "lib": ["es7"],
+      "allowJs": false,
+      "strict": true,
+      "forceConsistentCasingInFileNames": true,
+      "noEmit": true,
+      "incremental": true,
+      "esModuleInterop": true,
+      "resolveJsonModule": true,
+      "isolatedModules": true,
+      "noImplicitAny": false,
+      "noUnusedLocals": true,
+      "noLib": false,
+      "emitDecoratorMetadata": true,
+      "experimentalDecorators": true,
+      "useUnknownInCatchVariables": false,
+      "sourceMap": true,
+      "outDir": "dist",
+      "baseUrl": "."
+    },
+    "include": ["packages/**/*", "integration/**/*"],
+    "exclude": ["node_modules", "**/*.spec.ts"]
+  }
+  

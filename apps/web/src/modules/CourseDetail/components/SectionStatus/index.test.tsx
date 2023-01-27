@@ -1,6 +1,6 @@
 import { shallow } from 'enzyme'
 
-import { Capacity } from '@libs/codegen'
+import { Capacity } from '@cgr/codegen'
 
 describe('SectionStatus', () => {
   const mockCapacity: Capacity = {

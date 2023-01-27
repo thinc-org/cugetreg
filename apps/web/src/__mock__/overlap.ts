@@ -6,7 +6,7 @@ import {
   ScheduleClass,
 } from '@web/modules/Schedule/components/Schedule/utils'
 
-import { GenEdType } from '@libs/codegen'
+import { GenEdType } from '@cgr/codegen'
 
 const mockCourse = mockCourseData[0]
 export const mockItem = {

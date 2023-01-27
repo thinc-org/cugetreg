@@ -1,9 +1,10 @@
 {
-  "extends": "./tsconfig.json",
+  "extends": "tsconfig/nestjs.json",
   "compilerOptions": {
     "outDir": "../../dist/out-tsc",
-    "module": "commonjs",
-    "types": ["jest", "node"]
+    "paths": {
+      "@api/*": ["./src/*"]
+    }
   },
   "include": ["jest.config.ts", "**/*.test.ts", "**/*.spec.ts", "**/*.d.ts"]
 }

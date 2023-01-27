@@ -1,6 +1,6 @@
 import { Theme } from '@mui/material'
 
-import { DayOfWeek } from '@libs/codegen'
+import { DayOfWeek } from '@cgr/codegen'
 
 export function getDayColor(theme: Theme, day: DayOfWeek): string {
   switch (day) {

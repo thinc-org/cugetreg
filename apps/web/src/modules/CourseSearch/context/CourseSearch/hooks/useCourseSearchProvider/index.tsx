@@ -5,7 +5,7 @@ import { useRouter } from 'next/router'
 import { LIMIT_QUERY_CONSTANT } from '@web/modules/CourseSearch/context/CourseSearch/constants'
 import { useSearchCourseQueryParams } from '@web/modules/CourseSearch/hooks/useSearchCourseQueryParams'
 
-import { useSearchCourseQuery } from '@libs/codegen'
+import { useSearchCourseQuery } from '@cgr/codegen'
 
 import { useEmpty } from '../useEmpty'
 

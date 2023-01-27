@@ -1,3 +1,3 @@
-import { Review } from '@web/common/types/reviews'
+import { Review } from '@cgr/codegen'
 
 export type ReviewCardProps = Review

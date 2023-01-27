@@ -1,7 +1,7 @@
-import { StudyProgram } from '@libs/codegen'
+import { StudyProgram } from '@cgr/codegen'
 
 export interface QueryParams {
-  keyword?: string
+  keyword?: string | null
   genEdTypes?: string
   dayOfWeeks?: string
   limit?: number

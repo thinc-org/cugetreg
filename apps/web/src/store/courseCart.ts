@@ -12,7 +12,7 @@ import { client } from '@web/services/apollo'
 import { collectErrorLog, collectLogEvent } from '@web/services/logging'
 import { userStore } from '@web/store/userStore'
 
-import type { Course } from '@libs/codegen'
+import type { Course } from '@cgr/codegen'
 import {
   GenEdType,
   GetCourseCartDocument,
@@ -24,7 +24,7 @@ import {
   PushCourseCartMutationVariables,
   Semester,
   StudyProgram,
-} from '@libs/codegen'
+} from '@cgr/codegen'
 
 export interface CourseCartItem extends Course {
   selectedSectionNo: string

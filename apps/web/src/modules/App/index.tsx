@@ -46,7 +46,7 @@ export function App(props: MyAppProps) {
   useSaveStudyProgram()
 
   return (
-    <AppProvider forceDark={forceDark} emotionCache={emotionCache}>
+    <AppProvider forceDark={forceDark ?? false} emotionCache={emotionCache}>
       <TrackPageChange>
         <DefaultSeo {...SEO} />
         <LoadingProgress />

@@ -7,7 +7,7 @@ import { collectLogEvent } from '@web/services/logging'
 import { courseCartStore } from '@web/store'
 import { userStore } from '@web/store/userStore'
 
-import { StudyProgram } from '@libs/codegen'
+import { StudyProgram } from '@cgr/codegen'
 
 import { removeElement } from '../../utils/removeElement'
 import { useLogging } from '../useLogging'

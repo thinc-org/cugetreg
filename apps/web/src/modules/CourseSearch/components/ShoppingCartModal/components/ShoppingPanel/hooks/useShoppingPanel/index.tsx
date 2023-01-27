@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import { courseCartStore } from '@web/store'
 
-import { Course } from '@libs/codegen'
+import { Course } from '@cgr/codegen'
 
 export enum ShoppingState {
   Default = 'default',

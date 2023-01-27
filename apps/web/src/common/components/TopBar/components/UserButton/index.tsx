@@ -7,7 +7,7 @@ import { Analytics } from '@web/common/context/Analytics/components/Analytics'
 import { LOGIN_BUTTON, LOGOUT_BUTTON } from '@web/common/context/Analytics/constants'
 import { userStore } from '@web/store/userStore'
 
-import { useMeQuery } from '@libs/codegen'
+import { useMeQuery } from '@cgr/codegen'
 
 import { GDriveIndicator } from '../GDriveIndicator'
 import { NavBarItem } from '../NavBarItem'
@@ -25,7 +25,7 @@ export const UserButton = observer(function UserButton() {
         <SyncContainer direction="row" alignItems="center">
           <GDriveIndicator />
           <UserContainer>
-            <Typography variant="h6">{data?.me.name}</Typography>
+            <Typography variant="h6">{data?.me?.name}</Typography>
           </UserContainer>
         </SyncContainer>
         <Analytics elementName={LOGOUT_BUTTON}>

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { useCourseGroup } from '@web/common/hooks/useCourseGroup'
 
-import { StudyProgram } from '@libs/codegen'
+import { StudyProgram } from '@cgr/codegen'
 
 import { ConfigBarSelect } from '../ConfigSelect'
 

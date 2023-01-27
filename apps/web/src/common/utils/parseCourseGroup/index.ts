@@ -2,7 +2,7 @@ import { ParsedUrlQuery } from 'querystring'
 
 import { parseTerm } from '@web/common/utils/parseTerm'
 
-import { StudyProgram } from '@libs/codegen'
+import { StudyProgram } from '@cgr/codegen'
 
 import { DEFAULT_STUDY_PROGRAM } from '../../hooks/useCourseGroup/constants'
 import { CourseGroup } from '../../hooks/useCourseGroup/types'

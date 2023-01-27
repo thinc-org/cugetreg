@@ -1,11 +1,10 @@
 {
-  "extends": "./tsconfig.json",
+  "extends": "tsconfig/nestjs.json",
   "compilerOptions": {
     "outDir": "../../dist/out-tsc",
-    "module": "commonjs",
-    "types": ["node"],
-    "emitDecoratorMetadata": true,
-    "target": "es2015"
+    "paths": {
+      "@api/*": ["./src/*"]
+    }
   },
   "exclude": ["jest.config.ts", "**/*.spec.ts", "**/*.test.ts"],
   "include": ["**/*.ts"]

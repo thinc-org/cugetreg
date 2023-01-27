@@ -15,12 +15,13 @@ import { courseCartStore } from '@web/store'
 
 import { useCourseDialog } from '../context'
 import { SectionSelect } from './SectionSelect'
+import { GenEdType } from '@cgr/codegen'
 
 export function CourseDialogDetail() {
   const { item, overlaps } = useCourseDialog()
   const section = courseCartStore
     .item(item)
-    .sections.find((section) => section.sectionNo === item.selectedSectionNo)
+    ?.sections.find((section) => section.sectionNo === item.selectedSectionNo)
   const warning = useOverlapWarning(overlaps)
   const { t } = useTranslation('courseDialog')
 
@@ -32,9 +33,11 @@ export function CourseDialogDetail() {
       <Stack direction="row" justifyContent="space-between" alignItems="center">
         <Stack direction="row" gap={2} alignItems="center" flexWrap="wrap">
           <SectionSelect />
-          {section.genEdType !== 'NO' && <GenEdChip type={section.genEdType} size="small" />}
+          {section?.genEdType !== 'NO' && (
+            <GenEdChip type={section?.genEdType ?? GenEdType.No} size="small" />
+          )}
         </Stack>
-        <SectionStatus capacity={section.capacity} closed={section.closed} />
+        {section && <SectionStatus capacity={section.capacity} closed={section.closed} />}
       </Stack>
 
       <Typography variant="subtitle1" color="highlight.red.500">

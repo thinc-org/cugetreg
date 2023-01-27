@@ -7,7 +7,7 @@ import { apiUrl } from '@web/services/httpClient'
 import { userStore } from '@web/store/userStore'
 import { uniqBy } from '@web/utils/uniqBy'
 
-import { Course, SearchCourseQueryVariables } from '@libs/codegen'
+import { Course, SearchCourseQueryVariables } from '@cgr/codegen'
 
 const cache = new InMemoryCache({
   typePolicies: {

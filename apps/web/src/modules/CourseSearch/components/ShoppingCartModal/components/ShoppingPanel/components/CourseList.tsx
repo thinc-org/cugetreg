@@ -5,7 +5,7 @@ import { Checkbox, Grid, Hidden, Typography, useMediaQuery, useTheme } from '@mu
 
 import { GenEdChip } from '@web/common/components/Chips/catagories/GenEdChip'
 
-import { Course } from '@libs/codegen'
+import { Course } from '@cgr/codegen'
 
 import { CourseName } from './CourseName'
 

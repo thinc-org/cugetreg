@@ -11,7 +11,7 @@ import { INITIAL_CONTENT } from '@web/common/components/RichTextEditor/initialCo
 import { RichTextEditorRef } from '@web/common/components/RichTextEditor/types'
 import { Storage } from '@web/common/storage'
 import { StorageKey } from '@web/common/storage/constants'
-import { Review } from '@web/common/types/reviews'
+import { Review } from '@cgr/codegen'
 import { getCurrentTerm } from '@web/common/utils/getCurrentTerm'
 import { ControlledSelect } from '@web/modules/CourseDetail/components/ControlledSelect'
 import { ReviewEditables } from '@web/modules/CourseDetail/components/ReviewForm/types'
@@ -101,7 +101,7 @@ export function ReviewForm() {
     restoreFormState({
       ...review,
       rating: review.rating / 2,
-      content: getEditor().deserializeHtml(review.content),
+      content: getEditor()?.deserializeHtml(review.content ?? ''),
     })
   }
 
@@ -128,7 +128,7 @@ export function ReviewForm() {
     const review = methods.getValues()
     const ratingNumber = review.rating * 2 // 1 - 10, 0 isn't accepted
     const modifiedNode = applyEscapedText(review.content as TNode[])
-    const html = getEditor().serializeHtml(modifiedNode)
+    const html = getEditor()?.serializeHtml(modifiedNode)
     return {
       rating: ratingNumber,
       semester: review.semester,

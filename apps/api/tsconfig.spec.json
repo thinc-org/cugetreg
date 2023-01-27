@@ -1,10 +1,23 @@
 {
-  "extends": "tsconfig/nestjs.json",
+  "extends": "tsconfig/nextjs.json",
   "compilerOptions": {
-    "outDir": "../../dist/out-tsc",
     "paths": {
-      "@api/*": ["./src/*"]
-    }
+      "@reg-scraper/*": ["./src/*"]
+    },
+    "outDir": "./dist",
+    "baseUrl": "./"
   },
-  "include": ["jest.config.ts", "**/*.test.ts", "**/*.spec.ts", "**/*.d.ts"]
+  "include": [
+    "jest.config.ts",
+    "**/*.test.ts",
+    "**/*.spec.ts",
+    "**/*.test.tsx",
+    "**/*.spec.tsx",
+    "**/*.test.js",
+    "**/*.spec.js",
+    "**/*.test.jsx",
+    "**/*.spec.jsx",
+    "**/*.d.ts"
+  ],
+  "exclude": ["node_modules"]
 }

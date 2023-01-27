@@ -1,0 +1,72 @@
+{
+  "name": "discord-bot",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/discord-bot/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/apps/discord-bot",
+        "main": "apps/discord-bot/src/main.ts",
+        "tsConfig": "apps/discord-bot/tsconfig.app.json"
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "extractLicenses": true,
+          "inspect": false,
+          "fileReplacements": [
+            {
+              "replace": "apps/discord-bot/src/environments/environment.ts",
+              "with": "apps/discord-bot/src/environments/environment.prod.ts"
+            }
+          ]
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/js:node",
+      "options": {
+        "buildTarget": "discord-bot:build"
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "discord-bot:build:production"
+        }
+      }
+    },
+    "deploy-commands": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "ts-node --project ./apps/discord-bot/tsconfig.app.json ./apps/discord-bot/src/deploy-commands.ts"
+      }
+    },
+    "prisma-migrate-dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cd {args.db} && npx prisma migrate dev",
+        "cwd": "apps/discord-bot/src/database"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/discord-bot/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/discord-bot/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}

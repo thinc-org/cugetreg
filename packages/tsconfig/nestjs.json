@@ -3,7 +3,7 @@
   "display": "Nest.js",
   "extends": "./base.json",
   "compilerOptions": {
-    "module": "ES2022",
+    "module": "CommonJS",
     "declaration": true,
     "removeComments": true,
     "emitDecoratorMetadata": true,

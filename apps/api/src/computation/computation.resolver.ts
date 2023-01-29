@@ -16,7 +16,7 @@ export class ComputationResolver {
   private courseRecommendation: any
 
   constructor(configService: ConfigService) {
-    const pkgDef = protoloader.loadSync(join(__dirname, 'assets/cgrcompute.proto'), {
+    const pkgDef = protoloader.loadSync(join(__dirname, 'cgrcompute.proto'), {
       keepCase: true,
       longs: String,
       enums: String,

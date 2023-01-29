@@ -1,20 +1,26 @@
-# This Dockerfile is copy-pasted into our main docs at /docs/handbook/deploying-with-docker.
-# Make sure you update both files!
+# When copying this Dockerfile for use in other apps, don't forget to change the scope (api, web, etc.) in RUN commands
 
-FROM node:16.17.0-alpine AS builder
+FROM node:16.17.0-alpine AS pnpm
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
-RUN apk add --no-cache --update libc6-compat
+RUN apk add --no-cache libc6-compat
+RUN apk update
+
 ENV PNPM_HOME="/root/.local/share/pnpm"
 ENV PATH="${PATH}:${PNPM_HOME}"
-RUN npm install -g pnpm turbo
+RUN npm install -g pnpm
 
-# Set working directory
+# --------------------------------------------------------
+
+FROM pnpm AS builder
 WORKDIR /app
+RUN pnpm install -g turbo
 COPY . .
 RUN turbo prune --scope=web --docker
 
-# Add lockfile and package.json's of isolated subworkspace
-FROM node:16.17.0-alpine AS installer
+# --------------------------------------------------------
+
+FROM pnpm AS installer
+WORKDIR /app
 RUN apk add --no-cache --update --no-cache \
     make \
     g++ \
@@ -24,26 +30,19 @@ RUN apk add --no-cache --update --no-cache \
     pango-dev \
     libtool \
     autoconf \
-    automake \
-    libc6-compat
+    automake
 
-ENV PNPM_HOME="/root/.local/share/pnpm"
-ENV PATH="${PATH}:${PNPM_HOME}"
-RUN npm install -g pnpm
-WORKDIR /app
-
-# First install the dependencies (as they change less often)
-COPY .gitignore .gitignore
 COPY --from=builder /app/out/json/ .
 COPY --from=builder /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
 RUN pnpm install --frozen-lockfile
 
-# Build the project
 COPY --from=builder /app/out/full/ .
 COPY turbo.json turbo.json
 RUN pnpm turbo run build --filter=web...
 
-FROM node:16.17.0-alpine AS runner
+# --------------------------------------------------------
+
+FROM pnpm AS runner
 WORKDIR /app
 
 # Don't run production as root

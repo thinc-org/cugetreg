@@ -41,4 +41,4 @@ RUN pnpm install --frozen-lockfile --production
 
 COPY --from=installer /app/apps/api/dist/ apps/api/dist/
 
-CMD ["node", "apps/api/dist/main.js"]
+CMD node apps/api/dist/main.js

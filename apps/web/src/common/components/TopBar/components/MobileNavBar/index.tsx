@@ -44,7 +44,7 @@ export const MobileNavBar = observer(() => {
       </MoreButton>
       <Drawer anchor="right" open={isOpen} onClose={onClose}>
         <DrawerContent>
-          <Logo src={cgrLogoDark} alt={t('translation:appName')} />
+          <Logo src={cgrLogoDark.src} alt={t('translation:appName')} />
           <div style={{ marginTop: '2rem' }}>
             <LinkWithAnalytics
               href={buildLink(`/courses`)}

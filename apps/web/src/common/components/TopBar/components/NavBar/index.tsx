@@ -53,7 +53,7 @@ export function NavBar() {
       <FlexContainer>
         <LinkWithAnalytics href={buildLink(`/courses`)} passHref elementName={GETREG_LOGO}>
           <Logo>
-            <img src={cgrLogoDark} alt={t('translation:appName')} />
+            <img src={cgrLogoDark.src} alt={t('translation:appName')} />
           </Logo>
         </LinkWithAnalytics>
         {isLargeScreen ? (

@@ -5,7 +5,7 @@
       "@api/*": ["./src/*"]
     },
     "outDir": "./dist",
-    "baseUrl": ".",
+    "baseUrl": "./",
     "experimentalDecorators": true,
     "types": ["node"]
   },

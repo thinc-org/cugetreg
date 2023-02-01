@@ -1,5 +1,5 @@
 import { StudyProgram } from '@thinc-org/chula-courses'
-import * as mongoose from 'mongoose'
+import mongoose from 'mongoose'
 
 import { ReviewInteractionType, ReviewStatus } from '../graphql'
 

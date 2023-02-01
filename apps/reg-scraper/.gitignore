@@ -35,5 +35,6 @@ lerna-debug.log*
 
 courses
 .env
+.env.local
 data/
 *.rdb

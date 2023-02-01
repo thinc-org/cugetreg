@@ -23,7 +23,7 @@ FROM pnpm AS installer
 WORKDIR /app
 
 COPY --from=builder /app/out/json/ .
-COPY --from=builder /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
+COPY pnpm-lock.yaml ./pnpm-lock.yaml
 RUN pnpm install --frozen-lockfile
 
 COPY --from=builder /app/out/full/ .
@@ -36,7 +36,7 @@ FROM pnpm AS runner
 WORKDIR /app
 
 COPY --from=builder /app/out/json/ .
-COPY --from=builder /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
+COPY pnpm-lock.yaml ./pnpm-lock.yaml
 RUN pnpm install --frozen-lockfile --production
 
 COPY --from=installer /app/apps/api/dist/ apps/api/dist/

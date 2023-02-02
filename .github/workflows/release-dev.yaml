@@ -55,7 +55,7 @@ jobs:
           version: 7
           run_install: false
 
-      - name: Install dependencies
+      - name: Install turbo
         run: pnpm install --global turbo
 
       - name: Get affected app names

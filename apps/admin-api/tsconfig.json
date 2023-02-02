@@ -1,0 +1,25 @@
+{
+  "extends": "tsconfig/nestjs.json",
+  "compilerOptions": {
+    "paths": {
+      "@admin-api/*": ["./src/*"]
+    },
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "experimentalDecorators": true,
+    "types": ["node"]
+  },
+  "include": ["next-env.d.ts", "src/**/*.ts"],
+  "exclude": [
+    "node_modules",
+    "jest.config.ts",
+    "**/*.test.ts",
+    "**/*.spec.ts",
+    "**/*.test.tsx",
+    "**/*.spec.tsx",
+    "**/*.test.js",
+    "**/*.spec.js",
+    "**/*.test.jsx",
+    "**/*.spec.jsx"
+  ]
+}

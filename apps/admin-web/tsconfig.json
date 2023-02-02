@@ -2,12 +2,13 @@
   "extends": "tsconfig/nextjs.json",
   "compilerOptions": {
     "paths": {
-      "@api/*": ["./src/*"]
+      "@admin-web/*": ["./src/*"]
     },
-    "outDir": "./dist",
-    "baseUrl": "./"
+    "experimentalDecorators": true
   },
-  "include": [
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "exclude": [
+    "node_modules",
     "jest.config.ts",
     "**/*.test.ts",
     "**/*.spec.ts",
@@ -16,8 +17,6 @@
     "**/*.test.js",
     "**/*.spec.js",
     "**/*.test.jsx",
-    "**/*.spec.jsx",
-    "**/*.d.ts"
-  ],
-  "exclude": ["node_modules"]
+    "**/*.spec.jsx"
+  ]
 }

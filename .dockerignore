@@ -22,8 +22,13 @@ pnpm-debug.log*
 .DS_Store
 
 Dockerfile
+**/Dockerfile
 
 # misc
 .git
 .github
 .vscode
+
+# turbo cache
+.turbo
+**/.turbo

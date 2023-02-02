@@ -12,14 +12,16 @@ import {
   GetCourseForThumbnailDocument,
   GetCourseForThumbnailQuery,
   GetCourseForThumbnailQueryVariables,
-} from '@libs/codegen'
+} from '@cgr/codegen'
+
+import { ParsedUrlQuery } from 'querystring'
 
 export async function CourseThumbnailAPI(req: NextApiRequest, res: NextApiResponse) {
   if (!ENABLE_COURSE_THUMBNAIL) {
     throw new Error('Course thumbnail is disabled')
   }
   try {
-    const { courseNo, courseGroup } = parseCourseNoFromQuery(req.query)
+    const { courseNo, courseGroup } = parseCourseNoFromQuery(req.query as ParsedUrlQuery)
     const key = `${courseNo}-${courseGroup.studyProgram}-${courseGroup.academicYear}-${courseGroup.semester}`
     if (!key.match(/^\d{7}-[STI]-\d{4}-\d$/)) {
       throw new Error('Invalid courseNo')

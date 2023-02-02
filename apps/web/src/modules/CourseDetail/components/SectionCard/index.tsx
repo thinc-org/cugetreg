@@ -24,7 +24,7 @@ import { Analytics } from '@web/common/context/Analytics/components/Analytics'
 import { SUBJECT_SELECT_BUTTON_WITH_SECTION } from '@web/common/context/Analytics/constants'
 import { getClassPeriod } from '@web/common/utils/getClassPeriod'
 
-import { Course, Section } from '@libs/codegen'
+import { Course, Section } from '@cgr/codegen'
 
 import { SectionStatus } from '../SectionStatus'
 

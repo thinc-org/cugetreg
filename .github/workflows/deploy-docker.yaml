@@ -1,0 +1,144 @@
+name: Build and Publish Docker image
+
+on:
+  workflow_call:
+    inputs:
+      packages:
+        description: Packages to build and publish
+        required: true
+        type: string
+      container-registry:
+        description: Container registry to push the image to
+        default: ghcr.io
+        type: string
+      image-prefix:
+        description: Image prefix of the built image
+        type: string
+      username:
+        description: Username for logging in to the container registry
+        type: string
+        default: ${{ github.actor }}
+      password:
+        description: Password for logging in to the container registry
+        type: string
+        default: ${{ github.token }}
+      target-repository:
+        description: Target repository for updating deployment declaration
+        type: string
+        default: ${{ github.repository }}
+      target-ref:
+        description: Target ref for updating deployment declaration
+        type: string
+        default: main
+      target-directory:
+        description: Target directory for updating deployment declaration
+        type: string
+        default: .
+      push:
+        description: Enable pushing the image to the container registry
+        type: boolean
+        default: false
+      update:
+        description: Enable updating deployment declaration in the target repository
+        type: boolean
+        default: false
+
+jobs:
+  build-and-publish-docker-image:
+    name: Build and Publish Docker image
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        packages: ${{ fromJson(inputs.packages) }}
+
+    outputs:
+      DOCKERFILE_EXISTS: ${{ steps.check-dockerfile.outputs.DOCKERFILE_EXISTS }}
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      - name: Check if Dockerfile exists
+        id: check-dockerfile
+        run: |
+          if [ ! -f apps/${{ matrix.packages.name }}/Dockerfile ]; then
+            echo "Dockerfile does not exist"
+            echo "DOCKERFILE_EXISTS=false" >> $GITHUB_OUTPUT
+          else
+            echo "Dockerfile exists"
+            echo "DOCKERFILE_EXISTS=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Set up Docker Buildx
+        if: steps.check-dockerfile.outputs.DOCKERFILE_EXISTS == 'true'
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to Container Registry
+        if: steps.check-dockerfile.outputs.DOCKERFILE_EXISTS == 'true'
+        uses: docker/login-action@v1
+        with:
+          registry: ${{ inputs.container-registry }}
+          username: ${{ inputs.username || github.actor }}
+          password: ${{ inputs.password || github.token }}
+
+      - name: Build and push Docker image
+        if: steps.check-dockerfile.outputs.DOCKERFILE_EXISTS == 'true'
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          file: apps/${{ env.APP_NAME }}/Dockerfile
+          tags: |
+            ${{ inputs.container-registry  }}/${{ inputs.image-prefix }}/${{ env.APP_NAME }}:latest
+            ${{ inputs.container-registry  }}/${{ inputs.image-prefix }}/${{ env.APP_NAME }}:${{ env.VERSION }}
+          push: ${{ inputs.push }}
+        env:
+          APP_NAME: ${{ matrix.packages.name }}
+          VERSION: ${{ matrix.packages.version }}
+
+      - name: Show Docker image
+        if: steps.check-dockerfile.outputs.DOCKERFILE_EXISTS == 'true'
+        run: docker images
+
+  update-deployment-declaration:
+    name: Update deployment declaration
+
+    if: ${{ inputs.update && needs.build-and-publish-docker-image.outputs.DOCKERFILE_EXISTS == 'true' }}
+
+    needs:
+      - build-and-publish-docker-image
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+        with:
+          repository: ${{ inputs.target-repository }}
+          ref: ${{ inputs.target-ref }}
+
+      - name: Update publishPackages version in YAML file
+        run: |
+          for row in $(echo "$PACKAGES" | jq -r '.[] | @base64'); do
+            _jq() {
+              echo ${row} | base64 --decode | jq -r ${1}
+            }
+            NAME=$(_jq '.name')
+            VERSION=$(_jq '.version')
+            OLD_VERSION=${{ inputs.container-registry }}\/${{ inputs.image-prefix }}\/$NAME:.*
+            NEW_VERSION=${{ inputs.container-registry }}\/${{ inputs.image-prefix }}\/$NAME:$VERSION
+            find ./${{ inputs.target-directory }} -type f -exec sed -i -e "s|$OLD_VERSION|$NEW_VERSION|g" {} \;
+            echo "${NAME}:${VERSION} is updated"
+          done
+        env:
+          PACKAGES: ${{ inputs.packages }}
+
+      - name: Show git status
+        run: git status
+
+      - name: Open Pull Request to the target repository
+        uses: peter-evans/create-pull-request@v4
+        with:
+          title: Update Package versions
+          commit-message: Update Package versions

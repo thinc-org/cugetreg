@@ -1,7 +1,7 @@
 import { UseGuards } from '@nestjs/common'
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
 
-import { StudyProgram } from '@thinc-org/chula-courses'
+import type { StudyProgram } from '@thinc-org/chula-courses'
 
 import { AdminAuthGuard } from '../auth/admin.guard'
 import { JwtAuthGuard, JwtAuthGuardOptional } from '../auth/jwt.guard'

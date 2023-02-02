@@ -25,6 +25,7 @@ import { AppService } from './app.service'
     ConfigModule.forRoot({
       isGlobal: true,
       load: [configuration],
+      envFilePath: ['.env', '.env.local'],
     }),
     GraphQLModule.forRootAsync({
       useFactory: (configService: ConfigService) => ({
@@ -33,7 +34,7 @@ import { AppService } from './app.service'
         definitions:
           configService.get<string>('env') === 'development'
             ? {
-                path: join(process.cwd(), 'apps/api/src/graphql.ts'),
+                path: join(process.cwd(), 'src/graphql.ts'),
                 outputAs: 'class',
               }
             : null,

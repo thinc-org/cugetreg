@@ -1,7 +1,7 @@
 import { InjectQueue } from '@nestjs/bull'
 import { Injectable, Logger } from '@nestjs/common'
 
-import { Queue } from 'bull'
+import type { Queue } from 'bull'
 
 import { searchRequest } from '@reg-scraper/scraper/request/search.request'
 import CourseFetchJob from '@reg-scraper/scraper/types/CourseFetchJob'

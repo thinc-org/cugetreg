@@ -1,4 +1,4 @@
-import { DayOfWeek } from '@libs/codegen'
+import { DayOfWeek } from '@cgr/codegen'
 
 type dayOfWeekMapperType = Record<DayOfWeek, string>
 

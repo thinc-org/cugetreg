@@ -1,10 +1,14 @@
 import { StudyProgram } from '@thinc-org/chula-courses'
-import * as mongoose from 'mongoose'
+import mongoose from 'mongoose'
 
 import { ReviewInteractionType, ReviewStatus } from '../graphql'
 
 export const InteractionSchema = new mongoose.Schema({
-  userId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'user' },
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: 'user',
+  },
   type: {
     type: String,
     required: true,

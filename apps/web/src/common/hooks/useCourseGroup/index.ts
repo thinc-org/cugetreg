@@ -7,7 +7,7 @@ import { Storage } from '@web/common/storage'
 import { StorageKey } from '@web/common/storage/constants'
 import { parseCourseGroup } from '@web/common/utils/parseCourseGroup'
 
-import { StudyProgram } from '@libs/codegen'
+import { StudyProgram } from '@cgr/codegen'
 
 import { CourseGroupResult } from './types'
 

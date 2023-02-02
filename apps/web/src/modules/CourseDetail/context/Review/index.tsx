@@ -2,12 +2,12 @@ import React, { createContext, useCallback, useContext, useRef, useState } from 
 import toast from 'react-hot-toast'
 
 import { useCourseGroup } from '@web/common/hooks/useCourseGroup'
-import { Review } from '@web/common/types/reviews'
 import { loginGuard } from '@web/common/utils/loginGuard'
 import { DialogOptions, dialog } from '@web/lib/dialog'
 import { ReviewFormRef } from '@web/modules/CourseDetail/components/ReviewForm/types'
 
 import {
+  Review,
   GetMyPendingReviewsDocument,
   GetMyPendingReviewsQuery,
   GetMyPendingReviewsQueryVariables,
@@ -21,7 +21,7 @@ import {
   useGetReviewsQuery,
   useRemoveReviewMutation,
   useSetReviewInteractionMutation,
-} from '@libs/codegen'
+} from '@cgr/codegen'
 
 import { DEFAULT_REVIEW_CONTEXT_VALUE } from './constants'
 import { ReviewContextValues, ReviewProviderProps } from './types'
@@ -175,7 +175,7 @@ export const ReviewProvider: React.FC<ReviewProviderProps> = ({
     const review = allReviews.find((data) => data._id === reviewId)
     if (!review) return
 
-    getForm().applyFromReview(review)
+    getForm()?.applyFromReview(review)
     setEditingReviewId(reviewId)
   }
 
@@ -183,7 +183,7 @@ export const ReviewProvider: React.FC<ReviewProviderProps> = ({
    * Use this function to cancel editing review
    */
   const cancelEditReview = () => {
-    getForm().clearForm()
+    getForm()?.clearForm()
     setEditingReviewId(undefined)
   }
 
@@ -193,8 +193,9 @@ export const ReviewProvider: React.FC<ReviewProviderProps> = ({
    */
   const submitReview = async () => {
     try {
-      if (!loginGuard(getForm().storeLocalReviewForm)) return
-      const review = getForm().toReview()
+      if (!loginGuard(getForm()?.storeLocalReviewForm)) return
+      const review = getForm()?.toReview()
+      if (!review) return
       const response = await createReviewMutation({
         variables: {
           createReviewInput: {
@@ -220,8 +221,9 @@ export const ReviewProvider: React.FC<ReviewProviderProps> = ({
    */
   const submitEditedReview = async (reviewId: string) => {
     try {
-      if (!loginGuard(getForm().storeLocalReviewForm)) return
-      const review = getForm().toReview()
+      if (!loginGuard(getForm()?.storeLocalReviewForm)) return
+      const review = getForm()?.toReview()
+      if (!review) return
       const response = await editMyReviewMutation({
         variables: {
           reviewId,

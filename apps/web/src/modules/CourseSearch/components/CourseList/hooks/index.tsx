@@ -2,7 +2,7 @@ import { useContext, useEffect } from 'react'
 
 import { CourseSearchContext } from '@web/modules/CourseSearch/context/CourseSearch'
 
-import { SearchCourseQueryResult } from '@libs/codegen'
+import { SearchCourseQueryResult } from '@cgr/codegen'
 
 export const useCourseList = () => {
   const BOTTOM_OFFSET = 500

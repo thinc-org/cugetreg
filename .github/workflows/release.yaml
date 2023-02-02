@@ -1,0 +1,143 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+      - beta
+  workflow_dispatch:
+    inputs:
+      app:
+        type: choice
+        description: 'The app to release. The name should be the same as name in package.json'
+        required: true
+        options:
+          - api
+          - web
+          - reg-scraper
+      version:
+        description: 'The version to release. The version should be the same as version in package.json. For example, 1.0.0'
+        required: true
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+permissions:
+  actions: read
+  checks: read
+  contents: write
+  deployments: read
+  issues: write
+  discussions: read
+  packages: write
+  pull-requests: write
+  repository-projects: write
+  security-events: read
+  statuses: write
+
+jobs:
+  release:
+    name: Versioning
+
+    strategy:
+      matrix:
+        node-version: [16.17.0]
+        os: [ubuntu-latest]
+
+    runs-on: ${{ matrix.os }}
+
+    if: ${{ github.event_name != 'workflow_dispatch' }}
+
+    outputs:
+      published: ${{ steps.changesets.outputs.published }}
+      publishedPackages: ${{ steps.changesets.outputs.publishedPackages }}
+      hasChangesets: ${{ steps.changesets.outputs.hasChangesets }}
+      pullRequestNumber: ${{ steps.changesets.outputs.pullRequestNumber }}
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+        with:
+          # related to issue, https://github.com/changesets/action/issues/201
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2.2.2
+        id: pnpm-install
+        with:
+          version: 7
+          run_install: false
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        run: |
+          echo "::set-output name=pnpm_cache_dir::$(pnpm store path)"
+
+      - name: Setup pnpm cache
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.pnpm-cache.outputs.pnpm_cache_dir }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --prefer-offline
+
+      - name: Create Versioning Pull Request
+        id: changesets
+        uses: changesets/action@v1.4.1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          createGithubReleases: true
+          version: pnpm changeset version
+          publish: pnpm release
+
+      - name: Echo Changeset output
+        run: |
+          echo "Changeset published - ${{ steps.changesets.outputs.published }}"
+          echo "Changeset publishedPackages - ${{ toJSON(steps.changesets.outputs.publishedPackages) }}"
+          echo "Changeset hasChangesets - ${{ steps.changesets.outputs.hasChangesets }}"
+          echo "Changeset pullRequestNumber - ${{ steps.changesets.outputs.pullRequestNumber }}"
+
+  deploy-with-docker:
+    needs:
+      - release
+    if: ${{ needs.release.outputs.published == 'true' }}
+    uses: ./.github/workflows/deploy-docker.yaml
+    with:
+      packages: ${{ needs.release.outputs.publishedPackages }}
+      container-registry: ghcr.io
+      image-prefix: thinc-org/cugetreg
+      username: ${{ github.actor }}
+      password: ${{ github.token }}
+      # target-repository: ${{ github.repository }}
+      # target-ref: main
+      # target-directory: k8s-demo
+      push: false
+      update: false
+
+  deploy-with-docker-dispatch:
+    if: ${{ github.event_name == 'workflow_dispatch' }}
+    uses: ./.github/workflows/deploy-docker.yaml
+    with:
+      packages: |
+        [
+          {
+            "name": "${{ github.event.inputs.app }}",
+            "version": "${{ github.event.inputs.version }}"
+          }
+        ]
+      container-registry: ghcr.io
+      image-prefix: thinc-org/cugetreg
+      username: ${{ github.actor }}
+      password: ${{ github.token }}
+      # target-repository: ${{ github.repository }}
+      # target-ref: refs/tags/${{ github.event.inputs.app }}@${{ github.event.inputs.version }}
+      # target-directory: k8s-demo
+      push: false
+      update: false

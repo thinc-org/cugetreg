@@ -1,4 +1,4 @@
-import { Course, Period } from '@libs/codegen'
+import { Course, Period } from '@cgr/codegen'
 
 import { ExamClass } from '../types'
 

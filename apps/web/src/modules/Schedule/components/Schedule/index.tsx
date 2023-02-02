@@ -27,13 +27,14 @@ function Schedule({ classes, overlappingCourses }: React.PropsWithChildren<Sched
   const { width, height, cellWidth } = useDimensions()
   const fontSize = (16 * cellWidth) / 77
   const { open, onClose, onOpen, onRemove, selectedClasssetDialog } = useCourseDialogDisclosure()
+  const item = selectedClasssetDialog ? courseCartStore.item(selectedClasssetDialog.item) : null
   return (
     <ScheduleTable style={{ width, height, fontSize }}>
       <Header />
       <Gutters />
-      {selectedClasssetDialog && (
+      {selectedClasssetDialog && item && (
         <CourseDialog
-          item={courseCartStore.item(selectedClasssetDialog.item)}
+          item={item}
           open={open}
           onClose={onClose}
           onRemove={onRemove}

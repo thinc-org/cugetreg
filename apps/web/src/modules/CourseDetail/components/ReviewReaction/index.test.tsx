@@ -5,7 +5,7 @@ import { shallow } from 'enzyme'
 
 import { lightTheme } from '@web/configs/theme'
 
-import { ReviewInteractionType } from '@libs/codegen'
+import { ReviewInteractionType } from '@cgr/codegen'
 
 import { ReviewReactionProps } from './types'
 

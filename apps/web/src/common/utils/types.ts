@@ -1,6 +1,6 @@
 import { CourseCartItem } from '@web/store'
 
-import { Class, Course } from '@libs/codegen'
+import { Class, Course } from '@cgr/codegen'
 
 export type ExamClass = Pick<
   CourseCartItem,

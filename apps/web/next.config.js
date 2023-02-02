@@ -1,22 +1,18 @@
 //@ts-check
 const path = require('path')
 
-const { withNx } = require('@nrwl/next/plugins/with-nx')
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
-  enabled: process.env.ANALYZE === 'true',
-})
+// const withBundleAnalyzer = require('@next/bundle-analyzer')({
+//   enabled: process.env.ANALYZE === 'true',
+// })
 
 /**
- * @type {import('@nrwl/next/plugins/with-nx').WithNxOptions}
- **/
+ * @type {import('next').NextConfig}
+ */
 const nextConfig = {
-  nx: {
-    svgr: true,
-  },
   productionBrowserSourceMaps: true,
-  env: {
-    IS_PULL_REQUEST: process.env.IS_PULL_REQUEST,
-  },
+  // env: {
+  //   IS_PULL_REQUEST: process.env.IS_PULL_REQUEST,
+  // },
   compiler: {
     removeConsole: {
       exclude: ['error', 'warn'],
@@ -38,10 +34,8 @@ const nextConfig = {
   output: 'standalone',
   experimental: {
     outputFileTracingRoot: path.join(__dirname, '../../'),
+    transpilePackages: ['@cgr/course-utils', '@cgr/codegen'],
   },
 }
 
-module.exports = withNx({
-  nx: { svgr: false },
-  ...withBundleAnalyzer(nextConfig),
-})
+module.exports = nextConfig

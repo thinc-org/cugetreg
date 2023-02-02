@@ -1,6 +1,6 @@
-import { Review } from '@web/common/types/reviews'
+import { Review } from '@cgr/codegen'
 
-import { StudyProgram } from '@libs/codegen'
+import { StudyProgram } from '@cgr/codegen'
 
 export const mockReviews: Review[] = [
   {

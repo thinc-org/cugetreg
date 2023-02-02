@@ -5,7 +5,7 @@ import {
   ChipOutlinedHighlightColor,
 } from '@web/configs/theme/overrides/chip'
 
-import { DayOfWeek, GenEdType } from '@libs/codegen'
+import { DayOfWeek, GenEdType } from '@cgr/codegen'
 
 /*
  * This configuration file provide the Chip's types.

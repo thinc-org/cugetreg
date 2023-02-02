@@ -1,7 +1,7 @@
 import { uniq } from '@web/utils/uniq'
 
-import { DayOfWeek } from '@libs/codegen'
-import { CourseThumbnailData, SectionThumbnailData } from '@libs/course-utils'
+import { DayOfWeek } from '@cgr/codegen'
+import { CourseThumbnailData, SectionThumbnailData } from '@cgr/course-utils'
 
 const sortedDaysOfWeek: DayOfWeek[] = [
   DayOfWeek.Mo,

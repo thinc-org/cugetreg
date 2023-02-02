@@ -1,6 +1,6 @@
 import { Term } from '@web/common/types/term'
 
-import { StudyProgram } from '@libs/codegen'
+import { StudyProgram } from '@cgr/codegen'
 
 export interface CourseGroup extends Term {
   studyProgram: StudyProgram

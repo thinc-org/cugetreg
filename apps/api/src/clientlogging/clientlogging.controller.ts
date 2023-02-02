@@ -1,7 +1,7 @@
 import { BadRequestException, Body, Controller, Post, Req } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 
-import { Request } from 'express'
+import type { Request } from 'express'
 import { validate } from 'jsonschema'
 
 import { AccessTokenPayload } from '../auth/auth.dto'

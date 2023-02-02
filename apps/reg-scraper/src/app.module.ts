@@ -18,8 +18,10 @@ import { AppService } from './app.service'
     ConfigModule.forRoot({
       isGlobal: true,
       load: [configuration],
+      envFilePath: ['.env', '.env.local'],
     }),
     MongooseModule.forRootAsync({
+      imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
         uri: configService.get<string>('mongoURI'),
       }),

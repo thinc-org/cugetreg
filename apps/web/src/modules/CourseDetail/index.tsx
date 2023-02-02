@@ -11,7 +11,7 @@ import defaultSEO from '@web/../next-seo.config'
 import { BackButton } from '@web/common/components/BackButton'
 import { useLinkBuilder } from '@web/common/hooks/useLinkBuilder'
 import { Language } from '@web/common/i18n'
-import { Review } from '@web/common/types/reviews'
+import { Review } from '@cgr/codegen'
 import { getExamDate } from '@web/common/utils/getExamDate'
 import { getExamPeriod } from '@web/common/utils/getExamPeriod'
 import { parseCourseNoFromQuery } from '@web/common/utils/parseCourseNoFromQuery'
@@ -31,8 +31,8 @@ import {
   GetReviewsDocument,
   GetReviewsQuery,
   GetReviewsQueryVariables,
-} from '@libs/codegen'
-import { getFaculty } from '@libs/course-utils'
+} from '@cgr/codegen'
+import { getFaculty } from '@cgr/course-utils'
 
 import {
   Container,

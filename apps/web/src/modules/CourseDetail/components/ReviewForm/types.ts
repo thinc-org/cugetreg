@@ -1,4 +1,4 @@
-import { Review } from '@web/common/types/reviews'
+import { Review } from '@cgr/codegen'
 import { ReviewState } from '@web/modules/CourseDetail/context/Review/types'
 
 export type ReviewEditables = Pick<Review, 'rating' | 'academicYear' | 'semester' | 'content'>

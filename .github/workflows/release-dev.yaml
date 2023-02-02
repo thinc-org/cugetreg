@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - dev
+      - fix/release-dev-comments
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 

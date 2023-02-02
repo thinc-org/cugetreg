@@ -2,7 +2,7 @@
   "extends": "tsconfig/nextjs.json",
   "compilerOptions": {
     "paths": {
-      "@api/*": ["./src/*"]
+      "@reg-scraper/*": ["./src/*"]
     },
     "outDir": "./dist",
     "baseUrl": "./"

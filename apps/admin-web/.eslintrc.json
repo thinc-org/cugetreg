@@ -1,3 +1,27 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": ["next", "next/core-web-vitals", "../../.eslintrc.js"],
+  "ignorePatterns": ["!**/*"],
+  "overrides": [
+    {
+      "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
+      "rules": {
+        "@next/next/no-html-link-for-pages": ["error", "apps/admin-web/src/pages"]
+      }
+    },
+    {
+      "files": ["*.ts", "*.tsx"],
+      "rules": {}
+    },
+    {
+      "files": ["*.js", "*.jsx"],
+      "rules": {}
+    }
+  ],
+  "rules": {
+    "@next/next/no-html-link-for-pages": "off",
+    "@next/next/no-img-element": "off"
+  },
+  "env": {
+    "jest": true
+  }
 }

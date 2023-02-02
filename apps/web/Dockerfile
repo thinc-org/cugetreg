@@ -11,7 +11,7 @@ RUN npm install -g pnpm
 
 # --------------------------------------------------------
 
-FROM pnpm AS builder
+FROM pnpm AS pruner
 WORKDIR /app
 RUN pnpm install -g turbo
 COPY . .
@@ -19,7 +19,7 @@ RUN turbo prune --scope=web --docker
 
 # --------------------------------------------------------
 
-FROM pnpm AS installer
+FROM pnpm AS builder
 WORKDIR /app
 RUN apk add --no-cache --update --no-cache \
     make \
@@ -32,11 +32,11 @@ RUN apk add --no-cache --update --no-cache \
     autoconf \
     automake
 
-COPY --from=builder /app/out/json/ .
+COPY --from=pruner /app/out/json/ .
 COPY pnpm-lock.yaml ./pnpm-lock.yaml
 RUN pnpm install --frozen-lockfile
 
-COPY --from=builder /app/out/full/ .
+COPY --from=pruner /app/out/full/ .
 COPY turbo.json turbo.json
 RUN pnpm turbo run build --filter=web...
 
@@ -50,14 +50,14 @@ RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 USER nextjs
 
-COPY --from=installer /app/apps/web/next.config.js .
-COPY --from=installer /app/apps/web/package.json .
+COPY --from=builder /app/apps/web/next.config.js .
+COPY --from=builder /app/apps/web/package.json .
 
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
-COPY --from=installer --chown=nextjs:nodejs /app/apps/web/.next/standalone ./
-COPY --from=installer --chown=nextjs:nodejs /app/apps/web/public ./apps/web/public
-COPY --from=installer --chown=nextjs:nodejs /app/apps/web/.next/static ./apps/web/.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/apps/web/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/apps/web/public ./apps/web/public
+COPY --from=builder --chown=nextjs:nodejs /app/apps/web/.next/static ./apps/web/.next/static
 
 ENV PORT 4200
 

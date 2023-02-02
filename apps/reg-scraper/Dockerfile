@@ -11,7 +11,7 @@ RUN npm install -g pnpm
 
 # --------------------------------------------------------
 
-FROM pnpm AS builder
+FROM pnpm AS pruner
 WORKDIR /app
 RUN pnpm install -g turbo
 COPY . .
@@ -19,14 +19,14 @@ RUN turbo prune --scope=reg-scraper --docker
 
 # --------------------------------------------------------
 
-FROM pnpm AS installer
+FROM pnpm AS builder
 WORKDIR /app
 
-COPY --from=builder /app/out/json/ .
+COPY --from=pruner /app/out/json/ .
 COPY pnpm-lock.yaml ./pnpm-lock.yaml
 RUN pnpm install --frozen-lockfile
 
-COPY --from=builder /app/out/full/ .
+COPY --from=pruner /app/out/full/ .
 COPY turbo.json turbo.json
 RUN pnpm turbo run build --filter=reg-scraper...
 
@@ -35,10 +35,10 @@ RUN pnpm turbo run build --filter=reg-scraper...
 FROM pnpm AS runner
 WORKDIR /app
 
-COPY --from=builder /app/out/json/ .
+COPY --from=pruner /app/out/json/ .
 COPY pnpm-lock.yaml ./pnpm-lock.yaml
 RUN pnpm install --frozen-lockfile --production
 
-COPY --from=installer /app/apps/reg-scraper/dist/ apps/reg-scraper/dist/
+COPY --from=builder /app/apps/reg-scraper/dist/ apps/reg-scraper/dist/
 
 CMD node apps/reg-scraper/dist/main.js

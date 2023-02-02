@@ -2,6 +2,7 @@
 dist/
 .output/
 out/
+**/.next/
 
 # dependencies
 node_modules/
@@ -21,3 +22,8 @@ pnpm-debug.log*
 .DS_Store
 
 Dockerfile
+
+# misc
+.git
+.github
+.vscode

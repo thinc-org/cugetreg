@@ -54,21 +54,8 @@ jobs:
           version: 7
           run_install: false
 
-      - name: Get pnpm store directory
-        id: pnpm-cache
-        run: |
-          echo "::set-output name=pnpm_cache_dir::$(pnpm store path)"
-
-      - name: Setup pnpm cache
-        uses: actions/cache@v3
-        with:
-          path: ${{ steps.pnpm-cache.outputs.pnpm_cache_dir }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile --prefer-offline
+      - name: Install turbo
+        run: pnpm install --global turbo
 
       - name: Get affected app names
         id: affected-apps
@@ -80,17 +67,8 @@ jobs:
       - name: Generate affected packages
         id: affected-packages
         run: |
-          ITER=0
           PACKAGES='${{ steps.affected-apps.outputs.packages }}'
-          for PACKAGE in $(echo "$PACKAGES" | jq -r '.[]' ); do
-            if [ "$ITER" = "0" ]; then
-              PACKAGES_OUTPUT=$(echo "[{\"name\":\"${PACKAGE}\",\"version\":\"dev\"}")
-              ITER=$(expr $ITER + 1)
-            else
-              PACKAGES_OUTPUT=$(echo "${PACKAGES_OUTPUT},{\"name\":\"${PACKAGE}\",\"version\":\"dev\"}")
-            fi
-          done
-          PACKAGES_OUTPUT="${PACKAGES_OUTPUT}]"
+          PACKAGES_OUTPUT=$(echo $PACKAGES | jq -c 'map_values({name:.,version:"dev"})')
           echo "affectPackages=$PACKAGES_OUTPUT" >> $GITHUB_OUTPUT
           echo "affectPackages=$PACKAGES_OUTPUT"
 

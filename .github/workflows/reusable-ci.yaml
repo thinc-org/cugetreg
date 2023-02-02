@@ -52,4 +52,4 @@ jobs:
 
       - name: Target
         if: ${{ inputs.target }}
-        run: pnpm ${{ inputs.target } --parallel --filter=...[origin/master]
+        run: pnpm ${{ inputs.target }} --parallel --filter=...[origin/master]

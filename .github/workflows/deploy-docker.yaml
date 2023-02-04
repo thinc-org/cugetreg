@@ -83,6 +83,20 @@ jobs:
           username: ${{ inputs.username || github.actor }}
           password: ${{ inputs.password || github.token }}
 
+      - name: Set frontend env
+        if: ${{ matrix.packages.name == 'web' || matrix.packages.name == 'admin-web' }}
+        env:
+          APP_NAME: ${{ matrix.packages.name }}
+          BRANCH: ${{ github.ref_name }}
+        run: |
+          if [[ $BRANCH == 'main' ]]; then
+            mv apps/$APP_NAME/.env.prod apps/$APP_NAME/.env
+          elif [[ $BRANCH == 'beta' ]]; then
+            mv apps/$APP_NAME/.env.beta apps/$APP_NAME/.env
+          elif [[ $BRANCH == 'dev' ]]; then
+            mv apps/$APP_NAME/.env.dev apps/$APP_NAME/.env
+          fi
+
       - name: Build and push Docker image
         if: steps.check-dockerfile.outputs.DOCKERFILE_EXISTS == 'true'
         uses: docker/build-push-action@v3

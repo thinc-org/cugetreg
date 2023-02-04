@@ -4,6 +4,7 @@ import { Container } from '@mui/material'
 import { DefaultSeo } from 'next-seo'
 import { AppProps } from 'next/app'
 import dynamic from 'next/dynamic'
+import Script from 'next/script'
 
 import { Footer } from '@web/common/components/Footer'
 import { LoadingProgress } from '@web/common/components/LoadingProgress'
@@ -62,6 +63,7 @@ export function App(props: MyAppProps) {
         <CustomToaster />
         <CookieBanner />
       </TrackPageChange>
+      <Script src="https://accounts.google.com/gsi/client" strategy="beforeInteractive" />
     </AppProvider>
   )
 }

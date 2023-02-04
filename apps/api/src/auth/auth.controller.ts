@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  Body,
   Controller,
   Get,
   Post,
@@ -46,6 +47,23 @@ export class AuthController {
       url,
       statusCode: 302,
     }
+  }
+
+  @Post('/google/idtoken')
+  async authWithIdToken(
+    @Body() body: { idToken: string },
+    @Res({ passthrough: true }) res: Response
+  ) {
+    const { idToken } = body
+    const payload = await this.authService.validateGoogleIdToken(idToken)
+    if (!payload) throw new BadRequestException('Invalid id token')
+
+    const { refreshToken } = await this.authService.handleGoogleIdToken(payload)
+    res.cookie('refreshtoken', refreshToken, {
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60 * 24 * 30 * 6,
+    })
+    return { success: true }
   }
 
   @Get('/google/callback')

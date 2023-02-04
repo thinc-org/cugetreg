@@ -24,6 +24,17 @@ class UserStore {
     window.location.href = `${apiUrl}/auth/google?${urlParams.toString()}`
   }
 
+  loginWithIdToken = async (idToken: string) => {
+    try {
+      await httpClient.post(`/auth/google/idtoken`, {
+        idToken,
+      })
+      await this.restoreSession()
+    } catch (e) {
+      console.error('Fail to login with id token', e)
+    }
+  }
+
   logout = () => {
     this.setAccessToken(null)
     httpClient.post(`/auth/logout`)

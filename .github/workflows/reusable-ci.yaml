@@ -48,8 +48,8 @@ jobs:
         uses: tj-actions/branch-names@v6
 
       - name: Echo base branch name
-        run: echo ${{ steps.branch-name.outputs.base_ref_branch || 'master' }}
+        run: echo ${{ steps.branch-name.outputs.base_ref_branch || 'main' }}
 
       - name: Target
         if: ${{ inputs.target }}
-        run: pnpm ${{ inputs.target }} --parallel --filter=...[origin/master]
+        run: pnpm ${{ inputs.target }} --parallel --filter=...[origin/main]

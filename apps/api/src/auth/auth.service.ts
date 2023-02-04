@@ -84,7 +84,6 @@ export class AuthService {
         audience: this.configService.get('googleOAuthId'),
       })
       const payload = ticket.getPayload() as TokenPayload
-      console.log(payload.hd)
       if (payload.hd !== 'student.chula.ac.th')
         throw new ForbiddenException('User hosted_domain is not student.chula.ac.th')
       return payload
@@ -107,7 +106,7 @@ export class AuthService {
         hasMigratedGDrive: true, // no need to handle gdrive migration anymore
       }
       await user.save()
-      this.logger.log('Created new user with Google Auth though id token', { user })
+      this.logger.log('Created new user with Google Auth through id token', { user })
     }
 
     // Issue token

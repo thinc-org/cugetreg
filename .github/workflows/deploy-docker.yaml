@@ -57,8 +57,11 @@ jobs:
       DOCKERFILE_EXISTS: ${{ steps.check-dockerfile.outputs.DOCKERFILE_EXISTS }}
 
     steps:
-      - name: Checkout Repo
+      - name: Checkout with tags
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          ref: refs/tags/${{ matrix.packages.name }}@${{ matrix.packages.version }}
 
       - name: Check if Dockerfile exists
         id: check-dockerfile

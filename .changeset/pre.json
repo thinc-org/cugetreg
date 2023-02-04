@@ -12,5 +12,7 @@
     "eslint-config-custom": "0.0.0",
     "tsconfig": "0.0.0"
   },
-  "changesets": []
+  "changesets": [
+    "early-dryers-sip"
+  ]
 }

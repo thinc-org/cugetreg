@@ -46,8 +46,10 @@ FROM node:16.17.0-alpine AS runner
 WORKDIR /app
 
 RUN apk add --no-cache --update \
+    jpeg \
     cairo \
-    pango 
+    giflib \
+    pango
 
 # Don't run production as root
 RUN addgroup --system --gid 1001 nodejs

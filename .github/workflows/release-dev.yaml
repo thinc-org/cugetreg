@@ -88,5 +88,5 @@ jobs:
       # target-repository: ${{ github.repository }}
       # target-ref: main
       # target-directory: k8s-demo
-      push: false
+      push: true
       update: false

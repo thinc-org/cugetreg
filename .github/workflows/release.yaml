@@ -118,7 +118,7 @@ jobs:
       # target-repository: ${{ github.repository }}
       # target-ref: main
       # target-directory: k8s-demo
-      push: false
+      push: true
       update: false
 
   deploy-with-docker-dispatch:
@@ -139,5 +139,5 @@ jobs:
       # target-repository: ${{ github.repository }}
       # target-ref: refs/tags/${{ github.event.inputs.app }}@${{ github.event.inputs.version }}
       # target-directory: k8s-demo
-      push: false
+      push: true
       update: false

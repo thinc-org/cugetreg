@@ -90,10 +90,13 @@ jobs:
           BRANCH: ${{ github.ref_name }}
         run: |
           if [[ $BRANCH == 'main' ]]; then
+            echo "$APP_NAME env is set to production"
             mv apps/$APP_NAME/.env.prod apps/$APP_NAME/.env
           elif [[ $BRANCH == 'beta' ]]; then
+            echo "$APP_NAME env is set to dev"
             mv apps/$APP_NAME/.env.beta apps/$APP_NAME/.env
           elif [[ $BRANCH == 'dev' ]]; then
+            echo "$APP_NAME env is set to beta"
             mv apps/$APP_NAME/.env.dev apps/$APP_NAME/.env
           fi
 
@@ -110,10 +113,6 @@ jobs:
         env:
           APP_NAME: ${{ matrix.packages.name }}
           VERSION: ${{ matrix.packages.version }}
-
-      - name: Show Docker image
-        if: steps.check-dockerfile.outputs.DOCKERFILE_EXISTS == 'true'
-        run: docker images
 
   update-deployment-declaration:
     name: Update deployment declaration

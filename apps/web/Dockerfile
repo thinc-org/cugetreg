@@ -21,7 +21,7 @@ RUN turbo prune --scope=web --docker
 
 FROM pnpm AS builder
 WORKDIR /app
-RUN apk add --no-cache --update --no-cache \
+RUN apk add --update --no-cache \
     make \
     g++ \
     jpeg-dev \
@@ -45,14 +45,14 @@ RUN pnpm turbo run build --filter=web...
 FROM node:16.17.0-alpine AS runner
 WORKDIR /app
 
+RUN apk add --no-cache --update \
+    cairo \
+    pango 
+
 # Don't run production as root
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 USER nextjs
-
-RUN apk add --no-cache --update --no-cache \
-    cairo \
-    pango 
 
 COPY --from=builder /app/apps/web/next.config.js .
 COPY --from=builder /app/apps/web/package.json .

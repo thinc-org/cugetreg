@@ -1,5 +1,11 @@
 # web
 
+## 1.0.1
+
+### Patch Changes
+
+- ee359408: add lib to web dockerfile
+
 ## 1.0.1-beta.0
 
 ### Patch Changes

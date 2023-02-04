@@ -50,6 +50,10 @@ RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 USER nextjs
 
+RUN apk add --no-cache --update --no-cache \
+    cairo \
+    pango 
+
 COPY --from=builder /app/apps/web/next.config.js .
 COPY --from=builder /app/apps/web/package.json .
 

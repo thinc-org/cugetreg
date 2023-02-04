@@ -2,7 +2,7 @@ import md5 from 'md5'
 
 import { thumbnailVersion } from '@web/modules/CourseThumbnailAPI/constants'
 
-import { CourseThumbnailData } from '@libs/course-utils'
+import { CourseThumbnailData } from '@cgr/course-utils'
 
 import { getDaysOfWeek } from './getDaysOfWeek'
 

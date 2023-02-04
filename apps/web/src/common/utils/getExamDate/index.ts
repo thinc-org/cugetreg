@@ -1,7 +1,7 @@
 import { format, parseISO } from 'date-fns'
 import { th } from 'date-fns/locale'
 
-import { Course } from '@libs/codegen'
+import { Course } from '@cgr/codegen'
 
 import { ExamClass } from '../types'
 

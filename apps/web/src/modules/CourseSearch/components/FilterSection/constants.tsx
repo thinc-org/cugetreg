@@ -1,7 +1,7 @@
 import { DayChipKey, GenEdChipKey } from '@web/common/components/Chips/config'
 import { CreateCheckbox } from '@web/modules/CourseSearch/components/FilterSection/hooks/useFilterBar'
 
-import { DayOfWeek, GenEdType } from '@libs/codegen'
+import { DayOfWeek, GenEdType } from '@cgr/codegen'
 
 export const createGenEdCheckboxes: CreateCheckbox<GenEdChipKey>[] = [
   {

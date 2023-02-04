@@ -10,7 +10,7 @@ import {
   SearchCourseQuery,
   SearchCourseQueryVariables,
   StudyProgram,
-} from '@libs/codegen'
+} from '@cgr/codegen'
 
 // TODO: dynamic this varaibles
 const MAX_COURSES = 1000000

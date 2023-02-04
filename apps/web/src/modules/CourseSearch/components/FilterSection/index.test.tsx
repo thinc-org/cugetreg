@@ -4,7 +4,7 @@ import { ResponsiveDialog } from '@web/common/components/ResponsiveDialog'
 import { Analytics } from '@web/common/context/Analytics/components/Analytics'
 import { DAY_FILTER, GENED_FILTER } from '@web/common/context/Analytics/constants'
 
-import { DayOfWeek, GenEdType } from '@libs/codegen'
+import { DayOfWeek, GenEdType } from '@cgr/codegen'
 
 import { Button, StickyPaper } from './styled'
 

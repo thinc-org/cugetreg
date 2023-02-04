@@ -6,7 +6,7 @@ import { CourseCardContextValue } from '@web/modules/CourseSearch/components/Cou
 import { sum } from '@web/utils/sum'
 import { uniq } from '@web/utils/uniq'
 
-import { Capacity, Course, Section } from '@libs/codegen'
+import { Capacity, Course, Section } from '@cgr/codegen'
 
 export function useCourseCardContext(course: Course): CourseCardContextValue {
   const courseCardValue = useCourseCardValue(course)

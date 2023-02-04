@@ -1,5 +1,57 @@
 {
+  "name": "api",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "nest start --watch",
+    "build": "nest build",
+    "start": "nest start",
+    "lint": "eslint '{src,apps,libs,test}/**/*.ts' --fix",
+    "prebuild": "rimraf dist"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "^9.0.0",
+    "@types/cookie-parser": "^1.4.3",
+    "@types/express": "^4.17.16",
+    "@types/jest": "28.1.8",
+    "@types/node": "^18.11.18",
+    "eslint": "7.32.0",
+    "eslint-config-custom": "workspace:*",
+    "jest": "28.1.3",
+    "ts-jest": "28.0.8",
+    "tsconfig": "workspace:*",
+    "typescript": "~4.7.4"
+  },
   "dependencies": {
-    "apollo-server-express": "2.19.2"
+    "@grpc/grpc-js": "1.4.4",
+    "@grpc/proto-loader": "0.6.7",
+    "@nestjs/common": "9.2.1",
+    "@nestjs/config": "2.2.0",
+    "@nestjs/core": "9.2.1",
+    "@nestjs/graphql": "7.9.8",
+    "@nestjs/jwt": "7.2.0",
+    "@nestjs/mongoose": "9.2.1",
+    "@nestjs/passport": "7.1.5",
+    "@nestjs/platform-express": "9.2.1",
+    "@nestjs/schedule": "2.1.0",
+    "@opensearch-project/opensearch": "2.1.0",
+    "@slack/webhook": "6.0.0",
+    "@thinc-org/chula-courses": "^2.3.0",
+    "@typegoose/typegoose": "9.1.0",
+    "apollo-server-express": "2.19.2",
+    "class-validator": "0.13.2",
+    "cookie-parser": "1.4.6",
+    "google-auth-library": "^8.7.0",
+    "googleapis": "88.2.0",
+    "googleapis-common": "5.0.5",
+    "graphql": "15.5.0",
+    "jsonschema": "^1.4.1",
+    "mongoose": "6.5.2",
+    "nest-winston": "^1.8.0",
+    "passport": "0.6.0",
+    "passport-jwt": "4.0.0",
+    "rxjs": "^7.8.0",
+    "serialize-error": "8.1.0",
+    "winston": "3.8.2"
   }
 }

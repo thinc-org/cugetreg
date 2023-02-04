@@ -1,4 +1,4 @@
-import { ReviewInteractionType } from '@libs/codegen'
+import { ReviewInteractionType } from '@cgr/codegen'
 
 export interface ReviewReactionProps {
   type: ReviewInteractionType

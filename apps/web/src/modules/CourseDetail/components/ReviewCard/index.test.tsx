@@ -13,7 +13,7 @@ import { lightTheme } from '@web/configs/theme'
 import { ReviewCardProps } from '@web/modules/CourseDetail/components/ReviewCard/types'
 import { ReviewReaction } from '@web/modules/CourseDetail/components/ReviewReaction'
 
-import { ReviewInteractionType } from '@libs/codegen'
+import { ReviewInteractionType } from '@cgr/codegen'
 
 describe('ReviewCard', () => {
   const mockReviewData = mockReviews[0]

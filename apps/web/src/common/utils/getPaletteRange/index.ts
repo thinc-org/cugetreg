@@ -2,7 +2,7 @@ import { Theme } from '@mui/material'
 
 import { HighlightColorRange } from '@web/configs/theme/palette'
 
-import { GenEdType } from '@libs/codegen'
+import { GenEdType } from '@cgr/codegen'
 
 export function getPaletteRange(theme: Theme, genEdType: GenEdType): HighlightColorRange {
   switch (genEdType) {

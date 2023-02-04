@@ -15,6 +15,9 @@ export interface Configuration {
   computationBackendAuthToken: string
   slackWebhookUrl: string
   env: string
+  elasticUrl: string
+  elasticUsername: string
+  elasticPassword: string
 }
 
 export const configuration = (): Configuration => {
@@ -32,6 +35,9 @@ export const configuration = (): Configuration => {
     computationBackendAuthToken: process.env.COMPUTATION_BACKEND_AUTHTOKEN,
     slackWebhookUrl: process.env.SLACK_WEBHOOK_URL,
     env: process.env.ENV || 'development',
+    elasticUrl: process.env.ELASTIC_URL,
+    elasticUsername: process.env.ELASTIC_USERNAME,
+    elasticPassword: process.env.ELASTIC_PASSWORD,
   }
 }
 
@@ -40,9 +46,11 @@ const requiredConfigs = [
   'googleOAuthSecret',
   'jwtSecret',
   'adminToken',
-  'clientLoggerUrl',
   'computationBackendUrl',
   'backendPublicUrl',
+  'elasticUrl',
+  'elasticUsername',
+  'elasticPassword',
 ]
 
 export function validateConfig(configService: ConfigService<Configuration>): void {

@@ -5,7 +5,7 @@ import { Typography } from '@mui/material'
 import { getCourseKeyString } from '@web/common/utils/getCourseKeyString'
 import { CourseCard } from '@web/modules/CourseSearch/components/CourseCard'
 
-import { Course } from '@libs/codegen'
+import { Course } from '@cgr/codegen'
 
 export interface CoursesProps {
   loading: boolean

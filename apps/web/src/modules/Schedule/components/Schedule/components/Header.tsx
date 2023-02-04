@@ -4,7 +4,7 @@ import { styled } from '@mui/material'
 
 import { dayOfWeekArray } from '@web/common/constants/dayOfWeek'
 
-import { DayOfWeek } from '@libs/codegen'
+import { DayOfWeek } from '@cgr/codegen'
 
 import { hourStart } from '../constants'
 import { useDimensions } from '../dimensions'

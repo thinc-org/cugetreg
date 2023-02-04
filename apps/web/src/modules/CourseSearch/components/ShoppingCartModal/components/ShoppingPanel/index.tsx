@@ -6,7 +6,7 @@ import { useCourseGroup } from '@web/common/hooks/useCourseGroup'
 import { Spacer } from '@web/components/Spacer'
 import { CourseCartItem, courseCartStore } from '@web/store'
 
-import { Course } from '@libs/codegen'
+import { Course } from '@cgr/codegen'
 
 import { ActionButton } from './components/ActionButton'
 import { CourseList } from './components/CourseList'

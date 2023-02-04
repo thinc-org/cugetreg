@@ -2,7 +2,7 @@ import { ArgumentMetadata, BadRequestException, Injectable, PipeTransform } from
 
 @Injectable()
 export class ParseKeyValuePipe implements PipeTransform<string, Record<string, string>> {
-  transform(value: string, metadata: ArgumentMetadata): Record<string, string> {
+  transform(value: string, _metadata: ArgumentMetadata): Record<string, string> {
     const pairs = value.split('&').map((pair) => pair.split('='))
 
     // there exists a pair that doesn't follow 'key=value' format

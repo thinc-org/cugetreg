@@ -7,3 +7,5 @@
 .env.local.production
 
 generate-typings.js
+
+dist

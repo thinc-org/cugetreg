@@ -54,6 +54,7 @@ import {
   VisibilityToggle,
 } from './styled'
 import { useOverlapWarning } from './utils'
+import { GenEdType } from '@cgr/codegen'
 
 export interface ScheduleTableCardProps {
   item: CourseCartItem
@@ -173,7 +174,9 @@ function CardHeader({ item }: CardComponentProps) {
                   <SectionSelect item={item} />
                 </Stack>
               </Hidden>
-              {section.genEdType !== 'NO' && <GenEdChip type={section.genEdType} size="small" />}
+              {section && section.genEdType !== GenEdType.No && (
+                <GenEdChip type={section.genEdType} size="small" />
+              )}
             </Stack>
           </Stack>
         </Stack>
@@ -241,7 +244,7 @@ function SectionSelect({ item }: CardComponentProps) {
 function CardDetail({ item, overlaps }: CardDetailProps) {
   const { t } = useTranslation('scheduleTableCard')
   const section = item.sections.find((section) => section.sectionNo === item.selectedSectionNo)
-  const teachers = uniq(section.classes.flatMap((cls) => cls.teachers))
+  const teachers = uniq(section?.classes.flatMap((cls) => cls.teachers) ?? [])
   const warning = useOverlapWarning(overlaps)
   return (
     <Grid container spacing={1} sx={{ mt: -1, mb: 2 }}>
@@ -263,7 +266,7 @@ function CardDetail({ item, overlaps }: CardDetailProps) {
         <Stack spacing={0.5}>
           <Caption>{t('time')}</Caption>
           <Stack>
-            {section.classes.map((sectionClass, index) => (
+            {section?.classes.map((sectionClass, index) => (
               <Typography variant="body1" key={`${section.sectionNo}.${index}`}>
                 {sectionClass.dayOfWeek && dayOfWeekMapper[sectionClass.dayOfWeek]}{' '}
                 {getClassPeriod(sectionClass)}
@@ -277,7 +280,7 @@ function CardDetail({ item, overlaps }: CardDetailProps) {
         <Stack spacing={0.5}>
           <Caption>{t('classRoom')}</Caption>
           <Stack>
-            {section.classes.map((sectionClass, index) => (
+            {section?.classes.map((sectionClass, index) => (
               <Typography variant="body1" key={`${section.sectionNo}.${index}`}>
                 {sectionClass.building} {sectionClass.room}
               </Typography>
@@ -290,7 +293,7 @@ function CardDetail({ item, overlaps }: CardDetailProps) {
         <Stack spacing={0.5}>
           <Caption>{t('classType')}</Caption>
           <Stack>
-            {section.classes.map((sectionClass, index) => (
+            {section?.classes.map((sectionClass, index) => (
               <Typography variant="body1" key={`${section.sectionNo}.${index}`}>
                 {sectionClass.type}
               </Typography>

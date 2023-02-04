@@ -12,10 +12,11 @@ import { CourseRecommendationRequest, CourseRecommendationResponse } from '../gr
 export class ComputationResolver {
   private metadata: grpc.Metadata
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private courseRecommendation: any
 
   constructor(configService: ConfigService) {
-    const pkgDef = protoloader.loadSync(join(__dirname, 'assets/cgrcompute.proto'), {
+    const pkgDef = protoloader.loadSync(join(__dirname, 'cgrcompute.proto'), {
       keepCase: true,
       longs: String,
       enums: String,
@@ -37,6 +38,7 @@ export class ComputationResolver {
       )
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     this.courseRecommendation = new (descriptor.CourseRecommendation as any)(...clientArgs)
   }
 

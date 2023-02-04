@@ -18,7 +18,7 @@ import {
   GetCourseInfoDocument,
   GetCourseInfoQuery,
   GetCourseInfoQueryVariables,
-} from '@libs/codegen'
+} from '@cgr/codegen'
 
 interface RawScheduleItem {
   courseNo: string

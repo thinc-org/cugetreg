@@ -10,13 +10,14 @@ import { useSearchCourseQueryParams } from '@web/modules/CourseSearch/hooks/useS
 import { collectLogEvent } from '@web/services/logging'
 import { courseCartStore } from '@web/store'
 
-import { SearchCourseQueryVariables, useRecommendCourseTextLazyQuery } from '@libs/codegen'
+import { SearchCourseQueryVariables, useRecommendCourseTextLazyQuery } from '@cgr/codegen'
 
 import { SelectedCourse } from './types'
 
 const RecommendationItem = styled(Link)`
   color: ${({ theme }) => theme.palette.highlight.indigo[700]};
   margin-left: 1em;
+  cursor: pointer;
 `
 
 interface RecommendationTextProps {

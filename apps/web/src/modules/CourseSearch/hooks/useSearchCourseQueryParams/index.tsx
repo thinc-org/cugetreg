@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 
 import { useCourseGroup } from '@web/common/hooks/useCourseGroup'
 
-import { SearchCourseQueryVariables } from '@libs/codegen'
+import { SearchCourseQueryVariables } from '@cgr/codegen'
 
 import { QueryParams } from './types'
 import { extractSearchVarsFromQuery } from './utils/extractSearchVarsFromQuery'

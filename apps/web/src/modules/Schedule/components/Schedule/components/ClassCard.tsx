@@ -2,7 +2,7 @@ import { styled } from '@mui/material'
 
 import { useColor } from '@web/modules/Schedule/components/ColorPicker/hooks/useColor'
 
-import { DayOfWeek } from '@libs/codegen'
+import { DayOfWeek } from '@cgr/codegen'
 
 import { useDimensions } from '../dimensions'
 import { ScheduleClass } from '../utils'

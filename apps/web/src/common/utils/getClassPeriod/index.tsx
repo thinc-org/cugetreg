@@ -1,4 +1,4 @@
-import { Class } from '@libs/codegen'
+import { Class } from '@cgr/codegen'
 
 export function getClassPeriod(sectionClass: Class) {
   const period = sectionClass.period

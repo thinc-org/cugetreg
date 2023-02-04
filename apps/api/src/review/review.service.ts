@@ -77,7 +77,16 @@ export class ReviewService {
     })
     return reviews
       .map((rawReview) => this.transformReview(rawReview, userId))
-      .sort((reviewA, reviewB) => (reviewB.isOwner ? 1 : 0) - (reviewA.isOwner ? 1 : 0))
+      .sort((reviewA, reviewB) => {
+        if (reviewA.isOwner) {
+          return -1
+        }
+        if (reviewB.isOwner) {
+          return 1
+        }
+        // Sort by _id descending
+        return reviewB._id.localeCompare(reviewA._id)
+      })
   }
 
   async getPending(): Promise<Review[]> {
@@ -218,7 +227,7 @@ export class ReviewService {
       interaction.userId.equals(userId)
     )?.type
     return {
-      _id: rawReview._id,
+      _id: rawReview._id.toString(),
       rating: rawReview.rating,
       courseNo: rawReview.courseNo,
       semester: rawReview.semester,

@@ -1,20 +1,44 @@
-FROM node:16.17.0-alpine
-WORKDIR /usr/app
+# When copying this Dockerfile for use in other apps, don't forget to change the scope (api, web, etc.) in RUN commands
 
-ENV NODE_ENV production
+FROM node:16.17.0-alpine AS pnpm
+# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
+RUN apk add --no-cache libc6-compat
+RUN apk update
+
+ENV PNPM_HOME="/root/.local/share/pnpm"
+ENV PATH="${PATH}:${PNPM_HOME}"
 RUN npm install -g pnpm
 
-COPY dist/apps/api/.npmrc .
-COPY dist/apps/api/pnpm-lock.yaml .
-COPY dist/apps/api/package.json .
-RUN pnpm install -r --prod --prefer-offline
+# --------------------------------------------------------
 
-# Generate Prisma Client
-# RUN npm install -g prisma
-# RUN npx prisma generate --schema=apps/api/src/prisma/schema.prisma
+FROM pnpm AS pruner
+WORKDIR /app
+RUN pnpm install -g turbo
+COPY . .
+RUN turbo prune --scope=api --docker
 
-COPY dist/apps/api .
+# --------------------------------------------------------
 
-EXPOSE 3333
+FROM pnpm AS builder
+WORKDIR /app
 
-CMD ["node", "main.js"]
+COPY --from=pruner /app/out/json/ .
+COPY pnpm-lock.yaml ./pnpm-lock.yaml
+RUN pnpm install --frozen-lockfile
+
+COPY --from=pruner /app/out/full/ .
+COPY turbo.json turbo.json
+RUN pnpm turbo run build --filter=api...
+
+# --------------------------------------------------------
+
+FROM pnpm AS runner
+WORKDIR /app
+
+COPY --from=pruner /app/out/json/ .
+COPY pnpm-lock.yaml ./pnpm-lock.yaml
+RUN pnpm install --frozen-lockfile --production
+
+COPY --from=builder /app/apps/api/dist/ apps/api/dist/
+
+CMD node apps/api/dist/main.js

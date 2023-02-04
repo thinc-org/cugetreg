@@ -6,18 +6,18 @@ import DOMPurify from 'isomorphic-dompurify'
 import { GeneralChip } from '@web/common/components/Chips'
 import { OtherChipKey } from '@web/common/components/Chips/config'
 import { HighlightHTML } from '@web/common/components/HighlightHTML'
-import { ReviewStatus } from '@web/common/types/reviews'
+import { ReviewStatus } from '@cgr/codegen'
 import { getSemesterName } from '@web/common/utils/getSemesterName'
 import { scrollToReviewForm } from '@web/modules/CourseDetail/components/ReviewForm/functions'
 
-import { ReviewInteractionType, Semester } from '@libs/codegen'
+import { ReviewInteractionType, Semester } from '@cgr/codegen'
 
 import { useReviewContext } from '../../context/Review'
 import { ReviewReaction } from '../ReviewReaction'
 import { Card, CardMaxRating, CardRating, CardRejectedMessage, CardTerm } from './styled'
 import { ReviewCardProps } from './types'
 
-const getChipType = (status: ReviewStatus): OtherChipKey | null => {
+const getChipType = (status?: ReviewStatus | null): OtherChipKey | null => {
   switch (status) {
     case ReviewStatus.Pending:
       return 'reviewPending'
@@ -71,7 +71,7 @@ export const ReviewCard: React.FC<ReviewCardProps> = (data) => {
           <CardMaxRating>จาก 5</CardMaxRating>
         </Stack>
       </Stack>
-      <HighlightHTML dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(data.content) }} />
+      <HighlightHTML dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(data.content ?? '') }} />
       <Stack direction="row" justifyContent="space-between" alignItems="center">
         {/** Left side */}
         {data.status === ReviewStatus.Rejected ? (

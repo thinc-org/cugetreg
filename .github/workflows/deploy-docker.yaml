@@ -57,8 +57,11 @@ jobs:
       DOCKERFILE_EXISTS: ${{ steps.check-dockerfile.outputs.DOCKERFILE_EXISTS }}
 
     steps:
-      - name: Checkout Repo
+      - name: Checkout with tags
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          ref: refs/tags/${{ matrix.packages.name }}@${{ matrix.packages.version }}
 
       - name: Check if Dockerfile exists
         id: check-dockerfile
@@ -83,6 +86,23 @@ jobs:
           username: ${{ inputs.username || github.actor }}
           password: ${{ inputs.password || github.token }}
 
+      - name: Set frontend env
+        if: ${{ matrix.packages.name == 'web' || matrix.packages.name == 'admin-web' }}
+        env:
+          APP_NAME: ${{ matrix.packages.name }}
+          BRANCH: ${{ github.ref_name }}
+        run: |
+          if [[ $BRANCH == 'main' ]]; then
+            echo "$APP_NAME env is set to production"
+            mv apps/$APP_NAME/.env.prod apps/$APP_NAME/.env
+          elif [[ $BRANCH == 'beta' ]]; then
+            echo "$APP_NAME env is set to dev"
+            mv apps/$APP_NAME/.env.beta apps/$APP_NAME/.env
+          elif [[ $BRANCH == 'dev' ]]; then
+            echo "$APP_NAME env is set to beta"
+            mv apps/$APP_NAME/.env.dev apps/$APP_NAME/.env
+          fi
+
       - name: Build and push Docker image
         if: steps.check-dockerfile.outputs.DOCKERFILE_EXISTS == 'true'
         uses: docker/build-push-action@v3
@@ -96,10 +116,6 @@ jobs:
         env:
           APP_NAME: ${{ matrix.packages.name }}
           VERSION: ${{ matrix.packages.version }}
-
-      - name: Show Docker image
-        if: steps.check-dockerfile.outputs.DOCKERFILE_EXISTS == 'true'
-        run: docker images
 
   update-deployment-declaration:
     name: Update deployment declaration

@@ -48,8 +48,15 @@ jobs:
         uses: tj-actions/branch-names@v6
 
       - name: Echo base branch name
-        run: echo ${{ steps.branch-name.outputs.base_ref_branch || 'master' }}
+        id: get-base-branch
+        run: |
+          BASE_BRANCH=${{ steps.branch-name.outputs.base_ref_branch || 'main' }}
+          echo "BASE_BRANCH=$BASE_BRANCH" >> $GITHUB_OUTPUT
 
-      - name: Target
-        if: ${{ inputs.target }}
-        run: pnpm ${{ inputs.target }} --parallel --filter=...[origin/master]
+          if [ "$BASE_BRANCH" != "main" ]; then
+            echo "TURBO_FILTER=--filter=...[origin/main]" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Target (main branch)
+        if: ${{ inputs.target && steps.get-base-branch.outputs.BASE_BRANCH == 'main' }}
+        run: pnpm ${{ inputs.target }} --parallel ${{ steps.get-base-branch.outputs.TURBO_FILTER }}

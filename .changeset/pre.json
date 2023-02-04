@@ -1,0 +1,16 @@
+{
+  "mode": "pre",
+  "tag": "beta",
+  "initialVersions": {
+    "admin-api": "0.0.1",
+    "admin-web": "0.0.0",
+    "api": "0.0.0",
+    "reg-scraper": "0.0.0",
+    "web": "0.0.0",
+    "@cgr/codegen": "0.0.0",
+    "@cgr/course-utils": "0.0.0",
+    "eslint-config-custom": "0.0.0",
+    "tsconfig": "0.0.0"
+  },
+  "changesets": []
+}

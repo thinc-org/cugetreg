@@ -78,12 +78,14 @@ importers:
 
   apps/api:
     specifiers:
+      '@elastic/elasticsearch': ^8.6.0
       '@grpc/grpc-js': 1.4.4
       '@grpc/proto-loader': 0.6.7
       '@nestjs/cli': ^9.0.0
       '@nestjs/common': 9.2.1
       '@nestjs/config': 2.2.0
       '@nestjs/core': 9.2.1
+      '@nestjs/elasticsearch': ^9.0.0
       '@nestjs/graphql': 7.9.8
       '@nestjs/jwt': 7.2.0
       '@nestjs/mongoose': 9.2.1
@@ -120,11 +122,13 @@ importers:
       typescript: ~4.7.4
       winston: 3.8.2
     dependencies:
+      '@elastic/elasticsearch': 8.6.0
       '@grpc/grpc-js': 1.4.4
       '@grpc/proto-loader': 0.6.7
       '@nestjs/common': 9.2.1_huyc3vjxdj723rrinn6lunzxyq
       '@nestjs/config': 2.2.0_b4pxbpa7chblgbyake5iz5rdmu
       '@nestjs/core': 9.2.1_e6la6qvsclaae2becwjnmfvsuq
+      '@nestjs/elasticsearch': 9.0.0_anwldfygmy4bbl2t6vvhkmi2au
       '@nestjs/graphql': 7.9.8_lbey7msv7p5rwlztn3uuvl6age
       '@nestjs/jwt': 7.2.0_@nestjs+common@9.2.1
       '@nestjs/mongoose': 9.2.1_qllokwhbbxyphnu7erbtzw5xuq
@@ -1357,6 +1361,30 @@ packages:
     dev: false
     optional: true
 
+  /@elastic/elasticsearch/8.6.0:
+    resolution: {integrity: sha512-mN5EbbgSp1rfRmQ/5Hv7jqAK8xhGJxCg7G84xje8hSefE59P+HPPCv/+DgesCUSJdZpwXIo0DwOWHfHvktxxLw==}
+    engines: {node: '>=14'}
+    dependencies:
+      '@elastic/transport': 8.3.1
+      tslib: 2.5.0
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
+
+  /@elastic/transport/8.3.1:
+    resolution: {integrity: sha512-jv/Yp2VLvv5tSMEOF8iGrtL2YsYHbpf4s+nDsItxUTLFTzuJGpnsB/xBlfsoT2kAYEnWHiSJuqrbRcpXEI/SEQ==}
+    engines: {node: '>=14'}
+    dependencies:
+      debug: 4.3.4
+      hpagent: 1.2.0
+      ms: 2.1.3
+      secure-json-parse: 2.7.0
+      tslib: 2.5.0
+      undici: 5.17.1
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
+
   /@emotion/babel-plugin/11.10.5_@babel+core@7.20.12:
     resolution: {integrity: sha512-xE7/hyLHJac7D2Ve9dKroBBZqBT7WuPQmWcq7HSGb84sUuP4mlOWoB8dvVfD9yk5DHkU1m6RW7xSoDtnQHNQeA==}
     peerDependencies:
@@ -2454,7 +2482,7 @@ packages:
       '@nestjs/websockets':
         optional: true
     dependencies:
-      '@nestjs/common': 9.2.1_mnr6j2del53muneqly5h4y27ai
+      '@nestjs/common': 9.2.1_huyc3vjxdj723rrinn6lunzxyq
       '@nestjs/platform-express': 9.2.1_hjcqpoaebdr7gdo5hgc22hthbe
       '@nuxtjs/opencollective': 0.3.2
       fast-safe-stringify: 2.1.1
@@ -2467,6 +2495,18 @@ packages:
       uuid: 9.0.0
     transitivePeerDependencies:
       - encoding
+    dev: false
+
+  /@nestjs/elasticsearch/9.0.0_anwldfygmy4bbl2t6vvhkmi2au:
+    resolution: {integrity: sha512-+NhXg0od/luNuObrCoouO8IGJ5d8esd2LbqOyX4wqM3PtzoVgQC5uDoxHu0ZyWkp/Coj7OiT0osYN9rgctEPbg==}
+    peerDependencies:
+      '@elastic/elasticsearch': ^7.4.0 || ^8.0.0
+      '@nestjs/common': ^8.0.0 || ^9.0.0
+      rxjs: ^7.2.0
+    dependencies:
+      '@elastic/elasticsearch': 8.6.0
+      '@nestjs/common': 9.2.1_huyc3vjxdj723rrinn6lunzxyq
+      rxjs: 7.8.0
     dev: false
 
   /@nestjs/graphql/7.9.8_lbey7msv7p5rwlztn3uuvl6age:
@@ -2564,7 +2604,7 @@ packages:
       '@nestjs/common': ^9.0.0
       '@nestjs/core': ^9.0.0
     dependencies:
-      '@nestjs/common': 9.2.1_mnr6j2del53muneqly5h4y27ai
+      '@nestjs/common': 9.2.1_huyc3vjxdj723rrinn6lunzxyq
       '@nestjs/core': 9.2.1_e6la6qvsclaae2becwjnmfvsuq
       body-parser: 1.20.1
       cors: 2.8.5
@@ -7696,6 +7736,11 @@ packages:
     resolution: {integrity: sha512-ePqFXHtSQWAFXYmj+JtOTHr84iNrII4/QRlAAPPE+zqnKy4xJo7Ie1Y4kC7AdB+LxLxSTTzBMASsEcy0q8YyvQ==}
     dev: false
 
+  /hpagent/1.2.0:
+    resolution: {integrity: sha512-A91dYTeIB6NoXG+PxTQpCCDDnfHsW9kc06Lvpu1TEe9gnd6ZFeiBoRO9JvzEv6xK7EX97/dUE8g/vBMTqTS3CA==}
+    engines: {node: '>=14'}
+    dev: false
+
   /html-element-map/1.3.1:
     resolution: {integrity: sha512-6XMlxrAFX4UEEGxctfFnmrFaaZFNf9i5fNuV5wZ3WWQ4FVaNP1aX1LkX9j2mfEx1NpjeE/rL3nmgEn23GdFmrg==}
     dependencies:
@@ -12270,6 +12315,13 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: false
     optional: true
+
+  /undici/5.17.1:
+    resolution: {integrity: sha512-qMwK+1tmJ6DsMlsl/AYsZXnkIraXmQzzBuPSiQXP6q0WvNO+dwfiBAhjZWmxxW4N0PS31fzB6ulDOUS6cv8oKw==}
+    engines: {node: '>=12.18'}
+    dependencies:
+      busboy: 1.6.0
+    dev: false
 
   /unique-filename/1.1.1:
     resolution: {integrity: sha512-Vmp0jIp2ln35UTXuryvjzkjGdRyf9b2lTXuSYUiPmzRcl3FDtYqAwOnTJkAngD9SWhnoJzDbTKwaOrZ+STtxNQ==}

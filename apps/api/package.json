@@ -23,11 +23,13 @@
     "typescript": "~4.7.4"
   },
   "dependencies": {
+    "@elastic/elasticsearch": "^8.6.0",
     "@grpc/grpc-js": "1.4.4",
     "@grpc/proto-loader": "0.6.7",
     "@nestjs/common": "9.2.1",
     "@nestjs/config": "2.2.0",
     "@nestjs/core": "9.2.1",
+    "@nestjs/elasticsearch": "^9.0.0",
     "@nestjs/graphql": "7.9.8",
     "@nestjs/jwt": "7.2.0",
     "@nestjs/mongoose": "9.2.1",

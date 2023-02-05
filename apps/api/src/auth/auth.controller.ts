@@ -55,6 +55,9 @@ export class AuthController {
     @Res({ passthrough: true }) res: Response
   ) {
     const { idToken } = body
+    if (!idToken) {
+      throw new BadRequestException('idToken is required')
+    }
     const payload = await this.authService.validateGoogleIdToken(idToken)
     const { refreshToken } = await this.authService.handleGoogleIdToken(payload)
     this.setCookie(res, 'refreshtoken', refreshToken)

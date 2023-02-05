@@ -1,6 +1,6 @@
 {
   "name": "reg-scraper",
-  "version": "0.0.0",
+  "version": "1.0.1",
   "private": true,
   "scripts": {
     "dev": "nest start --watch",
@@ -29,6 +29,8 @@
     "@nestjs/platform-express": "9.2.1",
     "@nestjs/schedule": "2.1.0",
     "@thinc-org/chula-courses": "^2.3.0",
+    "class-transformer": "0.3.1",
+    "class-validator": "0.13.2",
     "axios": "0.23.0",
     "bull": "4.10.2",
     "cheerio": "1.0.0-rc.12",

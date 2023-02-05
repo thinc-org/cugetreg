@@ -257,6 +257,7 @@ importers:
       '@testing-library/react-hooks': 8.0.1
       '@types/enzyme': ^3.10.12
       '@types/escape-html': ^1.0.2
+      '@types/google-one-tap': ^1.2.2
       '@types/jest': 28.1.8
       '@types/md5': 2.3.2
       '@types/nprogress': 0.2.0
@@ -393,6 +394,7 @@ importers:
       '@testing-library/react-hooks': 8.0.1_7ey2zzynotv32rpkwno45fsx4e
       '@types/enzyme': 3.10.12
       '@types/escape-html': 1.0.2
+      '@types/google-one-tap': 1.2.2
       '@types/jest': 28.1.8
       '@types/md5': 2.3.2
       '@types/nprogress': 0.2.0
@@ -3310,6 +3312,10 @@ packages:
     dependencies:
       '@types/node': 18.11.18
     dev: false
+
+  /@types/google-one-tap/1.2.2:
+    resolution: {integrity: sha512-7uAOjukbJnzJ5P8fKPSy7QDrbLbCEyUrSH/M4K+8wnk+cbSxE3t2MmrLPX7ejUl8rDZv3oUl0/uwQRlIIrLMBA==}
+    dev: true
 
   /@types/graceful-fs/4.1.6:
     resolution: {integrity: sha512-Sig0SNORX9fdW+bQuTEovKj3uHcUL6LQKbCrrqb1X7J6/ReAbhCXRAhc+SMejhLELFj2QcyuxmUooZ4bt5ReSw==}

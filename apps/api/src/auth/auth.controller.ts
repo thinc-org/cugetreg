@@ -57,10 +57,7 @@ export class AuthController {
     const { idToken } = body
     const payload = await this.authService.validateGoogleIdToken(idToken)
     const { refreshToken } = await this.authService.handleGoogleIdToken(payload)
-    res.cookie('refreshtoken', refreshToken, {
-      httpOnly: true,
-      maxAge: 1000 * 60 * 60 * 24 * 30 * 6,
-    })
+    this.setCookie(res, 'refreshtoken', refreshToken)
     return { success: true }
   }
 
@@ -78,11 +75,7 @@ export class AuthController {
       code,
       state.overrideBackendUrl
     )
-    res.cookie('refreshtoken', refreshToken, {
-      httpOnly: true,
-      maxAge: 1000 * 60 * 60 * 24 * 30 * 6,
-    })
-
+    this.setCookie(res, 'refreshtoken', refreshToken)
     return {
       url: state.returnUrl,
     }
@@ -102,6 +95,19 @@ export class AuthController {
     return {
       accessToken: await this.authService.issueAccessToken(token),
     }
+  }
+
+  private setCookie(
+    res: Response,
+    name: string,
+    value: string,
+    httpOnly = true,
+    maxAge = 1000 * 60 * 60 * 24 * 30 * 6
+  ) {
+    res.cookie(name, value, {
+      httpOnly,
+      maxAge,
+    })
   }
 
   private createOauthState(returnUrl: string, overrideBackendUrl?: string) {

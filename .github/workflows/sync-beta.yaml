@@ -1,0 +1,37 @@
+name: Sync beta to main
+
+on:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    name: Sync beta to main
+
+    strategy:
+      matrix:
+        node-version: [16.17.0]
+        os: [ubuntu-latest]
+
+    runs-on: ${{ matrix.os }}
+
+    # Only run this job if the pull request is merged and the base branch is 'changeset-release/main'
+    if: ${{ github.event.pull_request.merged == true && github.head_ref == 'changeset-release/main' }}
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+        with:
+          ref: beta
+          fetch-depth: 0
+
+      - name: Rebase beta to main
+        run: |
+          git rebase origin/main
+          git push

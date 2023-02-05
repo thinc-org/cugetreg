@@ -1,5 +1,11 @@
 # web
 
+## 1.1.0
+
+### Minor Changes
+
+- b305b2eb: Implement Google One Tap sign-in
+
 ## 1.0.1
 
 ### Patch Changes

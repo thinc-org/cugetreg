@@ -21,8 +21,8 @@ jobs:
 
     runs-on: ${{ matrix.os }}
 
-    # Only run this job if the pull request is merged and the base branch is beta
-    if: ${{ github.event.pull_request.merged == true && github.head_ref == 'beta' }}
+    # Only run this job if the pull request is merged and the base branch is 'changeset-release/main'
+    if: ${{ github.event.pull_request.merged == true && github.head_ref == 'changeset-release/main' }}
 
     steps:
       - name: Checkout Repo

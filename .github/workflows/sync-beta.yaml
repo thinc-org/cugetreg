@@ -1,0 +1,31 @@
+name: Sync beta to main
+
+on:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - main
+
+jobs:
+  sync:
+    name: Sync beta to main
+
+    strategy:
+      matrix:
+        node-version: [16.17.0]
+        os: [ubuntu-latest]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+        with:
+          ref: beta
+
+      - name: Echo event payload
+        run: echo ${{ github.event.pull_request.merged }}
+
+      - name: Echo event payload
+        run: echo ${{ toJSON(github.event) }}

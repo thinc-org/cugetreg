@@ -56,8 +56,6 @@ export class AuthController {
   ) {
     const { idToken } = body
     const payload = await this.authService.validateGoogleIdToken(idToken)
-    if (!payload) throw new BadRequestException('Invalid id token')
-
     const { refreshToken } = await this.authService.handleGoogleIdToken(payload)
     res.cookie('refreshtoken', refreshToken, {
       httpOnly: true,

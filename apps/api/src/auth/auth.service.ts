@@ -77,19 +77,21 @@ export class AuthService {
 
   async validateGoogleIdToken(idToken: string) {
     const client = this.generateGoogleOauthClient()
+    let payload: TokenPayload
     try {
       // verifyIdToken will throw an error if the token is invalid
       const ticket = await client.verifyIdToken({
         idToken,
         audience: this.configService.get('googleOAuthId'),
       })
-      const payload = ticket.getPayload() as TokenPayload
-      if (payload.hd !== 'student.chula.ac.th')
-        throw new ForbiddenException('User hosted_domain is not student.chula.ac.th')
-      return payload
+      payload = ticket.getPayload()
     } catch {
-      return null
+      throw new BadRequestException('Invalid id token')
     }
+    if (payload.hd !== 'student.chula.ac.th') {
+      throw new ForbiddenException('User hosted_domain is not student.chula.ac.th')
+    }
+    return payload
   }
 
   async handleGoogleIdToken(payload: TokenPayload) {

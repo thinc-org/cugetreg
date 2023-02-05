@@ -46,11 +46,12 @@ export function useApp(router: Router) {
       callback: (response: CredentialResponse) => {
         userStore.loginWithIdToken(response.credential)
       },
+      cancel_on_tap_outside: false,
       hosted_domain: 'student.chula.ac.th', // hosted_domain is undocumented in the official documentation
     } as IdConfiguration)
 
     if (!userStore.isLoggedIn() && !!GOOGLE_OAUTH_ID) {
       window.google?.accounts.id.prompt()
     }
-  })
+  }, [userStore.accessToken])
 }

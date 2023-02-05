@@ -1,5 +1,11 @@
 # api
 
+## 1.1.0-beta.0
+
+### Minor Changes
+
+- b305b2eb: Add support for signing in with Google ID Token
+
 ## 1.0.1
 
 ### Patch Changes

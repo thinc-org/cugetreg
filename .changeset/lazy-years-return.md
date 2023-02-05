@@ -1,5 +1,4 @@
 ---
-'api': minor
 'web': minor
 ---
 

@@ -30,6 +30,7 @@ class UserStore {
         idToken,
       })
       await this.restoreSession()
+      await courseCartStore.upgradeSource()
     } catch (e) {
       console.error('Fail to login with id token', e)
     }

@@ -4,7 +4,6 @@ import { Container } from '@mui/material'
 import { DefaultSeo } from 'next-seo'
 import { AppProps } from 'next/app'
 import dynamic from 'next/dynamic'
-import Script from 'next/script'
 
 import { Footer } from '@web/common/components/Footer'
 import { LoadingProgress } from '@web/common/components/LoadingProgress'
@@ -12,6 +11,7 @@ import { TopBar } from '@web/common/components/TopBar'
 import { useSaveStudyProgram } from '@web/common/hooks/useCourseGroup'
 import '@web/common/i18n'
 import { TrackPageChange } from '@web/common/tracker/components/TrackPageChange'
+import { GoogleOneTapPrompt } from '@web/common/components/GoogleOneTapPrompt'
 import { createEmotionCache } from '@web/configs/createEmotionCache'
 import { mobxConfiguration } from '@web/configs/mobx'
 import { CustomToaster } from '@web/modules/App/components/CustomToaster'
@@ -62,8 +62,8 @@ export function App(props: MyAppProps) {
         <ShoppingCartModal />
         <CustomToaster />
         <CookieBanner />
+        <GoogleOneTapPrompt />
       </TrackPageChange>
-      <Script src="https://accounts.google.com/gsi/client" strategy="beforeInteractive" />
     </AppProvider>
   )
 }

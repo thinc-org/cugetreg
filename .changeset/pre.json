@@ -12,5 +12,8 @@
     "eslint-config-custom": "1.0.0",
     "tsconfig": "1.0.0"
   },
-  "changesets": []
+  "changesets": [
+    "lazy-years-return",
+    "rich-days-applaud"
+  ]
 }

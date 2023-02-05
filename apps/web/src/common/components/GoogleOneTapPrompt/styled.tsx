@@ -1,11 +1,8 @@
 import { styled } from '@mui/material'
 
 export const OneTapPromptContainer = styled('div')`
-  display: relative;
-`
-
-export const OneTapPrompt = styled('div')`
-  position: absolute;
+  position: fixed;
   top: 48px;
-  right: 4px;
+  right: 2px;
+  z-index: 1200;
 `

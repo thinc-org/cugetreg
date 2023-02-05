@@ -8,7 +8,8 @@ export function useGoogleOneTap(promptRef: React.RefObject<HTMLDivElement>) {
   const [isInitialized, setIsInitialized] = useState(false)
 
   useEffect(() => {
-    if (!promptRef.current) return
+    if (!promptRef.current || !GOOGLE_OAUTH_ID) return
+
     window.google?.accounts.id.initialize({
       client_id: GOOGLE_OAUTH_ID,
       callback: (response: CredentialResponse) => {
@@ -22,7 +23,7 @@ export function useGoogleOneTap(promptRef: React.RefObject<HTMLDivElement>) {
   }, [promptRef.current])
 
   useEffect(() => {
-    if (isInitialized && !userStore.isLoggedIn() && !!GOOGLE_OAUTH_ID) {
+    if (isInitialized && !userStore.isLoggedIn()) {
       window.google?.accounts.id.prompt()
     }
   }, [isInitialized, userStore.accessToken])

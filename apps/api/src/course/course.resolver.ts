@@ -4,6 +4,7 @@ import { Course, Semester, StudyProgram } from '@thinc-org/chula-courses'
 
 import { CourseGroupInput, FilterInput } from '../graphql'
 import { CourseService } from './course.service'
+import { ICourseSearchDocument } from './interface/course.interface'
 
 @Resolver('Course')
 export class CourseResolver {
@@ -27,7 +28,17 @@ export class CourseResolver {
   async search(
     @Args('filter') filter: FilterInput,
     @Args('courseGroup') courseGroup: CourseGroupInput
-  ): Promise<Course[]> {
-    return this.courseService.search(filter, courseGroup)
+  ): Promise<ICourseSearchDocument[]> {
+    return this.courseService.search({
+      academicYear: courseGroup.academicYear,
+      semester: courseGroup.semester,
+      studyProgram: courseGroup.studyProgram,
+      dayOfWeeks: filter.dayOfWeeks,
+      genEdTypes: filter.genEdTypes,
+      limit: filter.limit,
+      offset: filter.offset,
+      keyword: filter.keyword,
+      periodRange: filter.periodRange,
+    })
   }
 }

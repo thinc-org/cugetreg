@@ -1,18 +1,25 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 
-import { Semester, StudyProgram } from '@thinc-org/chula-courses'
-import { FilterQuery, Model } from 'mongoose'
-
-import { escapeRegExpString } from '@api/util/functions'
+import { DayOfWeek, GenEdType, Semester, StudyProgram } from '@thinc-org/chula-courses'
+import { Model } from 'mongoose'
 
 import { Course } from '../common/types/course.type'
-import { CourseGroupInput, FilterInput } from '../graphql'
 import { CourseDocument } from '../schemas/course.schema'
+import { QueryDslQueryContainer } from '@elastic/elasticsearch/lib/api/types'
+import { Period } from '@api/graphql'
+import { SearchService } from '@api/search/search.service'
+import { ConfigService } from '@nestjs/config'
+import { isTime } from '@api/util/functions'
+import { ICourseSearchDocument, ICourseSearchFilter } from './interface/course.interface'
 
 @Injectable()
 export class CourseService {
-  constructor(@InjectModel('course') private courseModel: Model<CourseDocument>) {}
+  constructor(
+    @InjectModel('course') private courseModel: Model<CourseDocument>,
+    private readonly configService: ConfigService,
+    private readonly searchService: SearchService
+  ) {}
 
   async findOne(
     courseNo: string,
@@ -51,40 +58,20 @@ export class CourseService {
     return courseNos
   }
 
-  async search(
-    {
-      keyword = '',
-      genEdTypes = [],
-      dayOfWeeks = [],
-      limit = 10,
-      offset = 0,
-      periodRange,
-    }: FilterInput,
-    { semester, academicYear, studyProgram }: CourseGroupInput
-  ): Promise<Course[]> {
-    const query = {
-      semester,
-      academicYear,
-      studyProgram,
-    } as FilterQuery<CourseDocument>
-    const escapedKeyword = escapeRegExpString(keyword.trim())
-    if (keyword) {
-      query.$or = [
-        { courseNo: new RegExp('^' + escapedKeyword, 'i') },
-        { abbrName: new RegExp(escapedKeyword, 'i') },
-        { courseNameTh: new RegExp(escapedKeyword, 'i') },
-        { courseNameEn: new RegExp(escapedKeyword, 'i') },
-      ]
-    }
-
-    if (genEdTypes.length > 0) {
-      query.genEdType = { $in: genEdTypes }
-    }
-
-    if (dayOfWeeks.length > 0) {
-      query['sections.classes.dayOfWeek'] = { $in: dayOfWeeks }
-    }
-
+  async search({
+    keyword = '',
+    genEdTypes = [],
+    dayOfWeeks = [],
+    limit = 10,
+    offset = 0,
+    periodRange = {
+      start: '06:00',
+      end: '20:00',
+    },
+    studyProgram,
+    semester,
+    academicYear,
+  }: ICourseSearchFilter): Promise<ICourseSearchDocument[]> {
     if (periodRange) {
       const { start, end } = periodRange
       if (!isTime(start) || !isTime(end)) {
@@ -93,26 +80,130 @@ export class CourseService {
           message: 'Start time or end time is invalid',
         })
       }
+
       if (start > end) {
         throw new BadRequestException({
           reason: 'INVALID_PERIOD_RANGE',
           message: 'Start time cannot be later than end time',
         })
       }
-      query['sections.classes'] = {
-        $elemMatch: {
-          'period.start': { $gte: start },
-          'period.end': { $lte: end },
-        },
-      }
     }
 
-    const courses = await this.courseModel.find(query).limit(limit).skip(offset).lean()
-    return courses
+    return this.searchService.search<ICourseSearchDocument>(
+      this.configService.get<string>('courseIndex'),
+      buildCourseQuery({
+        keyword,
+        genEdTypes,
+        dayOfWeeks,
+        limit,
+        offset,
+        periodRange,
+        studyProgram,
+        semester,
+        academicYear,
+      })
+    )
   }
 }
 
-function isTime(timeString: string): boolean {
-  const timeRegex = /^\d{2}:\d{2}$/
-  return timeRegex.test(timeString)
+// build the query
+function buildCourseQuery(filter: ICourseSearchFilter): QueryDslQueryContainer {
+  // create the base query from values that guarantee is not undefined
+  const boolMust: QueryDslQueryContainer[] = [
+    {
+      multi_match: {
+        query: filter.keyword,
+        fields: [
+          'abbrName^5',
+          'courseNo^5',
+          'courseNameEn^3',
+          'courseDescEn',
+          'courseNameTh^3',
+          'courseDescTh',
+        ],
+      },
+    },
+    {
+      term: {
+        semester: {
+          value: filter.semester,
+        },
+      },
+    },
+    {
+      term: {
+        studyProgram: {
+          value: filter.studyProgram,
+        },
+      },
+    },
+    {
+      term: {
+        academicYear: {
+          value: filter.academicYear,
+        },
+      },
+    },
+  ]
+
+  const nestedQuery: QueryDslQueryContainer[] = []
+
+  // push the query for each filter if filter is not undefined
+  if (filter.dayOfWeeks.length > 0) {
+    nestedQuery.push({
+      terms: {
+        'rawData.sections.classes.dayOfWeek': filter.dayOfWeeks,
+      },
+    })
+  }
+
+  if (filter.periodRange) {
+    nestedQuery.push({
+      nested: {
+        path: 'rawData.sections.classes.period',
+        query: {
+          query_string: {
+            query: `rawData.sections.classes.period.start:[${filter.periodRange.start} TO ${filter.periodRange.end}] AND rawData.sections.classes.period.end:[* TO ${filter.periodRange.end}]`,
+          },
+        },
+      },
+    })
+  }
+
+  if (filter.genEdTypes.length > 0) {
+    boolMust.push({
+      terms: {
+        genEdType: filter.genEdTypes,
+      },
+    })
+  }
+
+  if (nestedQuery.length > 0) {
+    boolMust.push({
+      nested: {
+        path: 'rawData',
+        query: {
+          nested: {
+            path: 'rawData.sections',
+            query: {
+              nested: {
+                path: 'rawData.sections.classes',
+                query: {
+                  bool: {
+                    must: nestedQuery,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    })
+  }
+
+  return {
+    bool: {
+      must: boolMust,
+    },
+  }
 }

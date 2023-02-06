@@ -127,6 +127,8 @@ export abstract class IQuery {
 
     abstract search(filter: FilterInput, courseGroup: CourseGroupInput): Course[] | Promise<Course[]>;
 
+    abstract suggest(text: string): string[] | Promise<string[]>;
+
     abstract overrides(): Override[] | Promise<Override[]>;
 
     abstract reviews(courseNo: string, studyProgram: StudyProgram): Review[] | Promise<Review[]>;

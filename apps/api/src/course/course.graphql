@@ -157,4 +157,5 @@ type Query {
   Search courses using the given course filters. Supports pagination with limit and offset fields in `FilterInput`.
   """
   search(filter: FilterInput!, courseGroup: CourseGroupInput!): [Course!]!
+  suggest(text: String!): [String]!
 }

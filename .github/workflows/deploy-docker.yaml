@@ -143,6 +143,6 @@ jobs:
       gitops-repository: ${{ inputs.target-gitops-repository }}
       gitops-ref: ${{ inputs.target-gitops-ref }}
       container-registry: ${{ inputs.container-registry }}
-      gitops-mode: ${{ inputs.gitops-mode }}
+      mode: ${{ inputs.gitops-mode }}
     secrets:
       GH_TOKEN: ${{ secrets.GH_TOKEN }}

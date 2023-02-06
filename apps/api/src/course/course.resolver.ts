@@ -41,4 +41,9 @@ export class CourseResolver {
       periodRange: filter.periodRange,
     })
   }
+
+  @Query('suggest')
+  async suggest(@Args('text') text: string): Promise<string[]> {
+    return this.courseService.suggest(text)
+  }
 }

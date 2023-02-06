@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { ElasticsearchService } from '@nestjs/elasticsearch'
-import { SearchRequest } from '@elastic/elasticsearch/lib/api/types'
+import { SearchRequest, SearchSuggest, SuggestionName } from '@elastic/elasticsearch/lib/api/types'
 
 @Injectable()
 export class SearchService {
@@ -11,5 +11,9 @@ export class SearchService {
 
     const hits = res.hits.hits
     return hits.map((item) => item._source)
+  }
+
+  async suggest<T>(req: SearchRequest): Promise<Record<SuggestionName, SearchSuggest<T>[]>> {
+    return (await this.elasticsearchService.search<T>(req)).suggest
   }
 }

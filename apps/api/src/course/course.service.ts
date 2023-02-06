@@ -6,12 +6,21 @@ import { Model } from 'mongoose'
 
 import { Course } from '../common/types/course.type'
 import { CourseDocument } from '../schemas/course.schema'
-import { QueryDslQueryContainer } from '@elastic/elasticsearch/lib/api/types'
+import {
+  QueryDslQueryContainer,
+  SearchCompletionSuggest,
+  SearchSuggest,
+  SuggestionName,
+} from '@elastic/elasticsearch/lib/api/types'
 import { Period } from '@api/graphql'
 import { SearchService } from '@api/search/search.service'
 import { ConfigService } from '@nestjs/config'
 import { isTime } from '@api/util/functions'
-import { ICourseSearchDocument, ICourseSearchFilter } from './interface/course.interface'
+import {
+  ICourseSearchDocument,
+  ICourseSearchFilter,
+  ICourseSuggest,
+} from './interface/course.interface'
 
 @Injectable()
 export class CourseService {
@@ -102,6 +111,47 @@ export class CourseService {
       from: offset,
       size: limit,
     })
+  }
+
+  async suggest(text: string): Promise<string[]> {
+    const suggestResult = await this.searchService.suggest<string>({
+      index: this.configService.get<string>('courseIndex'),
+      suggest: {
+        name: {
+          phrase: {
+            field: 'courseNameEn',
+            direct_generator: [
+              {
+                field: 'courseNameEn',
+                suggest_mode: 'always',
+              },
+            ],
+          },
+        },
+        no: {
+          term: {
+            field: 'courseNo',
+          },
+        },
+        text: text,
+      },
+    })
+
+    const result: string[] = []
+
+    for (const sug of suggestResult['name']) {
+      for (const option of sug.options as []) {
+        result.push((option as SearchCompletionSuggest).text)
+      }
+    }
+
+    for (const sug of suggestResult['no']) {
+      for (const option of sug.options as []) {
+        result.push((option as SearchCompletionSuggest).text)
+      }
+    }
+
+    return result
   }
 }
 

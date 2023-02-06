@@ -1,0 +1,18 @@
+name: Update GitOps
+
+on:
+  workflow_call:
+    inputs:
+      packages:
+        description: Packages to update
+        required: true
+        type: string
+
+jobs:
+  update-gitops:
+    name: Build and Publish Docker image
+
+    runs-on: ubuntu-latest
+
+    steps:
+      -

@@ -75,18 +75,14 @@ jobs:
       - name: Print Debug
         run: echo "${{ steps.affected-packages.outputs.affectPackages }}"
 
-  deploy-with-docker:
+  build-with-docker:
     needs:
       - release
-    uses: ./.github/workflows/deploy-docker.yaml
+    uses: ./.github/workflows/build-docker.yaml
     with:
       packages: ${{ needs.release.outputs.affectedPackages }}
       container-registry: ghcr.io
       image-prefix: thinc-org/cugetreg
       username: ${{ github.actor }}
       password: ${{ github.token }}
-      # target-repository: ${{ github.repository }}
-      # target-ref: main
-      # target-directory: k8s-demo
       push: true
-      update: false

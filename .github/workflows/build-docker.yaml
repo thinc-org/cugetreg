@@ -38,10 +38,6 @@ on:
         description: Enable pushing the image to the container registry
         type: boolean
         default: false
-      update:
-        description: Enable updating deployment declaration in the target repository
-        type: boolean
-        default: false
 
 jobs:
   build-and-publish-docker-image:
@@ -112,45 +108,3 @@ jobs:
           tags: |
             ${{ inputs.container-registry }}/${{ inputs.image-prefix }}/${{ matrix.packages.name }}:${{ matrix.packages.imageTag }}
           push: ${{ inputs.push }}
-
-  # update-deployment-declaration:
-  #   name: Update deployment declaration
-
-  #   if: ${{ inputs.update && needs.build-and-publish-docker-image.outputs.DOCKERFILE_EXISTS == 'true' }}
-
-  #   needs:
-  #     - build-and-publish-docker-image
-
-  #   runs-on: ubuntu-latest
-
-  #   steps:
-  #     - name: Checkout Repo
-  #       uses: actions/checkout@v3
-  #       with:
-  #         repository: ${{ inputs.target-repository }}
-  #         ref: ${{ inputs.target-ref }}
-
-  #     - name: Update publishPackages version in YAML file
-  #       run: |
-  #         for row in $(echo "$PACKAGES" | jq -r '.[] | @base64'); do
-  #           _jq() {
-  #             echo ${row} | base64 --decode | jq -r ${1}
-  #           }
-  #           NAME=$(_jq '.name')
-  #           VERSION=$(_jq '.version')
-  #           OLD_VERSION=${{ inputs.container-registry }}\/${{ inputs.image-prefix }}\/$NAME:.*
-  #           NEW_VERSION=${{ inputs.container-registry }}\/${{ inputs.image-prefix }}\/$NAME:$VERSION
-  #           find ./${{ inputs.target-directory }} -type f -exec sed -i -e "s|$OLD_VERSION|$NEW_VERSION|g" {} \;
-  #           echo "${NAME}:${VERSION} is updated"
-  #         done
-  #       env:
-  #         PACKAGES: ${{ inputs.packages }}
-
-  #     - name: Show git status
-  #       run: git status
-
-  #     - name: Open Pull Request to the target repository
-  #       uses: peter-evans/create-pull-request@v4
-  #       with:
-  #         title: Update Package versions
-  #         commit-message: Update Package versions

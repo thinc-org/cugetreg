@@ -111,11 +111,11 @@ jobs:
           echo "Changeset pullRequestNumber - ${{ steps.changesets.outputs.pullRequestNumber }}"
           echo "Packages to build - ${{ toJSON(steps.transform-packages.outputs.packages) }}"
 
-  deploy-with-docker:
+  build-with-docker:
     needs:
       - release
     if: ${{ needs.release.outputs.published == 'true' }}
-    uses: ./.github/workflows/deploy-docker.yaml
+    uses: ./.github/workflows/build-docker.yaml
     with:
       packages: ${{ needs.release.outputs.publishedPackages }}
       container-registry: ghcr.io
@@ -126,11 +126,10 @@ jobs:
       # target-ref: main
       # target-directory: k8s-demo
       push: true
-      update: false
 
-  deploy-with-docker-dispatch:
+  build-with-docker-dispatch:
     if: ${{ github.event_name == 'workflow_dispatch' }}
-    uses: ./.github/workflows/deploy-docker.yaml
+    uses: ./.github/workflows/build-docker.yaml
     with:
       packages: |
         [
@@ -148,4 +147,3 @@ jobs:
       # target-ref: refs/tags/${{ github.event.inputs.app }}@${{ github.event.inputs.version }}
       # target-directory: k8s-demo
       push: true
-      update: false

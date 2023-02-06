@@ -71,6 +71,14 @@ jobs:
             echo "DOCKERFILE_EXISTS=true" >> $GITHUB_OUTPUT
           fi
 
+      - name: Cache Docker layers
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+
       - name: Set up Docker Buildx
         if: steps.check-dockerfile.outputs.DOCKERFILE_EXISTS == 'true'
         uses: docker/setup-buildx-action@v2
@@ -108,11 +116,25 @@ jobs:
           file: apps/${{ matrix.packages.name }}/Dockerfile
           tags: ${{ inputs.container-registry }}/${{ inputs.image-prefix }}/${{ matrix.packages.name }}:${{ matrix.packages.imageTag }}
           push: ${{ inputs.push }}
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache-new
+
+      - name: Move Docker cache
+        run: |
+          rm -rf /tmp/.buildx-cache
+          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+
+      - name: Print Debug
+        run: |
+          echo "update = ${{ inputs.update }}"
+          echo "push = ${{ inputs.push }}"
+          echo "packages = ${{ inputs.packages }}"
+          echo "environment = ${{ inputs.environment }}"
 
   update-gitops:
     needs: build-and-publish-docker-image
 
-    if: inputs.update == 'true'
+    if: ${{ inputs.update == 'true' }}
 
     uses: ./.github/workflows/update-gitops.yaml
     with:

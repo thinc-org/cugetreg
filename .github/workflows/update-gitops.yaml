@@ -35,7 +35,9 @@ on:
 jobs:
   update-gitops:
     name: Update GitOps and Open PR
+
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v3

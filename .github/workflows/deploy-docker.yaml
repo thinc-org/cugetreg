@@ -73,6 +73,7 @@ jobs:
 
       - name: Cache Docker layers
         uses: actions/cache@v2
+        if: steps.check-dockerfile.outputs.DOCKERFILE_EXISTS == 'true'
         with:
           path: /tmp/.buildx-cache
           key: ${{ runner.os }}-buildx-${{ github.sha }}
@@ -120,16 +121,10 @@ jobs:
           cache-to: type=local,dest=/tmp/.buildx-cache-new
 
       - name: Move Docker cache
+        if: steps.check-dockerfile.outputs.DOCKERFILE_EXISTS == 'true'
         run: |
           rm -rf /tmp/.buildx-cache
           mv /tmp/.buildx-cache-new /tmp/.buildx-cache
-
-      - name: Print Debug
-        run: |
-          echo "update = ${{ inputs.update }}"
-          echo "push = ${{ inputs.push }}"
-          echo "packages = ${{ inputs.packages }}"
-          echo "environment = ${{ inputs.environment }}"
 
   update-gitops:
     needs: build-and-publish-docker-image

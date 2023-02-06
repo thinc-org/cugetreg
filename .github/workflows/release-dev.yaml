@@ -100,6 +100,6 @@ jobs:
       container-registry: ghcr.io
       image-prefix: thinc-org/cugetreg
       target-gitops-repository: thinc-org/cugetreg-gitops
-      target-gitops-ref: refs/heads/main
+      target-gitops-ref: refs/heads/master
     secrets:
       GH_TOKEN: ${{ secrets.GH_TOKEN }}

@@ -5,7 +5,7 @@ import { apiUrl, httpClient } from '@web/services/httpClient'
 import { courseCartStore } from '@web/store'
 
 class UserStore {
-  private isInitialized = false
+  isInitialized = false
   accessToken: string | null
 
   constructor() {

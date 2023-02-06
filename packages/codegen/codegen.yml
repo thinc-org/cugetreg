@@ -1,9 +1,9 @@
 overwrite: true
-schema: apps/api/**/*.graphql
-documents: libs/codegen/src/query/*.graphql
+schema: ../../apps/api/**/*.graphql
+documents: ../../packages/codegen/src/query/*.graphql
 
 generates:
-  libs/codegen/src/generated/index.tsx:
+  ../../packages/codegen/src/generated/index.tsx:
     plugins:
       - typescript
       - typescript-operations

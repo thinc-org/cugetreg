@@ -24,8 +24,8 @@ export function useGoogleOneTap(promptRef: React.RefObject<HTMLDivElement>) {
   }, [promptRef.current])
 
   useEffect(() => {
-    if (isInitialized && !userStore.isLoggedIn()) {
+    if (isInitialized && userStore.isInitialized && !userStore.isLoggedIn()) {
       window.google?.accounts.id.prompt()
     }
-  }, [isInitialized, userStore.accessToken])
+  }, [isInitialized, userStore.accessToken, userStore.isInitialized])
 }

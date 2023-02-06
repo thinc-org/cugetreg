@@ -97,7 +97,9 @@ export class CourseService {
         studyProgram,
         semester,
         academicYear,
-      })
+      }),
+      offset,
+      limit
     )
   }
 }

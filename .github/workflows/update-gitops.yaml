@@ -1,4 +1,4 @@
-name: Update GitOps and Open PR
+name: Update GitOps repository
 
 on:
   workflow_call:

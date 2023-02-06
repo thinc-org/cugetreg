@@ -19,6 +19,7 @@ import { ReviewModule } from '../review/review.module'
 import { UserModule } from '../user/user.module'
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
+import { SearchModule } from '@api/search/search.module'
 
 @Module({
   imports: [
@@ -81,6 +82,7 @@ import { AppService } from './app.service'
     ClientLoggingModule,
     OverrideModule,
     ComputationModule,
+    SearchModule,
   ],
   controllers: [AppController],
   providers: [AppService],

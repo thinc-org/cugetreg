@@ -5,6 +5,8 @@ const path = require('path')
 //   enabled: process.env.ANALYZE === 'true',
 // })
 
+const isProd = process.env.NODE_ENV !== 'development'
+
 /**
  * @type {import('next').NextConfig}
  */
@@ -14,7 +16,7 @@ const nextConfig = {
   //   IS_PULL_REQUEST: process.env.IS_PULL_REQUEST,
   // },
   compiler: {
-    removeConsole: {
+    removeConsole: isProd && {
       exclude: ['error', 'warn'],
     },
   },
@@ -23,7 +25,7 @@ const nextConfig = {
     return config
   },
   async rewrites() {
-    if (process.env.NODE_ENV !== 'development') return []
+    if (isProd) return []
     return [
       {
         source: '/apiProxy/:path*',

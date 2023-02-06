@@ -73,7 +73,7 @@ export class CourseService {
     studyProgram,
     semester,
     academicYear,
-  }: ICourseSearchFilter): Promise<ICourseSearchDocument[]> {
+  }): Promise<ICourseSearchDocument[]> {
     if (periodRange) {
       const { start, end } = periodRange
       if (!isTime(start) || !isTime(end)) {
@@ -84,23 +84,20 @@ export class CourseService {
         throw new UserInputError('Start time cannot be later than end time')
       }
     }
-
-    return this.searchService.search<ICourseSearchDocument>(
-      this.configService.get<string>('courseIndex'),
-      buildCourseQuery({
+    return this.searchService.search<ICourseSearchDocument>({
+      index: this.configService.get<string>('courseIndex'),
+      query: buildCourseQuery({
         keyword,
         genEdTypes,
         dayOfWeeks,
-        limit,
-        offset,
         periodRange,
         studyProgram,
         semester,
         academicYear,
       }),
-      offset,
-      limit
-    )
+      from: offset,
+      size: limit,
+    })
   }
 }
 

@@ -19,8 +19,6 @@ export interface ICourseSearchFilter {
   genEdTypes: GenEdType[]
   dayOfWeeks: DayOfWeek[]
   periodRange: Period
-  limit: number
-  offset: number
   studyProgram: string
   semester: string
   academicYear: string

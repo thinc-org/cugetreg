@@ -121,8 +121,8 @@ jobs:
           context: .
           file: apps/${{ env.APP_NAME }}/Dockerfile
           tags: |
-            ${{ inputs.container-registry  }}/${{ inputs.image-prefix }}/${{ env.APP_NAME }}:latest
-            ${{ inputs.container-registry  }}/${{ inputs.image-prefix }}/${{ env.APP_NAME }}:${{ env.VERSION }}
+            ${{ inputs.container-registry }}/${{ inputs.image-prefix }}/${{ env.APP_NAME }}:latest
+            ${{ inputs.container-registry }}/${{ inputs.image-prefix }}/${{ env.APP_NAME }}:${{ env.VERSION }}
           push: ${{ inputs.push }}
         env:
           APP_NAME: ${{ matrix.packages.name }}

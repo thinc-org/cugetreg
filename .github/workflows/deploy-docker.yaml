@@ -108,14 +108,10 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: .
-          file: apps/${{ env.APP_NAME }}/Dockerfile
+          file: apps/${{ matrix.packages.name }}/Dockerfile
           tags: |
-            ${{ inputs.container-registry }}/${{ inputs.image-prefix }}/${{ env.APP_NAME }}:latest
-            ${{ inputs.container-registry }}/${{ inputs.image-prefix }}/${{ env.APP_NAME }}:${{ env.VERSION }}
+            ${{ inputs.container-registry }}/${{ inputs.image-prefix }}/${{ matrix.packages.name }}:${{ matrix.packages.imageTag }}
           push: ${{ inputs.push }}
-        env:
-          APP_NAME: ${{ matrix.packages.name }}
-          VERSION: ${{ matrix.packages.version }}
 
   update-deployment-declaration:
     name: Update deployment declaration

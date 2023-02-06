@@ -22,7 +22,7 @@ permissions:
 
 jobs:
   release:
-    name: Release dev
+    name: Release without versioning
 
     strategy:
       matrix:
@@ -68,7 +68,8 @@ jobs:
         id: affected-packages
         run: |
           PACKAGES='${{ steps.affected-apps.outputs.packages }}'
-          PACKAGES_OUTPUT=$(echo $PACKAGES | jq -c 'map_values({name:.,ref:"refs/heads/dev",imageTag:"dev"})')
+          TAG=${{ github.ref_name }}-${{ github.sha }}
+          PACKAGES_OUTPUT=$(echo $PACKAGES | jq -c 'map_values({name:.,ref:"refs/heads/dev",imageTag:"$TAG"})')
           echo "affectPackages=$PACKAGES_OUTPUT" >> $GITHUB_OUTPUT
           echo "affectPackages=$PACKAGES_OUTPUT"
 
@@ -83,10 +84,7 @@ jobs:
       packages: ${{ needs.release.outputs.affectedPackages }}
       container-registry: ghcr.io
       image-prefix: thinc-org/cugetreg
-      username: ${{ github.actor }}
-      password: ${{ github.token }}
-      # target-repository: ${{ github.repository }}
-      # target-ref: main
-      # target-directory: k8s-demo
-      push: true
-      update: false
+      target-gitops-repository: thinc-org/cugetreg-gitops
+      target-gitops-ref: refs/heads/main
+    secrets:
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}

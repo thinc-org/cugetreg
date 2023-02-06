@@ -37,6 +37,7 @@ class UserStore {
   }
 
   logout = () => {
+    window.google?.accounts?.id?.disableAutoSelect()
     this.setAccessToken(null)
     httpClient.post(`/auth/logout`)
     courseCartStore.upgradeSource()

@@ -19,6 +19,7 @@ export interface Configuration {
   elasticUrl: string
   elasticUsername: string
   elasticPassword: string
+  courseIndex: string
 }
 
 export const configuration = (): Configuration => {
@@ -40,6 +41,7 @@ export const configuration = (): Configuration => {
     elasticUrl: process.env.ELASTIC_URL,
     elasticUsername: process.env.ELASTIC_USERNAME,
     elasticPassword: process.env.ELASTIC_PASSWORD,
+    courseIndex: process.env.COURSE_INDEX_NAME,
   }
 }
 

@@ -1,26 +1,18 @@
-import { Injectable } from '@nestjs/common';
-import { CreateSearchInput } from './dto/create-search.input';
-import { UpdateSearchInput } from './dto/update-search.input';
+import { Injectable } from '@nestjs/common'
+import { ElasticsearchService } from '@nestjs/elasticsearch'
+import { QueryDslQueryContainer } from '@elastic/elasticsearch/lib/api/types'
 
 @Injectable()
 export class SearchService {
-  create(createSearchInput: CreateSearchInput) {
-    return 'This action adds a new search';
-  }
+  constructor(private readonly elasticsearchService: ElasticsearchService) {}
 
-  findAll() {
-    return `This action returns all search`;
-  }
+  async search<T>(indexName: string, query: QueryDslQueryContainer): Promise<T[]> {
+    const res = await this.elasticsearchService.search<T>({
+      index: indexName,
+      query: query,
+    })
 
-  findOne(id: number) {
-    return `This action returns a #${id} search`;
-  }
-
-  update(id: number, updateSearchInput: UpdateSearchInput) {
-    return `This action updates a #${id} search`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} search`;
+    const hits = res.hits.hits
+    return hits.map((item) => item._source)
   }
 }

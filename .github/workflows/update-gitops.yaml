@@ -73,7 +73,10 @@ jobs:
         id: pr-body
         run: |
           echo "DATE=$(date +'%d/%m/%Y')" >> $GITHUB_OUTPUT
-          echo "UPDATED_PACKAGES=$(echo "$PACKAGES" | jq -r '.[] | "- \(.name): \(.imageTag)"')" >> $GITHUB_OUTPUT
+          UPDATED_PACKAGES=$(echo "$PACKAGES" | jq -r '.[] | "- \(.name): \(.imageTag)"')
+          echo "UPDATED_PACKAGES<<EOF" >> $GITHUB_ENV
+          echo "$UPDATED_PACKAGES" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
         env:
           PACKAGES: ${{ inputs.packages }}
 

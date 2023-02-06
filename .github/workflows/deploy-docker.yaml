@@ -134,7 +134,7 @@ jobs:
   update-gitops:
     needs: build-and-publish-docker-image
 
-    if: ${{ inputs.update == 'true' }}
+    if: inputs.update
 
     uses: ./.github/workflows/update-gitops.yaml
     with:

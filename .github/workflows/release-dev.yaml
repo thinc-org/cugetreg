@@ -90,3 +90,4 @@ jobs:
       # target-directory: k8s-demo
       push: true
       update: false
+      checkout-with-ref: false

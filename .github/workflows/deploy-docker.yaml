@@ -42,6 +42,10 @@ on:
         description: Enable updating deployment declaration in the target repository
         type: boolean
         default: false
+      checkout-with-ref:
+        description: Enable checking out the repository with the ref of the package
+        type: boolean
+        default: true
 
 jobs:
   build-and-publish-docker-image:
@@ -59,9 +63,16 @@ jobs:
     steps:
       - name: Checkout with tags
         uses: actions/checkout@v3
+        if: inputs.checkout-with-ref
         with:
           fetch-depth: 0
           ref: refs/tags/${{ matrix.packages.name }}@${{ matrix.packages.version }}
+
+      - name: Checkout without tags
+        uses: actions/checkout@v3
+        if: inputs.checkout-with-ref
+        with:
+          fetch-depth: 0
 
       - name: Check if Dockerfile exists
         id: check-dockerfile

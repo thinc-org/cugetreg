@@ -14,7 +14,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [16.17.0]
+        node-version: [18]
         os: [ubuntu-latest]
 
     runs-on: ${{ matrix.os }}
@@ -55,4 +55,4 @@ jobs:
         uses: EndBug/add-and-commit@v7
         with:
           add: .changeset/pre.json
-          message: "Configure pre-release mode"
+          message: 'Configure pre-release mode'

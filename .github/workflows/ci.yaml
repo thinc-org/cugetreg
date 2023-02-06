@@ -10,7 +10,7 @@ jobs:
   install-deps:
     strategy:
       matrix:
-        node-version: [16.17.0]
+        node-version: [18]
         platform: [ubuntu-latest]
     uses: ./.github/workflows/reusable-ci.yaml
 
@@ -18,7 +18,7 @@ jobs:
   # lint:
   #   strategy:
   #     matrix:
-  #       node-version: [16.17.0]
+  #       node-version: [18]
   #       platform: [ubuntu-latest]
   #   needs: install-deps
   #   uses: ./.github/workflows/reusable-ci.yaml
@@ -29,7 +29,7 @@ jobs:
   test:
     strategy:
       matrix:
-        node-version: [16.17.0]
+        node-version: [18]
         platform: [ubuntu-latest]
     needs: install-deps
     uses: ./.github/workflows/reusable-ci.yaml
@@ -40,7 +40,7 @@ jobs:
   build:
     strategy:
       matrix:
-        node-version: [16.17.0]
+        node-version: [18]
         platform: [ubuntu-latest]
     needs: install-deps
     uses: ./.github/workflows/reusable-ci.yaml

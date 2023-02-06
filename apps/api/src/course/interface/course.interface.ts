@@ -1,3 +1,4 @@
+import { SearchSuggest } from '@elastic/elasticsearch/lib/api/types'
 import { Course, DayOfWeek, GenEdType, Period } from '@thinc-org/chula-courses'
 
 export interface ICourseSearchDocument {
@@ -22,4 +23,9 @@ export interface ICourseSearchFilter {
   studyProgram: string
   semester: string
   academicYear: string
+}
+
+export interface ICourseSuggest {
+  name: SearchSuggest<string>[]
+  no: SearchSuggest<string>[]
 }

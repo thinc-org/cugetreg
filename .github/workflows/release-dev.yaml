@@ -68,7 +68,7 @@ jobs:
         id: affected-packages
         run: |
           PACKAGES='${{ steps.affected-apps.outputs.packages }}'
-          PACKAGES_OUTPUT=$(echo $PACKAGES | jq -c 'map_values({name:.,version:"dev"})')
+          PACKAGES_OUTPUT=$(echo $PACKAGES | jq -c 'map_values({name:.,ref:"refs/heads/dev",imageTag:"dev"})')
           echo "affectPackages=$PACKAGES_OUTPUT" >> $GITHUB_OUTPUT
           echo "affectPackages=$PACKAGES_OUTPUT"
 

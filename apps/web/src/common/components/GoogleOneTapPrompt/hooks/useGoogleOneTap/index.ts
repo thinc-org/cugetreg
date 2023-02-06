@@ -15,6 +15,7 @@ export function useGoogleOneTap(promptRef: React.RefObject<HTMLDivElement>) {
       callback: (response: CredentialResponse) => {
         userStore.loginWithIdToken(response.credential)
       },
+      itp_supported: false,
       cancel_on_tap_outside: false,
       prompt_parent_id: promptRef.current.id,
       hosted_domain: 'student.chula.ac.th', // hosted_domain is undocumented in the official documentation

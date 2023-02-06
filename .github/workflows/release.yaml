@@ -139,7 +139,7 @@ jobs:
       image-prefix: thinc-org/cugetreg
       target-gitops-repository: thinc-org/cugetreg-gitops
       target-gitops-ref: refs/heads/master
-      mode: pr
+      gitops-mode: pr
     secrets:
       GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
@@ -160,6 +160,6 @@ jobs:
       image-prefix: thinc-org/cugetreg
       target-gitops-repository: thinc-org/cugetreg-gitops
       target-gitops-ref: refs/heads/master
-      mode: pr
+      gitops-mode: pr
     secrets:
       GH_TOKEN: ${{ secrets.GH_TOKEN }}

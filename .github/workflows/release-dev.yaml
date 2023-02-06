@@ -101,6 +101,6 @@ jobs:
       image-prefix: thinc-org/cugetreg
       target-gitops-repository: thinc-org/cugetreg-gitops
       target-gitops-ref: refs/heads/master
-      mode: commit
+      gitops-mode: commit
     secrets:
       GH_TOKEN: ${{ secrets.GH_TOKEN }}

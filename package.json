@@ -1,5 +1,5 @@
 {
-  "name": "turborepo-versioning-demo",
+  "name": "cugetreg",
   "version": "0.0.0",
   "private": true,
   "workspaces": [
@@ -12,7 +12,8 @@
     "lint": "turbo run lint",
     "test": "turbo run test",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "release": "pnpm changeset tag"
+    "release": "pnpm changeset tag",
+    "codegen": "pnpm --filter=@cgr/codegen codegen"
   },
   "devDependencies": {
     "@changesets/changelog-github": "^0.4.8",

@@ -134,6 +134,7 @@ jobs:
     uses: ./.github/workflows/deploy-docker.yaml
     with:
       packages: ${{ needs.release.outputs.transformedPackages }}
+      environment: ${{ needs.release.outputs.environment }}
       container-registry: ghcr.io
       image-prefix: thinc-org/cugetreg
       target-gitops-repository: thinc-org/cugetreg-gitops
@@ -153,6 +154,7 @@ jobs:
             "imageTag": "${{ github.event.inputs.version }}"
           }
         ]
+      environment: ${{ needs.release.outputs.environment }}
       container-registry: ghcr.io
       image-prefix: thinc-org/cugetreg
       target-gitops-repository: thinc-org/cugetreg-gitops

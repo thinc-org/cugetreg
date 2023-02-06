@@ -97,12 +97,19 @@ jobs:
           version: pnpm changeset version
           publish: pnpm release
 
+      - name: Transform Packages
+        id: transform-packages
+        run: |
+          PACKAGES=$(echo ${{ steps.changesets.outputs.publishedPackages }} | jq -c 'map_values({name:.name,ref:"refs/tags/"+.version,imageTag:.version})')
+          echo "packages=$PACKAGES" >> $GITHUB_OUTPUT
+
       - name: Echo Changeset output
         run: |
           echo "Changeset published - ${{ steps.changesets.outputs.published }}"
           echo "Changeset publishedPackages - ${{ toJSON(steps.changesets.outputs.publishedPackages) }}"
           echo "Changeset hasChangesets - ${{ steps.changesets.outputs.hasChangesets }}"
           echo "Changeset pullRequestNumber - ${{ steps.changesets.outputs.pullRequestNumber }}"
+          echo "Packages to build - ${{ toJSON(steps.transform-packages.outputs.packages) }}"
 
   deploy-with-docker:
     needs:
@@ -129,7 +136,8 @@ jobs:
         [
           {
             "name": "${{ github.event.inputs.app }}",
-            "version": "${{ github.event.inputs.version }}"
+            "ref": "refs/tags/${{ github.event.inputs.app }}@${{ github.event.inputs.version }}",
+            "imageTag": "${{ github.event.inputs.version }}"
           }
         ]
       container-registry: ghcr.io

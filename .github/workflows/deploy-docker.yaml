@@ -26,6 +26,10 @@ on:
         description: Target ref for updating deployment declaration
         type: string
         default: ref/heads/master
+      gitops-mode:
+        description: Mode of updating deployment declaration, pr or commit
+        type: string
+        default: pr
       push:
         description: Enable pushing the image to the container registry
         type: boolean
@@ -139,5 +143,6 @@ jobs:
       gitops-repository: ${{ inputs.target-gitops-repository }}
       gitops-ref: ${{ inputs.target-gitops-ref }}
       container-registry: ${{ inputs.container-registry }}
+      gitops-mode: ${{ inputs.gitops-mode }}
     secrets:
       GH_TOKEN: ${{ secrets.GH_TOKEN }}

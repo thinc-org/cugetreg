@@ -97,4 +97,4 @@ jobs:
 
             ## Updated Packages
 
-            ${{ steps.pr-body.outputs.UPDATED_PACKAGES }}
+            ${{ env.UPDATED_PACKAGES }}

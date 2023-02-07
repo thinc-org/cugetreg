@@ -18,6 +18,14 @@ on:
       version:
         description: 'The version to release. The version should be the same as version in package.json. For example, 1.0.0'
         required: true
+      environment:
+        type: choice
+        description: 'The environment to release. The name should be the same as name in package.json'
+        required: true
+        options:
+          - prod
+          - beta
+          - dev
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
@@ -155,7 +163,7 @@ jobs:
             "imageTag": "${{ github.event.inputs.version }}"
           }
         ]
-      environment: ${{ needs.release.outputs.environment }}
+      environment: ${{ github.event.inputs.environment }}
       container-registry: ghcr.io
       image-prefix: thinc-org/cugetreg
       target-gitops-repository: thinc-org/cugetreg-gitops

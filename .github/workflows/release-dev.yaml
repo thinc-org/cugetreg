@@ -87,9 +87,6 @@ jobs:
             echo "ENVIRONMENT=dev" >> $GITHUB_OUTPUT
           fi
 
-      - name: Print Debug
-        run: echo "${{ steps.affected-packages.outputs.affectPackages }}"
-
   deploy-with-docker:
     needs:
       - release

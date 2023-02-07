@@ -52,7 +52,6 @@
     "nest-winston": "^1.8.0",
     "passport": "0.6.0",
     "passport-jwt": "4.0.0",
-    "prettier-plugin-organize-imports": "^3.2.2",
     "rxjs": "^7.8.0",
     "serialize-error": "8.1.0",
     "winston": "3.8.2"

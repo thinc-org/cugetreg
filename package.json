@@ -20,9 +20,10 @@
     "@cgr/project-config": "workspace:*",
     "@changesets/changelog-github": "^0.4.8",
     "@changesets/cli": "^2.26.0",
-    "@types/node": "^18.14.0",
-    "prettier": "^2.8.4",
-    "turbo": "^1.8.1"
+    "@trivago/prettier-plugin-sort-imports": "^4.0.0",
+    "prettier": "latest",
+    "prettier-plugin-organize-imports": "^3.2.2",
+    "turbo": "latest"
   },
   "engines": {
     "node": "^18.12",

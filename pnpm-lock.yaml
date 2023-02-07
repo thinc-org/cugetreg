@@ -3,25 +3,20 @@ lockfileVersion: '6.0'
 importers:
 
   .:
+    specifiers:
+      '@changesets/changelog-github': ^0.4.8
+      '@changesets/cli': ^2.26.0
+      '@trivago/prettier-plugin-sort-imports': ^4.0.0
+      prettier: latest
+      prettier-plugin-organize-imports: ^3.2.2
+      turbo: latest
     devDependencies:
-      '@cgr/project-config':
-        specifier: workspace:*
-        version: link:packages/project-config
-      '@changesets/changelog-github':
-        specifier: ^0.4.8
-        version: 0.4.8
-      '@changesets/cli':
-        specifier: ^2.26.0
-        version: 2.26.0
-      '@types/node':
-        specifier: ^18.14.0
-        version: 18.14.0
-      prettier:
-        specifier: ^2.8.4
-        version: 2.8.4
-      turbo:
-        specifier: ^1.8.1
-        version: 1.8.1
+      '@changesets/changelog-github': 0.4.8
+      '@changesets/cli': 2.26.0
+      '@trivago/prettier-plugin-sort-imports': 4.0.0_7yjediqwct5rofa5licti4izue
+      prettier: 2.8.3
+      prettier-plugin-organize-imports: 3.2.2_uhxzhaxu465qzax2tftpee5s7i
+      turbo: 1.7.3
 
   apps/admin-api:
     dependencies:
@@ -155,100 +150,83 @@ importers:
         version: 4.7.4
 
   apps/api:
+    specifiers:
+      '@elastic/elasticsearch': ^8.6.0
+      '@grpc/grpc-js': 1.4.4
+      '@grpc/proto-loader': 0.6.7
+      '@nestjs/cli': ^9.0.0
+      '@nestjs/common': 9.2.1
+      '@nestjs/config': 2.2.0
+      '@nestjs/core': 9.2.1
+      '@nestjs/elasticsearch': ^9.0.0
+      '@nestjs/graphql': 7.9.8
+      '@nestjs/jwt': 7.2.0
+      '@nestjs/mongoose': 9.2.1
+      '@nestjs/passport': 7.1.5
+      '@nestjs/platform-express': 9.2.1
+      '@nestjs/schedule': 2.1.0
+      '@opensearch-project/opensearch': 2.1.0
+      '@slack/webhook': 6.0.0
+      '@thinc-org/chula-courses': ^2.3.0
+      '@typegoose/typegoose': 9.1.0
+      '@types/cookie-parser': ^1.4.3
+      '@types/express': ^4.17.16
+      '@types/jest': 28.1.8
+      '@types/node': ^18.11.18
+      apollo-server-express: 2.19.2
+      class-validator: 0.13.2
+      cookie-parser: 1.4.6
+      eslint: 7.32.0
+      eslint-config-custom: workspace:*
+      google-auth-library: ^8.7.0
+      googleapis: 88.2.0
+      googleapis-common: 5.0.5
+      graphql: 15.5.0
+      jest: 28.1.3
+      jsonschema: ^1.4.1
+      mongoose: 6.5.2
+      nest-winston: ^1.8.0
+      passport: 0.6.0
+      passport-jwt: 4.0.0
+      rxjs: ^7.8.0
+      serialize-error: 8.1.0
+      ts-jest: 28.0.8
+      tsconfig: workspace:*
+      typescript: ~4.7.4
+      winston: 3.8.2
     dependencies:
-      '@apollo/server':
-        specifier: ^4.7.1
-        version: 4.7.1(graphql@16.6.0)
-      '@cgr/schema':
-        specifier: workspace:*
-        version: link:../../packages/schema
-      '@grpc/grpc-js':
-        specifier: 1.4.4
-        version: 1.4.4
-      '@grpc/proto-loader':
-        specifier: 0.6.7
-        version: 0.6.7
-      '@nestjs/apollo':
-        specifier: ^11.0.5
-        version: 11.0.5(@apollo/server@4.7.1)(@apollo/subgraph@2.4.3)(@nestjs/common@9.4.0)(@nestjs/core@9.4.0)(@nestjs/graphql@11.0.5)(graphql@16.6.0)
-      '@nestjs/common':
-        specifier: 9.4.0
-        version: 9.4.0(class-transformer@0.3.1)(class-validator@0.14.0)(reflect-metadata@0.1.13)(rxjs@7.8.0)
-      '@nestjs/config':
-        specifier: 2.2.0
-        version: 2.2.0(@nestjs/common@9.4.0)(reflect-metadata@0.1.13)(rxjs@7.8.0)
-      '@nestjs/core':
-        specifier: 9.4.0
-        version: 9.4.0(@nestjs/common@9.4.0)(@nestjs/platform-express@9.4.0)(reflect-metadata@0.1.13)(rxjs@7.8.0)
-      '@nestjs/graphql':
-        specifier: 11.0.5
-        version: 11.0.5(@apollo/subgraph@2.4.3)(@nestjs/common@9.4.0)(@nestjs/core@9.4.0)(class-transformer@0.3.1)(class-validator@0.14.0)(graphql@16.6.0)(reflect-metadata@0.1.13)(ts-morph@18.0.0)
-      '@nestjs/jwt':
-        specifier: 7.2.0
-        version: 7.2.0(@nestjs/common@9.4.0)
-      '@nestjs/mongoose':
-        specifier: 9.2.1
-        version: 9.2.1(@nestjs/common@9.4.0)(@nestjs/core@9.4.0)(mongoose@6.5.2)(reflect-metadata@0.1.13)(rxjs@7.8.0)
-      '@nestjs/passport':
-        specifier: 7.1.5
-        version: 7.1.5(@nestjs/common@9.4.0)(passport@0.6.0)
-      '@nestjs/platform-express':
-        specifier: 9.4.0
-        version: 9.4.0(@nestjs/common@9.4.0)(@nestjs/core@9.4.0)
-      '@opensearch-project/opensearch':
-        specifier: 2.1.0
-        version: 2.1.0
-      '@slack/webhook':
-        specifier: 6.0.0
-        version: 6.0.0
-      '@typegoose/typegoose':
-        specifier: 9.1.0
-        version: 9.1.0(mongoose@6.5.2)
-      class-transformer:
-        specifier: 0.3.1
-        version: 0.3.1
-      class-validator:
-        specifier: 0.14.0
-        version: 0.14.0
-      cookie-parser:
-        specifier: 1.4.6
-        version: 1.4.6
-      google-auth-library:
-        specifier: ^8.7.0
-        version: 8.7.0
-      googleapis:
-        specifier: 88.2.0
-        version: 88.2.0
-      googleapis-common:
-        specifier: 5.0.5
-        version: 5.0.5
-      graphql:
-        specifier: 16.6.0
-        version: 16.6.0
-      jsonschema:
-        specifier: ^1.4.1
-        version: 1.4.1
-      mongoose:
-        specifier: 6.5.2
-        version: 6.5.2
-      nest-winston:
-        specifier: ^1.8.0
-        version: 1.8.0(@nestjs/common@9.4.0)(winston@3.8.2)
-      passport:
-        specifier: 0.6.0
-        version: 0.6.0
-      passport-jwt:
-        specifier: 4.0.0
-        version: 4.0.0
-      rxjs:
-        specifier: ^7.8.0
-        version: 7.8.0
-      serialize-error:
-        specifier: 8.1.0
-        version: 8.1.0
-      winston:
-        specifier: 3.8.2
-        version: 3.8.2
+      '@elastic/elasticsearch': 8.6.0
+      '@grpc/grpc-js': 1.4.4
+      '@grpc/proto-loader': 0.6.7
+      '@nestjs/common': 9.2.1_huyc3vjxdj723rrinn6lunzxyq
+      '@nestjs/config': 2.2.0_b4pxbpa7chblgbyake5iz5rdmu
+      '@nestjs/core': 9.2.1_e6la6qvsclaae2becwjnmfvsuq
+      '@nestjs/elasticsearch': 9.0.0_anwldfygmy4bbl2t6vvhkmi2au
+      '@nestjs/graphql': 7.9.8_lbey7msv7p5rwlztn3uuvl6age
+      '@nestjs/jwt': 7.2.0_@nestjs+common@9.2.1
+      '@nestjs/mongoose': 9.2.1_qllokwhbbxyphnu7erbtzw5xuq
+      '@nestjs/passport': 7.1.5_6o47igfla2pj7yzh7agpvpttka
+      '@nestjs/platform-express': 9.2.1_hjcqpoaebdr7gdo5hgc22hthbe
+      '@nestjs/schedule': 2.1.0_dntc3uqqknzoduyjojusds5kla
+      '@opensearch-project/opensearch': 2.1.0
+      '@slack/webhook': 6.0.0
+      '@thinc-org/chula-courses': 2.3.0
+      '@typegoose/typegoose': 9.1.0_mongoose@6.5.2
+      apollo-server-express: 2.19.2_graphql@15.5.0
+      class-validator: 0.13.2
+      cookie-parser: 1.4.6
+      google-auth-library: 8.7.0
+      googleapis: 88.2.0
+      googleapis-common: 5.0.5
+      graphql: 15.5.0
+      jsonschema: 1.4.1
+      mongoose: 6.5.2
+      nest-winston: 1.8.0_xlxfmi5fzr5alofp25xqzclqqq
+      passport: 0.6.0
+      passport-jwt: 4.0.0
+      rxjs: 7.8.0
+      serialize-error: 8.1.0
+      winston: 3.8.2
     devDependencies:
       '@nestjs/cli':
         specifier: ^9.0.0
@@ -12694,17 +12672,28 @@ packages:
     engines: {node: '>= 0.8.0'}
     dev: true
 
-  /prettier-linter-helpers@1.0.0:
-    resolution: {integrity: sha512-GbK2cP9nraSSUF9N2XwUwqfzlAFlMNYYl+ShE/V+H8a9uNl/oUqB1w2EL54Jh0OlyRSd8RfWYJ3coVS4TROP2w==}
-    engines: {node: '>=6.0.0'}
+  /prettier-plugin-organize-imports/3.2.2_uhxzhaxu465qzax2tftpee5s7i:
+    resolution: {integrity: sha512-e97lE6odGSiHonHJMTYC0q0iLXQyw0u5z/PJpvP/3vRy6/Zi9kLBwFAbEGjDzIowpjQv8b+J04PDamoUSQbzGA==}
+    peerDependencies:
+      '@volar/vue-language-plugin-pug': ^1.0.4
+      '@volar/vue-typescript': ^1.0.4
+      prettier: '>=2.0'
+      typescript: '>=2.9'
+    peerDependenciesMeta:
+      '@volar/vue-language-plugin-pug':
+        optional: true
+      '@volar/vue-typescript':
+        optional: true
     dependencies:
-      fast-diff: 1.2.0
+      prettier: 2.8.3
+      typescript: 4.9.4
     dev: true
 
   /prettier@2.8.4:
     resolution: {integrity: sha512-vIS4Rlc2FNh0BySk3Wkd6xmwxB0FpOndW5fisM5H8hsZSxU2VWVB5CWIkIjWvrHjIhxk2g3bfMKM87zNTrZddw==}
     engines: {node: '>=10.13.0'}
     hasBin: true
+    dev: true
 
   /pretty-format@26.6.2:
     resolution: {integrity: sha512-7AeGuCYNGmycyQbCqd/3PWH4eOoX/OiCa0uphp57NVTeAGdJGaAliecxwBDHYQCIvrW7aDBZCYeNTP/WX69mkg==}
@@ -14702,6 +14691,7 @@ packages:
     resolution: {integrity: sha512-C0WQT0gezHuw6AdY1M2jxUO83Rjf0HP7Sk1DtXj6j1EwkQNZrHAg2XPWlq62oqEhYvONq5pkC2Y9oPljWToLmQ==}
     engines: {node: '>=4.2.0'}
     hasBin: true
+    dev: true
 
   /typescript@4.9.4:
     resolution: {integrity: sha512-Uz+dTXYzxXXbsFpM86Wh3dKCxrQqUcVMxwU54orwlJjOpO3ao8L7j5lH+dWfTwgCwIuM9GQ2kvVotzYJMXTBZg==}

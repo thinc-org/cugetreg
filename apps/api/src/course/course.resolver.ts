@@ -65,7 +65,7 @@ export class CourseResolver {
   async search(
     @Args('filter') filter: FilterInput,
     @Args('courseGroup') courseGroup: CourseGroupInput
-  ): Promise<ICourseSearchDocument[]> {
+  ): Promise<Course[]> {
     if (filter.periodRange) {
       const { start, end } = filter.periodRange
       if (!isTime(start) || !isTime(end)) {
@@ -83,7 +83,7 @@ export class CourseResolver {
       }
     }
 
-    return this.searchService.search<ICourseSearchDocument>({
+    const searchResult = await this.searchService.search<ICourseSearchDocument>({
       index: this.configService.get<string>('courseIndex'),
       query: buildCourseQuery({
         keyword: filter.keyword,
@@ -97,6 +97,8 @@ export class CourseResolver {
       from: filter.offset,
       size: filter.limit,
     })
+
+    return searchResult.map((item) => item.rawData)
   }
 }
 

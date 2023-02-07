@@ -1,15 +1,38 @@
 import { Args, Query, Resolver } from '@nestjs/graphql'
 
-import { Semester, StudyProgram } from '@cgr/schema'
+import { Course, DayOfWeek, GenEdType, Semester, StudyProgram } from '@thinc-org/chula-courses'
 
-import { CourseGroupInput, FilterInput, Course as GraphQLCourse } from '../graphql'
+import { CourseGroupInput, FilterInput, Period } from '../graphql'
 import { CourseService } from './course.service'
-import { ICourseSearchDocument, ICourseSearchFilter } from './interface/course.interface'
 import { isTime } from '@api/util/functions'
 import { BadRequestException } from '@nestjs/common'
 import { SearchService } from '@api/search/search.service'
 import { ConfigService } from '@nestjs/config'
 import { QueryDslQueryContainer } from '@elastic/elasticsearch/lib/api/types'
+
+export interface ICourseSearchDocument {
+  abbrName: string
+  courseNo: string
+  courseNameTh: string
+  courseNameEn: string
+  courseDescTh: string
+  courseDescEn: string
+  genEdType: string
+  studyProgram: string
+  semester: string
+  academicYear: string
+  rawData: Course
+}
+
+export interface ICourseSearchFilter {
+  keyword: string
+  genEdTypes: GenEdType[]
+  dayOfWeeks: DayOfWeek[]
+  periodRange: Period
+  studyProgram: string
+  semester: string
+  academicYear: string
+}
 
 @Resolver('Course')
 export class CourseResolver {

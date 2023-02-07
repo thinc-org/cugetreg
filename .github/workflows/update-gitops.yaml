@@ -75,6 +75,7 @@ jobs:
 
       - name: Prepare Pull Request body
         id: pr-body
+        if: ${{ inputs.mode == 'pr' }}
         run: |
           echo "DATE=$(date +'%d/%m/%Y')" >> $GITHUB_OUTPUT
           UPDATED_PACKAGES=$(echo "$PACKAGES" | jq -r '.[] | "- \(.name): \(.imageTag)"')

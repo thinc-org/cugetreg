@@ -55,6 +55,7 @@ const requiredConfigs = [
   'elasticUrl',
   'elasticUsername',
   'elasticPassword',
+  'courseIndex',
 ]
 
 export function validateConfig(configService: ConfigService<Configuration>): void {

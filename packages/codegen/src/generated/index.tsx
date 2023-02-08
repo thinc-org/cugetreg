@@ -547,6 +547,11 @@ export type GetMyPendingReviewsQueryVariables = Exact<{
 
 export type GetMyPendingReviewsQuery = { __typename?: 'Query', myPendingReviews: Array<{ __typename?: 'Review', _id: string, rating: number, courseNo: string, semester: string, academicYear: string, studyProgram: StudyProgram, content?: string | null, likeCount: number, dislikeCount: number, myInteraction?: ReviewInteractionType | null, status?: ReviewStatus | null, rejectionReason?: string | null, isOwner: boolean }> };
 
+export type GetPendingReviewsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetPendingReviewsQuery = { __typename?: 'Query', pendingReviews: Array<{ __typename?: 'Review', _id: string, rating: number, courseNo: string, semester: string, academicYear: string, studyProgram: StudyProgram, content?: string | null, likeCount: number, dislikeCount: number, myInteraction?: ReviewInteractionType | null, status?: ReviewStatus | null, rejectionReason?: string | null, isOwner: boolean }> };
+
 export type GetReviewsQueryVariables = Exact<{
   courseNo: Scalars['String'];
   studyProgram: StudyProgram;
@@ -903,6 +908,40 @@ export function useGetMyPendingReviewsLazyQuery(baseOptions?: Apollo.LazyQueryHo
 export type GetMyPendingReviewsQueryHookResult = ReturnType<typeof useGetMyPendingReviewsQuery>;
 export type GetMyPendingReviewsLazyQueryHookResult = ReturnType<typeof useGetMyPendingReviewsLazyQuery>;
 export type GetMyPendingReviewsQueryResult = Apollo.QueryResult<GetMyPendingReviewsQuery, GetMyPendingReviewsQueryVariables>;
+export const GetPendingReviewsDocument = gql`
+    query GetPendingReviews {
+  pendingReviews {
+    ...ReviewDataFields
+  }
+}
+    ${ReviewDataFieldsFragmentDoc}`;
+
+/**
+ * __useGetPendingReviewsQuery__
+ *
+ * To run a query within a React component, call `useGetPendingReviewsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPendingReviewsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPendingReviewsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetPendingReviewsQuery(baseOptions?: Apollo.QueryHookOptions<GetPendingReviewsQuery, GetPendingReviewsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetPendingReviewsQuery, GetPendingReviewsQueryVariables>(GetPendingReviewsDocument, options);
+      }
+export function useGetPendingReviewsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPendingReviewsQuery, GetPendingReviewsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetPendingReviewsQuery, GetPendingReviewsQueryVariables>(GetPendingReviewsDocument, options);
+        }
+export type GetPendingReviewsQueryHookResult = ReturnType<typeof useGetPendingReviewsQuery>;
+export type GetPendingReviewsLazyQueryHookResult = ReturnType<typeof useGetPendingReviewsLazyQuery>;
+export type GetPendingReviewsQueryResult = Apollo.QueryResult<GetPendingReviewsQuery, GetPendingReviewsQueryVariables>;
 export const GetReviewsDocument = gql`
     query GetReviews($courseNo: String!, $studyProgram: StudyProgram!) {
   reviews(courseNo: $courseNo, studyProgram: $studyProgram) {

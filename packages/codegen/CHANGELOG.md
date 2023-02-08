@@ -1,5 +1,11 @@
 # @cgr/codegen
 
+## 1.1.0-beta.0
+
+### Minor Changes
+
+- fe018c1e: make codegen compatible with turbo
+
 ## 1.0.0
 
 ### Major Changes

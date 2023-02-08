@@ -1,5 +1,17 @@
 # web
 
+## 1.1.0-beta.1
+
+### Patch Changes
+
+- 4be13030: Disable Google One Tap for ITP browsers
+- cb53b4cf: Retain console.log in non-production environments
+- 904d9bc6: Enable auto sign in flow
+- c99965cf: Wait for userStore to initialize before prompting Google One Tap
+- Updated dependencies [fe018c1e]
+  - @cgr/codegen@1.1.0-beta.0
+  - @cgr/course-utils@1.0.1-beta.0
+
 ## 1.1.0-beta.0
 
 ### Minor Changes

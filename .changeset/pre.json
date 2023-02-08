@@ -13,7 +13,12 @@
     "tsconfig": "1.0.0"
   },
   "changesets": [
+    "bright-pets-wait",
+    "funny-ducks-wash",
     "lazy-years-return",
-    "rich-days-applaud"
+    "light-badgers-boil",
+    "pretty-lions-applaud",
+    "rich-days-applaud",
+    "spotty-apples-invent"
   ]
 }

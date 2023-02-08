@@ -1,4 +1,4 @@
-name: Release - Dev
+name: Release without versioning
 
 on:
   push:
@@ -22,7 +22,7 @@ permissions:
 
 jobs:
   release:
-    name: Release dev
+    name: Release without versioning
 
     strategy:
       matrix:
@@ -35,6 +35,7 @@ jobs:
 
     outputs:
       affectedPackages: ${{ steps.affected-packages.outputs.affectPackages }}
+      environment: ${{ steps.get-deploy-environment.outputs.ENVIRONMENT }}
 
     steps:
       - name: Checkout Repo
@@ -68,12 +69,23 @@ jobs:
         id: affected-packages
         run: |
           PACKAGES='${{ steps.affected-apps.outputs.packages }}'
-          PACKAGES_OUTPUT=$(echo $PACKAGES | jq -c 'map_values({name:.,ref:"refs/heads/dev",imageTag:"dev"})')
+          PACKAGES_OUTPUT=$(echo $PACKAGES | jq -c 'map_values({name:.,ref:"refs/heads/${{ github.ref_name }}",imageTag:"${{ github.ref_name }}-${{ github.sha }}"})')
           echo "affectPackages=$PACKAGES_OUTPUT" >> $GITHUB_OUTPUT
           echo "affectPackages=$PACKAGES_OUTPUT"
 
-      - name: Print Debug
-        run: echo "${{ steps.affected-packages.outputs.affectPackages }}"
+      - name: Get deploy environment
+        id: get-deploy-environment
+        run: |
+          if [[ ${{ github.ref_name  }} == "main" ]]; then
+            echo "Deploy environment is production"
+            echo "ENVIRONMENT=prod" >> $GITHUB_OUTPUT
+          elif [[ ${{ github.ref_name  }} == "beta" ]]; then
+            echo "Deploy environment is beta"
+            echo "ENVIRONMENT=beta" >> $GITHUB_OUTPUT
+          elif [[ ${{ github.ref_name  }} == "dev" ]]; then
+            echo "Deploy environment is dev"
+            echo "ENVIRONMENT=dev" >> $GITHUB_OUTPUT
+          fi
 
   deploy-with-docker:
     needs:
@@ -81,12 +93,11 @@ jobs:
     uses: ./.github/workflows/deploy-docker.yaml
     with:
       packages: ${{ needs.release.outputs.affectedPackages }}
+      environment: ${{ needs.release.outputs.environment }}
       container-registry: ghcr.io
       image-prefix: thinc-org/cugetreg
-      username: ${{ github.actor }}
-      password: ${{ github.token }}
-      # target-repository: ${{ github.repository }}
-      # target-ref: main
-      # target-directory: k8s-demo
-      push: true
-      update: false
+      target-gitops-repository: thinc-org/cugetreg-gitops
+      target-gitops-ref: refs/heads/master
+      update-mode: commit
+    secrets:
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}

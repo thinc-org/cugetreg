@@ -7,6 +7,10 @@ on:
         description: Packages to build and publish
         required: true
         type: string
+      environment:
+        description: Environment to build and publish e.g. prod, beta, dev
+        required: true
+        type: string
       container-registry:
         description: Container registry to push the image to
         default: ghcr.io
@@ -14,34 +18,30 @@ on:
       image-prefix:
         description: Image prefix of the built image
         type: string
-      username:
-        description: Username for logging in to the container registry
-        type: string
-        default: ${{ github.actor }}
-      password:
-        description: Password for logging in to the container registry
-        type: string
-        default: ${{ github.token }}
-      target-repository:
+      target-gitops-repository:
         description: Target repository for updating deployment declaration
         type: string
         default: ${{ github.repository }}
-      target-ref:
+      target-gitops-ref:
         description: Target ref for updating deployment declaration
         type: string
-        default: main
-      target-directory:
-        description: Target directory for updating deployment declaration
+        default: ref/heads/master
+      update-mode:
+        description: Mode of updating deployment declaration, pr or commit
         type: string
-        default: .
+        default: pr
       push:
         description: Enable pushing the image to the container registry
         type: boolean
-        default: false
+        default: true
       update:
         description: Enable updating deployment declaration in the target repository
         type: boolean
-        default: false
+        default: true
+    secrets:
+      GH_TOKEN:
+        description: GitHub token used to checkout target repository and open PR
+        required: true
 
 jobs:
   build-and-publish-docker-image:
@@ -83,8 +83,8 @@ jobs:
         uses: docker/login-action@v1
         with:
           registry: ${{ inputs.container-registry }}
-          username: ${{ inputs.username || github.actor }}
-          password: ${{ inputs.password || github.token }}
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
 
       - name: Set frontend env
         if: ${{ matrix.packages.name == 'web' || matrix.packages.name == 'admin-web' }}
@@ -109,48 +109,24 @@ jobs:
         with:
           context: .
           file: apps/${{ matrix.packages.name }}/Dockerfile
-          tags: |
-            ${{ inputs.container-registry }}/${{ inputs.image-prefix }}/${{ matrix.packages.name }}:${{ matrix.packages.imageTag }}
+          tags: ${{ inputs.container-registry }}/${{ inputs.image-prefix }}/${{ matrix.packages.name }}:${{ matrix.packages.imageTag }}
           push: ${{ inputs.push }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
-  # update-deployment-declaration:
-  #   name: Update deployment declaration
+  update-gitops:
+    needs: build-and-publish-docker-image
 
-  #   if: ${{ inputs.update && needs.build-and-publish-docker-image.outputs.DOCKERFILE_EXISTS == 'true' }}
+    if: inputs.update
 
-  #   needs:
-  #     - build-and-publish-docker-image
-
-  #   runs-on: ubuntu-latest
-
-  #   steps:
-  #     - name: Checkout Repo
-  #       uses: actions/checkout@v3
-  #       with:
-  #         repository: ${{ inputs.target-repository }}
-  #         ref: ${{ inputs.target-ref }}
-
-  #     - name: Update publishPackages version in YAML file
-  #       run: |
-  #         for row in $(echo "$PACKAGES" | jq -r '.[] | @base64'); do
-  #           _jq() {
-  #             echo ${row} | base64 --decode | jq -r ${1}
-  #           }
-  #           NAME=$(_jq '.name')
-  #           VERSION=$(_jq '.version')
-  #           OLD_VERSION=${{ inputs.container-registry }}\/${{ inputs.image-prefix }}\/$NAME:.*
-  #           NEW_VERSION=${{ inputs.container-registry }}\/${{ inputs.image-prefix }}\/$NAME:$VERSION
-  #           find ./${{ inputs.target-directory }} -type f -exec sed -i -e "s|$OLD_VERSION|$NEW_VERSION|g" {} \;
-  #           echo "${NAME}:${VERSION} is updated"
-  #         done
-  #       env:
-  #         PACKAGES: ${{ inputs.packages }}
-
-  #     - name: Show git status
-  #       run: git status
-
-  #     - name: Open Pull Request to the target repository
-  #       uses: peter-evans/create-pull-request@v4
-  #       with:
-  #         title: Update Package versions
-  #         commit-message: Update Package versions
+    uses: ./.github/workflows/update-gitops.yaml
+    with:
+      packages: ${{ inputs.packages }}
+      environment: ${{ inputs.environment }}
+      image-prefix: ${{ inputs.image-prefix }}
+      gitops-repository: ${{ inputs.target-gitops-repository }}
+      gitops-ref: ${{ inputs.target-gitops-ref }}
+      container-registry: ${{ inputs.container-registry }}
+      mode: ${{ inputs.update-mode }}
+    secrets:
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}

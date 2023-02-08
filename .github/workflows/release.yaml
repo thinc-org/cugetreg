@@ -110,8 +110,10 @@ jobs:
       - name: Transform Packages
         id: transform-packages
         run: |
-          PACKAGES=$(echo ${{ steps.changesets.outputs.publishedPackages }} | jq -c 'map_values({name:.name,ref:"refs/tags/\(.version)",imageTag:.version})')
+          PACKAGES=$(echo $PACKAGES | jq -c 'map_values({name:.name,ref:"refs/tags/\(.version)",imageTag:.version})')
           echo "packages=$PACKAGES" >> $GITHUB_OUTPUT
+        env:
+          PACKAGES: ${{ steps.changesets.outputs.publishedPackages }}
 
       - name: Get deploy environment
         id: get-deploy-environment

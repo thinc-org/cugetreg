@@ -37,7 +37,7 @@ export class ReviewCron {
       this.logger.log(`There are ${pendingReviewCount} pending reviews, alerting team via Slack...`)
       await this.webhook.send({
         text: `There are *${pendingReviewCount}* pending reviews. Review them now in <${this.configService.get<string>(
-          'DASHBOARD_URL'
+          'dashboardUrl'
         )}|Review Dashboard>.`,
       })
     }

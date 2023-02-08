@@ -4,6 +4,12 @@
  */
 import { Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
+/**
+ * This is not a production server yet!
+ * This is only a minimal backend to get started.
+ */
+import { Logger } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
 import { NestFactory } from '@nestjs/core'
 import { NestExpressApplication } from '@nestjs/platform-express'
 
@@ -31,6 +37,8 @@ async function bootstrap() {
     Logger.log(`🚀 Application is running on: http://localhost:${port}/${globalPrefix}`)
   })
 }
+
+// Run main application
 
 // Run main application
 bootstrap()

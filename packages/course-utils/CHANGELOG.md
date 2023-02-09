@@ -1,5 +1,12 @@
 # @cgr/course-utils
 
+## 1.0.1
+
+### Patch Changes
+
+- Updated dependencies [fe018c1e]
+  - @cgr/codegen@1.1.0
+
 ## 1.0.1-beta.0
 
 ### Patch Changes

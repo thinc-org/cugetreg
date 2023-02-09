@@ -4,7 +4,6 @@ import DOMPurify from 'isomorphic-dompurify'
 
 export default function Test() {
   const reviewQuery = useGetPendingReviewsQuery()
-  console.log(reviewQuery)
   return (
     <>
       Reviews:

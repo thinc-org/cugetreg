@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import styles from '@admin-web/styles/Home.module.css'
-import Test from './api/Test'
+import Test from '@admin-web/pages/api/Test'
 
 export default function Home() {
   return (

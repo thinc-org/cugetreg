@@ -1,6 +1,6 @@
 import '@admin-web/styles/globals.css'
 import type { AppProps } from 'next/app'
-import { AppProvider } from './AppProvider'
+import { AppProvider } from '@admin-web/pages/AppProvider'
 
 export default function App({ Component, pageProps }: AppProps) {
   return (

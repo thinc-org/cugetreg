@@ -45,6 +45,8 @@ jobs:
 
       - name: Push beta to origin
         run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add .changeset/pre.json
           git commit -m "Enter pre-release mode"
           git push origin beta

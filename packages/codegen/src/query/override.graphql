@@ -1,0 +1,5 @@
+query GetOverrides {
+  overrides {
+    ...OverrideDataFields
+  }
+}

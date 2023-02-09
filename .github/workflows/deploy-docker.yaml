@@ -18,14 +18,14 @@ on:
       image-prefix:
         description: Image prefix of the built image
         type: string
-      target-gitops-repository:
+      gitops-repository:
         description: Target repository for updating deployment declaration
         type: string
         default: ${{ github.repository }}
-      target-gitops-ref:
+      gitops-ref:
         description: Target ref for updating deployment declaration
         type: string
-        default: ref/heads/master
+        default: master
       update-mode:
         description: Mode of updating deployment declaration, pr or commit
         type: string
@@ -124,8 +124,8 @@ jobs:
       packages: ${{ inputs.packages }}
       environment: ${{ inputs.environment }}
       image-prefix: ${{ inputs.image-prefix }}
-      gitops-repository: ${{ inputs.target-gitops-repository }}
-      gitops-ref: ${{ inputs.target-gitops-ref }}
+      gitops-repository: ${{ inputs.gitops-repository }}
+      gitops-ref: ${{ inputs.gitops-ref }}
       container-registry: ${{ inputs.container-registry }}
       mode: ${{ inputs.update-mode }}
     secrets:

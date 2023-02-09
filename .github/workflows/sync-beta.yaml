@@ -43,12 +43,8 @@ jobs:
       - name: Enter pre-release mode for Beta
         run: npx changeset pre enter beta
 
-      - name: Commit Changes to the Pull Request
-        uses: EndBug/add-and-commit@v7
-        with:
-          add: .changeset/pre.json
-          message: 'Enter pre-release mode'
-
       - name: Push beta to origin
         run: |
-          git push
+          git add .changeset/pre.json
+          git commit -m "Enter pre-release mode"
+          git push origin beta

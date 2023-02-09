@@ -2,6 +2,7 @@ export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:30
 export const BACKEND_URI = process.env.NEXT_PUBLIC_BACKEND_URL || ''
 export const ENVIRONMENT = process.env.NEXT_PUBLIC_ENVIRONMENT || 'local'
 
+export const GOOGLE_OAUTH_ID = process.env.NEXT_PUBLIC_GOOGLE_OAUTH_ID || ''
 export const GOOGLE_TAG_MANAGER_CONTAINER_ID =
   process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_CONTAINER_ID || ''
 export const GOOGLE_ANALYTIC_PROPERTY_ID = process.env.NEXT_PUBLIC_GOOGLE_ANALYTIC_PROPERTY_ID || ''

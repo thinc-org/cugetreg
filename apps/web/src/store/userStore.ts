@@ -5,7 +5,7 @@ import { apiUrl, httpClient } from '@web/services/httpClient'
 import { courseCartStore } from '@web/store'
 
 class UserStore {
-  private isInitialized = false
+  isInitialized = false
   accessToken: string | null
 
   constructor() {
@@ -24,7 +24,20 @@ class UserStore {
     window.location.href = `${apiUrl}/auth/google?${urlParams.toString()}`
   }
 
+  loginWithIdToken = async (idToken: string) => {
+    try {
+      await httpClient.post(`/auth/google/idtoken`, {
+        idToken,
+      })
+      await this.restoreSession()
+      await courseCartStore.upgradeSource()
+    } catch (e) {
+      console.error('Fail to login with id token', e)
+    }
+  }
+
   logout = () => {
+    window.google?.accounts?.id?.disableAutoSelect()
     this.setAccessToken(null)
     httpClient.post(`/auth/logout`)
     courseCartStore.upgradeSource()

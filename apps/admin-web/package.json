@@ -1,6 +1,6 @@
 {
   "name": "admin-web",
-  "version": "0.0.0",
+  "version": "0.0.1-beta.0",
   "private": true,
   "scripts": {
     "dev": "PORT=4201 next dev",

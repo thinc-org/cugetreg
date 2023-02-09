@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  Body,
   Controller,
   Get,
   Post,
@@ -48,6 +49,21 @@ export class AuthController {
     }
   }
 
+  @Post('/google/idtoken')
+  async authWithIdToken(
+    @Body() body: { idToken: string },
+    @Res({ passthrough: true }) res: Response
+  ) {
+    const { idToken } = body
+    if (!idToken) {
+      throw new BadRequestException('idToken is required')
+    }
+    const payload = await this.authService.validateGoogleIdToken(idToken)
+    const { refreshToken } = await this.authService.handleGoogleIdToken(payload)
+    this.setCookie(res, 'refreshtoken', refreshToken)
+    return { success: true }
+  }
+
   @Get('/google/callback')
   @Redirect()
   async authWithGoogleCallback(
@@ -62,11 +78,7 @@ export class AuthController {
       code,
       state.overrideBackendUrl
     )
-    res.cookie('refreshtoken', refreshToken, {
-      httpOnly: true,
-      maxAge: 1000 * 60 * 60 * 24 * 30 * 6,
-    })
-
+    this.setCookie(res, 'refreshtoken', refreshToken)
     return {
       url: state.returnUrl,
     }
@@ -86,6 +98,19 @@ export class AuthController {
     return {
       accessToken: await this.authService.issueAccessToken(token),
     }
+  }
+
+  private setCookie(
+    res: Response,
+    name: string,
+    value: string,
+    httpOnly = true,
+    maxAge = 1000 * 60 * 60 * 24 * 30 * 6
+  ) {
+    res.cookie(name, value, {
+      httpOnly,
+      maxAge,
+    })
   }
 
   private createOauthState(returnUrl: string, overrideBackendUrl?: string) {

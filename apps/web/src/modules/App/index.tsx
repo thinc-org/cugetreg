@@ -11,6 +11,7 @@ import { TopBar } from '@web/common/components/TopBar'
 import { useSaveStudyProgram } from '@web/common/hooks/useCourseGroup'
 import '@web/common/i18n'
 import { TrackPageChange } from '@web/common/tracker/components/TrackPageChange'
+import { GoogleOneTapPrompt } from '@web/common/components/GoogleOneTapPrompt'
 import { createEmotionCache } from '@web/configs/createEmotionCache'
 import { mobxConfiguration } from '@web/configs/mobx'
 import { CustomToaster } from '@web/modules/App/components/CustomToaster'
@@ -61,6 +62,7 @@ export function App(props: MyAppProps) {
         <ShoppingCartModal />
         <CustomToaster />
         <CookieBanner />
+        <GoogleOneTapPrompt />
       </TrackPageChange>
     </AppProvider>
   )

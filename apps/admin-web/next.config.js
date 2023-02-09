@@ -1,10 +1,12 @@
 const path = require('path')
 
+const isProd = process.env.NODE_ENV !== 'development'
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   productionBrowserSourceMaps: true,
   compiler: {
-    removeConsole: {
+    removeConsole: isProd && {
       exclude: ['error', 'warn'],
     },
   },

@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ForbiddenException,
   Injectable,
   Logger,
   UnprocessableEntityException,
@@ -10,7 +11,7 @@ import { InjectModel } from '@nestjs/mongoose'
 
 import { validateOrReject } from 'class-validator'
 import { randomBytes } from 'crypto'
-import { Credentials } from 'google-auth-library'
+import { Credentials, TokenPayload } from 'google-auth-library'
 import { OAuth2Client } from 'googleapis-common'
 import { drive } from 'googleapis/build/src/apis/drive'
 import { oauth2 } from 'googleapis/build/src/apis/oauth2'
@@ -72,6 +73,48 @@ export class AuthService {
     const token: AccessTokenPayload = { _id: doc.userId.toHexString() }
     this.logger.log('Issued access token', { userId: doc.userId })
     return this.jwtService.sign(token)
+  }
+
+  async validateGoogleIdToken(idToken: string) {
+    const client = this.generateGoogleOauthClient()
+    let payload: TokenPayload
+    try {
+      // verifyIdToken will throw an error if the token is invalid
+      const ticket = await client.verifyIdToken({
+        idToken,
+        audience: this.configService.get('googleOAuthId'),
+      })
+      payload = ticket.getPayload()
+    } catch {
+      throw new BadRequestException('Invalid id token')
+    }
+    if (payload.hd !== 'student.chula.ac.th') {
+      throw new ForbiddenException('User hosted_domain is not student.chula.ac.th')
+    }
+    return payload
+  }
+
+  async handleGoogleIdToken(payload: TokenPayload) {
+    // User lookup
+    let user: UserDocument = await this.userModel.findOne({
+      'google.googleId': payload.sub,
+    })
+    if (!user) {
+      user = new this.userModel()
+      user.email = payload.email
+      user.name = payload.name
+      user.google = {
+        googleId: payload.sub,
+        hasMigratedGDrive: true, // no need to handle gdrive migration anymore
+      }
+      await user.save()
+      this.logger.log('Created new user with Google Auth through id token', { user })
+    }
+
+    // Issue token
+    return {
+      refreshToken: await this.issueRefreshToken(user),
+    }
   }
 
   async handleGoogleOauthCode(

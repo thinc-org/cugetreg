@@ -1,14 +1,19 @@
 {
   "name": "@cgr/codegen",
-  "version": "1.0.0",
+  "version": "1.1.0-beta.0",
   "private": true,
   "main": "./src/index.ts",
   "types": "./src/index.ts",
   "scripts": {
-    "lint": "eslint '{src,apps,libs,test}/**/*.ts*' --fix"
+    "lint": "eslint '{src,apps,libs,test}/**/*.ts*' --fix",
+    "codegen": "graphql-codegen"
   },
   "dependencies": {
-    "@apollo/client": "3.6.9",
+    "@apollo/client": "3.7.7",
+    "@graphql-codegen/cli": "3.0.0",
+    "@graphql-codegen/typescript": "3.0.0",
+    "@graphql-codegen/typescript-operations": "3.0.0",
+    "@graphql-codegen/typescript-react-apollo": "3.3.7",
     "graphql-tag": "2.12.6"
   },
   "devDependencies": {

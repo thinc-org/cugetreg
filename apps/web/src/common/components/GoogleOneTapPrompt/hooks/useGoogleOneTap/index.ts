@@ -4,6 +4,10 @@ import { useEffect, useState } from 'react'
 import { GOOGLE_OAUTH_ID } from '@web/env'
 import { userStore } from '@web/store/userStore'
 
+interface ExtendedIdConfiguration extends IdConfiguration {
+  hosted_domain: string // hosted_domain is undocumented in the official documentation
+}
+
 export function useGoogleOneTap(promptRef: React.RefObject<HTMLDivElement>) {
   const [isInitialized, setIsInitialized] = useState(false)
 
@@ -16,11 +20,11 @@ export function useGoogleOneTap(promptRef: React.RefObject<HTMLDivElement>) {
         userStore.loginWithIdToken(response.credential)
       },
       auto_select: true,
-      itp_supported: false,
+      itp_support: false,
       cancel_on_tap_outside: false,
       prompt_parent_id: promptRef.current.id,
-      hosted_domain: 'student.chula.ac.th', // hosted_domain is undocumented in the official documentation
-    } as IdConfiguration)
+      hosted_domain: 'student.chula.ac.th',
+    } satisfies ExtendedIdConfiguration as IdConfiguration)
     setIsInitialized(true)
   }, [promptRef.current])
 

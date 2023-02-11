@@ -1,6 +1,6 @@
 {
   "name": "api",
-  "version": "1.1.0",
+  "version": "1.1.1-beta.0",
   "private": true,
   "scripts": {
     "dev": "nest start --watch",
@@ -40,7 +40,7 @@
     "@typegoose/typegoose": "9.1.0",
     "apollo-server-express": "2.19.2",
     "class-transformer": "0.3.1",
-    "class-validator": "0.13.2",
+    "class-validator": "0.14.0",
     "cookie-parser": "1.4.6",
     "google-auth-library": "^8.7.0",
     "googleapis": "88.2.0",

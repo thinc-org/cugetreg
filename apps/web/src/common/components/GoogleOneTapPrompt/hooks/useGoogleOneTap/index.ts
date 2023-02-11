@@ -14,7 +14,7 @@ export function useGoogleOneTap(promptRef: React.RefObject<HTMLDivElement>) {
   useEffect(() => {
     if (!promptRef.current || !GOOGLE_OAUTH_ID) return
 
-    window.google?.accounts.id.initialize({
+    const config: ExtendedIdConfiguration = {
       client_id: GOOGLE_OAUTH_ID,
       callback: (response: CredentialResponse) => {
         userStore.loginWithIdToken(response.credential)
@@ -24,7 +24,8 @@ export function useGoogleOneTap(promptRef: React.RefObject<HTMLDivElement>) {
       cancel_on_tap_outside: false,
       prompt_parent_id: promptRef.current.id,
       hosted_domain: 'student.chula.ac.th',
-    } satisfies ExtendedIdConfiguration as IdConfiguration)
+    }
+    window.google?.accounts.id.initialize(config as IdConfiguration)
     setIsInitialized(true)
   }, [promptRef.current])
 

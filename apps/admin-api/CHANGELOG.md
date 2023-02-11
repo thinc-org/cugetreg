@@ -1,5 +1,11 @@
 # admin-api
 
+## 0.0.3-beta.0
+
+### Patch Changes
+
+- 313b9e75: Avoid SQL injection and XSS by upgrading class-validtor to version 0.14.0
+
 ## 0.0.2
 
 ### Patch Changes

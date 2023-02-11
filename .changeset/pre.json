@@ -12,5 +12,8 @@
     "eslint-config-custom": "1.0.0",
     "tsconfig": "1.0.0"
   },
-  "changesets": []
+  "changesets": [
+    "long-seals-clean",
+    "nasty-hats-visit"
+  ]
 }

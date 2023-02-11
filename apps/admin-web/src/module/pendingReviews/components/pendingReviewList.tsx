@@ -1,5 +1,4 @@
 import { useGetPendingReviewsQuery } from '@cgr/codegen'
-// import { HighlightHTML } from '@admin-web/common/HighlightHTML'
 import DOMPurify from 'isomorphic-dompurify'
 
 export default function PendingReviewsList() {

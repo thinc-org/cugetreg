@@ -1,6 +1,11 @@
-import Router from 'next/router'
+import { useRouter } from 'next/router'
+import { useEffect } from 'react'
 
 export default function Home() {
-  Router.push('/pendingReviews')
+  const router = useRouter()
+
+  useEffect(() => {
+    router.push('/pendingReviews')
+  }, [])
   return null
 }

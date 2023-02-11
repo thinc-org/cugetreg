@@ -5,7 +5,7 @@ export default function Topbar() {
   return (
     <ul className={styles.navbar}>
       <li className={styles.navbarItem}>
-        <Link href="/">Pending Reviews</Link>
+        <Link href="/pendingReviews">Pending Reviews</Link>
       </li>
       <li>
         <Link href="/approvedReviews">Approved Reviews</Link>

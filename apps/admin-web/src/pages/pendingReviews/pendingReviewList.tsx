@@ -2,7 +2,7 @@ import { useGetPendingReviewsQuery } from '@cgr/codegen'
 // import { HighlightHTML } from '@admin-web/common/HighlightHTML'
 import DOMPurify from 'isomorphic-dompurify'
 
-export default function Test() {
+export default function PendingReviewsList() {
   const reviewQuery = useGetPendingReviewsQuery()
   return (
     <>

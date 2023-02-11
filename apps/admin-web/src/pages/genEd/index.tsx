@@ -1,5 +1,1 @@
-import GenEdList from './components/genedList'
-
-export default function GenEdPage() {
-  return <GenEdList />
-}
+export { GenEdPage as default } from '@admin-web/module/genEd'

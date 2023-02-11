@@ -21,11 +21,14 @@
     "@apollo/client": "^3.7.7",
     "@cgr/codegen": "workspace:*",
     "@cgr/course-utils": "workspace:*",
+    "@emotion/react": "11.10.4",
+    "@emotion/styled": "11.10.4",
+    "@mui/material": "5.9.1",
     "@next/font": "13.1.6",
     "axios": "0.23.0",
+    "isomorphic-dompurify": "0.20.0",
     "next": "^13.0.0",
     "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "isomorphic-dompurify": "0.20.0"
+    "react-dom": "18.2.0"
   }
 }

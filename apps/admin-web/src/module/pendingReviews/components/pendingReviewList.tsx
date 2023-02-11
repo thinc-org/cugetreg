@@ -1,15 +1,19 @@
 import { useGetPendingReviewsQuery } from '@cgr/codegen'
-import DOMPurify from 'isomorphic-dompurify'
+import { Container, Typography } from '@mui/material'
+import SinglePendingReview from './singlePendingReview'
 
 export default function PendingReviewsList() {
   const reviewQuery = useGetPendingReviewsQuery()
   return (
     <>
-      Reviews:
-      {reviewQuery.data?.pendingReviews.map((data) => (
-        // Todo: change p tag to highlightHtml
-        <p dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(data.content ?? '') }} />
-      ))}
+      <Container>
+        <Typography variant="h3" align="center">
+          Reviews
+        </Typography>
+        {reviewQuery.data?.pendingReviews.map((data) => (
+          <SinglePendingReview data={data} />
+        ))}
+      </Container>
     </>
   )
 }

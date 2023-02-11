@@ -58,6 +58,9 @@ importers:
       '@apollo/client': ^3.7.7
       '@cgr/codegen': workspace:*
       '@cgr/course-utils': workspace:*
+      '@emotion/react': 11.10.4
+      '@emotion/styled': 11.10.4
+      '@mui/material': 5.9.1
       '@next/font': 13.1.6
       '@types/node': 18.11.18
       '@types/react': 18.0.20
@@ -75,10 +78,13 @@ importers:
       '@apollo/client': 3.7.7_gdcq4dv6opitr3wbfwyjmanyra
       '@cgr/codegen': link:../../packages/codegen
       '@cgr/course-utils': link:../../packages/course-utils
+      '@emotion/react': 11.10.4_eapys5ndgs37tbuawlv2xlkq5i
+      '@emotion/styled': 11.10.4_h3g5w2xi67gb5owhpqb5xdbzbe
+      '@mui/material': 5.9.1_af5ln35zuaotaffazii6n6bke4
       '@next/font': 13.1.6
       axios: 0.23.0
       isomorphic-dompurify: 0.20.0
-      next: 13.1.6_biqbaboplfbrettd7655fr4n2y
+      next: 13.1.6_pjwopsidmaokadturxaafygjp4
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
     devDependencies:
@@ -11454,7 +11460,7 @@ packages:
       - babel-plugin-macros
     dev: false
 
-  /next/13.1.6_biqbaboplfbrettd7655fr4n2y:
+  /next/13.1.6_pjwopsidmaokadturxaafygjp4:
     resolution: {integrity: sha512-hHlbhKPj9pW+Cymvfzc15lvhaOZ54l+8sXDXJWm3OBNBzgrVj6hwGPmqqsXg40xO1Leq+kXpllzRPuncpC0Phw==}
     engines: {node: '>=14.6.0'}
     hasBin: true
@@ -11478,7 +11484,7 @@ packages:
       postcss: 8.4.14
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
-      styled-jsx: 5.1.1_react@18.2.0
+      styled-jsx: 5.1.1_2exiyaescjxorpwwmy4ejghgte
     optionalDependencies:
       '@next/swc-android-arm-eabi': 13.1.6
       '@next/swc-android-arm64': 13.1.6
@@ -13447,7 +13453,7 @@ packages:
       react: 18.2.0
     dev: false
 
-  /styled-jsx/5.1.1_react@18.2.0:
+  /styled-jsx/5.1.1_2exiyaescjxorpwwmy4ejghgte:
     resolution: {integrity: sha512-pW7uC1l4mBZ8ugbiZrcIsiIvVx1UmTfw7UkC3Um2tmfUq9Bhk8IiyEIPl6F8agHgjzku6j0xQEZbfA5uSgSaCw==}
     engines: {node: '>= 12.0.0'}
     peerDependencies:
@@ -13460,6 +13466,7 @@ packages:
       babel-plugin-macros:
         optional: true
     dependencies:
+      '@babel/core': 7.20.12
       client-only: 0.0.1
       react: 18.2.0
     dev: false

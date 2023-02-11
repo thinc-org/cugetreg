@@ -2,12 +2,11 @@ import { ApolloClient, InMemoryCache } from '@apollo/client'
 import { BatchHttpLink } from '@apollo/client/link/batch-http'
 import { setContext } from '@apollo/client/link/context'
 
-import { ENVIRONMENT } from '@admin-web/env'
+import { ENVIRONMENT, ADMIN_ACCESS_TOKEN } from '@admin-web/env'
 import { apiUrl } from '@admin-web/services/httpClient'
 // import { uniqBy } from '@admin-web/utils/uniqBy'
 
 import { Course, SearchCourseQueryVariables } from '@cgr/codegen'
-import { ADMIN_ACCESS_TOKEN } from '@admin-web/env'
 
 const cache = new InMemoryCache({
   typePolicies: {
@@ -46,9 +45,6 @@ const createHttpLink = () =>
   })
 
 const authLink = setContext(async (_, { headers }) => {
-  // Todo: Migrate admin access token to somewhere more secure
-  // const accessToken = await userStore.getAccessToken()
-  // const accessToken = 'wqbglfcqoJx1L3rTOIIx4W31hdHZQN8RV6f9rzW9Jy5eec9TYuR3TQ5e6XVvykt'
   const accessToken = ADMIN_ACCESS_TOKEN
   console.log(`Access token: ${accessToken}`)
   return {

@@ -1,5 +1,12 @@
 # web
 
+## 1.1.1
+
+### Patch Changes
+
+- 27e6047a: Correct typo in Google One Tap ITP config
+- df88b4db: Fix TypeScript 4.7 unsupported feature introduced in "Hotfix typo in Google One Tap ITP config"
+
 ## 1.1.1-beta.0
 
 ### Patch Changes

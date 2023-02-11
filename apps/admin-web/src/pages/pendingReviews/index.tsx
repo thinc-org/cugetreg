@@ -1,5 +1,1 @@
-import PendingReviewsList from './pendingReviewList'
-
-export default function PendingReviewsPage() {
-  return <PendingReviewsList />
-}
+export { PendingReviewsPage as default } from '@admin-web/module/pendingReviews'

@@ -55,22 +55,40 @@ importers:
 
   apps/admin-web:
     specifiers:
+      '@apollo/client': ^3.7.7
+      '@cgr/codegen': workspace:*
+      '@cgr/course-utils': workspace:*
+      '@emotion/react': 11.10.4
+      '@emotion/styled': 11.10.4
+      '@mui/material': 5.9.1
       '@next/font': 13.1.6
       '@types/node': 18.11.18
       '@types/react': 18.0.20
       '@types/react-dom': 18.0.6
+      axios: 0.23.0
       eslint: 7.32.0
       eslint-config-custom: workspace:*
+      isomorphic-dompurify: 0.20.0
       next: ^13.0.0
       react: 18.2.0
       react-dom: 18.2.0
+      styled-components: 5.3.5
       tsconfig: workspace:*
       typescript: ~4.7.4
     dependencies:
+      '@apollo/client': 3.7.7_gdcq4dv6opitr3wbfwyjmanyra
+      '@cgr/codegen': link:../../packages/codegen
+      '@cgr/course-utils': link:../../packages/course-utils
+      '@emotion/react': 11.10.4_eapys5ndgs37tbuawlv2xlkq5i
+      '@emotion/styled': 11.10.4_h3g5w2xi67gb5owhpqb5xdbzbe
+      '@mui/material': 5.9.1_af5ln35zuaotaffazii6n6bke4
       '@next/font': 13.1.6
-      next: 13.1.6_biqbaboplfbrettd7655fr4n2y
+      axios: 0.23.0
+      isomorphic-dompurify: 0.20.0
+      next: 13.1.6_pjwopsidmaokadturxaafygjp4
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
+      styled-components: 5.3.5_7i5myeigehqah43i5u7wbekgba
     devDependencies:
       '@types/node': 18.11.18
       '@types/react': 18.0.20
@@ -545,6 +563,42 @@ packages:
       optimism: 0.16.2
       prop-types: 15.8.1
       react: 18.2.0
+      symbol-observable: 4.0.0
+      ts-invariant: 0.10.3
+      tslib: 2.5.0
+      zen-observable-ts: 1.2.5
+    dev: false
+
+  /@apollo/client/3.7.7_gdcq4dv6opitr3wbfwyjmanyra:
+    resolution: {integrity: sha512-Rp/pCWuJSjLN7Xl5Qi2NoeURmZYEU/TIUz0n/LOwEo1tGdU2W7/fGVZ8+5um58JeVYq4UoTGBKFxSVeG4s411A==}
+    peerDependencies:
+      graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
+      graphql-ws: ^5.5.5
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
+      subscriptions-transport-ws: ^0.9.0 || ^0.11.0
+    peerDependenciesMeta:
+      graphql-ws:
+        optional: true
+      react:
+        optional: true
+      react-dom:
+        optional: true
+      subscriptions-transport-ws:
+        optional: true
+    dependencies:
+      '@graphql-typed-document-node/core': 3.1.1_graphql@16.6.0
+      '@wry/context': 0.7.0
+      '@wry/equality': 0.5.3
+      '@wry/trie': 0.3.2
+      graphql: 16.6.0
+      graphql-tag: 2.12.6_graphql@16.6.0
+      hoist-non-react-statics: 3.3.2
+      optimism: 0.16.2
+      prop-types: 15.8.1
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+      response-iterator: 0.2.6
       symbol-observable: 4.0.0
       ts-invariant: 0.10.3
       tslib: 2.5.0
@@ -9628,6 +9682,19 @@ packages:
   /isexe/2.0.0:
     resolution: {integrity: sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw==}
 
+  /isomorphic-dompurify/0.20.0:
+    resolution: {integrity: sha512-ha3GBgVb9faPfGknAkwokYxqvdnh6c+R33LtgoXj4Lttg3b5DN5YH1P3zX1AHFFvTCOL7TER5zwGnUbJcQ85Cw==}
+    dependencies:
+      '@types/dompurify': 2.4.0
+      dompurify: 2.4.3
+      jsdom: 20.0.3
+    transitivePeerDependencies:
+      - bufferutil
+      - canvas
+      - supports-color
+      - utf-8-validate
+    dev: false
+
   /isomorphic-dompurify/0.20.0_canvas@2.9.3:
     resolution: {integrity: sha512-ha3GBgVb9faPfGknAkwokYxqvdnh6c+R33LtgoXj4Lttg3b5DN5YH1P3zX1AHFFvTCOL7TER5zwGnUbJcQ85Cw==}
     dependencies:
@@ -10307,6 +10374,47 @@ packages:
       - supports-color
       - utf-8-validate
     dev: true
+
+  /jsdom/20.0.3:
+    resolution: {integrity: sha512-SYhBvTh89tTfCD/CRdSOm13mOBa42iTaTyfyEWBdKcGdPxPtLFBXuHR8XHb33YNYaP+lLbmSvBTsnoesCNJEsQ==}
+    engines: {node: '>=14'}
+    peerDependencies:
+      canvas: ^2.5.0
+    peerDependenciesMeta:
+      canvas:
+        optional: true
+    dependencies:
+      abab: 2.0.6
+      acorn: 8.8.2
+      acorn-globals: 7.0.1
+      cssom: 0.5.0
+      cssstyle: 2.3.0
+      data-urls: 3.0.2
+      decimal.js: 10.4.3
+      domexception: 4.0.0
+      escodegen: 2.0.0
+      form-data: 4.0.0
+      html-encoding-sniffer: 3.0.0
+      http-proxy-agent: 5.0.0
+      https-proxy-agent: 5.0.1
+      is-potential-custom-element-name: 1.0.1
+      nwsapi: 2.2.2
+      parse5: 7.1.2
+      saxes: 6.0.0
+      symbol-tree: 3.2.4
+      tough-cookie: 4.1.2
+      w3c-xmlserializer: 4.0.0
+      webidl-conversions: 7.0.0
+      whatwg-encoding: 2.0.0
+      whatwg-mimetype: 3.0.0
+      whatwg-url: 11.0.0
+      ws: 8.12.0
+      xml-name-validator: 4.0.0
+    transitivePeerDependencies:
+      - bufferutil
+      - supports-color
+      - utf-8-validate
+    dev: false
 
   /jsdom/20.0.3_canvas@2.9.3:
     resolution: {integrity: sha512-SYhBvTh89tTfCD/CRdSOm13mOBa42iTaTyfyEWBdKcGdPxPtLFBXuHR8XHb33YNYaP+lLbmSvBTsnoesCNJEsQ==}
@@ -11361,7 +11469,7 @@ packages:
       - babel-plugin-macros
     dev: false
 
-  /next/13.1.6_biqbaboplfbrettd7655fr4n2y:
+  /next/13.1.6_pjwopsidmaokadturxaafygjp4:
     resolution: {integrity: sha512-hHlbhKPj9pW+Cymvfzc15lvhaOZ54l+8sXDXJWm3OBNBzgrVj6hwGPmqqsXg40xO1Leq+kXpllzRPuncpC0Phw==}
     engines: {node: '>=14.6.0'}
     hasBin: true
@@ -11385,7 +11493,7 @@ packages:
       postcss: 8.4.14
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
-      styled-jsx: 5.1.1_react@18.2.0
+      styled-jsx: 5.1.1_2exiyaescjxorpwwmy4ejghgte
     optionalDependencies:
       '@next/swc-android-arm-eabi': 13.1.6
       '@next/swc-android-arm64': 13.1.6
@@ -13354,7 +13462,7 @@ packages:
       react: 18.2.0
     dev: false
 
-  /styled-jsx/5.1.1_react@18.2.0:
+  /styled-jsx/5.1.1_2exiyaescjxorpwwmy4ejghgte:
     resolution: {integrity: sha512-pW7uC1l4mBZ8ugbiZrcIsiIvVx1UmTfw7UkC3Um2tmfUq9Bhk8IiyEIPl6F8agHgjzku6j0xQEZbfA5uSgSaCw==}
     engines: {node: '>= 12.0.0'}
     peerDependencies:
@@ -13367,6 +13475,7 @@ packages:
       babel-plugin-macros:
         optional: true
     dependencies:
+      '@babel/core': 7.20.12
       client-only: 0.0.1
       react: 18.2.0
     dev: false

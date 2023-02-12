@@ -87,20 +87,23 @@ jobs:
           password: ${{ github.token }}
 
       - name: Set frontend env
-        if: ${{ matrix.packages.name == 'web' || matrix.packages.name == 'admin-web' }}
+        if: ${{ contains(fromJson('["web", "admin-web"]'), matrix.packages.name) && steps.check-dockerfile.outputs.DOCKERFILE_EXISTS == 'true' }}
         env:
           APP_NAME: ${{ matrix.packages.name }}
           BRANCH: ${{ github.ref_name }}
         run: |
           if [[ $BRANCH == 'main' ]]; then
-            echo "$APP_NAME env is set to production"
-            mv apps/$APP_NAME/.env.prod apps/$APP_NAME/.env
+            [ ! -d "apps/$APP_NAME/.env.prod" ] && echo "$APP_NAME production env not found"
+            [ -d "apps/$APP_NAME/.env.prod" ] && echo "$APP_NAME env is set to production"
+            [ -d "apps/$APP_NAME/.env.prod" ] && mv apps/$APP_NAME/.env.prod apps/$APP_NAME/.env
           elif [[ $BRANCH == 'beta' ]]; then
-            echo "$APP_NAME env is set to dev"
-            mv apps/$APP_NAME/.env.beta apps/$APP_NAME/.env
+            [ ! -d "apps/$APP_NAME/.env.beta" ] && echo "$APP_NAME beta env not found"
+            [ -d "apps/$APP_NAME/.env.beta" ] && echo "$APP_NAME env is set to dev"
+            [ -d "apps/$APP_NAME/.env.beta" ] && mv apps/$APP_NAME/.env.beta apps/$APP_NAME/.env
           elif [[ $BRANCH == 'dev' ]]; then
-            echo "$APP_NAME env is set to beta"
-            mv apps/$APP_NAME/.env.dev apps/$APP_NAME/.env
+            [ ! -d "apps/$APP_NAME/.env.dev" ] && echo "$APP_NAME dev env not found"
+            [ -d "apps/$APP_NAME/.env.dev" ] && echo "$APP_NAME env is set to beta"
+            [ -d "apps/$APP_NAME/.env.dev" ] && mv apps/$APP_NAME/.env.dev apps/$APP_NAME/.env
           fi
 
       - name: Build and push Docker image

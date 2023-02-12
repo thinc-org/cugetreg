@@ -87,7 +87,7 @@ jobs:
           password: ${{ github.token }}
 
       - name: Set frontend env
-        if: ${{ contains(fromJson('["web", "admin-wb"]'), matrix.packages.name) && steps.check-dockerfile.outputs.DOCKERFILE_EXISTS == 'true' }}
+        if: ${{ contains(fromJson('["web", "admin-web"]'), matrix.packages.name) && steps.check-dockerfile.outputs.DOCKERFILE_EXISTS == 'true' }}
         env:
           APP_NAME: ${{ matrix.packages.name }}
           BRANCH: ${{ github.ref_name }}

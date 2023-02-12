@@ -24,7 +24,6 @@
     "@emotion/react": "11.10.4",
     "@emotion/styled": "11.10.4",
     "@mui/material": "5.9.1",
-    "@mui/styled-engine-sc": "^5.11.0",
     "@next/font": "13.1.6",
     "axios": "0.23.0",
     "isomorphic-dompurify": "0.20.0",

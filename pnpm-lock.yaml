@@ -61,7 +61,6 @@ importers:
       '@emotion/react': 11.10.4
       '@emotion/styled': 11.10.4
       '@mui/material': 5.9.1
-      '@mui/styled-engine-sc': ^5.11.0
       '@next/font': 13.1.6
       '@types/node': 18.11.18
       '@types/react': 18.0.20
@@ -83,7 +82,6 @@ importers:
       '@emotion/react': 11.10.4_eapys5ndgs37tbuawlv2xlkq5i
       '@emotion/styled': 11.10.4_h3g5w2xi67gb5owhpqb5xdbzbe
       '@mui/material': 5.9.1_af5ln35zuaotaffazii6n6bke4
-      '@mui/styled-engine-sc': 5.11.0_styled-components@5.3.5
       '@next/font': 13.1.6
       axios: 0.23.0
       isomorphic-dompurify: 0.20.0
@@ -3249,21 +3247,6 @@ packages:
       '@types/react': 18.0.20
       prop-types: 15.8.1
       react: 18.2.0
-    dev: false
-
-  /@mui/styled-engine-sc/5.11.0_styled-components@5.3.5:
-    resolution: {integrity: sha512-U8cA7DHB3fnLpDVM5qd/9FGnw5y+LrmwIXQ9Lzk3HYkF903tSMx9jXIbiz1vltpOfZTKX/Rn02m/nkH4OF6Pcg==}
-    engines: {node: '>=12.0.0'}
-    peerDependencies:
-      '@types/styled-components': ^5.1.14
-      styled-components: ^5.3.1
-    peerDependenciesMeta:
-      '@types/styled-components':
-        optional: true
-    dependencies:
-      '@babel/runtime': 7.20.13
-      prop-types: 15.8.1
-      styled-components: 5.3.5_7i5myeigehqah43i5u7wbekgba
     dev: false
 
   /@mui/styled-engine/5.11.0_hfzxdiydbrbhhfpkwuv3jhvwmq:

@@ -8,7 +8,7 @@ export default function PendingReviewsList() {
   return (
     <>
       <Container>
-        <Typography variant="h3" align="center">
+        <Typography variant="h3" align="center" sx={{ mt: '30px' }}>
           Reviews
         </Typography>
         {reviewQuery.loading ? (

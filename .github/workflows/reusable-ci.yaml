@@ -57,6 +57,6 @@ jobs:
             echo "TURBO_FILTER=--filter=...[origin/main]" >> $GITHUB_OUTPUT
           fi
 
-      - name: Target (main branch)
-        if: ${{ inputs.target && steps.get-base-branch.outputs.BASE_BRANCH == 'main' }}
+      - name: Target
+        if: ${{ inputs.target }}
         run: pnpm ${{ inputs.target }} --parallel ${{ steps.get-base-branch.outputs.TURBO_FILTER }}

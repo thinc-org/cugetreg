@@ -18,6 +18,7 @@ export default function GenEdList() {
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
+            <TableCell></TableCell>
             <TableCell align="center">Academic Year</TableCell>
             <TableCell align="center">Course No.</TableCell>
             <TableCell align="center">GenEd Type</TableCell>

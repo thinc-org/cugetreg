@@ -13,13 +13,11 @@ export class ReviewResolver {
     return this.reviewService.getReviews()
   }
 
-  // @UseGuards(AdminAuthGuard)
   @Query('pendingReviews')
   async getPending(): Promise<Review[]> {
     return this.reviewService.getPending()
   }
 
-  // @UseGuards(AdminAuthGuard)
   @Mutation('setReviewStatus')
   async setStatus(
     @Args('reviewId') reviewId: string,

@@ -12,6 +12,7 @@ import { OverrideModule } from '@admin-api/override/override.module'
 import { GraphQLExpressContext } from '../common/types/context.type'
 import { configuration } from '../config/configuration'
 import { ReviewModule } from '../review/review.module'
+import { OverrideModule } from '@admin-api/override/override.module'
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
 

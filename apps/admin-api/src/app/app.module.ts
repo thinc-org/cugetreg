@@ -10,6 +10,7 @@ import { join } from 'path'
 import { GraphQLExpressContext } from '../common/types/context.type'
 import { configuration } from '../config/configuration'
 import { ReviewModule } from '../review/review.module'
+import { OverrideModule } from '@admin-api/override/override.module'
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
 
@@ -57,6 +58,7 @@ import { AppService } from './app.service'
       inject: [ConfigService],
     }),
     ReviewModule,
+    OverrideModule,
     ScheduleModule.forRoot(),
   ],
   controllers: [AppController],

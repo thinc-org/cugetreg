@@ -13,7 +13,7 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule)
 
   const configService = app.get<ConfigService<Configuration>>(ConfigService)
-  validateConfig(configService)
+  // validateConfig(configService)
 
   // Setup the global prefix
   const globalPrefix = '_api'

@@ -15,11 +15,6 @@ export class ReviewResolver {
     return this.reviewService.getReviews()
   }
 
-  @Query('reviews')
-  async getReviews(): Promise<ReviewDocument[]> {
-    return this.reviewService.getReviews()
-  }
-
   @Query('pendingReviews')
   async getPending(): Promise<Review[]> {
     return this.reviewService.getPending()

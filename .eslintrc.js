@@ -1,8 +1,21 @@
 module.exports = {
   root: true,
-  // This tells ESLint to load the config from the package `eslint-config-custom`
-  extends: ['custom'],
+  parser: '@typescript-eslint/parser',
+  plugins: ['@typescript-eslint/eslint-plugin'],
+  extends: [
+    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:prettier/recommended',
+    'next/core-web-vitals',
+  ],
+  rules: {
+    '@next/next/no-html-link-for-pages': 'off',
+    'react/jsx-key': 'off',
+  },
   settings: {
+    react: {
+      version: '18.2.0',
+    },
     next: {
       rootDir: ['apps/*/'],
     },

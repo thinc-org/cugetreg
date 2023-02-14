@@ -14,7 +14,7 @@ export enum Language {
 
 declare module 'react-i18next' {
   interface CustomTypeOptions {
-    resources: typeof resources['th']
+    resources: (typeof resources)['th']
   }
 }
 

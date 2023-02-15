@@ -10,9 +10,7 @@ import { SEARCH_QUERY } from '@web/common/context/Analytics/constants'
 import { useLog } from '@web/common/context/Analytics/hooks/useLog'
 import { useSearchCourseQueryParams } from '@web/modules/CourseSearch/hooks/useSearchCourseQueryParams'
 
-export interface SeachFieldProp {}
-
-export const SearchField: React.FC<SeachFieldProp> = () => {
+export const SearchField: React.FC = () => {
   const { setFilter, searchCourseQueryParams } = useSearchCourseQueryParams()
   const [input, setInput] = useState(() => searchCourseQueryParams.filter.keyword || '')
   const lastSubmittedInput = useRef(input)

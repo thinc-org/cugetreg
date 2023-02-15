@@ -4,7 +4,7 @@ import { Dialog, DialogProps, Slide, SlideProps, useMediaQuery, useTheme } from 
 
 import { deepAssign } from '@web/common/utils/deepAssign'
 
-const Transition = forwardRef((props: SlideProps, ref: ForwardedRef<unknown>) => {
+const Transition = forwardRef(function Transition(props: SlideProps, ref: ForwardedRef<unknown>) {
   return <Slide direction="up" ref={ref} {...props} />
 })
 

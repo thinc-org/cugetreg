@@ -22,7 +22,7 @@ const editor = createPlateEditor({
 })
 
 export const RichTextEditor = forwardRef<RichTextEditorRef | undefined, RichTextEditorProps>(
-  ({ id, defaultValue = INITIAL_CONTENT, onChange }, ref) => {
+  function RichTextEditor({ id, defaultValue = INITIAL_CONTENT, onChange }, ref) {
     const theme = useTheme()
     const { resetEditor, setValue: setEditorValue } = usePlateActions(id)
 

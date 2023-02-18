@@ -823,6 +823,7 @@ packages:
   /@apollo/federation@0.17.0(graphql@15.5.0):
     resolution: {integrity: sha512-vSW/M8+SGdu5xALsA/RL37GgB+wNFZpXCyPAcg3b68c8x7uoQHgYwqwUu7D+GnAGeOpDUrNnFPdKAYW7elYkyQ==}
     engines: {node: '>=8'}
+    deprecated: The @apollo/federation package is deprecated and will reach end-of-life September 22, 2023. It contains outdated utilities for both running subgraphs and composing supergraph schemas. Please migrate to the appropriate package for your use case (@apollo/subgraph or @apollo/composition). For more details, see our announcement blog post (https://www.apollographql.com/blog/announcement/backend/announcing-the-end-of-life-schedule-for-apollo-gateway-v0-x/) and documentation (https://www.apollographql.com/docs/federation/federation-2/backward-compatibility/#is-official-support-ending-for-apollogateway-v0x).
     peerDependencies:
       graphql: ^14.5.0 || ^15.0.0
     dependencies:

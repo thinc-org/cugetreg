@@ -13,6 +13,7 @@ const config = {
   rules: {
     '@typescript-eslint/no-empty-function': 'off',
   },
+  ignorePatterns: ['.next', 'dist', 'apps/api/src/graphql.ts', 'libs/codegen/src/generated/**/*'],
   overrides: [
     {
       files: ['*.js', '*.cjs'],

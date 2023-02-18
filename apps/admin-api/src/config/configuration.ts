@@ -10,7 +10,11 @@ export interface Configuration {
   jwtSecret: string
   adminToken: string
   clientLoggerUrl: string
+<<<<<<< refs/remotes/origin/beta
   dashBoardUrl: string
+=======
+  slackWebhookUrl: string
+>>>>>>> remove unused env from template and config
   env: string
 }
 
@@ -24,12 +28,26 @@ export const configuration = (): Configuration => {
     jwtSecret: process.env.JWT_SECRET,
     adminToken: process.env.ADMIN_TOKEN,
     clientLoggerUrl: process.env.CLIENT_LOGGER_URL,
+<<<<<<< refs/remotes/origin/beta
     dashBoardUrl: process.env.DASHBOARD_URL,
+=======
+    slackWebhookUrl: process.env.SLACK_WEBHOOK_URL,
+>>>>>>> remove unused env from template and config
     env: process.env.ENV || 'development',
   }
 }
 
+<<<<<<< refs/remotes/origin/beta
 const requiredConfigs = ['googleOAuthId', 'googleOAuthSecret', 'jwtSecret', 'adminToken']
+=======
+const requiredConfigs = [
+  'googleOAuthId',
+  'googleOAuthSecret',
+  'jwtSecret',
+  'adminToken',
+  'backendPublicUrl',
+]
+>>>>>>> remove unused env from template and config
 
 export function validateConfig(configService: ConfigService<Configuration>): void {
   const logger = new Logger('ConfigService')

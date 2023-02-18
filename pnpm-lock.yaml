@@ -46,7 +46,7 @@ importers:
       '@nestjs/common': 9.2.1_rleu2amg6izhyk73dpeoeqq5o4
       '@nestjs/config': 2.2.0_b4pxbpa7chblgbyake5iz5rdmu
       '@nestjs/core': 9.2.1_e6la6qvsclaae2becwjnmfvsuq
-      '@nestjs/graphql': 7.9.8_lbey7msv7p5rwlztn3uuvl6age
+      '@nestjs/graphql': 7.9.8_myejjruapgaqvct3cqb6ok2i4y
       '@nestjs/mongoose': 9.2.1_qllokwhbbxyphnu7erbtzw5xuq
       '@nestjs/platform-express': 9.2.1_hjcqpoaebdr7gdo5hgc22hthbe
       '@nestjs/schedule': 2.1.0_dntc3uqqknzoduyjojusds5kla
@@ -645,6 +645,7 @@ packages:
   /@apollo/federation/0.17.0_graphql@15.5.0:
     resolution: {integrity: sha512-vSW/M8+SGdu5xALsA/RL37GgB+wNFZpXCyPAcg3b68c8x7uoQHgYwqwUu7D+GnAGeOpDUrNnFPdKAYW7elYkyQ==}
     engines: {node: '>=8'}
+    deprecated: The @apollo/federation package is deprecated and will reach end-of-life September 22, 2023. It contains outdated utilities for both running subgraphs and composing supergraph schemas. Please migrate to the appropriate package for your use case (@apollo/subgraph or @apollo/composition). For more details, see our announcement blog post (https://www.apollographql.com/blog/announcement/backend/announcing-the-end-of-life-schedule-for-apollo-gateway-v0-x/) and documentation (https://www.apollographql.com/docs/federation/federation-2/backward-compatibility/#is-official-support-ending-for-apollogateway-v0x).
     peerDependencies:
       graphql: ^14.5.0 || ^15.0.0
     dependencies:

@@ -10,4 +10,4 @@ pnpm-lock.yaml
 
 # Generate files
 apps/api/src/graphql.ts
-libs/codegen/src/generated/**/*
+packages/codegen/src/generated/**/*

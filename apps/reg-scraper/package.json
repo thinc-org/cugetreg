@@ -6,7 +6,7 @@
     "dev": "nest start --watch",
     "build": "nest build",
     "start": "nest start",
-    "lint": "echo 'ignored'",
+    "lint": "eslint src",
     "prebuild": "rimraf dist"
   },
   "devDependencies": {

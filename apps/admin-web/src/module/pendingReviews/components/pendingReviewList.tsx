@@ -20,7 +20,9 @@ export default function PendingReviewsList() {
             <Skeleton height={200} />
           </Grid>
         ) : (
-          reviewQuery.data?.pendingReviews.map((data) => <SinglePendingReview data={data} />)
+          reviewQuery.data?.pendingReviews.map((data) => (
+            <SinglePendingReview key={data._id} data={data} />
+          ))
         )}
       </Container>
     </>

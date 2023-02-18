@@ -9,5 +9,4 @@
 pnpm-lock.yaml
 
 apps/api/src/graphql.ts
-
 libs/codegen/src/generated/**/*

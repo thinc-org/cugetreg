@@ -16,7 +16,7 @@ jobs:
   run:
     runs-on: ${{ inputs.runs-on }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         name: Checkout
         with:
           fetch-depth: 0
@@ -27,6 +27,12 @@ jobs:
         with:
           version: 7
           run_install: false
+
+      - name: Setup node with cache
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: pnpm
 
       - name: Get pnpm store directory
         id: pnpm-cache

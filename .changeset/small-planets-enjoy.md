@@ -1,5 +1,5 @@
 ---
-'@cgr/config': major
+'@cgr/project-config': major
 'api': minor
 'web': minor
 ---

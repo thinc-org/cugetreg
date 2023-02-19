@@ -1,1 +1,1 @@
-module.exports = require('@cgr/config/eslint-next')
+module.exports = require('@cgr/project-config/eslint-next')

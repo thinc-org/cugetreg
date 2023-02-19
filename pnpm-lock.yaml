@@ -4,7 +4,7 @@ importers:
 
   .:
     specifiers:
-      '@cgr/config': workspace:*
+      '@cgr/project-config': workspace:*
       '@changesets/changelog-github': ^0.4.8
       '@changesets/cli': ^2.26.0
       '@trivago/prettier-plugin-sort-imports': ^4.0.0
@@ -17,7 +17,7 @@ importers:
       prettier: latest
       turbo: latest
     devDependencies:
-      '@cgr/config': link:packages/config
+      '@cgr/project-config': link:packages/project-config
       '@changesets/changelog-github': 0.4.8
       '@changesets/cli': 2.26.0
       '@trivago/prettier-plugin-sort-imports': 4.0.0_r4mc77vbl5cd3ycfh7mfqd7w5q
@@ -264,8 +264,8 @@ importers:
     specifiers:
       '@apollo/client': 3.6.9
       '@cgr/codegen': workspace:*
-      '@cgr/config': workspace:*
       '@cgr/course-utils': workspace:*
+      '@cgr/project-config': workspace:*
       '@emotion/cache': 11.9.3
       '@emotion/is-prop-valid': 1.2.0
       '@emotion/react': 11.10.4
@@ -413,7 +413,7 @@ importers:
       uuid: 9.0.0
       zustand: 4.0.0_react@18.2.0
     devDependencies:
-      '@cgr/config': link:../../packages/config
+      '@cgr/project-config': link:../../packages/project-config
       '@next/bundle-analyzer': 13.1.5
       '@testing-library/react': 13.4.0_biqbaboplfbrettd7655fr4n2y
       '@testing-library/react-hooks': 8.0.1_7ey2zzynotv32rpkwno45fsx4e
@@ -460,9 +460,6 @@ importers:
       eslint: 8.34.0
       tsconfig: link:../tsconfig
 
-  packages/config:
-    specifiers: {}
-
   packages/course-utils:
     specifiers:
       '@cgr/codegen': workspace:*
@@ -473,6 +470,9 @@ importers:
     devDependencies:
       eslint: 8.34.0
       tsconfig: link:../tsconfig
+
+  packages/project-config:
+    specifiers: {}
 
   packages/tsconfig:
     specifiers: {}

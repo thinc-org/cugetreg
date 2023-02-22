@@ -12,7 +12,7 @@ const config = {
     '^@nestjs',
     '^react',
     '<THIRD_PARTY_MODULES>',
-    '^@(admin-api|admin-web|api|web)',
+    '^@(admin-api|admin-web|api|web|reg-scraper)',
     '^@cgr',
     '^[.]',
     '^[.][.]',

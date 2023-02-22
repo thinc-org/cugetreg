@@ -5,7 +5,7 @@
   "main": "./src/index.ts",
   "types": "./src/index.ts",
   "scripts": {
-    "lint": "eslint '{src,apps,libs,test}/**/*.ts*' --fix",
+    "lint": "eslint src",
     "codegen": "graphql-codegen"
   },
   "dependencies": {
@@ -17,8 +17,6 @@
     "graphql-tag": "2.12.6"
   },
   "devDependencies": {
-    "eslint-config-custom": "workspace:*",
-    "eslint": "7.32.0",
-    "tsconfig": "workspace:*"
+    "eslint": "8.34.0"
   }
 }

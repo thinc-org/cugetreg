@@ -1,6 +1,5 @@
-import assert from 'assert'
-
 import { sum } from '@web/utils/sum'
+import assert from 'assert'
 
 describe('sum', function () {
   const array = [6, 4, 2]

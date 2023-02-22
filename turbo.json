@@ -8,6 +8,7 @@
     "lint": {
       "outputs": []
     },
+    "format": {},
     "dev": {
       "cache": false
     },

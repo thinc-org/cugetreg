@@ -4,9 +4,6 @@ import { MdMenu } from 'react-icons/md'
 
 import { Drawer } from '@mui/material'
 import { default as MaterialLink } from '@mui/material/Link'
-import { observer } from 'mobx-react'
-import { useRouter } from 'next/router'
-
 import cgrLogoDark from '@web/assets/images/cgrLogoDark.svg'
 import { Analytics } from '@web/common/context/Analytics/components/Analytics'
 import { LinkWithAnalytics } from '@web/common/context/Analytics/components/LinkWithAnalytics'
@@ -19,6 +16,8 @@ import {
 import { useDisclosure } from '@web/common/hooks/useDisclosure'
 import { useLinkBuilder } from '@web/common/hooks/useLinkBuilder'
 import { sessionIdStore } from '@web/store/sessionIdStore'
+import { observer } from 'mobx-react'
+import { useRouter } from 'next/router'
 
 import { NavBarItem } from '../NavBarItem'
 import { UserButton } from '../UserButton'

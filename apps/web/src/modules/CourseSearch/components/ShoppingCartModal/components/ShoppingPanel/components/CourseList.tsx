@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Checkbox, Grid, Hidden, Typography, useMediaQuery, useTheme } from '@mui/material'
-
 import { GenEdChip } from '@web/common/components/Chips/catagories/GenEdChip'
 
 import { Course } from '@cgr/codegen'

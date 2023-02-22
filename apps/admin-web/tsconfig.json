@@ -1,5 +1,5 @@
 {
-  "extends": "@cgr/project-config/tsconfig-nextjs.json",
+  "extends": "@cgr/project-config/tsconfig/nextjs.json",
   "compilerOptions": {
     "paths": {
       "@admin-web/*": ["./src/*"]

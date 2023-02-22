@@ -5,16 +5,16 @@ import { useTranslation } from 'react-i18next'
 
 import { Box, Button, MenuItem, Rating, Stack, Typography } from '@mui/material'
 import { TNode } from '@udecode/plate-core'
-
 import { RichTextEditor } from '@web/common/components/RichTextEditor'
 import { INITIAL_CONTENT } from '@web/common/components/RichTextEditor/initialContent'
 import { RichTextEditorRef } from '@web/common/components/RichTextEditor/types'
 import { Storage } from '@web/common/storage'
 import { StorageKey } from '@web/common/storage/constants'
-import { Review } from '@cgr/codegen'
 import { getCurrentTerm } from '@web/common/utils/getCurrentTerm'
 import { ControlledSelect } from '@web/modules/CourseDetail/components/ControlledSelect'
 import { ReviewEditables } from '@web/modules/CourseDetail/components/ReviewForm/types'
+
+import { Review } from '@cgr/codegen'
 
 import { ContributionGuide } from '../../components/ContributionGuide'
 import { useReviewContext } from '../../context/Review'

@@ -2,9 +2,8 @@ import { useTranslation } from 'react-i18next'
 import { MdCloudDone, MdCloudOff, MdCloudQueue } from 'react-icons/md'
 
 import { Stack, Tooltip } from '@mui/material'
-import { observer } from 'mobx-react'
-
 import { CourseCartSyncState, courseCartStore } from '@web/store'
+import { observer } from 'mobx-react'
 
 const SyncStatus: React.FC<{ title: string; children: React.ReactNode }> = ({
   title,

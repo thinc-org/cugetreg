@@ -8,7 +8,6 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material'
-
 import { termOptions } from '@web/common/constants/terms'
 import { Analytics } from '@web/common/context/Analytics/components/Analytics'
 import {

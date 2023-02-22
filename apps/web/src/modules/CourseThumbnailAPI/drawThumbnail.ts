@@ -1,11 +1,10 @@
-import { Canvas, CanvasRenderingContext2D, loadImage, registerFont } from 'canvas'
-
 import { i18n } from '@web/common/i18n'
 import { getPaletteRange } from '@web/common/utils/getPaletteRange'
 import { lightTheme } from '@web/configs/theme'
 import { ENABLE_DAY_OF_WEEK_THUMBNAIL } from '@web/env'
 import { getDayColor } from '@web/modules/CourseThumbnailAPI/utils/getDayColor'
 import { getDaysOfWeek } from '@web/modules/CourseThumbnailAPI/utils/getDaysOfWeek'
+import { Canvas, CanvasRenderingContext2D, loadImage, registerFont } from 'canvas'
 
 import { CourseThumbnailData } from '@cgr/course-utils'
 

@@ -1,5 +1,4 @@
 import { styled } from '@mui/material'
-
 import { ExamClass } from '@web/common/utils/types'
 
 import { ExamCard } from '../ExamCard'

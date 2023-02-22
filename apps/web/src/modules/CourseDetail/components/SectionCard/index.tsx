@@ -14,7 +14,6 @@ import {
   Typography,
   styled,
 } from '@mui/material'
-
 import { Caption } from '@web/common/components/Caption'
 import { GenEdChip } from '@web/common/components/Chips/catagories/GenEdChip'
 import { SelectButton } from '@web/common/components/SelectButton'

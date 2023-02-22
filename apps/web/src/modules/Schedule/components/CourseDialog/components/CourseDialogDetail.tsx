@@ -1,7 +1,6 @@
 import { useTranslation } from 'react-i18next'
 
 import { Stack, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material'
-
 import { Caption } from '@web/common/components/Caption'
 import { GenEdChip } from '@web/common/components/Chips/catagories/GenEdChip'
 import { UnstyledTable } from '@web/common/components/UnstyledTable'
@@ -13,9 +12,10 @@ import { SectionStatus } from '@web/modules/CourseDetail/components/SectionStatu
 import { useOverlapWarning } from '@web/modules/Schedule/components/ScheduleTable/components/ScheduleTableCard/utils'
 import { courseCartStore } from '@web/store'
 
+import { GenEdType } from '@cgr/codegen'
+
 import { useCourseDialog } from '../context'
 import { SectionSelect } from './SectionSelect'
-import { GenEdType } from '@cgr/codegen'
 
 export function CourseDialogDetail() {
   const { item, overlaps } = useCourseDialog()

@@ -1,10 +1,9 @@
 import { useCallback } from 'react'
 import { DragDropContext, DropResult, Droppable } from 'react-beautiful-dnd'
 
-import { LazyMotion, domMax } from 'framer-motion'
-
 import { useCourseGroup } from '@web/common/hooks/useCourseGroup'
 import { CourseCart } from '@web/store'
+import { LazyMotion, domMax } from 'framer-motion'
 
 import { CourseOverlapMap } from '../Schedule/utils'
 import { ScheduleTableCard } from './components/ScheduleTableCard'

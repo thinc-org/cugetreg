@@ -1,5 +1,4 @@
 import { Stack } from '@mui/material'
-
 import { ResponsiveDialog, ResposiveDialogProps } from '@web/common/components/ResponsiveDialog'
 import { CourseDialogActions } from '@web/modules/Schedule/components/CourseDialog/components/CourseDialogActions'
 import { CourseDialogColorPicker } from '@web/modules/Schedule/components/CourseDialog/components/CourseDialogColorPicker'

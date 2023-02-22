@@ -1,5 +1,4 @@
 import { CardContent, Collapse, Stack } from '@mui/material'
-
 import { CardDescription } from '@web/modules/CourseSearch/components/CourseCard/components/CardDescription'
 import { CardHiddenDescription } from '@web/modules/CourseSearch/components/CourseCard/components/CardHiddenDescription'
 import { CardSideActions } from '@web/modules/CourseSearch/components/CourseCard/components/CardSideActions'

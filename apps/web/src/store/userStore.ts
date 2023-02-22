@@ -1,8 +1,7 @@
-import { action, makeAutoObservable, when } from 'mobx'
-
 import { ENVIRONMENT } from '@web/env'
 import { apiUrl, httpClient } from '@web/services/httpClient'
 import { courseCartStore } from '@web/store'
+import { action, makeAutoObservable, when } from 'mobx'
 
 class UserStore {
   isInitialized = false

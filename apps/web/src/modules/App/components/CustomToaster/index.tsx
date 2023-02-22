@@ -2,7 +2,6 @@ import { Toaster } from 'react-hot-toast'
 
 import { ClassNames } from '@emotion/react'
 import { Theme, css, useTheme } from '@mui/material'
-
 import { ToastContextProvider } from '@web/common/components/Toast'
 
 import { CustomToastBar } from '../CustomToastBar'

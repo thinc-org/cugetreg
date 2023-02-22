@@ -2,7 +2,6 @@ import { useTranslation } from 'react-i18next'
 
 import { ChevronRight } from '@mui/icons-material'
 import { IconButton, Link, Stack, Typography } from '@mui/material'
-
 import { LinkWithAnalytics } from '@web/common/context/Analytics/components/LinkWithAnalytics'
 import { COURSE_DIALOG_CHEVRON, COURSE_DIALOG_TITLE } from '@web/common/context/Analytics/constants'
 import { useLinkBuilder } from '@web/common/hooks/useLinkBuilder'

@@ -3,10 +3,9 @@ import { useTranslation } from 'react-i18next'
 
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday'
 import { Button, Chip, Hidden, styled, useMediaQuery, useTheme } from '@mui/material'
-import { observer } from 'mobx-react'
-
 import { useCourseGroup } from '@web/common/hooks/useCourseGroup'
 import { courseCartStore } from '@web/store'
+import { observer } from 'mobx-react'
 
 const Number = styled(Chip)`
   z-index: 50;

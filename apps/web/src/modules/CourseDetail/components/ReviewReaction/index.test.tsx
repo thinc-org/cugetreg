@@ -1,9 +1,8 @@
 import { MdThumbDown, MdThumbDownOffAlt, MdThumbUp, MdThumbUpOffAlt } from 'react-icons/md'
 
 import { ThemeProvider } from '@mui/material'
-import { shallow } from 'enzyme'
-
 import { lightTheme } from '@web/configs/theme'
+import { shallow } from 'enzyme'
 
 import { ReviewInteractionType } from '@cgr/codegen'
 

@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react'
 
-import { useRouter } from 'next/router'
-
 import { LIMIT_QUERY_CONSTANT } from '@web/modules/CourseSearch/context/CourseSearch/constants'
 import { useSearchCourseQueryParams } from '@web/modules/CourseSearch/hooks/useSearchCourseQueryParams'
+import { useRouter } from 'next/router'
 
 import { useSearchCourseQuery } from '@cgr/codegen'
 

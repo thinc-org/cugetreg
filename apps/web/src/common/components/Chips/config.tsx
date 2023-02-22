@@ -1,5 +1,4 @@
 import { ChipProps } from '@mui/material'
-
 import {
   ChipFilledHighlightColor,
   ChipOutlinedHighlightColor,

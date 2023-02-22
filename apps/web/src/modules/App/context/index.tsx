@@ -4,7 +4,6 @@ import { ApolloProvider } from '@apollo/client'
 import { CacheProvider } from '@emotion/react'
 import { EmotionCache } from '@emotion/utils'
 import { ThemeProvider, useMediaQuery } from '@mui/material'
-
 import { AnalyticsProvider } from '@web/common/context/Analytics'
 import { useAnalytics } from '@web/common/context/Analytics/hooks/useAnalytics'
 import { darkTheme, lightTheme } from '@web/configs/theme'

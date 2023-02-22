@@ -1,9 +1,12 @@
-import RejectModal from '@admin-web/module/pendingReviews/components/rejectModal'
-import { Review } from '@cgr/codegen'
-import { Button, Card, CardActions, Typography } from '@mui/material'
 import { useState } from 'react'
-import { HighlightHTML } from '../../../common/HighlightHTML/index'
+
+import RejectModal from '@admin-web/module/pendingReviews/components/rejectModal'
+import { Button, Card, CardActions, Typography } from '@mui/material'
 import DOMPurify from 'isomorphic-dompurify'
+
+import { Review } from '@cgr/codegen'
+
+import { HighlightHTML } from '../../../common/HighlightHTML/index'
 
 interface SinglePendingReviewProps {
   data: Review

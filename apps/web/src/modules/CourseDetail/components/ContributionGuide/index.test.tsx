@@ -1,6 +1,5 @@
-import { shallow } from 'enzyme'
-
 import { lightTheme } from '@web/configs/theme'
+import { shallow } from 'enzyme'
 
 describe('ContributionGuide', () => {
   const useThemeSpy = jest.fn(() => lightTheme)

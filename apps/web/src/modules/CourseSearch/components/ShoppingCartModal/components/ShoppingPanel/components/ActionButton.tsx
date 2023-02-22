@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next'
 import DeleteIcon from '@mui/icons-material/Delete'
 import TableChartIcon from '@mui/icons-material/TableChart'
 import { Button, ButtonProps, styled } from '@mui/material'
-
 import { Analytics } from '@web/common/context/Analytics/components/Analytics'
 import { LinkWithAnalytics } from '@web/common/context/Analytics/components/LinkWithAnalytics'
 import {

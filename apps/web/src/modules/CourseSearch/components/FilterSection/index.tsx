@@ -1,7 +1,6 @@
 import { DialogContent, Stack, useTheme } from '@mui/material'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import useGoogleOptimize from '@react-hook/google-optimize'
-
 import { DayChipKey, GenEdChipKey } from '@web/common/components/Chips/config'
 import { ResponsiveDialog } from '@web/common/components/ResponsiveDialog'
 import { Analytics } from '@web/common/context/Analytics/components/Analytics'

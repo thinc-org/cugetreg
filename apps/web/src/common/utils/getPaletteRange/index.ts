@@ -1,5 +1,4 @@
 import { Theme } from '@mui/material'
-
 import { HighlightColorRange } from '@web/configs/theme/palette'
 
 import { GenEdType } from '@cgr/codegen'

@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next'
 import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown'
 import KeyboardArrowUp from '@mui/icons-material/KeyboardArrowUp'
 import { CardHeader, Grid, IconButton, Link, Stack, Typography } from '@mui/material'
-
 import { GenEdChip } from '@web/common/components/Chips/catagories/GenEdChip'
 import { Analytics } from '@web/common/context/Analytics/components/Analytics'
 import { LinkWithAnalytics } from '@web/common/context/Analytics/components/LinkWithAnalytics'

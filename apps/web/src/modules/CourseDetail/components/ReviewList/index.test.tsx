@@ -1,6 +1,5 @@
-import { shallow } from 'enzyme'
-
 import { mockMyPendingReviews, mockReviews } from '@web/__mock__/review'
+import { shallow } from 'enzyme'
 
 describe('ReviewList', () => {
   const useReviewContextSpy = jest.fn()

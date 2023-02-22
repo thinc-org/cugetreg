@@ -1,7 +1,3 @@
-import { getCookie } from 'cookies-next'
-import { runInAction } from 'mobx'
-import * as uuid from 'uuid'
-
 import { CookieKey } from '@web/common/constants/cookie'
 import { StorageKey } from '@web/common/storage/constants'
 import { Consents } from '@web/common/types/consents'
@@ -9,6 +5,9 @@ import { ENABLE_LOGGING } from '@web/env'
 import { httpClient } from '@web/services/httpClient'
 import { sessionIdStore } from '@web/store/sessionIdStore'
 import { userStore } from '@web/store/userStore'
+import { getCookie } from 'cookies-next'
+import { runInAction } from 'mobx'
+import * as uuid from 'uuid'
 
 import { ClientLogDTO, LogEvent } from './types'
 

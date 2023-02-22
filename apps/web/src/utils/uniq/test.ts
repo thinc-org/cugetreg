@@ -1,6 +1,5 @@
-import assert from 'assert'
-
 import { uniq } from '@web/utils/uniq'
+import assert from 'assert'
 
 describe('uniq methods', function () {
   const objects = [{ a: 2 }, { a: 3 }, { a: 1 }, { a: 2 }, { a: 3 }, { a: 1 }]

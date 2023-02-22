@@ -1,7 +1,6 @@
 import { useTranslation } from 'react-i18next'
 
 import { useMediaQuery, useTheme } from '@mui/material'
-
 import cgrLogoDark from '@web/assets/images/cgrLogoDark.svg'
 import { Analytics } from '@web/common/context/Analytics/components/Analytics'
 import { LinkWithAnalytics } from '@web/common/context/Analytics/components/LinkWithAnalytics'

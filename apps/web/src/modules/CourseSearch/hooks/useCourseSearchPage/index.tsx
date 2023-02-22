@@ -1,7 +1,6 @@
 import { useContext, useEffect, useState } from 'react'
 
 import { useMediaQuery, useTheme } from '@mui/material'
-
 import { ShoppingCartModalContext } from '@web/common/context/ShoppingCartModal'
 
 export const useCourseSearchPage = () => {

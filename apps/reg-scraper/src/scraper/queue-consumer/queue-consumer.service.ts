@@ -2,15 +2,14 @@ import { InjectQueue, Process, Processor } from '@nestjs/bull'
 import { Logger } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 
-import { Course } from '@thinc-org/chula-courses'
-import type { Job, Queue } from 'bull'
-import { Model } from 'mongoose'
-
 import { OverrideService } from '@reg-scraper/override/override.service'
 import { CourseDocument } from '@reg-scraper/schema/course.schema'
 import { courseRequest } from '@reg-scraper/scraper/request/course.request'
 import CourseFetchJob from '@reg-scraper/scraper/types/CourseFetchJob'
 import { QueueStoreService } from '@reg-scraper/stores/queue-store/queue-store.service'
+import { Course } from '@thinc-org/chula-courses'
+import type { Job, Queue } from 'bull'
+import { Model } from 'mongoose'
 
 @Processor({
   name: 'fetch',

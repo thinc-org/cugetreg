@@ -1,7 +1,6 @@
 import React from 'react'
 
 import { Grid, Typography } from '@mui/material'
-
 import { collectErrorLog, sessionId } from '@web/services/logging'
 
 export class ErrorBoundary extends React.Component<

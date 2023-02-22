@@ -1,7 +1,6 @@
 import { ToastBar, resolveValue } from 'react-hot-toast'
 
 import { styled } from '@mui/material'
-
 import { ToastLayout, useCurrentToast } from '@web/common/components/Toast'
 
 const Message = styled('div')`

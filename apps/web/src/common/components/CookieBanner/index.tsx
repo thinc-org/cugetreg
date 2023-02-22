@@ -1,8 +1,7 @@
 import { Button, Link as MuiLink, Stack, Typography } from '@mui/material'
-import Link from 'next/link'
-
 import { ConsentMode } from '@web/common/constants/consents'
 import { useConsentsStore } from '@web/store/consents'
+import Link from 'next/link'
 
 import { Consents } from '../../types/consents'
 import { CookieSettings } from './components/CookieSettings'

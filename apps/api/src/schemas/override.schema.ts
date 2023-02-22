@@ -1,6 +1,5 @@
-import * as mongoose from 'mongoose'
-
 import { GenEdType, StudyProgram } from '@api/graphql'
+import * as mongoose from 'mongoose'
 
 export const GenEdSchema = new mongoose.Schema({
   genEdType: {

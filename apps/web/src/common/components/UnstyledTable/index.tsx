@@ -1,5 +1,4 @@
 import { Table, TableProps } from '@mui/material'
-
 import { deepAssign } from '@web/common/utils/deepAssign'
 
 export function UnstyledTable({ sx, ...props }: TableProps) {

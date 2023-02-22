@@ -1,7 +1,6 @@
 import React from 'react'
 
 import { Checkbox, CheckboxProps, FormControlLabel, Stack, Typography } from '@mui/material'
-
 import { GeneralChipKey } from '@web/common/components/Chips/config'
 import { useSearchCourseQueryParams } from '@web/modules/CourseSearch/hooks/useSearchCourseQueryParams'
 

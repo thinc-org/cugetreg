@@ -15,9 +15,6 @@ import {
   useTheme,
 } from '@mui/material'
 import { useMediaQuery } from '@mui/material'
-import { PanInfo } from 'framer-motion'
-import { observer } from 'mobx-react'
-
 import { Caption } from '@web/common/components/Caption'
 import { GenEdChip } from '@web/common/components/Chips/catagories/GenEdChip'
 import { dayOfWeekMapper } from '@web/common/constants/dayOfWeek'
@@ -39,6 +36,10 @@ import { CourseOverlap } from '@web/modules/Schedule/components/Schedule/utils'
 import { useRemoveCourse } from '@web/modules/Schedule/hooks/useRemoveCourse'
 import { CourseCartItem, courseCartStore } from '@web/store'
 import { uniq } from '@web/utils/uniq'
+import { PanInfo } from 'framer-motion'
+import { observer } from 'mobx-react'
+
+import { GenEdType } from '@cgr/codegen'
 
 import {
   CardBorder,
@@ -54,7 +55,6 @@ import {
   VisibilityToggle,
 } from './styled'
 import { useOverlapWarning } from './utils'
-import { GenEdType } from '@cgr/codegen'
 
 export interface ScheduleTableCardProps {
   item: CourseCartItem

@@ -11,7 +11,6 @@ import {
 } from 'react-icons/md'
 
 import { useMediaQuery, useTheme } from '@mui/material'
-
 import { Spacer } from '@web/components/Spacer'
 
 import { RichTextActionType, RichTextBlockType, RichTextMarkType } from '../../constants'

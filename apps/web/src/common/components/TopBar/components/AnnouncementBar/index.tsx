@@ -2,7 +2,6 @@ import React from 'react'
 import { useEffect, useState } from 'react'
 
 import { Alert, Container, styled } from '@mui/material'
-
 import { Storage } from '@web/common/storage'
 import { StorageKey } from '@web/common/storage/constants'
 

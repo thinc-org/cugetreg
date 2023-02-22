@@ -2,11 +2,10 @@ import { Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { NestFactory } from '@nestjs/core'
 
-import { WinstonModule } from 'nest-winston'
-import * as winston from 'winston'
-
 import { Configuration, validateConfig } from '@reg-scraper/config/configuration'
 import { ScraperService } from '@reg-scraper/scraper/scraper.service'
+import { WinstonModule } from 'nest-winston'
+import * as winston from 'winston'
 
 import { AppModule } from './app.module'
 

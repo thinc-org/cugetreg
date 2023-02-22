@@ -1,5 +1,4 @@
 import { Button, ButtonProps, useTheme } from '@mui/material'
-
 import { ColorCircle } from '@web/modules/Schedule/components/ColorCircle'
 import { ScheduleColor } from '@web/modules/Schedule/components/ColorPicker/constants'
 

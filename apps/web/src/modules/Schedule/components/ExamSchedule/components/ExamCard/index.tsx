@@ -1,5 +1,4 @@
 import { Typography, styled } from '@mui/material'
-
 import { getExamDate } from '@web/common/utils/getExamDate'
 import { getExamPeriod } from '@web/common/utils/getExamPeriod'
 import { ExamClass } from '@web/common/utils/types'

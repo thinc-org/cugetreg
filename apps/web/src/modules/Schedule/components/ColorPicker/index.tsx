@@ -1,7 +1,6 @@
 import { useTranslation } from 'react-i18next'
 
 import { Button, Fade, Paper, Popper, Stack, Typography } from '@mui/material'
-
 import { ColorButton } from '@web/modules/Schedule/components/ColorButton'
 import { ColorClassKey } from '@web/modules/Schedule/components/ColorPicker/hooks/useColorPicker'
 

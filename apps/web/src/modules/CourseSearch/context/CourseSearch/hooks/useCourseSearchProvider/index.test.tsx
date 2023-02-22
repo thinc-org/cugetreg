@@ -1,5 +1,4 @@
 import { act, renderHook } from '@testing-library/react-hooks'
-
 import { stubFalse } from '@web/utils/stubFalse'
 
 describe('useCourseSearchProvider', () => {

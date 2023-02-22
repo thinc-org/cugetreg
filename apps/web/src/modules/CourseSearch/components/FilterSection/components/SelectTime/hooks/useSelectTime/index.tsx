@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react'
 
 import { SelectChangeEvent } from '@mui/material'
-
 import { useSearchCourseQueryParams } from '@web/modules/CourseSearch/hooks/useSearchCourseQueryParams'
 
 import { generateTimeAround } from '../../utils/generateTimeAround'

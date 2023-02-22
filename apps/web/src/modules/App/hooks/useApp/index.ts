@@ -1,11 +1,10 @@
 import { useEffect } from 'react'
 
-import { Router } from 'next/router'
-
 import { ENABLE_DARK_THEME } from '@web/env'
 import { collectLogEvent } from '@web/services/logging'
 import { courseCartStore } from '@web/store'
 import { userStore } from '@web/store/userStore'
+import { Router } from 'next/router'
 
 import { StudyProgram } from '@cgr/codegen'
 

@@ -3,15 +3,10 @@ import { MdEdit, MdStar } from 'react-icons/md'
 
 import { ApolloError } from '@apollo/client'
 import { Button, Grid, Stack, Typography } from '@mui/material'
-import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
-import { NextSeoProps } from 'next-seo/lib/types'
-import dynamic from 'next/dynamic'
-
 import defaultSEO from '@web/../next-seo.config'
 import { BackButton } from '@web/common/components/BackButton'
 import { useLinkBuilder } from '@web/common/hooks/useLinkBuilder'
 import { Language } from '@web/common/i18n'
-import { Review } from '@cgr/codegen'
 import { getExamDate } from '@web/common/utils/getExamDate'
 import { getExamPeriod } from '@web/common/utils/getExamPeriod'
 import { parseCourseNoFromQuery } from '@web/common/utils/parseCourseNoFromQuery'
@@ -22,7 +17,11 @@ import { ReviewList } from '@web/modules/CourseDetail/components/ReviewList'
 import { ReviewProvider } from '@web/modules/CourseDetail/context/Review'
 import { generateThumbnailId } from '@web/modules/CourseThumbnailAPI/utils/generateThumbnailId'
 import { createApolloServerClient } from '@web/services/apollo'
+import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
+import { NextSeoProps } from 'next-seo/lib/types'
+import dynamic from 'next/dynamic'
 
+import { Review } from '@cgr/codegen'
 import {
   Course,
   GetCourseInfoDocument,

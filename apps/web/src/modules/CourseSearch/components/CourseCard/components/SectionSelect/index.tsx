@@ -1,5 +1,4 @@
 import { FormControl, MenuItem, Select, useMediaQuery, useTheme } from '@mui/material'
-
 import { Analytics } from '@web/common/context/Analytics/components/Analytics'
 import { SECTION_SELECT } from '@web/common/context/Analytics/constants'
 import { useCourseCard } from '@web/modules/CourseSearch/components/CourseCard/context'

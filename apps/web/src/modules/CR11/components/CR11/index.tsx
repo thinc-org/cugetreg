@@ -1,7 +1,6 @@
 import { useTranslation } from 'react-i18next'
 
 import { Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material'
-
 import { CourseCartItem } from '@web/store/courseCart'
 
 import { Column, ColumnHeader } from './styled'

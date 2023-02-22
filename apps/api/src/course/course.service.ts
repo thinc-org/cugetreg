@@ -1,10 +1,9 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 
+import { escapeRegExpString } from '@api/util/functions'
 import { Semester, StudyProgram } from '@thinc-org/chula-courses'
 import { FilterQuery, Model } from 'mongoose'
-
-import { escapeRegExpString } from '@api/util/functions'
 
 import { Course } from '../common/types/course.type'
 import { CourseGroupInput, FilterInput } from '../graphql'

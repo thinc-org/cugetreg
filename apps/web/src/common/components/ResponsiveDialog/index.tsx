@@ -1,7 +1,6 @@
 import { ForwardedRef, forwardRef } from 'react'
 
 import { Dialog, DialogProps, Slide, SlideProps, useMediaQuery, useTheme } from '@mui/material'
-
 import { deepAssign } from '@web/common/utils/deepAssign'
 
 const Transition = forwardRef(function Transition(props: SlideProps, ref: ForwardedRef<unknown>) {

@@ -1,11 +1,10 @@
 import { InjectQueue } from '@nestjs/bull'
 import { Injectable, Logger } from '@nestjs/common'
 
-import type { Queue } from 'bull'
-
 import { searchRequest } from '@reg-scraper/scraper/request/search.request'
 import CourseFetchJob from '@reg-scraper/scraper/types/CourseFetchJob'
 import { QueueStoreService } from '@reg-scraper/stores/queue-store/queue-store.service'
+import type { Queue } from 'bull'
 
 const logger: Logger = new Logger('QueueProducer')
 

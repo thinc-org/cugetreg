@@ -1,4 +1,4 @@
-import { Button, Typography } from '@mui/material'
+import { Typography } from '@mui/material'
 import Link from 'next/link'
 
 import { StyledButtonLink } from './styled'

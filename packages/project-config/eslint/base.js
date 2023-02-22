@@ -4,7 +4,7 @@
 const config = {
   root: true,
   parser: '@typescript-eslint/parser',
-  plugins: ['@typescript-eslint/eslint-plugin'],
+  plugins: ['@typescript-eslint/eslint-plugin', 'unused-imports'],
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
@@ -12,6 +12,11 @@ const config = {
   ],
   rules: {
     '@typescript-eslint/no-empty-function': 'off',
+    'unused-imports/no-unused-imports': 'warn',
+    'unused-imports/no-unused-vars': [
+      'warn',
+      { vars: 'all', varsIgnorePattern: '^_', args: 'after-used', argsIgnorePattern: '^_' },
+    ],
   },
   ignorePatterns: [
     '.next',

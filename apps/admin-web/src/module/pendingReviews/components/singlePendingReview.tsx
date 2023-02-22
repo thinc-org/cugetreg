@@ -6,8 +6,6 @@ import DOMPurify from 'isomorphic-dompurify'
 
 import { Review } from '@cgr/codegen'
 
-import { HighlightHTML } from '../../../common/HighlightHTML/index'
-
 interface SinglePendingReviewProps {
   data: Review
 }

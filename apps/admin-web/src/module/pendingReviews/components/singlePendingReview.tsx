@@ -1,8 +1,9 @@
 import { useState } from 'react'
 
-import RejectModal from '@admin-web/module/pendingReviews/components/rejectModal'
 import { Button, Card, CardActions, Typography } from '@mui/material'
 import DOMPurify from 'isomorphic-dompurify'
+
+import RejectModal from '@admin-web/module/pendingReviews/components/rejectModal'
 
 import { Review } from '@cgr/codegen'
 

@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "format": "prettier --write \"**/*.{js,md,json}\""
+    "format": "prettier --write \"**/*.js\""
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^4.0.0",

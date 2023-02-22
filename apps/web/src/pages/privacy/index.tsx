@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { Box, Link, Typography, useTheme } from '@mui/material'
+
 import { StyledArticleBody } from '@web/configs/theme/articletext'
 import { sessionIdStore } from '@web/store/sessionIdStore'
 

@@ -1,8 +1,9 @@
+import { GetServerSideProps } from 'next'
+import { ISitemapField, getServerSideSitemap } from 'next-sitemap'
+
 import { getCurrentTerm } from '@web/common/utils/getCurrentTerm'
 import { SITE_URL } from '@web/env'
 import { createApolloServerClient } from '@web/services/apollo'
-import { GetServerSideProps } from 'next'
-import { ISitemapField, getServerSideSitemap } from 'next-sitemap'
 
 import {
   SearchCourseDocument,

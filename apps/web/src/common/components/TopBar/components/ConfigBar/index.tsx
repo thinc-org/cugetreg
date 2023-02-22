@@ -1,11 +1,12 @@
 import { useTranslation } from 'react-i18next'
 
 import { Typography } from '@mui/material'
+import { observer } from 'mobx-react'
+
 import { Analytics } from '@web/common/context/Analytics/components/Analytics'
 import { REPORT_PROBLEM, STUDY_PROGRAM_DROPDOWN } from '@web/common/context/Analytics/constants'
 import { Spacer } from '@web/components/Spacer'
 import { sessionIdStore } from '@web/store/sessionIdStore'
-import { observer } from 'mobx-react'
 
 import { StudyProgramDropdown } from '../StudyProgramDropdown'
 import { TermDropdown } from '../TermDropdown'

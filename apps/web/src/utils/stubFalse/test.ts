@@ -1,5 +1,6 @@
-import { stubFalse } from '@web/utils/stubFalse'
 import assert from 'assert'
+
+import { stubFalse } from '@web/utils/stubFalse'
 
 describe('sum', function () {
   it('should return false', function () {

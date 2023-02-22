@@ -1,4 +1,5 @@
 import { styled } from '@mui/material'
+
 import { useColor } from '@web/modules/Schedule/components/ColorPicker/hooks/useColor'
 
 import { DayOfWeek } from '@cgr/codegen'

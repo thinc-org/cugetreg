@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next'
 
 import { Stack, Typography } from '@mui/material'
+
 import { ColorButton } from '@web/modules/Schedule/components/ColorButton'
 import { SCHEDULE_COLORS } from '@web/modules/Schedule/components/ColorPicker/constants'
 import { useColorPicker } from '@web/modules/Schedule/components/ColorPicker/hooks/useColorPicker'

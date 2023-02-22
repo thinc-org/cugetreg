@@ -2,8 +2,9 @@ import { ConfigService } from '@nestjs/config'
 import { getModelToken } from '@nestjs/mongoose'
 import { Test, TestingModule } from '@nestjs/testing'
 
-import { Override } from '@reg-scraper/schema/override.schema'
 import { Course, GenEdType, GenEdTypeEnum, StudyProgram } from '@thinc-org/chula-courses'
+
+import { Override } from '@reg-scraper/schema/override.schema'
 
 import { OverrideService } from './override.service'
 

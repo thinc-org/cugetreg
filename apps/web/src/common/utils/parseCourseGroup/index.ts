@@ -1,5 +1,6 @@
-import { parseTerm } from '@web/common/utils/parseTerm'
 import { ParsedUrlQuery } from 'querystring'
+
+import { parseTerm } from '@web/common/utils/parseTerm'
 
 import { StudyProgram } from '@cgr/codegen'
 

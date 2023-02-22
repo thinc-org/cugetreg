@@ -1,7 +1,8 @@
 import { useEffect } from 'react'
 
-import { useLinkBuilder } from '@web/common/hooks/useLinkBuilder'
 import { useRouter } from 'next/router'
+
+import { useLinkBuilder } from '@web/common/hooks/useLinkBuilder'
 
 function HomePage() {
   const router = useRouter()

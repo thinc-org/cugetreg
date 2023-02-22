@@ -1,6 +1,7 @@
 import { ApolloClient, InMemoryCache } from '@apollo/client'
 import { BatchHttpLink } from '@apollo/client/link/batch-http'
 import { setContext } from '@apollo/client/link/context'
+
 import { ENVIRONMENT } from '@web/env'
 import { apiUrl } from '@web/services/httpClient'
 import { userStore } from '@web/store/userStore'

@@ -1,6 +1,7 @@
 import { ChangeEventHandler } from 'react'
 
 import { Stack, Typography } from '@mui/material'
+
 import { Switch } from '@web/common/components/Switch'
 
 interface SettingBlockProps {

@@ -2,9 +2,10 @@ import React, { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos'
+import { useRouter } from 'next/router'
+
 import { Analytics } from '@web/common/context/Analytics/components/Analytics'
 import { GO_BACK_BUTTON } from '@web/common/context/Analytics/constants'
-import { useRouter } from 'next/router'
 
 import { ButtonDesktop, ButtonMobile } from './styled'
 import { BackButtonProps } from './types'

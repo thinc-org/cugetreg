@@ -1,5 +1,6 @@
-import { parseCourseGroup } from '@web/common/utils/parseCourseGroup'
 import { ParsedUrlQuery } from 'querystring'
+
+import { parseCourseGroup } from '@web/common/utils/parseCourseGroup'
 
 import { GetCourseInfoQueryVariables } from '@cgr/codegen'
 

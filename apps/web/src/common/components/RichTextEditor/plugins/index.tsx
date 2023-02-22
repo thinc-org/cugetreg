@@ -22,6 +22,7 @@ import { ELEMENT_LI, ELEMENT_OL, ELEMENT_UL, createListPlugin } from '@udecode/p
 import { ELEMENT_PARAGRAPH, createParagraphPlugin } from '@udecode/plate-paragraph'
 import { createResetNodePlugin } from '@udecode/plate-reset-node'
 import { StyledElement, StyledLeaf } from '@udecode/plate-styled-components'
+
 import {
   RichTextBlockHotkey,
   RichTextMarkHotkey,

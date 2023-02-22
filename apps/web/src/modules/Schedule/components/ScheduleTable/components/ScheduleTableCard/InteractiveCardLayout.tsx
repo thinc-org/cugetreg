@@ -1,9 +1,10 @@
 import { PropsWithChildren } from 'react'
 import { Draggable } from 'react-beautiful-dnd'
 
+import { observer } from 'mobx-react'
+
 import { CourseOverlap } from '@web/modules/Schedule/components/Schedule/utils'
 import { CourseCartItem } from '@web/store'
-import { observer } from 'mobx-react'
 
 import { CardLayout } from './styled'
 

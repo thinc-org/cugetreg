@@ -1,13 +1,14 @@
 import { useTranslation } from 'react-i18next'
 
 import { Link, Stack, Typography } from '@mui/material'
+import { observer } from 'mobx-react'
+
 import { BackButton } from '@web/common/components/BackButton'
 import { useCourseGroup } from '@web/common/hooks/useCourseGroup'
 import { useLinkBuilder } from '@web/common/hooks/useLinkBuilder'
 import { PageMeta } from '@web/components/PageMeta'
 import { CR11 } from '@web/modules/CR11/components/CR11'
 import { courseCartStore } from '@web/store/courseCart'
-import { observer } from 'mobx-react'
 
 export const CR11Page = observer(() => {
   const shoppingCart = courseCartStore

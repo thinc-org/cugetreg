@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next'
 
 import { styled } from '@mui/material'
+
 import { dayOfWeekArray } from '@web/common/constants/dayOfWeek'
 
 import { DayOfWeek } from '@cgr/codegen'

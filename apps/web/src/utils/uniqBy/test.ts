@@ -1,5 +1,6 @@
-import { uniqBy } from '@web/utils/uniqBy'
 import assert from 'assert'
+
+import { uniqBy } from '@web/utils/uniqBy'
 
 describe('uniqBy methods', function () {
   const objects = [{ a: 2 }, { a: 3 }, { a: 1 }, { a: 2 }, { a: 3 }, { a: 1 }]

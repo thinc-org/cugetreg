@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react'
 import CloseIcon from '@mui/icons-material/Close'
 import SearchIcon from '@mui/icons-material/Search'
 import { IconButton, OutlinedInput, Paper } from '@mui/material'
+
 import { Analytics } from '@web/common/context/Analytics/components/Analytics'
 import { COURSE_SEARCH_BOX } from '@web/common/context/Analytics/constants'
 import { SEARCH_QUERY } from '@web/common/context/Analytics/constants'

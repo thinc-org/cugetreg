@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { Stack } from '@mui/material'
+
 import { Error } from '@web/common/components/Error'
 import { Loading } from '@web/modules/CourseSearch/components/Loading'
 

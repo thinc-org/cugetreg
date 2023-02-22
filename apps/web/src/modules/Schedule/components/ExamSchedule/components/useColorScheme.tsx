@@ -1,4 +1,5 @@
 import { useTheme } from '@mui/material'
+
 import { getPaletteRange } from '@web/common/utils/getPaletteRange'
 
 import { GenEdType } from '@cgr/codegen'

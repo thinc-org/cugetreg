@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next'
 
 import { DialogActions, DialogContent, DialogTitle, Stack, Typography } from '@mui/material'
+
 import { useCourseGroup } from '@web/common/hooks/useCourseGroup'
 import { Spacer } from '@web/components/Spacer'
 import { CourseCartItem, courseCartStore } from '@web/store'

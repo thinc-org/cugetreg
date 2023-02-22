@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next'
 
 import { MenuItem, Select } from '@mui/material'
+
 import { Analytics } from '@web/common/context/Analytics/components/Analytics'
 import { SECTION_CHANGE } from '@web/common/context/Analytics/constants'
 import { useCourseDialog } from '@web/modules/Schedule/components/CourseDialog/context'

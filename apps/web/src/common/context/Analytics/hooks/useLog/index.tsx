@@ -1,7 +1,8 @@
 import { useContext } from 'react'
 
-import { AnalyticsContext } from '@web/common/context/Analytics'
 import { useRouter } from 'next/router'
+
+import { AnalyticsContext } from '@web/common/context/Analytics'
 
 /**
  * TODO: Should move to common/tracker/hooks

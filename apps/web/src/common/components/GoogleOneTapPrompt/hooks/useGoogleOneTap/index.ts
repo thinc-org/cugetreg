@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
 
+import { CredentialResponse, IdConfiguration } from 'google-one-tap'
+
 import { GOOGLE_OAUTH_ID } from '@web/env'
 import { userStore } from '@web/store/userStore'
-import { CredentialResponse, IdConfiguration } from 'google-one-tap'
 
 interface ExtendedIdConfiguration extends IdConfiguration {
   hosted_domain: string // hosted_domain is undocumented in the official documentation

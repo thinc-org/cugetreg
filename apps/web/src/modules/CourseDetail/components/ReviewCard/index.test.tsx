@@ -1,6 +1,8 @@
 import { MdDelete, MdEdit, MdFlag } from 'react-icons/md'
 
 import { ThemeProvider } from '@mui/material'
+import { shallow } from 'enzyme'
+
 import {
   mockMyPendingReviews,
   mockMyRejectedReviews,
@@ -10,7 +12,6 @@ import {
 import { lightTheme } from '@web/configs/theme'
 import { ReviewCardProps } from '@web/modules/CourseDetail/components/ReviewCard/types'
 import { ReviewReaction } from '@web/modules/CourseDetail/components/ReviewReaction'
-import { shallow } from 'enzyme'
 
 import { ReviewInteractionType } from '@cgr/codegen'
 

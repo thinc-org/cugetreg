@@ -2,11 +2,12 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Stack } from '@mui/material'
+import Link from 'next/link'
+
 import bigLogo from '@web/assets/images/cgrLogoLight.svg'
 import github from '@web/assets/images/github.svg'
 import thincLogo from '@web/assets/images/thincLogo.svg'
 import { useConsentsStore } from '@web/store/consents'
-import Link from 'next/link'
 
 import {
   BannerContainer,

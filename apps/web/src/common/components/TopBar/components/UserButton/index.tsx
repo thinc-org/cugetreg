@@ -1,10 +1,11 @@
 import { useTranslation } from 'react-i18next'
 
 import { Typography } from '@mui/material'
+import { observer } from 'mobx-react'
+
 import { Analytics } from '@web/common/context/Analytics/components/Analytics'
 import { LOGIN_BUTTON, LOGOUT_BUTTON } from '@web/common/context/Analytics/constants'
 import { userStore } from '@web/store/userStore'
-import { observer } from 'mobx-react'
 
 import { useMeQuery } from '@cgr/codegen'
 

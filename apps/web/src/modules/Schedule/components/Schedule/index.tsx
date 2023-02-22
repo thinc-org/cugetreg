@@ -1,6 +1,7 @@
 import { withContentRect } from 'react-measure'
 
 import { styled } from '@mui/material'
+
 import { courseCartStore } from '@web/store'
 
 import { CourseDialog } from '../CourseDialog'

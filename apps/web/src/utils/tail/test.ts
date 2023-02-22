@@ -1,5 +1,6 @@
-import { tail } from '@web/utils/tail'
 import assert from 'assert'
+
+import { tail } from '@web/utils/tail'
 
 describe('tail', function () {
   const array = [1, 2, 3]

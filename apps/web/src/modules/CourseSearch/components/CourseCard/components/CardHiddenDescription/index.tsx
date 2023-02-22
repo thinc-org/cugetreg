@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next'
 
 import { Grid, Stack, Typography } from '@mui/material'
+
 import { Caption } from '@web/common/components/Caption'
 import { dayOfWeekMapper } from '@web/common/constants/dayOfWeek'
 import { getClassPeriod } from '@web/common/utils/getClassPeriod'

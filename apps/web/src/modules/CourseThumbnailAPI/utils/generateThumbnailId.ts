@@ -1,5 +1,6 @@
-import { thumbnailVersion } from '@web/modules/CourseThumbnailAPI/constants'
 import md5 from 'md5'
+
+import { thumbnailVersion } from '@web/modules/CourseThumbnailAPI/constants'
 
 import { CourseThumbnailData } from '@cgr/course-utils'
 

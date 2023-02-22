@@ -1,4 +1,5 @@
 import { Collapse, Stack } from '@mui/material'
+
 import { SelectButton } from '@web/common/components/SelectButton'
 import { Analytics } from '@web/common/context/Analytics/components/Analytics'
 import { SUBJECT_SELECT_BUTTON } from '@web/common/context/Analytics/constants'

@@ -1,5 +1,6 @@
-import { BACKEND_URI, ENVIRONMENT, SITE_URL } from '@web/env'
 import axios from 'axios'
+
+import { BACKEND_URI, ENVIRONMENT, SITE_URL } from '@web/env'
 
 const isClient = typeof window !== 'undefined'
 

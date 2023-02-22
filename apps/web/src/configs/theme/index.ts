@@ -1,4 +1,5 @@
 import { Theme, ThemeOptions, createTheme } from '@mui/material'
+
 import { deepAssign } from '@web/common/utils/deepAssign'
 
 import { overrideMuiBaseComponent } from './overrides'

@@ -1,5 +1,6 @@
-import { uniq } from '@web/utils/uniq'
 import assert from 'assert'
+
+import { uniq } from '@web/utils/uniq'
 
 import { randomInt } from '.'
 

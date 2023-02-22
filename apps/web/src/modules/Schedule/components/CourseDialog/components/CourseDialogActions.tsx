@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { Delete, Visibility, VisibilityOff } from '@mui/icons-material'
 import { Button, Stack, useMediaQuery } from '@mui/material'
 import { useTheme } from '@mui/material'
+
 import { useRemoveCourse } from '@web/modules/Schedule/hooks/useRemoveCourse'
 import { courseCartStore } from '@web/store'
 

@@ -1,12 +1,13 @@
 import { MdDelete, MdEdit, MdOutlineStar } from 'react-icons/md'
 
 import { IconButton, Stack, useTheme } from '@mui/material'
+import DOMPurify from 'isomorphic-dompurify'
+
 import { GeneralChip } from '@web/common/components/Chips'
 import { OtherChipKey } from '@web/common/components/Chips/config'
 import { HighlightHTML } from '@web/common/components/HighlightHTML'
 import { getSemesterName } from '@web/common/utils/getSemesterName'
 import { scrollToReviewForm } from '@web/modules/CourseDetail/components/ReviewForm/functions'
-import DOMPurify from 'isomorphic-dompurify'
 
 import { ReviewStatus } from '@cgr/codegen'
 import { ReviewInteractionType, Semester } from '@cgr/codegen'

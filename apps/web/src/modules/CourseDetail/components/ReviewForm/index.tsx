@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 
 import { Box, Button, MenuItem, Rating, Stack, Typography } from '@mui/material'
 import { TNode } from '@udecode/plate-core'
+
 import { RichTextEditor } from '@web/common/components/RichTextEditor'
 import { INITIAL_CONTENT } from '@web/common/components/RichTextEditor/initialContent'
 import { RichTextEditorRef } from '@web/common/components/RichTextEditor/types'

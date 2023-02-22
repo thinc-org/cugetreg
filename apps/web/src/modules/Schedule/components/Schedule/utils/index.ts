@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 
 import { useTheme } from '@mui/material'
+
 import { getPaletteRange } from '@web/common/utils/getPaletteRange'
 import { ExamClass } from '@web/common/utils/types'
 import { CourseCartItem } from '@web/store'

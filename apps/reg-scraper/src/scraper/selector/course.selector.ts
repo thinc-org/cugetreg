@@ -1,3 +1,6 @@
+import { ClassType, Course, GenEdType, Section, Semester } from '@thinc-org/chula-courses'
+import * as cheerio from 'cheerio'
+
 import {
   capacityParser,
   daysOfWeekParser,
@@ -10,8 +13,6 @@ import {
   teachersParser,
   updateGenEd,
 } from '@reg-scraper/scraper/parser'
-import { ClassType, Course, GenEdType, Section, Semester } from '@thinc-org/chula-courses'
-import * as cheerio from 'cheerio'
 
 export async function courseSelector(
   courseHtml: string,

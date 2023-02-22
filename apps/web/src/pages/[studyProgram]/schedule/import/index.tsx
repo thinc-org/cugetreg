@@ -1,6 +1,10 @@
 import { useEffect } from 'react'
 
 import { ApolloClient, NormalizedCacheObject, isApolloError } from '@apollo/client'
+import { observer } from 'mobx-react'
+import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
+import { useRouter } from 'next/router'
+
 import { CourseGroup } from '@web/common/hooks/useCourseGroup/types'
 import { useLinkBuilder } from '@web/common/hooks/useLinkBuilder'
 import { parseCourseGroup } from '@web/common/utils/parseCourseGroup'
@@ -8,9 +12,6 @@ import { Loading } from '@web/modules/CourseSearch/components/Loading'
 import { createApolloServerClient } from '@web/services/apollo'
 import { courseCartStore } from '@web/store'
 import { userStore } from '@web/store/userStore'
-import { observer } from 'mobx-react'
-import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
-import { useRouter } from 'next/router'
 
 import {
   Course,

@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next'
 
 import { Stack, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material'
+
 import { Caption } from '@web/common/components/Caption'
 import { GenEdChip } from '@web/common/components/Chips/catagories/GenEdChip'
 import { UnstyledTable } from '@web/common/components/UnstyledTable'

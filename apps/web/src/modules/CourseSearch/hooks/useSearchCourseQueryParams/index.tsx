@@ -1,7 +1,8 @@
 import { useCallback, useMemo } from 'react'
 
-import { useCourseGroup } from '@web/common/hooks/useCourseGroup'
 import { useRouter } from 'next/router'
+
+import { useCourseGroup } from '@web/common/hooks/useCourseGroup'
 
 import { SearchCourseQueryVariables } from '@cgr/codegen'
 

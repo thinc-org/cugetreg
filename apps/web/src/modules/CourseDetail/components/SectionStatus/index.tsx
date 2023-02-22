@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next'
 
 import { Stack, Typography } from '@mui/material'
+
 import { NoSeatIcon } from '@web/common/components/NoSeatIcon'
 
 import { SectionStatusProps } from './types'

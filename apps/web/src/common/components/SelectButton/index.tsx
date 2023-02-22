@@ -3,8 +3,9 @@ import { MdCheck } from 'react-icons/md'
 
 import Add from '@mui/icons-material/Add'
 import { LoadingButton } from '@mui/lab'
-import { useSelectButton } from '@web/common/components/SelectButton/hooks/useSelectButton'
 import { observer } from 'mobx-react'
+
+import { useSelectButton } from '@web/common/components/SelectButton/hooks/useSelectButton'
 
 import { SelectButtonProps } from './types'
 

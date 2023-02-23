@@ -1,5 +1,4 @@
 import { Review } from '@cgr/codegen'
-
 import { StudyProgram } from '@cgr/codegen'
 
 export const mockReviews: Review[] = [

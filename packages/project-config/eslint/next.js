@@ -1,6 +1,6 @@
 // @ts-check
 
-const base = require('./eslint-base')
+const base = require('./base')
 
 /** @type {import('eslint').Linter.Config} */
 const config = {

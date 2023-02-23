@@ -1,5 +1,6 @@
-import { Override } from '@cgr/codegen'
 import { Checkbox, TableCell, TableRow } from '@mui/material'
+
+import { Override } from '@cgr/codegen'
 
 interface SingleGenEdProps {
   data: Override

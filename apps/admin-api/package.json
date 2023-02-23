@@ -10,6 +10,7 @@
     "build": "nest build",
     "start": "nest start",
     "lint": "eslint src",
+    "format": "eslint src --fix",
     "prebuild": "rimraf dist"
   },
   "dependencies": {

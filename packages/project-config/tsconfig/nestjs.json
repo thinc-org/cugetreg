@@ -1,7 +1,7 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
   "display": "Nest.js",
-  "extends": "./tsconfig-base.json",
+  "extends": "./base.json",
   "compilerOptions": {
     "module": "CommonJS",
     "declaration": true,

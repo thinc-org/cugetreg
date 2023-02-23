@@ -1,5 +1,5 @@
 {
-  "extends": "@cgr/project-config/tsconfig-nestjs.json",
+  "extends": "@cgr/project-config/tsconfig/nestjs.json",
   "compilerOptions": {
     "paths": {
       "@reg-scraper/*": ["./src/*"]

@@ -1,5 +1,6 @@
-import { CredentialResponse, IdConfiguration } from 'google-one-tap'
 import { useEffect, useState } from 'react'
+
+import { CredentialResponse, IdConfiguration } from 'google-one-tap'
 
 import { GOOGLE_OAUTH_ID } from '@web/env'
 import { userStore } from '@web/store/userStore'

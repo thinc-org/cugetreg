@@ -1,5 +1,6 @@
-import GenEdList from '@admin-web/module/genEd/components/genEdList'
 import { Container } from '@mui/material'
+
+import GenEdList from '@admin-web/module/genEd/components/genEdList'
 
 export function GenEdPage() {
   return (

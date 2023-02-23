@@ -7,13 +7,13 @@ import { DialogOptions, dialog } from '@web/lib/dialog'
 import { ReviewFormRef } from '@web/modules/CourseDetail/components/ReviewForm/types'
 
 import {
-  Review,
   GetMyPendingReviewsDocument,
   GetMyPendingReviewsQuery,
   GetMyPendingReviewsQueryVariables,
   GetReviewsDocument,
   GetReviewsQuery,
   GetReviewsQueryVariables,
+  Review,
   ReviewInteractionType,
   useCreateReviewMutation,
   useEditMyReviewMutation,

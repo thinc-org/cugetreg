@@ -1,7 +1,7 @@
 import { Injectable, InternalServerErrorException, Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
-import { Client } from '@opensearch-project/opensearch'
 
+import { Client } from '@opensearch-project/opensearch'
 import { hostname } from 'os'
 
 export interface GelfLogEntry {

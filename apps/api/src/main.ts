@@ -6,10 +6,10 @@ import { Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { NestFactory } from '@nestjs/core'
 import { NestExpressApplication } from '@nestjs/platform-express'
-import { WinstonModule } from 'nest-winston'
-import * as winston from 'winston'
 
 import cookieParser from 'cookie-parser'
+import { WinstonModule } from 'nest-winston'
+import * as winston from 'winston'
 
 import { AppModule } from './app/app.module'
 import { Configuration, validateConfig } from './config/configuration'

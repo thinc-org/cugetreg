@@ -1,5 +1,6 @@
-import { Module, forwardRef, Provider } from '@nestjs/common'
+import { Module, Provider, forwardRef } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
+
 import { Client } from '@opensearch-project/opensearch'
 
 import { AuthModule } from '../auth/auth.module'

@@ -1,5 +1,7 @@
+import { Container, Grid, Skeleton, Typography } from '@mui/material'
+
 import { useGetPendingReviewsQuery } from '@cgr/codegen'
-import { Container, Skeleton, Typography, Grid } from '@mui/material'
+
 import SinglePendingReview from './singlePendingReview'
 
 export default function PendingReviewsList() {

@@ -138,6 +138,9 @@ export class AuthService {
 
     // User lookup
     const userInfo = (await oauth2('v2').userinfo.get({ auth: client })).data
+    if (userInfo.hd !== 'student.chula.ac.th') {
+      throw new ForbiddenException('User hosted_domain is not student.chula.ac.th')
+    }
     if (!userInfo.email || !userInfo.id || !userInfo.name) {
       this.logger.warn('UserInfo contains inssuficient data', { userInfo })
       throw new UnprocessableEntityException('Insufficient user data')

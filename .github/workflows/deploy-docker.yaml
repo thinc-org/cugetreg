@@ -101,6 +101,8 @@ jobs:
           elif [[ $BRANCH == 'dev' && -f "apps/$APP_NAME/.env.dev" ]]; then
             mv apps/$APP_NAME/.env.dev apps/$APP_NAME/.env
             echo "$APP_NAME env is set to dev"
+          else
+            echo "$APP_NAME env is not set. This could be because branch '$BRANCH' is not in [main, beta, dev] or .env file for the branch is not found"
           fi
 
       - name: Build and push Docker image

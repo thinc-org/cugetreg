@@ -9,8 +9,7 @@
     "web": "1.1.1",
     "@cgr/codegen": "1.1.0",
     "@cgr/course-utils": "1.0.1",
-    "eslint-config-custom": "1.0.0",
-    "tsconfig": "1.0.0"
+    "@cgr/project-config": "0.0.0"
   },
   "changesets": [
     "demo-fetched-data"

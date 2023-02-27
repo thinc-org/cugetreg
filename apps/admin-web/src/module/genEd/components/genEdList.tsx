@@ -1,13 +1,15 @@
-import { Override, useGetOverridesQuery } from '@cgr/codegen'
 import {
-  TableContainer,
   Paper,
   Table,
+  TableBody,
+  TableCell,
+  TableContainer,
   TableHead,
   TableRow,
-  TableCell,
-  TableBody,
 } from '@mui/material'
+
+import { Override, useGetOverridesQuery } from '@cgr/codegen'
+
 import SingleGenEd from './singleGenEd'
 
 export default function GenEdList() {

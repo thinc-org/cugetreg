@@ -1,4 +1,5 @@
 import type { AppProps } from 'next/app'
+
 import { AppProvider } from '@admin-web/context/AppProvider'
 import '@admin-web/styles/globals.css'
 

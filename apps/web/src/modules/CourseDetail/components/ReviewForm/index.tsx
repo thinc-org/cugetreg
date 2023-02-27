@@ -11,10 +11,11 @@ import { INITIAL_CONTENT } from '@web/common/components/RichTextEditor/initialCo
 import { RichTextEditorRef } from '@web/common/components/RichTextEditor/types'
 import { Storage } from '@web/common/storage'
 import { StorageKey } from '@web/common/storage/constants'
-import { Review } from '@cgr/codegen'
 import { getCurrentTerm } from '@web/common/utils/getCurrentTerm'
 import { ControlledSelect } from '@web/modules/CourseDetail/components/ControlledSelect'
 import { ReviewEditables } from '@web/modules/CourseDetail/components/ReviewForm/types'
+
+import { Review } from '@cgr/codegen'
 
 import { ContributionGuide } from '../../components/ContributionGuide'
 import { useReviewContext } from '../../context/Review'

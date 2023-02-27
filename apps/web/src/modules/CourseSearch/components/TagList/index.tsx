@@ -6,9 +6,7 @@ import { DayChipKey, GenEdChipKey, OtherEnum } from '@web/common/components/Chip
 import { StyledStack } from '@web/modules/CourseSearch/components/TagList/styled'
 import { useSearchCourseQueryParams } from '@web/modules/CourseSearch/hooks/useSearchCourseQueryParams'
 
-export interface TagListProps {}
-
-export const TagList: React.FC<TagListProps> = () => {
+export const TagList: React.FC = () => {
   const { searchCourseQueryParams, setFilter } = useSearchCourseQueryParams()
   const { filter } = searchCourseQueryParams
   const { genEdTypes, dayOfWeeks, periodRange } = filter

@@ -1,4 +1,5 @@
-import { AppBar, Container, Typography, Box, Button } from '@mui/material'
+import { Box } from '@mui/material'
+
 import SingleLink from './components/singleLink'
 import { StyledAppBar } from './styled'
 
@@ -14,7 +15,7 @@ export default function Topbar() {
     <StyledAppBar position="static">
       <Box>
         {pages.map((data) => (
-          <SingleLink title={data.title} url={data.url} />
+          <SingleLink key={data.url} title={data.title} url={data.url} />
         ))}
       </Box>
     </StyledAppBar>

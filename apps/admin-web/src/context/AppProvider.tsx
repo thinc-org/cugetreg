@@ -1,8 +1,9 @@
 import { ApolloProvider } from '@apollo/client'
-import { client } from '@admin-web/services/apollo'
 import { ThemeProvider } from '@mui/material'
-import { defaultTheme } from '@admin-web/config/theme/index'
+
 import Topbar from '@admin-web/common/Topbar/Topbar'
+import { defaultTheme } from '@admin-web/config/theme/index'
+import { client } from '@admin-web/services/apollo'
 
 interface AppProviderProps {
   children: React.ReactNode

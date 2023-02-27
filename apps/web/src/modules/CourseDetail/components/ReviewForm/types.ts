@@ -1,5 +1,6 @@
-import { Review } from '@cgr/codegen'
 import { ReviewState } from '@web/modules/CourseDetail/context/Review/types'
+
+import { Review } from '@cgr/codegen'
 
 export type ReviewEditables = Pick<Review, 'rating' | 'academicYear' | 'semester' | 'content'>
 

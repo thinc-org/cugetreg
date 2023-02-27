@@ -1,6 +1,7 @@
-import { Button, Typography } from '@mui/material'
-import { StyledButtonLink } from './styled'
+import { Typography } from '@mui/material'
 import Link from 'next/link'
+
+import { StyledButtonLink } from './styled'
 
 interface SingleLinkProps {
   title: string

@@ -1,5 +1,11 @@
 # reg-scraper
 
+## 1.0.3
+
+### Patch Changes
+
+- 2a7d242d: update prettier pipeline and import order
+
 ## 1.0.3-beta.0
 
 ### Patch Changes

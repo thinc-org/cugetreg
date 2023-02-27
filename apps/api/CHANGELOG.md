@@ -1,5 +1,16 @@
 # api
 
+## 1.2.0
+
+### Minor Changes
+
+- 2a7d242d: update eslint config, fixed eslint error
+
+### Patch Changes
+
+- 2a7d242d: check hosted domain for authorization code flow
+- 2a7d242d: update prettier pipeline and import order
+
 ## 1.2.0-beta.0
 
 ### Minor Changes

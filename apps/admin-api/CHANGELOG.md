@@ -1,5 +1,11 @@
 # admin-api
 
+## 0.0.4
+
+### Patch Changes
+
+- 2a7d242d: update prettier pipeline and import order
+
 ## 0.0.4-beta.0
 
 ### Patch Changes

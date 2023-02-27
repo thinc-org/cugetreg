@@ -1,5 +1,13 @@
 # admin-web
 
+## 0.0.2
+
+### Patch Changes
+
+- b2228d19: Visualize fetched data in pendingReview page and genEd page.
+- 0f2fab86: update prettier pipeline and import order
+- 44d1e187: fix undeclared MUI config variable
+
 ## 0.0.2-beta.1
 
 ### Patch Changes

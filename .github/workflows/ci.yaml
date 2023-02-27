@@ -10,28 +10,27 @@ jobs:
   install-deps:
     strategy:
       matrix:
-        node-version: [16.17.0]
         platform: [ubuntu-latest]
+
     uses: ./.github/workflows/reusable-ci.yaml
 
-  # disabled until eslint is fixed
-  # lint:
-  #   strategy:
-  #     matrix:
-  #       node-version: [16.17.0]
-  #       platform: [ubuntu-latest]
-  #   needs: install-deps
-  #   uses: ./.github/workflows/reusable-ci.yaml
-  #   with:
-  #     target: lint
-  #     runs-on: ${{ matrix.platform }}
+  lint:
+    strategy:
+      matrix:
+        platform: [ubuntu-latest]
+    needs: install-deps
+
+    uses: ./.github/workflows/reusable-ci.yaml
+    with:
+      target: lint
+      runs-on: ${{ matrix.platform }}
 
   test:
     strategy:
       matrix:
-        node-version: [16.17.0]
         platform: [ubuntu-latest]
     needs: install-deps
+
     uses: ./.github/workflows/reusable-ci.yaml
     with:
       target: test
@@ -40,9 +39,9 @@ jobs:
   build:
     strategy:
       matrix:
-        node-version: [16.17.0]
         platform: [ubuntu-latest]
     needs: install-deps
+
     uses: ./.github/workflows/reusable-ci.yaml
     with:
       target: build

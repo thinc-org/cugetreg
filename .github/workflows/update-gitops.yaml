@@ -64,7 +64,8 @@ jobs:
             NAME=$(_jq '.name')
             IMAGE_TAG=$(_jq '.imageTag')
             PREFIX=${{ inputs.container-registry }}/${{ inputs.image-prefix }}
-            bash -c "cd $NAME/overlays/${{ inputs.environment }} && kustomize edit set image $NAME=$PREFIX/$NAME:$IMAGE_TAG"
+            KUSTOMIZE_PATH=$NAME/overlays/${{ inputs.environment }}
+            [ -d "$KUSTOMIZE_PATH" ] && bash -c "cd $KUSTOMIZE_PATH && kustomize edit set image $NAME=$PREFIX/$NAME:$IMAGE_TAG"
             echo "${NAME}:${IMAGE_TAG} is updated"
           done
         env:

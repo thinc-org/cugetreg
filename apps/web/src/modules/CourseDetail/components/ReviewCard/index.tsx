@@ -6,10 +6,10 @@ import DOMPurify from 'isomorphic-dompurify'
 import { GeneralChip } from '@web/common/components/Chips'
 import { OtherChipKey } from '@web/common/components/Chips/config'
 import { HighlightHTML } from '@web/common/components/HighlightHTML'
-import { ReviewStatus } from '@cgr/codegen'
 import { getSemesterName } from '@web/common/utils/getSemesterName'
 import { scrollToReviewForm } from '@web/modules/CourseDetail/components/ReviewForm/functions'
 
+import { ReviewStatus } from '@cgr/codegen'
 import { ReviewInteractionType, Semester } from '@cgr/codegen'
 
 import { useReviewContext } from '../../context/Review'

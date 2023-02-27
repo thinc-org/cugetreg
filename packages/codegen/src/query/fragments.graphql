@@ -66,3 +66,14 @@ fragment ReviewDataFields on Review {
   rejectionReason
   isOwner
 }
+
+fragment OverrideDataFields on Override {
+  courseNo
+  studyProgram
+  semester
+  academicYear
+  genEd {
+    genEdType
+    sections
+  }
+}

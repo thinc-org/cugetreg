@@ -1,6 +1,7 @@
 import { useId, useRef } from 'react'
-import Script from 'next/script'
+
 import { observer } from 'mobx-react'
+import Script from 'next/script'
 
 import { useGoogleOneTap } from './hooks/useGoogleOneTap'
 import { OneTapPromptContainer } from './styled'

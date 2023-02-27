@@ -1,5 +1,11 @@
 # reg-scraper
 
+## 1.0.3-beta.0
+
+### Patch Changes
+
+- 0f2fab86: update prettier pipeline and import order
+
 ## 1.0.2
 
 ### Patch Changes

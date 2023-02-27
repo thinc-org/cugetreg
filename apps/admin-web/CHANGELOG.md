@@ -1,5 +1,12 @@
 # admin-web
 
+## 0.0.2-beta.1
+
+### Patch Changes
+
+- 0f2fab86: update prettier pipeline and import order
+- 44d1e187: fix undeclared MUI config variable
+
 ## 0.0.2-beta.0
 
 ### Patch Changes

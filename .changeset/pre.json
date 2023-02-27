@@ -12,6 +12,10 @@
     "@cgr/project-config": "0.0.0"
   },
   "changesets": [
-    "demo-fetched-data"
+    "brown-camels-know",
+    "demo-fetched-data",
+    "silent-jars-beg",
+    "small-planets-enjoy",
+    "smooth-terms-shout"
   ]
 }

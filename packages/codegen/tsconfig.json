@@ -1,5 +1,5 @@
 {
-  "extends": "tsconfig/base.json",
+  "extends": "@cgr/project-config/tsconfig/base.json",
   "compilerOptions": {
     "module": "commonjs",
     "outDir": "../../dist/out-tsc",

@@ -16,6 +16,12 @@ query GetMyPendingReviews($courseNo: String!, $studyProgram: StudyProgram!) {
   }
 }
 
+query GetPendingReviews {
+  pendingReviews {
+    ...ReviewDataFields
+  }
+}
+
 query GetReviews($courseNo: String!, $studyProgram: StudyProgram!) {
   reviews(courseNo: $courseNo, studyProgram: $studyProgram) {
     ...ReviewDataFields

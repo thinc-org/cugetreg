@@ -12,4 +12,4 @@ export const SCHEDULE_COLORS = [
   'primary',
 ] as const
 
-export type ScheduleColor = typeof SCHEDULE_COLORS[number]
+export type ScheduleColor = (typeof SCHEDULE_COLORS)[number]

@@ -13,9 +13,10 @@ import { SectionStatus } from '@web/modules/CourseDetail/components/SectionStatu
 import { useOverlapWarning } from '@web/modules/Schedule/components/ScheduleTable/components/ScheduleTableCard/utils'
 import { courseCartStore } from '@web/store'
 
+import { GenEdType } from '@cgr/codegen'
+
 import { useCourseDialog } from '../context'
 import { SectionSelect } from './SectionSelect'
-import { GenEdType } from '@cgr/codegen'
 
 export function CourseDialogDetail() {
   const { item, overlaps } = useCourseDialog()

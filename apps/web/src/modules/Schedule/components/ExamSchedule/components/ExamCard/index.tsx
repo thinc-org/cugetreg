@@ -39,7 +39,7 @@ const ExamTime = styled(Typography)`
 
 const ExamDate = styled('div')`
   text-transform: uppercase;
-  margin-right: ${({ theme }) => theme.spacing(4)}; ;
+  margin-right: ${({ theme }) => theme.spacing(4)};
 `
 
 export function ExamCard({ scheduleClass, order, isFinal, className, isHidden }: ClassCardProps) {

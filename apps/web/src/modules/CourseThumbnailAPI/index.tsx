@@ -1,5 +1,6 @@
 import { createCanvas } from 'canvas'
 import { NextApiRequest, NextApiResponse } from 'next'
+import { ParsedUrlQuery } from 'querystring'
 
 import { CourseGroup } from '@web/common/hooks/useCourseGroup/types'
 import { parseCourseNoFromQuery } from '@web/common/utils/parseCourseNoFromQuery'
@@ -13,8 +14,6 @@ import {
   GetCourseForThumbnailQuery,
   GetCourseForThumbnailQueryVariables,
 } from '@cgr/codegen'
-
-import { ParsedUrlQuery } from 'querystring'
 
 export async function CourseThumbnailAPI(req: NextApiRequest, res: NextApiResponse) {
   if (!ENABLE_COURSE_THUMBNAIL) {

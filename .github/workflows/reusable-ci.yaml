@@ -46,6 +46,14 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
 
+      - name: Cache turbo
+        uses: actions/cache@v3
+        with:
+          path: .turbo
+          key: turbo-${{ github.job }}-${{ github.ref_name }}-${{ github.sha }}
+          restore-keys: |
+            turbo-${{ github.job }}-${{ github.ref_name }}-
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --prefer-offline
 
@@ -65,4 +73,4 @@ jobs:
 
       - name: Target
         if: ${{ inputs.target }}
-        run: pnpm ${{ inputs.target }} --parallel ${{ steps.get-base-branch.outputs.TURBO_FILTER }}
+        run: pnpm ${{ inputs.target }} --parallel ${{ steps.get-base-branch.outputs.TURBO_FILTER }} --cache-dir=.turbo

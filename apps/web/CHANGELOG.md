@@ -1,5 +1,11 @@
 # web
 
+## 1.2.2-beta.0
+
+### Patch Changes
+
+- 15dfbfca: Disable linting during Next.js builds
+
 ## 1.2.1
 
 ### Patch Changes

@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "format": "eslint src --fix",
-    "docker-build": "docker buildx build -t $npm_package_name -f Dockerfile --cache-to type=gha,mode=max --cache-from type=gha ../.."
+    "docker-build": "docker build -t $npm_package_name -f Dockerfile ../.."
   },
   "devDependencies": {
     "@cgr/project-config": "workspace:*",

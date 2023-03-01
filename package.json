@@ -12,6 +12,7 @@
     "lint": "turbo run lint",
     "test": "turbo run test",
     "docker-build": "turbo run docker-build",
+    "test:e2e": "turbo run test:e2e",
     "format": "turbo run format && prettier --write \"**/*.{md,json}\"",
     "release": "pnpm changeset tag",
     "codegen": "pnpm --filter=@cgr/codegen codegen"

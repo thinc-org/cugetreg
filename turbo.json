@@ -12,9 +12,12 @@
       "cache": false
     },
     "dev": {
-      "cache": false
+      "cache": false,
+      "persistent": true
     },
-    "test": {},
+    "test": {
+      "outputs": ["coverage/**"]
+    },
     "test:e2e": {
       "outputs": ["playwright-report/**"]
     }

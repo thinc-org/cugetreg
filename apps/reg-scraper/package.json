@@ -8,7 +8,8 @@
     "start": "nest start",
     "lint": "eslint src",
     "format": "eslint src --fix",
-    "prebuild": "rimraf dist"
+    "prebuild": "rimraf dist",
+    "docker-build": "docker build -t $npm_package_name -f Dockerfile ../.."
   },
   "devDependencies": {
     "@nestjs/cli": "^9.1.9",

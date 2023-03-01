@@ -11,6 +11,7 @@
     "dev": "turbo run dev --parallel",
     "lint": "turbo run lint",
     "test": "turbo run test",
+    "docker-build": "turbo run docker-build",
     "format": "turbo run format && prettier --write \"**/*.{md,json}\"",
     "release": "pnpm changeset tag",
     "codegen": "pnpm --filter=@cgr/codegen codegen"

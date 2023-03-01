@@ -1,6 +1,6 @@
 {
   "name": "admin-web",
-  "version": "0.0.2",
+  "version": "0.0.3-beta.0",
   "private": true,
   "scripts": {
     "dev": "next dev -p 4201",

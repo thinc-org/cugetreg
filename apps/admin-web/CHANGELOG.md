@@ -1,5 +1,11 @@
 # admin-web
 
+## 0.0.3-beta.0
+
+### Patch Changes
+
+- 15dfbfca: Disable linting during Next.js builds
+
 ## 0.0.2
 
 ### Patch Changes

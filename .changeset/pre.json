@@ -11,5 +11,7 @@
     "@cgr/course-utils": "1.0.1",
     "@cgr/project-config": "1.0.0"
   },
-  "changesets": []
+  "changesets": [
+    "quiet-eggs-turn"
+  ]
 }

@@ -64,7 +64,7 @@ jobs:
           fi
 
       - name: Set up Docker Buildx
-        if: ${{ inputs.target == "docker-build" }}
+        if: ${{ inputs.target == 'docker-build' }}
         uses: docker/setup-buildx-action@v2
 
       - name: Target

@@ -46,14 +46,3 @@ jobs:
     with:
       target: build
       runs-on: ${{ matrix.platform }}
-
-  docker-build:
-    strategy:
-      matrix:
-        platform: [ubuntu-latest]
-    needs: install-deps
-
-    uses: ./.github/workflows/reusable-ci.yaml
-    with:
-      target: docker-build
-      runs-on: ${{ matrix.platform }}

@@ -37,7 +37,6 @@ COPY pnpm-lock.yaml ./pnpm-lock.yaml
 RUN pnpm install --frozen-lockfile
 
 COPY --from=pruner /app/out/full/ .
-COPY --from=pruner /app/.prettierrc.js ./.prettierrc.js
 COPY turbo.json turbo.json
 RUN pnpm turbo run build --filter=web...
 

@@ -1,5 +1,11 @@
 # web
 
+## 1.2.1
+
+### Patch Changes
+
+- 8601d0a3: Include .prettierrc.js during web build
+
 ## 1.2.1-beta.0
 
 ### Patch Changes

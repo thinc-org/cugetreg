@@ -63,6 +63,10 @@ jobs:
             echo "TURBO_FILTER=--filter=...[origin/main]" >> $GITHUB_OUTPUT
           fi
 
+      - name: Set up Docker Buildx
+        if: ${{ inputs.target == "docker-build" }}
+        uses: docker/setup-buildx-action@v2
+
       - name: Target
         if: ${{ inputs.target }}
         run: pnpm ${{ inputs.target }} --parallel ${{ steps.get-base-branch.outputs.TURBO_FILTER }}

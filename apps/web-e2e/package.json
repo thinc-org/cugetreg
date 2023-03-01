@@ -10,7 +10,7 @@
     "install-browser": "playwright install",
     "test:e2e": "playwright test",
     "test:head": "playwright test --headed --slowmo=1000",
-    "test:debug": "playwright test --headed --browser=chromium",
+    "test:debug": "playwright test --debug",
     "show:report": "playwright show-report",
     "show:trace": "playwright show-trace"
   }

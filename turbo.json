@@ -14,6 +14,9 @@
     "dev": {
       "cache": false
     },
-    "test": {}
+    "test": {},
+    "test:e2e": {
+      "outputs": ["playwright-report/**"]
+    }
   }
 }

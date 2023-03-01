@@ -73,4 +73,4 @@ jobs:
 
       - name: Target
         if: ${{ inputs.target }}
-        run: pnpm ${{ inputs.target }} --parallel ${{ steps.get-base-branch.outputs.TURBO_FILTER }} --cache-dir=.turbo
+        run: pnpm turbo run test ${{ inputs.target }} --parallel ${{ steps.get-base-branch.outputs.TURBO_FILTER }} --cache-dir=.turbo

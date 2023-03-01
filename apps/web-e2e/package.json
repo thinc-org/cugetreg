@@ -7,7 +7,7 @@
     "@playwright/test": "^1.31.1"
   },
   "scripts": {
-    "install": "playwright install",
+    "install-browser": "playwright install",
     "test:e2e": "playwright test",
     "test:head": "playwright test --headed --slowmo=1000",
     "test:debug": "playwright test --headed --browser=chromium",

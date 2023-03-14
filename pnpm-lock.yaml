@@ -290,7 +290,7 @@ importers:
       '@zarconontol/enzyme-adapter-react-18': 0.7.3
       axios: 0.23.0
       broadcast-channel: 4.2.0
-      canvas: 2.9.3
+      canvas: 2.11.0
       cookies-next: ^2.1.1
       date-fns: ^2.29.3
       enzyme: 3.11.0
@@ -360,13 +360,13 @@ importers:
       '@udecode/plate-toolbar': 8.3.0_nw3niz7xeuolbnaaupe3ub5alq
       axios: 0.23.0
       broadcast-channel: 4.2.0
-      canvas: 2.9.3
+      canvas: 2.11.0
       cookies-next: 2.1.1
       date-fns: 2.29.3
       escape-html: 1.0.3
       framer-motion: 7.1.0_biqbaboplfbrettd7655fr4n2y
       html2canvas: 1.4.1
-      isomorphic-dompurify: 0.20.0_canvas@2.9.3
+      isomorphic-dompurify: 0.20.0_canvas@2.11.0
       md5: 2.3.0
       mobx: 6.6.1
       mobx-react: 7.5.2_m26jawr67gnusmh4egzqtnhxru
@@ -414,7 +414,7 @@ importers:
       eslint: 8.34.0
       i18next: 21.9.0
       jest: 28.1.3
-      jest-environment-jsdom: 28.1.3_canvas@2.9.3
+      jest-environment-jsdom: 28.1.3_canvas@2.11.0
       typescript: 4.7.4
 
   apps/web-e2e:
@@ -6698,8 +6698,8 @@ packages:
   /caniuse-lite/1.0.30001448:
     resolution: {integrity: sha512-tq2YI+MJnooG96XpbTRYkBxLxklZPOdLmNIOdIhvf7SNJan6u5vCKum8iT7ZfCt70m1GPkuC7P3TtX6UuhupuA==}
 
-  /canvas/2.9.3:
-    resolution: {integrity: sha512-WOUM7ghii5TV2rbhaZkh1youv/vW1/Canev6Yx6BG2W+1S07w8jKZqKkPnbiPpQEDsnJdN8ouDd7OvQEGXDcUw==}
+  /canvas/2.11.0:
+    resolution: {integrity: sha512-bdTjFexjKJEwtIo0oRx8eD4G2yWoUOXP9lj279jmQ2zMnTQhT8C3512OKz3s+ZOaQlLbE7TuVvRDYDB3Llyy5g==}
     engines: {node: '>=6'}
     requiresBuild: true
     dependencies:
@@ -9854,12 +9854,12 @@ packages:
       - utf-8-validate
     dev: false
 
-  /isomorphic-dompurify/0.20.0_canvas@2.9.3:
+  /isomorphic-dompurify/0.20.0_canvas@2.11.0:
     resolution: {integrity: sha512-ha3GBgVb9faPfGknAkwokYxqvdnh6c+R33LtgoXj4Lttg3b5DN5YH1P3zX1AHFFvTCOL7TER5zwGnUbJcQ85Cw==}
     dependencies:
       '@types/dompurify': 2.4.0
       dompurify: 2.4.3
-      jsdom: 20.0.3_canvas@2.9.3
+      jsdom: 20.0.3_canvas@2.11.0
     transitivePeerDependencies:
       - bufferutil
       - canvas
@@ -10182,7 +10182,7 @@ packages:
       pretty-format: 28.1.3
     dev: true
 
-  /jest-environment-jsdom/28.1.3_canvas@2.9.3:
+  /jest-environment-jsdom/28.1.3_canvas@2.11.0:
     resolution: {integrity: sha512-HnlGUmZRdxfCByd3GM2F100DgQOajUBzEitjGqIREcb45kGjZvRrKUdlaF6escXBdcXNl0OBh+1ZrfeZT3GnAg==}
     engines: {node: ^12.13.0 || ^14.15.0 || ^16.10.0 || >=17.0.0}
     dependencies:
@@ -10193,7 +10193,7 @@ packages:
       '@types/node': 18.11.18
       jest-mock: 28.1.3
       jest-util: 28.1.3
-      jsdom: 19.0.0_canvas@2.9.3
+      jsdom: 19.0.0_canvas@2.11.0
     transitivePeerDependencies:
       - bufferutil
       - canvas
@@ -10534,7 +10534,7 @@ packages:
     dependencies:
       argparse: 2.0.1
 
-  /jsdom/19.0.0_canvas@2.9.3:
+  /jsdom/19.0.0_canvas@2.11.0:
     resolution: {integrity: sha512-RYAyjCbxy/vri/CfnjUWJQQtZ3LKlLnDqj+9XLNnJPgEGeirZs3hllKR20re8LUZ6o1b1X4Jat+Qd26zmP41+A==}
     engines: {node: '>=12'}
     peerDependencies:
@@ -10546,7 +10546,7 @@ packages:
       abab: 2.0.6
       acorn: 8.8.2
       acorn-globals: 6.0.0
-      canvas: 2.9.3
+      canvas: 2.11.0
       cssom: 0.5.0
       cssstyle: 2.3.0
       data-urls: 3.0.2
@@ -10618,7 +10618,7 @@ packages:
       - utf-8-validate
     dev: false
 
-  /jsdom/20.0.3_canvas@2.9.3:
+  /jsdom/20.0.3_canvas@2.11.0:
     resolution: {integrity: sha512-SYhBvTh89tTfCD/CRdSOm13mOBa42iTaTyfyEWBdKcGdPxPtLFBXuHR8XHb33YNYaP+lLbmSvBTsnoesCNJEsQ==}
     engines: {node: '>=14'}
     peerDependencies:
@@ -10630,7 +10630,7 @@ packages:
       abab: 2.0.6
       acorn: 8.8.2
       acorn-globals: 7.0.1
-      canvas: 2.9.3
+      canvas: 2.11.0
       cssom: 0.5.0
       cssstyle: 2.3.0
       data-urls: 3.0.2

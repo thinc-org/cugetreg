@@ -67,7 +67,7 @@
     "@udecode/plate-toolbar": "8.3.0",
     "axios": "0.23.0",
     "broadcast-channel": "4.2.0",
-    "canvas": "2.9.3",
+    "canvas": "2.11.0",
     "cookies-next": "^2.1.1",
     "date-fns": "^2.29.3",
     "escape-html": "^1.0.3",

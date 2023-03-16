@@ -1,0 +1,56 @@
+"""
+Overrides GenEdType for specific sections. Other sections without an override will have the value set as `NO` (Not GenEd) during scraping.
+"""
+type GenEdOverride {
+  genEdType: GenEdType!
+  sections: [String!]!
+}
+
+"""
+Course override for overriding course info from Reg Chula during course scraping.
+"""
+type Override {
+  courseNo: String!
+  studyProgram: StudyProgram!
+  semester: String!
+  academicYear: String!
+  genEd: GenEdOverride
+}
+
+"""
+Overrides GenEdType for specific sections. Other sections without an override will have the value set as `NO` (Not GenEd) during scraping.
+"""
+input GenEdOverrideInput {
+  genEdType: GenEdType!
+  sections: [String!]!
+}
+
+"""
+Course override for overriding course info from Reg Chula during course scraping.
+"""
+input OverrideInput {
+  courseNo: String!
+  studyProgram: StudyProgram!
+  semester: String!
+  academicYear: String!
+  genEd: GenEdOverrideInput
+}
+
+type Query {
+  overrides: [Override!]!
+}
+
+type Mutation {
+  """
+  Create a new override. If override already exists, update it.
+  Requires admin authentication.
+  """
+  createOrUpdateOverride(override: OverrideInput!): Override!
+
+  """
+  Delete an override.
+
+  Requires admin authentication.
+  """
+  deleteOverride(courseNo: String!, courseGroup: CourseGroupInput!): Override
+}

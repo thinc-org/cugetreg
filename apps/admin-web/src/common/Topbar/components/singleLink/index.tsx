@@ -10,7 +10,6 @@ interface SingleLinkProps {
 export default function SingleLink({ title, url }: SingleLinkProps) {
   const router = useRouter()
 
-  console.log(router.pathname)
   const isSelected = router.pathname === url
 
   return (

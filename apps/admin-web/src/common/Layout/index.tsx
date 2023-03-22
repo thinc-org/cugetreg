@@ -1,6 +1,6 @@
 import Topbar from '@admin-web/common/Topbar'
 
-import { LayoutContainer } from './style'
+import { LayoutContainer } from './styled'
 
 interface AppProviderProps {
   children: React.ReactNode

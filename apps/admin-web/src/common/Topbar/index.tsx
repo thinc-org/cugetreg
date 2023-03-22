@@ -1,59 +1,16 @@
-import {
-  AppBar,
-  Container,
-  Typography,
-  Box,
-  Button,
-  List,
-  ListItem,
-  ListItemText,
-  ListItemButton,
-} from '@mui/material'
-import SingleLink from './components/singleLink'
-import { StyledListItem, StyledList } from './styled'
+import SectionLink from './components/SectionLink'
+import { links, LinkSectionType } from './linkConstant'
 
-// Todo: change route names
-const pages = [
-  { title: 'Pending Reviews', url: '/pendingReviews' },
-  { title: 'Approved Reviews', url: '/approvedReviews' },
-  { title: 'GenEd', url: '/genEd' },
-]
-
+// TODO: change route names
+// TODO: download font
 export default function SideBar() {
   return (
     <>
       <nav>
-        <StyledList sx={{ width: '240px' }}>
-          <Typography>Review</Typography>
-          <StyledListItem disablePadding>
-            <ListItemButton sx={{ width: '100%' }}>
-              <ListItemText primary="Review Approval" />
-            </ListItemButton>
-            <ListItemButton sx={{ width: '100%' }}>
-              <ListItemText sx={{ textAlign: 'right' }} primary="All Reviews" />
-            </ListItemButton>
-          </StyledListItem>
-        </StyledList>
-
-        <StyledList sx={{ width: '240px' }}>
-          <Typography>GenEd</Typography>
-          <StyledListItem disablePadding>
-            <ListItemButton sx={{ width: '100%' }}>
-              <ListItemText primary="All Types" />
-            </ListItemButton>
-            <ListItemButton sx={{ width: '100%' }}>
-              <ListItemText primary="HU (มนุษย์)" />
-            </ListItemButton>
-          </StyledListItem>
-        </StyledList>
+        {Object.keys(links).map((key: keyof LinkSectionType) => (
+          <SectionLink key={key} sectionTitle={String(key)} links={links[key]} />
+        ))}
       </nav>
     </>
-    // <StyledAppBar position="static">
-    //   <Box>
-    //     {pages.map((data) => (
-    //       <SingleLink title={data.title} url={data.url} />
-    //     ))}
-    //   </Box>
-    // </StyledAppBar>
   )
 }

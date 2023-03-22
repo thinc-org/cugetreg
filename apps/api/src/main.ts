@@ -11,7 +11,7 @@ import cookieParser from 'cookie-parser'
 
 import { AppModule } from './app/app.module'
 import { Configuration, validateConfig } from './config/configuration'
-import { createLogger } from './util/customlogger'
+import { createLogger } from './util/logger'
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {

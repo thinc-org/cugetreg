@@ -12,4 +12,8 @@ export const StyledListItem = styled(ListItem)({
 
 export const StyledList = styled(List)({})
 
-export const StyledNav = styled('nav')({})
+export const StyledNav = styled('nav')({
+  backgroundColor: '#F3F4F6',
+  height: '100vh',
+  borderRight: '1px solid #E5E7EB',
+})

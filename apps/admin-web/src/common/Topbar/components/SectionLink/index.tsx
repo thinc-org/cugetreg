@@ -5,7 +5,7 @@ import SingleLink from '../singleLink'
 
 interface SectionLinkProps {
   links: LinkType[]
-  sectionTitle: String
+  sectionTitle: string
 }
 
 export default function SectionLink({ links, sectionTitle }: SectionLinkProps) {

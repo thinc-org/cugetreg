@@ -1,6 +1,6 @@
 export interface LinkType {
-  title: String
-  url: String
+  title: string
+  url: string
 }
 
 export interface LinkSectionType {
@@ -9,8 +9,8 @@ export interface LinkSectionType {
 
 export const links: LinkSectionType = {
   Review: [
-    { title: 'Pending Reviews', url: '/pendingReviews' },
-    { title: 'Approved Reviews', url: '/approvedReviews' },
+    { title: 'Review Approval', url: '/pendingReviews' },
+    { title: 'All Review', url: '/approvedReviews' },
   ],
   Gened: [{ title: 'All Context', url: '/genEd' }],
 }

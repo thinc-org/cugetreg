@@ -3,7 +3,7 @@ import { ThemeOptions, createTheme } from '@mui/material'
 const themeBaseOptions: ThemeOptions = {
   typography: {
     htmlFontSize: (16 * 16) / 18,
-    fontFamily: ['Poppins', 'Prompt', 'sans-serif'].join(','),
+    fontFamily: "'JetBrains Mono', monospace",
   },
   breakpoints: {
     values: {

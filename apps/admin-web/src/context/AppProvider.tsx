@@ -1,8 +1,7 @@
-import { ApolloProvider } from '@apollo/client'
+import { defaultTheme } from '@admin-web/config/theme'
 import { client } from '@admin-web/services/apollo'
+import { ApolloProvider } from '@apollo/client'
 import { ThemeProvider } from '@mui/material'
-import { defaultTheme } from '@admin-web/config/theme/index'
-import Topbar from '@admin-web/common/Topbar/Topbar'
 
 interface AppProviderProps {
   children: React.ReactNode
@@ -11,10 +10,7 @@ interface AppProviderProps {
 export function AppProvider({ children }: AppProviderProps) {
   return (
     <ApolloProvider client={client}>
-      <ThemeProvider theme={defaultTheme}>
-        <Topbar />
-        {children}
-      </ThemeProvider>
+      <ThemeProvider theme={defaultTheme}>{children}</ThemeProvider>
     </ApolloProvider>
   )
 }

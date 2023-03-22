@@ -1,5 +1,16 @@
+import {
+  Container,
+  Skeleton,
+  Typography,
+  Grid,
+  Button,
+  TextField,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+} from '@mui/material'
 import { useGetPendingReviewsQuery } from '@cgr/codegen'
-import { Container, Skeleton, Typography, Grid } from '@mui/material'
 import SinglePendingReview from './singlePendingReview'
 
 export default function PendingReviewsList() {
@@ -8,9 +19,57 @@ export default function PendingReviewsList() {
   return (
     <>
       <Container>
-        <Typography variant="h3" align="center" sx={{ mt: '30px' }}>
-          Reviews
-        </Typography>
+        <Grid container paddingY={5} justifyContent={'space-between'} alignItems="center">
+          <Typography fontSize={32}>Review Approval</Typography>
+
+          <Grid item>
+            <Grid container gap={3}>
+              <Grid item>x</Grid>
+              <Grid item>y</Grid>
+              <Grid item>z</Grid>
+            </Grid>
+            {/* <FormControl
+              size="small"
+              sx={{
+                width: 120,
+                height: 40,
+              }}
+            >
+              <InputLabel>Year</InputLabel>
+              <Select label="Year">
+                <MenuItem value={2564}>2564</MenuItem>
+                <MenuItem value={2565}>2565</MenuItem>
+                <MenuItem value={2566}>2566</MenuItem>
+              </Select>
+            </FormControl>
+            <FormControl
+              size="small"
+              sx={{
+                width: 120,
+                height: 40,
+                //marginLeft: 3,
+              }}
+            >
+              <InputLabel>Sem</InputLabel>
+              <Select label="Semester">
+                <MenuItem value={1}>1</MenuItem>
+                <MenuItem value={2}>2</MenuItem>
+              </Select>
+            </FormControl>
+            <TextField
+              id="outlined-basic"
+              label="Search"
+              variant="outlined"
+              size="small"
+              sx={{
+                width: 240,
+                height: 40,
+                // marginLeft: 3,
+              }}
+            /> */}
+          </Grid>
+        </Grid>
+
         {reviewQuery.loading ? (
           // Todo: Reduce gaps between each skeleton
           // Todo: Add more skeleton (dynamically?)

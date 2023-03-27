@@ -73,6 +73,34 @@ export default function PendingReviewsList() {
           </Grid>
         </Grid>
 
+        <Grid
+          container
+          // paddingY={16}
+          // paddingX={24}
+          justifyContent="space-between"
+          alignItems="center"
+        >
+          <Grid item>
+            <Grid container gap={8}>
+              <Grid item>
+                <Typography>CourseNo.</Typography>
+              </Grid>
+              <Grid item>
+                <Typography>Year</Typography>
+              </Grid>
+              <Grid item>
+                <Typography>Semester</Typography>
+              </Grid>
+              <Grid item>
+                <Typography>Star</Typography>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid item>
+            <Typography>Approval</Typography>
+          </Grid>
+        </Grid>
+
         {reviewQuery.loading ? (
           // Todo: Reduce gaps between each skeleton
           // Todo: Add more skeleton (dynamically?)

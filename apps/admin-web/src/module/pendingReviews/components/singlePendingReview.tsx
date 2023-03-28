@@ -24,8 +24,8 @@ export default function SinglePendingReview({ data }: SinglePendingReviewProps) 
           <Button>Approve</Button>
           <Button onClick={handleOpen}>Reject</Button>
         </CardActions>
-      </Card>
-      <RejectModal open={open} onClose={handleClose} /> */}
+      </Card> */}
+      <RejectModal open={open} onClose={handleClose} />
       <Grid
         container
         // paddingY={16}
@@ -56,9 +56,12 @@ export default function SinglePendingReview({ data }: SinglePendingReviewProps) 
           </Typography>
         </Grid>
       </Grid>
-      <Typography paddingX={24} paddingTop={6} paddingBottom={24}>
-        {data.content}
-      </Typography>
+      <Typography
+        paddingX={24}
+        paddingTop={6}
+        paddingBottom={24}
+        dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(data.content ?? '') }}
+      />
     </>
   )
 }

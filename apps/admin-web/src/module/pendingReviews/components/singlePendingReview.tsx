@@ -1,5 +1,5 @@
 import RejectModal from '@admin-web/module/pendingReviews/components/rejectModal'
-import { Review } from '@cgr/codegen'
+import { GetCourseInfoDocument, Review } from '@cgr/codegen'
 import { Button, Card, CardActions, Grid, Typography } from '@mui/material'
 import { useState } from 'react'
 import { HighlightHTML } from '../../../common/HighlightHTML/index'
@@ -28,13 +28,14 @@ export default function SinglePendingReview({ data }: SinglePendingReviewProps) 
       <RejectModal open={open} onClose={handleClose} />
       <Grid
         container
-        // paddingY={16}
-        // paddingX={24}
+        padding={3}
+        display={'flex'}
+        flexDirection="row"
         justifyContent="space-between"
-        alignItems="center"
+        alignItems="flex-start"
       >
         <Grid item>
-          <Grid container gap={10}>
+          <Grid container gap={8}>
             <Grid item>
               <Typography>{data.courseNo}</Typography>
             </Grid>
@@ -55,13 +56,15 @@ export default function SinglePendingReview({ data }: SinglePendingReviewProps) 
             <Button>2</Button>
           </Typography>
         </Grid>
+        <Grid item xs={12}>
+          <Typography
+            // paddingX={24}
+            // paddingTop={6}
+            // paddingBottom={24}
+            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(data.content ?? '') }}
+          />
+        </Grid>
       </Grid>
-      <Typography
-        paddingX={24}
-        paddingTop={6}
-        paddingBottom={24}
-        dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(data.content ?? '') }}
-      />
     </>
   )
 }

@@ -19,7 +19,12 @@ export default function PendingReviewsList() {
   return (
     <>
       <Container>
-        <Grid container paddingY={5} justifyContent={'space-between'} alignItems="center">
+        <Grid
+          container
+          sx={{ paddingX: 3, paddingY: 4 }}
+          justifyContent={'space-between'}
+          alignItems="center"
+        >
           <Typography fontSize={32}>Review Approval</Typography>
 
           <Grid item>
@@ -73,13 +78,7 @@ export default function PendingReviewsList() {
           </Grid>
         </Grid>
 
-        <Grid
-          container
-          // paddingY={16}
-          // paddingX={24}
-          justifyContent="space-between"
-          alignItems="center"
-        >
+        <Grid container padding={3} justifyContent="space-between" alignItems="center">
           <Grid item>
             <Grid container gap={8}>
               <Grid item>
@@ -100,7 +99,6 @@ export default function PendingReviewsList() {
             <Typography>Approval</Typography>
           </Grid>
         </Grid>
-
         {reviewQuery.loading ? (
           // Todo: Reduce gaps between each skeleton
           // Todo: Add more skeleton (dynamically?)

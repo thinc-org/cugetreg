@@ -13,6 +13,7 @@ import { ReviewModule } from '../review/review.module'
 import { OverrideModule } from '@admin-api/override/override.module'
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
+import { AuthModule } from '@admin-api/auth/auth.module'
 
 @Module({
   imports: [
@@ -60,6 +61,7 @@ import { AppService } from './app.service'
     ReviewModule,
     OverrideModule,
     ScheduleModule.forRoot(),
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

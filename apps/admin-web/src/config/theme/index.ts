@@ -4,8 +4,12 @@ import { lightPaletteOptions } from './palette'
 
 const themeBaseOptions: ThemeOptions = {
   typography: {
-    htmlFontSize: (16 * 16) / 18,
-    fontFamily: "'JetBrains Mono', monospace",
+    // htmlFontSize: (16 * 16) / 18,
+    fontFamily: "'JetBrains Mono','IBM Plex Sans Thai', monospace",
+    h1: {
+      fontWeight: 700,
+      fontSize: 32,
+    },
   },
   breakpoints: {
     values: {

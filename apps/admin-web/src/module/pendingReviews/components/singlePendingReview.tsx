@@ -1,6 +1,6 @@
 import RejectModal from '@admin-web/module/pendingReviews/components/rejectModal'
 import { GetCourseInfoDocument, Review } from '@cgr/codegen'
-import { Button, Card, CardActions, Grid, Typography } from '@mui/material'
+import { Button, Card, CardActions, Grid, TableCell, TableRow, Typography } from '@mui/material'
 import { useState } from 'react'
 import { HighlightHTML } from '../../../common/HighlightHTML/index'
 import DOMPurify from 'isomorphic-dompurify'
@@ -26,7 +26,7 @@ export default function SinglePendingReview({ data }: SinglePendingReviewProps) 
         </CardActions>
       </Card> */}
       <RejectModal open={open} onClose={handleClose} />
-      <Grid
+      {/* <Grid
         container
         padding={3}
         display={'flex'}
@@ -56,15 +56,33 @@ export default function SinglePendingReview({ data }: SinglePendingReviewProps) 
             <Button>2</Button>
           </Typography>
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={12} sx={{ wordBreak: 'break-word' }}>
           <Typography
-            // paddingX={24}
-            // paddingTop={6}
-            // paddingBottom={24}
             dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(data.content ?? '') }}
           />
         </Grid>
-      </Grid>
+      </Grid> */}
+      <TableRow>
+        <TableCell sx={{ padding: '24px' }}>
+          <Typography>{data.courseNo}</Typography>
+        </TableCell>
+        <TableCell sx={{ padding: '24px' }}>
+          <Typography>{data.academicYear}</Typography>
+        </TableCell>
+        <TableCell sx={{ padding: '24px' }}>
+          <Typography>{data.semester}</Typography>
+        </TableCell>
+        <TableCell sx={{ padding: '24px' }}>
+          <Typography>{data.rating / 2}</Typography>
+        </TableCell>
+        <TableCell sx={{ width: '100%', padding: '24px' }}></TableCell>
+        <TableCell sx={{ padding: '24px' }}>
+          <Typography>
+            <Button>1</Button>
+            <Button>2</Button>
+          </Typography>
+        </TableCell>
+      </TableRow>
     </>
   )
 }

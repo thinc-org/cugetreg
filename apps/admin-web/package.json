@@ -23,6 +23,7 @@
     "@cgr/course-utils": "workspace:*",
     "@emotion/react": "11.10.4",
     "@emotion/styled": "11.10.4",
+    "@mui/icons-material": "5.8.4",
     "@mui/material": "5.9.1",
     "@mui/styled-engine-sc": "^5.11.0",
     "@next/font": "13.1.6",

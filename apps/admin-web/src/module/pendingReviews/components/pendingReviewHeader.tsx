@@ -6,7 +6,6 @@ import {
   Select,
   MenuItem,
   TextField,
-  Container,
 } from '@mui/material'
 
 export default function PendingReviewHeader() {
@@ -14,11 +13,13 @@ export default function PendingReviewHeader() {
     <>
       <Grid
         container
-        sx={{ paddingX: 3, paddingY: 4 }}
+        sx={{ paddingX: 3, paddingY: 2 }}
         justifyContent={'space-between'}
         alignItems="center"
       >
-        <Typography fontSize={32}>Review Approval</Typography>
+        <Typography variant="h1" mb={{ xs: 1, lg: 0 }}>
+          Review Approval
+        </Typography>
 
         <Grid item>
           <Grid container gap={3}>

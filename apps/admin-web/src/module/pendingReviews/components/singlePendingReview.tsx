@@ -1,10 +1,10 @@
 import RejectModal from '@admin-web/module/pendingReviews/components/rejectModal'
-import { GetCourseInfoDocument, Review } from '@cgr/codegen'
-import { Button, Card, CardActions, Grid, TableCell, TableRow, Typography } from '@mui/material'
-import { useState } from 'react'
-import { HighlightHTML } from '../../../common/HighlightHTML/index'
+import { Review, Semester } from '@cgr/codegen'
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
+import HighlightOffIcon from '@mui/icons-material/HighlightOff'
+import { Box, IconButton, TableCell, TableRow, Typography } from '@mui/material'
 import DOMPurify from 'isomorphic-dompurify'
-
+import { useState } from 'react'
 interface SinglePendingReviewProps {
   data: Review
 }
@@ -16,73 +16,51 @@ export default function SinglePendingReview({ data }: SinglePendingReviewProps) 
 
   return (
     <>
-      {/* Todo: change p tag to highlightHtml */}
-      {/* <Card sx={{ display: 'flex', flexDirection: 'column' }}>
-        <Typography>2100101</Typography>
-        <Typography dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(data.content ?? '') }} />
-        <CardActions sx={{ display: 'flex', alignSelf: 'flex-end' }}>
-          <Button>Approve</Button>
-          <Button onClick={handleOpen}>Reject</Button>
-        </CardActions>
-      </Card> */}
       <RejectModal open={open} onClose={handleClose} />
-      {/* <Grid
-        container
-        padding={3}
-        display={'flex'}
-        flexDirection="row"
-        justifyContent="space-between"
-        alignItems="flex-start"
-      >
-        <Grid item>
-          <Grid container gap={8}>
-            <Grid item>
-              <Typography>{data.courseNo}</Typography>
-            </Grid>
-            <Grid item>
-              <Typography>{data.academicYear}</Typography>
-            </Grid>
-            <Grid item>
-              <Typography>{data.semester}</Typography>
-            </Grid>
-            <Grid item>
-              <Typography>{data.rating}</Typography>
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid item>
-          <Typography>
-            <Button>1</Button>
-            <Button>2</Button>
-          </Typography>
-        </Grid>
-        <Grid item xs={12} sx={{ wordBreak: 'break-word' }}>
+
+      <TableRow>
+        <TableCell sx={{ px: 3, py: 2, borderBottom: 'none' }}>
+          <Typography fontWeight={700}>{data.courseNo}</Typography>
+        </TableCell>
+        <TableCell sx={{ px: 3, py: 2, borderBottom: 'none' }}>
+          <Typography fontWeight={700}>{data.academicYear}</Typography>
+        </TableCell>
+        <TableCell sx={{ px: 3, py: 2, borderBottom: 'none' }}>
+          <Typography fontWeight={700}>{getSemesterName(data.semester as Semester)}</Typography>
+        </TableCell>
+        <TableCell sx={{ px: 3, py: 2, borderBottom: 'none' }}>
+          <Typography fontWeight={700}>{data.rating / 2}</Typography>
+        </TableCell>
+        <TableCell sx={{ width: '100%', borderBottom: 'none' }}></TableCell>
+        <TableCell sx={{ px: 3, py: 2, borderBottom: 'none' }}>
+          <Box sx={{ whiteSpace: 'nowrap' }}>
+            <IconButton color="success">
+              <CheckCircleOutlineIcon />
+            </IconButton>
+            <IconButton color="warning">
+              <HighlightOffIcon />
+            </IconButton>
+          </Box>
+        </TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell colSpan={6} sx={{ px: 3, py: 2, wordBreak: 'break-word' }}>
           <Typography
             dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(data.content ?? '') }}
           />
-        </Grid>
-      </Grid> */}
-      <TableRow>
-        <TableCell sx={{ padding: '24px' }}>
-          <Typography>{data.courseNo}</Typography>
-        </TableCell>
-        <TableCell sx={{ padding: '24px' }}>
-          <Typography>{data.academicYear}</Typography>
-        </TableCell>
-        <TableCell sx={{ padding: '24px' }}>
-          <Typography>{data.semester}</Typography>
-        </TableCell>
-        <TableCell sx={{ padding: '24px' }}>
-          <Typography>{data.rating / 2}</Typography>
-        </TableCell>
-        <TableCell sx={{ width: '100%', padding: '24px' }}></TableCell>
-        <TableCell sx={{ padding: '24px' }}>
-          <Typography>
-            <Button>1</Button>
-            <Button>2</Button>
-          </Typography>
         </TableCell>
       </TableRow>
     </>
   )
+}
+
+export const getSemesterName = (semester: Semester) => {
+  switch (semester) {
+    case Semester.First:
+      return 'ภาคต้น'
+    case Semester.Second:
+      return 'ภาคปลาย'
+    case Semester.Third:
+      return 'ภาคฤดูร้อน'
+  }
 }

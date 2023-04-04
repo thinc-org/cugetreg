@@ -40,6 +40,8 @@ import { useRemoveCourse } from '@web/modules/Schedule/hooks/useRemoveCourse'
 import { CourseCartItem, courseCartStore } from '@web/store'
 import { uniq } from '@web/utils/uniq'
 
+import { GenEdType } from '@cgr/codegen'
+
 import {
   CardBorder,
   CardContent,
@@ -54,7 +56,6 @@ import {
   VisibilityToggle,
 } from './styled'
 import { useOverlapWarning } from './utils'
-import { GenEdType } from '@cgr/codegen'
 
 export interface ScheduleTableCardProps {
   item: CourseCartItem

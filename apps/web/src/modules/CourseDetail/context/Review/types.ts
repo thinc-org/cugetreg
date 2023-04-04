@@ -2,9 +2,9 @@ import { RefObject } from 'react'
 
 import { TNode } from '@udecode/plate-core'
 
-import { Review } from '@cgr/codegen'
 import { ReviewFormRef } from '@web/modules/CourseDetail/components/ReviewForm/types'
 
+import { Review } from '@cgr/codegen'
 import { ReviewInteractionType } from '@cgr/codegen'
 
 export type ReviewState = Pick<Review, 'rating' | 'academicYear' | 'semester'> & {

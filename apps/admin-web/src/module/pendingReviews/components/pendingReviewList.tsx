@@ -1,15 +1,17 @@
 import {
   Container,
-  Typography,
   Table,
+  TableBody,
   TableCell,
   TableHead,
   TableRow,
-  TableBody,
+  Typography,
 } from '@mui/material'
+
 import { useGetPendingReviewsQuery } from '@cgr/codegen'
-import SinglePendingReview from './singlePendingReview'
+
 import PendingReviewHeader from './pendingReviewHeader'
+import SinglePendingReview from './singlePendingReview'
 
 export default function PendingReviewsList() {
   const reviewQuery = useGetPendingReviewsQuery()

@@ -1,5 +1,7 @@
-import { deepAssign } from '@admin-web/common/deepAssign'
 import { ThemeOptions, createTheme } from '@mui/material'
+
+import { deepAssign } from '@admin-web/common/deepAssign'
+
 import { lightPaletteOptions } from './palette'
 
 const themeBaseOptions: ThemeOptions = {

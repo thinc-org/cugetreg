@@ -6,7 +6,7 @@ interface RejectModalProps {
 }
 
 const style = {
-  position: 'absolute' as 'absolute',
+  position: 'absolute',
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
@@ -18,7 +18,7 @@ const style = {
   borderRadius: '10px',
   display: 'flex',
   flexDirection: 'column',
-}
+} as const
 
 export default function RejectModal({ open, onClose }: RejectModalProps) {
   return (

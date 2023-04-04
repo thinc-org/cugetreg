@@ -1,5 +1,29 @@
 # reg-scraper
 
+## 1.0.3
+
+### Patch Changes
+
+- 0f2fab86: update prettier pipeline and import order
+
+## 1.0.3-beta.0
+
+### Patch Changes
+
+- 0f2fab86: update prettier pipeline and import order
+
+## 1.0.2
+
+### Patch Changes
+
+- 313b9e75: Avoid SQL injection and XSS by upgrading class-validtor to version 0.14.0
+
+## 1.0.2-beta.0
+
+### Patch Changes
+
+- 313b9e75: Avoid SQL injection and XSS by upgrading class-validtor to version 0.14.0
+
 ## 1.0.1
 
 ### Patch Changes

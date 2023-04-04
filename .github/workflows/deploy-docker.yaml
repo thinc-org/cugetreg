@@ -18,14 +18,14 @@ on:
       image-prefix:
         description: Image prefix of the built image
         type: string
-      target-gitops-repository:
+      gitops-repository:
         description: Target repository for updating deployment declaration
         type: string
         default: ${{ github.repository }}
-      target-gitops-ref:
+      gitops-ref:
         description: Target ref for updating deployment declaration
         type: string
-        default: ref/heads/master
+        default: master
       update-mode:
         description: Mode of updating deployment declaration, pr or commit
         type: string
@@ -87,20 +87,22 @@ jobs:
           password: ${{ github.token }}
 
       - name: Set frontend env
-        if: ${{ matrix.packages.name == 'web' || matrix.packages.name == 'admin-web' }}
+        if: ${{ contains(fromJson('["web", "admin-web"]'), matrix.packages.name) && steps.check-dockerfile.outputs.DOCKERFILE_EXISTS == 'true' }}
         env:
           APP_NAME: ${{ matrix.packages.name }}
           BRANCH: ${{ github.ref_name }}
         run: |
-          if [[ $BRANCH == 'main' ]]; then
-            echo "$APP_NAME env is set to production"
+          if [[ $BRANCH == 'main' && -f "apps/$APP_NAME/.env.prod" ]]; then
             mv apps/$APP_NAME/.env.prod apps/$APP_NAME/.env
-          elif [[ $BRANCH == 'beta' ]]; then
-            echo "$APP_NAME env is set to dev"
+            echo "$APP_NAME env is set to production"
+          elif [[ $BRANCH == 'beta' && -f "apps/$APP_NAME/.env.beta" ]]; then
             mv apps/$APP_NAME/.env.beta apps/$APP_NAME/.env
-          elif [[ $BRANCH == 'dev' ]]; then
             echo "$APP_NAME env is set to beta"
+          elif [[ $BRANCH == 'dev' && -f "apps/$APP_NAME/.env.dev" ]]; then
             mv apps/$APP_NAME/.env.dev apps/$APP_NAME/.env
+            echo "$APP_NAME env is set to dev"
+          else
+            echo "$APP_NAME env is not set. This could be because branch '$BRANCH' is not in [main, beta, dev] or .env file for the branch is not found"
           fi
 
       - name: Build and push Docker image
@@ -124,8 +126,8 @@ jobs:
       packages: ${{ inputs.packages }}
       environment: ${{ inputs.environment }}
       image-prefix: ${{ inputs.image-prefix }}
-      gitops-repository: ${{ inputs.target-gitops-repository }}
-      gitops-ref: ${{ inputs.target-gitops-ref }}
+      gitops-repository: ${{ inputs.gitops-repository }}
+      gitops-ref: ${{ inputs.gitops-ref }}
       container-registry: ${{ inputs.container-registry }}
       mode: ${{ inputs.update-mode }}
     secrets:

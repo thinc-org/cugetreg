@@ -11,19 +11,21 @@
     "dev": "turbo run dev --parallel",
     "lint": "turbo run lint",
     "test": "turbo run test",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "test:e2e": "turbo run test:e2e",
+    "format": "turbo run format && prettier --write \"**/*.{md,json}\"",
     "release": "pnpm changeset tag",
     "codegen": "pnpm --filter=@cgr/codegen codegen"
   },
   "devDependencies": {
+    "@cgr/project-config": "workspace:*",
     "@changesets/changelog-github": "^0.4.8",
     "@changesets/cli": "^2.26.0",
-    "@trivago/prettier-plugin-sort-imports": "^4.0.0",
-    "prettier": "latest",
-    "turbo": "latest"
+    "@types/node": "^18.14.0",
+    "prettier": "^2.8.4",
+    "turbo": "^1.8.1"
   },
   "engines": {
-    "node": ">=16.0.0"
+    "node": "^18.12"
   },
   "packageManager": "pnpm@7.21.0"
 }

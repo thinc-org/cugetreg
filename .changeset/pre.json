@@ -2,15 +2,16 @@
   "mode": "pre",
   "tag": "beta",
   "initialVersions": {
-    "admin-api": "0.0.2",
-    "admin-web": "0.0.1",
-    "api": "1.1.0",
-    "reg-scraper": "1.0.1",
-    "web": "1.1.0",
+    "admin-api": "0.0.4",
+    "admin-web": "0.0.2",
+    "api": "1.2.0",
+    "reg-scraper": "1.0.3",
+    "web": "1.2.1",
     "@cgr/codegen": "1.1.0",
     "@cgr/course-utils": "1.0.1",
-    "eslint-config-custom": "1.0.0",
-    "tsconfig": "1.0.0"
+    "@cgr/project-config": "1.0.0"
   },
-  "changesets": []
+  "changesets": [
+    "quiet-eggs-turn"
+  ]
 }

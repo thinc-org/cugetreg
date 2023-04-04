@@ -1,5 +1,57 @@
 # web
 
+## 1.2.2-beta.0
+
+### Patch Changes
+
+- 15dfbfca: Disable linting during Next.js builds
+
+## 1.2.1
+
+### Patch Changes
+
+- 28a2d5ba: Include .prettierrc.js during web build
+
+## 1.2.1-beta.0
+
+### Patch Changes
+
+- 28a2d5ba: Include .prettierrc.js during web build
+
+## 1.2.0
+
+### Minor Changes
+
+- 4af83ff9: update eslint config, fixed eslint error
+
+### Patch Changes
+
+- 0f2fab86: update prettier pipeline and import order
+
+## 1.2.0-beta.0
+
+### Minor Changes
+
+- 4af83ff9: update eslint config, fixed eslint error
+
+### Patch Changes
+
+- 0f2fab86: update prettier pipeline and import order
+
+## 1.1.1
+
+### Patch Changes
+
+- 27e6047a: Correct typo in Google One Tap ITP config
+- df88b4db: Fix TypeScript 4.7 unsupported feature introduced in "Hotfix typo in Google One Tap ITP config"
+
+## 1.1.1-beta.0
+
+### Patch Changes
+
+- 27e6047a: Correct typo in Google One Tap ITP config
+- df88b4db: Fix TypeScript 4.7 unsupported feature introduced in "Hotfix typo in Google One Tap ITP config"
+
 ## 1.1.0
 
 ### Minor Changes

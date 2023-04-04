@@ -1,5 +1,39 @@
 # api
 
+## 1.2.0
+
+### Minor Changes
+
+- 4af83ff9: update eslint config, fixed eslint error
+
+### Patch Changes
+
+- 3b6b100e: check hosted domain for authorization code flow
+- 0f2fab86: update prettier pipeline and import order
+
+## 1.2.0-beta.0
+
+### Minor Changes
+
+- 4af83ff9: update eslint config, fixed eslint error
+
+### Patch Changes
+
+- 3b6b100e: check hosted domain for authorization code flow
+- 0f2fab86: update prettier pipeline and import order
+
+## 1.1.1
+
+### Patch Changes
+
+- 313b9e75: Avoid SQL injection and XSS by upgrading class-validtor to version 0.14.0
+
+## 1.1.1-beta.0
+
+### Patch Changes
+
+- 313b9e75: Avoid SQL injection and XSS by upgrading class-validtor to version 0.14.0
+
 ## 1.1.0
 
 ### Minor Changes

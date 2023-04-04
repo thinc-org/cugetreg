@@ -1,10 +1,14 @@
-import RejectModal from '@admin-web/module/pendingReviews/components/rejectModal'
-import { Review, Semester } from '@cgr/codegen'
+import { useState } from 'react'
+
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
 import HighlightOffIcon from '@mui/icons-material/HighlightOff'
 import { Box, IconButton, TableCell, TableRow, Typography } from '@mui/material'
 import DOMPurify from 'isomorphic-dompurify'
-import { useState } from 'react'
+
+import RejectModal from '@admin-web/module/pendingReviews/components/rejectModal'
+
+import { Review, Semester } from '@cgr/codegen'
+
 interface SinglePendingReviewProps {
   data: Review
 }

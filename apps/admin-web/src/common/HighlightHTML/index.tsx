@@ -2,8 +2,6 @@
 import { styled } from '@mui/material'
 
 export const HighlightHTML = styled('div')`
-  ${({ theme }) => theme.palette.primaryRange[700]};
-
   .slate-h1,
   .slate-h2,
   .slate-h3,
@@ -31,9 +29,9 @@ export const HighlightHTML = styled('div')`
   .slate-blockquote {
     font-size: ${({ theme }) => theme.typography.h6.fontSize};
     line-height: ${({ theme }) => theme.typography.h4.lineHeight};
-    color: ${({ theme }) => theme.palette.primaryRange[100]};
+    color: ${({ theme }) => theme.palette.primary.main};
     margin: ${({ theme }) => theme.spacing(1, 0)};
     padding: ${({ theme }) => theme.spacing(0, 2)};
-    border-left: 2px solid ${({ theme }) => theme.palette.primaryRange[50]};
+    border-left: 2px solid ${({ theme }) => theme.palette.primary.main};
   }
 `

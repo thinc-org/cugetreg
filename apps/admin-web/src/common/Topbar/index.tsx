@@ -1,5 +1,5 @@
 import SectionLink from './components/SectionLink'
-import { links, LinkSectionType } from './linkConstant'
+import { LinkSectionType, links } from './linkConstant'
 import { StyledNav } from './styled'
 
 // TODO: change route names

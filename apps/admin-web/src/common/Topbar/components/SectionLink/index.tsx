@@ -1,7 +1,8 @@
 import { Typography } from '@mui/material'
-import { StyledListItem, StyledList } from './styled'
+
 import { LinkType } from '../../linkConstant'
 import SingleLink from '../singleLink'
+import { StyledList, StyledListItem } from './styled'
 
 interface SectionLinkProps {
   links: LinkType[]
@@ -16,7 +17,7 @@ export default function SectionLink({ links, sectionTitle }: SectionLinkProps) {
       </Typography>
       <StyledListItem disablePadding>
         {links.map((link) => (
-          <SingleLink title={link.title} url={link.url} />
+          <SingleLink key={link.url} title={link.title} url={link.url} />
         ))}
       </StyledListItem>
     </StyledList>

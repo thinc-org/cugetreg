@@ -1,22 +1,9 @@
-import {
-  BadRequestException,
-  ConflictException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common'
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 
-import { StudyProgram } from '@thinc-org/chula-courses'
-import { Model, Types } from 'mongoose'
+import { Model } from 'mongoose'
 
-import {
-  CreateReviewInput,
-  EditReviewInput,
-  StudyProgram as GraphQLStudyProgram,
-  Review,
-  ReviewInteractionType,
-  ReviewStatus,
-} from '../graphql'
+import { StudyProgram as GraphQLStudyProgram, Review, ReviewStatus } from '../graphql'
 import { ReviewDocument } from '../schemas/review.schema'
 
 @Injectable()

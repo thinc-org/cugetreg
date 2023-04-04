@@ -16,7 +16,6 @@ export class AuthController {
 
   @Get()
   async requestAuth() {
-    //random code
     const code: string = randomBytes(64).toString('base64')
 
     return await this.authService.requestAuthentik(code)

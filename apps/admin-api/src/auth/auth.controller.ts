@@ -28,40 +28,19 @@ export class AuthController {
     return decodedPayload
   }
 
-  // @Post('idtoken')
-  // async authWithIdToken(
-  //   @Body() body: { idToken: string },
-  //   @Res({ passthrough: true }) res: Response
-  // ) {
-  //   const { idToken } = body
-  //   if (!idToken) {
-  //     throw new BadRequestException('idToken is required')
-  //   }
-  //   const payload = await this.authService.validateGoogleIdToken(idToken)
-  //   const { refreshToken } = await this.authService.handleGoogleIdToken(payload)
-  //   this.setCookie(res, 'refreshtoken', refreshToken)
-  //   return { success: true }
-  // }
-
-  // @Get('/google/callback')
-  // @Redirect()
-  // async authWithGoogleCallback(
-  //   @Query('code') code: string,
-  //   @Query('state') stateString = '',
-  //   @Res({ passthrough: true }) res: Response
-  // ) {
-  //   const state: OauthStatePayload = JSON.parse(stateString)
-  //   this.validateOauthState(state)
-
-  //   const { refreshToken } = await this.authService.handleGoogleOauthCode(
-  //     code,
-  //     state.overrideBackendUrl
-  //   )
-  //   this.setCookie(res, 'refreshtoken', refreshToken)
-  //   return {
-  //     url: state.returnUrl,
-  //   }
-  // }
+  @Post('idtoken')
+  async authWithIdToken(
+    @Body() body: { idToken: string },
+    @Res({ passthrough: true }) res: Response
+  ) {
+    const { idToken } = body
+    if (!idToken) {
+      throw new BadRequestException('idToken is required')
+    }
+    const accessToken = await this.authService.validateIdToken(idToken)
+    this.setCookie(res, 'accessToken', accessToken)
+    return { success: true }
+  }
 
   @Post('/logout')
   async logout(@Req() req: Request, @Res({ passthrough: true }) res: Response) {

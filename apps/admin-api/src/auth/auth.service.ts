@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common'
+import { BadRequestException, Injectable, Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { HttpService } from '@nestjs/axios'
 import { lastValueFrom } from 'rxjs'
@@ -22,14 +22,13 @@ export class AuthService {
     const config = {
       params: {
         response_type: code,
-        client_id: this.configService.get<string>('CLIENT_ID'),
+        client_id: this.configService.get<string>('clientId'),
         scope: 'openid email profile',
-        redirect_uri: this.configService.get<string>('REDIRECT_URI'),
-
+        redirect_uri: this.configService.get<string>('redirectUrl'),
       },
     }
     const response = await lastValueFrom(
-      this.httpService.get(this.configService.get<string>('AUTHORIZATION_URL'), config)
+      this.httpService.get(this.configService.get<string>('authorizationUrl'), config)
     )
     return response
   }
@@ -39,16 +38,27 @@ export class AuthService {
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       param: {
         code: authenticationCode,
-        client_id: this.configService.get<string>('CLIENT_ID'),
-        client_secret: this.configService.get<string>('CLIENT_SECRET'),
-        redirect_uri: this.configService.get<string>('REDIRECT_URI'),
+        client_id: this.configService.get<string>('clientId'),
+        client_secret: this.configService.get<string>('clientSecret'),
+        redirect_uri: this.configService.get<string>('redirectUrl'),
         grant_type: 'authorization_code',
       },
     }
     const response = await lastValueFrom(
-      this.httpService.post('https://auth.internal.cugetreg.com/application/o/token/', config)
+      this.httpService.post(this.configService.get<string>('tokenUrl'), config)
     )
     return response.data
+  }
+
+  async validateIdToken(idToken: string) {
+    // verifyIdToken will throw an error if the token is invalid
+    let payload
+
+    if (false) {
+      throw new BadRequestException('Invalid id token')
+    }
+
+    return payload
   }
 
   async issueAccessToken(userInfo: any): Promise<string> {

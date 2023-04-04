@@ -22,13 +22,14 @@ export class AuthService {
     const config = {
       params: {
         response_type: code,
-        client_id: '2f3a5527c10a61c0489d75825011c69f59743981',
+        client_id: this.configService.get<string>('CLIENT_ID'),
         scope: 'openid email profile',
-        redirect_uri: 'localhost:4201',
+        redirect_uri: this.configService.get<string>('REDIRECT_URI'),
+
       },
     }
     const response = await lastValueFrom(
-      this.httpService.get('https://auth.internal.cugetreg.com/application/o/authorize/', config)
+      this.httpService.get(this.configService.get<string>('AUTHORIZATION_URL'), config)
     )
     return response
   }
@@ -38,10 +39,9 @@ export class AuthService {
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       param: {
         code: authenticationCode,
-        client_id: '2f3a5527c10a61c0489d75825011c69f59743981',
-        client_secret:
-          '5fcb850b2b50fff7d1c135a9fc96d1260e87ad48ce78f516cbf8688a31aeab05384e93209b3f8ebadc8cc896a2847a691570d6483fd1d24193f8fee5f62adae5',
-        redirect_uri: 'localhost:4201',
+        client_id: this.configService.get<string>('CLIENT_ID'),
+        client_secret: this.configService.get<string>('CLIENT_SECRET'),
+        redirect_uri: this.configService.get<string>('REDIRECT_URI'),
         grant_type: 'authorization_code',
       },
     }

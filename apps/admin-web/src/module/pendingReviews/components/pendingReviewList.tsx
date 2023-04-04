@@ -14,8 +14,8 @@ import PendingReviewHeader from './pendingReviewHeader'
 import SinglePendingReview from './singlePendingReview'
 
 export default function PendingReviewsList() {
-  const reviewQuery = useGetPendingReviewsQuery()
-  console.log(reviewQuery.loading)
+  const { loading, error, data } = useGetPendingReviewsQuery()
+
   return (
     <>
       <Container>
@@ -42,7 +42,7 @@ export default function PendingReviewsList() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {reviewQuery.loading
+            {loading
               ? // Todo: Reduce gaps between each skeleton
                 // Todo: Add more skeleton (dynamically?)
                 // <Grid spacing={0} direction="column">
@@ -52,7 +52,7 @@ export default function PendingReviewsList() {
                 // </Grid>
                 // TODO: THiS Cause ERROR
                 null
-              : reviewQuery.data?.pendingReviews.map((data) => (
+              : data?.pendingReviews.map((data) => (
                   <SinglePendingReview key={data._id} data={data} />
                 ))}
           </TableBody>

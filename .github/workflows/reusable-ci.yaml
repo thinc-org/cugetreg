@@ -25,7 +25,7 @@ jobs:
         uses: pnpm/action-setup@v2.0.1
         id: pnpm-install
         with:
-          version: 7
+          version: 8
           run_install: false
 
       - name: Setup node with cache

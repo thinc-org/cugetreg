@@ -2,10 +2,9 @@ import { useState } from 'react'
 
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
 import HighlightOffIcon from '@mui/icons-material/HighlightOff'
-import { Box, IconButton, TableCell, TableRow, Typography } from '@mui/material'
+import StarIcon from '@mui/icons-material/Star'
+import { Button, IconButton, Stack, TextField, Typography } from '@mui/material'
 import DOMPurify from 'isomorphic-dompurify'
-
-import RejectModal from '@admin-web/module/pendingReviews/components/rejectModal'
 
 import { Review, Semester } from '@cgr/codegen'
 
@@ -14,46 +13,68 @@ interface SinglePendingReviewProps {
 }
 
 export default function SinglePendingReview({ data }: SinglePendingReviewProps) {
-  const [open, setOpen] = useState(false)
-  const handleOpen = () => setOpen(true)
-  const handleClose = () => setOpen(false)
+  const [reject, setReject] = useState(false)
+
+  const [rejectionReason, setRejectionReason] = useState('')
+  const handleReject = () => {
+    setReject(true)
+  }
+  const handleClose = () => setReject(false)
+  const bgcolor = reject ? '#FFEDD5' : undefined
 
   return (
     <>
-      <RejectModal open={open} onClose={handleClose} />
+      <Stack px={2.5} py={3} spacing={2} bgcolor={bgcolor}>
+        <Stack direction={'row'} alignItems={'center'} justifyContent={'space-between'}>
+          <Stack direction={'row'} alignItems={'center'} spacing={1}>
+            <Stack direction={'row'} alignItems={'center'} width={72} height={32}>
+              <StarIcon />
+              <Typography fontWeight={700}>{data.rating / 2}</Typography>
+            </Stack>
+            <Typography fontWeight={700}>{data.courseNo} PARAGRAPH WRITING</Typography>
+          </Stack>
+          <Stack direction={'row'} alignItems={'center'} spacing={2}>
+            <IconButton>
+              <CheckCircleOutlineIcon color="success" />
+            </IconButton>
+            <IconButton onClick={handleReject}>
+              <HighlightOffIcon color="warning" />
+            </IconButton>
+          </Stack>
+        </Stack>
 
-      <TableRow>
-        <TableCell sx={{ px: 3, py: 2, borderBottom: 'none' }}>
-          <Typography fontWeight={700}>{data.courseNo}</Typography>
-        </TableCell>
-        <TableCell sx={{ px: 3, py: 2, borderBottom: 'none' }}>
-          <Typography fontWeight={700}>{data.academicYear}</Typography>
-        </TableCell>
-        <TableCell sx={{ px: 3, py: 2, borderBottom: 'none' }}>
-          <Typography fontWeight={700}>{getSemesterName(data.semester as Semester)}</Typography>
-        </TableCell>
-        <TableCell sx={{ px: 3, py: 2, borderBottom: 'none' }}>
-          <Typography fontWeight={700}>{data.rating / 2}</Typography>
-        </TableCell>
-        <TableCell sx={{ width: '100%', borderBottom: 'none' }}></TableCell>
-        <TableCell sx={{ px: 3, py: 2, borderBottom: 'none' }}>
-          <Box sx={{ whiteSpace: 'nowrap' }}>
-            <IconButton color="success">
-              <CheckCircleOutlineIcon />
-            </IconButton>
-            <IconButton color="warning">
-              <HighlightOffIcon />
-            </IconButton>
-          </Box>
-        </TableCell>
-      </TableRow>
-      <TableRow>
-        <TableCell colSpan={6} sx={{ px: 3, py: 2, wordBreak: 'break-word' }}>
+        <Stack direction={'row'} alignItems={'center'} spacing={1}>
+          <Stack direction={'row'} alignItems={'center'} width={72} height={24}>
+            <Typography fontWeight={500} color="#6B7280">
+              {data.academicYear}
+            </Typography>
+          </Stack>
+
+          <Stack direction={'row'} alignItems={'center'} width={72} height={24}>
+            <Typography fontWeight={500} color="#6B7280">
+              {getSemesterName(data.semester as Semester)}
+            </Typography>
+          </Stack>
+        </Stack>
+
+        <Stack sx={{ wordBreak: 'break-word' }}>
           <Typography
             dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(data.content ?? '') }}
-          />
-        </TableCell>
-      </TableRow>
+          ></Typography>
+        </Stack>
+      </Stack>
+      {reject && (
+        <Stack p={3} pt={1} spacing={2} bgcolor={bgcolor}>
+          <Typography fontWeight={700} color="red">
+            Reject Reason
+          </Typography>
+          <TextField onChange={(e) => setRejectionReason(e.target.value)} />
+          {/* TODO: REJECT */}
+          <Button variant="contained" sx={{ bgcolor: '#D54C0C', width: 240, height: 40 }}>
+            <Typography>Done</Typography>
+          </Button>
+        </Stack>
+      )}
     </>
   )
 }

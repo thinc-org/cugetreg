@@ -1,6 +1,4 @@
-import useUser from '@admin-web/hooks/useUser'
 import { useRouter } from 'next/router'
-import { useEffect } from 'react'
 
 interface ProctectedRoutesProps {
   children: JSX.Element

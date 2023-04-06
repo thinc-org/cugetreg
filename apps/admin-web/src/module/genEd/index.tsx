@@ -1,11 +1,11 @@
-import { Container } from '@mui/material'
-
-import GenEdList from '@admin-web/module/genEd/components/genEdList'
+import { GenEdList } from './components/GenEdList'
+import { GenEdTableHeader } from './components/GenEdTableHeader'
 
 export function GenEdPage() {
   return (
-    <Container sx={{ mt: 4 }}>
+    <div>
+      <GenEdTableHeader />
       <GenEdList />
-    </Container>
+    </div>
   )
 }

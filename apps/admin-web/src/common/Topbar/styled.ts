@@ -16,4 +16,6 @@ export const StyledNav = styled('nav')({
   backgroundColor: '#F3F4F6',
   height: '100vh',
   borderRight: '1px solid #E5E7EB',
+  position: 'sticky',
+  top: 0,
 })

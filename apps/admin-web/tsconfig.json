@@ -1,11 +1,10 @@
 {
-  "extends": "tsconfig/nextjs.json",
+  "extends": "@cgr/project-config/tsconfig/nextjs.json",
   "compilerOptions": {
     "paths": {
       "@admin-web/*": ["./src/*"]
     },
-    "experimentalDecorators": true,
-    "jsx": "preserve"
+    "experimentalDecorators": true
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": [

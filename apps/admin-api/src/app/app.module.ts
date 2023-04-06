@@ -7,8 +7,6 @@ import { ScheduleModule } from '@nestjs/schedule'
 import { GraphQLError } from 'graphql'
 import { join } from 'path'
 
-import { OverrideModule } from '@admin-api/override/override.module'
-
 import { GraphQLExpressContext } from '../common/types/context.type'
 import { configuration } from '../config/configuration'
 import { ReviewModule } from '../review/review.module'

@@ -30,10 +30,118 @@ importers:
       prettier: 2.8.7
       turbo: 1.8.8
 >>>>>>> setup auth to request id_token
+      '@trivago/prettier-plugin-sort-imports': 4.0.0_hji7q35r5poin4yuczd5ydoa4m
+      prettier: 2.8.7
+      turbo: 1.8.8
 
   apps/admin-api:
     specifiers:
       '@nestjs/axios': ^2.0.0
+      '@nestjs/cli': ^9.0.0
+      '@nestjs/common': 9.2.1
+      '@nestjs/config': 2.2.0
+      '@nestjs/core': 9.2.1
+      '@nestjs/graphql': 7.9.8
+      '@nestjs/jwt': 7.2.0
+      '@nestjs/mongoose': 9.2.1
+      '@nestjs/platform-express': 9.2.1
+      '@nestjs/schedule': 2.1.0
+      '@slack/webhook': 6.0.0
+      '@thinc-org/chula-courses': ^2.3.0
+      '@types/express': ^4.17.16
+      '@types/jest': 28.1.8
+      '@types/node': ^18.11.18
+      axios: 0.23.0
+      class-transformer: 0.3.1
+      class-validator: 0.14.0
+      eslint: 7.32.0
+      eslint-config-custom: workspace:*
+      graphql: 15.5.0
+      jest: 28.1.3
+      mongoose: 6.5.2
+      rxjs: ^7.8.0
+      ts-jest: 28.0.8
+      tsconfig: workspace:*
+      typescript: ~4.7.4
+    dependencies:
+      '@nestjs/axios': 2.0.0_wh2yvxfi7ct4aonxtzszklh25u
+      '@nestjs/cli': 9.1.9
+      '@nestjs/common': 9.2.1_rleu2amg6izhyk73dpeoeqq5o4
+      '@nestjs/config': 2.2.0_b4pxbpa7chblgbyake5iz5rdmu
+      '@nestjs/core': 9.2.1_e6la6qvsclaae2becwjnmfvsuq
+      '@nestjs/graphql': 7.9.8_myejjruapgaqvct3cqb6ok2i4y
+      '@nestjs/jwt': 7.2.0_@nestjs+common@9.2.1
+      '@nestjs/mongoose': 9.2.1_qllokwhbbxyphnu7erbtzw5xuq
+      '@nestjs/platform-express': 9.2.1_hjcqpoaebdr7gdo5hgc22hthbe
+      '@nestjs/schedule': 2.1.0_dntc3uqqknzoduyjojusds5kla
+      '@slack/webhook': 6.0.0
+      '@thinc-org/chula-courses': 2.3.0
+      axios: 0.23.0
+      class-transformer: 0.3.1
+      class-validator: 0.14.0
+      graphql: 15.5.0
+      mongoose: 6.5.2
+      rxjs: 7.8.0
+    devDependencies:
+      '@types/express': 4.17.16
+      '@types/jest': 28.1.8
+      '@types/node': 18.11.18
+      eslint: 7.32.0
+      eslint-config-custom: link:../../packages/eslint-config-custom
+      jest: 28.1.3_@types+node@18.11.18
+      ts-jest: 28.0.8_qglmbi2i2uib5oy4iovazhrsri
+      tsconfig: link:../../packages/tsconfig
+      typescript: 4.7.4
+
+  apps/admin-web:
+    specifiers:
+      '@apollo/client': ^3.7.7
+      '@cgr/codegen': workspace:*
+      '@cgr/course-utils': workspace:*
+      '@emotion/react': 11.10.4
+      '@emotion/styled': 11.10.4
+      '@mui/material': 5.9.1
+      '@next/font': 13.1.6
+      '@types/node': 18.11.18
+      '@types/react': 18.0.20
+      '@types/react-dom': 18.0.6
+      axios: 0.23.0
+      eslint: 7.32.0
+      eslint-config-custom: workspace:*
+      isomorphic-dompurify: 0.20.0
+      next: ^13.0.0
+      react: 18.2.0
+      react-dom: 18.2.0
+      styled-components: 5.3.5
+      tsconfig: workspace:*
+      typescript: ~4.7.4
+    dependencies:
+      '@apollo/client': 3.7.7_gdcq4dv6opitr3wbfwyjmanyra
+      '@cgr/codegen': link:../../packages/codegen
+      '@cgr/course-utils': link:../../packages/course-utils
+      '@emotion/react': 11.10.4_eapys5ndgs37tbuawlv2xlkq5i
+      '@emotion/styled': 11.10.4_h3g5w2xi67gb5owhpqb5xdbzbe
+      '@mui/material': 5.9.1_af5ln35zuaotaffazii6n6bke4
+      '@next/font': 13.1.6
+      axios: 0.23.0
+      isomorphic-dompurify: 0.20.0
+      next: 13.1.6_pjwopsidmaokadturxaafygjp4
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+      styled-components: 5.3.5_7i5myeigehqah43i5u7wbekgba
+    devDependencies:
+      '@types/node': 18.11.18
+      '@types/react': 18.0.20
+      '@types/react-dom': 18.0.6
+      eslint: 7.32.0
+      eslint-config-custom: link:../../packages/eslint-config-custom
+      tsconfig: link:../../packages/tsconfig
+      typescript: 4.7.4
+
+  apps/api:
+    specifiers:
+      '@grpc/grpc-js': 1.4.4
+      '@grpc/proto-loader': 0.6.7
       '@nestjs/cli': ^9.0.0
       '@nestjs/common': 9.2.1
       '@nestjs/config': 2.2.0
@@ -3552,9 +3660,6 @@ packages:
       react-is: 18.2.0
     dev: false
 
-<<<<<<< refs/remotes/origin/beta
-  /@nestjs/bull-shared@0.1.2(@nestjs/common@9.2.1)(@nestjs/core@9.2.1):
-=======
   /@nestjs/axios/2.0.0_wh2yvxfi7ct4aonxtzszklh25u:
     resolution: {integrity: sha512-F6oceoQLEn031uun8NiommeMkRIojQqVryxQy/mK7fx0CI0KbgkJL3SloCQcsOD+agoEnqKJKXZpEvL6FNswJg==}
     peerDependencies:
@@ -4392,11 +4497,7 @@ packages:
     resolution: {integrity: sha512-XCuKFP5PS55gnMVu3dty8KPatLqUoy/ZYzDzAGCQ8JNFCkLXzmI7vNHCR+XpbZaMWQK/vQubr7PkYq8g470J/A==}
     engines: {node: '>= 10'}
 
-<<<<<<< refs/remotes/origin/beta
-  /@trivago/prettier-plugin-sort-imports@4.0.0(@vue/compiler-sfc@3.2.45)(prettier@2.8.4):
-=======
   /@trivago/prettier-plugin-sort-imports/4.0.0_hji7q35r5poin4yuczd5ydoa4m:
->>>>>>> setup auth to request id_token
     resolution: {integrity: sha512-Tyuk5ZY4a0e2MNFLdluQO9F6d1awFQYXVVujEPFfvKPPXz8DADNHzz73NMhwCSXGSuGGZcA/rKOyZBrxVNMxaA==}
     peerDependencies:
       '@vue/compiler-sfc': 3.x
@@ -12428,20 +12529,8 @@ packages:
     engines: {node: '>= 0.8.0'}
     dev: true
 
-  /prettier-linter-helpers@1.0.0:
-    resolution: {integrity: sha512-GbK2cP9nraSSUF9N2XwUwqfzlAFlMNYYl+ShE/V+H8a9uNl/oUqB1w2EL54Jh0OlyRSd8RfWYJ3coVS4TROP2w==}
-    engines: {node: '>=6.0.0'}
-    dependencies:
-      fast-diff: 1.2.0
-    dev: true
-
-<<<<<<< refs/remotes/origin/beta
-  /prettier@2.8.4:
-    resolution: {integrity: sha512-vIS4Rlc2FNh0BySk3Wkd6xmwxB0FpOndW5fisM5H8hsZSxU2VWVB5CWIkIjWvrHjIhxk2g3bfMKM87zNTrZddw==}
-=======
   /prettier/2.8.7:
     resolution: {integrity: sha512-yPngTo3aXUUmyuTjeTUT75txrf+aMh9FiD7q9ZE/i6r0bPb22g4FsE6Y338PQX1bmfy08i9QQCB7/rcUAVntfw==}
->>>>>>> setup auth to request id_token
     engines: {node: '>=10.13.0'}
     hasBin: true
     dev: true
@@ -14277,91 +14366,56 @@ packages:
       yargs: 17.6.2
     dev: true
 
-<<<<<<< refs/remotes/origin/beta
-  /turbo-darwin-64@1.8.1:
-    resolution: {integrity: sha512-H7pxGF/vsYG7kbY+vB8h+3r8VXn2L6hhYQi0XWA+EjZ1e2zu7+TzEMRWFYmvJPx8TRo5cV5txtg0I22/Y7bxUA==}
-=======
   /turbo-darwin-64/1.8.8:
     resolution: {integrity: sha512-18cSeIm7aeEvIxGyq7PVoFyEnPpWDM/0CpZvXKHpQ6qMTkfNt517qVqUTAwsIYqNS8xazcKAqkNbvU1V49n65Q==}
->>>>>>> setup auth to request id_token
     cpu: [x64]
     os: [darwin]
     requiresBuild: true
     dev: true
     optional: true
 
-<<<<<<< refs/remotes/origin/beta
-  /turbo-darwin-arm64@1.8.1:
-    resolution: {integrity: sha512-zMcvplVGluR6v4oJXW7S1/R9QFsHdDkXMhPq8PIdvT3HwTb69ms0MNv7aKiQ0ZFy5D/eKCTyBRUFZvjorZmBqA==}
-=======
   /turbo-darwin-arm64/1.8.8:
     resolution: {integrity: sha512-ruGRI9nHxojIGLQv1TPgN7ud4HO4V8mFBwSgO6oDoZTNuk5ybWybItGR+yu6fni5vJoyMHXOYA2srnxvOc7hjQ==}
->>>>>>> setup auth to request id_token
     cpu: [arm64]
     os: [darwin]
     requiresBuild: true
     dev: true
     optional: true
 
-<<<<<<< refs/remotes/origin/beta
-  /turbo-linux-64@1.8.1:
-    resolution: {integrity: sha512-eJNx8iWDn5Lt8d0221RFd6lBjViLiPCVWNFF5JtqOohgRYplvepY3y/THa1GivMxY4px6zjTiy2oPE/VscVP4w==}
-=======
   /turbo-linux-64/1.8.8:
     resolution: {integrity: sha512-N/GkHTHeIQogXB1/6ZWfxHx+ubYeb8Jlq3b/3jnU4zLucpZzTQ8XkXIAfJG/TL3Q7ON7xQ8yGOyGLhHL7MpFRg==}
->>>>>>> setup auth to request id_token
     cpu: [x64]
     os: [linux]
     requiresBuild: true
     dev: true
     optional: true
 
-<<<<<<< refs/remotes/origin/beta
-  /turbo-linux-arm64@1.8.1:
-    resolution: {integrity: sha512-hFZkm8tq9kLE8tdbOzD6EbNzftdzMR4JEuuoKC6AbTzx1ZsWRvXJ/BGTeSH9/dYYm/wfuIEUiOP7HeXWiZRx7g==}
-=======
   /turbo-linux-arm64/1.8.8:
     resolution: {integrity: sha512-hKqLbBHgUkYf2Ww8uBL9UYdBFQ5677a7QXdsFhONXoACbDUPvpK4BKlz3NN7G4NZ+g9dGju+OJJjQP0VXRHb5w==}
->>>>>>> setup auth to request id_token
     cpu: [arm64]
     os: [linux]
     requiresBuild: true
     dev: true
     optional: true
 
-<<<<<<< refs/remotes/origin/beta
-  /turbo-windows-64@1.8.1:
-    resolution: {integrity: sha512-o3oDg0lTYZl5KZD3Mi753On2vQT51unIiungoUmHDCeDH5JXfWPFu+6p+GAoIyRwQkZPvaEzMLuUtRgklKcBJw==}
-=======
   /turbo-windows-64/1.8.8:
     resolution: {integrity: sha512-2ndjDJyzkNslXxLt+PQuU21AHJWc8f6MnLypXy3KsN4EyX/uKKGZS0QJWz27PeHg0JS75PVvhfFV+L9t9i+Yyg==}
->>>>>>> setup auth to request id_token
     cpu: [x64]
     os: [win32]
     requiresBuild: true
     dev: true
     optional: true
 
-<<<<<<< refs/remotes/origin/beta
-  /turbo-windows-arm64@1.8.1:
-    resolution: {integrity: sha512-NDYr2Mra21KOdl18BhMRoH2jQmlu+oqkpqRd+cGB8+c5P0B6LDVCM83cfcXQ+PNqX9S3Y1eZDRENZJx9I03sSw==}
-=======
   /turbo-windows-arm64/1.8.8:
     resolution: {integrity: sha512-xCA3oxgmW9OMqpI34AAmKfOVsfDljhD5YBwgs0ZDsn5h3kCHhC4x9W5dDk1oyQ4F5EXSH3xVym5/xl1J6WRpUg==}
->>>>>>> setup auth to request id_token
     cpu: [arm64]
     os: [win32]
     requiresBuild: true
     dev: true
     optional: true
 
-<<<<<<< refs/remotes/origin/beta
-  /turbo@1.8.1:
-    resolution: {integrity: sha512-g8RltmG5zd0nYbKpkBQwnTSXTWUiup9+yileQ1TETNzpjxI3TL5k7kt2WkgUHEqR947IPUV+ckIduZHVITJmIQ==}
-=======
   /turbo/1.8.8:
     resolution: {integrity: sha512-qYJ5NjoTX+591/x09KgsDOPVDUJfU9GoS+6jszQQlLp1AHrf1wRFA3Yps8U+/HTG03q0M4qouOfOLtRQP4QypA==}
->>>>>>> setup auth to request id_token
     hasBin: true
     requiresBuild: true
     optionalDependencies:

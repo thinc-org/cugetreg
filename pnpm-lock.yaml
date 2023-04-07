@@ -3,10 +3,6 @@ lockfileVersion: '6.0'
 importers:
 
   .:
-    dependencies:
-      react-hot-toast:
-        specifier: 2.3.0
-        version: 2.3.0(csstype@3.1.1)(react-dom@18.2.0)(react@18.2.0)
     devDependencies:
       '@cgr/project-config':
         specifier: workspace:*
@@ -141,6 +137,9 @@ importers:
       react-dom:
         specifier: 18.2.0
         version: 18.2.0(react@18.2.0)
+      react-hot-toast:
+        specifier: 2.3.0
+        version: 2.3.0(csstype@3.1.1)(react-dom@18.2.0)(react@18.2.0)
       styled-components:
         specifier: 5.3.5
         version: 5.3.5(react-dom@18.2.0)(react-is@18.2.0)(react@18.2.0)

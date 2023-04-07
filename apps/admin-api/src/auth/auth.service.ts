@@ -1,10 +1,12 @@
+import { HttpService } from '@nestjs/axios'
 import { BadRequestException, Injectable, Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
-import { HttpService } from '@nestjs/axios'
-import { lastValueFrom } from 'rxjs'
-import { astFromValue } from 'graphql'
-import { AccessTokenPayload } from './auth.dto'
 import { JwtService } from '@nestjs/jwt'
+
+import { astFromValue } from 'graphql'
+import { lastValueFrom } from 'rxjs'
+
+import { AccessTokenPayload } from './auth.dto'
 
 @Injectable()
 export class AuthService {

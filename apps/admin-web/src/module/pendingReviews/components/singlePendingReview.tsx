@@ -34,10 +34,10 @@ export default function SinglePendingReview({ data }: SinglePendingReviewProps) 
             <Typography fontWeight={700}>{data.courseNo} PARAGRAPH WRITING</Typography>
           </Stack>
           <Stack direction={'row'} alignItems={'center'} spacing={2}>
-            <IconButton>
+            <IconButton disabled={reject}>
               <CheckCircleOutlineIcon color="success" />
             </IconButton>
-            <IconButton onClick={handleReject}>
+            <IconButton disabled={reject} onClick={handleReject}>
               <HighlightOffIcon color="warning" />
             </IconButton>
           </Stack>
@@ -69,10 +69,19 @@ export default function SinglePendingReview({ data }: SinglePendingReviewProps) 
             Reject Reason
           </Typography>
           <TextField onChange={(e) => setRejectionReason(e.target.value)} />
-          {/* TODO: REJECT */}
-          <Button variant="contained" sx={{ bgcolor: '#D54C0C', width: 240, height: 40 }}>
-            <Typography>Done</Typography>
-          </Button>
+          <Stack direction={'row'} spacing={2}>
+            {/* TODO: REJECT */}
+            <Button variant="contained" sx={{ bgcolor: '#D54C0C', width: 240, height: 40 }}>
+              <Typography>Done</Typography>
+            </Button>
+            <Button
+              variant="outlined"
+              sx={{ borderColor: '#D54C0C', width: 240, height: 40 }}
+              onClick={handleClose}
+            >
+              <Typography sx={{ color: '#D54C0C' }}>Cancel</Typography>
+            </Button>
+          </Stack>
         </Stack>
       )}
     </>

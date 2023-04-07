@@ -1,5 +1,6 @@
 import { useState } from 'react'
 
+import { ApolloQueryResult } from '@apollo/client'
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 import IconButton from '@mui/material/IconButton'
@@ -9,15 +10,25 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Typography from '@mui/material/Typography'
 
-import { Override } from '@cgr/codegen'
+import { Exact, GetOverridesQuery, Override, useDeleteOverrideMutation } from '@cgr/codegen'
 
 import { GenEdRowContainer } from './styled'
 
 interface SingleGenEdProps {
   course: Override
+  refetchOverrides: (
+    variables?:
+      | Partial<
+          Exact<{
+            [key: string]: never
+          }>
+        >
+      | undefined
+  ) => Promise<ApolloQueryResult<GetOverridesQuery>>
 }
 
-export default function SingleGenEd({ course }: SingleGenEdProps) {
+export default function SingleGenEd({ course, refetchOverrides }: SingleGenEdProps) {
+  const [deleteOverride, { data, loading, error }] = useDeleteOverrideMutation()
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -28,9 +39,19 @@ export default function SingleGenEd({ course }: SingleGenEdProps) {
   }
 
   const handleDelete = async () => {
-    // TODO: call API for deleting and fetch new data
+    // TODO: add error handler
     handleClose()
-    console.log('Delete: ', course.courseNo)
+    await deleteOverride({
+      variables: {
+        courseNo: course.courseNo,
+        courseGroup: {
+          studyProgram: course.studyProgram,
+          semester: course.semester,
+          academicYear: course.academicYear,
+        },
+      },
+    })
+    await refetchOverrides()
   }
 
   return (
@@ -41,7 +62,6 @@ export default function SingleGenEd({ course }: SingleGenEdProps) {
       <Typography></Typography>
       <IconButton aria-label="delete" onClick={handleClick}>
         <MoreVertIcon />
-        {/* <DeleteOutlinedIcon sx={{ fontSize: 24 }} onClick={() => handleDelete(course)} /> */}
       </IconButton>
       <Menu open={open} onClose={handleClose} anchorEl={anchorEl}>
         <MenuItem onClick={handleDelete}>

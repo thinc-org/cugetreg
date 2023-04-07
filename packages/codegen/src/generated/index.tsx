@@ -531,6 +531,14 @@ export type GetOverridesQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetOverridesQuery = { __typename?: 'Query', overrides: Array<{ __typename?: 'Override', courseNo: string, studyProgram: StudyProgram, semester: string, academicYear: string, genEd?: { __typename?: 'GenEdOverride', genEdType: GenEdType, sections: Array<string> } | null }> };
 
+export type DeleteOverrideMutationVariables = Exact<{
+  courseNo: Scalars['String'];
+  courseGroup: CourseGroupInput;
+}>;
+
+
+export type DeleteOverrideMutation = { __typename?: 'Mutation', deleteOverride?: { __typename?: 'Override', courseNo: string, studyProgram: StudyProgram, semester: string, academicYear: string, genEd?: { __typename?: 'GenEdOverride', genEdType: GenEdType, sections: Array<string> } | null } | null };
+
 export type CreateReviewMutationVariables = Exact<{
   createReviewInput: CreateReviewInput;
 }>;
@@ -867,6 +875,40 @@ export function useGetOverridesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
 export type GetOverridesQueryHookResult = ReturnType<typeof useGetOverridesQuery>;
 export type GetOverridesLazyQueryHookResult = ReturnType<typeof useGetOverridesLazyQuery>;
 export type GetOverridesQueryResult = Apollo.QueryResult<GetOverridesQuery, GetOverridesQueryVariables>;
+export const DeleteOverrideDocument = gql`
+    mutation DeleteOverride($courseNo: String!, $courseGroup: CourseGroupInput!) {
+  deleteOverride(courseNo: $courseNo, courseGroup: $courseGroup) {
+    ...OverrideDataFields
+  }
+}
+    ${OverrideDataFieldsFragmentDoc}`;
+export type DeleteOverrideMutationFn = Apollo.MutationFunction<DeleteOverrideMutation, DeleteOverrideMutationVariables>;
+
+/**
+ * __useDeleteOverrideMutation__
+ *
+ * To run a mutation, you first call `useDeleteOverrideMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteOverrideMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteOverrideMutation, { data, loading, error }] = useDeleteOverrideMutation({
+ *   variables: {
+ *      courseNo: // value for 'courseNo'
+ *      courseGroup: // value for 'courseGroup'
+ *   },
+ * });
+ */
+export function useDeleteOverrideMutation(baseOptions?: Apollo.MutationHookOptions<DeleteOverrideMutation, DeleteOverrideMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteOverrideMutation, DeleteOverrideMutationVariables>(DeleteOverrideDocument, options);
+      }
+export type DeleteOverrideMutationHookResult = ReturnType<typeof useDeleteOverrideMutation>;
+export type DeleteOverrideMutationResult = Apollo.MutationResult<DeleteOverrideMutation>;
+export type DeleteOverrideMutationOptions = Apollo.BaseMutationOptions<DeleteOverrideMutation, DeleteOverrideMutationVariables>;
 export const CreateReviewDocument = gql`
     mutation CreateReview($createReviewInput: CreateReviewInput!) {
   createReview(createReviewInput: $createReviewInput) {

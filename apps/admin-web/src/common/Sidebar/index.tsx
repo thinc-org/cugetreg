@@ -4,6 +4,7 @@ import { StyledNav } from './styled'
 
 // TODO: change route names
 // TODO: download font
+// TODO: add logo
 export default function SideBar() {
   return (
     <>

@@ -1,4 +1,4 @@
-import Topbar from '@admin-web/common/Topbar'
+import SideBar from '@admin-web/common/Sidebar'
 
 import { LayoutContainer } from './styled'
 
@@ -9,7 +9,7 @@ interface AppProviderProps {
 export function Layout({ children }: AppProviderProps) {
   return (
     <LayoutContainer>
-      <Topbar />
+      <SideBar />
       {children}
     </LayoutContainer>
   )

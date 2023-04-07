@@ -30,9 +30,10 @@ export const LeftContainer = styled(`div`)({
 
 export const RightContainer = styled(`div`)({
   display: 'flex',
+  alignContent: 'center',
+  flexWrap: 'wrap',
   columnGap: '24px',
   justifyContent: 'space-between',
-  alignContent: 'center',
 })
 
 export const StyledButton = styled(Button)({

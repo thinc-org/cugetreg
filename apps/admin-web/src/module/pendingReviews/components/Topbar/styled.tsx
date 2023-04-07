@@ -31,6 +31,7 @@ export const LeftContainer = styled(`div`)({
 export const RightContainer = styled(`div`)({
   display: 'flex',
   columnGap: '24px',
-  justifyContent: 'space-between',
   alignContent: 'center',
+  flexWrap: 'wrap',
+  justifyContent: 'space-between',
 })

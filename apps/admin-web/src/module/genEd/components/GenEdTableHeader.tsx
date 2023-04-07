@@ -9,7 +9,6 @@ export function GenEdTableHeader() {
       <Typography sx={{ fontWeight: 700 }}>Number</Typography>
       <Typography sx={{ fontWeight: 700, justifySelf: 'start' }}>Course title</Typography>
       <Typography sx={{ fontWeight: 700 }}></Typography>
-      <Typography sx={{ fontWeight: 700 }}>Credit</Typography>
     </GenEdTableHeaderContainer>
   )
 }

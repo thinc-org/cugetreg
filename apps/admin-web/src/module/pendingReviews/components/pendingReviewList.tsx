@@ -2,7 +2,6 @@ import { Container } from '@mui/material'
 
 import { useGetPendingReviewsQuery } from '@cgr/codegen'
 
-import PendingReviewHeader from './pendingReviewHeader'
 import SinglePendingReview from './singlePendingReview'
 
 export default function PendingReviewsList() {
@@ -11,7 +10,6 @@ export default function PendingReviewsList() {
   return (
     <>
       <Container disableGutters>
-        <PendingReviewHeader />
         {loading
           ? // Todo: Reduce gaps between each skeleton
             // Todo: Add more skeleton (dynamically?)

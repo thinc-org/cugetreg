@@ -109,7 +109,7 @@ export default function SinglePendingReview({ data, refetchReviews }: SinglePend
           <Typography fontWeight={700} color="red">
             Reject Reason
           </Typography>
-          <TextField onChange={(e) => setRejectionReason(e.target.value)} />
+          <TextField multiline onChange={(e) => setRejectionReason(e.target.value)} />
           <Stack direction={'row'} spacing={2}>
             <Button
               variant="contained"

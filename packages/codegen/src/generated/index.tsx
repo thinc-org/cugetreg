@@ -582,6 +582,15 @@ export type SetReviewInteractionMutationVariables = Exact<{
 
 export type SetReviewInteractionMutation = { __typename?: 'Mutation', setReviewInteraction: { __typename?: 'Review', _id: string, rating: number, courseNo: string, semester: string, academicYear: string, studyProgram: StudyProgram, content?: string | null, likeCount: number, dislikeCount: number, myInteraction?: ReviewInteractionType | null, status?: ReviewStatus | null, rejectionReason?: string | null, isOwner: boolean } };
 
+export type SetReviewStatusMutationVariables = Exact<{
+  reviewId: Scalars['String'];
+  status: ReviewStatus;
+  rejectionReason?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type SetReviewStatusMutation = { __typename?: 'Mutation', setReviewStatus: string };
+
 export type GetAllCourseNoQueryVariables = Exact<{
   filter: FilterInput;
   courseGroup: CourseGroupInput;
@@ -1098,6 +1107,43 @@ export function useSetReviewInteractionMutation(baseOptions?: Apollo.MutationHoo
 export type SetReviewInteractionMutationHookResult = ReturnType<typeof useSetReviewInteractionMutation>;
 export type SetReviewInteractionMutationResult = Apollo.MutationResult<SetReviewInteractionMutation>;
 export type SetReviewInteractionMutationOptions = Apollo.BaseMutationOptions<SetReviewInteractionMutation, SetReviewInteractionMutationVariables>;
+export const SetReviewStatusDocument = gql`
+    mutation SetReviewStatus($reviewId: String!, $status: ReviewStatus!, $rejectionReason: String) {
+  setReviewStatus(
+    reviewId: $reviewId
+    status: $status
+    rejectionReason: $rejectionReason
+  )
+}
+    `;
+export type SetReviewStatusMutationFn = Apollo.MutationFunction<SetReviewStatusMutation, SetReviewStatusMutationVariables>;
+
+/**
+ * __useSetReviewStatusMutation__
+ *
+ * To run a mutation, you first call `useSetReviewStatusMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetReviewStatusMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setReviewStatusMutation, { data, loading, error }] = useSetReviewStatusMutation({
+ *   variables: {
+ *      reviewId: // value for 'reviewId'
+ *      status: // value for 'status'
+ *      rejectionReason: // value for 'rejectionReason'
+ *   },
+ * });
+ */
+export function useSetReviewStatusMutation(baseOptions?: Apollo.MutationHookOptions<SetReviewStatusMutation, SetReviewStatusMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SetReviewStatusMutation, SetReviewStatusMutationVariables>(SetReviewStatusDocument, options);
+      }
+export type SetReviewStatusMutationHookResult = ReturnType<typeof useSetReviewStatusMutation>;
+export type SetReviewStatusMutationResult = Apollo.MutationResult<SetReviewStatusMutation>;
+export type SetReviewStatusMutationOptions = Apollo.BaseMutationOptions<SetReviewStatusMutation, SetReviewStatusMutationVariables>;
 export const GetAllCourseNoDocument = gql`
     query GetAllCourseNo($filter: FilterInput!, $courseGroup: CourseGroupInput!) {
   search(filter: $filter, courseGroup: $courseGroup) {

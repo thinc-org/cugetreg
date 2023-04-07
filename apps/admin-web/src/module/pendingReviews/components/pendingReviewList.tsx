@@ -1,11 +1,11 @@
-import { Container } from '@mui/material'
+import { Button, Container } from '@mui/material'
 
 import { useGetPendingReviewsQuery } from '@cgr/codegen'
 
 import SinglePendingReview from './singlePendingReview'
 
 export default function PendingReviewsList() {
-  const { data, loading } = useGetPendingReviewsQuery()
+  const { data, loading, refetch: refetchReviews } = useGetPendingReviewsQuery()
 
   return (
     <>
@@ -20,7 +20,9 @@ export default function PendingReviewsList() {
             // </Grid>
             // TODO: THiS Cause ERROR
             null
-          : data?.pendingReviews.map((data) => <SinglePendingReview key={data._id} data={data} />)}
+          : data?.pendingReviews.map((data) => (
+              <SinglePendingReview key={data._id} data={data} refetchReviews={refetchReviews} />
+            ))}
       </Container>
     </>
   )

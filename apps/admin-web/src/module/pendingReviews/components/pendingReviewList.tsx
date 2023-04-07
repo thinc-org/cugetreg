@@ -1,4 +1,4 @@
-import { Button, Container } from '@mui/material'
+import { Button, Container, Stack, Typography } from '@mui/material'
 
 import { useGetPendingReviewsQuery } from '@cgr/codegen'
 
@@ -23,6 +23,11 @@ export default function PendingReviewsList() {
           : data?.pendingReviews.map((data) => (
               <SinglePendingReview key={data._id} data={data} refetchReviews={refetchReviews} />
             ))}
+        <Stack alignItems={'center'} paddingBottom={2}>
+          <Button variant="contained">
+            <Typography>Load more</Typography>
+          </Button>
+        </Stack>
       </Container>
     </>
   )

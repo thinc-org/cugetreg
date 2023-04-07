@@ -24,6 +24,11 @@ export const client = new ApolloClient({
   link: authLink.concat(createHttpLink()),
   cache: new InMemoryCache(),
   connectToDevTools: ENVIRONMENT !== 'production',
+  defaultOptions: {
+    mutate: {
+      errorPolicy: 'all',
+    },
+  },
 })
 
 export function createApolloServerClient() {

@@ -1,3 +1,5 @@
+import { Toaster } from 'react-hot-toast'
+
 import type { AppProps } from 'next/app'
 
 import { Layout } from '@admin-web/common/Layout'
@@ -9,6 +11,7 @@ export default function App({ Component, pageProps }: AppProps) {
     <AppProvider>
       <Layout>
         <Component {...pageProps} />
+        <Toaster position="top-center" reverseOrder={false} />
       </Layout>
     </AppProvider>
   )

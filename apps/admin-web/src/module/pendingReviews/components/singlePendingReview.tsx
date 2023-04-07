@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import toast from 'react-hot-toast'
 
-import { ApolloQueryResult } from '@apollo/client'
+import { ApolloError, ApolloQueryResult } from '@apollo/client'
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
 import HighlightOffIcon from '@mui/icons-material/HighlightOff'
 import StarIcon from '@mui/icons-material/Star'
@@ -27,6 +28,15 @@ interface SinglePendingReviewProps {
         >
       | undefined
   ) => Promise<ApolloQueryResult<GetPendingReviewsQuery>>
+  // refetchLazy: (
+  //   variables?:
+  //     | Partial<
+  //         Exact<{
+  //           [key: string]: never
+  //         }>
+  //       >
+  //     | undefined
+  // ) => Promise<ApolloQueryResult<GetPendingReviewsQuery>>
 }
 
 // TODO: add toast to enhance user experience
@@ -41,6 +51,10 @@ export default function SinglePendingReview({ data, refetchReviews }: SinglePend
   }
   const handleClose = () => setReject(false)
   const bgcolor = reject ? '#FFEDD5' : undefined
+
+  useEffect(() => {
+    if (mutateError) toast.error(mutateError.message)
+  }, [mutateError])
 
   const handleApproved = async () => {
     await setReviewStatus({

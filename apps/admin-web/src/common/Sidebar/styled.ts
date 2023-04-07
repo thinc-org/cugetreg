@@ -19,3 +19,7 @@ export const StyledNav = styled('nav')({
   position: 'sticky',
   top: 0,
 })
+
+export const StyledLogoContainer = styled('div')({
+  padding: '24px 0 24px 24px',
+})

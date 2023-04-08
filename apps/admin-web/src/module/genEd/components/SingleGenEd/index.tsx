@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { toast } from 'react-hot-toast'
 
 import { ApolloQueryResult } from '@apollo/client'
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
@@ -39,26 +40,24 @@ export default function SingleGenEd({ course, refetchOverrides }: SingleGenEdPro
   }
 
   const handleDelete = async () => {
-    // TODO: add error handler
     handleClose()
+    const toastId = toast.loading('Deleting Gened...')
     await deleteOverride({
       variables: {
-        courseNo: '00000000',
+        courseNo: course.courseNo,
         courseGroup: {
           studyProgram: course.studyProgram,
           semester: course.semester,
           academicYear: course.academicYear,
         },
       },
+      onCompleted(data, clientOptions) {
+        if (!!data.deleteOverride) toast.success('Delete GenEd Successfully', { id: toastId })
+        else toast.error('Fail to delete GenEd', { id: toastId })
+      },
     })
-    console.log('loading: ', loading)
     await refetchOverrides()
   }
-
-  useEffect(() => {
-    console.log('DATA: ', data)
-    console.log('Error: ', error)
-  }, [data, error])
 
   return (
     <GenEdRowContainer key={`${course.courseNo}${course.semester}${course.studyProgram}`}>

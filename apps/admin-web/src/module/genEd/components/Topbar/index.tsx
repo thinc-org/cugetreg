@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction } from 'react'
+import { toast } from 'react-hot-toast'
 
 import { ApolloQueryResult } from '@apollo/client'
 import { Typography } from '@mui/material'
@@ -24,6 +25,7 @@ interface TopbarProps {
 
 export default function Topbar({ setOpenAddGenEdDialog, refetchOverrides }: TopbarProps) {
   const handleClick = () => {
+    toast.success('Hello')
     setOpenAddGenEdDialog(true)
     window.scrollTo({
       top: 0,

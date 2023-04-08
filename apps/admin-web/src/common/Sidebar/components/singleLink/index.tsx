@@ -1,6 +1,6 @@
 import { ListItemButton, Typography } from '@mui/material'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
+import { NextRouter, useRouter } from 'next/router'
 
 interface SingleLinkProps {
   title: string
@@ -10,7 +10,7 @@ interface SingleLinkProps {
 export default function SingleLink({ title, url }: SingleLinkProps) {
   const router = useRouter()
 
-  const isSelected = router.pathname === url
+  const isSelected = isSelectedLink(router, url)
 
   return (
     <Link
@@ -32,4 +32,16 @@ export default function SingleLink({ title, url }: SingleLinkProps) {
       </ListItemButton>
     </Link>
   )
+}
+
+function isSelectedLink(router: NextRouter, url: string): boolean {
+  if (router.pathname === url) return true
+  const genEdRegex = /^\/genEd/
+  const isGenEd = genEdRegex.test(router.pathname)
+  if (isGenEd) {
+    const { slug } = router.query
+    if (!slug && url === '/genEd') return true
+    if (!!slug && url === `/genEd/${slug[0]}`) return true
+  }
+  return false
 }

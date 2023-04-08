@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
 
+import { useRouter } from 'next/router'
+
 import { Override, useGetOverridesQuery } from '@cgr/codegen'
 
 import AddGenEdDialog from './components/AddGenEdDialog'
@@ -16,6 +18,9 @@ export function GenEdPage() {
     refetch: refetchOverrides,
     networkStatus,
   } = useGetOverridesQuery({ notifyOnNetworkStatusChange: true })
+  const router = useRouter()
+
+  console.log(router.query)
 
   // TODO: set stale content's color to gray
   useEffect(() => {

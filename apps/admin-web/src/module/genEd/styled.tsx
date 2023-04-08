@@ -11,4 +11,8 @@ export const GenEdTableHeaderContainer = styled('div')({
   fontStyle: 'normal',
   fontWeight: '700',
   fontSize: '16px',
+  position: 'sticky',
+  top: '126.8px',
+  zIndex: '1',
+  background: 'white',
 })

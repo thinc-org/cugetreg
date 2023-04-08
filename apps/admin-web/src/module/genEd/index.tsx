@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { Override, useGetOverridesQuery } from '@cgr/codegen'
 
@@ -9,7 +9,19 @@ import Topbar from './components/Topbar'
 
 export function GenEdPage() {
   const [openAddGenEdDialog, setOpenAddGenEdDialog] = useState(false)
-  const { data, loading, error, refetch: refetchOverrides } = useGetOverridesQuery()
+  const {
+    data,
+    loading,
+    error,
+    refetch: refetchOverrides,
+    networkStatus,
+  } = useGetOverridesQuery({ notifyOnNetworkStatusChange: true })
+
+  // TODO: set stale content's color to gray
+  useEffect(() => {
+    console.log('Status: ', networkStatus)
+  }, [networkStatus])
+
   return (
     <div>
       <Topbar setOpenAddGenEdDialog={setOpenAddGenEdDialog} refetchOverrides={refetchOverrides} />

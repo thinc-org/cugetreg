@@ -5,6 +5,7 @@ import type { AppProps } from 'next/app'
 import { Layout } from '@admin-web/common/Layout'
 import { AppProvider } from '@admin-web/context/AppProvider'
 import '@admin-web/styles/globals.css'
+import { toastConfig } from '@admin-web/config/toastConfig'
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
@@ -15,21 +16,4 @@ export default function App({ Component, pageProps }: AppProps) {
       </Layout>
     </AppProvider>
   )
-}
-
-export const toastConfig = {
-  style: {
-    fontFamily: "'JetBrains Mono','IBM Plex Sans Thai','monospace'",
-    fontWeight: '700',
-  },
-  success: {
-    style: {
-      background: '#D1FAE5',
-    },
-  },
-  error: {
-    style: {
-      background: '#FEE2E2',
-    },
-  },
 }

@@ -25,7 +25,6 @@ interface TopbarProps {
 
 export default function Topbar({ setOpenAddGenEdDialog, refetchOverrides }: TopbarProps) {
   const handleClick = () => {
-    toast.success('Hello')
     setOpenAddGenEdDialog(true)
     window.scrollTo({
       top: 0,

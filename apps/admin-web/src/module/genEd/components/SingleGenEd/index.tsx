@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { ApolloQueryResult } from '@apollo/client'
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
@@ -28,7 +28,7 @@ interface SingleGenEdProps {
 }
 
 export default function SingleGenEd({ course, refetchOverrides }: SingleGenEdProps) {
-  const [deleteOverride, { data, loading, error }] = useDeleteOverrideMutation()
+  const [deleteOverride, { data, loading, error, reset }] = useDeleteOverrideMutation()
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -43,7 +43,7 @@ export default function SingleGenEd({ course, refetchOverrides }: SingleGenEdPro
     handleClose()
     await deleteOverride({
       variables: {
-        courseNo: course.courseNo,
+        courseNo: '00000000',
         courseGroup: {
           studyProgram: course.studyProgram,
           semester: course.semester,
@@ -51,8 +51,14 @@ export default function SingleGenEd({ course, refetchOverrides }: SingleGenEdPro
         },
       },
     })
+    console.log('loading: ', loading)
     await refetchOverrides()
   }
+
+  useEffect(() => {
+    console.log('DATA: ', data)
+    console.log('Error: ', error)
+  }, [data, error])
 
   return (
     <GenEdRowContainer key={`${course.courseNo}${course.semester}${course.studyProgram}`}>

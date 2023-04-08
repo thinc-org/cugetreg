@@ -13,12 +13,14 @@ interface AddGenEdDialogProps {
 const REGEX = /^[0-9]*$/
 
 // TODO: Add transiton when render
+// TODO: Fix the bug that has delay when open
 export default function AddGenEdDialog({ setOpenAddGenEdDialog }: AddGenEdDialogProps) {
   const [courseNo, setCourseNo] = useState<string>('')
   const [isFirstInput, setIsFirstInput] = useState<boolean>(true)
-
+  console.log('Render AddGenEdDialog')
   const handleAdd = async () => {
     // TODO: Add API
+    // TODO: Add toast
 
     setOpenAddGenEdDialog(false)
   }

@@ -19,6 +19,10 @@ export const TopbarContainer = styled(`div`)({
   alignContent: 'center',
   padding: '36px 24px',
   backgroundColor: '#F2F5F8',
+  position: 'sticky',
+  top: '0',
+  zIndex: '1',
+  borderBottom: '1px solid #F2F5F8',
 })
 
 export const LeftContainer = styled(`div`)({

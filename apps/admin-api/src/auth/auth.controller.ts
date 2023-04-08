@@ -1,8 +1,7 @@
-import { BadRequestException, Body, Controller, Get, Param, Post, Req, Res } from '@nestjs/common'
+import { BadRequestException, Controller, Param, Post, Req, Res } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { JwtService } from '@nestjs/jwt'
 
-import { randomBytes } from 'crypto'
 import { Request, Response } from 'express'
 
 import { AuthService } from './auth.service'
@@ -10,36 +9,24 @@ import { AuthService } from './auth.service'
 @Controller('auth')
 export class AuthController {
   constructor(
-    readonly authService: AuthService,
-    readonly configService: ConfigService,
-    readonly jwtService: JwtService
+    private readonly authService: AuthService,
+    private readonly configService: ConfigService,
+    private readonly jwtService: JwtService
   ) {}
 
-  @Get()
-  async requestAuth() {
-    const code: string = randomBytes(64).toString('base64')
-
-    return await this.authService.requestAuthentik(code)
-  }
-
   @Post()
-  async auth(@Body() body: { authenticationCode: string }): Promise<any> {
-    const payload = await this.authService.verify(body.authenticationCode)
-    const decodedPayload = this.jwtService.decode(payload)
-    return decodedPayload
-  }
+  async auth(@Param() params: { code: string }, @Res({ passthrough: true }) res: Response) {
+    const payload = await this.authService.verifyAuthenticationCode(params.code)
+    const { accessToken, idToken } = payload
 
-  @Post('idtoken')
-  async authWithIdToken(
-    @Body() body: { idToken: string },
-    @Res({ passthrough: true }) res: Response
-  ) {
-    const { idToken } = body
-    if (!idToken) {
-      throw new BadRequestException('idToken is required')
+    if (!params.code) {
+      throw new BadRequestException('authentication code is required')
     }
-    const accessToken = await this.authService.validateIdToken(idToken)
+
+    this.authService.validateIdToken(idToken)
+
     this.setCookie(res, 'accessToken', accessToken)
+
     return { success: true }
   }
 

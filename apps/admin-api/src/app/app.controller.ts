@@ -1,13 +1,16 @@
-import { Controller, Get, UseGuards } from '@nestjs/common'
+import { Controller, Get, Req, UnauthorizedException, UseGuards } from '@nestjs/common'
 import { Query } from '@nestjs/graphql'
 
+import { Request } from 'express'
+
+import { AuthService } from '@admin-api/auth/auth.service'
 import { JwtAuthGuard } from '@admin-api/auth/oidc.guard'
 
 import { AppService } from './app.service'
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(private readonly appService: AppService, private readonly authService: AuthService) {}
 
   @Get()
   getHello(): string {
@@ -16,11 +19,13 @@ export class AppController {
 
   @Query('me')
   @UseGuards(JwtAuthGuard)
-  async getCurrentUser(@CurrentUser() userId: string): Promise<User> {
-    const user = await this.userModel.findById(userId)
+  async getMe(@Req() req: Request) {
+    if (!req.cookies['accessToken']) {
+      throw new UnauthorizedException('No access token')
+    }
+
     return {
-      _id: user._id,
-      name: user.name,
+      success: true,
     }
   }
 }

@@ -11,6 +11,7 @@ Course override for overriding course info from Reg Chula during course scraping
 """
 type Override {
   courseNo: String!
+  courseTitle: String!
   studyProgram: StudyProgram!
   semester: String!
   academicYear: String!

@@ -22,13 +22,16 @@
     "@cgr/course-utils": "workspace:*",
     "@emotion/react": "11.10.4",
     "@emotion/styled": "11.10.4",
+    "@mui/icons-material": "5.8.4",
     "@mui/material": "5.9.1",
+    "@mui/styled-engine-sc": "^5.11.0",
     "@next/font": "13.1.6",
     "axios": "0.23.0",
     "isomorphic-dompurify": "0.20.0",
     "next": "^13.0.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-hot-toast": "2.3.0",
     "styled-components": "5.3.5"
   }
 }

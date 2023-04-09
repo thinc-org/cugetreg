@@ -8,7 +8,7 @@ import { NestFactory } from '@nestjs/core'
 import { NestExpressApplication } from '@nestjs/platform-express'
 
 import { AppModule } from './app/app.module'
-import { Configuration, validateConfig } from './config/configuration'
+import { Configuration } from './config/configuration'
 
 async function bootstrap() {
 

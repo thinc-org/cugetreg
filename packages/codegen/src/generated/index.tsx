@@ -531,6 +531,14 @@ export type GetOverridesQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetOverridesQuery = { __typename?: 'Query', overrides: Array<{ __typename?: 'Override', courseNo: string, studyProgram: StudyProgram, semester: string, academicYear: string, genEd?: { __typename?: 'GenEdOverride', genEdType: GenEdType, sections: Array<string> } | null }> };
 
+export type DeleteOverrideMutationVariables = Exact<{
+  courseNo: Scalars['String'];
+  courseGroup: CourseGroupInput;
+}>;
+
+
+export type DeleteOverrideMutation = { __typename?: 'Mutation', deleteOverride?: { __typename?: 'Override', courseNo: string, studyProgram: StudyProgram, semester: string, academicYear: string, genEd?: { __typename?: 'GenEdOverride', genEdType: GenEdType, sections: Array<string> } | null } | null };
+
 export type CreateReviewMutationVariables = Exact<{
   createReviewInput: CreateReviewInput;
 }>;
@@ -581,6 +589,15 @@ export type SetReviewInteractionMutationVariables = Exact<{
 
 
 export type SetReviewInteractionMutation = { __typename?: 'Mutation', setReviewInteraction: { __typename?: 'Review', _id: string, rating: number, courseNo: string, semester: string, academicYear: string, studyProgram: StudyProgram, content?: string | null, likeCount: number, dislikeCount: number, myInteraction?: ReviewInteractionType | null, status?: ReviewStatus | null, rejectionReason?: string | null, isOwner: boolean } };
+
+export type SetReviewStatusMutationVariables = Exact<{
+  reviewId: Scalars['String'];
+  status: ReviewStatus;
+  rejectionReason?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type SetReviewStatusMutation = { __typename?: 'Mutation', setReviewStatus: string };
 
 export type GetAllCourseNoQueryVariables = Exact<{
   filter: FilterInput;
@@ -858,6 +875,40 @@ export function useGetOverridesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
 export type GetOverridesQueryHookResult = ReturnType<typeof useGetOverridesQuery>;
 export type GetOverridesLazyQueryHookResult = ReturnType<typeof useGetOverridesLazyQuery>;
 export type GetOverridesQueryResult = Apollo.QueryResult<GetOverridesQuery, GetOverridesQueryVariables>;
+export const DeleteOverrideDocument = gql`
+    mutation DeleteOverride($courseNo: String!, $courseGroup: CourseGroupInput!) {
+  deleteOverride(courseNo: $courseNo, courseGroup: $courseGroup) {
+    ...OverrideDataFields
+  }
+}
+    ${OverrideDataFieldsFragmentDoc}`;
+export type DeleteOverrideMutationFn = Apollo.MutationFunction<DeleteOverrideMutation, DeleteOverrideMutationVariables>;
+
+/**
+ * __useDeleteOverrideMutation__
+ *
+ * To run a mutation, you first call `useDeleteOverrideMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteOverrideMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteOverrideMutation, { data, loading, error }] = useDeleteOverrideMutation({
+ *   variables: {
+ *      courseNo: // value for 'courseNo'
+ *      courseGroup: // value for 'courseGroup'
+ *   },
+ * });
+ */
+export function useDeleteOverrideMutation(baseOptions?: Apollo.MutationHookOptions<DeleteOverrideMutation, DeleteOverrideMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteOverrideMutation, DeleteOverrideMutationVariables>(DeleteOverrideDocument, options);
+      }
+export type DeleteOverrideMutationHookResult = ReturnType<typeof useDeleteOverrideMutation>;
+export type DeleteOverrideMutationResult = Apollo.MutationResult<DeleteOverrideMutation>;
+export type DeleteOverrideMutationOptions = Apollo.BaseMutationOptions<DeleteOverrideMutation, DeleteOverrideMutationVariables>;
 export const CreateReviewDocument = gql`
     mutation CreateReview($createReviewInput: CreateReviewInput!) {
   createReview(createReviewInput: $createReviewInput) {
@@ -1098,6 +1149,43 @@ export function useSetReviewInteractionMutation(baseOptions?: Apollo.MutationHoo
 export type SetReviewInteractionMutationHookResult = ReturnType<typeof useSetReviewInteractionMutation>;
 export type SetReviewInteractionMutationResult = Apollo.MutationResult<SetReviewInteractionMutation>;
 export type SetReviewInteractionMutationOptions = Apollo.BaseMutationOptions<SetReviewInteractionMutation, SetReviewInteractionMutationVariables>;
+export const SetReviewStatusDocument = gql`
+    mutation SetReviewStatus($reviewId: String!, $status: ReviewStatus!, $rejectionReason: String) {
+  setReviewStatus(
+    reviewId: $reviewId
+    status: $status
+    rejectionReason: $rejectionReason
+  )
+}
+    `;
+export type SetReviewStatusMutationFn = Apollo.MutationFunction<SetReviewStatusMutation, SetReviewStatusMutationVariables>;
+
+/**
+ * __useSetReviewStatusMutation__
+ *
+ * To run a mutation, you first call `useSetReviewStatusMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetReviewStatusMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setReviewStatusMutation, { data, loading, error }] = useSetReviewStatusMutation({
+ *   variables: {
+ *      reviewId: // value for 'reviewId'
+ *      status: // value for 'status'
+ *      rejectionReason: // value for 'rejectionReason'
+ *   },
+ * });
+ */
+export function useSetReviewStatusMutation(baseOptions?: Apollo.MutationHookOptions<SetReviewStatusMutation, SetReviewStatusMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SetReviewStatusMutation, SetReviewStatusMutationVariables>(SetReviewStatusDocument, options);
+      }
+export type SetReviewStatusMutationHookResult = ReturnType<typeof useSetReviewStatusMutation>;
+export type SetReviewStatusMutationResult = Apollo.MutationResult<SetReviewStatusMutation>;
+export type SetReviewStatusMutationOptions = Apollo.BaseMutationOptions<SetReviewStatusMutation, SetReviewStatusMutationVariables>;
 export const GetAllCourseNoDocument = gql`
     query GetAllCourseNo($filter: FilterInput!, $courseGroup: CourseGroupInput!) {
   search(filter: $filter, courseGroup: $courseGroup) {

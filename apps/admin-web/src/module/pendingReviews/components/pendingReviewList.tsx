@@ -1,31 +1,33 @@
-import { Container, Grid, Skeleton, Typography } from '@mui/material'
+import { Button, Container, Stack, Typography } from '@mui/material'
 
 import { useGetPendingReviewsQuery } from '@cgr/codegen'
 
 import SinglePendingReview from './singlePendingReview'
 
 export default function PendingReviewsList() {
-  const reviewQuery = useGetPendingReviewsQuery()
+  const { data, loading, refetch: refetchReviews } = useGetPendingReviewsQuery()
 
   return (
     <>
-      <Container>
-        <Typography variant="h3" align="center" sx={{ mt: '30px' }}>
-          Reviews
-        </Typography>
-        {reviewQuery.loading ? (
-          // Todo: Reduce gaps between each skeleton
-          // Todo: Add more skeleton (dynamically?)
-          <Grid spacing={0} direction="column">
-            <Skeleton height={200} />
-            <Skeleton height={200} />
-            <Skeleton height={200} />
-          </Grid>
-        ) : (
-          reviewQuery.data?.pendingReviews.map((data) => (
-            <SinglePendingReview key={data._id} data={data} />
-          ))
-        )}
+      <Container disableGutters>
+        {loading
+          ? // Todo: Reduce gaps between each skeleton
+            // Todo: Add more skeleton (dynamically?)
+            // <Grid spacing={0} direction="column">
+            //   <Skeleton height={200} />
+            //   <Skeleton height={200} />
+            //   <Skeleton height={200} />
+            // </Grid>
+            // TODO: THiS Cause ERROR
+            null
+          : data?.pendingReviews.map((data) => (
+              <SinglePendingReview key={data._id} data={data} refetchReviews={refetchReviews} />
+            ))}
+        <Stack alignItems={'center'} paddingBottom={2}>
+          <Button variant="contained">
+            <Typography>Load more</Typography>
+          </Button>
+        </Stack>
       </Container>
     </>
   )

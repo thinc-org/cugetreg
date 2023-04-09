@@ -1,4 +1,4 @@
-import { Checkbox, TableCell, TableRow } from '@mui/material'
+import { TableCell, TableRow } from '@mui/material'
 
 import { Override } from '@cgr/codegen'
 
@@ -9,9 +9,6 @@ interface SingleGenEdProps {
 export default function SingleGenEd({ data }: SingleGenEdProps) {
   return (
     <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-      <TableCell align="center" padding="checkbox">
-        <Checkbox></Checkbox>
-      </TableCell>
       <TableCell scope="row" align="center">
         {data.academicYear}
       </TableCell>

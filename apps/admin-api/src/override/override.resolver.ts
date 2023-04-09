@@ -1,4 +1,3 @@
-import { UseGuards } from '@nestjs/common'
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
 
 import { CourseGroupInput, OverrideInput } from '@admin-api/graphql'

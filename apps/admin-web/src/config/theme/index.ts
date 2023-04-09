@@ -1,9 +1,17 @@
 import { ThemeOptions, createTheme } from '@mui/material'
 
+import { deepAssign } from '@admin-web/common/deepAssign'
+
+import { lightPaletteOptions } from './palette'
+
 const themeBaseOptions: ThemeOptions = {
   typography: {
-    htmlFontSize: (16 * 16) / 18,
-    fontFamily: ['Poppins', 'Prompt', 'sans-serif'].join(','),
+    // htmlFontSize: (16 * 16) / 18,
+    fontFamily: "'JetBrains Mono','IBM Plex Sans Thai', monospace",
+    h1: {
+      fontWeight: 700,
+      fontSize: 32,
+    },
   },
   breakpoints: {
     values: {
@@ -16,4 +24,9 @@ const themeBaseOptions: ThemeOptions = {
   },
 }
 
+const lightThemeOptions: ThemeOptions = deepAssign(themeBaseOptions, {
+  palette: lightPaletteOptions,
+})
+
 export const defaultTheme = createTheme(themeBaseOptions)
+export const lightTheme = createTheme(lightThemeOptions)

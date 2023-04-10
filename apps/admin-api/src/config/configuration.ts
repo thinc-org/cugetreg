@@ -19,7 +19,7 @@ export interface Configuration {
 
 export const configuration = (): Configuration => {
   return {
-    mongoURI: process.env.MONGO_URI || 'mongodb://localhost:27017/cugetreg',
+    mongoURI: process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/cugetreg',
     port: parseInt(process.env.PORT, 10) || 3333,
     origin: process.env.CORS_ORIGIN || '*',
     clientId: process.env.CLIENT_ID,
@@ -38,7 +38,6 @@ export const configuration = (): Configuration => {
 const requiredConfigs = [
   'clientId',
   'clientSecret',
-  'authorizationUrl',
   'tokenUrl',
   'userInfoUrl',
   'redirectUrl',

@@ -1,4 +1,4 @@
-import { BadRequestException, Controller, Param, Post, Req, Res } from '@nestjs/common'
+import { BadRequestException, Controller, Get, Param, Post, Query, Req, Res } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { JwtService } from '@nestjs/jwt'
 
@@ -14,14 +14,21 @@ export class AuthController {
     private readonly jwtService: JwtService
   ) {}
 
-  @Post()
-  async auth(@Param() params: { code: string }, @Res({ passthrough: true }) res: Response) {
-    const payload = await this.authService.verifyAuthenticationCode(params.code)
-    const { accessToken, idToken } = payload
+  @Get()
+  async sayHello() {
+    return 'Hello'
+  }
 
-    if (!params.code) {
+  @Post()
+  async auth(@Query() query, @Res({ passthrough: true }) res: Response) {
+    // console.log('Code: ', params.code)
+    console.log(query)
+    if (!query.code) {
       throw new BadRequestException('authentication code is required')
     }
+
+    const payload = await this.authService.verifyAuthenticationCode(query.code)
+    const { accessToken, idToken } = payload
 
     this.authService.validateIdToken(idToken)
 

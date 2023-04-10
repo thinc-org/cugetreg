@@ -8,7 +8,7 @@ export function GenerateToken() {
   useEffect(() => {
     console.log(router.query)
     const { code } = router.query
-
+    console.log('code: ', code)
     // TODO: send code to backend
     // router.push('/pendingReviews')
   }, [router])

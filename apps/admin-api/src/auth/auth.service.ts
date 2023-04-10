@@ -46,9 +46,15 @@ export class AuthService {
         grant_type: 'authorization_code',
       },
     }
+
+    console.log('Authenticating code')
+
     const response = await lastValueFrom(
       this.httpService.post(this.configService.get<string>('tokenUrl'), config)
     )
+
+    this.logger.log('Response: ', response)
+
     return response.data
   }
 

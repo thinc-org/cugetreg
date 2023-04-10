@@ -1,9 +1,20 @@
-import { BadRequestException, Controller, Get, Param, Post, Query, Req, Res } from '@nestjs/common'
+import {
+  BadRequestException,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Query,
+  Req,
+  Res,
+  UseGuards,
+} from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { JwtService } from '@nestjs/jwt'
 
 import { Request, Response } from 'express'
 
+import { AuthGuard } from './auth.guard'
 import { AuthService } from './auth.service'
 
 @Controller('auth')
@@ -15,6 +26,7 @@ export class AuthController {
   ) {}
 
   @Get()
+  @UseGuards(AuthGuard)
   async sayHello() {
     return 'Hello'
   }

@@ -17,8 +17,6 @@ export function GenerateToken() {
           throw new Error('TOKEN_URL is not defined')
         }
 
-        console.log(code, typeof code)
-
         if (!code || typeof code !== 'string') {
           throw new Error('Code is not defined or is invalid')
         }
@@ -27,7 +25,6 @@ export function GenerateToken() {
         url.searchParams.append('code', code)
         const response = await fetch(url, { credentials: 'include' })
         const data = await response.json()
-        console.log(data)
       } catch (err) {
         if (err instanceof Error) toast.error(err.message)
         else toast.error('Unknown error')

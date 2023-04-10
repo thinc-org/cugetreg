@@ -55,8 +55,6 @@ export class AuthService {
         config
       )) as TokenUrlResponse
 
-      console.log(response.data)
-
       return {
         id_token: response.data?.id_token,
         access_token: response.data?.access_token,
@@ -86,7 +84,6 @@ export class AuthService {
     }
   }
 
-  // TODO: lessen expiry time?
   async issueAccessToken(userInfo: UserInfoDto): Promise<string> {
     this.logger.log(`Issued access token for: ${userInfo.name}`)
     return this.jwtService.sign(userInfo)

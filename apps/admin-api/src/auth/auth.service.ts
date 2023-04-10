@@ -1,12 +1,12 @@
 import { HttpService } from '@nestjs/axios'
-import { BadRequestException, Injectable, Logger } from '@nestjs/common'
+import { BadRequestException, HttpException, Injectable, Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { JwtService } from '@nestjs/jwt'
 
-import { AxiosRequestConfig } from 'axios'
-import { lastValueFrom } from 'rxjs'
+import axios, { AxiosRequestConfig } from 'axios'
+import { lastValueFrom, map } from 'rxjs'
 
-import { AccessTokenPayload } from './auth.dto'
+import { AccessTokenPayload, TokenUrlResponse, UserInfoDto } from './auth.dto'
 
 @Injectable()
 export class AuthService {
@@ -38,48 +38,56 @@ export class AuthService {
   async verifyAuthenticationCode(authenticationCode: string) {
     const config: AxiosRequestConfig = {
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      params: {
-        code: authenticationCode,
-        client_id: this.configService.get<string>('clientId'),
-        client_secret: this.configService.get<string>('clientSecret'),
-        redirect_uri: this.configService.get<string>('redirectUrl'),
-        grant_type: 'authorization_code',
-      },
     }
 
-    console.log('Authenticating code')
-
-    const response = await lastValueFrom(
-      this.httpService.post(this.configService.get<string>('tokenUrl'), config)
-    )
-
-    this.logger.log('Response: ', response)
-
-    return response.data
-  }
-
-  async validateIdToken(idToken: string) {
-    let payload: {
-      email: string
-      name: string
-      roles: string
+    const reqBody = {
+      code: authenticationCode,
+      client_id: this.configService.get<string>('clientId'),
+      client_secret: this.configService.get<string>('clientSecret'),
+      redirect_uri: this.configService.get<string>('redirectUrl'),
+      grant_type: 'authorization_code',
     }
 
     try {
-      const userInfo = JSON.parse(this.jwtService.decode(idToken) as string)
-      payload.email = userInfo.email
-      payload.name = userInfo.name
-      payload.roles = userInfo.roles
+      const response = (await axios.post(
+        this.configService.get<string>('tokenUrl'),
+        new URLSearchParams(reqBody),
+        config
+      )) as TokenUrlResponse
+
+      console.log(response.data)
+
+      return {
+        id_token: response.data?.id_token,
+        access_token: response.data?.access_token,
+      }
+    } catch (err) {
+      // TODO: Add better error handler
+      // console.log(err)
+      return {}
+    }
+  }
+
+  async validateIdToken(idToken: string) {
+    try {
+      const userInfo = this.jwtService.decode(idToken) as UserInfoDto
+
+      // TODO: Check if user is in cugetreg group
+      const payload = {
+        email: userInfo.email,
+        name: userInfo.name,
+        groups: userInfo.groups,
+      } as UserInfoDto
+
+      console.log(userInfo)
+      return payload
     } catch (e) {
       throw new BadRequestException('Invalid id token')
     }
-
-    return payload
   }
 
-  async issueAccessToken(userInfo): Promise<string> {
-    const token: AccessTokenPayload = { _id: userInfo.userId.toHexString() }
-    this.logger.log('Issued access token', { userId: userInfo.userId })
-    return this.jwtService.sign(token)
+  async issueAccessToken(userInfo: UserInfoDto): Promise<string> {
+    this.logger.log(`Issued access token for: ${userInfo.name}`)
+    return this.jwtService.sign(userInfo)
   }
 }

@@ -19,22 +19,34 @@ export class AuthController {
     return 'Hello'
   }
 
-  @Post()
+  @Post('test')
+  async testPost(@Res() res: Response) {
+    res.send('Hello')
+  }
+
+  @Get('/validateCode')
   async auth(@Query() query, @Res({ passthrough: true }) res: Response) {
-    // console.log('Code: ', params.code)
-    console.log(query)
     if (!query.code) {
       throw new BadRequestException('authentication code is required')
     }
 
-    const payload = await this.authService.verifyAuthenticationCode(query.code)
-    const { accessToken, idToken } = payload
+    try {
+      const payload = await this.authService.verifyAuthenticationCode(query.code)
 
-    this.authService.validateIdToken(idToken)
+      const id_token = payload.id_token
 
-    this.setCookie(res, 'accessToken', accessToken)
+      const userInfo = await this.authService.validateIdToken(id_token)
+      const access_token = await this.authService.issueAccessToken(userInfo)
 
-    return { success: true }
+      console.log(`Access Token: ${access_token}`)
+
+      // TODO: Generate new token
+      this.setCookie(res, 'access_token', access_token)
+
+      return res.status(200).json({ message: 'Validate code successfully' })
+    } catch (err) {
+      return res.status(400).json({ message: 'Something went wrong' })
+    }
   }
 
   @Post('/logout')

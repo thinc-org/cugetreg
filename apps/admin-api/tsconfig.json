@@ -9,7 +9,7 @@
     "experimentalDecorators": true,
     "types": ["node"]
   },
-  "include": ["next-env.d.ts", "src/**/*.ts"],
+  "include": ["next-env.d.ts", "src/**/*.ts", "generate-typings.ts"],
   "exclude": [
     "node_modules",
     "jest.config.ts",

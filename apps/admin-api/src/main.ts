@@ -11,7 +11,6 @@ import { AppModule } from './app/app.module'
 import { Configuration } from './config/configuration'
 
 async function bootstrap() {
-
   const app = await NestFactory.create<NestExpressApplication>(AppModule)
 
   const configService = app.get<ConfigService<Configuration>>(ConfigService)
@@ -23,7 +22,7 @@ async function bootstrap() {
 
   // Enable CORS policy
   const origin = configService.get<string>('origin')
-  app.enableCors({ origin: origin })
+  app.enableCors({ origin: origin, credentials: true })
   app.set('trust proxy', 1)
 
   // Setup application port

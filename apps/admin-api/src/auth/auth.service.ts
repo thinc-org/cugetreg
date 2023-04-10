@@ -86,6 +86,7 @@ export class AuthService {
     }
   }
 
+  // TODO: lessen expiry time?
   async issueAccessToken(userInfo: UserInfoDto): Promise<string> {
     this.logger.log(`Issued access token for: ${userInfo.name}`)
     return this.jwtService.sign(userInfo)

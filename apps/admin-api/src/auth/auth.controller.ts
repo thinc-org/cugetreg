@@ -19,6 +19,7 @@ export class AuthController {
     return 'Hello'
   }
 
+  // TODO: Remove this route
   @Post('test')
   async testPost(@Res() res: Response) {
     res.send('Hello')
@@ -37,8 +38,6 @@ export class AuthController {
 
       const userInfo = await this.authService.validateIdToken(id_token)
       const access_token = await this.authService.issueAccessToken(userInfo)
-
-      console.log(`Access Token: ${access_token}`)
 
       // TODO: Generate new token
       this.setCookie(res, 'access_token', access_token)
@@ -63,6 +62,7 @@ export class AuthController {
     }
   }
 
+  // TODO: lessen expiry
   private setCookie(
     res: Response,
     name: string,
@@ -73,6 +73,7 @@ export class AuthController {
     res.cookie(name, value, {
       httpOnly,
       maxAge,
+      secure: true,
     })
   }
 }

@@ -1,22 +1,26 @@
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common'
+import { Reflector } from '@nestjs/core'
 import { JwtService } from '@nestjs/jwt'
 
 import { Request } from 'express'
 
+import { SKIP_AUTH } from '@admin-api/common/decorators/SkipAuth'
+
 @Injectable()
 export class AuthGuard implements CanActivate {
-  constructor(private jwtService: JwtService) {}
+  constructor(private jwtService: JwtService, private reflector: Reflector) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    console.log('In auth guard')
+    const isSkippedAuth = this.reflector.getAllAndOverride<boolean>(SKIP_AUTH, [
+      context.getHandler(),
+      context.getClass(),
+    ])
+    if (isSkippedAuth) return true
 
-    const request = context.switchToHttp().getRequest()
-    const token = this.extractTokenFromCookie(request)
-    console.log(`Token: ${token}`)
-    if (!token) {
-      throw new UnauthorizedException()
-    }
     try {
+      const request = context.switchToHttp().getRequest()
+      const token = this.extractTokenFromCookie(request)
+      console.log(`Token: ${token}`)
       const payload = await this.jwtService.verifyAsync(token)
       // 💡 We're assigning the payload to the request object here
       // so that we can access it in our route handlers
@@ -28,9 +32,9 @@ export class AuthGuard implements CanActivate {
   }
 
   private extractTokenFromCookie(request: Request): string | undefined {
+    if (!request.cookies || !request.cookies['access_token']) throw new UnauthorizedException()
     console.log(`Cookies: ${request.cookies['access_token']}`)
     const token = request.cookies['access_token']
-    // const [type, token] = request.headers.authorization?.split(' ') ?? []
     return token
   }
 }

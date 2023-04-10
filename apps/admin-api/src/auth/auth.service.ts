@@ -1,22 +1,16 @@
-import { HttpService } from '@nestjs/axios'
-import { BadRequestException, HttpException, Injectable, Logger } from '@nestjs/common'
+import { BadRequestException, Injectable, Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { JwtService } from '@nestjs/jwt'
 
 import axios, { AxiosRequestConfig } from 'axios'
-import { lastValueFrom, map } from 'rxjs'
 
-import { AccessTokenPayload, TokenUrlResponse, UserInfoDto } from './auth.dto'
+import { TokenUrlResponse, UserInfoDto } from './auth.dto'
 
 @Injectable()
 export class AuthService {
   logger: Logger
 
-  constructor(
-    private configService: ConfigService,
-    private httpService: HttpService,
-    private jwtService: JwtService
-  ) {
+  constructor(private configService: ConfigService, private jwtService: JwtService) {
     this.logger = new Logger('Auth Service')
   }
 

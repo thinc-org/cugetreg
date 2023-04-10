@@ -1,43 +1,30 @@
-import {
-  BadRequestException,
-  Controller,
-  Get,
-  Param,
-  Post,
-  Query,
-  Req,
-  Res,
-  UseGuards,
-} from '@nestjs/common'
-import { ConfigService } from '@nestjs/config'
-import { JwtService } from '@nestjs/jwt'
+import { BadRequestException, Controller, Get, Post, Query, Req, Res } from '@nestjs/common'
 
 import { Request, Response } from 'express'
 
-import { AuthGuard } from './auth.guard'
+import { SkipAuth } from '@admin-api/common/decorators/SkipAuth'
+
 import { AuthService } from './auth.service'
 
 @Controller('auth')
 export class AuthController {
-  constructor(
-    private readonly authService: AuthService,
-    private readonly configService: ConfigService,
-    private readonly jwtService: JwtService
-  ) {}
+  constructor(private readonly authService: AuthService) {}
 
   @Get()
-  @UseGuards(AuthGuard)
+  @SkipAuth()
   async sayHello() {
     return 'Hello'
   }
 
   // TODO: Remove this route
   @Post('test')
+  @SkipAuth()
   async testPost(@Res() res: Response) {
     res.send('Hello')
   }
 
   @Get('/validateCode')
+  @SkipAuth()
   async auth(@Query() query, @Res({ passthrough: true }) res: Response) {
     if (!query.code) {
       throw new BadRequestException('authentication code is required')
@@ -51,7 +38,6 @@ export class AuthController {
       const userInfo = await this.authService.validateIdToken(id_token)
       const access_token = await this.authService.issueAccessToken(userInfo)
 
-      // TODO: Generate new token
       this.setCookie(res, 'access_token', access_token)
 
       return res.status(200).json({ message: 'Validate code successfully' })
@@ -60,18 +46,24 @@ export class AuthController {
     }
   }
 
+  // TODO: Test this route
   @Post('/logout')
   async logout(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
     res.clearCookie('accessToken')
   }
 
-  @Post('/accesstoken')
-  async getAccessToken(@Req() req: Request) {
-    const token = req.cookies['accessToken']
-    if (!token) throw new BadRequestException('Not logged in')
-    return {
-      accessToken: await this.authService.issueAccessToken(token),
-    }
+  // @Post('/accesstoken')
+  // async getAccessToken(@Req() req: Request) {
+  //   const token = req.cookies['accessToken']
+  //   if (!token) throw new BadRequestException('Not logged in')
+  //   return {
+  //     accessToken: await this.authService.issueAccessToken(token),
+  //   }
+  // }
+
+  @Get('me')
+  async getUserInfo(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
+    return res.json(req['user'])
   }
 
   // TODO: lessen expiry

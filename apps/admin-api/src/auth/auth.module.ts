@@ -1,9 +1,10 @@
-import { HttpModule } from '@nestjs/axios'
 import { Module } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
+import { APP_GUARD } from '@nestjs/core'
 import { JwtModule } from '@nestjs/jwt'
 
 import { AuthController } from './auth.controller'
+import { AuthGuard } from './auth.guard'
 import { AuthService } from './auth.service'
 
 @Module({
@@ -17,9 +18,8 @@ import { AuthService } from './auth.service'
       }),
       inject: [ConfigService],
     }),
-    HttpModule,
   ],
-  providers: [AuthService],
+  providers: [AuthService, { provide: APP_GUARD, useClass: AuthGuard }],
   controllers: [AuthController],
   exports: [AuthService],
 })

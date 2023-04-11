@@ -34,18 +34,18 @@ export class AuthService {
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     }
 
-    const reqBody = {
+    const reqBody = new URLSearchParams({
       code: authenticationCode,
       client_id: this.configService.get<string>('clientId'),
       client_secret: this.configService.get<string>('clientSecret'),
       redirect_uri: this.configService.get<string>('redirectUrl'),
       grant_type: 'authorization_code',
-    }
+    })
 
     try {
       const response = (await axios.post(
         this.configService.get<string>('tokenUrl'),
-        new URLSearchParams(reqBody),
+        reqBody.toString(),
         config
       )) as TokenUrlResponse
 
@@ -54,15 +54,15 @@ export class AuthService {
         access_token: response.data?.access_token,
       }
     } catch (err) {
-      // TODO: Add better error handler
-      // console.log(err)
-      return {}
+      return null
     }
   }
 
   async validateIdToken(idToken: string) {
     try {
       const userInfo = this.jwtService.decode(idToken) as UserInfoDto
+
+      if (!userInfo || !userInfo.groups) throw new Error("User is null or User doesn't have groups")
 
       // TODO: Check if user is in cugetreg group
       const payload = {
@@ -71,10 +71,9 @@ export class AuthService {
         groups: userInfo.groups,
       } as UserInfoDto
 
-      console.log(userInfo)
       return payload
     } catch (e) {
-      throw new BadRequestException('Invalid id token')
+      return null
     }
   }
 

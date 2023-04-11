@@ -1,4 +1,4 @@
-import { BadRequestException, Controller, Get, Post, Query, Req, Res } from '@nestjs/common'
+import { BadRequestException, Controller, Get, Logger, Post, Query, Req, Res } from '@nestjs/common'
 
 import { Request, Response } from 'express'
 
@@ -8,7 +8,10 @@ import { AuthService } from './auth.service'
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  logger: Logger
+  constructor(private readonly authService: AuthService) {
+    this.logger = new Logger('Auth Controller')
+  }
 
   @Get()
   @SkipAuth()
@@ -16,39 +19,44 @@ export class AuthController {
     return 'Hello'
   }
 
-  // TODO: Remove this route
-  @Post('test')
-  @SkipAuth()
-  async testPost(@Res() res: Response) {
-    res.send('Hello')
-  }
-
   @Get('/validateCode')
   @SkipAuth()
-  async auth(@Query() query, @Res({ passthrough: true }) res: Response) {
+  async auth(@Query() query, @Res() res: Response) {
     if (!query.code) {
       throw new BadRequestException('authentication code is required')
     }
 
+    const payload = await this.authService.verifyAuthenticationCode(query.code)
+
+    if (!payload || !payload.id_token) {
+      throw new BadRequestException('Authentication code is invalid')
+    }
+
+    const id_token = payload.id_token
+
+    const userInfo = await this.authService.validateIdToken(id_token)
+
+    if (!userInfo) {
+      throw new BadRequestException('Invalid Id token')
+    }
+
     try {
-      const payload = await this.authService.verifyAuthenticationCode(query.code)
-
-      const id_token = payload.id_token
-
-      const userInfo = await this.authService.validateIdToken(id_token)
       const access_token = await this.authService.issueAccessToken(userInfo)
 
       this.setCookie(res, 'access_token', access_token)
 
       return res.status(200).json({ message: 'Validate code successfully' })
     } catch (err) {
+      this.logger.error(
+        'Error occurs in validating code (could be issue access token or setting cookie)'
+      )
       return res.status(400).json({ message: 'Something went wrong' })
     }
   }
 
   // TODO: Test this route
   @Post('/logout')
-  async logout(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
+  async logout(@Req() req: Request, @Res() res: Response) {
     res.clearCookie('accessToken')
   }
 
@@ -62,7 +70,7 @@ export class AuthController {
   // }
 
   @Get('me')
-  async getUserInfo(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
+  async getUserInfo(@Req() req: Request, @Res() res: Response) {
     return res.json(req['user'])
   }
 

@@ -1,8 +1,7 @@
 import { Dispatch, SetStateAction, createContext, useContext, useState } from 'react'
 
-import axios from 'axios'
-
 import { UserDto } from '@admin-web/common/types/UserDto'
+import { authApi } from '@admin-web/utils/authAxios'
 
 interface AuthProviderProps {
   children: React.ReactNode
@@ -29,9 +28,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
   const logout = async () => {
     // TODO: send api for logging user out
     try {
-      const res = await axios.get('http://localhost:3333/_api/auth/logout', {
-        withCredentials: true,
-      })
+      const res = await authApi.get('/logout')
       console.log(res)
       setUser(null)
     } catch (err) {

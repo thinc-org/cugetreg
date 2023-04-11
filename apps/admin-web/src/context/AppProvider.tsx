@@ -5,6 +5,7 @@ import { Layout } from '@admin-web/common/Layout'
 import { defaultTheme } from '@admin-web/config/theme'
 import { client } from '@admin-web/services/apollo'
 
+import AuthProvider from './AuthProvider'
 import { ProtectedRoutes } from './ProtectedRoutes'
 
 interface AppProviderProps {
@@ -14,11 +15,13 @@ interface AppProviderProps {
 export function AppProvider({ children }: AppProviderProps) {
   return (
     <ApolloProvider client={client}>
-      <ThemeProvider theme={defaultTheme}>
-        <Layout>
-          <ProtectedRoutes>{children}</ProtectedRoutes>
-        </Layout>
-      </ThemeProvider>
+      <AuthProvider>
+        <ThemeProvider theme={defaultTheme}>
+          <Layout>
+            <ProtectedRoutes>{children}</ProtectedRoutes>
+          </Layout>
+        </ThemeProvider>
+      </AuthProvider>
     </ApolloProvider>
   )
 }

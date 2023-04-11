@@ -3,6 +3,7 @@ import { BadRequestException, Controller, Get, Logger, Post, Query, Req, Res } f
 import { Request, Response } from 'express'
 
 import { SkipAuth } from '@admin-api/common/decorators/SkipAuth'
+import { accessTokenCookieOption } from '@admin-api/config/cookieOption'
 
 import { AuthService } from './auth.service'
 
@@ -55,9 +56,11 @@ export class AuthController {
   }
 
   // TODO: Test this route
-  @Post('/logout')
+  @Get('/logout')
   async logout(@Req() req: Request, @Res() res: Response) {
-    res.clearCookie('accessToken')
+    this.logger.log(`User: ${req['user'].name} is logging out`)
+    res.clearCookie('access_token', accessTokenCookieOption)
+    return res.status(200).json({ message: 'Logout successfully' })
   }
 
   @Get('me')
@@ -71,13 +74,11 @@ export class AuthController {
     res: Response,
     name: string,
     value: string,
-    httpOnly = true,
     maxAge = 1000 * 60 * 60 * 24 * 30 * 6
   ) {
     res.cookie(name, value, {
-      httpOnly,
       maxAge,
-      secure: true,
+      ...accessTokenCookieOption,
     })
   }
 }

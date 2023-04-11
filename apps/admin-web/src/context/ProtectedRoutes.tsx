@@ -6,6 +6,8 @@ import { useRouter } from 'next/router'
 
 import { UserDto } from '@admin-web/common/types/UserDto'
 
+import { useAuth } from './AuthProvider'
+
 interface ProctectedRoutesProps {
   children: React.ReactNode
 }
@@ -16,24 +18,22 @@ export const ProtectedRoutes = (props: ProctectedRoutesProps) => {
   const { children } = props
   const router = useRouter()
 
+  const { user, setUser } = useAuth()
+
   useEffect(() => {
     if (!router) return
     if (unProtectedRoutes.includes(router.pathname)) return
+    if (!!user) return
 
     const loadUserData = async () => {
       try {
         const res = await axios.get('http://localhost:3333/_api/auth/me', { withCredentials: true })
-        console.log(res)
         const user = res.data as UserDto
-        console.log(user)
-        // TODO: set auth provider
+        setUser(user)
       } catch (err) {
-        if (axios.isAxiosError(err) && err.response?.status === 401) {
-          router.push('/login')
-        } else {
-          // TODO: add error handler
-          toast.error('Error logging user in')
-        }
+        // TODO: add error handler
+        toast.error('Error logging user in. Retry logging in')
+        router.push('/login')
       }
     }
     loadUserData()

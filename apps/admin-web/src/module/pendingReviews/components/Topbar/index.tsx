@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { Typography } from '@mui/material'
 
 import LogoutButton from '@admin-web/common/LogoutButton'
+import { useAuth } from '@admin-web/context/AuthProvider'
 
 import SelectForm from './components/SelectForm'
 import { LeftContainer, RightContainer, TopbarContainer } from './styled'
@@ -10,6 +11,8 @@ import { LeftContainer, RightContainer, TopbarContainer } from './styled'
 export default function Topbar() {
   const [year, setYear] = useState<string>('')
   const [sem, setSem] = useState<string>('')
+
+  const { logout } = useAuth()
 
   return (
     <TopbarContainer>
@@ -29,7 +32,7 @@ export default function Topbar() {
           value={sem}
           setValue={setSem}
         />
-        <LogoutButton />
+        <LogoutButton handleClick={logout} />
       </RightContainer>
     </TopbarContainer>
   )

@@ -60,15 +60,6 @@ export class AuthController {
     res.clearCookie('accessToken')
   }
 
-  // @Post('/accesstoken')
-  // async getAccessToken(@Req() req: Request) {
-  //   const token = req.cookies['accessToken']
-  //   if (!token) throw new BadRequestException('Not logged in')
-  //   return {
-  //     accessToken: await this.authService.issueAccessToken(token),
-  //   }
-  // }
-
   @Get('me')
   async getUserInfo(@Req() req: Request, @Res() res: Response) {
     this.logger.log(`User: ${req['user'].name}`)

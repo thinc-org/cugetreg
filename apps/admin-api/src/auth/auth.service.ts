@@ -14,21 +14,6 @@ export class AuthService {
     this.logger = new Logger('Auth Service')
   }
 
-  // async requestAuthentik(code: string): Promise<any> {
-  //   const config = {
-  //     params: {
-  //       response_type: code,
-  //       client_id: this.configService.get<string>('clientId'),
-  //       scope: 'openid email profile',
-  //       redirect_uri: this.configService.get<string>('redirectUrl'),
-  //     },
-  //   }
-  //   const response = await lastValueFrom(
-  //     this.httpService.get(this.configService.get<string>('authorizationUrl'), config)
-  //   )
-  //   return response
-  // }
-
   async verifyAuthenticationCode(authenticationCode: string) {
     const config: AxiosRequestConfig = {
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },

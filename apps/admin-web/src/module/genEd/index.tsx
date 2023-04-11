@@ -20,8 +20,6 @@ export function GenEdPage() {
   } = useGetOverridesQuery({ notifyOnNetworkStatusChange: true })
   const router = useRouter()
 
-  console.log(router.query)
-
   // TODO: set stale content's color to gray
   useEffect(() => {
     console.log('Status: ', networkStatus)

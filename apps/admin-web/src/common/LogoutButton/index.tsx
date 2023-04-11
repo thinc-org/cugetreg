@@ -1,9 +1,13 @@
 import { StyledLogoutButton } from './styled'
 
-export default function LogoutButton() {
+interface LogoutButtonProps {
+  handleClick?: () => Promise<void> | void
+}
+
+export default function LogoutButton({ handleClick }: LogoutButtonProps) {
   return (
     <>
-      <StyledLogoutButton>Log out</StyledLogoutButton>
+      <StyledLogoutButton onClick={handleClick}>Log out</StyledLogoutButton>
     </>
   )
 }

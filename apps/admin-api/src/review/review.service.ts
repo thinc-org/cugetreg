@@ -57,6 +57,8 @@ export class ReviewService {
     const interactionType = rawReview.interactions.find((interaction) =>
       interaction.userId.equals(userId)
     )?.type
+
+    // TODO: change course title
     return {
       _id: rawReview._id.toString(),
       rating: rawReview.rating,
@@ -71,6 +73,7 @@ export class ReviewService {
       status: rawReview.status,
       rejectionReason: rawReview.rejectionReason,
       isOwner: rawReview.ownerId.equals(userId),
+      courseTitle: 'demo',
     }
   }
 }

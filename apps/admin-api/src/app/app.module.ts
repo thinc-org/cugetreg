@@ -7,6 +7,7 @@ import { ScheduleModule } from '@nestjs/schedule'
 import { GraphQLError } from 'graphql'
 import { join } from 'path'
 
+import { AuthModule } from '@admin-api/auth/auth.module'
 import { OverrideModule } from '@admin-api/override/override.module'
 
 import { GraphQLExpressContext } from '../common/types/context.type'
@@ -61,6 +62,7 @@ import { AppService } from './app.service'
     ReviewModule,
     OverrideModule,
     ScheduleModule.forRoot(),
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

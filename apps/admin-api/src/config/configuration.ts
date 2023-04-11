@@ -5,10 +5,13 @@ export interface Configuration {
   mongoURI: string
   port: number
   origin: string
-  googleOAuthId: string
-  googleOAuthSecret: string
+  clientId: string
+  clientSecret: string
+  authorizationUrl: string
+  tokenUrl: string
+  userInfoUrl: string
+  redirectUrl: string
   jwtSecret: string
-  adminToken: string
   clientLoggerUrl: string
   dashBoardUrl: string
   env: string
@@ -16,20 +19,30 @@ export interface Configuration {
 
 export const configuration = (): Configuration => {
   return {
-    mongoURI: process.env.MONGO_URI || 'mongodb://localhost:27017/cugetreg',
+    mongoURI: process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/cugetreg',
     port: parseInt(process.env.PORT, 10) || 3333,
     origin: process.env.CORS_ORIGIN || '*',
-    googleOAuthId: process.env.GOOGLE_OAUTH_ID,
-    googleOAuthSecret: process.env.GOOGLE_OAUTH_SECRET,
+    clientId: process.env.CLIENT_ID,
+    clientSecret: process.env.CLIENT_SECRET,
+    authorizationUrl: process.env.AUTHORIZATION_URL,
+    tokenUrl: process.env.TOKEN_URL,
+    userInfoUrl: process.env.USERINFO_URL,
+    redirectUrl: process.env.REDIRECT_URL || 'localhost:4201',
     jwtSecret: process.env.JWT_SECRET,
-    adminToken: process.env.ADMIN_TOKEN,
     clientLoggerUrl: process.env.CLIENT_LOGGER_URL,
     dashBoardUrl: process.env.DASHBOARD_URL,
     env: process.env.ENV || 'development',
   }
 }
 
-const requiredConfigs = ['googleOAuthId', 'googleOAuthSecret', 'jwtSecret', 'adminToken']
+const requiredConfigs = [
+  'clientId',
+  'clientSecret',
+  'tokenUrl',
+  'userInfoUrl',
+  'redirectUrl',
+  'jwtSecret',
+]
 
 export function validateConfig(configService: ConfigService<Configuration>): void {
   const logger = new Logger('ConfigService')

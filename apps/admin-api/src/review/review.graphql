@@ -37,6 +37,7 @@ type Review {
   _id: String!
   rating: Int!
   courseNo: String!
+  courseTitle: String!
   semester: String!
   academicYear: String!
   studyProgram: StudyProgram!

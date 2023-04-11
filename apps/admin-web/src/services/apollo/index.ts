@@ -8,6 +8,9 @@ import { apiUrl } from '@admin-web/services/httpClient'
 const createHttpLink = () =>
   new BatchHttpLink({
     uri: `${apiUrl}/graphql`,
+
+    // For cross-site cookie
+    credentials: 'include',
   })
 
 const authLink = setContext(async (_, { headers }) => {

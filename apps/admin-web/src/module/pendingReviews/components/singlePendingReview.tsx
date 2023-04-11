@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 
-import { ApolloError, ApolloQueryResult } from '@apollo/client'
+import { ApolloQueryResult } from '@apollo/client'
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
 import HighlightOffIcon from '@mui/icons-material/HighlightOff'
 import StarIcon from '@mui/icons-material/Star'
@@ -28,23 +28,13 @@ interface SinglePendingReviewProps {
         >
       | undefined
   ) => Promise<ApolloQueryResult<GetPendingReviewsQuery>>
-  // refetchLazy: (
-  //   variables?:
-  //     | Partial<
-  //         Exact<{
-  //           [key: string]: never
-  //         }>
-  //       >
-  //     | undefined
-  // ) => Promise<ApolloQueryResult<GetPendingReviewsQuery>>
 }
 
 // TODO: add toast to enhance user experience
 // TODO: add error handler
 export default function SinglePendingReview({ data, refetchReviews }: SinglePendingReviewProps) {
   const [reject, setReject] = useState(false)
-  const [setReviewStatus, { data: mutateData, loading: mutateLoading, error: mutateError, reset }] =
-    useSetReviewStatusMutation()
+  const [setReviewStatus, { error: mutateError }] = useSetReviewStatusMutation()
   const [rejectionReason, setRejectionReason] = useState('')
   const handleReject = () => {
     setReject(true)

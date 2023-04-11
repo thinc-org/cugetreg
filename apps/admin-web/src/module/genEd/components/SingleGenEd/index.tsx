@@ -29,7 +29,7 @@ interface SingleGenEdProps {
 }
 
 export default function SingleGenEd({ course, refetchOverrides }: SingleGenEdProps) {
-  const [deleteOverride, { data, loading, error, reset }] = useDeleteOverrideMutation()
+  const [deleteOverride] = useDeleteOverrideMutation()
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -51,7 +51,7 @@ export default function SingleGenEd({ course, refetchOverrides }: SingleGenEdPro
           academicYear: course.academicYear,
         },
       },
-      onCompleted(data, clientOptions) {
+      onCompleted(data) {
         if (!!data.deleteOverride) toast.success('Delete GenEd Successfully', { id: toastId })
         else toast.error('Fail to delete GenEd', { id: toastId })
       },
@@ -76,12 +76,6 @@ export default function SingleGenEd({ course, refetchOverrides }: SingleGenEdPro
           <ListItemText>Delete</ListItemText>
         </MenuItem>
       </Menu>
-      {/* <GenEdCreditContainer>
-                <Typography sx={{ fontWeight: 700, justifySelf: 'center' }}>
-                  {course.courseNo}
-                </Typography>
-                <Typography sx={{ fontWeight: 700 }}></Typography>
-              </GenEdCreditContainer> */}
     </GenEdRowContainer>
   )
 }

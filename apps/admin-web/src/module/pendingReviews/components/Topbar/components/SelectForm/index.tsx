@@ -1,6 +1,6 @@
 import { ReactNode } from 'react'
 
-import { FormControl, InputLabel, MenuItem, SelectChangeEvent } from '@mui/material'
+import { FormControl, MenuItem, SelectChangeEvent } from '@mui/material'
 
 import { StyledInputLabel, StyledSelect } from './styled'
 
@@ -14,7 +14,7 @@ interface SelectFormProps {
 export default function SelectForm(props: SelectFormProps) {
   const { name, data, value, setValue } = props
 
-  const handleChange = (event: SelectChangeEvent<unknown>, child: ReactNode) => {
+  const handleChange = (event: SelectChangeEvent<unknown>) => {
     if (typeof event.target?.value === 'string') setValue(event.target?.value)
   }
 

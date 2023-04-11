@@ -22,7 +22,7 @@ export function GenerateToken() {
           throw new Error('Code is not defined or is invalid')
         }
 
-        const response = await authApi.get('/validateCode', {
+        await authApi.get('/validateCode', {
           params: {
             code,
           },

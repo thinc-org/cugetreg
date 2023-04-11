@@ -15,5 +15,5 @@ export default function LoginPage() {
     auth_url.searchParams.append('scope', scope)
     auth_url.searchParams.append('redirect_uri', redirect_uri)
     router.push(auth_url)
-  }, [])
+  }, [router])
 }

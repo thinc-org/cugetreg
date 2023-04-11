@@ -1,5 +1,4 @@
 import { Dispatch, SetStateAction } from 'react'
-import { toast } from 'react-hot-toast'
 
 import { ApolloQueryResult } from '@apollo/client'
 import { Typography } from '@mui/material'

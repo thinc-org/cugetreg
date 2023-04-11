@@ -2,14 +2,12 @@ import { useEffect } from 'react'
 
 import { Button, Container, Stack, Typography } from '@mui/material'
 
-import { useGetPendingReviewsLazyQuery, useGetPendingReviewsQuery } from '@cgr/codegen'
+import { useGetPendingReviewsLazyQuery } from '@cgr/codegen'
 
 import SinglePendingReview from './singlePendingReview'
 
 export default function PendingReviewsList() {
-  const { data, loading, refetch: refetchReviews } = useGetPendingReviewsQuery()
-  const [loadMore, { data: lazyData, loading: lazyLoading, error: lazyError, refetch, called }] =
-    useGetPendingReviewsLazyQuery()
+  const [loadMore, { data: lazyData, refetch, called }] = useGetPendingReviewsLazyQuery()
 
   useEffect(() => {
     if (!called) loadMore()
@@ -18,20 +16,6 @@ export default function PendingReviewsList() {
   return (
     <>
       <Container disableGutters>
-        {/* {loading
-          ? // Todo: Reduce gaps between each skeleton
-            // Todo: Add more skeleton (dynamically?)
-            // <Grid spacing={0} direction="column">
-            //   <Skeleton height={200} />
-            //   <Skeleton height={200} />
-            //   <Skeleton height={200} />
-            // </Grid>
-            // TODO: THiS Cause ERROR
-            null
-          : data?.pendingReviews.map((data) => (
-              <SinglePendingReview key={data._id} data={data} refetchReviews={refetchReviews} />
-            ))} */}
-
         {lazyData?.pendingReviews.map((data) => (
           <SinglePendingReview key={data._id} data={data} refetchReviews={refetch} />
         ))}

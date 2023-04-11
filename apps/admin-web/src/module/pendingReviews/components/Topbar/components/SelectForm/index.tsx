@@ -14,11 +14,10 @@ interface SelectFormProps {
 export default function SelectForm(props: SelectFormProps) {
   const { name, data, value, setValue } = props
 
-  const handleChange = (event: SelectChangeEvent<string>, child: ReactNode) => {
-    setValue(event.target?.value)
+  const handleChange = (event: SelectChangeEvent<unknown>, child: ReactNode) => {
+    if (typeof event.target?.value === 'string') setValue(event.target?.value)
   }
 
-  //   TODO: Beautify this
   return (
     <FormControl size="small" sx={{ minWidth: '120px' }}>
       <StyledInputLabel id={`${name}-select-label`}>{name}</StyledInputLabel>

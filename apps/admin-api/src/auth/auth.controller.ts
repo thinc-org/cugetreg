@@ -70,12 +70,7 @@ export class AuthController {
   }
 
   // TODO: lessen expiry
-  private setCookie(
-    res: Response,
-    name: string,
-    value: string,
-    maxAge = 1000 * 60 * 60 * 24 * 30 * 6
-  ) {
+  private setCookie(res: Response, name: string, value: string, maxAge = 1000 * 60 * 60 * 24 * 30) {
     res.cookie(name, value, {
       maxAge,
       ...accessTokenCookieOption,

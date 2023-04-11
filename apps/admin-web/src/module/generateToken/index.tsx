@@ -1,7 +1,11 @@
 import { useEffect } from 'react'
 import { toast } from 'react-hot-toast'
 
+import { CircularProgress } from '@mui/material'
+import axios from 'axios'
 import { useRouter } from 'next/router'
+
+import { SpinnerContainer } from './styled'
 
 export function GenerateToken() {
   const router = useRouter()
@@ -23,8 +27,8 @@ export function GenerateToken() {
 
         const url = new URL(process.env.NEXT_PUBLIC_TOKEN_URL)
         url.searchParams.append('code', code)
-        const response = await fetch(url, { credentials: 'include' })
-        const data = await response.json()
+        const response = await axios.get(url.toString(), { withCredentials: true })
+        router.push('/pendingReviews')
       } catch (err) {
         if (err instanceof Error) toast.error(err.message)
         else toast.error('Unknown error')
@@ -34,8 +38,8 @@ export function GenerateToken() {
   }, [router])
 
   return (
-    <>
-      <h1>Hello</h1>
-    </>
+    <SpinnerContainer>
+      <CircularProgress />
+    </SpinnerContainer>
   )
 }

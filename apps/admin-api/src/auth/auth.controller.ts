@@ -71,6 +71,7 @@ export class AuthController {
 
   @Get('me')
   async getUserInfo(@Req() req: Request, @Res() res: Response) {
+    this.logger.log(`User: ${req['user'].name}`)
     return res.json(req['user'])
   }
 

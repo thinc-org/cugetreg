@@ -1,6 +1,7 @@
 import { ApolloProvider } from '@apollo/client'
 import { ThemeProvider } from '@mui/material'
 
+import { Layout } from '@admin-web/common/Layout'
 import { defaultTheme } from '@admin-web/config/theme'
 import { client } from '@admin-web/services/apollo'
 
@@ -13,9 +14,11 @@ interface AppProviderProps {
 export function AppProvider({ children }: AppProviderProps) {
   return (
     <ApolloProvider client={client}>
-      <ProtectedRoutes>
-        <ThemeProvider theme={defaultTheme}>{children}</ThemeProvider>
-      </ProtectedRoutes>
+      <ThemeProvider theme={defaultTheme}>
+        <Layout>
+          <ProtectedRoutes>{children}</ProtectedRoutes>
+        </Layout>
+      </ThemeProvider>
     </ApolloProvider>
   )
 }

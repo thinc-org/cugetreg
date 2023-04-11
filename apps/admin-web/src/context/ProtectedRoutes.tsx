@@ -1,35 +1,43 @@
 import { useEffect } from 'react'
+import { toast } from 'react-hot-toast'
 
+import axios from 'axios'
 import { useRouter } from 'next/router'
 
-import { useUser } from '@admin-web/hooks/useUser'
+import { UserDto } from '@admin-web/common/types/UserDto'
 
 interface ProctectedRoutesProps {
-  children: JSX.Element
+  children: React.ReactNode
 }
 
-// export const unProtectedRoutes = ['/login', '/pendingReviews']
 export const unProtectedRoutes = ['/login', '/generateToken']
 
 export const ProtectedRoutes = (props: ProctectedRoutesProps) => {
   const { children } = props
-  //   TODO: useUser instead
-  const { isLoggedIn, isLoading, user } = useUser()
-  // const isLoggedIn = true
-  // const isLoading = false
   const router = useRouter()
 
   useEffect(() => {
     if (!router) return
-    if (isLoading) return
+    if (unProtectedRoutes.includes(router.pathname)) return
 
-    console.log(`Login status: ${isLoggedIn}`)
-
-    if (!unProtectedRoutes.includes(router.pathname) && !isLoggedIn) {
-      router.push('/login')
-      return
+    const loadUserData = async () => {
+      try {
+        const res = await axios.get('http://localhost:3333/_api/auth/me', { withCredentials: true })
+        console.log(res)
+        const user = res.data as UserDto
+        console.log(user)
+        // TODO: set auth provider
+      } catch (err) {
+        if (axios.isAxiosError(err) && err.response?.status === 401) {
+          router.push('/login')
+        } else {
+          // TODO: add error handler
+          toast.error('Error logging user in')
+        }
+      }
     }
-  }, [isLoading, isLoggedIn, router])
+    loadUserData()
+  }, [router])
 
-  return children
+  return <>{children}</>
 }

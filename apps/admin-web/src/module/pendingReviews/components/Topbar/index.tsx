@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
 
 import { Typography } from '@mui/material'
 
@@ -8,9 +8,21 @@ import { useAuth } from '@admin-web/context/AuthProvider'
 import SelectForm from './components/SelectForm'
 import { LeftContainer, RightContainer, TopbarContainer } from './styled'
 
-export default function Topbar() {
-  const [year, setYear] = useState<string>('')
-  const [sem, setSem] = useState<string>('')
+interface TopbarProps {
+  year: string
+  semester: string
+  setYear: Dispatch<SetStateAction<string>>
+  setSemester: Dispatch<SetStateAction<string>>
+}
+
+export default function Topbar({
+  year: Year,
+  semester: Semester,
+  setYear,
+  setSemester,
+}: TopbarProps) {
+  // const [year, setYear] = useState<string>('')
+  // const [sem, setSem] = useState<string>('')
 
   const { logout } = useAuth()
 
@@ -23,14 +35,14 @@ export default function Topbar() {
         <SelectForm
           name={YearSelectData.name}
           data={YearSelectData.data}
-          value={year}
+          value={Year}
           setValue={setYear}
         />
         <SelectForm
           name={SemSelectData.name}
           data={SemSelectData.data}
-          value={sem}
-          setValue={setSem}
+          value={Semester}
+          setValue={setSemester}
         />
         <LogoutButton handleClick={logout} />
       </RightContainer>

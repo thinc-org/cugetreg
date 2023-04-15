@@ -6,12 +6,24 @@ import { useGetPendingReviewsLazyQuery } from '@cgr/codegen'
 
 import SinglePendingReview from './singlePendingReview'
 
-export default function PendingReviewsList() {
+interface PendingReviewListProps {
+  year: string
+  semester: string
+}
+
+export default function PendingReviewsList({
+  year: year,
+  semester: semester,
+}: PendingReviewListProps) {
   const [loadMore, { data: lazyData, refetch, called }] = useGetPendingReviewsLazyQuery()
 
   useEffect(() => {
-    if (!called) loadMore()
-  }, [called, loadMore])
+    if (!called) {
+      loadMore()
+    }
+    console.log(year)
+    console.log(semester)
+  }, [called, loadMore, year, semester])
 
   return (
     <>

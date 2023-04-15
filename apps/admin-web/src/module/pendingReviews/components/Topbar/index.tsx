@@ -16,8 +16,8 @@ interface TopbarProps {
 }
 
 export default function Topbar({
-  year: Year,
-  semester: Semester,
+  year: year,
+  semester: semester,
   setYear,
   setSemester,
 }: TopbarProps) {
@@ -35,13 +35,13 @@ export default function Topbar({
         <SelectForm
           name={YearSelectData.name}
           data={YearSelectData.data}
-          value={Year}
+          value={year}
           setValue={setYear}
         />
         <SelectForm
           name={SemSelectData.name}
           data={SemSelectData.data}
-          value={Semester}
+          value={semester}
           setValue={setSemester}
         />
         <LogoutButton handleClick={logout} />

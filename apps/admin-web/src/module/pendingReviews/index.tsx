@@ -5,14 +5,13 @@ import PendingReviewsList from '@admin-web/module/pendingReviews/components/pend
 
 import Topbar from './components/Topbar'
 
-const [year, setYear] = useState<string>('')
-const [semester, setSemester] = useState<string>('')
-
 export function PendingReviewsPage() {
+  const [year, setYear] = useState<string>('')
+  const [semester, setSemester] = useState<string>('')
   return (
     <div>
       <Topbar year={year} semester={semester} setYear={setYear} setSemester={setSemester} />
-      <PendingReviewsList />
+      <PendingReviewsList year={year} semester={semester} />
     </div>
   )
 }

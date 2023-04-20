@@ -242,6 +242,22 @@ export class Override {
     genEd?: GenEdOverride;
 }
 
+export class Review {
+    _id: string;
+    rating: number;
+    courseNo: string;
+    semester: string;
+    academicYear: string;
+    studyProgram: StudyProgram;
+    content?: string;
+    likeCount: number;
+    dislikeCount: number;
+    myInteraction?: ReviewInteractionType;
+    status?: ReviewStatus;
+    rejectionReason?: string;
+    isOwner: boolean;
+}
+
 export abstract class IMutation {
     abstract createOrUpdateOverride(override: OverrideInput): Override | Promise<Override>;
 
@@ -260,22 +276,6 @@ export abstract class IMutation {
     abstract modifyCourseCart(newContent: CourseCartItemInput[]): CourseCartItem[] | Promise<CourseCartItem[]>;
 
     abstract modifyCalendarId(newCalendarId?: string): string | Promise<string>;
-}
-
-export class Review {
-    _id: string;
-    rating: number;
-    courseNo: string;
-    semester: string;
-    academicYear: string;
-    studyProgram: StudyProgram;
-    content?: string;
-    likeCount: number;
-    dislikeCount: number;
-    myInteraction?: ReviewInteractionType;
-    status?: ReviewStatus;
-    rejectionReason?: string;
-    isOwner: boolean;
 }
 
 export class User {

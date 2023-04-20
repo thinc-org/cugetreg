@@ -14,6 +14,7 @@ export interface Configuration {
   computationBackendUrl: string
   computationBackendAuthToken: string
   slackWebhookUrl: string
+  reviewDashboardUrl: string
   env: string
   elasticUrl: string
   elasticUsername: string
@@ -34,6 +35,7 @@ export const configuration = (): Configuration => {
     computationBackendUrl: process.env.COMPUTATION_BACKEND_URL,
     computationBackendAuthToken: process.env.COMPUTATION_BACKEND_AUTHTOKEN,
     slackWebhookUrl: process.env.SLACK_WEBHOOK_URL,
+    reviewDashboardUrl: process.env.REVIEW_DASHBOARD_URL,
     env: process.env.ENV || 'development',
     elasticUrl: process.env.ELASTIC_URL,
     elasticUsername: process.env.ELASTIC_USERNAME,

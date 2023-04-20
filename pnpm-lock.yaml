@@ -183,9 +183,6 @@ importers:
       '@nestjs/platform-express':
         specifier: 9.2.1
         version: 9.2.1(@nestjs/common@9.2.1)(@nestjs/core@9.2.1)
-      '@nestjs/schedule':
-        specifier: 2.1.0
-        version: 2.1.0(@nestjs/common@9.2.1)(@nestjs/core@9.2.1)(reflect-metadata@0.1.13)
       '@opensearch-project/opensearch':
         specifier: 2.1.0
         version: 2.1.0

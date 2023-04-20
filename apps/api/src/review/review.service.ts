@@ -2,10 +2,13 @@ import {
   BadRequestException,
   ConflictException,
   Injectable,
+  Logger,
   NotFoundException,
 } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
 import { InjectModel } from '@nestjs/mongoose'
 
+import { IncomingWebhook } from '@slack/webhook'
 import { StudyProgram } from '@thinc-org/chula-courses'
 import { Model, Types } from 'mongoose'
 
@@ -21,7 +24,31 @@ import { ReviewDocument } from '../schemas/review.schema'
 
 @Injectable()
 export class ReviewService {
-  constructor(@InjectModel('review') private reviewModel: Model<ReviewDocument>) {}
+  private logger: Logger = new Logger('ReviewService')
+  private webhook: IncomingWebhook
+
+  constructor(
+    private configService: ConfigService,
+    @InjectModel('review') private reviewModel: Model<ReviewDocument>
+  ) {
+    const env = this.configService.get<string>('env')
+    const url = this.configService.get<string>('slackWebhookUrl')
+    if (url && env == 'production') {
+      this.logger.log(`Slack webhook is configured: ${url}`)
+      this.webhook = new IncomingWebhook(url)
+    }
+  }
+
+  async sendReviewAlert(review: ReviewDocument) {
+    if (!this.webhook) {
+      return
+    }
+    const reviewDashboardUrl = this.configService.get<string>('reviewDashboardUrl')
+    this.logger.log(`sent alert`)
+    return this.webhook.send({
+      text: `A new review is created for course ${review.courseNo} ${review.studyProgram} ${review.semester}/${review.academicYear}. Review them now in <${reviewDashboardUrl}|Review Dashboard>.`,
+    })
+  }
 
   async getReviews(): Promise<ReviewDocument[]> {
     const reviews = await this.reviewModel.find()
@@ -61,8 +88,9 @@ export class ReviewService {
       content,
       status: 'PENDING',
     })
-
-    return this.transformReview(await newReview.save(), userId)
+    await newReview.save()
+    await this.sendReviewAlert(newReview)
+    return this.transformReview(newReview, userId)
   }
 
   async getApprovedReviews(

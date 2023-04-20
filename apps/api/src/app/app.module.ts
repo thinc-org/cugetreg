@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { GraphQLModule } from '@nestjs/graphql'
 import { MongooseModule } from '@nestjs/mongoose'
-import { ScheduleModule } from '@nestjs/schedule'
 
 import { GraphQLError } from 'graphql'
 import { join } from 'path'
@@ -71,7 +70,6 @@ import { AppService } from './app.service'
     UserModule,
     AuthModule,
     ReviewModule,
-    ScheduleModule.forRoot(),
     ClientLoggingModule,
     OverrideModule,
     ComputationModule,

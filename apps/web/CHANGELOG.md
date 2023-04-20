@@ -1,5 +1,15 @@
 # web
 
+## 1.3.0
+
+### Minor Changes
+
+- e1b5095b: upgrade to node 18
+
+### Patch Changes
+
+- 15dfbfca: Disable linting during Next.js builds
+
 ## 1.3.0-beta.1
 
 ### Minor Changes

@@ -1,6 +1,6 @@
 {
   "name": "api",
-  "version": "1.3.0-beta.0",
+  "version": "1.3.0",
   "private": true,
   "scripts": {
     "dev": "nest start --watch",

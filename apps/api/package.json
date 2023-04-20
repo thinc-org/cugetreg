@@ -32,7 +32,6 @@
     "@nestjs/mongoose": "9.2.1",
     "@nestjs/passport": "7.1.5",
     "@nestjs/platform-express": "9.2.1",
-    "@nestjs/schedule": "2.1.0",
     "@opensearch-project/opensearch": "2.1.0",
     "@slack/webhook": "6.0.0",
     "@thinc-org/chula-courses": "^2.3.0",

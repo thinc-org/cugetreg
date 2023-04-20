@@ -1,5 +1,11 @@
 # reg-scraper
 
+## 1.1.0-beta.0
+
+### Minor Changes
+
+- e1b5095b: upgrade to node 18
+
 ## 1.0.3
 
 ### Patch Changes

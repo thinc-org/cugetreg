@@ -1,5 +1,11 @@
 # admin-web
 
+## 0.1.0-beta.1
+
+### Minor Changes
+
+- e1b5095b: upgrade to node 18
+
 ## 0.0.3-beta.0
 
 ### Patch Changes

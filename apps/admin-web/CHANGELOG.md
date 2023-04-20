@@ -1,5 +1,15 @@
 # admin-web
 
+## 0.1.0
+
+### Minor Changes
+
+- e1b5095b: upgrade to node 18
+
+### Patch Changes
+
+- 15dfbfca: Disable linting during Next.js builds
+
 ## 0.1.0-beta.1
 
 ### Minor Changes

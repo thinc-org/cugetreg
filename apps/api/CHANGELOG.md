@@ -1,5 +1,16 @@
 # api
 
+## 1.3.0
+
+### Minor Changes
+
+- 21122935: fix stack field in log file being array instead of string causing elastic to failed parsing it
+- e1b5095b: upgrade to node 18
+
+### Patch Changes
+
+- 76659ecb: send review alert on create review
+
 ## 1.3.0-beta.0
 
 ### Minor Changes

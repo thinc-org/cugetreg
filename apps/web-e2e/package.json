@@ -1,0 +1,17 @@
+{
+  "name": "web-e2e",
+  "version": "0.0.1-beta.0",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "@playwright/test": "^1.31.1"
+  },
+  "scripts": {
+    "install-browser": "playwright install",
+    "test:e2e": "playwright test",
+    "test:head": "playwright test --headed --slowmo=1000",
+    "test:debug": "playwright test --debug",
+    "show:report": "playwright show-report",
+    "show:trace": "playwright show-trace"
+  }
+}

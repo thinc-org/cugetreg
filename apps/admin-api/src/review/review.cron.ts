@@ -36,7 +36,9 @@ export class ReviewCron {
     if (pendingReviewCount > 0) {
       this.logger.log(`There are ${pendingReviewCount} pending reviews, alerting team via Slack...`)
       await this.webhook.send({
-        text: `There are *${pendingReviewCount}* pending reviews. Review them now in <https://appsmith.internal.cugetreg.com/applications/6155d8914a99086ac822a925/pages/61b73ebe0599052fee9c8295|Review Dashboard>.`,
+        text: `There are *${pendingReviewCount}* pending reviews. Review them now in <${this.configService.get<string>(
+          'DASHBOARD_URL'
+        )}|Review Dashboard>.`,
       })
     }
   }

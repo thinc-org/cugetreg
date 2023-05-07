@@ -699,6 +699,16 @@ importers:
         specifier: ^2.8.4
         version: 2.8.4
 
+  packages/schema:
+    dependencies:
+      mongoose:
+        specifier: 6.5.2
+        version: 6.5.2
+    devDependencies:
+      eslint:
+        specifier: 8.34.0
+        version: 8.34.0
+
 packages:
 
   /@ampproject/remapping@2.2.0:

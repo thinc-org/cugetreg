@@ -2,8 +2,9 @@ import { Module } from '@nestjs/common'
 import { MongooseModule } from '@nestjs/mongoose'
 
 import { OverrideModule } from '@reg-scraper/override/override.module'
-import { CourseSchema } from '@reg-scraper/schema/course.schema'
 import { QueueStoreModule } from '@reg-scraper/stores/queue-store/queue-store.module'
+
+import { CourseSchema } from '@cgr/schema'
 
 import { QueueProducerModule } from './queue-producer/queue-producer.module'
 import { ScraperController } from './scraper.controller'

@@ -1,8 +1,7 @@
 import { Module } from '@nestjs/common'
 import { MongooseModule } from '@nestjs/mongoose'
 
-import { OverrideSchema } from '@reg-scraper/schema/override.schema'
-import { ReviewSchema } from '@reg-scraper/schema/review.schema'
+import { OverrideSchema, ReviewSchema } from '@cgr/schema'
 
 import { OverrideService } from './override.service'
 

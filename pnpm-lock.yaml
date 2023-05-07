@@ -274,6 +274,9 @@ importers:
 
   apps/reg-scraper:
     dependencies:
+      '@cgr/schema':
+        specifier: workspace:*
+        version: link:../../packages/schema
       '@nestjs/bull':
         specifier: 0.6.2
         version: 0.6.2(@nestjs/common@9.2.1)(@nestjs/core@9.2.1)(bull@4.10.2)
@@ -295,9 +298,6 @@ importers:
       '@nestjs/schedule':
         specifier: 2.1.0
         version: 2.1.0(@nestjs/common@9.2.1)(@nestjs/core@9.2.1)(reflect-metadata@0.1.13)
-      '@thinc-org/chula-courses':
-        specifier: ^2.3.0
-        version: 2.3.0
       axios:
         specifier: 0.23.0
         version: 0.23.0

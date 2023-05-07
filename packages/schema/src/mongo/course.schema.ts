@@ -17,6 +17,12 @@ export interface Period {
   start: string
   end: string
 }
+
+export interface ExamPeriod {
+  date: string
+  period: Period
+}
+
 export interface Section {
   sectionNo: string
   closed: boolean
@@ -53,20 +59,19 @@ export interface Course {
   courseCondition: string
   genEdType: GenEdType
   rating?: string
-  midterm?: {
-    date: string
-    period: Period
-  }
-  final?: {
-    date: string
-    period: Period
-  }
+  midterm?: ExamPeriod
+  final?: ExamPeriod
   sections: Section[]
 }
 
 const period = {
   start: { type: String, required: true },
   end: { type: String, required: true },
+}
+
+const examPeriod = {
+  date: { type: String, required: true },
+  period: period,
 }
 
 const classSchema = {
@@ -120,14 +125,8 @@ export const CourseSchema = new Schema({
     required: true,
     enum: genEdTypes,
   },
-  midterm: {
-    date: { type: String, required: true },
-    period: period,
-  },
-  final: {
-    date: { type: String, required: true },
-    period: period,
-  },
+  midterm: examPeriod,
+  final: examPeriod,
   sections: { type: [section], required: true },
   rating: { type: String },
 })

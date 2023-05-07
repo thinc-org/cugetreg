@@ -2,15 +2,15 @@ import { InjectQueue, Process, Processor } from '@nestjs/bull'
 import { Logger } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 
-import { Course } from '@thinc-org/chula-courses'
 import type { Job, Queue } from 'bull'
 import { Model } from 'mongoose'
 
 import { OverrideService } from '@reg-scraper/override/override.service'
-import { CourseDocument } from '@reg-scraper/schema/course.schema'
 import { courseRequest } from '@reg-scraper/scraper/request/course.request'
 import CourseFetchJob from '@reg-scraper/scraper/types/CourseFetchJob'
 import { QueueStoreService } from '@reg-scraper/stores/queue-store/queue-store.service'
+
+import { Course } from '@cgr/schema'
 
 @Processor({
   name: 'fetch',
@@ -20,13 +20,13 @@ export class QueueConsumerService {
 
   constructor(
     private overrideService: OverrideService,
-    @InjectModel('course') private courseModel: Model<CourseDocument>,
+    @InjectModel('course') private courseModel: Model<Course>,
     @InjectQueue('fetch')
     private fetchQueue: Queue<CourseFetchJob>,
     private queueStoreService: QueueStoreService
   ) {}
 
-  async saveCourse(course: Course): Promise<CourseDocument> {
+  async saveCourse(course: Course): Promise<Course> {
     const result = await this.courseModel.findOneAndUpdate(
       {
         courseNo: course.courseNo,
@@ -61,7 +61,7 @@ export class QueueConsumerService {
         courses.push(course)
       }
       // save course data to mongo
-      const mongoosePromises: Promise<CourseDocument>[] = []
+      const mongoosePromises: Promise<Course>[] = []
       for (const course of courses) {
         mongoosePromises.push(this.saveCourse(course))
       }

@@ -1,17 +1,17 @@
 import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 
-import { StudyProgram } from '@thinc-org/chula-courses'
 import { Model } from 'mongoose'
 
+import { Override, Semester, StudyProgram } from '@cgr/schema'
+
 import { OverrideInput } from '../graphql'
-import { Override, OverrideDocument } from '../schemas/override.schema'
 
 @Injectable()
 export class OverrideService {
   constructor(
     @InjectModel('override')
-    private overrideModel: Model<OverrideDocument>
+    private overrideModel: Model<Override>
   ) {}
 
   async getOverrides(): Promise<Override[]> {
@@ -42,7 +42,7 @@ export class OverrideService {
     courseNo: string,
     studyProgram: StudyProgram,
     academicYear: string,
-    semester: string
+    semester: Semester
   ): Promise<Override> {
     const result = await this.overrideModel.findOneAndDelete({
       courseNo,

@@ -18,8 +18,8 @@ import { oauth2 } from 'googleapis/build/src/apis/oauth2'
 import { Model } from 'mongoose'
 import { serializeError } from 'serialize-error'
 
-import { RefreshToken, RefreshTokenDocument } from '../schemas/auth.schema'
-import { CourseCart, CourseCartItem, UserDocument } from '../schemas/user.schema'
+import { RefreshToken, User } from '@cgr/schema'
+
 import { AccessTokenPayload } from './auth.dto'
 
 @Injectable()
@@ -29,9 +29,9 @@ export class AuthService {
   constructor(
     private configService: ConfigService,
     private jwtService: JwtService,
-    @InjectModel('user') private userModel: Model<UserDocument>,
-    @InjectModel(RefreshToken.name)
-    private refreshTokenModel: Model<RefreshTokenDocument>
+    @InjectModel('user') private userModel: Model<User>,
+    @InjectModel('refreshtoken')
+    private refreshTokenModel: Model<RefreshToken>
   ) {
     this.logger = new Logger('Auth Service')
   }
@@ -48,7 +48,7 @@ export class AuthService {
     return `${backendApiUrl}/auth/google/callback`
   }
 
-  async issueRefreshToken(user: UserDocument): Promise<string> {
+  async issueRefreshToken(user: User): Promise<string> {
     const token = new this.refreshTokenModel()
     token.refreshToken = randomBytes(64).toString('base64')
     token.userId = user._id
@@ -96,7 +96,7 @@ export class AuthService {
 
   async handleGoogleIdToken(payload: TokenPayload) {
     // User lookup
-    let user: UserDocument = await this.userModel.findOne({
+    let user = await this.userModel.findOne({
       'google.googleId': payload.sub,
     })
     if (!user) {
@@ -145,7 +145,7 @@ export class AuthService {
       this.logger.warn('UserInfo contains inssuficient data', { userInfo })
       throw new UnprocessableEntityException('Insufficient user data')
     }
-    let user: UserDocument = await this.userModel.findOne({
+    let user = await this.userModel.findOne({
       'google.googleId': userInfo.id,
     })
     if (!user) {
@@ -174,23 +174,26 @@ export class AuthService {
 
           if (!Array.isArray(data)) throw { reason: 'Object is not an array', data }
 
-          const courseCart = new CourseCart()
-          courseCart.cartContent = []
+          const cartContent = []
           for (const e of data) {
             if (typeof e !== 'object') throw { reason: 'Migrated cart item is not an object', e }
-            const item = new CourseCartItem()
-            item.academicYear = e.academicYear
-            item.courseNo = e.courseNo
-            item.semester = e.semester
-            item.studyProgram = e.studyProgram
-            item.selectedSectionNo = e.selectedSectionNo
-            item.isHidden = false
+            const item = {
+              academicYear: e.academicYear,
+              courseNo: e.courseNo,
+              semester: e.semester,
+              studyProgram: e.studyProgram,
+              selectedSectionNo: e.selectedSectionNo,
+              isHidden: false,
+            }
+
             await validateOrReject(item, { forbidUnknownValues: true })
-            courseCart.cartContent.push(item)
+            cartContent.push(item)
           }
-          user.courseCart = courseCart
+          user.courseCart = {
+            cartContent,
+          }
           this.logger.log('Migrated old course cart', {
-            courseCart,
+            courseCart: user.courseCart,
             userId: user._id,
           })
         }

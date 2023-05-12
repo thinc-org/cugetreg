@@ -1,6 +1,7 @@
 import { Schema, Types } from 'mongoose'
 
 export interface RefreshToken {
+  _id: Types.ObjectId
   refreshToken: string
   userId: Types.ObjectId
   createdAt: Date

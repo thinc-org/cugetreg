@@ -14,6 +14,7 @@ export interface ReviewInteraction {
 }
 
 export interface Review {
+  _id: Types.ObjectId
   ownerId: Types.ObjectId
   rating: number
   courseNo: string

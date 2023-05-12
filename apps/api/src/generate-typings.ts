@@ -7,4 +7,5 @@ definitionsFactory.generate({
   typePaths: [join(__dirname, '/**/*.graphql')],
   path: join(__dirname, '/graphql.ts'),
   outputAs: 'class',
+  enumsAsTypes: true,
 })

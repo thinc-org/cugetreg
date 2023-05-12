@@ -1,6 +1,9 @@
-import { Schema } from 'mongoose'
+import { Schema, Types } from 'mongoose'
+
+import { Semester, StudyProgram } from './types'
 
 export interface User {
+  _id: Types.ObjectId
   email: string
   name: string
   google: {
@@ -9,9 +12,9 @@ export interface User {
   }
   courseCart: {
     cartContent: {
-      studyProgram: string
+      studyProgram: StudyProgram
       academicYear: string
-      semester: string
+      semester: Semester
       courseNo: string
       selectedSectionNo: string
       isHidden: boolean

@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common'
 import { MongooseModule } from '@nestjs/mongoose'
 
-import { ReviewSchema } from '../schemas/review.schema'
+import { ReviewSchema } from '@cgr/schema'
+
 import { ReviewResolver } from './review.resolver'
 import { ReviewService } from './review.service'
 

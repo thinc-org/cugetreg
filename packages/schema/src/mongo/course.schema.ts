@@ -1,4 +1,4 @@
-import { Schema } from 'mongoose'
+import { Schema, Types } from 'mongoose'
 
 import {
   ClassType,
@@ -43,6 +43,7 @@ export interface Section {
 }
 
 export interface Course {
+  _id: Types.ObjectId
   studyProgram: StudyProgram
   semester: Semester
   academicYear: string

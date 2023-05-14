@@ -29,3 +29,11 @@ export type ClassType = (typeof classTypes)[number]
 
 export const dayOfWeeks = ['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU', 'IA', 'AR'] as const
 export type DayOfWeek = (typeof dayOfWeeks)[number]
+
+export const ModelName = {
+  Course: 'course',
+  Override: 'override',
+  RefreshToken: 'refreshtoken',
+  Review: 'review',
+  User: 'user',
+} as const

@@ -78,7 +78,7 @@ export type CourseCartItemInput = {
   /** The section no. that user selected for this course. */
   selectedSectionNo: Scalars['String'];
   semester: Scalars['String'];
-  studyProgram: Scalars['String'];
+  studyProgram: StudyProgram;
 };
 
 export type CourseDetail = {
@@ -251,8 +251,6 @@ export type Mutation = {
    * Requires user authentication.
    */
   editMyReview: Review;
-  /** @deprecated Will be redesigned. */
-  modifyCalendarId?: Maybe<Scalars['String']>;
   /** Modifies current user's course cart. */
   modifyCourseCart?: Maybe<Array<CourseCartItem>>;
   /**
@@ -296,11 +294,6 @@ export type MutationDeleteOverrideArgs = {
 export type MutationEditMyReviewArgs = {
   review: EditReviewInput;
   reviewId: Scalars['String'];
-};
-
-
-export type MutationModifyCalendarIdArgs = {
-  newCalendarId?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -360,8 +353,6 @@ export type PeriodRangeInput = {
 
 export type Query = {
   __typename?: 'Query';
-  /** @deprecated Will be redesigned. */
-  calendarId?: Maybe<Scalars['String']>;
   /** Find a course and returns it */
   course: Course;
   /**

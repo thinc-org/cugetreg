@@ -9,17 +9,24 @@ export class DateScalar implements CustomScalar<string, Date> {
     'Date custom scalar type, for (de)serializing Date values from/to ISO8601 representation.'
 
   parseValue(value: unknown): Date {
-    if (typeof value === 'string') {
-      return new Date(value)
+    if (typeof value !== 'string') {
+      throw new ValidationError('Cannot parse value for Date scalar. Value must be string.')
     }
-    throw new ValidationError('Cannot parse value for Date scalar. Value must be string.')
+    const date = new Date(value)
+    if (isNaN(date.getTime())) {
+      throw new ValidationError('Cannot parse value for Date scalar. Value must be valid date.')
+    }
+    return date
   }
 
   serialize(value: unknown): string {
-    if (value instanceof Date) {
-      return value.toISOString()
+    if (!(value instanceof Date)) {
+      throw new ValidationError('Cannot serialize value for Date scalar. Value must be Date.')
     }
-    throw new ValidationError('Cannot serialize value for Date scalar. Value must be Date.')
+    if (isNaN(value.getTime())) {
+      throw new ValidationError('Cannot serialize value for Date scalar. Value must be valid date.')
+    }
+    return value.toISOString()
   }
 
   parseLiteral(ast: ValueNode): Date {

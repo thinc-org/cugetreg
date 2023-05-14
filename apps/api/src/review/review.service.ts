@@ -8,7 +8,13 @@ import { Model, Types } from 'mongoose'
 
 import { BadRequestError, NotFoundError } from '@api/common/errors'
 
-import { Review, ReviewInteractionType, ReviewStatus, StudyProgram } from '@cgr/schema'
+import {
+  Review,
+  ReviewDocument,
+  ReviewInteractionType,
+  ReviewStatus,
+  StudyProgram,
+} from '@cgr/schema'
 
 import { CreateReviewInput, EditReviewInput } from '../graphql'
 
@@ -29,7 +35,7 @@ export class ReviewService {
     }
   }
 
-  async sendReviewAlert(review: Review) {
+  async sendReviewAlert(review: ReviewDocument) {
     if (!this.webhook) {
       return
     }
@@ -40,7 +46,7 @@ export class ReviewService {
     })
   }
 
-  async getReviews(): Promise<Review[]> {
+  async getReviews(): Promise<ReviewDocument[]> {
     const reviews = await this.reviewModel.find()
     return reviews
   }
@@ -48,7 +54,7 @@ export class ReviewService {
   async create(
     { courseNo, semester, academicYear, studyProgram, rating, content }: CreateReviewInput,
     userId: string
-  ): Promise<Review> {
+  ): Promise<ReviewDocument> {
     if (rating < 0 || rating > 10) {
       throw new UserInputError(`Rating must be between 0 and 10. Got ${rating}`)
     }
@@ -81,7 +87,7 @@ export class ReviewService {
     courseNo: string,
     studyProgram: StudyProgram,
     userId: string
-  ): Promise<Review[]> {
+  ): Promise<ReviewDocument[]> {
     const reviews = await this.reviewModel.find({
       courseNo,
       studyProgram,
@@ -99,7 +105,7 @@ export class ReviewService {
     })
   }
 
-  async getPending(): Promise<Review[]> {
+  async getPending(): Promise<ReviewDocument[]> {
     const reviews = await this.reviewModel.find({
       status: 'PENDING',
     })
@@ -110,7 +116,7 @@ export class ReviewService {
     courseNo: string,
     studyProgram: StudyProgram,
     userId: string
-  ): Promise<Review[]> {
+  ): Promise<ReviewDocument[]> {
     const reviews = await this.reviewModel.find({
       $or: [{ status: 'PENDING' }, { status: 'REJECTED' }],
       ownerId: userId,
@@ -124,7 +130,7 @@ export class ReviewService {
     reviewId: string,
     reviewInput: EditReviewInput,
     userId: string
-  ): Promise<Review> {
+  ): Promise<ReviewDocument> {
     if (reviewInput.rating != null && (reviewInput.rating < 0 || reviewInput.rating > 10)) {
       throw new UserInputError(`Rating must be between 0 and 10. Got ${reviewInput.rating}`)
     }
@@ -149,7 +155,7 @@ export class ReviewService {
     return newReview
   }
 
-  async remove(reviewId: string, userId: string): Promise<Review> {
+  async remove(reviewId: string, userId: string): Promise<ReviewDocument> {
     const review = await this.reviewModel.findOneAndDelete({
       _id: reviewId,
       ownerId: userId,
@@ -166,7 +172,7 @@ export class ReviewService {
     reviewId: string,
     status: ReviewStatus,
     rejectionReason: string = null
-  ): Promise<Review> {
+  ): Promise<ReviewDocument> {
     if (status !== 'APPROVED' && status !== 'REJECTED') {
       throw new UserInputError(`Only APPROVED and REJECTED status is supported. Got ${status}`)
     }
@@ -186,7 +192,7 @@ export class ReviewService {
     reviewId: string,
     interaction: ReviewInteractionType,
     userId: string
-  ): Promise<Review> {
+  ): Promise<ReviewDocument> {
     const review = await this.reviewModel.findById(reviewId)
     if (!review) {
       throw new NotFoundError('Review with the given id does not exist.')

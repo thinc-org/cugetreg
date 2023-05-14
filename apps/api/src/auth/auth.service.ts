@@ -18,7 +18,7 @@ import { oauth2 } from 'googleapis/build/src/apis/oauth2'
 import { Model } from 'mongoose'
 import { serializeError } from 'serialize-error'
 
-import { RefreshToken, User } from '@cgr/schema'
+import { RefreshToken, User, UserDocument } from '@cgr/schema'
 
 import { AccessTokenPayload } from './auth.dto'
 
@@ -48,7 +48,7 @@ export class AuthService {
     return `${backendApiUrl}/auth/google/callback`
   }
 
-  async issueRefreshToken(user: User): Promise<string> {
+  async issueRefreshToken(user: UserDocument): Promise<string> {
     const token = new this.refreshTokenModel()
     token.refreshToken = randomBytes(64).toString('base64')
     token.userId = user._id

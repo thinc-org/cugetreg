@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose'
 
 import { Model } from 'mongoose'
 
-import { Semester, User } from '@cgr/schema'
+import { Semester, User, UserDocument } from '@cgr/schema'
 
 import { CourseCartItem, CourseCartItemInput } from '../graphql'
 
@@ -11,7 +11,7 @@ import { CourseCartItem, CourseCartItemInput } from '../graphql'
 export class UserService {
   constructor(@InjectModel('user') private userModel: Model<User>) {}
 
-  async getUserById(userId: string): Promise<User> {
+  async getUserById(userId: string): Promise<UserDocument> {
     return this.userModel.findById(userId).lean()
   }
 

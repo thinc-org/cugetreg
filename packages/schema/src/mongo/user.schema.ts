@@ -1,29 +1,7 @@
-import { Schema, Types } from 'mongoose'
+import { Document, Schema, Types } from 'mongoose'
 
 import { Semester, StudyProgram } from './types'
 
-export interface User {
-  _id: Types.ObjectId
-  email: string
-  name: string
-  google: {
-    googleId: string
-    hasMigratedGDrive?: boolean
-  }
-  courseCart: {
-    cartContent: {
-      studyProgram: StudyProgram
-      academicYear: string
-      semester: Semester
-      courseNo: string
-      selectedSectionNo: string
-      isHidden: boolean
-      color?: string
-    }[]
-  }
-}
-
-// export const UserSchema = buildSchema(User)
 export const UserSchema = new Schema({
   email: { type: String, required: true },
   name: { type: String, required: true },
@@ -45,3 +23,25 @@ export const UserSchema = new Schema({
     ],
   },
 })
+
+export interface User {
+  email: string
+  name: string
+  google: {
+    googleId: string
+    hasMigratedGDrive?: boolean
+  }
+  courseCart: {
+    cartContent: {
+      studyProgram: StudyProgram
+      academicYear: string
+      semester: Semester
+      courseNo: string
+      selectedSectionNo: string
+      isHidden: boolean
+      color?: string
+    }[]
+  }
+}
+
+export type UserDocument = Document<Types.ObjectId, unknown, User> & User

@@ -1,11 +1,4 @@
-import { Schema, Types } from 'mongoose'
-
-export interface RefreshToken {
-  _id: Types.ObjectId
-  refreshToken: string
-  userId: Types.ObjectId
-  createdAt: Date
-}
+import { Document, Schema, Types } from 'mongoose'
 
 export const RefreshTokenSchema = new Schema(
   {
@@ -14,3 +7,11 @@ export const RefreshTokenSchema = new Schema(
   },
   { timestamps: true }
 )
+
+export interface RefreshToken {
+  refreshToken: string
+  userId: Types.ObjectId
+  createdAt: Date
+}
+
+export type RefreshTokenDocument = Document<Types.ObjectId, unknown, RefreshToken> & RefreshToken

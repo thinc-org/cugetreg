@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose'
 
 import { Model } from 'mongoose'
 
-import { Override, Semester, StudyProgram } from '@cgr/schema'
+import { Override, OverrideDocument, Semester, StudyProgram } from '@cgr/schema'
 
 import { OverrideInput } from '../graphql'
 
@@ -14,27 +14,25 @@ export class OverrideService {
     private overrideModel: Model<Override>
   ) {}
 
-  async getOverrides(): Promise<Override[]> {
-    const result = await this.overrideModel.find().lean()
+  async getOverrides(): Promise<OverrideDocument[]> {
+    const result = await this.overrideModel.find()
     return result
   }
 
-  async createOrUpdateOverride(override: OverrideInput): Promise<Override> {
-    const result = await this.overrideModel
-      .findOneAndUpdate(
-        {
-          courseNo: override.courseNo,
-          studyProgram: override.studyProgram,
-          academicYear: override.academicYear,
-          semester: override.semester,
-        },
-        override,
-        {
-          new: true,
-          upsert: true,
-        }
-      )
-      .lean()
+  async createOrUpdateOverride(override: OverrideInput): Promise<OverrideDocument> {
+    const result = await this.overrideModel.findOneAndUpdate(
+      {
+        courseNo: override.courseNo,
+        studyProgram: override.studyProgram,
+        academicYear: override.academicYear,
+        semester: override.semester,
+      },
+      override,
+      {
+        new: true,
+        upsert: true,
+      }
+    )
     return result
   }
 
@@ -43,7 +41,7 @@ export class OverrideService {
     studyProgram: StudyProgram,
     academicYear: string,
     semester: Semester
-  ): Promise<Override> {
+  ): Promise<OverrideDocument> {
     const result = await this.overrideModel.findOneAndDelete({
       courseNo,
       studyProgram,

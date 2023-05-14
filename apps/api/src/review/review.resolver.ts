@@ -1,7 +1,7 @@
 import { UseGuards } from '@nestjs/common'
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
 
-import { Review, ReviewInteractionType, ReviewStatus, StudyProgram } from '@cgr/schema'
+import { ReviewDocument, ReviewInteractionType, ReviewStatus, StudyProgram } from '@cgr/schema'
 
 import { AdminAuthGuard } from '../auth/admin.guard'
 import { JwtAuthGuard, JwtAuthGuardOptional } from '../auth/jwt.guard'
@@ -100,7 +100,7 @@ export class ReviewResolver {
     )
   }
 
-  private toGraphQLReview(rawReview: Review, userId: string): GraphQLReview {
+  private toGraphQLReview(rawReview: ReviewDocument, userId: string): GraphQLReview {
     const likeCount = rawReview.interactions.filter(
       (interaction) => interaction.type === 'L'
     ).length

@@ -1,4 +1,4 @@
-import { Schema, Types } from 'mongoose'
+import { Document, Schema, Types } from 'mongoose'
 
 import { StudyProgram } from './types'
 
@@ -14,7 +14,6 @@ export interface ReviewInteraction {
 }
 
 export interface Review {
-  _id: Types.ObjectId
   ownerId: Types.ObjectId
   rating: number
   courseNo: string
@@ -26,6 +25,8 @@ export interface Review {
   status: ReviewStatus
   rejectionReason?: string
 }
+
+export type ReviewDocument = Document<Types.ObjectId, unknown, Review> & Review
 
 // TODO: move away from subdocuments?
 export const InteractionSchema = new Schema({

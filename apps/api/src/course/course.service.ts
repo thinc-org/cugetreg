@@ -7,7 +7,7 @@ import { FilterQuery, Model } from 'mongoose'
 import { NotFoundError } from '@api/common/errors'
 import { escapeRegExpString } from '@api/util/functions'
 
-import { Course, Semester, StudyProgram } from '@cgr/schema'
+import { Course, CourseDocument, Semester, StudyProgram } from '@cgr/schema'
 
 import { CourseGroupInput, FilterInput } from '../graphql'
 
@@ -20,10 +20,14 @@ export class CourseService {
     semester: Semester,
     academicYear: string,
     studyProgram: StudyProgram
-  ): Promise<Course> {
-    const course = await this.courseModel
-      .findOne({ courseNo, semester, academicYear, studyProgram })
-      .lean()
+  ): Promise<CourseDocument> {
+    const course = await this.courseModel.findOne({
+      courseNo,
+      semester,
+      academicYear,
+      studyProgram,
+    })
+
     if (!course) {
       throw new NotFoundError("Can't find a course with the given parameters")
     }
@@ -59,7 +63,7 @@ export class CourseService {
       periodRange,
     }: FilterInput,
     { semester, academicYear, studyProgram }: CourseGroupInput
-  ): Promise<Course[]> {
+  ): Promise<CourseDocument[]> {
     const query = {
       semester,
       academicYear,
@@ -99,7 +103,7 @@ export class CourseService {
       }
     }
 
-    const courses = await this.courseModel.find(query).limit(limit).skip(offset).lean()
+    const courses = await this.courseModel.find(query).limit(limit).skip(offset)
     return courses
   }
 }

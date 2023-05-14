@@ -1,4 +1,4 @@
-import { Schema, Types } from 'mongoose'
+import { Document, Schema, Types } from 'mongoose'
 
 import { GenEdType, StudyProgram, genEdTypes, studyPrograms } from './types'
 
@@ -18,7 +18,6 @@ export const OverrideSchema = new Schema({
 })
 
 export interface Override {
-  _id: Types.ObjectId
   courseNo: string
   studyProgram: StudyProgram
   semester: string
@@ -28,3 +27,5 @@ export interface Override {
     sections: string[]
   }
 }
+
+export type OverrideDocument = Document<Types.ObjectId, unknown, Override> & Override

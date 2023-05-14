@@ -62,6 +62,7 @@ import { AppService } from './app.service'
           return formattedError
         },
         includeStacktraceInErrorResponses: false,
+        allowBatchedHttpRequests: true,
       }),
       inject: [ConfigService],
     }),

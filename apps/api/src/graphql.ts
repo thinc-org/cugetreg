@@ -141,8 +141,8 @@ export class Period {
 }
 
 export class ExamPeriod {
-    date?: Nullable<string>;
-    period?: Nullable<Period>;
+    date: string;
+    period: Period;
 }
 
 export class Capacity {
@@ -210,6 +210,22 @@ export class Override {
     genEd?: Nullable<GenEdOverride>;
 }
 
+export class Review {
+    _id: string;
+    rating: number;
+    courseNo: string;
+    semester: string;
+    academicYear: string;
+    studyProgram: StudyProgram;
+    content?: Nullable<string>;
+    likeCount: number;
+    dislikeCount: number;
+    myInteraction?: Nullable<ReviewInteractionType>;
+    status?: Nullable<ReviewStatus>;
+    rejectionReason?: Nullable<string>;
+    isOwner: boolean;
+}
+
 export abstract class IMutation {
     abstract createOrUpdateOverride(override: OverrideInput): Override | Promise<Override>;
 
@@ -226,22 +242,6 @@ export abstract class IMutation {
     abstract setReviewStatus(reviewId: string, status: ReviewStatus, rejectionReason?: Nullable<string>): string | Promise<string>;
 
     abstract modifyCourseCart(newContent: CourseCartItemInput[]): Nullable<CourseCartItem[]> | Promise<Nullable<CourseCartItem[]>>;
-}
-
-export class Review {
-    _id: string;
-    rating: number;
-    courseNo: string;
-    semester: string;
-    academicYear: string;
-    studyProgram: StudyProgram;
-    content?: Nullable<string>;
-    likeCount: number;
-    dislikeCount: number;
-    myInteraction?: Nullable<ReviewInteractionType>;
-    status?: Nullable<ReviewStatus>;
-    rejectionReason?: Nullable<string>;
-    isOwner: boolean;
 }
 
 export class User {

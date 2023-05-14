@@ -1,0 +1,20 @@
+{
+  "name": "@cgr/schema",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./dist/index.js",
+  "types": "./src/index.ts",
+  "scripts": {
+    "lint": "eslint src",
+    "format": "eslint src --fix",
+    "build": "tsc",
+    "dev": "echo \"No dev script\""
+  },
+  "dependencies": {
+    "mongoose": "6.5.2"
+  },
+  "devDependencies": {
+    "eslint": "8.34.0",
+    "typescript": "~4.7.4"
+  }
+}

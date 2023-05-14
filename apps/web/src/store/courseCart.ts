@@ -41,7 +41,7 @@ export interface CourseCartProps {
 }
 
 interface CourseCartStoreItem {
-  studyProgram: string
+  studyProgram: StudyProgram
   academicYear: string
   courseNo: string
   semester: string

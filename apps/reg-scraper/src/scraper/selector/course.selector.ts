@@ -1,4 +1,3 @@
-import { ClassType, Course, GenEdType, Section, Semester } from '@thinc-org/chula-courses'
 import * as cheerio from 'cheerio'
 
 import {
@@ -11,8 +10,9 @@ import {
   roomAndBuildingParser,
   studyProgramParser,
   teachersParser,
-  updateGenEd,
 } from '@reg-scraper/scraper/parser'
+
+import { ClassType, Course, GenEdType, Section, Semester } from '@cgr/schema'
 
 export async function courseSelector(
   courseHtml: string,
@@ -56,8 +56,6 @@ export async function courseSelector(
   const department = departmentParser(list2[2])
   const midterm = examDateParser(list2[3])
   const final = examDateParser(list2[4])
-  // initialize genEd type
-  let genEdType: GenEdType = 'NO'
   // ceate empty section array
   const sections: Section[] = []
 
@@ -95,16 +93,13 @@ export async function courseSelector(
         if (sectionNo !== currentSection.sectionNo) {
           if (currentSection.sectionNo !== '0') sections.push(currentSection)
           const note = noteParser(row[8])
-          if (genEdType === 'NO') {
-            genEdType = updateGenEd(note)
-          }
           currentSection = {
             sectionNo,
             closed,
             capacity: capacityParser(row[9]),
             note,
             classes: [],
-            genEdType: updateGenEd(note),
+            genEdType: 'NO', // genEdType will be set later
           }
         }
       }
@@ -140,7 +135,7 @@ export async function courseSelector(
   //push last section
   sections.push(currentSection)
   // create course
-  const course = {
+  const course: Course = {
     studyProgram,
     semester,
     academicYear,
@@ -153,13 +148,10 @@ export async function courseSelector(
     credit,
     creditHours,
     courseCondition,
-    genEdType,
+    genEdType: 'NO',
     midterm,
     final,
     sections,
-  }
-  if (course === undefined) {
-    console.log('NULL')
   }
   // return course
   return course

@@ -20,14 +20,14 @@
     "typescript": "~4.7.4"
   },
   "dependencies": {
+    "@cgr/schema": "workspace:*",
     "@nestjs/bull": "0.6.2",
-    "@nestjs/common": "9.2.1",
+    "@nestjs/common": "9.4.0",
     "@nestjs/config": "2.2.0",
-    "@nestjs/core": "9.2.1",
+    "@nestjs/core": "9.4.0",
     "@nestjs/mongoose": "9.2.1",
-    "@nestjs/platform-express": "9.2.1",
+    "@nestjs/platform-express": "9.4.0",
     "@nestjs/schedule": "2.1.0",
-    "@thinc-org/chula-courses": "^2.3.0",
     "axios": "0.23.0",
     "bull": "4.10.2",
     "cheerio": "1.0.0-rc.12",

@@ -28,7 +28,7 @@ export function getFinalExamDate(scheduleClass: ExamClass | Course) {
   return getFormattedExamDate(scheduleClass.final?.date)
 }
 
-export function getFormattedExamDate(date: string | undefined) {
+export function getFormattedExamDate(date: string | undefined | null) {
   if (!date) {
     return 'TBA'
   }

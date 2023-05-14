@@ -40,5 +40,6 @@ COPY pnpm-lock.yaml ./pnpm-lock.yaml
 RUN pnpm install --frozen-lockfile --production
 
 COPY --from=builder /app/apps/reg-scraper/dist/ apps/reg-scraper/dist/
+COPY --from=builder /app/packages/ packages/
 
 CMD node apps/reg-scraper/dist/main.js

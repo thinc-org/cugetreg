@@ -7,58 +7,13 @@ services:
     restart: unless-stopped
     volumes:
       - ./volumes/mongo:/data/db
-    networks:
-      - cugetreg-network
+    ports:
+      - 27017:27017
 
   redis:
     image: redis:latest
     container_name: cugetreg-redis
     volumes:
       - ./volumes/redis:/data
-    networks:
-      - cugetreg-network
-
-  api:
-    image: cugetreg-api
-    container_name: cugetreg-api
-    networks:
-      - cugetreg-network
-    environment:
-      MONGO_URI: mongodb://mongo:27017/cugetreg
-      PORT: 3000
-      ENV: production
-      GOOGLE_OAUTH_ID: '297489937770-g4p9q7jsmgaddbl074tbn9b6j2ba2kf4.apps.googleusercontent.com'
-      GOOGLE_OAUTH_SECRET: YR_ig_jzZgcsQ46XSPeKoHQL
-      JWT_SECRET: C5FMbzsRF2Bpkcyq35zq0LF5X77GZ3WIz3sr8MESG9hOE8teFIlvbmJYlr187LP
-      ADMIN_TOKEN: isrqg07u25M4BdmF7AWsDu3cq6ah7C7zRcd56XfqkaeF4PcxzWCDgmRPxenXczZ3
-      ELASTIC_URL: https://localhost:9200
-      ELASTIC_USERNAME: cgr-api
-      ELASTIC_PASSWORD: <password>
-      COMPUTATION_BACKEND_URL: http://localhost:8000
-      BACKEND_PUBLIC_URL: http://localhost:3000/_api
-      SLACK_WEBHOOK_URL: https://discord.com/api/webhooks/1098581702785388574/qWjyNUSF_dSEXs_hS-IFeTECW9b4LfL2xfHPetF5bl5EVYgCdRpWnuCXQSr8p9P9gZ2p/slack
-      REVIEW_DASHBOARD_URL: https://appsmith.internal.cugetreg.com/applications/63aec3a125a444191f1d17cb/pages/63aec3a225a444191f1d17d0
-
-  scraper:
-    image: cugetreg-reg-scraper
-    container_name: cugetreg-reg-scraper
-    volumes:
-      - ./apps/reg-scraper/data:/app/data
-    networks:
-      - cugetreg-network
-    environment:
-      MONGO_URI: mongodb://mongo:27017/cugetreg
-      REDIS_URL: redis://redis:6379
-      REDIS_KEY_PREFIX: scraper-local
-      PORT: 3000
-      SCRAPER_ACADEMIC_YEARS: 2565
-      SCRAPER_STUDY_PROGRAMS: I
-      SCRAPER_SEMESTERS: 1,2,3
-      RATE_LIMIT_MAX_REQUESTS_PER_JOB: 10
-      RATE_LIMIT_CYCLE_DURATION_MS: 100
-      RATE_LIMIT_MAX_JOBS: 1
-      LOG_DEBUG: false
-      COURSE_DESC_PATH: /app/data/course_chula_full.csv
-
-networks:
-  cugetreg-network:
+    ports:
+      - 6379:6379

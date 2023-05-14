@@ -1,5 +1,16 @@
 # reg-scraper
 
+## 1.1.1-beta.0
+
+### Patch Changes
+
+- 7be734a2: - add constant model names
+  - add CourseCartItem type
+- 7be734a2: upgrade dependencies
+- Updated dependencies [7be734a2]
+- Updated dependencies [7be734a2]
+  - @cgr/schema@1.0.0-beta.0
+
 ## 1.1.0
 
 ### Minor Changes

@@ -1,5 +1,17 @@
 # web
 
+## 1.3.1-beta.0
+
+### Patch Changes
+
+- 7be734a2: make exam period and period fields nullable in graphql
+- 7be734a2: remove calendarId stuffs and fix type in course cart
+- Updated dependencies [7be734a2]
+- Updated dependencies [7be734a2]
+- Updated dependencies [7be734a2]
+  - @cgr/codegen@1.2.0-beta.0
+  - @cgr/course-utils@1.0.2-beta.0
+
 ## 1.3.0
 
 ### Minor Changes

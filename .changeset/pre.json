@@ -10,7 +10,16 @@
     "web-e2e": "0.0.1",
     "@cgr/codegen": "1.1.0",
     "@cgr/course-utils": "1.0.1",
-    "@cgr/project-config": "1.0.0"
+    "@cgr/project-config": "1.0.0",
+    "@cgr/schema": "0.0.0"
   },
-  "changesets": []
+  "changesets": [
+    "afraid-flowers-confess",
+    "fuzzy-cycles-ring",
+    "lucky-dogs-matter",
+    "rare-guests-play",
+    "tasty-sheep-move",
+    "three-maps-promise",
+    "unlucky-spoons-stare"
+  ]
 }

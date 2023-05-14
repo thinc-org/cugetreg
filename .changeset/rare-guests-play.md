@@ -4,4 +4,4 @@
 'web': patch
 ---
 
-make exam period and period fields nullable
+make exam period and period fields nullable in graphql

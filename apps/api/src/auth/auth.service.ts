@@ -18,7 +18,7 @@ import { oauth2 } from 'googleapis/build/src/apis/oauth2'
 import { Model } from 'mongoose'
 import { serializeError } from 'serialize-error'
 
-import { RefreshToken, User, UserDocument } from '@cgr/schema'
+import { CourseCartItem, RefreshToken, User, UserDocument } from '@cgr/schema'
 
 import { AccessTokenPayload } from './auth.dto'
 
@@ -174,10 +174,10 @@ export class AuthService {
 
           if (!Array.isArray(data)) throw { reason: 'Object is not an array', data }
 
-          const cartContent = []
+          const cartContent: CourseCartItem[] = []
           for (const e of data) {
             if (typeof e !== 'object') throw { reason: 'Migrated cart item is not an object', e }
-            const item = {
+            const item: CourseCartItem = {
               academicYear: e.academicYear,
               courseNo: e.courseNo,
               semester: e.semester,

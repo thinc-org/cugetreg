@@ -3,9 +3,9 @@ import { InjectModel } from '@nestjs/mongoose'
 
 import { Model } from 'mongoose'
 
-import { Semester, User, UserDocument } from '@cgr/schema'
+import { CourseCartItem, Semester, User, UserDocument } from '@cgr/schema'
 
-import { CourseCartItem, CourseCartItemInput } from '../graphql'
+import { CourseCartItemInput } from '../graphql'
 
 @Resolver('User')
 export class UserService {

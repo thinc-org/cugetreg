@@ -3,7 +3,11 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
 
 import { JwtAuthGuard } from '../auth/jwt.guard'
 import { CurrentUser } from '../common/decorators/currentUser.decorator'
-import { CourseCartItem, CourseCartItemInput, User as GraphQLUser } from '../graphql'
+import {
+  CourseCartItemInput,
+  CourseCartItem as GraphQLCourseCartItem,
+  User as GraphQLUser,
+} from '../graphql'
 import { UserService } from './user.service'
 
 @Resolver('User')
@@ -22,7 +26,7 @@ export class UserResolver {
 
   @Query('courseCart')
   @UseGuards(JwtAuthGuard)
-  async getCurrentCartItems(@CurrentUser() userId: string): Promise<CourseCartItem[]> {
+  async getCurrentCartItems(@CurrentUser() userId: string): Promise<GraphQLCourseCartItem[]> {
     const user = await this.userService.getUserById(userId)
     return user.courseCart?.cartContent || []
   }
@@ -32,7 +36,7 @@ export class UserResolver {
   async setCurrentCartItems(
     @CurrentUser() userId: string,
     @Args('newContent') newContent: CourseCartItemInput[]
-  ): Promise<CourseCartItem[]> {
+  ): Promise<GraphQLCourseCartItem[]> {
     return this.userService.editCourseCart(userId, newContent)
   }
 }

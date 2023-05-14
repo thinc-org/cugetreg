@@ -24,6 +24,16 @@ export const UserSchema = new Schema({
   },
 })
 
+export interface CourseCartItem {
+  studyProgram: StudyProgram
+  academicYear: string
+  semester: Semester
+  courseNo: string
+  selectedSectionNo: string
+  isHidden: boolean
+  color?: string
+}
+
 export interface User {
   email: string
   name: string
@@ -32,15 +42,7 @@ export interface User {
     hasMigratedGDrive?: boolean
   }
   courseCart: {
-    cartContent: {
-      studyProgram: StudyProgram
-      academicYear: string
-      semester: Semester
-      courseNo: string
-      selectedSectionNo: string
-      isHidden: boolean
-      color?: string
-    }[]
+    cartContent: CourseCartItem[]
   }
 }
 

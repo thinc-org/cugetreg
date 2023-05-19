@@ -1,5 +1,26 @@
 # api
 
+## 1.4.0
+
+### Minor Changes
+
+- 7be734a2: - migrate graphql from apollo-server-express to @apollo/server
+  - use common types from `@cgr/schema`
+  - refactor api to be consistent across modules
+  - throw `GraphQLError`s instead of `HttpException`s in resolvers and services
+  - validate graphql date parsing and serialization
+- 7be734a2: make exam period and period fields nullable in graphql
+
+### Patch Changes
+
+- 7be734a2: - add constant model names
+  - add CourseCartItem type
+- 7be734a2: remove calendarId stuffs and fix type in course cart
+- 7be734a2: upgrade dependencies
+- Updated dependencies [7be734a2]
+- Updated dependencies [7be734a2]
+  - @cgr/schema@1.0.0
+
 ## 1.4.0-beta.0
 
 ### Minor Changes

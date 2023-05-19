@@ -1,5 +1,6 @@
-import { Course } from '@thinc-org/chula-courses'
 import * as fs from 'fs'
+
+import { Course } from '@cgr/schema'
 
 const studyPrograms = ['S', 'T', 'I']
 const acadyears = ['2563']

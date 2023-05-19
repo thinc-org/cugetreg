@@ -1,10 +1,10 @@
 import { Logger } from '@nestjs/common'
 
-import { Course, Semester } from '@thinc-org/chula-courses'
-
 import { instance } from '@reg-scraper/scraper/instance'
 import { courseParam } from '@reg-scraper/scraper/params/course.param'
 import { courseSelector } from '@reg-scraper/scraper/selector/course.selector'
+
+import { Course, Semester, StudyProgram } from '@cgr/schema'
 
 const path = '/servlet/com.dtm.chula.cs.servlet.QueryCourseScheduleNew.CourseScheduleDtlNewServlet'
 const logger = new Logger('CourseRequest')
@@ -12,9 +12,9 @@ const MAX_TRY = 10
 
 export async function courseRequest(
   courseNo: string,
-  studyProgram: string,
+  studyProgram: StudyProgram,
   academicYear: string,
-  semester: string
+  semester: Semester
 ): Promise<Course> {
   for (let i = 0; i < MAX_TRY; i++) {
     try {
@@ -37,7 +37,7 @@ export async function courseRequest(
         `[Running] On ${studyProgram}-${semester}/${academicYear}: Selecting Course No. ${courseNo}`
       )
 
-      const course = await courseSelector(response.data, academicYear, semester as Semester)
+      const course = await courseSelector(response.data, academicYear, semester)
       logger.debug(
         `[Running] On ${studyProgram}-${semester}/${academicYear}: Selected Course No. ${courseNo}`
       )

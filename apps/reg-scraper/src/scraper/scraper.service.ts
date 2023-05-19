@@ -5,6 +5,8 @@ import { Cron } from '@nestjs/schedule'
 import { OverrideService } from '@reg-scraper/override/override.service'
 import { QueueStoreService } from '@reg-scraper/stores/queue-store/queue-store.service'
 
+import { Semester, StudyProgram } from '@cgr/schema'
+
 import { QueueProducerService } from './queue-producer/queue-producer.service'
 
 @Injectable()
@@ -50,8 +52,8 @@ export class ScraperService {
     ])
 
     const academicYears = this.configService.get<string[]>('scraper.academicYears')
-    const studyPrograms = this.configService.get<string[]>('scraper.studyPrograms')
-    const semesters = this.configService.get<string[]>('scraper.semesters')
+    const studyPrograms = this.configService.get<StudyProgram[]>('scraper.studyPrograms')
+    const semesters = this.configService.get<Semester[]>('scraper.semesters')
     this.logger.log(
       `[Starting] Academic years: [${academicYears}], studyPrograms: [${studyPrograms}], semesters: [${semesters}]`
     )

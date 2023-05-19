@@ -2,15 +2,11 @@ import { Injectable, Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { InjectModel } from '@nestjs/mongoose'
 
-import { Course, StudyProgram } from '@thinc-org/chula-courses'
 import { parse } from 'csv-parse'
 import * as fs from 'fs'
 import { Model } from 'mongoose'
 
-import { Override, OverrideDocument } from '@reg-scraper/schema/override.schema'
-import { ReviewDocument } from '@reg-scraper/schema/review.schema'
-
-import { findAvgRating } from './override.util'
+import { Course, Override, Review, StudyProgram } from '@cgr/schema'
 
 @Injectable()
 export class OverrideService {
@@ -41,8 +37,8 @@ export class OverrideService {
 
   constructor(
     private configService: ConfigService,
-    @InjectModel('override') private overrideModel: Model<OverrideDocument>,
-    @InjectModel('review') private reviewModel: Model<ReviewDocument>
+    @InjectModel('override') private overrideModel: Model<Override>,
+    @InjectModel('review') private reviewModel: Model<Review>
   ) {}
 
   public get isLoaded(): boolean {
@@ -162,4 +158,12 @@ export class OverrideService {
   getOverrides(): Record<StudyProgram, Record<string, Record<string, Record<string, Override>>>> {
     return this.overrides
   }
+}
+
+function findAvgRating(ratings: number[]): string {
+  let total = 0
+  for (const rating of ratings) {
+    total += rating
+  }
+  return (total / (2 * ratings.length)).toFixed(2)
 }

@@ -32,10 +32,10 @@ export function sortExamSchedule(classes: CourseCartItem[], isMidterm: boolean) 
     const bExam = isMidterm ? b.midterm : b.final
     const aExam = isMidterm ? a.midterm : a.final
 
-    const { hour: aHour, minute: aMinute } = getHourMinuteFromPeriod(aExam?.period.start || '')
-    const { hour: bHour, minute: bMinute } = getHourMinuteFromPeriod(bExam?.period.start || '')
+    const { hour: aHour, minute: aMinute } = getHourMinuteFromPeriod(aExam?.period?.start || '')
+    const { hour: bHour, minute: bMinute } = getHourMinuteFromPeriod(bExam?.period?.start || '')
 
-    const dateCompare = aExam?.date.localeCompare(bExam?.date || '')
+    const dateCompare = aExam?.date?.localeCompare(bExam?.date || '')
     const hourCompare = aHour - bHour
     const minuteCompare = aMinute - bMinute
     return dateCompare || hourCompare || minuteCompare
@@ -65,9 +65,9 @@ export function findOverlap(sortedClasses: CourseCartItem[], isMidterm: boolean)
       for (let j = i + 1; j < classes.length; j++) {
         const examNext = getExamPeriod(classes[j], isMidterm)
         if (examNext && exam.date === examNext.date) {
-          const { hour, minute } = getHourMinuteFromPeriod(exam.period.end)
+          const { hour, minute } = getHourMinuteFromPeriod(exam?.period?.end || '')
           const { hour: hourNext, minute: minuteNext } = getHourMinuteFromPeriod(
-            examNext.period.start
+            examNext?.period?.start || ''
           )
           if (hour > hourNext || (hour === hourNext && minute > minuteNext)) {
             mapOverlap[i] = [...(mapOverlap[i] ?? []), j]

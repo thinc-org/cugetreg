@@ -7,6 +7,8 @@ import { searchRequest } from '@reg-scraper/scraper/request/search.request'
 import CourseFetchJob from '@reg-scraper/scraper/types/CourseFetchJob'
 import { QueueStoreService } from '@reg-scraper/stores/queue-store/queue-store.service'
 
+import { Semester, StudyProgram } from '@cgr/schema'
+
 const logger: Logger = new Logger('QueueProducer')
 
 function groupBy<T>(array: T[], count: number): T[][] {
@@ -31,7 +33,7 @@ export class QueueProducerService {
     await this.fetchQueue.obliterate({ force: true })
   }
 
-  async scrape(studyProgram: string, academicYear: string, semester: string) {
+  async scrape(studyProgram: StudyProgram, academicYear: string, semester: Semester) {
     await this.fetchQueue.pause()
 
     for (let round = 0; round < MAX_TRY; round++) {

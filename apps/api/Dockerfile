@@ -40,5 +40,6 @@ COPY pnpm-lock.yaml ./pnpm-lock.yaml
 RUN pnpm install --frozen-lockfile --production
 
 COPY --from=builder /app/apps/api/dist/ apps/api/dist/
+COPY --from=builder /app/packages/ packages/
 
 CMD node apps/api/dist/main.js

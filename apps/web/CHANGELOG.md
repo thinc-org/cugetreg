@@ -1,5 +1,11 @@
 # web
 
+## 1.3.2-beta.0
+
+### Patch Changes
+
+- 54265779: add 2565/ฤดูร้อน semester
+
 ## 1.3.1
 
 ### Patch Changes

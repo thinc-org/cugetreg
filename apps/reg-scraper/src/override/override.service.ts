@@ -21,14 +21,7 @@ export class OverrideService {
       en?: string
     }
   > = {}
-  private overrides: Record<
-    StudyProgram,
-    Record<string, Record<string, Record<string, Override>>>
-  > = {
-    S: {},
-    T: {},
-    I: {},
-  }
+  private overrides: Record<string, Override> = {}
   private ratings: Record<StudyProgram, Record<string, string>> = {
     S: {},
     T: {},
@@ -54,20 +47,11 @@ export class OverrideService {
 
     course.rating = this.ratings[course.studyProgram][course.courseNo]
 
-    const courseOverrides = this.overrides[course.studyProgram][course.courseNo]
-
-    if (
-      courseOverrides &&
-      courseOverrides[course.academicYear] &&
-      courseOverrides[course.academicYear][course.semester] &&
-      courseOverrides[course.academicYear][course.semester].genEd
-    ) {
-      const { genEdType, sections: genEdSections } =
-        courseOverrides[course.academicYear][course.semester].genEd
+    if (this.overrides[course.courseNo]) {
+      const { genEdType } = this.overrides[course.courseNo]
       course.genEdType = genEdType
-
       for (const section of course.sections) {
-        section.genEdType = genEdSections.includes(section.sectionNo) ? genEdType : 'NO'
+        section.genEdType = genEdType
       }
     } else {
       // only use genEdType from override
@@ -109,19 +93,10 @@ export class OverrideService {
   }
 
   async loadOverrides() {
-    const overridesList = await this.overrideModel.find().lean()
-    this.overrides = {
-      S: {},
-      T: {},
-      I: {},
-    }
+    const overridesList = await this.overrideModel.find()
+    this.overrides = {}
     for (const override of overridesList) {
-      const course = this.overrides[override.studyProgram][override.courseNo] || {}
-      const academicYear = course[override.academicYear] || {}
-
-      academicYear[override.semester] = override
-      course[override.academicYear] = academicYear
-      this.overrides[override.studyProgram][override.courseNo] = course
+      this.overrides[override.courseNo] = override
     }
     this.logger.log(`Loaded course overrides from database`)
   }
@@ -145,18 +120,6 @@ export class OverrideService {
       }
     }
     this.logger.log(`Loaded review ratings from database`)
-  }
-
-  // For testing purpose only
-  setOverrides(
-    overrides: Record<StudyProgram, Record<string, Record<string, Record<string, Override>>>>
-  ) {
-    this.overrides = overrides
-    this._isLoaded = true
-  }
-
-  getOverrides(): Record<StudyProgram, Record<string, Record<string, Record<string, Override>>>> {
-    return this.overrides
   }
 }
 

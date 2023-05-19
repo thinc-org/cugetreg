@@ -49,17 +49,9 @@ export class CourseGroupInput {
     studyProgram: StudyProgram;
 }
 
-export class GenEdOverrideInput {
-    genEdType: GenEdType;
-    sections: string[];
-}
-
 export class OverrideInput {
     courseNo: string;
-    studyProgram: StudyProgram;
-    semester: string;
-    academicYear: string;
-    genEd?: Nullable<GenEdOverrideInput>;
+    genEdType: GenEdType;
 }
 
 export class CreateReviewInput {
@@ -197,23 +189,15 @@ export class CourseNosOutput {
     I: string[];
 }
 
-export class GenEdOverride {
-    genEdType: GenEdType;
-    sections: string[];
-}
-
 export class Override {
     courseNo: string;
-    studyProgram: StudyProgram;
-    semester: string;
-    academicYear: string;
-    genEd?: Nullable<GenEdOverride>;
+    genEdType: GenEdType;
 }
 
 export abstract class IMutation {
     abstract createOrUpdateOverride(override: OverrideInput): Override | Promise<Override>;
 
-    abstract deleteOverride(courseNo: string, courseGroup: CourseGroupInput): Nullable<Override> | Promise<Nullable<Override>>;
+    abstract deleteOverride(courseNo: string): Nullable<Override> | Promise<Nullable<Override>>;
 
     abstract createReview(createReviewInput: CreateReviewInput): Review | Promise<Review>;
 

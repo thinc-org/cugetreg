@@ -1,5 +1,11 @@
 # admin-api
 
+## 0.1.1
+
+### Patch Changes
+
+- 7be734a2: upgrade dependencies
+
 ## 0.1.1-beta.0
 
 ### Patch Changes

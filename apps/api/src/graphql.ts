@@ -49,17 +49,9 @@ export class CourseGroupInput {
     studyProgram: StudyProgram;
 }
 
-export class GenEdOverrideInput {
-    genEdType: GenEdType;
-    sections: string[];
-}
-
 export class OverrideInput {
     courseNo: string;
-    studyProgram: StudyProgram;
-    semester: string;
-    academicYear: string;
-    genEd?: Nullable<GenEdOverrideInput>;
+    genEdType: GenEdType;
 }
 
 export class CreateReviewInput {
@@ -136,13 +128,13 @@ export class CourseRecommendationResponse {
 }
 
 export class Period {
-    start: string;
-    end: string;
+    start?: Nullable<string>;
+    end?: Nullable<string>;
 }
 
 export class ExamPeriod {
-    date: string;
-    period: Period;
+    date?: Nullable<string>;
+    period?: Nullable<Period>;
 }
 
 export class Capacity {
@@ -197,17 +189,27 @@ export class CourseNosOutput {
     I: string[];
 }
 
-export class GenEdOverride {
-    genEdType: GenEdType;
-    sections: string[];
-}
-
 export class Override {
     courseNo: string;
-    studyProgram: StudyProgram;
-    semester: string;
-    academicYear: string;
-    genEd?: Nullable<GenEdOverride>;
+    genEdType: GenEdType;
+}
+
+export abstract class IMutation {
+    abstract createOrUpdateOverride(override: OverrideInput): Override | Promise<Override>;
+
+    abstract deleteOverride(courseNo: string): Nullable<Override> | Promise<Nullable<Override>>;
+
+    abstract createReview(createReviewInput: CreateReviewInput): Review | Promise<Review>;
+
+    abstract removeReview(reviewId: string): Review | Promise<Review>;
+
+    abstract editMyReview(reviewId: string, review: EditReviewInput): Review | Promise<Review>;
+
+    abstract setReviewInteraction(reviewId: string, interactionType: ReviewInteractionType): Review | Promise<Review>;
+
+    abstract setReviewStatus(reviewId: string, status: ReviewStatus, rejectionReason?: Nullable<string>): string | Promise<string>;
+
+    abstract modifyCourseCart(newContent: CourseCartItemInput[]): Nullable<CourseCartItem[]> | Promise<Nullable<CourseCartItem[]>>;
 }
 
 export class Review {
@@ -224,24 +226,6 @@ export class Review {
     status?: Nullable<ReviewStatus>;
     rejectionReason?: Nullable<string>;
     isOwner: boolean;
-}
-
-export abstract class IMutation {
-    abstract createOrUpdateOverride(override: OverrideInput): Override | Promise<Override>;
-
-    abstract deleteOverride(courseNo: string, courseGroup: CourseGroupInput): Nullable<Override> | Promise<Nullable<Override>>;
-
-    abstract createReview(createReviewInput: CreateReviewInput): Review | Promise<Review>;
-
-    abstract removeReview(reviewId: string): Review | Promise<Review>;
-
-    abstract editMyReview(reviewId: string, review: EditReviewInput): Review | Promise<Review>;
-
-    abstract setReviewInteraction(reviewId: string, interactionType: ReviewInteractionType): Review | Promise<Review>;
-
-    abstract setReviewStatus(reviewId: string, status: ReviewStatus, rejectionReason?: Nullable<string>): string | Promise<string>;
-
-    abstract modifyCourseCart(newContent: CourseCartItemInput[]): Nullable<CourseCartItem[]> | Promise<Nullable<CourseCartItem[]>>;
 }
 
 export class User {

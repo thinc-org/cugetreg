@@ -1,5 +1,13 @@
 # api
 
+## 1.4.1-beta.0
+
+### Patch Changes
+
+- 85f089b2: fix override module to support new schema
+- Updated dependencies [85f089b2]
+  - @cgr/schema@1.1.0-beta.0
+
 ## 1.4.0
 
 ### Minor Changes

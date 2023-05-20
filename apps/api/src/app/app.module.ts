@@ -35,7 +35,7 @@ import { AppService } from './app.service'
         definitions:
           configService.get<string>('env') === 'development'
             ? {
-                path: join(process.cwd(), 'src/graphql.ts'),
+                path: join(__dirname, '../graphql.ts'),
                 outputAs: 'class',
                 enumsAsTypes: true,
               }

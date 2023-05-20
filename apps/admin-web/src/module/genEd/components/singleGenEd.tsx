@@ -12,13 +12,14 @@ export default function SingleGenEd({ data }: SingleGenEdProps) {
       <TableCell align="center" padding="checkbox">
         <Checkbox></Checkbox>
       </TableCell>
-      <TableCell scope="row" align="center">
+      {/* TODO: temporarily fixed to fix linter */}
+      {/* <TableCell scope="row" align="center">
         {data.academicYear}
-      </TableCell>
+      </TableCell> */}
       <TableCell align="center">{data.courseNo}</TableCell>
-      <TableCell align="center">{data.genEd?.genEdType}</TableCell>
+      {/* <TableCell align="center">{data.genEd?.genEdType}</TableCell>
       <TableCell align="center">{data.semester}</TableCell>
-      <TableCell align="center">{data.studyProgram}</TableCell>
+      <TableCell align="center">{data.studyProgram}</TableCell> */}
     </TableRow>
   )
 }

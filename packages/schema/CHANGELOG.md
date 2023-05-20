@@ -1,5 +1,11 @@
 # @cgr/schema
 
+## 1.1.0-beta.0
+
+### Minor Changes
+
+- 85f089b2: Rework GenEd override structure
+
 ## 1.0.0
 
 ### Major Changes

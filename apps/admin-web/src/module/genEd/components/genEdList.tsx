@@ -30,7 +30,7 @@ export default function GenEdList() {
         </TableHead>
         <TableBody>
           {overridesQuery.data?.overrides?.map((data: Override) => (
-            <SingleGenEd key={data.courseNo + data.studyProgram} data={data} />
+            <SingleGenEd key={data.courseNo} data={data} />
           ))}
         </TableBody>
       </Table>

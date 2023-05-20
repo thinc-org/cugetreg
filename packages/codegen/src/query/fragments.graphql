@@ -69,11 +69,5 @@ fragment ReviewDataFields on Review {
 
 fragment OverrideDataFields on Override {
   courseNo
-  studyProgram
-  semester
-  academicYear
-  genEd {
-    genEdType
-    sections
-  }
+  genEdType
 }

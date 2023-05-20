@@ -200,19 +200,6 @@ export type FilterInput = {
   periodRange?: InputMaybe<PeriodRangeInput>;
 };
 
-/** Overrides GenEdType for specific sections. Other sections without an override will have the value set as `NO` (Not GenEd) during scraping. */
-export type GenEdOverride = {
-  __typename?: 'GenEdOverride';
-  genEdType: GenEdType;
-  sections: Array<Scalars['String']>;
-};
-
-/** Overrides GenEdType for specific sections. Other sections without an override will have the value set as `NO` (Not GenEd) during scraping. */
-export type GenEdOverrideInput = {
-  genEdType: GenEdType;
-  sections: Array<Scalars['String']>;
-};
-
 export enum GenEdType {
   /** Humanities */
   Hu = 'HU',
@@ -286,7 +273,6 @@ export type MutationCreateReviewArgs = {
 
 
 export type MutationDeleteOverrideArgs = {
-  courseGroup: CourseGroupInput;
   courseNo: Scalars['String'];
 };
 
@@ -322,20 +308,14 @@ export type MutationSetReviewStatusArgs = {
 /** Course override for overriding course info from Reg Chula during course scraping. */
 export type Override = {
   __typename?: 'Override';
-  academicYear: Scalars['String'];
   courseNo: Scalars['String'];
-  genEd?: Maybe<GenEdOverride>;
-  semester: Scalars['String'];
-  studyProgram: StudyProgram;
+  genEdType: GenEdType;
 };
 
 /** Course override for overriding course info from Reg Chula during course scraping. */
 export type OverrideInput = {
-  academicYear: Scalars['String'];
   courseNo: Scalars['String'];
-  genEd?: InputMaybe<GenEdOverrideInput>;
-  semester: Scalars['String'];
-  studyProgram: StudyProgram;
+  genEdType: GenEdType;
 };
 
 /** Pair of start and end time. Format is `HH:MM`. */
@@ -515,12 +495,12 @@ export type CourseDataFieldsFragment = { __typename?: 'Course', studyProgram: St
 
 export type ReviewDataFieldsFragment = { __typename?: 'Review', _id: string, rating: number, courseNo: string, semester: string, academicYear: string, studyProgram: StudyProgram, content?: string | null, likeCount: number, dislikeCount: number, myInteraction?: ReviewInteractionType | null, status?: ReviewStatus | null, rejectionReason?: string | null, isOwner: boolean };
 
-export type OverrideDataFieldsFragment = { __typename?: 'Override', courseNo: string, studyProgram: StudyProgram, semester: string, academicYear: string, genEd?: { __typename?: 'GenEdOverride', genEdType: GenEdType, sections: Array<string> } | null };
+export type OverrideDataFieldsFragment = { __typename?: 'Override', courseNo: string, genEdType: GenEdType };
 
 export type GetOverridesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetOverridesQuery = { __typename?: 'Query', overrides: Array<{ __typename?: 'Override', courseNo: string, studyProgram: StudyProgram, semester: string, academicYear: string, genEd?: { __typename?: 'GenEdOverride', genEdType: GenEdType, sections: Array<string> } | null }> };
+export type GetOverridesQuery = { __typename?: 'Query', overrides: Array<{ __typename?: 'Override', courseNo: string, genEdType: GenEdType }> };
 
 export type CreateReviewMutationVariables = Exact<{
   createReviewInput: CreateReviewInput;
@@ -680,13 +660,7 @@ export const ReviewDataFieldsFragmentDoc = gql`
 export const OverrideDataFieldsFragmentDoc = gql`
     fragment OverrideDataFields on Override {
   courseNo
-  studyProgram
-  semester
-  academicYear
-  genEd {
-    genEdType
-    sections
-  }
+  genEdType
 }
     `;
 export const GetCourseInfoDocument = gql`

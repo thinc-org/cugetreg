@@ -5,8 +5,10 @@ export interface Configuration {
   mongoURI: string
   port: number
   origin: string
+  // TODO: add "authentik" prefix to these variables
   clientId: string
   clientSecret: string
+  // TODO: merge authorizationUrl, tokenUrl, and userInfoUrl into one url with different paths?
   authorizationUrl: string
   tokenUrl: string
   userInfoUrl: string
@@ -15,6 +17,7 @@ export interface Configuration {
   clientLoggerUrl: string
   dashBoardUrl: string
   env: string
+  slackWebhookUrl?: string
 }
 
 export const configuration = (): Configuration => {
@@ -32,6 +35,7 @@ export const configuration = (): Configuration => {
     clientLoggerUrl: process.env.CLIENT_LOGGER_URL,
     dashBoardUrl: process.env.DASHBOARD_URL,
     env: process.env.ENV || 'development',
+    slackWebhookUrl: process.env.SLACK_WEBHOOK_URL,
   }
 }
 

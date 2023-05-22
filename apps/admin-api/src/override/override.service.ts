@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 
-import { StudyProgram } from '@thinc-org/chula-courses'
 import { Model } from 'mongoose'
 
+import { Override, OverrideDocument } from '@cgr/schema'
+
 import { OverrideInput } from '../graphql'
-import { Override, OverrideDocument } from '../schemas/override.schema'
 
 @Injectable()
 export class OverrideService {
@@ -15,40 +15,27 @@ export class OverrideService {
   ) {}
 
   async getOverrides(): Promise<Override[]> {
-    const result = await this.overrideModel.find().lean()
+    const result = await this.overrideModel.find()
     return result
   }
 
   async createOrUpdateOverride(override: OverrideInput): Promise<Override> {
-    const result = await this.overrideModel
-      .findOneAndUpdate(
-        {
-          courseNo: override.courseNo,
-          studyProgram: override.studyProgram,
-          academicYear: override.academicYear,
-          semester: override.semester,
-        },
-        override,
-        {
-          new: true,
-          upsert: true,
-        }
-      )
-      .lean()
+    const result = await this.overrideModel.findOneAndUpdate(
+      {
+        courseNo: override.courseNo,
+      },
+      override,
+      {
+        new: true,
+        upsert: true,
+      }
+    )
     return result
   }
 
-  async deleteOverride(
-    courseNo: string,
-    studyProgram: StudyProgram,
-    academicYear: string,
-    semester: string
-  ): Promise<Override> {
+  async deleteOverride(courseNo: string): Promise<Override> {
     const result = await this.overrideModel.findOneAndDelete({
       courseNo,
-      studyProgram,
-      academicYear,
-      semester,
     })
     return result
   }

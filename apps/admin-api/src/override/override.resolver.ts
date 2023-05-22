@@ -1,7 +1,6 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
 
-import { CourseGroupInput, OverrideInput } from '@admin-api/graphql'
-import { Override } from '@admin-api/schemas/override.schema'
+import { Override as GraphQLOverride, OverrideInput } from '@admin-api/graphql'
 
 import { OverrideService } from './override.service'
 
@@ -10,7 +9,7 @@ export class OverrideResolver {
   constructor(private readonly overrideService: OverrideService) {}
 
   @Query('overrides')
-  getOverrides(): Promise<Override[]> {
+  getOverrides(): Promise<GraphQLOverride[]> {
     return this.overrideService.getOverrides()
   }
 
@@ -20,11 +19,7 @@ export class OverrideResolver {
   }
 
   @Mutation('deleteOverride')
-  deleteOverride(
-    @Args('courseNo') courseNo: string,
-    @Args('courseGroup') courseGroup: CourseGroupInput
-  ) {
-    const { studyProgram, academicYear, semester } = courseGroup
-    return this.overrideService.deleteOverride(courseNo, studyProgram, academicYear, semester)
+  deleteOverride(@Args('courseNo') courseNo: string) {
+    return this.overrideService.deleteOverride(courseNo)
   }
 }

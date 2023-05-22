@@ -21,6 +21,7 @@ const config = {
   ignorePatterns: [
     '.next',
     'dist',
+    'apps/admin-api/src/graphql.ts',
     'apps/api/src/graphql.ts',
     'packages/codegen/src/generated/index.tsx',
   ],

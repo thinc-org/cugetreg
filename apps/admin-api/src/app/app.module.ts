@@ -1,3 +1,4 @@
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo'
 import { Module } from '@nestjs/common'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { GraphQLModule } from '@nestjs/graphql'
@@ -23,14 +24,19 @@ import { AppService } from './app.service'
       load: [configuration],
       envFilePath: ['.env', '.env.local'],
     }),
-    GraphQLModule.forRootAsync({
+    GraphQLModule.forRootAsync<ApolloDriverConfig>({
+      driver: ApolloDriver,
       useFactory: (configService: ConfigService) => ({
         // needed in production, to make apollo server work
         typePaths: [join(__dirname, '/../**/*.graphql')],
-        definitions: {
-          path: join(process.cwd(), 'src/graphql.ts'),
-          outputAs: 'class',
-        },
+        definitions:
+          configService.get<string>('env') === 'development'
+            ? {
+                path: join(__dirname, '../graphql.ts'),
+                outputAs: 'class',
+                enumsAsTypes: true,
+              }
+            : null,
         playground: true,
         introspection: true,
         cors: {
@@ -38,17 +44,22 @@ import { AppService } from './app.service'
         },
         path: '/_api/graphql',
         context: ({ req, res }: GraphQLExpressContext) => ({ req, res }),
-        formatError: (error: GraphQLError) => {
-          const graphQLFormattedError = {
-            message: error?.extensions?.exception?.response?.message || error.message,
-            path: error.path,
-            locations: error.locations,
-            reason: error?.extensions?.exception?.response?.reason,
-            status: error?.extensions?.exception?.status,
-            exception: error?.extensions?.exception,
+        formatError: (formattedError, error: unknown) => {
+          if (error instanceof GraphQLError) {
+            const graphQLFormattedError = {
+              message: error.message,
+              path: error.path,
+              locations: error.locations,
+              extensions: {
+                code: error?.extensions?.code,
+              },
+            }
+            return graphQLFormattedError
           }
-          return graphQLFormattedError
+          return formattedError
         },
+        includeStacktraceInErrorResponses: false,
+        allowBatchedHttpRequests: true,
       }),
       inject: [ConfigService],
     }),

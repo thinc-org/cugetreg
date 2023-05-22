@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { toast } from 'react-hot-toast'
 
 import { ApolloQueryResult } from '@apollo/client'
@@ -45,14 +45,9 @@ export default function SingleGenEd({ course, refetchOverrides }: SingleGenEdPro
     await deleteOverride({
       variables: {
         courseNo: course.courseNo,
-        courseGroup: {
-          studyProgram: course.studyProgram,
-          semester: course.semester,
-          academicYear: course.academicYear,
-        },
       },
       onCompleted(data) {
-        if (!!data.deleteOverride) toast.success('Delete GenEd Successfully', { id: toastId })
+        if (data.deleteOverride) toast.success('Delete GenEd Successfully', { id: toastId })
         else toast.error('Fail to delete GenEd', { id: toastId })
       },
     })
@@ -60,8 +55,8 @@ export default function SingleGenEd({ course, refetchOverrides }: SingleGenEdPro
   }
 
   return (
-    <GenEdRowContainer key={`${course.courseNo}${course.semester}${course.studyProgram}`}>
-      <Typography sx={{ fontWeight: 700 }}>{course.genEd?.genEdType}</Typography>
+    <GenEdRowContainer key={`${course.courseNo}`}>
+      <Typography sx={{ fontWeight: 700 }}>{course.genEdType}</Typography>
       <Typography sx={{ fontWeight: 700 }}>{course.courseNo}</Typography>
       <Typography sx={{ fontWeight: 700, justifySelf: 'start' }}>{course.courseNo}</Typography>
       <Typography></Typography>

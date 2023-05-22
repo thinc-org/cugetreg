@@ -4,8 +4,8 @@ query GetOverrides {
   }
 }
 
-mutation DeleteOverride($courseNo: String!, $courseGroup: CourseGroupInput!) {
-  deleteOverride(courseNo: $courseNo, courseGroup: $courseGroup) {
+mutation DeleteOverride($courseNo: String!) {
+  deleteOverride(courseNo: $courseNo) {
     ...OverrideDataFields
   }
 }

@@ -504,11 +504,10 @@ export type GetOverridesQuery = { __typename?: 'Query', overrides: Array<{ __typ
 
 export type DeleteOverrideMutationVariables = Exact<{
   courseNo: Scalars['String'];
-  courseGroup: CourseGroupInput;
 }>;
 
 
-export type DeleteOverrideMutation = { __typename?: 'Mutation', deleteOverride?: { __typename?: 'Override', courseNo: string, studyProgram: StudyProgram, semester: string, academicYear: string, genEd?: { __typename?: 'GenEdOverride', genEdType: GenEdType, sections: Array<string> } | null } | null };
+export type DeleteOverrideMutation = { __typename?: 'Mutation', deleteOverride?: { __typename?: 'Override', courseNo: string, genEdType: GenEdType } | null };
 
 export type CreateReviewMutationVariables = Exact<{
   createReviewInput: CreateReviewInput;
@@ -841,8 +840,8 @@ export type GetOverridesQueryHookResult = ReturnType<typeof useGetOverridesQuery
 export type GetOverridesLazyQueryHookResult = ReturnType<typeof useGetOverridesLazyQuery>;
 export type GetOverridesQueryResult = Apollo.QueryResult<GetOverridesQuery, GetOverridesQueryVariables>;
 export const DeleteOverrideDocument = gql`
-    mutation DeleteOverride($courseNo: String!, $courseGroup: CourseGroupInput!) {
-  deleteOverride(courseNo: $courseNo, courseGroup: $courseGroup) {
+    mutation DeleteOverride($courseNo: String!) {
+  deleteOverride(courseNo: $courseNo) {
     ...OverrideDataFields
   }
 }
@@ -863,7 +862,6 @@ export type DeleteOverrideMutationFn = Apollo.MutationFunction<DeleteOverrideMut
  * const [deleteOverrideMutation, { data, loading, error }] = useDeleteOverrideMutation({
  *   variables: {
  *      courseNo: // value for 'courseNo'
- *      courseGroup: // value for 'courseGroup'
  *   },
  * });
  */

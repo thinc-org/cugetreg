@@ -26,7 +26,7 @@ export function GenEdList({ data, loading, refetchOverrides }: GenEdListProps) {
       {data?.overrides.map((course: Override) => {
         return (
           <SingleGenEd
-            key={`${course.courseNo}${course.semester}${course.studyProgram}`}
+            key={`${course.courseNo}`}
             course={course}
             refetchOverrides={refetchOverrides}
           />

@@ -63,8 +63,8 @@ function checkOverlap(classes: ScheduleClass[]) {
   }
 }
 
-function isValidTime(time: string | undefined): boolean {
-  if (typeof time === 'undefined') {
+function isValidTime(time: string | undefined | null): boolean {
+  if (!time) {
     return false
   }
   return time !== 'IA' && time !== 'AR'

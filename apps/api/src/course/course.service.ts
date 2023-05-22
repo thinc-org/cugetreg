@@ -1,33 +1,35 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common'
+import { UserInputError } from '@nestjs/apollo'
+import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 
-import { Semester, StudyProgram } from '@thinc-org/chula-courses'
 import { FilterQuery, Model } from 'mongoose'
 
+import { NotFoundError } from '@api/common/errors'
 import { escapeRegExpString } from '@api/util/functions'
 
-import { Course } from '../common/types/course.type'
+import { Course, CourseDocument, Semester, StudyProgram } from '@cgr/schema'
+
 import { CourseGroupInput, FilterInput } from '../graphql'
-import { CourseDocument } from '../schemas/course.schema'
 
 @Injectable()
 export class CourseService {
-  constructor(@InjectModel('course') private courseModel: Model<CourseDocument>) {}
+  constructor(@InjectModel('course') private courseModel: Model<Course>) {}
 
   async findOne(
     courseNo: string,
     semester: Semester,
     academicYear: string,
     studyProgram: StudyProgram
-  ): Promise<Course> {
-    const course = await this.courseModel
-      .findOne({ courseNo, semester, academicYear, studyProgram })
-      .lean()
+  ): Promise<CourseDocument> {
+    const course = await this.courseModel.findOne({
+      courseNo,
+      semester,
+      academicYear,
+      studyProgram,
+    })
+
     if (!course) {
-      throw new NotFoundException({
-        reason: 'COURSE_NOT_FOUND',
-        message: "Can't find a course with the given properties",
-      })
+      throw new NotFoundError("Can't find a course with the given parameters")
     }
     return course
   }
@@ -61,12 +63,12 @@ export class CourseService {
       periodRange,
     }: FilterInput,
     { semester, academicYear, studyProgram }: CourseGroupInput
-  ): Promise<Course[]> {
+  ): Promise<CourseDocument[]> {
     const query = {
       semester,
       academicYear,
       studyProgram,
-    } as FilterQuery<CourseDocument>
+    } as FilterQuery<Course>
     const escapedKeyword = escapeRegExpString(keyword.trim())
     if (keyword) {
       query.$or = [
@@ -88,16 +90,10 @@ export class CourseService {
     if (periodRange) {
       const { start, end } = periodRange
       if (!isTime(start) || !isTime(end)) {
-        throw new BadRequestException({
-          reason: 'INVALID_PERIOD_RANGE',
-          message: 'Start time or end time is invalid',
-        })
+        throw new UserInputError('Start time or end time is invalid')
       }
       if (start > end) {
-        throw new BadRequestException({
-          reason: 'INVALID_PERIOD_RANGE',
-          message: 'Start time cannot be later than end time',
-        })
+        throw new UserInputError('Start time cannot be later than end time')
       }
       query['sections.classes'] = {
         $elemMatch: {
@@ -107,7 +103,7 @@ export class CourseService {
       }
     }
 
-    const courses = await this.courseModel.find(query).limit(limit).skip(offset).lean()
+    const courses = await this.courseModel.find(query).limit(limit).skip(offset)
     return courses
   }
 }

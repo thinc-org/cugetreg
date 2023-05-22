@@ -1,5 +1,27 @@
 # @cgr/codegen
 
+## 1.2.0
+
+### Minor Changes
+
+- 7be734a2: make exam period and period fields nullable in graphql
+
+### Patch Changes
+
+- 7be734a2: use graphql schemas from apps/api/src directory
+- 7be734a2: remove calendarId stuffs and fix type in course cart
+
+## 1.2.0-beta.0
+
+### Minor Changes
+
+- 7be734a2: make exam period and period fields nullable in graphql
+
+### Patch Changes
+
+- 7be734a2: use graphql schemas from apps/api/src directory
+- 7be734a2: remove calendarId stuffs and fix type in course cart
+
 ## 1.1.0
 
 ### Minor Changes

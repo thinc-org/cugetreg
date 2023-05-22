@@ -2,8 +2,8 @@
 Pair of start and end time. Format is `HH:MM`.
 """
 type Period {
-  start: String!
-  end: String!
+  start: String
+  end: String
 }
 
 """
@@ -13,8 +13,8 @@ type ExamPeriod {
   """
   Date of the exam. The value is formatted as ISO8601 representation: `YYYY-MM-DDT00:00:00.000Z`.
   """
-  date: String!
-  period: Period!
+  date: String
+  period: Period
 }
 
 type Capacity {

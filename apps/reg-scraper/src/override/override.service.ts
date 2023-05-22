@@ -2,15 +2,11 @@ import { Injectable, Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { InjectModel } from '@nestjs/mongoose'
 
-import { Course, StudyProgram } from '@thinc-org/chula-courses'
 import { parse } from 'csv-parse'
 import * as fs from 'fs'
 import { Model } from 'mongoose'
 
-import { Override, OverrideDocument } from '@reg-scraper/schema/override.schema'
-import { ReviewDocument } from '@reg-scraper/schema/review.schema'
-
-import { findAvgRating } from './override.util'
+import { Course, Override, Review, StudyProgram } from '@cgr/schema'
 
 @Injectable()
 export class OverrideService {
@@ -25,14 +21,7 @@ export class OverrideService {
       en?: string
     }
   > = {}
-  private overrides: Record<
-    StudyProgram,
-    Record<string, Record<string, Record<string, Override>>>
-  > = {
-    S: {},
-    T: {},
-    I: {},
-  }
+  private overrides: Record<string, Override> = {}
   private ratings: Record<StudyProgram, Record<string, string>> = {
     S: {},
     T: {},
@@ -41,8 +30,8 @@ export class OverrideService {
 
   constructor(
     private configService: ConfigService,
-    @InjectModel('override') private overrideModel: Model<OverrideDocument>,
-    @InjectModel('review') private reviewModel: Model<ReviewDocument>
+    @InjectModel('override') private overrideModel: Model<Override>,
+    @InjectModel('review') private reviewModel: Model<Review>
   ) {}
 
   public get isLoaded(): boolean {
@@ -58,20 +47,11 @@ export class OverrideService {
 
     course.rating = this.ratings[course.studyProgram][course.courseNo]
 
-    const courseOverrides = this.overrides[course.studyProgram][course.courseNo]
-
-    if (
-      courseOverrides &&
-      courseOverrides[course.academicYear] &&
-      courseOverrides[course.academicYear][course.semester] &&
-      courseOverrides[course.academicYear][course.semester].genEd
-    ) {
-      const { genEdType, sections: genEdSections } =
-        courseOverrides[course.academicYear][course.semester].genEd
+    if (this.overrides[course.courseNo]) {
+      const { genEdType } = this.overrides[course.courseNo]
       course.genEdType = genEdType
-
       for (const section of course.sections) {
-        section.genEdType = genEdSections.includes(section.sectionNo) ? genEdType : 'NO'
+        section.genEdType = genEdType
       }
     } else {
       // only use genEdType from override
@@ -113,19 +93,10 @@ export class OverrideService {
   }
 
   async loadOverrides() {
-    const overridesList = await this.overrideModel.find().lean()
-    this.overrides = {
-      S: {},
-      T: {},
-      I: {},
-    }
+    const overridesList = await this.overrideModel.find()
+    this.overrides = {}
     for (const override of overridesList) {
-      const course = this.overrides[override.studyProgram][override.courseNo] || {}
-      const academicYear = course[override.academicYear] || {}
-
-      academicYear[override.semester] = override
-      course[override.academicYear] = academicYear
-      this.overrides[override.studyProgram][override.courseNo] = course
+      this.overrides[override.courseNo] = override
     }
     this.logger.log(`Loaded course overrides from database`)
   }
@@ -150,16 +121,12 @@ export class OverrideService {
     }
     this.logger.log(`Loaded review ratings from database`)
   }
+}
 
-  // For testing purpose only
-  setOverrides(
-    overrides: Record<StudyProgram, Record<string, Record<string, Record<string, Override>>>>
-  ) {
-    this.overrides = overrides
-    this._isLoaded = true
+function findAvgRating(ratings: number[]): string {
+  let total = 0
+  for (const rating of ratings) {
+    total += rating
   }
-
-  getOverrides(): Record<StudyProgram, Record<string, Record<string, Record<string, Override>>>> {
-    return this.overrides
-  }
+  return (total / (2 * ratings.length)).toFixed(2)
 }

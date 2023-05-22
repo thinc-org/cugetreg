@@ -1,47 +1,17 @@
 
-/** ------------------------------------------------------
+/*
+ * -------------------------------------------------------
  * THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
  * -------------------------------------------------------
  */
 
 /* tslint:disable */
 /* eslint-disable */
-export enum DayOfWeek {
-    MO = "MO",
-    TU = "TU",
-    WE = "WE",
-    TH = "TH",
-    FR = "FR",
-    SA = "SA",
-    SU = "SU",
-    IA = "IA",
-    AR = "AR"
-}
-
-export enum StudyProgram {
-    S = "S",
-    T = "T",
-    I = "I"
-}
-
-export enum GenEdType {
-    SO = "SO",
-    HU = "HU",
-    SC = "SC",
-    IN = "IN",
-    NO = "NO"
-}
-
-export enum ReviewInteractionType {
-    L = "L",
-    D = "D"
-}
-
-export enum ReviewStatus {
-    APPROVED = "APPROVED",
-    REJECTED = "REJECTED",
-    PENDING = "PENDING"
-}
+export type DayOfWeek = "MO" | "TU" | "WE" | "TH" | "FR" | "SA" | "SU" | "IA" | "AR";
+export type StudyProgram = "S" | "T" | "I";
+export type GenEdType = "SO" | "HU" | "SC" | "IN" | "NO";
+export type ReviewInteractionType = "L" | "D";
+export type ReviewStatus = "APPROVED" | "REJECTED" | "PENDING";
 
 export class CourseEntryInput {
     courseId: string;
@@ -65,12 +35,12 @@ export class PeriodRangeInput {
 }
 
 export class FilterInput {
-    keyword?: string;
-    genEdTypes?: GenEdType[];
-    dayOfWeeks?: DayOfWeek[];
-    periodRange?: PeriodRangeInput;
-    limit?: number;
-    offset?: number;
+    keyword?: Nullable<string>;
+    genEdTypes?: Nullable<GenEdType[]>;
+    dayOfWeeks?: Nullable<DayOfWeek[]>;
+    periodRange?: Nullable<PeriodRangeInput>;
+    limit?: Nullable<number>;
+    offset?: Nullable<number>;
 }
 
 export class CourseGroupInput {
@@ -79,17 +49,9 @@ export class CourseGroupInput {
     studyProgram: StudyProgram;
 }
 
-export class GenEdOverrideInput {
-    genEdType: GenEdType;
-    sections: string[];
-}
-
 export class OverrideInput {
     courseNo: string;
-    studyProgram: StudyProgram;
-    semester: string;
-    academicYear: string;
-    genEd?: GenEdOverrideInput;
+    genEdType: GenEdType;
 }
 
 export class CreateReviewInput {
@@ -98,30 +60,30 @@ export class CreateReviewInput {
     semester: string;
     academicYear: string;
     studyProgram: StudyProgram;
-    content?: string;
+    content?: Nullable<string>;
 }
 
 export class EditReviewInput {
-    rating?: number;
-    semester?: string;
-    academicYear?: string;
-    content?: string;
+    rating?: Nullable<number>;
+    semester?: Nullable<string>;
+    academicYear?: Nullable<string>;
+    content?: Nullable<string>;
 }
 
 export class CourseCartItemInput {
-    studyProgram: string;
+    studyProgram: StudyProgram;
     academicYear: string;
     courseNo: string;
     semester: string;
     selectedSectionNo: string;
     isHidden: boolean;
-    color?: string;
+    color?: Nullable<string>;
 }
 
 export abstract class IQuery {
     abstract recommend(req: CourseRecommendationRequest): CourseRecommendationResponse | Promise<CourseRecommendationResponse>;
 
-    abstract courseNos(): CourseNosOutput | Promise<CourseNosOutput>;
+    abstract courseNos(): Nullable<CourseNosOutput> | Promise<Nullable<CourseNosOutput>>;
 
     abstract course(courseNo: string, courseGroup: CourseGroupInput): Course | Promise<Course>;
 
@@ -135,11 +97,9 @@ export abstract class IQuery {
 
     abstract pendingReviews(): Review[] | Promise<Review[]>;
 
-    abstract me(): User | Promise<User>;
+    abstract me(): Nullable<User> | Promise<Nullable<User>>;
 
-    abstract courseCart(): CourseCartItem[] | Promise<CourseCartItem[]>;
-
-    abstract calendarId(): string | Promise<string>;
+    abstract courseCart(): Nullable<CourseCartItem[]> | Promise<Nullable<CourseCartItem[]>>;
 }
 
 export class CourseEntry {
@@ -168,13 +128,13 @@ export class CourseRecommendationResponse {
 }
 
 export class Period {
-    start: string;
-    end: string;
+    start?: Nullable<string>;
+    end?: Nullable<string>;
 }
 
 export class ExamPeriod {
-    date: string;
-    period: Period;
+    date?: Nullable<string>;
+    period?: Nullable<Period>;
 }
 
 export class Capacity {
@@ -184,10 +144,10 @@ export class Capacity {
 
 export class Class {
     type: string;
-    dayOfWeek?: DayOfWeek;
-    period?: Period;
-    building?: string;
-    room?: string;
+    dayOfWeek?: Nullable<DayOfWeek>;
+    period?: Nullable<Period>;
+    building?: Nullable<string>;
+    room?: Nullable<string>;
     teachers: string[];
 }
 
@@ -195,7 +155,7 @@ export class Section {
     sectionNo: string;
     closed: boolean;
     capacity: Capacity;
-    note?: string;
+    note?: Nullable<string>;
     classes: Class[];
     genEdType: GenEdType;
 }
@@ -205,8 +165,8 @@ export class Course {
     semester: string;
     academicYear: string;
     courseNo: string;
-    courseDescTh?: string;
-    courseDescEn?: string;
+    courseDescTh?: Nullable<string>;
+    courseDescEn?: Nullable<string>;
     abbrName: string;
     courseNameTh: string;
     courseNameEn: string;
@@ -216,11 +176,11 @@ export class Course {
     creditHours: string;
     courseCondition: string;
     genEdType: GenEdType;
-    midterm?: ExamPeriod;
-    final?: ExamPeriod;
+    midterm?: Nullable<ExamPeriod>;
+    final?: Nullable<ExamPeriod>;
     sections: Section[];
-    rating?: string;
-    courseDesc?: string;
+    rating?: Nullable<string>;
+    courseDesc?: Nullable<string>;
 }
 
 export class CourseNosOutput {
@@ -229,23 +189,15 @@ export class CourseNosOutput {
     I: string[];
 }
 
-export class GenEdOverride {
-    genEdType: GenEdType;
-    sections: string[];
-}
-
 export class Override {
     courseNo: string;
-    studyProgram: StudyProgram;
-    semester: string;
-    academicYear: string;
-    genEd?: GenEdOverride;
+    genEdType: GenEdType;
 }
 
 export abstract class IMutation {
     abstract createOrUpdateOverride(override: OverrideInput): Override | Promise<Override>;
 
-    abstract deleteOverride(courseNo: string, courseGroup: CourseGroupInput): Override | Promise<Override>;
+    abstract deleteOverride(courseNo: string): Nullable<Override> | Promise<Nullable<Override>>;
 
     abstract createReview(createReviewInput: CreateReviewInput): Review | Promise<Review>;
 
@@ -255,11 +207,9 @@ export abstract class IMutation {
 
     abstract setReviewInteraction(reviewId: string, interactionType: ReviewInteractionType): Review | Promise<Review>;
 
-    abstract setReviewStatus(reviewId: string, status: ReviewStatus, rejectionReason?: string): string | Promise<string>;
+    abstract setReviewStatus(reviewId: string, status: ReviewStatus, rejectionReason?: Nullable<string>): string | Promise<string>;
 
-    abstract modifyCourseCart(newContent: CourseCartItemInput[]): CourseCartItem[] | Promise<CourseCartItem[]>;
-
-    abstract modifyCalendarId(newCalendarId?: string): string | Promise<string>;
+    abstract modifyCourseCart(newContent: CourseCartItemInput[]): Nullable<CourseCartItem[]> | Promise<Nullable<CourseCartItem[]>>;
 }
 
 export class Review {
@@ -269,12 +219,12 @@ export class Review {
     semester: string;
     academicYear: string;
     studyProgram: StudyProgram;
-    content?: string;
+    content?: Nullable<string>;
     likeCount: number;
     dislikeCount: number;
-    myInteraction?: ReviewInteractionType;
-    status?: ReviewStatus;
-    rejectionReason?: string;
+    myInteraction?: Nullable<ReviewInteractionType>;
+    status?: Nullable<ReviewStatus>;
+    rejectionReason?: Nullable<string>;
     isOwner: boolean;
 }
 
@@ -290,5 +240,7 @@ export class CourseCartItem {
     semester: string;
     selectedSectionNo: string;
     isHidden: boolean;
-    color?: string;
+    color?: Nullable<string>;
 }
+
+type Nullable<T> = T | null;

@@ -3,8 +3,9 @@ import { Module } from '@nestjs/common'
 import { MongooseModule } from '@nestjs/mongoose'
 
 import { OverrideModule } from '@reg-scraper/override/override.module'
-import { CourseSchema } from '@reg-scraper/schema/course.schema'
 import { QueueStoreModule } from '@reg-scraper/stores/queue-store/queue-store.module'
+
+import { CourseSchema, ModelName } from '@cgr/schema'
 
 import { QueueProducerService } from './queue-producer.service'
 
@@ -12,7 +13,7 @@ import { QueueProducerService } from './queue-producer.service'
   providers: [QueueProducerService],
   exports: [QueueProducerService],
   imports: [
-    MongooseModule.forFeature([{ name: 'course', schema: CourseSchema }]),
+    MongooseModule.forFeature([{ name: ModelName.Course, schema: CourseSchema }]),
     OverrideModule,
     QueueProducerModule,
     BullModule.registerQueue({

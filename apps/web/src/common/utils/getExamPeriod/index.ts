@@ -25,7 +25,7 @@ export function getFinalExamPeriod(scheduleClass: ExamClass | Course) {
   return getFormattedExamPeriod(scheduleClass.final?.period)
 }
 
-export function getFormattedExamPeriod(period: Period | undefined) {
+export function getFormattedExamPeriod(period: Period | undefined | null) {
   if (!period) {
     return 'TBA'
   }

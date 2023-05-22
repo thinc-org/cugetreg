@@ -9,8 +9,11 @@ services:
       - ./volumes/mongo:/data/db
     ports:
       - 27017:27017
-    networks:
-      - cugetreg-network
 
-networks:
-  cugetreg-network:
+  redis:
+    image: redis:latest
+    container_name: cugetreg-redis
+    volumes:
+      - ./volumes/redis:/data
+    ports:
+      - 6379:6379

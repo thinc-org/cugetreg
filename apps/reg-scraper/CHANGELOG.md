@@ -1,5 +1,55 @@
 # reg-scraper
 
+## 1.1.2
+
+### Patch Changes
+
+- 85f089b2: fix override module to support new schema
+- Updated dependencies [85f089b2]
+  - @cgr/schema@1.1.0
+
+## 1.1.2-beta.0
+
+### Patch Changes
+
+- 85f089b2: fix override module to support new schema
+- Updated dependencies [85f089b2]
+  - @cgr/schema@1.1.0-beta.0
+
+## 1.1.1
+
+### Patch Changes
+
+- 7be734a2: - add constant model names
+  - add CourseCartItem type
+- 7be734a2: upgrade dependencies
+- Updated dependencies [7be734a2]
+- Updated dependencies [7be734a2]
+  - @cgr/schema@1.0.0
+
+## 1.1.1-beta.0
+
+### Patch Changes
+
+- 7be734a2: - add constant model names
+  - add CourseCartItem type
+- 7be734a2: upgrade dependencies
+- Updated dependencies [7be734a2]
+- Updated dependencies [7be734a2]
+  - @cgr/schema@1.0.0-beta.0
+
+## 1.1.0
+
+### Minor Changes
+
+- e1b5095b: upgrade to node 18
+
+## 1.1.0-beta.0
+
+### Minor Changes
+
+- e1b5095b: upgrade to node 18
+
 ## 1.0.3
 
 ### Patch Changes

@@ -78,7 +78,7 @@ export type CourseCartItemInput = {
   /** The section no. that user selected for this course. */
   selectedSectionNo: Scalars['String'];
   semester: Scalars['String'];
-  studyProgram: Scalars['String'];
+  studyProgram: StudyProgram;
 };
 
 export type CourseDetail = {
@@ -173,8 +173,8 @@ export type EditReviewInput = {
 export type ExamPeriod = {
   __typename?: 'ExamPeriod';
   /** Date of the exam. The value is formatted as ISO8601 representation: `YYYY-MM-DDT00:00:00.000Z`. */
-  date: Scalars['String'];
-  period: Period;
+  date?: Maybe<Scalars['String']>;
+  period?: Maybe<Period>;
 };
 
 /** Filters for searching courses. If a filter is not specified, it will not be used in the search. */
@@ -198,19 +198,6 @@ export type FilterInput = {
    * have class that intersects with the `periodRange`.
    */
   periodRange?: InputMaybe<PeriodRangeInput>;
-};
-
-/** Overrides GenEdType for specific sections. Other sections without an override will have the value set as `NO` (Not GenEd) during scraping. */
-export type GenEdOverride = {
-  __typename?: 'GenEdOverride';
-  genEdType: GenEdType;
-  sections: Array<Scalars['String']>;
-};
-
-/** Overrides GenEdType for specific sections. Other sections without an override will have the value set as `NO` (Not GenEd) during scraping. */
-export type GenEdOverrideInput = {
-  genEdType: GenEdType;
-  sections: Array<Scalars['String']>;
 };
 
 export enum GenEdType {
@@ -251,8 +238,6 @@ export type Mutation = {
    * Requires user authentication.
    */
   editMyReview: Review;
-  /** @deprecated Will be redesigned. */
-  modifyCalendarId?: Maybe<Scalars['String']>;
   /** Modifies current user's course cart. */
   modifyCourseCart?: Maybe<Array<CourseCartItem>>;
   /**
@@ -288,7 +273,6 @@ export type MutationCreateReviewArgs = {
 
 
 export type MutationDeleteOverrideArgs = {
-  courseGroup: CourseGroupInput;
   courseNo: Scalars['String'];
 };
 
@@ -296,11 +280,6 @@ export type MutationDeleteOverrideArgs = {
 export type MutationEditMyReviewArgs = {
   review: EditReviewInput;
   reviewId: Scalars['String'];
-};
-
-
-export type MutationModifyCalendarIdArgs = {
-  newCalendarId?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -329,27 +308,21 @@ export type MutationSetReviewStatusArgs = {
 /** Course override for overriding course info from Reg Chula during course scraping. */
 export type Override = {
   __typename?: 'Override';
-  academicYear: Scalars['String'];
   courseNo: Scalars['String'];
-  genEd?: Maybe<GenEdOverride>;
-  semester: Scalars['String'];
-  studyProgram: StudyProgram;
+  genEdType: GenEdType;
 };
 
 /** Course override for overriding course info from Reg Chula during course scraping. */
 export type OverrideInput = {
-  academicYear: Scalars['String'];
   courseNo: Scalars['String'];
-  genEd?: InputMaybe<GenEdOverrideInput>;
-  semester: Scalars['String'];
-  studyProgram: StudyProgram;
+  genEdType: GenEdType;
 };
 
 /** Pair of start and end time. Format is `HH:MM`. */
 export type Period = {
   __typename?: 'Period';
-  end: Scalars['String'];
-  start: Scalars['String'];
+  end?: Maybe<Scalars['String']>;
+  start?: Maybe<Scalars['String']>;
 };
 
 /** Filter for searching courses that have class inside the given time period. */
@@ -360,8 +333,6 @@ export type PeriodRangeInput = {
 
 export type Query = {
   __typename?: 'Query';
-  /** @deprecated Will be redesigned. */
-  calendarId?: Maybe<Scalars['String']>;
   /** Find a course and returns it */
   course: Course;
   /**
@@ -503,7 +474,7 @@ export type GetCourseInfoQueryVariables = Exact<{
 }>;
 
 
-export type GetCourseInfoQuery = { __typename?: 'Query', course: { __typename?: 'Course', studyProgram: StudyProgram, semester: string, academicYear: string, courseNo: string, abbrName: string, courseNameTh: string, courseNameEn: string, faculty: string, department: string, credit: number, creditHours: string, courseCondition: string, courseDescTh?: string | null, courseDescEn?: string | null, genEdType: GenEdType, midterm?: { __typename?: 'ExamPeriod', date: string, period: { __typename?: 'Period', start: string, end: string } } | null, final?: { __typename?: 'ExamPeriod', date: string, period: { __typename?: 'Period', start: string, end: string } } | null, sections: Array<{ __typename?: 'Section', genEdType: GenEdType, sectionNo: string, closed: boolean, note?: string | null, capacity: { __typename?: 'Capacity', current: number, max: number }, classes: Array<{ __typename?: 'Class', type: string, dayOfWeek?: DayOfWeek | null, room?: string | null, building?: string | null, teachers: Array<string>, period?: { __typename?: 'Period', start: string, end: string } | null }> }> } };
+export type GetCourseInfoQuery = { __typename?: 'Query', course: { __typename?: 'Course', studyProgram: StudyProgram, semester: string, academicYear: string, courseNo: string, abbrName: string, courseNameTh: string, courseNameEn: string, faculty: string, department: string, credit: number, creditHours: string, courseCondition: string, courseDescTh?: string | null, courseDescEn?: string | null, genEdType: GenEdType, midterm?: { __typename?: 'ExamPeriod', date?: string | null, period?: { __typename?: 'Period', start?: string | null, end?: string | null } | null } | null, final?: { __typename?: 'ExamPeriod', date?: string | null, period?: { __typename?: 'Period', start?: string | null, end?: string | null } | null } | null, sections: Array<{ __typename?: 'Section', genEdType: GenEdType, sectionNo: string, closed: boolean, note?: string | null, capacity: { __typename?: 'Capacity', current: number, max: number }, classes: Array<{ __typename?: 'Class', type: string, dayOfWeek?: DayOfWeek | null, room?: string | null, building?: string | null, teachers: Array<string>, period?: { __typename?: 'Period', start?: string | null, end?: string | null } | null }> }> } };
 
 export type GetCourseForThumbnailQueryVariables = Exact<{
   courseNo: Scalars['String'];
@@ -520,16 +491,16 @@ export type RecommendCourseTextQueryVariables = Exact<{
 
 export type RecommendCourseTextQuery = { __typename?: 'Query', recommend: { __typename?: 'CourseRecommendationResponse', courses: Array<{ __typename?: 'CourseDetail', courseNameEn: string, key: { __typename?: 'CourseKey', courseNo: string, semesterKey: { __typename?: 'SemesterKey', academicYear: string, semester: string, studyProgram: string } } }> } };
 
-export type CourseDataFieldsFragment = { __typename?: 'Course', studyProgram: StudyProgram, semester: string, academicYear: string, courseNo: string, abbrName: string, courseNameTh: string, courseNameEn: string, faculty: string, department: string, credit: number, creditHours: string, courseCondition: string, courseDescTh?: string | null, courseDescEn?: string | null, genEdType: GenEdType, midterm?: { __typename?: 'ExamPeriod', date: string, period: { __typename?: 'Period', start: string, end: string } } | null, final?: { __typename?: 'ExamPeriod', date: string, period: { __typename?: 'Period', start: string, end: string } } | null, sections: Array<{ __typename?: 'Section', genEdType: GenEdType, sectionNo: string, closed: boolean, note?: string | null, capacity: { __typename?: 'Capacity', current: number, max: number }, classes: Array<{ __typename?: 'Class', type: string, dayOfWeek?: DayOfWeek | null, room?: string | null, building?: string | null, teachers: Array<string>, period?: { __typename?: 'Period', start: string, end: string } | null }> }> };
+export type CourseDataFieldsFragment = { __typename?: 'Course', studyProgram: StudyProgram, semester: string, academicYear: string, courseNo: string, abbrName: string, courseNameTh: string, courseNameEn: string, faculty: string, department: string, credit: number, creditHours: string, courseCondition: string, courseDescTh?: string | null, courseDescEn?: string | null, genEdType: GenEdType, midterm?: { __typename?: 'ExamPeriod', date?: string | null, period?: { __typename?: 'Period', start?: string | null, end?: string | null } | null } | null, final?: { __typename?: 'ExamPeriod', date?: string | null, period?: { __typename?: 'Period', start?: string | null, end?: string | null } | null } | null, sections: Array<{ __typename?: 'Section', genEdType: GenEdType, sectionNo: string, closed: boolean, note?: string | null, capacity: { __typename?: 'Capacity', current: number, max: number }, classes: Array<{ __typename?: 'Class', type: string, dayOfWeek?: DayOfWeek | null, room?: string | null, building?: string | null, teachers: Array<string>, period?: { __typename?: 'Period', start?: string | null, end?: string | null } | null }> }> };
 
 export type ReviewDataFieldsFragment = { __typename?: 'Review', _id: string, rating: number, courseNo: string, semester: string, academicYear: string, studyProgram: StudyProgram, content?: string | null, likeCount: number, dislikeCount: number, myInteraction?: ReviewInteractionType | null, status?: ReviewStatus | null, rejectionReason?: string | null, isOwner: boolean };
 
-export type OverrideDataFieldsFragment = { __typename?: 'Override', courseNo: string, studyProgram: StudyProgram, semester: string, academicYear: string, genEd?: { __typename?: 'GenEdOverride', genEdType: GenEdType, sections: Array<string> } | null };
+export type OverrideDataFieldsFragment = { __typename?: 'Override', courseNo: string, genEdType: GenEdType };
 
 export type GetOverridesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetOverridesQuery = { __typename?: 'Query', overrides: Array<{ __typename?: 'Override', courseNo: string, studyProgram: StudyProgram, semester: string, academicYear: string, genEd?: { __typename?: 'GenEdOverride', genEdType: GenEdType, sections: Array<string> } | null }> };
+export type GetOverridesQuery = { __typename?: 'Query', overrides: Array<{ __typename?: 'Override', courseNo: string, genEdType: GenEdType }> };
 
 export type DeleteOverrideMutationVariables = Exact<{
   courseNo: Scalars['String'];
@@ -613,7 +584,7 @@ export type SearchCourseQueryVariables = Exact<{
 }>;
 
 
-export type SearchCourseQuery = { __typename?: 'Query', search: Array<{ __typename?: 'Course', studyProgram: StudyProgram, semester: string, academicYear: string, courseNo: string, abbrName: string, courseNameTh: string, courseNameEn: string, faculty: string, department: string, credit: number, creditHours: string, courseCondition: string, courseDescTh?: string | null, courseDescEn?: string | null, genEdType: GenEdType, midterm?: { __typename?: 'ExamPeriod', date: string, period: { __typename?: 'Period', start: string, end: string } } | null, final?: { __typename?: 'ExamPeriod', date: string, period: { __typename?: 'Period', start: string, end: string } } | null, sections: Array<{ __typename?: 'Section', genEdType: GenEdType, sectionNo: string, closed: boolean, note?: string | null, capacity: { __typename?: 'Capacity', current: number, max: number }, classes: Array<{ __typename?: 'Class', type: string, dayOfWeek?: DayOfWeek | null, room?: string | null, building?: string | null, teachers: Array<string>, period?: { __typename?: 'Period', start: string, end: string } | null }> }> }> };
+export type SearchCourseQuery = { __typename?: 'Query', search: Array<{ __typename?: 'Course', studyProgram: StudyProgram, semester: string, academicYear: string, courseNo: string, abbrName: string, courseNameTh: string, courseNameEn: string, faculty: string, department: string, credit: number, creditHours: string, courseCondition: string, courseDescTh?: string | null, courseDescEn?: string | null, genEdType: GenEdType, midterm?: { __typename?: 'ExamPeriod', date?: string | null, period?: { __typename?: 'Period', start?: string | null, end?: string | null } | null } | null, final?: { __typename?: 'ExamPeriod', date?: string | null, period?: { __typename?: 'Period', start?: string | null, end?: string | null } | null } | null, sections: Array<{ __typename?: 'Section', genEdType: GenEdType, sectionNo: string, closed: boolean, note?: string | null, capacity: { __typename?: 'Capacity', current: number, max: number }, classes: Array<{ __typename?: 'Class', type: string, dayOfWeek?: DayOfWeek | null, room?: string | null, building?: string | null, teachers: Array<string>, period?: { __typename?: 'Period', start?: string | null, end?: string | null } | null }> }> }> };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -706,13 +677,7 @@ export const ReviewDataFieldsFragmentDoc = gql`
 export const OverrideDataFieldsFragmentDoc = gql`
     fragment OverrideDataFields on Override {
   courseNo
-  studyProgram
-  semester
-  academicYear
-  genEd {
-    genEdType
-    sections
-  }
+  genEdType
 }
     `;
 export const GetCourseInfoDocument = gql`

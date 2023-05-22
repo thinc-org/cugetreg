@@ -104,6 +104,9 @@ importers:
       ts-jest:
         specifier: 28.0.8
         version: 28.0.8(@babel/core@7.20.12)(jest@28.1.3)(typescript@4.7.4)
+      ts-morph:
+        specifier: ^18.0.0
+        version: 18.0.0
       typescript:
         specifier: ~4.7.4
         version: 4.7.4
@@ -203,7 +206,7 @@ importers:
         version: 9.4.0(@nestjs/common@9.4.0)(@nestjs/platform-express@9.4.0)(reflect-metadata@0.1.13)(rxjs@7.8.0)
       '@nestjs/graphql':
         specifier: 11.0.5
-        version: 11.0.5(@apollo/subgraph@2.4.3)(@nestjs/common@9.4.0)(@nestjs/core@9.4.0)(class-transformer@0.3.1)(class-validator@0.14.0)(graphql@16.6.0)(reflect-metadata@0.1.13)
+        version: 11.0.5(@apollo/subgraph@2.4.3)(@nestjs/common@9.4.0)(@nestjs/core@9.4.0)(class-transformer@0.3.1)(class-validator@0.14.0)(graphql@16.6.0)(reflect-metadata@0.1.13)(ts-morph@18.0.0)
       '@nestjs/jwt':
         specifier: 7.2.0
         version: 7.2.0(@nestjs/common@9.4.0)
@@ -298,6 +301,9 @@ importers:
       ts-jest:
         specifier: 28.0.8
         version: 28.0.8(@babel/core@7.20.12)(jest@28.1.3)(typescript@4.7.4)
+      ts-morph:
+        specifier: ^18.0.0
+        version: 18.0.0
       typescript:
         specifier: ~4.7.4
         version: 4.7.4
@@ -3813,7 +3819,7 @@ packages:
       '@apollo/subgraph': 2.4.3(graphql@16.6.0)
       '@nestjs/common': 9.4.0(class-transformer@0.3.1)(class-validator@0.14.0)(reflect-metadata@0.1.13)(rxjs@7.8.0)
       '@nestjs/core': 9.4.0(@nestjs/common@9.4.0)(@nestjs/platform-express@9.4.0)(reflect-metadata@0.1.13)(rxjs@7.8.0)
-      '@nestjs/graphql': 11.0.5(@apollo/subgraph@2.4.3)(@nestjs/common@9.4.0)(@nestjs/core@9.4.0)(class-transformer@0.3.1)(class-validator@0.14.0)(graphql@16.6.0)(reflect-metadata@0.1.13)
+      '@nestjs/graphql': 11.0.5(@apollo/subgraph@2.4.3)(@nestjs/common@9.4.0)(@nestjs/core@9.4.0)(class-transformer@0.3.1)(class-validator@0.14.0)(graphql@16.6.0)(reflect-metadata@0.1.13)(ts-morph@18.0.0)
       graphql: 16.6.0
       iterall: 1.3.0
       lodash.omit: 4.5.0
@@ -3966,7 +3972,7 @@ packages:
       - encoding
     dev: false
 
-  /@nestjs/graphql@11.0.5(@apollo/subgraph@2.4.3)(@nestjs/common@9.4.0)(@nestjs/core@9.4.0)(class-transformer@0.3.1)(class-validator@0.14.0)(graphql@16.6.0)(reflect-metadata@0.1.13):
+  /@nestjs/graphql@11.0.5(@apollo/subgraph@2.4.3)(@nestjs/common@9.4.0)(@nestjs/core@9.4.0)(class-transformer@0.3.1)(class-validator@0.14.0)(graphql@16.6.0)(reflect-metadata@0.1.13)(ts-morph@18.0.0):
     resolution: {integrity: sha512-yWDxorb3efDpY55i8exSlJTRRdIISoaQAWm1LukvVJAn4FiRAMUOUlAgNOSU+oX4TMjMp6LffA2cG66WpIssPg==}
     peerDependencies:
       '@apollo/subgraph': ^2.0.0
@@ -4005,6 +4011,7 @@ packages:
       normalize-path: 3.0.0
       reflect-metadata: 0.1.13
       subscriptions-transport-ws: 0.11.0(graphql@16.6.0)
+      ts-morph: 18.0.0
       tslib: 2.5.0
       uuid: 9.0.0
       ws: 8.13.0
@@ -4739,6 +4746,14 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
+
+  /@ts-morph/common@0.19.0:
+    resolution: {integrity: sha512-Unz/WHmd4pGax91rdIKWi51wnVUW11QttMEPpBiBgIewnc9UQIX7UDLxr5vRlqeByXCwhkF6VabSsI0raWcyAQ==}
+    dependencies:
+      fast-glob: 3.2.12
+      minimatch: 7.4.6
+      mkdirp: 2.1.6
+      path-browserify: 1.0.1
 
   /@ts-morph/common@0.7.5:
     resolution: {integrity: sha512-nlFunSKAsFWI0Ol/uPxJcpVqXxTGNuaWXTmoQDhcnwj1UM4QmBSUVWzqoQ0OzUlqo4sV1gobfFBkMHuZVemMAQ==}
@@ -7066,6 +7081,11 @@ packages:
       balanced-match: 1.0.2
       concat-map: 0.0.1
 
+  /brace-expansion@2.0.1:
+    resolution: {integrity: sha512-XnAIvQ8eM+kC6aULx6wuQiwVsnzsi9d3WxzV3FpWTGA19F621kwdbsAcFKXgKUHZWsy+mY6iL1sHTxWEFCytDA==}
+    dependencies:
+      balanced-match: 1.0.2
+
   /braces@3.0.2:
     resolution: {integrity: sha512-b8um+L1RzM3WDSzvhm6gIz1yfTbBt6YTlcEKAvsmqCZZFw46z626lVj9j1yEPW33H5H+lBQpZMP1k8l+78Ha0A==}
     engines: {node: '>=8'}
@@ -7519,6 +7539,9 @@ packages:
     resolution: {integrity: sha512-67ueh2IRGst/51p0n6FvPrnRjAGHY5F8xdjkgrYE7DDzpJe6qA07RYQ9VcoUeo5ATOjSOiWpSL3SWBRRbempMw==}
     dev: false
     optional: true
+
+  /code-block-writer@12.0.0:
+    resolution: {integrity: sha512-q4dMFMlXtKR3XNBHyMHt/3pwYNA69EDk00lloMOaaUMKPUXBw6lpXtbu3MMVG6/uOihGnRDOlkyqsONEUj60+w==}
 
   /collect-v8-coverage@1.0.1:
     resolution: {integrity: sha512-iBPtljfCNcTKNAto0KEtDfZ3qzjJvqE3aTGZsbhjSBlorqpXJlaWWtPO35D+ZImoC3KWejX64o+yPGxhWSTzfg==}
@@ -11699,6 +11722,12 @@ packages:
       brace-expansion: 1.1.11
     dev: false
 
+  /minimatch@7.4.6:
+    resolution: {integrity: sha512-sBz8G/YjVniEz6lKPNpKxXwazJe4c19fEfV2GDMX6AjFz+MX9uDWIZW8XreVhkFW3fkIdTv/gxWr/Kks5FFAVw==}
+    engines: {node: '>=10'}
+    dependencies:
+      brace-expansion: 2.0.1
+
   /minimist-options@4.1.0:
     resolution: {integrity: sha512-Q4r8ghd80yhO/0j1O3B2BjweX3fiHg9cdOwjJd2J76Q135c+NDxGCqdYKQ1SKBuFfgWbAUzBfvYjPUEeNgqN1A==}
     engines: {node: '>= 6'}
@@ -11788,6 +11817,11 @@ packages:
 
   /mkdirp@1.0.4:
     resolution: {integrity: sha512-vVqVZQyf3WLx2Shd0qJ9xuvqgAyKPLAiqITEtqW0oIUjzo3PePDd6fW9iFz30ef7Ysp/oiWqbhszeGWW2T6Gzw==}
+    engines: {node: '>=10'}
+    hasBin: true
+
+  /mkdirp@2.1.6:
+    resolution: {integrity: sha512-+hEnITedc8LAtIP9u3HJDFIdcLV2vXP33sqLLIzkv1Db1zO/1OxbvYf0Y1OC/S/Qo5dxHXepofhmxL02PsKe+A==}
     engines: {node: '>=10'}
     hasBin: true
 
@@ -12571,6 +12605,9 @@ packages:
       pause: 0.0.1
       utils-merge: 1.0.1
     dev: false
+
+  /path-browserify@1.0.1:
+    resolution: {integrity: sha512-b7uo2UCUOYZcnF/3ID0lulOJi/bafxa1xPe7ZPsammBSpjSWQkjNxlt635YGS2MiR9GjvuXCtz2emr3jbsz98g==}
 
   /path-case@3.0.4:
     resolution: {integrity: sha512-qO4qCFjXqVTrcbPt/hQfhTQ+VhFsqNKOPtytgNKkKxSoEp3XPUQ8ObFuePylOIok5gjn69ry8XiULxCwot3Wfg==}
@@ -14468,6 +14505,12 @@ packages:
   /ts-log@2.2.5:
     resolution: {integrity: sha512-PGcnJoTBnVGy6yYNFxWVNkdcAuAMstvutN9MgDJIV6L0oG8fB+ZNNy1T+wJzah8RPGor1mZuPQkVfXNDpy9eHA==}
     dev: false
+
+  /ts-morph@18.0.0:
+    resolution: {integrity: sha512-Kg5u0mk19PIIe4islUI/HWRvm9bC1lHejK4S0oh1zaZ77TMZAEmQC0sHQYiu2RgCQFZKXz1fMVi/7nOOeirznA==}
+    dependencies:
+      '@ts-morph/common': 0.19.0
+      code-block-writer: 12.0.0
 
   /ts-morph@9.1.0:
     resolution: {integrity: sha512-sei4u651MBenr27sD6qLDXN3gZ4thiX71E3qV7SuVtDas0uvK2LtgZkIYUf9DKm/fLJ6AB/+yhRJ1vpEBJgy7Q==}

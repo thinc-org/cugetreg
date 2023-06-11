@@ -1,5 +1,13 @@
 # reg-scraper
 
+## 1.1.3-beta.0
+
+### Patch Changes
+
+- a4ecf786: exit on scrape if scraper is in progress to prevent infinitely stuck scraper
+- Updated dependencies [a4ecf786]
+  - @cgr/schema@1.1.1-beta.0
+
 ## 1.1.2
 
 ### Patch Changes

@@ -114,6 +114,8 @@ export const CourseSchema = new Schema({
   semester: { type: String, required: true, enum: semesters },
   academicYear: { type: String, required: true },
   courseNo: { type: String, required: true },
+  courseDescTh: { type: String },
+  courseDescEn: { type: String },
   abbrName: { type: String, required: true },
   courseNameTh: { type: String, required: true },
   courseNameEn: { type: String, required: true },

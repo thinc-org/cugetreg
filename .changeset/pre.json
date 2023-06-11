@@ -13,5 +13,8 @@
     "@cgr/project-config": "1.0.0",
     "@cgr/schema": "1.1.0"
   },
-  "changesets": []
+  "changesets": [
+    "eighty-carrots-ring",
+    "thick-otters-accept"
+  ]
 }

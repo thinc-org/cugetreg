@@ -1,5 +1,11 @@
 # @cgr/schema
 
+## 1.1.1-beta.0
+
+### Patch Changes
+
+- a4ecf786: add course descriptions to course schema
+
 ## 1.1.0
 
 ### Minor Changes

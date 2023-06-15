@@ -1,5 +1,11 @@
 # web
 
+## 1.3.3-beta.0
+
+### Patch Changes
+
+- 5f27c74d: add semester 2566/1
+
 ## 1.3.2
 
 ### Patch Changes

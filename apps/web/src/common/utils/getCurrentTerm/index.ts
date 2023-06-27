@@ -1,7 +1,7 @@
 import { termOptions } from '@web/common/constants/terms'
 import { Term } from '@web/common/types/term'
 
-const { academicYear, semester } = termOptions[0]
+const { academicYear, semester } = termOptions[1]
 
 export function getCurrentTerm(): Term {
   // TODO: dynamic year and semester

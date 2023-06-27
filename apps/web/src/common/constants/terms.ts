@@ -4,7 +4,10 @@ interface TermOption {
   label: string
 }
 
+// Reminder: Also edit currentTerm here src/common/utils/getCurrentTerm/index.ts
+
 export const termOptions: TermOption[] = [
+  { academicYear: '2566', semester: '2', label: '2566/2' },
   { academicYear: '2566', semester: '1', label: '2566/1' },
   { academicYear: '2565', semester: '3', label: '2565/ฤดูร้อน' },
   { academicYear: '2565', semester: '2', label: '2565/2' },

@@ -1,5 +1,11 @@
 # web
 
+## 1.4.0
+
+### Minor Changes
+
+- e09e36f0: add 66/2 and set current to 66/1
+
 ## 1.4.0-beta.0
 
 ### Minor Changes

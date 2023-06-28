@@ -4,8 +4,6 @@ interface TermOption {
   label: string
 }
 
-// Reminder: Also edit currentTerm here src/common/utils/getCurrentTerm/index.ts
-
 export const termOptions: TermOption[] = [
   { academicYear: '2566', semester: '2', label: '2566/2' },
   { academicYear: '2566', semester: '1', label: '2566/1' },
@@ -16,3 +14,5 @@ export const termOptions: TermOption[] = [
   { academicYear: '2564', semester: '2', label: '2564/2' },
   { academicYear: '2564', semester: '1', label: '2564/1' },
 ]
+
+export const tempHardCodedCurrentTerm = termOptions[1]

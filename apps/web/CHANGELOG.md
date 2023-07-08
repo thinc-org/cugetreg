@@ -1,5 +1,11 @@
 # web
 
+## 1.4.1-beta.0
+
+### Patch Changes
+
+- eabd6fa8: Fix term selector out of sync
+
 ## 1.4.0
 
 ### Minor Changes

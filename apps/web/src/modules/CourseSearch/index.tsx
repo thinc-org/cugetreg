@@ -49,7 +49,7 @@ export function CourseSearchPage() {
         <MuiStack direction="row" spacing={2} alignItems="center">
           <Typography variant="h2">ค้นหาวิชาเรียน</Typography>
           {isSmUp && (
-            <Select defaultValue={`${academicYear}/${semester}`} onChange={handleChange}>
+            <Select value={`${academicYear}/${semester}`} onChange={handleChange}>
               {termOptions.map(({ academicYear, semester, label }) => (
                 <MenuItem key={`${academicYear}/${semester}`} value={`${academicYear}/${semester}`}>
                   {label}

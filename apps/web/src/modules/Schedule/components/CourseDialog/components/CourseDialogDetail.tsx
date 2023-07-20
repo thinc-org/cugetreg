@@ -93,13 +93,13 @@ export function CourseDialogDetail() {
         <Stack spacing={0.5}>
           <Caption>{t('midtermExam')}</Caption>
           <Typography variant="subtitle1">
-            {midtermPeriod} {midtermDate}
+            {item.midterm?.date ? `${midtermDate} ${midtermPeriod}` : 'TBA'}
           </Typography>
         </Stack>
         <Stack spacing={0.5}>
           <Caption>{t('finalExam')}</Caption>
           <Typography variant="subtitle1">
-            {finalPeriod} {finalDate}
+            {item.final?.date ? `${midtermDate} ${midtermPeriod}` : 'TBA'}
           </Typography>
         </Stack>
       </Stack>

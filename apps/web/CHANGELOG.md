@@ -1,5 +1,12 @@
 # web
 
+## 1.4.1
+
+### Patch Changes
+
+- eabd6fa8: Fix term selector out of sync
+- ff59d7bb: fix empty exam date display
+
 ## 1.4.1-beta.0
 
 ### Patch Changes

@@ -26,7 +26,7 @@ export function getFinalExamPeriod(scheduleClass: ExamClass | Course) {
 }
 
 export function getFormattedExamPeriod(period: Period | undefined | null) {
-  if (!period) {
+  if (!period || !period.start || !period.end) {
     return 'TBA'
   }
   return `${period.start} - ${period.end}`

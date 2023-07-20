@@ -166,13 +166,13 @@ export function CourseDetailPage({ course, reviews, ogImageUrl }: CourseDetailPa
         <Grid item xs={12} sm={6}>
           <DescriptionTitle variant="subtitle1">สอบกลางภาค</DescriptionTitle>
           <Typography variant="h6">
-            {course.midterm ? `${midtermDate} ${midtermPeriod}` : 'TBA'}
+            {course.midterm?.date ? `${midtermDate} ${midtermPeriod}` : 'TBA'}
           </Typography>
         </Grid>
         <GridEnd item xs={12} sm={6}>
           <DescriptionTitle variant="subtitle1">สอบปลายภาค</DescriptionTitle>
           <Typography variant="h6">
-            {course.final ? `${finalDate} ${finalPeriod}` : 'TBA'}
+            {course.final?.date ? `${finalDate} ${finalPeriod}` : 'TBA'}
           </Typography>
         </GridEnd>
         <Grid item xs={12} sm={12}>

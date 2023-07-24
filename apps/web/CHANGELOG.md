@@ -1,5 +1,11 @@
 # web
 
+## 1.4.2-beta.0
+
+### Patch Changes
+
+- aaa57bc1: Fix midterm exam date displays as final exam
+
 ## 1.4.1
 
 ### Patch Changes

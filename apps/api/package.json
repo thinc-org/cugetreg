@@ -24,7 +24,7 @@
     "typescript": "~4.7.4"
   },
   "dependencies": {
-    "@apollo/server": "^4.7.1",
+    "@apollo/server": "^4.7.4",
     "@cgr/schema": "workspace:*",
     "@grpc/grpc-js": "1.4.4",
     "@grpc/proto-loader": "0.6.7",

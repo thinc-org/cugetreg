@@ -37,6 +37,7 @@ export class PeriodRangeInput {
 export class FilterInput {
     keyword?: Nullable<string>;
     genEdTypes?: Nullable<GenEdType[]>;
+    isSUGrading?: Nullable<boolean>;
     dayOfWeeks?: Nullable<DayOfWeek[]>;
     periodRange?: Nullable<PeriodRangeInput>;
     limit?: Nullable<number>;

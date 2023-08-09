@@ -57,6 +57,7 @@ export class CourseService {
     {
       keyword = '',
       genEdTypes = [],
+      isSUGrading,
       dayOfWeeks = [],
       limit = 10,
       offset = 0,
@@ -81,6 +82,10 @@ export class CourseService {
 
     if (genEdTypes.length > 0) {
       query.genEdType = { $in: genEdTypes }
+    }
+
+    if (isSUGrading !== undefined) {
+      query.creditHours = isSUGrading ? /S\/U/ : { $not: /S\/U/ }
     }
 
     if (dayOfWeeks.length > 0) {

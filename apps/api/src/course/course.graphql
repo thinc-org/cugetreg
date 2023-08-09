@@ -103,6 +103,11 @@ input FilterInput {
   genEdTypes: [GenEdType!]
 
   """
+  If is `true` or `false` will filter courses by grading method (S/U or Letter Grade)
+  """
+  isSUGrading: Boolean
+
+  """
   List of `DayOfWeeks`. This filter is passed IF ANY of the course's sections have class in ANY of the `dayOfWeeks` in the list.
   """
   dayOfWeeks: [DayOfWeek!]

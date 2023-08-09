@@ -175,10 +175,16 @@ export function CourseDetailPage({ course, reviews, ogImageUrl }: CourseDetailPa
             {course.final?.date ? `${finalDate} ${finalPeriod}` : 'TBA'}
           </Typography>
         </GridEnd>
-        <Grid item xs={12} sm={12}>
+        <Grid item xs={12} sm={6}>
           <DescriptionTitle variant="subtitle1">เงื่อนไขรายวิชา</DescriptionTitle>
           <Typography variant="h6">{course.courseCondition}</Typography>
         </Grid>
+        <GridEnd item xs={12} sm={6}>
+          <DescriptionTitle variant="subtitle1">วิธีการวัดผล</DescriptionTitle>
+          <Typography variant="h6">
+            {course.creditHours.includes('S/U') ? 'S/U' : 'Letter Grade'}
+          </Typography>
+        </GridEnd>
         {course.courseDescTh && (
           <Grid item xs={12} sm={12}>
             <DescriptionTitle variant="subtitle1">คำอธิบายรายวิชา (ภาษาไทย)</DescriptionTitle>

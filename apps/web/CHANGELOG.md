@@ -1,5 +1,11 @@
 # web
 
+## 1.5.0
+
+### Minor Changes
+
+- 5edf7f1d: add S/U field in course page
+
 ## 1.5.0-beta.0
 
 ### Minor Changes

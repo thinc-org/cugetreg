@@ -2,12 +2,13 @@ import { DialogContent, Stack, useTheme } from '@mui/material'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import useGoogleOptimize from '@react-hook/google-optimize'
 
-import { DayChipKey, GenEdChipKey } from '@web/common/components/Chips/config'
+import { DayChipKey, GenEdChipKey, GradingChipKey } from '@web/common/components/Chips/config'
 import { ResponsiveDialog } from '@web/common/components/ResponsiveDialog'
 import { Analytics } from '@web/common/context/Analytics/components/Analytics'
 import {
   DAY_FILTER,
   GENED_FILTER,
+  GRADING_FILTER,
   PERIOD_RANGE_FILTER,
 } from '@web/common/context/Analytics/constants'
 import { GOOGLE_OPTIMIZA_FILTER_ORDER } from '@web/env'
@@ -15,6 +16,7 @@ import { CheckboxGroup } from '@web/modules/CourseSearch/components/CheckboxGrou
 import {
   createDayOfWeekCheckboxes, // createSpecialCheckboxes,
   createGenEdCheckboxes,
+  createGradingCheckboxes,
 } from '@web/modules/CourseSearch/components/FilterSection/constants'
 import { FilterSectionProps } from '@web/modules/CourseSearch/components/FilterSection/types'
 import { tail } from '@web/utils/tail'
@@ -33,6 +35,11 @@ export const FilterSection: React.FC<FilterSectionProps> = ({ open, handleClose 
     createDayOfWeekCheckboxes,
     'dayOfWeeks'
   )
+  const { checkboxes: gradingCheckboxes } = useFilterBar<GradingChipKey>(
+    createGradingCheckboxes,
+    'gradingTypes'
+  )
+
   // const { checkboxes: specialCheckboxes } = useFilterBar(createSpecialCheckboxes)
 
   const hasTags = useHasTags()
@@ -42,13 +49,23 @@ export const FilterSection: React.FC<FilterSectionProps> = ({ open, handleClose 
   const isExperimentOrder = useGoogleOptimize(GOOGLE_OPTIMIZA_FILTER_ORDER, [false, true])
 
   const filters = [
-    <Analytics key={1} elementName={GENED_FILTER}>
+    <Analytics key={0} elementName={GENED_FILTER}>
       {({ log }) => (
         <CheckboxGroup
           log={log}
           id="genEdFilter"
           title="หมวดหมู่ GenEd"
           checkboxes={genEdCheckboxes}
+        />
+      )}
+    </Analytics>,
+    <Analytics key={1} elementName={GRADING_FILTER}>
+      {({ log }) => (
+        <CheckboxGroup
+          log={log}
+          id="gradingFilter"
+          title="วิธีการวัดผล"
+          checkboxes={gradingCheckboxes}
         />
       )}
     </Analytics>,

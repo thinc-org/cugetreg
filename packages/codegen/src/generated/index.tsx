@@ -184,7 +184,7 @@ export type FilterInput = {
   /** List of `GenEdTypes`. This filter is passed IF the course's `genEdType` matches ANY of the `genEdTypes` in the list. */
   genEdTypes?: InputMaybe<Array<GenEdType>>;
   /** If is `true` or `false` will filter courses by grading method (S/U or Letter Grade) */
-  isSUGrading?: InputMaybe<Scalars['Boolean']>;
+  gradingTypes?: InputMaybe<Array<GradingType>>;
   /**
    * Keyword to search for courses. This filter is passed IF any of  `courseNo`, `abbrName`,
    * `courseNameTh`, or `courseNameEn` contains the keyword as a substring (except for `courseNo`
@@ -213,6 +213,13 @@ export enum GenEdType {
   Sc = 'SC',
   /** Social Science */
   So = 'SO'
+}
+
+export enum GradingType {
+  /** Letter Grade */
+  Letter = 'LETTER',
+  /** S/U */
+  Su = 'SU'
 }
 
 export type Mutation = {

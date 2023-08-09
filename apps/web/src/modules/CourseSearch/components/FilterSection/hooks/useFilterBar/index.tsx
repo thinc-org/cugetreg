@@ -16,7 +16,10 @@ export interface CreateCheckbox<Value> {
 
 export function useFilterBar<TagValue extends GeneralChipKey = GeneralChipKey>(
   initCheckboxes: CreateCheckbox<TagValue>[],
-  type?: keyof Pick<SearchCourseQueryVariables['filter'], 'genEdTypes' | 'dayOfWeeks'>
+  type?: keyof Pick<
+    SearchCourseQueryVariables['filter'],
+    'genEdTypes' | 'dayOfWeeks' | 'gradingTypes'
+  >
 ) {
   const { setFilter, searchCourseQueryParams } = useSearchCourseQueryParams()
 

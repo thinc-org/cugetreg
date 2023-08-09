@@ -5,7 +5,7 @@ import {
   ChipOutlinedHighlightColor,
 } from '@web/configs/theme/overrides/chip'
 
-import { DayOfWeek, GenEdType } from '@cgr/codegen'
+import { DayOfWeek, GenEdType, GradingType } from '@cgr/codegen'
 
 /*
  * This configuration file provide the Chip's types.
@@ -31,6 +31,13 @@ export const genEdChipConfig: GenEdChipConfigProps = {
   HU: { label: 'หมวดมนุษย์', color: 'pinkOutlined', variant: 'outlined' },
   IN: { label: 'หมวดสหฯ', color: 'purpleOutlined', variant: 'outlined' },
   NO: { label: 'ไม่ใช่ Gened', color: 'deepGrayOutlined', variant: 'outlined' },
+}
+
+export type GradingChipKey = GradingType
+export type GradingChipConfigProps = Record<GradingChipKey, ChipConfigProps>
+export const gradingChipConfig: GradingChipConfigProps = {
+  SU: { label: 'S/U Grade', color: 'blueOutlined', variant: 'outlined' },
+  LETTER: { label: 'Letter Grade', color: 'orangeOutlined', variant: 'outlined' },
 }
 
 export type DayChipKey = DayOfWeek
@@ -67,9 +74,10 @@ export const otherChipConfig: OtherChipConfigProps = {
   // Add more Chips here; don't forget to add key into `OtherChipKey` too
 }
 
-export type GeneralChipKey = GenEdChipKey | DayChipKey | OtherChipKey
+export type GeneralChipKey = GenEdChipKey | GradingChipKey | DayChipKey | OtherChipKey
 export const chipConfig = {
   ...genEdChipConfig,
+  ...gradingChipConfig,
   ...dayChipConfig,
   ...otherChipConfig,
 }

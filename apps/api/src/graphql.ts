@@ -10,6 +10,7 @@
 export type DayOfWeek = "MO" | "TU" | "WE" | "TH" | "FR" | "SA" | "SU" | "IA" | "AR";
 export type StudyProgram = "S" | "T" | "I";
 export type GenEdType = "SO" | "HU" | "SC" | "IN" | "NO";
+export type GradingType = "SU" | "LETTER";
 export type ReviewInteractionType = "L" | "D";
 export type ReviewStatus = "APPROVED" | "REJECTED" | "PENDING";
 
@@ -37,7 +38,7 @@ export class PeriodRangeInput {
 export class FilterInput {
     keyword?: Nullable<string>;
     genEdTypes?: Nullable<GenEdType[]>;
-    isSUGrading?: Nullable<boolean>;
+    gradingTypes?: Nullable<GradingType[]>;
     dayOfWeeks?: Nullable<DayOfWeek[]>;
     periodRange?: Nullable<PeriodRangeInput>;
     limit?: Nullable<number>;

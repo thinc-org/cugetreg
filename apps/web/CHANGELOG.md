@@ -1,5 +1,11 @@
 # web
 
+## 1.6.0-beta.1
+
+### Patch Changes
+
+- 38b30bc4: fix(web): filter params logic (from #616)
+
 ## 1.6.0-beta.0
 
 ### Minor Changes

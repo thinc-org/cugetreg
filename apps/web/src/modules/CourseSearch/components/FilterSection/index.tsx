@@ -31,13 +31,13 @@ export const FilterSection: React.FC<FilterSectionProps> = ({ open, handleClose 
     createGenEdCheckboxes,
     'genEdTypes'
   )
-  const { checkboxes: dayOfWeekCheckboxes } = useFilterBar<DayChipKey>(
-    createDayOfWeekCheckboxes,
-    'dayOfWeeks'
-  )
   const { checkboxes: gradingCheckboxes } = useFilterBar<GradingChipKey>(
     createGradingCheckboxes,
     'gradingTypes'
+  )
+  const { checkboxes: dayOfWeekCheckboxes } = useFilterBar<DayChipKey>(
+    createDayOfWeekCheckboxes,
+    'dayOfWeeks'
   )
 
   // const { checkboxes: specialCheckboxes } = useFilterBar(createSpecialCheckboxes)

@@ -10,7 +10,7 @@
 export type DayOfWeek = "MO" | "TU" | "WE" | "TH" | "FR" | "SA" | "SU" | "IA" | "AR";
 export type StudyProgram = "S" | "T" | "I";
 export type GenEdType = "SO" | "HU" | "SC" | "IN" | "NO";
-export type GradingType = "SU" | "LETTER";
+export type GradingType = "S_U" | "LETTER";
 export type ReviewInteractionType = "L" | "D";
 export type ReviewStatus = "APPROVED" | "REJECTED" | "PENDING";
 

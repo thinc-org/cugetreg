@@ -29,7 +29,7 @@ export const createGenEdCheckboxes: CreateCheckbox<GenEdChipKey>[] = [
 export const createGradingCheckboxes: CreateCheckbox<GradingChipKey>[] = [
   {
     label: 'S/U Grade',
-    value: GradingType.Su,
+    value: GradingType.SU,
   },
   {
     label: 'Letter Grade',

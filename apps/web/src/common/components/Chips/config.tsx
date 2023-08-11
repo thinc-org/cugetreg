@@ -36,7 +36,7 @@ export const genEdChipConfig: GenEdChipConfigProps = {
 export type GradingChipKey = GradingType
 export type GradingChipConfigProps = Record<GradingChipKey, ChipConfigProps>
 export const gradingChipConfig: GradingChipConfigProps = {
-  SU: { label: 'S/U Grade', color: 'blueOutlined', variant: 'outlined' },
+  S_U: { label: 'S/U Grade', color: 'blueOutlined', variant: 'outlined' },
   LETTER: { label: 'Letter Grade', color: 'orangeOutlined', variant: 'outlined' },
 }
 

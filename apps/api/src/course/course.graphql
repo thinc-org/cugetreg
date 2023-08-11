@@ -103,7 +103,7 @@ input FilterInput {
   genEdTypes: [GenEdType!]
 
   """
-  If is `true` or `false` will filter courses by grading method (S/U or Letter Grade)
+  List of `GradingTypes`. This filter is passed IF the course's has S/U in Credit Hours. If both filter are given, filters have no effect.
   """
   gradingTypes: [GradingType!]
 

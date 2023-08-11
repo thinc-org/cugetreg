@@ -1,5 +1,12 @@
 # web
 
+## 1.6.0
+
+### Minor Changes
+
+- bd18bed9: feat: add s/u filter
+- bd18bed9: chore: change S/U -> S/U Grade in course detail page for consistency
+
 ## 1.6.0-beta.0
 
 ### Minor Changes

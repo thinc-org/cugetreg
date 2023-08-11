@@ -11,9 +11,9 @@ export function extractSearchVarsFromQuery(
 ): SearchCourseQueryVariables {
   const { keyword, genEdTypes, gradingTypes, dayOfWeeks, startTime, endTime } = query
 
-  const genEdTypeArray = genEdTypes?.split(',')
-  const gradingTypeArray = gradingTypes?.split(',')
-  const dayOfWeekArray = dayOfWeeks?.split(',')
+  const genEdTypeArray = genEdTypes ? genEdTypes.split(',') : undefined
+  const gradingTypeArray = gradingTypes ? gradingTypes.split(',') : undefined
+  const dayOfWeekArray = dayOfWeeks ? dayOfWeeks.split(',') : undefined
 
   const filter = removeUndefinedValue({
     keyword: keyword ? keyword : undefined,

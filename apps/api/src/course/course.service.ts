@@ -84,10 +84,10 @@ export class CourseService {
       query.genEdType = { $in: genEdTypes }
     }
 
-    if (gradingTypes && !(gradingTypes.includes('LETTER') && gradingTypes.includes('SU'))) {
+    if (gradingTypes && !(gradingTypes.includes('LETTER') && gradingTypes.includes('S_U'))) {
       if (gradingTypes.includes('LETTER')) {
         query.creditHours = { $not: /S\/U/ }
-      } else if (gradingTypes.includes('SU')) {
+      } else if (gradingTypes.includes('S_U')) {
         query.creditHours = /S\/U/
       }
     }

@@ -1,5 +1,11 @@
 # api
 
+## 1.5.0
+
+### Minor Changes
+
+- bd18bed9: feat: add s/u filter
+
 ## 1.5.0-beta.0
 
 ### Minor Changes

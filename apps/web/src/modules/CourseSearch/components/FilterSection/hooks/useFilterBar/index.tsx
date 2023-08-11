@@ -1,6 +1,11 @@
 import { useCallback, useMemo } from 'react'
 
-import { DayChipKey, GenEdChipKey, GeneralChipKey } from '@web/common/components/Chips/config'
+import {
+  DayChipKey,
+  GenEdChipKey,
+  GeneralChipKey,
+  GradingChipKey,
+} from '@web/common/components/Chips/config'
 import { useSearchCourseQueryParams } from '@web/modules/CourseSearch/hooks/useSearchCourseQueryParams'
 
 import { SearchCourseQueryVariables } from '@cgr/codegen'
@@ -16,7 +21,10 @@ export interface CreateCheckbox<Value> {
 
 export function useFilterBar<TagValue extends GeneralChipKey = GeneralChipKey>(
   initCheckboxes: CreateCheckbox<TagValue>[],
-  type?: keyof Pick<SearchCourseQueryVariables['filter'], 'genEdTypes' | 'dayOfWeeks'>
+  type?: keyof Pick<
+    SearchCourseQueryVariables['filter'],
+    'genEdTypes' | 'gradingTypes' | 'dayOfWeeks'
+  >
 ) {
   const { setFilter, searchCourseQueryParams } = useSearchCourseQueryParams()
 
@@ -30,7 +38,16 @@ export function useFilterBar<TagValue extends GeneralChipKey = GeneralChipKey>(
           : (removeTag(searchCourseQueryParams.filter.genEdTypes, tag) as GenEdChipKey[])
 
         setFilter({ ...searchCourseQueryParams.filter, genEdTypes: genEdTypes })
-      } else if (type == 'dayOfWeeks') {
+      } else if (type === 'gradingTypes') {
+        const gradingTypes: GradingChipKey[] = checked
+          ? ([tag] as GradingChipKey[])
+          : (removeTag(searchCourseQueryParams.filter.gradingTypes, tag) as GradingChipKey[])
+
+        setFilter({
+          ...searchCourseQueryParams.filter,
+          gradingTypes,
+        })
+      } else if (type === 'dayOfWeeks') {
         const dayOfWeeks: DayChipKey[] = checked
           ? (addTag(searchCourseQueryParams.filter.dayOfWeeks, tag) as DayChipKey[])
           : (removeTag(searchCourseQueryParams.filter.dayOfWeeks, tag) as DayChipKey[])

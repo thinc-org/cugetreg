@@ -1,0 +1,21 @@
+{
+  "mode": "exit",
+  "tag": "beta",
+  "initialVersions": {
+    "admin-api": "0.1.1",
+    "admin-web": "0.1.1",
+    "api": "1.4.2",
+    "reg-scraper": "1.1.3",
+    "web": "1.5.0",
+    "web-e2e": "0.0.1",
+    "@cgr/codegen": "1.2.0",
+    "@cgr/course-utils": "1.0.2",
+    "@cgr/project-config": "1.0.0",
+    "@cgr/schema": "1.1.1"
+  },
+  "changesets": [
+    "khaki-feet-flash",
+    "serious-teachers-switch",
+    "silver-buttons-marry"
+  ]
+}

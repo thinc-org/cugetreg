@@ -1,5 +1,18 @@
 # web
 
+## 1.6.0-beta.1
+
+### Patch Changes
+
+- 38b30bc4: fix(web): filter params logic (from #616)
+
+## 1.6.0-beta.0
+
+### Minor Changes
+
+- bd18bed9: feat: add s/u filter
+- bd18bed9: chore: change S/U -> S/U Grade in course detail page for consistency
+
 ## 1.5.0
 
 ### Minor Changes

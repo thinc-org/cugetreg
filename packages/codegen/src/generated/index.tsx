@@ -183,6 +183,8 @@ export type FilterInput = {
   dayOfWeeks?: InputMaybe<Array<DayOfWeek>>;
   /** List of `GenEdTypes`. This filter is passed IF the course's `genEdType` matches ANY of the `genEdTypes` in the list. */
   genEdTypes?: InputMaybe<Array<GenEdType>>;
+  /** List of `GradingTypes`. This filter is passed IF the course's has S/U in Credit Hours. If both filter are given, filters have no effect. */
+  gradingTypes?: InputMaybe<Array<GradingType>>;
   /**
    * Keyword to search for courses. This filter is passed IF any of  `courseNo`, `abbrName`,
    * `courseNameTh`, or `courseNameEn` contains the keyword as a substring (except for `courseNo`
@@ -211,6 +213,13 @@ export enum GenEdType {
   Sc = 'SC',
   /** Social Science */
   So = 'SO'
+}
+
+export enum GradingType {
+  /** Letter Grade */
+  Letter = 'LETTER',
+  /** S/U */
+  SU = 'S_U'
 }
 
 export type Mutation = {

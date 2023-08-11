@@ -22,9 +22,10 @@ export const CheckboxGroup: React.FC<CheckboxGroupProps> = ({ title, checkboxes,
 
   const hasChecked = (tag: GeneralChipKey) => {
     const genEdTags: string[] = searchCourseQueryParams.filter?.genEdTypes ?? []
+    const gradingTypes: string[] = searchCourseQueryParams.filter?.gradingTypes ?? []
     const dayOfWeeks: string[] = searchCourseQueryParams.filter?.dayOfWeeks ?? []
 
-    return genEdTags.includes(tag) || dayOfWeeks.includes(tag)
+    return genEdTags.includes(tag) || gradingTypes.includes(tag) || dayOfWeeks.includes(tag)
   }
 
   return (

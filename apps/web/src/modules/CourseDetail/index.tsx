@@ -182,7 +182,7 @@ export function CourseDetailPage({ course, reviews, ogImageUrl }: CourseDetailPa
         <GridEnd item xs={12} sm={6}>
           <DescriptionTitle variant="subtitle1">วิธีการวัดผล</DescriptionTitle>
           <Typography variant="h6">
-            {course.creditHours.includes('S/U') ? 'S/U' : 'Letter Grade'}
+            {course.creditHours.includes('S/U') ? 'S/U Grade' : 'Letter Grade'}
           </Typography>
         </GridEnd>
         {course.courseDescTh && (

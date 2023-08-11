@@ -120,6 +120,16 @@ export const FilterSection: React.FC<FilterSectionProps> = ({ open, handleClose 
               )}
             </Analytics>
           </Stack>
+          <Analytics elementName={GRADING_FILTER}>
+            {({ log }) => (
+              <CheckboxGroup
+                log={log}
+                id="gradingFilter"
+                title="วิธีการวัดผล"
+                checkboxes={gradingCheckboxes}
+              />
+            )}
+          </Analytics>
           <Analytics elementName={PERIOD_RANGE_FILTER}>
             {({ log }) => <SelectTime log={log} />}
           </Analytics>

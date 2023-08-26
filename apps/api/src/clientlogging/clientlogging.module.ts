@@ -1,32 +1,34 @@
-import { Module, Provider, forwardRef } from '@nestjs/common'
+import { Module, forwardRef } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 
-import { Client } from '@opensearch-project/opensearch'
+import { OpensearchModule } from 'nestjs-opensearch'
 
 import { AuthModule } from '../auth/auth.module'
 import { ClientLoggingController } from './clientlogging.controller'
 import { ClientLoggingService } from './clientlogging.service'
 
-const elasticProvider: Provider<Client> = {
-  provide: Client,
-  useFactory: (configService: ConfigService) =>
-    new Client({
-      node: configService.get('elasticUrl'),
-      auth: {
-        username: configService.get('elasticUsername'),
-        password: configService.get('elasticPassword'),
-      },
-      ssl: {
-        rejectUnauthorized: false,
+@Module({
+  imports: [
+    forwardRef(() => AuthModule),
+    OpensearchModule.forRootAsync({
+      clientName: 'default',
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => {
+        return {
+          nodes: configService.get<string>('opensearchUrl'),
+          auth: {
+            username: configService.get<string>('opensearchUsername'),
+            password: configService.get<string>('opensearchPassword'),
+          },
+          ssl: {
+            rejectUnauthorized: configService.get<boolean>('opensearchSkipSSL'),
+          },
+        }
       },
     }),
-  inject: [ConfigService],
-}
-
-@Module({
-  providers: [ClientLoggingService, elasticProvider],
+  ],
+  providers: [ClientLoggingService],
   controllers: [ClientLoggingController],
-  imports: [forwardRef(() => AuthModule)],
   exports: [ClientLoggingService],
 })
 export class ClientLoggingModule {}

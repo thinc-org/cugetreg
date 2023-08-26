@@ -10,12 +10,9 @@ export class SearchService {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async search<T>(req: Record<string, any>): Promise<T[]> {
-    const res = await this.opensearchService.search<T>(req)
+    const res = await this.opensearchService.search(req)
 
-    console.debug(res)
-
-    return []
-    // const hits = res.hits.hits
-    // return hits.map((item) => item._source)
+    const hits = res.body.hits.hits
+    return hits.map((item) => item._source)
   }
 }

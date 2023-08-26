@@ -1,20 +1,28 @@
 import { Module } from '@nestjs/common'
-import { SearchService } from './search.service'
 import { ConfigModule, ConfigService } from '@nestjs/config'
-import { ElasticsearchModule } from '@nestjs/elasticsearch'
+
+import { OpensearchModule } from 'nestjs-opensearch'
+
+import { SearchService } from './search.service'
 
 @Module({
   imports: [
-    ElasticsearchModule.registerAsync({
-      imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
-        node: configService.get<string>('elasticUrl'),
-        auth: {
-          username: configService.get<string>('elasticUsername'),
-          password: configService.get<string>('elasticPassword'),
-        },
-      }),
+    ConfigModule,
+    OpensearchModule.forRootAsync({
+      clientName: 'default',
       inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => {
+        return {
+          nodes: configService.get<string>('opensearchUrl'),
+          auth: {
+            username: configService.get<string>('opensearchUsername'),
+            password: configService.get<string>('opensearchPassword'),
+          },
+          ssl: {
+            rejectUnauthorized: configService.get<boolean>('opensearchSkipSSL'),
+          },
+        }
+      },
     }),
   ],
   providers: [SearchService],

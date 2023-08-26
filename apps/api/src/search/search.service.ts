@@ -1,15 +1,21 @@
 import { Injectable } from '@nestjs/common'
-import { ElasticsearchService } from '@nestjs/elasticsearch'
-import { SearchRequest } from '@elastic/elasticsearch/lib/api/types'
+
+import { InjectOpensearchClient, OpensearchClient } from 'nestjs-opensearch'
 
 @Injectable()
 export class SearchService {
-  constructor(private readonly elasticsearchService: ElasticsearchService) {}
+  constructor(
+    @InjectOpensearchClient('default') private readonly opensearchService: OpensearchClient
+  ) {}
 
-  async search<T>(req: SearchRequest): Promise<T[]> {
-    const res = await this.elasticsearchService.search<T>(req)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async search<T>(req: Record<string, any>): Promise<T[]> {
+    const res = await this.opensearchService.search<T>(req)
 
-    const hits = res.hits.hits
-    return hits.map((item) => item._source)
+    console.debug(res)
+
+    return []
+    // const hits = res.hits.hits
+    // return hits.map((item) => item._source)
   }
 }

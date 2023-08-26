@@ -21,7 +21,7 @@ import { ClientLoggingService } from './clientlogging.service'
             password: configService.get<string>('opensearchPassword'),
           },
           ssl: {
-            rejectUnauthorized: configService.get<boolean>('opensearchSkipSSL'),
+            rejectUnauthorized: !configService.get<boolean>('opensearchSkipSSL'),
           },
         }
       },

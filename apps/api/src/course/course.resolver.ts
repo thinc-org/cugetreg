@@ -27,8 +27,8 @@ export interface ICourseSearchDocument {
 
 export interface ICourseSearchFilter {
   keyword: string
-  genEdTypes: GenEdType[]
-  dayOfWeeks: DayOfWeek[]
+  genEdTypes?: GenEdType[]
+  dayOfWeeks?: DayOfWeek[]
   periodRange: Period
   studyProgram: string
   semester: string
@@ -86,17 +86,19 @@ export class CourseResolver {
 
     const searchResult = await this.searchService.search<ICourseSearchDocument>({
       index: this.configService.get<string>('courseIndex'),
-      // query: buildCourseQuery({
-      //   keyword: filter.keyword,
-      //   genEdTypes: filter.genEdTypes,
-      //   dayOfWeeks: filter.dayOfWeeks,
-      //   periodRange: filter.periodRange,
-      //   studyProgram: courseGroup.studyProgram,
-      //   semester: courseGroup.semester,
-      //   academicYear: courseGroup.academicYear,
-      // }),
-      // from: filter.offset,
-      // size: filter.limit,
+      body: {
+        query: buildCourseQuery({
+          keyword: filter.keyword,
+          genEdTypes: filter.genEdTypes,
+          dayOfWeeks: filter.dayOfWeeks,
+          periodRange: filter.periodRange,
+          studyProgram: courseGroup.studyProgram,
+          semester: courseGroup.semester,
+          academicYear: courseGroup.academicYear,
+        }),
+        from: filter.offset,
+        size: filter.limit,
+      },
     })
 
     return searchResult.map((item) => item.rawData)
@@ -146,7 +148,7 @@ function buildCourseQuery(filter: ICourseSearchFilter): Record<string, any> {
   const nestedQuery: Record<string, any>[] = []
 
   // push the query for each filter if filter is not undefined
-  if (filter.dayOfWeeks.length > 0) {
+  if (filter.dayOfWeeks?.length > 0) {
     nestedQuery.push({
       terms: {
         'rawData.sections.classes.dayOfWeek': filter.dayOfWeeks,
@@ -167,7 +169,7 @@ function buildCourseQuery(filter: ICourseSearchFilter): Record<string, any> {
     })
   }
 
-  if (filter.genEdTypes.length > 0) {
+  if (filter.genEdTypes?.length > 0) {
     boolMust.push({
       terms: {
         genEdType: filter.genEdTypes,

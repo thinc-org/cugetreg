@@ -1,11 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 
-import { Semester, StudyProgram } from '@thinc-org/chula-courses'
 import { Model } from 'mongoose'
 
-import { Course } from '../common/types/course.type'
-import { CourseDocument } from '../schemas/course.schema'
+import { NotFoundError } from '@api/common/errors'
+
+import { CourseDocument, Semester, StudyProgram } from '@cgr/schema'
 
 @Injectable()
 export class CourseService {

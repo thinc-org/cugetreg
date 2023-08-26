@@ -1,14 +1,15 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { BadRequestException } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
 import { Args, Query, Resolver } from '@nestjs/graphql'
 
-import { Course, DayOfWeek, GenEdType, Semester, StudyProgram } from '@thinc-org/chula-courses'
+import { SearchService } from '@api/search/search.service'
+import { isTime } from '@api/util/functions'
+
+import { Course, CourseDocument, DayOfWeek, GenEdType, Semester, StudyProgram } from '@cgr/schema'
 
 import { CourseGroupInput, FilterInput, Period } from '../graphql'
 import { CourseService } from './course.service'
-import { isTime } from '@api/util/functions'
-import { BadRequestException } from '@nestjs/common'
-import { SearchService } from '@api/search/search.service'
-import { ConfigService } from '@nestjs/config'
-import { QueryDslQueryContainer } from '@elastic/elasticsearch/lib/api/types'
 
 export interface ICourseSearchDocument {
   abbrName: string
@@ -52,7 +53,7 @@ export class CourseResolver {
     @Args('courseNo') courseNo: string,
     @Args('courseGroup')
     { semester, academicYear, studyProgram }: CourseGroupInput
-  ): Promise<GraphQLCourse> {
+  ): Promise<CourseDocument> {
     return this.courseService.findOne(
       courseNo,
       semester as Semester,
@@ -85,17 +86,17 @@ export class CourseResolver {
 
     const searchResult = await this.searchService.search<ICourseSearchDocument>({
       index: this.configService.get<string>('courseIndex'),
-      query: buildCourseQuery({
-        keyword: filter.keyword,
-        genEdTypes: filter.genEdTypes,
-        dayOfWeeks: filter.dayOfWeeks,
-        periodRange: filter.periodRange,
-        studyProgram: courseGroup.studyProgram,
-        semester: courseGroup.semester,
-        academicYear: courseGroup.academicYear,
-      }),
-      from: filter.offset,
-      size: filter.limit,
+      // query: buildCourseQuery({
+      //   keyword: filter.keyword,
+      //   genEdTypes: filter.genEdTypes,
+      //   dayOfWeeks: filter.dayOfWeeks,
+      //   periodRange: filter.periodRange,
+      //   studyProgram: courseGroup.studyProgram,
+      //   semester: courseGroup.semester,
+      //   academicYear: courseGroup.academicYear,
+      // }),
+      // from: filter.offset,
+      // size: filter.limit,
     })
 
     return searchResult.map((item) => item.rawData)
@@ -103,9 +104,9 @@ export class CourseResolver {
 }
 
 // build the query
-function buildCourseQuery(filter: ICourseSearchFilter): QueryDslQueryContainer {
+function buildCourseQuery(filter: ICourseSearchFilter): Record<string, any> {
   // create the base query from values that guarantee is not undefined
-  const boolMust: QueryDslQueryContainer[] = [
+  const boolMust: Record<string, any>[] = [
     {
       multi_match: {
         query: filter.keyword,
@@ -142,7 +143,7 @@ function buildCourseQuery(filter: ICourseSearchFilter): QueryDslQueryContainer {
     },
   ]
 
-  const nestedQuery: QueryDslQueryContainer[] = []
+  const nestedQuery: Record<string, any>[] = []
 
   // push the query for each filter if filter is not undefined
   if (filter.dayOfWeeks.length > 0) {

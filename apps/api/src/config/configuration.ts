@@ -57,7 +57,7 @@ const requiredConfigs = [
   'opensearchUrl',
   'opensearchUsername',
   'opensearchPassword',
-  'courseIndex',
+  'courseIndexName',
 ]
 
 export function validateConfig(configService: ConfigService<Configuration>): void {

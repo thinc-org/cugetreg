@@ -2,10 +2,15 @@
 
 In Opensearch, we employ names to differentiate environments that utilize an index. For instance, the development environment is labeled as 'course-dev,' while the beta environment is denoted as 'course-beta.
 
+### Installing
+
+1. Copy `opensearch.example.yaml` in `config` and paste it in the same location then remove `.example` from its name.
+2. update `opensearch.yaml` with a valid configuration
+
 # Create Index
 
 ```shell
-go run ./cli/app.go index create --index-name=<index name> --filename=<filename> --debug=<true/false>
+go run ./cli index create --index-name=<index name> --filename=<filename> --debug=<true/false>
 ```
 
 | name       | description                                |

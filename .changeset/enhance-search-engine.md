@@ -2,4 +2,4 @@
 'api': minor
 ---
 
-Enchance serach engine by Elasticsearch
+Enhance search engine with Elasticsearch

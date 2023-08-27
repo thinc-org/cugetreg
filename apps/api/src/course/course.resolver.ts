@@ -3,6 +3,7 @@ import { BadRequestException, Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { Args, Query, Resolver } from '@nestjs/graphql'
 
+import { buildCourseQuery } from '@api/search/queries/course'
 import { SearchService } from '@api/search/search.service'
 import { isTime } from '@api/util/functions'
 
@@ -102,110 +103,5 @@ export class CourseResolver {
     })
 
     return searchResult.map((item) => item.rawData)
-  }
-}
-
-// build the query
-function buildCourseQuery(filter: ICourseSearchFilter): Record<string, any> {
-  // create the base query from values that guarantee is not undefined
-  const boolMust: Record<string, any>[] = [
-    {
-      term: {
-        semester: {
-          value: filter.semester,
-        },
-      },
-    },
-    {
-      term: {
-        studyProgram: {
-          value: filter.studyProgram,
-        },
-      },
-    },
-    {
-      term: {
-        academicYear: {
-          value: filter.academicYear,
-        },
-      },
-    },
-  ]
-
-  if (filter.keyword) {
-    boolMust.push({
-      multi_match: {
-        query: filter.keyword,
-        fields: [
-          'abbrName^5',
-          'courseNo^5',
-          'courseNameEn^3',
-          'courseDescEn',
-          'courseNameTh^3',
-          'courseDescTh',
-        ],
-      },
-    })
-  }
-
-  const nestedQuery: Record<string, any>[] = []
-
-  // push the query for each filter if filter is not undefined
-  if (filter.dayOfWeeks?.length > 0) {
-    nestedQuery.push({
-      terms: {
-        'rawData.sections.classes.dayOfWeek': filter.dayOfWeeks,
-      },
-    })
-  }
-
-  if (filter.periodRange) {
-    nestedQuery.push({
-      nested: {
-        path: 'rawData.sections.classes.period',
-        query: {
-          query_string: {
-            query: `rawData.sections.classes.period.start:[${filter.periodRange.start} TO ${filter.periodRange.end}] AND rawData.sections.classes.period.end:[* TO ${filter.periodRange.end}]`,
-          },
-        },
-      },
-    })
-  }
-
-  if (filter.genEdTypes?.length > 0) {
-    boolMust.push({
-      terms: {
-        genEdType: filter.genEdTypes,
-      },
-    })
-  }
-
-  if (nestedQuery.length > 0) {
-    boolMust.push({
-      nested: {
-        path: 'rawData',
-        query: {
-          nested: {
-            path: 'rawData.sections',
-            query: {
-              nested: {
-                path: 'rawData.sections.classes',
-                query: {
-                  bool: {
-                    must: nestedQuery,
-                  },
-                },
-              },
-            },
-          },
-        },
-      },
-    })
-  }
-
-  return {
-    bool: {
-      must: boolMust,
-    },
   }
 }

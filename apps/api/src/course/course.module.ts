@@ -3,13 +3,16 @@ import { MongooseModule } from '@nestjs/mongoose'
 
 import { SearchModule } from '@api/search/search.module'
 
-import { CourseSchema } from '@cgr/schema'
+import { CourseSchema, ModelName } from '@cgr/schema'
 
 import { CourseResolver } from './course.resolver'
 import { CourseService } from './course.service'
 
 @Module({
-  imports: [MongooseModule.forFeature([{ name: 'course', schema: CourseSchema }]), SearchModule],
+  imports: [
+    MongooseModule.forFeature([{ name: ModelName.Course, schema: CourseSchema }]),
+    SearchModule,
+  ],
   providers: [CourseResolver, CourseService],
   exports: [CourseService],
 })

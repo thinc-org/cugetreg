@@ -43,11 +43,11 @@ export function buildCourseQuery(filter: ICourseSearchFilter): Record<string, an
     })
   }
 
-  const nestedQuery: Record<string, any>[] = []
+  const sectionsQuery: Record<string, any>[] = []
 
   // push the query for each filter if filter is not undefined
   if (filter.dayOfWeeks?.length > 0) {
-    nestedQuery.push({
+    sectionsQuery.push({
       terms: {
         'rawData.sections.classes.dayOfWeek': filter.dayOfWeeks,
       },
@@ -55,7 +55,7 @@ export function buildCourseQuery(filter: ICourseSearchFilter): Record<string, an
   }
 
   if (filter.periodRange) {
-    nestedQuery.push({
+    sectionsQuery.push({
       nested: {
         path: 'rawData.sections.classes.period',
         query: {
@@ -75,7 +75,7 @@ export function buildCourseQuery(filter: ICourseSearchFilter): Record<string, an
     })
   }
 
-  if (nestedQuery.length > 0) {
+  if (sectionsQuery.length > 0) {
     boolMust.push({
       nested: {
         path: 'rawData',
@@ -87,7 +87,7 @@ export function buildCourseQuery(filter: ICourseSearchFilter): Record<string, an
                 path: 'rawData.sections.classes',
                 query: {
                   bool: {
-                    must: nestedQuery,
+                    must: sectionsQuery,
                   },
                 },
               },

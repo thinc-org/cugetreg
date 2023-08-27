@@ -20,7 +20,7 @@ export interface Configuration {
   opensearchUsername: string
   opensearchPassword: string
   opensearchSkipSSL: boolean
-  courseIndex: string
+  courseIndexName: string
 }
 
 export const configuration = (): Configuration => {
@@ -43,7 +43,7 @@ export const configuration = (): Configuration => {
     opensearchUsername: process.env.OPENSEARCH_USERNAME,
     opensearchPassword: process.env.OPENSEARCH_PASSWORD,
     opensearchSkipSSL: process.env.OPENSEARCH_SKIP_SSL === 'true',
-    courseIndex: process.env.COURSE_INDEX_NAME,
+    courseIndexName: process.env.COURSE_INDEX_NAME,
   }
 }
 

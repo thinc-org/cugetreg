@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { BadRequestException } from '@nestjs/common'
+import { BadRequestException, Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { Args, Query, Resolver } from '@nestjs/graphql'
 
@@ -85,7 +85,7 @@ export class CourseResolver {
     }
 
     const searchResult = await this.searchService.search<ICourseSearchDocument>({
-      index: this.configService.get<string>('courseIndex'),
+      index: this.configService.get<string>('courseIndexName'),
       body: {
         query: buildCourseQuery({
           keyword: filter.keyword,
@@ -96,8 +96,8 @@ export class CourseResolver {
           semester: courseGroup.semester,
           academicYear: courseGroup.academicYear,
         }),
-        from: filter.offset,
-        size: filter.limit,
+        from: filter?.offset || 0,
+        size: filter?.limit || 10,
       },
     })
 
@@ -109,19 +109,6 @@ export class CourseResolver {
 function buildCourseQuery(filter: ICourseSearchFilter): Record<string, any> {
   // create the base query from values that guarantee is not undefined
   const boolMust: Record<string, any>[] = [
-    {
-      multi_match: {
-        query: filter.keyword,
-        fields: [
-          'abbrName^5',
-          'courseNo^5',
-          'courseNameEn^3',
-          'courseDescEn',
-          'courseNameTh^3',
-          'courseDescTh',
-        ],
-      },
-    },
     {
       term: {
         semester: {
@@ -144,6 +131,22 @@ function buildCourseQuery(filter: ICourseSearchFilter): Record<string, any> {
       },
     },
   ]
+
+  if (filter.keyword) {
+    boolMust.push({
+      multi_match: {
+        query: filter.keyword,
+        fields: [
+          'abbrName^5',
+          'courseNo^5',
+          'courseNameEn^3',
+          'courseDescEn',
+          'courseNameTh^3',
+          'courseDescTh',
+        ],
+      },
+    })
+  }
 
   const nestedQuery: Record<string, any>[] = []
 

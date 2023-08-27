@@ -1,3 +1,7 @@
+# About CU Get Reg Index in Opensearch
+
+In Opensearch, we employ names to differentiate environments that utilize an index. For instance, the development environment is labeled as 'course-dev,' while the beta environment is denoted as 'course-beta.
+
 # Create Index
 
 ```shell

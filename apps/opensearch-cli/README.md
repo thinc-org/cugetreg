@@ -10,7 +10,7 @@ In Opensearch, we employ names to differentiate environments that utilize an ind
 # Create Index
 
 ```shell
-go run ./cli index create --index-name=<index name> --filename=<filename> --debug=<true/false>
+go run ./cli/app.go index create --index-name=<index name> --filename=<filename> --debug=<true/false>
 ```
 
 | name       | description                                |

@@ -3,29 +3,7 @@ import { ICourseSearchFilter } from '@api/course/course.resolver'
 // build the query
 export function buildCourseQuery(filter: ICourseSearchFilter): Record<string, any> {
   // create the base query from values that guarantee is not undefined
-  const boolMust: Record<string, any>[] = [
-    {
-      term: {
-        semester: {
-          value: filter.semester,
-        },
-      },
-    },
-    {
-      term: {
-        studyProgram: {
-          value: filter.studyProgram,
-        },
-      },
-    },
-    {
-      term: {
-        academicYear: {
-          value: filter.academicYear,
-        },
-      },
-    },
-  ]
+  const boolMust: Record<string, any>[] = []
 
   if (filter.keyword) {
     boolMust.push({
@@ -98,9 +76,37 @@ export function buildCourseQuery(filter: ICourseSearchFilter): Record<string, an
     })
   }
 
-  return {
+  const result: Record<string, any> = {
     bool: {
-      must: boolMust,
+      filter: [
+        {
+          term: {
+            semester: {
+              value: filter.semester,
+            },
+          },
+        },
+        {
+          term: {
+            studyProgram: {
+              value: filter.studyProgram,
+            },
+          },
+        },
+        {
+          term: {
+            academicYear: {
+              value: filter.academicYear,
+            },
+          },
+        },
+      ],
     },
   }
+
+  if (boolMust.length > 0) {
+    result['bool'] = { must: boolMust }
+  }
+
+  return result
 }

@@ -1,7 +1,6 @@
 import { Injectable, InternalServerErrorException, Logger } from '@nestjs/common'
-import { ConfigService } from '@nestjs/config'
 
-import { Client } from '@opensearch-project/opensearch'
+import { InjectOpensearchClient, OpensearchClient } from 'nestjs-opensearch'
 import { hostname } from 'os'
 
 export interface GelfLogEntry {
@@ -15,7 +14,9 @@ const CLIENTLOGGING_INDEX = 'cgr-clientlogging'
 
 @Injectable()
 export class ClientLoggingService {
-  constructor(readonly configService: ConfigService, private readonly elasticClient: Client) {}
+  constructor(
+    @InjectOpensearchClient('default') private readonly opensearchClient: OpensearchClient
+  ) {}
 
   async sendLogEntry(entry: GelfLogEntry & Record<string, string>) {
     try {
@@ -25,7 +26,7 @@ export class ClientLoggingService {
         host: hostname(),
       }
 
-      await this.elasticClient.index({
+      await this.opensearchClient.index({
         index: CLIENTLOGGING_INDEX,
         body: record,
         refresh: true,

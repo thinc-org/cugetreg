@@ -28,6 +28,7 @@
     "@nestjs/mongoose": "9.2.1",
     "@nestjs/platform-express": "9.4.0",
     "@nestjs/schedule": "2.1.0",
+    "@opensearch-project/opensearch": "2.1.0",
     "axios": "0.23.0",
     "bull": "4.10.2",
     "cheerio": "1.0.0-rc.12",
@@ -39,6 +40,7 @@
     "iconv-lite": "^0.6.3",
     "mongoose": "6.5.2",
     "nest-winston": "^1.8.0",
+    "nestjs-opensearch": "^0.3.2",
     "rxjs": "^7.8.0",
     "tough-cookie": "^4.1.2",
     "winston": "^3.8.2"

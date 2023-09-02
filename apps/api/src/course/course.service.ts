@@ -1,19 +1,15 @@
-import { UserInputError } from '@nestjs/apollo'
 import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 
-import { FilterQuery, Model } from 'mongoose'
+import { Model } from 'mongoose'
 
 import { NotFoundError } from '@api/common/errors'
-import { escapeRegExpString } from '@api/util/functions'
 
-import { Course, CourseDocument, Semester, StudyProgram } from '@cgr/schema'
-
-import { CourseGroupInput, FilterInput } from '../graphql'
+import { CourseDocument, Semester, StudyProgram } from '@cgr/schema'
 
 @Injectable()
 export class CourseService {
-  constructor(@InjectModel('course') private courseModel: Model<Course>) {}
+  constructor(@InjectModel('course') private courseModel: Model<CourseDocument>) {}
 
   async findOne(
     courseNo: string,
@@ -52,72 +48,4 @@ export class CourseService {
     }
     return courseNos
   }
-
-  async search(
-    {
-      keyword = '',
-      genEdTypes = [],
-      gradingTypes,
-      dayOfWeeks = [],
-      limit = 10,
-      offset = 0,
-      periodRange,
-    }: FilterInput,
-    { semester, academicYear, studyProgram }: CourseGroupInput
-  ): Promise<CourseDocument[]> {
-    const query = {
-      semester,
-      academicYear,
-      studyProgram,
-    } as FilterQuery<Course>
-    const escapedKeyword = escapeRegExpString(keyword.trim())
-    if (keyword) {
-      query.$or = [
-        { courseNo: new RegExp('^' + escapedKeyword, 'i') },
-        { abbrName: new RegExp(escapedKeyword, 'i') },
-        { courseNameTh: new RegExp(escapedKeyword, 'i') },
-        { courseNameEn: new RegExp(escapedKeyword, 'i') },
-      ]
-    }
-
-    if (genEdTypes.length > 0) {
-      query.genEdType = { $in: genEdTypes }
-    }
-
-    if (gradingTypes && !(gradingTypes.includes('LETTER') && gradingTypes.includes('S_U'))) {
-      if (gradingTypes.includes('LETTER')) {
-        query.creditHours = { $not: /S\/U/ }
-      } else if (gradingTypes.includes('S_U')) {
-        query.creditHours = /S\/U/
-      }
-    }
-
-    if (dayOfWeeks.length > 0) {
-      query['sections.classes.dayOfWeek'] = { $in: dayOfWeeks }
-    }
-
-    if (periodRange) {
-      const { start, end } = periodRange
-      if (!isTime(start) || !isTime(end)) {
-        throw new UserInputError('Start time or end time is invalid')
-      }
-      if (start > end) {
-        throw new UserInputError('Start time cannot be later than end time')
-      }
-      query['sections.classes'] = {
-        $elemMatch: {
-          'period.start': { $gte: start },
-          'period.end': { $lte: end },
-        },
-      }
-    }
-
-    const courses = await this.courseModel.find(query).limit(limit).skip(offset)
-    return courses
-  }
-}
-
-function isTime(timeString: string): boolean {
-  const timeRegex = /^\d{2}:\d{2}$/
-  return timeRegex.test(timeString)
 }

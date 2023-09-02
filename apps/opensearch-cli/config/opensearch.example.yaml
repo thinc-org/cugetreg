@@ -1,0 +1,4 @@
+host: https://localhost:9200
+username: admin
+password: admin
+skip-ssl: true

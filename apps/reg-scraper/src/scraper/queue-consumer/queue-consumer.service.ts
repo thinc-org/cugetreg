@@ -56,6 +56,7 @@ export class QueueConsumerService {
       {
         upsert: true,
         overwrite: true,
+        new: true,
       }
     )
 
@@ -115,7 +116,7 @@ export class QueueConsumerService {
         if (results[index].status == 'rejected') {
           const result = results[index] as PromiseRejectedResult
           this.logger.error(
-            `[Error] On ${studyProgram}-${semester}/${academicYear}: Saving Courses ${courses[index].courseNo} failed: ${result.reason}`
+            `[Error] On ${studyProgram}-${semester}/${academicYear}: Saving Courses ${courses[index].courseNo} failed: ${result.reason}`, result.reason.stack
           )
         }
       }

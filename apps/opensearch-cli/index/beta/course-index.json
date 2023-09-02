@@ -1,6 +1,6 @@
 {
   "aliases": {
-    "course-beta": {}
+    "course-dev": {}
   },
   "settings": {
     "index": {
@@ -20,6 +20,33 @@
             "lowercase",
             "decimal_digit",
             "thai_stop"
+          ]
+        },
+        "courseabbranal": {
+          "tokenizer": "trigram",
+          "filter": ["lowercase"]
+        },
+        "coursenoanal": {
+          "tokenizer": "edgegram"
+        }
+      },
+      "tokenizer": {
+        "trigram": {
+          "type": "ngram",
+          "min_gram": 3,
+          "max_gram": 3,
+          "token_chars": [
+            "letter",
+            "digit"
+          ]
+        },
+        "edgegram": {
+          "type": "edge_ngram",
+          "min_gram": 1,
+          "max_gram": 7,
+          "token_chars": [
+            "letter",
+            "digit"
           ]
         }
       }
@@ -57,10 +84,12 @@
         }
       },
       "abbrName": {
-        "type": "text"
+        "type": "text",
+        "analyzer": "courseabbranal"
       },
       "courseNo": {
-        "type": "keyword"
+        "type": "text",
+        "analyzer": "coursenoanal"
       },
       "courseNameEn": {
         "type": "text"

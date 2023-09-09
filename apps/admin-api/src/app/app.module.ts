@@ -41,6 +41,7 @@ import { AppService } from './app.service'
         introspection: true,
         cors: {
           origin: configService.get<string>('origin'),
+          credentials: true,
         },
         path: '/_api/graphql',
         context: ({ req, res }: GraphQLExpressContext) => ({ req, res }),

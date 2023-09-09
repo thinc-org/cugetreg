@@ -33,9 +33,9 @@ export class ScraperService {
     const start = new Date()
     if (this.isScraping) {
       this.logger.error(
-        'Received attempt to scrape via scheduler while already in progress. Rejected.'
+        'Received attempt to scrape via scheduler while already in progress. Exiting...'
       )
-      return
+      process.exit(1)
     }
     this.isScraping = true
 

@@ -1,5 +1,19 @@
 # api
 
+## 1.4.2
+
+### Patch Changes
+
+- Updated dependencies [a4ecf786]
+  - @cgr/schema@1.1.1
+
+## 1.4.2-beta.0
+
+### Patch Changes
+
+- Updated dependencies [a4ecf786]
+  - @cgr/schema@1.1.1-beta.0
+
 ## 1.4.1
 
 ### Patch Changes

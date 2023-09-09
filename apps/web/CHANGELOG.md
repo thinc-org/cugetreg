@@ -1,5 +1,54 @@
 # web
 
+## 1.4.2
+
+### Patch Changes
+
+- aaa57bc1: Fix midterm exam date displays as final exam
+
+## 1.4.2-beta.0
+
+### Patch Changes
+
+- aaa57bc1: Fix midterm exam date displays as final exam
+
+## 1.4.1
+
+### Patch Changes
+
+- eabd6fa8: Fix term selector out of sync
+- ff59d7bb: fix empty exam date display
+
+## 1.4.1-beta.0
+
+### Patch Changes
+
+- eabd6fa8: Fix term selector out of sync
+
+## 1.4.0
+
+### Minor Changes
+
+- e09e36f0: add 66/2 and set current to 66/1
+
+## 1.4.0-beta.0
+
+### Minor Changes
+
+- e09e36f0: add 66/2 and set current to 66/1
+
+## 1.3.3
+
+### Patch Changes
+
+- 5f27c74d: add semester 2566/1
+
+## 1.3.3-beta.0
+
+### Patch Changes
+
+- 5f27c74d: add semester 2566/1
+
 ## 1.3.2
 
 ### Patch Changes

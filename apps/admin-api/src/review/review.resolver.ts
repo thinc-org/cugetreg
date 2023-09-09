@@ -26,10 +26,8 @@ export class ReviewResolver {
     @Args('reviewId') reviewId: string,
     @Args('status') status: ReviewStatus,
     @Args('rejectionReason') rejectionReason?: string
-  ): Promise<GraphQLReview> {
-    return this.toGraphQLReview(
-      await this.reviewService.setStatus(reviewId, status, rejectionReason)
-    )
+  ): Promise<string> {
+    return await this.reviewService.setStatus(reviewId, status, rejectionReason)
   }
 
   private toGraphQLReview(rawReview: ReviewDocument): GraphQLReview {

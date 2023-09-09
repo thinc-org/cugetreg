@@ -172,7 +172,7 @@ export class ReviewService {
     reviewId: string,
     status: ReviewStatus,
     rejectionReason: string = null
-  ): Promise<ReviewDocument> {
+  ): Promise<string> {
     if (status !== 'APPROVED' && status !== 'REJECTED') {
       throw new UserInputError(`Only APPROVED and REJECTED status is supported. Got ${status}`)
     }
@@ -185,7 +185,7 @@ export class ReviewService {
     if (!review) {
       throw new NotFoundError('Review with the given id does not exist.')
     }
-    return review
+    return `${status}`
   }
 
   async setInteraction(

@@ -21,8 +21,6 @@ export default function PendingReviewsList({
     if (!called) {
       loadMore()
     }
-    console.log(year)
-    console.log(semester)
   }, [called, loadMore, year, semester])
 
   return (

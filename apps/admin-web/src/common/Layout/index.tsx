@@ -1,5 +1,7 @@
 import { Toaster } from 'react-hot-toast'
 
+import { useRouter } from 'next/router'
+
 import SideBar from '@admin-web/common/Sidebar'
 import { toastConfig } from '@admin-web/config/toastConfig'
 
@@ -10,9 +12,11 @@ interface AppProviderProps {
 }
 
 export function Layout({ children }: AppProviderProps) {
+  const router = useRouter()
+  const disableSideBar = router.pathname.startsWith('/login')
   return (
     <LayoutContainer>
-      <SideBar />
+      {!disableSideBar && <SideBar />}
       {children}
       <Toaster position="top-center" reverseOrder={false} toastOptions={toastConfig} />
     </LayoutContainer>

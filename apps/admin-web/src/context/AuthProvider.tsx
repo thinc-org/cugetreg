@@ -1,5 +1,7 @@
 import { Dispatch, SetStateAction, createContext, useContext, useState } from 'react'
 
+import { useRouter } from 'next/router'
+
 import { UserDto } from '@admin-web/common/types/UserDto'
 import { authApi } from '@admin-web/utils/authAxios'
 
@@ -25,12 +27,14 @@ export const AuthContext = createContext<IAuthContext | null>(null)
 
 export default function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<UserDto | null>(null)
+  const router = useRouter()
   const logout = async () => {
     // TODO: send api for logging user out
     try {
       const res = await authApi.get('/logout')
       console.log(res)
       setUser(null)
+      router.push('/login')
     } catch (err) {
       console.log(`Error when logging user out: ${err}`)
     }

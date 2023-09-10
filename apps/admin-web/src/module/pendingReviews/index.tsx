@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { Dispatch, SetStateAction, useState } from 'react'
+import { useState } from 'react'
 
 import PendingReviewsList from '@admin-web/module/pendingReviews/components/pendingReviewList'
 

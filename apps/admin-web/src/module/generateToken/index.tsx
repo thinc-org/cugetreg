@@ -31,6 +31,7 @@ export function GenerateToken() {
       } catch (err) {
         if (err instanceof Error) toast.error(err.message)
         else toast.error('Unknown error')
+        router.push('/login')
       }
     }
     getToken()

@@ -54,6 +54,7 @@ export default function SinglePendingReview({ data, refetchReviews }: SinglePend
       },
     })
     await refetchReviews()
+    toast.success('Approved')
   }
 
   const handleSendReject = async () => {
@@ -65,6 +66,7 @@ export default function SinglePendingReview({ data, refetchReviews }: SinglePend
       },
     })
     await refetchReviews()
+    toast.error('Rejected')
   }
 
   return (
@@ -80,10 +82,10 @@ export default function SinglePendingReview({ data, refetchReviews }: SinglePend
           </Stack>
           <Stack direction={'row'} alignItems={'center'} spacing={2}>
             <IconButton disabled={reject} onClick={handleApproved}>
-              <CheckCircleOutlineIcon color="success" />
+              <CheckCircleOutlineIcon color={reject ? 'disabled' : 'success'} />
             </IconButton>
             <IconButton disabled={reject} onClick={handleReject}>
-              <HighlightOffIcon color="warning" />
+              <HighlightOffIcon color={'warning'} />
             </IconButton>
           </Stack>
         </Stack>

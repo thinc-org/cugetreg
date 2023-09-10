@@ -30,11 +30,11 @@ export default function PendingReviewsList({
           <SinglePendingReview key={data._id} data={data} refetchReviews={refetch} />
         ))}
 
-        <Stack alignItems={'center'} paddingBottom={2}>
+        {/* <Stack alignItems={'center'} paddingBottom={2}>
           <Button variant="contained" onClick={() => loadMore()}>
             <Typography>Load more</Typography>
           </Button>
-        </Stack>
+        </Stack> */}
       </Container>
     </>
   )

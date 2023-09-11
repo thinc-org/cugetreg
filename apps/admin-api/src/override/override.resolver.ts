@@ -2,6 +2,8 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
 
 import { Override as GraphQLOverride, OverrideInput } from '@admin-api/graphql'
 
+import { GenEdType } from '@cgr/schema'
+
 import { OverrideService } from './override.service'
 
 @Resolver('Override')
@@ -9,8 +11,8 @@ export class OverrideResolver {
   constructor(private readonly overrideService: OverrideService) {}
 
   @Query('overrides')
-  getOverrides(): Promise<GraphQLOverride[]> {
-    return this.overrideService.getOverrides()
+  getOverrides(@Args('genEdType') genEdType?: GenEdType): Promise<GraphQLOverride[]> {
+    return this.overrideService.getOverrides(genEdType)
   }
 
   @Mutation('createOrUpdateOverride')

@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose'
 
 import { Model } from 'mongoose'
 
-import { Override, OverrideDocument } from '@cgr/schema'
+import { GenEdType, Override, OverrideDocument } from '@cgr/schema'
 
 import { OverrideInput } from '../graphql'
 
@@ -14,8 +14,10 @@ export class OverrideService {
     private overrideModel: Model<OverrideDocument>
   ) {}
 
-  async getOverrides(): Promise<Override[]> {
-    const result = await this.overrideModel.find()
+  async getOverrides(genEdType: GenEdType = null): Promise<Override[]> {
+    const query = {}
+    if (genEdType) query['genEdType'] = genEdType
+    const result = await this.overrideModel.find(query)
     return result
   }
 

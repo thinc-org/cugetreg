@@ -15,7 +15,7 @@ input OverrideInput {
 }
 
 type Query {
-  overrides: [Override!]!
+  overrides(genEdType: GenEdType): [Override!]!
 }
 
 type Mutation {

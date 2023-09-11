@@ -1,17 +1,30 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
-import PendingReviewsList from '@admin-web/module/pendingReviews/components/pendingReviewList'
+import { Container } from '@mui/material'
+
+import { useGetPendingReviewsLazyQuery } from '@cgr/codegen'
 
 import Topbar from './components/Topbar'
+import SinglePendingReview from './components/singlePendingReview'
 
 export function PendingReviewsPage() {
-  const [year, setYear] = useState<string>('')
-  const [semester, setSemester] = useState<string>('')
+  const [loadMore, { data: lazyData, refetch, called }] = useGetPendingReviewsLazyQuery()
+
+  useEffect(() => {
+    if (!called) {
+      loadMore()
+    }
+  }, [called, loadMore])
+
   return (
     <div>
-      <Topbar year={year} semester={semester} setYear={setYear} setSemester={setSemester} />
-      <PendingReviewsList year={year} semester={semester} />
+      <Topbar />
+      <Container disableGutters>
+        {lazyData?.pendingReviews.map((data) => (
+          <SinglePendingReview key={data._id} data={data} refetchReviews={refetch} />
+        ))}
+      </Container>
     </div>
   )
 }

@@ -14,7 +14,7 @@
     "prebuild": "rimraf dist"
   },
   "dependencies": {
-    "@apollo/server": "^4.7.1",
+    "@apollo/server": "^4.9.3",
     "@cgr/schema": "workspace:*",
     "@nestjs/apollo": "^11.0.5",
     "@nestjs/axios": "^2.0.0",

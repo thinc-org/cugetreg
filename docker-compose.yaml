@@ -1,10 +1,19 @@
 version: '3.9'
 
 services:
-  admin-api:
-    build:
-      context: .
-      dockerfile: ./apps/admin-api/Dockerfile
-    restart: always
+  mongo:
+    image: mongo:5.0.10
+    container_name: cugetreg-mongo
+    restart: unless-stopped
+    volumes:
+      - ./volumes/mongo:/data/db
     ports:
-      - 3333:3333
+      - 27017:27017
+
+  redis:
+    image: redis:latest
+    container_name: cugetreg-redis
+    volumes:
+      - ./volumes/redis:/data
+    ports:
+      - 6379:6379

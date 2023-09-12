@@ -67,4 +67,4 @@ COPY --from=builder --chown=nextjs:nodejs /app/apps/admin-web/.next/static ./app
 
 ENV PORT 4200
 
-CMD NODE_ENV=production node apps/admin-web/server.js
+CMD node apps/admin-web/server.js

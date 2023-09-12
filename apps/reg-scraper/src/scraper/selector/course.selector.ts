@@ -12,7 +12,7 @@ import {
   teachersParser,
 } from '@reg-scraper/scraper/parser'
 
-import { ClassType, Course, GenEdType, Section, Semester } from '@cgr/schema'
+import { ClassType, Course, Section, Semester } from '@cgr/schema'
 
 export async function courseSelector(
   courseHtml: string,

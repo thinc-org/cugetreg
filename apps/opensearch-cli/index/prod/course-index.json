@@ -9,18 +9,14 @@
     "analysis": {
       "filter": {
         "thai_stop": {
-          "type":       "stop",
-          "stopwords":  "_thai_"
+          "type": "stop",
+          "stopwords": "_thai_"
         }
       },
       "analyzer": {
         "thai": {
-          "tokenizer":  "thai",
-          "filter": [
-            "lowercase",
-            "decimal_digit",
-            "thai_stop"
-          ]
+          "tokenizer": "thai",
+          "filter": ["lowercase", "decimal_digit", "thai_stop"]
         },
         "courseabbranal": {
           "tokenizer": "trigram",
@@ -35,19 +31,13 @@
           "type": "ngram",
           "min_gram": 3,
           "max_gram": 3,
-          "token_chars": [
-            "letter",
-            "digit"
-          ]
+          "token_chars": ["letter", "digit"]
         },
         "edgegram": {
           "type": "edge_ngram",
           "min_gram": 1,
           "max_gram": 7,
-          "token_chars": [
-            "letter",
-            "digit"
-          ]
+          "token_chars": ["letter", "digit"]
         }
       }
     }

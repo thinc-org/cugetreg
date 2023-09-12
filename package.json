@@ -20,14 +20,14 @@
     "@cgr/project-config": "workspace:*",
     "@changesets/changelog-github": "^0.4.8",
     "@changesets/cli": "^2.26.0",
-    "@trivago/prettier-plugin-sort-imports": "^4.0.0",
-    "prettier": "latest",
-    "prettier-plugin-organize-imports": "^3.2.2",
+    "@trivago/prettier-plugin-sort-imports": "^4.2.0",
+    "prettier": "^3.0.3",
+    "prettier-plugin-organize-imports": "^3.2.3",
     "turbo": "latest"
   },
   "engines": {
     "node": "^18.12",
     "pnpm": ">=8"
   },
-  "packageManager": "pnpm@8.1.1"
+  "packageManager": "pnpm@8.7.5"
 }

@@ -8,6 +8,9 @@ import { apiUrl } from '@admin-web/services/httpClient'
 const createHttpLink = () =>
   new BatchHttpLink({
     uri: `${apiUrl}/graphql`,
+
+    // For cross-site cookie
+    credentials: 'include',
   })
 
 const authLink = setContext(async (_, { headers }) => {
@@ -24,6 +27,11 @@ export const client = new ApolloClient({
   link: authLink.concat(createHttpLink()),
   cache: new InMemoryCache(),
   connectToDevTools: ENVIRONMENT !== 'production',
+  defaultOptions: {
+    mutate: {
+      errorPolicy: 'all',
+    },
+  },
 })
 
 export function createApolloServerClient() {

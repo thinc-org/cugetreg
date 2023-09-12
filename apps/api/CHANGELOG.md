@@ -1,5 +1,19 @@
 # api
 
+## 1.6.0-beta.0
+
+### Minor Changes
+
+- 7282ea1e: Enhance search engine with Elasticsearch
+- 79af67e9: bump mongoose to 6.12 (fix vulnerabilities)
+
+### Patch Changes
+
+- 8d9d304b: bump eslint and fix ci
+- Updated dependencies [8d9d304b]
+- Updated dependencies [79af67e9]
+  - @cgr/schema@1.2.0-beta.0
+
 ## 1.5.0
 
 ### Minor Changes

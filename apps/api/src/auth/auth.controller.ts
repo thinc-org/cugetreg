@@ -19,7 +19,10 @@ import { AuthService } from './auth.service'
 
 @Controller('auth')
 export class AuthController {
-  constructor(readonly authService: AuthService, readonly configService: ConfigService) {}
+  constructor(
+    readonly authService: AuthService,
+    readonly configService: ConfigService
+  ) {}
 
   @Get('/google')
   @Redirect()

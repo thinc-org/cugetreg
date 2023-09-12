@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { BadRequestException, Logger } from '@nestjs/common'
+import { BadRequestException } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { Args, Query, Resolver } from '@nestjs/graphql'
 

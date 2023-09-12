@@ -1,5 +1,14 @@
 # web
 
+## 1.6.1-beta.0
+
+### Patch Changes
+
+- 8d9d304b: bump eslint and fix ci
+- Updated dependencies [8d9d304b]
+  - @cgr/course-utils@1.0.3-beta.0
+  - @cgr/codegen@1.2.1-beta.0
+
 ## 1.6.0
 
 ### Minor Changes

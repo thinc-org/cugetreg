@@ -1,15 +1,7 @@
 import { parse } from 'date-fns'
 import { th } from 'date-fns/locale'
 
-import {
-  Course,
-  DayOfWeek,
-  ExamPeriod,
-  GenEdType,
-  Period,
-  Section,
-  StudyProgram,
-} from '@cgr/schema'
+import { DayOfWeek, ExamPeriod, Period, Section, StudyProgram } from '@cgr/schema'
 
 export function examDateParser(dateTh: string): ExamPeriod {
   if (dateTh[0] === 'T') {

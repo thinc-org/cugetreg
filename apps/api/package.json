@@ -1,6 +1,6 @@
 {
   "name": "api",
-  "version": "1.4.2",
+  "version": "1.5.0",
   "private": true,
   "scripts": {
     "dev": "nest start --watch",
@@ -38,6 +38,7 @@
     "@nestjs/passport": "7.1.5",
     "@nestjs/platform-express": "9.4.0",
     "@opensearch-project/opensearch": "2.1.0",
+    "nestjs-opensearch": "^0.3.2",
     "@slack/webhook": "6.0.0",
     "@typegoose/typegoose": "9.1.0",
     "class-transformer": "0.3.1",

@@ -16,9 +16,11 @@ export interface Configuration {
   slackWebhookUrl: string
   reviewDashboardUrl: string
   env: string
-  elasticUrl: string
-  elasticUsername: string
-  elasticPassword: string
+  opensearchUrl: string
+  opensearchUsername: string
+  opensearchPassword: string
+  opensearchSkipSSL: boolean
+  courseIndexName: string
 }
 
 export const configuration = (): Configuration => {
@@ -37,9 +39,11 @@ export const configuration = (): Configuration => {
     slackWebhookUrl: process.env.SLACK_WEBHOOK_URL,
     reviewDashboardUrl: process.env.REVIEW_DASHBOARD_URL,
     env: process.env.ENV || 'development',
-    elasticUrl: process.env.ELASTIC_URL,
-    elasticUsername: process.env.ELASTIC_USERNAME,
-    elasticPassword: process.env.ELASTIC_PASSWORD,
+    opensearchUrl: process.env.OPENSEARCH_URL,
+    opensearchUsername: process.env.OPENSEARCH_USERNAME,
+    opensearchPassword: process.env.OPENSEARCH_PASSWORD,
+    opensearchSkipSSL: process.env.OPENSEARCH_SKIP_SSL === 'true',
+    courseIndexName: process.env.COURSE_INDEX_NAME,
   }
 }
 
@@ -50,9 +54,10 @@ const requiredConfigs = [
   'adminToken',
   'computationBackendUrl',
   'backendPublicUrl',
-  'elasticUrl',
-  'elasticUsername',
-  'elasticPassword',
+  'opensearchUrl',
+  'opensearchUsername',
+  'opensearchPassword',
+  'courseIndexName',
 ]
 
 export function validateConfig(configService: ConfigService<Configuration>): void {

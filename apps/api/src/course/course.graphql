@@ -103,6 +103,11 @@ input FilterInput {
   genEdTypes: [GenEdType!]
 
   """
+  List of `GradingTypes`. This filter is passed IF the course's has S/U in Credit Hours. If both filter are given, filters have no effect.
+  """
+  gradingTypes: [GradingType!]
+
+  """
   List of `DayOfWeeks`. This filter is passed IF ANY of the course's sections have class in ANY of the `dayOfWeeks` in the list.
   """
   dayOfWeeks: [DayOfWeek!]

@@ -38,7 +38,7 @@
     "date-fns": "^2.29.3",
     "http-cookie-agent": "^5.0.2",
     "iconv-lite": "^0.6.3",
-    "mongoose": "6.5.2",
+    "mongoose": "6.12.0",
     "nest-winston": "^1.8.0",
     "nestjs-opensearch": "^0.3.2",
     "rxjs": "^7.8.0",

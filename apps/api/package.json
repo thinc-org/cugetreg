@@ -49,7 +49,7 @@
     "googleapis-common": "5.0.5",
     "graphql": "16.6.0",
     "jsonschema": "^1.4.1",
-    "mongoose": "6.5.2",
+    "mongoose": "6.12.0",
     "nest-winston": "^1.8.0",
     "passport": "0.6.0",
     "passport-jwt": "4.0.0",

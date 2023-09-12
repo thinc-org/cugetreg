@@ -33,7 +33,7 @@
     "class-validator": "0.14.0",
     "cookie-parser": "1.4.6",
     "graphql": "16.6.0",
-    "mongoose": "6.5.2",
+    "mongoose": "6.12.0",
     "rxjs": "^7.8.0"
   },
   "devDependencies": {

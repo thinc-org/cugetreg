@@ -11,7 +11,7 @@
     "dev": "pnpm build"
   },
   "dependencies": {
-    "mongoose": "6.5.2"
+    "mongoose": "6.12.0"
   },
   "devDependencies": {
     "eslint": "8.34.0",

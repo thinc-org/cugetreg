@@ -1,1 +1,11 @@
-.env.*local
+# ENV files
+.env.local
+
+.env.development
+.env.production
+.env.local.development
+.env.local.production
+
+generate-typings.js
+
+dist

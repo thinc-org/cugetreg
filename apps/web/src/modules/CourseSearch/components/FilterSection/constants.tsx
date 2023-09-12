@@ -1,7 +1,7 @@
-import { DayChipKey, GenEdChipKey } from '@web/common/components/Chips/config'
+import { DayChipKey, GenEdChipKey, GradingChipKey } from '@web/common/components/Chips/config'
 import { CreateCheckbox } from '@web/modules/CourseSearch/components/FilterSection/hooks/useFilterBar'
 
-import { DayOfWeek, GenEdType } from '@cgr/codegen'
+import { DayOfWeek, GenEdType, GradingType } from '@cgr/codegen'
 
 export const createGenEdCheckboxes: CreateCheckbox<GenEdChipKey>[] = [
   {
@@ -23,6 +23,17 @@ export const createGenEdCheckboxes: CreateCheckbox<GenEdChipKey>[] = [
   {
     label: 'ไม่ใช่ GenEd',
     value: GenEdType.No,
+  },
+]
+
+export const createGradingCheckboxes: CreateCheckbox<GradingChipKey>[] = [
+  {
+    label: 'S/U Grade',
+    value: GradingType.SU,
+  },
+  {
+    label: 'Letter Grade',
+    value: GradingType.Letter,
   },
 ]
 

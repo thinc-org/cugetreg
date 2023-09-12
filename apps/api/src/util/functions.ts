@@ -46,3 +46,8 @@ export function findAvgRating(reviews: Review[]): string {
 export function escapeRegExpString(str: string): string {
   return str.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&')
 }
+
+export function isTime(timeString: string): boolean {
+  const timeRegex = /^\d{2}:\d{2}$/
+  return timeRegex.test(timeString)
+}

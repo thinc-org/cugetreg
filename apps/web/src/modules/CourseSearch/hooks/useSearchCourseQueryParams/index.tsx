@@ -29,6 +29,7 @@ export const useSearchCourseQueryParams = () => {
         endTime: filterVars?.periodRange?.end,
         keyword: filterVars.keyword,
         genEdTypes: filterVars.genEdTypes?.join(','),
+        gradingTypes: filterVars.gradingTypes?.join(','),
         dayOfWeeks: filterVars.dayOfWeeks?.join(','),
       }
 

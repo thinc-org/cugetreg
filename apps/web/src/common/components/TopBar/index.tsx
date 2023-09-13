@@ -1,11 +1,21 @@
 import { useRouter } from 'next/router'
 
 import { AnnouncementBar } from './components/AnnouncementBar'
+import { getAnnouncement1, getNotRegChulaWarning } from './components/AnnouncementBar/announcements'
 import { ConfigBar } from './components/ConfigBar'
 import { ConfigBarLayout } from './components/ConfigBar/styled'
 import { NavBar } from './components/NavBar'
 import { NavBarLayout } from './components/NavBar/styled'
 import { StickyContainer, StickySpace, TopBarLayout } from './styled'
+
+export function AnnouncementSection() {
+  return (
+    <>
+      <AnnouncementBar announcement={getAnnouncement1()} />
+      <AnnouncementBar announcement={getNotRegChulaWarning()} />
+    </>
+  )
+}
 
 export function TopBar() {
   const { pathname } = useRouter()
@@ -22,7 +32,7 @@ export function TopBar() {
           </TopBarLayout>
           <StickySpace />
         </StickyContainer>
-        <AnnouncementBar />
+        <AnnouncementSection />
       </>
     )
   }
@@ -33,7 +43,7 @@ export function TopBar() {
         <ConfigBar />
         <NavBar />
       </TopBarLayout>
-      <AnnouncementBar />
+      <AnnouncementSection />
     </>
   )
 }

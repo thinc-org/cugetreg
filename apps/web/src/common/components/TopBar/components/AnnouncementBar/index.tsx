@@ -1,36 +1,34 @@
-import React from 'react'
-import { useEffect, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 
 import { Alert, Container, styled } from '@mui/material'
 
 import { Storage } from '@web/common/storage'
 import { StorageKey } from '@web/common/storage/constants'
 
-import { getCurrentAnnoucement } from './announcements'
-import { AnnoucementItem } from './types'
+import { AnnouncementItem } from './types'
 
 const AlertContainer = styled(Container)`
   padding-top: 16px;
 `
 
-export const AnnouncementBar: React.FC = () => {
-  const currentAnnoucement = getCurrentAnnoucement()
+type AnnouncementBarProps = { announcement: AnnouncementItem }
 
+export const AnnouncementBar: FC<AnnouncementBarProps> = ({ announcement }) => {
   const [show, setShow] = useState(false)
 
   useEffect(() => {
     const storage = new Storage('localStorage')
-    const seenAnnoucements = storage.get<AnnoucementItem[]>(StorageKey.SeenAnnoucements) ?? []
-    const seen = seenAnnoucements.some(({ id }) => id === currentAnnoucement.id)
+    const seenAnnoucements = storage.get<AnnouncementItem[]>(StorageKey.SeenAnnoucements) ?? []
+    const seen = seenAnnoucements.some(({ id }) => id === announcement.id)
     setShow(!seen)
-  }, [currentAnnoucement])
+  }, [announcement])
 
   const handleClose = () => {
     const storage = new Storage('localStorage')
-    const seenAnnoucements = storage.get<AnnoucementItem[]>(StorageKey.SeenAnnoucements) ?? []
-    storage.set<AnnoucementItem[]>(StorageKey.SeenAnnoucements, [
+    const seenAnnoucements = storage.get<AnnouncementItem[]>(StorageKey.SeenAnnoucements) ?? []
+    storage.set<AnnouncementItem[]>(StorageKey.SeenAnnoucements, [
       ...seenAnnoucements,
-      currentAnnoucement,
+      announcement,
     ])
     setShow(false)
   }
@@ -41,8 +39,8 @@ export const AnnouncementBar: React.FC = () => {
 
   return (
     <AlertContainer>
-      <Alert onClose={handleClose} severity="info">
-        {currentAnnoucement.label}
+      <Alert onClose={handleClose} severity={announcement.severity}>
+        {announcement.label}
       </Alert>
     </AlertContainer>
   )

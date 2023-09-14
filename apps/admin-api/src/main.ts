@@ -7,8 +7,10 @@ import { ConfigService } from '@nestjs/config'
 import { NestFactory } from '@nestjs/core'
 import { NestExpressApplication } from '@nestjs/platform-express'
 
+import cookieParser from 'cookie-parser'
+
 import { AppModule } from './app/app.module'
-import { Configuration, validateConfig } from './config/configuration'
+import { Configuration } from './config/configuration'
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule)
@@ -22,8 +24,10 @@ async function bootstrap() {
 
   // Enable CORS policy
   const origin = configService.get<string>('origin')
-  app.enableCors({ origin: origin })
+  app.enableCors({ origin: origin, credentials: true })
   app.set('trust proxy', 1)
+
+  app.use(cookieParser())
 
   // Setup application port
   const port = configService.get<number>('port') || 3333

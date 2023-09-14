@@ -13,5 +13,11 @@
     "@cgr/project-config": "1.0.0",
     "@cgr/schema": "1.1.1"
   },
-  "changesets": []
+  "changesets": [
+    "change",
+    "enhance-search-engine",
+    "thin-houses-rhyme",
+    "unlucky-cars-hang",
+    "violet-sloths-reply"
+  ]
 }

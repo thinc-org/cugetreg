@@ -1,11 +1,13 @@
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo'
-import { Logger, Module } from '@nestjs/common'
+import { Module } from '@nestjs/common'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { GraphQLModule } from '@nestjs/graphql'
 import { MongooseModule } from '@nestjs/mongoose'
 
 import { GraphQLError } from 'graphql'
 import { join } from 'path'
+
+import { SearchModule } from '@api/search/search.module'
 
 import { AuthModule } from '../auth/auth.module'
 import { ClientLoggingModule } from '../clientlogging/clientlogging.module'
@@ -81,6 +83,7 @@ import { AppService } from './app.service'
     ClientLoggingModule,
     OverrideModule,
     ComputationModule,
+    SearchModule,
   ],
   controllers: [AppController],
   providers: [AppService],

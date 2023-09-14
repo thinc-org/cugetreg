@@ -39,3 +39,7 @@ mutation SetReviewInteraction($reviewId: String!, $interactionType: ReviewIntera
     ...ReviewDataFields
   }
 }
+
+mutation SetReviewStatus($reviewId: String!, $status: ReviewStatus!, $rejectionReason: String) {
+  setReviewStatus(reviewId: $reviewId, status: $status, rejectionReason: $rejectionReason)
+}

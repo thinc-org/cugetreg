@@ -18,6 +18,13 @@ export interface Configuration {
     studyPrograms: string[]
     semesters: string[]
   }
+  opensearch: {
+    url: string
+    username: string
+    password: string
+    skipSSL: boolean
+  }
+  courseIndexName: string
 }
 
 export const configuration = (): Configuration => ({
@@ -37,6 +44,13 @@ export const configuration = (): Configuration => ({
     studyPrograms: process.env.SCRAPER_STUDY_PROGRAMS?.split(','),
     semesters: process.env.SCRAPER_SEMESTERS?.split(','),
   },
+  opensearch: {
+    url: process.env.OPENSEARCH_URL,
+    username: process.env.OPENSEARCH_USERNAME,
+    password: process.env.OPENSEARCH_PASSWORD,
+    skipSSL: process.env.OPENSEARCH_SKIP_SSL === 'true',
+  },
+  courseIndexName: process.env.COURSE_INDEX_NAME,
 })
 
 const requiredConfigs = [

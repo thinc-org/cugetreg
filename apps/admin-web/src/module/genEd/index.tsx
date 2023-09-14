@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react'
 
-import { useRouter } from 'next/router'
-
 import { useGetOverridesQuery } from '@cgr/codegen'
 
 import AddGenEdDialog from './components/AddGenEdDialog'

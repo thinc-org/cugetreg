@@ -2,7 +2,7 @@ import { ApolloClient, InMemoryCache } from '@apollo/client'
 import { BatchHttpLink } from '@apollo/client/link/batch-http'
 import { setContext } from '@apollo/client/link/context'
 
-import { ADMIN_ACCESS_TOKEN, ENVIRONMENT } from '@admin-web/env'
+import { ENVIRONMENT } from '@admin-web/env'
 import { apiUrl } from '@admin-web/services/httpClient'
 
 const createHttpLink = () =>
@@ -14,7 +14,7 @@ const createHttpLink = () =>
   })
 
 const authLink = setContext(async (_, { headers }) => {
-  const accessToken = ADMIN_ACCESS_TOKEN
+  const accessToken = 'ADMIN_ACCESS_TOKEN'
   return {
     headers: {
       ...headers,

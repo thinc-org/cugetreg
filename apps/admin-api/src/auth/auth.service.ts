@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, Logger } from '@nestjs/common'
+import { Injectable, Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { JwtService } from '@nestjs/jwt'
 
@@ -10,7 +10,10 @@ import { TokenUrlResponse, UserInfoDto } from './auth.dto'
 export class AuthService {
   logger: Logger
 
-  constructor(private configService: ConfigService, private jwtService: JwtService) {
+  constructor(
+    private configService: ConfigService,
+    private jwtService: JwtService
+  ) {
     this.logger = new Logger('Auth Service')
   }
 

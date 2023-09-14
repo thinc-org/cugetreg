@@ -1,4 +1,4 @@
-import { BadRequestException, Controller, Get, Logger, Post, Query, Req, Res } from '@nestjs/common'
+import { BadRequestException, Controller, Get, Logger, Query, Req, Res } from '@nestjs/common'
 
 import { Request, Response } from 'express'
 

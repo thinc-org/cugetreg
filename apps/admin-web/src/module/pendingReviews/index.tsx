@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 
 import { Container } from '@mui/material'
 

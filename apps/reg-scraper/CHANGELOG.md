@@ -1,5 +1,11 @@
 # reg-scraper
 
+## 1.2.0-beta.1
+
+### Minor Changes
+
+- bfda7a77: use cas url instead
+
 ## 1.2.0-beta.0
 
 ### Minor Changes

@@ -1,5 +1,11 @@
 # admin-web
 
+## 1.0.0-beta.2
+
+### Patch Changes
+
+- 02c4acbe: fix broken build in previous release
+
 ## 1.0.0-beta.1
 
 ### Major Changes

@@ -1,5 +1,11 @@
 # web
 
+## 1.7.0-beta.2
+
+### Patch Changes
+
+- 02c4acbe: fix broken build in previous release
+
 ## 1.7.0-beta.1
 
 ### Minor Changes

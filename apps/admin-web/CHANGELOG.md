@@ -1,5 +1,11 @@
 # admin-web
 
+## 1.0.0-beta.1
+
+### Major Changes
+
+- f771ad38: init admin-api and admin-web
+
 ## 0.1.2-beta.0
 
 ### Patch Changes

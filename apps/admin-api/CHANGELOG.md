@@ -1,5 +1,11 @@
 # admin-api
 
+## 1.0.0-beta.3
+
+### Patch Changes
+
+- 7fe7a910: Fix health check path in admin-api
+
 ## 1.0.0-beta.2
 
 ### Patch Changes

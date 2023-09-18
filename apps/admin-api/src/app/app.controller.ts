@@ -5,14 +5,19 @@ import { Request } from 'express'
 
 import { AuthService } from '@admin-api/auth/auth.service'
 import { JwtAuthGuard } from '@admin-api/auth/oidc.guard'
+import { SkipAuth } from '@admin-api/common/decorators/SkipAuth'
 
 import { AppService } from './app.service'
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService, private readonly authService: AuthService) {}
+  constructor(
+    private readonly appService: AppService,
+    private readonly authService: AuthService
+  ) {}
 
   @Get()
+  @SkipAuth()
   getHello(): string {
     return this.appService.getHello()
   }

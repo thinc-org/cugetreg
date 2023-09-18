@@ -5,6 +5,7 @@ import { Request } from 'express'
 
 import { AuthService } from '@admin-api/auth/auth.service'
 import { JwtAuthGuard } from '@admin-api/auth/oidc.guard'
+import { SkipAuth } from '@admin-api/common/decorators/SkipAuth'
 
 import { AppService } from './app.service'
 
@@ -16,6 +17,7 @@ export class AppController {
   ) {}
 
   @Get()
+  @SkipAuth()
   getHello(): string {
     return this.appService.getHello()
   }

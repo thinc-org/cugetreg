@@ -16,6 +16,7 @@
   "changesets": [
     "change",
     "enhance-search-engine",
+    "fix-health-check",
     "old-insects-sit",
     "spotty-gifts-flash",
     "thin-houses-rhyme",

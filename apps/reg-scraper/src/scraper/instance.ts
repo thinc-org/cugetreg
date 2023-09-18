@@ -5,7 +5,7 @@ import tough from 'tough-cookie'
 
 // make instance for collecting cookie
 export const instance = axios.create({
-  baseURL: 'https://www2.reg.chula.ac.th',
+  baseURL: 'https://cas.reg.chula.ac.th',
   withCredentials: true,
   responseType: 'arraybuffer',
   httpsAgent: new HttpsCookieAgent({

@@ -23,7 +23,7 @@ export const ProtectedRoutes = (props: ProctectedRoutesProps) => {
   useEffect(() => {
     if (!router) return
     if (unProtectedRoutes.includes(router.pathname)) return
-    if (!!user) return
+    if (user) return
 
     const loadUserData = async () => {
       try {

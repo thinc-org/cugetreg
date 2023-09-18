@@ -1,5 +1,3 @@
-import { ReactNode } from 'react'
-
 import { FormControl, MenuItem, SelectChangeEvent } from '@mui/material'
 
 import { StyledInputLabel, StyledSelect } from './styled'

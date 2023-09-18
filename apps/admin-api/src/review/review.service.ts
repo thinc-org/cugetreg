@@ -39,10 +39,10 @@ export class ReviewService {
     if (!this.webhook) {
       return
     }
-    const dashBoardUrl = this.configService.get<string>('dashBoardUrl')
+    const reviewDashboardUrl = this.configService.get<string>('reviewDashboardUrl')
     this.logger.log(`sent alert`)
     return this.webhook.send({
-      text: `A new review is created for course ${review.courseNo} ${review.studyProgram} ${review.semester}/${review.academicYear}. Review them now in <${dashBoardUrl}|Review Dashboard>.`,
+      text: `A new review is created for course ${review.courseNo} ${review.studyProgram} ${review.semester}/${review.academicYear}. Review them now in <${reviewDashboardUrl}|Review Dashboard>.`,
     })
   }
 

@@ -1,5 +1,11 @@
 # admin-web
 
+## 1.0.0-beta.3
+
+### Patch Changes
+
+- c0c50c24: edit .env for admin-web
+
 ## 1.0.0-beta.2
 
 ### Patch Changes

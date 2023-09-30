@@ -46,7 +46,7 @@
     "google-auth-library": "^8.7.0",
     "googleapis": "88.2.0",
     "googleapis-common": "5.0.5",
-    "graphql": "16.6.0",
+    "graphql": "16.8.1",
     "jsonschema": "^1.4.1",
     "mongoose": "6.12.0",
     "nest-winston": "^1.8.0",

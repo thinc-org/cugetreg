@@ -1,5 +1,13 @@
 # @cgr/course-utils
 
+## 1.0.3
+
+### Patch Changes
+
+- 8d9d304b: bump eslint and fix ci
+- Updated dependencies [8d9d304b]
+  - @cgr/codegen@1.2.1
+
 ## 1.0.3-beta.0
 
 ### Patch Changes

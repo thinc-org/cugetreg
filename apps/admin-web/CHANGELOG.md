@@ -1,5 +1,20 @@
 # admin-web
 
+## 1.0.0
+
+### Major Changes
+
+- f771ad38: init admin-api and admin-web
+
+### Patch Changes
+
+- c0c50c24: edit .env for admin-web
+- 02c4acbe: fix broken build in previous release
+- 8d9d304b: bump eslint and fix ci
+- Updated dependencies [8d9d304b]
+  - @cgr/course-utils@1.0.3
+  - @cgr/codegen@1.2.1
+
 ## 1.0.0-beta.3
 
 ### Patch Changes

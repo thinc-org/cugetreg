@@ -1,5 +1,11 @@
 # @cgr/codegen
 
+## 1.2.1
+
+### Patch Changes
+
+- 8d9d304b: bump eslint and fix ci
+
 ## 1.2.1-beta.0
 
 ### Patch Changes

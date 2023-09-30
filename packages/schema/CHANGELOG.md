@@ -1,5 +1,15 @@
 # @cgr/schema
 
+## 1.2.0
+
+### Minor Changes
+
+- 79af67e9: bump mongoose to 6.12 (fix vulnerabilities)
+
+### Patch Changes
+
+- 8d9d304b: bump eslint and fix ci
+
 ## 1.2.0-beta.0
 
 ### Minor Changes

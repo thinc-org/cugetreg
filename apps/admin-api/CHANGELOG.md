@@ -1,5 +1,24 @@
 # admin-api
 
+## 1.0.0
+
+### Major Changes
+
+- f771ad38: init admin-api and admin-web
+
+### Minor Changes
+
+- 79af67e9: bump mongoose to 6.12 (fix vulnerabilities)
+
+### Patch Changes
+
+- 7fe7a910: Fix health check path in admin-api
+- 02c4acbe: fix broken build in previous release
+- 8d9d304b: bump eslint and fix ci
+- Updated dependencies [8d9d304b]
+- Updated dependencies [79af67e9]
+  - @cgr/schema@1.2.0
+
 ## 1.0.0-beta.3
 
 ### Patch Changes

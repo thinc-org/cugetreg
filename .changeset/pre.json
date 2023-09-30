@@ -1,0 +1,17 @@
+{
+  "mode": "pre",
+  "tag": "beta",
+  "initialVersions": {
+    "admin-api": "1.0.0",
+    "admin-web": "1.0.0",
+    "api": "1.6.0",
+    "reg-scraper": "1.2.0",
+    "web": "1.7.0",
+    "web-e2e": "0.0.1",
+    "@cgr/codegen": "1.2.1",
+    "@cgr/course-utils": "1.0.3",
+    "@cgr/project-config": "1.0.1",
+    "@cgr/schema": "1.2.0"
+  },
+  "changesets": []
+}

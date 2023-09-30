@@ -1,5 +1,11 @@
 # @cgr/project-config
 
+## 1.0.1
+
+### Patch Changes
+
+- 8d9d304b: bump eslint and fix ci
+
 ## 1.0.1-beta.0
 
 ### Patch Changes

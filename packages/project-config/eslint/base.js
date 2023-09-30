@@ -17,10 +17,13 @@ const config = {
       'warn',
       { vars: 'all', varsIgnorePattern: '^_', args: 'after-used', argsIgnorePattern: '^_' },
     ],
+    '@typescript-eslint/no-unused-vars': 'warn',
+    '@typescript-eslint/no-explicit-any': 'warn',
   },
   ignorePatterns: [
     '.next',
     'dist',
+    'apps/admin-api/src/graphql.ts',
     'apps/api/src/graphql.ts',
     'packages/codegen/src/generated/index.tsx',
   ],

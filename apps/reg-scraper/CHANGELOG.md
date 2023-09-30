@@ -1,5 +1,24 @@
 # reg-scraper
 
+## 1.2.0-beta.1
+
+### Minor Changes
+
+- bfda7a77: use cas url instead
+
+## 1.2.0-beta.0
+
+### Minor Changes
+
+- 79af67e9: bump mongoose to 6.12 (fix vulnerabilities)
+
+### Patch Changes
+
+- 8d9d304b: bump eslint and fix ci
+- Updated dependencies [8d9d304b]
+- Updated dependencies [79af67e9]
+  - @cgr/schema@1.2.0-beta.0
+
 ## 1.1.3
 
 ### Patch Changes

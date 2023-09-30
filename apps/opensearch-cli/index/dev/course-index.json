@@ -1,0 +1,112 @@
+{
+  "aliases": {
+    "course-dev": {}
+  },
+  "settings": {
+    "index": {
+      "number_of_shards": 1
+    },
+    "analysis": {
+      "filter": {
+        "thai_stop": {
+          "type": "stop",
+          "stopwords": "_thai_"
+        }
+      },
+      "analyzer": {
+        "thai": {
+          "tokenizer": "thai",
+          "filter": ["lowercase", "decimal_digit", "thai_stop"]
+        },
+        "courseabbranal": {
+          "tokenizer": "trigram",
+          "filter": ["lowercase"]
+        },
+        "coursenoanal": {
+          "tokenizer": "edgegram"
+        }
+      },
+      "tokenizer": {
+        "trigram": {
+          "type": "ngram",
+          "min_gram": 3,
+          "max_gram": 3,
+          "token_chars": ["letter", "digit"]
+        },
+        "edgegram": {
+          "type": "edge_ngram",
+          "min_gram": 1,
+          "max_gram": 7,
+          "token_chars": ["letter", "digit"]
+        }
+      }
+    }
+  },
+  "mappings": {
+    "properties": {
+      "rawData": {
+        "type": "nested",
+        "properties": {
+          "sections": {
+            "type": "nested",
+            "properties": {
+              "classes": {
+                "type": "nested",
+                "properties": {
+                  "dayOfWeek": {
+                    "type": "keyword"
+                  },
+                  "period": {
+                    "type": "nested",
+                    "properties": {
+                      "start": {
+                        "type": "keyword"
+                      },
+                      "end": {
+                        "type": "keyword"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "abbrName": {
+        "type": "text",
+        "analyzer": "courseabbranal"
+      },
+      "courseNo": {
+        "type": "text",
+        "analyzer": "coursenoanal"
+      },
+      "courseNameEn": {
+        "type": "text"
+      },
+      "courseDescEn": {
+        "type": "text"
+      },
+      "courseNameTh": {
+        "type": "text",
+        "analyzer": "thai"
+      },
+      "courseDescTh": {
+        "type": "text",
+        "analyzer": "thai"
+      },
+      "genEdType": {
+        "type": "keyword"
+      },
+      "studyProgram": {
+        "type": "keyword"
+      },
+      "semester": {
+        "type": "keyword"
+      },
+      "academicYear": {
+        "type": "keyword"
+      }
+    }
+  }
+}

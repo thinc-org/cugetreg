@@ -59,7 +59,10 @@ const clientLogDtoArraySchema = {
 
 @Controller('clientlogging')
 export class ClientLoggingController {
-  constructor(readonly loggingService: ClientLoggingService, readonly jwtService: JwtService) {}
+  constructor(
+    readonly loggingService: ClientLoggingService,
+    readonly jwtService: JwtService
+  ) {}
 
   @Post()
   async postClientLog(@Body() dtos: ClientLogDto[], @Req() req: Request) {

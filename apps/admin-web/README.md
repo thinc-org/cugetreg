@@ -2,11 +2,7 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
-First, create .env.local with the following variables:
-
-1. NEXT_PUBLIC_ENVIRONMENT (could be "local")
-2. NEXT_PUBLIC_BACKEND_URL (backend url)
-3. NEXT_PUBLIC_ADMIN_ACCESS_TOKEN
+Create .env.local with the variables in .env.example
 
 ```bash
 npm run dev

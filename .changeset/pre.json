@@ -13,5 +13,8 @@
     "@cgr/project-config": "1.0.1",
     "@cgr/schema": "1.2.0"
   },
-  "changesets": []
+  "changesets": [
+    "nasty-pandas-burn",
+    "silent-pants-attack"
+  ]
 }

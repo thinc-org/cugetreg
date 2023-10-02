@@ -1,5 +1,11 @@
 # web-e2e
 
+## 0.1.0-beta.0
+
+### Minor Changes
+
+- 61d07e46: chore: bump patch and minor deps
+
 ## 0.0.1
 
 ### Patch Changes

@@ -11,27 +11,27 @@
   },
   "devDependencies": {
     "@types/node": "18.11.18",
-    "@types/react": "18.0.20",
-    "@types/react-dom": "18.0.6",
-    "eslint": "8.49.0",
-    "typescript": "~4.7.4"
+    "@types/react": "18.2.24",
+    "@types/react-dom": "18.2.8",
+    "eslint": "8.50.0",
+    "typescript": "~5.2.2"
   },
   "dependencies": {
-    "@apollo/client": "^3.7.7",
+    "@apollo/client": "^3.8.4",
     "@cgr/codegen": "workspace:*",
     "@cgr/course-utils": "workspace:*",
-    "@emotion/react": "11.10.4",
-    "@emotion/styled": "11.10.4",
-    "@mui/icons-material": "5.8.4",
-    "@mui/material": "5.9.1",
-    "@mui/styled-engine-sc": "^5.11.0",
-    "@next/font": "13.1.6",
+    "@emotion/react": "11.11.1",
+    "@emotion/styled": "11.11.0",
+    "@mui/icons-material": "5.14.11",
+    "@mui/material": "5.14.11",
+    "@mui/styled-engine-sc": "^5.14.11",
+    "@next/font": "13.5.3",
     "axios": "0.23.0",
     "isomorphic-dompurify": "0.20.0",
-    "next": "^13.0.0",
+    "next": "^13.5.3",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-hot-toast": "2.3.0",
+    "react-hot-toast": "2.4.1",
     "styled-components": "5.3.5"
   }
 }

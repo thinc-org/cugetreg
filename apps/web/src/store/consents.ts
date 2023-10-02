@@ -1,5 +1,5 @@
 import { getCookie, setCookies } from 'cookies-next'
-import create from 'zustand'
+import { create } from 'zustand'
 
 import { CookieKey } from '@web/common/constants/cookie'
 import { Tracker } from '@web/common/tracker'

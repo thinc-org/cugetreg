@@ -11,7 +11,7 @@
     "prebuild": "rimraf dist"
   },
   "devDependencies": {
-    "@nestjs/cli": "^9.0.0",
+    "@nestjs/cli": "^9.5.0",
     "@types/cookie-parser": "^1.4.4",
     "@types/express": "^4.17.18",
     "@types/jest": "29.5.5",
@@ -28,7 +28,7 @@
     "@cgr/schema": "workspace:*",
     "@grpc/grpc-js": "1.9.4",
     "@grpc/proto-loader": "0.7.10",
-    "@nestjs/apollo": "^11.0.5",
+    "@nestjs/apollo": "^11.0.6",
     "@nestjs/common": "9.4.0",
     "@nestjs/config": "2.2.0",
     "@nestjs/core": "9.4.0",
@@ -43,7 +43,7 @@
     "class-transformer": "0.3.1",
     "class-validator": "0.14.0",
     "cookie-parser": "1.4.6",
-    "google-auth-library": "^8.7.0",
+    "google-auth-library": "^8.9.0",
     "googleapis": "88.2.0",
     "googleapis-common": "5.0.5",
     "graphql": "16.8.1",

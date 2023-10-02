@@ -53,6 +53,57 @@ export function buildCourseQuery(filter: ICourseSearchFilter): Record<string, an
     })
   }
 
+  const containsSU = filter.gradingTypes?.includes('S_U')
+  const containsLetter = filter.gradingTypes?.includes('LETTER')
+
+  if (filter.gradingTypes && !(containsSU && containsLetter)) {
+    if (containsLetter) {
+      boolMust.push({
+        nested: {
+          path: 'rawData',
+          query: {
+            nested: {
+              path: 'rawData.creditHours',
+              query: {
+                bool: {
+                  must_not: [
+                    {
+                      wildcard: {
+                        'rawData.creditHours': '*S/U*',
+                      },
+                    },
+                  ],
+                },
+              },
+            },
+          },
+        },
+      })
+    } else if (containsSU) {
+      boolMust.push({
+        nested: {
+          path: 'rawData',
+          query: {
+            nested: {
+              path: 'rawData.creditHours',
+              query: {
+                bool: {
+                  must: [
+                    {
+                      wildcard: {
+                        'rawData.creditHours': '*S/U*',
+                      },
+                    },
+                  ],
+                },
+              },
+            },
+          },
+        },
+      })
+    }
+  }
+
   if (sectionsQuery.length > 0) {
     boolMust.push({
       nested: {

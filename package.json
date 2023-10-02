@@ -19,11 +19,11 @@
   "devDependencies": {
     "@cgr/project-config": "workspace:*",
     "@changesets/changelog-github": "^0.4.8",
-    "@changesets/cli": "^2.26.0",
+    "@changesets/cli": "^2.26.2",
     "@trivago/prettier-plugin-sort-imports": "^4.2.0",
     "prettier": "^3.0.3",
     "prettier-plugin-organize-imports": "^3.2.3",
-    "turbo": "latest"
+    "turbo": "^1.10.14"
   },
   "engines": {
     "node": "^18.12",

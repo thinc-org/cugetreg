@@ -1,16 +1,15 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo } from 'react'
 
 import { Link, Typography, styled, useTheme } from '@mui/material'
 import { observer } from 'mobx-react'
 
 import { Analytics } from '@web/common/context/Analytics/components/Analytics'
 import { useCourseGroup } from '@web/common/hooks/useCourseGroup'
-import { useCourseSearchProvider } from '@web/modules/CourseSearch/context/CourseSearch/hooks/useCourseSearchProvider'
 import { useSearchCourseQueryParams } from '@web/modules/CourseSearch/hooks/useSearchCourseQueryParams'
 import { collectLogEvent } from '@web/services/logging'
 import { courseCartStore } from '@web/store'
 
-import { SearchCourseQueryVariables, useRecommendCourseTextLazyQuery } from '@cgr/codegen'
+import { useRecommendCourseTextQuery } from '@cgr/codegen'
 
 import { SelectedCourse } from './types'
 
@@ -30,13 +29,17 @@ const RecommendationText: React.FC<RecommendationTextProps> = (props: Recommenda
   const selectedCourses = props.selectedCourses
   const courseGroup = useCourseGroup()
 
-  const { courseSearchQuery } = useCourseSearchProvider()
   const { setFilter } = useSearchCourseQueryParams()
-  const [lastSearchQuery, setLastSearchQuery] = useState<SearchCourseQueryVariables | undefined>(
-    undefined
-  )
 
-  const [fetchRecommendation, { data }] = useRecommendCourseTextLazyQuery()
+  const { data } = useRecommendCourseTextQuery({
+    variables: {
+      req: {
+        variant,
+        semesterKey: courseGroup,
+        selectedCourses: selectedCourses,
+      },
+    },
+  })
 
   const visibleRecommendation = useMemo(() => data?.recommend?.courses?.slice(0, 6) ?? [], [data])
   const theme = useTheme()
@@ -53,27 +56,6 @@ const RecommendationText: React.FC<RecommendationTextProps> = (props: Recommenda
       },
     })
   }, [data, variant])
-
-  useEffect(() => {
-    if (JSON.stringify(courseSearchQuery.variables) === JSON.stringify(lastSearchQuery)) return
-    fetchRecommendation({
-      variables: {
-        req: {
-          variant,
-          semesterKey: courseGroup,
-          selectedCourses: selectedCourses,
-        },
-      },
-    })
-    setLastSearchQuery(courseSearchQuery.variables)
-  }, [
-    courseSearchQuery.variables,
-    selectedCourses,
-    courseGroup,
-    fetchRecommendation,
-    lastSearchQuery,
-    variant,
-  ])
 
   if (!visibleRecommendation || visibleRecommendation.length === 0) return null
 

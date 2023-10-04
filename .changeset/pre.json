@@ -14,6 +14,7 @@
     "@cgr/schema": "1.2.0"
   },
   "changesets": [
+    "lucky-phones-listen",
     "nasty-pandas-burn",
     "silent-pants-attack"
   ]

@@ -1,5 +1,11 @@
 # web
 
+## 1.8.0-beta.1
+
+### Patch Changes
+
+- ee1ff5fe: fix: recommendation crashing website (unexpected behavior of useEffect)
+
 ## 1.8.0-beta.0
 
 ### Minor Changes

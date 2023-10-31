@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"encoding/json"
 	"flag"
 	"fmt"
 	"github.com/opensearch-project/opensearch-go/v2"
@@ -18,6 +19,7 @@ import (
 var (
 	fileName  string
 	indexName string
+	destName  string
 	isDebug   bool
 	indexCmd  *flag.FlagSet
 )
@@ -28,6 +30,7 @@ func init() {
 	indexCmd = flag.NewFlagSet("index", flag.ExitOnError)
 
 	indexCmd.StringVar(&indexName, "index-name", "", "Index name")
+	indexCmd.StringVar(&destName, "dest", "", "Destination index name")
 	indexCmd.StringVar(&fileName, "filename", "", "Index filename")
 	indexCmd.BoolVar(&isDebug, "debug", false, "Enable the debug log")
 	flag.Parse()
@@ -74,6 +77,26 @@ func main() {
 
 			fmt.Println(strings.Repeat("_", 65))
 			fmt.Printf("successfully create the index, %s \n", indexName)
+		case "reindex":
+			if err := handleReindex(client); err != nil {
+				logger.Fatal(
+					"Error while creating the index",
+					zap.Error(err),
+				)
+			}
+
+			fmt.Println(strings.Repeat("_", 65))
+			fmt.Printf("successfully reindex from %s to %s \n", indexName, destName)
+		case "delete":
+			if err := handleDeleteIndex(client); err != nil {
+				logger.Fatal(
+					"Error while creating the index",
+					zap.Error(err),
+				)
+			}
+
+			fmt.Println(strings.Repeat("_", 65))
+			fmt.Printf("successfully delete the index, %s \n", indexName)
 		default:
 			logger.Fatal("Invalid input (invalid command)")
 		}
@@ -134,6 +157,70 @@ func handleCreateIndex(client *opensearch.Client) error {
 	res, err := client.Indices.Create(
 		indexName,
 		client.Indices.Create.WithBody(bytes.NewReader(indexJsonRaw)),
+	)
+
+	if err != nil {
+		return err
+	}
+
+	if res.IsError() {
+		return errors.New(res.String())
+	}
+
+	return nil
+}
+
+type ReIndexBody struct {
+	Source struct {
+		Index string `json:"index"`
+	} `json:"source"`
+
+	Dest struct {
+		Index string `json:"index"`
+	} `json:"dest"`
+}
+
+func handleReindex(client *opensearch.Client) error {
+	if err := indexCmd.Parse(os.Args[3:]); err != nil {
+		return err
+	}
+
+	req, err := json.Marshal(ReIndexBody{
+		Source: struct {
+			Index string `json:"index"`
+		}{Index: indexName},
+
+		Dest: struct {
+			Index string `json:"index"`
+		}{Index: destName},
+	})
+
+	if err != nil {
+		return err
+	}
+
+	res, err := client.Reindex(
+		bytes.NewReader(req),
+	)
+
+	if err != nil {
+		return err
+	}
+
+	if res.IsError() {
+		return errors.New(res.String())
+	}
+
+	return nil
+}
+
+func handleDeleteIndex(client *opensearch.Client) error {
+	if err := indexCmd.Parse(os.Args[3:]); err != nil {
+		return err
+	}
+
+	res, err := client.Indices.Delete(
+		[]string{indexName},
 	)
 
 	if err != nil {

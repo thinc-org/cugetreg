@@ -26,3 +26,42 @@ go run ./cli/app.go index create --index-name=<index name> --filename=<filename>
 ```shell
 go run ./cli/app.go index create --index-name=course-dev-1 --filename=dev/course-index.json
 ```
+
+# Reindex
+
+```shell
+go run ./cli/app.go index reindex --index-name=<source index name> --dest=<dest index name> --debug=<true/false>
+```
+
+| name       | description                        |
+| ---------- | ---------------------------------- |
+| index name | name of index                      |
+| dest       | name of destination index          |
+| debug      | enable debug mode (`true`/`false`) |
+
+## Example
+
+### Reindex from course-dev-1 to course-dev-2
+
+```shell
+go run ./cli/app.go index reindex --index-name=course-dev-1 --dest=course-dev-2
+```
+
+# Delete Index
+
+```shell
+go run ./cli/app.go index reindex --index-name=<source index name> --dest=<dest index name> --debug=<true/false>
+```
+
+| name       | description                        |
+|------------|------------------------------------|
+| index name | name of index                      |
+| debug      | enable debug mode (`true`/`false`) |
+
+## Example
+
+### Delete index course-dev-1
+
+```shell
+go run ./cli/app.go index delete --index-name=course-dev-1
+```

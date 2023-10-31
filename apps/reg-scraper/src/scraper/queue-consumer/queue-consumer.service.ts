@@ -78,6 +78,12 @@ export class QueueConsumerService {
           semester: course.semester,
           studyProgram: course.studyProgram,
           creditHours: course.creditHours,
+          suggestions: [
+            {
+              input: [course.courseNo, course.abbrName, course.courseNameEn, course.courseNameTh],
+              weight: 20,
+            },
+          ],
         } as CourseDoc,
         doc_as_upsert: true,
       },

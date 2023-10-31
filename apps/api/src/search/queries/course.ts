@@ -4,6 +4,8 @@ import { ICourseSearchFilter } from '@api/course/course.resolver'
 export function buildCourseQuery(filter: ICourseSearchFilter): Record<string, any> {
   // create the base query from values that guarantee is not undefined
   const boolMust: Record<string, any>[] = []
+  const boolMustNot: Record<string, any>[] = []
+  const boolFilter: Record<string, any>[] = []
 
   if (filter.keyword) {
     boolMust.push({
@@ -56,50 +58,14 @@ export function buildCourseQuery(filter: ICourseSearchFilter): Record<string, an
   const containsSU = filter.gradingTypes?.includes('S_U')
   const containsLetter = filter.gradingTypes?.includes('LETTER')
 
-  if (filter.gradingTypes && !(containsSU && containsLetter)) {
-    if (containsLetter) {
-      boolMust.push({
-        nested: {
-          path: 'rawData',
-          query: {
-            nested: {
-              path: 'rawData.creditHours',
-              query: {
-                bool: {
-                  must_not: [
-                    {
-                      wildcard: {
-                        'rawData.creditHours': '*S/U*',
-                      },
-                    },
-                  ],
-                },
-              },
-            },
-          },
-        },
+  if (filter.gradingTypes?.length > 0 && !(containsSU && containsLetter)) {
+    if (containsSU) {
+      boolFilter.push({
+        wildcard: { creditHours: { value: '*(S/U)*' } },
       })
-    } else if (containsSU) {
-      boolMust.push({
-        nested: {
-          path: 'rawData',
-          query: {
-            nested: {
-              path: 'rawData.creditHours',
-              query: {
-                bool: {
-                  must: [
-                    {
-                      wildcard: {
-                        'rawData.creditHours': '*S/U*',
-                      },
-                    },
-                  ],
-                },
-              },
-            },
-          },
-        },
+    } else if (containsLetter) {
+      boolMustNot.push({
+        wildcard: { creditHours: { value: '*(S/U)*' } },
       })
     }
   }
@@ -155,9 +121,7 @@ export function buildCourseQuery(filter: ICourseSearchFilter): Record<string, an
     },
   }
 
-  if (boolMust.length > 0) {
-    result['bool'] = { must: boolMust }
-  }
+  result['bool'] = { must: boolMust, must_not: boolMustNot, filter: boolFilter }
 
   return result
 }

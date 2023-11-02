@@ -1,6 +1,7 @@
 import React, { createRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import GetAppRoundedIcon from '@mui/icons-material/GetAppRounded'
 import { Button, Typography, useMediaQuery, useTheme } from '@mui/material'
 import { observer } from 'mobx-react'
 
@@ -118,12 +119,17 @@ export const SchedulePage = observer(() => {
         <InfoSpacer />
         <ButtonBar>
           {!isExamTable && <SaveImgButton imageRef={ref} />}
-          <Button variant="outlined" disabled>
-            {t('addToCalendar')}
-          </Button>
-          <Button variant="outlined" onClick={() => downloadExamSchedules(shopItems)}>
-            ตารางสอบ (.ics)
-          </Button>
+          {!isExamTable && (
+            <Button variant="outlined" disabled>
+              {t('addToCalendar')}
+            </Button>
+          )}
+          {isExamTable && (
+            <Button variant="outlined" onClick={() => downloadExamSchedules(shopItems)}>
+              <GetAppRoundedIcon />
+              ตารางสอบ (.ics)
+            </Button>
+          )}
           <LinkWithAnalytics href={buildLink(`/schedule/cr11`)} passHref elementName={CR11_BUTTON}>
             <Button style={{ marginRight: 0 }} variant="outlined">
               {isDesktop ? t('showCR11') : t('showCR11Mobile')}

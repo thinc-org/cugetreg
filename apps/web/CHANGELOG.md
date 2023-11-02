@@ -1,5 +1,11 @@
 # web
 
+## 1.8.0-beta.3
+
+### Minor Changes
+
+- 9a97af74: feat(web): exam ics improvement
+
 ## 1.8.0-beta.2
 
 ### Minor Changes

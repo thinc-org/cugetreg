@@ -47,7 +47,7 @@ export const shoppingPanel = {
 export const schedulePage = {
   title: 'จัดตารางเรียน',
   downloadPng: 'PNG',
-  addToCalendar: 'Google Calendar',
+  addToCalendar: 'ตารางเรียน (Soon)',
   showCR11: 'แสดง จท11',
   showCR11Mobile: 'จท11',
   sumCreditsDesc: 'หน่วยกิตรวมในตาราง',

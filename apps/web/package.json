@@ -73,6 +73,7 @@
     "escape-html": "^1.0.3",
     "framer-motion": "7.1.0",
     "html2canvas": "1.4.1",
+    "ics": "^3.5.0",
     "isomorphic-dompurify": "0.20.0",
     "md5": "2.3.0",
     "mobx": "6.10.2",

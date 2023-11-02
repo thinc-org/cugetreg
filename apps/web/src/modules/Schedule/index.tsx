@@ -28,6 +28,7 @@ import {
   useTimetableClasses,
 } from './components/Schedule/utils'
 import { ScheduleTable } from './components/ScheduleTable'
+import { downloadExamSchedules } from './ics'
 import {
   ButtonBar,
   ExamContainer,
@@ -119,6 +120,9 @@ export const SchedulePage = observer(() => {
           {!isExamTable && <SaveImgButton imageRef={ref} />}
           <Button variant="outlined" disabled>
             {t('addToCalendar')}
+          </Button>
+          <Button variant="outlined" onClick={() => downloadExamSchedules(shopItems)}>
+            ตารางสอบ (.ics)
           </Button>
           <LinkWithAnalytics href={buildLink(`/schedule/cr11`)} passHref elementName={CR11_BUTTON}>
             <Button style={{ marginRight: 0 }} variant="outlined">

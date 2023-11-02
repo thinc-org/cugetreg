@@ -1,5 +1,11 @@
 # web
 
+## 1.8.0-beta.2
+
+### Minor Changes
+
+- 8c220883: feat(web): download exam ics
+
 ## 1.8.0-beta.1
 
 ### Patch Changes

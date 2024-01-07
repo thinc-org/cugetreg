@@ -1,5 +1,11 @@
 # web
 
+## 1.8.0-beta.4
+
+### Minor Changes
+
+- c6e294bd: update current semester
+
 ## 1.8.0-beta.3
 
 ### Minor Changes

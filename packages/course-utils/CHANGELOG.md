@@ -1,5 +1,16 @@
 # @cgr/course-utils
 
+## 1.1.0-beta.0
+
+### Minor Changes
+
+- 61d07e46: chore: bump patch and minor deps
+
+### Patch Changes
+
+- Updated dependencies [61d07e46]
+  - @cgr/codegen@1.3.0-beta.0
+
 ## 1.0.3
 
 ### Patch Changes

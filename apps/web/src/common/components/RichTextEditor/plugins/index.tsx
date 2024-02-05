@@ -81,8 +81,11 @@ export const plugins = createPlugins(
     components: {
       /** Element */
       [ELEMENT_BLOCKQUOTE]: BlockquoteElement,
+      // @ts-expect-error incompatible types
       [ELEMENT_H1]: withProps(StyledElement, { as: 'h1' }),
+      // @ts-expect-error incompatible types
       [ELEMENT_LI]: withProps(StyledElement, { as: 'li' }),
+      // @ts-expect-error incompatible types
       [ELEMENT_UL]: withProps(StyledElement, {
         as: 'ul',
         styles: {
@@ -92,6 +95,7 @@ export const plugins = createPlugins(
           `,
         },
       }),
+      // @ts-expect-error incompatible types
       [ELEMENT_OL]: withProps(StyledElement, {
         as: 'ol',
         styles: {
@@ -101,6 +105,7 @@ export const plugins = createPlugins(
           `,
         },
       }),
+      // @ts-expect-error incompatible types
       [ELEMENT_PARAGRAPH]: withProps(StyledElement, {
         as: 'p',
         styles: {
@@ -112,10 +117,15 @@ export const plugins = createPlugins(
         prefixClassNames: 'p',
       }),
       /** Mark */
+      // @ts-expect-error incompatible types
       [MARK_BOLD]: withProps(StyledLeaf, { as: 'strong' }),
+      // @ts-expect-error incompatible types
       [MARK_CODE]: withProps(StyledLeaf, { as: 'code' }),
+      // @ts-expect-error incompatible types
       [MARK_ITALIC]: withProps(StyledLeaf, { as: 'em' }),
+      // @ts-expect-error incompatible types
       [MARK_STRIKETHROUGH]: withProps(StyledLeaf, { as: 's' }),
+      // @ts-expect-error incompatible types
       [MARK_UNDERLINE]: withProps(StyledLeaf, { as: 'u' }),
     },
   }

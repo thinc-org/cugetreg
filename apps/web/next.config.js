@@ -34,13 +34,13 @@ const nextConfig = {
     ]
   },
   output: 'standalone',
+  transpilePackages: ['@cgr/course-utils', '@cgr/codegen'],
   experimental: {
     outputFileTracingRoot: path.join(__dirname, '../../'),
-    transpilePackages: ['@cgr/course-utils', '@cgr/codegen'],
   },
   eslint: {
     ignoreDuringBuilds: true,
-  }
+  },
 }
 
 module.exports = nextConfig

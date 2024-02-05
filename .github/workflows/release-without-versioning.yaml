@@ -26,7 +26,6 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18]
         os: [ubuntu-latest]
 
     runs-on: ${{ matrix.os }}
@@ -39,20 +38,19 @@ jobs:
 
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version-file: .nvmrc
 
       - name: Install pnpm
-        uses: pnpm/action-setup@v2.2.2
+        uses: pnpm/action-setup@v2
         id: pnpm-install
         with:
-          version: 8
           run_install: false
 
       - name: Install turbo

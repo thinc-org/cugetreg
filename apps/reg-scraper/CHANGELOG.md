@@ -1,5 +1,17 @@
 # reg-scraper
 
+## 1.3.0
+
+### Minor Changes
+
+- 9b7de076: chore: bump deps and webpack
+- 61d07e46: chore: bump patch and minor deps
+
+### Patch Changes
+
+- Updated dependencies [61d07e46]
+  - @cgr/schema@1.3.0
+
 ## 1.3.0-beta.0
 
 ### Minor Changes

@@ -1,5 +1,22 @@
 # web
 
+## 1.8.0
+
+### Minor Changes
+
+- 9b7de076: chore: bump deps and webpack
+- c6e294bd: update current semester
+- 9a97af74: feat(web): exam ics improvement
+- 61d07e46: chore: bump patch and minor deps
+- 8c220883: feat(web): download exam ics
+
+### Patch Changes
+
+- ee1ff5fe: fix: recommendation crashing website (unexpected behavior of useEffect)
+- Updated dependencies [61d07e46]
+  - @cgr/course-utils@1.1.0
+  - @cgr/codegen@1.3.0
+
 ## 1.8.0-beta.4
 
 ### Minor Changes

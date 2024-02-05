@@ -1,5 +1,11 @@
 # @cgr/project-config
 
+## 1.1.0
+
+### Minor Changes
+
+- 61d07e46: chore: bump patch and minor deps
+
 ## 1.1.0-beta.0
 
 ### Minor Changes

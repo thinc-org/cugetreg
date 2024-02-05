@@ -1,5 +1,11 @@
 # @cgr/codegen
 
+## 1.3.0
+
+### Minor Changes
+
+- 61d07e46: chore: bump patch and minor deps
+
 ## 1.3.0-beta.0
 
 ### Minor Changes

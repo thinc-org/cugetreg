@@ -1,5 +1,16 @@
 # reg-scraper
 
+## 1.4.0-beta.0
+
+### Minor Changes
+
+- 4f342ee: deps: upgrade to node 20 and bump all patch-minor
+
+### Patch Changes
+
+- Updated dependencies [4f342ee]
+  - @cgr/schema@1.4.0-beta.0
+
 ## 1.3.0
 
 ### Minor Changes

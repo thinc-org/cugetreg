@@ -44,7 +44,7 @@ jobs:
 
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: ${{ inputs.gitops-repository }}
           ref: ${{ inputs.gitops-ref }}
@@ -87,6 +87,7 @@ jobs:
           PACKAGES: ${{ inputs.packages }}
 
       - name: Create Pull Request to GitOps
+        # TODO Migrate
         uses: peter-evans/create-pull-request@v4
         if: ${{ inputs.mode == 'pr' }}
         with:

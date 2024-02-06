@@ -48,7 +48,6 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18]
         os: [ubuntu-latest]
 
     runs-on: ${{ matrix.os }}
@@ -66,21 +65,20 @@ jobs:
 
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           # related to issue, https://github.com/changesets/action/issues/201
           fetch-depth: 0
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version-file: .nvmrc
 
       - name: Install pnpm
-        uses: pnpm/action-setup@v2.2.2
+        uses: pnpm/action-setup@v2
         id: pnpm-install
         with:
-          version: 8
           run_install: false
 
       - name: Get pnpm store directory
@@ -89,7 +87,7 @@ jobs:
           echo "::set-output name=pnpm_cache_dir::$(pnpm store path)"
 
       - name: Setup pnpm cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ${{ steps.pnpm-cache.outputs.pnpm_cache_dir }}
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
@@ -100,7 +98,7 @@ jobs:
 
       - name: Create Versioning Pull Request
         id: changesets
-        uses: changesets/action@v1.4.1
+        uses: changesets/action@v1
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:

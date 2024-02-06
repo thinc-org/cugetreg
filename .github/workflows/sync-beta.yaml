@@ -17,7 +17,6 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18]
         os: [ubuntu-latest]
 
     runs-on: ${{ matrix.os }}
@@ -27,7 +26,7 @@ jobs:
 
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: beta
           fetch-depth: 0

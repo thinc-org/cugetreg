@@ -1,5 +1,13 @@
 # @cgr/course-utils
 
+## 1.2.0-beta.1
+
+### Patch Changes
+
+- c0e5777: feat: next 14 and minor dependencies
+- Updated dependencies [c0e5777]
+  - @cgr/codegen@1.4.0-beta.1
+
 ## 1.2.0-beta.0
 
 ### Minor Changes

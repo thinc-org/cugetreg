@@ -1,5 +1,11 @@
 # web-e2e
 
+## 0.2.0-beta.1
+
+### Patch Changes
+
+- c0e5777: feat: next 14 and minor dependencies
+
 ## 0.2.0-beta.0
 
 ### Minor Changes

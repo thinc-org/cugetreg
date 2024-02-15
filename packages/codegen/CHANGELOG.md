@@ -1,5 +1,11 @@
 # @cgr/codegen
 
+## 1.4.0-beta.1
+
+### Minor Changes
+
+- c0e5777: feat: next 14 and minor dependencies
+
 ## 1.4.0-beta.0
 
 ### Minor Changes

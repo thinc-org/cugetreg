@@ -14,6 +14,7 @@
     "@cgr/schema": "1.3.0"
   },
   "changesets": [
-    "sixty-waves-tie"
+    "sixty-waves-tie",
+    "tiny-cheetahs-yawn"
   ]
 }

@@ -5,129 +5,131 @@ export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
+export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 const defaultOptions = {} as const;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: string;
-  String: string;
-  Boolean: boolean;
-  Int: number;
-  Float: number;
-  Date: any;
+  ID: { input: string; output: string; }
+  String: { input: string; output: string; }
+  Boolean: { input: boolean; output: boolean; }
+  Int: { input: number; output: number; }
+  Float: { input: number; output: number; }
+  Date: { input: any; output: any; }
 };
 
 export type Capacity = {
   __typename?: 'Capacity';
-  current: Scalars['Int'];
-  max: Scalars['Int'];
+  current: Scalars['Int']['output'];
+  max: Scalars['Int']['output'];
 };
 
 export type Class = {
   __typename?: 'Class';
-  building?: Maybe<Scalars['String']>;
+  building?: Maybe<Scalars['String']['output']>;
   dayOfWeek?: Maybe<DayOfWeek>;
   period?: Maybe<Period>;
-  room?: Maybe<Scalars['String']>;
-  teachers: Array<Scalars['String']>;
-  type: Scalars['String'];
+  room?: Maybe<Scalars['String']['output']>;
+  teachers: Array<Scalars['String']['output']>;
+  type: Scalars['String']['output'];
 };
 
 export type Course = {
   __typename?: 'Course';
-  abbrName: Scalars['String'];
-  academicYear: Scalars['String'];
-  courseCondition: Scalars['String'];
+  abbrName: Scalars['String']['output'];
+  academicYear: Scalars['String']['output'];
+  courseCondition: Scalars['String']['output'];
   /** @deprecated Use courseDescTh or courseDescEn instead */
-  courseDesc?: Maybe<Scalars['String']>;
-  courseDescEn?: Maybe<Scalars['String']>;
-  courseDescTh?: Maybe<Scalars['String']>;
-  courseNameEn: Scalars['String'];
-  courseNameTh: Scalars['String'];
-  courseNo: Scalars['String'];
-  credit: Scalars['Float'];
-  creditHours: Scalars['String'];
-  department: Scalars['String'];
-  faculty: Scalars['String'];
+  courseDesc?: Maybe<Scalars['String']['output']>;
+  courseDescEn?: Maybe<Scalars['String']['output']>;
+  courseDescTh?: Maybe<Scalars['String']['output']>;
+  courseNameEn: Scalars['String']['output'];
+  courseNameTh: Scalars['String']['output'];
+  courseNo: Scalars['String']['output'];
+  credit: Scalars['Float']['output'];
+  creditHours: Scalars['String']['output'];
+  department: Scalars['String']['output'];
+  faculty: Scalars['String']['output'];
   final?: Maybe<ExamPeriod>;
   /** `GenEdType` of this course. If this course is not a GenEd course, the value will be `NO`. */
   genEdType: GenEdType;
   midterm?: Maybe<ExamPeriod>;
-  rating?: Maybe<Scalars['String']>;
+  rating?: Maybe<Scalars['String']['output']>;
   sections: Array<Section>;
-  semester: Scalars['String'];
+  semester: Scalars['String']['output'];
   studyProgram: StudyProgram;
 };
 
 export type CourseCartItem = {
   __typename?: 'CourseCartItem';
-  academicYear: Scalars['String'];
-  color?: Maybe<Scalars['String']>;
-  courseNo: Scalars['String'];
-  isHidden: Scalars['Boolean'];
+  academicYear: Scalars['String']['output'];
+  color?: Maybe<Scalars['String']['output']>;
+  courseNo: Scalars['String']['output'];
+  isHidden: Scalars['Boolean']['output'];
   /** The section no. that user selected for this course. */
-  selectedSectionNo: Scalars['String'];
-  semester: Scalars['String'];
-  studyProgram: Scalars['String'];
+  selectedSectionNo: Scalars['String']['output'];
+  semester: Scalars['String']['output'];
+  studyProgram: Scalars['String']['output'];
 };
 
 export type CourseCartItemInput = {
-  academicYear: Scalars['String'];
-  color?: InputMaybe<Scalars['String']>;
-  courseNo: Scalars['String'];
-  isHidden: Scalars['Boolean'];
+  academicYear: Scalars['String']['input'];
+  color?: InputMaybe<Scalars['String']['input']>;
+  courseNo: Scalars['String']['input'];
+  isHidden: Scalars['Boolean']['input'];
   /** The section no. that user selected for this course. */
-  selectedSectionNo: Scalars['String'];
-  semester: Scalars['String'];
+  selectedSectionNo: Scalars['String']['input'];
+  semester: Scalars['String']['input'];
   studyProgram: StudyProgram;
 };
 
 export type CourseDetail = {
   __typename?: 'CourseDetail';
-  courseNameEn: Scalars['String'];
+  courseNameEn: Scalars['String']['output'];
   key: CourseKey;
 };
 
 export type CourseEntry = {
   __typename?: 'CourseEntry';
-  courseId: Scalars['String'];
-  studyProgram: Scalars['String'];
+  courseId: Scalars['String']['output'];
+  studyProgram: Scalars['String']['output'];
 };
 
 export type CourseEntryInput = {
-  courseId: Scalars['String'];
-  studyProgram: Scalars['String'];
+  courseId: Scalars['String']['input'];
+  studyProgram: Scalars['String']['input'];
 };
 
 /** Combination of `semester`, `academicYear`, and `studyProgram`. Used to differentiate courses between time periods and program. */
 export type CourseGroupInput = {
-  academicYear: Scalars['String'];
-  semester: Scalars['String'];
+  academicYear: Scalars['String']['input'];
+  semester: Scalars['String']['input'];
   studyProgram: StudyProgram;
 };
 
 export type CourseKey = {
   __typename?: 'CourseKey';
-  courseNo: Scalars['String'];
+  courseNo: Scalars['String']['output'];
   semesterKey: SemesterKey;
 };
 
 export type CourseKeyInput = {
-  courseNo: Scalars['String'];
+  courseNo: Scalars['String']['input'];
   semesterKey: CourseGroupInput;
 };
 
 /** List of all course nos. in all `studyPrograms`. */
 export type CourseNosOutput = {
   __typename?: 'CourseNosOutput';
-  I: Array<Scalars['String']>;
-  S: Array<Scalars['String']>;
-  T: Array<Scalars['String']>;
+  I: Array<Scalars['String']['output']>;
+  S: Array<Scalars['String']['output']>;
+  T: Array<Scalars['String']['output']>;
 };
 
 export type CourseRecommendationRequest = {
   selectedCourses: Array<CourseKeyInput>;
   semesterKey: CourseGroupInput;
-  variant: Scalars['String'];
+  variant: Scalars['String']['input'];
 };
 
 export type CourseRecommendationResponse = {
@@ -137,12 +139,12 @@ export type CourseRecommendationResponse = {
 
 /** Review data for creating a review. Course no. and `studyProgram` cannot be changed later. */
 export type CreateReviewInput = {
-  academicYear: Scalars['String'];
-  content?: InputMaybe<Scalars['String']>;
-  courseNo: Scalars['String'];
+  academicYear: Scalars['String']['input'];
+  content?: InputMaybe<Scalars['String']['input']>;
+  courseNo: Scalars['String']['input'];
   /** Rating of the course. Value must be in range [0, 10] */
-  rating: Scalars['Int'];
-  semester: Scalars['String'];
+  rating: Scalars['Int']['input'];
+  semester: Scalars['String']['input'];
   studyProgram: StudyProgram;
 };
 
@@ -162,18 +164,18 @@ export enum DayOfWeek {
 
 /** Review data for editing a review. Fields that are not specified will not be changed. */
 export type EditReviewInput = {
-  academicYear?: InputMaybe<Scalars['String']>;
-  content?: InputMaybe<Scalars['String']>;
+  academicYear?: InputMaybe<Scalars['String']['input']>;
+  content?: InputMaybe<Scalars['String']['input']>;
   /** Rating of the course. Value must be in range [0, 10] */
-  rating?: InputMaybe<Scalars['Int']>;
-  semester?: InputMaybe<Scalars['String']>;
+  rating?: InputMaybe<Scalars['Int']['input']>;
+  semester?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** Pair of exam date and period. */
 export type ExamPeriod = {
   __typename?: 'ExamPeriod';
   /** Date of the exam. The value is formatted as ISO8601 representation: `YYYY-MM-DDT00:00:00.000Z`. */
-  date?: Maybe<Scalars['String']>;
+  date?: Maybe<Scalars['String']['output']>;
   period?: Maybe<Period>;
 };
 
@@ -190,11 +192,11 @@ export type FilterInput = {
    * `courseNameTh`, or `courseNameEn` contains the keyword as a substring (except for `courseNo`
    * which checks if value **starts with** the keyword).
    */
-  keyword?: InputMaybe<Scalars['String']>;
+  keyword?: InputMaybe<Scalars['String']['input']>;
   /** Number of courses to return in this query. Used for pagination. */
-  limit?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
   /** Number of courses to skip through. Used for pagination. */
-  offset?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   /**
    * Range of the classes' period. This filter is passed IF ANY of the course's sections
    * have class that intersects with the `periodRange`.
@@ -267,7 +269,7 @@ export type Mutation = {
    *
    * Requires admin authentication.
    */
-  setReviewStatus: Scalars['String'];
+  setReviewStatus: Scalars['String']['output'];
 };
 
 
@@ -282,13 +284,13 @@ export type MutationCreateReviewArgs = {
 
 
 export type MutationDeleteOverrideArgs = {
-  courseNo: Scalars['String'];
+  courseNo: Scalars['String']['input'];
 };
 
 
 export type MutationEditMyReviewArgs = {
   review: EditReviewInput;
-  reviewId: Scalars['String'];
+  reviewId: Scalars['String']['input'];
 };
 
 
@@ -298,46 +300,46 @@ export type MutationModifyCourseCartArgs = {
 
 
 export type MutationRemoveReviewArgs = {
-  reviewId: Scalars['String'];
+  reviewId: Scalars['String']['input'];
 };
 
 
 export type MutationSetReviewInteractionArgs = {
   interactionType: ReviewInteractionType;
-  reviewId: Scalars['String'];
+  reviewId: Scalars['String']['input'];
 };
 
 
 export type MutationSetReviewStatusArgs = {
-  rejectionReason?: InputMaybe<Scalars['String']>;
-  reviewId: Scalars['String'];
+  rejectionReason?: InputMaybe<Scalars['String']['input']>;
+  reviewId: Scalars['String']['input'];
   status: ReviewStatus;
 };
 
 /** Course override for overriding course info from Reg Chula during course scraping. */
 export type Override = {
   __typename?: 'Override';
-  courseNo: Scalars['String'];
+  courseNo: Scalars['String']['output'];
   genEdType: GenEdType;
 };
 
 /** Course override for overriding course info from Reg Chula during course scraping. */
 export type OverrideInput = {
-  courseNo: Scalars['String'];
+  courseNo: Scalars['String']['input'];
   genEdType: GenEdType;
 };
 
 /** Pair of start and end time. Format is `HH:MM`. */
 export type Period = {
   __typename?: 'Period';
-  end?: Maybe<Scalars['String']>;
-  start?: Maybe<Scalars['String']>;
+  end?: Maybe<Scalars['String']['output']>;
+  start?: Maybe<Scalars['String']['output']>;
 };
 
 /** Filter for searching courses that have class inside the given time period. */
 export type PeriodRangeInput = {
-  end: Scalars['String'];
-  start: Scalars['String'];
+  end: Scalars['String']['input'];
+  start: Scalars['String']['input'];
 };
 
 export type Query = {
@@ -380,12 +382,12 @@ export type Query = {
 
 export type QueryCourseArgs = {
   courseGroup: CourseGroupInput;
-  courseNo: Scalars['String'];
+  courseNo: Scalars['String']['input'];
 };
 
 
 export type QueryMyPendingReviewsArgs = {
-  courseNo: Scalars['String'];
+  courseNo: Scalars['String']['input'];
   studyProgram: StudyProgram;
 };
 
@@ -396,7 +398,7 @@ export type QueryRecommendArgs = {
 
 
 export type QueryReviewsArgs = {
-  courseNo: Scalars['String'];
+  courseNo: Scalars['String']['input'];
   studyProgram: StudyProgram;
 };
 
@@ -408,20 +410,20 @@ export type QuerySearchArgs = {
 
 export type Review = {
   __typename?: 'Review';
-  _id: Scalars['String'];
-  academicYear: Scalars['String'];
-  content?: Maybe<Scalars['String']>;
-  courseNo: Scalars['String'];
+  _id: Scalars['String']['output'];
+  academicYear: Scalars['String']['output'];
+  content?: Maybe<Scalars['String']['output']>;
+  courseNo: Scalars['String']['output'];
   /** Number of users that disliked this review. */
-  dislikeCount: Scalars['Int'];
-  isOwner: Scalars['Boolean'];
+  dislikeCount: Scalars['Int']['output'];
+  isOwner: Scalars['Boolean']['output'];
   /** Number of users that liked this review. */
-  likeCount: Scalars['Int'];
+  likeCount: Scalars['Int']['output'];
   /** Interaction type of current user on this review. `null` if user is not logged in. */
   myInteraction?: Maybe<ReviewInteractionType>;
-  rating: Scalars['Int'];
-  rejectionReason?: Maybe<Scalars['String']>;
-  semester: Scalars['String'];
+  rating: Scalars['Int']['output'];
+  rejectionReason?: Maybe<Scalars['String']['output']>;
+  semester: Scalars['String']['output'];
   status?: Maybe<ReviewStatus>;
   studyProgram: StudyProgram;
 };
@@ -448,18 +450,18 @@ export type Section = {
   __typename?: 'Section';
   capacity: Capacity;
   classes: Array<Class>;
-  closed: Scalars['Boolean'];
+  closed: Scalars['Boolean']['output'];
   /** `GenEdType` of this section. If this section is not a GenEd section, the value will be `NO`. */
   genEdType: GenEdType;
-  note?: Maybe<Scalars['String']>;
-  sectionNo: Scalars['String'];
+  note?: Maybe<Scalars['String']['output']>;
+  sectionNo: Scalars['String']['output'];
 };
 
 export type SemesterKey = {
   __typename?: 'SemesterKey';
-  academicYear: Scalars['String'];
-  semester: Scalars['String'];
-  studyProgram: Scalars['String'];
+  academicYear: Scalars['String']['output'];
+  semester: Scalars['String']['output'];
+  studyProgram: Scalars['String']['output'];
 };
 
 export enum StudyProgram {
@@ -473,12 +475,12 @@ export enum StudyProgram {
 
 export type User = {
   __typename?: 'User';
-  _id: Scalars['String'];
-  name: Scalars['String'];
+  _id: Scalars['String']['output'];
+  name: Scalars['String']['output'];
 };
 
 export type GetCourseInfoQueryVariables = Exact<{
-  courseNo: Scalars['String'];
+  courseNo: Scalars['String']['input'];
   courseGroup: CourseGroupInput;
 }>;
 
@@ -486,7 +488,7 @@ export type GetCourseInfoQueryVariables = Exact<{
 export type GetCourseInfoQuery = { __typename?: 'Query', course: { __typename?: 'Course', studyProgram: StudyProgram, semester: string, academicYear: string, courseNo: string, abbrName: string, courseNameTh: string, courseNameEn: string, faculty: string, department: string, credit: number, creditHours: string, courseCondition: string, courseDescTh?: string | null, courseDescEn?: string | null, genEdType: GenEdType, midterm?: { __typename?: 'ExamPeriod', date?: string | null, period?: { __typename?: 'Period', start?: string | null, end?: string | null } | null } | null, final?: { __typename?: 'ExamPeriod', date?: string | null, period?: { __typename?: 'Period', start?: string | null, end?: string | null } | null } | null, sections: Array<{ __typename?: 'Section', genEdType: GenEdType, sectionNo: string, closed: boolean, note?: string | null, capacity: { __typename?: 'Capacity', current: number, max: number }, classes: Array<{ __typename?: 'Class', type: string, dayOfWeek?: DayOfWeek | null, room?: string | null, building?: string | null, teachers: Array<string>, period?: { __typename?: 'Period', start?: string | null, end?: string | null } | null }> }> } };
 
 export type GetCourseForThumbnailQueryVariables = Exact<{
-  courseNo: Scalars['String'];
+  courseNo: Scalars['String']['input'];
   courseGroup: CourseGroupInput;
 }>;
 
@@ -512,7 +514,7 @@ export type GetOverridesQueryVariables = Exact<{ [key: string]: never; }>;
 export type GetOverridesQuery = { __typename?: 'Query', overrides: Array<{ __typename?: 'Override', courseNo: string, genEdType: GenEdType }> };
 
 export type DeleteOverrideMutationVariables = Exact<{
-  courseNo: Scalars['String'];
+  courseNo: Scalars['String']['input'];
 }>;
 
 
@@ -526,7 +528,7 @@ export type CreateReviewMutationVariables = Exact<{
 export type CreateReviewMutation = { __typename?: 'Mutation', createReview: { __typename?: 'Review', _id: string, rating: number, courseNo: string, semester: string, academicYear: string, studyProgram: StudyProgram, content?: string | null, likeCount: number, dislikeCount: number, myInteraction?: ReviewInteractionType | null, status?: ReviewStatus | null, rejectionReason?: string | null, isOwner: boolean } };
 
 export type EditMyReviewMutationVariables = Exact<{
-  reviewId: Scalars['String'];
+  reviewId: Scalars['String']['input'];
   review: EditReviewInput;
 }>;
 
@@ -534,7 +536,7 @@ export type EditMyReviewMutationVariables = Exact<{
 export type EditMyReviewMutation = { __typename?: 'Mutation', editMyReview: { __typename?: 'Review', _id: string, rating: number, courseNo: string, semester: string, academicYear: string, studyProgram: StudyProgram, content?: string | null, likeCount: number, dislikeCount: number, myInteraction?: ReviewInteractionType | null, status?: ReviewStatus | null, rejectionReason?: string | null, isOwner: boolean } };
 
 export type GetMyPendingReviewsQueryVariables = Exact<{
-  courseNo: Scalars['String'];
+  courseNo: Scalars['String']['input'];
   studyProgram: StudyProgram;
 }>;
 
@@ -547,7 +549,7 @@ export type GetPendingReviewsQueryVariables = Exact<{ [key: string]: never; }>;
 export type GetPendingReviewsQuery = { __typename?: 'Query', pendingReviews: Array<{ __typename?: 'Review', _id: string, rating: number, courseNo: string, semester: string, academicYear: string, studyProgram: StudyProgram, content?: string | null, likeCount: number, dislikeCount: number, myInteraction?: ReviewInteractionType | null, status?: ReviewStatus | null, rejectionReason?: string | null, isOwner: boolean }> };
 
 export type GetReviewsQueryVariables = Exact<{
-  courseNo: Scalars['String'];
+  courseNo: Scalars['String']['input'];
   studyProgram: StudyProgram;
 }>;
 
@@ -555,14 +557,14 @@ export type GetReviewsQueryVariables = Exact<{
 export type GetReviewsQuery = { __typename?: 'Query', reviews: Array<{ __typename?: 'Review', _id: string, rating: number, courseNo: string, semester: string, academicYear: string, studyProgram: StudyProgram, content?: string | null, likeCount: number, dislikeCount: number, myInteraction?: ReviewInteractionType | null, status?: ReviewStatus | null, rejectionReason?: string | null, isOwner: boolean }> };
 
 export type RemoveReviewMutationVariables = Exact<{
-  reviewId: Scalars['String'];
+  reviewId: Scalars['String']['input'];
 }>;
 
 
 export type RemoveReviewMutation = { __typename?: 'Mutation', removeReview: { __typename?: 'Review', _id: string, rating: number, courseNo: string, semester: string, academicYear: string, studyProgram: StudyProgram, content?: string | null, likeCount: number, dislikeCount: number, myInteraction?: ReviewInteractionType | null, status?: ReviewStatus | null, rejectionReason?: string | null, isOwner: boolean } };
 
 export type SetReviewInteractionMutationVariables = Exact<{
-  reviewId: Scalars['String'];
+  reviewId: Scalars['String']['input'];
   interactionType: ReviewInteractionType;
 }>;
 
@@ -570,9 +572,9 @@ export type SetReviewInteractionMutationVariables = Exact<{
 export type SetReviewInteractionMutation = { __typename?: 'Mutation', setReviewInteraction: { __typename?: 'Review', _id: string, rating: number, courseNo: string, semester: string, academicYear: string, studyProgram: StudyProgram, content?: string | null, likeCount: number, dislikeCount: number, myInteraction?: ReviewInteractionType | null, status?: ReviewStatus | null, rejectionReason?: string | null, isOwner: boolean } };
 
 export type SetReviewStatusMutationVariables = Exact<{
-  reviewId: Scalars['String'];
+  reviewId: Scalars['String']['input'];
   status: ReviewStatus;
-  rejectionReason?: InputMaybe<Scalars['String']>;
+  rejectionReason?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
@@ -713,7 +715,7 @@ export const GetCourseInfoDocument = gql`
  *   },
  * });
  */
-export function useGetCourseInfoQuery(baseOptions: Apollo.QueryHookOptions<GetCourseInfoQuery, GetCourseInfoQueryVariables>) {
+export function useGetCourseInfoQuery(baseOptions: Apollo.QueryHookOptions<GetCourseInfoQuery, GetCourseInfoQueryVariables> & ({ variables: GetCourseInfoQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<GetCourseInfoQuery, GetCourseInfoQueryVariables>(GetCourseInfoDocument, options);
       }
@@ -721,8 +723,13 @@ export function useGetCourseInfoLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<GetCourseInfoQuery, GetCourseInfoQueryVariables>(GetCourseInfoDocument, options);
         }
+export function useGetCourseInfoSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetCourseInfoQuery, GetCourseInfoQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetCourseInfoQuery, GetCourseInfoQueryVariables>(GetCourseInfoDocument, options);
+        }
 export type GetCourseInfoQueryHookResult = ReturnType<typeof useGetCourseInfoQuery>;
 export type GetCourseInfoLazyQueryHookResult = ReturnType<typeof useGetCourseInfoLazyQuery>;
+export type GetCourseInfoSuspenseQueryHookResult = ReturnType<typeof useGetCourseInfoSuspenseQuery>;
 export type GetCourseInfoQueryResult = Apollo.QueryResult<GetCourseInfoQuery, GetCourseInfoQueryVariables>;
 export const GetCourseForThumbnailDocument = gql`
     query GetCourseForThumbnail($courseNo: String!, $courseGroup: CourseGroupInput!) {
@@ -758,7 +765,7 @@ export const GetCourseForThumbnailDocument = gql`
  *   },
  * });
  */
-export function useGetCourseForThumbnailQuery(baseOptions: Apollo.QueryHookOptions<GetCourseForThumbnailQuery, GetCourseForThumbnailQueryVariables>) {
+export function useGetCourseForThumbnailQuery(baseOptions: Apollo.QueryHookOptions<GetCourseForThumbnailQuery, GetCourseForThumbnailQueryVariables> & ({ variables: GetCourseForThumbnailQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<GetCourseForThumbnailQuery, GetCourseForThumbnailQueryVariables>(GetCourseForThumbnailDocument, options);
       }
@@ -766,8 +773,13 @@ export function useGetCourseForThumbnailLazyQuery(baseOptions?: Apollo.LazyQuery
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<GetCourseForThumbnailQuery, GetCourseForThumbnailQueryVariables>(GetCourseForThumbnailDocument, options);
         }
+export function useGetCourseForThumbnailSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetCourseForThumbnailQuery, GetCourseForThumbnailQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetCourseForThumbnailQuery, GetCourseForThumbnailQueryVariables>(GetCourseForThumbnailDocument, options);
+        }
 export type GetCourseForThumbnailQueryHookResult = ReturnType<typeof useGetCourseForThumbnailQuery>;
 export type GetCourseForThumbnailLazyQueryHookResult = ReturnType<typeof useGetCourseForThumbnailLazyQuery>;
+export type GetCourseForThumbnailSuspenseQueryHookResult = ReturnType<typeof useGetCourseForThumbnailSuspenseQuery>;
 export type GetCourseForThumbnailQueryResult = Apollo.QueryResult<GetCourseForThumbnailQuery, GetCourseForThumbnailQueryVariables>;
 export const RecommendCourseTextDocument = gql`
     query RecommendCourseText($req: CourseRecommendationRequest!) {
@@ -803,7 +815,7 @@ export const RecommendCourseTextDocument = gql`
  *   },
  * });
  */
-export function useRecommendCourseTextQuery(baseOptions: Apollo.QueryHookOptions<RecommendCourseTextQuery, RecommendCourseTextQueryVariables>) {
+export function useRecommendCourseTextQuery(baseOptions: Apollo.QueryHookOptions<RecommendCourseTextQuery, RecommendCourseTextQueryVariables> & ({ variables: RecommendCourseTextQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<RecommendCourseTextQuery, RecommendCourseTextQueryVariables>(RecommendCourseTextDocument, options);
       }
@@ -811,8 +823,13 @@ export function useRecommendCourseTextLazyQuery(baseOptions?: Apollo.LazyQueryHo
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<RecommendCourseTextQuery, RecommendCourseTextQueryVariables>(RecommendCourseTextDocument, options);
         }
+export function useRecommendCourseTextSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<RecommendCourseTextQuery, RecommendCourseTextQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<RecommendCourseTextQuery, RecommendCourseTextQueryVariables>(RecommendCourseTextDocument, options);
+        }
 export type RecommendCourseTextQueryHookResult = ReturnType<typeof useRecommendCourseTextQuery>;
 export type RecommendCourseTextLazyQueryHookResult = ReturnType<typeof useRecommendCourseTextLazyQuery>;
+export type RecommendCourseTextSuspenseQueryHookResult = ReturnType<typeof useRecommendCourseTextSuspenseQuery>;
 export type RecommendCourseTextQueryResult = Apollo.QueryResult<RecommendCourseTextQuery, RecommendCourseTextQueryVariables>;
 export const GetOverridesDocument = gql`
     query GetOverrides {
@@ -845,8 +862,13 @@ export function useGetOverridesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<GetOverridesQuery, GetOverridesQueryVariables>(GetOverridesDocument, options);
         }
+export function useGetOverridesSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetOverridesQuery, GetOverridesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetOverridesQuery, GetOverridesQueryVariables>(GetOverridesDocument, options);
+        }
 export type GetOverridesQueryHookResult = ReturnType<typeof useGetOverridesQuery>;
 export type GetOverridesLazyQueryHookResult = ReturnType<typeof useGetOverridesLazyQuery>;
+export type GetOverridesSuspenseQueryHookResult = ReturnType<typeof useGetOverridesSuspenseQuery>;
 export type GetOverridesQueryResult = Apollo.QueryResult<GetOverridesQuery, GetOverridesQueryVariables>;
 export const DeleteOverrideDocument = gql`
     mutation DeleteOverride($courseNo: String!) {
@@ -973,7 +995,7 @@ export const GetMyPendingReviewsDocument = gql`
  *   },
  * });
  */
-export function useGetMyPendingReviewsQuery(baseOptions: Apollo.QueryHookOptions<GetMyPendingReviewsQuery, GetMyPendingReviewsQueryVariables>) {
+export function useGetMyPendingReviewsQuery(baseOptions: Apollo.QueryHookOptions<GetMyPendingReviewsQuery, GetMyPendingReviewsQueryVariables> & ({ variables: GetMyPendingReviewsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<GetMyPendingReviewsQuery, GetMyPendingReviewsQueryVariables>(GetMyPendingReviewsDocument, options);
       }
@@ -981,8 +1003,13 @@ export function useGetMyPendingReviewsLazyQuery(baseOptions?: Apollo.LazyQueryHo
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<GetMyPendingReviewsQuery, GetMyPendingReviewsQueryVariables>(GetMyPendingReviewsDocument, options);
         }
+export function useGetMyPendingReviewsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetMyPendingReviewsQuery, GetMyPendingReviewsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetMyPendingReviewsQuery, GetMyPendingReviewsQueryVariables>(GetMyPendingReviewsDocument, options);
+        }
 export type GetMyPendingReviewsQueryHookResult = ReturnType<typeof useGetMyPendingReviewsQuery>;
 export type GetMyPendingReviewsLazyQueryHookResult = ReturnType<typeof useGetMyPendingReviewsLazyQuery>;
+export type GetMyPendingReviewsSuspenseQueryHookResult = ReturnType<typeof useGetMyPendingReviewsSuspenseQuery>;
 export type GetMyPendingReviewsQueryResult = Apollo.QueryResult<GetMyPendingReviewsQuery, GetMyPendingReviewsQueryVariables>;
 export const GetPendingReviewsDocument = gql`
     query GetPendingReviews {
@@ -1015,8 +1042,13 @@ export function useGetPendingReviewsLazyQuery(baseOptions?: Apollo.LazyQueryHook
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<GetPendingReviewsQuery, GetPendingReviewsQueryVariables>(GetPendingReviewsDocument, options);
         }
+export function useGetPendingReviewsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetPendingReviewsQuery, GetPendingReviewsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetPendingReviewsQuery, GetPendingReviewsQueryVariables>(GetPendingReviewsDocument, options);
+        }
 export type GetPendingReviewsQueryHookResult = ReturnType<typeof useGetPendingReviewsQuery>;
 export type GetPendingReviewsLazyQueryHookResult = ReturnType<typeof useGetPendingReviewsLazyQuery>;
+export type GetPendingReviewsSuspenseQueryHookResult = ReturnType<typeof useGetPendingReviewsSuspenseQuery>;
 export type GetPendingReviewsQueryResult = Apollo.QueryResult<GetPendingReviewsQuery, GetPendingReviewsQueryVariables>;
 export const GetReviewsDocument = gql`
     query GetReviews($courseNo: String!, $studyProgram: StudyProgram!) {
@@ -1043,7 +1075,7 @@ export const GetReviewsDocument = gql`
  *   },
  * });
  */
-export function useGetReviewsQuery(baseOptions: Apollo.QueryHookOptions<GetReviewsQuery, GetReviewsQueryVariables>) {
+export function useGetReviewsQuery(baseOptions: Apollo.QueryHookOptions<GetReviewsQuery, GetReviewsQueryVariables> & ({ variables: GetReviewsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<GetReviewsQuery, GetReviewsQueryVariables>(GetReviewsDocument, options);
       }
@@ -1051,8 +1083,13 @@ export function useGetReviewsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<GetReviewsQuery, GetReviewsQueryVariables>(GetReviewsDocument, options);
         }
+export function useGetReviewsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetReviewsQuery, GetReviewsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetReviewsQuery, GetReviewsQueryVariables>(GetReviewsDocument, options);
+        }
 export type GetReviewsQueryHookResult = ReturnType<typeof useGetReviewsQuery>;
 export type GetReviewsLazyQueryHookResult = ReturnType<typeof useGetReviewsLazyQuery>;
+export type GetReviewsSuspenseQueryHookResult = ReturnType<typeof useGetReviewsSuspenseQuery>;
 export type GetReviewsQueryResult = Apollo.QueryResult<GetReviewsQuery, GetReviewsQueryVariables>;
 export const RemoveReviewDocument = gql`
     mutation RemoveReview($reviewId: String!) {
@@ -1183,7 +1220,7 @@ export const GetAllCourseNoDocument = gql`
  *   },
  * });
  */
-export function useGetAllCourseNoQuery(baseOptions: Apollo.QueryHookOptions<GetAllCourseNoQuery, GetAllCourseNoQueryVariables>) {
+export function useGetAllCourseNoQuery(baseOptions: Apollo.QueryHookOptions<GetAllCourseNoQuery, GetAllCourseNoQueryVariables> & ({ variables: GetAllCourseNoQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<GetAllCourseNoQuery, GetAllCourseNoQueryVariables>(GetAllCourseNoDocument, options);
       }
@@ -1191,8 +1228,13 @@ export function useGetAllCourseNoLazyQuery(baseOptions?: Apollo.LazyQueryHookOpt
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<GetAllCourseNoQuery, GetAllCourseNoQueryVariables>(GetAllCourseNoDocument, options);
         }
+export function useGetAllCourseNoSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetAllCourseNoQuery, GetAllCourseNoQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetAllCourseNoQuery, GetAllCourseNoQueryVariables>(GetAllCourseNoDocument, options);
+        }
 export type GetAllCourseNoQueryHookResult = ReturnType<typeof useGetAllCourseNoQuery>;
 export type GetAllCourseNoLazyQueryHookResult = ReturnType<typeof useGetAllCourseNoLazyQuery>;
+export type GetAllCourseNoSuspenseQueryHookResult = ReturnType<typeof useGetAllCourseNoSuspenseQuery>;
 export type GetAllCourseNoQueryResult = Apollo.QueryResult<GetAllCourseNoQuery, GetAllCourseNoQueryVariables>;
 export const SearchCourseDocument = gql`
     query SearchCourse($filter: FilterInput!, $courseGroup: CourseGroupInput!) {
@@ -1219,7 +1261,7 @@ export const SearchCourseDocument = gql`
  *   },
  * });
  */
-export function useSearchCourseQuery(baseOptions: Apollo.QueryHookOptions<SearchCourseQuery, SearchCourseQueryVariables>) {
+export function useSearchCourseQuery(baseOptions: Apollo.QueryHookOptions<SearchCourseQuery, SearchCourseQueryVariables> & ({ variables: SearchCourseQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<SearchCourseQuery, SearchCourseQueryVariables>(SearchCourseDocument, options);
       }
@@ -1227,8 +1269,13 @@ export function useSearchCourseLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<SearchCourseQuery, SearchCourseQueryVariables>(SearchCourseDocument, options);
         }
+export function useSearchCourseSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<SearchCourseQuery, SearchCourseQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<SearchCourseQuery, SearchCourseQueryVariables>(SearchCourseDocument, options);
+        }
 export type SearchCourseQueryHookResult = ReturnType<typeof useSearchCourseQuery>;
 export type SearchCourseLazyQueryHookResult = ReturnType<typeof useSearchCourseLazyQuery>;
+export type SearchCourseSuspenseQueryHookResult = ReturnType<typeof useSearchCourseSuspenseQuery>;
 export type SearchCourseQueryResult = Apollo.QueryResult<SearchCourseQuery, SearchCourseQueryVariables>;
 export const MeDocument = gql`
     query Me {
@@ -1262,8 +1309,13 @@ export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<MeQuery, MeQueryVariables>(MeDocument, options);
         }
+export function useMeSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<MeQuery, MeQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<MeQuery, MeQueryVariables>(MeDocument, options);
+        }
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
+export type MeSuspenseQueryHookResult = ReturnType<typeof useMeSuspenseQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
 export const PushCourseCartDocument = gql`
     mutation PushCourseCart($items: [CourseCartItemInput!]!) {
@@ -1335,6 +1387,11 @@ export function useGetCourseCartLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<GetCourseCartQuery, GetCourseCartQueryVariables>(GetCourseCartDocument, options);
         }
+export function useGetCourseCartSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetCourseCartQuery, GetCourseCartQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetCourseCartQuery, GetCourseCartQueryVariables>(GetCourseCartDocument, options);
+        }
 export type GetCourseCartQueryHookResult = ReturnType<typeof useGetCourseCartQuery>;
 export type GetCourseCartLazyQueryHookResult = ReturnType<typeof useGetCourseCartLazyQuery>;
+export type GetCourseCartSuspenseQueryHookResult = ReturnType<typeof useGetCourseCartSuspenseQuery>;
 export type GetCourseCartQueryResult = Apollo.QueryResult<GetCourseCartQuery, GetCourseCartQueryVariables>;

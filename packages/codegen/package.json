@@ -10,11 +10,11 @@
     "codegen": "graphql-codegen"
   },
   "dependencies": {
-    "@apollo/client": "3.9.2",
-    "@graphql-codegen/cli": "3.0.0",
-    "@graphql-codegen/typescript": "3.0.0",
-    "@graphql-codegen/typescript-operations": "3.0.0",
-    "@graphql-codegen/typescript-react-apollo": "3.3.7",
+    "@apollo/client": "3.9.4",
+    "@graphql-codegen/cli": "5.0.2",
+    "@graphql-codegen/typescript": "4.0.4",
+    "@graphql-codegen/typescript-operations": "4.1.2",
+    "@graphql-codegen/typescript-react-apollo": "4.3.0",
     "graphql-tag": "2.12.6"
   },
   "devDependencies": {

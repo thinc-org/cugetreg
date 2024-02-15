@@ -23,11 +23,11 @@
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
     "prettier": "^3.2.5",
     "prettier-plugin-organize-imports": "^3.2.4",
-    "turbo": "^1.12.2"
+    "turbo": "^1.12.4"
   },
   "engines": {
     "node": "^20.9",
     "pnpm": ">=8"
   },
-  "packageManager": "pnpm@8.15.1"
+  "packageManager": "pnpm@8.15.2"
 }

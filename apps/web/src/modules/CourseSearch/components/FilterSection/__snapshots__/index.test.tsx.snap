@@ -1,5 +1,138 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`FilterSection > Should matched snapshot correctly when matchSmallScreen=false and isExpandFilter=false 1`] = `
+<ResponsiveDialog
+  fullWidth={true}
+  onClose={[MockFunction spy]}
+  open={false}
+>
+  <ForwardRef(DialogContent)>
+    <ForwardRef(Grid)>
+      <ForwardRef(Grid)
+        direction="row"
+        justifyContent="space-between"
+      >
+        <Analytics
+          elementName="gened_search_filter"
+        >
+          <Component />
+        </Analytics>
+        <Analytics
+          elementName="day_search_filter"
+        >
+          <Component />
+        </Analytics>
+      </ForwardRef(Grid)>
+      <Analytics
+        elementName="grading_search_filter"
+      >
+        <Component />
+      </Analytics>
+      <Analytics
+        elementName="period_range_filter"
+      >
+        <Component />
+      </Analytics>
+    </ForwardRef(Grid)>
+    <Styled(ForwardRef(Button))
+      color="primary"
+      fullWidth={true}
+      onClick={[MockFunction spy]}
+      variant="outlined"
+    >
+      เลือกตัวกรอง
+    </Styled(ForwardRef(Button))>
+  </ForwardRef(DialogContent)>
+</ResponsiveDialog>
+`;
+
+exports[`FilterSection > Should matched snapshot correctly when matchSmallScreen=false and isExpandFilter=true 1`] = `
+<ResponsiveDialog
+  fullWidth={true}
+  onClose={[MockFunction spy]}
+  open={true}
+>
+  <ForwardRef(DialogContent)>
+    <ForwardRef(Grid)>
+      <ForwardRef(Grid)
+        direction="row"
+        justifyContent="space-between"
+      >
+        <Analytics
+          elementName="gened_search_filter"
+        >
+          <Component />
+        </Analytics>
+        <Analytics
+          elementName="day_search_filter"
+        >
+          <Component />
+        </Analytics>
+      </ForwardRef(Grid)>
+      <Analytics
+        elementName="grading_search_filter"
+      >
+        <Component />
+      </Analytics>
+      <Analytics
+        elementName="period_range_filter"
+      >
+        <Component />
+      </Analytics>
+    </ForwardRef(Grid)>
+    <Styled(ForwardRef(Button))
+      color="primary"
+      fullWidth={true}
+      onClick={[MockFunction spy]}
+      variant="outlined"
+    >
+      เลือกตัวกรอง
+    </Styled(ForwardRef(Button))>
+  </ForwardRef(DialogContent)>
+</ResponsiveDialog>
+`;
+
+exports[`FilterSection > Should matched snapshot correctly when matchSmallScreen=true and isExpandFilter=false 1`] = `""`;
+
+exports[`FilterSection > Should matched snapshot correctly when matchSmallScreen=true and isExpandFilter=true 1`] = `
+<Styled(ForwardRef(Paper))
+  hasTags={true}
+  variant="outlined"
+>
+  <ForwardRef(Grid)
+    overflow="auto"
+    p={4}
+    pr={2}
+    spacing={4}
+  >
+    <Analytics
+      elementName="gened_search_filter"
+      key="0"
+    >
+      <Component />
+    </Analytics>
+    <Analytics
+      elementName="grading_search_filter"
+      key="1"
+    >
+      <Component />
+    </Analytics>
+    <Analytics
+      elementName="day_search_filter"
+      key="2"
+    >
+      <Component />
+    </Analytics>
+    <Analytics
+      elementName="period_range_filter"
+      key="3"
+    >
+      <Component />
+    </Analytics>
+  </ForwardRef(Grid)>
+</Styled(ForwardRef(Paper))>
+`;
+
 exports[`FilterSection > Should render CheckboxGroup of GenEds correctly when when matchSmallScreen=false and isExpandFilter=false 1`] = `
 <CheckboxGroup
   checkboxes={[]}

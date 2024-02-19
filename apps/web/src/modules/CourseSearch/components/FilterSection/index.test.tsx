@@ -9,7 +9,7 @@ import { DayOfWeek, GenEdType } from '@cgr/codegen'
 
 import { Button, StickyPaper } from './styled'
 
-describe.todo('FilterSection', () => {
+describe('FilterSection', () => {
   const MOCK_HASTAG = true
   const MOCK_QUERY = 'query'
 
@@ -84,6 +84,20 @@ describe.todo('FilterSection', () => {
       )
       expect(mockUseFilterBar).toHaveBeenNthCalledWith(
         2,
+        [
+          {
+            label: 'S/U Grade',
+            value: 'S_U',
+          },
+          {
+            label: 'Letter Grade',
+            value: 'LETTER',
+          },
+        ],
+        'gradingTypes'
+      )
+      expect(mockUseFilterBar).toHaveBeenNthCalledWith(
+        3,
         [
           {
             label: 'วันจันทร์',

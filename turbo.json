@@ -15,6 +15,7 @@
       "cache": false
     },
     "test": {},
+    "test:cov": {},
     "test:e2e": {
       "outputs": ["playwright-report/**"]
     }

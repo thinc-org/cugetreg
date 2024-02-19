@@ -13,6 +13,14 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: './test-setup.mjs',
     snapshotSerializers: ['enzyme-to-json/serializer'],
+    coverage: {
+      reporter: ['text', 'json', 'html'],
+      reportsDirectory: '../../coverage/apps/web',
+    },
+    testTimeout: 10000,
+    typecheck: {
+      tsconfig: './tsconfig.spec.json',
+    },
   },
   resolve: {
     alias: {

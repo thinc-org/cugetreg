@@ -10,14 +10,14 @@
     "format": "eslint src --fix"
   },
   "devDependencies": {
-    "@types/node": "20.11.17",
-    "@types/react": "18.2.55",
+    "@types/node": "20.11.19",
+    "@types/react": "18.2.56",
     "@types/react-dom": "18.2.19",
     "eslint": "8.56.0",
     "typescript": "~5.3.3"
   },
   "dependencies": {
-    "@apollo/client": "^3.9.4",
+    "@apollo/client": "^3.9.5",
     "@cgr/codegen": "workspace:*",
     "@cgr/course-utils": "workspace:*",
     "@emotion/react": "11.11.3",
@@ -26,7 +26,7 @@
     "@mui/material": "5.15.10",
     "@mui/styled-engine-sc": "^5.14.12",
     "@next/font": "14.1.0",
-    "axios": "0.23.0",
+    "axios": "1.6.7",
     "isomorphic-dompurify": "2.3.0",
     "next": "^14.1.0",
     "react": "18.2.0",

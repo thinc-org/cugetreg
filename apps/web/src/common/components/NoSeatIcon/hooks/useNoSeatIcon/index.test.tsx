@@ -1,22 +1,23 @@
 import { MouseEvent } from 'react'
 
 import { act, renderHook } from '@testing-library/react-hooks'
+import { describe, expect, it, vi } from 'vitest'
 
 describe('UseNoSeatNotice', () => {
   const I18N_NAME = 'regWarNotice'
   const LOG_NAME = 'regwarnotice'
   const LOG_ARGS = 'see notice'
 
-  const mockTranslate = jest.fn()
-  const mockUseTranslation = jest.fn(() => ({ t: mockTranslate }))
-  const mockLog = jest.fn()
-  const mockUseLog = jest.fn(() => ({ log: mockLog }))
+  const mockTranslate = vi.fn()
+  const mockUseTranslation = vi.fn(() => ({ t: mockTranslate }))
+  const mockLog = vi.fn()
+  const mockUseLog = vi.fn(() => ({ log: mockLog }))
 
-  jest.doMock('react-i18next', () => ({
+  vi.doMock('react-i18next', () => ({
     useTranslation: mockUseTranslation,
   }))
 
-  jest.doMock('@web/common/context/Analytics/hooks/useLog', () => ({
+  vi.doMock('@web/common/context/Analytics/hooks/useLog', () => ({
     useLog: mockUseLog,
   }))
 

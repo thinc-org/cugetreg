@@ -1,6 +1,8 @@
+import { describe, expect, it, vi } from 'vitest'
+
 describe('removeElement', () => {
-  const mockRemoveChild = jest.fn()
-  const spy = jest.spyOn(document, 'getElementById')
+  const mockRemoveChild = vi.fn()
+  const spy = vi.spyOn(document, 'getElementById')
 
   it.each`
     element

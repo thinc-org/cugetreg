@@ -1,7 +1,7 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`SelectTime Should render correctly 1`] = `
-<ForwardRef(Stack)>
+exports[`SelectTime > Should render correctly 1`] = `
+<ForwardRef(Grid)>
   <Styled(ForwardRef(Typography))
     variant="button"
   >
@@ -14,9 +14,9 @@ exports[`SelectTime Should render correctly 1`] = `
         color="primary"
         id="periodRangeFilter"
         name="periodRange"
-        onChange={[MockFunction]}
+        onChange={[MockFunction spy]}
         sx={
-          Object {
+          {
             "fontFamily": "Prompt",
           }
         }
@@ -24,24 +24,24 @@ exports[`SelectTime Should render correctly 1`] = `
     }
     key="periodRange"
     label={
-      <ForwardRef(Stack)
+      <ForwardRef(Grid)
         direction={
-          Object {
+          {
             "sm": "column",
             "xs": "row",
           }
         }
         spacing={2}
         sx={
-          Object {
-            "mt": Object {
+          {
+            "mt": {
               "sm": 0,
               "xs": 0.5,
             },
           }
         }
       >
-        <ForwardRef(Stack)
+        <ForwardRef(Grid)
           alignItems="center"
           direction="row"
           justifyContent="space-between"
@@ -56,7 +56,7 @@ exports[`SelectTime Should render correctly 1`] = `
           <ForwardRef(Select)
             disabled={false}
             name="startTime"
-            onChange={[MockFunction]}
+            onChange={[MockFunction spy]}
             value="11:30"
           >
             <ForwardRef(MenuItem)
@@ -85,8 +85,8 @@ exports[`SelectTime Should render correctly 1`] = `
               12:30
             </ForwardRef(MenuItem)>
           </ForwardRef(Select)>
-        </ForwardRef(Stack)>
-        <ForwardRef(Stack)
+        </ForwardRef(Grid)>
+        <ForwardRef(Grid)
           alignItems="center"
           direction="row"
           justifyContent="space-between"
@@ -100,7 +100,7 @@ exports[`SelectTime Should render correctly 1`] = `
           <ForwardRef(Select)
             disabled={false}
             name="endTime"
-            onChange={[MockFunction]}
+            onChange={[MockFunction spy]}
             value="11:30"
           >
             <ForwardRef(MenuItem)
@@ -129,16 +129,16 @@ exports[`SelectTime Should render correctly 1`] = `
               13:30
             </ForwardRef(MenuItem)>
           </ForwardRef(Select)>
-        </ForwardRef(Stack)>
-      </ForwardRef(Stack)>
+        </ForwardRef(Grid)>
+      </ForwardRef(Grid)>
     }
     onClick={[Function]}
     sx={
-      Object {
+      {
         "alignItems": "flex-start",
         "display": "flex",
       }
     }
   />
-</ForwardRef(Stack)>
+</ForwardRef(Grid)>
 `;

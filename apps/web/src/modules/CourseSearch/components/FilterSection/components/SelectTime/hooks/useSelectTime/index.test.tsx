@@ -1,21 +1,22 @@
 import React from 'react'
 
 import { act, renderHook } from '@testing-library/react-hooks'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 
 describe('useSelectTime', () => {
-  const setFilterSpy = jest.fn()
-  const useSearchCourseQueryParamsSpy = jest.fn()
+  const setFilterSpy = vi.fn()
+  const useSearchCourseQueryParamsSpy = vi.fn()
   const mockGeneratedTime = ['09:00', '09:30', '10:00', '10:30', '11:00']
-  const generateTimeAroundSpy = jest.fn(() => mockGeneratedTime)
-  jest.doMock('@web/modules/CourseSearch/hooks/useSearchCourseQueryParams', () => ({
+  const generateTimeAroundSpy = vi.fn(() => mockGeneratedTime)
+  vi.doMock('@web/modules/CourseSearch/hooks/useSearchCourseQueryParams', () => ({
     useSearchCourseQueryParams: useSearchCourseQueryParamsSpy,
   }))
-  jest.doMock('../../utils/generateTimeAround', () => ({
+  vi.doMock('../../utils/generateTimeAround', () => ({
     generateTimeAround: generateTimeAroundSpy,
   }))
 
   afterEach(() => {
-    jest.clearAllMocks()
+    vi.clearAllMocks()
   })
 
   const mockDefaultStartTime = '09:00'

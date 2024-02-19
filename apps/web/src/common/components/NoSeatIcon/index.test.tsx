@@ -1,15 +1,16 @@
 import { IconButton, Popover } from '@mui/material'
 import { shallow } from 'enzyme'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 
 describe('NoSeatIcon', () => {
-  const mockOnHover = jest.fn()
-  const mockOnLeave = jest.fn()
-  const mockTranslate = jest.fn()
-  const mockOpen = jest.fn()
+  const mockOnHover = vi.fn()
+  const mockOnLeave = vi.fn()
+  const mockTranslate = vi.fn()
+  const mockOpen = vi.fn()
   const mockRef = { current: 'current' }
   const mockAnchorEl = document.createElement('a') as Element
 
-  const mockUseNoSeatIcon = jest.fn(() => ({
+  const mockUseNoSeatIcon = vi.fn(() => ({
     anchorEl: mockAnchorEl,
     onHover: mockOnHover,
     onLeave: mockOnLeave,
@@ -18,12 +19,12 @@ describe('NoSeatIcon', () => {
     containerRef: mockRef,
   }))
 
-  jest.doMock('./hooks/useNoSeatIcon', () => ({
+  vi.doMock('./hooks/useNoSeatIcon', () => ({
     useNoSeatIcon: mockUseNoSeatIcon,
   }))
 
   afterEach(() => {
-    jest.clearAllMocks()
+    vi.clearAllMocks()
   })
 
   it.each`

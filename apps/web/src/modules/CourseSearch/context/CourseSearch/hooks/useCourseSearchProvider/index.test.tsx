@@ -1,4 +1,5 @@
 import { act, renderHook } from '@testing-library/react-hooks'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import { stubFalse } from '@web/utils/stubFalse'
 
@@ -7,37 +8,37 @@ describe('useCourseSearchProvider', () => {
   const mockQueryParam = { param: 'param', filter: { a: 'a' } }
   const mockFetchMoreResult = { data: { search: { length: 5 } } }
 
-  const mockUseQuery = jest.fn(() => mockUseQueryResult)
-  const mockSetIsEmpty = jest.fn()
-  const mockFetchMore = jest.fn(() => mockFetchMoreResult)
+  const mockUseQuery = vi.fn(() => mockUseQueryResult)
+  const mockSetIsEmpty = vi.fn()
+  const mockFetchMore = vi.fn(() => mockFetchMoreResult)
 
   const mockUseQueryResult = {
     loading: false,
     fetchMore: mockFetchMore,
     variables: { key: 'variables' },
-    refetch: jest.fn(),
+    refetch: vi.fn(),
   }
   const mockUseEmptyResult = { isEmpty: false, setIsEmpty: mockSetIsEmpty }
 
   const LIMIT_FETCH_EXPECTED = 15
 
-  jest.doMock('next/router', () => ({
+  vi.doMock('next/router', () => ({
     useRouter: () => ({ query: mockQuery }),
   }))
-  jest.doMock('@web/modules/CourseSearch/hooks/useSearchCourseQueryParams', () => ({
+  vi.doMock('@web/modules/CourseSearch/hooks/useSearchCourseQueryParams', () => ({
     useSearchCourseQueryParams: () => ({
       searchCourseQueryParams: { filter: {}, query: mockQueryParam },
     }),
   }))
-  jest.doMock('@apollo/client', () => ({
+  vi.doMock('@apollo/client', () => ({
     useQuery: mockUseQuery,
   }))
-  jest.doMock('../useEmpty', () => ({
+  vi.doMock('../useEmpty', () => ({
     useEmpty: () => mockUseEmptyResult,
   }))
 
   afterEach(() => {
-    jest.clearAllMocks()
+    vi.clearAllMocks()
   })
 
   it('Should fetch more course if result is not empty and not currently loading more courses (isEmpty: false, loading: false)', async () => {

@@ -3,10 +3,12 @@
   "compilerOptions": {
     "paths": {
       "@web/*": ["./src/*"]
-    }
+    },
+    "experimentalDecorators": true
   },
   "include": [
-    "jest.config.ts",
+    "vitest.config.mts",
+    "test-setup.mjs",
     "**/*.test.ts",
     "**/*.spec.ts",
     "**/*.test.tsx",

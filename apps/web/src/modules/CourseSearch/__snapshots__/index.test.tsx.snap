@@ -1,17 +1,17 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`CourseSearchPage Should match snapshot correctly 1`] = `
+exports[`CourseSearchPage > Should match snapshot correctly 1`] = `
 <Styled(div)>
   <PageMeta
     title="ค้นหาวิชาเรียน"
   />
-  <Styled(ForwardRef(Stack))
+  <Styled(ForwardRef(Grid))
     alignItems="center"
     direction="row"
     justifyContent="space-between"
     spacing={2}
   >
-    <ForwardRef(Stack)
+    <ForwardRef(Grid)
       alignItems="center"
       direction="row"
       spacing={2}
@@ -21,7 +21,7 @@ exports[`CourseSearchPage Should match snapshot correctly 1`] = `
       >
         ค้นหาวิชาเรียน
       </ForwardRef(Typography)>
-    </ForwardRef(Stack)>
+    </ForwardRef(Grid)>
     <Hidden
       mdUp={true}
     >
@@ -29,15 +29,15 @@ exports[`CourseSearchPage Should match snapshot correctly 1`] = `
         elementName="open_shopping_cart_button"
       >
         <Memo(observerComponent)
-          onClick={[MockFunction]}
+          onClick={[MockFunction spy]}
         />
       </Analytics>
     </Hidden>
-  </Styled(ForwardRef(Stack))>
-  <Styled(ForwardRef(Stack))
+  </Styled(ForwardRef(Grid))>
+  <Styled(ForwardRef(Grid))
     alignItems="flex-start"
   >
-    <Styled(ForwardRef(Stack))
+    <Styled(ForwardRef(Grid))
       direction="row"
       spacing={2}
       width="100%"
@@ -55,15 +55,15 @@ exports[`CourseSearchPage Should match snapshot correctly 1`] = `
           elementName="selected_courses_button"
         >
           <Memo(observerComponent)
-            onClick={[MockFunction]}
+            onClick={[MockFunction spy]}
           />
         </Analytics>
       </Hidden>
-    </Styled(ForwardRef(Stack))>
+    </Styled(ForwardRef(Grid))>
     <TagList />
-  </Styled(ForwardRef(Stack))>
+  </Styled(ForwardRef(Grid))>
   <Memo(observerComponent) />
-  <Styled(ForwardRef(Stack))
+  <Styled(ForwardRef(Grid))
     direction="row"
     spacing={3}
   >
@@ -71,6 +71,6 @@ exports[`CourseSearchPage Should match snapshot correctly 1`] = `
     <FilterSection
       open={false}
     />
-  </Styled(ForwardRef(Stack))>
+  </Styled(ForwardRef(Grid))>
 </Styled(div)>
 `;

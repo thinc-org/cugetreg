@@ -1,12 +1,12 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`SectionStatus Should match snapshot correctly' 1`] = `
+exports[`SectionStatus > Should match snapshot correctly' 1`] = `
 <ForwardRef(Typography)
   ml={1}
   px={2}
   py={0.5}
   sx={
-    Object {
+    {
       "backgroundColor": "highlight.green.300",
       "borderRadius": 1,
       "color": "highlight.green.700",
@@ -16,7 +16,7 @@ exports[`SectionStatus Should match snapshot correctly' 1`] = `
   }
   variant="h6"
 >
-  <ForwardRef(Stack)
+  <ForwardRef(Grid)
     alignItems="center"
     direction="row"
     spacing={0.5}
@@ -26,22 +26,22 @@ exports[`SectionStatus Should match snapshot correctly' 1`] = `
     </div>
     <NoSeatIcon
       sx={
-        Object {
+        {
           "color": "primary.main",
         }
       }
     />
-  </ForwardRef(Stack)>
+  </ForwardRef(Grid)>
 </ForwardRef(Typography)>
 `;
 
-exports[`SectionStatus Should match snapshot correctly' 2`] = `
+exports[`SectionStatus > Should match snapshot correctly' 2`] = `
 <ForwardRef(Typography)
   ml={1}
   px={2}
   py={0.5}
   sx={
-    Object {
+    {
       "backgroundColor": "highlight.red.300",
       "borderRadius": 1,
       "color": "highlight.red.700",
@@ -51,7 +51,7 @@ exports[`SectionStatus Should match snapshot correctly' 2`] = `
   }
   variant="h6"
 >
-  <ForwardRef(Stack)
+  <ForwardRef(Grid)
     alignItems="center"
     direction="row"
     spacing={0.5}
@@ -61,22 +61,22 @@ exports[`SectionStatus Should match snapshot correctly' 2`] = `
     </div>
     <NoSeatIcon
       sx={
-        Object {
+        {
           "color": "primary.main",
         }
       }
     />
-  </ForwardRef(Stack)>
+  </ForwardRef(Grid)>
 </ForwardRef(Typography)>
 `;
 
-exports[`SectionStatus Should match snapshot correctly' 3`] = `
+exports[`SectionStatus > Should match snapshot correctly' 3`] = `
 <ForwardRef(Typography)
   ml={1}
   px={2}
   py={0.5}
   sx={
-    Object {
+    {
       "backgroundColor": "highlight.red.500",
       "borderRadius": 1,
       "color": "white",
@@ -86,7 +86,7 @@ exports[`SectionStatus Should match snapshot correctly' 3`] = `
   }
   variant="h6"
 >
-  <ForwardRef(Stack)
+  <ForwardRef(Grid)
     alignItems="center"
     direction="row"
     spacing={0.5}
@@ -96,22 +96,22 @@ exports[`SectionStatus Should match snapshot correctly' 3`] = `
     </div>
     <NoSeatIcon
       sx={
-        Object {
+        {
           "color": "white",
         }
       }
     />
-  </ForwardRef(Stack)>
+  </ForwardRef(Grid)>
 </ForwardRef(Typography)>
 `;
 
-exports[`SectionStatus Should match snapshot correctly' 4`] = `
+exports[`SectionStatus > Should match snapshot correctly' 4`] = `
 <ForwardRef(Typography)
   ml={1}
   px={2}
   py={0.5}
   sx={
-    Object {
+    {
       "backgroundColor": "highlight.red.500",
       "borderRadius": 1,
       "color": "white",
@@ -121,7 +121,7 @@ exports[`SectionStatus Should match snapshot correctly' 4`] = `
   }
   variant="h6"
 >
-  <ForwardRef(Stack)
+  <ForwardRef(Grid)
     alignItems="center"
     direction="row"
     spacing={0.5}
@@ -131,11 +131,11 @@ exports[`SectionStatus Should match snapshot correctly' 4`] = `
     </div>
     <NoSeatIcon
       sx={
-        Object {
+        {
           "color": "white",
         }
       }
     />
-  </ForwardRef(Stack)>
+  </ForwardRef(Grid)>
 </ForwardRef(Typography)>
 `;

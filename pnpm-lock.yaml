@@ -3442,7 +3442,7 @@ packages:
     dependencies:
       '@graphql-tools/utils': 9.2.1(graphql@16.8.1)
       graphql: 16.8.1
-      tslib: 2.5.0
+      tslib: 2.6.2
     dev: false
 
   /@graphql-tools/merge@8.4.2(graphql@16.8.1):
@@ -3568,7 +3568,7 @@ packages:
       '@graphql-tools/merge': 8.4.0(graphql@16.8.1)
       '@graphql-tools/utils': 9.2.1(graphql@16.8.1)
       graphql: 16.8.1
-      tslib: 2.5.0
+      tslib: 2.6.2
       value-or-promise: 1.0.12
     dev: false
 

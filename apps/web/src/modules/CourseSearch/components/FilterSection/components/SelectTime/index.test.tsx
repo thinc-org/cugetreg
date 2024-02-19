@@ -1,21 +1,22 @@
 import { shallow } from 'enzyme'
+import { describe, expect, it, vi } from 'vitest'
 
 import { SelectTimeTitle } from './styled'
 
 describe('SelectTime', () => {
   const I18N_NAME = 'filterBar'
 
-  const onCheckboxChangeSpy = jest.fn()
-  const onEndTimeChangeSpy = jest.fn()
-  const onStartTimeChangeSpy = jest.fn()
+  const onCheckboxChangeSpy = vi.fn()
+  const onEndTimeChangeSpy = vi.fn()
+  const onStartTimeChangeSpy = vi.fn()
   const mockStartTimeChoices = ['10:30', '11:00', '11:30', '12:00', '12:30']
   const mockEndTimeChoices = ['11:30', '12:00', '12:30', '13:00', '13:30']
   const mockStartTime = '11:30'
   const mockEndTime = '11:30'
 
-  const mockLog = jest.fn()
+  const mockLog = vi.fn()
 
-  const mockUseSelectTime = jest.fn(() => ({
+  const mockUseSelectTime = vi.fn(() => ({
     selectedStartTime: mockStartTime,
     selectedEndTime: mockEndTime,
     startTimeChoices: mockStartTimeChoices,
@@ -25,12 +26,12 @@ describe('SelectTime', () => {
     checked: true,
     onCheckboxChange: onCheckboxChangeSpy,
   }))
-  jest.doMock('./hooks/useSelectTime', () => ({ useSelectTime: mockUseSelectTime }))
+  vi.doMock('./hooks/useSelectTime', () => ({ useSelectTime: mockUseSelectTime }))
 
-  const translateSpy = jest.fn((text) => text)
-  const useTranslationSpy = jest.fn(() => ({ t: translateSpy }))
+  const translateSpy = vi.fn((text) => text)
+  const useTranslationSpy = vi.fn(() => ({ t: translateSpy }))
 
-  jest.doMock('react-i18next', () => ({
+  vi.doMock('react-i18next', () => ({
     useTranslation: useTranslationSpy,
   }))
 

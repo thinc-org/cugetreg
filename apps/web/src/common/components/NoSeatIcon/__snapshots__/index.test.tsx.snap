@@ -1,13 +1,13 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`NoSeatIcon Should render correctly when open is false 1`] = `
+exports[`NoSeatIcon > Should render correctly when open is false 1`] = `
 <Fragment>
   <ForwardRef(IconButton)
     aria-haspopup="true"
     aria-owns="mouse-over-popover"
     color="primary"
-    onMouseEnter={[MockFunction]}
-    onMouseLeave={[MockFunction]}
+    onMouseEnter={[MockFunction spy]}
+    onMouseLeave={[MockFunction spy]}
     size="small"
   >
     <Memo(ForwardRef(ErrorOutlineIcon))
@@ -17,7 +17,7 @@ exports[`NoSeatIcon Should render correctly when open is false 1`] = `
   <ForwardRef(Popover)
     anchorEl={<a />}
     anchorOrigin={
-      Object {
+      {
         "horizontal": "left",
         "vertical": "bottom",
       }
@@ -25,15 +25,15 @@ exports[`NoSeatIcon Should render correctly when open is false 1`] = `
     container="current"
     disableRestoreFocus={true}
     id="mouse-over-popover"
-    onClose={[MockFunction]}
-    open={[MockFunction]}
+    onClose={[MockFunction spy]}
+    open={[MockFunction spy]}
     sx={
-      Object {
+      {
         "pointerEvents": "none",
       }
     }
     transformOrigin={
-      Object {
+      {
         "horizontal": "left",
         "vertical": "top",
       }
@@ -52,14 +52,14 @@ exports[`NoSeatIcon Should render correctly when open is false 1`] = `
 </Fragment>
 `;
 
-exports[`NoSeatIcon Should render correctly when open is true 1`] = `
+exports[`NoSeatIcon > Should render correctly when open is true 1`] = `
 <Fragment>
   <ForwardRef(IconButton)
     aria-haspopup="true"
     aria-owns="mouse-over-popover"
     color="primary"
-    onMouseEnter={[MockFunction]}
-    onMouseLeave={[MockFunction]}
+    onMouseEnter={[MockFunction spy]}
+    onMouseLeave={[MockFunction spy]}
     size="small"
   >
     <Memo(ForwardRef(ErrorOutlineIcon))
@@ -69,7 +69,7 @@ exports[`NoSeatIcon Should render correctly when open is true 1`] = `
   <ForwardRef(Popover)
     anchorEl={<a />}
     anchorOrigin={
-      Object {
+      {
         "horizontal": "left",
         "vertical": "bottom",
       }
@@ -77,15 +77,15 @@ exports[`NoSeatIcon Should render correctly when open is true 1`] = `
     container="current"
     disableRestoreFocus={true}
     id="mouse-over-popover"
-    onClose={[MockFunction]}
-    open={[MockFunction]}
+    onClose={[MockFunction spy]}
+    open={[MockFunction spy]}
     sx={
-      Object {
+      {
         "pointerEvents": "none",
       }
     }
     transformOrigin={
-      Object {
+      {
         "horizontal": "left",
         "vertical": "top",
       }

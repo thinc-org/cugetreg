@@ -1,7 +1,7 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`ReviewList should list of reviews 1`] = `
-<ForwardRef(Stack)
+exports[`ReviewList > should list of reviews 1`] = `
+<ForwardRef(Grid)
   mb={6}
   spacing={2}
 >
@@ -87,7 +87,7 @@ exports[`ReviewList should list of reviews 1`] = `
     status="APPROVED"
     studyProgram="S"
   />
-</ForwardRef(Stack)>
+</ForwardRef(Grid)>
 `;
 
-exports[`ReviewList should render nothing if there are no reviews 1`] = `""`;
+exports[`ReviewList > should render nothing if there are no reviews 1`] = `""`;

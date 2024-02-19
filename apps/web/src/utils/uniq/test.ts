@@ -1,4 +1,5 @@
 import assert from 'assert'
+import { describe, it } from 'vitest'
 
 import { uniq } from '@web/utils/uniq'
 

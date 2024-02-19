@@ -1,14 +1,14 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`App module Should app component render preperly when forceDark=false 1`] = `
+exports[`App module > Should app component render preperly when forceDark=false 1`] = `
 <AppProvider
   emotionCache={
-    Object {
+    {
       "insert": [Function],
-      "inserted": Object {},
+      "inserted": {},
       "key": "css",
       "nonce": undefined,
-      "registered": Object {},
+      "registered": {},
       "sheet": StyleSheet {
         "_insertTag": [Function],
         "before": null,
@@ -16,7 +16,42 @@ exports[`App module Should app component render preperly when forceDark=false 1`
           <style
             id="_goober"
           >
-             @keyframes go2264125279{from{transform:scale(0) rotate(45deg);opacity:0;}to{transform:scale(1) rotate(45deg);opacity:1;}}@keyframes go3020080000{from{transform:scale(0);opacity:0;}to{transform:scale(1);opacity:1;}}@keyframes go463499852{from{transform:scale(0) rotate(90deg);opacity:0;}to{transform:scale(1) rotate(90deg);opacity:1;}}@keyframes go1268368563{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}@keyframes go1310225428{from{transform:scale(0) rotate(45deg);opacity:0;}to{transform:scale(1) rotate(45deg);opacity:1;}}@keyframes go651618207{0%{height:0;width:0;opacity:0;}40%{height:0;width:6px;opacity:1;}100%{opacity:1;height:10px;}}@keyframes go901347462{from{transform:scale(0.6);opacity:0.4;}to{transform:scale(1);opacity:1;}}.go4109123758{z-index:9999;}.go4109123758 &gt; *{pointer-events:auto;}
+             @keyframes go2264125279{from{transform:scale(0) rotate(45deg);opacity:0;}to{transform:scale(1) rotate(45deg);opacity:1;}}
+          </style>
+          <style
+            id="_goober"
+          >
+             @keyframes go3020080000{from{transform:scale(0);opacity:0;}to{transform:scale(1);opacity:1;}}
+          </style>
+          <style
+            id="_goober"
+          >
+             @keyframes go463499852{from{transform:scale(0) rotate(90deg);opacity:0;}to{transform:scale(1) rotate(90deg);opacity:1;}}
+          </style>
+          <style
+            id="_goober"
+          >
+             @keyframes go1268368563{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+          </style>
+          <style
+            id="_goober"
+          >
+             @keyframes go1310225428{from{transform:scale(0) rotate(45deg);opacity:0;}to{transform:scale(1) rotate(45deg);opacity:1;}}
+          </style>
+          <style
+            id="_goober"
+          >
+             @keyframes go651618207{0%{height:0;width:0;opacity:0;}40%{height:0;width:6px;opacity:1;}100%{opacity:1;height:10px;}}
+          </style>
+          <style
+            id="_goober"
+          >
+             @keyframes go901347462{from{transform:scale(0.6);opacity:0.4;}to{transform:scale(1);opacity:1;}}
+          </style>
+          <style
+            id="_goober"
+          >
+             .go4109123758{z-index:9999;}.go4109123758 &gt; *{pointer-events:auto;}
           </style>
         </head>,
         "ctr": 0,
@@ -25,7 +60,7 @@ exports[`App module Should app component render preperly when forceDark=false 1`
         "key": "css",
         "nonce": undefined,
         "prepend": undefined,
-        "tags": Array [],
+        "tags": [],
       },
     }
   }
@@ -34,12 +69,12 @@ exports[`App module Should app component render preperly when forceDark=false 1`
   <TrackPageChange>
     <DefaultSeo
       additionalMetaTags={
-        Array [
-          Object {
+        [
+          {
             "content": "cu,chula,จุฬา,reg,getreg,regchula,ตารางเรียน,ตารางสอน,gened,CU Get Reg,ลงทะเบียนเรียน,อำนวยความสะดวก",
             "property": "keywords",
           },
-          Object {
+          {
             "content": "CU Get Reg",
             "name": "application-name",
           },
@@ -50,10 +85,10 @@ exports[`App module Should app component render preperly when forceDark=false 1`
       defaultTitle="CU Get Reg"
       description="เว็บไซต์เพื่ออำนวยความสะดวกในการลงทะเบียนเรียนให้กับนิสิตจุฬาฯ ทุกคน"
       openGraph={
-        Object {
+        {
           "description": "เว็บไซต์เพื่ออำนวยความสะดวกในการลงทะเบียนเรียนให้กับนิสิตจุฬาฯ ทุกคน",
-          "images": Array [
-            Object {
+          "images": [
+            {
               "alt": "CU Get Reg",
               "height": 600,
               "url": "http://localhost:4200/cover.jpg",
@@ -81,19 +116,20 @@ exports[`App module Should app component render preperly when forceDark=false 1`
     <ShoppingCartModal />
     <CustomToaster />
     <ForwardRef(LoadableComponent) />
+    <Memo(GoogleOneTapPrompt) />
   </TrackPageChange>
 </AppProvider>
 `;
 
-exports[`App module Should app component render preperly when forceDark=false 2`] = `
+exports[`App module > Should app component render preperly when forceDark=false 2`] = `
 <AppProvider
   emotionCache={
-    Object {
+    {
       "insert": [Function],
-      "inserted": Object {},
+      "inserted": {},
       "key": "css",
       "nonce": undefined,
-      "registered": Object {},
+      "registered": {},
       "sheet": StyleSheet {
         "_insertTag": [Function],
         "before": null,
@@ -101,7 +137,42 @@ exports[`App module Should app component render preperly when forceDark=false 2`
           <style
             id="_goober"
           >
-             @keyframes go2264125279{from{transform:scale(0) rotate(45deg);opacity:0;}to{transform:scale(1) rotate(45deg);opacity:1;}}@keyframes go3020080000{from{transform:scale(0);opacity:0;}to{transform:scale(1);opacity:1;}}@keyframes go463499852{from{transform:scale(0) rotate(90deg);opacity:0;}to{transform:scale(1) rotate(90deg);opacity:1;}}@keyframes go1268368563{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}@keyframes go1310225428{from{transform:scale(0) rotate(45deg);opacity:0;}to{transform:scale(1) rotate(45deg);opacity:1;}}@keyframes go651618207{0%{height:0;width:0;opacity:0;}40%{height:0;width:6px;opacity:1;}100%{opacity:1;height:10px;}}@keyframes go901347462{from{transform:scale(0.6);opacity:0.4;}to{transform:scale(1);opacity:1;}}.go4109123758{z-index:9999;}.go4109123758 &gt; *{pointer-events:auto;}
+             @keyframes go2264125279{from{transform:scale(0) rotate(45deg);opacity:0;}to{transform:scale(1) rotate(45deg);opacity:1;}}
+          </style>
+          <style
+            id="_goober"
+          >
+             @keyframes go3020080000{from{transform:scale(0);opacity:0;}to{transform:scale(1);opacity:1;}}
+          </style>
+          <style
+            id="_goober"
+          >
+             @keyframes go463499852{from{transform:scale(0) rotate(90deg);opacity:0;}to{transform:scale(1) rotate(90deg);opacity:1;}}
+          </style>
+          <style
+            id="_goober"
+          >
+             @keyframes go1268368563{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+          </style>
+          <style
+            id="_goober"
+          >
+             @keyframes go1310225428{from{transform:scale(0) rotate(45deg);opacity:0;}to{transform:scale(1) rotate(45deg);opacity:1;}}
+          </style>
+          <style
+            id="_goober"
+          >
+             @keyframes go651618207{0%{height:0;width:0;opacity:0;}40%{height:0;width:6px;opacity:1;}100%{opacity:1;height:10px;}}
+          </style>
+          <style
+            id="_goober"
+          >
+             @keyframes go901347462{from{transform:scale(0.6);opacity:0.4;}to{transform:scale(1);opacity:1;}}
+          </style>
+          <style
+            id="_goober"
+          >
+             .go4109123758{z-index:9999;}.go4109123758 &gt; *{pointer-events:auto;}
           </style>
         </head>,
         "ctr": 0,
@@ -110,7 +181,7 @@ exports[`App module Should app component render preperly when forceDark=false 2`
         "key": "css",
         "nonce": undefined,
         "prepend": undefined,
-        "tags": Array [],
+        "tags": [],
       },
     }
   }
@@ -119,12 +190,12 @@ exports[`App module Should app component render preperly when forceDark=false 2`
   <TrackPageChange>
     <DefaultSeo
       additionalMetaTags={
-        Array [
-          Object {
+        [
+          {
             "content": "cu,chula,จุฬา,reg,getreg,regchula,ตารางเรียน,ตารางสอน,gened,CU Get Reg,ลงทะเบียนเรียน,อำนวยความสะดวก",
             "property": "keywords",
           },
-          Object {
+          {
             "content": "CU Get Reg",
             "name": "application-name",
           },
@@ -135,10 +206,10 @@ exports[`App module Should app component render preperly when forceDark=false 2`
       defaultTitle="CU Get Reg"
       description="เว็บไซต์เพื่ออำนวยความสะดวกในการลงทะเบียนเรียนให้กับนิสิตจุฬาฯ ทุกคน"
       openGraph={
-        Object {
+        {
           "description": "เว็บไซต์เพื่ออำนวยความสะดวกในการลงทะเบียนเรียนให้กับนิสิตจุฬาฯ ทุกคน",
-          "images": Array [
-            Object {
+          "images": [
+            {
               "alt": "CU Get Reg",
               "height": 600,
               "url": "http://localhost:4200/cover.jpg",
@@ -166,19 +237,20 @@ exports[`App module Should app component render preperly when forceDark=false 2`
     <ShoppingCartModal />
     <CustomToaster />
     <ForwardRef(LoadableComponent) />
+    <Memo(GoogleOneTapPrompt) />
   </TrackPageChange>
 </AppProvider>
 `;
 
-exports[`App module Should app component render preperly when forceDark=false 3`] = `
+exports[`App module > Should app component render preperly when forceDark=false 3`] = `
 <AppProvider
   emotionCache={
-    Object {
+    {
       "insert": [Function],
-      "inserted": Object {},
+      "inserted": {},
       "key": "css",
       "nonce": undefined,
-      "registered": Object {},
+      "registered": {},
       "sheet": StyleSheet {
         "_insertTag": [Function],
         "before": null,
@@ -186,7 +258,42 @@ exports[`App module Should app component render preperly when forceDark=false 3`
           <style
             id="_goober"
           >
-             @keyframes go2264125279{from{transform:scale(0) rotate(45deg);opacity:0;}to{transform:scale(1) rotate(45deg);opacity:1;}}@keyframes go3020080000{from{transform:scale(0);opacity:0;}to{transform:scale(1);opacity:1;}}@keyframes go463499852{from{transform:scale(0) rotate(90deg);opacity:0;}to{transform:scale(1) rotate(90deg);opacity:1;}}@keyframes go1268368563{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}@keyframes go1310225428{from{transform:scale(0) rotate(45deg);opacity:0;}to{transform:scale(1) rotate(45deg);opacity:1;}}@keyframes go651618207{0%{height:0;width:0;opacity:0;}40%{height:0;width:6px;opacity:1;}100%{opacity:1;height:10px;}}@keyframes go901347462{from{transform:scale(0.6);opacity:0.4;}to{transform:scale(1);opacity:1;}}.go4109123758{z-index:9999;}.go4109123758 &gt; *{pointer-events:auto;}
+             @keyframes go2264125279{from{transform:scale(0) rotate(45deg);opacity:0;}to{transform:scale(1) rotate(45deg);opacity:1;}}
+          </style>
+          <style
+            id="_goober"
+          >
+             @keyframes go3020080000{from{transform:scale(0);opacity:0;}to{transform:scale(1);opacity:1;}}
+          </style>
+          <style
+            id="_goober"
+          >
+             @keyframes go463499852{from{transform:scale(0) rotate(90deg);opacity:0;}to{transform:scale(1) rotate(90deg);opacity:1;}}
+          </style>
+          <style
+            id="_goober"
+          >
+             @keyframes go1268368563{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+          </style>
+          <style
+            id="_goober"
+          >
+             @keyframes go1310225428{from{transform:scale(0) rotate(45deg);opacity:0;}to{transform:scale(1) rotate(45deg);opacity:1;}}
+          </style>
+          <style
+            id="_goober"
+          >
+             @keyframes go651618207{0%{height:0;width:0;opacity:0;}40%{height:0;width:6px;opacity:1;}100%{opacity:1;height:10px;}}
+          </style>
+          <style
+            id="_goober"
+          >
+             @keyframes go901347462{from{transform:scale(0.6);opacity:0.4;}to{transform:scale(1);opacity:1;}}
+          </style>
+          <style
+            id="_goober"
+          >
+             .go4109123758{z-index:9999;}.go4109123758 &gt; *{pointer-events:auto;}
           </style>
         </head>,
         "ctr": 0,
@@ -195,7 +302,7 @@ exports[`App module Should app component render preperly when forceDark=false 3`
         "key": "css",
         "nonce": undefined,
         "prepend": undefined,
-        "tags": Array [],
+        "tags": [],
       },
     }
   }
@@ -204,12 +311,12 @@ exports[`App module Should app component render preperly when forceDark=false 3`
   <TrackPageChange>
     <DefaultSeo
       additionalMetaTags={
-        Array [
-          Object {
+        [
+          {
             "content": "cu,chula,จุฬา,reg,getreg,regchula,ตารางเรียน,ตารางสอน,gened,CU Get Reg,ลงทะเบียนเรียน,อำนวยความสะดวก",
             "property": "keywords",
           },
-          Object {
+          {
             "content": "CU Get Reg",
             "name": "application-name",
           },
@@ -220,10 +327,10 @@ exports[`App module Should app component render preperly when forceDark=false 3`
       defaultTitle="CU Get Reg"
       description="เว็บไซต์เพื่ออำนวยความสะดวกในการลงทะเบียนเรียนให้กับนิสิตจุฬาฯ ทุกคน"
       openGraph={
-        Object {
+        {
           "description": "เว็บไซต์เพื่ออำนวยความสะดวกในการลงทะเบียนเรียนให้กับนิสิตจุฬาฯ ทุกคน",
-          "images": Array [
-            Object {
+          "images": [
+            {
               "alt": "CU Get Reg",
               "height": 600,
               "url": "http://localhost:4200/cover.jpg",
@@ -251,19 +358,20 @@ exports[`App module Should app component render preperly when forceDark=false 3`
     <ShoppingCartModal />
     <CustomToaster />
     <ForwardRef(LoadableComponent) />
+    <Memo(GoogleOneTapPrompt) />
   </TrackPageChange>
 </AppProvider>
 `;
 
-exports[`App module Should app component render preperly when forceDark=true 1`] = `
+exports[`App module > Should app component render preperly when forceDark=true 1`] = `
 <AppProvider
   emotionCache={
-    Object {
+    {
       "insert": [Function],
-      "inserted": Object {},
+      "inserted": {},
       "key": "css",
       "nonce": undefined,
-      "registered": Object {},
+      "registered": {},
       "sheet": StyleSheet {
         "_insertTag": [Function],
         "before": null,
@@ -271,7 +379,42 @@ exports[`App module Should app component render preperly when forceDark=true 1`]
           <style
             id="_goober"
           >
-             @keyframes go2264125279{from{transform:scale(0) rotate(45deg);opacity:0;}to{transform:scale(1) rotate(45deg);opacity:1;}}@keyframes go3020080000{from{transform:scale(0);opacity:0;}to{transform:scale(1);opacity:1;}}@keyframes go463499852{from{transform:scale(0) rotate(90deg);opacity:0;}to{transform:scale(1) rotate(90deg);opacity:1;}}@keyframes go1268368563{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}@keyframes go1310225428{from{transform:scale(0) rotate(45deg);opacity:0;}to{transform:scale(1) rotate(45deg);opacity:1;}}@keyframes go651618207{0%{height:0;width:0;opacity:0;}40%{height:0;width:6px;opacity:1;}100%{opacity:1;height:10px;}}@keyframes go901347462{from{transform:scale(0.6);opacity:0.4;}to{transform:scale(1);opacity:1;}}.go4109123758{z-index:9999;}.go4109123758 &gt; *{pointer-events:auto;}
+             @keyframes go2264125279{from{transform:scale(0) rotate(45deg);opacity:0;}to{transform:scale(1) rotate(45deg);opacity:1;}}
+          </style>
+          <style
+            id="_goober"
+          >
+             @keyframes go3020080000{from{transform:scale(0);opacity:0;}to{transform:scale(1);opacity:1;}}
+          </style>
+          <style
+            id="_goober"
+          >
+             @keyframes go463499852{from{transform:scale(0) rotate(90deg);opacity:0;}to{transform:scale(1) rotate(90deg);opacity:1;}}
+          </style>
+          <style
+            id="_goober"
+          >
+             @keyframes go1268368563{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+          </style>
+          <style
+            id="_goober"
+          >
+             @keyframes go1310225428{from{transform:scale(0) rotate(45deg);opacity:0;}to{transform:scale(1) rotate(45deg);opacity:1;}}
+          </style>
+          <style
+            id="_goober"
+          >
+             @keyframes go651618207{0%{height:0;width:0;opacity:0;}40%{height:0;width:6px;opacity:1;}100%{opacity:1;height:10px;}}
+          </style>
+          <style
+            id="_goober"
+          >
+             @keyframes go901347462{from{transform:scale(0.6);opacity:0.4;}to{transform:scale(1);opacity:1;}}
+          </style>
+          <style
+            id="_goober"
+          >
+             .go4109123758{z-index:9999;}.go4109123758 &gt; *{pointer-events:auto;}
           </style>
         </head>,
         "ctr": 0,
@@ -280,7 +423,7 @@ exports[`App module Should app component render preperly when forceDark=true 1`]
         "key": "css",
         "nonce": undefined,
         "prepend": undefined,
-        "tags": Array [],
+        "tags": [],
       },
     }
   }
@@ -289,12 +432,12 @@ exports[`App module Should app component render preperly when forceDark=true 1`]
   <TrackPageChange>
     <DefaultSeo
       additionalMetaTags={
-        Array [
-          Object {
+        [
+          {
             "content": "cu,chula,จุฬา,reg,getreg,regchula,ตารางเรียน,ตารางสอน,gened,CU Get Reg,ลงทะเบียนเรียน,อำนวยความสะดวก",
             "property": "keywords",
           },
-          Object {
+          {
             "content": "CU Get Reg",
             "name": "application-name",
           },
@@ -305,10 +448,10 @@ exports[`App module Should app component render preperly when forceDark=true 1`]
       defaultTitle="CU Get Reg"
       description="เว็บไซต์เพื่ออำนวยความสะดวกในการลงทะเบียนเรียนให้กับนิสิตจุฬาฯ ทุกคน"
       openGraph={
-        Object {
+        {
           "description": "เว็บไซต์เพื่ออำนวยความสะดวกในการลงทะเบียนเรียนให้กับนิสิตจุฬาฯ ทุกคน",
-          "images": Array [
-            Object {
+          "images": [
+            {
               "alt": "CU Get Reg",
               "height": 600,
               "url": "http://localhost:4200/cover.jpg",
@@ -336,19 +479,20 @@ exports[`App module Should app component render preperly when forceDark=true 1`]
     <ShoppingCartModal />
     <CustomToaster />
     <ForwardRef(LoadableComponent) />
+    <Memo(GoogleOneTapPrompt) />
   </TrackPageChange>
 </AppProvider>
 `;
 
-exports[`App module Should app component render preperly when forceDark=true 2`] = `
+exports[`App module > Should app component render preperly when forceDark=true 2`] = `
 <AppProvider
   emotionCache={
-    Object {
+    {
       "insert": [Function],
-      "inserted": Object {},
+      "inserted": {},
       "key": "css",
       "nonce": undefined,
-      "registered": Object {},
+      "registered": {},
       "sheet": StyleSheet {
         "_insertTag": [Function],
         "before": null,
@@ -356,7 +500,42 @@ exports[`App module Should app component render preperly when forceDark=true 2`]
           <style
             id="_goober"
           >
-             @keyframes go2264125279{from{transform:scale(0) rotate(45deg);opacity:0;}to{transform:scale(1) rotate(45deg);opacity:1;}}@keyframes go3020080000{from{transform:scale(0);opacity:0;}to{transform:scale(1);opacity:1;}}@keyframes go463499852{from{transform:scale(0) rotate(90deg);opacity:0;}to{transform:scale(1) rotate(90deg);opacity:1;}}@keyframes go1268368563{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}@keyframes go1310225428{from{transform:scale(0) rotate(45deg);opacity:0;}to{transform:scale(1) rotate(45deg);opacity:1;}}@keyframes go651618207{0%{height:0;width:0;opacity:0;}40%{height:0;width:6px;opacity:1;}100%{opacity:1;height:10px;}}@keyframes go901347462{from{transform:scale(0.6);opacity:0.4;}to{transform:scale(1);opacity:1;}}.go4109123758{z-index:9999;}.go4109123758 &gt; *{pointer-events:auto;}
+             @keyframes go2264125279{from{transform:scale(0) rotate(45deg);opacity:0;}to{transform:scale(1) rotate(45deg);opacity:1;}}
+          </style>
+          <style
+            id="_goober"
+          >
+             @keyframes go3020080000{from{transform:scale(0);opacity:0;}to{transform:scale(1);opacity:1;}}
+          </style>
+          <style
+            id="_goober"
+          >
+             @keyframes go463499852{from{transform:scale(0) rotate(90deg);opacity:0;}to{transform:scale(1) rotate(90deg);opacity:1;}}
+          </style>
+          <style
+            id="_goober"
+          >
+             @keyframes go1268368563{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+          </style>
+          <style
+            id="_goober"
+          >
+             @keyframes go1310225428{from{transform:scale(0) rotate(45deg);opacity:0;}to{transform:scale(1) rotate(45deg);opacity:1;}}
+          </style>
+          <style
+            id="_goober"
+          >
+             @keyframes go651618207{0%{height:0;width:0;opacity:0;}40%{height:0;width:6px;opacity:1;}100%{opacity:1;height:10px;}}
+          </style>
+          <style
+            id="_goober"
+          >
+             @keyframes go901347462{from{transform:scale(0.6);opacity:0.4;}to{transform:scale(1);opacity:1;}}
+          </style>
+          <style
+            id="_goober"
+          >
+             .go4109123758{z-index:9999;}.go4109123758 &gt; *{pointer-events:auto;}
           </style>
         </head>,
         "ctr": 0,
@@ -365,7 +544,7 @@ exports[`App module Should app component render preperly when forceDark=true 2`]
         "key": "css",
         "nonce": undefined,
         "prepend": undefined,
-        "tags": Array [],
+        "tags": [],
       },
     }
   }
@@ -374,12 +553,12 @@ exports[`App module Should app component render preperly when forceDark=true 2`]
   <TrackPageChange>
     <DefaultSeo
       additionalMetaTags={
-        Array [
-          Object {
+        [
+          {
             "content": "cu,chula,จุฬา,reg,getreg,regchula,ตารางเรียน,ตารางสอน,gened,CU Get Reg,ลงทะเบียนเรียน,อำนวยความสะดวก",
             "property": "keywords",
           },
-          Object {
+          {
             "content": "CU Get Reg",
             "name": "application-name",
           },
@@ -390,10 +569,10 @@ exports[`App module Should app component render preperly when forceDark=true 2`]
       defaultTitle="CU Get Reg"
       description="เว็บไซต์เพื่ออำนวยความสะดวกในการลงทะเบียนเรียนให้กับนิสิตจุฬาฯ ทุกคน"
       openGraph={
-        Object {
+        {
           "description": "เว็บไซต์เพื่ออำนวยความสะดวกในการลงทะเบียนเรียนให้กับนิสิตจุฬาฯ ทุกคน",
-          "images": Array [
-            Object {
+          "images": [
+            {
               "alt": "CU Get Reg",
               "height": 600,
               "url": "http://localhost:4200/cover.jpg",
@@ -421,19 +600,20 @@ exports[`App module Should app component render preperly when forceDark=true 2`]
     <ShoppingCartModal />
     <CustomToaster />
     <ForwardRef(LoadableComponent) />
+    <Memo(GoogleOneTapPrompt) />
   </TrackPageChange>
 </AppProvider>
 `;
 
-exports[`App module Should app component render preperly when forceDark=true 3`] = `
+exports[`App module > Should app component render preperly when forceDark=true 3`] = `
 <AppProvider
   emotionCache={
-    Object {
+    {
       "insert": [Function],
-      "inserted": Object {},
+      "inserted": {},
       "key": "css",
       "nonce": undefined,
-      "registered": Object {},
+      "registered": {},
       "sheet": StyleSheet {
         "_insertTag": [Function],
         "before": null,
@@ -441,7 +621,42 @@ exports[`App module Should app component render preperly when forceDark=true 3`]
           <style
             id="_goober"
           >
-             @keyframes go2264125279{from{transform:scale(0) rotate(45deg);opacity:0;}to{transform:scale(1) rotate(45deg);opacity:1;}}@keyframes go3020080000{from{transform:scale(0);opacity:0;}to{transform:scale(1);opacity:1;}}@keyframes go463499852{from{transform:scale(0) rotate(90deg);opacity:0;}to{transform:scale(1) rotate(90deg);opacity:1;}}@keyframes go1268368563{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}@keyframes go1310225428{from{transform:scale(0) rotate(45deg);opacity:0;}to{transform:scale(1) rotate(45deg);opacity:1;}}@keyframes go651618207{0%{height:0;width:0;opacity:0;}40%{height:0;width:6px;opacity:1;}100%{opacity:1;height:10px;}}@keyframes go901347462{from{transform:scale(0.6);opacity:0.4;}to{transform:scale(1);opacity:1;}}.go4109123758{z-index:9999;}.go4109123758 &gt; *{pointer-events:auto;}
+             @keyframes go2264125279{from{transform:scale(0) rotate(45deg);opacity:0;}to{transform:scale(1) rotate(45deg);opacity:1;}}
+          </style>
+          <style
+            id="_goober"
+          >
+             @keyframes go3020080000{from{transform:scale(0);opacity:0;}to{transform:scale(1);opacity:1;}}
+          </style>
+          <style
+            id="_goober"
+          >
+             @keyframes go463499852{from{transform:scale(0) rotate(90deg);opacity:0;}to{transform:scale(1) rotate(90deg);opacity:1;}}
+          </style>
+          <style
+            id="_goober"
+          >
+             @keyframes go1268368563{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+          </style>
+          <style
+            id="_goober"
+          >
+             @keyframes go1310225428{from{transform:scale(0) rotate(45deg);opacity:0;}to{transform:scale(1) rotate(45deg);opacity:1;}}
+          </style>
+          <style
+            id="_goober"
+          >
+             @keyframes go651618207{0%{height:0;width:0;opacity:0;}40%{height:0;width:6px;opacity:1;}100%{opacity:1;height:10px;}}
+          </style>
+          <style
+            id="_goober"
+          >
+             @keyframes go901347462{from{transform:scale(0.6);opacity:0.4;}to{transform:scale(1);opacity:1;}}
+          </style>
+          <style
+            id="_goober"
+          >
+             .go4109123758{z-index:9999;}.go4109123758 &gt; *{pointer-events:auto;}
           </style>
         </head>,
         "ctr": 0,
@@ -450,7 +665,7 @@ exports[`App module Should app component render preperly when forceDark=true 3`]
         "key": "css",
         "nonce": undefined,
         "prepend": undefined,
-        "tags": Array [],
+        "tags": [],
       },
     }
   }
@@ -459,12 +674,12 @@ exports[`App module Should app component render preperly when forceDark=true 3`]
   <TrackPageChange>
     <DefaultSeo
       additionalMetaTags={
-        Array [
-          Object {
+        [
+          {
             "content": "cu,chula,จุฬา,reg,getreg,regchula,ตารางเรียน,ตารางสอน,gened,CU Get Reg,ลงทะเบียนเรียน,อำนวยความสะดวก",
             "property": "keywords",
           },
-          Object {
+          {
             "content": "CU Get Reg",
             "name": "application-name",
           },
@@ -475,10 +690,10 @@ exports[`App module Should app component render preperly when forceDark=true 3`]
       defaultTitle="CU Get Reg"
       description="เว็บไซต์เพื่ออำนวยความสะดวกในการลงทะเบียนเรียนให้กับนิสิตจุฬาฯ ทุกคน"
       openGraph={
-        Object {
+        {
           "description": "เว็บไซต์เพื่ออำนวยความสะดวกในการลงทะเบียนเรียนให้กับนิสิตจุฬาฯ ทุกคน",
-          "images": Array [
-            Object {
+          "images": [
+            {
               "alt": "CU Get Reg",
               "height": 600,
               "url": "http://localhost:4200/cover.jpg",
@@ -506,6 +721,7 @@ exports[`App module Should app component render preperly when forceDark=true 3`]
     <ShoppingCartModal />
     <CustomToaster />
     <ForwardRef(LoadableComponent) />
+    <Memo(GoogleOneTapPrompt) />
   </TrackPageChange>
 </AppProvider>
 `;

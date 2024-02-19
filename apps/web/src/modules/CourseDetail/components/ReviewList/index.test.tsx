@@ -1,20 +1,21 @@
 import { shallow } from 'enzyme'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { mockMyPendingReviews, mockReviews } from '@web/__mock__/review'
 
 describe('ReviewList', () => {
-  const useReviewContextSpy = jest.fn()
+  const useReviewContextSpy = vi.fn()
 
-  jest.doMock('@web/modules/CourseDetail/context/Review', () => ({
+  vi.doMock('@web/modules/CourseDetail/context/Review', () => ({
     useReviewContext: useReviewContextSpy,
   }))
 
-  jest.doMock('@web/modules/CourseDetail/components/ReviewCard', () => ({
+  vi.doMock('@web/modules/CourseDetail/components/ReviewCard', () => ({
     ReviewCard: () => <>ReviewCard</>,
   }))
 
   beforeEach(() => {
-    jest.resetAllMocks()
+    vi.resetAllMocks()
   })
 
   it('should render nothing if there are no reviews', async () => {

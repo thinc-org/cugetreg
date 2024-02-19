@@ -1,3 +1,5 @@
+import { afterEach, describe, expect, it, vi } from 'vitest'
+
 import { Term } from '@web/common/types/term'
 
 import { DEFAULT_STUDY_PROGRAM } from '../../hooks/useCourseGroup/constants'
@@ -14,14 +16,14 @@ describe('parseCourseGroup', () => {
   const MOCK_STUDY_PROGRAM = 'T'
   const MOCK_WRONG_STUDY_PROGRAM = 'D'
 
-  const mockParseTerm = jest.fn((term: string) => {
+  const mockParseTerm = vi.fn((term: string) => {
     const isEmpty = term === ''
     return !isEmpty ? MOCK_TERM : MOCK_TERM_2
   })
-  jest.doMock('@web/common/utils/parseTerm', () => ({ parseTerm: mockParseTerm }))
+  vi.doMock('@web/common/utils/parseTerm', () => ({ parseTerm: mockParseTerm }))
 
   afterEach(() => {
-    jest.clearAllMocks()
+    vi.clearAllMocks()
   })
 
   it.each`

@@ -3,25 +3,26 @@ import { getModelToken } from '@nestjs/mongoose'
 import { Test, TestingModule } from '@nestjs/testing'
 
 import { Course, GenEdType, GenEdTypeEnum, StudyProgram } from '@thinc-org/chula-courses'
+import { vi } from 'vitest'
 
 import { Override } from '@reg-scraper/schema/override.schema'
 
 import { OverrideService } from './override.service'
 
-jest.mock('fs')
+vi.mock('fs')
 
 const MockConfigService = {
-  get: jest.fn(),
+  get: vi.fn(),
 }
 
 const MockOverrideModel = {
-  find: jest.fn(),
-  lean: jest.fn(),
+  find: vi.fn(),
+  lean: vi.fn(),
 }
 
 const MockReviewModel = {
-  find: jest.fn(),
-  lean: jest.fn(),
+  find: vi.fn(),
+  lean: vi.fn(),
 }
 
 const createOverride = (

@@ -1,10 +1,11 @@
 import { act, renderHook } from '@testing-library/react-hooks'
+import { describe, expect, it, vi } from 'vitest'
 
 describe('useCourseSearchPage', () => {
-  const mockUseMeiaQuery = jest.fn()
-  jest.doMock('@mui/material', () => ({
+  const mockUseMeiaQuery = vi.fn()
+  vi.doMock('@mui/material', () => ({
     useMediaQuery: mockUseMeiaQuery,
-    useTheme: jest.fn(() => ({ breakpoints: { up: jest.fn() } })),
+    useTheme: vi.fn(() => ({ breakpoints: { up: vi.fn() } })),
   }))
 
   it('Should toggleFilterBar and handleClose FilterBar correctly', async () => {

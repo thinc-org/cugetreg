@@ -1,4 +1,5 @@
 import { shallow } from 'enzyme'
+import { describe, expect, it } from 'vitest'
 
 import { Capacity } from '@cgr/codegen'
 

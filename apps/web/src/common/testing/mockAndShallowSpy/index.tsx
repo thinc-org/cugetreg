@@ -4,9 +4,7 @@ import { Mock, vi } from 'vitest'
 /**
  * @deprecated please use shallow rendering instead
  */
-export function mockAndShallowSpy(
-  modulePath: string
-): [Mock<JSX.Element, [props: any]>, () => void] {
+export function mockAndShallowSpy(modulePath: string): [Mock<any, [props: any]>, () => void] {
   const componentSpy = vi.fn((props: any) => {
     const children = props?.children || modulePath
 
@@ -19,5 +17,5 @@ export function mockAndShallowSpy(
 
   vi.doMock(modulePath, () => componentSpy)
 
-  return [componentSpy, resetComponentSpy]
+  return [componentSpy as any, resetComponentSpy]
 }

@@ -17,7 +17,7 @@ export function mockAndShallowSpy(
     componentSpy.mockClear()
   }
 
-  jest.doMock(modulePath, () => componentSpy)
+  vi.doMock(modulePath, () => componentSpy)
 
   return [componentSpy, resetComponentSpy]
 }

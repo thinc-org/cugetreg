@@ -1,5 +1,17 @@
 # web-e2e
 
+## 0.2.0-beta.1
+
+### Patch Changes
+
+- c0e5777: feat: next 14 and minor dependencies
+
+## 0.2.0-beta.0
+
+### Minor Changes
+
+- 4f342ee: deps: upgrade to node 20 and bump all patch-minor
+
 ## 0.1.0
 
 ### Minor Changes

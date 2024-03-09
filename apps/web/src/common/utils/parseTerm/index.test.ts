@@ -1,8 +1,10 @@
+import { describe, expect, it, vi } from 'vitest'
+
 import { Term } from '@web/common/types/term'
 
 describe('', () => {
-  jest.doMock('../getCurrentTerm', () => ({
-    getCurrentTerm: jest.fn(() => ({ academicYear: '2564', semester: '2' })),
+  vi.doMock('../getCurrentTerm', () => ({
+    getCurrentTerm: vi.fn(() => ({ academicYear: '2564', semester: '2' })),
   }))
 
   it.each`

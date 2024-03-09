@@ -1,10 +1,10 @@
 {
   "name": "web-e2e",
-  "version": "0.1.0",
+  "version": "0.2.0-beta.1",
   "main": "index.js",
   "license": "MIT",
   "devDependencies": {
-    "@playwright/test": "^1.38.1"
+    "@playwright/test": "^1.41.2"
   },
   "scripts": {
     "install-browser": "playwright install",

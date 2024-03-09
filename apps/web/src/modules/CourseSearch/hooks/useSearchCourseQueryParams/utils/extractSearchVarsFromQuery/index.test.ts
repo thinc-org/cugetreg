@@ -1,11 +1,13 @@
+import { describe, expect, it, vi } from 'vitest'
+
 import { CourseGroup } from '@web/common/hooks/useCourseGroup/types'
 
 import { QueryParams } from '../../types'
 
 describe('extractSearchVarsFromQuery', () => {
   const mockFilter = { key: 'value' }
-  const mockRemoveUndefinedValue = jest.fn(() => mockFilter)
-  jest.doMock('../removeUndefinedValue', () => ({ removeUndefinedValue: mockRemoveUndefinedValue }))
+  const mockRemoveUndefinedValue = vi.fn(() => mockFilter)
+  vi.doMock('../removeUndefinedValue', () => ({ removeUndefinedValue: mockRemoveUndefinedValue }))
 
   it.each`
     keyword      | genEdTypes   | dayOfWeeks   | expectedParam

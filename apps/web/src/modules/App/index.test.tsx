@@ -1,24 +1,25 @@
 import { shallow } from 'enzyme'
+import { afterAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
 describe('App module', () => {
-  const mockRouter = jest.fn()
-  const mockUseApp = jest.fn()
+  const mockRouter = vi.fn()
+  const mockUseApp = vi.fn()
   const mockPageProps = { test: 'test' }
   const mockComponent = () => <div></div>
-  const mockClient = jest.fn()
-  const mockUseSaveStudyProgram = jest.fn()
+  const mockClient = vi.fn()
+  const mockUseSaveStudyProgram = vi.fn()
 
-  jest.doMock('./hooks/useApp', () => ({ useApp: mockUseApp }))
-  jest.doMock('@web/common/hooks/useCourseGroup', () => ({
+  vi.doMock('./hooks/useApp', () => ({ useApp: mockUseApp }))
+  vi.doMock('@web/common/hooks/useCourseGroup', () => ({
     useSaveStudyProgram: mockUseSaveStudyProgram,
   }))
-  jest.doMock('@web/services/apollo', () => ({ client: mockClient }))
+  vi.doMock('@web/services/apollo', () => ({ client: mockClient }))
 
   const DEFAULT_ENV = process.env
 
   beforeEach(() => {
-    jest.resetModules()
-    jest.clearAllMocks()
+    vi.resetModules()
+    vi.clearAllMocks()
     process.env = { ...DEFAULT_ENV }
   })
 

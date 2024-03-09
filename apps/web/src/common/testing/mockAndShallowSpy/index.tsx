@@ -1,11 +1,11 @@
+import { Mock, vi } from 'vitest'
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * @deprecated please use shallow rendering instead
  */
-export function mockAndShallowSpy(
-  modulePath: string
-): [jest.Mock<JSX.Element, [props: any]>, () => void] {
-  const componentSpy = jest.fn((props: any) => {
+export function mockAndShallowSpy(modulePath: string): [Mock<any, [props: any]>, () => void] {
+  const componentSpy = vi.fn((props: any) => {
     const children = props?.children || modulePath
 
     return <div>{children}</div>
@@ -15,7 +15,7 @@ export function mockAndShallowSpy(
     componentSpy.mockClear()
   }
 
-  jest.doMock(modulePath, () => componentSpy)
+  vi.doMock(modulePath, () => componentSpy)
 
-  return [componentSpy, resetComponentSpy]
+  return [componentSpy as any, resetComponentSpy]
 }

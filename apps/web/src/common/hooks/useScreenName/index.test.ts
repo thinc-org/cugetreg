@@ -1,4 +1,5 @@
 import { renderHook } from '@testing-library/react-hooks'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import { ScreenName } from './constants'
 
@@ -9,11 +10,11 @@ describe('useScreenName', () => {
   const mockCR11Path = '/[studyProgram]/schedule/cr11'
   const mockOther = '/other'
 
-  const useRouterSpy = jest.fn()
+  const useRouterSpy = vi.fn()
 
   afterEach(() => {
-    jest.resetAllMocks()
-    jest.resetModules()
+    vi.resetAllMocks()
+    vi.resetModules()
   })
 
   it.each`
@@ -24,7 +25,7 @@ describe('useScreenName', () => {
     ${mockCR11Path}         | ${ScreenName.CR11}
     ${mockOther}            | ${undefined}
   `('should return courseSearch screen name', async ({ pathname, expectedScreenName }) => {
-    jest.doMock('next/router', () => ({
+    vi.doMock('next/router', () => ({
       useRouter: useRouterSpy.mockReturnValue({
         pathname: pathname,
       }),

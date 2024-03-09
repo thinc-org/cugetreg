@@ -2,6 +2,7 @@ import { MdDelete, MdEdit, MdFlag } from 'react-icons/md'
 
 import { ThemeProvider } from '@mui/material'
 import { shallow } from 'enzyme'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import {
   mockMyPendingReviews,
@@ -21,29 +22,29 @@ describe('ReviewCard', () => {
   const mockMyPendingReviewData = mockMyPendingReviews[0]
   const mockMyRejectedReviewData = mockMyRejectedReviews[0]
 
-  const useThemeSpy = jest.fn(() => lightTheme)
-  const setInteractionSpy = jest.fn()
-  const reportReviewSpy = jest.fn()
-  const deleteMyReviewSpy = jest.fn()
-  const editMyReviewSpy = jest.fn()
-  const useReviewContextSpy = jest.fn(() => ({
+  const useThemeSpy = vi.fn(() => lightTheme)
+  const setInteractionSpy = vi.fn()
+  const reportReviewSpy = vi.fn()
+  const deleteMyReviewSpy = vi.fn()
+  const editMyReviewSpy = vi.fn()
+  const useReviewContextSpy = vi.fn(() => ({
     setInteraction: setInteractionSpy,
     reportReview: reportReviewSpy,
     deleteMyReview: deleteMyReviewSpy,
     editMyReview: editMyReviewSpy,
   }))
 
-  jest.doMock('@web/modules/CourseDetail/context/Review', () => ({
+  vi.doMock('@web/modules/CourseDetail/context/Review', () => ({
     useReviewContext: useReviewContextSpy,
   }))
 
-  jest.doMock('@mui/material', () => ({
-    ...(jest.requireActual('@mui/material') as Record<string, unknown>),
+  vi.doMock('@mui/material', async () => ({
+    ...((await vi.importActual('@mui/material')) as Record<string, unknown>),
     useTheme: useThemeSpy,
   }))
 
   afterEach(() => {
-    jest.clearAllMocks()
+    vi.clearAllMocks()
   })
 
   async function customShallow(props: ReviewCardProps) {

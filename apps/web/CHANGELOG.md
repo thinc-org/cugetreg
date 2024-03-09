@@ -1,5 +1,36 @@
 # web
 
+## 1.9.0-beta.2
+
+### Patch Changes
+
+- 9c02387: test: migrate unit test
+- b3823e8: chore: enable new semester (2566/3)
+
+## 1.9.0-beta.1
+
+### Minor Changes
+
+- c0e5777: feat: next 14 and minor dependencies
+
+### Patch Changes
+
+- Updated dependencies [c0e5777]
+  - @cgr/codegen@1.4.0-beta.1
+  - @cgr/course-utils@1.2.0-beta.1
+
+## 1.9.0-beta.0
+
+### Minor Changes
+
+- 4f342ee: deps: upgrade to node 20 and bump all patch-minor
+
+### Patch Changes
+
+- Updated dependencies [4f342ee]
+  - @cgr/course-utils@1.2.0-beta.0
+  - @cgr/codegen@1.4.0-beta.0
+
 ## 1.8.0
 
 ### Minor Changes

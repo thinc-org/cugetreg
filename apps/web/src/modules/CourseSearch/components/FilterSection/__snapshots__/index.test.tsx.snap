@@ -1,14 +1,14 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`FilterSection Should matched snapshot correctly when matchSmallScreen=false and isExpandFilter=false 1`] = `
+exports[`FilterSection > Should matched snapshot correctly when matchSmallScreen=false and isExpandFilter=false 1`] = `
 <ResponsiveDialog
   fullWidth={true}
-  onClose={[MockFunction]}
+  onClose={[MockFunction spy]}
   open={false}
 >
   <ForwardRef(DialogContent)>
-    <ForwardRef(Stack)>
-      <ForwardRef(Stack)
+    <ForwardRef(Grid)>
+      <ForwardRef(Grid)
         direction="row"
         justifyContent="space-between"
       >
@@ -22,17 +22,22 @@ exports[`FilterSection Should matched snapshot correctly when matchSmallScreen=f
         >
           <Component />
         </Analytics>
-      </ForwardRef(Stack)>
+      </ForwardRef(Grid)>
+      <Analytics
+        elementName="grading_search_filter"
+      >
+        <Component />
+      </Analytics>
       <Analytics
         elementName="period_range_filter"
       >
         <Component />
       </Analytics>
-    </ForwardRef(Stack)>
+    </ForwardRef(Grid)>
     <Styled(ForwardRef(Button))
       color="primary"
       fullWidth={true}
-      onClick={[MockFunction]}
+      onClick={[MockFunction spy]}
       variant="outlined"
     >
       เลือกตัวกรอง
@@ -41,15 +46,15 @@ exports[`FilterSection Should matched snapshot correctly when matchSmallScreen=f
 </ResponsiveDialog>
 `;
 
-exports[`FilterSection Should matched snapshot correctly when matchSmallScreen=false and isExpandFilter=true 1`] = `
+exports[`FilterSection > Should matched snapshot correctly when matchSmallScreen=false and isExpandFilter=true 1`] = `
 <ResponsiveDialog
   fullWidth={true}
-  onClose={[MockFunction]}
+  onClose={[MockFunction spy]}
   open={true}
 >
   <ForwardRef(DialogContent)>
-    <ForwardRef(Stack)>
-      <ForwardRef(Stack)
+    <ForwardRef(Grid)>
+      <ForwardRef(Grid)
         direction="row"
         justifyContent="space-between"
       >
@@ -63,17 +68,22 @@ exports[`FilterSection Should matched snapshot correctly when matchSmallScreen=f
         >
           <Component />
         </Analytics>
-      </ForwardRef(Stack)>
+      </ForwardRef(Grid)>
+      <Analytics
+        elementName="grading_search_filter"
+      >
+        <Component />
+      </Analytics>
       <Analytics
         elementName="period_range_filter"
       >
         <Component />
       </Analytics>
-    </ForwardRef(Stack)>
+    </ForwardRef(Grid)>
     <Styled(ForwardRef(Button))
       color="primary"
       fullWidth={true}
-      onClick={[MockFunction]}
+      onClick={[MockFunction spy]}
       variant="outlined"
     >
       เลือกตัวกรอง
@@ -82,14 +92,14 @@ exports[`FilterSection Should matched snapshot correctly when matchSmallScreen=f
 </ResponsiveDialog>
 `;
 
-exports[`FilterSection Should matched snapshot correctly when matchSmallScreen=true and isExpandFilter=false 1`] = `""`;
+exports[`FilterSection > Should matched snapshot correctly when matchSmallScreen=true and isExpandFilter=false 1`] = `""`;
 
-exports[`FilterSection Should matched snapshot correctly when matchSmallScreen=true and isExpandFilter=true 1`] = `
+exports[`FilterSection > Should matched snapshot correctly when matchSmallScreen=true and isExpandFilter=true 1`] = `
 <Styled(ForwardRef(Paper))
   hasTags={true}
   variant="outlined"
 >
-  <ForwardRef(Stack)
+  <ForwardRef(Grid)
     overflow="auto"
     p={4}
     pr={2}
@@ -97,6 +107,12 @@ exports[`FilterSection Should matched snapshot correctly when matchSmallScreen=t
   >
     <Analytics
       elementName="gened_search_filter"
+      key="0"
+    >
+      <Component />
+    </Analytics>
+    <Analytics
+      elementName="grading_search_filter"
       key="1"
     >
       <Component />
@@ -113,58 +129,58 @@ exports[`FilterSection Should matched snapshot correctly when matchSmallScreen=t
     >
       <Component />
     </Analytics>
-  </ForwardRef(Stack)>
+  </ForwardRef(Grid)>
 </Styled(ForwardRef(Paper))>
 `;
 
-exports[`FilterSection Should render CheckboxGroup of GenEds correctly when when matchSmallScreen=false and isExpandFilter=false 1`] = `
+exports[`FilterSection > Should render CheckboxGroup of GenEds correctly when when matchSmallScreen=false and isExpandFilter=false 1`] = `
 <CheckboxGroup
-  checkboxes={Array []}
+  checkboxes={[]}
   id="genEdFilter"
   log={[Function]}
   title="หมวดหมู่ GenEd"
 />
 `;
 
-exports[`FilterSection Should render CheckboxGroup of GenEds correctly when when matchSmallScreen=false and isExpandFilter=true 1`] = `
+exports[`FilterSection > Should render CheckboxGroup of GenEds correctly when when matchSmallScreen=false and isExpandFilter=true 1`] = `
 <CheckboxGroup
-  checkboxes={Array []}
+  checkboxes={[]}
   id="genEdFilter"
   log={[Function]}
   title="หมวดหมู่ GenEd"
 />
 `;
 
-exports[`FilterSection Should render CheckboxGroup of GenEds correctly when when matchSmallScreen=true and isExpandFilter=true 1`] = `
+exports[`FilterSection > Should render CheckboxGroup of GenEds correctly when when matchSmallScreen=true and isExpandFilter=true 1`] = `
 <CheckboxGroup
-  checkboxes={Array []}
+  checkboxes={[]}
   id="genEdFilter"
   log={[Function]}
   title="หมวดหมู่ GenEd"
 />
 `;
 
-exports[`FilterSection Should render CheckboxGroup of days correctly when matchSmallScreen=false and isExpandFilter=false 1`] = `
+exports[`FilterSection > Should render CheckboxGroup of days correctly when matchSmallScreen=false and isExpandFilter=false 1`] = `
 <CheckboxGroup
-  checkboxes={Array []}
+  checkboxes={[]}
   id="dayOfWeekFilter"
   log={[Function]}
   title="วันในสัปดาห์"
 />
 `;
 
-exports[`FilterSection Should render CheckboxGroup of days correctly when matchSmallScreen=false and isExpandFilter=true 1`] = `
+exports[`FilterSection > Should render CheckboxGroup of days correctly when matchSmallScreen=false and isExpandFilter=true 1`] = `
 <CheckboxGroup
-  checkboxes={Array []}
+  checkboxes={[]}
   id="dayOfWeekFilter"
   log={[Function]}
   title="วันในสัปดาห์"
 />
 `;
 
-exports[`FilterSection Should render CheckboxGroup of days correctly when matchSmallScreen=true and isExpandFilter=true 1`] = `
+exports[`FilterSection > Should render CheckboxGroup of days correctly when matchSmallScreen=true and isExpandFilter=true 1`] = `
 <CheckboxGroup
-  checkboxes={Array []}
+  checkboxes={[]}
   id="dayOfWeekFilter"
   log={[Function]}
   title="วันในสัปดาห์"

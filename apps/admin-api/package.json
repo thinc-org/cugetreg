@@ -1,6 +1,6 @@
 {
   "name": "admin-api",
-  "version": "1.1.0",
+  "version": "1.2.0-beta.1",
   "description": "",
   "author": "",
   "private": true,
@@ -14,7 +14,7 @@
     "prebuild": "rimraf dist"
   },
   "dependencies": {
-    "@apollo/server": "^4.9.3",
+    "@apollo/server": "^4.10.0",
     "@cgr/schema": "workspace:*",
     "@nestjs/apollo": "^11.0.6",
     "@nestjs/axios": "^2.0.0",
@@ -37,14 +37,11 @@
     "rxjs": "^7.8.1"
   },
   "devDependencies": {
-    "@types/cookie-parser": "^1.4.4",
-    "@types/express": "^4.17.18",
-    "@types/jest": "29.5.5",
-    "@types/node": "^18.18.1",
-    "eslint": "8.50.0",
-    "jest": "29.7.0",
-    "ts-jest": "29.1.1",
+    "@types/cookie-parser": "^1.4.6",
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.11.17",
+    "eslint": "8.56.0",
     "ts-morph": "^20.0.0",
-    "typescript": "~5.2.2"
+    "typescript": "~5.3.3"
   }
 }

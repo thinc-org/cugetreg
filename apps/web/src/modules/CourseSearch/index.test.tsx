@@ -1,27 +1,28 @@
 import React from 'react'
 
 import { shallow } from 'enzyme'
+import { describe, expect, it, vi } from 'vitest'
 
 describe('CourseSearchPage', () => {
   const mockOpenFilterBar = false
   const mockAcademicYear = '2564'
   const mockSemester = '1'
 
-  const setTermSpy = jest.fn()
-  const setOpenFilterBarSpy = jest.fn()
-  const useCourseSearchPageSpy = jest.fn(() => ({
+  const setTermSpy = vi.fn()
+  const setOpenFilterBarSpy = vi.fn()
+  const useCourseSearchPageSpy = vi.fn(() => ({
     openFilterBar: mockOpenFilterBar,
     setOpenFilterBar: setOpenFilterBarSpy,
-    onOpen: jest.fn(),
+    onOpen: vi.fn(),
   }))
 
-  jest.doMock('./hooks/useCourseSearchPage', () => ({
+  vi.doMock('./hooks/useCourseSearchPage', () => ({
     useCourseSearchPage: useCourseSearchPageSpy,
   }))
-  jest.doMock('@web/services/apollo', () => ({
-    client: { mutate: jest.fn() },
+  vi.doMock('@web/services/apollo', () => ({
+    client: { mutate: vi.fn() },
   }))
-  jest.doMock('@web/common/hooks/useCourseGroup', () => ({
+  vi.doMock('@web/common/hooks/useCourseGroup', () => ({
     useCourseGroup: () => ({
       academicYear: mockAcademicYear,
       semester: mockSemester,

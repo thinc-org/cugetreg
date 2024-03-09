@@ -1,18 +1,18 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`ReviewCard should render correctly if this is not your review 1`] = `
-<Styled(ForwardRef(Stack))
+exports[`ReviewCard > should render correctly if this is not your review 1`] = `
+<Styled(ForwardRef(Grid))
   direction="column"
   pending={false}
   spacing={2}
 >
-  <ForwardRef(Stack)
+  <ForwardRef(Grid)
     direction="row"
     flexWrap="wrap"
     gap={1}
     justifyContent="space-between"
   >
-    <ForwardRef(Stack)
+    <ForwardRef(Grid)
       alignItems="center"
       direction="row"
       spacing={2}
@@ -22,8 +22,8 @@ exports[`ReviewCard should render correctly if this is not your review 1`] = `
       >
         2564 ภาคปลาย
       </Styled(Styled(ForwardRef(Typography)))>
-    </ForwardRef(Stack)>
-    <ForwardRef(Stack)
+    </ForwardRef(Grid)>
+    <ForwardRef(Grid)
       alignItems="center"
       direction="row"
       spacing={1}
@@ -41,21 +41,21 @@ exports[`ReviewCard should render correctly if this is not your review 1`] = `
       >
         จาก 5
       </Styled(ForwardRef(Typography))>
-    </ForwardRef(Stack)>
-  </ForwardRef(Stack)>
+    </ForwardRef(Grid)>
+  </ForwardRef(Grid)>
   <Styled(div)
     dangerouslySetInnerHTML={
-      Object {
+      {
         "__html": "เหนื่อยากเลยค่าแงงงงง",
       }
     }
   />
-  <ForwardRef(Stack)
+  <ForwardRef(Grid)
     alignItems="center"
     direction="row"
     justifyContent="space-between"
   >
-    <ForwardRef(Stack)
+    <ForwardRef(Grid)
       direction="row"
       spacing={3}
     >
@@ -71,24 +71,24 @@ exports[`ReviewCard should render correctly if this is not your review 1`] = `
         reactionCount={0}
         type="D"
       />
-    </ForwardRef(Stack)>
-  </ForwardRef(Stack)>
-</Styled(ForwardRef(Stack))>
+    </ForwardRef(Grid)>
+  </ForwardRef(Grid)>
+</Styled(ForwardRef(Grid))>
 `;
 
-exports[`ReviewCard should render correctly if this is your approved review 1`] = `
-<Styled(ForwardRef(Stack))
+exports[`ReviewCard > should render correctly if this is your approved review 1`] = `
+<Styled(ForwardRef(Grid))
   direction="column"
   pending={false}
   spacing={2}
 >
-  <ForwardRef(Stack)
+  <ForwardRef(Grid)
     direction="row"
     flexWrap="wrap"
     gap={1}
     justifyContent="space-between"
   >
-    <ForwardRef(Stack)
+    <ForwardRef(Grid)
       alignItems="center"
       direction="row"
       spacing={2}
@@ -98,8 +98,8 @@ exports[`ReviewCard should render correctly if this is your approved review 1`] 
       >
         2564 ภาคปลาย
       </Styled(Styled(ForwardRef(Typography)))>
-    </ForwardRef(Stack)>
-    <ForwardRef(Stack)
+    </ForwardRef(Grid)>
+    <ForwardRef(Grid)
       alignItems="center"
       direction="row"
       spacing={1}
@@ -117,21 +117,21 @@ exports[`ReviewCard should render correctly if this is your approved review 1`] 
       >
         จาก 5
       </Styled(ForwardRef(Typography))>
-    </ForwardRef(Stack)>
-  </ForwardRef(Stack)>
+    </ForwardRef(Grid)>
+  </ForwardRef(Grid)>
   <Styled(div)
     dangerouslySetInnerHTML={
-      Object {
+      {
         "__html": "เหนื่อยากเลยค่าแงงงงง",
       }
     }
   />
-  <ForwardRef(Stack)
+  <ForwardRef(Grid)
     alignItems="center"
     direction="row"
     justifyContent="space-between"
   >
-    <ForwardRef(Stack)
+    <ForwardRef(Grid)
       direction="row"
       spacing={3}
     >
@@ -147,8 +147,8 @@ exports[`ReviewCard should render correctly if this is your approved review 1`] 
         reactionCount={0}
         type="D"
       />
-    </ForwardRef(Stack)>
-    <ForwardRef(Stack)
+    </ForwardRef(Grid)>
+    <ForwardRef(Grid)
       direction="row"
       ml="auto"
       spacing={1}
@@ -172,24 +172,24 @@ exports[`ReviewCard should render correctly if this is your approved review 1`] 
           size={24}
         />
       </ForwardRef(IconButton)>
-    </ForwardRef(Stack)>
-  </ForwardRef(Stack)>
-</Styled(ForwardRef(Stack))>
+    </ForwardRef(Grid)>
+  </ForwardRef(Grid)>
+</Styled(ForwardRef(Grid))>
 `;
 
-exports[`ReviewCard should render correctly if this is your pending review 1`] = `
-<Styled(ForwardRef(Stack))
+exports[`ReviewCard > should render correctly if this is your pending review 1`] = `
+<Styled(ForwardRef(Grid))
   direction="column"
   pending={true}
   spacing={2}
 >
-  <ForwardRef(Stack)
+  <ForwardRef(Grid)
     direction="row"
     flexWrap="wrap"
     gap={1}
     justifyContent="space-between"
   >
-    <ForwardRef(Stack)
+    <ForwardRef(Grid)
       alignItems="center"
       direction="row"
       spacing={2}
@@ -202,8 +202,8 @@ exports[`ReviewCard should render correctly if this is your pending review 1`] =
       <GeneralChip
         type="reviewPending"
       />
-    </ForwardRef(Stack)>
-    <ForwardRef(Stack)
+    </ForwardRef(Grid)>
+    <ForwardRef(Grid)
       alignItems="center"
       direction="row"
       spacing={1}
@@ -221,21 +221,21 @@ exports[`ReviewCard should render correctly if this is your pending review 1`] =
       >
         จาก 5
       </Styled(ForwardRef(Typography))>
-    </ForwardRef(Stack)>
-  </ForwardRef(Stack)>
+    </ForwardRef(Grid)>
+  </ForwardRef(Grid)>
   <Styled(div)
     dangerouslySetInnerHTML={
-      Object {
+      {
         "__html": "เขียนดี ๆ แล้ว อิอิ",
       }
     }
   />
-  <ForwardRef(Stack)
+  <ForwardRef(Grid)
     alignItems="center"
     direction="row"
     justifyContent="space-between"
   >
-    <ForwardRef(Stack)
+    <ForwardRef(Grid)
       direction="row"
       spacing={3}
     >
@@ -251,8 +251,8 @@ exports[`ReviewCard should render correctly if this is your pending review 1`] =
         reactionCount={0}
         type="D"
       />
-    </ForwardRef(Stack)>
-    <ForwardRef(Stack)
+    </ForwardRef(Grid)>
+    <ForwardRef(Grid)
       direction="row"
       ml="auto"
       spacing={1}
@@ -276,24 +276,24 @@ exports[`ReviewCard should render correctly if this is your pending review 1`] =
           size={24}
         />
       </ForwardRef(IconButton)>
-    </ForwardRef(Stack)>
-  </ForwardRef(Stack)>
-</Styled(ForwardRef(Stack))>
+    </ForwardRef(Grid)>
+  </ForwardRef(Grid)>
+</Styled(ForwardRef(Grid))>
 `;
 
-exports[`ReviewCard should render correctly if this is your rejected review 1`] = `
-<Styled(ForwardRef(Stack))
+exports[`ReviewCard > should render correctly if this is your rejected review 1`] = `
+<Styled(ForwardRef(Grid))
   direction="column"
   pending={true}
   spacing={2}
 >
-  <ForwardRef(Stack)
+  <ForwardRef(Grid)
     direction="row"
     flexWrap="wrap"
     gap={1}
     justifyContent="space-between"
   >
-    <ForwardRef(Stack)
+    <ForwardRef(Grid)
       alignItems="center"
       direction="row"
       spacing={2}
@@ -306,8 +306,8 @@ exports[`ReviewCard should render correctly if this is your rejected review 1`] 
       <GeneralChip
         type="reviewRejected"
       />
-    </ForwardRef(Stack)>
-    <ForwardRef(Stack)
+    </ForwardRef(Grid)>
+    <ForwardRef(Grid)
       alignItems="center"
       direction="row"
       spacing={1}
@@ -325,16 +325,16 @@ exports[`ReviewCard should render correctly if this is your rejected review 1`] 
       >
         จาก 5
       </Styled(ForwardRef(Typography))>
-    </ForwardRef(Stack)>
-  </ForwardRef(Stack)>
+    </ForwardRef(Grid)>
+  </ForwardRef(Grid)>
   <Styled(div)
     dangerouslySetInnerHTML={
-      Object {
+      {
         "__html": "เขียนดี ๆ แล้ว อิอิ",
       }
     }
   />
-  <ForwardRef(Stack)
+  <ForwardRef(Grid)
     alignItems="center"
     direction="row"
     justifyContent="space-between"
@@ -348,7 +348,7 @@ exports[`ReviewCard should render correctly if this is your rejected review 1`] 
       <br />
       กรุณาแก้ไข ก่อนส่งรีวิวรายวิชาอีกครั้ง
     </Styled(ForwardRef(Typography))>
-    <ForwardRef(Stack)
+    <ForwardRef(Grid)
       direction="row"
       ml="auto"
       spacing={1}
@@ -372,7 +372,7 @@ exports[`ReviewCard should render correctly if this is your rejected review 1`] 
           size={24}
         />
       </ForwardRef(IconButton)>
-    </ForwardRef(Stack)>
-  </ForwardRef(Stack)>
-</Styled(ForwardRef(Stack))>
+    </ForwardRef(Grid)>
+  </ForwardRef(Grid)>
+</Styled(ForwardRef(Grid))>
 `;

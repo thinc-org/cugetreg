@@ -1,33 +1,34 @@
 import { act, renderHook } from '@testing-library/react-hooks'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 
 describe('useFilterBar', () => {
-  const mockSetFilter = jest.fn()
+  const mockSetFilter = vi.fn()
   const MOCK_GENEDTYPE = ['SO']
   const MOCK_DAYOFWEEK = ['TH', 'WE']
   const MOCK_SEARCH_QEURY_PARAM = {
     filter: { genEdypes: MOCK_GENEDTYPE, dayOfWeeks: MOCK_DAYOFWEEK },
   }
-  const mockUseSearchCourseQueryParams = jest.fn(() => ({
+  const mockUseSearchCourseQueryParams = vi.fn(() => ({
     setFilter: mockSetFilter,
     searchCourseQueryParams: MOCK_SEARCH_QEURY_PARAM,
   }))
   const MOCK_ADDED_TAG = ['tag1', 'tag2']
   const MOCK_REMOVED_TAG = ['tag3']
-  const mockAddTag = jest.fn(() => MOCK_ADDED_TAG)
-  const mockRemoveTag = jest.fn(() => MOCK_REMOVED_TAG)
+  const mockAddTag = vi.fn(() => MOCK_ADDED_TAG)
+  const mockRemoveTag = vi.fn(() => MOCK_REMOVED_TAG)
 
-  jest.doMock('@web/modules/CourseSearch/hooks/useSearchCourseQueryParams', () => ({
+  vi.doMock('@web/modules/CourseSearch/hooks/useSearchCourseQueryParams', () => ({
     useSearchCourseQueryParams: mockUseSearchCourseQueryParams,
   }))
-  jest.doMock('../../utils/addTag', () => ({
+  vi.doMock('../../utils/addTag', () => ({
     addTag: mockAddTag,
   }))
-  jest.doMock('../../utils/removeTag', () => ({
+  vi.doMock('../../utils/removeTag', () => ({
     removeTag: mockRemoveTag,
   }))
 
   afterEach(() => {
-    jest.clearAllMocks()
+    vi.clearAllMocks()
   })
 
   const EXPECTED_CHECKBOXES = [

@@ -2,6 +2,7 @@ import { MdThumbDown, MdThumbDownOffAlt, MdThumbUp, MdThumbUpOffAlt } from 'reac
 
 import { ThemeProvider } from '@mui/material'
 import { shallow } from 'enzyme'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import { lightTheme } from '@web/configs/theme'
 
@@ -16,15 +17,15 @@ describe('ReviewReaction', () => {
     reactionCount: 42,
   }
 
-  const useThemeSpy = jest.fn(() => lightTheme)
+  const useThemeSpy = vi.fn(() => lightTheme)
 
-  jest.doMock('@mui/material', () => ({
-    ...(jest.requireActual('@mui/material') as any),
+  vi.doMock('@mui/material', async () => ({
+    ...((await vi.importActual('@mui/material')) as any),
     useTheme: useThemeSpy,
   }))
 
   afterEach(() => {
-    jest.clearAllMocks()
+    vi.clearAllMocks()
   })
 
   it.each`

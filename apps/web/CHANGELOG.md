@@ -1,5 +1,12 @@
 # web
 
+## 1.9.0-beta.2
+
+### Patch Changes
+
+- 9c02387: test: migrate unit test
+- b3823e8: chore: enable new semester (2566/3)
+
 ## 1.9.0-beta.1
 
 ### Minor Changes

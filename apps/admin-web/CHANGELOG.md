@@ -1,5 +1,19 @@
 # admin-web
 
+## 1.2.0
+
+### Minor Changes
+
+- 4f342ee: deps: upgrade to node 20 and bump all patch-minor
+- c0e5777: feat: next 14 and minor dependencies
+
+### Patch Changes
+
+- Updated dependencies [4f342ee]
+- Updated dependencies [c0e5777]
+  - @cgr/course-utils@1.2.0
+  - @cgr/codegen@1.4.0
+
 ## 1.2.0-beta.1
 
 ### Minor Changes

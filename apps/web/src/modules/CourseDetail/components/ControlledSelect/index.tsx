@@ -1,9 +1,9 @@
 import { Controller, FieldValues, UseControllerProps } from 'react-hook-form'
 
-import { Select, SelectProps } from '@mui/material'
+import { BaseSelectProps, Select } from '@mui/material'
 
 type ControlledSelectProps<TFieldValues extends FieldValues = FieldValues> =
-  UseControllerProps<TFieldValues> & SelectProps
+  UseControllerProps<TFieldValues> & BaseSelectProps
 
 export function ControlledSelect<TFieldValues extends FieldValues = FieldValues>({
   name,

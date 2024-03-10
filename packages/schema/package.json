@@ -14,7 +14,7 @@
     "mongoose": "6.12.0"
   },
   "devDependencies": {
-    "eslint": "8.56.0",
-    "typescript": "~5.3.3"
+    "eslint": "8.57.0",
+    "typescript": "~5.4.2"
   }
 }

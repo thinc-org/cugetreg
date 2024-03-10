@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "devDependencies": {
-    "@playwright/test": "^1.41.2"
+    "@playwright/test": "^1.42.1"
   },
   "scripts": {
     "install-browser": "playwright install",

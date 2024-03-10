@@ -69,8 +69,8 @@ importers:
         specifier: 11.0.5
         version: 11.0.5(@nestjs/common@9.4.0)(@nestjs/core@9.4.0)(class-transformer@0.3.1)(class-validator@0.14.1)(graphql@16.8.1)(reflect-metadata@0.1.14)(ts-morph@21.0.1)
       '@nestjs/jwt':
-        specifier: 7.2.0
-        version: 7.2.0(@nestjs/common@9.4.0)
+        specifier: 10.2.0
+        version: 10.2.0(@nestjs/common@9.4.0)
       '@nestjs/mongoose':
         specifier: 9.2.1
         version: 9.2.1(@nestjs/common@9.4.0)(@nestjs/core@9.4.0)(mongoose@6.12.0)(reflect-metadata@0.1.14)(rxjs@7.8.1)
@@ -81,8 +81,8 @@ importers:
         specifier: 2.1.0
         version: 2.1.0(@nestjs/common@9.4.0)(@nestjs/core@9.4.0)(reflect-metadata@0.1.14)
       '@slack/webhook':
-        specifier: 6.1.0
-        version: 6.1.0
+        specifier: 7.0.2
+        version: 7.0.2
       axios:
         specifier: 0.28.0
         version: 0.28.0
@@ -224,8 +224,8 @@ importers:
         specifier: 11.0.5
         version: 11.0.5(@nestjs/common@9.4.0)(@nestjs/core@9.4.0)(class-transformer@0.3.1)(class-validator@0.14.1)(graphql@16.8.1)(reflect-metadata@0.1.14)(ts-morph@21.0.1)
       '@nestjs/jwt':
-        specifier: 7.2.0
-        version: 7.2.0(@nestjs/common@9.4.0)
+        specifier: 10.2.0
+        version: 10.2.0(@nestjs/common@9.4.0)
       '@nestjs/mongoose':
         specifier: 9.2.1
         version: 9.2.1(@nestjs/common@9.4.0)(@nestjs/core@9.4.0)(mongoose@6.12.0)(reflect-metadata@0.1.14)(rxjs@7.8.1)
@@ -239,8 +239,8 @@ importers:
         specifier: 2.5.0
         version: 2.5.0
       '@slack/webhook':
-        specifier: 6.1.0
-        version: 6.1.0
+        specifier: 7.0.2
+        version: 7.0.2
       '@typegoose/typegoose':
         specifier: 9.1.0
         version: 9.1.0(mongoose@6.12.0)
@@ -306,8 +306,8 @@ importers:
         specifier: 20.11.25
         version: 20.11.25
       '@types/passport-jwt':
-        specifier: ^3.0.13
-        version: 3.0.13
+        specifier: ^4.0.1
+        version: 4.0.1
       eslint:
         specifier: 8.57.0
         version: 8.57.0
@@ -4584,14 +4584,14 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@nestjs/jwt@7.2.0(@nestjs/common@9.4.0):
-    resolution: {integrity: sha512-uOTqYmWNpu+oS/MrdYjrWXtKGV4HkCYmAEVEFPP/KfiP/7K6fNy+boLllE6cnqESAXh9u0CLa1noAAavs+LHEQ==}
+  /@nestjs/jwt@10.2.0(@nestjs/common@9.4.0):
+    resolution: {integrity: sha512-x8cG90SURkEiLOehNaN2aRlotxT0KZESUliOPKKnjWiyJOcWurkF3w345WOX0P4MgFzUjGoZ1Sy0aZnxeihT0g==}
     peerDependencies:
-      '@nestjs/common': ^6.0.0 || ^7.0.0
+      '@nestjs/common': ^8.0.0 || ^9.0.0 || ^10.0.0
     dependencies:
       '@nestjs/common': 9.4.0(class-transformer@0.3.1)(class-validator@0.14.1)(reflect-metadata@0.1.14)(rxjs@7.8.1)
-      '@types/jsonwebtoken': 8.5.0
-      jsonwebtoken: 8.5.1
+      '@types/jsonwebtoken': 9.0.5
+      jsonwebtoken: 9.0.2
     dev: false
 
   /@nestjs/mapped-types@1.2.2(@nestjs/common@9.4.0)(class-transformer@0.3.1)(class-validator@0.14.1)(reflect-metadata@0.1.14):
@@ -5060,18 +5060,18 @@ packages:
     resolution: {integrity: sha512-+Fj43pSMwJs4KRrH/938Uf+uAELIgVBmQzg/q1YG10djyfA3TnrU8N8XzqCh/okZdszqBQTZf96idMfE5lnwTA==}
     dev: true
 
-  /@slack/types@1.10.0:
-    resolution: {integrity: sha512-tA7GG7Tj479vojfV3AoxbckalA48aK6giGjNtgH6ihpLwTyHE3fIgRrvt8TWfLwW8X8dyu7vgmAsGLRG7hWWOg==}
-    engines: {node: '>= 8.9.0', npm: '>= 5.5.1'}
+  /@slack/types@2.11.0:
+    resolution: {integrity: sha512-UlIrDWvuLaDly3QZhCPnwUSI/KYmV1N9LyhuH6EDKCRS1HWZhyTG3Ja46T3D0rYfqdltKYFXbJSSRPwZpwO0cQ==}
+    engines: {node: '>= 12.13.0', npm: '>= 6.12.0'}
     dev: false
 
-  /@slack/webhook@6.1.0:
-    resolution: {integrity: sha512-7AYNISyAjn/lA/VDwZ307K5ft5DojXgBd3DRrGoFN8XxIwIyRALdFhxBiMgAqeJH8eWoktvNwLK24R9hREEqpA==}
-    engines: {node: '>= 12.13.0', npm: '>= 6.12.0'}
+  /@slack/webhook@7.0.2:
+    resolution: {integrity: sha512-dsrO/ow6a6+xkLm/lZKbUNTsFJlBc679tD+qwlVTztsQkDxPLH6odM7FKALz1IHa+KpLX8HKUIPV13a7y7z29w==}
+    engines: {node: '>= 18', npm: '>= 8.6.0'}
     dependencies:
-      '@slack/types': 1.10.0
+      '@slack/types': 2.11.0
       '@types/node': 20.11.25
-      axios: 0.21.4
+      axios: 1.6.7
     transitivePeerDependencies:
       - debug
     dev: false
@@ -5918,8 +5918,8 @@ packages:
     resolution: {integrity: sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==}
     dev: true
 
-  /@types/jsonwebtoken@8.5.0:
-    resolution: {integrity: sha512-9bVao7LvyorRGZCw0VmH/dr7Og+NdjYSsKAxB43OQoComFbBgsEpoR9JW6+qSq/ogwVBg8GI2MfAlk4SYI4OLg==}
+  /@types/jsonwebtoken@9.0.5:
+    resolution: {integrity: sha512-VRLSGzik+Unrup6BsouBeHsf4d1hOEgYWTm/7Nmw1sXoN1+tRly/Gy/po3yeahnP4jfnQWWAhQAqcNfH7ngOkA==}
     dependencies:
       '@types/node': 20.11.25
     dev: false
@@ -5983,10 +5983,9 @@ packages:
   /@types/parse-json@4.0.2:
     resolution: {integrity: sha512-dISoDXWWQwUquiKsyZ4Ng+HX2KsPL7LyHKHQwgGFEA3IaKac4Obd+h2a/a6waisAoepJlBcx9paWqjA8/HVjCw==}
 
-  /@types/passport-jwt@3.0.13:
-    resolution: {integrity: sha512-fjHaC6Bv8EpMMqzTnHP32SXlZGaNfBPC/Po5dmRGYi2Ky7ljXPbGnOy+SxZqa6iZvFgVhoJ1915Re3m93zmcfA==}
+  /@types/passport-jwt@4.0.1:
+    resolution: {integrity: sha512-Y0Ykz6nWP4jpxgEUYq8NoVZeCQPo1ZndJLfapI249g1jHChvRfZRO/LS3tqu26YgAS/laI1qx98sYGz0IalRXQ==}
     dependencies:
-      '@types/express': 4.17.21
       '@types/jsonwebtoken': 9.0.6
       '@types/passport-strategy': 0.2.38
     dev: true
@@ -7319,16 +7318,18 @@ packages:
     engines: {node: '>=4'}
     dev: true
 
-  /axios@0.21.4:
-    resolution: {integrity: sha512-ut5vewkiu8jjGBdqpM44XxjuCjq9LAKeHVmoVfHVzy8eHgxxq8SbAVQNovDA8mVi05kP0Ea/n/UzcSHcTJQfNg==}
+  /axios@0.28.0:
+    resolution: {integrity: sha512-Tu7NYoGY4Yoc7I+Npf9HhUMtEEpV7ZiLH9yndTCoNhcpBH0kwcvFbzYN9/u5QKI5A6uefjsNNWaz5olJVYS62Q==}
     dependencies:
       follow-redirects: 1.15.5
+      form-data: 4.0.0
+      proxy-from-env: 1.1.0
     transitivePeerDependencies:
       - debug
     dev: false
 
-  /axios@0.28.0:
-    resolution: {integrity: sha512-Tu7NYoGY4Yoc7I+Npf9HhUMtEEpV7ZiLH9yndTCoNhcpBH0kwcvFbzYN9/u5QKI5A6uefjsNNWaz5olJVYS62Q==}
+  /axios@1.6.7:
+    resolution: {integrity: sha512-/hDJGff6/c7u0hDkvkGxR/oy6CbCs8ziCsC7SqmhjfozqiJGc8Z11wrv9z9lYfY4K8l+H9TpjcMDX0xOZmx+RA==}
     dependencies:
       follow-redirects: 1.15.5
       form-data: 4.0.0
@@ -11067,22 +11068,6 @@ packages:
     resolution: {integrity: sha512-S6cATIPVv1z0IlxdN+zUk5EPjkGCdnhN4wVSBlvoUO1tOLJootbo9CquNJmbIh4yikWHiUedhRYrNPn1arpEmQ==}
     dev: false
 
-  /jsonwebtoken@8.5.1:
-    resolution: {integrity: sha512-XjwVfRS6jTMsqYs0EsuJ4LGxXV14zQybNd4L2r0UvbVnSF9Af8x7p5MzbJ90Ioz/9TI41/hTCvznF/loiSzn8w==}
-    engines: {node: '>=4', npm: '>=1.4.28'}
-    dependencies:
-      jws: 3.2.2
-      lodash.includes: 4.3.0
-      lodash.isboolean: 3.0.3
-      lodash.isinteger: 4.0.4
-      lodash.isnumber: 3.0.3
-      lodash.isplainobject: 4.0.6
-      lodash.isstring: 4.0.1
-      lodash.once: 4.1.1
-      ms: 2.1.3
-      semver: 5.7.2
-    dev: false
-
   /jsonwebtoken@9.0.2:
     resolution: {integrity: sha512-PRp66vJ865SSqOlgqS8hujT5U4AOgMfhrwYIuIhfKaoSCZcirrmASQr8CX7cUg+RMih+hgznrjp99o+W4pJLHQ==}
     engines: {node: '>=12', npm: '>=6'}
@@ -13437,6 +13422,7 @@ packages:
   /semver@5.7.2:
     resolution: {integrity: sha512-cBznnQ9KjJqU67B52RMC65CMarK2600WFnbkcaiwWq3xy/5haFJlshgnpjovMVJ+Hff49d8GEn0b87C5pDQ10g==}
     hasBin: true
+    dev: true
 
   /semver@6.3.1:
     resolution: {integrity: sha512-BR7VvDCVHO+q2xBEWskxS6DJE1qRnb7DxzUrogb71CWoSficBxYsiAGd+Kl0mmq/MprG9yArRkyrQxTO6XjMzA==}

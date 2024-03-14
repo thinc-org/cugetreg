@@ -1,6 +1,6 @@
 {
   "aliases": {
-    "course-prod": {}
+    "cgr-course-prod": {}
   },
   "settings": {
     "index": {
@@ -73,6 +73,9 @@
           }
         }
       },
+      "suggestions": {
+        "type": "completion"
+      },
       "abbrName": {
         "type": "text",
         "analyzer": "courseabbranal"
@@ -105,6 +108,9 @@
         "type": "keyword"
       },
       "academicYear": {
+        "type": "keyword"
+      },
+      "creditHours": {
         "type": "keyword"
       }
     }

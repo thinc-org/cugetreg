@@ -26,6 +26,7 @@ interface CourseDoc {
   studyProgram: StudyProgram
   semester: Semester
   academicYear: string
+  creditHours: string
 }
 
 @Processor({
@@ -76,6 +77,13 @@ export class QueueConsumerService {
           genEdType: course.genEdType,
           semester: course.semester,
           studyProgram: course.studyProgram,
+          creditHours: course.creditHours,
+          suggestions: [
+            {
+              input: [course.courseNo, course.abbrName, course.courseNameEn, course.courseNameTh],
+              weight: 20,
+            },
+          ],
         } as CourseDoc,
         doc_as_upsert: true,
       },

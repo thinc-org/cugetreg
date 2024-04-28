@@ -1,7 +1,10 @@
 {
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "typescript.preferences.importModuleSpecifier": "shortest",
+  "javascript.preferences.importModuleSpecifier": "shortest",
+  "typescript.format.enable": true,
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "tailwindCSS.experimental.classRegex": ["cn\\(([^)]*)\\)", "cva\\(([^)]*)\\)"],
   "[proto3]": {
     "editor.defaultFormatter": "zxh404.vscode-proto3"
   },
@@ -11,5 +14,8 @@
   "svelte.enable-ts-plugin": true,
   "[svelte]": {
     "editor.defaultFormatter": "svelte.svelte-vscode"
+  },
+  "editor.codeActionsOnSave": {
+    "source.fixAll": true
   }
 }

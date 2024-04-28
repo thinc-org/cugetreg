@@ -12,13 +12,13 @@ const config = {
   ],
   rules: {
     '@typescript-eslint/no-empty-function': 'off',
-    'unused-imports/no-unused-imports': 'warn',
     'unused-imports/no-unused-vars': [
       'warn',
       { vars: 'all', varsIgnorePattern: '^_', args: 'after-used', argsIgnorePattern: '^_' },
     ],
     '@typescript-eslint/no-unused-vars': 'warn',
     '@typescript-eslint/no-explicit-any': 'warn',
+    'unused-imports/no-unused-imports': 'warn',
   },
   ignorePatterns: [
     '.next',

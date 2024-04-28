@@ -1,0 +1,21 @@
+{
+  "extends": "@cgr/project-config/tsconfig/nextjs.json",
+  "compilerOptions": {
+    "paths": {
+      "@web/*": ["./src/*"]
+    },
+    "experimentalDecorators": true
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "exclude": [
+    "node_modules",
+    "**/*.test.ts",
+    "**/*.spec.ts",
+    "**/*.test.tsx",
+    "**/*.spec.tsx",
+    "**/*.test.js",
+    "**/*.spec.js",
+    "**/*.test.jsx",
+    "**/*.spec.jsx"
+  ]
+}

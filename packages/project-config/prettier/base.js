@@ -14,6 +14,7 @@ const config = {
     '<THIRD_PARTY_MODULES>',
     '^@(admin-api|admin-web|api|web|reg-scraper)',
     '^@cgr',
+    "$^['./]",
     '^[.]',
     '^[.][.]',
   ],

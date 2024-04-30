@@ -1,11 +1,4 @@
-# ENV files
+.DS_Store
+.env
 .env.local
-
-.env.development
-.env.production
-.env.local.development
-.env.local.production
-
-generate-typings.js
-
-dist
+node_modules/

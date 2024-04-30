@@ -1,6 +1,0 @@
-export * from './types'
-export * from './course.schema'
-export * from './override.schema'
-export * from './refreshtoken.schema'
-export * from './review.schema'
-export * from './user.schema'

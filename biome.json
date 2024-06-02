@@ -28,9 +28,9 @@
     "formatWithErrors": false,
     "indentStyle": "space",
     "indentWidth": 2,
-    "lineWidth": 120,
+    "lineWidth": 80,
     "lineEnding": "lf",
-    "ignore": ["**/generated/**", "**/__generated__/**"]
+    "ignore": ["**/generated/**", "**/__generated__/**", "**/.svelte-kit/**"]
   },
   "linter": {
     "enabled": true,
@@ -46,6 +46,6 @@
         "noBarrelFile": "warn"
       }
     },
-    "ignore": ["**/generated/**", "**/__generated__/**"]
+    "ignore": ["**/generated/**", "**/__generated__/**", "**/.svelte-kit/**"]
   }
 }

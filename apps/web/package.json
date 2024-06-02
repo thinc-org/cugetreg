@@ -1,6 +1,6 @@
 {
-  "name": "web",
-	"version": "0.0.1",
+	"name": "@app/web",
+	"version": "2.0.0",
 	"private": true,
 	"type": "module",
 	"scripts": {

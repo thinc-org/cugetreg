@@ -1,5 +1,10 @@
 {
-  "compilerOptions": {},
-  "include": ["index.d.ts", "index.ts", "components/**/*"],
+  "compilerOptions": {
+    "paths": {
+      "$lib": ["./src"],
+      "$lib/*": ["./src/*"]
+    }
+  },
+  "include": ["index.d.ts", "src", "src/index.ts"],
   "exclude": ["node_modules"]
 }

@@ -1,13 +1,17 @@
 {
   "name": "@repo/ui",
-  "version": "0.0.0",
+  "version": "2.0.0",
   "type": "module",
-  "module": "index.ts",
-  "main": "index.ts",
   "exports": {
-    ".": {
-      "types": "./index.ts",
-      "svelte": "./index.ts"
+    "./button": {
+      "types": "./src/components/button/index.ts",
+      "svelte": "./src/components/button/index.ts",
+      "default": "./src/components/button/index.ts"
+    },
+    "./input": {
+      "types": "./src/components/input/index.ts",
+      "svelte": "./src/components/input/index.ts",
+      "default": "./src/components/input/index.ts"
     }
   },
   "scripts": {
@@ -16,5 +20,11 @@
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "svelte": "^4.2.12"
+  },
+  "dependencies": {
+    "bits-ui": "^0.21.10",
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^2.3.0",
+    "tailwind-variants": "^0.2.1"
   }
 }

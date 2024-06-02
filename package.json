@@ -7,10 +7,9 @@
     "format": "prettier --write ."
   },
   "devDependencies": {
+    "@repo/config": "workspace:^",
     "eslint": "^8.57.0",
-    "@repo/eslint-config": "workspace:*",
     "prettier": "^3.2.5",
-    "prettier-plugin-svelte": "^3.2.2",
     "turbo": "latest"
   },
   "packageManager": "pnpm@8.9.0",

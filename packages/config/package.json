@@ -1,14 +1,13 @@
 {
-  "name": "@repo/eslint-config",
-  "version": "0.0.0",
+  "name": "@repo/config",
+  "version": "2.0.0",
   "dependencies": {
     "@typescript-eslint/eslint-plugin": "^7.1.0",
     "@typescript-eslint/parser": "^7.1.0",
+    "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-config-turbo": "^1.12.4",
-    "eslint-plugin-svelte": "^2.35.1"
-  },
-  "publishConfig": {
-    "access": "public"
+    "eslint-plugin-svelte": "^2.35.1",
+    "prettier-plugin-svelte": "^3.2.2"
   }
 }

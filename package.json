@@ -1,5 +1,5 @@
 {
-  "name": "cugetregv2",
+  "name": "cugetreg",
   "private": true,
   "scripts": {
     "build": "turbo build",
@@ -9,9 +9,13 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^1.7.1",
-    "prettier": "^3.2.5",
-    "turbo": "latest"
+    "prettier": "^3.3.0",
+    "turbo": "latest",
+    "@cgr/config": "workspace:*"
   },
-  "packageManager": "bun@1.1.6",
-  "workspaces": ["apps/*", "packages/*"]
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "packageManager": "pnpm@9.1.2"
 }

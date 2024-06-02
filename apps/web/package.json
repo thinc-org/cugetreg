@@ -1,5 +1,5 @@
 {
-  "name": "web",
+  "name": "@app/web",
   "version": "0.0.1",
   "scripts": {
     "dev": "bunx --bun vite",

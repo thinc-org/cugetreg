@@ -1,5 +1,5 @@
 {
-  "name": "@cugetreg/api",
+  "name": "@app/api",
   "type": "module",
   "scripts": {
     "start": "bun run main.ts",

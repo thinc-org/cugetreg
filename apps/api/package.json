@@ -1,6 +1,7 @@
 {
   "name": "@app/api",
   "type": "module",
+  "version": "2.0.0",
   "scripts": {
     "start": "bun run main.ts",
     "typecheck": "tsc"

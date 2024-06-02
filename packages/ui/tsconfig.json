@@ -1,20 +1,5 @@
 {
-  "extends": "@cgr/config/tsconfig/svelte",
-  "compilerOptions": {
-    "types": ["svelte"],
-    "paths": {
-      "$lib": ["./src"],
-      "$lib/*": ["./src/*"]
-    }
-  },
-  "include": [
-    "./src/app.d.ts",
-    "./src/**/*.js",
-    "./src/**/*.ts",
-    "./src/**/*.svelte",
-    "./tests/**/*.js",
-    "./tests/**/*.ts",
-    "./tests/**/*.svelte"
-  ],
+  "compilerOptions": {},
+  "include": ["index.d.ts", "index.ts", "components/**/*"],
   "exclude": ["node_modules"]
 }

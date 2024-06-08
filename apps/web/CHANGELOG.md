@@ -1,5 +1,11 @@
 # web
 
+## 1.10.0-beta.1
+
+### Minor Changes
+
+- 02b8e7b: feat: enable 2567 with warnings
+
 ## 1.10.0-beta.0
 
 ### Minor Changes

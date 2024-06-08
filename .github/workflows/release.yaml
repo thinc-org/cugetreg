@@ -1,0 +1,177 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+      - beta
+  workflow_dispatch:
+    inputs:
+      app:
+        type: choice
+        description: 'The app to release. The name should be the same as name in package.json'
+        required: true
+        options:
+          - api
+          - web
+          - reg-scraper
+      version:
+        description: 'The version to release. The version should be the same as version in package.json. For example, 1.0.0'
+        required: true
+      environment:
+        type: choice
+        description: 'The environment to release. The name should be the same as name in package.json'
+        required: true
+        options:
+          - prod
+          - beta
+          - dev
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+permissions:
+  actions: read
+  checks: read
+  contents: write
+  deployments: read
+  issues: write
+  discussions: read
+  packages: write
+  pull-requests: write
+  repository-projects: write
+  security-events: read
+  statuses: write
+
+jobs:
+  release:
+    name: Versioning
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+
+    runs-on: ${{ matrix.os }}
+
+    if: ${{ github.event_name != 'workflow_dispatch' }}
+
+    outputs:
+      published: ${{ steps.changesets.outputs.published }}
+      publishedPackages: ${{ steps.changesets.outputs.publishedPackages }}
+      hasChangesets: ${{ steps.changesets.outputs.hasChangesets }}
+      pullRequestNumber: ${{ steps.changesets.outputs.pullRequestNumber }}
+      environment: ${{ steps.get-deploy-metadata.outputs.environment }}
+      gitOpsUpdateMode: ${{ steps.get-deploy-metadata.outputs.gitOpsUpdateMode }}
+      transformedPackages: ${{ steps.transform-packages.outputs.packages }}
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+        with:
+          # related to issue, https://github.com/changesets/action/issues/201
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        id: pnpm-install
+        with:
+          run_install: false
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        run: |
+          echo "::set-output name=pnpm_cache_dir::$(pnpm store path)"
+
+      - name: Setup pnpm cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.pnpm-cache.outputs.pnpm_cache_dir }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --prefer-offline
+
+      - name: Create Versioning Pull Request
+        id: changesets
+        uses: changesets/action@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          createGithubReleases: true
+          version: pnpm changeset version
+          publish: pnpm release
+
+      - name: Transform Packages
+        id: transform-packages
+        run: |
+          PACKAGES=$(echo $PACKAGES | jq -c 'map_values({name:.name,ref:"refs/tags/\(.name)@\(.version)",imageTag:.version})')
+          echo "packages=$PACKAGES" >> $GITHUB_OUTPUT
+        env:
+          PACKAGES: ${{ steps.changesets.outputs.publishedPackages }}
+
+      - name: Get deploy metadata
+        id: get-deploy-metadata
+        run: |
+          if [[ ${{ github.ref_name  }} == "main" ]]; then
+            echo "Deploy environment is production"
+            echo "environment=prod" >> $GITHUB_OUTPUT
+            echo "gitOpsUpdateMode=pr" >> $GITHUB_OUTPUT
+          elif [[ ${{ github.ref_name  }} == "beta" ]]; then
+            echo "Deploy environment is beta"
+            echo "environment=beta" >> $GITHUB_OUTPUT
+            echo "gitOpsUpdateMode=commit" >> $GITHUB_OUTPUT
+          elif [[ ${{ github.ref_name  }} == "dev" ]]; then
+            echo "Deploy environment is dev"
+            echo "environment=dev" >> $GITHUB_OUTPUT
+            echo "gitOpsUpdateMode=commit" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Echo Changeset output
+        run: |
+          echo "Changeset published - ${{ steps.changesets.outputs.published }}"
+          echo "Changeset publishedPackages - ${{ toJSON(steps.changesets.outputs.publishedPackages) }}"
+          echo "Changeset hasChangesets - ${{ steps.changesets.outputs.hasChangesets }}"
+          echo "Changeset pullRequestNumber - ${{ steps.changesets.outputs.pullRequestNumber }}"
+          echo "Packages to build - ${{ toJSON(steps.transform-packages.outputs.packages) }}"
+
+  deploy-with-docker:
+    needs:
+      - release
+    if: ${{ needs.release.outputs.published == 'true' }}
+    uses: ./.github/workflows/deploy-docker.yaml
+    with:
+      packages: ${{ needs.release.outputs.transformedPackages }}
+      environment: ${{ needs.release.outputs.environment }}
+      container-registry: ghcr.io
+      image-prefix: thinc-org/cugetreg
+      gitops-repository: thinc-org/cugetreg-gitops
+      gitops-ref: master
+      update-mode: ${{ needs.release.outputs.gitOpsUpdateMode }}
+    secrets:
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}
+
+  deploy-with-docker-dispatch:
+    if: ${{ github.event_name == 'workflow_dispatch' }}
+    uses: ./.github/workflows/deploy-docker.yaml
+    with:
+      packages: |
+        [
+          {
+            "name": "${{ github.event.inputs.app }}",
+            "ref": "refs/tags/${{ github.event.inputs.app }}@${{ github.event.inputs.version }}",
+            "imageTag": "${{ github.event.inputs.version }}"
+          }
+        ]
+      environment: ${{ github.event.inputs.environment }}
+      container-registry: ghcr.io
+      image-prefix: thinc-org/cugetreg
+      gitops-repository: thinc-org/cugetreg-gitops
+      gitops-ref: master
+      update-mode: commit
+    secrets:
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}

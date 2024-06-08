@@ -1,0 +1,48 @@
+name: Continuous Integration
+on:
+  push:
+    branches:
+      - main
+      - beta
+  pull_request:
+
+jobs:
+  install-deps:
+    strategy:
+      matrix:
+        platform: [ubuntu-latest]
+
+    uses: ./.github/workflows/reusable-ci.yaml
+
+  lint:
+    strategy:
+      matrix:
+        platform: [ubuntu-latest]
+    needs: install-deps
+
+    uses: ./.github/workflows/reusable-ci.yaml
+    with:
+      target: lint
+      runs-on: ${{ matrix.platform }}
+
+  test:
+    strategy:
+      matrix:
+        platform: [ubuntu-latest]
+    needs: install-deps
+
+    uses: ./.github/workflows/reusable-ci.yaml
+    with:
+      target: test
+      runs-on: ${{ matrix.platform }}
+
+  build:
+    strategy:
+      matrix:
+        platform: [ubuntu-latest]
+    needs: install-deps
+
+    uses: ./.github/workflows/reusable-ci.yaml
+    with:
+      target: build
+      runs-on: ${{ matrix.platform }}

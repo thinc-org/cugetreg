@@ -11,6 +11,12 @@ module.exports = defineConfig({
   rules: {
     ...base.rules,
     ...config.rules,
+    '@typescript-eslint/no-unused-vars': [
+      'error',
+      {
+        varsIgnorePattern: 'props|^\\$\\$',
+      },
+    ],
   },
   overrides: [
     ...base.overrides,

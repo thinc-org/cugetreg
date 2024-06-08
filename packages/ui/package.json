@@ -10,11 +10,12 @@
     }
   },
   "scripts": {
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "format": "eslint --fix"
   },
   "devDependencies": {
     "@repo/config": "workspace:^",
-    "svelte": "^4.2.12"
+    "svelte": "^4.2.18"
   },
   "dependencies": {
     "bits-ui": "^0.21.10",

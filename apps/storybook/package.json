@@ -9,7 +9,9 @@
     "preview": "vite preview",
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "lint": "eslint",
+    "format": "eslint --fix"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^1.5.0",
@@ -20,13 +22,13 @@
     "@storybook/svelte": "^8.1.6",
     "@storybook/svelte-vite": "^8.1.6",
     "@storybook/test": "^8.1.6",
-    "@sveltejs/vite-plugin-svelte": "^3.0.2",
+    "@sveltejs/vite-plugin-svelte": "^3.1.1",
     "@tsconfig/svelte": "^5.0.2",
     "storybook": "^8.1.6",
-    "svelte": "^4.2.12",
-    "svelte-check": "^3.6.7",
-    "tslib": "^2.6.2",
-    "typescript": "^5.2.2",
-    "vite": "^5.2.0"
+    "svelte": "^4.2.18",
+    "svelte-check": "^3.8.0",
+    "tslib": "^2.6.3",
+    "typescript": "^5.4.5",
+    "vite": "^5.2.13"
   }
 }

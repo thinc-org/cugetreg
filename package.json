@@ -1,18 +1,19 @@
 {
+  "name": "cugetreg",
   "private": true,
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
-    "format": "prettier --write ."
+    "format": "turbo run format"
   },
   "devDependencies": {
     "@changesets/changelog-github": "^0.5.0",
     "@changesets/cli": "^2.27.5",
     "@repo/config": "workspace:^",
     "eslint": "^8.57.0",
-    "prettier": "^3.2.5",
-    "turbo": "^1.13.3"
+    "prettier": "^3.3.1",
+    "turbo": "^2.0.3"
   },
   "packageManager": "pnpm@9.2.0",
   "engines": {

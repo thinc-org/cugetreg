@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router'
 
 import { AnnouncementBar } from './components/AnnouncementBar'
-import { getAnnouncement1, getNotRegChulaWarning } from './components/AnnouncementBar/announcements'
+import { getAnnouncement1, getNotRegChulaWarning, term67Issue } from './components/AnnouncementBar/announcements'
 import { ConfigBar } from './components/ConfigBar'
 import { ConfigBarLayout } from './components/ConfigBar/styled'
 import { NavBar } from './components/NavBar'
@@ -13,6 +13,7 @@ export function AnnouncementSection() {
     <>
       <AnnouncementBar announcement={getAnnouncement1()} />
       <AnnouncementBar announcement={getNotRegChulaWarning()} />
+      <AnnouncementBar announcement={term67Issue()} />
     </>
   )
 }

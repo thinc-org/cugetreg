@@ -18,3 +18,12 @@ export function getNotRegChulaWarning(): AnnouncementItem {
     severity: 'warning',
   }
 }
+
+export function term67Issue(): AnnouncementItem {
+  return {
+    id: 'term_67_issue',
+    label:
+      'ข้อมูลของปีการศึกษา 2567 จะยังมีไม่ครบ เนื่องจากปัญหาของการเชื่อมต่อระหว่าง CU Get Reg กับเว็บไซต์ของทะเบียนจุฬาฯ ขออภัยในความไม่สะดวก',
+    severity: 'error',
+  }
+}

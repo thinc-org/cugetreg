@@ -1,1 +1,1 @@
-module.exports = require("@repo/config/prettier/base.js")
+module.exports = require('@repo/config/prettier/base.js')

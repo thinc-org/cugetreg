@@ -5,6 +5,6 @@
       "$lib/*": ["./src/*"]
     }
   },
-  "include": ["index.d.ts", "src", "src/index.ts"],
+  "include": ["index.d.ts", "./src/**/*ts", "./src/**/*.svelte"],
   "exclude": ["node_modules"]
 }

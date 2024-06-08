@@ -3,15 +3,10 @@
   "version": "2.0.0",
   "type": "module",
   "exports": {
-    "./button": {
-      "types": "./src/components/button/index.ts",
-      "svelte": "./src/components/button/index.ts",
-      "default": "./src/components/button/index.ts"
-    },
-    "./input": {
-      "types": "./src/components/input/index.ts",
-      "svelte": "./src/components/input/index.ts",
-      "default": "./src/components/input/index.ts"
+    "./*": {
+      "types": "./src/components/*/index.ts",
+      "svelte": "./src/components/*/index.ts",
+      "default": "./src/components/*/index.ts"
     }
   },
   "scripts": {

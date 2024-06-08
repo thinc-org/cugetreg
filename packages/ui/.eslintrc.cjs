@@ -1,3 +1,1 @@
-module.exports = {
-  extends: ['@repo/config/eslint/base.js']
-};
+module.exports = require('@repo/config/eslint/base.js')

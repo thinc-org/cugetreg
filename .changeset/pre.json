@@ -1,0 +1,20 @@
+{
+  "mode": "exit",
+  "tag": "beta",
+  "initialVersions": {
+    "admin-api": "1.2.0",
+    "admin-web": "1.2.0",
+    "api": "1.8.0",
+    "reg-scraper": "1.4.0",
+    "web": "1.9.0",
+    "web-e2e": "0.2.0",
+    "@cgr/codegen": "1.4.0",
+    "@cgr/course-utils": "1.2.0",
+    "@cgr/project-config": "1.2.0",
+    "@cgr/schema": "1.4.0"
+  },
+  "changesets": [
+    "dull-schools-doubt",
+    "moody-shrimps-admire"
+  ]
+}

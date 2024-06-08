@@ -1,5 +1,11 @@
 # web-e2e
 
+## 0.3.0-beta.0
+
+### Minor Changes
+
+- 1322a2a: bump dependencies
+
 ## 0.2.0
 
 ### Minor Changes

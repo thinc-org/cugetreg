@@ -1,5 +1,16 @@
 # admin-api
 
+## 1.3.0-beta.0
+
+### Minor Changes
+
+- 1322a2a: bump dependencies
+
+### Patch Changes
+
+- Updated dependencies [1322a2a]
+  - @cgr/schema@1.5.0-beta.0
+
 ## 1.2.0
 
 ### Minor Changes

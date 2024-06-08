@@ -1,5 +1,16 @@
 # api
 
+## 1.9.0-beta.0
+
+### Minor Changes
+
+- 1322a2a: bump dependencies
+
+### Patch Changes
+
+- Updated dependencies [1322a2a]
+  - @cgr/schema@1.5.0-beta.0
+
 ## 1.8.0
 
 ### Minor Changes

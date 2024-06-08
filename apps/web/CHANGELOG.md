@@ -1,5 +1,23 @@
 # web
 
+## 1.10.0-beta.1
+
+### Minor Changes
+
+- 02b8e7b: feat: enable 2567 with warnings
+
+## 1.10.0-beta.0
+
+### Minor Changes
+
+- 1322a2a: bump dependencies
+
+### Patch Changes
+
+- Updated dependencies [1322a2a]
+  - @cgr/course-utils@1.3.0-beta.0
+  - @cgr/codegen@1.5.0-beta.0
+
 ## 1.9.0
 
 ### Minor Changes

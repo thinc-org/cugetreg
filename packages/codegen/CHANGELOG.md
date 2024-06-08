@@ -1,5 +1,11 @@
 # @cgr/codegen
 
+## 1.5.0
+
+### Minor Changes
+
+- 1322a2a: bump dependencies
+
 ## 1.5.0-beta.0
 
 ### Minor Changes

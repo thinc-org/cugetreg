@@ -14,6 +14,7 @@
     "@cgr/schema": "1.4.0"
   },
   "changesets": [
+    "dull-schools-doubt",
     "moody-shrimps-admire"
   ]
 }

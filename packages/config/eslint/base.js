@@ -1,8 +1,7 @@
 // @ts-check
 
-const { defineConfig } = require('eslint-define-config')
-
-module.exports = defineConfig({
+/** @type {import('eslint').Linter.Config} */
+const config = {
   root: true,
   extends: [
     'eslint:recommended',
@@ -59,4 +58,6 @@ module.exports = defineConfig({
       },
     },
   ],
-})
+}
+
+module.exports = config

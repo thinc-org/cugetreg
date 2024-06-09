@@ -1,18 +1,23 @@
 // @ts-check
 
 const base = require('./base.js')
-const { defineConfig } = require('eslint-define-config')
+
 const eslintPluginSvelte = require('eslint-plugin-svelte')
 
-const config = eslintPluginSvelte.configs['recommended']
+const svelteConfig = eslintPluginSvelte.configs['recommended']
 
-module.exports = defineConfig({
+/** @type {Record<string, import('eslint').Linter.RuleLevel>} */
+// @ts-expect-error Force Typecast, Insufficient type information
+const svConfigRules = svelteConfig.rules
+
+/** @satisfies {import('eslint').Linter.Config} */
+const config = {
   ...base,
-  extends: [...(base.extends ?? []), ...config.extends],
+  extends: [...svelteConfig.extends, ...(base.extends ?? [])],
   plugins: base.plugins,
   rules: {
     ...base.rules,
-    ...config.rules,
+    ...svConfigRules,
     '@typescript-eslint/no-unused-vars': [
       'error',
       {
@@ -29,7 +34,12 @@ module.exports = defineConfig({
       parserOptions: {
         parser: '@typescript-eslint/parser',
       },
+      rules: {
+        'no-inner-declarations': 'off',
+      },
     },
     // ...
   ],
-})
+}
+
+module.exports = config

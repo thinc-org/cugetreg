@@ -1,5 +1,11 @@
 # admin-api
 
+## 1.3.1-beta.0
+
+### Patch Changes
+
+- 90eecbe: fix: build and lint error
+
 ## 1.3.0
 
 ### Minor Changes

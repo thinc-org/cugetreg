@@ -1,5 +1,11 @@
 # api
 
+## 1.9.1-beta.0
+
+### Patch Changes
+
+- 90eecbe: fix: build and lint error
+
 ## 1.9.0
 
 ### Minor Changes

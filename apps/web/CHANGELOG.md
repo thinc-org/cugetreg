@@ -1,5 +1,11 @@
 # web
 
+## 1.10.1-beta.0
+
+### Patch Changes
+
+- 90eecbe: fix: build and lint error
+
 ## 1.10.0
 
 ### Minor Changes

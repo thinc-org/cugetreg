@@ -1,5 +1,11 @@
 # reg-scraper
 
+## 1.5.1-beta.0
+
+### Patch Changes
+
+- 90eecbe: fix: build and lint error
+
 ## 1.5.0
 
 ### Minor Changes

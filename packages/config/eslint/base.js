@@ -1,10 +1,21 @@
+// @ts-check
+
 const { defineConfig } = require('eslint-define-config')
 
 module.exports = defineConfig({
   root: true,
-  extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended', 'prettier', 'turbo'],
+  extends: [
+    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
+    'turbo',
+    'plugin:prettier/recommended',
+  ],
   parser: '@typescript-eslint/parser',
-  plugins: ['@typescript-eslint/eslint-plugin', 'unused-imports', 'simple-import-sort'],
+  plugins: [
+    '@typescript-eslint/eslint-plugin',
+    'unused-imports',
+    'simple-import-sort',
+  ],
   parserOptions: {
     sourceType: 'module',
     ecmaVersion: 2020,

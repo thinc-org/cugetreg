@@ -1,10 +1,11 @@
+// @ts-check
+
 /**
  * @type {import('prettier').Options}
  */
-module.exports = {
+const config = {
   semi: false,
   singleQuote: true,
-  printWidth: 100,
-  tabWidth: 2,
-  trailingComma: 'es5',
 }
+
+module.exports = config

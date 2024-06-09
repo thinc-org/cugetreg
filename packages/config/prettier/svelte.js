@@ -1,11 +1,15 @@
+// @ts-check
+
 const base = require('./base.js')
 
 /**
  * @type {import('prettier').Options}
  */
-module.exports = {
+const config = {
   ...base,
   svelteStrictMode: true,
   svelteAllowShorthand: true,
-  plugins: [...base.plugins, 'prettier-plugin-svelte'],
+  plugins: [...(base.plugins ?? []), 'prettier-plugin-svelte'],
 }
+
+module.exports = config

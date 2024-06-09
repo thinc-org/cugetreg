@@ -10,8 +10,8 @@
     "test": "npm run test:integration && npm run test:unit",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-    "lint": "eslint .",
-    "format": "eslint --fix",
+    "lint": "eslint src",
+    "format": "eslint src --fix",
     "test:integration": "playwright test",
     "test:unit": "vitest"
   },

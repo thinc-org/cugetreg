@@ -4,12 +4,11 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview",
-    "check": "svelte-check --tsconfig ./tsconfig.json",
+    "dev": "pnpm run storybook",
     "storybook": "storybook dev -p 6006",
+    "build": "storybook build",
     "build-storybook": "storybook build",
+    "check": "svelte-check --tsconfig ./tsconfig.json",
     "lint": "eslint src",
     "format": "eslint src --fix"
   },

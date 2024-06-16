@@ -11,7 +11,7 @@
 
 <h1>Web</h1>
 
-<Button on:click="{onButtonClick}">Click Me</Button>
+<Button on:click="{onButtonClick}">Button</Button>
 
 {counter}
 

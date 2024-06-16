@@ -1,0 +1,15 @@
+{
+  "name": "@cugetreg/database",
+  "version": "2.0.0",
+  "private": true,
+  "scripts": {
+    "generate": "drizzle-kit generate"
+  },
+  "dependencies": {
+    "drizzle-orm": "^0.31.2",
+    "postgres": "^3.4.4"
+  },
+  "devDependencies": {
+    "drizzle-kit": "^0.22.7"
+  }
+}

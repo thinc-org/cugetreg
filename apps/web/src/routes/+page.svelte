@@ -1,11 +1,20 @@
 <script lang="ts">
   import { Button } from '@repo/ui/button'
   import { Input } from '@repo/ui/input'
+
+  let counter = $state(0)
+
+  const onButtonClick = () => {
+    counter++
+  }
 </script>
 
 <h1>Web</h1>
 
-<Button></Button>
+<Button on:click="{onButtonClick}">Click Me</Button>
+
+{counter}
+
 <Input placeholder="Input" />
 
 <p>

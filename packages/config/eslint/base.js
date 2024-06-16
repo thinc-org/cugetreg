@@ -6,7 +6,6 @@ const config = {
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
-    'turbo',
     'plugin:prettier/recommended',
   ],
   parser: '@typescript-eslint/parser',

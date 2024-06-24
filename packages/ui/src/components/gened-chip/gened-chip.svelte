@@ -3,7 +3,6 @@
   import { chipVariants, type Size, type Type } from './index.js'
 
   let className: string | undefined | null = undefined
-  export let href: string | undefined = undefined
   export let type: Type
   export let size: Size = 'default'
   export { className as class }
@@ -16,13 +15,8 @@
   }
 </script>
 
-<svelte:element
-  this="{href ? 'a' : 'span'}"
-  {href}
-  class="{cn(chipVariants({ type, size, className }))}"
-  {...$$restProps}
->
+<span class="{cn(chipVariants({ type, size, className }))}" {...$$restProps}>
   {#if type}
     {label[type]}
   {/if}
-</svelte:element>
+</span>

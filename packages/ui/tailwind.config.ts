@@ -9,15 +9,75 @@ export const config: Config = {
   ],
   safelist: ['dark'],
   theme: {
-    container: {
-      center: true,
-      padding: '2rem',
-      screens: {
-        '2xl': '1400px',
-      },
-    },
     extend: {
       colors: {
+        neutral: {
+          50: 'hsl(var(--neutral-50) / <alpha-value>)',
+          100: 'hsl(var(--neutral-100) / <alpha-value>)',
+          200: 'hsl(var(--neutral-200) / <alpha-value>)',
+          300: 'hsl(var(--neutral-300) / <alpha-value>)',
+          400: 'hsl(var(--neutral-400) / <alpha-value>)',
+          500: 'hsl(var(--neutral-500) / <alpha-value>)',
+          600: 'hsl(var(--neutral-600) / <alpha-value>)',
+          700: 'hsl(var(--neutral-700) / <alpha-value>)',
+          800: 'hsl(var(--neutral-800) / <alpha-value>)',
+          900: 'hsl(var(--neutral-900) / <alpha-value>)',
+        },
+        blue: {
+          300: 'hsl(var(--blue-300) / <alpha-value>)',
+          500: 'hsl(var(--blue-500) / <alpha-value>)',
+          700: 'hsl(var(--blue-700) / <alpha-value>)',
+        },
+        tangerine: {
+          300: 'hsl(var(--tangerine-300) / <alpha-value>)',
+          500: 'hsl(var(--tangerine-500) / <alpha-value>)',
+          700: 'hsl(var(--tangerine-700) / <alpha-value>)',
+        },
+        yellow: {
+          300: 'hsl(var(--yellow-300) / <alpha-value>)',
+          500: 'hsl(var(--yellow-500) / <alpha-value>)',
+          700: 'hsl(var(--yellow-700) / <alpha-value>)',
+        },
+        pink: {
+          300: 'hsl(var(--pink-300) / <alpha-value>)',
+          500: 'hsl(var(--pink-500) / <alpha-value>)',
+          700: 'hsl(var(--pink-700) / <alpha-value>)',
+        },
+        red: {
+          300: 'hsl(var(--red-300) / <alpha-value>)',
+          500: 'hsl(var(--red-500) / <alpha-value>)',
+          700: 'hsl(var(--red-700) / <alpha-value>)',
+        },
+        orange: {
+          300: 'hsl(var(--orange-300) / <alpha-value>)',
+          500: 'hsl(var(--orange-500) / <alpha-value>)',
+          700: 'hsl(var(--orange-700) / <alpha-value>)',
+        },
+        green: {
+          300: 'hsl(var(--green-300) / <alpha-value>)',
+          500: 'hsl(var(--green-500) / <alpha-value>)',
+          700: 'hsl(var(--green-700) / <alpha-value>)',
+        },
+        teal: {
+          300: 'hsl(var(--teal-300) / <alpha-value>)',
+          500: 'hsl(var(--teal-500) / <alpha-value>)',
+          700: 'hsl(var(--teal-700) / <alpha-value>)',
+        },
+        sky: {
+          300: 'hsl(var(--sky-300) / <alpha-value>)',
+          500: 'hsl(var(--sky-500) / <alpha-value>)',
+          700: 'hsl(var(--sky-700) / <alpha-value>)',
+        },
+        purple: {
+          300: 'hsl(var(--purple-300) / <alpha-value>)',
+          500: 'hsl(var(--purple-500) / <alpha-value>)',
+          700: 'hsl(var(--purple-700) / <alpha-value>)',
+        },
+        indigo: {
+          300: 'hsl(var(--indigo-300) / <alpha-value>)',
+          500: 'hsl(var(--indigo-500) / <alpha-value>)',
+          700: 'hsl(var(--indigo-700) / <alpha-value>)',
+        },
         primary: {
           DEFAULT: 'hsl(var(--primary) / <alpha-value>)',
           hover: 'hsl(var(--primary-hover) / <alpha-value>)',

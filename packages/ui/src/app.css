@@ -4,30 +4,87 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-
-    /* Design token from figma */
     --primary: 222 52% 53%;
     --primary-hover: 225 40% 33%;
-    --primary-container: 225 40% 33%;
-    --primary-foreground: 210 40% 98%;
+    --primary-low: 212 88% 93%;
+    --primary-low-hover: 222 52% 53%;
+    --primary-container: 212 88% 93%;
     --on-primary: 0 0% 100%;
     --on-primary-hover: 0 0% 100%;
+    --on-primary-low: 225 40% 33%;
+    --on-primary-container: 225 40% 33%;
+
+    --secondary: 19 89% 67%;
+    --secondary-hover: 18 87% 53%;
+    --secondary-container: 20 100% 88%;
+    --on-secondary: 0 0% 100%;
+    --on-secondary-hover: 0 0% 100%;
+    --on-secondary-container: 18 87% 53%;
+
+    --error: 0 92% 69%;
+    --error-hover: 0 87% 37%;
+    --error-container: 0 89% 93%;
+    --on-error: 0 0% 100%;
+    --on-error-hover: 0 0% 100%;
+    --on-error-container: 0 87% 37%;
+
+    --warning: 44 92% 77%;
+    --warning-hover: 40 97% 47%;
+    --warning-container: 46 85% 92%;
+    --on-warning: 0 0% 100%;
+    --on-warning-hover: 0 0% 100%;
+    --on-warning-container: 40 97% 47%;
+
+    --success: 97 68% 50%;
+    --success-hover: 97 69% 35%;
+    --success-container: 98 97% 85%;
+    --on-success: 0 0% 100%;
+    --on-success-hover: 0 0% 100%;
+    --on-success-container: 97 69% 35%;
+
+    --surface-dim: 231 16% 74%;
+    --surface: 0 0% 100%;
+    --surface-bright: 0 0% 100%;
+    --surface-container: 235 15% 86%;
+    --surface-container-low: 240 13% 94%;
+    --surface-container-lowest: 240 20% 97%;
+    --surface-container-high: 231 16% 74%;
+    --surface-container-highest: 230 15% 60%;
+    --on-surface: 233 13% 24%;
+    --on-surface-var: 222 52% 53%;
+    --on-surface-disabled: 235 15% 86%;
+    --on-surface-placeholder: 235 15% 86%;
+
+    --monday: 46 85% 92%;
+    --on-monday: 40 97% 47%;
+    --tuesday: 324 90% 92%;
+    --on-tuesday: 324 86% 73%;
+    --wednesday: 98 97% 85%;
+    --on-wednesday: 97 69% 35%;
+    --thursday: 33 100% 87%;
+    --on-thursday: 32 100% 45%;
+    --friday: 205 95% 93%;
+    --on-friday: 205 85% 31%;
+    --saturday: 248 100% 92%;
+    --on-saturday: 248 80% 31%;
+    --sunday: 0 89% 93%;
+    --on-sunday: 0 87% 37%;
+  }
+
+  .dark {
+    --primary: 212 88% 93%;
+    --primary-hover: 222 52% 53%;
+    --primary-low: 222 52% 53%;
+    --primary-low-hover: 212 88% 93%;
+    --primary-container: 222 52% 53%;
+    --on-primary: 225 40% 33%;
+    --on-primary-hover: 0 0% 100%;
+    --on-primary-low: 225 40% 33%;
     --on-primary-container: 212 88% 93%;
 
     --secondary: 19 89% 67%;
+    --secondary-hover: 20 100% 88%;
     --secondary-container: 18 87% 53%;
-    --secondary-hover: 18 87% 53%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
     --on-secondary: 0 0% 100%;
     --on-secondary-hover: 0 0% 100%;
     --on-secondary-container: 20 100% 88%;
@@ -39,69 +96,40 @@
     --on-error-hover: 0 0% 100%;
     --on-error-container: 0 87% 37%;
 
-    --success: 97 68% 50%;
-    --success-hover: 97 69% 35%;
-    --success-container: 97 69% 35%;
-    --on-success: 0 0% 100%;
-    --on-success-hover: 0 0% 100%;
-    --on-success-container: 98 97% 85%;
-
     --warning: 44 92% 77%;
-    --warning-hover: 40 97% 47%;
-    --warning-container: 46 85% 92%;
+    --warning-hover: 46 85% 92%;
+    --warning-container: 40 97% 47%;
     --on-warning: 0 0% 100%;
     --on-warning-hover: 0 0% 100%;
-    --on-warning-container: 40 97% 47%;
+    --on-warning-container: 46 85% 92%;
 
-    --surface-dim: 231 16% 74%;
+    --success: 97 68% 50%;
+    --success-hover: 98 97% 85%;
+    --success-container: 98 97% 85%;
+    --on-success: 0 0% 100%;
+    --on-success-hover: 0 0% 100%;
+    --on-success-container: 97 69% 35;
+
+    --surface-dim: 230 15% 39%;
+    --surface: 233 13% 24%;
     --surface-bright: 0 0% 100%;
-    --surface-container: 235 15% 86%;
-    --surface-container-low: 240 13% 94%;
-    --surface-container-lowest: 240 20% 97%;
-    --surface-container-high: 231 16% 74%;
+    --surface-container: 230 15% 39%;
+    --surface-container-low: 233 16% 32%;
+    --surface-container-lowest: 231 14% 27%;
+    --surface-container-high: 230 14% 51%;
     --surface-container-highest: 230 15% 60%;
-    --on-surface: 233 13% 24%;
-    --on-surface-var: 222 52% 53%;
-
-    /* End of design token */
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 72.2% 50.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --ring: 222.2 84% 4.9%;
-    --radius: 0.5rem;
-  }
-
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --ring: 212.7 26.8% 83.9%;
+    --on-surface: 240 20% 97%;
+    --on-surface-var: 212 88% 93%;
+    --on-surface-disabled: 230 15% 39%;
+    --on-surface-placeholder: 230 15% 39%;
   }
 }
 
 @layer base {
   * {
-    @apply border-border;
+    @apply border-surface-container;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-surface text-on-surface;
   }
 }

@@ -1,7 +1,41 @@
 import { type ClassValue, clsx } from 'clsx'
 import { cubicOut } from 'svelte/easing'
 import type { TransitionConfig } from 'svelte/transition'
-import { twMerge } from 'tailwind-merge'
+import { extendTailwindMerge } from 'tailwind-merge'
+import { defaultConfig } from 'tailwind-variants'
+
+defaultConfig.twMerge = false
+
+const twMerge = extendTailwindMerge({
+  extend: {
+    classGroups: {
+      'font-size': [
+        {
+          text: [
+            '10',
+            '12',
+            '14',
+            '16',
+            '18',
+            '20',
+            '28',
+            '36',
+            '48',
+            'h1',
+            'h2',
+            'h3',
+            'table-header',
+            'subtitle',
+            'body1',
+            'body2',
+            'button1',
+            'button2',
+          ],
+        },
+      ],
+    },
+  },
+})
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))

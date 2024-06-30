@@ -1,9 +1,11 @@
+import { createId } from '@paralleldrive/cuid2'
 import {
   boolean,
   doublePrecision,
   integer,
   pgEnum,
   pgTable,
+  real,
   text,
   timestamp,
   unique,
@@ -11,10 +13,15 @@ import {
 
 export const semester = pgEnum('semester', ['1', '2', '3'])
 export const studyProgram = pgEnum('study_program', ['S', 'T', 'I'])
+export const genEdType = pgEnum('gen_ed_type', ['NO', 'SC', 'SO', 'HU', 'IN'])
 
 export const course = pgTable(
   'course',
   {
+    id: text('id')
+      .primaryKey()
+      .$defaultFn(() => createId()),
+
     studyProgram: studyProgram('study_program').notNull(),
     academicYear: integer('academic_year').notNull(),
     semester: semester('semester').notNull(),
@@ -25,14 +32,14 @@ export const course = pgTable(
     courseNameTh: text('course_name_th').notNull(),
 
     // Not from Reg Chula
-    courseDescEn: text('course_desc_en').notNull(),
-    courseDescTh: text('course_desc_th').notNull(),
+    courseDescEn: text('course_desc_en'),
+    courseDescTh: text('course_desc_th'),
     // Not from Reg Chula
 
-    faculty: integer('faculty').notNull(),
+    faculty: text('faculty').notNull(),
     department: text('department').notNull(),
 
-    credit: integer('credit').notNull(),
+    credit: real('credit').notNull(),
     creditHours: text('credit_hours').notNull(),
 
     courseCondition: text('course_condition'),
@@ -42,10 +49,10 @@ export const course = pgTable(
     finalStart: timestamp('final_start'),
     finalEnd: timestamp('final_end'),
 
-    sections: text('sections').notNull(),
+    // sections: In sections table
 
     // From GenEd Database
-    genEdType: text('gen_ed_type'),
+    genEdType: genEdType('gen_ed_type').notNull().default('NO'),
 
     // CU Get Reg's User Data
     rating: doublePrecision('rating'),
@@ -69,9 +76,14 @@ export const course = pgTable(
 export const section = pgTable(
   'course_section',
   {
-    courseNo: text('course_no')
+    id: text('id')
+      .primaryKey()
+      .$defaultFn(() => createId()),
+    courseId: text('course_id')
       .notNull()
-      .references(() => course.courseNo),
+      .references(() => course.id),
+
+    courseNo: text('course_no').notNull(),
 
     sectionNo: integer('section_no').notNull(),
     closed: boolean('closed').notNull(),
@@ -82,7 +94,11 @@ export const section = pgTable(
     note: text('note'),
   },
   (t) => ({
-    sectionUnique: unique('section_unique').on(t.courseNo, t.sectionNo),
+    sectionUnique: unique('section_unique').on(
+      t.courseId,
+      t.courseNo,
+      t.sectionNo,
+    ),
   }),
 )
 
@@ -98,8 +114,12 @@ export const dayOfWeek = pgEnum('day_of_week', [
 
 // TODO Add constraint
 export const sectionClass = pgTable('course_class', {
-  courseNo: text('course_no').notNull(),
-  sectionNo: integer('section_no').notNull(),
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => createId()),
+  sectionId: text('section_id')
+    .notNull()
+    .references(() => section.id),
 
   type: text('type').notNull(),
 
@@ -110,5 +130,5 @@ export const sectionClass = pgTable('course_class', {
   building: text('building'),
   room: text('room'),
 
-  professors: text('staff').array(),
+  professors: text('professors').array(),
 })

@@ -1,1 +1,4 @@
-drizzle
+.env
+
+# Temporary for Migration
+data

@@ -1,0 +1,21 @@
+{
+  "name": "@app/analytics",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "dotenv -- tsx src/index.ts",
+    "lint": "eslint src",
+    "format": "eslint src --fix"
+  },
+  "dependencies": {
+    "@cugetreg/database": "workspace:*",
+    "dotenv-cli": "^7.4.2",
+    "drizzle-orm": "^0.31.2",
+    "postgres": "^3.4.4",
+    "tsx": "^4.16.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.2"
+  }
+}

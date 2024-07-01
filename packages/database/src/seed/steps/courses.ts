@@ -23,7 +23,7 @@ export const seedCourses = () =>
           abbrName: course.abbrName,
           courseNameEn: course.courseNameEn,
           courseNameTh: course.courseNameTh,
-          courseDescEn: course.courseDescen,
+          courseDescEn: course.courseDescEn,
           courseDescTh: course.courseDescTh,
           faculty: course.faculty,
           department: course.department,

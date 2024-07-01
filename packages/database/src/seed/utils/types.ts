@@ -2,7 +2,7 @@ export type CourseSeed = {
   abbrName: string
   academicYear: string
   courseCondition: string
-  courseDescen: string
+  courseDescEn: string
   courseDescTh: string
   courseNameEn: string
   courseNameTh: string
@@ -19,4 +19,26 @@ export type CourseSeed = {
   semester: '1' | '2' | '3'
   studyProgram: 'S' | 'T' | 'I'
   updatedAt: string
+}
+
+export type SectionSeed = {
+  sectionNo: string
+  closed: boolean
+  note: string
+  genEdType: 'NO' | 'SC' | 'SO' | 'HU' | 'IN'
+  classes: {
+    room: string
+    dayOfWeek: 'MO' | 'TU' | 'WE' | 'TH' | 'FR' | 'SA' | 'SU' | 'AR' | 'IA'
+    teachers: string[]
+    building: string
+    period: {
+      start: string
+      end: string
+    }
+    type: string
+  }[]
+  capacity: {
+    current: number
+    max: number
+  }
 }

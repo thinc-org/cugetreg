@@ -13,3 +13,18 @@ export const courseData = await withTimeLog(
     return courses
   },
 )
+
+type Compat = {
+  studyProgram: string
+  academicYear: number | string
+  semester: string
+  courseNo: string
+}
+
+export function getKey(course: Compat) {
+  return `${course.studyProgram}-${course.academicYear}-${course.semester}-${course.courseNo}`
+}
+
+export function classKey(courseId: string, sectionNo: number) {
+  return `${courseId}-${sectionNo}`
+}

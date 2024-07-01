@@ -1,5 +1,5 @@
 {
-  "id": "9e26c5d6-df89-4bdd-b370-a290aa1e2cac",
+  "id": "c536e578-c0dd-436e-ae71-cd9183bf5caf",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -185,12 +185,6 @@
           "primaryKey": false,
           "notNull": true
         },
-        "course_no": {
-          "name": "course_no",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
         "section_no": {
           "name": "section_no",
           "type": "integer",
@@ -220,6 +214,28 @@
           "type": "text",
           "primaryKey": false,
           "notNull": false
+        },
+        "gen_ed_type": {
+          "name": "gen_ed_type",
+          "type": "gen_ed_type",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'NO'"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
         }
       },
       "indexes": {},
@@ -245,7 +261,6 @@
           "nullsNotDistinct": false,
           "columns": [
             "course_id",
-            "course_no",
             "section_no"
           ]
         }
@@ -278,19 +293,19 @@
           "type": "day_of_week",
           "typeSchema": "public",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "period_start": {
           "name": "period_start",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "period_end": {
           "name": "period_end",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "building": {
           "name": "building",
@@ -309,6 +324,20 @@
           "type": "text[]",
           "primaryKey": false,
           "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
         }
       },
       "indexes": {},
@@ -342,7 +371,9 @@
         "TH",
         "FR",
         "SA",
-        "SU"
+        "SU",
+        "AR",
+        "IA"
       ]
     },
     "public.gen_ed_type": {

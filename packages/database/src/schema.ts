@@ -83,8 +83,6 @@ export const section = pgTable(
       .notNull()
       .references(() => course.id),
 
-    courseNo: text('course_no').notNull(),
-
     sectionNo: integer('section_no').notNull(),
     closed: boolean('closed').notNull(),
 
@@ -92,13 +90,16 @@ export const section = pgTable(
     max: integer('max').notNull(),
 
     note: text('note'),
+    genEdType: genEdType('gen_ed_type').notNull().default('NO'),
+
+    createdAt: timestamp('created_at').notNull().defaultNow(),
+    updatedAt: timestamp('updated_at')
+      .notNull()
+      .defaultNow()
+      .$onUpdate(() => new Date()),
   },
   (t) => ({
-    sectionUnique: unique('section_unique').on(
-      t.courseId,
-      t.courseNo,
-      t.sectionNo,
-    ),
+    sectionUnique: unique('section_unique').on(t.courseId, t.sectionNo),
   }),
 )
 
@@ -110,9 +111,10 @@ export const dayOfWeek = pgEnum('day_of_week', [
   'FR',
   'SA',
   'SU',
+  'AR',
+  'IA',
 ])
 
-// TODO Add constraint
 export const sectionClass = pgTable('course_class', {
   id: text('id')
     .primaryKey()
@@ -123,12 +125,18 @@ export const sectionClass = pgTable('course_class', {
 
   type: text('type').notNull(),
 
-  dayOfWeek: dayOfWeek('day_of_week'),
-  periodStart: text('period_start'),
-  periodEnd: text('period_end'),
+  dayOfWeek: dayOfWeek('day_of_week').notNull(),
+  periodStart: text('period_start').notNull(),
+  periodEnd: text('period_end').notNull(),
 
   building: text('building'),
   room: text('room'),
 
   professors: text('professors').array(),
+
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+  updatedAt: timestamp('updated_at')
+    .notNull()
+    .defaultNow()
+    .$onUpdate(() => new Date()),
 })

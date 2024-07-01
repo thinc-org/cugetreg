@@ -1,5 +1,5 @@
 DO $$ BEGIN
- CREATE TYPE "public"."day_of_week" AS ENUM('MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU');
+ CREATE TYPE "public"."day_of_week" AS ENUM('MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU', 'AR', 'IA');
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
@@ -52,25 +52,29 @@ CREATE TABLE IF NOT EXISTS "course" (
 CREATE TABLE IF NOT EXISTS "course_section" (
 	"id" text PRIMARY KEY NOT NULL,
 	"course_id" text NOT NULL,
-	"course_no" text NOT NULL,
 	"section_no" integer NOT NULL,
 	"closed" boolean NOT NULL,
 	"regis" integer NOT NULL,
 	"max" integer NOT NULL,
 	"note" text,
-	CONSTRAINT "section_unique" UNIQUE("course_id","course_no","section_no")
+	"gen_ed_type" "gen_ed_type" DEFAULT 'NO' NOT NULL,
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"updated_at" timestamp DEFAULT now() NOT NULL,
+	CONSTRAINT "section_unique" UNIQUE("course_id","section_no")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "course_class" (
 	"id" text PRIMARY KEY NOT NULL,
 	"section_id" text NOT NULL,
 	"type" text NOT NULL,
-	"day_of_week" "day_of_week",
-	"period_start" text,
-	"period_end" text,
+	"day_of_week" "day_of_week" NOT NULL,
+	"period_start" text NOT NULL,
+	"period_end" text NOT NULL,
 	"building" text,
 	"room" text,
-	"professors" text[]
+	"professors" text[],
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"updated_at" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
 DO $$ BEGIN

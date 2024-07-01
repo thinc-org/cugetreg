@@ -6,7 +6,7 @@
   "scripts": {
     "generate": "drizzle-kit generate",
     "migrate": "dotenv -- tsx src/migrate.ts",
-    "seed": "dotenv -- tsx src/seed.ts"
+    "seed": "dotenv -- tsx src/seed/index.ts"
   },
   "dependencies": {
     "@paralleldrive/cuid2": "^2.2.2",

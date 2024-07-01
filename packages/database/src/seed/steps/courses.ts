@@ -4,7 +4,7 @@ import { course } from '../../schema.js'
 import { db } from '../utils/client.js'
 import { withTimeLog } from '../utils/log.js'
 import { parsePeriod } from '../utils/parsing.js'
-import { courseData } from './shared.js'
+import { courseData } from './_shared.js'
 
 export const seedCourses = () =>
   withTimeLog('Seed Courses: Total', async () => {

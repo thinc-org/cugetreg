@@ -11,6 +11,7 @@ import {
   unique,
 } from 'drizzle-orm/pg-core'
 
+// #region CourseData
 export const semester = pgEnum('semester', ['1', '2', '3'])
 export const studyProgram = pgEnum('study_program', ['S', 'T', 'I'])
 export const genEdType = pgEnum('gen_ed_type', ['NO', 'SC', 'SO', 'HU', 'IN'])
@@ -140,3 +141,109 @@ export const sectionClass = pgTable('course_class', {
     .defaultNow()
     .$onUpdate(() => new Date()),
 })
+// #endregion CourseData
+
+// #region UserData
+export const user = pgTable('user', {
+  email: text('email').primaryKey(),
+
+  name: text('name').notNull(),
+  googleId: text('google_id').notNull(),
+
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+  updatedAt: timestamp('updated_at')
+    .notNull()
+    .defaultNow()
+    .$onUpdate(() => new Date()),
+})
+
+export const cart = pgTable('cart', {
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => createId()),
+  userEmail: text('user_email')
+    .notNull()
+    .references(() => user.email),
+
+  studyProgram: studyProgram('study_program').notNull(),
+  academicYear: integer('academic_year').notNull(),
+  semester: semester('semester').notNull(),
+
+  name: text('name').notNull().default('Untitled'),
+
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+  updatedAt: timestamp('updated_at')
+    .notNull()
+    .defaultNow()
+    .$onUpdate(() => new Date()),
+})
+
+export const cartItem = pgTable('cart_item', {
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => createId()),
+  cartId: text('cart_id')
+    .notNull()
+    .references(() => cart.id),
+
+  courseNo: text('course_no').notNull(),
+  sectionNo: integer('section_no').notNull(),
+  color: text('color'),
+  hidden: boolean('hidden').notNull().default(false),
+
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+  updatedAt: timestamp('updated_at')
+    .notNull()
+    .defaultNow()
+    .$onUpdate(() => new Date()),
+})
+
+export const reviewStatus = pgEnum('review_status', [
+  'PENDING',
+  'APPROVED',
+  'REJECTED',
+])
+
+export const review = pgTable('review', {
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => createId()),
+  userEmail: text('user_email')
+    .notNull()
+    .references(() => user.email),
+
+  studyProgram: studyProgram('study_program').notNull(),
+  academicYear: integer('academic_year').notNull(),
+  semester: semester('semester').notNull(),
+
+  courseNo: text('course_no').notNull(),
+  content: text('content').notNull(),
+  rating: integer('rating').notNull(),
+
+  status: reviewStatus('status').notNull().default('PENDING'),
+  rejectionReason: text('rejection_reason'),
+
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+  updatedAt: timestamp('updated_at')
+    .notNull()
+    .defaultNow()
+    .$onUpdate(() => new Date()),
+})
+
+export const voteType = pgEnum('vote_type', ['L', 'D'])
+
+export const reviewVotes = pgTable('review_votes', {
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => createId()),
+
+  reviewId: text('review_id')
+    .notNull()
+    .references(() => review.id),
+  userEmail: text('user_email')
+    .notNull()
+    .references(() => user.email),
+
+  voteType: voteType('vote_type').notNull(),
+})
+// #endregion UserData

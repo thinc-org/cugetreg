@@ -148,7 +148,7 @@ export const user = pgTable('user', {
   email: text('email').primaryKey(),
 
   name: text('name').notNull(),
-  googleId: text('google_id').notNull(),
+  googleId: text('google_id').notNull().unique(),
 
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at')

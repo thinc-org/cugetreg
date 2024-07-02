@@ -8,15 +8,16 @@
   type $$Events = Events
 
   let className: $$Props['class'] = undefined
-  export let variant: $$Props['variant'] = 'primary'
+  export let variant: $$Props['variant'] = 'solid'
   export let size: $$Props['size'] = 'default'
+  export let color: $$Props['color'] = 'primary'
   export let builders: $$Props['builders'] = []
   export { className as class }
 </script>
 
 <ButtonPrimitive.Root
   {builders}
-  class="{cn(buttonVariants({ variant, size, className }))}"
+  class="{cn(buttonVariants({ variant, size, color, className }))}"
   type="button"
   {...$$restProps}
   on:click

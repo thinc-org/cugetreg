@@ -207,6 +207,9 @@ export const config: Config = {
       ],
     },
     extend: {
+      ringWidth: {
+        1.5: '1.5px',
+      },
       borderRadius: {
         button: '0.625rem',
       },

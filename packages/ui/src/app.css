@@ -2,42 +2,42 @@
 
 @font-face {
   font-family: 'FC Orbit';
-  src: url('./assets/fonts/FCOrbit-Bold.woff2') format('woff2');
+  src: url('assets/fonts/FCOrbit-Bold.woff2') format('woff2');
   font-weight: 700;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'FC Orbit';
-  src: url('./assets/fonts/FCOrbit-BoldItalic.woff2') format('woff2');
+  src: url('assets/fonts/FCOrbit-BoldItalic.woff2') format('woff2');
   font-weight: 700;
   font-style: italic;
 }
 
 @font-face {
   font-family: 'FC Orbit';
-  src: url('./assets/fonts/FCOrbit-Medium.woff2') format('woff2');
+  src: url('assets/fonts/FCOrbit-Medium.woff2') format('woff2');
   font-weight: 500;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'FC Orbit';
-  src: url('./assets/fonts/FCOrbit-MediumItalic.woff2') format('woff2');
+  src: url('assets/fonts/FCOrbit-MediumItalic.woff2') format('woff2');
   font-weight: 500;
   font-style: italic;
 }
 
 @font-face {
   font-family: 'FC Orbit';
-  src: url('./assets/fonts/FCOrbit-Regular.woff2') format('woff2');
+  src: url('assets/fonts/FCOrbit-Regular.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'FC Orbit';
-  src: url('./assets/fonts/FCOrbit-Italic.woff2') format('woff2');
+  src: url('assets/fonts/FCOrbit-Italic.woff2') format('woff2');
   font-weight: 400;
   font-style: italic;
 }
@@ -258,7 +258,7 @@
     --secondary-container: var(--tangerine-300);
     --on-secondary: var(--neutral-white);
     --on-secondary-hover: var(--neutral-white);
-    --on-secondary-container: var(--tangerine-300);
+    --on-secondary-container: var(--tangerine-700);
     --error: var(--red-500);
     --error-hover: var(--red-300);
     --error-container: var(--red-700);

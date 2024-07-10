@@ -13,5 +13,7 @@
     "@cgr/project-config": "1.3.0",
     "@cgr/schema": "1.5.0"
   },
-  "changesets": []
+  "changesets": [
+    "real-mails-beg"
+  ]
 }

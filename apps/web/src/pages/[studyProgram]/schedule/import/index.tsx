@@ -55,20 +55,20 @@ function ImportSchedulePage({ items }: ImportPageProps) {
 }
 
 // TODO: research security issues for importing from other 3rd party data sources
-const whitelistedOrigins = ['https://esc.eng.chula.ac.th', 'http://localhost:8000']
+// const whitelistedOrigins = ['https://esc.eng.chula.ac.th', 'http://localhost:8000']
 
 export async function getServerSideProps(
   context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<ImportPageProps>> {
-  const referer = context.req.headers.referer as string
-  const isFromWhitelistedOrigins = whitelistedOrigins.some((origin) => {
-    return typeof referer === 'string' && referer.startsWith(origin)
-  })
-  if (!isFromWhitelistedOrigins) {
-    return {
-      notFound: true,
-    }
-  }
+  // const referer = context.req.headers.referer as string
+  // const isFromWhitelistedOrigins = whitelistedOrigins.some((origin) => {
+  //   return typeof referer === 'string' && referer.startsWith(origin)
+  // })
+  // if (!isFromWhitelistedOrigins) {
+  //   return {
+  //     notFound: true,
+  //   }
+  // }
   try {
     const client = createApolloServerClient()
     const q = context.query
@@ -90,13 +90,20 @@ export async function getServerSideProps(
         }
       })
       .filter((it) => it !== null) as RawScheduleItem[]
-    const items = await Promise.all(rawItems.map((it) => fetchItem(client, courseGroup, it)))
+    console.log({ rawItems, courseGroup })
+    const items = await Promise.all(
+      rawItems.map((it) => {
+        console.log({ courseGroup, it })
+        return fetchItem(client, courseGroup, it)
+      })
+    )
     return {
       props: {
         items,
       },
     }
   } catch (e: unknown) {
+    console.log({ e })
     if (isApolloError(e as Error)) {
       return {
         notFound: true,

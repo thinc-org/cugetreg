@@ -13,7 +13,5 @@
     "@cgr/project-config": "1.3.0",
     "@cgr/schema": "1.5.0"
   },
-  "changesets": [
-    "dont-deploy-prod-at-4am"
-  ]
+  "changesets": []
 }

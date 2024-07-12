@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 
-import { ApolloClient, NormalizedCacheObject, isApolloError } from '@apollo/client'
+import { ApolloClient, NormalizedCacheObject } from '@apollo/client'
 import { observer } from 'mobx-react'
 import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 import { useRouter } from 'next/router'
@@ -32,9 +32,10 @@ interface ScheduleItem {
 
 interface ImportPageProps {
   items: ScheduleItem[]
+  errorMessage: string[]
 }
 
-function ImportSchedulePage({ items }: ImportPageProps) {
+function ImportSchedulePage({ items, errorMessage }: ImportPageProps) {
   const router = useRouter()
   const { buildLink } = useLinkBuilder()
 
@@ -46,12 +47,29 @@ function ImportSchedulePage({ items }: ImportPageProps) {
       items.forEach(({ course, sectionNo }) => {
         courseCartStore.addItem(course, sectionNo)
       })
-      router.replace(buildLink(`/schedule`))
+
+      if (!errorMessage) router.replace(buildLink(`/schedule`))
     }
     fn()
-  }, [items, router, buildLink])
+  }, [items, router, buildLink, errorMessage])
 
-  return <Loading loading />
+  return (
+    <>
+      <Loading loading />
+
+      {errorMessage && (
+        <div>
+          <p>ERROR</p>
+
+          <ul>
+            {errorMessage.map((msg, i) => (
+              <li key={i}>{msg}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </>
+  )
 }
 
 // TODO: research security issues for importing from other 3rd party data sources
@@ -69,48 +87,46 @@ export async function getServerSideProps(
   //     notFound: true,
   //   }
   // }
-  try {
-    const client = createApolloServerClient()
-    const q = context.query
-    const courseGroup = parseCourseGroup(q)
-    const itemsQuery = (q.items as string) ?? ''
-    const rawItems = itemsQuery
-      .split(',')
-      .map((it) => {
-        if (it.length === 0) {
-          return null
-        }
-        const parts = it.split(':')
-        if (parts.length !== 2) {
-          throw new Error('expected 2 parts for each item')
-        }
-        return {
-          courseNo: parts[0],
-          sectionNo: parts[1],
-        }
-      })
-      .filter((it) => it !== null) as RawScheduleItem[]
-    console.log({ rawItems, courseGroup })
-    const items = await Promise.all(
+  const client = createApolloServerClient()
+  const q = context.query
+  const courseGroup = parseCourseGroup(q)
+  const itemsQuery = (q.items as string) ?? ''
+
+  const errorMessage: string[] = []
+
+  const rawItems = itemsQuery
+    .split(',')
+    .map((it) => {
+      if (it.length === 0) {
+        return null
+      }
+      const parts = it.split(':')
+      if (parts.length !== 2) {
+        errorMessage.push(`expected 2 parts for each item: ${it}`)
+      }
+      return {
+        courseNo: parts[0],
+        sectionNo: parts[1],
+      }
+    })
+    .filter((it) => it !== null) as RawScheduleItem[]
+
+  const items = (
+    await Promise.all(
       rawItems.map((it) => {
-        console.log({ courseGroup, it })
-        return fetchItem(client, courseGroup, it)
+        return fetchItem(client, courseGroup, it).catch(() => {
+          errorMessage.push(`error fetching item: ${it.courseNo} ${it.sectionNo}`)
+          return null
+        })
       })
     )
-    return {
-      props: {
-        items,
-      },
-    }
-  } catch (e: unknown) {
-    console.log({ e })
-    if (isApolloError(e as Error)) {
-      return {
-        notFound: true,
-      }
-    } else {
-      throw e
-    }
+  ).filter((x) => x !== null)
+
+  return {
+    props: {
+      items,
+      errorMessage,
+    },
   }
 }
 

@@ -48,7 +48,7 @@ function ImportSchedulePage({ items, errorMessage }: ImportPageProps) {
         courseCartStore.addItem(course, sectionNo)
       })
 
-      if (!errorMessage) router.replace(buildLink(`/schedule`))
+      if (errorMessage.length === 0) router.replace(buildLink(`/schedule`))
     }
     fn()
   }, [items, router, buildLink, errorMessage])
@@ -57,7 +57,7 @@ function ImportSchedulePage({ items, errorMessage }: ImportPageProps) {
     <>
       <Loading loading />
 
-      {errorMessage && (
+      {errorMessage.length > 0 && (
         <div>
           <p>ERROR</p>
 

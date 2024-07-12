@@ -1,5 +1,23 @@
 # web
 
+## 1.11.0-beta.2
+
+### Minor Changes
+
+- b80e54d: feat: schedule import part 2
+
+## 1.11.0-beta.1
+
+### Minor Changes
+
+- cd80cac: feat: schedule import
+
+## 1.11.0-beta.0
+
+### Minor Changes
+
+- ef01a7c: fix: disable referrer check
+
 ## 1.10.1
 
 ### Patch Changes

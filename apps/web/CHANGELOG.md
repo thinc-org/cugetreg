@@ -1,5 +1,13 @@
 # web
 
+## 1.11.0
+
+### Minor Changes
+
+- af8c1e2: fix: disable referrer check
+- af8c1e2: feat: schedule import
+- af8c1e2: feat: schedule import part 2
+
 ## 1.11.0-beta.2
 
 ### Minor Changes

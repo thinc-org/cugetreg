@@ -1,5 +1,11 @@
 # web
 
+## 1.11.0-beta.1
+
+### Minor Changes
+
+- cd80cac: feat: schedule import
+
 ## 1.11.0-beta.0
 
 ### Minor Changes

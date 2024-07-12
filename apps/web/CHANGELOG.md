@@ -1,5 +1,11 @@
 # web
 
+## 1.12.0
+
+### Minor Changes
+
+- e105063: fix: import course error
+
 ## 1.12.0-beta.0
 
 ### Minor Changes

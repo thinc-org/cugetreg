@@ -120,7 +120,7 @@ export async function getServerSideProps(
         })
       })
     )
-  ).filter((x) => x !== null)
+  ).filter((x) => x !== null) as ScheduleItem[]
 
   return {
     props: {

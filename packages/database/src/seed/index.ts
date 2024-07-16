@@ -9,8 +9,11 @@ import { pgClient } from './utils/client.js'
 await seedCourses()
 await seedSections()
 await seedClasses()
+
+// #region User Data
 await seedUsers()
 await seedReviews()
 await seedCarts()
+// #endregion User Data
 
 await pgClient.end()

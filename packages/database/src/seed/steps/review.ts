@@ -4,14 +4,16 @@ import { review, reviewVotes } from '../../schema.js'
 import { db } from '../utils/client.js'
 import { withTimeLog } from '../utils/log.js'
 import { Interaction, ObjectId } from '../utils/types.js'
-import { idToEmail, reviewData } from './_shared.js'
+import { getEmailToUserIdMap, idToEmail, reviewData } from './_shared.js'
 
 export const seedReviews = () =>
   withTimeLog('Seed Reviews & Votes: Total', async () => {
+    const emailToUId = await getEmailToUserIdMap()
+
     const payload = await withTimeLog('Seed Reviews: Payload', async () => {
       return reviewData.map((review) => ({
-        userEmail: idToEmail.get(
-          (JSON.parse(review.ownerId) as ObjectId).$oid,
+        userId: emailToUId.get(
+          idToEmail.get((JSON.parse(review.ownerId) as ObjectId).$oid)!,
         )!,
         studyProgram: review.studyProgram,
         academicYear: +review.academicYear,
@@ -39,7 +41,7 @@ export const seedReviews = () =>
 
         const thisReview = interactions.map((i) => ({
           reviewId,
-          userEmail: idToEmail.get(i.userId.$oid)!,
+          userId: emailToUId.get(idToEmail.get(i.userId.$oid)!)!,
           voteType: i.type,
         })) as PgInsertValue<typeof reviewVotes>[]
 

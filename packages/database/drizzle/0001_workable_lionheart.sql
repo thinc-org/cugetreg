@@ -1,1 +1,0 @@
-ALTER TABLE "user" ADD CONSTRAINT "user_google_id_unique" UNIQUE("google_id");

@@ -36,7 +36,7 @@ END $$;
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "cart" (
 	"id" text PRIMARY KEY NOT NULL,
-	"user_email" text NOT NULL,
+	"user_id" text NOT NULL,
 	"study_program" "study_program" NOT NULL,
 	"academic_year" integer NOT NULL,
 	"semester" "semester" NOT NULL,
@@ -52,6 +52,7 @@ CREATE TABLE IF NOT EXISTS "cart_item" (
 	"section_no" integer NOT NULL,
 	"color" text,
 	"hidden" boolean DEFAULT false NOT NULL,
+	"cart_order" integer NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL
 );
@@ -85,7 +86,7 @@ CREATE TABLE IF NOT EXISTS "course" (
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "review" (
 	"id" text PRIMARY KEY NOT NULL,
-	"user_email" text NOT NULL,
+	"user_id" text NOT NULL,
 	"study_program" "study_program" NOT NULL,
 	"academic_year" integer NOT NULL,
 	"semester" "semester" NOT NULL,
@@ -101,7 +102,7 @@ CREATE TABLE IF NOT EXISTS "review" (
 CREATE TABLE IF NOT EXISTS "review_votes" (
 	"id" text PRIMARY KEY NOT NULL,
 	"review_id" text NOT NULL,
-	"user_email" text NOT NULL,
+	"user_id" text NOT NULL,
 	"vote_type" "vote_type" NOT NULL
 );
 --> statement-breakpoint
@@ -134,15 +135,19 @@ CREATE TABLE IF NOT EXISTS "course_class" (
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "user" (
-	"email" text PRIMARY KEY NOT NULL,
+	"id" text PRIMARY KEY NOT NULL,
+	"email" text NOT NULL,
 	"name" text NOT NULL,
+	"image" text,
 	"google_id" text NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
-	"updated_at" timestamp DEFAULT now() NOT NULL
+	"updated_at" timestamp DEFAULT now() NOT NULL,
+	CONSTRAINT "user_email_unique" UNIQUE("email"),
+	CONSTRAINT "user_google_id_unique" UNIQUE("google_id")
 );
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "cart" ADD CONSTRAINT "cart_user_email_user_email_fk" FOREIGN KEY ("user_email") REFERENCES "public"."user"("email") ON DELETE no action ON UPDATE no action;
+ ALTER TABLE "cart" ADD CONSTRAINT "cart_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
@@ -154,7 +159,7 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "review" ADD CONSTRAINT "review_user_email_user_email_fk" FOREIGN KEY ("user_email") REFERENCES "public"."user"("email") ON DELETE no action ON UPDATE no action;
+ ALTER TABLE "review" ADD CONSTRAINT "review_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
@@ -166,7 +171,7 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "review_votes" ADD CONSTRAINT "review_votes_user_email_user_email_fk" FOREIGN KEY ("user_email") REFERENCES "public"."user"("email") ON DELETE no action ON UPDATE no action;
+ ALTER TABLE "review_votes" ADD CONSTRAINT "review_votes_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;

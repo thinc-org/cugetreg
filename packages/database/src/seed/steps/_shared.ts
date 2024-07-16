@@ -1,5 +1,7 @@
 import fs from 'node:fs/promises'
 
+import { user } from '../../schema.js'
+import { db } from '../utils/client.js'
 import { withTimeLog } from '../utils/log.js'
 import { CourseSeed, ObjectId, ReviewSeed, UserSeed } from '../utils/types.js'
 
@@ -52,3 +54,21 @@ export const reviewData = await withTimeLog(
     return reviews
   },
 )
+
+export async function getEmailToUserIdMap() {
+  const eti = await withTimeLog('Read and parse users', async () => {
+    const idToEmailMap = await db
+      .select({
+        id: user.id,
+        email: user.email,
+      })
+      .from(user)
+
+    const emailToId = new Map<string, string>()
+    idToEmailMap.forEach((u) => emailToId.set(u.email, u.id))
+
+    return emailToId
+  })
+
+  return eti
+}

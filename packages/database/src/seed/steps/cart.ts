@@ -5,10 +5,12 @@ import { cart, cartItem } from '../../schema.js'
 import { db } from '../utils/client.js'
 import { withTimeLog } from '../utils/log.js'
 import { CourseCart } from '../utils/types.js'
-import { userData } from './_shared.js'
+import { getEmailToUserIdMap, userData } from './_shared.js'
 
 export const seedCarts = () =>
   withTimeLog('Seed Carts: Total (N + 1 Moment)', async () => {
+    const emailToUId = await getEmailToUserIdMap()
+
     const progress = new cliProgress.SingleBar(
       {},
       cliProgress.Presets.shades_classic,
@@ -25,13 +27,15 @@ export const seedCarts = () =>
         continue
       }
 
+      let cartIndex = 0
+
       for (const content of cartContent) {
         const existingCart = await db
           .select()
           .from(cart)
           .where(
             and(
-              eq(cart.userEmail, user.email),
+              eq(cart.userId, emailToUId.get(user.email)!),
               eq(cart.studyProgram, content.studyProgram),
               eq(cart.academicYear, +content.academicYear),
               eq(cart.semester, content.semester),
@@ -44,7 +48,7 @@ export const seedCarts = () =>
           const rt = await db
             .insert(cart)
             .values({
-              userEmail: user.email,
+              userId: emailToUId.get(user.email)!,
               studyProgram: content.studyProgram,
               academicYear: +content.academicYear,
               semester: content.semester,
@@ -61,7 +65,10 @@ export const seedCarts = () =>
           sectionNo: +content.selectedSectionNo,
           color: content.color,
           hidden: content.isHidden,
+          cartOrder: cartIndex,
         })
+
+        cartIndex++
       }
 
       index++

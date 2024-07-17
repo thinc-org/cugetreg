@@ -9,7 +9,7 @@ import { isTime } from '@api/util/functions'
 
 import { Course, CourseDocument, DayOfWeek, GenEdType, Semester, StudyProgram } from '@cgr/schema'
 
-import { CourseGroupInput, FilterInput, Period } from '../graphql'
+import { CourseGroupInput, FilterInput, GradingType, Period } from '../graphql'
 import { CourseService } from './course.service'
 
 export interface ICourseSearchDocument {
@@ -29,6 +29,7 @@ export interface ICourseSearchDocument {
 export interface ICourseSearchFilter {
   keyword: string
   genEdTypes?: GenEdType[]
+  gradingTypes?: GradingType[]
   dayOfWeeks?: DayOfWeek[]
   periodRange: Period
   studyProgram: string
@@ -92,6 +93,7 @@ export class CourseResolver {
           keyword: filter.keyword,
           genEdTypes: filter.genEdTypes,
           dayOfWeeks: filter.dayOfWeeks,
+          gradingTypes: filter.gradingTypes,
           periodRange: filter.periodRange,
           studyProgram: courseGroup.studyProgram,
           semester: courseGroup.semester,

@@ -1,6 +1,6 @@
 // @ts-check
 
-const base = require('./base.js')
+import base from './base.js'
 
 /**
  * @type {import('prettier').Options}
@@ -12,4 +12,4 @@ const config = {
   plugins: [...(base.plugins ?? []), 'prettier-plugin-svelte'],
 }
 
-module.exports = config
+export default config

@@ -1,45 +1,26 @@
 // @ts-check
 
-const base = require('./base.js')
+import eslintPluginSvelte from 'eslint-plugin-svelte'
+import globals from 'globals'
+import svelteParser from 'svelte-eslint-parser'
+import tseslint from 'typescript-eslint'
 
-const eslintPluginSvelte = require('eslint-plugin-svelte')
-
-const svelteConfig = eslintPluginSvelte.configs['recommended']
-
-/** @type {Record<string, import('eslint').Linter.RuleLevel>} */
-// @ts-expect-error Force Typecast, Insufficient type information
-const svConfigRules = svelteConfig.rules
-
-/** @satisfies {import('eslint').Linter.Config} */
-const config = {
+import base from './base.js'
+export default tseslint.config(
   ...base,
-  extends: [...svelteConfig.extends, ...(base.extends ?? [])],
-  plugins: base.plugins,
-  rules: {
-    ...base.rules,
-    ...svConfigRules,
-    '@typescript-eslint/no-unused-vars': [
-      'error',
-      {
-        varsIgnorePattern: 'props|^\\$\\$',
-      },
-    ],
-  },
-  overrides: [
-    ...(base.overrides ?? []),
-    {
-      files: ['*.svelte'],
-      parser: 'svelte-eslint-parser',
-      // Parse the `<script>` in `.svelte` as TypeScript by adding the following configuration.
+  ...eslintPluginSvelte.configs['flat/recommended'],
+  ...eslintPluginSvelte.configs['flat/prettier'],
+  {
+    files: ['**/*.svelte'],
+    languageOptions: {
+      ecmaVersion: 2022,
+      sourceType: 'module',
+      globals: { ...globals.browser },
+      parser: svelteParser,
       parserOptions: {
-        parser: '@typescript-eslint/parser',
-      },
-      rules: {
-        'no-inner-declarations': 'off',
+        parser: tseslint.parser,
+        extraFileExtensions: ['.svelte'],
       },
     },
-    // ...
-  ],
-}
-
-module.exports = config
+  },
+)

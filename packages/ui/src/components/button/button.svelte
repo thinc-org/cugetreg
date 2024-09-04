@@ -2,7 +2,7 @@
   import { Button as ButtonPrimitive } from 'bits-ui'
 
   import { cn } from '../../utils'
-  import { buttonVariants, type Events, type Props } from '.'
+  import { buttonVariants, type Events, type Props } from './index.js'
 
   type $$Props = Props
   type $$Events = Events

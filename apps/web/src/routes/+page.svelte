@@ -2,7 +2,7 @@
   import { Button } from '@repo/ui/button'
   import { Input } from '@repo/ui/input'
 
-  let counter = $state(0)
+  let counter = 0
 
   const onButtonClick = () => {
     counter++

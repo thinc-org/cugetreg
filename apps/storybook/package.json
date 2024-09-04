@@ -11,22 +11,22 @@
     "format": "eslint src --fix"
   },
   "devDependencies": {
-    "@chromatic-com/storybook": "^1.6.0",
-    "@storybook/addon-essentials": "^8.1.11",
-    "@storybook/addon-interactions": "^8.1.11",
-    "@storybook/addon-links": "^8.1.11",
-    "@storybook/blocks": "^8.1.11",
-    "@storybook/svelte": "^8.1.11",
-    "@storybook/svelte-vite": "^8.1.11",
-    "@storybook/test": "^8.1.11",
-    "@sveltejs/vite-plugin-svelte": "^3.1.1",
+    "@chromatic-com/storybook": "^1.8.0",
+    "@storybook/addon-essentials": "^8.2.9",
+    "@storybook/addon-interactions": "^8.2.9",
+    "@storybook/addon-links": "^8.2.9",
+    "@storybook/blocks": "^8.2.9",
+    "@storybook/svelte": "^8.2.9",
+    "@storybook/svelte-vite": "^8.2.9",
+    "@storybook/test": "^8.2.9",
+    "@sveltejs/vite-plugin-svelte": "^3.1.2",
     "@tsconfig/svelte": "^5.0.4",
-    "eslint": "^8.57.0",
-    "storybook": "^8.1.11",
-    "svelte": "^4.2.18",
-    "svelte-check": "^3.8.4",
-    "tslib": "^2.6.3",
-    "typescript": "^5.5.2",
-    "vite": "^5.3.2"
+    "eslint": "^9.9.1",
+    "storybook": "^8.2.9",
+    "svelte": "^4.2.19",
+    "svelte-check": "^4.0.0",
+    "tslib": "^2.7.0",
+    "typescript": "^5.5.4",
+    "vite": "^5.4.3"
   }
 }

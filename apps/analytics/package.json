@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "start": "dotenv -- tsx src/index.ts",
-    "lint": "eslint src",
-    "format": "eslint src --fix"
+    "lint": "eslint .",
+    "format": "eslint . --fix"
   },
   "dependencies": {
     "@cugetreg/database": "workspace:*",

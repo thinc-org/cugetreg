@@ -55,5 +55,8 @@ export default tseslint.config(
       ],
     },
   },
+  {
+    ignores: ['**/build', '**/.svelte-kit', '**/package'],
+  },
   eslintPluginPrettierRecommended,
 )

@@ -7,8 +7,8 @@
     "dev": "storybook dev -p 6006",
     "build": "storybook build",
     "check": "svelte-check --tsconfig ./tsconfig.json",
-    "lint": "eslint src",
-    "format": "eslint src --fix"
+    "lint": "eslint .",
+    "format": "eslint . --fix"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^1.8.0",

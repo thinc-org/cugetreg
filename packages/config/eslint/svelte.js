@@ -10,6 +10,7 @@ export default tseslint.config(
   ...base,
   ...eslintPluginSvelte.configs['flat/recommended'],
   ...eslintPluginSvelte.configs['flat/prettier'],
+  // https://github.com/sveltejs/eslint-plugin-svelte/issues/732
   {
     files: ['**/*.svelte'],
     languageOptions: {

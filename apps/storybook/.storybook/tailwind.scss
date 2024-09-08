@@ -1,0 +1,302 @@
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&display=swap');
+
+// @font-face {
+//   font-family: 'FC Orbit';
+//   src: url('assets/fonts/FCOrbit-Bold.woff2') format('woff2');
+//   font-weight: 700;
+//   font-style: normal;
+// }
+
+// @font-face {
+//   font-family: 'FC Orbit';
+//   src: url('assets/fonts/FCOrbit-BoldItalic.woff2') format('woff2');
+//   font-weight: 700;
+//   font-style: italic;
+// }
+
+// @font-face {
+//   font-family: 'FC Orbit';
+//   src: url('assets/fonts/FCOrbit-Medium.woff2') format('woff2');
+//   font-weight: 500;
+//   font-style: normal;
+// }
+
+// @font-face {
+//   font-family: 'FC Orbit';
+//   src: url('assets/fonts/FCOrbit-MediumItalic.woff2') format('woff2');
+//   font-weight: 500;
+//   font-style: italic;
+// }
+
+// @font-face {
+//   font-family: 'FC Orbit';
+//   src: url('assets/fonts/FCOrbit-Regular.woff2') format('woff2');
+//   font-weight: 400;
+//   font-style: normal;
+// }
+
+// @font-face {
+//   font-family: 'FC Orbit';
+//   src: url('assets/fonts/FCOrbit-Italic.woff2') format('woff2');
+//   font-weight: 400;
+//   font-style: italic;
+// }
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --neutral-white: 0 0% 100%;
+    --neutral-50: 240 20% 97%;
+    --neutral-100: 240 13% 94%;
+    --neutral-200: 235 15% 86%;
+    --neutral-300: 231 16% 74%;
+    --neutral-400: 230 15% 60%;
+    --neutral-500: 230 14% 51%;
+    --neutral-600: 230 15% 39%;
+    --neutral-700: 233 16% 32%;
+    --neutral-800: 231 14% 27%;
+    --neutral-900: 233 13% 24%;
+    --blue-300: 212 88% 93%;
+    --blue-500: 222 52% 53%;
+    --blue-700: 225 40% 33%;
+    --tangerine-300: 20 100% 88%;
+    --tangerine-500: 19 89% 67%;
+    --tangerine-700: 18 87% 53%;
+    --yellow-300: 46 85% 92%;
+    --yellow-500: 44 92% 77%;
+    --yellow-700: 40 97% 47%;
+    --pink-300: 324 90% 92%;
+    --pink-500: 324 86% 73%;
+    --pink-700: 324 84% 42%;
+    --red-300: 0 89% 93%;
+    --red-500: 0 92% 69%;
+    --red-700: 0 87% 37%;
+    --orange-300: 33 100% 87%;
+    --orange-500: 32 99% 61%;
+    --orange-700: 32 100% 45%;
+    --green-300: 98 97% 85%;
+    --green-500: 97 68% 50%;
+    --green-700: 97 69% 35%;
+    --teal-300: 166 100% 93%;
+    --teal-500: 166 68% 50%;
+    --teal-700: 166 50% 40%;
+    --sky-300: 205 95% 93%;
+    --sky-500: 205 85% 57%;
+    --sky-700: 205 85% 31%;
+    --purple-300: 285 91% 92%;
+    --purple-500: 285 76% 66%;
+    --purple-700: 285 67% 31%;
+    --indigo-300: 248 100% 92%;
+    --indigo-500: 248 82% 69%;
+    --indigo-700: 248 80% 31%;
+
+    --primary: var(--blue-500);
+    --primary-hover: var(--blue-700);
+    --primary-low: var(--blue-300);
+    --primary-low-hover: var(--blue-500);
+    --primary-container: var(--blue-300);
+    --on-primary: var(--neutral-white);
+    --on-primary-hover: var(--neutral-white);
+    --on-primary-low: var(--blue-700);
+    --on-primary-container: var(--blue-700);
+    --secondary: var(--tangerine-500);
+    --secondary-hover: var(--tangerine-700);
+    --secondary-container: var(--tangerine-300);
+    --on-secondary: var(--neutral-white);
+    --on-secondary-hover: var(--neutral-white);
+    --on-secondary-container: var(--tangerine-700);
+    --error: var(--red-500);
+    --error-hover: var(--red-700);
+    --error-container: var(--red-300);
+    --on-error: var(--neutral-white);
+    --on-error-hover: var(--neutral-white);
+    --on-error-container: var(--red-700);
+    --warning: var(--yellow-500);
+    --warning-hover: var(--yellow-700);
+    --warning-container: var(--yellow-300);
+    --on-warning: var(--neutral-white);
+    --on-warning-hover: var(--neutral-white);
+    --on-warning-container: var(--yellow-700);
+    --success: var(--green-500);
+    --success-hover: var(--green-700);
+    --success-container: var(--green-300);
+    --on-success: var(--neutral-white);
+    --on-success-hover: var(--neutral-white);
+    --on-success-container: var(--green-700);
+    --surface-dim: var(--neutral-300);
+    --surface: var(--neutral-white);
+    --surface-bright: var(--neutral-white);
+    --surface-container: var(--neutral-200);
+    --surface-container-low: var(--neutral-100);
+    --surface-container-lowest: var(--neutral-50);
+    --surface-container-high: var(--neutral-300);
+    --surface-container-highest: var(--neutral-400);
+    --on-surface: var(--neutral-900);
+    --on-surface-var: var(--primary);
+    --on-surface-disabled: var(--neutral-200);
+    --on-surface-placeholder: var(--neutral-200);
+
+    --monday: var(--yellow-300);
+    --on-monday: var(--yellow-700);
+    --tuesday: var(--pink-300);
+    --on-tuesday: var(--pink-500);
+    --wednesday: var(--green-300);
+    --on-wednesday: var(--green-700);
+    --thursday: var(--orange-300);
+    --on-thursday: var(--orange-700);
+    --friday: var(--sky-300);
+    --on-friday: var(--sky-700);
+    --saturday: var(--indigo-300);
+    --on-saturday: var(--indigo-700);
+    --sunday: var(--red-300);
+    --on-sunday: var(--red-700);
+
+    --h1-font-size: 1.75rem;
+    --h2-font-size: 1.5rem;
+    --h3-font-size: 1.25rem;
+    --table-header-font-size: 1rem;
+    --subtitle-font-size: 1.125rem;
+    --body1-font-size: 1.125rem;
+    --body2-font-size: 1rem;
+    --button1-font-size: 1.125rem;
+    --button2-font-size: 1rem;
+
+    --h1-line-height: 2rem;
+    --h2-line-height: 1.75rem;
+    --h3-line-height: 1.5rem;
+    --table-header-line-height: 1.125rem;
+    --subtitle-line-height: 1.25rem;
+    --body1-line-height: 1.75rem;
+    --body2-line-height: 1.5rem;
+    --button1-line-height: 1.25rem;
+    --button2-line-height: 1.125rem;
+  }
+
+  @media screen and (max-width: 640px) {
+    :root {
+      --h1-font-size: 1.25rem;
+      --h2-font-size: 1rem;
+      --h3-font-size: 1rem;
+      --table-header-font-size: 0.75rem;
+      --subtitle-font-size: 0.875rem;
+      --body1-font-size: 0.875rem;
+      --body2-font-size: 0.75rem;
+      --button1-font-size: 0.875rem;
+      --button2-font-size: 0.75rem;
+
+      --h1-line-height: 1.75rem;
+      --h2-line-height: 1.5rem;
+      --h3-line-height: 1.25rem;
+      --table-header-line-height: 1rem;
+      --subtitle-line-height: 1.125rem;
+      --body1-line-height: 1.375rem;
+      --body2-line-height: 1.25rem;
+      --button1-line-height: 1.125rem;
+      --button2-line-height: 1rem;
+    }
+  }
+
+  .dark {
+    --neutral-900: 240 20% 97%;
+    --neutral-800: 240 13% 94%;
+    --neutral-700: 235 15% 86%;
+    --neutral-600: 231 16% 74%;
+    --neutral-500: 230 15% 60%;
+    --neutral-400: 230 14% 51%;
+    --neutral-300: 230 15% 39%;
+    --neutral-200: 233 16% 32%;
+    --neutral-100: 231 14% 27%;
+    --neutral-50: 233 13% 24%;
+    --blue-700: 212 88% 93%;
+    --blue-500: 222 52% 53%;
+    --blue-300: 225 40% 33%;
+    --tangerine-700: 20 100% 88%;
+    --tangerine-500: 19 89% 67%;
+    --tangerine-300: 18 87% 53%;
+    --yellow-700: 46 85% 92%;
+    --yellow-500: 44 92% 77%;
+    --yellow-300: 40 97% 47%;
+    --pink-700: 324 90% 92%;
+    --pink-500: 324 86% 73%;
+    --pink-300: 324 84% 42%;
+    --red-700: 0 89% 93%;
+    --red-500: 0 92% 69%;
+    --red-300: 0 87% 37%;
+    --orange-700: 33 100% 87%;
+    --orange-500: 32 99% 61%;
+    --orange-300: 32 100% 45%;
+    --green-700: 98 97% 85%;
+    --green-500: 97 68% 50%;
+    --green-300: 97 69% 35%;
+    --teal-700: 166 100% 93%;
+    --teal-500: 166 68% 50%;
+    --teal-300: 166 50% 40%;
+    --sky-700: 205 95% 93%;
+    --sky-500: 205 85% 57%;
+    --sky-300: 205 85% 31%;
+    --purple-700: 285 91% 92%;
+    --purple-500: 285 76% 66%;
+    --purple-300: 285 67% 31%;
+    --indigo-700: 248 100% 92%;
+    --indigo-500: 248 82% 69%;
+    --indigo-300: 248 80% 31%;
+
+    --primary: var(--blue-700);
+    --primary-hover: var(--blue-500);
+    --primary-low: var(--blue-500);
+    --primary-low-hover: var(--blue-700);
+    --primary-container: var(--blue-500);
+    --on-primary: var(--blue-300);
+    --on-primary-hover: var(--neutral-white);
+    --on-primary-low: var(--blue-300);
+    --on-primary-container: var(--blue-700);
+    --secondary: var(--tangerine-500);
+    --secondary-hover: var(--tangerine-300);
+    --secondary-container: var(--tangerine-300);
+    --on-secondary: var(--neutral-white);
+    --on-secondary-hover: var(--neutral-white);
+    --on-secondary-container: var(--tangerine-700);
+    --error: var(--red-500);
+    --error-hover: var(--red-300);
+    --error-container: var(--red-700);
+    --on-error: var(--neutral-white);
+    --on-error-hover: var(--neutral-white);
+    --on-error-container: var(--red-300);
+    --warning: var(--yellow-500);
+    --warning-hover: var(--yellow-700);
+    --warning-container: var(--yellow-300);
+    --on-warning: var(--neutral-white);
+    --on-warning-hover: var(--neutral-white);
+    --on-warning-container: var(--yellow-700);
+    --success: var(--green-500);
+    --success-hover: var(--green-700);
+    --success-container: var(--green-700);
+    --on-success: var(--neutral-white);
+    --on-success-hover: var(--neutral-white);
+    --on-success-container: var(--green-300);
+    --surface-dim: var(--neutral-300);
+    --surface: var(--neutral-50);
+    --surface-bright: var(--neutral-white);
+    --surface-container: var(--neutral-300);
+    --surface-container-low: var(--neutral-200);
+    --surface-container-lowest: var(--neutral-100);
+    --surface-container-high: var(--neutral-400);
+    --surface-container-highest: var(--neutral-500);
+    --on-surface: var(--neutral-900);
+    --on-surface-var: var(--primary);
+    --on-surface-disabled: var(--neutral-300);
+    --on-surface-placeholder: var(--neutral-300);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-surface-container;
+  }
+  body {
+    @apply bg-surface text-on-surface;
+  }
+}

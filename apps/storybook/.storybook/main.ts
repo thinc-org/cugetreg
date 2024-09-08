@@ -1,5 +1,6 @@
+import { dirname, join } from 'node:path'
+
 import type { StorybookConfig } from '@storybook/svelte-vite'
-import { dirname, join } from 'path'
 
 /**
  * This function is used to resolve the absolute path of a package.
@@ -10,12 +11,17 @@ function getAbsolutePath(value: string) {
 }
 
 const config: StorybookConfig = {
-  stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|ts|tsx|svelte)'],
+  stories: [
+    '../src/**/*.mdx',
+    '../src/**/*.stories.@(js|jsx|ts|tsx|svelte)',
+    '../../../packages/ui/src/**/*.stories.@(js|jsx|ts|tsx|svelte)',
+  ],
   addons: [
     getAbsolutePath('@storybook/addon-links'),
     getAbsolutePath('@storybook/addon-essentials'),
     getAbsolutePath('@chromatic-com/storybook'),
     getAbsolutePath('@storybook/addon-interactions'),
+    '@storybook/addon-svelte-csf',
   ],
   framework: {
     name: getAbsolutePath('@storybook/svelte-vite'),

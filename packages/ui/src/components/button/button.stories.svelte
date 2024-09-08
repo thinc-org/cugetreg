@@ -52,11 +52,16 @@
 <!-- 👇 Each story then reuses that template -->
 
 <Story
-  name="PrimarySolid"
+  name="Primary Solid"
   args="{{ variant: 'solid', size: 'default', color: 'primary' }}"
 />
 
 <Story
-  name="ErrorSolid"
+  name="Error Solid"
   args="{{ variant: 'solid', size: 'default', color: 'error' }}"
+/>
+
+<Story
+  name="Secondary Solid"
+  args="{{ variant: 'solid', size: 'default', color: 'secondary' }}"
 />

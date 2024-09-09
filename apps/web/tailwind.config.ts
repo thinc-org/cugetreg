@@ -1,3 +1,3 @@
-import { config } from '@repo/ui/config'
+import config from '@repo/ui/config'
 
 export default config

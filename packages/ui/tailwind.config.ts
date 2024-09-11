@@ -1,8 +1,6 @@
 import { Config } from 'tailwindcss'
 import { fontFamily } from 'tailwindcss/defaultTheme'
 
-console.log('Using @repo/ui tailwind config')
-
 const config = {
   darkMode: ['class'],
   content: [

@@ -1,3 +1,1 @@
-import config from '@repo/ui/config'
-
-export default config
+export { default } from '@repo/ui/tailwind-config'

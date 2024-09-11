@@ -1,4 +1,4 @@
-import './tailwind.scss'
+import '@repo/ui/css'
 
 import { withThemeByClassName } from '@storybook/addon-themes'
 import type { Preview } from '@storybook/svelte'

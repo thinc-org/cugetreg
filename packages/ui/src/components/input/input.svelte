@@ -7,6 +7,8 @@
 
   let className: $$Props['class'] = undefined
   export let value: $$Props['value'] = undefined
+  export let label: $$Props['label'] = ''
+  export let desc: $$Props['desc'] = ''
   export let state: $$Props['state'] = 'default'
   export { className as class }
 
@@ -15,25 +17,31 @@
   export let readonly: $$Props['readonly'] = undefined
 </script>
 
-<input
-  class="{cn(className, inputVariants({ state }))}"
-  bind:value
-  {readonly}
-  on:blur
-  on:change
-  on:click
-  on:focus
-  on:focusin
-  on:focusout
-  on:keydown
-  on:keypress
-  on:keyup
-  on:mouseover
-  on:mouseenter
-  on:mouseleave
-  on:mousemove
-  on:paste
-  on:input
-  on:wheel|passive
-  {...$$restProps}
-/>
+<div class="my-3">
+  <label>
+    {label}
+    <input
+      class="{cn(className, inputVariants({ state }))}"
+      bind:value
+      {readonly}
+      on:blur
+      on:change
+      on:click
+      on:focus
+      on:focusin
+      on:focusout
+      on:keydown
+      on:keypress
+      on:keyup
+      on:mouseover
+      on:mouseenter
+      on:mouseleave
+      on:mousemove
+      on:paste
+      on:input
+      on:wheel|passive
+      {...$$restProps}
+    />
+  </label>
+  <p>{desc}</p>
+</div>

@@ -15,7 +15,18 @@
 
 {counter}
 
-<Input placeholder="Input" />
+<Input
+  color="error"
+  placeholder="โปรดกรอกรหัสผ่าน"
+  label="รหัสผ่าน"
+  desc="กรุณากรอกรหัสผ่านให้ถูกต้อง"
+/>
+<Input
+  color="error"
+  placeholder="โปรดกรอกรหัสผ่าน"
+  label="เกิดข้อผิดพลาด"
+  desc="กรุณากรอกรหัสผ่านให้ถูกต้อง"
+/>
 
 <p>
   Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation

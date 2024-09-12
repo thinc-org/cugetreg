@@ -8,7 +8,7 @@ export type FormInputEvent<T extends Event = Event> = T & {
 }
 
 const inputVariants = tv({
-  base: 'flex w-full h-10 rounded-button bg-surface-container-lowest px-4 text-button2 placeholder:text-on-surface hover:outline-none hover:ring-1 hover:ring-primary focus-visible:outline-none focus-visible:ring-1.5 focus-visible:ring-primary disabled:cursor-not-allowed placeholder:disabled:text-on-surface-disabled disabled:hover:ring-0',
+  base: 'flex w-full max-w-[225px] h-10 rounded-button bg-surface-container-lowest px-4 text-button2 placeholder:text-on-surface hover:outline-none hover:ring-1 hover:ring-primary focus-visible:outline-none focus-visible:ring-1.5 focus-visible:ring-primary disabled:cursor-not-allowed placeholder:disabled:text-on-surface-disabled disabled:hover:ring-0',
   variants: {
     color: {
       primary: 'hover:ring-primary focus-visible:ring-primary',
@@ -52,6 +52,8 @@ type State = VariantProps<typeof inputVariants>['state']
 type Props = HTMLInputAttributes & {
   color?: Variant
   state?: State
+  label?: string
+  desc?: string
 }
 
 type Events = InputEvents

@@ -56,7 +56,12 @@ export default tseslint.config(
     },
   },
   {
-    ignores: ['**/build', '**/.svelte-kit', '**/package'],
+    ignores: [
+      '**/build',
+      '**/.svelte-kit',
+      '**/package',
+      '**/storybook-static',
+    ],
   },
   eslintPluginPrettierRecommended,
 )

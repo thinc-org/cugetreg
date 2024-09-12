@@ -1,14 +1,13 @@
 <script lang="ts">
-  import type { HTMLInputAttributes } from 'svelte/elements'
-
   import { cn } from '../../utils'
-  import type { InputEvents } from '.'
+  import { type Events, inputVariants, type Props } from './index.js'
 
-  type $$Props = HTMLInputAttributes
-  type $$Events = InputEvents
+  type $$Props = Props
+  type $$Events = Events
 
   let className: $$Props['class'] = undefined
   export let value: $$Props['value'] = undefined
+  export let state: $$Props['state'] = 'default'
   export { className as class }
 
   // Workaround for https://github.com/sveltejs/svelte/issues/9305
@@ -17,10 +16,7 @@
 </script>
 
 <input
-  class="{cn(
-    'flex w-full h-10 rounded-button bg-surface-container-lowest px-4 text-button2 placeholder:text-on-surface hover:outline-none hover:ring-1 hover:ring-primary focus-visible:outline-none focus-visible:ring-1.5 focus-visible:ring-primary disabled:cursor-not-allowed placeholder:disabled:text-on-surface-disabled disabled:hover:ring-0',
-    className,
-  )}"
+  class="{cn(className, inputVariants({ state }))}"
   bind:value
   {readonly}
   on:blur

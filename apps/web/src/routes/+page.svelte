@@ -15,19 +15,29 @@
 
 {counter}
 
-<Input
-  color="error"
-  placeholder="โปรดกรอกรหัสผ่าน"
-  label="รหัสผ่าน"
-  desc="กรุณากรอกรหัสผ่านให้ถูกต้อง"
-/>
-<Input
-  color="error"
-  placeholder="โปรดกรอกรหัสผ่าน"
-  label="เกิดข้อผิดพลาด"
-  desc="กรุณากรอกรหัสผ่านให้ถูกต้อง"
-/>
-
+<div
+  class="flex flex-col space-x-0 space-y-10 w-auto h-auto p-10 my-5 border-b-2 border-t-2"
+>
+  <h1>ตัวอย่าง Input</h1>
+  <Input
+    placeholder="โปรดกรอกรหัสผ่าน"
+    label="รหัสผ่าน"
+    desc="กรุณากรอกรหัสผ่านให้ถูกต้อง"
+  />
+  <Input
+    placeholder="โปรดกรอกรหัสผ่าน"
+    label="รหัสผ่าน"
+    desc="กรุณากรอกรหัสผ่านให้ถูกต้อง"
+    state="error"
+  />
+  <Input placeholder="สำเร็จ" label="รหัสผ่าน" desc="สำเร็จ" state="success" />
+  <Input
+    placeholder="ฟอร์มนี้ใช้ไม่ได้"
+    label="รหัสผ่าน"
+    desc="ฟอร์มนี้ใช้ไม่ได้"
+    state="disable"
+  />
+</div>
 <p>
   Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation
 </p>

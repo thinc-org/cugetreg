@@ -15,33 +15,30 @@
   // Workaround for https://github.com/sveltejs/svelte/issues/9305
   // Fixed in Svelte 5, but not backported to 4.x.
   export let readonly: $$Props['readonly'] = undefined
+  const disabled = state === 'disable'
 </script>
 
-<div class="my-3">
+<div class="my-3 space-y-2">
   <label>
     {label}
     <input
       class="{cn(className, inputVariants({ state }))}"
       bind:value
       {readonly}
-      on:blur
       on:change
       on:click
       on:focus
-      on:focusin
-      on:focusout
-      on:keydown
-      on:keypress
-      on:keyup
-      on:mouseover
-      on:mouseenter
-      on:mouseleave
-      on:mousemove
-      on:paste
-      on:input
-      on:wheel|passive
+      {disabled}
       {...$$restProps}
     />
   </label>
-  <p>{desc}</p>
+  <p
+    class="{state == 'error'
+      ? 'text-error'
+      : state == 'success'
+        ? 'text-success'
+        : ''}"
+  >
+    {desc}
+  </p>
 </div>

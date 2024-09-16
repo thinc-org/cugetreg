@@ -1,8 +1,7 @@
 <script lang="ts">
   import { Button } from '@repo/ui/button'
   import { Input } from '@repo/ui/input'
-  import * as Select from '@repo/ui/input-select'
-
+  import { Select } from '@repo/ui/input-select'
   let counter = 0
 
   const onButtonClick = () => {
@@ -43,16 +42,34 @@
   class="flex flex-col space-x-0 space-y-10 w-auto h-auto p-10 my-5 border-b-2 border-t-2"
 >
   <h1>Select</h1>
-  <Select.Root>
-    <Select.Trigger class="w-[350px]">
-      <Select.Value placeholder="Theme" />
-    </Select.Trigger>
-    <Select.Content>
-      <Select.Item value="light">Light</Select.Item>
-      <Select.Item value="dark">Dark</Select.Item>
-      <Select.Item value="system">System</Select.Item>
-    </Select.Content>
-  </Select.Root>
+
+  <Select
+    placeholder="โปรดเลือกตัวเลือก"
+    label="ตัวเลือก"
+    desc="เลือกตัวเลือกที่กำหนด"
+    items="{['option1', 'option2']}"
+  />
+  <Select
+    placeholder="โปรดเลือกตัวเลือก"
+    label="ตัวเลือก"
+    desc="เลือกตัวเลือกที่กำหนด"
+    state="error"
+    items="{['option1', 'option2']}"
+  />
+  <Select
+    placeholder="โปรดเลือกตัวเลือก"
+    label="ตัวเลือก"
+    desc="เลือกตัวเลือกที่กำหนด"
+    state="success"
+    items="{['option1', 'option2']}"
+  />
+  <Select
+    placeholder="โปรดเลือกตัวเลือก"
+    label="ตัวเลือก"
+    desc="เลือกตัวเลือกที่กำหนด"
+    state="disable"
+    items="{['option1', 'option2']}"
+  />
 </div>
 <p>
   Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation

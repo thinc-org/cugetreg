@@ -2,7 +2,7 @@
   import { Select as SelectPrimitive } from 'bits-ui'
   import { scale } from 'svelte/transition'
 
-  import { cn, flyAndScale } from '../../utils'
+  import { cn, flyAndScale } from '../../../utils'
 
   type $$Props = SelectPrimitive.ContentProps
   type $$Events = SelectPrimitive.ContentEvents

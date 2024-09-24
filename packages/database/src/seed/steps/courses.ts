@@ -1,6 +1,6 @@
 import { PgInsertValue } from 'drizzle-orm/pg-core'
 
-import { course } from '../../schema.js'
+import { course } from '../../schema/courseData.js'
 import { db } from '../utils/client.js'
 import { withTimeLog } from '../utils/log.js'
 import { parsePeriod } from '../utils/parsing.js'
@@ -27,7 +27,7 @@ export const seedCourses = () =>
           courseDescTh: course.courseDescTh,
           faculty: course.faculty,
           department: course.department,
-          credit: course.credit,
+          credit: String(course.credit),
           creditHours: course.creditHours,
           courseCondition: course.courseCondition,
           midtermStart: midterm.start,

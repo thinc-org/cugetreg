@@ -1,6 +1,6 @@
 import { PgInsertValue } from 'drizzle-orm/pg-core'
 
-import { course, section } from '../../schema.js'
+import { course, section } from '../../schema/courseData.js'
 import { db } from '../utils/client.js'
 import { withTimeLog } from '../utils/log.js'
 import { SectionSeed } from '../utils/types.js'

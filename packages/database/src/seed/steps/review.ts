@@ -1,6 +1,6 @@
 import { PgInsertValue } from 'drizzle-orm/pg-core'
 
-import { review, reviewVotes } from '../../schema.js'
+import { review, reviewVotes } from '../../schema/userData.js'
 import { db } from '../utils/client.js'
 import { withTimeLog } from '../utils/log.js'
 import { Interaction, ObjectId } from '../utils/types.js'

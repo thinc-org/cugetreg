@@ -19,19 +19,19 @@
   "devDependencies": {
     "@repo/config": "workspace:^",
     "@storybook/addon-svelte-csf": "^4.1.7",
-    "@storybook/svelte": "^8.2.9",
-    "@sveltejs/adapter-node": "^5.2.2",
-    "@sveltejs/kit": "^2.5.26",
+    "@storybook/svelte": "^8.3.3",
+    "@sveltejs/adapter-node": "^5.2.4",
+    "@sveltejs/kit": "^2.5.28",
     "@sveltejs/vite-plugin-svelte": "^3.1.2",
     "svelte": "^4.2.19",
-    "vitest": "^2.0.5"
+    "vitest": "^2.1.1"
   },
   "dependencies": {
-    "bits-ui": "^0.21.13",
+    "bits-ui": "^0.21.15",
     "clsx": "^2.1.1",
-    "lucide-svelte": "^0.439.0",
+    "lucide-svelte": "^0.445.0",
     "tailwind-merge": "^2.5.2",
     "tailwind-variants": "^0.2.1",
-    "tailwindcss": "^3.4.10"
+    "tailwindcss": "^3.4.13"
   }
 }

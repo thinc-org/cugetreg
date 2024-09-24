@@ -13,9 +13,9 @@
     "@changesets/cli": "^2.27.8",
     "@repo/config": "workspace:^",
     "@types/eslint": "^9.6.1",
-    "eslint": "^9.10.0",
+    "eslint": "^9.11.1",
     "prettier": "^3.3.3",
-    "turbo": "^2.1.1"
+    "turbo": "^2.1.2"
   },
-  "packageManager": "pnpm@9.10.0"
+  "packageManager": "pnpm@9.11.0"
 }

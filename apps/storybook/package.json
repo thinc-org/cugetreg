@@ -7,8 +7,8 @@
     "dev": "storybook dev -p 6006",
     "build": "storybook build",
     "check": "svelte-check --tsconfig ./tsconfig.json",
-    "lint": "eslint .",
-    "format": "eslint . --fix"
+    "lint": "eslint . && prettier --check \"src/**/*.mdx\"",
+    "format": "eslint . --fix && prettier --write \"src/**/*.mdx\""
   },
   "dependencies": {
     "@repo/ui": "workspace:*"

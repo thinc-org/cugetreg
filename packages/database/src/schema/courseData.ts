@@ -151,7 +151,7 @@ export const sectionClass = pgTable('course_class', {
   type: text('type').notNull(),
 
   // 8 DAY1 & 9 DAY2 & ... & 14 DAY7
-  // TODO Use array?
+  // * Note: DG use Multi-Valued, we will flatten it in our database
   dayOfWeek: dayOfWeek('day_of_week').notNull(),
   // 15 STARTTIME
   periodStart: text('period_start').notNull(),

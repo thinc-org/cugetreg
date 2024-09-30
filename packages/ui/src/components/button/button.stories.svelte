@@ -57,11 +57,36 @@
 />
 
 <Story
+  name="Primary Outline"
+  args="{{ variant: 'outlined', size: 'default', color: 'primary' }}"
+/>
+
+<Story
+  name="Neutral Solid"
+  args="{{ variant: 'solid', size: 'default', color: 'neutral' }}"
+/>
+
+<Story
+  name="Neutral Outline"
+  args="{{ variant: 'outlined', size: 'default', color: 'neutral' }}"
+/>
+
+<Story
   name="Error Solid"
   args="{{ variant: 'solid', size: 'default', color: 'error' }}"
 />
 
 <Story
+  name="Error Outline"
+  args="{{ variant: 'outlined', size: 'default', color: 'error' }}"
+/>
+
+<Story
   name="Secondary Solid"
   args="{{ variant: 'solid', size: 'default', color: 'secondary' }}"
+/>
+
+<Story
+  name="Secondary Outline"
+  args="{{ variant: 'outlined', size: 'default', color: 'secondary' }}"
 />

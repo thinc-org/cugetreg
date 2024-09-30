@@ -4,7 +4,7 @@ import { tv, type VariantProps } from 'tailwind-variants'
 import Root from './button.svelte'
 
 const buttonVariants = tv({
-  base: 'inline-flex items-center justify-center whitespace-nowrap rounded-button text-button2 font-medium ring-offset-surface transition-colors focus-visible:outline-none focus-visible:ring-1.5 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
+  base: 'inline-flex items-center justify-center whitespace-nowrap rounded-button text-button2 font-medium ring-offset-surface transition-all focus-visible:outline-none focus-visible:ring-1.5 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
   variants: {
     variant: {
       solid: 'hover:outline-none hover:ring-1.5 hover:ring-offset-2',

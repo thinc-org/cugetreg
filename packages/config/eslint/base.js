@@ -61,6 +61,7 @@ export default tseslint.config(
       '**/.svelte-kit',
       '**/package',
       '**/storybook-static',
+      '**/dist',
     ],
   },
   eslintPluginPrettierRecommended,

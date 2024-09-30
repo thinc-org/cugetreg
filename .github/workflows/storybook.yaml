@@ -45,3 +45,4 @@ jobs:
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
           projectName: cugetreg-storybook
           directory: apps/storybook/storybook-static
+          branch: main

@@ -19,7 +19,7 @@
   },
   "devDependencies": {
     "@types/cli-progress": "^3.11.6",
-    "@types/node": "20",
+    "@types/node": "^20.16.10",
     "cli-progress": "^3.12.0",
     "dotenv-cli": "^7.4.2",
     "drizzle-kit": "^0.24.2",

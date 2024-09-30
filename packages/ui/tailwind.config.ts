@@ -4,8 +4,8 @@ import { fontFamily } from 'tailwindcss/defaultTheme'
 const config = {
   darkMode: ['class'],
   content: [
-    './src/**/*.{html,js,svelte,ts}',
-    '../../packages/ui/src/**/*.{html,js,svelte,ts}',
+    './src/**/*.{html,js,svelte,ts,mdx}',
+    '../../packages/ui/src/**/*.{html,js,svelte,ts,mdx}',
   ],
   safelist: ['dark'],
   theme: {

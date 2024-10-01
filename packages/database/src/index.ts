@@ -1,1 +1,1 @@
-export * from './schema/userData.js'
+export * from './schema/index.js'

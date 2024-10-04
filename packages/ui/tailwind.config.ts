@@ -126,6 +126,10 @@ const config = {
       friday: 'hsl(var(--friday) / <alpha-value>)',
       saturday: 'hsl(var(--saturday) / <alpha-value>)',
       sunday: 'hsl(var(--sunday) / <alpha-value>)',
+      sc: 'hsl(var(--sc) / <alpha-value>)',
+      so: 'hsl(var(--so) / <alpha-value>)',
+      in: 'hsl(var(--in) / <alpha-value>)',
+      hu: 'hsl(var(--hu) / <alpha-value>)',
       on: {
         primary: {
           DEFAULT: 'hsl(var(--on-primary) / <alpha-value>)',
@@ -166,18 +170,13 @@ const config = {
         friday: 'hsl(var(--on-friday) / <alpha-value>)',
         saturday: 'hsl(var(--on-saturday) / <alpha-value>)',
         sunday: 'hsl(var(--on-sunday) / <alpha-value>)',
+        sc: 'hsl(var(--on-sc) / <alpha-value>)',
+        so: 'hsl(var(--on-so) / <alpha-value>)',
+        in: 'hsl(var(--on-in) / <alpha-value>)',
+        hu: 'hsl(var(--on-hu) / <alpha-value>)',
       },
     },
     fontSize: {
-      10: ['0.625rem', { lineHeight: '0.625rem' }],
-      12: ['0.75rem', { lineHeight: '0.75rem' }],
-      14: ['0.875rem', { lineHeight: '0.875rem' }],
-      16: ['1rem', { lineHeight: '1rem' }],
-      18: ['1.125rem', { lineHeight: '1.125rem' }],
-      20: ['1.25rem', { lineHeight: '1.25rem' }],
-      28: ['1.75rem', { lineHeight: '1.75rem' }],
-      36: ['2.25rem', { lineHeight: '2.25rem' }],
-      48: ['3rem', { lineHeight: '3rem' }],
       h1: ['var(--h1-font-size)', { lineHeight: 'var(--h1-line-height)' }],
       h2: ['var(--h2-font-size)', { lineHeight: 'var(--h2-line-height)' }],
       h3: ['var(--h3-font-size)', { lineHeight: 'var(--h3-line-height)' }],
@@ -204,6 +203,10 @@ const config = {
       button2: [
         'var(--button2-font-size)',
         { lineHeight: 'var(--button2-line-height)' },
+      ],
+      caption: [
+        'var(--caption-font-size)',
+        { lineHeight: 'var(--caption-line-height)' },
       ],
     },
     extend: {

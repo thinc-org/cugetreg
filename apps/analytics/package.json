@@ -11,11 +11,11 @@
   "dependencies": {
     "@cugetreg/database": "workspace:*",
     "dotenv-cli": "^7.4.2",
-    "drizzle-orm": "^0.33.0",
+    "drizzle-orm": "^0.34.1",
     "postgres": "^3.4.4",
     "tsx": "^4.19.1"
   },
   "devDependencies": {
-    "typescript": "^5.6.2"
+    "typescript": "^5.6.3"
   }
 }

@@ -20,7 +20,7 @@
   <RadioGroupPrimitive.Item
     {value}
     class="{cn(
-      'border-on-surface-placeholder data-[state=checked]:border-primary  text-primary ring-offset-background focus-visible:ring-ring aspect-square h-5 w-5 rounded-full border-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
+      'peer border-on-surface-placeholder data-[state=checked]:border-primary  text-primary ring-offset-background focus-visible:ring-ring aspect-square h-5 w-5 rounded-full border-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
       className,
     )}"
     {...$$restProps}
@@ -32,5 +32,9 @@
       </RadioGroupPrimitive.ItemIndicator>
     </div>
   </RadioGroupPrimitive.Item>
-  <Label.Root for="{id}">{label}</Label.Root>
+  <Label.Root
+    for="{id}"
+    class="text-button2 font-normal leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+    >{label}</Label.Root
+  >
 </div>

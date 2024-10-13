@@ -8,6 +8,10 @@
     component: RadioGroup,
     tags: ['autodocs'],
     argTypes: {
+      'aria-label': {
+        control: 'text',
+        description: 'string value that labels an interactive element',
+      },
       value: {
         description: 'The selected value in the radio group.',
         control: {
@@ -56,11 +60,13 @@
       value="{args.itemValue1}"
       id="{args.itemValue1}"
       label="{args['item1-label']}"
+      aria-label="{args['aria-label']}"
     />
     <RadioGroup.Item
       value="{args.itemValue2}"
       id="{args.itemValue2}"
       label="{args['item2-label']}"
+      aria-label="{args['aria-label']}"
     />
   </RadioGroup.Root>
 </Template>
@@ -73,6 +79,7 @@
     'item1-label': 'option 1',
     itemValue2: 'option-two',
     'item2-label': 'option 2',
+    'aria-label': 'for example of enable radio group',
   }}"
 />
 
@@ -84,5 +91,6 @@
     itemValue2: 'option-two',
     'item2-label': 'option 2',
     disabled: true,
+    'aria-label': 'for example of disabled radio group',
   }}"
 />

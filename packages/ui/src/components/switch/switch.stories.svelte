@@ -8,6 +8,10 @@
     component: Switch,
     tags: ['autodocs'],
     argTypes: {
+      'aria-label': {
+        control: 'text',
+        description: 'string value that labels an interactive element',
+      },
       checked: {
         control: 'boolean',
         description: 'Whether the switch is checked or not.',
@@ -48,17 +52,32 @@
 <!-- Define the stories with different states -->
 <Story
   name="Default"
-  args="{{ checked: false, label: 'Switch Label', id: 'switch' }}"
+  args="{{
+    checked: false,
+    label: 'Switch Label',
+    id: 'switch',
+    'aria-label': 'for example of default switch',
+  }}"
 />
 
 <Story
   name="Checked"
-  args="{{ checked: true, label: 'Checked Switch', id: 'checked-switch' }}"
+  args="{{
+    checked: true,
+    label: 'Checked Switch',
+    id: 'checked-switch',
+    'aria-label': 'for example of checked switch ',
+  }}"
 />
 
 <Story
   name="With Custom Label"
-  args="{{ checked: false, label: 'Custom Label', id: 'custom-switch' }}"
+  args="{{
+    checked: false,
+    label: 'Custom Label',
+    id: 'custom-switch',
+    'aria-label': 'for example of custom label switch ',
+  }}"
 />
 
 <Story
@@ -68,5 +87,6 @@
     label: 'Disabled Switch',
     id: 'disabled-switch',
     disabled: true,
+    'aria-label': 'for example of disable switch ',
   }}"
 />

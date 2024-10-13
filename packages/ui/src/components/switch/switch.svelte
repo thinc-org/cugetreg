@@ -34,6 +34,10 @@
     />
   </SwitchPrimitive.Root>
   {#if label}
-    <Label.Root for="{id}">{label}</Label.Root>
+    <Label.Root
+      for="{id}"
+      class="text-button2 font-normal leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+      >{label}</Label.Root
+    >
   {/if}
 </div>

@@ -40,6 +40,19 @@ CREATE TABLE IF NOT EXISTS "course" (
 	"academic_year" integer NOT NULL,
 	"semester" "semester" NOT NULL,
 	"course_no" text NOT NULL,
+	"course_condition" text,
+	"midterm_start" timestamp,
+	"midterm_end" timestamp,
+	"final_start" timestamp,
+	"final_end" timestamp,
+	"gen_ed_type" "gen_ed_type" DEFAULT 'NO' NOT NULL,
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"updated_at" timestamp DEFAULT now() NOT NULL,
+	CONSTRAINT "course_unique" UNIQUE("study_program","academic_year","semester","course_no")
+);
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "course_info" (
+	"course_no" text PRIMARY KEY NOT NULL,
 	"abbr_name" text NOT NULL,
 	"course_name_en" text NOT NULL,
 	"course_name_th" text NOT NULL,
@@ -48,17 +61,7 @@ CREATE TABLE IF NOT EXISTS "course" (
 	"faculty" text NOT NULL,
 	"department" text NOT NULL,
 	"credit" numeric NOT NULL,
-	"credit_hours" text NOT NULL,
-	"course_condition" text,
-	"midterm_start" timestamp,
-	"midterm_end" timestamp,
-	"final_start" timestamp,
-	"final_end" timestamp,
-	"gen_ed_type" "gen_ed_type" DEFAULT 'NO' NOT NULL,
-	"rating" double precision,
-	"created_at" timestamp DEFAULT now() NOT NULL,
-	"updated_at" timestamp DEFAULT now() NOT NULL,
-	CONSTRAINT "course_unique" UNIQUE("study_program","academic_year","semester","course_no")
+	"credit_hours" text NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "course_section" (
@@ -145,6 +148,12 @@ CREATE TABLE IF NOT EXISTS "user" (
 	CONSTRAINT "user_email_unique" UNIQUE("email"),
 	CONSTRAINT "user_google_id_unique" UNIQUE("google_id")
 );
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "course" ADD CONSTRAINT "course_course_no_course_info_course_no_fk" FOREIGN KEY ("course_no") REFERENCES "public"."course_info"("course_no") ON DELETE no action ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
 --> statement-breakpoint
 DO $$ BEGIN
  ALTER TABLE "course_section" ADD CONSTRAINT "course_section_course_id_course_id_fk" FOREIGN KEY ("course_id") REFERENCES "public"."course"("id") ON DELETE no action ON UPDATE no action;

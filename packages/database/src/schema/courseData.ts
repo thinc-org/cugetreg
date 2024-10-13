@@ -2,16 +2,14 @@ import { createId } from '@paralleldrive/cuid2'
 import {
   boolean,
   decimal,
-  doublePrecision,
   integer,
-  pgEnum,
   pgTable,
   text,
   timestamp,
   unique,
 } from 'drizzle-orm/pg-core'
 
-import { genEdType, semester, studyProgram } from './types.js'
+import { dayOfWeek, genEdType, semester, studyProgram } from './types.js'
 
 /**
  * https://datagateway.chula.ac.th (Connect to Chula Wi-Fi)
@@ -34,29 +32,9 @@ export const course = pgTable(
     semester: semester('semester').notNull(),
 
     // 3 COURSECODE / 11 courseno
-    courseNo: text('course_no').notNull(),
-    // 4 COURSENAME
-    abbrName: text('abbr_name').notNull(),
-
-    // 14 coursename_en
-    courseNameEn: text('course_name_en').notNull(),
-    // 13 coursename_th
-    courseNameTh: text('course_name_th').notNull(),
-
-    // 23 coursedescription_en
-    courseDescEn: text('course_desc_en'),
-    // 22 coursedescription_th
-    courseDescTh: text('course_desc_th'),
-
-    // indirect -> 30 FACCODE or From CourseNo (Transitive Dependency)
-    faculty: text('faculty').notNull(),
-    // indirect -> From CourseNo (Transitive Dependency)
-    department: text('department').notNull(),
-
-    // 24 TOTALCREDIT
-    credit: decimal('credit').notNull(),
-    // Must build from 17 lcredit 18 nlcredit 19 lhour 20 nlhour 21 shour
-    creditHours: text('credit_hours').notNull(),
+    courseNo: text('course_no')
+      .notNull()
+      .references(() => courseInfo.courseNo),
 
     // ! not available in data gateway
     courseCondition: text('course_condition'),
@@ -71,9 +49,6 @@ export const course = pgTable(
 
     // From section rows OR from gened override?
     genEdType: genEdType('gen_ed_type').notNull().default('NO'),
-
-    // CU Get Reg's User Data
-    rating: doublePrecision('rating'),
 
     createdAt: timestamp('created_at').notNull().defaultNow(),
     updatedAt: timestamp('updated_at')
@@ -90,6 +65,34 @@ export const course = pgTable(
     ),
   }),
 )
+
+export const courseInfo = pgTable('course_info', {
+  courseNo: text('course_no').primaryKey(),
+
+  // 4 COURSENAME
+  abbrName: text('abbr_name').notNull(),
+
+  // 14 coursename_en
+  courseNameEn: text('course_name_en').notNull(),
+  // 13 coursename_th
+  courseNameTh: text('course_name_th').notNull(),
+
+  // 23 coursedescription_en
+  courseDescEn: text('course_desc_en'),
+  // 22 coursedescription_th
+  courseDescTh: text('course_desc_th'),
+
+  // TODO separate this into other table
+  // indirect -> 30 FACCODE or From CourseNo (Transitive Dependency)
+  faculty: text('faculty').notNull(),
+  // indirect -> From CourseNo (Transitive Dependency)
+  department: text('department').notNull(),
+
+  // 24 TOTALCREDIT
+  credit: decimal('credit').notNull(),
+  // Must build from 17 lcredit 18 nlcredit 19 lhour 20 nlhour 21 shour
+  creditHours: text('credit_hours').notNull(),
+})
 
 export const section = pgTable(
   'course_section',
@@ -126,18 +129,6 @@ export const section = pgTable(
     sectionUnique: unique('section_unique').on(t.courseId, t.sectionNo),
   }),
 )
-
-export const dayOfWeek = pgEnum('day_of_week', [
-  'MO',
-  'TU',
-  'WE',
-  'TH',
-  'FR',
-  'SA',
-  'SU',
-  'AR',
-  'IA',
-])
 
 export const sectionClass = pgTable('course_class', {
   id: text('id')

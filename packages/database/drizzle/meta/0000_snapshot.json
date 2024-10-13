@@ -1,5 +1,5 @@
 {
-  "id": "e865a62d-1e0a-4578-9cfd-b44fbbee2d6f",
+  "id": "101832e8-626d-434f-bbb9-fd1b0f87f781",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -38,6 +38,99 @@
           "name": "course_no",
           "type": "text",
           "primaryKey": false,
+          "notNull": true
+        },
+        "course_condition": {
+          "name": "course_condition",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "midterm_start": {
+          "name": "midterm_start",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "midterm_end": {
+          "name": "midterm_end",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "final_start": {
+          "name": "final_start",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "final_end": {
+          "name": "final_end",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "gen_ed_type": {
+          "name": "gen_ed_type",
+          "type": "gen_ed_type",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'NO'"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "course_course_no_course_info_course_no_fk": {
+          "name": "course_course_no_course_info_course_no_fk",
+          "tableFrom": "course",
+          "tableTo": "course_info",
+          "columnsFrom": [
+            "course_no"
+          ],
+          "columnsTo": [
+            "course_no"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "course_unique": {
+          "name": "course_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "study_program",
+            "academic_year",
+            "semester",
+            "course_no"
+          ]
+        }
+      }
+    },
+    "public.course_info": {
+      "name": "course_info",
+      "schema": "",
+      "columns": {
+        "course_no": {
+          "name": "course_no",
+          "type": "text",
+          "primaryKey": true,
           "notNull": true
         },
         "abbr_name": {
@@ -93,81 +186,12 @@
           "type": "text",
           "primaryKey": false,
           "notNull": true
-        },
-        "course_condition": {
-          "name": "course_condition",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "midterm_start": {
-          "name": "midterm_start",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "midterm_end": {
-          "name": "midterm_end",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "final_start": {
-          "name": "final_start",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "final_end": {
-          "name": "final_end",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "gen_ed_type": {
-          "name": "gen_ed_type",
-          "type": "gen_ed_type",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'NO'"
-        },
-        "rating": {
-          "name": "rating",
-          "type": "double precision",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
         }
       },
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "course_unique": {
-          "name": "course_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "study_program",
-            "academic_year",
-            "semester",
-            "course_no"
-          ]
-        }
-      }
+      "uniqueConstraints": {}
     },
     "public.course_section": {
       "name": "course_section",

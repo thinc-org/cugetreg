@@ -14,11 +14,11 @@ const inputVariants = tv({
       default:
         'border-none bg-surface-container-lowest hover:ring-primary placeholder:text-on-surface hover:outline-none hover:ring-1 focus-visible:outline-none focus-visible:ring-2',
       error:
-        'border-error ring-error bg-red-200 placeholder:text-on-surface ring-1.5 hover:outline-none focus-visible:outline-none',
+        'border-error ring-error placeholder:text-on-surface ring-1.5 hover:outline-none focus-visible:outline-none',
       success:
         'border-success ring-success ring-1.5 focus-visible:outline-none hover:outline-none',
       disable:
-        'bg-gray-200 border-none focus-visible:outline-none cursor-not-allowed ring-0 placeholder:text-on-surface-disabled placeholder:pointer-events-none',
+        'bg-surface-container-lowest border-none focus-visible:outline-none cursor-not-allowed ring-0 placeholder:text-on-surface-disabled placeholder:pointer-events-none',
     },
   },
   defaultVariants: {

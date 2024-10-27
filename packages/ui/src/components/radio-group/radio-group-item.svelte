@@ -1,10 +1,11 @@
 <script lang="ts">
   import { Label, RadioGroup as RadioGroupPrimitive } from 'bits-ui'
-  import Circle from 'lucide-svelte/icons/circle'
+  import { Circle } from 'lucide-svelte'
 
   import { cn } from '../../utils'
 
   type $$Props = RadioGroupPrimitive.ItemProps & {
+    id: string
     label: string
   }
   type $$Events = RadioGroupPrimitive.ItemEvents
@@ -35,6 +36,7 @@
   <Label.Root
     for="{id}"
     class="text-button2 font-normal leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-    >{label}</Label.Root
   >
+    {label}
+  </Label.Root>
 </div>

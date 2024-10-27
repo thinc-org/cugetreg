@@ -37,7 +37,8 @@
     <Label.Root
       for="{id}"
       class="text-button2 font-normal leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-      >{label}</Label.Root
     >
+      {label}
+    </Label.Root>
   {/if}
 </div>

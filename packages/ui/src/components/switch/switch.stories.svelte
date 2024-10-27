@@ -27,13 +27,13 @@
         description: 'ID for the switch element and its label.',
         defaultValue: 'switch',
       },
-      className: {
+      class: {
         control: false,
       },
-      onClick: {
+      'on:click': {
         action: 'onClick',
       },
-      onKeyDown: {
+      'on:keydown': {
         action: 'onKeyDown',
       },
     },

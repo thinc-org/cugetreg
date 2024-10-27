@@ -19,6 +19,11 @@
       onClick: {
         action: 'onClick',
       },
+      'aria-label': {
+        control: 'text',
+        description:
+          'attribute defines a string value that labels an interactive element',
+      },
     },
   } satisfies Meta<Checkbox>
 </script>
@@ -34,13 +39,39 @@
 </Template>
 
 <!-- 👇 Each story then reuses that template -->
-<Story name="Unchecked" args="{{ checked: false, label: 'Accept Terms' }}" />
+<Story
+  name="Unchecked"
+  args="{{
+    checked: false,
+    label: 'Accept Terms',
+    'aria-label': 'for accept terms',
+  }}"
+/>
 
-<Story name="Checked" args="{{ checked: true, label: 'Accept Terms' }}" />
+<Story
+  name="Checked"
+  args="{{
+    checked: true,
+    label: 'Accept Terms',
+    'aria-label': 'for accept terms',
+  }}"
+/>
 
-<Story name="Unchecked Without Label" args="{{ checked: false }}" />
+<Story
+  name="Unchecked Without Label"
+  args="{{
+    checked: false,
+    'aria-label': 'for example of unchecked checkbox without label',
+  }}"
+/>
 
-<Story name="Checked Without Label" args="{{ checked: true }}" />
+<Story
+  name="Checked Without Label"
+  args="{{
+    checked: true,
+    'aria-label': 'for example of checkbox without label',
+  }}"
+/>
 
 <Story
   name="Disabled Checkbox"

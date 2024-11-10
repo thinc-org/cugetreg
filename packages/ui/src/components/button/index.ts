@@ -4,7 +4,7 @@ import { tv, type VariantProps } from 'tailwind-variants'
 import Root from './button.svelte'
 
 const buttonVariants = tv({
-  base: 'inline-flex items-center justify-center whitespace-nowrap rounded-button text-button2 font-medium ring-offset-surface transition-all focus-visible:outline-none focus-visible:ring-1.5 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
+  base: 'inline-flex items-center justify-center  whitespace-nowrap rounded-button text-button2 font-medium font-sans ring-offset-surface transition-all focus-visible:outline-none focus-visible:ring-1.5 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
   variants: {
     variant: {
       solid: 'hover:outline-none hover:ring-1.5 hover:ring-offset-2',
@@ -16,7 +16,7 @@ const buttonVariants = tv({
       lg: 'h-10 px-5',
     },
     color: {
-      primary: 'text-on-primary-container focus-visible:ring-primary-container',
+      primary: 'focus-visible:ring-primary-container',
       neutral: 'text-on-surface focus-visible:ring-surface-container-low',
       error: 'text-on-error-container focus-visible:ring-error-container',
       secondary:
@@ -27,7 +27,8 @@ const buttonVariants = tv({
     {
       variant: 'solid',
       color: 'primary',
-      class: 'bg-primary-container hover:ring-primary-container',
+      class:
+        'bg-primary-container hover:ring-primary-container text-on-primary-container ',
     },
     {
       variant: 'solid',
@@ -47,7 +48,8 @@ const buttonVariants = tv({
     {
       variant: 'outlined',
       color: 'primary',
-      class: 'ring-primary-container hover:bg-primary-container',
+      class:
+        'ring-primary hover:bg-primary-container text-primary hover:text-on-primary-container',
     },
     {
       variant: 'outlined',

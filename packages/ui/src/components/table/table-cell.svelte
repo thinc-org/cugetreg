@@ -11,7 +11,7 @@
 
 <td
   class="{cn(
-    'p-4 align-middle [&:has([role=checkbox])]:pr-0 text-on-surface font-normal text-body1',
+    'p-4 align-middle data-[rowspan=true]:align-top  [&:has([role=checkbox])]:pr-0 text-on-surface font-normal font-sarabun text-body1',
     className,
   )}"
   {...$$restProps}

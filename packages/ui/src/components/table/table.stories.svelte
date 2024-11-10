@@ -18,7 +18,8 @@ This example demonstrates the use of each sub-component:
 - **Table.Row**: Represents a row within either the header or the body.
 - **Table.Head**: Column headers, typically styled differently from body cells.
 - **Table.Body**: Contains the main content rows.
-- **Table.Cell**: Represents an individual data cell, with support for styling and spans.
+- **Table.Cell**: Represents an individual data cell, with support for styling and spans. 
+**(don't forget to use data-rowspan='true' or 'false' to apply correct style)**
           `,
         },
       },
@@ -44,7 +45,7 @@ This example demonstrates the use of each sub-component:
     </Table.Header>
     <Table.Body>
       <Table.Row class="border-b-0">
-        <Table.Cell rowspan="{2}">INV001</Table.Cell>
+        <Table.Cell data-rowspan="{true}" rowspan="{2}">INV001</Table.Cell>
         <Table.Cell>Paid</Table.Cell>
         <Table.Cell>Credit Card</Table.Cell>
         <Table.Cell>$250.00</Table.Cell>

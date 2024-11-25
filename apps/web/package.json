@@ -21,7 +21,7 @@
     "@playwright/test": "^1.48.2",
     "@repo/config": "workspace:^",
     "@sveltejs/adapter-auto": "^3.3.1",
-    "@sveltejs/kit": "^2.7.3",
+    "@sveltejs/kit": "^2.8.3",
     "@sveltejs/vite-plugin-svelte": "^3.1.2",
     "@typescript-eslint/eslint-plugin": "^8.11.0",
     "@typescript-eslint/parser": "^8.11.0",

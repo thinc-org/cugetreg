@@ -21,7 +21,7 @@
     "@storybook/addon-svelte-csf": "^4.1.7",
     "@storybook/svelte": "^8.3.6",
     "@sveltejs/adapter-node": "^5.2.9",
-    "@sveltejs/kit": "^2.7.3",
+    "@sveltejs/kit": "^2.8.3",
     "@sveltejs/vite-plugin-svelte": "^3.1.2",
     "svelte": "^4.2.19",
     "vitest": "^2.1.3"

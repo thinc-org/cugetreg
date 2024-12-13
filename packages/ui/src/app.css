@@ -154,6 +154,15 @@
     --sunday: var(--red-300);
     --on-sunday: var(--red-700);
 
+    --sc: var(--neutral-white);
+    --on-sc: var(--yellow-700);
+    --so: var(--neutral-white);
+    --on-so: var(--green-700);
+    --in: var(--neutral-white);
+    --on-in: var(--purple-700);
+    --hu: var(--neutral-white);
+    --on-hu: var(--pink-700);
+
     --h1-font-size: 1.75rem;
     --h2-font-size: 1.5rem;
     --h3-font-size: 1.25rem;
@@ -163,6 +172,7 @@
     --body2-font-size: 1rem;
     --button1-font-size: 1.125rem;
     --button2-font-size: 1rem;
+    --caption-font-size: 0.75rem;
 
     --h1-line-height: 2rem;
     --h2-line-height: 1.75rem;
@@ -173,6 +183,7 @@
     --body2-line-height: 1.5rem;
     --button1-line-height: 1.25rem;
     --button2-line-height: 1.125rem;
+    --caption-line-height: 0.875rem;
   }
 
   @media screen and (max-width: 640px) {
@@ -186,6 +197,7 @@
       --body2-font-size: 0.75rem;
       --button1-font-size: 0.875rem;
       --button2-font-size: 0.75rem;
+      --caption-font-size: 0.625rem;
 
       --h1-line-height: 1.75rem;
       --h2-line-height: 1.5rem;
@@ -196,6 +208,7 @@
       --body2-line-height: 1.25rem;
       --button1-line-height: 1.125rem;
       --button2-line-height: 1rem;
+      --caption-line-height: 0.75rem;
     }
   }
 

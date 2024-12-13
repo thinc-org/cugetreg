@@ -1,7 +1,7 @@
 import cliProgress from 'cli-progress'
 import { and, eq } from 'drizzle-orm'
 
-import { cart, cartItem } from '../../schema.js'
+import { cart, cartItem } from '../../schema/userData.js'
 import { db } from '../utils/client.js'
 import { withTimeLog } from '../utils/log.js'
 import { CourseCart } from '../utils/types.js'

@@ -1,6 +1,6 @@
 import fs from 'node:fs/promises'
 
-import { user } from '../../schema.js'
+import { user } from '../../schema/userData.js'
 import { db } from '../utils/client.js'
 import { withTimeLog } from '../utils/log.js'
 import { CourseSeed, ObjectId, ReviewSeed, UserSeed } from '../utils/types.js'

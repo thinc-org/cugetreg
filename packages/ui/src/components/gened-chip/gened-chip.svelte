@@ -1,22 +1,28 @@
 <script lang="ts">
   import { cn } from '../../utils'
-  import { chipVariants, type Size, type Type } from './index.js'
+  import { Chip } from '../chip'
+  import { chipVariants, type Type } from './index.js'
 
   let className: string | undefined | null = undefined
   export let type: Type
-  export let size: Size = 'default'
+  export let closable: boolean = false
+  export let onClose: () => void = () => {}
   export { className as class }
 
   const label = {
-    SC: 'หมวดวิทย์',
-    SO: 'หมวดสังคม',
-    HU: 'หมวดมนุษย์',
-    IN: 'หมวดสหฯ',
+    SC: 'วิทย์',
+    SO: 'สังคม',
+    HU: 'มนุษย์',
+    IN: 'สหฯ',
   }
 </script>
 
-<span class="{cn(chipVariants({ type, size, className }))}" {...$$restProps}>
-  {#if type}
+<Chip
+  class="{cn(chipVariants({ type, className }))}"
+  {closable}
+  {onClose}
+  {...$$restProps}
+  >{#if type}
     {label[type]}
-  {/if}
-</span>
+  {/if}</Chip
+>

@@ -1,6 +1,6 @@
 import { PgInsertValue } from 'drizzle-orm/pg-core'
 
-import { user } from '../../schema.js'
+import { user } from '../../schema/userData.js'
 import { db } from '../utils/client.js'
 import { withTimeLog } from '../utils/log.js'
 import { GoogleSeed } from '../utils/types.js'

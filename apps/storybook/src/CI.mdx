@@ -1,0 +1,349 @@
+import { Meta } from '@storybook/blocks'
+
+import CUGetRegDarkFull from './assets/logo/cugetreg-dark-full.svg'
+import CUGetRegDarkSmall from './assets/logo/cugetreg-dark-small.svg'
+import CUGetRegWhiteFull from './assets/logo/cugetreg-white-full.svg'
+import CUGetRegWhiteSmall from './assets/logo/cugetreg-white-small.svg'
+
+import ThincDark from './assets/logo/thinc-dark.svg'
+import ThincLight from './assets/logo/thinc-light.svg'
+
+<Meta title="CI and Branding" />
+
+# CI and Branding
+
+## CU Get Reg Logo
+
+### Small
+
+<div className="flex gap-16">
+  <img src={CUGetRegDarkSmall} className="h-24 p-4" />
+  <img src={CUGetRegWhiteSmall} className="h-24 p-4 bg-blue-700 rounded-lg" />
+</div>
+
+Used as favicon, and in small contexts such as margins
+
+### Full
+
+<div className="flex gap-16">
+  <img src={CUGetRegDarkFull} className="h-24 p-4" />
+  <img src={CUGetRegWhiteFull} className="h-24 p-4 bg-blue-700 rounded-lg" />
+</div>
+
+Used in branding, everywhere
+
+## Thinc Logo
+
+<div className="flex gap-16">
+  <img src={ThincDark} className="h-24 p-4 bg-blue-700 rounded-lg" />
+  <img src={ThincLight} className="h-24 p-4" />
+</div>
+
+## Color Styles
+
+### Color Palette
+
+export const ColorPalette = ({ classNames }) => {
+  return (
+    <div className="flex" title={classNames[0]?.split('-')?.[1]}>
+      {classNames.map((className) => (
+        <div className={`w-24 h-24 ${className}`} />
+      ))}
+    </div>
+  )
+}
+
+<div className="flex justify-between">
+
+  <div className="flex flex-col">
+    ### Blue
+
+    <ColorPalette classNames={["bg-blue-300", "bg-blue-500", "bg-blue-700"]} />
+
+  </div>
+
+  <div className="flex flex-col">
+    ### Tangerine
+
+    <ColorPalette classNames={["bg-tangerine-300", "bg-tangerine-500", "bg-tangerine-700"]} />
+
+  </div>
+
+  <div className="flex flex-col">
+    ### Yellow
+
+    <ColorPalette classNames={["bg-yellow-300", "bg-yellow-500", "bg-yellow-700"]} />
+
+  </div>
+
+</div>
+
+### Neutral
+
+<ColorPalette
+  classNames={[
+    'bg-neutral-50',
+    'bg-neutral-100',
+    'bg-neutral-200',
+    'bg-neutral-300',
+    'bg-neutral-400',
+    'bg-neutral-500',
+    'bg-neutral-600',
+    'bg-neutral-700',
+    'bg-neutral-800',
+    'bg-neutral-900',
+  ]}
+/>
+
+### Highlight
+
+<div className="grid grid-cols-3 gap-4">
+
+<ColorPalette classNames={['bg-pink-300', 'bg-pink-500', 'bg-pink-700']} />
+<ColorPalette
+  classNames={['bg-yellow-300', 'bg-yellow-500', 'bg-yellow-700']}
+/>
+<ColorPalette classNames={['bg-sky-300', 'bg-sky-500', 'bg-sky-700']} />
+
+<ColorPalette classNames={['bg-red-300', 'bg-red-500', 'bg-red-700']} />
+<ColorPalette classNames={['bg-green-300', 'bg-green-500', 'bg-green-700']} />
+<ColorPalette
+  classNames={['bg-indigo-300', 'bg-indigo-500', 'bg-indigo-700']}
+/>
+
+<ColorPalette
+  classNames={['bg-orange-300', 'bg-orange-500', 'bg-orange-700']}
+/>
+<ColorPalette classNames={['bg-teal-300', 'bg-teal-500', 'bg-teal-700']} />
+<ColorPalette
+  classNames={['bg-purple-300', 'bg-purple-500', 'bg-purple-700']}
+/>
+
+</div>
+
+### Main Colors
+
+export function getText(index, color) {
+    let res = ""
+
+    if (index >= 3) {
+      res += "On "
+    }
+
+    res += color;
+
+    if (index % 3 === 0) {
+      // pass
+    } else if (index % 3 === 1) {
+      res += " Hover"
+    } else {
+      res += " Container"
+    }
+
+    return res;
+
+}
+
+export const ColorGrid = ({ colorName, classNames }) => {
+  return (
+    <div className="grid grid-cols-3">
+      {classNames.map((className, index) => (
+        <div className={`h-16 ${className[0]}`} title={className[0]}>
+          <p className={`text-center !font-sans ${className[1]}`}>
+            {getText(index, colorName)}
+          </p>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+<div className="flex flex-col gap-4">
+
+<ColorGrid
+  colorName="Primary"
+  classNames={[
+    ['bg-primary', '!text-neutral-white'],
+    ['bg-primary-hover', '!text-neutral-white'],
+    ['bg-primary-container', '!text-primary-hover'],
+    ['', '!text-primary'],
+    ['', '!text-primary-hover'],
+    ['bg-primary-hover', '!text-primary-container'],
+  ]}
+/>
+
+<ColorGrid
+  colorName="Secondary"
+  classNames={[
+    ['bg-secondary', '!text-neutral-white'],
+    ['bg-secondary-hover', '!text-neutral-white'],
+    ['bg-secondary-container', '!text-secondary-hover'],
+    ['', '!text-secondary'],
+    ['', '!text-secondary-hover'],
+    ['bg-secondary-hover', '!text-secondary-container'],
+  ]}
+/>
+
+<ColorGrid
+  colorName="Error"
+  classNames={[
+    ['bg-error', '!text-neutral-white'],
+    ['bg-error-hover', '!text-neutral-white'],
+    ['bg-error-container', '!text-error-hover'],
+    ['', '!text-error'],
+    ['', '!text-error-hover'],
+    ['bg-error-hover', '!text-error-container'],
+  ]}
+/>
+
+<ColorGrid
+  colorName="Success"
+  classNames={[
+    ['bg-success', '!text-neutral-white'],
+    ['bg-success-hover', '!text-neutral-white'],
+    ['bg-success-container', '!text-success-hover'],
+    ['', '!text-success'],
+    ['', '!text-success-hover'],
+    ['bg-success-hover', '!text-success-container'],
+  ]}
+/>
+
+<ColorGrid
+  colorName="Warning"
+  classNames={[
+    ['bg-warning', '!text-neutral-white'],
+    ['bg-warning-hover', '!text-neutral-white'],
+    ['bg-warning-container', '!text-warning-hover'],
+    ['', '!text-warning'],
+    ['', '!text-warning-hover'],
+    ['bg-warning-hover', '!text-warning-container'],
+  ]}
+/>
+
+</div>
+
+### Surface Colors
+
+export const ColorGrid2 = ({ param, gridCols }) => {
+  return (
+    <div className={`grid ${gridCols}`}>
+      {param.map((className, index) => (
+        <div className={`h-16 ${className[1]}`} title={className[1]}>
+          <p className={`text-center !font-sans ${className[2]}`}>
+            {className[0]}
+          </p>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+<ColorGrid2
+  gridCols="grid-cols-3"
+  param={[
+    ['Surface Dim', 'bg-surface-dim', ''],
+    ['Surface', 'bg-surface'],
+    ['Surface Bright', 'bg-surface-bright'],
+  ]}
+/>
+
+<ColorGrid2
+  gridCols="grid-cols-5"
+  param={[
+    ['Surf. Container Lowest', 'bg-surface-container-lowest', ''],
+    ['Surf. Container Low', 'bg-surface-container-low', ''],
+    ['Surf. Container', 'bg-surface-container', ''],
+    ['Surf. Container High', 'bg-surface-container-high', ''],
+    ['Surf. Container Highest', 'bg-surface-container-highest', ''],
+  ]}
+/>
+
+<ColorGrid2
+  gridCols="grid-cols-2"
+  param={[
+    ['On Surface', 'bg-on-surface', '!text-neutral-white'],
+    ['On Surface Var', 'bg-on-surface-var', '!text-neutral-white'],
+  ]}
+/>
+
+<div className="bg-surface" />
+
+## Font
+
+### Heading
+
+<p className="!font-sans font-bold !text-h1">FC Orbit</p>
+
+<table className="table-auto w-full mt-4 !font-sans">
+  <thead>
+    <tr>
+      <th className="px-4 py-2">Font Weight</th>
+      <th className="px-4 py-2">Sample Text</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td className="border px-4 py-2">Light</td>
+      <td className="border px-4 py-2 font-light">
+        วันนี้ฉันไปตลาด Super Animal Market
+      </td>
+    </tr>
+    <tr>
+      <td className="border px-4 py-2">Regular</td>
+      <td className="border px-4 py-2 font-normal">
+        วันนี้ฉันไปตลาด Super Animal Market
+      </td>
+    </tr>
+    <tr>
+      <td className="border px-4 py-2">Medium</td>
+      <td className="border px-4 py-2 font-medium">
+        วันนี้ฉันไปตลาด Super Animal Market
+      </td>
+    </tr>
+    <tr>
+      <td className="border px-4 py-2">Bold</td>
+      <td className="border px-4 py-2 font-bold">
+        วันนี้ฉันไปตลาด Super Animal Market
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+### Body
+
+<p className="!font-sarabun font-bold !text-h1">Sarabun</p>
+
+<table className="table-auto w-full mt-4 !font-sarabun">
+  <thead>
+    <tr>
+      <th className="px-4 py-2">Font Weight</th>
+      <th className="px-4 py-2">Sample Text</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td className="border px-4 py-2">Light</td>
+      <td className="border px-4 py-2 font-light">
+        วันนี้ฉันไปตลาด Super Animal Market
+      </td>
+    </tr>
+    <tr>
+      <td className="border px-4 py-2">Regular</td>
+      <td className="border px-4 py-2 font-normal">
+        วันนี้ฉันไปตลาด Super Animal Market
+      </td>
+    </tr>
+    <tr>
+      <td className="border px-4 py-2">Medium</td>
+      <td className="border px-4 py-2 font-medium">
+        วันนี้ฉันไปตลาด Super Animal Market
+      </td>
+    </tr>
+    <tr>
+      <td className="border px-4 py-2">Bold</td>
+      <td className="border px-4 py-2 font-bold">
+        วันนี้ฉันไปตลาด Super Animal Market
+      </td>
+    </tr>
+  </tbody>
+</table>

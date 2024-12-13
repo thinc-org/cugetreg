@@ -14,13 +14,13 @@ const config: StorybookConfig = {
   stories: [
     '../src/**/*.mdx',
     '../src/**/*.stories.@(js|jsx|ts|tsx|svelte)',
-    '../../../packages/ui/src/**/*.stories.@(js|jsx|ts|tsx|svelte)',
+    '../../../packages/ui/src/components/**/*.stories.@(js|jsx|ts|tsx|svelte)',
   ],
   addons: [
     getAbsolutePath('@storybook/addon-links'),
     getAbsolutePath('@storybook/addon-essentials'),
-    getAbsolutePath('@chromatic-com/storybook'),
     getAbsolutePath('@storybook/addon-interactions'),
+    getAbsolutePath('@storybook/addon-a11y'),
     '@storybook/addon-svelte-csf',
   ],
   framework: {

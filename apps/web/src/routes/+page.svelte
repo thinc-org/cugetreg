@@ -4,6 +4,8 @@
   import { DayChip } from '@repo/ui/day-chip'
   import { GenedChip } from '@repo/ui/gened-chip'
   import { Input } from '@repo/ui/input'
+  import { CourseCard } from '@repo/ui/course-card'
+  import { RecommendedTag } from '@repo/ui/recommended-tag'
 
   let counter = 0
 
@@ -33,3 +35,23 @@
 >
 <DayChip day="SA" />
 <GenedChip type="SC" />
+
+<h1>Testtsetst</h1>
+<CourseCard
+  class="mt-4"
+  recommended="{false}"
+  Selected="{false}"
+  course="{{
+    code: '0123101',
+    name: 'PARAGRAPH WRITING',
+    credit: 3,
+    gened: ['HU', 'SC', 'SO'],
+    seat: 24,
+    maxseat: 305,
+    review: 14,
+    days: ['MO', 'TU', 'WE'],
+  }}"
+/>
+
+<h1>RecommendedTag</h1>
+<RecommendedTag />

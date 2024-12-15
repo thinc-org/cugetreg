@@ -5,7 +5,7 @@
     "source.fixAll.eslint": "explicit"
   },
   "[svelte]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "svelte.svelte-vscode"
   },
   "eslint.validate": ["javascript", "javascriptreact", "svelte"],
   "scss.lint.unknownAtRules": "ignore"

@@ -8,7 +8,7 @@
 อันนี้ก็ขึ้นอยู่กับ sec ของเราอาจารย์ให้คะแนนงานค่อนข้างง่าย แต่จะให้คะแนนสอบยากหน่อย แต่เฉลี่ยๆรวมๆกันก็ได้ A
 เพราะเขียนตามใจตัวเองเป็นหลัก ไม่ค่อยยึดกับเรื่องที่เรียนมาเลยรู้สึกไม่ค่อยได้อะไรใหม่ ที่ช่วยน่าจะเป็นการจัดระเบียบความคิดและสรุปให้อยู่ในย่อหน้า`;
   export let semester = `ภาคต้น 2565`;
-  export let rating = 4;
+  export let rating = 4.5;
   export let likesCount = 2;
   export let dislikesCount = 0;
   // Calculate the number of filled and unfilled stars
@@ -34,6 +34,17 @@
     font-weight: bold;
     color: #4A70C6;
   }
+  .half-star {
+    position: relative;
+    display: inline-block;
+    width: 24px; /* Adjust based on your icon size */
+    height: 24px;
+  }
+
+  .half-star .filled {
+    position: absolute;
+    clip-path: inset(0 50% 0 0); /* Show only the left half */
+  }
 </style>
 
 <div class="comment rounded-lg flex flex-col place-content-center">
@@ -44,17 +55,22 @@
     <div class="flex flex-row rating mr-4">
       <!-- Render filled stars -->
       {#each Array(filledStars) as _, i}
-        <Star class="filled" key={i} />
+        <Star fill="currentColor" stroke="none" />
       {/each}
 
       <!-- Optionally render a half star (if applicable) -->
       {#if hasHalfStar}
-        <Star class="filled opacity-50" />
+        <div class="half-star">
+          <!-- Filled half -->
+          <Star fill="currentColor" stroke="none" class="filled" />
+          <!-- Outlined full star -->
+          <Star fill="none" stroke="currentColor" />
+        </div>
       {/if}
 
       <!-- Render unfilled stars -->
       {#each Array(emptyStars) as _, i}
-        <Star class="unfilled" key={filledStars + i} />
+        <Star/>
       {/each}
     </div>
     <div class="fontcolor">

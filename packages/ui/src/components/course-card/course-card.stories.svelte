@@ -25,7 +25,7 @@
 </script>
 
 <script lang="ts">
-  import { Story, Template } from '@storybook/addon-svelte-csf'
+  import { Template } from '@storybook/addon-svelte-csf'
 </script>
 
 <!--👇 We create a “template” of how args map to rendering-->

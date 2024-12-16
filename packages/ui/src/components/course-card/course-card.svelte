@@ -1,12 +1,11 @@
 <script lang="ts">
-  import { Plus, Check } from 'lucide-svelte'
-
-  import { GenedChip } from '../gened-chip'
-  import { DayChip } from '../day-chip'
-  import { Button } from '../button'
-  import { RecommendedTag } from '../recommended-tag'
+  import { Check, Plus } from 'lucide-svelte'
 
   import { cn } from '../../utils'
+  import { Button } from '../button'
+  import { DayChip } from '../day-chip'
+  import { GenedChip } from '../gened-chip'
+  import { RecommendedTag } from '../recommended-tag'
 
   let className: string | undefined | null = undefined
   export { className as class }
@@ -15,11 +14,11 @@
     code: string
     name: string
     credit: number
-    gened: String[]
+    gened: ('HU' | 'SC' | 'SO' | 'IN')[]
     seat: number
     maxseat: number
     review: number
-    days: String[]
+    days: ('MO' | 'TU' | 'WE' | 'TH' | 'FR' | 'SA' | 'SU')[]
   } = {
     code: 'testCode',
     name: 'testName',

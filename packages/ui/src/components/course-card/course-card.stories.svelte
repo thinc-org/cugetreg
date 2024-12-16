@@ -8,7 +8,7 @@
     component: CourseCard,
     tags: ['autodocs'],
     argTypes: {
-      Selected: {
+      selected: {
         control: 'boolean',
       },
       recommended: {
@@ -20,15 +20,23 @@
       class: {
         control: false,
       },
+      course: {
+        control: false,
+      },
     },
   } as Meta<CourseCard>
 </script>
 
 <script lang="ts">
-  import { Template } from '@storybook/addon-svelte-csf'
+  import { Story, Template } from '@storybook/addon-svelte-csf'
 </script>
 
 <!--👇 We create a “template” of how args map to rendering-->
 <Template let:args>
   <CourseCard {...args} />
 </Template>
+
+<!--👇 Each story then reuses that template-->
+<Story name="Default" />
+
+<Story name="Recommended" args="{{ recommended: true }}" />

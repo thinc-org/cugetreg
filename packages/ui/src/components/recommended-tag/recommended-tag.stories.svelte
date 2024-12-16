@@ -1,30 +1,18 @@
 <script context="module" lang="ts">
   import type { Meta } from '@storybook/svelte'
 
-  import { CourseCard } from './index.js'
+  import { RecommendedTag } from './index.js'
 
   export const meta = {
-    title: 'Molecule/CourseCard',
-    component: CourseCard,
+    title: 'Atom/RecommendedTag',
+    component: RecommendedTag,
     tags: ['autodocs'],
     argTypes: {
-      selected: {
-        control: 'boolean',
-      },
-      recommended: {
-        control: 'boolean',
-      },
-      onButtonClick: {
-        action: 'onButtonClick',
-      },
       class: {
         control: false,
       },
-      course: {
-        control: false,
-      },
     },
-  } satisfies Meta<CourseCard>
+  } satisfies Meta<RecommendedTag>
 </script>
 
 <script lang="ts">
@@ -33,10 +21,8 @@
 
 <!--👇 We create a “template” of how args map to rendering-->
 <Template let:args>
-  <CourseCard {...args} />
+  <RecommendedTag {...args} />
 </Template>
 
 <!--👇 Each story then reuses that template-->
 <Story name="Default" />
-
-<Story name="Recommended" args="{{ recommended: true }}" />

@@ -13,18 +13,32 @@
 </script>
   
 <style>
+  .fontcolor {
+    color: #353745;
+  }
   .comment {
     width: 968px;
     height: 444px;
     border: 1px solid #D6D7E1; /* 1px border */
     padding: 16px; /* Optional padding */
     box-sizing: border-box; /* Ensure padding doesn't affect dimensions */
+    color: #353745;
+  }
+  .rating {
+    font-weight: bold;
+    color: #4A70C6;
   }
 </style>
 
 <div class="comment rounded-lg flex flex-col place-content-center">
   <div class="ml-8 flex flex-row">
+    <div class="mr-2 rating">
+      {rating}
+    </div>
     <div>
+      
+    </div>
+    <div class="fontcolor">
       {semester}
     </div>
   </div>

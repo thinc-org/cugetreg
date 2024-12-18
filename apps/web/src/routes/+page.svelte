@@ -1,9 +1,11 @@
 <script lang="ts">
   import { Button } from '@repo/ui/button'
   import { Chip } from '@repo/ui/chip'
+  import { CourseCard } from '@repo/ui/course-card'
   import { DayChip } from '@repo/ui/day-chip'
   import { GenedChip } from '@repo/ui/gened-chip'
   import { Input } from '@repo/ui/input'
+  import { RecommendedTag } from '@repo/ui/recommended-tag'
 
   let counter = 0
 
@@ -33,3 +35,9 @@
 >
 <DayChip day="SA" />
 <GenedChip type="SC" />
+
+<h1>Testtsetst</h1>
+<CourseCard recommended="{true}" class="mt-4" />
+
+<h1>RecommendedTag</h1>
+<RecommendedTag />

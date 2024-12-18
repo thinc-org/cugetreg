@@ -1,10 +1,10 @@
 <script lang="ts">
   import { Button } from '@repo/ui/button'
   import { Chip } from '@repo/ui/chip'
+  import { CourseCard } from '@repo/ui/course-card'
   import { DayChip } from '@repo/ui/day-chip'
   import { GenedChip } from '@repo/ui/gened-chip'
   import { Input } from '@repo/ui/input'
-  import { CourseCard } from '@repo/ui/course-card'
   import { RecommendedTag } from '@repo/ui/recommended-tag'
 
   let counter = 0

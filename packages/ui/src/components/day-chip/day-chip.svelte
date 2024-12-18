@@ -25,7 +25,8 @@
   {closable}
   {onClose}
   {...$$restProps}
-  >{#if day}
-    {label[day]}
-  {/if}</Chip
 >
+  {#if day}
+    {label[day]}
+  {/if}
+</Chip>

@@ -1,5 +1,6 @@
 <script lang="ts">
   import { Accordion as AccordionPrimitive } from 'bits-ui'
+
   import { cn } from '../../utils'
 
   type $$Props = AccordionPrimitive.ItemProps

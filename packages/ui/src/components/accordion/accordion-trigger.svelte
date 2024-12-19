@@ -1,6 +1,7 @@
 <script lang="ts">
   import { Accordion as AccordionPrimitive } from 'bits-ui'
   import { ChevronDown } from 'lucide-svelte'
+
   import { cn } from '../../utils'
 
   type $$Props = AccordionPrimitive.TriggerProps

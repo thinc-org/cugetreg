@@ -1,4 +1,5 @@
 <script lang="ts">
+  import * as Accordion from '@repo/ui/accordion'
   import { Button } from '@repo/ui/button'
   import { Chip } from '@repo/ui/chip'
   import { CourseCard } from '@repo/ui/course-card'
@@ -6,7 +7,6 @@
   import { GenedChip } from '@repo/ui/gened-chip'
   import { Input } from '@repo/ui/input'
   import { RecommendedTag } from '@repo/ui/recommended-tag'
-  import * as Accordion from '@repo/ui/accordion'
 
   let counter = 0
 

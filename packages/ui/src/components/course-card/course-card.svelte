@@ -7,19 +7,12 @@
   import { GenedChip } from '../gened-chip'
   import { RecommendedTag } from '../recommended-tag'
 
+  import type { Course } from './index'
+
   let className: string | undefined | null = undefined
   export { className as class }
 
-  export let course: {
-    code: string
-    name: string
-    credit: number
-    gened: ('HU' | 'SC' | 'SO' | 'IN')[]
-    seat: number
-    maxseat: number
-    review: number
-    days: ('MO' | 'TU' | 'WE' | 'TH' | 'FR' | 'SA' | 'SU')[]
-  } = {
+  export let course: Course = {
     code: '0123101',
     name: 'PARAGRAPH WRITING',
     credit: 3,

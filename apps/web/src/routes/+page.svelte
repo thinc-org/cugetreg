@@ -1,4 +1,5 @@
 <script lang="ts">
+  import * as Accordion from '@repo/ui/accordion'
   import { Button } from '@repo/ui/button'
   import { Chip } from '@repo/ui/chip'
   import { CourseCard } from '@repo/ui/course-card'
@@ -41,3 +42,12 @@
 
 <h1>RecommendedTag</h1>
 <RecommendedTag />
+
+<Accordion.Root>
+  <Accordion.Item value="item-1">
+    <Accordion.Trigger>Is it accessible?</Accordion.Trigger>
+    <Accordion.Content>
+      Yes. It adheres to the WAI-ARIA design pattern.
+    </Accordion.Content>
+  </Accordion.Item>
+</Accordion.Root>

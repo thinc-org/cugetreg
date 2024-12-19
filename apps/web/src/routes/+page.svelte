@@ -4,6 +4,7 @@
   import { DayChip } from '@repo/ui/day-chip'
   import { GenedChip } from '@repo/ui/gened-chip'
   import { Input } from '@repo/ui/input'
+  import { Navbar } from '@repo/ui/navbar'
 
   let counter = 0
 
@@ -12,6 +13,7 @@
   }
 </script>
 
+<Navbar />
 <h1>Web</h1>
 
 <Button on:click="{onButtonClick}">Button</Button>

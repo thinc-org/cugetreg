@@ -6,6 +6,7 @@
   import { GenedChip } from '@repo/ui/gened-chip'
   import { Input } from '@repo/ui/input'
   import { RecommendedTag } from '@repo/ui/recommended-tag'
+  import * as Accordion from '@repo/ui/accordion'
 
   let counter = 0
 
@@ -41,3 +42,12 @@
 
 <h1>RecommendedTag</h1>
 <RecommendedTag />
+
+<Accordion.Root>
+  <Accordion.Item value="item-1">
+    <Accordion.Trigger>Is it accessible?</Accordion.Trigger>
+    <Accordion.Content>
+      Yes. It adheres to the WAI-ARIA design pattern.
+    </Accordion.Content>
+  </Accordion.Item>
+</Accordion.Root>

@@ -4,12 +4,13 @@
   import { DayChip } from '@repo/ui/day-chip'
   import { GenedChip } from '@repo/ui/gened-chip'
   import { Input } from '@repo/ui/input'
-  import { Select } from '@repo/ui/input-select'
   let counter = 0
 
   const onButtonClick = () => {
     counter++
   }
+
+  import { InputSelect } from '@repo/ui/select'
 </script>
 
 <h1>Web</h1>
@@ -46,30 +47,22 @@
 >
   <h1>Select</h1>
 
-  <Select
+  <InputSelect
     placeholder="โปรดเลือกตัวเลือก"
-    label="ตัวเลือก"
-    desc="เลือกตัวเลือกที่กำหนด"
     items="{['option1', 'option2']}"
   />
-  <Select
+  <InputSelect
     placeholder="โปรดเลือกตัวเลือก"
-    label="ตัวเลือก"
-    desc="เลือกตัวเลือกที่กำหนด"
     state="error"
     items="{['option1', 'option2']}"
   />
-  <Select
+  <InputSelect
     placeholder="โปรดเลือกตัวเลือก"
-    label="ตัวเลือก"
-    desc="เลือกตัวเลือกที่กำหนด"
     state="success"
     items="{['option1', 'option2']}"
   />
-  <Select
+  <InputSelect
     placeholder="โปรดเลือกตัวเลือก"
-    label="ตัวเลือก"
-    desc="เลือกตัวเลือกที่กำหนด"
     state="disable"
     items="{['option1', 'option2']}"
   />

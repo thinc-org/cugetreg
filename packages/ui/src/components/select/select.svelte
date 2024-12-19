@@ -1,14 +1,15 @@
 <script lang="ts">
   import { cn } from '../../utils'
   import { type Events, inputVariants, type Props } from './index.js'
-  import * as Select from './select/index.js'
+  import * as Select from './index.js'
 
   type $$Props = Props
   type $$Events = Events
 
   let className: $$Props['class'] = undefined
-  export let label: $$Props['label'] = ''
-  export let desc: $$Props['desc'] = ''
+  // export let label: $$Props['label'] = ''
+  // export let desc: $$Props['desc'] = ''
+  export let placeholder: $$Props['placeholder'] = 'none'
   export let state: $$Props['state'] = 'default'
   export let items: $$Props['items'] = []
 
@@ -20,16 +21,16 @@
 </script>
 
 <div class="my-3 space-y-2 text-button2">
-  <p>
+  <!-- <p>
     {label}
-  </p>
+  </p> -->
 
   <Select.Root>
     <Select.Trigger
       {disabled}
       class="{cn(className, inputVariants({ state }))}"
     >
-      <Select.Value placeholder="none" />
+      <Select.Value {placeholder} />
     </Select.Trigger>
     <Select.Content>
       {#each items as item}
@@ -38,7 +39,7 @@
     </Select.Content>
   </Select.Root>
 
-  <p
+  <!-- <p
     class="{state == 'error'
       ? 'text-error'
       : state == 'success'
@@ -46,5 +47,5 @@
         : ''}"
   >
     {desc}
-  </p>
+  </p> -->
 </div>

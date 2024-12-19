@@ -32,3 +32,7 @@
 <!-- 👇 Each story then reuses that template -->
 
 <Story name="Default" args="{{ state: 'default', placeholder: 'รหัสผ่าน' }}" />
+
+<Story name="Error" args="{{ state: 'error', placeholder: 'รหัสผ่าน' }}" />
+
+<Story name="Success" args="{{ state: 'success', placeholder: 'รหัสผ่าน' }}" />

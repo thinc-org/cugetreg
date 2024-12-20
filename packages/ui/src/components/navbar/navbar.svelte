@@ -2,12 +2,12 @@
   import { Moon, Search } from 'lucide-svelte'
 
   import { cn } from '../../utils'
-  import Button from '../button/button.svelte'
-  import Collapsible from '../collapsible/collapsible.svelte'
-  import IconButton from '../icon-button/icon-button.svelte'
-  import Input from '../input/input.svelte'
-  import Logo from '../logo/cugetreg/DarkFull.svelte'
-  import GitHubMark from '../logo/vendor/GitHubMark.svelte'
+  import { Button } from '../button'
+  import { Collapsible } from '../collapsible'
+  import { IconButton } from '../icon-button'
+  import { Input } from '../input'
+  import { CUGetRegDarkFull as CUGetRegLogo } from '../logo/cugetreg'
+  import { GitHubMark } from '../logo/vendor'
 
   export let isLoggedIn: boolean = false
   export let name: string = undefined
@@ -19,7 +19,7 @@
   class=" h-20 py-3 px-5 md:py-3 md:px-10 flex justify-between items-center z-50 border-b-2 border-surface-container-low"
 >
   <div class="flex flex-row gap-6 items-center">
-    <Logo class="w-24 h-8 md:w-32 md:h-10" />
+    <CUGetRegLogo class="w-24 h-8 md:w-32 md:h-10" />
     <div class="hidden md:flex relative">
       <Search
         class="absolute right-4 top-[32%]"

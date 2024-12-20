@@ -15,6 +15,8 @@
 </script>
 
 <Navbar />
+<Navbar isLoggedIn="{true}" name="เจษฎ์ผยองดู๋" />
+
 <h1>Web</h1>
 
 <Button on:click="{onButtonClick}">Button</Button>

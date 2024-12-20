@@ -5,11 +5,14 @@
 
   import { cn } from '../../utils'
   import Button from '../button/button.svelte'
+  import Collapsible from '../collapsible/collapsible.svelte'
   import IconButton from '../icon-button/icon-button.svelte'
   import Input from '../input/input.svelte'
   import Logo from '../logo/cugetreg/DarkFull.svelte'
   import GitHubMark from '../logo/vendor/GitHubMark.svelte'
 
+  export let isLoggedIn: boolean = false
+  export let name: string = undefined
   let navItems = ['ค้นหาวิชา', 'จัดตารางเรียน', 'เกี่ยวกับ']
   let selected = 'ค้นหาวิชา'
 </script>
@@ -23,7 +26,7 @@
       <Search
         class="absolute my-auto right-4 top-[32%]"
         size="16"
-        color="hsl(var(--neutral-400) / var(--tw-text-opacity, 1))"
+        color="#898EA7"
         strokeWidth="3.5"
       />
       <Input
@@ -58,7 +61,12 @@
       <GitHubMark class="w-8 h-8 text-neutral-500" />
     </a>
     <IconButton color="neutral"><Moon strokeWidth="3" size="16" /></IconButton>
-    <!-- To be implemented: add real href in Button -->
-    <Button href="login" class="font-normal w-28">เข้าสู่ระบบ</Button>
+    {#if isLoggedIn}
+      <!-- To be implemented: Collapsible component -->
+      <Collapsible {name} />
+    {:else}
+      <!-- To be implemented: add real href in Button -->
+      <Button href="login" class="font-normal w-28">เข้าสู่ระบบ</Button>
+    {/if}
   </div>
 </div>

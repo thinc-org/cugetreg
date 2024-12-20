@@ -66,7 +66,7 @@
       <Collapsible {name} />
     {:else}
       <!-- To be implemented: add real href in Button -->
-      <Button href="login" class="font-normal w-28">เข้าสู่ระบบ</Button>
+      <Button href="login" class="font-medium w-28">เข้าสู่ระบบ</Button>
     {/if}
   </div>
 </div>

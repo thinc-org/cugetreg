@@ -14,7 +14,9 @@
   let selected = 'ค้นหาวิชา'
 </script>
 
-<div class="py-3 px-12 flex justify-between items-center z-50">
+<div
+  class="py-3 px-10 flex justify-between items-center z-50 border-b-2 border-surface-container-low"
+>
   <div class="flex flex-row gap-6">
     <Logo class="w-32 h-10" />
     <div class="relative h-full">

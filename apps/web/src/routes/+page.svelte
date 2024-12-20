@@ -5,6 +5,7 @@
   import { GenedChip } from '@repo/ui/gened-chip'
   import { Input } from '@repo/ui/input'
   import { Navbar } from '@repo/ui/navbar'
+  import { Footer } from '@repo/ui/organism/footer'
 
   let counter = 0
 
@@ -35,3 +36,4 @@
 >
 <DayChip day="SA" />
 <GenedChip type="SC" />
+<Footer />

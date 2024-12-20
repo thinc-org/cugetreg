@@ -8,7 +8,7 @@
 อันนี้ก็ขึ้นอยู่กับ sec ของเราอาจารย์ให้คะแนนงานค่อนข้างง่าย แต่จะให้คะแนนสอบยากหน่อย แต่เฉลี่ยๆรวมๆกันก็ได้ A
 เพราะเขียนตามใจตัวเองเป็นหลัก ไม่ค่อยยึดกับเรื่องที่เรียนมาเลยรู้สึกไม่ค่อยได้อะไรใหม่ ที่ช่วยน่าจะเป็นการจัดระเบียบความคิดและสรุปให้อยู่ในย่อหน้า`
   export let semester = `ภาคต้น 2565`
-  export let rating = 2.5
+  export let rating = 4.0
   export let likesCount = 2
   export let dislikesCount = 0
   // Calculate the number of filled and unfilled stars
@@ -18,12 +18,19 @@
   const emptyStars = totalStars - filledStars - (hasHalfStar ? 1 : 0)
 </script>
 
-<div class="comment rounded-lg flex flex-col place-content-center">
-  <div class="ml-8 flex flex-row">
-    <div class="mr-4 rating">
-      {rating}
+<div
+  class="w-[968px] h-[444px] border border-[#d6d7e1] py-10 px-12 box-border rounded-xl flex flex-col place-content-center"
+>
+  <div class="flex flex-row">
+    <div class="mr-4 font-bold text-h3 text-primary">
+      {#if !hasHalfStar}
+        <span>{rating}.0</span>
+      {/if}
+      {#if hasHalfStar}
+        <span>{rating}</span>
+      {/if}
     </div>
-    <div class="flex flex-row rating mr-4">
+    <div class="flex flex-row mr-4 text-h3 text-primary gap-1.5">
       <!-- Render filled stars -->
       {#each Array(filledStars) as _, i}
         <Star fill="currentColor" stroke="none" />
@@ -31,11 +38,15 @@
 
       <!-- Optionally render a half star (if applicable) -->
       {#if hasHalfStar}
-        <div class="half-star">
-          <Star fill="currentColor" />
-        </div>
-        <div class="half-star-right">
-          <Star />
+        <div class="flex gap-0">
+          <div class="relative inline-block w-6 h-6 overflow-hidden max-w-3">
+            <Star fill="currentColor" />
+          </div>
+          <div
+            class="relative inline-block w-6 h-6 overflow-hidden max-w-3 transform scale-x-[-1]"
+          >
+            <Star />
+          </div>
         </div>
       {/if}
 
@@ -44,56 +55,23 @@
         <Star />
       {/each}
     </div>
-    <div class="fontcolor">
+    <div class="text-subtitle font-sans font-medium">
       {semester}
     </div>
   </div>
-  <div class="w-[872px] h-[252px] self-center mt-6">
+  <div
+    class="w-[872px] h-[252px] self-center mt-6 text-body1 font-sarabun font-regular"
+  >
     {content}
   </div>
-  <div class="ml-8 flex flex-row">
-    <div class="flex flex-row">
-      <ThumbsUp class="mx-2" />
+  <div class="gap-6 flex flex-row text-subtitle font-sans">
+    <div class="flex flex-row font-medium">
+      <ThumbsUp class="mr-2 text-neutral-400" />
       {likesCount}
     </div>
-    <div class="flex flex-row ml-4">
-      <ThumbsDown class="mx-2" />
+    <div class="flex flex-row font-medium">
+      <ThumbsDown class="mr-2 text-neutral-400" />
       {dislikesCount}
     </div>
   </div>
 </div>
-
-<style>
-  .fontcolor {
-    color: #353745;
-  }
-  .comment {
-    width: 968px;
-    height: 444px;
-    border: 1px solid #d6d7e1; /* 1px border */
-    padding: 16px; /* Optional padding */
-    box-sizing: border-box; /* Ensure padding doesn't affect dimensions */
-    color: #353745;
-  }
-  .rating {
-    font-weight: bold;
-    color: #4a70c6;
-  }
-  .half-star {
-    position: relative;
-    display: inline-block;
-    width: 24px; /* Adjust based on your icon size */
-    height: 24px;
-    overflow: hidden;
-    max-width: 12px;
-  }
-  .half-star-right {
-    position: relative;
-    display: inline-block;
-    width: 24px; /* Adjust based on your icon size */
-    height: 24px;
-    overflow: hidden;
-    max-width: 12px;
-    transform: scaleX(-1);
-  }
-</style>

@@ -32,7 +32,6 @@
       />
     </div>
   </div>
-  <!-- To be fix: this section should be in the middle of the screen -->
   <div
     class="absolute left-1/2 transform -translate-x-1/2 flex flex-row justify-center items-center gap-4"
   >
@@ -51,7 +50,13 @@
     {/each}
   </div>
   <div class="flex flex-row justify-between items-center gap-4">
-    <GitHubMark class="w-8 h-8 text-neutral-500" />
+    <a
+      href="https://github.com/thinc-org/cugetreg"
+      target="_blank"
+      rel="noreferrer"
+    >
+      <GitHubMark class="w-8 h-8 text-neutral-500" />
+    </a>
     <IconButton color="neutral"><Moon strokeWidth="3" size="16" /></IconButton>
     <!-- To be implemented: add real href in Button -->
     <Button href="login" class="font-normal w-28">เข้าสู่ระบบ</Button>

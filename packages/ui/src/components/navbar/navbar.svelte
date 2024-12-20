@@ -33,7 +33,9 @@
     </div>
   </div>
   <!-- To be fix: this section should be in the middle of the screen -->
-  <div class="flex flex-row justify-between items-center gap-4">
+  <div
+    class="absolute left-1/2 transform -translate-x-1/2 flex flex-row justify-center items-center gap-4"
+  >
     <!-- To be implemented: add page from navItems-->
     {#each navItems as item}
       <a

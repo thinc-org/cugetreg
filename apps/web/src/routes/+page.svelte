@@ -5,13 +5,12 @@
   import { GenedChip } from '@repo/ui/gened-chip'
   import { Input } from '@repo/ui/input'
   import { Label } from '@repo/ui/label'
+  import { Select } from '@repo/ui/select'
   let counter = 0
 
   const onButtonClick = () => {
     counter++
   }
-
-  import { Select } from '@repo/ui/select'
 </script>
 
 <h1>Web</h1>
@@ -47,40 +46,41 @@
   class="flex flex-col space-x-0 space-y-10 w-auto h-auto p-10 my-5 border-b-2 border-t-2"
 >
   <h1>Select</h1>
-  <div>
+  <div class="space-y-2">
     <Label label="เลือกตัวเลือก" />
     <Select
+      state="default"
       placeholder="โปรดเลือกตัวเลือก"
       items="{['option1', 'option2']}"
-      desc="กรุณาเลือกตัวเลือกให้ถูกต้อง"
     />
+    <Label label="กรุณาเลือกตัวเลือกให้ถูกต้อง" />
   </div>
-  <div>
+  <div class="space-y-2">
     <Label label="เลือกตัวเลือก" />
     <Select
       placeholder="โปรดเลือกตัวเลือก"
       state="error"
       items="{['option1', 'option2']}"
-      desc="กรุณาเลือกตัวเลือกให้ถูกต้อง"
     />
+    <Label label="กรุณาเลือกตัวเลือกให้ถูกต้อง" state="error" />
   </div>
-  <div>
+  <div class="space-y-2">
     <Label label="เลือกตัวเลือก" />
     <Select
       placeholder="โปรดเลือกตัวเลือก"
       state="success"
       items="{['option1', 'option2']}"
-      desc="กรุณาเลือกตัวเลือกให้ถูกต้อง"
     />
+    <Label label="กรุณาเลือกตัวเลือกให้ถูกต้อง" state="success" />
   </div>
-  <div>
+  <div class="space-y-2">
     <Label label="เลือกตัวเลือก" />
     <Select
       placeholder="โปรดเลือกตัวเลือก"
       state="disable"
       items="{['option1', 'option2']}"
-      desc="กรุณาเลือกตัวเลือกให้ถูกต้อง"
     />
+    <Label label="กรุณาเลือกตัวเลือกให้ถูกต้อง" state="disable" />
   </div>
 </div>
 <p>

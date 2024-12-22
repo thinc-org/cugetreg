@@ -16,7 +16,7 @@ const Input = SelectPrimitive.Input
 const Value = SelectPrimitive.Value
 
 const inputVariants = tv({
-  base: 'flex w-full max-w-[250px] h-10 rounded-button border-2 px-4 text-button rounded-xl',
+  base: 'flex w-full max-w-[250px] h-10 rounded-button border-2 px-4 text-button rounded-xl text-button2',
   variants: {
     state: {
       default:
@@ -54,7 +54,7 @@ export {
   Label,
   Root,
   //
-  // Root as Select,
+  // Root as SelectRoot,
   // Content as SelectContent,
   // Group as SelectGroup,
   // Input as SelectInput,
@@ -63,6 +63,7 @@ export {
   // Separator as SelectSeparator,
   // Trigger as SelectTrigger,
   // Value as SelectValue,
+  //
   Separator,
   Trigger,
   Value,

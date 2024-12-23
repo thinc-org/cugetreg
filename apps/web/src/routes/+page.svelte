@@ -8,7 +8,7 @@
   import { Input } from '@repo/ui/input'
   import { RecommendedTag } from '@repo/ui/recommended-tag'
 
-  let counter = 0
+  let counter = $state(0)
 
   const onButtonClick = () => {
     counter++

@@ -21,7 +21,7 @@
 </script>
 
 <Chip
-  class="{cn(chipVariants({ day, className }))}"
+  class={cn(chipVariants({ day, className }))}
   {closable}
   {onClose}
   {...$$restProps}

@@ -10,10 +10,10 @@
 </script>
 
 <th
-  class="{cn(
+  class={cn(
     'text-primary text-table-header h-8 px-4 text-left align-middle font-medium border-x-[1px] border-surface [&:has([role=checkbox])]:pr-0 first:rounded-tl-xl last:rounded-tr-xl',
     className,
-  )}"
+  )}
   {...$$restProps}
 >
   <slot />

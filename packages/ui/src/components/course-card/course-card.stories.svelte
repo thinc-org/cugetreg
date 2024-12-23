@@ -39,4 +39,4 @@
 <!--👇 Each story then reuses that template-->
 <Story name="Default" />
 
-<Story name="Recommended" args="{{ recommended: true }}" />
+<Story name="Recommended" args={{ recommended: true }} />

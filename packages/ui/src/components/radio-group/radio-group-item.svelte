@@ -20,10 +20,10 @@
 <div class="flex items-center space-x-2">
   <RadioGroupPrimitive.Item
     {value}
-    class="{cn(
+    class={cn(
       'peer border-on-surface-placeholder data-[state=checked]:border-primary  text-primary ring-offset-background focus-visible:ring-ring aspect-square h-5 w-5 rounded-full border-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
       className,
-    )}"
+    )}
     {...$$restProps}
     on:click
   >
@@ -34,7 +34,7 @@
     </div>
   </RadioGroupPrimitive.Item>
   <Label.Root
-    for="{id}"
+    for={id}
     class="text-button2 font-normal leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
   >
     {label}

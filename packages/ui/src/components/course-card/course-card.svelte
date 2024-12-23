@@ -39,10 +39,10 @@
 </script>
 
 <div
-  class="{cn(
+  class={cn(
     'flex flex-col w-[334px] h-[170px] lg:w-[440px] lg:h-[200px] ring-2 ring-neutral-100 rounded-xl py-5 px-4 lg:p-6 justify-between relative',
     className,
-  )}"
+  )}
   {...$$restProps}
 >
   {#if recommended}
@@ -55,7 +55,7 @@
     </div>
     <div class="flex gap-1">
       {#each course.gened as gened}
-        <GenedChip type="{gened}" />
+        <GenedChip type={gened} />
       {/each}
     </div>
   </div>
@@ -83,13 +83,13 @@
       <Button
         variant="outlined"
         color="primary"
-        on:click="{onButtonClick}"
+        on:click={onButtonClick}
         class="w-36 lg:w-48"
       >
         เลือก <Plus size="16" strokeWidth="3" />
       </Button>
     {:else}
-      <Button color="primary" on:click="{onButtonClick}" class="w-36 lg:w-48">
+      <Button color="primary" on:click={onButtonClick} class="w-36 lg:w-48">
         เลือก <Check size="16" strokeWidth="3" />
       </Button>
     {/if}

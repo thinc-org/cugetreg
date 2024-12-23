@@ -17,7 +17,7 @@
 
 <ButtonPrimitive.Root
   {builders}
-  class="{cn(buttonVariants({ variant, size, color, className }))}"
+  class={cn(buttonVariants({ variant, size, color, className }))}
   type="button"
   {...$$restProps}
   on:click

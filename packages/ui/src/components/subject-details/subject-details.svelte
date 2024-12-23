@@ -5,7 +5,7 @@
   setContext('subject-details-variant', variant)
 </script>
 
-<div class="{`subject-details ${className}`}">
+<div class={`subject-details ${className}`}>
   <slot></slot>
   <!-- This will allow nesting of Label and Description -->
 </div>

@@ -11,7 +11,7 @@
 
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <thead
-  class="{cn('[&_tr]:border-b-0  bg-surface-container-lowest ', className)}"
+  class={cn('[&_tr]:border-b-0  bg-surface-container-lowest ', className)}
   {...$$restProps}
   on:click
   on:keydown

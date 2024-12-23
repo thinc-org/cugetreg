@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@cugetreg/database": "workspace:*",
-    "dotenv-cli": "^7.4.4",
+    "dotenv-cli": "^8.0.0",
     "drizzle-orm": "^0.38.1",
     "postgres": "^3.4.5",
     "tsx": "^4.19.2"

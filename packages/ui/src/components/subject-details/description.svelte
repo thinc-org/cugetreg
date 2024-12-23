@@ -9,8 +9,6 @@
   export let text: string = '' // Optional text prop, can be overridden by slot
 </script>
 
-<div
-  class="{`text-on-surface font-normal text-body1 ${textStyle} ${className}`}"
->
+<div class={`text-on-surface font-normal text-body1 ${textStyle} ${className}`}>
   <slot>{text}</slot>
 </div>

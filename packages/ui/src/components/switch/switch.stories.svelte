@@ -52,41 +52,41 @@
 <!-- Define the stories with different states -->
 <Story
   name="Default"
-  args="{{
+  args={{
     checked: false,
     label: 'Switch Label',
     id: 'switch',
     'aria-label': 'for example of default switch',
-  }}"
+  }}
 />
 
 <Story
   name="Checked"
-  args="{{
+  args={{
     checked: true,
     label: 'Checked Switch',
     id: 'checked-switch',
     'aria-label': 'for example of checked switch ',
-  }}"
+  }}
 />
 
 <Story
   name="With Custom Label"
-  args="{{
+  args={{
     checked: false,
     label: 'Custom Label',
     id: 'custom-switch',
     'aria-label': 'for example of custom label switch ',
-  }}"
+  }}
 />
 
 <Story
   name="Disabled"
-  args="{{
+  args={{
     checked: false,
     label: 'Disabled Switch',
     id: 'disabled-switch',
     disabled: true,
     'aria-label': 'for example of disable switch ',
-  }}"
+  }}
 />

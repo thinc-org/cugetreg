@@ -14,10 +14,10 @@
 
 <AccordionPrimitive.Header {level} class="flex">
   <AccordionPrimitive.Trigger
-    class="{cn(
+    class={cn(
       'flex flex-1 items-center justify-between py-4 font-medium transition-all [&[data-state=open]>svg]:rotate-180 px-2',
       className,
-    )}"
+    )}
     {...$$restProps}
     on:click
   >

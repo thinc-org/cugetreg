@@ -41,39 +41,39 @@
 <!-- 👇 Each story then reuses that template -->
 <Story
   name="Unchecked"
-  args="{{
+  args={{
     checked: false,
     label: 'Accept Terms',
     'aria-label': 'for accept terms',
-  }}"
+  }}
 />
 
 <Story
   name="Checked"
-  args="{{
+  args={{
     checked: true,
     label: 'Accept Terms',
     'aria-label': 'for accept terms',
-  }}"
+  }}
 />
 
 <Story
   name="Unchecked Without Label"
-  args="{{
+  args={{
     checked: false,
     'aria-label': 'for example of unchecked checkbox without label',
-  }}"
+  }}
 />
 
 <Story
   name="Checked Without Label"
-  args="{{
+  args={{
     checked: true,
     'aria-label': 'for example of checkbox without label',
-  }}"
+  }}
 />
 
 <Story
   name="Disabled Checkbox"
-  args="{{ checked: false, label: 'Disabled Checkbox', disabled: true }}"
+  args={{ checked: false, label: 'Disabled Checkbox', disabled: true }}
 />

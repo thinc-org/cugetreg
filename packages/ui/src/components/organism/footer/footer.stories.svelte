@@ -20,10 +20,10 @@
 
 <Story
   name="Mobile"
-  parameters="{{ viewport: { defaultViewport: 'mobile2' } }}"
+  parameters={{ viewport: { defaultViewport: 'mobile2' } }}
 />
 
 <Story
   name="Desktop"
-  parameters="{{ viewport: { defaultViewport: 'tablet' } }}"
+  parameters={{ viewport: { defaultViewport: 'tablet' } }}
 />

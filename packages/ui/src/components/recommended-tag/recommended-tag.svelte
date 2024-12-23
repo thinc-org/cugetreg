@@ -9,10 +9,10 @@
 </script>
 
 <div
-  class="{cn(
+  class={cn(
     'inline-flex items-center justify-center relative text-neutral-white bg-tangerine-500 py-[2px] px-6 rounded-tl-xl rounded-br-xl z-30',
     className,
-  )}"
+  )}
   {...$$restProps}
 >
   <Sparkles class="mr-2" size="16" />

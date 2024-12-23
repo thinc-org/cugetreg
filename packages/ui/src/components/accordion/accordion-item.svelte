@@ -10,6 +10,6 @@
   export { className as class }
 </script>
 
-<AccordionPrimitive.Item {value} class="{cn('', className)}" {...$$restProps}>
+<AccordionPrimitive.Item {value} class={cn('', className)} {...$$restProps}>
   <slot />
 </AccordionPrimitive.Item>

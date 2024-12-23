@@ -33,6 +33,6 @@
 
 <!-- 👇 Each story then reuses that template -->
 
-<Story name="Default" args="{{ closable: false }}" />
+<Story name="Default" args={{ closable: false }} />
 
-<Story name="Default Closable" args="{{ closable: true }}" />
+<Story name="Default Closable" args={{ closable: true }} />

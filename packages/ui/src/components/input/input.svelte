@@ -17,10 +17,10 @@
 </script>
 
 <input
-  class="{cn(
+  class={cn(
     'flex w-full h-10 rounded-button bg-surface-container-lowest px-4 text-button2 placeholder:text-on-surface hover:outline-none hover:ring-1 hover:ring-primary focus-visible:outline-none focus-visible:ring-1.5 focus-visible:ring-primary disabled:cursor-not-allowed placeholder:disabled:text-on-surface-disabled disabled:hover:ring-0',
     className,
-  )}"
+  )}
   bind:value
   {readonly}
   on:blur

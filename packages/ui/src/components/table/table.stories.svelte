@@ -45,7 +45,7 @@ This example demonstrates the use of each sub-component:
     </Table.Header>
     <Table.Body>
       <Table.Row class="border-b-0">
-        <Table.Cell data-rowspan="{true}" rowspan="{2}">INV001</Table.Cell>
+        <Table.Cell data-rowspan={true} rowspan={2}>INV001</Table.Cell>
         <Table.Cell>Paid</Table.Cell>
         <Table.Cell>Credit Card</Table.Cell>
         <Table.Cell>$250.00</Table.Cell>

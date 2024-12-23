@@ -22,7 +22,8 @@
   {closable}
   {onClose}
   {...$$restProps}
-  >{#if type}
-    {label[type]}
-  {/if}</Chip
 >
+  {#if type}
+    {label[type]}
+  {/if}
+</Chip>

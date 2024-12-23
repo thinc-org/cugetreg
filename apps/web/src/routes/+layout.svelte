@@ -1,7 +1,7 @@
 <script lang="ts">
   import '@repo/ui/css'
 
-  import { type Snippet } from 'svelte'
+  import type { Snippet } from 'svelte'
 
   interface Props {
     children: Snippet

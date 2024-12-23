@@ -33,8 +33,8 @@
       className,
     )}
     {...rest}
-    {onclick}
-    {onkeydown}
+    on:click
+    on:keydown
     {id}
   >
     <SwitchPrimitive.Thumb

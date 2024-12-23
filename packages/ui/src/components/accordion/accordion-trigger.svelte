@@ -30,7 +30,7 @@
       className,
     )}
     {...rest}
-    {onclick}
+    on:click
   >
     {@render children?.()}
     <ChevronDown class="h-6 w-6 transition-transform duration-200" />

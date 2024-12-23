@@ -13,8 +13,8 @@
 <span class="{cn(chipVariants({ className }))}" {...$$restProps}>
   <slot />
   {#if closable}
-    <button type="button" on:click="{onClose}"
-      ><X class="size-3" strokeWidth="{4}" /></button
-    >
+    <button type="button" on:click="{onClose}">
+      <X class="size-3" strokeWidth="{4}" />
+    </button>
   {/if}
 </span>

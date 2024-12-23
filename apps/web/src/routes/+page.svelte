@@ -1,10 +1,11 @@
 <script lang="ts">
+  import * as Accordion from '@repo/ui/accordion'
   import { Button } from '@repo/ui/button'
   import { Chip } from '@repo/ui/chip'
+  import { CourseCard } from '@repo/ui/course-card'
   import { DayChip } from '@repo/ui/day-chip'
   import { GenedChip } from '@repo/ui/gened-chip'
   import { Input } from '@repo/ui/input'
-  import { CourseCard } from '@repo/ui/course-card'
   import { RecommendedTag } from '@repo/ui/recommended-tag'
 
   let counter = 0
@@ -31,8 +32,10 @@
   closable
   onClose="{() => {
     console.log('close')
-  }}">Closable</Chip
+  }}"
 >
+  Closable
+</Chip>
 <DayChip day="SA" />
 <GenedChip type="SC" />
 
@@ -41,3 +44,12 @@
 
 <h1>RecommendedTag</h1>
 <RecommendedTag />
+
+<Accordion.Root>
+  <Accordion.Item value="item-1">
+    <Accordion.Trigger>Is it accessible?</Accordion.Trigger>
+    <Accordion.Content>
+      Yes. It adheres to the WAI-ARIA design pattern.
+    </Accordion.Content>
+  </Accordion.Item>
+</Accordion.Root>

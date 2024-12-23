@@ -17,7 +17,7 @@
 
 <h1>Web</h1>
 
-<Button on:click={onButtonClick}>Button</Button>
+<Button onclick={onButtonClick}>Button</Button>
 
 {counter}
 
@@ -32,8 +32,10 @@
   closable
   onClose={() => {
     console.log('close')
-  }}>Closable</Chip
+  }}
 >
+  Closable
+</Chip>
 <DayChip day="SA" />
 <GenedChip type="SC" />
 

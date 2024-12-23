@@ -30,10 +30,10 @@
       class: {
         control: false,
       },
-      'on:click': {
+      onclick: {
         action: 'onClick',
       },
-      'on:keydown': {
+      onkeydown: {
         action: 'onKeyDown',
       },
     },

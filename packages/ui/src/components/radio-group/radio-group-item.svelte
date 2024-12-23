@@ -35,7 +35,7 @@
       className,
     )}
     {...rest}
-    on:click
+    {onclick}
   >
     <div class="flex items-center justify-center">
       <RadioGroupPrimitive.ItemIndicator>

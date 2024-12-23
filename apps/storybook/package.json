@@ -8,7 +8,8 @@
     "build": "storybook build",
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "lint": "eslint . && prettier --check \"src/**/*.mdx\"",
-    "format": "eslint . --fix && prettier --write \"src/**/*.mdx\""
+    "format": "eslint . --fix && prettier --write \"src/**/*.mdx\"",
+    "postinstall": "node scripts/patch-sb-csf.js"
   },
   "dependencies": {
     "@repo/ui": "workspace:*"

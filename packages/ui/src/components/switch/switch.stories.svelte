@@ -1,9 +1,9 @@
-<script context="module" lang="ts">
-  import type { Meta } from '@storybook/svelte'
+<script module lang="ts">
+  import { defineMeta } from '@storybook/addon-svelte-csf'
 
   import { Switch } from './index.js'
 
-  export const meta = {
+  const { Story } = defineMeta<typeof Switch>({
     title: 'Atom/Switch',
     component: Switch,
     tags: ['autodocs'],
@@ -37,19 +37,11 @@
         action: 'onKeyDown',
       },
     },
-  } satisfies Meta<Switch>
+  })
 </script>
-
-<script lang="ts">
-  import { Story, Template } from '@storybook/addon-svelte-csf'
-</script>
-
-<!-- Define the template for the switch component -->
-<Template let:args>
-  <Switch {...args} />
-</Template>
 
 <!-- Define the stories with different states -->
+
 <Story
   name="Default"
   args={{

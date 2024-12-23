@@ -1,9 +1,9 @@
-<script context="module" lang="ts">
-  import type { Meta } from '@storybook/svelte'
+<script module lang="ts">
+  import { defineMeta } from '@storybook/addon-svelte-csf'
 
   import * as RadioGroup from './index.js'
 
-  export const meta = {
+  const { Story } = defineMeta({
     title: 'Atom/RadioGroup',
     component: RadioGroup,
     tags: ['autodocs'],
@@ -47,14 +47,10 @@
         action: 'onClick',
       },
     },
-  } satisfies Meta<RadioGroup>
+  })
 </script>
 
-<script lang="ts">
-  import { Story, Template } from '@storybook/addon-svelte-csf'
-</script>
-
-<Template let:args>
+{#snippet template(args)}
   <RadioGroup.Root {...args}>
     <RadioGroup.Item
       value={args.itemValue1}
@@ -69,7 +65,7 @@
       aria-label={args['aria-label']}
     />
   </RadioGroup.Root>
-</Template>
+{/snippet}
 
 <Story
   name="Default"
@@ -81,7 +77,11 @@
     'item2-label': 'option 2',
     'aria-label': 'for example of enable radio group',
   }}
-/>
+>
+  {#snippet children(args)}
+    {@render template(args)}
+  {/snippet}
+</Story>
 
 <Story
   name="Disabled"
@@ -93,4 +93,8 @@
     disabled: true,
     'aria-label': 'for example of disabled radio group',
   }}
-/>
+>
+  {#snippet children(args)}
+    {@render template(args)}
+  {/snippet}
+</Story>

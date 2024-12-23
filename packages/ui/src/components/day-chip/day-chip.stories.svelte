@@ -1,9 +1,9 @@
-<script context="module" lang="ts">
-  import type { Meta } from '@storybook/svelte'
+<script module lang="ts">
+  import { defineMeta } from '@storybook/addon-svelte-csf'
 
   import { DayChip } from './index.js'
 
-  export const meta = {
+  const { Story } = defineMeta<typeof DayChip>({
     title: 'Atom/DayChip',
     component: DayChip,
     tags: ['autodocs'],
@@ -25,18 +25,8 @@
         control: false,
       },
     },
-  } satisfies Meta<DayChip>
+  })
 </script>
-
-<script lang="ts">
-  import { Story, Template } from '@storybook/addon-svelte-csf'
-</script>
-
-<!--👇 We create a “template” of how args map to rendering -->
-
-<Template let:args>
-  <DayChip {...args}>DayChip</DayChip>
-</Template>
 
 <!-- 👇 Each story then reuses that template -->
 

@@ -3,11 +3,21 @@
   import { Chip } from '../chip'
   import { chipVariants, type Day } from './index.js'
 
-  let className: string | undefined | null = undefined
-  export let day: Day
-  export let closable: boolean = false
-  export let onClose: () => void = () => {}
-  export { className as class }
+  interface Props {
+    class?: string | undefined | null
+    day: Day
+    closable?: boolean
+    onClose?: () => void
+    [key: string]: unknown
+  }
+
+  let {
+    class: className = undefined,
+    day,
+    closable = false,
+    onClose = () => {},
+    ...rest
+  }: Props = $props()
 
   const label = {
     MO: 'จันทร์',
@@ -24,7 +34,7 @@
   class={cn(chipVariants({ day, className }))}
   {closable}
   {onClose}
-  {...$$restProps}
+  {...rest}
 >
   {#if day}
     {label[day]}

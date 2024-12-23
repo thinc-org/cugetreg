@@ -8,11 +8,21 @@
   }
   type $$Events = SwitchPrimitive.Events
 
-  let className: $$Props['class'] = undefined
-  export let checked: $$Props['checked'] = undefined
-  export let id: $$Props['id'] = null
-  export let label: $$Props['label'] = 'label'
-  export { className as class }
+  interface Props {
+    class?: $$Props['class']
+    checked?: $$Props['checked']
+    id?: $$Props['id']
+    label?: $$Props['label']
+    [key: string]: unknown
+  }
+
+  let {
+    class: className = undefined,
+    checked = $bindable(undefined),
+    id = null,
+    label = 'label',
+    ...rest
+  }: Props = $props()
 </script>
 
 <div class="flex items-center space-x-2">
@@ -22,7 +32,7 @@
       'focus-visible:ring-ring focus-visible:ring-offset-background data-[state=checked]:border-primary data-[state=checked]:bg-primary-low data-[state=unchecked]:bg-surface-container-lowest peer inline-flex h-[18px] w-[32px] shrink-0 cursor-pointer items-center rounded-full border border-surface-container-high  transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
       className,
     )}
-    {...$$restProps}
+    {...rest}
     on:click
     on:keydown
     {id}

@@ -1,14 +1,20 @@
 <script lang="ts">
-  import { getContext } from 'svelte'
+  import { getContext, type Snippet } from 'svelte'
+
   const variant = getContext<'left' | 'center' | 'right' | 'mobile'>(
     'subject-details-variant',
   )
 
   const textStyle = variant === 'mobile' ? 'p-2' : 'p-4'
-  export let className: string = '' // Additional classes
-  export let text: string = '' // Optional text prop, can be overridden by slot
+  interface Props {
+    className?: string // Additional classes
+    text?: string // Optional text prop, can be overridden by slot
+    children?: Snippet
+  }
+
+  let { className = '', text = '', children }: Props = $props()
 </script>
 
 <div class={`text-on-surface font-normal text-body1 ${textStyle} ${className}`}>
-  <slot>{text}</slot>
+  {#if children}{@render children()}{:else}{text}{/if}
 </div>

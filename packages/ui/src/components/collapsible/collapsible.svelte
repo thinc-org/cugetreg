@@ -7,7 +7,7 @@
 </script>
 
 <Collapsible.Root class="relative">
-  <div class="flex flex-row gap-2">
+  <div class="flex flex-row md:gap-2">
     <p class="text-primary text-lg">{name}</p>
     <Collapsible.Trigger>
       <ChevronDown color="#4A70C6" class="hidden md:block" />

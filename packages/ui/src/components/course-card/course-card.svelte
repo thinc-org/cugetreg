@@ -6,7 +6,6 @@
   import { DayChip } from '../day-chip'
   import { GenedChip } from '../gened-chip'
   import { RecommendedTag } from '../recommended-tag'
-
   import type { Course } from './index'
 
   let className: string | undefined | null = undefined

@@ -12,6 +12,7 @@
   export let isLoggedIn: boolean = false
   export let name: string = undefined
   let navItems = ['ค้นหาวิชา', 'จัดตารางเรียน', 'เกี่ยวกับ']
+  let collapseItems = ['TEST1', 'TEST2', 'TEST3']
   let selected = 'ค้นหาวิชา'
 </script>
 
@@ -64,7 +65,11 @@
     >
     {#if isLoggedIn}
       <!-- To be implemented: Collapsible component -->
-      <Collapsible {name} />
+      <Collapsible {name}>
+        {#each collapseItems as item}
+          <p class="p-2 cursor-pointer">{item}</p>
+        {/each}
+      </Collapsible>
     {:else}
       <!-- To be implemented: add real href in Button -->
       <Button href="login" class="w-24 md:w-28"

@@ -32,7 +32,7 @@ importers:
 
   apps/analytics:
     dependencies:
-      '@cugetreg/database':
+      '@repo/database':
         specifier: workspace:*
         version: link:../../packages/database
       dotenv-cli:
@@ -124,6 +124,9 @@ importers:
 
   apps/web:
     dependencies:
+      '@repo/database':
+        specifier: workspace:*
+        version: link:../../packages/database
       '@repo/ui':
         specifier: workspace:*
         version: link:../../packages/ui
@@ -152,12 +155,18 @@ importers:
       autoprefixer:
         specifier: ^10.4.20
         version: 10.4.20(postcss@8.4.49)
+      drizzle-orm:
+        specifier: ^0.38.1
+        version: 0.38.2(@types/react@19.0.1)(postgres@3.4.5)(react@18.3.1)
       eslint:
         specifier: ^9.16.0
         version: 9.16.0(jiti@1.21.6)
       postcss:
         specifier: ^8.4.49
         version: 8.4.49
+      postgres:
+        specifier: ^3.4.5
+        version: 3.4.5
       prettier:
         specifier: ^3.4.2
         version: 3.4.2
@@ -301,19 +310,19 @@ importers:
         version: link:../config
       '@storybook/addon-svelte-csf':
         specifier: ^4.2.0
-        version: 4.2.0(@storybook/svelte@8.4.7(storybook@8.4.7(prettier@3.4.2))(svelte@4.2.19))(@sveltejs/vite-plugin-svelte@3.1.2(svelte@4.2.19)(vite@5.4.11(@types/node@22.10.2)(sass-embedded@1.83.0)))(storybook@8.4.7(prettier@3.4.2))(svelte@4.2.19)(vite@5.4.11(@types/node@22.10.2)(sass-embedded@1.83.0))
+        version: 4.2.0(@storybook/svelte@8.4.7(storybook@8.4.7(prettier@3.4.2))(svelte@4.2.19))(@sveltejs/vite-plugin-svelte@3.1.2(svelte@4.2.19)(vite@6.0.3(@types/node@22.10.2)(jiti@1.21.6)(sass-embedded@1.83.0)(tsx@4.19.2)(yaml@2.6.1)))(storybook@8.4.7(prettier@3.4.2))(svelte@4.2.19)(vite@6.0.3(@types/node@22.10.2)(jiti@1.21.6)(sass-embedded@1.83.0)(tsx@4.19.2)(yaml@2.6.1))
       '@storybook/svelte':
         specifier: ^8.4.7
         version: 8.4.7(storybook@8.4.7(prettier@3.4.2))(svelte@4.2.19)
       '@sveltejs/adapter-node':
         specifier: ^5.2.10
-        version: 5.2.10(@sveltejs/kit@2.11.1(@sveltejs/vite-plugin-svelte@3.1.2(svelte@4.2.19)(vite@5.4.11(@types/node@22.10.2)(sass-embedded@1.83.0)))(svelte@4.2.19)(vite@5.4.11(@types/node@22.10.2)(sass-embedded@1.83.0)))
+        version: 5.2.10(@sveltejs/kit@2.11.1(@sveltejs/vite-plugin-svelte@3.1.2(svelte@4.2.19)(vite@6.0.3(@types/node@22.10.2)(jiti@1.21.6)(sass-embedded@1.83.0)(tsx@4.19.2)(yaml@2.6.1)))(svelte@4.2.19)(vite@6.0.3(@types/node@22.10.2)(jiti@1.21.6)(sass-embedded@1.83.0)(tsx@4.19.2)(yaml@2.6.1)))
       '@sveltejs/kit':
         specifier: ^2.11.1
-        version: 2.11.1(@sveltejs/vite-plugin-svelte@3.1.2(svelte@4.2.19)(vite@5.4.11(@types/node@22.10.2)(sass-embedded@1.83.0)))(svelte@4.2.19)(vite@5.4.11(@types/node@22.10.2)(sass-embedded@1.83.0))
+        version: 2.11.1(@sveltejs/vite-plugin-svelte@3.1.2(svelte@4.2.19)(vite@6.0.3(@types/node@22.10.2)(jiti@1.21.6)(sass-embedded@1.83.0)(tsx@4.19.2)(yaml@2.6.1)))(svelte@4.2.19)(vite@6.0.3(@types/node@22.10.2)(jiti@1.21.6)(sass-embedded@1.83.0)(tsx@4.19.2)(yaml@2.6.1))
       '@sveltejs/vite-plugin-svelte':
         specifier: ^3.1.2
-        version: 3.1.2(svelte@4.2.19)(vite@5.4.11(@types/node@22.10.2)(sass-embedded@1.83.0))
+        version: 3.1.2(svelte@4.2.19)(vite@6.0.3(@types/node@22.10.2)(jiti@1.21.6)(sass-embedded@1.83.0)(tsx@4.19.2)(yaml@2.6.1))
       svelte:
         specifier: ^4.2.18
         version: 4.2.19
@@ -4889,21 +4898,6 @@ snapshots:
       storybook: 8.4.7(prettier@3.4.2)
       ts-dedent: 2.2.0
 
-  '@storybook/addon-svelte-csf@4.2.0(@storybook/svelte@8.4.7(storybook@8.4.7(prettier@3.4.2))(svelte@4.2.19))(@sveltejs/vite-plugin-svelte@3.1.2(svelte@4.2.19)(vite@5.4.11(@types/node@22.10.2)(sass-embedded@1.83.0)))(storybook@8.4.7(prettier@3.4.2))(svelte@4.2.19)(vite@5.4.11(@types/node@22.10.2)(sass-embedded@1.83.0))':
-    dependencies:
-      '@babel/runtime': 7.26.0
-      '@storybook/svelte': 8.4.7(storybook@8.4.7(prettier@3.4.2))(svelte@4.2.19)
-      '@storybook/types': 8.4.7(storybook@8.4.7(prettier@3.4.2))
-      dedent: 1.5.3
-      magic-string: 0.30.15
-      svelte: 4.2.19
-    optionalDependencies:
-      '@sveltejs/vite-plugin-svelte': 3.1.2(svelte@4.2.19)(vite@5.4.11(@types/node@22.10.2)(sass-embedded@1.83.0))
-      vite: 5.4.11(@types/node@22.10.2)(sass-embedded@1.83.0)
-    transitivePeerDependencies:
-      - babel-plugin-macros
-      - storybook
-
   '@storybook/addon-svelte-csf@4.2.0(@storybook/svelte@8.4.7(storybook@8.4.7(prettier@3.4.2))(svelte@4.2.19))(@sveltejs/vite-plugin-svelte@3.1.2(svelte@4.2.19)(vite@6.0.3(@types/node@22.10.2)(jiti@1.21.6)(sass-embedded@1.83.0)(tsx@4.19.2)(yaml@2.6.1)))(storybook@8.4.7(prettier@3.4.2))(svelte@4.2.19)(vite@6.0.3(@types/node@22.10.2)(jiti@1.21.6)(sass-embedded@1.83.0)(tsx@4.19.2)(yaml@2.6.1))':
     dependencies:
       '@babel/runtime': 7.26.0
@@ -5077,12 +5071,12 @@ snapshots:
       '@sveltejs/kit': 2.11.1(@sveltejs/vite-plugin-svelte@3.1.2(svelte@4.2.19)(vite@5.4.11(@types/node@22.10.2)(sass-embedded@1.83.0)))(svelte@4.2.19)(vite@5.4.11(@types/node@22.10.2)(sass-embedded@1.83.0))
       import-meta-resolve: 4.1.0
 
-  '@sveltejs/adapter-node@5.2.10(@sveltejs/kit@2.11.1(@sveltejs/vite-plugin-svelte@3.1.2(svelte@4.2.19)(vite@5.4.11(@types/node@22.10.2)(sass-embedded@1.83.0)))(svelte@4.2.19)(vite@5.4.11(@types/node@22.10.2)(sass-embedded@1.83.0)))':
+  '@sveltejs/adapter-node@5.2.10(@sveltejs/kit@2.11.1(@sveltejs/vite-plugin-svelte@3.1.2(svelte@4.2.19)(vite@6.0.3(@types/node@22.10.2)(jiti@1.21.6)(sass-embedded@1.83.0)(tsx@4.19.2)(yaml@2.6.1)))(svelte@4.2.19)(vite@6.0.3(@types/node@22.10.2)(jiti@1.21.6)(sass-embedded@1.83.0)(tsx@4.19.2)(yaml@2.6.1)))':
     dependencies:
       '@rollup/plugin-commonjs': 28.0.1(rollup@4.28.1)
       '@rollup/plugin-json': 6.1.0(rollup@4.28.1)
       '@rollup/plugin-node-resolve': 15.3.0(rollup@4.28.1)
-      '@sveltejs/kit': 2.11.1(@sveltejs/vite-plugin-svelte@3.1.2(svelte@4.2.19)(vite@5.4.11(@types/node@22.10.2)(sass-embedded@1.83.0)))(svelte@4.2.19)(vite@5.4.11(@types/node@22.10.2)(sass-embedded@1.83.0))
+      '@sveltejs/kit': 2.11.1(@sveltejs/vite-plugin-svelte@3.1.2(svelte@4.2.19)(vite@6.0.3(@types/node@22.10.2)(jiti@1.21.6)(sass-embedded@1.83.0)(tsx@4.19.2)(yaml@2.6.1)))(svelte@4.2.19)(vite@6.0.3(@types/node@22.10.2)(jiti@1.21.6)(sass-embedded@1.83.0)(tsx@4.19.2)(yaml@2.6.1))
       rollup: 4.28.1
 
   '@sveltejs/kit@2.11.1(@sveltejs/vite-plugin-svelte@3.1.2(svelte@4.2.19)(vite@5.4.11(@types/node@22.10.2)(sass-embedded@1.83.0)))(svelte@4.2.19)(vite@5.4.11(@types/node@22.10.2)(sass-embedded@1.83.0))':
@@ -5102,6 +5096,24 @@ snapshots:
       svelte: 4.2.19
       tiny-glob: 0.2.9
       vite: 5.4.11(@types/node@22.10.2)(sass-embedded@1.83.0)
+
+  '@sveltejs/kit@2.11.1(@sveltejs/vite-plugin-svelte@3.1.2(svelte@4.2.19)(vite@6.0.3(@types/node@22.10.2)(jiti@1.21.6)(sass-embedded@1.83.0)(tsx@4.19.2)(yaml@2.6.1)))(svelte@4.2.19)(vite@6.0.3(@types/node@22.10.2)(jiti@1.21.6)(sass-embedded@1.83.0)(tsx@4.19.2)(yaml@2.6.1))':
+    dependencies:
+      '@sveltejs/vite-plugin-svelte': 3.1.2(svelte@4.2.19)(vite@6.0.3(@types/node@22.10.2)(jiti@1.21.6)(sass-embedded@1.83.0)(tsx@4.19.2)(yaml@2.6.1))
+      '@types/cookie': 0.6.0
+      cookie: 0.6.0
+      devalue: 5.1.1
+      esm-env: 1.2.1
+      import-meta-resolve: 4.1.0
+      kleur: 4.1.5
+      magic-string: 0.30.15
+      mrmime: 2.0.0
+      sade: 1.8.1
+      set-cookie-parser: 2.7.1
+      sirv: 3.0.0
+      svelte: 4.2.19
+      tiny-glob: 0.2.9
+      vite: 6.0.3(@types/node@22.10.2)(jiti@1.21.6)(sass-embedded@1.83.0)(tsx@4.19.2)(yaml@2.6.1)
 
   '@sveltejs/vite-plugin-svelte-inspector@2.1.0(@sveltejs/vite-plugin-svelte@3.1.2(svelte@4.2.19)(vite@5.4.11(@types/node@22.10.2)(sass-embedded@1.83.0)))(svelte@4.2.19)(vite@5.4.11(@types/node@22.10.2)(sass-embedded@1.83.0))':
     dependencies:

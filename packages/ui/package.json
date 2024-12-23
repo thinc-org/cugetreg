@@ -14,7 +14,8 @@
   },
   "scripts": {
     "lint": "eslint .",
-    "format": "eslint . --fix"
+    "format": "eslint . --fix",
+    "postinstall": "node scripts/patch-sb-csf.js"
   },
   "devDependencies": {
     "@repo/config": "workspace:^",

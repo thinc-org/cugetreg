@@ -3,7 +3,7 @@
 
   import { Button } from './index.js'
 
-  const { Story } = defineMeta({
+  const { Story } = defineMeta<typeof Button>({
     title: 'Atom/Button',
     component: Button,
     tags: ['autodocs'],

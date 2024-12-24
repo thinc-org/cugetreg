@@ -2,7 +2,7 @@
   import { Label, RadioGroup as RadioGroupPrimitive } from 'bits-ui'
   import { Circle } from 'lucide-svelte'
 
-  import { cn } from '../../../utils.js'
+  import { cn } from '@repo/utils'
 
   type $$Props = RadioGroupPrimitive.ItemProps & {
     id: string

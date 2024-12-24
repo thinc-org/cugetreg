@@ -4,7 +4,8 @@
   const bubble = createBubbler()
   import type { HTMLInputAttributes } from 'svelte/elements'
 
-  import { cn } from '../../../utils.js'
+  import { cn } from '@repo/utils'
+
   import type { InputEvents } from './index.js'
 
   type $$Props = HTMLInputAttributes

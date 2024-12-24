@@ -1,7 +1,8 @@
 <script lang="ts">
   import { Check, Dot, Plus } from 'lucide-svelte'
 
-  import { cn } from '../../../utils.js'
+  import { cn } from '@repo/utils'
+
   import { Button } from '../../atom/button/index.js'
   import { DayChip } from '../../atom/day-chip/index.js'
   import { GenedChip } from '../../atom/gened-chip/index.js'

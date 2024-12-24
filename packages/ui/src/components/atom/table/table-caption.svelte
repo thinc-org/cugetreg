@@ -2,7 +2,7 @@
   import type { Snippet } from 'svelte'
   import type { HTMLAttributes } from 'svelte/elements'
 
-  import { cn } from '../../../utils.js'
+  import { cn } from '@repo/utils'
 
   type $$Props = HTMLAttributes<HTMLTableCaptionElement>
 

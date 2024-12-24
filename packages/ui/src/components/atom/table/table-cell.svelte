@@ -5,7 +5,7 @@
   const bubble = createBubbler()
   import type { HTMLTdAttributes } from 'svelte/elements'
 
-  import { cn } from '../../../utils.js'
+  import { cn } from '@repo/utils'
 
   type $$Props = HTMLTdAttributes
 

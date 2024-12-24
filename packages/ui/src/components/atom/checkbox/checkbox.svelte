@@ -2,7 +2,7 @@
   import { Checkbox as CheckboxPrimitive, Label } from 'bits-ui'
   import { Check } from 'lucide-svelte'
 
-  import { cn } from '../../../utils.js'
+  import { cn } from '@repo/utils'
 
   type $$Props = CheckboxPrimitive.Props & {
     label?: string | undefined | null

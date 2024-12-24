@@ -2,7 +2,8 @@
   import { Button as ButtonPrimitive } from 'bits-ui'
   import type { Snippet } from 'svelte'
 
-  import { cn } from '../../../utils.js'
+  import { cn } from '@repo/utils'
+
   import { buttonVariants, type Events, type Props } from './index.js'
 
   type $$Props = Props

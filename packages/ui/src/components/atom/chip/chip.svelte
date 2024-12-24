@@ -2,7 +2,8 @@
   import { X } from 'lucide-svelte'
   import type { Snippet } from 'svelte'
 
-  import { cn } from '../../../utils.js'
+  import { cn } from '@repo/utils'
+
   import { chipVariants } from './index.js'
 
   interface Props {

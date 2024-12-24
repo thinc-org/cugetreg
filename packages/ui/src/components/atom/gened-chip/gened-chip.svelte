@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { cn } from '../../../utils.js'
+  import { cn } from '@repo/utils'
+
   import { Chip } from '../chip/index.js'
   import { chipVariants, type Type } from './index.js'
 

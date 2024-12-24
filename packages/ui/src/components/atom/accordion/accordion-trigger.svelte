@@ -3,7 +3,7 @@
   import { ChevronDown } from 'lucide-svelte'
   import type { Snippet } from 'svelte'
 
-  import { cn } from '../../../utils.js'
+  import { cn } from '@repo/utils'
 
   type $$Props = AccordionPrimitive.TriggerProps
   type $$Events = AccordionPrimitive.TriggerEvents

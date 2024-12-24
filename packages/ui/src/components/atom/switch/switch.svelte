@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Label, Switch as SwitchPrimitive } from 'bits-ui'
 
-  import { cn } from '../../../utils.js'
+  import { cn } from '@repo/utils'
 
   type $$Props = SwitchPrimitive.Props & {
     label?: string | undefined | null

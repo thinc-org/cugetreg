@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Sparkles } from 'lucide-svelte'
 
-  import { cn } from '../../../utils.js'
+  import { cn } from '@repo/utils'
 
   interface Props {
     class?: string | undefined | null

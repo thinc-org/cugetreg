@@ -22,6 +22,9 @@ if (!pkg.main || !pkg.types) {
 const replacePatterns = {
   "utils/identifier-utils'": "utils/identifier-utils.js'",
   "from '@storybook/node-logger'": "from 'storybook/internal/node-logger'",
+  "/replace-argument'": "/replace-argument.js'",
+  "/define-meta'": "/define-meta.js'",
+  "/parser/ast'": "/parser/ast.js'",
 }
 
 // Recursive all files in addonPath that match *.js
@@ -29,19 +32,43 @@ const replacePatterns = {
  * @param {string} file
  */
 async function fixImport(file) {
-  const content = await fs.readFile(file, 'utf8')
+  let content = await fs.readFile(file, 'utf8')
+  let replaced = false
 
   for (const pattern in replacePatterns) {
     if (content.includes(pattern)) {
+      replaced = true
+
       const lengthLimit = 70 - pattern.length
 
       console.log(
         `Fixing pattern "${pattern}" in ${file.length > lengthLimit ? '...' + file.slice(-lengthLimit) : file}`,
       )
-      await fs.writeFile(
-        file,
-        content.replace(pattern, replacePatterns[pattern]),
-      )
+
+      content = content.replaceAll(pattern, replacePatterns[pattern])
+    }
+  }
+
+  if (replaced) {
+    await fs.writeFile(file, content)
+  }
+
+  for (const line of content.split('\n')) {
+    if (line.startsWith('import')) {
+      const match = line.match(/from '(.*)'/)
+
+      if (!match) {
+        continue
+      }
+
+      const importPath = match[1]
+      if (
+        importPath.startsWith('.') &&
+        !(importPath.endsWith('.js') || importPath.endsWith('.svelte'))
+      ) {
+        console.log(`Warn: ${file}`)
+        console.log(`Invalid Import: ${importPath}`)
+      }
     }
   }
 }

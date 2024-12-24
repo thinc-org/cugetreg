@@ -65,11 +65,11 @@
     <div
       class="font-normal text-caption text-neutral-400 flex flex-row items-center"
     >
-      {course.credit} หน่วยกิต <Dot color="#EDEDF1" size="12" /> ที่นั่ง GenEd {course.seat}
-      /
-      {course.maxseat}
-      <Dot color="#EDEDF1" size="12" />
-      {course.review} รีวิว
+      <span>{course.credit} หน่วยกิต</span>
+      <Dot color="#EDEDF1" size="16" />
+      <span>ที่นั่ง GenEd {course.seat} / {course.maxseat}</span>
+      <Dot color="#EDEDF1" size="16" />
+      <span>{course.review} รีวิว</span>
     </div>
     <div class="flex gap-2">
       {#each course.days as day}

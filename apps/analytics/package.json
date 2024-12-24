@@ -9,7 +9,7 @@
     "format": "eslint . --fix"
   },
   "dependencies": {
-    "@cugetreg/database": "workspace:*",
+    "@repo/database": "workspace:*",
     "dotenv-cli": "^8.0.0",
     "drizzle-orm": "^0.38.1",
     "postgres": "^3.4.5",

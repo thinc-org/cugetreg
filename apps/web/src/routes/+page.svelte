@@ -53,3 +53,5 @@
     </Accordion.Content>
   </Accordion.Item>
 </Accordion.Root>
+
+<a href="/dbdemo">Click to go to DB Demo</a>

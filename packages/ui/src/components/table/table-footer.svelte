@@ -1,17 +1,23 @@
 <script lang="ts">
+  import type { Snippet } from 'svelte'
   import type { HTMLAttributes } from 'svelte/elements'
 
   import { cn } from '../../utils'
 
   type $$Props = HTMLAttributes<HTMLTableSectionElement>
 
-  let className: $$Props['class'] = undefined
-  export { className as class }
+  interface Props {
+    class?: $$Props['class']
+    children?: Snippet
+    [key: string]: unknown
+  }
+
+  let { class: className = undefined, children, ...rest }: Props = $props()
 </script>
 
 <tfoot
-  class="{cn('bg-primary text-primary-foreground font-medium', className)}"
-  {...$$restProps}
+  class={cn('bg-primary text-primary-foreground font-medium', className)}
+  {...rest}
 >
-  <slot />
+  {@render children?.()}
 </tfoot>

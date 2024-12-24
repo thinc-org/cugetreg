@@ -1,9 +1,9 @@
-<script context="module" lang="ts">
-  import type { Meta } from '@storybook/svelte'
+<script module lang="ts">
+  import { defineMeta } from '@storybook/addon-svelte-csf'
 
   import * as RadioGroup from './index.js'
 
-  export const meta = {
+  const { Story } = defineMeta({
     title: 'Atom/RadioGroup',
     component: RadioGroup,
     tags: ['autodocs'],
@@ -47,50 +47,54 @@
         action: 'onClick',
       },
     },
-  } satisfies Meta<RadioGroup>
+  })
 </script>
 
-<script lang="ts">
-  import { Story, Template } from '@storybook/addon-svelte-csf'
-</script>
-
-<Template let:args>
+{#snippet template(args)}
   <RadioGroup.Root {...args}>
     <RadioGroup.Item
-      value="{args.itemValue1}"
-      id="{args.itemValue1}"
-      label="{args['item1-label']}"
-      aria-label="{args['aria-label']}"
+      value={args.itemValue1}
+      id={args.itemValue1}
+      label={args['item1-label']}
+      aria-label={args['aria-label']}
     />
     <RadioGroup.Item
-      value="{args.itemValue2}"
-      id="{args.itemValue2}"
-      label="{args['item2-label']}"
-      aria-label="{args['aria-label']}"
+      value={args.itemValue2}
+      id={args.itemValue2}
+      label={args['item2-label']}
+      aria-label={args['aria-label']}
     />
   </RadioGroup.Root>
-</Template>
+{/snippet}
 
 <Story
   name="Default"
-  args="{{
+  args={{
     value: 'option-one',
     itemValue1: 'option-one',
     'item1-label': 'option 1',
     itemValue2: 'option-two',
     'item2-label': 'option 2',
     'aria-label': 'for example of enable radio group',
-  }}"
-/>
+  }}
+>
+  {#snippet children(args)}
+    {@render template(args)}
+  {/snippet}
+</Story>
 
 <Story
   name="Disabled"
-  args="{{
+  args={{
     itemValue1: 'option-one',
     'item1-label': 'option 1',
     itemValue2: 'option-two',
     'item2-label': 'option 2',
     disabled: true,
     'aria-label': 'for example of disabled radio group',
-  }}"
-/>
+  }}
+>
+  {#snippet children(args)}
+    {@render template(args)}
+  {/snippet}
+</Story>

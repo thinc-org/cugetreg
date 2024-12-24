@@ -8,22 +8,30 @@
   import { RecommendedTag } from '../recommended-tag'
   import type { Course } from './index'
 
-  let className: string | undefined | null = undefined
-  export { className as class }
-
-  export let course: Course = {
-    code: '0123101',
-    name: 'PARAGRAPH WRITING',
-    credit: 3,
-    gened: ['HU'],
-    seat: 24,
-    maxseat: 305,
-    review: 14,
-    days: ['MO', 'TU', 'WE'],
+  interface Props {
+    class?: string | undefined | null
+    course?: Course
+    selected?: boolean
+    recommended?: boolean
+    [key: string]: unknown
   }
 
-  export let selected: boolean = false
-  export let recommended: boolean = false
+  let {
+    class: className = undefined,
+    course = {
+      code: '0123101',
+      name: 'PARAGRAPH WRITING',
+      credit: 3,
+      gened: ['HU'],
+      seat: 24,
+      maxseat: 305,
+      review: 14,
+      days: ['MO', 'TU', 'WE'],
+    },
+    selected = $bindable(false),
+    recommended = false,
+    ...rest
+  }: Props = $props()
 
   export const onButtonClick = () => {
     selected = !selected
@@ -31,11 +39,11 @@
 </script>
 
 <div
-  class="{cn(
+  class={cn(
     'flex flex-col w-[334px] h-[164px] md:w-[440px] md:h-[194px] px-4 py-5 md:p-6 gap-3 ring-2 ring-neutral-100 rounded-xl relative',
     className,
-  )}"
-  {...$$restProps}
+  )}
+  {...rest}
 >
   {#if recommended}
     <RecommendedTag class="absolute top-[-9.5px] left-0" />
@@ -49,7 +57,7 @@
     </div>
     <div class="flex gap-1">
       {#each course.gened as gened}
-        <GenedChip type="{gened}" />
+        <GenedChip type={gened} />
       {/each}
     </div>
   </div>
@@ -74,13 +82,14 @@
       variant="outlined"
       color="neutral"
       class="w-36 h-7 md:w-48 md:h-9 text-caption md:text-body2"
-      >เลือกเซคชัน</Button
     >
+      เลือกเซคชัน
+    </Button>
     {#if !selected}
       <Button
         variant="outlined"
         color="primary"
-        on:click="{onButtonClick}"
+        onclick={onButtonClick}
         class="w-36 h-7 md:w-48 md:h-9 text-caption md:text-body2"
         size="sm"
       >
@@ -89,7 +98,7 @@
     {:else}
       <Button
         color="primary"
-        on:click="{onButtonClick}"
+        onclick={onButtonClick}
         class="w-36 h-7 md:w-48 md:h-9 text-caption md:text-body2"
       >
         เลือก <Check size="16" strokeWidth="3" />

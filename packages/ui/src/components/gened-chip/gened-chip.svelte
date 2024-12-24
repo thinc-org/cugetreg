@@ -3,11 +3,21 @@
   import { Chip } from '../chip'
   import { chipVariants, type Type } from './index.js'
 
-  let className: string | undefined | null = undefined
-  export let type: Type
-  export let closable: boolean = false
-  export let onClose: () => void = () => {}
-  export { className as class }
+  interface Props {
+    class?: string | undefined | null
+    type: Type
+    closable?: boolean
+    onClose?: () => void
+    [key: string]: unknown
+  }
+
+  let {
+    class: className = undefined,
+    type,
+    closable = false,
+    onClose = () => {},
+    ...rest
+  }: Props = $props()
 
   const label = {
     SC: 'วิทย์',
@@ -18,10 +28,10 @@
 </script>
 
 <Chip
-  class="{cn(chipVariants({ type, className }))}"
+  class={cn(chipVariants({ type, className }))}
   {closable}
   {onClose}
-  {...$$restProps}
+  {...rest}
 >
   {#if type}
     {label[type]}

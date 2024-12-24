@@ -1,9 +1,9 @@
-<script context="module" lang="ts">
-  import type { Meta } from '@storybook/svelte'
+<script module lang="ts">
+  import { defineMeta } from '@storybook/addon-svelte-csf'
 
   import { DayChip } from './index.js'
 
-  export const meta = {
+  const { Story } = defineMeta<typeof DayChip>({
     title: 'Atom/DayChip',
     component: DayChip,
     tags: ['autodocs'],
@@ -25,45 +25,35 @@
         control: false,
       },
     },
-  } satisfies Meta<DayChip>
+  })
 </script>
-
-<script lang="ts">
-  import { Story, Template } from '@storybook/addon-svelte-csf'
-</script>
-
-<!--👇 We create a “template” of how args map to rendering -->
-
-<Template let:args>
-  <DayChip {...args}>DayChip</DayChip>
-</Template>
 
 <!-- 👇 Each story then reuses that template -->
 
-<Story name="Monday" args="{{ day: 'MO', closable: false }}" />
+<Story name="Monday" args={{ day: 'MO', closable: false }} />
 
-<Story name="Monday Closable" args="{{ day: 'MO', closable: true }}" />
+<Story name="Monday Closable" args={{ day: 'MO', closable: true }} />
 
-<Story name="Tuesday" args="{{ day: 'TU', closable: false }}" />
+<Story name="Tuesday" args={{ day: 'TU', closable: false }} />
 
-<Story name="Tuesday Closable" args="{{ day: 'TU', closable: true }}" />
+<Story name="Tuesday Closable" args={{ day: 'TU', closable: true }} />
 
-<Story name="Wednesday" args="{{ day: 'WE', closable: false }}" />
+<Story name="Wednesday" args={{ day: 'WE', closable: false }} />
 
-<Story name="Wednesday Closable" args="{{ day: 'WE', closable: true }}" />
+<Story name="Wednesday Closable" args={{ day: 'WE', closable: true }} />
 
-<Story name="Thursday" args="{{ day: 'TH', closable: false }}" />
+<Story name="Thursday" args={{ day: 'TH', closable: false }} />
 
-<Story name="Thursday Closable" args="{{ day: 'TH', closable: true }}" />
+<Story name="Thursday Closable" args={{ day: 'TH', closable: true }} />
 
-<Story name="Friday" args="{{ day: 'FR', closable: false }}" />
+<Story name="Friday" args={{ day: 'FR', closable: false }} />
 
-<Story name="Friday Closable" args="{{ day: 'FR', closable: true }}" />
+<Story name="Friday Closable" args={{ day: 'FR', closable: true }} />
 
-<Story name="Saturday" args="{{ day: 'SA', closable: false }}" />
+<Story name="Saturday" args={{ day: 'SA', closable: false }} />
 
-<Story name="Saturday Closable" args="{{ day: 'SA', closable: true }}" />
+<Story name="Saturday Closable" args={{ day: 'SA', closable: true }} />
 
-<Story name="Sunday" args="{{ day: 'SU', closable: false }}" />
+<Story name="Sunday" args={{ day: 'SU', closable: false }} />
 
-<Story name="Sunday Closable" args="{{ day: 'SU', closable: true }}" />
+<Story name="Sunday Closable" args={{ day: 'SU', closable: true }} />

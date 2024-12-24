@@ -1,20 +1,32 @@
 <script lang="ts">
   import { X } from 'lucide-svelte'
+  import type { Snippet } from 'svelte'
 
   import { cn } from '../../utils.js'
   import { chipVariants } from './index.js'
 
-  let className: string | undefined | null = undefined
-  export let closable: boolean = false
-  export let onClose: () => void = () => {}
-  export { className as class }
+  interface Props {
+    class?: string | undefined | null
+    closable?: boolean
+    onClose?: () => void
+    children?: Snippet
+    [key: string]: unknown
+  }
+
+  let {
+    class: className = undefined,
+    closable = false,
+    onClose = () => {},
+    children,
+    ...rest
+  }: Props = $props()
 </script>
 
-<span class="{cn(chipVariants({ className }))}" {...$$restProps}>
-  <slot />
+<span class={cn(chipVariants({ className }))} {...rest}>
+  {@render children?.()}
   {#if closable}
-    <button type="button" on:click="{onClose}">
-      <X class="size-3" strokeWidth="{4}" />
+    <button type="button" onclick={onClose}>
+      <X class="size-3" strokeWidth={4} />
     </button>
   {/if}
 </span>

@@ -1,9 +1,9 @@
-<script context="module" lang="ts">
-  import type { Meta } from '@storybook/svelte'
+<script module lang="ts">
+  import { defineMeta } from '@storybook/addon-svelte-csf'
 
   import { Button } from './index.js'
 
-  export const meta = {
+  const { Story } = defineMeta<typeof Button>({
     title: 'Atom/Button',
     component: Button,
     tags: ['autodocs'],
@@ -36,57 +36,79 @@
         control: false,
       },
     },
-  } satisfies Meta<Button>
+  })
 </script>
-
-<script lang="ts">
-  import { Story, Template } from '@storybook/addon-svelte-csf'
-</script>
-
-<!--👇 We create a “template” of how args map to rendering -->
-
-<Template let:args>
-  <Button {...args}>Button</Button>
-</Template>
 
 <!-- 👇 Each story then reuses that template -->
 
 <Story
   name="Primary Solid"
-  args="{{ variant: 'solid', size: 'default', color: 'primary' }}"
-/>
+  args={{ variant: 'solid', size: 'default', color: 'primary' }}
+>
+  {#snippet children(args)}
+    <Button {...args}>Button</Button>
+  {/snippet}
+</Story>
 
 <Story
   name="Primary Outline"
-  args="{{ variant: 'outlined', size: 'default', color: 'primary' }}"
-/>
+  args={{ variant: 'outlined', size: 'default', color: 'primary' }}
+>
+  {#snippet children(args)}
+    <Button {...args}>Button</Button>
+  {/snippet}
+</Story>
 
 <Story
   name="Neutral Solid"
-  args="{{ variant: 'solid', size: 'default', color: 'neutral' }}"
-/>
+  args={{ variant: 'solid', size: 'default', color: 'neutral' }}
+>
+  {#snippet children(args)}
+    <Button {...args}>Button</Button>
+  {/snippet}
+</Story>
 
 <Story
   name="Neutral Outline"
-  args="{{ variant: 'outlined', size: 'default', color: 'neutral' }}"
-/>
+  args={{ variant: 'outlined', size: 'default', color: 'neutral' }}
+>
+  {#snippet children(args)}
+    <Button {...args}>Button</Button>
+  {/snippet}
+</Story>
 
 <Story
   name="Error Solid"
-  args="{{ variant: 'solid', size: 'default', color: 'error' }}"
-/>
+  args={{ variant: 'solid', size: 'default', color: 'error' }}
+>
+  {#snippet children(args)}
+    <Button {...args}>Button</Button>
+  {/snippet}
+</Story>
 
 <Story
   name="Error Outline"
-  args="{{ variant: 'outlined', size: 'default', color: 'error' }}"
-/>
+  args={{ variant: 'outlined', size: 'default', color: 'error' }}
+>
+  {#snippet children(args)}
+    <Button {...args}>Button</Button>
+  {/snippet}
+</Story>
 
 <Story
   name="Secondary Solid"
-  args="{{ variant: 'solid', size: 'default', color: 'secondary' }}"
-/>
+  args={{ variant: 'solid', size: 'default', color: 'secondary' }}
+>
+  {#snippet children(args)}
+    <Button {...args}>Button</Button>
+  {/snippet}
+</Story>
 
 <Story
   name="Secondary Outline"
-  args="{{ variant: 'outlined', size: 'default', color: 'secondary' }}"
-/>
+  args={{ variant: 'outlined', size: 'default', color: 'secondary' }}
+>
+  {#snippet children(args)}
+    <Button {...args}>Button</Button>
+  {/snippet}
+</Story>

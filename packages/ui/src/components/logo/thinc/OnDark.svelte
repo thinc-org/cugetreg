@@ -1,10 +1,18 @@
+<script lang="ts">
+  interface Props {
+    [key: string]: unknown
+  }
+
+  let { ...rest }: Props = $props()
+</script>
+
 <svg
   width="389"
   height="175"
   viewBox="0 0 389 175"
   fill="none"
   xmlns="http://www.w3.org/2000/svg"
-  {...$$restProps}
+  {...rest}
 >
   <g clip-path="url(#clip0_1410_50608)">
     <g clip-path="url(#clip1_1410_50608)">

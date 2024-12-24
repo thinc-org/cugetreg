@@ -1,9 +1,9 @@
-<script context="module" lang="ts">
-  import type { Meta } from '@storybook/svelte'
+<script module lang="ts">
+  import { defineMeta } from '@storybook/addon-svelte-csf'
 
   import { Checkbox } from './index.js'
 
-  export const meta = {
+  const { Story } = defineMeta<typeof Checkbox>({
     title: 'Atom/Checkbox',
     component: Checkbox,
     tags: ['autodocs'],
@@ -25,55 +25,46 @@
           'attribute defines a string value that labels an interactive element',
       },
     },
-  } satisfies Meta<Checkbox>
+  })
 </script>
-
-<script lang="ts">
-  import { Story, Template } from '@storybook/addon-svelte-csf'
-</script>
-
-<!--👇 We create a “template” of how args map to rendering -->
-
-<Template let:args>
-  <Checkbox {...args} />
-</Template>
 
 <!-- 👇 Each story then reuses that template -->
+
 <Story
   name="Unchecked"
-  args="{{
+  args={{
     checked: false,
     label: 'Accept Terms',
     'aria-label': 'for accept terms',
-  }}"
+  }}
 />
 
 <Story
   name="Checked"
-  args="{{
+  args={{
     checked: true,
     label: 'Accept Terms',
     'aria-label': 'for accept terms',
-  }}"
+  }}
 />
 
 <Story
   name="Unchecked Without Label"
-  args="{{
+  args={{
     checked: false,
     'aria-label': 'for example of unchecked checkbox without label',
-  }}"
+  }}
 />
 
 <Story
   name="Checked Without Label"
-  args="{{
+  args={{
     checked: true,
     'aria-label': 'for example of checkbox without label',
-  }}"
+  }}
 />
 
 <Story
   name="Disabled Checkbox"
-  args="{{ checked: false, label: 'Disabled Checkbox', disabled: true }}"
+  args={{ checked: false, label: 'Disabled Checkbox', disabled: true }}
 />

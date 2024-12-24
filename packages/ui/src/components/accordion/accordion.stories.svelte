@@ -1,9 +1,9 @@
-<script context="module" lang="ts">
-  import type { Meta } from '@storybook/svelte'
+<script module lang="ts">
+  import { defineMeta } from '@storybook/addon-svelte-csf'
 
   import * as Accordion from './index.js'
 
-  export const meta = {
+  const { Story } = defineMeta({
     title: 'Atom/Accordion',
 
     tags: ['autodocs'],
@@ -25,11 +25,7 @@ You can use this component to improve content accessibility and maintain a clean
       },
     },
     argTypes: {},
-  } satisfies Meta<typeof Accordion.Root>
-</script>
-
-<script lang="ts">
-  import { Story } from '@storybook/addon-svelte-csf'
+  })
 </script>
 
 <!-- 👇 Example story using the Accordion component -->

@@ -1,9 +1,17 @@
+<script lang="ts">
+  interface Props {
+    [key: string]: unknown
+  }
+
+  let { ...rest }: Props = $props()
+</script>
+
 <svg
   width="98"
   height="96"
   viewBox="0 0 98 96"
   xmlns="http://www.w3.org/2000/svg"
-  {...$$restProps}
+  {...rest}
 >
   <path
     fill-rule="evenodd"

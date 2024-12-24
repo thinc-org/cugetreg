@@ -8,7 +8,7 @@
   import { Input } from '@repo/ui/input'
   import { RecommendedTag } from '@repo/ui/recommended-tag'
 
-  let counter = 0
+  let counter = $state(0)
 
   const onButtonClick = () => {
     counter++
@@ -17,7 +17,7 @@
 
 <h1>Web</h1>
 
-<Button on:click="{onButtonClick}">Button</Button>
+<Button onclick={onButtonClick}>Button</Button>
 
 {counter}
 
@@ -30,9 +30,9 @@
 <Chip>รหัสผ่าน</Chip>
 <Chip
   closable
-  onClose="{() => {
+  onClose={() => {
     console.log('close')
-  }}"
+  }}
 >
   Closable
 </Chip>
@@ -40,7 +40,7 @@
 <GenedChip type="SC" />
 
 <h1>Testtsetst</h1>
-<CourseCard recommended="{true}" class="mt-4" />
+<CourseCard recommended={true} class="mt-4" />
 
 <h1>RecommendedTag</h1>
 <RecommendedTag />
@@ -53,3 +53,5 @@
     </Accordion.Content>
   </Accordion.Item>
 </Accordion.Root>
+
+<a href="/dbdemo">Click to go to DB Demo</a>

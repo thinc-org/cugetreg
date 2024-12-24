@@ -1,22 +1,31 @@
 <script lang="ts">
+  import type { Snippet } from 'svelte'
+  import { createBubbler } from 'svelte/legacy'
+
+  const bubble = createBubbler()
   import type { HTMLTdAttributes } from 'svelte/elements'
 
   import { cn } from '../../utils'
 
   type $$Props = HTMLTdAttributes
 
-  let className: $$Props['class'] = undefined
-  export { className as class }
+  interface Props {
+    class?: $$Props['class']
+    children?: Snippet
+    [key: string]: unknown
+  }
+
+  let { class: className = undefined, children, ...rest }: Props = $props()
 </script>
 
 <td
-  class="{cn(
+  class={cn(
     'p-4 align-middle data-[rowspan=true]:align-top  [&:has([role=checkbox])]:pr-0 text-on-surface font-normal font-sarabun text-body1',
     className,
-  )}"
-  {...$$restProps}
-  on:click
-  on:keydown
+  )}
+  {...rest}
+  onclick={bubble('click')}
+  onkeydown={bubble('keydown')}
 >
-  <slot />
+  {@render children?.()}
 </td>

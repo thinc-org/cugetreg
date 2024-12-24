@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { getContext } from 'svelte'
+  import { getContext, type Snippet } from 'svelte'
+
   const variant = getContext<'left' | 'center' | 'right' | 'mobile'>(
     'subject-details-variant',
   )
@@ -10,12 +11,17 @@
     mobile: 'rounded-full',
   }
 
-  export let className: string = '' // Additional classes
-  export let text: string = '' // Optional text prop, can be overridden by slot
+  interface Props {
+    className?: string // Additional classes
+    text?: string // Optional text prop, can be overridden by slot
+    children?: Snippet
+  }
+
+  let { className = '', text = '', children }: Props = $props()
 </script>
 
 <div
   class="{`bg-surface-container-lowest px-4 py-[7px] text-primary text-table-header font-medium ${roundedStyle[variant]} ${className}`} "
 >
-  <slot>{text}</slot>
+  {#if children}{@render children()}{:else}{text}{/if}
 </div>

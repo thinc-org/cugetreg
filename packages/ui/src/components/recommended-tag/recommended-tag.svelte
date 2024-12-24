@@ -3,17 +3,20 @@
 
   import { cn } from '../../utils'
 
-  let className: string | undefined | null = undefined
+  interface Props {
+    class?: string | undefined | null
+    [key: string]: unknown
+  }
 
-  export { className as class }
+  let { class: className = undefined, ...rest }: Props = $props()
 </script>
 
 <div
-  class="{cn(
+  class={cn(
     'inline-flex items-center justify-center relative text-neutral-white bg-tangerine-500 py-[2px] px-6 rounded-tl-xl rounded-br-xl z-30',
     className,
-  )}"
-  {...$$restProps}
+  )}
+  {...rest}
 >
   <Sparkles class="mr-2" size="16" />
   แนะนำสำหรับคุณ

@@ -1,9 +1,9 @@
-<script context="module" lang="ts">
-  import type { Meta } from '@storybook/svelte'
+<script module lang="ts">
+  import { defineMeta } from '@storybook/addon-svelte-csf'
 
   import { Chip } from './index.js'
 
-  export const meta = {
+  const { Story } = defineMeta<typeof Chip>({
     title: 'Atom/Chip',
     component: Chip,
     tags: ['autodocs'],
@@ -18,21 +18,19 @@
         control: false,
       },
     },
-  } satisfies Meta<Chip>
+  })
 </script>
-
-<script lang="ts">
-  import { Story, Template } from '@storybook/addon-svelte-csf'
-</script>
-
-<!--👇 We create a “template” of how args map to rendering -->
-
-<Template let:args>
-  <Chip {...args}>Chip</Chip>
-</Template>
 
 <!-- 👇 Each story then reuses that template -->
 
-<Story name="Default" args="{{ closable: false }}" />
+<Story name="Default" args={{ closable: false }}>
+  {#snippet children(args)}
+    <Chip {...args}>Chip</Chip>
+  {/snippet}
+</Story>
 
-<Story name="Default Closable" args="{{ closable: true }}" />
+<Story name="Default Closable" args={{ closable: true }}>
+  {#snippet children(args)}
+    <Chip {...args}>Chip</Chip>
+  {/snippet}
+</Story>

@@ -10,21 +10,31 @@
   }
   type $$Events = RadioGroupPrimitive.ItemEvents
 
-  let className: $$Props['class'] = undefined
-  export let value: $$Props['value']
-  export let id: $$Props['id']
-  export let label: $$Props['label'] = 'label'
-  export { className as class }
+  interface Props {
+    class?: $$Props['class']
+    value: $$Props['value']
+    id: $$Props['id']
+    label?: $$Props['label']
+    [key: string]: unknown
+  }
+
+  let {
+    class: className = undefined,
+    value,
+    id,
+    label = 'label',
+    ...rest
+  }: Props = $props()
 </script>
 
 <div class="flex items-center space-x-2">
   <RadioGroupPrimitive.Item
     {value}
-    class="{cn(
+    class={cn(
       'peer border-on-surface-placeholder data-[state=checked]:border-primary  text-primary ring-offset-background focus-visible:ring-ring aspect-square h-5 w-5 rounded-full border-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
       className,
-    )}"
-    {...$$restProps}
+    )}
+    {...rest}
     on:click
   >
     <div class="flex items-center justify-center">
@@ -34,7 +44,7 @@
     </div>
   </RadioGroupPrimitive.Item>
   <Label.Root
-    for="{id}"
+    for={id}
     class="text-button2 font-normal leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
   >
     {label}

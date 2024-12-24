@@ -19,7 +19,10 @@ if (!pkg.main || !pkg.types) {
 // Patch broken import
 // See: https://github.com/storybookjs/addon-svelte-csf/issues/252
 
-const importToFix = ['utils/identifier-utils']
+const replacePatterns = {
+  "utils/identifier-utils'": "utils/identifier-utils.js'",
+  "from '@storybook/node-logger'": "from 'storybook/internal/node-logger'",
+}
 
 // Recursive all files in addonPath that match *.js
 /**
@@ -28,12 +31,17 @@ const importToFix = ['utils/identifier-utils']
 async function fixImport(file) {
   const content = await fs.readFile(file, 'utf8')
 
-  for (const im of importToFix) {
-    if (content.includes(im + "'")) {
+  for (const pattern in replacePatterns) {
+    if (content.includes(pattern)) {
+      const lengthLimit = 70 - pattern.length
+
       console.log(
-        `Fixing import ${im} in ${file.length > 50 ? '...' + file.slice(-50) : file}`,
+        `Fixing pattern "${pattern}" in ${file.length > lengthLimit ? '...' + file.slice(-lengthLimit) : file}`,
       )
-      await fs.writeFile(file, content.replace(im + "'", im + ".js'"))
+      await fs.writeFile(
+        file,
+        content.replace(pattern, replacePatterns[pattern]),
+      )
     }
   }
 }

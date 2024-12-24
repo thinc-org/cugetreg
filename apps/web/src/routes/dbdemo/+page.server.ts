@@ -1,8 +1,8 @@
 import { eq } from 'drizzle-orm'
 
-import { course } from '@repo/database'
-
 import { db } from '$lib/db'
+
+import { course } from '@repo/database'
 
 import type { PageServerLoad } from './$types.js'
 

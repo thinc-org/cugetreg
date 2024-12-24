@@ -11,10 +11,4 @@ export default defineConfig({
       include: [/@repo-ui/, /node_modules/],
     },
   },
-  server: {
-    port: 5173,
-    fs: {
-      allow: ['../../packages/ui/src'],
-    },
-  },
 })

@@ -4,7 +4,8 @@
   import { DayChip } from '@repo/ui/day-chip'
   import { GenedChip } from '@repo/ui/gened-chip'
   import { Input } from '@repo/ui/input'
-  import { Navbar } from '@repo/ui/navbar'
+  import { Footer } from '@repo/ui/organism/footer'
+  import { Navbar } from '@repo/ui/organism/navbar'
 
   let counter = 0
 
@@ -14,7 +15,6 @@
 </script>
 
 <Navbar />
-<Navbar isLoggedIn="{true}" name="เจษฎ์ผยองดู๋" />
 
 <h1>Web</h1>
 
@@ -37,3 +37,4 @@
 >
 <DayChip day="SA" />
 <GenedChip type="SC" />
+<Footer />

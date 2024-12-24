@@ -1,14 +1,14 @@
 <script lang="ts">
   import { Menu, Moon, Search, Settings2 } from 'lucide-svelte'
 
-  import { cn } from '../../utils'
-  import { Button } from '../button'
-  import { Chip } from '../chip'
-  import { Collapsible } from '../collapsible'
-  import { IconButton } from '../icon-button'
-  import { Input } from '../input'
-  import { CUGetRegDarkFull as CUGetRegLogo } from '../logo/cugetreg'
-  import { GitHubMark } from '../logo/vendor'
+  import { cn } from '../../../utils'
+  import { Button } from '../../button'
+  import { Chip } from '../../chip'
+  import { Collapsible } from '../../collapsible'
+  import { IconButton } from '../../icon-button'
+  import { Input } from '../../input'
+  import { CUGetRegDarkFull as CUGetRegLogo } from '../../logo/cugetreg'
+  import { GitHubMark } from '../../logo/vendor'
 
   export let isLoggedIn: boolean = false
   export let name: string = undefined

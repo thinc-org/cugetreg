@@ -10,4 +10,8 @@
   let { children }: Props = $props()
 </script>
 
+<svelte:head>
+  <title>CU Get Reg (v2 alpha)</title>
+</svelte:head>
+
 {@render children()}

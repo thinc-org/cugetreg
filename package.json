@@ -7,7 +7,8 @@
     "dev": "turbo run dev",
     "lint": "turbo run --continue lint",
     "format": "turbo run --continue format",
-    "storybook:dev": "turbo run --filter=@app/storybook dev"
+    "storybook:dev": "turbo run --filter=@app/storybook dev",
+    "web:dev": "turbo run --filter=@app/web dev"
   },
   "devDependencies": {
     "@changesets/changelog-github": "^0.5.0",

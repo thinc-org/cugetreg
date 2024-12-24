@@ -50,7 +50,7 @@
     {#each navItems as item}
       <a
         class="{cn(
-          'text-neutral-500 text-xl w-28 text-center cursor-pointer hover:text-neutral-800',
+          'text-neutral-500 w-28 text-center cursor-pointer hover:text-neutral-800',
           selected === item && 'text-primary',
         )}"
         on:click="{() => (selected = item)}"
@@ -105,7 +105,7 @@
       'fixed top-0 right-0 flex flex-col justify-between h-screen bg-neutral-white z-50 transform transition-transform duration-300 ease-in-out',
       openSideBar ? 'translate-x-0' : 'translate-x-full',
     )}"
-    aria-hidden="{!openSideBar}"
+    hidden="{!openSideBar}"
   >
     <div class="p-3 flex flex-col gap-5">
       <div class="flex flex-row gap-2">
@@ -145,10 +145,13 @@
         {#each navItems as item}
           <a
             class="{cn(
-              'text-neutral-500 w-28 cursor-pointer hover:text-neutral-800',
+              'text-neutral-500 cursor-pointer hover:text-neutral-800',
               selected === item && 'text-primary',
             )}"
-            on:click="{() => (selected = item)}"
+            on:click="{() => {
+              selected = item
+              toggleSideBar()
+            }}"
             href="/"
           >
             {item}

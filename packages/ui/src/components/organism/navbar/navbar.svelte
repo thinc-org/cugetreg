@@ -83,7 +83,7 @@
     {:else}
       <!-- To be implemented: add real href in Button -->
       <Button href="login" class="w-24 md:w-28"
-        ><p class="text-xs font-light md:text-base">เข้าสู่ระบบ</p></Button
+        ><p class="font-light">เข้าสู่ระบบ</p></Button
       >
     {/if}
     <IconButton variant="ghost" class="md:hidden" on:click="{toggleSideBar}">

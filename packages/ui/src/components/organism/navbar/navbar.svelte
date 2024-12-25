@@ -56,7 +56,7 @@
     {#each navItems as item}
       <a
         class={cn(
-          'text-neutral-500 text-nowrap xl:w-24 text-center cursor-pointer hover:text-neutral-800',
+          'text-neutral-500 text-button1 font-medium text-nowrap xl:w-32 text-center cursor-pointer hover:text-neutral-800',
           selected === item && 'text-primary',
         )}
         onclick={() => (selected = item)}
@@ -119,10 +119,12 @@
           <Menu size="16" strokeWidth="3" color="#353745" />
         </IconButton>
         <div class="w-48 flex flex-col gap-2">
-          <p class="text-on-surface-placeholder text-[12px]">
+          <p class="text-on-surface-placeholder text-caption">
             คุณกำลังจัดตารางเรียน...
           </p>
-          <p class="text-primary leading-4">ปี 2 ภาคฤดูร้อนที่ยาวมาก บลาบลา</p>
+          <p class="text-primary text-subtitle">
+            ปี 2 ภาคฤดูร้อนที่ยาวมาก บลาบลา
+          </p>
           <Chip class="w-32 flex items-center text-nowrap justify-center"
             >นานาชาติ 66 / ฤดูร้อน</Chip
           >
@@ -147,7 +149,7 @@
         {#each navItems as item}
           <a
             class={cn(
-              'text-neutral-500 cursor-pointer hover:text-neutral-800',
+              'text-neutral-500 text-button1 font-medium cursor-pointer hover:text-neutral-800',
               selected === item && 'text-primary',
             )}
             onclick={() => {
@@ -171,8 +173,10 @@
           class="w-10 h-10 rounded-full"
         />
         <div class="flex flex-col">
-          <p class="text-on-surface">{name}</p>
-          <p class="text-on-surface-placeholder">6XXXXXXXXX</p>
+          <p class="text-on-surface text-subtitle font-medium">{name}</p>
+          <p class="text-on-surface-placeholder text-body2 font-medium">
+            6XXXXXXXXX
+          </p>
         </div>
       </div>
     {/if}

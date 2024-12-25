@@ -8,7 +8,7 @@
 
 <Collapsible.Root class="relative">
   <div class="flex flex-row md:gap-2">
-    <p class="text-primary text-lg">{name}</p>
+    <p class="text-primary text-button1 font-medium">{name}</p>
     <Collapsible.Trigger>
       <ChevronDown color="#4A70C6" class="hidden md:block" />
     </Collapsible.Trigger>

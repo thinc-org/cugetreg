@@ -17,7 +17,7 @@
 </script>
 
 <Navbar />
-<Navbar isLoggedIn name="testname testname" />
+<Navbar isLoggedIn name="Testname testname" />
 
 <h1>Web</h1>
 

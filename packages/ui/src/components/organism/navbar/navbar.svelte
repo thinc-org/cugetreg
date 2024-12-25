@@ -55,11 +55,11 @@
     <!-- To be implemented: add page from navItems-->
     {#each navItems as item}
       <a
-        class="{cn(
+        class={cn(
           'text-neutral-500 text-nowrap xl:w-24 text-center cursor-pointer hover:text-neutral-800',
           selected === item && 'text-primary',
-        )}"
-        on:click="{() => (selected = item)}"
+        )}
+        onclick={() => (selected = item)}
         href="/"
       >
         {item}
@@ -80,7 +80,7 @@
     >
     {#if isLoggedIn}
       <!-- To be implemented: Collapsible component -->
-      <Collapsible name="{shortenedName}">
+      <Collapsible name={shortenedName}>
         {#each collapseItems as item}
           <p class="p-2 cursor-pointer">{item}</p>
         {/each}
@@ -91,7 +91,7 @@
         ><p class="font-light">เข้าสู่ระบบ</p></Button
       >
     {/if}
-    <IconButton variant="ghost" class="md:hidden" on:click="{toggleSideBar}">
+    <IconButton variant="ghost" class="md:hidden" onclick={toggleSideBar}>
       <Menu size="16" strokeWidth="3" color="#353745" />
     </IconButton>
   </div>
@@ -102,24 +102,20 @@
       role="button"
       tabindex="0"
       aria-label="Close sidebar"
-      on:click="{toggleSideBar}"
-      on:keydown="{(e) => e.key === 'Enter' && toggleSideBar()}"
+      onclick={toggleSideBar}
+      onkeydown={(e) => e.key === 'Enter' && toggleSideBar()}
     ></div>
   {/if}
   <div
-    class="{cn(
+    class={cn(
       'fixed top-0 right-0 flex flex-col justify-between h-screen bg-neutral-white z-50 transform transition-transform duration-300 ease-in-out',
       openSideBar ? 'translate-x-0' : 'translate-x-full',
-    )}"
-    hidden="{!openSideBar}"
+    )}
+    hidden={!openSideBar}
   >
     <div class="p-3 flex flex-col gap-5">
       <div class="flex flex-row gap-2">
-        <IconButton
-          variant="ghost"
-          class="md:hidden"
-          on:click="{toggleSideBar}"
-        >
+        <IconButton variant="ghost" class="md:hidden" onclick={toggleSideBar}>
           <Menu size="16" strokeWidth="3" color="#353745" />
         </IconButton>
         <div class="w-48 flex flex-col gap-2">
@@ -150,14 +146,14 @@
       <div class="flex flex-col px-3 gap-3">
         {#each navItems as item}
           <a
-            class="{cn(
+            class={cn(
               'text-neutral-500 cursor-pointer hover:text-neutral-800',
               selected === item && 'text-primary',
-            )}"
-            on:click="{() => {
+            )}
+            onclick={() => {
               selected = item
               toggleSideBar()
-            }}"
+            }}
             href="/"
           >
             {item}

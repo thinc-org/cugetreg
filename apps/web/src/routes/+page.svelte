@@ -21,7 +21,7 @@
 
 <h1>Web</h1>
 
-<Button onclick="{onButtonClick}">Button</Button>
+<Button onclick={onButtonClick}>Button</Button>
 
 {counter}
 
@@ -34,9 +34,9 @@
 <Chip>รหัสผ่าน</Chip>
 <Chip
   closable
-  onClose="{() => {
+  onClose={() => {
     console.log('close')
-  }}"
+  }}
 >
   Closable
 </Chip>
@@ -44,7 +44,7 @@
 <GenedChip type="SC" />
 
 <h1>Testtsetst</h1>
-<CourseCard recommended="{true}" class="mt-4" />
+<CourseCard recommended={true} class="mt-4" />
 
 <h1>RecommendedTag</h1>
 <RecommendedTag />

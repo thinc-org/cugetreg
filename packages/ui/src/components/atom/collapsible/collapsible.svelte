@@ -15,7 +15,7 @@
   </div>
   <Collapsible.Content
     class="absolute top-8 right-0 w-28 bg-surface-container border-b-neutral-400 rounded-md"
-    transition="{slide}"
+    transition={slide}
   >
     <slot />
   </Collapsible.Content>

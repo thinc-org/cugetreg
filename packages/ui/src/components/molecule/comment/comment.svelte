@@ -61,12 +61,12 @@
     {content}
   </p>
   <div class="gap-6 flex flex-row text-subtitle font-sans">
-    <div class="flex flex-row font-medium">
-      <ThumbsUp class="mr-2 text-neutral-400" />
+    <div class="flex flex-row font-medium gap-x-2">
+      <ThumbsUp class="text-neutral-400" />
       {likesCount}
     </div>
-    <div class="flex flex-row font-medium">
-      <ThumbsDown class="mr-2 text-neutral-400" />
+    <div class="flex flex-row font-medium gap-x-2">
+      <ThumbsDown class="text-neutral-400" />
       {dislikesCount}
     </div>
   </div>

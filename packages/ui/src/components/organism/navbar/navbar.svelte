@@ -25,33 +25,33 @@
 </script>
 
 <div
-  class=" h-20 py-3 px-5 md:py-3 md:px-10 flex justify-between items-center z-50 border-b-2 border-surface-container-low"
+  class=" h-20 py-3 px-5 md:py-3 lg:px-10 flex justify-between items-center z-50 border-b-2 border-surface-container-low"
 >
-  <div class="flex flex-row gap-6 items-center">
+  <div class="flex flex-row gap-3 items-center">
     <a href="/">
-      <CUGetRegLogo class="w-24 h-8 md:w-32 md:h-10" />
+      <CUGetRegLogo class="w-24 h-8 lg:w-32 lg:h-10" />
     </a>
-    <div class="relative hidden md:flex items-center">
+    <div class="relative hidden w-36 lg:w-full md:flex items-center">
       <Search
-        class="absolute right-4 my-auto"
+        class="absolute right-[18%] lg:right-4 my-auto"
         size="16"
         color="#898EA7"
         strokeWidth="3"
       />
       <Input
         placeholder="ค้นหาวิชา"
-        class="w-56 bg-surface-container-lowest placeholder:text-neutral-400"
+        class="w-11/12 lg:w-52 bg-surface-container-lowest placeholder:text-neutral-400"
       />
     </div>
   </div>
   <div
-    class="hidden absolute left-1/2 transform -translate-x-1/2 md:flex flex-row justify-center items-center gap-4"
+    class="hidden absolute left-1/2 transform -translate-x-1/2 md:flex flex-row justify-center items-center gap-3 lg:gap-4"
   >
     <!-- To be implemented: add page from navItems-->
     {#each navItems as item}
       <a
         class="{cn(
-          'text-neutral-500 w-28 text-center cursor-pointer hover:text-neutral-800',
+          'text-neutral-500 text-nowrap text-center cursor-pointer hover:text-neutral-800',
           selected === item && 'text-primary',
         )}"
         on:click="{() => (selected = item)}"

@@ -1,23 +1,28 @@
 <script lang="ts">
   import { Menu, Moon, Search, Settings2 } from 'lucide-svelte'
 
-  import { cn } from '../../../utils'
-  import { Button } from '../../button'
-  import { Chip } from '../../chip'
-  import { Collapsible } from '../../collapsible'
-  import { IconButton } from '../../icon-button'
-  import { Input } from '../../input'
+  import { cn } from '@repo/utils'
+
+  import { Button } from '../../atom/button'
+  import { Chip } from '../../atom/chip'
+  import { Collapsible } from '../../atom/collapsible'
+  import { IconButton } from '../../atom/icon-button'
+  import { Input } from '../../atom/input'
   import { CUGetRegDarkFull as CUGetRegLogo } from '../../logo/cugetreg'
   import { GitHubMark } from '../../logo/vendor'
 
-  export let isLoggedIn: boolean = false
-  export let name: string = undefined
+  interface Props {
+    isLoggedIn?: boolean
+    name?: string
+  }
+
+  let { isLoggedIn = false, name = undefined }: Props = $props()
 
   let shortenedName = `${name?.split(' ')[0]} ${name?.split(' ')[1]?.charAt(0)}.`
   let navItems = ['ค้นหาวิชา', 'จัดตารางเรียน', 'เกี่ยวกับ']
-  let selected = 'ค้นหาวิชา'
+  let selected = $state('ค้นหาวิชา')
   let collapseItems = ['TEST1', 'TEST2', 'TEST3']
-  let openSideBar = false
+  let openSideBar = $state(false)
 
   const toggleSideBar = () => {
     openSideBar = !openSideBar
@@ -33,14 +38,14 @@
     </a>
     <div class="relative hidden w-36 lg:w-full md:flex items-center">
       <Search
-        class="absolute right-[18%] lg:right-4 my-auto"
+        class="absolute right-[15%] my-auto"
         size="16"
         color="#898EA7"
         strokeWidth="3"
       />
       <Input
         placeholder="ค้นหาวิชา"
-        class="w-11/12 lg:w-52 bg-surface-container-lowest placeholder:text-neutral-400"
+        class="w-11/12 xl:w-52 bg-surface-container-lowest placeholder:text-neutral-400"
       />
     </div>
   </div>
@@ -51,7 +56,7 @@
     {#each navItems as item}
       <a
         class="{cn(
-          'text-neutral-500 text-nowrap text-center cursor-pointer hover:text-neutral-800',
+          'text-neutral-500 text-nowrap xl:w-24 text-center cursor-pointer hover:text-neutral-800',
           selected === item && 'text-primary',
         )}"
         on:click="{() => (selected = item)}"

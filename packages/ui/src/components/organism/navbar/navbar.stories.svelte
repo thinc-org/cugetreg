@@ -1,9 +1,9 @@
-<script context="module" lang="ts">
-  import type { Meta } from '@storybook/svelte'
+<script module lang="ts">
+  import { defineMeta } from '@storybook/addon-svelte-csf'
 
   import { Navbar } from './index.js'
 
-  export const meta = {
+  const { Story } = defineMeta<Navbar>({
     title: 'Organism/Navbar',
     component: Navbar,
     tags: ['autodocs'],
@@ -15,16 +15,8 @@
         control: 'text',
       },
     },
-  } satisfies Meta<Navbar>
+  })
 </script>
-
-<script lang="ts">
-  import { Story, Template } from '@storybook/addon-svelte-csf'
-</script>
-
-<Template let:args>
-  <Navbar {...args} />
-</Template>
 
 <Story
   name="Desktop"
@@ -32,14 +24,14 @@
 />
 
 <Story
-  name="Mobile"
-  parameters="{{ viewport: { defaultViewport: 'mobile2' } }}"
-/>
-
-<Story
   name="Desktop & Logged In"
   parameters="{{ viewport: { defaultViewport: 'tablet' } }}"
   args="{{ isLoggedIn: true, name: 'testname testname' }}"
+/>
+
+<Story
+  name="Mobile"
+  parameters="{{ viewport: { defaultViewport: 'mobile2' } }}"
 />
 
 <Story

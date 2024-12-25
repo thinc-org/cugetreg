@@ -1,1 +1,7 @@
-export { default as Navbar } from './navbar.svelte'
+import Root from './navbar.svelte'
+
+export {
+  //
+  Root as Navbar,
+  Root,
+}

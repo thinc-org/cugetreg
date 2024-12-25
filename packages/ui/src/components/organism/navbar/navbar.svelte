@@ -108,7 +108,7 @@
   {/if}
   <div
     class={cn(
-      'fixed top-0 right-0 flex flex-col justify-between h-screen bg-neutral-white z-50 transform transition-transform duration-300 ease-in-out',
+      'fixed top-0 right-0 flex flex-col justify-between h-screen bg-surface z-50 transform transition-transform duration-300 ease-in-out',
       openSideBar ? 'translate-x-0' : 'translate-x-full',
     )}
     hidden={!openSideBar}
@@ -123,7 +123,7 @@
             คุณกำลังจัดตารางเรียน...
           </p>
           <p class="text-primary leading-4">ปี 2 ภาคฤดูร้อนที่ยาวมาก บลาบลา</p>
-          <Chip class="w-32 flex items-center justify-center"
+          <Chip class="w-32 flex items-center text-nowrap justify-center"
             >นานาชาติ 66 / ฤดูร้อน</Chip
           >
         </div>

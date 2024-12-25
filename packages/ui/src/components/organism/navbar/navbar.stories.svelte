@@ -20,22 +20,22 @@
 
 <Story
   name="Desktop"
-  parameters="{{ viewport: { defaultViewport: 'tablet' } }}"
+  parameters={{ viewport: { defaultViewport: 'tablet' } }}
 />
 
 <Story
   name="Desktop & Logged In"
-  parameters="{{ viewport: { defaultViewport: 'tablet' } }}"
-  args="{{ isLoggedIn: true, name: 'testname testname' }}"
+  parameters={{ viewport: { defaultViewport: 'tablet' } }}
+  args={{ isLoggedIn: true, name: 'testname testname' }}
 />
 
 <Story
   name="Mobile"
-  parameters="{{ viewport: { defaultViewport: 'mobile2' } }}"
+  parameters={{ viewport: { defaultViewport: 'mobile2' } }}
 />
 
 <Story
   name="Mobile & Loggin In"
-  parameters="{{ viewport: { defaultViewport: 'mobile2' } }}"
-  args="{{ isLoggedIn: true, name: 'testname testname' }}"
+  parameters={{ viewport: { defaultViewport: 'mobile2' } }}
+  args={{ isLoggedIn: true, name: 'testname testname' }}
 />

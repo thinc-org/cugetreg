@@ -13,6 +13,8 @@
   export let isLoggedIn: boolean = false
   export let name: string = undefined
 
+  let shortenedName =
+    name?.split(' ')[0] + ' ' + name?.split(' ')[1]?.charAt(0) + '.'
   let navItems = ['ค้นหาวิชา', 'จัดตารางเรียน', 'เกี่ยวกับ']
   let selected = 'ค้นหาวิชา'
   let collapseItems = ['TEST1', 'TEST2', 'TEST3']
@@ -74,7 +76,7 @@
     >
     {#if isLoggedIn}
       <!-- To be implemented: Collapsible component -->
-      <Collapsible {name}>
+      <Collapsible name="{shortenedName}">
         {#each collapseItems as item}
           <p class="p-2 cursor-pointer">{item}</p>
         {/each}

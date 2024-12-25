@@ -39,11 +39,11 @@
 <Story
   name="Desktop & Logged In"
   parameters="{{ viewport: { defaultViewport: 'tablet' } }}"
-  args="{{ isLoggedIn: true, name: 'test name' }}"
+  args="{{ isLoggedIn: true, name: 'testname testname' }}"
 />
 
 <Story
   name="Mobile & Loggin In"
   parameters="{{ viewport: { defaultViewport: 'mobile2' } }}"
-  args="{{ isLoggedIn: true, name: 'test name' }}"
+  args="{{ isLoggedIn: true, name: 'testname testname' }}"
 />

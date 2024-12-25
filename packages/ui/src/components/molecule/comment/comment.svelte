@@ -16,21 +16,20 @@
 </script>
 
 <div
-  class="w-[968px] h-[444px] border border-surface-container py-10 px-12 box-border rounded-xl flex flex-col"
+  class="w-full h-auto border border-surface-container py-10 px-12 box-border rounded-xl flex flex-col gap-y-8"
 >
-  <div class="flex flex-row">
-    <div class="mr-4 font-bold text-h3 text-primary">
+  <div class="flex flex-row gap-x-6">
+    <div class="font-bold text-h3 text-primary">
       {#if !hasHalfStar}
         <span>{rating}.0</span>
-      {/if}
-      {#if hasHalfStar}
+      {:else}
         <span>{rating}</span>
       {/if}
     </div>
-    <div class="flex flex-row mr-4 text-h3 text-primary gap-1.5">
+    <div class="flex flex-row text-h3 text-primary gap-1.5">
       <!-- Render filled stars -->
       {#each Array(filledStars) as _, i}
-        <Star fill="currentColor" stroke="none" />
+        <Star fill="currentColor" />
       {/each}
 
       <!-- Optionally render a half star (if applicable) -->
@@ -56,11 +55,11 @@
       {semester}
     </div>
   </div>
-  <div
-    class="w-[872px] h-[252px] self-center mt-6 text-body1 font-sarabun font-regular"
+  <p
+    class="w-full h-auto self-center text-body1 font-sarabun font-regular text-on-surface"
   >
     {content}
-  </div>
+  </p>
   <div class="gap-6 flex flex-row text-subtitle font-sans">
     <div class="flex flex-row font-medium">
       <ThumbsUp class="mr-2 text-neutral-400" />

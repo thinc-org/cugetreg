@@ -1,7 +1,8 @@
-import { user } from '@cugetreg/database'
 import { count, like } from 'drizzle-orm'
 import { drizzle } from 'drizzle-orm/postgres-js'
 import postgres from 'postgres'
+
+import { user } from '@repo/database'
 
 import { emailYear, faculty } from './constants.js'
 

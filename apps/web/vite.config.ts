@@ -12,9 +12,12 @@ export default defineConfig({
     },
   },
   server: {
-    port: 5173,
+    port: 5343,
     fs: {
       allow: ['../../packages/ui/src'],
     },
+  },
+  preview: {
+    port: 4343,
   },
 })

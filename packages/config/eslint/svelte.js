@@ -6,6 +6,7 @@ import svelteParser from 'svelte-eslint-parser'
 import tseslint from 'typescript-eslint'
 
 import base from './base.js'
+
 export default tseslint.config(
   ...base,
   ...eslintPluginSvelte.configs['flat/recommended'],

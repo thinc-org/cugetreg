@@ -32,7 +32,7 @@
 <div
   class=" h-20 py-3 px-5 md:py-3 lg:px-10 flex justify-between items-center z-50 border-b-2 border-surface-container-low"
 >
-  <div class="flex flex-row gap-3 items-center">
+  <div class="flex flex-row gap-3 items-center xl:gap-6">
     <a href="/">
       <CUGetRegLogo class="w-24 h-8 lg:w-32 lg:h-10" />
     </a>
@@ -88,7 +88,7 @@
     {:else}
       <!-- To be implemented: add real href in Button -->
       <Button href="login" class="w-24 md:w-28"
-        ><p class="font-light">เข้าสู่ระบบ</p></Button
+        ><p class="font-medium text-button2">เข้าสู่ระบบ</p></Button
       >
     {/if}
     <IconButton variant="ghost" class="md:hidden" onclick={toggleSideBar}>

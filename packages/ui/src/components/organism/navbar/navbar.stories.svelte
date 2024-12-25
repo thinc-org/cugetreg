@@ -3,7 +3,7 @@
 
   import { Navbar } from './index.js'
 
-  const { Story } = defineMeta<Navbar>({
+  const { Story } = defineMeta<typeof Navbar>({
     title: 'Organism/Navbar',
     component: Navbar,
     tags: ['autodocs'],
@@ -26,7 +26,7 @@
 <Story
   name="Desktop & Logged In"
   parameters={{ viewport: { defaultViewport: 'tablet' } }}
-  args={{ isLoggedIn: true, name: 'testname testname' }}
+  args={{ isLoggedIn: true, name: 'Testname testname' }}
 />
 
 <Story
@@ -37,5 +37,5 @@
 <Story
   name="Mobile & Loggin In"
   parameters={{ viewport: { defaultViewport: 'mobile2' } }}
-  args={{ isLoggedIn: true, name: 'testname testname' }}
+  args={{ isLoggedIn: true, name: 'Testname testname' }}
 />

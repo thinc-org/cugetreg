@@ -46,7 +46,7 @@
       {/if}
 
       <!-- Render unfilled stars -->
-      {#each Array(emptyStars) as _, i}
+      {#each Array(emptyStars) as _, __}
         <Star />
       {/each}
     </div>

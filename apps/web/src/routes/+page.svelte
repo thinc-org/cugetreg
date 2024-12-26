@@ -7,6 +7,7 @@
   import { Input } from '@repo/ui/atom/input'
   import { RecommendedTag } from '@repo/ui/atom/recommended-tag'
   import { CourseCard } from '@repo/ui/molecule/course-card'
+  import { Navbar } from '@repo/ui/organism/navbar'
 
   let counter = $state(0)
 
@@ -14,6 +15,9 @@
     counter++
   }
 </script>
+
+<Navbar />
+<Navbar isLoggedIn name="Testname testname" />
 
 <h1>Web</h1>
 
@@ -40,7 +44,20 @@
 <GenedChip type="SC" />
 
 <h1>Testtsetst</h1>
-<CourseCard recommended={true} class="mt-4" />
+<CourseCard
+  recommended={true}
+  class="mt-4"
+  course={{
+    code: '0123101',
+    name: 'PARAGRAPH WRITING',
+    credit: 3,
+    gened: ['HU'],
+    seat: 24,
+    maxseat: 305,
+    review: 14,
+    days: ['MO', 'TU', 'WE'],
+  }}
+/>
 
 <h1>RecommendedTag</h1>
 <RecommendedTag />

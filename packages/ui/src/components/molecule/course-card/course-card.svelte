@@ -7,19 +7,11 @@
   import { DayChip } from '../../atom/day-chip/index.js'
   import { GenedChip } from '../../atom/gened-chip/index.js'
   import { RecommendedTag } from '../../atom/recommended-tag/index.js'
+  import type { Course } from './index.js'
 
   interface Props {
     class?: string | undefined | null
-    course?: {
-      code: string
-      name: string
-      credit: number
-      gened: ('HU' | 'SC' | 'SO' | 'IN')[]
-      seat: number
-      maxseat: number
-      review: number
-      days: ('MO' | 'TU' | 'WE' | 'TH' | 'FR' | 'SA' | 'SU')[]
-    }
+    course?: Course
     selected?: boolean
     recommended?: boolean
     [key: string]: unknown
@@ -27,16 +19,7 @@
 
   let {
     class: className = undefined,
-    course = {
-      code: '0123101',
-      name: 'PARAGRAPH WRITING',
-      credit: 3,
-      gened: ['HU'],
-      seat: 24,
-      maxseat: 305,
-      review: 14,
-      days: ['MO', 'TU', 'WE'],
-    },
+    course,
     selected = $bindable(false),
     recommended = false,
     ...rest
@@ -49,7 +32,7 @@
 
 <div
   class={cn(
-    'flex flex-col w-[334px] h-[170px] lg:w-[440px] lg:h-[200px] ring-2 ring-neutral-100 rounded-xl py-5 px-4 lg:p-6 justify-between relative',
+    'flex flex-col w-[334px] h-[164px] md:w-[440px] md:h-[194px] px-4 py-5 md:p-6 gap-3 ring-2 ring-neutral-100 rounded-xl relative',
     className,
   )}
   {...rest}
@@ -60,7 +43,9 @@
   <div class="flex flex-row justify-between items-center">
     <div class="flex flex-col">
       <div class="font-medium text-caption">{course.code}</div>
-      <div class="font-medium text-subtitle">{course.name}</div>
+      <div class="font-medium sm:text-body2 md:text-body1">
+        {course.name}
+      </div>
     </div>
     <div class="flex gap-1">
       {#each course.gened as gened}
@@ -72,11 +57,11 @@
     <div
       class="font-normal text-caption text-neutral-400 flex flex-row items-center"
     >
-      {course.credit} หน่วยกิต <Dot color="#EDEDF1" /> ที่นั่ง GenEd {course.seat}
-      /
-      {course.maxseat}
-      <Dot color="#EDEDF1" />
-      {course.review} รีวิว
+      <span>{course.credit} หน่วยกิต</span>
+      <Dot color="#EDEDF1" size="16" />
+      <span>ที่นั่ง GenEd {course.seat} / {course.maxseat}</span>
+      <Dot color="#EDEDF1" size="16" />
+      <span>{course.review} รีวิว</span>
     </div>
     <div class="flex gap-2">
       {#each course.days as day}
@@ -85,20 +70,29 @@
     </div>
   </div>
   <div class="flex flex-row justify-between items-center">
-    <Button variant="outlined" size="lg" color="neutral" class="w-36 lg:w-48"
-      >เลือกเซคชัน</Button
+    <Button
+      variant="outlined"
+      color="neutral"
+      class="w-36 h-7 md:w-48 md:h-9 text-caption md:text-body2"
     >
+      เลือกเซคชัน
+    </Button>
     {#if !selected}
       <Button
         variant="outlined"
         color="primary"
         onclick={onButtonClick}
-        class="w-36 lg:w-48"
+        class="w-36 h-7 md:w-48 md:h-9 text-caption md:text-body2"
+        size="sm"
       >
         เลือก <Plus size="16" strokeWidth="3" />
       </Button>
     {:else}
-      <Button color="primary" onclick={onButtonClick} class="w-36 lg:w-48">
+      <Button
+        color="primary"
+        onclick={onButtonClick}
+        class="w-36 h-7 md:w-48 md:h-9 text-caption md:text-body2"
+      >
         เลือก <Check size="16" strokeWidth="3" />
       </Button>
     {/if}

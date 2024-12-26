@@ -40,7 +40,20 @@
 <GenedChip type="SC" />
 
 <h1>Testtsetst</h1>
-<CourseCard recommended={true} class="mt-4" />
+<CourseCard
+  recommended={true}
+  class="mt-4"
+  course={{
+    code: '0123101',
+    name: 'PARAGRAPH WRITING',
+    credit: 3,
+    gened: ['HU'],
+    seat: 24,
+    maxseat: 305,
+    review: 14,
+    days: ['MO', 'TU', 'WE'],
+  }}
+/>
 
 <h1>RecommendedTag</h1>
 <RecommendedTag />

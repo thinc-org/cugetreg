@@ -19,16 +19,7 @@
 
   let {
     class: className = undefined,
-    course = {
-      code: '0123101',
-      name: 'PARAGRAPH WRITING',
-      credit: 3,
-      gened: ['HU'],
-      seat: 24,
-      maxseat: 305,
-      review: 14,
-      days: ['MO', 'TU', 'WE'],
-    },
+    course,
     selected = $bindable(false),
     recommended = false,
     ...rest

@@ -16,7 +16,8 @@
 </script>
 
 <div
-  class="w-full h-auto border border-surface-container py-10 px-12 box-border rounded-xl flex flex-col gap-y-8"
+  class="w-full h-auto border border-surface-container px-6 py-5 lg:py-10 lg:px-12 box-border rounded-xl flex flex-col gap-y-4
+  lg:gap-y-8"
 >
   <div class="flex flex-row gap-x-6">
     <div class="font-bold text-h3 text-primary">

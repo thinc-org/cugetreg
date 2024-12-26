@@ -7,6 +7,7 @@
   import { Input } from '@repo/ui/atom/input'
   import { RecommendedTag } from '@repo/ui/atom/recommended-tag'
   import { CourseCard } from '@repo/ui/molecule/course-card'
+  import { Navbar } from '@repo/ui/organism/navbar'
 
   let counter = $state(0)
 
@@ -14,6 +15,9 @@
     counter++
   }
 </script>
+
+<Navbar />
+<Navbar isLoggedIn name="Testname testname" />
 
 <h1>Web</h1>
 

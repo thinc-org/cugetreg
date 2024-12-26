@@ -16,8 +16,8 @@
 </script>
 
 <div
-  class="w-full h-auto border border-surface-container px-6 py-5 lg:py-10 lg:px-12 box-border rounded-xl flex flex-col gap-y-4
-  lg:gap-y-8"
+  class="w-[335px] h-[320px] lg:w-full lg:h-auto border border-surface-container px-6 py-5 lg:py-10 lg:px-12 box-border rounded-xl flex flex-col gap-y-4
+  lg:gap-y-8 overflow-hidden"
 >
   <div class="flex flex-row gap-x-6">
     <div class="font-bold text-h3 text-primary">
@@ -57,7 +57,7 @@
     </div>
   </div>
   <p
-    class="w-full h-auto self-center text-body1 font-sarabun font-regular text-on-surface"
+    class="w-full h-auto self-center text-body1 font-sarabun font-regular text-on-surface overflow-hidden line-clamp-6 lg:line-clamp-none"
   >
     {content}
   </p>

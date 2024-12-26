@@ -1,7 +1,5 @@
 <script>
-  import { ThumbsUp } from 'lucide-svelte'
-  import { ThumbsDown } from 'lucide-svelte'
-  import { Star } from 'lucide-svelte'
+  import { ThumbsUp, ThumbsDown, Star } from 'lucide-svelte'
 
   export let content
   export let semester
@@ -16,7 +14,7 @@
 </script>
 
 <div
-  class="w-[335px] h-[320px] lg:w-full lg:h-auto border border-surface-container px-6 py-5 lg:py-10 lg:px-12 box-border rounded-xl flex flex-col gap-y-4
+  class="h-[320px] w-full lg:h-auto border border-surface-container px-6 py-5 lg:py-10 lg:px-12 box-border rounded-xl flex flex-col gap-y-4
   lg:gap-y-8 overflow-hidden"
 >
   <div class="flex flex-row gap-x-6">

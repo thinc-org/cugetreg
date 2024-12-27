@@ -4,7 +4,7 @@
   import * as RadioGroup from './index.js'
 
   const { Story } = defineMeta({
-    title: 'Atom/RadioGroup',
+    title: 'Atom/Radio Group',
     component: RadioGroup,
     tags: ['autodocs'],
     argTypes: {

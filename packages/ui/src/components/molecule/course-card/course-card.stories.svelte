@@ -4,7 +4,7 @@
   import { CourseCard } from './index.js'
 
   const { Story } = defineMeta<typeof CourseCard>({
-    title: 'Molecule/CourseCard',
+    title: 'Molecule/Course Card',
     component: CourseCard,
     tags: ['autodocs'],
     argTypes: {

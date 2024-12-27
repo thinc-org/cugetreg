@@ -16,7 +16,6 @@
   }
 </script>
 
-<Navbar />
 <Navbar isLoggedIn name="Testname testname" />
 
 <h1>Web</h1>

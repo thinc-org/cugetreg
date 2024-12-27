@@ -16,7 +16,8 @@
   },
   "dependencies": {
     "@repo/database": "workspace:*",
-    "@repo/ui": "workspace:*"
+    "@repo/ui": "workspace:*",
+    "@repo/utils": "workspace:*"
   },
   "devDependencies": {
     "@playwright/test": "^1.49.1",

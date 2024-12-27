@@ -127,6 +127,9 @@ importers:
       '@repo/ui':
         specifier: workspace:*
         version: link:../../packages/ui
+      '@repo/utils':
+        specifier: workspace:*
+        version: link:../../packages/utils
     devDependencies:
       '@playwright/test':
         specifier: ^1.49.1

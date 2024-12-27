@@ -3,6 +3,8 @@
 
   import type { Snippet } from 'svelte'
 
+  import { Navbar } from '@repo/ui/organism/navbar'
+
   interface Props {
     children: Snippet
   }
@@ -14,4 +16,5 @@
   <title>CU Get Reg (v2 alpha)</title>
 </svelte:head>
 
+<Navbar />
 {@render children()}

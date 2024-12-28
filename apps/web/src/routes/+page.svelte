@@ -72,6 +72,12 @@
   </Accordion.Item>
 </Accordion.Root>
 
-<UserDialog />
+<div class="pl-4">
+  <UserDialog
+    imageUrl="https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg"
+    name="Testname Testname"
+    id="6XXXXXXXXX"
+  />
+</div>
 
 <a href="/dbdemo">Click to go to DB Demo</a>

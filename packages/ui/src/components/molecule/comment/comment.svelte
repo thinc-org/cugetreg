@@ -3,6 +3,7 @@
   import { ThumbsUp, ThumbsDown } from 'lucide-svelte'
 
   let { content, semester, rating, likesCount, dislikesCount } = $props()
+  let hasHalfStar = $derived(rating % 1 !== 0) // Determine if there's a half star
   let isExpanded = $state(false)
 </script>
 

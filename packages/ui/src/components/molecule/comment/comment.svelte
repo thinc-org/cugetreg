@@ -1,6 +1,6 @@
 <script>
-  import RatingStar from '$lib/components/atom/rating-star/rating-star.svelte'
-  import { ThumbsUp, ThumbsDown, Star } from 'lucide-svelte'
+  import { RatingStar } from '../../atom/rating-star'
+  import { ThumbsUp, ThumbsDown } from 'lucide-svelte'
 
   let { content, semester, rating, likesCount, dislikesCount } = $props()
   let isExpanded = $state(false)

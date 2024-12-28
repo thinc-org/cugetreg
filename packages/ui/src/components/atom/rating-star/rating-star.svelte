@@ -1,6 +1,6 @@
 <script>
   import { Star } from 'lucide-svelte'
-  let rating = $props()
+  let { rating } = $props()
   // Calculate the number of filled and unfilled stars
   const totalStars = 5
   let filledStars = $derived(Math.floor(rating)) // Number of fully filled stars

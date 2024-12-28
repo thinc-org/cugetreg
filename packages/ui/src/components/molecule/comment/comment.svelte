@@ -1,4 +1,5 @@
 <script>
+  import RatingStar from '$lib/components/atom/rating-star/rating-star.svelte'
   import { ThumbsUp, ThumbsDown, Star } from 'lucide-svelte'
 
   let { content, semester, rating, likesCount, dislikesCount } = $props()
@@ -18,31 +19,9 @@
         <span>{rating}</span>
       {/if}
     </div>
-    <div class="flex flex-row text-h3 text-primary gap-1.5">
-      <!-- Render filled stars -->
-      {#each Array(filledStars) as _, i}
-        <Star fill="currentColor" />
-      {/each}
 
-      <!-- Optionally render a half star (if applicable) -->
-      {#if hasHalfStar}
-        <div class="flex gap-0">
-          <div class="relative inline-block w-6 h-6 overflow-hidden max-w-3">
-            <Star fill="currentColor" />
-          </div>
-          <div
-            class="relative inline-block w-6 h-6 overflow-hidden max-w-3 transform scale-x-[-1]"
-          >
-            <Star />
-          </div>
-        </div>
-      {/if}
+    <RatingStar {rating} />
 
-      <!-- Render unfilled stars -->
-      {#each Array(emptyStars) as _, __}
-        <Star />
-      {/each}
-    </div>
     <div class="text-subtitle font-sans font-medium">
       {semester}
     </div>

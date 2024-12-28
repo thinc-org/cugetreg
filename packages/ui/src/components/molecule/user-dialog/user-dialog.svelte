@@ -1,11 +1,30 @@
-<script>
+<script lang="ts">
   import { DoorOpen, Settings } from 'lucide-svelte'
 
-  export let imageUrl = undefined
-  export let name = undefined
-  export let id = undefined
+  interface Props {
+    imageUrl: string
+    name: string
+    id: string
+  }
+
+  let {
+    imageUrl = undefined,
+    name = undefined,
+    id = undefined,
+  }: Props = $props()
 
   let shortenedName = `${name?.split(' ')[0]} ${name?.split(' ')[1]?.charAt(0)}.`
+
+  const items = [
+    {
+      icon: Settings,
+      name: 'ตั้งค่า',
+    },
+    {
+      icon: DoorOpen,
+      name: 'ออกจากระบบ',
+    },
+  ]
 </script>
 
 <div class="w-60 rounded-lg border-2 border-[#EDEDF1]">

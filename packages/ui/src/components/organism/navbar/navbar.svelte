@@ -14,9 +14,16 @@
   interface Props {
     isLoggedIn?: boolean
     name?: string
+    imageUrl?: string
+    id?: string
   }
 
-  let { isLoggedIn = false, name = undefined }: Props = $props()
+  let {
+    isLoggedIn = false,
+    name = undefined,
+    imageUrl = undefined,
+    id = undefined,
+  }: Props = $props()
 
   let shortenedName = `${name?.split(' ')[0]} ${name?.split(' ')[1]?.charAt(0)}.`
   let navItems = ['ค้นหาวิชา', 'จัดตารางเรียน', 'เกี่ยวกับ']
@@ -167,15 +174,11 @@
       <div
         class="flex flex-row gap-2 p-3 items-center border-t-2 border-surface-container-low"
       >
-        <img
-          src="https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg"
-          alt="profile pic"
-          class="w-10 h-10 rounded-full"
-        />
+        <img src={imageUrl} alt="profile pic" class="w-10 h-10 rounded-full" />
         <div class="flex flex-col">
           <p class="text-on-surface text-subtitle font-medium">{name}</p>
           <p class="text-on-surface-placeholder text-body2 font-medium">
-            6XXXXXXXXX
+            {id}
           </p>
         </div>
       </div>

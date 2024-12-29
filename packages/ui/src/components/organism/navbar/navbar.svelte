@@ -37,22 +37,22 @@
 </script>
 
 <div
-  class=" h-20 py-3 px-5 md:py-3 lg:px-10 flex justify-between items-center z-50 border-b-2 border-surface-container-low"
+  class=" h-20 p-3 md:py-3 lg:px-10 flex justify-between items-center z-50 border-b-2 border-surface-container-low"
 >
-  <div class="flex flex-row gap-3 items-center xl:gap-6">
+  <div class="flex flex-row gap-3 items-center xl:gap-6 grow">
     <a href="/">
       <CUGetRegLogo class="w-24 h-8 lg:w-32 lg:h-10" />
     </a>
-    <div class="relative hidden w-36 lg:w-full md:flex items-center">
+    <div class="relative hidden w-1/3 md:flex items-center">
       <Search
-        class="absolute right-[15%] my-auto"
+        class="absolute left-[60%] my-auto"
         size="16"
         color="#898EA7"
         strokeWidth="3"
       />
       <Input
         placeholder="ค้นหาวิชา"
-        class="w-11/12 xl:w-52 bg-surface-container-lowest placeholder:text-neutral-400"
+        class="w-3/4 bg-surface-container-lowest placeholder:text-neutral-400"
       />
     </div>
   </div>
@@ -73,7 +73,9 @@
       </a>
     {/each}
   </div>
-  <div class="flex flex-row justify-between items-center gap-2 md:gap-4">
+  <div
+    class="flex flex-row justify-between items-center gap-2 md:gap-3 lg:gap-4"
+  >
     <a
       href="https://github.com/thinc-org/cugetreg"
       target="_blank"

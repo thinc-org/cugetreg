@@ -3,9 +3,21 @@
 
   import { RatingStar } from '../../atom/rating-star'
 
-  let { content, semester, rating, likesCount, dislikesCount } = $props()
-  let hasHalfStar = $derived(rating % 1 !== 0) // Determine if there's a half star
-  let isExpanded = $state(false)
+  let {
+    content,
+    semester,
+    rating,
+    likesCount,
+    dislikesCount,
+  }: {
+    content: string
+    semester: string
+    rating: number
+    likesCount: number
+    dislikesCount: number
+  } = $props()
+  let hasHalfStar: boolean = $derived(rating % 1 !== 0) // Determine if there's a half star
+  let isExpanded: boolean = $state(false)
 </script>
 
 <div

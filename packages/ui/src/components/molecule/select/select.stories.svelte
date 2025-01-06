@@ -10,10 +10,12 @@
     argTypes: {
       value: {
         control: 'text',
+        description: 'Currently selected value.',
       },
       disabled: {
         control: 'boolean',
         defaultValue: false,
+        description: 'Disables the component.',
       },
       type: {
         control: {
@@ -21,9 +23,11 @@
         },
         options: ['single', 'multiple'],
         defaultValue: 'single',
+        description: 'Selection mode: single or multiple.',
       },
       name: {
         control: 'text',
+        description: 'Name attribute for forms.',
       },
     },
   })
@@ -147,7 +151,7 @@
   <Select.Root type="multiple" name="favoriteFruit" bind:value={value2}>
     <Select.Trigger
       aria-label="Select multiple fruits"
-      class="w-[300px] h-12 z-0 space-x-2"
+      class="w-[300px] h-12 z-0 "
       placeholder="Select fruits"
     >
       {#if !value2.length}
@@ -155,7 +159,7 @@
       {:else}
         {#each value2 as temp}
           <Chip
-            class="z-10"
+            class="z-10 mr-2"
             closable
             onClose={(event: MouseEvent) => {
               event.stopPropagation()

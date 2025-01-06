@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { Star } from 'lucide-svelte'
   let { rating } = $props()
   // Calculate the number of filled and unfilled stars
@@ -9,8 +9,7 @@
 </script>
 
 <div class="flex flex-row text-h3 text-primary gap-1.5">
-  <!-- Render filled stars -->
-  {#each Array(filledStars)}
+  {#each Array(filledStars) as _}
     <Star fill="currentColor" />
   {/each}
 
@@ -29,7 +28,7 @@
   {/if}
 
   <!-- Render unfilled stars -->
-  {#each Array(emptyStars)}
+  {#each Array(emptyStars) as _}
     <Star />
   {/each}
 </div>

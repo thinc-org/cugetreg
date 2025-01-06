@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { ThumbsDown, ThumbsUp } from 'lucide-svelte'
 
   import { RatingStar } from '../../atom/rating-star'

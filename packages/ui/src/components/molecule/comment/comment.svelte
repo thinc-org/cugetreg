@@ -1,6 +1,7 @@
 <script>
+  import { ThumbsDown, ThumbsUp } from 'lucide-svelte'
+
   import { RatingStar } from '../../atom/rating-star'
-  import { ThumbsUp, ThumbsDown } from 'lucide-svelte'
 
   let { content, semester, rating, likesCount, dislikesCount } = $props()
   let hasHalfStar = $derived(rating % 1 !== 0) // Determine if there's a half star

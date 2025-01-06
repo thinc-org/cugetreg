@@ -1,5 +1,6 @@
 <script module lang="ts">
   import { defineMeta } from '@storybook/addon-svelte-csf'
+
   import { RatingStar } from './index.js'
 
   const { Story } = defineMeta<typeof RatingStar>({

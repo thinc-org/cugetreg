@@ -10,7 +10,7 @@
 
 <div class="flex flex-row text-h3 text-primary gap-1.5">
   <!-- Render filled stars -->
-  {#each Array(filledStars) as _, i}
+  {#each Array(filledStars)}
     <Star fill="currentColor" />
   {/each}
 
@@ -29,7 +29,7 @@
   {/if}
 
   <!-- Render unfilled stars -->
-  {#each Array(emptyStars) as _, __}
+  {#each Array(emptyStars)}
     <Star />
   {/each}
 </div>

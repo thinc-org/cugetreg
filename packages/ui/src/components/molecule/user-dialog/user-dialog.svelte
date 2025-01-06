@@ -1,6 +1,8 @@
 <script lang="ts">
   import { DoorOpen, Settings } from 'lucide-svelte'
 
+  import { getShortenName } from './shortenName.js'
+
   interface Props {
     imageUrl: string
     name: string
@@ -13,7 +15,7 @@
     id = undefined,
   }: Props = $props()
 
-  let shortenedName = `${name?.split(' ')[0]} ${name?.split(' ')[1]?.charAt(0)}.`
+  let shortenedName = $derived(getShortenName(name))
 
   const items = [
     {

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { DoorOpen, Settings } from 'lucide-svelte'
 
-  import { getShortenName } from './shortenName.js'
+  import { getShortenName } from '@repo/utils/src/ui.js'
 
   interface Props {
     imageUrl: string

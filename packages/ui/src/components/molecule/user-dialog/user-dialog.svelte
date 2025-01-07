@@ -34,7 +34,7 @@
     <img
       src={imageUrl}
       alt="Profile"
-      class="rounded-full w-[72px] h-20 object-cover"
+      class="rounded-full w-20 h-20 object-cover"
     />
     <div class="flex flex-col gap-2 items-center">
       <p class="text-on-surface text-h3 font-bold">{shortenedName}</p>

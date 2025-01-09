@@ -4,12 +4,17 @@
   import { RatingStar } from './index.js'
 
   const { Story } = defineMeta<typeof RatingStar>({
-    title: 'Atom/RatingStar',
+    title: 'Atom/Rating Star',
     component: RatingStar,
     tags: ['autodocs'],
     argTypes: {
       rating: {
-        control: 'number',
+        control: {
+          type: 'range',
+          min: 0,
+          max: 5,
+          step: 0.5,
+        },
       },
     },
   })

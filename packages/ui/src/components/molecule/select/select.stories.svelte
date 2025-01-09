@@ -138,6 +138,7 @@
             label={fruit.label}
             aria-label={fruit.label}
             role="option"
+            check={true}
           >
             {fruit.label}
           </Select.Item>
@@ -149,29 +150,36 @@
 
 <Story name="Multiple Select with Chips">
   <Select.Root type="multiple" name="favoriteFruit" bind:value={value2}>
-    <Select.Trigger
-      aria-label="Select multiple fruits"
-      class="w-[300px] h-12 z-0 "
-      placeholder="Select fruits"
-    >
-      {#if !value2.length}
-        เลือก
-      {:else}
-        {#each value2 as temp}
-          <Chip
-            class="z-10 mr-2"
-            closable
-            onClose={(event: MouseEvent) => {
-              event.stopPropagation()
-              value2 = value2.filter((item) => item != temp)
-            }}
-            aria-label={`Remove ${themes.find((item) => item.value === temp)?.label || temp}`}
-          >
-            {themes.find((item) => item.value === temp)?.label || temp}
-          </Chip>
-        {/each}
+    <div class="relative w-[300px]">
+      {#if value2.length}
+        <div
+          class="absolute flex max-w-[274px] w-auto pl-2 top-1/2 -translate-y-1/2 items-center gap-1 truncate"
+        >
+          {#each value2 as temp}
+            <Chip
+              class="z-10"
+              closable
+              onClose={(event: MouseEvent) => {
+                event.stopPropagation()
+                value2 = value2.filter((item) => item != temp)
+              }}
+              aria-label={`Remove ${themes.find((item) => item.value === temp)?.label || temp}`}
+            >
+              {themes.find((item) => item.value === temp)?.label || temp}
+            </Chip>
+          {/each}
+        </div>
       {/if}
-    </Select.Trigger>
+      <Select.Trigger
+        aria-label="Select multiple fruits"
+        class="w-[300px] h-12 z-0 "
+        placeholder="Select fruits"
+      >
+        {#if !value2.length}
+          เลือก
+        {/if}
+      </Select.Trigger>
+    </div>
     <Select.Content role="listbox">
       <Select.Group>
         {#each themes as fruit}
@@ -180,6 +188,7 @@
             label={fruit.label}
             aria-label={fruit.label}
             role="option"
+            check={true}
           >
             {fruit.label}
           </Select.Item>

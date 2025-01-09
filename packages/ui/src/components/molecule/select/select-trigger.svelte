@@ -21,7 +21,9 @@
   )}
   {...restProps}
 >
-  <div class="w-full h-full overflow-hidden text-left truncate">
+  <div
+    class="w-full h-full overflow-hidden flex items-center text-left truncate"
+  >
     {@render children?.()}
   </div>
   {#if arrow}

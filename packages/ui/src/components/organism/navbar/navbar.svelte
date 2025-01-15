@@ -2,6 +2,7 @@
   import { Menu, Moon, Search, Settings2 } from 'lucide-svelte'
 
   import { cn } from '@repo/utils'
+  import { getShortenName } from '@repo/utils/src/name'
 
   import { Button } from '../../atom/button'
   import { Chip } from '../../atom/chip'
@@ -18,7 +19,7 @@
 
   let { isLoggedIn = false, name = undefined }: Props = $props()
 
-  let shortenedName = `${name?.split(' ')[0]} ${name?.split(' ')[1]?.charAt(0)}.`
+  let shortenedName = $derived(getShortenName(name ?? ''))
   let navItems = ['ค้นหาวิชา', 'จัดตารางเรียน', 'เกี่ยวกับ']
   let selected = $state('ค้นหาวิชา')
   let collapseItems = ['TEST1', 'TEST2', 'TEST3']

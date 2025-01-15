@@ -1,5 +1,11 @@
 # web
 
+## 1.12.1-beta.0
+
+### Patch Changes
+
+- 5ae9440: feat: update default semester to 67/2
+
 ## 1.12.0
 
 ### Minor Changes

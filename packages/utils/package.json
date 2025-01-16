@@ -6,14 +6,18 @@
   "main": "src/index.ts",
   "scripts": {
     "lint": "eslint .",
-    "format": "eslint . --fix"
+    "format": "eslint . --fix",
+    "test": "vitest run",
+    "test:cov": "vitest run --coverage"
   },
   "devDependencies": {
-    "typescript": "^5.7.2"
+    "@vitest/coverage-v8": "^2.1.8",
+    "typescript": "^5.7.3",
+    "vitest": "^2.1.8"
   },
   "dependencies": {
     "clsx": "^2.1.1",
-    "svelte": "^5.15.0",
+    "svelte": "^5.17.1",
     "tailwind-merge": "^2.6.0",
     "tailwind-variants": "^0.3.0"
   }

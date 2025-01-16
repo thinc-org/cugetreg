@@ -10,9 +10,9 @@
   }
 
   let {
-    imageUrl = undefined,
-    name = undefined,
-    id = undefined,
+    imageUrl = 'https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg',
+    name = '',
+    id = '',
   }: Props = $props()
 
   let shortenedName = $derived(getShortenName(name ?? ''))

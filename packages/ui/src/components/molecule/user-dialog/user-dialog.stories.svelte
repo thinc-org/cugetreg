@@ -24,8 +24,6 @@
 <Story
   name="Example"
   args={{
-    imageUrl:
-      'https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg',
     name: 'Wanrudee Kkk',
     id: '6XXXXXXXXX',
   }}

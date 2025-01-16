@@ -4,9 +4,9 @@
   import { getShortenName } from '@repo/utils/src/ui.js'
 
   interface Props {
-    imageUrl: string
-    name: string
-    id: string
+    imageUrl?: string
+    name?: string
+    id?: string
   }
 
   let {
@@ -15,7 +15,7 @@
     id = undefined,
   }: Props = $props()
 
-  let shortenedName = $derived(getShortenName(name))
+  let shortenedName = $derived(getShortenName(name ?? ''))
 
   const items = [
     {

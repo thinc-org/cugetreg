@@ -7,6 +7,7 @@
   import { Input } from '@repo/ui/atom/input'
   import { RecommendedTag } from '@repo/ui/atom/recommended-tag'
   import { CourseCard } from '@repo/ui/molecule/course-card'
+  import { UserDialog } from '@repo/ui/molecule/user-dialog'
   import { Navbar } from '@repo/ui/organism/navbar'
 
   let counter = $state(0)
@@ -70,5 +71,11 @@
     </Accordion.Content>
   </Accordion.Item>
 </Accordion.Root>
+
+<UserDialog
+  imageUrl="https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg"
+  name="Testname Testname"
+  id="6XXXXXXXXX"
+/>
 
 <a href="/dbdemo">Click to go to DB Demo</a>

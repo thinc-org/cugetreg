@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Menu, Moon, Search, Settings2 } from 'lucide-svelte'
 
-  import { cn } from '@repo/utils'
+  import { cn, getShortenName } from '@repo/utils'
 
   import { Button } from '../../atom/button'
   import { Chip } from '../../atom/chip'
@@ -12,7 +12,7 @@
   import { GitHubMark } from '../../logo/vendor'
 
   interface Props {
-    isLoggedIn?: boolean
+    isLoggedIn: boolean
     name?: string
     imageUrl?: string
     id?: string
@@ -20,12 +20,12 @@
 
   let {
     isLoggedIn = false,
-    name = undefined,
+    name = '',
     imageUrl = undefined,
     id = undefined,
   }: Props = $props()
 
-  let shortenedName = `${name?.split(' ')[0]} ${name?.split(' ')[1]?.charAt(0)}.`
+  let shortenedName = $derived(getShortenName(name))
   let navItems = ['ค้นหาวิชา', 'จัดตารางเรียน', 'เกี่ยวกับ']
   let selected = $state('ค้นหาวิชา')
   let collapseItems = ['TEST1', 'TEST2', 'TEST3']

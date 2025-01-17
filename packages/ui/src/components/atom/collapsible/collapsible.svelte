@@ -1,9 +1,15 @@
 <script lang="ts">
   import { Collapsible } from 'bits-ui'
   import { ChevronDown } from 'lucide-svelte'
+  import type { Snippet } from 'svelte'
   import { slide } from 'svelte/transition'
 
-  export let name = undefined
+  interface Props {
+    name: string
+    children?: Snippet
+  }
+
+  let { name = '', children }: Props = $props()
 </script>
 
 <Collapsible.Root class="relative">
@@ -17,6 +23,6 @@
     class="absolute top-8 right-0 w-28 bg-surface-container border-b-neutral-400 rounded-md"
     transition={slide}
   >
-    <slot />
+    {@render children?.()}
   </Collapsible.Content>
 </Collapsible.Root>

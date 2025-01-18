@@ -10,6 +10,7 @@
   import { Input } from '../../atom/input'
   import { CUGetRegDarkFull as CUGetRegLogo } from '../../logo/cugetreg'
   import { GitHubMark } from '../../logo/vendor'
+  import { UserDialog } from '../../molecule/user-dialog'
 
   interface Props {
     isLoggedIn: boolean
@@ -21,14 +22,13 @@
   let {
     isLoggedIn = false,
     name = '',
-    imageUrl = undefined,
-    id = undefined,
+    imageUrl = 'https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg',
+    id = '',
   }: Props = $props()
 
   let shortenedName = $derived(getShortenName(name))
   let navItems = ['ค้นหาวิชา', 'จัดตารางเรียน', 'เกี่ยวกับ']
   let selected = $state('ค้นหาวิชา')
-  let collapseItems = ['TEST1', 'TEST2', 'TEST3']
   let openSideBar = $state(false)
 
   const toggleSideBar = () => {
@@ -88,11 +88,8 @@
       ><Moon strokeWidth="3" size="16" /></IconButton
     >
     {#if isLoggedIn}
-      <!-- To be implemented: Collapsible component -->
       <Collapsible name={shortenedName}>
-        {#each collapseItems as item}
-          <p class="p-2 cursor-pointer">{item}</p>
-        {/each}
+        <UserDialog {name} {id} />
       </Collapsible>
     {:else}
       <!-- To be implemented: add real href in Button -->

@@ -29,7 +29,7 @@
   ]
 </script>
 
-<div class="w-60 rounded-xl border-2 border-[#EDEDF1]">
+<div class="w-60 rounded-xl border-2 border-[#EDEDF1] bg-surface">
   <div class="flex flex-col justify-center items-center p-4 gap-4">
     <img
       src={imageUrl}

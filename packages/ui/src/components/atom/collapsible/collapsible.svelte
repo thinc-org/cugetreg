@@ -16,7 +16,7 @@
   <div class="flex flex-row md:gap-1">
     <p class="text-primary text-button1 font-medium">{name}</p>
     <Collapsible.Trigger>
-      <ChevronDown color="#4A70C6" class="hidden md:block" />
+      <ChevronDown color="#4A70C6" class="hidden min-[900px]:block" />
     </Collapsible.Trigger>
   </div>
   <Collapsible.Content class="absolute top-10 -left-20" transition={slide}>

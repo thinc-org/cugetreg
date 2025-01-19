@@ -39,13 +39,13 @@
 <div
   class=" h-20 p-3 md:py-3 lg:px-10 flex justify-between items-center z-50 border-b-2 border-surface-container-low"
 >
-  <div class="flex flex-row gap-3 items-center xl:gap-6 grow">
+  <div class="flex flex-row flex-1 gap-3 items-center lg:gap-6">
     <a href="/">
       <CUGetRegLogo class="w-24 h-8 lg:w-32 lg:h-10" />
     </a>
-    <div class="relative hidden w-1/3 md:flex items-center">
+    <div class="relative hidden md:flex items-center">
       <Search
-        class="absolute left-[60%] my-auto"
+        class="absolute right-[15%] my-auto lg:right-8"
         size="16"
         color="#898EA7"
         strokeWidth="3"
@@ -57,7 +57,7 @@
     </div>
   </div>
   <div
-    class="hidden absolute left-1/2 transform -translate-x-1/2 md:flex flex-row justify-center items-center gap-3 lg:gap-4"
+    class="hidden min-[900px]:flex flex-row flex-1 justify-center items-center gap-3 lg:gap-4"
   >
     <!-- To be implemented: add page from navItems-->
     {#each navItems as item}
@@ -74,7 +74,7 @@
     {/each}
   </div>
   <div
-    class="flex flex-row justify-between items-center gap-2 md:gap-3 lg:gap-4"
+    class="flex flex-row flex-1 justify-end items-center gap-2 md:gap-3 lg:gap-4"
   >
     <a
       href="https://github.com/thinc-org/cugetreg"
@@ -97,7 +97,11 @@
         ><p class="font-medium text-button2">เข้าสู่ระบบ</p></Button
       >
     {/if}
-    <IconButton variant="ghost" class="md:hidden" onclick={toggleSideBar}>
+    <IconButton
+      variant="ghost"
+      class="min-[900px]:hidden"
+      onclick={toggleSideBar}
+    >
       <Menu size="16" strokeWidth="3" color="#353745" />
     </IconButton>
   </div>

@@ -37,7 +37,7 @@
 </script>
 
 <div
-  class=" h-20 p-3 md:py-3 lg:px-10 flex justify-between items-center z-50 border-b-2 border-surface-container-low"
+  class="h-16 md:h-20 px-3 py-1 gap-2 md:py-3 lg:px-10 flex justify-between items-center z-50 border-b-2 border-surface-container-low"
 >
   <div class="flex flex-row flex-1 gap-3 items-center lg:gap-6">
     <a href="/">
@@ -52,7 +52,7 @@
       />
       <Input
         placeholder="ค้นหาวิชา"
-        class="w-3/4 bg-surface-container-lowest placeholder:text-neutral-400"
+        class="w-11/12 xl:w-full bg-surface-container-lowest placeholder:text-neutral-400"
       />
     </div>
   </div>
@@ -125,7 +125,7 @@
   >
     <div class="p-3 flex flex-col gap-5">
       <div class="flex flex-row gap-2">
-        <IconButton variant="ghost" class="md:hidden" onclick={toggleSideBar}>
+        <IconButton variant="ghost" onclick={toggleSideBar}>
           <Menu size="16" strokeWidth="3" color="#353745" />
         </IconButton>
         <div class="w-48 flex flex-col gap-2">
@@ -175,7 +175,7 @@
     </div>
     {#if isLoggedIn}
       <div
-        class="flex flex-row gap-2 p-3 items-center border-t-2 border-surface-container-low"
+        class="flex flex-row gap-4 p-4 items-center border-t-2 border-surface-container-low"
       >
         <img src={imageUrl} alt="profile pic" class="w-10 h-10 rounded-full" />
         <div class="flex flex-col">

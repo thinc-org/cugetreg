@@ -42,13 +42,13 @@
   {/if}
   <div class="flex flex-row justify-between items-center">
     <div class="flex flex-col">
-      <div class="font-medium text-caption">{course.code}</div>
+      <div class="font-medium text-caption">{course?.code}</div>
       <div class="font-medium sm:text-body2 md:text-body1">
-        {course.name}
+        {course?.name}
       </div>
     </div>
     <div class="flex gap-1">
-      {#each course.gened as gened}
+      {#each course?.gened ?? [] as gened}
         <GenedChip type={gened} />
       {/each}
     </div>
@@ -57,14 +57,14 @@
     <div
       class="font-normal text-caption text-neutral-400 flex flex-row items-center"
     >
-      <span>{course.credit} หน่วยกิต</span>
+      <span>{course?.credit} หน่วยกิต</span>
       <Dot color="#EDEDF1" size="16" />
-      <span>ที่นั่ง GenEd {course.seat} / {course.maxseat}</span>
+      <span>ที่นั่ง GenEd {course?.seat} / {course?.maxseat}</span>
       <Dot color="#EDEDF1" size="16" />
-      <span>{course.review} รีวิว</span>
+      <span>{course?.review} รีวิว</span>
     </div>
     <div class="flex gap-2">
-      {#each course.days as day}
+      {#each course?.days ?? [] as day}
         <DayChip {day} />
       {/each}
     </div>

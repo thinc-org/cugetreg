@@ -16,5 +16,9 @@
 </script>
 
 <div class={`text-on-surface font-normal text-body1 ${textStyle} ${className}`}>
-  {#if children}{@render children()}{:else}{text}{/if}
+  {#if children}
+    {@render children()}
+  {:else}
+    {text}
+  {/if}
 </div>

@@ -13,7 +13,7 @@
   import { UserDialog } from '../../molecule/user-dialog'
 
   interface Props {
-    isLoggedIn: boolean
+    isLoggedIn?: boolean
     name?: string
     imageUrl?: string
     id?: string
@@ -27,7 +27,7 @@
   }: Props = $props()
 
   let shortenedName = $derived(getShortenName(name))
-  let navItems = ['ค้นหาวิชา', 'จัดตารางเรียน', 'เกี่ยวกับ']
+  const navItems = ['ค้นหาวิชา', 'จัดตารางเรียน', 'เกี่ยวกับ']
   let selected = $state('ค้นหาวิชา')
   let openSideBar = $state(false)
 
@@ -84,18 +84,18 @@
     >
       <GitHubMark class="w-8 h-8 text-neutral-500 " />
     </a>
-    <IconButton color="neutral" class="hidden md:flex"
-      ><Moon strokeWidth="3" size="16" /></IconButton
-    >
+    <IconButton color="neutral" class="hidden md:flex">
+      <Moon strokeWidth="3" size="16" />
+    </IconButton>
     {#if isLoggedIn}
       <Collapsible name={shortenedName}>
         <UserDialog {name} {id} />
       </Collapsible>
     {:else}
       <!-- To be implemented: add real href in Button -->
-      <Button href="login" class="w-24 md:w-28"
-        ><p class="font-medium text-button2">เข้าสู่ระบบ</p></Button
-      >
+      <Button href="login" class="w-24 md:w-28">
+        <p class="font-medium text-button2">เข้าสู่ระบบ</p>
+      </Button>
     {/if}
     <IconButton
       variant="ghost"
@@ -135,9 +135,9 @@
           <p class="text-primary text-subtitle">
             ปี 2 ภาคฤดูร้อนที่ยาวมาก บลาบลา
           </p>
-          <Chip class="w-32 flex items-center text-nowrap justify-center"
-            >นานาชาติ 66 / ฤดูร้อน</Chip
-          >
+          <Chip class="w-32 flex items-center text-nowrap justify-center">
+            นานาชาติ 66 / ฤดูร้อน
+          </Chip>
         </div>
         <IconButton variant="ghost">
           <Settings2 size="16" strokeWidth="2.5" color="#353745" />

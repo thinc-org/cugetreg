@@ -54,6 +54,9 @@ importers:
       '@repo/ui':
         specifier: workspace:*
         version: link:../../packages/ui
+      '@storybook/addon-viewport':
+        specifier: ^8.5.0
+        version: 8.5.0(storybook@8.4.7(prettier@3.4.2))
     devDependencies:
       '@storybook/addon-a11y':
         specifier: ^8.4.7
@@ -1536,6 +1539,11 @@ packages:
     resolution: {integrity: sha512-hvczh/jjuXXcOogih09a663sRDDSATXwbE866al1DXgbDFraYD/LxX/QDb38W9hdjU9+Qhx8VFIcNWoMQns5HQ==}
     peerDependencies:
       storybook: ^8.4.7
+
+  '@storybook/addon-viewport@8.5.0':
+    resolution: {integrity: sha512-MlhVELImk9YzjEgGR2ciLC8d5tUSGcO7my4kWIClN0VyTRcvG4ZfwrsEC+jN3/l52nrgjLmKrDX5UAGZm6w5mQ==}
+    peerDependencies:
+      storybook: ^8.5.0
 
   '@storybook/blocks@8.4.7':
     resolution: {integrity: sha512-+QH7+JwXXXIyP3fRCxz/7E2VZepAanXJM7G8nbR3wWsqWgrRp4Wra6MvybxAYCxU7aNfJX5c+RW84SNikFpcIA==}
@@ -5038,6 +5046,11 @@ snapshots:
       storybook: 8.4.7(prettier@3.4.2)
 
   '@storybook/addon-viewport@8.4.7(storybook@8.4.7(prettier@3.4.2))':
+    dependencies:
+      memoizerific: 1.11.3
+      storybook: 8.4.7(prettier@3.4.2)
+
+  '@storybook/addon-viewport@8.5.0(storybook@8.4.7(prettier@3.4.2))':
     dependencies:
       memoizerific: 1.11.3
       storybook: 8.4.7(prettier@3.4.2)

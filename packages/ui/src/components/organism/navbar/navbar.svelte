@@ -10,18 +10,25 @@
   import { Input } from '../../atom/input'
   import { CUGetRegDarkFull as CUGetRegLogo } from '../../logo/cugetreg'
   import { GitHubMark } from '../../logo/vendor'
+  import { UserDialog } from '../../molecule/user-dialog'
 
   interface Props {
     isLoggedIn: boolean
     name?: string
+    imageUrl?: string
+    id?: string
   }
 
-  let { isLoggedIn = false, name = '' }: Props = $props()
+  let {
+    isLoggedIn = false,
+    name = '',
+    imageUrl = 'https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg',
+    id = '',
+  }: Props = $props()
 
   let shortenedName = $derived(getShortenName(name))
   let navItems = ['ค้นหาวิชา', 'จัดตารางเรียน', 'เกี่ยวกับ']
   let selected = $state('ค้นหาวิชา')
-  let collapseItems = ['TEST1', 'TEST2', 'TEST3']
   let openSideBar = $state(false)
 
   const toggleSideBar = () => {
@@ -30,27 +37,27 @@
 </script>
 
 <div
-  class=" h-20 py-3 px-5 md:py-3 lg:px-10 flex justify-between items-center z-50 border-b-2 border-surface-container-low"
+  class="h-16 md:h-20 px-3 py-1 gap-2 md:py-3 lg:px-10 flex justify-between items-center z-50 border-b-2 border-surface-container-low"
 >
-  <div class="flex flex-row gap-3 items-center xl:gap-6">
+  <div class="flex flex-row flex-1 gap-3 items-center lg:gap-6">
     <a href="/">
       <CUGetRegLogo class="w-24 h-8 lg:w-32 lg:h-10" />
     </a>
-    <div class="relative hidden w-36 lg:w-full md:flex items-center">
+    <div class="relative hidden md:flex items-center">
       <Search
-        class="absolute right-[15%] my-auto"
+        class="absolute right-[15%] my-auto lg:right-8"
         size="16"
         color="#898EA7"
         strokeWidth="3"
       />
       <Input
         placeholder="ค้นหาวิชา"
-        class="w-11/12 xl:w-52 bg-surface-container-lowest placeholder:text-neutral-400"
+        class="w-11/12 xl:w-full bg-surface-container-lowest placeholder:text-neutral-400"
       />
     </div>
   </div>
   <div
-    class="hidden absolute left-1/2 transform -translate-x-1/2 md:flex flex-row justify-center items-center gap-3 lg:gap-4"
+    class="hidden min-[900px]:flex flex-row flex-1 justify-center items-center gap-3 lg:gap-4"
   >
     <!-- To be implemented: add page from navItems-->
     {#each navItems as item}
@@ -66,7 +73,9 @@
       </a>
     {/each}
   </div>
-  <div class="flex flex-row justify-between items-center gap-2 md:gap-4">
+  <div
+    class="flex flex-row flex-1 justify-end items-center gap-2 md:gap-3 lg:gap-4"
+  >
     <a
       href="https://github.com/thinc-org/cugetreg"
       target="_blank"
@@ -79,11 +88,8 @@
       ><Moon strokeWidth="3" size="16" /></IconButton
     >
     {#if isLoggedIn}
-      <!-- To be implemented: Collapsible component -->
       <Collapsible name={shortenedName}>
-        {#each collapseItems as item}
-          <p class="p-2 cursor-pointer">{item}</p>
-        {/each}
+        <UserDialog {name} {id} />
       </Collapsible>
     {:else}
       <!-- To be implemented: add real href in Button -->
@@ -91,7 +97,11 @@
         ><p class="font-medium text-button2">เข้าสู่ระบบ</p></Button
       >
     {/if}
-    <IconButton variant="ghost" class="md:hidden" onclick={toggleSideBar}>
+    <IconButton
+      variant="ghost"
+      class="min-[900px]:hidden"
+      onclick={toggleSideBar}
+    >
       <Menu size="16" strokeWidth="3" color="#353745" />
     </IconButton>
   </div>
@@ -115,7 +125,7 @@
   >
     <div class="p-3 flex flex-col gap-5">
       <div class="flex flex-row gap-2">
-        <IconButton variant="ghost" class="md:hidden" onclick={toggleSideBar}>
+        <IconButton variant="ghost" onclick={toggleSideBar}>
           <Menu size="16" strokeWidth="3" color="#353745" />
         </IconButton>
         <div class="w-48 flex flex-col gap-2">
@@ -165,17 +175,13 @@
     </div>
     {#if isLoggedIn}
       <div
-        class="flex flex-row gap-2 p-3 items-center border-t-2 border-surface-container-low"
+        class="flex flex-row gap-4 p-4 items-center border-t-2 border-surface-container-low"
       >
-        <img
-          src="https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg"
-          alt="profile pic"
-          class="w-10 h-10 rounded-full"
-        />
+        <img src={imageUrl} alt="profile pic" class="w-10 h-10 rounded-full" />
         <div class="flex flex-col">
           <p class="text-on-surface text-subtitle font-medium">{name}</p>
           <p class="text-on-surface-placeholder text-body2 font-medium">
-            6XXXXXXXXX
+            {id}
           </p>
         </div>
       </div>

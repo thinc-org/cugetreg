@@ -4,7 +4,7 @@
   import { DayChip } from './index.js'
 
   const { Story } = defineMeta<typeof DayChip>({
-    title: 'Atom/DayChip',
+    title: 'Atom/Day Chip',
     component: DayChip,
     tags: ['autodocs'],
     argTypes: {

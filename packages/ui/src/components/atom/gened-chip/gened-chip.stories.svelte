@@ -4,7 +4,7 @@
   import { GenedChip } from './index.js'
 
   const { Story } = defineMeta<typeof GenedChip>({
-    title: 'Atom/GenedChip',
+    title: 'Atom/Gened Chip',
     component: GenedChip,
     tags: ['autodocs'],
     argTypes: {

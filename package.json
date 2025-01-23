@@ -7,6 +7,7 @@
     "dev": "turbo run dev",
     "lint": "turbo run --continue lint",
     "format": "turbo run --continue format",
+    "test": "turbo run --continue test",
     "storybook:dev": "turbo run --filter=@app/storybook dev",
     "web:dev": "turbo run --filter=@app/web dev"
   },
@@ -14,9 +15,9 @@
     "@changesets/changelog-github": "^0.5.0",
     "@changesets/cli": "^2.27.11",
     "@repo/config": "workspace:^",
-    "eslint": "^9.17.0",
+    "eslint": "^9.18.0",
     "prettier": "^3.4.2",
     "turbo": "^2.3.3"
   },
-  "packageManager": "pnpm@9.15.1"
+  "packageManager": "pnpm@9.15.4"
 }

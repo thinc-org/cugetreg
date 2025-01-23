@@ -4,7 +4,7 @@
   import { RecommendedTag } from './index.js'
 
   const { Story } = defineMeta<typeof RecommendedTag>({
-    title: 'Atom/RecommendedTag',
+    title: 'Atom/Recommended Tag',
     component: RecommendedTag,
     tags: ['autodocs'],
     argTypes: {

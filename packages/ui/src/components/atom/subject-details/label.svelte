@@ -23,5 +23,9 @@
 <div
   class="{`bg-surface-container-lowest px-4 py-[7px] text-primary text-table-header font-medium ${roundedStyle[variant]} ${className}`} "
 >
-  {#if children}{@render children()}{:else}{text}{/if}
+  {#if children}
+    {@render children()}
+  {:else}
+    {text}
+  {/if}
 </div>

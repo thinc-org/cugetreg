@@ -14,16 +14,16 @@
   },
   "dependencies": {
     "@paralleldrive/cuid2": "^2.2.2",
-    "drizzle-orm": "^0.38.1",
+    "drizzle-orm": "^0.38.4",
     "postgres": "^3.4.5"
   },
   "devDependencies": {
     "@types/cli-progress": "^3.11.6",
-    "@types/node": "^22.10.2",
+    "@types/node": "^22.10.9",
     "cli-progress": "^3.12.0",
     "dotenv-cli": "^8.0.0",
-    "drizzle-kit": "^0.30.0",
+    "drizzle-kit": "^0.30.2",
     "tsx": "^4.19.2",
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.3"
   }
 }

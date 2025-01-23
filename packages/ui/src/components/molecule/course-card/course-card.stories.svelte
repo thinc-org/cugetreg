@@ -4,7 +4,7 @@
   import { CourseCard } from './index.js'
 
   const { Story } = defineMeta<typeof CourseCard>({
-    title: 'Molecule/CourseCard',
+    title: 'Molecule/Course Card',
     component: CourseCard,
     tags: ['autodocs'],
     argTypes: {
@@ -22,6 +22,16 @@
       },
       course: {
         control: false,
+        defaultValue: {
+          code: '0123101',
+          name: 'PARAGRAPH WRITING',
+          credit: 3,
+          gened: ['HU'],
+          seat: 24,
+          maxseat: 305,
+          review: 14,
+          days: ['MO', 'TU', 'WE'],
+        },
       },
     },
   })
@@ -29,6 +39,35 @@
 
 <!--👇 Each story then reuses that template-->
 
-<Story name="Default" />
+<Story
+  name="Default"
+  args={{
+    course: {
+      code: '0123101',
+      name: 'PARAGRAPH WRITING',
+      credit: 3,
+      gened: ['HU'],
+      seat: 24,
+      maxseat: 305,
+      review: 14,
+      days: ['MO', 'TU', 'WE'],
+    },
+  }}
+/>
 
-<Story name="Recommended" args={{ recommended: true }} />
+<Story
+  name="Recommended"
+  args={{
+    course: {
+      code: '0123101',
+      name: 'PARAGRAPH WRITING',
+      credit: 3,
+      gened: ['HU'],
+      seat: 24,
+      maxseat: 305,
+      review: 14,
+      days: ['MO', 'TU', 'WE'],
+    },
+    recommended: true,
+  }}
+/>

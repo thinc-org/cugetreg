@@ -5,7 +5,7 @@
 
   import { cn } from '@repo/utils'
 
-  import { inputVariants, type Events, type Props } from './index.js'
+  import { type Events, inputVariants, type Props } from './index.js'
 
   type $$Props = Props
   type $$Events = Events

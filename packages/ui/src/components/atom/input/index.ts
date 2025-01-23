@@ -49,4 +49,4 @@ type Props = HTMLInputAttributes & {
 
 type Events = InputEvents
 
-export { Root as Input, inputVariants, type Events, type Props }
+export { type Events, Root as Input, inputVariants, type Props }

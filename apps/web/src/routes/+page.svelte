@@ -60,7 +60,8 @@
   />
   <Input placeholder="สำเร็จ" label="รหัสผ่าน" desc="สำเร็จ" state="success" />
 </div>
-<!-- <h1>Testtsetst</h1>
+
+<h1>Testtsetst</h1>
 <CourseCard
   recommended={true}
   class="mt-4"
@@ -86,6 +87,6 @@
       Yes. It adheres to the WAI-ARIA design pattern.
     </Accordion.Content>
   </Accordion.Item>
-</Accordion.Root> -->
+</Accordion.Root>
 
 <a href="/dbdemo">Click to go to DB Demo</a>

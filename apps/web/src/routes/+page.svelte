@@ -44,6 +44,24 @@
 <DayChip day="SA" />
 <GenedChip type="SC" />
 
+<div
+  class="flex flex-col space-x-0 space-y-10 w-auto h-auto p-10 my-5 border-b-2 border-t-2"
+>
+  <h1>ตัวอย่าง Input</h1>
+  <Input
+    placeholder="โปรดกรอกรหัสผ่าน"
+    label="รหัสผ่าน"
+    desc="กรุณากรอกรหัสผ่านให้ถูกต้อง"
+  />
+  <Input
+    placeholder="โปรดกรอกรหัสผ่าน"
+    label="รหัสผ่าน"
+    desc="กรุณากรอกรหัสผ่านให้ถูกต้อง"
+    state="error"
+  />
+  <Input placeholder="สำเร็จ" label="รหัสผ่าน" desc="สำเร็จ" state="success" />
+</div>
+
 <h1>Testtsetst</h1>
 <CourseCard
   recommended={true}

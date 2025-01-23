@@ -2,20 +2,19 @@
   import { createBubbler, passive } from 'svelte/legacy'
 
   const bubble = createBubbler()
-  import type { HTMLInputAttributes } from 'svelte/elements'
 
   import { cn } from '@repo/utils'
 
-  import type { InputEvents } from './index.js'
+  import { type Events, inputVariants, type Props } from './index.js'
 
-  type $$Props = HTMLInputAttributes
-  type $$Events = InputEvents
+  type $$Props = Props
+  type $$Events = Events
 
   // Workaround for https://github.com/sveltejs/svelte/issues/9305
-
-  interface Props {
+  interface InputProps {
     class?: $$Props['class']
     value?: $$Props['value']
+    state?: $$Props['state']
     // Fixed in Svelte 5, but not backported to 4.x.
     readonly?: $$Props['readonly']
     [key: string]: unknown
@@ -24,16 +23,14 @@
   let {
     class: className = undefined,
     value = $bindable(undefined),
+    state = 'default',
     readonly = undefined,
     ...rest
-  }: Props = $props()
+  }: InputProps = $props()
 </script>
 
 <input
-  class={cn(
-    'flex w-full h-10 rounded-button bg-surface-container-lowest px-4 text-button2 placeholder:text-on-surface hover:outline-none hover:ring-1 hover:ring-primary focus-visible:outline-none focus-visible:ring-1.5 focus-visible:ring-primary disabled:cursor-not-allowed placeholder:disabled:text-on-surface-disabled disabled:hover:ring-0',
-    className,
-  )}
+  class={cn(inputVariants({ state, className }))}
   bind:value
   {readonly}
   onblur={bubble('blur')}

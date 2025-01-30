@@ -3,13 +3,19 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": [".svelte-kit/**", ".vercel/**"]
+      "outputs": [".svelte-kit/**", "build/**", "storybook-static/**"]
     },
     "lint": {},
     "format": {},
     "dev": {
       "cache": false,
       "persistent": true
+    },
+    "test": {
+      "cache": false
+    },
+    "test:cov": {
+      "cache": false
     }
   }
 }

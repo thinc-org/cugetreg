@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { cn } from '../../utils'
+  import { cn } from '../../../../../utils'
   import { Chip } from '../chip'
   import { chipVariants, type Status } from './index.js'
 
@@ -10,7 +10,7 @@
   export { className as class }
 </script>
 
-<Chip class="{cn(chipVariants({ status, className }))}" {closable} {onClose}>
+<Chip class={cn(chipVariants({ status, className }))} {closable} {onClose}>
   {#if status == 'close'}
     ปิด
   {:else}

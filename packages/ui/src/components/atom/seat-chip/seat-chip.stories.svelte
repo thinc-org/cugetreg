@@ -34,8 +34,8 @@
 
 <!-- 👇 Each story then reuses that template -->
 
-<Story name="full" args="{{ status: 'full', closable: false }}" />
+<Story name="full" args={{ status: 'full', closable: false }} />
 
-<Story name="avaliable" args="{{ status: 'avaliable', closable: false }}" />
+<Story name="avaliable" args={{ status: 'avaliable', closable: false }} />
 
-<Story name="close" args="{{ status: 'close', closable: false }}" />
+<Story name="close" args={{ status: 'close', closable: false }} />

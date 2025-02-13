@@ -76,6 +76,26 @@
           ],
           selectable: true,
         },
+        {
+          section: 3,
+          seats: { status: 'close', count: '28/28' },
+          instructors: ['SSS'],
+          group: '4EE ONLY',
+          schedule: [
+            {
+              day: 'THU',
+              time: '16:00 - 17:00',
+              room: 'MAHIT 202',
+              type: 'LECT',
+            },
+            {
+              day: 'THU',
+              time: '16:00 - 17:00',
+              room: 'MAHIT 202',
+              type: 'LECT',
+            },
+          ],
+        },
       ],
     },
   }}

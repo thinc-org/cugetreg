@@ -1,10 +1,9 @@
-<script context="module" lang="ts">
-  import { Story } from '@storybook/addon-svelte-csf'
-  import type { Meta } from '@storybook/svelte'
+<script module lang="ts">
+  import { defineMeta } from '@storybook/addon-svelte-csf'
 
   import { SeatChip } from './index.js'
 
-  export const meta = {
+  const { Story } = defineMeta<typeof SeatChip>({
     title: 'Atom/SeatChip',
     component: SeatChip,
     tags: ['autodocs'],
@@ -20,7 +19,7 @@
         control: false,
       },
     },
-  } satisfies Meta<SeatChip>
+  })
 </script>
 
 <!--👇 We create a “template” of how args map to rendering -->

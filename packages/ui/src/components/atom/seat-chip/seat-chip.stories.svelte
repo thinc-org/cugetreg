@@ -1,4 +1,5 @@
 <script context="module" lang="ts">
+  import { Story } from '@storybook/addon-svelte-csf'
   import type { Meta } from '@storybook/svelte'
 
   import { SeatChip } from './index.js'
@@ -22,20 +23,24 @@
   } satisfies Meta<SeatChip>
 </script>
 
-<script lang="ts">
-  import { Story, Template } from '@storybook/addon-svelte-csf'
-</script>
-
 <!--👇 We create a “template” of how args map to rendering -->
-
-<Template let:args>
-  <SeatChip {...args}>28/28</SeatChip>
-</Template>
 
 <!-- 👇 Each story then reuses that template -->
 
-<Story name="full" args={{ status: 'full', closable: false }} />
+<Story name="full" args={{ status: 'full', closable: false }}>
+  {#snippet children(args)}
+    <SeatChip {...args}>28/28</SeatChip>
+  {/snippet}
+</Story>
 
-<Story name="avaliable" args={{ status: 'avaliable', closable: false }} />
+<Story name="avaliable" args={{ status: 'avaliable', closable: false }}>
+  {#snippet children(args)}
+    <SeatChip {...args}>10/28</SeatChip>
+  {/snippet}
+</Story>
 
-<Story name="close" args={{ status: 'close', closable: false }} />
+<Story name="close" args={{ status: 'close', closable: false }}>
+  {#snippet children(args)}
+    <SeatChip {...args}>1/28</SeatChip>
+  {/snippet}
+</Story>

@@ -14,6 +14,7 @@
     "@cgr/schema": "1.5.0"
   },
   "changesets": [
+    "better-toes-flow",
     "clear-ways-open",
     "seven-pets-perform",
     "sour-places-own"

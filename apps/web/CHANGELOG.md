@@ -1,5 +1,11 @@
 # web
 
+## 1.13.0-beta.3
+
+### Minor Changes
+
+- f9da2bb: update runtime to node 22 and fix changeset bug
+
 ## 1.12.2-beta.2
 
 ### Patch Changes

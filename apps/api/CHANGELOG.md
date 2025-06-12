@@ -1,5 +1,11 @@
 # api
 
+## 1.10.0-beta.2
+
+### Minor Changes
+
+- f9da2bb: update runtime to node 22 and fix changeset bug
+
 ## 1.9.2-beta.1
 
 ### Patch Changes

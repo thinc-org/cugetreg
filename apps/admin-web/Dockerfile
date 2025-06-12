@@ -42,7 +42,7 @@ RUN pnpm turbo run build --filter=admin-web...
 
 # --------------------------------------------------------
 
-FROM node:2-alpine AS runner
+FROM node:22-alpine AS runner
 WORKDIR /app
 
 RUN apk add --no-cache --update \

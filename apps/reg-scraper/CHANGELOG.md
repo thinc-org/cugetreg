@@ -1,5 +1,13 @@
 # reg-scraper
 
+## 1.5.2-beta.0
+
+### Patch Changes
+
+- cd7a75b: bump deps
+- Updated dependencies [cd7a75b]
+  - @cgr/schema@1.5.1-beta.0
+
 ## 1.5.1
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @cgr/project-config
 
+## 1.3.1-beta.0
+
+### Patch Changes
+
+- cd7a75b: bump deps
+
 ## 1.3.0
 
 ### Minor Changes

@@ -1,5 +1,11 @@
 # admin-web
 
+## 1.4.0-beta.3
+
+### Patch Changes
+
+- de43027: fix admin-web build
+
 ## 1.4.0-beta.2
 
 ### Minor Changes

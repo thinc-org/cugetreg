@@ -1,5 +1,11 @@
 # web-e2e
 
+## 0.3.1-beta.0
+
+### Patch Changes
+
+- cd7a75b: bump deps
+
 ## 0.3.0
 
 ### Minor Changes

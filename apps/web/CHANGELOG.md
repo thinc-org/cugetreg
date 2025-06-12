@@ -1,5 +1,11 @@
 # web
 
+## 1.12.2-beta.0
+
+### Patch Changes
+
+- b59796f: Add 2568 and set default semester to 68/1
+
 ## 1.12.1
 
 ### Patch Changes

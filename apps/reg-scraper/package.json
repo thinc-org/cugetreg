@@ -1,6 +1,6 @@
 {
   "name": "reg-scraper",
-  "version": "1.5.2-beta.0",
+  "version": "1.5.2-beta.1",
   "private": true,
   "scripts": {
     "dev": "nest start --watch",

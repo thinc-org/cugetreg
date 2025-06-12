@@ -1,5 +1,11 @@
 # reg-scraper
 
+## 1.5.2-beta.1
+
+### Patch Changes
+
+- d3f5092: ci: retry deploy
+
 ## 1.5.2-beta.0
 
 ### Patch Changes

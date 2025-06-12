@@ -1,5 +1,11 @@
 # web
 
+## 1.12.2-beta.2
+
+### Patch Changes
+
+- 99326f7: ci: retry deploy 2
+
 ## 1.12.2-beta.1
 
 ### Patch Changes

@@ -10,7 +10,7 @@
     "format": "eslint src --fix"
   },
   "devDependencies": {
-    "@types/node": "20.11.25",
+    "@types/node": "^22.15.31",
     "@types/react": "18.2.64",
     "@types/react-dom": "18.2.21",
     "eslint": "8.57.0",

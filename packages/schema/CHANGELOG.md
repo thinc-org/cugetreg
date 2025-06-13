@@ -1,5 +1,11 @@
 # @cgr/schema
 
+## 1.5.1
+
+### Patch Changes
+
+- cd7a75b: bump deps
+
 ## 1.5.1-beta.0
 
 ### Patch Changes

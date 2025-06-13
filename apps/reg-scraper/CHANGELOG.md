@@ -1,5 +1,18 @@
 # reg-scraper
 
+## 1.6.0
+
+### Minor Changes
+
+- f9da2bb: update runtime to node 22 and fix changeset bug
+
+### Patch Changes
+
+- d3f5092: ci: retry deploy
+- cd7a75b: bump deps
+- Updated dependencies [cd7a75b]
+  - @cgr/schema@1.5.1
+
 ## 1.6.0-beta.2
 
 ### Minor Changes

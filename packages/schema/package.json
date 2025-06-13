@@ -1,6 +1,6 @@
 {
   "name": "@cgr/schema",
-  "version": "1.5.1-beta.0",
+  "version": "1.5.1",
   "private": true,
   "main": "./dist/index.js",
   "types": "./src/index.ts",

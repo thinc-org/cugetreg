@@ -25,7 +25,6 @@ on:
         options:
           - prod
           - beta
-          - dev
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
@@ -124,10 +123,6 @@ jobs:
           elif [[ ${{ github.ref_name  }} == "beta" ]]; then
             echo "Deploy environment is beta"
             echo "environment=beta" >> $GITHUB_OUTPUT
-            echo "gitOpsUpdateMode=commit" >> $GITHUB_OUTPUT
-          elif [[ ${{ github.ref_name  }} == "dev" ]]; then
-            echo "Deploy environment is dev"
-            echo "environment=dev" >> $GITHUB_OUTPUT
             echo "gitOpsUpdateMode=commit" >> $GITHUB_OUTPUT
           fi
 

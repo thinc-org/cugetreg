@@ -6,10 +6,6 @@
 
 -
 
-## Demo
-
-[https://dev.cugetreg.com](https://dev.cugetreg.com)
-
 ## Checklist
 
 - [ ] Deploy a demo

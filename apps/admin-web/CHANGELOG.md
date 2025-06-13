@@ -1,5 +1,29 @@
 # admin-web
 
+## 1.4.0-beta.3
+
+### Patch Changes
+
+- de43027: fix admin-web build
+
+## 1.4.0-beta.2
+
+### Minor Changes
+
+- f9da2bb: update runtime to node 22 and fix changeset bug
+
+## 1.3.1-beta.1
+
+### Patch Changes
+
+- d3f5092: ci: retry deploy
+
+## 1.3.1-beta.0
+
+### Patch Changes
+
+- cd7a75b: bump deps
+
 ## 1.3.0
 
 ### Minor Changes

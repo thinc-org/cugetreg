@@ -1,5 +1,35 @@
 # web
 
+## 1.13.0-beta.3
+
+### Minor Changes
+
+- f9da2bb: update runtime to node 22 and fix changeset bug
+
+## 1.12.2-beta.2
+
+### Patch Changes
+
+- 99326f7: ci: retry deploy 2
+
+## 1.12.2-beta.1
+
+### Patch Changes
+
+- d3f5092: ci: retry deploy
+
+## 1.12.2-beta.0
+
+### Patch Changes
+
+- cd7a75b: bump deps
+
+## 1.12.2-beta.0
+
+### Patch Changes
+
+- b59796f: Add 2568 and set default semester to 68/1
+
 ## 1.12.1
 
 ### Patch Changes

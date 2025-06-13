@@ -1,5 +1,25 @@
 # admin-api
 
+## 1.4.0-beta.2
+
+### Minor Changes
+
+- f9da2bb: update runtime to node 22 and fix changeset bug
+
+## 1.3.2-beta.1
+
+### Patch Changes
+
+- d3f5092: ci: retry deploy
+
+## 1.3.2-beta.0
+
+### Patch Changes
+
+- cd7a75b: bump deps
+- Updated dependencies [cd7a75b]
+  - @cgr/schema@1.5.1-beta.0
+
 ## 1.3.1
 
 ### Patch Changes

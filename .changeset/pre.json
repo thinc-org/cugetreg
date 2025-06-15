@@ -13,6 +13,7 @@
     "@cgr/schema": "1.5.1"
   },
   "changesets": [
-    "quiet-moles-promise"
+    "quiet-moles-promise",
+    "silly-pianos-know"
   ]
 }

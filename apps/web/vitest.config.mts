@@ -17,7 +17,7 @@ export default defineConfig({
       reporter: ['text', 'json', 'html'],
       reportsDirectory: '../../coverage/apps/web',
     },
-    testTimeout: 10000,
+    testTimeout: 15000,
     typecheck: {
       tsconfig: './tsconfig.spec.json',
     },

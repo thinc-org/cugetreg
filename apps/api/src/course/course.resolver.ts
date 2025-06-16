@@ -66,8 +66,14 @@ export class CourseResolver {
   @Query('search')
   async search(
     @Args('filter') filter: FilterInput,
-    @Args('courseGroup') courseGroup: CourseGroupInput
+    @Args('courseGroup') courseGroup: CourseGroupInput,
+    @Args('useOpenSearch', { type: () => Boolean, nullable: true })
+    useOpenSearch: boolean = false
   ): Promise<Course[]> {
+    if (!useOpenSearch) {
+      return this.courseService.search(filter, courseGroup)
+    }
+
     if (filter.periodRange) {
       const { start, end } = filter.periodRange
       if (!isTime(start) || !isTime(end)) {

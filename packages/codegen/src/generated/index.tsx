@@ -406,6 +406,7 @@ export type QueryReviewsArgs = {
 export type QuerySearchArgs = {
   courseGroup: CourseGroupInput;
   filter: FilterInput;
+  useOpenSearch?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type Review = {

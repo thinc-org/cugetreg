@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next'
 import { MdEdit, MdStar } from 'react-icons/md'
 
 import { ApolloError } from '@apollo/client'
-import { Button, Grid, Stack, Typography } from '@mui/material'
+import { Alert, Button, Grid, Stack, Typography } from '@mui/material'
 import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 import { NextSeoProps } from 'next-seo/lib/types'
 import dynamic from 'next/dynamic'
@@ -195,6 +195,14 @@ export function CourseDetailPage({ course, reviews, ogImageUrl }: CourseDetailPa
           <Grid item xs={12} sm={12}>
             <DescriptionTitle variant="subtitle1">คำอธิบายรายวิชา (ภาษาอังกฤษ)</DescriptionTitle>
             <Typography variant="h6">{course.courseDescEn}</Typography>
+          </Grid>
+        )}
+        {((course.courseDescEn?.length ?? 0) > 3 || (course.courseDescTh?.length ?? 0) > 3) && (
+          <Grid item xs={12} sm={12} mt={2}>
+            <Alert severity="warning">
+              ข้อมูลคำอธิบายรายวิชาที่แสดงไม่ได้เป็นข้อมูลล่าสุด อาจมีการเปลี่ยนแปลงได้
+              โปรดตรวจสอบกับรายวิชาอีกครั้ง
+            </Alert>
           </Grid>
         )}
       </GridContainer>

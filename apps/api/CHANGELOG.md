@@ -1,5 +1,11 @@
 # api
 
+## 1.11.0
+
+### Minor Changes
+
+- 7367b3f: bring back old mongo search and use it by default
+
 ## 1.11.0-beta.0
 
 ### Minor Changes

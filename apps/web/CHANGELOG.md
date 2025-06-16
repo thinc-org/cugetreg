@@ -1,5 +1,11 @@
 # web
 
+## 1.14.0
+
+### Minor Changes
+
+- 8a30bb9: Add outdated course description warning
+
 ## 1.14.0-beta.0
 
 ### Minor Changes

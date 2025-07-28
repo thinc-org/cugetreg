@@ -14,7 +14,7 @@ export class DiscordService {
   }
 
   isAvailable(): boolean {
-    return this.webhookUrl !== null
+    return this.webhookUrl !== null && this.webhookUrl.trim() !== ""
   }
 
   async sendMessage(message: MessageCreateOptions) {

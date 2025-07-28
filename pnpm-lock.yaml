@@ -256,12 +256,6 @@ importers:
       cookie-parser:
         specifier: 1.4.6
         version: 1.4.6
-      discord-api-types:
-        specifier: ^0.38.17
-        version: 0.38.17
-      discord.js:
-        specifier: ^14.21.0
-        version: 14.21.0
       google-auth-library:
         specifier: ^8.9.0
         version: 8.9.0
@@ -320,6 +314,9 @@ importers:
       '@types/passport-jwt':
         specifier: ^4.0.1
         version: 4.0.1
+      discord.js:
+        specifier: ^14.21.0
+        version: 14.21.0
       eslint:
         specifier: 8.57.0
         version: 8.57.0

@@ -21,6 +21,7 @@ export interface Configuration {
   opensearchPassword: string
   opensearchSkipSSL: boolean
   courseIndexName: string
+  openaiApiKey: string
 }
 
 export const configuration = (): Configuration => {
@@ -44,6 +45,7 @@ export const configuration = (): Configuration => {
     opensearchPassword: process.env.OPENSEARCH_PASSWORD,
     opensearchSkipSSL: process.env.OPENSEARCH_SKIP_SSL === 'true',
     courseIndexName: process.env.COURSE_INDEX_NAME,
+    openaiApiKey: process.env.OPENAI_API_KEY,
   }
 }
 

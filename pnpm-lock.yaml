@@ -241,9 +241,6 @@ importers:
       '@opensearch-project/opensearch':
         specifier: 2.5.0
         version: 2.5.0
-      '@slack/webhook':
-        specifier: 7.0.2
-        version: 7.0.2
       '@typegoose/typegoose':
         specifier: 9.1.0
         version: 9.1.0(mongoose@6.12.0)

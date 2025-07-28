@@ -14,6 +14,7 @@ export interface Configuration {
   computationBackendUrl: string
   computationBackendAuthToken: string
   slackWebhookUrl: string
+  discordWebhookUrl: string
   reviewDashboardUrl: string
   env: string
   opensearchUrl: string
@@ -38,6 +39,7 @@ export const configuration = (): Configuration => {
     computationBackendUrl: process.env.COMPUTATION_BACKEND_URL,
     computationBackendAuthToken: process.env.COMPUTATION_BACKEND_AUTHTOKEN,
     slackWebhookUrl: process.env.SLACK_WEBHOOK_URL,
+    discordWebhookUrl: process.env.DISCORD_WEBHOOK_URL,
     reviewDashboardUrl: process.env.REVIEW_DASHBOARD_URL,
     env: process.env.ENV || 'development',
     opensearchUrl: process.env.OPENSEARCH_URL,

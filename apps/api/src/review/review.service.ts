@@ -3,12 +3,12 @@ import { Injectable, Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { InjectModel } from '@nestjs/mongoose'
 
-import { IncomingWebhook } from '@slack/webhook'
 import { Model, Types } from 'mongoose'
 
 import { BadRequestError, NotFoundError } from '@api/common/errors'
 import { DiscordService } from '@api/common/services/discord.service'
 import { OpenAIService } from '@api/common/services/openai.service'
+import { Configuration } from '@api/config/configuration'
 
 import {
   Review,
@@ -22,23 +22,14 @@ import { CreateReviewInput, EditReviewInput } from '../graphql'
 
 @Injectable()
 export class ReviewService {
-  private logger: Logger = new Logger('ReviewService')
-  private webhook: IncomingWebhook
   private reviewDashboardUrl: string
 
   constructor(
-    private configService: ConfigService,
+    private configService: ConfigService<Configuration>,
     @InjectModel('review') private reviewModel: Model<Review>,
     private openaiService: OpenAIService,
     private discordService: DiscordService
   ) {
-    const env = this.configService.get<string>('env')
-    const url = this.configService.get<string>('slackWebhookUrl')
-    if (url && env == 'production') {
-      this.logger.log(`Slack webhook (Actually Discord) is configured: ${url}`)
-      this.webhook = new IncomingWebhook(url)
-    }
-
     this.reviewDashboardUrl = this.configService.get<string>('reviewDashboardUrl')
   }
 
@@ -71,6 +62,11 @@ export class ReviewService {
             {
               name: 'Dashboard Link',
               value: `[Click Here](${this.reviewDashboardUrl})`,
+              inline: true,
+            },
+            {
+              name: 'Content (First 100 characters)',
+              value: review.content.substring(0, 100) + (review.content.length > 100 ? '...' : ''),
             },
           ],
           color: status === 'APPROVED' ? 0x00ff00 : status === 'REJECTED' ? 0xff0000 : 0xffff00,
@@ -121,6 +117,10 @@ export class ReviewService {
       rating,
       content,
       status: reviewStatus,
+      rejectionReason:
+        reviewStatus === 'REJECTED'
+          ? 'รีวิวนี้มีเนื้อหาที่ไม่เหมาะสม (จากการตรวจสอบด้วย AI) โปรดติดต่อเราหากคิดว่านี่เป็นข้อผิดพลาด'
+          : undefined,
     })
     await newReview.save()
 
@@ -203,6 +203,10 @@ export class ReviewService {
         $set: {
           ...reviewInput,
           status: reviewStatus,
+          rejectionReason:
+            reviewStatus === 'REJECTED'
+              ? 'รีวิวนี้มีเนื้อหาที่ไม่เหมาะสม (จากการตรวจสอบด้วย AI) โปรดติดต่อเราหากคิดว่านี่เป็นข้อผิดพลาด'
+              : undefined,
         },
       },
       { new: true }

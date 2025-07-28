@@ -38,6 +38,7 @@ export class OpenAIService {
 
     try {
       const response = await this.openai.moderations.create({
+        model: 'omni-moderation-latest',
         input: content,
       })
 

@@ -37,7 +37,6 @@
     "@nestjs/passport": "7.1.5",
     "@nestjs/platform-express": "9.4.0",
     "@opensearch-project/opensearch": "2.5.0",
-    "@slack/webhook": "7.0.2",
     "@typegoose/typegoose": "9.1.0",
     "class-transformer": "0.3.1",
     "class-validator": "0.14.1",

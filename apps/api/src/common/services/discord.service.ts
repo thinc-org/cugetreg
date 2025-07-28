@@ -10,7 +10,7 @@ export class DiscordService {
   private webhookUrl: string | null = null
 
   constructor(private configService: ConfigService<Configuration>) {
-    this.webhookUrl = this.configService.get<string>('slackWebhookUrl')
+    this.webhookUrl = this.configService.get<string>('discordWebhookUrl')
   }
 
   isAvailable(): boolean {
@@ -31,9 +31,11 @@ export class DiscordService {
     })
 
     if (!response.ok) {
-      throw new Error(`Failed to send message to Discord: ${response.statusText}`)
+      throw new Error(
+        `Failed to send message to Discord: ${response.statusText} ${await response.text().catch()}`
+      )
     }
 
-    return await response.json()
+    return
   }
 }

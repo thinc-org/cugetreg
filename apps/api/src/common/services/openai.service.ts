@@ -5,6 +5,8 @@ import OpenAI from 'openai'
 
 import { Configuration } from '@api/config/configuration'
 
+export type ReviewResult = 'FLAGGED' | 'NOT_FLAGGED' | 'UNKNOWN'
+
 @Injectable()
 export class OpenAIService {
   private logger: Logger = new Logger('OpenAIService')
@@ -28,7 +30,7 @@ export class OpenAIService {
    * @param content Content to check with OpenAI moderation API
    * @returns `true` if content is flagged, `false` if not, or `null` if moderation fails
    */
-  async moderateContent(content: string): Promise<boolean | null> {
+  async moderateContent(content: string): Promise<ReviewResult> {
     if (!this.openai) {
       this.logger.warn('OpenAI service not initialized. Skipping content moderation.')
       return null
@@ -40,14 +42,14 @@ export class OpenAIService {
       })
 
       const result = response.results[0]
-      return result.flagged
+      return result.flagged ? 'FLAGGED' : 'NOT_FLAGGED'
     } catch (error) {
       this.logger.error(
         'Error moderating content with OpenAI:',
         error instanceof Error ? error.message : 'Unknown error'
       )
 
-      return null
+      return 'UNKNOWN'
     }
   }
 

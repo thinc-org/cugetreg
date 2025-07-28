@@ -33,7 +33,7 @@ export class OpenAIService {
   async moderateContent(content: string): Promise<ReviewResult> {
     if (!this.openai) {
       this.logger.warn('OpenAI service not initialized. Skipping content moderation.')
-      return null
+      return 'UNKNOWN'
     }
 
     try {

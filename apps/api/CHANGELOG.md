@@ -1,5 +1,11 @@
 # api
 
+## 1.12.0-beta.1
+
+### Minor Changes
+
+- 144b442: finalize ai moderation
+
 ## 1.12.0-beta.0
 
 ### Minor Changes

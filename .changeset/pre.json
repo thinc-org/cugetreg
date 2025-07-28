@@ -13,6 +13,7 @@
     "@cgr/schema": "1.5.1"
   },
   "changesets": [
-    "dry-emus-cheer"
+    "dry-emus-cheer",
+    "tall-news-protect"
   ]
 }

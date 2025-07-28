@@ -1,5 +1,11 @@
 # api
 
+## 1.12.0-beta.0
+
+### Minor Changes
+
+- 5db09ca: add openai moderation to approve review
+
 ## 1.11.0
 
 ### Minor Changes

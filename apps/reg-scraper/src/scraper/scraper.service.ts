@@ -26,7 +26,7 @@ export class ScraperService {
     return this.isScraping
   }
 
-  @Cron('0 0 */3 * * *', {
+  @Cron('0 0 3 * * *', {
     timeZone: 'Asia/Bangkok',
   })
   async scrape() {
@@ -69,6 +69,9 @@ export class ScraperService {
     this.isScraping = false
     this.logger.log(
       `[Complete] Saving all courses completed. Total: ${this.queueStoreService.length} courses`
+    )
+    this.logger.log(
+      `Job started at ${start.toLocaleTimeString('th-TH')} and ended at ${stop.toLocaleTimeString('th-TH')}`
     )
     this.logger.log(`Time taken: ${(stop.getTime() - start.getTime()) / 1000} seconds`)
     this.logger.log(`----------------------------------------------------------------`)

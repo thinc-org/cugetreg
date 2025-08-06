@@ -14,6 +14,7 @@ export interface Configuration {
   computationBackendUrl: string
   computationBackendAuthToken: string
   slackWebhookUrl: string
+  discordWebhookUrl: string
   reviewDashboardUrl: string
   env: string
   opensearchUrl: string
@@ -21,6 +22,7 @@ export interface Configuration {
   opensearchPassword: string
   opensearchSkipSSL: boolean
   courseIndexName: string
+  openaiApiKey: string
 }
 
 export const configuration = (): Configuration => {
@@ -37,6 +39,7 @@ export const configuration = (): Configuration => {
     computationBackendUrl: process.env.COMPUTATION_BACKEND_URL,
     computationBackendAuthToken: process.env.COMPUTATION_BACKEND_AUTHTOKEN,
     slackWebhookUrl: process.env.SLACK_WEBHOOK_URL,
+    discordWebhookUrl: process.env.DISCORD_WEBHOOK_URL,
     reviewDashboardUrl: process.env.REVIEW_DASHBOARD_URL,
     env: process.env.ENV || 'development',
     opensearchUrl: process.env.OPENSEARCH_URL,
@@ -44,6 +47,7 @@ export const configuration = (): Configuration => {
     opensearchPassword: process.env.OPENSEARCH_PASSWORD,
     opensearchSkipSSL: process.env.OPENSEARCH_SKIP_SSL === 'true',
     courseIndexName: process.env.COURSE_INDEX_NAME,
+    openaiApiKey: process.env.OPENAI_API_KEY,
   }
 }
 

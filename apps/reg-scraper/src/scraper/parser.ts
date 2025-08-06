@@ -75,7 +75,24 @@ export function capacityParser(capacity: string): Section['capacity'] {
 }
 
 export function daysOfWeekParser(days: string): DayOfWeek[] {
-  return days.split(' ') as DayOfWeek[] // TODO: find ways to make this more type-safe. Make it throw if invalid instead?
+  const validDaysOfWeek: DayOfWeek[] = ['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU', 'IA', 'AR']
+
+  if (!days || typeof days !== 'string') {
+    throw new Error(`Invalid days input: ${days}`)
+  }
+
+  const parsedDays = days.split(' ').filter((day) => day.trim() !== '')
+
+  for (const day of parsedDays) {
+    const trimmedDay = day.trim()
+    if (!validDaysOfWeek.includes(trimmedDay as DayOfWeek)) {
+      throw new Error(
+        `Invalid day of week: '${trimmedDay}'. Expected one of: ${validDaysOfWeek.join(', ')}`
+      )
+    }
+  }
+
+  return parsedDays.map((day) => day.trim()) as DayOfWeek[]
 }
 
 export function roomAndBuildingParser(name: string): string {

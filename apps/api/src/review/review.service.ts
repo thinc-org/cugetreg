@@ -3,10 +3,12 @@ import { Injectable, Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { InjectModel } from '@nestjs/mongoose'
 
-import { IncomingWebhook } from '@slack/webhook'
 import { Model, Types } from 'mongoose'
 
 import { BadRequestError, NotFoundError } from '@api/common/errors'
+import { DiscordService } from '@api/common/services/discord.service'
+import { OpenAIService } from '@api/common/services/openai.service'
+import { Configuration } from '@api/config/configuration'
 
 import {
   Review,
@@ -20,29 +22,59 @@ import { CreateReviewInput, EditReviewInput } from '../graphql'
 
 @Injectable()
 export class ReviewService {
-  private logger: Logger = new Logger('ReviewService')
-  private webhook: IncomingWebhook
+  private reviewDashboardUrl: string
 
   constructor(
-    private configService: ConfigService,
-    @InjectModel('review') private reviewModel: Model<Review>
+    private configService: ConfigService<Configuration>,
+    @InjectModel('review') private reviewModel: Model<Review>,
+    private openaiService: OpenAIService,
+    private discordService: DiscordService
   ) {
-    const env = this.configService.get<string>('env')
-    const url = this.configService.get<string>('slackWebhookUrl')
-    if (url && env == 'production') {
-      this.logger.log(`Slack webhook is configured: ${url}`)
-      this.webhook = new IncomingWebhook(url)
-    }
+    this.reviewDashboardUrl = this.configService.get<string>('reviewDashboardUrl')
   }
 
-  async sendReviewAlert(review: ReviewDocument) {
-    if (!this.webhook) {
+  async sendReviewAlert(review: ReviewDocument, status: ReviewStatus, isEdit: boolean) {
+    if (!this.discordService.isAvailable()) {
       return
     }
-    const reviewDashboardUrl = this.configService.get<string>('reviewDashboardUrl')
-    this.logger.log(`sent alert`)
-    return this.webhook.send({
-      text: `A new review is created for course ${review.courseNo} ${review.studyProgram} ${review.semester}/${review.academicYear}. Review them now in <${reviewDashboardUrl}|Review Dashboard>.`,
+
+    return this.discordService.sendMessage({
+      embeds: [
+        {
+          title:
+            status === 'APPROVED'
+              ? 'Review Auto-Approved'
+              : status === 'REJECTED'
+                ? 'Review Auto-Rejected'
+                : ':warning: Manual Review Pending',
+          description: isEdit ? 'A review has been edited' : 'A new review has been created',
+          fields: [
+            {
+              name: 'Course No',
+              value: review.courseNo,
+              inline: true,
+            },
+            {
+              name: 'Semester',
+              value: `${review.studyProgram} ${review.semester}/${review.academicYear}`,
+              inline: true,
+            },
+            {
+              name: 'Dashboard Link',
+              value: `[Click Here](${this.reviewDashboardUrl})`,
+              inline: true,
+            },
+            {
+              name: 'Content (First 100 characters)',
+              value: review.content.substring(0, 100) + (review.content.length > 100 ? '...' : ''),
+            },
+          ],
+          color: status === 'APPROVED' ? 0x00ff00 : status === 'REJECTED' ? 0xff0000 : 0xffff00,
+          footer: {
+            text: `Review ID: ${review._id.toString()}`,
+          },
+        },
+      ],
     })
   }
 
@@ -68,6 +100,14 @@ export class ReviewService {
       throw new BadRequestError('User already created a review for this course.')
     }
 
+    const moderationResult = await this.openaiService.moderateContent(content)
+    const reviewStatus =
+      moderationResult === 'NOT_FLAGGED'
+        ? 'APPROVED'
+        : moderationResult === 'FLAGGED'
+          ? 'REJECTED'
+          : 'PENDING'
+
     const newReview = new this.reviewModel({
       ownerId: new Types.ObjectId(userId),
       courseNo,
@@ -76,10 +116,16 @@ export class ReviewService {
       studyProgram,
       rating,
       content,
-      status: 'PENDING',
+      status: reviewStatus,
+      rejectionReason:
+        reviewStatus === 'REJECTED'
+          ? 'รีวิวนี้มีเนื้อหาที่ไม่เหมาะสม (จากการตรวจสอบด้วย AI) โปรดติดต่อเราหากคิดว่านี่เป็นข้อผิดพลาด'
+          : undefined,
     })
     await newReview.save()
-    await this.sendReviewAlert(newReview)
+
+    await this.sendReviewAlert(newReview, reviewStatus, false)
+
     return newReview
   }
 
@@ -142,16 +188,32 @@ export class ReviewService {
     if (!review.ownerId.equals(userId)) {
       throw new BadRequestError('User is not owner of this review.')
     }
+
+    const moderationResult = await this.openaiService.moderateContent(reviewInput.content)
+    const reviewStatus =
+      moderationResult === 'NOT_FLAGGED'
+        ? 'APPROVED'
+        : moderationResult === 'FLAGGED'
+          ? 'REJECTED'
+          : 'PENDING'
+
     const newReview = await this.reviewModel.findByIdAndUpdate(
       reviewId,
       {
         $set: {
           ...reviewInput,
-          status: 'PENDING',
+          status: reviewStatus,
+          rejectionReason:
+            reviewStatus === 'REJECTED'
+              ? 'รีวิวนี้มีเนื้อหาที่ไม่เหมาะสม (จากการตรวจสอบด้วย AI) โปรดติดต่อเราหากคิดว่านี่เป็นข้อผิดพลาด'
+              : undefined,
         },
       },
       { new: true }
     )
+
+    await this.sendReviewAlert(newReview, reviewStatus, true)
+
     return newReview
   }
 

@@ -1,5 +1,11 @@
 # @cgr/schema
 
+## 1.6.0-beta.0
+
+### Minor Changes
+
+- 2cde454: fix: scraper putting invalid data
+
 ## 1.5.1
 
 ### Patch Changes

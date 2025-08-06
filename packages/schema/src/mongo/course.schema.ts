@@ -85,7 +85,22 @@ const classSchema = {
   dayOfWeek: {
     type: String,
     required: true,
-    enum: dayOfWeeks,
+    enum: {
+      values: dayOfWeeks,
+      message: 'dayOfWeek must be one of: {VALUES}. Received: {VALUE}',
+    },
+    validate: {
+      validator: function (value: string) {
+        const isValid = dayOfWeeks.includes(value as any)
+        if (!isValid) {
+          console.error(
+            `Invalid dayOfWeek value in course data: '${value}'. Expected one of: ${dayOfWeeks.join(', ')}`
+          )
+        }
+        return isValid
+      },
+      message: 'Invalid dayOfWeek value: {VALUE}',
+    },
   },
   period: period,
   building: { type: String },

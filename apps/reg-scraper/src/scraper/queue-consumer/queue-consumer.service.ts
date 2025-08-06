@@ -45,49 +45,84 @@ export class QueueConsumerService {
   ) {}
 
   async saveCourse(course: Course): Promise<Course> {
-    const result = await this.courseModel.findOneAndUpdate(
-      {
-        courseNo: course.courseNo,
-        semester: course.semester,
-        studyProgram: course.studyProgram,
-        academicYear: course.academicYear,
-      },
-      course,
-      {
-        upsert: true,
-        overwrite: true,
-        new: true,
-      }
-    )
+    try {
+      // Validate course data before saving
+      this.validateCourseData(course)
 
-    const res = await this.opensearchClient.update({
-      id: result._id.toString(),
-      index: this.configService.get<string>('courseIndexName'),
-      body: {
-        doc: {
-          rawData: course,
-          abbrName: course.abbrName,
-          academicYear: course.academicYear,
-          courseDescEn: course.courseDescEn,
-          courseDescTh: course.courseDescTh,
-          courseNameEn: course.courseNameEn,
-          courseNameTh: course.courseNameTh,
+      const result = await this.courseModel.findOneAndUpdate(
+        {
           courseNo: course.courseNo,
-          genEdType: course.genEdType,
           semester: course.semester,
           studyProgram: course.studyProgram,
-        } as CourseDoc,
-        doc_as_upsert: true,
-      },
-      refresh: true,
-    })
+          academicYear: course.academicYear,
+        },
+        course,
+        {
+          upsert: true,
+          overwrite: true,
+          new: true,
+        }
+      )
 
-    if (res.statusCode >= 400) {
-      this.logger.error(res)
-      throw new InternalServerErrorException('cannot insert data to opensearch database')
+      const res = await this.opensearchClient.update({
+        id: result._id.toString(),
+        index: this.configService.get<string>('courseIndexName'),
+        body: {
+          doc: {
+            rawData: course,
+            abbrName: course.abbrName,
+            academicYear: course.academicYear,
+            courseDescEn: course.courseDescEn,
+            courseDescTh: course.courseDescTh,
+            courseNameEn: course.courseNameEn,
+            courseNameTh: course.courseNameTh,
+            courseNo: course.courseNo,
+            genEdType: course.genEdType,
+            semester: course.semester,
+            studyProgram: course.studyProgram,
+          } as CourseDoc,
+          doc_as_upsert: true,
+        },
+        refresh: true,
+      })
+
+      if (res.statusCode >= 400) {
+        this.logger.error(res)
+        throw new InternalServerErrorException('cannot insert data to opensearch database')
+      }
+
+      return result
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : String(error)
+      this.logger.error(`Error saving course ${course.courseNo}: ${errorMessage}`)
+      // Re-throw to let the caller handle it
+      throw error
+    }
+  }
+
+  private validateCourseData(course: Course): void {
+    const validDaysOfWeek = ['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU', 'IA', 'AR']
+
+    if (!course.sections || !Array.isArray(course.sections)) {
+      throw new Error(`Invalid sections data for course ${course.courseNo}`)
     }
 
-    return result
+    for (const section of course.sections) {
+      if (!section.classes || !Array.isArray(section.classes)) {
+        continue
+      }
+
+      for (const classItem of section.classes) {
+        if (classItem.dayOfWeek && !validDaysOfWeek.includes(classItem.dayOfWeek)) {
+          this.logger.error(
+            `Invalid dayOfWeek '${classItem.dayOfWeek}' found in course ${course.courseNo}, section ${section.sectionNo}`
+          )
+          throw new Error(
+            `Invalid dayOfWeek '${classItem.dayOfWeek}' for course ${course.courseNo}. Expected one of: ${validDaysOfWeek.join(', ')}`
+          )
+        }
+      }
+    }
   }
 
   @Process()

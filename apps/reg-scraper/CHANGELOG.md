@@ -1,5 +1,16 @@
 # reg-scraper
 
+## 1.7.0-beta.0
+
+### Minor Changes
+
+- 2cde454: fix: scraper putting invalid data
+
+### Patch Changes
+
+- Updated dependencies [2cde454]
+  - @cgr/schema@1.6.0-beta.0
+
 ## 1.6.0
 
 ### Minor Changes

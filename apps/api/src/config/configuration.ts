@@ -17,11 +17,6 @@ export interface Configuration {
   discordWebhookUrl: string
   reviewDashboardUrl: string
   env: string
-  opensearchUrl: string
-  opensearchUsername: string
-  opensearchPassword: string
-  opensearchSkipSSL: boolean
-  courseIndexName: string
   openaiApiKey: string
 }
 
@@ -42,11 +37,6 @@ export const configuration = (): Configuration => {
     discordWebhookUrl: process.env.DISCORD_WEBHOOK_URL,
     reviewDashboardUrl: process.env.REVIEW_DASHBOARD_URL,
     env: process.env.ENV || 'development',
-    opensearchUrl: process.env.OPENSEARCH_URL,
-    opensearchUsername: process.env.OPENSEARCH_USERNAME,
-    opensearchPassword: process.env.OPENSEARCH_PASSWORD,
-    opensearchSkipSSL: process.env.OPENSEARCH_SKIP_SSL === 'true',
-    courseIndexName: process.env.COURSE_INDEX_NAME,
     openaiApiKey: process.env.OPENAI_API_KEY,
   }
 }
@@ -58,10 +48,6 @@ const requiredConfigs = [
   'adminToken',
   'computationBackendUrl',
   'backendPublicUrl',
-  'opensearchUrl',
-  'opensearchUsername',
-  'opensearchPassword',
-  'courseIndexName',
 ]
 
 export function validateConfig(configService: ConfigService<Configuration>): void {

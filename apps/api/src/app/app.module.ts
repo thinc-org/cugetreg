@@ -7,8 +7,6 @@ import { MongooseModule } from '@nestjs/mongoose'
 import { GraphQLError } from 'graphql'
 import { join } from 'path'
 
-import { SearchModule } from '@api/search/search.module'
-
 import { AuthModule } from '../auth/auth.module'
 import { ClientLoggingModule } from '../clientlogging/clientlogging.module'
 import { CommonModule } from '../common/common.module'
@@ -83,7 +81,6 @@ import { AppService } from './app.service'
     ClientLoggingModule,
     OverrideModule,
     ComputationModule,
-    SearchModule,
   ],
   controllers: [AppController],
   providers: [AppService],

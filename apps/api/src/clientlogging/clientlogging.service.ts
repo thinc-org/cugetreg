@@ -1,7 +1,10 @@
 import { Injectable, InternalServerErrorException, Logger } from '@nestjs/common'
+import { InjectModel } from '@nestjs/mongoose'
 
-import { InjectOpensearchClient, OpensearchClient } from 'nestjs-opensearch'
+import { Model } from 'mongoose'
 import { hostname } from 'os'
+
+import { ClientLoggingDocument } from '@cgr/schema'
 
 export interface GelfLogEntry {
   short_message: string
@@ -10,12 +13,10 @@ export interface GelfLogEntry {
   app: 'frontend-client' | 'backend'
 }
 
-const CLIENTLOGGING_INDEX = 'cgr-clientlogging'
-
 @Injectable()
 export class ClientLoggingService {
   constructor(
-    @InjectOpensearchClient('default') private readonly opensearchClient: OpensearchClient
+    @InjectModel('clientLogging') private readonly clientLoggingModel: Model<ClientLoggingDocument>
   ) {}
 
   async sendLogEntry(entry: GelfLogEntry & Record<string, string>) {
@@ -26,11 +27,7 @@ export class ClientLoggingService {
         host: hostname(),
       }
 
-      await this.opensearchClient.index({
-        index: CLIENTLOGGING_INDEX,
-        body: record,
-        refresh: true,
-      })
+      await this.clientLoggingModel.create(record)
     } catch (e) {
       Logger.error('Failed to send log to logging service', e)
       throw new InternalServerErrorException("Can't send log to log collector")

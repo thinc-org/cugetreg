@@ -1,5 +1,12 @@
 # admin-api
 
+## 1.4.1-beta.0
+
+### Patch Changes
+
+- Updated dependencies [2cde454]
+  - @cgr/schema@1.6.0-beta.0
+
 ## 1.4.0
 
 ### Minor Changes

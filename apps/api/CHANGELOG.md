@@ -1,5 +1,12 @@
 # api
 
+## 1.12.0-beta.2
+
+### Patch Changes
+
+- Updated dependencies [2cde454]
+  - @cgr/schema@1.6.0-beta.0
+
 ## 1.12.0-beta.1
 
 ### Minor Changes

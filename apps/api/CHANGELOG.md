@@ -1,5 +1,17 @@
 # api
 
+## 1.12.0
+
+### Minor Changes
+
+- 5db09ca: add openai moderation to approve review
+- 144b442: finalize ai moderation
+
+### Patch Changes
+
+- Updated dependencies [2cde454]
+  - @cgr/schema@1.6.0
+
 ## 1.12.0-beta.2
 
 ### Patch Changes

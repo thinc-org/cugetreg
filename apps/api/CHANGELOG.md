@@ -1,5 +1,16 @@
 # api
 
+## 1.13.0-beta.0
+
+### Minor Changes
+
+- 18f4e95: refactor: remove opensearch
+
+### Patch Changes
+
+- Updated dependencies [18f4e95]
+  - @cgr/schema@1.7.0-beta.0
+
 ## 1.12.0
 
 ### Minor Changes

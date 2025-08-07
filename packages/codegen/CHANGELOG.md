@@ -1,5 +1,11 @@
 # @cgr/codegen
 
+## 1.5.1-beta.0
+
+### Patch Changes
+
+- 18f4e95: refactor: remove opensearch
+
 ## 1.5.0
 
 ### Minor Changes

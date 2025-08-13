@@ -1,5 +1,12 @@
 # reg-scraper
 
+## 1.8.0-beta.1
+
+### Patch Changes
+
+- Updated dependencies [5eb12f2]
+  - @cgr/schema@1.7.0-beta.1
+
 ## 1.8.0-beta.0
 
 ### Minor Changes

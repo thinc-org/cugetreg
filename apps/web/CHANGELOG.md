@@ -1,5 +1,11 @@
 # web
 
+## 1.15.0-beta.1
+
+### Minor Changes
+
+- 5eb12f2: refactor: remove client logging
+
 ## 1.14.1-beta.0
 
 ### Patch Changes

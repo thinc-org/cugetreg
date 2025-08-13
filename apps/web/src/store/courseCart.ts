@@ -9,7 +9,6 @@ import type { CourseKey } from '@web/common/utils/types'
 import type { ScheduleColor } from '@web/modules/Schedule/components/ColorPicker/constants'
 import { getNewColor } from '@web/modules/Schedule/components/ColorPicker/utils/getNewColor'
 import { client } from '@web/services/apollo'
-import { collectErrorLog, collectLogEvent } from '@web/services/logging'
 import { userStore } from '@web/store/userStore'
 
 import type { Course } from '@cgr/codegen'
@@ -204,7 +203,6 @@ export class CourseCart implements CourseCartProps {
         1000
       )
     } catch (e) {
-      collectErrorLog('Fail to pull course cart', e)
       console.error('Fail to pull course cart', e)
       runInAction(() => {
         if (this.source.online) this.syncState = CourseCartSyncState.FAIL
@@ -235,7 +233,6 @@ export class CourseCart implements CourseCartProps {
         1000
       )
     } catch (e) {
-      collectErrorLog('Fail to push course cart', e)
       console.error('Fail to push course cart', e)
       runInAction(() => {
         if (this.source.online) this.syncState = CourseCartSyncState.FAIL
@@ -272,19 +269,6 @@ export class CourseCart implements CourseCartProps {
    */
   @action
   addItem(course: Course, selectedSectionNo?: string, sync = true) {
-    // TO DO: remove and use analytics instead
-    collectLogEvent({
-      kind: 'track',
-      message: 'user add course',
-      additionalData: {
-        courseNo: course.courseNo,
-        selectedSectionNo: selectedSectionNo || 'NONE',
-        acaedemicYear: course.academicYear,
-        semester: course.semester,
-        studyProgram: course.studyProgram,
-      },
-    })
-
     if (!selectedSectionNo) selectedSectionNo = this.findFirstSectionNo(course)
     const newItem: CourseCartItem = {
       ...course,

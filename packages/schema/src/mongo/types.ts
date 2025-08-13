@@ -36,5 +36,4 @@ export const ModelName = {
   RefreshToken: 'refreshtoken',
   Review: 'review',
   User: 'user',
-  ClientLogging: 'clientLogging',
 } as const

@@ -8,7 +8,6 @@ import { GraphQLError } from 'graphql'
 import { join } from 'path'
 
 import { AuthModule } from '../auth/auth.module'
-import { ClientLoggingModule } from '../clientlogging/clientlogging.module'
 import { CommonModule } from '../common/common.module'
 import { GraphQLExpressContext } from '../common/types/context.type'
 import { ComputationModule } from '../computation/computation.module'
@@ -78,7 +77,6 @@ import { AppService } from './app.service'
     UserModule,
     AuthModule,
     ReviewModule,
-    ClientLoggingModule,
     OverrideModule,
     ComputationModule,
   ],

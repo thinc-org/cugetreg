@@ -1,5 +1,4 @@
 import { ENVIRONMENT, GOOGLE_ANALYTIC_PROPERTY_ID } from '@web/env'
-import { collectLogEvent } from '@web/services/logging'
 
 import { AnalyticsType } from '../../types'
 
@@ -9,21 +8,8 @@ export function useAnalytics() {
     const gaData = typeof window !== 'undefined' && (window as any).gaData
     const experiments = gaData && gaData[GOOGLE_ANALYTIC_PROPERTY_ID]?.experiments
 
-    return collectLogEvent({
-      kind: 'fine-tracking',
-      message: `User performed ${e.eventType} on object ${e.pathname} at ${e.timeStamp}`,
-      additionalData: {
-        value: e.value || '',
-        elementName: e.elementName || '',
-        elementId: e.elementId || '',
-        eventType: e.eventType,
-        pathname: e.pathname,
-        pathId: e.pathId || '',
-        ua: navigator?.userAgent || '',
-        experiments: JSON.stringify(experiments),
-        environment: ENVIRONMENT,
-      },
-    })
+    // Removed logging functionality - just log to console
+    console.log('Analytics event:', e)
   }
 
   return { addEvent }

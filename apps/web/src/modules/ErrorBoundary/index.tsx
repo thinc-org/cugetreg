@@ -2,8 +2,6 @@ import React from 'react'
 
 import { Grid, Typography } from '@mui/material'
 
-import { collectErrorLog, sessionId } from '@web/services/logging'
-
 export class ErrorBoundary extends React.Component<
   { children: React.ReactNode },
   { hasError: boolean }
@@ -14,7 +12,7 @@ export class ErrorBoundary extends React.Component<
   }
 
   componentDidCatch(error: unknown) {
-    collectErrorLog('React error boundary', error)
+    console.error('React error boundary', error)
   }
 
   static getDerivedStateFromError() {
@@ -29,7 +27,6 @@ export class ErrorBoundary extends React.Component<
 
           <Typography variant="h3">
             <p>Please contact the development team (upper right button)</p>
-            <p>Session ID: {sessionId}</p>
           </Typography>
         </Grid>
       )

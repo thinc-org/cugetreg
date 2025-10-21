@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Separator as SeparatorPrimitive } from 'bits-ui';
 
-  import { Separator } from '@repo/ui/components/atom/separator';
+  import { Separator } from '@repo/ui/atom/separator';
   import { cn } from '@repo/ui/utils';
 
   let {

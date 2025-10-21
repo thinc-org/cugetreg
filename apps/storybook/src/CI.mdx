@@ -1,4 +1,4 @@
-import { Meta } from '@storybook/blocks';
+import { Meta } from '@storybook/addon-docs/blocks';
 
 import CUGetRegDarkFull from './assets/logo/cugetreg-dark-full.svg';
 import CUGetRegDarkSmall from './assets/logo/cugetreg-dark-small.svg';
@@ -149,7 +149,7 @@ export const ColorGrid = ({ colorName, classNames }) => {
     <div className="grid grid-cols-3">
       {classNames.map((className, index) => (
         <div className={`h-16 ${className[0]}`} title={className[0]}>
-          <p className={`text-center !font-sans ${className[1]}`}>
+          <p className={`text-center font-sans! ${className[1]}`}>
             {getText(index, colorName)}
           </p>
         </div>
@@ -229,7 +229,7 @@ export const ColorGrid2 = ({ param, gridCols }) => {
     <div className={`grid ${gridCols}`}>
       {param.map((className, index) => (
         <div className={`h-16 ${className[1]}`} title={className[1]}>
-          <p className={`text-center !font-sans ${className[2]}`}>
+          <p className={`text-center font-sans! ${className[2]}`}>
             {className[0]}
           </p>
         </div>
@@ -272,9 +272,9 @@ export const ColorGrid2 = ({ param, gridCols }) => {
 
 ### Heading
 
-<p className="!font-sans font-bold !text-h1">FC Orbit</p>
+<p className="font-sans! font-bold text-h1!">FC Orbit</p>
 
-<table className="table-auto w-full mt-4 !font-sans">
+<table className="table-auto w-full mt-4 font-sans!">
   <thead>
     <tr>
       <th className="px-4 py-2">Font Weight</th>
@@ -311,9 +311,9 @@ export const ColorGrid2 = ({ param, gridCols }) => {
 
 ### Body
 
-<p className="!font-sarabun font-bold !text-h1">Sarabun</p>
+<p className="font-sarabun! font-bold text-h1!">Sarabun</p>
 
-<table className="table-auto w-full mt-4 !font-sarabun">
+<table className="table-auto w-full mt-4 font-sarabun!">
   <thead>
     <tr>
       <th className="px-4 py-2">Font Weight</th>

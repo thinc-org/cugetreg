@@ -2,7 +2,7 @@
   import CircleIcon from '@lucide/svelte/icons/circle';
   import { RadioGroup as RadioGroupPrimitive } from 'bits-ui';
 
-  import { cn, type WithoutChildrenOrChild } from '@repo/ui/utils.js';
+  import { cn, type WithoutChildrenOrChild } from '@repo/ui/utils';
 
   let {
     ref = $bindable(null),

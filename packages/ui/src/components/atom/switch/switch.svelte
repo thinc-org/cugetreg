@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Label, Switch as SwitchPrimitive } from 'bits-ui';
 
-  import { cn, type WithoutChildrenOrChild } from '@repo/ui/utils.js';
+  import { cn, type WithoutChildrenOrChild } from '@repo/ui/utils';
 
   type SwitchProps = WithoutChildrenOrChild<SwitchPrimitive.RootProps> & {
     label?: string;

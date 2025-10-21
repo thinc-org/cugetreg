@@ -1,23 +1,23 @@
 <script lang="ts">
-  import type { Snippet } from 'svelte'
-  import { createBubbler } from 'svelte/legacy'
+  import type { Snippet } from 'svelte';
+  import { createBubbler } from 'svelte/legacy';
 
-  const bubble = createBubbler()
-  import type { HTMLAttributes } from 'svelte/elements'
+  const bubble = createBubbler();
+  import type { HTMLAttributes } from 'svelte/elements';
 
-  import { cn } from '@repo/utils'
+  import { cn } from '@repo/utils';
 
   type $$Props = HTMLAttributes<HTMLTableRowElement> & {
-    'data-state'?: unknown
-  }
+    'data-state'?: unknown;
+  };
 
   interface Props {
-    class?: $$Props['class']
-    children?: Snippet
-    [key: string]: unknown
+    class?: $$Props['class'];
+    children?: Snippet;
+    [key: string]: unknown;
   }
 
-  let { class: className = undefined, children, ...rest }: Props = $props()
+  let { class: className = undefined, children, ...rest }: Props = $props();
 </script>
 
 <tr

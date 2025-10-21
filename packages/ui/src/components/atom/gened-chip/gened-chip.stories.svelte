@@ -1,12 +1,12 @@
 <script module lang="ts">
-  import { defineMeta } from '@storybook/addon-svelte-csf'
+  import { defineMeta } from '@storybook/addon-svelte-csf';
 
-  import { GenedChip } from './index.js'
+  import { GenedChip } from './index.js';
 
   const { Story } = defineMeta<typeof GenedChip>({
     title: 'Atom/Gened Chip',
     component: GenedChip,
-    tags: ['autodocs'],
+    tags: ['autodocs', 'derived'],
     argTypes: {
       type: {
         control: {
@@ -25,7 +25,7 @@
         control: false,
       },
     },
-  })
+  });
 </script>
 
 <!-- 👇 Each story then reuses that template -->

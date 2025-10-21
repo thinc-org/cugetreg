@@ -1,10 +1,10 @@
 <script module lang="ts">
-  import { defineMeta } from '@storybook/addon-svelte-csf'
+  import { defineMeta } from '@storybook/addon-svelte-csf';
 
-  import { Chip } from '../../atom/chip/index.js'
-  import * as Select from './index.js'
+  import { Chip } from '../../atom/chip/index.js';
+  import * as Select from './index.js';
 
-  const { Story } = defineMeta<typeof Select.Root>({
+  const { Story } = defineMeta({
     title: 'Molecule/Select',
     tags: ['autodocs'],
     argTypes: {
@@ -30,7 +30,7 @@
         description: 'Name attribute for forms.',
       },
     },
-  })
+  });
 
   const fruits = [
     { value: 'apple', label: 'Apple' },
@@ -38,13 +38,13 @@
     { value: 'blueberry', label: 'Blueberry' },
     { value: 'grapes', label: 'Grapes' },
     { value: 'pineapple', label: 'Pineapple' },
-  ]
+  ];
 
-  let value = $state('')
+  let value = $state('');
 
   const triggerContent = $derived(
     fruits.find((f) => f.value === value)?.label ?? 'Select a fruit',
-  )
+  );
 
   const themes = [
     { value: '1', label: 'เซค 1' },
@@ -53,9 +53,9 @@
     { value: '4', label: 'เซค 4' },
     { value: '5', label: 'เซค 5' },
     { value: '6', label: 'เซค 6' },
-  ]
+  ];
 
-  let value2 = $state<string[]>([])
+  let value2 = $state<string[]>([]);
 </script>
 
 <!--👇 Each story then reuses that template-->
@@ -72,7 +72,7 @@
     <Select.Content role="listbox">
       <Select.Group>
         <Select.GroupHeading>Fruits</Select.GroupHeading>
-        {#each fruits as fruit}
+        {#each fruits as fruit (fruit.value)}
           <Select.Item
             value={fruit.value}
             label={fruit.label}
@@ -99,7 +99,7 @@
     <Select.Content role="listbox">
       <Select.Group>
         <Select.GroupHeading>Fruits</Select.GroupHeading>
-        {#each fruits as fruit}
+        {#each fruits as fruit (fruit.value)}
           <Select.Item
             value={fruit.value}
             label={fruit.label}
@@ -124,7 +124,7 @@
       {#if !value2.length}
         เลือก
       {:else}
-        {#each value2 as temp}
+        {#each value2 as temp, index (index)}
           {themes.find((item) => item.value === temp)?.label + ', ' ||
             temp + ', '}
         {/each}
@@ -132,7 +132,7 @@
     </Select.Trigger>
     <Select.Content role="listbox">
       <Select.Group>
-        {#each themes as fruit}
+        {#each themes as fruit (fruit.value)}
           <Select.Item
             value={fruit.value}
             label={fruit.label}
@@ -155,13 +155,13 @@
         <div
           class="absolute flex max-w-[274px] w-auto pl-2 top-1/2 -translate-y-1/2 items-center gap-1 truncate"
         >
-          {#each value2 as temp}
+          {#each value2 as temp, index (index)}
             <Chip
               class="z-10"
               closable
               onClose={(event: MouseEvent) => {
-                event.stopPropagation()
-                value2 = value2.filter((item) => item != temp)
+                event.stopPropagation();
+                value2 = value2.filter((item) => item != temp);
               }}
               aria-label={`Remove ${themes.find((item) => item.value === temp)?.label || temp}`}
             >
@@ -182,7 +182,7 @@
     </div>
     <Select.Content role="listbox">
       <Select.Group>
-        {#each themes as fruit}
+        {#each themes as fruit (fruit.value)}
           <Select.Item
             value={fruit.value}
             label={fruit.label}

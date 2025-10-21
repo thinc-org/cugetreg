@@ -1,9 +1,9 @@
 <script module lang="ts">
-  import { defineMeta } from '@storybook/addon-svelte-csf'
+  import { defineMeta } from '@storybook/addon-svelte-csf';
 
-  import { CourseCard } from './index.js'
+  import { CourseCard } from './index.js';
 
-  const { Story } = defineMeta<typeof CourseCard>({
+  const { Story } = defineMeta({
     title: 'Molecule/Course Card',
     component: CourseCard,
     tags: ['autodocs'],
@@ -34,7 +34,7 @@
         },
       },
     },
-  })
+  });
 </script>
 
 <!--👇 Each story then reuses that template-->

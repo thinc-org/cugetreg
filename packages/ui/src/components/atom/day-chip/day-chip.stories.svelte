@@ -1,12 +1,12 @@
 <script module lang="ts">
-  import { defineMeta } from '@storybook/addon-svelte-csf'
+  import { defineMeta } from '@storybook/addon-svelte-csf';
 
-  import { DayChip } from './index.js'
+  import { DayChip } from './index.js';
 
   const { Story } = defineMeta<typeof DayChip>({
     title: 'Atom/Day Chip',
     component: DayChip,
-    tags: ['autodocs'],
+    tags: ['autodocs', 'derived'],
     argTypes: {
       day: {
         control: {
@@ -25,7 +25,7 @@
         control: false,
       },
     },
-  })
+  });
 </script>
 
 <!-- 👇 Each story then reuses that template -->

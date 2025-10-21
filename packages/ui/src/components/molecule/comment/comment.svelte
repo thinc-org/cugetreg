@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { ThumbsDown, ThumbsUp } from 'lucide-svelte'
+  import { ThumbsDown, ThumbsUp } from '@lucide/svelte';
 
-  import { RatingStar } from '../../atom/rating-star'
+  import { RatingStar } from '../../atom/rating-star';
 
   let {
     content,
@@ -10,14 +10,14 @@
     likesCount,
     dislikesCount,
   }: {
-    content: string
-    semester: string
-    rating: number
-    likesCount: number
-    dislikesCount: number
-  } = $props()
-  let hasHalfStar: boolean = $derived(rating % 1 !== 0) // Determine if there's a half star
-  let isExpanded: boolean = $state(false)
+    content: string;
+    semester: string;
+    rating: number;
+    likesCount: number;
+    dislikesCount: number;
+  } = $props();
+  let hasHalfStar: boolean = $derived(rating % 1 !== 0); // Determine if there's a half star
+  let isExpanded: boolean = $state(false);
 </script>
 
 <div

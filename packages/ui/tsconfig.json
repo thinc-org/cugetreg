@@ -3,8 +3,11 @@
     "strict": true,
     "paths": {
       "$lib": ["./src"],
-      "$lib/*": ["./src/*"]
-    }
+      "$lib/*": ["./src/*"],
+      "@repo/ui/*": ["./src/*"]
+    },
+    "module": "esnext",
+    "moduleResolution": "bundler"
   },
   "include": ["index.d.ts", "./src/**/*ts", "./src/**/*.svelte"],
   "exclude": ["node_modules"]

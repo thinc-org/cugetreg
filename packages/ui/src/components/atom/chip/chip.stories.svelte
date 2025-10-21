@@ -1,12 +1,12 @@
 <script module lang="ts">
-  import { defineMeta } from '@storybook/addon-svelte-csf'
+  import { defineMeta } from '@storybook/addon-svelte-csf';
 
-  import { Chip } from './index.js'
+  import { Chip } from './index.js';
 
   const { Story } = defineMeta<typeof Chip>({
     title: 'Atom/Chip',
     component: Chip,
-    tags: ['autodocs'],
+    tags: ['autodocs', 'original'],
     argTypes: {
       closable: {
         control: 'boolean',
@@ -18,7 +18,7 @@
         control: false,
       },
     },
-  })
+  });
 </script>
 
 <!-- 👇 Each story then reuses that template -->

@@ -1,52 +1,35 @@
 <script lang="ts">
-  import { Label, RadioGroup as RadioGroupPrimitive } from 'bits-ui'
-  import { Circle } from 'lucide-svelte'
+  import CircleIcon from '@lucide/svelte/icons/circle';
+  import { RadioGroup as RadioGroupPrimitive } from 'bits-ui';
 
-  import { cn } from '@repo/utils'
-
-  type $$Props = RadioGroupPrimitive.ItemProps & {
-    id: string
-    label: string
-  }
-  type $$Events = RadioGroupPrimitive.ItemEvents
-
-  interface Props {
-    class?: $$Props['class']
-    value: $$Props['value']
-    id: $$Props['id']
-    label?: $$Props['label']
-    [key: string]: unknown
-  }
+  import { cn, type WithoutChildrenOrChild } from '@repo/ui/utils.js';
 
   let {
-    class: className = undefined,
-    value,
-    id,
-    label = 'label',
-    ...rest
-  }: Props = $props()
+    ref = $bindable(null),
+    class: className,
+    ...restProps
+  }: WithoutChildrenOrChild<RadioGroupPrimitive.ItemProps> = $props();
 </script>
 
-<div class="flex items-center space-x-2">
-  <RadioGroupPrimitive.Item
-    {value}
-    class={cn(
-      'peer border-on-surface-placeholder data-[state=checked]:border-primary  text-primary ring-offset-background focus-visible:ring-ring aspect-square h-5 w-5 rounded-full border-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
-      className,
-    )}
-    {...rest}
-    on:click
-  >
-    <div class="flex items-center justify-center">
-      <RadioGroupPrimitive.ItemIndicator>
-        <Circle class="h-2.5 w-2.5 fill-primary text-current" />
-      </RadioGroupPrimitive.ItemIndicator>
+<RadioGroupPrimitive.Item
+  bind:ref
+  data-slot="radio-group-item"
+  class={cn(
+    'border-input text-primary focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 shadow-xs aspect-square size-4 shrink-0 rounded-full border outline-none transition-[color,box-shadow] focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50',
+    className,
+  )}
+  {...restProps}
+>
+  {#snippet children({ checked })}
+    <div
+      data-slot="radio-group-indicator"
+      class="relative flex items-center justify-center"
+    >
+      {#if checked}
+        <CircleIcon
+          class="fill-primary absolute left-1/2 top-1/2 size-2 -translate-x-1/2 -translate-y-1/2"
+        />
+      {/if}
     </div>
-  </RadioGroupPrimitive.Item>
-  <Label.Root
-    for={id}
-    class="text-button2 font-normal leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-  >
-    {label}
-  </Label.Root>
-</div>
+  {/snippet}
+</RadioGroupPrimitive.Item>

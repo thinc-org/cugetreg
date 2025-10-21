@@ -1,20 +1,20 @@
 <script lang="ts">
-  import { Check, Dot, Plus } from 'lucide-svelte'
+  import { Check, Dot, Plus } from '@lucide/svelte';
 
-  import { cn } from '@repo/utils'
+  import { cn } from '@repo/ui/utils';
 
-  import { Button } from '../../atom/button/index.js'
-  import { DayChip } from '../../atom/day-chip/index.js'
-  import { GenedChip } from '../../atom/gened-chip/index.js'
-  import { RecommendedTag } from '../../atom/recommended-tag/index.js'
-  import type { Course } from './index.js'
+  import { Button } from '../../atom/button/index.js';
+  import { DayChip } from '../../atom/day-chip/index.js';
+  import { GenedChip } from '../../atom/gened-chip/index.js';
+  import { RecommendedTag } from '../../atom/recommended-tag/index.js';
+  import type { Course } from './index.js';
 
   interface Props {
-    class?: string | undefined | null
-    course?: Course
-    selected?: boolean
-    recommended?: boolean
-    [key: string]: unknown
+    class?: string | undefined | null;
+    course?: Course;
+    selected?: boolean;
+    recommended?: boolean;
+    [key: string]: unknown;
   }
 
   let {
@@ -23,11 +23,11 @@
     selected = $bindable(false),
     recommended = false,
     ...rest
-  }: Props = $props()
+  }: Props = $props();
 
   export const onButtonClick = () => {
-    selected = !selected
-  }
+    selected = !selected;
+  };
 </script>
 
 <div
@@ -48,7 +48,7 @@
       </div>
     </div>
     <div class="flex gap-1">
-      {#each course?.gened ?? [] as gened}
+      {#each course?.gened ?? [] as gened (gened)}
         <GenedChip type={gened} />
       {/each}
     </div>
@@ -64,7 +64,7 @@
       <span>{course?.review} รีวิว</span>
     </div>
     <div class="flex gap-2">
-      {#each course?.days ?? [] as day}
+      {#each course?.days ?? [] as day (day)}
         <DayChip {day} />
       {/each}
     </div>

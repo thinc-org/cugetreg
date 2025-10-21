@@ -1,12 +1,12 @@
 <script module lang="ts">
-  import { defineMeta } from '@storybook/addon-svelte-csf'
+  import { defineMeta } from '@storybook/addon-svelte-csf';
 
-  import * as RadioGroup from './index.js'
+  import * as RadioGroup from './index.js';
 
   const { Story } = defineMeta({
     title: 'Atom/Radio Group',
     component: RadioGroup,
-    tags: ['autodocs'],
+    tags: ['autodocs', 'shadcn-base'],
     argTypes: {
       'aria-label': {
         control: 'text',
@@ -47,7 +47,7 @@
         action: 'onClick',
       },
     },
-  })
+  });
 </script>
 
 {#snippet template(args)}

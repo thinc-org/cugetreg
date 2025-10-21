@@ -1,21 +1,21 @@
 <script lang="ts">
-  import { DoorOpen, Settings } from 'lucide-svelte'
+  import { DoorOpen, Settings } from '@lucide/svelte';
 
-  import { getShortenName } from '@repo/utils'
+  import { getShortenName } from '@repo/utils';
 
   interface Props {
-    imageUrl?: string
-    name?: string
-    id?: string
+    imageUrl?: string;
+    name?: string;
+    id?: string;
   }
 
   let {
     imageUrl = 'https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg',
     name = '',
     id = '',
-  }: Props = $props()
+  }: Props = $props();
 
-  let shortenedName = $derived(getShortenName(name))
+  let shortenedName = $derived(getShortenName(name));
 
   const items = [
     {
@@ -26,7 +26,7 @@
       icon: DoorOpen,
       name: 'ออกจากระบบ',
     },
-  ]
+  ];
 </script>
 
 <div class="w-60 rounded-xl border-2 border-[#EDEDF1] bg-surface">
@@ -41,7 +41,7 @@
       <p class="text-on-surface text-body2 font-medium">ID: {id}</p>
     </div>
   </div>
-  {#each items as { icon: Icon, name }}
+  {#each items as { icon: Icon, name } (name)}
     <div class="flex flex-row p-4 gap-3 items-center border-t border-[#EDEDF1]">
       <Icon size="16" color="#353745" strokeWidth="2.5" />
       <p class="text-on-surface font-medium text-button2">{name}</p>

@@ -1,12 +1,12 @@
 <script module lang="ts">
-  import { defineMeta } from '@storybook/addon-svelte-csf'
+  import { defineMeta } from '@storybook/addon-svelte-csf';
 
-  import * as Table from './index.js'
+  import * as Table from './index.js';
 
   const { Story } = defineMeta({
     title: 'Atom/Table',
 
-    tags: ['autodocs'],
+    tags: ['autodocs', 'original'],
     parameters: {
       docs: {
         description: {
@@ -25,7 +25,7 @@ This example demonstrates the use of each sub-component:
       },
     },
     argTypes: {},
-  })
+  });
 </script>
 
 <!-- 👇 Each story then reuses that template -->

@@ -1,45 +1,39 @@
 <script lang="ts">
-  import { Label, Switch as SwitchPrimitive } from 'bits-ui'
+  import { Label, Switch as SwitchPrimitive } from 'bits-ui';
 
-  import { cn } from '@repo/utils'
+  import { cn, type WithoutChildrenOrChild } from '@repo/ui/utils.js';
 
-  type $$Props = SwitchPrimitive.Props & {
-    label?: string | undefined | null
-  }
-  type $$Events = SwitchPrimitive.Events
-
-  interface Props {
-    class?: $$Props['class']
-    checked?: $$Props['checked']
-    id?: $$Props['id']
-    label?: $$Props['label']
-    [key: string]: unknown
-  }
+  type SwitchProps = WithoutChildrenOrChild<SwitchPrimitive.RootProps> & {
+    label?: string;
+    id?: string;
+  };
 
   let {
-    class: className = undefined,
-    checked = $bindable(undefined),
-    id = null,
-    label = 'label',
-    ...rest
-  }: Props = $props()
+    ref = $bindable(null),
+    class: className,
+    checked = $bindable(false),
+    label,
+    id,
+    ...restProps
+  }: SwitchProps = $props();
 </script>
 
 <div class="flex items-center space-x-2">
   <SwitchPrimitive.Root
+    bind:ref
     bind:checked
+    data-slot="switch"
     class={cn(
-      'focus-visible:ring-ring focus-visible:ring-offset-background data-[state=checked]:border-primary data-[state=checked]:bg-primary-low data-[state=unchecked]:bg-surface-container-lowest peer inline-flex h-[18px] w-[32px] shrink-0 cursor-pointer items-center rounded-full border border-surface-container-high  transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
+      'data-[state=checked]:border-primary data-[state=checked]:bg-primary-low [state=unchecked]:bg-surface-container-lowest focus-visible:border-ring focus-visible:ring-ring/50 dark:data-[state=unchecked]:bg-input/80 shadow-xs peer inline-flex h-[1.15rem] w-8 shrink-0 items-center rounded-full border border-surface-container-high outline-none transition-all focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50',
       className,
     )}
-    {...rest}
-    on:click
-    on:keydown
     {id}
+    {...restProps}
   >
     <SwitchPrimitive.Thumb
+      data-slot="switch-thumb"
       class={cn(
-        'p-1 bg-surface-container-high data-[state=checked]:bg-primary pointer-events-none block h-3.5 w-3.5 rounded-full shadow-lg ring-0 transition-transform data-[state=checked]:translate-x-[14.5px] data-[state=unchecked]:translate-x-[1px]',
+        'bg-surface-container-high data-[state=checked]:bg-primary dark:data-[state=unchecked]:bg-foreground dark:data-[state=checked]:bg-primary-foreground pointer-events-none block size-4 rounded-full ring-0 transition-transform data-[state=checked]:translate-x-[calc(100%-2px)] data-[state=unchecked]:translate-x-0',
       )}
     />
   </SwitchPrimitive.Root>

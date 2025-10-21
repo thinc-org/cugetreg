@@ -1,15 +1,15 @@
 <script lang="ts">
-  import { cn } from '@repo/utils'
+  import { cn } from '@repo/ui/utils';
 
-  import { Chip } from '../chip/index.js'
-  import { chipVariants, type Day } from './index.js'
+  import { Chip } from '../chip/index.js';
+  import { chipVariants, type Day } from './index.js';
 
   interface Props {
-    class?: string | undefined | null
-    day: Day
-    closable?: boolean
-    onClose?: () => void
-    [key: string]: unknown
+    class?: string | undefined | null;
+    day: Day;
+    closable?: boolean;
+    onClose?: () => void;
+    [key: string]: unknown;
   }
 
   let {
@@ -18,7 +18,7 @@
     closable = false,
     onClose = () => {},
     ...rest
-  }: Props = $props()
+  }: Props = $props();
 
   const label = {
     MO: 'จันทร์',
@@ -28,7 +28,7 @@
     FR: 'ศุกร์',
     SA: 'เสาร์',
     SU: 'อาทิตย์',
-  }
+  };
 </script>
 
 <Chip

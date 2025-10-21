@@ -1,9 +1,9 @@
 <script module lang="ts">
-  import { defineMeta } from '@storybook/addon-svelte-csf'
+  import { defineMeta } from '@storybook/addon-svelte-csf';
 
-  import { UserDialog } from './index'
+  import { UserDialog } from './index';
 
-  const { Story } = defineMeta<typeof UserDialog>({
+  const { Story } = defineMeta({
     title: 'Molecule/User Dialog',
     component: UserDialog,
     tags: ['autodocs'],
@@ -18,7 +18,7 @@
         control: 'text',
       },
     },
-  })
+  });
 </script>
 
 <Story

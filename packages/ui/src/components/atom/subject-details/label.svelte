@@ -1,23 +1,23 @@
 <script lang="ts">
-  import { getContext, type Snippet } from 'svelte'
+  import { getContext, type Snippet } from 'svelte';
 
   const variant = getContext<'left' | 'center' | 'right' | 'mobile'>(
     'subject-details-variant',
-  )
+  );
   const roundedStyle = {
     left: 'rounded-l-full',
     right: 'rounded-r-full',
     center: '',
     mobile: 'rounded-full',
-  }
+  };
 
   interface Props {
-    className?: string // Additional classes
-    text?: string // Optional text prop, can be overridden by slot
-    children?: Snippet
+    className?: string; // Additional classes
+    text?: string; // Optional text prop, can be overridden by slot
+    children?: Snippet;
   }
 
-  let { className = '', text = '', children }: Props = $props()
+  let { className = '', text = '', children }: Props = $props();
 </script>
 
 <div

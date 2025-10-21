@@ -42,9 +42,161 @@
   font-style: italic;
 }
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+@source "./components";
+
+@theme {
+  /* Dark mode configuration */
+  --color-neutral-white: hsl(0 0% 100%);
+  --color-neutral-50: hsl(240 20% 97%);
+  --color-neutral-100: hsl(240 13% 94%);
+  --color-neutral-200: hsl(235 15% 86%);
+  --color-neutral-300: hsl(231 16% 74%);
+  --color-neutral-400: hsl(230 15% 60%);
+  --color-neutral-500: hsl(230 14% 51%);
+  --color-neutral-600: hsl(230 15% 39%);
+  --color-neutral-700: hsl(233 16% 32%);
+  --color-neutral-800: hsl(231 14% 27%);
+  --color-neutral-900: hsl(233 13% 24%);
+  --color-blue-300: hsl(212 88% 93%);
+  --color-blue-500: hsl(222 52% 53%);
+  --color-blue-700: hsl(225 40% 33%);
+  --color-tangerine-300: hsl(20 100% 88%);
+  --color-tangerine-500: hsl(19 89% 67%);
+  --color-tangerine-700: hsl(18 87% 53%);
+  --color-yellow-300: hsl(46 85% 92%);
+  --color-yellow-500: hsl(44 92% 77%);
+  --color-yellow-700: hsl(40 97% 47%);
+  --color-pink-300: hsl(324 90% 92%);
+  --color-pink-500: hsl(324 86% 73%);
+  --color-pink-700: hsl(324 84% 42%);
+  --color-red-300: hsl(0 89% 93%);
+  --color-red-500: hsl(0 92% 69%);
+  --color-red-700: hsl(0 87% 37%);
+  --color-orange-300: hsl(33 100% 87%);
+  --color-orange-500: hsl(32 99% 61%);
+  --color-orange-700: hsl(32 100% 45%);
+  --color-green-300: hsl(98 97% 85%);
+  --color-green-500: hsl(97 68% 50%);
+  --color-green-700: hsl(97 69% 35%);
+  --color-teal-300: hsl(166 100% 93%);
+  --color-teal-500: hsl(166 68% 50%);
+  --color-teal-700: hsl(166 50% 40%);
+  --color-sky-300: hsl(205 95% 93%);
+  --color-sky-500: hsl(205 85% 57%);
+  --color-sky-700: hsl(205 85% 31%);
+  --color-purple-300: hsl(285 91% 92%);
+  --color-purple-500: hsl(285 76% 66%);
+  --color-purple-700: hsl(285 67% 31%);
+  --color-indigo-300: hsl(248 100% 92%);
+  --color-indigo-500: hsl(248 82% 69%);
+  --color-indigo-700: hsl(248 80% 31%);
+  --color-primary: hsl(var(--primary));
+  --color-primary-hover: hsl(var(--primary-hover));
+  --color-primary-low: hsl(var(--primary-low));
+  --color-primary-low-hover: hsl(var(--primary-low-hover));
+  --color-primary-container: hsl(var(--primary-container));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-hover: hsl(var(--secondary-hover));
+  --color-secondary-container: hsl(var(--secondary-container));
+  --color-error: hsl(var(--error));
+  --color-error-hover: hsl(var(--error-hover));
+  --color-error-container: hsl(var(--error-container));
+  --color-warning: hsl(var(--warning));
+  --color-warning-hover: hsl(var(--warning-hover));
+  --color-warning-container: hsl(var(--warning-container));
+  --color-success: hsl(var(--success));
+  --color-success-hover: hsl(var(--success-hover));
+  --color-success-container: hsl(var(--success-container));
+  --color-surface: hsl(var(--surface));
+  --color-surface-dim: hsl(var(--surface-dim));
+  --color-surface-bright: hsl(var(--surface-bright));
+  --color-surface-container: hsl(var(--surface-container));
+  --color-surface-container-low: hsl(var(--surface-container-low));
+  --color-surface-container-lowest: hsl(var(--surface-container-lowest));
+  --color-surface-container-high: hsl(var(--surface-container-high));
+  --color-surface-container-highest: hsl(var(--surface-container-highest));
+  --color-monday: hsl(var(--monday));
+  --color-tuesday: hsl(var(--tuesday));
+  --color-wednesday: hsl(var(--wednesday));
+  --color-thursday: hsl(var(--thursday));
+  --color-friday: hsl(var(--friday));
+  --color-saturday: hsl(var(--saturday));
+  --color-sunday: hsl(var(--sunday));
+  --color-sc: hsl(var(--sc));
+  --color-so: hsl(var(--so));
+  --color-in: hsl(var(--in));
+  --color-hu: hsl(var(--hu));
+  --color-on-primary: hsl(var(--on-primary));
+  --color-on-primary-hover: hsl(var(--on-primary-hover));
+  --color-on-primary-low: hsl(var(--on-primary-low));
+  --color-on-primary-container: hsl(var(--on-primary-container));
+  --color-on-secondary: hsl(var(--on-secondary));
+  --color-on-secondary-hover: hsl(var(--on-secondary-hover));
+  --color-on-secondary-container: hsl(var(--on-secondary-container));
+  --color-on-error: hsl(var(--on-error));
+  --color-on-error-hover: hsl(var(--on-error-hover));
+  --color-on-error-container: hsl(var(--on-error-container));
+  --color-on-warning: hsl(var(--on-warning));
+  --color-on-warning-hover: hsl(var(--on-warning-hover));
+  --color-on-warning-container: hsl(var(--on-warning-container));
+  --color-on-success: hsl(var(--on-success));
+  --color-on-success-hover: hsl(var(--on-success-hover));
+  --color-on-success-container: hsl(var(--on-success-container));
+  --color-on-surface: hsl(var(--on-surface));
+  --color-on-surface-var: hsl(var(--on-surface-var));
+  --color-on-surface-disabled: hsl(var(--on-surface-disabled));
+  --color-on-surface-placeholder: hsl(var(--on-surface-placeholder));
+  --color-on-monday: hsl(var(--on-monday));
+  --color-on-tuesday: hsl(var(--on-tuesday));
+  --color-on-wednesday: hsl(var(--on-wednesday));
+  --color-on-thursday: hsl(var(--on-thursday));
+  --color-on-friday: hsl(var(--on-friday));
+  --color-on-saturday: hsl(var(--on-saturday));
+  --color-on-sunday: hsl(var(--on-sunday));
+  --color-on-sc: hsl(var(--on-sc));
+  --color-on-so: hsl(var(--on-so));
+  --color-on-in: hsl(var(--on-in));
+  --color-on-hu: hsl(var(--on-hu));
+
+  /* Font sizes */
+  --font-size-h1: var(--h1-font-size);
+  --font-size-h2: var(--h2-font-size);
+  --font-size-h3: var(--h3-font-size);
+  --font-size-table-header: var(--table-header-font-size);
+  --font-size-subtitle: var(--subtitle-font-size);
+  --font-size-body1: var(--body1-font-size);
+  --font-size-body2: var(--body2-font-size);
+  --font-size-button1: var(--button1-font-size);
+  --font-size-button2: var(--button2-font-size);
+  --font-size-caption: var(--caption-font-size);
+
+  /* Line heights */
+  --line-height-h1: var(--h1-line-height);
+  --line-height-h2: var(--h2-line-height);
+  --line-height-h3: var(--h3-line-height);
+  --line-height-table-header: var(--table-header-line-height);
+  --line-height-subtitle: var(--subtitle-line-height);
+  --line-height-body1: var(--body1-line-height);
+  --line-height-body2: var(--body2-line-height);
+  --line-height-button1: var(--button1-line-height);
+  --line-height-button2: var(--button2-line-height);
+  --line-height-caption: var(--caption-line-height);
+
+  /* Ring widths */
+  --ring-width-1\.5: 1.5px;
+
+  /* Border radius */
+  --radius-button: 0.625rem;
+
+  /* Font families */
+  --font-family-sans:
+    'FC Orbit', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
+    'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  --font-family-sarabun:
+    'Sarabun', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
+    'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+}
 
 @layer base {
   :root {

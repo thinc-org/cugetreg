@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { CUGetRegWhiteFull } from '../../logo/cugetreg/index.js'
-  import { ThincOnDark } from '../../logo/thinc/index.js'
-  import { GitHubMark } from '../../logo/vendor/index.js'
+  import { CUGetRegWhiteFull } from '../../logo/cugetreg/index.js';
+  import { ThincOnDark } from '../../logo/thinc/index.js';
+  import { GitHubMark } from '../../logo/vendor/index.js';
 </script>
 
 <footer
@@ -15,7 +15,7 @@
       <p>จุฬาลงกรณ์มหาวิทยาลัย</p>
     </div>
 
-    <div class="h-10 w-[0.0625rem] bg-on-primary hidden sm:inline"></div>
+    <div class="h-10 w-0.25 bg-on-primary hidden sm:inline"></div>
 
     <div class="flex items-center gap-2">
       <p>Open Source on</p>

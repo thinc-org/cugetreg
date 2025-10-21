@@ -1,1 +1,1 @@
-export { default as GitHubMark } from './GitHubMark.svelte'
+export { default as GitHubMark } from './GitHubMark.svelte';

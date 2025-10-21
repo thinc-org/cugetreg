@@ -1,12 +1,12 @@
 <script module lang="ts">
-  import { defineMeta } from '@storybook/addon-svelte-csf'
+  import { defineMeta } from '@storybook/addon-svelte-csf';
 
-  import * as Accordion from './index.js'
+  import * as Accordion from './index.js';
 
   const { Story } = defineMeta({
     title: 'Atom/Accordion',
 
-    tags: ['autodocs'],
+    tags: ['autodocs', 'shadcn-base'],
     parameters: {
       docs: {
         description: {
@@ -25,12 +25,12 @@ You can use this component to improve content accessibility and maintain a clean
       },
     },
     argTypes: {},
-  })
+  });
 </script>
 
 <!-- 👇 Example story using the Accordion component -->
 <Story name="Normal Accordion">
-  <Accordion.Root class="w-full sm:max-w-[70%]">
+  <Accordion.Root type="single" class="w-full sm:max-w-[70%]">
     <Accordion.Item value="item-1">
       <Accordion.Trigger>Is it accessible?</Accordion.Trigger>
       <Accordion.Content>
@@ -56,7 +56,10 @@ You can use this component to improve content accessibility and maintain a clean
 </Story>
 
 <Story name="Root Example">
-  <Accordion.Root class="bg-gray-50 border border-gray-200 rounded-lg p-6">
+  <Accordion.Root
+    type="single"
+    class="bg-gray-50 border border-gray-200 rounded-lg p-6"
+  >
     <Accordion.Item value="item-1">
       <Accordion.Trigger>What is the purpose of Root?</Accordion.Trigger>
       <Accordion.Content>
@@ -68,7 +71,7 @@ You can use this component to improve content accessibility and maintain a clean
 </Story>
 
 <Story name="Item Example">
-  <Accordion.Root>
+  <Accordion.Root type="single">
     <Accordion.Item value="item-1">
       <Accordion.Trigger>What is an Item?</Accordion.Trigger>
       <Accordion.Content>
@@ -88,7 +91,7 @@ You can use this component to improve content accessibility and maintain a clean
 </Story>
 
 <Story name="Trigger Example">
-  <Accordion.Root>
+  <Accordion.Root type="single">
     <Accordion.Item value="item-1">
       <Accordion.Trigger>What is a Trigger?</Accordion.Trigger>
       <Accordion.Content>
@@ -100,7 +103,7 @@ You can use this component to improve content accessibility and maintain a clean
 </Story>
 
 <Story name="Content Example">
-  <Accordion.Root>
+  <Accordion.Root type="single">
     <Accordion.Item value="item-1">
       <Accordion.Trigger>What is Content?</Accordion.Trigger>
       <Accordion.Content>

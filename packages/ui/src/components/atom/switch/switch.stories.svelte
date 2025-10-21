@@ -1,12 +1,12 @@
 <script module lang="ts">
-  import { defineMeta } from '@storybook/addon-svelte-csf'
+  import { defineMeta } from '@storybook/addon-svelte-csf';
 
-  import { Switch } from './index.js'
+  import { Switch } from './index.js';
 
-  const { Story } = defineMeta<typeof Switch>({
+  const { Story } = defineMeta({
     title: 'Atom/Switch',
     component: Switch,
-    tags: ['autodocs'],
+    tags: ['autodocs', 'primitive'],
     argTypes: {
       'aria-label': {
         control: 'text',
@@ -37,7 +37,7 @@
         action: 'onKeyDown',
       },
     },
-  })
+  });
 </script>
 
 <!-- Define the stories with different states -->

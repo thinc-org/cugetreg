@@ -1,9 +1,9 @@
 <script module lang="ts">
-  import { defineMeta } from '@storybook/addon-svelte-csf'
+  import { defineMeta } from '@storybook/addon-svelte-csf';
 
-  import { Comment } from './index.js'
+  import { Comment } from './index.js';
 
-  const { Story } = defineMeta<typeof Comment>({
+  const { Story } = defineMeta({
     title: 'Molecule/Comment',
     component: Comment,
     tags: ['autodocs'],
@@ -24,7 +24,7 @@
         control: 'number',
       },
     },
-  })
+  });
 </script>
 
 <Story

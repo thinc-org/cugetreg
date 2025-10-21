@@ -1,17 +1,17 @@
 <script lang="ts">
-  import { Star } from 'lucide-svelte'
-  let { rating }: { rating: number } = $props()
+  import { Star } from '@lucide/svelte';
+  let { rating }: { rating: number } = $props();
   // Calculate the number of filled and unfilled stars
-  const totalStars: number = 5
-  let filledStars: number = $derived(Math.floor(rating)) // Number of fully filled stars
-  let hasHalfStar: boolean = $derived(rating % 1 !== 0) // Determine if there's a half star
+  const totalStars: number = 5;
+  let filledStars: number = $derived(Math.floor(rating)); // Number of fully filled stars
+  let hasHalfStar: boolean = $derived(rating % 1 !== 0); // Determine if there's a half star
   let emptyStars: number = $derived(
     totalStars - filledStars - (hasHalfStar ? 1 : 0),
-  )
+  );
 </script>
 
 <div class="flex flex-row text-h3 text-primary gap-1.5">
-  {#each Array(filledStars) as _}
+  {#each Array(filledStars) as _, index (index)}
     <Star fill="currentColor" />
   {/each}
 
@@ -30,7 +30,7 @@
   {/if}
 
   <!-- Render unfilled stars -->
-  {#each Array(emptyStars) as _}
+  {#each Array(emptyStars) as _, index (index)}
     <Star />
   {/each}
 </div>

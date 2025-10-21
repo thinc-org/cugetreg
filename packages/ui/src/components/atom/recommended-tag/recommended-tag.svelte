@@ -1,14 +1,14 @@
 <script lang="ts">
-  import { Sparkles } from 'lucide-svelte'
+  import { Sparkles } from '@lucide/svelte';
 
-  import { cn } from '@repo/utils'
+  import { cn } from '@repo/utils';
 
   interface Props {
-    class?: string | undefined | null
-    [key: string]: unknown
+    class?: string | undefined | null;
+    [key: string]: unknown;
   }
 
-  let { class: className = undefined, ...rest }: Props = $props()
+  let { class: className = undefined, ...rest }: Props = $props();
 </script>
 
 <div

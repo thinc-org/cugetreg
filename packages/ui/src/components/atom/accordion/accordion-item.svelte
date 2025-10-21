@@ -1,26 +1,18 @@
 <script lang="ts">
-  import { Accordion as AccordionPrimitive } from 'bits-ui'
-  import type { Snippet } from 'svelte'
+  import { Accordion as AccordionPrimitive } from 'bits-ui';
 
-  import { cn } from '@repo/utils'
-
-  type $$Props = AccordionPrimitive.ItemProps
-
-  interface Props {
-    class?: $$Props['class']
-    value: $$Props['value']
-    children?: Snippet
-    [key: string]: unknown
-  }
+  import { cn } from '@repo/ui/utils';
 
   let {
-    class: className = undefined,
-    value,
-    children,
-    ...rest
-  }: Props = $props()
+    ref = $bindable(null),
+    class: className,
+    ...restProps
+  }: AccordionPrimitive.ItemProps = $props();
 </script>
 
-<AccordionPrimitive.Item {value} class={cn('', className)} {...rest}>
-  {@render children?.()}
-</AccordionPrimitive.Item>
+<AccordionPrimitive.Item
+  bind:ref
+  data-slot="accordion-item"
+  class={cn('border-b last:border-b-0', className)}
+  {...restProps}
+/>

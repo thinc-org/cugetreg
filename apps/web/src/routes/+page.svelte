@@ -1,23 +1,30 @@
 <script lang="ts">
-  import * as Accordion from '@repo/ui/atom/accordion'
-  import { Button } from '@repo/ui/atom/button'
-  import { Chip } from '@repo/ui/atom/chip'
-  import { DayChip } from '@repo/ui/atom/day-chip'
-  import { GenedChip } from '@repo/ui/atom/gened-chip'
-  import { Input } from '@repo/ui/atom/input'
-  import { RecommendedTag } from '@repo/ui/atom/recommended-tag'
-  import { CourseCard } from '@repo/ui/molecule/course-card'
-  import { UserDialog } from '@repo/ui/molecule/user-dialog'
-  import { Navbar } from '@repo/ui/organism/navbar'
+  import { resolve } from '$app/paths';
 
-  let counter = $state(0)
+  import * as Accordion from '@repo/ui/atom/accordion';
+  import { Button } from '@repo/ui/atom/button';
+  import { Checkbox } from '@repo/ui/atom/checkbox';
+  import { Chip } from '@repo/ui/atom/chip';
+  import { DayChip } from '@repo/ui/atom/day-chip';
+  import { GenedChip } from '@repo/ui/atom/gened-chip';
+  import { Input } from '@repo/ui/atom/input';
+  import { RecommendedTag } from '@repo/ui/atom/recommended-tag';
+  import { CourseCard } from '@repo/ui/molecule/course-card';
+  import { UserDialog } from '@repo/ui/molecule/user-dialog';
+  import { Footer } from '@repo/ui/organism/footer';
+  import { Navbar } from '@repo/ui/organism/navbar';
+
+  let counter = $state(0);
 
   const onButtonClick = () => {
-    counter++
-  }
+    counter++;
+  };
 </script>
 
+<p>Guest Navbar</p>
 <Navbar isLoggedIn={false} />
+
+<p>Logged in Navbar</p>
 <Navbar isLoggedIn name="Testfirstname Lastname" id="6XXXXXXXXX" />
 
 <h1>Web</h1>
@@ -32,11 +39,18 @@
   Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation
 </p>
 
+<div class="flex flex-col gap-2">
+  <p>this is checkbox</p>
+
+  <Checkbox />
+  <Checkbox checked />
+</div>
+
 <Chip>รหัสผ่าน</Chip>
 <Chip
   closable
   onClose={() => {
-    console.log('close')
+    console.log('close');
   }}
 >
   Closable
@@ -81,7 +95,7 @@
 <h1>RecommendedTag</h1>
 <RecommendedTag />
 
-<Accordion.Root>
+<Accordion.Root type="single">
   <Accordion.Item value="item-1">
     <Accordion.Trigger>Is it accessible?</Accordion.Trigger>
     <Accordion.Content>
@@ -96,4 +110,6 @@
   id="6XXXXXXXXX"
 />
 
-<a href="/dbdemo">Click to go to DB Demo</a>
+<a href={resolve('/dbdemo', {})}>Click to go to DB Demo</a>
+
+<Footer />

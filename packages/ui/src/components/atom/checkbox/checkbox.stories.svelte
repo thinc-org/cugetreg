@@ -1,12 +1,12 @@
 <script module lang="ts">
-  import { defineMeta } from '@storybook/addon-svelte-csf'
+  import { defineMeta } from '@storybook/addon-svelte-csf';
 
-  import { Checkbox } from './index.js'
+  import { Checkbox } from './index.js';
 
   const { Story } = defineMeta<typeof Checkbox>({
     title: 'Atom/Checkbox',
     component: Checkbox,
-    tags: ['autodocs'],
+    tags: ['autodocs', 'shadcn-base'],
     argTypes: {
       checked: {
         control: 'boolean',
@@ -25,7 +25,7 @@
           'attribute defines a string value that labels an interactive element',
       },
     },
-  })
+  });
 </script>
 
 <!-- 👇 Each story then reuses that template -->

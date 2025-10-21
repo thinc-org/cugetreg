@@ -1,12 +1,12 @@
 <script module lang="ts">
-  import { defineMeta } from '@storybook/addon-svelte-csf'
+  import { defineMeta } from '@storybook/addon-svelte-csf';
 
-  import { Button } from './index.js'
+  import { Button } from './index.js';
 
-  const { Story } = defineMeta<typeof Button>({
+  const { Story } = defineMeta({
     title: 'Atom/Button',
     component: Button,
-    tags: ['autodocs'],
+    tags: ['autodocs', 'shadcn-base', 'styled'],
     argTypes: {
       variant: {
         control: {
@@ -29,14 +29,11 @@
         options: ['primary', 'neutral', 'error', 'secondary'],
         defaultValue: 'primary',
       },
-      builders: {
-        control: false,
-      },
       class: {
         control: false,
       },
     },
-  })
+  });
 </script>
 
 <!-- 👇 Each story then reuses that template -->

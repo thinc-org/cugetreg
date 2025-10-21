@@ -1,56 +1,37 @@
 <script lang="ts">
-  import { Checkbox as CheckboxPrimitive, Label } from 'bits-ui'
-  import { Check } from 'lucide-svelte'
+  import CheckIcon from '@lucide/svelte/icons/check';
+  import MinusIcon from '@lucide/svelte/icons/minus';
+  import { Checkbox as CheckboxPrimitive } from 'bits-ui';
 
-  import { cn } from '@repo/utils'
-
-  type $$Props = CheckboxPrimitive.Props & {
-    label?: string | undefined | null
-  }
-  type $$Events = CheckboxPrimitive.Events
-
-  interface Props {
-    class?: $$Props['class']
-    checked?: $$Props['checked']
-    label?: $$Props['label']
-    [key: string]: unknown
-  }
+  import { cn, type WithoutChildrenOrChild } from '@repo/ui/utils';
 
   let {
-    class: className = undefined,
+    ref = $bindable(null),
     checked = $bindable(false),
-    label = undefined,
-    ...rest
-  }: Props = $props()
+    indeterminate = $bindable(false),
+    class: className,
+    ...restProps
+  }: WithoutChildrenOrChild<CheckboxPrimitive.RootProps> = $props();
 </script>
 
-<div class="flex items-center space-x-2 p-1">
-  <CheckboxPrimitive.Root
-    class={cn(
-      'border-on-surface-placeholder ring-offset-background focus-visible:ring-ring data-[state=checked]:border-primary data-[state=checked]:bg-primary data-[state=checked]:text-neutral-white peer box-content h-4 w-4 shrink-0 rounded-sm border-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[disabled=true]:cursor-not-allowed data-[disabled=true]:opacity-50',
-      className,
-    )}
-    bind:checked
-    {...rest}
-    on:click
-  >
-    <CheckboxPrimitive.Indicator
-      class={cn('flex h-4 w-4 items-center justify-center text-current')}
-    >
-      {#snippet children({ isChecked })}
-        {#if isChecked}
-          <Check class="h-4 w-4" />
-        {/if}
-      {/snippet}
-    </CheckboxPrimitive.Indicator>
-  </CheckboxPrimitive.Root>
-  {#if label}
-    <Label.Root
-      id="terms-label"
-      for="terms"
-      class="text-button2 font-normal leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-    >
-      {label}
-    </Label.Root>
-  {/if}
-</div>
+<CheckboxPrimitive.Root
+  bind:ref
+  data-slot="checkbox"
+  class={cn(
+    'border-input dark:bg-input/30 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground dark:data-[state=checked]:bg-primary data-[state=checked]:border-primary focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive shadow-xs peer flex size-4 shrink-0 items-center justify-center rounded-[4px] border outline-none transition-shadow focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50',
+    className,
+  )}
+  bind:checked
+  bind:indeterminate
+  {...restProps}
+>
+  {#snippet children({ checked, indeterminate })}
+    <div data-slot="checkbox-indicator" class="text-current transition-none">
+      {#if checked}
+        <CheckIcon class="size-3.5" />
+      {:else if indeterminate}
+        <MinusIcon class="size-3.5" />
+      {/if}
+    </div>
+  {/snippet}
+</CheckboxPrimitive.Root>

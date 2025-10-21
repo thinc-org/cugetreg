@@ -1,22 +1,21 @@
 <script lang="ts">
-  import { Menu, Moon, Search, Settings2 } from 'lucide-svelte'
+  import { Menu, Moon, Search, Settings2 } from '@lucide/svelte';
 
-  import { cn, getShortenName } from '@repo/utils'
+  import { cn, getShortenName } from '@repo/utils';
 
-  import { Button } from '../../atom/button'
-  import { Chip } from '../../atom/chip'
-  import { Collapsible } from '../../atom/collapsible'
-  import { IconButton } from '../../atom/icon-button'
-  import { Input } from '../../atom/input'
-  import { CUGetRegDarkFull as CUGetRegLogo } from '../../logo/cugetreg'
-  import { GitHubMark } from '../../logo/vendor'
-  import { UserDialog } from '../../molecule/user-dialog'
+  import { Button } from '../../atom/button';
+  import { Chip } from '../../atom/chip';
+  import { Collapsible } from '../../atom/collapsible';
+  import { Input } from '../../atom/input';
+  import { CUGetRegDarkFull as CUGetRegLogo } from '../../logo/cugetreg';
+  import { GitHubMark } from '../../logo/vendor';
+  import { UserDialog } from '../../molecule/user-dialog';
 
   interface Props {
-    isLoggedIn?: boolean
-    name?: string
-    imageUrl?: string
-    id?: string
+    isLoggedIn?: boolean;
+    name?: string;
+    imageUrl?: string;
+    id?: string;
   }
 
   let {
@@ -24,16 +23,16 @@
     name = '',
     imageUrl = 'https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg',
     id = '',
-  }: Props = $props()
+  }: Props = $props();
 
-  let shortenedName = $derived(getShortenName(name))
-  const navItems = ['ค้นหาวิชา', 'จัดตารางเรียน', 'เกี่ยวกับ']
-  let selected = $state('ค้นหาวิชา')
-  let openSideBar = $state(false)
+  let shortenedName = $derived(getShortenName(name));
+  const navItems = ['ค้นหาวิชา', 'จัดตารางเรียน', 'เกี่ยวกับ'];
+  let selected = $state('ค้นหาวิชา');
+  let openSideBar = $state(false);
 
   const toggleSideBar = () => {
-    openSideBar = !openSideBar
-  }
+    openSideBar = !openSideBar;
+  };
 </script>
 
 <div
@@ -60,7 +59,7 @@
     class="hidden min-[900px]:flex flex-row flex-1 justify-center items-center gap-3 lg:gap-4"
   >
     <!-- To be implemented: add page from navItems-->
-    {#each navItems as item}
+    {#each navItems as item (item)}
       <a
         class={cn(
           'text-neutral-500 text-button1 font-medium text-nowrap xl:w-32 text-center cursor-pointer hover:text-neutral-800',
@@ -84,9 +83,9 @@
     >
       <GitHubMark class="w-8 h-8 text-neutral-500 " />
     </a>
-    <IconButton color="neutral" class="hidden md:flex">
+    <Button color="neutral" class="hidden md:flex">
       <Moon strokeWidth="3" size="16" />
-    </IconButton>
+    </Button>
     {#if isLoggedIn}
       <Collapsible name={shortenedName}>
         <UserDialog {name} {id} />
@@ -97,13 +96,9 @@
         <p class="font-medium text-button2">เข้าสู่ระบบ</p>
       </Button>
     {/if}
-    <IconButton
-      variant="ghost"
-      class="min-[900px]:hidden"
-      onclick={toggleSideBar}
-    >
+    <Button variant="ghost" class="min-[900px]:hidden" onclick={toggleSideBar}>
       <Menu size="16" strokeWidth="3" color="#353745" />
-    </IconButton>
+    </Button>
   </div>
 
   {#if openSideBar}
@@ -125,9 +120,9 @@
   >
     <div class="p-3 flex flex-col gap-5">
       <div class="flex flex-row gap-2">
-        <IconButton variant="ghost" onclick={toggleSideBar}>
+        <Button variant="ghost" onclick={toggleSideBar}>
           <Menu size="16" strokeWidth="3" color="#353745" />
-        </IconButton>
+        </Button>
         <div class="w-48 flex flex-col gap-2">
           <p class="text-on-surface-placeholder text-caption">
             คุณกำลังจัดตารางเรียน...
@@ -139,9 +134,9 @@
             นานาชาติ 66 / ฤดูร้อน
           </Chip>
         </div>
-        <IconButton variant="ghost">
+        <Button variant="ghost">
           <Settings2 size="16" strokeWidth="2.5" color="#353745" />
-        </IconButton>
+        </Button>
       </div>
       <div class="relative flex items-center px-3">
         <Search
@@ -156,15 +151,15 @@
         />
       </div>
       <div class="flex flex-col px-3 gap-3">
-        {#each navItems as item}
+        {#each navItems as item (item)}
           <a
             class={cn(
               'text-neutral-500 text-button1 font-medium cursor-pointer hover:text-neutral-800',
               selected === item && 'text-primary',
             )}
             onclick={() => {
-              selected = item
-              toggleSideBar()
+              selected = item;
+              toggleSideBar();
             }}
             href="/"
           >

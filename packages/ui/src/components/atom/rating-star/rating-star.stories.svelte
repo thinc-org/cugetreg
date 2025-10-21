@@ -1,12 +1,12 @@
 <script module lang="ts">
-  import { defineMeta } from '@storybook/addon-svelte-csf'
+  import { defineMeta } from '@storybook/addon-svelte-csf';
 
-  import { RatingStar } from './index.js'
+  import { RatingStar } from './index.js';
 
-  const { Story } = defineMeta<typeof RatingStar>({
+  const { Story } = defineMeta({
     title: 'Atom/Rating Star',
     component: RatingStar,
-    tags: ['autodocs'],
+    tags: ['autodocs', 'original'],
     argTypes: {
       rating: {
         control: {
@@ -17,7 +17,7 @@
         },
       },
     },
-  })
+  });
 </script>
 
 <Story

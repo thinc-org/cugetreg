@@ -11,7 +11,7 @@ Have no idea what courses to take? Don't know what this course is about? We got 
 - [The beginning of CU Get Reg](#the-beginning-of-cu-get-reg)
 - [This repository](#this-repository)
 - [Contribution](#contribution)
-- [Roadmap](#roadmap)
+<!-- - [Roadmap](#roadmap) -->
 - [Contributors](#contributors)
 - [Contacts](#contacts)
 - [Sponsors](#sponsors)
@@ -36,14 +36,22 @@ We saw this problem and built [CU Get Reg](https://cugetreg.com) to make this pl
 
 ## This repository
 
+> ![NOTE]
+> This branch is for CU Get Reg V2, the version which is currently on production is V1 located in `main` and `beta` branch.
+
 This is a monorepo repository containing almost everything of cugetreg
 
-- apps/api - The backend API, powered by NestJS and GraphQL
-- apps/web - The web interface, powered by Next.js
+### apps
+
+- apps/web - The main website (cugetreg.com), powered by Full Stack Framework SvelteKit
 - apps/web-e2e - E2E test for apps/web (Coming Soon)
 
-- libs/codegen - GraphQL Codegen
-- libs/course-utils - Utilities/Data for courses and some extra type definition.
+### packages
+
+- packages/config - Shared config (ESLint, Prettier, TSConfig, etc.)
+- packages/database - Database Schema and Seed Script, written in Drizzle ORM
+- packages/ui - UI components library used in CU Get Reg, built with shadcn (svelte) and TailwindCSS
+- packages/utils - Other shared utilities and types
 
 <div id="contribution"></div>
 
@@ -51,15 +59,11 @@ This is a monorepo repository containing almost everything of cugetreg
 
 CU Get Reg is open source - we welcome all developers. If you want to be a part of CU Get Reg and improve Chulalongkorn University society, you can start here!
 
-- [Contribution Guide](https://github.com/thinc-org/cugetreg/wiki/Contribution-Guide)
 - [Explore issues](https://github.com/thinc-org/cugetreg/issues)
-- [Our Roadmap](https://github.com/thinc-org/cugetreg/wiki/Contribution-Guide)
 
-<div id="roadmap"></div>
+Legacy: [Contribution Guide](https://github.com/thinc-org/cugetreg/wiki/Contribution-Guide) for detail about V1 project architecture.
 
-## Roadmap
-
-Read more at [Roadmap](https://github.com/thinc-org/cugetreg/wiki/Contribution-Guide)
+For V2 please see [CONTRIBUTING.md](CONTRIBUTING.md)
 
 <div id="contributors"></div>
 
@@ -76,6 +80,7 @@ You can contact us anytime via
 - Facebook Page: [Thinc.](https://www.facebook.com/ThailandIncubator)
 - LinkedIn: [CU Get Reg](https://www.linkedin.com/company/cugetreg)
 - Discord: Coming soon
+- Feedback Form: (You can find it on the website navbar)
 
 <div id="sponsors"></div>
 

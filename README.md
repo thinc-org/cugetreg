@@ -36,7 +36,7 @@ We saw this problem and built [CU Get Reg](https://cugetreg.com) to make this pl
 
 ## This repository
 
-> ![NOTE]
+> [!NOTE]
 > This branch is for CU Get Reg V2, the version which is currently on production is V1 located in `main` and `beta` branch.
 
 This is a monorepo repository containing almost everything of cugetreg

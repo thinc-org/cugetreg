@@ -1,4 +1,4 @@
-import { defineConfig } from 'drizzle-kit'
+import { defineConfig } from 'drizzle-kit';
 
 export default defineConfig({
   schema: './dist/schema/index.js',
@@ -9,4 +9,4 @@ export default defineConfig({
   },
   verbose: true,
   strict: true,
-})
+});

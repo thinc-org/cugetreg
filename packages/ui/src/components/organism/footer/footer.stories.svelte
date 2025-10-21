@@ -1,13 +1,13 @@
 <script module lang="ts">
-  import { defineMeta } from '@storybook/addon-svelte-csf'
+  import { defineMeta } from '@storybook/addon-svelte-csf';
 
-  import { Footer } from './index.js'
+  import { Footer } from './index.js';
 
   const { Story } = defineMeta<typeof Footer>({
     title: 'Organism/Footer',
     component: Footer,
     tags: ['autodocs'],
-  })
+  });
 </script>
 
 <Story

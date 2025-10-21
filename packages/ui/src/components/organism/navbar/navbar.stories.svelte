@@ -1,7 +1,7 @@
 <script module lang="ts">
-  import { defineMeta } from '@storybook/addon-svelte-csf'
+  import { defineMeta } from '@storybook/addon-svelte-csf';
 
-  import { Navbar } from './index.js'
+  import { Navbar } from './index.js';
 
   const { Story } = defineMeta<typeof Navbar>({
     title: 'Organism/Navbar',
@@ -15,7 +15,7 @@
         control: 'text',
       },
     },
-  })
+  });
 </script>
 
 <Story

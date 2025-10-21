@@ -1,11 +1,11 @@
 // @ts-check
 
-import eslintPluginSvelte from 'eslint-plugin-svelte'
-import globals from 'globals'
-import svelteParser from 'svelte-eslint-parser'
-import tseslint from 'typescript-eslint'
+import eslintPluginSvelte from 'eslint-plugin-svelte';
+import globals from 'globals';
+import svelteParser from 'svelte-eslint-parser';
+import tseslint from 'typescript-eslint';
 
-import base from './base.js'
+import base from './base.js';
 
 export default tseslint.config(
   ...base,
@@ -25,4 +25,4 @@ export default tseslint.config(
       },
     },
   },
-)
+);

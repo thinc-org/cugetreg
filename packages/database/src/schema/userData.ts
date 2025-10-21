@@ -1,4 +1,4 @@
-import { createId } from '@paralleldrive/cuid2'
+import { createId } from '@paralleldrive/cuid2';
 import {
   boolean,
   integer,
@@ -6,9 +6,9 @@ import {
   pgTable,
   text,
   timestamp,
-} from 'drizzle-orm/pg-core'
+} from 'drizzle-orm/pg-core';
 
-import { semester, studyProgram } from './types.js'
+import { semester, studyProgram } from './types.js';
 
 export const user = pgTable('user', {
   id: text('id')
@@ -25,7 +25,7 @@ export const user = pgTable('user', {
     .notNull()
     .defaultNow()
     .$onUpdate(() => new Date()),
-})
+});
 
 export const cart = pgTable('cart', {
   id: text('id')
@@ -46,7 +46,7 @@ export const cart = pgTable('cart', {
     .notNull()
     .defaultNow()
     .$onUpdate(() => new Date()),
-})
+});
 
 export const cartItem = pgTable('cart_item', {
   id: text('id')
@@ -67,13 +67,13 @@ export const cartItem = pgTable('cart_item', {
     .notNull()
     .defaultNow()
     .$onUpdate(() => new Date()),
-})
+});
 
 export const reviewStatus = pgEnum('review_status', [
   'PENDING',
   'APPROVED',
   'REJECTED',
-])
+]);
 
 export const review = pgTable('review', {
   id: text('id')
@@ -99,9 +99,9 @@ export const review = pgTable('review', {
     .notNull()
     .defaultNow()
     .$onUpdate(() => new Date()),
-})
+});
 
-export const voteType = pgEnum('vote_type', ['L', 'D'])
+export const voteType = pgEnum('vote_type', ['L', 'D']);
 
 export const reviewVotes = pgTable('review_votes', {
   id: text('id')
@@ -116,4 +116,4 @@ export const reviewVotes = pgTable('review_votes', {
     .references(() => user.id),
 
   voteType: voteType('vote_type').notNull(),
-})
+});

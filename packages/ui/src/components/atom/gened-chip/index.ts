@@ -1,5 +1,5 @@
-import { tv, type VariantProps } from 'tailwind-variants'
-export { default as GenedChip } from './gened-chip.svelte'
+import { tv, type VariantProps } from 'tailwind-variants';
+export { default as GenedChip } from './gened-chip.svelte';
 
 export const chipVariants = tv({
   base: 'border',
@@ -11,6 +11,6 @@ export const chipVariants = tv({
       IN: 'border-on-in text-on-in bg-in',
     },
   },
-})
+});
 
-export type Type = VariantProps<typeof chipVariants>['type']
+export type Type = VariantProps<typeof chipVariants>['type'];

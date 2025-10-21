@@ -1,10 +1,10 @@
-import { PgInsertValue } from 'drizzle-orm/pg-core'
+import { PgInsertValue } from 'drizzle-orm/pg-core';
 
-import { course, section, sectionClass } from '../../schema/courseData.js'
-import { db } from '../utils/client.js'
-import { withTimeLog } from '../utils/log.js'
-import { SectionSeed } from '../utils/types.js'
-import { classKey, courseData, getKey } from './_shared.js'
+import { course, section, sectionClass } from '../../schema/courseData.js';
+import { db } from '../utils/client.js';
+import { withTimeLog } from '../utils/log.js';
+import { SectionSeed } from '../utils/types.js';
+import { classKey, courseData, getKey } from './_shared.js';
 
 export const seedClasses = () =>
   withTimeLog('Seed Classes: Total', async () => {
@@ -17,10 +17,10 @@ export const seedClasses = () =>
           semester: course.semester,
           courseNo: course.courseNo,
         })
-        .from(course)
+        .from(course);
 
-      const mapToCourseId = new Map<string, string>()
-      coursesData.forEach((c) => mapToCourseId.set(getKey(c), c.id))
+      const mapToCourseId = new Map<string, string>();
+      coursesData.forEach((c) => mapToCourseId.set(getKey(c), c.id));
 
       const sectionsData = await db
         .select({
@@ -29,12 +29,12 @@ export const seedClasses = () =>
           sectionNo: section.sectionNo,
         })
         .from(section)
-        .execute()
+        .execute();
 
-      const mapToSectionId = new Map<string, string>()
+      const mapToSectionId = new Map<string, string>();
       sectionsData.forEach((s) =>
         mapToSectionId.set(classKey(s.courseId, s.sectionNo), s.id),
-      )
+      );
 
       const classes = courseData.flatMap((c) =>
         (JSON.parse(c.sections) as SectionSeed[]).flatMap((section) =>
@@ -51,17 +51,17 @@ export const seedClasses = () =>
             professors: cls.teachers,
           })),
         ),
-      ) satisfies PgInsertValue<typeof sectionClass>[]
+      ) satisfies PgInsertValue<typeof sectionClass>[];
 
-      return classes
-    })
+      return classes;
+    });
 
     await withTimeLog('Seed Classes: Push', async () => {
-      let index = 0
+      let index = 0;
       while (index < payload.length) {
-        const next = index + 100
-        await db.insert(sectionClass).values(payload.slice(index, next))
-        index = next
+        const next = index + 100;
+        await db.insert(sectionClass).values(payload.slice(index, next));
+        index = next;
       }
-    })
-  })
+    });
+  });

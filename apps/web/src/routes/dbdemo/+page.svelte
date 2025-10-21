@@ -1,11 +1,11 @@
 <script lang="ts">
-  import type { PageData } from './$types'
+  import type { PageData } from './$types';
 
   interface Props {
-    data: PageData
+    data: PageData;
   }
 
-  let { data }: Props = $props()
+  let { data }: Props = $props();
 </script>
 
 <h1 class="text-h1">DB Demo</h1>

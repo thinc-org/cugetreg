@@ -23,6 +23,6 @@ export const faculty = [
   '51',
   '53',
   '56',
-]
+];
 
-export const emailYear = [60, 61, 62, 63, 64, 65, 66]
+export const emailYear = [60, 61, 62, 63, 64, 65, 66];

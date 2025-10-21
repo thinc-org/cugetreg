@@ -1,1 +1,1 @@
-export { default } from '@repo/config/eslint/svelte.js'
+export { default } from '@repo/config/eslint/svelte.js';

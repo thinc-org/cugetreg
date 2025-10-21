@@ -1,5 +1,5 @@
-import { tv, type VariantProps } from 'tailwind-variants'
-export { default as DayChip } from './day-chip.svelte'
+import { tv, type VariantProps } from 'tailwind-variants';
+export { default as DayChip } from './day-chip.svelte';
 
 export const chipVariants = tv({
   variants: {
@@ -13,6 +13,6 @@ export const chipVariants = tv({
       SU: 'bg-sunday text-on-sunday',
     },
   },
-})
+});
 
-export type Day = VariantProps<typeof chipVariants>['day']
+export type Day = VariantProps<typeof chipVariants>['day'];

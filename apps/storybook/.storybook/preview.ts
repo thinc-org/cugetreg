@@ -1,8 +1,11 @@
-import '@repo/ui/css'
+import '@repo/ui/css';
 
-import { withThemeByClassName } from '@storybook/addon-themes'
-import { INITIAL_VIEWPORTS, MINIMAL_VIEWPORTS } from '@storybook/addon-viewport'
-import type { Preview } from '@storybook/svelte'
+import { withThemeByClassName } from '@storybook/addon-themes';
+import {
+  INITIAL_VIEWPORTS,
+  MINIMAL_VIEWPORTS,
+} from '@storybook/addon-viewport';
+import type { Preview } from '@storybook/svelte';
 
 const preview: Preview = {
   parameters: {
@@ -19,7 +22,7 @@ const preview: Preview = {
       },
     },
   },
-}
+};
 
 /* snipped for brevity */
 
@@ -31,6 +34,6 @@ export const decorators = [
     },
     defaultTheme: 'light',
   }),
-]
+];
 
-export default preview
+export default preview;

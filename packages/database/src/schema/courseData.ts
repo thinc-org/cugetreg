@@ -1,4 +1,4 @@
-import { createId } from '@paralleldrive/cuid2'
+import { createId } from '@paralleldrive/cuid2';
 import {
   boolean,
   decimal,
@@ -7,9 +7,9 @@ import {
   text,
   timestamp,
   unique,
-} from 'drizzle-orm/pg-core'
+} from 'drizzle-orm/pg-core';
 
-import { dayOfWeek, genEdType, semester, studyProgram } from './types.js'
+import { dayOfWeek, genEdType, semester, studyProgram } from './types.js';
 
 /**
  * https://datagateway.chula.ac.th (Connect to Chula Wi-Fi)
@@ -64,7 +64,7 @@ export const course = pgTable(
       t.courseNo,
     ),
   }),
-)
+);
 
 export const courseInfo = pgTable('course_info', {
   courseNo: text('course_no').primaryKey(),
@@ -92,7 +92,7 @@ export const courseInfo = pgTable('course_info', {
   credit: decimal('credit').notNull(),
   // Must build from 17 lcredit 18 nlcredit 19 lhour 20 nlhour 21 shour
   creditHours: text('credit_hours').notNull(),
-})
+});
 
 export const section = pgTable(
   'course_section',
@@ -128,7 +128,7 @@ export const section = pgTable(
   (t) => ({
     sectionUnique: unique('section_unique').on(t.courseId, t.sectionNo),
   }),
-)
+);
 
 export const sectionClass = pgTable('course_class', {
   id: text('id')
@@ -162,4 +162,4 @@ export const sectionClass = pgTable('course_class', {
     .notNull()
     .defaultNow()
     .$onUpdate(() => new Date()),
-})
+});

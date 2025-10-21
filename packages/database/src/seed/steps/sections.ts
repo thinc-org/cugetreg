@@ -1,10 +1,10 @@
-import { PgInsertValue } from 'drizzle-orm/pg-core'
+import { PgInsertValue } from 'drizzle-orm/pg-core';
 
-import { course, section } from '../../schema/courseData.js'
-import { db } from '../utils/client.js'
-import { withTimeLog } from '../utils/log.js'
-import { SectionSeed } from '../utils/types.js'
-import { courseData, getKey } from './_shared.js'
+import { course, section } from '../../schema/courseData.js';
+import { db } from '../utils/client.js';
+import { withTimeLog } from '../utils/log.js';
+import { SectionSeed } from '../utils/types.js';
+import { courseData, getKey } from './_shared.js';
 
 export const seedSections = () =>
   withTimeLog('Seed Sections: Total', async () => {
@@ -17,10 +17,10 @@ export const seedSections = () =>
           semester: course.semester,
           courseNo: course.courseNo,
         })
-        .from(course)
+        .from(course);
 
-      const mapToId = new Map<string, string>()
-      coursesData.forEach((c) => mapToId.set(getKey(c), c.id))
+      const mapToId = new Map<string, string>();
+      coursesData.forEach((c) => mapToId.set(getKey(c), c.id));
 
       const sections = courseData.flatMap((c) =>
         (JSON.parse(c.sections) as SectionSeed[]).map((section) => ({
@@ -32,17 +32,17 @@ export const seedSections = () =>
           note: section.note,
           genEdType: section.genEdType,
         })),
-      ) satisfies PgInsertValue<typeof section>[]
+      ) satisfies PgInsertValue<typeof section>[];
 
-      return sections
-    })
+      return sections;
+    });
 
     await withTimeLog('Seed Sections: Push', async () => {
-      let index = 0
+      let index = 0;
       while (index < payload.length) {
-        const next = index + 100
-        await db.insert(section).values(payload.slice(index, next))
-        index = next
+        const next = index + 100;
+        await db.insert(section).values(payload.slice(index, next));
+        index = next;
       }
-    })
-  })
+    });
+  });

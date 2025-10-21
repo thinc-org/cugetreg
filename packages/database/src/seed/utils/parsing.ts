@@ -3,41 +3,41 @@ export function parsePeriod(str: string) {
     return {
       start: null,
       end: null,
-    }
+    };
   }
 
   type Expected = {
     period: {
-      start: string
-      end: string
-    }
-    date: string
-  }
+      start: string;
+      end: string;
+    };
+    date: string;
+  };
 
   const {
     period: { start, end },
     date,
-  } = JSON.parse(str) as Expected
+  } = JSON.parse(str) as Expected;
 
-  const [sH, sM] = start.split(':').map(Number)
-  const [eH, eM] = end.split(':').map(Number)
+  const [sH, sM] = start.split(':').map(Number);
+  const [eH, eM] = end.split(':').map(Number);
 
-  const realDate = new Date(date)
+  const realDate = new Date(date);
 
-  const realStart = new Date(realDate)
-  realStart.setFullYear(realDate.getFullYear() - 543)
-  realStart.setHours(sH)
-  realStart.setMinutes(sM)
+  const realStart = new Date(realDate);
+  realStart.setFullYear(realDate.getFullYear() - 543);
+  realStart.setHours(sH);
+  realStart.setMinutes(sM);
 
-  const realEnd = new Date(realDate)
-  realEnd.setFullYear(realDate.getFullYear() - 543)
-  realEnd.setHours(eH)
-  realEnd.setMinutes(eM)
+  const realEnd = new Date(realDate);
+  realEnd.setFullYear(realDate.getFullYear() - 543);
+  realEnd.setHours(eH);
+  realEnd.setMinutes(eM);
 
   return {
     start: realStart,
     end: realEnd,
-  }
+  };
 }
 
 // console.log(

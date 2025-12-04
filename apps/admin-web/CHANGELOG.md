@@ -1,5 +1,13 @@
 # admin-web
 
+## 1.4.1
+
+### Patch Changes
+
+- Updated dependencies [18f4e95]
+  - @cgr/codegen@1.5.1
+  - @cgr/course-utils@1.3.1
+
 ## 1.4.1-beta.0
 
 ### Patch Changes

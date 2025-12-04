@@ -1,5 +1,18 @@
 # api
 
+## 1.13.0
+
+### Minor Changes
+
+- 18f4e95: refactor: remove opensearch
+- 5eb12f2: refactor: remove client logging
+
+### Patch Changes
+
+- Updated dependencies [18f4e95]
+- Updated dependencies [5eb12f2]
+  - @cgr/schema@1.7.0
+
 ## 1.13.0-beta.1
 
 ### Minor Changes

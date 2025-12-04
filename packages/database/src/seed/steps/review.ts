@@ -3,7 +3,6 @@ import { PgInsertValue } from 'drizzle-orm/pg-core'
 import { review, reviewVotes } from '../../schema/userData.js'
 import { db } from '../utils/client.js'
 import { withTimeLog } from '../utils/log.js'
-import { Interaction, ObjectId } from '../utils/types.js'
 import { getEmailToUserIdMap, idToEmail, reviewData } from './_shared.js'
 
 export const seedReviews = () =>
@@ -12,9 +11,7 @@ export const seedReviews = () =>
 
     const payload = await withTimeLog('Seed Reviews: Payload', async () => {
       return reviewData.map((review) => ({
-        userId: emailToUId.get(
-          idToEmail.get((JSON.parse(review.ownerId) as ObjectId).$oid)!,
-        )!,
+        userId: emailToUId.get(idToEmail.get(review.ownerId.$oid)!)!,
         studyProgram: review.studyProgram,
         academicYear: +review.academicYear,
         semester: review.semester,
@@ -37,7 +34,7 @@ export const seedReviews = () =>
         )[0]
 
         const reviewRaw = reviewData[index]
-        const interactions = JSON.parse(reviewRaw.interactions) as Interaction[]
+        const interactions = reviewRaw.interactions
 
         const thisReview = interactions.map((i) => ({
           reviewId,

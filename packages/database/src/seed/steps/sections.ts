@@ -3,7 +3,6 @@ import { PgInsertValue } from 'drizzle-orm/pg-core'
 import { course, section } from '../../schema/courseData.js'
 import { db } from '../utils/client.js'
 import { withTimeLog } from '../utils/log.js'
-import { SectionSeed } from '../utils/types.js'
 import { courseData, getKey } from './_shared.js'
 
 export const seedSections = () =>
@@ -23,7 +22,7 @@ export const seedSections = () =>
       coursesData.forEach((c) => mapToId.set(getKey(c), c.id))
 
       const sections = courseData.flatMap((c) =>
-        (JSON.parse(c.sections) as SectionSeed[]).map((section) => ({
+        c.sections.map((section) => ({
           courseId: mapToId.get(getKey(c))!,
           sectionNo: +section.sectionNo,
           closed: section.closed,

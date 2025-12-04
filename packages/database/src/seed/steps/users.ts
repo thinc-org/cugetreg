@@ -3,7 +3,6 @@ import { PgInsertValue } from 'drizzle-orm/pg-core'
 import { user } from '../../schema/userData.js'
 import { db } from '../utils/client.js'
 import { withTimeLog } from '../utils/log.js'
-import { GoogleSeed } from '../utils/types.js'
 import { userData } from './_shared.js'
 
 export const seedUsers = () =>
@@ -12,7 +11,7 @@ export const seedUsers = () =>
       return userData.map((user) => ({
         email: user.email,
         name: user.name,
-        googleId: (JSON.parse(user.google) as GoogleSeed).googleId,
+        googleId: user.google.googleId,
       })) satisfies PgInsertValue<typeof user>[]
     })
 

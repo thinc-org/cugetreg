@@ -4,7 +4,6 @@ import { and, eq } from 'drizzle-orm'
 import { cart, cartItem } from '../../schema/userData.js'
 import { db } from '../utils/client.js'
 import { withTimeLog } from '../utils/log.js'
-import { CourseCart } from '../utils/types.js'
 import { getEmailToUserIdMap, userData } from './_shared.js'
 
 export const seedCarts = () =>
@@ -20,8 +19,7 @@ export const seedCarts = () =>
     let index = 0
 
     for (const user of userData) {
-      const cartContent =
-        (JSON.parse(user.courseCart || '{}') as CourseCart).cartContent ?? []
+      const cartContent = (user.courseCart || {}).cartContent ?? []
 
       if (cartContent.length < 1) {
         continue

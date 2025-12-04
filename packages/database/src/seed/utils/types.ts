@@ -1,3 +1,11 @@
+export type Period = {
+  period: {
+    start: string
+    end: string
+  }
+  date: string
+}
+
 export type CourseSeed = {
   abbrName: string
   academicYear: string
@@ -7,18 +15,18 @@ export type CourseSeed = {
   courseNameEn: string
   courseNameTh: string
   courseNo: string
-  createdAt: string
+  createdAt: { $date: string }
   credit: number
   creditHours: string
   department: string
   faculty: string
-  final: string
+  final?: Period
   genEdType: 'NO' | 'SC' | 'SO' | 'HU' | 'IN'
-  midterm: string
-  sections: string
+  midterm?: Period
+  sections: SectionSeed[]
   semester: '1' | '2' | '3'
   studyProgram: 'S' | 'T' | 'I'
-  updatedAt: string
+  updatedAt: { $date: string }
 }
 
 export type SectionSeed = {
@@ -48,10 +56,10 @@ export type ObjectId = {
 }
 
 export type UserSeed = {
-  _id: string // ObjectId
-  courseCart: string | null // CourseCart
+  _id: ObjectId
+  courseCart: CourseCart | null
   email: string
-  google: string
+  google: GoogleSeed
   name: string
 }
 
@@ -78,8 +86,8 @@ export type ReviewSeed = {
   academicYear: string
   content: string
   courseNo: string
-  interactions: string // Interaction[]
-  ownerId: string // ObjectId
+  interactions: Interaction[]
+  ownerId: ObjectId
   rating: number
   rejectionReason: string | null
   semester: '1' | '2' | '3'

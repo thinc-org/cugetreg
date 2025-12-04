@@ -1,24 +1,16 @@
-export function parsePeriod(str: string) {
-  if (!str) {
+import { Period } from './types.js'
+
+export function parsePeriod(p: Period | undefined) {
+  if (!p) {
     return {
       start: null,
       end: null,
     }
   }
-
-  type Expected = {
-    period: {
-      start: string
-      end: string
-    }
-    date: string
-  }
-
   const {
     period: { start, end },
     date,
-  } = JSON.parse(str) as Expected
-
+  } = p
   const [sH, sM] = start.split(':').map(Number)
   const [eH, eM] = end.split(':').map(Number)
 

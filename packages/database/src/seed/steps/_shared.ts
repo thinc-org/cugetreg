@@ -3,7 +3,7 @@ import fs from 'node:fs/promises'
 import { user } from '../../schema/userData.js'
 import { db } from '../utils/client.js'
 import { withTimeLog } from '../utils/log.js'
-import { CourseSeed, ObjectId, ReviewSeed, UserSeed } from '../utils/types.js'
+import { CourseSeed, ReviewSeed, UserSeed } from '../utils/types.js'
 
 export const courseData = await withTimeLog(
   'Read and parse courses',
@@ -40,9 +40,7 @@ export const userData = await withTimeLog('Read and parse users', async () => {
 })
 
 export const idToEmail = new Map<string, string>()
-userData.forEach((user) =>
-  idToEmail.set((JSON.parse(user._id) as ObjectId).$oid, user.email),
-)
+userData.forEach((user) => idToEmail.set(user._id.$oid, user.email))
 
 export const reviewData = await withTimeLog(
   'Read and parse reviews',

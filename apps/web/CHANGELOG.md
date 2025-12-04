@@ -1,5 +1,11 @@
 # web
 
+## 1.15.0-beta.2
+
+### Patch Changes
+
+- da02e80: update default semester to 2568/2
+
 ## 1.15.0-beta.1
 
 ### Minor Changes

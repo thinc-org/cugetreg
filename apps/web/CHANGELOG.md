@@ -1,5 +1,18 @@
 # web
 
+## 1.15.0
+
+### Minor Changes
+
+- 5eb12f2: refactor: remove client logging
+
+### Patch Changes
+
+- da02e80: update default semester to 2568/2
+- Updated dependencies [18f4e95]
+  - @cgr/codegen@1.5.1
+  - @cgr/course-utils@1.3.1
+
 ## 1.15.0-beta.2
 
 ### Patch Changes

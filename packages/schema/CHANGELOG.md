@@ -1,5 +1,12 @@
 # @cgr/schema
 
+## 1.7.0
+
+### Minor Changes
+
+- 18f4e95: refactor: remove opensearch
+- 5eb12f2: refactor: remove client logging
+
 ## 1.7.0-beta.1
 
 ### Minor Changes

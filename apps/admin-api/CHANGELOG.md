@@ -1,5 +1,13 @@
 # admin-api
 
+## 1.4.2
+
+### Patch Changes
+
+- Updated dependencies [18f4e95]
+- Updated dependencies [5eb12f2]
+  - @cgr/schema@1.7.0
+
 ## 1.4.2-beta.1
 
 ### Patch Changes

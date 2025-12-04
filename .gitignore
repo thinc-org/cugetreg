@@ -52,7 +52,4 @@ data/
 
 out
 
-# opensearch-cli
 .idea
-opensearch.yaml
-apps/opensearch-cli/index/local

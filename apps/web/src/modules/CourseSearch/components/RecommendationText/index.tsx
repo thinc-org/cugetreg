@@ -6,7 +6,6 @@ import { observer } from 'mobx-react'
 import { Analytics } from '@web/common/context/Analytics/components/Analytics'
 import { useCourseGroup } from '@web/common/hooks/useCourseGroup'
 import { useSearchCourseQueryParams } from '@web/modules/CourseSearch/hooks/useSearchCourseQueryParams'
-import { collectLogEvent } from '@web/services/logging'
 import { courseCartStore } from '@web/store'
 
 import { useRecommendCourseTextQuery } from '@cgr/codegen'
@@ -47,14 +46,7 @@ const RecommendationText: React.FC<RecommendationTextProps> = (props: Recommenda
   useEffect(() => {
     const visibleRecommendation =
       data && data.recommend.courses.length > 0 ? data.recommend.courses.slice(0, 6) : null
-    collectLogEvent({
-      kind: 'track',
-      message: 'displayed recommendation',
-      additionalData: {
-        variant,
-        display: JSON.stringify(visibleRecommendation),
-      },
-    })
+    // Removed logging functionality
   }, [data, variant])
 
   if (!visibleRecommendation || visibleRecommendation.length === 0) return null

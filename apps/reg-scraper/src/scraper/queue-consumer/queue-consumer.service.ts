@@ -1,32 +1,16 @@
 import { InjectQueue, Process, Processor } from '@nestjs/bull'
 import { InternalServerErrorException, Logger } from '@nestjs/common'
-import { ConfigService } from '@nestjs/config'
 import { InjectModel } from '@nestjs/mongoose'
 
 import type { Job, Queue } from 'bull'
 import { Model } from 'mongoose'
-import { InjectOpensearchClient, OpensearchClient } from 'nestjs-opensearch'
 
 import { OverrideService } from '@reg-scraper/override/override.service'
 import { courseRequest } from '@reg-scraper/scraper/request/course.request'
 import CourseFetchJob from '@reg-scraper/scraper/types/CourseFetchJob'
 import { QueueStoreService } from '@reg-scraper/stores/queue-store/queue-store.service'
 
-import { Course, GenEdType, Semester, StudyProgram } from '@cgr/schema'
-
-interface CourseDoc {
-  rawData: Course
-  abbrName: string
-  courseNo: string
-  courseNameEn: string
-  courseDescEn: string
-  courseNameTh: string
-  courseDescTh: string
-  genEdType: GenEdType
-  studyProgram: StudyProgram
-  semester: Semester
-  academicYear: string
-}
+import { Course, Semester, StudyProgram } from '@cgr/schema'
 
 @Processor({
   name: 'fetch',
@@ -39,9 +23,7 @@ export class QueueConsumerService {
     @InjectModel('course') private courseModel: Model<Course>,
     @InjectQueue('fetch')
     private fetchQueue: Queue<CourseFetchJob>,
-    private queueStoreService: QueueStoreService,
-    @InjectOpensearchClient('default') private opensearchClient: OpensearchClient,
-    private configService: ConfigService
+    private queueStoreService: QueueStoreService
   ) {}
 
   async saveCourse(course: Course): Promise<Course> {
@@ -63,33 +45,6 @@ export class QueueConsumerService {
           new: true,
         }
       )
-
-      const res = await this.opensearchClient.update({
-        id: result._id.toString(),
-        index: this.configService.get<string>('courseIndexName'),
-        body: {
-          doc: {
-            rawData: course,
-            abbrName: course.abbrName,
-            academicYear: course.academicYear,
-            courseDescEn: course.courseDescEn,
-            courseDescTh: course.courseDescTh,
-            courseNameEn: course.courseNameEn,
-            courseNameTh: course.courseNameTh,
-            courseNo: course.courseNo,
-            genEdType: course.genEdType,
-            semester: course.semester,
-            studyProgram: course.studyProgram,
-          } as CourseDoc,
-          doc_as_upsert: true,
-        },
-        refresh: true,
-      })
-
-      if (res.statusCode >= 400) {
-        this.logger.error(res)
-        throw new InternalServerErrorException('cannot insert data to opensearch database')
-      }
 
       return result
     } catch (error) {

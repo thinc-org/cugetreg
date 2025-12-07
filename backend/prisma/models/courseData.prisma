@@ -1,0 +1,129 @@
+/**
+ * https://datagateway.chula.ac.th (Connect to Chula Wi-Fi)
+ * DG0206 (ALL CAPS stuff) -> Each row of section class (1NF?)
+ * DG0403 (snake_case stuff) -> Course Data Only
+ * DG0216 For Professors Reference
+ */
+
+// course_info
+model CourseInfo {
+  // 3 COURSECODE / 11 courseno
+  courseNo String @id @map("course_no")
+  // 4 COURSENAME
+  abbrName String @map("abbr_name")
+  // 14 coursename_en
+  courseNameEn String @map("course_name_en")
+  // 13 coursename_th
+  courseNameTh String @map("course_name_th")
+  // 23 coursedescription_en
+  courseDescEn String? @map("course_desc_en")
+  // 22 coursedescription_th
+  courseDescTh String? @map("course_desc_th")
+
+  // TODO separate this into other table
+  // indirect -> 30 FACCODE or From CourseNo (Transitive Dependency)
+  faculty String
+  // indirect -> From CourseNo (Transitive Dependency)
+  department String
+
+  // 24 TOTALCREDIT
+  credit Decimal // ใช้ Decimal เพื่อความแม่นยำ
+  // 17 lcredit 18 nlcredit 19 lhour 20 nlhour 21 shour
+  creditHours String @map("credit_hours")
+  // Relation to Course
+  courses Course[]
+  // New!!!
+  cartItem CartItem[]
+
+  @@map("course_info")
+}
+
+// course
+model Course {
+  id String @id @default(cuid())
+  // 19 STUDYPROGRAMSYSTEM
+  studyProgram StudyProgram @map("study_program")
+  // 1 YEAR
+  academicYear Int @map("academic_year")
+  // 2 SEMESTER
+  semester Semester
+  // 3 COURSECODE / 11 courseno
+  courseNo String @map("course_no")
+  courseInfo CourseInfo @relation(fields: [courseNo], references: [courseNo])
+  // ! not available in data gateway
+  courseCondition String? @map("course_condition")
+  // ! not available in data gateway
+  midtermStart DateTime? @map("midterm_start")
+  midtermEnd DateTime? @map("midterm_end")
+  finalStart DateTime? @map("final_start")
+  finalEnd DateTime? @map("final_end")
+
+  // sections for this course: In sections table
+  // From section rows OR from gened override?
+  genEdType GenEdType @default(NOT_GENED) @map("gen_ed_type")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relation to Sections
+  sections Section[]
+  @@unique([studyProgram, academicYear, semester, courseNo], name: "course_unique")
+  @@map("course")
+}
+
+// course_section
+model Section {
+  id String @id @default(cuid())
+
+  courseId String @map("course_id")
+  course Course @relation(fields: [courseId], references: [id])
+
+  // 5 SECTION
+  sectionNo Int @map("section_no")
+  // ! Might not available in Data Gateway
+  closed Boolean
+  // 25 REALREG
+  regis Int
+  // 26 TOTALREG
+  max Int
+  // 27 REMARK1 & 28 REMARK2 & 29 REMARK3
+  note String?
+  // 20 GENEDSTATUS & 21 GENERALSUBJECT
+  genEdType GenEdType @default(NOT_GENED) @map("gen_ed_type")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relation to SectionClass (Class Schedule)
+  classes SectionClass[]
+  @@unique([courseId, sectionNo], name: "section_unique")
+  @@map("course_section")
+}
+
+// course_class
+model SectionClass {
+  id String @id @default(cuid())
+
+  sectionId String @map("section_id")
+  section Section @relation(fields: [sectionId], references: [id])
+
+  // 7 TEACHTYPE (LECT,LAB,PRAC,L/L,99)
+  type String
+  // 8 DAY1 & 9 DAY2 & ... & 14 DAY7
+  // * Note: DG use Multi-Valued, we will flatten it in our database
+  dayOfWeek DayOfWeek @map("day_of_week")
+  // 15 STARTTIME
+  periodStart String @map("period_start")
+  // 16 ENDTIME
+  periodEnd String @map("period_end")
+  // 17 BUILDING
+  building String?
+  // 18 ROOM
+  room String?
+  // DG0216 -> FK(???) 16 NAME_ABBR (PostgreSQL array type)
+  professors String @map("professors")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("course_class")
+}

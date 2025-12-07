@@ -1,0 +1,30 @@
+services:
+  db:
+    image: postgres:18
+    restart: always
+    container_name: cugetreg-db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - ./volumes/postgres:/var/lib/postgresql
+
+    ports:
+      - "${POSTGRES_PORT}:5432"
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
+
+  redis:
+    image: redis:latest
+    container_name: cugetreg-redis
+    volumes:
+      - ./volumes/redis:/data
+    ports:
+      - 6379:6379

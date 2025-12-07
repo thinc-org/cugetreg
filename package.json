@@ -1,0 +1,14 @@
+{
+	"name": "cugetreg",
+	"private": true,
+	"version": "1.0.0",
+	"scripts": {
+		"dev": "pnpm -r dev",
+		"build": "pnpm -r build"
+	},
+	"pnpm": {
+		"onlyBuiltDependencies": [
+			"esbuild"
+		]
+	}
+}

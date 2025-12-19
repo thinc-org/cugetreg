@@ -143,8 +143,7 @@
 
     --ring-width-1-5: 1.5px;
     --radius-button: 0.625rem;
-
-    --color-neutral-white: hsl(0 0% 100%);
+    -- --color-neutral-white: hsl(0 0% 100%);
     --color-neutral-50: hsl(240 20% 97%);
     --color-neutral-100: hsl(240 13% 94%);
     --color-neutral-200: hsl(235 15% 86%);
@@ -234,6 +233,30 @@
     --color-on-surface-var: var(--primary);
     --color-on-surface-disabled: var(--neutral-200);
     --color-on-surface-placeholder: var(--neutral-200);
+
+    --color-monday: var(--yellow-300);
+    --color-on-monday: var(--yellow-700);
+    --color-tuesday: var(--pink-300);
+    --color-on-tuesday: var(--pink-500);
+    --color-wednesday: var(--green-300);
+    --color-on-wednesday: var(--green-700);
+    --color-thursday: var(--orange-300);
+    --color-on-thursday: var(--orange-700);
+    --color-friday: var(--sky-300);
+    --color-on-friday: var(--sky-700);
+    --color-saturday: var(--indigo-300);
+    --color-on-saturday: var(--indigo-700);
+    --color-sunday: var(--red-300);
+    --color-on-sunday: var(--red-700);
+    --color-sc: var(--neutral-white);
+    --color-on-sc: var(--yellow-700);
+    --color-so: var(--neutral-white);
+    --color-on-so: var(--green-700);
+    --color-in: var(--neutral-white);
+    --color-on-in: var(--purple-700);
+    --color-hu: var(--neutral-white);
+    --color-on-hu: var(--pink-700);
+
 }
 
 
@@ -268,9 +291,5 @@
 @layer base {
     body {
         @apply bg-surface text-on-surface font-sans;
-    }
-
-    * {
-        @apply border-surface-container;
     }
 }

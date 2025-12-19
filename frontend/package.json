@@ -15,6 +15,7 @@
     "@chromatic-com/storybook": "^4.1.3",
     "@storybook/addon-a11y": "^10.1.7",
     "@storybook/addon-docs": "^10.1.7",
+    "@storybook/addon-styling-webpack": "^3.0.0",
     "@storybook/addon-svelte-csf": "^5.0.10",
     "@storybook/addon-vitest": "^10.1.7",
     "@storybook/svelte-vite": "^10.1.7",
@@ -35,7 +36,7 @@
     "storybook": "^10.1.7",
     "svelte": "^5.45.8",
     "svelte-check": "^4.3.4",
-    "tailwindcss": "^4.1.17",
+    "tailwindcss": "^4.1.18",
     "typescript": "~5.9.3",
     "vite": "^7.2.4",
     "vitest": "^4.0.15"
@@ -46,6 +47,7 @@
     ]
   },
   "dependencies": {
+    "@tailwindcss/vite": "^4.1.18",
     "bits-ui": "^2.14.4",
     "clsx": "^2.1.1",
     "lucide-svelte": "^0.560.0",

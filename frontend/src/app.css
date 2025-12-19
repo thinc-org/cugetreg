@@ -141,6 +141,9 @@
     --text-caption: var(--caption-font-size);
     --leading-caption: var(--caption-line-height);
 
+    --ring-width-1-5: 1.5px;
+    --radius-button: 0.625rem;
+
     --color-neutral-white: hsl(0 0% 100%);
     --color-neutral-50: hsl(240 20% 97%);
     --color-neutral-100: hsl(240 13% 94%);
@@ -247,6 +250,8 @@
         --button2-font-size: 0.75rem;
         --caption-font-size: 0.625rem;
 
+        --button-border-radius: 0.625rem;
+
         --h1-line-height: 1.75rem;
         --h2-line-height: 1.5rem;
         --h3-line-height: 1.25rem;
@@ -265,8 +270,7 @@
         @apply bg-surface text-on-surface font-sans;
     }
 
-    /* Use @apply for the universal border to ensure it hits the Tailwind layer */
     * {
-        border-color: var(--color-surface-container);
+        @apply border-surface-container;
     }
 }

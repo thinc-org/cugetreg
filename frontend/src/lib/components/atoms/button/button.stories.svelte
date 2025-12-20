@@ -12,7 +12,7 @@
                 control: {
                     type: "select",
                 },
-                options: ["solid", "outline"],
+                options: ["solid", "outlined"],
                 defaultValue: "solid",
             },
             size: {

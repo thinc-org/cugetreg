@@ -141,9 +141,9 @@
     --text-caption: var(--caption-font-size);
     --leading-caption: var(--caption-line-height);
 
-    --ring-width-1-5: 1.5px;
     --radius-button: 0.625rem;
-    -- --color-neutral-white: hsl(0 0% 100%);
+
+    --color-neutral-white: hsl(0 0% 100%);
     --color-neutral-50: hsl(240 20% 97%);
     --color-neutral-100: hsl(240 13% 94%);
     --color-neutral-200: hsl(235 15% 86%);

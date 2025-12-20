@@ -34,11 +34,14 @@
         {...rest}
         {id}
     >
-        <SwitchPrimitive.Thumb
-            class={cn(
-                "p-1 bg-surface-container-high data-[state=checked]:bg-primary pointer-events-none block h-3.5 w-3.5 rounded-full shadow-lg ring-0 transition-transform data-[state=checked]:translate-x-[22px] data-[state=unchecked]:translate-x-px",
-            )}
-        />
+        <div class="relative w-full h-full">
+            <SwitchPrimitive.Thumb
+                class={cn(
+                    // "p-1 bg-surface-container-high data-[state=checked]:bg-primary pointer-events-none block h-3.5 w-3.5 rounded-full shadow-lg ring-0 transition-transform data-[state=checked]:translate-x-6 data-[state=unchecked]:translate-x-px",
+                    "p-1 bg-surface-container-high data-[state=checked]:bg-primary pointer-events-none block h-3.5 w-3.5 rounded-full shadow-lg ring-0 transition-transform absolute data-[state=checked]:right-0.5 data-[state=unchecked]:left-0.5 top-1/2 -translate-y-1/2",
+                )}
+            />
+        </div>
     </SwitchPrimitive.Root>
     {#if label}
         <Label.Root

@@ -7,7 +7,7 @@
     let hasHalfStar: boolean = $derived(rating % 1 !== 0); // Determine if there's a half star
 </script>
 
-<div class="flex flex-row text-h3 text-primary gap-1.5">
+<div class="relative flex flex-row text-h3 text-primary gap-1.5">
     <div class="absolute inset-0 flex flex-row">
         {#each Array(totalStars) as _}
             <Star />

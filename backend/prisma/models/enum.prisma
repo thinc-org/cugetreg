@@ -1,69 +1,69 @@
-/// Academic Semester (ภาคการศึกษา)
-enum Semester {
-  FIRST @map("1")
-  SECOND @map("2")
-  SUMMER @map("3")
+// /// Academic Semester (ภาคการศึกษา)
+// enum Semester {
+//   FIRST @map("1")
+//   SECOND @map("2")
+//   SUMMER @map("3")
 
-  @@map("semester")
-}
+//   @@map("semester")
+// }
 
-/// Study Program System (ระบบการศึกษา)
-enum StudyProgram {
-  SPECIAL @map("S")       // หรือค่าอื่นๆ ที่ใช้ 'S'
-  THAI @map("T")          // ภาคภาษาไทย
-  INTERNATIONAL @map("I") // ภาคอินเตอร์
+// /// Study Program System (ระบบการศึกษา)
+// enum StudyProgram {
+//   SPECIAL @map("S")       // หรือค่าอื่นๆ ที่ใช้ 'S'
+//   THAI @map("T")          // ภาคภาษาไทย
+//   INTERNATIONAL @map("I") // ภาคอินเตอร์
 
-  @@map("study_program")
-}
+//   @@map("study_program")
+// }
 
-/// General Education (GenEd) Course Type (ประเภทวิชาศึกษาทั่วไป)
-enum GenEdType {
-  NOT_GENED @map("NO") // ไม่ใช่หมวดศึกษาทั่วไป
-  SCIENCE @map("SC")   // วิทยาศาสตร์และคณิตศาสตร์
-  SOCIAL @map("SO")    // สังคมศาสตร์
-  HUMAN @map("HU")     // มนุษยศาสตร์
-  INTEGRATED @map("IN")// ศึกษาทั่วไปแบบบูรณาการ
+// /// General Education (GenEd) Course Type (ประเภทวิชาศึกษาทั่วไป)
+// enum GenEdType {
+//   NOT_GENED @map("NO") // ไม่ใช่หมวดศึกษาทั่วไป
+//   SCIENCE @map("SC")   // วิทยาศาสตร์และคณิตศาสตร์
+//   SOCIAL @map("SO")    // สังคมศาสตร์
+//   HUMAN @map("HU")     // มนุษยศาสตร์
+//   INTEGRATED @map("IN")// ศึกษาทั่วไปแบบบูรณาการ
 
-  @@map("gen_ed_type")
-}
+//   @@map("gen_ed_type")
+// }
 
-/// Day of the Week for Class Scheduling (วันเรียน)
-enum DayOfWeek {
-  MONDAY @map("MO")
-  TUESDAY @map("TU")
-  WEDNESDAY @map("WE")
-  THURSDAY @map("TH")
-  FRIDAY @map("FR")
-  SATURDAY @map("SA")
-  SUNDAY @map("SU")
-  ARRANGED @map("AR")  // นัดหมายภายหลัง
-  IRREGULAR @map("IA") // ไม่ปกติ/Intensive
+// /// Day of the Week for Class Scheduling (วันเรียน)
+// enum DayOfWeek {
+//   MONDAY @map("MO")
+//   TUESDAY @map("TU")
+//   WEDNESDAY @map("WE")
+//   THURSDAY @map("TH")
+//   FRIDAY @map("FR")
+//   SATURDAY @map("SA")
+//   SUNDAY @map("SU")
+//   ARRANGED @map("AR")  // นัดหมายภายหลัง
+//   IRREGULAR @map("IA") // ไม่ปกติ/Intensive
 
-  @@map("day_of_week")
-}
+//   @@map("day_of_week")
+// }
 
-/// Review Status (สถานะการรีวิว)
-enum ReviewStatus {
-  PENDING
-  APPROVED
-  REJECTED
+// /// Review Status (สถานะการรีวิว)
+// enum ReviewStatus {
+//   PENDING
+//   APPROVED
+//   REJECTED
 
-  @@map("review_status")
-}
+//   @@map("review_status")
+// }
 
-/// Vote Type (ประเภทการโหวต)
-enum VoteType {
-  LIKE @map("L")
-  DISLIKE @map("D")
+// /// Vote Type (ประเภทการโหวต)
+// enum VoteType {
+//   LIKE @map("L")
+//   DISLIKE @map("D")
 
-  @@map("vote_type")
-}
+//   @@map("vote_type")
+// }
 
-// New!!!
-/// Visible (ประเภทการมองเห็น)
-enum Visible {
-  PUBLIC @map("PUB")
-  PRIVATE @map("PVT")
+// // New!!!
+// /// Visible (ประเภทการมองเห็น)
+// enum Visible {
+//   PUBLIC @map("PUB")
+//   PRIVATE @map("PVT")
 
-  @@map("visible")
-}
+//   @@map("visible")
+// }

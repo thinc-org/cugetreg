@@ -1,10 +1,13 @@
 {
   "name": "cugetregv2",
+  "version": "1.0.0",
   "type": "module",
+  "packageManager": "pnpm@10.13.1",
   "engines": {
     "node": ">=24.11.1"
   },
   "scripts": {
+    "lint": "tsc --noEmit",
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js"
@@ -14,11 +17,16 @@
   },
   "dependencies": {
     "@hono/node-server": "^1.19.6",
+    "@hono/oauth-providers": "^0.8.5",
+    "@hono/zod-validator": "^0.7.6",
     "@prisma/adapter-pg": "^7.1.0",
+    "@prisma/client": "^7.2.0",
+    "dotenv": "^17.2.3",
     "dotenv-cli": "^11.0.0",
     "hono": "^4.10.7",
     "prisma": "^7.1.0",
-    "redis": "^5.10.0"
+    "redis": "^5.10.0",
+    "zod": "^4.2.1"
   },
   "devDependencies": {
     "@types/node": "^20.11.17",

@@ -1,0 +1,5 @@
+{
+  "name": "cugetreg-monorepo",
+  "packageManager": "pnpm@10.13.1",
+  "private": true
+}

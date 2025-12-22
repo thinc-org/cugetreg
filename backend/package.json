@@ -1,5 +1,6 @@
 {
   "name": "cugetregv2",
+  "version": "1.0.0",
   "type": "module",
   "packageManager": "pnpm@10.13.1",
   "engines": {

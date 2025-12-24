@@ -1,0 +1,295 @@
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&display=swap');
+
+@import 'tailwindcss';
+
+@font-face {
+    font-family: 'FC Orbit';
+    src: url('./assets/fonts/FCOrbit-Bold.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'FC Orbit';
+    src: url('./assets/fonts/FCOrbit-BoldItalic.woff2') format('woff2');
+    font-weight: 700;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'FC Orbit';
+    src: url('./assets/fonts/FCOrbit-Medium.woff2') format('woff2');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'FC Orbit';
+    src: url('./assets/fonts/FCOrbit-MediumItalic.woff2') format('woff2');
+    font-weight: 500;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'FC Orbit';
+    src: url('./assets/fonts/FCOrbit-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'FC Orbit';
+    src: url('./assets/fonts/FCOrbit-Italic.woff2') format('woff2');
+    font-weight: 400;
+    font-style: italic;
+}
+
+:root {
+    --neutral-white: hsl(0 0% 100%);
+    --neutral-50: hsl(240 20% 97%);
+    --neutral-100: hsl(240 13% 94%);
+    --neutral-200: hsl(235 15% 86%);
+    --neutral-300: hsl(231 16% 74%);
+    --neutral-400: hsl(230 15% 60%);
+    --neutral-500: hsl(230 14% 51%);
+    --neutral-600: hsl(230 15% 39%);
+    --neutral-700: hsl(233 16% 32%);
+    --neutral-800: hsl(231 14% 27%);
+    --neutral-900: hsl(233 13% 24%);
+    --blue-300: hsl(212 88% 93%);
+    --blue-500: hsl(222 52% 53%);
+    --blue-700: hsl(225 40% 33%);
+    --tangerine-300: hsl(20 100% 88%);
+    --tangerine-500: hsl(19 89% 67%);
+    --tangerine-700: hsl(18 87% 53%);
+    --yellow-300: hsl(46 85% 92%);
+    --yellow-500: hsl(44 92% 77%);
+    --yellow-700: hsl(40 97% 47%);
+    --pink-300: hsl(324 90% 92%);
+    --pink-500: hsl(324 86% 73%);
+    --pink-700: hsl(324 84% 42%);
+    --red-300: hsl(0 89% 93%);
+    --red-500: hsl(0 92% 69%);
+    --red-700: hsl(0 87% 37%);
+    --orange-300: hsl(33 100% 87%);
+    --orange-500: hsl(32 99% 61%);
+    --orange-700: hsl(32 100% 45%);
+    --green-300: hsl(98 97% 85%);
+    --green-500: hsl(97 68% 50%);
+    --green-700: hsl(97 69% 35%);
+    --teal-300: hsl(166 100% 93%);
+    --teal-500: hsl(166 68% 50%);
+    --teal-700: hsl(166 50% 40%);
+    --sky-300: hsl(205 95% 93%);
+    --sky-500: hsl(205 85% 57%);
+    --sky-700: hsl(205 85% 31%);
+    --purple-300: hsl(285 91% 92%);
+    --purple-500: hsl(285 76% 66%);
+    --purple-700: hsl(285 67% 31%);
+    --indigo-300: hsl(248 100% 92%);
+    --indigo-500: hsl(248 82% 69%);
+    --indigo-700: hsl(248 80% 31%);
+
+    --h1-font-size: 1.75rem;
+    --h2-font-size: 1.5rem;
+    --h3-font-size: 1.25rem;
+    --table-header-font-size: 1rem;
+    --subtitle-font-size: 1.125rem;
+    --body1-font-size: 1.125rem;
+    --body2-font-size: 1rem;
+    --button1-font-size: 1.125rem;
+    --button2-font-size: 1rem;
+    --caption-font-size: 0.75rem;
+
+    --h1-line-height: 2rem;
+    --h2-line-height: 1.75rem;
+    --h3-line-height: 1.5rem;
+    --table-header-line-height: 1.125rem;
+    --subtitle-line-height: 1.25rem;
+    --body1-line-height: 1.75rem;
+    --body2-line-height: 1.5rem;
+    --button1-line-height: 1.25rem;
+    --button2-line-height: 1.125rem;
+    --caption-line-height: 0.875rem;
+}
+
+@theme {
+    --font-sarabun: "Sarabun", sans-serif;
+    --font-sans: "FC Orbit", sans-serif;
+
+    --text-h1: var(--h1-font-size);
+    --leading-h1: var(--h1-line-height);
+
+    --text-h2: var(--h1-font-size);
+    --leading-h2: var(--h1-line-height);
+
+    --text-h3: var(--h1-font-size);
+    --leading-h3: var(--h1-line-height);
+
+    --text-body1: var(--body1-font-size);
+    --leading-body1: var(--body1-line-height);
+
+    --text-body2: var(--body2-font-size);
+    --leading-body2: var(--body2-line-height);
+
+    --text-button1: var(--button-font-size);
+    --leading-button1: var(--button-line-height);
+
+    --text-button2: var(--button2-font-size);
+    --leading-button2: var(--button2-line-height);
+
+    --text-caption: var(--caption-font-size);
+    --leading-caption: var(--caption-line-height);
+
+    --radius-button: 0.625rem;
+
+    --color-neutral-white: hsl(0 0% 100%);
+    --color-neutral-50: hsl(240 20% 97%);
+    --color-neutral-100: hsl(240 13% 94%);
+    --color-neutral-200: hsl(235 15% 86%);
+    --color-neutral-300: hsl(231 16% 74%);
+    --color-neutral-400: hsl(230 15% 60%);
+    --color-neutral-500: hsl(230 14% 51%);
+    --color-neutral-600: hsl(230 15% 39%);
+    --color-neutral-700: hsl(233 16% 32%);
+    --color-neutral-800: hsl(231 14% 27%);
+    --color-neutral-900: hsl(233 13% 24%);
+    --color-blue-300: hsl(212 88% 93%);
+    --color-blue-500: hsl(222 52% 53%);
+    --color-blue-700: hsl(225 40% 33%);
+    --color-tangerine-300: hsl(20 100% 88%);
+    --color-tangerine-500: hsl(19 89% 67%);
+    --color-tangerine-700: hsl(18 87% 53%);
+    --color-yellow-300: hsl(46 85% 92%);
+    --color-yellow-500: hsl(44 92% 77%);
+    --color-yellow-700: hsl(40 97% 47%);
+    --color-pink-300: hsl(324 90% 92%);
+    --color-pink-500: hsl(324 86% 73%);
+    --color-pink-700: hsl(324 84% 42%);
+    --color-red-300: hsl(0 89% 93%);
+    --color-red-500: hsl(0 92% 69%);
+    --color-red-700: hsl(0 87% 37%);
+    --color-orange-300: hsl(33 100% 87%);
+    --color-orange-500: hsl(32 99% 61%);
+    --color-orange-700: hsl(32 100% 45%);
+    --color-green-300: hsl(98 97% 85%);
+    --color-green-500: hsl(97 68% 50%);
+    --color-green-700: hsl(97 69% 35%);
+    --color-teal-300: hsl(166 100% 93%);
+    --color-teal-500: hsl(166 68% 50%);
+    --color-teal-700: hsl(166 50% 40%);
+    --color-sky-300: hsl(205 95% 93%);
+    --color-sky-500: hsl(205 85% 57%);
+    --color-sky-700: hsl(205 85% 31%);
+    --color-purple-300: hsl(285 91% 92%);
+    --color-purple-500: hsl(285 76% 66%);
+    --color-purple-700: hsl(285 67% 31%);
+    --color-indigo-300: hsl(248 100% 92%);
+    --color-indigo-500: hsl(248 82% 69%);
+    --color-indigo-700: hsl(248 80% 31%);
+
+    --color-primary: var(--blue-500);
+    --color-primary-hover: var(--blue-700);
+    --color-primary-low: var(--blue-300);
+    --color-primary-low-hover: var(--blue-500);
+    --color-primary-container: var(--blue-300);
+    --color-on-primary: var(--neutral-white);
+    --color-on-primary-hover: var(--neutral-white);
+    --color-on-primary-low: var(--blue-700);
+    --color-on-primary-container: var(--blue-700);
+    --color-secondary: var(--tangerine-500);
+    --color-secondary-hover: var(--tangerine-700);
+    --color-secondary-container: var(--tangerine-300);
+    --color-on-secondary: var(--neutral-white);
+    --color-on-secondary-hover: var(--neutral-white);
+    --color-on-secondary-container: var(--tangerine-700);
+    --color-error: var(--red-500);
+    --color-error-hover: var(--red-700);
+    --color-error-container: var(--red-300);
+    --color-on-error: var(--neutral-white);
+    --color-on-error-hover: var(--neutral-white);
+    --color-on-error-container: var(--red-700);
+    --color-warning: var(--yellow-500);
+    --color-warning-hover: var(--yellow-700);
+    --color-warning-container: var(--yellow-300);
+    --color-on-warning: var(--neutral-white);
+    --color-on-warning-hover: var(--neutral-white);
+    --color-on-warning-container: var(--yellow-700);
+    --color-success: var(--green-500);
+    --color-success-hover: var(--green-700);
+    --color-success-container: var(--green-300);
+    --color-on-success: var(--neutral-white);
+    --color-on-success-hover: var(--neutral-white);
+    --color-on-success-container: var(--green-700);
+    --color-surface-dim: var(--neutral-300);
+    --color-surface: var(--neutral-white);
+    --color-surface-bright: var(--neutral-white);
+    --color-surface-container: var(--neutral-200);
+    --color-surface-container-low: var(--neutral-100);
+    --color-surface-container-lowest: var(--neutral-50);
+    --color-surface-container-high: var(--neutral-300);
+    --color-surface-container-highest: var(--neutral-400);
+    --color-on-surface: var(--neutral-900);
+    --color-on-surface-var: var(--primary);
+    --color-on-surface-disabled: var(--neutral-200);
+    --color-on-surface-placeholder: var(--neutral-200);
+
+    --color-monday: var(--yellow-300);
+    --color-on-monday: var(--yellow-700);
+    --color-tuesday: var(--pink-300);
+    --color-on-tuesday: var(--pink-500);
+    --color-wednesday: var(--green-300);
+    --color-on-wednesday: var(--green-700);
+    --color-thursday: var(--orange-300);
+    --color-on-thursday: var(--orange-700);
+    --color-friday: var(--sky-300);
+    --color-on-friday: var(--sky-700);
+    --color-saturday: var(--indigo-300);
+    --color-on-saturday: var(--indigo-700);
+    --color-sunday: var(--red-300);
+    --color-on-sunday: var(--red-700);
+    --color-sc: var(--neutral-white);
+    --color-on-sc: var(--yellow-700);
+    --color-so: var(--neutral-white);
+    --color-on-so: var(--green-700);
+    --color-in: var(--neutral-white);
+    --color-on-in: var(--purple-700);
+    --color-hu: var(--neutral-white);
+    --color-on-hu: var(--pink-700);
+
+}
+
+
+@media screen and (max-width: 640px) {
+    :root {
+        --h1-font-size: 1.25rem;
+        --h2-font-size: 1rem;
+        --h3-font-size: 1rem;
+        --table-header-font-size: 0.75rem;
+        --subtitle-font-size: 0.875rem;
+        --body1-font-size: 0.875rem;
+        --body2-font-size: 0.75rem;
+        --button1-font-size: 0.875rem;
+        --button2-font-size: 0.75rem;
+        --caption-font-size: 0.625rem;
+
+        --button-border-radius: 0.625rem;
+
+        --h1-line-height: 1.75rem;
+        --h2-line-height: 1.5rem;
+        --h3-line-height: 1.25rem;
+        --table-header-line-height: 1rem;
+        --subtitle-line-height: 1.125rem;
+        --body1-line-height: 1.375rem;
+        --body2-line-height: 1.25rem;
+        --button1-line-height: 1.125rem;
+        --button2-line-height: 1rem;
+        --caption-line-height: 0.75rem;
+    }
+}
+
+@layer base {
+    body {
+        @apply bg-surface text-on-surface font-sans;
+    }
+}

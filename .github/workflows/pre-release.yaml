@@ -1,0 +1,59 @@
+name: Configure Pre-release
+
+on:
+  pull_request:
+    types:
+      - opened
+    branches:
+      - main
+      - beta
+
+jobs:
+  configure:
+    name: Configure Pre-release
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+
+      - name: Check if pre.json exists
+        id: pre-release-file
+        run: |
+          if [ -f ".changeset/pre.json" ]; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Echo pre-release file exists
+        run: echo ${{ steps.pre-release-file.outputs.exists }}
+
+      - name: Install Changeset
+        run: npm install -g @changesets/cli
+
+      - name: Enter pre-release mode for Beta
+        if: ${{ github.base_ref == 'beta' && steps.pre-release-file.outputs.exists == 'false' }}
+        run: npx changeset pre enter beta
+
+      - name: Exit pre-release mode for Main
+        if: ${{ github.base_ref == 'main' && steps.pre-release-file.outputs.exists == 'true' }}
+        run: npx changeset pre exit
+
+      - name: Commit Changes to the Pull Request
+        uses: EndBug/add-and-commit@v9
+        with:
+          add: .changeset/pre.json
+          message: 'Configure pre-release mode'

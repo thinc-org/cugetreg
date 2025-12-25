@@ -9,6 +9,7 @@ export const timeTableCourseCardVariant = tv({
         "left-[calc(100%/var(--cols)*var(--y))]",
         "flex flex-col justify-center items-center",
         "border-2 border-amber-400 rounded-lg",
+        "hover:cursor-pointer select-none"
     ],
     variants: {
         color: {

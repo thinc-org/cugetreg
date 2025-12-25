@@ -21,6 +21,7 @@
         length?: number;
         col?: number;
         row?: number;
+        [key: string]: unknown;
     }
 
     const {
@@ -29,6 +30,7 @@
         length = 2,
         col = 0,
         row = 0,
+        ...rest
     }: TimeTableCourseCardProp = $props();
 </script>
 
@@ -41,6 +43,7 @@
         --y: {col};
     "
     class={cn(timeTableCourseCardVariant({ color }))}
+    {...rest}
 >
     {#if length === 1}
         <span class="text-[1.8cqh] truncate">{course.name}</span>

@@ -2,8 +2,6 @@
     import { type TimeTableContext } from "./index";
     import type { Day } from "../day-chip";
     import { setContext, type Snippet } from "svelte";
-    import TimetableCourseCard from "./timetable-course-card.svelte";
-    import type { Course } from "../../molecules/course-card";
 
     // TODO: Add period label
     const DAYS: NonNullable<Day>[] = ["MO", "TU", "WE", "TH", "FR"];
@@ -48,7 +46,6 @@
     style="
         grid-template-columns: repeat({periodPerDay + 1}, minmax(0, 1fr));
         grid-template-rows: auto repeat({amountOfDays + 1});
-        container-type: inline-size;
     "
 >
     <div class="bg-indigo-50! py-3.5 cell border-r border-b border-neutral-200">
@@ -99,7 +96,9 @@
         </div>
 
         <div class="absolute top-0 left-0 w-full h-full">
-            {@render children?.()}
+            <div class="relative w-full h-full">
+                {@render children?.()}
+            </div>
         </div>
     </div>
 </div>

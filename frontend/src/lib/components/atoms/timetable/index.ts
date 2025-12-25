@@ -2,14 +2,14 @@ import { tv, type VariantProps } from 'tailwind-variants';
 
 export const timeTableCourseCardVariant = tv({
     base: [
-        "absolute @container overflow-hidden",
+        "absolute overflow-hidden @container-[size]",
         "w-[calc(100%/var(--cols)*var(--len))]",
         "h-[calc(100%/var(--rows))]",
         "top-[calc(100%/var(--rows)*var(--x))]",
         "left-[calc(100%/var(--cols)*var(--y))]",
         "flex flex-col justify-center items-center",
         "border-2 border-amber-400 rounded-lg",
-        "hover:cursor-pointer select-none"
+        "hover:cursor-pointer hover:z-100 select-none"
     ],
     variants: {
         color: {
@@ -18,7 +18,7 @@ export const timeTableCourseCardVariant = tv({
             tangerine: 'bg-tangerine-300 border-tangerine-700 text-tangerine-700',
             purple: 'bg-purple-300 border-purple-700 text-purple-700',
             blue: 'bg-blue-300 border-blue-700 text-blue-700',
-            conflict: 'bg-red-300/50 border-red-800 text-red-800'
+            conflict: 'bg-red-300 border-red-800 text-red-800'
         }
     },
     defaultVariants: {

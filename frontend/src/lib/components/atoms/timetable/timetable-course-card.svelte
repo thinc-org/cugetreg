@@ -8,8 +8,6 @@
     import { cn } from "../../../../utils";
     import { getContext } from "svelte";
 
-    // TODO: Add hover + onclick
-
     const context = getContext<TimeTableContext>("timetable-context");
 
     const numCol = context.periodPerDay;
@@ -45,16 +43,19 @@
     class={cn(timeTableCourseCardVariant({ color }))}
     {...rest}
 >
+    <!-- NOTE: Scaling on some resolution is kinda wonky -->
     {#if length === 1}
-        <span class="text-[1.8cqh] truncate">{course.name}</span>
-        <span class="text-[1.5cqh] truncate">{course.bldg} {course.room}</span>
-        <span class="text-[1.3cqh]">Sec {course.section}</span>
-    {:else}
-        <span class="text-[1.8cqh]">{course.code}</span>
-        <span class="text-[2cqh]">{course.name}</span>
-        <span class="text-[1.8cqh]">
+        <span class="text-[15cqh] truncate">{course.code}</span>
+        <span class="text-[16cqh] font-bold truncate">{course.name}</span>
+        <span class="text-[15cqh] truncate">
             {course.bldg}
-            {course.room} | Sec {course.section}
+            {course.room}
         </span>
+    {:else}
+        <span class="truncate text-[16cqh]">{course.code}</span>
+        <span class="truncate text-[20cqh] font-bold">{course.name}</span>
+        <span class="truncate text-[16cqh]"
+            >{course.bldg} {course.room} | Sec {course.section}</span
+        >
     {/if}
 </div>

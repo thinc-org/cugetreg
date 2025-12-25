@@ -3,8 +3,20 @@
     import type { Day } from "../day-chip";
     import { setContext, type Snippet } from "svelte";
 
-    // TODO: Add period label
-    const DAYS: NonNullable<Day>[] = ["MO", "TU", "WE", "TH", "FR"];
+    import { cn } from "../../../../utils";
+    import type { ClassValue } from "clsx";
+
+    const DAYS5: NonNullable<Day>[] = ["MO", "TU", "WE", "TH", "FR"];
+    const DAYS7: NonNullable<Day>[] = [
+        "MO",
+        "TU",
+        "WE",
+        "TH",
+        "FR",
+        "SA",
+        "SU",
+    ];
+
     const days: Record<NonNullable<Day>, string> = {
         MO: "MON",
         TU: "TUE",
@@ -18,6 +30,8 @@
     interface TimeTableProp {
         periodPerDay?: number;
         includeSatSun?: boolean;
+        startTime: number;
+        class?: ClassValue;
         children?: Snippet;
         [key: string]: unknown;
     }
@@ -25,11 +39,14 @@
     const {
         periodPerDay = 12,
         includeSatSun = false,
+        startTime = 6,
+        class: className = undefined,
         children,
         ...rest
     }: TimeTableProp = $props();
 
     const amountOfDays = $derived(includeSatSun ? 7 : 5);
+    const DAYS = $derived(includeSatSun ? DAYS7 : DAYS5);
 
     setContext<TimeTableContext>("timetable-context", {
         get periodPerDay() {
@@ -42,7 +59,7 @@
 </script>
 
 <div
-    class="grid border border-neutral-200"
+    class={cn("grid border border-neutral-200", className)}
     style="
         grid-template-columns: repeat({periodPerDay + 1}, minmax(0, 1fr));
         grid-template-rows: auto repeat({amountOfDays + 1});
@@ -60,7 +77,7 @@
     >
         {#each Array.from({ length: periodPerDay }) as _, i}
             <div class="bg-indigo-50! py-3.5 cell text-[1.2cqw]!">
-                {i + 1}
+                {i + startTime}
             </div>
         {/each}
     </div>

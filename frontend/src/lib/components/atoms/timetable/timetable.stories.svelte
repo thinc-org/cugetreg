@@ -1,125 +1,7 @@
 <script module lang="ts">
     import { defineMeta } from "@storybook/addon-svelte-csf";
-
-    import { TimeTable, type Period, type Schedule } from "./index";
-    import type { Course } from "../../molecules/course-card";
-
-    const emptySchedule: Schedule = {
-        MO: Array.from({ length: 12 }),
-        TU: Array.from({ length: 12 }),
-        WE: Array.from({ length: 12 }),
-        TH: Array.from({ length: 12 }),
-        FR: Array.from({ length: 12 }),
-        SA: Array.from({ length: 12 }),
-        SU: Array.from({ length: 12 }),
-    };
-
-    let mockCourse: Course = {
-        name: "COM PROG",
-        code: "2190101",
-        credit: 3,
-        gened: [],
-        seat: 100,
-        maxseat: 999,
-        review: 12,
-        days: [],
-    };
-
-    let noConflict: Schedule = {
-        MO: Array.from({ length: 12 }),
-        TU: Array.from({ length: 12 }),
-        WE: Array.from({ length: 12 }),
-        TH: Array.from({ length: 12 }),
-        FR: Array.from({ length: 12 }),
-        SA: Array.from({ length: 12 }),
-        SU: Array.from({ length: 12 }),
-    };
-
-    noConflict["TU"][1] = {
-        course: mockCourse,
-        length: 1,
-    } as Period;
-
-    noConflict["WE"][1] = {
-        course: mockCourse,
-        length: 2,
-    } as Period;
-
-    noConflict["TH"][1] = {
-        course: mockCourse,
-        length: 3,
-    } as Period;
-
-    noConflict["FR"][1] = {
-        course: mockCourse,
-        length: 4,
-    } as Period;
-
-    let conflicted: Schedule = {
-        MO: Array.from({ length: 12 }),
-        TU: Array.from({ length: 12 }),
-        WE: Array.from({ length: 12 }),
-        TH: Array.from({ length: 12 }),
-        FR: Array.from({ length: 12 }),
-        SA: Array.from({ length: 12 }),
-        SU: Array.from({ length: 12 }),
-    };
-
-    conflicted["MO"][3] = [
-        {
-            course: mockCourse,
-            length: 1,
-        },
-        {
-            course: mockCourse,
-            length: 1,
-        },
-    ] as Period[];
-
-    conflicted["TU"][1] = {
-        course: mockCourse,
-        length: 2,
-    } as Period;
-
-    conflicted["TU"][2] = {
-        course: mockCourse,
-        length: 2,
-    } as Period;
-
-    conflicted["WE"][1] = {
-        course: mockCourse,
-        length: 3,
-    } as Period;
-
-    conflicted["WE"][3] = {
-        course: mockCourse,
-        length: 3,
-    } as Period;
-
-    conflicted["TH"][5] = {
-        course: mockCourse,
-        length: 3,
-    } as Period;
-
-    conflicted["TH"][6] = {
-        course: mockCourse,
-        length: 3,
-    } as Period;
-
-    conflicted["FR"][1] = {
-        course: mockCourse,
-        length: 3,
-    } as Period;
-
-    conflicted["FR"][3] = {
-        course: mockCourse,
-        length: 3,
-    } as Period;
-
-    conflicted["FR"][5] = {
-        course: mockCourse,
-        length: 3,
-    } as Period;
+    import { TimeTable, type TimeTableCourse } from ".";
+    import TimetableCourseCard from "./timetable-course-card.svelte";
 
     const { Story } = defineMeta({
         title: "Atom/Time Table",
@@ -131,12 +13,92 @@
             },
             schedule: {
                 control: false,
-                defaultValue: emptySchedule,
             },
         },
     });
+
+    const course1: TimeTableCourse = {
+        name: "COM PROG",
+        code: "2190101",
+        bldg: "ENG2",
+        room: "303/1",
+        section: 1,
+    };
+
+    const course2: TimeTableCourse = {
+        name: "ADV MATH METH",
+        code: "2190101",
+        bldg: "ENG2",
+        room: "303/1",
+        section: 32,
+    };
+
+    const course3: TimeTableCourse = {
+        name: "Calculus II",
+        code: "2190101",
+        bldg: "ENG100",
+        room: "M07/1",
+        section: 123,
+    };
 </script>
 
 <Story name="Default" />
-<Story name="Populated" args={{ schedule: noConflict }} />
-<Story name="Conflicted" args={{ schedule: conflicted }} />
+
+<Story name="Populated">
+    <TimetableCourseCard
+        course={course1}
+        length={1}
+        row={2}
+        col={1}
+        color="amber"
+    />
+    <TimetableCourseCard
+        course={course2}
+        length={2}
+        row={2}
+        col={2}
+        color="tangerine"
+    />
+    <TimetableCourseCard
+        course={course3}
+        length={3}
+        row={3}
+        col={3}
+        color="purple"
+    />
+    <TimetableCourseCard
+        course={course1}
+        length={1}
+        row={1}
+        col={1}
+        color="blue"
+    />
+    <TimetableCourseCard
+        course={course2}
+        length={2}
+        row={1}
+        col={4}
+        color="conflict"
+    />
+    <TimetableCourseCard
+        course={course3}
+        length={5}
+        row={4}
+        col={0}
+        color="amber"
+    />
+    <TimetableCourseCard
+        course={course3}
+        length={3}
+        row={2}
+        col={6}
+        color="conflict"
+    />
+    <TimetableCourseCard
+        course={course2}
+        length={3}
+        row={2}
+        col={8}
+        color="conflict"
+    />
+</Story>

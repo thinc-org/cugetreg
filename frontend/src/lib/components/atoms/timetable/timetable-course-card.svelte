@@ -1,43 +1,57 @@
 <script lang="ts">
-    import { type Length } from "./index";
+    import {
+        timeTableCourseCardVariant,
+        type TimeTableCardColor,
+        type TimeTableContext,
+        type TimeTableCourse,
+    } from "./index";
     import { cn } from "../../../../utils";
-    import { timeCourseCardVariant } from "./index";
-    import type { Course } from "../../molecules/course-card";
+    import { getContext } from "svelte";
 
-    interface CourseTimeSlotProp {
-        course: Course;
-        length?: Length;
-        conflict?: boolean;
+    // TODO: Add hover + onclick
+
+    const context = getContext<TimeTableContext>("timetable-context");
+
+    const numCol = context.periodPerDay;
+    const numRow = context.amountOfDays;
+
+    interface TimeTableCourseCardProp {
+        course: TimeTableCourse;
+        color?: TimeTableCardColor;
+        length?: number;
+        col?: number;
+        row?: number;
     }
 
-    // TODO: Add Location and Section Prop
-    // TODO: Add half time
-    // TODO: Add customizable color
-    // TODO: Add hover + onclick
     const {
-        length = 1,
-        conflict = false,
         course,
-    }: CourseTimeSlotProp = $props();
-
-    const backgroundClassName = $derived(
-        conflict ? "bg-red-400/50 border-red-900!" : "",
-    );
+        color,
+        length = 2,
+        col = 0,
+        row = 0,
+    }: TimeTableCourseCardProp = $props();
 </script>
 
-<div class={cn(timeCourseCardVariant({ length }), backgroundClassName)}>
-    <div class="relative w-full h-full">
-        <div
-            class="flex flex-col w-full h-full items-center justify-center p-1"
-        >
-            <span class="flex-1">{course.code}</span>
-            <span class="flex-1">{course.name}</span>
-            {#if length === 1}
-                <span class="flex-1">AR AR</span>
-                <span class="flex-1">Sec 10</span>
-            {:else}
-                <span class="flex-1">AR AR | Sec 10</span>
-            {/if}
-        </div>
-    </div>
+<div
+    style="
+        --cols: {numCol};
+        --rows: {numRow};
+        --len: {length};
+        --x: {row};
+        --y: {col};
+    "
+    class={cn(timeTableCourseCardVariant({ color }))}
+>
+    {#if length === 1}
+        <span class="text-[1.8cqh] truncate">{course.name}</span>
+        <span class="text-[1.5cqh] truncate">{course.bldg} {course.room}</span>
+        <span class="text-[1.3cqh]">Sec {course.section}</span>
+    {:else}
+        <span class="text-[1.8cqh]">{course.code}</span>
+        <span class="text-[2cqh]">{course.name}</span>
+        <span class="text-[1.8cqh]">
+            {course.bldg}
+            {course.room} | Sec {course.section}
+        </span>
+    {/if}
 </div>

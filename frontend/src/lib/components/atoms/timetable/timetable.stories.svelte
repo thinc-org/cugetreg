@@ -50,7 +50,7 @@
         length={1}
         row={2}
         col={1}
-        color="amber"
+        color="orange"
     />
     <TimetableCourseCard
         course={course2}
@@ -71,7 +71,7 @@
         length={1}
         row={1}
         col={1}
-        color="blue"
+        color="teal"
     />
     <TimetableCourseCard
         course={course2}
@@ -85,7 +85,7 @@
         length={5}
         row={4}
         col={0}
-        color="amber"
+        color="yellow"
     />
     <TimetableCourseCard
         course={course3}

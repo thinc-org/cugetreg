@@ -8,22 +8,28 @@ export const timeTableCourseCardVariant = tv({
         "top-[calc(100%/var(--rows)*var(--x))]",
         "left-[calc(100%/var(--cols)*var(--y))]",
         "flex flex-col justify-center items-center",
-        "border-2 rounded-lg",
+        "border-1 rounded-lg",
         "hover:cursor-pointer hover:z-100 select-none"
     ],
     variants: {
         color: {
-            //TODO: Add more colors
-            amber: 'bg-amber-200 border-amber-800 text-amber-800',
-            tangerine: 'bg-tangerine-300 border-tangerine-700 text-tangerine-700',
-            purple: 'bg-purple-300 border-purple-700 text-purple-700',
-            blue: 'bg-blue-300 border-blue-700 text-blue-700',
+            neutral: 'bg-neutral-300 border-neutral-500 text-neutral-700',
+            tangerine: 'bg-tangerine-300 border-tangerine-500 text-tangerine-700',
+            orange: 'bg-orange-300 border-orange-500 text-orange-700',
+            yellow: 'bg-yellow-300 border-yellow-500 text-yellow-700',
+            green: 'bg-green-300 border-green-500 text-green-700',
+            teal: 'bg-teal-300 border-teal-500 text-teal-700',
+            sky: 'bg-sky-300 border-sky-500 text-sky-700',
+            indigo: 'bg-indigo-300 border-indigo-500 text-indigo-700',
+            purple: 'bg-purple-300 border-purple-500 text-purple-700',
+            pink: 'bg-pink-300 border-pink-500 text-pink-700',
+
             conflict: 'bg-red-300 border-red-800 text-red-800'
         }
     },
     defaultVariants: {
         length: 3,
-        color: 'amber'
+        color: 'neutral'
     }
 });
 

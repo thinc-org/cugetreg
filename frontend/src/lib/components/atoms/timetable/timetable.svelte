@@ -66,7 +66,7 @@
     "
 >
     <div class="bg-indigo-50! py-3.5 cell border-r border-b border-neutral-200">
-        DAY/TIME
+        วัน/เวลา
     </div>
     <div
         class="grid divide-x divide-neutral-200"
@@ -76,7 +76,9 @@
         "
     >
         {#each Array.from({ length: periodPerDay }) as _, i}
-            <div class="bg-indigo-50! py-3.5 cell text-[1.2cqw]!">
+            <div
+                class="bg-indigo-50! px-2 py-3.5 cell text-right! items-end! justify-end!"
+            >
                 {i + startTime}
             </div>
         {/each}
@@ -87,7 +89,7 @@
         style="grid-row: span {amountOfDays} / span {amountOfDays}"
     >
         {#each DAYS as day}
-            <div class="cell bg-indigo-50! text-[1.2cqw]! aspect-square">
+            <div class="cell bg-indigo-50! aspect-square">
                 {days[day]}
             </div>
         {/each}
@@ -124,6 +126,7 @@
     @reference "../../../../app.css";
 
     .cell {
-        @apply ring-[1px] ring-neutral-200 bg-white flex justify-center text-center items-center font-bold text-[1.2cqw];
+        @apply ring-[1px] ring-neutral-200 bg-white flex justify-center text-center items-center;
+        @apply text-sm;
     }
 </style>

@@ -9,6 +9,7 @@
       "dev": "turbo run dev",
       "build": "turbo run build",
       "lint": "turbo run lint",
-      "storybook": "turbo run storybook"
+      "storybook": "turbo run storybook",
+      "test": "turbo run test"
   }
 }

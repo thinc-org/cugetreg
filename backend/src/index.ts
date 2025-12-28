@@ -13,7 +13,7 @@ import auth from "./routes/auth.js";
 dotenv.config();
 
 const app = new Hono();
-const api = new Hono().basePath("/api");
+const api = new Hono().basePath("/api/v1");
 const JWT_SECRET = process.env.JWT_SECRET;
 if (!JWT_SECRET) {
   throw new Error("JWT_SECRET is not defined in environment variables");

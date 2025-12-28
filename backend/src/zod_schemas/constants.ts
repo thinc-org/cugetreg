@@ -5,3 +5,4 @@ export const genEdType = ["NO", "SC", "SO", "HU", "IN"];
 export const assessment = ["LETTER", "SU"];
 export const sortBy = ["NAME", "CAPACITY_SUM", "REMAING_SUM"];
 export const sortOrder = ["asc", "desc"];
+export const semester = ["1", "2", "3"];

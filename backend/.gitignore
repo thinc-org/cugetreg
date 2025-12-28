@@ -29,3 +29,5 @@ lerna-debug.log*
 
 /src/generated/prisma
 volumes
+
+bin/*

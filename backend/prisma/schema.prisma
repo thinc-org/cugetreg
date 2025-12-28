@@ -45,6 +45,7 @@ model CourseInfo {
   credit Decimal // ใช้ Decimal เพื่อความแม่นยำ
   // 17 lcredit 18 nlcredit 19 lhour 20 nlhour 21 shour
   creditHours String @map("credit_hours")
+
   // Relation to Course
   courses Course[]
   // New!!!
@@ -56,6 +57,7 @@ model CourseInfo {
 // course
 model Course {
   id String @id @default(cuid())
+
   // 19 STUDYPROGRAMSYSTEM
   studyProgram StudyProgram @map("study_program")
   // 1 YEAR
@@ -65,6 +67,7 @@ model Course {
   // 3 COURSECODE / 11 courseno
   courseNo String @map("course_no")
   courseInfo CourseInfo @relation(fields: [courseNo], references: [courseNo])
+
   // ! not available in data gateway
   courseCondition String? @map("course_condition")
   // ! not available in data gateway
@@ -76,11 +79,13 @@ model Course {
   // sections for this course: In sections table
   // From section rows OR from gened override?
   genEdType GenEdType @default(NOT_GENED) @map("gen_ed_type")
+
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
   // Relation to Sections
   sections Section[]
+
   @@unique([studyProgram, academicYear, semester, courseNo], name: "course_unique")
   @@map("course")
 }
@@ -110,6 +115,7 @@ model Section {
 
   // Relation to SectionClass (Class Schedule)
   classes SectionClass[]
+
   @@unique([courseId, sectionNo], name: "section_unique")
   @@map("course_section")
 }
@@ -145,44 +151,44 @@ model SectionClass {
 
 /// Academic Semester (ภาคการศึกษา)
 enum Semester {
-  FIRST @map("1")
-  SECOND @map("2")
-  SUMMER @map("3")
+  FIRST
+  SECOND
+  SUMMER
 
   @@map("semester")
 }
 
 /// Study Program System (ระบบการศึกษา)
 enum StudyProgram {
-  SPECIAL @map("S")       // หรือค่าอื่นๆ ที่ใช้ 'S'
-  THAI @map("T")          // ภาคภาษาไทย
-  INTERNATIONAL @map("I") // ภาคอินเตอร์
+  SPECIAL        // หรือค่าอื่นๆ ที่ใช้ 'S'
+  THAI           // ภาคภาษาไทย
+  INTERNATIONAL  // ภาคอินเตอร์
 
   @@map("study_program")
 }
 
 /// General Education (GenEd) Course Type (ประเภทวิชาศึกษาทั่วไป)
 enum GenEdType {
-  NOT_GENED @map("NO") // ไม่ใช่หมวดศึกษาทั่วไป
-  SCIENCE @map("SC")   // วิทยาศาสตร์และคณิตศาสตร์
-  SOCIAL @map("SO")    // สังคมศาสตร์
-  HUMAN @map("HU")     // มนุษยศาสตร์
-  INTEGRATED @map("IN")// ศึกษาทั่วไปแบบบูรณาการ
+  NOT_GENED   // ไม่ใช่หมวดศึกษาทั่วไป
+  SCIENCE     // วิทยาศาสตร์และคณิตศาสตร์
+  SOCIAL      // สังคมศาสตร์
+  HUMAN       // มนุษยศาสตร์
+  INTEGRATED  // ศึกษาทั่วไปแบบบูรณาการ
 
   @@map("gen_ed_type")
 }
 
 /// Day of the Week for Class Scheduling (วันเรียน)
 enum DayOfWeek {
-  MONDAY @map("MO")
-  TUESDAY @map("TU")
-  WEDNESDAY @map("WE")
-  THURSDAY @map("TH")
-  FRIDAY @map("FR")
-  SATURDAY @map("SA")
-  SUNDAY @map("SU")
-  ARRANGED @map("AR")  // นัดหมายภายหลัง
-  IRREGULAR @map("IA") // ไม่ปกติ/Intensive
+  MONDAY      // MO
+  TUESDAY     // TU
+  WEDNESDAY   // WE
+  THURSDAY    // TH
+  FRIDAY      // FR
+  SATURDAY    // SA
+  SUNDAY      // SU
+  ARRANGED    // นัดหมายภายหลัง
+  IRREGULAR   // ไม่ปกติ/Intensive
 
   @@map("day_of_week")
 }
@@ -198,17 +204,16 @@ enum ReviewStatus {
 
 /// Vote Type (ประเภทการโหวต)
 enum VoteType {
-  LIKE @map("L")
-  DISLIKE @map("D")
+  LIKE
+  DISLIKE
 
   @@map("vote_type")
 }
 
-// New!!!
 /// Visible (ประเภทการมองเห็น)
 enum Visible {
-  PUBLIC @map("PUB")
-  PRIVATE @map("PVT")
+  PUBLIC
+  PRIVATE
 
   @@map("visible")
 }
@@ -238,7 +243,7 @@ model User {
 
 model Cart {
   id String @id @default(cuid())
-  
+
   userId String @map("user_id")
   user User @relation(fields: [userId], references: [id])
 
@@ -251,7 +256,7 @@ model Cart {
   // New!!!
   visible Visible @default(PRIVATE)
   isDefault Boolean @default(false) @map("is_default")
-  cartOrder Int @default(0) @map("cart_order") // new cartOrder = max_old_order + 1
+  cartOrder Int @default(0) @map("cart_order")
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -264,13 +269,13 @@ model Cart {
 
 model CartItem {
   id String @id @default(cuid())
-  
+
   cartId String @map("cart_id")
   cart Cart @relation(fields: [cartId], references: [id])
 
   courseNo String @map("course_no")
   // New!!! for find credit for grade calculation feature
-  courseN CourseInfo @relation(fields: [courseNo],references: [courseNo])
+  courseN CourseInfo @relation(fields: [courseNo], references: [courseNo])
 
   sectionNo Int @map("section_no")
   color String?
@@ -289,7 +294,7 @@ model CartItem {
 
 model Review {
   id String @id @default(cuid())
-  
+
   userId String @map("user_id")
   user User @relation(fields: [userId], references: [id])
 
@@ -318,7 +323,7 @@ model ReviewVote {
 
   reviewId String @map("review_id")
   review Review @relation(fields: [reviewId], references: [id])
-  
+
   userId String @map("user_id")
   user User @relation(fields: [userId], references: [id])
 

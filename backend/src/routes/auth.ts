@@ -9,9 +9,9 @@ if (process.env.NODE_ENV !== "production") {
   auth.get("/test-login", async (c) => {
     const JWT_SECRET = process.env.JWT_SECRET || "12345678";
     const mockUser = {
-      id: "mock-12345",
-      email: "test@cugetreg.com",
-      name: "สมชาย ทดสอบ",
+      id: "6543bfa2997a3cf9d965899e",
+      email: "6538187821@student.chula.ac.th",
+      name: "Wasin [Uddy] Silakong",
       picture: "https://api.dicebear.com/7.x/avataaars/svg?seed=Somchai",
     };
     const payload = {

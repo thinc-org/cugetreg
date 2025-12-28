@@ -218,9 +218,217 @@ carts.delete("/:cartId", async (c) => {
 
 // 3.5. Get timetable details (courses, credits, ect.)
 carts.get("/:cartId", async (c) => {
-  return c.json({
-    message: "3.5. Get timetable details (courses, credits, ect.)",
-  });
+  const userId = c.get("jwtPayload").id;
+  const cartId = c.req.param("cartId");
+
+  try {
+    const cart = await prisma.cart.findUnique({
+      where: { id: cartId },
+      include: {
+        items: {
+          include: {
+            courseN: {
+              include: {
+                courses: {
+                  include: {
+                    sections: {
+                      include: { classes: true },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (!cart) return c.json({ error: "CART_NOT_FOUND" }, 404);
+    if (cart.userId !== userId) return c.json({ error: "NOT_CART_OWNER" }, 403);
+
+    const itemsResponse: any[] = [];
+    const classesSchedule: any[] = [];
+    const examsSchedule: any[] = [];
+
+    let totalCredits = 0;
+    let totalVisibleCredits = 0;
+    let totalGradedCredits = 0;
+    let totalPoints = 0;
+
+    cart.items.forEach((item) => {
+      const info = item.courseN;
+      const creditValue = Number(info.credit);
+
+      const courseData = info.courses.find(
+        (course) =>
+          course.academicYear === cart.academicYear &&
+          course.semester === cart.semester &&
+          course.studyProgram === cart.studyProgram
+      );
+
+      const sectionData = courseData?.sections.find(
+        (sec) => sec.sectionNo === item.sectionNo
+      );
+
+      // Calculate Pre-Summary
+      totalCredits += creditValue;
+      if (!item.hidden) totalVisibleCredits += creditValue;
+      if (item.isGraded) {
+        totalGradedCredits += creditValue;
+        totalPoints += Number(item.expectedGrade) * creditValue;
+      }
+
+      // Format Items
+      itemsResponse.push({
+        id: item.id,
+        courseNo: item.courseNo,
+        sectionNo: item.sectionNo,
+        color: item.color,
+        hidden: item.hidden,
+        cartOrder: item.cartOrder,
+        isGraded: item.isGraded,
+        expectedGrade: item.expectedGrade.toString(),
+        course: {
+          courseNameTh: info.courseNameTh,
+          courseNameEn: info.courseNameEn,
+          credit: info.credit.toString(),
+        },
+        section: sectionData
+          ? {
+              closed: sectionData.closed,
+              regis: sectionData.regis,
+              max: sectionData.max,
+              note: sectionData.note,
+            }
+          : null,
+      });
+
+      // Format Classes Schedule
+      sectionData?.classes.forEach((cls) => {
+        classesSchedule.push({
+          cartItemId: item.id,
+          courseNo: item.courseNo,
+          sectionNo: item.sectionNo,
+          type: cls.type,
+          dayOfWeek: cls.dayOfWeek,
+          periodStart: cls.periodStart,
+          periodEnd: cls.periodEnd,
+          building: cls.building,
+          room: cls.room,
+          professors: cls.professors.split(","),
+        });
+      });
+
+      // Format Exams Schedule (Midterm/Final)
+      if (courseData?.midtermStart) {
+        examsSchedule.push({
+          cartItemId: item.id,
+          courseNo: item.courseNo,
+          type: "MIDTERM",
+          start: courseData.midtermStart.toISOString(),
+          end: courseData.midtermEnd?.toISOString(),
+        });
+      }
+      if (courseData?.finalStart) {
+        examsSchedule.push({
+          cartItemId: item.id,
+          courseNo: item.courseNo,
+          type: "FINAL",
+          start: courseData.finalStart.toISOString(),
+          end: courseData.finalEnd?.toISOString(),
+        });
+      }
+    });
+
+    // Find class conflict -> Please review this logic
+    const classConflicts: any[] = [];
+    const timeToMin = (t: string) => {
+      const [h, m] = t.split(":").map(Number);
+      return h * 60 + m;
+    };
+
+    for (let i = 0; i < classesSchedule.length; i++) {
+      for (let j = i + 1; j < classesSchedule.length; j++) {
+        const a = classesSchedule[i];
+        const b = classesSchedule[j];
+        if (a.dayOfWeek === b.dayOfWeek) {
+          const startA = timeToMin(a.periodStart);
+          const endA = timeToMin(a.periodEnd);
+          const startB = timeToMin(b.periodStart);
+          const endB = timeToMin(b.periodEnd);
+          if (startA < endB && startB < endA) {
+            classConflicts.push({
+              type: "TIME_OVERLAP",
+              itemIds: [a.cartItemId, b.cartItemId],
+              dayOfWeek: a.dayOfWeek,
+              periodStart: a.periodStart,
+              periodEnd: a.periodEnd,
+            });
+          }
+        }
+      }
+    }
+
+    // Find Exam Conflicts -> Please review this logic
+    const examConflicts: any[] = [];
+    for (let i = 0; i < examsSchedule.length; i++) {
+      for (let j = i + 1; j < examsSchedule.length; j++) {
+        const examA = examsSchedule[i];
+        const examB = examsSchedule[j];
+
+        // Garuntee if startA exist then endA exist
+        const startA = new Date(examA.start).getTime();
+        const endA = new Date(examA.end).getTime();
+        const startB = new Date(examB.start).getTime();
+        const endB = new Date(examB.end).getTime();
+
+        if (startA < endB && startB < endA) {
+          examConflicts.push({
+            type: "EXAM_OVERLAP",
+            itemIds: [examA.cartItemId, examB.cartItemId],
+            start: startA > startB ? examA.start : examB.start,
+            end: endA < endB ? examA.end : examB.end,
+          });
+        }
+      }
+    }
+
+    return c.json({
+      data: {
+        cart: {
+          id: cart.id,
+          name: cart.name,
+          studyProgram: cart.studyProgram,
+          academicYear: cart.academicYear,
+          semester: cart.semester,
+          visible: cart.visible === "PUBLIC" ? "PUB" : "PRIV",
+          isDefault: cart.isDefault,
+          cartOrder: cart.cartOrder,
+          items: itemsResponse,
+        },
+        summary: {
+          totalCredits: totalCredits.toFixed(1),
+          totalVisibleCredits: totalVisibleCredits.toFixed(1),
+          totalGradedCredits: totalGradedCredits.toFixed(1),
+          expectedGPA:
+            totalGradedCredits > 0
+              ? Number((totalPoints / totalGradedCredits).toFixed(2))
+              : 0,
+        },
+        conflicts: {
+          classConflicts: classConflicts,
+          examConflicts: examConflicts,
+        },
+        schedule: {
+          classes: classesSchedule,
+          exams: examsSchedule,
+        },
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    return c.json({ error: "INTERNAL_SERVER_ERROR" }, 500);
+  }
 });
 
 // Manange Course in Timetable

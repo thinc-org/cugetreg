@@ -168,11 +168,11 @@ enum StudyProgram {
 
 /// General Education (GenEd) Course Type (ประเภทวิชาศึกษาทั่วไป)
 enum GenEdType {
-  NOT_GENED   // ไม่ใช่หมวดศึกษาทั่วไป
-  SCIENCE     // วิทยาศาสตร์และคณิตศาสตร์
-  SOCIAL      // สังคมศาสตร์
-  HUMAN       // มนุษยศาสตร์
-  INTEGRATED  // ศึกษาทั่วไปแบบบูรณาการ
+  NOT_GENED           // ไม่ใช่หมวดศึกษาทั่วไป
+  SCIENCE             // วิทยาศาสตร์และคณิตศาสตร์
+  SOCIAL              // สังคมศาสตร์
+  HUMAN               // มนุษยศาสตร์ 
+  INTERDISCIPLINARY   // สหศาสตร์
 
   @@map("gen_ed_type")
 }

@@ -1,0 +1,57 @@
+import { PrismaClient } from "../src/generated/prisma/client.js";
+import * as fs from "fs";
+import { mapReviewStatus, mapSemester, mapStudyProgram } from "./enumMapper.js";
+import { PrismaPg } from "@prisma/adapter-pg";
+
+const adapter = new PrismaPg({
+  connectionString:
+    "postgresql://admin:cugetreg@localhost:5432/cugetreg?schema=public",
+});
+const prisma = new PrismaClient({ adapter });
+
+async function migrate() {
+  const rawData = fs.readFileSync("reviews.json", "utf-8");
+  const reviewsData = JSON.parse(rawData);
+
+  console.log("--- Starting Review Import ---");
+
+  for (const item of reviewsData) {
+    try {
+      await prisma.review.create({
+        data: {
+          id: item._id.$oid,
+          content: item.content,
+          rating: item.rating,
+          courseNo: item.courseNo,
+          academicYear: parseInt(item.academicYear),
+          semester: mapSemester(item.semester),
+          studyProgram: mapStudyProgram(item.studyProgram),
+          status: mapReviewStatus(item.status),
+          rejectionReason: item.rejectionReason || null,
+
+          user: {
+            connect: { id: item.ownerId.$oid },
+          },
+        },
+      });
+
+      console.log(`Imported review: ${item._id.$oid}`);
+    } catch (error) {
+      console.error(
+        `Failed to import review ${item._id.$oid}:`,
+        (error as Error).message
+      );
+    }
+  }
+
+  console.log("--- Import Completed ---");
+}
+
+migrate()
+  .catch((e) => {
+    console.error(e);
+    process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
+  });

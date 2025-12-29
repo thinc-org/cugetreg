@@ -2,6 +2,7 @@ import { Hono } from "hono";
 import { prisma } from "../db/clients.js";
 import { zValidator } from "@hono/zod-validator";
 import {
+  addCourseBodySchema,
   createCartBodySchema,
   listCartsQuerySchema,
   updateCartBodySchema,
@@ -256,19 +257,21 @@ carts.get("/:cartId", async (c) => {
     let totalPoints = 0;
 
     cart.items.forEach((item) => {
-      const info = item.courseN;
+      const info = item.courseN; // CourseInfo Object of this item
       const creditValue = Number(info.credit);
 
       const courseData = info.courses.find(
+        // info.courses is Array of Course
         (course) =>
           course.academicYear === cart.academicYear &&
           course.semester === cart.semester &&
           course.studyProgram === cart.studyProgram
-      );
+      ); // Course Object of this item
 
       const sectionData = courseData?.sections.find(
+        // courseData.sections is Array of Section
         (sec) => sec.sectionNo === item.sectionNo
-      );
+      ); // Section Object of this item
 
       // Calculate Pre-Summary
       totalCredits += creditValue;
@@ -433,16 +436,120 @@ carts.get("/:cartId", async (c) => {
 
 // Manange Course in Timetable
 
-carts.post("/:cartId/items", async (c) => {
-  return c.json({ message: "3.6. Add course to timetable" });
-});
+// 3.6. Add course to timetable
+carts.post(
+  "/:cartId/items",
+  zValidator("json", addCourseBodySchema),
+  async (c) => {
+    const validatedData = c.req.valid("json");
+    const cartId = c.req.param("cartId");
+    try {
+      // Get cart
+      const cart = await prisma.cart.findUnique({ where: { id: cartId } });
+      if (!cart) return c.json({ error: "CART_NOT_FOUND" }, 404);
+      // Get Course
+      const courseInfo = await prisma.courseInfo.findUnique({
+        where: { courseNo: validatedData.courseNo },
+      });
+      if (!courseInfo) return c.json({ error: "COURSE_NOT_FOUND" }, 404);
+      console.log(courseInfo);
+      // Get Section
+      const section = await prisma.section.findFirst({
+        where: {
+          sectionNo: validatedData.sectionNo,
+          course: {
+            courseNo: validatedData.courseNo,
+            semester: cart.semester,
+            academicYear: cart.academicYear,
+            studyProgram: cart.studyProgram,
+          },
+        },
+      });
+      console.log({
+        sectionNo: validatedData.sectionNo,
+        course: {
+          courseNo: validatedData.courseNo,
+          semester: cart.semester,
+          academicYear: cart.academicYear,
+          studyProgram: cart.studyProgram,
+        },
+      });
+      if (!section) {
+        return c.json({ error: "SECTION_NOT_FOUND_FOR_SEMESTER" }, 404);
+      }
+      // Find nextCardItemOrder
+      const aggregation = await prisma.cartItem.aggregate({
+        where: { cartId },
+        _max: { cartOrder: true },
+      });
+      const nextOrder = (aggregation._max.cartOrder ?? -1) + 1;
+      // Add new cartItem
+      const newItem = await prisma.cartItem.create({
+        data: {
+          cartId: cartId,
+          courseNo: validatedData.courseNo,
+          sectionNo: validatedData.sectionNo,
+          color: validatedData.color || "primary",
+          isGraded: validatedData.isGraded,
+          expectedGrade: validatedData.expectedGrade,
+          hidden: validatedData.hidden,
+          cartOrder: nextOrder,
+        },
+      });
+      return c.json({ data: newItem }, 201);
+    } catch (err) {}
+  }
+);
 
+// 3.7. Update/edit course in timetable
 carts.patch("/:itemId", async (c) => {
+  
   return c.json({ message: "3.7. Update/edit course in timetable" });
 });
 
-carts.delete("/:itemId", async (c) => {
-  return c.json({ message: "3.8. Remove course from timetable" });
+// 3.8. Remove course from timetable
+carts.delete(":cartId/items/:itemId", async (c) => {
+  const payload = c.get("jwtPayload");
+  const userId = payload.id;
+  const itemId = c.req.param("itemId");
+  console.log("here");
+  try {
+    const cartItem = await prisma.cartItem.findUnique({
+      where: { id: itemId },
+      include: { cart: true },
+    });
+
+    if (!cartItem) {
+      return c.json({ error: "ITEM_NOT_FOUND" }, 404);
+    }
+
+    if (cartItem.cart.userId !== userId) {
+      return c.json({ error: "NOT_CART_OWNER" }, 403);
+    }
+
+    await prisma.$transaction(async (tx) => {
+      await tx.cartItem.delete({
+        where: { id: itemId },
+      });
+
+      await tx.cartItem.updateMany({
+        where: {
+          cartId: cartItem.cartId,
+          cartOrder: {
+            gt: cartItem.cartOrder,
+          },
+        },
+        data: {
+          cartOrder: {
+            decrement: 1,
+          },
+        },
+      });
+    });
+    return c.body(null, 204);
+  } catch (error) {
+    return c.json({ error: "Internal Server Error" }, 500);
+  }
 });
 
 export default carts;

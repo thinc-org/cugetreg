@@ -30,4 +30,7 @@ lerna-debug.log*
 /src/generated/prisma
 volumes
 
-bin/*
+bin/courses.json
+bin/overrides.json
+bin/reviews.json
+bin/users.json

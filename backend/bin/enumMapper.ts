@@ -6,7 +6,7 @@ import {
   DayOfWeek,
   ReviewStatus,
   VoteType,
-} from "../generated/prisma/client.js";
+} from "../src/generated/prisma/client.js";
 
 export function mapSemester(raw: string): Semester {
   switch (raw) {

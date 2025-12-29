@@ -35,3 +35,27 @@ export const updateCartBodySchema = z.object({
   isDefault: z.boolean().optional(),
   cartOrder: z.number().min(0).optional(),
 });
+
+export const addCourseBodySchema = z.object({
+  courseNo: z
+    .string()
+    .trim()
+    .length(7)
+    .regex(/^[0-9]+$/),
+  sectionNo: z.number().int(),
+  color: z.string().optional(),
+  isGraded: z.boolean().optional(),
+  expectedGrade: z
+    .number()
+    .min(0)
+    .max(4)
+    .refine((n) => n % 0.5 === 0, {
+      message: "Grade must be a multiple of 0.5",
+    })
+    .optional(),
+  hidden: z.boolean().optional(),
+});
+
+export const updateCourseBodySchema = z.object({
+  
+})

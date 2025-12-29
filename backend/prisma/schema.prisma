@@ -160,10 +160,9 @@ enum Semester {
 
 /// Study Program System (ระบบการศึกษา)
 enum StudyProgram {
-  SPECIAL        // หรือค่าอื่นๆ ที่ใช้ 'S'
-  THAI           // ภาคภาษาไทย
-  INTERNATIONAL  // ภาคอินเตอร์
-
+  S        // ทวิภาค
+  I        // ทวิภาค-นานาชาต
+  T        // ตรีภาค
   @@map("study_program")
 }
 

@@ -8,16 +8,12 @@ import courses from "./routes/courses.js";
 import carts from "./routes/carts.js";
 import reviews from "./routes/reviews.js";
 import user from "./routes/user.js";
-import auth from "./routes/auth.js";
+import auth, { middleware_auth } from "./routes/auth.js";
 
 dotenv.config();
 
 const app = new Hono();
 const api = new Hono().basePath("/api/v1");
-const JWT_SECRET = process.env.JWT_SECRET;
-if (!JWT_SECRET) {
-  throw new Error("JWT_SECRET is not defined in environment variables");
-}
 
 // Without JWT Auth
 
@@ -26,11 +22,11 @@ api.route("/auth", auth);
 
 // Middleware List
 
-api.all("/admin/*", jwt({ secret: JWT_SECRET })); // Middleware from Bearer Token
-api.all("/carts/*", jwt({ secret: JWT_SECRET }));
-api.all("/courses/*", jwt({ secret: JWT_SECRET }));
-api.all("/reviews/*", jwt({ secret: JWT_SECRET }));
-api.all("/user/*", jwt({ secret: JWT_SECRET }));
+api.all("/admin/*", middleware_auth); // Middleware from Bearer Token
+api.all("/carts/*", middleware_auth);
+api.all("/courses/*", middleware_auth);
+api.all("/reviews/*", middleware_auth);
+api.all("/user/*", middleware_auth);
 
 // With JWT Auth
 

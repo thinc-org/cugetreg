@@ -1,6 +1,12 @@
 import { Hono } from "hono";
 import { googleAuth } from "@hono/oauth-providers/google";
-import { sign } from "hono/jwt";
+import { sign, jwt } from "hono/jwt";
+
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) {
+  throw new Error("JWT_SECRET is not defined in environment variables");
+}
+export const middleware_auth = jwt({ secret: JWT_SECRET });
 
 const auth = new Hono();
 const hr = 1;
@@ -9,9 +15,9 @@ if (process.env.NODE_ENV !== "production") {
   auth.get("/test-login", async (c) => {
     const JWT_SECRET = process.env.JWT_SECRET || "12345678";
     const mockUser = {
-      id: "6543bfa2997a3cf9d965899e",
-      email: "6538187821@student.chula.ac.th",
-      name: "Wasin [Uddy] Silakong",
+      id: "63dea25026f1907da44534a7",
+      email: "6438097921@student.chula.ac.th",
+      name: "Thanayut [Bank] Tiratatri",
       picture: "https://api.dicebear.com/7.x/avataaars/svg?seed=Somchai",
     };
     const payload = {

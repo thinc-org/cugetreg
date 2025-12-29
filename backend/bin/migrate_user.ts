@@ -2,17 +2,20 @@ import * as fs from "fs";
 import { PrismaClient } from "../src/generated/prisma/client.js";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { mapSemester, mapStudyProgram, mapVisible } from "./enumMapper.js";
+import "dotenv/config";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const adapter = new PrismaPg({
-  connectionString:
-    "postgresql://admin:cugetreg@localhost:5432/cugetreg?schema=public",
+  connectionString: process.env.DATABASE_URL,
 });
 const prisma = new PrismaClient({ adapter });
 async function migrate() {
   const rawData = fs.readFileSync("users.json", "utf-8");
   const usersData = JSON.parse(rawData);
 
-  console.log(`Starting migration for ${usersData.length} users...`);
+  console.log(`Starting migration for ${usersData.length} users`);
 
   for (const mongoUser of usersData) {
     try {

@@ -1,6 +1,10 @@
 import { GenEdType, PrismaClient } from "../src/generated/prisma/client.js"; // ปรับ path ตาม output prisma
 import { Decimal } from "decimal.js";
 import * as fs from "fs";
+import "dotenv/config";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 import { PrismaPg } from "@prisma/adapter-pg";
 import {
@@ -11,8 +15,7 @@ import {
 } from "./enumMapper.js";
 
 const adapter = new PrismaPg({
-  connectionString:
-    "postgresql://admin:cugetreg@localhost:5432/cugetreg?schema=public",
+  connectionString: process.env.DATABASE_URL,
 });
 const prisma = new PrismaClient({ adapter });
 
@@ -42,7 +45,7 @@ async function migrate() {
   const rawData = fs.readFileSync("courses.json", "utf-8");
   const coursesData = JSON.parse(rawData);
 
-  console.log(`Starting migration of ${coursesData.length} courses...`);
+  console.log(`Starting migration of ${coursesData.length} courses`);
 
   for (const data of coursesData) {
     try {

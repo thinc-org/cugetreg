@@ -2,10 +2,13 @@ import { PrismaClient } from "../src/generated/prisma/client.js";
 import * as fs from "fs";
 import { mapReviewStatus, mapSemester, mapStudyProgram } from "./enumMapper.js";
 import { PrismaPg } from "@prisma/adapter-pg";
+import "dotenv/config";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const adapter = new PrismaPg({
-  connectionString:
-    "postgresql://admin:cugetreg@localhost:5432/cugetreg?schema=public",
+  connectionString: process.env.DATABASE_URL,
 });
 const prisma = new PrismaClient({ adapter });
 
@@ -13,7 +16,7 @@ async function migrate() {
   const rawData = fs.readFileSync("reviews.json", "utf-8");
   const reviewsData = JSON.parse(rawData);
 
-  console.log("--- Starting Review Import ---");
+  console.log("Starting Migrate Import");
 
   for (const item of reviewsData) {
     try {
@@ -35,16 +38,16 @@ async function migrate() {
         },
       });
 
-      console.log(`Imported review: ${item._id.$oid}`);
+      console.log(`Migrated review: ${item._id.$oid}`);
     } catch (error) {
       console.error(
-        `Failed to import review ${item._id.$oid}:`,
+        `Failed to migrated review ${item._id.$oid}:`,
         (error as Error).message
       );
     }
   }
 
-  console.log("--- Import Completed ---");
+  console.log("Migrate Completed");
 }
 
 migrate()

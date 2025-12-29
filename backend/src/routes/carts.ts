@@ -6,6 +6,7 @@ import {
   createCartBodySchema,
   listCartsQuerySchema,
   updateCartBodySchema,
+  updateCourseBodySchema,
 } from "../zod_schemas/carts.schema.js";
 
 const carts = new Hono();
@@ -116,26 +117,46 @@ carts.patch("/:cartId", zValidator("json", updateCartBodySchema), async (c) => {
       }
 
       // Reorder other cartOrder -> Please review this code!
-      const newOrder = updatedData.cartOrder;
-      const oldOrder = targetCart.cartOrder;
-      if (newOrder !== undefined && newOrder !== oldOrder) {
-        const isMoveDown = oldOrder < newOrder;
-        await tx.cart.updateMany({
+      if (
+        updatedData.cartOrder !== undefined &&
+        updatedData.cartOrder !== targetCart.cartOrder
+      ) {
+        const aggregate = await tx.cart.aggregate({
           where: {
             userId,
             academicYear: targetCart.academicYear,
             semester: targetCart.semester,
             studyProgram: targetCart.studyProgram,
-            cartOrder: isMoveDown
-              ? { gt: oldOrder, lte: newOrder }
-              : { gte: newOrder, lt: oldOrder },
           },
-          data: {
-            cartOrder: {
-              [isMoveDown ? "decrement" : "increment"]: 1,
-            },
-          },
+          _max: { cartOrder: true },
         });
+
+        const maxOrder = aggregate._max.cartOrder ?? 0;
+
+        let newOrder = Math.max(0, Math.min(updatedData.cartOrder, maxOrder));
+        updatedData.cartOrder = newOrder;
+
+        const oldOrder = targetCart.cartOrder;
+
+        if (newOrder !== oldOrder) {
+          const isMoveDown = oldOrder < newOrder;
+          await tx.cart.updateMany({
+            where: {
+              userId,
+              academicYear: targetCart.academicYear,
+              semester: targetCart.semester,
+              studyProgram: targetCart.studyProgram,
+              cartOrder: isMoveDown
+                ? { gt: oldOrder, lte: newOrder }
+                : { gte: newOrder, lt: oldOrder },
+            },
+            data: {
+              cartOrder: {
+                [isMoveDown ? "decrement" : "increment"]: 1,
+              },
+            },
+          });
+        }
       }
 
       return await tx.cart.update({
@@ -344,6 +365,7 @@ carts.get("/:cartId", async (c) => {
     });
 
     // Find class conflict -> Please review this logic
+    // Now O(n^2) improve later
     const classConflicts: any[] = [];
     const timeToMin = (t: string) => {
       const [h, m] = t.split(":").map(Number);
@@ -373,6 +395,7 @@ carts.get("/:cartId", async (c) => {
     }
 
     // Find Exam Conflicts -> Please review this logic
+    // Now O(n^2) improve later
     const examConflicts: any[] = [];
     for (let i = 0; i < examsSchedule.length; i++) {
       for (let j = i + 1; j < examsSchedule.length; j++) {
@@ -441,93 +464,187 @@ carts.post(
   "/:cartId/items",
   zValidator("json", addCourseBodySchema),
   async (c) => {
+    const userId = c.get("jwtPayload").id;
     const validatedData = c.req.valid("json");
     const cartId = c.req.param("cartId");
     try {
-      // Get cart
-      const cart = await prisma.cart.findUnique({ where: { id: cartId } });
-      if (!cart) return c.json({ error: "CART_NOT_FOUND" }, 404);
-      // Get Course
-      const courseInfo = await prisma.courseInfo.findUnique({
-        where: { courseNo: validatedData.courseNo },
-      });
-      if (!courseInfo) return c.json({ error: "COURSE_NOT_FOUND" }, 404);
-      console.log(courseInfo);
-      // Get Section
-      const section = await prisma.section.findFirst({
-        where: {
-          sectionNo: validatedData.sectionNo,
-          course: {
-            courseNo: validatedData.courseNo,
-            semester: cart.semester,
-            academicYear: cart.academicYear,
-            studyProgram: cart.studyProgram,
+      const newItem = await prisma.$transaction(async (tx) => {
+        // Get cart
+        const cart = await tx.cart.findUnique({ where: { id: cartId } });
+        if (!cart) throw new Error("CART_NOT_FOUND");
+        if (cart.userId !== userId) throw new Error("NOT_CART_OWNER");
+        // Get Course
+        const courseInfo = await tx.courseInfo.findUnique({
+          where: { courseNo: validatedData.courseNo },
+        });
+        if (!courseInfo) throw new Error("COURSE_NOT_FOUND");
+        console.log(courseInfo);
+        // Get Section
+        const section = await tx.section.findFirst({
+          where: {
+            sectionNo: validatedData.sectionNo,
+            course: {
+              courseNo: validatedData.courseNo,
+              semester: cart.semester,
+              academicYear: cart.academicYear,
+              studyProgram: cart.studyProgram,
+            },
           },
-        },
-      });
-      console.log({
-        sectionNo: validatedData.sectionNo,
-        course: {
-          courseNo: validatedData.courseNo,
-          semester: cart.semester,
-          academicYear: cart.academicYear,
-          studyProgram: cart.studyProgram,
-        },
-      });
-      if (!section) {
-        return c.json({ error: "SECTION_NOT_FOUND_FOR_SEMESTER" }, 404);
-      }
-      // Find nextCardItemOrder
-      const aggregation = await prisma.cartItem.aggregate({
-        where: { cartId },
-        _max: { cartOrder: true },
-      });
-      const nextOrder = (aggregation._max.cartOrder ?? -1) + 1;
-      // Add new cartItem
-      const newItem = await prisma.cartItem.create({
-        data: {
-          cartId: cartId,
-          courseNo: validatedData.courseNo,
-          sectionNo: validatedData.sectionNo,
-          color: validatedData.color || "primary",
-          isGraded: validatedData.isGraded,
-          expectedGrade: validatedData.expectedGrade,
-          hidden: validatedData.hidden,
-          cartOrder: nextOrder,
-        },
+        });
+        if (!section) throw new Error("SECTION_NOT_FOUND");
+
+        // Find nextCardItemOrder
+        const aggregation = await tx.cartItem.aggregate({
+          where: { cartId },
+          _max: { cartOrder: true },
+        });
+        const nextOrder = (aggregation._max.cartOrder ?? -1) + 1;
+        // Add new cartItem
+        return await tx.cartItem.create({
+          data: {
+            cartId: cartId,
+            courseNo: validatedData.courseNo,
+            sectionNo: validatedData.sectionNo,
+            color: validatedData.color || "primary",
+            isGraded: validatedData.isGraded,
+            expectedGrade: validatedData.expectedGrade,
+            hidden: validatedData.hidden,
+            cartOrder: nextOrder,
+          },
+        });
       });
       return c.json({ data: newItem }, 201);
-    } catch (err) {}
+    } catch (err: any) {
+      console.error(err);
+      const errorMap: Record<string, number> = {
+        CART_NOT_FOUND: 404,
+        NOT_CART_OWNER: 403,
+        COURSE_NOT_FOUND: 404,
+        SECTION_NOT_FOUND: 404,
+      };
+
+      const status = errorMap[err.message] || 500;
+      return c.json(
+        { error: err.message || "INTERNAL_SERVER_ERROR" },
+        status as any
+      );
+    }
   }
 );
 
 // 3.7. Update/edit course in timetable
-carts.patch("/:itemId", async (c) => {
-  
-  return c.json({ message: "3.7. Update/edit course in timetable" });
-});
+carts.patch(
+  "/:itemId",
+  zValidator("json", updateCourseBodySchema),
+  async (c) => {
+    const userId = c.get("jwtPayload").id;
+    const itemId = c.req.param("itemId");
+    const updatedData = c.req.valid("json");
+
+    try {
+      const updatedItem = await prisma.$transaction(async (tx) => {
+        const targetItem = await tx.cartItem.findUnique({
+          where: { id: itemId },
+          include: { cart: true },
+        });
+
+        if (!targetItem) throw new Error("ITEM_NOT_FOUND");
+        if (targetItem.cart.userId !== userId)
+          throw new Error("NOT_CART_OWNER");
+
+        if (
+          updatedData.sectionNo !== undefined &&
+          updatedData.sectionNo !== targetItem.sectionNo
+        ) {
+          const section = await tx.section.findFirst({
+            where: {
+              sectionNo: updatedData.sectionNo,
+              course: {
+                courseNo: targetItem.courseNo,
+                semester: targetItem.cart.semester,
+                academicYear: targetItem.cart.academicYear,
+                studyProgram: targetItem.cart.studyProgram,
+              },
+            },
+          });
+          if (!section) throw new Error("SECTION_NOT_FOUND");
+        }
+
+        // Reorder cartOrder -> please review this logic
+        if (
+          updatedData.cartOrder !== undefined &&
+          updatedData.cartOrder !== targetItem.cartOrder
+        ) {
+          const aggregate = await tx.cartItem.aggregate({
+            where: { cartId: targetItem.cartId },
+            _max: { cartOrder: true },
+          });
+
+          const maxOrder = aggregate._max.cartOrder ?? 0;
+
+          let newOrder = Math.max(0, Math.min(updatedData.cartOrder, maxOrder));
+          updatedData.cartOrder = newOrder;
+
+          const oldOrder = targetItem.cartOrder;
+
+          if (newOrder !== oldOrder) {
+            const isMoveDown = oldOrder < newOrder;
+            await tx.cartItem.updateMany({
+              where: {
+                cartId: targetItem.cartId,
+                cartOrder: isMoveDown
+                  ? { gt: oldOrder, lte: newOrder }
+                  : { gte: newOrder, lt: oldOrder },
+              },
+              data: {
+                cartOrder: {
+                  [isMoveDown ? "decrement" : "increment"]: 1,
+                },
+              },
+            });
+          }
+        }
+
+        return await tx.cartItem.update({
+          where: { id: itemId },
+          data: updatedData,
+        });
+      });
+
+      return c.json({ data: updatedItem }, 200);
+    } catch (err: any) {
+      console.error("Update CartItem Error:", err);
+      if (err.message === "ITEM_NOT_FOUND")
+        return c.json({ error: "ITEM_NOT_FOUND" }, 404);
+      if (err.message === "NOT_CART_OWNER")
+        return c.json({ error: "NOT_CART_OWNER" }, 403);
+      if (err.message === "SECTION_NOT_FOUND")
+        return c.json({ error: "SECTION_NOT_FOUND_FOR_SEMESTER" }, 400);
+      return c.json({ error: "INTERNAL_SERVER_ERROR" }, 500);
+    }
+  }
+);
 
 // 3.8. Remove course from timetable
 carts.delete(":cartId/items/:itemId", async (c) => {
   const payload = c.get("jwtPayload");
   const userId = payload.id;
   const itemId = c.req.param("itemId");
-  console.log("here");
   try {
-    const cartItem = await prisma.cartItem.findUnique({
-      where: { id: itemId },
-      include: { cart: true },
-    });
-
-    if (!cartItem) {
-      return c.json({ error: "ITEM_NOT_FOUND" }, 404);
-    }
-
-    if (cartItem.cart.userId !== userId) {
-      return c.json({ error: "NOT_CART_OWNER" }, 403);
-    }
-
     await prisma.$transaction(async (tx) => {
+      const cartItem = await tx.cartItem.findUnique({
+        where: { id: itemId },
+        include: { cart: true },
+      });
+
+      if (!cartItem) {
+        return c.json({ error: "ITEM_NOT_FOUND" }, 404);
+      }
+
+      if (cartItem.cart.userId !== userId) {
+        return c.json({ error: "NOT_CART_OWNER" }, 403);
+      }
+
       await tx.cartItem.delete({
         where: { id: itemId },
       });
@@ -547,7 +664,8 @@ carts.delete(":cartId/items/:itemId", async (c) => {
       });
     });
     return c.body(null, 204);
-  } catch (error) {
+  } catch (err) {
+    console.error(err);
     return c.json({ error: "Internal Server Error" }, 500);
   }
 });

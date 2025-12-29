@@ -57,5 +57,17 @@ export const addCourseBodySchema = z.object({
 });
 
 export const updateCourseBodySchema = z.object({
-  
-})
+  sectionNo: z.number().int().optional(),
+  color: z.string().optional(),
+  hidden: z.boolean().optional(),
+  isGraded: z.boolean().optional(),
+  expectedGrade: z
+    .number()
+    .min(0)
+    .max(4)
+    .refine((n) => n % 0.5 === 0, {
+      message: "Grade must be a multiple of 0.5",
+    })
+    .optional(),
+  cartOrder: z.number().int().optional(),
+});

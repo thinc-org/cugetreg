@@ -9,11 +9,17 @@
     import { GenedChip } from "../../atoms/gened-chip";
     import { IconButton } from "../../atoms/icon-button";
     import { Button } from "../../atoms/button";
+    import { ColorPicker } from "../../molecules/colorpicker";
     import * as Accordion from "../../atoms/accordion";
     import * as Select from "../../molecules/select";
 
-    import type { SelectedCourseData, Course } from ".";
     import type { ClassValue } from "clsx";
+    import type {
+        ColorVariant,
+        CourseSchedule,
+        ScheduleData,
+    } from "../../../../types";
+    import { courseColorVariants } from "../../../../constants";
 
     function handleDragEnd(e: SortableList.RootEvents["ondragend"]) {
         const { draggedItemIndex, targetItemIndex, isCanceled } = e;
@@ -22,7 +28,7 @@
             typeof targetItemIndex === "number" &&
             draggedItemIndex !== targetItemIndex
         )
-            courses = sortItems(courses, draggedItemIndex, targetItemIndex);
+            schedule = sortItems(schedule, draggedItemIndex, targetItemIndex);
     }
 
     function handleRemoveClick(e: MouseEvent) {
@@ -30,25 +36,50 @@
         const item = target.closest<HTMLLIElement>(".ssl-item");
         const itemIndex = Number(item?.dataset.itemIndex);
         if (!item || itemIndex < 0) return;
-        courses = removeItem(courses, itemIndex);
+        schedule = removeItem(schedule, itemIndex);
     }
 
-    type SelectedCourseProp = SelectedCourseData & {
+    interface SelectedCourseProp {
         class?: ClassValue;
-    };
+        schedule: ScheduleData;
+    }
 
     let {
         class: className = undefined,
-        courses = $bindable(),
+        schedule = $bindable(),
     }: SelectedCourseProp = $props();
 
     const totalCredit = $derived(
-        courses.reduce((acc, course) => acc + course.credit, 0),
+        schedule.reduce((acc, course) => acc + course.course.credit, 0),
     );
+
+    let showChangeColorModal = $state(false);
+    let currentColorVariant = $state<ColorVariant>("neutral");
+    let initialColorVariant = $state<ColorVariant>("neutral");
+    let changeColorFor = $state<number | undefined>();
+    let modalPosition = $state({
+        x: 0,
+        y: 0,
+    });
+
+    $effect(() => {
+        if (changeColorFor) {
+            const index = schedule.findIndex((x) => x.id === changeColorFor);
+            schedule[index].colorVariant = currentColorVariant;
+        }
+    });
 </script>
 
+<svelte:window
+    onkeydown={(e) => {
+        if (e.key === "Escape" && showChangeColorModal) {
+            showChangeColorModal = false;
+        }
+    }}
+/>
+
 <div class={cn(className)}>
-    <Accordion.Root class="w-full" type="single">
+    <Accordion.Root class="w-full" type="single" value={"selected-course"}>
         <Accordion.Item value="selected-course">
             <Accordion.Trigger class="border-b border-neutral-200">
                 <div class="flex">
@@ -70,7 +101,7 @@
                     }}
                     gap={0}
                 >
-                    {#each courses as course, index (course.id)}
+                    {#each schedule as course, index (course.id)}
                         <SortableList.Item
                             id={course.id.toString()}
                             {index}
@@ -82,17 +113,22 @@
                         </SortableList.Item>
                     {/each}
                 </SortableList.Root>
+                <div class="px-2">
+                    <Button class="w-full" color="neutral">Find courses</Button>
+                </div>
             </Accordion.Content>
         </Accordion.Item>
     </Accordion.Root>
+    {#if showChangeColorModal}
+        {@render changeColorModal()}
+    {/if}
 </div>
 
-{#snippet selectedCourseItem(course: Course)}
+{#snippet selectedCourseItem(course: CourseSchedule)}
     <div
         data-hidden={course.hidden}
         class="
             flex p-1 my-1
-            data-[hidden=true]:grayscale-75
             data-[hidden=true]:text-neutral-500
             font-light
         "
@@ -110,30 +146,38 @@
             </IconButton>
         </div>
         <div class="flex flex-col flex-1 justify-center">
-            <div class="text-[0.6rem]">
-                {course.code}
-                <GenedChip
-                    type="SO"
-                    class="text-[0.6rem] px-2 py-0 bg-transparent"
-                />
+            <div class="flex text-[0.6rem] flex-nowrap">
+                {course.course.code}
+                {#each course.course.gened as gened}
+                    <GenedChip
+                        type={gened}
+                        class="text-[0.6rem] mx-1 px-2 py-0 bg-transparent"
+                    />
+                {/each}
             </div>
-            <div class="text-sm">
-                {course.name}
+            <div class="text-sm truncate">
+                {course.course.name}
             </div>
         </div>
         <div class="flex items-center">
-            <div class="flex w-15">
-                <Select.Root type="single" bind:value={course.selectedSection}>
+            <div class="flex text-sm w-12">
+                <Select.Root
+                    type="single"
+                    bind:value={
+                        () => String(course.selectedSection),
+                        (v) => (course.selectedSection = Number(v))
+                    }
+                >
                     <Select.Trigger showArrow={false} class="rounded-sm p-0">
                         <div
-                            class="w-full h-full flex items-center justify-center text-sm"
+                            class="w-full h-full flex items-center justify-center text-xs"
                         >
                             Sec {course.selectedSection}
                         </div>
                     </Select.Trigger>
                     <Select.Content role="listbox">
                         <Select.Group>
-                            {#each course.sections as section}
+                            {#each Object.keys(course.course.sections) as section}
                                 <Select.Item
                                     value={`${section}`}
                                     label={`Sec ${section}`}
@@ -147,7 +191,18 @@
             </div>
             <div class="flex items-center justify-center">
                 <Button
-                    class="aspect-square hover:ring-0 border rounded-lg m-2"
+                    class={cn(
+                        "aspect-square hover:ring-0 border rounded-lg m-2",
+                        courseColorVariants[course.colorVariant ?? "neutral"],
+                    )}
+                    onclick={(e: MouseEvent) => {
+                        modalPosition.x = e.clientX;
+                        modalPosition.y = e.clientY;
+                        changeColorFor = course.id;
+                        showChangeColorModal = true;
+                        initialColorVariant = course.colorVariant ?? "neutral";
+                        currentColorVariant = course.colorVariant ?? "neutral";
+                    }}
                 />
             </div>
             <div class="flex">
@@ -170,6 +225,48 @@
                     </IconButton>
                 </SortableList.ItemHandle>
             </div>
+        </div>
+    </div>
+{/snippet}
+
+{#snippet changeColorModal()}
+    <div
+        class="fixed z-50 h-screen w-screen top-0 left-0"
+        role="button"
+        tabindex="0"
+        onclick={() => {
+            showChangeColorModal = false;
+        }}
+        onkeydown={(e) => {
+            if (e.key === "Enter" || e.key === " " || e.key === "Escape") {
+                showChangeColorModal = false;
+            }
+        }}
+    >
+        <div
+            class="fixed z-60"
+            style="top: {modalPosition.y}px; left: {modalPosition.x}px;"
+            onclick={(e) => e.stopPropagation()}
+            onkeydown={(e) => {
+                if (e.key === "Enter" || e.key === " " || e.key === "Escape") {
+                    showChangeColorModal = false;
+                }
+            }}
+            role="dialog"
+            tabindex="0"
+        >
+            <ColorPicker
+                class="bg-surface"
+                options={courseColorVariants}
+                bind:value={currentColorVariant}
+                onCancel={() => {
+                    currentColorVariant = initialColorVariant;
+                    showChangeColorModal = false;
+                }}
+                onConfirmSelected={() => {
+                    showChangeColorModal = false;
+                }}
+            />
         </div>
     </div>
 {/snippet}

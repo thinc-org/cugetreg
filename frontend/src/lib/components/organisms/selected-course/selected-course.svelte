@@ -114,7 +114,9 @@
                     {/each}
                 </SortableList.Root>
                 <div class="px-2">
-                    <Button class="w-full" color="neutral">Find courses</Button>
+                    <Button class="w-full" color="neutral">
+                        ค้นหาวิชาเรียน
+                    </Button>
                 </div>
             </Accordion.Content>
         </Accordion.Item>
@@ -172,7 +174,7 @@
                         <div
                             class="w-full h-full flex items-center justify-center text-xs"
                         >
-                            Sec {course.selectedSection}
+                            เซค {course.selectedSection}
                         </div>
                     </Select.Trigger>
                     <Select.Content role="listbox">
@@ -180,7 +182,7 @@
                             {#each Object.keys(course.course.sections) as section}
                                 <Select.Item
                                     value={`${section}`}
-                                    label={`Sec ${section}`}
+                                    label={`เซค ${section}`}
                                     aria-label={`Sec ${section}`}
                                     role="option"
                                 />

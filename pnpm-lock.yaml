@@ -7,13 +7,6 @@ settings:
 importers:
 
   .:
-    dependencies:
-      '@rodrigodagostino/svelte-sortable-list':
-        specifier: ^2.1.9
-        version: 2.1.9(esm-env@1.2.2)(svelte@5.46.0)
-      bits-ui:
-        specifier: ^2.14.4
-        version: 2.14.4(@internationalized/date@3.10.1)(svelte@5.46.0)
     devDependencies:
       turbo:
         specifier: ^2.7.2
@@ -417,12 +410,6 @@ packages:
 
   '@polka/url@1.0.0-next.29':
     resolution: {integrity: sha512-wwQAWhWSuHaag8c4q/KN/vCoeOJYshAIvMQwD4GpSb3OiZklFfvAgmj0VCBBImRpuF/aFgIRzllXlVX93Jevww==}
-
-  '@rodrigodagostino/svelte-sortable-list@2.1.9':
-    resolution: {integrity: sha512-nQ5jrFnLnLA0/+b9waU+XJpcl1kxaVW9XnuyBnvE1KLPVVlF72+QjApLfJtNBIgZ2RCFUgIMZaLX+cqcWki8Kw==}
-    peerDependencies:
-      esm-env: ^1.0.0
-      svelte: ^5.0.0
 
   '@rollup/rollup-android-arm-eabi@4.54.0':
     resolution: {integrity: sha512-OywsdRHrFvCdvsewAInDKCNyR3laPA2mc9bRYJ6LBp5IyvF3fvXbbNR0bSzHlZVFtn6E0xw2oZlyjg4rKCVcng==}
@@ -2478,11 +2465,6 @@ snapshots:
   '@neoconfetti/react@1.0.0': {}
 
   '@polka/url@1.0.0-next.29': {}
-
-  '@rodrigodagostino/svelte-sortable-list@2.1.9(esm-env@1.2.2)(svelte@5.46.0)':
-    dependencies:
-      esm-env: 1.2.2
-      svelte: 5.46.0
 
   '@rollup/rollup-android-arm-eabi@4.54.0':
     optional: true

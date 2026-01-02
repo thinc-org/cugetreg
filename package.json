@@ -3,13 +3,15 @@
   "packageManager": "pnpm@10.13.1",
   "private": true,
   "devDependencies": {
+    "prettier": "^3.7.4",
+    "prettier-plugin-svelte": "^3.4.1",
     "turbo": "^2.7.2"
   },
   "scripts": {
-      "dev": "turbo run dev",
-      "build": "turbo run build",
-      "lint": "turbo run lint",
-      "storybook": "turbo run storybook",
-      "test": "turbo run test"
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "storybook": "turbo run storybook",
+    "test": "turbo run test"
   }
 }

@@ -96,7 +96,6 @@
 
   <!-- Public Checkbox -->
   <div class="flex items-center gap-2.5">
-    <!-- TODO: Add link generation functionality -->
     <Checkbox bind:checked={isPublic} label="เปิดเป็นสาธารณะ" />
     <InfoCircle
       tooltipText={'เมื่อเปิดสาธารณะ จะสามารถแชร์ตารางเรียนนี้ได้ด้วยลิงก์'}

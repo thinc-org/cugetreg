@@ -10,32 +10,18 @@
   import { Chip } from '../../atoms/chip'
   import { SelectorButton } from '../../atoms/selector-button'
 
-  export let tableData = [
-    {
-      section: '1',
-      seats: '28 / 28',
-      teacher: 'SSS',
-      schedule: 'THU 16:00 - 17:00',
-      room: 'MAHIT 202',
-      type: 'LECT',
-    },
-    {
-      section: '2',
-      seats: '12 / 28',
-      teacher: 'SSS',
-      schedule: 'THU 16:00 - 17:00',
-      room: 'MAHIT 202',
-      type: 'LECT',
-    },
-    {
-      section: '3',
-      seats: 'ปิด',
-      teacher: 'SSS',
-      schedule: 'THU 16:00 - 17:00',
-      room: 'MAHIT 202',
-      type: 'LECT',
-    },
-  ]
+  interface Props {
+    tableData: Array<{
+      section: string
+      seats: string
+      teacher: string
+      schedule: string
+      room: string
+      type: string
+    }>
+  }
+
+  let { tableData }: Props = $props()
 
   const getSeatColor = (value: string) => {
     if (value === 'ปิด') return 'bg-[#EDEDF1] text-[#6F7593]'

@@ -28,6 +28,7 @@ export type CourseSchedule = {
     course: Course;
     selectedSection: number;
     hidden: boolean;
+    conflicted?: boolean;
     colorVariant?: ColorVariant;
 }
 

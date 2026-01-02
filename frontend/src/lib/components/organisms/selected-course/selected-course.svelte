@@ -50,7 +50,10 @@
     }: SelectedCourseProp = $props();
 
     const totalCredit = $derived(
-        schedule.reduce((acc, course) => acc + course.course.credit, 0),
+        schedule.reduce(
+            (acc, course) => acc + (course.hidden ? 0 : course.course.credit),
+            0,
+        ),
     );
 
     let showChangeColorModal = $state(false);
@@ -147,7 +150,7 @@
                 {/if}
             </IconButton>
         </div>
-        <div class="flex flex-col flex-1 justify-center">
+        <div class="flex flex-col flex-1 overflow-hidden justify-center">
             <div class="flex text-[0.6rem] flex-nowrap">
                 {course.course.code}
                 {#each course.course.gened as gened}
@@ -170,7 +173,14 @@
                         (v) => (course.selectedSection = Number(v))
                     }
                 >
-                    <Select.Trigger showArrow={false} class="rounded-sm p-0">
+                    <Select.Trigger
+                        showArrow={false}
+                        class={cn(
+                            "rounded-sm p-0",
+                            course.conflicted &&
+                                "bg-red-300 border-red-800 text-red-800",
+                        )}
+                    >
                         <div
                             class="w-full h-full flex items-center justify-center text-xs"
                         >

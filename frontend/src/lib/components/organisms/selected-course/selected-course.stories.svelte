@@ -2,7 +2,6 @@
     import { defineMeta } from "@storybook/addon-svelte-csf";
 
     import { SelectedCourse } from "./index";
-    import type { Course } from "./index";
 
     import { mockSchedule as schedule } from "../../../../mockData";
 

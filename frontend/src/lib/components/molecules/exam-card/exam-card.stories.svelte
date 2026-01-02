@@ -4,7 +4,7 @@
   import type { Exam } from './types'
 
   const { Story } = defineMeta({
-    title: 'Molecule/ExamCard',
+    title: 'Molecule/Exam Card',
     component: ExamCard,
     tags: ['autodocs'],
     argTypes: {

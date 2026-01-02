@@ -76,7 +76,7 @@ const courseEffectCareer: Course = {
 }
 
 const courseCalculusI: Course = {
-    name: "Calculus I",
+    name: "CALCULUS I",
     code: "0201171",
     credit: 3,
     gened: [],
@@ -105,7 +105,50 @@ const courseCalculusI: Course = {
                 building: "ENG2",
                 room: "210"
             },
+        ],
+        2: [
+            {
+                day: "TU",
+                startTime: 9,
+                duration: 1,
+                building: "ENG2",
+                room: "210"
+            },
+            {
+                day: "WE",
+                startTime: 9,
+                duration: 1,
+                building: "ENG2",
+                room: "210"
+            },
+            {
+                day: "TH",
+                startTime: 9,
+                duration: 1,
+                building: "ENG2",
+                room: "210"
+            },
         ]
+    }
+}
+
+const courseLongName: Course = {
+    name: "PNEUMONOULTRAMICROSCOPICSILICOVOLCANOCONIOSIS",
+    code: "0201171",
+    credit: 3,
+    gened: [],
+    seat: 15,
+    maxseat: 30,
+    sections: {
+        1: [
+            {
+                day: "FR",
+                startTime: 13.5,
+                duration: 3,
+                building: "ENG2",
+                room: "210"
+            },
+        ],
     }
 }
 
@@ -114,26 +157,37 @@ const mockSchedule: ScheduleData = [
         id: 1,
         course: courseComPres,
         selectedSection: 6,
-        hidden: false
+        hidden: false,
+        colorVariant: "pink",
     },
     {
         id: 2,
         course: courseAppDev,
         selectedSection: 1,
-        hidden: false
+        hidden: false,
+        colorVariant: "tangerine",
     },
     {
         id: 3,
         course: courseEffectCareer,
         selectedSection: 71,
-        hidden: false
+        hidden: false,
+        colorVariant: "green"
     },
     {
         id: 4,
         course: courseCalculusI,
         selectedSection: 1,
-        hidden: false
+        hidden: false,
+        colorVariant: "purple"
     },
+    {
+        id: 5,
+        course: courseLongName,
+        selectedSection: 1,
+        hidden: false,
+        colorVariant: "teal"
+    }
 ]
 
 export {
@@ -141,5 +195,6 @@ export {
     courseEffectCareer,
     courseAppDev,
     courseComPres,
+    courseLongName,
     mockSchedule
 };

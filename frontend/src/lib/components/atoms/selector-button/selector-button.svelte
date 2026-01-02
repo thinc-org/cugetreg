@@ -1,29 +1,36 @@
 <script lang="ts">
-  export let selected: {
-    section: string
-    seats: string
-    teacher: string
-    schedule: string
-    room: string
-    type: string
+  interface Props {
+    selected: {
+      section: string
+      seats: string
+      teacher: string
+      schedule: string
+      room: string
+      type: string
+    }
+    handleClick?: () => void
   }
 
-  let clicked = false
+  let { selected, handleClick }: Props = $props()
 
-  let selectedRows: (typeof selected)[] = []
+  let clicked = $state(false)
 
-  const handleClick = () => {
+  const defaultHandleClick = () => {
     clicked = !clicked
+    console.log('Selected row:', selected)
+  }
 
-    if (!selectedRows.includes(selected)) {
-      selectedRows = [...selectedRows, selected]
+  const onClick = () => {
+    if (handleClick) {
+      handleClick()
+    } else {
+      defaultHandleClick()
     }
-    console.log('All selected rows:', selectedRows)
   }
 </script>
 
 <button
-  on:click={handleClick}
+  onclick={onClick}
   class={`rounded-button h-9 w-22 rotate-0 gap-1 border-[1.5px] pt-0.5 pr-5 pl-4 opacity-100 ${
     clicked ? 'border-[#4A70C6]' : 'border-[#EDEDF1]'
   }`}

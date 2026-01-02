@@ -2,7 +2,7 @@
   export let tooltipText = ''
 </script>
 
-<div class="group relative top-0.5 inline-block cursor-pointer">
+<div class="group relative inline-block cursor-pointer">
   <!-- SVG Icon -->
   <svg
     width="16"
@@ -22,7 +22,7 @@
 
   <!-- Tooltip -->
   <div
-    class="absolute top-5 flex h-8 w-80.25 -translate-x-1/2 transform items-center gap-2.5 rounded bg-gray-200 p-2.5 text-[12px] opacity-0 transition-opacity group-hover:opacity-100"
+    class="pointer-events-none absolute top-6 left-1/2 z-50 w-max max-w-80 -translate-x-1/2 rounded bg-[#f6f6f9] px-3 py-2 text-xs text-[#353745] opacity-0 shadow-lg transition-opacity group-hover:opacity-100"
   >
     {tooltipText}
   </div>

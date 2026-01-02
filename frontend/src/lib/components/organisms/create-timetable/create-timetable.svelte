@@ -3,7 +3,13 @@
   import { Checkbox } from '../../atoms/checkbox'
   import { Input } from '../../atoms/input'
   import { InfoCircle } from '../../atoms/info-circle'
-  import { Dropdown } from '../../atoms/dropdown'
+  import {
+    Select,
+    SelectTrigger,
+    SelectContent,
+    SelectItem,
+    SelectGroup,
+  } from '../../molecules/select'
 
   export let handleCancel: () => void
   export let handleConfirm: () => void
@@ -59,25 +65,67 @@
     <p class="font-orbit text-caption leading-caption text-[#898EA7]">
       ตั้งค่า
     </p>
-    <Dropdown
-      bind:value={selected_system}
-      options={options_system}
-      state="default"
-      className="my-1"
-    />
+
+    <Select type="single" bind:value={selected_system}>
+      <SelectTrigger class="my-1 w-full" aria-label="Select system">
+        {selected_system}
+      </SelectTrigger>
+
+      <SelectContent>
+        <SelectGroup>
+          {#each options_system as option}
+            <SelectItem
+              value={option.value}
+              label={option.label}
+              aria-label={option.label}
+            >
+              {option.label}
+            </SelectItem>
+          {/each}
+        </SelectGroup>
+      </SelectContent>
+    </Select>
+
     <div class="flex gap-2">
-      <Dropdown
-        bind:value={selected_year}
-        options={options_year}
-        state="default"
-        className="my-1"
-      />
-      <Dropdown
-        bind:value={selected_semester}
-        options={options_semester}
-        state="default"
-        className="my-1"
-      />
+      <Select type="single" bind:value={selected_year}>
+        <SelectTrigger class="my-1 flex-1" aria-label="Select year">
+          {selected_year}
+        </SelectTrigger>
+
+        <SelectContent>
+          <SelectGroup>
+            {#each options_year as option}
+              <SelectItem
+                value={option.value}
+                label={option.label}
+                aria-label={option.label}
+              >
+                {option.label}
+              </SelectItem>
+            {/each}
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+
+      <Select type="single" bind:value={selected_semester}>
+        <SelectTrigger class="my-1 flex-1" aria-label="Select semester">
+          {selected_semester}
+        </SelectTrigger>
+
+        <SelectContent>
+          <SelectGroup>
+            {#each options_semester as option}
+              <SelectItem
+                value={option.value}
+                label={option.label}
+                aria-label={option.label}
+              >
+                {option.label}
+              </SelectItem>
+            {/each}
+          </SelectGroup>
+        </SelectContent>
+      </Select>
     </div>
   </div>
 

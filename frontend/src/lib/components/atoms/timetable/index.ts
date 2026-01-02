@@ -10,10 +10,13 @@ export const timeTableCourseCardVariant = tv({
         "left-[calc(100%/var(--cols)*var(--y))]",
         "flex flex-col justify-center items-center",
         "border-1 rounded-lg",
-        "hover:cursor-pointer hover:z-100 select-none"
+        "hover:cursor-pointer hover:z-100 select-none",
     ],
     variants: {
-        color: courseColorVariants
+        color: {
+            conflict: 'bg-red-300 border-red-800 text-red-800',
+            ...courseColorVariants
+        }
     },
     defaultVariants: {
         length: 3,
@@ -36,5 +39,5 @@ export interface TimeTableContext {
     amountOfDays: number;
 }
 
-export { default as CourseTimeSlot } from './timetable-course-card.svelte';
+export { default as TimetableCourseCard } from './timetable-course-card.svelte';
 export { default as TimeTable } from './timetable.svelte';

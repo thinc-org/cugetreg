@@ -77,9 +77,14 @@
     >
         {#each Array.from({ length: periodPerDay }) as _, i}
             <div
-                class="bg-indigo-50! px-2 py-3.5 cell text-right! items-end! justify-end!"
+                class="
+                    bg-indigo-50! px-2 py-3.5 cell text-right! items-end! justify-end!
+                    @container-[size]
+                "
             >
-                {i + startTime}
+                <span class="text-[80cqh]">
+                    {i + startTime}
+                </span>
             </div>
         {/each}
     </div>
@@ -89,8 +94,10 @@
         style="grid-row: span {amountOfDays} / span {amountOfDays}"
     >
         {#each DAYS as day}
-            <div class="cell bg-indigo-50! aspect-square">
-                {days[day]}
+            <div class="cell bg-indigo-50! aspect-square @container-[size]">
+                <span class="text-[25cqh]">
+                    {days[day]}
+                </span>
             </div>
         {/each}
     </div>

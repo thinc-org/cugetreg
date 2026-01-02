@@ -1,15 +1,15 @@
+import "dotenv/config";
 import * as fs from "fs";
 import { PrismaClient } from "../src/generated/prisma/client.js";
 import { PrismaPg } from "@prisma/adapter-pg";
+import pg from "pg";
 import { mapSemester, mapStudyProgram, mapVisible } from "./enumMapper.js";
-import "dotenv/config";
-import dotenv from "dotenv";
 
-dotenv.config();
-
-const adapter = new PrismaPg({
+const pool = new pg.Pool({
   connectionString: process.env.DATABASE_URL,
+  max: 10,
 });
+const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
 async function migrate() {
   const rawData = fs.readFileSync("users.json", "utf-8");

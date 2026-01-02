@@ -1,14 +1,13 @@
+import dotenv from "dotenv";
+import "dotenv/config";
 import { PrismaClient } from "../src/generated/prisma/client.js";
 import * as fs from "fs";
 import { mapReviewStatus, mapSemester, mapStudyProgram } from "./enumMapper.js";
 import { PrismaPg } from "@prisma/adapter-pg";
-import "dotenv/config";
-import dotenv from "dotenv";
-
-dotenv.config();
 
 const adapter = new PrismaPg({
   connectionString: process.env.DATABASE_URL,
+  max: 10,
 });
 const prisma = new PrismaClient({ adapter });
 

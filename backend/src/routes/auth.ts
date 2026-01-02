@@ -1,6 +1,7 @@
 import { Hono } from "hono";
 import { googleAuth } from "@hono/oauth-providers/google";
 import { sign, jwt } from "hono/jwt";
+import { prisma } from "../db/clients.js";
 
 const JWT_SECRET = process.env.JWT_SECRET;
 if (!JWT_SECRET) {
@@ -51,8 +52,23 @@ auth.get(
 
     if (!googleUser) return c.json({ error: "Auth Failed" }, 401);
 
+    let user = await prisma.user.findUnique({
+      where: { email: googleUser.email },
+    });
+
+    if (!user) {
+      user = await prisma.user.create({
+        data: {
+          email: googleUser.email!,
+          name: googleUser.name!,
+          googleId: googleUser.id!,
+        },
+      });
+      console.log("New account created for:", googleUser.email);
+    }
+
     const payload = {
-      id: googleUser.id,
+      id: user.id,
       email: googleUser.email,
       exp: Math.floor(Date.now() / 1000) + 60 * 60 * hr,
     };
@@ -62,7 +78,10 @@ auth.get(
     return c.json({
       message: "Login Success",
       token: token,
-      user: googleUser,
+      user: {
+        name: user.name,
+        email: user.email,
+      },
     });
   }
 );

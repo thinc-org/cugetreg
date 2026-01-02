@@ -5,6 +5,9 @@
   import { InfoCircle } from '../../atoms/info-circle'
   import { Dropdown } from '../../atoms/dropdown'
 
+  export let handleCancel: () => void
+  export let handleConfirm: () => void
+
   let selected_system = 'ทวิภาค'
   const options_system = [
     { value: 'ทวิภาค', label: 'ทวิภาค' },
@@ -33,27 +36,17 @@
   $: tableName = tableName.slice(0, 30)
 
   let isPublic = false
-  let shareLink = 'https://example.com/my-timetable'
-
+  export let shareLink: string = 'https://example.com/my-timetable'
   function copyLink() {
+    if (!shareLink) return
+
     navigator.clipboard.writeText(shareLink).then(() => {
       alert('Link copied to clipboard!')
     })
   }
-
-  function handleConfirm() {
-    console.log('Selected system:', selected_system)
-    console.log('Selected year:', selected_year)
-    console.log('Selected semester:', selected_semester)
-    console.log('Table name:', tableName)
-  }
-
-  function handleCancel() {
-    console.log('Cancel clicked')
-  }
 </script>
 
-<div class="flex w-104 flex-col gap-6 rounded-xl border p-12">
+<div class="flex w-104 flex-col gap-6 rounded-xl border border-[#d6d7e1] p-12">
   <!-- Title -->
   <h1
     class="text-h2 leading-h2 text-center font-medium tracking-[0.15px] text-[#353745]"
@@ -114,7 +107,7 @@
       class="relative -mt-5 flex h-8 w-[320px] items-center justify-center rounded-sm border border-[#EDEDF1] px-4"
     >
       <span
-        class="absolute left-4.25 truncate text-center text-[12px] leading-3 font-normal tracking-[0.15px] text-[#898EA7]"
+        class="absolute right-12 left-4.25 truncate text-center text-[12px] leading-3 font-normal tracking-[0.15px] text-[#898EA7]"
       >
         {shareLink}
       </span>
@@ -124,6 +117,7 @@
         on:click={copyLink}
         aria-label="Copy link"
       >
+        <!-- Copy button -->
         <svg
           width="16"
           height="16"
@@ -152,18 +146,24 @@
 
   <!-- Cancel/Confirm Buttons -->
   <div class="flex w-full gap-6">
-    <!-- TODO: fix button click -->
-    <button type="button" on:click={handleCancel} class="w-full">
-      <Button variant="solid" size="default" color="neutral" class="w-full">
-        ยกเลิก
-      </Button>
-    </button>
+    <Button
+      variant="solid"
+      size="default"
+      color="neutral"
+      class="w-full"
+      onclick={handleCancel}
+    >
+      ยกเลิก
+    </Button>
 
-    <!-- TODO: fix button click -->
-    <button type="button" on:click={handleConfirm} class="w-full">
-      <Button variant="solid" size="default" color="primary" class="w-full">
-        สร้าง
-      </Button>
-    </button>
+    <Button
+      variant="solid"
+      size="default"
+      color="primary"
+      class="w-full"
+      onclick={handleConfirm}
+    >
+      สร้าง
+    </Button>
   </div>
 </div>

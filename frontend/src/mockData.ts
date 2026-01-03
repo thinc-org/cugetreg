@@ -22,6 +22,16 @@ const courseComPres: Course = {
             building: "ENG3",
             room: "319"
         }]
+    },
+    midterm: {
+        date: "จันทร์ 1 ธ.ค. 2567",
+        startTime: 13,
+        duration: 3,
+    },
+    final: {
+        date: "จันทร์ 2 ธ.ค. 2567",
+        startTime: 8.5,
+        duration: 3,
     }
 }
 
@@ -55,7 +65,7 @@ const courseAppDev: Course = {
     },
     final: {
         date: "จันทร์ 4 ธ.ค. 2567",
-        startTime: 8.5, //8.30
+        startTime: 13, //8.30
         duration: 3,
     }
 }
@@ -82,6 +92,11 @@ const courseEffectCareer: Course = {
             building: "ENG2",
             room: "210"
         }]
+    },
+    final: {
+        date: "จันทร์ 5 ธ.ค. 2567",
+        startTime: 13, //8.30
+        duration: 3,
     }
 }
 
@@ -139,6 +154,16 @@ const courseCalculusI: Course = {
                 room: "210"
             },
         ]
+    },
+    midterm: {
+        date: "จันทร์ 3 ธ.ค. 2567",
+        startTime: 13,
+        duration: 3,
+    },
+    final: {
+        date: "จันทร์ 4 ธ.ค. 2567",
+        startTime: 8.5,
+        duration: 3,
     }
 }
 
@@ -159,6 +184,46 @@ const courseLongName: Course = {
                 room: "210"
             },
         ],
+    },
+    midterm: {
+        date: "จันทร์ 3 ธ.ค. 2567",
+        startTime: 16,
+        duration: 1,
+    },
+    final: {
+        date: "จันทร์ 4 ธ.ค. 2567",
+        startTime: 12,
+        duration: 1,
+    }
+}
+
+const courseAI: Course = {
+    name: "AI",
+    code: "2190513",
+    credit: 3,
+    gened: [],
+    seat: 15,
+    maxseat: 30,
+    sections: {
+        1: [
+            {
+                day: "WE",
+                startTime: 13,
+                duration: 3,
+                building: "ENG2",
+                room: "210"
+            },
+        ],
+    },
+    midterm: {
+        date: "จันทร์ 1 ธ.ค. 2567",
+        startTime: 13,
+        duration: 3,
+    },
+    final: {
+        date: "จันทร์ 2 ธ.ค. 2567",
+        startTime: 8.5,
+        duration: 3,
     }
 }
 
@@ -197,7 +262,14 @@ const mockSchedule: ScheduleData = [
         selectedSection: 1,
         hidden: false,
         colorVariant: "teal"
-    }
+    },
+    {
+        id: 6,
+        course: courseAI,
+        selectedSection: 1,
+        hidden: false,
+        colorVariant: "teal"
+    },
 ]
 
 export {

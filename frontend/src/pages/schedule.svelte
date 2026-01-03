@@ -5,14 +5,15 @@
     import { Switch } from "../lib/components/atoms/switch";
     import { TimetableCourseCard } from "../lib/components/atoms/timetable";
     import Timetable from "../lib/components/atoms/timetable/timetable.svelte";
+    import { ExamCard, type Exam, type StatusColour } from "../lib/components/molecules/exam-card"
     import * as Select from "../lib/components/molecules/select";
-    import { Footer } from "../lib/components/organisms/footer";
     import { Navbar } from "../lib/components/organisms/navbar";
     import { SelectedCourse } from "../lib/components/organisms/selected-course";
     import { mockSchedule } from "../mockData";
-    import type { CourseSchedule, Day } from "../types";
+    import type { Course, CourseSchedule, Day } from "../types";
 
-    import { Share2, Ellipsis } from "lucide-svelte";
+    import { Share2, Ellipsis, Copy } from "lucide-svelte";
+    import { formatTimePeriod, isMidtermConflict, isFinalsConflict } from "../utils"
 
     function getColumnFromDay(day: Day): number {
         switch (day) {
@@ -68,6 +69,31 @@
     // TODO: Temporary
     let currentSchedule = $state("schedule 1");
     let isPublic = $state(false);
+
+    const examsData = $derived.by(() => {
+        let midterms: Record<string, CourseSchedule[]> = {};
+        let finals: Record<string, CourseSchedule[]> = {};
+
+        schedule.forEach((course) => {
+            if (course.hidden) return;
+
+            const { midterm, final } = course.course;
+
+            if (midterm) {
+                const date = midterm.date;
+                if (date in midterms) midterms[date].push(course);
+                else midterms[date] = [course];
+            }
+
+            if (final) {
+                const date = final.date;
+                if (date in finals) finals[date].push(course);
+                else finals[date] = [course];
+            }
+        })
+
+        return { midterms, finals };
+    })
 
     const totalCredit = $derived(
         schedule.reduce(
@@ -144,21 +170,76 @@
         <div class="flex justify-end mx-5 mb-5 font-bold text-lg">
             หน่วยกิตรวม {totalCredit} / 22
         </div>
+
         <div class="flex">
             <Switch bind:checked={isPublic} label="เปิดเป็นสาธารณะ" />
-            <Input />
-            <IconButton class="aspect-square">
-                <Share2 class="" />
-            </IconButton>
-            <Button>บันทึกเป็นภาพ</Button>
+            <div class="flex flex-1 relative">
+                <Input 
+                    value="cugetreg.com/1232141413"
+                    disabled={!isPublic}
+                    readonly 
+                />
+
+                <IconButton 
+                    variant="ghost" 
+                    disabled={!isPublic}
+                    class="absolute z-10 right-0 hover:cursor-pointer hover:bg-transparent"
+                >
+                    <Copy /> 
+                </IconButton>
+            </div>
+            <div>
+                <IconButton class="aspect-square">
+                    <Share2/>
+                </IconButton>
+                <Button class="h-full m-0">บันทึกเป็นภาพ</Button>
+            </div>
         </div>
 
         <div class="flex my-5">
             <div class="flex-1">
                 <span class="text-2xl font-bold">Midterm</span>
+                {#each Object.entries(examsData.midterms) as [date, courses]}
+                    <div class="my-5">
+                        <ExamCard 
+                            date={date}
+                            data={
+                                courses.map(course => {
+                                    const { id, course: courseData, colorVariant } = course;
+
+                                    return {
+                                        id: String(id),
+                                        colour: isMidtermConflict(course, courses) ? "error" : (colorVariant as StatusColour),
+                                        time: formatTimePeriod(courseData.midterm?.startTime, courseData.midterm?.duration),
+                                        subject: courseData.name
+                                    } as Exam
+                                })
+                            }
+                        />
+                    </div>
+                {/each}
             </div>
             <div class="flex-1">
                 <span class="text-2xl font-bold">Finals</span>
+                {#each Object.entries(examsData.finals) as [date, courses]}
+                    <div class="my-5">
+                        <ExamCard 
+                            date={date}
+                            data={
+                                courses.map(course => {
+                                    const { id, course: courseData, colorVariant } = course;
+
+                                    return {
+                                        id: String(id),
+                                        colour: isFinalsConflict(course, courses) ? "error" : (colorVariant as StatusColour),
+                                        time: formatTimePeriod(courseData.final?.startTime, courseData.final?.duration),
+                                        subject: courseData.name
+                                    } as Exam
+                                })
+                            }
+                        />
+                    </div>
+                {/each}
             </div>
         </div>
     </div>

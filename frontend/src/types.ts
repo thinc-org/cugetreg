@@ -12,6 +12,16 @@ export type Period = {
     room: string;
 }
 
+export type CourseExamDate = {
+    date: string;
+    startTime: number;
+    duration: number;
+
+    // Will we have exam location?
+    // building: string;
+    // room: string;
+}
+
 export type Course = {
     name: string;
     code: string;
@@ -21,6 +31,8 @@ export type Course = {
     maxseat: number;
     // review: number;
     sections: { [key: number]: Period[] };
+    midterm?: CourseExamDate;
+    final?: CourseExamDate;
 }
 
 export type CourseSchedule = {

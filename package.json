@@ -13,5 +13,8 @@
     "lint": "turbo run lint",
     "storybook": "turbo run storybook",
     "test": "turbo run test"
+  },
+  "dependencies": {
+    "@rodrigodagostino/svelte-sortable-list": "^2.1.9"
   }
 }

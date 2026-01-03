@@ -339,7 +339,7 @@ carts.get("/:cartId", async (c) => {
           periodEnd: cls.periodEnd,
           building: cls.building,
           room: cls.room,
-          professors: cls.professors.split(","),
+          professors: cls.professors,
         });
       });
 

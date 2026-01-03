@@ -2,6 +2,10 @@ import { GenEdType, PrismaClient } from "../src/generated/prisma/client.js";
 import * as fs from "fs";
 import dotenv from "dotenv";
 import { Decimal } from "decimal.js";
+import dayjs from "dayjs";
+import * as R from "ramda";
+import * as S from "@effect/schema/Schema";
+import { Schema, Effect, Console } from "effect";
 
 dotenv.config();
 
@@ -14,7 +18,8 @@ import {
 } from "./enumMapper.js";
 
 const adapter = new PrismaPg({
-  connectionString: process.env.DATABASE_URL,
+  connectionString:
+    "postgresql://admin:cugetreg@localhost:5432/cugetreg?schema=public",
   max: 10,
 });
 const prisma = new PrismaClient({ adapter });
@@ -22,111 +27,217 @@ const prisma = new PrismaClient({ adapter });
 function parseExamDate(
   dateStr: string | undefined,
   timeStr: string | undefined
-): Date | null {
+) {
   if (!dateStr || !timeStr) return null;
-  const date = new Date(dateStr);
-  if (date.getFullYear() > 2400) {
-    date.setFullYear(date.getFullYear() - 543);
+  let d = dayjs(dateStr);
+  if (d.year() > 2400) {
+    d = d.subtract(543, "year");
   }
   const [hours, minutes] = timeStr.split(":").map(Number);
-  date.setHours(hours, minutes, 0, 0);
-  return date;
+  return d.startOf("day").add(hours, "hours").add(minutes, "minutes").toDate();
 }
 
-async function migrate() {
-  const overridesRaw = fs.readFileSync("overrides.json", "utf-8");
-  const overridesData = JSON.parse(overridesRaw);
-  const genEdOverrideMap = new Map<string, GenEdType>();
-
-  overridesData.forEach((item: any) => {
-    genEdOverrideMap.set(item.courseNo, mapGenEdType(item.genEdType));
+const safeParseJSON = <T>(jsonString: string) =>
+  Effect.try({
+    try: () => JSON.parse(jsonString) as T,
+    catch: (e) => new Error(`JSON parsing failed: ${e}`),
   });
 
-  const rawData = fs.readFileSync("courses.json", "utf-8");
-  const coursesData = JSON.parse(rawData);
+interface MongoDate {
+  $date: string;
+}
+
+interface MongoId {
+  $oid: string;
+}
+
+interface Period {
+  start: string; // e.g. "13:30"
+  end: string;
+}
+
+interface ExamInfo {
+  period: Period;
+  date: string; // pass to parseExamDate
+}
+
+interface ClassInfo {
+  _id: MongoId;
+  type: string;
+  dayOfWeek: string;
+  period: Period;
+  building?: string;
+  room?: string;
+  teachers: string[];
+}
+
+interface Section {
+  _id: MongoId;
+  sectionNo: string;
+  closed: boolean;
+  capacity: {
+    current: number;
+    max: number;
+  };
+  note?: string;
+  classes: ClassInfo[];
+  genEdType: string;
+}
+
+interface Course {
+  _id: MongoId;
+  courseNo: string;
+  abbrName: string;
+  courseNameTh: string;
+  courseNameEn: string;
+  courseDescTh?: string;
+  courseDescEn?: string;
+  courseCondition?: string;
+  academicYear: string;
+  semester: string;
+  credit: number;
+  creditHours?: string;
+  department?: string;
+  faculty?: string;
+  genEdType: string;
+  studyProgram: string;
+  sections: Section[];
+  midterm?: ExamInfo;
+  final?: ExamInfo;
+  updatedAt: MongoDate;
+  createdAt?: MongoDate;
+  rating?: string;
+}
+
+interface CourseOverride {
+  _id: MongoId;
+  courseNo: string;
+  genEdType: string;
+}
+
+const migrateCourse = (data: Course, currentGenEd: GenEdType) =>
+  Effect.gen(function* (_) {
+    yield* _(
+      Effect.tryPromise({
+        try: () =>
+          prisma.courseInfo.upsert({
+            where: { courseNo: data.courseNo },
+            update: {
+              abbrName: data.abbrName,
+              courseNameEn: data.courseNameEn,
+              courseNameTh: data.courseNameTh,
+              courseDescEn: data.courseDescEn,
+              courseDescTh: data.courseDescTh,
+            },
+            create: {
+              courseNo: data.courseNo,
+              abbrName: data.abbrName,
+              courseNameEn: data.courseNameEn,
+              courseNameTh: data.courseNameTh,
+              courseDescEn: data.courseDescEn,
+              courseDescTh: data.courseDescTh,
+              faculty: data.faculty || "",
+              department: data.department || "",
+              credit: new Decimal(data.credit),
+              creditHours: data.creditHours || "",
+            },
+          }),
+        catch: (e) => new Error(`Prisma CourseInfo Error: ${e}`),
+      })
+    );
+
+    yield* _(
+      Effect.tryPromise({
+        try: () =>
+          prisma.course.create({
+            data: {
+              courseNo: data.courseNo,
+              academicYear: parseInt(data.academicYear),
+              semester: mapSemester(data.semester),
+              studyProgram: mapStudyProgram(data.studyProgram),
+              courseCondition: data.courseCondition,
+              midtermStart: parseExamDate(
+                data.midterm?.date,
+                data.midterm?.period?.start
+              ),
+              midtermEnd: parseExamDate(
+                data.midterm?.date,
+                data.midterm?.period?.end
+              ),
+              finalStart: parseExamDate(
+                data.final?.date,
+                data.final?.period?.start
+              ),
+              finalEnd: parseExamDate(
+                data.final?.date,
+                data.final?.period?.end
+              ),
+              genEdType: currentGenEd,
+              sections: {
+                create: data.sections.map((sec) => ({
+                  sectionNo: parseInt(sec.sectionNo),
+                  closed: sec.closed,
+                  regis: sec.capacity.current,
+                  max: sec.capacity.max,
+                  note: sec.note,
+                  genEdType: currentGenEd,
+                  classes: {
+                    create: sec.classes.map((cls) => ({
+                      type: cls.type,
+                      dayOfWeek: mapDayOfWeek(cls.dayOfWeek),
+                      periodStart: cls.period.start,
+                      periodEnd: cls.period.end,
+                      building: cls.building,
+                      room: cls.room,
+                      professors: cls.teachers,
+                    })),
+                  },
+                })),
+              },
+            },
+          }),
+        catch: (e) => new Error(`Prisma Course Create Error: ${e}`),
+      })
+    );
+
+    yield* _(Console.log(`Successfully migrated: ${data.courseNo}`));
+  }).pipe(
+    Effect.catchAll((err) =>
+      Console.error(`Skipping ${data.courseNo}: ${err.message}`)
+    )
+  );
+
+async function migrate() {
+  const overridesRaw: string = fs.readFileSync("overrides.json", "utf-8");
+  const overridesData = Effect.runSync(
+    safeParseJSON<CourseOverride[]>(overridesRaw)
+  );
+
+  const indexedOverrides = R.indexBy(
+    (item: CourseOverride) => item.courseNo,
+    overridesData
+  );
+  const genEdOverrideLookup = R.map(
+    (item: CourseOverride) => mapGenEdType(item.genEdType),
+    indexedOverrides
+  );
+
+  const rawData: string = fs.readFileSync("courses.json", "utf-8");
+  const coursesData = Effect.runSync(safeParseJSON<Course[]>(rawData));
 
   console.log(`Starting migration of ${coursesData.length} courses`);
 
-  for (const data of coursesData) {
-    try {
+  const migrationProgram = Effect.forEach(
+    coursesData,
+    (data) => {
       const currentGenEd =
-        genEdOverrideMap.get(data.courseNo) || GenEdType.NOT_GENED;
+        genEdOverrideLookup[data.courseNo] || GenEdType.NOT_GENED;
+      return migrateCourse(data, currentGenEd);
+    },
+    { discard: true }
+  );
 
-      await prisma.courseInfo.upsert({
-        where: { courseNo: data.courseNo },
-        update: {
-          abbrName: data.abbrName,
-          courseNameEn: data.courseNameEn,
-          courseNameTh: data.courseNameTh,
-          courseDescEn: data.courseDescEn,
-          courseDescTh: data.courseDescTh,
-        },
-        create: {
-          courseNo: data.courseNo,
-          abbrName: data.abbrName,
-          courseNameEn: data.courseNameEn,
-          courseNameTh: data.courseNameTh,
-          courseDescEn: data.courseDescEn,
-          courseDescTh: data.courseDescTh,
-          faculty: data.faculty,
-          department: data.department,
-          credit: new Decimal(data.credit),
-          creditHours: data.creditHours,
-        },
-      });
-
-      const course = await prisma.course.create({
-        data: {
-          courseNo: data.courseNo,
-          academicYear: parseInt(data.academicYear),
-          semester: mapSemester(data.semester),
-          studyProgram: mapStudyProgram(data.studyProgram),
-          courseCondition: data.courseCondition,
-          midtermStart: parseExamDate(
-            data.midterm?.date,
-            data.midterm?.period?.start
-          ),
-          midtermEnd: parseExamDate(
-            data.midterm?.date,
-            data.midterm?.period?.end
-          ),
-          finalStart: parseExamDate(
-            data.final?.date,
-            data.final?.period?.start
-          ),
-          finalEnd: parseExamDate(data.final?.date, data.final?.period?.end),
-          genEdType: currentGenEd,
-          sections: {
-            create: data.sections.map((sec: any) => ({
-              sectionNo: parseInt(sec.sectionNo),
-              closed: sec.closed,
-              regis: sec.capacity.current,
-              max: sec.capacity.max,
-              note: sec.note,
-              genEdType: currentGenEd,
-              classes: {
-                create: sec.classes.map((cls: any) => ({
-                  type: cls.type,
-                  dayOfWeek: mapDayOfWeek(cls.dayOfWeek),
-                  periodStart: cls.period.start,
-                  periodEnd: cls.period.end,
-                  building: cls.building,
-                  room: cls.room,
-                  professors: cls.teachers.join(","),
-                })),
-              },
-            })),
-          },
-        },
-      });
-
-      console.log(
-        `Successfully migrated: ${data.courseNo} (GenEd: ${currentGenEd})`
-      );
-    } catch (error) {
-      console.error(`Error migrating ${data.courseNo}:`, error);
-    }
-  }
+  await Effect.runPromise(migrationProgram);
 }
 
 migrate()

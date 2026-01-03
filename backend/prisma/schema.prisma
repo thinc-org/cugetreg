@@ -141,7 +141,7 @@ model SectionClass {
   // 18 ROOM
   room String?
   // DG0216 -> FK(???) 16 NAME_ABBR (PostgreSQL array type)
-  professors String @map("professors")
+  professors String[] @map("professors")
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")

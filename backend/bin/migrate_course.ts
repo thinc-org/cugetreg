@@ -4,8 +4,7 @@ import dotenv from "dotenv";
 import { Decimal } from "decimal.js";
 import dayjs from "dayjs";
 import * as R from "ramda";
-import * as S from "@effect/schema/Schema";
-import { Schema, Effect, Console } from "effect";
+import { Effect, Console } from "effect";
 
 dotenv.config();
 
@@ -15,7 +14,7 @@ import {
   mapGenEdType,
   mapSemester,
   mapStudyProgram,
-} from "./enumMapper.js";
+} from "../src/utils/enumMapper.js";
 
 const adapter = new PrismaPg({
   connectionString:
@@ -234,7 +233,7 @@ async function migrate() {
         genEdOverrideLookup[data.courseNo] || GenEdType.NOT_GENED;
       return migrateCourse(data, currentGenEd);
     },
-    { discard: true }
+    { discard: true, concurrency: 5 }
   );
 
   await Effect.runPromise(migrationProgram);

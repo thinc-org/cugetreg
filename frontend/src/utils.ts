@@ -1,6 +1,7 @@
 import { type ClassValue, clsx } from 'clsx'
 import { extendTailwindMerge } from 'tailwind-merge'
 import { defaultConfig } from 'tailwind-variants'
+import type { CourseSchedule } from './types'
 
 defaultConfig.twMerge = false
 
@@ -52,4 +53,79 @@ export function getShortenName(fullName: string): string {
 
     // Return first name and abbreviated last name
     return `${firstName} ${lastName.charAt(0)}.`
+}
+
+export function formatScheduleTime(time: number): string {
+    const hour = Math.floor(time);
+    const minute = Math.floor(60 * (time - hour));
+
+    const hourStr = String(hour).padStart(2, '0');
+    const minuteStr = String(minute).padStart(2, '0');
+
+    return `${hourStr}:${minuteStr}`;
+}
+
+export function formatTimePeriod(startTime?: number, duration?: number): string {
+    if (!startTime || !duration) return "";
+
+    return `${formatScheduleTime(startTime)} - ${formatScheduleTime(startTime + duration)}`;
+}
+
+
+export function isMidtermConflict(course: CourseSchedule, otherCourses: CourseSchedule[]) {
+    const { midterm } = course.course;
+
+    if (!midterm) return false;
+
+    const midtermStart = midterm.startTime;
+    const midtermEnd = midterm.startTime + midterm.duration;
+
+    for (const other of otherCourses) {
+        if (other === course || other.hidden) continue;
+
+        const { midterm: otherMidterm } = other.course;
+        if (!otherMidterm) continue;
+
+        const otherStart = otherMidterm.startTime;
+        const otherEnd = otherStart + otherMidterm.duration;
+
+        if (
+            midtermStart < otherEnd &&
+            otherStart < midtermEnd
+        ) {
+            return true;
+        }
+
+    }
+
+    return false;
+}
+
+export function isFinalsConflict(course: CourseSchedule, otherCourses: CourseSchedule[]) {
+    const { final } = course.course;
+
+    if (!final) return false;
+
+    const finalStart = final.startTime;
+    const finalEnd = final.startTime + final.duration;
+
+    for (const other of otherCourses) {
+        if (other === course || other.hidden) continue;
+
+        const { final: otherfinal } = other.course;
+        if (!otherfinal) continue;
+
+        const otherStart = otherfinal.startTime;
+        const otherEnd = otherStart + otherfinal.duration;
+
+        if (
+            finalStart < otherEnd &&
+            otherStart < finalEnd
+        ) {
+            return true;
+        }
+
+    }
+
+    return false;
 }

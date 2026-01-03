@@ -47,6 +47,16 @@ const courseAppDev: Course = {
             building: "ENG2",
             room: "210"
         }]
+    },
+    midterm: {
+        date: "จันทร์ 3 ธ.ค. 2567",
+        startTime: 8.5, //8.30
+        duration: 3,
+    },
+    final: {
+        date: "จันทร์ 4 ธ.ค. 2567",
+        startTime: 8.5, //8.30
+        duration: 3,
     }
 }
 

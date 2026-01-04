@@ -49,7 +49,7 @@ model CourseInfo {
   // Relation to Course
   courses Course[]
   // New!!!
-  cartItem CartItem[]
+  cartItems CartItem[]
 
   @@map("course_info")
 }

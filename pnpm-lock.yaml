@@ -25,9 +25,6 @@ importers:
       '@hono/zod-openapi':
         specifier: ^1.2.0
         version: 1.2.0(hono@4.10.7)(zod@4.2.1)
-      '@hono/zod-validator':
-        specifier: ^0.7.6
-        version: 0.7.6(hono@4.10.7)(zod@4.2.1)
       '@prisma/adapter-pg':
         specifier: ^7.1.0
         version: 7.1.0
@@ -37,9 +34,6 @@ importers:
       '@t3-oss/env-core':
         specifier: ^0.13.10
         version: 0.13.10(typescript@5.9.3)(valibot@1.2.0(typescript@5.9.3))(zod@4.2.1)
-      Schema:
-        specifier: link:@effect/schema/Schema
-        version: link:@effect/schema/Schema
       dayjs:
         specifier: ^1.11.19
         version: 1.11.19

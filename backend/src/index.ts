@@ -12,31 +12,32 @@ import auth, { middleware_auth } from "./routes/auth.js";
 
 dotenv.config();
 
-const app = new Hono();
-const api = new Hono().basePath("/api/v1");
+const app = new Hono()
+  .basePath("/api/v1")
 
-// Without JWT Auth
+  // Without JWT Auth
 
-api.route("/public/carts", public_carts);
-api.route("/auth", auth);
+  .route("/public/carts", public_carts)
+  .route("/auth", auth)
 
-// Middleware List
+  // Middleware List
 
-api.all("/admin/*", middleware_auth); // Middleware from Bearer Token
-api.all("/carts/*", middleware_auth);
-api.all("/courses/*", middleware_auth);
-api.all("/reviews/*", middleware_auth);
-api.all("/user/*", middleware_auth);
+  .all("/admin/*", middleware_auth) // Middleware from Bearer Token
+  .all("/carts/*", middleware_auth)
+  .all("/courses/*", middleware_auth)
+  .all("/reviews/*", middleware_auth)
+  .all("/user/*", middleware_auth)
 
-// With JWT Auth
+  // With JWT Auth
 
-api.route("/admin", admin);
-api.route("/courses", courses);
-api.route("/carts", carts);
-api.route("/reviews", reviews);
-api.route("/user", user);
+  .route("/admin", admin)
+  .route("/courses", courses)
+  .route("/carts", carts)
+  .route("/reviews", reviews)
+  .route("/user", user);
 
-app.route("/", api);
+export type AppType = typeof app;
+
 serve(
   {
     fetch: app.fetch,

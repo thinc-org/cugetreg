@@ -274,7 +274,7 @@ model CartItem {
 
   courseNo String @map("course_no")
   // New!!! for find credit for grade calculation feature
-  courseN CourseInfo @relation(fields: [courseNo], references: [courseNo])
+  courseInfo CourseInfo @relation(fields: [courseNo], references: [courseNo])
 
   sectionNo Int @map("section_no")
   color String?

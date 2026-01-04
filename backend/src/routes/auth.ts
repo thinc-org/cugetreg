@@ -2,19 +2,16 @@ import { Hono } from "hono";
 import { googleAuth } from "@hono/oauth-providers/google";
 import { sign, jwt } from "hono/jwt";
 import { prisma } from "../db/clients.js";
+import { env } from "../env.js";
 
-const JWT_SECRET = process.env.JWT_SECRET;
-if (!JWT_SECRET) {
-  throw new Error("JWT_SECRET is not defined in environment variables");
-}
-export const middleware_auth = jwt({ secret: JWT_SECRET });
+export const middleware_auth = jwt({ secret: env.JWT_SECRET });
 
 const auth = new Hono();
 const hr = 1;
 
 if (process.env.NODE_ENV !== "production") {
   auth.get("/test-login", async (c) => {
-    const JWT_SECRET = process.env.JWT_SECRET || "12345678";
+    const JWT_SECRET = env.JWT_SECRET || "12345678";
     const mockUser = {
       id: "63dea25026f1907da44534a7",
       email: "6438097921@student.chula.ac.th",
@@ -38,12 +35,12 @@ if (process.env.NODE_ENV !== "production") {
 auth.get(
   "/login",
   googleAuth({
-    client_id: process.env.GOOGLE_CLIENT_ID || "", // from Google Cloud Console
-    client_secret: process.env.GOOGLE_CLIENT_SECRET || "", // from Google Cloud Console
+    client_id: env.GOOGLE_CLIENT_ID || "", // from Google Cloud Console
+    client_secret: env.GOOGLE_CLIENT_SECRET || "", // from Google Cloud Console
     scope: ["openid", "email", "profile"],
   }),
   async (c) => {
-    const JWT_SECRET = process.env.JWT_SECRET;
+    const JWT_SECRET = env.JWT_SECRET;
     if (!JWT_SECRET) {
       throw new Error("JWT_SECRET is not defined in environment variables");
     }
@@ -52,20 +49,17 @@ auth.get(
 
     if (!googleUser) return c.json({ error: "Auth Failed" }, 401);
 
-    let user = await prisma.user.findUnique({
+    const user = await prisma.user.upsert({
       where: { email: googleUser.email },
+      update: {
+        name: googleUser.name!, // update new name
+      },
+      create: {
+        email: googleUser.email!,
+        name: googleUser.name!,
+        googleId: googleUser.id!,
+      },
     });
-
-    if (!user) {
-      user = await prisma.user.create({
-        data: {
-          email: googleUser.email!,
-          name: googleUser.name!,
-          googleId: googleUser.id!,
-        },
-      });
-      console.log("New account created for:", googleUser.email);
-    }
 
     const payload = {
       id: user.id,

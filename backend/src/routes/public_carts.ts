@@ -4,6 +4,7 @@ import { Visible } from "../generated/prisma/enums.js";
 import { middleware_auth } from "./auth.js";
 import { zValidator } from "@hono/zod-validator";
 import { ImportTimetableBodySchema } from "../zod_schemas/public_carts.schema.js";
+import { Effect, Console } from "effect";
 
 const public_carts = new Hono();
 
@@ -12,39 +13,43 @@ const public_carts = new Hono();
 public_carts.get("/:cartId", async (c) => {
   const cartId = c.req.param("cartId");
 
-  try {
-    const cart = await prisma.cart.findUnique({
-      where: { id: cartId },
-      include: {
-        items: {
+  const program = Effect.gen(function* () {
+    const cart = yield* Effect.tryPromise({
+      try: () =>
+        prisma.cart.findUnique({
+          where: { id: cartId },
           include: {
-            courseN: {
+            items: {
               include: {
-                courses: {
+                courseN: {
                   include: {
-                    sections: {
-                      include: { classes: true },
+                    courses: {
+                      include: {
+                        sections: {
+                          include: { classes: true },
+                        },
+                      },
                     },
                   },
                 },
               },
             },
           },
-        },
-      },
+        }),
+      catch: (error) => error as Error,
     });
 
-    if (!cart || cart.visible == Visible.PRIVATE)
-      return c.json({ error: "PUBLIC_CART_NOT_FOUND_OR_PRIVATE" }, 404);
+    if (!cart || cart.visible === "PRIVATE") {
+      return yield* Effect.fail(new Error("PUBLIC_CART_NOT_FOUND_OR_PRIVATE"));
+    }
 
     const itemsResponse: any[] = [];
     const classesSchedule: any[] = [];
     const examsSchedule: any[] = [];
-
     let totalCredits = 0;
 
     cart.items.forEach((item) => {
-      const info = item.courseN; // CourseInfo Object of this item
+      const info = item.courseN;
       const creditValue = Number(info.credit);
 
       const courseData = info.courses.find(
@@ -53,7 +58,7 @@ public_carts.get("/:cartId", async (c) => {
           course.academicYear === cart.academicYear &&
           course.semester === cart.semester &&
           course.studyProgram === cart.studyProgram
-      ); // Course Object of this item
+      );
 
       const sectionData = courseData?.sections.find(
         // courseData.sections is Array of Section
@@ -98,7 +103,7 @@ public_carts.get("/:cartId", async (c) => {
           periodEnd: cls.periodEnd,
           building: cls.building,
           room: cls.room,
-          professors: cls.professors.split(","),
+          professors: cls.professors,
         });
       });
 
@@ -123,8 +128,7 @@ public_carts.get("/:cartId", async (c) => {
       }
     });
 
-    // Find class conflict -> Please review this logic
-    // Now O(n^2) improve later
+    // Conflict Detection Logic (O(n^2))
     const classConflicts: any[] = [];
     const timeToMin = (t: string) => {
       const [h, m] = t.split(":").map(Number);
@@ -192,8 +196,8 @@ public_carts.get("/:cartId", async (c) => {
           totalCredits: totalCredits.toFixed(1),
         },
         conflicts: {
-          classConflicts: classConflicts,
-          examConflicts: examConflicts,
+          classConflicts,
+          examConflicts,
         },
         schedule: {
           classes: classesSchedule,
@@ -201,10 +205,19 @@ public_carts.get("/:cartId", async (c) => {
         },
       },
     });
-  } catch (error) {
-    console.error(error);
-    return c.json({ error: "INTERNAL_SERVER_ERROR" }, 500);
-  }
+  }).pipe(
+    Effect.catchAll((err) =>
+      Effect.gen(function* () {
+        yield* Console.error("Fetch Carts Error:", err);
+        if (err.message === "PUBLIC_CART_NOT_FOUND_OR_PRIVATE") {
+          return c.json({ error: "PUBLIC_CART_NOT_FOUND_OR_PRIVATE" }, 404);
+        }
+        return c.json({ error: "INTERNAL_SERVER_ERROR" }, 500);
+      })
+    )
+  );
+
+  return await Effect.runPromise(program);
 });
 
 // 4.2. Import timetable from public link
@@ -217,60 +230,88 @@ public_carts.post(
     const userId = payload.id;
     const cartId = c.req.param("cartId");
 
-    try {
-      const sourceCart = await prisma.cart.findUnique({
-        where: { id: cartId },
-        include: { items: true },
+    const program = Effect.gen(function* () {
+      const sourceCart = yield* Effect.tryPromise({
+        try: () =>
+          prisma.cart.findUnique({
+            where: { id: cartId },
+            include: { items: true },
+          }),
+        catch: (err) => err as Error,
       });
 
       if (!sourceCart || sourceCart.visible !== Visible.PUBLIC) {
-        return c.json({ error: "PUBLIC_CART_NOT_FOUND_OR_PRIVATE" }, 404);
+        return yield* Effect.fail(
+          new Error("PUBLIC_CART_NOT_FOUND_OR_PRIVATE")
+        );
       }
 
       // Find next cartOrder
-      const lastCart = await prisma.cart.findFirst({
-        where: { userId: userId },
-        orderBy: { cartOrder: "desc" },
+      const lastCart = yield* Effect.tryPromise({
+        try: () =>
+          prisma.cart.findFirst({
+            where: { userId: userId },
+            orderBy: { cartOrder: "desc" },
+          }),
+        catch: (err) => err as Error,
       });
       const nextOrder = (lastCart?.cartOrder ?? -1) + 1;
 
       // For Timetable Name
-      const body = await c.req.json().catch(() => ({}));
+      const rawBody = yield* Effect.tryPromise({
+        try: () => c.req.json().catch(() => ({})),
+        catch: (err) => err as Error,
+      });
+      const body = ImportTimetableBodySchema.parse(rawBody);
 
-      const newCart = await prisma.$transaction(async (tx) => {
-        return await tx.cart.create({
-          data: {
-            userId: userId,
-            name: body.name || "Copy Timetable",
-            studyProgram: sourceCart.studyProgram,
-            academicYear: sourceCart.academicYear,
-            semester: sourceCart.semester,
-            visible: Visible.PRIVATE,
-            isDefault: false,
-            cartOrder: nextOrder,
-            items: {
-              create: sourceCart.items.map((item) => ({
-                courseNo: item.courseNo,
-                sectionNo: item.sectionNo,
-                color: item.color,
-                hidden: item.hidden,
-                cartOrder: item.cartOrder,
-                isGraded: false,
-                expectedGrade: 0,
-              })),
-            },
-          },
-          include: {
-            items: true,
-          },
-        });
+      const newCart = yield* Effect.tryPromise({
+        try: () =>
+          prisma.$transaction(async (tx) => {
+            return await tx.cart.create({
+              data: {
+                userId: userId,
+                name: body.name || "Copy Timetable",
+                studyProgram: sourceCart.studyProgram,
+                academicYear: sourceCart.academicYear,
+                semester: sourceCart.semester,
+                visible: Visible.PRIVATE,
+                isDefault: false,
+                cartOrder: nextOrder,
+                items: {
+                  create: sourceCart.items.map((item) => ({
+                    courseNo: item.courseNo,
+                    sectionNo: item.sectionNo,
+                    color: item.color,
+                    hidden: item.hidden,
+                    cartOrder: item.cartOrder,
+                    isGraded: false,
+                    expectedGrade: 0,
+                  })),
+                },
+              },
+              include: {
+                items: true,
+              },
+            });
+          }),
+        catch: (err) => err as Error,
       });
 
       return c.json({ data: { cart: newCart } }, 201);
-    } catch (error) {
-      console.error("Import Error:", error);
-      return c.json({ error: "INTERNAL_SERVER_ERROR" }, 500);
-    }
+    }).pipe(
+      Effect.catchAll((err) =>
+        Effect.gen(function* () {
+          yield* Console.error("Import Error:", err);
+          if (err.message === "PUBLIC_CART_NOT_FOUND_OR_PRIVATE") {
+            return c.json({ error: "PUBLIC_CART_NOT_FOUND_OR_PRIVATE" }, 404);
+          }
+
+          return c.json({ error: "INTERNAL_SERVER_ERROR" }, 500);
+        })
+      )
+    );
+
+    return await Effect.runPromise(program);
   }
 );
 

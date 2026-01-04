@@ -6,7 +6,7 @@ import {
   mapVisible,
 } from "../utils/enumMapper.js";
 
-export const listCartsQuerySchema = z
+export const ListCartsQuerySchema = z
   .object({
     academicYear: z.number().int().min(2564).optional(),
     semester: z
@@ -20,7 +20,9 @@ export const listCartsQuerySchema = z
   })
   .strict();
 
-export const createCartBodySchema = z
+export type ListCartsQuerySchema = z.output<typeof ListCartsQuerySchema>;
+
+export const CreateCartBodySchema = z
   .object({
     academicYear: z.number().int().min(2564),
     semester: z.enum(semester).transform((v) => mapSemester(v)),
@@ -30,7 +32,9 @@ export const createCartBodySchema = z
   })
   .strict();
 
-export const updateCartBodySchema = z
+export type CreateCartBodySchema = z.output<typeof CreateCartBodySchema>;
+
+export const UpdateCartBodySchema = z
   .object({
     name: z.string().nonempty().optional(),
     visible: z
@@ -42,7 +46,9 @@ export const updateCartBodySchema = z
   })
   .strict();
 
-export const addCourseBodySchema = z
+export type UpdateCartBodySchema = z.output<typeof UpdateCartBodySchema>;
+
+export const AddCourseBodySchema = z
   .object({
     courseNo: z
       .string()
@@ -64,7 +70,9 @@ export const addCourseBodySchema = z
   })
   .strict();
 
-export const updateCourseBodySchema = z
+export type AddCourseBodySchema = z.output<typeof AddCourseBodySchema>;
+
+export const UpdateCourseBodySchema = z
   .object({
     sectionNo: z.number().int().optional(),
     color: z.string().optional(),
@@ -81,3 +89,5 @@ export const updateCourseBodySchema = z
     cartOrder: z.number().int().optional(),
   })
   .strict();
+
+export type UpdateCourseBodySchema = z.output<typeof UpdateCourseBodySchema>;

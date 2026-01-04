@@ -5,3 +5,7 @@ export const ImportTimetableBodySchema = z
     name: z.string().nonempty().optional(),
   })
   .strict();
+
+export type ImportTimetableBodySchema = z.output<
+  typeof ImportTimetableBodySchema
+>;

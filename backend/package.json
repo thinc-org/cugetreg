@@ -19,6 +19,8 @@
     "@effect/schema": "^0.75.5",
     "@hono/node-server": "^1.19.6",
     "@hono/oauth-providers": "^0.8.5",
+    "@hono/swagger-ui": "^0.5.3",
+    "@hono/zod-openapi": "^1.2.0",
     "@hono/zod-validator": "^0.7.6",
     "@prisma/adapter-pg": "^7.1.0",
     "@prisma/client": "^7.2.0",

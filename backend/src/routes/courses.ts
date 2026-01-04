@@ -1,9 +1,9 @@
-import { Hono } from "hono";
 import { zValidator } from "@hono/zod-validator";
 import { prisma } from "../db/clients.js";
 import { getCourseQuerySchema } from "../zod_schemas/courses.schema.js";
+import { OpenAPIHono } from "@hono/zod-openapi";
 
-const courses = new Hono();
+const courses = new OpenAPIHono();
 
 courses.get("/", zValidator("param", getCourseQuerySchema), async (c) => {
   const courses = await prisma.user.findMany();

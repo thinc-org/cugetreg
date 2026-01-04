@@ -1,12 +1,12 @@
-import { Hono } from "hono";
 import { googleAuth } from "@hono/oauth-providers/google";
 import { sign, jwt } from "hono/jwt";
 import { prisma } from "../db/clients.js";
 import { env } from "../env.js";
+import { OpenAPIHono } from "@hono/zod-openapi";
 
 export const middleware_auth = jwt({ secret: env.JWT_SECRET });
 
-const auth = new Hono();
+const auth = new OpenAPIHono();
 const hr = 1;
 
 if (process.env.NODE_ENV !== "production") {

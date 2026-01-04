@@ -1,4 +1,3 @@
-import { Hono } from "hono";
 import { prisma } from "../db/clients.js";
 import { zValidator } from "@hono/zod-validator";
 import {
@@ -9,13 +8,24 @@ import {
   UpdateCourseBodySchema,
 } from "../zod_schemas/carts.schema.js";
 import { Effect, Console } from "effect";
+import { OpenAPIHono } from "@hono/zod-openapi";
+import {
+  addCourseRoute,
+  createCartRoute,
+  deleteCartRoute,
+  deleteCourseRoute,
+  getCartDetailRoute,
+  listCartsRoute,
+  updateCartRoute,
+  updateCourseRoute,
+} from "../routes_define/carts.routes.js";
 
-const carts = new Hono()
+const carts = new OpenAPIHono()
 
   // Manage Timetable
 
   // 3.1. List timetables for current user
-  .get("/", zValidator("query", ListCartsQuerySchema), async (c) => {
+  .openapi(listCartsRoute, async (c) => {
     const payload = c.get("jwtPayload");
     const userId = payload.id;
     const { academicYear, semester, studyProgram } = c.req.valid("query");
@@ -32,7 +42,7 @@ const carts = new Hono()
           }),
         catch: (error) => new Error(`Prisma Error: ${error}`),
       });
-      return c.json({ data: userCarts });
+      return c.json({ data: userCarts }, 200);
     }).pipe(
       Effect.catchAll((err) => {
         return Effect.gen(function* () {
@@ -45,7 +55,7 @@ const carts = new Hono()
   })
 
   // 3.2. Create new timetable (cart)
-  .post("/", zValidator("json", CreateCartBodySchema), async (c) => {
+  .openapi(createCartRoute, async (c) => {
     const payload = c.get("jwtPayload");
     const userId = payload.id;
     const validatedData = c.req.valid("json");
@@ -104,7 +114,7 @@ const carts = new Hono()
   })
 
   // 3.3. Edit timetable (cart) (Rename, Set default, share/stop share, Ordering)
-  .patch("/:cartId", zValidator("json", UpdateCartBodySchema), async (c) => {
+  .openapi(updateCartRoute, async (c) => {
     const payload = c.get("jwtPayload");
     const userId = payload.id;
     const cartId = c.req.param("cartId");
@@ -213,7 +223,7 @@ const carts = new Hono()
   })
 
   // 3.4. Delete timetable (cart)
-  .delete("/:cartId", async (c) => {
+  .openapi(deleteCartRoute, async (c) => {
     const userId = c.get("jwtPayload").id;
     const cartId = c.req.param("cartId");
 
@@ -288,7 +298,7 @@ const carts = new Hono()
   })
 
   // 3.5. Get timetable details (courses, credits, ect.)
-  .get("/:cartId", async (c) => {
+  .openapi(getCartDetailRoute, async (c) => {
     const userId = c.get("jwtPayload").id;
     const cartId = c.req.param("cartId");
 
@@ -476,38 +486,43 @@ const carts = new Hono()
         }
       }
 
-      return c.json({
-        data: {
-          cart: {
-            id: cart.id,
-            name: cart.name,
-            studyProgram: cart.studyProgram,
-            academicYear: cart.academicYear,
-            semester: cart.semester,
-            visible: cart.visible === "PUBLIC" ? "PUB" : "PRIV",
-            isDefault: cart.isDefault,
-            cartOrder: cart.cartOrder,
-            items: itemsResponse,
-          },
-          summary: {
-            totalCredits: totalCredits.toFixed(1),
-            totalVisibleCredits: totalVisibleCredits.toFixed(1),
-            totalGradedCredits: totalGradedCredits.toFixed(1),
-            expectedGPA:
-              totalGradedCredits > 0
-                ? Number((totalPoints / totalGradedCredits).toFixed(2))
-                : 0,
-          },
-          conflicts: {
-            classConflicts,
-            examConflicts,
-          },
-          schedule: {
-            classes: classesSchedule,
-            exams: examsSchedule,
+      return c.json(
+        {
+          data: {
+            cart: {
+              id: cart.id,
+              name: cart.name,
+              studyProgram: cart.studyProgram,
+              academicYear: cart.academicYear,
+              semester: cart.semester,
+              visible: (cart.visible === "PUBLIC" ? "PUB" : "PVT") as
+                | "PUB"
+                | "PVT",
+              isDefault: cart.isDefault,
+              cartOrder: cart.cartOrder,
+              items: itemsResponse,
+            },
+            summary: {
+              totalCredits: totalCredits.toFixed(1),
+              totalVisibleCredits: totalVisibleCredits.toFixed(1),
+              totalGradedCredits: totalGradedCredits.toFixed(1),
+              expectedGPA:
+                totalGradedCredits > 0
+                  ? Number((totalPoints / totalGradedCredits).toFixed(2))
+                  : 0,
+            },
+            conflicts: {
+              classConflicts,
+              examConflicts,
+            },
+            schedule: {
+              classes: classesSchedule,
+              exams: examsSchedule,
+            },
           },
         },
-      });
+        200
+      );
     }).pipe(
       Effect.catchAll((err) =>
         Effect.gen(function* () {
@@ -527,96 +542,92 @@ const carts = new Hono()
   // Manange Course in Timetable
 
   // 3.6. Add course to timetable
-  .post(
-    "/:cartId/items",
-    zValidator("json", AddCourseBodySchema),
-    async (c) => {
-      const userId = c.get("jwtPayload").id;
-      const validatedData = c.req.valid("json");
-      const cartId = c.req.param("cartId");
+  .openapi(addCourseRoute, async (c) => {
+    const userId = c.get("jwtPayload").id;
+    const validatedData = c.req.valid("json");
+    const cartId = c.req.param("cartId");
 
-      const program = Effect.gen(function* () {
-        const newItem = yield* Effect.tryPromise({
-          try: () =>
-            prisma.$transaction(async (tx) => {
-              // Get cart
-              const cart = await tx.cart.findUnique({ where: { id: cartId } });
-              if (!cart) throw new Error("CART_NOT_FOUND");
-              if (cart.userId !== userId) throw new Error("NOT_CART_OWNER");
+    const program = Effect.gen(function* () {
+      const newItem = yield* Effect.tryPromise({
+        try: () =>
+          prisma.$transaction(async (tx) => {
+            // Get cart
+            const cart = await tx.cart.findUnique({ where: { id: cartId } });
+            if (!cart) throw new Error("CART_NOT_FOUND");
+            if (cart.userId !== userId) throw new Error("NOT_CART_OWNER");
 
-              // Get Course
-              const courseInfo = await tx.courseInfo.findUnique({
-                where: { courseNo: validatedData.courseNo },
-              });
-              if (!courseInfo) throw new Error("COURSE_NOT_FOUND");
-              console.log(courseInfo);
+            // Get Course
+            const courseInfo = await tx.courseInfo.findUnique({
+              where: { courseNo: validatedData.courseNo },
+            });
+            if (!courseInfo) throw new Error("COURSE_NOT_FOUND");
+            console.log(courseInfo);
 
-              // Get Section
-              const section = await tx.section.findFirst({
-                where: {
-                  sectionNo: validatedData.sectionNo,
-                  course: {
-                    courseNo: validatedData.courseNo,
-                    semester: cart.semester,
-                    academicYear: cart.academicYear,
-                    studyProgram: cart.studyProgram,
-                  },
-                },
-              });
-              if (!section) throw new Error("SECTION_NOT_FOUND");
-
-              // Find nextCardItemOrder
-              const aggregation = await tx.cartItem.aggregate({
-                where: { cartId },
-                _max: { cartOrder: true },
-              });
-              const nextOrder = (aggregation._max.cartOrder ?? -1) + 1;
-
-              // Add new cartItem
-              return await tx.cartItem.create({
-                data: {
-                  cartId: cartId,
+            // Get Section
+            const section = await tx.section.findFirst({
+              where: {
+                sectionNo: validatedData.sectionNo,
+                course: {
                   courseNo: validatedData.courseNo,
-                  sectionNo: validatedData.sectionNo,
-                  color: validatedData.color || "primary",
-                  isGraded: validatedData.isGraded,
-                  expectedGrade: validatedData.expectedGrade,
-                  hidden: validatedData.hidden,
-                  cartOrder: nextOrder,
+                  semester: cart.semester,
+                  academicYear: cart.academicYear,
+                  studyProgram: cart.studyProgram,
                 },
-              });
-            }),
-          catch: (err) => err as Error,
-        });
+              },
+            });
+            if (!section) throw new Error("SECTION_NOT_FOUND");
 
-        return c.json({ data: newItem }, 201);
-      }).pipe(
-        Effect.catchAll((err) =>
-          Effect.gen(function* () {
-            yield* Console.error(err);
+            // Find nextCardItemOrder
+            const aggregation = await tx.cartItem.aggregate({
+              where: { cartId },
+              _max: { cartOrder: true },
+            });
+            const nextOrder = (aggregation._max.cartOrder ?? -1) + 1;
 
-            const errorMap: Record<string, number> = {
-              CART_NOT_FOUND: 404,
-              NOT_CART_OWNER: 403,
-              COURSE_NOT_FOUND: 404,
-              SECTION_NOT_FOUND: 404,
-            };
+            // Add new cartItem
+            return await tx.cartItem.create({
+              data: {
+                cartId: cartId,
+                courseNo: validatedData.courseNo,
+                sectionNo: validatedData.sectionNo,
+                color: validatedData.color || "primary",
+                isGraded: validatedData.isGraded,
+                expectedGrade: validatedData.expectedGrade,
+                hidden: validatedData.hidden,
+                cartOrder: nextOrder,
+              },
+            });
+          }),
+        catch: (err) => err as Error,
+      });
 
-            const status = errorMap[err.message] || 500;
-            return c.json(
-              { error: err.message || "INTERNAL_SERVER_ERROR" },
-              status as any
-            );
-          })
-        )
-      );
+      return c.json({ data: newItem }, 201);
+    }).pipe(
+      Effect.catchAll((err) =>
+        Effect.gen(function* () {
+          yield* Console.error(err);
 
-      return await Effect.runPromise(program);
-    }
-  )
+          const errorMap: Record<string, number> = {
+            CART_NOT_FOUND: 404,
+            NOT_CART_OWNER: 403,
+            COURSE_NOT_FOUND: 404,
+            SECTION_NOT_FOUND: 404,
+          };
+
+          const status = errorMap[err.message] || 500;
+          return c.json(
+            { error: err.message || "INTERNAL_SERVER_ERROR" },
+            status as any
+          );
+        })
+      )
+    );
+
+    return await Effect.runPromise(program);
+  })
 
   // 3.7. Update/edit course in timetable
-  .patch("/:itemId", zValidator("json", UpdateCourseBodySchema), async (c) => {
+  .openapi(updateCourseRoute, async (c) => {
     const userId = c.get("jwtPayload").id;
     const itemId = c.req.param("itemId");
     const updatedData = c.req.valid("json");
@@ -720,7 +731,7 @@ const carts = new Hono()
   })
 
   // 3.8. Remove course from timetable
-  .delete(":cartId/items/:itemId", async (c) => {
+  .openapi(deleteCourseRoute, async (c) => {
     const payload = c.get("jwtPayload");
     const userId = payload.id;
     const itemId = c.req.param("itemId");

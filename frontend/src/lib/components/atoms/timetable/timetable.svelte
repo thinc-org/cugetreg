@@ -1,52 +1,29 @@
 <script lang="ts">
     import { type TimeTableContext } from "./index";
-    import type { Day } from "../day-chip";
     import { setContext, type Snippet } from "svelte";
 
     import { cn } from "../../../../utils";
     import type { ClassValue } from "clsx";
 
-    const DAYS5: NonNullable<Day>[] = ["MO", "TU", "WE", "TH", "FR"];
-    const DAYS7: NonNullable<Day>[] = [
-        "MO",
-        "TU",
-        "WE",
-        "TH",
-        "FR",
-        "SA",
-        "SU",
-    ];
-
-    const days: Record<NonNullable<Day>, string> = {
-        MO: "MON",
-        TU: "TUE",
-        WE: "WED",
-        TH: "THU",
-        FR: "FRI",
-        SA: "SAT",
-        SU: "SUN",
-    };
+    const DAYS5 = ["MON", "TUE", "WED", "THU", "FRI"];
 
     interface TimeTableProp {
         periodPerDay?: number;
-        includeSatSun?: boolean;
         startTime: number;
         class?: ClassValue;
+        days?: string[];
         children?: Snippet;
-        [key: string]: unknown;
     }
 
     const {
         periodPerDay = 12,
-        includeSatSun = false,
         startTime = 6,
         class: className = undefined,
+        days = DAYS5,
         children,
-        ...rest
     }: TimeTableProp = $props();
 
-    const amountOfDays = $derived(includeSatSun ? 7 : 5);
-    const DAYS = $derived(includeSatSun ? DAYS7 : DAYS5);
+    const amountOfDays = $derived(days.length);
 
     setContext<TimeTableContext>("timetable-context", {
         get periodPerDay() {
@@ -93,10 +70,10 @@
         class="grid divide-y divide-neutral-200"
         style="grid-row: span {amountOfDays} / span {amountOfDays}"
     >
-        {#each DAYS as day}
+        {#each days as day}
             <div class="cell bg-indigo-50! aspect-square @container-[size]">
-                <span class="text-[25cqh]">
-                    {days[day]}
+                <span class="text">
+                    {day}
                 </span>
             </div>
         {/each}

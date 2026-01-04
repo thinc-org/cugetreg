@@ -11,9 +11,10 @@
             periodPerDay: {
                 defaultValue: 12,
             },
-            schedule: {
-                control: false,
-            },
+            days: {
+                controls: false,
+                defaultValue: ["MON", "TUE", "WED", "THU", "FRI"],
+            }
         },
     });
 
@@ -43,6 +44,13 @@
 </script>
 
 <Story name="Default" />
+
+<Story name="Custom Days" args={{ days: [
+'3 ธ.ค 67',
+'4 ธ.ค 67',
+'5 ธ.ค 67',
+'7 ธ.ค 67',
+]}}/>
 
 <Story name="Populated">
     <TimetableCourseCard

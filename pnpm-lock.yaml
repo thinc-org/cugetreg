@@ -46,9 +46,6 @@ importers:
       decimal:
         specifier: ^0.0.2
         version: 0.0.2
-      decimal.js:
-        specifier: ^10.6.0
-        version: 10.6.0
       dotenv:
         specifier: ^17.2.3
         version: 17.2.3
@@ -1459,9 +1456,6 @@ packages:
     peerDependenciesMeta:
       supports-color:
         optional: true
-
-  decimal.js@10.6.0:
-    resolution: {integrity: sha512-YpgQiITW3JXGntzdUmyUR1V812Hn8T1YVXhCu+wO3OpS4eU9l4YdD3qjyiKdV6mvV29zapkMeD390UVEf2lkUg==}
 
   decimal@0.0.2:
     resolution: {integrity: sha512-puX1+D5GlpXYH0kDejnu8F2jsGLKRePc7eOznNjqMbA2otl7AzvubrvvZVmOvRCHhsqeAPKNcAxHHbevsH/1qg==}
@@ -4063,8 +4057,6 @@ snapshots:
   debug@4.4.3:
     dependencies:
       ms: 2.1.3
-
-  decimal.js@10.6.0: {}
 
   decimal@0.0.2: {}
 

@@ -1,7 +1,7 @@
 import { serve } from "@hono/node-server";
 import dotenv from "dotenv";
 import { OpenAPIHono } from "@hono/zod-openapi";
-import public_carts from "./routes/public_carts.js";
+import publicCarts from "./routes/publicCarts.js";
 import admin from "./routes/admin.js";
 import courses from "./routes/courses.js";
 import carts from "./routes/carts.js";
@@ -21,7 +21,7 @@ app.openAPIRegistry.registerComponent("securitySchemes", "Bearer", {
 });
 
 // Without JWT Auth
-app.route("/public/carts", public_carts);
+app.route("/public/carts", publicCarts);
 app.route("/auth", auth);
 
 // Middleware List

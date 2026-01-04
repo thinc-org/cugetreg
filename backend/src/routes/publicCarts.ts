@@ -1,18 +1,26 @@
 import { prisma } from "../db/clients.js";
 import { Visible } from "../generated/prisma/enums.js";
 import { middlewareAuth } from "./auth.js";
-import { ImportTimetableBodySchema } from "../zod_schemas/public_carts.schema.js";
+import { ImportTimetableBodySchema } from "../zod_schemas/publicCcarts.schema.js";
 import { Effect, Console } from "effect";
 import { OpenAPIHono } from "@hono/zod-openapi";
 import {
   getPublicCartDetailRoute,
   importPublicCartRoute,
 } from "../routes_define/public_carts.routes.js";
+import type {
+  ClassConflict,
+  ClassScheduleItem,
+  ExamConflict,
+  ExamScheduleItem,
+} from "../zod_schemas/carts.response.schema.js";
+import type { PublicCartItemDetail } from "../zod_schemas/publicCarts.response.schema.js";
+import dayjs from "dayjs";
 
-const public_carts = new OpenAPIHono();
-public_carts.use("/:cartId/import", middlewareAuth);
+const publicCarts = new OpenAPIHono();
+publicCarts.use("/:cartId/import", middlewareAuth);
 
-public_carts
+publicCarts
   // 4.1. Public view of timetable (from share with link)
   // Similar to 3.5
   .openapi(getPublicCartDetailRoute, async (c) => {
@@ -50,9 +58,9 @@ public_carts
         );
       }
 
-      const itemsResponse: any[] = [];
-      const classesSchedule: any[] = [];
-      const examsSchedule: any[] = [];
+      const itemsResponse: PublicCartItemDetail[] = [];
+      const classesSchedule: ClassScheduleItem[] = [];
+      const examsSchedule: ExamScheduleItem[] = [];
       let totalCredits = 0;
 
       cart.items.forEach((item) => {
@@ -115,16 +123,16 @@ public_carts
         });
 
         // Format Exams Schedule (Midterm/Final)
-        if (courseData?.midtermStart) {
+        if (courseData?.midtermStart && courseData.midtermEnd) {
           examsSchedule.push({
             cartItemId: item.id,
             courseNo: item.courseNo,
             type: "MIDTERM",
             start: courseData.midtermStart.toISOString(),
-            end: courseData.midtermEnd?.toISOString(),
+            end: courseData.midtermEnd.toISOString(),
           });
         }
-        if (courseData?.finalStart) {
+        if (courseData?.finalStart && courseData.finalEnd) {
           examsSchedule.push({
             cartItemId: item.id,
             courseNo: item.courseNo,
@@ -136,22 +144,19 @@ public_carts
       });
 
       // Conflict Detection Logic (O(n^2))
-      const classConflicts: any[] = [];
-      const timeToMin = (t: string) => {
-        const [h, m] = t.split(":").map(Number);
-        return h * 60 + m;
-      };
-
+      const classConflicts: ClassConflict[] = [];
       for (let i = 0; i < classesSchedule.length; i++) {
         for (let j = i + 1; j < classesSchedule.length; j++) {
           const a = classesSchedule[i];
           const b = classesSchedule[j];
+
           if (a.dayOfWeek === b.dayOfWeek) {
-            const startA = timeToMin(a.periodStart);
-            const endA = timeToMin(a.periodEnd);
-            const startB = timeToMin(b.periodStart);
-            const endB = timeToMin(b.periodEnd);
-            if (startA < endB && startB < endA) {
+            const startA = dayjs(`2000-01-01T${a.periodStart}`);
+            const endA = dayjs(`2000-01-01T${a.periodEnd}`);
+            const startB = dayjs(`2000-01-01T${b.periodStart}`);
+            const endB = dayjs(`2000-01-01T${b.periodEnd}`);
+
+            if (startA.isBefore(endB) && startB.isBefore(endA)) {
               classConflicts.push({
                 type: "TIME_OVERLAP",
                 itemIds: [a.cartItemId, b.cartItemId],
@@ -166,24 +171,23 @@ public_carts
 
       // Find Exam Conflicts -> Please review this logic
       // Now O(n^2) improve later
-      const examConflicts: any[] = [];
+      const examConflicts: ExamConflict[] = [];
       for (let i = 0; i < examsSchedule.length; i++) {
         for (let j = i + 1; j < examsSchedule.length; j++) {
           const examA = examsSchedule[i];
           const examB = examsSchedule[j];
 
-          // Garuntee if startA exist then endA exist
-          const startA = new Date(examA.start).getTime();
-          const endA = new Date(examA.end).getTime();
-          const startB = new Date(examB.start).getTime();
-          const endB = new Date(examB.end).getTime();
+          const startA = dayjs(examA.start);
+          const endA = dayjs(examA.end);
+          const startB = dayjs(examB.start);
+          const endB = dayjs(examB.end);
 
-          if (startA < endB && startB < endA) {
+          if (startA.isBefore(endB) && startB.isBefore(endA)) {
             examConflicts.push({
               type: "EXAM_OVERLAP",
               itemIds: [examA.cartItemId, examB.cartItemId],
-              start: startA > startB ? examA.start : examB.start,
-              end: endA < endB ? examA.end : examB.end,
+              start: startA.isAfter(startB) ? examA.start : examB.start,
+              end: endA.isBefore(endB) ? examA.end : examB.end,
             });
           }
         }
@@ -320,4 +324,4 @@ public_carts
     return await Effect.runPromise(program);
   });
 
-export default public_carts;
+export default publicCarts;

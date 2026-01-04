@@ -4,7 +4,7 @@ import { errorRes, InternalError } from "./carts.routes.js";
 import {
   ImportPublicCartResponseSchema,
   PublicCartDetailResponseSchema,
-} from "../zod_schemas/public_carts.response.schema.js";
+} from "../zod_schemas/publicCarts.response.schema.js";
 
 export const getPublicCartDetailRoute = createRoute({
   method: "get",

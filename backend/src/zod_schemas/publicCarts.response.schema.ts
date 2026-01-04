@@ -1,4 +1,10 @@
 import { z } from "@hono/zod-openapi";
+import {
+  ClassConflictSchema,
+  ClassScheduleItemSchema,
+  ExamConflictSchema,
+  ExamScheduleItemSchema,
+} from "./carts.response.schema.js";
 
 const PublicCartItemDetailSchema = z.object({
   id: z.string(),
@@ -7,8 +13,6 @@ const PublicCartItemDetailSchema = z.object({
   color: z.string().nullable(),
   hidden: z.boolean(),
   cartOrder: z.number(),
-  isGraded: z.boolean(),
-  expectedGrade: z.string(),
   course: z.object({
     courseNameTh: z.string(),
     courseNameEn: z.string(),
@@ -38,12 +42,12 @@ export const PublicCartDetailResponseSchema = z.object({
       totalCredits: z.string(),
     }),
     conflicts: z.object({
-      classConflicts: z.array(z.any()),
-      examConflicts: z.array(z.any()),
+      classConflicts: z.array(ClassConflictSchema),
+      examConflicts: z.array(ExamConflictSchema),
     }),
     schedule: z.object({
-      classes: z.array(z.any()),
-      exams: z.array(z.any()),
+      classes: z.array(ClassScheduleItemSchema),
+      exams: z.array(ExamScheduleItemSchema),
     }),
   }),
 });
@@ -69,3 +73,29 @@ export const ImportPublicCartResponseSchema = z.object({
     }),
   }),
 });
+
+const CartItemDetailSchema = z.object({
+  id: z.string(),
+  courseNo: z.string(),
+  sectionNo: z.number(),
+  color: z.string().nullable(),
+  hidden: z.boolean(),
+  cartOrder: z.number(),
+  isGraded: z.boolean(),
+  expectedGrade: z.string(),
+  course: z.object({
+    courseNameTh: z.string(),
+    courseNameEn: z.string(),
+    credit: z.string(),
+  }),
+  section: z
+    .object({
+      closed: z.boolean(),
+      regis: z.number(),
+      max: z.number(),
+      note: z.string().nullable(),
+    })
+    .nullable(),
+});
+
+export type PublicCartItemDetail = z.infer<typeof PublicCartItemDetailSchema>;

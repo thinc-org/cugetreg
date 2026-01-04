@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { createRawSnippet, Snippet } from "svelte"
+    import type { Snippet } from "svelte"
     import { cn } from "../../../../utils";
 
     function handleClick(e: MouseEvent) {

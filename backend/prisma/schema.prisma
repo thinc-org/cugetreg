@@ -9,6 +9,12 @@ generator client {
   output   = "../src/generated/prisma"
 }
 
+generator effectPrisma {
+  provider = "effect-prisma-generator"
+  clientImportPath = "../prisma"
+  output   = "../src/generated/prisma-effect/index.ts" 
+}
+
 datasource db {
   provider = "postgresql"
 }

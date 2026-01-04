@@ -64,6 +64,9 @@ importers:
       redis:
         specifier: ^5.10.0
         version: 5.10.0
+      remeda:
+        specifier: ^2.33.1
+        version: 2.33.1
       zod:
         specifier: ^4.2.1
         version: 4.2.1
@@ -77,6 +80,9 @@ importers:
       '@types/ramda':
         specifier: ^0.31.1
         version: 0.31.1
+      effect-prisma-generator:
+        specifier: ^0.7.1
+        version: 0.7.1
       tsx:
         specifier: ^4.7.1
         version: 4.21.0
@@ -581,8 +587,14 @@ packages:
   '@prisma/debug@7.1.0':
     resolution: {integrity: sha512-pPAckG6etgAsEBusmZiFwM9bldLSNkn++YuC4jCTJACdK5hLOVnOzX7eSL2FgaU6Gomd6wIw21snUX2dYroMZQ==}
 
+  '@prisma/debug@7.2.0':
+    resolution: {integrity: sha512-YSGTiSlBAVJPzX4ONZmMotL+ozJwQjRmZweQNIq/ER0tQJKJynNkRB3kyvt37eOfsbMCXk3gnLF6J9OJ4QWftw==}
+
   '@prisma/dev@0.15.0':
     resolution: {integrity: sha512-KhWaipnFlS/fWEs6I6Oqjcy2S08vKGmxJ5LexqUl/3Ve0EgLUsZwdKF0MvqPM5F5ttw8GtfZarjM5y7VLwv9Ow==}
+
+  '@prisma/dmmf@7.2.0':
+    resolution: {integrity: sha512-w+hAFGH34+Ed+y7AhK3FL6ExwPu5Ym2uyadqlTEn8yyXereHRD8qO9tQfgTIJuUqF0G2JZXBVrNuqvRVVvSZdg==}
 
   '@prisma/driver-adapter-utils@7.1.0':
     resolution: {integrity: sha512-AlVLzeXkw81+47MvQ9M8DvTiHkRfJ8xzklTbYjpskb0cTTDVHboTI/OVwT6Wcep/bNvfLKJYO0nylBiM5rxgww==}
@@ -595,6 +607,12 @@ packages:
 
   '@prisma/fetch-engine@7.1.0':
     resolution: {integrity: sha512-GZYF5Q8kweXWGfn87hTu17kw7x1DgnehgKoE4Zg1BmHYF3y1Uu0QRY/qtSE4veH3g+LW8f9HKqA0tARG66bxxQ==}
+
+  '@prisma/generator-helper@7.2.0':
+    resolution: {integrity: sha512-PTz/2mrLlj6ITgvEeubEe+CoSt5GsyFI+3xqnBS27h2r4fYFA6i1TLKjIq8m82GZERN9J/Awwdjw90hdAQSOHg==}
+
+  '@prisma/generator@7.2.0':
+    resolution: {integrity: sha512-EucIFLF/aGmXB2qrjPhjGnL2E0urFuYg1o1+DzFLecoJzZtpRD+nJQt9ZbxKSU6a7PjX3KROOzAEPb3ItaAATA==}
 
   '@prisma/get-platform@6.8.2':
     resolution: {integrity: sha512-vXSxyUgX3vm1Q70QwzwkjeYfRryIvKno1SXbIqwSptKwqKzskINnDUcx85oX+ys6ooN2ATGSD0xN2UTfg6Zcow==}
@@ -1536,6 +1554,10 @@ packages:
     resolution: {integrity: sha512-JVUnt+DUIzu87TABbhPmNfVdBDt18BLOWjMUFJMSi/Qqg7NTYtabbvSNJGOJ7afbRuv9D/lngizHtP7QyLQ+9w==}
     engines: {node: '>=12'}
 
+  effect-prisma-generator@0.7.1:
+    resolution: {integrity: sha512-SKjGo1929ltpXjpG/Cs/uwAZUkMHgP5Ss/ZOMJul6l6RK9GSlNeMtshVYItOCZYhsH+drk6Mj89aq7tYbjBMGw==}
+    hasBin: true
+
   effect@3.18.4:
     resolution: {integrity: sha512-b1LXQJLe9D11wfnOKAk3PKxuqYshQ0Heez+y5pnkd3jLj1yx9QhM72zZ9uUrOQyNvrs2GZZd/3maL0ZV18YuDA==}
 
@@ -2302,6 +2324,9 @@ packages:
 
   remeda@2.21.3:
     resolution: {integrity: sha512-XXrZdLA10oEOQhLLzEJEiFFSKi21REGAkHdImIb4rt/XXy8ORGXh5HCcpUOsElfPNDb+X6TA/+wkh+p2KffYmg==}
+
+  remeda@2.33.1:
+    resolution: {integrity: sha512-404Eba/HI/blNfbebo586OjEnAhq/x5jN1aIfK4gHnjAP7SADaRfDdIjo8Acpz7hkXgM06MPTwu4IbXamvM9Qw==}
 
   require-from-string@2.0.2:
     resolution: {integrity: sha512-Xf0nWe6RseziFMu+Ap9biiUbmplq6S9/p+7w7YXP/JBHhrUDDUhwa+vANyubuqfZWTveU//DYVGsDG7RKL/vEw==}
@@ -3110,6 +3135,8 @@ snapshots:
 
   '@prisma/debug@7.1.0': {}
 
+  '@prisma/debug@7.2.0': {}
+
   '@prisma/dev@0.15.0(typescript@5.9.3)':
     dependencies:
       '@electric-sql/pglite': 0.3.2
@@ -3132,6 +3159,8 @@ snapshots:
     transitivePeerDependencies:
       - typescript
 
+  '@prisma/dmmf@7.2.0': {}
+
   '@prisma/driver-adapter-utils@7.1.0':
     dependencies:
       '@prisma/debug': 7.1.0
@@ -3150,6 +3179,14 @@ snapshots:
       '@prisma/debug': 7.1.0
       '@prisma/engines-version': 7.1.0-6.ab635e6b9d606fa5c8fb8b1a7f909c3c3c1c98ba
       '@prisma/get-platform': 7.1.0
+
+  '@prisma/generator-helper@7.2.0':
+    dependencies:
+      '@prisma/debug': 7.2.0
+      '@prisma/dmmf': 7.2.0
+      '@prisma/generator': 7.2.0
+
+  '@prisma/generator@7.2.0': {}
 
   '@prisma/get-platform@6.8.2':
     dependencies:
@@ -4106,6 +4143,10 @@ snapshots:
 
   dotenv@17.2.3: {}
 
+  effect-prisma-generator@0.7.1:
+    dependencies:
+      '@prisma/generator-helper': 7.2.0
+
   effect@3.18.4:
     dependencies:
       '@standard-schema/spec': 1.0.0
@@ -4835,6 +4876,8 @@ snapshots:
   remeda@2.21.3:
     dependencies:
       type-fest: 4.41.0
+
+  remeda@2.33.1: {}
 
   require-from-string@2.0.2: {}
 

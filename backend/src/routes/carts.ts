@@ -29,6 +29,7 @@ const carts = new OpenAPIHono()
     const payload = c.get("jwtPayload");
     const userId = payload.id;
     const { academicYear, semester, studyProgram } = c.req.valid("query");
+
     const program = Effect.gen(function* () {
       const userCarts = yield* Effect.tryPromise({
         try: () =>
@@ -310,7 +311,7 @@ const carts = new OpenAPIHono()
             include: {
               items: {
                 include: {
-                  courseN: {
+                  courseInfo: {
                     include: {
                       courses: {
                         include: {
@@ -345,7 +346,7 @@ const carts = new OpenAPIHono()
       let totalPoints = 0;
 
       cart.items.forEach((item) => {
-        const info = item.courseN;
+        const info = item.courseInfo;
         const creditValue = Number(info.credit);
 
         const courseData = info.courses.find(

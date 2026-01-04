@@ -34,12 +34,14 @@
     "prisma": "^7.1.0",
     "ramda": "^0.32.0",
     "redis": "^5.10.0",
+    "remeda": "^2.33.1",
     "zod": "^4.2.1"
   },
   "devDependencies": {
     "@types/node": "^20.11.17",
     "@types/pg": "^8.16.0",
     "@types/ramda": "^0.31.1",
+    "effect-prisma-generator": "^0.7.1",
     "tsx": "^4.7.1",
     "typescript": "^5.8.3"
   }

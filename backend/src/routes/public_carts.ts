@@ -1,7 +1,6 @@
 import { prisma } from "../db/clients.js";
 import { Visible } from "../generated/prisma/enums.js";
 import { middleware_auth } from "./auth.js";
-import { zValidator } from "@hono/zod-validator";
 import { ImportTimetableBodySchema } from "../zod_schemas/public_carts.schema.js";
 import { Effect, Console } from "effect";
 import { OpenAPIHono } from "@hono/zod-openapi";

@@ -1,12 +1,4 @@
 import { prisma } from "../db/clients.js";
-import { zValidator } from "@hono/zod-validator";
-import {
-  AddCourseBodySchema,
-  CreateCartBodySchema,
-  ListCartsQuerySchema,
-  UpdateCartBodySchema,
-  UpdateCourseBodySchema,
-} from "../zod_schemas/carts.schema.js";
 import { Effect, Console } from "effect";
 import { OpenAPIHono } from "@hono/zod-openapi";
 import {
@@ -19,6 +11,13 @@ import {
   updateCartRoute,
   updateCourseRoute,
 } from "../routes_define/carts.routes.js";
+import type {
+  CartItemDetail,
+  ClassConflict,
+  ClassScheduleItem,
+  ExamConflict,
+  ExamScheduleItem,
+} from "../zod_schemas/carts.response.schema.js";
 
 const carts = new OpenAPIHono()
 
@@ -335,9 +334,9 @@ const carts = new OpenAPIHono()
         return yield* Effect.fail(new Error("NOT_CART_OWNER"));
       }
 
-      const itemsResponse: any[] = [];
-      const classesSchedule: any[] = [];
-      const examsSchedule: any[] = [];
+      const itemsResponse: CartItemDetail[] = [];
+      const classesSchedule: ClassScheduleItem[] = [];
+      const examsSchedule: ExamScheduleItem[] = [];
 
       let totalCredits = 0;
       let totalVisibleCredits = 0;
@@ -411,16 +410,16 @@ const carts = new OpenAPIHono()
         });
 
         // Format Exams Schedule (Midterm/Final)
-        if (courseData?.midtermStart) {
+        if (courseData?.midtermStart && courseData.midtermEnd) {
           examsSchedule.push({
             cartItemId: item.id,
             courseNo: item.courseNo,
             type: "MIDTERM",
             start: courseData.midtermStart.toISOString(),
-            end: courseData.midtermEnd?.toISOString(),
+            end: courseData.midtermEnd.toISOString(),
           });
         }
-        if (courseData?.finalStart) {
+        if (courseData?.finalStart && courseData.finalEnd) {
           examsSchedule.push({
             cartItemId: item.id,
             courseNo: item.courseNo,
@@ -433,7 +432,7 @@ const carts = new OpenAPIHono()
 
       // Find class conflict -> Please review this logic
       // Now O(n^2) improve later
-      const classConflicts: any[] = [];
+      const classConflicts: ClassConflict[] = [];
       const timeToMin = (t: string) => {
         const [h, m] = t.split(":").map(Number);
         return h * 60 + m;
@@ -463,7 +462,7 @@ const carts = new OpenAPIHono()
 
       // Find Exam Conflicts -> Please review this logic
       // Now O(n^2) improve later
-      const examConflicts: any[] = [];
+      const examConflicts: ExamConflict[] = [];
       for (let i = 0; i < examsSchedule.length; i++) {
         for (let j = i + 1; j < examsSchedule.length; j++) {
           const examA = examsSchedule[i];

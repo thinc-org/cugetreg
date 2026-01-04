@@ -58,15 +58,14 @@ export const CartSchema = z.object({
   visible: z.string(),
   isDefault: z.boolean(),
   cartOrder: z.number(),
-  createdAt: z.union([z.date(), z.string()]), // รองรับทั้ง Date object และ ISO String
+  createdAt: z.union([z.date(), z.string()]),
   updatedAt: z.union([z.date(), z.string()]),
 });
 
-// 2. สร้าง Schema สำหรับ Response ที่มี "cart" ครอบ (ตามที่ Handler ส่ง)
 export const ImportPublicCartResponseSchema = z.object({
   data: z.object({
     cart: CartSchema.extend({
-      items: z.array(z.any()).optional(), // ใส่ items เพิ่มเข้าไปเพราะใน handler มี include items
+      items: z.array(z.any()).optional(),
     }),
   }),
 });

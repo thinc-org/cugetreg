@@ -46,6 +46,48 @@ const CartItemDetailSchema = z.object({
     .nullable(),
 });
 
+export const ClassScheduleItemSchema = z.object({
+  cartItemId: z.string(),
+  courseNo: z.string(),
+  sectionNo: z.number().int(),
+  type: z.string(),
+  dayOfWeek: z.string(),
+  periodStart: z.string(),
+  periodEnd: z.string(),
+  building: z.string().nullable(),
+  room: z.string().nullable(),
+  professors: z.array(z.string()),
+});
+
+export const ExamScheduleItemSchema = z.object({
+  cartItemId: z.string(),
+  courseNo: z.string(),
+  type: z.enum(["MIDTERM", "FINAL"]),
+  start: z.string(),
+  end: z.string(),
+});
+
+export const ClassConflictSchema = z.object({
+  type: z.literal("TIME_OVERLAP"),
+  itemIds: z.array(z.string()),
+  dayOfWeek: z.string(),
+  periodStart: z.string(),
+  periodEnd: z.string(),
+});
+
+export const ExamConflictSchema = z.object({
+  type: z.literal("EXAM_OVERLAP"),
+  itemIds: z.array(z.string()),
+  start: z.string(),
+  end: z.string(),
+});
+
+export type ClassScheduleItem = z.infer<typeof ClassScheduleItemSchema>;
+export type ExamScheduleItem = z.infer<typeof ExamScheduleItemSchema>;
+export type ClassConflict = z.infer<typeof ClassConflictSchema>;
+export type ExamConflict = z.infer<typeof ExamConflictSchema>;
+export type CartItemDetail = z.infer<typeof CartItemDetailSchema>;
+
 export const CartDetailResponseSchema = z.object({
   data: z.object({
     cart: z.object({
@@ -66,12 +108,12 @@ export const CartDetailResponseSchema = z.object({
       expectedGPA: z.number(),
     }),
     conflicts: z.object({
-      classConflicts: z.array(z.any()),
-      examConflicts: z.array(z.any()),
+      classConflicts: z.array(ClassConflictSchema),
+      examConflicts: z.array(ExamConflictSchema),
     }),
     schedule: z.object({
-      classes: z.array(z.any()),
-      exams: z.array(z.any()),
+      classes: z.array(ClassScheduleItemSchema),
+      exams: z.array(ExamScheduleItemSchema),
     }),
   }),
 });

@@ -18,6 +18,7 @@ import type {
   ExamConflict,
   ExamScheduleItem,
 } from "../zod_schemas/carts.response.schema.js";
+import dayjs from "dayjs";
 
 const carts = new OpenAPIHono()
 
@@ -430,24 +431,20 @@ const carts = new OpenAPIHono()
         }
       });
 
-      // Find class conflict -> Please review this logic
-      // Now O(n^2) improve later
+      // Find class conflict
       const classConflicts: ClassConflict[] = [];
-      const timeToMin = (t: string) => {
-        const [h, m] = t.split(":").map(Number);
-        return h * 60 + m;
-      };
-
       for (let i = 0; i < classesSchedule.length; i++) {
         for (let j = i + 1; j < classesSchedule.length; j++) {
           const a = classesSchedule[i];
           const b = classesSchedule[j];
+
           if (a.dayOfWeek === b.dayOfWeek) {
-            const startA = timeToMin(a.periodStart);
-            const endA = timeToMin(a.periodEnd);
-            const startB = timeToMin(b.periodStart);
-            const endB = timeToMin(b.periodEnd);
-            if (startA < endB && startB < endA) {
+            const startA = dayjs(`2000-01-01T${a.periodStart}`);
+            const endA = dayjs(`2000-01-01T${a.periodEnd}`);
+            const startB = dayjs(`2000-01-01T${b.periodStart}`);
+            const endB = dayjs(`2000-01-01T${b.periodEnd}`);
+
+            if (startA.isBefore(endB) && startB.isBefore(endA)) {
               classConflicts.push({
                 type: "TIME_OVERLAP",
                 itemIds: [a.cartItemId, b.cartItemId],
@@ -461,25 +458,23 @@ const carts = new OpenAPIHono()
       }
 
       // Find Exam Conflicts -> Please review this logic
-      // Now O(n^2) improve later
       const examConflicts: ExamConflict[] = [];
       for (let i = 0; i < examsSchedule.length; i++) {
         for (let j = i + 1; j < examsSchedule.length; j++) {
           const examA = examsSchedule[i];
           const examB = examsSchedule[j];
 
-          // Garuntee if startA exist then endA exist
-          const startA = new Date(examA.start).getTime();
-          const endA = new Date(examA.end).getTime();
-          const startB = new Date(examB.start).getTime();
-          const endB = new Date(examB.end).getTime();
+          const startA = dayjs(examA.start);
+          const endA = dayjs(examA.end);
+          const startB = dayjs(examB.start);
+          const endB = dayjs(examB.end);
 
-          if (startA < endB && startB < endA) {
+          if (startA.isBefore(endB) && startB.isBefore(endA)) {
             examConflicts.push({
               type: "EXAM_OVERLAP",
               itemIds: [examA.cartItemId, examB.cartItemId],
-              start: startA > startB ? examA.start : examB.start,
-              end: endA < endB ? examA.end : examB.end,
+              start: startA.isAfter(startB) ? examA.start : examB.start,
+              end: endA.isBefore(endB) ? examA.end : examB.end,
             });
           }
         }

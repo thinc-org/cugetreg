@@ -9,7 +9,7 @@ export const middlewareAuth = jwt({ secret: env.JWT_SECRET });
 const auth = new OpenAPIHono();
 const hr = 1;
 
-if (process.env.NODE_ENV !== "production") {
+if (process.env.APP_MODE === "dev") {
   auth.get("/test-login", async (c) => {
     const JWT_SECRET = env.JWT_SECRET || "12345678";
     const mockUser = {

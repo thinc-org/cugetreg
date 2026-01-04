@@ -28,7 +28,6 @@
     "Schema": "link:@effect/schema/Schema",
     "dayjs": "^1.11.19",
     "decimal": "^0.0.2",
-    "decimal.js": "^10.6.0",
     "dotenv": "^17.2.3",
     "dotenv-cli": "^11.0.0",
     "effect": "^3.19.14",

@@ -7,7 +7,7 @@ import courses from "./routes/courses.js";
 import carts from "./routes/carts.js";
 import reviews from "./routes/reviews.js";
 import user from "./routes/user.js";
-import auth, { middleware_auth } from "./routes/auth.js";
+import auth, { middlewareAuth } from "./routes/auth.js";
 import { swaggerUI } from "@hono/swagger-ui";
 
 dotenv.config();
@@ -26,11 +26,11 @@ app.route("/auth", auth);
 
 // Middleware List
 
-app.use("/admin/*", middleware_auth); // Middleware from Bearer Token
-app.use("/carts/*", middleware_auth);
-app.use("/courses/*", middleware_auth);
-app.use("/reviews/*", middleware_auth);
-app.use("/user/*", middleware_auth);
+app.use("/admin/*", middlewareAuth); // Middleware from Bearer Token
+app.use("/carts/*", middlewareAuth);
+app.use("/courses/*", middlewareAuth);
+app.use("/reviews/*", middlewareAuth);
+app.use("/user/*", middlewareAuth);
 
 // With JWT Auth
 

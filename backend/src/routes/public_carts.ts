@@ -1,6 +1,6 @@
 import { prisma } from "../db/clients.js";
 import { Visible } from "../generated/prisma/enums.js";
-import { middleware_auth } from "./auth.js";
+import { middlewareAuth } from "./auth.js";
 import { ImportTimetableBodySchema } from "../zod_schemas/public_carts.schema.js";
 import { Effect, Console } from "effect";
 import { OpenAPIHono } from "@hono/zod-openapi";
@@ -10,7 +10,7 @@ import {
 } from "../routes_define/public_carts.routes.js";
 
 const public_carts = new OpenAPIHono();
-public_carts.use("/:cartId/import", middleware_auth);
+public_carts.use("/:cartId/import", middlewareAuth);
 
 public_carts
   // 4.1. Public view of timetable (from share with link)

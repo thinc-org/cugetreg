@@ -4,7 +4,7 @@ import { prisma } from "../db/clients.js";
 import { env } from "../env.js";
 import { OpenAPIHono } from "@hono/zod-openapi";
 
-export const middleware_auth = jwt({ secret: env.JWT_SECRET });
+export const middlewareAuth = jwt({ secret: env.JWT_SECRET });
 
 const auth = new OpenAPIHono();
 const hr = 1;

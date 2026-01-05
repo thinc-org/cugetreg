@@ -163,7 +163,7 @@
                 </li>
                 <li class="flex items-center">
                     <Instagram class="w-[2em] h-[2em] m-2" />
-                    <a class="link" href="https://github.com/thinc-org"
+                    <a class="link" href="https://www.instagram.com/thinc.in.th/"
                         >Instagram: Thinc.</a
                     >
                 </li>

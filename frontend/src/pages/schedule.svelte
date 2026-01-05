@@ -13,7 +13,7 @@
     import type { CourseSchedule, Day } from "../types";
 
     import { Share2, Ellipsis, Copy } from "lucide-svelte";
-    import { isMidtermConflict, isFinalsConflict, formatExamTime, formatDate, discardTime } from "../utils"
+    import { isMidtermConflict, isFinalsConflict, formatExamTime, formatDate, discardTime, formatExamColumn } from "../utils"
 
     function getColumnFromDay(day: Day): number {
         switch (day) {
@@ -64,6 +64,7 @@
     }
 
     let schedule = $state(mockSchedule);
+    let showExamSchedule = $state<"list" | "schedule">("schedule");
 
     // TODO: Temporary
     let currentSchedule = $state("schedule 1");
@@ -104,11 +105,17 @@
                 if (!(0 in midterms)) midterms[0] = [];
                 finals[0].push(course);
             }
-
-        })
+        });
 
         return { midterms, finals };
-    })
+    });
+
+    const examDateOrder = $derived.by(() => {
+        let midterms: number[] = Object.keys(examsData.midterms).sort(examSort).map(x => Number(x));
+        let finals: number[] = Object.keys(examsData.finals).sort(examSort).map(x => Number(x));
+
+        return { midterms, finals };
+    });
 
     const totalCredit = $derived(
         schedule.reduce(
@@ -218,60 +225,102 @@
                 </div>
             </div>
 
-            <div class="flex justify-center  items-center">
-                <div class="my-5 inline-flex space-x-5">
-                    <div class="flex-1">
-                        <span class="text-2xl font-bold">Midterm</span>
+            <Button onclick={() => {
+                if (showExamSchedule === "list") showExamSchedule = "schedule";
+                else showExamSchedule = "list";
+            }}>
+                Toggle
+            </Button>
 
-                        {#each Object.keys(examsData.midterms).sort(examSort) as key}
-                            <div class="my-5">
-                                <ExamCard 
-                                    date={key == "0" ? "ยังไม่ประกาศ" : formatDate(new Date(Number(key)))}
-                                    data={
-                                        examsData.midterms[Number(key)].map(course => {
-                                            const { id, course: courseData, colorVariant } = course;
-
-                                            return {
-                                                id: String(id),
-                                                colour: isMidtermConflict(course, examsData.midterms[Number(key)]) ? "error" : (colorVariant as StatusColour),
-                                                time: formatExamTime(courseData.midterm?.date, courseData.midterm?.duration),
-                                                subject: courseData.name
-                                            } as Exam
-                                        })
-                                    }
-                                />
-                            </div>
-                        {/each}
-                    </div>
-                    <div class="flex-1">
-                        <span class="text-2xl font-bold">Finals</span>
-
-
-                        {#each Object.keys(examsData.finals).sort(examSort) as key}
-                            <div class="my-5">
-                                <ExamCard 
-                                    date={key == "0" ? "ยังไม่ประกาศ" : formatDate(new Date(Number(key)))}
-                                    data={
-                                        examsData.finals[Number(key)].map(course => {
-                                            const { id, course: courseData, colorVariant } = course;
-
-                                            return {
-                                                id: String(id),
-                                                colour: isFinalsConflict(course, examsData.finals[Number(key)]) ? "error" : (colorVariant as StatusColour),
-                                                time: formatExamTime(courseData.final?.date, courseData.final?.duration),
-                                                subject: courseData.name
-                                            } as Exam
-                                        })
-                                    }
-                                />
-                            </div>
-                        {/each}
-                    </div>
-                </div>
-            </div>
+            {#if showExamSchedule === "list"}
+                {@render examList()}
+            {:else}
+                {@render examSchedule()}
+            {/if}
         </div>
     </div>
 </div>
+
+
+{#snippet examSchedule()}
+    Midterm
+    <Timetable 
+        startTime={7} 
+        days={
+            examDateOrder.midterms.map(time => formatDate(new Date(time)))
+        }
+    >
+        {#each examDateOrder.midterms as key, index}
+            {#each examsData.midterms[key] as exam}
+                <TimetableCourseCard 
+                    course={{
+                        name: exam.course.name,
+                        code: exam.course.code,
+                        bldg: "",
+                        room: "",
+                        section: exam.selectedSection
+                    }}
+                    col={formatExamColumn(exam.course.midterm?.date) - 7}
+                    row={index}
+                    length={exam.course.midterm?.duration ?? 3}
+                />
+            {/each}
+         {/each} 
+    </Timetable>
+{/snippet}
+
+{#snippet examList()}
+    <div class="flex justify-center  items-center">
+        <div class="my-5 inline-flex space-x-5">
+            <div class="flex-1">
+                <span class="text-2xl font-bold">Midterm</span>
+
+                {#each Object.keys(examsData.midterms).sort(examSort) as key}
+                    <div class="my-5">
+                        <ExamCard 
+                            date={key == "0" ? "ยังไม่ประกาศ" : formatDate(new Date(Number(key)))}
+                            data={
+                                examsData.midterms[Number(key)].map(course => {
+                                    const { id, course: courseData, colorVariant } = course;
+
+                                    return {
+                                        id: String(id),
+                                        colour: isMidtermConflict(course, examsData.midterms[Number(key)]) ? "error" : (colorVariant as StatusColour),
+                                        time: formatExamTime(courseData.midterm?.date, courseData.midterm?.duration),
+                                        subject: courseData.name
+                                    } as Exam
+                                })
+                            }
+                        />
+                    </div>
+                {/each}
+            </div>
+            <div class="flex-1">
+                <span class="text-2xl font-bold">Finals</span>
+
+                {#each Object.keys(examsData.finals).sort(examSort) as key}
+                    <div class="my-5">
+                        <ExamCard 
+                            date={key == "0" ? "ยังไม่ประกาศ" : formatDate(new Date(Number(key)))}
+                            data={
+                                examsData.finals[Number(key)].map(course => {
+                                    const { id, course: courseData, colorVariant } = course;
+
+                                    return {
+                                        id: String(id),
+                                        colour: isFinalsConflict(course, examsData.finals[Number(key)]) ? "error" : (colorVariant as StatusColour),
+                                        time: formatExamTime(courseData.final?.date, courseData.final?.duration),
+                                        subject: courseData.name
+                                    } as Exam
+                                })
+                            }
+                        />
+                    </div>
+                {/each}
+            </div>
+        </div>
+    </div>
+{/snippet}
 
 {#snippet timeTableCourse({
     course,

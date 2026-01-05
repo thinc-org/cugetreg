@@ -13,8 +13,7 @@ export type Period = {
 }
 
 export type CourseExamDate = {
-    date: string;
-    startTime: number;
+    date: Date;
     duration: number;
 
     // Will we have exam location?

@@ -24,14 +24,12 @@ const courseComPres: Course = {
         }]
     },
     midterm: {
-        date: "จันทร์ 1 ธ.ค. 2567",
-        startTime: 13,
-        duration: 3,
+        date: new Date("2024-12-01T08:30:00"),
+        duration: 3
     },
     final: {
-        date: "จันทร์ 2 ธ.ค. 2567",
-        startTime: 8.5,
-        duration: 3,
+        date: new Date("2024-12-02T08:30:00"),
+        duration: 3
     }
 }
 
@@ -59,13 +57,11 @@ const courseAppDev: Course = {
         }]
     },
     midterm: {
-        date: "จันทร์ 3 ธ.ค. 2567",
-        startTime: 8.5, //8.30
-        duration: 3,
+        date: new Date("2024-12-03T08:30:00"),
+        duration: 3
     },
     final: {
-        date: "จันทร์ 4 ธ.ค. 2567",
-        startTime: 13, //8.30
+        date: new Date("2024-12-04T13:00:00"),
         duration: 3,
     }
 }
@@ -94,8 +90,7 @@ const courseEffectCareer: Course = {
         }]
     },
     final: {
-        date: "จันทร์ 5 ธ.ค. 2567",
-        startTime: 13, //8.30
+        date: new Date("2024-12-05T13:00:00"),
         duration: 3,
     }
 }
@@ -156,13 +151,11 @@ const courseCalculusI: Course = {
         ]
     },
     midterm: {
-        date: "จันทร์ 3 ธ.ค. 2567",
-        startTime: 13,
+        date: new Date("2024-12-03T13:00:00"),
         duration: 3,
     },
     final: {
-        date: "จันทร์ 4 ธ.ค. 2567",
-        startTime: 8.5,
+        date: new Date("2024-12-04T08:30:00"),
         duration: 3,
     }
 }
@@ -186,13 +179,11 @@ const courseLongName: Course = {
         ],
     },
     midterm: {
-        date: "จันทร์ 3 ธ.ค. 2567",
-        startTime: 16,
+        date: new Date("2024-12-03T16:00:00"),
         duration: 1,
     },
     final: {
-        date: "จันทร์ 4 ธ.ค. 2567",
-        startTime: 12,
+        date: new Date("2024-12-04T12:00:00"),
         duration: 1,
     }
 }
@@ -216,13 +207,11 @@ const courseAI: Course = {
         ],
     },
     midterm: {
-        date: "จันทร์ 1 ธ.ค. 2567",
-        startTime: 13,
+        date: new Date("2024-12-01T13:00:00"),
         duration: 3,
     },
     final: {
-        date: "จันทร์ 2 ธ.ค. 2567",
-        startTime: 8.5,
+        date: new Date("2024-12-02T08:30:00"),
         duration: 3,
     }
 }
@@ -278,5 +267,6 @@ export {
     courseAppDev,
     courseComPres,
     courseLongName,
+    courseAI,
     mockSchedule
 };

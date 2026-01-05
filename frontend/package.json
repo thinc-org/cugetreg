@@ -53,6 +53,7 @@
     "bits-ui": "^2.14.4",
     "clsx": "^2.1.1",
     "lucide-svelte": "^0.560.0",
+    "svelte-routing": "^2.13.0",
     "tailwind-merge": "^3.4.0",
     "tailwind-variants": "^3.2.2"
   }

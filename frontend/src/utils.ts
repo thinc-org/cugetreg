@@ -77,8 +77,8 @@ export function isMidtermConflict(course: CourseSchedule, otherCourses: CourseSc
 
     if (!midterm) return false;
 
-    const midtermStart = midterm.startTime;
-    const midtermEnd = midterm.startTime + midterm.duration;
+    const midtermStart = midterm.date.getHours();
+    const midtermEnd = midterm.date.getHours() + midterm.duration;
 
     for (const other of otherCourses) {
         if (other === course || other.hidden) continue;
@@ -86,7 +86,7 @@ export function isMidtermConflict(course: CourseSchedule, otherCourses: CourseSc
         const { midterm: otherMidterm } = other.course;
         if (!otherMidterm) continue;
 
-        const otherStart = otherMidterm.startTime;
+        const otherStart = otherMidterm.date.getHours();
         const otherEnd = otherStart + otherMidterm.duration;
 
         if (
@@ -106,8 +106,8 @@ export function isFinalsConflict(course: CourseSchedule, otherCourses: CourseSch
 
     if (!final) return false;
 
-    const finalStart = final.startTime;
-    const finalEnd = final.startTime + final.duration;
+    const finalStart = final.date.getHours();
+    const finalEnd = final.date.getHours() + final.duration;
 
     for (const other of otherCourses) {
         if (other === course || other.hidden) continue;
@@ -115,7 +115,7 @@ export function isFinalsConflict(course: CourseSchedule, otherCourses: CourseSch
         const { final: otherfinal } = other.course;
         if (!otherfinal) continue;
 
-        const otherStart = otherfinal.startTime;
+        const otherStart = otherfinal.date.getHours();
         const otherEnd = otherStart + otherfinal.duration;
 
         if (
@@ -128,4 +128,28 @@ export function isFinalsConflict(course: CourseSchedule, otherCourses: CourseSch
     }
 
     return false;
+}
+
+export function formatDate(date: Date): string {
+    const DAYS_TH = ["จันทร์", "อังคาร", "พุธ", "พฤหัสบดี", "ศุกร์", "เสาร์", "อาทิตย์"];
+    const MONTH_TH = ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
+
+    const day = date.getDay();
+    const cdate = date.getDate();
+    const month = date.getMonth();
+
+    return `${DAYS_TH[day]} ${cdate} ${MONTH_TH[month]}`;
+}
+
+export function formatExamTime(date?: Date, duration?: number): string {
+    if (!date || !duration) return "";
+
+    const end = new Date(date.getTime() + duration * 60 * 60 * 1000);
+
+    const startH = String(date.getHours()).padStart(2, '0');
+    const startM = String(date.getMinutes()).padStart(2, '0');
+    const endH = String(end.getHours()).padStart(2, '0');
+    const endM = String(end.getMinutes()).padStart(2, '0');
+
+    return `${startH}:${startM} - ${endH}:${endM} น.`;
 }

@@ -10,10 +10,10 @@
     import { Navbar } from "../lib/components/organisms/navbar";
     import { SelectedCourse } from "../lib/components/organisms/selected-course";
     import { mockSchedule } from "../mockData";
-    import type { Course, CourseSchedule, Day } from "../types";
+    import type { CourseSchedule, Day } from "../types";
 
     import { Share2, Ellipsis, Copy } from "lucide-svelte";
-    import { formatTimePeriod, isMidtermConflict, isFinalsConflict } from "../utils"
+    import { formatTimePeriod, isMidtermConflict, isFinalsConflict, formatExamTime, formatDate } from "../utils"
 
     function getColumnFromDay(day: Day): number {
         switch (day) {
@@ -80,16 +80,17 @@
             const { midterm, final } = course.course;
 
             if (midterm) {
-                const date = midterm.date;
-                if (date in midterms) midterms[date].push(course);
-                else midterms[date] = [course];
+                const formattedDate = formatDate(midterm.date);
+                if (formattedDate in midterms) midterms[formattedDate].push(course);
+                else midterms[formattedDate] = [course];
             }
 
             if (final) {
-                const date = final.date;
-                if (date in finals) finals[date].push(course);
-                else finals[date] = [course];
+                const formattedDate = formatDate(final.date);
+                if (formattedDate in finals) finals[formattedDate].push(course);
+                else finals[formattedDate] = [course];
             }
+
         })
 
         return { midterms, finals };
@@ -110,136 +111,146 @@
     });
 </script>
 
-<Navbar />
-<div class="w-full flex">
-    <div class="flex-1 border-r border-neutral-200 overflow-hidden">
-        <SelectedCourse bind:schedule class="border-b border-neutral-200" />
+<div class="flex flex-col h-screen">
+    <Navbar />
+    <div class="w-full flex flex-1 overflow-hidden">
+        <div class="
+            flex flex-col flex-1 border-r border-neutral-200
+            overflow-hidden
+            [scrollbar-width:none] [&::-webkit-scrollbar]:hidden
+        ">
+            <!-- TODO: Choose semester component -->
+            <div></div>
+            <SelectedCourse bind:schedule class="border-b border-neutral-200" />
 
-        <div
-            class="border-2 border-tangerine-500 text-tangerine-700 m-5 p-5 items-center rounded-2xl"
-        >
-            <div class="text-center font-bold">
-                CU Get Reg ไม่ใช่การลงทะเบียนเรียนจริง
-            </div>
-            <div class="text-center">
-                สามารถลงทะเบียนเรียนได้ที่ <a
-                    href="https://www2.reg.chula.ac.th/"
-                    >https://www2.reg.chula.ac.th/</a
-                >
-                เพียงช่องทางเดียวเท่านั้น
+            <div
+                class="border-2 border-tangerine-500 text-tangerine-700 m-5 p-5 items-center rounded-2xl"
+            >
+                <div class="text-center font-bold">
+                    CU Get Reg ไม่ใช่การลงทะเบียนเรียนจริง
+                </div>
+                <div class="text-center">
+                    สามารถลงทะเบียนเรียนได้ที่ <a
+                        href="https://www2.reg.chula.ac.th/"
+                        >https://www2.reg.chula.ac.th/</a
+                    >
+                    เพียงช่องทางเดียวเท่านั้น
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="flex-3 p-10">
-        <div class="flex justify-between">
-            <span class="text-4xl font-bold">ตารางเรียน</span>
+        <div class="flex-3 p-10 overflow-y-auto">
+            <div class="flex justify-between">
+                <span class="text-4xl font-bold">ตารางเรียน</span>
+
+                <div class="flex">
+                    <Select.Root type="single" bind:value={currentSchedule}>
+                        <Select.Trigger>
+                            {currentSchedule}
+                        </Select.Trigger>
+                        <Select.Content>
+                            <!-- TODO: -->
+                            <Select.Group>
+                                {#each [1, 2, 3, 4] as item}
+                                    <Select.Item
+                                        value={`Schedule ${item}`}
+                                        label={`Schedule ${item}`}
+                                        aria-label={`Schedule ${item}`}
+                                        role="option"
+                                    />
+                                {/each}
+                            </Select.Group>
+                        </Select.Content>
+                    </Select.Root>
+
+                    <IconButton class="aspect-square mx-3">
+                        <Ellipsis />
+                    </IconButton>
+                </div>
+            </div>
+            <div class="p-8">
+                <Timetable startTime={7}>
+                    {#each schedule as courseSchedule}
+                        {@render timeTableCourse(courseSchedule)}
+                    {/each}
+                </Timetable>
+            </div>
+            <div class="flex justify-end mx-5 mb-5 font-bold text-lg">
+                หน่วยกิตรวม {totalCredit} / 22
+            </div>
 
             <div class="flex">
-                <Select.Root type="single" bind:value={currentSchedule}>
-                    <Select.Trigger>
-                        {currentSchedule}
-                    </Select.Trigger>
-                    <Select.Content>
-                        <!-- TODO: -->
-                        <Select.Group>
-                            {#each [1, 2, 3, 4] as item}
-                                <Select.Item
-                                    value={`Schedule ${item}`}
-                                    label={`Schedule ${item}`}
-                                    aria-label={`Schedule ${item}`}
-                                    role="option"
+                <Switch bind:checked={isPublic} label="เปิดเป็นสาธารณะ" />
+                <div class="flex flex-1 relative">
+                    <Input 
+                        value="cugetreg.com/1232141413"
+                        disabled={!isPublic}
+                        readonly 
+                    />
+
+                    <IconButton 
+                        variant="ghost" 
+                        disabled={!isPublic}
+                        class="absolute z-10 right-0 hover:cursor-pointer hover:bg-transparent"
+                    >
+                        <Copy /> 
+                    </IconButton>
+                </div>
+                <div>
+                    <IconButton class="aspect-square">
+                        <Share2/>
+                    </IconButton>
+                    <Button class="h-full m-0">บันทึกเป็นภาพ</Button>
+                </div>
+            </div>
+
+            <div class="flex justify-center  items-center">
+                <div class="my-5 inline-flex space-x-5">
+                    <div class="flex-1">
+                        <span class="text-2xl font-bold">Midterm</span>
+                        {#each Object.entries(examsData.midterms) as [date, courses]}
+                            <div class="my-5">
+                                <ExamCard 
+                                    date={date}
+                                    data={
+                                        courses.map(course => {
+                                            const { id, course: courseData, colorVariant } = course;
+
+                                            return {
+                                                id: String(id),
+                                                colour: isMidtermConflict(course, courses) ? "error" : (colorVariant as StatusColour),
+                                                time: formatExamTime(courseData.midterm?.date, courseData.midterm?.duration),
+                                                subject: courseData.name
+                                            } as Exam
+                                        })
+                                    }
                                 />
-                            {/each}
-                        </Select.Group>
-                    </Select.Content>
-                </Select.Root>
-
-                <IconButton class="aspect-square mx-3">
-                    <Ellipsis />
-                </IconButton>
-            </div>
-        </div>
-        <div class="p-8">
-            <Timetable startTime={7}>
-                {#each schedule as courseSchedule}
-                    {@render timeTableCourse(courseSchedule)}
-                {/each}
-            </Timetable>
-        </div>
-        <div class="flex justify-end mx-5 mb-5 font-bold text-lg">
-            หน่วยกิตรวม {totalCredit} / 22
-        </div>
-
-        <div class="flex">
-            <Switch bind:checked={isPublic} label="เปิดเป็นสาธารณะ" />
-            <div class="flex flex-1 relative">
-                <Input 
-                    value="cugetreg.com/1232141413"
-                    disabled={!isPublic}
-                    readonly 
-                />
-
-                <IconButton 
-                    variant="ghost" 
-                    disabled={!isPublic}
-                    class="absolute z-10 right-0 hover:cursor-pointer hover:bg-transparent"
-                >
-                    <Copy /> 
-                </IconButton>
-            </div>
-            <div>
-                <IconButton class="aspect-square">
-                    <Share2/>
-                </IconButton>
-                <Button class="h-full m-0">บันทึกเป็นภาพ</Button>
-            </div>
-        </div>
-
-        <div class="flex my-5">
-            <div class="flex-1">
-                <span class="text-2xl font-bold">Midterm</span>
-                {#each Object.entries(examsData.midterms) as [date, courses]}
-                    <div class="my-5">
-                        <ExamCard 
-                            date={date}
-                            data={
-                                courses.map(course => {
-                                    const { id, course: courseData, colorVariant } = course;
-
-                                    return {
-                                        id: String(id),
-                                        colour: isMidtermConflict(course, courses) ? "error" : (colorVariant as StatusColour),
-                                        time: formatTimePeriod(courseData.midterm?.startTime, courseData.midterm?.duration),
-                                        subject: courseData.name
-                                    } as Exam
-                                })
-                            }
-                        />
+                            </div>
+                        {/each}
                     </div>
-                {/each}
-            </div>
-            <div class="flex-1">
-                <span class="text-2xl font-bold">Finals</span>
-                {#each Object.entries(examsData.finals) as [date, courses]}
-                    <div class="my-5">
-                        <ExamCard 
-                            date={date}
-                            data={
-                                courses.map(course => {
-                                    const { id, course: courseData, colorVariant } = course;
+                    <div class="flex-1">
+                        <span class="text-2xl font-bold">Finals</span>
+                        {#each Object.entries(examsData.finals) as [date, courses]}
+                            <div class="my-5">
+                                <ExamCard 
+                                    date={date}
+                                    data={
+                                        courses.map(course => {
+                                            const { id, course: courseData, colorVariant } = course;
 
-                                    return {
-                                        id: String(id),
-                                        colour: isFinalsConflict(course, courses) ? "error" : (colorVariant as StatusColour),
-                                        time: formatTimePeriod(courseData.final?.startTime, courseData.final?.duration),
-                                        subject: courseData.name
-                                    } as Exam
-                                })
-                            }
-                        />
+                                            return {
+                                                id: String(id),
+                                                colour: isFinalsConflict(course, courses) ? "error" : (colorVariant as StatusColour),
+                                                time: formatExamTime(courseData.final?.date, courseData.final?.duration),
+                                                subject: courseData.name
+                                            } as Exam
+                                        })
+                                    }
+                                />
+                            </div>
+                        {/each}
                     </div>
-                {/each}
+                </div>
             </div>
         </div>
     </div>

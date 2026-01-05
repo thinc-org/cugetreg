@@ -126,6 +126,8 @@ export function isFinalsConflict(course: CourseSchedule, otherCourses: CourseSch
 const USE_CHRISTIAN_YEAR = false;
 
 export function formatDate(date: Date): string {
+    if (!date || date.getTime() === 0) return "TBA";
+
     const DAYS_TH = ["จันทร์", "อังคาร", "พุธ", "พฤหัสบดี", "ศุกร์", "เสาร์", "อาทิตย์"];
     const MONTH_TH = ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
 
@@ -150,6 +152,15 @@ export function formatExamTime(date?: Date, duration?: number): string {
     const endM = String(end.getMinutes()).padStart(2, '0');
 
     return `${startH}:${startM} - ${endH}:${endM} น.`;
+}
+
+export function formatExamColumn(date?: Date): number {
+    if (!date) return 0;
+
+    const h = date.getHours();
+    const m = date.getMinutes();
+
+    return h + (m / 60);
 }
 
 export function discardTime(time: number): number {

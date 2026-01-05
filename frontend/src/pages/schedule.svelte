@@ -13,7 +13,7 @@
     import type { CourseSchedule, Day } from "../types";
 
     import { Share2, Ellipsis, Copy } from "lucide-svelte";
-    import { formatTimePeriod, isMidtermConflict, isFinalsConflict, formatExamTime, formatDate } from "../utils"
+    import { isMidtermConflict, isFinalsConflict, formatExamTime, formatDate, discardTime } from "../utils"
 
     function getColumnFromDay(day: Day): number {
         switch (day) {
@@ -49,8 +49,7 @@
                     const periodStart = period.startTime;
                     const periodEnd = period.startTime + period.duration;
                     const otherPeriodStart = otherPeriod.startTime;
-                    const otherPeriodEnd =
-                        otherPeriod.startTime + otherPeriod.duration;
+                    const otherPeriodEnd = otherPeriod.startTime + otherPeriod.duration;
 
                     if (
                         periodStart < otherPeriodEnd &&
@@ -70,9 +69,18 @@
     let currentSchedule = $state("schedule 1");
     let isPublic = $state(false);
 
+    const examSort = (a: string, b: string) => {
+        const numA = Number(a);
+        const numB = Number(b);
+
+        if (numA === 0) return 1;
+        else if (numB === 0) return -1;
+        else return numA - numB;
+    }
+
     const examsData = $derived.by(() => {
-        let midterms: Record<string, CourseSchedule[]> = {};
-        let finals: Record<string, CourseSchedule[]> = {};
+        let midterms: Record<number, CourseSchedule[]> = {};
+        let finals: Record<number, CourseSchedule[]> = {};
 
         schedule.forEach((course) => {
             if (course.hidden) return;
@@ -80,15 +88,21 @@
             const { midterm, final } = course.course;
 
             if (midterm) {
-                const formattedDate = formatDate(midterm.date);
+                const formattedDate = discardTime(midterm.date.getTime());
                 if (formattedDate in midterms) midterms[formattedDate].push(course);
                 else midterms[formattedDate] = [course];
+            } else {
+                if (!(0 in midterms)) midterms[0] = [];
+                midterms[0].push(course);
             }
 
             if (final) {
-                const formattedDate = formatDate(final.date);
+                const formattedDate = discardTime(final.date.getTime());
                 if (formattedDate in finals) finals[formattedDate].push(course);
                 else finals[formattedDate] = [course];
+            } else {
+                if (!(0 in midterms)) midterms[0] = [];
+                finals[0].push(course);
             }
 
         })
@@ -208,17 +222,18 @@
                 <div class="my-5 inline-flex space-x-5">
                     <div class="flex-1">
                         <span class="text-2xl font-bold">Midterm</span>
-                        {#each Object.entries(examsData.midterms) as [date, courses]}
+
+                        {#each Object.keys(examsData.midterms).sort(examSort) as key}
                             <div class="my-5">
                                 <ExamCard 
-                                    date={date}
+                                    date={key == "0" ? "ยังไม่ประกาศ" : formatDate(new Date(Number(key)))}
                                     data={
-                                        courses.map(course => {
+                                        examsData.midterms[Number(key)].map(course => {
                                             const { id, course: courseData, colorVariant } = course;
 
                                             return {
                                                 id: String(id),
-                                                colour: isMidtermConflict(course, courses) ? "error" : (colorVariant as StatusColour),
+                                                colour: isMidtermConflict(course, examsData.midterms[Number(key)]) ? "error" : (colorVariant as StatusColour),
                                                 time: formatExamTime(courseData.midterm?.date, courseData.midterm?.duration),
                                                 subject: courseData.name
                                             } as Exam
@@ -230,17 +245,19 @@
                     </div>
                     <div class="flex-1">
                         <span class="text-2xl font-bold">Finals</span>
-                        {#each Object.entries(examsData.finals) as [date, courses]}
+
+
+                        {#each Object.keys(examsData.finals).sort(examSort) as key}
                             <div class="my-5">
                                 <ExamCard 
-                                    date={date}
+                                    date={key == "0" ? "ยังไม่ประกาศ" : formatDate(new Date(Number(key)))}
                                     data={
-                                        courses.map(course => {
+                                        examsData.finals[Number(key)].map(course => {
                                             const { id, course: courseData, colorVariant } = course;
 
                                             return {
                                                 id: String(id),
-                                                colour: isFinalsConflict(course, courses) ? "error" : (colorVariant as StatusColour),
+                                                colour: isFinalsConflict(course, examsData.finals[Number(key)]) ? "error" : (colorVariant as StatusColour),
                                                 time: formatExamTime(courseData.final?.date, courseData.final?.duration),
                                                 subject: courseData.name
                                             } as Exam

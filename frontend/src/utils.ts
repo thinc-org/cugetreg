@@ -65,13 +65,6 @@ export function formatScheduleTime(time: number): string {
     return `${hourStr}:${minuteStr}`;
 }
 
-export function formatTimePeriod(startTime?: number, duration?: number): string {
-    if (!startTime || !duration) return "";
-
-    return `${formatScheduleTime(startTime)} - ${formatScheduleTime(startTime + duration)}`;
-}
-
-
 export function isMidtermConflict(course: CourseSchedule, otherCourses: CourseSchedule[]) {
     const { midterm } = course.course;
 
@@ -130,6 +123,8 @@ export function isFinalsConflict(course: CourseSchedule, otherCourses: CourseSch
     return false;
 }
 
+const USE_CHRISTIAN_YEAR = false;
+
 export function formatDate(date: Date): string {
     const DAYS_TH = ["จันทร์", "อังคาร", "พุธ", "พฤหัสบดี", "ศุกร์", "เสาร์", "อาทิตย์"];
     const MONTH_TH = ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
@@ -137,12 +132,15 @@ export function formatDate(date: Date): string {
     const day = date.getDay();
     const cdate = date.getDate();
     const month = date.getMonth();
+    const year = date.getFullYear();
 
-    return `${DAYS_TH[day]} ${cdate} ${MONTH_TH[month]}`;
+    const offset = USE_CHRISTIAN_YEAR ? 0 : 543;
+
+    return `${DAYS_TH[day]} ${cdate} ${MONTH_TH[month]} ${year + offset}`;
 }
 
 export function formatExamTime(date?: Date, duration?: number): string {
-    if (!date || !duration) return "";
+    if (!date || !duration) return "TBA";
 
     const end = new Date(date.getTime() + duration * 60 * 60 * 1000);
 
@@ -152,4 +150,9 @@ export function formatExamTime(date?: Date, duration?: number): string {
     const endM = String(end.getMinutes()).padStart(2, '0');
 
     return `${startH}:${startM} - ${endH}:${endM} น.`;
+}
+
+export function discardTime(time: number): number {
+    const mod = time % (1000 * 60 * 60 * 24);
+    return time - mod;
 }

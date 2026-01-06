@@ -12,7 +12,7 @@
     import { mockSchedule } from "../mockData";
     import type { CourseSchedule, Day } from "../types";
 
-    import { Share2, Ellipsis, Copy } from "lucide-svelte";
+    import { Share2, Ellipsis, Copy, ChevronLeft, ChevronRight } from "lucide-svelte";
     import { isMidtermConflict, isFinalsConflict, formatExamTime, formatDate, discardTime, formatExamColumn } from "../utils"
 
     function getColumnFromDay(day: Day): number {
@@ -64,7 +64,7 @@
     }
 
     let schedule = $state(mockSchedule);
-    let showExamSchedule = $state<"list" | "schedule">("schedule");
+    let showExamSchedule = $state<"List" | "Schedule">("Schedule");
 
     // TODO: Temporary
     let currentSchedule = $state("schedule 1");
@@ -225,14 +225,22 @@
                 </div>
             </div>
 
-            <Button onclick={() => {
-                if (showExamSchedule === "list") showExamSchedule = "schedule";
-                else showExamSchedule = "list";
-            }}>
-                Toggle
-            </Button>
+            <div class="flex justify-center mt-5">
+                <Button
+                    class="outline-0 ring-0 hover:bg-transparent!"
+                    onclick={() => {
+                        if (showExamSchedule === "List") showExamSchedule = "Schedule";
+                        else showExamSchedule = "List";
+                    }}
+                    variant="outlined"
+                >
+                    <ChevronLeft />               
+                    {showExamSchedule}
+                    <ChevronRight />
+                </Button>
+            </div>
 
-            {#if showExamSchedule === "list"}
+            {#if showExamSchedule === "List"}
                 {@render examList()}
             {:else}
                 {@render examSchedule()}
@@ -243,7 +251,7 @@
 
 
 {#snippet examSchedule()}
-    Midterm
+    <div class="font-bold text-xl my-5">Midterm</div>
     <Timetable 
         startTime={7} 
         days={
@@ -263,6 +271,33 @@
                     col={formatExamColumn(exam.course.midterm?.date) - 7}
                     row={index}
                     length={exam.course.midterm?.duration ?? 3}
+                    color={exam.colorVariant}
+                />
+            {/each}
+         {/each} 
+    </Timetable>
+
+    <div class="font-bold text-xl my-5">Finals</div>
+    <Timetable 
+        startTime={7} 
+        days={
+            examDateOrder.finals.map(time => formatDate(new Date(time)))
+        }
+    >
+        {#each examDateOrder.finals as key, index}
+            {#each examsData.finals[key] as examCourse}
+                <TimetableCourseCard 
+                    course={{
+                        name: examCourse.course.name,
+                        code: examCourse.course.code,
+                        bldg: "",
+                        room: "",
+                        section: examCourse.selectedSection
+                    }}
+                    col={formatExamColumn(examCourse.course.final?.date) - 7}
+                    row={index}
+                    length={examCourse.course.final?.duration ?? 3}
+                    color={examCourse.colorVariant}
                 />
             {/each}
          {/each} 

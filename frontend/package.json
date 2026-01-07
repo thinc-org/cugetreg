@@ -4,11 +4,11 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "lint": "tsc --noEmit",
-    "dev": "vite",
+    "dev": "vite dev",
     "build": "vite build",
     "preview": "vite preview",
-    "check": "svelte-check --tsconfig ./tsconfig.app.json && tsc -p tsconfig.node.json",
+    "check": "svelte-kit sync && svelte-check",
+    "lint": "eslint .",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
@@ -20,6 +20,8 @@
     "@storybook/addon-svelte-csf": "^5.0.10",
     "@storybook/addon-vitest": "^10.1.7",
     "@storybook/svelte-vite": "^10.1.7",
+    "@sveltejs/adapter-auto": "^7.0.0",
+    "@sveltejs/kit": "^2.49.3",
     "@sveltejs/vite-plugin-svelte": "^6.2.1",
     "@tsconfig/svelte": "^5.0.6",
     "@types/node": "^24.10.1",

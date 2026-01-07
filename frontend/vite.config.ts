@@ -1,39 +1,42 @@
 /// <reference types="vitest/config" />
-import { defineConfig } from 'vite';
-import { svelte } from '@sveltejs/vite-plugin-svelte';
+import { defineConfig } from 'vite'
+import { sveltekit } from '@sveltejs/kit/vite'
 
-// https://vite.dev/config/
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { storybookTest } from '@storybook/addon-vitest/vitest-plugin';
-import { playwright } from '@vitest/browser-playwright';
-import tailwindcss from '@tailwindcss/vite';
-const dirname = typeof __dirname !== 'undefined' ? __dirname : path.dirname(fileURLToPath(import.meta.url));
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 
-// More info at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
+import { storybookTest } from '@storybook/addon-vitest/vitest-plugin'
+import { playwright } from '@vitest/browser-playwright'
+import tailwindcss from '@tailwindcss/vite'
+
+const dirname =
+  typeof __dirname !== 'undefined'
+    ? __dirname
+    : path.dirname(fileURLToPath(import.meta.url))
+
 export default defineConfig({
-    plugins: [tailwindcss(), svelte()],
-    test: {
-        projects: [{
-            extends: true,
-            plugins: [
-                // The plugin will run tests for the stories defined in your Storybook config
-                // See options at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon#storybooktest
-                storybookTest({
-                    configDir: path.join(dirname, '.storybook')
-                })],
-            test: {
-                name: 'storybook',
-                browser: {
-                    enabled: true,
-                    headless: true,
-                    provider: playwright({}),
-                    instances: [{
-                        browser: 'chromium'
-                    }]
-                },
-                setupFiles: ['.storybook/vitest.setup.ts']
-            }
-        }]
-    }
-});
+  plugins: [tailwindcss(), sveltekit()],
+
+  test: {
+    projects: [
+      {
+        extends: true,
+        plugins: [
+          storybookTest({
+            configDir: path.join(dirname, '.storybook'),
+          }),
+        ],
+        test: {
+          name: 'storybook',
+          browser: {
+            enabled: true,
+            headless: true,
+            provider: playwright({}),
+            instances: [{ browser: 'chromium' }],
+          },
+          setupFiles: ['.storybook/vitest.setup.ts'],
+        },
+      },
+    ],
+  },
+})

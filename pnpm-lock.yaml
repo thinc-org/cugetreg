@@ -18,7 +18,7 @@ importers:
         specifier: ^2.7.2
         version: 2.7.2
 
-  frontend:
+  apps/frontend:
     dependencies:
       '@rodrigodagostino/svelte-sortable-list':
         specifier: ^2.1.9

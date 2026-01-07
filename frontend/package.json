@@ -49,6 +49,7 @@
     ]
   },
   "dependencies": {
+    "@rodrigodagostino/svelte-sortable-list": "^2.1.9",
     "@tailwindcss/vite": "^4.1.18",
     "bits-ui": "^2.14.4",
     "clsx": "^2.1.1",

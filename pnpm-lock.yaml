@@ -35,9 +35,6 @@ importers:
       lucide-svelte:
         specifier: ^0.560.0
         version: 0.560.0(svelte@5.46.0)
-      svelte-routing:
-        specifier: ^2.13.0
-        version: 2.13.0
       tailwind-merge:
         specifier: ^3.4.0
         version: 3.4.0
@@ -1995,9 +1992,6 @@ packages:
     peerDependencies:
       svelte: ^4.0.0 || ^5.0.0-next.0
       typescript: '>=5.0.0'
-
-  svelte-routing@2.13.0:
-    resolution: {integrity: sha512-/NTxqTwLc7Dq306hARJrH2HLXOBtKd7hu8nxgoFDlK0AC4SOKnzisiX/9m8Uksei1QAWtlAEdF91YphNM8iDMg==}
 
   svelte-toolbelt@0.10.6:
     resolution: {integrity: sha512-YWuX+RE+CnWYx09yseAe4ZVMM7e7GRFZM6OYWpBKOb++s+SQ8RBIMMe+Bs/CznBMc0QPLjr+vDBxTAkozXsFXQ==}
@@ -4081,8 +4075,6 @@ snapshots:
       typescript: 5.9.3
     transitivePeerDependencies:
       - picomatch
-
-  svelte-routing@2.13.0: {}
 
   svelte-toolbelt@0.10.6(svelte@5.46.0):
     dependencies:

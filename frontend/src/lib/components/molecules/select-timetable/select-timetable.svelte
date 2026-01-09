@@ -1,25 +1,25 @@
 <script lang="ts">
+    import type { ClassValue } from "clsx"
     import { Menu } from "lucide-svelte";
+    import { cn } from "../../../../utils";
+    import type { ScheduleList, ScheduleListItem } from "../../../../types"
+    import { mockScheduleList } from "../../../../mockData"
 
     interface SelectTimetableProp {
-        options: string[],
-        value?: string,
+        options?: ScheduleList,
+        value?: ScheduleListItem,
+        class?: ClassValue
     }     
 
-    const placeholder = [
-        "ปี 2 เทอม 1",
-        "ปี 2 เทอม 2",
-        "ปี 2 ฤดูร้อน"
-    ]
-
     let {
-        options = placeholder,
+        options = mockScheduleList,
         value = $bindable(),
+        class: className = undefined
     }: SelectTimetableProp = $props();
 </script>
 
-<div class="flex">
-    <div class="mx-1 flex justify-center items-center scale-75">
+<div class={cn("flex", className)}>
+    <div class="ml-1 mr-5 flex justify-center items-center">
         <Menu />
     </div>
     <div class="flex-1">
@@ -28,8 +28,8 @@
         </span>
         <div class="flex gap-2.5">
             <select class="flex-3 border border-primary rounded-lg p-1 focus:outline-none text-primary" bind:value={value}>
-                {#each options as option}
-                    <option value={option}>{option}</option>
+                {#each options as item}
+                    <option value={item}>{item.name}</option>
                 {/each}
             </select>
 

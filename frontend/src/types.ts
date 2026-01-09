@@ -44,3 +44,16 @@ export type CourseSchedule = {
 }
 
 export type ScheduleData = CourseSchedule[];
+
+export type SemesterType = "Semester" | "Trimester" | "Inter";
+
+export type ScheduleListItem = {
+    name: string;
+    scheduleId: number;
+    schedule: ScheduleData;
+    semesterType: SemesterType;
+    semester: string;
+    isPublic?: boolean;
+}
+
+export type ScheduleList = ScheduleListItem[];

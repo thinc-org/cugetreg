@@ -33,18 +33,10 @@
                 {/each}
             </select>
 
-            <div class="right text-xs truncate">
-                ทวิภาค 2566 / ภาคต้น
+            <div class="text-xs truncate border border-neutral-900 rounded-lg px-1">
+                <div class="text-xs">ทวิภาค 2566</div>
+                <div class="text-xs">ภาคต้น</div>
             </div>
         </div>
     </div>
 </div>
-
-<style>
-    .right{
-        border: 1px solid black;
-        border-radius: 8px;
-        padding: 5px;
-
-    }
-</style>

@@ -9,7 +9,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "check": "svelte-check --tsconfig ./tsconfig.app.json && tsc -p tsconfig.node.json",
-    "storybook": "storybook dev -p 6006",
+    "storybook": "storybook dev -p 6006 --ci",
     "build-storybook": "storybook build"
   },
   "devDependencies": {
@@ -50,6 +50,7 @@
     ]
   },
   "dependencies": {
+    "@lucide/svelte": "^0.562.0",
     "@tailwindcss/vite": "^4.1.18",
     "bits-ui": "^2.14.4",
     "clsx": "^2.1.1",

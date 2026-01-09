@@ -20,6 +20,9 @@ importers:
 
   frontend:
     dependencies:
+      '@lucide/svelte':
+        specifier: ^0.562.0
+        version: 0.562.0(svelte@5.46.0)
       '@tailwindcss/vite':
         specifier: ^4.1.18
         version: 4.1.18(vite@7.3.0(@types/node@24.10.4)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.44.1)(tsx@4.21.0))
@@ -410,6 +413,11 @@ packages:
 
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
+
+  '@lucide/svelte@0.562.0':
+    resolution: {integrity: sha512-wDMULwtTFN2Sc/TFBm6gfuVCNb4Y5P9LDrwxNnUbV52+IEU7NXZmvxwXoz+vrrpad6Xupq+Hw5eUlqIHEGhouw==}
+    peerDependencies:
+      svelte: ^5
 
   '@mdx-js/react@3.1.1':
     resolution: {integrity: sha512-f++rKLQgUVYDAtECQ6fn/is15GkEH9+nZPM3MS0RcxVqoTfawHvDlSCH7JbMhAM6uJ32v3eXLvLmLvjGu7PTQw==}
@@ -2528,6 +2536,10 @@ snapshots:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
+
+  '@lucide/svelte@0.562.0(svelte@5.46.0)':
+    dependencies:
+      svelte: 5.46.0
 
   '@mdx-js/react@3.1.1(@types/react@19.2.7)(react@19.2.1)':
     dependencies:

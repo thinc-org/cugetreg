@@ -1,18 +1,40 @@
-import type { StorybookConfig } from '@storybook/svelte-vite';
+import type { StorybookConfig } from '@storybook/sveltekit';
 
+import { dirname } from "path"
+
+import { fileURLToPath } from "url"
+import { join } from 'path';
+import { searchForWorkspaceRoot } from 'vite';
+
+/**
+* This function is used to resolve the absolute path of a package.
+* It is needed in projects that use Yarn PnP or are set up within a monorepo.
+*/
+function getAbsolutePath(value: string): any {
+    return dirname(fileURLToPath(import.meta.resolve(`${value}/package.json`)))
+}
 const config: StorybookConfig = {
     "stories": [
         "../src/**/*.mdx",
         "../src/**/*.stories.@(js|ts|svelte)"
     ],
     "addons": [
-        "@storybook/addon-svelte-csf",
-        "@chromatic-com/storybook",
-        "@storybook/addon-vitest",
-        "@storybook/addon-a11y",
-        "@storybook/addon-docs",
-        "@storybook/addon-styling-webpack"
+        getAbsolutePath('@storybook/addon-svelte-csf'),
+        getAbsolutePath('@chromatic-com/storybook'),
+        getAbsolutePath('@storybook/addon-vitest'),
+        getAbsolutePath('@storybook/addon-a11y'),
+        getAbsolutePath('@storybook/addon-docs'),
+        getAbsolutePath('@storybook/addon-styling-webpack')
     ],
-    "framework": "@storybook/svelte-vite"
+    "framework": getAbsolutePath('@storybook/sveltekit'),
+    "staticDirs": ['../static'],
+    viteFinal: async (config) => {
+        if (config.server && config.server.fs) {
+            config.server.fs.allow = [
+                searchForWorkspaceRoot(process.cwd()),
+            ];
+        }
+        return config;
+    },
 };
 export default config;

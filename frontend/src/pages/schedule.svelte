@@ -9,11 +9,12 @@
     import * as Select from "../lib/components/molecules/select";
     import { Navbar } from "../lib/components/organisms/navbar";
     import { SelectedCourse } from "../lib/components/organisms/selected-course";
-    import { mockSchedule } from "../mockData";
+    import { mockScheduleList } from "../mockData";
     import type { CourseSchedule, Day } from "../types";
 
     import { Share2, Ellipsis, Copy, ChevronLeft, ChevronRight } from "lucide-svelte";
     import { isMidtermConflict, isFinalsConflict, formatExamTime, formatDate, discardTime, formatExamColumn } from "../utils"
+    import SelectTimetable from "../lib/components/molecules/select-timetable/select-timetable.svelte"
 
     function getColumnFromDay(day: Day): number {
         switch (day) {
@@ -37,7 +38,7 @@
     function isConflicted(course: CourseSchedule): boolean {
         const courseSection = course.course.sections[course.selectedSection];
 
-        for (const other of schedule) {
+        for (const other of selectedSchedule.schedule) {
             if (other === course || other.hidden) continue;
 
             const otherSection = other.course.sections[other.selectedSection];
@@ -63,7 +64,9 @@
         return false;
     }
 
-    let schedule = $state(mockSchedule);
+    // NOTE: Temporary: this should be global state
+    let scheduleList = $state(mockScheduleList);
+    let selectedSchedule = $state(scheduleList[0]);
     let showExamSchedule = $state<"List" | "Schedule">("Schedule");
 
     // TODO: Temporary
@@ -83,7 +86,7 @@
         let midterms: Record<number, CourseSchedule[]> = {};
         let finals: Record<number, CourseSchedule[]> = {};
 
-        schedule.forEach((course) => {
+        selectedSchedule.schedule.forEach((course) => {
             if (course.hidden) return;
 
             const { midterm, final } = course.course;
@@ -118,16 +121,16 @@
     });
 
     const totalCredit = $derived(
-        schedule.reduce(
+        selectedSchedule.schedule.reduce(
             (acc, course) => acc + (course.hidden ? 0 : course.course.credit),
             0,
         ),
     );
 
     $effect(() => {
-        schedule.forEach(
+        selectedSchedule.schedule.forEach(
             (course, index) =>
-                (schedule[index].conflicted = isConflicted(course)),
+                (selectedSchedule.schedule[index].conflicted = isConflicted(course)),
         );
     });
 </script>
@@ -140,9 +143,12 @@
             overflow-hidden
             [scrollbar-width:none] [&::-webkit-scrollbar]:hidden
         ">
-            <!-- TODO: Choose semester component -->
-            <div></div>
-            <SelectedCourse bind:schedule class="border-b border-neutral-200" />
+            <SelectTimetable 
+                class="px-2 py-5 border-b border-neutral-200"
+                options={scheduleList}
+                bind:value={selectedSchedule}
+            />
+            <SelectedCourse bind:schedule={selectedSchedule.schedule} class="border-b border-neutral-200" />
 
             <div
                 class="border-2 border-tangerine-500 text-tangerine-700 m-5 p-5 items-center rounded-2xl"
@@ -191,7 +197,7 @@
             </div>
             <div class="p-8">
                 <Timetable startTime={7}>
-                    {#each schedule as courseSchedule}
+                    {#each selectedSchedule.schedule as courseSchedule}
                         {@render timeTableCourse(courseSchedule)}
                     {/each}
                 </Timetable>

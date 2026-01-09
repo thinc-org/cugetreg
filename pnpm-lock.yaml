@@ -23,6 +23,9 @@ importers:
       '@lucide/svelte':
         specifier: ^0.562.0
         version: 0.562.0(svelte@5.46.0)
+      '@rodrigodagostino/svelte-sortable-list':
+        specifier: ^2.1.9
+        version: 2.1.9(esm-env@1.2.2)(svelte@5.46.0)
       '@tailwindcss/vite':
         specifier: ^4.1.18
         version: 4.1.18(vite@7.3.0(@types/node@24.10.4)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.44.1)(tsx@4.21.0))

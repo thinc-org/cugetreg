@@ -49,7 +49,7 @@ export type SemesterType = "Semester" | "Trimester" | "Inter";
 
 export type ScheduleListItem = {
     name: string;
-    scheduleId: number;
+    scheduleId: string;
     schedule: ScheduleData;
     semesterType: SemesterType;
     semester: string;

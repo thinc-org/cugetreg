@@ -15,6 +15,7 @@
     import { Share2, Ellipsis, Copy, ChevronLeft, ChevronRight } from "lucide-svelte";
     import { isMidtermConflict, isFinalsConflict, formatExamTime, formatDate, discardTime, formatExamColumn } from "../utils"
     import SelectTimetable from "../lib/components/molecules/select-timetable/select-timetable.svelte"
+    import { EditSchedule } from "../lib/components/molecules/edit-schedule"
 
     function getColumnFromDay(day: Day): number {
         switch (day) {
@@ -139,8 +140,8 @@
     <Navbar />
     <div class="w-full flex flex-1 overflow-hidden">
         <div class="
-            flex flex-col flex-1 border-r border-neutral-200
-            overflow-hidden
+            flex flex-col flex-1  border-r border-neutral-200
+            overflow-hidden min-w-90
             [scrollbar-width:none] [&::-webkit-scrollbar]:hidden
         ">
             <SelectTimetable 
@@ -170,30 +171,10 @@
             <div class="flex justify-between">
                 <span class="text-4xl font-bold">ตารางเรียน</span>
 
-                <div class="flex">
-                    <Select.Root type="single" bind:value={currentSchedule}>
-                        <Select.Trigger>
-                            {currentSchedule}
-                        </Select.Trigger>
-                        <Select.Content>
-                            <!-- TODO: -->
-                            <Select.Group>
-                                {#each [1, 2, 3, 4] as item}
-                                    <Select.Item
-                                        value={`Schedule ${item}`}
-                                        label={`Schedule ${item}`}
-                                        aria-label={`Schedule ${item}`}
-                                        role="option"
-                                    />
-                                {/each}
-                            </Select.Group>
-                        </Select.Content>
-                    </Select.Root>
-
-                    <IconButton class="aspect-square mx-3">
-                        <Ellipsis />
-                    </IconButton>
-                </div>
+                <EditSchedule 
+                    bind:selectedSchedule   
+                    {scheduleList}
+                />
             </div>
             <div class="p-8">
                 <Timetable startTime={7}>

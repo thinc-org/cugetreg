@@ -1,4 +1,5 @@
-import type { Course, ScheduleData } from "./types.ts";
+import type { Course, ScheduleData, ScheduleList } from "./types.ts";
+import type { ScheduleList, ScheduleListItem } from "./types.ts";
 
 const courseComPres: Course = {
     name: "COMM PRES SKILL",
@@ -259,7 +260,89 @@ const mockSchedule: ScheduleData = [
         hidden: false,
         colorVariant: "teal"
     },
+
 ]
+
+const mockSchedule1: ScheduleData = [
+    {
+        id: 1,
+        course: courseComPres,
+        selectedSection: 6,
+        hidden: false,
+        colorVariant: "pink",
+    },
+    {
+        id: 2,
+        course: courseAppDev,
+        selectedSection: 1,
+        hidden: false,
+        colorVariant: "tangerine",
+    },
+]
+
+const mockSchedule2: ScheduleData = [
+    {
+        id: 3,
+        course: courseEffectCareer,
+        selectedSection: 71,
+        hidden: false,
+        colorVariant: "green"
+    },
+    {
+        id: 4,
+        course: courseCalculusI,
+        selectedSection: 1,
+        hidden: false,
+        colorVariant: "purple"
+    },
+]
+
+const mockSchedule3: ScheduleData = [
+    {
+        id: 5,
+        course: courseLongName,
+        selectedSection: 1,
+        hidden: false,
+        colorVariant: "teal"
+    },
+    {
+        id: 6,
+        course: courseAI,
+        selectedSection: 1,
+        hidden: false,
+        colorVariant: "teal"
+    },
+]
+
+const mockScheduleItem1: ScheduleListItem = {
+    name: "ปี 2 เทอม 1",
+    scheduleId: 1,
+    schedule: mockSchedule1,
+    semesterType: "Semester",
+    semester: "2566/1"
+}
+
+const mockScheduleItem2: ScheduleListItem = {
+    name: "ปี 2 เทอม 2",
+    scheduleId: 2,
+    schedule: mockSchedule2,
+    semesterType: "Semester",
+    semester: "2566/2"
+}
+
+const mockScheduleItem3: ScheduleListItem = {
+    name: "ปี 3 เทอม 1",
+    scheduleId: 3,
+    schedule: mockSchedule3,
+    semesterType: "Semester",
+    semester: "2567/1"
+}
+
+const mockScheduleList: ScheduleList = [
+    mockScheduleItem1,
+    mockScheduleItem2,
+    mockScheduleItem3,
+];
 
 export {
     courseCalculusI,
@@ -268,5 +351,9 @@ export {
     courseComPres,
     courseLongName,
     courseAI,
-    mockSchedule
+    mockSchedule,
+    mockSchedule1,
+    mockSchedule2,
+    mockSchedule3,
+    mockScheduleList
 };

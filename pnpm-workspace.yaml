@@ -2,3 +2,4 @@ packages:
   # TODO: uncomment this when backend is done
   # - apps/*
   - apps/frontend
+  - packages/*

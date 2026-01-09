@@ -5,7 +5,7 @@
     import { type Icon, Ellipsis, PenLine, Copy, Plus, Pin, Trash } from "@lucide/svelte";
     import { cn } from "../../../../utils";
     import type { ClassValue } from "clsx"
-
+    import type { ScheduleData, ScheduleList, ScheduleListItem } from "../../../../types"
 
     interface Option {
         icon: typeof Icon;
@@ -16,17 +16,19 @@
 
     interface EditScheduleProps {
         class?: ClassValue;
-        currentSchedule: string;
-        onRename: () => void;
-        onDuplicate: () => void;
-        onAddSchedule: () => void;
-        onPin: () => void;
-        onDelete: () => void;
+        selectedSchedule: ScheduleListItem;
+        scheduleList: ScheduleList;
+        onRename?: () => void;
+        onDuplicate?: () => void;
+        onAddSchedule?: () => void;
+        onPin?: () => void;
+        onDelete?: () => void;
     }
 
     let {
         class: className = undefined,
-        currentSchedule = $bindable(),
+        selectedSchedule = $bindable(),
+        scheduleList,
         onRename = () => {},
         onDuplicate = () => {},
         onAddSchedule = () => {},
@@ -62,31 +64,23 @@
             danger: true
         },
     ]
+
+    let selectedScheduleId = $state(selectedSchedule.scheduleId ?? scheduleList[0].scheduleId);
 </script>
 
 <div class={cn("flex space-x-2", className)}>
-    <Select.Root type="single" bind:value={currentSchedule}>
-        <Select.Trigger class="focus:outline-none! focus:ring-0! ">
-            {currentSchedule}
-        </Select.Trigger>
-        <Select.Content>
-            <!-- TODO: -->
-            <Select.Group>
-                {#each [1, 2, 3, 4] as item}
-                    <Select.Item
-                        value={`Schedule ${item}`}
-                        label={`Schedule ${item}`}
-                        aria-label={`Schedule ${item}`}
-                        role="option"
-                    />
-                {/each}
-            </Select.Group>
-        </Select.Content>
-    </Select.Root>
+    <select 
+        class="p-2 mx-1 border border-neutral-200 rounded-xl"
+        bind:value={selectedSchedule}
+    >
+        {#each scheduleList as schedule}
+            <option value={schedule}>{schedule.name}</option>
+        {/each}
+    </select>
 
     <DropdownMenu.Root>
         <DropdownMenu.Trigger>
-            <IconButton class="hover:cursor-pointer">
+            <IconButton class="hover:cursor-pointer" variant="outlined">
                 <Ellipsis />
             </IconButton>
         </DropdownMenu.Trigger>

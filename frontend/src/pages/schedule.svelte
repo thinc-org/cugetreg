@@ -10,12 +10,14 @@
     import { Navbar } from "../lib/components/organisms/navbar";
     import { SelectedCourse } from "../lib/components/organisms/selected-course";
     import { mockScheduleList } from "../mockData";
-    import type { CourseSchedule, Day } from "../types";
+    import type { CourseSchedule, Day, ScheduleListItem } from "../types";
 
-    import { Share2, Ellipsis, Copy, ChevronLeft, ChevronRight } from "lucide-svelte";
+    import { Share2, Copy, ChevronLeft, ChevronRight } from "lucide-svelte";
     import { isMidtermConflict, isFinalsConflict, formatExamTime, formatDate, discardTime, formatExamColumn } from "../utils"
     import SelectTimetable from "../lib/components/molecules/select-timetable/select-timetable.svelte"
     import { EditSchedule } from "../lib/components/molecules/edit-schedule"
+    import { Modal } from "../lib/components/atoms/modal"
+    import { CreateTimetable } from "../lib/components/organisms/create-timetable"
 
     function getColumnFromDay(day: Day): number {
         switch (day) {
@@ -70,9 +72,7 @@
     let selectedSchedule = $state(scheduleList[0]);
     let showExamSchedule = $state<"List" | "Schedule">("Schedule");
 
-    // TODO: Temporary
-    let currentSchedule = $state("schedule 1");
-    let isPublic = $state(false);
+    let showCreateScheduleModal = $state(false);
 
     const examSort = (a: string, b: string) => {
         const numA = Number(a);
@@ -137,6 +137,22 @@
 </script>
 
 <div class="flex flex-col h-screen">
+    <Modal 
+        exitOnEsc
+        exitOnBackgroundClick
+        centered
+        dim
+        bind:show={showCreateScheduleModal}
+    >
+        <CreateTimetable
+            onConfirm={(schedule: ScheduleListItem) => {
+                scheduleList.push(schedule);
+                selectedSchedule = schedule;
+                showCreateScheduleModal = false;
+            }}
+            onCancel={() => showCreateScheduleModal = false}
+        /> 
+    </Modal>
     <Navbar />
     <div class="w-full flex flex-1 overflow-hidden">
         <div class="
@@ -174,6 +190,8 @@
                 <EditSchedule 
                     bind:selectedSchedule   
                     {scheduleList}
+
+                    onAddSchedule={() => showCreateScheduleModal = true}
                 />
             </div>
             <div class="p-8">
@@ -188,17 +206,17 @@
             </div>
 
             <div class="flex">
-                <Switch bind:checked={isPublic} label="เปิดเป็นสาธารณะ" />
+                <Switch bind:checked={selectedSchedule.isPublic} label="เปิดเป็นสาธารณะ" />
                 <div class="flex flex-1 relative">
                     <Input 
                         value="cugetreg.com/1232141413"
-                        disabled={!isPublic}
+                        disabled={!selectedSchedule.isPublic}
                         readonly 
                     />
 
                     <IconButton 
                         variant="ghost" 
-                        disabled={!isPublic}
+                        disabled={!selectedSchedule.isPublic}
                         class="absolute z-10 right-0 hover:cursor-pointer hover:bg-transparent"
                     >
                         <Copy /> 

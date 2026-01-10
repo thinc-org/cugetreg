@@ -42,7 +42,8 @@ export const UpdateCartBodySchema = z
       .optional()
       .transform((v) => (v ? mapVisible(v) : undefined)),
     isDefault: z.boolean().optional(),
-    cartOrder: z.number().min(0).optional(),
+    prevId: z.string().optional(),
+    nextId: z.string().optional(),
   })
   .strict();
 
@@ -86,7 +87,8 @@ export const UpdateCourseBodySchema = z
         message: "Grade must be a multiple of 0.5",
       })
       .optional(),
-    cartOrder: z.number().int().optional(),
+    prevId: z.string().optional(),
+    nextId: z.string().optional(),
   })
   .strict();
 

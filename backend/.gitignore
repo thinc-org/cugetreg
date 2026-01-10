@@ -34,4 +34,3 @@ bin/*
 !bin/README.md
 /src/routes/auth-old.ts
 /src/generated/*
-/src/generated/prisma-effect/index.ts

@@ -12,7 +12,7 @@ const PublicCartItemDetailSchema = z.object({
   sectionNo: z.number(),
   color: z.string().nullable(),
   hidden: z.boolean(),
-  cartOrder: z.number(),
+  cartOrder: z.string(),
   course: z.object({
     courseNameTh: z.string(),
     courseNameEn: z.string(),
@@ -61,7 +61,7 @@ export const CartSchema = z.object({
   name: z.string(),
   visible: z.string(),
   isDefault: z.boolean(),
-  cartOrder: z.number(),
+  cartOrder: z.string(),
   createdAt: z.union([z.date(), z.string()]),
   updatedAt: z.union([z.date(), z.string()]),
 });
@@ -80,7 +80,7 @@ const CartItemDetailSchema = z.object({
   sectionNo: z.number(),
   color: z.string().nullable(),
   hidden: z.boolean(),
-  cartOrder: z.number(),
+  cartOrder: z.string(),
   isGraded: z.boolean(),
   expectedGrade: z.string(),
   course: z.object({

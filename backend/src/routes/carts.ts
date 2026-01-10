@@ -20,6 +20,7 @@ import type {
 } from "../zod_schemas/carts.response.schema.js";
 import dayjs from "dayjs";
 import type { Variables } from "../lib/auth.js";
+import { LexoRankService } from "../services/lexorank.service.js";
 
 const carts = new OpenAPIHono<{ Variables: Variables }>()
 
@@ -79,18 +80,20 @@ const carts = new OpenAPIHono<{ Variables: Variables }>()
                 data: { isDefault: false },
               });
             }
-            // Find max of cart_order
-            const aggregate = await tx.cart.aggregate({
+
+            const lastCart = await tx.cart.findFirst({
               where: {
                 userId,
                 academicYear: validatedData.academicYear,
                 semester: validatedData.semester,
                 studyProgram: validatedData.studyProgram,
               },
-              _max: { cartOrder: true },
+              orderBy: { cartOrder: "desc" },
             });
-            // When aggregate._max.cartOrder === null , nextCartOrder = 0
-            const nextCartOrder = (aggregate._max.cartOrder ?? -1) + 1;
+
+            const nextCartOrder = LexoRankService.getNextRank(
+              lastCart?.cartOrder
+            );
 
             return await tx.cart.create({
               data: {
@@ -151,54 +154,23 @@ const carts = new OpenAPIHono<{ Variables: Variables }>()
             }
 
             // Reorder other cartOrder -> Please review this code!
-            if (
-              updatedData.cartOrder !== undefined &&
-              updatedData.cartOrder !== targetCart.cartOrder
-            ) {
-              const aggregate = await tx.cart.aggregate({
-                where: {
-                  userId,
-                  academicYear: targetCart.academicYear,
-                  semester: targetCart.semester,
-                  studyProgram: targetCart.studyProgram,
-                },
-                _max: { cartOrder: true },
-              });
+            const { prevId, nextId, ...dataToUpdate } = updatedData as any;
 
-              const maxOrder = aggregate._max.cartOrder ?? 0;
+            if (prevId !== undefined || nextId !== undefined) {
+              const [prevCart, nextCart] = await Promise.all([
+                prevId ? tx.cart.findUnique({ where: { id: prevId } }) : null,
+                nextId ? tx.cart.findUnique({ where: { id: nextId } }) : null,
+              ]);
 
-              let newOrder = Math.max(
-                0,
-                Math.min(updatedData.cartOrder, maxOrder)
+              dataToUpdate.cartOrder = LexoRankService.getBetweenRank(
+                prevCart?.cartOrder,
+                nextCart?.cartOrder
               );
-              updatedData.cartOrder = newOrder;
-
-              const oldOrder = targetCart.cartOrder;
-
-              if (newOrder !== oldOrder) {
-                const isMoveDown = oldOrder < newOrder;
-                await tx.cart.updateMany({
-                  where: {
-                    userId,
-                    academicYear: targetCart.academicYear,
-                    semester: targetCart.semester,
-                    studyProgram: targetCart.studyProgram,
-                    cartOrder: isMoveDown
-                      ? { gt: oldOrder, lte: newOrder }
-                      : { gte: newOrder, lt: oldOrder },
-                  },
-                  data: {
-                    cartOrder: {
-                      [isMoveDown ? "decrement" : "increment"]: 1,
-                    },
-                  },
-                });
-              }
             }
 
             return await tx.cart.update({
               where: { id: cartId },
-              data: updatedData,
+              data: dataToUpdate,
             });
           }),
         catch: (err) => err as Error,
@@ -241,20 +213,6 @@ const carts = new OpenAPIHono<{ Variables: Variables }>()
 
             await tx.cart.delete({
               where: { id: cartId },
-            });
-
-            // Reorder cartOrder -> Please review this code
-            await tx.cart.updateMany({
-              where: {
-                userId,
-                academicYear: targetCart.academicYear,
-                semester: targetCart.semester,
-                studyProgram: targetCart.studyProgram,
-                cartOrder: { gt: targetCart.cartOrder },
-              },
-              data: {
-                cartOrder: { decrement: 1 },
-              },
             });
 
             // Case deletedCart is default assign least cartOrder to be next default
@@ -557,7 +515,6 @@ const carts = new OpenAPIHono<{ Variables: Variables }>()
               where: { courseNo: validatedData.courseNo },
             });
             if (!courseInfo) throw new Error("COURSE_NOT_FOUND");
-            console.log(courseInfo);
 
             // Get Section
             const section = await tx.section.findFirst({
@@ -573,12 +530,12 @@ const carts = new OpenAPIHono<{ Variables: Variables }>()
             });
             if (!section) throw new Error("SECTION_NOT_FOUND");
 
-            // Find nextCardItemOrder
-            const aggregation = await tx.cartItem.aggregate({
-              where: { cartId },
-              _max: { cartOrder: true },
+            const lastItem = await tx.cartItem.findFirst({
+              where: { cartId: cartId },
+              orderBy: { cartOrder: "desc" },
             });
-            const nextOrder = (aggregation._max.cartOrder ?? -1) + 1;
+
+            const nextOrder = LexoRankService.getNextRank(lastItem?.cartOrder);
 
             // Add new cartItem
             return await tx.cartItem.create({
@@ -660,46 +617,27 @@ const carts = new OpenAPIHono<{ Variables: Variables }>()
             }
 
             // Reorder cartOrder -> please review this logic
-            if (
-              updatedData.cartOrder !== undefined &&
-              updatedData.cartOrder !== targetItem.cartOrder
-            ) {
-              const aggregate = await tx.cartItem.aggregate({
-                where: { cartId: targetItem.cartId },
-                _max: { cartOrder: true },
-              });
+            const { prevId, nextId, ...dataToUpdate } = updatedData as any;
 
-              const maxOrder = aggregate._max.cartOrder ?? 0;
+            if (prevId !== undefined || nextId !== undefined) {
+              const [prevItem, nextItem] = await Promise.all([
+                prevId
+                  ? tx.cartItem.findUnique({ where: { id: prevId } })
+                  : null,
+                nextId
+                  ? tx.cartItem.findUnique({ where: { id: nextId } })
+                  : null,
+              ]);
 
-              let newOrder = Math.max(
-                0,
-                Math.min(updatedData.cartOrder, maxOrder)
+              dataToUpdate.cartOrder = LexoRankService.getBetweenRank(
+                prevItem?.cartOrder,
+                nextItem?.cartOrder
               );
-              updatedData.cartOrder = newOrder;
-
-              const oldOrder = targetItem.cartOrder;
-
-              if (newOrder !== oldOrder) {
-                const isMoveDown = oldOrder < newOrder;
-                await tx.cartItem.updateMany({
-                  where: {
-                    cartId: targetItem.cartId,
-                    cartOrder: isMoveDown
-                      ? { gt: oldOrder, lte: newOrder }
-                      : { gte: newOrder, lt: oldOrder },
-                  },
-                  data: {
-                    cartOrder: {
-                      [isMoveDown ? "decrement" : "increment"]: 1,
-                    },
-                  },
-                });
-              }
             }
 
             return await tx.cartItem.update({
               where: { id: itemId },
-              data: updatedData,
+              data: dataToUpdate,
             });
           }),
         catch: (err) => err as Error,
@@ -751,20 +689,6 @@ const carts = new OpenAPIHono<{ Variables: Variables }>()
 
             await tx.cartItem.delete({
               where: { id: itemId },
-            });
-
-            await tx.cartItem.updateMany({
-              where: {
-                cartId: cartItem.cartId,
-                cartOrder: {
-                  gt: cartItem.cartOrder,
-                },
-              },
-              data: {
-                cartOrder: {
-                  decrement: 1,
-                },
-              },
             });
           }),
         catch: (err) => err as Error,

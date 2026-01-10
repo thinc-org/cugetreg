@@ -17,6 +17,7 @@ import type {
 import type { PublicCartItemDetail } from "../zod_schemas/publicCarts.response.schema.js";
 import dayjs from "dayjs";
 import type { Variables } from "../lib/auth.js";
+import { LexoRankService } from "../services/lexorank.service.js";
 
 const publicCarts = new OpenAPIHono<{ Variables: Variables }>();
 publicCarts.use("/:cartId/import", middlewareAuth);
@@ -266,7 +267,7 @@ publicCarts
           }),
         catch: (err) => err as Error,
       });
-      const nextOrder = (lastCart?.cartOrder ?? -1) + 1;
+      const nextOrder = LexoRankService.getNextRank(lastCart?.cartOrder);
 
       // For Timetable Name
       const rawBody = yield* Effect.tryPromise({

@@ -10,7 +10,7 @@ generator client {
 }
 
 generator effectPrisma {
-  provider         = "effect-prisma-generator"
+  provider         = "./node_modules/.bin/effect-prisma-generator"
   clientImportPath = "../prisma"
   output           = "../src/generated/prisma-effect/index.ts"
 }
@@ -268,7 +268,7 @@ model Cart {
   // New!!!
   visible   Visible @default(PRIVATE)
   isDefault Boolean @default(false) @map("is_default")
-  cartOrder Int     @default(0) @map("cart_order")
+  cartOrder String @default("0|hzzzzz:") @map("cart_order")
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -292,7 +292,7 @@ model CartItem {
   sectionNo Int     @map("section_no")
   color     String?
   hidden    Boolean @default(false)
-  cartOrder Int     @map("cart_order")
+  cartOrder String @default("0|hzzzzz:") @map("cart_order")
 
   // New!!!
   isGraded      Boolean @default(false) @map("is_graded")

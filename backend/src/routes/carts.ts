@@ -19,14 +19,15 @@ import type {
   ExamScheduleItem,
 } from "../zod_schemas/carts.response.schema.js";
 import dayjs from "dayjs";
+import type { Variables } from "../lib/auth.js";
 
-const carts = new OpenAPIHono()
+const carts = new OpenAPIHono<{ Variables: Variables }>()
 
   // Manage Timetable
 
   // 3.1. List timetables for current user
   .openapi(listCartsRoute, async (c) => {
-    const payload = c.get("jwtPayload");
+    const payload = c.get("user");
     const userId = payload.id;
     const { academicYear, semester, studyProgram } = c.req.valid("query");
 
@@ -57,7 +58,7 @@ const carts = new OpenAPIHono()
 
   // 3.2. Create new timetable (cart)
   .openapi(createCartRoute, async (c) => {
-    const payload = c.get("jwtPayload");
+    const payload = c.get("user");
     const userId = payload.id;
     const validatedData = c.req.valid("json");
     const program = Effect.gen(function* () {
@@ -116,7 +117,7 @@ const carts = new OpenAPIHono()
 
   // 3.3. Edit timetable (cart) (Rename, Set default, share/stop share, Ordering)
   .openapi(updateCartRoute, async (c) => {
-    const payload = c.get("jwtPayload");
+    const payload = c.get("user");
     const userId = payload.id;
     const cartId = c.req.param("cartId");
     const updatedData = c.req.valid("json");
@@ -225,7 +226,7 @@ const carts = new OpenAPIHono()
 
   // 3.4. Delete timetable (cart)
   .openapi(deleteCartRoute, async (c) => {
-    const userId = c.get("jwtPayload").id;
+    const userId = c.get("user").id;
     const cartId = c.req.param("cartId");
 
     const program = Effect.gen(function* () {
@@ -300,7 +301,7 @@ const carts = new OpenAPIHono()
 
   // 3.5. Get timetable details (courses, credits, ect.)
   .openapi(getCartDetailRoute, async (c) => {
-    const userId = c.get("jwtPayload").id;
+    const userId = c.get("user").id;
     const cartId = c.req.param("cartId");
 
     const program = Effect.gen(function* () {
@@ -538,7 +539,7 @@ const carts = new OpenAPIHono()
 
   // 3.6. Add course to timetable
   .openapi(addCourseRoute, async (c) => {
-    const userId = c.get("jwtPayload").id;
+    const userId = c.get("user").id;
     const validatedData = c.req.valid("json");
     const cartId = c.req.param("cartId");
 
@@ -623,7 +624,7 @@ const carts = new OpenAPIHono()
 
   // 3.7. Update/edit course in timetable
   .openapi(updateCourseRoute, async (c) => {
-    const userId = c.get("jwtPayload").id;
+    const userId = c.get("user").id;
     const itemId = c.req.param("itemId");
     const updatedData = c.req.valid("json");
 
@@ -727,7 +728,7 @@ const carts = new OpenAPIHono()
 
   // 3.8. Remove course from timetable
   .openapi(deleteCourseRoute, async (c) => {
-    const payload = c.get("jwtPayload");
+    const payload = c.get("user");
     const userId = payload.id;
     const itemId = c.req.param("itemId");
 

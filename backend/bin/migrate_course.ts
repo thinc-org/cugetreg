@@ -28,6 +28,6 @@ export const runCourseMigration = Effect.gen(function* () {
         genEdOverrideByCourseNo[data.courseNo] || GenEdType.NOT_GENED;
       return migrateCourse(data, currentGenEd);
     },
-    { discard: true, concurrency: 20 }
+    { discard: true, concurrency: 50 }
   );
 });

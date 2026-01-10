@@ -7,22 +7,23 @@ import courses from "./routes/courses.js";
 import carts from "./routes/carts.js";
 import reviews from "./routes/reviews.js";
 import user from "./routes/user.js";
-import auth, { middlewareAuth } from "./routes/auth.js";
+import authRoute, { middlewareAuth } from "./routes/auth.js";
 import { swaggerUI } from "@hono/swagger-ui";
+import type { Variables } from "../src/lib/auth.js";
 
 dotenv.config();
 
-const app = new OpenAPIHono().basePath("/api/v1");
+const app = new OpenAPIHono<{ Variables: Variables }>().basePath("/api/v1");
 
-app.openAPIRegistry.registerComponent("securitySchemes", "Bearer", {
-  type: "http",
-  scheme: "bearer",
-  bearerFormat: "JWT",
+app.openAPIRegistry.registerComponent("securitySchemes", "CookieAuth", {
+  type: "apiKey",
+  in: "cookie",
+  name: "better-auth.session_token",
 });
 
 // Without JWT Auth
 app.route("/public/carts", publicCarts);
-app.route("/auth", auth);
+app.route("/auth", authRoute);
 
 // Middleware List
 

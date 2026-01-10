@@ -2315,6 +2315,636 @@ export class PrismaService extends Service<PrismaService>()("PrismaService", {
             catch: (error) => mapFindError(error, "groupBy", "ReviewVote")
           }),
         ),
+    },
+
+    session: {
+      findUnique: <T extends Prisma.SessionFindUniqueArgs>(args: Prisma.SelectSubset<T, Prisma.SessionFindUniqueArgs>) =>
+        Effect.flatMap(clientOrTx(client), client =>
+          Effect.tryPromise({
+            try: () => client.session.findUnique(args),
+            catch: (error) => mapFindError(error, "findUnique", "Session")
+          }),
+        ),
+
+      findUniqueOrThrow: <T extends Prisma.SessionFindUniqueOrThrowArgs>(args: Prisma.SelectSubset<T, Prisma.SessionFindUniqueOrThrowArgs>) =>
+        Effect.flatMap(clientOrTx(client), client =>
+          Effect.tryPromise({
+            try: () => client.session.findUniqueOrThrow(args),
+            catch: (error) => mapFindOrThrowError(error, "findUniqueOrThrow", "Session")
+          }),
+        ),
+
+      findFirst: <T extends Prisma.SessionFindFirstArgs>(args: Prisma.SelectSubset<T, Prisma.SessionFindFirstArgs>) =>
+        Effect.flatMap(clientOrTx(client), client =>
+          Effect.tryPromise({
+            try: () => client.session.findFirst(args),
+            catch: (error) => mapFindError(error, "findFirst", "Session")
+          }),
+        ),
+
+      findFirstOrThrow: <T extends Prisma.SessionFindFirstOrThrowArgs>(args: Prisma.SelectSubset<T, Prisma.SessionFindFirstOrThrowArgs>) =>
+        Effect.flatMap(clientOrTx(client), client =>
+          Effect.tryPromise({
+            try: () => client.session.findFirstOrThrow(args),
+            catch: (error) => mapFindOrThrowError(error, "findFirstOrThrow", "Session")
+          }),
+        ),
+
+      findMany: <T extends Prisma.SessionFindManyArgs>(args: Prisma.SelectSubset<T, Prisma.SessionFindManyArgs>) =>
+        Effect.flatMap(clientOrTx(client), client =>
+          Effect.tryPromise({
+            try: () => client.session.findMany(args),
+            catch: (error) => mapFindError(error, "findMany", "Session")
+          }),
+        ),
+
+      create: <T extends Prisma.SessionCreateArgs>(args: Prisma.SelectSubset<T, Prisma.SessionCreateArgs>) =>
+        Effect.flatMap(clientOrTx(client), client =>
+          Effect.tryPromise({
+            try: () => client.session.create(args),
+            catch: (error) => mapCreateError(error, "create", "Session")
+          }),
+        ),
+
+      createMany: <T extends Prisma.SessionCreateManyArgs>(args: Prisma.SelectSubset<T, Prisma.SessionCreateManyArgs>) =>
+        Effect.flatMap(clientOrTx(client), client =>
+          Effect.tryPromise({
+            try: () => client.session.createMany(args),
+            catch: (error) => mapCreateError(error, "createMany", "Session")
+          }),
+        ),
+
+      createManyAndReturn: <T extends Prisma.SessionCreateManyAndReturnArgs>(args: Prisma.SelectSubset<T, Prisma.SessionCreateManyAndReturnArgs>) =>
+        Effect.flatMap(clientOrTx(client), client =>
+          Effect.tryPromise({
+            try: () => client.session.createManyAndReturn(args),
+            catch: (error) => mapCreateError(error, "createManyAndReturn", "Session")
+          }),
+        ),
+
+      delete: <T extends Prisma.SessionDeleteArgs>(args: Prisma.SelectSubset<T, Prisma.SessionDeleteArgs>) =>
+        Effect.flatMap(clientOrTx(client), client =>
+          Effect.tryPromise({
+            try: () => client.session.delete(args),
+            catch: (error) => mapDeleteError(error, "delete", "Session")
+          }),
+        ),
+
+      update: <T extends Prisma.SessionUpdateArgs>(args: Prisma.SelectSubset<T, Prisma.SessionUpdateArgs>) =>
+        Effect.flatMap(clientOrTx(client), client =>
+          Effect.tryPromise({
+            try: () => client.session.update(args),
+            catch: (error) => mapUpdateError(error, "update", "Session")
+          }),
+        ),
+
+      deleteMany: <T extends Prisma.SessionDeleteManyArgs>(args: Prisma.SelectSubset<T, Prisma.SessionDeleteManyArgs>) =>
+        Effect.flatMap(clientOrTx(client), client =>
+          Effect.tryPromise({
+            try: () => client.session.deleteMany(args),
+            catch: (error) => mapDeleteManyError(error, "deleteMany", "Session")
+          }),
+        ),
+
+      updateMany: <T extends Prisma.SessionUpdateManyArgs>(args: Prisma.SelectSubset<T, Prisma.SessionUpdateManyArgs>) =>
+        Effect.flatMap(clientOrTx(client), client =>
+          Effect.tryPromise({
+            try: () => client.session.updateMany(args),
+            catch: (error) => mapUpdateManyError(error, "updateMany", "Session")
+          }),
+        ),
+
+      updateManyAndReturn: <T extends Prisma.SessionUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, Prisma.SessionUpdateManyAndReturnArgs>) =>
+        Effect.flatMap(clientOrTx(client), client =>
+          Effect.tryPromise({
+            try: () => client.session.updateManyAndReturn(args),
+            catch: (error) => mapUpdateManyError(error, "updateManyAndReturn", "Session")
+          }),
+        ),
+
+      upsert: <T extends Prisma.SessionUpsertArgs>(args: Prisma.SelectSubset<T, Prisma.SessionUpsertArgs>) =>
+        Effect.flatMap(clientOrTx(client), client =>
+          Effect.tryPromise({
+            try: () => client.session.upsert(args),
+            catch: (error) => mapCreateError(error, "upsert", "Session")
+          }),
+        ),
+
+      // Aggregation operations
+      count: <T extends Prisma.SessionCountArgs>(args: Prisma.SelectSubset<T, Prisma.SessionCountArgs>) =>
+        Effect.flatMap(clientOrTx(client), client =>
+          Effect.tryPromise({
+            try: () => client.session.count(args),
+            catch: (error) => mapFindError(error, "count", "Session")
+          }),
+        ),
+
+      aggregate: <T extends Prisma.SessionAggregateArgs>(args: Prisma.SelectSubset<T, Prisma.SessionAggregateArgs>) =>
+        Effect.flatMap(clientOrTx(client), client =>
+          Effect.tryPromise({
+            try: () => client.session.aggregate(args),
+            catch: (error) => mapFindError(error, "aggregate", "Session")
+          }),
+        ),
+
+      groupBy: <
+        T extends Prisma.SessionGroupByArgs,
+        HasSelectOrTake extends Prisma.Or<
+          Prisma.Extends<'skip', Prisma.Keys<T>>,
+          Prisma.Extends<'take', Prisma.Keys<T>>
+        >,
+        OrderByArg extends Prisma.True extends HasSelectOrTake
+          ? { orderBy: Prisma.SessionGroupByArgs['orderBy'] }
+          : { orderBy?: Prisma.SessionGroupByArgs['orderBy'] },
+        OrderFields extends Prisma.ExcludeUnderscoreKeys<Prisma.Keys<Prisma.MaybeTupleToUnion<T['orderBy']>>>,
+        ByFields extends Prisma.MaybeTupleToUnion<T['by']>,
+        ByValid extends Prisma.Has<ByFields, OrderFields>,
+        HavingFields extends Prisma.GetHavingFields<T['having']>,
+        HavingValid extends Prisma.Has<ByFields, HavingFields>,
+        ByEmpty extends T['by'] extends never[] ? Prisma.True : Prisma.False,
+        InputErrors extends ByEmpty extends Prisma.True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends Prisma.False
+        ? {
+            [P in HavingFields]: P extends ByFields
+              ? never
+              : P extends string
+              ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+              : [
+                  Error,
+                  'Field ',
+                  P,
+                  ` in "having" needs to be provided in "by"`,
+                ]
+          }[HavingFields]
+        : 'take' extends Prisma.Keys<T>
+        ? 'orderBy' extends Prisma.Keys<T>
+          ? ByValid extends Prisma.True
+            ? {}
+            : {
+                [P in OrderFields]: P extends ByFields
+                  ? never
+                  : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+              }[OrderFields]
+          : 'Error: If you provide "take", you also need to provide "orderBy"'
+        : 'skip' extends Prisma.Keys<T>
+        ? 'orderBy' extends Prisma.Keys<T>
+          ? ByValid extends Prisma.True
+            ? {}
+            : {
+                [P in OrderFields]: P extends ByFields
+                  ? never
+                  : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+              }[OrderFields]
+          : 'Error: If you provide "skip", you also need to provide "orderBy"'
+        : ByValid extends Prisma.True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+              ? never
+              : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+          }[OrderFields]
+      >(args: Prisma.SubsetIntersection<T, Prisma.SessionGroupByArgs, OrderByArg> & InputErrors) =>
+        Effect.flatMap(clientOrTx(client), client =>
+          Effect.tryPromise({
+            try: () => client.session.groupBy(args as any) as Prisma.PrismaPromise<
+              Array<Prisma.PickEnumerable<Prisma.SessionGroupByOutputType, T["by"]> & {
+                  [P in keyof T &
+                    keyof Prisma.SessionGroupByOutputType]: P extends "_count"
+                    ? T[P] extends boolean
+                      ? number
+                      : Prisma.GetScalarType<
+                          T[P],
+                          Prisma.SessionGroupByOutputType[P]
+                        >
+                    : Prisma.GetScalarType<
+                        T[P],
+                        Prisma.SessionGroupByOutputType[P]
+                      >;
+                }>>,
+            catch: (error) => mapFindError(error, "groupBy", "Session")
+          }),
+        ),
+    },
+
+    account: {
+      findUnique: <T extends Prisma.AccountFindUniqueArgs>(args: Prisma.SelectSubset<T, Prisma.AccountFindUniqueArgs>) =>
+        Effect.flatMap(clientOrTx(client), client =>
+          Effect.tryPromise({
+            try: () => client.account.findUnique(args),
+            catch: (error) => mapFindError(error, "findUnique", "Account")
+          }),
+        ),
+
+      findUniqueOrThrow: <T extends Prisma.AccountFindUniqueOrThrowArgs>(args: Prisma.SelectSubset<T, Prisma.AccountFindUniqueOrThrowArgs>) =>
+        Effect.flatMap(clientOrTx(client), client =>
+          Effect.tryPromise({
+            try: () => client.account.findUniqueOrThrow(args),
+            catch: (error) => mapFindOrThrowError(error, "findUniqueOrThrow", "Account")
+          }),
+        ),
+
+      findFirst: <T extends Prisma.AccountFindFirstArgs>(args: Prisma.SelectSubset<T, Prisma.AccountFindFirstArgs>) =>
+        Effect.flatMap(clientOrTx(client), client =>
+          Effect.tryPromise({
+            try: () => client.account.findFirst(args),
+            catch: (error) => mapFindError(error, "findFirst", "Account")
+          }),
+        ),
+
+      findFirstOrThrow: <T extends Prisma.AccountFindFirstOrThrowArgs>(args: Prisma.SelectSubset<T, Prisma.AccountFindFirstOrThrowArgs>) =>
+        Effect.flatMap(clientOrTx(client), client =>
+          Effect.tryPromise({
+            try: () => client.account.findFirstOrThrow(args),
+            catch: (error) => mapFindOrThrowError(error, "findFirstOrThrow", "Account")
+          }),
+        ),
+
+      findMany: <T extends Prisma.AccountFindManyArgs>(args: Prisma.SelectSubset<T, Prisma.AccountFindManyArgs>) =>
+        Effect.flatMap(clientOrTx(client), client =>
+          Effect.tryPromise({
+            try: () => client.account.findMany(args),
+            catch: (error) => mapFindError(error, "findMany", "Account")
+          }),
+        ),
+
+      create: <T extends Prisma.AccountCreateArgs>(args: Prisma.SelectSubset<T, Prisma.AccountCreateArgs>) =>
+        Effect.flatMap(clientOrTx(client), client =>
+          Effect.tryPromise({
+            try: () => client.account.create(args),
+            catch: (error) => mapCreateError(error, "create", "Account")
+          }),
+        ),
+
+      createMany: <T extends Prisma.AccountCreateManyArgs>(args: Prisma.SelectSubset<T, Prisma.AccountCreateManyArgs>) =>
+        Effect.flatMap(clientOrTx(client), client =>
+          Effect.tryPromise({
+            try: () => client.account.createMany(args),
+            catch: (error) => mapCreateError(error, "createMany", "Account")
+          }),
+        ),
+
+      createManyAndReturn: <T extends Prisma.AccountCreateManyAndReturnArgs>(args: Prisma.SelectSubset<T, Prisma.AccountCreateManyAndReturnArgs>) =>
+        Effect.flatMap(clientOrTx(client), client =>
+          Effect.tryPromise({
+            try: () => client.account.createManyAndReturn(args),
+            catch: (error) => mapCreateError(error, "createManyAndReturn", "Account")
+          }),
+        ),
+
+      delete: <T extends Prisma.AccountDeleteArgs>(args: Prisma.SelectSubset<T, Prisma.AccountDeleteArgs>) =>
+        Effect.flatMap(clientOrTx(client), client =>
+          Effect.tryPromise({
+            try: () => client.account.delete(args),
+            catch: (error) => mapDeleteError(error, "delete", "Account")
+          }),
+        ),
+
+      update: <T extends Prisma.AccountUpdateArgs>(args: Prisma.SelectSubset<T, Prisma.AccountUpdateArgs>) =>
+        Effect.flatMap(clientOrTx(client), client =>
+          Effect.tryPromise({
+            try: () => client.account.update(args),
+            catch: (error) => mapUpdateError(error, "update", "Account")
+          }),
+        ),
+
+      deleteMany: <T extends Prisma.AccountDeleteManyArgs>(args: Prisma.SelectSubset<T, Prisma.AccountDeleteManyArgs>) =>
+        Effect.flatMap(clientOrTx(client), client =>
+          Effect.tryPromise({
+            try: () => client.account.deleteMany(args),
+            catch: (error) => mapDeleteManyError(error, "deleteMany", "Account")
+          }),
+        ),
+
+      updateMany: <T extends Prisma.AccountUpdateManyArgs>(args: Prisma.SelectSubset<T, Prisma.AccountUpdateManyArgs>) =>
+        Effect.flatMap(clientOrTx(client), client =>
+          Effect.tryPromise({
+            try: () => client.account.updateMany(args),
+            catch: (error) => mapUpdateManyError(error, "updateMany", "Account")
+          }),
+        ),
+
+      updateManyAndReturn: <T extends Prisma.AccountUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, Prisma.AccountUpdateManyAndReturnArgs>) =>
+        Effect.flatMap(clientOrTx(client), client =>
+          Effect.tryPromise({
+            try: () => client.account.updateManyAndReturn(args),
+            catch: (error) => mapUpdateManyError(error, "updateManyAndReturn", "Account")
+          }),
+        ),
+
+      upsert: <T extends Prisma.AccountUpsertArgs>(args: Prisma.SelectSubset<T, Prisma.AccountUpsertArgs>) =>
+        Effect.flatMap(clientOrTx(client), client =>
+          Effect.tryPromise({
+            try: () => client.account.upsert(args),
+            catch: (error) => mapCreateError(error, "upsert", "Account")
+          }),
+        ),
+
+      // Aggregation operations
+      count: <T extends Prisma.AccountCountArgs>(args: Prisma.SelectSubset<T, Prisma.AccountCountArgs>) =>
+        Effect.flatMap(clientOrTx(client), client =>
+          Effect.tryPromise({
+            try: () => client.account.count(args),
+            catch: (error) => mapFindError(error, "count", "Account")
+          }),
+        ),
+
+      aggregate: <T extends Prisma.AccountAggregateArgs>(args: Prisma.SelectSubset<T, Prisma.AccountAggregateArgs>) =>
+        Effect.flatMap(clientOrTx(client), client =>
+          Effect.tryPromise({
+            try: () => client.account.aggregate(args),
+            catch: (error) => mapFindError(error, "aggregate", "Account")
+          }),
+        ),
+
+      groupBy: <
+        T extends Prisma.AccountGroupByArgs,
+        HasSelectOrTake extends Prisma.Or<
+          Prisma.Extends<'skip', Prisma.Keys<T>>,
+          Prisma.Extends<'take', Prisma.Keys<T>>
+        >,
+        OrderByArg extends Prisma.True extends HasSelectOrTake
+          ? { orderBy: Prisma.AccountGroupByArgs['orderBy'] }
+          : { orderBy?: Prisma.AccountGroupByArgs['orderBy'] },
+        OrderFields extends Prisma.ExcludeUnderscoreKeys<Prisma.Keys<Prisma.MaybeTupleToUnion<T['orderBy']>>>,
+        ByFields extends Prisma.MaybeTupleToUnion<T['by']>,
+        ByValid extends Prisma.Has<ByFields, OrderFields>,
+        HavingFields extends Prisma.GetHavingFields<T['having']>,
+        HavingValid extends Prisma.Has<ByFields, HavingFields>,
+        ByEmpty extends T['by'] extends never[] ? Prisma.True : Prisma.False,
+        InputErrors extends ByEmpty extends Prisma.True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends Prisma.False
+        ? {
+            [P in HavingFields]: P extends ByFields
+              ? never
+              : P extends string
+              ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+              : [
+                  Error,
+                  'Field ',
+                  P,
+                  ` in "having" needs to be provided in "by"`,
+                ]
+          }[HavingFields]
+        : 'take' extends Prisma.Keys<T>
+        ? 'orderBy' extends Prisma.Keys<T>
+          ? ByValid extends Prisma.True
+            ? {}
+            : {
+                [P in OrderFields]: P extends ByFields
+                  ? never
+                  : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+              }[OrderFields]
+          : 'Error: If you provide "take", you also need to provide "orderBy"'
+        : 'skip' extends Prisma.Keys<T>
+        ? 'orderBy' extends Prisma.Keys<T>
+          ? ByValid extends Prisma.True
+            ? {}
+            : {
+                [P in OrderFields]: P extends ByFields
+                  ? never
+                  : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+              }[OrderFields]
+          : 'Error: If you provide "skip", you also need to provide "orderBy"'
+        : ByValid extends Prisma.True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+              ? never
+              : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+          }[OrderFields]
+      >(args: Prisma.SubsetIntersection<T, Prisma.AccountGroupByArgs, OrderByArg> & InputErrors) =>
+        Effect.flatMap(clientOrTx(client), client =>
+          Effect.tryPromise({
+            try: () => client.account.groupBy(args as any) as Prisma.PrismaPromise<
+              Array<Prisma.PickEnumerable<Prisma.AccountGroupByOutputType, T["by"]> & {
+                  [P in keyof T &
+                    keyof Prisma.AccountGroupByOutputType]: P extends "_count"
+                    ? T[P] extends boolean
+                      ? number
+                      : Prisma.GetScalarType<
+                          T[P],
+                          Prisma.AccountGroupByOutputType[P]
+                        >
+                    : Prisma.GetScalarType<
+                        T[P],
+                        Prisma.AccountGroupByOutputType[P]
+                      >;
+                }>>,
+            catch: (error) => mapFindError(error, "groupBy", "Account")
+          }),
+        ),
+    },
+
+    verification: {
+      findUnique: <T extends Prisma.VerificationFindUniqueArgs>(args: Prisma.SelectSubset<T, Prisma.VerificationFindUniqueArgs>) =>
+        Effect.flatMap(clientOrTx(client), client =>
+          Effect.tryPromise({
+            try: () => client.verification.findUnique(args),
+            catch: (error) => mapFindError(error, "findUnique", "Verification")
+          }),
+        ),
+
+      findUniqueOrThrow: <T extends Prisma.VerificationFindUniqueOrThrowArgs>(args: Prisma.SelectSubset<T, Prisma.VerificationFindUniqueOrThrowArgs>) =>
+        Effect.flatMap(clientOrTx(client), client =>
+          Effect.tryPromise({
+            try: () => client.verification.findUniqueOrThrow(args),
+            catch: (error) => mapFindOrThrowError(error, "findUniqueOrThrow", "Verification")
+          }),
+        ),
+
+      findFirst: <T extends Prisma.VerificationFindFirstArgs>(args: Prisma.SelectSubset<T, Prisma.VerificationFindFirstArgs>) =>
+        Effect.flatMap(clientOrTx(client), client =>
+          Effect.tryPromise({
+            try: () => client.verification.findFirst(args),
+            catch: (error) => mapFindError(error, "findFirst", "Verification")
+          }),
+        ),
+
+      findFirstOrThrow: <T extends Prisma.VerificationFindFirstOrThrowArgs>(args: Prisma.SelectSubset<T, Prisma.VerificationFindFirstOrThrowArgs>) =>
+        Effect.flatMap(clientOrTx(client), client =>
+          Effect.tryPromise({
+            try: () => client.verification.findFirstOrThrow(args),
+            catch: (error) => mapFindOrThrowError(error, "findFirstOrThrow", "Verification")
+          }),
+        ),
+
+      findMany: <T extends Prisma.VerificationFindManyArgs>(args: Prisma.SelectSubset<T, Prisma.VerificationFindManyArgs>) =>
+        Effect.flatMap(clientOrTx(client), client =>
+          Effect.tryPromise({
+            try: () => client.verification.findMany(args),
+            catch: (error) => mapFindError(error, "findMany", "Verification")
+          }),
+        ),
+
+      create: <T extends Prisma.VerificationCreateArgs>(args: Prisma.SelectSubset<T, Prisma.VerificationCreateArgs>) =>
+        Effect.flatMap(clientOrTx(client), client =>
+          Effect.tryPromise({
+            try: () => client.verification.create(args),
+            catch: (error) => mapCreateError(error, "create", "Verification")
+          }),
+        ),
+
+      createMany: <T extends Prisma.VerificationCreateManyArgs>(args: Prisma.SelectSubset<T, Prisma.VerificationCreateManyArgs>) =>
+        Effect.flatMap(clientOrTx(client), client =>
+          Effect.tryPromise({
+            try: () => client.verification.createMany(args),
+            catch: (error) => mapCreateError(error, "createMany", "Verification")
+          }),
+        ),
+
+      createManyAndReturn: <T extends Prisma.VerificationCreateManyAndReturnArgs>(args: Prisma.SelectSubset<T, Prisma.VerificationCreateManyAndReturnArgs>) =>
+        Effect.flatMap(clientOrTx(client), client =>
+          Effect.tryPromise({
+            try: () => client.verification.createManyAndReturn(args),
+            catch: (error) => mapCreateError(error, "createManyAndReturn", "Verification")
+          }),
+        ),
+
+      delete: <T extends Prisma.VerificationDeleteArgs>(args: Prisma.SelectSubset<T, Prisma.VerificationDeleteArgs>) =>
+        Effect.flatMap(clientOrTx(client), client =>
+          Effect.tryPromise({
+            try: () => client.verification.delete(args),
+            catch: (error) => mapDeleteError(error, "delete", "Verification")
+          }),
+        ),
+
+      update: <T extends Prisma.VerificationUpdateArgs>(args: Prisma.SelectSubset<T, Prisma.VerificationUpdateArgs>) =>
+        Effect.flatMap(clientOrTx(client), client =>
+          Effect.tryPromise({
+            try: () => client.verification.update(args),
+            catch: (error) => mapUpdateError(error, "update", "Verification")
+          }),
+        ),
+
+      deleteMany: <T extends Prisma.VerificationDeleteManyArgs>(args: Prisma.SelectSubset<T, Prisma.VerificationDeleteManyArgs>) =>
+        Effect.flatMap(clientOrTx(client), client =>
+          Effect.tryPromise({
+            try: () => client.verification.deleteMany(args),
+            catch: (error) => mapDeleteManyError(error, "deleteMany", "Verification")
+          }),
+        ),
+
+      updateMany: <T extends Prisma.VerificationUpdateManyArgs>(args: Prisma.SelectSubset<T, Prisma.VerificationUpdateManyArgs>) =>
+        Effect.flatMap(clientOrTx(client), client =>
+          Effect.tryPromise({
+            try: () => client.verification.updateMany(args),
+            catch: (error) => mapUpdateManyError(error, "updateMany", "Verification")
+          }),
+        ),
+
+      updateManyAndReturn: <T extends Prisma.VerificationUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, Prisma.VerificationUpdateManyAndReturnArgs>) =>
+        Effect.flatMap(clientOrTx(client), client =>
+          Effect.tryPromise({
+            try: () => client.verification.updateManyAndReturn(args),
+            catch: (error) => mapUpdateManyError(error, "updateManyAndReturn", "Verification")
+          }),
+        ),
+
+      upsert: <T extends Prisma.VerificationUpsertArgs>(args: Prisma.SelectSubset<T, Prisma.VerificationUpsertArgs>) =>
+        Effect.flatMap(clientOrTx(client), client =>
+          Effect.tryPromise({
+            try: () => client.verification.upsert(args),
+            catch: (error) => mapCreateError(error, "upsert", "Verification")
+          }),
+        ),
+
+      // Aggregation operations
+      count: <T extends Prisma.VerificationCountArgs>(args: Prisma.SelectSubset<T, Prisma.VerificationCountArgs>) =>
+        Effect.flatMap(clientOrTx(client), client =>
+          Effect.tryPromise({
+            try: () => client.verification.count(args),
+            catch: (error) => mapFindError(error, "count", "Verification")
+          }),
+        ),
+
+      aggregate: <T extends Prisma.VerificationAggregateArgs>(args: Prisma.SelectSubset<T, Prisma.VerificationAggregateArgs>) =>
+        Effect.flatMap(clientOrTx(client), client =>
+          Effect.tryPromise({
+            try: () => client.verification.aggregate(args),
+            catch: (error) => mapFindError(error, "aggregate", "Verification")
+          }),
+        ),
+
+      groupBy: <
+        T extends Prisma.VerificationGroupByArgs,
+        HasSelectOrTake extends Prisma.Or<
+          Prisma.Extends<'skip', Prisma.Keys<T>>,
+          Prisma.Extends<'take', Prisma.Keys<T>>
+        >,
+        OrderByArg extends Prisma.True extends HasSelectOrTake
+          ? { orderBy: Prisma.VerificationGroupByArgs['orderBy'] }
+          : { orderBy?: Prisma.VerificationGroupByArgs['orderBy'] },
+        OrderFields extends Prisma.ExcludeUnderscoreKeys<Prisma.Keys<Prisma.MaybeTupleToUnion<T['orderBy']>>>,
+        ByFields extends Prisma.MaybeTupleToUnion<T['by']>,
+        ByValid extends Prisma.Has<ByFields, OrderFields>,
+        HavingFields extends Prisma.GetHavingFields<T['having']>,
+        HavingValid extends Prisma.Has<ByFields, HavingFields>,
+        ByEmpty extends T['by'] extends never[] ? Prisma.True : Prisma.False,
+        InputErrors extends ByEmpty extends Prisma.True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends Prisma.False
+        ? {
+            [P in HavingFields]: P extends ByFields
+              ? never
+              : P extends string
+              ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+              : [
+                  Error,
+                  'Field ',
+                  P,
+                  ` in "having" needs to be provided in "by"`,
+                ]
+          }[HavingFields]
+        : 'take' extends Prisma.Keys<T>
+        ? 'orderBy' extends Prisma.Keys<T>
+          ? ByValid extends Prisma.True
+            ? {}
+            : {
+                [P in OrderFields]: P extends ByFields
+                  ? never
+                  : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+              }[OrderFields]
+          : 'Error: If you provide "take", you also need to provide "orderBy"'
+        : 'skip' extends Prisma.Keys<T>
+        ? 'orderBy' extends Prisma.Keys<T>
+          ? ByValid extends Prisma.True
+            ? {}
+            : {
+                [P in OrderFields]: P extends ByFields
+                  ? never
+                  : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+              }[OrderFields]
+          : 'Error: If you provide "skip", you also need to provide "orderBy"'
+        : ByValid extends Prisma.True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+              ? never
+              : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+          }[OrderFields]
+      >(args: Prisma.SubsetIntersection<T, Prisma.VerificationGroupByArgs, OrderByArg> & InputErrors) =>
+        Effect.flatMap(clientOrTx(client), client =>
+          Effect.tryPromise({
+            try: () => client.verification.groupBy(args as any) as Prisma.PrismaPromise<
+              Array<Prisma.PickEnumerable<Prisma.VerificationGroupByOutputType, T["by"]> & {
+                  [P in keyof T &
+                    keyof Prisma.VerificationGroupByOutputType]: P extends "_count"
+                    ? T[P] extends boolean
+                      ? number
+                      : Prisma.GetScalarType<
+                          T[P],
+                          Prisma.VerificationGroupByOutputType[P]
+                        >
+                    : Prisma.GetScalarType<
+                        T[P],
+                        Prisma.VerificationGroupByOutputType[P]
+                      >;
+                }>>,
+            catch: (error) => mapFindError(error, "groupBy", "Verification")
+          }),
+        ),
     }
     }
   })

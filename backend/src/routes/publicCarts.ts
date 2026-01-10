@@ -16,8 +16,9 @@ import type {
 } from "../zod_schemas/carts.response.schema.js";
 import type { PublicCartItemDetail } from "../zod_schemas/publicCarts.response.schema.js";
 import dayjs from "dayjs";
+import type { Variables } from "../lib/auth.js";
 
-const publicCarts = new OpenAPIHono();
+const publicCarts = new OpenAPIHono<{ Variables: Variables }>();
 publicCarts.use("/:cartId/import", middlewareAuth);
 
 publicCarts
@@ -34,7 +35,7 @@ publicCarts
             include: {
               items: {
                 include: {
-                  courseN: {
+                  courseInfo: {
                     include: {
                       courses: {
                         include: {
@@ -64,7 +65,7 @@ publicCarts
       let totalCredits = 0;
 
       cart.items.forEach((item) => {
-        const info = item.courseN;
+        const info = item.courseInfo;
         const creditValue = Number(info.credit);
 
         const courseData = info.courses.find(
@@ -236,7 +237,7 @@ publicCarts
 
   // 4.2. Import timetable from public link
   .openapi(importPublicCartRoute, async (c) => {
-    const payload = c.get("jwtPayload");
+    const payload = c.get("user");
     const userId = payload.id;
     const cartId = c.req.param("cartId");
 

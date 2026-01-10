@@ -20,6 +20,6 @@ export const runReviewMigration = Effect.gen(function* () {
   const migrationReviewsProgram = yield* Effect.forEach(
     reviewsData,
     (item) => migrateReview(item),
-    { discard: true, concurrency: 20 }
+    { discard: true, concurrency: 50 }
   );
 });

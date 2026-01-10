@@ -8,7 +8,7 @@ import {
 
 export const ListCartsQuerySchema = z
   .object({
-    academicYear: z.number().int().optional(),
+    academicYear: z.coerce.number().int().optional(),
     semester: z
       .enum(semester)
       .optional()

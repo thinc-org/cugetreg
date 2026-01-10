@@ -64,8 +64,6 @@
             danger: true
         },
     ]
-
-    let selectedScheduleId = $state(selectedSchedule.scheduleId ?? scheduleList[0].scheduleId);
 </script>
 
 <div class={cn("flex space-x-2", className)}>
@@ -93,7 +91,13 @@
                         {@const OptionIcon = option.icon}
                         {@const danger = option.danger ?? false}
                         <DropdownMenu.Item aria-label="dropdown">   
-                            <div class="flex p-1 rounded-sm hover:bg-neutral-200 hover:cursor-pointer">
+                            <div 
+                                class="flex p-1 rounded-sm hover:bg-neutral-200 hover:cursor-pointer"
+                                onclick={option.onclick}
+                                onkeydown={() => {}}
+                                role="dialog"
+                                tabindex="0"
+                            >
                                 <OptionIcon size={18} class={danger ? "stroke-on-error-container" : ""}/>
                                 <span class={cn(
                                     "ml-2 text-sm font-extralight",

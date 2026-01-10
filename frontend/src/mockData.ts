@@ -319,7 +319,8 @@ const mockScheduleItem1: ScheduleListItem = {
     scheduleId: "1",
     schedule: mockSchedule1,
     semesterType: "Semester",
-    semester: "2566/1"
+    semester: "2566/1",
+    isPublic: false
 }
 
 const mockScheduleItem2: ScheduleListItem = {
@@ -327,7 +328,8 @@ const mockScheduleItem2: ScheduleListItem = {
     scheduleId: "2",
     schedule: mockSchedule2,
     semesterType: "Semester",
-    semester: "2566/2"
+    semester: "2566/2",
+    isPublic: true
 }
 
 const mockScheduleItem3: ScheduleListItem = {
@@ -335,7 +337,8 @@ const mockScheduleItem3: ScheduleListItem = {
     scheduleId: "3",
     schedule: mockSchedule3,
     semesterType: "Semester",
-    semester: "2567/1"
+    semester: "2567/1",
+    isPublic: false
 }
 
 const mockScheduleList: ScheduleList = [

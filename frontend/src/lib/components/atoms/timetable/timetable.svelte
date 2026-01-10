@@ -15,15 +15,17 @@
         children?: Snippet;
     }
 
-    const {
-        periodPerDay = 12,
+    let prop: TimeTableProp = $props();
+
+    let {
         startTime = 6,
         class: className = undefined,
-        days = DAYS5,
         children,
-    }: TimeTableProp = $props();
+    }: TimeTableProp = prop;
 
-    const amountOfDays = $derived(days.length);
+    let periodPerDay = $derived(prop.periodPerDay ?? 12);
+    let days = $derived(prop.days ?? DAYS5);
+    let amountOfDays = $derived(prop.days?.length ?? 5);
 
     setContext<TimeTableContext>("timetable-context", {
         get periodPerDay() {

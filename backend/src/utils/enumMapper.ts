@@ -41,10 +41,10 @@ export function mapVisible(raw: string): Visible {
   switch (raw) {
     case "PUB":
     case "PUBLIC":
-      return Visible.PUBLIC;
+      return Visible.PUB;
     case "PVT":
     case "PRIVATE":
-      return Visible.PRIVATE;
+      return Visible.PVT;
     default:
       throw new Error(`Invalid Visible: ${raw}`);
   }
@@ -54,19 +54,19 @@ export function mapGenEdType(raw: string): GenEdType {
   switch (raw) {
     case "NO":
     case "NOT_GENED":
-      return GenEdType.NOT_GENED;
+      return GenEdType.NO;
     case "SC":
     case "SCIENCE":
-      return GenEdType.SCIENCE;
+      return GenEdType.SC;
     case "SO":
     case "SOCIAL":
-      return GenEdType.SOCIAL;
+      return GenEdType.SO;
     case "HU":
     case "HUMAN":
-      return GenEdType.HUMAN;
+      return GenEdType.HU;
     case "IN":
     case "INTERDISCIPLINARY":
-      return GenEdType.INTERDISCIPLINARY;
+      return GenEdType.IN;
     default:
       throw new Error(`Invalid GenEdType: ${raw}`);
   }
@@ -76,31 +76,29 @@ export function mapDayOfWeek(raw: string): DayOfWeek {
   switch (raw) {
     case "MO":
     case "MONDAY":
-      return DayOfWeek.MONDAY;
+      return DayOfWeek.MO;
     case "TU":
     case "TUESDAY":
-      return DayOfWeek.TUESDAY;
+      return DayOfWeek.TU;
     case "WE":
     case "WEDNESDAY":
-      return DayOfWeek.WEDNESDAY;
+      return DayOfWeek.WE;
     case "TH":
     case "THURSDAY":
-      return DayOfWeek.THURSDAY;
+      return DayOfWeek.TH;
     case "FR":
     case "FRIDAY":
-      return DayOfWeek.FRIDAY;
+      return DayOfWeek.FR;
     case "SA":
     case "SATURDAY":
-      return DayOfWeek.SATURDAY;
+      return DayOfWeek.SA;
     case "SU":
     case "SUNDAY":
-      return DayOfWeek.SUNDAY;
+      return DayOfWeek.SU;
     case "AR":
-    case "ARRANGED":
-      return DayOfWeek.ARRANGED;
+      return DayOfWeek.AR;
     case "IA":
-    case "IRREGULAR":
-      return DayOfWeek.IRREGULAR;
+      return DayOfWeek.IR;
     default:
       throw new Error(`Invalid DayOfWeek: ${raw}`);
   }
@@ -123,10 +121,10 @@ export function mapVoteType(raw: string): VoteType {
   switch (raw) {
     case "L":
     case "LIKE":
-      return VoteType.LIKE;
+      return VoteType.L;
     case "D":
     case "DISLIKE":
-      return VoteType.DISLIKE;
+      return VoteType.D;
     default:
       throw new Error(`Invalid VoteType: ${raw}`);
   }

@@ -1,4 +1,4 @@
-import { prisma } from "../db/clients.js";
+import { prisma, PrismaLive } from "../db/clients.js";
 import { Effect, Console } from "effect";
 import { OpenAPIHono } from "@hono/zod-openapi";
 import {
@@ -21,6 +21,15 @@ import type {
 import dayjs from "dayjs";
 import type { Variables } from "../lib/auth.js";
 import { LexoRankService } from "../services/lexorank.service.js";
+import { PrismaService } from "../generated/prisma-effect/index.js";
+import type {
+  Cart,
+  CartItem,
+  Course,
+  CourseInfo,
+  Section,
+  SectionClass,
+} from "../generated/prisma/client.js";
 
 const carts = new OpenAPIHono<{ Variables: Variables }>()
 
@@ -33,26 +42,19 @@ const carts = new OpenAPIHono<{ Variables: Variables }>()
     const { academicYear, semester, studyProgram } = c.req.valid("query");
 
     const program = Effect.gen(function* () {
-      const userCarts = yield* Effect.tryPromise({
-        try: () =>
-          prisma.cart.findMany({
-            where: {
-              userId,
-              academicYear,
-              semester,
-              studyProgram,
-            },
-          }),
-        catch: (error) => new Error(`Prisma Error: ${error}`),
+      const prisma = yield* PrismaService;
+      const userCarts = yield* prisma.cart.findMany({
+        where: { userId, academicYear, semester, studyProgram },
       });
-      return c.json({ data: userCarts }, 200);
+      return c.json({ data: userCarts as Cart[] }, 200);
     }).pipe(
       Effect.catchAll((err) => {
         return Effect.gen(function* () {
           yield* Console.error("Fetch Carts Error:", err);
           return c.json({ error: "INTERNAL_SERVER_ERROR" }, 500);
         });
-      })
+      }),
+      Effect.provide(PrismaLive)
     );
     return await Effect.runPromise(program);
   })
@@ -63,22 +65,19 @@ const carts = new OpenAPIHono<{ Variables: Variables }>()
     const userId = payload.id;
     const validatedData = c.req.valid("json");
     const program = Effect.gen(function* () {
-      // Sequence of dependent operation
-      const newCart = yield* Effect.tryPromise({
-        try: () =>
-          prisma.$transaction(async (tx) => {
-            // Set other isDefault
-            if (validatedData.isDefault) {
-              await tx.cart.updateMany({
-                where: {
-                  userId: userId,
-                  isDefault: true,
-                },
-                data: { isDefault: false },
-              });
-            }
+      const db = yield* PrismaService;
+      const newCart = (yield* db.$transaction(
+        Effect.gen(function* () {
+          // Set other isDefault
+          if (validatedData.isDefault) {
+            yield* db.cart.updateMany({
+              where: { userId, isDefault: true },
+              data: { isDefault: false },
+            });
+          }
 
-            const lastCart = await tx.cart.findFirst({
+          const lastCart = yield* db.cart
+            .findFirst({
               where: {
                 userId,
                 academicYear: validatedData.academicYear,
@@ -86,31 +85,28 @@ const carts = new OpenAPIHono<{ Variables: Variables }>()
                 studyProgram: validatedData.studyProgram,
               },
               orderBy: { cartOrder: "desc" },
-            });
+            })
+            .pipe(Effect.map((res) => res as Cart | null));
 
-            const nextCartOrder = LexoRankService.getNextRank(
-              lastCart?.cartOrder
-            );
+          const nextCartOrder = LexoRankService.getNextRank(
+            lastCart?.cartOrder
+          );
 
-            return await tx.cart.create({
-              data: {
-                userId,
-                cartOrder: nextCartOrder,
-                ...validatedData,
-              },
-            });
-          }),
-        catch: (err) => err,
-      });
-
+          return yield* db.cart.create({
+            data: {
+              userId,
+              cartOrder: nextCartOrder,
+              ...validatedData,
+            },
+          });
+        })
+      )) as Cart;
       return c.json({ data: newCart }, 201);
     }).pipe(
       Effect.catchAll((err) =>
-        Effect.gen(function* () {
-          yield* Console.error("Fetch Carts Error:", err);
-          return c.json({ error: "INTERNAL_SERVER_ERROR" }, 500);
-        })
-      )
+        Effect.succeed(c.json({ error: "INTERNAL_SERVER_ERROR" }, 500))
+      ),
+      Effect.provide(PrismaLive)
     );
     return await Effect.runPromise(program);
   })
@@ -123,52 +119,66 @@ const carts = new OpenAPIHono<{ Variables: Variables }>()
     const updatedData = c.req.valid("json");
 
     const program = Effect.gen(function* () {
-      const updatedCart = yield* Effect.tryPromise({
-        try: () =>
-          prisma.$transaction(async (tx) => {
-            // Find current cart
-            const targetCart = await tx.cart.findFirst({
+      const db = yield* PrismaService;
+
+      const updatedCart = yield* db.$transaction(
+        Effect.gen(function* () {
+          // Find current cart
+          const targetCart = yield* db.cart
+            .findFirst({
               where: { id: cartId },
+            })
+            .pipe(Effect.map((r) => r as Cart | null));
+
+          if (!targetCart) {
+            yield* Effect.fail(new Error("CART_NOT_FOUND"));
+          }
+          if (targetCart!.userId !== userId)
+            Effect.fail(new Error("NOT_CART_OWNER"));
+
+          // Set other isDefault
+          if (updatedData.isDefault === true) {
+            yield* db.cart.updateMany({
+              where: {
+                userId,
+                isDefault: true,
+              },
+              data: { isDefault: false },
             });
+          }
 
-            if (!targetCart) {
-              throw new Error("CART_NOT_FOUND");
-            }
-            if (targetCart.userId !== userId) throw new Error("NOT_CART_OWNER");
+          // Reorder other cartOrder -> Please review this code!
+          const { prevId, nextId, ...dataToUpdate } = updatedData as any;
 
-            // Set other isDefault
-            if (updatedData.isDefault === true) {
-              await tx.cart.updateMany({
-                where: {
-                  userId,
-                  isDefault: true,
-                },
-                data: { isDefault: false },
-              });
-            }
+          if (prevId !== undefined || nextId !== undefined) {
+            const [prevCart, nextCart] = yield* Effect.all([
+              prevId
+                ? db.cart
+                    .findUnique({ where: { id: prevId } })
+                    .pipe(Effect.map((r) => r as Cart | null))
+                : Effect.succeed(null),
+              nextId
+                ? db.cart
+                    .findUnique({ where: { id: nextId } })
+                    .pipe(Effect.map((r) => r as Cart | null))
+                : Effect.succeed(null),
+            ]);
 
-            // Reorder other cartOrder -> Please review this code!
-            const { prevId, nextId, ...dataToUpdate } = updatedData as any;
+            dataToUpdate.cartOrder = LexoRankService.getBetweenRank(
+              prevCart?.cartOrder,
+              nextCart?.cartOrder
+            );
+          }
 
-            if (prevId !== undefined || nextId !== undefined) {
-              const [prevCart, nextCart] = await Promise.all([
-                prevId ? tx.cart.findUnique({ where: { id: prevId } }) : null,
-                nextId ? tx.cart.findUnique({ where: { id: nextId } }) : null,
-              ]);
-
-              dataToUpdate.cartOrder = LexoRankService.getBetweenRank(
-                prevCart?.cartOrder,
-                nextCart?.cartOrder
-              );
-            }
-
-            return await tx.cart.update({
+          return yield* db.cart
+            .update({
               where: { id: cartId },
               data: dataToUpdate,
-            });
-          }),
-        catch: (err) => err as Error,
-      });
+            })
+            .pipe(Effect.map((r) => r as Cart));
+        })
+      );
+
       return c.json({ data: updatedCart }, 200);
     }).pipe(
       Effect.catchAll((err) =>
@@ -184,9 +194,9 @@ const carts = new OpenAPIHono<{ Variables: Variables }>()
 
           return c.json({ error: "INTERNAL_SERVER_ERROR" }, 500);
         })
-      )
+      ),
+      Effect.provide(PrismaLive)
     );
-
     return await Effect.runPromise(program);
   })
 
@@ -196,37 +206,48 @@ const carts = new OpenAPIHono<{ Variables: Variables }>()
     const cartId = c.req.param("cartId");
 
     const program = Effect.gen(function* () {
-      yield* Effect.tryPromise({
-        try: () =>
-          prisma.$transaction(async (tx) => {
-            const targetCart = await tx.cart.findUnique({
-              where: { id: cartId },
-            });
-            if (!targetCart) throw new Error("CART_NOT_FOUND");
-            if (targetCart.userId !== userId) throw new Error("NOT_CART_OWNER");
+      const db = yield* PrismaService;
 
-            await tx.cart.delete({
+      yield* db.$transaction(
+        Effect.gen(function* () {
+          const targetCart = yield* db.cart
+            .findUnique({
               where: { id: cartId },
-            });
+            })
+            .pipe(Effect.map((r) => r as Cart | null));
 
-            // Case deletedCart is default assign least cartOrder to be next default
-            if (targetCart.isDefault) {
-              const nextDefaultCart = await tx.cart.findFirst({
+          if (!targetCart) {
+            yield* Effect.fail(new Error("CART_NOT_FOUND"));
+          }
+          if (targetCart!.userId !== userId) {
+            yield* Effect.fail(new Error("NOT_CART_OWNER"));
+          }
+
+          yield* db.cart.delete({
+            where: { id: cartId },
+          });
+
+          // Case deletedCart is default assign least cartOrder to be next default
+          if (targetCart!.isDefault) {
+            const nextDefaultCart = yield* db.cart
+              .findFirst({
                 where: {
                   userId,
                 },
                 orderBy: { cartOrder: "asc" },
+              })
+              .pipe(Effect.map((r) => r as Cart | null));
+
+            if (nextDefaultCart) {
+              yield* db.cart.update({
+                where: { id: nextDefaultCart.id },
+                data: { isDefault: true },
               });
-              if (nextDefaultCart) {
-                await tx.cart.update({
-                  where: { id: nextDefaultCart.id },
-                  data: { isDefault: true },
-                });
-              }
             }
-          }),
-        catch: (err) => err as Error,
-      });
+          }
+        })
+      );
+
       return c.body(null, 204);
     }).pipe(
       Effect.catchAll((err) =>
@@ -242,9 +263,9 @@ const carts = new OpenAPIHono<{ Variables: Variables }>()
 
           return c.json({ error: "INTERNAL_SERVER_ERROR" }, 500);
         })
-      )
+      ),
+      Effect.provide(PrismaLive)
     );
-
     return await Effect.runPromise(program);
   })
 
@@ -254,20 +275,20 @@ const carts = new OpenAPIHono<{ Variables: Variables }>()
     const cartId = c.req.param("cartId");
 
     const program = Effect.gen(function* () {
-      const cart = yield* Effect.tryPromise({
-        try: () =>
-          prisma.cart.findUnique({
-            where: { id: cartId },
-            include: {
-              items: {
-                include: {
-                  courseInfo: {
-                    include: {
-                      courses: {
-                        include: {
-                          sections: {
-                            include: { classes: true },
-                          },
+      const db = yield* PrismaService;
+
+      const cart = yield* db.cart
+        .findUnique({
+          where: { id: cartId },
+          include: {
+            items: {
+              include: {
+                courseInfo: {
+                  include: {
+                    courses: {
+                      include: {
+                        sections: {
+                          include: { classes: true },
                         },
                       },
                     },
@@ -275,9 +296,9 @@ const carts = new OpenAPIHono<{ Variables: Variables }>()
                 },
               },
             },
-          }),
-        catch: (error) => error as Error,
-      });
+          },
+        })
+        .pipe(Effect.map((r) => r as any));
 
       if (!cart) {
         return yield* Effect.fail(new Error("CART_NOT_FOUND"));
@@ -295,13 +316,13 @@ const carts = new OpenAPIHono<{ Variables: Variables }>()
       let totalGradedCredits = 0;
       let totalPoints = 0;
 
-      cart.items.forEach((item) => {
+      cart.items.forEach((item: any) => {
         const info = item.courseInfo;
         const creditValue = Number(info.credit);
 
         const courseData = info.courses.find(
           // info.courses is Array of Course
-          (course) =>
+          (course: Course) =>
             course.academicYear === cart.academicYear &&
             course.semester === cart.semester &&
             course.studyProgram === cart.studyProgram
@@ -309,7 +330,7 @@ const carts = new OpenAPIHono<{ Variables: Variables }>()
 
         const sectionData = courseData?.sections.find(
           // courseData.sections is Array of Section
-          (sec) => sec.sectionNo === item.sectionNo
+          (sec: Section) => sec.sectionNo === item.sectionNo
         ); // Section Object of this item
 
         // Calculate Pre-Summary
@@ -346,7 +367,7 @@ const carts = new OpenAPIHono<{ Variables: Variables }>()
         });
 
         // Format Classes Schedule
-        sectionData?.classes.forEach((cls) => {
+        sectionData?.classes.forEach((cls: SectionClass) => {
           classesSchedule.push({
             cartItemId: item.id,
             courseNo: item.courseNo,
@@ -478,7 +499,8 @@ const carts = new OpenAPIHono<{ Variables: Variables }>()
             return c.json({ error: "NOT_CART_OWNER" }, 403);
           return c.json({ error: "INTERNAL_SERVER_ERROR" }, 500);
         })
-      )
+      ),
+      Effect.provide(PrismaLive)
     );
 
     return await Effect.runPromise(program);
@@ -493,57 +515,71 @@ const carts = new OpenAPIHono<{ Variables: Variables }>()
     const cartId = c.req.param("cartId");
 
     const program = Effect.gen(function* () {
-      const newItem = yield* Effect.tryPromise({
-        try: () =>
-          prisma.$transaction(async (tx) => {
-            // Get cart
-            const cart = await tx.cart.findUnique({ where: { id: cartId } });
-            if (!cart) throw new Error("CART_NOT_FOUND");
-            if (cart.userId !== userId) throw new Error("NOT_CART_OWNER");
+      const db = yield* PrismaService;
 
-            // Get Course
-            const courseInfo = await tx.courseInfo.findUnique({
+      const newItem = (yield* db.$transaction(
+        Effect.gen(function* () {
+          // Get cart
+          const cart = yield* db.cart
+            .findUnique({
+              where: { id: cartId },
+            })
+            .pipe(Effect.map((r) => r as Cart | null));
+
+          if (!cart) yield* Effect.fail(new Error("CART_NOT_FOUND"));
+          if (cart!.userId !== userId)
+            yield* Effect.fail(new Error("NOT_CART_OWNER"));
+
+          // Get Course
+          const courseInfo = yield* db.courseInfo
+            .findUnique({
               where: { courseNo: validatedData.courseNo },
-            });
-            if (!courseInfo) throw new Error("COURSE_NOT_FOUND");
+            })
+            .pipe(Effect.map((r) => r as CourseInfo | null));
 
-            // Get Section
-            const section = await tx.section.findFirst({
+          if (!courseInfo) yield* Effect.fail(new Error("COURSE_NOT_FOUND"));
+
+          // Get Section
+          const section = yield* db.section
+            .findFirst({
               where: {
                 sectionNo: validatedData.sectionNo,
                 course: {
                   courseNo: validatedData.courseNo,
-                  semester: cart.semester,
-                  academicYear: cart.academicYear,
-                  studyProgram: cart.studyProgram,
+                  semester: cart!.semester,
+                  academicYear: cart!.academicYear,
+                  studyProgram: cart!.studyProgram,
                 },
               },
-            });
-            if (!section) throw new Error("SECTION_NOT_FOUND");
+            })
+            .pipe(Effect.map((r) => r as Section | null));
 
-            const lastItem = await tx.cartItem.findFirst({
+          if (!section) yield* Effect.fail(new Error("SECTION_NOT_FOUND"));
+
+          const lastItem = yield* db.cartItem
+            .findFirst({
               where: { cartId: cartId },
               orderBy: { cartOrder: "desc" },
-            });
+            })
+            .pipe(Effect.map((r) => r as CartItem | null));
 
-            const nextOrder = LexoRankService.getNextRank(lastItem?.cartOrder);
+          const nextOrder = LexoRankService.getNextRank(lastItem?.cartOrder);
 
-            // Add new cartItem
-            return await tx.cartItem.create({
-              data: {
-                cartId: cartId,
-                courseNo: validatedData.courseNo,
-                sectionNo: validatedData.sectionNo,
-                color: validatedData.color || "primary",
-                isGraded: validatedData.isGraded,
-                expectedGrade: validatedData.expectedGrade,
-                hidden: validatedData.hidden,
-                cartOrder: nextOrder,
-              },
-            });
-          }),
-        catch: (err) => err as Error,
-      });
+          // Add new cartItem
+          return yield* db.cartItem.create({
+            data: {
+              cartId: cartId,
+              courseNo: validatedData.courseNo,
+              sectionNo: validatedData.sectionNo,
+              color: validatedData.color || "primary",
+              isGraded: validatedData.isGraded,
+              expectedGrade: validatedData.expectedGrade,
+              hidden: validatedData.hidden,
+              cartOrder: nextOrder,
+            },
+          });
+        })
+      )) as CartItem;
 
       return c.json({ data: newItem }, 201);
     }).pipe(
@@ -564,7 +600,8 @@ const carts = new OpenAPIHono<{ Variables: Variables }>()
             status as any
           );
         })
-      )
+      ),
+      Effect.provide(PrismaLive)
     );
 
     return await Effect.runPromise(program);
@@ -577,62 +614,71 @@ const carts = new OpenAPIHono<{ Variables: Variables }>()
     const updatedData = c.req.valid("json");
 
     const program = Effect.gen(function* () {
-      const updatedItem = yield* Effect.tryPromise({
-        try: () =>
-          prisma.$transaction(async (tx) => {
-            const targetItem = await tx.cartItem.findUnique({
+      const db = yield* PrismaService;
+
+      const updatedItem = (yield* db.$transaction(
+        Effect.gen(function* () {
+          const targetItem = yield* db.cartItem
+            .findUnique({
               where: { id: itemId },
               include: { cart: true },
-            });
+            })
+            .pipe(Effect.map((r) => r as (CartItem & { cart: Cart }) | null));
 
-            if (!targetItem) throw new Error("ITEM_NOT_FOUND");
-            if (targetItem.cart.userId !== userId)
-              throw new Error("NOT_CART_OWNER");
+          if (!targetItem) yield* Effect.fail(new Error("ITEM_NOT_FOUND"));
+          if (targetItem!.cart.userId !== userId)
+            yield* Effect.fail(new Error("NOT_CART_OWNER"));
 
-            if (
-              updatedData.sectionNo !== undefined &&
-              updatedData.sectionNo !== targetItem.sectionNo
-            ) {
-              const section = await tx.section.findFirst({
+          if (
+            updatedData.sectionNo !== undefined &&
+            updatedData.sectionNo !== targetItem!.sectionNo
+          ) {
+            const section = yield* db.section
+              .findFirst({
                 where: {
                   sectionNo: updatedData.sectionNo,
                   course: {
-                    courseNo: targetItem.courseNo,
-                    semester: targetItem.cart.semester,
-                    academicYear: targetItem.cart.academicYear,
-                    studyProgram: targetItem.cart.studyProgram,
+                    courseNo: targetItem!.courseNo,
+                    semester: targetItem!.cart.semester,
+                    academicYear: targetItem!.cart.academicYear,
+                    studyProgram: targetItem!.cart.studyProgram,
                   },
                 },
-              });
-              if (!section) throw new Error("SECTION_NOT_FOUND");
-            }
+              })
+              .pipe(Effect.map((r) => r as Section | null));
 
-            // Reorder cartOrder -> please review this logic
-            const { prevId, nextId, ...dataToUpdate } = updatedData as any;
+            if (!section) yield* Effect.fail(new Error("SECTION_NOT_FOUND"));
+          }
 
-            if (prevId !== undefined || nextId !== undefined) {
-              const [prevItem, nextItem] = await Promise.all([
-                prevId
-                  ? tx.cartItem.findUnique({ where: { id: prevId } })
-                  : null,
-                nextId
-                  ? tx.cartItem.findUnique({ where: { id: nextId } })
-                  : null,
-              ]);
+          // Reorder cartOrder -> please review this logic
+          const { prevId, nextId, ...dataToUpdate } = updatedData as any;
 
-              dataToUpdate.cartOrder = LexoRankService.getBetweenRank(
-                prevItem?.cartOrder,
-                nextItem?.cartOrder
-              );
-            }
+          if (prevId !== undefined || nextId !== undefined) {
+            const [prevItem, nextItem] = yield* Effect.all([
+              prevId
+                ? db.cartItem
+                    .findUnique({ where: { id: prevId } })
+                    .pipe(Effect.map((r) => r as CartItem | null))
+                : Effect.succeed(null),
+              nextId
+                ? db.cartItem
+                    .findUnique({ where: { id: nextId } })
+                    .pipe(Effect.map((r) => r as CartItem | null))
+                : Effect.succeed(null),
+            ]);
 
-            return await tx.cartItem.update({
-              where: { id: itemId },
-              data: dataToUpdate,
-            });
-          }),
-        catch: (err) => err as Error,
-      });
+            dataToUpdate.cartOrder = LexoRankService.getBetweenRank(
+              prevItem?.cartOrder,
+              nextItem?.cartOrder
+            );
+          }
+
+          return yield* db.cartItem.update({
+            where: { id: itemId },
+            data: dataToUpdate,
+          });
+        })
+      )) as CartItem;
 
       return c.json({ data: updatedItem }, 200);
     }).pipe(
@@ -649,9 +695,9 @@ const carts = new OpenAPIHono<{ Variables: Variables }>()
 
           return c.json({ error: "INTERNAL_SERVER_ERROR" }, 500);
         })
-      )
+      ),
+      Effect.provide(PrismaLive)
     );
-
     return await Effect.runPromise(program);
   })
 
@@ -662,44 +708,46 @@ const carts = new OpenAPIHono<{ Variables: Variables }>()
     const itemId = c.req.param("itemId");
 
     const program = Effect.gen(function* () {
-      yield* Effect.tryPromise({
-        try: () =>
-          prisma.$transaction(async (tx) => {
-            const cartItem = await tx.cartItem.findUnique({
+      const db = yield* PrismaService;
+
+      yield* db.$transaction(
+        Effect.gen(function* () {
+          const cartItem = yield* db.cartItem
+            .findUnique({
               where: { id: itemId },
               include: { cart: true },
-            });
+            })
+            .pipe(Effect.map((r) => r as (CartItem & { cart: Cart }) | null));
 
-            if (!cartItem) {
-              throw new Error("ITEM_NOT_FOUND");
-            }
+          if (!cartItem) {
+            yield* Effect.fail(new Error("ITEM_NOT_FOUND"));
+          }
 
-            if (cartItem.cart.userId !== userId) {
-              throw new Error("NOT_CART_OWNER");
-            }
+          if (cartItem!.cart.userId !== userId) {
+            yield* Effect.fail(new Error("NOT_CART_OWNER"));
+          }
 
-            await tx.cartItem.delete({
-              where: { id: itemId },
-            });
-          }),
-        catch: (err) => err as Error,
-      });
+          yield* db.cartItem.delete({
+            where: { id: itemId },
+          });
+        })
+      );
+
       return c.body(null, 204);
     }).pipe(
       Effect.catchAll((err) =>
         Effect.gen(function* () {
           yield* Console.error("Delete CartItem Error:", err);
-
           if (err.message === "ITEM_NOT_FOUND") {
             return c.json({ error: "ITEM_NOT_FOUND" }, 404);
           }
           if (err.message === "NOT_CART_OWNER") {
             return c.json({ error: "NOT_CART_OWNER" }, 403);
           }
-
           return c.json({ error: "INTERNAL_SERVER_ERROR" }, 500);
         })
-      )
+      ),
+      Effect.provide(PrismaLive)
     );
 
     return await Effect.runPromise(program);

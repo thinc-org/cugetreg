@@ -1,4 +1,4 @@
-import { prisma } from "../db/clients.js";
+import { prisma, PrismaLive } from "../db/clients.js";
 import { Visible } from "../generated/prisma/enums.js";
 import { middlewareAuth } from "./auth.js";
 import { ImportTimetableBodySchema } from "../zod_schemas/publicCcarts.schema.js";
@@ -18,6 +18,8 @@ import type { PublicCartItemDetail } from "../zod_schemas/publicCarts.response.s
 import dayjs from "dayjs";
 import type { Variables } from "../lib/auth.js";
 import { LexoRankService } from "../services/lexorank.service.js";
+import { PrismaService } from "../generated/prisma-effect/index.js";
+import type { Cart, CartItem } from "../generated/prisma/client.js";
 
 const publicCarts = new OpenAPIHono<{ Variables: Variables }>();
 publicCarts.use("/:cartId/import", middlewareAuth);
@@ -29,20 +31,20 @@ publicCarts
     const cartId = c.req.param("cartId");
 
     const program = Effect.gen(function* () {
-      const cart = yield* Effect.tryPromise({
-        try: () =>
-          prisma.cart.findUnique({
-            where: { id: cartId },
-            include: {
-              items: {
-                include: {
-                  courseInfo: {
-                    include: {
-                      courses: {
-                        include: {
-                          sections: {
-                            include: { classes: true },
-                          },
+      const db = yield* PrismaService;
+
+      const cart = yield* db.cart
+        .findUnique({
+          where: { id: cartId },
+          include: {
+            items: {
+              include: {
+                courseInfo: {
+                  include: {
+                    courses: {
+                      include: {
+                        sections: {
+                          include: { classes: true },
                         },
                       },
                     },
@@ -50,9 +52,9 @@ publicCarts
                 },
               },
             },
-          }),
-        catch: (error) => error as Error,
-      });
+          },
+        })
+        .pipe(Effect.map((r) => r as any)); // ใช้ any เพื่อรับมือ include หลายชั้น
 
       if (!cart || cart.visible === "PRIVATE") {
         return yield* Effect.fail(
@@ -65,13 +67,13 @@ publicCarts
       const examsSchedule: ExamScheduleItem[] = [];
       let totalCredits = 0;
 
-      cart.items.forEach((item) => {
+      cart.items.forEach((item: any) => {
         const info = item.courseInfo;
         const creditValue = Number(info.credit);
 
         const courseData = info.courses.find(
           // info.courses is Array of Course
-          (course) =>
+          (course: any) =>
             course.academicYear === cart.academicYear &&
             course.semester === cart.semester &&
             course.studyProgram === cart.studyProgram
@@ -79,7 +81,7 @@ publicCarts
 
         const sectionData = courseData?.sections.find(
           // courseData.sections is Array of Section
-          (sec) => sec.sectionNo === item.sectionNo
+          (sec: any) => sec.sectionNo === item.sectionNo
         ); // Section Object of this item
 
         // Calculate Pre-Summary
@@ -109,7 +111,7 @@ publicCarts
         });
 
         // Format Classes Schedule
-        sectionData?.classes.forEach((cls) => {
+        sectionData?.classes.forEach((cls: any) => {
           classesSchedule.push({
             cartItemId: item.id,
             courseNo: item.courseNo,
@@ -230,9 +232,9 @@ publicCarts
           }
           return c.json({ error: "INTERNAL_SERVER_ERROR" }, 500);
         })
-      )
+      ),
+      Effect.provide(PrismaLive)
     );
-
     return await Effect.runPromise(program);
   })
 
@@ -243,30 +245,29 @@ publicCarts
     const cartId = c.req.param("cartId");
 
     const program = Effect.gen(function* () {
-      const sourceCart = yield* Effect.tryPromise({
-        try: () =>
-          prisma.cart.findUnique({
-            where: { id: cartId },
-            include: { items: true },
-          }),
-        catch: (err) => err as Error,
-      });
+      const db = yield* PrismaService;
 
-      if (!sourceCart || sourceCart.visible !== Visible.PUBLIC) {
+      const sourceCart = yield* db.cart
+        .findUnique({
+          where: { id: cartId },
+          include: { items: true },
+        })
+        .pipe(Effect.map((r) => r as (Cart & { items: CartItem[] }) | null));
+
+      if (!sourceCart || sourceCart.visible !== Visible.PUB) {
         return yield* Effect.fail(
           new Error("PUBLIC_CART_NOT_FOUND_OR_PRIVATE")
         );
       }
 
       // Find next cartOrder
-      const lastCart = yield* Effect.tryPromise({
-        try: () =>
-          prisma.cart.findFirst({
-            where: { userId: userId },
-            orderBy: { cartOrder: "desc" },
-          }),
-        catch: (err) => err as Error,
-      });
+      const lastCart = yield* db.cart
+        .findFirst({
+          where: { userId: userId },
+          orderBy: { cartOrder: "desc" },
+        })
+        .pipe(Effect.map((r) => r as Cart | null));
+
       const nextOrder = LexoRankService.getNextRank(lastCart?.cartOrder);
 
       // For Timetable Name
@@ -276,38 +277,36 @@ publicCarts
       });
       const body = ImportTimetableBodySchema.parse(rawBody);
 
-      const newCart = yield* Effect.tryPromise({
-        try: () =>
-          prisma.$transaction(async (tx) => {
-            return await tx.cart.create({
-              data: {
-                userId: userId,
-                name: body.name || "Copy Timetable",
-                studyProgram: sourceCart.studyProgram,
-                academicYear: sourceCart.academicYear,
-                semester: sourceCart.semester,
-                visible: Visible.PRIVATE,
-                isDefault: false,
-                cartOrder: nextOrder,
-                items: {
-                  create: sourceCart.items.map((item) => ({
-                    courseNo: item.courseNo,
-                    sectionNo: item.sectionNo,
-                    color: item.color,
-                    hidden: item.hidden,
-                    cartOrder: item.cartOrder,
-                    isGraded: false,
-                    expectedGrade: 0,
-                  })),
-                },
+      const newCart = (yield* db.$transaction(
+        Effect.gen(function* () {
+          return yield* db.cart.create({
+            data: {
+              userId: userId,
+              name: body.name || "Copy Timetable",
+              studyProgram: sourceCart.studyProgram,
+              academicYear: sourceCart.academicYear,
+              semester: sourceCart.semester,
+              visible: Visible.PVT,
+              isDefault: false,
+              cartOrder: nextOrder,
+              items: {
+                create: sourceCart.items.map((item) => ({
+                  courseNo: item.courseNo,
+                  sectionNo: item.sectionNo,
+                  color: item.color,
+                  hidden: item.hidden,
+                  cartOrder: item.cartOrder,
+                  isGraded: false,
+                  expectedGrade: 0,
+                })),
               },
-              include: {
-                items: true,
-              },
-            });
-          }),
-        catch: (err) => err as Error,
-      });
+            },
+            include: {
+              items: true,
+            },
+          });
+        })
+      )) as Cart;
 
       return c.json({ data: { cart: newCart } }, 201);
     }).pipe(
@@ -320,7 +319,8 @@ publicCarts
 
           return c.json({ error: "INTERNAL_SERVER_ERROR" }, 500);
         })
-      )
+      ),
+      Effect.provide(PrismaLive)
     );
 
     return await Effect.runPromise(program);

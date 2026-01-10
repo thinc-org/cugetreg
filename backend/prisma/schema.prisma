@@ -44,7 +44,7 @@ model CourseInfo {
   department String
 
   // 24 TOTALCREDIT
-  credit      Decimal // ใช้ Decimal เพื่อความแม่นยำ
+  credit      Decimal 
   // 17 lcredit 18 nlcredit 19 lhour 20 nlhour 21 shour
   creditHours String  @map("credit_hours")
 
@@ -81,7 +81,7 @@ model Course {
 
   // sections for this course: In sections table
   // From section rows OR from gened override?
-  genEdType GenEdType @default(NOT_GENED) @map("gen_ed_type")
+  genEdType GenEdType @default(NO) @map("gen_ed_type")
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -112,7 +112,7 @@ model Section {
   // 27 REMARK1 & 28 REMARK2 & 29 REMARK3
   note      String?
   // 20 GENEDSTATUS & 21 GENERALSUBJECT
-  genEdType GenEdType @default(NOT_GENED) @map("gen_ed_type")
+  genEdType GenEdType @default(NO) @map("gen_ed_type")
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -176,26 +176,26 @@ enum StudyProgram {
 /// General Education (GenEd) Course Type 
 
 enum GenEdType {
-  NOT_GENED // ไม่ใช่หมวดศึกษาทั่วไป
-  SCIENCE // วิทยาศาสตร์และคณิตศาสตร์
-  SOCIAL // สังคมศาสตร์
-  HUMAN // มนุษยศาสตร์ 
-  INTERDISCIPLINARY // สหศาสตร์
+  NO // NOT_GENED 
+  SC // SCIENCE 
+  SO // SOCIAL 
+  HU // HUMAN 
+  IN // INTERDISCIPLINARY
 
   @@map("gen_ed_type")
 }
 
 /// Day of the Week for Class Scheduling 
 enum DayOfWeek {
-  MONDAY // MO
-  TUESDAY // TU
-  WEDNESDAY // WE
-  THURSDAY // TH
-  FRIDAY // FR
-  SATURDAY // SA
-  SUNDAY // SU
-  ARRANGED // 
-  IRREGULAR //
+  MO 
+  TU 
+  WE 
+  TH
+  FR 
+  SA 
+  SU
+  AR // To Be Arranged
+  IR // Individually Arranged
 
   @@map("day_of_week")
 }
@@ -213,8 +213,8 @@ enum ReviewStatus {
 /// Vote Type 
 
 enum VoteType {
-  LIKE
-  DISLIKE
+  L // LIKE
+  D // DISLIKE
 
   @@map("vote_type")
 }
@@ -222,8 +222,8 @@ enum VoteType {
 /// Visible 
 
 enum Visible {
-  PUBLIC
-  PRIVATE
+  PUB // PUBLIC
+  PVT // PRIVATE
 
   @@map("visible")
 }
@@ -274,7 +274,7 @@ model Cart {
   name String @default("Untitled")
 
   // New!!!
-  visible   Visible @default(PRIVATE)
+  visible   Visible @default(PVT)
   isDefault Boolean @default(false) @map("is_default")
   cartOrder String @default("0|hzzzzz:") @map("cart_order")
 

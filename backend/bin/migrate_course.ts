@@ -25,7 +25,7 @@ export const runCourseMigration = Effect.gen(function* () {
     coursesData,
     (data) => {
       const currentGenEd =
-        genEdOverrideByCourseNo[data.courseNo] || GenEdType.NOT_GENED;
+        genEdOverrideByCourseNo[data.courseNo] || GenEdType.NO;
       return migrateCourse(data, currentGenEd);
     },
     { discard: true, concurrency: 50 }

@@ -38,13 +38,13 @@
 </script>
 
 <div
-    class={cn("grid border border-neutral-200", className)}
+    class={cn("grid border-l border-t border-neutral-200", className)}
     style="
         grid-template-columns: repeat({periodPerDay + 1}, minmax(0, 1fr));
         grid-template-rows: auto repeat({amountOfDays + 1});
     "
 >
-    <div class="bg-indigo-50! py-3.5 cell border-r border-b border-neutral-200">
+    <div class="bg-indigo-50! py-3.5 cell border-r border-b border-neutral-200 truncate">
         วัน/เวลา
     </div>
     <div
@@ -61,7 +61,7 @@
                     @container-[size]
                 "
             >
-                <span class="text-[80cqh]">
+                <span class="text-sm">
                     {i + startTime}
                 </span>
             </div>
@@ -74,7 +74,7 @@
     >
         {#each days as day}
             <div class="cell bg-indigo-50! aspect-square @container-[size]">
-                <span class="text">
+                <span class="text-[20cqh]">
                     {day}
                 </span>
             </div>
@@ -112,7 +112,8 @@
     @reference "../../../../app.css";
 
     .cell {
-        @apply ring-[1px] ring-neutral-200 bg-white flex justify-center text-center items-center;
+        @apply bg-white flex justify-center text-center items-center;
+        @apply border-r border-b border-neutral-200;
         @apply text-sm;
     }
 </style>

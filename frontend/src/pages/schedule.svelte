@@ -20,6 +20,7 @@
     import { ConfirmDeleteSchedule } from "../lib/components/molecules/confirm-delete-schedule"
     import { untrack } from "svelte"
     import { RenameSchedule } from "../lib/components/organisms/rename-schedule"
+    import html2canvas from "html2canvas-pro"
 
     function getColumnFromDay(day: Day): number {
         switch (day) {
@@ -80,10 +81,32 @@
         });
     }
 
+    async function screenshotTimetable() {
+        if (!timetableDiv) return;
+
+        const canvas = await html2canvas(timetableDiv, {
+            backgroundColor: null,
+            logging: false,
+            useCORS: true,
+            scale: 3
+        });
+
+        const screenshot = canvas.toDataURL("image/jpeg");
+
+        const link = document.createElement("a");
+        link.href = screenshot;
+        link.download = `${selectedSchedule.name}_timetable.jpg`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
     // NOTE: Temporary: this should be global state
     let scheduleList = $state(mockScheduleList);
     let selectedSchedule = $state(untrack(() => scheduleList[0]));
     let showExamSchedule = $state<"List" | "Schedule">("Schedule");
+
+    let timetableDiv = $state<HTMLElement | null>(null);
 
     let showRenameScheduleModal = $state(false);
     let showCreateScheduleModal = $state(false);
@@ -244,12 +267,14 @@
                     onDelete={() => showDeleteScheduleModal = true}
                 />
             </div>
-            <div class="p-8">
-                <Timetable startTime={7}>
-                    {#each selectedSchedule.schedule as courseSchedule}
-                        {@render timeTableCourse(courseSchedule)}
-                    {/each}
-                </Timetable>
+            <div class="p-8 bg-surface overflow-x-scroll" bind:this={timetableDiv}>
+                <div class="min-w-[600px]">
+                    <Timetable startTime={7}>
+                        {#each selectedSchedule.schedule as courseSchedule}
+                            {@render timeTableCourse(courseSchedule)}
+                        {/each}
+                    </Timetable>
+                </div>
             </div>
             <div class="flex justify-end mx-5 mb-5 font-bold text-lg">
                 หน่วยกิตรวม {totalCredit} / 22
@@ -276,7 +301,7 @@
                     <IconButton class="aspect-square">
                         <Share2/>
                     </IconButton>
-                    <Button class="h-full m-0">บันทึกเป็นภาพ</Button>
+                    <Button class="h-full m-0" onclick={screenshotTimetable}>บันทึกเป็นภาพ</Button>
                 </div>
             </div>
 

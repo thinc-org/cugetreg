@@ -6,7 +6,6 @@
     import { TimetableCourseCard } from "../lib/components/atoms/timetable";
     import Timetable from "../lib/components/atoms/timetable/timetable.svelte";
     import { ExamCard, type Exam, type StatusColour } from "../lib/components/molecules/exam-card"
-    import * as Select from "../lib/components/molecules/select";
     import { Navbar } from "../lib/components/organisms/navbar";
     import { SelectedCourse } from "../lib/components/organisms/selected-course";
     import { mockScheduleList } from "../mockData";
@@ -18,6 +17,7 @@
     import { EditSchedule } from "../lib/components/molecules/edit-schedule"
     import { Modal } from "../lib/components/atoms/modal"
     import { CreateTimetable } from "../lib/components/organisms/create-timetable"
+    import { ConfirmDeleteSchedule } from "../lib/components/molecules/confirm-delete-schedule"
 
     function getColumnFromDay(day: Day): number {
         switch (day) {
@@ -73,6 +73,7 @@
     let showExamSchedule = $state<"List" | "Schedule">("Schedule");
 
     let showCreateScheduleModal = $state(false);
+    let showDeleteScheduleModal = $state(false);
 
     const examSort = (a: string, b: string) => {
         const numA = Number(a);
@@ -153,6 +154,25 @@
             onCancel={() => showCreateScheduleModal = false}
         /> 
     </Modal>
+
+    <Modal
+        exitOnEsc
+        exitOnBackgroundClick
+        centered
+        dim
+        bind:show={showDeleteScheduleModal}
+    >
+        <ConfirmDeleteSchedule 
+            scheduleName={selectedSchedule.name}
+            onCancel={() => showDeleteScheduleModal = false}
+            onConfirm={() => {
+                scheduleList = scheduleList.filter(x => x !== selectedSchedule);
+                selectedSchedule = scheduleList[0];
+                showDeleteScheduleModal = false;
+            }}
+        />  
+    </Modal>
+
     <Navbar />
     <div class="w-full flex flex-1 overflow-hidden">
         <div class="
@@ -192,6 +212,7 @@
                     {scheduleList}
 
                     onAddSchedule={() => showCreateScheduleModal = true}
+                    onDelete={() => showDeleteScheduleModal = true}
                 />
             </div>
             <div class="p-8">

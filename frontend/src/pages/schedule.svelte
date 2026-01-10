@@ -19,6 +19,7 @@
     import { CreateTimetable } from "../lib/components/organisms/create-timetable"
     import { ConfirmDeleteSchedule } from "../lib/components/molecules/confirm-delete-schedule"
     import { untrack } from "svelte"
+    import { RenameSchedule } from "../lib/components/organisms/rename-schedule"
 
     function getColumnFromDay(day: Day): number {
         switch (day) {
@@ -84,6 +85,7 @@
     let selectedSchedule = $state(untrack(() => scheduleList[0]));
     let showExamSchedule = $state<"List" | "Schedule">("Schedule");
 
+    let showRenameScheduleModal = $state(false);
     let showCreateScheduleModal = $state(false);
     let showDeleteScheduleModal = $state(false);
 
@@ -150,6 +152,19 @@
 </script>
 
 <div class="flex flex-col h-screen">
+    <Modal 
+        exitOnEsc
+        exitOnBackgroundClick
+        centered
+        dim
+        bind:show={showRenameScheduleModal}
+    >
+        <RenameSchedule
+            bind:name={selectedSchedule.name}
+            onCancel={() => showRenameScheduleModal = false}
+            onConfirm={() => showRenameScheduleModal = false}
+        />
+    </Modal>
     <Modal 
         exitOnEsc
         exitOnBackgroundClick
@@ -223,6 +238,7 @@
                     bind:selectedSchedule   
                     {scheduleList}
 
+                    onRename={() => showRenameScheduleModal = true}
                     onDuplicate={duplicateCurrentSchedule}
                     onAddSchedule={() => showCreateScheduleModal = true}
                     onDelete={() => showDeleteScheduleModal = true}

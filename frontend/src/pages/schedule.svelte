@@ -18,6 +18,7 @@
     import { Modal } from "../lib/components/atoms/modal"
     import { CreateTimetable } from "../lib/components/organisms/create-timetable"
     import { ConfirmDeleteSchedule } from "../lib/components/molecules/confirm-delete-schedule"
+    import { untrack } from "svelte"
 
     function getColumnFromDay(day: Day): number {
         switch (day) {
@@ -67,9 +68,20 @@
         return false;
     }
 
+    function duplicateCurrentSchedule() {
+        const snapshot = $state.snapshot(selectedSchedule);
+        const current = structuredClone(snapshot);
+
+        scheduleList.push({
+            ...current,
+            name: `${selectedSchedule.name} Copy`,
+            scheduleId: crypto.randomUUID()
+        });
+    }
+
     // NOTE: Temporary: this should be global state
     let scheduleList = $state(mockScheduleList);
-    let selectedSchedule = $state(scheduleList[0]);
+    let selectedSchedule = $state(untrack(() => scheduleList[0]));
     let showExamSchedule = $state<"List" | "Schedule">("Schedule");
 
     let showCreateScheduleModal = $state(false);
@@ -211,6 +223,7 @@
                     bind:selectedSchedule   
                     {scheduleList}
 
+                    onDuplicate={duplicateCurrentSchedule}
                     onAddSchedule={() => showCreateScheduleModal = true}
                     onDelete={() => showDeleteScheduleModal = true}
                 />

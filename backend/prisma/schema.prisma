@@ -228,6 +228,14 @@ enum Visible {
   @@map("visible")
 }
 
+enum GradingType {
+  LETTER
+  SU
+  TBA
+
+  @@map("grading_type")
+}
+
 model User {
   id    String @id @default(cuid())
   email String @unique

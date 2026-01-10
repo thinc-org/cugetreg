@@ -72,9 +72,6 @@ const carts = new OpenAPIHono<{ Variables: Variables }>()
               await tx.cart.updateMany({
                 where: {
                   userId: userId,
-                  academicYear: validatedData.academicYear,
-                  semester: validatedData.semester,
-                  studyProgram: validatedData.studyProgram,
                   isDefault: true,
                 },
                 data: { isDefault: false },
@@ -144,9 +141,6 @@ const carts = new OpenAPIHono<{ Variables: Variables }>()
               await tx.cart.updateMany({
                 where: {
                   userId,
-                  academicYear: targetCart.academicYear,
-                  semester: targetCart.semester,
-                  studyProgram: targetCart.studyProgram,
                   isDefault: true,
                 },
                 data: { isDefault: false },
@@ -220,9 +214,6 @@ const carts = new OpenAPIHono<{ Variables: Variables }>()
               const nextDefaultCart = await tx.cart.findFirst({
                 where: {
                   userId,
-                  academicYear: targetCart.academicYear,
-                  semester: targetCart.semester,
-                  studyProgram: targetCart.studyProgram,
                 },
                 orderBy: { cartOrder: "asc" },
               });

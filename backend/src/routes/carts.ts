@@ -30,6 +30,7 @@ import type {
   Section,
   SectionClass,
 } from "../generated/prisma/client.js";
+import * as R from "remeda";
 
 const carts = new OpenAPIHono<{ Variables: Variables }>()
 
@@ -134,7 +135,7 @@ const carts = new OpenAPIHono<{ Variables: Variables }>()
             yield* Effect.fail(new Error("CART_NOT_FOUND"));
           }
           if (targetCart!.userId !== userId)
-            Effect.fail(new Error("NOT_CART_OWNER"));
+            yield* Effect.fail(new Error("NOT_CART_OWNER"));
 
           // Set other isDefault
           if (updatedData.isDefault === true) {
@@ -287,9 +288,7 @@ const carts = new OpenAPIHono<{ Variables: Variables }>()
                   include: {
                     courses: {
                       include: {
-                        sections: {
-                          include: { classes: true },
-                        },
+                        sections: { include: { classes: true } },
                       },
                     },
                   },
@@ -300,157 +299,162 @@ const carts = new OpenAPIHono<{ Variables: Variables }>()
         })
         .pipe(Effect.map((r) => r as any));
 
-      if (!cart) {
-        return yield* Effect.fail(new Error("CART_NOT_FOUND"));
-      }
-      if (cart.userId !== userId) {
+      if (!cart) return yield* Effect.fail(new Error("CART_NOT_FOUND"));
+      if (cart.userId !== userId)
         return yield* Effect.fail(new Error("NOT_CART_OWNER"));
-      }
 
-      const itemsResponse: CartItemDetail[] = [];
-      const classesSchedule: ClassScheduleItem[] = [];
-      const examsSchedule: ExamScheduleItem[] = [];
+      // 1. Data Enrichment
+      const enrichedItems = R.pipe(
+        cart.items,
+        R.map((item) => {
+          const info = item.courseInfo;
+          const courseData = info.courses.find(
+            (course: Course) =>
+              course.academicYear === cart.academicYear &&
+              course.semester === cart.semester &&
+              course.studyProgram === cart.studyProgram
+          );
+          const sectionData = courseData?.sections.find(
+            (sec: Section) => sec.sectionNo === item.sectionNo
+          );
 
-      let totalCredits = 0;
-      let totalVisibleCredits = 0;
-      let totalGradedCredits = 0;
-      let totalPoints = 0;
+          return { ...item, info, courseData, sectionData };
+        })
+      );
 
-      cart.items.forEach((item: any) => {
-        const info = item.courseInfo;
-        const creditValue = Number(info.credit);
+      // 2. Format Items Response
+      const itemsResponse = R.map(enrichedItems, (item) => ({
+        id: item.id,
+        courseNo: item.courseNo,
+        sectionNo: item.sectionNo,
+        color: item.color,
+        hidden: item.hidden,
+        cartOrder: item.cartOrder,
+        isGraded: item.isGraded,
+        expectedGrade: item.expectedGrade.toString(),
+        course: {
+          courseNameTh: item.info.courseNameTh,
+          courseNameEn: item.info.courseNameEn,
+          credit: item.info.credit.toString(),
+        },
+        section: item.sectionData
+          ? {
+              closed: item.sectionData.closed,
+              regis: item.sectionData.regis,
+              max: item.sectionData.max,
+              note: item.sectionData.note,
+            }
+          : null,
+      }));
 
-        const courseData = info.courses.find(
-          // info.courses is Array of Course
-          (course: Course) =>
-            course.academicYear === cart.academicYear &&
-            course.semester === cart.semester &&
-            course.studyProgram === cart.studyProgram
-        );
-
-        const sectionData = courseData?.sections.find(
-          // courseData.sections is Array of Section
-          (sec: Section) => sec.sectionNo === item.sectionNo
-        ); // Section Object of this item
-
-        // Calculate Pre-Summary
-        totalCredits += creditValue;
-        if (!item.hidden) totalVisibleCredits += creditValue;
-        if (item.isGraded) {
-          totalGradedCredits += creditValue;
-          totalPoints += Number(item.expectedGrade) * creditValue;
-        }
-
-        // Format Items
-        itemsResponse.push({
-          id: item.id,
-          courseNo: item.courseNo,
-          sectionNo: item.sectionNo,
-          color: item.color,
-          hidden: item.hidden,
-          cartOrder: item.cartOrder,
-          isGraded: item.isGraded,
-          expectedGrade: item.expectedGrade.toString(),
-          course: {
-            courseNameTh: info.courseNameTh,
-            courseNameEn: info.courseNameEn,
-            credit: info.credit.toString(),
-          },
-          section: sectionData
-            ? {
-                closed: sectionData.closed,
-                regis: sectionData.regis,
-                max: sectionData.max,
-                note: sectionData.note,
-              }
-            : null,
-        });
-
-        // Format Classes Schedule
-        sectionData?.classes.forEach((cls: SectionClass) => {
-          classesSchedule.push({
+      // 3. Extract Schedules
+      const classesSchedule = R.pipe(
+        enrichedItems,
+        R.flatMap((item) =>
+          (item.sectionData?.classes ?? []).map((cls: SectionClass) => ({
             cartItemId: item.id,
             courseNo: item.courseNo,
             sectionNo: item.sectionNo,
-            type: cls.type,
-            dayOfWeek: cls.dayOfWeek,
-            periodStart: cls.periodStart,
-            periodEnd: cls.periodEnd,
-            building: cls.building,
-            room: cls.room,
-            professors: cls.professors,
-          });
-        });
+            ...R.pick(cls, [
+              "type",
+              "dayOfWeek",
+              "periodStart",
+              "periodEnd",
+              "building",
+              "room",
+              "professors",
+            ]),
+          }))
+        )
+      );
 
-        // Format Exams Schedule (Midterm/Final)
-        if (courseData?.midtermStart && courseData.midtermEnd) {
-          examsSchedule.push({
-            cartItemId: item.id,
-            courseNo: item.courseNo,
-            type: "MIDTERM",
-            start: courseData.midtermStart.toISOString(),
-            end: courseData.midtermEnd.toISOString(),
-          });
+      const examsSchedule = R.pipe(
+        enrichedItems,
+        R.flatMap((item) => {
+          const exams: ExamScheduleItem[] = [];
+          if (item.courseData?.midtermStart && item.courseData.midtermEnd) {
+            exams.push({
+              cartItemId: item.id,
+              courseNo: item.courseNo,
+              type: "MIDTERM",
+              start: item.courseData.midtermStart.toISOString(),
+              end: item.courseData.midtermEnd.toISOString(),
+            });
+          }
+          if (item.courseData?.finalStart && item.courseData.finalEnd) {
+            exams.push({
+              cartItemId: item.id,
+              courseNo: item.courseNo,
+              type: "FINAL",
+              start: item.courseData.finalStart.toISOString(),
+              end: item.courseData.finalEnd.toISOString(),
+            });
+          }
+          return exams;
+        })
+      );
+
+      // 4. Conflicts Logic (Declarative approach)
+      const classConflicts = R.pipe(classesSchedule, (schedules) => {
+        const conflicts: ClassConflict[] = [];
+        for (let i = 0; i < schedules.length; i++) {
+          for (let j = i + 1; j < schedules.length; j++) {
+            const a = schedules[i];
+            const b = schedules[j];
+            if (a.dayOfWeek === b.dayOfWeek) {
+              const startA = dayjs(`2000-01-01T${a.periodStart}`);
+              const endA = dayjs(`2000-01-01T${a.periodEnd}`);
+              const startB = dayjs(`2000-01-01T${b.periodStart}`);
+              const endB = dayjs(`2000-01-01T${b.periodEnd}`);
+
+              if (startA.isBefore(endB) && startB.isBefore(endA)) {
+                conflicts.push({
+                  type: "TIME_OVERLAP",
+                  itemIds: [a.cartItemId, b.cartItemId],
+                  dayOfWeek: a.dayOfWeek,
+                  periodStart: a.periodStart,
+                  periodEnd: a.periodEnd,
+                });
+              }
+            }
+          }
         }
-        if (courseData?.finalStart && courseData.finalEnd) {
-          examsSchedule.push({
-            cartItemId: item.id,
-            courseNo: item.courseNo,
-            type: "FINAL",
-            start: courseData.finalStart.toISOString(),
-            end: courseData.finalEnd?.toISOString(),
-          });
-        }
+        return conflicts;
       });
 
-      // Find class conflict
-      const classConflicts: ClassConflict[] = [];
-      for (let i = 0; i < classesSchedule.length; i++) {
-        for (let j = i + 1; j < classesSchedule.length; j++) {
-          const a = classesSchedule[i];
-          const b = classesSchedule[j];
-
-          if (a.dayOfWeek === b.dayOfWeek) {
-            const startA = dayjs(`2000-01-01T${a.periodStart}`);
-            const endA = dayjs(`2000-01-01T${a.periodEnd}`);
-            const startB = dayjs(`2000-01-01T${b.periodStart}`);
-            const endB = dayjs(`2000-01-01T${b.periodEnd}`);
+      const examConflicts = R.pipe(examsSchedule, (exams) => {
+        const conflicts: ExamConflict[] = [];
+        for (let i = 0; i < exams.length; i++) {
+          for (let j = i + 1; j < exams.length; j++) {
+            const a = exams[i];
+            const b = exams[j];
+            const startA = dayjs(a.start),
+              endA = dayjs(a.end);
+            const startB = dayjs(b.start),
+              endB = dayjs(b.end);
 
             if (startA.isBefore(endB) && startB.isBefore(endA)) {
-              classConflicts.push({
-                type: "TIME_OVERLAP",
+              conflicts.push({
+                type: "EXAM_OVERLAP",
                 itemIds: [a.cartItemId, b.cartItemId],
-                dayOfWeek: a.dayOfWeek,
-                periodStart: a.periodStart,
-                periodEnd: a.periodEnd,
+                start: startA.isAfter(startB) ? a.start : b.start,
+                end: endA.isBefore(endB) ? a.end : b.end,
               });
             }
           }
         }
-      }
+        return conflicts;
+      });
 
-      // Find Exam Conflicts -> Please review this logic
-      const examConflicts: ExamConflict[] = [];
-      for (let i = 0; i < examsSchedule.length; i++) {
-        for (let j = i + 1; j < examsSchedule.length; j++) {
-          const examA = examsSchedule[i];
-          const examB = examsSchedule[j];
-
-          const startA = dayjs(examA.start);
-          const endA = dayjs(examA.end);
-          const startB = dayjs(examB.start);
-          const endB = dayjs(examB.end);
-
-          if (startA.isBefore(endB) && startB.isBefore(endA)) {
-            examConflicts.push({
-              type: "EXAM_OVERLAP",
-              itemIds: [examA.cartItemId, examB.cartItemId],
-              start: startA.isAfter(startB) ? examA.start : examB.start,
-              end: endA.isBefore(endB) ? examA.end : examB.end,
-            });
-          }
-        }
-      }
+      // 5. Calculate Summary
+      const gradedItems = R.filter(enrichedItems, (item) => item.isGraded);
+      const totalGradedCredits = R.sumBy(gradedItems, (item) =>
+        Number(item.info.credit)
+      );
+      const totalPoints = R.sumBy(
+        gradedItems,
+        (item) => Number(item.info.credit) * Number(item.expectedGrade)
+      );
 
       return c.json(
         {
@@ -461,30 +465,28 @@ const carts = new OpenAPIHono<{ Variables: Variables }>()
               studyProgram: cart.studyProgram,
               academicYear: cart.academicYear,
               semester: cart.semester,
-              visible: (cart.visible === "PUBLIC" ? "PUB" : "PVT") as
-                | "PUB"
-                | "PVT",
               isDefault: cart.isDefault,
               cartOrder: cart.cartOrder,
+              visible: cart.visible,
               items: itemsResponse,
             },
             summary: {
-              totalCredits: totalCredits.toFixed(1),
-              totalVisibleCredits: totalVisibleCredits.toFixed(1),
+              totalCredits: R.sumBy(enrichedItems, (x) =>
+                Number(x.info.credit)
+              ).toFixed(1),
+              totalVisibleCredits: R.pipe(
+                enrichedItems,
+                R.filter((x) => !x.hidden),
+                R.sumBy((x) => Number(x.info.credit))
+              ).toFixed(1),
               totalGradedCredits: totalGradedCredits.toFixed(1),
               expectedGPA:
                 totalGradedCredits > 0
                   ? Number((totalPoints / totalGradedCredits).toFixed(2))
                   : 0,
             },
-            conflicts: {
-              classConflicts,
-              examConflicts,
-            },
-            schedule: {
-              classes: classesSchedule,
-              exams: examsSchedule,
-            },
+            conflicts: { classConflicts, examConflicts },
+            schedule: { classes: classesSchedule, exams: examsSchedule },
           },
         },
         200
@@ -492,7 +494,6 @@ const carts = new OpenAPIHono<{ Variables: Variables }>()
     }).pipe(
       Effect.catchAll((err) =>
         Effect.gen(function* () {
-          yield* Console.error(err);
           if (err.message === "CART_NOT_FOUND")
             return c.json({ error: "CART_NOT_FOUND" }, 404);
           if (err.message === "NOT_CART_OWNER")
@@ -502,7 +503,6 @@ const carts = new OpenAPIHono<{ Variables: Variables }>()
       ),
       Effect.provide(PrismaLive)
     );
-
     return await Effect.runPromise(program);
   })
 

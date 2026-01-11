@@ -156,17 +156,15 @@ const carts = new OpenAPIHono<{ Variables: Variables }>()
           return c.json({ data: newItem }, 201);
         },
         onFailure: (err) => {
-          const errorMap: Record<string, number> = {
-            CART_NOT_FOUND: 404,
-            NOT_CART_OWNER: 403,
-            COURSE_NOT_FOUND: 404,
-            SECTION_NOT_FOUND: 404,
-          };
-          const status = errorMap[err.message] || 500;
-          return c.json(
-            { error: err.message || "INTERNAL_SERVER_ERROR" },
-            status as any
-          );
+          if (err.message === "CART_NOT_FOUND")
+            return c.json({ error: "CART_NOT_FOUND" }, 404);
+          if (err.message === "NOT_CART_OWNER")
+            return c.json({ error: "NOT_CART_OWNER" }, 403);
+          if (err.message === "COURSE_NOT_FOUND")
+            return c.json({ error: "COURSE_NOT_FOUND" }, 404);
+          if (err.message === "SECTION_NOT_FOUND")
+            return c.json({ error: "SECTION_NOT_FOUND_FOR_SEMESTER" }, 400);
+          return c.json({ error: "INTERNAL_SERVER_ERROR" }, 500);
         },
       }),
       Effect.runPromise

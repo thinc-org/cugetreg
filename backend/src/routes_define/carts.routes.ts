@@ -130,10 +130,24 @@ export const addCourseRoute = createRoute({
       content: { "application/json": { schema: SingleCartItemResponseSchema } },
       description: "Added",
     },
-    403: errorRes("NOT_CART_OWNER"),
-    404: errorRes(
-      "COURSE_NOT_FOUND หรือ CART_NOT_FOUND หรือ SECTION_NOT_FOUND"
-    ),
+    400: {
+      content: {
+        "application/json": { schema: z.object({ error: z.string() }) },
+      },
+      description: "Bad Request",
+    },
+    403: {
+      content: {
+        "application/json": { schema: z.object({ error: z.string() }) },
+      },
+      description: "Forbidden",
+    },
+    404: {
+      content: {
+        "application/json": { schema: z.object({ error: z.string() }) },
+      },
+      description: "Not Found",
+    },
     500: InternalError,
   },
   security: [{ Bearer: [] }],

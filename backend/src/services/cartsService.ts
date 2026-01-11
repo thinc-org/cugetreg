@@ -423,32 +423,6 @@ export const cartService = {
           if (cart!.userId !== userId)
             yield* Effect.fail(new Error("NOT_CART_OWNER"));
 
-          // Get Course
-          const courseInfo = yield* db.courseInfo
-            .findUnique({
-              where: { courseNo: validatedData.courseNo },
-            })
-            .pipe(Effect.map((r) => r as CourseInfo | null));
-
-          if (!courseInfo) yield* Effect.fail(new Error("COURSE_NOT_FOUND"));
-
-          // Get Section
-          const section = yield* db.section
-            .findFirst({
-              where: {
-                sectionNo: validatedData.sectionNo,
-                course: {
-                  courseNo: validatedData.courseNo,
-                  semester: cart!.semester,
-                  academicYear: cart!.academicYear,
-                  studyProgram: cart!.studyProgram,
-                },
-              },
-            })
-            .pipe(Effect.map((r) => r as Section | null));
-
-          if (!section) yield* Effect.fail(new Error("SECTION_NOT_FOUND"));
-
           const lastItem = yield* db.cartItem
             .findFirst({
               where: { cartId: cartId },

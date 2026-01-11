@@ -1,1 +1,4 @@
-export { default as Filter } from './filter.svelte'
+import FilterBar from './filter.svelte';
+
+export { FilterBar };
+export default FilterBar;

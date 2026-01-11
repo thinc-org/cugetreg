@@ -10,18 +10,35 @@
     SelectItem,
     SelectGroup,
   } from '../../molecules/select'
+    import type { ScheduleListItem, SemesterType } from '../../../../types'
 
-  export let handleCancel: () => void
-  export let handleConfirm: () => void
+    interface CreateTimetableProp {
+        onCancel?: () => void;
+        onConfirm?: (schedule: ScheduleListItem) => void;
+        shareLink?: string; 
+    }
 
-  let selected_system = 'ทวิภาค'
-  const options_system = [
-    { value: 'ทวิภาค', label: 'ทวิภาค' },
-    { value: 'ตรีภาค', label: 'ตรีภาค' },
-    { value: 'นานาชาติ', label: 'นานาชาติ' },
+    let {
+        onCancel = () => {},
+        onConfirm = () => {},
+        shareLink = 'https://example.com/my-timetable'
+    }: CreateTimetableProp = $props();
+
+  interface SystemInterface {
+    value: SemesterType;
+    label: string;
+  }
+
+  let selected_system: SemesterType = $state('Semester')
+  const options_system: SystemInterface[] = [
+    { value: 'Semester', label: 'ทวิภาค' },
+    { value: 'Trimester', label: 'ตรีภาค' },
+    { value: 'Inter', label: 'นานาชาติ' },
   ]
-
-  let selected_year = '2568'
+    
+    // TODO: Add formatter
+    // TODO: Connect it to somewhere 
+  let selected_year = $state('2568')
   const options_year = [
     { value: '2568', label: '2568' },
     { value: '2567', label: '2567' },
@@ -30,19 +47,30 @@
     { value: '2564', label: '2564' },
   ]
 
-  let selected_semester = '1'
+  let selected_semester = $state('1')
   let options_semester = [
     { value: '1', label: '1' },
     { value: '2', label: '2' },
     { value: 'ฤดูร้อน', label: 'ฤดูร้อน' },
   ]
+    
+    let tableName = $state('ตารางเรียนแสนสนุก');
+  let currentLetter = $derived(tableName.length);
+  let isPublic = $state(false);
 
-  let tableName = 'ตารางเรียนแสนสนุก'
-  $: currentLetter = tableName.length
-  $: tableName = tableName.slice(0, 30)
+    function handleConfirm() {
+        const timetableMeta: ScheduleListItem = {
+            name: tableName,
+            scheduleId: crypto.randomUUID(),
+            schedule: [],
+            semesterType: selected_system,
+            semester: selected_semester,
+            isPublic
+        }  
 
-  let isPublic = false
-  export let shareLink: string = 'https://example.com/my-timetable'
+        onConfirm(timetableMeta);
+    }
+
   function copyLink() {
     if (!shareLink) return
 
@@ -50,9 +78,13 @@
       alert('Link copied to clipboard!')
     })
   }
+
+  $effect(() => {
+    tableName = tableName.slice(0, 30);
+  });
 </script>
 
-<div class="flex w-104 flex-col gap-6 rounded-xl border border-[#d6d7e1] p-12">
+<div class="flex w-104 flex-col gap-6 rounded-xl border border-[#d6d7e1] p-12 bg-surface">
   <!-- Title -->
   <h1
     class="text-h2 leading-h2 text-center font-medium tracking-[0.15px] text-[#353745]"
@@ -68,7 +100,7 @@
 
     <Select type="single" bind:value={selected_system}>
       <SelectTrigger class="my-1 w-full" aria-label="Select system">
-        {selected_system}
+        {options_system.find(x => x.value == selected_system)?.label}
       </SelectTrigger>
 
       <SelectContent>
@@ -198,7 +230,7 @@
       size="default"
       color="neutral"
       class="w-full"
-      onclick={handleCancel}
+      onclick={() => onCancel()}
     >
       ยกเลิก
     </Button>

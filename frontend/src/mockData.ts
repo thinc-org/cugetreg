@@ -1,4 +1,5 @@
-// src/mockData.ts
+import type { Course, ScheduleData, ScheduleList } from "./types.ts";
+import type { ScheduleList, ScheduleListItem } from "./types.ts";
 
 import type { ScheduleList, ScheduleListItem } from "./types"; 
 
@@ -72,11 +73,14 @@ const rawCourseComPres: CourseMock = {
             room: "319"
         }]
     },
-    midtermStart: new Date("2024-12-01T08:30:00"),
-    finalStart: new Date("2024-12-02T08:30:00"),
-    
-    get midterm() { return this.midtermStart ? { date: this.midtermStart, duration: 3 } : undefined },
-    get final() { return this.finalStart ? { date: this.finalStart, duration: 3 } : undefined }
+    midterm: {
+        date: new Date("2024-12-01T08:30:00"),
+        duration: 3
+    },
+    final: {
+        date: new Date("2024-12-02T08:30:00"),
+        duration: 3
+    }
 }
 
 const rawCourseAppDev: CourseMock = {
@@ -109,11 +113,14 @@ const rawCourseAppDev: CourseMock = {
             room: "210"
         }]
     },
-    midtermStart: new Date("2024-12-03T08:30:00"),
-    finalStart: new Date("2024-12-04T13:00:00"),
-    
-    get midterm() { return this.midtermStart ? { date: this.midtermStart, duration: 3 } : undefined },
-    get final() { return this.finalStart ? { date: this.finalStart, duration: 3 } : undefined }
+    midterm: {
+        date: new Date("2024-12-03T08:30:00"),
+        duration: 3
+    },
+    final: {
+        date: new Date("2024-12-04T13:00:00"),
+        duration: 3,
+    }
 }
 
 const rawCourseEffectCareer: CourseMock = {
@@ -146,16 +153,15 @@ const rawCourseEffectCareer: CourseMock = {
             room: "210"
         }]
     },
-    midtermStart: null,
-    finalStart: new Date("2024-12-05T13:00:00"),
-    
-    get final() { return this.finalStart ? { date: this.finalStart, duration: 3 } : undefined }
+    final: {
+        date: new Date("2024-12-05T13:00:00"),
+        duration: 3,
+    }
 }
 
-const rawCourseCalculusI: CourseMock = {
-    courseNo: "2301107",
-    abbrName: "CALCULUS I",
-    courseNameEn: "CALCULUS I",
+const courseCalculusI: Course = {
+    name: "CALCULUS I",
+    code: "0201171",
     credit: 3,
     genEdType: "SC",
     regis: 120,
@@ -164,43 +170,116 @@ const rawCourseCalculusI: CourseMock = {
     rating: 2.5, // วิชาหิน
     sections: {
         1: [
-            { dayOfWeek: "TU", periodStart: "08:00", periodEnd: "09:00", startTime: 8, duration: 1, building: "ENG2", room: "210" },
-            { dayOfWeek: "WE", periodStart: "08:00", periodEnd: "09:00", startTime: 8, duration: 1, building: "ENG2", room: "210" },
-            { dayOfWeek: "TH", periodStart: "08:00", periodEnd: "09:00", startTime: 8, duration: 1, building: "ENG2", room: "210" },
+            {
+                day: "TU",
+                startTime: 8,
+                duration: 1,
+                building: "ENG2",
+                room: "210"
+            },
+            {
+                day: "WE",
+                startTime: 8,
+                duration: 1,
+                building: "ENG2",
+                room: "210"
+            },
+            {
+                day: "TH",
+                startTime: 8,
+                duration: 1,
+                building: "ENG2",
+                room: "210"
+            },
         ],
         2: [
-            { dayOfWeek: "TU", periodStart: "09:00", periodEnd: "10:00", startTime: 9, duration: 1, building: "ENG2", room: "210" },
-            { dayOfWeek: "WE", periodStart: "09:00", periodEnd: "10:00", startTime: 9, duration: 1, building: "ENG2", room: "210" },
-            { dayOfWeek: "TH", periodStart: "09:00", periodEnd: "10:00", startTime: 9, duration: 1, building: "ENG2", room: "210" },
+            {
+                day: "TU",
+                startTime: 9,
+                duration: 1,
+                building: "ENG2",
+                room: "210"
+            },
+            {
+                day: "WE",
+                startTime: 9,
+                duration: 1,
+                building: "ENG2",
+                room: "210"
+            },
+            {
+                day: "TH",
+                startTime: 9,
+                duration: 1,
+                building: "ENG2",
+                room: "210"
+            },
         ]
     },
-    midtermStart: new Date("2024-12-03T13:00:00"),
-    finalStart: new Date("2024-12-04T08:30:00"),
-    
-    get midterm() { return this.midtermStart ? { date: this.midtermStart, duration: 3 } : undefined },
-    get final() { return this.finalStart ? { date: this.finalStart, duration: 3 } : undefined }
+    midterm: {
+        date: new Date("2024-12-03T13:00:00"),
+        duration: 3,
+    },
+    final: {
+        date: new Date("2024-12-04T08:30:00"),
+        duration: 3,
+    }
 }
 
-const rawCourseLongName: CourseMock = {
-    courseNo: "9999999",
-    abbrName: "PNEUMONOULTRAMICROSCOPICSILICOVOLCANOCONIOSIS",
-    courseNameEn: "PNEUMONOULTRAMICROSCOPICSILICOVOLCANOCONIOSIS",
+const courseLongName: Course = {
+    name: "PNEUMONOULTRAMICROSCOPICSILICOVOLCANOCONIOSIS",
+    code: "0201171",
     credit: 3,
-    genEdType: "NO",
-    regis: 1,
-    max: 30,
-    reviewCount: 0,
-    rating: 0,
+    gened: [],
+    seat: 15,
+    maxseat: 30,
     sections: {
         1: [
-            { dayOfWeek: "FR", periodStart: "13:30", periodEnd: "16:30", startTime: 13.5, duration: 3, building: "ENG2", room: "210" },
+            {
+                day: "FR",
+                startTime: 13.5,
+                duration: 3,
+                building: "ENG2",
+                room: "210"
+            },
         ],
     },
-    midtermStart: new Date("2024-12-03T16:00:00"),
-    finalStart: new Date("2024-12-04T12:00:00"),
+    midterm: {
+        date: new Date("2024-12-03T16:00:00"),
+        duration: 1,
+    },
+    final: {
+        date: new Date("2024-12-04T12:00:00"),
+        duration: 1,
+    }
+}
 
-    get midterm() { return this.midtermStart ? { date: this.midtermStart, duration: 1 } : undefined },
-    get final() { return this.finalStart ? { date: this.finalStart, duration: 1 } : undefined }
+const courseAI: Course = {
+    name: "AI",
+    code: "2190513",
+    credit: 3,
+    gened: [],
+    seat: 15,
+    maxseat: 30,
+    sections: {
+        1: [
+            {
+                day: "WE",
+                startTime: 13,
+                duration: 3,
+                building: "ENG2",
+                room: "210"
+            },
+        ],
+    },
+    midterm: {
+        date: new Date("2024-12-01T13:00:00"),
+        duration: 3,
+    },
+    final: {
+        date: new Date("2024-12-02T08:30:00"),
+        duration: 3,
+    }
 }
 
 const rawCourseAI: CourseMock = {
@@ -252,107 +331,125 @@ const rawMockSchedule = [
         colorVariant: "green"
     },
     {
-        id: "4",
-        course: rawCourseCalculusI,
+        id: "6",
+        course: rawCourseAI,
         selectedSection: 1,
         hidden: false,
         colorVariant: "purple"
     },
     {
-        id: "5",
-        course: rawCourseLongName,
+        id: 5,
+        course: courseLongName,
         selectedSection: 1,
         hidden: false,
         colorVariant: "teal"
     },
     {
-        id: "6",
-        course: rawCourseAI,
+        id: 6,
+        course: courseAI,
         selectedSection: 1,
         hidden: false,
         colorVariant: "teal"
     },
-];
 
-const rawMockSchedule1 = [
-    rawMockSchedule[0],
-    rawMockSchedule[1],
-];
+]
 
-const rawMockSchedule2 = [
-    rawMockSchedule[2],
-    rawMockSchedule[3],
-];
-
-const rawMockSchedule3 = [
-    rawMockSchedule[4],
-    rawMockSchedule[5],
-];
-
-const rawMockScheduleList: ScheduleList = [
+const mockSchedule1: ScheduleData = [
     {
-        name: "ปี 2 เทอม 1",
-        scheduleId: "1",
-        schedule: rawMockSchedule1,
-        semesterType: "Semester",
-        semester: "2566/1",
-        isPublic: false
+        id: 1,
+        course: courseComPres,
+        selectedSection: 6,
+        hidden: false,
+        colorVariant: "pink",
     },
     {
-        name: "ปี 2 เทอม 2",
-        scheduleId: "2",
-        schedule: rawMockSchedule2,
-        semesterType: "Semester",
-        semester: "2566/2",
-        isPublic: true
+        id: 2,
+        course: courseAppDev,
+        selectedSection: 1,
+        hidden: false,
+        colorVariant: "tangerine",
+    },
+]
+
+const mockSchedule2: ScheduleData = [
+    {
+        id: 3,
+        course: courseEffectCareer,
+        selectedSection: 71,
+        hidden: false,
+        colorVariant: "green"
     },
     {
-        name: "ปี 3 เทอม 1",
-        scheduleId: "3",
-        schedule: rawMockSchedule3,
-        semesterType: "Semester",
-        semester: "2567/1",
-        isPublic: false
-    }
+        id: 4,
+        course: courseCalculusI,
+        selectedSection: 1,
+        hidden: false,
+        colorVariant: "purple"
+    },
+]
+
+const mockSchedule3: ScheduleData = [
+    {
+        id: 5,
+        course: courseLongName,
+        selectedSection: 1,
+        hidden: false,
+        colorVariant: "teal"
+    },
+    {
+        id: 6,
+        course: courseAI,
+        selectedSection: 1,
+        hidden: false,
+        colorVariant: "teal"
+    },
+]
+
+const mockScheduleItem1: ScheduleListItem = {
+    name: "ปี 2 เทอม 1",
+    scheduleId: "1",
+    schedule: mockSchedule1,
+    semesterType: "Semester",
+    semester: "2566/1",
+    isPublic: false
+}
+
+const mockScheduleItem2: ScheduleListItem = {
+    name: "ปี 2 เทอม 2",
+    scheduleId: "2",
+    schedule: mockSchedule2,
+    semesterType: "Semester",
+    semester: "2566/2",
+    isPublic: true
+}
+
+const mockScheduleItem3: ScheduleListItem = {
+    name: "ปี 3 เทอม 1",
+    scheduleId: "3",
+    schedule: mockSchedule3,
+    semesterType: "Semester",
+    semester: "2567/1",
+    isPublic: false
+}
+
+const mockScheduleList: ScheduleList = [
+    mockScheduleItem1,
+    mockScheduleItem2,
+    mockScheduleItem3,
 ];
 
-// ---------------------------------------------------------
-// ADAPTER & EXPORTS
-// สร้าง Adapter เพื่อแปลงข้อมูลให้เข้ากับ Frontend เดิม
-// ---------------------------------------------------------
-const adaptCourse = (c: CourseMock) => {
-    // 1. หาว่าวิชานี้เรียนวันไหนบ้าง (ดึงจากทุก Section มารวมกันแบบไม่ซ้ำ)
-    const allDays = new Set<string>();
-    Object.values(c.sections).forEach(classes => {
-        classes.forEach(cls => allDays.add(cls.dayOfWeek));
-    });
-
-    // 2. แปลง GenEd เป็น Array (ถ้าเป็น NO ให้เป็น array ว่าง)
-    const genedList = c.genEdType === "NO" ? [] : [c.genEdType];
-
-    return {
-        ...c,
-        // Mapping ชื่อ Field ให้ตรงกับที่ Frontend เดิมเรียกใช้
-        name: c.abbrName,   
-        code: c.courseNo, 
-        seat: c.regis,
-        maxseat: c.max,
-        
-        // Field ที่เพิ่มมาใหม่สำหรับ CourseCard
-        review: c.reviewCount,     // map reviewCount -> review
-        gened: genedList,          // map genEdType -> gened []
-        days: Array.from(allDays), // set -> array ["MO", "WE"]
-
-        sections: Object.fromEntries(
-            Object.entries(c.sections).map(([secNo, classes]) => [
-                secNo,
-                classes.map(cls => ({
-                    ...cls,
-                    day: cls.dayOfWeek 
-                }))
-            ])
-        )
-    };
+export {
+    courseCalculusI,
+    courseEffectCareer,
+    courseAppDev,
+    courseComPres,
+    courseLongName,
+    courseAI,
+    mockSchedule,
+    mockSchedule1,
+    mockSchedule2,
+    mockSchedule3,
+    mockScheduleList
 };
 
 // Export ตัวแปรที่ผ่าน Adapter แล้ว

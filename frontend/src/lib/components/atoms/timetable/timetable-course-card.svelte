@@ -8,10 +8,7 @@
     import { cn } from "../../../../utils";
     import { getContext } from "svelte";
 
-    const context = getContext<TimeTableContext>("timetable-context");
-
-    const numCol = context.periodPerDay;
-    const numRow = context.amountOfDays;
+    let context = getContext<TimeTableContext>("timetable-context");
 
     interface TimeTableCourseCardProp {
         course: TimeTableCourse;
@@ -34,8 +31,8 @@
 
 <div
     style="
-        --cols: {numCol};
-        --rows: {numRow};
+        --cols: {context.periodPerDay};
+        --rows: {context.amountOfDays};
         --len: {length};
         --x: {row};
         --y: {col};

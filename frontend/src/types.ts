@@ -12,6 +12,15 @@ export type Period = {
     room: string;
 }
 
+export type CourseExamDate = {
+    date: Date;
+    duration: number;
+
+    // Will we have exam location?
+    // building: string;
+    // room: string;
+}
+
 export type Course = {
     name: string;
     code: string;
@@ -21,6 +30,8 @@ export type Course = {
     maxseat: number;
     // review: number;
     sections: { [key: number]: Period[] };
+    midterm?: CourseExamDate;
+    final?: CourseExamDate;
 }
 
 export type CourseSchedule = {
@@ -28,7 +39,21 @@ export type CourseSchedule = {
     course: Course;
     selectedSection: number;
     hidden: boolean;
+    conflicted?: boolean;
     colorVariant?: ColorVariant;
 }
 
 export type ScheduleData = CourseSchedule[];
+
+export type SemesterType = "Semester" | "Trimester" | "Inter";
+
+export type ScheduleListItem = {
+    name: string;
+    scheduleId: string;
+    schedule: ScheduleData;
+    semesterType: SemesterType;
+    semester: string;
+    isPublic: boolean;
+}
+
+export type ScheduleList = ScheduleListItem[];

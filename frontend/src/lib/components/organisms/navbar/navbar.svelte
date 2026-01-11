@@ -37,7 +37,7 @@
 </script>
 
 <div
-    class="h-16 md:h-20 px-3 py-1 gap-2 md:py-3 lg:px-10 flex justify-between items-center z-50 border-b-2 border-surface-container-low"
+    class="h-16 md:h-20 px-3 py-1 gap-2 md:py-3 lg:px-10 flex justify-between items-center z-40 border-b-2 border-surface-container-low"
 >
     <div class="flex flex-row flex-1 gap-3 items-center lg:gap-6">
         <a href="/">

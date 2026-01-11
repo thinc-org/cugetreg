@@ -1,52 +1,31 @@
 <script lang="ts">
     import { type TimeTableContext } from "./index";
-    import type { Day } from "../day-chip";
     import { setContext, type Snippet } from "svelte";
 
     import { cn } from "../../../../utils";
     import type { ClassValue } from "clsx";
 
-    const DAYS5: NonNullable<Day>[] = ["MO", "TU", "WE", "TH", "FR"];
-    const DAYS7: NonNullable<Day>[] = [
-        "MO",
-        "TU",
-        "WE",
-        "TH",
-        "FR",
-        "SA",
-        "SU",
-    ];
-
-    const days: Record<NonNullable<Day>, string> = {
-        MO: "MON",
-        TU: "TUE",
-        WE: "WED",
-        TH: "THU",
-        FR: "FRI",
-        SA: "SAT",
-        SU: "SUN",
-    };
+    const DAYS5 = ["MON", "TUE", "WED", "THU", "FRI"];
 
     interface TimeTableProp {
         periodPerDay?: number;
-        includeSatSun?: boolean;
         startTime: number;
         class?: ClassValue;
+        days?: string[];
         children?: Snippet;
-        [key: string]: unknown;
     }
 
-    const {
-        periodPerDay = 12,
-        includeSatSun = false,
+    let prop: TimeTableProp = $props();
+
+    let {
         startTime = 6,
         class: className = undefined,
         children,
-        ...rest
-    }: TimeTableProp = $props();
+    }: TimeTableProp = prop;
 
-    const amountOfDays = $derived(includeSatSun ? 7 : 5);
-    const DAYS = $derived(includeSatSun ? DAYS7 : DAYS5);
+    let periodPerDay = $derived(prop.periodPerDay ?? 12);
+    let days = $derived(prop.days ?? DAYS5);
+    let amountOfDays = $derived(prop.days?.length ?? 5);
 
     setContext<TimeTableContext>("timetable-context", {
         get periodPerDay() {
@@ -59,13 +38,13 @@
 </script>
 
 <div
-    class={cn("grid border border-neutral-200", className)}
+    class={cn("grid border-l border-t border-neutral-200", className)}
     style="
         grid-template-columns: repeat({periodPerDay + 1}, minmax(0, 1fr));
         grid-template-rows: auto repeat({amountOfDays + 1});
     "
 >
-    <div class="bg-indigo-50! py-3.5 cell border-r border-b border-neutral-200">
+    <div class="bg-indigo-50! py-3.5 cell border-r border-b border-neutral-200 truncate">
         วัน/เวลา
     </div>
     <div
@@ -77,9 +56,14 @@
     >
         {#each Array.from({ length: periodPerDay }) as _, i}
             <div
-                class="bg-indigo-50! px-2 py-3.5 cell text-right! items-end! justify-end!"
+                class="
+                    bg-indigo-50! px-2 py-3.5 cell text-right! items-end! justify-end!
+                    @container-[size]
+                "
             >
-                {i + startTime}
+                <span class="text-sm">
+                    {i + startTime}
+                </span>
             </div>
         {/each}
     </div>
@@ -88,9 +72,11 @@
         class="grid divide-y divide-neutral-200"
         style="grid-row: span {amountOfDays} / span {amountOfDays}"
     >
-        {#each DAYS as day}
-            <div class="cell bg-indigo-50! aspect-square">
-                {days[day]}
+        {#each days as day}
+            <div class="cell bg-indigo-50! aspect-square @container-[size]">
+                <span class="text-[20cqh]">
+                    {day}
+                </span>
             </div>
         {/each}
     </div>
@@ -126,7 +112,8 @@
     @reference "../../../../app.css";
 
     .cell {
-        @apply ring-[1px] ring-neutral-200 bg-white flex justify-center text-center items-center;
+        @apply bg-white flex justify-center text-center items-center;
+        @apply border-r border-b border-neutral-200;
         @apply text-sm;
     }
 </style>

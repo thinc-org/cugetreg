@@ -1,7 +1,7 @@
-import { Hono } from "hono";
 import { prisma } from "../db/clients.js";
+import { OpenAPIHono } from "@hono/zod-openapi";
 
-const user = new Hono();
+const user = new OpenAPIHono();
 
 user.get("/", async (c) => {
   return c.json({ message: "5.1. Get User Information" });

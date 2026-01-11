@@ -30,7 +30,7 @@ lerna-debug.log*
 /src/generated/prisma
 volumes
 
-bin/*
+bin/*.json
 !bin/README.md
 /src/routes/auth-old.ts
 /src/generated/*

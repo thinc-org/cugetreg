@@ -1,6 +1,6 @@
-import { Hono } from "hono";
 import { prisma } from "../db/clients.js";
+import { OpenAPIHono } from "@hono/zod-openapi";
 
-const admin = new Hono()
+const admin = new OpenAPIHono();
 
-export default admin
+export default admin;

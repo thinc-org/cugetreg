@@ -6,7 +6,11 @@ import type {
   MongoUser,
   Review,
 } from "./migrate_interface.ts";
-import { mapSemester } from "../src/utils/enumMapper.js";
+import {
+  mapDayOfWeek,
+  mapSemester,
+  mapStudyProgram,
+} from "../src/utils/enumMapper.js";
 import {
   Prisma,
   Visible,
@@ -76,11 +80,11 @@ export const migrateCourse = (data: Course, currentGenEd: GenEdType) =>
 
     yield* prisma.course.upsert({
       where: {
-        courseNo_academicYear_semester_studyProgram: {
+        course_unique: {
           courseNo: data.courseNo,
           academicYear: parseInt(data.academicYear),
           semester: mapSemester(data.semester),
-          studyProgram: data.studyProgram,
+          studyProgram: mapStudyProgram(data.studyProgram),
         },
       },
       update: {},
@@ -88,7 +92,7 @@ export const migrateCourse = (data: Course, currentGenEd: GenEdType) =>
         courseNo: data.courseNo,
         academicYear: parseInt(data.academicYear),
         semester: mapSemester(data.semester),
-        studyProgram: data.studyProgram,
+        studyProgram: mapStudyProgram(data.studyProgram),
         courseCondition: data.courseCondition,
         midtermStart: parseExamDate(
           data.midterm?.date,
@@ -112,7 +116,7 @@ export const migrateCourse = (data: Course, currentGenEd: GenEdType) =>
             classes: {
               create: sec.classes.map((cls) => ({
                 type: cls.type,
-                dayOfWeek: cls.dayOfWeek,
+                dayOfWeek: mapDayOfWeek(cls.dayOfWeek),
                 periodStart: cls.period.start,
                 periodEnd: cls.period.end,
                 building: cls.building,
@@ -145,7 +149,7 @@ export const migrateReview = (item: Review) =>
         courseNo: item.courseNo,
         academicYear: parseInt(item.academicYear),
         semester: mapSemester(item.semester),
-        studyProgram: item.studyProgram,
+        studyProgram: mapStudyProgram(item.studyProgram),
         status: item.status,
         rejectionReason: item.rejectionReason || null,
         user: {
@@ -199,20 +203,11 @@ export const migrateUser = (mongoUser: MongoUser) =>
         const first = items[0];
 
         const cart = (yield* prisma.cart.create({
-          where: {
-            userId_academicYear_semester_studyProgram: {
-              userId: user.id,
-              academicYear: parseInt(first.academicYear),
-              semester: mapSemester(first.semester),
-              studyProgram: first.studyProgram,
-            },
-          },
-          update: {},
-          create: {
+          data: {
             userId: user.id,
             academicYear: parseInt(first.academicYear),
             semester: mapSemester(first.semester),
-            studyProgram: first.studyProgram,
+            studyProgram: mapStudyProgram(first.studyProgram),
             name: "My Schedule",
             visible: Visible.PVT,
             isDefault: true,
@@ -229,14 +224,6 @@ export const migrateUser = (mongoUser: MongoUser) =>
           currentItemRank = LexoRankService.getNextRank(currentItemRank);
 
           yield* prisma.cartItem.create({
-            where: {
-              cartId_courseNo_sectionNo: {
-                cartId: cart.id,
-                courseNo: item.courseNo,
-                sectionNo: parseInt(item.selectedSectionNo),
-              },
-            },
-            update: {},
             data: {
               cartId: cart.id,
               courseNo: item.courseNo,

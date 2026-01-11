@@ -3,6 +3,7 @@ import { runCourseMigration } from "./migrate_course.js";
 import { runReviewMigration } from "./migrate_review.js";
 import { runUserMigration } from "./migrate_user.js";
 import { PrismaLive } from "../src/db/clients.js";
+import "dotenv/config";
 
 const mainMigrationProgram = Effect.gen(function* () {
   yield* Console.log("Starting All Migration Process...");

@@ -9,10 +9,11 @@ generator client {
   output   = "../src/generated/prisma"
 }
 
+// Please don't edit this Generator!
 generator effectPrisma {
   provider         = "./node_modules/.bin/effect-prisma-generator"
-  clientImportPath = "../prisma"
-  output           = "../src/generated/prisma-effect/index.ts"
+  output   = "../src/generated/prisma-effect/index.ts"
+  clientImportPath = "../prisma/client.ts"
 }
 
 datasource db {

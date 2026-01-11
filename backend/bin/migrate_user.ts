@@ -11,7 +11,7 @@ export const runUserMigration = Effect.gen(function* () {
     usersData,
     (data) => migrateUser(data),
     {
-      concurrency: 50,
+      concurrency: 100,
       discard: true,
     }
   );

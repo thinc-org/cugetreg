@@ -1,0 +1,402 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+// Please don't edit this Generator!
+generator effectPrisma {
+  provider         = "./node_modules/.bin/effect-prisma-generator"
+  output   = "../src/generated/prisma-effect/index.ts"
+  clientImportPath = "../prisma/client.ts"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+//datagateway.chula.ac.th (Connect to Chula Wi-Fi)
+
+// course_info
+
+model CourseInfo {
+  // 3 COURSECODE / 11 courseno
+  courseNo     String  @id @map("course_no")
+  // 4 COURSENAME
+  abbrName     String  @map("abbr_name")
+  // 14 coursename_en
+  courseNameEn String  @map("course_name_en")
+  // 13 coursename_th
+  courseNameTh String  @map("course_name_th")
+  // 23 coursedescription_en
+  courseDescEn String? @map("course_desc_en")
+  // 22 coursedescription_th
+  courseDescTh String? @map("course_desc_th")
+
+  // TODO separate this into other table
+  // indirect -> 30 FACCODE or From CourseNo (Transitive Dependency)
+  faculty    String
+  // indirect -> From CourseNo (Transitive Dependency)
+  department String
+
+  // 24 TOTALCREDIT
+  credit      Decimal 
+  // 17 lcredit 18 nlcredit 19 lhour 20 nlhour 21 shour
+  creditHours String  @map("credit_hours")
+
+  // Relation to Course
+  courses   Course[]
+  // New!!!
+  cartItems CartItem[]
+
+  @@map("course_info")
+}
+
+// course
+
+model Course {
+  id String @id @default(cuid())
+
+  // 19 STUDYPROGRAMSYSTEM
+  studyProgram StudyProgram @map("study_program")
+  // 1 YEAR
+  academicYear Int          @map("academic_year")
+  // 2 SEMESTER
+  semester     Semester
+  // 3 COURSECODE / 11 courseno
+  courseNo     String       @map("course_no")
+  courseInfo   CourseInfo   @relation(fields: [courseNo], references: [courseNo])
+
+  // ! not available in data gateway
+  courseCondition String?   @map("course_condition")
+  // ! not available in data gateway
+  midtermStart    DateTime? @map("midterm_start")
+  midtermEnd      DateTime? @map("midterm_end")
+  finalStart      DateTime? @map("final_start")
+  finalEnd        DateTime? @map("final_end")
+
+  // sections for this course: In sections table
+  // From section rows OR from gened override?
+  genEdType GenEdType @default(NO) @map("gen_ed_type")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relation to Sections
+  sections Section[]
+
+  @@unique([studyProgram, academicYear, semester, courseNo], name: "course_unique")
+  @@map("course")
+}
+
+// course_section
+
+model Section {
+  id String @id @default(cuid())
+
+  courseId String @map("course_id")
+  course   Course @relation(fields: [courseId], references: [id])
+
+  // 5 SECTION
+  sectionNo Int       @map("section_no")
+  // ! Might not available in Data Gateway
+  closed    Boolean
+  // 25 REALREG
+  regis     Int
+  // 26 TOTALREG
+  max       Int
+  // 27 REMARK1 & 28 REMARK2 & 29 REMARK3
+  note      String?
+  // 20 GENEDSTATUS & 21 GENERALSUBJECT
+  genEdType GenEdType @default(NO) @map("gen_ed_type")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relation to SectionClass (Class Schedule)
+  classes SectionClass[]
+
+  @@unique([courseId, sectionNo], name: "section_unique")
+  @@map("course_section")
+}
+
+// course_class
+
+model SectionClass {
+  id String @id @default(cuid())
+
+  sectionId String  @map("section_id")
+  section   Section @relation(fields: [sectionId], references: [id])
+
+  // 7 TEACHTYPE (LECT,LAB,PRAC,L/L,99)
+  type        String
+  // 8 DAY1 & 9 DAY2 & ... & 14 DAY7
+  // * Note: DG use Multi-Valued, we will flatten it in our database
+  dayOfWeek   DayOfWeek @map("day_of_week")
+  // 15 STARTTIME
+  periodStart String    @map("period_start")
+  // 16 ENDTIME
+  periodEnd   String    @map("period_end")
+  // 17 BUILDING
+  building    String?
+  // 18 ROOM
+  room        String?
+  // DG0216 -> FK(???) 16 NAME_ABBR (PostgreSQL array type)
+  professors  String[]  @map("professors")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("course_class")
+}
+
+/// Academic Semester
+
+enum Semester {
+  FIRST
+  SECOND
+  SUMMER
+
+  @@map("semester")
+}
+
+/// Study Program System
+
+enum StudyProgram {
+  S // ทวิภาค
+  I // ทวิภาค-นานาชาต
+  T // ตรีภาค
+  @@map("study_program")
+}
+
+/// General Education (GenEd) Course Type 
+
+enum GenEdType {
+  NO // NOT_GENED 
+  SC // SCIENCE 
+  SO // SOCIAL 
+  HU // HUMAN 
+  IN // INTERDISCIPLINARY
+
+  @@map("gen_ed_type")
+}
+
+/// Day of the Week for Class Scheduling 
+enum DayOfWeek {
+  MO 
+  TU 
+  WE 
+  TH
+  FR 
+  SA 
+  SU
+  AR // To Be Arranged
+  IR // Individually Arranged
+
+  @@map("day_of_week")
+}
+
+/// Review Status 
+
+enum ReviewStatus {
+  PENDING
+  APPROVED
+  REJECTED
+
+  @@map("review_status")
+}
+
+/// Vote Type 
+
+enum VoteType {
+  L // LIKE
+  D // DISLIKE
+
+  @@map("vote_type")
+}
+
+/// Visible 
+
+enum Visible {
+  PUB // PUBLIC
+  PVT // PRIVATE
+
+  @@map("visible")
+}
+
+enum GradingType {
+  LETTER
+  SU
+  TBA
+
+  @@map("grading_type")
+}
+
+model User {
+  id    String @id @default(cuid())
+  email String @unique
+
+  name     String
+  image    String?
+
+  // New!!!
+  faculty    String?
+  department String?
+
+  createdAt DateTime     @default(now()) @map("created_at")
+  updatedAt DateTime     @updatedAt @map("updated_at")
+  // Relations
+  carts     Cart[]
+  reviews   Review[]
+  votes     ReviewVote[]
+
+  emailVerified Boolean   @default(false)
+  sessions      Session[]
+  accounts      Account[]
+
+  @@map("user")
+}
+
+model Cart {
+  id String @id @default(cuid())
+
+  userId String @map("user_id")
+  user   User   @relation(fields: [userId], references: [id])
+
+  studyProgram StudyProgram @map("study_program")
+  academicYear Int          @map("academic_year")
+  semester     Semester
+
+  name String @default("Untitled")
+
+  // New!!!
+  visible   Visible @default(PVT)
+  isDefault Boolean @default(false) @map("is_default")
+  cartOrder String @default("0|hzzzzz:") @map("cart_order")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  items CartItem[]
+
+  @@map("cart")
+}
+
+model CartItem {
+  id String @id @default(cuid())
+
+  cartId String @map("cart_id")
+  cart   Cart   @relation(fields: [cartId], references: [id])
+
+  courseNo   String     @map("course_no")
+  // New!!! for find credit for grade calculation feature
+  courseInfo CourseInfo @relation(fields: [courseNo], references: [courseNo])
+
+  sectionNo Int     @map("section_no")
+  color     String?
+  hidden    Boolean @default(false)
+  cartOrder String @default("0|hzzzzz:") @map("cart_order")
+
+  // New!!!
+  isGraded      Boolean @default(false) @map("is_graded")
+  expectedGrade Decimal @default(0) @map("expected_grade") // X.0 or X.5 only!
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("cart_item")
+}
+
+model Review {
+  id String @id @default(cuid())
+
+  userId String @map("user_id")
+  user   User   @relation(fields: [userId], references: [id])
+
+  studyProgram StudyProgram @map("study_program")
+  academicYear Int          @map("academic_year")
+  semester     Semester
+
+  courseNo String @map("course_no")
+  content  String
+  rating   Int
+
+  status          ReviewStatus @default(PENDING)
+  rejectionReason String?      @map("rejection_reason")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  votes ReviewVote[]
+
+  @@map("review")
+}
+
+model ReviewVote {
+  id String @id @default(cuid())
+
+  reviewId String @map("review_id")
+  review   Review @relation(fields: [reviewId], references: [id])
+
+  userId String @map("user_id")
+  user   User   @relation(fields: [userId], references: [id])
+
+  voteType VoteType @map("vote_type")
+
+  @@map("review_votes")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
+}

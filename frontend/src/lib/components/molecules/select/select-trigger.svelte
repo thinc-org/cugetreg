@@ -9,9 +9,10 @@
         class: className,
         children,
         arrow = false,
+        showArrow = true,
         ...restProps
     }: WithoutChild<
-        SelectPrimitive.TriggerProps & { arrow?: boolean }
+        SelectPrimitive.TriggerProps & { arrow?: boolean; showArrow?: boolean }
     > = $props();
 </script>
 
@@ -28,8 +29,12 @@
     >
         {@render children?.()}
     </div>
-    {#if arrow}
+    {#if showArrow}
+        {#if arrow}
+            <ChevronDown
+                class="size-4 text-on-surface-placeholder stroke-[4px]"
+            />
+        {/if}
         <ChevronDown class="size-4 text-on-surface-placeholder stroke-[4px]" />
     {/if}
-    <ChevronDown class="size-4 text-on-surface-placeholder stroke-[4px]" />
 </SelectPrimitive.Trigger>

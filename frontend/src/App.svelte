@@ -1,9 +1,10 @@
 <script lang="ts">
   import { Router, Route, Link } from 'svelte-routing'
-
+  
   import Home from './pages/Home.svelte'
   import About from './pages/About.svelte'
-  import NotFound from './pages/NotFound.svelte'
+  import Error from './pages/Error.svelte'
+  import "./app.css"; 
 </script>
 
 <Router>
@@ -15,7 +16,7 @@
       <About />
     </Route>
     <Route path="*">
-      <NotFound />
+      <Error />
     </Route>
   </main>
 </Router>

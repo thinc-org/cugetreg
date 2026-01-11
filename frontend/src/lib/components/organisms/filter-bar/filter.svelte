@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   // --- 1. CONFIGURATION DATA ---
   const genEdOptions = [
     { id: 'sci', label: 'วิทย์', color: '#F59E0B', bg: '#FFFBEB' },
@@ -24,7 +24,9 @@
     { id: 'tue', label: 'อังคาร', color: '#DB2777', bg: '#FDF2F8' },
     { id: 'wed', label: 'พุธ',    color: '#059669', bg: '#ECFDF5' },
     { id: 'thu', label: 'พฤหัส',  color: '#EA580C', bg: '#FFF7ED' },
-    { id: 'fri', label: 'ศุกร์',   color: '#2563EB', bg: '#EFF6FF' }
+    { id: 'fri', label: 'ศุกร์',   color: '#2563EB', bg: '#EFF6FF' },
+    { id: 'sat', label: 'เสาร์',   color: '#7C3AED', bg: '#F3E8FF' },
+    { id: 'sun', label: 'อาทิตย์', color: '#DC2626', bg: '#FEF2F2' }
   ];
 
   const evalOptions = [
@@ -32,50 +34,49 @@
     { id: 'grade', label: 'Letter Grade' }
   ];
 
-  // --- 2. STATE ---
-  let selectedGenEds = ['sci', 'hum']; 
-  let selectedSpecial = ['ng1'];
-  let selectedFaculties = ['21'];
-  let selectedDays = ['mon', 'tue'];
-  let selectedEval = ['su']; 
-  
-  let startTime = '08:00';
-  let endTime = '09:00';
-  let fitSchedule = false;
-  
-  // No Conditions State
-  let noConditions = false;
+  // --- 2. PROPS (Svelte 5) ---
+  let {
+    selectedGenEds = $bindable([]),
+    selectedSpecial = $bindable([]),
+    selectedFaculties = $bindable([]),
+    selectedDays = $bindable([]),
+    selectedEval = $bindable([]),
+    startTime = $bindable(''),
+    endTime = $bindable(''),
+    fitSchedule = $bindable(false),
+    noConditions = $bindable(true),
+    onsearch = () => {} // Callback function
+  } = $props();
 
-  let openDropdown = null; 
+  // --- STATE ---
+  let openDropdown = $state<string | null>(null);
 
-  // --- 3. HELPER LOGIC ---
-  $: activeGenEds = genEdOptions.filter(o => selectedGenEds.includes(o.id));
-  $: availableGenEds = genEdOptions.filter(o => !selectedGenEds.includes(o.id));
+  // --- 3. HELPER LOGIC ($derived) ---
+  let activeGenEds = $derived(genEdOptions.filter(o => selectedGenEds.includes(o.id)));
+  let availableGenEds = $derived(genEdOptions.filter(o => !selectedGenEds.includes(o.id)));
 
-  $: activeSpecial = specialOptions.filter(o => selectedSpecial.includes(o.id));
-  $: availableSpecial = specialOptions.filter(o => !selectedSpecial.includes(o.id));
+  let activeSpecial = $derived(specialOptions.filter(o => selectedSpecial.includes(o.id)));
+  let availableSpecial = $derived(specialOptions.filter(o => !selectedSpecial.includes(o.id)));
 
-  $: activeFaculties = facultyOptions.filter(o => selectedFaculties.includes(o.id));
-  $: availableFaculties = facultyOptions.filter(o => !selectedFaculties.includes(o.id));
+  let activeFaculties = $derived(facultyOptions.filter(o => selectedFaculties.includes(o.id)));
+  let availableFaculties = $derived(facultyOptions.filter(o => !selectedFaculties.includes(o.id)));
 
-  $: activeDays = dayOptions.filter(o => selectedDays.includes(o.id));
-  $: availableDays = dayOptions.filter(o => !selectedDays.includes(o.id));
+  let activeDays = $derived(dayOptions.filter(o => selectedDays.includes(o.id)));
+  let availableDays = $derived(dayOptions.filter(o => !selectedDays.includes(o.id)));
 
-  $: activeEval = evalOptions.filter(o => selectedEval.includes(o.id));
-  $: availableEval = evalOptions.filter(o => !selectedEval.includes(o.id));
+  let activeEval = $derived(evalOptions.filter(o => selectedEval.includes(o.id)));
+  let availableEval = $derived(evalOptions.filter(o => !selectedEval.includes(o.id)));
 
   // --- ACTIONS ---
-
-  function toggleDropdown(name, event) {
+  function toggleDropdown(name: string, event?: Event) {
     if (event) event.stopPropagation();
     openDropdown = (openDropdown === name) ? null : name;
   }
 
-  function addOption(listName, id) {
-    // Optional: If you want adding a filter to uncheck "No conditions", keep this line. 
-    // If you want it completely independent, remove the next line.
+  function addOption(listName: string, id: string) {
     if (noConditions) noConditions = false; 
 
+    // Svelte 5: Reassign array to trigger update
     if (listName === 'gened') selectedGenEds = [...selectedGenEds, id];
     if (listName === 'special') selectedSpecial = [...selectedSpecial, id];
     if (listName === 'faculty') selectedFaculties = [...selectedFaculties, id];
@@ -84,12 +85,12 @@
     openDropdown = null; 
   }
 
-  function removeOption(listName, id) {
-    if (listName === 'gened') selectedGenEds = selectedGenEds.filter(i => i !== id);
-    if (listName === 'special') selectedSpecial = selectedSpecial.filter(i => i !== id);
-    if (listName === 'faculty') selectedFaculties = selectedFaculties.filter(i => i !== id);
-    if (listName === 'day') selectedDays = selectedDays.filter(i => i !== id);
-    if (listName === 'eval') selectedEval = selectedEval.filter(i => i !== id);
+  function removeOption(listName: string, id: string) {
+    if (listName === 'gened') selectedGenEds = selectedGenEds.filter((i: string) => i !== id);
+    if (listName === 'special') selectedSpecial = selectedSpecial.filter((i: string) => i !== id);
+    if (listName === 'faculty') selectedFaculties = selectedFaculties.filter((i: string) => i !== id);
+    if (listName === 'day') selectedDays = selectedDays.filter((i: string) => i !== id);
+    if (listName === 'eval') selectedEval = selectedEval.filter((i: string) => i !== id);
   }
 
   function handleWindowClick() {
@@ -97,37 +98,27 @@
   }
 </script>
 
-<svelte:window on:click={handleWindowClick} />
+<svelte:window onclick={handleWindowClick} />
 
-<div class="sidebar">
-  <div class="header">
-    <div class="header-title">
-      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
-      <span>ตัวกรอง</span>
-    </div>
-    <div style="cursor: pointer;">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
-    </div>
-  </div>
-
+<div class="filter-container">
   <div class="scroll-content">
     
     <div class="form-group">
       <label>ประเภท GenEd</label>
-      <div class="multi-select-box" on:click={(e) => toggleDropdown('gened', e)}>
+      <div class="multi-select-box" onclick={(e) => toggleDropdown('gened', e)} role="button" tabindex="0" onkeypress={()=>{}}>
         {#each activeGenEds as item}
           <div class="chip outlined" style="color: {item.color}; border-color: {item.color};">
             {item.label}
-            <span class="close-btn" on:click|stopPropagation={() => removeOption('gened', item.id)}>×</span>
+            <span class="close-btn" onclick={(e) => { e.stopPropagation(); removeOption('gened', item.id); }} role="button" tabindex="0" onkeypress={()=>{}}>×</span>
           </div>
         {/each}
         {#if activeGenEds.length === 0} <span class="placeholder">Select GenEd...</span> {/if}
         <div class="dropdown-arrow">▼</div>
         
         {#if openDropdown === 'gened'}
-          <div class="dropdown-list" on:click|stopPropagation>
+          <div class="dropdown-list" onclick={(e) => e.stopPropagation()} role="listbox" tabindex="0" onkeypress={()=>{}}>
             {#each availableGenEds as opt}
-              <div class="option-item" style="color: {opt.color}" on:click={() => addOption('gened', opt.id)}>{opt.label}</div>
+              <div class="option-item" style="color: {opt.color}" onclick={() => addOption('gened', opt.id)} role="option" tabindex="0" onkeypress={()=>{}}>{opt.label}</div>
             {/each}
             {#if availableGenEds.length === 0} <div class="option-item disabled">All selected</div> {/if}
           </div>
@@ -137,20 +128,20 @@
 
     <div class="form-group">
       <label>ประเภทพิเศษ</label>
-      <div class="multi-select-box gray-bg" on:click={(e) => toggleDropdown('special', e)}>
+      <div class="multi-select-box gray-bg" onclick={(e) => toggleDropdown('special', e)} role="button" tabindex="0" onkeypress={()=>{}}>
         {#each activeSpecial as item}
           <div class="chip gray-pill">
             {item.label}
-            <span class="close-btn" on:click|stopPropagation={() => removeOption('special', item.id)}>×</span>
+            <span class="close-btn" onclick={(e) => { e.stopPropagation(); removeOption('special', item.id); }} role="button" tabindex="0" onkeypress={()=>{}}>×</span>
           </div>
         {/each}
         {#if activeSpecial.length === 0} <span class="placeholder">Select...</span> {/if}
         <div class="dropdown-arrow">▼</div>
 
         {#if openDropdown === 'special'}
-          <div class="dropdown-list">
+          <div class="dropdown-list" onclick={(e) => e.stopPropagation()} role="listbox" tabindex="0" onkeypress={()=>{}}>
             {#each availableSpecial as opt}
-              <div class="option-item" on:click={() => addOption('special', opt.id)}>{opt.label}</div>
+              <div class="option-item" onclick={() => addOption('special', opt.id)} role="option" tabindex="0" onkeypress={()=>{}}>{opt.label}</div>
             {/each}
           </div>
         {/if}
@@ -159,19 +150,19 @@
 
     <div class="form-group">
       <label>คณะ</label>
-      <div class="multi-select-box gray-bg" on:click={(e) => toggleDropdown('faculty', e)}>
+      <div class="multi-select-box gray-bg" onclick={(e) => toggleDropdown('faculty', e)} role="button" tabindex="0" onkeypress={()=>{}}>
         {#each activeFaculties as item}
           <div class="chip gray-pill">
             {item.label}
-            <span class="close-btn" on:click|stopPropagation={() => removeOption('faculty', item.id)}>×</span>
+            <span class="close-btn" onclick={(e) => { e.stopPropagation(); removeOption('faculty', item.id); }} role="button" tabindex="0" onkeypress={()=>{}}>×</span>
           </div>
         {/each}
         {#if activeFaculties.length === 0} <span class="placeholder">Select Faculty...</span> {/if}
         <div class="dropdown-arrow">▼</div>
         {#if openDropdown === 'faculty'}
-          <div class="dropdown-list">
+          <div class="dropdown-list" onclick={(e) => e.stopPropagation()} role="listbox" tabindex="0" onkeypress={()=>{}}>
             {#each availableFaculties as opt}
-              <div class="option-item" on:click={() => addOption('faculty', opt.id)}>{opt.label}</div>
+              <div class="option-item" onclick={() => addOption('faculty', opt.id)} role="option" tabindex="0" onkeypress={()=>{}}>{opt.label}</div>
             {/each}
           </div>
         {/if}
@@ -180,19 +171,19 @@
 
     <div class="form-group">
       <label>วันในสัปดาห์</label>
-      <div class="multi-select-box" on:click={(e) => toggleDropdown('day', e)}>
+      <div class="multi-select-box" onclick={(e) => toggleDropdown('day', e)} role="button" tabindex="0" onkeypress={()=>{}}>
         {#each activeDays as item}
           <div class="chip pastel" style="background-color: {item.bg}; color: {item.color};">
             {item.label}
-            <span class="close-btn" on:click|stopPropagation={() => removeOption('day', item.id)}>×</span>
+            <span class="close-btn" onclick={(e) => { e.stopPropagation(); removeOption('day', item.id); }} role="button" tabindex="0" onkeypress={()=>{}}>×</span>
           </div>
         {/each}
         {#if activeDays.length === 0} <span class="placeholder">Select Days...</span> {/if}
         <div class="dropdown-arrow">▼</div>
         {#if openDropdown === 'day'}
-          <div class="dropdown-list">
+          <div class="dropdown-list" onclick={(e) => e.stopPropagation()} role="listbox" tabindex="0" onkeypress={()=>{}}>
             {#each availableDays as opt}
-              <div class="option-item" style="color: {opt.color}" on:click={() => addOption('day', opt.id)}>{opt.label}</div>
+              <div class="option-item" style="color: {opt.color}" onclick={() => addOption('day', opt.id)} role="option" tabindex="0" onkeypress={()=>{}}>{opt.label}</div>
             {/each}
           </div>
         {/if}
@@ -203,14 +194,14 @@
         <div class="time-col">
           <label>เวลาเริ่ม</label>
           <div class="input-wrapper">
-            <input type="text" bind:value={startTime} />
+            <input type="text" bind:value={startTime} placeholder="08:00" />
             <svg class="clock-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
           </div>
         </div>
         <div class="time-col">
           <label>เวลาจบ</label>
           <div class="input-wrapper">
-            <input type="text" bind:value={endTime} />
+            <input type="text" bind:value={endTime} placeholder="16:00" />
             <svg class="clock-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
           </div>
         </div>
@@ -238,50 +229,48 @@
 
     <div class="form-group">
         <label>วิธีการวัดผล</label>
-        <div class="multi-select-box gray-bg" on:click={(e) => toggleDropdown('eval', e)}>
+        <div class="multi-select-box gray-bg" onclick={(e) => toggleDropdown('eval', e)} role="button" tabindex="0" onkeypress={()=>{}}>
           {#each activeEval as item}
             <div class="chip gray-pill">
               {item.label}
-              <span class="close-btn" on:click|stopPropagation={() => removeOption('eval', item.id)}>×</span>
+              <span class="close-btn" onclick={(e) => { e.stopPropagation(); removeOption('eval', item.id); }} role="button" tabindex="0" onkeypress={()=>{}}>×</span>
             </div>
           {/each}
           {#if activeEval.length === 0} <span class="placeholder">Select...</span> {/if}
           <div class="dropdown-arrow">▼</div>
           {#if openDropdown === 'eval'}
-            <div class="dropdown-list">
+            <div class="dropdown-list" onclick={(e) => e.stopPropagation()} role="listbox" tabindex="0" onkeypress={()=>{}}>
               {#each availableEval as opt}
-                <div class="option-item" on:click={() => addOption('eval', opt.id)}>{opt.label}</div>
+                <div class="option-item" onclick={() => addOption('eval', opt.id)} role="option" tabindex="0" onkeypress={()=>{}}>{opt.label}</div>
               {/each}
             </div>
           {/if}
         </div>
     </div>
 
-  </div> <div class="footer">
-      <button class="search-btn">ค้นหา</button>
+  </div> 
+  <div class="footer">
+      <button class="search-btn" onclick={onsearch}>ค้นหา</button>
   </div>
 </div>
 
 <style>
-  /* --- LAYOUT --- */
-  .sidebar {
-    width: 320px;
+  .filter-container {
+    width: 100%; 
     background: white;
-    border: 1px solid #eee;
-    padding: 16px;
-    font-family: 'Sarabun', sans-serif;
+    padding: 0; 
+    font-family: 'IBM Plex Sans Thai', sans-serif;
     display: flex;
     flex-direction: column;
     gap: 16px;
-    border-radius: 12px;
+    height: 100%; 
   }
-  .header {
-    display: flex; justify-content: space-between; align-items: center;
-    padding-bottom: 10px; border-bottom: 1px solid #f0f0f0;
-  }
-  .header-title {
-    display: flex; align-items: center; gap: 8px;
-    font-weight: bold; font-size: 16px; color: #333;
+
+  .scroll-content {
+    flex: 1;
+    overflow-y: auto; 
+    padding-right: 4px;
+    padding-left: 4px;
   }
   
   .form-group { margin-bottom: 16px; }

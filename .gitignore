@@ -12,7 +12,6 @@ coverage
 .svelte-kit
 
 # misc
-.vscode/
 .DS_Store
 *.pem
 

@@ -8,7 +8,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "check": "svelte-kit sync && svelte-check",
-    "lint": "tsc --noEmit",
+    "lint": "eslint .",
     "storybook": "storybook dev -p 6006 --ci",
     "build-storybook": "storybook build"
   },

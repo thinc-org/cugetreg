@@ -18,7 +18,7 @@ importers:
         specifier: ^2.7.2
         version: 2.7.3
 
-  frontend:
+  apps/cugetreg:
     dependencies:
       '@lucide/svelte':
         specifier: ^0.562.0

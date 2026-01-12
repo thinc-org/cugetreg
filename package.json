@@ -1,11 +1,12 @@
 {
-  "name": "cugetreg-monorepo",
+  "name": "cugetreg",
   "packageManager": "pnpm@10.13.1",
   "private": true,
   "devDependencies": {
     "prettier": "^3.7.4",
     "prettier-plugin-svelte": "^3.4.1",
-    "turbo": "^2.7.2"
+    "turbo": "^2.7.2",
+    "@cugetreg/configs": "workspace:*"
   },
   "scripts": {
     "dev": "turbo run dev",

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Navbar from '../lib/components/organisms/navbar/navbar.svelte'
+  import Navbar from '../../lib/components/organisms/navbar/navbar.svelte'
   import {
     AlertTriangle,
     Bold,
@@ -12,11 +12,11 @@
     Strikethrough,
     Underline,
   } from 'lucide-svelte'
-  import { GenedChip } from '../lib/components/atoms/gened-chip'
-  import { Button } from '../lib/components/atoms/button'
-  import Comment from '../lib/components/molecules/comment/comment.svelte'
-  import { SectionTable } from '../lib/components/molecules/section-table'
-  import * as Select from '../lib/components/molecules/select'
+  import { GenedChip } from '../../lib/components/atoms/gened-chip'
+  import { Button } from '../../lib/components/atoms/button'
+  import Comment from '../../lib/components/molecules/comment/comment.svelte'
+  import { SectionTable } from '../../lib/components/molecules/section-table'
+  import * as Select from '../../lib/components/molecules/select'
 
   const sectionGroups = ['4EE ONLY', 'OPEN']
   let selectedGroup = $state(sectionGroups[0])

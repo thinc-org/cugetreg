@@ -2,8 +2,8 @@
   "name": "@cugetreg/ui",
   "version": "0.0.1",
   "scripts": {
-    "dev": "tailwindcss -i ./src/app.css -o ./dist/app.css && svelte-package --watch",
-    "build": "vite build && npm run prepack && tailwindcss -i ./src/app.css -o ./dist/app.css",
+    "dev": "svelte-package --watch",
+    "build": "vite build && npm run prepack",
     "preview": "vite preview",
     "prepare": "svelte-kit sync || echo ''",
     "prepack": "svelte-kit sync && svelte-package && publint",

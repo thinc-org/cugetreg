@@ -6,7 +6,9 @@
     "prettier": "^3.7.4",
     "prettier-plugin-svelte": "^3.4.1",
     "turbo": "^2.7.2",
-    "@cugetreg/configs": "workspace:*"
+    "@cugetreg/configs": "workspace:*",
+    "@cugetreg/ui": "workspace:*",
+    "@cugetreg/utils": "workspace:*"
   },
   "scripts": {
     "dev": "turbo run dev",

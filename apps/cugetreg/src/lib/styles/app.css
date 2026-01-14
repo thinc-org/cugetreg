@@ -4,6 +4,8 @@
 
 @import "@cugetreg/ui/css";
 
+@source "../../../../../packages/ui/src/**/*.{svelte,js,ts,jsx,tsx}";
+
 @font-face {
     font-family: 'FC Orbit';
     src: url('fonts/FCOrbit-Bold.woff2') format('woff2');

@@ -1,30 +1,30 @@
 <script lang="ts">
-  import { Button } from '$lib/components/atoms/button'
-  import { IconButton } from '$lib/components/atoms/icon-button'
-  import { Input } from '$lib/components/atoms/input'
-  import { Switch } from '$lib/components/atoms/switch'
-  import { TimetableCourseCard } from '$lib/components/atoms/timetable'
-  import Timetable from '$lib/components/atoms/timetable/timetable.svelte'
+  import { Button } from '@cugetreg/ui/atoms/button'
+  import { IconButton } from '@cugetreg/ui/atoms/icon-button'
+  import { Input } from '@cugetreg/ui/atoms/input'
+  import { Switch } from '@cugetreg/ui/atoms/switch'
+  import { TimetableCourseCard } from '@cugetreg/ui/atoms/timetable'
+  import { TimeTable as Timetable } from '@cugetreg/ui/atoms/timetable'
 
   import {
     ExamCard,
     type Exam,
     type StatusColour,
-  } from '$lib/components/molecules/exam-card'
+  } from '@cugetreg/ui/molecules/exam-card'
 
-  import { Navbar } from '$lib/components/organisms/navbar'
-  import { SelectedCourse } from '$lib/components/organisms/selected-course'
-  import { CreateTimetable } from '$lib/components/organisms/create-timetable'
-  import { RenameSchedule } from '$lib/components/organisms/rename-schedule'
+  import { Navbar } from '@cugetreg/ui/organisms/navbar'
+  import { SelectedCourse } from '@cugetreg/ui/organisms/selected-course'
+  import { CreateTimetable } from '@cugetreg/ui/organisms/create-timetable'
+  import { RenameSchedule } from '@cugetreg/ui/organisms/rename-schedule'
 
-  import SelectTimetable from '$lib/components/molecules/select-timetable/select-timetable.svelte'
-  import { EditSchedule } from '$lib/components/molecules/edit-schedule'
-  import { ConfirmDeleteSchedule } from '$lib/components/molecules/confirm-delete-schedule'
+  import { SelectTimetable } from '@cugetreg/ui/molecules/select-timetable'
+  import { EditSchedule } from '@cugetreg/ui/molecules/edit-schedule'
+  import { ConfirmDeleteSchedule } from '@cugetreg/ui/molecules/confirm-delete-schedule'
 
-  import { Modal } from '$lib/components/atoms/modal'
+  import { Modal } from '@cugetreg/ui/atoms/modal'
 
-  import { mockScheduleList } from '$lib/utils/mockData'
-  import type { CourseSchedule, Day, ScheduleListItem } from '$lib/utils/types'
+  import { mockScheduleList } from '@cugetreg/utils/mock'
+  import type { CourseSchedule, Day, ScheduleListItem } from '@cugetreg/utils/types'
 
   import {
     isMidtermConflict,
@@ -33,7 +33,7 @@
     formatDate,
     discardTime,
     formatExamColumn,
-  } from '$lib/utils/utils'
+  } from '@cugetreg/utils'
 
   import { Share2, Copy, ChevronLeft, ChevronRight } from 'lucide-svelte'
   import { untrack } from 'svelte'

@@ -1,14 +1,14 @@
 <script lang="ts">
   import { Globe } from 'lucide-svelte'
 
-  import GitHubMark from '$lib/components/logo/vendor/GitHubMark.svelte'
-  import Facebook from '$lib/components/logo/facebook/facebook.svelte'
-  import Instagram from '$lib/components/logo/instagram/instagram.svelte'
+  import { GitHubMark } from '@cugetreg/ui/logo/vendor';
+  import { Instagram } from '@cugetreg/ui/logo/instagram';
+  import { Facebook } from '@cugetreg/ui/logo/facebook';
 
-  import { QuestionAnswer } from '$lib/components/atoms/faqs'
+  import { QuestionAnswer } from '@cugetreg/ui/atoms/faqs'
 
-  import Footer from '$lib/components/organisms/footer/footer.svelte'
-  import Navbar from '$lib/components/organisms/navbar/navbar.svelte'
+  import { Footer } from '@cugetreg/ui/organisms/footer'
+  import { Navbar } from '@cugetreg/ui/organisms/navbar'
 </script>
 
 <Navbar />
@@ -166,7 +166,7 @@
 <Footer />
 
 <style>
-  @reference "../app.css";
+  @reference "$lib/styles/app.css";
 
   .link {
     @apply text-blue-700 underline;

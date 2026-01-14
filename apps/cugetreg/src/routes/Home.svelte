@@ -1,11 +1,11 @@
 <script lang="ts">
-  import { Navbar } from '$lib/components/organisms/navbar'
-  import { Footer } from '$lib/components/organisms/footer'
-  import { SelectedCourse } from '$lib/components/organisms/selected-course'
-  import { FilterBar } from '$lib/components/organisms/filter-bar'
+  import { Navbar } from '@cugetreg/ui/organisms/navbar'
+  import { Footer } from '@cugetreg/ui/organisms/footer'
+  import { SelectedCourse } from '@cugetreg/ui/organisms/selected-course'
+  import { Filter as FilterBar } from '@cugetreg/ui/organisms/filter-bar'
 
-  import { CourseCard } from '$lib/components/molecules/course-card'
-  import { Input } from '$lib/components/atoms/input'
+  import { CourseCard } from '@cugetreg/ui/molecules/course-card'
+  import { Input } from '@cugetreg/ui/atoms/input'
 
   import {
     mockScheduleList,
@@ -15,9 +15,9 @@
     courseCalculusI,
     courseLongName,
     courseAI,
-  } from '$lib/utils/mockData'
+  } from '@cugetreg/utils/mock';
 
-  import { Menu, Filter, BookMarked, Plus, ChevronDown } from 'lucide-svelte'
+  import { Menu, Filter, BookMarked, Plus, ChevronDown } from '@lucide/svelte'
   import { untrack } from 'svelte'
 
   const mockAllCourses = [

@@ -1,0 +1,47 @@
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&display=swap');
+
+@import 'tailwindcss';
+
+@import "@cugetreg/ui/css";
+
+@font-face {
+    font-family: 'FC Orbit';
+    src: url('fonts/FCOrbit-Bold.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'FC Orbit';
+    src: url('fonts/FCOrbit-BoldItalic.woff2') format('woff2');
+    font-weight: 700;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'FC Orbit';
+    src: url('fonts/FCOrbit-Medium.woff2') format('woff2');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'FC Orbit';
+    src: url('fonts/FCOrbit-MediumItalic.woff2') format('woff2');
+    font-weight: 500;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'FC Orbit';
+    src: url('fonts/FCOrbit-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'FC Orbit';
+    src: url('fonts/FCOrbit-Italic.woff2') format('woff2');
+    font-weight: 400;
+    font-style: italic;
+}

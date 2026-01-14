@@ -1,0 +1,23 @@
+{
+  "name": "@cugetreg/utils",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "lint": "eslint ."
+  },
+  "devDependencies": {
+    "typescript": "~5.9.3"
+  },
+  "exports": {
+      "./mock": "./mockData.ts",
+      "./constants": "./constants.ts",
+      "./types": "./types.ts",
+      ".": "./utils.ts"
+  },
+  "dependencies": {
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^3.4.0",
+    "tailwind-variants": "^3.2.2"
+  }
+}

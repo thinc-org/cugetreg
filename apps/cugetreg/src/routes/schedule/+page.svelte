@@ -5,6 +5,7 @@
   import { Switch } from '@cugetreg/ui/atoms/switch'
   import { TimetableCourseCard } from '@cugetreg/ui/atoms/timetable'
   import { TimeTable as Timetable } from '@cugetreg/ui/atoms/timetable'
+  import { ViewCourse } from '@cugetreg/ui/organisms/view-course'
 
   import {
     ExamCard,
@@ -125,6 +126,7 @@
   let showRenameScheduleModal = $state(false)
   let showCreateScheduleModal = $state(false)
   let showDeleteScheduleModal = $state(false)
+  let showViewCourseModal = $state(false);
 
   const examSort = (a: string, b: string) => {
     const numA = Number(a)
@@ -228,16 +230,10 @@
     exitOnBackgroundClick
     centered
     dim
-    bind:show={showDeleteScheduleModal}
+    bind:show={showViewCourseModal}
   >
-    <ConfirmDeleteSchedule
-      scheduleName={selectedSchedule.name}
-      onCancel={() => (showDeleteScheduleModal = false)}
-      onConfirm={() => {
-        scheduleList = scheduleList.filter((x) => x !== selectedSchedule)
-        selectedSchedule = scheduleList[0]
-        showDeleteScheduleModal = false
-      }}
+    <ViewCourse 
+        onExit={() => showViewCourseModal = false}
     />
   </Modal>
 
@@ -484,6 +480,7 @@
   {#if !hidden}
     {#each course.sections[selectedSection] as period}
       <TimetableCourseCard
+        onclick={() => showViewCourseModal = true}
         course={{
           name: course.name,
           code: course.code,

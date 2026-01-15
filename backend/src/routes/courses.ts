@@ -1,37 +1,13 @@
 import { Hono } from "hono";
 import { zValidator } from "@hono/zod-validator";
 import { prisma } from "../db/clients.js";
-<<<<<<< Updated upstream
-import { getCourseQuerySchema } from "../zod_schemas/courses.schema.js";
-||||||| Stash base
-import { getCourseQuerySchema } from "../zod_schemas/courses.schema.js";
-import { OpenAPIHono } from "@hono/zod-openapi";
-=======
 import { getCourseQuerySchema, courseDetailsSchema } from "../zod_schemas/courses.schema.js";
 import { OpenAPIHono } from "@hono/zod-openapi";
 import { getCoursesRoute,getCourseByNoRoute } from "../routes_define/courses.routes.js";
 import { Effect,Console } from "effect";
->>>>>>> Stashed changes
 
-<<<<<<< Updated upstream
-const courses = new Hono();
-||||||| Stash base
-const courses = new OpenAPIHono();
-=======
 const courses = new OpenAPIHono()
->>>>>>> Stashed changes
 
-<<<<<<< Updated upstream
-courses.get("/", zValidator("param", getCourseQuerySchema), async (c) => {
-  const courses = await prisma.user.findMany();
-  return c.json({ message: "1.1 Get Courses" });
-});
-||||||| Stash base
-// courses.get("/", zValidator("param", getCourseQuerySchema), async (c) => {
-//   const courses = await prisma.user.findMany();
-//   return c.json({ message: "1.1 Get Courses" });
-// });
-=======
   //1.1get courses
   .openapi(getCoursesRoute,async (c) =>{
     const user = c.get("jwtPayload");
@@ -108,7 +84,6 @@ courses.get("/", zValidator("param", getCourseQuerySchema), async (c) => {
     );
     return await Effect.runPromise(program);
   })
->>>>>>> Stashed changes
 
 
 export default courses;

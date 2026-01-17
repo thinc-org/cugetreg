@@ -109,7 +109,7 @@
 </div>
 
 <style>
-    @reference "@cugetreg/ui/css";
+    @reference "../../../app.css";
 
     .cell {
         @apply bg-white flex justify-center text-center items-center;

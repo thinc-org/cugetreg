@@ -1,1 +1,5 @@
-<h1>hi</h1>
+<script lang="ts">
+  import CoursePage from "./course-page/+page.svelte";
+</script>
+
+<CoursePage />

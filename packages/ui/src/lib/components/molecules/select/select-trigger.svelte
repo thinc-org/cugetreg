@@ -31,10 +31,8 @@
     </div>
     {#if showArrow}
         {#if arrow}
-            <ChevronDown
-                class="size-4 text-on-surface-placeholder stroke-[4px]"
-            />
+            <ChevronDown class="size-4 text-neutral-400 stroke-[4px]" />
         {/if}
-        <ChevronDown class="size-4 text-on-surface-placeholder stroke-[4px]" />
+        <ChevronDown class="size-4 text-neutral-400 stroke-[4px]" />
     {/if}
 </SelectPrimitive.Trigger>

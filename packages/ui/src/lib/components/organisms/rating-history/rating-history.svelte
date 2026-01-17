@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { ChevronRight, Clock, Star } from "@lucide/svelte";
+    import { ChevronRight, Clock, NotebookPen, Star } from "@lucide/svelte";
 
     import { RatingStar } from "../../atoms/rating-star";
 
@@ -112,22 +112,41 @@
         <p>{overviewTitle}</p>
     </div>
 
-    <div class="mt-4 flex items-end">
-        <div class="h-16 flex items-end text-primary shrink-0">
-            <Star size="18" strokeWidth="1.5" fill="currentColor" class="translate-y-[2px]" />
+    {#if reviews.length}
+        <div class="mt-4 flex items-end">
+            <div class="h-16 flex items-end text-primary shrink-0">
+                <Star size="18" strokeWidth="1.5" fill="currentColor" class="translate-y-[2px]" />
+            </div>
+            <div class="h-16 flex-1 flex items-end justify-center gap-1">
+                {#each histogramData as value}
+                    <div
+                        class="w-4 bg-surface-container-high"
+                        style={`height: ${Math.max(2, (value / maxValue) * 64)}px`}
+                    ></div>
+                {/each}
+            </div>
+            <div class="h-16 flex items-end text-primary shrink-0">
+                <RatingStar rating={5} size={14} gap={4} />
+            </div>
         </div>
-        <div class="h-16 flex-1 flex items-end justify-center gap-1">
-            {#each histogramData as value}
-                <div
-                    class="w-5 bg-surface-container-high"
-                    style={`height: ${Math.max(8, (value / maxValue) * 64)}px`}
-                ></div>
-            {/each}
+    {:else}
+        <div class="mt-4 flex items-end gap-3">
+            <div class="flex items-end text-primary shrink-0">
+                <Star size="18" strokeWidth="1.5" fill="currentColor" />
+            </div>
+            <div class="flex-1 grid grid-cols-11 items-end gap-2 overflow-hidden pb-[3px]">
+                {#each histogramData as value}
+                    <div
+                        class="h-[2px] w-full rounded-full bg-surface-container-highest"
+                        style={`opacity: ${value === 0 ? 0.5 : 1}`}
+                    ></div>
+                {/each}
+            </div>
+            <div class="flex items-end text-primary shrink-0">
+                <RatingStar rating={5} size={16} gap={4} />
+            </div>
         </div>
-        <div class="h-16 flex items-end text-primary shrink-0">
-            <RatingStar rating={5} size={14} gap={4} />
-        </div>
-    </div>
+    {/if}
 
     <div class="mt-6 border-t border-surface-container-low pt-4">
         <div class="flex items-center justify-between">
@@ -135,43 +154,62 @@
                 <Clock size="18" strokeWidth="2.5" />
                 <p>{latestTitle}</p>
             </div>
-            <button
-                type="button"
-                class="text-on-surface"
-                onclick={() => (showAll = !showAll)}
-                aria-label="Toggle all reviews"
-            >
-                <ChevronRight
-                    size="18"
-                    strokeWidth="2.5"
-                    class={showAll ? "rotate-90 transition-transform" : "transition-transform"}
-                />
-            </button>
+            {#if reviews.length}
+                <button
+                    type="button"
+                    class="text-on-surface"
+                    onclick={() => (showAll = !showAll)}
+                    aria-label="Toggle all reviews"
+                >
+                    <ChevronRight
+                        size="18"
+                        strokeWidth="2.5"
+                        class={showAll ? "rotate-90 transition-transform" : "transition-transform"}
+                    />
+                </button>
+            {/if}
         </div>
 
-        <div class="mt-4 flex flex-col gap-4">
-            {#each visibleReviews as review}
-                <div class="flex flex-col gap-2">
-                    <div class="flex items-center justify-between gap-3">
-                        <p class="text-body2 font-normal">
-                            {review.code} {review.name}
+        <div class="mt-4">
+            {#if reviews.length === 0}
+                <div class="flex flex-col items-center gap-4 py-8 text-center">
+                    <NotebookPen size="56" strokeWidth="1.5" class="text-primary" />
+                    <div class="space-y-2">
+                        <p class="text-h3 font-semibold text-on-surface">
+                            เริ่มเขียนรีวิวแรก
                         </p>
-                        <span
-                            class={`rounded-full border px-3 py-1 text-caption font-semibold ${tagClass(
-                                review.tag,
-                            )}`}
-                        >
-                            {review.tag}
-                        </span>
-                    </div>
-                    <div class="flex items-center gap-3">
-                        <RatingStar rating={normalizeRating(review.rating)} size={16} gap={4} />
-                        <p class="text-caption text-on-surface/60">
-                            {review.term}
+                        <p class="text-body2 text-on-surface/60">
+                            เริ่มเขียนรีวิวแรกเพื่อแบ่งปันประสบการณ์ที่น่าจดจำกับวิชานั้น ๆ
+                            และดูภาพรวมตารางเรียนทั้งหมดที่คุณสร้างไว้ในหน้าโปรไฟล์นี้
                         </p>
                     </div>
                 </div>
-            {/each}
+            {:else}
+                <div class="flex flex-col gap-4">
+                    {#each visibleReviews as review}
+                        <div class="flex flex-col gap-2">
+                            <div class="flex items-center justify-between gap-3">
+                                <p class="text-body2 font-normal">
+                                    {review.code} {review.name}
+                                </p>
+                                <span
+                                    class={`rounded-full border px-3 py-1 text-caption font-semibold ${tagClass(
+                                        review.tag,
+                                    )}`}
+                                >
+                                    {review.tag}
+                                </span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <RatingStar rating={normalizeRating(review.rating)} size={16} gap={4} />
+                                <p class="text-caption text-on-surface/60">
+                                    {review.term}
+                                </p>
+                            </div>
+                        </div>
+                    {/each}
+                </div>
+            {/if}
         </div>
     </div>
 </div>

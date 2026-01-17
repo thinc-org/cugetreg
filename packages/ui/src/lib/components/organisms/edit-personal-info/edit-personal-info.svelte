@@ -20,7 +20,7 @@
         firstName = "Wanrudee",
         lastName = "Kittichaiyakorn",
         faculty = "วิศวกรรมศาสตร์",
-        department = "",
+        department = $bindable(""),
         accountProvider = "Google",
         accountEmail = "6534344444@student.chula.ac.th",
         onCancel,

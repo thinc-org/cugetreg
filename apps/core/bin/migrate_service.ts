@@ -198,6 +198,9 @@ export const migrateUser = (mongoUser: MongoUser) =>
         mongoUser.courseCart.cartContent
       );
 
+      const sortedGroupKeys = Object.keys(cartGroups).sort().reverse();
+      const latestGroupKey = sortedGroupKeys[0];
+
       for (const groupKey in cartGroups) {
         const items = cartGroups[groupKey]!;
         const first = items[0];
@@ -210,7 +213,7 @@ export const migrateUser = (mongoUser: MongoUser) =>
             studyProgram: mapStudyProgram(first.studyProgram),
             name: "My Schedule",
             visible: Visible.PVT,
-            isDefault: true,
+            isDefault: groupKey === latestGroupKey,
             cartOrder: LexoRankService.INITIAL_RANK,
           },
         })) as Cart;

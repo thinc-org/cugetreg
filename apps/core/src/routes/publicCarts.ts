@@ -20,20 +20,21 @@ publicCarts
 
     const program = publicCartsService.getPublicCartDetail(cartId);
 
-    return await program.pipe(
-      Effect.provide(PrismaLive),
-      Effect.match({
-        onSuccess: (result) => {
-          return c.json({ data: result }, 200);
-        },
-        onFailure: (err) => {
-          if (err.message === "PUBLIC_CART_NOT_FOUND_OR_PRIVATE") {
-            return c.json({ error: "PUBLIC_CART_NOT_FOUND_OR_PRIVATE" }, 404);
-          }
-          return c.json({ error: "INTERNAL_SERVER_ERROR" }, 500);
-        },
-      }),
-      Effect.runPromise
+    return await Effect.runPromise(
+      program.pipe(
+        Effect.provide(PrismaLive),
+        Effect.match({
+          onSuccess: (result) => {
+            return c.json({ data: result }, 200);
+          },
+          onFailure: (err) => {
+            if (err.message === "PUBLIC_CART_NOT_FOUND_OR_PRIVATE") {
+              return c.json({ error: "PUBLIC_CART_NOT_FOUND_OR_PRIVATE" }, 404);
+            }
+            return c.json({ error: "INTERNAL_SERVER_ERROR" }, 500);
+          },
+        })
+      )
     );
   })
 
@@ -45,21 +46,22 @@ publicCarts
 
     const program = publicCartsService.importPublicCart(userId, cartId, body);
 
-    return await program.pipe(
-      Effect.provide(PrismaLive),
-      Effect.match({
-        onSuccess: (newCart) => {
-          return c.json({ data: { cart: newCart } }, 201);
-        },
-        onFailure: (err) => {
-          if (err.message === "PUBLIC_CART_NOT_FOUND_OR_PRIVATE") {
-            return c.json({ error: "PUBLIC_CART_NOT_FOUND_OR_PRIVATE" }, 404);
-          }
+    return await Effect.runPromise(
+      program.pipe(
+        Effect.provide(PrismaLive),
+        Effect.match({
+          onSuccess: (newCart) => {
+            return c.json({ data: { cart: newCart } }, 201);
+          },
+          onFailure: (err) => {
+            if (err.message === "PUBLIC_CART_NOT_FOUND_OR_PRIVATE") {
+              return c.json({ error: "PUBLIC_CART_NOT_FOUND_OR_PRIVATE" }, 404);
+            }
 
-          return c.json({ error: "INTERNAL_SERVER_ERROR" }, 500);
-        },
-      }),
-      Effect.runPromise
+            return c.json({ error: "INTERNAL_SERVER_ERROR" }, 500);
+          },
+        })
+      )
     );
   });
 

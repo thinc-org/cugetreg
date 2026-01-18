@@ -50,6 +50,9 @@ importers:
       '@hono/zod-openapi':
         specifier: ^1.2.0
         version: 1.2.0(hono@4.11.3)(zod@4.3.5)
+      '@hono/zod-validator':
+        specifier: ^0.7.6
+        version: 0.7.6(hono@4.11.3)(zod@4.3.5)
       '@prisma/adapter-pg':
         specifier: ^7.1.0
         version: 7.2.0

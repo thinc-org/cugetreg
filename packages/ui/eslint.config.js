@@ -8,12 +8,13 @@ import globals from 'globals';
 import ts from 'typescript-eslint';
 import svelteConfig from './svelte.config.js';
 
+import { default as globalConfig } from '@cugetreg/configs/linter';
+
 const gitignorePath = fileURLToPath(new URL('./.gitignore', import.meta.url));
 
 export default defineConfig(
 	includeIgnoreFile(gitignorePath),
-	js.configs.recommended,
-	...ts.configs.recommended,
+	...globalConfig,
 	...svelte.configs.recommended,
 	prettier,
 	...svelte.configs.prettier,
@@ -23,7 +24,7 @@ export default defineConfig(
 		rules: {
 			// typescript-eslint strongly recommend that you do not use the no-undef lint rule on TypeScript projects.
 			// see: https://typescript-eslint.io/troubleshooting/faqs/eslint/#i-get-errors-from-the-no-undef-rule-about-global-variables-not-being-defined-even-though-there-are-no-typescript-errors
-			"no-undef": 'off'
+			'no-undef': 'off'
 		}
 	},
 	{
@@ -37,5 +38,8 @@ export default defineConfig(
 				svelteConfig
 			}
 		}
+	},
+	{
+		ignores: ['.storybook/*']
 	}
 );

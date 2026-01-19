@@ -5,6 +5,7 @@
   import { Switch } from '@cugetreg/ui/atoms/switch'
   import { TimetableCourseCard } from '@cugetreg/ui/atoms/timetable'
   import { TimeTable as Timetable } from '@cugetreg/ui/atoms/timetable'
+  import { ViewCourse } from '@cugetreg/ui/organisms/view-course'
 
   import {
     ExamCard,
@@ -24,7 +25,11 @@
   import { Modal } from '@cugetreg/ui/atoms/modal'
 
   import { mockScheduleList } from '@cugetreg/utils/mock'
-  import type { CourseSchedule, Day, ScheduleListItem } from '@cugetreg/utils/types'
+  import type {
+    CourseSchedule,
+    Day,
+    ScheduleListItem,
+  } from '@cugetreg/utils/types'
 
   import {
     isMidtermConflict,
@@ -125,6 +130,7 @@
   let showRenameScheduleModal = $state(false)
   let showCreateScheduleModal = $state(false)
   let showDeleteScheduleModal = $state(false)
+  let showViewCourseModal = $state(false)
 
   const examSort = (a: string, b: string) => {
     const numA = Number(a)
@@ -228,13 +234,25 @@
     exitOnBackgroundClick
     centered
     dim
+    bind:show={showViewCourseModal}
+  >
+    <ViewCourse onExit={() => (showViewCourseModal = false)} />
+  </Modal>
+
+  <Modal
+    exitOnEsc
+    exitOnBackgroundClick
+    centered
+    dim
     bind:show={showDeleteScheduleModal}
   >
     <ConfirmDeleteSchedule
       scheduleName={selectedSchedule.name}
       onCancel={() => (showDeleteScheduleModal = false)}
       onConfirm={() => {
-        scheduleList = scheduleList.filter((x) => x !== selectedSchedule)
+        scheduleList = scheduleList.filter(
+          (schedule) => schedule !== selectedSchedule,
+        )
         selectedSchedule = scheduleList[0]
         showDeleteScheduleModal = false
       }}
@@ -484,6 +502,7 @@
   {#if !hidden}
     {#each course.sections[selectedSection] as period}
       <TimetableCourseCard
+        onclick={() => (showViewCourseModal = true)}
         course={{
           name: course.name,
           code: course.code,

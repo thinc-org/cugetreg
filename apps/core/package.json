@@ -7,9 +7,10 @@
     "node": ">=24.11.1"
   },
   "scripts": {
+    "postinstall": "prisma generate",
     "lint": "eslint .",
     "dev": "tsx watch src/index.ts",
-    "build": "tsc",
+    "build": "tsc --noEmit --allowImportingTsExtensions",
     "start": "node dist/index.js"
   },
   "prisma": {

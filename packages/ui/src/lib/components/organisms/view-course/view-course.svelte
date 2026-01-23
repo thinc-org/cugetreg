@@ -59,7 +59,7 @@
 				</Select.Trigger>
 				<Select.Content>
 					<Select.Group>
-						{#each [1, 2, 3, 4] as section}
+						{#each [1, 2, 3, 4] as section (section)}
 							<Select.Item
 								value={`${section}`}
 								label={`เซค ${section}`}
@@ -132,7 +132,7 @@
 			<span class="font-bold">เลือกสีในตาราง</span>
 		</div>
 		<div class="flex justify-between">
-			{#each Object.keys(courseColorVariants) as ColorVariant[] as option}
+			{#each Object.keys(courseColorVariants) as ColorVariant[] as option (option)}
 				<Button
 					variant="solid"
 					color="primary"

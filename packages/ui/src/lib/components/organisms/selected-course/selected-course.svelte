@@ -82,7 +82,7 @@
 />
 
 <div class={cn(className)}>
-    <Accordion.Root class="w-full" type="single" value={"selected-course"}>
+    <Accordion.Root class="w-full" type="single" value="selected-course">
         <Accordion.Item value="selected-course">
             <Accordion.Trigger class="border-b border-neutral-200">
                 <div class="flex">
@@ -154,7 +154,7 @@
         <div class="flex flex-col flex-1 overflow-hidden justify-center">
             <div class="flex text-[0.6rem] flex-nowrap">
                 {course.course.code}
-                {#each course.course.gened as gened}
+                {#each course.course.gened as gened, i (i)}
                     <GenedChip
                         type={gened}
                         class="text-[0.6rem] mx-1 px-2 py-0 bg-transparent"
@@ -190,7 +190,7 @@
                     </Select.Trigger>
                     <Select.Content role="listbox">
                         <Select.Group>
-                            {#each Object.keys(course.course.sections) as section}
+                            {#each Object.keys(course.course.sections) as section (section)}
                                 <Select.Item
                                     value={`${section}`}
                                     label={`เซค ${section}`}

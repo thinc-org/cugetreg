@@ -9,8 +9,8 @@
     SelectContent,
     SelectItem,
     SelectGroup,
-  } from '../../molecules/select'
-    import type { ScheduleListItem, SemesterType } from '../../../../types'
+  } from '../../molecules/select';
+    import type { ScheduleListItem, SemesterType } from '@cugetreg/utils/types';
 
     interface CreateTimetableProp {
         onCancel?: () => void;
@@ -79,9 +79,9 @@
     })
   }
 
-  $effect(() => {
-    tableName = tableName.slice(0, 30);
-  });
+  // $effect(() => {
+  //   tableName = tableName.slice(0, 30);
+  // });
 </script>
 
 <div class="flex w-104 flex-col gap-6 rounded-xl border border-[#d6d7e1] p-12 bg-surface">
@@ -105,7 +105,7 @@
 
       <SelectContent>
         <SelectGroup>
-          {#each options_system as option}
+          {#each options_system as option (option.value)}
             <SelectItem
               value={option.value}
               label={option.label}
@@ -126,7 +126,7 @@
 
         <SelectContent>
           <SelectGroup>
-            {#each options_year as option}
+            {#each options_year as option (option.value)}
               <SelectItem
                 value={option.value}
                 label={option.label}
@@ -146,7 +146,7 @@
 
         <SelectContent>
           <SelectGroup>
-            {#each options_semester as option}
+            {#each options_semester as option (option.value)}
               <SelectItem
                 value={option.value}
                 label={option.label}
@@ -167,7 +167,7 @@
       ชื่อตารางเรียน
     </p>
 
-    <Input bind:value={tableName} state="default" placeholder="" class="my-1" />
+    <Input bind:value={tableName} state="default" placeholder="" class="my-1" maxLength={30}/>
 
     <p class="font-orbit text-caption leading-caption text-[#898EA7]">
       จำนวนตัวอักษร {currentLetter}/30
@@ -178,7 +178,7 @@
   <div class="flex items-center gap-2.5">
     <Checkbox bind:checked={isPublic} label="เปิดเป็นสาธารณะ" />
     <InfoCircle
-      tooltipText={'เมื่อเปิดสาธารณะ จะสามารถแชร์ตารางเรียนนี้ได้ด้วยลิงก์'}
+      tooltipText="เมื่อเปิดสาธารณะ จะสามารถแชร์ตารางเรียนนี้ได้ด้วยลิงก์"
     />
   </div>
   {#if isPublic}

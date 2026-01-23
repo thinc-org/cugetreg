@@ -72,7 +72,7 @@
         <Select.Content role="listbox">
             <Select.Group>
                 <Select.GroupHeading>Fruits</Select.GroupHeading>
-                {#each fruits as fruit}
+                {#each fruits as fruit (fruit.value)}
                     <Select.Item
                         value={fruit.value}
                         label={fruit.label}
@@ -99,7 +99,7 @@
         <Select.Content role="listbox">
             <Select.Group>
                 <Select.GroupHeading>Fruits</Select.GroupHeading>
-                {#each fruits as fruit}
+                {#each fruits as fruit (fruit.value)}
                     <Select.Item
                         value={fruit.value}
                         label={fruit.label}
@@ -124,7 +124,7 @@
             {#if !value2.length}
                 เลือก
             {:else}
-                {#each value2 as temp}
+                {#each value2 as temp, i (i)}
                     {themes.find((item) => item.value === temp)?.label + ", " ||
                         temp + ", "}
                 {/each}
@@ -132,7 +132,7 @@
         </Select.Trigger>
         <Select.Content role="listbox">
             <Select.Group>
-                {#each themes as fruit}
+                {#each themes as fruit (fruit.value)}
                     <Select.Item
                         value={fruit.value}
                         label={fruit.label}
@@ -155,7 +155,7 @@
                 <div
                     class="absolute flex max-w-[274px] w-auto pl-2 top-1/2 -translate-y-1/2 items-center gap-1 truncate"
                 >
-                    {#each value2 as temp}
+                    {#each value2 as temp, i (i)}
                         <Chip
                             class="z-10"
                             closable
@@ -183,7 +183,7 @@
         </div>
         <Select.Content role="listbox">
             <Select.Group>
-                {#each themes as fruit}
+                {#each themes as fruit (fruit.value)}
                     <Select.Item
                         value={fruit.value}
                         label={fruit.label}

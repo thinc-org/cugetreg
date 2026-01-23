@@ -69,7 +69,7 @@
             bind:value={selectedTerm}
             onchange={() => onSelectTerm?.(selectedTerm)}
         >
-            {#each terms as term}
+            {#each terms as term (term)}
                 <option value={term}>{term}</option>
             {/each}
         </select>
@@ -81,7 +81,7 @@
     </div>
 
     <div class="mt-4 flex flex-col gap-4">
-        {#each visibleItems as item, index}
+        {#each visibleItems as item, index (item.title)}
             <div class="rounded-3xl border border-surface-container-low bg-surface px-6 py-6">
                 <div class="flex items-start justify-between gap-3">
                     <div class="flex flex-col gap-1">

@@ -106,7 +106,7 @@
     <div class="form-group">
       <label>ประเภท GenEd</label>
       <div class="multi-select-box" onclick={(e) => toggleDropdown('gened', e)} role="button" tabindex="0" onkeypress={()=>{}}>
-        {#each activeGenEds as item}
+        {#each activeGenEds as item (item.label)}
           <div class="chip outlined" style="color: {item.color}; border-color: {item.color};">
             {item.label}
             <span class="close-btn" onclick={(e) => { e.stopPropagation(); removeOption('gened', item.id); }} role="button" tabindex="0" onkeypress={()=>{}}>×</span>
@@ -117,7 +117,7 @@
         
         {#if openDropdown === 'gened'}
           <div class="dropdown-list" onclick={(e) => e.stopPropagation()} role="listbox" tabindex="0" onkeypress={()=>{}}>
-            {#each availableGenEds as opt}
+            {#each availableGenEds as opt (opt.label)}
               <div class="option-item" style="color: {opt.color}" onclick={() => addOption('gened', opt.id)} role="option" tabindex="0" onkeypress={()=>{}}>{opt.label}</div>
             {/each}
             {#if availableGenEds.length === 0} <div class="option-item disabled">All selected</div> {/if}
@@ -129,7 +129,7 @@
     <div class="form-group">
       <label>ประเภทพิเศษ</label>
       <div class="multi-select-box gray-bg" onclick={(e) => toggleDropdown('special', e)} role="button" tabindex="0" onkeypress={()=>{}}>
-        {#each activeSpecial as item}
+        {#each activeSpecial as item (item.label)}
           <div class="chip gray-pill">
             {item.label}
             <span class="close-btn" onclick={(e) => { e.stopPropagation(); removeOption('special', item.id); }} role="button" tabindex="0" onkeypress={()=>{}}>×</span>
@@ -140,7 +140,7 @@
 
         {#if openDropdown === 'special'}
           <div class="dropdown-list" onclick={(e) => e.stopPropagation()} role="listbox" tabindex="0" onkeypress={()=>{}}>
-            {#each availableSpecial as opt}
+            {#each availableSpecial as opt (opt.id)}
               <div class="option-item" onclick={() => addOption('special', opt.id)} role="option" tabindex="0" onkeypress={()=>{}}>{opt.label}</div>
             {/each}
           </div>
@@ -151,7 +151,7 @@
     <div class="form-group">
       <label>คณะ</label>
       <div class="multi-select-box gray-bg" onclick={(e) => toggleDropdown('faculty', e)} role="button" tabindex="0" onkeypress={()=>{}}>
-        {#each activeFaculties as item}
+        {#each activeFaculties as item (item.id)}
           <div class="chip gray-pill">
             {item.label}
             <span class="close-btn" onclick={(e) => { e.stopPropagation(); removeOption('faculty', item.id); }} role="button" tabindex="0" onkeypress={()=>{}}>×</span>
@@ -161,7 +161,7 @@
         <div class="dropdown-arrow">▼</div>
         {#if openDropdown === 'faculty'}
           <div class="dropdown-list" onclick={(e) => e.stopPropagation()} role="listbox" tabindex="0" onkeypress={()=>{}}>
-            {#each availableFaculties as opt}
+            {#each availableFaculties as opt (opt.id)}
               <div class="option-item" onclick={() => addOption('faculty', opt.id)} role="option" tabindex="0" onkeypress={()=>{}}>{opt.label}</div>
             {/each}
           </div>
@@ -172,7 +172,7 @@
     <div class="form-group">
       <label>วันในสัปดาห์</label>
       <div class="multi-select-box" onclick={(e) => toggleDropdown('day', e)} role="button" tabindex="0" onkeypress={()=>{}}>
-        {#each activeDays as item}
+        {#each activeDays as item (item.id)}
           <div class="chip pastel" style="background-color: {item.bg}; color: {item.color};">
             {item.label}
             <span class="close-btn" onclick={(e) => { e.stopPropagation(); removeOption('day', item.id); }} role="button" tabindex="0" onkeypress={()=>{}}>×</span>
@@ -182,7 +182,7 @@
         <div class="dropdown-arrow">▼</div>
         {#if openDropdown === 'day'}
           <div class="dropdown-list" onclick={(e) => e.stopPropagation()} role="listbox" tabindex="0" onkeypress={()=>{}}>
-            {#each availableDays as opt}
+            {#each availableDays as opt (opt.id)}
               <div class="option-item" style="color: {opt.color}" onclick={() => addOption('day', opt.id)} role="option" tabindex="0" onkeypress={()=>{}}>{opt.label}</div>
             {/each}
           </div>
@@ -230,7 +230,7 @@
     <div class="form-group">
         <label>วิธีการวัดผล</label>
         <div class="multi-select-box gray-bg" onclick={(e) => toggleDropdown('eval', e)} role="button" tabindex="0" onkeypress={()=>{}}>
-          {#each activeEval as item}
+          {#each activeEval as item (item.label)}
             <div class="chip gray-pill">
               {item.label}
               <span class="close-btn" onclick={(e) => { e.stopPropagation(); removeOption('eval', item.id); }} role="button" tabindex="0" onkeypress={()=>{}}>×</span>
@@ -240,8 +240,8 @@
           <div class="dropdown-arrow">▼</div>
           {#if openDropdown === 'eval'}
             <div class="dropdown-list" onclick={(e) => e.stopPropagation()} role="listbox" tabindex="0" onkeypress={()=>{}}>
-              {#each availableEval as opt}
-                <div class="option-item" onclick={() => addOption('eval', opt.id)} role="option" tabindex="0" onkeypress={()=>{}}>{opt.label}</div>
+              {#each availableEval as option (option.label)}
+                <div class="option-item" onclick={() => addOption('eval', option.id)} role="option" tabindex="0" onkeypress={()=>{}}>{option.label}</div>
               {/each}
             </div>
           {/if}

@@ -9,7 +9,7 @@
     interface Props {
         class?: string | undefined | null;
         closable?: boolean;
-        onClose?: () => void;
+        onClose?: (event: MouseEvent) => void;
         children?: Snippet;
         [key: string]: unknown;
     }

@@ -41,7 +41,7 @@
             <p class="text-on-surface text-body2 font-medium">ID: {id}</p>
         </div>
     </div>
-    {#each items as { icon: Icon, name }}
+    {#each items as { icon: Icon, name } (name)}
         <div
             class="flex flex-row p-4 gap-3 items-center border-t border-[#EDEDF1]"
         >

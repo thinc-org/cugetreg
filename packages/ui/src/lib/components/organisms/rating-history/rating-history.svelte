@@ -117,7 +117,7 @@
             <Star size="18" strokeWidth="1.5" fill="currentColor" class="translate-y-[2px]" />
         </div>
         <div class="h-16 flex-1 flex items-end justify-center gap-1">
-            {#each histogramData as value}
+            {#each histogramData as value, i (i)}
                 <div
                     class="w-5 bg-surface-container-high"
                     style={`height: ${Math.max(8, (value / maxValue) * 64)}px`}
@@ -150,7 +150,7 @@
         </div>
 
         <div class="mt-4 flex flex-col gap-4">
-            {#each visibleReviews as review}
+            {#each visibleReviews as review, i (i)}
                 <div class="flex flex-col gap-2">
                     <div class="flex items-center justify-between gap-3">
                         <p class="text-body2 font-normal">

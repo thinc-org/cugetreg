@@ -2,8 +2,8 @@
     import type { ClassValue } from "clsx"
     import { Menu } from "@lucide/svelte";
     import { cn } from "@cugetreg/utils";
-    import type { ScheduleList, ScheduleListItem } from "../../../../types"
-    import { mockScheduleList } from "@cugetreg/utils/mock"
+    import type { ScheduleList, ScheduleListItem } from "@cugetreg/utils/types";
+    import { mockScheduleList } from "@cugetreg/utils/mock";
 
     interface SelectTimetableProp {
         options?: ScheduleList,
@@ -28,7 +28,7 @@
         </span>
         <div class="flex gap-2.5">
             <select class="flex-3 border border-primary rounded-lg p-1 focus:outline-none text-primary" bind:value={value}>
-                {#each options as item}
+                {#each options as item (item.scheduleId)}
                     <option value={item}>{item.name}</option>
                 {/each}
             </select>

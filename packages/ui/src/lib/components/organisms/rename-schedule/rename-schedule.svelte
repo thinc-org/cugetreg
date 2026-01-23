@@ -24,10 +24,6 @@
 
     let nameDraft = $state(untrack(() => name));
     let length = $derived(nameDraft?.length ?? 0);
-
-    $effect(() => {
-        nameDraft = nameDraft?.slice(0, LENGTH_CAP);
-    });
 </script>
 
 <div class="p-5 border border-neutral-200 bg-surface w-[300px] rounded-lg">
@@ -35,6 +31,7 @@
     <div class="my-5">
         <Input 
             bind:value={nameDraft}
+            maxLength={LENGTH_CAP}
         />
         <span class="text-caption leading-caption text-neutral-400">จำนวนตัวอักษร {length} / {LENGTH_CAP}</span>
     </div>

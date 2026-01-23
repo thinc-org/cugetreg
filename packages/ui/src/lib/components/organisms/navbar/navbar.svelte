@@ -60,7 +60,7 @@
         class="hidden min-[900px]:flex flex-row flex-1 justify-center items-center gap-3 lg:gap-4"
     >
         <!-- To be implemented: add page from navItems-->
-        {#each navItems as item}
+        {#each navItems as item, i (i)}
             <a
                 class={cn(
                     "text-neutral-500 text-button1 font-medium text-nowrap xl:w-32 text-center cursor-pointer hover:text-neutral-800",
@@ -158,7 +158,7 @@
                 />
             </div>
             <div class="flex flex-col px-3 gap-3">
-                {#each navItems as item}
+                {#each navItems as item, i (i)}
                     <a
                         class={cn(
                             "text-neutral-500 text-button1 font-medium cursor-pointer hover:text-neutral-800",

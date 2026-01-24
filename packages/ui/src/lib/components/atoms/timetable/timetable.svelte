@@ -1,9 +1,10 @@
 <script lang="ts">
-	import { type TimeTableContext } from './index';
+	import type { ClassValue } from 'clsx';
 	import { setContext, type Snippet } from 'svelte';
 
 	import { cn } from '@cugetreg/utils';
-	import type { ClassValue } from 'clsx';
+
+	import { type TimeTableContext } from './index';
 
 	const DAYS5 = ['MON', 'TUE', 'WED', 'THU', 'FRI'];
 

@@ -3,12 +3,12 @@
 
 	import { cn } from '@cugetreg/utils';
 
+	import type { Course } from './index.js';
+
 	import { Button } from '../../atoms/button/index.js';
 	import { DayChip } from '../../atoms/day-chip/index.js';
 	import { GenedChip } from '../../atoms/gened-chip/index.js';
 	import { RecommendedTag } from '../../atoms/recommended-tag/index.js';
-
-	import type { Course } from './index.js';
 
 	interface Props {
 		class?: string | undefined | null;

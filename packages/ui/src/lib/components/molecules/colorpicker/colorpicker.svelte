@@ -1,6 +1,8 @@
 <script lang="ts" generics="Key extends string">
 	import type { ClassValue } from 'clsx';
+
 	import { cn } from '@cugetreg/utils';
+
 	import { Button } from '../../atoms/button';
 
 	interface ColorPickerProps {

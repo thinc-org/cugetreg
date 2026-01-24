@@ -1,7 +1,7 @@
-import Root from "./edit-personal-info.svelte";
+import Root from './edit-personal-info.svelte';
 
 export {
-    Root,
-    //
-    Root as EditPersonalInfo,
+	//
+	Root as EditPersonalInfo,
+	Root
 };

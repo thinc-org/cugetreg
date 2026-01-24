@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Star, StarHalf } from '@lucide/svelte';
+
 	import { cn } from '@cugetreg/utils';
 
 	let {

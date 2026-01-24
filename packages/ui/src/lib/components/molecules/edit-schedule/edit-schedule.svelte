@@ -1,10 +1,12 @@
 <script lang="ts">
+	import { Copy, Ellipsis, type Icon, PenLine, Pin, Plus, Trash } from '@lucide/svelte';
 	import { DropdownMenu } from 'bits-ui';
-	import { IconButton } from '../../atoms/icon-button';
-	import { type Icon, Ellipsis, PenLine, Copy, Plus, Pin, Trash } from '@lucide/svelte';
-	import { cn } from '@cugetreg/utils';
 	import type { ClassValue } from 'clsx';
+
+	import { cn } from '@cugetreg/utils';
 	import type { ScheduleList, ScheduleListItem } from '@cugetreg/utils/types';
+
+	import { IconButton } from '../../atoms/icon-button';
 
 	interface Option {
 		icon: typeof Icon;

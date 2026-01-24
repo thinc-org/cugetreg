@@ -91,9 +91,9 @@ const config = defineConfig(
             // Asolute aliases. Anything that starts with `@`.
             ["^@?\\w"],
             // Absolute app import.
-            ["^@app?\\w"],
+            // ["^@app?\\w"], Doesn't exist (yet)
             // Internal Packages. Things that start with a letter (or digit or underscore), or `@repo` followed by a letter.
-            ["^@repo?\\w"],
+            ["^@cugetreg?\\w"],
             // Internal aliases. Anything that starts with `~`.
             ["^~"],
             // Relative imports. Anything that starts with a dot.

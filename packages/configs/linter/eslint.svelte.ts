@@ -34,5 +34,5 @@ export default defineConfig(
   {
     ignores: [".storybook/*"],
   },
-  prettier
+  prettier,
 );

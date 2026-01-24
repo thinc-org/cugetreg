@@ -61,7 +61,7 @@
       </TableHeader>
 
       <TableBody>
-        {#each tableData as row}
+        {#each tableData as row, i (i)}
           <TableRow class="[&>td]:border-b [&>td]:border-[#E6E8F0] last:[&>td]:border-b-0">
             <TableCell
               class={`py-5 ${row.seats === 'ปิด' ? 'text-[#6F7593]' : 'text-black'}`}
@@ -134,7 +134,7 @@
     </TableHeader>
 
     <TableBody>
-      {#each tableData as row}
+      {#each tableData as row, i (i)}
         <TableRow class="[&>td]:border-b [&>td]:border-[#E6E8F0] last:[&>td]:border-b-0">
           <TableCell
             class={`py-5 ${row.seats === 'ปิด' ? 'text-[#6F7593]' : 'text-black'}`}

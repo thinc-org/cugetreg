@@ -9,12 +9,14 @@
         rating,
         likesCount,
         dislikesCount,
+        facultyMajor,
     }: {
         content: string;
         semester: string;
         rating: number;
         likesCount: number;
         dislikesCount: number;
+        facultyMajor?: string;
     } = $props();
     let hasHalfStar: boolean = $derived(rating % 1 !== 0); // Determine if there's a half star
     let isExpanded: boolean = $state(false);
@@ -25,7 +27,7 @@
   lg:gap-y-8 overflow-hidden"
     class:h-auto={isExpanded}
 >
-    <div class="flex flex-row gap-x-6">
+    <div class="flex flex-row items-center gap-x-6">
         <div class="font-bold text-h3 text-primary">
             {#if !hasHalfStar}
                 <span>{rating}.0</span>
@@ -41,29 +43,37 @@
         </div>
     </div>
 
-    <div
-        class="h-[200px] lg:h-auto relative overflow-hidden"
-        class:h-fit={isExpanded}
-        class:overflow-visible={isExpanded}
-    >
-        <p
-            class="w-full h-auto self-center text-body1 font-sarabun font-regular text-on-surface"
-        >
-            {content}
-        </p>
+    <div class="flex flex-col gap-2">
+        {#if facultyMajor}
+            <div class="text-on-surface/60 font-sans text-body2">
+                {facultyMajor}
+            </div>
+        {/if}
 
-        <!-- Button to toggle view -->
-        <button
-            class="absolute bottom-0 right-0 underline text-button1 text-primary lg:hidden pb-1 pt-1 pl-2 bg-surface
-"
-            onclick={() => (isExpanded = !isExpanded)}
+        <div
+            class="h-[200px] lg:h-auto relative overflow-hidden"
+            class:h-fit={isExpanded}
+            class:overflow-visible={isExpanded}
         >
-            {#if isExpanded}
-                ดูน้อยลง
-            {:else}
-                ดูเพ่ิมเติม
-            {/if}
-        </button>
+            <p
+                class="w-full h-auto self-center text-body1 font-sarabun font-regular text-on-surface"
+            >
+                {content}
+            </p>
+
+            <!-- Button to toggle view -->
+            <button
+                class="absolute bottom-0 right-0 underline text-button1 text-primary lg:hidden pb-1 pt-1 pl-2 bg-surface
+"
+                onclick={() => (isExpanded = !isExpanded)}
+            >
+                {#if isExpanded}
+                    ดูน้อยลง
+                {:else}
+                    ดูเพ่ิมเติม
+                {/if}
+            </button>
+        </div>
     </div>
 
     <div class="gap-6 flex flex-row text-subtitle font-sans">

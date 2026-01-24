@@ -9,7 +9,7 @@
   "scripts": {
     "lint": "eslint .",
     "dev": "tsx watch src/index.ts",
-    "build": "tsc --noEmit --allowImportingTsExtensions",
+    "build": "tsc",
     "start": "node dist/index.js",
     "codegen": "prisma generate"
   },

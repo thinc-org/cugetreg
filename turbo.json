@@ -1,7 +1,11 @@
 {
   "$schema": "https://turborepo.com/schema.json",
   "tasks": {
+    "codegen": {
+        "cache": true
+    },
     "build": {
+        "dependsOn": ["codegen"],
       "outputs": ["dist/**", "storybook-static/**"]
     },
     "check-types": {

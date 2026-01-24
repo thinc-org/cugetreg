@@ -20,9 +20,9 @@
     "typescript-eslint": "^8.52.0"
   },
   "exports": {
-    "./linter/*": {
+    "./linter": {
       "default": "./linter/eslint.base.ts",
-      "svelte": "./linter/eslint.svelte.ts"
+      "./svelte": "./linter/eslint.svelte.ts"
     }
   }
 }

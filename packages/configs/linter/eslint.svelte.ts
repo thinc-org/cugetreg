@@ -1,6 +1,7 @@
 import { defineConfig } from "eslint/config";
 import prettier from "eslint-config-prettier";
 import svelte from "eslint-plugin-svelte";
+import svelteParser from "svelte-eslint-parser";
 import ts from "typescript-eslint";
 
 import base from "./eslint.base.ts";
@@ -8,7 +9,6 @@ import base from "./eslint.base.ts";
 export default defineConfig(
   ...base,
   ...svelte.configs.recommended,
-  prettier,
   ...svelte.configs.prettier,
   {
     rules: {
@@ -22,6 +22,7 @@ export default defineConfig(
     files: ["**/*.svelte", "**/*.svelte.ts", "**/*.svelte.js"],
 
     languageOptions: {
+      parser: svelteParser,
       parserOptions: {
         projectService: true,
         extraFileExtensions: [".svelte"],
@@ -33,4 +34,5 @@ export default defineConfig(
   {
     ignores: [".storybook/*"],
   },
+  prettier
 );

@@ -34,6 +34,7 @@ const ignores = [
   "generated",
   "*.config.js",
   "*.config.mjs",
+  ".svelte-kit",
 ];
 
 const config = defineConfig(

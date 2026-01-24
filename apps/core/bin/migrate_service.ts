@@ -12,6 +12,7 @@ import {
   mapStudyProgram,
 } from "../src/utils/enumMapper.js";
 import {
+  GradingType,
   Prisma,
   Visible,
   type Cart,
@@ -25,7 +26,7 @@ import { PrismaService } from "../src/generated/prisma-effect/index.js";
 
 export function parseExamDate(
   dateStr: string | undefined,
-  timeStr: string | undefined
+  timeStr: string | undefined,
 ) {
   if (!dateStr || !timeStr) return null;
   let d = dayjs(dateStr);
@@ -63,6 +64,13 @@ export const migrateCourse = (data: Course, currentGenEd: GenEdType) =>
         department: data.department || "",
         credit: new Prisma.Decimal(data.credit),
         creditHours: data.creditHours || "",
+        gradingType:
+          data.creditHours && data.creditHours.includes("S/U")
+            ? GradingType.SU
+            : GradingType.LETTER,
+        academicYear: parseInt(data.academicYear),
+        semester: mapSemester(data.semester),
+        studyProgram: mapStudyProgram(data.studyProgram),
       },
       create: {
         courseNo: data.courseNo,
@@ -75,6 +83,13 @@ export const migrateCourse = (data: Course, currentGenEd: GenEdType) =>
         department: data.department || "",
         credit: new Prisma.Decimal(data.credit),
         creditHours: data.creditHours || "",
+        gradingType:
+          data.creditHours && data.creditHours.includes("S/U")
+            ? GradingType.SU
+            : GradingType.LETTER,
+        academicYear: parseInt(data.academicYear),
+        semester: mapSemester(data.semester),
+        studyProgram: mapStudyProgram(data.studyProgram),
       },
     });
 
@@ -96,11 +111,11 @@ export const migrateCourse = (data: Course, currentGenEd: GenEdType) =>
         courseCondition: data.courseCondition,
         midtermStart: parseExamDate(
           data.midterm?.date,
-          data.midterm?.period?.start
+          data.midterm?.period?.start,
         ),
         midtermEnd: parseExamDate(
           data.midterm?.date,
-          data.midterm?.period?.end
+          data.midterm?.period?.end,
         ),
         finalStart: parseExamDate(data.final?.date, data.final?.period?.start),
         finalEnd: parseExamDate(data.final?.date, data.final?.period?.end),
@@ -132,8 +147,8 @@ export const migrateCourse = (data: Course, currentGenEd: GenEdType) =>
     yield* Console.log(`Successfully migrated: ${data.courseNo}`);
   }).pipe(
     Effect.catchAll((err) =>
-      Console.error(`Skipping ${data.courseNo}: ${err.message}`)
-    )
+      Console.error(`Skipping ${data.courseNo}: ${err.message}`),
+    ),
   );
 
 export const migrateReview = (item: Review) =>
@@ -161,8 +176,8 @@ export const migrateReview = (item: Review) =>
     yield* Console.log(`Migrated review: ${item._id.$oid}`);
   }).pipe(
     Effect.catchAll((err) =>
-      Console.error(`Failed to migrate review: ${err.message}`)
-    )
+      Console.error(`Failed to migrate review: ${err.message}`),
+    ),
   );
 
 export const migrateUser = (mongoUser: MongoUser) =>
@@ -195,7 +210,7 @@ export const migrateUser = (mongoUser: MongoUser) =>
       const cartGroups = R.groupBy(
         (item: MongoCartItem) =>
           `${item.academicYear}-${item.semester}-${item.studyProgram}`,
-        mongoUser.courseCart.cartContent
+        mongoUser.courseCart.cartContent,
       );
 
       const sortedGroupKeys = Object.keys(cartGroups).sort().reverse();
@@ -219,7 +234,7 @@ export const migrateUser = (mongoUser: MongoUser) =>
         })) as Cart;
 
         const sortedItems = [...items].sort(
-          (a, b) => (a.cartOrder ?? 0) - (b.cartOrder ?? 0)
+          (a, b) => (a.cartOrder ?? 0) - (b.cartOrder ?? 0),
         );
         let currentItemRank: string | undefined = undefined;
 
@@ -245,6 +260,6 @@ export const migrateUser = (mongoUser: MongoUser) =>
     yield* Console.log(`Successfully migrated: ${user.name}`);
   }).pipe(
     Effect.catchAll((err) =>
-      Console.error(`Skipping ${mongoUser.email}: ${err.message}`)
-    )
+      Console.error(`Skipping ${mongoUser.email}: ${err.message}`),
+    ),
   );

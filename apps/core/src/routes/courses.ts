@@ -1,10 +1,5 @@
-import { prisma } from "../db/clients.js";
 import { OpenAPIHono } from "@hono/zod-openapi";
-import {
-  getCoursesRoute,
-  getCourseByNoRoute,
-} from "../routes_define/courses.routes.js";
-import { Effect, Console } from "effect";
+
 import type { Variables } from "../lib/auth.js";
 
 const courses = new OpenAPIHono<{ Variables: Variables }>();

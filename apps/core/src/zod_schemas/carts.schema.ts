@@ -1,5 +1,7 @@
 import z from "zod";
+
 import { semester, studyProgram, visible } from "./constants.js";
+
 import {
   mapSemester,
   mapStudyProgram,

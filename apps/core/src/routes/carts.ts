@@ -1,6 +1,8 @@
-import { PrismaLive } from "../db/clients.js";
-import { Effect } from "effect";
 import { OpenAPIHono } from "@hono/zod-openapi";
+import { Effect } from "effect";
+
+import { PrismaLive } from "../db/clients.js";
+import type { Variables } from "../lib/auth.js";
 import {
   addCourseRoute,
   createCartRoute,
@@ -11,7 +13,6 @@ import {
   updateCartRoute,
   updateCourseRoute,
 } from "../routes_define/carts.routes.js";
-import type { Variables } from "../lib/auth.js";
 import { cartService } from "../services/cartsService.js";
 
 const carts = new OpenAPIHono<{ Variables: Variables }>()
@@ -31,8 +32,8 @@ const carts = new OpenAPIHono<{ Variables: Variables }>()
         Effect.match({
           onSuccess: (data) => c.json({ data: data }, 200),
           onFailure: (err) => c.json({ error: "INTERNAL_SERVER_ERROR" }, 500),
-        })
-      )
+        }),
+      ),
     );
   })
 
@@ -53,8 +54,8 @@ const carts = new OpenAPIHono<{ Variables: Variables }>()
           onFailure: (err) => {
             return c.json({ error: "INTERNAL_SERVER_ERROR" }, 500);
           },
-        })
-      )
+        }),
+      ),
     );
   })
 
@@ -83,8 +84,8 @@ const carts = new OpenAPIHono<{ Variables: Variables }>()
 
             return c.json({ error: "INTERNAL_SERVER_ERROR" }, 500);
           },
-        })
-      )
+        }),
+      ),
     );
   })
 
@@ -111,8 +112,8 @@ const carts = new OpenAPIHono<{ Variables: Variables }>()
             }
             return c.json({ error: "INTERNAL_SERVER_ERROR" }, 500);
           },
-        })
-      )
+        }),
+      ),
     );
   })
 
@@ -139,8 +140,8 @@ const carts = new OpenAPIHono<{ Variables: Variables }>()
             }
             return c.json({ error: "INTERNAL_SERVER_ERROR" }, 500);
           },
-        })
-      )
+        }),
+      ),
     );
   })
 
@@ -162,18 +163,22 @@ const carts = new OpenAPIHono<{ Variables: Variables }>()
             return c.json({ data: newItem }, 201);
           },
           onFailure: (err) => {
-            if (err.message === "CART_NOT_FOUND")
+            if (err.message === "CART_NOT_FOUND") {
               return c.json({ error: "CART_NOT_FOUND" }, 404);
-            if (err.message === "NOT_CART_OWNER")
+            }
+            if (err.message === "NOT_CART_OWNER") {
               return c.json({ error: "NOT_CART_OWNER" }, 403);
-            if (err.message === "COURSE_NOT_FOUND")
+            }
+            if (err.message === "COURSE_NOT_FOUND") {
               return c.json({ error: "COURSE_NOT_FOUND" }, 404);
-            if (err.message === "SECTION_NOT_FOUND")
+            }
+            if (err.message === "SECTION_NOT_FOUND") {
               return c.json({ error: "SECTION_NOT_FOUND_FOR_SEMESTER" }, 400);
+            }
             return c.json({ error: "INTERNAL_SERVER_ERROR" }, 500);
           },
-        })
-      )
+        }),
+      ),
     );
   })
 
@@ -193,16 +198,19 @@ const carts = new OpenAPIHono<{ Variables: Variables }>()
             return c.json({ data: updatedItem }, 200);
           },
           onFailure: (err) => {
-            if (err.message === "ITEM_NOT_FOUND")
+            if (err.message === "ITEM_NOT_FOUND") {
               return c.json({ error: "ITEM_NOT_FOUND" }, 404);
-            if (err.message === "NOT_CART_OWNER")
+            }
+            if (err.message === "NOT_CART_OWNER") {
               return c.json({ error: "NOT_CART_OWNER" }, 403);
-            if (err.message === "SECTION_NOT_FOUND")
+            }
+            if (err.message === "SECTION_NOT_FOUND") {
               return c.json({ error: "SECTION_NOT_FOUND_FOR_SEMESTER" }, 400);
+            }
             return c.json({ error: "INTERNAL_SERVER_ERROR" }, 500);
           },
-        })
-      )
+        }),
+      ),
     );
   })
 
@@ -230,8 +238,8 @@ const carts = new OpenAPIHono<{ Variables: Variables }>()
             }
             return c.json({ error: "INTERNAL_SERVER_ERROR" }, 500);
           },
-        })
-      )
+        }),
+      ),
     );
   });
 

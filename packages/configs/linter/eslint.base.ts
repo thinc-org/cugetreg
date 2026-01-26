@@ -31,7 +31,7 @@ const ignores = [
   "dist",
   "data",
   "__generated__",
-  "generated",
+  "**/generated/",
   "*.config.js",
   "*.config.mjs",
   ".svelte-kit",

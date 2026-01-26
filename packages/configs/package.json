@@ -8,6 +8,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.39.2",
+    "@hono/eslint-config": "^2.0.6",
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.5",
@@ -21,6 +22,7 @@
   },
   "exports": {
     "./linter": "./linter/eslint.base.ts",
-    "./linter/svelte": "./linter/eslint.svelte.ts"
+    "./linter/svelte": "./linter/eslint.svelte.ts",
+    "./linter/hono": "./linter/eslint.hono.ts"
   }
 }

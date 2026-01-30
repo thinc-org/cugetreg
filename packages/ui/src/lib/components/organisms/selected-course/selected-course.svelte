@@ -42,11 +42,13 @@
     interface SelectedCourseProp {
         class?: ClassValue;
         schedule: ScheduleData;
+        variant: "simple" | "detailed";
     }
 
     let {
         class: className = undefined,
         schedule = $bindable(),
+        variant = "detailed"
     }: SelectedCourseProp = $props();
 
     const totalCredit = $derived(
@@ -139,7 +141,7 @@
             font-light
         "
     >
-        <div class="flex justify-center items-center">
+        <div data-variant={variant} class="flex justify-center items-center data-[variant=simple]:hidden">
             <IconButton
                 class="hover:cursor-pointer bg-transparent"
                 onclick={() => (course.hidden = !course.hidden)}
@@ -151,22 +153,45 @@
                 {/if}
             </IconButton>
         </div>
+
         <div class="flex flex-col flex-1 overflow-hidden justify-center">
             <div class="flex text-[0.6rem] flex-nowrap">
                 {course.course.code}
-                {#each course.course.gened as gened}
-                    <GenedChip
-                        type={gened}
-                        class="text-[0.6rem] mx-1 px-2 py-0 bg-transparent"
-                    />
-                {/each}
+
+                {#if variant === "detailed"}
+                    {#each course.course.gened as gened}
+                        <GenedChip
+                            type={gened}
+                            class="text-[0.6rem] mx-1 px-2 py-0 bg-transparent"
+                        />
+                    {/each}
+                {/if}
             </div>
             <div class="text-sm truncate">
                 {course.course.name}
             </div>
         </div>
+
+        <div 
+            data-variant={variant} 
+            class="data-[variant=detailed]:hidden flex flex-1 justify-center items-center px-2"
+        >
+            <div class="flex-1 justify-center">
+                {#each course.course.gened as gened}
+                    <GenedChip
+                        type={gened}
+                        class="mx-1 px-2 py-0 bg-transparent text-sm"
+                    />
+                {/each}
+            </div>
+
+            <div class="flex-1 justify-center">
+                {course.course.credit} นก.
+            </div>
+        </div>
+
         <div class="flex items-center">
-            <div class="flex text-sm w-12">
+            <div data-variant={variant} class="flex text-sm w-12 data-[variant=simple]:hidden">
                 <Select.Root
                     type="single"
                     bind:value={
@@ -202,7 +227,7 @@
                     </Select.Content>
                 </Select.Root>
             </div>
-            <div class="flex items-center justify-center">
+            <div data-variant={variant} class="data-[variant=simple]:hidden flex items-center justify-center">
                 <Button
                     class={cn(
                         "aspect-square hover:ring-0 border rounded-lg m-2",
@@ -228,15 +253,18 @@
                         />
                     </IconButton>
                 </SortableList.ItemRemove>
-                <SortableList.ItemHandle>
-                    <IconButton
-                        class="hover:cursor-pointer size-7 bg-transparent"
-                    >
-                        <Equal
-                            class="data-[hidden=true]:text-neutral-500  mx-1"
-                        />
-                    </IconButton>
-                </SortableList.ItemHandle>
+
+                {#if variant === "detailed"}
+                    <SortableList.ItemHandle>
+                        <IconButton
+                            class="hover:cursor-pointer size-7 bg-transparent"
+                        >
+                            <Equal
+                                class="data-[hidden=true]:text-neutral-500  mx-1"
+                            />
+                        </IconButton>
+                    </SortableList.ItemHandle>
+                {/if}
             </div>
         </div>
     </div>

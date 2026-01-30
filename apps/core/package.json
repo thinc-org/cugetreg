@@ -23,6 +23,7 @@
     "@hono/standard-validator": "^0.2.1",
     "@hono/swagger-ui": "^0.5.3",
     "@hono/zod-openapi": "^1.2.0",
+    "@hono/zod-validator": "^0.7.6",
     "@prisma/adapter-pg": "^7.1.0",
     "@prisma/client": "^7.2.0",
     "@t3-oss/env-core": "^0.13.10",

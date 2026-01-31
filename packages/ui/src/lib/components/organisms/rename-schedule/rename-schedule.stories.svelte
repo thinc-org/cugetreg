@@ -1,12 +1,12 @@
 <script module lang="ts">
-    import { defineMeta } from "@storybook/addon-svelte-csf";
+	import { defineMeta } from '@storybook/addon-svelte-csf';
 
-    import { RenameSchedule } from "./index";
+	import { RenameSchedule } from './index';
 
-    const { Story } = defineMeta({
-        title: "Organism/Rename Schedule",
-        component: RenameSchedule
-    })
+	const { Story } = defineMeta({
+		title: 'Organism/Rename Schedule',
+		component: RenameSchedule
+	});
 </script>
 
 <Story name="default" />

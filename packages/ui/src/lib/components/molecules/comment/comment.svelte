@@ -1,89 +1,87 @@
 <script lang="ts">
-    import { ThumbsDown, ThumbsUp } from "@lucide/svelte";
+	import { ThumbsDown, ThumbsUp } from '@lucide/svelte';
 
-    import { RatingStar } from "../../atoms/rating-star";
+	import { RatingStar } from '../../atoms/rating-star';
 
-    let {
-        content,
-        semester,
-        rating,
-        likesCount,
-        dislikesCount,
-        facultyMajor,
-    }: {
-        content: string;
-        semester: string;
-        rating: number;
-        likesCount: number;
-        dislikesCount: number;
-        facultyMajor?: string;
-    } = $props();
-    let hasHalfStar: boolean = $derived(rating % 1 !== 0); // Determine if there's a half star
-    let isExpanded: boolean = $state(false);
+	let {
+		content,
+		semester,
+		rating,
+		likesCount,
+		dislikesCount,
+		facultyMajor
+	}: {
+		content: string;
+		semester: string;
+		rating: number;
+		likesCount: number;
+		dislikesCount: number;
+		facultyMajor?: string;
+	} = $props();
+	let hasHalfStar: boolean = $derived(rating % 1 !== 0); // Determine if there's a half star
+	let isExpanded: boolean = $state(false);
 </script>
 
 <div
-    class="h-[320px] w-full lg:h-auto border border-surface-container px-6 py-5 lg:py-10 lg:px-12 box-border rounded-xl flex flex-col gap-y-4
-  lg:gap-y-8 overflow-hidden"
-    class:h-auto={isExpanded}
+	class="border-surface-container box-border flex h-[320px] w-full flex-col gap-y-4 overflow-hidden rounded-xl border px-6 py-5 lg:h-auto lg:gap-y-8
+  lg:px-12 lg:py-10"
+	class:h-auto={isExpanded}
 >
-    <div class="flex flex-row items-center gap-x-6">
-        <div class="font-bold text-h3 text-primary">
-            {#if !hasHalfStar}
-                <span>{rating}.0</span>
-            {:else}
-                <span>{rating}</span>
-            {/if}
-        </div>
+	<div class="flex flex-row items-center gap-x-6">
+		<div class="text-h3 text-primary font-bold">
+			{#if !hasHalfStar}
+				<span>{rating}.0</span>
+			{:else}
+				<span>{rating}</span>
+			{/if}
+		</div>
 
-        <RatingStar {rating} />
+		<RatingStar {rating} />
 
-        <div class="text-subtitle font-sans font-medium">
-            {semester}
-        </div>
-    </div>
+		<div class="text-subtitle font-sans font-medium">
+			{semester}
+		</div>
+	</div>
 
-    <div class="flex flex-col gap-2">
-        {#if facultyMajor}
-            <div class="text-on-surface/60 font-sans text-body2">
-                {facultyMajor}
-            </div>
-        {/if}
+	<div class="flex flex-col gap-2">
+		{#if facultyMajor}
+			<div class="text-on-surface/60 text-body2 font-sans">
+				{facultyMajor}
+			</div>
+		{/if}
 
-        <div
-            class="h-[200px] lg:h-auto relative overflow-hidden"
-            class:h-fit={isExpanded}
-            class:overflow-visible={isExpanded}
-        >
-            <p
-                class="w-full h-auto self-center text-body1 font-sarabun font-regular text-on-surface"
-            >
-                {content}
-            </p>
+		<div
+			class="relative h-[200px] overflow-hidden lg:h-auto"
+			class:h-fit={isExpanded}
+			class:overflow-visible={isExpanded}
+		>
+			<p class="text-body1 font-sarabun font-regular text-on-surface h-auto w-full self-center">
+				{content}
+			</p>
 
-            <!-- Button to toggle view -->
-            <button
-                class="absolute bottom-0 right-0 underline text-button1 text-primary lg:hidden pb-1 pt-1 pl-2 bg-surface
+			<!-- Button to toggle view -->
+			<button
+				class="text-button1 text-primary bg-surface absolute right-0 bottom-0 pt-1 pb-1 pl-2 underline lg:hidden
 "
-                onclick={() => (isExpanded = !isExpanded)}
-            >
-                {#if isExpanded}
-                    ดูน้อยลง
-                {:else}
-                    ดูเพ่ิมเติม
-                {/if}
-            </button>
-        </div>
-    </div>
+				onclick={() => (isExpanded = !isExpanded)}
+			>
+				{#if isExpanded}
+					ดูน้อยลง
+				{:else}
+					ดูเพ่ิมเติม
+				{/if}
+			</button>
+		</div>
+	</div>
 
-    <div class="gap-6 flex flex-row text-subtitle font-sans">
-        <div class="flex flex-row font-medium gap-x-2">
-            <ThumbsUp class="text-neutral-400" />
-            {likesCount}
-        </div>
-        <div class="flex flex-row font-medium gap-x-2">
-            <ThumbsDown class="text-neutral-400" />
-            {dislikesCount}
-        </div>
-    </div>
+	<div class="text-subtitle flex flex-row gap-6 font-sans">
+		<div class="flex flex-row gap-x-2 font-medium">
+			<ThumbsUp class="text-neutral-400" />
+			{likesCount}
+		</div>
+		<div class="flex flex-row gap-x-2 font-medium">
+			<ThumbsDown class="text-neutral-400" />
+			{dislikesCount}
+		</div>
+	</div>
 </div>

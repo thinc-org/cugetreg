@@ -8,11 +8,21 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.39.2",
+    "@hono/eslint-config": "^2.0.6",
     "eslint": "^9.39.2",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.5",
+    "eslint-plugin-promise": "^7.2.1",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
+    "eslint-plugin-svelte": "^3.14.0",
+    "eslint-plugin-unused-imports": "^4.3.0",
+    "svelte-eslint-parser": "^1.4.1",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.52.0"
   },
   "exports": {
-      "./linter": "./eslint.ts"
+    "./linter": "./linter/eslint.base.ts",
+    "./linter/svelte": "./linter/eslint.svelte.ts",
+    "./linter/hono": "./linter/eslint.hono.ts"
   }
 }

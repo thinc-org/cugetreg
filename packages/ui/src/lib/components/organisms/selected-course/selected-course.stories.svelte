@@ -1,9 +1,9 @@
 <script module lang="ts">
-    import { defineMeta } from "@storybook/addon-svelte-csf";
+	import { defineMeta } from '@storybook/addon-svelte-csf';
 
-    import { SelectedCourse } from "./index";
+	import { mockSchedule as schedule } from '@cugetreg/utils/mock';
 
-    import { mockSchedule as schedule } from "@cugetreg/utils/mock";
+	import { SelectedCourse } from './index';
 
     const { Story } = defineMeta({
         title: "Organism/Selected Course",

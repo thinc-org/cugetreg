@@ -6,6 +6,20 @@ on:
       - beta
   pull_request:
 
+env:
+  POSTGRES_HOST: db
+  POSTGRES_PORT: 5432
+  POSTGRES_USER: USER_NAME
+  POSTGRES_PASSWORD: PASSWORD
+  POSTGRES_DB: DB_NAME
+  DATABASE_URL: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@localhost:${POSTGRES_PORT}/${POSTGRES_DB}?schema=public"
+  JWT_SECRET: 12345678
+  GOOGLE_CLIENT_ID: 123-XXX.apps.googleusercontent.com
+  GOOGLE_CLIENT_SECRET: BBBBBBB
+  APP_MODE: dev
+  BETTER_AUTH_SECRET: ABCdsfsvsdkjvdakj
+  BETTER_AUTH_URL: http://localhost:3000
+
 jobs:
   install-deps:
     strategy:

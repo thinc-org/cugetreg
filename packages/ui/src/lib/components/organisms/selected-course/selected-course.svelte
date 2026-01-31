@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { BookMarked, Equal, Eye, EyeOff, Trash2 } from '@lucide/svelte';
-	import { removeItem, SortableList, sortItems } from '@rodrigodagostino/svelte-sortable-list';
+	import { SortableList, sortItems } from '@rodrigodagostino/svelte-sortable-list';
 	import type { ClassValue } from 'clsx';
 
 	import { cn } from '@cugetreg/utils';
@@ -20,19 +20,17 @@
 			schedule = sortItems(schedule, draggedItemIndex, targetItemIndex);
 	}
 
-    interface SelectedCourseProp {
-        class?: ClassValue;
-        schedule: ScheduleData;
-        variant: "simple" | "detailed";
-    }
+	interface SelectedCourseProp {
+		class?: ClassValue;
+		schedule: ScheduleData;
+		variant: 'simple' | 'detailed';
+	}
 
-    let {
-        class: className = undefined,
-        schedule = $bindable(),
-        variant = "detailed"
-    }: SelectedCourseProp = $props();
-
-	let { class: className = undefined, schedule = $bindable() }: SelectedCourseProp = $props();
+	let {
+		class: className = undefined,
+		schedule = $bindable(),
+		variant = 'detailed'
+	}: SelectedCourseProp = $props();
 
 	const totalCredit = $derived(
 		schedule.reduce((acc, course) => acc + (course.hidden ? 0 : course.course.credit), 0)
@@ -113,134 +111,122 @@
             font-light
             data-[hidden=true]:text-neutral-500
         "
-    >
-        <div data-variant={variant} class="flex justify-center items-center data-[variant=simple]:hidden">
-            <IconButton
-                class="hover:cursor-pointer bg-transparent"
-                onclick={() => (course.hidden = !course.hidden)}
-            >
-                {#if course.hidden}
-                    <EyeOff class="stroke-neutral-500" />
-                {:else}
-                    <Eye />
-                {/if}
-            </IconButton>
-        </div>
+	>
+		<div
+			data-variant={variant}
+			class="flex items-center justify-center data-[variant=simple]:hidden"
+		>
+			<IconButton
+				class="bg-transparent hover:cursor-pointer"
+				onclick={() => (course.hidden = !course.hidden)}
+			>
+				{#if course.hidden}
+					<EyeOff class="stroke-neutral-500" />
+				{:else}
+					<Eye />
+				{/if}
+			</IconButton>
+		</div>
 
-        <div class="flex flex-col flex-1 overflow-hidden justify-center">
-            <div class="flex text-[0.6rem] flex-nowrap">
-                {course.course.code}
+		<div class="flex flex-1 flex-col justify-center overflow-hidden">
+			<div class="flex flex-nowrap text-[0.6rem]">
+				{course.course.code}
 
-                {#if variant === "detailed"}
-                    {#each course.course.gened as gened}
-                        <GenedChip
-                            type={gened}
-                            class="text-[0.6rem] mx-1 px-2 py-0 bg-transparent"
-                        />
-                    {/each}
-                {/if}
-            </div>
-            <div class="text-sm truncate">
-                {course.course.name}
-            </div>
-        </div>
+				{#if variant === 'detailed'}
+					{#each course.course.gened as gened (gened)}
+						<GenedChip type={gened} class="mx-1 bg-transparent px-2 py-0 text-[0.6rem]" />
+					{/each}
+				{/if}
+			</div>
+			<div class="truncate text-sm">
+				{course.course.name}
+			</div>
+		</div>
 
-        <div 
-            data-variant={variant} 
-            class="data-[variant=detailed]:hidden flex flex-1 justify-center items-center px-2"
-        >
-            <div class="flex-1 justify-center">
-                {#each course.course.gened as gened}
-                    <GenedChip
-                        type={gened}
-                        class="mx-1 px-2 py-0 bg-transparent text-sm"
-                    />
-                {/each}
-            </div>
+		<div
+			data-variant={variant}
+			class="flex flex-1 items-center justify-center px-2 data-[variant=detailed]:hidden"
+		>
+			<div class="flex-1 justify-center">
+				{#each course.course.gened as gened (gened)}
+					<GenedChip type={gened} class="mx-1 bg-transparent px-2 py-0 text-sm" />
+				{/each}
+			</div>
 
-            <div class="flex-1 justify-center">
-                {course.course.credit} นก.
-            </div>
-        </div>
+			<div class="flex-1 justify-center">
+				{course.course.credit} นก.
+			</div>
+		</div>
 
-        <div class="flex items-center">
-            <div data-variant={variant} class="flex text-sm w-12 data-[variant=simple]:hidden">
-                <Select.Root
-                    type="single"
-                    bind:value={
-                        () => String(course.selectedSection),
-                        (v) => (course.selectedSection = Number(v))
-                    }
-                >
-                    <Select.Trigger
-                        showArrow={false}
-                        class={cn(
-                            "rounded-sm p-0",
-                            course.conflicted &&
-                                "bg-red-300 border-red-800 text-red-800",
-                        )}
-                    >
-                        <div
-                            class="w-full h-full flex items-center justify-center text-xs"
-                        >
-                            เซค {course.selectedSection}
-                        </div>
-                    </Select.Trigger>
-                    <Select.Content role="listbox">
-                        <Select.Group>
-                            {#each Object.keys(course.course.sections) as section}
-                                <Select.Item
-                                    value={`${section}`}
-                                    label={`เซค ${section}`}
-                                    aria-label={`Sec ${section}`}
-                                    role="option"
-                                />
-                            {/each}
-                        </Select.Group>
-                    </Select.Content>
-                </Select.Root>
-            </div>
-            <div data-variant={variant} class="data-[variant=simple]:hidden flex items-center justify-center">
-                <Button
-                    class={cn(
-                        "aspect-square hover:ring-0 border rounded-lg m-2",
-                        courseColorVariants[course.colorVariant ?? "neutral"],
-                    )}
-                    onclick={(e: MouseEvent) => {
-                        modalPosition.x = e.clientX;
-                        modalPosition.y = e.clientY;
-                        changeColorFor = course.id;
-                        showChangeColorModal = true;
-                        initialColorVariant = course.colorVariant ?? "neutral";
-                        currentColorVariant = course.colorVariant ?? "neutral";
-                    }}
-                />
-            </div>
-            <div class="flex">
-                <SortableList.ItemRemove onclick={handleRemoveClick}>
-                    <IconButton
-                        class="hover:cursor-pointer size-7 bg-transparent"
-                    >
-                        <Trash2
-                            class="data-[hidden=true]:text-neutral-500 mx-1"
-                        />
-                    </IconButton>
-                </SortableList.ItemRemove>
+		<div class="flex items-center">
+			<div data-variant={variant} class="flex w-12 text-sm data-[variant=simple]:hidden">
+				<Select.Root
+					type="single"
+					bind:value={
+						() => String(course.selectedSection), (v) => (course.selectedSection = Number(v))
+					}
+				>
+					<Select.Trigger
+						showArrow={false}
+						class={cn(
+							'rounded-sm p-0',
+							course.conflicted && 'border-red-800 bg-red-300 text-red-800'
+						)}
+					>
+						<div class="flex h-full w-full items-center justify-center text-xs">
+							เซค {course.selectedSection}
+						</div>
+					</Select.Trigger>
+					<Select.Content role="listbox">
+						<Select.Group>
+							{#each Object.keys(course.course.sections) as section (section)}
+								<Select.Item
+									value={`${section}`}
+									label={`เซค ${section}`}
+									aria-label={`Sec ${section}`}
+									role="option"
+								/>
+							{/each}
+						</Select.Group>
+					</Select.Content>
+				</Select.Root>
+			</div>
+			<div
+				data-variant={variant}
+				class="flex items-center justify-center data-[variant=simple]:hidden"
+			>
+				<Button
+					class={cn(
+						'm-2 aspect-square rounded-lg border hover:ring-0',
+						courseColorVariants[course.colorVariant ?? 'neutral']
+					)}
+					onclick={(e: MouseEvent) => {
+						modalPosition.x = e.clientX;
+						modalPosition.y = e.clientY;
+						changeColorFor = course.id;
+						showChangeColorModal = true;
+						initialColorVariant = course.colorVariant ?? 'neutral';
+						currentColorVariant = course.colorVariant ?? 'neutral';
+					}}
+				/>
+			</div>
+			<div class="flex">
+				<SortableList.ItemRemove onclick={handleRemoveClick}>
+					<IconButton class="size-7 bg-transparent hover:cursor-pointer">
+						<Trash2 class="mx-1 data-[hidden=true]:text-neutral-500" />
+					</IconButton>
+				</SortableList.ItemRemove>
 
-                {#if variant === "detailed"}
-                    <SortableList.ItemHandle>
-                        <IconButton
-                            class="hover:cursor-pointer size-7 bg-transparent"
-                        >
-                            <Equal
-                                class="data-[hidden=true]:text-neutral-500  mx-1"
-                            />
-                        </IconButton>
-                    </SortableList.ItemHandle>
-                {/if}
-            </div>
-        </div>
-    </div>
+				{#if variant === 'detailed'}
+					<SortableList.ItemHandle>
+						<IconButton class="size-7 bg-transparent hover:cursor-pointer">
+							<Equal class="mx-1  data-[hidden=true]:text-neutral-500" />
+						</IconButton>
+					</SortableList.ItemHandle>
+				{/if}
+			</div>
+		</div>
+	</div>
 {/snippet}
 
 {#snippet changeColorModal()}

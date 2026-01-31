@@ -1,7 +1,7 @@
-import Root from "./rating-history.svelte";
+import Root from './rating-history.svelte';
 
 export {
-    Root,
-    //
-    Root as RatingHistory,
+	//
+	Root as RatingHistory,
+	Root
 };

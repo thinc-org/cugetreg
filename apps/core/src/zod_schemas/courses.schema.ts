@@ -1,4 +1,5 @@
 import { z } from "zod";
+
 import {
   assessment,
   days,
@@ -8,7 +9,6 @@ import {
   studyProgram,
   TIME_REGEX,
 } from "./constants.js";
-
 
 //1.1 get courses
 export const getCourseQuerySchema = z.object({
@@ -78,8 +78,6 @@ export const courseDetailsSchema = z.object({
 export const courseNoParamSchema = z.object({
   courseNo: z.string().describe("The registration number of the course"),
 });
-
-
 
 /*
   Default return HTTP Status 400 Bad Request

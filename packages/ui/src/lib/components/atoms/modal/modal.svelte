@@ -1,58 +1,58 @@
 <script lang="ts">
-    import type { Snippet } from "svelte"
-    import { cn } from "@cugetreg/utils";
+	import type { Snippet } from 'svelte';
 
-    function handleClick(e: MouseEvent) {
-        e.preventDefault();
+	import { cn } from '@cugetreg/utils';
 
-        if (!exitOnBackgroundClick) return;
-        show = false;
-    }
+	function handleClick(e: MouseEvent) {
+		e.preventDefault();
 
-    function handleKeydown(e: KeyboardEvent) {
-        if (e.key === 'Escape' && exitOnEsc) show = false;
-    }
+		if (!exitOnBackgroundClick) return;
+		show = false;
+	}
 
-    interface ModalProp {
-        children?: Snippet;
-        show?: boolean;
-        centered?: boolean;
-        dim?: boolean;
-        exitOnBackgroundClick?: boolean;
-        exitOnEsc?: boolean;
-    }
+	function handleKeydown(e: KeyboardEvent) {
+		if (e.key === 'Escape' && exitOnEsc) show = false;
+	}
 
-    let {
-        children,
-        centered = true,
-        dim = false,
-        show = $bindable(true),
-        exitOnBackgroundClick = false,
-        exitOnEsc = false,
-    }: ModalProp = $props();
+	interface ModalProp {
+		children?: Snippet;
+		show?: boolean;
+		centered?: boolean;
+		dim?: boolean;
+		exitOnBackgroundClick?: boolean;
+		exitOnEsc?: boolean;
+	}
+
+	let {
+		children,
+		centered = true,
+		dim = false,
+		show = $bindable(true),
+		exitOnBackgroundClick = false,
+		exitOnEsc = false
+	}: ModalProp = $props();
 </script>
 
 {#if show}
-    <div 
-        class={cn(
-            "fixed top-0 left-0 w-screen h-screen m-0 p-0 z-50",
-            dim && "bg-black/40",
-            centered && "flex items-center justify-center"
-        )}
-        onclick={handleClick}
-        onkeydown={handleKeydown}
-        tabindex="0"
-        role="dialog"
-
-    >
-        <div
-            class="z-60"
-            onclick={(e) => e.stopPropagation()}
-            onkeydown={(e) => e.stopPropagation()}
-            tabindex="0"
-            role="dialog"
-        >
-            {@render children?.()}
-        </div>
-    </div>
+	<div
+		class={cn(
+			'fixed top-0 left-0 z-50 m-0 h-screen w-screen p-0',
+			dim && 'bg-black/40',
+			centered && 'flex items-center justify-center'
+		)}
+		onclick={handleClick}
+		onkeydown={handleKeydown}
+		tabindex="0"
+		role="dialog"
+	>
+		<div
+			class="z-60"
+			onclick={(e) => e.stopPropagation()}
+			onkeydown={(e) => e.stopPropagation()}
+			tabindex="0"
+			role="dialog"
+		>
+			{@render children?.()}
+		</div>
+	</div>
 {/if}

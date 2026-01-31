@@ -1,1 +1,1 @@
-export { default as CreateTimetable } from './create-timetable.svelte'
+export { default as CreateTimetable } from './create-timetable.svelte';

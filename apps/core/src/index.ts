@@ -1,14 +1,16 @@
 import { serve } from "@hono/node-server";
-import dotenv from "dotenv";
+import { swaggerUI } from "@hono/swagger-ui";
 import { OpenAPIHono } from "@hono/zod-openapi";
-import publicCarts from "./routes/publicCarts.js";
+import dotenv from "dotenv";
+
 import admin from "./routes/admin.js";
-import courses from "./routes/courses.js";
+import authRoute, { middlewareAuth } from "./routes/auth.js";
 import carts from "./routes/carts.js";
+import courses from "./routes/courses.js";
+import publicCarts from "./routes/publicCarts.js";
 import reviews from "./routes/reviews.js";
 import user from "./routes/user.js";
-import authRoute, { middlewareAuth } from "./routes/auth.js";
-import { swaggerUI } from "@hono/swagger-ui";
+
 import type { Variables } from "../src/lib/auth.js";
 
 dotenv.config();
@@ -57,5 +59,5 @@ serve(
   },
   (info) => {
     console.log(`Server is running on http://localhost:${info.port}`);
-  }
+  },
 );

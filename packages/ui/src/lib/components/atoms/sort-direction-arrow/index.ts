@@ -1,1 +1,1 @@
-export { default as Arrow } from './arrow.svelte'
+export { default as Arrow } from './arrow.svelte';

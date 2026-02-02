@@ -12,7 +12,7 @@ env:
   POSTGRES_USER: USER_NAME
   POSTGRES_PASSWORD: PASSWORD
   POSTGRES_DB: DB_NAME
-  DATABASE_URL: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@localhost:${POSTGRES_PORT}/${POSTGRES_DB}?schema=public"
+  DATABASE_URL: "postgresql://USER_NAME:PASSWORD@localhost:$5432/DB_NAME?schema=public"
   JWT_SECRET: 12345678
   GOOGLE_CLIENT_ID: 123-XXX.apps.googleusercontent.com
   GOOGLE_CLIENT_SECRET: BBBBBBB
@@ -60,3 +60,4 @@ jobs:
     with:
       target: build
       runs-on: ${{ matrix.platform }}
+    secrets: inherit

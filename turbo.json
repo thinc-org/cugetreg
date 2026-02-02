@@ -7,7 +7,7 @@
     },
     "build": {
         "env": ["DATABASE_URL"],
-        "dependsOn": ["codegen", "check"],
+        "dependsOn": ["codegen", "prepack"],
         "outputs": ["dist/**", "storybook-static/**"]
     },
     "check-types": {
@@ -25,7 +25,7 @@
         "cache": false
     },
     "storybook": {},
-    "check": {
+    "prepack": {
         "cache": true,
         "persistent": false
     }

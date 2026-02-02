@@ -60,3 +60,5 @@ jobs:
     with:
       target: build
       runs-on: ${{ matrix.platform }}
+
+    secrets: inherit

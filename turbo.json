@@ -2,11 +2,13 @@
   "$schema": "https://turborepo.com/schema.json",
   "tasks": {
     "codegen": {
+        "env": ["DATABASE_URL"],
         "cache": true
     },
     "build": {
-        "dependsOn": ["codegen"],
-      "outputs": ["dist/**", "storybook-static/**"]
+        "env": ["DATABASE_URL"],
+        "dependsOn": ["codegen", "check"],
+        "outputs": ["dist/**", "storybook-static/**"]
     },
     "check-types": {
       "dependsOn": ["^check-types"]
@@ -23,5 +25,9 @@
         "cache": false
     },
     "storybook": {},
+    "check": {
+        "cache": true,
+        "persistent": false
+    }
   }
 }

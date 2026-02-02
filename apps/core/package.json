@@ -9,7 +9,7 @@
   "scripts": {
     "lint": "eslint .",
     "dev": "tsx watch src/index.ts",
-    "build": "tsc",
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean",
     "start": "node dist/index.js",
     "codegen": "prisma generate"
   },
@@ -52,6 +52,7 @@
     "@typescript-eslint/eslint-plugin": "^8.52.0",
     "@typescript-eslint/parser": "^8.52.0",
     "effect-prisma-generator": "^0.7.1",
+    "tsup": "^8.5.1",
     "tsx": "^4.7.1",
     "typescript": "^5.8.3"
   }

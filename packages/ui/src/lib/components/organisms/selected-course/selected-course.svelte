@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { BookMarked, Equal, Eye, EyeOff, Trash2 } from '@lucide/svelte';
-	import { removeItem, SortableList, sortItems } from '@rodrigodagostino/svelte-sortable-list';
+	import { SortableList, sortItems } from '@rodrigodagostino/svelte-sortable-list';
 	import type { ClassValue } from 'clsx';
 
 	import { cn } from '@cugetreg/utils';
@@ -20,20 +20,17 @@
 			schedule = sortItems(schedule, draggedItemIndex, targetItemIndex);
 	}
 
-	function handleRemoveClick(e: MouseEvent) {
-		const target = e.target as HTMLElement;
-		const item = target.closest<HTMLLIElement>('.ssl-item');
-		const itemIndex = Number(item?.dataset.itemIndex);
-		if (!item || itemIndex < 0) return;
-		schedule = removeItem(schedule, itemIndex);
-	}
-
 	interface SelectedCourseProp {
 		class?: ClassValue;
 		schedule: ScheduleData;
+		variant: 'simple' | 'detailed';
 	}
 
-	let { class: className = undefined, schedule = $bindable() }: SelectedCourseProp = $props();
+	let {
+		class: className = undefined,
+		schedule = $bindable(),
+		variant = 'detailed'
+	}: SelectedCourseProp = $props();
 
 	const totalCredit = $derived(
 		schedule.reduce((acc, course) => acc + (course.hidden ? 0 : course.course.credit), 0)
@@ -115,7 +112,10 @@
             data-[hidden=true]:text-neutral-500
         "
 	>
-		<div class="flex items-center justify-center">
+		<div
+			data-variant={variant}
+			class="flex items-center justify-center data-[variant=simple]:hidden"
+		>
 			<IconButton
 				class="bg-transparent hover:cursor-pointer"
 				onclick={() => (course.hidden = !course.hidden)}
@@ -127,19 +127,39 @@
 				{/if}
 			</IconButton>
 		</div>
+
 		<div class="flex flex-1 flex-col justify-center overflow-hidden">
 			<div class="flex flex-nowrap text-[0.6rem]">
 				{course.course.code}
-				{#each course.course.gened as gened, i (i)}
-					<GenedChip type={gened} class="mx-1 bg-transparent px-2 py-0 text-[0.6rem]" />
-				{/each}
+
+				{#if variant === 'detailed'}
+					{#each course.course.gened as gened (gened)}
+						<GenedChip type={gened} class="mx-1 bg-transparent px-2 py-0 text-[0.6rem]" />
+					{/each}
+				{/if}
 			</div>
 			<div class="truncate text-sm">
 				{course.course.name}
 			</div>
 		</div>
+
+		<div
+			data-variant={variant}
+			class="flex flex-1 items-center justify-center px-2 data-[variant=detailed]:hidden"
+		>
+			<div class="flex-1 justify-center">
+				{#each course.course.gened as gened (gened)}
+					<GenedChip type={gened} class="mx-1 bg-transparent px-2 py-0 text-sm" />
+				{/each}
+			</div>
+
+			<div class="flex-1 justify-center">
+				{course.course.credit} นก.
+			</div>
+		</div>
+
 		<div class="flex items-center">
-			<div class="flex w-12 text-sm">
+			<div data-variant={variant} class="flex w-12 text-sm data-[variant=simple]:hidden">
 				<Select.Root
 					type="single"
 					bind:value={
@@ -171,7 +191,10 @@
 					</Select.Content>
 				</Select.Root>
 			</div>
-			<div class="flex items-center justify-center">
+			<div
+				data-variant={variant}
+				class="flex items-center justify-center data-[variant=simple]:hidden"
+			>
 				<Button
 					class={cn(
 						'm-2 aspect-square rounded-lg border hover:ring-0',
@@ -193,11 +216,14 @@
 						<Trash2 class="mx-1 data-[hidden=true]:text-neutral-500" />
 					</IconButton>
 				</SortableList.ItemRemove>
-				<SortableList.ItemHandle>
-					<IconButton class="size-7 bg-transparent hover:cursor-pointer">
-						<Equal class="mx-1  data-[hidden=true]:text-neutral-500" />
-					</IconButton>
-				</SortableList.ItemHandle>
+
+				{#if variant === 'detailed'}
+					<SortableList.ItemHandle>
+						<IconButton class="size-7 bg-transparent hover:cursor-pointer">
+							<Equal class="mx-1  data-[hidden=true]:text-neutral-500" />
+						</IconButton>
+					</SortableList.ItemHandle>
+				{/if}
 			</div>
 		</div>
 	</div>

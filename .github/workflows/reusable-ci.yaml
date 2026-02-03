@@ -66,4 +66,4 @@ jobs:
 
       - name: Target
         if: ${{ inputs.target }}
-        run: pnpm ${{ inputs.target }} --parallel ${{ steps.get-base-branch.outputs.TURBO_FILTER }}
+        run: pnpm ${{ inputs.target }} ${{ steps.get-base-branch.outputs.TURBO_FILTER }}

@@ -141,6 +141,12 @@ importers:
 
   apps/cugetreg:
     dependencies:
+      '@cugetreg/ui':
+        specifier: workspace:*
+        version: link:../../packages/ui
+      '@cugetreg/utils':
+        specifier: workspace:*
+        version: link:../../packages/utils
       '@lucide/svelte':
         specifier: ^0.562.0
         version: 0.562.0(svelte@5.46.4)

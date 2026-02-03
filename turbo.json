@@ -3,11 +3,17 @@
   "tasks": {
     "codegen": {
         "env": ["DATABASE_URL"],
-        "cache": true
+        "cache": true,
+        "outputs": ["src/generated/**"]
+    },
+    "prepack": {
+        "cache": true,
+        "persistent": false,
+        "outputs": ["dist/**"]
     },
     "build": {
         "env": ["DATABASE_URL"],
-        "dependsOn": ["codegen", "prepack"],
+        "dependsOn": ["^build", "codegen", "prepack"],
         "outputs": ["dist/**", "storybook-static/**"]
     },
     "check-types": {
@@ -25,9 +31,5 @@
         "cache": false
     },
     "storybook": {},
-    "prepack": {
-        "cache": true,
-        "persistent": false
-    }
   }
 }

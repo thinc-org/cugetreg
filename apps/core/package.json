@@ -1,5 +1,5 @@
 {
-  "name": "cugetregv2",
+  "name": "@cugetreg/core",
   "version": "1.0.0",
   "type": "module",
   "packageManager": "pnpm@10.13.1",

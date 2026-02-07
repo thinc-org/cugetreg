@@ -27,6 +27,7 @@ jobs:
         platform: [ubuntu-latest]
 
     uses: ./.github/workflows/reusable-ci.yaml
+    secrets: inherit
 
   lint:
     strategy:
@@ -35,6 +36,7 @@ jobs:
     needs: install-deps
 
     uses: ./.github/workflows/reusable-ci.yaml
+    secrets: inherit
     with:
       target: lint
       runs-on: ${{ matrix.platform }}
@@ -46,6 +48,7 @@ jobs:
     needs: install-deps
 
     uses: ./.github/workflows/reusable-ci.yaml
+    secrets: inherit
     with:
       target: test
       runs-on: ${{ matrix.platform }}
@@ -56,8 +59,8 @@ jobs:
         platform: [ubuntu-latest]
     needs: install-deps
 
+    secrets: inherit
     uses: ./.github/workflows/reusable-ci.yaml
     with:
       target: build
       runs-on: ${{ matrix.platform }}
-    secrets: inherit

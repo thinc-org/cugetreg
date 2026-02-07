@@ -25,7 +25,7 @@
     "@hono/swagger-ui": "^0.5.3",
     "@hono/zod-openapi": "^1.2.0",
     "@prisma/adapter-pg": "^7.1.0",
-    "@prisma/client": "^7.2.0",
+    "@prisma/client": "^7.3.0",
     "@t3-oss/env-core": "^0.13.10",
     "better-auth": "^1.4.10",
     "dayjs": "^1.11.19",
@@ -45,7 +45,7 @@
     "zod": "^4.2.1"
   },
   "devDependencies": {
-    "@esbuild/darwin-arm64": "^0.27.2",
+    "@esbuild/darwin-arm64": "^0.27.1",
     "@types/node": "^20.11.17",
     "@types/pg": "^8.16.0",
     "@types/ramda": "^0.31.1",

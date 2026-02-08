@@ -13,21 +13,20 @@ import {
 //1.1 get courses
 export const getCourseQuerySchema = z.object({
   studyProgram: z.enum(studyProgram),
-  academicYear: z.number().int().min(2564),
-  semester: z.union([z.literal(1), z.literal(2), z.literal(3)]),
-  // Optional Query
+  academicYear: z.coerce.number().int().min(2564),
+  semester: z.coerce.number().pipe(z.union([z.literal(1), z.literal(2), z.literal(3)])),
   q: z.string().optional(),
   genEdType: z.enum(genEdType).optional(),
   faculty: z.string().optional(),
   day: z.enum(days).optional(),
   timeStart: z.string().regex(TIME_REGEX).optional(),
   timeEnd: z.string().regex(TIME_REGEX).optional(),
-  noPrereq: z.boolean().optional(),
+  noPrereq: z.coerce.boolean().optional(),
   fitCardId: z.string().optional(),
   assessment: z.enum(assessment).optional(),
   sortBy: z.enum(sortBy).optional(),
   sortOrder: z.enum(sortOrder).optional(),
-  limit: z.number().int().optional(),
+  limit: z.coerce.number().int().optional(),
 });
 // 1. Sub-schema for the 'course' object
 const courseSchema = z.object({

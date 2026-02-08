@@ -3,45 +3,22 @@
   import { Footer } from '@cugetreg/ui/organisms/footer'
   import { SelectedCourse } from '@cugetreg/ui/organisms/selected-course'
   import { Filter as FilterBar } from '@cugetreg/ui/organisms/filter-bar'
-
   import { CourseCard } from '@cugetreg/ui/molecules/course-card'
   import { Input } from '@cugetreg/ui/atoms/input'
-
-  import {
-    mockScheduleList,
-    courseComPres,
-    courseAppDev,
-    courseEffectCareer,
-    courseCalculusI,
-    courseLongName,
-    courseAI,
-  } from '@cugetreg/utils/mock';
-
-  import { Menu, Filter, BookMarked, Plus, ChevronDown } from '@lucide/svelte'
+  import { mockScheduleList } from '@cugetreg/utils/mock'
+  import { Menu, Filter, BookMarked, Plus, ChevronDown, Loader2 } from '@lucide/svelte'
   import { untrack } from 'svelte'
 
-  const mockAllCourses = [
-    { course: courseComPres, recommended: true },
-    { course: courseAppDev, recommended: true },
-    { course: courseEffectCareer, recommended: false },
-    { course: courseCalculusI, recommended: false },
-    { course: courseLongName, recommended: false },
-    { course: courseAI, recommended: true },
-  ]
+  let courses = $state<any[]>([]) 
+  let isLoading = $state(false)
 
-  let { courses = mockAllCourses } = $props()
-
-  // --- STATES ---
-  let openPanel = $state<'sidebar' | 'filter_only' | 'selected_only' | null>(
-    null,
-  )
+  let openPanel = $state<'sidebar' | 'filter_only' | 'selected_only' | null>(null)
   let scheduleList = $state(mockScheduleList)
   let activeSchedule = $state(untrack(() => scheduleList[0]))
   let searchQuery = $state('')
   let isScheduleDropdownOpen = $state(false)
   let activeDropdown = $state<'program' | 'semester' | 'sort' | null>(null)
 
-  // --- Filter States ---
   let selectedGenEds = $state([])
   let selectedSpecial = $state([])
   let selectedFaculties = $state([])
@@ -52,7 +29,6 @@
   let fitSchedule = $state(false)
   let noConditions = $state(true)
 
-  // --- Header Values ---
   let currentProgram = $state('นานาชาติ')
   let currentSemester = $state('2566 / ภาคต้น')
   let currentSort = $state('จำนวนที่นั่ง')
@@ -65,26 +41,102 @@
     '2568 / 1',
     '2567 / ฤดูร้อน',
     '2567 / 2',
+    '2567 / 1',
+    '2566 / 2',
+    '2566 / 1',
   ]
   const sortOptions = ['จำนวนที่นั่ง', 'ชื่อวิชา', 'จำนวนที่นั่งเหลือ']
 
   const genEdMap: Record<string, string> = {
-    sci: 'SC',
-    hum: 'HU',
-    soc: 'SO',
-    int: 'IN',
+    sci: 'SC', hum: 'HU', soc: 'SO', int: 'IN',
   }
   const dayMap: Record<string, string> = {
-    mon: 'MO',
-    tue: 'TU',
-    wed: 'WE',
-    thu: 'TH',
-    fri: 'FR',
-    sat: 'SA',
-    sun: 'SU',
+    mon: 'MO', tue: 'TU', wed: 'WE', thu: 'TH', fri: 'FR', sat: 'SA', sun: 'SU',
   }
 
-  // --- LOGIC ---
+  function getParams() {
+    const parts = currentSemester.split(' / ')
+    const year = parts[0]
+    const semRaw = parts[1]
+
+    let semesterVal = '1'
+    if (semRaw === 'ฤดูร้อน') semesterVal = '3'
+    else if (semRaw === '2' || semRaw === 'ภาคปลาย') semesterVal = '2'
+    else if (semRaw === '1' || semRaw === 'ภาคต้น') semesterVal = '1'
+
+    let programVal = 'S'
+    if (currentProgram === 'นานาชาติ') programVal = 'I'
+    if (currentProgram === 'ทวิภาค') programVal = 'S'
+    if (currentProgram === 'ตรีภาค') programVal = 'T'
+
+    return { academicYear: year, semester: semesterVal, studyProgram: programVal }
+  }
+
+  async function fetchCourses() {
+    isLoading = true
+    try {
+      const { academicYear, semester, studyProgram } = getParams()
+      
+      const params = new URLSearchParams()
+      params.append('academicYear', academicYear)
+      params.append('semester', semester)
+      params.append('studyProgram', studyProgram)
+
+      console.log('Fetching:', `http://localhost:3000/api/v1/courses?${params.toString()}`)
+
+      const res = await fetch(`http://localhost:3000/api/v1/courses?${params.toString()}`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' }
+      })
+
+      if (!res.ok) throw new Error(`Server error (${res.status})`)
+
+      const json = await res.json()
+      
+      courses = (json.data || []).map((c: any) => {
+        const totalMaxSeat = c.sections?.reduce((sum: number, sec: any) => sum + (sec.max || 0), 0) || 0
+        const totalCurrentSeat = c.sections?.reduce((sum: number, sec: any) => sum + (sec.regis || 0), 0) || 0
+
+        const firstSection = c.sections?.[0]
+        const firstClass = firstSection?.classes?.[0]
+        const allDays = Array.from(new Set(
+             c.sections?.flatMap((s: any) => s.classes?.map((cl: any) => cl.dayOfWeek))
+        )).filter(Boolean);
+
+        return {
+          recommended: false,
+          course: {
+            ...c, 
+            code: c.courseNo,
+            name: c.courseInfo?.abbrName || c.courseInfo?.courseNameEn || '-',
+            credit: Number(c.courseInfo?.credit) || 0,
+            maxseat: totalMaxSeat,
+            seat: totalCurrentSeat,
+            gened: (c.genEdType && c.genEdType !== "NO") ? [c.genEdType] : [], 
+            totalReviews: c.reviewCount || 0,
+            rating: c.rating || 0,
+            days: allDays, 
+            startTime: firstClass?.periodStart || '',
+            endTime: firstClass?.periodEnd || '',
+            room: firstClass?.room || '',
+            building: firstClass?.building || ''
+          },
+        }
+      })
+    } catch (err) {
+      console.error('Error fetching courses:', err)
+      courses = []
+    } finally {
+      isLoading = false
+    }
+  }
+
+  $effect(() => {
+    currentSemester
+    currentProgram
+    fetchCourses()
+  })
+
   function togglePanel(type: typeof openPanel) {
     openPanel = openPanel === type ? null : type
   }
@@ -110,18 +162,26 @@
       (s) => s.course.code === courseItem.course.code,
     )
     if (index === -1) {
-      activeSchedule.schedule.push({
-        id: crypto.randomUUID(),
-        course: courseItem.course,
-        selectedSection: 1,
-        colorVariant: 'neutral',
-        hidden: false,
-      })
+      activeSchedule.schedule = [
+        ...activeSchedule.schedule,
+        {
+            id: crypto.randomUUID(),
+            course: courseItem.course,
+            selectedSection: 1,
+            colorVariant: 'neutral',
+            hidden: false,
+        }
+      ]
     } else {
-      activeSchedule.schedule = activeSchedule.schedule.filter(
-        (s) => s.course.code !== courseItem.course.code,
-      )
+      handleRemoveCourse(courseItem.course.code)
     }
+  }
+
+  function handleRemoveCourse(courseCode: string) {
+    if (!activeSchedule) return
+    activeSchedule.schedule = activeSchedule.schedule.filter(
+        (s) => s.course.code !== courseCode
+    )
   }
 
   let filteredCourses = $derived.by(() => {
@@ -131,8 +191,10 @@
           .toLowerCase()
           .includes(searchQuery.toLowerCase()) ||
         (item.course?.code || '').includes(searchQuery)
+      
       if (!matchSearch) return false
       if (noConditions) return true
+
       if (selectedGenEds.length > 0) {
         const courseGenEds = item.course.gened || []
         const targetGenEds = selectedGenEds.map((id: string) => genEdMap[id])
@@ -184,9 +246,7 @@
   <Navbar />
 
   <div class="relative flex flex-1 overflow-hidden">
-    <nav
-      class="z-[65] flex w-16 shrink-0 flex-col items-center gap-6 border-r bg-white py-6"
-    >
+    <nav class="z-[65] flex w-16 shrink-0 flex-col items-center gap-6 border-r bg-white py-6">
       <button
         onclick={() => togglePanel('sidebar')}
         class="rounded-xl p-3 transition-all {openPanel === 'sidebar'
@@ -217,15 +277,17 @@
       <div
         class="fixed inset-0 z-40 bg-black/5"
         onclick={() => (openPanel = null)}
+        role="button"
+        tabindex="0"
+        onkeydown={() => {}}
       ></div>
     {/if}
 
     {#if openPanel}
       <aside
-        class="
-            z-50 flex flex-col bg-white transition-all duration-300 ease-in-out
+        class="z-50 flex flex-col bg-white transition-all duration-300 ease-in-out
             {openPanel === 'sidebar'
-          ? 'relative h-full w-[450px] shrink-0 border-r' /* Sidebar: ดันเนื้อหา, เต็มจอ, เหลี่ยม */
+          ? 'relative h-full w-[450px] shrink-0 border-r'
           : 'absolute top-0 left-16 m-4 h-auto max-h-[90vh] w-[400px] rounded-[2.5rem] border shadow-2xl'} 
         "
       >
@@ -233,68 +295,43 @@
           <div class="custom-scrollbar flex-1 overflow-y-auto pr-2">
             {#if openPanel === 'sidebar'}
               <div class="relative mb-6 flex flex-col gap-2">
-                <label class="ml-1 text-[11px] font-medium text-gray-400"
-                  >คุณกำลังจัดตารางเรียน...</label
-                >
+                <label class="ml-1 text-[11px] font-medium text-gray-400">คุณกำลังจัดตารางเรียน...</label>
                 <div class="flex items-center gap-2">
                   <button
-                    onclick={() =>
-                      (isScheduleDropdownOpen = !isScheduleDropdownOpen)}
+                    onclick={() => (isScheduleDropdownOpen = !isScheduleDropdownOpen)}
                     class="flex h-14 flex-1 items-center justify-between overflow-hidden rounded-2xl border border-blue-500 bg-white px-5 shadow-sm transition-all hover:bg-gray-50"
                   >
-                    <span class="mr-2 truncate text-lg font-bold text-[#1C1B1F]"
-                      >{activeSchedule?.name || 'เลือกตาราง'}</span
-                    >
+                    <span class="mr-2 truncate text-lg font-bold text-[#1C1B1F]">{activeSchedule?.name || 'เลือกตาราง'}</span>
                     <ChevronDown size={24} class="shrink-0 text-gray-400" />
                   </button>
                   <div
                     class="flex h-14 min-w-[100px] flex-col items-center justify-center rounded-2xl border border-neutral-800 bg-white px-3 py-2 text-center shadow-sm"
                   >
-                    <span
-                      class="text-[10px] leading-tight font-bold text-neutral-800"
-                      >ทวิภาค</span
-                    >
-                    <span
-                      class="text-[10px] leading-tight font-bold whitespace-nowrap text-neutral-800"
-                      >{activeSchedule?.semester || '-'}</span
-                    >
+                    <span class="text-[10px] leading-tight font-bold text-neutral-800">ทวิภาค</span>
+                    <span class="text-[10px] leading-tight font-bold whitespace-nowrap text-neutral-800">{activeSchedule?.semester || '-'}</span>
                   </div>
                 </div>
 
                 {#if isScheduleDropdownOpen}
-                  <div
-                    class="absolute top-[110%] left-0 z-[70] w-full overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-2xl"
-                  >
-                    <div
-                      class="custom-scrollbar flex max-h-[200px] flex-col overflow-y-auto py-2"
-                    >
+                  <div class="absolute top-[110%] left-0 z-[70] w-full overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-2xl">
+                    <div class="custom-scrollbar flex max-h-[200px] flex-col overflow-y-auto py-2">
                       {#each scheduleList as s}
                         <button
                           onclick={() => {
                             activeSchedule = s
                             isScheduleDropdownOpen = false
                           }}
-                          class="px-5 py-3 text-left hover:bg-gray-50 {activeSchedule.scheduleId ===
-                          s.scheduleId
-                            ? 'bg-gray-50 font-bold'
-                            : ''}"
+                          class="px-5 py-3 text-left hover:bg-gray-50 {activeSchedule.scheduleId === s.scheduleId ? 'bg-gray-50 font-bold' : ''}"
                         >
-                          <span class="block truncate text-[15px]"
-                            >{s.name}</span
-                          >
+                          <span class="block truncate text-[15px]">{s.name}</span>
                         </button>
                       {/each}
                     </div>
-                    <button
-                      class="flex w-full items-center justify-center gap-2 border-t p-4 font-bold text-[#004494] transition-colors hover:bg-gray-50"
-                    >
+                    <button class="flex w-full items-center justify-center gap-2 border-t p-4 font-bold text-[#004494] transition-colors hover:bg-gray-50">
                       <Plus size={18} strokeWidth={3} /> เพิ่มตาราง
                     </button>
                   </div>
-                  <div
-                    class="fixed inset-0 z-[65]"
-                    onclick={() => (isScheduleDropdownOpen = false)}
-                  ></div>
+                  <div class="fixed inset-0 z-[65]" onclick={() => (isScheduleDropdownOpen = false)} role="button" tabindex="0" onkeydown={() => {}}></div>
                 {/if}
               </div>
               <hr class="mb-6 opacity-50" />
@@ -328,18 +365,18 @@
               <div class="mb-4 flex items-center gap-2">
                 <BookMarked size={20} />
                 <h2 class="text-xl font-bold">
-                  วิชาที่เลือก <span
-                    class="ml-2 text-sm font-normal text-gray-400"
-                  >
-                    {activeSchedule?.schedule.reduce(
-                      (acc, curr) => acc + curr.course.credit,
-                      0,
-                    ) ?? 0} หน่วยกิต
+                  วิชาที่เลือก <span class="ml-2 text-sm font-normal text-gray-400">
+                    {activeSchedule?.schedule.reduce((acc, curr) => acc + curr.course.credit, 0) ?? 0} หน่วยกิต
                   </span>
                 </h2>
               </div>
               {#if activeSchedule}
-                <SelectedCourse bind:schedule={activeSchedule.schedule} />
+                {#key activeSchedule.scheduleId}
+                  <SelectedCourse 
+                    bind:schedule={activeSchedule.schedule} 
+                    remove={handleRemoveCourse} 
+                  />
+                {/key}
               {/if}
             {/if}
           </div>
@@ -353,9 +390,7 @@
           <div class="mb-2 flex items-center justify-between">
             <div class="flex items-baseline gap-3">
               <h1 class="text-4xl font-bold text-[#1C1B1F]">วิชาเรียน</h1>
-              <span class="text-sm font-medium text-gray-400"
-                >({filteredCourses.length} ผลลัพธ์)</span
-              >
+              <span class="text-sm font-medium text-gray-400">({filteredCourses.length} ผลลัพธ์)</span>
             </div>
 
             <div class="relative flex gap-2">
@@ -368,21 +403,19 @@
                   <ChevronDown size={16} />
                 </button>
                 {#if activeDropdown === 'program'}
-                  <div
-                    class="absolute top-full right-0 z-[70] mt-2 w-32 overflow-hidden rounded-xl border border-gray-100 bg-white shadow-xl"
-                  >
+                  <div class="absolute top-full right-0 z-[70] mt-2 w-32 overflow-hidden rounded-xl border border-gray-100 bg-white shadow-xl">
                     {#each programOptions as opt}
                       <button
                         onclick={() => selectOption('program', opt)}
-                        class="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 {currentProgram ===
-                        opt
-                          ? 'bg-gray-50 font-bold'
-                          : ''}">{opt}</button
+                        class="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 {currentProgram === opt ? 'bg-gray-50 font-bold' : ''}"
                       >
+                        {opt}
+                      </button>
                     {/each}
                   </div>
                 {/if}
               </div>
+              
               <div class="relative">
                 <button
                   onclick={() => toggleDropdown('semester')}
@@ -392,30 +425,23 @@
                   <ChevronDown size={16} />
                 </button>
                 {#if activeDropdown === 'semester'}
-                  <div
-                    class="absolute top-full right-0 z-[70] mt-2 w-48 overflow-hidden rounded-xl border border-gray-100 bg-white shadow-xl"
-                  >
-                    <div
-                      class="custom-scrollbar flex max-h-[250px] flex-col overflow-y-auto py-1"
-                    >
+                  <div class="absolute top-full right-0 z-[70] mt-2 w-48 overflow-hidden rounded-xl border border-gray-100 bg-white shadow-xl">
+                    <div class="custom-scrollbar flex max-h-[250px] flex-col overflow-y-auto py-1">
                       {#each semesterOptions as opt}
                         <button
                           onclick={() => selectOption('semester', opt)}
-                          class="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 {currentSemester ===
-                          opt
-                            ? 'bg-gray-50 font-bold'
-                            : ''}">{opt}</button
+                          class="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 {currentSemester === opt ? 'bg-gray-50 font-bold' : ''}"
                         >
+                          {opt}
+                        </button>
                       {/each}
                     </div>
                   </div>
                 {/if}
               </div>
+              
               {#if activeDropdown}
-                <div
-                  class="fixed inset-0 z-[65]"
-                  onclick={() => (activeDropdown = null)}
-                ></div>
+                <div class="fixed inset-0 z-[65]" onclick={() => (activeDropdown = null)} role="button" tabindex="0" onkeydown={() => {}}></div>
               {/if}
             </div>
           </div>
@@ -431,9 +457,7 @@
                 />
               </div>
               <div class="flex w-64 flex-col gap-1">
-                <span class="ml-1 text-[10px] font-bold text-gray-400 uppercase"
-                  >จัดลำดับตาม</span
-                >
+                <span class="ml-1 text-[10px] font-bold text-gray-400 uppercase">จัดลำดับตาม</span>
                 <div class="relative flex items-center gap-3">
                   <button
                     onclick={() => toggleDropdown('sort')}
@@ -443,17 +467,14 @@
                     <ChevronDown size={18} class="text-gray-400" />
                   </button>
                   {#if activeDropdown === 'sort'}
-                    <div
-                      class="absolute top-full left-0 z-[70] mt-2 w-full overflow-hidden rounded-xl border border-gray-100 bg-white shadow-xl"
-                    >
+                    <div class="absolute top-full left-0 z-[70] mt-2 w-full overflow-hidden rounded-xl border border-gray-100 bg-white shadow-xl">
                       {#each sortOptions as opt}
                         <button
                           onclick={() => selectOption('sort', opt)}
-                          class="w-full px-5 py-3 text-left text-sm hover:bg-gray-50 {currentSort ===
-                          opt
-                            ? 'bg-gray-50 font-bold'
-                            : ''}">{opt}</button
+                          class="w-full px-5 py-3 text-left text-sm hover:bg-gray-50 {currentSort === opt ? 'bg-gray-50 font-bold' : ''}"
                         >
+                          {opt}
+                        </button>
                       {/each}
                     </div>
                   {/if}
@@ -461,23 +482,10 @@
                     onclick={toggleSortDirection}
                     class="flex h-12 w-12 cursor-pointer items-center justify-center rounded-xl text-[#004494] transition-all hover:bg-blue-50"
                   >
-                    <div
-                      class="transition-transform duration-300 {sortDirection ===
-                      'asc'
-                        ? 'rotate-180'
-                        : 'rotate-0'}"
-                    >
-                      <svg
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2.5"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        ><path d="M12 5v14M19 12l-7 7-7-7" /></svg
-                      >
+                    <div class="transition-transform duration-300 {sortDirection === 'asc' ? 'rotate-180' : 'rotate-0'}">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 5v14M19 12l-7 7-7-7" />
+                      </svg>
                     </div>
                   </button>
                 </div>
@@ -486,19 +494,26 @@
           </div>
 
           <div class="grid grid-cols-1 gap-4 pb-32 md:grid-cols-2">
-            {#each filteredCourses as item}
-              <CourseCard
-                course={item.course}
-                recommended={item.recommended}
-                selected={activeSchedule
-                  ? activeSchedule.schedule.some(
-                      (s) => s.course.code === item.course.code,
-                    )
-                  : false}
-                onclick={() => handleToggleCourse(item)}
-                class="w-full"
-              />
-            {/each}
+            {#if isLoading}
+              <div class="col-span-full flex h-64 flex-col items-center justify-center gap-3 text-gray-400">
+                <Loader2 class="animate-spin" size={40} />
+                <p>กำลังโหลดข้อมูลวิชา...</p>
+              </div>
+            {:else if filteredCourses.length === 0}
+               <div class="col-span-full flex h-64 items-center justify-center text-gray-400">
+                <p>ไม่พบรายวิชา</p>
+               </div>
+            {:else}
+              {#each filteredCourses as item}
+                <CourseCard
+                  course={item.course}
+                  recommended={item.recommended}
+                  selected={activeSchedule ? activeSchedule.schedule.some((s) => s.course.code === item.course.code) : false}
+                  onclick={() => handleToggleCourse(item)}
+                  class="w-full"
+                />
+              {/each}
+            {/if}
           </div>
         </div>
 

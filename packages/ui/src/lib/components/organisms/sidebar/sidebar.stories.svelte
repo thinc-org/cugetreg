@@ -147,7 +147,38 @@
 </Story>
 
 <Story name="Right Side">
-	{@render Layout('sidebar', 'right', 'offcanvas')}
+	<div class="bg-background flex h-[600px] w-full overflow-hidden">
+		<Sidebar.Provider>
+			<Sidebar.Inset>
+				<header class="flex h-16 shrink-0 items-center gap-2 border-b px-4">
+					<div class="ml-2 flex w-full items-center justify-between">
+						<span class="text-sm font-semibold">Dashboard</span>
+						<div class="flex gap-4">
+							<Search class="text-muted-foreground size-4" />
+							<Bell class="text-muted-foreground size-4" />
+						</div>
+					</div>
+					<Sidebar.Trigger class="-ml-1" />
+				</header>
+				<div class="flex flex-1 flex-col gap-4 p-4">
+					<div class="grid auto-rows-min gap-4 md:grid-cols-3">
+						<div class="bg-muted/50 aspect-video rounded-xl"></div>
+						<div class="bg-muted/50 aspect-video rounded-xl"></div>
+						<div class="bg-muted/50 aspect-video rounded-xl"></div>
+					</div>
+					<div class="bg-muted/50 min-h-[100vh] flex-1 rounded-xl md:min-h-min"></div>
+				</div>
+			</Sidebar.Inset>
+
+			<Sidebar.Root
+				variant="sidebar"
+				side="right"
+				collapsible="offcanvas"
+			>
+				{@render SidebarInnerContent()}
+			</Sidebar.Root>
+		</Sidebar.Provider>
+	</div>
 </Story>
 
 <Story name="Icon Collapsible">

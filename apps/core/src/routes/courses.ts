@@ -18,7 +18,6 @@ const semesterMap: Record<number, "FIRST" | "SECOND" | "SUMMER"> = {
 const courses = new OpenAPIHono<{ Variables: Variables }>();
 
 courses
-  // 1.1 Get courses
   .openapi(getCoursesRoute, async (c) => {
     const {
       studyProgram,
@@ -33,7 +32,6 @@ courses
     } = c.req.valid("query");
 
     const program = Effect.gen(function* () {
-      // 1. ดึงรายวิชา (Courses)
       const courses = yield* Effect.tryPromise({
         try: () =>
           prisma.course.findMany({
@@ -45,12 +43,12 @@ courses
               faculty,
             },
             include: {
-              courseInfo: true, // เอาชื่อวิชา
-              sections: {       // เอา Section ไปคำนวณที่นั่ง
+              courseInfo: true,
+              sections: {
                 include: {
-                  classes: true // เอาเวลาเรียน
-                }
-              }
+                  classes: true,
+                },
+              },
             },
             orderBy: sortBy
               ? {
@@ -62,30 +60,29 @@ courses
         catch: (error) => new Error(`Prisma Error: ${error}`),
       });
 
-      // 2. ดึงจำนวนรีวิว (Review Counts) แยกต่างหาก
-      // เพราะใน Schema ไม่มี Relation Course -> Review
       const courseNos = courses.map((c) => c.courseNo);
-      
+
       const reviewCounts = yield* Effect.tryPromise({
-        try: () => 
+        try: () =>
           prisma.review.groupBy({
-            by: ['courseNo'],
+            by: ["courseNo"],
             _count: {
-              _all: true
+              _all: true,
             },
             where: {
-              courseNo: { in: courseNos }
-            }
+              courseNo: { in: courseNos },
+            },
           }),
-        catch: (error) => new Error(`Review Count Error: ${error}`)
+        catch: (error) => new Error(`Review Count Error: ${error}`),
       });
 
-      // 3. รวมร่างข้อมูล (Merge)
-      const result = courses.map(course => {
-        const reviewData = reviewCounts.find(r => r.courseNo === course.courseNo);
+      const result = courses.map((course) => {
+        const reviewData = reviewCounts.find(
+          (r) => r.courseNo === course.courseNo,
+        );
         return {
           ...course,
-          reviewCount: reviewData?._count._all || 0 // เพิ่ม field นี้เข้าไปเอง
+          reviewCount: reviewData?._count._all || 0,
         };
       });
 
@@ -96,12 +93,11 @@ courses
           yield* Console.error("Fetch Courses Error:", err);
           return c.json({ error: "INTERNAL_SERVER_ERROR" }, 500);
         });
-      })
+      }),
     );
     return await Effect.runPromise(program);
   })
   .openapi(getCourseByNoRoute, async (c) => {
-    // ... (ส่วน getCourseByNoRoute คงเดิม หรือแก้คล้ายๆ กันถ้าต้องการรีวิว)
     const { courseNo } = c.req.valid("param");
     const { studyProgram, academicYear, semester } = c.req.valid("query");
 
@@ -116,9 +112,9 @@ courses
               semester: semester ? semesterMap[semester] : undefined,
             },
             include: {
-                courseInfo: true,
-                sections: { include: { classes: true } }
-            }
+              courseInfo: true,
+              sections: { include: { classes: true } },
+            },
           }),
         catch: (e) => new Error("DB Error"),
       });
@@ -134,7 +130,7 @@ courses
           yield* Console.error("Fetch Course Error:", err);
           return c.json({ error: "INTERNAL_SERVER_ERROR" }, 500);
         });
-      })
+      }),
     );
     return await Effect.runPromise(program);
   });

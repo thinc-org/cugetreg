@@ -149,7 +149,6 @@
     fetchCourses()
   })
 
-  // 1. ฟังก์ชันรับค่าการพิมพ์โดยตรง (ทะลุแพ็กเกจ UI ชัวร์ 100%)
   function handleSearch(e: Event) {
     const target = e.target as HTMLInputElement;
     if (!target) return;

@@ -14,7 +14,9 @@ import {
 export const getCourseQuerySchema = z.object({
   studyProgram: z.enum(studyProgram),
   academicYear: z.coerce.number().int().min(2564),
-  semester: z.coerce.number().pipe(z.union([z.literal(1), z.literal(2), z.literal(3)])),
+  semester: z.coerce
+    .number()
+    .pipe(z.union([z.literal(1), z.literal(2), z.literal(3)])),
   q: z.string().optional(),
   genEdType: z.enum(genEdType).optional(),
   faculty: z.string().optional(),
@@ -48,11 +50,11 @@ const courseInfoSchema = z.object({
   abbrName: z.string(),
   courseNameEn: z.string(),
   courseNameTh: z.string(),
-  courseDescEn: z.string().nullable(), // Nullable since your data shows null
+  courseDescEn: z.string().nullable(),
   courseDescTh: z.string().nullable(),
   faculty: z.string(),
   department: z.string(),
-  credit: z.string(), // "3.0" is a string in your JSON
+  credit: z.string(),
   creditHours: z.string(),
 });
 

@@ -11,10 +11,8 @@ import type {
 } from "./migrate_interface.ts";
 
 import {
-  GradingType,
-  Prisma,
-  Visible,
   type Cart,
+  GradingType,
   Prisma,
   type User,
   Visible,
@@ -25,16 +23,8 @@ import type {
   Semester,
   StudyProgram,
 } from "../src/generated/prisma/enums.js";
-import * as R from "ramda";
-import * as fs from "fs";
-import { LexoRankService } from "../src/services/lexorank.service.js";
 import { PrismaService } from "../src/generated/prisma-effect/index.js";
 import { LexoRankService } from "../src/services/lexorank.service.js";
-import {
-  mapDayOfWeek,
-  mapSemester,
-  mapStudyProgram,
-} from "../src/utils/enumMapper.js";
 
 export function parseExamDate(
   dateStr: string | undefined,

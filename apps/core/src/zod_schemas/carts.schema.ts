@@ -1,22 +1,11 @@
 import z from "zod";
-import { semester, studyProgram, visible } from "./constants.js";
-import {
-  mapSemester,
-  mapStudyProgram,
-  mapVisible,
-} from "../utils/enumMapper.js";
+import { Semester, StudyProgram, Visible } from "../generated/prisma/client.js";
 
 export const ListCartsQuerySchema = z
   .object({
     academicYear: z.coerce.number().int().optional(),
-    semester: z
-      .enum(semester)
-      .optional()
-      .transform((v) => (v ? mapSemester(v) : undefined)),
-    studyProgram: z
-      .enum(studyProgram)
-      .optional()
-      .transform((v) => (v ? mapStudyProgram(v) : undefined)),
+    semester: z.nativeEnum(Semester).optional(),
+    studyProgram: z.nativeEnum(StudyProgram).optional(),
   })
   .strict();
 
@@ -25,8 +14,8 @@ export type ListCartsQuerySchema = z.output<typeof ListCartsQuerySchema>;
 export const CreateCartBodySchema = z
   .object({
     academicYear: z.number().int().min(2564),
-    semester: z.enum(semester).transform((v) => mapSemester(v)),
-    studyProgram: z.enum(studyProgram).transform((v) => mapStudyProgram(v)),
+    semester: z.nativeEnum(Semester).optional(),
+    studyProgram: z.nativeEnum(StudyProgram).optional(),
     name: z.string().nonempty(),
     isDefault: z.boolean(),
   })
@@ -37,10 +26,7 @@ export type CreateCartBodySchema = z.output<typeof CreateCartBodySchema>;
 export const UpdateCartBodySchema = z
   .object({
     name: z.string().nonempty().optional(),
-    visible: z
-      .enum(visible)
-      .optional()
-      .transform((v) => (v ? mapVisible(v) : undefined)),
+    visible: z.nativeEnum(Visible).optional(),
     isDefault: z.boolean().optional(),
     prevId: z.string().optional(),
     nextId: z.string().optional(),

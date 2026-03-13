@@ -48,14 +48,14 @@ model CourseInfo {
 
   // TODO separate this into other table
   // indirect -> 30 FACCODE or From CourseNo (Transitive Dependency)
-  faculty    String
+  faculty    String?
   // indirect -> From CourseNo (Transitive Dependency)
-  department String
+  department String?
 
   // 24 TOTALCREDIT
   credit      Decimal 
   // 17 lcredit 18 nlcredit 19 lhour 20 nlhour 21 shour
-  creditHours String  @map("credit_hours")
+  creditHours String?  @map("credit_hours")
 
   gradingType GradingType @map("grading_type")
 

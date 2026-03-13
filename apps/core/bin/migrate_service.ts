@@ -14,6 +14,7 @@ import {
   type User,
 } from "../src/generated/prisma/client.js";
 import type {
+  DayOfWeek,
   GenEdType,
   Semester,
   StudyProgram,
@@ -130,7 +131,7 @@ export const migrateCourse = (data: Course, currentGenEd: GenEdType) =>
             classes: {
               create: sec.classes.map((cls) => ({
                 type: cls.type,
-                dayOfWeek: cls.dayOfWeek,
+                dayOfWeek: cls.dayOfWeek as DayOfWeek,
                 periodStart: cls.period.start,
                 periodEnd: cls.period.end,
                 building: cls.building,

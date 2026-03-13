@@ -1,14 +1,16 @@
 <script lang="ts">
-	import { ArrowRight, Trash, EyeOff, X } from '@lucide/svelte';
 	import Button from '$lib/components/atoms/button/button.svelte';
-	import * as Select from '$lib/components/molecules/select/index.js';
-	import { GenedChip } from '$lib/components/atoms/gened-chip/index.js';
 	import { Chip } from '$lib/components/atoms/chip/index.js';
+	import { GenedChip } from '$lib/components/atoms/gened-chip/index.js';
+	import { IconButton } from '$lib/components/atoms/icon-button/index.js';
 	import * as Table from '$lib/components/atoms/table/index.js';
+	import * as Select from '$lib/components/molecules/select/index.js';
+
+	import { ArrowRight, EyeOff, Trash, X } from '@lucide/svelte';
+
 	import { cn } from '@cugetreg/utils';
 	import { courseColorVariants } from '@cugetreg/utils/constants';
 	import { type ColorVariant } from '@cugetreg/utils/types';
-	import { IconButton } from '$lib/components/atoms/icon-button/index.js';
 
 	interface ViewCourseProps {
 		onExit: () => void;
@@ -50,16 +52,13 @@
 	</div>
 	<div class="my-3 flex justify-between">
 		<div class="flex space-x-2">
-			<Select.Root
-				type="single"
-				bind:value={() => String(section), (v) => (section = Number(v))}
-			>
+			<Select.Root type="single" bind:value={() => String(section), (v) => (section = Number(v))}>
 				<Select.Trigger>
 					เซค {section}
 				</Select.Trigger>
 				<Select.Content>
 					<Select.Group>
-						{#each [1, 2, 3, 4] as section}
+						{#each [1, 2, 3, 4] as section (section)}
 							<Select.Item
 								value={`${section}`}
 								label={`เซค ${section}`}
@@ -132,7 +131,7 @@
 			<span class="font-bold">เลือกสีในตาราง</span>
 		</div>
 		<div class="flex justify-between">
-			{#each Object.keys(courseColorVariants) as ColorVariant[] as option}
+			{#each Object.keys(courseColorVariants) as ColorVariant[] as option (option)}
 				<Button
 					variant="solid"
 					color="primary"

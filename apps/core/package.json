@@ -1,5 +1,5 @@
 {
-  "name": "cugetregv2",
+  "name": "@cugetreg/core",
   "version": "1.0.0",
   "type": "module",
   "packageManager": "pnpm@10.13.1",
@@ -9,8 +9,9 @@
   "scripts": {
     "lint": "eslint .",
     "dev": "tsx watch src/index.ts",
-    "build": "tsc",
-    "start": "node dist/index.js"
+    "build": "tsup",
+    "start": "node dist/index.js",
+    "codegen": "prisma generate"
   },
   "prisma": {
     "schema": "./prisma"
@@ -24,7 +25,7 @@
     "@hono/swagger-ui": "^0.5.3",
     "@hono/zod-openapi": "^1.2.0",
     "@prisma/adapter-pg": "^7.1.0",
-    "@prisma/client": "^7.2.0",
+    "@prisma/client": "^7.3.0",
     "@t3-oss/env-core": "^0.13.10",
     "better-auth": "^1.4.10",
     "dayjs": "^1.11.19",
@@ -44,13 +45,14 @@
     "zod": "^4.2.1"
   },
   "devDependencies": {
-    "@esbuild/darwin-arm64": "^0.27.2",
+    "@esbuild/darwin-arm64": "^0.27.1",
     "@types/node": "^20.11.17",
     "@types/pg": "^8.16.0",
     "@types/ramda": "^0.31.1",
     "@typescript-eslint/eslint-plugin": "^8.52.0",
     "@typescript-eslint/parser": "^8.52.0",
     "effect-prisma-generator": "^0.7.1",
+    "tsup": "^8.5.1",
     "tsx": "^4.7.1",
     "typescript": "^5.8.3"
   }

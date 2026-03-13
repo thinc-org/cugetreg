@@ -1,7 +1,8 @@
-import { type MiddlewareHandler } from "hono";
-import { auth } from "../lib/auth.js";
 import { OpenAPIHono } from "@hono/zod-openapi";
+import { type MiddlewareHandler } from "hono";
+
 import { env } from "../env.js";
+import { auth } from "../lib/auth.js";
 
 const authRoute = new OpenAPIHono();
 

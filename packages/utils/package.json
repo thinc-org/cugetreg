@@ -7,13 +7,16 @@
     "lint": "eslint ."
   },
   "devDependencies": {
-    "typescript": "~5.9.3"
+    "@eslint/js": "^9.39.2",
+    "eslint": "^9.39.2",
+    "typescript": "~5.9.3",
+    "typescript-eslint": "^8.53.0"
   },
   "exports": {
-      "./mock": "./mockData.ts",
-      "./constants": "./constants.ts",
-      "./types": "./types.ts",
-      ".": "./utils.ts"
+    "./mock": "./mockData.ts",
+    "./constants": "./constants.ts",
+    "./types": "./types.ts",
+    ".": "./utils.ts"
   },
   "dependencies": {
     "clsx": "^2.1.1",

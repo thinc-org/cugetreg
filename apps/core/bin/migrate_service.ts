@@ -1,17 +1,23 @@
 import dayjs from "dayjs";
 import { Console, Effect } from "effect";
+import * as fs from "fs";
+import * as R from "ramda";
+
 import type {
   Course,
   MongoCartItem,
   MongoUser,
   Review,
 } from "./migrate_interface.ts";
+
 import {
   GradingType,
   Prisma,
   Visible,
   type Cart,
+  Prisma,
   type User,
+  Visible,
 } from "../src/generated/prisma/client.js";
 import type {
   GenEdType,
@@ -22,12 +28,20 @@ import * as R from "ramda";
 import * as fs from "fs";
 import { LexoRankService } from "../src/services/lexorank.service.js";
 import { PrismaService } from "../src/generated/prisma-effect/index.js";
+import { LexoRankService } from "../src/services/lexorank.service.js";
+import {
+  mapDayOfWeek,
+  mapSemester,
+  mapStudyProgram,
+} from "../src/utils/enumMapper.js";
 
 export function parseExamDate(
   dateStr: string | undefined,
   timeStr: string | undefined,
 ) {
-  if (!dateStr || !timeStr) return null;
+  if (!dateStr || !timeStr) {
+    return null;
+  }
   let d = dayjs(dateStr);
   if (d.year() > 2400) {
     d = d.subtract(543, "year");

@@ -14,6 +14,8 @@ on:
 
 jobs:
   run:
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
     runs-on: ${{ inputs.runs-on }}
     steps:
       - uses: actions/checkout@v4
@@ -64,4 +66,4 @@ jobs:
 
       - name: Target
         if: ${{ inputs.target }}
-        run: pnpm ${{ inputs.target }} --parallel ${{ steps.get-base-branch.outputs.TURBO_FILTER }}
+        run: pnpm ${{ inputs.target }} ${{ steps.get-base-branch.outputs.TURBO_FILTER }}

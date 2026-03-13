@@ -1,7 +1,7 @@
-import Root from "./confirm-delete-schedule.svelte";
+import Root from './confirm-delete-schedule.svelte';
 
 export {
-    Root,
-    //
-    Root as ConfirmDeleteSchedule,
+	//
+	Root as ConfirmDeleteSchedule,
+	Root
 };

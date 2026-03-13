@@ -3,14 +3,14 @@ import type { Day } from '../../atoms/day-chip';
 import type { Type } from '../../atoms/gened-chip';
 
 type Course = {
-    code: string
-    name: string
-    credit: number
-    gened: Type[]
-    seat: number
-    maxseat: number
-    review: number
-    days: Day[]
-}
+	code: string;
+	name: string;
+	credit: number;
+	gened: Type[];
+	seat: number;
+	maxseat: number;
+	review: number;
+	days: Day[];
+};
 
-export type { Course }
+export type { Course };

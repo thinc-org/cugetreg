@@ -1,4 +1,5 @@
 import z from "zod";
+
 import { Semester, StudyProgram, Visible } from "../generated/prisma/client.js";
 
 export const ListCartsQuerySchema = z

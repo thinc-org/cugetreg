@@ -7,11 +7,6 @@ import type {
   Review,
 } from "./migrate_interface.ts";
 import {
-  mapDayOfWeek,
-  mapSemester,
-  mapStudyProgram,
-} from "../src/utils/enumMapper.js";
-import {
   GradingType,
   Prisma,
   Visible,
@@ -135,7 +130,7 @@ export const migrateCourse = (data: Course, currentGenEd: GenEdType) =>
             classes: {
               create: sec.classes.map((cls) => ({
                 type: cls.type,
-                dayOfWeek: mapDayOfWeek(cls.dayOfWeek),
+                dayOfWeek: cls.dayOfWeek,
                 periodStart: cls.period.start,
                 periodEnd: cls.period.end,
                 building: cls.building,

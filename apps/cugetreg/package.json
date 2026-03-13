@@ -8,6 +8,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "check": "svelte-kit sync && svelte-check",
+    "prepack": "svelte-kit sync",
     "lint": "eslint .",
     "storybook": "storybook dev -p 6006 --ci",
     "build-storybook": "storybook build"
@@ -48,6 +49,8 @@
     ]
   },
   "dependencies": {
+    "@cugetreg/ui": "workspace:*",
+    "@cugetreg/utils": "workspace:*",
     "@lucide/svelte": "^0.562.0",
     "@rodrigodagostino/svelte-sortable-list": "^2.1.9",
     "@sveltejs/adapter-auto": "^7.0.0",

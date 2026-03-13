@@ -1,22 +1,22 @@
-import { GenEdType } from "../src/generated/prisma/client.js";
-import * as fs from "fs";
-import * as R from "remeda";
 import { Effect } from "effect";
-import { mapGenEdType } from "../src/utils/enumMapper.js";
-import { migrateCourse, safeFsJsonRead } from "./migrate_service.js";
+import * as R from "remeda";
+
 import type { Course, CourseOverride } from "./migrate_interface.js";
+import { migrateCourse, safeFsJsonRead } from "./migrate_service.js";
+
+import { GenEdType } from "../src/generated/prisma/client.js";
+import { mapGenEdType } from "../src/utils/enumMapper.js";
 
 export const runCourseMigration = Effect.gen(function* () {
-  const overridesData = yield* safeFsJsonRead<CourseOverride[]>(
-    "overrides.json"
-  );
+  const overridesData =
+    yield* safeFsJsonRead<CourseOverride[]>("overrides.json");
 
   const coursesData = yield* safeFsJsonRead<Course[]>("courses.json");
 
   const genEdOverrideByCourseNo = R.pipe(
     overridesData,
     R.indexBy((item) => item.courseNo),
-    R.mapValues((value) => mapGenEdType(value.genEdType))
+    R.mapValues((value) => mapGenEdType(value.genEdType)),
   );
 
   console.log(`Starting migration of ${coursesData.length} courses`);
@@ -28,6 +28,6 @@ export const runCourseMigration = Effect.gen(function* () {
         genEdOverrideByCourseNo[data.courseNo] || GenEdType.NO;
       return migrateCourse(data, currentGenEd);
     },
-    { discard: true, concurrency: 100 }
+    { discard: true, concurrency: 100 },
   );
 });

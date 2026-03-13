@@ -9,7 +9,7 @@
 		"skipLibCheck": true,
 		"sourceMap": true,
 		"strict": true,
-		"module": "bundler",
-		"moduleResolution": "bunder"
+		"module": "esnext",
+		"moduleResolution": "bundler"
 	}
 }

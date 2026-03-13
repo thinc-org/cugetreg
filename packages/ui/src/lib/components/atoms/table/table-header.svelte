@@ -1,29 +1,20 @@
 <script lang="ts">
-    import type { Snippet } from "svelte";
-    import { createBubbler } from "svelte/legacy"; //TODO: Fix deprecation
+	import type { Snippet } from 'svelte';
+	import type { HTMLAttributes } from 'svelte/elements';
 
-    const bubble = createBubbler();
-    import type { HTMLAttributes } from "svelte/elements";
+	import { cn } from '@cugetreg/utils';
 
-    import { cn } from "@cugetreg/utils";
+	type $$Props = HTMLAttributes<HTMLTableSectionElement>;
 
-    type $$Props = HTMLAttributes<HTMLTableSectionElement>;
+	interface Props {
+		class?: $$Props['class'];
+		children?: Snippet;
+		[key: string]: unknown;
+	}
 
-    interface Props {
-        class?: $$Props["class"];
-        children?: Snippet;
-        [key: string]: unknown;
-    }
-
-    let { class: className = undefined, children, ...rest }: Props = $props();
+	let { class: className = undefined, children, ...rest }: Props = $props();
 </script>
 
-<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-<thead
-    class={cn("[&_tr]:border-b-0  bg-surface-container-lowest ", className)}
-    {...rest}
-    onclick={bubble("click")}
-    onkeydown={bubble("keydown")}
->
-    {@render children?.()}
+<thead class={cn('bg-surface-container-lowest  [&_tr]:border-b-0 ', className)} {...rest}>
+	{@render children?.()}
 </thead>

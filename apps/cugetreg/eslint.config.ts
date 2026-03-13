@@ -1,1 +1,1 @@
-export { default } from "@cugetreg/configs/linter";
+export { default } from '@cugetreg/configs/linter'

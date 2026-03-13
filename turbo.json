@@ -1,8 +1,20 @@
 {
   "$schema": "https://turborepo.com/schema.json",
   "tasks": {
+    "codegen": {
+        "env": ["DATABASE_URL"],
+        "cache": true,
+        "outputs": ["src/generated/**"]
+    },
+    "prepack": {
+        "cache": true,
+        "persistent": false,
+        "outputs": ["dist/**"]
+    },
     "build": {
-      "outputs": ["dist/**", "storybook-static/**"]
+        "env": ["DATABASE_URL"],
+        "dependsOn": ["^build", "codegen", "prepack"],
+        "outputs": ["dist/**", "storybook-static/**"]
     },
     "check-types": {
       "dependsOn": ["^check-types"]

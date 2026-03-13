@@ -1,30 +1,30 @@
 <script module lang="ts">
-    import { defineMeta } from "@storybook/addon-svelte-csf";
+	import { defineMeta } from '@storybook/addon-svelte-csf';
 
-    import { UserDialog } from "./index";
+	import { UserDialog } from './index';
 
-    const { Story } = defineMeta({
-        title: "Molecule/User Dialog",
-        component: UserDialog,
-        tags: ["autodocs"],
-        argTypes: {
-            imageUrl: {
-                control: "text",
-            },
-            name: {
-                control: "text",
-            },
-            id: {
-                control: "text",
-            },
-        },
-    });
+	const { Story } = defineMeta({
+		title: 'Molecule/User Dialog',
+		component: UserDialog,
+		tags: ['autodocs'],
+		argTypes: {
+			imageUrl: {
+				control: 'text'
+			},
+			name: {
+				control: 'text'
+			},
+			id: {
+				control: 'text'
+			}
+		}
+	});
 </script>
 
 <Story
-    name="Example"
-    args={{
-        name: "Wanrudee Kkk",
-        id: "6XXXXXXXXX",
-    }}
+	name="Example"
+	args={{
+		name: 'Wanrudee Kkk',
+		id: '6XXXXXXXXX'
+	}}
 />

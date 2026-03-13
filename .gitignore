@@ -29,4 +29,4 @@ yarn-error.log*
 # turbo
 .turbo
 
-backend/*
+**/dist/

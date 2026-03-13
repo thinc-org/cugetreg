@@ -1,7 +1,6 @@
-import { createToJSONSchemaMethod } from "zod/v4/core";
-import * as CourseSchema from "../zod_schemas/courses.schema.js"
 import { createRoute, z } from "@hono/zod-openapi";
 
+import * as CourseSchema from "../zod_schemas/courses.schema.js";
 
 export const errorRes = (message: string) => ({
   content: {
@@ -16,25 +15,25 @@ export const errorRes = (message: string) => ({
 
 export const InternalError = errorRes("INTERNAL_SERVER_ERROR");
 //1.1get courses
-export const getCoursesRoute= createRoute({
-    method: "get",
-    path: "/",
-    summary:"1.1 Get Courses",
-    request : {query : CourseSchema.getCourseQuerySchema},
-    responses :{
-        200 : {
-            content :{
-                "application/json": {schema : CourseSchema.courseDetailsSchema},
-            },
-        description : "OK",
-        },
-        400: { description: "Invalid course number format" },
-        401: { description: "Unauthorized - Missing or invalid token" },
-        404: { description: "Course not found" },
-        500 : InternalError,
+export const getCoursesRoute = createRoute({
+  method: "get",
+  path: "/",
+  summary: "1.1 Get Courses",
+  request: { query: CourseSchema.getCourseQuerySchema },
+  responses: {
+    200: {
+      content: {
+        "application/json": { schema: CourseSchema.courseDetailsSchema },
+      },
+      description: "OK",
     },
-    security : [{Bearer: []}],
-})
+    400: { description: "Invalid course number format" },
+    401: { description: "Unauthorized - Missing or invalid token" },
+    404: { description: "Course not found" },
+    500: InternalError,
+  },
+  security: [{ Bearer: [] }],
+});
 //1.2 get course detail by id
 export const getCourseByNoRoute = createRoute({
   method: "get",
@@ -42,7 +41,7 @@ export const getCourseByNoRoute = createRoute({
   summary: "1.2 Get Course by Course Number",
   request: {
     params: CourseSchema.courseNoParamSchema,
-    query : CourseSchema.getCourseQuerySchema
+    query: CourseSchema.getCourseQuerySchema,
   },
   responses: {
     200: {

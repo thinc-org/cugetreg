@@ -23,8 +23,8 @@
 	interface SelectedCourseProp {
 		class?: ClassValue;
 		schedule: ScheduleData;
-		variant?: 'simple' | 'detailed'; 
-		remove?: (courseCode: string) => void; 
+		variant?: 'simple' | 'detailed';
+		remove?: (courseCode: string) => void;
 	}
 
 	let {
@@ -214,14 +214,18 @@
 			</div>
 			<div class="flex">
 				<SortableList.ItemRemove onclick={() => remove?.(course.course.code)}>
-					<span class="flex size-7 items-center justify-center rounded-md bg-transparent hover:cursor-pointer hover:bg-neutral-100">
+					<span
+						class="flex size-7 items-center justify-center rounded-md bg-transparent hover:cursor-pointer hover:bg-neutral-100"
+					>
 						<Trash2 class="mx-1 data-[hidden=true]:text-neutral-500" />
 					</span>
 				</SortableList.ItemRemove>
 
 				{#if variant === 'detailed'}
 					<SortableList.ItemHandle>
-						<span class="flex size-7 items-center justify-center rounded-md bg-transparent hover:cursor-pointer hover:bg-neutral-100">
+						<span
+							class="flex size-7 items-center justify-center rounded-md bg-transparent hover:cursor-pointer hover:bg-neutral-100"
+						>
 							<Equal class="mx-1 data-[hidden=true]:text-neutral-500" />
 						</span>
 					</SortableList.ItemHandle>

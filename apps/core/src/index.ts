@@ -1,8 +1,8 @@
 import { serve } from "@hono/node-server";
 import { swaggerUI } from "@hono/swagger-ui";
 import { OpenAPIHono } from "@hono/zod-openapi";
-import { cors } from "hono/cors";
 import dotenv from "dotenv";
+import { cors } from "hono/cors";
 
 import admin from "./routes/admin.js";
 import authRoute, { middlewareAuth } from "./routes/auth.js";

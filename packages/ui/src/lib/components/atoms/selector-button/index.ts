@@ -1,3 +1,3 @@
-import Root from './selector-button.svelte'
+import Root from './selector-button.svelte';
 
-export { Root, Root as SelectorButton }
+export { Root, Root as SelectorButton };

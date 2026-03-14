@@ -1,7 +1,7 @@
-import Root from "./schedule-list.svelte";
+import Root from './schedule-list.svelte';
 
 export {
-    Root,
-    //
-    Root as ScheduleList,
+	Root,
+	//
+	Root as ScheduleList
 };

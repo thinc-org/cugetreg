@@ -1,18 +1,18 @@
-import tsParser from "@typescript-eslint/parser";
+import { defineConfig } from "eslint/config";
 
-export default [
+import baseHono from "@cugetreg/configs/linter/hono";
+
+export default defineConfig(
+  ...baseHono,
   {
-    files: ["**/*.ts", "**/*.tsx"],
+    ignores: ["generated/"],
+  },
+  {
     languageOptions: {
-      parser: tsParser,
       parserOptions: {
+        projectService: true,
         tsconfigRootDir: import.meta.dirname,
-        project: [
-          "./tsconfig.json",
-          "./apps/*/tsconfig.json",
-          "./packages/*/tsconfig.json",
-        ],
       },
     },
   },
-];
+);

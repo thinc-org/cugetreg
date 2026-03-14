@@ -1,19 +1,21 @@
+import dayjs from "dayjs";
 import { Effect } from "effect";
+
+import { LexoRankService } from "./lexorank.service.js";
+
+import {
+  type Cart,
+  type CartItem,
+  Visible,
+} from "../generated/prisma/client.js";
 import { PrismaService } from "../generated/prisma-effect/index.js";
-import type { PublicCartItemDetail } from "../zod_schemas/publicCarts.response.schema.js";
 import type {
   ClassConflict,
   ClassScheduleItem,
   ExamConflict,
   ExamScheduleItem,
 } from "../zod_schemas/carts.response.schema.js";
-import dayjs from "dayjs";
-import {
-  Visible,
-  type Cart,
-  type CartItem,
-} from "../generated/prisma/client.js";
-import { LexoRankService } from "./lexorank.service.js";
+import type { PublicCartItemDetail } from "../zod_schemas/publicCarts.response.schema.js";
 
 export const publicCartsService = {
   getPublicCartDetail: (cartId: string) =>
@@ -45,7 +47,7 @@ export const publicCartsService = {
 
       if (!cart || cart.visible === "PRIVATE") {
         return yield* Effect.fail(
-          new Error("PUBLIC_CART_NOT_FOUND_OR_PRIVATE")
+          new Error("PUBLIC_CART_NOT_FOUND_OR_PRIVATE"),
         );
       }
 
@@ -63,12 +65,12 @@ export const publicCartsService = {
           (course: any) =>
             course.academicYear === cart.academicYear &&
             course.semester === cart.semester &&
-            course.studyProgram === cart.studyProgram
+            course.studyProgram === cart.studyProgram,
         );
 
         const sectionData = courseData?.sections.find(
           // courseData.sections is Array of Section
-          (sec: any) => sec.sectionNo === item.sectionNo
+          (sec: any) => sec.sectionNo === item.sectionNo,
         ); // Section Object of this item
 
         // Calculate Pre-Summary
@@ -220,7 +222,7 @@ export const publicCartsService = {
 
       if (!sourceCart || sourceCart.visible !== Visible.PUB) {
         return yield* Effect.fail(
-          new Error("PUBLIC_CART_NOT_FOUND_OR_PRIVATE")
+          new Error("PUBLIC_CART_NOT_FOUND_OR_PRIVATE"),
         );
       }
 
@@ -262,7 +264,7 @@ export const publicCartsService = {
               items: true,
             },
           });
-        })
+        }),
       )) as Cart;
 
       return newCart;

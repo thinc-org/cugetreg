@@ -1,10 +1,10 @@
 import {
+  DayOfWeek,
+  GenEdType,
+  ReviewStatus,
   Semester,
   StudyProgram,
   Visible,
-  GenEdType,
-  DayOfWeek,
-  ReviewStatus,
   VoteType,
 } from "../generated/prisma/client.js";
 

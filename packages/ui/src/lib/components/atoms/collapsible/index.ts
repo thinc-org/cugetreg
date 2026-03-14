@@ -1,7 +1,7 @@
-import Root from './collapsible.svelte'
+import Root from './collapsible.svelte';
 
 export {
-  Root as Collapsible,
-  //
-  Root,
-}
+	Root as Collapsible,
+	//
+	Root
+};

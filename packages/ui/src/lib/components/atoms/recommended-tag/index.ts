@@ -1,1 +1,1 @@
-export { default as RecommendedTag } from './recommended-tag.svelte'
+export { default as RecommendedTag } from './recommended-tag.svelte';

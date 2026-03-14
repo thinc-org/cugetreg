@@ -1,5 +1,5 @@
-import * as fs from "fs";
 import { Console, Effect } from "effect";
+
 import type { MongoUser } from "./migrate_interface.js";
 import { migrateUser, safeFsJsonRead } from "./migrate_service.js";
 export const runUserMigration = Effect.gen(function* () {
@@ -13,6 +13,6 @@ export const runUserMigration = Effect.gen(function* () {
     {
       concurrency: 100,
       discard: true,
-    }
+    },
   );
 });

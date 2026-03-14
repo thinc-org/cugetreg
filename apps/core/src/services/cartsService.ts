@@ -1,5 +1,22 @@
+import dayjs from "dayjs";
 import { Effect } from "effect";
+import * as R from "remeda";
+
+import { LexoRankService } from "./lexorank.service.js";
+
+import type {
+  Cart,
+  CartItem,
+  Course,
+  Section,
+  SectionClass,
+} from "../generated/prisma/client.js";
 import { PrismaService } from "../generated/prisma-effect/index.js";
+import type {
+  ClassConflict,
+  ExamConflict,
+  ExamScheduleItem,
+} from "../zod_schemas/carts.response.schema.js";
 import type {
   AddCourseBodySchema,
   CreateCartBodySchema,
@@ -7,22 +24,6 @@ import type {
   UpdateCartBodySchema,
   UpdateCourseBodySchema,
 } from "../zod_schemas/carts.schema.js";
-import type {
-  Cart,
-  CartItem,
-  Course,
-  CourseInfo,
-  Section,
-  SectionClass,
-} from "../generated/prisma/client.js";
-import { LexoRankService } from "./lexorank.service.js";
-import * as R from "remeda";
-import type {
-  ClassConflict,
-  ExamConflict,
-  ExamScheduleItem,
-} from "../zod_schemas/carts.response.schema.js";
-import dayjs from "dayjs";
 
 export const cartService = {
   getAllCartItems: (userId: string, query: ListCartsQuerySchema) =>
@@ -59,7 +60,7 @@ export const cartService = {
             .pipe(Effect.map((res) => res as Cart | null));
 
           const nextCartOrder = LexoRankService.getNextRank(
-            lastCart?.cartOrder
+            lastCart?.cartOrder,
           );
 
           return yield* db.cart.create({
@@ -69,7 +70,7 @@ export const cartService = {
               ...validatedData,
             },
           });
-        })
+        }),
       )) as Cart;
       return newCart;
     }),
@@ -77,7 +78,7 @@ export const cartService = {
   updateCart: (
     userId: string,
     cartId: string,
-    updatedData: UpdateCartBodySchema
+    updatedData: UpdateCartBodySchema,
   ) =>
     Effect.gen(function* () {
       const db = yield* PrismaService;
@@ -94,8 +95,9 @@ export const cartService = {
           if (!targetCart) {
             yield* Effect.fail(new Error("CART_NOT_FOUND"));
           }
-          if (targetCart!.userId !== userId)
+          if (targetCart!.userId !== userId) {
             yield* Effect.fail(new Error("NOT_CART_OWNER"));
+          }
 
           // Set other isDefault
           if (updatedData.isDefault === true) {
@@ -127,7 +129,7 @@ export const cartService = {
 
             dataToUpdate.cartOrder = LexoRankService.getBetweenRank(
               prevCart?.cartOrder,
-              nextCart?.cartOrder
+              nextCart?.cartOrder,
             );
           }
 
@@ -137,7 +139,7 @@ export const cartService = {
               data: dataToUpdate,
             })
             .pipe(Effect.map((r) => r as Cart));
-        })
+        }),
       );
 
       return updatedCart;
@@ -184,7 +186,7 @@ export const cartService = {
               });
             }
           }
-        })
+        }),
       );
     }),
 
@@ -213,9 +215,12 @@ export const cartService = {
         })
         .pipe(Effect.map((r) => r as any));
 
-      if (!cart) return yield* Effect.fail(new Error("CART_NOT_FOUND"));
-      if (cart.userId !== userId)
+      if (!cart) {
+        return yield* Effect.fail(new Error("CART_NOT_FOUND"));
+      }
+      if (cart.userId !== userId) {
         return yield* Effect.fail(new Error("NOT_CART_OWNER"));
+      }
 
       // 1. Data Enrichment
       const enrichedItems = R.pipe(
@@ -226,14 +231,14 @@ export const cartService = {
             (course: Course) =>
               course.academicYear === cart.academicYear &&
               course.semester === cart.semester &&
-              course.studyProgram === cart.studyProgram
+              course.studyProgram === cart.studyProgram,
           );
           const sectionData = courseData?.sections.find(
-            (sec: Section) => sec.sectionNo === item.sectionNo
+            (sec: Section) => sec.sectionNo === item.sectionNo,
           );
 
           return { ...item, info, courseData, sectionData };
-        })
+        }),
       );
 
       // 2. Format Items Response
@@ -278,8 +283,8 @@ export const cartService = {
               "room",
               "professors",
             ]),
-          }))
-        )
+          })),
+        ),
       );
 
       const examsSchedule = R.pipe(
@@ -305,7 +310,7 @@ export const cartService = {
             });
           }
           return exams;
-        })
+        }),
       );
 
       // 4. Conflicts Logic (Declarative approach)
@@ -363,11 +368,11 @@ export const cartService = {
       // 5. Calculate Summary
       const gradedItems = R.filter(enrichedItems, (item) => item.isGraded);
       const totalGradedCredits = R.sumBy(gradedItems, (item) =>
-        Number(item.info.credit)
+        Number(item.info.credit),
       );
       const totalPoints = R.sumBy(
         gradedItems,
-        (item) => Number(item.info.credit) * Number(item.expectedGrade)
+        (item) => Number(item.info.credit) * Number(item.expectedGrade),
       );
 
       return {
@@ -384,12 +389,12 @@ export const cartService = {
         },
         summary: {
           totalCredits: R.sumBy(enrichedItems, (x) =>
-            Number(x.info.credit)
+            Number(x.info.credit),
           ).toFixed(1),
           totalVisibleCredits: R.pipe(
             enrichedItems,
             R.filter((x) => !x.hidden),
-            R.sumBy((x) => Number(x.info.credit))
+            R.sumBy((x) => Number(x.info.credit)),
           ).toFixed(1),
           totalGradedCredits: totalGradedCredits.toFixed(1),
           expectedGPA:
@@ -405,7 +410,7 @@ export const cartService = {
   addCourseToCart: (
     userId: string,
     cartId: string,
-    validatedData: AddCourseBodySchema
+    validatedData: AddCourseBodySchema,
   ) =>
     Effect.gen(function* () {
       const db = yield* PrismaService;
@@ -419,9 +424,12 @@ export const cartService = {
             })
             .pipe(Effect.map((r) => r as Cart | null));
 
-          if (!cart) yield* Effect.fail(new Error("CART_NOT_FOUND"));
-          if (cart!.userId !== userId)
+          if (!cart) {
+            yield* Effect.fail(new Error("CART_NOT_FOUND"));
+          }
+          if (cart!.userId !== userId) {
             yield* Effect.fail(new Error("NOT_CART_OWNER"));
+          }
 
           const lastItem = yield* db.cartItem
             .findFirst({
@@ -445,7 +453,7 @@ export const cartService = {
               cartOrder: nextOrder,
             },
           });
-        })
+        }),
       )) as CartItem;
 
       return newItem;
@@ -454,7 +462,7 @@ export const cartService = {
   updateCourseInCart: (
     userId: string,
     itemId: string,
-    updatedData: UpdateCourseBodySchema
+    updatedData: UpdateCourseBodySchema,
   ) =>
     Effect.gen(function* () {
       const db = yield* PrismaService;
@@ -468,9 +476,12 @@ export const cartService = {
             })
             .pipe(Effect.map((r) => r as (CartItem & { cart: Cart }) | null));
 
-          if (!targetItem) yield* Effect.fail(new Error("ITEM_NOT_FOUND"));
-          if (targetItem!.cart.userId !== userId)
+          if (!targetItem) {
+            yield* Effect.fail(new Error("ITEM_NOT_FOUND"));
+          }
+          if (targetItem!.cart.userId !== userId) {
             yield* Effect.fail(new Error("NOT_CART_OWNER"));
+          }
 
           if (
             updatedData.sectionNo !== undefined &&
@@ -490,7 +501,9 @@ export const cartService = {
               })
               .pipe(Effect.map((r) => r as Section | null));
 
-            if (!section) yield* Effect.fail(new Error("SECTION_NOT_FOUND"));
+            if (!section) {
+              yield* Effect.fail(new Error("SECTION_NOT_FOUND"));
+            }
           }
 
           // Reorder cartOrder -> please review this logic
@@ -512,7 +525,7 @@ export const cartService = {
 
             dataToUpdate.cartOrder = LexoRankService.getBetweenRank(
               prevItem?.cartOrder,
-              nextItem?.cartOrder
+              nextItem?.cartOrder,
             );
           }
 
@@ -520,7 +533,7 @@ export const cartService = {
             where: { id: itemId },
             data: dataToUpdate,
           });
-        })
+        }),
       )) as CartItem;
 
       return updatedItem;
@@ -550,7 +563,7 @@ export const cartService = {
           yield* db.cartItem.delete({
             where: { id: itemId },
           });
-        })
+        }),
       );
     }),
 };

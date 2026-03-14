@@ -1,1 +1,1 @@
-export { default as SectionTable } from './section-table.svelte'
+export { default as SectionTable } from './section-table.svelte';

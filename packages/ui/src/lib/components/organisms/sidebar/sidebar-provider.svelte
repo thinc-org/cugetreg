@@ -1,7 +1,9 @@
 <script lang="ts">
 	import * as Tooltip from '$lib/components/molecules/tooltip';
 	import { cn, type WithElementRef } from '$lib/utils.js';
+
 	import type { HTMLAttributes } from 'svelte/elements';
+
 	import { setSidebar } from './context.svelte.js';
 
 	let {

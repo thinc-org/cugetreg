@@ -1,7 +1,8 @@
 <script module lang="ts">
+	import { Bell, Briefcase, Home, LogOut, Search, Settings, Users } from '@lucide/svelte';
 	import { defineMeta } from '@storybook/addon-svelte-csf';
+
 	import * as Sidebar from './index.js';
-	import { Home, Settings, Users, Briefcase, LogOut, Search, Bell } from '@lucide/svelte';
 
 	const { Story } = defineMeta({
 		title: 'Organism/Sidebar',
@@ -170,11 +171,7 @@
 				</div>
 			</Sidebar.Inset>
 
-			<Sidebar.Root
-				variant="sidebar"
-				side="right"
-				collapsible="offcanvas"
-			>
+			<Sidebar.Root variant="sidebar" side="right" collapsible="offcanvas">
 				{@render SidebarInnerContent()}
 			</Sidebar.Root>
 		</Sidebar.Provider>

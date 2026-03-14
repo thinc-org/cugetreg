@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Separator } from '$lib/components/atoms/separator';
 	import { cn } from '$lib/utils.js';
+
 	import type { ComponentProps } from 'svelte';
 
 	let {

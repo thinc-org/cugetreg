@@ -1,8 +1,10 @@
 <script lang="ts">
 	import { IconButton } from '$lib/components/atoms/icon-button';
 	import { cn } from '$lib/utils.js';
+
 	import { PanelLeftIcon } from '@lucide/svelte';
 	import type { ComponentProps } from 'svelte';
+
 	import { useSidebar } from './context.svelte.js';
 
 	let {

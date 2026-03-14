@@ -28,9 +28,11 @@
 <script lang="ts">
 	import * as Tooltip from '$lib/components/molecules/tooltip';
 	import { cn, type WithElementRef, type WithoutChildrenOrChild } from '$lib/utils.js';
+
 	import { mergeProps } from 'bits-ui';
 	import type { ComponentProps, Snippet } from 'svelte';
 	import type { HTMLAttributes } from 'svelte/elements';
+
 	import { useSidebar } from './context.svelte.js';
 
 	let {

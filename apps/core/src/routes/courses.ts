@@ -57,7 +57,7 @@ courses
               : undefined,
             take: limit ? Number(limit) : undefined,
           }),
-        catch: (error) => new Error(`Prisma Error: ${error}`),
+        catch: (error) => new Error(`Prisma Error:`), // TODO: Handle this
       });
 
       const courseNos = courses.map((c) => c.courseNo);
@@ -73,7 +73,7 @@ courses
               courseNo: { in: courseNos },
             },
           }),
-        catch: (error) => new Error(`Review Count Error: ${error}`),
+        catch: (error) => new Error(`Review Count Error:`), // TODO: Handle this
       });
 
       const result = courses.map((course) => {

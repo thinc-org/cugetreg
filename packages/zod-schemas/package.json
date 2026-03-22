@@ -1,0 +1,21 @@
+{
+  "name": "@cugetreg/zod-schemas",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "lint": "eslint ."
+  },
+  "devDependencies": {
+    "typescript": "~5.9.3"
+  },
+  "dependencies": {
+    "zod": "^4.3.5"
+  },
+  "exports": {
+    "./admin": "./admin.schema.ts",
+    "./cart-response": "./carts.response.schema.ts",
+    "./public-cart-response": "./publicCarts.response.schema.ts",
+    "./cart": "./carts.schema.ts"
+  }
+}

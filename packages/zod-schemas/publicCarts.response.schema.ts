@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 import {
   ClassConflictSchema,
@@ -28,7 +28,7 @@ const PublicCartItemDetailSchema = z.object({
   //     note: z.string().nullable(),
   //   })
   //   .nullable(),
-    sections: z.array(Section)
+  sections: z.array(Section),
 });
 
 export const PublicCartDetailResponseSchema = z.object({

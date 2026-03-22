@@ -1,6 +1,14 @@
 import dayjs from "dayjs";
 import { Effect } from "effect";
 
+import type {
+  ClassConflict,
+  ClassScheduleItem,
+  ExamConflict,
+  ExamScheduleItem,
+} from "@cugetreg/zod-schemas/cart-response";
+import type { PublicCartItemDetail } from "@cugetreg/zod-schemas/public-cart-response";
+
 import { LexoRankService } from "./lexorank.service.js";
 
 import {
@@ -9,13 +17,6 @@ import {
   Visible,
 } from "../generated/prisma/client.js";
 import { PrismaService } from "../generated/prisma-effect/index.js";
-import type {
-  ClassConflict,
-  ClassScheduleItem,
-  ExamConflict,
-  ExamScheduleItem,
-} from "@cugetreg/zod-schemas/cart-response";
-import type { PublicCartItemDetail } from "@cugetreg/zod-schemas/public-cart-response";
 
 export const publicCartsService = {
   getPublicCartDetail: (cartId: string) =>
@@ -97,7 +98,7 @@ export const publicCartsService = {
           //       note: sectionData.note,
           //     }
           //   : null,
-          sections: courseData?.sections || []
+          sections: courseData?.sections || [],
         });
 
         // Format Classes Schedule

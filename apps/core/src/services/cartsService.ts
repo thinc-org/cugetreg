@@ -237,7 +237,13 @@ export const cartService = {
             (sec: Section) => sec.sectionNo === item.sectionNo,
           );
 
-          return { ...item, info, courseData, sectionData, sections: courseData?.sections};
+          return {
+            ...item,
+            info,
+            courseData,
+            sectionData,
+            sections: courseData?.sections,
+          };
         }),
       );
 
@@ -264,9 +270,8 @@ export const cartService = {
               note: item.sectionData.note,
             }
           : null,
-        sections: item.sections
+        sections: item.sections,
       }));
-
 
       // 3. Extract Schedules
       const classesSchedule = R.pipe(

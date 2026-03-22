@@ -17,7 +17,7 @@ export const CartSchema = z.object({
 export const CartList = z.array(CartSchema);
 
 export const ListCartsResponseSchema = z.object({
-  data: CartList
+  data: CartList,
 });
 
 export const SingleCartResponseSchema = z.object({
@@ -32,17 +32,17 @@ export const Section = z.object({
   max: z.number(),
   note: z.string().nullable(),
   classes: z.array(
-      z.object({
-          type: z.string(),
-          dayOfWeek: z.string(),
-          periodStart: z.string(),
-          periodEnd: z.string(),
-          building: z.string().nullable(),
-          room: z.string().nullable(),
-          professors: z.array(z.string()),
-      })
-  ) 
-})
+    z.object({
+      type: z.string(),
+      dayOfWeek: z.string(),
+      periodStart: z.string(),
+      periodEnd: z.string(),
+      building: z.string().nullable(),
+      room: z.string().nullable(),
+      professors: z.array(z.string()),
+    }),
+  ),
+});
 
 const CartItemDetailSchema = z.object({
   id: z.string(),
@@ -66,7 +66,7 @@ const CartItemDetailSchema = z.object({
   //     note: z.string().nullable(),
   //   })
   //   .nullable(),
-  sections: z.array(Section)
+  sections: z.array(Section),
 });
 
 export const CartData = z.object({

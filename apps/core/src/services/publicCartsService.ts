@@ -14,8 +14,8 @@ import type {
   ClassScheduleItem,
   ExamConflict,
   ExamScheduleItem,
-} from "../zod_schemas/carts.response.schema.js";
-import type { PublicCartItemDetail } from "../zod_schemas/publicCarts.response.schema.js";
+} from "@cugetreg/zod-schemas/cart-response";
+import type { PublicCartItemDetail } from "@cugetreg/zod-schemas/public-cart-response";
 
 export const publicCartsService = {
   getPublicCartDetail: (cartId: string) =>
@@ -89,14 +89,15 @@ export const publicCartsService = {
             courseNameEn: info.courseNameEn,
             credit: info.credit.toString(),
           },
-          section: sectionData
-            ? {
-                closed: sectionData.closed,
-                regis: sectionData.regis,
-                max: sectionData.max,
-                note: sectionData.note,
-              }
-            : null,
+          // section: sectionData
+          //   ? {
+          //       closed: sectionData.closed,
+          //       regis: sectionData.regis,
+          //       max: sectionData.max,
+          //       note: sectionData.note,
+          //     }
+          //   : null,
+          sections: courseData?.sections || []
         });
 
         // Format Classes Schedule

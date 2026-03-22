@@ -51,11 +51,13 @@
   "dependencies": {
     "@cugetreg/ui": "workspace:*",
     "@cugetreg/utils": "workspace:*",
+    "@cugetreg/zod-schemas": "workspace:*",
     "@lucide/svelte": "^0.562.0",
     "@rodrigodagostino/svelte-sortable-list": "^2.1.9",
     "@sveltejs/adapter-auto": "^7.0.0",
     "@sveltejs/kit": "^2.49.5",
     "@tailwindcss/vite": "^4.1.18",
+    "axios": "^1.13.6",
     "bits-ui": "^2.14.4",
     "clsx": "^2.1.1",
     "html2canvas": "^1.4.1",

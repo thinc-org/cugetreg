@@ -218,9 +218,9 @@ export const cartService = {
       if (!cart) {
         return yield* Effect.fail(new Error("CART_NOT_FOUND"));
       }
-      if (cart.userId !== userId) {
-        return yield* Effect.fail(new Error("NOT_CART_OWNER"));
-      }
+      // if (cart.userId !== userId) {
+      //   return yield* Effect.fail(new Error("NOT_CART_OWNER"));
+      // }
 
       // 1. Data Enrichment
       const enrichedItems = R.pipe(
@@ -237,7 +237,13 @@ export const cartService = {
             (sec: Section) => sec.sectionNo === item.sectionNo,
           );
 
-          return { ...item, info, courseData, sectionData };
+          return {
+            ...item,
+            info,
+            courseData,
+            sectionData,
+            sections: courseData?.sections,
+          };
         }),
       );
 
@@ -264,6 +270,7 @@ export const cartService = {
               note: item.sectionData.note,
             }
           : null,
+        sections: item.sections,
       }));
 
       // 3. Extract Schedules

@@ -5,7 +5,7 @@ import baseHono from "@cugetreg/configs/linter/hono";
 export default defineConfig(
   ...baseHono,
   {
-    ignores: ["generated/"],
+    ignores: ["generated/", "volumes/"],
   },
   {
     languageOptions: {

@@ -2,6 +2,7 @@ import { serve } from "@hono/node-server";
 import { swaggerUI } from "@hono/swagger-ui";
 import { OpenAPIHono } from "@hono/zod-openapi";
 import dotenv from "dotenv";
+import { cors } from "hono/cors";
 
 import admin from "./routes/admin.js";
 import authRoute, { middlewareAuth } from "./routes/auth.js";
@@ -17,26 +18,44 @@ dotenv.config();
 
 const app = new OpenAPIHono<{ Variables: Variables }>().basePath("/api/v1");
 
+app.use(
+  "/*",
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "http://localhost:3001",
+      "http://localhost:3000",
+    ], // อนุญาต Port เหล่านี้
+    allowHeaders: [
+      "Content-Type",
+      "Authorization",
+      "Upgrade-Insecure-Requests",
+    ],
+    allowMethods: ["POST", "GET", "OPTIONS", "PUT", "DELETE"],
+    exposeHeaders: ["Content-Length"],
+    maxAge: 600,
+    credentials: true,
+  }),
+);
+
 app.openAPIRegistry.registerComponent("securitySchemes", "CookieAuth", {
   type: "apiKey",
   in: "cookie",
   name: "better-auth.session_token",
 });
 
-// Without JWT Auth
 app.route("/public/carts", publicCarts);
 app.route("/auth", authRoute);
+app.route("/courses", courses);
 
 // Middleware List
-
-app.use("/admin/*", middlewareAuth); // Middleware from Bearer Token
+app.use("/admin/*", middlewareAuth);
 app.use("/carts/*", middlewareAuth);
-app.use("/courses/*", middlewareAuth);
+//app.use("/courses/*", middlewareAuth);
 app.use("/reviews/*", middlewareAuth);
 app.use("/user/*", middlewareAuth);
 
 // With JWT Auth
-
 app.route("/admin", admin);
 app.route("/courses", courses);
 app.route("/carts", carts);

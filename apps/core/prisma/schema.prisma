@@ -11,7 +11,7 @@ generator client {
 
 // Please don't edit this Generator!
 generator effectPrisma {
-  provider         = "./node_modules/.bin/effect-prisma-generator"
+  provider = "effect-prisma-generator"
   output   = "../src/generated/prisma-effect/index.ts"
   clientImportPath = "../prisma/client.ts"
 }

@@ -4,7 +4,6 @@
 	import type { ClassValue } from 'clsx';
 
 	import { cn } from '@cugetreg/utils';
-	import type { ScheduleList, ScheduleListItem } from '@cugetreg/utils/types';
 
 	import { IconButton } from '../../atoms/icon-button';
 
@@ -17,11 +16,11 @@
 
 	interface EditScheduleProps {
 		class?: ClassValue;
-        currentScheduleId: string,
+		currentScheduleId: string;
 		schedules?: {
-            name: string,
-            id: string
-        }[];
+			name: string;
+			id: string;
+		}[];
 		onRename?: () => void;
 		onDuplicate?: () => void;
 		onAddSchedule?: () => void;
@@ -30,8 +29,8 @@
 	}
 
 	let {
-        schedules = [],
-        currentScheduleId = $bindable(),
+		schedules = [],
+		currentScheduleId = $bindable(),
 		class: className = undefined,
 		onRename = () => {},
 		onDuplicate = () => {},
@@ -75,8 +74,6 @@
 		{#each schedules as schedule (schedule.id)}
 			<option value={schedule.id}>{schedule.name}</option>
 		{/each}
-
-
 	</select>
 
 	<DropdownMenu.Root>
@@ -88,7 +85,7 @@
 		<DropdownMenu.Portal>
 			<DropdownMenu.Content
 				class="
-                m-2 w-40 rounded-lg border bg-neutral-50 border-neutral-200 p-1
+                m-2 w-40 rounded-lg border border-neutral-200 bg-neutral-50 p-1
             "
 			>
 				<DropdownMenu.Group class="space-y-1">

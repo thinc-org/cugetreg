@@ -6,9 +6,9 @@
 
 	interface SelectTimetableProp {
 		options?: {
-            name: string,
-            id: string
-        }[];
+			name: string;
+			id: string;
+		}[];
 		value?: string;
 		class?: ClassValue;
 	}
@@ -36,7 +36,7 @@
 				{/each}
 			</select>
 
-            <!-- TODO: -->
+			<!-- TODO: -->
 			<div class="truncate rounded-lg border border-neutral-900 px-1 text-xs">
 				<div class="text-xs">ทวิภาค 2566</div>
 				<div class="text-xs">ภาคต้น</div>

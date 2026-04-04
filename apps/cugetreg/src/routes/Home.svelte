@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Navbar } from '@cugetreg/ui/organisms/navbar'
   import { Footer } from '@cugetreg/ui/organisms/footer'
-  import { SelectedCourse } from '@cugetreg/ui/organisms/selected-course'
+  import SelectedCourse from '$lib/components/selected-course.svelte'
   import { Filter as FilterBar } from '@cugetreg/ui/organisms/filter-bar'
 
   import { CourseCard } from '@cugetreg/ui/molecules/course-card'
@@ -107,19 +107,37 @@
   function handleToggleCourse(courseItem: any) {
     if (!activeSchedule) return
     const index = activeSchedule.schedule.findIndex(
-      (s) => s.course.code === courseItem.course.code,
+      (s) => s.courseNo === courseItem.course.code,
     )
     if (index === -1) {
       activeSchedule.schedule.push({
         id: crypto.randomUUID(),
-        course: courseItem.course,
-        selectedSection: 1,
-        colorVariant: 'neutral',
+        cartId: 'mock',
+        courseNo: courseItem.course.code,
+        sectionNo: 1,
+        color: 'primary',
         hidden: false,
+        cartOrder: '0',
+        isGraded: true,
+        expectedGrade: 'A',
+        course: { 
+          courseNameTh: courseItem.course.name || '', 
+          courseNameEn: '', 
+          credit: courseItem.course.credit.toString() 
+        },
+        sections: Object.keys(courseItem.course.sections || { '1': {} }).map(s => ({
+            id: s,
+            sectionNo: Number(s),
+            closed: false,
+            regis: 0,
+            max: 0,
+            note: null,
+            classes: []
+        }))
       })
     } else {
       activeSchedule.schedule = activeSchedule.schedule.filter(
-        (s) => s.course.code !== courseItem.course.code,
+        (s) => s.courseNo !== courseItem.course.code,
       )
     }
   }
@@ -328,11 +346,11 @@
               <div class="mb-4 flex items-center gap-2">
                 <BookMarked size={20} />
                 <h2 class="text-xl font-bold">
-                  วิชาที่เลือก <span
+                   <span
                     class="ml-2 text-sm font-normal text-gray-400"
                   >
                     {activeSchedule?.schedule.reduce(
-                      (acc, curr) => acc + curr.course.credit,
+                      (acc, curr) => acc + Number(curr.course.credit),
                       0,
                     ) ?? 0} หน่วยกิต
                   </span>
@@ -492,7 +510,7 @@
                 recommended={item.recommended}
                 selected={activeSchedule
                   ? activeSchedule.schedule.some(
-                      (s) => s.course.code === item.course.code,
+                      (s) => s.courseNo === item.course.code,
                     )
                   : false}
                 onclick={() => handleToggleCourse(item)}

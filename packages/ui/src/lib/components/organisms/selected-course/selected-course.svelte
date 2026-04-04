@@ -115,9 +115,9 @@
 	<div
 		data-hidden={course.hidden}
 		class="
-            my-1 flex p-1
+            data-[hidden=true]:text-primary-500 my-1 flex
+            p-1
             font-light
-            data-[hidden=true]:text-primary-500
         "
 	>
 		<div
@@ -221,14 +221,14 @@
 			<div class="flex">
 				<SortableList.ItemRemove onclick={handleRemoveClick}>
 					<IconButton class="size-7 bg-transparent hover:cursor-pointer">
-						<Trash2 class="mx-1 data-[hidden=true]:text-primary-500" />
+						<Trash2 class="data-[hidden=true]:text-primary-500 mx-1" />
 					</IconButton>
 				</SortableList.ItemRemove>
 
 				{#if variant === 'detailed'}
 					<SortableList.ItemHandle>
 						<IconButton class="size-7 bg-transparent hover:cursor-pointer">
-							<Equal class="mx-1  data-[hidden=true]:text-primary-500" />
+							<Equal class="data-[hidden=true]:text-primary-500  mx-1" />
 						</IconButton>
 					</SortableList.ItemHandle>
 				{/if}

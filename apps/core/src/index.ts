@@ -2,6 +2,7 @@ import { serve } from "@hono/node-server";
 import { swaggerUI } from "@hono/swagger-ui";
 import { OpenAPIHono } from "@hono/zod-openapi";
 import dotenv from "dotenv";
+import { cors } from "hono/cors";
 
 import admin from "./routes/admin.js";
 import authRoute, { middlewareAuth } from "./routes/auth.js";
@@ -28,6 +29,11 @@ app.route("/public/carts", publicCarts);
 app.route("/auth", authRoute);
 
 // Middleware List
+// NOTE:
+
+if (process.env.APP_MODE === "dev") {
+  app.use("/*", cors());
+}
 
 app.use("/admin/*", middlewareAuth); // Middleware from Bearer Token
 app.use("/carts/*", middlewareAuth);

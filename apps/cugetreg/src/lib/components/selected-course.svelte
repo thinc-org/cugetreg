@@ -1,84 +1,83 @@
 <script lang="ts">
-  import { BookMarked, Equal, Eye, EyeOff, Trash2 } from '@lucide/svelte'
+  import { BookMarked, Equal, Eye, EyeOff, Trash2 } from '@lucide/svelte';
   import {
     removeItem,
     SortableList,
     sortItems,
-  } from '@rodrigodagostino/svelte-sortable-list'
-  import type { ClassValue } from 'clsx'
+  } from '@rodrigodagostino/svelte-sortable-list';
+  import type { ClassValue } from 'clsx';
 
-  import { cn } from '@cugetreg/utils'
-  import { courseColorVariants } from '@cugetreg/utils/constants'
-  import type { ColorVariant } from '@cugetreg/utils/types'
-  import type { CartItemDetail } from '@cugetreg/zod-schemas/cart-response'
-
-  import * as Accordion from '@cugetreg/ui/atoms/accordion'
-  import { Button } from '@cugetreg/ui/atoms/button'
-  import { IconButton } from '@cugetreg/ui/atoms/icon-button'
-  import { ColorPicker } from '@cugetreg/ui/molecules/colorpicker'
-  import * as Select from '@cugetreg/ui/molecules/select'
+  import * as Accordion from '@cugetreg/ui/atoms/accordion';
+  import { Button } from '@cugetreg/ui/atoms/button';
+  import { IconButton } from '@cugetreg/ui/atoms/icon-button';
+  import { ColorPicker } from '@cugetreg/ui/molecules/colorpicker';
+  import * as Select from '@cugetreg/ui/molecules/select';
+  import { cn } from '@cugetreg/utils';
+  import { courseColorVariants } from '@cugetreg/utils/constants';
+  import type { ColorVariant } from '@cugetreg/utils/types';
+  import type { CartItemDetail } from '@cugetreg/zod-schemas/cart-response';
 
   function handleDragEnd(e: SortableList.RootEvents['ondragend']) {
-    const { draggedItemIndex, targetItemIndex, isCanceled } = e
+    const { draggedItemIndex, targetItemIndex, isCanceled } = e;
     if (
       !isCanceled &&
       typeof targetItemIndex === 'number' &&
       draggedItemIndex !== targetItemIndex
     )
-      schedule = sortItems(schedule, draggedItemIndex, targetItemIndex)
+      schedule = sortItems(schedule, draggedItemIndex, targetItemIndex);
   }
 
   function handleRemoveClick(e: MouseEvent) {
-    const target = e.target as HTMLElement
-    const item = target.closest<HTMLLIElement>('.ssl-item')
-    const itemIndex = Number(item?.dataset.itemIndex)
-    if (!item || itemIndex < 0) return
-    schedule = removeItem(schedule, itemIndex)
+    const target = e.target as HTMLElement;
+    const item = target.closest<HTMLLIElement>('.ssl-item');
+    const itemIndex = Number(item?.dataset.itemIndex);
+    if (!item || itemIndex < 0) return;
+    schedule = removeItem(schedule, itemIndex);
   }
 
   interface SelectedCourseProp {
-    class?: ClassValue
-    schedule: CartItemDetail[]
-    variant?: 'simple' | 'detailed'
+    class?: ClassValue;
+    schedule: CartItemDetail[];
+    variant?: 'simple' | 'detailed';
   }
 
   let {
     class: className = undefined,
     schedule = $bindable(),
     variant = 'detailed',
-  }: SelectedCourseProp = $props()
+  }: SelectedCourseProp = $props();
 
   const totalCredit = $derived(
-    schedule.reduce(
+    (schedule ?? []).reduce(
       (acc, course) => acc + (course.hidden ? 0 : Number(course.course.credit)),
       0,
     ),
-  )
+  );
 
-  let showChangeColorModal = $state(false)
-  let currentColorVariant = $state<ColorVariant>('primary')
-  let initialColorVariant = $state<ColorVariant>('primary')
-  let changeColorFor = $state<string | undefined>()
+  let showChangeColorModal = $state(false);
+  let currentColorVariant = $state<ColorVariant>('primary');
+  let initialColorVariant = $state<ColorVariant>('primary');
+  let changeColorFor = $state<string | undefined>();
   let modalPosition = $state({
     x: 0,
     y: 0,
-  })
+  });
 
   $effect(() => {
     if (changeColorFor) {
-      const index = schedule.findIndex((x) => x.id === changeColorFor)
+      const index = schedule.findIndex((x) => x.id === changeColorFor);
       if (index !== -1 && schedule[index].color !== currentColorVariant) {
-        schedule[index].color = currentColorVariant
-        schedule = [...schedule]
+        schedule[index].color = currentColorVariant;
+        schedule = [...schedule];
       }
     }
-  })
+  });
 </script>
 
 <svelte:window
   onkeydown={(e) => {
     if (e.key === 'Escape' && showChangeColorModal) {
-      showChangeColorModal = false
+      showChangeColorModal = false;
     }
   }}
 />
@@ -142,8 +141,8 @@
       <IconButton
         class="bg-transparent hover:cursor-pointer"
         onclick={() => {
-          course.hidden = !course.hidden
-          schedule = [...schedule]
+          course.hidden = !course.hidden;
+          schedule = [...schedule];
         }}
       >
         {#if course.hidden}
@@ -184,8 +183,8 @@
           bind:value={
             () => String(course.sectionNo),
             (v) => {
-              course.sectionNo = Number(v)
-              schedule = [...schedule]
+              course.sectionNo = Number(v);
+              schedule = [...schedule];
             }
           }
         >
@@ -218,12 +217,12 @@
             courseColorVariants[(course.color as ColorVariant) ?? 'neutral'],
           )}
           onclick={(e: MouseEvent) => {
-            modalPosition.x = e.clientX
-            modalPosition.y = e.clientY
-            changeColorFor = course.id
-            showChangeColorModal = true
-            initialColorVariant = (course.color as ColorVariant) ?? 'neutral'
-            currentColorVariant = (course.color as ColorVariant) ?? 'neutral'
+            modalPosition.x = e.clientX;
+            modalPosition.y = e.clientY;
+            changeColorFor = course.id;
+            showChangeColorModal = true;
+            initialColorVariant = (course.color as ColorVariant) ?? 'neutral';
+            currentColorVariant = (course.color as ColorVariant) ?? 'neutral';
           }}
         />
       </div>
@@ -252,11 +251,11 @@
     role="button"
     tabindex="0"
     onclick={() => {
-      showChangeColorModal = false
+      showChangeColorModal = false;
     }}
     onkeydown={(e) => {
       if (e.key === 'Enter' || e.key === ' ' || e.key === 'Escape') {
-        showChangeColorModal = false
+        showChangeColorModal = false;
       }
     }}
   >
@@ -266,7 +265,7 @@
       onclick={(e) => e.stopPropagation()}
       onkeydown={(e) => {
         if (e.key === 'Enter' || e.key === ' ' || e.key === 'Escape') {
-          showChangeColorModal = false
+          showChangeColorModal = false;
         }
       }}
       role="dialog"
@@ -277,11 +276,11 @@
         options={courseColorVariants}
         bind:value={currentColorVariant}
         onCancel={() => {
-          currentColorVariant = initialColorVariant
-          showChangeColorModal = false
+          currentColorVariant = initialColorVariant;
+          showChangeColorModal = false;
         }}
         onConfirmSelected={() => {
-          showChangeColorModal = false
+          showChangeColorModal = false;
         }}
       />
     </div>

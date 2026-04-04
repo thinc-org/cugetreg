@@ -1,14 +1,12 @@
 <script lang="ts">
-  import { Globe } from 'lucide-svelte'
+  import { Globe } from 'lucide-svelte';
 
-  import { GitHubMark } from '@cugetreg/ui/logo/vendor';
-  import { Instagram } from '@cugetreg/ui/logo/instagram';
+  import { QuestionAnswer } from '@cugetreg/ui/atoms/faqs';
   import { Facebook } from '@cugetreg/ui/logo/facebook';
-
-  import { QuestionAnswer } from '@cugetreg/ui/atoms/faqs'
-
-  import { Footer } from '@cugetreg/ui/organisms/footer'
-  import { Navbar } from '@cugetreg/ui/organisms/navbar'
+  import { Instagram } from '@cugetreg/ui/logo/instagram';
+  import { GitHubMark } from '@cugetreg/ui/logo/vendor';
+  import { Footer } from '@cugetreg/ui/organisms/footer';
+  import { Navbar } from '@cugetreg/ui/organisms/navbar';
 </script>
 
 <Navbar />

@@ -1,24 +1,23 @@
 <script lang="ts">
-  import { Navbar } from '@cugetreg/ui/organisms/navbar'
-  import { Footer } from '@cugetreg/ui/organisms/footer'
-  import SelectedCourse from '$lib/components/selected-course.svelte'
-  import { Filter as FilterBar } from '@cugetreg/ui/organisms/filter-bar'
+  import SelectedCourse from '$lib/components/selected-course.svelte';
 
-  import { CourseCard } from '@cugetreg/ui/molecules/course-card'
-  import { Input } from '@cugetreg/ui/atoms/input'
+  import { BookMarked, ChevronDown, Filter, Menu, Plus } from '@lucide/svelte';
+  import { untrack } from 'svelte';
 
+  import { Input } from '@cugetreg/ui/atoms/input';
+  import { CourseCard } from '@cugetreg/ui/molecules/course-card';
+  import { Filter as FilterBar } from '@cugetreg/ui/organisms/filter-bar';
+  import { Footer } from '@cugetreg/ui/organisms/footer';
+  import { Navbar } from '@cugetreg/ui/organisms/navbar';
   import {
-    mockScheduleList,
-    courseComPres,
-    courseAppDev,
-    courseEffectCareer,
-    courseCalculusI,
-    courseLongName,
     courseAI,
+    courseAppDev,
+    courseCalculusI,
+    courseComPres,
+    courseEffectCareer,
+    courseLongName,
+    mockScheduleList,
   } from '@cugetreg/utils/mock';
-
-  import { Menu, Filter, BookMarked, Plus, ChevronDown } from '@lucide/svelte'
-  import { untrack } from 'svelte'
 
   const mockAllCourses = [
     { course: courseComPres, recommended: true },
@@ -27,53 +26,53 @@
     { course: courseCalculusI, recommended: false },
     { course: courseLongName, recommended: false },
     { course: courseAI, recommended: true },
-  ]
+  ];
 
-  let { courses = mockAllCourses } = $props()
+  let { courses = mockAllCourses } = $props();
 
   // --- STATES ---
   let openPanel = $state<'sidebar' | 'filter_only' | 'selected_only' | null>(
     null,
-  )
-  let scheduleList = $state(mockScheduleList)
-  let activeSchedule = $state(untrack(() => scheduleList[0]))
-  let searchQuery = $state('')
-  let isScheduleDropdownOpen = $state(false)
-  let activeDropdown = $state<'program' | 'semester' | 'sort' | null>(null)
+  );
+  let scheduleList = $state(mockScheduleList);
+  let activeSchedule = $state(untrack(() => scheduleList[0]));
+  let searchQuery = $state('');
+  let isScheduleDropdownOpen = $state(false);
+  let activeDropdown = $state<'program' | 'semester' | 'sort' | null>(null);
 
   // --- Filter States ---
-  let selectedGenEds = $state([])
-  let selectedSpecial = $state([])
-  let selectedFaculties = $state([])
-  let selectedDays = $state([])
-  let selectedEval = $state([])
-  let startTime = $state('')
-  let endTime = $state('')
-  let fitSchedule = $state(false)
-  let noConditions = $state(true)
+  let selectedGenEds = $state([]);
+  let selectedSpecial = $state([]);
+  let selectedFaculties = $state([]);
+  let selectedDays = $state([]);
+  let selectedEval = $state([]);
+  let startTime = $state('');
+  let endTime = $state('');
+  let fitSchedule = $state(false);
+  let noConditions = $state(true);
 
   // --- Header Values ---
-  let currentProgram = $state('นานาชาติ')
-  let currentSemester = $state('2566 / ภาคต้น')
-  let currentSort = $state('จำนวนที่นั่ง')
-  let sortDirection = $state<'asc' | 'desc'>('desc')
+  let currentProgram = $state('นานาชาติ');
+  let currentSemester = $state('2566 / ภาคต้น');
+  let currentSort = $state('จำนวนที่นั่ง');
+  let sortDirection = $state<'asc' | 'desc'>('desc');
 
-  const programOptions = ['ทวิภาค', 'ตรีภาค', 'นานาชาติ']
+  const programOptions = ['ทวิภาค', 'ตรีภาค', 'นานาชาติ'];
   const semesterOptions = [
     '2568 / ฤดูร้อน',
     '2568 / 2',
     '2568 / 1',
     '2567 / ฤดูร้อน',
     '2567 / 2',
-  ]
-  const sortOptions = ['จำนวนที่นั่ง', 'ชื่อวิชา', 'จำนวนที่นั่งเหลือ']
+  ];
+  const sortOptions = ['จำนวนที่นั่ง', 'ชื่อวิชา', 'จำนวนที่นั่งเหลือ'];
 
   const genEdMap: Record<string, string> = {
     sci: 'SC',
     hum: 'HU',
     soc: 'SO',
     int: 'IN',
-  }
+  };
   const dayMap: Record<string, string> = {
     mon: 'MO',
     tue: 'TU',
@@ -82,33 +81,33 @@
     fri: 'FR',
     sat: 'SA',
     sun: 'SU',
-  }
+  };
 
   // --- LOGIC ---
   function togglePanel(type: typeof openPanel) {
-    openPanel = openPanel === type ? null : type
+    openPanel = openPanel === type ? null : type;
   }
 
   function toggleDropdown(type: typeof activeDropdown) {
-    activeDropdown = activeDropdown === type ? null : type
+    activeDropdown = activeDropdown === type ? null : type;
   }
 
   function selectOption(type: 'program' | 'semester' | 'sort', value: string) {
-    if (type === 'program') currentProgram = value
-    if (type === 'semester') currentSemester = value
-    if (type === 'sort') currentSort = value
-    activeDropdown = null
+    if (type === 'program') currentProgram = value;
+    if (type === 'semester') currentSemester = value;
+    if (type === 'sort') currentSort = value;
+    activeDropdown = null;
   }
 
   function toggleSortDirection() {
-    sortDirection = sortDirection === 'asc' ? 'desc' : 'asc'
+    sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
   }
 
   function handleToggleCourse(courseItem: any) {
-    if (!activeSchedule) return
+    if (!activeSchedule) return;
     const index = activeSchedule.schedule.findIndex(
       (s) => s.courseNo === courseItem.course.code,
-    )
+    );
     if (index === -1) {
       activeSchedule.schedule.push({
         id: crypto.randomUUID(),
@@ -120,25 +119,27 @@
         cartOrder: '0',
         isGraded: true,
         expectedGrade: 'A',
-        course: { 
-          courseNameTh: courseItem.course.name || '', 
-          courseNameEn: '', 
-          credit: courseItem.course.credit.toString() 
+        course: {
+          courseNameTh: courseItem.course.name || '',
+          courseNameEn: '',
+          credit: courseItem.course.credit.toString(),
         },
-        sections: Object.keys(courseItem.course.sections || { '1': {} }).map(s => ({
+        sections: Object.keys(courseItem.course.sections || { '1': {} }).map(
+          (s) => ({
             id: s,
             sectionNo: Number(s),
             closed: false,
             regis: 0,
             max: 0,
             note: null,
-            classes: []
-        }))
-      })
+            classes: [],
+          }),
+        ),
+      });
     } else {
       activeSchedule.schedule = activeSchedule.schedule.filter(
         (s) => s.courseNo !== courseItem.course.code,
-      )
+      );
     }
   }
 
@@ -148,52 +149,52 @@
         (item.course?.name || '')
           .toLowerCase()
           .includes(searchQuery.toLowerCase()) ||
-        (item.course?.code || '').includes(searchQuery)
-      if (!matchSearch) return false
-      if (noConditions) return true
+        (item.course?.code || '').includes(searchQuery);
+      if (!matchSearch) return false;
+      if (noConditions) return true;
       if (selectedGenEds.length > 0) {
-        const courseGenEds = item.course.gened || []
-        const targetGenEds = selectedGenEds.map((id: string) => genEdMap[id])
+        const courseGenEds = item.course.gened || [];
+        const targetGenEds = selectedGenEds.map((id: string) => genEdMap[id]);
         if (!targetGenEds.some((code: string) => courseGenEds.includes(code)))
-          return false
+          return false;
       }
       if (selectedDays.length > 0) {
-        const courseDays = item.course.days || []
-        const targetDays = selectedDays.map((id: string) => dayMap[id])
+        const courseDays = item.course.days || [];
+        const targetDays = selectedDays.map((id: string) => dayMap[id]);
         if (!targetDays.some((day: string) => courseDays.includes(day)))
-          return false
+          return false;
       }
-      return true
-    })
+      return true;
+    });
 
     return result.sort((a, b) => {
-      if (a.recommended !== b.recommended) return a.recommended ? -1 : 1
-      let valA, valB
+      if (a.recommended !== b.recommended) return a.recommended ? -1 : 1;
+      let valA, valB;
       switch (currentSort) {
         case 'ชื่อวิชา':
-          valA = a.course.name || ''
-          valB = b.course.name || ''
+          valA = a.course.name || '';
+          valB = b.course.name || '';
           return sortDirection === 'asc'
             ? valA.localeCompare(valB, 'th')
-            : valB.localeCompare(valA, 'th')
+            : valB.localeCompare(valA, 'th');
         case 'จำนวนที่นั่ง':
-          valA = a.course.maxseat || 0
-          valB = b.course.maxseat || 0
-          break
+          valA = a.course.maxseat || 0;
+          valB = b.course.maxseat || 0;
+          break;
         case 'จำนวนที่นั่งเหลือ':
-          valA = (a.course.maxseat || 0) - (a.course.seat || 0)
-          valB = (b.course.maxseat || 0) - (b.course.seat || 0)
-          break
+          valA = (a.course.maxseat || 0) - (a.course.seat || 0);
+          valB = (b.course.maxseat || 0) - (b.course.seat || 0);
+          break;
         default:
-          valA = a.course.code
-          valB = b.course.code
+          valA = a.course.code;
+          valB = b.course.code;
           return sortDirection === 'asc'
             ? valA.localeCompare(valB)
-            : valB.localeCompare(valA)
+            : valB.localeCompare(valA);
       }
-      return sortDirection === 'asc' ? valA - valB : valB - valA
-    })
-  })
+      return sortDirection === 'asc' ? valA - valB : valB - valA;
+    });
+  });
 
   function onSearchFilter() {}
 </script>
@@ -289,8 +290,8 @@
                       {#each scheduleList as s}
                         <button
                           onclick={() => {
-                            activeSchedule = s
-                            isScheduleDropdownOpen = false
+                            activeSchedule = s;
+                            isScheduleDropdownOpen = false;
                           }}
                           class="px-5 py-3 text-left hover:bg-gray-50 {activeSchedule.scheduleId ===
                           s.scheduleId
@@ -346,9 +347,7 @@
               <div class="mb-4 flex items-center gap-2">
                 <BookMarked size={20} />
                 <h2 class="text-xl font-bold">
-                   <span
-                    class="ml-2 text-sm font-normal text-gray-400"
-                  >
+                  <span class="ml-2 text-sm font-normal text-gray-400">
                     {activeSchedule?.schedule.reduce(
                       (acc, curr) => acc + Number(curr.course.credit),
                       0,

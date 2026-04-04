@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { AlertTriangle } from 'lucide-svelte'
+  import { AlertTriangle } from 'lucide-svelte';
   let {
     title = 'เกิดข้อผิดพลาดบางอย่าง!',
     message = 'ขออภัยในความไม่สะดวก ขณะนี้ระบบของเรากำลังดำเนินการปรับปรุงและบำรุงรักษา',
-  } = $props()
+  } = $props();
 </script>
 
 <div

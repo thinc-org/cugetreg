@@ -1,131 +1,126 @@
 <script lang="ts">
-  import { Button } from '@cugetreg/ui/atoms/button'
-  import { IconButton } from '@cugetreg/ui/atoms/icon-button'
-  import { Input } from '@cugetreg/ui/atoms/input'
-  import { Switch } from '@cugetreg/ui/atoms/switch'
-  import { TimetableCourseCard } from '@cugetreg/ui/atoms/timetable'
-  import { TimeTable as Timetable } from '@cugetreg/ui/atoms/timetable'
-  import { ViewCourse } from '@cugetreg/ui/organisms/view-course'
+  import SelectedCourse from '$lib/components/selected-course.svelte';
 
+  import html2canvas from 'html2canvas-pro';
+  import { ChevronLeft, ChevronRight, Copy, Share2 } from 'lucide-svelte';
+  import { untrack } from 'svelte';
+
+  import { Button } from '@cugetreg/ui/atoms/button';
+  import { IconButton } from '@cugetreg/ui/atoms/icon-button';
+  import { Input } from '@cugetreg/ui/atoms/input';
+  import { Modal } from '@cugetreg/ui/atoms/modal';
+  import { Switch } from '@cugetreg/ui/atoms/switch';
+  import { TimetableCourseCard } from '@cugetreg/ui/atoms/timetable';
+  import { TimeTable as Timetable } from '@cugetreg/ui/atoms/timetable';
+  import { ConfirmDeleteSchedule } from '@cugetreg/ui/molecules/confirm-delete-schedule';
+  import { EditSchedule } from '@cugetreg/ui/molecules/edit-schedule';
   import {
-    ExamCard,
     type Exam,
+    ExamCard,
     type StatusColour,
-  } from '@cugetreg/ui/molecules/exam-card'
-
-  import { Navbar } from '@cugetreg/ui/organisms/navbar'
-  import SelectedCourse from '$lib/components/selected-course.svelte'
-  import { CreateTimetable } from '@cugetreg/ui/organisms/create-timetable'
-  import { RenameSchedule } from '@cugetreg/ui/organisms/rename-schedule'
-
-  import { SelectTimetable } from '@cugetreg/ui/molecules/select-timetable'
-  import { EditSchedule } from '@cugetreg/ui/molecules/edit-schedule'
-  import { ConfirmDeleteSchedule } from '@cugetreg/ui/molecules/confirm-delete-schedule'
-
-  import { Modal } from '@cugetreg/ui/atoms/modal'
-
+  } from '@cugetreg/ui/molecules/exam-card';
+  import { SelectTimetable } from '@cugetreg/ui/molecules/select-timetable';
+  import { CreateTimetable } from '@cugetreg/ui/organisms/create-timetable';
+  import { RenameSchedule } from '@cugetreg/ui/organisms/rename-schedule';
+  import { ViewCourse } from '@cugetreg/ui/organisms/view-course';
+  import {
+    discardTime,
+    formatDate,
+    formatExamColumn,
+    formatExamTime,
+    isFinalsConflict,
+    isMidtermConflict,
+  } from '@cugetreg/utils';
   import type {
+    ColorVariant,
     CourseSchedule,
     Day,
     Period,
-    ColorVariant,
     ScheduleList,
     ScheduleListItem,
-  } from '@cugetreg/utils/types'
+  } from '@cugetreg/utils/types';
 
-  import {
-    isMidtermConflict,
-    isFinalsConflict,
-    formatExamTime,
-    formatDate,
-    discardTime,
-    formatExamColumn,
-  } from '@cugetreg/utils'
-
-  import { Share2, Copy, ChevronLeft, ChevronRight } from 'lucide-svelte'
-  import { untrack } from 'svelte'
-  import html2canvas from 'html2canvas-pro'
-  import type { PageProps } from './$types'
+  import type { PageProps } from './$types';
 
   function getColumnFromDay(day: Day): number {
     switch (day) {
       case 'MO':
-        return 0
+        return 0;
       case 'TU':
-        return 1
+        return 1;
       case 'WE':
-        return 2
+        return 2;
       case 'TH':
-        return 3
+        return 3;
       case 'FR':
-        return 4
+        return 4;
       case 'SA':
-        return 5
+        return 5;
       case 'SU':
-        return 6
+        return 6;
     }
   }
 
   function isConflicted(course: CourseSchedule): boolean {
-    const courseSection = course.course.sections[course.selectedSection] || []
+    const courseSection = course.course.sections[course.selectedSection] || [];
 
     for (const other of selectedSchedule.schedule) {
-      if (other === course || other.hidden) continue
+      if (other === course || other.hidden) continue;
 
-      const otherSection = other.course.sections[other.selectedSection] || []
+      const otherSection = other.course.sections[other.selectedSection] || [];
 
       for (const period of courseSection) {
         for (const otherPeriod of otherSection) {
-          if (period.day !== otherPeriod.day) continue
+          if (period.day !== otherPeriod.day) continue;
 
-          const periodStart = period.startTime
-          const periodEnd = period.startTime + period.duration
-          const otherPeriodStart = otherPeriod.startTime
-          const otherPeriodEnd = otherPeriod.startTime + otherPeriod.duration
+          const periodStart = period.startTime;
+          const periodEnd = period.startTime + period.duration;
+          const otherPeriodStart = otherPeriod.startTime;
+          const otherPeriodEnd = otherPeriod.startTime + otherPeriod.duration;
 
           if (periodStart < otherPeriodEnd && otherPeriodStart < periodEnd) {
-            return true
+            return true;
           }
         }
       }
     }
-    return false
+    return false;
   }
 
   function duplicateCurrentSchedule() {
-    const snapshot = $state.snapshot(selectedSchedule)
-    const current = structuredClone(snapshot)
+    const snapshot = $state.snapshot(selectedSchedule);
+    const current = structuredClone(snapshot);
 
     scheduleList.push({
       ...current,
       name: `${selectedSchedule.name} Copy`,
       scheduleId: crypto.randomUUID(),
-    })
+    });
   }
 
   async function screenshotTimetable() {
-    if (!timetableDiv) return
+    if (!timetableDiv) return;
 
     const canvas = await html2canvas(timetableDiv, {
       backgroundColor: null,
       logging: false,
       useCORS: true,
       scale: 3,
-    })
+    });
 
-    const screenshot = canvas.toDataURL('image/jpeg')
+    const screenshot = canvas.toDataURL('image/jpeg');
 
-    const link = document.createElement('a')
-    link.href = screenshot
-    link.download = `${selectedSchedule.name}_timetable.jpg`
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
+    const link = document.createElement('a');
+    link.href = screenshot;
+    link.download = `${selectedSchedule.name}_timetable.jpg`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   }
 
-  const { data }: PageProps = $props()
+  const { data }: PageProps = $props();
 
-  const cartInfo = data.data.cart
+  const cartInfo = data.data.cart;
 
   const initialScheduleList: ScheduleList = [
     {
@@ -136,13 +131,13 @@
       // isPublic: cartInfo.visible === 'PUBLIC',
       isPublic: true,
       schedule: cartInfo.items.map((item, index) => {
-        const sectionsObj: Record<number, Period[]> = {}
+        const sectionsObj: Record<number, Period[]> = {};
         item.sections.forEach((sec) => {
           sectionsObj[sec.sectionNo] = sec.classes.map((cls) => {
-            const [startH, startM] = cls.periodStart.split(':').map(Number)
-            const [endH, endM] = cls.periodEnd.split(':').map(Number)
-            const startTime = startH + startM / 60
-            const endTime = endH + endM / 60
+            const [startH, startM] = cls.periodStart.split(':').map(Number);
+            const [endH, endM] = cls.periodEnd.split(':').map(Number);
+            const startTime = startH + startM / 60;
+            const endTime = endH + endM / 60;
 
             return {
               day: cls.dayOfWeek.substring(0, 2).toUpperCase() as Day,
@@ -150,27 +145,27 @@
               duration: endTime - startTime,
               building: cls.building || '',
               room: cls.room || '',
-            }
-          })
-        })
+            };
+          });
+        });
 
         const midtermExam = data.data.schedule.exams.find(
           (e) => e.cartItemId === item.id && e.type === 'MIDTERM',
-        )
+        );
         const finalExam = data.data.schedule.exams.find(
           (e) => e.cartItemId === item.id && e.type === 'FINAL',
-        )
+        );
 
         const parseExam = (examObj?: typeof midtermExam) => {
-          if (!examObj) return undefined
-          const startDate = new Date(examObj.start)
-          const endDate = new Date(examObj.end)
+          if (!examObj) return undefined;
+          const startDate = new Date(examObj.start);
+          const endDate = new Date(examObj.end);
           return {
             date: startDate,
             duration:
               (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60),
-          }
-        }
+          };
+        };
 
         return {
           id: index + 1,
@@ -187,86 +182,86 @@
           hidden: item.hidden,
           colorVariant: (item.color as ColorVariant) || 'pink',
           conflicted: false,
-        }
+        };
       }),
     },
-  ]
+  ];
 
-  let scheduleList = $state(structuredClone(initialScheduleList))
-  let selectedSchedule = $state(untrack(() => scheduleList[0]))
-  let showExamSchedule = $state<'List' | 'Schedule'>('Schedule')
+  let scheduleList = $state(structuredClone(initialScheduleList));
+  let selectedSchedule = $state(untrack(() => scheduleList[0]));
+  let showExamSchedule = $state<'List' | 'Schedule'>('Schedule');
 
-  let timetableDiv = $state<HTMLElement | null>(null)
+  let timetableDiv = $state<HTMLElement | null>(null);
 
-  let showRenameScheduleModal = $state(false)
-  let showCreateScheduleModal = $state(false)
-  let showDeleteScheduleModal = $state(false)
-  let showViewCourseModal = $state(false)
+  let showRenameScheduleModal = $state(false);
+  let showCreateScheduleModal = $state(false);
+  let showDeleteScheduleModal = $state(false);
+  let showViewCourseModal = $state(false);
 
   const examSort = (a: string, b: string) => {
-    const numA = Number(a)
-    const numB = Number(b)
+    const numA = Number(a);
+    const numB = Number(b);
 
-    if (numA === 0) return 1
-    else if (numB === 0) return -1
-    else return numA - numB
-  }
+    if (numA === 0) return 1;
+    else if (numB === 0) return -1;
+    else return numA - numB;
+  };
 
   const examsData = $derived.by(() => {
-    let midterms: Record<number, CourseSchedule[]> = {}
-    let finals: Record<number, CourseSchedule[]> = {}
+    let midterms: Record<number, CourseSchedule[]> = {};
+    let finals: Record<number, CourseSchedule[]> = {};
 
     selectedSchedule.schedule.forEach((course) => {
-      if (course.hidden) return
+      if (course.hidden) return;
 
-      const { midterm, final } = course.course
+      const { midterm, final } = course.course;
 
       if (midterm) {
-        const formattedDate = discardTime(midterm.date.getTime())
-        if (formattedDate in midterms) midterms[formattedDate].push(course)
-        else midterms[formattedDate] = [course]
+        const formattedDate = discardTime(midterm.date.getTime());
+        if (formattedDate in midterms) midterms[formattedDate].push(course);
+        else midterms[formattedDate] = [course];
       } else {
-        if (!(0 in midterms)) midterms[0] = []
-        midterms[0].push(course)
+        if (!(0 in midterms)) midterms[0] = [];
+        midterms[0].push(course);
       }
 
       if (final) {
-        const formattedDate = discardTime(final.date.getTime())
-        if (formattedDate in finals) finals[formattedDate].push(course)
-        else finals[formattedDate] = [course]
+        const formattedDate = discardTime(final.date.getTime());
+        if (formattedDate in finals) finals[formattedDate].push(course);
+        else finals[formattedDate] = [course];
       } else {
-        if (!(0 in finals)) finals[0] = []
-        finals[0].push(course)
+        if (!(0 in finals)) finals[0] = [];
+        finals[0].push(course);
       }
-    })
+    });
 
-    return { midterms, finals }
-  })
+    return { midterms, finals };
+  });
 
   const examDateOrder = $derived.by(() => {
     let midterms: number[] = Object.keys(examsData.midterms)
       .sort(examSort)
-      .map((x) => Number(x))
+      .map((x) => Number(x));
     let finals: number[] = Object.keys(examsData.finals)
       .sort(examSort)
-      .map((x) => Number(x))
+      .map((x) => Number(x));
 
-    return { midterms, finals }
-  })
+    return { midterms, finals };
+  });
 
   const totalCredit = $derived(
     selectedSchedule.schedule.reduce(
       (acc, course) => acc + (course.hidden ? 0 : course.course.credit),
       0,
     ),
-  )
+  );
 
   $effect(() => {
     selectedSchedule.schedule.forEach(
       (course, index) =>
         (selectedSchedule.schedule[index].conflicted = isConflicted(course)),
-    )
-  })
+    );
+  });
 </script>
 
 <div class="flex h-screen flex-col">
@@ -292,9 +287,9 @@
   >
     <CreateTimetable
       onConfirm={(schedule: ScheduleListItem) => {
-        scheduleList.push(schedule)
-        selectedSchedule = schedule
-        showCreateScheduleModal = false
+        scheduleList.push(schedule);
+        selectedSchedule = schedule;
+        showCreateScheduleModal = false;
       }}
       onCancel={() => (showCreateScheduleModal = false)}
     />
@@ -323,9 +318,9 @@
       onConfirm={() => {
         scheduleList = scheduleList.filter(
           (schedule) => schedule !== selectedSchedule,
-        )
-        selectedSchedule = scheduleList[0]
-        showDeleteScheduleModal = false
+        );
+        selectedSchedule = scheduleList[0];
+        showDeleteScheduleModal = false;
       }}
     />
   </Modal>
@@ -333,10 +328,10 @@
   <div class="flex w-full flex-1 overflow-hidden">
     <div
       class="
-            flex min-w-90 flex-1 flex-col overflow-hidden
+            flex hidden max-w-[50vw] min-w-90 flex-1
+            flex-col overflow-hidden
             border-r border-neutral-200
             [scrollbar-width:none] [&::-webkit-scrollbar]:hidden
-            hidden max-w-[50vw]
         "
     >
       <SelectTimetable
@@ -370,14 +365,14 @@
         <span class="text-4xl font-bold">ตารางเรียน</span>
 
         <div class="hidden">
-            <EditSchedule
-              bind:selectedSchedule
-              {scheduleList}
-              onRename={() => (showRenameScheduleModal = true)}
-              onDuplicate={duplicateCurrentSchedule}
-              onAddSchedule={() => (showCreateScheduleModal = true)}
-              onDelete={() => (showDeleteScheduleModal = true)}
-            />
+          <EditSchedule
+            bind:selectedSchedule
+            {scheduleList}
+            onRename={() => (showRenameScheduleModal = true)}
+            onDuplicate={duplicateCurrentSchedule}
+            onAddSchedule={() => (showCreateScheduleModal = true)}
+            onDelete={() => (showDeleteScheduleModal = true)}
+          />
         </div>
       </div>
       <div class="bg-surface overflow-x-scroll p-8" bind:this={timetableDiv}>
@@ -427,8 +422,8 @@
         <Button
           class="ring-0 outline-0 hover:bg-transparent!"
           onclick={() => {
-            if (showExamSchedule === 'List') showExamSchedule = 'Schedule'
-            else showExamSchedule = 'List'
+            if (showExamSchedule === 'List') showExamSchedule = 'Schedule';
+            else showExamSchedule = 'List';
           }}
           variant="outlined"
         >
@@ -510,7 +505,7 @@
                 ? 'ยังไม่ประกาศ'
                 : formatDate(new Date(Number(key)))}
               data={examsData.midterms[Number(key)].map((course) => {
-                const { id, course: courseData, colorVariant } = course
+                const { id, course: courseData, colorVariant } = course;
 
                 return {
                   id: String(id),
@@ -525,7 +520,7 @@
                     courseData.midterm?.duration,
                   ),
                   subject: courseData.name,
-                } as Exam
+                } as Exam;
               })}
             />
           </div>
@@ -541,7 +536,7 @@
                 ? 'ยังไม่ประกาศ'
                 : formatDate(new Date(Number(key)))}
               data={examsData.finals[Number(key)].map((course) => {
-                const { id, course: courseData, colorVariant } = course
+                const { id, course: courseData, colorVariant } = course;
 
                 return {
                   id: String(id),
@@ -556,7 +551,7 @@
                     courseData.final?.duration,
                   ),
                   subject: courseData.name,
-                } as Exam
+                } as Exam;
               })}
             />
           </div>

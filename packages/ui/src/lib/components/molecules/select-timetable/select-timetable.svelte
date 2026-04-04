@@ -3,17 +3,18 @@
 	import type { ClassValue } from 'clsx';
 
 	import { cn } from '@cugetreg/utils';
-	import { mockScheduleList } from '@cugetreg/utils/mock';
-	import type { ScheduleList, ScheduleListItem } from '@cugetreg/utils/types';
 
 	interface SelectTimetableProp {
-		options?: ScheduleList;
-		value?: ScheduleListItem;
+		options?: {
+            name: string,
+            id: string
+        }[];
+		value?: string;
 		class?: ClassValue;
 	}
 
 	let {
-		options = mockScheduleList,
+		options,
 		value = $bindable(),
 		class: className = undefined
 	}: SelectTimetableProp = $props();
@@ -30,11 +31,12 @@
 				class="border-primary text-primary flex-3 rounded-lg border p-1 focus:outline-none"
 				bind:value
 			>
-				{#each options as item (item.scheduleId)}
-					<option value={item}>{item.name}</option>
+				{#each options as item (item.id)}
+					<option value={item.id}>{item.name}</option>
 				{/each}
 			</select>
 
+            <!-- TODO: -->
 			<div class="truncate rounded-lg border border-neutral-900 px-1 text-xs">
 				<div class="text-xs">ทวิภาค 2566</div>
 				<div class="text-xs">ภาคต้น</div>

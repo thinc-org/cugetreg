@@ -17,8 +17,11 @@
 
 	interface EditScheduleProps {
 		class?: ClassValue;
-		selectedSchedule: ScheduleListItem;
-		scheduleList: ScheduleList;
+        currentScheduleId: string,
+		schedules?: {
+            name: string,
+            id: string
+        }[];
 		onRename?: () => void;
 		onDuplicate?: () => void;
 		onAddSchedule?: () => void;
@@ -27,9 +30,9 @@
 	}
 
 	let {
+        schedules = [],
+        currentScheduleId = $bindable(),
 		class: className = undefined,
-		selectedSchedule = $bindable(),
-		scheduleList,
 		onRename = () => {},
 		onDuplicate = () => {},
 		onAddSchedule = () => {},
@@ -68,10 +71,12 @@
 </script>
 
 <div class={cn('flex space-x-2', className)}>
-	<select class="mx-1 rounded-xl border border-neutral-200 p-2" bind:value={selectedSchedule}>
-		{#each scheduleList as schedule (schedule.scheduleId)}
-			<option value={schedule}>{schedule.name}</option>
+	<select class="mx-1 rounded-xl border border-neutral-200 p-2" bind:value={currentScheduleId}>
+		{#each schedules as schedule (schedule.id)}
+			<option value={schedule.id}>{schedule.name}</option>
 		{/each}
+
+
 	</select>
 
 	<DropdownMenu.Root>
@@ -83,7 +88,7 @@
 		<DropdownMenu.Portal>
 			<DropdownMenu.Content
 				class="
-                bg-surface m-2 w-40 rounded-lg border border-neutral-200 p-1
+                m-2 w-40 rounded-lg border bg-neutral-50 border-neutral-200 p-1
             "
 			>
 				<DropdownMenu.Group class="space-y-1">

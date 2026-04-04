@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { BookMarked, Equal, Eye, EyeOff, Trash2 } from '@lucide/svelte';
-	import { SortableList, sortItems } from '@rodrigodagostino/svelte-sortable-list';
+	import { removeItem, SortableList, sortItems } from '@rodrigodagostino/svelte-sortable-list';
 	import type { ClassValue } from 'clsx';
 
 	import { cn } from '@cugetreg/utils';
@@ -20,10 +20,18 @@
 			schedule = sortItems(schedule, draggedItemIndex, targetItemIndex);
 	}
 
+	function handleRemoveClick(e: MouseEvent) {
+		const target = e.target as HTMLElement;
+		const item = target.closest<HTMLLIElement>('.ssl-item');
+		const itemIndex = Number(item?.dataset.itemIndex);
+		if (!item || itemIndex < 0) return;
+		schedule = removeItem(schedule, itemIndex);
+	}
+
 	interface SelectedCourseProp {
 		class?: ClassValue;
 		schedule: ScheduleData;
-		variant: 'simple' | 'detailed';
+		variant?: 'simple' | 'detailed';
 	}
 
 	let {
@@ -93,7 +101,7 @@
 					{/each}
 				</SortableList.Root>
 				<div class="px-2">
-					<Button class="w-full" color="neutral">ค้นหาวิชาเรียน</Button>
+					<Button class="w-full" color="primary">ค้นหาวิชาเรียน</Button>
 				</div>
 			</Accordion.Content>
 		</Accordion.Item>
@@ -109,7 +117,7 @@
 		class="
             my-1 flex p-1
             font-light
-            data-[hidden=true]:text-neutral-500
+            data-[hidden=true]:text-primary-500
         "
 	>
 		<div
@@ -121,7 +129,7 @@
 				onclick={() => (course.hidden = !course.hidden)}
 			>
 				{#if course.hidden}
-					<EyeOff class="stroke-neutral-500" />
+					<EyeOff class="stroke-primary-500" />
 				{:else}
 					<Eye />
 				{/if}
@@ -198,29 +206,29 @@
 				<Button
 					class={cn(
 						'm-2 aspect-square rounded-lg border hover:ring-0',
-						courseColorVariants[course.colorVariant ?? 'neutral']
+						courseColorVariants[course.colorVariant ?? 'primary']
 					)}
 					onclick={(e: MouseEvent) => {
 						modalPosition.x = e.clientX;
 						modalPosition.y = e.clientY;
 						changeColorFor = course.id;
 						showChangeColorModal = true;
-						initialColorVariant = course.colorVariant ?? 'neutral';
-						currentColorVariant = course.colorVariant ?? 'neutral';
+						initialColorVariant = course.colorVariant ?? 'primary';
+						currentColorVariant = course.colorVariant ?? 'primary';
 					}}
 				/>
 			</div>
 			<div class="flex">
 				<SortableList.ItemRemove onclick={handleRemoveClick}>
 					<IconButton class="size-7 bg-transparent hover:cursor-pointer">
-						<Trash2 class="mx-1 data-[hidden=true]:text-neutral-500" />
+						<Trash2 class="mx-1 data-[hidden=true]:text-primary-500" />
 					</IconButton>
 				</SortableList.ItemRemove>
 
 				{#if variant === 'detailed'}
 					<SortableList.ItemHandle>
 						<IconButton class="size-7 bg-transparent hover:cursor-pointer">
-							<Equal class="mx-1  data-[hidden=true]:text-neutral-500" />
+							<Equal class="mx-1  data-[hidden=true]:text-primary-500" />
 						</IconButton>
 					</SortableList.ItemHandle>
 				{/if}

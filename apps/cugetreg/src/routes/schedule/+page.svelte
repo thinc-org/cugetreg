@@ -1,78 +1,59 @@
 <script lang="ts">
-  import { Button } from '@cugetreg/ui/atoms/button'
-  import { IconButton } from '@cugetreg/ui/atoms/icon-button'
-  import { Input } from '@cugetreg/ui/atoms/input'
-  import { Switch } from '@cugetreg/ui/atoms/switch'
-  import { TimetableCourseCard } from '@cugetreg/ui/atoms/timetable'
-  import { TimeTable as Timetable } from '@cugetreg/ui/atoms/timetable'
-  import { ViewCourse } from '@cugetreg/ui/organisms/view-course'
+  import SelectedCourse from '$lib/components/selected-course.svelte';
+  import { getUserCartStore } from '$lib/stores/user-cart';
 
+  import html2canvas from 'html2canvas-pro';
+  import { ChevronLeft, ChevronRight, Copy, Share2 } from 'lucide-svelte';
+
+  import { Button } from '@cugetreg/ui/atoms/button';
+  import { IconButton } from '@cugetreg/ui/atoms/icon-button';
+  import { Input } from '@cugetreg/ui/atoms/input';
+  import { Modal } from '@cugetreg/ui/atoms/modal';
+  import { Switch } from '@cugetreg/ui/atoms/switch';
+  import { TimetableCourseCard } from '@cugetreg/ui/atoms/timetable';
+  import { TimeTable as Timetable } from '@cugetreg/ui/atoms/timetable';
+  import { EditSchedule } from '@cugetreg/ui/molecules/edit-schedule';
   import {
-    ExamCard,
     type Exam,
+    ExamCard,
     type StatusColour,
-  } from '@cugetreg/ui/molecules/exam-card'
-
-  import { Navbar } from '@cugetreg/ui/organisms/navbar'
-  import SelectedCourse from '$lib/components/selected-course.svelte'
-  import { CreateTimetable } from '@cugetreg/ui/organisms/create-timetable'
-  import { RenameSchedule } from '@cugetreg/ui/organisms/rename-schedule'
-
-  import { SelectTimetable } from '@cugetreg/ui/molecules/select-timetable'
-  import { EditSchedule } from '@cugetreg/ui/molecules/edit-schedule'
-  import { ConfirmDeleteSchedule } from '@cugetreg/ui/molecules/confirm-delete-schedule'
-
-  import { Modal } from '@cugetreg/ui/atoms/modal'
-
-  import { mockScheduleList } from '@cugetreg/utils/mock'
-  import type {
-    ColorVariant,
-    CourseSchedule,
-    Day,
-    ScheduleList,
-    ScheduleListItem,
-  } from '@cugetreg/utils/types'
-
+  } from '@cugetreg/ui/molecules/exam-card';
+  import { SelectTimetable } from '@cugetreg/ui/molecules/select-timetable';
+  import { ViewCourse } from '@cugetreg/ui/organisms/view-course';
   import {
-    isMidtermConflict,
-    isFinalsConflict,
-    formatExamTime,
-    formatDate,
     discardTime,
+    formatDate,
     formatExamColumn,
-  } from '@cugetreg/utils'
-
-  import { Share2, Copy, ChevronLeft, ChevronRight } from 'lucide-svelte'
-  import { untrack } from 'svelte'
-  import html2canvas from 'html2canvas-pro'
-  import { getUserCartStore } from '$lib/stores/user-cart'
-  import type { CartItemDetail } from '@cugetreg/zod-schemas/cart-response'
+    formatExamTime,
+  } from '@cugetreg/utils';
+  import type { ColorVariant, Day } from '@cugetreg/utils/types';
+  import type { CartItemDetail } from '@cugetreg/zod-schemas/cart-response';
 
   // TODO: Move this somewhere else
   function parsePeriodTime(periodTime: string): number {
-    const parts = periodTime.split(':')
-    const hour = Number(parts[0])
-    const minute = Number(parts[1])
+    const parts = periodTime.split(':');
+    const hour = Number(parts[0]);
+    const minute = Number(parts[1]);
 
-    return hour + minute / 60
+    return hour + minute / 60;
   }
 
   function getColumnFromDay(day: Day): number {
     switch (day) {
       case 'MO':
-        return 0
+        return 0;
       case 'TU':
-        return 1
+        return 1;
       case 'WE':
-        return 2
+        return 2;
       case 'TH':
-        return 3
+        return 3;
       case 'FR':
-        return 4
+        return 4;
       case 'SA':
-        return 5
+        return 5;
       case 'SU':
-        return 6
+        return 6;
     }
   }
 
@@ -115,72 +96,71 @@
   //   })
   // }
 
-  async function screenshotTimetable() {}
-  // async function screenshotTimetable() {
-  //   if (!timetableDiv) return
-  //
-  //   const canvas = await html2canvas(timetableDiv, {
-  //     backgroundColor: null,
-  //     logging: false,
-  //     useCORS: true,
-  //     scale: 3,
-  //   })
-  //
-  //   const screenshot = canvas.toDataURL('image/jpeg')
-  //
-  //   const link = document.createElement('a')
-  //   link.href = screenshot
-  //   link.download = `${selectedSchedule.name}_timetable.jpg`
-  //   document.body.appendChild(link)
-  //   link.click()
-  //   document.body.removeChild(link)
-  // }
+  async function screenshotTimetable() {
+    if (!timetableDiv) return;
+
+    const canvas = await html2canvas(timetableDiv, {
+      backgroundColor: null,
+      logging: false,
+      useCORS: true,
+      scale: 3,
+    });
+
+    const screenshot = canvas.toDataURL('image/jpeg');
+
+    const link = document.createElement('a');
+    link.href = screenshot;
+    link.download = `${selectedSchedule.name}_timetable.jpg`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
 
   // NOTE: Temporary: this should be global state
   // let scheduleList = $state(mockScheduleList)
   // let selectedSchedule = $state(untrack(() => scheduleList[0]))
-  let showExamSchedule = $state<'List' | 'Schedule'>('Schedule')
+  let showExamSchedule = $state<'List' | 'Schedule'>('Schedule');
 
-  let timetableDiv = $state<HTMLElement | null>(null)
+  let timetableDiv = $state<HTMLElement | null>(null);
 
-  let showRenameScheduleModal = $state(false)
-  let showCreateScheduleModal = $state(false)
-  let showDeleteScheduleModal = $state(false)
-  let showViewCourseModal = $state(false)
+  let showRenameScheduleModal = $state(false);
+  let showCreateScheduleModal = $state(false);
+  let showDeleteScheduleModal = $state(false);
+  let showViewCourseModal = $state(false);
 
-  const userCart = getUserCartStore()
+  const userCart = getUserCartStore();
 
   type LocalExamData = {
-    cartItemId: string
-    courseNo: string
-    name: string
-    colorVariant: ColorVariant
-    start: Date | null
-    end: Date | null
-    duration: number // calculated here
-  }
+    cartItemId: string;
+    courseNo: string;
+    name: string;
+    colorVariant: ColorVariant;
+    start: Date | null;
+    end: Date | null;
+    duration: number; // calculated here
+  };
 
   const examsData = $derived.by(() => {
-    let midterms: Record<number, LocalExamData[]> = {}
-    let finals: Record<number, LocalExamData[]> = {}
+    let midterms: Record<number, LocalExamData[]> = {};
+    let finals: Record<number, LocalExamData[]> = {};
 
     if ($userCart && $userCart.exams) {
       for (const exam of $userCart.exams) {
         const course = $userCart.currentCart?.items.find(
           (item) => item.id === exam.cartItemId,
-        )
-        if (!course || course.hidden) continue
+        );
+        if (!course || course.hidden) continue;
 
-        let dateVal = 0
-        let start: Date | null = null
-        let end: Date | null = null
-        let duration = 0
+        let dateVal = 0;
+        let start: Date | null = null;
+        let end: Date | null = null;
+        let duration = 0;
 
         if (exam.start && exam.end) {
-          start = new Date(exam.start)
-          end = new Date(exam.end)
-          dateVal = discardTime(start.getTime())
-          duration = (end.getTime() - start.getTime()) / (1000 * 60 * 60)
+          start = new Date(exam.start);
+          end = new Date(exam.end);
+          dateVal = discardTime(start.getTime());
+          duration = (end.getTime() - start.getTime()) / (1000 * 60 * 60);
         }
 
         const data: LocalExamData = {
@@ -194,59 +174,59 @@
           start,
           end,
           duration,
-        }
+        };
 
         if (exam.type === 'MIDTERM') {
-          if (!midterms[dateVal]) midterms[dateVal] = []
-          midterms[dateVal].push(data)
+          if (!midterms[dateVal]) midterms[dateVal] = [];
+          midterms[dateVal].push(data);
         } else if (exam.type === 'FINAL') {
-          if (!finals[dateVal]) finals[dateVal] = []
-          finals[dateVal].push(data)
+          if (!finals[dateVal]) finals[dateVal] = [];
+          finals[dateVal].push(data);
         }
       }
     }
 
-    return { midterms, finals }
-  })
+    return { midterms, finals };
+  });
 
   const examSort = (a: string, b: string) => {
-    const numA = Number(a)
-    const numB = Number(b)
+    const numA = Number(a);
+    const numB = Number(b);
 
-    if (numA === 0) return 1
-    else if (numB === 0) return -1
-    else return numA - numB
-  }
+    if (numA === 0) return 1;
+    else if (numB === 0) return -1;
+    else return numA - numB;
+  };
 
   const examDateOrder = $derived.by(() => {
     let midterms: number[] = Object.keys(examsData.midterms)
       .sort(examSort)
-      .map((x) => Number(x))
+      .map((x) => Number(x));
     let finals: number[] = Object.keys(examsData.finals)
       .sort(examSort)
-      .map((x) => Number(x))
+      .map((x) => Number(x));
 
-    return { midterms, finals }
-  })
+    return { midterms, finals };
+  });
 
   function isExamConflicted(exam: LocalExamData, others?: LocalExamData[]) {
-    if (!exam.start || !exam.end) return false
-    if (!others) return false
+    if (!exam.start || !exam.end) return false;
+    if (!others) return false;
 
-    const s1 = exam.start.getTime()
-    const e1 = exam.end.getTime()
+    const s1 = exam.start.getTime();
+    const e1 = exam.end.getTime();
 
     for (const other of others) {
-      if (other.cartItemId === exam.cartItemId) continue
-      if (!other.start || !other.end) continue
+      if (other.cartItemId === exam.cartItemId) continue;
+      if (!other.start || !other.end) continue;
 
-      const s2 = other.start.getTime()
-      const e2 = other.end.getTime()
+      const s2 = other.start.getTime();
+      const e2 = other.end.getTime();
 
-      if (s1 < e2 && s2 < e1) return true
+      if (s1 < e2 && s2 < e1) return true;
     }
 
-    return false
+    return false;
   }
 
   const totalCredit = $derived(
@@ -254,7 +234,7 @@
       (acc, item) => acc + (item.hidden ? 0 : Number(item.course.credit)),
       0,
     ) ?? 0,
-  )
+  );
 
   let selectedSchedule = $state({
     name: 'ปี 2 เทอม 1',
@@ -263,9 +243,9 @@
     semesterType: 'Semester',
     semester: '2566/1',
     isPublic: false,
-  })
+  });
 
-  let currentScheduleId = $state($userCart.currentCart?.id ?? '')
+  // let currentScheduleId = $state($userCart.currentCart?.id ?? '');
 </script>
 
 <div class="flex h-screen flex-col">
@@ -343,7 +323,7 @@
           name: item.name,
           id: item.id,
         })) ?? []}
-        bind:value={currentScheduleId}
+        bind:value={$userCart.currentCartId}
       />
       {#if $userCart.currentCart}
         <SelectedCourse
@@ -374,22 +354,21 @@
         <span class="text-4xl font-bold">ตารางเรียน</span>
 
         <EditSchedule
-          bind:currentScheduleId
-            schedules={$userCart.cartList?.map((item) => ({
-              name: item.name,
-              id: item.id,
-            })) ?? []}
+          bind:currentScheduleId={$userCart.currentCartId}
+          schedules={$userCart.cartList?.map((item) => ({
+            name: item.name,
+            id: item.id,
+          })) ?? []}
           onRename={() => (showRenameScheduleModal = true)}
           onDuplicate={duplicateCurrentSchedule}
           onAddSchedule={() => (showCreateScheduleModal = true)}
-          onDelete={() => (showDeleteScheduleModal = true)}>
-        </EditSchedule>
-
+          onDelete={() => (showDeleteScheduleModal = true)}
+        ></EditSchedule>
       </div>
       <div class="bg-surface overflow-x-scroll p-8" bind:this={timetableDiv}>
         <div class="min-w-150">
           <Timetable startTime={7}>
-            {#each $userCart.currentCart?.items as item}
+            {#each $userCart.currentCart?.items as item (item.id)}
               {@render timetableCourseCard(item)}
             {/each}
           </Timetable>
@@ -433,8 +412,8 @@
         <Button
           class="ring-0 outline-0 hover:bg-transparent!"
           onclick={() => {
-            if (showExamSchedule === 'List') showExamSchedule = 'Schedule'
-            else showExamSchedule = 'List'
+            if (showExamSchedule === 'List') showExamSchedule = 'Schedule';
+            else showExamSchedule = 'List';
           }}
           variant="outlined"
         >
@@ -461,8 +440,8 @@
       .filter((time) => time !== 0)
       .map((time) => formatDate(new Date(time)))}
   >
-    {#each examDateOrder.midterms.filter((time) => time !== 0) as key, index}
-      {#each examsData.midterms[key] as exam}
+    {#each examDateOrder.midterms.filter((time) => time !== 0) as key, index (key)}
+      {#each examsData.midterms[key] as exam (exam.cartItemId)}
         {#if exam.start && exam.end}
           <TimetableCourseCard
             course={{
@@ -489,8 +468,8 @@
       .filter((time) => time !== 0)
       .map((time) => formatDate(new Date(time)))}
   >
-    {#each examDateOrder.finals.filter((time) => time !== 0) as key, index}
-      {#each examsData.finals[key] as examCourse}
+    {#each examDateOrder.finals.filter((time) => time !== 0) as key, index (key)}
+      {#each examsData.finals[key] as examCourse (examCourse.cartItemId)}
         {#if examCourse.start && examCourse.end}
           <TimetableCourseCard
             course={{
@@ -517,7 +496,7 @@
       <div class="flex-1">
         <span class="text-2xl font-bold">Midterm</span>
 
-        {#each examDateOrder.midterms as key}
+        {#each examDateOrder.midterms as key (key)}
           <div class="my-5">
             <ExamCard
               date={key === 0 ? 'ยังไม่ประกาศ' : formatDate(new Date(key))}
@@ -532,7 +511,7 @@
                     course.duration,
                   ),
                   subject: course.name,
-                } as Exam
+                } as Exam;
               })}
             />
           </div>
@@ -541,7 +520,7 @@
       <div class="flex-1">
         <span class="text-2xl font-bold">Finals</span>
 
-        {#each examDateOrder.finals as key}
+        {#each examDateOrder.finals as key (key)}
           <div class="my-5">
             <ExamCard
               date={key === 0 ? 'ยังไม่ประกาศ' : formatDate(new Date(key))}
@@ -556,7 +535,7 @@
                     course.duration,
                   ),
                   subject: course.name,
-                } as Exam
+                } as Exam;
               })}
             />
           </div>
@@ -568,7 +547,7 @@
 
 {#snippet timetableCourseCard(course: CartItemDetail)}
   {#if !course.hidden}
-    {#each course.sections.find((sec) => sec.sectionNo === course.sectionNo)?.classes ?? [] as section}
+    {#each course.sections.find((sec) => sec.sectionNo === course.sectionNo)?.classes ?? [] as section, i (i)}
       <TimetableCourseCard
         onclick={() => (showViewCourseModal = true)}
         course={{

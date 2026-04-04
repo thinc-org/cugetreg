@@ -8,6 +8,7 @@ import {
   CartDetailResponseSchema,
   CartList,
   ListCartsResponseSchema,
+  type ExamScheduleItem,
 } from '@cugetreg/zod-schemas/cart-response'
 
 import type { LayoutServerLoad } from './$types'
@@ -36,6 +37,7 @@ export const load: LayoutServerLoad = async ({ params }) => {
     defaultCartResponse.data,
   ).data
   const currentCart: CartData = currentScheduleResponse.cart
+  const exams: ExamScheduleItem[] = currentScheduleResponse.schedule.exams;
 
-  return { cartList, currentCart };
+  return { cartList, currentCart, exams };
 }

@@ -14,7 +14,7 @@
   } from '@cugetreg/ui/molecules/exam-card'
 
   import { Navbar } from '@cugetreg/ui/organisms/navbar'
-  import { SelectedCourse } from '@cugetreg/ui/organisms/selected-course'
+  import SelectedCourse from '$lib/components/selected-course.svelte'
   import { CreateTimetable } from '@cugetreg/ui/organisms/create-timetable'
   import { RenameSchedule } from '@cugetreg/ui/organisms/rename-schedule'
 
@@ -346,7 +346,7 @@
       />
       <SelectedCourse
         variant="detailed"
-        bind:schedule={selectedSchedule.schedule}
+        bind:schedule={cartInfo.items}
         class="border-b border-neutral-200"
       />
 
@@ -585,7 +585,7 @@
           section: selectedSection,
         }}
         length={period.duration}
-        color={conflicted ? 'conflict' : (colorVariant ?? 'neutral')}
+        color={conflicted ? 'conflict' : (colorVariant ?? 'primary')}
         row={getColumnFromDay(period.day)}
         col={period.startTime - 7}
       />

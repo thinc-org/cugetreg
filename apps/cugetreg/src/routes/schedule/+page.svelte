@@ -14,7 +14,7 @@
   } from '@cugetreg/ui/molecules/exam-card'
 
   import { Navbar } from '@cugetreg/ui/organisms/navbar'
-  import { SelectedCourse } from '@cugetreg/ui/organisms/selected-course'
+  import SelectedCourse from '$lib/components/selected-course.svelte'
   import { CreateTimetable } from '@cugetreg/ui/organisms/create-timetable'
   import { RenameSchedule } from '@cugetreg/ui/organisms/rename-schedule'
 
@@ -26,8 +26,10 @@
 
   import { mockScheduleList } from '@cugetreg/utils/mock'
   import type {
+    ColorVariant,
     CourseSchedule,
     Day,
+    ScheduleList,
     ScheduleListItem,
   } from '@cugetreg/utils/types'
 
@@ -43,6 +45,17 @@
   import { Share2, Copy, ChevronLeft, ChevronRight } from 'lucide-svelte'
   import { untrack } from 'svelte'
   import html2canvas from 'html2canvas-pro'
+  import { getUserCartStore } from '$lib/stores/user-cart'
+  import type { CartItemDetail } from '@cugetreg/zod-schemas/cart-response'
+
+  // TODO: Move this somewhere else
+  function parsePeriodTime(periodTime: string): number {
+    const parts = periodTime.split(':')
+    const hour = Number(parts[0])
+    const minute = Number(parts[1])
+
+    return hour + minute / 60
+  }
 
   function getColumnFromDay(day: Day): number {
     switch (day) {
@@ -63,66 +76,69 @@
     }
   }
 
-  function isConflicted(course: CourseSchedule): boolean {
-    const courseSection = course.course.sections[course.selectedSection]
+  function isConflicted() {}
+  // function isConflicted(course: CourseSchedule): boolean {
+  //   const courseSection = course.course.sections[course.selectedSection]
+  //
+  //   for (const other of selectedSchedule.schedule) {
+  //     if (other === course || other.hidden) continue
+  //
+  //     const otherSection = other.course.sections[other.selectedSection]
+  //
+  //     for (const period of courseSection) {
+  //       for (const otherPeriod of otherSection) {
+  //         if (period.day !== otherPeriod.day) continue
+  //
+  //         const periodStart = period.startTime
+  //         const periodEnd = period.startTime + period.duration
+  //         const otherPeriodStart = otherPeriod.startTime
+  //         const otherPeriodEnd = otherPeriod.startTime + otherPeriod.duration
+  //
+  //         if (periodStart < otherPeriodEnd && otherPeriodStart < periodEnd) {
+  //           return true
+  //         }
+  //       }
+  //     }
+  //   }
+  //   return false
+  // }
 
-    for (const other of selectedSchedule.schedule) {
-      if (other === course || other.hidden) continue
+  function duplicateCurrentSchedule() {}
+  // function duplicateCurrentSchedule() {
+  //   const snapshot = $state.snapshot(selectedSchedule)
+  //   const current = structuredClone(snapshot)
+  //
+  //   scheduleList.push({
+  //     ...current,
+  //     name: `${selectedSchedule.name} Copy`,
+  //     scheduleId: crypto.randomUUID(),
+  //   })
+  // }
 
-      const otherSection = other.course.sections[other.selectedSection]
-
-      for (const period of courseSection) {
-        for (const otherPeriod of otherSection) {
-          if (period.day !== otherPeriod.day) continue
-
-          const periodStart = period.startTime
-          const periodEnd = period.startTime + period.duration
-          const otherPeriodStart = otherPeriod.startTime
-          const otherPeriodEnd = otherPeriod.startTime + otherPeriod.duration
-
-          if (periodStart < otherPeriodEnd && otherPeriodStart < periodEnd) {
-            return true
-          }
-        }
-      }
-    }
-    return false
-  }
-
-  function duplicateCurrentSchedule() {
-    const snapshot = $state.snapshot(selectedSchedule)
-    const current = structuredClone(snapshot)
-
-    scheduleList.push({
-      ...current,
-      name: `${selectedSchedule.name} Copy`,
-      scheduleId: crypto.randomUUID(),
-    })
-  }
-
-  async function screenshotTimetable() {
-    if (!timetableDiv) return
-
-    const canvas = await html2canvas(timetableDiv, {
-      backgroundColor: null,
-      logging: false,
-      useCORS: true,
-      scale: 3,
-    })
-
-    const screenshot = canvas.toDataURL('image/jpeg')
-
-    const link = document.createElement('a')
-    link.href = screenshot
-    link.download = `${selectedSchedule.name}_timetable.jpg`
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-  }
+  async function screenshotTimetable() {}
+  // async function screenshotTimetable() {
+  //   if (!timetableDiv) return
+  //
+  //   const canvas = await html2canvas(timetableDiv, {
+  //     backgroundColor: null,
+  //     logging: false,
+  //     useCORS: true,
+  //     scale: 3,
+  //   })
+  //
+  //   const screenshot = canvas.toDataURL('image/jpeg')
+  //
+  //   const link = document.createElement('a')
+  //   link.href = screenshot
+  //   link.download = `${selectedSchedule.name}_timetable.jpg`
+  //   document.body.appendChild(link)
+  //   link.click()
+  //   document.body.removeChild(link)
+  // }
 
   // NOTE: Temporary: this should be global state
-  let scheduleList = $state(mockScheduleList)
-  let selectedSchedule = $state(untrack(() => scheduleList[0]))
+  // let scheduleList = $state(mockScheduleList)
+  // let selectedSchedule = $state(untrack(() => scheduleList[0]))
   let showExamSchedule = $state<'List' | 'Schedule'>('Schedule')
 
   let timetableDiv = $state<HTMLElement | null>(null)
@@ -132,6 +148,67 @@
   let showDeleteScheduleModal = $state(false)
   let showViewCourseModal = $state(false)
 
+  const userCart = getUserCartStore()
+
+  type LocalExamData = {
+    cartItemId: string
+    courseNo: string
+    name: string
+    colorVariant: ColorVariant
+    start: Date | null
+    end: Date | null
+    duration: number // calculated here
+  }
+
+  const examsData = $derived.by(() => {
+    let midterms: Record<number, LocalExamData[]> = {}
+    let finals: Record<number, LocalExamData[]> = {}
+
+    if ($userCart && $userCart.exams) {
+      for (const exam of $userCart.exams) {
+        const course = $userCart.currentCart?.items.find(
+          (item) => item.id === exam.cartItemId,
+        )
+        if (!course || course.hidden) continue
+
+        let dateVal = 0
+        let start: Date | null = null
+        let end: Date | null = null
+        let duration = 0
+
+        if (exam.start && exam.end) {
+          start = new Date(exam.start)
+          end = new Date(exam.end)
+          dateVal = discardTime(start.getTime())
+          duration = (end.getTime() - start.getTime()) / (1000 * 60 * 60)
+        }
+
+        const data: LocalExamData = {
+          cartItemId: exam.cartItemId,
+          courseNo: exam.courseNo,
+          name:
+            course.course.courseNameEn ||
+            course.course.courseNameTh ||
+            exam.courseNo,
+          colorVariant: (course.color ?? 'primary') as ColorVariant,
+          start,
+          end,
+          duration,
+        }
+
+        if (exam.type === 'MIDTERM') {
+          if (!midterms[dateVal]) midterms[dateVal] = []
+          midterms[dateVal].push(data)
+        } else if (exam.type === 'FINAL') {
+          if (!finals[dateVal]) finals[dateVal] = []
+          finals[dateVal].push(data)
+        }
+      }
+    }
+
+    return { midterms, finals }
+  })
+
   const examSort = (a: string, b: string) => {
     const numA = Number(a)
     const numB = Number(b)
@@ -140,37 +217,6 @@
     else if (numB === 0) return -1
     else return numA - numB
   }
-
-  const examsData = $derived.by(() => {
-    let midterms: Record<number, CourseSchedule[]> = {}
-    let finals: Record<number, CourseSchedule[]> = {}
-
-    selectedSchedule.schedule.forEach((course) => {
-      if (course.hidden) return
-
-      const { midterm, final } = course.course
-
-      if (midterm) {
-        const formattedDate = discardTime(midterm.date.getTime())
-        if (formattedDate in midterms) midterms[formattedDate].push(course)
-        else midterms[formattedDate] = [course]
-      } else {
-        if (!(0 in midterms)) midterms[0] = []
-        midterms[0].push(course)
-      }
-
-      if (final) {
-        const formattedDate = discardTime(final.date.getTime())
-        if (formattedDate in finals) finals[formattedDate].push(course)
-        else finals[formattedDate] = [course]
-      } else {
-        if (!(0 in midterms)) midterms[0] = []
-        finals[0].push(course)
-      }
-    })
-
-    return { midterms, finals }
-  })
 
   const examDateOrder = $derived.by(() => {
     let midterms: number[] = Object.keys(examsData.midterms)
@@ -183,19 +229,43 @@
     return { midterms, finals }
   })
 
+  function isExamConflicted(exam: LocalExamData, others?: LocalExamData[]) {
+    if (!exam.start || !exam.end) return false
+    if (!others) return false
+
+    const s1 = exam.start.getTime()
+    const e1 = exam.end.getTime()
+
+    for (const other of others) {
+      if (other.cartItemId === exam.cartItemId) continue
+      if (!other.start || !other.end) continue
+
+      const s2 = other.start.getTime()
+      const e2 = other.end.getTime()
+
+      if (s1 < e2 && s2 < e1) return true
+    }
+
+    return false
+  }
+
   const totalCredit = $derived(
-    selectedSchedule.schedule.reduce(
-      (acc, course) => acc + (course.hidden ? 0 : course.course.credit),
+    $userCart.currentCart?.items.reduce(
+      (acc, item) => acc + (item.hidden ? 0 : Number(item.course.credit)),
       0,
-    ),
+    ) ?? 0,
   )
 
-  $effect(() => {
-    selectedSchedule.schedule.forEach(
-      (course, index) =>
-        (selectedSchedule.schedule[index].conflicted = isConflicted(course)),
-    )
+  let selectedSchedule = $state({
+    name: 'ปี 2 เทอม 1',
+    scheduleId: '1',
+    schedule: [],
+    semesterType: 'Semester',
+    semester: '2566/1',
+    isPublic: false,
   })
+
+  let currentScheduleId = $state($userCart.currentCart?.id ?? '')
 </script>
 
 <div class="flex h-screen flex-col">
@@ -206,11 +276,11 @@
     dim
     bind:show={showRenameScheduleModal}
   >
-    <RenameSchedule
-      bind:name={selectedSchedule.name}
-      onCancel={() => (showRenameScheduleModal = false)}
-      onConfirm={() => (showRenameScheduleModal = false)}
-    />
+    <!-- <RenameSchedule -->
+    <!--   bind:name={selectedSchedule.name} -->
+    <!--   onCancel={() => (showRenameScheduleModal = false)} -->
+    <!--   onConfirm={() => (showRenameScheduleModal = false)} -->
+    <!-- /> -->
   </Modal>
   <Modal
     exitOnEsc
@@ -219,14 +289,14 @@
     dim
     bind:show={showCreateScheduleModal}
   >
-    <CreateTimetable
-      onConfirm={(schedule: ScheduleListItem) => {
-        scheduleList.push(schedule)
-        selectedSchedule = schedule
-        showCreateScheduleModal = false
-      }}
-      onCancel={() => (showCreateScheduleModal = false)}
-    />
+    <!-- <CreateTimetable -->
+    <!--   onConfirm={(schedule: ScheduleListItem) => { -->
+    <!--     scheduleList.push(schedule) -->
+    <!--     selectedSchedule = schedule -->
+    <!--     showCreateScheduleModal = false -->
+    <!--   }} -->
+    <!--   onCancel={() => (showCreateScheduleModal = false)} -->
+    <!-- /> -->
   </Modal>
 
   <Modal
@@ -246,20 +316,19 @@
     dim
     bind:show={showDeleteScheduleModal}
   >
-    <ConfirmDeleteSchedule
-      scheduleName={selectedSchedule.name}
-      onCancel={() => (showDeleteScheduleModal = false)}
-      onConfirm={() => {
-        scheduleList = scheduleList.filter(
-          (schedule) => schedule !== selectedSchedule,
-        )
-        selectedSchedule = scheduleList[0]
-        showDeleteScheduleModal = false
-      }}
-    />
+    <!-- <ConfirmDeleteSchedule -->
+    <!--   scheduleName={selectedSchedule.name} -->
+    <!--   onCancel={() => (showDeleteScheduleModal = false)} -->
+    <!--   onConfirm={() => { -->
+    <!--     scheduleList = scheduleList.filter( -->
+    <!--       (schedule) => schedule !== selectedSchedule, -->
+    <!--     ) -->
+    <!--     selectedSchedule = scheduleList[0] -->
+    <!--     showDeleteScheduleModal = false -->
+    <!--   }} -->
+    <!-- /> -->
   </Modal>
 
-  <Navbar />
   <div class="flex w-full flex-1 overflow-hidden">
     <div
       class="
@@ -270,13 +339,20 @@
     >
       <SelectTimetable
         class="border-b border-neutral-200 px-2 py-5"
-        options={scheduleList}
-        bind:value={selectedSchedule}
+        options={$userCart.cartList?.map((item) => ({
+          name: item.name,
+          id: item.id,
+        })) ?? []}
+        bind:value={currentScheduleId}
       />
-      <SelectedCourse
-        bind:schedule={selectedSchedule.schedule}
-        class="border-b border-neutral-200"
-      />
+      {#if $userCart.currentCart}
+        <SelectedCourse
+          bind:schedule={$userCart.currentCart.items}
+          class="border-b border-neutral-200"
+        />
+      {:else}
+        <SelectedCourse schedule={[]} class="border-b border-neutral-200" />
+      {/if}
 
       <div
         class="border-tangerine-500 text-tangerine-700 m-5 items-center rounded-2xl border-2 p-5"
@@ -298,19 +374,23 @@
         <span class="text-4xl font-bold">ตารางเรียน</span>
 
         <EditSchedule
-          bind:selectedSchedule
-          {scheduleList}
+          bind:currentScheduleId
+            schedules={$userCart.cartList?.map((item) => ({
+              name: item.name,
+              id: item.id,
+            })) ?? []}
           onRename={() => (showRenameScheduleModal = true)}
           onDuplicate={duplicateCurrentSchedule}
           onAddSchedule={() => (showCreateScheduleModal = true)}
-          onDelete={() => (showDeleteScheduleModal = true)}
-        />
+          onDelete={() => (showDeleteScheduleModal = true)}>
+        </EditSchedule>
+
       </div>
       <div class="bg-surface overflow-x-scroll p-8" bind:this={timetableDiv}>
-        <div class="min-w-[600px]">
+        <div class="min-w-150">
           <Timetable startTime={7}>
-            {#each selectedSchedule.schedule as courseSchedule}
-              {@render timeTableCourse(courseSchedule)}
+            {#each $userCart.currentCart?.items as item}
+              {@render timetableCourseCard(item)}
             {/each}
           </Timetable>
         </div>
@@ -377,23 +457,27 @@
   <div class="my-5 text-xl font-bold">Midterm</div>
   <Timetable
     startTime={7}
-    days={examDateOrder.midterms.map((time) => formatDate(new Date(time)))}
+    days={examDateOrder.midterms
+      .filter((time) => time !== 0)
+      .map((time) => formatDate(new Date(time)))}
   >
-    {#each examDateOrder.midterms as key, index}
+    {#each examDateOrder.midterms.filter((time) => time !== 0) as key, index}
       {#each examsData.midterms[key] as exam}
-        <TimetableCourseCard
-          course={{
-            name: exam.course.name,
-            code: exam.course.code,
-            bldg: '',
-            room: '',
-            section: exam.selectedSection,
-          }}
-          col={formatExamColumn(exam.course.midterm?.date) - 7}
-          row={index}
-          length={exam.course.midterm?.duration ?? 3}
-          color={exam.colorVariant}
-        />
+        {#if exam.start && exam.end}
+          <TimetableCourseCard
+            course={{
+              name: exam.name,
+              code: exam.courseNo,
+              bldg: '',
+              room: '',
+              section: 0,
+            }}
+            col={formatExamColumn(exam.start ?? undefined) - 7}
+            row={index}
+            length={exam.duration}
+            color={exam.colorVariant}
+          />
+        {/if}
       {/each}
     {/each}
   </Timetable>
@@ -401,23 +485,27 @@
   <div class="my-5 text-xl font-bold">Finals</div>
   <Timetable
     startTime={7}
-    days={examDateOrder.finals.map((time) => formatDate(new Date(time)))}
+    days={examDateOrder.finals
+      .filter((time) => time !== 0)
+      .map((time) => formatDate(new Date(time)))}
   >
-    {#each examDateOrder.finals as key, index}
+    {#each examDateOrder.finals.filter((time) => time !== 0) as key, index}
       {#each examsData.finals[key] as examCourse}
-        <TimetableCourseCard
-          course={{
-            name: examCourse.course.name,
-            code: examCourse.course.code,
-            bldg: '',
-            room: '',
-            section: examCourse.selectedSection,
-          }}
-          col={formatExamColumn(examCourse.course.final?.date) - 7}
-          row={index}
-          length={examCourse.course.final?.duration ?? 3}
-          color={examCourse.colorVariant}
-        />
+        {#if examCourse.start && examCourse.end}
+          <TimetableCourseCard
+            course={{
+              name: examCourse.name,
+              code: examCourse.courseNo,
+              bldg: '',
+              room: '',
+              section: 0,
+            }}
+            col={formatExamColumn(examCourse.start ?? undefined) - 7}
+            row={index}
+            length={examCourse.duration}
+            color={examCourse.colorVariant}
+          />
+        {/if}
       {/each}
     {/each}
   </Timetable>
@@ -429,28 +517,21 @@
       <div class="flex-1">
         <span class="text-2xl font-bold">Midterm</span>
 
-        {#each Object.keys(examsData.midterms).sort(examSort) as key}
+        {#each examDateOrder.midterms as key}
           <div class="my-5">
             <ExamCard
-              date={key == '0'
-                ? 'ยังไม่ประกาศ'
-                : formatDate(new Date(Number(key)))}
-              data={examsData.midterms[Number(key)].map((course) => {
-                const { id, course: courseData, colorVariant } = course
-
+              date={key === 0 ? 'ยังไม่ประกาศ' : formatDate(new Date(key))}
+              data={examsData.midterms[key].map((course) => {
                 return {
-                  id: String(id),
-                  colour: isMidtermConflict(
-                    course,
-                    examsData.midterms[Number(key)],
-                  )
+                  id: course.cartItemId,
+                  colour: isExamConflicted(course, examsData.midterms[key])
                     ? 'error'
-                    : (colorVariant as StatusColour),
+                    : (course.colorVariant as StatusColour),
                   time: formatExamTime(
-                    courseData.midterm?.date,
-                    courseData.midterm?.duration,
+                    course.start ?? undefined,
+                    course.duration,
                   ),
-                  subject: courseData.name,
+                  subject: course.name,
                 } as Exam
               })}
             />
@@ -460,28 +541,21 @@
       <div class="flex-1">
         <span class="text-2xl font-bold">Finals</span>
 
-        {#each Object.keys(examsData.finals).sort(examSort) as key}
+        {#each examDateOrder.finals as key}
           <div class="my-5">
             <ExamCard
-              date={key == '0'
-                ? 'ยังไม่ประกาศ'
-                : formatDate(new Date(Number(key)))}
-              data={examsData.finals[Number(key)].map((course) => {
-                const { id, course: courseData, colorVariant } = course
-
+              date={key === 0 ? 'ยังไม่ประกาศ' : formatDate(new Date(key))}
+              data={examsData.finals[key].map((course) => {
                 return {
-                  id: String(id),
-                  colour: isFinalsConflict(
-                    course,
-                    examsData.finals[Number(key)],
-                  )
+                  id: course.cartItemId,
+                  colour: isExamConflicted(course, examsData.finals[key])
                     ? 'error'
-                    : (colorVariant as StatusColour),
+                    : (course.colorVariant as StatusColour),
                   time: formatExamTime(
-                    courseData.final?.date,
-                    courseData.final?.duration,
+                    course.start ?? undefined,
+                    course.duration,
                   ),
-                  subject: courseData.name,
+                  subject: course.name,
                 } as Exam
               })}
             />
@@ -492,28 +566,23 @@
   </div>
 {/snippet}
 
-{#snippet timeTableCourse({
-  course,
-  selectedSection,
-  hidden,
-  colorVariant,
-  conflicted,
-}: CourseSchedule)}
-  {#if !hidden}
-    {#each course.sections[selectedSection] as period}
+{#snippet timetableCourseCard(course: CartItemDetail)}
+  {#if !course.hidden}
+    {#each course.sections.find((sec) => sec.sectionNo === course.sectionNo)?.classes ?? [] as section}
       <TimetableCourseCard
         onclick={() => (showViewCourseModal = true)}
         course={{
-          name: course.name,
-          code: course.code,
-          bldg: period.building,
-          room: period.room,
-          section: selectedSection,
+          name: course.course.courseNameEn,
+          code: course.courseNo,
+          bldg: section.building ?? '',
+          room: section.room ?? '',
+          section: course.sectionNo,
         }}
-        length={period.duration}
-        color={conflicted ? 'conflict' : (colorVariant ?? 'neutral')}
-        row={getColumnFromDay(period.day)}
-        col={period.startTime - 7}
+        color={(course.color as ColorVariant) ?? 'primary'}
+        length={parsePeriodTime(section.periodEnd) -
+          parsePeriodTime(section.periodStart)}
+        row={getColumnFromDay(section.dayOfWeek as Day)}
+        col={parsePeriodTime(section.periodStart) - 7}
       />
     {/each}
   {/if}

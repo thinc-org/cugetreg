@@ -3,7 +3,7 @@
   import { Navbar } from '@cugetreg/ui/organisms/navbar'
   import type { LayoutData } from './$types'
   import type { Snippet } from 'svelte'
-    import { initUserCartStore } from '$lib/stores/user-cart'
+    import { getUserCartStore, initUserCartStore } from '$lib/stores/user-cart'
 
   let { data, children }: {
     data: LayoutData,
@@ -11,6 +11,10 @@
   } = $props();
 
   initUserCartStore((() => data)());
+
+  const userCart = getUserCartStore();
+
+  console.log($userCart);
 </script>
 
 <Navbar />

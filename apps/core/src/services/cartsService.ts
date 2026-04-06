@@ -258,6 +258,7 @@ export const cartService = {
         isGraded: item.isGraded,
         expectedGrade: item.expectedGrade.toString(),
         course: {
+          abbrName: item.info.abbrName,
           courseNameTh: item.info.courseNameTh,
           courseNameEn: item.info.courseNameEn,
           credit: item.info.credit.toString(),

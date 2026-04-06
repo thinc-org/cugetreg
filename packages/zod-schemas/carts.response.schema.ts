@@ -24,6 +24,16 @@ export const SingleCartResponseSchema = z.object({
   data: CartSchema,
 });
 
+export const Period = z.object({
+  type: z.string(),
+  dayOfWeek: z.string(),
+  periodStart: z.string(),
+  periodEnd: z.string(),
+  building: z.string().nullable(),
+  room: z.string().nullable(),
+  professors: z.array(z.string()),
+});
+
 export const Section = z.object({
   id: z.string(),
   sectionNo: z.number().int(),
@@ -31,17 +41,7 @@ export const Section = z.object({
   regis: z.number(),
   max: z.number(),
   note: z.string().nullable(),
-  classes: z.array(
-    z.object({
-      type: z.string(),
-      dayOfWeek: z.string(),
-      periodStart: z.string(),
-      periodEnd: z.string(),
-      building: z.string().nullable(),
-      room: z.string().nullable(),
-      professors: z.array(z.string()),
-    }),
-  ),
+  classes: z.array(Period),
 });
 
 const CartItemDetailSchema = z.object({
@@ -54,6 +54,7 @@ const CartItemDetailSchema = z.object({
   isGraded: z.boolean(),
   expectedGrade: z.string(),
   course: z.object({
+    abbrName: z.string(),
     courseNameTh: z.string(),
     courseNameEn: z.string(),
     credit: z.string(),
@@ -118,6 +119,7 @@ export const ExamConflictSchema = z.object({
 });
 
 export type Section = z.infer<typeof Section>;
+export type Period = z.infer<typeof Period>;
 export type CartList = z.infer<typeof CartList>;
 export type CartData = z.infer<typeof CartData>;
 export type ClassScheduleItem = z.infer<typeof ClassScheduleItemSchema>;

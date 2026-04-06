@@ -38,6 +38,7 @@ export const timeTableCourseCardVariant = tv({
 
 export type TimeTableCourse = {
 	name: string;
+	abbrName: string;
 	code: string;
 	bldg: string;
 	room: string;

@@ -27,7 +27,12 @@
     formatExamTime,
   } from '@cugetreg/utils';
   import type { ColorVariant, Day } from '@cugetreg/utils/types';
-  import type { CartItemDetail } from '@cugetreg/zod-schemas/cart-response';
+  import type {
+    CartItemDetail,
+    Period,
+    Section,
+  } from '@cugetreg/zod-schemas/cart-response';
+  import { conflict, courseColorVariants } from '@cugetreg/utils/constants';
 
   // TODO: Move this somewhere else
   function parsePeriodTime(periodTime: string): number {
@@ -57,32 +62,36 @@
     }
   }
 
-  function isConflicted() {}
-  // function isConflicted(course: CourseSchedule): boolean {
-  //   const courseSection = course.course.sections[course.selectedSection]
-  //
-  //   for (const other of selectedSchedule.schedule) {
-  //     if (other === course || other.hidden) continue
-  //
-  //     const otherSection = other.course.sections[other.selectedSection]
-  //
-  //     for (const period of courseSection) {
-  //       for (const otherPeriod of otherSection) {
-  //         if (period.day !== otherPeriod.day) continue
-  //
-  //         const periodStart = period.startTime
-  //         const periodEnd = period.startTime + period.duration
-  //         const otherPeriodStart = otherPeriod.startTime
-  //         const otherPeriodEnd = otherPeriod.startTime + otherPeriod.duration
-  //
-  //         if (periodStart < otherPeriodEnd && otherPeriodStart < periodEnd) {
-  //           return true
-  //         }
-  //       }
-  //     }
-  //   }
-  //   return false
-  // }
+  function isConflicted(courseNo: string, period: Period): boolean {
+    for (const other of $userCart.currentCart.items) {
+      if (other.hidden || other.courseNo === courseNo) continue;
+
+      const otherSection = other.sections.find(
+        (sec) => sec.sectionNo === other.sectionNo,
+      );
+
+      const periodStartTime = parsePeriodTime(period.periodStart);
+      const periodEndTime = parsePeriodTime(period.periodEnd);
+
+      if (isNaN(periodStartTime) || isNaN(periodEndTime)) continue;
+
+      for (const otherPeriod of otherSection?.classes ?? []) {
+        const otherPeriodStartTime = parsePeriodTime(otherPeriod.periodStart);
+        const otherPeriodEndTime = parsePeriodTime(otherPeriod.periodEnd);
+
+        if (isNaN(otherPeriodStartTime) || isNaN(otherPeriodEndTime)) continue;
+
+        if (period.dayOfWeek !== otherPeriod.dayOfWeek) continue;
+        if (
+          periodStartTime < otherPeriodEndTime &&
+          otherPeriodStartTime < periodEndTime
+        ) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
 
   function duplicateCurrentSchedule() {}
   // function duplicateCurrentSchedule() {
@@ -131,6 +140,7 @@
   const userCart = getUserCartStore();
 
   type LocalExamData = {
+    abbrName: string;
     cartItemId: string;
     courseNo: string;
     name: string;
@@ -170,6 +180,7 @@
             course.course.courseNameEn ||
             course.course.courseNameTh ||
             exam.courseNo,
+          abbrName: course.course.abbrName,
           colorVariant: (course.color ?? 'primary') as ColorVariant,
           start,
           end,
@@ -446,6 +457,7 @@
           <TimetableCourseCard
             course={{
               name: exam.name,
+              abbrName: exam.abbrName,
               code: exam.courseNo,
               bldg: '',
               room: '',
@@ -473,6 +485,7 @@
         {#if examCourse.start && examCourse.end}
           <TimetableCourseCard
             course={{
+              abbrName: examCourse.abbrName,
               name: examCourse.name,
               code: examCourse.courseNo,
               bldg: '',
@@ -547,22 +560,32 @@
 
 {#snippet timetableCourseCard(course: CartItemDetail)}
   {#if !course.hidden}
-    {#each course.sections.find((sec) => sec.sectionNo === course.sectionNo)?.classes ?? [] as section, i (i)}
-      <TimetableCourseCard
-        onclick={() => (showViewCourseModal = true)}
-        course={{
-          name: course.course.courseNameEn,
-          code: course.courseNo,
-          bldg: section.building ?? '',
-          room: section.room ?? '',
-          section: course.sectionNo,
-        }}
-        color={(course.color as ColorVariant) ?? 'primary'}
-        length={parsePeriodTime(section.periodEnd) -
-          parsePeriodTime(section.periodStart)}
-        row={getColumnFromDay(section.dayOfWeek as Day)}
-        col={parsePeriodTime(section.periodStart) - 7}
-      />
+    {@const courseNo = course.courseNo}
+    {#each course.sections.find((sec) => sec.sectionNo === course.sectionNo)?.classes ?? [] as period, i (i)}
+      {@const startTime = parsePeriodTime(period.periodStart)}
+      {@const endTime = parsePeriodTime(period.periodEnd)}
+      {@const color = isConflicted(courseNo, period)
+        ? 'conflict'
+        : ((course.color as ColorVariant) ?? 'primary')}
+
+      {#if !isNaN(startTime) && !isNaN(endTime)}
+        <TimetableCourseCard
+          onclick={() => (showViewCourseModal = true)}
+          course={{
+            abbrName: course.course.abbrName,
+            name: course.course.courseNameEn,
+            code: course.courseNo,
+            bldg: period.building ?? '',
+            room: period.room ?? '',
+            section: course.sectionNo,
+          }}
+          {color}
+          length={parsePeriodTime(period.periodEnd) -
+            parsePeriodTime(period.periodStart)}
+          row={getColumnFromDay(period.dayOfWeek as Day)}
+          col={parsePeriodTime(period.periodStart) - 7}
+        />
+      {/if}
     {/each}
   {/if}
 {/snippet}

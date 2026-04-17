@@ -12,19 +12,18 @@ import type {
 
 import {
   type Cart,
-  GradingType,
   Prisma,
   type User,
   Visible,
 } from "../src/generated/prisma/client.js";
-import type {
-  DayOfWeek,
-  GenEdType,
-  Semester,
-  StudyProgram,
-} from "../src/generated/prisma/enums.js";
+import type { GenEdType } from "../src/generated/prisma/enums.js";
 import { PrismaService } from "../src/generated/prisma-effect/index.js";
 import { LexoRankService } from "../src/services/lexorank.service.js";
+import {
+  mapDayOfWeek,
+  mapSemester,
+  mapStudyProgram,
+} from "../src/utils/enumMapper.js";
 
 export function parseExamDate(
   dateStr: string | undefined,
@@ -64,17 +63,10 @@ export const migrateCourse = (data: Course, currentGenEd: GenEdType) =>
         courseNameTh: data.courseNameTh,
         courseDescEn: data.courseDescEn,
         courseDescTh: data.courseDescTh,
-        faculty: data.faculty || null,
-        department: data.department || null,
+        faculty: data.faculty || "",
+        department: data.department || "",
         credit: new Prisma.Decimal(data.credit),
-        creditHours: data.creditHours || null,
-        gradingType:
-          data.creditHours && data.creditHours.includes("S/U")
-            ? GradingType.SU
-            : GradingType.LETTER,
-        academicYear: parseInt(data.academicYear),
-        semester: data.semester as Semester,
-        studyProgram: data.studyProgram as StudyProgram,
+        creditHours: data.creditHours || "",
       },
       create: {
         courseNo: data.courseNo,
@@ -83,17 +75,10 @@ export const migrateCourse = (data: Course, currentGenEd: GenEdType) =>
         courseNameTh: data.courseNameTh,
         courseDescEn: data.courseDescEn,
         courseDescTh: data.courseDescTh,
-        faculty: data.faculty || null,
-        department: data.department || null,
+        faculty: data.faculty || "",
+        department: data.department || "",
         credit: new Prisma.Decimal(data.credit),
-        creditHours: data.creditHours || null,
-        gradingType:
-          data.creditHours && data.creditHours.includes("S/U")
-            ? GradingType.SU
-            : GradingType.LETTER,
-        academicYear: parseInt(data.academicYear),
-        semester: data.semester as Semester,
-        studyProgram: data.studyProgram as StudyProgram,
+        creditHours: data.creditHours || "",
       },
     });
 
@@ -102,16 +87,16 @@ export const migrateCourse = (data: Course, currentGenEd: GenEdType) =>
         course_unique: {
           courseNo: data.courseNo,
           academicYear: parseInt(data.academicYear),
-          semester: data.semester as Semester,
-          studyProgram: data.studyProgram as StudyProgram,
+          semester: mapSemester(data.semester),
+          studyProgram: mapStudyProgram(data.studyProgram),
         },
       },
       update: {},
       create: {
         courseNo: data.courseNo,
         academicYear: parseInt(data.academicYear),
-        semester: data.semester as Semester,
-        studyProgram: data.studyProgram as StudyProgram,
+        semester: mapSemester(data.semester),
+        studyProgram: mapStudyProgram(data.studyProgram),
         courseCondition: data.courseCondition,
         midtermStart: parseExamDate(
           data.midterm?.date,
@@ -135,7 +120,7 @@ export const migrateCourse = (data: Course, currentGenEd: GenEdType) =>
             classes: {
               create: sec.classes.map((cls) => ({
                 type: cls.type,
-                dayOfWeek: cls.dayOfWeek as DayOfWeek,
+                dayOfWeek: mapDayOfWeek(cls.dayOfWeek),
                 periodStart: cls.period.start,
                 periodEnd: cls.period.end,
                 building: cls.building,
@@ -167,8 +152,8 @@ export const migrateReview = (item: Review) =>
         rating: item.rating,
         courseNo: item.courseNo,
         academicYear: parseInt(item.academicYear),
-        semester: item.semester as Semester,
-        studyProgram: item.studyProgram as StudyProgram,
+        semester: mapSemester(item.semester),
+        studyProgram: mapStudyProgram(item.studyProgram),
         status: item.status,
         rejectionReason: item.rejectionReason || null,
         user: {
@@ -228,8 +213,8 @@ export const migrateUser = (mongoUser: MongoUser) =>
           data: {
             userId: user.id,
             academicYear: parseInt(first.academicYear),
-            semester: first.semester as Semester,
-            studyProgram: first.studyProgram as StudyProgram,
+            semester: mapSemester(first.semester),
+            studyProgram: mapStudyProgram(first.studyProgram),
             name: "My Schedule",
             visible: Visible.PVT,
             isDefault: groupKey === latestGroupKey,

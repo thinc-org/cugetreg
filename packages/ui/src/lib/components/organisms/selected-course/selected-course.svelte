@@ -32,12 +32,14 @@
 		class?: ClassValue;
 		schedule: ScheduleData;
 		variant?: 'simple' | 'detailed';
+		remove?: (courseCode: string) => void;
 	}
 
 	let {
 		class: className = undefined,
 		schedule = $bindable(),
-		variant = 'detailed'
+		variant = 'detailed',
+		remove
 	}: SelectedCourseProp = $props();
 
 	const totalCredit = $derived(
@@ -219,17 +221,21 @@
 				/>
 			</div>
 			<div class="flex">
-				<SortableList.ItemRemove onclick={handleRemoveClick}>
-					<IconButton class="size-7 bg-transparent hover:cursor-pointer">
-						<Trash2 class="data-[hidden=true]:text-primary-500 mx-1" />
-					</IconButton>
+				<SortableList.ItemRemove onclick={() => remove?.(course.course.code)}>
+					<span
+						class="flex size-7 items-center justify-center rounded-md bg-transparent hover:cursor-pointer hover:bg-neutral-100"
+					>
+						<Trash2 class="mx-1 data-[hidden=true]:text-neutral-500" />
+					</span>
 				</SortableList.ItemRemove>
 
 				{#if variant === 'detailed'}
 					<SortableList.ItemHandle>
-						<IconButton class="size-7 bg-transparent hover:cursor-pointer">
-							<Equal class="data-[hidden=true]:text-primary-500  mx-1" />
-						</IconButton>
+						<span
+							class="flex size-7 items-center justify-center rounded-md bg-transparent hover:cursor-pointer hover:bg-neutral-100"
+						>
+							<Equal class="mx-1 data-[hidden=true]:text-neutral-500" />
+						</span>
 					</SortableList.ItemHandle>
 				{/if}
 			</div>

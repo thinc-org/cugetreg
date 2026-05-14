@@ -17,6 +17,24 @@
   import type { ColorVariant } from '@cugetreg/utils/types';
   import type { CartItemDetail } from '@cugetreg/zod-schemas/cart-response';
 
+  function updateCourse(
+    courseId: string | number,
+    updates: Partial<CartItemDetail>,
+  ) {
+    const index = schedule.findIndex((c) => c.id === courseId);
+
+    if (index !== -1) {
+      // 1. Create a brand new object with the updated properties
+      const updatedCourse = { ...schedule[index], ...updates };
+
+      // 2. Replace the old object in the array
+      schedule[index] = updatedCourse;
+
+      // 3. Reassign the array to trigger the $bindable sync to the parent
+      schedule = [...schedule];
+    }
+  }
+
   function handleDragEnd(e: SortableList.RootEvents['ondragend']) {
     const { draggedItemIndex, targetItemIndex, isCanceled } = e;
     if (
@@ -63,15 +81,15 @@
     y: 0,
   });
 
-  $effect(() => {
-    if (changeColorFor) {
-      const index = schedule.findIndex((x) => x.id === changeColorFor);
-      if (index !== -1 && schedule[index].color !== currentColorVariant) {
-        schedule[index].color = currentColorVariant;
-        schedule = [...schedule];
-      }
-    }
-  });
+  // $effect(() => {
+  //   if (changeColorFor) {
+  //     const index = schedule.findIndex((x) => x.id === changeColorFor);
+  //     if (index !== -1 && schedule[index].color !== currentColorVariant) {
+  //       schedule[index].color = currentColorVariant;
+  //       schedule = [...schedule];
+  //     }
+  //   }
+  // });
 </script>
 
 <svelte:window
@@ -141,8 +159,7 @@
       <IconButton
         class="bg-transparent hover:cursor-pointer"
         onclick={() => {
-          course.hidden = !course.hidden;
-          schedule = [...schedule];
+          updateCourse(course.id, { hidden: !course.hidden });
         }}
       >
         {#if course.hidden}
@@ -180,13 +197,12 @@
       >
         <Select.Root
           type="single"
-          bind:value={
-            () => String(course.sectionNo),
-            (v) => {
-              course.sectionNo = Number(v);
-              schedule = [...schedule];
+          value={String(course.sectionNo)}
+          onValueChange={(v) => {
+            if (v) {
+              updateCourse(course.id, { sectionNo: Number(v) });
             }
-          }
+          }}
         >
           <Select.Trigger showArrow={false} class={cn('rounded-sm p-0')}>
             <div class="flex h-full w-full items-center justify-center text-xs">
@@ -197,7 +213,7 @@
             <Select.Group>
               {#each course.sections as section (section.sectionNo)}
                 <Select.Item
-                  value={`${section.sectionNo}`}
+                  value={String(section.sectionNo)}
                   label={`เซค ${section.sectionNo}`}
                   aria-label={`Sec ${section.sectionNo}`}
                   role="option"
@@ -278,6 +294,11 @@
         onCancel={() => {
           currentColorVariant = initialColorVariant;
           showChangeColorModal = false;
+        }}
+        onChange={() => {
+          if (changeColorFor) {
+            updateCourse(changeColorFor, { color: currentColorVariant });
+          }
         }}
         onConfirmSelected={() => {
           showChangeColorModal = false;

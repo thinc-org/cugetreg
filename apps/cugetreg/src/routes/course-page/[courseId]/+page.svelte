@@ -200,6 +200,7 @@
                 teacher: classInfo.professors.join(','),
                 schedule: `${classInfo.dayOfWeek} ${classInfo.periodStart} - ${classInfo.periodEnd}`,
                 room: `${classInfo.building ?? 'AR'} ${classInfo.room ?? 'AR'}`,
+                type: classInfo.type,
               }) as ClassInfo,
           ),
         })

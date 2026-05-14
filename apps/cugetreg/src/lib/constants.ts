@@ -52,7 +52,7 @@ export const faculties: Record<string, { th: string; en: string }> = {
   },
   '58': {
     th: 'สถาบันบัณฑิตบริหารธุรกิจ ศศินทร์ฯ',
-    en: 'SASIN GRADUATE INSTITUTE OF BUSINESS ADMINISTION',
+    en: 'SASIN GRADUATE INSTITUTE OF BUSINESS ADMINISTRATION',
   },
   '63': {
     th: 'วิทยาลัยปิโตรเลียมและปิโตรเคมี',

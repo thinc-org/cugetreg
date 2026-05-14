@@ -1,16 +1,17 @@
 <script lang="ts">
   import '$lib/styles/app.css';
 
+  import { tryCatch } from '$lib/async-handler';
+  import { initUserStore } from '$lib/stores/user';
   import { getUserCartStore, initUserCartStore } from '$lib/stores/user-cart';
 
+  import axios from 'axios';
   import type { Snippet } from 'svelte';
 
   import { Navbar } from '@cugetreg/ui/organisms/navbar';
+  import { CartDetailResponseSchema } from '@cugetreg/zod-schemas/cart-response';
 
   import type { LayoutData } from './$types';
-  import { tryCatch } from '$lib/async-handler';
-  import axios from 'axios';
-  import { CartDetailResponseSchema } from '@cugetreg/zod-schemas/cart-response';
 
   let {
     data,
@@ -45,7 +46,7 @@
       );
 
       if (error || !response) {
-        console.error('Something went wrong: ' + error.message);
+        // console.error('Something went wrong: ' + error.message);
         return;
       }
 
@@ -55,6 +56,7 @@
 
       lastFetchedId = currentId;
       $userCart.currentCart = currentScheduleResponse.cart;
+      console.log($userCart.currentCart);
     };
 
     fetchCurrentSchedule(currentId);

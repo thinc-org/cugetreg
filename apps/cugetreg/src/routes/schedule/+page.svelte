@@ -1,6 +1,6 @@
 <script lang="ts">
   import SelectedCourse from '$lib/components/selected-course.svelte';
-  import { getUserCartStore } from '$lib/stores/user-cart';
+  import { getUserCartStore, useCartActions } from '$lib/stores/user-cart';
 
   import html2canvas from 'html2canvas-pro';
   import { ChevronLeft, ChevronRight, Copy, Share2 } from 'lucide-svelte';
@@ -12,6 +12,7 @@
   import { Switch } from '@cugetreg/ui/atoms/switch';
   import { TimetableCourseCard } from '@cugetreg/ui/atoms/timetable';
   import { TimeTable as Timetable } from '@cugetreg/ui/atoms/timetable';
+  import { ConfirmDeleteSchedule } from '@cugetreg/ui/molecules/confirm-delete-schedule';
   import { EditSchedule } from '@cugetreg/ui/molecules/edit-schedule';
   import {
     type Exam,
@@ -19,6 +20,11 @@
     type StatusColour,
   } from '@cugetreg/ui/molecules/exam-card';
   import { SelectTimetable } from '@cugetreg/ui/molecules/select-timetable';
+  import {
+    CreateTimetable,
+    type TimetableMetaData,
+  } from '@cugetreg/ui/organisms/create-timetable';
+  import { RenameSchedule } from '@cugetreg/ui/organisms/rename-schedule';
   import { ViewCourse } from '@cugetreg/ui/organisms/view-course';
   import {
     discardTime,
@@ -30,9 +36,7 @@
   import type {
     CartItemDetail,
     Period,
-    Section,
   } from '@cugetreg/zod-schemas/cart-response';
-  import { conflict, courseColorVariants } from '@cugetreg/utils/constants';
 
   // TODO: Move this somewhere else
   function parsePeriodTime(periodTime: string): number {
@@ -93,18 +97,6 @@
     return false;
   }
 
-  function duplicateCurrentSchedule() {}
-  // function duplicateCurrentSchedule() {
-  //   const snapshot = $state.snapshot(selectedSchedule)
-  //   const current = structuredClone(snapshot)
-  //
-  //   scheduleList.push({
-  //     ...current,
-  //     name: `${selectedSchedule.name} Copy`,
-  //     scheduleId: crypto.randomUUID(),
-  //   })
-  // }
-
   async function screenshotTimetable() {
     if (!timetableDiv) return;
 
@@ -138,6 +130,8 @@
   let showViewCourseModal = $state(false);
 
   const userCart = getUserCartStore();
+  const { renameCart, copyCart, deleteCart, createCart, pinCart } =
+    useCartActions();
 
   type LocalExamData = {
     abbrName: string;
@@ -267,11 +261,14 @@
     dim
     bind:show={showRenameScheduleModal}
   >
-    <!-- <RenameSchedule -->
-    <!--   bind:name={selectedSchedule.name} -->
-    <!--   onCancel={() => (showRenameScheduleModal = false)} -->
-    <!--   onConfirm={() => (showRenameScheduleModal = false)} -->
-    <!-- /> -->
+    <RenameSchedule
+      initialName={$userCart.currentCart.name}
+      onCancel={() => (showRenameScheduleModal = false)}
+      onConfirm={(name) => {
+        renameCart(name);
+        showRenameScheduleModal = false;
+      }}
+    />
   </Modal>
   <Modal
     exitOnEsc
@@ -280,14 +277,19 @@
     dim
     bind:show={showCreateScheduleModal}
   >
-    <!-- <CreateTimetable -->
-    <!--   onConfirm={(schedule: ScheduleListItem) => { -->
-    <!--     scheduleList.push(schedule) -->
-    <!--     selectedSchedule = schedule -->
-    <!--     showCreateScheduleModal = false -->
-    <!--   }} -->
-    <!--   onCancel={() => (showCreateScheduleModal = false)} -->
-    <!-- /> -->
+    <CreateTimetable
+      onConfirm={(schedule: TimetableMetaData) => {
+        createCart(
+          schedule.name,
+          schedule.isPublic,
+          schedule.semesterType,
+          schedule.semester,
+          schedule.academicYear,
+        );
+        showCreateScheduleModal = false;
+      }}
+      onCancel={() => (showCreateScheduleModal = false)}
+    />
   </Modal>
 
   <Modal
@@ -307,17 +309,14 @@
     dim
     bind:show={showDeleteScheduleModal}
   >
-    <!-- <ConfirmDeleteSchedule -->
-    <!--   scheduleName={selectedSchedule.name} -->
-    <!--   onCancel={() => (showDeleteScheduleModal = false)} -->
-    <!--   onConfirm={() => { -->
-    <!--     scheduleList = scheduleList.filter( -->
-    <!--       (schedule) => schedule !== selectedSchedule, -->
-    <!--     ) -->
-    <!--     selectedSchedule = scheduleList[0] -->
-    <!--     showDeleteScheduleModal = false -->
-    <!--   }} -->
-    <!-- /> -->
+    <ConfirmDeleteSchedule
+      scheduleName={selectedSchedule.name}
+      onCancel={() => (showDeleteScheduleModal = false)}
+      onConfirm={() => {
+        showDeleteScheduleModal = false;
+        deleteCart();
+      }}
+    />
   </Modal>
 
   <div class="flex w-full flex-1 overflow-hidden">
@@ -371,9 +370,10 @@
             id: item.id,
           })) ?? []}
           onRename={() => (showRenameScheduleModal = true)}
-          onDuplicate={duplicateCurrentSchedule}
+          onDuplicate={() => copyCart()}
           onAddSchedule={() => (showCreateScheduleModal = true)}
           onDelete={() => (showDeleteScheduleModal = true)}
+          onPin={() => pinCart()}
         ></EditSchedule>
       </div>
       <div class="bg-surface overflow-x-scroll p-8" bind:this={timetableDiv}>

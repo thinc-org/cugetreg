@@ -16,7 +16,15 @@ import type { LayoutServerLoad } from './$types';
 const API_URL = 'http://localhost:3000/api/v1/carts';
 
 export const load: LayoutServerLoad = async ({ params }) => {
-  const [response, error] = await tryCatch(axios.get(API_URL));
+  const [response, error] = await tryCatch(
+    axios.get(API_URL, {
+      params: {
+        academicYear: 2566,
+        semester: 2,
+        studyProgram: 'S',
+      },
+    }),
+  );
 
   if (error || !response) {
     throw svelteError(500, 'Something went wrong');

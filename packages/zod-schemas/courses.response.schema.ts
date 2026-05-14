@@ -1,6 +1,7 @@
 import z from "zod";
-import { courseSchema, courseInfoSchema } from "./courses.schema";
+
 import { Section } from "./carts.response.schema";
+import { courseInfoSchema, courseSchema } from "./courses.schema";
 
 export const CourseNoResponseSchema = courseSchema.extend({
   courseInfo: courseInfoSchema,

@@ -103,7 +103,7 @@
 
 		<TableBody>
 			{#each tableData as row, i (i)}
-				{#each row.classes as cls, j}
+				{#each row.classes as cls, j (j)}
 					<TableRow class="[&>td]:border-b [&>td]:border-[#E6E8F0] last:[&>td]:border-b-0">
 						{#if j === 0}
 							<TableCell

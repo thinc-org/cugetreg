@@ -1,7 +1,6 @@
 import { getContext, setContext } from 'svelte';
 import { type Writable, writable } from 'svelte/store';
 
-// CR. Gemini
 export function useContextStore<T>(contextKey: symbol) {
   const initStore = (initialData: T): Writable<T> => {
     const store = writable<T>(initialData);

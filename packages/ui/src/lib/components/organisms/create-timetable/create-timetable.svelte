@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { ScheduleListItem, SemesterType } from '@cugetreg/utils/types';
+	import type { TimetableMetaData } from '.';
 
 	import { Button } from '../../atoms/button';
 	import { Checkbox } from '../../atoms/checkbox';
@@ -15,7 +15,7 @@
 
 	interface CreateTimetableProp {
 		onCancel?: () => void;
-		onConfirm?: (schedule: ScheduleListItem) => void;
+		onConfirm?: (schedule: TimetableMetaData) => void;
 		shareLink?: string;
 	}
 
@@ -26,15 +26,15 @@
 	}: CreateTimetableProp = $props();
 
 	interface SystemInterface {
-		value: SemesterType;
+		value: 'S' | 'I' | 'T';
 		label: string;
 	}
 
-	let selected_system: SemesterType = $state('Semester');
+	let selected_system: 'S' | 'I' | 'T' = $state('S');
 	const options_system: SystemInterface[] = [
-		{ value: 'Semester', label: 'ทวิภาค' },
-		{ value: 'Trimester', label: 'ตรีภาค' },
-		{ value: 'Inter', label: 'นานาชาติ' }
+		{ value: 'S', label: 'ทวิภาค' },
+		{ value: 'T', label: 'ตรีภาค' },
+		{ value: 'I', label: 'นานาชาติ' }
 	];
 
 	// TODO: Add formatter
@@ -48,11 +48,11 @@
 		{ value: '2564', label: '2564' }
 	];
 
-	let selected_semester = $state('1');
+	let selected_semester: '1' | '2' | '3' = $state('1');
 	let options_semester = [
 		{ value: '1', label: '1' },
 		{ value: '2', label: '2' },
-		{ value: 'ฤดูร้อน', label: 'ฤดูร้อน' }
+		{ value: '3', label: 'ฤดูร้อน' }
 	];
 
 	let tableName = $state('ตารางเรียนแสนสนุก');
@@ -60,12 +60,11 @@
 	let isPublic = $state(false);
 
 	function handleConfirm() {
-		const timetableMeta: ScheduleListItem = {
+		const timetableMeta: TimetableMetaData = {
 			name: tableName,
-			scheduleId: crypto.randomUUID(),
-			schedule: [],
 			semesterType: selected_system,
 			semester: selected_semester,
+			academicYear: Number(selected_year),
 			isPublic
 		};
 

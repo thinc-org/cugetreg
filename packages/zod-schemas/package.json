@@ -18,6 +18,8 @@
     "./admin": "./admin.schema.ts",
     "./cart-response": "./carts.response.schema.ts",
     "./public-cart-response": "./publicCarts.response.schema.ts",
-    "./cart": "./carts.schema.ts"
+    "./cart": "./carts.schema.ts",
+    "./courses": "./courses.schema.ts",
+    "./courses-response": "./courses.response.schema.ts"
   }
 }

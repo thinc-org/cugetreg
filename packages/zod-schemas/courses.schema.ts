@@ -30,7 +30,7 @@ export const getCourseQuerySchema = z.object({
   limit: z.number().int().optional(),
 });
 // 1. Sub-schema for the 'course' object
-const courseSchema = z.object({
+export const courseSchema = z.object({
   id: z.string(),
   studyProgram: z.string(),
   academicYear: z.number().int(),
@@ -44,7 +44,7 @@ const courseSchema = z.object({
 });
 
 // 2. Sub-schema for the 'courseInfo' object
-const courseInfoSchema = z.object({
+export const courseInfoSchema = z.object({
   courseNo: z.string(),
   abbrName: z.string(),
   courseNameEn: z.string(),

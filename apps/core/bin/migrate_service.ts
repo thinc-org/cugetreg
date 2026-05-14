@@ -66,7 +66,14 @@ export const migrateCourse = (data: Course, currentGenEd: GenEdType) =>
         faculty: data.faculty || "",
         department: data.department || "",
         credit: new Prisma.Decimal(data.credit),
-        creditHours: data.creditHours || "",
+        creditHours: data.creditHours || null,
+        gradingType:
+          data.creditHours && data.creditHours.includes("S/U")
+            ? GradingType.SU
+            : GradingType.LETTER,
+        academicYear: parseInt(data.academicYear),
+        semester: mapSemester(data.semester),
+        studyProgram: mapStudyProgram(data.studyProgram),
       },
       create: {
         courseNo: data.courseNo,
@@ -78,7 +85,14 @@ export const migrateCourse = (data: Course, currentGenEd: GenEdType) =>
         faculty: data.faculty || "",
         department: data.department || "",
         credit: new Prisma.Decimal(data.credit),
-        creditHours: data.creditHours || "",
+        creditHours: data.creditHours || null,
+        gradingType:
+          data.creditHours && data.creditHours.includes("S/U")
+            ? GradingType.SU
+            : GradingType.LETTER,
+        academicYear: parseInt(data.academicYear),
+        semester: mapSemester(data.semester),
+        studyProgram: mapStudyProgram(data.studyProgram),
       },
     });
 

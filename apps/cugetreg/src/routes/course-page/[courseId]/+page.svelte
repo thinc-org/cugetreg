@@ -1,6 +1,4 @@
 <script lang="ts">
-  // TODO: Remove this
-
   import { Navbar } from '@cugetreg/ui/organisms/navbar'
   import { Footer } from '@cugetreg/ui/organisms/footer'
   import {
@@ -21,11 +19,17 @@
   import { GenedChip } from '@cugetreg/ui/atoms/gened-chip'
   import { Button } from '@cugetreg/ui/atoms/button'
   import { Comment } from '@cugetreg/ui/molecules/comment'
-  import { SectionTable } from '@cugetreg/ui/molecules/section-table'
+  import {
+    SectionTable,
+    type ClassInfo,
+    type SectionTableData,
+  } from '@cugetreg/ui/molecules/section-table'
   import * as Select from '@cugetreg/ui/molecules/select'
+  import type { PageProps } from './$types'
+  import { untrack } from 'svelte'
+  import { faculties } from '$lib/constants'
+  import type { GenEdType } from '@cugetreg/utils/types'
 
-  const sectionGroups = ['4EE ONLY', 'OPEN']
-  let selectedGroup = $state(sectionGroups[0])
   let isSectionOpen = $state(true)
   const years = ['2566', '2565', '2564']
   const terms = ['ภาคต้น', 'ภาคปลาย']
@@ -93,10 +97,13 @@
       dislikesCount: 0,
     },
   ]
-  const reviews = Array.from({ length: 12 }, (_, i) => {
-    const sample = reviewSamples[i % reviewSamples.length]
-    return { ...sample }
-  })
+
+  // const reviews = Array.from({ length: 12 }, (_, i) => {
+  //   const sample = reviewSamples[i % reviewSamples.length]
+  //   return { ...sample }
+  // })
+
+  const reviews = []
   const filteredReviews = $derived.by(() =>
     reviews.filter((review) => {
       const [term, year] = review.semester.split(' ')
@@ -105,15 +112,18 @@
       return true
     }),
   )
+
   const totalReviewPages = $derived(
     Math.max(1, Math.ceil(filteredReviews.length / reviewsPerPage)),
   )
+
   const pagedReviews = $derived(
     filteredReviews.slice(
       (reviewsPage - 1) * reviewsPerPage,
       reviewsPage * reviewsPerPage,
     ),
   )
+
   const reviewPageItems = $derived.by(() => {
     const last = totalReviewPages
     const current = reviewsPage
@@ -128,18 +138,21 @@
     if (last > 1) items.push(last)
     return items
   })
+
   const reviewMeta = reviews
     .map((review) => {
       const [term, year] = review.semester.split(' ')
       return { term, year }
     })
     .filter((item) => item.term && item.year)
+
   const reviewYearOptions = [
     reviewYearPlaceholder,
     ...Array.from(new Set(reviewMeta.map((item) => item.year)))
       .sort()
       .reverse(),
   ]
+
   const reviewTermOptions = $derived.by(() => {
     const terms = reviews
       .map((review) => {
@@ -167,32 +180,37 @@
       reviewsPage = 1
     }
   })
-  const sectionTableData = [
-    {
-      section: '1',
-      seats: '28 / 28',
-      teacher: 'SSS',
-      schedule: 'THU 16:00 - 17:00',
-      room: 'MAHIT 202',
-      type: 'LECT',
-    },
-    {
-      section: '2',
-      seats: '20 / 28',
-      teacher: 'SSS',
-      schedule: 'THU 16:00 - 17:00',
-      room: 'MAHIT 202',
-      type: 'LECT',
-    },
-    {
-      section: '3',
-      seats: 'ปิด',
-      teacher: 'SSS',
-      schedule: 'THU 16:00 - 17:00',
-      room: 'MAHIT 202',
-      type: 'LECT',
-    },
-  ]
+
+  const { data }: PageProps = $props()
+  const course = $derived(data.course)
+
+  const isLoggedIn = false
+
+  const sectionGroups = $derived.by(() => {
+    return course.sections.reduce(
+      (accum: Record<string, SectionTableData[]>, section) => {
+        const group = section.note ?? 'General'
+        if (!accum[group]) accum[group] = []
+        accum[group].push({
+          section: String(section.sectionNo),
+          seats: section.closed ? 'ปิด' : `${section.regis} / ${section.max}`,
+          classes: section.classes.map(
+            (classInfo) =>
+              ({
+                teacher: classInfo.professors.join(','),
+                schedule: `${classInfo.dayOfWeek} ${classInfo.periodStart} - ${classInfo.periodEnd}`,
+                room: `${classInfo.building ?? 'AR'} ${classInfo.room ?? 'AR'}`,
+              }) as ClassInfo,
+          ),
+        })
+
+        return accum
+      },
+      {},
+    )
+  })
+
+  let selectedGroup = $state(untrack(() => Object.keys(sectionGroups)[0]))
 </script>
 
 <div>
@@ -201,15 +219,21 @@
     <section class="text-on-surface mx-auto w-full max-w-5xl">
       <div class="flex flex-wrap items-center gap-3">
         <h1 class="text-primary text-xl font-semibold">
-          0123104 CON PDG PEACE CONFWV
+          {course.courseNo}
+          {course.courseInfo.abbrName}
         </h1>
-        <GenedChip type="HU" class="px-3 py-1 text-xs" />
+        {#if ['SC', 'SO', 'HU', 'IN'].includes(course.genEdType)}
+          <GenedChip
+            type={course.genEdType as GenEdType}
+            class="px-3 py-1 text-xs"
+          />
+        {/if}
       </div>
       <p class="text-on-surface mt-2 text-sm font-semibold">
-        การลดความขัดแย้ง การเปลี่ยนความขัดแย้งและกระบวนการสันติภาพ
+        {course.courseInfo.courseNameTh}
       </p>
       <p class="text-on-surface text-sm font-semibold">
-        CONFLICT RESOLUTION,CONFLICT TRANSFORMATION,AND PEACE PROCESS
+        {course.courseInfo.courseNameEn}
       </p>
       <div class="mt-5 flex items-start gap-2 bg-amber-50 px-3 py-2 text-xs">
         <AlertTriangle size={16} class="mt-0.5 text-amber-900" />
@@ -235,15 +259,12 @@
         </div>
         <div>
           <p class="text-on-surface font-sarabun mt-3 px-4 text-sm">
-            หลักการอ่าน ระดับของการอ่าน การจับใจความ การตีความบทอ่านประเภทต่างๆ
-            ทั้งบทอ่านทั่วไป บทอ่านเชิงวิชาการ ตาราง แผนภูมิ หรือรูปภาพ
+            {course.courseInfo.courseDescTh}
           </p>
         </div>
         <div>
           <p class="text-on-surface font-sarabun mt-3 px-4 text-sm">
-            Reading principles; levels of reading; main idea finding;
-            interpretation of general texts, academic texts, tables, figures and
-            illustrations
+            {course.courseInfo.courseDescEn}
           </p>
         </div>
       </div>
@@ -263,12 +284,12 @@
         </div>
         <div>
           <p class="text-on-surface font-sarabun mt-3 px-4 text-sm">
-            สถาบันภาษาไทยสิรินธร
+            {faculties[course.courseInfo.faculty].th}
           </p>
         </div>
         <div>
           <p class="text-on-surface font-sarabun mt-3 px-4 text-sm">
-            สถาบันภาษาไทยสิรินธร
+            {course.courseInfo.department}
           </p>
         </div>
       </div>
@@ -288,11 +309,13 @@
         </div>
         <div>
           <p class="text-on-surface font-sarabun mt-3 px-4 text-sm">
-            LECT/PRAC
+            {course.courseInfo.creditHours.split(' ')[0]}
           </p>
         </div>
         <div>
-          <p class="text-on-surface font-sarabun mt-3 px-4 text-sm">3</p>
+          <p class="text-on-surface font-sarabun mt-3 px-4 text-sm">
+            {course.courseInfo.credit}
+          </p>
         </div>
       </div>
 
@@ -355,8 +378,8 @@
           </Select.Trigger>
           <Select.Content role="listbox">
             <Select.Group>
-              {#each sectionGroups as group}
-                <Select.Item value={group} label={`กลุ่ม : ${group}`} />
+              {#each Object.keys(sectionGroups) as groupName}
+                <Select.Item value={groupName} label={`กลุ่ม : ${groupName}`} />
               {/each}
             </Select.Group>
           </Select.Content>
@@ -384,126 +407,132 @@
         {#if isSectionOpen}
           <div class="mt-4 overflow-x-auto">
             <SectionTable
-              tableData={sectionTableData}
+              tableData={sectionGroups[selectedGroup]}
               boxed={false}
               class="w-full"
             />
           </div>
         {/if}
       </div>
-      <div class="mt-4">
-        <Select.Root type="single" bind:value={selectedGroup}>
-          <Select.Trigger
-            class="text-on-surface h-14 w-full rounded-2xl border border-[#D6D7E1] bg-white px-5 text-base font-medium focus:ring-0 focus:ring-offset-0"
-          >
-            กลุ่ม : {selectedGroup}
-          </Select.Trigger>
-          <Select.Content role="listbox">
-            <Select.Group>
-              {#each sectionGroups as group}
-                <Select.Item value={group} label={`กลุ่ม : ${group}`} />
-              {/each}
-            </Select.Group>
-          </Select.Content>
-        </Select.Root>
-      </div>
+      <!-- <div class="mt-4"> -->
+      <!--   <Select.Root type="single" bind:value={selectedGroup}> -->
+      <!--     <Select.Trigger -->
+      <!--       class="text-on-surface h-14 w-full rounded-2xl border border-[#D6D7E1] bg-white px-5 text-base font-medium focus:ring-0 focus:ring-offset-0" -->
+      <!--     > -->
+      <!--       กลุ่ม : {selectedGroup} -->
+      <!--     </Select.Trigger> -->
+      <!--     <Select.Content role="listbox"> -->
+      <!--       <Select.Group> -->
+      <!--         {#each sectionGroups as group} -->
+      <!--           <Select.Item value={group} label={`กลุ่ม : ${group}`} /> -->
+      <!--         {/each} -->
+      <!--       </Select.Group> -->
+      <!--     </Select.Content> -->
+      <!--   </Select.Root> -->
+      <!-- </div> -->
     </section>
-    <section class="text-on-surface mx-auto mt-10 w-full max-w-5xl">
-      <div class="flex items-center justify-between">
-        <h2 class="text-on-surface text-lg font-semibold">เขียนรีวิวรายวิชา</h2>
-      </div>
-      <div class="mt-4 flex flex-wrap items-center gap-5">
-        <div class="min-w-[160px]">
-          <Select.Root type="single" bind:value={selectedYear}>
-            <Select.Trigger
-              class="text-on-surface h-12 w-[180px] rounded-lg border border-[#D6D7E1] bg-white px-4 text-base font-medium"
-            >
-              {selectedYear}
-            </Select.Trigger>
-            <Select.Content role="listbox">
-              <Select.Group>
-                {#each years as year}
-                  <Select.Item value={year} label={year} />
-                {/each}
-              </Select.Group>
-            </Select.Content>
-          </Select.Root>
+
+    {#if isLoggedIn}
+      <section class="text-on-surface mx-auto mt-10 w-full max-w-5xl">
+        <div class="flex items-center justify-between">
+          <h2 class="text-on-surface text-lg font-semibold">
+            เขียนรีวิวรายวิชา
+          </h2>
         </div>
-        <div class="min-w-[160px]">
-          <Select.Root type="single" bind:value={selectedTerm}>
-            <Select.Trigger
-              class="text-on-surface h-12 w-[180px] rounded-lg border border-[#D6D7E1] bg-white px-4 text-base font-medium"
-            >
-              {selectedTerm}
-            </Select.Trigger>
-            <Select.Content role="listbox">
-              <Select.Group>
-                {#each terms as term}
-                  <Select.Item value={term} label={term} />
-                {/each}
-              </Select.Group>
-            </Select.Content>
-          </Select.Root>
-        </div>
-        <div class="flex items-center gap-2">
-          {#each [1, 2, 3, 4, 5] as value}
-            <button
-              class="flex h-10 w-10 items-center justify-center"
-              type="button"
-              onclick={(event) => onStarClick(value, event)}
-              aria-label={`Rate ${value} stars`}
-            >
-              {#if getStarState(value) === 'half'}
-                <span class="relative inline-flex">
-                  <Star size={26} class="text-[#D6D7E1]" />
-                  <span class="absolute inset-0 w-1/2 overflow-hidden">
-                    <Star size={26} class="text-primary fill-current" />
+        <div class="mt-4 flex flex-wrap items-center gap-5">
+          <div class="min-w-[160px]">
+            <Select.Root type="single" bind:value={selectedYear}>
+              <Select.Trigger
+                class="text-on-surface h-12 w-[180px] rounded-lg border border-[#D6D7E1] bg-white px-4 text-base font-medium"
+              >
+                {selectedYear}
+              </Select.Trigger>
+              <Select.Content role="listbox">
+                <Select.Group>
+                  {#each years as year}
+                    <Select.Item value={year} label={year} />
+                  {/each}
+                </Select.Group>
+              </Select.Content>
+            </Select.Root>
+          </div>
+          <div class="min-w-[160px]">
+            <Select.Root type="single" bind:value={selectedTerm}>
+              <Select.Trigger
+                class="text-on-surface h-12 w-[180px] rounded-lg border border-[#D6D7E1] bg-white px-4 text-base font-medium"
+              >
+                {selectedTerm}
+              </Select.Trigger>
+              <Select.Content role="listbox">
+                <Select.Group>
+                  {#each terms as term}
+                    <Select.Item value={term} label={term} />
+                  {/each}
+                </Select.Group>
+              </Select.Content>
+            </Select.Root>
+          </div>
+          <div class="flex items-center gap-2">
+            {#each [1, 2, 3, 4, 5] as value}
+              <button
+                class="flex h-10 w-10 items-center justify-center"
+                type="button"
+                onclick={(event) => onStarClick(value, event)}
+                aria-label={`Rate ${value} stars`}
+              >
+                {#if getStarState(value) === 'half'}
+                  <span class="relative inline-flex">
+                    <Star size={26} class="text-[#D6D7E1]" />
+                    <span class="absolute inset-0 w-1/2 overflow-hidden">
+                      <Star size={26} class="text-primary fill-current" />
+                    </span>
                   </span>
-                </span>
-              {:else}
-                <Star
-                  size={26}
-                  class={getStarState(value) === 'full'
-                    ? 'text-primary fill-current'
-                    : 'text-[#D6D7E1]'}
-                />
-              {/if}
-            </button>
-          {/each}
+                {:else}
+                  <Star
+                    size={26}
+                    class={getStarState(value) === 'full'
+                      ? 'text-primary fill-current'
+                      : 'text-[#D6D7E1]'}
+                  />
+                {/if}
+              </button>
+            {/each}
+          </div>
         </div>
-      </div>
-      <div
-        class="border-surface-container-high bg-surface mt-4 rounded-xl border"
-      >
         <div
-          class="border-surface-container-high text-on-surface/60 flex items-center gap-6 border-b px-4 py-2"
+          class="border-surface-container-high bg-surface mt-4 rounded-xl border"
         >
-          <Bold size={18} />
-          <Italic size={18} />
-          <Underline size={18} />
-          <Strikethrough size={18} />
-          <Code size={18} />
-          <div class="bg-surface-container-high h-6 w-px"></div>
-          <Heading size={18} />
-          <Quote size={18} fill="currentColor" strokeWidth={0} />
+          <div
+            class="border-surface-container-high text-on-surface/60 flex items-center gap-6 border-b px-4 py-2"
+          >
+            <Bold size={18} />
+            <Italic size={18} />
+            <Underline size={18} />
+            <Strikethrough size={18} />
+            <Code size={18} />
+            <div class="bg-surface-container-high h-6 w-px"></div>
+            <Heading size={18} />
+            <Quote size={18} fill="currentColor" strokeWidth={0} />
+          </div>
+          <textarea
+            class="text-on-surface h-36 w-full resize-none bg-transparent px-4 py-3 text-sm outline-none"
+            placeholder="คุณคิดว่าวิชานี้เป็นอย่างไรบ้าง?"
+          ></textarea>
         </div>
-        <textarea
-          class="text-on-surface h-36 w-full resize-none bg-transparent px-4 py-3 text-sm outline-none"
-          placeholder="คุณคิดว่าวิชานี้เป็นอย่างไรบ้าง?"
-        ></textarea>
-      </div>
-      <div class="mt-4 flex justify-end">
-        <Button
-          size="sm"
-          variant="solid"
-          color="secondary"
-          class="bg-primary-container text-primary hover:ring-primary-container gap-2"
-        >
-          ส่งรีวิว
-          <Send size={14} />
-        </Button>
-      </div>
-    </section>
+        <div class="mt-4 flex justify-end">
+          <Button
+            size="sm"
+            variant="solid"
+            color="secondary"
+            class="bg-primary-container text-primary hover:ring-primary-container gap-2"
+          >
+            ส่งรีวิว
+            <Send size={14} />
+          </Button>
+        </div>
+      </section>
+    {/if}
+
     <section class="text-on-surface mx-auto mt-8 w-full max-w-5xl">
       <div class="flex items-center justify-between gap-4">
         <div class="text-lg font-semibold">

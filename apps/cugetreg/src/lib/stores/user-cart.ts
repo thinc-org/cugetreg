@@ -1,6 +1,6 @@
-import axios from 'axios';
-
 import { tryCatch } from '$lib/async-handler';
+
+import axios from 'axios';
 
 import type {
   CartData,
@@ -9,6 +9,7 @@ import type {
 } from '@cugetreg/zod-schemas/cart-response';
 import {
   CartDetailResponseSchema,
+  SingleCartItemResponseSchema,
   SingleCartResponseSchema,
 } from '@cugetreg/zod-schemas/cart-response';
 
@@ -262,13 +263,92 @@ export function useCartActions() {
   };
 
   /**
+   * Add a course to the current timetable.
+   *
+   * @param courseNo - The course number (e.g. "2110101")
+   * @param sectionNo - The section number
+   */
+  const addCourse = async (courseNo: string, sectionNo: number) => {
+    const snapshot = (() => {
+      let s: UserCartInterface | undefined;
+      const unsub = userCart.subscribe((v) => {
+        s = v;
+      });
+      unsub();
+      return s!;
+    })();
+
+    const { currentCartId } = snapshot;
+    if (!currentCartId) return;
+
+    const res = await axios.post(`${API_BASE}/${currentCartId}/items`, {
+      courseNo,
+      sectionNo,
+    });
+
+    const newItem = SingleCartItemResponseSchema.parse(res.data).data;
+
+    // Fetch the full detail to get the new exam schedule and complete course data
+    const detailRes = await axios.get(`${API_BASE}/${currentCartId}`);
+    const detail = CartDetailResponseSchema.parse(detailRes.data).data;
+
+    userCart.update((state) => ({
+      ...state,
+      currentCart: detail.cart,
+      exams: detail.schedule.exams,
+    }));
+
+    return newItem.id;
+  };
+
+  /**
+   * Remove a course from the current timetable.
+   *
+   * @param itemId - The cart item's database id
+   */
+  const removeCourse = async (itemId: string) => {
+    const snapshot = (() => {
+      let s: UserCartInterface | undefined;
+      const unsub = userCart.subscribe((v) => {
+        s = v;
+      });
+      unsub();
+      return s!;
+    })();
+
+    const { currentCartId } = snapshot;
+    if (!currentCartId) return;
+
+    await axios.delete(`${API_BASE}/items/${itemId}`);
+
+    // Update local state immediately
+    userCart.update((state) => ({
+      ...state,
+      currentCart: {
+        ...state.currentCart,
+        items: state.currentCart.items.filter((item) => item.id !== itemId),
+      },
+    }));
+
+    // Fetch the full detail to refresh exams and other derived data
+    const detailRes = await axios.get(`${API_BASE}/${currentCartId}`);
+    const detail = CartDetailResponseSchema.parse(detailRes.data).data;
+
+    userCart.update((state) => ({
+      ...state,
+      currentCart: detail.cart,
+      exams: detail.schedule.exams,
+    }));
+  };
+
+  /**
    * Update fields on a course item inside the current timetable optimistically
    * and schedule an API sync.
    *
    * @param itemId - The cart item's database id (CartData.items[n].id)
    * @param fields - Partial set of fields to update
    */
-  const updateCartItem = (itemId: string, fields: UpdateCourseFields) => {
+  const updateCourse = (itemId: string, fields: UpdateCourseFields) => {
     userCart.update((state) => ({
       ...state,
       currentCart: {
@@ -495,7 +575,9 @@ export function useCartActions() {
   return {
     renameCart,
     updateCartMeta,
-    updateCartItem,
+    updateCourse,
+    addCourse,
+    removeCourse,
     copyCart,
     deleteCart,
     createCart,

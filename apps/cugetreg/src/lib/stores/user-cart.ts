@@ -319,7 +319,7 @@ export function useCartActions() {
     const { currentCartId } = snapshot;
     if (!currentCartId) return;
 
-    await axios.delete(`${API_BASE}/items/${itemId}`);
+    await axios.delete(`${API_BASE}/${currentCartId}/items/${itemId}`);
 
     // Update local state immediately
     userCart.update((state) => ({

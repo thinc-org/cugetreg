@@ -67,7 +67,7 @@ const CartItemDetailSchema = z.object({
   //     note: z.string().nullable(),
   //   })
   //   .nullable(),
-  sections: z.array(Section),
+  sections: z.array(Section).default([]),
 });
 
 export const CartData = z.object({

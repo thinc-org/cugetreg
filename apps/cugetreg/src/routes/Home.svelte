@@ -1,4 +1,7 @@
 <script lang="ts">
+  import SelectedCourse from '$lib/components/selected-course.svelte';
+  import { getUserCartStore, useCartActions } from '$lib/stores/user-cart';
+
   import {
     BookMarked,
     ChevronDown,
@@ -11,12 +14,11 @@
 
   import { Input } from '@cugetreg/ui/atoms/input';
   import { CourseCard } from '@cugetreg/ui/molecules/course-card';
+  import { SelectTimetable } from '@cugetreg/ui/molecules/select-timetable';
   import { Filter as FilterBar } from '@cugetreg/ui/organisms/filter-bar';
   import { Footer } from '@cugetreg/ui/organisms/footer';
   import { Navbar } from '@cugetreg/ui/organisms/navbar';
-  import { SelectedCourse } from '@cugetreg/ui/organisms/selected-course';
   import * as Sidebar from '@cugetreg/ui/organisms/sidebar';
-  import { mockScheduleList } from '@cugetreg/utils/mock';
 
   let courses = $state<any[]>([]);
   let isLoading = $state(false);
@@ -33,8 +35,8 @@
   let filterSection = $state<HTMLElement>();
   let selectedSection = $state<HTMLElement>();
 
-  let scheduleList = $state(mockScheduleList);
-  let activeSchedule = $state(untrack(() => scheduleList[0]));
+  // let scheduleList = $state(mockScheduleList);
+  // let activeSchedule = $state(untrack(() => scheduleList[0]));
 
   let searchQuery = $state('');
   let debouncedSearchQuery = $state('');
@@ -257,6 +259,9 @@
     });
   });
 
+  const userCart = getUserCartStore();
+  const { addCourse, removeCourse } = useCartActions();
+
   function togglePanel(type: typeof openPanel) {
     if (sidebarExpanded) {
       if (type === 'sidebar') scrollToSection(timetableSection);
@@ -290,32 +295,44 @@
     sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
   }
 
-  function handleToggleCourse(courseItem: any) {
-    if (!activeSchedule) return;
-    const index = activeSchedule.schedule.findIndex(
-      (s: any) => s.course.code === courseItem.course.code,
+  function handleToggleCourse(courseItem) {
+    const { code, sections } = courseItem.course;
+
+    const courseInSchedule = $userCart.currentCart.items.find(
+      (cls) => cls.courseNo === code,
     );
-    if (index === -1) {
-      activeSchedule.schedule = [
-        ...activeSchedule.schedule,
-        {
-          id: crypto.randomUUID(),
-          course: courseItem.course,
-          selectedSection: 1,
-          colorVariant: 'neutral',
-          hidden: false,
-        },
-      ];
-    } else {
-      handleRemoveCourse(courseItem.course.code);
-    }
+
+    if (!courseInSchedule)
+      addCourse(code, sections.find((sec) => !sec.closed).sectionNo);
+    else removeCourse(courseInSchedule.id);
   }
 
+  // function handleToggleCourse(courseItem: any) {
+  //   if (!activeSchedule) return;
+  //   const index = activeSchedule.schedule.findIndex(
+  //     (s: any) => s.course.code === courseItem.course.code,
+  //   );
+  //   if (index === -1) {
+  //     activeSchedule.schedule = [
+  //       ...activeSchedule.schedule,
+  //       {
+  //         id: crypto.randomUUID(),
+  //         course: courseItem.course,
+  //         selectedSection: 1,
+  //         colorVariant: 'neutral',
+  //         hidden: false,
+  //       },
+  //     ];
+  //   } else {
+  //     handleRemoveCourse(courseItem.course.code);
+  //   }
+  // }
+
   function handleRemoveCourse(courseCode: string) {
-    if (!activeSchedule) return;
-    activeSchedule.schedule = activeSchedule.schedule.filter(
-      (s: any) => s.course.code !== courseCode,
-    );
+    // if (!activeSchedule) return;
+    // activeSchedule.schedule = activeSchedule.schedule.filter(
+    //   (s: any) => s.course.code !== courseCode,
+    // );
   }
 
   let filteredCourses = $derived.by(() => {
@@ -383,6 +400,7 @@
   });
 
   let displayedCourses = $derived(filteredCourses.slice(0, displayLimit));
+  console.log(displayedCourses);
 
   function onSearchFilter() {
     if (openPanel === 'filter_only') openPanel = null;
@@ -581,13 +599,13 @@
                     <p>ไม่พบรายวิชาที่ตรงกับเงื่อนไข</p>
                   </div>
                 {:else}
-                  {#each displayedCourses as item}
+                  {#each displayedCourses as item (item.course.code)}
                     <CourseCard
                       course={item.course}
                       recommended={item.recommended}
-                      selected={activeSchedule
-                        ? activeSchedule.schedule.some(
-                            (s: any) => s.course.code === item.course.code,
+                      selected={$userCart
+                        ? $userCart.currentCart.items.some(
+                            (v) => v.courseNo === item.course.code,
                           )
                         : false}
                       onclick={() => handleToggleCourse(item)}
@@ -678,7 +696,7 @@
           ></div>
         {/if}
         <div
-          class="bg-surface flex flex-1 flex-col overflow-hidden md:p-8 group-data-[state=collapsed]:absolute group-data-[state=collapsed]:top-4 group-data-[state=collapsed]:left-[calc(var(--sidebar-width-icon)+1rem)] group-data-[state=collapsed]:z-50 group-data-[state=collapsed]:max-h-[min(800px,calc(100%-2rem))] group-data-[state=collapsed]:w-[400px] group-data-[state=collapsed]:rounded-3xl group-data-[state=collapsed]:border group-data-[state=collapsed]:shadow-2xl"
+          class="bg-surface flex flex-1 flex-col overflow-hidden group-data-[state=collapsed]:absolute group-data-[state=collapsed]:top-4 group-data-[state=collapsed]:left-[calc(var(--sidebar-width-icon)+1rem)] group-data-[state=collapsed]:z-50 group-data-[state=collapsed]:max-h-[min(800px,calc(100%-2rem))] group-data-[state=collapsed]:w-[400px] group-data-[state=collapsed]:rounded-3xl group-data-[state=collapsed]:border group-data-[state=collapsed]:shadow-2xl md:p-8"
         >
           <div class="flex-1 overflow-y-auto pr-2 pb-10">
             {#if sidebarExpanded || openPanel === 'sidebar'}
@@ -686,8 +704,8 @@
                 bind:this={timetableSection}
                 class="relative mb-6 flex flex-col gap-2"
               >
-                <label class="ml-1 text-[11px] font-medium text-gray-400"
-                  >คุณกำลังจัดตารางเรียน...</label
+                <span class="ml-1 text-[11px] font-medium text-gray-400"
+                  >คุณกำลังจัดตารางเรียน...</span
                 >
                 <div class="flex items-center gap-2">
                   <button
@@ -696,7 +714,7 @@
                     class="flex h-14 flex-1 items-center justify-between overflow-hidden rounded-2xl border border-blue-500 bg-white px-5 shadow-sm transition-all hover:bg-gray-50"
                   >
                     <span class="mr-2 truncate text-lg font-bold text-[#1C1B1F]"
-                      >{activeSchedule?.name || 'เลือกตาราง'}</span
+                      >{$userCart.currentCart.name || 'เลือกตาราง'}</span
                     >
                     <ChevronDown size={24} class="shrink-0 text-gray-400" />
                   </button>
@@ -709,7 +727,7 @@
                     >
                     <span
                       class="text-[10px] leading-tight font-bold whitespace-nowrap text-neutral-800"
-                      >{activeSchedule?.semester || '-'}</span
+                      >{$userCart.currentCart.semester || '-'}</span
                     >
                   </div>
                 </div>
@@ -721,22 +739,14 @@
                     <div
                       class="custom-scrollbar flex max-h-[200px] flex-col overflow-y-auto py-2"
                     >
-                      {#each scheduleList as s}
-                        <button
-                          onclick={() => {
-                            activeSchedule = s;
-                            isScheduleDropdownOpen = false;
-                          }}
-                          class="px-5 py-3 text-left hover:bg-gray-50 {activeSchedule.scheduleId ===
-                          s.scheduleId
-                            ? 'bg-gray-50 font-bold'
-                            : ''}"
-                        >
-                          <span class="block truncate text-[15px]"
-                            >{s.name}</span
-                          >
-                        </button>
-                      {/each}
+                      <SelectTimetable
+                        class="border-b border-neutral-200 px-2 py-5"
+                        options={$userCart.cartList?.map((item) => ({
+                          name: item.name,
+                          id: item.id,
+                        })) ?? []}
+                        bind:value={$userCart.currentCartId}
+                      />
                     </div>
                     <button
                       class="flex w-full items-center justify-center gap-2 border-t p-4 font-bold text-[#004494] transition-colors hover:bg-gray-50"
@@ -782,25 +792,17 @@
 
             {#if sidebarExpanded || openPanel === 'selected_only'}
               <div bind:this={selectedSection}>
-                <!-- <div class="mb-4 flex items-center gap-2"> -->
-                <!--   <BookMarked size={20} /> -->
-                <!--   <h2 class="text-xl font-bold"> -->
-                <!--     วิชาที่เลือก <span -->
-                <!--       class="ml-2 text-sm font-normal text-gray-400" -->
-                <!--       >{activeSchedule?.schedule.reduce( -->
-                <!--         (acc: number, curr: any) => acc + curr.course.credit, -->
-                <!--         0, -->
-                <!--       ) ?? 0} หน่วยกิต</span -->
-                <!--     > -->
-                <!--   </h2> -->
-                <!-- </div> -->
-                {#if activeSchedule}
-                  {#key activeSchedule.scheduleId}
-                    <SelectedCourse
-                      bind:schedule={activeSchedule.schedule}
-                      remove={handleRemoveCourse}
-                    />
-                  {/key}
+                {#if $userCart.currentCart}
+                  <SelectedCourse
+                    bind:schedule={$userCart.currentCart.items}
+                    variant="simple"
+                    class="border-b border-neutral-200"
+                  />
+                {:else}
+                  <SelectedCourse
+                    schedule={[]}
+                    class="border-b border-neutral-200"
+                  />
                 {/if}
               </div>
             {/if}

@@ -16,6 +16,7 @@
   import { courseColorVariants } from '@cugetreg/utils/constants';
   import type { ColorVariant } from '@cugetreg/utils/types';
   import type { CartItemDetail } from '@cugetreg/zod-schemas/cart-response';
+  import { getUserCartStore, useCartActions } from '$lib/stores/user-cart';
 
   function updateCourse(
     courseId: string | number,
@@ -50,14 +51,20 @@
     const item = target.closest<HTMLLIElement>('.ssl-item');
     const itemIndex = Number(item?.dataset.itemIndex);
     if (!item || itemIndex < 0) return;
+
+    removeCourse(schedule[itemIndex].id);
     schedule = removeItem(schedule, itemIndex);
   }
 
   interface SelectedCourseProp {
     class?: ClassValue;
     schedule: CartItemDetail[];
+    onRemove?: (index: number) => void;
     variant?: 'simple' | 'detailed';
   }
+
+  // const userCart = getUserCartStore();
+  const { removeCourse } = useCartActions();
 
   let {
     class: className = undefined,

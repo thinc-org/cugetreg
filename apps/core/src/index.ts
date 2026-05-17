@@ -19,19 +19,15 @@ dotenv.config();
 const app = new OpenAPIHono<{ Variables: Variables }>().basePath("/api/v1");
 
 app.use(
-  "/*",
+  "*",
   cors({
-    origin: [
-      "http://localhost:5173",
-      "http://localhost:3001",
-      "http://localhost:3000",
-    ], // อนุญาต Port เหล่านี้
+    origin: "http://localhost:5173",
     allowHeaders: [
       "Content-Type",
       "Authorization",
       "Upgrade-Insecure-Requests",
     ],
-    allowMethods: ["POST", "GET", "OPTIONS", "PUT", "DELETE"],
+    allowMethods: ["POST", "GET", "OPTIONS", "PUT", "DELETE", "PATCH"],
     exposeHeaders: ["Content-Length"],
     maxAge: 600,
     credentials: true,
@@ -49,12 +45,6 @@ app.route("/auth", authRoute);
 app.route("/courses", courses);
 
 // Middleware List
-// NOTE:
-
-if (process.env.APP_MODE === "dev") {
-  app.use("/*", cors());
-}
-
 app.use("/admin/*", middlewareAuth); // Middleware from Bearer Token
 app.use("/carts/*", middlewareAuth);
 //app.use("/courses/*", middlewareAuth);

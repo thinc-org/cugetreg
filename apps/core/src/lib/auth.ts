@@ -1,4 +1,4 @@
-import { betterAuth, APIError } from "better-auth";
+import { APIError, betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { openAPI } from "better-auth/plugins";
 

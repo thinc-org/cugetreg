@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
+
 	import { Menu, Moon, Search, Settings2 } from '@lucide/svelte';
 
 	import { cn, getShortenName } from '@cugetreg/utils';

@@ -1,7 +1,6 @@
 <script lang="ts">
   import { BookMarked, Equal, Eye, EyeOff, Trash2 } from '@lucide/svelte';
   import {
-    removeItem,
     SortableList,
     sortItems,
   } from '@rodrigodagostino/svelte-sortable-list';
@@ -18,23 +17,10 @@
   import type { CartItemDetail } from '@cugetreg/zod-schemas/cart-response';
   import { getUserCartStore, useCartActions } from '$lib/stores/user-cart';
 
-  function updateCourse(
-    courseId: string | number,
-    updates: Partial<CartItemDetail>,
-  ) {
-    const index = schedule.findIndex((c) => c.id === courseId);
+  const userCart = getUserCartStore();
+  const { removeCourse, updateCourse } = useCartActions();
 
-    if (index !== -1) {
-      // 1. Create a brand new object with the updated properties
-      const updatedCourse = { ...schedule[index], ...updates };
-
-      // 2. Replace the old object in the array
-      schedule[index] = updatedCourse;
-
-      // 3. Reassign the array to trigger the $bindable sync to the parent
-      schedule = [...schedule];
-    }
-  }
+  const schedule = $derived($userCart.currentCart?.items ?? []);
 
   function handleDragEnd(e: SortableList.RootEvents['ondragend']) {
     const { draggedItemIndex, targetItemIndex, isCanceled } = e;
@@ -42,8 +28,14 @@
       !isCanceled &&
       typeof targetItemIndex === 'number' &&
       draggedItemIndex !== targetItemIndex
-    )
-      schedule = sortItems(schedule, draggedItemIndex, targetItemIndex);
+    ) {
+      const newItems = sortItems(schedule, draggedItemIndex, targetItemIndex);
+      const movedItem = newItems[targetItemIndex];
+      const prevId = newItems[targetItemIndex - 1]?.id;
+      const nextId = newItems[targetItemIndex + 1]?.id;
+
+      updateCourse(movedItem.id, { prevId, nextId });
+    }
   }
 
   function handleRemoveClick(e: MouseEvent) {
@@ -53,22 +45,15 @@
     if (!item || itemIndex < 0) return;
 
     removeCourse(schedule[itemIndex].id);
-    schedule = removeItem(schedule, itemIndex);
   }
 
   interface SelectedCourseProp {
     class?: ClassValue;
-    schedule: CartItemDetail[];
-    onRemove?: (index: number) => void;
     variant?: 'simple' | 'detailed';
   }
 
-  // const userCart = getUserCartStore();
-  const { removeCourse } = useCartActions();
-
   let {
     class: className = undefined,
-    schedule = $bindable(),
     variant = 'detailed',
   }: SelectedCourseProp = $props();
 
@@ -302,9 +287,9 @@
           currentColorVariant = initialColorVariant;
           showChangeColorModal = false;
         }}
-        onChange={() => {
+        onChange={(option) => {
           if (changeColorFor) {
-            updateCourse(changeColorFor, { color: currentColorVariant });
+            updateCourse(changeColorFor, { color: option });
           }
         }}
         onConfirmSelected={() => {

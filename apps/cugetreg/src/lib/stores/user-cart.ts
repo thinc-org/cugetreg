@@ -349,15 +349,38 @@ export function useCartActions() {
    * @param fields - Partial set of fields to update
    */
   const updateCourse = (itemId: string, fields: UpdateCourseFields) => {
-    userCart.update((state) => ({
-      ...state,
-      currentCart: {
-        ...state.currentCart,
-        items: state.currentCart.items.map((item) =>
-          item.id === itemId ? ({ ...item, ...fields } as typeof item) : item,
-        ),
-      },
-    }));
+    userCart.update((state) => {
+      const items = [...state.currentCart.items];
+      const index = items.findIndex((item) => item.id === itemId);
+
+      if (index !== -1) {
+        // 1. Update fields
+        items[index] = { ...items[index], ...fields } as (typeof items)[0];
+
+        // 2. Handle optimistic reordering if prevId/nextId are present
+        if ('prevId' in fields || 'nextId' in fields) {
+          const [movedItem] = items.splice(index, 1);
+          let newIndex: number;
+
+          if (!fields.prevId) {
+            newIndex = 0;
+          } else {
+            const prevIdx = items.findIndex((i) => i.id === fields.prevId);
+            newIndex = prevIdx + 1;
+          }
+
+          items.splice(newIndex, 0, movedItem);
+        }
+      }
+
+      return {
+        ...state,
+        currentCart: {
+          ...state.currentCart,
+          items,
+        },
+      };
+    });
 
     // Merge into this item's pending bucket (last-write-wins per field)
     const existing = pendingItemUpdates.get(itemId) ?? {};
@@ -365,14 +388,6 @@ export function useCartActions() {
     scheduleFlush();
   };
 
-  /**
-   * Duplicate the current timetable:
-   * 1. Create a new cart with name "Copy of <original name>" and isDefault=false.
-   * 2. Copy every course item from the original cart into the new one.
-   * 3. Fetch the new cart's full detail and switch the store to it.
-   *
-   * Returns the new cart's id, or throws on API failure.
-   */
   const copyCart = async (): Promise<string> => {
     const snapshot = (() => {
       let s: UserCartInterface | undefined;
@@ -495,21 +510,6 @@ export function useCartActions() {
     }));
   };
 
-  /**
-   * Delete the current timetable and switch to a substitute.
-   *
-   * Flow:
-   * 1. DELETE /carts/:currentCartId
-   * 2. Remove the deleted cart from cartList.
-   * 3. If the deleted cart was the default:
-   *    - The server automatically promotes the cart with the lowest cartOrder
-   *      as the new default (same logic mirrored here client-side).
-   *    - Fetch that cart's full detail and activate it.
-   * 4. If it was not the default, switch to whichever cart is currently
-   *    marked default in the remaining list.
-   *
-   * Throws on API failure so callers can surface an error to the user.
-   */
   const deleteCart = async (): Promise<void> => {
     // Snapshot current state synchronously before any async work
     let snapshot: UserCartInterface | undefined;
@@ -535,9 +535,6 @@ export function useCartActions() {
       return;
     }
 
-    // 3. Find the substitute cart using the same rule as the server:
-    //    if deleted was default → lowest cartOrder in remaining list;
-    //    otherwise             → whichever is already marked default.
     let substituteId: string;
     let updatedList = remaining;
 

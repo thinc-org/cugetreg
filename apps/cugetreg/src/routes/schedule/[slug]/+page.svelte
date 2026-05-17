@@ -326,40 +326,6 @@
   </Modal>
 
   <div class="flex w-full flex-1 overflow-hidden">
-    <div
-      class="
-            flex hidden max-w-[50vw] min-w-90 flex-1
-            flex-col overflow-hidden
-            border-r border-neutral-200
-            [scrollbar-width:none] [&::-webkit-scrollbar]:hidden
-        "
-    >
-      <SelectTimetable
-        class="border-b border-neutral-200 px-2 py-5"
-        options={scheduleList}
-        bind:value={selectedSchedule}
-      />
-      <SelectedCourse
-        variant="detailed"
-        bind:schedule={cartInfo.items}
-        class="border-b border-neutral-200"
-      />
-
-      <div
-        class="border-tangerine-500 text-tangerine-700 m-5 items-center rounded-2xl border-2 p-5"
-      >
-        <div class="text-center font-bold">
-          CU Get Reg ไม่ใช่การลงทะเบียนเรียนจริง
-        </div>
-        <div class="text-center">
-          สามารถลงทะเบียนเรียนได้ที่ <a href="https://www2.reg.chula.ac.th/"
-            >https://www2.reg.chula.ac.th/</a
-          >
-          เพียงช่องทางเดียวเท่านั้น
-        </div>
-      </div>
-    </div>
-
     <div class="flex-3 overflow-y-auto p-10">
       <div class="flex justify-between">
         <span class="text-4xl font-bold">ตารางเรียน</span>

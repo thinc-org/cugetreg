@@ -337,11 +337,10 @@
       />
       {#if $userCart.currentCart}
         <SelectedCourse
-          bind:schedule={$userCart.currentCart.items}
           class="border-b border-neutral-200"
         />
       {:else}
-        <SelectedCourse schedule={[]} class="border-b border-neutral-200" />
+        <SelectedCourse class="border-b border-neutral-200" />
       {/if}
 
       <div

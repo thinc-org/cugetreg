@@ -794,13 +794,11 @@
               <div bind:this={selectedSection}>
                 {#if $userCart.currentCart}
                   <SelectedCourse
-                    bind:schedule={$userCart.currentCart.items}
                     variant="simple"
                     class="border-b border-neutral-200"
                   />
                 {:else}
                   <SelectedCourse
-                    schedule={[]}
                     class="border-b border-neutral-200"
                   />
                 {/if}

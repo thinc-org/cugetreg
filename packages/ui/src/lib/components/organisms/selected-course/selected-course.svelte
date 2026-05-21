@@ -23,20 +23,26 @@
 	interface SelectedCourseProp {
 		class?: ClassValue;
 		schedule: ScheduleData;
-		variant?: 'simple' | 'detailed';
+		variant?: 'simple' | 'detailed' | 'grouped';
 		remove?: (courseCode: string) => void;
+		onArrange?: () => void;
 	}
 
 	let {
 		class: className = undefined,
 		schedule = $bindable(),
 		variant = 'detailed',
-		remove
+		remove,
+		onArrange
 	}: SelectedCourseProp = $props();
 
 	const totalCredit = $derived(
 		schedule.reduce((acc, course) => acc + (course.hidden ? 0 : course.course.credit), 0)
 	);
+
+	// --- grouped variant helpers ---
+	const genedCourses = $derived(schedule.filter((c) => (c.course.gened?.length ?? 0) > 0));
+	const otherCourses = $derived(schedule.filter((c) => (c.course.gened?.length ?? 0) === 0));
 
 	let showChangeColorModal = $state(false);
 	let currentColorVariant = $state<ColorVariant>('neutral');
@@ -64,7 +70,31 @@
 />
 
 <div class={cn(className)}>
-	<Accordion.Root class="w-full" type="single" value="selected-course">
+	{#if variant === 'grouped'}
+		<div class="flex flex-col">
+			<div class="mb-4 flex items-baseline gap-2">
+				<h2 class="text-xl font-bold text-[#1C1B1F]">วิชาที่เลือก</h2>
+				<span class="text-sm font-normal text-gray-400">{totalCredit} หน่วยกิต</span>
+			</div>
+
+			{#if genedCourses.length > 0}
+				<p class="mb-1 text-sm font-medium text-[#6F7593]">วิชา GenEd</p>
+				{#each genedCourses as course (course.id)}
+					{@render groupedRow(course)}
+				{/each}
+			{/if}
+
+			{#if otherCourses.length > 0}
+				<p class="mt-4 mb-1 text-sm font-medium text-[#6F7593]">วิชาอื่นๆ</p>
+				{#each otherCourses as course (course.id)}
+					{@render groupedRow(course)}
+				{/each}
+			{/if}
+
+			<Button class="mt-6 w-full" color="neutral" onclick={onArrange}>จัดตารางเรียน</Button>
+		</div>
+	{:else}
+		<Accordion.Root class="w-full" type="single" value="selected-course">
 		<Accordion.Item value="selected-course">
 			<Accordion.Trigger class="border-b border-neutral-200">
 				<div class="flex">
@@ -100,10 +130,33 @@
 			</Accordion.Content>
 		</Accordion.Item>
 	</Accordion.Root>
+	{/if}
 	{#if showChangeColorModal}
 		{@render changeColorModal()}
 	{/if}
 </div>
+
+{#snippet groupedRow(course: CourseSchedule)}
+	<div class="flex items-center gap-3 py-3">
+		<div class="flex min-w-0 flex-1 flex-col">
+			<span class="text-xs text-neutral-400">{course.course.code}</span>
+			<span class="truncate text-[15px] text-[#1C1B1F]">{course.course.name}</span>
+		</div>
+		<div class="flex w-20 justify-center">
+			{#each course.course.gened as gened (gened)}
+				<GenedChip type={gened} />
+			{/each}
+		</div>
+		<span class="w-12 shrink-0 text-right text-sm text-[#1C1B1F]">{course.course.credit} นก.</span>
+		<button
+			class="shrink-0 rounded-md p-1 text-neutral-500 transition-colors hover:bg-neutral-100"
+			aria-label="ลบวิชา"
+			onclick={() => remove?.(course.course.code)}
+		>
+			<Trash2 size={18} />
+		</button>
+	</div>
+{/snippet}
 
 {#snippet selectedCourseItem(course: CourseSchedule)}
 	<div

@@ -6,22 +6,27 @@
   import { CourseCard } from '@cugetreg/ui/molecules/course-card'
   import { Input } from '@cugetreg/ui/atoms/input'
   import { mockScheduleList } from '@cugetreg/utils/mock'
-  import { Menu, Filter, BookMarked, Plus, ChevronDown, Loader2 } from '@lucide/svelte'
+  import { Menu, Filter, BookMarked, Plus, ChevronDown, Loader2, TriangleAlert } from '@lucide/svelte'
   import { untrack } from 'svelte'
+  import { slide, fly, fade } from 'svelte/transition'
+  import { cubicOut } from 'svelte/easing'
+  import { goto } from '$app/navigation'
 
-  let courses = $state<any[]>([]) 
+  let courses = $state<any[]>([])
   let isLoading = $state(false)
+  const courseCache = new Map<string, any[]>()
 
   let openPanel = $state<'sidebar' | 'filter_only' | 'selected_only' | null>(null)
-  
+
   let scheduleList = $state(mockScheduleList)
   let activeSchedule = $state(untrack(() => scheduleList[0]))
-  
+
   let searchQuery = $state('')
   let debouncedSearchQuery = $state('')
   let searchTimeout: ReturnType<typeof setTimeout> | undefined;
 
   let isScheduleDropdownOpen = $state(false)
+  let isFilterOpen = $state(true)
   let activeDropdown = $state<'program' | 'semester' | 'sort' | null>(null)
 
   let selectedGenEds = $state<string[]>([])
@@ -34,8 +39,8 @@
   let fitSchedule = $state(false)
   let noConditions = $state(true)
 
-  let currentProgram = $state('ทวิภาค') 
-  let currentSemester = $state('2566 / 1') 
+  let currentProgram = $state('ทวิภาค')
+  let currentSemester = $state('2566 / 1')
   let currentSort = $state('รหัสวิชา')
   let sortDirection = $state<'asc' | 'desc'>('asc')
 
@@ -56,49 +61,40 @@
   const dayMap: Record<string, string> = {
     mon: 'MO', tue: 'TU', wed: 'WE', thu: 'TH', fri: 'FR', sat: 'SA', sun: 'SU',
   }
+  const evalMap: Record<string, string> = {
+    su: 'SU', grade: 'LETTER',
+  }
+  const KNOWN_DAYS = new Set(['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU'])
+
+  function parseTime(t: string): number | null {
+    if (!t) return null
+    const m = t.trim().match(/^(\d{1,2}):(\d{2})$/)
+    if (!m) return null
+    const h = Number(m[1])
+    const mm = Number(m[2])
+    if (h > 23 || mm > 59) return null
+    return h * 60 + mm
+  }
 
   function getParams() {
     const parts = currentSemester.split(' / ')
-    return { 
-      academicYear: parts[0], 
-      semester: parts[1] === 'ฤดูร้อน' ? '3' : (parts[1] === '2' || parts[1] === 'ภาคปลาย' ? '2' : '1'), 
-      studyProgram: currentProgram === 'นานาชาติ' ? 'I' : (currentProgram === 'ตรีภาค' ? 'T' : 'S') 
+    return {
+      academicYear: parts[0],
+      semester: parts[1] === 'ฤดูร้อน' ? '3' : (parts[1] === '2' || parts[1] === 'ภาคปลาย' ? '2' : '1'),
+      studyProgram: currentProgram === 'นานาชาติ' ? 'I' : (currentProgram === 'ตรีภาค' ? 'T' : 'S')
     }
   }
 
-  async function fetchCourses() {
-    isLoading = true
-    try {
-      const { academicYear, semester, studyProgram } = getParams()
-      const params = new URLSearchParams({ academicYear, semester, studyProgram })
+  function mapCourse(c: any) {
+        const totalMaxSeat = c.sections?.reduce((sum: number, sec: any) => sum + (sec.max ?? sec.capacity ?? 0), 0) || 0
+        const totalCurrentSeat = c.sections?.reduce((sum: number, sec: any) => sum + (sec.regis ?? sec.enrolled ?? 0), 0) || 0
 
-      const res = await fetch(`http://localhost:3000/api/v1/courses?${params.toString()}`, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' }
-      })
+        const allDays = (c.sections ?? []).flatMap((s: any) => (s.classes ?? []).map((cl: any) => cl.dayOfWeek))
 
-      if (!res.ok) throw new Error(`Server error (${res.status})`)
-      const json = await res.json()
-      
-      courses = (json.data || []).map((c: any) => {
-        const totalMaxSeat = c.sections?.reduce((sum: number, sec: any) => sum + (sec.capacity || 0), 0) || 0
-        const totalCurrentSeat = c.sections?.reduce((sum: number, sec: any) => sum + (sec.enrolled || 0), 0) || 0
-
-        const allDays = Array.from(new Set(
-             c.sections?.flatMap((s: any) => s.classes?.map((cl: any) => cl.dayOfWeek))
-        )).filter(Boolean);
-
-        const normalizeDay = (d: string) => {
-            const up = String(d).toUpperCase();
-            if (up.startsWith('MO') || up === '1') return 'MO';
-            if (up.startsWith('TU') || up === '2') return 'TU';
-            if (up.startsWith('WE') || up === '3') return 'WE';
-            if (up.startsWith('TH') || up === '4') return 'TH';
-            if (up.startsWith('FR') || up === '5') return 'FR';
-            if (up.startsWith('SA') || up === '6') return 'SA';
-            if (up.startsWith('SU') || up === '7' || up === '0') return 'SU';
-            return up; 
-        };
+        const normalizeDay = (d: string): string | undefined => {
+          const up = String(d ?? '').toUpperCase().slice(0, 2)
+          return KNOWN_DAYS.has(up) ? up : undefined
+        }
 
         const normalizeGened = (g: string) => {
             if (!g || g === 'NO') return [];
@@ -110,7 +106,9 @@
             return [up];
         };
 
-        const validDays = Array.from(new Set(allDays.map((d: any) => normalizeDay(d)).filter(Boolean)));
+        const validDays = Array.from(new Set(
+          allDays.map((d: any) => normalizeDay(d)).filter((d: string | undefined): d is string => Boolean(d))
+        ))
 
         const nameTh = (c.courseInfo?.courseNameTh || '').toLowerCase()
         const nameEn = (c.courseInfo?.courseNameEn || '').toLowerCase()
@@ -122,7 +120,7 @@
           recommended: false,
           searchString,
           course: {
-            ...c, 
+            ...c,
             code: c.courseNo,
             name: c.courseInfo?.abbrName || c.courseInfo?.courseNameEn || c.courseInfo?.courseNameTh || '-',
             credit: Number(c.courseInfo?.credit) || 0,
@@ -131,10 +129,43 @@
             gened: normalizeGened(c.genEdType),
             review: c.reviewCount || 0,
             rating: c.rating || 0,
-            days: validDays, 
+            days: validDays,
+            gradingType: c.courseInfo?.gradingType,
           },
         }
+  }
+
+  async function fetchCourses() {
+    const { academicYear, semester, studyProgram } = getParams()
+    const cacheKey = `${studyProgram}-${academicYear}-${semester}`
+
+    const cached = courseCache.get(cacheKey)
+    if (cached) {
+      courses = cached
+      isLoading = false
+      return
+    }
+
+    isLoading = true
+    try {
+      const params = new URLSearchParams({
+        academicYear,
+        semester,
+        studyProgram,
       })
+
+      const res = await fetch(`http://localhost:3000/api/v1/courses?${params.toString()}`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' }
+      })
+
+      if (!res.ok) throw new Error(`Server error (${res.status})`)
+      const json = await res.json()
+
+      const mapped = (json.data || []).map(mapCourse)
+      courseCache.set(cacheKey, mapped)
+      courses = mapped
+      return
     } catch (err) {
       console.error('Error fetching courses:', err)
       courses = []
@@ -152,9 +183,9 @@
   function handleSearch(e: Event) {
     const target = e.target as HTMLInputElement;
     if (!target) return;
-    
+
     searchQuery = target.value;
-    
+
     clearTimeout(searchTimeout);
     searchTimeout = setTimeout(() => {
         debouncedSearchQuery = searchQuery;
@@ -165,16 +196,17 @@
     if (!bottomSentinel) return;
     const observer = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting) {
-            displayLimit += 20; 
+            displayLimit += 20;
         }
-    }, { rootMargin: '400px' }); 
-    
+    }, { rootMargin: '400px' });
+
     observer.observe(bottomSentinel);
     return () => observer.disconnect();
   });
 
   $effect(() => {
-    debouncedSearchQuery; selectedGenEds; selectedFaculties; selectedDays; noConditions; currentSort; sortDirection;
+    debouncedSearchQuery; selectedGenEds; selectedFaculties; selectedDays; selectedEval;
+    startTime; endTime; noConditions; currentSort; sortDirection;
     untrack(() => { displayLimit = 20; });
   });
 
@@ -188,13 +220,37 @@
   }
   function toggleSortDirection() { sortDirection = sortDirection === 'asc' ? 'desc' : 'asc' }
 
+  function handleAddSchedule() {
+    const newSchedule = {
+      name: `ตาราง ${scheduleList.length + 1}`,
+      scheduleId: `local-${crypto.randomUUID()}`,
+      schedule: [],
+      semesterType: activeSchedule?.semesterType ?? 'Semester',
+      semester: activeSchedule?.semester ?? currentSemester,
+      isPublic: false,
+    }
+    scheduleList = [...scheduleList, newSchedule]
+    activeSchedule = newSchedule
+    isScheduleDropdownOpen = false
+  }
+
+  function getFirstSectionNo(courseItem: any): number {
+    return Number(courseItem.course.sections?.[0]?.sectionNo) || 1
+  }
+
+  let nextScheduleItemId = $state(Date.now())
+  function newScheduleItemId(): number {
+    nextScheduleItemId += 1
+    return nextScheduleItemId
+  }
+
   function handleToggleCourse(courseItem: any) {
     if (!activeSchedule) return
     const index = activeSchedule.schedule.findIndex((s: any) => s.course.code === courseItem.course.code)
     if (index === -1) {
       activeSchedule.schedule = [
         ...activeSchedule.schedule,
-        { id: crypto.randomUUID(), course: courseItem.course, selectedSection: 1, colorVariant: 'neutral', hidden: false }
+        { id: newScheduleItemId(), course: courseItem.course, selectedSection: getFirstSectionNo(courseItem), colorVariant: 'neutral', hidden: false }
       ]
     } else {
       handleRemoveCourse(courseItem.course.code)
@@ -206,8 +262,33 @@
     activeSchedule.schedule = activeSchedule.schedule.filter((s: any) => s.course.code !== courseCode)
   }
 
+  function handleSelectSection(courseItem: any, sectionNo: string) {
+    if (!activeSchedule) return
+    const secNum = Number(sectionNo)
+    const index = activeSchedule.schedule.findIndex((s: any) => s.course.code === courseItem.course.code)
+    if (index === -1) {
+      activeSchedule.schedule = [
+        ...activeSchedule.schedule,
+        { id: newScheduleItemId(), course: courseItem.course, selectedSection: secNum, colorVariant: 'neutral', hidden: false }
+      ]
+    } else {
+      activeSchedule.schedule[index].selectedSection = secNum
+    }
+  }
+
+  function getSectionOptions(courseItem: any) {
+    return (courseItem.course.sections ?? [])
+      .map((sec: any) => ({ value: String(sec.sectionNo), label: `เซค ${sec.sectionNo}` }))
+  }
+
+  function getSelectedSection(courseCode: string): string {
+    if (!activeSchedule) return ''
+    const entry = activeSchedule.schedule.find((s: any) => s.course.code === courseCode)
+    return entry ? String(entry.selectedSection) : ''
+  }
+
   let filteredCourses = $derived.by(() => {
-    let result = courses 
+    let result = courses
 
     if (debouncedSearchQuery.trim() !== '') {
       const q = debouncedSearchQuery.toLowerCase().trim()
@@ -223,18 +304,37 @@
       })
     }
 
-    if (!noConditions) {
-      if (selectedGenEds.length > 0) {
-        const targetGenEds = selectedGenEds.map(id => genEdMap[id])
-        result = result.filter((item) => targetGenEds.includes(item.course.gened?.[0]))
-      }
-      if (selectedFaculties.length > 0) {
-        result = result.filter((item) => selectedFaculties.includes((item.course.code || '').substring(0, 2)))
-      }
-      if (selectedDays.length > 0) {
-        const targetDays = selectedDays.map(id => dayMap[id])
-        result = result.filter((item) => (item.course.days || []).some((day: string) => targetDays.includes(day)))
-      }
+    if (selectedGenEds.length > 0) {
+      const targetGenEds = selectedGenEds.map(id => genEdMap[id])
+      result = result.filter((item) => targetGenEds.includes(item.course.gened?.[0]))
+    }
+    if (selectedFaculties.length > 0) {
+      result = result.filter((item) => selectedFaculties.includes((item.course.code || '').substring(0, 2)))
+    }
+    if (selectedDays.length > 0) {
+      const targetDays = selectedDays.map(id => dayMap[id])
+      result = result.filter((item) => (item.course.days || []).some((day: string) => targetDays.includes(day)))
+    }
+    if (selectedEval.length > 0) {
+      const targetGrading = selectedEval.map(id => evalMap[id])
+      result = result.filter((item) => targetGrading.includes(item.course.gradingType))
+    }
+
+    const startMin = parseTime(startTime)
+    const endMin = parseTime(endTime)
+    if (startMin !== null || endMin !== null) {
+      const lo = startMin ?? 0
+      const hi = endMin ?? 24 * 60
+      result = result.filter((item) =>
+        (item.course.sections || []).some((sec: any) =>
+          (sec.classes || []).some((cl: any) => {
+            const s = parseTime(cl.periodStart)
+            const e = parseTime(cl.periodEnd)
+            if (s === null || e === null) return false
+            return s >= lo && e <= hi
+          })
+        )
+      )
     }
 
     return [...result].sort((a, b) => {
@@ -245,7 +345,7 @@
           valA = a.course.name || ''
           valB = b.course.name || ''
           return sortDirection === 'asc' ? valA.localeCompare(valB, 'th') : valB.localeCompare(valA, 'th')
-        default: 
+        default:
           valA = a.course.code || ''
           valB = b.course.code || ''
           return sortDirection === 'asc' ? valA.localeCompare(valB) : valB.localeCompare(valA)
@@ -258,6 +358,12 @@
   function onSearchFilter() {
     if (openPanel === 'filter_only') openPanel = null
   }
+
+  let contextLabel = $derived.by(() => {
+    const [year, sem] = currentSemester.split(' / ')
+    const semTh = sem === 'ฤดูร้อน' ? 'ภาคฤดูร้อน' : sem === '2' ? 'ภาคปลาย' : 'ภาคต้น'
+    return `ในปีการศึกษา ${year} ${semTh} หลักสูตร${currentProgram}`
+  })
 </script>
 
 <div class="relative flex h-screen flex-col overflow-hidden bg-white">
@@ -286,11 +392,20 @@
     </nav>
 
     {#if openPanel === 'filter_only' || openPanel === 'selected_only'}
-      <div class="fixed inset-0 z-40 bg-black/5" onclick={() => (openPanel = null)} role="button" tabindex="0" onkeydown={() => {}}></div>
+      <div transition:fade={{ duration: 200 }} class="fixed inset-0 z-40 bg-black/5" onclick={() => (openPanel = null)} role="button" tabindex="0" onkeydown={() => {}}></div>
     {/if}
 
-    {#if openPanel}
-      <aside class="z-50 flex flex-col bg-white transition-all duration-300 ease-in-out {openPanel === 'sidebar' ? 'relative h-full w-[450px] shrink-0 border-r' : 'absolute top-0 left-16 m-4 h-[calc(100vh-2rem)] max-h-[90vh] w-[400px] rounded-[2.5rem] border shadow-2xl'}">
+    {#if openPanel === 'sidebar'}
+      <aside transition:slide={{ axis: 'x', duration: 280, easing: cubicOut }} class="relative z-50 flex h-full w-[450px] shrink-0 flex-col border-r bg-white">
+        {@render panelContent()}
+      </aside>
+    {:else if openPanel}
+      <aside transition:fly={{ x: -24, duration: 250, easing: cubicOut }} class="absolute top-0 left-16 z-50 m-4 flex h-[calc(100vh-2rem)] max-h-[90vh] w-[400px] flex-col rounded-[2.5rem] border bg-white shadow-2xl">
+        {@render panelContent()}
+      </aside>
+    {/if}
+
+    {#snippet panelContent()}
         <div class="flex h-full flex-col overflow-hidden p-6 md:p-8">
           <div class="custom-scrollbar flex-1 overflow-y-auto pr-2 pb-10">
             {#if openPanel === 'sidebar'}
@@ -316,7 +431,7 @@
                         </button>
                       {/each}
                     </div>
-                    <button class="flex w-full items-center justify-center gap-2 border-t p-4 font-bold text-[#004494] transition-colors hover:bg-gray-50">
+                    <button onclick={handleAddSchedule} class="flex w-full items-center justify-center gap-2 border-t p-4 font-bold text-[#004494] transition-colors hover:bg-gray-50">
                       <Plus size={18} strokeWidth={3} /> เพิ่มตาราง
                     </button>
                   </div>
@@ -327,40 +442,71 @@
             {/if}
 
             {#if openPanel === 'sidebar' || openPanel === 'filter_only'}
-              <div class="mb-6 flex items-center gap-2">
-                <Filter size={20} />
-                <h2 class="text-xl font-bold">ตัวกรอง</h2>
-              </div>
-              <div class="mb-8 min-h-[650px]">
-                <FilterBar
-                  bind:selectedGenEds bind:selectedSpecial bind:selectedFaculties bind:selectedDays
-                  bind:selectedEval bind:startTime bind:endTime bind:fitSchedule bind:noConditions onsearch={onSearchFilter}
-                />
-              </div>
+              <button
+                onclick={() => (isFilterOpen = !isFilterOpen)}
+                aria-expanded={isFilterOpen}
+                class="mb-6 flex w-full items-center justify-between"
+              >
+                <span class="flex items-center gap-2">
+                  <Filter size={20} />
+                  <h2 class="text-xl font-bold">ตัวกรอง</h2>
+                </span>
+                <ChevronDown size={20} class="text-gray-500 transition-transform duration-200 {isFilterOpen ? '' : '-rotate-90'}" />
+              </button>
+              {#if isFilterOpen}
+                <div class="mb-8 min-h-[650px]">
+                  <FilterBar
+                    bind:selectedGenEds bind:selectedSpecial bind:selectedFaculties bind:selectedDays
+                    bind:selectedEval bind:startTime bind:endTime bind:fitSchedule bind:noConditions onsearch={onSearchFilter}
+                  />
+                </div>
+              {/if}
               {#if openPanel === 'sidebar'}
                 <hr class="mb-6 opacity-50" />
               {/if}
             {/if}
 
             {#if openPanel === 'sidebar' || openPanel === 'selected_only'}
-              <div class="mb-4 flex items-center gap-2">
-                <BookMarked size={20} />
-                <h2 class="text-xl font-bold">วิชาที่เลือก <span class="ml-2 text-sm font-normal text-gray-400">{activeSchedule?.schedule.reduce((acc: number, curr: any) => acc + curr.course.credit, 0) ?? 0} หน่วยกิต</span></h2>
-              </div>
-              {#if activeSchedule}
+              {#if activeSchedule && activeSchedule.schedule.length > 0}
                 {#key activeSchedule.scheduleId}
-                  <SelectedCourse bind:schedule={activeSchedule.schedule} remove={handleRemoveCourse} />
+                  <SelectedCourse
+                    variant="grouped"
+                    bind:schedule={activeSchedule.schedule}
+                    remove={handleRemoveCourse}
+                    onArrange={() => goto('/schedule')}
+                  />
                 {/key}
+              {:else}
+                <div class="mb-4 flex items-center gap-2">
+                  <BookMarked size={20} />
+                  <h2 class="text-xl font-bold">วิชาที่เลือก <span class="ml-2 text-sm font-normal text-gray-400">0 หน่วยกิต</span></h2>
+                </div>
+                <div class="flex flex-col items-center justify-center gap-3 px-6 py-12 text-center text-[#004494]">
+                  <BookMarked size={56} strokeWidth={1.5} />
+                  <p class="text-lg font-bold text-[#1C1B1F]">เพิ่มวิชาที่สนใจ</p>
+                  <p class="text-sm leading-relaxed text-gray-400">
+                    เพิ่มวิชาด้วยการกดเลือกในรายวิชาที่สนใจ<br />
+                    เพื่อนำมาจัดตารางเรียนและวางแผนการเรียน
+                  </p>
+                </div>
               {/if}
+            {/if}
+
+            {#if openPanel === 'sidebar'}
+              <div class="mt-8 rounded-2xl border border-orange-300 px-5 py-4 text-center text-[15px] leading-relaxed text-orange-500">
+                <span class="font-bold">CU Get Reg ไม่ใช่การลงทะเบียนเรียนจริง</span><br />
+                สามารถลงทะเบียนเรียนได้ที่
+                <a href="https://www2.reg.chula.ac.th/" target="_blank" rel="noreferrer" class="underline">https://www2.reg.chula.ac.th/</a><br />
+                เพียงช่องทางเดียวเท่านั้น
+              </div>
             {/if}
           </div>
         </div>
-      </aside>
-    {/if}
+    {/snippet}
 
     <main class="h-full min-w-0 flex-1 overflow-y-auto scroll-smooth bg-white">
       <div class="flex min-h-full flex-col">
-        <div class="mx-auto w-full max-w-[1200px] flex-1 p-8 lg:p-12">
+        <div class="mx-auto w-full max-w-[1000px] flex-1 p-8 lg:p-12">
           <div class="mb-2 flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div class="flex items-baseline gap-3">
               <h1 class="text-4xl font-bold text-[#1C1B1F]">วิชาเรียน</h1>
@@ -380,7 +526,7 @@
                   </div>
                 {/if}
               </div>
-              
+
               <div class="relative">
                 <button onclick={() => toggleDropdown('semester')} class="flex items-center gap-2 rounded-full border border-neutral-800 px-5 py-2 text-sm font-bold whitespace-nowrap transition-colors hover:bg-gray-50">
                   {currentSemester} <ChevronDown size={16} />
@@ -435,28 +581,38 @@
             </div>
           </div>
 
-          <div class="grid grid-cols-1 gap-4 pb-10 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2">
+          <div class="grid grid-cols-1 gap-x-5 gap-y-6 pb-10 md:grid-cols-2">
             {#if isLoading}
               <div class="col-span-full flex h-64 flex-col items-center justify-center gap-3 text-gray-400">
                 <Loader2 class="animate-spin" size={40} />
                 <p>กำลังโหลดข้อมูลวิชา...</p>
               </div>
             {:else if filteredCourses.length === 0}
-              <div class="col-span-full flex h-64 flex-col items-center justify-center text-gray-400">
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="mb-2 opacity-50"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                <p>ไม่พบรายวิชาที่ตรงกับเงื่อนไข</p>
-               </div>
+              <div class="col-span-full flex flex-col items-center justify-center gap-2 py-24 text-center">
+                <TriangleAlert size={72} strokeWidth={1.5} class="mb-2 text-[#4A6CF7]" />
+                <p class="text-lg font-medium text-[#1C1B1F]">
+                  ไม่พบรายวิชา{debouncedSearchQuery.trim() ? ` ${debouncedSearchQuery.trim()}` : ''}
+                </p>
+                <p class="text-base text-gray-500">{contextLabel}</p>
+                <p class="mt-3 text-sm leading-relaxed text-gray-400">
+                  ลองเปลี่ยนตัวเลือกภาคเรียน ปีการศึกษา หรือหลักสูตร<br />
+                  ในตารางเรียน แล้วลองใหม่อีกครั้งนะ!
+                </p>
+              </div>
             {:else}
-              {#each displayedCourses as item}
+              {#each displayedCourses as item (item.course.code)}
                 <CourseCard
                   course={item.course}
                   recommended={item.recommended}
                   selected={activeSchedule ? activeSchedule.schedule.some((s: any) => s.course.code === item.course.code) : false}
-                  onclick={() => handleToggleCourse(item)}
-                  class="w-full"
+                  onSelect={() => handleToggleCourse(item)}
+                  sections={getSectionOptions(item)}
+                  selectedSection={getSelectedSection(item.course.code)}
+                  onSelectSection={(v: string) => handleSelectSection(item, v)}
+                  class="w-full md:w-full max-w-full"
                 />
               {/each}
-              
+
               {#if displayLimit < filteredCourses.length}
                 <div bind:this={bottomSentinel} class="col-span-full flex h-24 items-center justify-center opacity-50">
                   <Loader2 class="animate-spin text-gray-400" size={24} />

@@ -1,4 +1,7 @@
 <script lang="ts">
+	import { InfoCircle } from '../../atoms/info-circle';
+	import { Modal } from '../../atoms/modal';
+
 	// --- 1. CONFIGURATION DATA ---
 	const genEdOptions = [
 		{ id: 'sci', label: 'วิทย์', color: '#F59E0B', bg: '#FFFBEB' },
@@ -50,6 +53,15 @@
 
 	// --- STATE ---
 	let openDropdown = $state<string | null>(null);
+	let showNoPrereqModal = $state(false);
+	let showFitModal = $state(false);
+
+	function onNoConditionsChange() {
+		if (noConditions) showNoPrereqModal = true;
+	}
+	function onFitScheduleChange() {
+		if (fitSchedule) showFitModal = true;
+	}
 
 	// --- 3. HELPER LOGIC ($derived) ---
 	let activeGenEds = $derived(genEdOptions.filter((o) => selectedGenEds.includes(o.id)));
@@ -359,38 +371,28 @@
 
 		<div class="form-group checkbox-row">
 			<label class="custom-checkbox">
-				<input type="checkbox" bind:checked={noConditions} />
+				<input type="checkbox" bind:checked={noConditions} onchange={onNoConditionsChange} />
 				<span class="checkmark"></span>
 				<span class="label-text">ไม่กำหนดเงื่อนไขรายวิชา</span>
-				<svg
-					class="info-icon"
-					xmlns="http://www.w3.org/2000/svg"
-					width="16"
-					height="16"
-					viewBox="0 0 24 24"
-					fill="none"
-					stroke="#666"
-					stroke-width="2"
-					stroke-linecap="round"
-					stroke-linejoin="round"
-					><circle cx="12" cy="12" r="10" /><line x1="12" y1="16" x2="12" y2="12" /><line
-						x1="12"
-						y1="8"
-						x2="12.01"
-						y2="8"
-					/></svg
-				>
 			</label>
+			<span class="info-slot">
+				<InfoCircle tooltipText="แสดงเฉพาะรายวิชาที่ไม่กำหนดเงื่อนไขในการลงทะเบียน" />
+			</span>
 		</div>
 
 		<div class="form-group">
 			<label style="margin-bottom: 8px; display:block">Fit my schedule</label>
 			<div class="toggle-row">
 				<label class="switch">
-					<input type="checkbox" bind:checked={fitSchedule} />
+					<input type="checkbox" bind:checked={fitSchedule} onchange={onFitScheduleChange} />
 					<span class="slider round"></span>
 				</label>
-				<span class="toggle-label">Fit my schedule <span class="info-icon-circle">ⓘ</span></span>
+				<span class="toggle-label">
+					Fit my schedule
+					<span class="info-slot">
+						<InfoCircle tooltipText="แสดงเฉพาะรายวิชาที่ไม่ชนกับตารางเรียนของคุณ" />
+					</span>
+				</span>
 			</div>
 		</div>
 
@@ -451,6 +453,32 @@
 	</div>
 </div>
 
+<Modal bind:show={showNoPrereqModal} dim centered exitOnBackgroundClick exitOnEsc>
+	<div class="info-modal">
+		<h3 class="info-modal-title">ไม่กำหนดเงื่อนไขรายวิชา</h3>
+		<p class="info-modal-body">
+			เมื่อเปิด ไม่กำหนดเงื่อนไขรายวิชา<br />
+			หน้าแสดงผลวิชาเรียน<br />
+			จะแสดงเฉพาะรายวิชาที่ไม่กำหนดเงื่อนไข<br />
+			ที่ต้องผ่านก่อนการลงทะเบียน
+		</p>
+		<button class="info-modal-btn" onclick={() => (showNoPrereqModal = false)}>ตกลง</button>
+	</div>
+</Modal>
+
+<Modal bind:show={showFitModal} dim centered exitOnBackgroundClick exitOnEsc>
+	<div class="info-modal">
+		<h3 class="info-modal-title">Fit my schedule</h3>
+		<p class="info-modal-body">
+			เมื่อเปิด Fit my schedule<br />
+			หน้าแสดงผลวิชาเรียน<br />
+			จะแสดงเฉพาะรายวิชาที่ไม่ซ้ำวัน เวลา<br />
+			กับตารางเรียนของคุณที่ได้เลือกและจัดไว้
+		</p>
+		<button class="info-modal-btn" onclick={() => (showFitModal = false)}>ตกลง</button>
+	</div>
+</Modal>
+
 <style>
 	.filter-container {
 		width: 100%;
@@ -466,8 +494,16 @@
 	.scroll-content {
 		flex: 1;
 		overflow-y: auto;
+		overflow-x: hidden;
+		scrollbar-width: none; /* Firefox */
+		-ms-overflow-style: none; /* legacy Edge/IE */
 		padding-right: 4px;
 		padding-left: 4px;
+	}
+	.scroll-content::-webkit-scrollbar {
+		width: 0;
+		height: 0;
+		display: none; /* Chrome / Safari */
 	}
 
 	.form-group {
@@ -600,6 +636,13 @@
 	/* --- CHECKBOX --- */
 	.checkbox-row {
 		margin-top: -5px;
+		display: flex;
+		align-items: center;
+		gap: 6px;
+	}
+	.info-slot {
+		display: inline-flex;
+		align-items: center;
 	}
 	.custom-checkbox {
 		display: flex;
@@ -732,5 +775,43 @@
 	}
 	.search-btn:hover {
 		background-color: #c7d2fe;
+	}
+
+	/* --- INFO MODAL --- */
+	.info-modal {
+		width: 420px;
+		max-width: 90vw;
+		background: #fff;
+		border-radius: 24px;
+		padding: 32px 28px;
+		text-align: center;
+		box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
+	}
+	.info-modal-title {
+		margin: 0 0 16px;
+		font-size: 24px;
+		font-weight: 700;
+		color: #004494;
+	}
+	.info-modal-body {
+		margin: 0 0 24px;
+		font-size: 15px;
+		line-height: 1.7;
+		color: #6b7280;
+	}
+	.info-modal-btn {
+		width: 100%;
+		background-color: #e8f0fe;
+		color: #004494;
+		border: none;
+		padding: 12px;
+		border-radius: 12px;
+		font-weight: 700;
+		font-size: 16px;
+		cursor: pointer;
+		transition: background-color 0.2s;
+	}
+	.info-modal-btn:hover {
+		background-color: #d6e4fd;
 	}
 </style>

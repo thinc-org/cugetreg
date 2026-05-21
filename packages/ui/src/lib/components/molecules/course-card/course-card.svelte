@@ -6,15 +6,22 @@
 	import type { Course } from './index.js';
 
 	import { Button } from '../../atoms/button/index.js';
+	import { Chip } from '../../atoms/chip/index.js';
 	import { DayChip } from '../../atoms/day-chip/index.js';
 	import { GenedChip } from '../../atoms/gened-chip/index.js';
 	import { RecommendedTag } from '../../atoms/recommended-tag/index.js';
+	import * as Select from '../../molecules/select/index.js';
 
 	interface Props {
 		class?: string | undefined | null;
 		course?: Course;
 		selected?: boolean;
 		recommended?: boolean;
+		specialType?: string;
+		onSelect?: () => void;
+		sections?: Array<{ value: string; label: string }>;
+		selectedSection?: string;
+		onSelectSection?: (value: string) => void;
 		[key: string]: unknown;
 	}
 
@@ -23,10 +30,20 @@
 		course,
 		selected = $bindable(false),
 		recommended = false,
+		specialType,
+		onSelect,
+		sections,
+		selectedSection = $bindable(''),
+		onSelectSection,
 		...rest
 	}: Props = $props();
 
-	export const onButtonClick = () => {
+	export const onButtonClick = (event?: MouseEvent) => {
+		event?.stopPropagation();
+		if (onSelect) {
+			onSelect();
+			return;
+		}
 		selected = !selected;
 	};
 </script>
@@ -49,6 +66,9 @@
 			</div>
 		</div>
 		<div class="flex gap-1">
+			{#if specialType}
+				<Chip class="border border-indigo-500 bg-white text-indigo-700">{specialType}</Chip>
+			{/if}
 			{#each course?.gened ?? [] as gened (gened)}
 				<GenedChip type={gened} />
 			{/each}
@@ -68,14 +88,51 @@
 			{/each}
 		</div>
 	</div>
-	<div class="flex flex-row items-center justify-between">
-		<Button
-			variant="outlined"
-			color="neutral"
-			class="text-caption md:text-body2 h-7 w-36 md:h-9 md:w-48"
-		>
-			เลือกเซคชัน
-		</Button>
+	<div class="flex flex-row items-center justify-between gap-2">
+		{#if sections && sections.length === 1}
+			<div
+				class="text-caption md:text-body2 flex h-7 w-36 items-center justify-center rounded-button border border-neutral-200 text-neutral-700 md:h-9 md:w-48"
+			>
+				{sections[0].label}
+			</div>
+		{:else if sections && sections.length > 1}
+			<Select.Root
+				type="single"
+				bind:value={
+					() => selectedSection,
+					(v) => {
+						selectedSection = v;
+						onSelectSection?.(v);
+					}
+				}
+			>
+				<Select.Trigger
+					class="text-caption md:text-body2 h-7 w-36 md:h-9 md:w-48 rounded-button"
+				>
+					{selectedSection
+						? (sections.find((s) => s.value === selectedSection)?.label ?? 'เลือกเซคชัน')
+						: 'เลือกเซคชัน'}
+				</Select.Trigger>
+				<Select.Content role="listbox">
+					<Select.Group>
+						{#each sections as sec (sec.value)}
+							<Select.Item value={sec.value} label={sec.label} role="option">
+								{sec.label}
+							</Select.Item>
+						{/each}
+					</Select.Group>
+				</Select.Content>
+			</Select.Root>
+		{:else}
+			<Button
+				variant="outlined"
+				color="neutral"
+				class="text-caption md:text-body2 h-7 w-36 md:h-9 md:w-48"
+				disabled
+			>
+				ไม่มีเซคชัน
+			</Button>
+		{/if}
 		{#if !selected}
 			<Button
 				variant="outlined"
@@ -92,7 +149,7 @@
 				onclick={onButtonClick}
 				class="text-caption md:text-body2 h-7 w-36 md:h-9 md:w-48"
 			>
-				เลือก <Check size="16" strokeWidth="3" />
+				เลือกแล้ว <Check size="16" strokeWidth="3" />
 			</Button>
 		{/if}
 	</div>

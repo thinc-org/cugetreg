@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -s http://localhost:3000/api/v1/courses?academicYear=2566)",
+      "Bash(studyProgram=S 2>&1)",
+      "Bash(pnpm check *)",
+      "Bash(cd C:\\\\\\\\code\\\\\\\\cugetreg\\\\\\\\apps\\\\\\\\cugetreg)",
+      "PowerShell(pnpm *)",
+      "Bash(find /c/code/cugetreg/node_modules/.pnpm/bits-ui* -name \"types.d.ts\" -path \"*select*\")",
+      "Bash(pnpm exec *)",
+      "Bash(pnpm prepack *)",
+      "PowerShell($out = & pnpm --filter cugetreg check 2>&1; \\($out -join \"`n\"\\) | Select-String -Pattern \"home/|Home.svelte\" -Context 0,2 | Select-Object -First 40)",
+      "PowerShell($out = & pnpm --filter cugetreg check 2>&1; \\($out -join \"`n\"\\) | Select-String -Pattern \"Error\" -Context 1,3 | Select-Object -First 50)",
+      "Read(//c/c/code/cugetreg/packages/ui/src/lib/components/atoms/**)",
+      "Read(//c/c/code/cugetreg/packages/ui/src/lib/components/atoms/modal/**)",
+      "Read(//c/c/code/cugetreg/packages/ui/src/lib/components/atoms/info-circle/**)",
+      "PowerShell($out = & pnpm --filter @cugetreg/ui check 2>&1; $text = \\($out -join \"`n\"\\); if \\($text -match \"filter.svelte|selected-course.svelte\"\\) { $text | Select-String -Pattern \"filter.svelte|selected-course.svelte\" -Context 0,3 | Select-Object -First 20 } else { Write-Output \"NO ERRORS in filter/selected-course\" }; $text | Select-String -Pattern \"svelte-check found\")",
+      "PowerShell($out = & pnpm --filter @cugetreg/ui check 2>&1; $text = \\($out -join \"`n\"\\); $lines = $text -split \"`n\"; for \\($i=0; $i -lt $lines.Length; $i++\\) { if \\($lines[$i] -match \"selected-course.svelte\" -and $lines[$i+1] -match \"Error\"\\) { Write-Output $lines[$i]; Write-Output $lines[$i+1] } }; Write-Output \"--- done scanning selected-course ---\")",
+      "Bash(pnpm lint *)",
+      "Bash(pnpm build *)",
+      "Read(//c/c/code/cugetreg/apps/cugetreg/src/**)",
+      "Read(//c/c/code/cugetreg/apps/cugetreg/**)",
+      "Bash(grep -rln 'writable\\\\|svelte/store\\\\|$state\\\\|getContext\\\\|setContext' packages/utils packages/ui/src)",
+      "Bash(git check-ignore *)"
+    ]
+  }
+}

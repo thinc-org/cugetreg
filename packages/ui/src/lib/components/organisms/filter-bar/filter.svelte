@@ -426,7 +426,7 @@
 				<div class="dropdown-arrow">▼</div>
 				{#if openDropdown === 'eval'}
 					<div
-						class="dropdown-list"
+						class="dropdown-list dropdown-list--up"
 						onclick={(e) => e.stopPropagation()}
 						role="listbox"
 						tabindex="0"
@@ -548,6 +548,11 @@
 		z-index: 50;
 		max-height: 200px;
 		overflow-y: auto;
+	}
+	/* For the last field (วิธีการวัดผล): open upward so it isn't covered by the ค้นหา button. */
+	.dropdown-list--up {
+		top: auto;
+		bottom: 105%;
 	}
 	.option-item {
 		padding: 10px 15px;

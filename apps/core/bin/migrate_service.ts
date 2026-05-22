@@ -18,10 +18,11 @@ import {
   Visible,
 } from "../src/generated/prisma/client.js";
 import type {
-  DayOfWeek,
+  // make lint pass: unused imports commented out
+  // DayOfWeek,
   GenEdType,
-  Semester,
-  StudyProgram,
+  // Semester,
+  // StudyProgram,
 } from "../src/generated/prisma/enums.js";
 import { PrismaService } from "../src/generated/prisma-effect/index.js";
 import { LexoRankService } from "../src/services/lexorank.service.js";

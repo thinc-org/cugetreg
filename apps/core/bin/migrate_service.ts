@@ -17,12 +17,7 @@ import {
   type User,
   Visible,
 } from "../src/generated/prisma/client.js";
-import type {
-  DayOfWeek,
-  GenEdType,
-  Semester,
-  StudyProgram,
-} from "../src/generated/prisma/enums.js";
+import type { GenEdType } from "../src/generated/prisma/enums.js";
 import { PrismaService } from "../src/generated/prisma-effect/index.js";
 import { LexoRankService } from "../src/services/lexorank.service.js";
 import {

@@ -95,41 +95,41 @@
 		</div>
 	{:else}
 		<Accordion.Root class="w-full" type="single" value="selected-course">
-		<Accordion.Item value="selected-course">
-			<Accordion.Trigger class="border-b border-neutral-200">
-				<div class="flex">
-					<BookMarked class="mr-2" />
-					<span class="">วิชาที่เลือก</span>
-					<span class="ml-2 flex items-baseline-last text-xs font-light text-neutral-400"
-						>{totalCredit} หน่วยกิต</span
+			<Accordion.Item value="selected-course">
+				<Accordion.Trigger class="border-b border-neutral-200">
+					<div class="flex">
+						<BookMarked class="mr-2" />
+						<span class="">วิชาที่เลือก</span>
+						<span class="ml-2 flex items-baseline-last text-xs font-light text-neutral-400"
+							>{totalCredit} หน่วยกิต</span
+						>
+					</div>
+				</Accordion.Trigger>
+				<Accordion.Content>
+					<SortableList.Root
+						ondragend={handleDragEnd}
+						hasLockedAxis
+						transition={{
+							duration: 160,
+							easing: 'cubic-bezier(0.2, 1, 0.1, 1)'
+						}}
+						gap={0}
+						class="max-h-[40vh] grow overflow-y-scroll"
 					>
-				</div>
-			</Accordion.Trigger>
-			<Accordion.Content>
-				<SortableList.Root
-					ondragend={handleDragEnd}
-					hasLockedAxis
-					transition={{
-						duration: 160,
-						easing: 'cubic-bezier(0.2, 1, 0.1, 1)'
-					}}
-					gap={0}
-					class="max-h-[40vh] grow overflow-y-scroll"
-				>
-					{#each schedule as course, index (course.id)}
-						<SortableList.Item id={course.id.toString()} {index} class="my-0">
-							<div class="ssl-item-content">
-								{@render selectedCourseItem(course)}
-							</div>
-						</SortableList.Item>
-					{/each}
-				</SortableList.Root>
-				<div class="px-2">
-					<Button class="w-full" color="neutral">ค้นหาวิชาเรียน</Button>
-				</div>
-			</Accordion.Content>
-		</Accordion.Item>
-	</Accordion.Root>
+						{#each schedule as course, index (course.id)}
+							<SortableList.Item id={course.id.toString()} {index} class="my-0">
+								<div class="ssl-item-content">
+									{@render selectedCourseItem(course)}
+								</div>
+							</SortableList.Item>
+						{/each}
+					</SortableList.Root>
+					<div class="px-2">
+						<Button class="w-full" color="neutral">ค้นหาวิชาเรียน</Button>
+					</div>
+				</Accordion.Content>
+			</Accordion.Item>
+		</Accordion.Root>
 	{/if}
 	{#if showChangeColorModal}
 		{@render changeColorModal()}

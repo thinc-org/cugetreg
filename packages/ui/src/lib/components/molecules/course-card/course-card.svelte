@@ -91,7 +91,7 @@
 	<div class="flex flex-row items-center justify-between gap-2">
 		{#if sections && sections.length === 1}
 			<div
-				class="text-caption md:text-body2 flex h-7 w-36 items-center justify-center rounded-button border border-neutral-200 text-neutral-700 md:h-9 md:w-48"
+				class="text-caption md:text-body2 rounded-button flex h-7 w-36 items-center justify-center border border-neutral-200 text-neutral-700 md:h-9 md:w-48"
 			>
 				{sections[0].label}
 			</div>
@@ -106,9 +106,7 @@
 					}
 				}
 			>
-				<Select.Trigger
-					class="text-caption md:text-body2 h-7 w-36 md:h-9 md:w-48 rounded-button"
-				>
+				<Select.Trigger class="text-caption md:text-body2 rounded-button h-7 w-36 md:h-9 md:w-48">
 					{selectedSection
 						? (sections.find((s) => s.value === selectedSection)?.label ?? 'เลือกเซคชัน')
 						: 'เลือกเซคชัน'}

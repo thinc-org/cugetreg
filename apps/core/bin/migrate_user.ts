@@ -1,18 +1,10 @@
-import { Console, Effect } from "effect";
-
 import type { MongoUser } from "./migrate_interface.js";
 import { migrateUser, safeFsJsonRead } from "./migrate_service.js";
-export const runUserMigration = Effect.gen(function* () {
-  const usersData = yield* safeFsJsonRead<MongoUser[]>("users.json");
 
-  Console.log(`Starting migration for ${usersData.length} users`);
+export async function runUserMigration() {
+  const usersData = safeFsJsonRead<MongoUser[]>("users.json");
 
-  const migrationProgram = yield* Effect.forEach(
-    usersData,
-    (data) => migrateUser(data),
-    {
-      concurrency: 100,
-      discard: true,
-    },
-  );
-});
+  console.log(`Starting migration for ${usersData.length} users`);
+
+  await Promise.all(usersData.map((data) => migrateUser(data)));
+}

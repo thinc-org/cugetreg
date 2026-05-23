@@ -2,7 +2,11 @@ import cliProgress from "cli-progress";
 import * as R from "remeda";
 
 import type { Course, CourseOverride } from "./migrate_interface.js";
-import { migrateCourse, runConcurrent, safeFsJsonRead } from "./migrate_service.js";
+import {
+  migrateCourse,
+  runConcurrent,
+  safeFsJsonRead,
+} from "./migrate_service.js";
 
 import { GenEdType } from "../src/generated/prisma/client.js";
 import { mapGenEdType } from "../src/utils/enumMapper.js";

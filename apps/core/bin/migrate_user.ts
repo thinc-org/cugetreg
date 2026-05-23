@@ -1,7 +1,11 @@
 import cliProgress from "cli-progress";
 
 import type { MongoUser } from "./migrate_interface.js";
-import { migrateUser, runConcurrent, safeFsJsonRead } from "./migrate_service.js";
+import {
+  migrateUser,
+  runConcurrent,
+  safeFsJsonRead,
+} from "./migrate_service.js";
 
 const CONCURRENCY = 20;
 

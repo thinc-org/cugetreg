@@ -1,7 +1,11 @@
 import cliProgress from "cli-progress";
 
 import type { Review } from "./migrate_interface.js";
-import { migrateReview, runConcurrent, safeFsJsonRead } from "./migrate_service.js";
+import {
+  migrateReview,
+  runConcurrent,
+  safeFsJsonRead,
+} from "./migrate_service.js";
 
 const CONCURRENCY = 50;
 

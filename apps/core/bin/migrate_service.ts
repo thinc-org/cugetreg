@@ -141,7 +141,6 @@ export async function migrateCourse(data: Course, currentGenEd: GenEdType) {
         },
       },
     });
-
   } catch (err) {
     console.error(`Skipping ${data.courseNo}: ${(err as Error).message}`);
   }
@@ -244,7 +243,6 @@ export async function migrateUser(mongoUser: MongoUser) {
         }
       }
     }
-
   } catch (err) {
     console.error(`Skipping ${mongoUser.email}: ${(err as Error).message}`);
   }

@@ -1,17 +1,21 @@
-import { Effect } from "effect";
+import cliProgress from "cli-progress";
 import * as R from "remeda";
 
 import type { Course, CourseOverride } from "./migrate_interface.js";
-import { migrateCourse, safeFsJsonRead } from "./migrate_service.js";
+import {
+  migrateCourse,
+  runConcurrent,
+  safeFsJsonRead,
+} from "./migrate_service.js";
 
 import { GenEdType } from "../src/generated/prisma/client.js";
 import { mapGenEdType } from "../src/utils/enumMapper.js";
 
-export const runCourseMigration = Effect.gen(function* () {
-  const overridesData =
-    yield* safeFsJsonRead<CourseOverride[]>("overrides.json");
+const CONCURRENCY = 50;
 
-  const coursesData = yield* safeFsJsonRead<Course[]>("courses.json");
+export async function runCourseMigration() {
+  const overridesData = safeFsJsonRead<CourseOverride[]>("overrides.json");
+  const coursesData = safeFsJsonRead<Course[]>("courses.json");
 
   const genEdOverrideByCourseNo = R.pipe(
     overridesData,
@@ -19,15 +23,17 @@ export const runCourseMigration = Effect.gen(function* () {
     R.mapValues((value) => mapGenEdType(value.genEdType)),
   );
 
-  console.log(`Starting migration of ${coursesData.length} courses`);
-
-  const migrationProgram = yield* Effect.forEach(
-    coursesData,
-    (data) => {
-      const currentGenEd =
-        genEdOverrideByCourseNo[data.courseNo] || GenEdType.NO;
-      return migrateCourse(data, currentGenEd);
-    },
-    { discard: true, concurrency: 100 },
+  const bar = new cliProgress.SingleBar(
+    { format: "  Courses  [{bar}] {value}/{total} ({percentage}%)" },
+    cliProgress.Presets.shades_classic,
   );
-});
+  bar.start(coursesData.length, 0);
+
+  await runConcurrent(coursesData, CONCURRENCY, async (data) => {
+    const currentGenEd = genEdOverrideByCourseNo[data.courseNo] || GenEdType.NO;
+    await migrateCourse(data, currentGenEd);
+    bar.increment();
+  });
+
+  bar.stop();
+}

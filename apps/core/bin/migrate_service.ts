@@ -1,5 +1,4 @@
 import dayjs from "dayjs";
-import { Console, Effect } from "effect";
 import * as fs from "fs";
 import * as R from "ramda";
 
@@ -10,6 +9,7 @@ import type {
   Review,
 } from "./migrate_interface.ts";
 
+import { prisma } from "../src/db/clients.js";
 import {
   type Cart,
   GradingType,
@@ -17,13 +17,7 @@ import {
   type User,
   Visible,
 } from "../src/generated/prisma/client.js";
-import type {
-  DayOfWeek,
-  GenEdType,
-  Semester,
-  StudyProgram,
-} from "../src/generated/prisma/enums.js";
-import { PrismaService } from "../src/generated/prisma-effect/index.js";
+import type { GenEdType } from "../src/generated/prisma/enums.js";
 import { LexoRankService } from "../src/services/lexorank.service.js";
 import {
   mapDayOfWeek,
@@ -46,22 +40,23 @@ export function parseExamDate(
   return d.startOf("day").add(hours, "hours").add(minutes, "minutes").toDate();
 }
 
-export const safeFsJsonRead = <T>(path: string) =>
-  Effect.try({
-    try: () => fs.readFileSync(path, "utf-8"),
-    catch: (e) => new Error(`JSON read failed`, { cause: e }),
-  }).pipe(Effect.flatMap((content) => safeParseJSON<T>(content)));
+export function safeFsJsonRead<T>(path: string): T {
+  try {
+    const content = fs.readFileSync(path, "utf-8");
+    return JSON.parse(content) as T;
+  } catch (e) {
+    throw new Error(`Failed to read/parse ${path}`, { cause: e });
+  }
+}
 
-const safeParseJSON = <T>(jsonString: string) =>
-  Effect.try({
-    try: () => JSON.parse(jsonString) as T,
-    catch: (e) => new Error(`JSON parsing failed`, { cause: e }),
-  });
+export async function migrateCourse(data: Course, currentGenEd: GenEdType) {
+  try {
+    const gradingType =
+      data.creditHours && data.creditHours.includes("S/U")
+        ? GradingType.SU
+        : GradingType.LETTER;
 
-export const migrateCourse = (data: Course, currentGenEd: GenEdType) =>
-  Effect.gen(function* (_) {
-    const prisma = yield* PrismaService;
-    yield* prisma.courseInfo.upsert({
+    await prisma.courseInfo.upsert({
       where: { courseNo: data.courseNo },
       update: {
         abbrName: data.abbrName,
@@ -73,10 +68,7 @@ export const migrateCourse = (data: Course, currentGenEd: GenEdType) =>
         department: data.department || null,
         credit: new Prisma.Decimal(data.credit),
         creditHours: data.creditHours || null,
-        gradingType:
-          data.creditHours && data.creditHours.includes("S/U")
-            ? GradingType.SU
-            : GradingType.LETTER,
+        gradingType,
         academicYear: parseInt(data.academicYear),
         semester: mapSemester(data.semester),
         studyProgram: mapStudyProgram(data.studyProgram),
@@ -92,17 +84,14 @@ export const migrateCourse = (data: Course, currentGenEd: GenEdType) =>
         department: data.department || null,
         credit: new Prisma.Decimal(data.credit),
         creditHours: data.creditHours || null,
-        gradingType:
-          data.creditHours && data.creditHours.includes("S/U")
-            ? GradingType.SU
-            : GradingType.LETTER,
+        gradingType,
         academicYear: parseInt(data.academicYear),
         semester: mapSemester(data.semester),
         studyProgram: mapStudyProgram(data.studyProgram),
       },
     });
 
-    yield* prisma.course.upsert({
+    await prisma.course.upsert({
       where: {
         course_unique: {
           courseNo: data.courseNo,
@@ -152,18 +141,14 @@ export const migrateCourse = (data: Course, currentGenEd: GenEdType) =>
         },
       },
     });
+  } catch (err) {
+    console.error(`Skipping ${data.courseNo}: ${(err as Error).message}`);
+  }
+}
 
-    yield* Console.log(`Successfully migrated: ${data.courseNo}`);
-  }).pipe(
-    Effect.catchAll((err) =>
-      Console.error(`Skipping ${data.courseNo}: ${err.message}`),
-    ),
-  );
-
-export const migrateReview = (item: Review) =>
-  Effect.gen(function* () {
-    const prisma = yield* PrismaService;
-    yield* prisma.review.upsert({
+export async function migrateReview(item: Review) {
+  try {
+    await prisma.review.upsert({
       where: { id: item._id.$oid },
       update: {},
       create: {
@@ -176,23 +161,17 @@ export const migrateReview = (item: Review) =>
         studyProgram: mapStudyProgram(item.studyProgram),
         status: item.status,
         rejectionReason: item.rejectionReason || null,
-        user: {
-          connect: { id: item.ownerId.$oid },
-        },
+        user: { connect: { id: item.ownerId.$oid } },
       },
     });
+  } catch (err) {
+    console.error(`Failed to migrate review: ${(err as Error).message}`);
+  }
+}
 
-    yield* Console.log(`Migrated review: ${item._id.$oid}`);
-  }).pipe(
-    Effect.catchAll((err) =>
-      Console.error(`Failed to migrate review: ${err.message}`),
-    ),
-  );
-
-export const migrateUser = (mongoUser: MongoUser) =>
-  Effect.gen(function* (_) {
-    const prisma = yield* PrismaService;
-    const user = (yield* prisma.user.upsert({
+export async function migrateUser(mongoUser: MongoUser) {
+  try {
+    const user = (await prisma.user.upsert({
       where: { id: mongoUser._id.$oid },
       update: { name: mongoUser.name, email: mongoUser.email },
       create: {
@@ -229,7 +208,7 @@ export const migrateUser = (mongoUser: MongoUser) =>
         const items = cartGroups[groupKey]!;
         const first = items[0];
 
-        const cart = (yield* prisma.cart.create({
+        const cart = (await prisma.cart.create({
           data: {
             userId: user.id,
             academicYear: parseInt(first.academicYear),
@@ -249,8 +228,7 @@ export const migrateUser = (mongoUser: MongoUser) =>
 
         for (const item of sortedItems) {
           currentItemRank = LexoRankService.getNextRank(currentItemRank);
-
-          yield* prisma.cartItem.create({
+          await prisma.cartItem.create({
             data: {
               cartId: cart.id,
               courseNo: item.courseNo,
@@ -265,10 +243,17 @@ export const migrateUser = (mongoUser: MongoUser) =>
         }
       }
     }
+  } catch (err) {
+    console.error(`Skipping ${mongoUser.email}: ${(err as Error).message}`);
+  }
+}
 
-    yield* Console.log(`Successfully migrated: ${user.name}`);
-  }).pipe(
-    Effect.catchAll((err) =>
-      Console.error(`Skipping ${mongoUser.email}: ${err.message}`),
-    ),
-  );
+export async function runConcurrent<T>(
+  items: T[],
+  concurrency: number,
+  fn: (item: T) => Promise<void>,
+): Promise<void> {
+  for (let i = 0; i < items.length; i += concurrency) {
+    await Promise.all(items.slice(i, i + concurrency).map(fn));
+  }
+}

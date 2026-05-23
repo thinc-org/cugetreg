@@ -1,16 +1,27 @@
-import { Effect } from "effect";
+import cliProgress from "cli-progress";
 
 import type { Review } from "./migrate_interface.js";
-import { migrateReview, safeFsJsonRead } from "./migrate_service.js";
+import {
+  migrateReview,
+  runConcurrent,
+  safeFsJsonRead,
+} from "./migrate_service.js";
 
-export const runReviewMigration = Effect.gen(function* () {
-  const reviewsData = yield* safeFsJsonRead<Review[]>("reviews.json");
+const CONCURRENCY = 50;
 
-  console.log("Starting Migrate Reviews");
+export async function runReviewMigration() {
+  const reviewsData = safeFsJsonRead<Review[]>("reviews.json");
 
-  const migrationReviewsProgram = yield* Effect.forEach(
-    reviewsData,
-    (item) => migrateReview(item),
-    { discard: true, concurrency: 100 },
+  const bar = new cliProgress.SingleBar(
+    { format: "  Reviews  [{bar}] {value}/{total} ({percentage}%)" },
+    cliProgress.Presets.shades_classic,
   );
-});
+  bar.start(reviewsData.length, 0);
+
+  await runConcurrent(reviewsData, CONCURRENCY, async (item) => {
+    await migrateReview(item);
+    bar.increment();
+  });
+
+  bar.stop();
+}

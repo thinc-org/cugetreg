@@ -1,5 +1,4 @@
 import { OpenAPIHono } from "@hono/zod-openapi";
-import { Console, Effect } from "effect";
 
 import { prisma } from "../db/clients.js";
 import type { Variables } from "../lib/auth.js";
@@ -7,8 +6,9 @@ import {
   getCourseByNoRoute,
   getCoursesRoute,
 } from "../routes_define/courses.routes.js";
+import { mapGenEdType, mapStudyProgram } from "../utils/enumMapper.js";
 
-// Map ตัวเลข Semester เป็น Enum
+// API accepts numeric semester (1/2/3); DB stores enum strings (FIRST/SECOND/SUMMER)
 const semesterMap: Record<number, "FIRST" | "SECOND" | "SUMMER"> = {
   1: "FIRST",
   2: "SECOND",
@@ -19,104 +19,72 @@ const courses = new OpenAPIHono<{ Variables: Variables }>();
 
 courses
   .openapi(getCoursesRoute, async (c) => {
-    const {
-      studyProgram,
-      academicYear,
-      semester,
-      q,
-      genEdType,
-      faculty,
-      sortBy,
-      sortOrder,
-      limit,
-    } = c.req.valid("query");
+    try {
+      const {
+        studyProgram,
+        academicYear,
+        semester,
+        genEdType,
+        faculty,
+        sortBy,
+        sortOrder,
+        limit,
+      } = c.req.valid("query");
 
-    const program = Effect.gen(function* () {
-      const courses = yield* Effect.tryPromise({
-        try: () =>
-          prisma.course.findMany({
-            where: {
-              studyProgram,
-              academicYear,
-              semester: semester ? semesterMap[semester] : undefined,
-              genEdType,
-              faculty,
-            },
-            include: {
-              courseInfo: true,
-              sections: {
-                include: {
-                  classes: true,
-                },
-              },
-            },
-            orderBy: sortBy
-              ? {
-                  [sortBy]: sortOrder || "asc",
-                }
-              : undefined,
-            take: limit ? Number(limit) : undefined,
-          }),
-        catch: (error) => new Error(`Prisma Error:`), // TODO: Handle this
+      const courseList = await prisma.course.findMany({
+        where: {
+          studyProgram: mapStudyProgram(studyProgram),
+          academicYear,
+          semester: semester ? semesterMap[semester] : undefined,
+          genEdType: genEdType ? mapGenEdType(genEdType) : undefined,
+          courseInfo: faculty ? { faculty } : undefined,
+        },
+        include: {
+          courseInfo: true,
+          sections: { include: { classes: true } },
+        },
+        orderBy: sortBy ? { [sortBy]: sortOrder || "asc" } : undefined,
+        take: limit ? Number(limit) : undefined,
       });
 
-      const courseNos = courses.map((c) => c.courseNo);
+      // Attach review counts in a separate GROUP BY query — Prisma can't do this in one query
+      const courseNos = courseList.map((c) => c.courseNo);
 
-      const reviewCounts = yield* Effect.tryPromise({
-        try: () =>
-          prisma.review.groupBy({
-            by: ["courseNo"],
-            _count: {
-              _all: true,
-            },
-            where: {
-              courseNo: { in: courseNos },
-            },
-          }),
-        catch: (error) => new Error(`Review Count Error:`), // TODO: Handle this
+      const reviewCounts = await prisma.review.groupBy({
+        by: ["courseNo"],
+        _count: { _all: true },
+        where: { courseNo: { in: courseNos } },
       });
 
-      const result = courses.map((course) => {
+      const result = courseList.map((course) => {
         const reviewData = reviewCounts.find(
           (r) => r.courseNo === course.courseNo,
         );
-        return {
-          ...course,
-          reviewCount: reviewData?._count._all || 0,
-        };
+        return { ...course, reviewCount: reviewData?._count._all || 0 };
       });
 
       return c.json({ data: result }, 200);
-    }).pipe(
-      Effect.catchAll((err) => {
-        return Effect.gen(function* () {
-          yield* Console.error("Fetch Courses Error:", err);
-          return c.json({ error: "INTERNAL_SERVER_ERROR" }, 500);
-        });
-      }),
-    );
-    return await Effect.runPromise(program);
+    } catch (err) {
+      console.error("Fetch Courses Error:", err);
+      return c.json({ error: "INTERNAL_SERVER_ERROR" }, 500);
+    }
   })
   .openapi(getCourseByNoRoute, async (c) => {
-    const { courseNo } = c.req.valid("param");
-    const { studyProgram, academicYear, semester } = c.req.valid("query");
+    try {
+      const { courseNo } = c.req.valid("param");
+      const { studyProgram, academicYear, semester } = c.req.valid("query");
 
-    const program = Effect.gen(function* () {
-      const course = yield* Effect.tryPromise({
-        try: () =>
-          prisma.course.findFirst({
-            where: {
-              courseNo,
-              studyProgram,
-              academicYear,
-              semester: semester ? semesterMap[semester] : undefined,
-            },
-            include: {
-              courseInfo: true,
-              sections: { include: { classes: true } },
-            },
-          }),
-        catch: (e) => new Error("DB Error"),
+      const course = await prisma.course.findFirst({
+        where: {
+          courseNo,
+          studyProgram: mapStudyProgram(studyProgram),
+          academicYear,
+          semester: semester ? semesterMap[semester] : undefined,
+        },
+        include: {
+          courseInfo: true,
+          sections: { include: { classes: true } },
+        },
       });
 
       if (!course) {
@@ -124,15 +92,10 @@ courses
       }
 
       return c.json(course, 200);
-    }).pipe(
-      Effect.catchAll((err) => {
-        return Effect.gen(function* () {
-          yield* Console.error("Fetch Course Error:", err);
-          return c.json({ error: "INTERNAL_SERVER_ERROR" }, 500);
-        });
-      }),
-    );
-    return await Effect.runPromise(program);
+    } catch (err) {
+      console.error("Fetch Course Error:", err);
+      return c.json({ error: "INTERNAL_SERVER_ERROR" }, 500);
+    }
   });
 
 export default courses;

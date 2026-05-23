@@ -7,6 +7,26 @@ import {
   ExamScheduleItemSchema,
 } from "./carts.response.schema.js";
 
+const SectionSchema = z.object({
+  id: z.string(),
+  sectionNo: z.number().int(),
+  closed: z.boolean(),
+  regis: z.number(),
+  max: z.number(),
+  note: z.string().nullable(),
+  classes: z.array(
+    z.object({
+      type: z.string(),
+      dayOfWeek: z.string(),
+      periodStart: z.string(),
+      periodEnd: z.string(),
+      building: z.string().nullable(),
+      room: z.string().nullable(),
+      professors: z.array(z.string()),
+    }),
+  ),
+});
+
 const PublicCartItemDetailSchema = z.object({
   id: z.string(),
   courseNo: z.string(),
@@ -19,14 +39,7 @@ const PublicCartItemDetailSchema = z.object({
     courseNameEn: z.string(),
     credit: z.string(),
   }),
-  section: z
-    .object({
-      closed: z.boolean(),
-      regis: z.number(),
-      max: z.number(),
-      note: z.string().nullable(),
-    })
-    .nullable(),
+  sections: z.array(SectionSchema),
 });
 
 export const PublicCartDetailResponseSchema = z.object({
@@ -75,7 +88,7 @@ export const ImportPublicCartResponseSchema = z.object({
   }),
 });
 
-const CartItemDetailSchema = z.object({
+const _CartItemDetailSchema = z.object({
   id: z.string(),
   courseNo: z.string(),
   sectionNo: z.number(),

@@ -1,29 +1,23 @@
 import "dotenv/config";
 
-import { Console, Effect } from "effect";
-
 import { runCourseMigration } from "./migrate_course.js";
 import { runReviewMigration } from "./migrate_review.js";
 import { runUserMigration } from "./migrate_user.js";
 
-import { PrismaLive } from "../src/db/clients.js";
+try {
+  console.log("Starting All Migration Process...");
 
-const mainMigrationProgram = Effect.gen(function* () {
-  yield* Console.log("Starting All Migration Process...");
+  console.log("Step 1: Migrating Courses...");
+  await runCourseMigration();
 
-  yield* Console.log("Step 1: Migrating Courses...");
-  yield* runCourseMigration;
+  console.log("Step 2: Migrating Users...");
+  await runUserMigration();
 
-  yield* Console.log("Step 2: Migrating Users...");
-  yield* runUserMigration;
+  console.log("Step 3: Migrating Reviews...");
+  await runReviewMigration();
 
-  yield* Console.log("Step 3: Migrating Reviews...");
-  yield* runReviewMigration;
-
-  yield* Console.log("All Migrations Completed Successfully!");
-}).pipe(
-  Effect.catchAll((error) => Console.error("Migration Failed :", error)),
-  Effect.provide(PrismaLive),
-);
-
-await Effect.runPromise(mainMigrationProgram);
+  console.log("All Migrations Completed Successfully!");
+} catch (error) {
+  console.error("Migration Failed:", error);
+  process.exit(1);
+}

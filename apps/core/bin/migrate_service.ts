@@ -142,7 +142,6 @@ export async function migrateCourse(data: Course, currentGenEd: GenEdType) {
       },
     });
 
-    console.log(`Successfully migrated: ${data.courseNo}`);
   } catch (err) {
     console.error(`Skipping ${data.courseNo}: ${(err as Error).message}`);
   }
@@ -166,7 +165,6 @@ export async function migrateReview(item: Review) {
         user: { connect: { id: item.ownerId.$oid } },
       },
     });
-    console.log(`Migrated review: ${item._id.$oid}`);
   } catch (err) {
     console.error(`Failed to migrate review: ${(err as Error).message}`);
   }
@@ -247,8 +245,17 @@ export async function migrateUser(mongoUser: MongoUser) {
       }
     }
 
-    console.log(`Successfully migrated: ${user.name}`);
   } catch (err) {
     console.error(`Skipping ${mongoUser.email}: ${(err as Error).message}`);
+  }
+}
+
+export async function runConcurrent<T>(
+  items: T[],
+  concurrency: number,
+  fn: (item: T) => Promise<void>,
+): Promise<void> {
+  for (let i = 0; i < items.length; i += concurrency) {
+    await Promise.all(items.slice(i, i + concurrency).map(fn));
   }
 }

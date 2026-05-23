@@ -32,9 +32,6 @@ importers:
 
   apps/core:
     dependencies:
-      '@effect/schema':
-        specifier: ^0.75.5
-        version: 0.75.5(effect@3.19.14)
       '@eslint/js':
         specifier: ^9.39.2
         version: 9.39.2
@@ -65,6 +62,9 @@ importers:
       better-auth:
         specifier: ^1.4.10
         version: 1.4.11(@prisma/client@7.3.0(prisma@7.8.0(@types/react@19.2.7)(magicast@0.5.1)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(typescript@5.9.3))(typescript@5.9.3))(@sveltejs/kit@2.49.5(@sveltejs/vite-plugin-svelte@6.2.1(svelte@5.46.4)(vite@7.3.0(@types/node@20.19.28)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2)))(svelte@5.46.4)(typescript@5.9.3)(vite@7.3.0(@types/node@20.19.28)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2)))(mysql2@3.15.3)(pg@8.16.3)(prisma@7.8.0(@types/react@19.2.7)(magicast@0.5.1)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(typescript@5.9.3))(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(svelte@5.46.4)(vitest@4.0.17)
+      cli-progress:
+        specifier: ^3.12.0
+        version: 3.12.0
       dayjs:
         specifier: ^1.11.19
         version: 1.11.19
@@ -77,9 +77,6 @@ importers:
       dotenv-cli:
         specifier: ^11.0.0
         version: 11.0.0
-      effect:
-        specifier: ^3.19.14
-        version: 3.19.14
       eslint:
         specifier: ^9.39.2
         version: 9.39.2(jiti@2.6.1)
@@ -114,6 +111,9 @@ importers:
       '@esbuild/darwin-arm64':
         specifier: ^0.27.1
         version: 0.27.1
+      '@types/cli-progress':
+        specifier: ^3.11.6
+        version: 3.11.6
       '@types/node':
         specifier: ^20.11.17
         version: 20.19.28
@@ -129,9 +129,6 @@ importers:
       '@typescript-eslint/parser':
         specifier: ^8.52.0
         version: 8.52.0(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3)
-      effect-prisma-generator:
-        specifier: ^0.7.1
-        version: 0.7.1
       tsup:
         specifier: ^8.5.1
         version: 8.5.1(jiti@2.6.1)(postcss@8.5.6)(tsx@4.21.0)(typescript@5.9.3)(yaml@2.8.2)
@@ -559,12 +556,6 @@ packages:
     engines: {node: '>=20.0.0', yarn: '>=1.22.18'}
     peerDependencies:
       storybook: ^0.0.0-0 || ^10.1.0 || ^10.1.0-0 || ^10.2.0-0 || ^10.3.0-0
-
-  '@effect/schema@0.75.5':
-    resolution: {integrity: sha512-TQInulTVCuF+9EIbJpyLP6dvxbQJMphrnRqgexm/Ze39rSjfhJuufF7XvU3SxTgg3HnL7B/kpORTJbHhlE6thw==}
-    deprecated: this package has been merged into the main effect package
-    peerDependencies:
-      effect: ^3.9.2
 
   '@electric-sql/pglite-socket@0.1.1':
     resolution: {integrity: sha512-p2hoXw3Z3LQHwTeikdZNsFBOvXGqKY2hk51BBw+8NKND8eoH+8LFOtW9Z8CQKmTJ2qqGYu82ipqiyFZOTTXNfw==}
@@ -1034,9 +1025,6 @@ packages:
   '@prisma/dev@0.24.3':
     resolution: {integrity: sha512-ffHlQuKXZiaDt9Go0OnCTdJZrHxK0k7omJKNV86/VjpsXu5EIHZLK0T7JSWgvNlJwh56kW9JFu9v0qJciFzepg==}
 
-  '@prisma/dmmf@7.2.0':
-    resolution: {integrity: sha512-w+hAFGH34+Ed+y7AhK3FL6ExwPu5Ym2uyadqlTEn8yyXereHRD8qO9tQfgTIJuUqF0G2JZXBVrNuqvRVVvSZdg==}
-
   '@prisma/driver-adapter-utils@7.2.0':
     resolution: {integrity: sha512-gzrUcbI9VmHS24Uf+0+7DNzdIw7keglJsD5m/MHxQOU68OhGVzlphQRobLiDMn8CHNA2XN8uugwKjudVtnfMVQ==}
 
@@ -1048,12 +1036,6 @@ packages:
 
   '@prisma/fetch-engine@7.8.0':
     resolution: {integrity: sha512-gwB0Euiz/DDRyxFRpLXYlK3RfaZUj1c5dAYMuhZYfApg7arknJlcb9bIsOHDppJmbqYaVA+yBIiFMDBfprsNPQ==}
-
-  '@prisma/generator-helper@7.2.0':
-    resolution: {integrity: sha512-PTz/2mrLlj6ITgvEeubEe+CoSt5GsyFI+3xqnBS27h2r4fYFA6i1TLKjIq8m82GZERN9J/Awwdjw90hdAQSOHg==}
-
-  '@prisma/generator@7.2.0':
-    resolution: {integrity: sha512-EucIFLF/aGmXB2qrjPhjGnL2E0urFuYg1o1+DzFLecoJzZtpRD+nJQt9ZbxKSU6a7PjX3KROOzAEPb3ItaAATA==}
 
   '@prisma/get-platform@7.2.0':
     resolution: {integrity: sha512-k1V0l0Td1732EHpAfi2eySTezyllok9dXb6UQanajkJQzPUGi3vO2z7jdkz67SypFTdmbnyGYxvEvYZdZsMAVA==}
@@ -1648,6 +1630,9 @@ packages:
 
   '@types/chai@5.2.3':
     resolution: {integrity: sha512-Mw558oeA9fFbv65/y4mHtXDs9bPnFMZAL/jxdPFUpOHHIXX91mcgEHbS5Lahr+pwZFR8A7GQleRWeI6cGFC2UA==}
+
+  '@types/cli-progress@3.11.6':
+    resolution: {integrity: sha512-cE3+jb9WRlu+uOSAugewNpITJDt1VF8dHOopPO4IABFc3SXYL5WE/+PTz/FCdZRRfIujiWW3n3aMbv1eIGVRWA==}
 
   '@types/cookie@0.6.0':
     resolution: {integrity: sha512-4Kh9a6B2bQciAhf7FSuMRRkUWecJgJu9nPnx3yzpsfXX/c50REIqpHY4C82bXP90qrLtXtkDxTZosYO3UpOwlA==}
@@ -2411,6 +2396,10 @@ packages:
     resolution: {integrity: sha512-rNjApaLzuwaOTjCiT8lSDdGN1APCiqkChLMJxJPWLunPAt5fy8xgU9/jNOchV84wfIxrA0lRQB7oCT8jrn/wrQ==}
     engines: {node: '>=6.0'}
 
+  cli-progress@3.12.0:
+    resolution: {integrity: sha512-tRkV3HJ1ASwm19THiiLIXLO7Im7wlTuKnvkYaTkyoAPefqjNg7W7DHKUlGRxy9vxDvbyCYQkQozvptuMkGCg8A==}
+    engines: {node: '>=4'}
+
   clsx@2.1.1:
     resolution: {integrity: sha512-eYm0QWBtUrBWZWG0d386OGAw16Z995PiOVo2B7bjWSbHedGl5e0ZWaq65kOGgUSNesEIDkB9ISbTg/JK9dhCZA==}
     engines: {node: '>=6'}
@@ -2588,18 +2577,14 @@ packages:
     resolution: {integrity: sha512-KIN/nDJBQRcXw0MLVhZE9iQHmG68qAVIBg9CqmUYjmQIhgij9U5MFvrqkUL5FbtyyzZuOeOt0zdeRe4UY7ct+A==}
     engines: {node: '>= 0.4'}
 
-  effect-prisma-generator@0.7.1:
-    resolution: {integrity: sha512-SKjGo1929ltpXjpG/Cs/uwAZUkMHgP5Ss/ZOMJul6l6RK9GSlNeMtshVYItOCZYhsH+drk6Mj89aq7tYbjBMGw==}
-    hasBin: true
-
-  effect@3.19.14:
-    resolution: {integrity: sha512-3vwdq0zlvQOxXzXNKRIPKTqZNMyGCdaFUBfMPqpsyzZDre67kgC1EEHDV4EoQTovJ4w5fmJW756f86kkuz7WFA==}
-
   effect@3.20.0:
     resolution: {integrity: sha512-qMLfDJscrNG8p/aw+IkT9W7fgj50Z4wG5bLBy0Txsxz8iUHjDIkOgO3SV0WZfnQbNG2VJYb0b+rDLMrhM4+Krw==}
 
   electron-to-chromium@1.5.267:
     resolution: {integrity: sha512-0Drusm6MVRXSOJpGbaSVgcQsuB4hEkMpHXaVstcPmhu5LIedxs1xNK/nIxmQIU/RPC0+1/o0AVZfBTkTNJOdUw==}
+
+  emoji-regex@8.0.0:
+    resolution: {integrity: sha512-MSjYzcWNOA0ewAHpz0MxpYFvwg6yjy1NG3xteoqz644VCo/RPgnr1/GGt+ic3iJTzQ8Eu3TdM14SawnVUmGE6A==}
 
   empathic@2.0.0:
     resolution: {integrity: sha512-i6UzDscO/XfAcNYD75CfICkmfLedpyPDdozrLMmQc5ORaQcdMoc21OnlEylMIqI7U8eniKrPMxxtj8k0vhmJhA==}
@@ -3062,6 +3047,10 @@ packages:
   is-extglob@2.1.1:
     resolution: {integrity: sha512-SbKbANkN603Vi4jEZv49LeVJMn4yGwsbzZworEoyEiutsN3nJYdbO36zfhGJ6QEDpOZIFkDtnq5JRxmvl3jsoQ==}
     engines: {node: '>=0.10.0'}
+
+  is-fullwidth-code-point@3.0.0:
+    resolution: {integrity: sha512-zymm5+u+sCsSWyD9qNaejV3DFvhCKclKdizYaJUuHA83RLjb7nSuGnddCHGv0hk+KY7BMAlsWeK4Ueg6EV6XQg==}
+    engines: {node: '>=8'}
 
   is-glob@4.0.3:
     resolution: {integrity: sha512-xelSayHH36ZgE7ZWhli7pW34hNbNl8Ojv5KVmkJD4hBdD3th8Tfk9vYasLM+mXWOZhFkgZfxhLSnrwRr4elSSg==}
@@ -3867,6 +3856,14 @@ packages:
       prettier:
         optional: true
 
+  string-width@4.2.3:
+    resolution: {integrity: sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==}
+    engines: {node: '>=8'}
+
+  strip-ansi@6.0.1:
+    resolution: {integrity: sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==}
+    engines: {node: '>=8'}
+
   strip-ansi@7.1.2:
     resolution: {integrity: sha512-gmBGslpoQJtgnMAvOVqGZpEz9dyoKTCzy2nfz/n8aIFhN/jCE/rCmcxabB6jOOHV+0WNnylOxaxBQPSvcWklhA==}
     engines: {node: '>=12'}
@@ -4469,11 +4466,6 @@ snapshots:
       - '@chromatic-com/cypress'
       - '@chromatic-com/playwright'
 
-  '@effect/schema@0.75.5(effect@3.19.14)':
-    dependencies:
-      effect: 3.19.14
-      fast-check: 3.23.2
-
   '@electric-sql/pglite-socket@0.1.1(@electric-sql/pglite@0.4.1)':
     dependencies:
       '@electric-sql/pglite': 0.4.1
@@ -4870,8 +4862,6 @@ snapshots:
     transitivePeerDependencies:
       - typescript
 
-  '@prisma/dmmf@7.2.0': {}
-
   '@prisma/driver-adapter-utils@7.2.0':
     dependencies:
       '@prisma/debug': 7.2.0
@@ -4890,14 +4880,6 @@ snapshots:
       '@prisma/debug': 7.8.0
       '@prisma/engines-version': 7.8.0-6.3c6e192761c0362d496ed980de936e2f3cebcd3a
       '@prisma/get-platform': 7.8.0
-
-  '@prisma/generator-helper@7.2.0':
-    dependencies:
-      '@prisma/debug': 7.2.0
-      '@prisma/dmmf': 7.2.0
-      '@prisma/generator': 7.2.0
-
-  '@prisma/generator@7.2.0': {}
 
   '@prisma/get-platform@7.2.0':
     dependencies:
@@ -5497,6 +5479,10 @@ snapshots:
     dependencies:
       '@types/deep-eql': 4.0.2
       assertion-error: 2.0.1
+
+  '@types/cli-progress@3.11.6':
+    dependencies:
+      '@types/node': 24.10.4
 
   '@types/cookie@0.6.0': {}
 
@@ -6436,6 +6422,10 @@ snapshots:
 
   chrome-trace-event@1.0.4: {}
 
+  cli-progress@3.12.0:
+    dependencies:
+      string-width: 4.2.3
+
   clsx@2.1.1: {}
 
   cluster-key-slot@1.1.2: {}
@@ -6554,21 +6544,14 @@ snapshots:
       es-errors: 1.3.0
       gopd: 1.2.0
 
-  effect-prisma-generator@0.7.1:
-    dependencies:
-      '@prisma/generator-helper': 7.2.0
-
-  effect@3.19.14:
-    dependencies:
-      '@standard-schema/spec': 1.0.0
-      fast-check: 3.23.2
-
   effect@3.20.0:
     dependencies:
       '@standard-schema/spec': 1.0.0
       fast-check: 3.23.2
 
   electron-to-chromium@1.5.267: {}
+
+  emoji-regex@8.0.0: {}
 
   empathic@2.0.0: {}
 
@@ -7041,6 +7024,8 @@ snapshots:
   is-docker@3.0.0: {}
 
   is-extglob@2.1.1: {}
+
+  is-fullwidth-code-point@3.0.0: {}
 
   is-glob@4.0.3:
     dependencies:
@@ -7719,6 +7704,16 @@ snapshots:
       - react
       - react-dom
       - utf-8-validate
+
+  string-width@4.2.3:
+    dependencies:
+      emoji-regex: 8.0.0
+      is-fullwidth-code-point: 3.0.0
+      strip-ansi: 6.0.1
+
+  strip-ansi@6.0.1:
+    dependencies:
+      ansi-regex: 5.0.1
 
   strip-ansi@7.1.2:
     dependencies:

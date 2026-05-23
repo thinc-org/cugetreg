@@ -15,8 +15,8 @@ export type ListCartsQuerySchema = z.output<typeof ListCartsQuerySchema>;
 export const CreateCartBodySchema = z
   .object({
     academicYear: z.number().int().min(2564),
-    semester: z.nativeEnum(Semester).optional(),
-    studyProgram: z.nativeEnum(StudyProgram).optional(),
+    semester: z.nativeEnum(Semester),
+    studyProgram: z.nativeEnum(StudyProgram),
     name: z.string().nonempty(),
     isDefault: z.boolean(),
   })

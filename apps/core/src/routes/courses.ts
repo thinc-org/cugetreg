@@ -18,6 +18,7 @@ const semesterMap: Record<number, "FIRST" | "SECOND" | "SUMMER"> = {
 const courses = new OpenAPIHono<{ Variables: Variables }>();
 
 courses
+  // 1.1. Get Courses
   .openapi(getCoursesRoute, async (c) => {
     try {
       const {
@@ -69,6 +70,8 @@ courses
       return c.json({ error: "INTERNAL_SERVER_ERROR" }, 500);
     }
   })
+
+  // 1.2. Get Course Detail
   .openapi(getCourseByNoRoute, async (c) => {
     try {
       const { courseNo } = c.req.valid("param");

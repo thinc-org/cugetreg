@@ -1,4 +1,6 @@
 <script lang="ts">
+	import type { SectionTableData } from '.';
+
 	import { Chip } from '../../atoms/chip';
 	import { SelectorButton } from '../../atoms/selector-button';
 	import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../atoms/table';
@@ -6,14 +8,7 @@
 	interface Props {
 		class?: string;
 		boxed?: boolean;
-		tableData: Array<{
-			section: string;
-			seats: string;
-			teacher: string;
-			schedule: string;
-			room: string;
-			type: string;
-		}>;
+		tableData: Array<SectionTableData>;
 	}
 
 	let { tableData, class: className = undefined, boxed = true }: Props = $props();
@@ -47,37 +42,46 @@
 
 			<TableBody>
 				{#each tableData as row, i (i)}
-					<TableRow class="[&>td]:border-b [&>td]:border-[#E6E8F0] last:[&>td]:border-b-0">
-						<TableCell class={`py-5 ${row.seats === 'ปิด' ? 'text-[#6F7593]' : 'text-black'}`}>
-							{row.section}
-						</TableCell>
+					{#each row.classes as cls, j (j)}
+						<TableRow class="[&>td]:border-b [&>td]:border-[#E6E8F0] last:[&>td]:border-b-0">
+							{#if j === 0}
+								<TableCell
+									rowspan={row.classes.length}
+									class={`py-5 ${row.seats === 'ปิด' ? 'text-[#6F7593]' : 'text-black'}`}
+								>
+									{row.section}
+								</TableCell>
 
-						<TableCell class="py-5">
-							<Chip closable={false} class={getSeatColor(row.seats)}>
-								{row.seats}
-							</Chip>
-						</TableCell>
+								<TableCell rowspan={row.classes.length} class="py-5">
+									<Chip closable={false} class={getSeatColor(row.seats)}>
+										{row.seats}
+									</Chip>
+								</TableCell>
+							{/if}
 
-						<TableCell class={`py-5 ${row.seats === 'ปิด' ? 'text-[#6F7593]' : 'text-black'}`}>
-							{row.teacher}
-						</TableCell>
+							<TableCell class={`py-5 ${row.seats === 'ปิด' ? 'text-[#6F7593]' : 'text-black'}`}>
+								{cls.teacher}
+							</TableCell>
 
-						<TableCell class={`py-5 ${row.seats === 'ปิด' ? 'text-[#6F7593]' : 'text-black'}`}>
-							{row.schedule}
-						</TableCell>
+							<TableCell class={`py-5 ${row.seats === 'ปิด' ? 'text-[#6F7593]' : 'text-black'}`}>
+								{cls.schedule}
+							</TableCell>
 
-						<TableCell class={`py-5 ${row.seats === 'ปิด' ? 'text-[#6F7593]' : 'text-black'}`}>
-							{row.room}
-						</TableCell>
+							<TableCell class={`py-5 ${row.seats === 'ปิด' ? 'text-[#6F7593]' : 'text-black'}`}>
+								{cls.room}
+							</TableCell>
 
-						<TableCell class={`py-5 ${row.seats === 'ปิด' ? 'text-[#6F7593]' : 'text-black'}`}>
-							{row.type}
-						</TableCell>
+							<TableCell class={`py-5 ${row.seats === 'ปิด' ? 'text-[#6F7593]' : 'text-black'}`}>
+								{cls.type}
+							</TableCell>
 
-						<TableCell class="py-5 text-right">
-							<SelectorButton selected={row} />
-						</TableCell>
-					</TableRow>
+							{#if j === 0}
+								<TableCell rowspan={row.classes.length} class="py-5 text-right">
+									<SelectorButton selected={row} />
+								</TableCell>
+							{/if}
+						</TableRow>
+					{/each}
 				{/each}
 			</TableBody>
 		</Table>
@@ -99,37 +103,46 @@
 
 		<TableBody>
 			{#each tableData as row, i (i)}
-				<TableRow class="[&>td]:border-b [&>td]:border-[#E6E8F0] last:[&>td]:border-b-0">
-					<TableCell class={`py-5 ${row.seats === 'ปิด' ? 'text-[#6F7593]' : 'text-black'}`}>
-						{row.section}
-					</TableCell>
+				{#each row.classes as cls, j (j)}
+					<TableRow class="[&>td]:border-b [&>td]:border-[#E6E8F0] last:[&>td]:border-b-0">
+						{#if j === 0}
+							<TableCell
+								rowspan={row.classes.length}
+								class={`py-5 ${row.seats === 'ปิด' ? 'text-[#6F7593]' : 'text-black'}`}
+							>
+								{row.section}
+							</TableCell>
 
-					<TableCell class="py-5">
-						<Chip closable={false} class={getSeatColor(row.seats)}>
-							{row.seats}
-						</Chip>
-					</TableCell>
+							<TableCell rowspan={row.classes.length} class="py-5">
+								<Chip closable={false} class={getSeatColor(row.seats)}>
+									{row.seats}
+								</Chip>
+							</TableCell>
+						{/if}
 
-					<TableCell class={`py-5 ${row.seats === 'ปิด' ? 'text-[#6F7593]' : 'text-black'}`}>
-						{row.teacher}
-					</TableCell>
+						<TableCell class={`py-5 ${row.seats === 'ปิด' ? 'text-[#6F7593]' : 'text-black'}`}>
+							{cls.teacher}
+						</TableCell>
 
-					<TableCell class={`py-5 ${row.seats === 'ปิด' ? 'text-[#6F7593]' : 'text-black'}`}>
-						{row.schedule}
-					</TableCell>
+						<TableCell class={`py-5 ${row.seats === 'ปิด' ? 'text-[#6F7593]' : 'text-black'}`}>
+							{cls.schedule}
+						</TableCell>
 
-					<TableCell class={`py-5 ${row.seats === 'ปิด' ? 'text-[#6F7593]' : 'text-black'}`}>
-						{row.room}
-					</TableCell>
+						<TableCell class={`py-5 ${row.seats === 'ปิด' ? 'text-[#6F7593]' : 'text-black'}`}>
+							{cls.room}
+						</TableCell>
 
-					<TableCell class={`py-5 ${row.seats === 'ปิด' ? 'text-[#6F7593]' : 'text-black'}`}>
-						{row.type}
-					</TableCell>
+						<TableCell class={`py-5 ${row.seats === 'ปิด' ? 'text-[#6F7593]' : 'text-black'}`}>
+							{cls.type}
+						</TableCell>
 
-					<TableCell class="py-5 text-right">
-						<SelectorButton selected={row} />
-					</TableCell>
-				</TableRow>
+						{#if j === 0}
+							<TableCell rowspan={row.classes.length} class="py-5 text-right">
+								<SelectorButton selected={row} />
+							</TableCell>
+						{/if}
+					</TableRow>
+				{/each}
 			{/each}
 		</TableBody>
 	</Table>

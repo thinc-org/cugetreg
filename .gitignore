@@ -30,3 +30,6 @@ yarn-error.log*
 .turbo
 
 **/dist/
+
+# Claude Code
+CLAUDE.md

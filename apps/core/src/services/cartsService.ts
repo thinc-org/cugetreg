@@ -1,20 +1,19 @@
-import dayjs from "dayjs";
-import { Effect } from "effect";
 import * as R from "remeda";
 
+import {
+  detectClassConflicts,
+  detectExamConflicts,
+} from "./conflictDetection.js";
 import { LexoRankService } from "./lexorank.service.js";
 
+import { prisma } from "../db/clients.js";
 import type {
-  Cart,
-  CartItem,
   Course,
   Section,
   SectionClass,
 } from "../generated/prisma/client.js";
-import { PrismaService } from "../generated/prisma-effect/index.js";
 import type {
-  ClassConflict,
-  ExamConflict,
+  ClassScheduleItem,
   ExamScheduleItem,
 } from "../zod_schemas/carts.response.schema.js";
 import type {
@@ -26,551 +25,395 @@ import type {
 } from "../zod_schemas/carts.schema.js";
 
 export const cartService = {
-  getAllCartItems: (userId: string, query: ListCartsQuerySchema) =>
-    Effect.gen(function* () {
-      const prisma = yield* PrismaService;
-      return (yield* prisma.cart.findMany({
-        where: { userId, ...query },
-      })) as Cart[];
-    }),
+  getAllCartItems: async (userId: string, query: ListCartsQuerySchema) => {
+    return prisma.cart.findMany({
+      where: { userId, ...query },
+    });
+  },
 
-  createCart: (userId: string, validatedData: CreateCartBodySchema) =>
-    Effect.gen(function* () {
-      const db = yield* PrismaService;
-      const newCart = (yield* db.$transaction(
-        Effect.gen(function* () {
-          // Set other isDefault
-          if (validatedData.isDefault) {
-            yield* db.cart.updateMany({
-              where: { userId, isDefault: true },
-              data: { isDefault: false },
-            });
-          }
+  createCart: async (userId: string, validatedData: CreateCartBodySchema) => {
+    return prisma.$transaction(async (tx) => {
+      // Only one cart per user can be default — clear the old one before setting the new one
+      if (validatedData.isDefault) {
+        await tx.cart.updateMany({
+          where: { userId, isDefault: true },
+          data: { isDefault: false },
+        });
+      }
 
-          const lastCart = yield* db.cart
-            .findFirst({
-              where: {
-                userId,
-                academicYear: validatedData.academicYear,
-                semester: validatedData.semester,
-                studyProgram: validatedData.studyProgram,
-              },
-              orderBy: { cartOrder: "desc" },
-            })
-            .pipe(Effect.map((res) => res as Cart | null));
+      // Append after the last cart within the same semester+program so ordering stays stable
+      const lastCart = await tx.cart.findFirst({
+        where: {
+          userId,
+          academicYear: validatedData.academicYear,
+          semester: validatedData.semester,
+          studyProgram: validatedData.studyProgram,
+        },
+        orderBy: { cartOrder: "desc" },
+      });
 
-          const nextCartOrder = LexoRankService.getNextRank(
-            lastCart?.cartOrder,
-          );
+      const nextCartOrder = LexoRankService.getNextRank(lastCart?.cartOrder);
 
-          return yield* db.cart.create({
-            data: {
-              userId,
-              cartOrder: nextCartOrder,
-              ...validatedData,
-            },
-          });
-        }),
-      )) as Cart;
-      return newCart;
-    }),
+      return tx.cart.create({
+        data: { userId, cartOrder: nextCartOrder, ...validatedData },
+      });
+    });
+  },
 
-  updateCart: (
+  updateCart: async (
     userId: string,
     cartId: string,
     updatedData: UpdateCartBodySchema,
-  ) =>
-    Effect.gen(function* () {
-      const db = yield* PrismaService;
+  ) => {
+    return prisma.$transaction(async (tx) => {
+      const targetCart = await tx.cart.findFirst({ where: { id: cartId } });
 
-      const updatedCart = yield* db.$transaction(
-        Effect.gen(function* () {
-          // Find current cart
-          const targetCart = yield* db.cart
-            .findFirst({
-              where: { id: cartId },
-            })
-            .pipe(Effect.map((r) => r as Cart | null));
+      if (!targetCart) {
+        throw new Error("CART_NOT_FOUND");
+      }
+      if (targetCart.userId !== userId) {
+        throw new Error("NOT_CART_OWNER");
+      }
 
-          if (!targetCart) {
-            yield* Effect.fail(new Error("CART_NOT_FOUND"));
-          }
-          if (targetCart!.userId !== userId) {
-            yield* Effect.fail(new Error("NOT_CART_OWNER"));
-          }
+      if (updatedData.isDefault === true) {
+        await tx.cart.updateMany({
+          where: { userId, isDefault: true },
+          data: { isDefault: false },
+        });
+      }
 
-          // Set other isDefault
-          if (updatedData.isDefault === true) {
-            yield* db.cart.updateMany({
-              where: {
-                userId,
-                isDefault: true,
-              },
-              data: { isDefault: false },
-            });
-          }
+      // Reorder: resolve neighbour ranks and compute the between-rank string for the new position
+      const { prevId, nextId, ...rest } = updatedData;
+      const dataToUpdate: Omit<UpdateCartBodySchema, "prevId" | "nextId"> & {
+        cartOrder?: string;
+      } = { ...rest };
 
-          // Reorder other cartOrder -> Please review this code!
-          const { prevId, nextId, ...dataToUpdate } = updatedData as any;
+      if (prevId !== undefined || nextId !== undefined) {
+        const [prevCart, nextCart] = await Promise.all([
+          prevId ? tx.cart.findUnique({ where: { id: prevId } }) : null,
+          nextId ? tx.cart.findUnique({ where: { id: nextId } }) : null,
+        ]);
+        dataToUpdate.cartOrder = LexoRankService.getBetweenRank(
+          prevCart?.cartOrder,
+          nextCart?.cartOrder,
+        );
+      }
 
-          if (prevId !== undefined || nextId !== undefined) {
-            const [prevCart, nextCart] = yield* Effect.all([
-              prevId
-                ? db.cart
-                    .findUnique({ where: { id: prevId } })
-                    .pipe(Effect.map((r) => r as Cart | null))
-                : Effect.succeed(null),
-              nextId
-                ? db.cart
-                    .findUnique({ where: { id: nextId } })
-                    .pipe(Effect.map((r) => r as Cart | null))
-                : Effect.succeed(null),
-            ]);
+      return tx.cart.update({ where: { id: cartId }, data: dataToUpdate });
+    });
+  },
 
-            dataToUpdate.cartOrder = LexoRankService.getBetweenRank(
-              prevCart?.cartOrder,
-              nextCart?.cartOrder,
-            );
-          }
+  deleteCart: async (userId: string, cartId: string) => {
+    await prisma.$transaction(async (tx) => {
+      const targetCart = await tx.cart.findUnique({ where: { id: cartId } });
 
-          return yield* db.cart
-            .update({
-              where: { id: cartId },
-              data: dataToUpdate,
-            })
-            .pipe(Effect.map((r) => r as Cart));
-        }),
-      );
+      if (!targetCart) {
+        throw new Error("CART_NOT_FOUND");
+      }
+      if (targetCart.userId !== userId) {
+        throw new Error("NOT_CART_OWNER");
+      }
 
-      return updatedCart;
-    }),
+      await tx.cart.delete({ where: { id: cartId } });
 
-  deleteCart: (userId: string, cartId: string) =>
-    Effect.gen(function* () {
-      const db = yield* PrismaService;
-
-      yield* db.$transaction(
-        Effect.gen(function* () {
-          const targetCart = yield* db.cart
-            .findUnique({
-              where: { id: cartId },
-            })
-            .pipe(Effect.map((r) => r as Cart | null));
-
-          if (!targetCart) {
-            yield* Effect.fail(new Error("CART_NOT_FOUND"));
-          }
-          if (targetCart!.userId !== userId) {
-            yield* Effect.fail(new Error("NOT_CART_OWNER"));
-          }
-
-          yield* db.cart.delete({
-            where: { id: cartId },
+      // Promote the next cart to default so the user always has one active timetable
+      if (targetCart.isDefault) {
+        const nextDefaultCart = await tx.cart.findFirst({
+          where: { userId },
+          orderBy: { cartOrder: "asc" },
+        });
+        if (nextDefaultCart) {
+          await tx.cart.update({
+            where: { id: nextDefaultCart.id },
+            data: { isDefault: true },
           });
+        }
+      }
+    });
+  },
 
-          // Case deletedCart is default assign least cartOrder to be next default
-          if (targetCart!.isDefault) {
-            const nextDefaultCart = yield* db.cart
-              .findFirst({
-                where: {
-                  userId,
-                },
-                orderBy: { cartOrder: "asc" },
-              })
-              .pipe(Effect.map((r) => r as Cart | null));
-
-            if (nextDefaultCart) {
-              yield* db.cart.update({
-                where: { id: nextDefaultCart.id },
-                data: { isDefault: true },
-              });
-            }
-          }
-        }),
-      );
-    }),
-
-  getCartDetail: (userId: string, cartId: string) =>
-    Effect.gen(function* () {
-      const db = yield* PrismaService;
-
-      const cart = yield* db.cart
-        .findUnique({
-          where: { id: cartId },
+  /* eslint-disable @typescript-eslint/no-explicit-any */
+  getCartDetail: async (userId: string, cartId: string) => {
+    const cart = (await prisma.cart.findUnique({
+      where: { id: cartId },
+      include: {
+        items: {
           include: {
-            items: {
+            courseInfo: {
               include: {
-                courseInfo: {
+                courses: {
                   include: {
-                    courses: {
-                      include: {
-                        sections: { include: { classes: true } },
-                      },
-                    },
+                    sections: { include: { classes: true } },
                   },
                 },
               },
             },
           },
-        })
-        .pipe(Effect.map((r) => r as any));
-
-      if (!cart) {
-        return yield* Effect.fail(new Error("CART_NOT_FOUND"));
-      }
-      // if (cart.userId !== userId) {
-      //   return yield* Effect.fail(new Error("NOT_CART_OWNER"));
-      // }
-
-      // 1. Data Enrichment
-      const enrichedItems = R.pipe(
-        cart.items,
-        R.map((item) => {
-          const info = item.courseInfo;
-          const courseData = info.courses.find(
-            (course: Course) =>
-              course.academicYear === cart.academicYear &&
-              course.semester === cart.semester &&
-              course.studyProgram === cart.studyProgram,
-          );
-          const sectionData = courseData?.sections.find(
-            (sec: Section) => sec.sectionNo === item.sectionNo,
-          );
-
-          return {
-            ...item,
-            info,
-            courseData,
-            sectionData,
-            sections: courseData?.sections,
-          };
-        }),
-      );
-
-      // 2. Format Items Response
-      const itemsResponse = R.map(enrichedItems, (item) => ({
-        id: item.id,
-        courseNo: item.courseNo,
-        sectionNo: item.sectionNo,
-        color: item.color,
-        hidden: item.hidden,
-        cartOrder: item.cartOrder,
-        isGraded: item.isGraded,
-        expectedGrade: item.expectedGrade.toString(),
-        course: {
-          courseNameTh: item.info.courseNameTh,
-          courseNameEn: item.info.courseNameEn,
-          credit: item.info.credit.toString(),
         },
-        section: item.sectionData
-          ? {
-              closed: item.sectionData.closed,
-              regis: item.sectionData.regis,
-              max: item.sectionData.max,
-              note: item.sectionData.note,
-            }
-          : null,
-        sections: item.sections,
-      }));
+      },
+    })) as any;
 
-      // 3. Extract Schedules
-      const classesSchedule = R.pipe(
-        enrichedItems,
-        R.flatMap((item) =>
-          (item.sectionData?.classes ?? []).map((cls: SectionClass) => ({
+    if (!cart) {
+      throw new Error("CART_NOT_FOUND");
+    }
+
+    // 1. Data Enrichment
+    const enrichedItems = R.pipe(
+      cart.items,
+      R.map((item: any) => {
+        const info = item.courseInfo;
+        const courseData = info.courses.find(
+          (course: Course) =>
+            course.academicYear === cart.academicYear &&
+            course.semester === cart.semester &&
+            course.studyProgram === cart.studyProgram,
+        );
+        const sectionData = courseData?.sections.find(
+          (sec: Section) => sec.sectionNo === item.sectionNo,
+        );
+        return {
+          ...item,
+          info,
+          courseData,
+          sectionData,
+          sections: courseData?.sections,
+        };
+      }),
+    );
+
+    // 2. Format Items Response
+    const itemsResponse = R.map(enrichedItems, (item: any) => ({
+      id: item.id,
+      courseNo: item.courseNo,
+      sectionNo: item.sectionNo,
+      color: item.color,
+      hidden: item.hidden,
+      cartOrder: item.cartOrder,
+      isGraded: item.isGraded,
+      expectedGrade: item.expectedGrade.toString(),
+      course: {
+        courseNameTh: item.info.courseNameTh,
+        courseNameEn: item.info.courseNameEn,
+        credit: item.info.credit.toString(),
+      },
+      section: item.sectionData
+        ? {
+            closed: item.sectionData.closed,
+            regis: item.sectionData.regis,
+            max: item.sectionData.max,
+            note: item.sectionData.note,
+          }
+        : null,
+      sections: item.sections,
+    }));
+
+    // 3. Extract Schedules
+    const classesSchedule = R.pipe(
+      enrichedItems,
+      R.flatMap((item: any) =>
+        (item.sectionData?.classes ?? []).map((cls: SectionClass) => ({
+          cartItemId: item.id,
+          courseNo: item.courseNo,
+          sectionNo: item.sectionNo,
+          ...R.pick(cls, [
+            "type",
+            "dayOfWeek",
+            "periodStart",
+            "periodEnd",
+            "building",
+            "room",
+            "professors",
+          ]),
+        })),
+      ),
+    );
+
+    const examsSchedule = R.pipe(
+      enrichedItems,
+      R.flatMap((item: any) => {
+        const exams: ExamScheduleItem[] = [];
+        if (item.courseData?.midtermStart && item.courseData.midtermEnd) {
+          exams.push({
             cartItemId: item.id,
             courseNo: item.courseNo,
-            sectionNo: item.sectionNo,
-            ...R.pick(cls, [
-              "type",
-              "dayOfWeek",
-              "periodStart",
-              "periodEnd",
-              "building",
-              "room",
-              "professors",
-            ]),
-          })),
-        ),
-      );
-
-      const examsSchedule = R.pipe(
-        enrichedItems,
-        R.flatMap((item) => {
-          const exams: ExamScheduleItem[] = [];
-          if (item.courseData?.midtermStart && item.courseData.midtermEnd) {
-            exams.push({
-              cartItemId: item.id,
-              courseNo: item.courseNo,
-              type: "MIDTERM",
-              start: item.courseData.midtermStart.toISOString(),
-              end: item.courseData.midtermEnd.toISOString(),
-            });
-          }
-          if (item.courseData?.finalStart && item.courseData.finalEnd) {
-            exams.push({
-              cartItemId: item.id,
-              courseNo: item.courseNo,
-              type: "FINAL",
-              start: item.courseData.finalStart.toISOString(),
-              end: item.courseData.finalEnd.toISOString(),
-            });
-          }
-          return exams;
-        }),
-      );
-
-      // 4. Conflicts Logic (Declarative approach)
-      const classConflicts = R.pipe(classesSchedule, (schedules) => {
-        const conflicts: ClassConflict[] = [];
-        for (let i = 0; i < schedules.length; i++) {
-          for (let j = i + 1; j < schedules.length; j++) {
-            const a = schedules[i];
-            const b = schedules[j];
-            if (a.dayOfWeek === b.dayOfWeek) {
-              const startA = dayjs(`2000-01-01T${a.periodStart}`);
-              const endA = dayjs(`2000-01-01T${a.periodEnd}`);
-              const startB = dayjs(`2000-01-01T${b.periodStart}`);
-              const endB = dayjs(`2000-01-01T${b.periodEnd}`);
-
-              if (startA.isBefore(endB) && startB.isBefore(endA)) {
-                conflicts.push({
-                  type: "TIME_OVERLAP",
-                  itemIds: [a.cartItemId, b.cartItemId],
-                  dayOfWeek: a.dayOfWeek,
-                  periodStart: a.periodStart,
-                  periodEnd: a.periodEnd,
-                });
-              }
-            }
-          }
+            type: "MIDTERM",
+            start: item.courseData.midtermStart.toISOString(),
+            end: item.courseData.midtermEnd.toISOString(),
+          });
         }
-        return conflicts;
-      });
-
-      const examConflicts = R.pipe(examsSchedule, (exams) => {
-        const conflicts: ExamConflict[] = [];
-        for (let i = 0; i < exams.length; i++) {
-          for (let j = i + 1; j < exams.length; j++) {
-            const a = exams[i];
-            const b = exams[j];
-            const startA = dayjs(a.start),
-              endA = dayjs(a.end);
-            const startB = dayjs(b.start),
-              endB = dayjs(b.end);
-
-            if (startA.isBefore(endB) && startB.isBefore(endA)) {
-              conflicts.push({
-                type: "EXAM_OVERLAP",
-                itemIds: [a.cartItemId, b.cartItemId],
-                start: startA.isAfter(startB) ? a.start : b.start,
-                end: endA.isBefore(endB) ? a.end : b.end,
-              });
-            }
-          }
+        if (item.courseData?.finalStart && item.courseData.finalEnd) {
+          exams.push({
+            cartItemId: item.id,
+            courseNo: item.courseNo,
+            type: "FINAL",
+            start: item.courseData.finalStart.toISOString(),
+            end: item.courseData.finalEnd.toISOString(),
+          });
         }
-        return conflicts;
-      });
+        return exams;
+      }),
+    );
 
-      // 5. Calculate Summary
-      const gradedItems = R.filter(enrichedItems, (item) => item.isGraded);
-      const totalGradedCredits = R.sumBy(gradedItems, (item) =>
-        Number(item.info.credit),
-      );
-      const totalPoints = R.sumBy(
-        gradedItems,
-        (item) => Number(item.info.credit) * Number(item.expectedGrade),
-      );
+    // 4. Conflict Detection
+    const classConflicts = detectClassConflicts(
+      classesSchedule as ClassScheduleItem[],
+    );
+    const examConflicts = detectExamConflicts(examsSchedule);
 
-      return {
-        cart: {
-          id: cart.id,
-          name: cart.name,
-          studyProgram: cart.studyProgram,
-          academicYear: cart.academicYear,
-          semester: cart.semester,
-          isDefault: cart.isDefault,
-          cartOrder: cart.cartOrder,
-          visible: cart.visible,
-          items: itemsResponse,
-        },
-        summary: {
-          totalCredits: R.sumBy(enrichedItems, (x) =>
-            Number(x.info.credit),
-          ).toFixed(1),
-          totalVisibleCredits: R.pipe(
-            enrichedItems,
-            R.filter((x) => !x.hidden),
-            R.sumBy((x) => Number(x.info.credit)),
-          ).toFixed(1),
-          totalGradedCredits: totalGradedCredits.toFixed(1),
-          expectedGPA:
-            totalGradedCredits > 0
-              ? Number((totalPoints / totalGradedCredits).toFixed(2))
-              : 0,
-        },
-        conflicts: { classConflicts, examConflicts },
-        schedule: { classes: classesSchedule, exams: examsSchedule },
-      };
-    }),
+    // 5. Summary
+    const gradedItems = R.filter(enrichedItems, (item: any) => item.isGraded);
+    const totalGradedCredits = R.sumBy(gradedItems, (item: any) =>
+      Number(item.info.credit),
+    );
+    const totalPoints = R.sumBy(
+      gradedItems,
+      (item: any) => Number(item.info.credit) * Number(item.expectedGrade),
+    );
 
-  addCourseToCart: (
+    return {
+      cart: {
+        id: cart.id,
+        name: cart.name,
+        studyProgram: cart.studyProgram,
+        academicYear: cart.academicYear,
+        semester: cart.semester,
+        isDefault: cart.isDefault,
+        cartOrder: cart.cartOrder,
+        visible: cart.visible,
+        items: itemsResponse,
+      },
+      summary: {
+        totalCredits: R.sumBy(enrichedItems, (x: any) =>
+          Number(x.info.credit),
+        ).toFixed(1),
+        totalVisibleCredits: R.pipe(
+          enrichedItems,
+          R.filter((x: any) => !x.hidden),
+          R.sumBy((x: any) => Number(x.info.credit)),
+        ).toFixed(1),
+        totalGradedCredits: totalGradedCredits.toFixed(1),
+        expectedGPA:
+          totalGradedCredits > 0
+            ? Number((totalPoints / totalGradedCredits).toFixed(2))
+            : 0,
+      },
+      conflicts: { classConflicts, examConflicts },
+      schedule: { classes: classesSchedule, exams: examsSchedule },
+    };
+  },
+  /* eslint-enable @typescript-eslint/no-explicit-any */
+
+  addCourseToCart: async (
     userId: string,
     cartId: string,
     validatedData: AddCourseBodySchema,
-  ) =>
-    Effect.gen(function* () {
-      const db = yield* PrismaService;
+  ) => {
+    return prisma.$transaction(async (tx) => {
+      const cart = await tx.cart.findUnique({ where: { id: cartId } });
 
-      const newItem = (yield* db.$transaction(
-        Effect.gen(function* () {
-          // Get cart
-          const cart = yield* db.cart
-            .findUnique({
-              where: { id: cartId },
-            })
-            .pipe(Effect.map((r) => r as Cart | null));
+      if (!cart) {
+        throw new Error("CART_NOT_FOUND");
+      }
+      if (cart.userId !== userId) {
+        throw new Error("NOT_CART_OWNER");
+      }
 
-          if (!cart) {
-            yield* Effect.fail(new Error("CART_NOT_FOUND"));
-          }
-          if (cart!.userId !== userId) {
-            yield* Effect.fail(new Error("NOT_CART_OWNER"));
-          }
+      const lastItem = await tx.cartItem.findFirst({
+        where: { cartId },
+        orderBy: { cartOrder: "desc" },
+      });
 
-          const lastItem = yield* db.cartItem
-            .findFirst({
-              where: { cartId: cartId },
-              orderBy: { cartOrder: "desc" },
-            })
-            .pipe(Effect.map((r) => r as CartItem | null));
+      const nextOrder = LexoRankService.getNextRank(lastItem?.cartOrder);
 
-          const nextOrder = LexoRankService.getNextRank(lastItem?.cartOrder);
+      return tx.cartItem.create({
+        data: {
+          cartId,
+          courseNo: validatedData.courseNo,
+          sectionNo: validatedData.sectionNo,
+          color: validatedData.color || "primary",
+          isGraded: validatedData.isGraded ?? false,
+          expectedGrade: validatedData.expectedGrade ?? 0,
+          hidden: validatedData.hidden ?? false,
+          cartOrder: nextOrder,
+        },
+      });
+    });
+  },
 
-          // Add new cartItem
-          return yield* db.cartItem.create({
-            data: {
-              cartId: cartId,
-              courseNo: validatedData.courseNo,
-              sectionNo: validatedData.sectionNo,
-              color: validatedData.color || "primary",
-              isGraded: validatedData.isGraded,
-              expectedGrade: validatedData.expectedGrade,
-              hidden: validatedData.hidden,
-              cartOrder: nextOrder,
-            },
-          });
-        }),
-      )) as CartItem;
-
-      return newItem;
-    }),
-
-  updateCourseInCart: (
+  updateCourseInCart: async (
     userId: string,
     itemId: string,
     updatedData: UpdateCourseBodySchema,
-  ) =>
-    Effect.gen(function* () {
-      const db = yield* PrismaService;
+  ) => {
+    return prisma.$transaction(async (tx) => {
+      const targetItem = await tx.cartItem.findUnique({
+        where: { id: itemId },
+        include: { cart: true },
+      });
 
-      const updatedItem = (yield* db.$transaction(
-        Effect.gen(function* () {
-          const targetItem = yield* db.cartItem
-            .findUnique({
-              where: { id: itemId },
-              include: { cart: true },
-            })
-            .pipe(Effect.map((r) => r as (CartItem & { cart: Cart }) | null));
+      if (!targetItem) {
+        throw new Error("ITEM_NOT_FOUND");
+      }
+      if (targetItem.cart.userId !== userId) {
+        throw new Error("NOT_CART_OWNER");
+      }
 
-          if (!targetItem) {
-            yield* Effect.fail(new Error("ITEM_NOT_FOUND"));
-          }
-          if (targetItem!.cart.userId !== userId) {
-            yield* Effect.fail(new Error("NOT_CART_OWNER"));
-          }
+      // Validate the new section exists for this course in the cart's semester before saving
+      if (
+        updatedData.sectionNo !== undefined &&
+        updatedData.sectionNo !== targetItem.sectionNo
+      ) {
+        const section = await tx.section.findFirst({
+          where: {
+            sectionNo: updatedData.sectionNo,
+            course: {
+              courseNo: targetItem.courseNo,
+              semester: targetItem.cart.semester,
+              academicYear: targetItem.cart.academicYear,
+              studyProgram: targetItem.cart.studyProgram,
+            },
+          },
+        });
+        if (!section) {
+          throw new Error("SECTION_NOT_FOUND");
+        }
+      }
 
-          if (
-            updatedData.sectionNo !== undefined &&
-            updatedData.sectionNo !== targetItem!.sectionNo
-          ) {
-            const section = yield* db.section
-              .findFirst({
-                where: {
-                  sectionNo: updatedData.sectionNo,
-                  course: {
-                    courseNo: targetItem!.courseNo,
-                    semester: targetItem!.cart.semester,
-                    academicYear: targetItem!.cart.academicYear,
-                    studyProgram: targetItem!.cart.studyProgram,
-                  },
-                },
-              })
-              .pipe(Effect.map((r) => r as Section | null));
+      const { prevId, nextId, ...rest } = updatedData;
+      const dataToUpdate: Omit<UpdateCourseBodySchema, "prevId" | "nextId"> & {
+        cartOrder?: string;
+      } = { ...rest };
 
-            if (!section) {
-              yield* Effect.fail(new Error("SECTION_NOT_FOUND"));
-            }
-          }
+      if (prevId !== undefined || nextId !== undefined) {
+        const [prevItem, nextItem] = await Promise.all([
+          prevId ? tx.cartItem.findUnique({ where: { id: prevId } }) : null,
+          nextId ? tx.cartItem.findUnique({ where: { id: nextId } }) : null,
+        ]);
+        dataToUpdate.cartOrder = LexoRankService.getBetweenRank(
+          prevItem?.cartOrder,
+          nextItem?.cartOrder,
+        );
+      }
 
-          // Reorder cartOrder -> please review this logic
-          const { prevId, nextId, ...dataToUpdate } = updatedData as any;
+      return tx.cartItem.update({ where: { id: itemId }, data: dataToUpdate });
+    });
+  },
 
-          if (prevId !== undefined || nextId !== undefined) {
-            const [prevItem, nextItem] = yield* Effect.all([
-              prevId
-                ? db.cartItem
-                    .findUnique({ where: { id: prevId } })
-                    .pipe(Effect.map((r) => r as CartItem | null))
-                : Effect.succeed(null),
-              nextId
-                ? db.cartItem
-                    .findUnique({ where: { id: nextId } })
-                    .pipe(Effect.map((r) => r as CartItem | null))
-                : Effect.succeed(null),
-            ]);
+  removeCourseFromCart: async (userId: string, itemId: string) => {
+    await prisma.$transaction(async (tx) => {
+      const cartItem = await tx.cartItem.findUnique({
+        where: { id: itemId },
+        include: { cart: true },
+      });
 
-            dataToUpdate.cartOrder = LexoRankService.getBetweenRank(
-              prevItem?.cartOrder,
-              nextItem?.cartOrder,
-            );
-          }
+      if (!cartItem) {
+        throw new Error("ITEM_NOT_FOUND");
+      }
+      if (cartItem.cart.userId !== userId) {
+        throw new Error("NOT_CART_OWNER");
+      }
 
-          return yield* db.cartItem.update({
-            where: { id: itemId },
-            data: dataToUpdate,
-          });
-        }),
-      )) as CartItem;
-
-      return updatedItem;
-    }),
-
-  removeCourseFromCart: (userId: string, itemId: string) =>
-    Effect.gen(function* () {
-      const db = yield* PrismaService;
-
-      yield* db.$transaction(
-        Effect.gen(function* () {
-          const cartItem = yield* db.cartItem
-            .findUnique({
-              where: { id: itemId },
-              include: { cart: true },
-            })
-            .pipe(Effect.map((r) => r as (CartItem & { cart: Cart }) | null));
-
-          if (!cartItem) {
-            yield* Effect.fail(new Error("ITEM_NOT_FOUND"));
-          }
-
-          if (cartItem!.cart.userId !== userId) {
-            yield* Effect.fail(new Error("NOT_CART_OWNER"));
-          }
-
-          yield* db.cartItem.delete({
-            where: { id: itemId },
-          });
-        }),
-      );
-    }),
+      await tx.cartItem.delete({ where: { id: itemId } });
+    });
+  },
 };

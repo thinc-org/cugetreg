@@ -38,6 +38,7 @@ export const auth = betterAuth({
   },
 });
 
+// Hono context variables injected by middlewareAuth — access via c.get("user")
 export type Variables = {
   user: typeof auth.$Infer.Session.user;
   session: typeof auth.$Infer.Session.session;

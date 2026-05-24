@@ -81,7 +81,7 @@ export interface Review {
   academicYear: string;
   content: string;
   courseNo: string;
-  interactions: any[]; // Interaction how it look like ??
+  interactions: unknown[]; // Interaction how it look like ??
   ownerId: MongoId;
   rating: number;
   semester: string;

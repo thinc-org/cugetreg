@@ -1,3 +1,5 @@
+// Converts loose API string inputs (short codes or full names) to typed Prisma enums.
+// Both forms are accepted: e.g. "S" or "ทวิภาค" for StudyProgram, "1" or "FIRST" for Semester.
 import {
   DayOfWeek,
   GenEdType,

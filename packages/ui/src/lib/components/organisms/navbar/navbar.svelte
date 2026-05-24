@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
+
 	import { Menu, Moon, Search, Settings2 } from '@lucide/svelte';
 
 	import { cn, getShortenName } from '@cugetreg/utils';
@@ -17,17 +19,36 @@
 		name?: string;
 		imageUrl?: string;
 		id?: string;
+		onLogin?: () => void;
+		onSignOut?: () => void;
 	}
 
 	let {
 		isLoggedIn = false,
 		name = '',
 		imageUrl = 'https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg',
-		id = ''
+		id = '',
+		onLogin = () => {},
+		onSignOut = () => {}
 	}: Props = $props();
 
 	let shortenedName = $derived(getShortenName(name));
-	const navItems = ['ค้นหาวิชา', 'จัดตารางเรียน', 'เกี่ยวกับ'];
+
+	const navItems = [
+		{
+			name: 'ค้นหาวิชา',
+			route: '/'
+		},
+		{
+			name: 'จัดตารางเรียน',
+			route: '/schedule'
+		},
+		{
+			name: 'เกี่ยวกับ',
+			route: '/about-us'
+		}
+	];
+
 	let selected = $state('ค้นหาวิชา');
 	let openSideBar = $state(false);
 
@@ -58,16 +79,16 @@
 	</div>
 	<div class="hidden flex-1 flex-row items-center justify-center gap-3 min-[900px]:flex lg:gap-4">
 		<!-- To be implemented: add page from navItems-->
-		{#each navItems as item, i (i)}
+		{#each navItems as { name, route }, i (i)}
 			<a
 				class={cn(
 					'text-button1 cursor-pointer text-center font-medium text-nowrap text-neutral-500 hover:text-neutral-800 xl:w-32',
-					selected === item && 'text-primary'
+					selected === name && 'text-primary'
 				)}
-				onclick={() => (selected = item)}
-				href="/"
+				onclick={() => (selected = name)}
+				href={resolve(route as any)}
 			>
-				{item}
+				{name}
 			</a>
 		{/each}
 	</div>
@@ -85,11 +106,11 @@
 		</IconButton>
 		{#if isLoggedIn}
 			<Collapsible name={shortenedName}>
-				<UserDialog {name} {id} />
+				<UserDialog {name} {id} {imageUrl} {onSignOut} />
 			</Collapsible>
 		{:else}
 			<!-- To be implemented: add real href in Button -->
-			<Button href="login" class="w-24 md:w-28">
+			<Button class="w-24 md:w-28" onclick={onLogin}>
 				<p class="text-button2 font-medium">เข้าสู่ระบบ</p>
 			</Button>
 		{/if}
@@ -139,19 +160,19 @@
 				/>
 			</div>
 			<div class="flex flex-col gap-3 px-3">
-				{#each navItems as item, i (i)}
+				{#each navItems as { name, route }, i (i)}
 					<a
 						class={cn(
 							'text-button1 cursor-pointer font-medium text-neutral-500 hover:text-neutral-800',
-							selected === item && 'text-primary'
+							selected === name && 'text-primary'
 						)}
 						onclick={() => {
-							selected = item;
+							selected = name;
 							toggleSideBar();
 						}}
-						href="/"
+						href={resolve(route as any)}
 					>
-						{item}
+						{name}
 					</a>
 				{/each}
 			</div>

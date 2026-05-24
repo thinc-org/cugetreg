@@ -1,15 +1,14 @@
 <script lang="ts">
   import { Globe } from 'lucide-svelte';
 
-  import { QuestionAnswer } from '@cugetreg/ui/atoms/faqs';
-  import { Facebook } from '@cugetreg/ui/logo/facebook';
-  import { Instagram } from '@cugetreg/ui/logo/instagram';
-  import { GitHubMark } from '@cugetreg/ui/logo/vendor';
-  import { Footer } from '@cugetreg/ui/organisms/footer';
-  import { Navbar } from '@cugetreg/ui/organisms/navbar';
-</script>
+  import { GitHubMark } from '@cugetreg/ui/logo/vendor'
+  import { Instagram } from '@cugetreg/ui/logo/instagram'
+  import { Facebook } from '@cugetreg/ui/logo/facebook'
 
-<Navbar />
+  import { QuestionAnswer } from '@cugetreg/ui/atoms/faqs'
+
+  import { Footer } from '@cugetreg/ui/organisms/footer'
+</script>
 
 <div class="flex justify-center py-12">
   <div class="w-[80%] min-w-[60vw]">

@@ -1,18 +1,27 @@
-import { Console, Effect } from "effect";
+import cliProgress from "cli-progress";
 
 import type { MongoUser } from "./migrate_interface.js";
-import { migrateUser, safeFsJsonRead } from "./migrate_service.js";
-export const runUserMigration = Effect.gen(function* () {
-  const usersData = yield* safeFsJsonRead<MongoUser[]>("users.json");
+import {
+  migrateUser,
+  runConcurrent,
+  safeFsJsonRead,
+} from "./migrate_service.js";
 
-  Console.log(`Starting migration for ${usersData.length} users`);
+const CONCURRENCY = 20;
 
-  const migrationProgram = yield* Effect.forEach(
-    usersData,
-    (data) => migrateUser(data),
-    {
-      concurrency: 100,
-      discard: true,
-    },
+export async function runUserMigration() {
+  const usersData = safeFsJsonRead<MongoUser[]>("users.json");
+
+  const bar = new cliProgress.SingleBar(
+    { format: "  Users    [{bar}] {value}/{total} ({percentage}%)" },
+    cliProgress.Presets.shades_classic,
   );
-});
+  bar.start(usersData.length, 0);
+
+  await runConcurrent(usersData, CONCURRENCY, async (data) => {
+    await migrateUser(data);
+    bar.increment();
+  });
+
+  bar.stop();
+}

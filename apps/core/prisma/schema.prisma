@@ -25,6 +25,7 @@ datasource db {
 // course_info
 
 model CourseInfo {
+  // Note: Add the id attribute, remove @id from courseId, and update the logic to match the CourseInfo transformation template.
   // 3 COURSECODE / 11 courseno
   courseNo     String  @id @map("course_no")
   // 4 COURSENAME
@@ -38,16 +39,25 @@ model CourseInfo {
   // 22 coursedescription_th
   courseDescTh String? @map("course_desc_th")
 
+  // 19 STUDYPROGRAMSYSTEM
+  studyProgram StudyProgram @map("study_program")
+  // 1 YEAR
+  academicYear Int          @map("academic_year")
+  // 2 SEMESTER
+  semester     Semester
+
   // TODO separate this into other table
   // indirect -> 30 FACCODE or From CourseNo (Transitive Dependency)
-  faculty    String
+  faculty    String?
   // indirect -> From CourseNo (Transitive Dependency)
-  department String
+  department String?
 
   // 24 TOTALCREDIT
   credit      Decimal 
   // 17 lcredit 18 nlcredit 19 lhour 20 nlhour 21 shour
-  creditHours String  @map("credit_hours")
+  creditHours String?  @map("credit_hours")
+
+  gradingType GradingType @map("grading_type")
 
   // Relation to Course
   courses   Course[]

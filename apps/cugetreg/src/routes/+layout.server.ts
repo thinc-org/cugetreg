@@ -21,7 +21,7 @@ export const load: LayoutServerLoad = async ({ params }) => {
     axios.get(API_URL, {
       params: {
         academicYear: 2566,
-        semester: '2',
+        semester: 'SECOND',
         studyProgram: 'S',
       },
     }),
@@ -41,7 +41,7 @@ export const load: LayoutServerLoad = async ({ params }) => {
     const [createRes, createErr] = await tryCatch(
       axios.post(API_URL, {
         academicYear: 2566,
-        semester: '2',
+        semester: 'SECOND',
         studyProgram: 'S',
         name: 'My Timetable',
         isDefault: true,

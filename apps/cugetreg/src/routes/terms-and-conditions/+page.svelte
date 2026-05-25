@@ -1,6 +1,7 @@
 <script lang="ts">
-  import SvelteMarkdown from 'svelte-markdown'
-  import termsConditions from '$lib/markdowns/terms-and-conditions.md?raw'
+  import termsConditions from '$lib/markdowns/terms-and-conditions.md?raw';
+
+  import SvelteMarkdown from 'svelte-markdown';
 </script>
 
 <div class="flex justify-center pt-5">

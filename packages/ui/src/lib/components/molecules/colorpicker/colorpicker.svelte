@@ -43,8 +43,8 @@
 					value === option && 'hover:outline-[1.5px]! hover:outline-solid!'
 				)}
 				onclick={() => {
-					onChange(option);
 					value = option;
+					onChange(option);
 				}}
 			/>
 		{/each}

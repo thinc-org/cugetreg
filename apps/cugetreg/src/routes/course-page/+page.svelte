@@ -1,8 +1,4 @@
 <script lang="ts">
-  // TODO: Remove this
-
-  import { Navbar } from '@cugetreg/ui/organisms/navbar'
-  import { Footer } from '@cugetreg/ui/organisms/footer'
   import {
     AlertTriangle,
     Bold,
@@ -17,44 +13,47 @@
     Star,
     Strikethrough,
     Underline,
-  } from '@lucide/svelte'
-  import { GenedChip } from '@cugetreg/ui/atoms/gened-chip'
-  import { Button } from '@cugetreg/ui/atoms/button'
-  import { Comment } from '@cugetreg/ui/molecules/comment'
-  import { SectionTable } from '@cugetreg/ui/molecules/section-table'
-  import * as Select from '@cugetreg/ui/molecules/select'
+  } from '@lucide/svelte';
 
-  const sectionGroups = ['4EE ONLY', 'OPEN']
-  let selectedGroup = $state(sectionGroups[0])
-  let isSectionOpen = $state(true)
-  const years = ['2566', '2565', '2564']
-  const terms = ['ภาคต้น', 'ภาคปลาย']
-  let selectedYear = $state(years[0])
-  let selectedTerm = $state(terms[0])
-  let reviewRating = $state(1)
+  import { Button } from '@cugetreg/ui/atoms/button';
+  import { GenedChip } from '@cugetreg/ui/atoms/gened-chip';
+  import { Comment } from '@cugetreg/ui/molecules/comment';
+  import { SectionTable } from '@cugetreg/ui/molecules/section-table';
+  import * as Select from '@cugetreg/ui/molecules/select';
+  import { Footer } from '@cugetreg/ui/organisms/footer';
+  import { Navbar } from '@cugetreg/ui/organisms/navbar';
+
+  const sectionGroups = ['4EE ONLY', 'OPEN'];
+  let selectedGroup = $state(sectionGroups[0]);
+  let isSectionOpen = $state(true);
+  const years = ['2566', '2565', '2564'];
+  const terms = ['ภาคต้น', 'ภาคปลาย'];
+  let selectedYear = $state(years[0]);
+  let selectedTerm = $state(terms[0]);
+  let reviewRating = $state(1);
   const getStarState = (value: number) => {
-    if (reviewRating >= value) return 'full'
-    if (reviewRating >= value - 0.5) return 'half'
-    return 'empty'
-  }
+    if (reviewRating >= value) return 'full';
+    if (reviewRating >= value - 0.5) return 'half';
+    return 'empty';
+  };
   const onStarClick = (value: number, event: MouseEvent) => {
-    const target = event.currentTarget as HTMLButtonElement
-    const rect = target.getBoundingClientRect()
-    const isHalf = event.clientX - rect.left < rect.width / 2
-    reviewRating = isHalf ? value - 0.5 : value
-  }
-  const reviewYearPlaceholder = 'ปีการศึกษา'
-  const reviewTermPlaceholder = 'ภาคเรียน'
-  let selectedReviewYear = $state(reviewYearPlaceholder)
-  let selectedReviewTerm = $state(reviewTermPlaceholder)
-  const reviewsPerPage = 2
-  let reviewsPage = $state(1)
+    const target = event.currentTarget as HTMLButtonElement;
+    const rect = target.getBoundingClientRect();
+    const isHalf = event.clientX - rect.left < rect.width / 2;
+    reviewRating = isHalf ? value - 0.5 : value;
+  };
+  const reviewYearPlaceholder = 'ปีการศึกษา';
+  const reviewTermPlaceholder = 'ภาคเรียน';
+  let selectedReviewYear = $state(reviewYearPlaceholder);
+  let selectedReviewTerm = $state(reviewTermPlaceholder);
+  const reviewsPerPage = 2;
+  let reviewsPage = $state(1);
   const isReviewYearPlaceholder = $derived(
     selectedReviewYear === reviewYearPlaceholder,
-  )
+  );
   const isReviewTermPlaceholder = $derived(
     selectedReviewTerm === reviewTermPlaceholder,
-  )
+  );
   const reviewSamples = [
     {
       rating: 4,
@@ -92,81 +91,81 @@
       likesCount: 3,
       dislikesCount: 0,
     },
-  ]
+  ];
   const reviews = Array.from({ length: 12 }, (_, i) => {
-    const sample = reviewSamples[i % reviewSamples.length]
-    return { ...sample }
-  })
+    const sample = reviewSamples[i % reviewSamples.length];
+    return { ...sample };
+  });
   const filteredReviews = $derived.by(() =>
     reviews.filter((review) => {
-      const [term, year] = review.semester.split(' ')
-      if (!isReviewYearPlaceholder && year !== selectedReviewYear) return false
-      if (!isReviewTermPlaceholder && term !== selectedReviewTerm) return false
-      return true
+      const [term, year] = review.semester.split(' ');
+      if (!isReviewYearPlaceholder && year !== selectedReviewYear) return false;
+      if (!isReviewTermPlaceholder && term !== selectedReviewTerm) return false;
+      return true;
     }),
-  )
+  );
   const totalReviewPages = $derived(
     Math.max(1, Math.ceil(filteredReviews.length / reviewsPerPage)),
-  )
+  );
   const pagedReviews = $derived(
     filteredReviews.slice(
       (reviewsPage - 1) * reviewsPerPage,
       reviewsPage * reviewsPerPage,
     ),
-  )
+  );
   const reviewPageItems = $derived.by(() => {
-    const last = totalReviewPages
-    const current = reviewsPage
-    const items: Array<number | 'ellipsis'> = []
-    if (last <= 1) return [1]
-    items.push(1)
-    if (current > 3) items.push('ellipsis')
-    const start = Math.max(2, current - 1)
-    const end = Math.min(last - 1, current + 1)
-    for (let i = start; i <= end; i += 1) items.push(i)
-    if (current < last - 2) items.push('ellipsis')
-    if (last > 1) items.push(last)
-    return items
-  })
+    const last = totalReviewPages;
+    const current = reviewsPage;
+    const items: Array<number | 'ellipsis'> = [];
+    if (last <= 1) return [1];
+    items.push(1);
+    if (current > 3) items.push('ellipsis');
+    const start = Math.max(2, current - 1);
+    const end = Math.min(last - 1, current + 1);
+    for (let i = start; i <= end; i += 1) items.push(i);
+    if (current < last - 2) items.push('ellipsis');
+    if (last > 1) items.push(last);
+    return items;
+  });
   const reviewMeta = reviews
     .map((review) => {
-      const [term, year] = review.semester.split(' ')
-      return { term, year }
+      const [term, year] = review.semester.split(' ');
+      return { term, year };
     })
-    .filter((item) => item.term && item.year)
+    .filter((item) => item.term && item.year);
   const reviewYearOptions = [
     reviewYearPlaceholder,
     ...Array.from(new Set(reviewMeta.map((item) => item.year)))
       .sort()
       .reverse(),
-  ]
+  ];
   const reviewTermOptions = $derived.by(() => {
     const terms = reviews
       .map((review) => {
-        const [term, year] = review.semester.split(' ')
-        return { term, year }
+        const [term, year] = review.semester.split(' ');
+        return { term, year };
       })
       .filter((item) =>
         isReviewYearPlaceholder ? true : item.year === selectedReviewYear,
       )
-      .map((item) => item.term)
-    return [reviewTermPlaceholder, ...Array.from(new Set(terms))]
-  })
+      .map((item) => item.term);
+    return [reviewTermPlaceholder, ...Array.from(new Set(terms))];
+  });
 
   $effect(() => {
     if (!reviewYearOptions.includes(selectedReviewYear)) {
-      selectedReviewYear = reviewYearPlaceholder
+      selectedReviewYear = reviewYearPlaceholder;
     }
     if (!reviewTermOptions.includes(selectedReviewTerm)) {
-      selectedReviewTerm = reviewTermPlaceholder
+      selectedReviewTerm = reviewTermPlaceholder;
     }
     if (reviewsPage > totalReviewPages) {
-      reviewsPage = totalReviewPages
+      reviewsPage = totalReviewPages;
     }
     if (reviewsPage < 1) {
-      reviewsPage = 1
+      reviewsPage = 1;
     }
-  })
+  });
   const sectionTableData = [
     {
       section: '1',
@@ -192,7 +191,7 @@
       room: 'MAHIT 202',
       type: 'LECT',
     },
-  ]
+  ];
 </script>
 
 <div>
@@ -355,7 +354,7 @@
           </Select.Trigger>
           <Select.Content role="listbox">
             <Select.Group>
-              {#each sectionGroups as group}
+              {#each sectionGroups as group (group)}
                 <Select.Item value={group} label={`กลุ่ม : ${group}`} />
               {/each}
             </Select.Group>
@@ -400,7 +399,7 @@
           </Select.Trigger>
           <Select.Content role="listbox">
             <Select.Group>
-              {#each sectionGroups as group}
+              {#each sectionGroups as group (group)}
                 <Select.Item value={group} label={`กลุ่ม : ${group}`} />
               {/each}
             </Select.Group>
@@ -422,7 +421,7 @@
             </Select.Trigger>
             <Select.Content role="listbox">
               <Select.Group>
-                {#each years as year}
+                {#each years as year (year)}
                   <Select.Item value={year} label={year} />
                 {/each}
               </Select.Group>
@@ -438,7 +437,7 @@
             </Select.Trigger>
             <Select.Content role="listbox">
               <Select.Group>
-                {#each terms as term}
+                {#each terms as term (term)}
                   <Select.Item value={term} label={term} />
                 {/each}
               </Select.Group>
@@ -446,7 +445,7 @@
           </Select.Root>
         </div>
         <div class="flex items-center gap-2">
-          {#each [1, 2, 3, 4, 5] as value}
+          {#each [1, 2, 3, 4, 5] as value (value)}
             <button
               class="flex h-10 w-10 items-center justify-center"
               type="button"
@@ -523,7 +522,7 @@
             </Select.Trigger>
             <Select.Content role="listbox">
               <Select.Group>
-                {#each reviewYearOptions as year}
+                {#each reviewYearOptions as year (year)}
                   <Select.Item value={year} label={year} />
                 {/each}
               </Select.Group>
@@ -541,7 +540,7 @@
             </Select.Trigger>
             <Select.Content role="listbox">
               <Select.Group>
-                {#each reviewTermOptions as term}
+                {#each reviewTermOptions as term (term)}
                   <Select.Item value={term} label={term} />
                 {/each}
               </Select.Group>

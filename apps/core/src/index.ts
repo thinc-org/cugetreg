@@ -21,19 +21,15 @@ const app = new OpenAPIHono<{ Variables: Variables }>().basePath("/api/v1");
 
 // Allow frontend dev servers and local prod preview to call the API with cookies
 app.use(
-  "/*",
+  "*",
   cors({
-    origin: [
-      "http://localhost:5173",
-      "http://localhost:3001",
-      "http://localhost:3000",
-    ],
+    origin: "http://localhost:5173",
     allowHeaders: [
       "Content-Type",
       "Authorization",
       "Upgrade-Insecure-Requests",
     ],
-    allowMethods: ["POST", "GET", "OPTIONS", "PUT", "DELETE"],
+    allowMethods: ["POST", "GET", "OPTIONS", "PUT", "DELETE", "PATCH"],
     exposeHeaders: ["Content-Length"],
     maxAge: 600,
     credentials: true,
@@ -52,8 +48,8 @@ app.route("/public/carts", publicCarts);
 app.route("/auth", authRoute);
 app.route("/courses", courses);
 
-// Auth middleware must be registered BEFORE the protected route — order matters in Hono
-app.use("/admin/*", middlewareAuth);
+// Middleware List
+app.use("/admin/*", middlewareAuth); // Middleware from Bearer Token
 app.use("/carts/*", middlewareAuth);
 //app.use("/courses/*", middlewareAuth);
 app.use("/reviews/*", middlewareAuth);

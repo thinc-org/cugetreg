@@ -195,6 +195,7 @@ export const cartService = {
         courseNameTh: item.info.courseNameTh,
         courseNameEn: item.info.courseNameEn,
         credit: item.info.credit.toString(),
+        abbrName: item.info.abbrName,
       },
       section: item.sectionData
         ? {

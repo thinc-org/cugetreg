@@ -1,6 +1,4 @@
 <script lang="ts">
-  import SelectedCourse from '$lib/components/selected-course.svelte';
-
   import html2canvas from 'html2canvas-pro';
   import { ChevronLeft, ChevronRight, Copy, Share2 } from 'lucide-svelte';
   import { untrack } from 'svelte';
@@ -19,7 +17,6 @@
     ExamCard,
     type StatusColour,
   } from '@cugetreg/ui/molecules/exam-card';
-  import { SelectTimetable } from '@cugetreg/ui/molecules/select-timetable';
   import { CreateTimetable } from '@cugetreg/ui/organisms/create-timetable';
   import { RenameSchedule } from '@cugetreg/ui/organisms/rename-schedule';
   import { ViewCourse } from '@cugetreg/ui/organisms/view-course';
@@ -344,7 +341,7 @@
       <div class="bg-surface overflow-x-scroll p-8" bind:this={timetableDiv}>
         <div class="min-w-[600px]">
           <Timetable startTime={7}>
-            {#each selectedSchedule.schedule as courseSchedule}
+            {#each selectedSchedule.schedule as courseSchedule (courseSchedule.course.code)}
               {@render timeTableCourse(courseSchedule)}
             {/each}
           </Timetable>
@@ -414,8 +411,8 @@
     startTime={7}
     days={examDateOrder.midterms.map((time) => formatDate(new Date(time)))}
   >
-    {#each examDateOrder.midterms as key, index}
-      {#each examsData.midterms[key] as exam}
+    {#each examDateOrder.midterms as key, index (key)}
+      {#each examsData.midterms[key] as exam (exam.course.code)}
         <TimetableCourseCard
           course={{
             name: exam.course.name,
@@ -438,8 +435,8 @@
     startTime={7}
     days={examDateOrder.finals.map((time) => formatDate(new Date(time)))}
   >
-    {#each examDateOrder.finals as key, index}
-      {#each examsData.finals[key] as examCourse}
+    {#each examDateOrder.finals as key, index (key)}
+      {#each examsData.finals[key] as examCourse (examCourse.course.code)}
         <TimetableCourseCard
           course={{
             name: examCourse.course.name,
@@ -464,7 +461,7 @@
       <div class="flex-1">
         <span class="text-2xl font-bold">Midterm</span>
 
-        {#each Object.keys(examsData.midterms).sort(examSort) as key}
+        {#each Object.keys(examsData.midterms).sort(examSort) as key (key)}
           <div class="my-5">
             <ExamCard
               date={key == '0'
@@ -495,7 +492,7 @@
       <div class="flex-1">
         <span class="text-2xl font-bold">Finals</span>
 
-        {#each Object.keys(examsData.finals).sort(examSort) as key}
+        {#each Object.keys(examsData.finals).sort(examSort) as key (key)}
           <div class="my-5">
             <ExamCard
               date={key == '0'
@@ -535,7 +532,7 @@
   conflicted,
 }: CourseSchedule)}
   {#if !hidden}
-    {#each course.sections[selectedSection] || [] as period}
+    {#each course.sections[selectedSection] || [] as period (period.day + period.startTime)}
       <TimetableCourseCard
         onclick={() => (showViewCourseModal = true)}
         course={{

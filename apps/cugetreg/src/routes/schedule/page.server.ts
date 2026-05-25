@@ -7,7 +7,7 @@ import { ListCartsResponseSchema } from '@cugetreg/zod-schemas/cart-response';
 
 import type { PageServerLoad } from './$types';
 
-const DUMMY_USER_ID = {
+const _DUMMY_USER_ID = {
   id: '63e06682cec32a7209b966b0',
   email: '6532155621@student.chula.ac.th',
 };

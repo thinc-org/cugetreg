@@ -16,7 +16,7 @@ import type { LayoutServerLoad } from './$types';
 
 const API_URL = 'http://localhost:3000/api/v1/carts';
 
-export const load: LayoutServerLoad = async ({ params }) => {
+export const load: LayoutServerLoad = async ({ params: _params }) => {
   const [response, error] = await tryCatch(
     axios.get(API_URL, {
       params: {

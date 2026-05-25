@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { getUserCartStore, useCartActions } from '$lib/stores/user-cart';
+
   import { BookMarked, Equal, Eye, EyeOff, Trash2 } from '@lucide/svelte';
   import {
     SortableList,
@@ -15,7 +17,6 @@
   import { courseColorVariants } from '@cugetreg/utils/constants';
   import type { ColorVariant } from '@cugetreg/utils/types';
   import type { CartItemDetail } from '@cugetreg/zod-schemas/cart-response';
-  import { getUserCartStore, useCartActions } from '$lib/stores/user-cart';
 
   const userCart = getUserCartStore();
   const { removeCourse, updateCourse } = useCartActions();

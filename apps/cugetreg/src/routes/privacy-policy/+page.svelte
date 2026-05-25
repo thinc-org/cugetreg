@@ -1,6 +1,7 @@
 <script lang="ts">
-  import SvelteMarkdown from 'svelte-markdown'
-  import privacyPolicy from '$lib/markdowns/privacy-policy.md?raw'
+  import privacyPolicy from '$lib/markdowns/privacy-policy.md?raw';
+
+  import SvelteMarkdown from 'svelte-markdown';
 </script>
 
 <div class="flex justify-center pt-5">

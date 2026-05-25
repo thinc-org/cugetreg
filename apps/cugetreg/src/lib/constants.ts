@@ -64,4 +64,4 @@ export const faculties: Record<string, { th: string; en: string }> = {
     th: 'คณะวิศวกรรมศาสตร์ และคณะพาณิชยศาสตร์และการบัญชี',
     en: 'FACULTY OF ENGINEERING AND FACULTY OF COMMERCE AND ACCOUNTANCY',
   },
-}
+};

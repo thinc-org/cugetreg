@@ -328,7 +328,7 @@
   //   }
   // }
 
-  function handleRemoveCourse(courseCode: string) {
+  function _handleRemoveCourse(_courseCode: string) {
     // if (!activeSchedule) return;
     // activeSchedule.schedule = activeSchedule.schedule.filter(
     //   (s: any) => s.course.code !== courseCode,
@@ -445,7 +445,7 @@
                       <div
                         class="absolute top-full right-0 z-[70] mt-2 w-32 overflow-hidden rounded-xl border border-gray-100 bg-white shadow-xl"
                       >
-                        {#each programOptions as opt}
+                        {#each programOptions as opt (opt)}
                           <button
                             onclick={() => selectOption('program', opt)}
                             class="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 {currentProgram ===
@@ -473,7 +473,7 @@
                         <div
                           class="custom-scrollbar flex max-h-[250px] flex-col overflow-y-auto py-1"
                         >
-                          {#each semesterOptions as opt}
+                          {#each semesterOptions as opt (opt)}
                             <button
                               onclick={() => selectOption('semester', opt)}
                               class="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 {currentSemester ===
@@ -526,7 +526,7 @@
                         <div
                           class="absolute top-full left-0 z-[70] mt-2 w-full overflow-hidden rounded-xl border border-gray-100 bg-white shadow-xl"
                         >
-                          {#each sortOptions as opt}
+                          {#each sortOptions as opt (opt)}
                             <button
                               onclick={() => selectOption('sort', opt)}
                               class="w-full px-5 py-3 text-left text-sm hover:bg-gray-50 {currentSort ===
@@ -636,7 +636,7 @@
 </div>
 
 {#snippet SidebarComponent()}
-  {@const sidebar = Sidebar.useSidebar()}
+  {@const _sidebar = Sidebar.useSidebar()}
   <Sidebar.Sidebar
     variant="sidebar"
     collapsible="icon"
@@ -798,9 +798,7 @@
                     class="border-b border-neutral-200"
                   />
                 {:else}
-                  <SelectedCourse
-                    class="border-b border-neutral-200"
-                  />
+                  <SelectedCourse class="border-b border-neutral-200" />
                 {/if}
               </div>
             {/if}

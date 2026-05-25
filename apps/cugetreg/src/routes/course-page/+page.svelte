@@ -354,7 +354,7 @@
           </Select.Trigger>
           <Select.Content role="listbox">
             <Select.Group>
-              {#each sectionGroups as group}
+              {#each sectionGroups as group (group)}
                 <Select.Item value={group} label={`กลุ่ม : ${group}`} />
               {/each}
             </Select.Group>
@@ -399,7 +399,7 @@
           </Select.Trigger>
           <Select.Content role="listbox">
             <Select.Group>
-              {#each sectionGroups as group}
+              {#each sectionGroups as group (group)}
                 <Select.Item value={group} label={`กลุ่ม : ${group}`} />
               {/each}
             </Select.Group>
@@ -421,7 +421,7 @@
             </Select.Trigger>
             <Select.Content role="listbox">
               <Select.Group>
-                {#each years as year}
+                {#each years as year (year)}
                   <Select.Item value={year} label={year} />
                 {/each}
               </Select.Group>
@@ -437,7 +437,7 @@
             </Select.Trigger>
             <Select.Content role="listbox">
               <Select.Group>
-                {#each terms as term}
+                {#each terms as term (term)}
                   <Select.Item value={term} label={term} />
                 {/each}
               </Select.Group>
@@ -445,7 +445,7 @@
           </Select.Root>
         </div>
         <div class="flex items-center gap-2">
-          {#each [1, 2, 3, 4, 5] as value}
+          {#each [1, 2, 3, 4, 5] as value (value)}
             <button
               class="flex h-10 w-10 items-center justify-center"
               type="button"
@@ -522,7 +522,7 @@
             </Select.Trigger>
             <Select.Content role="listbox">
               <Select.Group>
-                {#each reviewYearOptions as year}
+                {#each reviewYearOptions as year (year)}
                   <Select.Item value={year} label={year} />
                 {/each}
               </Select.Group>
@@ -540,7 +540,7 @@
             </Select.Trigger>
             <Select.Content role="listbox">
               <Select.Group>
-                {#each reviewTermOptions as term}
+                {#each reviewTermOptions as term (term)}
                   <Select.Item value={term} label={term} />
                 {/each}
               </Select.Group>

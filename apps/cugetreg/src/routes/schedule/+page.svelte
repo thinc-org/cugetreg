@@ -336,9 +336,7 @@
         bind:value={$userCart.currentCartId}
       />
       {#if $userCart.currentCart}
-        <SelectedCourse
-          class="border-b border-neutral-200"
-        />
+        <SelectedCourse class="border-b border-neutral-200" />
       {:else}
         <SelectedCourse class="border-b border-neutral-200" />
       {/if}

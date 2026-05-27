@@ -24,6 +24,7 @@
 
   const sectionGroups = ['4EE ONLY', 'OPEN'];
   let selectedGroup = $state(sectionGroups[0]);
+  let selectedSection = $state<string | null>(null);
   let isSectionOpen = $state(true);
   const years = ['2566', '2565', '2564'];
   const terms = ['ภาคต้น', 'ภาคปลาย'];
@@ -384,6 +385,10 @@
               tableData={sectionTableData}
               boxed={false}
               class="w-full"
+              selectedSection={selectedSection}
+              onSelectSection={(section) => {
+                selectedSection = selectedSection === section ? null : section;
+              }}
             />
           </div>
         {/if}

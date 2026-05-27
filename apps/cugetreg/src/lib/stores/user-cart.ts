@@ -67,7 +67,7 @@ const pendingItemUpdates = new Map<string, UpdateCourseFields>();
  */
 let cachedCartId: string | undefined;
 
-function mapSemester(dbValue: string): 'FIRST' | 'SECOND' | 'SUMMER' {
+function mapSemester(dbValue: '1' | '2' | '3'): 'FIRST' | 'SECOND' | 'SUMMER' {
   switch (dbValue) {
     case '1':
       return 'FIRST';

@@ -5,7 +5,6 @@
     AlertTriangle,
     Bold,
     Check,
-    ChevronUp,
     Code,
     Heading,
     Italic,
@@ -20,6 +19,7 @@
 
   import { Button } from '@cugetreg/ui/atoms/button';
   import { GenedChip } from '@cugetreg/ui/atoms/gened-chip';
+  import * as Accordion from '@cugetreg/ui/atoms/accordion';
   import { Comment } from '@cugetreg/ui/molecules/comment';
   import {
     type ClassInfo,
@@ -31,8 +31,8 @@
   import type { GenEdType } from '@cugetreg/utils/types';
 
   import type { PageProps } from './$types';
+  import { getUserCartStore, useCartActions } from '$lib/stores/user-cart';
 
-  let isSectionOpen = $state(true);
   const years = ['2566', '2565', '2564'];
   const terms = ['ภาคต้น', 'ภาคปลาย'];
   let selectedYear = $state(years[0]);
@@ -188,6 +188,18 @@
 
   const isLoggedIn = false;
 
+  const userCart = getUserCartStore();
+  const { addCourse, removeCourse } = useCartActions();
+
+  let globalSelectedSection = $state<string | null>(
+    untrack(() => {
+      const item = $userCart.currentCart.items.find(
+        (item) => item.courseNo === course.courseNo,
+      );
+      return item ? String(item.sectionNo) : null;
+    }),
+  );
+
   const sectionGroups = $derived.by(() => {
     return course.sections.reduce(
       (accum: Record<string, SectionTableData[]>, section) => {
@@ -213,7 +225,22 @@
     );
   });
 
-  let selectedGroup = $state(untrack(() => Object.keys(sectionGroups)[0]));
+  $effect(() => {
+    untrack(() => {
+      const currentItem = $userCart.currentCart.items.find(
+        (item) => item.courseNo === course.courseNo,
+      );
+      const currentSection = currentItem ? String(currentItem.sectionNo) : null;
+
+      if (globalSelectedSection === currentSection) return;
+
+      if (globalSelectedSection) {
+        addCourse(course.courseNo, Number(globalSelectedSection));
+      } else if (currentItem) {
+        removeCourse(currentItem.id);
+      }
+    });
+  });
 </script>
 
 <div>
@@ -371,67 +398,41 @@
     </section>
     <section class="text-on-surface mx-auto mt-8 w-full max-w-5xl">
       <h2 class="text-on-surface text-lg font-semibold">รายละเอียดเซคชัน</h2>
-      <div class="mt-4">
-        <Select.Root type="single" bind:value={selectedGroup}>
-          <Select.Trigger
-            class="text-on-surface h-14 w-full rounded-2xl border border-[#D6D7E1] bg-white px-5 text-base font-medium focus:ring-0 focus:ring-offset-0"
+      <Accordion.Root
+        type="multiple"
+        value={Object.keys(sectionGroups)}
+        class="mt-4 flex flex-col gap-4"
+      >
+        {#each Object.keys(sectionGroups) as groupName (groupName)}
+          <Accordion.Item
+            value={groupName}
+            class="rounded-2xl border border-[#D6D7E1] bg-white px-6 py-2"
           >
-            กลุ่ม : {selectedGroup}
-          </Select.Trigger>
-          <Select.Content role="listbox">
-            <Select.Group>
-              {#each Object.keys(sectionGroups) as groupName (groupName)}
-                <Select.Item value={groupName} label={`กลุ่ม : ${groupName}`} />
-              {/each}
-            </Select.Group>
-          </Select.Content>
-        </Select.Root>
-      </div>
-      <div class="mt-4 rounded-2xl border border-[#D6D7E1] bg-white p-6">
-        <button
-          type="button"
-          class="flex w-full items-center justify-between"
-          onclick={() => (isSectionOpen = !isSectionOpen)}
-          aria-expanded={isSectionOpen}
-        >
-          <div
-            class="flex items-center gap-2 text-sm font-medium text-[#4A70C6]"
-          >
-            <Check size={16} />
-            <span>กลุ่ม : {selectedGroup}</span>
-          </div>
-          <ChevronUp
-            size={18}
-            strokeWidth={4}
-            class={`-mr-2 text-neutral-400 transition-transform ${isSectionOpen ? '' : 'rotate-180'}`}
-          />
-        </button>
-        {#if isSectionOpen}
-          <div class="mt-4 overflow-x-auto">
-            <SectionTable
-              tableData={sectionGroups[selectedGroup]}
-              boxed={false}
-              class="w-full"
-            />
-          </div>
-        {/if}
-      </div>
-      <!-- <div class="mt-4"> -->
-      <!--   <Select.Root type="single" bind:value={selectedGroup}> -->
-      <!--     <Select.Trigger -->
-      <!--       class="text-on-surface h-14 w-full rounded-2xl border border-[#D6D7E1] bg-white px-5 text-base font-medium focus:ring-0 focus:ring-offset-0" -->
-      <!--     > -->
-      <!--       กลุ่ม : {selectedGroup} -->
-      <!--     </Select.Trigger> -->
-      <!--     <Select.Content role="listbox"> -->
-      <!--       <Select.Group> -->
-      <!--         {#each sectionGroups as group} -->
-      <!--           <Select.Item value={group} label={`กลุ่ม : ${group}`} /> -->
-      <!--         {/each} -->
-      <!--       </Select.Group> -->
-      <!--     </Select.Content> -->
-      <!--   </Select.Root> -->
-      <!-- </div> -->
+            <Accordion.Trigger class="hover:no-underline">
+              <div
+                class="flex items-center gap-2 text-sm font-medium text-[#4A70C6]"
+              >
+                <Check size={16} />
+                <span>กลุ่ม : {groupName}</span>
+              </div>
+            </Accordion.Trigger>
+            <Accordion.Content>
+              <div class="mt-4 overflow-x-auto">
+                <SectionTable
+                  tableData={sectionGroups[groupName]}
+                  boxed={false}
+                  class="w-full"
+                  selectedSection={globalSelectedSection}
+                  onSelectSection={(section) => {
+                    globalSelectedSection =
+                      globalSelectedSection === section ? null : section;
+                  }}
+                />
+              </div>
+            </Accordion.Content>
+          </Accordion.Item>
+        {/each}
+      </Accordion.Root>
     </section>
 
     {#if isLoggedIn}

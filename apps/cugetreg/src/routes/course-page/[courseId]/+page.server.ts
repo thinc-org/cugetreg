@@ -7,10 +7,12 @@ import { CourseNoResponseSchema } from '@cugetreg/zod-schemas/courses-response';
 
 import type { PageServerLoad } from './$types';
 
-const studyProgram = 'I';
+// TODO: How to reconcile?
+const studyProgram = 'S';
 const academicYear = 2566;
 const semester = 1;
 
+// TODO: Remove this
 const API_URL = 'http://localhost:3000/api/v1/courses/';
 
 export const load: PageServerLoad = async ({ params }) => {

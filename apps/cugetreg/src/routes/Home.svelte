@@ -17,7 +17,6 @@
   import { SelectTimetable } from '@cugetreg/ui/molecules/select-timetable';
   import { Filter as FilterBar } from '@cugetreg/ui/organisms/filter-bar';
   import { Footer } from '@cugetreg/ui/organisms/footer';
-  import { Navbar } from '@cugetreg/ui/organisms/navbar';
   import * as Sidebar from '@cugetreg/ui/organisms/sidebar';
 
   let courses = $state<any[]>([]);
@@ -408,7 +407,6 @@
 </script>
 
 <div class="relative flex h-screen flex-col overflow-hidden bg-white">
-  <Navbar />
   <div class="relative flex flex-1 overflow-hidden">
     <Sidebar.Provider
       bind:open={sidebarExpanded}
@@ -420,6 +418,7 @@
         <main
           class="h-full min-w-0 flex-1 overflow-y-auto scroll-smooth bg-white"
         >
+          <div class="h-16 shrink-0 md:h-20 w-full"></div>
           <div class="flex min-h-full flex-col">
             <div class="mx-auto w-full max-w-[1200px] flex-1 p-8 lg:p-12">
               <div
@@ -640,11 +639,11 @@
   <Sidebar.Sidebar
     variant="sidebar"
     collapsible="icon"
-    class="!absolute z-50 !h-full"
+    class="!absolute z-30 !h-full border-none"
   >
     <Sidebar.Content class="flex-row overflow-visible!">
       <Sidebar.Group
-        class="w-(--sidebar-width-icon) shrink-0 items-center border-r bg-white p-0 py-6 group-data-[variant=floating]:rounded-l-lg"
+        class="w-(--sidebar-width-icon) shrink-0 items-center border-r bg-white p-0 pb-6 pt-[5.5rem] md:pt-[6.5rem] group-data-[variant=floating]:rounded-l-lg"
       >
         <Sidebar.GroupContent>
           <Sidebar.Menu class="gap-6">
@@ -696,10 +695,12 @@
           ></div>
         {/if}
         <div
-          class="bg-surface flex flex-1 flex-col overflow-hidden group-data-[state=collapsed]:absolute group-data-[state=collapsed]:top-4 group-data-[state=collapsed]:left-[calc(var(--sidebar-width-icon)+1rem)] group-data-[state=collapsed]:z-50 group-data-[state=collapsed]:max-h-[min(800px,calc(100%-2rem))] group-data-[state=collapsed]:w-[400px] group-data-[state=collapsed]:rounded-3xl group-data-[state=collapsed]:border group-data-[state=collapsed]:shadow-2xl md:p-8"
+          class="bg-surface flex flex-1 flex-col overflow-hidden group-data-[state=collapsed]:absolute group-data-[state=collapsed]:top-4 group-data-[state=collapsed]:left-[calc(var(--sidebar-width-icon)+1rem)] group-data-[state=collapsed]:z-50 group-data-[state=collapsed]:max-h-[min(800px,calc(100%-2rem))] group-data-[state=collapsed]:w-[400px] group-data-[state=collapsed]:rounded-3xl group-data-[state=collapsed]:border group-data-[state=collapsed]:shadow-2xl md:px-8 md:pb-8 md:pt-0"
         >
           <div class="flex-1 overflow-y-auto pr-2 pb-10">
-            {#if sidebarExpanded || openPanel === 'sidebar'}
+            <div class="h-16 shrink-0 md:h-20 w-full"></div>
+            <div class="pt-4 md:pt-8">
+              {#if sidebarExpanded || openPanel === 'sidebar'}
               <div
                 bind:this={timetableSection}
                 class="relative mb-6 flex flex-col gap-2"
@@ -803,6 +804,7 @@
               </div>
             {/if}
           </div>
+        </div>
         </div>
       {/if}
     </Sidebar.Content>

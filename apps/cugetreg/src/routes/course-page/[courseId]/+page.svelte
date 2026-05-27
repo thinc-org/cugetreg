@@ -28,7 +28,6 @@
   } from '@cugetreg/ui/molecules/section-table';
   import * as Select from '@cugetreg/ui/molecules/select';
   import { Footer } from '@cugetreg/ui/organisms/footer';
-  import { Navbar } from '@cugetreg/ui/organisms/navbar';
   import type { GenEdType } from '@cugetreg/utils/types';
 
   import type { PageProps } from './$types';
@@ -218,7 +217,6 @@
 </script>
 
 <div>
-  <Navbar />
   <main class="px-6 py-6">
     <section class="text-on-surface mx-auto w-full max-w-5xl">
       <div class="flex flex-wrap items-center gap-3">

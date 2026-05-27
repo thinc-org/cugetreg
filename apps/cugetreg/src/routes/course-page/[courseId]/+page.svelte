@@ -1,5 +1,6 @@
 <script lang="ts">
   import { faculties } from '$lib/constants';
+  import { getUserCartStore, useCartActions } from '$lib/stores/user-cart';
 
   import {
     AlertTriangle,
@@ -17,9 +18,9 @@
   } from '@lucide/svelte';
   import { untrack } from 'svelte';
 
+  import * as Accordion from '@cugetreg/ui/atoms/accordion';
   import { Button } from '@cugetreg/ui/atoms/button';
   import { GenedChip } from '@cugetreg/ui/atoms/gened-chip';
-  import * as Accordion from '@cugetreg/ui/atoms/accordion';
   import { Comment } from '@cugetreg/ui/molecules/comment';
   import {
     type ClassInfo,
@@ -31,7 +32,6 @@
   import type { GenEdType } from '@cugetreg/utils/types';
 
   import type { PageProps } from './$types';
-  import { getUserCartStore, useCartActions } from '$lib/stores/user-cart';
 
   const years = ['2566', '2565', '2564'];
   const terms = ['ภาคต้น', 'ภาคปลาย'];

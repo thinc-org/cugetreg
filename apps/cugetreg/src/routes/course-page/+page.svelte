@@ -385,7 +385,7 @@
               tableData={sectionTableData}
               boxed={false}
               class="w-full"
-              selectedSection={selectedSection}
+              {selectedSection}
               onSelectSection={(section) => {
                 selectedSection = selectedSection === section ? null : section;
               }}

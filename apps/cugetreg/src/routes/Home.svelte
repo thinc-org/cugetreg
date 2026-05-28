@@ -408,7 +408,6 @@
 </script>
 
 <div class="relative flex h-screen flex-col overflow-hidden bg-white">
-  <Navbar />
   <div class="relative flex flex-1 overflow-hidden">
     <Sidebar.Provider
       bind:open={sidebarExpanded}

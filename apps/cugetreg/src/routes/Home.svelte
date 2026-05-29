@@ -781,17 +781,17 @@
               <hr class="mb-6 opacity-50" />
             {/if}
 
-              {#if sidebarExpanded || openPanel === 'filter_only'}
-                <div bind:this={filterSection}>
-                  <button
+            {#if sidebarExpanded || openPanel === 'filter_only'}
+              <div bind:this={filterSection}>
+                <button
                   onclick={() => (isFilterOpen = !isFilterOpen)}
                   aria-expanded={isFilterOpen}
                   class="mb-6 flex w-full items-center justify-between"
                 >
                   <span class="flex items-center gap-2">
-                      <Filter size={20} />
-                      <h2 class="text-xl font-bold">ตัวกรอง</h2>
-                    </span>
+                    <Filter size={20} />
+                    <h2 class="text-xl font-bold">ตัวกรอง</h2>
+                  </span>
                   <ChevronDown
                     size={20}
                     class="text-gray-500 transition-transform duration-200 {isFilterOpen
@@ -800,24 +800,24 @@
                   />
                 </button>
                 {#if isFilterOpen}
-                    <div class="mb-8 min-h-[650px]">
-                      <FilterBar
-                        bind:selectedGenEds
-                        bind:selectedSpecial
-                        bind:selectedFaculties
-                        bind:selectedDays
-                        bind:selectedEval
-                        bind:startTime
-                        bind:endTime
-                        bind:fitSchedule
-                        bind:noConditions
-                        onsearch={onSearchFilter}
-                      />
-                    </div>
+                  <div class="mb-8 min-h-[650px]">
+                    <FilterBar
+                      bind:selectedGenEds
+                      bind:selectedSpecial
+                      bind:selectedFaculties
+                      bind:selectedDays
+                      bind:selectedEval
+                      bind:startTime
+                      bind:endTime
+                      bind:fitSchedule
+                      bind:noConditions
+                      onsearch={onSearchFilter}
+                    />
+                  </div>
                 {/if}
-                  <hr class="mb-6 opacity-50" />
-                </div>
-              {/if}
+                <hr class="mb-6 opacity-50" />
+              </div>
+            {/if}
 
             {#if sidebarExpanded || openPanel === 'selected_only'}
               <div bind:this={selectedSection}>

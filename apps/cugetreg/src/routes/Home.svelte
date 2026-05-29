@@ -629,7 +629,9 @@
                 </div>
               </div>
 
-              <div class="grid grid-cols-1 gap-x-5 gap-y-6 pb-10 md:grid-cols-2">
+              <div
+                class="grid grid-cols-1 gap-x-5 gap-y-6 pb-10 md:grid-cols-2"
+              >
                 {#if isLoading}
                   <div
                     class="col-span-full flex h-64 flex-col items-center justify-center gap-3 text-gray-400"
@@ -670,7 +672,7 @@
                       selectedSection={getSelectedSection(item.course.code)}
                       onSelectSection={(v: string) =>
                         handleSelectSection(item, v)}
-                      class="w-full md:w-full max-w-full"
+                      class="w-full max-w-full md:w-full"
                     />
                   {/each}
 
@@ -757,72 +759,25 @@
           ></div>
         {/if}
         <div
-          class="bg-surface flex flex-1 flex-col overflow-hidden group-data-[state=collapsed]:absolute group-data-[state=collapsed]:top-4 group-data-[state=collapsed]:left-[calc(var(--sidebar-width-icon)+1rem)] group-data-[state=collapsed]:z-50 group-data-[state=collapsed]:max-h-[min(800px,calc(100%-2rem))] group-data-[state=collapsed]:w-[400px] group-data-[state=collapsed]:rounded-3xl group-data-[state=collapsed]:border group-data-[state=collapsed]:shadow-2xl md:p-8"
+          class="bg-surface flex flex-1 flex-col overflow-hidden group-data-[state=collapsed]:absolute group-data-[state=collapsed]:top-4 group-data-[state=collapsed]:left-[calc(var(--sidebar-width-icon)+1rem)] group-data-[state=collapsed]:z-50 group-data-[state=collapsed]:max-h-[min(800px,calc(100%-2rem))] group-data-[state=collapsed]:w-[400px] group-data-[state=collapsed]:rounded-3xl group-data-[state=collapsed]:border group-data-[state=collapsed]:shadow-2xl md:pt-8 md:pl-8"
         >
-          <div class="flex-1 overflow-y-auto pr-2 pb-10">
+          <div class="flex-1 overflow-y-auto pr-6 pb-10 md:pr-8">
             {#if sidebarExpanded || openPanel === 'sidebar'}
               <div
                 bind:this={timetableSection}
                 class="relative mb-6 flex flex-col gap-2"
               >
-                <span class="ml-1 text-[11px] font-medium text-gray-400"
-                  >คุณกำลังจัดตารางเรียน...</span
-                >
-                <div class="flex items-center gap-2">
-                  <button
-                    onclick={() =>
-                      (isScheduleDropdownOpen = !isScheduleDropdownOpen)}
-                    class="flex h-14 flex-1 items-center justify-between overflow-hidden rounded-2xl border border-blue-500 bg-white px-5 shadow-sm transition-all hover:bg-gray-50"
-                  >
-                    <span class="mr-2 truncate text-lg font-bold text-[#1C1B1F]"
-                      >{$userCart.currentCart?.name || 'เลือกตาราง'}</span
-                    >
-                    <ChevronDown size={24} class="shrink-0 text-gray-400" />
-                  </button>
-                  <div
-                    class="flex h-14 min-w-[100px] flex-col items-center justify-center rounded-2xl border border-neutral-800 bg-white px-3 py-2 text-center shadow-sm"
-                  >
-                    <span
-                      class="text-[10px] leading-tight font-bold text-neutral-800"
-                      >ทวิภาค</span
-                    >
-                    <span
-                      class="text-[10px] leading-tight font-bold whitespace-nowrap text-neutral-800"
-                      >{$userCart.currentCart?.semester || '-'}</span
-                    >
-                  </div>
-                </div>
-
-                {#if isScheduleDropdownOpen}
-                  <div
-                    class="absolute top-[110%] left-0 z-[70] w-full overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-2xl"
-                  >
-                    <div
-                      class="custom-scrollbar flex max-h-[200px] flex-col overflow-y-auto py-2"
-                    >
-                      <SelectTimetable
-                        class="border-b border-neutral-200 px-2 py-5"
-                        options={$userCart.cartList?.map((item) => ({
-                          name: item.name,
-                          id: item.id,
-                        })) ?? []}
-                        bind:value={$userCart.currentCartId}
-                      />
-                    </div>
-                    <button
-                      class="flex w-full items-center justify-center gap-2 border-t p-4 font-bold text-[#004494] transition-colors hover:bg-gray-50"
-                    >
-                      <Plus size={18} strokeWidth={3} /> เพิ่มตาราง
-                    </button>
-                  </div>
-                  <div
-                    class="fixed inset-0 z-[65]"
-                    onclick={() => (isScheduleDropdownOpen = false)}
-                    role="button"
-                    tabindex="0"
-                    onkeydown={() => {}}
-                  ></div>
-                {/if}
+                <SelectTimetable
+                  class="border-b border-neutral-200 px-2 py-5"
+                  options={$userCart.cartList?.map((item) => ({
+                    name: item.name,
+                    id: item.id,
+                  })) ?? []}
+                  bind:value={$userCart.currentCartId}
+                  semester={$userCart.currentCart.semester}
+                  semesterType={$userCart.currentCart.studyProgram}
+                  academicYear={$userCart.currentCart.academicYear}
+                />
               </div>
               <hr class="mb-6 opacity-50" />
             {/if}
@@ -869,7 +824,7 @@
               <div bind:this={selectedSection}>
                 {#if $userCart.currentCart}
                   <SelectedCourse
-                    variant="simple"
+                    variant="grouped"
                     class="border-b border-neutral-200"
                   />
                 {:else}

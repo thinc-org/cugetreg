@@ -1,5 +1,5 @@
 import z from "zod";
-
+import { genEdType } from "./constants";
 export const CartSchema = z.object({
   id: z.string(),
   userId: z.string(),
@@ -53,20 +53,13 @@ const CartItemDetailSchema = z.object({
   cartOrder: z.string(),
   isGraded: z.boolean(),
   expectedGrade: z.string(),
+  genEdType: z.enum(genEdType).default("NO"),
   course: z.object({
     abbrName: z.string(),
     courseNameTh: z.string(),
     courseNameEn: z.string(),
     credit: z.string(),
   }),
-  // section: z
-  //   .object({
-  //     closed: z.boolean(),
-  //     regis: z.number(),
-  //     max: z.number(),
-  //     note: z.string().nullable(),
-  //   })
-  //   .nullable(),
   sections: z.array(Section).default([]),
 });
 

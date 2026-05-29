@@ -23,6 +23,7 @@ import type {
   UpdateCartBodySchema,
   UpdateCourseBodySchema,
 } from "../zod_schemas/carts.schema.js";
+import { genEdType } from "../zod_schemas/constants.js";
 
 export const cartService = {
   getAllCartItems: async (userId: string, query: ListCartsQuerySchema) => {
@@ -134,7 +135,7 @@ export const cartService = {
 
   /* eslint-disable @typescript-eslint/no-explicit-any */
   getCartDetail: async (userId: string, cartId: string) => {
-    const cart = (await prisma.cart.findUnique({
+    const cart = await prisma.cart.findUnique({
       where: { id: cartId },
       include: {
         items: {
@@ -151,7 +152,7 @@ export const cartService = {
           },
         },
       },
-    })) as any;
+    });
 
     if (!cart) {
       throw new Error("CART_NOT_FOUND");
@@ -160,7 +161,7 @@ export const cartService = {
     // 1. Data Enrichment
     const enrichedItems = R.pipe(
       cart.items,
-      R.map((item: any) => {
+      R.map((item) => {
         const info = item.courseInfo;
         const courseData = info.courses.find(
           (course: Course) =>
@@ -182,7 +183,7 @@ export const cartService = {
     );
 
     // 2. Format Items Response
-    const itemsResponse = R.map(enrichedItems, (item: any) => ({
+    const itemsResponse = R.map(enrichedItems, (item) => ({
       id: item.id,
       courseNo: item.courseNo,
       sectionNo: item.sectionNo,
@@ -190,6 +191,7 @@ export const cartService = {
       hidden: item.hidden,
       cartOrder: item.cartOrder,
       isGraded: item.isGraded,
+      genEdType: item.courseData?.genEdType,
       expectedGrade: item.expectedGrade.toString(),
       course: {
         courseNameTh: item.info.courseNameTh,

@@ -1,29 +1,29 @@
 <script lang="ts">
-  import { Navbar } from '@cugetreg/ui/organisms/navbar';
-  import { Footer } from '@cugetreg/ui/organisms/footer';
   import SelectedCourse from '$lib/components/selected-course.svelte';
-  import { Filter as FilterBar } from '@cugetreg/ui/organisms/filter-bar';
-  import { CourseCard } from '@cugetreg/ui/molecules/course-card';
-  import { Input } from '@cugetreg/ui/atoms/input';
-  import { SelectTimetable } from '@cugetreg/ui/molecules/select-timetable';
-  import * as Sidebar from '@cugetreg/ui/organisms/sidebar';
   import { getUserCartStore, useCartActions } from '$lib/stores/user-cart';
+
   import {
-    Menu,
-    Filter,
     BookMarked,
-    Plus,
     ChevronDown,
+    Filter,
     Loader2,
+    Menu,
     TriangleAlert,
   } from '@lucide/svelte';
   import { untrack } from 'svelte';
-  import { fade } from 'svelte/transition';
-  import { goto } from '$app/navigation';
+  import { SvelteMap } from 'svelte/reactivity';
+
+  import { Input } from '@cugetreg/ui/atoms/input';
+  import { CourseCard } from '@cugetreg/ui/molecules/course-card';
+  import { SelectTimetable } from '@cugetreg/ui/molecules/select-timetable';
+  import { Filter as FilterBar } from '@cugetreg/ui/organisms/filter-bar';
+  import { Footer } from '@cugetreg/ui/organisms/footer';
+  import { Navbar } from '@cugetreg/ui/organisms/navbar';
+  import * as Sidebar from '@cugetreg/ui/organisms/sidebar';
 
   let courses = $state<any[]>([]);
   let isLoading = $state(false);
-  const courseCache = new Map<string, any[]>();
+  const courseCache = new SvelteMap<string, any[]>();
 
   let openPanel = $state<'sidebar' | 'filter_only' | 'selected_only' | null>(
     null,

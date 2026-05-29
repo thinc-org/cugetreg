@@ -1,4 +1,5 @@
 import z from "zod";
+
 import { genEdType } from "./constants";
 export const CartSchema = z.object({
   id: z.string(),

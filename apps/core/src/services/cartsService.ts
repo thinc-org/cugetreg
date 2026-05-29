@@ -23,7 +23,6 @@ import type {
   UpdateCartBodySchema,
   UpdateCourseBodySchema,
 } from "../zod_schemas/carts.schema.js";
-import { genEdType } from "../zod_schemas/constants.js";
 
 export const cartService = {
   getAllCartItems: async (userId: string, query: ListCartsQuerySchema) => {

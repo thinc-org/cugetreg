@@ -10,6 +10,7 @@
 
   import * as Accordion from '@cugetreg/ui/atoms/accordion';
   import { Button } from '@cugetreg/ui/atoms/button';
+  import { GenedChip } from '@cugetreg/ui/atoms/gened-chip';
   import { IconButton } from '@cugetreg/ui/atoms/icon-button';
   import { ColorPicker } from '@cugetreg/ui/molecules/colorpicker';
   import * as Select from '@cugetreg/ui/molecules/select';
@@ -17,7 +18,6 @@
   import { courseColorVariants } from '@cugetreg/utils/constants';
   import type { ColorVariant } from '@cugetreg/utils/types';
   import type { CartItemDetail } from '@cugetreg/zod-schemas/cart-response';
-  import { GenedChip } from '@cugetreg/ui/atoms/gened-chip';
 
   const userCart = getUserCartStore();
   const { removeCourse, updateCourse } = useCartActions();

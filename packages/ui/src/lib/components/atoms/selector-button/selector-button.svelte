@@ -1,50 +1,32 @@
 <script lang="ts">
 	interface Props {
-		selected: {
-			section: string;
-			seats: string;
-			teacher: string;
-			schedule: string;
-			room: string;
-			type: string;
-		};
-		handleClick?: () => void;
+		selected?: boolean;
+		onClick?: (value: boolean) => void;
 	}
+	let { selected = $bindable(false), onClick = (_v) => {} }: Props = $props();
 
-	let { selected, handleClick }: Props = $props();
-
-	let clicked = $state(false);
-
-	const defaultHandleClick = () => {
-		clicked = !clicked;
-		console.log('Selected row:', selected);
-	};
-
-	const onClick = () => {
-		if (handleClick) {
-			handleClick();
-		} else {
-			defaultHandleClick();
-		}
+	const handleClick = () => {
+		selected = !selected;
+		onClick(selected);
 	};
 </script>
 
 <button
-	onclick={onClick}
+	onclick={handleClick}
 	class={`rounded-button h-9 w-22 rotate-0 gap-1 border-[1.5px] pt-0.5 pr-5 pl-4 opacity-100 ${
-		clicked ? 'border-[#4A70C6]' : 'border-[#EDEDF1]'
+		selected ? 'border-[#4A70C6]' : 'border-[#EDEDF1]'
 	}`}
 >
 	<div class="flex items-center gap-1">
 		<p
 			class={`text-button2 align-middle font-[FC_Orbit] font-medium tracking-[0.15px] ${
-				clicked ? 'text-[#4A70C6]' : 'text-[#353745]'
+				selected ? 'text-[#4A70C6]' : 'text-[#353745]'
 			}`}
 		>
 			เลือก
 		</p>
 
-		{#if clicked}
+		{#if selected}
 			<svg
 				width="13"
 				height="10"

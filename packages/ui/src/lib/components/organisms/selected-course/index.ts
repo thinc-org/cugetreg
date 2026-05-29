@@ -1,1 +1,0 @@
-export { default as SelectedCourse } from './selected-course.svelte';

@@ -7,12 +7,16 @@
 		imageUrl?: string;
 		name?: string;
 		id?: string;
+		onSettings?: () => void;
+		onSignOut?: () => void;
 	}
 
 	let {
 		imageUrl = 'https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg',
 		name = '',
-		id = ''
+		id = '',
+		onSettings = () => {},
+		onSignOut = () => {}
 	}: Props = $props();
 
 	let shortenedName = $derived(getShortenName(name));
@@ -20,16 +24,18 @@
 	const items = [
 		{
 			icon: Settings,
-			name: 'ตั้งค่า'
+			name: 'ตั้งค่า',
+			onclick: () => onSettings()
 		},
 		{
 			icon: DoorOpen,
-			name: 'ออกจากระบบ'
+			name: 'ออกจากระบบ',
+			onclick: () => onSignOut()
 		}
 	];
 </script>
 
-<div class="bg-surface w-60 rounded-xl border-2 border-[#EDEDF1]">
+<div class="bg-surface w-60 overflow-hidden rounded-xl border-2 border-[#EDEDF1]">
 	<div class="flex flex-col items-center justify-center gap-4 p-4">
 		<img src={imageUrl} alt="Profile" class="h-20 w-20 rounded-full object-cover" />
 		<div class="flex flex-col items-center gap-2">
@@ -37,10 +43,13 @@
 			<p class="text-on-surface text-body2 font-medium">ID: {id}</p>
 		</div>
 	</div>
-	{#each items as { icon: Icon, name } (name)}
-		<div class="flex flex-row items-center gap-3 border-t border-[#EDEDF1] p-4">
+	{#each items as { icon: Icon, name, onclick } (name)}
+		<button
+			class="flex w-full flex-row items-center gap-3 overflow-hidden border-t border-[#EDEDF1] p-4 hover:cursor-pointer hover:bg-blue-200"
+			{onclick}
+		>
 			<Icon size="16" color="#353745" strokeWidth="2.5" />
 			<p class="text-on-surface text-button2 font-medium">{name}</p>
-		</div>
+		</button>
 	{/each}
 </div>

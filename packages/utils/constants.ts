@@ -1,5 +1,6 @@
 export const courseColorVariants = {
-  neutral: "bg-neutral-300 border-neutral-500 text-neutral-700",
+  primary: "bg-neutral-300 border-neutral-500 text-neutral-700",
+  secondary: "bg-sky-300 border-sky-500 text-sky-700",
   pink: "bg-pink-300 border-pink-500 text-pink-700",
   tangerine: "bg-tangerine-300 border-tangerine-500 text-tangerine-700",
   orange: "bg-orange-300 border-orange-500 text-orange-700",
@@ -23,6 +24,6 @@ export const conflict = "bg-red-300 border-red-800 text-red-800";
 //     sky: { border: '#35A1EF', fill: '#DAEFFE', text: '#0C5A93' },
 //     indigo: { border: '#8170F1', fill: '#DCD7FF', text: '#211090' },
 //     purple: { border: '#C865EA', fill: '#F3D6FD', text: '#681A83' },
-//     neutral: { border: '#B2B5C7', fill: '#F6F6F9', text: '#555A74' },
+//     primary: { border: '#B2B5C7', fill: '#F6F6F9', text: '#555A74' },
 //     error: { border: '#F96666', fill: '#F96666', text: '#F96666' },
 // }

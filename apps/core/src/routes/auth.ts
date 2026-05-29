@@ -4,18 +4,20 @@ import { type MiddlewareHandler } from "hono";
 import { env } from "../env.js";
 import { auth } from "../lib/auth.js";
 
+// Proxy all /auth/* requests directly to better-auth (login, callback, session, signout)
 const authRoute = new OpenAPIHono();
 
 authRoute.on(["POST", "GET"], "/*", (c) => {
   return auth.handler(c.req.raw);
 });
 
+// Inject session user into context; in non-prod bypasses real auth with a hardcoded user for local dev
 export const middlewareAuth: MiddlewareHandler = async (c, next) => {
   if (env.APP_MODE !== "prod") {
     c.set("user", {
       id: "63dea25026f1907da44534a7",
       email: "6438097921@student.chula.ac.th",
-    } as any);
+    } as typeof auth.$Infer.Session.user);
   } else {
     const session = await auth.api.getSession({
       headers: c.req.raw.headers,

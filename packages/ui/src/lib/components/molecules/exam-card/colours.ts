@@ -32,6 +32,7 @@ export const COLOURS: Record<StatusColour, StatusColourSet> = {
 	sky: { border: '#35A1EF', fill: '#DAEFFE', text: '#0C5A93' },
 	indigo: { border: '#8170F1', fill: '#DCD7FF', text: '#211090' },
 	purple: { border: '#C865EA', fill: '#F3D6FD', text: '#681A83' },
-	neutral: { border: '#B2B5C7', fill: '#F6F6F9', text: '#555A74' },
+	primary: { border: '#B2B5C7', fill: '#F6F6F9', text: '#555A74' },
+	secondary: { border: '#35A1EF', fill: '#DAEFFE', text: '#0C5A93' },
 	error: { border: '#F96666', fill: '#F96666', text: '#F96666' }
 };

@@ -1,3 +1,5 @@
+import type { Section } from "@cugetreg/zod-schemas/cart-response";
+
 import { courseColorVariants } from "./constants";
 
 export type ColorVariant = keyof typeof courseColorVariants;
@@ -26,10 +28,11 @@ export type Course = {
   code: string;
   credit: number;
   gened: GenEdType[];
-  seat: number;
-  maxseat: number;
+  // seat: number;
+  // maxseat: number;
   // review: number;
-  sections: { [key: number]: Period[] };
+  // sections: { [key: number]: Period[] };
+  sections: Section;
   midterm?: CourseExamDate;
   final?: CourseExamDate;
 };

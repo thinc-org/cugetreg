@@ -1,17 +1,12 @@
 <script lang="ts">
-  import { Globe } from 'lucide-svelte'
+  import { Globe } from 'lucide-svelte';
 
-  import { GitHubMark } from '@cugetreg/ui/logo/vendor';
-  import { Instagram } from '@cugetreg/ui/logo/instagram';
+  import { QuestionAnswer } from '@cugetreg/ui/atoms/faqs';
   import { Facebook } from '@cugetreg/ui/logo/facebook';
-
-  import { QuestionAnswer } from '@cugetreg/ui/atoms/faqs'
-
-  import { Footer } from '@cugetreg/ui/organisms/footer'
-  import { Navbar } from '@cugetreg/ui/organisms/navbar'
+  import { Instagram } from '@cugetreg/ui/logo/instagram';
+  import { GitHubMark } from '@cugetreg/ui/logo/vendor';
+  import { Footer } from '@cugetreg/ui/organisms/footer';
 </script>
-
-<Navbar />
 
 <div class="flex justify-center py-12">
   <div class="w-[80%] min-w-[60vw]">
@@ -56,7 +51,7 @@
     <QuestionAnswer question="CU Get Reg นำข้อมูลมาจากไหน?">
       <ul class="list-disc">
         <li>
-          ข้อมูลรายวิชาและข้อมูลตอนเรียน: นำมาจากหน้า 
+          ข้อมูลรายวิชาและข้อมูลตอนเรียน: นำมาจากหน้า
           <a
             href="https://cas.reg.chula.ac.th/cu/cs/QueryCourseScheduleNew/index.html"
             class="link"
@@ -72,12 +67,12 @@
           เพื่อให้ไม่พบปัญหาดังกล่าว
         </li>
         <li>
-          ข้อมูลตอนเรียนรายวิชา GenEd: ได้รับข้อมูลจาก Gen อย่าได้ Ed
+          ข้อมูลตอนเรียนรายวิชา GenEd: ได้รับข้อมูลจาก Gen อย่าได้ Ed
           และศูนย์การศึกษาทั่วไป
         </li>
         <li>
-          คำอธิบายรายวิชา: นำมาจาก ระบบค้นหาคำอธิบายรายวิชา ของสำนักบริหารวิชาการ
-          จุฬาฯ
+          คำอธิบายรายวิชา: นำมาจาก ระบบค้นหาคำอธิบายรายวิชา
+          ของสำนักบริหารวิชาการ จุฬาฯ
         </li>
       </ul>
     </QuestionAnswer>
@@ -89,36 +84,36 @@
       ในการเข้าสู่ระบบ สามารถใช้บัญชีอีเมลนิสิต (รหัสนิสิต@student.chula.ac.th)
       เท่านั้น เพื่อให้สามารถยืนยันตัวตนได้ว่าเป็นนิสิตจุฬาฯ
       หากต้องการทราบว่าเราเก็บข้อมูลใดและนำไปใช้อย่างไรบ้าง
-      สามารถอ่านเพิ่มเติมได้ที่ <a href="/privacy" class="link"
+      สามารถอ่านเพิ่มเติมได้ที่ <a href="/privacy" class="link"
         >Privacy Policy</a
-      > ของเรา
+      > ของเรา
     </QuestionAnswer>
 
     <QuestionAnswer question="ความร่วมมือกับหน่วยงานอื่น ๆ">
       CU Get Reg มีความร่วมมือกับหน่วยงานอื่นภายในจุฬาฯ ได้แก่
       <ul class="list-disc">
         <li>
-          สำนักงานการทะเบียน (Reg Chula): CU Get Reg
+          สำนักงานการทะเบียน (Reg Chula): CU Get Reg
           ได้รับการสนับสนุนเซิร์ฟเวอร์จากสำนักงานการทะเบียน นอกจากนี้
           ทางสำนักงานการทะเบียนยังพร้อมให้ความสนับสนุนในด้านข้อมูลรายวิชา
-          ซึ่งกำลังอยู่ในระหว่างดำเนินการ 
+          ซึ่งกำลังอยู่ในระหว่างดำเนินการ
           <br />
-          <a href="reg.chula.ac.th" class="link"
+          <a href="https://reg.chula.ac.th" class="link"
             >(เว็บไซต์ สำนักงานการทะเบียน)</a
           >
         </li>
         <li>
-          Gen อย่าได้ Ed: ปัจจุบันร่วมมือกับ CU Get Reg
-          ในการประชาสัมพันธ์เว็บไซต์ให้กับนิสิตจุฬาฯ 
+          Gen อย่าได้ Ed: ปัจจุบันร่วมมือกับ CU Get Reg
+          ในการประชาสัมพันธ์เว็บไซต์ให้กับนิสิตจุฬาฯ
           <br />
           <a href="https://www.facebook.com/genedahs" class="link"
             >(Facebook Page: Gen อย่าได้ Ed)</a
           >
         </li>
         <li>
-          ศูนย์การศึกษาทั่วไป (GenEd Chula): CU Get Reg
+          ศูนย์การศึกษาทั่วไป (GenEd Chula): CU Get Reg
           ได้รับการสนับสนุนจากศูนย์การศึกษาทั่วไปในด้านข้อมูลรายวิชาศึกษาทั่วไป
-          (GenEd) 
+          (GenEd)
           <br />
           <a href="https://www.gened.chula.ac.th" class="link"
             >(เว็บไซต์ ศูนย์การศึกษาทั่วไป)</a
@@ -140,7 +135,7 @@
       <ul class="list-normal mt-2 space-y-3 fill-blue-700">
         <li class="flex items-center">
           <Globe class="m-2 h-[2em] w-[2em] stroke-blue-700" />
-          <a class="link" href="thinc.in.th">https://thinc.in.th</a>
+          <a class="link" href="https://thinc.in.th">https://thinc.in.th</a>
         </li>
         <li class="flex items-center">
           <Facebook class="m-2 h-[2em] w-[2em]" />

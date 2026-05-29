@@ -6,25 +6,19 @@
 
 	interface RenameScheduleProp {
 		onCancel: () => void;
-		onConfirm: () => void;
-		name?: string;
+		onConfirm: (name: string) => void;
+		initialName: string;
 	}
 
-	let {
-		name = $bindable(),
-		onCancel = () => {},
-		onConfirm = () => {}
-	}: RenameScheduleProp = $props();
+	let { initialName, onCancel = () => {}, onConfirm = () => {} }: RenameScheduleProp = $props();
 
 	function handleConfirm() {
-		name = nameDraft;
-		onConfirm();
+		onConfirm(nameDraft);
 	}
 
 	const LENGTH_CAP = 30;
 
-	let nameDraft = $state(untrack(() => name));
-	let length = $derived(nameDraft?.length ?? 0);
+	let nameDraft = $state(untrack(() => initialName));
 </script>
 
 <div class="bg-surface w-[300px] rounded-lg border border-neutral-200 p-5">

@@ -58,6 +58,7 @@
 				{/each}
 			</select>
 
+			<!-- TODO: -->
 			<div class="truncate rounded-lg border border-neutral-900 px-1 text-xs">
 				<div class="text-xs">{formatSemesterType(semesterType)} {academicYear}</div>
 				<div class="text-xs">{formatSemester(semester)}</div>

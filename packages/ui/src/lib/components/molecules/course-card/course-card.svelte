@@ -50,7 +50,7 @@
 
 <div
 	class={cn(
-		'relative flex h-[164px] w-[334px] flex-col gap-3 rounded-xl px-4 py-5 ring-2 ring-neutral-100 md:h-[194px] md:w-[440px] md:p-6',
+		'relative flex w-[334px] flex-col gap-3 rounded-xl px-4 py-5 ring-2 ring-neutral-100 md:w-[440px] md:p-6',
 		className
 	)}
 	{...rest}

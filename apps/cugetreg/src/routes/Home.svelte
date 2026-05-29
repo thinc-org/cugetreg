@@ -18,7 +18,6 @@
   import { SelectTimetable } from '@cugetreg/ui/molecules/select-timetable';
   import { Filter as FilterBar } from '@cugetreg/ui/organisms/filter-bar';
   import { Footer } from '@cugetreg/ui/organisms/footer';
-  import { Navbar } from '@cugetreg/ui/organisms/navbar';
   import * as Sidebar from '@cugetreg/ui/organisms/sidebar';
 
   let courses = $state<any[]>([]);
@@ -472,7 +471,6 @@
 </script>
 
 <div class="relative flex h-screen flex-col overflow-hidden bg-white">
-  <Navbar />
   <div class="relative flex flex-1 overflow-hidden">
     <Sidebar.Provider
       bind:open={sidebarExpanded}

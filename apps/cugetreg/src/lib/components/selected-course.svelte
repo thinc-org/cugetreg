@@ -10,6 +10,7 @@
 
   import * as Accordion from '@cugetreg/ui/atoms/accordion';
   import { Button } from '@cugetreg/ui/atoms/button';
+  import { GenedChip } from '@cugetreg/ui/atoms/gened-chip';
   import { IconButton } from '@cugetreg/ui/atoms/icon-button';
   import { ColorPicker } from '@cugetreg/ui/molecules/colorpicker';
   import * as Select from '@cugetreg/ui/molecules/select';
@@ -50,12 +51,14 @@
 
   interface SelectedCourseProp {
     class?: ClassValue;
-    variant?: 'simple' | 'detailed';
+    variant?: 'simple' | 'detailed' | 'grouped';
+    onArrange?: () => void;
   }
 
   let {
     class: className = undefined,
     variant = 'detailed',
+    onArrange,
   }: SelectedCourseProp = $props();
 
   const totalCredit = $derived(
@@ -74,15 +77,8 @@
     y: 0,
   });
 
-  // $effect(() => {
-  //   if (changeColorFor) {
-  //     const index = schedule.findIndex((x) => x.id === changeColorFor);
-  //     if (index !== -1 && schedule[index].color !== currentColorVariant) {
-  //       schedule[index].color = currentColorVariant;
-  //       schedule = [...schedule];
-  //     }
-  //   }
-  // });
+  const genedCourses = $derived(schedule.filter((c) => c.genEdType !== 'NO'));
+  const otherCourses = $derived(schedule.filter((c) => c.genEdType === 'NO'));
 </script>
 
 <svelte:window
@@ -94,47 +90,104 @@
 />
 
 <div class={cn(className)}>
-  <Accordion.Root class="w-full" type="single" value="selected-course">
-    <Accordion.Item value="selected-course">
-      <Accordion.Trigger class="border-b border-neutral-200">
-        <div class="flex">
-          <BookMarked class="mr-2" />
-          <span class="">วิชาที่เลือก</span>
-          <span
-            class="ml-2 flex items-baseline-last text-xs font-light text-neutral-400"
-            >{totalCredit} หน่วยกิต</span
-          >
-        </div>
-      </Accordion.Trigger>
-      <Accordion.Content>
-        <SortableList.Root
-          ondragend={handleDragEnd}
-          hasLockedAxis
-          transition={{
-            duration: 160,
-            easing: 'cubic-bezier(0.2, 1, 0.1, 1)',
-          }}
-          gap={0}
-          class="max-h-[40vh] grow overflow-y-scroll"
+  {#if variant === 'grouped'}
+    <div class="flex flex-col">
+      <div class="mb-4 flex items-baseline gap-2">
+        <h2 class="text-xl font-bold text-[#1C1B1F]">วิชาที่เลือก</h2>
+        <span class="text-sm font-normal text-gray-400"
+          >{totalCredit} หน่วยกิต</span
         >
-          {#each schedule as course, index (course.id)}
-            <SortableList.Item id={course.id.toString()} {index} class="my-0">
-              <div class="ssl-item-content">
-                {@render selectedCourseItem(course)}
-              </div>
-            </SortableList.Item>
-          {/each}
-        </SortableList.Root>
-        <div class="px-2">
-          <Button class="w-full" color="neutral">ค้นหาวิชาเรียน</Button>
-        </div>
-      </Accordion.Content>
-    </Accordion.Item>
-  </Accordion.Root>
+      </div>
+
+      {#if genedCourses.length > 0}
+        <p class="mb-1 text-sm font-medium text-[#6F7593]">วิชา GenEd</p>
+        {#each genedCourses as course (course.id)}
+          {@render groupedRow(course)}
+        {/each}
+      {/if}
+
+      {#if otherCourses.length > 0}
+        <p class="mt-4 mb-1 text-sm font-medium text-[#6F7593]">วิชาอื่นๆ</p>
+        {#each otherCourses as course (course.id)}
+          {@render groupedRow(course)}
+        {/each}
+      {/if}
+
+      <Button class="mt-6 w-full" color="neutral" onclick={onArrange}
+        >จัดตารางเรียน</Button
+      >
+    </div>
+  {:else}
+    <Accordion.Root class="w-full" type="single" value="selected-course">
+      <Accordion.Item value="selected-course">
+        <Accordion.Trigger class="border-b border-neutral-200">
+          <div class="flex">
+            <BookMarked class="mr-2" />
+            <span class="">วิชาที่เลือก</span>
+            <span
+              class="ml-2 flex items-baseline-last text-xs font-light text-neutral-400"
+              >{totalCredit} หน่วยกิต</span
+            >
+          </div>
+        </Accordion.Trigger>
+        <Accordion.Content>
+          <SortableList.Root
+            ondragend={handleDragEnd}
+            hasLockedAxis
+            transition={{
+              duration: 160,
+              easing: 'cubic-bezier(0.2, 1, 0.1, 1)',
+            }}
+            gap={0}
+            class="max-h-[40vh] grow overflow-y-scroll"
+          >
+            {#each schedule as course, index (course.id)}
+              <SortableList.Item id={course.id.toString()} {index} class="my-0">
+                <div class="ssl-item-content">
+                  {@render selectedCourseItem(course)}
+                </div>
+              </SortableList.Item>
+            {/each}
+          </SortableList.Root>
+          <div class="px-2">
+            <Button class="w-full" color="neutral">ค้นหาวิชาเรียน</Button>
+          </div>
+        </Accordion.Content>
+      </Accordion.Item>
+    </Accordion.Root>
+  {/if}
   {#if showChangeColorModal}
     {@render changeColorModal()}
   {/if}
 </div>
+
+{#snippet groupedRow(course: CartItemDetail)}
+  <div class="flex items-center gap-3 py-3">
+    <div class="flex min-w-0 flex-1 flex-col">
+      <span class="text-xs text-neutral-400">{course.courseNo}</span>
+      <span class="truncate text-[15px] text-[#1C1B1F]"
+        >{course.course.courseNameEn}</span
+      >
+    </div>
+
+    {#if course.genEdType !== 'NO'}
+      <div class="flex w-20 justify-center">
+        <GenedChip type={course.genEdType} />
+      </div>
+    {/if}
+    <span class="w-12 shrink-0 text-right text-sm text-[#1C1B1F]"
+      >{course.course.credit} นก.</span
+    >
+
+    <button
+      class="shrink-0 rounded-md p-1 text-neutral-500 transition-colors hover:bg-neutral-100"
+      aria-label="ลบวิชา"
+      onclick={() => removeCourse(course.id)}
+    >
+      <Trash2 size={18} />
+    </button>
+  </div>
+{/snippet}
 
 {#snippet selectedCourseItem(course: CartItemDetail)}
   <div

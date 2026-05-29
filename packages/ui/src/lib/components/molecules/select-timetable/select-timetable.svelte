@@ -1,8 +1,29 @@
 <script lang="ts">
-	import { Menu } from '@lucide/svelte';
-	import type { ClassValue } from 'clsx';
+	function formatSemesterType(semesterType: string): string {
+		switch (semesterType) {
+			default:
+				console.warn(`Invalid semesterType ${semesterType}`);
+				return 'ทวิภาค';
+			case 'S':
+				return 'ทวิภาค';
+			case 'I':
+				return 'นานาชาติ';
+			case 'T':
+				return 'ไตรภาค';
+		}
+	}
 
-	import { cn } from '@cugetreg/utils';
+	function formatSemester(semester: 'FIRST' | 'SECOND' | 'SUMMER'): string {
+		switch (semester) {
+			default:
+			case 'FIRST':
+				return 'ภาคต้น';
+			case 'SECOND':
+				return 'ภาคปลาย';
+			case 'SUMMER':
+				return 'ภาคฤดูร้อน';
+		}
+	}
 
 	interface SelectTimetableProp {
 		options?: {
@@ -10,20 +31,21 @@
 			id: string;
 		}[];
 		value?: string;
-		class?: ClassValue;
+		semesterType: 'S' | 'I' | 'T';
+		academicYear: number;
+		semester: string;
 	}
 
 	let {
 		options,
 		value = $bindable(),
-		class: className = undefined
+		semesterType = 'S',
+		semester = 'FIRST',
+		academicYear = 2566
 	}: SelectTimetableProp = $props();
 </script>
 
-<div class={cn('flex', className)}>
-	<div class="mr-5 ml-1 flex items-center justify-center">
-		<Menu />
-	</div>
+<div class="flex">
 	<div class="flex-1">
 		<span class="text-xs text-neutral-400"> คุณกำลังเปลี่ยนตารางเรียน... </span>
 		<div class="flex gap-2.5">
@@ -38,8 +60,8 @@
 
 			<!-- TODO: -->
 			<div class="truncate rounded-lg border border-neutral-900 px-1 text-xs">
-				<div class="text-xs">ทวิภาค 2566</div>
-				<div class="text-xs">ภาคต้น</div>
+				<div class="text-xs">{formatSemesterType(semesterType)} {academicYear}</div>
+				<div class="text-xs">{formatSemester(semester)}</div>
 			</div>
 		</div>
 	</div>

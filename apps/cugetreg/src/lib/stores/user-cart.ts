@@ -1,6 +1,6 @@
 import { tryCatch } from '$lib/async-handler';
 
-import axios from 'axios';
+import { api } from '$lib/api';
 
 import type {
   CartData,
@@ -134,17 +134,13 @@ async function flushUpdates(): Promise<void> {
     // 1. Cart-level update
     if (currentCartId && Object.keys(cartPayload).length > 0) {
       console.log('Requesting patch');
-      const res = await axios.patch(
-        `${API_BASE}/${currentCartId}`,
-        cartPayload,
-      );
+      const res = await api.patch(`/carts/${currentCartId}`, cartPayload);
       console.log(res.data);
     }
 
     // 2. Per-item updates (parallel to keep things fast)
     const itemRequests = Array.from(itemPayloads.entries()).map(
-      ([itemId, payload]) =>
-        axios.patch(`${API_BASE}/items/${itemId}`, payload),
+      ([itemId, payload]) => api.patch(`/carts/items/${itemId}`, payload),
     );
     await Promise.all(itemRequests);
   } catch (err) {
@@ -221,11 +217,11 @@ export function useCartActions() {
       }),
     }));
 
-    await axios.patch(`${API_BASE}/${oldDefault}`, {
+    await api.patch(`/carts/${oldDefault}`, {
       isDefault: false,
     });
 
-    await axios.patch(`${API_BASE}/${newDefault}`, {
+    await api.patch(`/carts/${newDefault}`, {
       isDefault: true,
     });
   };
@@ -281,7 +277,7 @@ export function useCartActions() {
     const { currentCartId } = snapshot;
     if (!currentCartId) return;
 
-    const res = await axios.post(`${API_BASE}/${currentCartId}/items`, {
+    const res = await api.post(`/carts/${currentCartId}/items`, {
       courseNo,
       sectionNo,
     });
@@ -289,7 +285,7 @@ export function useCartActions() {
     const newItem = SingleCartItemResponseSchema.parse(res.data).data;
 
     // Fetch the full detail to get the new exam schedule and complete course data
-    const detailRes = await axios.get(`${API_BASE}/${currentCartId}`);
+    const detailRes = await api.get(`/carts/${currentCartId}`);
     const detail = CartDetailResponseSchema.parse(detailRes.data).data;
 
     userCart.update((state) => ({
@@ -319,7 +315,7 @@ export function useCartActions() {
     const { currentCartId } = snapshot;
     if (!currentCartId) return;
 
-    await axios.delete(`${API_BASE}/${currentCartId}/items/${itemId}`);
+    await api.delete(`/carts/${currentCartId}/items/${itemId}`);
 
     // Update local state immediately
     userCart.update((state) => ({
@@ -331,7 +327,7 @@ export function useCartActions() {
     }));
 
     // Fetch the full detail to refresh exams and other derived data
-    const detailRes = await axios.get(`${API_BASE}/${currentCartId}`);
+    const detailRes = await api.get(`/carts/${currentCartId}`);
     const detail = CartDetailResponseSchema.parse(detailRes.data).data;
 
     userCart.update((state) => ({
@@ -401,7 +397,7 @@ export function useCartActions() {
     const { currentCart } = snapshot;
 
     // 1. Create the new cart shell
-    const createRes = await axios.post(API_BASE, {
+    const createRes = await api.post('/carts', {
       academicYear: currentCart.academicYear,
       semester: reverseSemester(currentCart.semester),
       studyProgram: currentCart.studyProgram, // already "S" / "T" / "I"
@@ -415,7 +411,7 @@ export function useCartActions() {
     // 2. Copy all items in parallel
     await Promise.all(
       currentCart.items.map((item) =>
-        axios.post(`${API_BASE}/${newCartId}/items`, {
+        api.post(`/carts/${newCartId}/items`, {
           courseNo: item.courseNo,
           sectionNo: item.sectionNo,
           color: item.color ?? undefined,
@@ -427,7 +423,7 @@ export function useCartActions() {
     );
 
     // 3. Fetch the full detail of the new cart so the store has complete data
-    const detailRes = await axios.get(`${API_BASE}/${newCartId}`);
+    const detailRes = await api.get(`/carts/${newCartId}`);
     const detail = CartDetailResponseSchema.parse(detailRes.data).data;
 
     // 4. Update the store: push new cart into the list and activate it
@@ -466,7 +462,7 @@ export function useCartActions() {
     academicYear: number,
   ) => {
     const [response, error] = await tryCatch(
-      axios.post(API_BASE, {
+      api.post('/carts', {
         academicYear,
         semester,
         studyProgram,
@@ -483,7 +479,7 @@ export function useCartActions() {
     const newCart = SingleCartResponseSchema.parse(response.data).data;
     const newCartId = newCart.id;
 
-    const detailRes = await axios.get(`${API_BASE}/${newCartId}`);
+    const detailRes = await api.get(`/carts/${newCartId}`);
     const detail = CartDetailResponseSchema.parse(detailRes.data).data;
 
     userCart.update((state) => ({
@@ -520,7 +516,7 @@ export function useCartActions() {
     const { currentCartId, currentCart, cartList } = snapshot!;
 
     // 1. Call the API — will 204 on success
-    await axios.delete(`${API_BASE}/${currentCartId}`);
+    await api.delete(`/carts/${currentCartId}`);
 
     // 2. Build the remaining list without the deleted cart
     const remaining = cartList.filter((c) => c.id !== currentCartId);
@@ -556,7 +552,7 @@ export function useCartActions() {
     }
 
     // 4. Fetch the full detail of the substitute so the store has all data
-    const detailRes = await axios.get(`${API_BASE}/${substituteId}`);
+    const detailRes = await api.get(`/carts/${substituteId}`);
     const detail = CartDetailResponseSchema.parse(detailRes.data).data;
 
     // 5. Update the store in one shot

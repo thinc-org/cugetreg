@@ -11,7 +11,7 @@
   } from '$lib/auth-client';
   import { getUserCartStore, initUserCartStore } from '$lib/stores/user-cart';
 
-  import axios from 'axios';
+  import { api } from '$lib/api';
   import type { Snippet } from 'svelte';
   import toast, { Toaster } from 'svelte-french-toast';
 
@@ -50,7 +50,7 @@
     children?: Snippet;
   } = $props();
 
-  initUserCartStore((() => data)());
+  initUserCartStore((() => data.data)());
 
   const userCart = getUserCartStore();
 
@@ -63,10 +63,8 @@
 
     const fetchCurrentSchedule = async (id: string) => {
       // TODO: Move this
-      const API_URL = 'http://localhost:3000/api/v1/carts/';
-
       const [response, error] = await tryCatch(
-        axios.get(API_URL + id, {
+        api.get(`/carts/${id}`, {
           headers: {
             Authorization: 'Bearer your-token',
             'Content-Type': 'application/json',

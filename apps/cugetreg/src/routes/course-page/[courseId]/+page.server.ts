@@ -1,7 +1,6 @@
 import { tryCatch } from '$lib/async-handler';
 
 import { error as svelteError } from '@sveltejs/kit';
-import axios from 'axios';
 
 import { CourseNoResponseSchema } from '@cugetreg/zod-schemas/courses-response';
 
@@ -13,24 +12,22 @@ const semester = 1;
 
 const API_URL = 'http://localhost:3000/api/v1/courses/';
 
-export const load: PageServerLoad = async ({ params }) => {
+export const load: PageServerLoad = async ({ params, fetch }) => {
   const courseId = params.courseId;
 
-  const [response, error] = await tryCatch(
-    axios.get(API_URL + courseId, {
-      params: {
-        studyProgram,
-        academicYear,
-        semester,
-      },
-    }),
-  );
+  const url = new URL(API_URL + courseId);
+  url.searchParams.append('studyProgram', studyProgram);
+  url.searchParams.append('academicYear', academicYear.toString());
+  url.searchParams.append('semester', semester.toString());
 
-  if (error || !response) {
+  const [response, error] = await tryCatch(fetch(url.toString()));
+
+  if (error || !response || !response.ok) {
     throw svelteError(404, 'Course not found');
   }
 
-  const course = CourseNoResponseSchema.parse(response.data);
+  const data = await response.json();
+  const course = CourseNoResponseSchema.parse(data);
   return {
     course,
   };

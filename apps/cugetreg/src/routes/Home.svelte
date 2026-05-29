@@ -772,9 +772,9 @@
                     id: item.id,
                   })) ?? []}
                   bind:value={$userCart.currentCartId}
-                  semester={$userCart.currentCart.semester}
-                  semesterType={$userCart.currentCart.studyProgram}
-                  academicYear={$userCart.currentCart.academicYear}
+                  semester={$userCart.currentCart.semester ?? 'FIRST'}
+                  semesterType={$userCart.currentCart.studyProgram ?? 'S'}
+                  academicYear={$userCart.currentCart.academicYear ?? 2566}
                 />
               </div>
               <hr class="mb-6 opacity-50" />

@@ -1,12 +1,25 @@
 import { OpenAPIHono } from "@hono/zod-openapi";
 
+import { cartService } from "../services/cartsService.js";
 import { prisma } from "../db/clients.js";
 import type { Variables } from "../lib/auth.js";
 import {
   getCourseByNoRoute,
   getCoursesRoute,
 } from "../routes_define/courses.routes.js";
-import { mapGenEdType, mapStudyProgram } from "../utils/enumMapper.js";
+import {
+  mapGenEdType,
+  mapSemester,
+  mapStudyProgram,
+} from "../utils/enumMapper.js";
+import {
+  detectClassConflicts,
+  detectExamConflicts,
+} from "../services/conflictDetection.js";
+import type {
+  ClassScheduleItem,
+  ExamScheduleItem,
+} from "../zod_schemas/carts.response.schema.js";
 
 // API accepts numeric semester (1/2/3); DB stores enum strings (FIRST/SECOND/SUMMER)
 const semesterMap: Record<number, "FIRST" | "SECOND" | "SUMMER"> = {
@@ -29,10 +42,35 @@ courses
         faculty,
         sortBy,
         sortOrder,
+        fitCartId,
         limit,
       } = c.req.valid("query");
 
-      const courseList = await prisma.course.findMany({
+      let cartSchedule: {
+        classes: ClassScheduleItem[];
+        exams: ExamScheduleItem[];
+      } | null = null;
+
+      if (fitCartId) {
+        const userId = c.get("user")?.id;
+
+        if (!userId) {
+          return c.json({ error: "UNAUTHORIZED" }, 401);
+        }
+
+        const cart = await cartService.getCartDetail(userId, fitCartId);
+
+        if (
+          cart.cart.academicYear !== academicYear ||
+          mapSemester(semester.toString()) !== cart.cart.semester
+        ) {
+          return c.json({ error: "INVALID_CONTEXT_PARAMS" }, 400);
+        }
+
+        cartSchedule = cart.schedule;
+      }
+
+      let courseList = await prisma.course.findMany({
         where: {
           studyProgram: mapStudyProgram(studyProgram),
           academicYear,
@@ -45,8 +83,79 @@ courses
           sections: { include: { classes: true } },
         },
         orderBy: sortBy ? { [sortBy]: sortOrder || "asc" } : undefined,
-        take: limit ? Number(limit) : undefined,
+        take: fitCartId ? undefined : limit ? Number(limit) : undefined,
       });
+
+      if (cartSchedule) {
+        courseList = courseList
+          .map((course) => {
+            if (course.sections.length === 0) {
+              return course;
+            }
+
+            const fittingSections = course.sections.filter((section) => {
+              const mockClasses: ClassScheduleItem[] = section.classes.map(
+                (cls) => ({
+                  cartItemId: "new",
+                  courseNo: course.courseNo,
+                  sectionNo: section.sectionNo,
+                  type: cls.type,
+                  dayOfWeek: cls.dayOfWeek,
+                  periodStart: cls.periodStart,
+                  periodEnd: cls.periodEnd,
+                  building: cls.building,
+                  room: cls.room,
+                  professors: cls.professors,
+                }),
+              );
+
+              const mockExams: ExamScheduleItem[] = [];
+              if (course.midtermStart && course.midtermEnd) {
+                mockExams.push({
+                  cartItemId: "new",
+                  courseNo: course.courseNo,
+                  type: "MIDTERM",
+                  start: course.midtermStart.toISOString(),
+                  end: course.midtermEnd.toISOString(),
+                });
+              }
+              if (course.finalStart && course.finalEnd) {
+                mockExams.push({
+                  cartItemId: "new",
+                  courseNo: course.courseNo,
+                  type: "FINAL",
+                  start: course.finalStart.toISOString(),
+                  end: course.finalEnd.toISOString(),
+                });
+              }
+
+              const classConflicts = detectClassConflicts([
+                ...cartSchedule!.classes,
+                ...mockClasses,
+              ]);
+              const examConflicts = detectExamConflicts([
+                ...cartSchedule!.exams,
+                ...mockExams,
+              ]);
+
+              const hasNewClassConflict = classConflicts.some((conf) =>
+                conf.itemIds.includes("new"),
+              );
+              const hasNewExamConflict = examConflicts.some((conf) =>
+                conf.itemIds.includes("new"),
+              );
+
+              return !hasNewClassConflict && !hasNewExamConflict;
+            });
+
+            return { ...course, sections: fittingSections };
+          })
+          .filter((course) => course.sections.length > 0);
+
+        if (limit) {
+          courseList = courseList.slice(0, Number(limit));
+        }
+      }
 
       // Attach review counts in a separate GROUP BY query — Prisma can't do this in one query
       const courseNos = courseList.map((c) => c.courseNo);

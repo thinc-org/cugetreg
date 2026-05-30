@@ -24,7 +24,7 @@ export const getCourseQuerySchema = z.object({
   timeStart: z.string().regex(TIME_REGEX).optional(),
   timeEnd: z.string().regex(TIME_REGEX).optional(),
   noPrereq: z.coerce.boolean().optional(),
-  fitCardId: z.string().optional(),
+  fitCartId: z.string().optional(),
   assessment: z.enum(assessment).optional(),
   sortBy: z.enum(sortBy).optional(),
   sortOrder: z.enum(sortOrder).optional(),

@@ -5,7 +5,7 @@ import dotenv from "dotenv";
 import { cors } from "hono/cors";
 
 import admin from "./routes/admin.js";
-import authRoute, { middlewareAuth } from "./routes/auth.js";
+import authRoute, { middlewareAuth, includeAuth } from "./routes/auth.js";
 import carts from "./routes/carts.js";
 import courses from "./routes/courses.js";
 import publicCarts from "./routes/publicCarts.js";
@@ -43,6 +43,8 @@ app.openAPIRegistry.registerComponent("securitySchemes", "CookieAuth", {
   name: "better-auth.session_token",
 });
 
+app.use("/courses", includeAuth);
+
 // Public routes — no auth required
 app.route("/public/carts", publicCarts);
 app.route("/auth", authRoute);
@@ -51,13 +53,11 @@ app.route("/courses", courses);
 // Middleware List
 app.use("/admin/*", middlewareAuth); // Middleware from Bearer Token
 app.use("/carts/*", middlewareAuth);
-//app.use("/courses/*", middlewareAuth);
 app.use("/reviews/*", middlewareAuth);
 app.use("/user/*", middlewareAuth);
 
 // Protected routes (session injected by middlewareAuth above)
 app.route("/admin", admin);
-app.route("/courses", courses);
 app.route("/carts", carts);
 app.route("/reviews", reviews);
 app.route("/user", user);

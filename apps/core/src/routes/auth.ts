@@ -11,13 +11,15 @@ authRoute.on(["POST", "GET"], "/*", (c) => {
   return auth.handler(c.req.raw);
 });
 
+const DUMMY_USER = {
+  id: "63dea25026f1907da44534a7",
+  email: "6438097921@student.chula.ac.th",
+};
+
 // Inject session user into context; in non-prod bypasses real auth with a hardcoded user for local dev
 export const middlewareAuth: MiddlewareHandler = async (c, next) => {
   if (env.APP_MODE !== "prod") {
-    c.set("user", {
-      id: "63dea25026f1907da44534a7",
-      email: "6438097921@student.chula.ac.th",
-    } as typeof auth.$Infer.Session.user);
+    c.set("user", DUMMY_USER as typeof auth.$Infer.Session.user);
   } else {
     const session = await auth.api.getSession({
       headers: c.req.raw.headers,
@@ -29,6 +31,23 @@ export const middlewareAuth: MiddlewareHandler = async (c, next) => {
 
     c.set("user", session.user);
     c.set("session", session.session);
+  }
+
+  await next();
+};
+
+export const includeAuth: MiddlewareHandler = async (c, next) => {
+  if (env.APP_MODE !== "prod") {
+    console.log("wtf");
+    c.set("user", DUMMY_USER as typeof auth.$Infer.Session.user);
+  } else {
+    console.log("tf");
+    const session = await auth.api.getSession({
+      headers: c.req.raw.headers,
+    });
+
+    c.set("user", session?.user ?? null);
+    c.set("session", session?.session ?? null);
   }
 
   await next();

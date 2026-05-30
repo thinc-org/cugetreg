@@ -157,6 +157,10 @@ export const cartService = {
       throw new Error("CART_NOT_FOUND");
     }
 
+    if (cart.userId !== userId) {
+      throw new Error("NOT_CART_OWNER");
+    }
+
     // 1. Data Enrichment
     const enrichedItems = R.pipe(
       cart.items,

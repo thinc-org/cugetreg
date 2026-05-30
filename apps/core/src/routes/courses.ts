@@ -29,6 +29,7 @@ courses
         faculty,
         sortBy,
         sortOrder,
+        offset,
         limit,
       } = c.req.valid("query");
 
@@ -45,6 +46,7 @@ courses
           sections: { include: { classes: true } },
         },
         orderBy: sortBy ? { [sortBy]: sortOrder || "asc" } : undefined,
+        skip: offset ? Number(offset) : undefined,
         take: limit ? Number(limit) : undefined,
       });
 

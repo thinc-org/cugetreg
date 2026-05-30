@@ -1,21 +1,21 @@
 import { OpenAPIHono } from "@hono/zod-openapi";
 
-import { cartService } from "../services/cartsService.js";
 import { prisma } from "../db/clients.js";
 import type { Variables } from "../lib/auth.js";
 import {
   getCourseByNoRoute,
   getCoursesRoute,
 } from "../routes_define/courses.routes.js";
+import { cartService } from "../services/cartsService.js";
+import {
+  detectClassConflicts,
+  detectExamConflicts,
+} from "../services/conflictDetection.js";
 import {
   mapGenEdType,
   mapSemester,
   mapStudyProgram,
 } from "../utils/enumMapper.js";
-import {
-  detectClassConflicts,
-  detectExamConflicts,
-} from "../services/conflictDetection.js";
 import type {
   ClassScheduleItem,
   ExamScheduleItem,

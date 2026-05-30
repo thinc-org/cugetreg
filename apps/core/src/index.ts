@@ -5,7 +5,7 @@ import dotenv from "dotenv";
 import { cors } from "hono/cors";
 
 import admin from "./routes/admin.js";
-import authRoute, { middlewareAuth, includeAuth } from "./routes/auth.js";
+import authRoute, { includeAuth, middlewareAuth } from "./routes/auth.js";
 import carts from "./routes/carts.js";
 import courses from "./routes/courses.js";
 import publicCarts from "./routes/publicCarts.js";

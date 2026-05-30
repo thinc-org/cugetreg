@@ -1,7 +1,7 @@
 <script lang="ts">
   import SelectedCourse from '$lib/components/selected-course.svelte';
   import { getUserCartStore, useCartActions } from '$lib/stores/user-cart';
-  import { searchQuery, debouncedSearchQuery } from '$lib/stores/search';
+  import { searchState } from '$lib/stores/search.svelte';
 
   import {
     BookMarked,
@@ -234,7 +234,7 @@
   });
 
   $effect(() => {
-    $debouncedSearchQuery;
+    searchState.debounced;
     selectedGenEds;
     selectedFaculties;
     selectedDays;
@@ -325,8 +325,8 @@
   let filteredCourses = $derived.by(() => {
     let result = courses;
 
-    if ($debouncedSearchQuery.trim() !== '') {
-      const q = $debouncedSearchQuery.toLowerCase().trim();
+    if (searchState.debounced.trim() !== '') {
+      const q = searchState.debounced.toLowerCase().trim();
       result = result.filter((item) => {
         // ใช้ Fallback เผื่อ SearchString เตรียมตัวไม่ทันตอน Hot-reload
         if (item.searchString) return item.searchString.includes(q);
@@ -489,7 +489,7 @@
                   <div class="flex flex-1 flex-col gap-1">
                     <span class="ml-1 text-xs text-gray-400">ค้นหา...</span>
                     <Input
-                      bind:value={$searchQuery}
+                      bind:value={searchState.query}
                       onkeydown={(e: KeyboardEvent) => {
                         if (e.key === 'Enter') e.preventDefault(); 
                       }}

@@ -10,7 +10,7 @@
     useSession,
   } from '$lib/auth-client';
   import { getUserCartStore, initUserCartStore } from '$lib/stores/user-cart';
-  import { searchQuery, debouncedSearchQuery } from '$lib/stores/search';
+  import { searchState } from '$lib/stores/search.svelte';
 
   import axios from 'axios';
   import type { Snippet } from 'svelte';
@@ -93,19 +93,12 @@
     fetchCurrentSchedule(currentId);
   });
 
-  onMount(() => {
-    let timeout: ReturnType<typeof setTimeout>;
-    const unsubSearch = searchQuery.subscribe((val) => {
-      clearTimeout(timeout);
-      timeout = setTimeout(() => {
-        debouncedSearchQuery.set(val);
-      }, 250);
-    });
-
-    return () => {
-      unsubSearch();
-      clearTimeout(timeout);
-    };
+  $effect(() => {
+    const currentQuery = searchState.query; 
+    const timeout = setTimeout(() => {
+      searchState.debounced = currentQuery; 
+    }, 250);
+    return () => clearTimeout(timeout);
   });
 </script>
 
@@ -115,7 +108,7 @@
   onSignOut={handleGoogleLogout}
   isLoggedIn={Boolean($session.data)}
   onSearchEnter={(query) => {
-      $searchQuery = query;
+      searchState.query = query;
       goto('/'); 
   }}
   name={$session.data?.user.name}

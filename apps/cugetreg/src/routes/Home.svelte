@@ -1,6 +1,7 @@
 <script lang="ts">
   import SelectedCourse from '$lib/components/selected-course.svelte';
   import { getUserCartStore, useCartActions } from '$lib/stores/user-cart';
+  import { searchQuery, debouncedSearchQuery } from '$lib/stores/search';
 
   import {
     BookMarked,
@@ -38,8 +39,6 @@
   // let scheduleList = $state(mockScheduleList);
   // let activeSchedule = $state(untrack(() => scheduleList[0]));
 
-  let searchQuery = $state('');
-  let debouncedSearchQuery = $state('');
   let searchTimeout: ReturnType<typeof setTimeout> | undefined;
 
   let isScheduleDropdownOpen = $state(false);
@@ -219,18 +218,6 @@
     fetchCourses();
   });
 
-  function handleSearch(e: Event) {
-    const target = e.target as HTMLInputElement;
-    if (!target) return;
-
-    searchQuery = target.value;
-
-    clearTimeout(searchTimeout);
-    searchTimeout = setTimeout(() => {
-      debouncedSearchQuery = searchQuery;
-    }, 250);
-  }
-
   $effect(() => {
     if (!bottomSentinel) return;
     const observer = new IntersectionObserver(
@@ -247,7 +234,7 @@
   });
 
   $effect(() => {
-    debouncedSearchQuery;
+    $debouncedSearchQuery;
     selectedGenEds;
     selectedFaculties;
     selectedDays;
@@ -338,8 +325,8 @@
   let filteredCourses = $derived.by(() => {
     let result = courses;
 
-    if (debouncedSearchQuery.trim() !== '') {
-      const q = debouncedSearchQuery.toLowerCase().trim();
+    if ($debouncedSearchQuery.trim() !== '') {
+      const q = $debouncedSearchQuery.toLowerCase().trim();
       result = result.filter((item) => {
         // ใช้ Fallback เผื่อ SearchString เตรียมตัวไม่ทันตอน Hot-reload
         if (item.searchString) return item.searchString.includes(q);
@@ -408,7 +395,6 @@
 </script>
 
 <div class="relative flex h-screen flex-col overflow-hidden bg-white">
-  <Navbar />
   <div class="relative flex flex-1 overflow-hidden">
     <Sidebar.Provider
       bind:open={sidebarExpanded}
@@ -503,8 +489,10 @@
                   <div class="flex flex-1 flex-col gap-1">
                     <span class="ml-1 text-xs text-gray-400">ค้นหา...</span>
                     <Input
-                      value={searchQuery}
-                      oninput={handleSearch}
+                      bind:value={$searchQuery}
+                      onkeydown={(e: KeyboardEvent) => {
+                        if (e.key === 'Enter') e.preventDefault(); 
+                      }}
                       placeholder="พิมพ์ชื่อวิชา รหัสวิชา หรือคำค้นหาอื่นๆ..."
                       class="h-12 w-full rounded-xl border-none bg-[#F1F3F7] px-6 text-lg font-medium focus:ring-2 focus:ring-blue-500"
                     />

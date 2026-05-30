@@ -10,9 +10,11 @@
     useSession,
   } from '$lib/auth-client';
   import { getUserCartStore, initUserCartStore } from '$lib/stores/user-cart';
+  import { searchQuery, debouncedSearchQuery } from '$lib/stores/search';
 
   import axios from 'axios';
   import type { Snippet } from 'svelte';
+  import { onMount } from 'svelte';
   import toast, { Toaster } from 'svelte-french-toast';
 
   import { Navbar } from '@cugetreg/ui/organisms/navbar';
@@ -90,6 +92,21 @@
 
     fetchCurrentSchedule(currentId);
   });
+
+  onMount(() => {
+    let timeout: ReturnType<typeof setTimeout>;
+    const unsubSearch = searchQuery.subscribe((val) => {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        debouncedSearchQuery.set(val);
+      }, 250);
+    });
+
+    return () => {
+      unsubSearch();
+      clearTimeout(timeout);
+    };
+  });
 </script>
 
 <Toaster />
@@ -97,9 +114,12 @@
   onLogin={handleGoogleLogin}
   onSignOut={handleGoogleLogout}
   isLoggedIn={Boolean($session.data)}
+  onSearchEnter={(query) => {
+      $searchQuery = query;
+      goto('/'); 
+  }}
   name={$session.data?.user.name}
-  imageUrl={$session.data?.user.image ??
-    'https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg'}
+  imageUrl={$session.data?.user.image ?? 'https://...'}
 />
 
 <!-- TODO: Other page already have navbar which need to be removed -->

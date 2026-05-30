@@ -115,5 +115,13 @@
   imageUrl={$session.data?.user.image ?? 'https://...'}
 />
 
-<!-- TODO: Other page already have navbar which need to be removed -->
-{@render children?.()}
+<div class="relative flex h-dvh flex-col overflow-hidden">
+  {#if page.url.pathname === '/'}
+    {@render children?.()}
+  {:else}
+    <div class="h-16 shrink-0 md:h-20"></div>
+    <div class="relative flex-1 overflow-auto">
+      {@render children?.()}
+    </div>
+  {/if}
+</div>

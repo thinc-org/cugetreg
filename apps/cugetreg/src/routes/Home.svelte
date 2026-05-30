@@ -9,20 +9,21 @@
     Filter,
     Loader2,
     Menu,
-    Plus,
+    TriangleAlert,
   } from '@lucide/svelte';
   import { untrack } from 'svelte';
+  import { SvelteMap } from 'svelte/reactivity';
 
   import { Input } from '@cugetreg/ui/atoms/input';
   import { CourseCard } from '@cugetreg/ui/molecules/course-card';
   import { SelectTimetable } from '@cugetreg/ui/molecules/select-timetable';
   import { Filter as FilterBar } from '@cugetreg/ui/organisms/filter-bar';
   import { Footer } from '@cugetreg/ui/organisms/footer';
-  import { Navbar } from '@cugetreg/ui/organisms/navbar';
   import * as Sidebar from '@cugetreg/ui/organisms/sidebar';
 
   let courses = $state<any[]>([]);
   let isLoading = $state(false);
+  const courseCache = new SvelteMap<string, any[]>();
 
   let openPanel = $state<'sidebar' | 'filter_only' | 'selected_only' | null>(
     null,
@@ -39,9 +40,12 @@
   // let scheduleList = $state(mockScheduleList);
   // let activeSchedule = $state(untrack(() => scheduleList[0]));
 
+  let searchQuery = $state('');
+  let debouncedSearchQuery = $state('');
   let searchTimeout: ReturnType<typeof setTimeout> | undefined;
 
   let isScheduleDropdownOpen = $state(false);
+  let isFilterOpen = $state(true);
   let activeDropdown = $state<'program' | 'semester' | 'sort' | null>(null);
 
   let selectedGenEds = $state<string[]>([]);
@@ -90,6 +94,21 @@
     sat: 'SA',
     sun: 'SU',
   };
+  const evalMap: Record<string, string> = {
+    su: 'SU',
+    grade: 'LETTER',
+  };
+  const KNOWN_DAYS = new Set(['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU']);
+
+  function parseTime(t: string): number | null {
+    if (!t) return null;
+    const m = t.trim().match(/^(\d{1,2}):(\d{2})$/);
+    if (!m) return null;
+    const h = Number(m[1]);
+    const mm = Number(m[2]);
+    if (h > 23 || mm > 59) return null;
+    return h * 60 + mm;
+  }
 
   function getParams() {
     const parts = currentSemester.split(' / ');
@@ -110,10 +129,94 @@
     };
   }
 
+  function mapCourse(c: any) {
+    const totalMaxSeat =
+      c.sections?.reduce(
+        (sum: number, sec: any) => sum + (sec.capacity || sec.max || 0),
+        0,
+      ) || 0;
+    const totalCurrentSeat =
+      c.sections?.reduce(
+        (sum: number, sec: any) => sum + (sec.enrolled || sec.regis || 0),
+        0,
+      ) || 0;
+
+    const allDays = (c.sections ?? []).flatMap((s: any) =>
+      (s.classes ?? []).map((cl: any) => cl.dayOfWeek),
+    );
+
+    const normalizeDay = (d: string) => {
+      const up = String(d).toUpperCase();
+      if (up.startsWith('MO') || up === '1') return 'MO';
+      if (up.startsWith('TU') || up === '2') return 'TU';
+      if (up.startsWith('WE') || up === '3') return 'WE';
+      if (up.startsWith('TH') || up === '4') return 'TH';
+      if (up.startsWith('FR') || up === '5') return 'FR';
+      if (up.startsWith('SA') || up === '6') return 'SA';
+      if (up.startsWith('SU') || up === '7' || up === '0') return 'SU';
+      return KNOWN_DAYS.has(up.slice(0, 2)) ? up.slice(0, 2) : undefined;
+    };
+
+    const normalizeGened = (g: string) => {
+      if (!g || g === 'NO') return [];
+      const up = String(g).toUpperCase();
+      if (up.startsWith('SC')) return ['SC'];
+      if (up.startsWith('SO')) return ['SO'];
+      if (up.startsWith('HU')) return ['HU'];
+      if (up.startsWith('IN')) return ['IN'];
+      return [up];
+    };
+
+    const validDays = Array.from(
+      new Set(
+        allDays
+          .map((d: any) => normalizeDay(d))
+          .filter((d: string | undefined): d is string => Boolean(d)),
+      ),
+    );
+
+    const nameTh = (c.courseInfo?.courseNameTh || '').toLowerCase();
+    const nameEn = (c.courseInfo?.courseNameEn || '').toLowerCase();
+    const abbr = (c.courseInfo?.abbrName || '').toLowerCase();
+    const code = (c.courseNo || '').toLowerCase();
+    const searchString = `${code} ${abbr} ${nameTh} ${nameEn}`;
+
+    return {
+      recommended: false,
+      searchString,
+      course: {
+        ...c,
+        code: c.courseNo,
+        name:
+          c.courseInfo?.abbrName ||
+          c.courseInfo?.courseNameEn ||
+          c.courseInfo?.courseNameTh ||
+          '-',
+        credit: Number(c.courseInfo?.credit) || 0,
+        maxseat: totalMaxSeat,
+        seat: totalCurrentSeat,
+        gened: normalizeGened(c.genEdType),
+        review: c.reviewCount || 0,
+        rating: c.rating || 0,
+        days: validDays,
+        gradingType: c.courseInfo?.gradingType,
+      },
+    };
+  }
+
   async function fetchCourses() {
+    const { academicYear, semester, studyProgram } = getParams();
+    const cacheKey = `${studyProgram}-${academicYear}-${semester}`;
+
+    const cached = courseCache.get(cacheKey);
+    if (cached) {
+      courses = cached;
+      isLoading = false;
+      return;
+    }
+
     isLoading = true;
     try {
-      const { academicYear, semester, studyProgram } = getParams();
       const params = new URLSearchParams({
         academicYear,
         semester,
@@ -131,79 +234,9 @@
       if (!res.ok) throw new Error(`Server error (${res.status})`);
       const json = await res.json();
 
-      courses = (json.data || []).map((c: any) => {
-        const totalMaxSeat =
-          c.sections?.reduce(
-            (sum: number, sec: any) => sum + (sec.capacity || 0),
-            0,
-          ) || 0;
-        const totalCurrentSeat =
-          c.sections?.reduce(
-            (sum: number, sec: any) => sum + (sec.enrolled || 0),
-            0,
-          ) || 0;
-
-        const allDays = Array.from(
-          new Set(
-            c.sections?.flatMap((s: any) =>
-              s.classes?.map((cl: any) => cl.dayOfWeek),
-            ),
-          ),
-        ).filter(Boolean);
-
-        const normalizeDay = (d: string) => {
-          const up = String(d).toUpperCase();
-          if (up.startsWith('MO') || up === '1') return 'MO';
-          if (up.startsWith('TU') || up === '2') return 'TU';
-          if (up.startsWith('WE') || up === '3') return 'WE';
-          if (up.startsWith('TH') || up === '4') return 'TH';
-          if (up.startsWith('FR') || up === '5') return 'FR';
-          if (up.startsWith('SA') || up === '6') return 'SA';
-          if (up.startsWith('SU') || up === '7' || up === '0') return 'SU';
-          return up;
-        };
-
-        const normalizeGened = (g: string) => {
-          if (!g || g === 'NO') return [];
-          const up = String(g).toUpperCase();
-          if (up.startsWith('SC')) return ['SC'];
-          if (up.startsWith('SO')) return ['SO'];
-          if (up.startsWith('HU')) return ['HU'];
-          if (up.startsWith('IN')) return ['IN'];
-          return [up];
-        };
-
-        const validDays = Array.from(
-          new Set(allDays.map((d: any) => normalizeDay(d)).filter(Boolean)),
-        );
-
-        const nameTh = (c.courseInfo?.courseNameTh || '').toLowerCase();
-        const nameEn = (c.courseInfo?.courseNameEn || '').toLowerCase();
-        const abbr = (c.courseInfo?.abbrName || '').toLowerCase();
-        const code = (c.courseNo || '').toLowerCase();
-        const searchString = `${code} ${abbr} ${nameTh} ${nameEn}`;
-
-        return {
-          recommended: false,
-          searchString,
-          course: {
-            ...c,
-            code: c.courseNo,
-            name:
-              c.courseInfo?.abbrName ||
-              c.courseInfo?.courseNameEn ||
-              c.courseInfo?.courseNameTh ||
-              '-',
-            credit: Number(c.courseInfo?.credit) || 0,
-            maxseat: totalMaxSeat,
-            seat: totalCurrentSeat,
-            gened: normalizeGened(c.genEdType),
-            review: c.reviewCount || 0,
-            rating: c.rating || 0,
-            days: validDays,
-          },
-        };
-      });
+      const mapped = (json.data || []).map(mapCourse);
+      courseCache.set(cacheKey, mapped);
+      courses = mapped;
     } catch (err) {
       console.error('Error fetching courses:', err);
       courses = [];
@@ -238,6 +271,9 @@
     selectedGenEds;
     selectedFaculties;
     selectedDays;
+    selectedEval;
+    startTime;
+    endTime;
     noConditions;
     currentSort;
     sortDirection;
@@ -247,7 +283,7 @@
   });
 
   const userCart = getUserCartStore();
-  const { addCourse, removeCourse } = useCartActions();
+  const { addCourse, removeCourse, updateCourse } = useCartActions();
 
   function togglePanel(type: typeof openPanel) {
     if (sidebarExpanded) {
@@ -282,44 +318,48 @@
     sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
   }
 
-  function handleToggleCourse(courseItem) {
+  function handleToggleCourse(courseItem: any) {
     const { code, sections } = courseItem.course;
 
-    const courseInSchedule = $userCart.currentCart.items.find(
+    const courseInSchedule = $userCart.currentCart?.items.find(
       (cls) => cls.courseNo === code,
     );
 
-    if (!courseInSchedule)
-      addCourse(code, sections.find((sec) => !sec.closed).sectionNo);
-    else removeCourse(courseInSchedule.id);
+    if (!courseInSchedule) {
+      const firstAvailableSection =
+        sections.find((sec: any) => !sec.closed) || sections[0];
+      if (firstAvailableSection) {
+        addCourse(code, firstAvailableSection.sectionNo);
+      }
+    } else {
+      removeCourse(courseInSchedule.id);
+    }
   }
 
-  // function handleToggleCourse(courseItem: any) {
-  //   if (!activeSchedule) return;
-  //   const index = activeSchedule.schedule.findIndex(
-  //     (s: any) => s.course.code === courseItem.course.code,
-  //   );
-  //   if (index === -1) {
-  //     activeSchedule.schedule = [
-  //       ...activeSchedule.schedule,
-  //       {
-  //         id: crypto.randomUUID(),
-  //         course: courseItem.course,
-  //         selectedSection: 1,
-  //         colorVariant: 'neutral',
-  //         hidden: false,
-  //       },
-  //     ];
-  //   } else {
-  //     handleRemoveCourse(courseItem.course.code);
-  //   }
-  // }
+  function handleSelectSection(courseItem: any, sectionNo: string) {
+    const { code } = courseItem.course;
+    const courseInSchedule = $userCart.currentCart?.items.find(
+      (cls) => cls.courseNo === code,
+    );
+    if (courseInSchedule) {
+      updateCourse(courseInSchedule.id, { sectionNo: Number(sectionNo) });
+    } else {
+      addCourse(code, Number(sectionNo));
+    }
+  }
 
-  function _handleRemoveCourse(_courseCode: string) {
-    // if (!activeSchedule) return;
-    // activeSchedule.schedule = activeSchedule.schedule.filter(
-    //   (s: any) => s.course.code !== courseCode,
-    // );
+  function getSectionOptions(courseItem: any) {
+    return (courseItem.course.sections ?? []).map((sec: any) => ({
+      value: String(sec.sectionNo),
+      label: `เซค ${sec.sectionNo}`,
+    }));
+  }
+
+  function getSelectedSection(courseCode: string): string {
+    const entry = $userCart.currentCart?.items.find(
+      (s: any) => s.courseNo === courseCode,
+    );
+    return entry ? String(entry.sectionNo) : '';
   }
 
   let filteredCourses = $derived.by(() => {
@@ -328,7 +368,6 @@
     if (searchState.debounced.trim() !== '') {
       const q = searchState.debounced.toLowerCase().trim();
       result = result.filter((item) => {
-        // ใช้ Fallback เผื่อ SearchString เตรียมตัวไม่ทันตอน Hot-reload
         if (item.searchString) return item.searchString.includes(q);
         const c = item.course;
         const nameTh = (c.courseInfo?.courseNameTh || '').toLowerCase();
@@ -364,6 +403,29 @@
           ),
         );
       }
+      if (selectedEval.length > 0) {
+        const targetGrading = selectedEval.map((id) => evalMap[id]);
+        result = result.filter((item) =>
+          targetGrading.includes(item.course.gradingType),
+        );
+      }
+
+      const startMin = parseTime(startTime);
+      const endMin = parseTime(endTime);
+      if (startMin !== null || endMin !== null) {
+        const lo = startMin ?? 0;
+        const hi = endMin ?? 24 * 60;
+        result = result.filter((item) =>
+          (item.course.sections || []).some((sec: any) =>
+            (sec.classes || []).some((cl: any) => {
+              const s = parseTime(cl.periodStart);
+              const e = parseTime(cl.periodEnd);
+              if (s === null || e === null) return false;
+              return s >= lo && e <= hi;
+            }),
+          ),
+        );
+      }
     }
 
     return [...result].sort((a, b) => {
@@ -387,11 +449,17 @@
   });
 
   let displayedCourses = $derived(filteredCourses.slice(0, displayLimit));
-  console.log(displayedCourses);
 
   function onSearchFilter() {
     if (openPanel === 'filter_only') openPanel = null;
   }
+
+  let contextLabel = $derived.by(() => {
+    const [year, sem] = currentSemester.split(' / ');
+    const semTh =
+      sem === 'ฤดูร้อน' ? 'ภาคฤดูร้อน' : sem === '2' ? 'ภาคปลาย' : 'ภาคต้น';
+    return `ในปีการศึกษา ${year} ${semTh} หลักสูตร${currentProgram}`;
+  });
 </script>
 
 <div class="relative flex h-screen flex-col overflow-hidden bg-white">
@@ -406,6 +474,7 @@
         <main
           class="h-full min-w-0 flex-1 overflow-y-auto scroll-smooth bg-white"
         >
+          <div class="h-16 w-full shrink-0 md:h-20"></div>
           <div class="flex min-h-full flex-col">
             <div class="mx-auto w-full max-w-[1200px] flex-1 p-8 lg:p-12">
               <div
@@ -554,7 +623,7 @@
               </div>
 
               <div
-                class="grid grid-cols-1 gap-4 pb-10 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2"
+                class="grid grid-cols-1 gap-x-5 gap-y-6 pb-10 md:grid-cols-2"
               >
                 {#if isLoading}
                   <div
@@ -565,39 +634,38 @@
                   </div>
                 {:else if filteredCourses.length === 0}
                   <div
-                    class="col-span-full flex h-64 flex-col items-center justify-center text-gray-400"
+                    class="col-span-full flex flex-col items-center justify-center gap-2 py-24 text-center"
                   >
-                    <svg
-                      width="48"
-                      height="48"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="1.5"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      class="mb-2 opacity-50"
-                      ><circle cx="11" cy="11" r="8"></circle><line
-                        x1="21"
-                        y1="21"
-                        x2="16.65"
-                        y2="16.65"
-                      ></line></svg
-                    >
-                    <p>ไม่พบรายวิชาที่ตรงกับเงื่อนไข</p>
+                    <TriangleAlert
+                      size={72}
+                      strokeWidth={1.5}
+                      class="mb-2 text-[#4A6CF7]"
+                    />
+                    <p class="text-lg font-medium text-[#1C1B1F]">
+                      ไม่พบรายวิชา{debouncedSearchQuery.trim()
+                        ? ` ${debouncedSearchQuery.trim()}`
+                        : ''}
+                    </p>
+                    <p class="text-base text-gray-500">{contextLabel}</p>
+                    <p class="mt-3 text-sm leading-relaxed text-gray-400">
+                      ลองเปลี่ยนตัวเลือกภาคเรียน ปีการศึกษา หรือหลักสูตร<br />
+                      ในตารางเรียน แล้วลองใหม่อีกครั้งนะ!
+                    </p>
                   </div>
                 {:else}
                   {#each displayedCourses as item (item.course.code)}
                     <CourseCard
                       course={item.course}
                       recommended={item.recommended}
-                      selected={$userCart
-                        ? $userCart.currentCart.items.some(
-                            (v) => v.courseNo === item.course.code,
-                          )
-                        : false}
-                      onclick={() => handleToggleCourse(item)}
-                      class="w-full"
+                      selected={$userCart.currentCart?.items.some(
+                        (v) => v.courseNo === item.course.code,
+                      ) ?? false}
+                      onSelect={() => handleToggleCourse(item)}
+                      sections={getSectionOptions(item)}
+                      selectedSection={getSelectedSection(item.course.code)}
+                      onSelectSection={(v: string) =>
+                        handleSelectSection(item, v)}
+                      class="w-full max-w-full md:w-full"
                     />
                   {/each}
 
@@ -628,11 +696,11 @@
   <Sidebar.Sidebar
     variant="sidebar"
     collapsible="icon"
-    class="!absolute z-50 !h-full"
+    class="!absolute z-30 !h-full border-none"
   >
     <Sidebar.Content class="flex-row overflow-visible!">
       <Sidebar.Group
-        class="w-(--sidebar-width-icon) shrink-0 items-center border-r bg-white p-0 py-6 group-data-[variant=floating]:rounded-l-lg"
+        class="w-(--sidebar-width-icon) shrink-0 items-center border-r bg-white p-0 pt-[5.5rem] pb-6 group-data-[variant=floating]:rounded-l-lg md:pt-[6.5rem]"
       >
         <Sidebar.GroupContent>
           <Sidebar.Menu class="gap-6">
@@ -684,96 +752,63 @@
           ></div>
         {/if}
         <div
-          class="bg-surface flex flex-1 flex-col overflow-hidden group-data-[state=collapsed]:absolute group-data-[state=collapsed]:top-4 group-data-[state=collapsed]:left-[calc(var(--sidebar-width-icon)+1rem)] group-data-[state=collapsed]:z-50 group-data-[state=collapsed]:max-h-[min(800px,calc(100%-2rem))] group-data-[state=collapsed]:w-[400px] group-data-[state=collapsed]:rounded-3xl group-data-[state=collapsed]:border group-data-[state=collapsed]:shadow-2xl md:p-8"
+          class="bg-surface flex flex-1 flex-col overflow-hidden group-data-[state=collapsed]:absolute group-data-[state=collapsed]:top-4 group-data-[state=collapsed]:left-[calc(var(--sidebar-width-icon)+1rem)] group-data-[state=collapsed]:z-50 group-data-[state=collapsed]:max-h-[min(800px,calc(100%-2rem))] group-data-[state=collapsed]:w-[400px] group-data-[state=collapsed]:rounded-3xl group-data-[state=collapsed]:border group-data-[state=collapsed]:shadow-2xl md:px-8 md:pt-0 md:pb-8"
         >
-          <div class="flex-1 overflow-y-auto pr-2 pb-10">
+          <div class="flex-1 overflow-y-auto pr-6 pb-10 md:pr-8">
             {#if sidebarExpanded || openPanel === 'sidebar'}
               <div
                 bind:this={timetableSection}
                 class="relative mb-6 flex flex-col gap-2"
               >
-                <span class="ml-1 text-[11px] font-medium text-gray-400"
-                  >คุณกำลังจัดตารางเรียน...</span
-                >
-                <div class="flex items-center gap-2">
-                  <button
-                    onclick={() =>
-                      (isScheduleDropdownOpen = !isScheduleDropdownOpen)}
-                    class="flex h-14 flex-1 items-center justify-between overflow-hidden rounded-2xl border border-blue-500 bg-white px-5 shadow-sm transition-all hover:bg-gray-50"
-                  >
-                    <span class="mr-2 truncate text-lg font-bold text-[#1C1B1F]"
-                      >{$userCart.currentCart.name || 'เลือกตาราง'}</span
-                    >
-                    <ChevronDown size={24} class="shrink-0 text-gray-400" />
-                  </button>
-                  <div
-                    class="flex h-14 min-w-[100px] flex-col items-center justify-center rounded-2xl border border-neutral-800 bg-white px-3 py-2 text-center shadow-sm"
-                  >
-                    <span
-                      class="text-[10px] leading-tight font-bold text-neutral-800"
-                      >ทวิภาค</span
-                    >
-                    <span
-                      class="text-[10px] leading-tight font-bold whitespace-nowrap text-neutral-800"
-                      >{$userCart.currentCart.semester || '-'}</span
-                    >
-                  </div>
-                </div>
-
-                {#if isScheduleDropdownOpen}
-                  <div
-                    class="absolute top-[110%] left-0 z-[70] w-full overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-2xl"
-                  >
-                    <div
-                      class="custom-scrollbar flex max-h-[200px] flex-col overflow-y-auto py-2"
-                    >
-                      <SelectTimetable
-                        class="border-b border-neutral-200 px-2 py-5"
-                        options={$userCart.cartList?.map((item) => ({
-                          name: item.name,
-                          id: item.id,
-                        })) ?? []}
-                        bind:value={$userCart.currentCartId}
-                      />
-                    </div>
-                    <button
-                      class="flex w-full items-center justify-center gap-2 border-t p-4 font-bold text-[#004494] transition-colors hover:bg-gray-50"
-                    >
-                      <Plus size={18} strokeWidth={3} /> เพิ่มตาราง
-                    </button>
-                  </div>
-                  <div
-                    class="fixed inset-0 z-[65]"
-                    onclick={() => (isScheduleDropdownOpen = false)}
-                    role="button"
-                    tabindex="0"
-                    onkeydown={() => {}}
-                  ></div>
-                {/if}
+                <SelectTimetable
+                  class="border-b border-neutral-200 px-2 py-5"
+                  options={$userCart.cartList?.map((item) => ({
+                    name: item.name,
+                    id: item.id,
+                  })) ?? []}
+                  bind:value={$userCart.currentCartId}
+                  semester={$userCart.currentCart.semester}
+                  semesterType={$userCart.currentCart.studyProgram}
+                  academicYear={$userCart.currentCart.academicYear}
+                />
               </div>
               <hr class="mb-6 opacity-50" />
             {/if}
 
             {#if sidebarExpanded || openPanel === 'filter_only'}
               <div bind:this={filterSection}>
-                <div class="mb-6 flex items-center gap-2">
-                  <Filter size={20} />
-                  <h2 class="text-xl font-bold">ตัวกรอง</h2>
-                </div>
-                <div class="mb-8 min-h-[650px]">
-                  <FilterBar
-                    bind:selectedGenEds
-                    bind:selectedSpecial
-                    bind:selectedFaculties
-                    bind:selectedDays
-                    bind:selectedEval
-                    bind:startTime
-                    bind:endTime
-                    bind:fitSchedule
-                    bind:noConditions
-                    onsearch={onSearchFilter}
+                <button
+                  onclick={() => (isFilterOpen = !isFilterOpen)}
+                  aria-expanded={isFilterOpen}
+                  class="mb-6 flex w-full items-center justify-between"
+                >
+                  <span class="flex items-center gap-2">
+                    <Filter size={20} />
+                    <h2 class="text-xl font-bold">ตัวกรอง</h2>
+                  </span>
+                  <ChevronDown
+                    size={20}
+                    class="text-gray-500 transition-transform duration-200 {isFilterOpen
+                      ? ''
+                      : '-rotate-90'}"
                   />
-                </div>
+                </button>
+                {#if isFilterOpen}
+                  <div class="mb-8 min-h-[650px]">
+                    <FilterBar
+                      bind:selectedGenEds
+                      bind:selectedSpecial
+                      bind:selectedFaculties
+                      bind:selectedDays
+                      bind:selectedEval
+                      bind:startTime
+                      bind:endTime
+                      bind:fitSchedule
+                      bind:noConditions
+                      onsearch={onSearchFilter}
+                    />
+                  </div>
+                {/if}
                 <hr class="mb-6 opacity-50" />
               </div>
             {/if}
@@ -782,12 +817,30 @@
               <div bind:this={selectedSection}>
                 {#if $userCart.currentCart}
                   <SelectedCourse
-                    variant="simple"
+                    variant="grouped"
                     class="border-b border-neutral-200"
                   />
                 {:else}
                   <SelectedCourse class="border-b border-neutral-200" />
                 {/if}
+              </div>
+            {/if}
+
+            {#if sidebarExpanded || openPanel === 'sidebar'}
+              <div
+                class="mt-8 rounded-2xl border border-orange-300 px-5 py-4 text-center text-[15px] leading-relaxed text-orange-500"
+              >
+                <span class="font-bold"
+                  >CU Get Reg ไม่ใช่การลงทะเบียนเรียนจริง</span
+                ><br />
+                สามารถลงทะเบียนเรียนได้ที่
+                <a
+                  href="https://www2.reg.chula.ac.th/"
+                  target="_blank"
+                  rel="noreferrer"
+                  class="underline">https://www2.reg.chula.ac.th/</a
+                ><br />
+                เพียงช่องทางเดียวเท่านั้น
               </div>
             {/if}
           </div>

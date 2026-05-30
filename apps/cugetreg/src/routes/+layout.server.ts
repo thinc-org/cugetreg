@@ -21,7 +21,7 @@ export const load: LayoutServerLoad = async ({ params: _params }) => {
     axios.get(API_URL, {
       params: {
         academicYear: 2566,
-        semester: 'SECOND',
+        semester: 'FIRST',
         studyProgram: 'S',
       },
     }),

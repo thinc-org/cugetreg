@@ -202,7 +202,14 @@
 
   async function fetchCourses() {
     const { academicYear, semester, studyProgram } = getParams();
-    const cacheKey = `${studyProgram}-${academicYear}-${semester}`;
+    const fitCartId = fitSchedule ? $userCart.currentCartId : '';
+
+    const cartItemsKey = fitSchedule
+      ? ($userCart.currentCart?.items ?? [])
+          .map((i) => `${i.courseNo}-${i.sectionNo}`)
+          .join(',')
+      : '';
+    const cacheKey = `${studyProgram}-${academicYear}-${semester}-${fitCartId}-${cartItemsKey}`;
 
     const cached = courseCache.get(cacheKey);
     if (cached) {
@@ -217,6 +224,7 @@
         academicYear,
         semester,
         studyProgram,
+        fitCartId,
       });
 
       const res = await fetch(
@@ -224,6 +232,7 @@
         {
           method: 'GET',
           headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
         },
       );
 
@@ -244,6 +253,11 @@
   $effect(() => {
     currentSemester;
     currentProgram;
+    fitSchedule;
+    if (fitSchedule) {
+      $userCart.currentCartId;
+      $userCart.currentCart?.items;
+    }
     fetchCourses();
   });
 

@@ -6,4 +6,7 @@ export const assessment = ["LETTER", "SU"];
 export const sortBy = ["NAME", "CAPACITY_SUM", "REMAING_SUM"];
 export const sortOrder = ["asc", "desc"];
 export const semester = ["1", "2", "3"];
+export const semesterString = ["FIRST", "SECOND", "SUMMER"];
 export const visible = ["PUB", "PVT"];
+export const reviewStatus = ["PENDING", "APPROVED", "REJECTED"];
+export const vote = ["L", "D"];

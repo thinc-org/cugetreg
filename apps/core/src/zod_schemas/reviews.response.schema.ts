@@ -1,0 +1,56 @@
+import { z } from "zod";
+
+import {
+  reviewStatus,
+  semesterString,
+  studyProgram,
+  vote,
+} from "./constants.js";
+
+export const SubmitReviewResponseSchema = z.object({
+  message: z.string().nonempty(),
+  data: z.object({
+    id: z.string().nonempty(),
+    courseNo: z.string().length(7),
+    studyProgram: z.enum(studyProgram),
+    academicYear: z.coerce.number().int().min(2564),
+    semester: z.enum(semesterString),
+    rating: z.int().min(1).max(10),
+    content: z.string().nonempty(),
+    status: z.enum(reviewStatus),
+    likeCount: z.int().min(0),
+    dislikeCount: z.int().min(0),
+    //myVote: z.enum(vote).nullable(),
+    isOwner: z.boolean(),
+    createAt: z.date().or(z.string().nonempty()),
+  }),
+});
+
+export const VoteReviewResponseSchema = z.object({
+  message: z.string().nonempty(),
+  data: z.object({
+    id: z.string().nonempty(),
+    likeCount: z.int().min(0),
+    dislikeCount: z.int().min(0),
+    myInteraction: z.enum(vote).nullable(),
+    isOwner: z.boolean(),
+  }),
+});
+
+export const EditReviewResponseSchema = z.object({
+  message: z.string().nonempty(),
+  data: z.object({
+    id: z.string().nonempty(),
+    content: z.string().nonempty(),
+    updateAt: z.date().or(z.string().nonempty()),
+    isOwner: z.boolean(),
+  }),
+});
+
+export const DeleteReviewSchema = z.object({
+  message: z.string().nonempty(),
+  data: z.object({
+    id: z.string().nonempty(),
+    status: z.string().nonempty(),
+  }),
+});

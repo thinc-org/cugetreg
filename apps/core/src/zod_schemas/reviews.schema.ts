@@ -16,5 +16,8 @@ export const VoteReviewBodySchema = z.object({
 });
 
 export const EditReviewBodySchema = z.object({
+  academicYear: z.coerce.number().int().min(2564),
+  semester: z.enum(semester),
+  rating: z.coerce.number().min(1).max(10),
   content: z.string().nonempty(),
 });

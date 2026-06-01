@@ -41,6 +41,9 @@ export const EditReviewResponseSchema = z.object({
   message: z.string().nonempty(),
   data: z.object({
     id: z.string().nonempty(),
+    academicYear: z.coerce.number().int().min(2564),
+    semester: z.enum(semesterString),
+    rating: z.int().min(1).max(10),
     content: z.string().nonempty(),
     updateAt: z.date().or(z.string().nonempty()),
     isOwner: z.boolean(),

@@ -13,6 +13,7 @@
     "@cgr/schema": "1.7.0"
   },
   "changesets": [
+    "fresh-brooms-cheer",
     "smart-poets-bake"
   ]
 }

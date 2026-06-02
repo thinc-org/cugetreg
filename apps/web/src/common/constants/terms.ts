@@ -5,6 +5,9 @@ interface TermOption {
 }
 
 export const termOptions: TermOption[] = [
+  { academicYear: '2569', semester: '3', label: '2569/ฤดูร้อน' },
+  { academicYear: '2569', semester: '2', label: '2569/2' },
+  { academicYear: '2569', semester: '1', label: '2569/1' },
   { academicYear: '2568', semester: '3', label: '2568/ฤดูร้อน' },
   { academicYear: '2568', semester: '2', label: '2568/2' },
   { academicYear: '2568', semester: '1', label: '2568/1' },
@@ -22,4 +25,4 @@ export const termOptions: TermOption[] = [
   { academicYear: '2564', semester: '1', label: '2564/1' },
 ]
 
-export const tempHardCodedCurrentTerm = termOptions[1] // 2568/2
+export const tempHardCodedCurrentTerm = termOptions[3] // 2568/ฤดูร้อน

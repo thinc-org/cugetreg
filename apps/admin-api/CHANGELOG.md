@@ -1,5 +1,11 @@
 # admin-api
 
+## 1.4.3-beta.0
+
+### Patch Changes
+
+- 25a3e33: Fix Docker builds by using Corepack to respect the pinned pnpm version.
+
 ## 1.4.2
 
 ### Patch Changes

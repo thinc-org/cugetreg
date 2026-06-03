@@ -3,7 +3,6 @@ import { tryCatch } from '$lib/async-handler';
 import { error as svelteError } from '@sveltejs/kit';
 import axios from 'axios';
 
-// import { type CreateCartBodySchema } from '@cugetreg/zod-schemas/cart';
 import {
   CartData,
   CartDetailResponseSchema,
@@ -16,7 +15,11 @@ import type { LayoutServerLoad } from './$types';
 
 const API_URL = 'http://localhost:3000/api/v1/carts';
 
-export const load: LayoutServerLoad = async ({ params: _params }) => {
+export const load: LayoutServerLoad = () => {
+  return { cart: loadCart() };
+};
+
+async function loadCart() {
   const [response, error] = await tryCatch(
     axios.get(API_URL, {
       params: {
@@ -114,4 +117,4 @@ export const load: LayoutServerLoad = async ({ params: _params }) => {
   const currentCartId = currentCart.id;
 
   return { cartList, currentCart, currentCartId, exams };
-};
+}

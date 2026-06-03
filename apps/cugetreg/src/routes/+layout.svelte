@@ -9,10 +9,14 @@
     handleGoogleLogout,
     useSession,
   } from '$lib/auth-client';
-  import { getUserCartStore, initUserCartStore } from '$lib/stores/user-cart';
+  import {
+    CART_PROMISE_KEY,
+    initUserCartStore,
+    type UserCartInterface,
+  } from '$lib/stores/user-cart';
 
   import axios from 'axios';
-  import type { Snippet } from 'svelte';
+  import { setContext, type Snippet } from 'svelte';
   import toast, { Toaster } from 'svelte-french-toast';
 
   import { Navbar } from '@cugetreg/ui/organisms/navbar';
@@ -50,9 +54,36 @@
     children?: Snippet;
   } = $props();
 
-  initUserCartStore((() => data)());
 
-  const userCart = getUserCartStore();
+  const EMPTY_CART: UserCartInterface = {
+    currentCart: {
+      id: '',
+      name: '',
+      studyProgram: '',
+      academicYear: 0,
+      semester: '',
+      visible: '',
+      isDefault: false,
+      cartOrder: '',
+      items: [],
+    },
+    currentCartId: '',
+    cartList: [],
+    exams: [],
+  };
+
+  const userCart = initUserCartStore(EMPTY_CART);
+
+
+  const cartPromise = (() => data.cart)();
+
+
+  cartPromise.then(
+    (cart) => userCart.set(cart),
+    (err) => console.error('[layout] failed to load cart:', err),
+  );
+
+  setContext(CART_PROMISE_KEY, cartPromise);
 
   let lastFetchedId = '';
 

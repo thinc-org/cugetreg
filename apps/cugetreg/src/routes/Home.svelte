@@ -1,6 +1,11 @@
 <script lang="ts">
   import SelectedCourse from '$lib/components/selected-course.svelte';
-  import { getUserCartStore, useCartActions } from '$lib/stores/user-cart';
+  import {
+    CART_PROMISE_KEY,
+    type CartPromise,
+    getUserCartStore,
+    useCartActions,
+  } from '$lib/stores/user-cart';
 
   import {
     BookMarked,
@@ -10,7 +15,7 @@
     Menu,
     TriangleAlert,
   } from '@lucide/svelte';
-  import { untrack } from 'svelte';
+  import { getContext, untrack } from 'svelte';
   import { SvelteMap } from 'svelte/reactivity';
 
   import { Input } from '@cugetreg/ui/atoms/input';
@@ -20,9 +25,13 @@
   import { Footer } from '@cugetreg/ui/organisms/footer';
   import * as Sidebar from '@cugetreg/ui/organisms/sidebar';
 
-  let courses = $state<any[]>([]);
+  let courses = $state.raw<any[]>([]);
   let isLoading = $state(false);
   const courseCache = new SvelteMap<string, any[]>();
+
+
+  const collatorTh = new Intl.Collator('th');
+  const collatorDefault = new Intl.Collator();
 
   let openPanel = $state<'sidebar' | 'filter_only' | 'selected_only' | null>(
     null,
@@ -291,6 +300,7 @@
   });
 
   const userCart = getUserCartStore();
+  const cartPromise = getContext<CartPromise>(CART_PROMISE_KEY);
   const { addCourse, removeCourse, updateCourse } = useCartActions();
 
   function togglePanel(type: typeof openPanel) {
@@ -370,8 +380,25 @@
     return entry ? String(entry.sectionNo) : '';
   }
 
+  let sortedCourses = $derived.by(() => {
+    const result = [...courses];
+    result.sort((a, b) => {
+      if (a.recommended !== b.recommended) return a.recommended ? -1 : 1;
+      if (currentSort === 'ชื่อวิชา') {
+        const r = collatorTh.compare(a.course.name || '', b.course.name || '');
+        return sortDirection === 'asc' ? r : -r;
+      }
+      const r = collatorDefault.compare(
+        a.course.code || '',
+        b.course.code || '',
+      );
+      return sortDirection === 'asc' ? r : -r;
+    });
+    return result;
+  });
+
   let filteredCourses = $derived.by(() => {
-    let result = courses;
+    let result = sortedCourses;
 
     if (debouncedSearchQuery.trim() !== '') {
       const q = debouncedSearchQuery.toLowerCase().trim();
@@ -436,24 +463,7 @@
       }
     }
 
-    return [...result].sort((a, b) => {
-      if (a.recommended !== b.recommended) return a.recommended ? -1 : 1;
-      let valA, valB;
-      switch (currentSort) {
-        case 'ชื่อวิชา':
-          valA = a.course.name || '';
-          valB = b.course.name || '';
-          return sortDirection === 'asc'
-            ? valA.localeCompare(valB, 'th')
-            : valB.localeCompare(valA, 'th');
-        default:
-          valA = a.course.code || '';
-          valB = b.course.code || '';
-          return sortDirection === 'asc'
-            ? valA.localeCompare(valB)
-            : valB.localeCompare(valA);
-      }
-    });
+    return result;
   });
 
   let displayedCourses = $derived(filteredCourses.slice(0, displayLimit));
@@ -766,17 +776,32 @@
                 bind:this={timetableSection}
                 class="relative mb-6 flex flex-col gap-2"
               >
-                <SelectTimetable
-                  class="border-b border-neutral-200 px-2 py-5"
-                  options={$userCart.cartList?.map((item) => ({
-                    name: item.name,
-                    id: item.id,
-                  })) ?? []}
-                  bind:value={$userCart.currentCartId}
-                  semester={$userCart.currentCart.semester}
-                  semesterType={$userCart.currentCart.studyProgram}
-                  academicYear={$userCart.currentCart.academicYear}
-                />
+                {#await cartPromise}
+                  <div
+                    class="flex items-center justify-center gap-2 border-b border-neutral-200 px-2 py-8 text-gray-400"
+                  >
+                    <Loader2 class="animate-spin" size={24} />
+                    <span class="text-sm">กำลังโหลดตารางเรียน...</span>
+                  </div>
+                {:then}
+                  <SelectTimetable
+                    class="border-b border-neutral-200 px-2 py-5"
+                    options={$userCart.cartList?.map((item) => ({
+                      name: item.name,
+                      id: item.id,
+                    })) ?? []}
+                    bind:value={$userCart.currentCartId}
+                    semester={$userCart.currentCart.semester}
+                    semesterType={$userCart.currentCart.studyProgram}
+                    academicYear={$userCart.currentCart.academicYear}
+                  />
+                {:catch}
+                  <div
+                    class="flex items-center justify-center gap-2 border-b border-neutral-200 px-2 py-8 text-sm text-red-400"
+                  >
+                    โหลดตารางเรียนไม่สำเร็จ
+                  </div>
+                {/await}
               </div>
               <hr class="mb-6 opacity-50" />
             {/if}

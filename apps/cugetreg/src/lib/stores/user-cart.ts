@@ -22,6 +22,14 @@ export interface UserCartInterface {
   exams: ExamScheduleItem[];
 }
 
+/**
+ * Context key for the cart data promise streamed from the root layout load.
+ * Components can `{#await}` it to show a spinner while the cart is still being
+ * fetched, without blocking the rest of the page from rendering.
+ */
+export const CART_PROMISE_KEY = Symbol('cart-promise');
+export type CartPromise = Promise<UserCartInterface>;
+
 export interface UpdateCartFields {
   name?: string;
   visible?: string;

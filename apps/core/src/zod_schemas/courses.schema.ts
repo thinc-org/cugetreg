@@ -30,6 +30,7 @@ export const getCourseQuerySchema = z.object({
   sortOrder: z.enum(sortOrder).optional(),
   offset: z.coerce.number().int().optional(),
   limit: z.coerce.number().int().optional(),
+  offset: z.coerce.number().int().optional(),
 });
 // 1. Sub-schema for the 'course' object
 const courseSchema = z.object({

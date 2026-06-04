@@ -9,6 +9,7 @@
     handleGoogleLogout,
     useSession,
   } from '$lib/auth-client';
+  import { searchState } from '$lib/stores/search.svelte';
   import { getUserCartStore, initUserCartStore } from '$lib/stores/user-cart';
 
   import axios from 'axios';
@@ -90,6 +91,14 @@
 
     fetchCurrentSchedule(currentId);
   });
+
+  $effect(() => {
+    const currentQuery = searchState.query;
+    const timeout = setTimeout(() => {
+      searchState.debounced = currentQuery;
+    }, 250);
+    return () => clearTimeout(timeout);
+  });
 </script>
 
 <Toaster />
@@ -97,9 +106,12 @@
   onLogin={handleGoogleLogin}
   onSignOut={handleGoogleLogout}
   isLoggedIn={Boolean($session.data)}
+  onSearchEnter={(query) => {
+    searchState.query = query;
+    goto('/');
+  }}
   name={$session.data?.user.name}
-  imageUrl={$session.data?.user.image ??
-    'https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg'}
+  imageUrl={$session.data?.user.image ?? 'https://...'}
 />
 
 <div class="relative flex h-dvh flex-col overflow-hidden">

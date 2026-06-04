@@ -93,20 +93,19 @@
 </script>
 
 <Toaster />
-<Navbar
-  onLogin={handleGoogleLogin}
-  onSignOut={handleGoogleLogout}
-  isLoggedIn={Boolean($session.data)}
-  name={$session.data?.user.name}
-  imageUrl={$session.data?.user.image ??
-    'https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg'}
-/>
-
 <div class="relative flex h-dvh flex-col overflow-hidden">
+  <Navbar
+    onLogin={handleGoogleLogin}
+    onSignOut={handleGoogleLogout}
+    isLoggedIn={Boolean($session.data)}
+    name={$session.data?.user.name}
+    imageUrl={$session.data?.user.image ??
+      'https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg'}
+  />
+
   {#if page.url.pathname === '/'}
     {@render children?.()}
   {:else}
-    <div class="h-16 shrink-0 md:h-20"></div>
     <div class="relative flex-1 overflow-auto">
       {@render children?.()}
     </div>

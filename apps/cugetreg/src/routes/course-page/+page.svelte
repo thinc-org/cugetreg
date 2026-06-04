@@ -41,6 +41,7 @@
   let selectedYear = $state(years[0]);
   let selectedTerm = $state(terms[0]);
   let reviewRating = $state(1);
+  let textareaRef;
 
   let openPanel = $state<'sidebar' | 'description_only' | 'detail_only' | 'review_only' | 'selected_only' | null>(
     null,
@@ -81,22 +82,24 @@
   );
 
   function togglePanel(type: typeof openPanel) {
-    if (sidebarExpanded) {
-      if (type === 'sidebar') scrollToSection(timetableSection);
-      else if (type === 'description_only') scrollToSection(descriptionSection);
+    if (type === 'sidebar' || type === 'selected_only') {
+      if(sidebarExpanded) scrollToSection(timetableSection);
+      else {
+        if (openPanel === type) {
+          openPanel = null;
+        } else {
+          openPanel = type;
+          activePanel = type;
+        }
+      }
+    } else {
+      if (type === 'description_only') scrollToSection(descriptionSection);
       else if (type === 'detail_only') scrollToSection(detailSection);
       else if (type === 'review_only') scrollToSection(reviewSection);
-      else if (type === 'selected_only') scrollToSection(selectedSection);
       activePanel = type;
-    } else {
-      if (openPanel === type) {
-        openPanel = null;
-      } else {
-        openPanel = type;
-        activePanel = type;
-      }
     }
   }
+
 
   function scrollToSection(el: HTMLElement | undefined) {
     if (!el) return;
@@ -551,6 +554,7 @@
                     <Quote size={18} fill="currentColor" strokeWidth={0} />
                   </div>
                   <textarea
+                    bind:this={textareaRef}
                     class="text-on-surface h-36 w-full resize-none bg-transparent px-4 py-3 text-sm outline-none"
                     placeholder="คุณคิดว่าวิชานี้เป็นอย่างไรบ้าง?"
                   ></textarea>
@@ -836,7 +840,10 @@
                   <button
                     type="button"
                     class="flex items-center gap-1.5 rounded-xl bg-[#E9EEF6] px-3.5 py-1.5 text-sm font-medium text-[#004494] transition-all hover:bg-[#D2E0F5]"
-                    onclick={() => scrollToSection(reviewSection)} 
+                    onclick={() => {
+                      scrollToSection(reviewSection);
+                      setTimeout(() => textareaRef?.focus(), 300);
+                    }}
                   >
                     เขียนรีวิว
                     <Pencil size={14} strokeWidth={2.5} />

@@ -482,7 +482,6 @@
         <main
           class="h-full min-w-0 flex-1 overflow-y-auto scroll-smooth bg-white"
         >
-          <div class="h-16 w-full shrink-0 md:h-20"></div>
           <div class="flex min-h-full flex-col">
             <div class="mx-auto w-full max-w-[1200px] flex-1 p-8 lg:p-12">
               <div

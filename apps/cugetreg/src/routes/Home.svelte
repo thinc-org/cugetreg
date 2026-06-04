@@ -17,7 +17,6 @@
   import { SelectTimetable } from '@cugetreg/ui/molecules/select-timetable';
   import { Filter as FilterBar } from '@cugetreg/ui/organisms/filter-bar';
   import { Footer } from '@cugetreg/ui/organisms/footer';
-  import { Navbar } from '@cugetreg/ui/organisms/navbar';
   import * as Sidebar from '@cugetreg/ui/organisms/sidebar';
 
   let courses = $state<any[]>([]);

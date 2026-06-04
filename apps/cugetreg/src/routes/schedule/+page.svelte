@@ -417,24 +417,20 @@
       </div>
 
       <div class="mt-5 flex justify-center gap-4">
-          <ChevronLeft
-            onclick={() => showExamSchedule = 'Schedule'}
-            strokeWidth={3}
-            class={
-              showExamSchedule === 'Schedule'
-                ? 'cursor-pointer text-[#4A70C6] transition-colors hover:text-[#3B5EAB]'
-                : 'cursor-pointer text-[#D6D7E1] transition-colors hover:text-[#B0B2C5]'
-            }
-          />
-          <ChevronRight
-            onclick={() => showExamSchedule = 'List'}
-            strokeWidth={3}
-            class={
-              showExamSchedule === 'List'
-                ? 'cursor-pointer text-[#4A70C6] transition-colors hover:text-[#3B5EAB]'
-                : 'cursor-pointer text-[#D6D7E1] transition-colors hover:text-[#B0B2C5]'
-            }
-          />
+        <ChevronLeft
+          onclick={() => (showExamSchedule = 'Schedule')}
+          strokeWidth={3}
+          class={showExamSchedule === 'Schedule'
+            ? 'cursor-pointer text-[#4A70C6] transition-colors hover:text-[#3B5EAB]'
+            : 'cursor-pointer text-[#D6D7E1] transition-colors hover:text-[#B0B2C5]'}
+        />
+        <ChevronRight
+          onclick={() => (showExamSchedule = 'List')}
+          strokeWidth={3}
+          class={showExamSchedule === 'List'
+            ? 'cursor-pointer text-[#4A70C6] transition-colors hover:text-[#3B5EAB]'
+            : 'cursor-pointer text-[#D6D7E1] transition-colors hover:text-[#B0B2C5]'}
+        />
       </div>
 
       {#if showExamSchedule === 'List'}

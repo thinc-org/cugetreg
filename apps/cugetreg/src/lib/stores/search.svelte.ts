@@ -1,4 +1,4 @@
 export const searchState = $state({
-    query: '',
-    debounced: ''
+  query: '',
+  debounced: '',
 });

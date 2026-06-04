@@ -1,7 +1,10 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
+
 	import { Menu, Moon, Search, Settings2 } from '@lucide/svelte';
+
 	import { cn, getShortenName } from '@cugetreg/utils';
+
 	import { Button } from '../../atoms/button';
 	import { Chip } from '../../atoms/chip';
 	import { Collapsible } from '../../atoms/collapsible';
@@ -11,24 +14,24 @@
 	import { UserDialog } from '../../molecules/user-dialog';
 
 	interface Props {
-        isLoggedIn?: boolean;
-        name?: string;
-        imageUrl?: string;
-        id?: string;
-        onSearchEnter?: (val: string) => void;
-        onLogin?: () => void;
-        onSignOut?: () => void;
-    }
+		isLoggedIn?: boolean;
+		name?: string;
+		imageUrl?: string;
+		id?: string;
+		onSearchEnter?: (val: string) => void;
+		onLogin?: () => void;
+		onSignOut?: () => void;
+	}
 
-    let {
-        isLoggedIn = false,
-        name = '',
-        imageUrl = 'https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg',
-        id = '',
-        onSearchEnter = () => {},
-        onLogin = () => {},
-        onSignOut = () => {}
-    }: Props = $props();
+	let {
+		isLoggedIn = false,
+		name = '',
+		imageUrl = 'https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg',
+		id = '',
+		onSearchEnter = () => {},
+		onLogin = () => {},
+		onSignOut = () => {}
+	}: Props = $props();
 
 	let localSearch = $state('');
 
@@ -55,7 +58,6 @@
 	const toggleSideBar = () => {
 		openSideBar = !openSideBar;
 	};
-
 </script>
 
 <div

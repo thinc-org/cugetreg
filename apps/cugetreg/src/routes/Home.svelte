@@ -1,7 +1,7 @@
 <script lang="ts">
   import SelectedCourse from '$lib/components/selected-course.svelte';
-  import { getUserCartStore, useCartActions } from '$lib/stores/user-cart';
   import { searchState } from '$lib/stores/search.svelte';
+  import { getUserCartStore, useCartActions } from '$lib/stores/user-cart';
 
   import {
     BookMarked,
@@ -560,7 +560,7 @@
                     <Input
                       bind:value={searchState.query}
                       onkeydown={(e: KeyboardEvent) => {
-                        if (e.key === 'Enter') e.preventDefault(); 
+                        if (e.key === 'Enter') e.preventDefault();
                       }}
                       placeholder="พิมพ์ชื่อวิชา รหัสวิชา หรือคำค้นหาอื่นๆ..."
                       class="h-12 w-full rounded-xl border-none bg-[#F1F3F7] px-6 text-lg font-medium focus:ring-2 focus:ring-blue-500"

@@ -9,12 +9,11 @@
     handleGoogleLogout,
     useSession,
   } from '$lib/auth-client';
-  import { getUserCartStore, initUserCartStore } from '$lib/stores/user-cart';
   import { searchState } from '$lib/stores/search.svelte';
+  import { getUserCartStore, initUserCartStore } from '$lib/stores/user-cart';
 
   import axios from 'axios';
   import type { Snippet } from 'svelte';
-  import { onMount } from 'svelte';
   import toast, { Toaster } from 'svelte-french-toast';
 
   import { Navbar } from '@cugetreg/ui/organisms/navbar';
@@ -94,9 +93,9 @@
   });
 
   $effect(() => {
-    const currentQuery = searchState.query; 
+    const currentQuery = searchState.query;
     const timeout = setTimeout(() => {
-      searchState.debounced = currentQuery; 
+      searchState.debounced = currentQuery;
     }, 250);
     return () => clearTimeout(timeout);
   });
@@ -108,8 +107,8 @@
   onSignOut={handleGoogleLogout}
   isLoggedIn={Boolean($session.data)}
   onSearchEnter={(query) => {
-      searchState.query = query;
-      goto('/'); 
+    searchState.query = query;
+    goto('/');
   }}
   name={$session.data?.user.name}
   imageUrl={$session.data?.user.image ?? 'https://...'}

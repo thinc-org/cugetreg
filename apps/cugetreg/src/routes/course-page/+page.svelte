@@ -16,6 +16,9 @@
     Menu,
     BookMarked,
     Book,
+    StickyNote,
+    MessageCircleQuestionIcon,
+    Pencil,
   } from '@lucide/svelte';
 
   import { Button } from '@cugetreg/ui/atoms/button';
@@ -242,7 +245,7 @@
   ];
 </script>
 
-<div class="relative flex h-screen flex-col overflow-hidden bg-white">
+<div class="relative flex h-full flex-col overflow-hidden bg-white">
   <div class="relative flex flex-1 overflow-hidden">
     <Sidebar.Provider
       bind:open={sidebarExpanded}
@@ -275,7 +278,7 @@
                   </span>
                 </div>
               </section>
-              <section class="text-on-surface mx-auto mt-6 w-full max-w-5xl">
+              <section class="text-on-surface mx-auto mt-6 w-full max-w-5xl" bind:this={descriptionSection}>
                 <div class="grid gap-6 md:grid-cols-2 md:gap-0">
                   <div class="md:col-span-2">
                     <div
@@ -400,7 +403,7 @@
                   </div>
                 </div>
               </section>
-              <section class="text-on-surface mx-auto mt-8 w-full max-w-5xl">
+              <section class="text-on-surface mx-auto mt-8 w-full max-w-5xl" bind:this={detailSection}>
                 <h2 class="text-on-surface text-lg font-semibold">รายละเอียดเซคชัน</h2>
                 <div class="mt-4">
                   <Select.Root type="single" bind:value={selectedGroup}>
@@ -468,7 +471,7 @@
                   </Select.Root>
                 </div>
               </section>
-              <section class="text-on-surface mx-auto mt-10 w-full max-w-5xl">
+              <section class="text-on-surface mx-auto mt-10 w-full max-w-5xl" bind:this={reviewSection}>
                 <div class="flex items-center justify-between">
                   <h2 class="text-on-surface text-lg font-semibold">เขียนรีวิวรายวิชา</h2>
                 </div>
@@ -720,13 +723,35 @@
             </Sidebar.MenuItem>
             <Sidebar.MenuItem>
               <Sidebar.MenuButton
-                onclick={() => scrollToSection(descriptionSection)}
+                onclick={() => togglePanel('description_only')}
                 isActive={activePanel === 'description_only'}
                 size="lg"
                 tooltipContent="คำอธิบายรายวิชา"
                 class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-6!"
               >
                 <Book size="24" strokeWidth={2.5} />
+              </Sidebar.MenuButton>
+            </Sidebar.MenuItem>
+            <Sidebar.MenuItem>
+              <Sidebar.MenuButton
+                onclick={() => togglePanel('detail_only')}
+                isActive={activePanel === 'detail_only'}
+                size="lg"
+                tooltipContent="รายละเอียดเซคชัน"
+                class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-6!"
+              >
+                <StickyNote size="24" strokeWidth={2.5} />
+              </Sidebar.MenuButton>
+            </Sidebar.MenuItem>
+            <Sidebar.MenuItem>
+              <Sidebar.MenuButton
+                onclick={() => togglePanel('review_only')}
+                isActive={activePanel === 'review_only'}
+                size="lg"
+                tooltipContent="รีวิวรายวิชา"
+                class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-6!"
+              >
+                <MessageCircleQuestionIcon size="24" strokeWidth={2.5} />
               </Sidebar.MenuButton>
             </Sidebar.MenuItem>
             <Sidebar.MenuItem>
@@ -775,9 +800,50 @@
                   academicYear={$userCart.currentCart.academicYear}
                 />
               </div>
-              <hr class="mb-6 opacity-50" />
+              <hr class="mb-0 opacity-50" />
             {/if}
 
+            {#if sidebarExpanded}
+              <div class="mb-6 flex flex-col text-on-surface">
+                <button
+                  type="button"
+                  class="w-full border-b border-gray-400 py-4 text-left text-[20px] font-semibold transition-colors hover:text-primary"
+                  onclick={() => scrollToSection(descriptionSection)}
+                >
+                  คำอธิบายรายวิชา
+                </button>
+
+                <button
+                  type="button"
+                  class="w-full border-b border-gray-400 py-4 text-left text-[20px] font-semibold transition-colors hover:text-primary"
+                  onclick={() => scrollToSection(detailSection)}
+                >
+                  รายละเอียดเซคชัน
+                </button>
+
+                <div class="flex w-full items-center justify-between border-b border-gray-400 py-3.5">
+                  <button
+                    type="button"
+                    class="text-left text-[20px] font-semibold transition-colors hover:text-primary"
+                    onclick={() => scrollToSection(reviewSection)}
+                  >
+                    รีวิวรายวิชา 
+                    <span class="ml-1 text-sm font-normal text-on-surface/50">
+                      ({filteredReviews.length} รีวิว)
+                    </span>
+                  </button>
+                  
+                  <button
+                    type="button"
+                    class="flex items-center gap-1.5 rounded-xl bg-[#E9EEF6] px-3.5 py-1.5 text-sm font-medium text-[#004494] transition-all hover:bg-[#D2E0F5]"
+                    onclick={() => scrollToSection(reviewSection)} 
+                  >
+                    เขียนรีวิว
+                    <Pencil size={14} strokeWidth={2.5} />
+                  </button>
+                </div>
+              </div>
+            {/if}
 
             {#if sidebarExpanded || openPanel === 'selected_only'}
               <div bind:this={selectedSection}>

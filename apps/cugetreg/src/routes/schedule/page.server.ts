@@ -7,11 +7,6 @@ import { ListCartsResponseSchema } from '@cugetreg/zod-schemas/cart-response';
 
 import type { PageServerLoad } from './$types';
 
-const _DUMMY_USER_ID = {
-  id: '63e06682cec32a7209b966b0',
-  email: '6532155621@student.chula.ac.th',
-};
-
 const API_URL = 'http://localhost:3000/api/v1/carts';
 
 export const load: PageServerLoad = async () => {

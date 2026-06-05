@@ -75,7 +75,9 @@ export const load: LayoutServerLoad = async ({ locals, fetch }) => {
     );
 
     if (createErr || !createRes || !createRes.ok) {
-      const errorData = createRes ? await createRes.json().catch(() => ({})) : {};
+      const errorData = createRes
+        ? await createRes.json().catch(() => ({}))
+        : {};
       console.error(errorData);
       throw svelteError(
         500,
@@ -136,7 +138,8 @@ export const load: LayoutServerLoad = async ({ locals, fetch }) => {
     } else if (detailErr || !detailRes || !detailRes.ok) {
       throw svelteError(
         500,
-        'Something went wrong fetching timetable: ' + (detailErr?.message || detailRes?.statusText),
+        'Something went wrong fetching timetable: ' +
+          (detailErr?.message || detailRes?.statusText),
       );
     } else {
       cartDetailData = await detailRes.json();

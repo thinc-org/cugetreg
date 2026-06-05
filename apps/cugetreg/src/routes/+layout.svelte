@@ -31,6 +31,10 @@
         message = 'Please login with Chula email.';
       }
 
+      if (errorMsg === 'no_session') {
+        message = 'Please login before viewing this page.';
+      }
+
       toast.error(message, {
         position: 'bottom-right',
       });

@@ -1,10 +1,9 @@
 import { tryCatch } from '$lib/async-handler';
 
 import { error as svelteError } from '@sveltejs/kit';
+import axios from 'axios';
 
 import { CourseNoResponseSchema } from '@cugetreg/zod-schemas/courses-response';
-
-import axios from 'axios';
 
 import type { PageServerLoad } from './$types';
 

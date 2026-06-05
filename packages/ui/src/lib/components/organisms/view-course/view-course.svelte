@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import Button from '$lib/components/atoms/button/button.svelte';
 	import { Chip } from '$lib/components/atoms/chip/index.js';
 	import { GenedChip } from '$lib/components/atoms/gened-chip/index.js';
@@ -11,8 +12,6 @@
 	import { cn } from '@cugetreg/utils';
 	import { courseColorVariants } from '@cugetreg/utils/constants';
 	import { type ColorVariant } from '@cugetreg/utils/types';
-	import { goto } from '$app/navigation';
-	import { resolve } from '$app/paths';
 
 	export interface ViewCourseSectionClass {
 		type: string;

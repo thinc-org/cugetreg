@@ -11,7 +11,6 @@
 	import { GenedChip } from '../../atoms/gened-chip/index.js';
 	import { RecommendedTag } from '../../atoms/recommended-tag/index.js';
 	import * as Select from '../../molecules/select/index.js';
-	import { resolve } from '$app/paths';
 
 	interface Props {
 		class?: string | undefined | null;

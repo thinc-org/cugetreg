@@ -1,4 +1,5 @@
 import { prisma } from "../db/clients.js";
+import { Prisma } from "../generated/prisma/client.js";
 import type { VoteType } from "../generated/prisma/enums.js";
 import {
   mapReviewStatus,
@@ -58,75 +59,84 @@ export const reviewService = {
   ) => {
     // Implementation for voting on a review
     const { interaction } = body;
-    const [review, vote] = await Promise.all([
-      prisma.review.findUnique({
-        where: {
+    return prisma.$transaction(
+      async (tx) => {
+        const [review, vote] = await Promise.all([
+          tx.review.findUnique({
+            where: {
+              id: reviewId,
+            },
+          }),
+          tx.reviewVote.findUnique({
+            where: {
+              userId_reviewId: {
+                userId,
+                reviewId,
+              },
+            },
+          }),
+        ]);
+
+        if (!review) {
+          throw new Error("REVIEW_NOT_FOUND");
+        }
+
+        let myInteraction: string | VoteType | null = null;
+
+        if (!vote) {
+          await tx.reviewVote.create({
+            data: {
+              reviewId,
+              userId,
+              voteType: mapVoteType(interaction),
+            },
+          });
+          myInteraction = mapVoteType(interaction);
+        } else if (vote.voteType === mapVoteType(interaction)) {
+          await tx.reviewVote.delete({
+            where: {
+              id: vote.id,
+            },
+          });
+        } else {
+          await tx.reviewVote.update({
+            where: {
+              id: vote.id,
+            },
+            data: {
+              voteType: mapVoteType(interaction),
+            },
+          });
+          myInteraction = mapVoteType(interaction);
+        }
+
+        const [likeCount, dislikeCount] = await Promise.all([
+          tx.reviewVote.count({
+            where: {
+              reviewId,
+              voteType: mapVoteType("LIKE"),
+            },
+          }),
+          tx.reviewVote.count({
+            where: {
+              reviewId,
+              voteType: mapVoteType("DISLIKE"),
+            },
+          }),
+        ]);
+
+        return {
           id: reviewId,
-        },
-      }),
-      prisma.reviewVote.findFirst({
-        where: {
-          userId: userId,
-          reviewId: reviewId,
-        },
-      }),
-    ]);
-
-    if (!review) {
-      throw new Error("REVIEW_NOT_FOUND");
-    }
-
-    let myInteraction: string | VoteType | null = null;
-
-    if (!vote) {
-      await prisma.reviewVote.create({
-        data: {
-          reviewId,
-          userId,
-          voteType: mapVoteType(interaction),
-        },
-      });
-      myInteraction = mapVoteType(interaction);
-    } else if (vote.voteType === mapVoteType(interaction)) {
-      await prisma.reviewVote.delete({
-        where: {
-          id: vote.id,
-        },
-      });
-    } else {
-      await prisma.reviewVote.update({
-        where: {
-          id: vote.id,
-        },
-        data: {
-          voteType: mapVoteType(interaction),
-        },
-      });
-      myInteraction = mapVoteType(interaction);
-    }
-
-    const [likeCount, dislikeCount] = await Promise.all([
-      prisma.reviewVote.count({
-        where: {
-          reviewId,
-          voteType: mapVoteType("LIKE"),
-        },
-      }),
-      prisma.reviewVote.count({
-        where: {
-          reviewId,
-          voteType: mapVoteType("DISLIKE"),
-        },
-      }),
-    ]);
-
-    return {
-      id: reviewId,
-      likeCount,
-      dislikeCount,
-      myInteraction,
-      isOwner: review.userId === userId,
-    };
+          likeCount,
+          dislikeCount,
+          myInteraction,
+          isOwner: review.userId === userId,
+        };
+      },
+      {
+        isolationLevel: Prisma.TransactionIsolationLevel.Serializable,
+      },
+    );
   },
   editReview: async (
     userId: string,

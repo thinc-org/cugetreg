@@ -1,6 +1,6 @@
 import { createRoute, z } from "@hono/zod-openapi";
 
-import { BadRequestError, errorRes, InternalError } from "./errorRes.js";
+import { errorRes, InternalError } from "./errorRes.js";
 
 import {
   DeleteReviewSchema,
@@ -28,7 +28,6 @@ export const submitReviewRoute = createRoute({
       content: { "application/json": { schema: SubmitReviewResponseSchema } },
       description: "Created",
     },
-    400: BadRequestError,
     500: InternalError,
   },
   security: [{ Bearer: [] }],
@@ -49,7 +48,6 @@ export const voteReviewRoute = createRoute({
       content: { "application/json": { schema: VoteReviewResponseSchema } },
       description: "Vote Successful",
     },
-    400: BadRequestError,
     404: errorRes("REVIEW_NOT_FOUND"),
     500: InternalError,
   },
@@ -71,7 +69,6 @@ export const editReviewRoute = createRoute({
       content: { "application/json": { schema: EditReviewResponseSchema } },
       description: "Review Edited Successfully",
     },
-    400: BadRequestError,
     403: errorRes("NOT_REVIEW_OWNER"),
     404: errorRes("REVIEW_NOT_FOUND"),
     500: InternalError,
@@ -91,7 +88,6 @@ export const deleteReviewRoute = createRoute({
       content: { "application/json": { schema: DeleteReviewSchema } },
       description: "Deleted",
     },
-    400: BadRequestError,
     403: errorRes("NOT_REVIEW_OWNER"),
     404: errorRes("REVIEW_NOT_FOUND"),
     500: InternalError,

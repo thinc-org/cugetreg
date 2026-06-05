@@ -1,11 +1,6 @@
 import { z } from "zod";
 
-import {
-  reviewStatus,
-  semesterString,
-  studyProgram,
-  vote,
-} from "./constants.js";
+import { reviewStatus, semester, studyProgram, vote } from "./constants.js";
 
 export const SubmitReviewResponseSchema = z.object({
   message: z.string().nonempty(),
@@ -14,7 +9,7 @@ export const SubmitReviewResponseSchema = z.object({
     courseNo: z.string().length(7),
     studyProgram: z.enum(studyProgram),
     academicYear: z.coerce.number().int().min(2564),
-    semester: z.enum(semesterString),
+    semester: z.enum(semester),
     rating: z.int().min(1).max(10),
     content: z.string().nonempty(),
     status: z.enum(reviewStatus),
@@ -22,7 +17,7 @@ export const SubmitReviewResponseSchema = z.object({
     dislikeCount: z.int().min(0),
     //myVote: z.enum(vote).nullable(),
     isOwner: z.boolean(),
-    createAt: z.date().or(z.string().nonempty()),
+    createdAt: z.union([z.date(), z.string()]),
   }),
 });
 
@@ -42,10 +37,10 @@ export const EditReviewResponseSchema = z.object({
   data: z.object({
     id: z.string().nonempty(),
     academicYear: z.coerce.number().int().min(2564),
-    semester: z.enum(semesterString),
+    semester: z.enum(semester),
     rating: z.int().min(1).max(10),
     content: z.string().nonempty(),
-    updateAt: z.date().or(z.string().nonempty()),
+    updatedAt: z.union([z.date(), z.string()]),
     isOwner: z.boolean(),
   }),
 });

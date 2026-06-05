@@ -20,6 +20,16 @@ const semesterToNumber: Record<string, string> = {
 
 export const reviewService = {
   submitReview: async (userId: string, newReview: SubmitReviewBodySchema) => {
+    const course = await prisma.course.findFirst({
+      where: {
+        courseNo: newReview.courseNo,
+      },
+    });
+
+    if (!course) {
+      throw new Error("COURSE_NOT_FOUND");
+    }
+
     const createdReview = await prisma.review.create({
       data: {
         ...newReview,

@@ -18,7 +18,10 @@ reviews
       const body = c.req.valid("json");
       const data = await reviewService.submitReview(userId, body);
       return c.json({ message: "Review submitted successfully", data }, 201);
-    } catch {
+    } catch (e) {
+      if (e instanceof Error && e.message === "COURSE_NOT_FOUND") {
+        return c.json({ error: "COURSE_NOT_FOUND" }, 404);
+      }
       return c.json({ error: "INTERNAL_SERVER_ERROR" }, 500);
     }
   })

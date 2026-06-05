@@ -28,6 +28,7 @@ export const submitReviewRoute = createRoute({
       content: { "application/json": { schema: SubmitReviewResponseSchema } },
       description: "Created",
     },
+    404: errorRes("COURSE_NOT_FOUND"),
     500: InternalError,
   },
   security: [{ Bearer: [] }],

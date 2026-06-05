@@ -23,6 +23,7 @@
 
   import { Button } from '@cugetreg/ui/atoms/button';
   import { GenedChip } from '@cugetreg/ui/atoms/gened-chip';
+  import { StudyProgramChip } from '@cugetreg/ui/atoms/studyprogram-ship';
   import { Comment } from '@cugetreg/ui/molecules/comment';
   import { SectionTable } from '@cugetreg/ui/molecules/section-table';
   import * as Select from '@cugetreg/ui/molecules/select';
@@ -31,6 +32,7 @@
   import { SelectTimetable } from '@cugetreg/ui/molecules/select-timetable';
   import SelectedCourse from '$lib/components/selected-course.svelte';
   import { getUserCartStore, useCartActions } from '$lib/stores/user-cart';
+  import { studyProgram } from '../../../../../packages/zod-schemas/constants';
 
   const sectionGroups = ['4EE ONLY', 'OPEN'];
   let selectedGroup = $state(sectionGroups[0]);
@@ -266,6 +268,9 @@
                     0123104 CON PDG PEACE CONFWV
                   </h1>
                   <GenedChip type="HU" class="px-3 py-1 text-xs" />
+                </div>
+                <div class="flex flex-wrap items-center gap-3 py-2">
+                  <StudyProgramChip type="I" class="px-3 py-1 text-xs" />
                 </div>
                 <p class="text-on-surface mt-2 text-sm font-semibold">
                   การลดความขัดแย้ง การเปลี่ยนความขัดแย้งและกระบวนการสันติภาพ

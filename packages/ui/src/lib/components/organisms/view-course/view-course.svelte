@@ -11,6 +11,8 @@
 	import { cn } from '@cugetreg/utils';
 	import { courseColorVariants } from '@cugetreg/utils/constants';
 	import { type ColorVariant } from '@cugetreg/utils/types';
+	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
 
 	export interface ViewCourseSectionClass {
 		type: string;
@@ -98,7 +100,13 @@
 					<div class="text-sm font-bold">{data.courseNameEn}</div>
 				</div>
 				<div class="flex h-[90%] items-center justify-center">
-					<Button class="" variant="outlined">
+					<Button
+						class=""
+						variant="outlined"
+						onclick={() => {
+							goto(`/course-page/${data.courseNo}`);
+						}}
+					>
 						ข้อมูลรายวิชา
 						<ArrowRight />
 					</Button>

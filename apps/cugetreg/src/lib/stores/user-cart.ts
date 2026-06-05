@@ -1,7 +1,7 @@
+import { api } from '$lib/api';
 import { tryCatch } from '$lib/async-handler';
 
-import { api } from '$lib/api';
-
+import { isAxiosError } from 'axios';
 import toast from 'svelte-french-toast';
 
 import type {
@@ -16,7 +16,6 @@ import {
 } from '@cugetreg/zod-schemas/cart-response';
 
 import { useContextStore } from './stores';
-import { isAxiosError } from 'axios';
 
 export interface UserCartInterface {
   currentCart: CartData;
@@ -48,7 +47,7 @@ const CART_KEY = Symbol('cart');
 export const { initStore: initUserCartStore, getStore: getUserCartStore } =
   useContextStore<UserCartInterface>(CART_KEY);
 
-function handleError(error) {
+function handleError(error: any) {
   if (isAxiosError(error)) {
     if (error.status === 401) {
       toast.error('Please login before doing this action.', {
@@ -58,6 +57,7 @@ function handleError(error) {
     }
 
     toast.error('Something went wrong', { position: 'bottom-right' });
+    return;
   }
 
   toast.error('Something went wrong', { position: 'bottom-right' });

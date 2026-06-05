@@ -1,5 +1,6 @@
-import { redirect, type Handle, type HandleFetch } from '@sveltejs/kit';
 import { PUBLIC_API_URL } from '$env/static/public';
+
+import { type Handle, type HandleFetch, redirect } from '@sveltejs/kit';
 
 export const handle: Handle = async ({ event, resolve }) => {
   try {

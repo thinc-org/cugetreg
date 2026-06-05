@@ -1,4 +1,5 @@
 import { tryCatch } from '$lib/async-handler';
+import type { UserCartInterface } from '$lib/stores/user-cart';
 
 import { error as svelteError } from '@sveltejs/kit';
 
@@ -11,7 +12,6 @@ import {
 } from '@cugetreg/zod-schemas/cart-response';
 
 import type { LayoutServerLoad } from './$types';
-import type { UserCartInterface } from '$lib/stores/user-cart';
 
 const API_URL = 'http://localhost:3000/api/v1/carts';
 

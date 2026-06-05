@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { useSession } from '$lib/auth-client';
   import SelectedCourse from '$lib/components/selected-course.svelte';
   import { getUserCartStore, useCartActions } from '$lib/stores/user-cart';
 
@@ -19,7 +20,6 @@
   import { Filter as FilterBar } from '@cugetreg/ui/organisms/filter-bar';
   import { Footer } from '@cugetreg/ui/organisms/footer';
   import * as Sidebar from '@cugetreg/ui/organisms/sidebar';
-  import { useSession } from '$lib/auth-client';
 
   let courses = $state<any[]>([]);
   let isLoading = $state(false);

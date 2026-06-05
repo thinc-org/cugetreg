@@ -3,6 +3,7 @@
 
   import { goto } from '$app/navigation';
   import { page } from '$app/state';
+  import { api } from '$lib/api';
   import { tryCatch } from '$lib/async-handler';
   import {
     handleGoogleLogin,
@@ -11,7 +12,6 @@
   } from '$lib/auth-client';
   import { getUserCartStore, initUserCartStore } from '$lib/stores/user-cart';
 
-  import { api } from '$lib/api';
   import type { Snippet } from 'svelte';
   import toast, { Toaster } from 'svelte-french-toast';
 

@@ -31,7 +31,10 @@
   import { Footer } from '@cugetreg/ui/organisms/footer';
   import type { GenEdType } from '@cugetreg/utils/types';
 
+  import { page } from '$app/state';
   import type { PageProps } from './$types';
+  import { goto } from '$app/navigation';
+  import { resolve } from '$app/paths';
 
   const years = ['2566', '2565', '2564'];
   const terms = ['ภาคต้น', 'ภาคปลาย'];
@@ -166,6 +169,25 @@
       )
       .map((item) => item.term);
     return [reviewTermPlaceholder, ...Array.from(new Set(terms))];
+  });
+
+  $effect(() => {
+    const academicYear = page.url.searchParams.get('academicYear');
+    const semester = page.url.searchParams.get('semester');
+    const studyProgram = page.url.searchParams.get('studyProgram');
+
+    if (academicYear && semester && studyProgram) {
+      return;
+    }
+
+    const params = new URLSearchParams({
+      academicYear: String($userCart.currentCart.academicYear),
+      semester: $userCart.currentCart.semester,
+      studyProgram: $userCart.currentCart.studyProgram,
+    });
+    goto(resolve(`/course-page/${page.params.courseId}?${params.toString()}`), {
+      replaceState: true,
+    });
   });
 
   $effect(() => {

@@ -653,6 +653,11 @@
                     </p>
                   </div>
                 {:else}
+                  {@const params = new URLSearchParams({
+                    studyProgram: $userCart.currentCart.studyProgram,
+                    academicYear: String($userCart.currentCart.academicYear),
+                    semester: $userCart.currentCart.semester,
+                  })}
                   {#each displayedCourses as item (item.course.code)}
                     <CourseCard
                       course={item.course}
@@ -666,6 +671,7 @@
                       onSelectSection={(v: string) =>
                         handleSelectSection(item, v)}
                       class="w-full max-w-full md:w-full"
+                      courseUrl={`/course-page/${item.course.code}?${params.toString()}`}
                     />
                   {/each}
 

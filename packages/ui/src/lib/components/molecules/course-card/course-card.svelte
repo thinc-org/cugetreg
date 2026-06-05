@@ -11,6 +11,7 @@
 	import { GenedChip } from '../../atoms/gened-chip/index.js';
 	import { RecommendedTag } from '../../atoms/recommended-tag/index.js';
 	import * as Select from '../../molecules/select/index.js';
+	import { resolve } from '$app/paths';
 
 	interface Props {
 		class?: string | undefined | null;
@@ -22,6 +23,7 @@
 		sections?: Array<{ value: string; label: string }>;
 		selectedSection?: string;
 		onSelectSection?: (value: string) => void;
+		courseUrl?: string;
 		[key: string]: unknown;
 	}
 
@@ -35,6 +37,7 @@
 		sections,
 		selectedSection = $bindable(''),
 		onSelectSection,
+		courseUrl = '',
 		...rest
 	}: Props = $props();
 
@@ -61,9 +64,12 @@
 	<div class="flex flex-row items-center justify-between">
 		<div class="flex flex-col">
 			<div class="text-caption font-medium">{course?.code}</div>
-			<div class="sm:text-body2 md:text-body1 font-medium">
+			<a
+				class="sm:text-body2 md:text-body1 font-medium hover:cursor-pointer hover:underline"
+				href={courseUrl}
+			>
 				{course?.name}
-			</div>
+			</a>
 		</div>
 		<div class="flex gap-1">
 			{#if specialType}

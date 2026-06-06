@@ -7,3 +7,4 @@ export const sortBy = ["NAME", "CAPACITY_SUM", "REMAING_SUM"];
 export const sortOrder = ["asc", "desc"];
 export const semester = ["1", "2", "3"];
 export const visible = ["PUB", "PVT"];
+export const reviewStatus = ["PENDING", "APPROVED", "REJECTED"];

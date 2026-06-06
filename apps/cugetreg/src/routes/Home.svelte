@@ -699,7 +699,7 @@
   >
     <Sidebar.Content class="flex-row overflow-visible!">
       <Sidebar.Group
-        class="w-(--sidebar-width-icon) shrink-0 items-center border-r bg-white p-0 pt-[5.5rem] pb-6 group-data-[variant=floating]:rounded-l-lg md:pt-[6.5rem]"
+        class="w-(--sidebar-width-icon) shrink-0 items-center border-r bg-white p-0 pt-[1rem] pb-6 group-data-[variant=floating]:rounded-l-lg md:pt-[1.5rem]"
       >
         <Sidebar.GroupContent>
           <Sidebar.Menu class="gap-6">

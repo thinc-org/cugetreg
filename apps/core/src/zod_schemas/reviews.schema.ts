@@ -3,7 +3,7 @@ import { z } from "zod";
 import { semester, studyProgram, vote } from "./constants.js";
 
 export const SubmitReviewBodySchema = z.object({
-  courseNo: z.string().length(7),
+  courseNo: z.string().regex(/^\d{7}$/),
   studyProgram: z.enum(studyProgram),
   academicYear: z.coerce.number().int().min(2564),
   semester: z.enum(semester),

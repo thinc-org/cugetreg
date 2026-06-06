@@ -6,7 +6,7 @@ export const SubmitReviewResponseSchema = z.object({
   message: z.string().nonempty(),
   data: z.object({
     id: z.string().nonempty(),
-    courseNo: z.string().length(7),
+    courseNo: z.string().regex(/^\d{7}$/),
     studyProgram: z.enum(studyProgram),
     academicYear: z.coerce.number().int().min(2564),
     semester: z.enum(semester),

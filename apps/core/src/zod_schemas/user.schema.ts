@@ -12,7 +12,7 @@ export type GetUserReviewsQuery = z.infer<typeof GetUserReviewsQuerySchema>;
 
 export const UpdateUserInfoBodySchema = z.object({
   name: z.string().nonempty(),
-  faculty: z.string().nonempty(),
+  faculty: z.string().optional(),
   department: z.string().optional(),
 });
 

@@ -1,14 +1,14 @@
 import { z } from "zod";
 
-import { reviewStatus, semester } from "./constants.js";
+import { reviewStatus, semester, studyProgram } from "./constants.js";
 
 export const UserResponseSchema = z.object({
   id: z.string().regex(/^\d{10}$/),
   email: z.string().email(),
   name: z.string().nonempty(),
   googleId: z.string().regex(/^\d+$/),
-  faculty: z.string().nonempty(),
-  department: z.string().optional(),
+  faculty: z.string().nullable(),
+  department: z.string().nullable(),
   createdAt: z.iso.datetime(),
   updatedAt: z.iso.datetime(),
 });
@@ -21,6 +21,7 @@ export const UserReviewResponseSchema = z.object({
     z.object({
       id: z.string(),
       courseNo: z.string().regex(/^\d{7}$/),
+      studyProgram: z.enum(studyProgram),
       academicYear: z.int().min(2564),
       semester: z.enum(semester),
       rating: z.int().min(1).max(10),
@@ -33,13 +34,13 @@ export const UserReviewResponseSchema = z.object({
 
 export const UpdateUserInfoResponseSchema = z.object({
   message: z.string().nonempty(),
-  user: {
+  user: z.object({
     id: z.string().regex(/^\d{10}$/),
     email: z.string().email(),
     name: z.string().nonempty(),
-    image: z.string().url(),
-    faculty: z.string().nonempty(),
-    department: z.string().optional(),
+    image: z.string().url().nullable(),
+    faculty: z.string().nullable(),
+    department: z.string().nullable(),
     updatedAt: z.iso.datetime(),
-  },
+  }),
 });

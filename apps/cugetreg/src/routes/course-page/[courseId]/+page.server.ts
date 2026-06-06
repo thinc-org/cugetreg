@@ -1,33 +1,48 @@
 import { tryCatch } from '$lib/async-handler';
 
 import { error as svelteError } from '@sveltejs/kit';
+import axios from 'axios';
 
 import { CourseNoResponseSchema } from '@cugetreg/zod-schemas/courses-response';
 
 import type { PageServerLoad } from './$types';
 
-const studyProgram = 'I';
-const academicYear = 2566;
-const semester = 1;
-
 const API_URL = 'http://localhost:3000/api/v1/courses/';
 
-export const load: PageServerLoad = async ({ params, fetch }) => {
+function mapSemester(semester: string) {
+  switch (semester) {
+    default:
+    case 'FIRST':
+      return '1';
+    case 'SECOND':
+      return '2';
+    case 'SUMMER':
+      return '3';
+  }
+}
+
+export const load: PageServerLoad = async ({ params, url }) => {
   const courseId = params.courseId;
 
-  const url = new URL(API_URL + courseId);
-  url.searchParams.append('studyProgram', studyProgram);
-  url.searchParams.append('academicYear', academicYear.toString());
-  url.searchParams.append('semester', semester.toString());
+  const academicYear = url.searchParams.get('academicYear') ?? 2568;
+  const semester = url.searchParams.get('semester') ?? 1;
+  const studyProgram = url.searchParams.get('studyProgram') ?? 'S';
 
-  const [response, error] = await tryCatch(fetch(url.toString()));
+  const [response, error] = await tryCatch(
+    axios.get(API_URL + courseId, {
+      params: {
+        studyProgram,
+        academicYear,
+        semester: mapSemester(String(semester)),
+      },
+    }),
+  );
 
-  if (error || !response || !response.ok) {
+  if (error || !response) {
     throw svelteError(404, 'Course not found');
   }
 
-  const data = await response.json();
-  const course = CourseNoResponseSchema.parse(data);
+  const course = CourseNoResponseSchema.parse(response.data);
   return {
     course,
   };

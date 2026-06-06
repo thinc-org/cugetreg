@@ -10,6 +10,7 @@
     handleGoogleLogout,
     useSession,
   } from '$lib/auth-client';
+  import { searchState } from '$lib/stores/search.svelte';
   import { getUserCartStore, initUserCartStore } from '$lib/stores/user-cart';
 
   import type { Snippet } from 'svelte';
@@ -92,6 +93,14 @@
 
     fetchCurrentSchedule(currentId);
   });
+
+  $effect(() => {
+    const currentQuery = searchState.query;
+    const timeout = setTimeout(() => {
+      searchState.debounced = currentQuery;
+    }, 250);
+    return () => clearTimeout(timeout);
+  });
 </script>
 
 <Toaster />
@@ -99,10 +108,21 @@
   onLogin={handleGoogleLogin}
   onSignOut={handleGoogleLogout}
   isLoggedIn={Boolean($session.data)}
+  onSearchEnter={(query) => {
+    searchState.query = query;
+    goto('/');
+  }}
   name={$session.data?.user.name}
-  imageUrl={$session.data?.user.image ??
-    'https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg'}
+  imageUrl={$session.data?.user.image ?? 'https://...'}
 />
 
-<!-- TODO: Other page already have navbar which need to be removed -->
-{@render children?.()}
+<div class="relative flex h-dvh flex-col overflow-hidden">
+  {#if page.url.pathname === '/'}
+    {@render children?.()}
+  {:else}
+    <div class="h-16 shrink-0 md:h-20"></div>
+    <div class="relative flex-1 overflow-auto">
+      {@render children?.()}
+    </div>
+  {/if}
+</div>

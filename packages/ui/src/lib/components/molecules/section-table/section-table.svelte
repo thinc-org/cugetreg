@@ -9,9 +9,17 @@
 		class?: string;
 		boxed?: boolean;
 		tableData: Array<SectionTableData>;
+		selectedSection?: string | null;
+		onSelectSection?: (section: string) => void;
 	}
 
-	let { tableData, class: className = undefined, boxed = true }: Props = $props();
+	let {
+		tableData,
+		class: className = undefined,
+		boxed = true,
+		selectedSection = null,
+		onSelectSection = () => {}
+	}: Props = $props();
 
 	const getSeatColor = (value: string) => {
 		if (value === 'ปิด') return 'bg-[#EDEDF1] text-[#6F7593]';
@@ -77,7 +85,10 @@
 
 							{#if j === 0}
 								<TableCell rowspan={row.classes.length} class="py-5 text-right">
-									<SelectorButton selected={row} />
+									<SelectorButton
+										selected={selectedSection === row.section}
+										onClick={() => onSelectSection(row.section)}
+									/>
 								</TableCell>
 							{/if}
 						</TableRow>
@@ -138,7 +149,10 @@
 
 						{#if j === 0}
 							<TableCell rowspan={row.classes.length} class="py-5 text-right">
-								<SelectorButton selected={row} />
+								<SelectorButton
+									selected={selectedSection === row.section}
+									onClick={() => onSelectSection(row.section)}
+								/>
 							</TableCell>
 						{/if}
 					</TableRow>

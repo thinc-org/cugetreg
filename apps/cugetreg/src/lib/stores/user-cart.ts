@@ -85,23 +85,14 @@ const pendingItemUpdates = new Map<string, UpdateCourseFields>();
  */
 let cachedCartId: string | undefined;
 
-// ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
-
-/**
- * The DB stores semester as the Prisma enum value (FIRST / SECOND / SUMMER).
- * The POST /carts endpoint expects the short API form ("1" / "2" / "3").
- */
-function reverseSemester(dbValue: string): '1' | '2' | '3' {
+function mapSemester(dbValue: '1' | '2' | '3'): 'FIRST' | 'SECOND' | 'SUMMER' {
   switch (dbValue) {
-    case 'FIRST':
-      return '1';
-    case 'SECOND':
-      return '2';
-    case 'SUMMER':
-    default:
-      return '3';
+    case '1':
+      return 'FIRST';
+    case '2':
+      return 'SECOND';
+    case '3':
+      return 'SUMMER';
   }
 }
 
@@ -434,8 +425,8 @@ export function useCartActions() {
     // 1. Create the new cart shell
     const createRes = await api.post('/carts', {
       academicYear: currentCart.academicYear,
-      semester: reverseSemester(currentCart.semester),
-      studyProgram: currentCart.studyProgram, // already "S" / "T" / "I"
+      semester: currentCart.semester,
+      studyProgram: currentCart.studyProgram,
       name: `Copy of ${currentCart.name}`,
       isDefault: false,
     });
@@ -499,7 +490,7 @@ export function useCartActions() {
     const [response, error] = await tryCatch(
       api.post('/carts', {
         academicYear,
-        semester,
+        semester: mapSemester(semester),
         studyProgram,
         name,
         isDefault: false,

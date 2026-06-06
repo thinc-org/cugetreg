@@ -11,7 +11,6 @@
 	import { IconButton } from '../../atoms/icon-button';
 	import { Input } from '../../atoms/input';
 	import { CUGetRegDarkFull as CUGetRegLogo } from '../../logo/cugetreg';
-	import { GitHubMark } from '../../logo/vendor';
 	import { UserDialog } from '../../molecules/user-dialog';
 
 	interface Props {
@@ -19,6 +18,7 @@
 		name?: string;
 		imageUrl?: string;
 		id?: string;
+		onSearchEnter?: (val: string) => void;
 		onLogin?: () => void;
 		onSignOut?: () => void;
 	}
@@ -28,9 +28,12 @@
 		name = '',
 		imageUrl = 'https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg',
 		id = '',
+		onSearchEnter = () => {},
 		onLogin = () => {},
 		onSignOut = () => {}
 	}: Props = $props();
+
+	let localSearch = $state('');
 
 	let shortenedName = $derived(getShortenName(name));
 
@@ -58,7 +61,7 @@
 </script>
 
 <div
-	class="border-surface-container-low z-40 flex h-16 items-center justify-between gap-2 border-b-2 px-3 py-1 md:h-20 md:py-3 lg:px-10"
+	class="border-surface-container-low bg-surface fixed top-0 z-40 z-50 flex h-16 w-full items-center justify-between gap-2 border-b-2 px-3 py-1 md:h-20 md:py-3 lg:px-10"
 >
 	<div class="flex flex-1 flex-row items-center gap-3 lg:gap-6">
 		<a href="/">
@@ -72,8 +75,14 @@
 				strokeWidth="3"
 			/>
 			<Input
+				bind:value={localSearch}
+				onkeydown={(e: KeyboardEvent) => {
+					if (e.key === 'Enter') {
+						onSearchEnter(localSearch);
+					}
+				}}
 				placeholder="ค้นหาวิชา"
-				class="bg-surface-container-lowest w-11/12 placeholder:text-neutral-400 xl:w-full"
+				class="bg-surface-container-lowest h-8 w-full placeholder:text-neutral-400"
 			/>
 		</div>
 	</div>
@@ -93,14 +102,14 @@
 		{/each}
 	</div>
 	<div class="flex flex-1 flex-row items-center justify-end gap-2 md:gap-3 lg:gap-4">
-		<a
-			href="https://github.com/thinc-org/cugetreg"
-			target="_blank"
-			rel="noreferrer"
-			class="hidden md:flex"
-		>
-			<GitHubMark class="h-8 w-8 text-neutral-500 " />
-		</a>
+		<!-- <a -->
+		<!-- 	href="https://github.com/thinc-org/cugetreg" -->
+		<!-- 	target="_blank" -->
+		<!-- 	rel="noreferrer" -->
+		<!-- 	class="hidden md:flex" -->
+		<!-- > -->
+		<!-- 	<GitHubMark class="h-8 w-8 text-neutral-500 " /> -->
+		<!-- </a> -->
 		<IconButton color="neutral" class="hidden md:flex">
 			<Moon strokeWidth="3" size="16" />
 		</IconButton>
@@ -126,7 +135,7 @@
 			tabindex="0"
 			aria-label="Close sidebar"
 			onclick={toggleSideBar}
-			onkeydown={(e) => e.key === 'Enter' && toggleSideBar()}
+			onkeydown={(e: KeyboardEvent) => e.key === 'Enter' && toggleSideBar()}
 		></div>
 	{/if}
 	<div
@@ -155,6 +164,13 @@
 			<div class="relative flex items-center px-3">
 				<Search class="absolute right-6 my-auto" size="16" color="#898EA7" strokeWidth="3" />
 				<Input
+					bind:value={localSearch}
+					onkeydown={(e: KeyboardEvent) => {
+						if (e.key === 'Enter') {
+							onSearchEnter(localSearch);
+							if (openSideBar) toggleSideBar();
+						}
+					}}
 					placeholder="ค้นหาวิชา"
 					class="bg-surface-container-lowest h-8 w-full placeholder:text-neutral-400"
 				/>

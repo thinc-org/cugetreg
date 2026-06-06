@@ -25,7 +25,10 @@
     type TimetableMetaData,
   } from '@cugetreg/ui/organisms/create-timetable';
   import { RenameSchedule } from '@cugetreg/ui/organisms/rename-schedule';
-  import { ViewCourse } from '@cugetreg/ui/organisms/view-course';
+  import {
+    ViewCourse,
+    type ViewCourseData,
+  } from '@cugetreg/ui/organisms/view-course';
   import {
     discardTime,
     formatDate,
@@ -117,9 +120,6 @@
     document.body.removeChild(link);
   }
 
-  // NOTE: Temporary: this should be global state
-  // let scheduleList = $state(mockScheduleList)
-  // let selectedSchedule = $state(untrack(() => scheduleList[0]))
   let showExamSchedule = $state<'List' | 'Schedule'>('Schedule');
 
   let timetableDiv = $state<HTMLElement | null>(null);
@@ -129,9 +129,69 @@
   let showDeleteScheduleModal = $state(false);
   let showViewCourseModal = $state(false);
 
+  let selectedCartItemId = $state<string | null>(null);
+
+  const viewCourseData = $derived.by(() => {
+    if (!selectedCartItemId) return null;
+
+    const selectedCartItem = $userCart.currentCart?.items.find(
+      (item) => item.id === selectedCartItemId,
+    );
+    if (!selectedCartItem) return null;
+
+    const midterm = $userCart.exams?.find(
+      (e) => e.cartItemId === selectedCartItem?.id && e.type === 'MIDTERM',
+    );
+    const final = $userCart.exams?.find(
+      (e) => e.cartItemId === selectedCartItem?.id && e.type === 'FINAL',
+    );
+
+    const data: ViewCourseData = {
+      itemId: selectedCartItem.id,
+      courseNo: selectedCartItem.courseNo,
+      abbrName: selectedCartItem.course.abbrName,
+      courseNameTh: selectedCartItem.course.courseNameTh,
+      courseNameEn: selectedCartItem.course.courseNameEn,
+      credit: selectedCartItem.course.credit,
+      sections: selectedCartItem.sections.map((sec) => ({
+        sectionNo: sec.sectionNo,
+        closed: sec.closed,
+        regis: sec.regis,
+        max: sec.max,
+        classes: sec.classes.map((cls) => ({
+          type: cls.type,
+          dayOfWeek: cls.dayOfWeek,
+          periodStart: cls.periodStart,
+          periodEnd: cls.periodEnd,
+          building: cls.building,
+          room: cls.room,
+          professors: cls.professors,
+        })),
+      })),
+      selectedSectionNo: selectedCartItem.sectionNo,
+      color: (selectedCartItem.color as ColorVariant) ?? 'primary',
+      midterm: midterm
+        ? `${formatDate(new Date(midterm.start))} ${formatExamTime(new Date(midterm.start), (new Date(midterm.end).getTime() - new Date(midterm.start).getTime()) / (1000 * 60 * 60))}`
+        : undefined,
+      final: final
+        ? `${formatDate(new Date(final.start))} ${formatExamTime(new Date(final.start), (new Date(final.end).getTime() - new Date(final.start).getTime()) / (1000 * 60 * 60))}`
+        : undefined,
+      isHidden: selectedCartItem.hidden,
+    };
+
+    return data;
+  });
+
   const userCart = getUserCartStore();
-  const { renameCart, copyCart, deleteCart, createCart, pinCart } =
-    useCartActions();
+  const {
+    renameCart,
+    copyCart,
+    deleteCart,
+    createCart,
+    pinCart,
+    updateCourse,
+    removeCourse,
+  } = useCartActions();
 
   type LocalExamData = {
     abbrName: string;
@@ -299,7 +359,18 @@
     dim
     bind:show={showViewCourseModal}
   >
-    <ViewCourse onExit={() => (showViewCourseModal = false)} />
+    <ViewCourse
+      data={viewCourseData}
+      onExit={() => (showViewCourseModal = false)}
+      onHide={(itemId, hidden) => updateCourse(itemId, { hidden })}
+      onRemove={(itemId) => {
+        removeCourse(itemId);
+        showViewCourseModal = false;
+      }}
+      onChangeColor={(itemId, color) => updateCourse(itemId, { color })}
+      onChangeSection={(itemId, sectionNo) =>
+        updateCourse(itemId, { sectionNo })}
+    />
   </Modal>
 
   <Modal
@@ -335,12 +406,7 @@
         })) ?? []}
         bind:value={$userCart.currentCartId}
       />
-      {#if $userCart.currentCart}
-        <SelectedCourse class="border-b border-neutral-200" />
-      {:else}
-        <SelectedCourse class="border-b border-neutral-200" />
-      {/if}
-
+      <SelectedCourse class="border-b border-neutral-200" />
       <div
         class="border-tangerine-500 text-tangerine-700 m-5 items-center rounded-2xl border-2 p-5"
       >
@@ -416,19 +482,21 @@
         </div>
       </div>
 
-      <div class="mt-5 flex justify-center">
-        <Button
-          class="ring-0 outline-0 hover:bg-transparent!"
-          onclick={() => {
-            if (showExamSchedule === 'List') showExamSchedule = 'Schedule';
-            else showExamSchedule = 'List';
-          }}
-          variant="outlined"
-        >
-          <ChevronLeft />
-          {showExamSchedule}
-          <ChevronRight />
-        </Button>
+      <div class="mt-5 flex justify-center gap-4">
+        <ChevronLeft
+          onclick={() => (showExamSchedule = 'Schedule')}
+          strokeWidth={3}
+          class={showExamSchedule === 'Schedule'
+            ? 'cursor-pointer text-[#4A70C6] transition-colors hover:text-[#3B5EAB]'
+            : 'cursor-pointer text-[#D6D7E1] transition-colors hover:text-[#B0B2C5]'}
+        />
+        <ChevronRight
+          onclick={() => (showExamSchedule = 'List')}
+          strokeWidth={3}
+          class={showExamSchedule === 'List'
+            ? 'cursor-pointer text-[#4A70C6] transition-colors hover:text-[#3B5EAB]'
+            : 'cursor-pointer text-[#D6D7E1] transition-colors hover:text-[#B0B2C5]'}
+        />
       </div>
 
       {#if showExamSchedule === 'List'}
@@ -558,7 +626,10 @@
 {#snippet timetableCourseCard(course: CartItemDetail)}
   {#if !course.hidden}
     {@const courseNo = course.courseNo}
-    {#each course.sections.find((sec) => sec.sectionNo === course.sectionNo)?.classes ?? [] as period, i (i)}
+    {@const section = course.sections.find(
+      (sec) => sec.sectionNo === course.sectionNo,
+    )}
+    {#each section?.classes ?? [] as period, i (i)}
       {@const startTime = parsePeriodTime(period.periodStart)}
       {@const endTime = parsePeriodTime(period.periodEnd)}
       {@const color = isConflicted(courseNo, period)
@@ -567,7 +638,10 @@
 
       {#if !isNaN(startTime) && !isNaN(endTime)}
         <TimetableCourseCard
-          onclick={() => (showViewCourseModal = true)}
+          onclick={() => {
+            selectedCartItemId = course.id;
+            showViewCourseModal = true;
+          }}
           course={{
             abbrName: course.course.abbrName,
             name: course.course.courseNameEn,

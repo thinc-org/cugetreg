@@ -1,6 +1,7 @@
 .env
 
-# Temporary for Migration
-data
+# Temporary for Migration (courses.json stays local)
+data/*
+!data/scraper-status.json
 
 dist

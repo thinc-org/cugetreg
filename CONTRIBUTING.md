@@ -44,6 +44,23 @@ This image has 2 `section`s: 51 and 52. Each section has (mostly) one or more `s
 - Run `pnpm migrate` to apply to local postgresql instance
 - Run `pnpm seed` to seed the database
 
+### Scraper (v2)
+
+Course data can be populated by the Python scraper in `apps/reg-scraper-py` (Playwright + Receivers/Processors/Exporters architecture).
+
+```bash
+docker compose up -d postgres
+pnpm --filter @repo/database migrate
+
+cd apps/reg-scraper-py
+python -m venv .venv && source .venv/bin/activate  # Windows: .venv\Scripts\activate
+pip install -e . && playwright install chromium
+cp .env.example .env
+python -m reg_scraper scrape
+```
+
+See [apps/reg-scraper-py/README.md](../apps/reg-scraper-py/README.md) for full setup. After scraping, start the web app with `pnpm web:dev` and visit `/scraper` or `/api/courses`.
+
 ## Developing
 
 Most of the time, you will be working on core website `apps/web`, since it is a full-stack application, both frontend and backend logic are here.

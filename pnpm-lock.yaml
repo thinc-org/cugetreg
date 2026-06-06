@@ -49,6 +49,8 @@ importers:
         specifier: ^5.7.3
         version: 5.7.3
 
+  apps/reg-scraper-py: {}
+
   apps/storybook:
     dependencies:
       '@repo/ui':

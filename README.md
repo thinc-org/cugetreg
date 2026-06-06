@@ -44,6 +44,7 @@ This is a monorepo repository containing almost everything of cugetreg
 ### apps
 
 - apps/web - The main website (cugetreg.com), powered by Full Stack Framework SvelteKit
+- apps/reg-scraper-py - Python/Playwright course scraper (Receivers/Processors/Exporters)
 - apps/web-e2e - E2E test for apps/web (Coming Soon)
 
 ### packages

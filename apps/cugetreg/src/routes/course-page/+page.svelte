@@ -44,7 +44,7 @@
   let selectedYear = $state(years[0]);
   let selectedTerm = $state(terms[0]);
   let reviewRating = $state(1);
-  let textareaRef;
+  let textareaRef: HTMLTextAreaElement;
 
   let openPanel = $state<'sidebar' | 'description_only' | 'detail_only' | 'review_only' | 'selected_only' | null>(
     null,

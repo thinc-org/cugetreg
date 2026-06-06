@@ -107,9 +107,12 @@
     onLogin={handleGoogleLogin}
     onSignOut={handleGoogleLogout}
     isLoggedIn={Boolean($session.data)}
+    onSearchEnter={(query) => {
+      searchState.query = query;
+      goto('/');
+    }}
     name={$session.data?.user.name}
-    imageUrl={$session.data?.user.image ??
-      'https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg'}
+    imageUrl={$session.data?.user.image ?? 'https://...'}
   />
 
   {#if page.url.pathname === '/'}

@@ -8,8 +8,12 @@ export const GetUserReviewsQuerySchema = z.object({
   status: z.enum(reviewStatus),
 });
 
+export type GetUserReviewsQuery = z.infer<typeof GetUserReviewsQuerySchema>;
+
 export const UpdateUserInfoBodySchema = z.object({
   name: z.string().nonempty(),
   faculty: z.string().nonempty(),
   department: z.string().optional(),
 });
+
+export type UpdateUserInfoBody = z.infer<typeof UpdateUserInfoBodySchema>;

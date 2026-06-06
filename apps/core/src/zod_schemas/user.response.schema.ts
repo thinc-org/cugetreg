@@ -13,8 +13,6 @@ export const UserResponseSchema = z.object({
   updatedAt: z.iso.datetime(),
 });
 
-export type UserResponse = z.infer<typeof UserResponseSchema>;
-
 export const UserReviewResponseSchema = z.object({
   totalReviews: z.int().min(0),
   page: z.int().min(1),

@@ -1,5 +1,6 @@
 <script lang="ts">
   import SelectedCourse from '$lib/components/selected-course.svelte';
+  import { searchState } from '$lib/stores/search.svelte';
   import { getUserCartStore, useCartActions } from '$lib/stores/user-cart';
 
   import {
@@ -35,6 +36,9 @@
   let timetableSection = $state<HTMLElement>();
   let filterSection = $state<HTMLElement>();
   let selectedSection = $state<HTMLElement>();
+
+  // let scheduleList = $state(mockScheduleList);
+  // let activeSchedule = $state(untrack(() => scheduleList[0]));
 
   let searchQuery = $state('');
   let debouncedSearchQuery = $state('');
@@ -247,18 +251,6 @@
     fetchCourses();
   });
 
-  function handleSearch(e: Event) {
-    const target = e.target as HTMLInputElement;
-    if (!target) return;
-
-    searchQuery = target.value;
-
-    clearTimeout(searchTimeout);
-    searchTimeout = setTimeout(() => {
-      debouncedSearchQuery = searchQuery;
-    }, 250);
-  }
-
   $effect(() => {
     if (!bottomSentinel) return;
     const observer = new IntersectionObserver(
@@ -275,7 +267,7 @@
   });
 
   $effect(() => {
-    debouncedSearchQuery;
+    searchState.debounced;
     selectedGenEds;
     selectedFaculties;
     selectedDays;
@@ -373,8 +365,8 @@
   let filteredCourses = $derived.by(() => {
     let result = courses;
 
-    if (debouncedSearchQuery.trim() !== '') {
-      const q = debouncedSearchQuery.toLowerCase().trim();
+    if (searchState.debounced.trim() !== '') {
+      const q = searchState.debounced.toLowerCase().trim();
       result = result.filter((item) => {
         if (item.searchString) return item.searchString.includes(q);
         const c = item.course;
@@ -565,8 +557,10 @@
                   <div class="flex flex-1 flex-col gap-1">
                     <span class="ml-1 text-xs text-gray-400">ค้นหา...</span>
                     <Input
-                      value={searchQuery}
-                      oninput={handleSearch}
+                      bind:value={searchState.query}
+                      onkeydown={(e: KeyboardEvent) => {
+                        if (e.key === 'Enter') e.preventDefault();
+                      }}
                       placeholder="พิมพ์ชื่อวิชา รหัสวิชา หรือคำค้นหาอื่นๆ..."
                       class="h-12 w-full rounded-xl border-none bg-[#F1F3F7] px-6 text-lg font-medium focus:ring-2 focus:ring-blue-500"
                     />

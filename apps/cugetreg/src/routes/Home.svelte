@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { useSession } from '$lib/auth-client';
   import SelectedCourse from '$lib/components/selected-course.svelte';
   import { searchState } from '$lib/stores/search.svelte';
   import { getUserCartStore, useCartActions } from '$lib/stores/user-cart';
@@ -64,6 +65,8 @@
   let sortDirection = $state<'asc' | 'desc'>('asc');
 
   let bottomSentinel = $state<HTMLElement | null>(null);
+
+  const session = useSession();
 
   const programOptions = ['ทวิภาค', 'ตรีภาค', 'นานาชาติ'];
   const semesterOptions = [
@@ -690,17 +693,19 @@
                 <Filter size="24" strokeWidth={2.5} />
               </Sidebar.MenuButton>
             </Sidebar.MenuItem>
-            <Sidebar.MenuItem>
-              <Sidebar.MenuButton
-                onclick={() => togglePanel('selected_only')}
-                isActive={activePanel === 'selected_only'}
-                size="lg"
-                tooltipContent="วิชาที่เลือก"
-                class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-6!"
-              >
-                <BookMarked size="24" strokeWidth={2.5} />
-              </Sidebar.MenuButton>
-            </Sidebar.MenuItem>
+            {#if $session.data}
+              <Sidebar.MenuItem>
+                <Sidebar.MenuButton
+                  onclick={() => togglePanel('selected_only')}
+                  isActive={activePanel === 'selected_only'}
+                  size="lg"
+                  tooltipContent="วิชาที่เลือก"
+                  class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-6!"
+                >
+                  <BookMarked size="24" strokeWidth={2.5} />
+                </Sidebar.MenuButton>
+              </Sidebar.MenuItem>
+            {/if}
           </Sidebar.Menu>
         </Sidebar.GroupContent>
       </Sidebar.Group>
@@ -719,7 +724,7 @@
           class="bg-surface flex flex-1 flex-col overflow-hidden group-data-[state=collapsed]:absolute group-data-[state=collapsed]:top-4 group-data-[state=collapsed]:left-[calc(var(--sidebar-width-icon)+1rem)] group-data-[state=collapsed]:z-50 group-data-[state=collapsed]:max-h-[min(800px,calc(100%-2rem))] group-data-[state=collapsed]:w-[400px] group-data-[state=collapsed]:rounded-3xl group-data-[state=collapsed]:border group-data-[state=collapsed]:shadow-2xl md:px-8 md:pt-0 md:pb-8"
         >
           <div class="flex-1 overflow-y-auto pr-6 pb-10 md:pr-8">
-            {#if sidebarExpanded || openPanel === 'sidebar'}
+            {#if (sidebarExpanded || openPanel === 'sidebar') && $session.data}
               <div
                 bind:this={timetableSection}
                 class="relative mb-6 flex flex-col gap-2"
@@ -731,9 +736,9 @@
                     id: item.id,
                   })) ?? []}
                   bind:value={$userCart.currentCartId}
-                  semester={$userCart.currentCart.semester}
-                  semesterType={$userCart.currentCart.studyProgram}
-                  academicYear={$userCart.currentCart.academicYear}
+                  semester={$userCart.currentCart.semester ?? 'FIRST'}
+                  semesterType={$userCart.currentCart.studyProgram ?? 'S'}
+                  academicYear={$userCart.currentCart.academicYear ?? 2566}
                 />
               </div>
               <hr class="mb-6 opacity-50" />
@@ -777,7 +782,7 @@
               </div>
             {/if}
 
-            {#if sidebarExpanded || openPanel === 'selected_only'}
+            {#if (sidebarExpanded || openPanel === 'selected_only') && $session.data}
               <div bind:this={selectedSection}>
                 {#if $userCart.currentCart}
                   <SelectedCourse

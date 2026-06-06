@@ -239,6 +239,7 @@
   const { data }: PageProps = $props();
   const course = $derived(data.course);
 
+  // TODO: Connect with Auth
   const isLoggedIn = false;
 
   const userCart = getUserCartStore();

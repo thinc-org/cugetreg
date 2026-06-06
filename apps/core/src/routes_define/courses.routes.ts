@@ -3,6 +3,7 @@ import { createRoute } from "@hono/zod-openapi";
 import { InternalError } from "./errorRes.js";
 
 import * as CourseSchema from "../zod_schemas/courses.schema.js";
+
 //1.1get courses
 export const getCoursesRoute = createRoute({
   method: "get",

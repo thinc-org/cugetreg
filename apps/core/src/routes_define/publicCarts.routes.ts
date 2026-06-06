@@ -1,6 +1,6 @@
 import { createRoute, z } from "@hono/zod-openapi";
 
-import { errorRes, InternalError } from "./carts.routes.js";
+import { errorRes, InternalError } from "./errorRes.js";
 
 import {
   ImportPublicCartResponseSchema,

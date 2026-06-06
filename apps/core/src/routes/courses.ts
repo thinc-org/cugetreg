@@ -90,12 +90,36 @@ courses
       let orderBySql = Prisma.empty;
       const order = sortOrder === "asc" ? Prisma.sql`ASC` : Prisma.sql`DESC`;
       if (sortBy === "NAME") {
-        orderBySql = Prisma.sql`ORDER BY ci.abbr_name ${order}, ci.course_name_en ${order}`;
+        orderBySql = Prisma.sql`ORDER BY ci.abbr_name ${order}, ci.course_name_en ${order}, c.course_no ASC`;
       } else if (sortBy === "CAPACITY_SUM") {
-        orderBySql = Prisma.sql`ORDER BY "capacitySum" ${order}`;
+        orderBySql = Prisma.sql`ORDER BY "capacitySum" ${order}, c.course_no ASC`;
       } else {
-        orderBySql = Prisma.sql`ORDER BY "remainingSum" ${order}`;
+        orderBySql = Prisma.sql`ORDER BY "remainingSum" ${order}, c.course_no ASC`;
       }
+
+      const totalResult = await prisma.$queryRaw<any[]>(Prisma.sql`
+        SELECT COUNT(DISTINCT c.id)::int as total
+        FROM course c
+        JOIN course_info ci ON c.course_no = ci.course_no
+        JOIN course_section s ON s.course_id = c.id
+        WHERE c.study_program = ${sqlStudyProgram}::study_program
+          AND c.academic_year = ${academicYear}
+          AND c.semester = ${sqlSemester}::semester
+          ${sqlGenEd ? Prisma.sql`AND c.gen_ed_type = ${sqlGenEd}::gen_ed_type` : Prisma.empty}
+          ${faculty ? Prisma.sql`AND ci.faculty = ${faculty}` : Prisma.empty}
+          ${sqlGrading ? Prisma.sql`AND ci.grading_type = ${sqlGrading}::grading_type` : Prisma.empty}
+          ${noPrereq ? Prisma.sql`AND (c.course_condition IS NULL OR c.course_condition = '' OR c.course_condition = '-')` : Prisma.empty}
+          AND (
+            ${!q ? Prisma.sql`TRUE` : Prisma.empty}
+            ${q ? Prisma.sql`(ci.course_no ILIKE ${searchPattern} OR ci.abbr_name ILIKE ${searchPattern} OR ci.course_name_en ILIKE ${searchPattern} OR ci.course_name_th ILIKE ${searchPattern} OR EXISTS (SELECT 1 FROM course_class cc WHERE cc.section_id = s.id AND cc.professors::text ILIKE ${searchPattern}))` : Prisma.empty}
+          )
+          AND (
+            ${!day && !timeStart && !timeEnd ? Prisma.sql`TRUE` : Prisma.empty}
+            ${day || timeStart || timeEnd ? Prisma.sql`EXISTS (SELECT 1 FROM course_class cc WHERE cc.section_id = s.id ${day ? Prisma.sql`AND cc.day_of_week = ${sqlDay}::day_of_week` : Prisma.empty} ${timeStart ? Prisma.sql`AND cc.period_start >= ${timeStart}` : Prisma.empty} ${timeEnd ? Prisma.sql`AND cc.period_end <= ${timeEnd}` : Prisma.empty})` : Prisma.empty}
+          )
+          ${occupiedSql}
+      `);
+      const total = totalResult[0]?.total || 0;
 
       // Step 1: Raw SQL to get filtered and sorted IDs
       const rawResults = await prisma.$queryRaw<any[]>(Prisma.sql`
@@ -182,6 +206,7 @@ courses
               midtermEnd: course.midtermEnd?.toISOString() || null,
               finalStart: course.finalStart?.toISOString() || null,
               finalEnd: course.finalEnd?.toISOString() || null,
+              sections: course.sections,
             },
             courseInfo: {
               courseNo: course.courseInfo.courseNo,
@@ -215,7 +240,7 @@ courses
         return indexA - indexB;
       });
 
-      return c.json({ data: result }, 200);
+      return c.json({ data: result, total }, 200);
     } catch (err) {
       console.error("Fetch Courses Error:", err);
       return c.json({ error: "INTERNAL_SERVER_ERROR" }, 500);

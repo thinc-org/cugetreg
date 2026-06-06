@@ -44,6 +44,7 @@ const courseSchema = z.object({
   midtermEnd: z.string().datetime().nullable(),
   finalStart: z.string().datetime().nullable(),
   finalEnd: z.string().datetime().nullable(),
+  sections: z.any().array().optional(),
 });
 
 // 2. Sub-schema for the 'courseInfo' object

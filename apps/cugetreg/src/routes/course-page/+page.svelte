@@ -23,7 +23,8 @@
 
   import { Button } from '@cugetreg/ui/atoms/button';
   import { GenedChip } from '@cugetreg/ui/atoms/gened-chip';
-  import { StudyProgramChip } from '@cugetreg/ui/atoms/studyprogram-ship';
+  import { StudyProgramChip } from '@cugetreg/ui/atoms/studyprogram-chip';
+  import { YearSemesterChip } from '@cugetreg/ui/atoms/yearsemester-chip';
   import { Comment } from '@cugetreg/ui/molecules/comment';
   import { SectionTable } from '@cugetreg/ui/molecules/section-table';
   import * as Select from '@cugetreg/ui/molecules/select';
@@ -271,6 +272,7 @@
                 </div>
                 <div class="flex flex-wrap items-center gap-3 py-2">
                   <StudyProgramChip type="I" class="px-3 py-1 text-xs" />
+                  <YearSemesterChip year={2566} semester="FIRST" class="px-3 py-1 text-xs" />
                 </div>
                 <p class="text-on-surface mt-2 text-sm font-semibold">
                   การลดความขัดแย้ง การเปลี่ยนความขัดแย้งและกระบวนการสันติภาพ

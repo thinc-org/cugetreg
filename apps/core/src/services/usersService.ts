@@ -42,7 +42,6 @@ export const usersService = {
     return prisma.review.findMany({
       omit: {
         userId: true,
-        rejectionReason: true,
         updatedAt: true,
       },
       where: {

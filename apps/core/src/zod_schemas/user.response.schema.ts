@@ -24,6 +24,7 @@ export const UserReviewResponseSchema = z.object({
       studyProgram: z.enum(studyProgram),
       academicYear: z.int().min(2564),
       semester: z.enum(semester),
+      rejectionReason: z.string().nullable(),
       rating: z.int().min(1).max(10),
       content: z.string().nonempty(),
       status: z.enum(reviewStatus),

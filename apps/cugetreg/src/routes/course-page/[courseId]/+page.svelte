@@ -1,26 +1,27 @@
 <script lang="ts">
+  import SelectedCourse from '$lib/components/selected-course.svelte';
   import { faculties } from '$lib/constants';
   import { getUserCartStore, useCartActions } from '$lib/stores/user-cart';
 
   import {
     AlertTriangle,
     Bold,
+    Book,
+    BookMarked,
     Check,
     Code,
     Heading,
     Italic,
+    Menu,
+    MessageCircleQuestionIcon,
     NotebookPen,
+    Pencil,
     Quote,
     Send,
     Star,
+    StickyNote,
     Strikethrough,
     Underline,
-    Menu,
-    BookMarked,
-    Book,
-    StickyNote,
-    MessageCircleQuestionIcon,
-    Pencil,
   } from '@lucide/svelte';
   import { untrack } from 'svelte';
 
@@ -36,11 +37,10 @@
     type SectionTableData,
   } from '@cugetreg/ui/molecules/section-table';
   import * as Select from '@cugetreg/ui/molecules/select';
-  import { Footer } from '@cugetreg/ui/organisms/footer';
-  import type { GenEdType } from '@cugetreg/utils/types';
-  import * as Sidebar from '@cugetreg/ui/organisms/sidebar';
   import { SelectTimetable } from '@cugetreg/ui/molecules/select-timetable';
-  import SelectedCourse from '$lib/components/selected-course.svelte';
+  import { Footer } from '@cugetreg/ui/organisms/footer';
+  import * as Sidebar from '@cugetreg/ui/organisms/sidebar';
+  import type { GenEdType } from '@cugetreg/utils/types';
 
   import type { PageProps } from './$types';
 
@@ -50,12 +50,22 @@
   let selectedTerm = $state(terms[0]);
   let reviewRating = $state(1);
 
-  let openPanel = $state<'sidebar' | 'description_only' | 'detail_only' | 'review_only' | 'selected_only' | null>(
-    null,
-  );
-  let activePanel = $state<'sidebar' | 'description_only' | 'detail_only' | 'review_only' | 'selected_only' | null>(
-    null,
-  );
+  let openPanel = $state<
+    | 'sidebar'
+    | 'description_only'
+    | 'detail_only'
+    | 'review_only'
+    | 'selected_only'
+    | null
+  >(null);
+  let activePanel = $state<
+    | 'sidebar'
+    | 'description_only'
+    | 'detail_only'
+    | 'review_only'
+    | 'selected_only'
+    | null
+  >(null);
   let sidebarExpanded = $state(true);
 
   let timetableSection = $state<HTMLElement>();
@@ -92,7 +102,7 @@
 
   function togglePanel(type: typeof openPanel) {
     if (type === 'sidebar' || type === 'selected_only') {
-      if(sidebarExpanded) scrollToSection(timetableSection);
+      if (sidebarExpanded) scrollToSection(timetableSection);
       else {
         if (openPanel === type) {
           openPanel = null;
@@ -113,7 +123,7 @@
     if (!el) return;
     el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
-  
+
   const _reviewSamples = [
     {
       rating: 4,
@@ -306,7 +316,9 @@
     >
       {@render SidebarComponent()}
       <Sidebar.Inset>
-        <main class="h-full min-w-0 flex-1 overflow-y-auto scroll-smooth bg-white">
+        <main
+          class="h-full min-w-0 flex-1 overflow-y-auto scroll-smooth bg-white"
+        >
           <div class="flex min-h-full flex-col">
             <div class="px-6 py-6">
               <section class="text-on-surface mx-auto w-full max-w-5xl">
@@ -323,8 +335,15 @@
                   {/if}
                 </div>
                 <div class="flex flex-wrap items-center gap-3 py-2">
-                  <StudyProgramChip type={course.studyProgram as 'S' | 'I' | 'T'} class="px-3 py-1 text-xs" />
-                  <YearSemesterChip year={course.academicYear} semester={course.semester as 'FIRST' | 'SECOND' | 'SUMMER'} class="px-3 py-1 text-xs" />
+                  <StudyProgramChip
+                    type={course.studyProgram as 'S' | 'I' | 'T'}
+                    class="px-3 py-1 text-xs"
+                  />
+                  <YearSemesterChip
+                    year={course.academicYear}
+                    semester={course.semester as 'FIRST' | 'SECOND' | 'SUMMER'}
+                    class="px-3 py-1 text-xs"
+                  />
                 </div>
                 <p class="text-on-surface mt-2 text-sm font-semibold">
                   {course.courseInfo.courseNameTh}
@@ -332,7 +351,9 @@
                 <p class="text-on-surface text-sm font-semibold">
                   {course.courseInfo.courseNameEn}
                 </p>
-                <div class="mt-5 flex items-start gap-2 bg-amber-50 px-3 py-2 text-xs">
+                <div
+                  class="mt-5 flex items-start gap-2 bg-amber-50 px-3 py-2 text-xs"
+                >
                   <AlertTriangle size={16} class="mt-0.5 text-amber-900" />
                   <span class="font-sarabun text-neutral-900">
                     ข้อมูลคำอธิบายรายวิชาที่แสดงไม่ได้เป็นข้อมูลล่าสุด
@@ -340,16 +361,23 @@
                   </span>
                 </div>
               </section>
-              <section class="text-on-surface mx-auto mt-6 w-full max-w-5xl" bind:this={descriptionSection}>
+              <section
+                class="text-on-surface mx-auto mt-6 w-full max-w-5xl"
+                bind:this={descriptionSection}
+              >
                 <div class="grid gap-6 md:grid-cols-2 md:gap-0">
                   <div class="md:col-span-2">
                     <div
                       class="bg-surface-container-lowest grid rounded-full md:grid-cols-2"
                     >
-                      <p class="text-primary px-4 py-1 text-left text-sm font-medium">
+                      <p
+                        class="text-primary px-4 py-1 text-left text-sm font-medium"
+                      >
                         คำอธิบายรายวิชา (ภาษาไทย)
                       </p>
-                      <p class="text-primary px-4 py-1 text-left text-sm font-medium">
+                      <p
+                        class="text-primary px-4 py-1 text-left text-sm font-medium"
+                      >
                         คำอธิบายรายวิชา (ภาษาอังกฤษ)
                       </p>
                     </div>
@@ -371,10 +399,14 @@
                     <div
                       class="bg-surface-container-lowest grid rounded-full md:grid-cols-2"
                     >
-                      <p class="text-primary px-4 py-1 text-left text-sm font-medium">
+                      <p
+                        class="text-primary px-4 py-1 text-left text-sm font-medium"
+                      >
                         คณะ
                       </p>
-                      <p class="text-primary px-4 py-1 text-left text-sm font-medium">
+                      <p
+                        class="text-primary px-4 py-1 text-left text-sm font-medium"
+                      >
                         ภาควิชา/กลุ่มวิชา/สาขาวิชา
                       </p>
                     </div>
@@ -396,10 +428,14 @@
                     <div
                       class="bg-surface-container-lowest grid rounded-full md:grid-cols-2"
                     >
-                      <p class="text-primary px-4 py-1 text-left text-sm font-medium">
+                      <p
+                        class="text-primary px-4 py-1 text-left text-sm font-medium"
+                      >
                         รูปแบบรายวิชา
                       </p>
-                      <p class="text-primary px-4 py-1 text-left text-sm font-medium">
+                      <p
+                        class="text-primary px-4 py-1 text-left text-sm font-medium"
+                      >
                         หน่วยกิต
                       </p>
                     </div>
@@ -421,16 +457,22 @@
                     <div
                       class="bg-surface-container-lowest grid rounded-full md:grid-cols-2"
                     >
-                      <p class="text-primary px-4 py-1 text-left text-sm font-medium">
+                      <p
+                        class="text-primary px-4 py-1 text-left text-sm font-medium"
+                      >
                         เงื่อนไขรายวิชา
                       </p>
-                      <p class="text-primary px-4 py-1 text-left text-sm font-medium">
+                      <p
+                        class="text-primary px-4 py-1 text-left text-sm font-medium"
+                      >
                         วิธีการวัดผล
                       </p>
                     </div>
                   </div>
                   <div>
-                    <p class="text-on-surface font-sarabun mt-3 px-4 text-sm">-</p>
+                    <p class="text-on-surface font-sarabun mt-3 px-4 text-sm">
+                      -
+                    </p>
                   </div>
                   <div>
                     <p class="text-on-surface font-sarabun mt-3 px-4 text-sm">
@@ -444,10 +486,14 @@
                     <div
                       class="bg-surface-container-lowest grid rounded-full md:grid-cols-2"
                     >
-                      <p class="text-primary px-4 py-1 text-left text-sm font-medium">
+                      <p
+                        class="text-primary px-4 py-1 text-left text-sm font-medium"
+                      >
                         สอบกลางภาค
                       </p>
-                      <p class="text-primary px-4 py-1 text-left text-sm font-medium">
+                      <p
+                        class="text-primary px-4 py-1 text-left text-sm font-medium"
+                      >
                         สอบปลายภาค
                       </p>
                     </div>
@@ -464,8 +510,13 @@
                   </div>
                 </div>
               </section>
-              <section class="text-on-surface mx-auto mt-8 w-full max-w-5xl" bind:this={detailSection}>
-                <h2 class="text-on-surface text-lg font-semibold">รายละเอียดเซคชัน</h2>
+              <section
+                class="text-on-surface mx-auto mt-8 w-full max-w-5xl"
+                bind:this={detailSection}
+              >
+                <h2 class="text-on-surface text-lg font-semibold">
+                  รายละเอียดเซคชัน
+                </h2>
                 <Accordion.Root
                   type="multiple"
                   value={Object.keys(sectionGroups)}
@@ -493,7 +544,9 @@
                             selectedSection={globalSelectedSection}
                             onSelectSection={(section) => {
                               globalSelectedSection =
-                                globalSelectedSection === section ? null : section;
+                                globalSelectedSection === section
+                                  ? null
+                                  : section;
                             }}
                           />
                         </div>
@@ -504,7 +557,10 @@
               </section>
 
               {#if isLoggedIn}
-                <section class="text-on-surface mx-auto mt-10 w-full max-w-5xl" bind:this={reviewSection}>
+                <section
+                  class="text-on-surface mx-auto mt-10 w-full max-w-5xl"
+                  bind:this={reviewSection}
+                >
                   <div class="flex items-center justify-between">
                     <h2 class="text-on-surface text-lg font-semibold">
                       เขียนรีวิวรายวิชา
@@ -554,8 +610,13 @@
                           {#if getStarState(value) === 'half'}
                             <span class="relative inline-flex">
                               <Star size={26} class="text-[#D6D7E1]" />
-                              <span class="absolute inset-0 w-1/2 overflow-hidden">
-                                <Star size={26} class="text-primary fill-current" />
+                              <span
+                                class="absolute inset-0 w-1/2 overflow-hidden"
+                              >
+                                <Star
+                                  size={26}
+                                  class="text-primary fill-current"
+                                />
                               </span>
                             </span>
                           {:else}
@@ -609,7 +670,9 @@
                 <div class="flex items-center justify-between gap-4">
                   <div class="text-lg font-semibold">
                     <span class="text-on-surface/60">ทั้งหมด </span>
-                    <span class="text-primary">{filteredReviews.length} รีวิว</span>
+                    <span class="text-primary"
+                      >{filteredReviews.length} รีวิว</span
+                    >
                   </div>
                   <div class="flex flex-nowrap items-center gap-3">
                     <Select.Root type="single" bind:value={selectedReviewYear}>
@@ -654,7 +717,11 @@
                   <div
                     class="mt-12 flex flex-col items-center justify-center gap-4 py-12 text-center"
                   >
-                    <NotebookPen size={140} strokeWidth={2.2} class="text-[#4A70C6]" />
+                    <NotebookPen
+                      size={140}
+                      strokeWidth={2.2}
+                      class="text-[#4A70C6]"
+                    />
                     <div class="text-on-surface text-lg font-semibold">
                       เริ่มแบ่งปันเป็นคนแรก
                     </div>
@@ -677,12 +744,16 @@
                     {/each}
                   </div>
                   <div class="mt-6 flex justify-end">
-                    <nav class="flex items-center gap-2" aria-label="Pagination">
+                    <nav
+                      class="flex items-center gap-2"
+                      aria-label="Pagination"
+                    >
                       <button
                         class="border-surface-container-high bg-surface text-on-surface flex h-9 w-9 items-center justify-center rounded-lg border"
                         type="button"
                         aria-label="Previous page"
-                        onclick={() => (reviewsPage = Math.max(1, reviewsPage - 1))}
+                        onclick={() =>
+                          (reviewsPage = Math.max(1, reviewsPage - 1))}
                       >
                         ‹
                       </button>
@@ -704,7 +775,9 @@
                                 : 'border-surface-container-high text-on-surface'
                             }`}
                             type="button"
-                            aria-current={reviewsPage === item ? 'page' : undefined}
+                            aria-current={reviewsPage === item
+                              ? 'page'
+                              : undefined}
                             onclick={() => (reviewsPage = item)}
                           >
                             {item}
@@ -716,7 +789,10 @@
                         type="button"
                         aria-label="Next page"
                         onclick={() =>
-                          (reviewsPage = Math.min(totalReviewPages, reviewsPage + 1))}
+                          (reviewsPage = Math.min(
+                            totalReviewPages,
+                            reviewsPage + 1,
+                          ))}
                       >
                         ›
                       </button>
@@ -842,10 +918,10 @@
             {/if}
 
             {#if sidebarExpanded}
-              <div class="mb-6 flex flex-col text-on-surface">
+              <div class="text-on-surface mb-6 flex flex-col">
                 <button
                   type="button"
-                  class="w-full border-b border-gray-400 py-4 text-left text-[20px] font-semibold transition-colors hover:text-primary"
+                  class="hover:text-primary w-full border-b border-gray-400 py-4 text-left text-[20px] font-semibold transition-colors"
                   onclick={() => scrollToSection(descriptionSection)}
                 >
                   คำอธิบายรายวิชา
@@ -853,24 +929,26 @@
 
                 <button
                   type="button"
-                  class="w-full border-b border-gray-400 py-4 text-left text-[20px] font-semibold transition-colors hover:text-primary"
+                  class="hover:text-primary w-full border-b border-gray-400 py-4 text-left text-[20px] font-semibold transition-colors"
                   onclick={() => scrollToSection(detailSection)}
                 >
                   รายละเอียดเซคชัน
                 </button>
 
-                <div class="flex w-full items-center justify-between border-b border-gray-400 py-3.5">
+                <div
+                  class="flex w-full items-center justify-between border-b border-gray-400 py-3.5"
+                >
                   <button
                     type="button"
-                    class="text-left text-[20px] font-semibold transition-colors hover:text-primary"
+                    class="hover:text-primary text-left text-[20px] font-semibold transition-colors"
                     onclick={() => scrollToSection(reviewSection)}
                   >
-                    รีวิวรายวิชา 
-                    <span class="ml-1 text-sm font-normal text-on-surface/50">
+                    รีวิวรายวิชา
+                    <span class="text-on-surface/50 ml-1 text-sm font-normal">
                       ({filteredReviews.length} รีวิว)
                     </span>
                   </button>
-                  
+
                   <button
                     type="button"
                     class="flex items-center gap-1.5 rounded-xl bg-[#E9EEF6] px-3.5 py-1.5 text-sm font-medium text-[#004494] transition-all hover:bg-[#D2E0F5]"

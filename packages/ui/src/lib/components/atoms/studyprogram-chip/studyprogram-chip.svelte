@@ -1,35 +1,37 @@
 <script lang="ts">
-    import { cn } from '@cugetreg/utils';
-    import { chipVariants } from './index.js';
-    import { Chip } from '../chip/index.js';
+	import { cn } from '@cugetreg/utils';
 
-    type Type = 'S' | 'I' | 'T';
+	import { chipVariants } from './index.js';
 
-    interface Props {
-        class?: string | undefined | null;
-        type: Type;
-        closable?: boolean;
-        onClose?: () => void;
-        [key: string]: unknown;
-    }
+	import { Chip } from '../chip/index.js';
 
-    let {
-        class: className = undefined,
-        type,
-        closable = false,
-        onClose = () => {},
-        ...rest
-    }: Props = $props();
+	type Type = 'S' | 'I' | 'T';
 
-    const label = {
-        S: 'ทวิภาค',
-        I: 'นานาชาติ',
-        T: 'ตรีภาค'
-    };
+	interface Props {
+		class?: string | undefined | null;
+		type: Type;
+		closable?: boolean;
+		onClose?: () => void;
+		[key: string]: unknown;
+	}
+
+	let {
+		class: className = undefined,
+		type,
+		closable = false,
+		onClose = () => {},
+		...rest
+	}: Props = $props();
+
+	const label = {
+		S: 'ทวิภาค',
+		I: 'นานาชาติ',
+		T: 'ตรีภาค'
+	};
 </script>
 
 <Chip class={cn(chipVariants({ className }))} {closable} {onClose} {...rest}>
-    {#if type}
-        {label[type]}
-    {/if}
+	{#if type}
+		{label[type]}
+	{/if}
 </Chip>

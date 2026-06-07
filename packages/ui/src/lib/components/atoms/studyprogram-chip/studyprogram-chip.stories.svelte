@@ -1,30 +1,31 @@
 <script module lang="ts">
-    import { defineMeta } from '@storybook/addon-svelte-csf';
-    import { StudyProgramChip } from './index.js';
+	import { defineMeta } from '@storybook/addon-svelte-csf';
 
-    const { Story } = defineMeta({
-        title: 'Atom/StudyProgram Chip',
-        component: StudyProgramChip,
-        tags: ['autodocs'],
-        argTypes: {
-            type: {
-                control: {
-                    type: 'select'
-                },
-                options: ['S', 'I', 'T'],
-                defaultValue: 'S'
-            },
-            closable: {
-                control: 'boolean'
-            },
-            onClose: {
-                action: 'onClose'
-            },
-            class: {
-                control: false
-            }
-        }
-    });
+	import { StudyProgramChip } from './index.js';
+
+	const { Story } = defineMeta({
+		title: 'Atom/StudyProgram Chip',
+		component: StudyProgramChip,
+		tags: ['autodocs'],
+		argTypes: {
+			type: {
+				control: {
+					type: 'select'
+				},
+				options: ['S', 'I', 'T'],
+				defaultValue: 'S'
+			},
+			closable: {
+				control: 'boolean'
+			},
+			onClose: {
+				action: 'onClose'
+			},
+			class: {
+				control: false
+			}
+		}
+	});
 </script>
 
 <Story name="Semester (S)" args={{ type: 'S', closable: false }} />

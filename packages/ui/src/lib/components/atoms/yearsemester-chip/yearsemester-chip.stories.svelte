@@ -1,34 +1,35 @@
 <script module lang="ts">
-    import { defineMeta } from '@storybook/addon-svelte-csf';
-    import { YearSemesterChip } from './index.js';
+	import { defineMeta } from '@storybook/addon-svelte-csf';
 
-    const { Story } = defineMeta({
-        title: 'Atom/YearSemester Chip',
-        component: YearSemesterChip,
-        tags: ['autodocs'],
-        argTypes: {
-            year: {
-                control: 'number',
-                defaultValue: 2566
-            },
-            semester: {
-                control: {
-                    type: 'select'
-                },
-                options: ['FIRST', 'SECOND', 'SUMMER'],
-                defaultValue: 'FIRST'
-            },
-            closable: {
-                control: 'boolean'
-            },
-            onClose: {
-                action: 'onClose'
-            },
-            class: {
-                control: false
-            }
-        }
-    });
+	import { YearSemesterChip } from './index.js';
+
+	const { Story } = defineMeta({
+		title: 'Atom/YearSemester Chip',
+		component: YearSemesterChip,
+		tags: ['autodocs'],
+		argTypes: {
+			year: {
+				control: 'number',
+				defaultValue: 2566
+			},
+			semester: {
+				control: {
+					type: 'select'
+				},
+				options: ['FIRST', 'SECOND', 'SUMMER'],
+				defaultValue: 'FIRST'
+			},
+			closable: {
+				control: 'boolean'
+			},
+			onClose: {
+				action: 'onClose'
+			},
+			class: {
+				control: false
+			}
+		}
+	});
 </script>
 
 <Story name="FIRST" args={{ year: 2569, semester: 'FIRST', closable: false }} />

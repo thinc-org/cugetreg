@@ -1,5 +1,11 @@
 # api
 
+## 1.13.1
+
+### Patch Changes
+
+- 25a3e33: Fix Docker builds by using Corepack to respect the pinned pnpm version.
+
 ## 1.13.1-beta.0
 
 ### Patch Changes

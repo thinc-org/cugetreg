@@ -46,6 +46,7 @@
   import type { GenEdType } from '@cugetreg/utils/types';
 
   import type { PageProps } from './$types';
+  import { useSession } from '$lib/auth-client';
 
   const years = ['2566', '2565', '2564'];
   const terms = ['ภาคต้น', 'ภาคปลาย'];
@@ -271,8 +272,7 @@
   const { data }: PageProps = $props();
   const course = $derived(data.course);
 
-  // TODO: Connect with Auth
-  const isLoggedIn = false;
+  const session = useSession();
 
   const userCart = getUserCartStore();
   const { addCourse, removeCourse } = useCartActions();
@@ -578,7 +578,7 @@
                 </Accordion.Root>
               </section>
 
-              {#if isLoggedIn}
+              {#if $session.data}
                 <section
                   class="text-on-surface mx-auto mt-10 w-full max-w-5xl"
                   bind:this={reviewSection}

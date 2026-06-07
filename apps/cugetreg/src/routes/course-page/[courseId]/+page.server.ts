@@ -42,8 +42,9 @@ export const load: PageServerLoad = async ({ params, url }) => {
     throw svelteError(404, 'Course not found');
   }
 
-  const course = CourseNoResponseSchema.parse(response.data);
+  const { course, reviews } = CourseNoResponseSchema.parse(response.data);
   return {
     course,
+    reviews,
   };
 };

@@ -28,7 +28,6 @@ export const getCourseQuerySchema = z.object({
   assessment: z.enum(assessment).optional(),
   sortBy: z.enum(sortBy).optional(),
   sortOrder: z.enum(sortOrder).optional(),
-  offset: z.coerce.number().int().optional(),
   limit: z.coerce.number().int().optional(),
   offset: z.coerce.number().int().optional(),
 });

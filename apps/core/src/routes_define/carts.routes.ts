@@ -7,14 +7,14 @@ import {
   ListCartsResponseSchema,
   SingleCartItemResponseSchema,
   SingleCartResponseSchema,
-} from "../zod_schemas/carts.response.schema.js";
+} from "@cugetreg/zod-schemas/carts-response";
 import {
   AddCourseBodySchema,
   CreateCartBodySchema,
   ListCartsQuerySchema,
   UpdateCartBodySchema,
   UpdateCourseBodySchema,
-} from "../zod_schemas/carts.schema.js";
+} from "@cugetreg/zod-schemas/carts";
 
 // 3.1 List
 export const listCartsRoute = createRoute({

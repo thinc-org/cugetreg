@@ -5,7 +5,7 @@ import { errorRes, InternalError } from "./errorRes.js";
 import {
   ImportPublicCartResponseSchema,
   PublicCartDetailResponseSchema,
-} from "../zod_schemas/publicCarts.response.schema.js";
+} from "@cugetreg/zod-schemas/public-carts-response";
 
 export const getPublicCartDetailRoute = createRoute({
   method: "get",

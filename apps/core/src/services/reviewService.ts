@@ -11,7 +11,7 @@ import type {
   EditReviewBodySchema,
   SubmitReviewBodySchema,
   VoteReviewBodySchema,
-} from "../zod_schemas/reviews.schema.js";
+} from "@cugetreg/zod-schemas/reviews";
 
 const semesterToNumber: Record<string, string> = {
   FIRST: "1",

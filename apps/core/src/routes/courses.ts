@@ -16,7 +16,7 @@ import {
 import type {
   CourseNoResponse,
   CourseReview,
-} from "../zod_schemas/courses.response.schema.js";
+} from "@cugetreg/zod-schemas/courses-response";
 
 // API accepts numeric semester (1/2/3); DB stores enum strings (FIRST/SECOND/SUMMER)
 const semesterMap: Record<number, "FIRST" | "SECOND" | "SUMMER"> = {

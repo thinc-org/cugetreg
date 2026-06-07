@@ -1,6 +1,5 @@
 import z from "zod";
 
-import { genEdType } from "./constants";
 export const CartSchema = z.object({
   id: z.string(),
   userId: z.string(),
@@ -15,34 +14,12 @@ export const CartSchema = z.object({
   updatedAt: z.date().or(z.string()),
 });
 
-export const CartList = z.array(CartSchema);
-
 export const ListCartsResponseSchema = z.object({
-  data: CartList,
+  data: z.array(CartSchema),
 });
 
 export const SingleCartResponseSchema = z.object({
   data: CartSchema,
-});
-
-export const Period = z.object({
-  type: z.string(),
-  dayOfWeek: z.string(),
-  periodStart: z.string(),
-  periodEnd: z.string(),
-  building: z.string().nullable(),
-  room: z.string().nullable(),
-  professors: z.array(z.string()),
-});
-
-export const Section = z.object({
-  id: z.string(),
-  sectionNo: z.number().int(),
-  closed: z.boolean(),
-  regis: z.number(),
-  max: z.number(),
-  note: z.string().nullable(),
-  classes: z.array(Period),
 });
 
 const CartItemDetailSchema = z.object({
@@ -54,26 +31,19 @@ const CartItemDetailSchema = z.object({
   cartOrder: z.string(),
   isGraded: z.boolean(),
   expectedGrade: z.string(),
-  genEdType: z.enum(genEdType).default("NO"),
   course: z.object({
-    abbrName: z.string(),
     courseNameTh: z.string(),
     courseNameEn: z.string(),
     credit: z.string(),
   }),
-  sections: z.array(Section).default([]),
-});
-
-export const CartData = z.object({
-  id: z.string(),
-  name: z.string(),
-  studyProgram: z.string(),
-  academicYear: z.number(),
-  semester: z.string(),
-  visible: z.string(),
-  isDefault: z.boolean(),
-  cartOrder: z.string(),
-  items: z.array(CartItemDetailSchema),
+  section: z
+    .object({
+      closed: z.boolean(),
+      regis: z.number(),
+      max: z.number(),
+      note: z.string().nullable(),
+    })
+    .nullable(),
 });
 
 export const ClassScheduleItemSchema = z.object({
@@ -112,10 +82,6 @@ export const ExamConflictSchema = z.object({
   end: z.string(),
 });
 
-export type Section = z.infer<typeof Section>;
-export type Period = z.infer<typeof Period>;
-export type CartList = z.infer<typeof CartList>;
-export type CartData = z.infer<typeof CartData>;
 export type ClassScheduleItem = z.infer<typeof ClassScheduleItemSchema>;
 export type ExamScheduleItem = z.infer<typeof ExamScheduleItemSchema>;
 export type ClassConflict = z.infer<typeof ClassConflictSchema>;
@@ -124,7 +90,17 @@ export type CartItemDetail = z.infer<typeof CartItemDetailSchema>;
 
 export const CartDetailResponseSchema = z.object({
   data: z.object({
-    cart: CartData,
+    cart: z.object({
+      id: z.string(),
+      name: z.string(),
+      studyProgram: z.string(),
+      academicYear: z.number(),
+      semester: z.string(),
+      visible: z.string(),
+      isDefault: z.boolean(),
+      cartOrder: z.string(),
+      items: z.array(CartItemDetailSchema),
+    }),
     summary: z.object({
       totalCredits: z.string(),
       totalVisibleCredits: z.string(),

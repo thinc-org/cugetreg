@@ -1,8 +1,8 @@
 <script lang="ts">
-  import SelectedCourse from '$lib/components/selected-course.svelte';
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
   import { page } from '$app/state';
+  import SelectedCourse from '$lib/components/selected-course.svelte';
   import { faculties } from '$lib/constants';
   import { getUserCartStore, useCartActions } from '$lib/stores/user-cart';
 

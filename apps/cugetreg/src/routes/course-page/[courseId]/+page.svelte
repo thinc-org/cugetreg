@@ -1,5 +1,8 @@
 <script lang="ts">
   import SelectedCourse from '$lib/components/selected-course.svelte';
+  import { goto } from '$app/navigation';
+  import { resolve } from '$app/paths';
+  import { page } from '$app/state';
   import { faculties } from '$lib/constants';
   import { getUserCartStore, useCartActions } from '$lib/stores/user-cart';
 
@@ -229,6 +232,25 @@
       )
       .map((item) => item.term);
     return [reviewTermPlaceholder, ...Array.from(new Set(terms))];
+  });
+
+  $effect(() => {
+    const academicYear = page.url.searchParams.get('academicYear');
+    const semester = page.url.searchParams.get('semester');
+    const studyProgram = page.url.searchParams.get('studyProgram');
+
+    if (academicYear && semester && studyProgram) {
+      return;
+    }
+
+    const params = new URLSearchParams({
+      academicYear: String($userCart.currentCart.academicYear),
+      semester: $userCart.currentCart.semester,
+      studyProgram: $userCart.currentCart.studyProgram,
+    });
+    goto(resolve(`/course-page/${page.params.courseId}?${params.toString()}`), {
+      replaceState: true,
+    });
   });
 
   $effect(() => {

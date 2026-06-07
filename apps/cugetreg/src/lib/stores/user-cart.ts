@@ -1,6 +1,8 @@
+import { api } from '$lib/api';
 import { tryCatch } from '$lib/async-handler';
 
-import axios from 'axios';
+import { isAxiosError } from 'axios';
+import toast from 'svelte-french-toast';
 
 import type {
   CartData,
@@ -45,6 +47,22 @@ const CART_KEY = Symbol('cart');
 export const { initStore: initUserCartStore, getStore: getUserCartStore } =
   useContextStore<UserCartInterface>(CART_KEY);
 
+function handleError(error: any) {
+  if (isAxiosError(error)) {
+    if (error.status === 401) {
+      toast.error('Please login before doing this action.', {
+        position: 'bottom-right',
+      });
+      return;
+    }
+
+    toast.error('Something went wrong', { position: 'bottom-right' });
+    return;
+  }
+
+  toast.error('Something went wrong', { position: 'bottom-right' });
+}
+
 // ---------------------------------------------------------------------------
 // Pending-update buckets
 // These live outside the store so they survive independent of Svelte's
@@ -82,7 +100,6 @@ function mapSemester(dbValue: '1' | '2' | '3'): 'FIRST' | 'SECOND' | 'SUMMER' {
 // Flush logic
 // ---------------------------------------------------------------------------
 
-const API_BASE = 'http://localhost:3000/api/v1/carts';
 const DEBOUNCE_TIME_MS = 1000;
 
 let debounceHandle: ReturnType<typeof setTimeout> | null = null;
@@ -125,17 +142,13 @@ async function flushUpdates(): Promise<void> {
     // 1. Cart-level update
     if (currentCartId && Object.keys(cartPayload).length > 0) {
       console.log('Requesting patch');
-      const res = await axios.patch(
-        `${API_BASE}/${currentCartId}`,
-        cartPayload,
-      );
+      const res = await api.patch(`/carts/${currentCartId}`, cartPayload);
       console.log(res.data);
     }
 
     // 2. Per-item updates (parallel to keep things fast)
     const itemRequests = Array.from(itemPayloads.entries()).map(
-      ([itemId, payload]) =>
-        axios.patch(`${API_BASE}/items/${itemId}`, payload),
+      ([itemId, payload]) => api.patch(`/carts/items/${itemId}`, payload),
     );
     await Promise.all(itemRequests);
   } catch (err) {
@@ -202,23 +215,27 @@ export function useCartActions() {
     const oldDefault = snapshot.cartList.find((item) => item.isDefault)?.id;
     const newDefault = snapshot.currentCartId;
 
-    userCart.update((state) => ({
-      ...state,
-      currentCart: { ...state.currentCart, isDefault: true },
-      cartList: state.cartList.map((item) => {
-        if (state.currentCartId === item.id)
-          return { ...item, isDefault: true };
-        else return { ...item, isDefault: false };
-      }),
-    }));
+    try {
+      await api.patch(`/carts/${oldDefault}`, {
+        isDefault: false,
+      });
 
-    await axios.patch(`${API_BASE}/${oldDefault}`, {
-      isDefault: false,
-    });
+      await api.patch(`/carts/${newDefault}`, {
+        isDefault: true,
+      });
 
-    await axios.patch(`${API_BASE}/${newDefault}`, {
-      isDefault: true,
-    });
+      userCart.update((state) => ({
+        ...state,
+        currentCart: { ...state.currentCart, isDefault: true },
+        cartList: state.cartList.map((item) => {
+          if (state.currentCartId === item.id)
+            return { ...item, isDefault: true };
+          else return { ...item, isDefault: false };
+        }),
+      }));
+    } catch (error) {
+      handleError(error);
+    }
   };
 
   /**
@@ -270,26 +287,32 @@ export function useCartActions() {
     })();
 
     const { currentCartId } = snapshot;
-    if (!currentCartId) return;
 
-    const res = await axios.post(`${API_BASE}/${currentCartId}/items`, {
-      courseNo,
-      sectionNo,
-    });
+    try {
+      const res = await api.post(`/carts/${currentCartId}/items`, {
+        courseNo,
+        sectionNo,
+      });
 
-    const newItem = SingleCartItemResponseSchema.parse(res.data).data;
+      const newItem = SingleCartItemResponseSchema.parse(res.data).data;
 
-    // Fetch the full detail to get the new exam schedule and complete course data
-    const detailRes = await axios.get(`${API_BASE}/${currentCartId}`);
-    const detail = CartDetailResponseSchema.parse(detailRes.data).data;
+      // Fetch the full detail to get the new exam schedule and complete course data
 
-    userCart.update((state) => ({
-      ...state,
-      currentCart: detail.cart,
-      exams: detail.schedule.exams,
-    }));
+      const detailRes = await api.get(`/carts/${currentCartId}`);
+      const detail = CartDetailResponseSchema.parse(detailRes.data).data;
 
-    return newItem.id;
+      userCart.update((state) => ({
+        ...state,
+        currentCart: detail.cart,
+        exams: detail.schedule.exams,
+      }));
+
+      toast.success('Course added successfully', { position: 'bottom-right' });
+
+      return newItem.id;
+    } catch (error) {
+      handleError(error);
+    }
   };
 
   /**
@@ -310,26 +333,34 @@ export function useCartActions() {
     const { currentCartId } = snapshot;
     if (!currentCartId) return;
 
-    await axios.delete(`${API_BASE}/${currentCartId}/items/${itemId}`);
+    try {
+      await api.delete(`/carts/${currentCartId}/items/${itemId}`);
 
-    // Update local state immediately
-    userCart.update((state) => ({
-      ...state,
-      currentCart: {
-        ...state.currentCart,
-        items: state.currentCart.items.filter((item) => item.id !== itemId),
-      },
-    }));
+      // Update local state immediately
+      userCart.update((state) => ({
+        ...state,
+        currentCart: {
+          ...state.currentCart,
+          items: state.currentCart.items.filter((item) => item.id !== itemId),
+        },
+      }));
 
-    // Fetch the full detail to refresh exams and other derived data
-    const detailRes = await axios.get(`${API_BASE}/${currentCartId}`);
-    const detail = CartDetailResponseSchema.parse(detailRes.data).data;
+      // Fetch the full detail to refresh exams and other derived data
+      const detailRes = await api.get(`/carts/${currentCartId}`);
+      const detail = CartDetailResponseSchema.parse(detailRes.data).data;
 
-    userCart.update((state) => ({
-      ...state,
-      currentCart: detail.cart,
-      exams: detail.schedule.exams,
-    }));
+      userCart.update((state) => ({
+        ...state,
+        currentCart: detail.cart,
+        exams: detail.schedule.exams,
+      }));
+
+      toast.success('Course removed successfully.', {
+        position: 'bottom-right',
+      });
+    } catch (error) {
+      handleError(error);
+    }
   };
 
   /**
@@ -392,7 +423,7 @@ export function useCartActions() {
     const { currentCart } = snapshot;
 
     // 1. Create the new cart shell
-    const createRes = await axios.post(API_BASE, {
+    const createRes = await api.post('/carts', {
       academicYear: currentCart.academicYear,
       semester: currentCart.semester,
       studyProgram: currentCart.studyProgram,
@@ -406,7 +437,7 @@ export function useCartActions() {
     // 2. Copy all items in parallel
     await Promise.all(
       currentCart.items.map((item) =>
-        axios.post(`${API_BASE}/${newCartId}/items`, {
+        api.post(`/carts/${newCartId}/items`, {
           courseNo: item.courseNo,
           sectionNo: item.sectionNo,
           color: item.color ?? undefined,
@@ -418,7 +449,7 @@ export function useCartActions() {
     );
 
     // 3. Fetch the full detail of the new cart so the store has complete data
-    const detailRes = await axios.get(`${API_BASE}/${newCartId}`);
+    const detailRes = await api.get(`/carts/${newCartId}`);
     const detail = CartDetailResponseSchema.parse(detailRes.data).data;
 
     // 4. Update the store: push new cart into the list and activate it
@@ -457,7 +488,7 @@ export function useCartActions() {
     academicYear: number,
   ) => {
     const [response, error] = await tryCatch(
-      axios.post(API_BASE, {
+      api.post('/carts', {
         academicYear,
         semester: mapSemester(semester),
         studyProgram,
@@ -474,7 +505,7 @@ export function useCartActions() {
     const newCart = SingleCartResponseSchema.parse(response.data).data;
     const newCartId = newCart.id;
 
-    const detailRes = await axios.get(`${API_BASE}/${newCartId}`);
+    const detailRes = await api.get(`/carts/${newCartId}`);
     const detail = CartDetailResponseSchema.parse(detailRes.data).data;
 
     userCart.update((state) => ({
@@ -510,54 +541,59 @@ export function useCartActions() {
     unsub();
     const { currentCartId, currentCart, cartList } = snapshot!;
 
-    // 1. Call the API — will 204 on success
-    await axios.delete(`${API_BASE}/${currentCartId}`);
+    try {
+      // 1. Call the API — will 204 on success
+      await api.delete(`/carts/${currentCartId}`);
 
-    // 2. Build the remaining list without the deleted cart
-    const remaining = cartList.filter((c) => c.id !== currentCartId);
+      // 2. Build the remaining list without the deleted cart
+      const remaining = cartList.filter((c) => c.id !== currentCartId);
 
-    if (remaining.length === 0) {
-      // No carts left — clear the store to an empty state
+      if (remaining.length === 0) {
+        // No carts left — clear the store to an empty state
+        userCart.update((state) => ({
+          ...state,
+          cartList: [],
+          // Keep currentCart/currentCartId as-is; the UI should redirect away
+        }));
+        return;
+      }
+
+      let substituteId: string;
+      let updatedList = remaining;
+
+      if (currentCart.isDefault) {
+        // Mirror server logic: sort ascending by cartOrder (lexicographic —
+        // LexoRank strings sort correctly as plain strings)
+        const sorted = [...remaining].sort((a, b) =>
+          a.cartOrder < b.cartOrder ? -1 : a.cartOrder > b.cartOrder ? 1 : 0,
+        );
+        substituteId = sorted[0].id;
+
+        // Mark the substitute as default in the list (the server already did
+        // this on its side; we reflect it here so the UI stays consistent)
+        updatedList = remaining.map((c) =>
+          c.id === substituteId ? { ...c, isDefault: true } : c,
+        );
+      } else {
+        substituteId =
+          remaining.find((c) => c.isDefault)?.id ?? remaining[0].id;
+      }
+
+      // 4. Fetch the full detail of the substitute so the store has all data
+      const detailRes = await api.get(`/carts/${substituteId}`);
+      const detail = CartDetailResponseSchema.parse(detailRes.data).data;
+
+      // 5. Update the store in one shot
       userCart.update((state) => ({
         ...state,
-        cartList: [],
-        // Keep currentCart/currentCartId as-is; the UI should redirect away
+        cartList: updatedList,
+        currentCart: detail.cart,
+        currentCartId: substituteId,
+        exams: detail.schedule.exams,
       }));
-      return;
+    } catch (error) {
+      handleError(error);
     }
-
-    let substituteId: string;
-    let updatedList = remaining;
-
-    if (currentCart.isDefault) {
-      // Mirror server logic: sort ascending by cartOrder (lexicographic —
-      // LexoRank strings sort correctly as plain strings)
-      const sorted = [...remaining].sort((a, b) =>
-        a.cartOrder < b.cartOrder ? -1 : a.cartOrder > b.cartOrder ? 1 : 0,
-      );
-      substituteId = sorted[0].id;
-
-      // Mark the substitute as default in the list (the server already did
-      // this on its side; we reflect it here so the UI stays consistent)
-      updatedList = remaining.map((c) =>
-        c.id === substituteId ? { ...c, isDefault: true } : c,
-      );
-    } else {
-      substituteId = remaining.find((c) => c.isDefault)?.id ?? remaining[0].id;
-    }
-
-    // 4. Fetch the full detail of the substitute so the store has all data
-    const detailRes = await axios.get(`${API_BASE}/${substituteId}`);
-    const detail = CartDetailResponseSchema.parse(detailRes.data).data;
-
-    // 5. Update the store in one shot
-    userCart.update((state) => ({
-      ...state,
-      cartList: updatedList,
-      currentCart: detail.cart,
-      currentCartId: substituteId,
-      exams: detail.schedule.exams,
-    }));
   };
 
   return {

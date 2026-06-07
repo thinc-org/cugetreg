@@ -3,6 +3,7 @@
 
   import { goto } from '$app/navigation';
   import { page } from '$app/state';
+  import { api } from '$lib/api';
   import { tryCatch } from '$lib/async-handler';
   import {
     handleGoogleLogin,
@@ -12,7 +13,6 @@
   import { searchState } from '$lib/stores/search.svelte';
   import { getUserCartStore, initUserCartStore } from '$lib/stores/user-cart';
 
-  import axios from 'axios';
   import type { Snippet } from 'svelte';
   import toast, { Toaster } from 'svelte-french-toast';
 
@@ -30,6 +30,10 @@
       let message = 'Something went wrong.';
       if (errorMsg === 'non_chula_email') {
         message = 'Please login with Chula email.';
+      }
+
+      if (errorMsg === 'no_session') {
+        message = 'Please login before viewing this page.';
       }
 
       toast.error(message, {
@@ -51,7 +55,7 @@
     children?: Snippet;
   } = $props();
 
-  initUserCartStore((() => data)());
+  initUserCartStore((() => data.data)());
 
   const userCart = getUserCartStore();
 
@@ -64,10 +68,8 @@
 
     const fetchCurrentSchedule = async (id: string) => {
       // TODO: Move this
-      const API_URL = 'http://localhost:3000/api/v1/carts/';
-
       const [response, error] = await tryCatch(
-        axios.get(API_URL + id, {
+        api.get(`/carts/${id}`, {
           headers: {
             Authorization: 'Bearer your-token',
             'Content-Type': 'application/json',

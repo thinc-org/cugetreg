@@ -3,6 +3,7 @@
 import {
   DayOfWeek,
   GenEdType,
+  GradingType,
   ReviewStatus,
   Semester,
   StudyProgram,
@@ -129,5 +130,18 @@ export function mapVoteType(raw: string): VoteType {
       return VoteType.D;
     default:
       throw new Error(`Invalid VoteType: ${raw}`);
+  }
+}
+
+export function mapGradingType(raw: string): GradingType {
+  switch (raw) {
+    case "LETTER":
+      return GradingType.LETTER;
+    case "SU":
+      return GradingType.SU;
+    case "TBA":
+      return GradingType.TBA;
+    default:
+      throw new Error(`Invalid GradingType: ${raw}`);
   }
 }

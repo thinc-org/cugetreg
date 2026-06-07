@@ -5,17 +5,17 @@ FROM node:22-alpine AS pnpm
 RUN apk add --no-cache libc6-compat
 RUN apk update
 
-ENV PNPM_HOME="/root/.local/share/pnpm"
-ENV PATH="${PATH}:${PNPM_HOME}"
-RUN npm install -g pnpm
+ENV COREPACK_ENABLE_DOWNLOAD_PROMPT=0
+WORKDIR /app
+COPY package.json ./
+RUN corepack enable && corepack prepare "$(node -p 'require("./package.json").packageManager')" --activate
 
 # --------------------------------------------------------
 
 FROM pnpm AS pruner
 WORKDIR /app
-RUN pnpm install -g turbo
 COPY . .
-RUN turbo prune --scope=admin-api --docker
+RUN pnpm dlx turbo@$(node -p 'require("./package.json").devDependencies.turbo.replace(/^[~^]/, "")') prune --scope=admin-api --docker
 
 # --------------------------------------------------------
 

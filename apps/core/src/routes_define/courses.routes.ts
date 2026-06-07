@@ -3,6 +3,7 @@ import { createRoute } from "@hono/zod-openapi";
 import { InternalError } from "./errorRes.js";
 
 import * as CourseSchema from "../zod_schemas/courses.schema.js";
+import * as CourseResponseSchema from "../zod_schemas/courses.response.schema.js";
 
 //1.1get courses
 export const getCoursesRoute = createRoute({
@@ -36,7 +37,9 @@ export const getCourseByNoRoute = createRoute({
   responses: {
     200: {
       content: {
-        "application/json": { schema: CourseSchema.courseDetailsSchema },
+        "application/json": {
+          schema: CourseResponseSchema.courseNoResponseSchema,
+        },
       },
       description: "Successfully retrieved course details",
     },

@@ -62,17 +62,15 @@ export const reviewService = {
     return prisma.$transaction(
       async (tx) => {
         const [review, vote] = await Promise.all([
-          tx.review.findUnique({
+          tx.review.findFirst({
             where: {
               id: reviewId,
             },
           }),
-          tx.reviewVote.findUnique({
+          tx.reviewVote.findFirst({
             where: {
-              userId_reviewId: {
-                userId,
-                reviewId,
-              },
+              userId,
+              reviewId,
             },
           }),
         ]);

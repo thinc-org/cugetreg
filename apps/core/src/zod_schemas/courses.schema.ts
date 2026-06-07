@@ -29,10 +29,9 @@ export const getCourseQuerySchema = z.object({
   sortBy: z.enum(sortBy).optional(),
   sortOrder: z.enum(sortOrder).optional(),
   limit: z.coerce.number().int().optional(),
-  offset: z.coerce.number().int().optional(),
 });
 // 1. Sub-schema for the 'course' object
-const courseSchema = z.object({
+export const courseSchema = z.object({
   id: z.string(),
   studyProgram: z.string(),
   academicYear: z.number().int(),
@@ -47,17 +46,16 @@ const courseSchema = z.object({
 });
 
 // 2. Sub-schema for the 'courseInfo' object
-const courseInfoSchema = z.object({
-  courseNo: z.string(),
+export const courseInfoSchema = z.object({
   abbrName: z.string(),
   courseNameEn: z.string(),
   courseNameTh: z.string(),
   courseDescEn: z.string().nullable(),
   courseDescTh: z.string().nullable(),
-  faculty: z.string(),
-  department: z.string(),
+  faculty: z.string().nullable(),
+  department: z.string().nullable(),
   credit: z.string(),
-  creditHours: z.string(),
+  creditHours: z.string().nullable(),
 });
 
 // 3. Sub-schema for the 'stats' object

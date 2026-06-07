@@ -1,7 +1,7 @@
 import { OpenAPIHono } from "@hono/zod-openapi";
 
 import { prisma } from "../db/clients.js";
-import { Prisma } from "../generated/prisma/client.js";
+import { Prisma, ReviewStatus, VoteType } from "../generated/prisma/client.js";
 import type { Variables } from "../lib/auth.js";
 import {
   getCourseByNoRoute,
@@ -13,6 +13,10 @@ import {
   mapGradingType,
   mapStudyProgram,
 } from "../utils/enumMapper.js";
+import type {
+  CourseNoResponse,
+  CourseReview,
+} from "../zod_schemas/courses.response.schema.js";
 
 // API accepts numeric semester (1/2/3); DB stores enum strings (FIRST/SECOND/SUMMER)
 const semesterMap: Record<number, "FIRST" | "SECOND" | "SUMMER"> = {
@@ -209,7 +213,6 @@ courses
               sections: course.sections,
             },
             courseInfo: {
-              courseNo: course.courseInfo.courseNo,
               abbrName: course.courseInfo.abbrName,
               courseNameEn: course.courseInfo.courseNameEn,
               courseNameTh: course.courseInfo.courseNameTh,
@@ -266,13 +269,50 @@ courses
         },
       });
 
+      const reviewsRaw = await prisma.review.findMany({
+        where: {
+          courseNo,
+          status: ReviewStatus.APPROVED,
+        },
+        include: {
+          user: false,
+          votes: true,
+        },
+      });
+
       if (!course) {
         return c.json({ message: "Course not found" }, 404);
       }
 
-      return c.json(course, 200);
-    } catch (err) {
-      console.error("Fetch Course Error:", err);
+      const reviews = reviewsRaw.map((review) => {
+        const likeCount = review.votes.filter(
+          (vote) => vote.voteType === VoteType.L,
+        ).length;
+        const dislikeCount = reviewsRaw.length - likeCount;
+
+        return {
+          id: review.id,
+          rating: review.rating,
+          status: review.status,
+          studyProgram: review.studyProgram,
+          academicYear: review.academicYear,
+          semester: review.semester,
+          content: review.content,
+          stats: {
+            likeCount,
+            dislikeCount,
+          },
+        } as CourseReview;
+      });
+
+      return c.json(
+        {
+          course,
+          reviews,
+        },
+        200,
+      );
+    } catch {
       return c.json({ error: "INTERNAL_SERVER_ERROR" }, 500);
     }
   });

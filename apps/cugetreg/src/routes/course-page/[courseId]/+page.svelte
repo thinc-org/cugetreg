@@ -48,6 +48,15 @@
   import type { PageProps } from './$types';
   import { useSession } from '$lib/auth-client';
 
+  const { data }: PageProps = $props();
+  const course = $derived(data.course);
+  const reviews = $derived(data.reviews);
+
+  const session = useSession();
+
+  const userCart = getUserCartStore();
+  const { addCourse, removeCourse } = useCartActions();
+
   const years = ['2566', '2565', '2564'];
   const terms = ['ภาคต้น', 'ภาคปลาย'];
   let selectedYear = $state(years[0]);
@@ -128,56 +137,15 @@
     el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
-  const _reviewSamples = [
-    {
-      rating: 4,
-      semester: 'ภาคต้น 2566',
-      facultyMajor: 'คณะวิศวกรรมศาสตร์ ภาคเครื่องใน',
-      content:
-        'ส่วนตัวคิดว่าง่ายมาก มีงานสัปดาห์ละครั้ง ปกติจะมีวิดีโอให้ดู ไม่ยาวมาก แต่จะไม่ดูไม่ได้ เพราะปกติโฮมอ่านตัวอย่างที่ให้มาแล้วก็ลองเขียนเลย งานส่วนใหญ่จะให้ Topic กว้างๆมา ถ้าอาจารย์ประจำ sec ไม่ strict มาก ก็เขียนตามใจไปเลย แต่อาจารย์ที่สอนในสัปดาห์นั้นมาปรับบ้างหน่อย ปกติจะมีเวลาไม่มาก ก็เขียนครั้งเดียวแล้วส่งไปเลย เลยเสียเวลาแค่ 1-2 ชม. ต่อสัปดาห์ แต่ถ้าใครจะส่งชิงงานเขียนหน่อยก็อาจใช้เวลาเพิ่มขึ้น สอบเหมือนกับงานที่ทำ จะไม่อ่านไปสอบก็ได้ถ้าจำพวกงานที่ทำส่งได้ แต่ก่อนสอบมีคลิปรีวิวให้ดูก่อน ฟังตัวนี้เอาก็ได้ อันนี้ขึ้นอยู่กับ sec ของเราว่าอาจารย์ให้คะแนนค่อนข้างง่าย แต่ถ้าให้คะแนนมากหน่อย เฉลี่ยก็รวมๆกันได้ A เพราะจะเขียนตามใจตัวเองเป็นหลัก ไม่ค่อยยึดกับเรื่องที่เรียนมาเลยรู้สึกไม่ค่อยได้อะไรใหม่ ที่ช่วยนำจะเป็นการจัดระเบียบความคิดและสรุปให้อยู่ในย่อหน้า',
-      likesCount: 2,
-      dislikesCount: 0,
-    },
-    {
-      rating: 3.5,
-      semester: 'ภาคปลาย 2566',
-      facultyMajor: 'คณะวิศวกรรมศาสตร์ ภาคเครื่องใน',
-      content:
-        'ส่วนตัวคิดว่าง่ายมาก มีงานสัปดาห์ละครั้ง ปกติจะมีวิดีโอให้ดู ไม่ยาวมาก แต่จะไม่ดูไม่ได้ เพราะปกติโฮมอ่านตัวอย่างที่ให้มาแล้วก็ลองเขียนเลย งานส่วนใหญ่จะให้ Topic กว้างๆมา ถ้าอาจารย์ประจำ sec ไม่ strict มาก ก็เขียนตามใจไปเลย แต่อาจารย์ที่สอนในสัปดาห์นั้นมาปรับบ้างหน่อย ปกติจะมีเวลาไม่มาก ก็เขียนครั้งเดียวแล้วส่งไปเลย เลยเสียเวลาแค่ 1-2 ชม. ต่อสัปดาห์ แต่ถ้าใครจะส่งชิงงานเขียนหน่อยก็อาจใช้เวลาเพิ่มขึ้น สอบเหมือนกับงานที่ทำ จะไม่อ่านไปสอบก็ได้ถ้าจำพวกงานที่ทำส่งได้ แต่ก่อนสอบมีคลิปรีวิวให้ดูก่อน ฟังตัวนี้เอาก็ได้ อันนี้ขึ้นอยู่กับ sec ของเราว่าอาจารย์ให้คะแนนค่อนข้างง่าย แต่ถ้าให้คะแนนมากหน่อย เฉลี่ยก็รวมๆกันได้ A เพราะจะเขียนตามใจตัวเองเป็นหลัก ไม่ค่อยยึดกับเรื่องที่เรียนมาเลยรู้สึกไม่ค่อยได้อะไรใหม่ ที่ช่วยนำจะเป็นการจัดระเบียบความคิดและสรุปให้อยู่ในย่อหน้า',
-      likesCount: 1,
-      dislikesCount: 0,
-    },
-    {
-      rating: 4,
-      semester: 'ภาคต้น 2565',
-      facultyMajor: 'คณะวิศวกรรมศาสตร์ ภาคเครื่องใน',
-      content:
-        'ส่วนตัวคิดว่าง่ายมาก มีงานสัปดาห์ละครั้ง ปกติจะมีวิดีโอให้ดู ไม่ยาวมาก แต่จะไม่ดูไม่ได้ เพราะปกติโฮมอ่านตัวอย่างที่ให้มาแล้วก็ลองเขียนเลย งานส่วนใหญ่จะให้ Topic กว้างๆมา ถ้าอาจารย์ประจำ sec ไม่ strict มาก ก็เขียนตามใจไปเลย แต่อาจารย์ที่สอนในสัปดาห์นั้นมาปรับบ้างหน่อย ปกติจะมีเวลาไม่มาก ก็เขียนครั้งเดียวแล้วส่งไปเลย เลยเสียเวลาแค่ 1-2 ชม. ต่อสัปดาห์ แต่ถ้าใครจะส่งชิงงานเขียนหน่อยก็อาจใช้เวลาเพิ่มขึ้น สอบเหมือนกับงานที่ทำ จะไม่อ่านไปสอบก็ได้ถ้าจำพวกงานที่ทำส่งได้ แต่ก่อนสอบมีคลิปรีวิวให้ดูก่อน ฟังตัวนี้เอาก็ได้ อันนี้ขึ้นอยู่กับ sec ของเราว่าอาจารย์ให้คะแนนค่อนข้างง่าย แต่ถ้าให้คะแนนมากหน่อย เฉลี่ยก็รวมๆกันได้ A เพราะจะเขียนตามใจตัวเองเป็นหลัก ไม่ค่อยยึดกับเรื่องที่เรียนมาเลยรู้สึกไม่ค่อยได้อะไรใหม่ ที่ช่วยนำจะเป็นการจัดระเบียบความคิดและสรุปให้อยู่ในย่อหน้า',
-      likesCount: 2,
-      dislikesCount: 1,
-    },
-    {
-      rating: 4.5,
-      semester: 'ภาคปลาย 2565',
-      facultyMajor: 'คณะวิศวกรรมศาสตร์ ภาคเครื่องใน',
-      content:
-        'ส่วนตัวคิดว่าง่ายมาก มีงานสัปดาห์ละครั้ง ปกติจะมีวิดีโอให้ดู ไม่ยาวมาก แต่จะไม่ดูไม่ได้ เพราะปกติโฮมอ่านตัวอย่างที่ให้มาแล้วก็ลองเขียนเลย งานส่วนใหญ่จะให้ Topic กว้างๆมา ถ้าอาจารย์ประจำ sec ไม่ strict มาก ก็เขียนตามใจไปเลย แต่อาจารย์ที่สอนในสัปดาห์นั้นมาปรับบ้างหน่อย ปกติจะมีเวลาไม่มาก ก็เขียนครั้งเดียวแล้วส่งไปเลย เลยเสียเวลาแค่ 1-2 ชม. ต่อสัปดาห์ แต่ถ้าใครจะส่งชิงงานเขียนหน่อยก็อาจใช้เวลาเพิ่มขึ้น สอบเหมือนกับงานที่ทำ จะไม่อ่านไปสอบก็ได้ถ้าจำพวกงานที่ทำส่งได้ แต่ก่อนสอบมีคลิปรีวิวให้ดูก่อน ฟังตัวนี้เอาก็ได้ อันนี้ขึ้นอยู่กับ sec ของเราว่าอาจารย์ให้คะแนนค่อนข้างง่าย แต่ถ้าให้คะแนนมากหน่อย เฉลี่ยก็รวมๆกันได้ A เพราะจะเขียนตามใจตัวเองเป็นหลัก ไม่ค่อยยึดกับเรื่องที่เรียนมาเลยรู้สึกไม่ค่อยได้อะไรใหม่ ที่ช่วยนำจะเป็นการจัดระเบียบความคิดและสรุปให้อยู่ในย่อหน้า',
-      likesCount: 3,
-      dislikesCount: 0,
-    },
-  ];
-
-  // const reviews = Array.from({ length: 12 }, (_, i) => {
-  //   const sample = reviewSamples[i % reviewSamples.length]
-  //   return { ...sample }
-  // })
-
-  const reviews = [];
   const filteredReviews = $derived.by(() =>
     reviews.filter((review) => {
-      const [term, year] = review.semester.split(' ');
-      if (!isReviewYearPlaceholder && year !== selectedReviewYear) return false;
-      if (!isReviewTermPlaceholder && term !== selectedReviewTerm) return false;
+      if (
+        !isReviewYearPlaceholder &&
+        review.academicYear !== Number(selectedReviewYear)
+      )
+        return false;
+      if (!isReviewTermPlaceholder && review.semester !== selectedReviewTerm)
+        return false;
       return true;
     }),
   );
@@ -208,16 +176,9 @@
     return items;
   });
 
-  const reviewMeta = reviews
-    .map((review) => {
-      const [term, year] = review.semester.split(' ');
-      return { term, year };
-    })
-    .filter((item) => item.term && item.year);
-
   const reviewYearOptions = [
     reviewYearPlaceholder,
-    ...Array.from(new Set(reviewMeta.map((item) => item.year)))
+    ...Array.from(new Set(reviews.map((item) => item.academicYear)))
       .sort()
       .reverse(),
   ];
@@ -225,11 +186,13 @@
   const reviewTermOptions = $derived.by(() => {
     const terms = reviews
       .map((review) => {
-        const [term, year] = review.semester.split(' ');
+        const [term, year] = [review.semester, review.academicYear];
         return { term, year };
       })
       .filter((item) =>
-        isReviewYearPlaceholder ? true : item.year === selectedReviewYear,
+        isReviewYearPlaceholder
+          ? true
+          : item.year === Number(selectedReviewYear),
       )
       .map((item) => item.term);
     return [reviewTermPlaceholder, ...Array.from(new Set(terms))];
@@ -268,14 +231,6 @@
       reviewsPage = 1;
     }
   });
-
-  const { data }: PageProps = $props();
-  const course = $derived(data.course);
-
-  const session = useSession();
-
-  const userCart = getUserCartStore();
-  const { addCourse, removeCourse } = useCartActions();
 
   let globalSelectedSection = $state<string | null>(
     untrack(() => {
@@ -758,10 +713,9 @@
                       <Comment
                         rating={review.rating}
                         semester={review.semester}
-                        facultyMajor={review.facultyMajor}
                         content={review.content}
-                        likesCount={review.likesCount}
-                        dislikesCount={review.dislikesCount}
+                        likesCount={review.stats.likeCount}
+                        dislikesCount={review.stats.dislikeCount}
                       />
                     {/each}
                   </div>
@@ -925,7 +879,6 @@
                 class="relative mb-6 flex flex-col gap-2"
               >
                 <SelectTimetable
-                  class="border-b border-neutral-200 px-2 py-5"
                   options={$userCart.cartList?.map((item) => ({
                     name: item.name,
                     id: item.id,

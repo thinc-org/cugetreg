@@ -434,7 +434,6 @@
         <main
           class="h-full min-w-0 flex-1 overflow-y-auto scroll-smooth bg-white"
         >
-          <div class="h-16 w-full shrink-0 md:h-20"></div>
           <div class="flex min-h-full flex-col">
             <div class="mx-auto w-full max-w-[1200px] flex-1 p-8 lg:p-12">
               <div
@@ -667,7 +666,7 @@
   >
     <Sidebar.Content class="flex-row overflow-visible!">
       <Sidebar.Group
-        class="w-(--sidebar-width-icon) shrink-0 items-center border-r bg-white p-0 pt-[5.5rem] pb-6 group-data-[variant=floating]:rounded-l-lg md:pt-[6.5rem]"
+        class="w-(--sidebar-width-icon) shrink-0 items-center border-r bg-white p-0 pt-[1rem] pb-6 group-data-[variant=floating]:rounded-l-lg md:pt-[1.5rem]"
       >
         <Sidebar.GroupContent>
           <Sidebar.Menu class="gap-6">

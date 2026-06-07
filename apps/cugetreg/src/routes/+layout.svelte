@@ -104,23 +104,22 @@
 </script>
 
 <Toaster />
-<Navbar
-  onLogin={handleGoogleLogin}
-  onSignOut={handleGoogleLogout}
-  isLoggedIn={Boolean($session.data)}
-  onSearchEnter={(query) => {
-    searchState.query = query;
-    goto('/');
-  }}
-  name={$session.data?.user.name}
-  imageUrl={$session.data?.user.image ?? 'https://...'}
-/>
-
 <div class="relative flex h-dvh flex-col overflow-hidden">
+  <Navbar
+    onLogin={handleGoogleLogin}
+    onSignOut={handleGoogleLogout}
+    isLoggedIn={Boolean($session.data)}
+    onSearchEnter={(query) => {
+      searchState.query = query;
+      goto('/');
+    }}
+    name={$session.data?.user.name}
+    imageUrl={$session.data?.user.image ?? 'https://...'}
+  />
+
   {#if page.url.pathname === '/'}
     {@render children?.()}
   {:else}
-    <div class="h-16 shrink-0 md:h-20"></div>
     <div class="relative flex-1 overflow-auto">
       {@render children?.()}
     </div>

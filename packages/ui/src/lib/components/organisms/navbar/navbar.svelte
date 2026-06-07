@@ -61,7 +61,7 @@
 </script>
 
 <div
-	class="border-surface-container-low bg-surface fixed top-0 z-40 z-50 flex h-16 w-full items-center justify-between gap-2 border-b-2 px-3 py-1 md:h-20 md:py-3 lg:px-10"
+	class="border-surface-container-low bg-surface sticky top-0 z-[60] flex h-16 w-full items-center justify-between gap-2 border-b-2 px-3 py-1 md:h-20 md:py-3 lg:px-10"
 >
 	<div class="flex flex-1 flex-row items-center gap-3 lg:gap-6">
 		<a href="/">

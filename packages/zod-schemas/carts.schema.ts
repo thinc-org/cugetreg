@@ -1,24 +1,12 @@
 import z from "zod";
 
-import { semester, studyProgram, visible } from "./constants.js";
-
-import {
-  mapSemester,
-  mapStudyProgram,
-  mapVisible,
-} from "../utils/enumMapper.js";
+import { semesterString, studyProgram, visible } from "./constants.js";
 
 export const ListCartsQuerySchema = z
   .object({
     academicYear: z.coerce.number().int().optional(),
-    semester: z
-      .enum(semester)
-      .optional()
-      .transform((v) => (v ? mapSemester(v) : undefined)),
-    studyProgram: z
-      .enum(studyProgram)
-      .optional()
-      .transform((v) => (v ? mapStudyProgram(v) : undefined)),
+    semester: z.enum(semesterString).optional(),
+    studyProgram: z.enum(studyProgram).optional(),
   })
   .strict();
 
@@ -27,8 +15,8 @@ export type ListCartsQuerySchema = z.output<typeof ListCartsQuerySchema>;
 export const CreateCartBodySchema = z
   .object({
     academicYear: z.number().int().min(2564),
-    semester: z.enum(semester).transform((v) => mapSemester(v)),
-    studyProgram: z.enum(studyProgram).transform((v) => mapStudyProgram(v)),
+    semester: z.enum(semesterString),
+    studyProgram: z.enum(studyProgram),
     name: z.string().nonempty(),
     isDefault: z.boolean(),
   })
@@ -39,10 +27,7 @@ export type CreateCartBodySchema = z.output<typeof CreateCartBodySchema>;
 export const UpdateCartBodySchema = z
   .object({
     name: z.string().nonempty().optional(),
-    visible: z
-      .enum(visible)
-      .optional()
-      .transform((v) => (v ? mapVisible(v) : undefined)),
+    visible: z.enum(visible).optional(),
     isDefault: z.boolean().optional(),
     prevId: z.string().optional(),
     nextId: z.string().optional(),

@@ -15,14 +15,14 @@ import type {
 import type {
   ClassScheduleItem,
   ExamScheduleItem,
-} from "../zod_schemas/carts.response.schema.js";
+} from "@cugetreg/zod-schemas/carts-response";
 import type {
   AddCourseBodySchema,
   CreateCartBodySchema,
   ListCartsQuerySchema,
   UpdateCartBodySchema,
   UpdateCourseBodySchema,
-} from "../zod_schemas/carts.schema.js";
+} from "@cugetreg/zod-schemas/carts";
 
 export const cartService = {
   getAllCartItems: async (userId: string, query: ListCartsQuerySchema) => {

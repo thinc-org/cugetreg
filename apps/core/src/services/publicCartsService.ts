@@ -9,8 +9,8 @@ import { Visible } from "../generated/prisma/client.js";
 import type {
   ClassScheduleItem,
   ExamScheduleItem,
-} from "../zod_schemas/carts.response.schema.js";
-import type { PublicCartItemDetail } from "../zod_schemas/publicCarts.response.schema.js";
+} from "@cugetreg/zod-schemas/carts-response";
+import type { PublicCartItemDetail } from "@cugetreg/zod-schemas/public-carts-response";
 
 export const publicCartsService = {
   // Read-only view of a shared timetable — visible to anyone with the link

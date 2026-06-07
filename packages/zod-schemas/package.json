@@ -3,10 +3,15 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "scripts": {
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "build": "tsc",
+    "dev": "tsc -w"
   },
   "devDependencies": {
+    "@cugetreg/configs": "workspace:*",
     "@eslint/js": "^9.39.2",
     "eslint": "^9.39.2",
     "typescript": "~5.9.3"
@@ -15,11 +20,18 @@
     "zod": "^4.3.5"
   },
   "exports": {
+    ".": "./index.ts",
+    "./constants": "./constants.ts",
     "./admin": "./admin.schema.ts",
-    "./cart-response": "./carts.response.schema.ts",
-    "./public-cart-response": "./publicCarts.response.schema.ts",
-    "./cart": "./carts.schema.ts",
+    "./carts": "./carts.schema.ts",
+    "./carts-response": "./carts.response.schema.ts",
     "./courses": "./courses.schema.ts",
-    "./courses-response": "./courses.response.schema.ts"
+    "./courses-response": "./courses.response.schema.ts",
+    "./public-carts": "./publicCcarts.schema.ts",
+    "./public-carts-response": "./publicCarts.response.schema.ts",
+    "./reviews": "./reviews.schema.ts",
+    "./reviews-response": "./reviews.response.schema.ts",
+    "./user": "./user.schema.ts",
+    "./user-response": "./user.response.schema.ts"
   }
 }

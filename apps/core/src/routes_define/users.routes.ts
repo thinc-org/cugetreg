@@ -6,11 +6,11 @@ import {
   UpdateUserInfoResponseSchema,
   UserResponseSchema,
   UserReviewResponseSchema,
-} from "../zod_schemas/user.response.schema.js";
+} from "@cugetreg/zod-schemas/user-response";
 import {
   GetUserReviewsQuerySchema,
   UpdateUserInfoBodySchema,
-} from "../zod_schemas/user.schema.js";
+} from "@cugetreg/zod-schemas/user";
 
 export const getUserRoute = createRoute({
   method: "get",

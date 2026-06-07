@@ -7,12 +7,12 @@ import {
   EditReviewResponseSchema,
   SubmitReviewResponseSchema,
   VoteReviewResponseSchema,
-} from "../zod_schemas/reviews.response.schema.js";
+} from "@cugetreg/zod-schemas/reviews-response";
 import {
   EditReviewBodySchema,
   SubmitReviewBodySchema,
   VoteReviewBodySchema,
-} from "../zod_schemas/reviews.schema.js";
+} from "@cugetreg/zod-schemas/reviews";
 
 export const submitReviewRoute = createRoute({
   method: "post",

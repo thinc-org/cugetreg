@@ -17,6 +17,8 @@ import type {
   CourseNoResponse,
   CourseReview,
 } from "@cugetreg/zod-schemas/courses-response";
+import { not } from "ramda";
+import { vote } from "@cugetreg/zod-schemas/constants";
 
 // API accepts numeric semester (1/2/3); DB stores enum strings (FIRST/SECOND/SUMMER)
 const semesterMap: Record<number, "FIRST" | "SECOND" | "SUMMER"> = {
@@ -286,39 +288,43 @@ courses
         },
       });
 
-      const user_id = c.get("user")?.id;
+      if (!course) {
+        return c.json({ message: "Course not found" }, 404);
+      }
 
-      console.log(user_id);
+      const userId = c.get("user")?.id;
 
-      const reviewsRaw = await prisma.review.findMany({
+      const allReviews = await prisma.review.findMany({
         where: {
           courseNo,
-          OR: [
-            { status: ReviewStatus.APPROVED },
-            ...(user_id
-              ? [
-                  { status: ReviewStatus.PENDING, userId: user_id },
-                  { status: ReviewStatus.REJECTED, userId: user_id },
-                ]
-              : []),
-          ],
+          ...(userId && {
+            OR: [
+              { userId },
+              { status: ReviewStatus.APPROVED, userId: { not: userId } },
+            ],
+          }),
+          ...(!userId && { status: ReviewStatus.APPROVED }),
         },
         include: {
           votes: true,
         },
       });
 
-      console.log(reviewsRaw);
+      const reviews = allReviews.map((review) => {
+        let reaction: VoteType | undefined = undefined;
+        const [likeCount, dislikeCount] = review.votes.reduce(
+          ([like, dislike], vote) => {
+            if (vote.userId === userId) {
+              reaction = vote.voteType;
+            }
 
-      if (!course) {
-        return c.json({ message: "Course not found" }, 404);
-      }
-
-      const reviews = reviewsRaw.map((review) => {
-        const likeCount = review.votes.filter(
-          (vote) => vote.voteType === VoteType.L,
-        ).length;
-        const dislikeCount = reviewsRaw.length - likeCount;
+            return [
+              like + (vote.voteType === VoteType.L ? 1 : 0),
+              dislike + (vote.voteType === VoteType.D ? 1 : 0),
+            ];
+          },
+          [0, 0],
+        );
 
         return {
           id: review.id,
@@ -332,6 +338,7 @@ courses
             likeCount,
             dislikeCount,
           },
+          reaction,
         } as CourseReview;
       });
 

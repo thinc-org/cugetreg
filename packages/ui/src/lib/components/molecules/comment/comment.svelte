@@ -11,11 +11,27 @@
 		likesCount: number;
 		dislikesCount: number;
 		facultyMajor?: string;
+		reaction?: 'L' | 'D';
 		status: 'REJECTED' | 'PENDING' | 'APPROVED';
+
+		onLike: () => void;
+		onDislike: () => void;
 	}
 
-	let { content, semester, rating, likesCount, dislikesCount, facultyMajor, status }: CommentProps =
-		$props();
+	let {
+		content,
+		semester,
+		rating,
+		likesCount,
+		dislikesCount,
+		facultyMajor,
+		status,
+
+		reaction,
+
+		onLike,
+		onDislike
+	}: CommentProps = $props();
 	let hasHalfStar: boolean = $derived(rating % 1 !== 0); // Determine if there's a half star
 	let isExpanded: boolean = $state(false);
 </script>
@@ -80,11 +96,21 @@
 
 	<div class="text-subtitle flex flex-row gap-6 font-sans">
 		<div class="flex flex-row gap-x-2 font-medium">
-			<ThumbsUp class="text-neutral-400" />
+			<button class="hover:cursor-pointer" onclick={onLike}>
+				<ThumbsUp
+					data-fill={reaction === 'L'}
+					class="text-neutral-400 data-[fill=true]:fill-neutral-400"
+				/>
+			</button>
 			{likesCount}
 		</div>
 		<div class="flex flex-row gap-x-2 font-medium">
-			<ThumbsDown class="text-neutral-400" />
+			<button class="hover:cursor-pointer" onclick={onDislike}>
+				<ThumbsDown
+					data-fill={reaction === 'D'}
+					class="text-neutral-400 data-[fill=true]:fill-neutral-400"
+				/>
+			</button>
 			{dislikesCount}
 		</div>
 	</div>

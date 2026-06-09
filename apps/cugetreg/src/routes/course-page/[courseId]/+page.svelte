@@ -50,6 +50,8 @@
   import { api } from '$lib/api';
   import {
     SubmitReviewResponseSchema,
+    VoteReviewBodySchema,
+    VoteReviewResponseSchema,
     type SubmitReviewBodySchema,
   } from '@cugetreg/zod-schemas';
   import { isAxiosError } from 'axios';
@@ -57,6 +59,8 @@
   const { data }: PageProps = $props();
   const course = $derived(data.course);
   const reviews = $state(untrack(() => data.reviews));
+
+  $inspect(reviews);
 
   const session = useSession();
 
@@ -70,6 +74,7 @@
   let selectedTerm = $state(terms[0]);
   let reviewRating = $state(1);
   let reviewContent = $state('');
+  let selectedSection = $state();
 
   let openPanel = $state<
     | 'sidebar'
@@ -123,6 +128,8 @@
   );
 
   let textareaRef: HTMLTextAreaElement | undefined = $state();
+
+  $effect(() => console.log(reviews));
 
   function togglePanel(type: typeof openPanel) {
     if (type === 'sidebar' || type === 'selected_only') {
@@ -239,6 +246,37 @@
         return 'SECOND';
       case '3':
         return 'SUMMER';
+    }
+  }
+
+  async function handleReactReview(reviewId: string, interaction: 'L' | 'D') {
+    const payload: VoteReviewBodySchema = {
+      interaction,
+    };
+
+    try {
+      const response = await api.patch(`/reviews/react/${reviewId}`, payload);
+      const {
+        id,
+        likeCount,
+        dislikeCount,
+        myInteraction: reaction,
+      } = VoteReviewResponseSchema.parse(response.data).data;
+
+      const review = reviews.find((r) => r.id === id);
+      if (review) {
+        Object.assign(review, {
+          reaction,
+          stats: {
+            likeCount,
+            dislikeCount,
+          },
+        });
+      }
+    } catch (error) {
+      if (isAxiosError(error)) {
+        console.error(error.message);
+      }
     }
   }
 
@@ -799,6 +837,9 @@
                         likesCount={review.stats.likeCount}
                         dislikesCount={review.stats.dislikeCount}
                         status={review.status}
+                        onLike={() => handleReactReview(review.id, 'L')}
+                        onDislike={() => handleReactReview(review.id, 'D')}
+                        reaction={review.reaction}
                       />
                     {/each}
                   </div>

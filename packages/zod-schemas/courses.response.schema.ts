@@ -7,6 +7,7 @@ import {
   semesterString,
   studyProgram,
   TIME_REGEX,
+  vote,
 } from "./constants.js";
 import { CourseInfoSchema } from "./courses.schema.js";
 
@@ -64,6 +65,7 @@ export const CourseReview = z.object({
     likeCount: z.number(),
     dislikeCount: z.number(),
   }),
+  reaction: z.enum(vote).optional(),
 });
 
 export const CourseNoResponseSchema = z.object({

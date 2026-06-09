@@ -228,25 +228,33 @@
 
   function mapSemester(semester: string): '1' | '2' | '3' {
     switch (semester) {
-      default:
+      case '1':
       case 'FIRST':
         return '1';
+      case '2':
       case 'SECOND':
         return '2';
+      case '3':
       case 'SUMMER':
         return '3';
+      default:
+        return '1';
     }
   }
 
   function mapSemesterInverse(semester: string): 'FIRST' | 'SECOND' | 'SUMMER' {
     switch (semester) {
-      default:
       case '1':
+      case 'FIRST':
         return 'FIRST';
       case '2':
+      case 'SECOND':
         return 'SECOND';
       case '3':
+      case 'SUMMER':
         return 'SUMMER';
+      default:
+        return 'FIRST';
     }
   }
 

@@ -104,13 +104,17 @@
 
   function mapSemester(semester: string) {
     switch (semester) {
-      default:
+      case '1':
       case 'FIRST':
         return '1';
+      case '2':
       case 'SECOND':
         return '2';
+      case '3':
       case 'SUMMER':
         return '3';
+      default:
+        return '1';
     }
   }
 

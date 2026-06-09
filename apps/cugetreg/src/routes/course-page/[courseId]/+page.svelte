@@ -55,6 +55,7 @@
     type SubmitReviewBodySchema,
   } from '@cugetreg/zod-schemas';
   import { isAxiosError } from 'axios';
+  import toast from 'svelte-french-toast';
 
   const { data }: PageProps = $props();
   const course = $derived(data.course);
@@ -275,8 +276,16 @@
       }
     } catch (error) {
       if (isAxiosError(error)) {
-        console.error(error.message);
+        if (error.status === 401)
+          toast.error('Please login before doing this action', {
+            position: 'bottom-right',
+          });
+        return;
       }
+      console.error(error);
+      toast.error('Something went wrong', {
+        position: 'bottom-right',
+      });
     }
   }
 
@@ -311,8 +320,17 @@
       });
     } catch (error) {
       if (isAxiosError(error)) {
-        console.error(error.message);
+        if (error.status === 401) {
+          toast.error('Please login before doing this action', {
+            position: 'bottom-right',
+          });
+          return;
+        }
       }
+
+      toast.error('Something went wrong', {
+        position: 'bottom-right',
+      });
     }
   }
 
@@ -912,7 +930,7 @@
 </div>
 
 {#snippet SidebarComponent()}
-  {@const _sidebar = Sidebar.useSidebar()}
+  {@const isLoggedIn = Boolean(session.data)}
   <Sidebar.Sidebar
     variant="sidebar"
     collapsible="icon"
@@ -968,17 +986,19 @@
                 <MessageCircleQuestionIcon size="24" strokeWidth={2.5} />
               </Sidebar.MenuButton>
             </Sidebar.MenuItem>
-            <Sidebar.MenuItem>
-              <Sidebar.MenuButton
-                onclick={() => togglePanel('selected_only')}
-                isActive={activePanel === 'selected_only'}
-                size="lg"
-                tooltipContent="วิชาที่เลือก"
-                class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-6!"
-              >
-                <BookMarked size="24" strokeWidth={2.5} />
-              </Sidebar.MenuButton>
-            </Sidebar.MenuItem>
+            {#if isLoggedIn}
+              <Sidebar.MenuItem>
+                <Sidebar.MenuButton
+                  onclick={() => togglePanel('selected_only')}
+                  isActive={activePanel === 'selected_only'}
+                  size="lg"
+                  tooltipContent="วิชาที่เลือก"
+                  class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-6!"
+                >
+                  <BookMarked size="24" strokeWidth={2.5} />
+                </Sidebar.MenuButton>
+              </Sidebar.MenuItem>
+            {/if}
           </Sidebar.Menu>
         </Sidebar.GroupContent>
       </Sidebar.Group>
@@ -997,7 +1017,7 @@
           class="bg-surface flex flex-1 flex-col overflow-hidden group-data-[state=collapsed]:absolute group-data-[state=collapsed]:top-4 group-data-[state=collapsed]:left-[calc(var(--sidebar-width-icon)+1rem)] group-data-[state=collapsed]:z-50 group-data-[state=collapsed]:max-h-[min(800px,calc(100%-2rem))] group-data-[state=collapsed]:w-[400px] group-data-[state=collapsed]:rounded-3xl group-data-[state=collapsed]:border group-data-[state=collapsed]:shadow-2xl md:px-8 md:pt-0 md:pb-8"
         >
           <div class="flex-1 overflow-y-auto pr-6 pb-10 md:pr-8">
-            {#if sidebarExpanded || openPanel === 'sidebar'}
+            {#if (sidebarExpanded || openPanel === 'sidebar') && isLoggedIn}
               <div
                 bind:this={timetableSection}
                 class="relative mb-6 flex flex-col gap-2"
@@ -1050,7 +1070,8 @@
 
                   <button
                     type="button"
-                    class="flex items-center gap-1.5 rounded-xl bg-[#E9EEF6] px-3.5 py-1.5 text-sm font-medium text-[#004494] transition-all hover:bg-[#D2E0F5]"
+                    data-hidden={!isLoggedIn}
+                    class="flex items-center gap-1.5 rounded-xl bg-[#E9EEF6] px-3.5 py-1.5 text-sm font-medium text-[#004494] transition-all hover:bg-[#D2E0F5] data-[hidden=true]:hidden"
                     onclick={() => {
                       scrollToSection(reviewSection);
                       setTimeout(() => textareaRef?.focus(), 300);
@@ -1063,7 +1084,7 @@
               </div>
             {/if}
 
-            {#if sidebarExpanded || openPanel === 'selected_only'}
+            {#if (sidebarExpanded || openPanel === 'selected_only') && isLoggedIn}
               <div bind:this={selectedSection}>
                 {#if $userCart.currentCart}
                   <SelectedCourse

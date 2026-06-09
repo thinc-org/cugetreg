@@ -1,7 +1,8 @@
 import { createAuthClient } from 'better-auth/svelte';
+import { PUBLIC_API_URL } from '$env/static/public';
 
 export const { signIn, signOut, useSession } = createAuthClient({
-  baseURL: 'http://localhost:3000/api/v1/auth',
+  baseURL: `${PUBLIC_API_URL}/auth`,
 });
 
 export const handleGoogleLogin = async () => {
@@ -20,4 +21,5 @@ export const handleGoogleLogin = async () => {
 
 export const handleGoogleLogout = async () => {
   await signOut();
+  window.location.reload();
 };

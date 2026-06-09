@@ -453,11 +453,6 @@
     }
   }
 
-  function handleCreateSchedule() {
-    console.log('User wants to create a NEW schedule');
-    showMismatchPopup = false;
-  }
-
   function getSectionOptions(courseItem: any) {
     return (courseItem.course.sections ?? []).map((sec: any) => ({
       value: String(sec.sectionNo),
@@ -731,7 +726,6 @@
                   expectedParams.semester === '2' ? 'SECOND' : 'SUMMER'
                 }
                 onConfirm={handleScheduleChange}
-                onCreateNew={handleCreateSchedule}
                 onClose={() => (showMismatchPopup = false)}
               />
             {/if}

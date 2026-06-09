@@ -21,7 +21,6 @@
     expectedSemester: string;
     expectedProgram: string;
     onConfirm: (scheduleId: string) => void;
-    onCreateNew: () => void;
     onClose: () => void;
   }
 
@@ -31,7 +30,6 @@
     expectedSemester,
     expectedProgram,
     onConfirm,
-    onCreateNew,
     onClose,
   }: ScheduleMismatchPopupProps = $props();
 
@@ -60,9 +58,7 @@
   let showCreateScheduleModal = $state(false);
 
   function handleConfirm() {
-    if (selectedId === 'NEW') {
-      onCreateNew();
-    } else if (selectedId) {
+    if (selectedId !== 'NEW') {
       onConfirm(selectedId);
     }
     onClose();

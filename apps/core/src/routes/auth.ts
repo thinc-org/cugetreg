@@ -13,7 +13,7 @@ authRoute.on(["POST", "GET"], "/*", (c) => {
 
 // Inject session user into context; in non-prod bypasses real auth with a hardcoded user for local dev
 export const middlewareAuth: MiddlewareHandler = async (c, next) => {
-  if (env.APP_MODE === "prod") {
+  if (env.APP_MODE !== "prod") {
     c.set("user", {
       id: "63dea25026f1907da44534a7",
       email: "6438097921@student.chula.ac.th",
@@ -35,7 +35,7 @@ export const middlewareAuth: MiddlewareHandler = async (c, next) => {
 };
 
 export const includeAuth: MiddlewareHandler = async (c, next) => {
-  if (env.APP_MODE === "prod") {
+  if (env.APP_MODE !== "prod") {
     c.set("user", {
       id: "63dea25026f1907da44534a7",
       email: "6438097921@student.chula.ac.th",

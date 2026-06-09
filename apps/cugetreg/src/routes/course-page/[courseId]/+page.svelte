@@ -47,10 +47,16 @@
 
   import type { PageProps } from './$types';
   import { useSession } from '$lib/auth-client';
+  import { api } from '$lib/api';
+  import {
+    SubmitReviewResponseSchema,
+    type SubmitReviewBodySchema,
+  } from '@cugetreg/zod-schemas';
+  import { isAxiosError } from 'axios';
 
   const { data }: PageProps = $props();
   const course = $derived(data.course);
-  const reviews = $derived(data.reviews);
+  const reviews = $state(untrack(() => data.reviews));
 
   const session = useSession();
 
@@ -59,9 +65,11 @@
 
   const years = ['2566', '2565', '2564'];
   const terms = ['ภาคต้น', 'ภาคปลาย'];
+
   let selectedYear = $state(years[0]);
   let selectedTerm = $state(terms[0]);
   let reviewRating = $state(1);
+  let reviewContent = $state('');
 
   let openPanel = $state<
     | 'sidebar'
@@ -85,33 +93,36 @@
   let descriptionSection = $state<HTMLElement>();
   let detailSection = $state<HTMLElement>();
   let reviewSection = $state<HTMLElement>();
-  let selectedSection = $state<HTMLElement>();
 
   const getStarState = (value: number) => {
     if (reviewRating >= value) return 'full';
     if (reviewRating >= value - 0.5) return 'half';
     return 'empty';
   };
+
   const onStarClick = (value: number, event: MouseEvent) => {
     const target = event.currentTarget as HTMLButtonElement;
     const rect = target.getBoundingClientRect();
     const isHalf = event.clientX - rect.left < rect.width / 2;
     reviewRating = isHalf ? value - 0.5 : value;
   };
+
   const reviewYearPlaceholder = 'ปีการศึกษา';
   const reviewTermPlaceholder = 'ภาคเรียน';
   let selectedReviewYear = $state(reviewYearPlaceholder);
   let selectedReviewTerm = $state(reviewTermPlaceholder);
-  const reviewsPerPage = 2;
+  const reviewsPerPage = 4;
   let reviewsPage = $state(1);
+
   const isReviewYearPlaceholder = $derived(
     selectedReviewYear === reviewYearPlaceholder,
   );
+
   const isReviewTermPlaceholder = $derived(
     selectedReviewTerm === reviewTermPlaceholder,
   );
 
-  let textareaRef: HTMLTextAreaElement;
+  let textareaRef: HTMLTextAreaElement | undefined = $state();
 
   function togglePanel(type: typeof openPanel) {
     if (type === 'sidebar' || type === 'selected_only') {
@@ -138,16 +149,25 @@
   }
 
   const filteredReviews = $derived.by(() =>
-    reviews.filter((review) => {
-      if (
-        !isReviewYearPlaceholder &&
-        review.academicYear !== Number(selectedReviewYear)
-      )
-        return false;
-      if (!isReviewTermPlaceholder && review.semester !== selectedReviewTerm)
-        return false;
-      return true;
-    }),
+    reviews
+      .filter((review) => {
+        if (
+          !isReviewYearPlaceholder &&
+          review.academicYear !== Number(selectedReviewYear)
+        )
+          return false;
+        if (!isReviewTermPlaceholder && review.semester !== selectedReviewTerm)
+          return false;
+        return true;
+      })
+      .sort((a, b) => {
+        const priority: Record<string, number> = {
+          REJECTED: 0,
+          PENDING: 1,
+          APPROVED: 2,
+        };
+        return (priority[a.status] ?? 3) - (priority[b.status] ?? 3);
+      }),
   );
 
   const totalReviewPages = $derived(
@@ -197,6 +217,66 @@
       .map((item) => item.term);
     return [reviewTermPlaceholder, ...Array.from(new Set(terms))];
   });
+
+  function mapSemester(semester: string): '1' | '2' | '3' {
+    switch (semester) {
+      default:
+      case 'FIRST':
+        return '1';
+      case 'SECOND':
+        return '2';
+      case 'SUMMER':
+        return '3';
+    }
+  }
+
+  function mapSemesterInverse(semester: string): 'FIRST' | 'SECOND' | 'SUMMER' {
+    switch (semester) {
+      default:
+      case '1':
+        return 'FIRST';
+      case '2':
+        return 'SECOND';
+      case '3':
+        return 'SUMMER';
+    }
+  }
+
+  async function handleSubmitReview() {
+    const payload: SubmitReviewBodySchema = {
+      courseNo: course.courseNo,
+      studyProgram: course.studyProgram,
+      academicYear: course.academicYear,
+      semester: mapSemester(course.semester),
+      rating: reviewRating * 2,
+      content: reviewContent,
+    };
+
+    try {
+      const response = await api.post('/reviews', payload);
+      const review = SubmitReviewResponseSchema.parse(response.data).data;
+
+      console.log(review);
+
+      reviews.push({
+        id: review.id,
+        rating: review.rating,
+        status: review.status,
+        studyProgram: review.studyProgram,
+        academicYear: review.academicYear,
+        semester: mapSemesterInverse(review.semester), // CAN WE HAVE SINGLE () => data.reviewsSEMESTER TYPE PLEASE????
+        content: review.content,
+        stats: {
+          likeCount: review.likeCount,
+          dislikeCount: review.dislikeCount,
+        },
+      });
+    } catch (error) {
+      if (isAxiosError(error)) {
+        console.error(error.message);
+      }
+    }
+  }
 
   $effect(() => {
     const academicYear = page.url.searchParams.get('academicYear');
@@ -625,6 +705,7 @@
                     </div>
                     <textarea
                       bind:this={textareaRef}
+                      bind:value={reviewContent}
                       class="text-on-surface h-36 w-full resize-none bg-transparent px-4 py-3 text-sm outline-none"
                       placeholder="คุณคิดว่าวิชานี้เป็นอย่างไรบ้าง?"
                     ></textarea>
@@ -635,6 +716,7 @@
                       variant="solid"
                       color="secondary"
                       class="bg-primary-container text-primary hover:ring-primary-container gap-2"
+                      onclick={handleSubmitReview}
                     >
                       ส่งรีวิว
                       <Send size={14} />
@@ -711,11 +793,12 @@
                   <div class="mt-6 flex flex-col gap-6">
                     {#each pagedReviews as review, index (index)}
                       <Comment
-                        rating={review.rating}
-                        semester={review.semester}
+                        rating={review.rating / 2}
+                        semester={mapSemester(review.semester)}
                         content={review.content}
                         likesCount={review.stats.likeCount}
                         dislikesCount={review.stats.dislikeCount}
+                        status={review.status}
                       />
                     {/each}
                   </div>

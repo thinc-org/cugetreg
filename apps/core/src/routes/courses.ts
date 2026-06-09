@@ -59,6 +59,23 @@ courses
 
       let occupiedSql = Prisma.empty;
       if (fitCardId) {
+        const userId = c.get("user").id;
+
+        if (!userId) {
+          return c.json({ error: "UNAUTHORIZED" }, 401);
+        }
+
+        const cart = await prisma.cart.findFirst({
+          where: {
+            id: fitCardId,
+            userId,
+          },
+        });
+
+        if (!cart) {
+          return c.json({ error: "NOT_CART_OWNER" }, 403);
+        }
+
         const cartItems = await prisma.cartItem.findMany({
           where: { cartId: fitCardId },
         });
@@ -269,16 +286,29 @@ courses
         },
       });
 
+      const user_id = c.get("user")?.id;
+
+      console.log(user_id);
+
       const reviewsRaw = await prisma.review.findMany({
         where: {
           courseNo,
-          status: ReviewStatus.APPROVED,
+          OR: [
+            { status: ReviewStatus.APPROVED },
+            ...(user_id
+              ? [
+                  { status: ReviewStatus.PENDING, userId: user_id },
+                  { status: ReviewStatus.REJECTED, userId: user_id },
+                ]
+              : []),
+          ],
         },
         include: {
-          user: false,
           votes: true,
         },
       });
+
+      console.log(reviewsRaw);
 
       if (!course) {
         return c.json({ message: "Course not found" }, 404);
@@ -312,7 +342,8 @@ courses
         },
         200,
       );
-    } catch {
+    } catch (error) {
+      console.error(error);
       return c.json({ error: "INTERNAL_SERVER_ERROR" }, 500);
     }
   });

@@ -2,22 +2,20 @@
 	import { ThumbsDown, ThumbsUp } from '@lucide/svelte';
 
 	import { RatingStar } from '../../atoms/rating-star';
+	import StatusChip from '$lib/components/atoms/status-chip/status-chip.svelte';
 
-	let {
-		content,
-		semester,
-		rating,
-		likesCount,
-		dislikesCount,
-		facultyMajor
-	}: {
+	interface CommentProps {
 		content: string;
 		semester: string;
 		rating: number;
 		likesCount: number;
 		dislikesCount: number;
 		facultyMajor?: string;
-	} = $props();
+		status: 'REJECTED' | 'PENDING' | 'APPROVED';
+	}
+
+	let { content, semester, rating, likesCount, dislikesCount, facultyMajor, status }: CommentProps =
+		$props();
 	let hasHalfStar: boolean = $derived(rating % 1 !== 0); // Determine if there's a half star
 	let isExpanded: boolean = $state(false);
 </script>
@@ -27,19 +25,25 @@
   lg:px-12 lg:py-10"
 	class:h-auto={isExpanded}
 >
-	<div class="flex flex-row items-center gap-x-6">
-		<div class="text-h3 text-primary font-bold">
-			{#if !hasHalfStar}
-				<span>{rating}.0</span>
-			{:else}
-				<span>{rating}</span>
-			{/if}
+	<div class="flex flex-row items-center justify-between">
+		<div class="flex flex-row items-center gap-x-6">
+			<div class="text-h3 text-primary font-bold">
+				{#if !hasHalfStar}
+					<span>{rating}.0</span>
+				{:else}
+					<span>{rating}</span>
+				{/if}
+			</div>
+
+			<RatingStar {rating} />
+
+			<div class="text-subtitle font-sans font-medium">
+				{semester}
+			</div>
 		</div>
 
-		<RatingStar {rating} />
-
-		<div class="text-subtitle font-sans font-medium">
-			{semester}
+		<div class={status === 'APPROVED' ? 'hidden' : ''}>
+			<StatusChip variant={status} />
 		</div>
 	</div>
 

@@ -671,9 +671,17 @@
                   </div>
                 {:else}
                   {@const params = new URLSearchParams({
-                    studyProgram: $userCart.currentCart.studyProgram,
-                    academicYear: String($userCart.currentCart.academicYear),
-                    semester: $userCart.currentCart.semester,
+                    studyProgram: currentProgram === 'นานาชาติ'
+                      ? 'I'
+                      : currentProgram === 'ตรีภาค'
+                        ? 'T'
+                        : 'S',
+                    academicYear: String(getParams().academicYear),
+                    semester: getParams().semester === '1'
+                      ? 'FIRST'
+                      : getParams().semester === '2'
+                        ? 'SECOND'
+                        : 'SUMMER',
                   })}
                   {#each displayedCourses as item (item.course.code)}
                     <CourseCard

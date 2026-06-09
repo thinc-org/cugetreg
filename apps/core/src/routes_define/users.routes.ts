@@ -1,16 +1,16 @@
 import { createRoute } from "@hono/zod-openapi";
 
-import { InternalError } from "./errorRes.js";
-
+import {
+  GetUserReviewsQuerySchema,
+  UpdateUserInfoBodySchema,
+} from "@cugetreg/zod-schemas/user";
 import {
   UpdateUserInfoResponseSchema,
   UserResponseSchema,
   UserReviewResponseSchema,
 } from "@cugetreg/zod-schemas/user-response";
-import {
-  GetUserReviewsQuerySchema,
-  UpdateUserInfoBodySchema,
-} from "@cugetreg/zod-schemas/user";
+
+import { InternalError } from "./errorRes.js";
 
 export const getUserRoute = createRoute({
   method: "get",

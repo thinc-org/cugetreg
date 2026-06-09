@@ -2,6 +2,8 @@
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
   import { page } from '$app/state';
+  import { api } from '$lib/api';
+  import { useSession } from '$lib/auth-client';
   import SelectedCourse from '$lib/components/selected-course.svelte';
   import { faculties } from '$lib/constants';
   import { getUserCartStore, useCartActions } from '$lib/stores/user-cart';
@@ -26,7 +28,9 @@
     Strikethrough,
     Underline,
   } from '@lucide/svelte';
+  import { isAxiosError } from 'axios';
   import { untrack } from 'svelte';
+  import toast from 'svelte-french-toast';
 
   import * as Accordion from '@cugetreg/ui/atoms/accordion';
   import { Button } from '@cugetreg/ui/atoms/button';
@@ -44,24 +48,18 @@
   import { Footer } from '@cugetreg/ui/organisms/footer';
   import * as Sidebar from '@cugetreg/ui/organisms/sidebar';
   import type { GenEdType } from '@cugetreg/utils/types';
-
-  import type { PageProps } from './$types';
-  import { useSession } from '$lib/auth-client';
-  import { api } from '$lib/api';
   import {
+    type SubmitReviewBodySchema,
     SubmitReviewResponseSchema,
     VoteReviewBodySchema,
     VoteReviewResponseSchema,
-    type SubmitReviewBodySchema,
   } from '@cugetreg/zod-schemas';
-  import { isAxiosError } from 'axios';
-  import toast from 'svelte-french-toast';
+
+  import type { PageProps } from './$types';
 
   const { data }: PageProps = $props();
   const course = $derived(data.course);
   const reviews = $state(untrack(() => data.reviews));
-
-  $inspect(reviews);
 
   const session = useSession();
 

@@ -1,8 +1,9 @@
 <script lang="ts">
+	import StatusChip from '$lib/components/atoms/status-chip/status-chip.svelte';
+
 	import { ThumbsDown, ThumbsUp } from '@lucide/svelte';
 
 	import { RatingStar } from '../../atoms/rating-star';
-	import StatusChip from '$lib/components/atoms/status-chip/status-chip.svelte';
 
 	interface CommentProps {
 		content: string;

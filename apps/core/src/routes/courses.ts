@@ -1,5 +1,7 @@
 import { OpenAPIHono } from "@hono/zod-openapi";
 
+import type { CourseReview } from "@cugetreg/zod-schemas/courses-response";
+
 import { prisma } from "../db/clients.js";
 import { Prisma, ReviewStatus, VoteType } from "../generated/prisma/client.js";
 import type { Variables } from "../lib/auth.js";
@@ -13,12 +15,6 @@ import {
   mapGradingType,
   mapStudyProgram,
 } from "../utils/enumMapper.js";
-import type {
-  CourseNoResponse,
-  CourseReview,
-} from "@cugetreg/zod-schemas/courses-response";
-import { not } from "ramda";
-import { vote } from "@cugetreg/zod-schemas/constants";
 
 // API accepts numeric semester (1/2/3); DB stores enum strings (FIRST/SECOND/SUMMER)
 const semesterMap: Record<number, "FIRST" | "SECOND" | "SUMMER"> = {

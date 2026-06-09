@@ -1,3 +1,9 @@
+import type {
+  EditReviewBodySchema,
+  SubmitReviewBodySchema,
+  VoteReviewBodySchema,
+} from "@cugetreg/zod-schemas/reviews";
+
 import { prisma } from "../db/clients.js";
 import { Prisma } from "../generated/prisma/client.js";
 import type { VoteType } from "../generated/prisma/enums.js";
@@ -7,11 +13,6 @@ import {
   mapStudyProgram,
   mapVoteType,
 } from "../utils/enumMapper.js";
-import type {
-  EditReviewBodySchema,
-  SubmitReviewBodySchema,
-  VoteReviewBodySchema,
-} from "@cugetreg/zod-schemas/reviews";
 
 const semesterToNumber: Record<string, string> = {
   FIRST: "1",

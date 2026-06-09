@@ -1,9 +1,10 @@
-import { prisma } from "../db/clients.js";
-import { mapReviewStatus } from "../utils/enumMapper.js";
 import type {
   GetUserReviewsQuery,
   UpdateUserInfoBody,
 } from "@cugetreg/zod-schemas/user";
+
+import { prisma } from "../db/clients.js";
+import { mapReviewStatus } from "../utils/enumMapper.js";
 
 export const usersService = {
   getUserInfo: async (userId: string) => {

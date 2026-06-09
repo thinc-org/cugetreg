@@ -1,18 +1,18 @@
 import { createRoute, z } from "@hono/zod-openapi";
 
-import { errorRes, InternalError } from "./errorRes.js";
-
+import {
+  EditReviewBodySchema,
+  SubmitReviewBodySchema,
+  VoteReviewBodySchema,
+} from "@cugetreg/zod-schemas/reviews";
 import {
   DeleteReviewSchema,
   EditReviewResponseSchema,
   SubmitReviewResponseSchema,
   VoteReviewResponseSchema,
 } from "@cugetreg/zod-schemas/reviews-response";
-import {
-  EditReviewBodySchema,
-  SubmitReviewBodySchema,
-  VoteReviewBodySchema,
-} from "@cugetreg/zod-schemas/reviews";
+
+import { errorRes, InternalError } from "./errorRes.js";
 
 export const submitReviewRoute = createRoute({
   method: "post",

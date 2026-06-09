@@ -1,3 +1,9 @@
+import type {
+  ClassScheduleItem,
+  ExamScheduleItem,
+} from "@cugetreg/zod-schemas/carts-response";
+import type { PublicCartItemDetail } from "@cugetreg/zod-schemas/public-carts-response";
+
 import {
   detectClassConflicts,
   detectExamConflicts,
@@ -6,11 +12,6 @@ import { LexoRankService } from "./lexorank.service.js";
 
 import { prisma } from "../db/clients.js";
 import { Visible } from "../generated/prisma/client.js";
-import type {
-  ClassScheduleItem,
-  ExamScheduleItem,
-} from "@cugetreg/zod-schemas/carts-response";
-import type { PublicCartItemDetail } from "@cugetreg/zod-schemas/public-carts-response";
 
 export const publicCartsService = {
   // Read-only view of a shared timetable — visible to anyone with the link

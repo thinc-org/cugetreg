@@ -1,9 +1,9 @@
 import { createRoute } from "@hono/zod-openapi";
 
-import { InternalError } from "./errorRes.js";
-
 import * as CourseSchema from "@cugetreg/zod-schemas/courses";
 import * as CourseResponseSchema from "@cugetreg/zod-schemas/courses-response";
+
+import { InternalError } from "./errorRes.js";
 
 //1.1get courses
 export const getCoursesRoute = createRoute({

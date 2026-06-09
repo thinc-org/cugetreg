@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { cn } from '@cugetreg/utils';
 
-	import { chipVariants, type Variant, styles, text } from './index.js';
+	import { chipVariants, styles, text, type Variant } from './index.js';
 
 	interface Props {
 		variant: Variant;

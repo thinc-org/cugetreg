@@ -1,5 +1,16 @@
-export const TIME_REGEX = /^([01]\d|2[0-3]):([0-5]\d)$/;
-export const days = ["MO", "TU", "WE", "TH", "FR", "SA", "SU", "AR", "IA"] as const;
+export const TIME_REGEX = /^(IA)|([01]\d|2[0-3]):([0-5]\d)$/;
+export const days = [
+  "MO",
+  "TU",
+  "WE",
+  "TH",
+  "FR",
+  "SA",
+  "SU",
+  "AR",
+  "IA",
+  "IR",
+] as const;
 export const studyProgram = ["T", "I", "S"] as const;
 export const genEdType = ["NO", "SC", "SO", "HU", "IN"] as const;
 export const assessment = ["LETTER", "SU"] as const;

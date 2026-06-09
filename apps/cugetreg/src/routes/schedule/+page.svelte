@@ -25,10 +25,7 @@
     type TimetableMetaData,
   } from '@cugetreg/ui/organisms/create-timetable';
   import { RenameSchedule } from '@cugetreg/ui/organisms/rename-schedule';
-  import {
-    ViewCourse,
-    type ViewCourseData,
-  } from '@cugetreg/ui/organisms/view-course';
+  import { ViewCourse } from '@cugetreg/ui/organisms/view-course';
   import {
     discardTime,
     formatDate,
@@ -39,7 +36,7 @@
   import type {
     CartItemDetail,
     Period,
-  } from '@cugetreg/zod-schemas/cart-response';
+  } from '@cugetreg/zod-schemas/carts-response';
 
   // TODO: Move this somewhere else
   function parsePeriodTime(periodTime: string): number {
@@ -399,12 +396,14 @@
         "
     >
       <SelectTimetable
-        class="border-b border-neutral-200 px-2 py-5"
         options={$userCart.cartList?.map((item) => ({
           name: item.name,
           id: item.id,
         })) ?? []}
         bind:value={$userCart.currentCartId}
+        academicYear={$userCart.currentCart.academicYear}
+        semester={$userCart.currentCart.semester}
+        semesterType={$userCart.currentCart.studyProgram}
       />
       <SelectedCourse class="border-b border-neutral-200" />
       <div

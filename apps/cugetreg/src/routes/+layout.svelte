@@ -17,7 +17,7 @@
   import toast, { Toaster } from 'svelte-french-toast';
 
   import { Navbar } from '@cugetreg/ui/organisms/navbar';
-  import { CartDetailResponseSchema } from '@cugetreg/zod-schemas/cart-response';
+  import { CartDetailResponseSchema } from '@cugetreg/zod-schemas/carts-response';
 
   import type { LayoutData } from './$types';
 

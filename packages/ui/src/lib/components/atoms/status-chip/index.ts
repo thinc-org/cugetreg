@@ -13,7 +13,7 @@ export const styles: Record<Variant, string> = {
 };
 
 export const text: Record<Variant, string> = {
-	APPROVED: 'อนุมัติ',
+	APPROVED: 'อนุมัติแล้ว',
 	PENDING: 'กำลังรออนุมัติ',
-	REJECTED: 'ปฎิเสธ'
+	REJECTED: 'ถูกปฎิเสธ'
 };

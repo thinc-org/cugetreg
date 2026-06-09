@@ -5,7 +5,7 @@ export * from "./constants.js";
 export * from "./courses.response.schema.js";
 export * from "./courses.schema.js";
 export * from "./publicCarts.response.schema.js";
-export * from "./publicCcarts.schema.js";
+export * from "./publicCarts.schema.js";
 export * from "./reviews.response.schema.js";
 export * from "./reviews.schema.js";
 export * from "./user.response.schema.js";

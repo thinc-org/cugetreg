@@ -28,7 +28,7 @@
     "./carts-response": "./carts.response.schema.ts",
     "./courses": "./courses.schema.ts",
     "./courses-response": "./courses.response.schema.ts",
-    "./public-carts": "./publicCcarts.schema.ts",
+    "./public-carts": "./publicCarts.schema.ts",
     "./public-carts-response": "./publicCarts.response.schema.ts",
     "./reviews": "./reviews.schema.ts",
     "./reviews-response": "./reviews.response.schema.ts",

@@ -298,6 +298,9 @@ importers:
       '@hono/eslint-config':
         specifier: ^2.0.6
         version: 2.0.6(@typescript-eslint/utils@8.53.1(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3)
+      '@types/eslint-plugin-promise':
+        specifier: ^7.3.0
+        version: 7.3.0
       eslint:
         specifier: ^9.39.2
         version: 9.39.2(jiti@2.6.1)

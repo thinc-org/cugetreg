@@ -128,8 +128,6 @@
 
   let textareaRef: HTMLTextAreaElement | undefined = $state();
 
-  $effect(() => console.log(reviews));
-
   function togglePanel(type: typeof openPanel) {
     if (type === 'sidebar' || type === 'selected_only') {
       if (sidebarExpanded) scrollToSection(timetableSection);

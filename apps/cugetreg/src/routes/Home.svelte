@@ -102,6 +102,18 @@
   };
   const KNOWN_DAYS = new Set(['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU']);
 
+  function mapSemester(semester: string) {
+    switch (semester) {
+      default:
+      case 'FIRST':
+        return '1';
+      case 'SECOND':
+        return '2';
+      case 'SUMMER':
+        return '3';
+    }
+  }
+
   function parseTime(t: string): number | null {
     if (!t) return null;
     const m = t.trim().match(/^(\d{1,2}):(\d{2})$/);
@@ -199,8 +211,6 @@
     }
 
     if (!hasMore || isLoading) return;
-
-    console.log(`fetching ${offset}`);
 
     isLoading = true;
     try {
@@ -608,7 +618,7 @@
                   {@const params = new URLSearchParams({
                     studyProgram: $userCart.currentCart.studyProgram,
                     academicYear: String($userCart.currentCart.academicYear),
-                    semester: $userCart.currentCart.semester,
+                    semester: mapSemester($userCart.currentCart.semester),
                   })}
                   {#each displayedCourses as item (item.course.code)}
                     <CourseCard

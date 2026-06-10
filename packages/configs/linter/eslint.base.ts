@@ -61,6 +61,8 @@ const config = defineConfig(
       ],
       "@typescript-eslint/no-explicit-any": "off",
       "@typescript-eslint/no-empty-object-type": "off",
+
+      "prettier/prettier": ["error", { endOfLine: "auto" }],
     },
   },
   {

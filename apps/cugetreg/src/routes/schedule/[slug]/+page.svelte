@@ -19,12 +19,16 @@
   } from '@cugetreg/ui/molecules/exam-card';
   import { CreateTimetable } from '@cugetreg/ui/organisms/create-timetable';
   import { RenameSchedule } from '@cugetreg/ui/organisms/rename-schedule';
-  import { ViewCourse } from '@cugetreg/ui/organisms/view-course';
+  import {
+    ViewCourse,
+    type ViewCourseData,
+  } from '@cugetreg/ui/organisms/view-course';
   import {
     discardTime,
     formatDate,
     formatExamColumn,
     formatExamTime,
+    formatScheduleTime,
     isFinalsConflict,
     isMidtermConflict,
   } from '@cugetreg/utils';
@@ -195,6 +199,55 @@
   let showDeleteScheduleModal = $state(false);
   let showViewCourseModal = $state(false);
 
+  let selectedCourseScheduleId = $state<number | null>(null);
+
+  const viewCourseData = $derived.by(() => {
+    if (selectedCourseScheduleId === null) return null;
+
+    const courseSchedule = selectedSchedule.schedule.find(
+      (s) => s.id === selectedCourseScheduleId,
+    );
+    if (!courseSchedule) return null;
+
+    const data: ViewCourseData = {
+      itemId: String(courseSchedule.id),
+      courseNo: courseSchedule.course.code,
+      abbrName: courseSchedule.course.name, // In this view, name might be abbrName or full name
+      courseNameTh: courseSchedule.course.name,
+      courseNameEn: courseSchedule.course.name,
+      credit: courseSchedule.course.credit,
+      genEdType: courseSchedule.course.gened[0],
+      sections: Object.entries(courseSchedule.course.sections).map(
+        ([secNo, classes]) => ({
+          sectionNo: Number(secNo),
+          closed: false, // Not available in this view's data
+          regis: 0,
+          max: 0,
+          classes: (classes as any[]).map((cls) => ({
+            type: 'LECT', // Not available in this view's data
+            dayOfWeek: cls.day,
+            periodStart: formatScheduleTime(cls.startTime),
+            periodEnd: formatScheduleTime(cls.startTime + cls.duration),
+            building: cls.building,
+            room: cls.room,
+            professors: [], // Not available in this view's data
+          })),
+        }),
+      ),
+      selectedSectionNo: courseSchedule.selectedSection,
+      color: (courseSchedule.colorVariant as ColorVariant) ?? 'primary',
+      midterm: courseSchedule.course.midterm
+        ? `${formatDate(courseSchedule.course.midterm.date)} ${formatExamTime(courseSchedule.course.midterm.date, courseSchedule.course.midterm.duration)}`
+        : undefined,
+      final: courseSchedule.course.final
+        ? `${formatDate(courseSchedule.course.final.date)} ${formatExamTime(courseSchedule.course.final.date, courseSchedule.course.final.duration)}`
+        : undefined,
+      isHidden: courseSchedule.hidden,
+    };
+
+    return data;
+  });
+
   const examSort = (a: string, b: string) => {
     const numA = Number(a);
     const numB = Number(b);
@@ -299,7 +352,10 @@
     dim
     bind:show={showViewCourseModal}
   >
-    <ViewCourse onExit={() => (showViewCourseModal = false)} />
+    <ViewCourse
+      data={viewCourseData}
+      onExit={() => (showViewCourseModal = false)}
+    />
   </Modal>
 
   <Modal
@@ -534,7 +590,10 @@
   {#if !hidden}
     {#each course.sections[selectedSection] || [] as period (period.day + period.startTime)}
       <TimetableCourseCard
-        onclick={() => (showViewCourseModal = true)}
+        onclick={() => {
+          selectedCourseScheduleId = course.id;
+          showViewCourseModal = true;
+        }}
         course={{
           name: course.name,
           code: course.code,

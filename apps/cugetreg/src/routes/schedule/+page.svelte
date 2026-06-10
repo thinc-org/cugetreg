@@ -2,13 +2,15 @@
   import SelectedCourse from '$lib/components/selected-course.svelte';
   import {
     CART_PROMISE_KEY,
+    type CartPromise,
     getUserCartStore,
     useCartActions,
-    type CartPromise,
   } from '$lib/stores/user-cart';
 
+  import { Loader2 } from '@lucide/svelte';
   import html2canvas from 'html2canvas-pro';
   import { ChevronLeft, ChevronRight, Copy, Share2 } from 'lucide-svelte';
+  import { getContext } from 'svelte';
 
   import { Button } from '@cugetreg/ui/atoms/button';
   import { IconButton } from '@cugetreg/ui/atoms/icon-button';
@@ -45,8 +47,6 @@
     CartItemDetail,
     Period,
   } from '@cugetreg/zod-schemas/cart-response';
-  import { getContext } from 'svelte';
-  import { Loader2 } from '@lucide/svelte';
 
   // TODO: Move this somewhere else
   function parsePeriodTime(periodTime: string): number {

@@ -1,6 +1,11 @@
 <script lang="ts">
   import SelectedCourse from '$lib/components/selected-course.svelte';
-  import { getUserCartStore, useCartActions } from '$lib/stores/user-cart';
+  import {
+    CART_PROMISE_KEY,
+    getUserCartStore,
+    useCartActions,
+    type CartPromise,
+  } from '$lib/stores/user-cart';
 
   import html2canvas from 'html2canvas-pro';
   import { ChevronLeft, ChevronRight, Copy, Share2 } from 'lucide-svelte';
@@ -37,6 +42,8 @@
     CartItemDetail,
     Period,
   } from '@cugetreg/zod-schemas/cart-response';
+  import { getContext } from 'svelte';
+  import { Loader2 } from '@lucide/svelte';
 
   // TODO: Move this somewhere else
   function parsePeriodTime(periodTime: string): number {
@@ -251,6 +258,8 @@
   });
 
   // let currentScheduleId = $state($userCart.currentCart?.id ?? '');
+
+  const cartPromise = getContext<CartPromise>(CART_PROMISE_KEY);
 </script>
 
 <div class="flex h-screen flex-col">
@@ -327,17 +336,34 @@
             [scrollbar-width:none] [&::-webkit-scrollbar]:hidden
         "
     >
-      <SelectTimetable
-        class="border-b border-neutral-200 px-2 py-5"
-        options={$userCart.cartList?.map((item) => ({
-          name: item.name,
-          id: item.id,
-        })) ?? []}
-        bind:value={$userCart.currentCartId}
-      />
+      {#await cartPromise}
+        <div
+          class="flex items-center justify-center gap-2 border-b border-neutral-200 px-2 py-8 text-gray-400"
+        >
+          <Loader2 class="animate-spin" size={24} />
+          <span class="text-sm">กำลังโหลดตารางเรียน...</span>
+        </div>
+      {:then}
+        <SelectTimetable
+          class="border-b border-neutral-200 px-2 py-5"
+          options={$userCart.cartList?.map((item) => ({
+            name: item.name,
+            id: item.id,
+          })) ?? []}
+          bind:value={$userCart.currentCartId}
+          semester={$userCart.currentCart.semester}
+          semesterType={$userCart.currentCart.studyProgram}
+          academicYear={$userCart.currentCart.academicYear}
+        />
+      {:catch}
+        <div
+          class="flex items-center justify-center gap-2 border-b border-neutral-200 px-2 py-8 text-sm text-red-400"
+        >
+          โหลดตารางเรียนไม่สำเร็จ
+        </div>
+      {/await}
+
       {#if $userCart.currentCart}
-        <SelectedCourse class="border-b border-neutral-200" />
-      {:else}
         <SelectedCourse class="border-b border-neutral-200" />
       {/if}
 

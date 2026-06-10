@@ -135,14 +135,10 @@ async function loadCart() {
   const exams: ExamScheduleItem[] = currentScheduleResponse.schedule.exams;
   const currentCartId = currentCart.id;
 
-  const data: UserCartInterface = {
+  return {
     cartList,
     currentCart,
     currentCartId,
     exams,
-  };
-
-  return {
-    data,
-  };
+  } as UserCartInterface;
 }

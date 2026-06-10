@@ -1,7 +1,7 @@
 import { tryCatch } from '$lib/async-handler';
 
 import { error as svelteError } from '@sveltejs/kit';
-import axios from 'axios';
+import axios, { isAxiosError } from 'axios';
 
 import {
   CartData,
@@ -20,21 +20,21 @@ export const load: LayoutServerLoad = () => {
 };
 
 async function loadCart() {
-  const [response, error] = await tryCatch(
-    axios.get(API_URL, {
-      params: {
-        academicYear: 2566,
-        semester: 'SECOND',
-        studyProgram: 'S',
-      },
-    }),
-  );
+  // const [response, error] = await tryCatch(axios.get(API_URL));
+  //
+  // if (error || !response) {
+  //   throw svelteError(500, 'Something went wrong');
+  // }
+  //
+  const response = await fetch(`${API_URL}`);
 
-  if (error || !response) {
-    throw svelteError(500, 'Something went wrong');
+  if (!response || !response.ok) {
+    throw svelteError(500, 'Something went wrong fetching carts');
   }
 
-  const cartList: CartList = ListCartsResponseSchema.parse(response.data).data;
+  const rawCartList = await response.json();
+
+  const cartList: CartList = ListCartsResponseSchema.parse(rawCartList).data;
   const defaultSchedule = cartList.find((item) => item.isDefault);
 
   let cartDetailData: any;

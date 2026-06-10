@@ -54,7 +54,6 @@
     children?: Snippet;
   } = $props();
 
-
   const EMPTY_CART: UserCartInterface = {
     currentCart: {
       id: '',
@@ -74,9 +73,7 @@
 
   const userCart = initUserCartStore(EMPTY_CART);
 
-
   const cartPromise = (() => data.cart)();
-
 
   cartPromise.then(
     (cart) => userCart.set(cart),

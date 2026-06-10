@@ -16,7 +16,6 @@ jobs:
   run:
     env:
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
-      PUBLIC_API_URL: http://localhost:3000
     runs-on: ${{ inputs.runs-on }}
     steps:
       - uses: actions/checkout@v4

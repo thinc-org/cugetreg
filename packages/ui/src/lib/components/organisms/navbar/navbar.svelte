@@ -18,7 +18,6 @@
 		name?: string;
 		imageUrl?: string;
 		id?: string;
-		onSearchEnter?: (val: string) => void;
 		onLogin?: () => void;
 		onSignOut?: () => void;
 	}
@@ -28,12 +27,9 @@
 		name = '',
 		imageUrl = 'https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg',
 		id = '',
-		onSearchEnter = () => {},
 		onLogin = () => {},
 		onSignOut = () => {}
 	}: Props = $props();
-
-	let localSearch = $state('');
 
 	let shortenedName = $derived(getShortenName(name));
 
@@ -61,7 +57,7 @@
 </script>
 
 <div
-	class="border-surface-container-low bg-surface sticky top-0 z-[60] flex h-16 w-full items-center justify-between gap-2 border-b-2 px-3 py-1 md:h-20 md:py-3 lg:px-10"
+	class="border-surface-container-low bg-surface fixed top-0 z-40 z-50 flex h-16 w-full items-center justify-between gap-2 border-b-2 px-3 py-1 md:h-20 md:py-3 lg:px-10"
 >
 	<div class="flex flex-1 flex-row items-center gap-3 lg:gap-6">
 		<a href="/">
@@ -75,14 +71,8 @@
 				strokeWidth="3"
 			/>
 			<Input
-				bind:value={localSearch}
-				onkeydown={(e: KeyboardEvent) => {
-					if (e.key === 'Enter') {
-						onSearchEnter(localSearch);
-					}
-				}}
 				placeholder="ค้นหาวิชา"
-				class="bg-surface-container-lowest h-8 w-full placeholder:text-neutral-400"
+				class="bg-surface-container-lowest w-11/12 placeholder:text-neutral-400 xl:w-full"
 			/>
 		</div>
 	</div>
@@ -135,7 +125,7 @@
 			tabindex="0"
 			aria-label="Close sidebar"
 			onclick={toggleSideBar}
-			onkeydown={(e: KeyboardEvent) => e.key === 'Enter' && toggleSideBar()}
+			onkeydown={(e) => e.key === 'Enter' && toggleSideBar()}
 		></div>
 	{/if}
 	<div
@@ -164,13 +154,6 @@
 			<div class="relative flex items-center px-3">
 				<Search class="absolute right-6 my-auto" size="16" color="#898EA7" strokeWidth="3" />
 				<Input
-					bind:value={localSearch}
-					onkeydown={(e: KeyboardEvent) => {
-						if (e.key === 'Enter') {
-							onSearchEnter(localSearch);
-							if (openSideBar) toggleSideBar();
-						}
-					}}
 					placeholder="ค้นหาวิชา"
 					class="bg-surface-container-lowest h-8 w-full placeholder:text-neutral-400"
 				/>

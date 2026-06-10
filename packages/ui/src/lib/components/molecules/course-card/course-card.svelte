@@ -22,7 +22,6 @@
 		sections?: Array<{ value: string; label: string }>;
 		selectedSection?: string;
 		onSelectSection?: (value: string) => void;
-		courseUrl?: string;
 		[key: string]: unknown;
 	}
 
@@ -36,7 +35,6 @@
 		sections,
 		selectedSection = $bindable(''),
 		onSelectSection,
-		courseUrl = '',
 		...rest
 	}: Props = $props();
 
@@ -63,12 +61,9 @@
 	<div class="flex flex-row items-center justify-between">
 		<div class="flex flex-col">
 			<div class="text-caption font-medium">{course?.code}</div>
-			<a
-				class="sm:text-body2 md:text-body1 font-medium hover:cursor-pointer hover:underline"
-				href={courseUrl}
-			>
+			<div class="sm:text-body2 md:text-body1 font-medium">
 				{course?.name}
-			</a>
+			</div>
 		</div>
 		<div class="flex gap-1">
 			{#if specialType}

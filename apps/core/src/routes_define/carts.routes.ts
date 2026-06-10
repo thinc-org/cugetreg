@@ -1,7 +1,5 @@
 import { createRoute, z } from "@hono/zod-openapi";
 
-import { errorRes, InternalError } from "./errorRes.js";
-
 import {
   CartDetailResponseSchema,
   ListCartsResponseSchema,
@@ -15,6 +13,19 @@ import {
   UpdateCartBodySchema,
   UpdateCourseBodySchema,
 } from "../zod_schemas/carts.schema.js";
+
+export const errorRes = (message: string) => ({
+  content: {
+    "application/json": {
+      schema: z.object({
+        error: z.string().openapi({ example: message }),
+      }),
+    },
+  },
+  description: message,
+});
+
+export const InternalError = errorRes("INTERNAL_SERVER_ERROR");
 
 // 3.1 List
 export const listCartsRoute = createRoute({

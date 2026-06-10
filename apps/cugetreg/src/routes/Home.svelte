@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { useSession } from '$lib/auth-client';
   import SelectedCourse from '$lib/components/selected-course.svelte';
   import {
     CART_PROMISE_KEY,
@@ -7,7 +6,6 @@
     getUserCartStore,
     useCartActions,
   } from '$lib/stores/user-cart';
-  import { searchState } from '$lib/stores/search.svelte';
 
   import {
     BookMarked,
@@ -18,7 +16,7 @@
     TriangleAlert,
   } from '@lucide/svelte';
   import { getContext, untrack } from 'svelte';
-  import { SvelteURLSearchParams } from 'svelte/reactivity';
+  import { SvelteMap } from 'svelte/reactivity';
 
   import { Input } from '@cugetreg/ui/atoms/input';
   import { CourseCard } from '@cugetreg/ui/molecules/course-card';
@@ -29,10 +27,11 @@
 
   let courses = $state.raw<any[]>([]);
   let isLoading = $state(false);
-  let hasMore = $state(true);
-  let totalResults = $state(0);
-  let offset = $state(0);
-  const limit = 20;
+  const courseCache = new SvelteMap<string, any[]>();
+
+
+  const collatorTh = new Intl.Collator('th');
+  const collatorDefault = new Intl.Collator();
 
   let openPanel = $state<'sidebar' | 'filter_only' | 'selected_only' | null>(
     null,
@@ -69,9 +68,8 @@
   let currentSort = $state('รหัสวิชา');
   let sortDirection = $state<'asc' | 'desc'>('asc');
 
+  let displayLimit = $state(20);
   let bottomSentinel = $state<HTMLElement | null>(null);
-
-  const session = useSession();
 
   const programOptions = ['ทวิภาค', 'ตรีภาค', 'นานาชาติ'];
   const semesterOptions = [
@@ -136,12 +134,17 @@
     };
   }
 
-  function mapCourse(item: any) {
-    const { course: c, courseInfo: ci, reviewCount } = item;
-
-    const totalMaxSeat = item.stats?.capacitySum || 0;
+  function mapCourse(c: any) {
+    const totalMaxSeat =
+      c.sections?.reduce(
+        (sum: number, sec: any) => sum + (sec.capacity || sec.max || 0),
+        0,
+      ) || 0;
     const totalCurrentSeat =
-      (item.stats?.capacitySum || 0) - (item.stats?.remainingSum || 0);
+      c.sections?.reduce(
+        (sum: number, sec: any) => sum + (sec.enrolled || sec.regis || 0),
+        0,
+      ) || 0;
 
     const allDays = (c.sections ?? []).flatMap((s: any) =>
       (s.classes ?? []).map((cl: any) => cl.dayOfWeek),
@@ -177,84 +180,53 @@
       ),
     );
 
+    const nameTh = (c.courseInfo?.courseNameTh || '').toLowerCase();
+    const nameEn = (c.courseInfo?.courseNameEn || '').toLowerCase();
+    const abbr = (c.courseInfo?.abbrName || '').toLowerCase();
+    const code = (c.courseNo || '').toLowerCase();
+    const searchString = `${code} ${abbr} ${nameTh} ${nameEn}`;
+
     return {
       recommended: false,
+      searchString,
       course: {
         ...c,
-        courseInfo: ci,
         code: c.courseNo,
-        name: ci.abbrName || ci.courseNameEn || ci.courseNameTh || '-',
-        credit: Number(ci.credit) || 0,
+        name:
+          c.courseInfo?.abbrName ||
+          c.courseInfo?.courseNameEn ||
+          c.courseInfo?.courseNameTh ||
+          '-',
+        credit: Number(c.courseInfo?.credit) || 0,
         maxseat: totalMaxSeat,
         seat: totalCurrentSeat,
         gened: normalizeGened(c.genEdType),
-        review: reviewCount || 0,
-        rating: item.rating || 0,
+        review: c.reviewCount || 0,
+        rating: c.rating || 0,
         days: validDays,
-        gradingType: ci.gradingType,
+        gradingType: c.courseInfo?.gradingType,
       },
     };
   }
 
-  async function fetchCourses(reset = true) {
-    if (reset) {
-      offset = 0;
-      courses = [];
-      hasMore = true;
+  async function fetchCourses() {
+    const { academicYear, semester, studyProgram } = getParams();
+    const cacheKey = `${studyProgram}-${academicYear}-${semester}`;
+
+    const cached = courseCache.get(cacheKey);
+    if (cached) {
+      courses = cached;
+      isLoading = false;
+      return;
     }
-
-    if (!hasMore || isLoading) return;
-
-    console.log(`fetching ${offset}`);
 
     isLoading = true;
     try {
-      const { academicYear, semester, studyProgram } = getParams();
-      const params = new SvelteURLSearchParams({
+      const params = new URLSearchParams({
         academicYear,
         semester,
         studyProgram,
-        limit: limit.toString(),
-        offset: offset.toString(),
-        sortOrder: sortDirection,
       });
-
-      if (searchState.debounced.trim()) {
-        params.append('q', searchState.debounced.trim());
-      }
-
-      if (currentSort === 'ชื่อวิชา') {
-        params.append('sortBy', 'NAME');
-      }
-
-      if (!noConditions) {
-        if (selectedGenEds.length > 0) {
-          params.append('genEdType', genEdMap[selectedGenEds[0]]);
-        }
-        if (selectedFaculties.length > 0) {
-          params.append('faculty', selectedFaculties[0]);
-        }
-        if (selectedDays.length > 0) {
-          params.append('day', dayMap[selectedDays[0]]);
-        }
-        if (selectedEval.length > 0) {
-          params.append('assessment', evalMap[selectedEval[0]]);
-        }
-        if (startTime) params.append('timeStart', startTime);
-        if (endTime) params.append('timeEnd', endTime);
-        if (fitSchedule) {
-          const userCart = getUserCartStore();
-
-          let currentCartId = null;
-          const unsub = userCart.subscribe(
-            (s) => (currentCartId = s.currentCartId),
-          );
-
-          if (currentCartId) params.append('fitCartId', currentCartId);
-
-          unsub();
-        }
-      }
 
       const res = await fetch(
         `http://localhost:3000/api/v1/courses?${params.toString()}`,
@@ -266,44 +238,53 @@
 
       if (!res.ok) throw new Error(`Server error (${res.status})`);
       const json = await res.json();
-      const data = json.data || [];
-      totalResults = json.total || 0;
 
-      const mapped = data.map(mapCourse);
-
-      if (reset) {
-        courses = mapped;
-      } else {
-        // Deduplicate by course code to prevent key collisions
-        const existingCodes = new Set(courses.map((c) => c.course.code));
-        const newUniqueItems = mapped.filter(
-          (item) => !existingCodes.has(item.course.code),
-        );
-        courses = [...courses, ...newUniqueItems];
-      }
-
-      offset += limit;
-      if (data.length < limit) {
-        hasMore = false;
-      }
+      const mapped = (json.data || []).map(mapCourse);
+      courseCache.set(cacheKey, mapped);
+      courses = mapped;
     } catch (err) {
       console.error('Error fetching courses:', err);
-      if (reset) courses = [];
+      courses = [];
     } finally {
       isLoading = false;
     }
   }
 
   $effect(() => {
-    // Term changes (Reset offset and clear list)
     currentSemester;
     currentProgram;
-    untrack(() => fetchCourses(true));
+    fetchCourses();
+  });
+
+  function handleSearch(e: Event) {
+    const target = e.target as HTMLInputElement;
+    if (!target) return;
+
+    searchQuery = target.value;
+
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(() => {
+      debouncedSearchQuery = searchQuery;
+    }, 250);
+  }
+
+  $effect(() => {
+    if (!bottomSentinel) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          displayLimit += 20;
+        }
+      },
+      { rootMargin: '400px' },
+    );
+
+    observer.observe(bottomSentinel);
+    return () => observer.disconnect();
   });
 
   $effect(() => {
-    // Search & Filter changes (Reset offset and clear list)
-    searchState.debounced;
+    debouncedSearchQuery;
     selectedGenEds;
     selectedFaculties;
     selectedDays;
@@ -313,23 +294,9 @@
     noConditions;
     currentSort;
     sortDirection;
-    fitSchedule;
-    untrack(() => fetchCourses(true));
-  });
-
-  $effect(() => {
-    if (!bottomSentinel) return;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && hasMore && !isLoading) {
-          untrack(() => fetchCourses(false));
-        }
-      },
-      { rootMargin: '400px' },
-    );
-
-    observer.observe(bottomSentinel);
-    return () => observer.disconnect();
+    untrack(() => {
+      displayLimit = 20;
+    });
   });
 
   const userCart = getUserCartStore();
@@ -430,8 +397,76 @@
     return result;
   });
 
-  let filteredCourses = $derived(courses);
-  let displayedCourses = $derived(courses);
+  let filteredCourses = $derived.by(() => {
+    let result = sortedCourses;
+
+    if (debouncedSearchQuery.trim() !== '') {
+      const q = debouncedSearchQuery.toLowerCase().trim();
+      result = result.filter((item) => {
+        if (item.searchString) return item.searchString.includes(q);
+        const c = item.course;
+        const nameTh = (c.courseInfo?.courseNameTh || '').toLowerCase();
+        const nameEn = (c.courseInfo?.courseNameEn || '').toLowerCase();
+        const abbr = (c.courseInfo?.abbrName || '').toLowerCase();
+        const code = (c.code || '').toLowerCase();
+        return (
+          nameTh.includes(q) ||
+          nameEn.includes(q) ||
+          abbr.includes(q) ||
+          code.includes(q)
+        );
+      });
+    }
+
+    if (!noConditions) {
+      if (selectedGenEds.length > 0) {
+        const targetGenEds = selectedGenEds.map((id) => genEdMap[id]);
+        result = result.filter((item) =>
+          targetGenEds.includes(item.course.gened?.[0]),
+        );
+      }
+      if (selectedFaculties.length > 0) {
+        result = result.filter((item) =>
+          selectedFaculties.includes((item.course.code || '').substring(0, 2)),
+        );
+      }
+      if (selectedDays.length > 0) {
+        const targetDays = selectedDays.map((id) => dayMap[id]);
+        result = result.filter((item) =>
+          (item.course.days || []).some((day: string) =>
+            targetDays.includes(day),
+          ),
+        );
+      }
+      if (selectedEval.length > 0) {
+        const targetGrading = selectedEval.map((id) => evalMap[id]);
+        result = result.filter((item) =>
+          targetGrading.includes(item.course.gradingType),
+        );
+      }
+
+      const startMin = parseTime(startTime);
+      const endMin = parseTime(endTime);
+      if (startMin !== null || endMin !== null) {
+        const lo = startMin ?? 0;
+        const hi = endMin ?? 24 * 60;
+        result = result.filter((item) =>
+          (item.course.sections || []).some((sec: any) =>
+            (sec.classes || []).some((cl: any) => {
+              const s = parseTime(cl.periodStart);
+              const e = parseTime(cl.periodEnd);
+              if (s === null || e === null) return false;
+              return s >= lo && e <= hi;
+            }),
+          ),
+        );
+      }
+    }
+
+    return result;
+  });
+
+  let displayedCourses = $derived(filteredCourses.slice(0, displayLimit));
 
   function onSearchFilter() {
     if (openPanel === 'filter_only') openPanel = null;
@@ -457,6 +492,7 @@
         <main
           class="h-full min-w-0 flex-1 overflow-y-auto scroll-smooth bg-white"
         >
+          <div class="h-16 w-full shrink-0 md:h-20"></div>
           <div class="flex min-h-full flex-col">
             <div class="mx-auto w-full max-w-[1200px] flex-1 p-8 lg:p-12">
               <div
@@ -465,7 +501,7 @@
                 <div class="flex items-baseline gap-3">
                   <h1 class="text-4xl font-bold text-[#1C1B1F]">วิชาเรียน</h1>
                   <span class="text-sm font-medium text-gray-400"
-                    >({totalResults} ผลลัพธ์)</span
+                    >({filteredCourses.length} ผลลัพธ์)</span
                   >
                 </div>
 
@@ -540,10 +576,8 @@
                   <div class="flex flex-1 flex-col gap-1">
                     <span class="ml-1 text-xs text-gray-400">ค้นหา...</span>
                     <Input
-                      bind:value={searchState.query}
-                      onkeydown={(e: KeyboardEvent) => {
-                        if (e.key === 'Enter') e.preventDefault();
-                      }}
+                      value={searchQuery}
+                      oninput={handleSearch}
                       placeholder="พิมพ์ชื่อวิชา รหัสวิชา หรือคำค้นหาอื่นๆ..."
                       class="h-12 w-full rounded-xl border-none bg-[#F1F3F7] px-6 text-lg font-medium focus:ring-2 focus:ring-blue-500"
                     />
@@ -607,7 +641,14 @@
               <div
                 class="grid grid-cols-1 gap-x-5 gap-y-6 pb-10 md:grid-cols-2"
               >
-                {#if filteredCourses.length === 0 && !isLoading}
+                {#if isLoading}
+                  <div
+                    class="col-span-full flex h-64 flex-col items-center justify-center gap-3 text-gray-400"
+                  >
+                    <Loader2 class="animate-spin" size={40} />
+                    <p>กำลังโหลดข้อมูลวิชา...</p>
+                  </div>
+                {:else if filteredCourses.length === 0}
                   <div
                     class="col-span-full flex flex-col items-center justify-center gap-2 py-24 text-center"
                   >
@@ -617,8 +658,8 @@
                       class="mb-2 text-[#4A6CF7]"
                     />
                     <p class="text-lg font-medium text-[#1C1B1F]">
-                      ไม่พบรายวิชา{searchState.debounced.trim()
-                        ? ` ${searchState.debounced.trim()}`
+                      ไม่พบรายวิชา{debouncedSearchQuery.trim()
+                        ? ` ${debouncedSearchQuery.trim()}`
                         : ''}
                     </p>
                     <p class="text-base text-gray-500">{contextLabel}</p>
@@ -628,11 +669,6 @@
                     </p>
                   </div>
                 {:else}
-                  {@const params = new URLSearchParams({
-                    studyProgram: $userCart.currentCart.studyProgram,
-                    academicYear: String($userCart.currentCart.academicYear),
-                    semester: $userCart.currentCart.semester,
-                  })}
                   {#each displayedCourses as item (item.course.code)}
                     <CourseCard
                       course={item.course}
@@ -646,11 +682,10 @@
                       onSelectSection={(v: string) =>
                         handleSelectSection(item, v)}
                       class="w-full max-w-full md:w-full"
-                      courseUrl={`/course-page/${item.course.code}?${params.toString()}`}
                     />
                   {/each}
 
-                  {#if hasMore}
+                  {#if displayLimit < filteredCourses.length}
                     <div
                       bind:this={bottomSentinel}
                       class="col-span-full flex h-24 items-center justify-center opacity-50"
@@ -658,15 +693,6 @@
                       <Loader2 class="animate-spin text-gray-400" size={24} />
                     </div>
                   {/if}
-                {/if}
-
-                {#if isLoading}
-                  <div
-                    class="col-span-full flex h-64 flex-col items-center justify-center gap-3 text-gray-400"
-                  >
-                    <Loader2 class="animate-spin" size={40} />
-                    <p>กำลังโหลดข้อมูลวิชา...</p>
-                  </div>
                 {/if}
               </div>
             </div>
@@ -682,6 +708,7 @@
 </div>
 
 {#snippet SidebarComponent()}
+  {@const _sidebar = Sidebar.useSidebar()}
   <Sidebar.Sidebar
     variant="sidebar"
     collapsible="icon"
@@ -689,7 +716,7 @@
   >
     <Sidebar.Content class="flex-row overflow-visible!">
       <Sidebar.Group
-        class="w-(--sidebar-width-icon) shrink-0 items-center border-r bg-white p-0 pt-[1rem] pb-6 group-data-[variant=floating]:rounded-l-lg md:pt-[1.5rem]"
+        class="w-(--sidebar-width-icon) shrink-0 items-center border-r bg-white p-0 pt-[5.5rem] pb-6 group-data-[variant=floating]:rounded-l-lg md:pt-[6.5rem]"
       >
         <Sidebar.GroupContent>
           <Sidebar.Menu class="gap-6">
@@ -715,19 +742,17 @@
                 <Filter size="24" strokeWidth={2.5} />
               </Sidebar.MenuButton>
             </Sidebar.MenuItem>
-            {#if $session.data}
-              <Sidebar.MenuItem>
-                <Sidebar.MenuButton
-                  onclick={() => togglePanel('selected_only')}
-                  isActive={activePanel === 'selected_only'}
-                  size="lg"
-                  tooltipContent="วิชาที่เลือก"
-                  class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-6!"
-                >
-                  <BookMarked size="24" strokeWidth={2.5} />
-                </Sidebar.MenuButton>
-              </Sidebar.MenuItem>
-            {/if}
+            <Sidebar.MenuItem>
+              <Sidebar.MenuButton
+                onclick={() => togglePanel('selected_only')}
+                isActive={activePanel === 'selected_only'}
+                size="lg"
+                tooltipContent="วิชาที่เลือก"
+                class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-6!"
+              >
+                <BookMarked size="24" strokeWidth={2.5} />
+              </Sidebar.MenuButton>
+            </Sidebar.MenuItem>
           </Sidebar.Menu>
         </Sidebar.GroupContent>
       </Sidebar.Group>
@@ -746,7 +771,7 @@
           class="bg-surface flex flex-1 flex-col overflow-hidden group-data-[state=collapsed]:absolute group-data-[state=collapsed]:top-4 group-data-[state=collapsed]:left-[calc(var(--sidebar-width-icon)+1rem)] group-data-[state=collapsed]:z-50 group-data-[state=collapsed]:max-h-[min(800px,calc(100%-2rem))] group-data-[state=collapsed]:w-[400px] group-data-[state=collapsed]:rounded-3xl group-data-[state=collapsed]:border group-data-[state=collapsed]:shadow-2xl md:px-8 md:pt-0 md:pb-8"
         >
           <div class="flex-1 overflow-y-auto pr-6 pb-10 md:pr-8">
-            {#if (sidebarExpanded || openPanel === 'sidebar') && $session.data}
+            {#if sidebarExpanded || openPanel === 'sidebar'}
               <div
                 bind:this={timetableSection}
                 class="relative mb-6 flex flex-col gap-2"
@@ -819,7 +844,7 @@
               </div>
             {/if}
 
-            {#if (sidebarExpanded || openPanel === 'selected_only') && $session.data}
+            {#if sidebarExpanded || openPanel === 'selected_only'}
               <div bind:this={selectedSection}>
                 {#if $userCart.currentCart}
                   <SelectedCourse

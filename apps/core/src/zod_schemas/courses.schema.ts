@@ -29,7 +29,6 @@ export const getCourseQuerySchema = z.object({
   sortBy: z.enum(sortBy).optional(),
   sortOrder: z.enum(sortOrder).optional(),
   limit: z.coerce.number().int().optional(),
-  offset: z.coerce.number().int().optional(),
 });
 // 1. Sub-schema for the 'course' object
 const courseSchema = z.object({
@@ -43,7 +42,6 @@ const courseSchema = z.object({
   midtermEnd: z.string().datetime().nullable(),
   finalStart: z.string().datetime().nullable(),
   finalEnd: z.string().datetime().nullable(),
-  sections: z.any().array().optional(),
 });
 
 // 2. Sub-schema for the 'courseInfo' object

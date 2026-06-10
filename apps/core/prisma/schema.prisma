@@ -355,6 +355,7 @@ model ReviewVote {
   voteType VoteType @map("vote_type")
 
   @@map("review_votes")
+  @@unique([userId,reviewId])
 }
 
 model Session {

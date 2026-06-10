@@ -1,0 +1,6 @@
+import { tv } from 'tailwind-variants';
+export { default as YearSemesterChip } from './yearsemester-chip.svelte';
+
+export const chipVariants = tv({
+	base: 'border border-[#4A4B57] text-[#4A4B57] bg-transparent rounded-full px-3 py-1 text-sm font-medium'
+});

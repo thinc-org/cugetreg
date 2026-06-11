@@ -317,16 +317,17 @@
   });
 
   $effect(() => {
+    const triggerSection = globalSelectedSection;
     untrack(() => {
       const currentItem = $userCart.currentCart.items.find(
         (item) => item.courseNo === course.courseNo,
       );
       const currentSection = currentItem ? String(currentItem.sectionNo) : null;
 
-      if (globalSelectedSection === currentSection) return;
+      if (triggerSection === currentSection) return;
 
-      if (globalSelectedSection) {
-        addCourse(course.courseNo, Number(globalSelectedSection));
+      if (triggerSection) {
+        addCourse(course.courseNo, Number(triggerSection));
       } else if (currentItem) {
         removeCourse(currentItem.id);
       }

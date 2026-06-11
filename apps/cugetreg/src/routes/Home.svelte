@@ -1,5 +1,6 @@
 <script lang="ts">
   import { useSession } from '$lib/auth-client';
+  import ScheduleMismatchPopup from '$lib/components/schedule-mismatch-popup.svelte';
   import SelectedCourse from '$lib/components/selected-course.svelte';
   import { searchState } from '$lib/stores/search.svelte';
   import { getUserCartStore, useCartActions } from '$lib/stores/user-cart';
@@ -21,7 +22,6 @@
   import { Filter as FilterBar } from '@cugetreg/ui/organisms/filter-bar';
   import { Footer } from '@cugetreg/ui/organisms/footer';
   import * as Sidebar from '@cugetreg/ui/organisms/sidebar';
-  import ScheduleMismatchPopup from '$lib/components/schedule-mismatch-popup.svelte';
 
   let courses = $state<any[]>([]);
   let isLoading = $state(false);
@@ -69,7 +69,9 @@
 
   let showMismatchPopup = $state(false);
   let expectedParams = $derived(getParams());
-  let pendingCourse = $state<{ courseNo: string; sectionNo: number } | null>(null);
+  let pendingCourse = $state<{ courseNo: string; sectionNo: number } | null>(
+    null,
+  );
   let localSelectedSections: Record<string, number> = {};
 
   const session = useSession();
@@ -371,19 +373,26 @@
 
   function normalizeSemester(cartSemester: string): string {
     switch (cartSemester) {
-      case 'FIRST': return '1';
-      case 'SECOND': return '2';
-      case 'SUMMER': return '3';
-      default: return cartSemester;
+      case 'FIRST':
+        return '1';
+      case 'SECOND':
+        return '2';
+      case 'SUMMER':
+        return '3';
+      default:
+        return cartSemester;
     }
   }
 
   function isMismatch(): boolean {
     const currentCart = $userCart.currentCart;
     if (!currentCart) return false;
-    const isYearMismatch = String(currentCart.academicYear) !== String(expectedParams.academicYear);
-    const isProgramMismatch = currentCart.studyProgram !== expectedParams.studyProgram;
-    const isSemesterMismatch = normalizeSemester(currentCart.semester) !== expectedParams.semester;
+    const isYearMismatch =
+      String(currentCart.academicYear) !== String(expectedParams.academicYear);
+    const isProgramMismatch =
+      currentCart.studyProgram !== expectedParams.studyProgram;
+    const isSemesterMismatch =
+      normalizeSemester(currentCart.semester) !== expectedParams.semester;
     return isYearMismatch || isSemesterMismatch || isProgramMismatch;
   }
 
@@ -392,15 +401,23 @@
     const courseInSchedule = $userCart.currentCart?.items.find(
       (cls) => cls.courseNo === code,
     );
-    const alreadySelectedSec = localSelectedSections[code] || getSelectedSection(code);
+    const alreadySelectedSec =
+      localSelectedSections[code] || getSelectedSection(code);
 
     if (isMismatch()) {
       if (alreadySelectedSec) {
-        pendingCourse = { courseNo: code, sectionNo: Number(alreadySelectedSec) };
+        pendingCourse = {
+          courseNo: code,
+          sectionNo: Number(alreadySelectedSec),
+        };
       } else {
-        const firstAvailableSection = sections.find((sec: any) => !sec.closed) || sections[0];
+        const firstAvailableSection =
+          sections.find((sec: any) => !sec.closed) || sections[0];
         if (firstAvailableSection) {
-          pendingCourse = { courseNo: code, sectionNo: firstAvailableSection.sectionNo };
+          pendingCourse = {
+            courseNo: code,
+            sectionNo: firstAvailableSection.sectionNo,
+          };
         }
       }
       showMismatchPopup = true;
@@ -412,7 +429,8 @@
         addCourse(code, Number(alreadySelectedSec));
         return;
       }
-      const firstAvailableSection = sections.find((sec: any) => !sec.closed) || sections[0];
+      const firstAvailableSection =
+        sections.find((sec: any) => !sec.closed) || sections[0];
       if (firstAvailableSection) {
         addCourse(code, firstAvailableSection.sectionNo);
       }
@@ -439,7 +457,7 @@
     if (courseInSchedule) {
       updateCourse(courseInSchedule.id, { sectionNo: Number(sectionNo) });
     } else {
-      pendingCourse = { courseNo: code, sectionNo: Number(sectionNo)};
+      pendingCourse = { courseNo: code, sectionNo: Number(sectionNo) };
     }
   }
 
@@ -666,17 +684,19 @@
                   </div>
                 {:else}
                   {@const params = new URLSearchParams({
-                    studyProgram: currentProgram === 'นานาชาติ'
-                      ? 'I'
-                      : currentProgram === 'ตรีภาค'
-                        ? 'T'
-                        : 'S',
+                    studyProgram:
+                      currentProgram === 'นานาชาติ'
+                        ? 'I'
+                        : currentProgram === 'ตรีภาค'
+                          ? 'T'
+                          : 'S',
                     academicYear: String(getParams().academicYear),
-                    semester: getParams().semester === '1'
-                      ? 'FIRST'
-                      : getParams().semester === '2'
-                        ? 'SECOND'
-                        : 'SUMMER',
+                    semester:
+                      getParams().semester === '1'
+                        ? 'FIRST'
+                        : getParams().semester === '2'
+                          ? 'SECOND'
+                          : 'SUMMER',
                   })}
                   {#each displayedCourses as item (item.course.code)}
                     <CourseCard
@@ -694,7 +714,6 @@
                       courseUrl={`/course-page/${item.course.code}?${params.toString()}`}
                     />
                   {/each}
-                  
 
                   {#if hasMore}
                     <div
@@ -721,10 +740,11 @@
                 schedules={$userCart.cartList ?? []}
                 expectedYear={expectedParams.academicYear}
                 expectedProgram={expectedParams.studyProgram}
-                expectedSemester={
-                  expectedParams.semester === '1' ? 'FIRST' :
-                  expectedParams.semester === '2' ? 'SECOND' : 'SUMMER'
-                }
+                expectedSemester={expectedParams.semester === '1'
+                  ? 'FIRST'
+                  : expectedParams.semester === '2'
+                    ? 'SECOND'
+                    : 'SUMMER'}
                 onConfirm={handleScheduleChange}
                 onClose={() => (showMismatchPopup = false)}
               />

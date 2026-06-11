@@ -5,9 +5,9 @@
 	}
 	let { selected = false, onClick = () => {} }: Props = $props();
 
-    const handleClick = () => {
-        onClick();
-    };
+	const handleClick = () => {
+		onClick();
+	};
 </script>
 
 <button

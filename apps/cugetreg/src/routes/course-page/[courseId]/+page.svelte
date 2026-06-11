@@ -2,11 +2,10 @@
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
   import { page } from '$app/state';
+  import ScheduleMismatchPopup from '$lib/components/schedule-mismatch-popup.svelte';
   import SelectedCourse from '$lib/components/selected-course.svelte';
   import { faculties } from '$lib/constants';
   import { getUserCartStore, useCartActions } from '$lib/stores/user-cart';
-  import ScheduleMismatchPopup from '$lib/components/schedule-mismatch-popup.svelte';
-
 
   import {
     AlertTriangle,
@@ -337,7 +336,8 @@
   function isMismatch() {
     if (!$userCart.currentCart) return false;
     return (
-      String($userCart.currentCart.academicYear) !== String(course.academicYear) ||
+      String($userCart.currentCart.academicYear) !==
+        String(course.academicYear) ||
       $userCart.currentCart.semester !== course.semester ||
       $userCart.currentCart.studyProgram !== course.studyProgram
     );

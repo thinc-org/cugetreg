@@ -1,11 +1,13 @@
 <script lang="ts">
+  import { useCartActions } from '$lib/stores/user-cart';
+
   import { ChevronDown, Plus } from '@lucide/svelte';
+
   import { Modal } from '@cugetreg/ui/atoms/modal';
   import {
     CreateTimetable,
     type TimetableMetaData,
   } from '@cugetreg/ui/organisms/create-timetable';
-  import { useCartActions } from '$lib/stores/user-cart';
 
   type Schedule = {
     id: string;
@@ -38,8 +40,8 @@
       (c) =>
         String(c.academicYear) === String(expectedYear) &&
         c.semester === expectedSemester &&
-        c.studyProgram === expectedProgram
-    )
+        c.studyProgram === expectedProgram,
+    ),
   );
 
   let isDropdownOpen = $state(false);
@@ -67,10 +69,9 @@
   const { createCart } = useCartActions();
 </script>
 
-
 <div class="fixed inset-0 z-50 flex items-center justify-center">
   {#if !showCreateScheduleModal}
-    <div class="absolute inset-0 bg-black/40 flex items-center justify-center">
+    <div class="absolute inset-0 flex items-center justify-center bg-black/40">
       <button
         type="button"
         class="absolute inset-0 h-full w-full cursor-default bg-transparent"
@@ -94,12 +95,16 @@
             <span class="truncate pr-4">{selectedLabel}</span>
             <ChevronDown
               size={20}
-              class="text-[#4a70c6] transition-transform duration-200 {isDropdownOpen ? 'rotate-180' : ''}"
+              class="text-[#4a70c6] transition-transform duration-200 {isDropdownOpen
+                ? 'rotate-180'
+                : ''}"
             />
           </button>
 
           {#if isDropdownOpen}
-            <div class="absolute left-0 top-full z-10 mt-2 w-full overflow-hidden rounded-xl border border-gray-100 bg-white shadow-xl">
+            <div
+              class="absolute top-full left-0 z-10 mt-2 w-full overflow-hidden rounded-xl border border-gray-100 bg-white shadow-xl"
+            >
               <div class="max-h-[200px] overflow-y-auto py-1">
                 {#each matchingSchedules as schedule}
                   <button
@@ -107,13 +112,16 @@
                       selectedId = schedule.id;
                       isDropdownOpen = false;
                     }}
-                    class="w-full px-4 py-3 text-left text-[14px] transition-colors hover:bg-gray-50 {selectedId === schedule.id ? 'bg-[#f0f4f8] font-regular text-[#4a70c6]' : 'text-gray-700'}"
+                    class="w-full px-4 py-3 text-left text-[14px] transition-colors hover:bg-gray-50 {selectedId ===
+                    schedule.id
+                      ? 'font-regular bg-[#f0f4f8] text-[#4a70c6]'
+                      : 'text-gray-700'}"
                   >
                     {schedule.name}
                   </button>
                 {/each}
               </div>
-              
+
               <div class="border-t border-gray-100 bg-white p-1">
                 <button
                   onclick={() => {
@@ -149,7 +157,7 @@
     </div>
   {/if}
 
-  <Modal 
+  <Modal
     exitOnEsc
     exitOnBackgroundClick
     centered

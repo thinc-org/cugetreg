@@ -15,38 +15,20 @@ import type { LayoutServerLoad } from './$types';
 
 const API_URL = 'http://localhost:3000/api/v1/carts';
 
-const DUMMY_CART: UserCartInterface = {
-  cartList: [],
-  currentCartId: '',
-  currentCart: {
-    id: '',
-    name: '',
-    studyProgram: 'S',
-    academicYear: 2566,
-    semester: 'FIRST',
-    visible: 'PVT',
-    isDefault: true,
-    cartOrder: '',
-    items: [],
-  },
-  exams: [],
+export const load: LayoutServerLoad = () => {
+  return { cart: loadCart() };
 };
 
-export const load: LayoutServerLoad = async ({ locals, fetch }) => {
-  if (!locals.session) {
-    const data = DUMMY_CART;
-    return { data };
-  }
+async function loadCart() {
+  // const [response, error] = await tryCatch(axios.get(API_URL));
+  //
+  // if (error || !response) {
+  //   throw svelteError(500, 'Something went wrong');
+  // }
+  //
+  const response = await fetch(`${API_URL}`);
 
-  const queryParams = new URLSearchParams({
-    academicYear: '2566',
-    semester: 'SECOND',
-    studyProgram: 'S',
-  });
-
-  const [response, error] = await tryCatch(fetch(`${API_URL}?${queryParams}`));
-
-  if (error || !response || !response.ok) {
+  if (!response || !response.ok) {
     throw svelteError(500, 'Something went wrong fetching carts');
   }
 
@@ -152,14 +134,10 @@ export const load: LayoutServerLoad = async ({ locals, fetch }) => {
   const exams: ExamScheduleItem[] = currentScheduleResponse.schedule.exams;
   const currentCartId = currentCart.id;
 
-  const data: UserCartInterface = {
+  return {
     cartList,
     currentCart,
     currentCartId,
     exams,
-  };
-
-  return {
-    data,
-  };
-};
+  } as UserCartInterface;
+}

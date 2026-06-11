@@ -46,7 +46,7 @@
 
   let isDropdownOpen = $state(false);
   let selectedId = $state<string | 'NEW'>(
-    matchingSchedules.length > 0 ? matchingSchedules[0].id : 'NEW'
+    matchingSchedules.length > 0 ? matchingSchedules[0].id : 'NEW',
   );
 
   let selectedLabel = $derived.by(() => {

@@ -353,6 +353,7 @@
   }
 
   function handlePopupConfirm(scheduleId: string) {
+    $userCart.currentCartId = scheduleId;
     if (pendingSection) {
       globalSelectedSection = pendingSection;
     }

@@ -1,14 +1,13 @@
 <script lang="ts">
 	interface Props {
 		selected?: boolean;
-		onClick?: (value: boolean) => void;
+		onClick?: () => void;
 	}
-	let { selected = $bindable(false), onClick = (_v) => {} }: Props = $props();
+	let { selected = false, onClick = () => {} }: Props = $props();
 
-	const handleClick = () => {
-		selected = !selected;
-		onClick(selected);
-	};
+    const handleClick = () => {
+        onClick();
+    };
 </script>
 
 <button

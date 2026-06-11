@@ -79,22 +79,22 @@
       ></button>
 
       <div class="relative w-full max-w-[420px] rounded-3xl bg-white p-8">
-        <h2 class="mb-2 text-center text-xl font-bold text-[#2b4c8a]">
+        <h2 class="mb-4 text-center text-xl font-semibold text-[#4a70c6]">
           ตารางเรียนไม่ตรงกับภาค/ปีที่คุณเลือก
         </h2>
-        <p class="mb-6 text-center text-sm text-gray-600">
+        <p class="mb-2 text-center text-sm text-gray-600">
           กรุณาเลือกตารางที่สอดคล้องกับภาค/ปีที่คุณเลือกใหม่
         </p>
 
         <div class="relative mb-8">
           <button
             onclick={() => (isDropdownOpen = !isDropdownOpen)}
-            class="flex w-full items-center justify-between rounded-xl border border-[#b8c9e6] bg-white px-4 py-3 text-left text-[15px] text-[#2b4c8a] transition-all focus:ring-2 focus:ring-[#b8c9e6] focus:outline-none"
+            class="flex w-full items-center justify-between rounded-xl border border-[#b8c9e6] bg-white px-4 py-2 text-left text-[15px] text-[#4a70c6]"
           >
             <span class="truncate pr-4">{selectedLabel}</span>
             <ChevronDown
               size={20}
-              class="text-[#2b4c8a] transition-transform duration-200 {isDropdownOpen ? 'rotate-180' : ''}"
+              class="text-[#4a70c6] transition-transform duration-200 {isDropdownOpen ? 'rotate-180' : ''}"
             />
           </button>
 
@@ -107,7 +107,7 @@
                       selectedId = schedule.id;
                       isDropdownOpen = false;
                     }}
-                    class="w-full px-4 py-3 text-left text-[14px] transition-colors hover:bg-gray-50 {selectedId === schedule.id ? 'bg-[#f0f4f8] font-bold text-[#2b4c8a]' : 'text-gray-700'}"
+                    class="w-full px-4 py-3 text-left text-[14px] transition-colors hover:bg-gray-50 {selectedId === schedule.id ? 'bg-[#f0f4f8] font-regular text-[#4a70c6]' : 'text-gray-700'}"
                   >
                     {schedule.name}
                   </button>
@@ -134,13 +134,13 @@
         <div class="flex gap-4">
           <button
             onclick={onClose}
-            class="flex-1 rounded-xl bg-[#f0f2f5] py-3 text-[15px] font-bold text-gray-700 transition-colors hover:bg-gray-200"
+            class="flex-1 rounded-xl bg-[#f0f2f5] py-2 text-[15px] font-bold text-gray-700 transition-colors hover:bg-gray-200"
           >
             ยกเลิก
           </button>
           <button
             onclick={handleConfirm}
-            class="flex-1 rounded-xl bg-[#e3f0ff] py-3 text-[15px] font-bold text-[#2b4c8a] transition-colors hover:bg-[#d0e6ff]"
+            class="flex-1 rounded-xl bg-[#e3f0ff] py-2 text-[15px] font-bold text-[#2b4c8a] transition-colors hover:bg-[#d0e6ff]"
           >
             ตกลง
           </button>

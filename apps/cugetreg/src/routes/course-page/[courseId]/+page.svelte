@@ -279,7 +279,7 @@
   const isLoggedIn = false;
 
   const userCart = getUserCartStore();
-  const { addCourse, removeCourse } = useCartActions();
+  const { addCourse, removeCourse, updateCourse } = useCartActions();
 
   let globalSelectedSection = $state<string | null>(
     untrack(() => {
@@ -326,7 +326,11 @@
       if (triggerSection === currentSection) return;
 
       if (triggerSection) {
-        addCourse(course.courseNo, Number(triggerSection));
+        if (currentItem) {
+          updateCourse(currentItem.id, { sectionNo: Number(triggerSection) });
+        } else {
+          addCourse(course.courseNo, Number(triggerSection));
+        }
       } else if (currentItem) {
         removeCourse(currentItem.id);
       }

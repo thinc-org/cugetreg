@@ -102,6 +102,7 @@
   );
 
   let textareaRef: HTMLTextAreaElement;
+  let screenWidth = $state(0);
 
   function togglePanel(type: typeof openPanel) {
     if (type === 'sidebar' || type === 'selected_only') {
@@ -329,6 +330,8 @@
   });
 </script>
 
+<svelte:window bind:innerWidth={screenWidth} />
+
 <div class="relative flex h-full flex-col overflow-hidden bg-white">
   <div class="relative flex flex-1 overflow-hidden">
     <Sidebar.Provider
@@ -336,7 +339,9 @@
       class="relative h-full min-h-0"
       style="--sidebar-width-icon: 4rem; --sidebar-width: 450px;"
     >
-      {@render SidebarComponent()}
+      {#if screenWidth >= 1024}
+        {@render SidebarComponent()}
+      {/if}
       <Sidebar.Inset>
         <main
           class="h-full min-w-0 flex-1 overflow-y-auto scroll-smooth bg-white"

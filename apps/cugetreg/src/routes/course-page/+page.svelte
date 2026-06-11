@@ -45,6 +45,7 @@
   let selectedTerm = $state(terms[0]);
   let reviewRating = $state(1);
   let textareaRef: HTMLTextAreaElement;
+  let screenWidth = $state(0);
 
   let openPanel = $state<
     | 'sidebar'
@@ -260,6 +261,8 @@
   ];
 </script>
 
+<svelte:window bind:innerWidth={screenWidth} />
+
 <div class="relative flex h-full flex-col overflow-hidden bg-white">
   <div class="relative flex flex-1 overflow-hidden">
     <Sidebar.Provider
@@ -267,8 +270,10 @@
       class="relative h-full min-h-0"
       style="--sidebar-width-icon: 4rem; --sidebar-width: 450px;"
     >
-      {@render SidebarComponent()}
-      <Sidebar.Inset>
+      {#if screenWidth >= 1024}
+        {@render SidebarComponent()}
+      {/if}
+      <Sidebar.Inset class="min-w-0">
         <main
           class="h-full min-w-0 flex-1 overflow-y-auto scroll-smooth bg-white"
         >

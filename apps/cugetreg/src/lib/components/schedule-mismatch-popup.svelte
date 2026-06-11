@@ -45,11 +45,9 @@
   );
 
   let isDropdownOpen = $state(false);
-  let selectedId = $state<string | 'NEW'>('NEW');
-
-  $effect(() => {
-    selectedId = matchingSchedules.length > 0 ? matchingSchedules[0].id : 'NEW';
-  });
+  let selectedId = $state<string | 'NEW'>(
+    matchingSchedules.length > 0 ? matchingSchedules[0].id : 'NEW'
+  );
 
   let selectedLabel = $derived.by(() => {
     if (selectedId === 'NEW') return 'สร้างตารางเรียนใหม่...';
@@ -106,7 +104,7 @@
               class="absolute top-full left-0 z-10 mt-2 w-full overflow-hidden rounded-xl border border-gray-100 bg-white shadow-xl"
             >
               <div class="max-h-[200px] overflow-y-auto py-1">
-                {#each matchingSchedules as schedule}
+                {#each matchingSchedules as schedule (schedule.id)}
                   <button
                     onclick={() => {
                       selectedId = schedule.id;

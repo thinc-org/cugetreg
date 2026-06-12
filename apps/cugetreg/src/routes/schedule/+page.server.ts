@@ -2,7 +2,7 @@ import { tryCatch } from '$lib/async-handler';
 
 import { error as svelteError } from '@sveltejs/kit';
 
-import { ListCartsResponseSchema } from '@cugetreg/zod-schemas/cart-response';
+import { ListCartsResponseSchema } from '@cugetreg/zod-schemas/carts-response';
 
 import type { PageServerLoad } from './$types';
 

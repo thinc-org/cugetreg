@@ -1,7 +1,23 @@
 <script lang="ts">
+	import StatusChip from '$lib/components/atoms/status-chip/status-chip.svelte';
+
 	import { ThumbsDown, ThumbsUp } from '@lucide/svelte';
 
 	import { RatingStar } from '../../atoms/rating-star';
+
+	interface CommentProps {
+		content: string;
+		semester: string;
+		rating: number;
+		likesCount: number;
+		dislikesCount: number;
+		facultyMajor?: string;
+		reaction?: 'L' | 'D';
+		status: 'REJECTED' | 'PENDING' | 'APPROVED';
+
+		onLike: () => void;
+		onDislike: () => void;
+	}
 
 	let {
 		content,
@@ -9,15 +25,14 @@
 		rating,
 		likesCount,
 		dislikesCount,
-		facultyMajor
-	}: {
-		content: string;
-		semester: string;
-		rating: number;
-		likesCount: number;
-		dislikesCount: number;
-		facultyMajor?: string;
-	} = $props();
+		facultyMajor,
+		status,
+
+		reaction,
+
+		onLike,
+		onDislike
+	}: CommentProps = $props();
 	let hasHalfStar: boolean = $derived(rating % 1 !== 0); // Determine if there's a half star
 	let isExpanded: boolean = $state(false);
 </script>
@@ -27,19 +42,25 @@
   lg:px-12 lg:py-10"
 	class:h-auto={isExpanded}
 >
-	<div class="flex flex-row items-center gap-x-6">
-		<div class="text-h3 text-primary font-bold">
-			{#if !hasHalfStar}
-				<span>{rating}.0</span>
-			{:else}
-				<span>{rating}</span>
-			{/if}
+	<div class="flex flex-row items-center justify-between">
+		<div class="flex flex-row items-center gap-x-6">
+			<div class="text-h3 text-primary font-bold">
+				{#if !hasHalfStar}
+					<span>{rating}.0</span>
+				{:else}
+					<span>{rating}</span>
+				{/if}
+			</div>
+
+			<RatingStar {rating} />
+
+			<div class="text-subtitle font-sans font-medium">
+				{semester}
+			</div>
 		</div>
 
-		<RatingStar {rating} />
-
-		<div class="text-subtitle font-sans font-medium">
-			{semester}
+		<div class={status === 'APPROVED' ? 'hidden' : ''}>
+			<StatusChip variant={status} />
 		</div>
 	</div>
 
@@ -76,11 +97,21 @@
 
 	<div class="text-subtitle flex flex-row gap-6 font-sans">
 		<div class="flex flex-row gap-x-2 font-medium">
-			<ThumbsUp class="text-neutral-400" />
+			<button class="hover:cursor-pointer" onclick={onLike}>
+				<ThumbsUp
+					data-fill={reaction === 'L'}
+					class="text-neutral-400 data-[fill=true]:fill-neutral-400"
+				/>
+			</button>
 			{likesCount}
 		</div>
 		<div class="flex flex-row gap-x-2 font-medium">
-			<ThumbsDown class="text-neutral-400" />
+			<button class="hover:cursor-pointer" onclick={onDislike}>
+				<ThumbsDown
+					data-fill={reaction === 'D'}
+					class="text-neutral-400 data-[fill=true]:fill-neutral-400"
+				/>
+			</button>
 			{dislikesCount}
 		</div>
 	</div>

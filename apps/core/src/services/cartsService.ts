@@ -1,5 +1,17 @@
 import * as R from "remeda";
 
+import type {
+  AddCourseBodySchema,
+  CreateCartBodySchema,
+  ListCartsQuerySchema,
+  UpdateCartBodySchema,
+  UpdateCourseBodySchema,
+} from "@cugetreg/zod-schemas/carts";
+import type {
+  ClassScheduleItem,
+  ExamScheduleItem,
+} from "@cugetreg/zod-schemas/carts-response";
+
 import {
   detectClassConflicts,
   detectExamConflicts,
@@ -12,17 +24,6 @@ import type {
   Section,
   SectionClass,
 } from "../generated/prisma/client.js";
-import type {
-  ClassScheduleItem,
-  ExamScheduleItem,
-} from "../zod_schemas/carts.response.schema.js";
-import type {
-  AddCourseBodySchema,
-  CreateCartBodySchema,
-  ListCartsQuerySchema,
-  UpdateCartBodySchema,
-  UpdateCourseBodySchema,
-} from "../zod_schemas/carts.schema.js";
 
 export const cartService = {
   getAllCartItems: async (userId: string, query: ListCartsQuerySchema) => {

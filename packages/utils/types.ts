@@ -1,4 +1,4 @@
-import type { Section } from "@cugetreg/zod-schemas/cart-response";
+import type { Section } from "@cugetreg/zod-schemas/carts-response";
 
 import { courseColorVariants } from "./constants";
 

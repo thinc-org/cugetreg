@@ -3,7 +3,7 @@ import { tryCatch } from '$lib/async-handler';
 import { error as svelteError } from '@sveltejs/kit';
 
 import type { SemesterType } from '@cugetreg/utils/types';
-import { PublicCartDetailResponseSchema } from '@cugetreg/zod-schemas/public-cart-response';
+import { PublicCartDetailResponseSchema } from '@cugetreg/zod-schemas/public-carts-response';
 
 import type { PageServerLoad } from './$types';
 

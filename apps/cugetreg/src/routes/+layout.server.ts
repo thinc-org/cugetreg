@@ -6,10 +6,10 @@ import { error as svelteError } from '@sveltejs/kit';
 import {
   CartData,
   CartDetailResponseSchema,
-  CartList,
+  type CartSchema,
   type ExamScheduleItem,
   ListCartsResponseSchema,
-} from '@cugetreg/zod-schemas/cart-response';
+} from '@cugetreg/zod-schemas/carts-response';
 
 import type { LayoutServerLoad } from './$types';
 
@@ -32,9 +32,8 @@ async function loadCart() {
     throw svelteError(500, 'Something went wrong fetching carts');
   }
 
-  const rawCartList = await response.json();
-
-  const cartList: CartList = ListCartsResponseSchema.parse(rawCartList).data;
+  const resData = await response.json();
+  const cartList: CartSchema[] = ListCartsResponseSchema.parse(resData).data;
   const defaultSchedule = cartList.find((item) => item.isDefault);
 
   let cartDetailData: any;

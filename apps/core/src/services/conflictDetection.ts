@@ -5,7 +5,7 @@ import type {
   ClassScheduleItem,
   ExamConflict,
   ExamScheduleItem,
-} from "../zod_schemas/carts.response.schema.js";
+} from "@cugetreg/zod-schemas/carts-response";
 
 // O(n²) pairwise check — carts are small (< 10 courses) so this is fine
 export function detectClassConflicts(

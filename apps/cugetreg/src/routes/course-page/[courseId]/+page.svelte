@@ -2,9 +2,9 @@
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
   import { page } from '$app/state';
-  import ScheduleMismatchPopup from '$lib/components/schedule-mismatch-popup.svelte';
   import { api } from '$lib/api';
   import { useSession } from '$lib/auth-client';
+  import ScheduleMismatchPopup from '$lib/components/schedule-mismatch-popup.svelte';
   import SelectedCourse from '$lib/components/selected-course.svelte';
   import { faculties } from '$lib/constants';
   import { getUserCartStore, useCartActions } from '$lib/stores/user-cart';
@@ -65,7 +65,7 @@
   const session = useSession();
 
   const userCart = getUserCartStore();
-  const { addCourse, removeCourse } = useCartActions();
+  const { addCourse, removeCourse, updateCourse } = useCartActions();
 
   const years = ['2566', '2565', '2564'];
   const terms = ['ภาคต้น', 'ภาคปลาย'];
@@ -375,15 +375,6 @@
       reviewsPage = 1;
     }
   });
-
-  const { data }: PageProps = $props();
-  const course = $derived(data.course);
-
-  // TODO: Connect with Auth
-  const isLoggedIn = false;
-
-  const userCart = getUserCartStore();
-  const { addCourse, removeCourse, updateCourse } = useCartActions();
 
   let globalSelectedSection = $state<string | null>(
     untrack(() => {

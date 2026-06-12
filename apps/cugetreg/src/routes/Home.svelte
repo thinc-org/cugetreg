@@ -338,6 +338,18 @@
   const userCart = getUserCartStore();
   const { addCourse, removeCourse, updateCourse } = useCartActions();
 
+  const SEMESTER_MAP: Record<string, string> = {
+    '1': 'FIRST',
+    '2': 'SECOND',
+    '3': 'SUMMER'
+  };
+
+  const PROGRAM_MAP: Record<string, string> = {
+    'นานาชาติ': 'I',
+    'ตรีภาค': 'T',
+    'ทวิภาค': 'S'
+  };
+
   function togglePanel(type: typeof openPanel) {
     if (sidebarExpanded) {
       if (type === 'sidebar') scrollToSection(timetableSection);
@@ -371,18 +383,6 @@
     sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
   }
 
-  function normalizeSemester(cartSemester: string): string {
-    switch (cartSemester) {
-      case 'FIRST':
-        return '1';
-      case 'SECOND':
-        return '2';
-      case 'SUMMER':
-        return '3';
-      default:
-        return cartSemester;
-    }
-  }
 
   function isMismatch(): boolean {
     const currentCart = $userCart.currentCart;
@@ -392,7 +392,7 @@
     const isProgramMismatch =
       currentCart.studyProgram !== expectedParams.studyProgram;
     const isSemesterMismatch =
-      normalizeSemester(currentCart.semester) !== expectedParams.semester;
+      currentCart.semester !== SEMESTER_MAP[expectedParams.semester];
     return isYearMismatch || isSemesterMismatch || isProgramMismatch;
   }
 
@@ -684,19 +684,9 @@
                   </div>
                 {:else}
                   {@const params = new URLSearchParams({
-                    studyProgram:
-                      currentProgram === 'นานาชาติ'
-                        ? 'I'
-                        : currentProgram === 'ตรีภาค'
-                          ? 'T'
-                          : 'S',
+                    studyProgram: PROGRAM_MAP[currentProgram],
                     academicYear: String(getParams().academicYear),
-                    semester:
-                      getParams().semester === '1'
-                        ? 'FIRST'
-                        : getParams().semester === '2'
-                          ? 'SECOND'
-                          : 'SUMMER',
+                    semester: SEMESTER_MAP[getParams().semester]
                   })}
                   {#each displayedCourses as item (item.course.code)}
                     <CourseCard
@@ -741,11 +731,7 @@
                 expectedYear={expectedParams.academicYear}
                 expectedProgram={expectedParams.studyProgram}
                 bind:currentScheduleId={$userCart.currentCartId}
-                expectedSemester={expectedParams.semester === '1'
-                  ? 'FIRST'
-                  : expectedParams.semester === '2'
-                    ? 'SECOND'
-                    : 'SUMMER'}
+                expectedSemester={SEMESTER_MAP[expectedParams.semester]}
                 onConfirm={handleScheduleChange}
                 onClose={() => (showMismatchPopup = false)}
               />

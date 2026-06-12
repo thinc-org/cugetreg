@@ -43,9 +43,10 @@
 		</div>
 	</div>
 
-	<div 
+	<div
 		class="flex flex-col gap-2 lg:h-auto lg:flex-none lg:overflow-visible"
-		class:h-[220px]={!isExpanded} class:h-auto={isExpanded}    
+		class:h-[220px]={!isExpanded}
+		class:h-auto={isExpanded}
 	>
 		{#if facultyMajor}
 			<div class="text-on-surface/60 text-body2 font-sans">
@@ -53,16 +54,19 @@
 			</div>
 		{/if}
 
-		<div class="flex-1 h-full w-full lg:h-auto lg:overflow-visible" class:overflow-hidden={!isExpanded}>
-            <p class="text-body1 font-sarabun font-regular text-on-surface w-full">
-                {content}
-            </p>
-        </div>
+		<div
+			class="h-full w-full flex-1 lg:h-auto lg:overflow-visible"
+			class:overflow-hidden={!isExpanded}
+		>
+			<p class="text-body1 font-sarabun font-regular text-on-surface w-full">
+				{content}
+			</p>
+		</div>
 
 		<div class="mt-auto flex flex-col gap-4">
 			<!-- Button to toggle view -->
 			<button
-				class="text-button1 self-start text-primary underline lg:hidden"
+				class="text-button1 text-primary self-start underline lg:hidden"
 				onclick={() => (isExpanded = !isExpanded)}
 			>
 				{#if isExpanded}

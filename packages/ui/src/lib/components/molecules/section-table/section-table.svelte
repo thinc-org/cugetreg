@@ -35,7 +35,7 @@
 {#if boxed}
 	<div class={`flex flex-col gap-4 ${className ?? ''}`}>
 		{#each tableData as row, i (i)}
-			<div 
+			<div
 				class={`rounded-xl border p-4 transition-colors ${
 					selectedSection === row.section ? 'border-[#4A70C6]' : 'border-[#E6E8F0]'
 				} bg-white`}
@@ -57,7 +57,9 @@
 
 				<div class="w-full">
 					<div class="w-full">
-						<div class="mb-2 grid w-full grid-cols-[32fr_98fr_60fr_38fr] gap-2 text-[12px] font-semibold text-[#6F7593]">
+						<div
+							class="mb-2 grid w-full grid-cols-[32fr_98fr_60fr_38fr] gap-2 text-[12px] font-semibold text-[#6F7593]"
+						>
 							<div class="pr-0">ผู้สอน</div>
 							<div class="pr-0">วันเวลาเรียน</div>
 							<div class="pr-0">ห้องเรียน</div>
@@ -66,8 +68,10 @@
 
 						<div class="flex flex-col">
 							{#each row.classes as cls, j (j)}
-								<div class={`grid w-full grid-cols-[32fr_98fr_60fr_38fr] gap-2 py-2 text-[12px] font-sarabun ${row.seats === 'ปิด' ? 'text-[#6F7593]' : 'text-[#353745]'}`}>
-									<div class="pr-0">{cls.teacher}</div> 
+								<div
+									class={`font-sarabun grid w-full grid-cols-[32fr_98fr_60fr_38fr] gap-2 py-2 text-[12px] ${row.seats === 'ปิด' ? 'text-[#6F7593]' : 'text-[#353745]'}`}
+								>
+									<div class="pr-0">{cls.teacher}</div>
 									<div class="pr-0">{cls.schedule}</div>
 									<div class="pr-0">{cls.room}</div>
 									<div>{cls.type}</div>

@@ -1,21 +1,20 @@
 <script lang="ts">
   import { useCartActions } from '$lib/stores/user-cart';
 
-  import { ChevronDown, Plus } from '@lucide/svelte';
+  import { Plus } from '@lucide/svelte';
 
   import { Modal } from '@cugetreg/ui/atoms/modal';
+  import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectTrigger,
+  } from '@cugetreg/ui/molecules/select';
   import {
     CreateTimetable,
     type TimetableMetaData,
   } from '@cugetreg/ui/organisms/create-timetable';
-
-  import {
-		Select,
-		SelectContent,
-		SelectGroup,
-		SelectItem,
-		SelectTrigger
-	} from '@cugetreg/ui/molecules/select';
 
   type Schedule = {
     id: string;
@@ -116,7 +115,7 @@
         <div class="relative mb-8">
           <Select type="single" bind:value={selectedId}>
             <SelectTrigger
-              class="w-full rounded-xl border border-[#b8c9e6] bg-white px-4 py-3 text-left text-[15px] text-[#2b4c8a]" 
+              class="w-full rounded-xl border border-[#b8c9e6] bg-white px-4 py-3 text-left text-[15px] text-[#2b4c8a]"
               aria-label="Select table"
             >
               {selectedLabel}
@@ -125,8 +124,8 @@
               <SelectGroup>
                 <div class="max-h-[200px] overflow-y-auto">
                   {#each matchingSchedules as schedule (schedule.id)}
-                    <SelectItem 
-                      value={schedule.id} 
+                    <SelectItem
+                      value={schedule.id}
                       label={schedule.name}
                       aria-label={schedule.name}
                     >
@@ -136,12 +135,14 @@
                 </div>
 
                 <div class="border-t border-gray-100 bg-white p-1">
-                  <SelectItem 
-                    value="NEW" 
-                    label="เพิ่มตาราง" 
+                  <SelectItem
+                    value="NEW"
+                    label="เพิ่มตาราง"
                     aria-label="เพิ่มตาราง"
                   >
-                    <div class="flex items-center gap-2 font-bold text-gray-600">
+                    <div
+                      class="flex items-center gap-2 font-bold text-gray-600"
+                    >
                       <Plus size={16} />
                       เพิ่มตาราง
                     </div>
@@ -184,7 +185,7 @@
           semesterMapping[schedule.semester] !== expectedSemester ||
           schedule.semesterType !== expectedProgram
         ) {
-          return; 
+          return;
         }
         await createCart(
           schedule.name,
@@ -195,14 +196,16 @@
         );
         showCreateScheduleModal = false;
         if (currentScheduleId) {
-          selectedId = currentScheduleId; 
+          selectedId = currentScheduleId;
         } else {
-          selectedId = matchingSchedules.length > 0 ? matchingSchedules[0].id : '';
+          selectedId =
+            matchingSchedules.length > 0 ? matchingSchedules[0].id : '';
         }
       }}
       onCancel={() => {
         showCreateScheduleModal = false;
-        selectedId = matchingSchedules.length > 0 ? matchingSchedules[0].id : '';
+        selectedId =
+          matchingSchedules.length > 0 ? matchingSchedules[0].id : '';
       }}
     />
   </Modal>

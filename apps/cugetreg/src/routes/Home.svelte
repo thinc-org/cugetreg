@@ -341,13 +341,13 @@
   const SEMESTER_MAP: Record<string, string> = {
     '1': 'FIRST',
     '2': 'SECOND',
-    '3': 'SUMMER'
+    '3': 'SUMMER',
   };
 
   const PROGRAM_MAP: Record<string, string> = {
-    'นานาชาติ': 'I',
-    'ตรีภาค': 'T',
-    'ทวิภาค': 'S'
+    นานาชาติ: 'I',
+    ตรีภาค: 'T',
+    ทวิภาค: 'S',
   };
 
   function togglePanel(type: typeof openPanel) {
@@ -382,7 +382,6 @@
   function toggleSortDirection() {
     sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
   }
-
 
   function isMismatch(): boolean {
     const currentCart = $userCart.currentCart;
@@ -686,7 +685,7 @@
                   {@const params = new URLSearchParams({
                     studyProgram: PROGRAM_MAP[currentProgram],
                     academicYear: String(getParams().academicYear),
-                    semester: SEMESTER_MAP[getParams().semester]
+                    semester: SEMESTER_MAP[getParams().semester],
                   })}
                   {#each displayedCourses as item (item.course.code)}
                     <CourseCard

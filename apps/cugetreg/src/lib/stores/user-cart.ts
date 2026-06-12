@@ -6,23 +6,31 @@ import toast from 'svelte-french-toast';
 
 import type {
   CartData,
-  CartList,
+  CartSchema,
   ExamScheduleItem,
-} from '@cugetreg/zod-schemas/cart-response';
+} from '@cugetreg/zod-schemas/carts-response';
 import {
   CartDetailResponseSchema,
   SingleCartItemResponseSchema,
   SingleCartResponseSchema,
-} from '@cugetreg/zod-schemas/cart-response';
+} from '@cugetreg/zod-schemas/carts-response';
 
 import { useContextStore } from './stores';
 
 export interface UserCartInterface {
   currentCart: CartData;
   currentCartId: string;
-  cartList: CartList;
+  cartList: CartSchema[];
   exams: ExamScheduleItem[];
 }
+
+/**
+ * Context key for the cart data promise streamed from the root layout load.
+ * Components can `{#await}` it to show a spinner while the cart is still being
+ * fetched, without blocking the rest of the page from rendering.
+ */
+export const CART_PROMISE_KEY = Symbol('cart-promise');
+export type CartPromise = Promise<UserCartInterface>;
 
 export interface UpdateCartFields {
   name?: string;

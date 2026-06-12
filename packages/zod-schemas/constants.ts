@@ -1,9 +1,23 @@
-export const TIME_REGEX = /^([01]\d|2[0-3]):([0-5]\d)$/;
-export const days = ["MO", "TU", "WE", "TH", "FR", "SA", "SU", "AR", "IA"];
-export const studyProgram = ["T", "I", "S"];
-export const genEdType = ["NO", "SC", "SO", "HU", "IN"];
-export const assessment = ["LETTER", "SU"];
-export const sortBy = ["NAME", "CAPACITY_SUM", "REMAING_SUM"];
-export const sortOrder = ["asc", "desc"];
-export const semester = ["1", "2", "3"];
-export const visible = ["PUB", "PVT"];
+export const TIME_REGEX = /^(IA)|([01]\d|2[0-3]):([0-5]\d)$/;
+export const days = [
+  "MO",
+  "TU",
+  "WE",
+  "TH",
+  "FR",
+  "SA",
+  "SU",
+  "AR",
+  "IA",
+  "IR",
+] as const;
+export const studyProgram = ["T", "I", "S"] as const;
+export const genEdType = ["NO", "SC", "SO", "HU", "IN"] as const;
+export const assessment = ["LETTER", "SU"] as const;
+export const sortBy = ["NAME", "CAPACITY_SUM", "REMAING_SUM"] as const;
+export const sortOrder = ["asc", "desc"] as const;
+export const semester = ["1", "2", "3"] as const;
+export const semesterString = ["FIRST", "SECOND", "SUMMER"] as const;
+export const visible = ["PUB", "PVT"] as const;
+export const reviewStatus = ["PENDING", "APPROVED", "REJECTED"] as const;
+export const vote = ["L", "D"] as const;

@@ -5,8 +5,27 @@ import {
   ClassScheduleItemSchema,
   ExamConflictSchema,
   ExamScheduleItemSchema,
-  Section,
 } from "./carts.response.schema.js";
+
+const SectionSchema = z.object({
+  id: z.string(),
+  sectionNo: z.number().int(),
+  closed: z.boolean(),
+  regis: z.number(),
+  max: z.number(),
+  note: z.string().nullable(),
+  classes: z.array(
+    z.object({
+      type: z.string(),
+      dayOfWeek: z.string(),
+      periodStart: z.string(),
+      periodEnd: z.string(),
+      building: z.string().nullable(),
+      room: z.string().nullable(),
+      professors: z.array(z.string()),
+    }),
+  ),
+});
 
 const PublicCartItemDetailSchema = z.object({
   id: z.string(),
@@ -20,15 +39,7 @@ const PublicCartItemDetailSchema = z.object({
     courseNameEn: z.string(),
     credit: z.string(),
   }),
-  // section: z
-  //   .object({
-  //     closed: z.boolean(),
-  //     regis: z.number(),
-  //     max: z.number(),
-  //     note: z.string().nullable(),
-  //   })
-  //   .nullable(),
-  sections: z.array(Section),
+  sections: z.array(SectionSchema),
 });
 
 export const PublicCartDetailResponseSchema = z.object({
@@ -55,7 +66,7 @@ export const PublicCartDetailResponseSchema = z.object({
   }),
 });
 
-export const CartSchema = z.object({
+export const PublicCartSchema = z.object({
   id: z.string(),
   userId: z.string(),
   studyProgram: z.string(),
@@ -71,13 +82,13 @@ export const CartSchema = z.object({
 
 export const ImportPublicCartResponseSchema = z.object({
   data: z.object({
-    cart: CartSchema.extend({
+    cart: PublicCartSchema.extend({
       items: z.array(z.any()).optional(),
     }),
   }),
 });
 
-const CartItemDetailSchema = z.object({
+const _CartItemDetailSchema = z.object({
   id: z.string(),
   courseNo: z.string(),
   sectionNo: z.number(),

@@ -11,26 +11,28 @@ import {
 } from "./constants.js";
 
 //1.1 get courses
-export const getCourseQuerySchema = z.object({
+export const GetCourseQuerySchema = z.object({
   studyProgram: z.enum(studyProgram),
-  academicYear: z.number().int().min(2564),
-  semester: z.union([z.literal(1), z.literal(2), z.literal(3)]),
-  // Optional Query
+  academicYear: z.coerce.number().int().min(2564),
+  semester: z.coerce
+    .number()
+    .pipe(z.union([z.literal(1), z.literal(2), z.literal(3)])),
   q: z.string().optional(),
   genEdType: z.enum(genEdType).optional(),
   faculty: z.string().optional(),
   day: z.enum(days).optional(),
   timeStart: z.string().regex(TIME_REGEX).optional(),
   timeEnd: z.string().regex(TIME_REGEX).optional(),
-  noPrereq: z.boolean().optional(),
+  noPrereq: z.coerce.boolean().optional(),
   fitCardId: z.string().optional(),
   assessment: z.enum(assessment).optional(),
   sortBy: z.enum(sortBy).optional(),
   sortOrder: z.enum(sortOrder).optional(),
-  limit: z.number().int().optional(),
+  offset: z.coerce.number().int().optional(),
+  limit: z.coerce.number().int().optional(),
 });
 // 1. Sub-schema for the 'course' object
-export const courseSchema = z.object({
+export const CourseSchema = z.object({
   id: z.string(),
   studyProgram: z.string(),
   academicYear: z.number().int(),
@@ -41,24 +43,24 @@ export const courseSchema = z.object({
   midtermEnd: z.string().datetime().nullable(),
   finalStart: z.string().datetime().nullable(),
   finalEnd: z.string().datetime().nullable(),
+  sections: z.any().array().optional(),
 });
 
 // 2. Sub-schema for the 'courseInfo' object
-export const courseInfoSchema = z.object({
-  courseNo: z.string(),
+export const CourseInfoSchema = z.object({
   abbrName: z.string(),
   courseNameEn: z.string(),
   courseNameTh: z.string(),
-  courseDescEn: z.string().nullable(), // Nullable since your data shows null
+  courseDescEn: z.string().nullable(),
   courseDescTh: z.string().nullable(),
-  faculty: z.string(),
-  department: z.string(),
-  credit: z.string(), // "3.0" is a string in your JSON
-  creditHours: z.string(),
+  faculty: z.string().nullable(),
+  department: z.string().nullable(),
+  credit: z.string(),
+  creditHours: z.string().nullable(),
 });
 
 // 3. Sub-schema for the 'stats' object
-const statsSchema = z.object({
+const StatsSchema = z.object({
   sectionsCount: z.number().int(),
   capacitySum: z.number().int(),
   remainingSum: z.number().int(),
@@ -67,46 +69,14 @@ const statsSchema = z.object({
 });
 
 // 4. The Main Schema combining everything
-export const courseDetailsSchema = z.object({
-  course: courseSchema,
-  courseInfo: courseInfoSchema,
-  stats: statsSchema,
+export const CourseDetailsSchema = z.object({
+  course: CourseSchema,
+  courseInfo: CourseInfoSchema,
+  stats: StatsSchema,
   fitMySchedule: z.boolean(),
 });
 //1.2 get course detail by id
 // In your schema file
-export const courseNoParamSchema = z.object({
+export const CourseNoParamSchema = z.object({
   courseNo: z.string().describe("The registration number of the course"),
 });
-
-/*
-  Default return HTTP Status 400 Bad Request
-  {
-  "success": false,
-  "error": {
-    "name": "ZodError",
-    "issues": [
-      {
-        "code": "invalid_type",
-        "expected": "string",
-        "received": "undefined",
-        "path": ["studyProgram"],
-        "message": "Required"
-      },
-      {
-        "code": "invalid_type",
-        "expected": "number",
-        "received": "undefined",
-        "path": ["academicYear"],
-        "message": "Required"
-      },
-      {
-        "code": "invalid_type",
-        "expected": "1 | 2 | 3",
-        "received": "undefined",
-        "path": ["semester"],
-        "message": "Required"
-      }
-    ]
-  }
-*/

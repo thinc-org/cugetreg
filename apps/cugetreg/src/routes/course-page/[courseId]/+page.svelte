@@ -3,6 +3,8 @@
   import { resolve } from '$app/paths';
   import { page } from '$app/state';
   import ScheduleMismatchPopup from '$lib/components/schedule-mismatch-popup.svelte';
+  import { api } from '$lib/api';
+  import { useSession } from '$lib/auth-client';
   import SelectedCourse from '$lib/components/selected-course.svelte';
   import { faculties } from '$lib/constants';
   import { getUserCartStore, useCartActions } from '$lib/stores/user-cart';
@@ -27,7 +29,9 @@
     Strikethrough,
     Underline,
   } from '@lucide/svelte';
+  import { isAxiosError } from 'axios';
   import { untrack } from 'svelte';
+  import toast from 'svelte-french-toast';
 
   import * as Accordion from '@cugetreg/ui/atoms/accordion';
   import { Button } from '@cugetreg/ui/atoms/button';
@@ -45,14 +49,32 @@
   import { Footer } from '@cugetreg/ui/organisms/footer';
   import * as Sidebar from '@cugetreg/ui/organisms/sidebar';
   import type { GenEdType } from '@cugetreg/utils/types';
+  import {
+    type SubmitReviewBodySchema,
+    SubmitReviewResponseSchema,
+    VoteReviewBodySchema,
+    VoteReviewResponseSchema,
+  } from '@cugetreg/zod-schemas';
 
   import type { PageProps } from './$types';
 
+  const { data }: PageProps = $props();
+  const course = $derived(data.course);
+  const reviews = $state(untrack(() => data.reviews));
+
+  const session = useSession();
+
+  const userCart = getUserCartStore();
+  const { addCourse, removeCourse } = useCartActions();
+
   const years = ['2566', '2565', '2564'];
   const terms = ['ภาคต้น', 'ภาคปลาย'];
+
   let selectedYear = $state(years[0]);
   let selectedTerm = $state(terms[0]);
   let reviewRating = $state(1);
+  let reviewContent = $state('');
+  let selectedSection = $state();
 
   let openPanel = $state<
     | 'sidebar'
@@ -76,7 +98,6 @@
   let descriptionSection = $state<HTMLElement>();
   let detailSection = $state<HTMLElement>();
   let reviewSection = $state<HTMLElement>();
-  let selectedSection = $state<HTMLElement>();
 
   let showMismatchPopup = $state(false);
   let pendingSection = $state<any>(null);
@@ -86,26 +107,30 @@
     if (reviewRating >= value - 0.5) return 'half';
     return 'empty';
   };
+
   const onStarClick = (value: number, event: MouseEvent) => {
     const target = event.currentTarget as HTMLButtonElement;
     const rect = target.getBoundingClientRect();
     const isHalf = event.clientX - rect.left < rect.width / 2;
     reviewRating = isHalf ? value - 0.5 : value;
   };
+
   const reviewYearPlaceholder = 'ปีการศึกษา';
   const reviewTermPlaceholder = 'ภาคเรียน';
   let selectedReviewYear = $state(reviewYearPlaceholder);
   let selectedReviewTerm = $state(reviewTermPlaceholder);
-  const reviewsPerPage = 2;
+  const reviewsPerPage = 4;
   let reviewsPage = $state(1);
+
   const isReviewYearPlaceholder = $derived(
     selectedReviewYear === reviewYearPlaceholder,
   );
+
   const isReviewTermPlaceholder = $derived(
     selectedReviewTerm === reviewTermPlaceholder,
   );
 
-  let textareaRef: HTMLTextAreaElement;
+  let textareaRef: HTMLTextAreaElement | undefined = $state();
 
   function togglePanel(type: typeof openPanel) {
     if (type === 'sidebar' || type === 'selected_only') {
@@ -131,58 +156,26 @@
     el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
-  const _reviewSamples = [
-    {
-      rating: 4,
-      semester: 'ภาคต้น 2566',
-      facultyMajor: 'คณะวิศวกรรมศาสตร์ ภาคเครื่องใน',
-      content:
-        'ส่วนตัวคิดว่าง่ายมาก มีงานสัปดาห์ละครั้ง ปกติจะมีวิดีโอให้ดู ไม่ยาวมาก แต่จะไม่ดูไม่ได้ เพราะปกติโฮมอ่านตัวอย่างที่ให้มาแล้วก็ลองเขียนเลย งานส่วนใหญ่จะให้ Topic กว้างๆมา ถ้าอาจารย์ประจำ sec ไม่ strict มาก ก็เขียนตามใจไปเลย แต่อาจารย์ที่สอนในสัปดาห์นั้นมาปรับบ้างหน่อย ปกติจะมีเวลาไม่มาก ก็เขียนครั้งเดียวแล้วส่งไปเลย เลยเสียเวลาแค่ 1-2 ชม. ต่อสัปดาห์ แต่ถ้าใครจะส่งชิงงานเขียนหน่อยก็อาจใช้เวลาเพิ่มขึ้น สอบเหมือนกับงานที่ทำ จะไม่อ่านไปสอบก็ได้ถ้าจำพวกงานที่ทำส่งได้ แต่ก่อนสอบมีคลิปรีวิวให้ดูก่อน ฟังตัวนี้เอาก็ได้ อันนี้ขึ้นอยู่กับ sec ของเราว่าอาจารย์ให้คะแนนค่อนข้างง่าย แต่ถ้าให้คะแนนมากหน่อย เฉลี่ยก็รวมๆกันได้ A เพราะจะเขียนตามใจตัวเองเป็นหลัก ไม่ค่อยยึดกับเรื่องที่เรียนมาเลยรู้สึกไม่ค่อยได้อะไรใหม่ ที่ช่วยนำจะเป็นการจัดระเบียบความคิดและสรุปให้อยู่ในย่อหน้า',
-      likesCount: 2,
-      dislikesCount: 0,
-    },
-    {
-      rating: 3.5,
-      semester: 'ภาคปลาย 2566',
-      facultyMajor: 'คณะวิศวกรรมศาสตร์ ภาคเครื่องใน',
-      content:
-        'ส่วนตัวคิดว่าง่ายมาก มีงานสัปดาห์ละครั้ง ปกติจะมีวิดีโอให้ดู ไม่ยาวมาก แต่จะไม่ดูไม่ได้ เพราะปกติโฮมอ่านตัวอย่างที่ให้มาแล้วก็ลองเขียนเลย งานส่วนใหญ่จะให้ Topic กว้างๆมา ถ้าอาจารย์ประจำ sec ไม่ strict มาก ก็เขียนตามใจไปเลย แต่อาจารย์ที่สอนในสัปดาห์นั้นมาปรับบ้างหน่อย ปกติจะมีเวลาไม่มาก ก็เขียนครั้งเดียวแล้วส่งไปเลย เลยเสียเวลาแค่ 1-2 ชม. ต่อสัปดาห์ แต่ถ้าใครจะส่งชิงงานเขียนหน่อยก็อาจใช้เวลาเพิ่มขึ้น สอบเหมือนกับงานที่ทำ จะไม่อ่านไปสอบก็ได้ถ้าจำพวกงานที่ทำส่งได้ แต่ก่อนสอบมีคลิปรีวิวให้ดูก่อน ฟังตัวนี้เอาก็ได้ อันนี้ขึ้นอยู่กับ sec ของเราว่าอาจารย์ให้คะแนนค่อนข้างง่าย แต่ถ้าให้คะแนนมากหน่อย เฉลี่ยก็รวมๆกันได้ A เพราะจะเขียนตามใจตัวเองเป็นหลัก ไม่ค่อยยึดกับเรื่องที่เรียนมาเลยรู้สึกไม่ค่อยได้อะไรใหม่ ที่ช่วยนำจะเป็นการจัดระเบียบความคิดและสรุปให้อยู่ในย่อหน้า',
-      likesCount: 1,
-      dislikesCount: 0,
-    },
-    {
-      rating: 4,
-      semester: 'ภาคต้น 2565',
-      facultyMajor: 'คณะวิศวกรรมศาสตร์ ภาคเครื่องใน',
-      content:
-        'ส่วนตัวคิดว่าง่ายมาก มีงานสัปดาห์ละครั้ง ปกติจะมีวิดีโอให้ดู ไม่ยาวมาก แต่จะไม่ดูไม่ได้ เพราะปกติโฮมอ่านตัวอย่างที่ให้มาแล้วก็ลองเขียนเลย งานส่วนใหญ่จะให้ Topic กว้างๆมา ถ้าอาจารย์ประจำ sec ไม่ strict มาก ก็เขียนตามใจไปเลย แต่อาจารย์ที่สอนในสัปดาห์นั้นมาปรับบ้างหน่อย ปกติจะมีเวลาไม่มาก ก็เขียนครั้งเดียวแล้วส่งไปเลย เลยเสียเวลาแค่ 1-2 ชม. ต่อสัปดาห์ แต่ถ้าใครจะส่งชิงงานเขียนหน่อยก็อาจใช้เวลาเพิ่มขึ้น สอบเหมือนกับงานที่ทำ จะไม่อ่านไปสอบก็ได้ถ้าจำพวกงานที่ทำส่งได้ แต่ก่อนสอบมีคลิปรีวิวให้ดูก่อน ฟังตัวนี้เอาก็ได้ อันนี้ขึ้นอยู่กับ sec ของเราว่าอาจารย์ให้คะแนนค่อนข้างง่าย แต่ถ้าให้คะแนนมากหน่อย เฉลี่ยก็รวมๆกันได้ A เพราะจะเขียนตามใจตัวเองเป็นหลัก ไม่ค่อยยึดกับเรื่องที่เรียนมาเลยรู้สึกไม่ค่อยได้อะไรใหม่ ที่ช่วยนำจะเป็นการจัดระเบียบความคิดและสรุปให้อยู่ในย่อหน้า',
-      likesCount: 2,
-      dislikesCount: 1,
-    },
-    {
-      rating: 4.5,
-      semester: 'ภาคปลาย 2565',
-      facultyMajor: 'คณะวิศวกรรมศาสตร์ ภาคเครื่องใน',
-      content:
-        'ส่วนตัวคิดว่าง่ายมาก มีงานสัปดาห์ละครั้ง ปกติจะมีวิดีโอให้ดู ไม่ยาวมาก แต่จะไม่ดูไม่ได้ เพราะปกติโฮมอ่านตัวอย่างที่ให้มาแล้วก็ลองเขียนเลย งานส่วนใหญ่จะให้ Topic กว้างๆมา ถ้าอาจารย์ประจำ sec ไม่ strict มาก ก็เขียนตามใจไปเลย แต่อาจารย์ที่สอนในสัปดาห์นั้นมาปรับบ้างหน่อย ปกติจะมีเวลาไม่มาก ก็เขียนครั้งเดียวแล้วส่งไปเลย เลยเสียเวลาแค่ 1-2 ชม. ต่อสัปดาห์ แต่ถ้าใครจะส่งชิงงานเขียนหน่อยก็อาจใช้เวลาเพิ่มขึ้น สอบเหมือนกับงานที่ทำ จะไม่อ่านไปสอบก็ได้ถ้าจำพวกงานที่ทำส่งได้ แต่ก่อนสอบมีคลิปรีวิวให้ดูก่อน ฟังตัวนี้เอาก็ได้ อันนี้ขึ้นอยู่กับ sec ของเราว่าอาจารย์ให้คะแนนค่อนข้างง่าย แต่ถ้าให้คะแนนมากหน่อย เฉลี่ยก็รวมๆกันได้ A เพราะจะเขียนตามใจตัวเองเป็นหลัก ไม่ค่อยยึดกับเรื่องที่เรียนมาเลยรู้สึกไม่ค่อยได้อะไรใหม่ ที่ช่วยนำจะเป็นการจัดระเบียบความคิดและสรุปให้อยู่ในย่อหน้า',
-      likesCount: 3,
-      dislikesCount: 0,
-    },
-  ];
-
-  // const reviews = Array.from({ length: 12 }, (_, i) => {
-  //   const sample = reviewSamples[i % reviewSamples.length]
-  //   return { ...sample }
-  // })
-
-  const reviews = [];
   const filteredReviews = $derived.by(() =>
-    reviews.filter((review) => {
-      const [term, year] = review.semester.split(' ');
-      if (!isReviewYearPlaceholder && year !== selectedReviewYear) return false;
-      if (!isReviewTermPlaceholder && term !== selectedReviewTerm) return false;
-      return true;
-    }),
+    reviews
+      .filter((review) => {
+        if (
+          !isReviewYearPlaceholder &&
+          review.academicYear !== Number(selectedReviewYear)
+        )
+          return false;
+        if (!isReviewTermPlaceholder && review.semester !== selectedReviewTerm)
+          return false;
+        return true;
+      })
+      .sort((a, b) => {
+        const priority: Record<string, number> = {
+          REJECTED: 0,
+          PENDING: 1,
+          APPROVED: 2,
+        };
+        return (priority[a.status] ?? 3) - (priority[b.status] ?? 3);
+      }),
   );
 
   const totalReviewPages = $derived(
@@ -211,16 +204,9 @@
     return items;
   });
 
-  const reviewMeta = reviews
-    .map((review) => {
-      const [term, year] = review.semester.split(' ');
-      return { term, year };
-    })
-    .filter((item) => item.term && item.year);
-
   const reviewYearOptions = [
     reviewYearPlaceholder,
-    ...Array.from(new Set(reviewMeta.map((item) => item.year)))
+    ...Array.from(new Set(reviews.map((item) => item.academicYear)))
       .sort()
       .reverse(),
   ];
@@ -228,15 +214,133 @@
   const reviewTermOptions = $derived.by(() => {
     const terms = reviews
       .map((review) => {
-        const [term, year] = review.semester.split(' ');
+        const [term, year] = [review.semester, review.academicYear];
         return { term, year };
       })
       .filter((item) =>
-        isReviewYearPlaceholder ? true : item.year === selectedReviewYear,
+        isReviewYearPlaceholder
+          ? true
+          : item.year === Number(selectedReviewYear),
       )
       .map((item) => item.term);
     return [reviewTermPlaceholder, ...Array.from(new Set(terms))];
   });
+
+  function mapSemester(semester: string): '1' | '2' | '3' {
+    switch (semester) {
+      case '1':
+      case 'FIRST':
+        return '1';
+      case '2':
+      case 'SECOND':
+        return '2';
+      case '3':
+      case 'SUMMER':
+        return '3';
+      default:
+        return '1';
+    }
+  }
+
+  function mapSemesterInverse(semester: string): 'FIRST' | 'SECOND' | 'SUMMER' {
+    switch (semester) {
+      case '1':
+      case 'FIRST':
+        return 'FIRST';
+      case '2':
+      case 'SECOND':
+        return 'SECOND';
+      case '3':
+      case 'SUMMER':
+        return 'SUMMER';
+      default:
+        return 'FIRST';
+    }
+  }
+
+  async function handleReactReview(reviewId: string, interaction: 'L' | 'D') {
+    const payload: VoteReviewBodySchema = {
+      interaction,
+    };
+
+    try {
+      const response = await api.patch(`/reviews/react/${reviewId}`, payload);
+      const {
+        id,
+        likeCount,
+        dislikeCount,
+        myInteraction: reaction,
+      } = VoteReviewResponseSchema.parse(response.data).data;
+
+      const review = reviews.find((r) => r.id === id);
+      if (review) {
+        Object.assign(review, {
+          reaction,
+          stats: {
+            likeCount,
+            dislikeCount,
+          },
+        });
+      }
+    } catch (error) {
+      if (isAxiosError(error)) {
+        if (error.status === 401)
+          toast.error('Please login before doing this action', {
+            position: 'bottom-right',
+          });
+        return;
+      }
+      console.error(error);
+      toast.error('Something went wrong', {
+        position: 'bottom-right',
+      });
+    }
+  }
+
+  async function handleSubmitReview() {
+    const payload: SubmitReviewBodySchema = {
+      courseNo: course.courseNo,
+      studyProgram: course.studyProgram,
+      academicYear: course.academicYear,
+      semester: mapSemester(course.semester),
+      rating: reviewRating * 2,
+      content: reviewContent,
+    };
+
+    try {
+      const response = await api.post('/reviews', payload);
+      const review = SubmitReviewResponseSchema.parse(response.data).data;
+
+      console.log(review);
+
+      reviews.push({
+        id: review.id,
+        rating: review.rating,
+        status: review.status,
+        studyProgram: review.studyProgram,
+        academicYear: review.academicYear,
+        semester: mapSemesterInverse(review.semester), // CAN WE HAVE SINGLE () => data.reviewsSEMESTER TYPE PLEASE????
+        content: review.content,
+        stats: {
+          likeCount: review.likeCount,
+          dislikeCount: review.dislikeCount,
+        },
+      });
+    } catch (error) {
+      if (isAxiosError(error)) {
+        if (error.status === 401) {
+          toast.error('Please login before doing this action', {
+            position: 'bottom-right',
+          });
+          return;
+        }
+      }
+
+      toast.error('Something went wrong', {
+        position: 'bottom-right',
+      });
+    }
+  }
 
   $effect(() => {
     const academicYear = page.url.searchParams.get('academicYear');
@@ -622,7 +726,7 @@
                 />
               {/if}
 
-              {#if isLoggedIn}
+              {#if $session.data}
                 <section
                   class="text-on-surface mx-auto mt-10 w-full max-w-5xl"
                   bind:this={reviewSection}
@@ -714,6 +818,7 @@
                     </div>
                     <textarea
                       bind:this={textareaRef}
+                      bind:value={reviewContent}
                       class="text-on-surface h-36 w-full resize-none bg-transparent px-4 py-3 text-sm outline-none"
                       placeholder="คุณคิดว่าวิชานี้เป็นอย่างไรบ้าง?"
                     ></textarea>
@@ -724,6 +829,7 @@
                       variant="solid"
                       color="secondary"
                       class="bg-primary-container text-primary hover:ring-primary-container gap-2"
+                      onclick={handleSubmitReview}
                     >
                       ส่งรีวิว
                       <Send size={14} />
@@ -800,12 +906,15 @@
                   <div class="mt-6 flex flex-col gap-6">
                     {#each pagedReviews as review, index (index)}
                       <Comment
-                        rating={review.rating}
-                        semester={review.semester}
-                        facultyMajor={review.facultyMajor}
+                        rating={review.rating / 2}
+                        semester={mapSemester(review.semester)}
                         content={review.content}
-                        likesCount={review.likesCount}
-                        dislikesCount={review.dislikesCount}
+                        likesCount={review.stats.likeCount}
+                        dislikesCount={review.stats.dislikeCount}
+                        status={review.status}
+                        onLike={() => handleReactReview(review.id, 'L')}
+                        onDislike={() => handleReactReview(review.id, 'D')}
+                        reaction={review.reaction}
                       />
                     {/each}
                   </div>
@@ -878,7 +987,7 @@
 </div>
 
 {#snippet SidebarComponent()}
-  {@const _sidebar = Sidebar.useSidebar()}
+  {@const isLoggedIn = Boolean(session.data)}
   <Sidebar.Sidebar
     variant="sidebar"
     collapsible="icon"
@@ -934,17 +1043,19 @@
                 <MessageCircleQuestionIcon size="24" strokeWidth={2.5} />
               </Sidebar.MenuButton>
             </Sidebar.MenuItem>
-            <Sidebar.MenuItem>
-              <Sidebar.MenuButton
-                onclick={() => togglePanel('selected_only')}
-                isActive={activePanel === 'selected_only'}
-                size="lg"
-                tooltipContent="วิชาที่เลือก"
-                class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-6!"
-              >
-                <BookMarked size="24" strokeWidth={2.5} />
-              </Sidebar.MenuButton>
-            </Sidebar.MenuItem>
+            {#if isLoggedIn}
+              <Sidebar.MenuItem>
+                <Sidebar.MenuButton
+                  onclick={() => togglePanel('selected_only')}
+                  isActive={activePanel === 'selected_only'}
+                  size="lg"
+                  tooltipContent="วิชาที่เลือก"
+                  class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-6!"
+                >
+                  <BookMarked size="24" strokeWidth={2.5} />
+                </Sidebar.MenuButton>
+              </Sidebar.MenuItem>
+            {/if}
           </Sidebar.Menu>
         </Sidebar.GroupContent>
       </Sidebar.Group>
@@ -963,13 +1074,12 @@
           class="bg-surface flex flex-1 flex-col overflow-hidden group-data-[state=collapsed]:absolute group-data-[state=collapsed]:top-4 group-data-[state=collapsed]:left-[calc(var(--sidebar-width-icon)+1rem)] group-data-[state=collapsed]:z-50 group-data-[state=collapsed]:max-h-[min(800px,calc(100%-2rem))] group-data-[state=collapsed]:w-[400px] group-data-[state=collapsed]:rounded-3xl group-data-[state=collapsed]:border group-data-[state=collapsed]:shadow-2xl md:px-8 md:pt-0 md:pb-8"
         >
           <div class="flex-1 overflow-y-auto pr-6 pb-10 md:pr-8">
-            {#if sidebarExpanded || openPanel === 'sidebar'}
+            {#if (sidebarExpanded || openPanel === 'sidebar') && isLoggedIn}
               <div
                 bind:this={timetableSection}
                 class="relative mb-6 flex flex-col gap-2"
               >
                 <SelectTimetable
-                  class="border-b border-neutral-200 px-2 py-5"
                   options={$userCart.cartList?.map((item) => ({
                     name: item.name,
                     id: item.id,
@@ -1017,7 +1127,8 @@
 
                   <button
                     type="button"
-                    class="flex items-center gap-1.5 rounded-xl bg-[#E9EEF6] px-3.5 py-1.5 text-sm font-medium text-[#004494] transition-all hover:bg-[#D2E0F5]"
+                    data-hidden={!isLoggedIn}
+                    class="flex items-center gap-1.5 rounded-xl bg-[#E9EEF6] px-3.5 py-1.5 text-sm font-medium text-[#004494] transition-all hover:bg-[#D2E0F5] data-[hidden=true]:hidden"
                     onclick={() => {
                       scrollToSection(reviewSection);
                       setTimeout(() => textareaRef?.focus(), 300);
@@ -1030,7 +1141,7 @@
               </div>
             {/if}
 
-            {#if sidebarExpanded || openPanel === 'selected_only'}
+            {#if (sidebarExpanded || openPanel === 'selected_only') && isLoggedIn}
               <div bind:this={selectedSection}>
                 {#if $userCart.currentCart}
                   <SelectedCourse

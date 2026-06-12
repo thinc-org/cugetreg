@@ -1,20 +1,20 @@
 import { createRoute, z } from "@hono/zod-openapi";
 
-import { errorRes, InternalError } from "./errorRes.js";
-
-import {
-  CartDetailResponseSchema,
-  ListCartsResponseSchema,
-  SingleCartItemResponseSchema,
-  SingleCartResponseSchema,
-} from "../zod_schemas/carts.response.schema.js";
 import {
   AddCourseBodySchema,
   CreateCartBodySchema,
   ListCartsQuerySchema,
   UpdateCartBodySchema,
   UpdateCourseBodySchema,
-} from "../zod_schemas/carts.schema.js";
+} from "@cugetreg/zod-schemas/carts";
+import {
+  CartDetailResponseSchema,
+  ListCartsResponseSchema,
+  SingleCartItemResponseSchema,
+  SingleCartResponseSchema,
+} from "@cugetreg/zod-schemas/carts-response";
+
+import { errorRes, InternalError } from "./errorRes.js";
 
 // 3.1 List
 export const listCartsRoute = createRoute({

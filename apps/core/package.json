@@ -17,6 +17,7 @@
     "schema": "./prisma"
   },
   "dependencies": {
+    "@cugetreg/zod-schemas": "workspace:*",
     "@eslint/js": "^9.39.2",
     "@hono/node-server": "^1.19.6",
     "@hono/oauth-providers": "^0.8.5",

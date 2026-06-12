@@ -1,15 +1,18 @@
+import { invalidateAll } from '$app/navigation';
+import { PUBLIC_API_URL } from '$env/static/public';
+
 import { createAuthClient } from 'better-auth/svelte';
 
 export const { signIn, signOut, useSession } = createAuthClient({
-  baseURL: 'http://localhost:3000/api/v1/auth',
+  baseURL: `${PUBLIC_API_URL}/auth`,
 });
 
 export const handleGoogleLogin = async () => {
   console.log('Logging in...');
   await signIn.social({
     provider: 'google',
-    callbackURL: 'http://localhost:5173',
-    errorCallbackURL: 'http://localhost:5173',
+    callbackURL: String(window.location),
+    errorCallbackURL: String(window.location),
     fetchOptions: {
       onError: (context) => {
         console.error(context.error.message);
@@ -20,4 +23,6 @@ export const handleGoogleLogin = async () => {
 
 export const handleGoogleLogout = async () => {
   await signOut();
+  await invalidateAll();
+  window.location.reload();
 };

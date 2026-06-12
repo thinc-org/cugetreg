@@ -11,13 +11,17 @@
     useSession,
   } from '$lib/auth-client';
   import { searchState } from '$lib/stores/search.svelte';
-  import { getUserCartStore, initUserCartStore } from '$lib/stores/user-cart';
+  import {
+    CART_PROMISE_KEY,
+    initUserCartStore,
+    type UserCartInterface,
+  } from '$lib/stores/user-cart';
 
-  import type { Snippet } from 'svelte';
+  import { setContext, type Snippet } from 'svelte';
   import toast, { Toaster } from 'svelte-french-toast';
 
   import { Navbar } from '@cugetreg/ui/organisms/navbar';
-  import { CartDetailResponseSchema } from '@cugetreg/zod-schemas/cart-response';
+  import { CartDetailResponseSchema } from '@cugetreg/zod-schemas/carts-response';
 
   import type { LayoutData } from './$types';
 
@@ -55,9 +59,33 @@
     children?: Snippet;
   } = $props();
 
-  initUserCartStore((() => data.data)());
+  const EMPTY_CART: UserCartInterface = {
+    currentCart: {
+      id: '',
+      name: '',
+      studyProgram: '',
+      academicYear: 0,
+      semester: '',
+      visible: '',
+      isDefault: false,
+      cartOrder: '',
+      items: [],
+    },
+    currentCartId: '',
+    cartList: [],
+    exams: [],
+  };
 
-  const userCart = getUserCartStore();
+  const userCart = initUserCartStore(EMPTY_CART);
+
+  const cartPromise = (() => data.cart)();
+
+  cartPromise.then(
+    (cart) => userCart.set(cart),
+    (err) => console.error('[layout] failed to load cart:', err),
+  );
+
+  setContext(CART_PROMISE_KEY, cartPromise);
 
   let lastFetchedId = '';
 

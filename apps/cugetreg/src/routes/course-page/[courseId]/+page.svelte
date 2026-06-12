@@ -615,6 +615,7 @@
                   schedules={$userCart.cartList ?? []}
                   expectedYear={String(course.academicYear)}
                   expectedProgram={course.studyProgram}
+                  bind:currentScheduleId={$userCart.currentCartId}
                   expectedSemester={course.semester}
                   onConfirm={handlePopupConfirm}
                   onClose={() => (showMismatchPopup = false)}

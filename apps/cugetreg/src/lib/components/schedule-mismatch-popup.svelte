@@ -30,6 +30,7 @@
     expectedYear: string | number;
     expectedSemester: string;
     expectedProgram: string;
+    currentScheduleId: string;
     onConfirm: (scheduleId: string) => void;
     onClose: () => void;
   }
@@ -39,6 +40,7 @@
     expectedYear,
     expectedSemester,
     expectedProgram,
+    currentScheduleId = $bindable(),
     onConfirm,
     onClose,
   }: ScheduleMismatchPopupProps = $props();
@@ -56,10 +58,8 @@
     matchingSchedules.length > 0 ? matchingSchedules[0].id : '',
   );
 
-  let previousId = $state(selectedId);
-
   let selectedLabel = $derived.by(() => {
-    if (selectedId === 'NEW' || selectedId === '') return 'สร้างตารางเรียนใหม่...';
+    if (selectedId === '') return 'สร้างตารางเรียนใหม่...';
     const found = matchingSchedules.find((s) => s.id === selectedId);
     return found ? found.name : 'สร้างตารางเรียนใหม่...';
   });
@@ -82,11 +82,16 @@
 
   const { createCart } = useCartActions();
 
+  const semesterMapping: Record<string, string> = {
+    '1': 'FIRST',
+    '2': 'SECOND',
+    '3': 'SUMMER',
+  };
+
   $effect(() => {
-    if(selectedId === 'NEW' && previousId !== 'NEW'){
+    if (selectedId === 'NEW') {
       showCreateScheduleModal = true;
     }
-    previousId = selectedId;
   });
 </script>
 
@@ -174,7 +179,14 @@
   >
     <CreateTimetable
       onConfirm={async (schedule: TimetableMetaData) => {
-        const newCartId = await createCart(
+        if (
+          String(schedule.academicYear) !== String(expectedYear) ||
+          semesterMapping[schedule.semester] !== expectedSemester ||
+          schedule.semesterType !== expectedProgram
+        ) {
+          return; 
+        }
+        await createCart(
           schedule.name,
           schedule.isPublic,
           schedule.semesterType,
@@ -182,8 +194,8 @@
           schedule.academicYear,
         );
         showCreateScheduleModal = false;
-        if (newCartId) {
-          selectedId = newCartId; 
+        if (currentScheduleId) {
+          selectedId = currentScheduleId; 
         } else {
           selectedId = matchingSchedules.length > 0 ? matchingSchedules[0].id : '';
         }

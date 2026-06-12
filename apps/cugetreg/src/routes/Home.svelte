@@ -740,6 +740,7 @@
                 schedules={$userCart.cartList ?? []}
                 expectedYear={expectedParams.academicYear}
                 expectedProgram={expectedParams.studyProgram}
+                bind:currentScheduleId={$userCart.currentCartId}
                 expectedSemester={expectedParams.semester === '1'
                   ? 'FIRST'
                   : expectedParams.semester === '2'

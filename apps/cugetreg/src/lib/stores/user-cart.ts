@@ -530,6 +530,8 @@ export function useCartActions() {
         },
       ],
     }));
+
+    return newCartId;
   };
 
   const deleteCart = async (): Promise<void> => {

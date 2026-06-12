@@ -9,6 +9,14 @@
     type TimetableMetaData,
   } from '@cugetreg/ui/organisms/create-timetable';
 
+  import {
+		Select,
+		SelectContent,
+		SelectGroup,
+		SelectItem,
+		SelectTrigger
+	} from '@cugetreg/ui/molecules/select';
+
   type Schedule = {
     id: string;
     name: string;
@@ -44,13 +52,14 @@
     ),
   );
 
-  let isDropdownOpen = $state(false);
-  let selectedId = $state<string | 'NEW'>(
-    matchingSchedules.length > 0 ? matchingSchedules[0].id : 'NEW',
+  let selectedId = $state<string>(
+    matchingSchedules.length > 0 ? matchingSchedules[0].id : '',
   );
 
+  let previousId = $state(selectedId);
+
   let selectedLabel = $derived.by(() => {
-    if (selectedId === 'NEW') return 'สร้างตารางเรียนใหม่...';
+    if (selectedId === 'NEW' || selectedId === ' ') return 'สร้างตารางเรียนใหม่...';
     const found = matchingSchedules.find((s) => s.id === selectedId);
     return found ? found.name : 'กรุณาเลือกตาราง...';
   });
@@ -65,6 +74,13 @@
   }
 
   const { createCart } = useCartActions();
+
+  $effect(() => {
+    if(selectedId === 'NEW' && previousId !== 'NEW'){
+      showCreateScheduleModal = true;
+    }
+    previousId = selectedId;
+  });
 </script>
 
 <div class="fixed inset-0 z-50 flex items-center justify-center">
@@ -86,55 +102,42 @@
         </p>
 
         <div class="relative mb-8">
-          <button
-            onclick={() => (isDropdownOpen = !isDropdownOpen)}
-            class="flex w-full items-center justify-between rounded-xl border border-[#b8c9e6] bg-white px-4 py-2 text-left text-[15px] text-[#4a70c6]"
-          >
-            <span class="truncate pr-4">{selectedLabel}</span>
-            <ChevronDown
-              size={20}
-              class="text-[#4a70c6] transition-transform duration-200 {isDropdownOpen
-                ? 'rotate-180'
-                : ''}"
-            />
-          </button>
-
-          {#if isDropdownOpen}
-            <div
-              class="absolute top-full left-0 z-10 mt-2 w-full overflow-hidden rounded-xl border border-gray-100 bg-white shadow-xl"
+          <Select type="single" bind:value={selectedId}>
+            <SelectTrigger
+              class="w-full rounded-xl border border-[#b8c9e6] bg-white px-4 py-3 text-left text-[15px] text-[#2b4c8a]" 
+              aria-label="Select table"
             >
-              <div class="max-h-[200px] overflow-y-auto py-1">
-                {#each matchingSchedules as schedule (schedule.id)}
-                  <button
-                    onclick={() => {
-                      selectedId = schedule.id;
-                      isDropdownOpen = false;
-                    }}
-                    class="w-full px-4 py-3 text-left text-[14px] transition-colors hover:bg-gray-50 {selectedId ===
-                    schedule.id
-                      ? 'font-regular bg-[#f0f4f8] text-[#4a70c6]'
-                      : 'text-gray-700'}"
-                  >
-                    {schedule.name}
-                  </button>
-                {/each}
-              </div>
+              {selectedLabel}
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <div class="max-h-[200px] overflow-y-auto">
+                  {#each matchingSchedules as schedule (schedule.id)}
+                    <SelectItem 
+                      value={schedule.id} 
+                      label={schedule.name}
+                      aria-label={schedule.name}
+                    >
+                      {schedule.name}
+                    </SelectItem>
+                  {/each}
+                </div>
 
-              <div class="border-t border-gray-100 bg-white p-1">
-                <button
-                  onclick={() => {
-                    selectedId = 'NEW';
-                    showCreateScheduleModal = true;
-                    isDropdownOpen = false;
-                  }}
-                  class="flex w-full items-center justify-center gap-2 rounded-lg px-4 py-3 text-[14px] font-bold text-gray-600 transition-colors hover:bg-gray-50 hover:text-[#2b4c8a]"
-                >
-                  <Plus size={16} />
-                  เพิ่มตาราง
-                </button>
-              </div>
-            </div>
-          {/if}
+                <div class="border-t border-gray-100 bg-white p-1">
+                  <SelectItem 
+                    value="NEW" 
+                    label="เพิ่มตาราง" 
+                    aria-label="เพิ่มตาราง"
+                  >
+                    <div class="flex items-center gap-2 font-bold text-gray-600">
+                      <Plus size={16} />
+                      เพิ่มตาราง
+                    </div>
+                  </SelectItem>
+                </div>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
         </div>
 
         <div class="flex gap-4">
@@ -163,8 +166,8 @@
     bind:show={showCreateScheduleModal}
   >
     <CreateTimetable
-      onConfirm={(schedule: TimetableMetaData) => {
-        createCart(
+      onConfirm={async (schedule: TimetableMetaData) => {
+        const newCartId = await createCart(
           schedule.name,
           schedule.isPublic,
           schedule.semesterType,
@@ -172,8 +175,16 @@
           schedule.academicYear,
         );
         showCreateScheduleModal = false;
+        if (newCartId) {
+          selectedId = newCartId; 
+        } else {
+          selectedId = matchingSchedules.length > 0 ? matchingSchedules[0].id : '';
+        }
       }}
-      onCancel={() => (showCreateScheduleModal = false)}
+      onCancel={() => {
+        showCreateScheduleModal = false;
+        selectedId = matchingSchedules.length > 0 ? matchingSchedules[0].id : '';
+      }}
     />
   </Modal>
 </div>

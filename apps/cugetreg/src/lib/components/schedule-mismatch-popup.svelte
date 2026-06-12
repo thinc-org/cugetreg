@@ -59,14 +59,21 @@
   let previousId = $state(selectedId);
 
   let selectedLabel = $derived.by(() => {
-    if (selectedId === 'NEW' || selectedId === ' ') return 'สร้างตารางเรียนใหม่...';
+    if (selectedId === 'NEW' || selectedId === '') return 'สร้างตารางเรียนใหม่...';
     const found = matchingSchedules.find((s) => s.id === selectedId);
-    return found ? found.name : 'กรุณาเลือกตาราง...';
+    return found ? found.name : 'สร้างตารางเรียนใหม่...';
   });
 
   let showCreateScheduleModal = $state(false);
 
   function handleConfirm() {
+    if (selectedId === 'NEW' || selectedId === '') {
+      return;
+    }
+    const found = matchingSchedules.find((s) => s.id === selectedId);
+    if (!found) {
+      return;
+    }
     if (selectedId !== 'NEW') {
       onConfirm(selectedId);
     }

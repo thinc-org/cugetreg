@@ -23,7 +23,7 @@
 </script>
 
 <div
-	class="border-surface-container box-border flex h-[320px] w-full flex-col gap-y-4 overflow-hidden rounded-xl border px-6 py-5 lg:h-auto lg:gap-y-8
+	class="border-surface-container box-border flex h-[320px] w-full flex-col gap-y-4 rounded-xl border px-6 py-5 lg:h-auto lg:gap-y-8
   lg:px-12 lg:py-10"
 	class:h-auto={isExpanded}
 >
@@ -43,26 +43,26 @@
 		</div>
 	</div>
 
-	<div class="flex flex-col gap-2">
+	<div 
+		class="flex flex-col gap-2 lg:h-auto lg:flex-none lg:overflow-visible"
+		class:h-[220px]={!isExpanded} class:h-auto={isExpanded}    
+	>
 		{#if facultyMajor}
 			<div class="text-on-surface/60 text-body2 font-sans">
 				{facultyMajor}
 			</div>
 		{/if}
 
-		<div
-			class="relative h-[200px] overflow-hidden lg:h-auto"
-			class:h-fit={isExpanded}
-			class:overflow-visible={isExpanded}
-		>
-			<p class="text-body1 font-sarabun font-regular text-on-surface h-auto w-full self-center">
-				{content}
-			</p>
+		<div class="flex-1 h-full w-full lg:h-auto lg:overflow-visible" class:overflow-hidden={!isExpanded}>
+            <p class="text-body1 font-sarabun font-regular text-on-surface w-full">
+                {content}
+            </p>
+        </div>
 
+		<div class="mt-auto flex flex-col gap-4">
 			<!-- Button to toggle view -->
 			<button
-				class="text-button1 text-primary bg-surface absolute right-0 bottom-0 pt-1 pb-1 pl-2 underline lg:hidden
-"
+				class="text-button1 self-start text-primary underline lg:hidden"
 				onclick={() => (isExpanded = !isExpanded)}
 			>
 				{#if isExpanded}
@@ -71,17 +71,17 @@
 					ดูเพ่ิมเติม
 				{/if}
 			</button>
-		</div>
-	</div>
 
-	<div class="text-subtitle flex flex-row gap-6 font-sans">
-		<div class="flex flex-row gap-x-2 font-medium">
-			<ThumbsUp class="text-neutral-400" />
-			{likesCount}
-		</div>
-		<div class="flex flex-row gap-x-2 font-medium">
-			<ThumbsDown class="text-neutral-400" />
-			{dislikesCount}
+			<div class="text-subtitle flex flex-row gap-6 font-sans">
+				<div class="flex flex-row gap-x-2 font-medium">
+					<ThumbsUp class="text-neutral-400" />
+					{likesCount}
+				</div>
+				<div class="flex flex-row gap-x-2 font-medium">
+					<ThumbsDown class="text-neutral-400" />
+					{dislikesCount}
+				</div>
+			</div>
 		</div>
 	</div>
 </div>

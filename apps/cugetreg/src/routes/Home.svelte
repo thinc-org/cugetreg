@@ -779,7 +779,7 @@
                 <Filter size="24" strokeWidth={2.5} />
               </Sidebar.MenuButton>
             </Sidebar.MenuItem>
-            <!--{#if $session.data}-->
+            {#if $session.data}
               <Sidebar.MenuItem>
                 <Sidebar.MenuButton
                   onclick={() => togglePanel('selected_only')}
@@ -791,7 +791,7 @@
                   <BookMarked size="24" strokeWidth={2.5} />
                 </Sidebar.MenuButton>
               </Sidebar.MenuItem>
-            <!--{/if}-->
+            {/if}
           </Sidebar.Menu>
         </Sidebar.GroupContent>
       </Sidebar.Group>
@@ -810,7 +810,7 @@
           class="bg-surface flex flex-1 flex-col overflow-hidden group-data-[state=collapsed]:absolute group-data-[state=collapsed]:top-4 group-data-[state=collapsed]:left-[calc(var(--sidebar-width-icon)+1rem)] group-data-[state=collapsed]:z-50 group-data-[state=collapsed]:max-h-[min(800px,calc(100%-2rem))] group-data-[state=collapsed]:w-[400px] group-data-[state=collapsed]:rounded-3xl group-data-[state=collapsed]:border group-data-[state=collapsed]:shadow-2xl md:px-8 md:pt-0 md:pb-8"
         >
           <div class="flex-1 overflow-y-auto pr-6 pb-10 md:pr-8">
-            {#if (sidebarExpanded || openPanel === 'sidebar')}
+            {#if (sidebarExpanded || openPanel === 'sidebar') && $session.data}
               <div
                 bind:this={timetableSection}
                 class="relative mb-6 flex flex-col gap-2"
@@ -849,7 +849,7 @@
               {@render FilterContent()}
             {/if}
 
-            {#if (sidebarExpanded || openPanel === 'selected_only')}
+            {#if (sidebarExpanded || openPanel === 'selected_only') && $session.data}
               {@render SelectedContent()}
             {/if}
 

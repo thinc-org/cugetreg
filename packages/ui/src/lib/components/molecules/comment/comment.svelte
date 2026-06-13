@@ -1,7 +1,7 @@
 <script lang="ts">
 	import StatusChip from '$lib/components/atoms/status-chip/status-chip.svelte';
 
-	import { ThumbsDown, ThumbsUp } from '@lucide/svelte';
+	import { Divide, ThumbsDown, ThumbsUp } from '@lucide/svelte';
 
 	import { RatingStar } from '../../atoms/rating-star';
 
@@ -96,7 +96,8 @@
 					ดูเพ่ิมเติม
 				{/if}
 			</button>
-
+		</div>
+	</div>
 	<div class="text-subtitle flex flex-row gap-6 font-sans">
 		<div class="flex flex-row gap-x-2 font-medium">
 			<button class="hover:cursor-pointer" onclick={onLike}>

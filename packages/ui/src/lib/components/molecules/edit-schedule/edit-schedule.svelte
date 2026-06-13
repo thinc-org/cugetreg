@@ -52,7 +52,7 @@
 		},
 		{
 			icon: Plus,
-			label: 'เพื่มตาราง',
+			label: 'เพิ่มตาราง',
 			onclick: () => onAddSchedule()
 		},
 		{

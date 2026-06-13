@@ -4,6 +4,7 @@
   import { page } from '$app/state';
   import { api } from '$lib/api';
   import { useSession } from '$lib/auth-client';
+  import ScheduleMismatchPopup from '$lib/components/schedule-mismatch-popup.svelte';
   import SelectedCourse from '$lib/components/selected-course.svelte';
   import { faculties } from '$lib/constants';
   import { getUserCartStore, useCartActions } from '$lib/stores/user-cart';
@@ -64,7 +65,7 @@
   const session = useSession();
 
   const userCart = getUserCartStore();
-  const { addCourse, removeCourse } = useCartActions();
+  const { addCourse, removeCourse, updateCourse } = useCartActions();
 
   const years = ['2566', '2565', '2564'];
   const terms = ['ภาคต้น', 'ภาคปลาย'];
@@ -97,6 +98,9 @@
   let descriptionSection = $state<HTMLElement>();
   let detailSection = $state<HTMLElement>();
   let reviewSection = $state<HTMLElement>();
+
+  let showMismatchPopup = $state(false);
+  let pendingSection = $state<any>(null);
 
   const getStarState = (value: number) => {
     if (reviewRating >= value) return 'full';
@@ -407,21 +411,54 @@
   });
 
   $effect(() => {
+    const triggerSection = globalSelectedSection;
     untrack(() => {
       const currentItem = $userCart.currentCart.items.find(
         (item) => item.courseNo === course.courseNo,
       );
       const currentSection = currentItem ? String(currentItem.sectionNo) : null;
 
-      if (globalSelectedSection === currentSection) return;
+      if (triggerSection === currentSection) return;
 
-      if (globalSelectedSection) {
-        addCourse(course.courseNo, Number(globalSelectedSection));
+      if (triggerSection) {
+        if (currentItem) {
+          updateCourse(currentItem.id, { sectionNo: Number(triggerSection) });
+        } else {
+          addCourse(course.courseNo, Number(triggerSection));
+        }
       } else if (currentItem) {
         removeCourse(currentItem.id);
       }
     });
   });
+
+  function isMismatch() {
+    if (!$userCart.currentCart) return false;
+    return (
+      String($userCart.currentCart.academicYear) !==
+        String(course.academicYear) ||
+      $userCart.currentCart.semester !== course.semester ||
+      $userCart.currentCart.studyProgram !== course.studyProgram
+    );
+  }
+
+  function handleSelectSection(section: any) {
+    if (isMismatch()) {
+      pendingSection = section;
+      showMismatchPopup = true;
+      return;
+    }
+    globalSelectedSection = globalSelectedSection === section ? null : section;
+  }
+
+  function handlePopupConfirm(scheduleId: string) {
+    $userCart.currentCartId = scheduleId;
+    if (pendingSection) {
+      globalSelectedSection = pendingSection;
+    }
+    showMismatchPopup = false;
+    pendingSection = null;
+  }
 </script>
 
 <div class="relative flex h-full flex-col overflow-hidden bg-white">
@@ -659,12 +696,7 @@
                             boxed={false}
                             class="w-full"
                             selectedSection={globalSelectedSection}
-                            onSelectSection={(section) => {
-                              globalSelectedSection =
-                                globalSelectedSection === section
-                                  ? null
-                                  : section;
-                            }}
+                            onSelectSection={handleSelectSection}
                           />
                         </div>
                       </Accordion.Content>
@@ -672,6 +704,18 @@
                   {/each}
                 </Accordion.Root>
               </section>
+
+              {#if showMismatchPopup}
+                <ScheduleMismatchPopup
+                  schedules={$userCart.cartList ?? []}
+                  expectedYear={String(course.academicYear)}
+                  expectedProgram={course.studyProgram}
+                  bind:currentScheduleId={$userCart.currentCartId}
+                  expectedSemester={course.semester}
+                  onConfirm={handlePopupConfirm}
+                  onClose={() => (showMismatchPopup = false)}
+                />
+              {/if}
 
               {#if $session.data}
                 <section

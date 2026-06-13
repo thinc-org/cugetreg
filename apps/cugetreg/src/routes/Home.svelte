@@ -26,6 +26,7 @@
   import { Filter as FilterBar } from '@cugetreg/ui/organisms/filter-bar';
   import { Footer } from '@cugetreg/ui/organisms/footer';
   import * as Sidebar from '@cugetreg/ui/organisms/sidebar';
+  import { FloatingButton } from '@cugetreg/ui/molecules/floating-button';
 
   let courses = $state.raw<any[]>([]);
   let isLoading = $state(false);

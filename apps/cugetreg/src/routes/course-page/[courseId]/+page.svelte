@@ -130,7 +130,7 @@
     selectedReviewTerm === reviewTermPlaceholder,
   );
 
-  let textareaRef: HTMLTextAreaElement;
+  let textareaRef: HTMLTextAreaElement | undefined = $state();
   let screenWidth = $state(0);
 
   function togglePanel(type: typeof openPanel) {
@@ -376,12 +376,6 @@
       reviewsPage = 1;
     }
   });
-
-  const { data }: PageProps = $props();
-  const course = $derived(data.course);
-
-  const userCart = getUserCartStore();
-  const { addCourse, removeCourse } = useCartActions();
 
   let globalSelectedSection = $state<string | null>(
     untrack(() => {

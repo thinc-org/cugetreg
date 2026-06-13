@@ -1,7 +1,7 @@
 <script lang="ts">
 	import StatusChip from '$lib/components/atoms/status-chip/status-chip.svelte';
 
-	import { Divide, ThumbsDown, ThumbsUp } from '@lucide/svelte';
+	import { ThumbsDown, ThumbsUp } from '@lucide/svelte';
 
 	import { RatingStar } from '../../atoms/rating-star';
 

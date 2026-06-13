@@ -24,11 +24,11 @@
 
   import { Input } from '@cugetreg/ui/atoms/input';
   import { CourseCard } from '@cugetreg/ui/molecules/course-card';
+  import { FloatingButton } from '@cugetreg/ui/molecules/floating-button';
   import { SelectTimetable } from '@cugetreg/ui/molecules/select-timetable';
   import { Filter as FilterBar } from '@cugetreg/ui/organisms/filter-bar';
   import { Footer } from '@cugetreg/ui/organisms/footer';
   import * as Sidebar from '@cugetreg/ui/organisms/sidebar';
-  import { FloatingButton } from '@cugetreg/ui/molecules/floating-button';
 
   let courses = $state.raw<any[]>([]);
   let isLoading = $state(false);
@@ -115,13 +115,17 @@
     {
       label: 'ตัวกรอง',
       icon: Filter,
-      onClick: () => { activeModal = 'filter'; }
+      onClick: () => {
+        activeModal = 'filter';
+      },
     },
     {
       label: 'วิชาที่เลือก',
       icon: BookMarked,
-      onClick: () => { activeModal = 'selected'; }
-    }
+      onClick: () => {
+        activeModal = 'selected';
+      },
+    },
   ];
 
   function mapSemester(semester: string) {
@@ -717,17 +721,17 @@
       </div>
     {/if}
   </div>
-  
+
   {#if activeModal}
-    <div 
+    <div
       class="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm"
       transition:fade={{ duration: 200 }}
     >
-      <div 
-        class="relative flex max-h-[85vh] w-full max-w-[400px] flex-col overflow-y-auto rounded-3xl bg-white p-6 shadow-2xl custom-scrollbar"
+      <div
+        class="custom-scrollbar relative flex max-h-[85vh] w-full max-w-[400px] flex-col overflow-y-auto rounded-3xl bg-white p-6 shadow-2xl"
       >
         <button
-          class="absolute right-5 top-7 bg-white"
+          class="absolute top-7 right-5 bg-white"
           onclick={() => (activeModal = null)}
         >
           <X size={20} strokeWidth={2.5} />
@@ -876,7 +880,9 @@
       </span>
       <ChevronDown
         size={20}
-        class="text-gray-500 transition-transform duration-200 {isFilterOpen ? '' : '-rotate-90'}"
+        class="text-gray-500 transition-transform duration-200 {isFilterOpen
+          ? ''
+          : '-rotate-90'}"
       />
     </button>
     {#if isFilterOpen}
@@ -902,10 +908,7 @@
 {#snippet SelectedContent()}
   <div bind:this={selectedSection}>
     {#if $userCart.currentCart}
-      <SelectedCourse
-        variant="grouped"
-        class="border-b border-neutral-200"
-      />
+      <SelectedCourse variant="grouped" class="border-b border-neutral-200" />
     {:else}
       <SelectedCourse class="border-b border-neutral-200" />
     {/if}

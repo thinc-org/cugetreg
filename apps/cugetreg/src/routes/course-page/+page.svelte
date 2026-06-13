@@ -45,6 +45,7 @@
   let selectedTerm = $state(terms[0]);
   let reviewRating = $state(1);
   let textareaRef: HTMLTextAreaElement;
+  let screenWidth = $state(0);
 
   let openPanel = $state<
     | 'sidebar'
@@ -260,6 +261,8 @@
   ];
 </script>
 
+<svelte:window bind:innerWidth={screenWidth} />
+
 <div class="relative flex h-full flex-col overflow-hidden bg-white">
   <div class="relative flex flex-1 overflow-hidden">
     <Sidebar.Provider
@@ -267,8 +270,10 @@
       class="relative h-full min-h-0"
       style="--sidebar-width-icon: 4rem; --sidebar-width: 450px;"
     >
-      {@render SidebarComponent()}
-      <Sidebar.Inset>
+      {#if screenWidth >= 1024}
+        {@render SidebarComponent()}
+      {/if}
+      <Sidebar.Inset class="min-w-0">
         <main
           class="h-full min-w-0 flex-1 overflow-y-auto scroll-smooth bg-white"
         >
@@ -276,10 +281,16 @@
             <div class="px-6 py-6">
               <section class="text-on-surface mx-auto w-full max-w-5xl">
                 <div class="flex flex-wrap items-center gap-3">
-                  <h1 class="text-primary text-xl font-semibold">
-                    0123104 CON PDG PEACE CONFWV
-                  </h1>
-                  <GenedChip type="HU" class="px-3 py-1 text-xs" />
+                  <div class="flex flex-col items-start gap-3">
+                    <GenedChip type="HU" class="px-3 py-1 text-xs md:hidden" />
+                    <h1 class="text-primary text-xl font-semibold">
+                      0123104 CON PDG PEACE CONFWV
+                    </h1>
+                  </div>
+                  <GenedChip
+                    type="HU"
+                    class="hidden px-3 py-1 text-xs md:block"
+                  />
                 </div>
                 <div class="flex flex-wrap items-center gap-3 py-2">
                   <StudyProgramChip type="I" class="px-3 py-1 text-xs" />
@@ -309,7 +320,35 @@
                 class="text-on-surface mx-auto mt-6 w-full max-w-5xl"
                 bind:this={descriptionSection}
               >
-                <div class="grid gap-6 md:grid-cols-2 md:gap-0">
+                <div class="grid gap-6 md:hidden">
+                  <div>
+                    <div class="bg-surface-container-lowest rounded-full">
+                      <p class="text-primary px-4 py-1 text-sm font-medium">
+                        คำอธิบายรายวิชา (ภาษาไทย)
+                      </p>
+                    </div>
+                    <p class="text-on-surface font-sarabun mt-3 px-4 text-sm">
+                      หลักการอ่าน ระดับของการอ่าน การจับใจความ
+                      การตีความบทอ่านประเภทต่างๆ ทั้งบทอ่านทั่วไป
+                      บทอ่านเชิงวิชาการ ตาราง แผนภูมิ หรือรูปภาพ
+                    </p>
+                  </div>
+
+                  <div>
+                    <div class="bg-surface-container-lowest rounded-full">
+                      <p class="text-primary px-4 py-1 text-sm font-medium">
+                        คำอธิบายรายวิชา (ภาษาอังกฤษ)
+                      </p>
+                    </div>
+                    <p class="text-on-surface font-sarabun mt-3 px-4 text-sm">
+                      Reading principles; levels of reading; main idea finding;
+                      interpretation of general texts, academic texts, tables,
+                      figures and illustrations
+                    </p>
+                  </div>
+                </div>
+
+                <div class="hidden md:grid md:grid-cols-2 md:gap-0">
                   <div class="md:col-span-2">
                     <div
                       class="bg-surface-container-lowest grid rounded-full md:grid-cols-2"
@@ -342,7 +381,31 @@
                   </div>
                 </div>
 
-                <div class="mt-6 grid gap-6 md:grid-cols-2 md:gap-0">
+                <div class="mt-6 grid gap-6 md:hidden">
+                  <div>
+                    <div class="bg-surface-container-lowest rounded-full">
+                      <p class="text-primary px-4 py-1 text-sm font-medium">
+                        คณะ
+                      </p>
+                    </div>
+                    <p class="text-on-surface font-sarabun mt-3 px-4 text-sm">
+                      สถาบันภาษาไทยสิรินธร
+                    </p>
+                  </div>
+
+                  <div>
+                    <div class="bg-surface-container-lowest rounded-full">
+                      <p class="text-primary px-4 py-1 text-sm font-medium">
+                        ภาควิชา/กลุ่มวิชา/สาขาวิชา
+                      </p>
+                    </div>
+                    <p class="text-on-surface font-sarabun mt-3 px-4 text-sm">
+                      สถาบันภาษาไทยสิรินธร
+                    </p>
+                  </div>
+                </div>
+
+                <div class="hidden md:mt-6 md:grid md:grid-cols-2 md:gap-0">
                   <div class="md:col-span-2">
                     <div
                       class="bg-surface-container-lowest grid rounded-full md:grid-cols-2"
@@ -371,7 +434,31 @@
                   </div>
                 </div>
 
-                <div class="mt-6 grid gap-6 md:grid-cols-2 md:gap-0">
+                <div class="mt-6 grid gap-6 md:hidden">
+                  <div>
+                    <div class="bg-surface-container-lowest rounded-full">
+                      <p class="text-primary px-4 py-1 text-sm font-medium">
+                        รูปแบบรายวิชา
+                      </p>
+                    </div>
+                    <p class="text-on-surface font-sarabun mt-3 px-4 text-sm">
+                      LECT/PRAC
+                    </p>
+                  </div>
+
+                  <div>
+                    <div class="bg-surface-container-lowest rounded-full">
+                      <p class="text-primary px-4 py-1 text-sm font-medium">
+                        หน่วยกิต
+                      </p>
+                    </div>
+                    <p class="text-on-surface font-sarabun mt-3 px-4 text-sm">
+                      3
+                    </p>
+                  </div>
+                </div>
+
+                <div class="hidden md:mt-6 md:grid md:grid-cols-2 md:gap-0">
                   <div class="md:col-span-2">
                     <div
                       class="bg-surface-container-lowest grid rounded-full md:grid-cols-2"
@@ -400,7 +487,31 @@
                   </div>
                 </div>
 
-                <div class="mt-6 grid gap-6 md:grid-cols-2 md:gap-0">
+                <div class="mt-6 grid gap-6 md:hidden">
+                  <div>
+                    <div class="bg-surface-container-lowest rounded-full">
+                      <p class="text-primary px-4 py-1 text-sm font-medium">
+                        เงื่อนไขรายวิชา
+                      </p>
+                    </div>
+                    <p class="text-on-surface font-sarabun mt-3 px-4 text-sm">
+                      -
+                    </p>
+                  </div>
+
+                  <div>
+                    <div class="bg-surface-container-lowest rounded-full">
+                      <p class="text-primary px-4 py-1 text-sm font-medium">
+                        วิธีการวัดผล
+                      </p>
+                    </div>
+                    <p class="text-on-surface font-sarabun mt-3 px-4 text-sm">
+                      Letter Grade
+                    </p>
+                  </div>
+                </div>
+
+                <div class="hidden md:mt-6 md:grid md:grid-cols-2 md:gap-0">
                   <div class="md:col-span-2">
                     <div
                       class="bg-surface-container-lowest grid rounded-full md:grid-cols-2"
@@ -429,7 +540,31 @@
                   </div>
                 </div>
 
-                <div class="mt-6 grid gap-6 md:grid-cols-2 md:gap-0">
+                <div class="mt-6 grid gap-6 md:hidden">
+                  <div>
+                    <div class="bg-surface-container-lowest rounded-full">
+                      <p class="text-primary px-4 py-1 text-sm font-medium">
+                        สอบกลางภาค
+                      </p>
+                    </div>
+                    <p class="text-on-surface font-sarabun mt-3 px-4 text-sm">
+                      06 มี.ค. 2567 16:00 - 19:00
+                    </p>
+                  </div>
+
+                  <div>
+                    <div class="bg-surface-container-lowest rounded-full">
+                      <p class="text-primary px-4 py-1 text-sm font-medium">
+                        สอบปลายภาค
+                      </p>
+                    </div>
+                    <p class="text-on-surface font-sarabun mt-3 px-4 text-sm">
+                      01 พ.ค. 2567 16:00 - 19:00
+                    </p>
+                  </div>
+                </div>
+
+                <div class="hidden md:mt-6 md:grid md:grid-cols-2 md:gap-0">
                   <div class="md:col-span-2">
                     <div
                       class="bg-surface-container-lowest grid rounded-full md:grid-cols-2"
@@ -506,12 +641,25 @@
                     />
                   </button>
                   {#if isSectionOpen}
-                    <div class="mt-4 overflow-x-auto">
+                    <div class="w-full md:hidden">
+                      <SectionTable
+                        tableData={sectionTableData}
+                        boxed={true}
+                        class="w-full"
+                        selectedSection={selectedSectionNumber}
+                        onSelectSection={(section) => {
+                          selectedSectionNumber =
+                            selectedSectionNumber === section ? null : section;
+                        }}
+                      />
+                    </div>
+
+                    <div class="hidden w-full md:block">
                       <SectionTable
                         tableData={sectionTableData}
                         boxed={false}
                         class="w-full"
-                        {selectedSectionNumber}
+                        selectedSection={selectedSectionNumber}
                         onSelectSection={(section) => {
                           selectedSectionNumber =
                             selectedSectionNumber === section ? null : section;
@@ -549,69 +697,85 @@
                     เขียนรีวิวรายวิชา
                   </h2>
                 </div>
-                <div class="mt-4 flex flex-wrap items-center gap-5">
-                  <div class="min-w-[160px]">
-                    <Select.Root type="single" bind:value={selectedYear}>
-                      <Select.Trigger
-                        class="text-on-surface h-12 w-[180px] rounded-lg border border-[#D6D7E1] bg-white px-4 text-base font-medium"
-                      >
-                        {selectedYear}
-                      </Select.Trigger>
-                      <Select.Content role="listbox">
-                        <Select.Group>
-                          {#each years as year (year)}
-                            <Select.Item value={year} label={year} />
-                          {/each}
-                        </Select.Group>
-                      </Select.Content>
-                    </Select.Root>
+                <div
+                  class="mt-4 flex flex-col gap-4 md:flex-row md:items-center md:gap-5"
+                >
+                  <div
+                    class="flex w-full flex-row items-center justify-between gap-5 md:w-fit md:justify-start"
+                  >
+                    <p class="shrink-0 text-[14px] font-normal md:hidden">
+                      ภาคเรียน
+                    </p>
+                    <div class="flex flex-row gap-2 md:gap-5">
+                      <div>
+                        <Select.Root type="single" bind:value={selectedYear}>
+                          <Select.Trigger
+                            class="text-on-surface text:sm h-9 w-[120px] rounded-lg border border-[#D6D7E1] bg-white px-4 font-medium md:h-12 md:w-[180px] md:text-base"
+                          >
+                            {selectedYear}
+                          </Select.Trigger>
+                          <Select.Content role="listbox">
+                            <Select.Group>
+                              {#each years as year (year)}
+                                <Select.Item value={year} label={year} />
+                              {/each}
+                            </Select.Group>
+                          </Select.Content>
+                        </Select.Root>
+                      </div>
+                      <div>
+                        <Select.Root type="single" bind:value={selectedTerm}>
+                          <Select.Trigger
+                            class="text-on-surface text:sm h-9 w-[120px] rounded-lg border border-[#D6D7E1] bg-white px-4 font-medium md:h-12 md:w-[180px] md:text-base"
+                          >
+                            {selectedTerm}
+                          </Select.Trigger>
+                          <Select.Content role="listbox">
+                            <Select.Group>
+                              {#each terms as term (term)}
+                                <Select.Item value={term} label={term} />
+                              {/each}
+                            </Select.Group>
+                          </Select.Content>
+                        </Select.Root>
+                      </div>
+                    </div>
                   </div>
-                  <div class="min-w-[160px]">
-                    <Select.Root type="single" bind:value={selectedTerm}>
-                      <Select.Trigger
-                        class="text-on-surface h-12 w-[180px] rounded-lg border border-[#D6D7E1] bg-white px-4 text-base font-medium"
-                      >
-                        {selectedTerm}
-                      </Select.Trigger>
-                      <Select.Content role="listbox">
-                        <Select.Group>
-                          {#each terms as term (term)}
-                            <Select.Item value={term} label={term} />
-                          {/each}
-                        </Select.Group>
-                      </Select.Content>
-                    </Select.Root>
-                  </div>
-                  <div class="flex items-center gap-2">
-                    {#each [1, 2, 3, 4, 5] as value (value)}
-                      <button
-                        class="flex h-10 w-10 items-center justify-center"
-                        type="button"
-                        onclick={(event) => onStarClick(value, event)}
-                        aria-label={`Rate ${value} stars`}
-                      >
-                        {#if getStarState(value) === 'half'}
-                          <span class="relative inline-flex">
-                            <Star size={26} class="text-[#D6D7E1]" />
-                            <span
-                              class="absolute inset-0 w-1/2 overflow-hidden"
-                            >
-                              <Star
-                                size={26}
-                                class="text-primary fill-current"
-                              />
+                  <div class="flex items-center justify-between gap-8">
+                    <p class="text-[14px] font-normal md:hidden">
+                      ให้คะแนนรายวิชา
+                    </p>
+                    <div class="flex gap-2 md:gap-0">
+                      {#each [1, 2, 3, 4, 5] as value (value)}
+                        <button
+                          class="flex h-10 w-6 items-center justify-center md:w-10"
+                          type="button"
+                          onclick={(event) => onStarClick(value, event)}
+                          aria-label={`Rate ${value} stars`}
+                        >
+                          {#if getStarState(value) === 'half'}
+                            <span class="relative inline-flex">
+                              <Star size={26} class="text-[#D6D7E1]" />
+                              <span
+                                class="absolute inset-0 w-1/2 overflow-hidden"
+                              >
+                                <Star
+                                  size={26}
+                                  class="text-primary fill-current"
+                                />
+                              </span>
                             </span>
-                          </span>
-                        {:else}
-                          <Star
-                            size={26}
-                            class={getStarState(value) === 'full'
-                              ? 'text-primary fill-current'
-                              : 'text-[#D6D7E1]'}
-                          />
-                        {/if}
-                      </button>
-                    {/each}
+                          {:else}
+                            <Star
+                              size={26}
+                              class={getStarState(value) === 'full'
+                                ? 'text-primary fill-current'
+                                : 'text-[#D6D7E1]'}
+                            />
+                          {/if}
+                        </button>
+                      {/each}
+                    </div>
                   </div>
                 </div>
                 <div
@@ -635,12 +799,12 @@
                     placeholder="คุณคิดว่าวิชานี้เป็นอย่างไรบ้าง?"
                   ></textarea>
                 </div>
-                <div class="mt-4 flex justify-end">
+                <div class="mt-4 flex w-full md:justify-end">
                   <Button
                     size="sm"
                     variant="solid"
                     color="secondary"
-                    class="bg-primary-container text-primary hover:ring-primary-container gap-2"
+                    class="bg-primary-container text-primary hover:ring-primary-container w-full gap-2 md:w-auto"
                   >
                     ส่งรีวิว
                     <Send size={14} />
@@ -648,7 +812,9 @@
                 </div>
               </section>
               <section class="text-on-surface mx-auto mt-8 w-full max-w-5xl">
-                <div class="flex items-center justify-between gap-4">
+                <div
+                  class="flex flex-col justify-between gap-4 md:flex-row md:items-center"
+                >
                   <div class="text-lg font-semibold">
                     <span class="text-on-surface/60">ทั้งหมด </span>
                     <span class="text-primary"

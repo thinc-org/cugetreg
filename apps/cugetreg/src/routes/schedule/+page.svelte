@@ -32,10 +32,7 @@
     type TimetableMetaData,
   } from '@cugetreg/ui/organisms/create-timetable';
   import { RenameSchedule } from '@cugetreg/ui/organisms/rename-schedule';
-  import {
-    ViewCourse,
-    type ViewCourseData,
-  } from '@cugetreg/ui/organisms/view-course';
+  import { ViewCourse } from '@cugetreg/ui/organisms/view-course';
   import {
     discardTime,
     formatDate,
@@ -46,7 +43,7 @@
   import type {
     CartItemDetail,
     Period,
-  } from '@cugetreg/zod-schemas/cart-response';
+  } from '@cugetreg/zod-schemas/carts-response';
 
   // TODO: Move this somewhere else
   function parsePeriodTime(periodTime: string): number {

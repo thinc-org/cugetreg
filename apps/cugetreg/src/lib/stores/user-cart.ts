@@ -6,21 +6,21 @@ import toast from 'svelte-french-toast';
 
 import type {
   CartData,
-  CartList,
+  CartSchema,
   ExamScheduleItem,
-} from '@cugetreg/zod-schemas/cart-response';
+} from '@cugetreg/zod-schemas/carts-response';
 import {
   CartDetailResponseSchema,
   SingleCartItemResponseSchema,
   SingleCartResponseSchema,
-} from '@cugetreg/zod-schemas/cart-response';
+} from '@cugetreg/zod-schemas/carts-response';
 
 import { useContextStore } from './stores';
 
 export interface UserCartInterface {
   currentCart: CartData;
   currentCartId: string;
-  cartList: CartList;
+  cartList: CartSchema[];
   exams: ExamScheduleItem[];
 }
 

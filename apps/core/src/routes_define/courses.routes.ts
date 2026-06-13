@@ -1,19 +1,20 @@
 import { createRoute } from "@hono/zod-openapi";
 
-import { InternalError } from "./errorRes.js";
+import * as CourseSchema from "@cugetreg/zod-schemas/courses";
+import * as CourseResponseSchema from "@cugetreg/zod-schemas/courses-response";
 
-import * as CourseSchema from "../zod_schemas/courses.schema.js";
+import { InternalError } from "./errorRes.js";
 
 //1.1get courses
 export const getCoursesRoute = createRoute({
   method: "get",
   path: "/",
   summary: "1.1 Get Courses",
-  request: { query: CourseSchema.getCourseQuerySchema },
+  request: { query: CourseSchema.GetCourseQuerySchema },
   responses: {
     200: {
       content: {
-        "application/json": { schema: CourseSchema.courseDetailsSchema },
+        "application/json": { schema: CourseSchema.CourseDetailsSchema },
       },
       description: "OK",
     },
@@ -30,13 +31,15 @@ export const getCourseByNoRoute = createRoute({
   path: "/{courseNo}", // Use curly braces for OpenAPI / Hono path params
   summary: "1.2 Get Course by Course Number",
   request: {
-    params: CourseSchema.courseNoParamSchema,
-    query: CourseSchema.getCourseQuerySchema,
+    params: CourseSchema.CourseNoParamSchema,
+    query: CourseSchema.GetCourseQuerySchema,
   },
   responses: {
     200: {
       content: {
-        "application/json": { schema: CourseSchema.courseDetailsSchema },
+        "application/json": {
+          schema: CourseResponseSchema.CourseNoResponseSchema,
+        },
       },
       description: "Successfully retrieved course details",
     },

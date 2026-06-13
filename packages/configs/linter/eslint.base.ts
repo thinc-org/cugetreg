@@ -39,7 +39,7 @@ const ignores = [
 
 const config = defineConfig(
   { ignores },
-  pluginPromise.configs["flat/recommended"],
+  pluginPromise.configs["flat/recommended"] as any,
   eslint.configs.recommended,
   tseslint.configs.recommended,
   eslintPluginPrettierRecommended,

@@ -1,3 +1,9 @@
+import type {
+  EditReviewBodySchema,
+  SubmitReviewBodySchema,
+  VoteReviewBodySchema,
+} from "@cugetreg/zod-schemas/reviews";
+
 import { prisma } from "../db/clients.js";
 import { Prisma } from "../generated/prisma/client.js";
 import type { VoteType } from "../generated/prisma/enums.js";
@@ -7,11 +13,6 @@ import {
   mapStudyProgram,
   mapVoteType,
 } from "../utils/enumMapper.js";
-import type {
-  EditReviewBodySchema,
-  SubmitReviewBodySchema,
-  VoteReviewBodySchema,
-} from "../zod_schemas/reviews.schema.js";
 
 const semesterToNumber: Record<string, string> = {
   FIRST: "1",
@@ -62,17 +63,15 @@ export const reviewService = {
     return prisma.$transaction(
       async (tx) => {
         const [review, vote] = await Promise.all([
-          tx.review.findUnique({
+          tx.review.findFirst({
             where: {
               id: reviewId,
             },
           }),
-          tx.reviewVote.findUnique({
+          tx.reviewVote.findFirst({
             where: {
-              userId_reviewId: {
-                userId,
-                reviewId,
-              },
+              userId,
+              reviewId,
             },
           }),
         ]);

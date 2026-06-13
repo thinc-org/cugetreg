@@ -16,9 +16,11 @@
     Loader2,
     Menu,
     TriangleAlert,
+    X,
   } from '@lucide/svelte';
   import { getContext, untrack } from 'svelte';
   import { SvelteURLSearchParams } from 'svelte/reactivity';
+  import { fade } from 'svelte/transition';
 
   import { Input } from '@cugetreg/ui/atoms/input';
   import { CourseCard } from '@cugetreg/ui/molecules/course-card';
@@ -54,6 +56,7 @@
   let isScheduleDropdownOpen = $state(false);
   let isFilterOpen = $state(true);
   let activeDropdown = $state<'program' | 'semester' | 'sort' | null>(null);
+  let activeModal = $state<'filter' | 'selected' | null>(null);
 
   let selectedGenEds = $state<string[]>([]);
   let selectedSpecial = $state<string[]>([]);
@@ -107,6 +110,19 @@
     grade: 'LETTER',
   };
   const KNOWN_DAYS = new Set(['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU']);
+
+  const floatingOptions = [
+    {
+      label: 'ตัวกรอง',
+      icon: Filter,
+      onClick: () => { activeModal = 'filter'; }
+    },
+    {
+      label: 'วิชาที่เลือก',
+      icon: BookMarked,
+      onClick: () => { activeModal = 'selected'; }
+    }
+  ];
 
   function mapSemester(semester: string) {
     switch (semester) {
@@ -694,6 +710,39 @@
       </Sidebar.Inset>
     </Sidebar.Provider>
   </div>
+  <div class="lg:hidden">
+    {#if !activeModal}
+      <div transition:fade={{ duration: 200 }}>
+        <FloatingButton options={floatingOptions} />
+      </div>
+    {/if}
+  </div>
+  
+  {#if activeModal}
+    <div 
+      class="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm"
+      transition:fade={{ duration: 200 }}
+    >
+      <div 
+        class="relative flex max-h-[85vh] w-full max-w-[400px] flex-col overflow-y-auto rounded-3xl bg-white p-6 shadow-2xl custom-scrollbar"
+      >
+        <button
+          class="absolute right-5 top-7 bg-white"
+          onclick={() => (activeModal = null)}
+        >
+          <X size={20} strokeWidth={2.5} />
+        </button>
+        {#if activeModal === 'filter'}
+          {@render FilterContent()}
+        {:else if activeModal === 'selected'}
+          <div class="flex flex-col gap-6">
+            {@render SelectedContent()}
+            {@render WarningContent()}
+          </div>
+        {/if}
+      </div>
+    </div>
+  {/if}
 </div>
 
 {#snippet SidebarComponent()}
@@ -730,7 +779,7 @@
                 <Filter size="24" strokeWidth={2.5} />
               </Sidebar.MenuButton>
             </Sidebar.MenuItem>
-            {#if $session.data}
+            <!--{#if $session.data}-->
               <Sidebar.MenuItem>
                 <Sidebar.MenuButton
                   onclick={() => togglePanel('selected_only')}
@@ -742,7 +791,7 @@
                   <BookMarked size="24" strokeWidth={2.5} />
                 </Sidebar.MenuButton>
               </Sidebar.MenuItem>
-            {/if}
+            <!--{/if}-->
           </Sidebar.Menu>
         </Sidebar.GroupContent>
       </Sidebar.Group>
@@ -761,7 +810,7 @@
           class="bg-surface flex flex-1 flex-col overflow-hidden group-data-[state=collapsed]:absolute group-data-[state=collapsed]:top-4 group-data-[state=collapsed]:left-[calc(var(--sidebar-width-icon)+1rem)] group-data-[state=collapsed]:z-50 group-data-[state=collapsed]:max-h-[min(800px,calc(100%-2rem))] group-data-[state=collapsed]:w-[400px] group-data-[state=collapsed]:rounded-3xl group-data-[state=collapsed]:border group-data-[state=collapsed]:shadow-2xl md:px-8 md:pt-0 md:pb-8"
         >
           <div class="flex-1 overflow-y-auto pr-6 pb-10 md:pr-8">
-            {#if (sidebarExpanded || openPanel === 'sidebar') && $session.data}
+            {#if (sidebarExpanded || openPanel === 'sidebar')}
               <div
                 bind:this={timetableSection}
                 class="relative mb-6 flex flex-col gap-2"
@@ -797,76 +846,86 @@
             {/if}
 
             {#if sidebarExpanded || openPanel === 'filter_only'}
-              <div bind:this={filterSection}>
-                <button
-                  onclick={() => (isFilterOpen = !isFilterOpen)}
-                  aria-expanded={isFilterOpen}
-                  class="mb-6 flex w-full items-center justify-between"
-                >
-                  <span class="flex items-center gap-2">
-                    <Filter size={20} />
-                    <h2 class="text-xl font-bold">ตัวกรอง</h2>
-                  </span>
-                  <ChevronDown
-                    size={20}
-                    class="text-gray-500 transition-transform duration-200 {isFilterOpen
-                      ? ''
-                      : '-rotate-90'}"
-                  />
-                </button>
-                {#if isFilterOpen}
-                  <div class="mb-8 min-h-[650px]">
-                    <FilterBar
-                      bind:selectedGenEds
-                      bind:selectedSpecial
-                      bind:selectedFaculties
-                      bind:selectedDays
-                      bind:selectedEval
-                      bind:startTime
-                      bind:endTime
-                      bind:fitSchedule
-                      bind:noConditions
-                      onsearch={onSearchFilter}
-                    />
-                  </div>
-                {/if}
-                <hr class="mb-6 opacity-50" />
-              </div>
+              {@render FilterContent()}
             {/if}
 
-            {#if (sidebarExpanded || openPanel === 'selected_only') && $session.data}
-              <div bind:this={selectedSection}>
-                {#if $userCart.currentCart}
-                  <SelectedCourse
-                    variant="grouped"
-                    class="border-b border-neutral-200"
-                  />
-                {:else}
-                  <SelectedCourse class="border-b border-neutral-200" />
-                {/if}
-              </div>
+            {#if (sidebarExpanded || openPanel === 'selected_only')}
+              {@render SelectedContent()}
             {/if}
 
             {#if sidebarExpanded || openPanel === 'sidebar'}
-              <div
-                class="mt-8 rounded-2xl border border-orange-300 px-5 py-4 text-center text-[15px] leading-relaxed text-orange-500"
-              >
-                <span class="font-bold"
-                  >CU Get Reg ไม่ใช่การลงทะเบียนเรียนจริง</span
-                ><br />
-                สามารถลงทะเบียนเรียนได้ที่
-                <a
-                  href="https://www2.reg.chula.ac.th/"
-                  target="_blank"
-                  rel="noreferrer"
-                  class="underline">https://www2.reg.chula.ac.th/</a
-                ><br />
-                เพียงช่องทางเดียวเท่านั้น
-              </div>
+              {@render WarningContent()}
             {/if}
           </div>
         </div>
       {/if}
     </Sidebar.Content>
   </Sidebar.Sidebar>
+{/snippet}
+
+{#snippet FilterContent()}
+  <div bind:this={filterSection}>
+    <button
+      onclick={() => (isFilterOpen = !isFilterOpen)}
+      aria-expanded={isFilterOpen}
+      class="mb-6 flex w-full items-center justify-between"
+    >
+      <span class="flex items-center gap-2">
+        <Filter size={20} />
+        <h2 class="text-xl font-bold">ตัวกรอง</h2>
+      </span>
+      <ChevronDown
+        size={20}
+        class="text-gray-500 transition-transform duration-200 {isFilterOpen ? '' : '-rotate-90'}"
+      />
+    </button>
+    {#if isFilterOpen}
+      <div class="mb-8 min-h-[650px]">
+        <FilterBar
+          bind:selectedGenEds
+          bind:selectedSpecial
+          bind:selectedFaculties
+          bind:selectedDays
+          bind:selectedEval
+          bind:startTime
+          bind:endTime
+          bind:fitSchedule
+          bind:noConditions
+          onsearch={onSearchFilter}
+        />
+      </div>
+    {/if}
+    <hr class="mb-6 opacity-50" />
+  </div>
+{/snippet}
+
+{#snippet SelectedContent()}
+  <div bind:this={selectedSection}>
+    {#if $userCart.currentCart}
+      <SelectedCourse
+        variant="grouped"
+        class="border-b border-neutral-200"
+      />
+    {:else}
+      <SelectedCourse class="border-b border-neutral-200" />
+    {/if}
+  </div>
+{/snippet}
+
+{#snippet WarningContent()}
+  <div
+    class="mt-8 rounded-2xl border border-orange-300 px-5 py-4 text-center text-[15px] leading-relaxed text-orange-500"
+  >
+    <span class="font-bold">CU Get Reg ไม่ใช่การลงทะเบียนเรียนจริง</span><br />
+    สามารถลงทะเบียนเรียนได้ที่
+    <a
+      href="https://www2.reg.chula.ac.th/"
+      target="_blank"
+      rel="noreferrer"
+      class="underline"
+    >
+      https://www2.reg.chula.ac.th/
+    </a><br />
+    เพียงช่องทางเดียวเท่านั้น
+  </div>
 {/snippet}

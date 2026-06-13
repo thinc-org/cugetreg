@@ -27,7 +27,9 @@
     StickyNote,
     Strikethrough,
     Underline,
+    X
   } from '@lucide/svelte';
+  import { fade } from 'svelte/transition';
   import { isAxiosError } from 'axios';
   import { untrack } from 'svelte';
   import toast from 'svelte-french-toast';
@@ -47,6 +49,7 @@
   import { SelectTimetable } from '@cugetreg/ui/molecules/select-timetable';
   import { Footer } from '@cugetreg/ui/organisms/footer';
   import * as Sidebar from '@cugetreg/ui/organisms/sidebar';
+  import { FloatingButton } from '@cugetreg/ui/molecules/floating-button';
   import type { GenEdType } from '@cugetreg/utils/types';
   import {
     type SubmitReviewBodySchema,
@@ -126,7 +129,31 @@
     selectedReviewTerm === reviewTermPlaceholder,
   );
 
+  let activeModal = $state<'selected' | null>(null);
   let textareaRef: HTMLTextAreaElement | undefined = $state();
+
+  const floatingOptions = [
+    {
+      label: 'คำอธิบายรายวิชา',
+      icon: Book,
+      onClick: () => { scrollToSection(descriptionSection); }
+    },
+    {
+      label: 'รายละเอียดเซ็คชัน',
+      icon: StickyNote,
+      onClick: () => { scrollToSection(detailSection); }
+    },
+    {
+      label: 'รีวิวรายวิชา',
+      icon: MessageCircleQuestionIcon,
+      onClick: () => { scrollToSection(reviewSection); }
+    },
+    {
+      label: 'วิชาที่เลือก',
+      icon: BookMarked,
+      onClick: () => { activeModal = 'selected'; }
+    }
+  ];
 
   function togglePanel(type: typeof openPanel) {
     if (type === 'sidebar' || type === 'selected_only') {
@@ -931,6 +958,32 @@
       </Sidebar.Inset>
     </Sidebar.Provider>
   </div>
+  <div class="lg:hidden">
+    {#if !activeModal}
+      <div transition:fade={{ duration: 200 }}>
+        <FloatingButton options={floatingOptions} />
+      </div>
+    {/if}
+  </div>
+  {#if activeModal}
+    <div 
+      class="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm"
+      transition:fade={{ duration: 200 }}
+    >
+      <div 
+        class="relative flex max-h-[85vh] w-full max-w-[400px] flex-col overflow-y-auto rounded-3xl bg-white p-6 shadow-2xl custom-scrollbar"
+      >
+        <button
+          class="absolute right-5 top-7 bg-white"
+          onclick={() => (activeModal = null)}
+        >
+          <X size={20} strokeWidth={2.5} />
+        </button>
+        {@render SelectedContent()}
+        {@render WarningContent()}
+      </div>
+    </div>
+  {/if}
 </div>
 
 {#snippet SidebarComponent()}
@@ -1089,38 +1142,46 @@
             {/if}
 
             {#if (sidebarExpanded || openPanel === 'selected_only') && isLoggedIn}
-              <div bind:this={selectedSection}>
-                {#if $userCart.currentCart}
-                  <SelectedCourse
-                    variant="grouped"
-                    class="border-b border-neutral-200"
-                  />
-                {:else}
-                  <SelectedCourse class="border-b border-neutral-200" />
-                {/if}
-              </div>
+              {@render SelectedContent()}
             {/if}
 
             {#if sidebarExpanded || openPanel === 'sidebar'}
-              <div
-                class="mt-8 rounded-2xl border border-orange-300 px-5 py-4 text-center text-[15px] leading-relaxed text-orange-500"
-              >
-                <span class="font-bold"
-                  >CU Get Reg ไม่ใช่การลงทะเบียนเรียนจริง</span
-                ><br />
-                สามารถลงทะเบียนเรียนได้ที่
-                <a
-                  href="https://www2.reg.chula.ac.th/"
-                  target="_blank"
-                  rel="noreferrer"
-                  class="underline">https://www2.reg.chula.ac.th/</a
-                ><br />
-                เพียงช่องทางเดียวเท่านั้น
-              </div>
+              {@render WarningContent()}
             {/if}
           </div>
         </div>
       {/if}
     </Sidebar.Content>
   </Sidebar.Sidebar>
+{/snippet}
+
+{#snippet SelectedContent()}
+  <div bind:this={selectedSection}>
+    {#if $userCart.currentCart}
+      <SelectedCourse
+        variant="grouped"
+        class="border-b border-neutral-200"
+      />
+    {:else}
+      <SelectedCourse class="border-b border-neutral-200" />
+    {/if}
+  </div>
+{/snippet}
+
+{#snippet WarningContent()}
+  <div
+    class="mt-8 rounded-2xl border border-orange-300 px-5 py-4 text-center text-[15px] leading-relaxed text-orange-500"
+  >
+    <span class="font-bold">CU Get Reg ไม่ใช่การลงทะเบียนเรียนจริง</span><br />
+    สามารถลงทะเบียนเรียนได้ที่
+    <a
+      href="https://www2.reg.chula.ac.th/"
+      target="_blank"
+      rel="noreferrer"
+      class="underline"
+    >
+      https://www2.reg.chula.ac.th/
+    </a><br />
+    เพียงช่องทางเดียวเท่านั้น
+  </div>
 {/snippet}

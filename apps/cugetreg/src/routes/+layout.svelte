@@ -24,31 +24,30 @@
   import { CartDetailResponseSchema } from '@cugetreg/zod-schemas/carts-response';
 
   import type { LayoutData } from './$types';
+  import { Modal } from '@cugetreg/ui/atoms/modal';
+  import { LoginPopup } from '@cugetreg/ui/organisms/login-popup';
+  import { loginPopupState } from '$lib/stores/login-popup.svelte';
 
   const session = useSession();
 
   $effect(() => {
     const errorMsg = page.url.searchParams.get('error');
+    if (!errorMsg) return;
 
-    if (errorMsg) {
-      let message = 'Something went wrong.';
-      if (errorMsg === 'non_chula_email') {
-        message = 'Please login with Chula email.';
-      }
-
-      if (errorMsg === 'no_session') {
-        message = 'Please login before viewing this page.';
-      }
-
-      toast.error(message, {
+    if (errorMsg === 'no_session') {
+      loginPopupState.show = true;
+    } else {
+      const messages: Record<string, string> = {
+        non_chula_email: 'Please login with Chula email.',
+      };
+      toast.error(messages[errorMsg] ?? 'Something went wrong.', {
         position: 'bottom-right',
       });
-
-      const cleanUrl = new URL(page.url);
-      cleanUrl.searchParams.delete('error');
-
-      goto(cleanUrl, { replaceState: true, keepFocus: true });
     }
+
+    const cleanUrl = new URL(page.url);
+    cleanUrl.searchParams.delete('error');
+    goto(cleanUrl, { replaceState: true, keepFocus: true });
   });
 
   let {
@@ -131,7 +130,21 @@
   });
 </script>
 
+<Modal
+  exitOnEsc
+  exitOnBackgroundClick
+  centered
+  dim
+  bind:show={loginPopupState.show}
+>
+  <LoginPopup
+    onCancel={() => (loginPopupState.show = false)}
+    onLogin={handleGoogleLogin}
+  />
+</Modal>
+
 <Toaster />
+
 <div class="relative flex h-dvh flex-col overflow-hidden">
   <Navbar
     onLogin={handleGoogleLogin}

@@ -38,16 +38,19 @@
 		terms: ['ทวิภาค 2567 ภาคต้น', 'ทวิภาค 2566 ภาคต้น'],
 		items: [
 			{
+				id:'1',
 				title: 'ทวิภาค 2567 ภาคต้น',
 				subtitle: 'ทวิภาค 2567 / ภาคต้น',
 				isPublic: true
 			},
 			{
+				id:'2',
 				title: 'ทวิภาค 2566 ภาคต้น',
 				subtitle: 'ทวิภาค 2566 / ภาคต้น',
 				isPublic: false
 			},
 			{
+				id: '3',
 				title: 'ทวิภาค 2566 ภาคต้น',
 				subtitle: 'ทวิภาค 2566 / ภาคต้น',
 				isPublic: false

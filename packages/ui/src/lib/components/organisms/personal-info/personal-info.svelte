@@ -24,7 +24,7 @@
 		firstName = 'Wanrudee',
 		lastName = 'Kittichaiyakorn',
 		faculty = 'วิศวกรรมศาสตร์',
-		department = '-',
+		department = '',
 		accountProvider = 'Google',
 		accountEmail = '6534344444@student.chula.ac.th',
 		onEdit
@@ -75,7 +75,7 @@
 			</div>
 			<div class="flex flex-col gap-1">
 				<p class="text-caption text-on-surface/50 tracking-wide uppercase">ภาควิชา</p>
-				<p class="text-body2 font-medium">{department}</p>
+				<p class="text-body2 font-medium">{department || '-'}</p>
 			</div>
 		</div>
 	</div>

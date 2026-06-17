@@ -1,12 +1,15 @@
 <script lang="ts">
-	import { ChevronRight, Clock, Star } from '@lucide/svelte';
+	import { ChevronRight, Clock, Star, NotebookPen } from '@lucide/svelte';
 
 	import { RatingStar } from '../../atoms/rating-star';
+
+	import { Status } from '$lib/utils';
 
 	interface ReviewItem {
 		code: string;
 		name: string;
 		tag: string;
+		status: Status;
 		rating: number;
 		term: string;
 	}
@@ -24,6 +27,7 @@
 			code: '0123104',
 			name: 'CON PDG PEACE CONFWV',
 			tag: 'หมวดมนุษย์',
+			status: Status.APPROVED,
 			rating: 4,
 			term: 'ภาคต้น 2566'
 		},
@@ -31,6 +35,7 @@
 			code: '0123101',
 			name: 'PARAGRAPH WRITING',
 			tag: 'หมวดมนุษย์',
+			status: Status.APPROVED,
 			rating: 3,
 			term: 'ภาคปลาย 2565'
 		},
@@ -38,6 +43,7 @@
 			code: '0123101',
 			name: 'PARAGRAPH WRITING',
 			tag: 'หมวดมนุษย์',
+			status: Status.APPROVED,
 			rating: 3,
 			term: 'ภาคปลาย 2566'
 		},
@@ -45,6 +51,7 @@
 			code: '2190201',
 			name: 'COM PROG',
 			tag: 'หมวดวิทย์',
+			status: Status.PENDING,
 			rating: 2.5,
 			term: 'ภาคปลาย 2566'
 		}
@@ -134,44 +141,69 @@
 				<Clock size="18" strokeWidth="2.5" />
 				<p>{latestTitle}</p>
 			</div>
-			<button
-				type="button"
-				class="text-on-surface"
-				onclick={() => (showAll = !showAll)}
-				aria-label="Toggle all reviews"
-			>
-				<ChevronRight
-					size="18"
-					strokeWidth="2.5"
-					class={showAll ? 'rotate-90 transition-transform' : 'transition-transform'}
-				/>
-			</button>
+			{#if reviews.length}
+				<button
+					type="button"
+					class="text-on-surface"
+					onclick={() => (showAll = !showAll)}
+					aria-label="Toggle all reviews"
+				>
+					<ChevronRight
+						size="18"
+						strokeWidth="2.5"
+						class={showAll ? 'rotate-90 transition-transform' : 'transition-transform'}
+					/>
+				</button>
+			{/if}
 		</div>
 
-		<div class="mt-4 flex flex-col gap-4">
-			{#each visibleReviews as review, i (i)}
-				<div class="flex flex-col gap-2">
-					<div class="flex items-center justify-between gap-3">
-						<p class="text-body2 font-normal">
-							{review.code}
-							{review.name}
-						</p>
-						<span
-							class={`text-caption rounded-full border px-3 py-1 font-semibold ${tagClass(
-								review.tag
-							)}`}
-						>
-							{review.tag}
-						</span>
+		{#if !reviews.length}
+			<div class="flex items-center justify-center p-3">
+				<NotebookPen size={52} strokeWidth={1.5} class="text-blue-500" />
+			</div>
+
+			<div class="flex w-full flex-col items-center gap-1.5 px-4">
+				<h2 class="text-center text-lg font-bold tracking-wide text-gray-800">
+					เริ่มเขียนรีวิวแรก
+				</h2>
+				<p class="w-full text-center text-xs leading-relaxed text-gray-500">
+					เริ่มเขียนรีวิวแรกของคุณเพื่อแบ่งปันประสบการณ์ที่น่าจดจำกับวิชานั้น ๆ
+					และดูภาพรวมตารางเรียนทั้งหมดที่คุณสร้างไว้ในหน้าโปรไฟล์นี้
+				</p>
+			</div>
+		{:else}
+			<div class="mt-4 flex flex-col gap-4">
+				{#each visibleReviews as review, i (i)}
+					<div class="flex flex-col gap-2">
+						<div class="flex items-center justify-between gap-3">
+							<p class="text-body2 font-normal">
+								{review.code}
+								{review.name}
+							</p>
+							<span
+								class={`text-caption rounded-full border px-3 py-1 font-semibold ${tagClass(
+									review.tag
+								)}`}
+							>
+								{review.tag}
+							</span>
+						</div>
+						<div class="flex items-center gap-3">
+							{#if review.status === Status.PENDING}
+								<span
+									class="text-caption rounded-full border border-amber-600 bg-amber-100 px-3 py-1 font-normal text-amber-600"
+								>
+									กำลังรออนุมัติ
+								</span>
+							{/if}
+							<RatingStar rating={normalizeRating(review.rating)} size={16} gap={4} />
+							<p class="text-caption text-on-surface/60">
+								{review.term}
+							</p>
+						</div>
 					</div>
-					<div class="flex items-center gap-3">
-						<RatingStar rating={normalizeRating(review.rating)} size={16} gap={4} />
-						<p class="text-caption text-on-surface/60">
-							{review.term}
-						</p>
-					</div>
-				</div>
-			{/each}
-		</div>
+				{/each}
+			</div>
+		{/if}
 	</div>
 </div>

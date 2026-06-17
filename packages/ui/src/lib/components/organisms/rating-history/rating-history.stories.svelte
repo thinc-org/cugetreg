@@ -2,6 +2,7 @@
 	import { defineMeta } from '@storybook/addon-svelte-csf';
 
 	import { RatingHistory } from './index.js';
+	import { Status } from '$lib/utils.js';
 
 	const { Story } = defineMeta({
 		title: 'Organism/Rating History',
@@ -37,6 +38,7 @@
 				code: '0123104',
 				name: 'CON PDG PEACE CONFWV',
 				tag: 'หมวดมนุษย์',
+				status: Status.APPROVED,
 				rating: 4,
 				term: 'ภาคต้น 2566'
 			},
@@ -44,6 +46,7 @@
 				code: '0123101',
 				name: 'PARAGRAPH WRITING',
 				tag: 'หมวดมนุษย์',
+				status: Status.APPROVED,
 				rating: 3,
 				term: 'ภาคปลาย 2565'
 			},
@@ -51,6 +54,7 @@
 				code: '0123101',
 				name: 'PARAGRAPH WRITING',
 				tag: 'หมวดมนุษย์',
+				status: Status.APPROVED,
 				rating: 3,
 				term: 'ภาคปลาย 2566'
 			},
@@ -58,6 +62,7 @@
 				code: '2190201',
 				name: 'COM PROG',
 				tag: 'หมวดวิทย์',
+				status: Status.PENDING,
 				rating: 2.5,
 				term: 'ภาคปลาย 2566'
 			}

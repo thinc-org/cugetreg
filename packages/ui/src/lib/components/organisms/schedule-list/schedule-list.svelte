@@ -35,13 +35,24 @@
 		return match?.[0] ?? '';
 	};
 
+	const getSemester = (value: string) => {
+		const match = value.match(/(?:ภาคต้น|ภาคปลาย|ภาคฤดูร้อน)/);
+		return match?.[0] ?? '';
+	};
+
 	const onChangeTerm = (event: Event) => {
 		const selectElement = event.target as HTMLSelectElement;
 		selectedTerm = selectElement.value;
 		onSelectTerm?.(selectedTerm);
 	};
 
-	let visibleItems = $derived(items.filter((item) => item.title.includes(getYear(selectedTerm))));
+	let visibleItems = $derived(
+		items.filter(
+			(item) =>
+				item.subtitle.includes(getYear(selectedTerm)) &&
+				item.subtitle.includes(getSemester(selectedTerm))
+		)
+	);
 </script>
 
 <div class="text-on-surface w-full max-w-xl">

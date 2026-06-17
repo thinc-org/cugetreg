@@ -49,6 +49,18 @@
       subtitle: 'ทวิภาค 2566 / ภาคต้น',
       isPublic: true,
     },
+    {
+      id: '5',
+      title: 'OK',
+      subtitle: 'ทวิภาค 2567 / ภาคปลาย',
+      isPublic: true,
+    },
+    {
+      id: '6',
+      title: 'yyyyy',
+      subtitle: 'ทวิภาค 2568 / ภาคต้น',
+      isPublic: true,
+    },
   ]);
 
   let selectedTerm = $state('ทวิภาค 2567 ภาคต้น');
@@ -57,7 +69,14 @@
   let deleteItemPopupVisible = $state(false);
   let newDepartment = $state(personalInfo.department);
 
-  let terms = $derived([...new Set(items.map(({ title }) => title))]);
+  let terms = $derived([
+    ...new Set(
+      items.map(({ subtitle }) => {
+        const [studyProgram, academicYear, _, semester] = subtitle.split(' ');
+        return [studyProgram, academicYear, semester].join(' ');
+      }),
+    ),
+  ]);
 
   const toggleEditInfo = () => {
     editInfoPopupVisible = true;

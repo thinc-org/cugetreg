@@ -54,7 +54,9 @@
 	// TODO: Add formatter
 	// TODO: Connect it to somewhere
 	let selected_year = $state(yearOptions[0]?.value ?? '2568');
-	let selected_semester: 'FIRST' | 'SECOND' | 'SUMMER' = $state(semesterOptions[0]?.value as 'FIRST' | 'SECOND' | 'SUMMER' ?? 'FIRST');
+	let selected_semester: 'FIRST' | 'SECOND' | 'SUMMER' = $state(
+		(semesterOptions[0]?.value as 'FIRST' | 'SECOND' | 'SUMMER') ?? 'FIRST'
+	);
 
 	let tableName = $state('ตารางเรียนแสนสนุก');
 	let currentLetter = $derived(tableName.length);

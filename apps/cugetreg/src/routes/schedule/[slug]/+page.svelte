@@ -1,4 +1,9 @@
 <script lang="ts">
+  import {
+    getSemesterShortOptions,
+    getYearOptions,
+  } from '$lib/semesterOptions';
+
   import html2canvas from 'html2canvas-pro';
   import { ChevronLeft, ChevronRight, Copy, Share2 } from 'lucide-svelte';
   import { untrack } from 'svelte';
@@ -19,7 +24,6 @@
   } from '@cugetreg/ui/molecules/exam-card';
   import { CreateTimetable } from '@cugetreg/ui/organisms/create-timetable';
   import { RenameSchedule } from '@cugetreg/ui/organisms/rename-schedule';
-  import { getYearOptions, getSemesterShortOptions } from '$lib/semesterOptions';
   import {
     ViewCourse,
     type ViewCourseData,

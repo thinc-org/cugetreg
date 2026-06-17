@@ -14,8 +14,6 @@ import {
   mapVoteType,
 } from "../utils/enumMapper.js";
 
-
-
 export const reviewService = {
   submitReview: async (userId: string, newReview: SubmitReviewBodySchema) => {
     const course = await prisma.course.findFirst({

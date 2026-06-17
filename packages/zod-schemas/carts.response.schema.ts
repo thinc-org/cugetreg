@@ -1,7 +1,7 @@
 import z from "zod";
 
 import { genEdType } from "./constants.js";
-import { Period, Section } from "./types.js";
+import { Section } from "./types.js";
 
 export const CartSchema = z.object({
   id: z.string(),
@@ -94,7 +94,7 @@ export const ExamConflictSchema = z.object({
   end: z.string(),
 });
 
-export type { Section, Period } from "./types.js";
+export type { Period, Section } from "./types.js";
 export type CartList = z.infer<typeof CartList>;
 export type CartData = z.infer<typeof CartData>;
 export type ClassScheduleItem = z.infer<typeof ClassScheduleItemSchema>;

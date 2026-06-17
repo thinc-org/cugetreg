@@ -2,6 +2,11 @@
   import { useSession } from '$lib/auth-client';
   import ScheduleMismatchPopup from '$lib/components/schedule-mismatch-popup.svelte';
   import SelectedCourse from '$lib/components/selected-course.svelte';
+  import {
+    getSemesterDisplayOptions,
+    parseSemesterDisplay,
+    SEMESTER_LABEL_LONG,
+  } from '$lib/semesterOptions';
   import { searchState } from '$lib/stores/search.svelte';
   import {
     CART_PROMISE_KEY,
@@ -9,11 +14,6 @@
     getUserCartStore,
     useCartActions,
   } from '$lib/stores/user-cart';
-  import {
-    getSemesterDisplayOptions,
-    SEMESTER_LABEL_LONG,
-    parseSemesterDisplay,
-  } from '$lib/semesterOptions';
 
   import {
     BookMarked,

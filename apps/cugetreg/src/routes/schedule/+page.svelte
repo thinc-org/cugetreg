@@ -1,6 +1,10 @@
 <script lang="ts">
   import SelectedCourse from '$lib/components/selected-course.svelte';
   import {
+    getSemesterShortOptions,
+    getYearOptions,
+  } from '$lib/semesterOptions';
+  import {
     CART_PROMISE_KEY,
     type CartPromise,
     getUserCartStore,
@@ -32,7 +36,6 @@
     type TimetableMetaData,
   } from '@cugetreg/ui/organisms/create-timetable';
   import { RenameSchedule } from '@cugetreg/ui/organisms/rename-schedule';
-  import { getYearOptions, getSemesterShortOptions } from '$lib/semesterOptions';
   import { ViewCourse } from '@cugetreg/ui/organisms/view-course';
   import {
     discardTime,

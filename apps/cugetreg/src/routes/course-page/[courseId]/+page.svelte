@@ -7,6 +7,11 @@
   import ScheduleMismatchPopup from '$lib/components/schedule-mismatch-popup.svelte';
   import SelectedCourse from '$lib/components/selected-course.svelte';
   import { faculties } from '$lib/constants';
+  import {
+    ALLOWED_ACADEMIC_YEAR,
+    ALLOWED_SEMESTER,
+    SEMESTER_LABEL_LONG,
+  } from '$lib/semesterOptions';
   import { getUserCartStore, useCartActions } from '$lib/stores/user-cart';
 
   import {
@@ -48,11 +53,6 @@
   import { SelectTimetable } from '@cugetreg/ui/molecules/select-timetable';
   import { Footer } from '@cugetreg/ui/organisms/footer';
   import * as Sidebar from '@cugetreg/ui/organisms/sidebar';
-  import {
-    ALLOWED_ACADEMIC_YEAR,
-    ALLOWED_SEMESTER,
-    SEMESTER_LABEL_LONG,
-  } from '$lib/semesterOptions';
   import type { GenEdType } from '@cugetreg/utils/types';
   import {
     type SubmitReviewBodySchema,
@@ -1032,7 +1032,10 @@
                     {#each pagedReviews as review, index (index)}
                       <Comment
                         rating={review.rating / 2}
-                        semester={review.semester as 'FIRST' | 'SECOND' | 'SUMMER'}
+                        semester={review.semester as
+                          | 'FIRST'
+                          | 'SECOND'
+                          | 'SUMMER'}
                         content={review.content}
                         likesCount={review.stats.likeCount}
                         dislikesCount={review.stats.dislikeCount}

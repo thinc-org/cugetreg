@@ -14,9 +14,9 @@ import {
   SingleCartItemResponseSchema,
   SingleCartResponseSchema,
 } from '@cugetreg/zod-schemas/carts-response';
+import type { Semester, StudyProgram } from '@cugetreg/zod-schemas/constants';
 
 import { useContextStore } from './stores';
-import type { Semester, StudyProgram } from '@cugetreg/zod-schemas/constants';
 
 export interface UserCartInterface {
   currentCart: CartData;

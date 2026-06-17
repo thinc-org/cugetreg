@@ -1,4 +1,8 @@
 <script lang="ts">
+  import {
+    getSemesterShortOptions,
+    getYearOptions,
+  } from '$lib/semesterOptions';
   import { useCartActions } from '$lib/stores/user-cart';
 
   import { Plus } from '@lucide/svelte';
@@ -15,7 +19,6 @@
     CreateTimetable,
     type TimetableMetaData,
   } from '@cugetreg/ui/organisms/create-timetable';
-  import { getYearOptions, getSemesterShortOptions } from '$lib/semesterOptions';
 
   type Schedule = {
     id: string;

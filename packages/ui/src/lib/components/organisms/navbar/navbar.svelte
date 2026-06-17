@@ -5,11 +5,11 @@
 
 	import { cn, getShortenName } from '@cugetreg/utils';
 
-	import { Button } from '../../atoms/button';
-	import { Chip } from '../../atoms/chip';
-	import { Collapsible } from '../../atoms/collapsible';
-	import { IconButton } from '../../atoms/icon-button';
-	import { Input } from '../../atoms/input';
+	import { Button } from '$lib/components/atoms/button';
+	import { Chip } from '$lib/components/atoms/chip';
+	import { Collapsible } from '$lib/components/atoms/collapsible';
+	import { IconButton } from '$lib/components/atoms/icon-button';
+	import { Input } from '$lib/components/atoms/input';
 	import { CUGetRegDarkFull as CUGetRegLogo } from '../../logo/cugetreg';
 	import { UserDialog } from '../../molecules/user-dialog';
 

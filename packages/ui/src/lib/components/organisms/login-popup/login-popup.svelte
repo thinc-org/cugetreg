@@ -14,6 +14,10 @@
 		เข้าสู่ระบบเพื่อดำเนินการต่อ
 	</h1>
 
+	<span class="text-center">
+		กรุณาเข้าสู่ระบบเพื่อดำเนินการต่อเพื่อรับประสบการณ์การใช้งานอย่างเต็มรูปแบบ
+	</span>
+
 	<div class="flex w-full gap-6">
 		<Button variant="solid" size="default" color="neutral" class="w-full" onclick={onCancel}
 			>ยกเลิก</Button

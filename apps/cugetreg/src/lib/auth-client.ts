@@ -1,5 +1,7 @@
 import { invalidateAll } from '$app/navigation';
-import { PUBLIC_API_URL } from '$env/static/public';
+import { env } from '$env/dynamic/public';
+
+const PUBLIC_API_URL = env.PUBLIC_API_URL ?? 'http://localhost:3000/api/v1';
 
 import { createAuthClient } from 'better-auth/svelte';
 

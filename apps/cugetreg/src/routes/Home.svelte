@@ -1,5 +1,7 @@
 <script lang="ts">
-  import { PUBLIC_API_URL } from '$env/static/public';
+  import { env } from '$env/dynamic/public';
+
+  const PUBLIC_API_URL = env.PUBLIC_API_URL ?? 'http://localhost:3000/api/v1';
   import { useSession } from '$lib/auth-client';
   import ScheduleMismatchPopup from '$lib/components/schedule-mismatch-popup.svelte';
   import SelectedCourse from '$lib/components/selected-course.svelte';
@@ -280,7 +282,7 @@
       }
 
       const res = await fetch(
-        `${PUBLIC_API_URL}/api/v1/courses?${params.toString()}`,
+        `${PUBLIC_API_URL}/courses?${params.toString()}`,
         {
           method: 'GET',
           headers: { 'Content-Type': 'application/json' },

@@ -8,11 +8,12 @@ export const { signIn, signOut, useSession } = createAuthClient({
 });
 
 export const handleGoogleLogin = async () => {
-  console.log('Logging in...');
+  const appURL = typeof window !== 'undefined' ? window.location.origin : 'http://localhost:5173';
   await signIn.social({
     provider: 'google',
-    callbackURL: String(window.location),
-    errorCallbackURL: String(window.location),
+<<<<<<< HEAD
+    callbackURL: appURL,
+    errorCallbackURL: appURL,
     fetchOptions: {
       onError: (context) => {
         console.error(context.error.message);

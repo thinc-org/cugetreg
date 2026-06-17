@@ -22,8 +22,8 @@ const app = new OpenAPIHono<{ Variables: Variables }>().basePath("/api/v1");
 const ALLOWED_ORIGINS = [
   "http://localhost:5173",
   ...(process.env.BETTER_AUTH_TRUSTED_ORIGINS?.split(",")
-      .map((o) => o.trim())
-      .filter(Boolean) ?? []),
+    .map((o) => o.trim())
+    .filter(Boolean) ?? []),
 ];
 
 // Allow frontend dev servers and local prod preview to call the API with cookies

@@ -7,7 +7,7 @@
 </script>
 
 <div
-	class="min-h-51 w-103 gap-5 rounded-xl border border-[#D6D7E1] p-6 font-[FC_Orbit] opacity-100"
+	class="w-full min-h-40 min-w-85 lg:w-103 gap-5 rounded-xl border border-[#D6D7E1] p-6 font-[FC_Orbit] opacity-100"
 >
 	<h1 class="mb-5 align-middle text-xl leading-[1.4] font-medium tracking-[0.15px]">
 		{date}

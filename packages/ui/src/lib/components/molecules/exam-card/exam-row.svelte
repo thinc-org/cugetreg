@@ -8,12 +8,12 @@
 </script>
 
 {#if colour === 'error'}
-	<div class="mb-3 flex w-91 gap-3">
-		<h2 class="w-32 text-sm leading-none tracking-[0.15px]" style="color: {COLOURS[colour].text}">
+	<div class="mb-3 flex w-full gap-3">
+		<h2 class="text-sm leading-[1.2] tracking-[0.15px] whitespace-nowrap" style="color: {COLOURS[colour].text}">
 			{time}
 		</h2>
-		<div class="flex gap-2">
-			<svg
+		<div class="flex flex-1 gap-2 min-w-0">
+			<svg class="shrink-0 mt-[2px]"
 				width="16"
 				height="16"
 				viewBox="0 0 16 16"
@@ -29,7 +29,7 @@
 				/>
 			</svg>
 			<h2
-				class="line-clamp-2 w-50 text-sm leading-none tracking-[0.15px]"
+				class="line-clamp-2 text-sm leading-[1.2] tracking-[0.15px]"
 				style="color: {COLOURS[colour].text}"
 			>
 				{subject}
@@ -37,10 +37,10 @@
 		</div>
 	</div>
 {:else}
-	<div class="mb-3 flex w-91 gap-3">
-		<h2 class="w-32 text-sm leading-none tracking-[0.15px]">{time}</h2>
-		<div class="flex gap-2">
-			<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+	<div class="mb-3 flex w-full gap-3">
+		<h2 class="text-sm leading-[1.2] tracking-[0.15px] whitespace-nowrap">{time}</h2>
+		<div class="flex flex-1 gap-2 min-w-0">
+			<svg class="shrink-0 mt-[2px]" width="16" height="16" viewBox="0 0 16 16" fill="none">
 				<rect
 					x="0.5"
 					y="0.5"
@@ -52,7 +52,7 @@
 				/>
 			</svg>
 			<h2
-				class="line-clamp-2 w-50 text-sm leading-none tracking-[0.15px]"
+				class="line-clamp-2 text-sm leading-[1.2] tracking-[0.15px]"
 				style="color: {COLOURS[colour].text}"
 			>
 				{subject}

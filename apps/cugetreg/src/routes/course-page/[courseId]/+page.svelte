@@ -434,7 +434,7 @@
   });
 
   function isMismatch() {
-    if (!$userCart.currentCart) return false;
+    if (!$userCart.currentCart || !$session.data) return false;
     return (
       String($userCart.currentCart.academicYear) !==
         String(course.academicYear) ||

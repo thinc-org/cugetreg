@@ -405,7 +405,7 @@
 
   function isMismatch(): boolean {
     const currentCart = $userCart.currentCart;
-    if (!currentCart) return false;
+    if (!currentCart || !$session.data) return false;
     const isYearMismatch =
       String(currentCart.academicYear) !== String(expectedParams.academicYear);
     const isProgramMismatch =

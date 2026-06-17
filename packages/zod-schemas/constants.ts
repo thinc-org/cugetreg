@@ -20,7 +20,6 @@ export const assessment = z.enum(["LETTER", "SU"]);
 export const sortBy = z.enum(["NAME", "CAPACITY_SUM", "REMAING_SUM"]);
 export const sortOrder = z.enum(["asc", "desc"]);
 export const semester = z.enum(["FIRST", "SECOND", "SUMMER"]);
-// export const semester = z.enum(["1", "2", "3"]);
 export const visible = z.enum(["PUB", "PVT"]);
 export const reviewStatus = z.enum(["PENDING", "APPROVED", "REJECTED"]);
 export const vote = z.enum(["L", "D"]);

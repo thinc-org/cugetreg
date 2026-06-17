@@ -115,22 +115,6 @@
   };
   const KNOWN_DAYS = new Set(['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU']);
 
-  function mapSemester(semester: string) {
-    switch (semester) {
-      case '1':
-      case 'FIRST':
-        return '1';
-      case '2':
-      case 'SECOND':
-        return '2';
-      case '3':
-      case 'SUMMER':
-        return '3';
-      default:
-        return '1';
-    }
-  }
-
   function parseTime(t: string): number | null {
     if (!t) return null;
     const m = t.trim().match(/^(\d{1,2}):(\d{2})$/);
@@ -141,16 +125,17 @@
     return h * 60 + mm;
   }
 
+  // TODO: Refactor this
   function getParams() {
     const parts = currentSemester.split(' / ');
     return {
       academicYear: parts[0],
       semester:
         parts[1] === 'ฤดูร้อน'
-          ? '3'
+          ? 'SUMMER'
           : parts[1] === '2' || parts[1] === 'ภาคปลาย'
-            ? '2'
-            : '1',
+            ? 'SECOND'
+            : 'FIRST',
       studyProgram:
         currentProgram === 'นานาชาติ'
           ? 'I'
@@ -358,12 +343,6 @@
   const cartPromise = getContext<CartPromise>(CART_PROMISE_KEY);
   const { addCourse, removeCourse, updateCourse } = useCartActions();
 
-  const SEMESTER_MAP: Record<string, string> = {
-    '1': 'FIRST',
-    '2': 'SECOND',
-    '3': 'SUMMER',
-  };
-
   const PROGRAM_MAP: Record<string, string> = {
     นานาชาติ: 'I',
     ตรีภาค: 'T',
@@ -410,8 +389,7 @@
       String(currentCart.academicYear) !== String(expectedParams.academicYear);
     const isProgramMismatch =
       currentCart.studyProgram !== expectedParams.studyProgram;
-    const isSemesterMismatch =
-      currentCart.semester !== SEMESTER_MAP[expectedParams.semester];
+    const isSemesterMismatch = currentCart.semester !== expectedParams.semester;
     return isYearMismatch || isSemesterMismatch || isProgramMismatch;
   }
 
@@ -503,23 +481,6 @@
     );
     return entry ? String(entry.sectionNo) : '';
   }
-
-  let sortedCourses = $derived.by(() => {
-    const result = [...courses];
-    result.sort((a, b) => {
-      if (a.recommended !== b.recommended) return a.recommended ? -1 : 1;
-      if (currentSort === 'ชื่อวิชา') {
-        const r = collatorTh.compare(a.course.name || '', b.course.name || '');
-        return sortDirection === 'asc' ? r : -r;
-      }
-      const r = collatorDefault.compare(
-        a.course.code || '',
-        b.course.code || '',
-      );
-      return sortDirection === 'asc' ? r : -r;
-    });
-    return result;
-  });
 
   let filteredCourses = $derived(courses);
   let displayedCourses = $derived(courses);
@@ -722,7 +683,7 @@
                   {@const params = new URLSearchParams({
                     studyProgram: PROGRAM_MAP[currentProgram],
                     academicYear: String(getParams().academicYear),
-                    semester: SEMESTER_MAP[getParams().semester],
+                    semester: getParams().semester,
                   })}
                   {#each displayedCourses as item (item.course.code)}
                     <CourseCard

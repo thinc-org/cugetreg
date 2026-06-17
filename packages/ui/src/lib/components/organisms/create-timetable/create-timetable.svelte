@@ -48,11 +48,11 @@
 		{ value: '2564', label: '2564' }
 	];
 
-	let selected_semester: '1' | '2' | '3' = $state('1');
+	let selected_semester: 'FIRST' | 'SECOND' | 'SUMMER' = $state('FIRST');
 	let options_semester = [
-		{ value: '1', label: '1' },
-		{ value: '2', label: '2' },
-		{ value: '3', label: 'ฤดูร้อน' }
+		{ value: 'FIRST', label: '1' },
+		{ value: 'SECOND', label: '2' },
+		{ value: 'SUMMER', label: 'ฤดูร้อน' }
 	];
 
 	let tableName = $state('ตารางเรียนแสนสนุก');
@@ -133,7 +133,7 @@
 
 			<Select type="single" bind:value={selected_semester}>
 				<SelectTrigger class="my-1 flex-1" aria-label="Select semester">
-					{selected_semester}
+					{options_semester.find((x) => x.value === selected_semester)?.label}
 				</SelectTrigger>
 
 				<SelectContent>

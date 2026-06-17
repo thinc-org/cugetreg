@@ -13,15 +13,9 @@ import {
   mapDayOfWeek,
   mapGenEdType,
   mapGradingType,
+  mapSemester,
   mapStudyProgram,
 } from "../utils/enumMapper.js";
-
-// API accepts numeric semester (1/2/3); DB stores enum strings (FIRST/SECOND/SUMMER)
-const semesterMap: Record<number, "FIRST" | "SECOND" | "SUMMER"> = {
-  1: "FIRST",
-  2: "SECOND",
-  3: "SUMMER",
-};
 
 const courses = new OpenAPIHono<{ Variables: Variables }>();
 
@@ -49,7 +43,7 @@ courses
       } = c.req.valid("query");
 
       const sqlStudyProgram = mapStudyProgram(studyProgram);
-      const sqlSemester = semesterMap[semester];
+      const sqlSemester = mapSemester(semester);
       const sqlGenEd = genEdType ? mapGenEdType(genEdType) : undefined;
       const sqlGrading = assessment ? mapGradingType(assessment) : undefined;
       const sqlDay = day ? mapDayOfWeek(day) : undefined;
@@ -276,7 +270,7 @@ courses
           courseNo,
           studyProgram: mapStudyProgram(studyProgram),
           academicYear,
-          semester: semester ? semesterMap[semester] : undefined,
+          semester: mapSemester(semester),
         },
         include: {
           courseInfo: true,

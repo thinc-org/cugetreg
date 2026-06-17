@@ -81,11 +81,7 @@
 
   const { createCart } = useCartActions();
 
-  const semesterMapping: Record<string, string> = {
-    '1': 'FIRST',
-    '2': 'SECOND',
-    '3': 'SUMMER',
-  };
+
 
   $effect(() => {
     if (selectedId === 'NEW') {
@@ -182,7 +178,7 @@
       onConfirm={async (schedule: TimetableMetaData) => {
         if (
           String(schedule.academicYear) !== String(expectedYear) ||
-          semesterMapping[schedule.semester] !== expectedSemester ||
+          schedule.semester !== expectedSemester ||
           schedule.semesterType !== expectedProgram
         ) {
           return;

@@ -16,6 +16,7 @@ import {
 } from '@cugetreg/zod-schemas/carts-response';
 
 import { useContextStore } from './stores';
+import type { Semester, StudyProgram } from '@cugetreg/zod-schemas/constants';
 
 export interface UserCartInterface {
   currentCart: CartData;
@@ -92,17 +93,6 @@ const pendingItemUpdates = new Map<string, UpdateCourseFields>();
  * read the id without touching the Svelte context API.
  */
 let cachedCartId: string | undefined;
-
-function mapSemester(dbValue: '1' | '2' | '3'): 'FIRST' | 'SECOND' | 'SUMMER' {
-  switch (dbValue) {
-    case '1':
-      return 'FIRST';
-    case '2':
-      return 'SECOND';
-    case '3':
-      return 'SUMMER';
-  }
-}
 
 // ---------------------------------------------------------------------------
 // Flush logic
@@ -491,14 +481,14 @@ export function useCartActions() {
     name: string,
     // TODO:
     isPublic: boolean,
-    studyProgram: 'S' | 'I' | 'T',
-    semester: '1' | '2' | '3',
+    studyProgram: StudyProgram,
+    semester: Semester,
     academicYear: number,
   ) => {
     const [response, error] = await tryCatch(
       api.post('/carts', {
         academicYear,
-        semester: mapSemester(semester),
+        semester,
         studyProgram,
         name,
         isDefault: false,

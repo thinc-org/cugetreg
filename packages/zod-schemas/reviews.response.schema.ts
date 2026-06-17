@@ -15,7 +15,7 @@ export const SubmitReviewResponseSchema = z.object({
     status: reviewStatus,
     likeCount: z.int().min(0),
     dislikeCount: z.int().min(0),
-    //myVote: vote).nullable(),
+    //myVote: vote.nullable(),
     isOwner: z.boolean(),
     createdAt: z.union([z.date(), z.string()]),
   }),

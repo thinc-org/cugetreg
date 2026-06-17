@@ -19,11 +19,16 @@ dotenv.config();
 // All routes are under /api/v1
 const app = new OpenAPIHono<{ Variables: Variables }>().basePath("/api/v1");
 
+const ALLOWED_ORIGINS = [
+  "http://localhost:5173",
+  ...(process.env.BETTER_AUTH_TRUSTED_ORIGINS?.split(",").map((o) => o.trim()).filter(Boolean) ?? []),
+];
+
 // Allow frontend dev servers and local prod preview to call the API with cookies
 app.use(
   "*",
   cors({
-    origin: "http://localhost:5173",
+    origin: (o) => (ALLOWED_ORIGINS.includes(o) ? o : ALLOWED_ORIGINS[0]),
     allowHeaders: [
       "Content-Type",
       "Authorization",

@@ -19,7 +19,10 @@ export const auth = betterAuth({
   },
   plugins: [openAPI()],
   baseURL: env.BETTER_AUTH_URL,
-  trustedOrigins: ["http://localhost:5173"],
+  trustedOrigins: [
+    "http://localhost:5173",
+    ...(env.BETTER_AUTH_TRUSTED_ORIGINS?.split(",").map(o => o.trim()) ?? []),
+  ],
   databaseHooks: {
     user: {
       create: {

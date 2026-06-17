@@ -7,6 +7,7 @@
   import ScheduleMismatchPopup from '$lib/components/schedule-mismatch-popup.svelte';
   import SelectedCourse from '$lib/components/selected-course.svelte';
   import { faculties } from '$lib/constants';
+  import { loginPopupState } from '$lib/stores/login-popup.svelte';
   import { getUserCartStore, useCartActions } from '$lib/stores/user-cart';
 
   import {
@@ -444,6 +445,11 @@
   }
 
   function handleSelectSection(section: any) {
+    if (!$session.data) {
+      loginPopupState.show = true;
+      return;
+    }
+
     if (isMismatch()) {
       pendingSection = section;
       showMismatchPopup = true;

@@ -10,6 +10,7 @@
     handleGoogleLogout,
     useSession,
   } from '$lib/auth-client';
+  import { loginPopupState } from '$lib/stores/login-popup.svelte';
   import { searchState } from '$lib/stores/search.svelte';
   import {
     CART_PROMISE_KEY,
@@ -20,13 +21,12 @@
   import { setContext, type Snippet } from 'svelte';
   import toast, { Toaster } from 'svelte-french-toast';
 
+  import { Modal } from '@cugetreg/ui/atoms/modal';
+  import { LoginPopup } from '@cugetreg/ui/organisms/login-popup';
   import { Navbar } from '@cugetreg/ui/organisms/navbar';
   import { CartDetailResponseSchema } from '@cugetreg/zod-schemas/carts-response';
 
   import type { LayoutData } from './$types';
-  import { Modal } from '@cugetreg/ui/atoms/modal';
-  import { LoginPopup } from '@cugetreg/ui/organisms/login-popup';
-  import { loginPopupState } from '$lib/stores/login-popup.svelte';
 
   const session = useSession();
 

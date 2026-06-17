@@ -1,5 +1,8 @@
+import z from "zod";
+
 export const TIME_REGEX = /^(IA)|([01]\d|2[0-3]):([0-5]\d)$/;
-export const days = [
+
+export const days = z.enum([
   "MO",
   "TU",
   "WE",
@@ -10,14 +13,25 @@ export const days = [
   "AR",
   "IA",
   "IR",
-] as const;
-export const studyProgram = ["T", "I", "S"] as const;
-export const genEdType = ["NO", "SC", "SO", "HU", "IN"] as const;
-export const assessment = ["LETTER", "SU"] as const;
-export const sortBy = ["NAME", "CAPACITY_SUM", "REMAING_SUM"] as const;
-export const sortOrder = ["asc", "desc"] as const;
-export const semester = ["1", "2", "3"] as const;
-export const semesterString = ["FIRST", "SECOND", "SUMMER"] as const;
-export const visible = ["PUB", "PVT"] as const;
-export const reviewStatus = ["PENDING", "APPROVED", "REJECTED"] as const;
-export const vote = ["L", "D"] as const;
+]);
+export const studyProgram = z.enum(["T", "I", "S"]);
+export const genEdType = z.enum(["NO", "SC", "SO", "HU", "IN"]);
+export const assessment = z.enum(["LETTER", "SU"]);
+export const sortBy = z.enum(["NAME", "CAPACITY_SUM", "REMAING_SUM"]);
+export const sortOrder = z.enum(["asc", "desc"]);
+export const semester = z.enum(["FIRST", "SECOND", "SUMMER"]);
+// export const semester = z.enum(["1", "2", "3"]);
+export const visible = z.enum(["PUB", "PVT"]);
+export const reviewStatus = z.enum(["PENDING", "APPROVED", "REJECTED"]);
+export const vote = z.enum(["L", "D"]);
+
+export type Days = z.infer<typeof days>;
+export type StudyProgram = z.infer<typeof studyProgram>;
+export type GenEdType = z.infer<typeof genEdType>;
+export type Assessment = z.infer<typeof assessment>;
+export type SortBy = z.infer<typeof sortBy>;
+export type SortOrder = z.infer<typeof sortOrder>;
+export type Semester = z.infer<typeof semester>;
+export type Visible = z.infer<typeof visible>;
+export type ReviewStatus = z.infer<typeof reviewStatus>;
+export type Vote = z.infer<typeof vote>;

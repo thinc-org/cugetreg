@@ -1,12 +1,12 @@
 import z from "zod";
 
-import { semesterString, studyProgram, visible } from "./constants.js";
+import { semester, studyProgram, visible } from "./constants.js";
 
 export const ListCartsQuerySchema = z
   .object({
     academicYear: z.coerce.number().int().optional(),
-    semester: z.enum(semesterString).optional(),
-    studyProgram: z.enum(studyProgram).optional(),
+    semester: semester.optional(),
+    studyProgram: studyProgram.optional(),
   })
   .strict();
 
@@ -15,8 +15,8 @@ export type ListCartsQuerySchema = z.output<typeof ListCartsQuerySchema>;
 export const CreateCartBodySchema = z
   .object({
     academicYear: z.number().int().min(2564),
-    semester: z.enum(semesterString),
-    studyProgram: z.enum(studyProgram),
+    semester: semester,
+    studyProgram: studyProgram,
     name: z.string().nonempty(),
     isDefault: z.boolean(),
   })
@@ -27,7 +27,7 @@ export type CreateCartBodySchema = z.output<typeof CreateCartBodySchema>;
 export const UpdateCartBodySchema = z
   .object({
     name: z.string().nonempty().optional(),
-    visible: z.enum(visible).optional(),
+    visible: visible.optional(),
     isDefault: z.boolean().optional(),
     prevId: z.string().optional(),
     nextId: z.string().optional(),

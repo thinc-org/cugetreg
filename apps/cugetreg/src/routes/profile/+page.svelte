@@ -5,34 +5,14 @@
   import { PersonalInfo } from '@cugetreg/ui/organisms/personal-info';
   import { RatingHistory } from '@cugetreg/ui/organisms/rating-history';
   import { ScheduleList } from '@cugetreg/ui/organisms/schedule-list';
+  import { ConfirmDeleteSchedule } from '@cugetreg/ui/molecules/confirm-delete-schedule';
 
-  let selectedTerm = $state('ทวิภาค 2567 ภาคต้น');
-  let editInfoPopupVisible = $state(false);
-
-  const toggleEditInfo = () => {
-    editInfoPopupVisible = true;
-  };
-
-  const onCancelChange = () => {
-    newDepartment = personalInfo.department;
-    editInfoPopupVisible = false;
-  };
-
-  const onConfirmChange = () => {
-    newDepartment = newDepartment || '-';
-    personalInfo.department = newDepartment;
-    editInfoPopupVisible = false;
-  };
-
-  const onSelectTerm = (term: string) => {
-    selectedTerm = term;
-  };
-
-  let onDeleteItem = (id: string) => {
-    console.log(id, items);
-    items = items.filter((item) => item.id !== id);
-    console.log(items);
-  };
+  interface ScheduleItem {
+    id: string;
+    title: string;
+    subtitle: string;
+    isPublic: boolean;
+  }
 
   let personalInfo = $state({
     username: '6534344444',
@@ -44,7 +24,7 @@
     accountEmail: '6534344444@student.chula.ac.th',
   });
 
-  let items = $state([
+  let items = $state<ScheduleItem[]>([
     {
       id: '1',
       title: 'ทวิภาค 2567 ภาคต้น',
@@ -71,9 +51,49 @@
     },
   ]);
 
+  let selectedTerm = $state('ทวิภาค 2567 ภาคต้น');
+  let editInfoPopupVisible = $state(false);
+  let itemToDelete = $state<ScheduleItem | null>(null);
+  let deleteItemPopupVisible = $state(false);
+  let newDepartment = $state(personalInfo.department);
+
   let terms = $derived([...new Set(items.map(({ title }) => title))]);
 
-  let newDepartment = $state(personalInfo.department);
+  const toggleEditInfo = () => {
+    editInfoPopupVisible = true;
+  };
+
+  const onCancelChange = () => {
+    newDepartment = personalInfo.department;
+    editInfoPopupVisible = false;
+  };
+
+  const onConfirmChange = () => {
+    newDepartment = newDepartment || '-';
+    personalInfo.department = newDepartment;
+    editInfoPopupVisible = false;
+  };
+
+  const onSelectTerm = (term: string) => {
+    selectedTerm = term;
+  };
+
+  let onDeleteItem = (item: ScheduleItem) => {
+    deleteItemPopupVisible = true;
+    itemToDelete = item;
+  };
+
+  let onCancelDelete = () => {
+    deleteItemPopupVisible = false;
+    itemToDelete = null;
+  };
+
+  let onConfirmDelete = () => {
+    const id = itemToDelete?.id;
+    items = items.filter((item) => item.id !== id);
+    deleteItemPopupVisible = false;
+    itemToDelete = null;
+  };
 </script>
 
 <div class="relative flex min-h-screen flex-col bg-white">
@@ -108,6 +128,13 @@
         onConfirm={onConfirmChange}
       />
     </div>
+  {/if}
+  {#if deleteItemPopupVisible}
+    <ConfirmDeleteSchedule
+      onCancel={onCancelDelete}
+      onConfirm={onConfirmDelete}
+      scheduleName={itemToDelete?.title}
+    />
   {/if}
   <div
     class="fixed right-6 bottom-6 z-50 inline-flex cursor-default items-center gap-2 rounded-full border-2 border-blue-700 px-6 py-1"

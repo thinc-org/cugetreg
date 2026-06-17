@@ -16,7 +16,7 @@
 		terms?: string[];
 		items?: ScheduleItem[];
 		onSelectTerm?: (term: string) => void;
-		onDelete?: (id: string) => void;
+		onDelete?: (item: ScheduleItem) => void;
 		onInsert: () => void;
 	}
 
@@ -99,7 +99,7 @@
 						<button
 							type="button"
 							class="text-error hover:text-error-hover"
-							onclick={() => onDelete?.(item.id)}
+							onclick={() => onDelete?.(item)}
 							aria-label="Delete schedule"
 						>
 							<Trash2 size="18" strokeWidth="2.5" />

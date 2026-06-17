@@ -15,6 +15,7 @@
     CreateTimetable,
     type TimetableMetaData,
   } from '@cugetreg/ui/organisms/create-timetable';
+  import { getYearOptions, getSemesterShortOptions } from '$lib/semesterOptions';
 
   type Schedule = {
     id: string;
@@ -81,7 +82,8 @@
 
   const { createCart } = useCartActions();
 
-
+  const yearOptions = getYearOptions();
+  const semesterOptions = getSemesterShortOptions();
 
   $effect(() => {
     if (selectedId === 'NEW') {
@@ -175,6 +177,8 @@
     bind:show={showCreateScheduleModal}
   >
     <CreateTimetable
+      {yearOptions}
+      {semesterOptions}
       onConfirm={async (schedule: TimetableMetaData) => {
         if (
           String(schedule.academicYear) !== String(expectedYear) ||

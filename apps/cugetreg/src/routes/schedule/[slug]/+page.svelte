@@ -19,6 +19,7 @@
   } from '@cugetreg/ui/molecules/exam-card';
   import { CreateTimetable } from '@cugetreg/ui/organisms/create-timetable';
   import { RenameSchedule } from '@cugetreg/ui/organisms/rename-schedule';
+  import { getYearOptions, getSemesterShortOptions } from '$lib/semesterOptions';
   import {
     ViewCourse,
     type ViewCourseData,
@@ -336,6 +337,8 @@
     bind:show={showCreateScheduleModal}
   >
     <CreateTimetable
+      yearOptions={getYearOptions()}
+      semesterOptions={getSemesterShortOptions()}
       onConfirm={(schedule: ScheduleListItem) => {
         scheduleList.push(schedule);
         selectedSchedule = schedule;

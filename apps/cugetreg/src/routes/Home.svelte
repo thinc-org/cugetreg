@@ -9,6 +9,11 @@
     getUserCartStore,
     useCartActions,
   } from '$lib/stores/user-cart';
+  import {
+    getSemesterDisplayOptions,
+    SEMESTER_LABEL_LONG,
+    parseSemesterDisplay,
+  } from '$lib/semesterOptions';
 
   import {
     BookMarked,
@@ -82,16 +87,7 @@
   const session = useSession();
 
   const programOptions = ['ทวิภาค', 'ตรีภาค', 'นานาชาติ'];
-  const semesterOptions = [
-    '2568 / ฤดูร้อน',
-    '2568 / 2',
-    '2568 / 1',
-    '2567 / ฤดูร้อน',
-    '2567 / 2',
-    '2567 / 1',
-    '2566 / 2',
-    '2566 / 1',
-  ];
+  const semesterOptions = getSemesterDisplayOptions();
   const sortOptions = ['รหัสวิชา', 'ชื่อวิชา'];
 
   const genEdMap: Record<string, string> = {
@@ -125,17 +121,11 @@
     return h * 60 + mm;
   }
 
-  // TODO: Refactor this
   function getParams() {
-    const parts = currentSemester.split(' / ');
+    const parsed = parseSemesterDisplay(currentSemester);
     return {
-      academicYear: parts[0],
-      semester:
-        parts[1] === 'ฤดูร้อน'
-          ? 'SUMMER'
-          : parts[1] === '2' || parts[1] === 'ภาคปลาย'
-            ? 'SECOND'
-            : 'FIRST',
+      academicYear: parsed?.academicYear ?? '2566',
+      semester: parsed?.semester ?? 'FIRST',
       studyProgram:
         currentProgram === 'นานาชาติ'
           ? 'I'
@@ -490,10 +480,10 @@
   }
 
   let contextLabel = $derived.by(() => {
-    const [year, sem] = currentSemester.split(' / ');
-    const semTh =
-      sem === 'ฤดูร้อน' ? 'ภาคฤดูร้อน' : sem === '2' ? 'ภาคปลาย' : 'ภาคต้น';
-    return `ในปีการศึกษา ${year} ${semTh} หลักสูตร${currentProgram}`;
+    const parsed = parseSemesterDisplay(currentSemester);
+    const year = parsed?.academicYear ?? '2566';
+    const sem = parsed?.semester ?? 'FIRST';
+    return `ในปีการศึกษา ${year} ${SEMESTER_LABEL_LONG[sem]} หลักสูตร${currentProgram}`;
   });
 </script>
 
@@ -728,7 +718,7 @@
                 expectedYear={expectedParams.academicYear}
                 expectedProgram={expectedParams.studyProgram}
                 bind:currentScheduleId={$userCart.currentCartId}
-                expectedSemester={SEMESTER_MAP[expectedParams.semester]}
+                expectedSemester={expectedParams.semester}
                 onConfirm={handleScheduleChange}
                 onClose={() => (showMismatchPopup = false)}
               />

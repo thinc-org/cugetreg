@@ -34,6 +34,7 @@
   import { SelectTimetable } from '@cugetreg/ui/molecules/select-timetable';
   import { Footer } from '@cugetreg/ui/organisms/footer';
   import * as Sidebar from '@cugetreg/ui/organisms/sidebar';
+  // TODO: To be removed
 
   const sectionGroups = ['4EE ONLY', 'OPEN'];
   let selectedGroup = $state(sectionGroups[0]);

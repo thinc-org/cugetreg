@@ -32,6 +32,7 @@
     type TimetableMetaData,
   } from '@cugetreg/ui/organisms/create-timetable';
   import { RenameSchedule } from '@cugetreg/ui/organisms/rename-schedule';
+  import { getYearOptions, getSemesterShortOptions } from '$lib/semesterOptions';
   import { ViewCourse } from '@cugetreg/ui/organisms/view-course';
   import {
     discardTime,
@@ -344,6 +345,8 @@
     bind:show={showCreateScheduleModal}
   >
     <CreateTimetable
+      yearOptions={getYearOptions()}
+      semesterOptions={getSemesterShortOptions()}
       onConfirm={(schedule: TimetableMetaData) => {
         createCart(
           schedule.name,

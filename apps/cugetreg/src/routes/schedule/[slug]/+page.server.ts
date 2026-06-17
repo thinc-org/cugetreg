@@ -1,6 +1,6 @@
+import { env } from '$env/dynamic/private';
 import { tryCatch } from '$lib/async-handler';
 
-import { env } from '$env/dynamic/private';
 import { error as svelteError } from '@sveltejs/kit';
 
 import type { SemesterType } from '@cugetreg/utils/types';

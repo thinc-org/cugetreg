@@ -1,6 +1,6 @@
+import { env } from '$env/dynamic/private';
 import { tryCatch } from '$lib/async-handler';
 
-import { env } from '$env/dynamic/private';
 import { error as svelteError, redirect } from '@sveltejs/kit';
 
 import { CourseNoResponseSchema } from '@cugetreg/zod-schemas/courses-response';

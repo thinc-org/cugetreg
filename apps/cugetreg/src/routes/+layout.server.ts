@@ -1,7 +1,7 @@
+import { env } from '$env/dynamic/private';
 import { tryCatch } from '$lib/async-handler';
 import type { UserCartInterface } from '$lib/stores/user-cart';
 
-import { env } from '$env/dynamic/private';
 import { error as svelteError } from '@sveltejs/kit';
 
 import {

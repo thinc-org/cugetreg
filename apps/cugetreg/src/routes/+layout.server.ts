@@ -1,6 +1,7 @@
 import { tryCatch } from '$lib/async-handler';
 import type { UserCartInterface } from '$lib/stores/user-cart';
 
+import { env } from '$env/dynamic/private';
 import { error as svelteError } from '@sveltejs/kit';
 
 import {
@@ -13,7 +14,7 @@ import {
 
 import type { LayoutServerLoad } from './$types';
 
-const API_URL = 'http://localhost:3000/api/v1/carts';
+const API_URL = `${env.API_URL ?? 'http://localhost:3000'}/api/v1/carts`;
 
 export const load: LayoutServerLoad = () => {
   return { cart: loadCart() };

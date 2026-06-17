@@ -1,5 +1,6 @@
 import { tryCatch } from '$lib/async-handler';
 
+import { env } from '$env/dynamic/private';
 import { error as svelteError } from '@sveltejs/kit';
 
 import type { SemesterType } from '@cugetreg/utils/types';
@@ -7,7 +8,7 @@ import { PublicCartDetailResponseSchema } from '@cugetreg/zod-schemas/public-car
 
 import type { PageServerLoad } from './$types';
 
-const API_URL = 'http://localhost:3000/api/v1/public/carts/';
+const API_URL = `${env.API_URL ?? 'http://localhost:3000'}/api/v1/public/carts/`;
 
 const toSemesterType = (studyProgram: string): SemesterType => {
   switch (studyProgram) {

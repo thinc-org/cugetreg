@@ -21,7 +21,7 @@ export const auth = betterAuth({
   baseURL: env.BETTER_AUTH_URL,
   trustedOrigins: [
     "http://localhost:5173",
-    ...(env.BETTER_AUTH_TRUSTED_ORIGINS?.split(",").map(o => o.trim()) ?? []),
+    ...(env.BETTER_AUTH_TRUSTED_ORIGINS?.split(",").map((o) => o.trim()) ?? []),
   ],
   databaseHooks: {
     user: {

@@ -97,24 +97,26 @@
 				{/if}
 			</button>
 
-	<div class="text-subtitle flex flex-row gap-6 font-sans">
-		<div class="flex flex-row gap-x-2 font-medium">
-			<button class="hover:cursor-pointer" onclick={onLike}>
-				<ThumbsUp
-					data-fill={reaction === 'L'}
-					class="text-neutral-400 data-[fill=true]:fill-neutral-400"
-				/>
-			</button>
-			{likesCount}
-		</div>
-		<div class="flex flex-row gap-x-2 font-medium">
-			<button class="hover:cursor-pointer" onclick={onDislike}>
-				<ThumbsDown
-					data-fill={reaction === 'D'}
-					class="text-neutral-400 data-[fill=true]:fill-neutral-400"
-				/>
-			</button>
-			{dislikesCount}
+			<div class="text-subtitle flex flex-row gap-6 font-sans">
+				<div class="flex flex-row gap-x-2 font-medium">
+					<button class="hover:cursor-pointer" onclick={onLike}>
+						<ThumbsUp
+							data-fill={reaction === 'L'}
+							class="text-neutral-400 data-[fill=true]:fill-neutral-400"
+						/>
+					</button>
+					{likesCount}
+				</div>
+				<div class="flex flex-row gap-x-2 font-medium">
+					<button class="hover:cursor-pointer" onclick={onDislike}>
+						<ThumbsDown
+							data-fill={reaction === 'D'}
+							class="text-neutral-400 data-[fill=true]:fill-neutral-400"
+						/>
+					</button>
+					{dislikesCount}
+				</div>
+			</div>
 		</div>
 	</div>
 </div>

@@ -377,12 +377,6 @@
     }
   });
 
-  const { data }: PageProps = $props();
-  const course = $derived(data.course);
-
-  const userCart = getUserCartStore();
-  const { addCourse, removeCourse } = useCartActions();
-
   let globalSelectedSection = $state<string | null>(
     untrack(() => {
       const item = $userCart.currentCart.items.find(

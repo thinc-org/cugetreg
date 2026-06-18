@@ -129,6 +129,34 @@
     }, 250);
     return () => clearTimeout(timeout);
   });
+
+  const PROGRAM_LABEL: Record<string, string> = {
+    S: 'ทวิภาค',
+    I: 'นานาชาติ',
+    T: 'ตรีภาค',
+  };
+  const SEMESTER_LABEL: Record<string, string> = {
+    FIRST: 'ภาคต้น',
+    SECOND: 'ภาคปลาย',
+    SUMMER: 'ภาคฤดูร้อน',
+  };
+
+  const programLabel = $derived.by(() => {
+    const cart = $userCart.currentCart;
+    if (!cart?.academicYear) return '';
+    const program = PROGRAM_LABEL[cart.studyProgram] ?? cart.studyProgram;
+    const semester = SEMESTER_LABEL[cart.semester] ?? cart.semester;
+    return `${program} ${cart.academicYear} / ${semester}`;
+  });
+
+  const scheduleOptions = $derived(
+    $userCart.cartList?.map((item) => ({ name: item.name, id: item.id })) ?? [],
+  );
+
+  function toggleTheme() {
+    if (typeof document === 'undefined') return;
+    document.documentElement.classList.toggle('dark');
+  }
 </script>
 
 <Toaster />
@@ -143,6 +171,10 @@
     }}
     name={$session.data?.user.name}
     imageUrl={$session.data?.user.image ?? 'https://...'}
+    {scheduleOptions}
+    {programLabel}
+    bind:currentScheduleId={$userCart.currentCartId}
+    onToggleTheme={toggleTheme}
   />
 
   {#if page.url.pathname === '/'}

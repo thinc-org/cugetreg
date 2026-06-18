@@ -1,17 +1,22 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 
-	import { Menu, Moon, Search, Settings2 } from '@lucide/svelte';
+	import { Menu, Moon, Search } from '@lucide/svelte';
 
 	import { cn, getShortenName } from '@cugetreg/utils';
 
 	import { Button } from '../../atoms/button';
-	import { Chip } from '../../atoms/chip';
 	import { Collapsible } from '../../atoms/collapsible';
 	import { IconButton } from '../../atoms/icon-button';
 	import { Input } from '../../atoms/input';
 	import { CUGetRegDarkFull as CUGetRegLogo } from '../../logo/cugetreg';
 	import { UserDialog } from '../../molecules/user-dialog';
+	import { MobileSidebar } from '../mobile-sidebar';
+
+	interface ScheduleOption {
+		name: string;
+		id: string;
+	}
 
 	interface Props {
 		isLoggedIn?: boolean;
@@ -21,6 +26,13 @@
 		onSearchEnter?: (val: string) => void;
 		onLogin?: () => void;
 		onSignOut?: () => void;
+		/** Schedules for the mobile drawer's timetable selector. */
+		scheduleOptions?: ScheduleOption[];
+		/** Selected schedule id for the mobile drawer. Bindable. */
+		currentScheduleId?: string;
+		/** Study-program chip label for the mobile drawer. */
+		programLabel?: string;
+		onToggleTheme?: () => void;
 	}
 
 	let {
@@ -30,7 +42,11 @@
 		id = '',
 		onSearchEnter = () => {},
 		onLogin = () => {},
-		onSignOut = () => {}
+		onSignOut = () => {},
+		scheduleOptions = [],
+		currentScheduleId = $bindable(''),
+		programLabel = '',
+		onToggleTheme = () => {}
 	}: Props = $props();
 
 	let localSearch = $state('');
@@ -47,7 +63,7 @@
 			route: '/schedule'
 		},
 		{
-			name: 'เกี่ยวกับ',
+			name: 'เกี่ยวกับเรา',
 			route: '/about-us'
 		}
 	];
@@ -64,6 +80,9 @@
 	class="border-surface-container-low bg-surface sticky top-0 z-[60] flex h-16 w-full items-center justify-between gap-2 border-b-2 px-3 py-1 md:h-20 md:py-3 lg:px-10"
 >
 	<div class="flex flex-1 flex-row items-center gap-3 lg:gap-6">
+		<IconButton variant="ghost" class="min-[900px]:hidden" onclick={toggleSideBar}>
+			<Menu size="16" strokeWidth="3" color="#353745" />
+		</IconButton>
 		<a href="/">
 			<CUGetRegLogo class="h-8 w-24 lg:h-10 lg:w-32" />
 		</a>
@@ -123,88 +142,21 @@
 				<p class="text-button2 font-medium">เข้าสู่ระบบ</p>
 			</Button>
 		{/if}
-		<IconButton variant="ghost" class="min-[900px]:hidden" onclick={toggleSideBar}>
-			<Menu size="16" strokeWidth="3" color="#353745" />
-		</IconButton>
 	</div>
 
-	{#if openSideBar}
-		<div
-			class="fixed inset-0 z-10 bg-[#353745CC]/80 backdrop-blur-[3px]"
-			role="button"
-			tabindex="0"
-			aria-label="Close sidebar"
-			onclick={toggleSideBar}
-			onkeydown={(e: KeyboardEvent) => e.key === 'Enter' && toggleSideBar()}
-		></div>
-	{/if}
-	<div
-		class={cn(
-			'bg-surface fixed top-0 right-0 z-50 flex h-screen transform flex-col justify-between transition-transform duration-300 ease-in-out',
-			openSideBar ? 'translate-x-0' : 'translate-x-full'
-		)}
-		hidden={!openSideBar}
-	>
-		<div class="flex flex-col gap-5 p-3">
-			<div class="flex flex-row gap-2">
-				<IconButton variant="ghost" onclick={toggleSideBar}>
-					<Menu size="16" strokeWidth="3" color="#353745" />
-				</IconButton>
-				<div class="flex w-48 flex-col gap-2">
-					<p class="text-on-surface-placeholder text-caption">คุณกำลังจัดตารางเรียน...</p>
-					<p class="text-primary text-subtitle">ปี 2 ภาคฤดูร้อนที่ยาวมาก บลาบลา</p>
-					<Chip class="flex w-32 items-center justify-center text-nowrap">
-						นานาชาติ 66 / ฤดูร้อน
-					</Chip>
-				</div>
-				<IconButton variant="ghost">
-					<Settings2 size="16" strokeWidth="2.5" color="#353745" />
-				</IconButton>
-			</div>
-			<div class="relative flex items-center px-3">
-				<Search class="absolute right-6 my-auto" size="16" color="#898EA7" strokeWidth="3" />
-				<Input
-					bind:value={localSearch}
-					onkeydown={(e: KeyboardEvent) => {
-						if (e.key === 'Enter') {
-							onSearchEnter(localSearch);
-							if (openSideBar) toggleSideBar();
-						}
-					}}
-					placeholder="ค้นหาวิชา"
-					class="bg-surface-container-lowest h-8 w-full placeholder:text-neutral-400"
-				/>
-			</div>
-			<div class="flex flex-col gap-3 px-3">
-				{#each navItems as { name, route }, i (i)}
-					<a
-						class={cn(
-							'text-button1 cursor-pointer font-medium text-neutral-500 hover:text-neutral-800',
-							selected === name && 'text-primary'
-						)}
-						onclick={() => {
-							selected = name;
-							toggleSideBar();
-						}}
-						href={resolve(route as any)}
-					>
-						{name}
-					</a>
-				{/each}
-			</div>
-		</div>
-		{#if isLoggedIn}
-			<div class="border-surface-container-low flex flex-row items-center gap-4 border-t-2 p-4">
-				<img src={imageUrl} alt="profile pic" class="h-10 w-10 rounded-full" />
-				<div class="flex flex-col">
-					<p class="text-on-surface text-subtitle font-medium">
-						{name}
-					</p>
-					<p class="text-on-surface-placeholder text-body2 font-medium">
-						{id}
-					</p>
-				</div>
-			</div>
-		{/if}
-	</div>
+	<MobileSidebar
+		bind:open={openSideBar}
+		bind:selected
+		bind:currentScheduleId
+		{isLoggedIn}
+		{name}
+		{id}
+		{navItems}
+		{scheduleOptions}
+		{programLabel}
+		{onLogin}
+		{onSignOut}
+		{onToggleTheme}
+		onClose={toggleSideBar}
+	/>
 </div>

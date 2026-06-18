@@ -1,11 +1,11 @@
 <script lang="ts">
   import { TriangleAlert } from '@lucide/svelte';
 
+  import { ConfirmDeleteSchedule } from '@cugetreg/ui/molecules/confirm-delete-schedule';
   import { EditPersonalInfo } from '@cugetreg/ui/organisms/edit-personal-info';
   import { PersonalInfo } from '@cugetreg/ui/organisms/personal-info';
   import { RatingHistory } from '@cugetreg/ui/organisms/rating-history';
   import { ScheduleList } from '@cugetreg/ui/organisms/schedule-list';
-  import { ConfirmDeleteSchedule } from '@cugetreg/ui/molecules/confirm-delete-schedule';
 
   interface ScheduleItem {
     id: string;
@@ -63,20 +63,26 @@
     },
   ]);
 
-  let selectedTerm = $state('ทวิภาค 2567 ภาคต้น');
+  let selectedTerm = $state('2567 ภาคต้น');
   let editInfoPopupVisible = $state(false);
   let itemToDelete = $state<ScheduleItem | null>(null);
   let deleteItemPopupVisible = $state(false);
   let newDepartment = $state(personalInfo.department);
 
-  let terms = $derived([
-    ...new Set(
-      items.map(({ subtitle }) => {
-        const [studyProgram, academicYear, _, semester] = subtitle.split(' ');
-        return [studyProgram, academicYear, semester].join(' ');
-      }),
-    ),
-  ]);
+  let terms = [
+    '2569 ภาคฤดูร้อน',
+    '2569 ภาคปลาย',
+    '2569 ภาคต้น',
+    '2568 ภาคฤดูร้อน',
+    '2568 ภาคปลาย',
+    '2568 ภาคต้น',
+    '2567 ภาคฤดูร้อน',
+    '2567 ภาคปลาย',
+    '2567 ภาคต้น',
+    '2566 ภาคฤดูร้อน',
+    '2566 ภาคปลาย',
+    '2566 ภาคต้น',
+  ];
 
   const toggleEditInfo = () => {
     editInfoPopupVisible = true;

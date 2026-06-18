@@ -1,11 +1,18 @@
 <script lang="ts">
   import { TriangleAlert } from '@lucide/svelte';
+  import { PUBLIC_API_URL } from '$env/static/public';
 
   import { ConfirmDeleteSchedule } from '@cugetreg/ui/molecules/confirm-delete-schedule';
   import { EditPersonalInfo } from '@cugetreg/ui/organisms/edit-personal-info';
   import { PersonalInfo } from '@cugetreg/ui/organisms/personal-info';
   import { RatingHistory } from '@cugetreg/ui/organisms/rating-history';
   import { ScheduleList } from '@cugetreg/ui/organisms/schedule-list';
+
+  import type { PageProps } from './$types';
+  import { tryCatch } from '$lib/async-handler';
+  import { api } from '$lib/api';
+    import { UpdateUserInfoResponseSchema } from '@cugetreg/zod-schemas';
+    import { convertUser } from '$lib/utils/user';
 
   interface ScheduleItem {
     id: string;
@@ -14,15 +21,8 @@
     isPublic: boolean;
   }
 
-  let personalInfo = $state({
-    username: '6534344444',
-    firstName: 'Wanrudee',
-    lastName: 'Kittichaiyakorn',
-    faculty: 'วิศวกรรมศาสตร์',
-    department: '',
-    accountProvider: 'Google',
-    accountEmail: '6534344444@student.chula.ac.th',
-  });
+  const { data } : PageProps = $props();
+  let personalInfo = $state(data.user);
 
   let items = $state<ScheduleItem[]>([
     {
@@ -63,11 +63,6 @@
     },
   ]);
 
-  let selectedTerm = $state('2567 ภาคต้น');
-  let editInfoPopupVisible = $state(false);
-  let itemToDelete = $state<ScheduleItem | null>(null);
-  let deleteItemPopupVisible = $state(false);
-  let newDepartment = $state(personalInfo.department);
 
   let terms = [
     '2569 ภาคฤดูร้อน',
@@ -84,6 +79,31 @@
     '2566 ภาคต้น',
   ];
 
+  let selectedTerm = $state('2567 ภาคต้น');
+  let editInfoPopupVisible = $state(false);
+  let itemToDelete = $state<ScheduleItem | null>(null);
+  let deleteItemPopupVisible = $state(false);
+  let newDepartment = $state(personalInfo.department);
+
+  async function updateUser() {
+    const updatedUser = {
+      name: personalInfo.name,
+      faculty: personalInfo.faculty,
+      department: newDepartment,
+    }
+
+    const [res, error] = await tryCatch(api.patch(`${PUBLIC_API_URL}/api/v1/user`,updatedUser));
+
+    if(error || res.status !== 200){
+      console.error(error?.message)
+      return;
+    }
+
+    const { user } = UpdateUserInfoResponseSchema.parse(res.data)
+    personalInfo = convertUser(user);
+    editInfoPopupVisible = false;
+  }
+
   const toggleEditInfo = () => {
     editInfoPopupVisible = true;
   };
@@ -93,10 +113,8 @@
     editInfoPopupVisible = false;
   };
 
-  const onConfirmChange = () => {
-    newDepartment = newDepartment || '-';
-    personalInfo.department = newDepartment;
-    editInfoPopupVisible = false;
+  const onConfirmChange = async () => {
+    await updateUser();
   };
 
   const onSelectTerm = (term: string) => {

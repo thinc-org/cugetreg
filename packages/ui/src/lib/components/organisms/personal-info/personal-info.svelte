@@ -19,7 +19,6 @@
 
 	let {
 		name = 'Wanrudee Kittichaiyakorn',
-		id = '6534344444',
 		username = '6534344444',
 		firstName = 'Wanrudee',
 		lastName = 'Kittichaiyakorn',
@@ -29,6 +28,8 @@
 		accountEmail = '6534344444@student.chula.ac.th',
 		onEdit
 	}: Props = $props();
+
+	const id = username;
 
 	const infoItems = [
 		{ label: 'username', value: username },

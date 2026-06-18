@@ -83,7 +83,7 @@
 		<div class="text-caption flex flex-row items-center font-normal text-neutral-400">
 			<span>{course?.credit} หน่วยกิต</span>
 			<Dot color="#EDEDF1" size="16" />
-			<span>ที่นั่ง GenEd {course?.seat} / {course?.maxseat}</span>
+			<span>ที่นั่ง {course?.seat} / {course?.maxseat}</span>
 			<Dot color="#EDEDF1" size="16" />
 			<span>{course?.review} รีวิว</span>
 		</div>

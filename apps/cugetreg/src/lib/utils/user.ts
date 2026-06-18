@@ -14,7 +14,7 @@ export function getFirstNameAndLastName(name: string) {
   return [splitName[0], splitName[splitName.length - 1]];
 }
 
-export function convertUser(user: UserInput) {
+export function convertUserInfo(user: UserInput) {
   const [firstName, lastName] = getFirstNameAndLastName(user.name);
 
   return {

@@ -12,7 +12,7 @@
   import { tryCatch } from '$lib/async-handler';
   import { api } from '$lib/api';
     import { UpdateUserInfoResponseSchema } from '@cugetreg/zod-schemas';
-    import { convertUser } from '$lib/utils/user';
+    import { convertUserInfo } from '$lib/utils/user';
 
   interface ScheduleItem {
     id: string;
@@ -100,7 +100,7 @@
     }
 
     const { user } = UpdateUserInfoResponseSchema.parse(res.data)
-    personalInfo = convertUser(user);
+    personalInfo = convertUserInfo(user);
     editInfoPopupVisible = false;
   }
 

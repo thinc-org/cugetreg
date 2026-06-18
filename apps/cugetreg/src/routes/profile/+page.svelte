@@ -134,7 +134,6 @@
       bind:selectedTerm
       {onSelectTerm}
       onDelete={onDeleteItem}
-      onInsert={() => {}}
     />
   </div>
   {#if editInfoPopupVisible}

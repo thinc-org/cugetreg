@@ -17,7 +17,6 @@
 		items?: ScheduleItem[];
 		onSelectTerm?: (term: string) => void;
 		onDelete?: (item: ScheduleItem) => void;
-		onInsert: () => void;
 	}
 
 	let {
@@ -27,7 +26,6 @@
 		items = [],
 		onSelectTerm,
 		onDelete,
-		onInsert
 	}: Props = $props();
 
 	const getYear = (value: string) => {
@@ -124,9 +122,8 @@
 		<button
 			type="button"
 			class="text-md w-full rounded-2xl bg-blue-100 px-8 py-2 font-medium text-blue-900"
-			onclick={onInsert}
 		>
-			เพิ่มตารางเรียน
+			<a href="/schedule">เพิ่มตารางเรียน</a>
 		</button>
 	</div>
 </div>

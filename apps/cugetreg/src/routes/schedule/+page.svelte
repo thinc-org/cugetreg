@@ -9,10 +9,19 @@
 
   import { Loader2 } from '@lucide/svelte';
   import html2canvas from 'html2canvas-pro';
-  import { ChevronLeft, ChevronRight, Copy, Share2, Download, ListOrdered, Grid3X3 } from 'lucide-svelte';
+  import {
+    ChevronLeft,
+    ChevronRight,
+    Copy,
+    Download,
+    Grid3X3,
+    ListOrdered,
+    Share2,
+  } from 'lucide-svelte';
   import { getContext } from 'svelte';
 
   import { Button } from '@cugetreg/ui/atoms/button';
+  import { CustomizeScrollbar } from '@cugetreg/ui/atoms/customize-scrollbar';
   import { IconButton } from '@cugetreg/ui/atoms/icon-button';
   import { Input } from '@cugetreg/ui/atoms/input';
   import { Modal } from '@cugetreg/ui/atoms/modal';
@@ -21,7 +30,6 @@
   import { TimeTable as Timetable } from '@cugetreg/ui/atoms/timetable';
   import { ConfirmDeleteSchedule } from '@cugetreg/ui/molecules/confirm-delete-schedule';
   import { EditSchedule } from '@cugetreg/ui/molecules/edit-schedule';
-  import { CustomizeScrollbar } from '@cugetreg/ui/atoms/customize-scrollbar';
   import {
     type Exam,
     ExamCard,
@@ -32,9 +40,9 @@
     CreateTimetable,
     type TimetableMetaData,
   } from '@cugetreg/ui/organisms/create-timetable';
+  import { Footer } from '@cugetreg/ui/organisms/footer';
   import { RenameSchedule } from '@cugetreg/ui/organisms/rename-schedule';
   import { ViewCourse } from '@cugetreg/ui/organisms/view-course';
-  import { Footer } from '@cugetreg/ui/organisms/footer';
   import {
     discardTime,
     formatDate,
@@ -419,11 +427,15 @@
     {#if innerWidth >= 1024}
       {@render sideSection()}
     {/if}
-    <div class="flex flex-3 flex-col overflow-y-auto w-full">
+    <div class="flex w-full flex-3 flex-col overflow-y-auto">
       <div class="flex-3 p-6 lg:p-10">
-        <div class="flex w-full flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+        <div
+          class="flex w-full flex-col gap-4 lg:flex-row lg:items-center lg:justify-between"
+        >
           <div class="flex w-full items-center justify-between lg:w-auto">
-            <span class="text-[20px] md:text-[30px] lg:text-4xl font-bold">ตารางเรียน</span>
+            <span class="text-[20px] font-bold md:text-[30px] lg:text-4xl"
+              >ตารางเรียน</span
+            >
             <div class="lg:hidden">
               <Switch
                 bind:checked={selectedSchedule.isPublic}
@@ -448,7 +460,11 @@
             />
           </div>
         </div>
-        <div class="bg-surface overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden pt-4 pb-0 lg:py-8 lg:px-8" bind:this={timetableDiv} bind:this={scheduleTableRef}>
+        <div
+          class="bg-surface overflow-x-auto pt-4 pb-0 [scrollbar-width:none] lg:px-8 lg:py-8 [&::-webkit-scrollbar]:hidden"
+          bind:this={timetableDiv}
+          bind:this={scheduleTableRef}
+        >
           <div class="min-w-150">
             <Timetable startTime={7}>
               {#each $userCart.currentCart?.items as item (item.id)}
@@ -458,18 +474,25 @@
           </div>
         </div>
         <CustomizeScrollbar target={scheduleTableRef} />
-        <div class="hidden lg:mx-5 lg:mb-5 lg:flex lg:justify-end lg:text-lg lg:font-bold">
+        <div
+          class="hidden lg:mx-5 lg:mb-5 lg:flex lg:justify-end lg:text-lg lg:font-bold"
+        >
           หน่วยกิตรวม {totalCredit} / 22
         </div>
 
-        <div class="mt-4 lg:mt-0 flex w-full flex-col gap-2 lg:flex-row lg:items-center">
+        <div
+          class="mt-4 flex w-full flex-col gap-2 lg:mt-0 lg:flex-row lg:items-center"
+        >
           <div class="flex w-full items-center justify-between lg:w-auto">
             <Switch
               bind:checked={selectedSchedule.isPublic}
               label="เปิดเป็นสาธารณะ"
             />
             {#if innerWidth < 1024}
-              <Button class="m-0 flex items-center gap-1 border border-gray-200 bg-white" onclick={screenshotTimetable}>
+              <Button
+                class="m-0 flex items-center gap-1 border border-gray-200 bg-white"
+                onclick={screenshotTimetable}
+              >
                 <Download size={20} strokeWidth={2.5} class="text-[#353745]" />
                 <span class="font-medium text-[#353745]">บันทึกภาพ</span>
               </Button>
@@ -499,11 +522,13 @@
                 บันทึกเป็นภาพ
               </Button>
             {/if}
-            </div>
+          </div>
         </div>
 
-        <div class="flex flex-row items-center justify-between lg:justify-center">
-          <span class="lg:hidden mt-5 text-2xl font-bold">ตารางสอบ</span>
+        <div
+          class="flex flex-row items-center justify-between lg:justify-center"
+        >
+          <span class="mt-5 text-2xl font-bold lg:hidden">ตารางสอบ</span>
           <div class="hidden lg:mt-5 lg:flex lg:justify-center lg:gap-4">
             <ChevronLeft
               onclick={() => (showExamSchedule = 'Schedule')}
@@ -520,12 +545,14 @@
                 : 'cursor-pointer text-[#D6D7E1] transition-colors hover:text-[#B0B2C5]'}
             />
           </div>
-          <div class="mt-5 flex justify-center lg:gap-4 lg:hidden">
-            <div class="px-4 py-3 rounded-l-lg {showExamSchedule === 'Schedule'
-                  ? 'bg-[#4A70C6]'
-                  : 'bg-gray-200'}"
-              >
-              <ListOrdered size={18}
+          <div class="mt-5 flex justify-center lg:hidden lg:gap-4">
+            <div
+              class="rounded-l-lg px-4 py-3 {showExamSchedule === 'Schedule'
+                ? 'bg-[#4A70C6]'
+                : 'bg-gray-200'}"
+            >
+              <ListOrdered
+                size={18}
                 onclick={() => (showExamSchedule = 'Schedule')}
                 strokeWidth={1.5}
                 class={showExamSchedule === 'Schedule'
@@ -533,11 +560,13 @@
                   : 'cursor-pointer text-[#353745] transition-colors hover:text-black'}
               />
             </div>
-            <div class="px-4 py-3 rounded-r-lg {showExamSchedule === 'List'
-                  ? 'bg-[#4A70C6]'
-                  : 'bg-gray-200'}"
-              >
-              <Grid3X3 size={18}
+            <div
+              class="rounded-r-lg px-4 py-3 {showExamSchedule === 'List'
+                ? 'bg-[#4A70C6]'
+                : 'bg-gray-200'}"
+            >
+              <Grid3X3
+                size={18}
                 onclick={() => (showExamSchedule = 'List')}
                 strokeWidth={1.5}
                 class={showExamSchedule === 'List'
@@ -554,7 +583,7 @@
           {@render examSchedule()}
         {/if}
       </div>
-      <div class="lg:hidden mt-auto w-full border-t bg-white">
+      <div class="mt-auto w-full border-t bg-white lg:hidden">
         <Footer />
       </div>
     </div>
@@ -563,7 +592,10 @@
 
 {#snippet examSchedule()}
   <div class="my-5 text-xl font-bold">Midterm</div>
-  <div class="overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" bind:this={midtermTableRef}>
+  <div
+    class="overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+    bind:this={midtermTableRef}
+  >
     <div class="min-w-150">
       <Timetable
         startTime={7}
@@ -595,10 +627,13 @@
     </div>
   </div>
 
-  <CustomizeScrollbar target={midtermTableRef}/>
+  <CustomizeScrollbar target={midtermTableRef} />
 
   <div class="my-5 text-xl font-bold">Finals</div>
-  <div class="overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" bind:this={finalTableRef}>
+  <div
+    class="overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+    bind:this={finalTableRef}
+  >
     <div class="min-w-150">
       <Timetable
         startTime={7}
@@ -630,12 +665,12 @@
     </div>
   </div>
 
-  <CustomizeScrollbar target={finalTableRef}/>
+  <CustomizeScrollbar target={finalTableRef} />
 {/snippet}
 
 {#snippet examList()}
   <div class="flex items-center justify-center">
-    <div class="my-5 w-full lg:w-auto lg:inline-flex space-x-5">
+    <div class="my-5 w-full space-x-5 lg:inline-flex lg:w-auto">
       <div class="flex-1">
         <span class="text-2xl font-bold">Midterm</span>
 

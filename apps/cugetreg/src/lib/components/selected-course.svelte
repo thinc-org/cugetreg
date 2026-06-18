@@ -1,5 +1,7 @@
 <script lang="ts">
+  import { resolve } from '$app/paths';
   import { getUserCartStore, useCartActions } from '$lib/stores/user-cart';
+
   import { BookMarked, Equal, Eye, EyeOff, Trash2 } from '@lucide/svelte';
   import {
     SortableList,
@@ -17,7 +19,6 @@
   import { courseColorVariants } from '@cugetreg/utils/constants';
   import type { ColorVariant } from '@cugetreg/utils/types';
   import type { CartItemDetail } from '@cugetreg/zod-schemas/cart-response';
-  import { resolve } from "$app/paths"
 
   const userCart = getUserCartStore();
   const { removeCourse, updateCourse } = useCartActions();
@@ -150,7 +151,9 @@
             {/each}
           </SortableList.Root>
           <div class="px-2">
-            <Button class="w-full" color="neutral" href={resolve('/' as any)}>ค้นหาวิชาเรียน</Button>
+            <Button class="w-full" color="neutral" href={resolve('/' as any)}
+              >ค้นหาวิชาเรียน</Button
+            >
           </div>
         </Accordion.Content>
       </Accordion.Item>

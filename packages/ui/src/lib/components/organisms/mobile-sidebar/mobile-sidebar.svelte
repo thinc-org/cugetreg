@@ -1,10 +1,9 @@
 <script lang="ts">
-	import { ChevronDown, LogOut, Menu, Moon } from '@lucide/svelte';
+	import { ChevronDown, LogOut, Menu, Moon, Plus } from '@lucide/svelte';
 
 	import { cn } from '@cugetreg/utils';
 
 	import { Button } from '../../atoms/button';
-	import { Chip } from '../../atoms/chip';
 	import { IconButton } from '../../atoms/icon-button';
 	import { CUGetRegDarkFull as CUGetRegLogo } from '../../logo/cugetreg';
 
@@ -39,6 +38,8 @@
 		onLogin?: () => void;
 		onSignOut?: () => void;
 		onToggleTheme?: () => void;
+		/** Called when the user taps "เพิ่มตาราง" to create a new timetable. */
+		onAddSchedule?: () => void;
 	}
 
 	let {
@@ -55,8 +56,26 @@
 		onSelect = () => {},
 		onLogin = () => {},
 		onSignOut = () => {},
-		onToggleTheme = () => {}
+		onToggleTheme = () => {},
+		onAddSchedule = () => {}
 	}: Props = $props();
+
+	let scheduleDropdownOpen = $state(false);
+	let scheduleSelectorEl = $state<HTMLDivElement>();
+	const currentScheduleName = $derived(
+		scheduleOptions.find((o) => o.id === currentScheduleId)?.name ?? 'เลือกตาราง'
+	);
+
+	$effect(() => {
+		if (!scheduleDropdownOpen) return;
+		const onDocClick = (e: MouseEvent) => {
+			if (scheduleSelectorEl && !scheduleSelectorEl.contains(e.target as Node)) {
+				scheduleDropdownOpen = false;
+			}
+		};
+		document.addEventListener('click', onDocClick, true);
+		return () => document.removeEventListener('click', onDocClick, true);
+	});
 
 	function handleNavigate(itemName: string) {
 		selected = itemName;
@@ -104,24 +123,65 @@
 		<div class="flex flex-col gap-2">
 			<span class="text-caption text-neutral-400">คุณกำลังจัดตารางเรียน...</span>
 			{#if scheduleOptions.length > 0}
-				<div class="relative">
-					<select
-						bind:value={currentScheduleId}
-						class="border-primary text-primary text-subtitle w-full appearance-none truncate rounded-xl border bg-transparent py-2.5 pr-10 pl-4 font-medium focus:outline-none"
+				<div class="relative" bind:this={scheduleSelectorEl}>
+					<button
+						type="button"
+						onclick={() => (scheduleDropdownOpen = !scheduleDropdownOpen)}
+						class="border-primary text-primary text-subtitle flex w-full items-center justify-between gap-2 rounded-xl border bg-transparent py-2.5 pr-3 pl-4 font-medium focus:outline-none"
 						aria-label="เลือกตารางเรียน"
+						aria-expanded={scheduleDropdownOpen}
 					>
-						{#each scheduleOptions as opt (opt.id)}
-							<option value={opt.id}>{opt.name}</option>
-						{/each}
-					</select>
-					<ChevronDown
-						size="20"
-						class="text-primary pointer-events-none absolute top-1/2 right-3 -translate-y-1/2"
-					/>
+						<span class="truncate">{currentScheduleName}</span>
+						<ChevronDown
+							size="20"
+							class={cn(
+								'text-primary shrink-0 transition-transform',
+								scheduleDropdownOpen && 'rotate-180'
+							)}
+						/>
+					</button>
+
+					{#if scheduleDropdownOpen}
+						<div
+							class="border-surface-container-low bg-surface absolute top-full left-0 z-20 mt-1 w-full overflow-hidden rounded-xl border shadow-lg"
+						>
+							{#each scheduleOptions as opt (opt.id)}
+								<button
+									type="button"
+									onclick={() => {
+										currentScheduleId = opt.id;
+										scheduleDropdownOpen = false;
+									}}
+									class={cn(
+										'text-body2 block w-full truncate px-4 py-2.5 text-left text-neutral-700 hover:bg-neutral-100',
+										opt.id === currentScheduleId && 'bg-neutral-100 font-medium'
+									)}
+								>
+									{opt.name}
+								</button>
+							{/each}
+							{#if programLabel}
+								<div
+									class="text-caption border-t border-neutral-100 px-4 py-2 text-neutral-400"
+								>
+									{programLabel}
+								</div>
+							{/if}
+							<button
+								type="button"
+								onclick={() => {
+									scheduleDropdownOpen = false;
+									onClose();
+									onAddSchedule();
+								}}
+								class="text-primary text-body2 flex w-full items-center justify-center gap-2 border-t border-neutral-100 px-4 py-2.5 font-medium hover:bg-neutral-100"
+							>
+								<Plus size="18" strokeWidth="2.5" />
+								เพิ่มตาราง
+							</button>
+						</div>
+					{/if}
 				</div>
-			{/if}
-			{#if programLabel}
-				<Chip class="w-fit text-nowrap">{programLabel}</Chip>
 			{/if}
 		</div>
 

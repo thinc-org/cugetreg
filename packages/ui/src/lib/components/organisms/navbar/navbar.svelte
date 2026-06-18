@@ -33,6 +33,8 @@
 		/** Study-program chip label for the mobile drawer. */
 		programLabel?: string;
 		onToggleTheme?: () => void;
+		/** Called when the user taps "เพิ่มตาราง" in the mobile drawer. */
+		onAddSchedule?: () => void;
 	}
 
 	let {
@@ -46,7 +48,8 @@
 		scheduleOptions = [],
 		currentScheduleId = $bindable(''),
 		programLabel = '',
-		onToggleTheme = () => {}
+		onToggleTheme = () => {},
+		onAddSchedule = () => {}
 	}: Props = $props();
 
 	let localSearch = $state('');
@@ -157,6 +160,7 @@
 		{onLogin}
 		{onSignOut}
 		{onToggleTheme}
+		{onAddSchedule}
 		onClose={toggleSideBar}
 	/>
 </div>

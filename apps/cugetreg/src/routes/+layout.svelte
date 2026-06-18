@@ -14,12 +14,18 @@
   import {
     CART_PROMISE_KEY,
     initUserCartStore,
+    useCartActions,
     type UserCartInterface,
   } from '$lib/stores/user-cart';
 
   import { setContext, type Snippet } from 'svelte';
   import toast, { Toaster } from 'svelte-french-toast';
 
+  import { Modal } from '@cugetreg/ui/atoms/modal';
+  import {
+    CreateTimetable,
+    type TimetableMetaData,
+  } from '@cugetreg/ui/organisms/create-timetable';
   import { Navbar } from '@cugetreg/ui/organisms/navbar';
   import { CartDetailResponseSchema } from '@cugetreg/zod-schemas/carts-response';
 
@@ -157,6 +163,9 @@
     if (typeof document === 'undefined') return;
     document.documentElement.classList.toggle('dark');
   }
+
+  const { createCart } = useCartActions();
+  let showCreateScheduleModal = $state(false);
 </script>
 
 <Toaster />
@@ -175,7 +184,24 @@
     {programLabel}
     bind:currentScheduleId={$userCart.currentCartId}
     onToggleTheme={toggleTheme}
+    onAddSchedule={() => (showCreateScheduleModal = true)}
   />
+
+  <Modal exitOnEsc exitOnBackgroundClick centered dim bind:show={showCreateScheduleModal}>
+    <CreateTimetable
+      onConfirm={(schedule: TimetableMetaData) => {
+        createCart(
+          schedule.name,
+          schedule.isPublic,
+          schedule.semesterType,
+          schedule.semester,
+          schedule.academicYear,
+        );
+        showCreateScheduleModal = false;
+      }}
+      onCancel={() => (showCreateScheduleModal = false)}
+    />
+  </Modal>
 
   {#if page.url.pathname === '/'}
     {@render children?.()}

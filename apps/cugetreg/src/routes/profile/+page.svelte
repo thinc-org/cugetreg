@@ -1,18 +1,23 @@
 <script lang="ts">
-  import { TriangleAlert } from '@lucide/svelte';
   import { PUBLIC_API_URL } from '$env/static/public';
+  import { api } from '$lib/api';
+  import { tryCatch } from '$lib/async-handler';
+  import { convertSchedulesInfo } from '$lib/utils/scheduleInfo';
+  import { convertUserInfo } from '$lib/utils/user';
+
+  import { TriangleAlert } from '@lucide/svelte';
 
   import { ConfirmDeleteSchedule } from '@cugetreg/ui/molecules/confirm-delete-schedule';
   import { EditPersonalInfo } from '@cugetreg/ui/organisms/edit-personal-info';
   import { PersonalInfo } from '@cugetreg/ui/organisms/personal-info';
   import { RatingHistory } from '@cugetreg/ui/organisms/rating-history';
   import { ScheduleList } from '@cugetreg/ui/organisms/schedule-list';
+  import {
+    ListCartsResponseSchema,
+    UpdateUserInfoResponseSchema,
+  } from '@cugetreg/zod-schemas';
 
   import type { PageProps } from './$types';
-  import { tryCatch } from '$lib/async-handler';
-  import { api } from '$lib/api';
-    import { UpdateUserInfoResponseSchema } from '@cugetreg/zod-schemas';
-    import { convertUserInfo } from '$lib/utils/user';
 
   interface ScheduleItem {
     id: string;
@@ -21,48 +26,10 @@
     isPublic: boolean;
   }
 
-  const { data } : PageProps = $props();
+  const { data }: PageProps = $props();
   let personalInfo = $state(data.user);
 
-  let items = $state<ScheduleItem[]>([
-    {
-      id: '1',
-      title: 'ทวิภาค 2567 ภาคต้น',
-      subtitle: 'ทวิภาค 2567 / ภาคต้น',
-      isPublic: true,
-    },
-    {
-      id: '2',
-      title: 'ทวิภาค 2566 ภาคต้น',
-      subtitle: 'ทวิภาค 2566 / ภาคต้น',
-      isPublic: false,
-    },
-    {
-      id: '3',
-      title: 'ทวิภาค 2566 ภาคต้น',
-      subtitle: 'ทวิภาค 2566 / ภาคต้น',
-      isPublic: false,
-    },
-    {
-      id: '4',
-      title: 'ทวิภาค 2566 ภาคต้น',
-      subtitle: 'ทวิภาค 2566 / ภาคต้น',
-      isPublic: true,
-    },
-    {
-      id: '5',
-      title: 'OK',
-      subtitle: 'ทวิภาค 2567 / ภาคปลาย',
-      isPublic: true,
-    },
-    {
-      id: '6',
-      title: 'yyyyy',
-      subtitle: 'ทวิภาค 2568 / ภาคต้น',
-      isPublic: true,
-    },
-  ]);
-
+  let items = $state<ScheduleItem[]>([]);
 
   let terms = [
     '2569 ภาคฤดูร้อน',
@@ -77,9 +44,10 @@
     '2566 ภาคฤดูร้อน',
     '2566 ภาคปลาย',
     '2566 ภาคต้น',
+    '2565 ภาคปลาย',
   ];
 
-  let selectedTerm = $state('2567 ภาคต้น');
+  let selectedTerm = $state('2569 ภาคต้น');
   let editInfoPopupVisible = $state(false);
   let itemToDelete = $state<ScheduleItem | null>(null);
   let deleteItemPopupVisible = $state(false);
@@ -90,18 +58,79 @@
       name: personalInfo.name,
       faculty: personalInfo.faculty,
       department: newDepartment,
-    }
+    };
 
-    const [res, error] = await tryCatch(api.patch(`${PUBLIC_API_URL}/api/v1/user`,updatedUser));
+    const [res, error] = await tryCatch(
+      api.patch(`${PUBLIC_API_URL}/api/v1/user`, updatedUser),
+    );
 
-    if(error || res.status !== 200){
-      console.error(error?.message)
+    if (error || res.status !== 200) {
+      console.error(error?.message);
       return;
     }
 
-    const { user } = UpdateUserInfoResponseSchema.parse(res.data)
+    const { user } = UpdateUserInfoResponseSchema.parse(res.data);
     personalInfo = convertUserInfo(user);
     editInfoPopupVisible = false;
+  }
+
+  async function fetchScheduleItems() {
+    const [academicYear, semester] = selectedTerm.split(' ');
+
+    const semesters: Record<string, string> = {
+      ภาคต้น: 'FIRST',
+      ภาคปลาย: 'SECOND',
+      ภาคฤดูร้อน: 'SUMMER',
+    };
+
+    const query = new URLSearchParams({
+      academicYear,
+      semester: semesters[semester],
+    });
+    const [res, error] = await tryCatch(
+      api.get(`${PUBLIC_API_URL}/api/v1/carts?${query.toString()}`),
+    );
+
+    if (error || res.status !== 200) {
+      console.error(error?.message);
+      return;
+    }
+
+    const { data } = ListCartsResponseSchema.parse(res.data);
+    const fetchedItems = convertSchedulesInfo(data);
+    items = fetchedItems;
+  }
+
+  async function changeVisibility(item: ScheduleItem) {
+    const { id, isPublic } = item;
+
+    console.log(id, isPublic);
+
+    const [res, error] = await tryCatch(
+      api.patch(`${PUBLIC_API_URL}/api/v1/carts/${id}`, {
+        visible: isPublic ? 'PUB' : 'PVT',
+      }),
+    );
+
+    if (error || !res) {
+      console.error(error.message);
+      return;
+    }
+  }
+
+  async function deleteSchedule(id: string) {
+    const [res, error] = await tryCatch(
+      api.delete(`${PUBLIC_API_URL}/api/v1/carts/${id}`),
+    );
+
+    if (error || !res) {
+      console.error(error.message);
+      return;
+    }
+
+    items = items.filter((item) => item.id !== id);
+    deleteItemPopupVisible = false;
+    itemToDelete = null;
   }
 
   const toggleEditInfo = () => {
@@ -131,12 +160,16 @@
     itemToDelete = null;
   };
 
-  let onConfirmDelete = () => {
-    const id = itemToDelete?.id;
-    items = items.filter((item) => item.id !== id);
-    deleteItemPopupVisible = false;
-    itemToDelete = null;
+  let onConfirmDelete = async () => {
+    const id = itemToDelete?.id ?? '';
+    await deleteSchedule(id);
   };
+
+  $effect(() => {
+    selectedTerm;
+    items;
+    fetchScheduleItems();
+  });
 </script>
 
 <div class="relative flex min-h-screen flex-col bg-white">
@@ -152,6 +185,7 @@
       bind:selectedTerm
       {onSelectTerm}
       onDelete={onDeleteItem}
+      onChangeVisibility={changeVisibility}
     />
   </div>
   {#if editInfoPopupVisible}

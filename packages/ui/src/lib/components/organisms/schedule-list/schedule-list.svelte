@@ -17,6 +17,7 @@
 		items?: ScheduleItem[];
 		onSelectTerm?: (term: string) => void;
 		onDelete?: (item: ScheduleItem) => void;
+		onChangeVisibility: (item: ScheduleItem) => void;
 	}
 
 	let {
@@ -26,31 +27,14 @@
 		items = [],
 		onSelectTerm,
 		onDelete,
+		onChangeVisibility,
 	}: Props = $props();
-
-	const getYear = (value: string) => {
-		const match = value.match(/\d{4}/);
-		return match?.[0] ?? '';
-	};
-
-	const getSemester = (value: string) => {
-		const match = value.match(/(?:ภาคต้น|ภาคปลาย|ภาคฤดูร้อน)/);
-		return match?.[0] ?? '';
-	};
 
 	const onChangeTerm = (event: Event) => {
 		const selectElement = event.target as HTMLSelectElement;
 		selectedTerm = selectElement.value;
 		onSelectTerm?.(selectedTerm);
 	};
-
-	let visibleItems = $derived(
-		items.filter(
-			(item) =>
-				item.subtitle.includes(getYear(selectedTerm)) &&
-				item.subtitle.includes(getSemester(selectedTerm))
-		)
-	);
 </script>
 
 <div class="text-on-surface w-full max-w-xl">
@@ -76,7 +60,7 @@
 			class="text-on-surface/70 pointer-events-none absolute top-1/2 right-4 -translate-y-1/2"
 		/>
 	</div>
-	{#if !visibleItems.length}
+	{#if !items.length}
 		<div class="flex items-center justify-center rounded-xl p-4">
 			<BookPlus size={52} strokeWidth={1.5} class="text-blue-500" />
 		</div>
@@ -93,7 +77,7 @@
 		</div>
 	{/if}
 	<div class="mt-4 flex flex-col gap-4">
-		{#each visibleItems as item, index (index)}
+		{#each items as item (item.id)}
 			<div class="border-surface-container-low bg-surface rounded-3xl border px-6 py-6">
 				<div class="flex items-start justify-between gap-3">
 					<div class="flex flex-col gap-1">
@@ -114,7 +98,11 @@
 					</button>
 				</div>
 				<div class="mt-5 flex items-center gap-3">
-					<Switch bind:checked={item.isPublic} label={null} />
+					<Switch
+						bind:checked={item.isPublic}
+						onCheckedChange={() => onChangeVisibility(item)}
+						label={null}
+					/>
 					<p class="text-body2 text-on-surface/70 font-medium">เป็นสาธารณะ</p>
 				</div>
 			</div>

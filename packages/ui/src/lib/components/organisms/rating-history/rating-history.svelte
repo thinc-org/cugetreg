@@ -35,7 +35,7 @@
 			code: '0123101',
 			name: 'PARAGRAPH WRITING',
 			tag: 'หมวดมนุษย์',
-			status: Status.APPROVED,
+			status: Status.REJECTED,
 			rating: 3,
 			term: 'ภาคปลาย 2565'
 		},
@@ -194,6 +194,12 @@
 									class="text-caption rounded-full border border-amber-600 bg-amber-100 px-3 py-1 font-normal text-amber-600"
 								>
 									กำลังรออนุมัติ
+								</span>
+							{:else if review.status === Status.REJECTED}
+								<span
+									class="text-caption rounded-full border border-red-600 bg-red-100 px-3 py-1 font-normal text-red-600"
+								>
+									ไม่อนุมัติ
 								</span>
 							{/if}
 							<RatingStar rating={normalizeRating(review.rating)} size={16} gap={4} />

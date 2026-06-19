@@ -10,6 +10,7 @@
     parseSemesterDisplay,
     SEMESTER_LABEL_LONG,
   } from '$lib/semesterOptions';
+  import { loginPopupState } from '$lib/stores/login-popup.svelte';
   import { searchState } from '$lib/stores/search.svelte';
   import {
     CART_PROMISE_KEY,
@@ -398,7 +399,7 @@
 
   function isMismatch(): boolean {
     const currentCart = $userCart.currentCart;
-    if (!currentCart) return false;
+    if (!currentCart || !$session.data) return false;
     const isYearMismatch =
       String(currentCart.academicYear) !== String(expectedParams.academicYear);
     const isProgramMismatch =
@@ -408,6 +409,11 @@
   }
 
   function handleToggleCourse(courseItem: any) {
+    if (!$session.data) {
+      loginPopupState.show = true;
+      return;
+    }
+
     const { code, sections } = courseItem.course;
     const courseInSchedule = $userCart.currentCart?.items.find(
       (cls) => cls.courseNo === code,
@@ -454,6 +460,11 @@
   function handleSelectSection(courseItem: any, sectionNo: string) {
     const { code } = courseItem.course;
     localSelectedSections[code] = Number(sectionNo);
+
+    if (!$session.data) {
+      loginPopupState.show = true;
+      return;
+    }
 
     if (isMismatch()) {
       pendingCourse = { courseNo: code, sectionNo: Number(sectionNo) };

@@ -12,6 +12,7 @@
     ALLOWED_SEMESTER,
     SEMESTER_LABEL_LONG,
   } from '$lib/semesterOptions';
+  import { loginPopupState } from '$lib/stores/login-popup.svelte';
   import { getUserCartStore, useCartActions } from '$lib/stores/user-cart';
 
   import {
@@ -442,7 +443,7 @@
   });
 
   function isMismatch() {
-    if (!$userCart.currentCart) return false;
+    if (!$userCart.currentCart || !$session.data) return false;
     return (
       String($userCart.currentCart.academicYear) !==
         String(course.academicYear) ||
@@ -452,6 +453,11 @@
   }
 
   function handleSelectSection(section: any) {
+    if (!$session.data) {
+      loginPopupState.show = true;
+      return;
+    }
+
     if (isMismatch()) {
       pendingSection = section;
       showMismatchPopup = true;
@@ -832,12 +838,7 @@
                             boxed={true}
                             class="w-full"
                             selectedSection={globalSelectedSection}
-                            onSelectSection={(section) => {
-                              globalSelectedSection =
-                                globalSelectedSection === section
-                                  ? null
-                                  : section;
-                            }}
+                            onSelectSection={handleSelectSection}
                           />
                         </div>
 

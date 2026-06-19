@@ -16,6 +16,7 @@ import {
 } from '@cugetreg/zod-schemas/carts-response';
 import type { Semester, StudyProgram } from '@cugetreg/zod-schemas/constants';
 
+import { loginPopupState } from './login-popup.svelte';
 import { useContextStore } from './stores';
 
 export interface UserCartInterface {
@@ -59,9 +60,7 @@ export const { initStore: initUserCartStore, getStore: getUserCartStore } =
 function handleError(error: any) {
   if (isAxiosError(error)) {
     if (error.status === 401) {
-      toast.error('Please login before doing this action.', {
-        position: 'bottom-right',
-      });
+      loginPopupState.show = true;
       return;
     }
 

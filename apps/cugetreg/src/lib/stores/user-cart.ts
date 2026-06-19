@@ -197,7 +197,7 @@ export function useCartActions() {
   // Keep the module-level cachedCartId in sync so flushUpdates can read it
   // from an async context where getContext() is unavailable.
   userCart.subscribe((s) => {
-    cachedCartId = s.currentCartId;
+    cachedCartId = s?.currentCartId;
   });
 
   const pinCart = async () => {

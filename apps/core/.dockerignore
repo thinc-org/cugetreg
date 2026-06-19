@@ -1,0 +1,9 @@
+node_modules
+dist
+volumes
+src/generated
+.env
+.env.*
+!.env.example
+*.log
+bin/*.json

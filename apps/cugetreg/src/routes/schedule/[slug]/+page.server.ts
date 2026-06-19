@@ -1,3 +1,4 @@
+import { env } from '$env/dynamic/private';
 import { tryCatch } from '$lib/async-handler';
 
 import { error as svelteError } from '@sveltejs/kit';
@@ -6,8 +7,6 @@ import type { SemesterType } from '@cugetreg/utils/types';
 import { PublicCartDetailResponseSchema } from '@cugetreg/zod-schemas/public-carts-response';
 
 import type { PageServerLoad } from './$types';
-
-const API_URL = 'http://localhost:3000/api/v1/public/carts/';
 
 const toSemesterType = (studyProgram: string): SemesterType => {
   switch (studyProgram) {
@@ -23,6 +22,7 @@ const toSemesterType = (studyProgram: string): SemesterType => {
 };
 
 export const load: PageServerLoad = async ({ params, fetch }) => {
+  const API_URL = `${env.API_URL ?? 'http://localhost:3000'}/api/v1/public/carts/`;
   const cartId = params.slug;
 
   const [response, error] = await tryCatch(fetch(API_URL + cartId));

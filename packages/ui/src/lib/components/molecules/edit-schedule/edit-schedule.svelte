@@ -70,7 +70,7 @@
 </script>
 
 <div class={cn('flex space-x-2', className)}>
-	<select class="mx-1 rounded-xl border border-neutral-200 p-2" bind:value={currentScheduleId}>
+	<select class="rounded-xl border border-neutral-200 p-2 lg:mx-1" bind:value={currentScheduleId}>
 		{#each schedules as schedule (schedule.id)}
 			<option value={schedule.id}>{schedule.name}</option>
 		{/each}

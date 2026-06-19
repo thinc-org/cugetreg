@@ -593,6 +593,22 @@ export function useCartActions() {
     }
   };
 
+  const switchCart = async (cartId: string) => {
+    try {
+      const detailRes = await api.get(`/carts/${cartId}`);
+      const detail = CartDetailResponseSchema.parse(detailRes.data).data;
+
+      userCart.update((state) => ({
+        ...state,
+        currentCartId: cartId,
+        currentCart: detail.cart,
+        exams: detail.schedule.exams,
+      }));
+    } catch (error) {
+      handleError(error);
+    }
+  };
+
   return {
     renameCart,
     updateCartMeta,
@@ -603,5 +619,6 @@ export function useCartActions() {
     deleteCart,
     createCart,
     pinCart,
+    switchCart,
   };
 }

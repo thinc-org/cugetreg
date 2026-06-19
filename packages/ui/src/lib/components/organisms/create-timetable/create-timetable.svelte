@@ -17,12 +17,26 @@
 		onCancel?: () => void;
 		onConfirm?: (schedule: TimetableMetaData) => void;
 		shareLink?: string;
+		yearOptions?: { value: string; label: string }[];
+		semesterOptions?: { value: string; label: string }[];
 	}
 
 	let {
 		onCancel = () => {},
 		onConfirm = () => {},
-		shareLink = 'https://example.com/my-timetable'
+		shareLink = 'https://example.com/my-timetable',
+		yearOptions = [
+			{ value: '2568', label: '2568' },
+			{ value: '2567', label: '2567' },
+			{ value: '2566', label: '2566' },
+			{ value: '2565', label: '2565' },
+			{ value: '2564', label: '2564' }
+		],
+		semesterOptions = [
+			{ value: 'FIRST', label: '1' },
+			{ value: 'SECOND', label: '2' },
+			{ value: 'SUMMER', label: 'ฤดูร้อน' }
+		]
 	}: CreateTimetableProp = $props();
 
 	interface SystemInterface {
@@ -39,21 +53,10 @@
 
 	// TODO: Add formatter
 	// TODO: Connect it to somewhere
-	let selected_year = $state('2568');
-	const options_year = [
-		{ value: '2568', label: '2568' },
-		{ value: '2567', label: '2567' },
-		{ value: '2566', label: '2566' },
-		{ value: '2565', label: '2565' },
-		{ value: '2564', label: '2564' }
-	];
-
-	let selected_semester: '1' | '2' | '3' = $state('1');
-	let options_semester = [
-		{ value: '1', label: '1' },
-		{ value: '2', label: '2' },
-		{ value: '3', label: 'ฤดูร้อน' }
-	];
+	let selected_year = $state(yearOptions[0]?.value ?? '2568');
+	let selected_semester: 'FIRST' | 'SECOND' | 'SUMMER' = $state(
+		(semesterOptions[0]?.value as 'FIRST' | 'SECOND' | 'SUMMER') ?? 'FIRST'
+	);
 
 	let tableName = $state('ตารางเรียนแสนสนุก');
 	let currentLetter = $derived(tableName.length);
@@ -122,7 +125,7 @@
 
 				<SelectContent>
 					<SelectGroup>
-						{#each options_year as option (option.value)}
+						{#each yearOptions as option (option.value)}
 							<SelectItem value={option.value} label={option.label} aria-label={option.label}>
 								{option.label}
 							</SelectItem>
@@ -133,12 +136,12 @@
 
 			<Select type="single" bind:value={selected_semester}>
 				<SelectTrigger class="my-1 flex-1" aria-label="Select semester">
-					{selected_semester}
+					{semesterOptions.find((x) => x.value === selected_semester)?.label}
 				</SelectTrigger>
 
 				<SelectContent>
 					<SelectGroup>
-						{#each options_semester as option (option.value)}
+						{#each semesterOptions as option (option.value)}
 							<SelectItem value={option.value} label={option.label} aria-label={option.label}>
 								{option.label}
 							</SelectItem>

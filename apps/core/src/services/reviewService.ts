@@ -14,12 +14,6 @@ import {
   mapVoteType,
 } from "../utils/enumMapper.js";
 
-const semesterToNumber: Record<string, string> = {
-  FIRST: "1",
-  SECOND: "2",
-  SUMMER: "3",
-};
-
 export const reviewService = {
   submitReview: async (userId: string, newReview: SubmitReviewBodySchema) => {
     const course = await prisma.course.findFirst({
@@ -45,7 +39,7 @@ export const reviewService = {
     return {
       ...newReview,
       id: createdReview.id,
-      semester: semesterToNumber[createdReview.semester],
+      semester: createdReview.semester,
       status: createdReview.status,
       likeCount: 0,
       dislikeCount: 0,
@@ -172,7 +166,7 @@ export const reviewService = {
     return {
       id: reviewId,
       academicYear: updatedReview.academicYear,
-      semester: semesterToNumber[updatedReview.semester],
+      semester: updatedReview.semester,
       rating: updatedReview.rating,
       content: updatedReview.content,
       isOwner: true,

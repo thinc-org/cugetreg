@@ -4,9 +4,9 @@ import { semester, studyProgram, vote } from "./constants.js";
 
 export const SubmitReviewBodySchema = z.object({
   courseNo: z.string().regex(/^\d{7}$/),
-  studyProgram: z.enum(studyProgram),
+  studyProgram: studyProgram,
   academicYear: z.coerce.number().int().min(2564),
-  semester: z.enum(semester),
+  semester: semester,
   rating: z.coerce.number().int().min(1).max(10),
   content: z.string().nonempty(),
 });
@@ -14,14 +14,14 @@ export const SubmitReviewBodySchema = z.object({
 export type SubmitReviewBodySchema = z.output<typeof SubmitReviewBodySchema>;
 
 export const VoteReviewBodySchema = z.object({
-  interaction: z.enum(vote),
+  interaction: vote,
 });
 
 export type VoteReviewBodySchema = z.output<typeof VoteReviewBodySchema>;
 
 export const EditReviewBodySchema = z.object({
   academicYear: z.coerce.number().int().min(2564),
-  semester: z.enum(semester),
+  semester: semester,
   rating: z.coerce.number().int().min(1).max(10),
   content: z.string().nonempty(),
 });

@@ -80,7 +80,10 @@
   const cartPromise = (() => data.cart)();
 
   cartPromise.then(
-    (cart) => userCart.set(cart),
+    (cart) => {
+      if (cart) userCart.set(cart);
+      return cart;
+    },
     (err) => console.error('[layout] failed to load cart:', err),
   );
 
@@ -94,7 +97,6 @@
     if (!currentId || currentId === lastFetchedId) return;
 
     const fetchCurrentSchedule = async (id: string) => {
-      // TODO: Move this
       const [response, error] = await tryCatch(
         api.get(`/carts/${id}`, {
           headers: {

@@ -1,4 +1,8 @@
 <script lang="ts">
+  import {
+    getSemesterShortOptions,
+    getYearOptions,
+  } from '$lib/semesterOptions';
   import { useCartActions } from '$lib/stores/user-cart';
 
   import { Plus } from '@lucide/svelte';
@@ -81,11 +85,8 @@
 
   const { createCart } = useCartActions();
 
-  const semesterMapping: Record<string, string> = {
-    '1': 'FIRST',
-    '2': 'SECOND',
-    '3': 'SUMMER',
-  };
+  const yearOptions = getYearOptions();
+  const semesterOptions = getSemesterShortOptions();
 
   $effect(() => {
     if (selectedId === 'NEW') {
@@ -179,10 +180,12 @@
     bind:show={showCreateScheduleModal}
   >
     <CreateTimetable
+      {yearOptions}
+      {semesterOptions}
       onConfirm={async (schedule: TimetableMetaData) => {
         if (
           String(schedule.academicYear) !== String(expectedYear) ||
-          semesterMapping[schedule.semester] !== expectedSemester ||
+          schedule.semester !== expectedSemester ||
           schedule.semesterType !== expectedProgram
         ) {
           return;

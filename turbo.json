@@ -20,6 +20,7 @@
       "dependsOn": ["^check-types"]
     },
     "dev": {
+      "dependsOn": ["prepack"],
       "env": ["DATABASE_URL", "PUBLIC_API_URL"],
       "persistent": true,
       "cache": false

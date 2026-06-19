@@ -2,11 +2,13 @@ import { z } from "zod";
 
 import { reviewStatus } from "./constants.js";
 
-export const GetUserReviewsQuerySchema = z.object({
-  page: z.coerce.number().int().min(1),
-  limit: z.coerce.number().int().min(1),
-  status: reviewStatus,
-});
+export const GetUserReviewsQuerySchema = z
+  .object({
+    page: z.coerce.number().int().min(1),
+    limit: z.coerce.number().int().min(1),
+    status: reviewStatus.optional(),
+  })
+  .strict();
 
 export type GetUserReviewsQuery = z.infer<typeof GetUserReviewsQuerySchema>;
 

@@ -40,20 +40,48 @@ export const usersService = {
   getUserReviews: async (userId: string, query: GetUserReviewsQuery) => {
     const { page, limit, status } = query;
     const offset = (page - 1) * limit;
-    return prisma.review.findMany({
+    const reviews = await prisma.review.findMany({
       omit: {
         userId: true,
         updatedAt: true,
       },
+      include: {
+        courseInfo: {
+          select: {
+            abbrName: true,
+            courses: {
+              select: {
+                genEdType: true,
+              },
+              take: 1,
+            },
+          },
+        },
+      },
       where: {
         userId,
-        status: mapReviewStatus(status),
+        status: status ? mapReviewStatus(status) : undefined,
       },
       skip: offset,
       take: limit,
       orderBy: {
         createdAt: "desc",
       },
+    });
+
+    return reviews.map((review) => {
+      const {
+        courseInfo: {
+          abbrName,
+          courses: [{ genEdType }],
+        },
+        ...r
+      } = review;
+      return {
+        ...r,
+        courseAbbrName: abbrName,
+        genEdType,
+      };
     });
   },
   updateUserInfo: async (userId: string, body: UpdateUserInfoBody) => {

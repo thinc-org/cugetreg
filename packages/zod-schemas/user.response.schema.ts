@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { reviewStatus, semester, studyProgram } from "./constants.js";
+import { genEdType, reviewStatus, semester, studyProgram } from "./constants.js";
 
 export const UserResponseSchema = z.object({
   id: z.string().regex(/^\d{10}$/),
@@ -21,6 +21,8 @@ export const UserReviewResponseSchema = z.object({
     z.object({
       id: z.string(),
       courseNo: z.string().regex(/^\d{7}$/),
+      courseAbbrName: z.string().nonempty(),
+      genEdType: genEdType,
       studyProgram: studyProgram,
       academicYear: z.int().min(2564),
       semester: semester,

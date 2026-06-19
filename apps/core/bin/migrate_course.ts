@@ -7,7 +7,7 @@ import {
   safeFsJsonRead,
 } from "./migrate_service.js";
 
-import { GenEdType } from "../src/generated/prisma/client.js";
+import type { GenEdType } from "../src/generated/prisma/client.js";
 import { mapGenEdType } from "../src/utils/enumMapper.js";
 
 export async function runCourseMigration() {
@@ -25,14 +25,12 @@ export async function runCourseMigration() {
   // Step 1: bulk-insert CourseInfo in batches of 5k
   const totalBatches = Math.ceil(coursesData.length / 5_000);
   for (let b = 0; b < totalBatches; b++) {
-    process.stdout.write(
-      `\r  CourseInfo  batch ${b + 1}/${totalBatches}...`,
-    );
-    await bulkMigrateCourseInfo(
-      coursesData.slice(b * 5_000, (b + 1) * 5_000),
-    );
+    process.stdout.write(`\r  CourseInfo  batch ${b + 1}/${totalBatches}...`);
+    await bulkMigrateCourseInfo(coursesData.slice(b * 5_000, (b + 1) * 5_000));
   }
-  process.stdout.write(`\r  CourseInfo  ✔ all ${coursesData.length} rows inserted\n`);
+  process.stdout.write(
+    `\r  CourseInfo  ✔ all ${coursesData.length} rows inserted\n`,
+  );
 
   // Step 2: courses → sections → classes via createManyAndReturn
   let lastStep = "";
@@ -41,7 +39,9 @@ export async function runCourseMigration() {
     genEdOverrideByCourseNo as Record<string, GenEdType>,
     (step, done, total) => {
       if (step !== lastStep) {
-        if (lastStep) process.stdout.write("\n");
+        if (lastStep) {
+          process.stdout.write("\n");
+        }
         lastStep = step;
       }
       const pct = total > 0 ? Math.round((done / total) * 100) : 100;
@@ -50,7 +50,11 @@ export async function runCourseMigration() {
       );
     },
   );
-  if (lastStep) process.stdout.write("\n");
+  if (lastStep) {
+    process.stdout.write("\n");
+  }
 
-  console.log(`  ✔ Created ${created} new courses, skipped ${skipped} existing`);
+  console.log(
+    `  ✔ Created ${created} new courses, skipped ${skipped} existing`,
+  );
 }

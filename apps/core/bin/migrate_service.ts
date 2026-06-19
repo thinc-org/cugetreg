@@ -29,9 +29,13 @@ export function parseExamDate(
   dateStr: string | undefined,
   timeStr: string | undefined,
 ) {
-  if (!dateStr || !timeStr) return null;
+  if (!dateStr || !timeStr) {
+    return null;
+  }
   let d = dayjs(dateStr);
-  if (d.year() > 2400) d = d.subtract(543, "year");
+  if (d.year() > 2400) {
+    d = d.subtract(543, "year");
+  }
   const [hours, minutes] = timeStr.split(":").map(Number);
   return d.startOf("day").add(hours, "hours").add(minutes, "minutes").toDate();
 }
@@ -58,25 +62,25 @@ function courseKey(c: {
 
 export async function bulkMigrateCourseInfo(coursesData: Course[]) {
   await prisma.courseInfo.createMany({
-      data: coursesData.map((data) => ({
-        courseNo: data.courseNo,
-        abbrName: data.abbrName,
-        courseNameEn: data.courseNameEn,
-        courseNameTh: data.courseNameTh,
-        courseDescEn: data.courseDescEn ?? null,
-        courseDescTh: data.courseDescTh ?? null,
-        faculty: data.faculty ?? null,
-        department: data.department ?? null,
-        credit: new Prisma.Decimal(data.credit),
-        creditHours: data.creditHours ?? null,
-        gradingType: data.creditHours?.includes("S/U")
-          ? GradingType.SU
-          : GradingType.LETTER,
-        academicYear: parseInt(data.academicYear),
-        semester: mapSemester(data.semester),
-        studyProgram: mapStudyProgram(data.studyProgram),
-      })),
-      skipDuplicates: true,
+    data: coursesData.map((data) => ({
+      courseNo: data.courseNo,
+      abbrName: data.abbrName,
+      courseNameEn: data.courseNameEn,
+      courseNameTh: data.courseNameTh,
+      courseDescEn: data.courseDescEn ?? null,
+      courseDescTh: data.courseDescTh ?? null,
+      faculty: data.faculty ?? null,
+      department: data.department ?? null,
+      credit: new Prisma.Decimal(data.credit),
+      creditHours: data.creditHours ?? null,
+      gradingType: data.creditHours?.includes("S/U")
+        ? GradingType.SU
+        : GradingType.LETTER,
+      academicYear: parseInt(data.academicYear),
+      semester: mapSemester(data.semester),
+      studyProgram: mapStudyProgram(data.studyProgram),
+    })),
+    skipDuplicates: true,
   });
 }
 
@@ -196,7 +200,9 @@ export async function bulkMigrateCoursesWithSections(
         courseNo: c.courseNo,
       }),
     );
-    if (!courseId) continue;
+    if (!courseId) {
+      continue;
+    }
     const currentGenEd =
       genEdOverrideByCourseNo[c.courseNo] ?? ("NO" as GenEdType);
     for (const sec of c.sections) {
@@ -239,11 +245,7 @@ export async function bulkMigrateCoursesWithSections(
         allClassRecords.push({ ...cls, sectionId: sec.id });
       }
     });
-    onProgress(
-      "sections",
-      i + batch.length,
-      sectionMetas.length,
-    );
+    onProgress("sections", i + batch.length, sectionMetas.length);
   }
 
   // 4. Bulk-insert all classes

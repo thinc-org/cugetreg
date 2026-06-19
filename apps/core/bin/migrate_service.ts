@@ -49,125 +49,151 @@ export function safeFsJsonRead<T>(path: string): T {
   }
 }
 
-export async function migrateCourse(data: Course, currentGenEd: GenEdType) {
-  try {
-    const gradingType =
-      data.creditHours && data.creditHours.includes("S/U")
+// ── Bulk: CourseInfo ──────────────────────────────────────────────────────────
+// One INSERT ... ON CONFLICT DO NOTHING for the entire dataset.
+
+export async function bulkMigrateCourseInfo(coursesData: Course[]) {
+  await prisma.courseInfo.createMany({
+    data: coursesData.map((data) => ({
+      courseNo: data.courseNo,
+      abbrName: data.abbrName,
+      courseNameEn: data.courseNameEn,
+      courseNameTh: data.courseNameTh,
+      courseDescEn: data.courseDescEn ?? null,
+      courseDescTh: data.courseDescTh ?? null,
+      faculty: data.faculty ?? null,
+      department: data.department ?? null,
+      credit: new Prisma.Decimal(data.credit),
+      creditHours: data.creditHours ?? null,
+      gradingType: data.creditHours?.includes("S/U")
         ? GradingType.SU
-        : GradingType.LETTER;
+        : GradingType.LETTER,
+      academicYear: parseInt(data.academicYear),
+      semester: mapSemester(data.semester),
+      studyProgram: mapStudyProgram(data.studyProgram),
+    })),
+    skipDuplicates: true,
+  });
+}
 
-    await prisma.courseInfo.upsert({
-      where: { courseNo: data.courseNo },
-      update: {
-        abbrName: data.abbrName,
-        courseNameEn: data.courseNameEn,
-        courseNameTh: data.courseNameTh,
-        courseDescEn: data.courseDescEn,
-        courseDescTh: data.courseDescTh,
-        faculty: data.faculty || null,
-        department: data.department || null,
-        credit: new Prisma.Decimal(data.credit),
-        creditHours: data.creditHours || null,
-        gradingType,
-        academicYear: parseInt(data.academicYear),
-        semester: mapSemester(data.semester),
-        studyProgram: mapStudyProgram(data.studyProgram),
-      },
-      create: {
-        courseNo: data.courseNo,
-        abbrName: data.abbrName,
-        courseNameEn: data.courseNameEn,
-        courseNameTh: data.courseNameTh,
-        courseDescEn: data.courseDescEn,
-        courseDescTh: data.courseDescTh,
-        faculty: data.faculty || null,
-        department: data.department || null,
-        credit: new Prisma.Decimal(data.credit),
-        creditHours: data.creditHours || null,
-        gradingType,
-        academicYear: parseInt(data.academicYear),
-        semester: mapSemester(data.semester),
-        studyProgram: mapStudyProgram(data.studyProgram),
-      },
-    });
+// ── Bulk: Course + Section + SectionClass ─────────────────────────────────────
+// Fetches existing courses in one query, then batches new ones into $transaction
+// groups so sections/classes get their courseId/sectionId from nested creates.
 
-    await prisma.course.upsert({
-      where: {
-        course_unique: {
-          courseNo: data.courseNo,
-          academicYear: parseInt(data.academicYear),
-          semester: mapSemester(data.semester),
-          studyProgram: mapStudyProgram(data.studyProgram),
-        },
-      },
-      update: {},
-      create: {
-        courseNo: data.courseNo,
-        academicYear: parseInt(data.academicYear),
-        semester: mapSemester(data.semester),
-        studyProgram: mapStudyProgram(data.studyProgram),
-        courseCondition: data.courseCondition,
-        midtermStart: parseExamDate(
-          data.midterm?.date,
-          data.midterm?.period?.start,
-        ),
-        midtermEnd: parseExamDate(
-          data.midterm?.date,
-          data.midterm?.period?.end,
-        ),
-        finalStart: parseExamDate(data.final?.date, data.final?.period?.start),
-        finalEnd: parseExamDate(data.final?.date, data.final?.period?.end),
-        genEdType: currentGenEd,
-        sections: {
-          create: data.sections.map((sec) => ({
-            sectionNo: parseInt(sec.sectionNo),
-            closed: sec.closed,
-            regis: sec.capacity.current,
-            max: sec.capacity.max,
-            note: sec.note,
+const COURSE_BATCH = 200;
+
+export async function bulkMigrateCoursesWithSections(
+  coursesData: Course[],
+  genEdOverrideByCourseNo: Record<string, GenEdType>,
+  onProgress: (done: number, total: number) => void,
+): Promise<{ created: number; skipped: number }> {
+  const existing = await prisma.course.findMany({
+    select: {
+      courseNo: true,
+      academicYear: true,
+      semester: true,
+      studyProgram: true,
+    },
+  });
+  const existingSet = new Set(
+    existing.map(
+      (c) => `${c.studyProgram}|${c.academicYear}|${c.semester}|${c.courseNo}`,
+    ),
+  );
+
+  const newCourses = coursesData.filter(
+    (c) =>
+      !existingSet.has(
+        `${mapStudyProgram(c.studyProgram)}|${parseInt(c.academicYear)}|${mapSemester(c.semester)}|${c.courseNo}`,
+      ),
+  );
+
+  let done = 0;
+  for (let i = 0; i < newCourses.length; i += COURSE_BATCH) {
+    const batch = newCourses.slice(i, i + COURSE_BATCH);
+    await prisma.$transaction(
+      batch.map((data) => {
+        const currentGenEd =
+          genEdOverrideByCourseNo[data.courseNo] ?? ("NO" as GenEdType);
+        return prisma.course.create({
+          data: {
+            courseNo: data.courseNo,
+            academicYear: parseInt(data.academicYear),
+            semester: mapSemester(data.semester),
+            studyProgram: mapStudyProgram(data.studyProgram),
+            courseCondition: data.courseCondition,
+            midtermStart: parseExamDate(
+              data.midterm?.date,
+              data.midterm?.period?.start,
+            ),
+            midtermEnd: parseExamDate(
+              data.midterm?.date,
+              data.midterm?.period?.end,
+            ),
+            finalStart: parseExamDate(
+              data.final?.date,
+              data.final?.period?.start,
+            ),
+            finalEnd: parseExamDate(
+              data.final?.date,
+              data.final?.period?.end,
+            ),
             genEdType: currentGenEd,
-            classes: {
-              create: sec.classes.map((cls) => ({
-                type: cls.type,
-                dayOfWeek: mapDayOfWeek(cls.dayOfWeek),
-                periodStart: cls.period.start,
-                periodEnd: cls.period.end,
-                building: cls.building,
-                room: cls.room,
-                professors: cls.teachers,
+            sections: {
+              create: data.sections.map((sec) => ({
+                sectionNo: parseInt(sec.sectionNo),
+                closed: sec.closed,
+                regis: sec.capacity.current,
+                max: sec.capacity.max,
+                note: sec.note,
+                genEdType: currentGenEd,
+                classes: {
+                  create: sec.classes.map((cls) => ({
+                    type: cls.type,
+                    dayOfWeek: mapDayOfWeek(cls.dayOfWeek),
+                    periodStart: cls.period.start,
+                    periodEnd: cls.period.end,
+                    building: cls.building,
+                    room: cls.room,
+                    professors: cls.teachers,
+                  })),
+                },
               })),
             },
-          })),
-        },
-      },
-    });
-  } catch (err) {
-    console.error(`Skipping ${data.courseNo}: ${(err as Error).message}`);
+          },
+        });
+      }),
+      { timeout: 60_000 },
+    );
+    done += batch.length;
+    onProgress(done, newCourses.length);
   }
+
+  return { created: newCourses.length, skipped: existing.length };
 }
 
-export async function migrateReview(item: Review) {
-  try {
-    await prisma.review.upsert({
-      where: { id: item._id.$oid },
-      update: {},
-      create: {
-        id: item._id.$oid,
-        content: item.content,
-        rating: item.rating,
-        courseNo: item.courseNo,
-        academicYear: parseInt(item.academicYear),
-        semester: mapSemester(item.semester),
-        studyProgram: mapStudyProgram(item.studyProgram),
-        status: item.status,
-        rejectionReason: item.rejectionReason || null,
-        user: { connect: { id: item.ownerId.$oid } },
-      },
-    });
-  } catch (err) {
-    console.error(`Failed to migrate review: ${(err as Error).message}`);
-  }
+// ── Bulk: Review ──────────────────────────────────────────────────────────────
+// Single INSERT ... ON CONFLICT DO NOTHING for all reviews.
+
+export async function bulkMigrateReviews(reviewsData: Review[]) {
+  return prisma.review.createMany({
+    data: reviewsData.map((item) => ({
+      id: item._id.$oid,
+      content: item.content,
+      rating: item.rating,
+      courseNo: item.courseNo,
+      academicYear: parseInt(item.academicYear),
+      semester: mapSemester(item.semester),
+      studyProgram: mapStudyProgram(item.studyProgram),
+      status: item.status,
+      rejectionReason: item.rejectionReason ?? null,
+      userId: item.ownerId.$oid,
+    })),
+    skipDuplicates: true,
+  });
 }
+
+// ── Per-user migration (kept for cart/cartItem nested logic) ──────────────────
 
 export async function migrateUser(mongoUser: MongoUser) {
   try {

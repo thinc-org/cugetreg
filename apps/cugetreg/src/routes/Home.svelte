@@ -27,6 +27,7 @@
   import { Filter as FilterBar } from '@cugetreg/ui/organisms/filter-bar';
   import { Footer } from '@cugetreg/ui/organisms/footer';
   import * as Sidebar from '@cugetreg/ui/organisms/sidebar';
+  import { loginPopupState } from '$lib/stores/login-popup.svelte';
 
   let courses = $state.raw<any[]>([]);
   let isLoading = $state(false);
@@ -416,6 +417,11 @@
   }
 
   function handleToggleCourse(courseItem: any) {
+    if (!$session.data) {
+      loginPopupState.show = true;
+      return;
+    }
+
     const { code, sections } = courseItem.course;
     const courseInSchedule = $userCart.currentCart?.items.find(
       (cls) => cls.courseNo === code,
@@ -462,6 +468,11 @@
   function handleSelectSection(courseItem: any, sectionNo: string) {
     const { code } = courseItem.course;
     localSelectedSections[code] = Number(sectionNo);
+
+    if (!$session.data) {
+      loginPopupState.show = true;
+      return;
+    }
 
     if (isMismatch()) {
       pendingCourse = { courseNo: code, sectionNo: Number(sectionNo) };

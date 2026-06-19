@@ -830,12 +830,7 @@
                             boxed={true}
                             class="w-full"
                             selectedSection={globalSelectedSection}
-                            onSelectSection={(section) => {
-                              globalSelectedSection =
-                                globalSelectedSection === section
-                                  ? null
-                                  : section;
-                            }}
+                            onSelectSection={handleSelectSection}
                           />
                         </div>
 

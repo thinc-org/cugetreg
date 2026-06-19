@@ -1,3 +1,4 @@
+import { env } from '$env/dynamic/private';
 import { tryCatch } from '$lib/async-handler';
 import type { UserCartInterface } from '$lib/stores/user-cart';
 
@@ -13,20 +14,18 @@ import {
 
 import type { LayoutServerLoad } from './$types';
 
-const API_URL = 'http://localhost:3000/api/v1/carts';
-
-export const load: LayoutServerLoad = () => {
-  return { cart: loadCart() };
+export const load: LayoutServerLoad = ({ fetch }) => {
+  return { cart: loadCart(fetch) };
 };
 
-async function loadCart() {
-  // const [response, error] = await tryCatch(axios.get(API_URL));
-  //
-  // if (error || !response) {
-  //   throw svelteError(500, 'Something went wrong');
-  // }
-  //
+async function loadCart(fetch: typeof globalThis.fetch) {
+  const API_URL = `${env.API_URL ?? 'http://localhost:3000'}/api/v1/carts`;
   const response = await fetch(`${API_URL}`);
+
+  // 401/403 means the user is not logged in — return null so the layout renders without cart data
+  if (response.status === 401 || response.status === 403) {
+    return null;
+  }
 
   if (!response || !response.ok) {
     throw svelteError(500, 'Something went wrong fetching carts');

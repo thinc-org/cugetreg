@@ -1,4 +1,3 @@
-import cliProgress from "cli-progress";
 import * as R from "remeda";
 
 import type { Course, CourseOverride } from "./migrate_interface.js";
@@ -23,27 +22,35 @@ export async function runCourseMigration() {
 
   console.log(`  Found ${coursesData.length} courses`);
 
-  // Step 1: bulk-insert all CourseInfo in one query
-  process.stdout.write("  CourseInfo  inserting...");
-  await bulkMigrateCourseInfo(coursesData);
-  process.stdout.write(" done\n");
+  // Step 1: bulk-insert CourseInfo in batches of 5k
+  const totalBatches = Math.ceil(coursesData.length / 5_000);
+  for (let b = 0; b < totalBatches; b++) {
+    process.stdout.write(
+      `\r  CourseInfo  batch ${b + 1}/${totalBatches}...`,
+    );
+    await bulkMigrateCourseInfo(
+      coursesData.slice(b * 5_000, (b + 1) * 5_000),
+    );
+  }
+  process.stdout.write(`\r  CourseInfo  ✔ all ${coursesData.length} rows inserted\n`);
 
-  // Step 2: find what's new, then batch-insert Course + Section + SectionClass
-  const bar = new cliProgress.SingleBar(
-    { format: "  Courses    [{bar}] {value}/{total} ({percentage}%)" },
-    cliProgress.Presets.shades_classic,
-  );
-  bar.start(0, 0);
-
+  // Step 2: courses → sections → classes via createManyAndReturn
+  let lastStep = "";
   const { created, skipped } = await bulkMigrateCoursesWithSections(
     coursesData,
     genEdOverrideByCourseNo as Record<string, GenEdType>,
-    (done, total) => {
-      bar.setTotal(total);
-      bar.update(done);
+    (step, done, total) => {
+      if (step !== lastStep) {
+        if (lastStep) process.stdout.write("\n");
+        lastStep = step;
+      }
+      const pct = total > 0 ? Math.round((done / total) * 100) : 100;
+      process.stdout.write(
+        `\r  ${step.padEnd(12)} ${String(done).padStart(7)}/${total} (${pct}%)`,
+      );
     },
   );
+  if (lastStep) process.stdout.write("\n");
 
-  bar.stop();
-  console.log(`  Created ${created} new courses, skipped ${skipped} existing`);
+  console.log(`  ✔ Created ${created} new courses, skipped ${skipped} existing`);
 }

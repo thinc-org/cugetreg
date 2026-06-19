@@ -29,64 +29,76 @@ export function parseExamDate(
   dateStr: string | undefined,
   timeStr: string | undefined,
 ) {
-  if (!dateStr || !timeStr) {
-    return null;
-  }
+  if (!dateStr || !timeStr) return null;
   let d = dayjs(dateStr);
-  if (d.year() > 2400) {
-    d = d.subtract(543, "year");
-  }
+  if (d.year() > 2400) d = d.subtract(543, "year");
   const [hours, minutes] = timeStr.split(":").map(Number);
   return d.startOf("day").add(hours, "hours").add(minutes, "minutes").toDate();
 }
 
 export function safeFsJsonRead<T>(path: string): T {
   try {
-    const content = fs.readFileSync(path, "utf-8");
-    return JSON.parse(content) as T;
+    return JSON.parse(fs.readFileSync(path, "utf-8")) as T;
   } catch (e) {
     throw new Error(`Failed to read/parse ${path}`, { cause: e });
   }
 }
 
+function courseKey(c: {
+  studyProgram: string;
+  academicYear: string | number;
+  semester: string;
+  courseNo: string;
+}) {
+  return `${c.studyProgram}|${c.academicYear}|${c.semester}|${c.courseNo}`;
+}
+
 // ── Bulk: CourseInfo ──────────────────────────────────────────────────────────
-// One INSERT ... ON CONFLICT DO NOTHING for the entire dataset.
+// Called with a pre-sliced batch from migrate_course.ts (5k rows at a time).
 
 export async function bulkMigrateCourseInfo(coursesData: Course[]) {
   await prisma.courseInfo.createMany({
-    data: coursesData.map((data) => ({
-      courseNo: data.courseNo,
-      abbrName: data.abbrName,
-      courseNameEn: data.courseNameEn,
-      courseNameTh: data.courseNameTh,
-      courseDescEn: data.courseDescEn ?? null,
-      courseDescTh: data.courseDescTh ?? null,
-      faculty: data.faculty ?? null,
-      department: data.department ?? null,
-      credit: new Prisma.Decimal(data.credit),
-      creditHours: data.creditHours ?? null,
-      gradingType: data.creditHours?.includes("S/U")
-        ? GradingType.SU
-        : GradingType.LETTER,
-      academicYear: parseInt(data.academicYear),
-      semester: mapSemester(data.semester),
-      studyProgram: mapStudyProgram(data.studyProgram),
-    })),
-    skipDuplicates: true,
+      data: coursesData.map((data) => ({
+        courseNo: data.courseNo,
+        abbrName: data.abbrName,
+        courseNameEn: data.courseNameEn,
+        courseNameTh: data.courseNameTh,
+        courseDescEn: data.courseDescEn ?? null,
+        courseDescTh: data.courseDescTh ?? null,
+        faculty: data.faculty ?? null,
+        department: data.department ?? null,
+        credit: new Prisma.Decimal(data.credit),
+        creditHours: data.creditHours ?? null,
+        gradingType: data.creditHours?.includes("S/U")
+          ? GradingType.SU
+          : GradingType.LETTER,
+        academicYear: parseInt(data.academicYear),
+        semester: mapSemester(data.semester),
+        studyProgram: mapStudyProgram(data.studyProgram),
+      })),
+      skipDuplicates: true,
   });
 }
 
 // ── Bulk: Course + Section + SectionClass ─────────────────────────────────────
-// Fetches existing courses in one query, then batches new ones into $transaction
-// groups so sections/classes get their courseId/sectionId from nested creates.
+// 4 queries total:
+//   1. find existing course keys
+//   2. createManyAndReturn courses  → get auto-generated course IDs
+//   3. createManyAndReturn sections → get auto-generated section IDs
+//   4. createMany classes
+// All batched to keep individual payloads under ~20k rows.
 
-const COURSE_BATCH = 200;
+const COURSE_BATCH = 5_000;
+const SECTION_BATCH = 20_000;
+const CLASS_BATCH = 50_000;
 
 export async function bulkMigrateCoursesWithSections(
   coursesData: Course[],
   genEdOverrideByCourseNo: Record<string, GenEdType>,
-  onProgress: (done: number, total: number) => void,
+  onProgress: (step: string, done: number, total: number) => void,
 ): Promise<{ created: number; skipped: number }> {
+  // 1. Find existing courses in one query
+  onProgress("checking existing", 0, 1);
   const existing = await prisma.course.findMany({
     select: {
       courseNo: true,
@@ -96,84 +108,156 @@ export async function bulkMigrateCoursesWithSections(
     },
   });
   const existingSet = new Set(
-    existing.map(
-      (c) => `${c.studyProgram}|${c.academicYear}|${c.semester}|${c.courseNo}`,
+    existing.map((c) =>
+      courseKey({
+        ...c,
+        academicYear: String(c.academicYear),
+        semester: String(c.semester),
+        studyProgram: String(c.studyProgram),
+      }),
     ),
   );
 
   const newCourses = coursesData.filter(
     (c) =>
       !existingSet.has(
-        `${mapStudyProgram(c.studyProgram)}|${parseInt(c.academicYear)}|${mapSemester(c.semester)}|${c.courseNo}`,
+        courseKey({
+          studyProgram: mapStudyProgram(c.studyProgram),
+          academicYear: String(parseInt(c.academicYear)),
+          semester: mapSemester(c.semester),
+          courseNo: c.courseNo,
+        }),
       ),
   );
 
-  let done = 0;
+  if (newCourses.length === 0) {
+    return { created: 0, skipped: existing.length };
+  }
+
+  // 2. Bulk-insert courses, get IDs back
+  const courseIdMap = new Map<string, string>();
   for (let i = 0; i < newCourses.length; i += COURSE_BATCH) {
     const batch = newCourses.slice(i, i + COURSE_BATCH);
-    await prisma.$transaction(
-      batch.map((data) => {
+    const created = await prisma.course.createManyAndReturn({
+      data: batch.map((data) => {
         const currentGenEd =
           genEdOverrideByCourseNo[data.courseNo] ?? ("NO" as GenEdType);
-        return prisma.course.create({
-          data: {
-            courseNo: data.courseNo,
-            academicYear: parseInt(data.academicYear),
-            semester: mapSemester(data.semester),
-            studyProgram: mapStudyProgram(data.studyProgram),
-            courseCondition: data.courseCondition,
-            midtermStart: parseExamDate(
-              data.midterm?.date,
-              data.midterm?.period?.start,
-            ),
-            midtermEnd: parseExamDate(
-              data.midterm?.date,
-              data.midterm?.period?.end,
-            ),
-            finalStart: parseExamDate(
-              data.final?.date,
-              data.final?.period?.start,
-            ),
-            finalEnd: parseExamDate(
-              data.final?.date,
-              data.final?.period?.end,
-            ),
-            genEdType: currentGenEd,
-            sections: {
-              create: data.sections.map((sec) => ({
-                sectionNo: parseInt(sec.sectionNo),
-                closed: sec.closed,
-                regis: sec.capacity.current,
-                max: sec.capacity.max,
-                note: sec.note,
-                genEdType: currentGenEd,
-                classes: {
-                  create: sec.classes.map((cls) => ({
-                    type: cls.type,
-                    dayOfWeek: mapDayOfWeek(cls.dayOfWeek),
-                    periodStart: cls.period.start,
-                    periodEnd: cls.period.end,
-                    building: cls.building,
-                    room: cls.room,
-                    professors: cls.teachers,
-                  })),
-                },
-              })),
-            },
-          },
-        });
+        return {
+          courseNo: data.courseNo,
+          academicYear: parseInt(data.academicYear),
+          semester: mapSemester(data.semester),
+          studyProgram: mapStudyProgram(data.studyProgram),
+          courseCondition: data.courseCondition,
+          midtermStart: parseExamDate(
+            data.midterm?.date,
+            data.midterm?.period?.start,
+          ),
+          midtermEnd: parseExamDate(
+            data.midterm?.date,
+            data.midterm?.period?.end,
+          ),
+          finalStart: parseExamDate(
+            data.final?.date,
+            data.final?.period?.start,
+          ),
+          finalEnd: parseExamDate(data.final?.date, data.final?.period?.end),
+          genEdType: currentGenEd,
+        };
       }),
-      { timeout: 60_000 },
+      skipDuplicates: true,
+    });
+    created.forEach((c) =>
+      courseIdMap.set(
+        courseKey({
+          studyProgram: String(c.studyProgram),
+          academicYear: String(c.academicYear),
+          semester: String(c.semester),
+          courseNo: c.courseNo,
+        }),
+        c.id,
+      ),
     );
-    done += batch.length;
-    onProgress(done, newCourses.length);
+    onProgress("courses", i + batch.length, newCourses.length);
+  }
+
+  // 3. Build section records (with courseId) then bulk-insert, get IDs back
+  type SectionMeta = {
+    record: Parameters<typeof prisma.section.create>[0]["data"];
+    classRecords: Parameters<typeof prisma.sectionClass.create>[0]["data"][];
+  };
+
+  const sectionMetas: SectionMeta[] = [];
+  for (const c of newCourses) {
+    const courseId = courseIdMap.get(
+      courseKey({
+        studyProgram: mapStudyProgram(c.studyProgram),
+        academicYear: String(parseInt(c.academicYear)),
+        semester: mapSemester(c.semester),
+        courseNo: c.courseNo,
+      }),
+    );
+    if (!courseId) continue;
+    const currentGenEd =
+      genEdOverrideByCourseNo[c.courseNo] ?? ("NO" as GenEdType);
+    for (const sec of c.sections) {
+      sectionMetas.push({
+        record: {
+          courseId,
+          sectionNo: parseInt(sec.sectionNo),
+          closed: sec.closed,
+          regis: sec.capacity.current,
+          max: sec.capacity.max,
+          note: sec.note,
+          genEdType: currentGenEd,
+        },
+        classRecords: sec.classes.map((cls) => ({
+          sectionId: "", // filled in after section insert
+          type: cls.type,
+          dayOfWeek: mapDayOfWeek(cls.dayOfWeek),
+          periodStart: cls.period.start,
+          periodEnd: cls.period.end,
+          building: cls.building,
+          room: cls.room,
+          professors: cls.teachers,
+        })),
+      });
+    }
+  }
+
+  const allClassRecords: Parameters<
+    typeof prisma.sectionClass.createMany
+  >[0]["data"] = [];
+
+  for (let i = 0; i < sectionMetas.length; i += SECTION_BATCH) {
+    const batch = sectionMetas.slice(i, i + SECTION_BATCH);
+    const createdSections = await prisma.section.createManyAndReturn({
+      data: batch.map((s) => s.record),
+    });
+    // createManyAndReturn preserves insertion order — match by index
+    createdSections.forEach((sec, j) => {
+      for (const cls of batch[j]!.classRecords) {
+        allClassRecords.push({ ...cls, sectionId: sec.id });
+      }
+    });
+    onProgress(
+      "sections",
+      i + batch.length,
+      sectionMetas.length,
+    );
+  }
+
+  // 4. Bulk-insert all classes
+  for (let i = 0; i < allClassRecords.length; i += CLASS_BATCH) {
+    await prisma.sectionClass.createMany({
+      data: allClassRecords.slice(i, i + CLASS_BATCH),
+    });
+    onProgress("classes", i + CLASS_BATCH, allClassRecords.length);
   }
 
   return { created: newCourses.length, skipped: existing.length };
 }
 
 // ── Bulk: Review ──────────────────────────────────────────────────────────────
-// Single INSERT ... ON CONFLICT DO NOTHING for all reviews.
 
 export async function bulkMigrateReviews(reviewsData: Review[]) {
   return prisma.review.createMany({

@@ -1,3 +1,4 @@
+import { Status } from '../../../../../packages/ui/dist/utils';
 export function semesterMapper(semester: string) {
   switch (semester) {
     case 'FIRST':
@@ -19,5 +20,32 @@ export function studyProgramMapper(studyProgram: string) {
       return 'นานาชาติ';
     case 'S':
       return 'ทวิภาค';
+  }
+}
+export function genEdTypeMapper(genEdType: string) {
+  switch (genEdType) {
+    case 'SC':
+      return 'หมวดวิทย์';
+    case 'SO':
+      return 'หมวดสังคม';
+    case 'HU':
+      return 'หมวดมนุษย์';
+    case 'SC':
+      return 'หมวดสหฯ';
+    default:
+      return null;
+  }
+}
+
+export function reviewStatusMapper(raw: string) {
+  switch (raw) {
+    case 'PENDING':
+      return Status.PENDING;
+    case 'APPROVED':
+      return Status.APPROVED;
+    case 'REJECTED':
+      return Status.REJECTED;
+    default:
+      throw new Error(`Invalid ReviewStatus: ${raw}`);
   }
 }

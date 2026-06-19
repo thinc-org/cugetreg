@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { ChevronRight, Clock, Star, NotebookPen } from '@lucide/svelte';
+	import { ChevronRight, Clock, Star, NotebookPen, LoaderCircle } from '@lucide/svelte';
+	import { ScrollArea } from 'bits-ui';
 
 	import { RatingStar } from '../../atoms/rating-star';
 
@@ -8,7 +9,7 @@
 	interface ReviewItem {
 		code: string;
 		name: string;
-		tag: string;
+		tag: string | null;
 		status: Status;
 		rating: number;
 		term: string;
@@ -20,52 +21,60 @@
 		histogram?: number[];
 		overallRating?: number;
 		reviews?: ReviewItem[];
+		hasMore?: boolean;
+		loading?: boolean;
+		onLoadMore?: () => void;
 	}
 
-	const defaultReviews: ReviewItem[] = [
-		{
-			code: '0123104',
-			name: 'CON PDG PEACE CONFWV',
-			tag: 'หมวดมนุษย์',
-			status: Status.APPROVED,
-			rating: 4,
-			term: 'ภาคต้น 2566'
-		},
-		{
-			code: '0123101',
-			name: 'PARAGRAPH WRITING',
-			tag: 'หมวดมนุษย์',
-			status: Status.REJECTED,
-			rating: 3,
-			term: 'ภาคปลาย 2565'
-		},
-		{
-			code: '0123101',
-			name: 'PARAGRAPH WRITING',
-			tag: 'หมวดมนุษย์',
-			status: Status.APPROVED,
-			rating: 3,
-			term: 'ภาคปลาย 2566'
-		},
-		{
-			code: '2190201',
-			name: 'COM PROG',
-			tag: 'หมวดวิทย์',
-			status: Status.PENDING,
-			rating: 2.5,
-			term: 'ภาคปลาย 2566'
-		}
-	];
 
 	let {
 		overviewTitle = 'ภาพรวมรีวิว',
 		latestTitle = 'รีวิวล่าสุด',
 		histogram = undefined,
 		overallRating = undefined,
-		reviews = defaultReviews
+		reviews = [],
+		hasMore = false,
+		loading = false,
+		onLoadMore
 	}: Props = $props();
 
 	let showAll = $state(false);
+	let scrollBox: HTMLDivElement | undefined = $state();
+
+	const LOAD_MORE_THRESHOLD = 120;
+ 
+	// เช็คตอน scroll ภายในกล่องโดยตรง ไม่ต้องพึ่ง IntersectionObserver
+	// (กันปัญหา bind:this/effect ที่อาจรันไม่ทันตอน element เพิ่งถูก mount ครั้งแรก)
+	function handleScroll(event: Event) {
+		if (!hasMore || loading) return;
+ 
+		const target = event.currentTarget as HTMLDivElement;
+		const distanceFromBottom = target.scrollHeight - target.scrollTop - target.clientHeight;
+ 
+		if (distanceFromBottom <= LOAD_MORE_THRESHOLD) {
+			onLoadMore?.();
+		}
+	}
+
+	function toggleShowAll() {
+		showAll = !showAll;
+ 
+		if (showAll && scrollBox) {
+			scrollBox.scrollTop = 0;
+		}
+	}
+
+ 
+	$effect(() => {
+		reviews.length;
+ 
+		if (!showAll || !hasMore || loading || !scrollBox) return;
+ 
+		if (scrollBox.scrollHeight <= scrollBox.clientHeight) {
+			onLoadMore?.();
+		}
+	});
+
 
 	const histogramData = $derived.by(() => {
 		if (histogram && histogram.length > 0) {
@@ -145,7 +154,7 @@
 				<button
 					type="button"
 					class="text-on-surface"
-					onclick={() => (showAll = !showAll)}
+					onclick={toggleShowAll}
 					aria-label="Toggle all reviews"
 				>
 					<ChevronRight
@@ -172,7 +181,11 @@
 				</p>
 			</div>
 		{:else}
-			<div class="mt-4 flex flex-col gap-4">
+			<div
+				bind:this={scrollBox}
+				onscroll={handleScroll}
+				class={`mt-4 flex flex-col gap-4 ${ showAll && "h-80 overflow-y-auto"}`}
+			>
 				{#each visibleReviews as review, i (i)}
 					<div class="flex flex-col gap-2">
 						<div class="flex items-center justify-between gap-3">
@@ -180,13 +193,15 @@
 								{review.code}
 								{review.name}
 							</p>
-							<span
-								class={`text-caption rounded-full border px-3 py-1 font-semibold ${tagClass(
-									review.tag
-								)}`}
-							>
-								{review.tag}
+							{#if review.tag}
+								<span
+									class={`text-caption rounded-full border px-3 py-1 font-semibold ${tagClass(
+										review.tag
+									)}`}
+								>
+									{review.tag}
 							</span>
+							{/if}
 						</div>
 						<div class="flex items-center gap-3">
 							{#if review.status === Status.PENDING}
@@ -210,6 +225,17 @@
 					</div>
 				{/each}
 			</div>
+
+			{#if showAll}
+				{#if hasMore}
+					<div bind:this={sentinel} class="h-px w-full"></div>
+				{/if}
+				{#if loading && hasMore}
+					<div class="flex items-center justify-center py-3">
+						<LoaderCircle class="animate-spin" size={40} />
+					</div>
+				{/if}
+			{/if}
 		{/if}
 	</div>
 </div>

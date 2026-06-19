@@ -15,9 +15,13 @@
   import {
     ListCartsResponseSchema,
     UpdateUserInfoResponseSchema,
+    UserReviewResponseSchema,
   } from '@cugetreg/zod-schemas';
 
   import type { PageProps } from './$types';
+    import type { Status } from '../../../../../packages/ui/dist/utils';
+    import { convertReviewInfos } from '$lib/utils/reviews';
+    import { onMount } from 'svelte';
 
   interface ScheduleItem {
     id: string;
@@ -26,10 +30,20 @@
     isPublic: boolean;
   }
 
+  interface Review {
+    code: string,
+    name: string,
+    tag: string | null,
+    status: Status,
+    rating: number,
+    term: string,
+  }
+
   const { data }: PageProps = $props();
   let personalInfo = $state(data.user);
 
   let items = $state<ScheduleItem[]>([]);
+  let reviews = $state<Review[]>([]);
 
   let terms = [
     '2569 ภาคฤดูร้อน',
@@ -52,6 +66,10 @@
   let itemToDelete = $state<ScheduleItem | null>(null);
   let deleteItemPopupVisible = $state(false);
   let newDepartment = $state(personalInfo.department);
+  let page = $state(1);
+  const limit = 10;
+  let hasMoreReviews = $state(true);
+  let loadingReviews = $state(false);
 
   async function updateUser() {
     const updatedUser = {
@@ -133,6 +151,46 @@
     itemToDelete = null;
   }
 
+  async function fetchReviews(pageToFetch: number, replace = false) {
+    if (loadingReviews) return;
+    if (!replace && !hasMoreReviews) return;
+
+    loadingReviews = true;
+
+    const queryParams = new URLSearchParams({
+      page: pageToFetch.toString(),
+      limit: limit.toString(),
+    });
+    const [res, error] = await tryCatch(
+      api.get(`${PUBLIC_API_URL}/api/v1/user/reviews?${queryParams.toString()}`),
+    );
+
+    if (error || !res) {
+      console.error(error?.message);
+      loadingReviews = false;
+      return;
+    }
+
+    const { totalReviews,reviews: data } = UserReviewResponseSchema.parse(res.data);
+    const newReviews = convertReviewInfos(data);
+
+    if(replace)
+      reviews = newReviews;
+    else
+      reviews.push(...newReviews);
+
+
+    hasMoreReviews = totalReviews === limit;
+    page = pageToFetch;
+
+    loadingReviews = false;
+  }
+
+  function loadMoreReviews() {
+    if (loadingReviews || !hasMoreReviews) return;
+    fetchReviews(page + 1);
+  }
+
   const toggleEditInfo = () => {
     editInfoPopupVisible = true;
   };
@@ -170,13 +228,22 @@
     items;
     fetchScheduleItems();
   });
+
+  onMount(() => {
+    fetchReviews(1, true);
+  })
 </script>
 
 <div class="relative flex min-h-screen flex-col bg-white">
   <div class="container mx-auto flex justify-center gap-20 p-8">
     <div class="flex w-3/4 max-w-lg flex-col gap-10 px-6 py-8">
       <PersonalInfo onEdit={toggleEditInfo} {...personalInfo} />
-      <RatingHistory />
+      <RatingHistory
+        {reviews}
+        hasMore={hasMoreReviews}
+        loading={loadingReviews}
+        onLoadMore={loadMoreReviews}
+      />
     </div>
     <ScheduleList
       heading="ตารางเรียน"

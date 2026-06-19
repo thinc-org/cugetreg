@@ -1,10 +1,22 @@
 import type { Review } from "./migrate_interface.js";
 import { bulkMigrateReviews, safeFsJsonRead } from "./migrate_service.js";
 
+const SPINNER = ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"];
+
 export async function runReviewMigration() {
   const reviewsData = safeFsJsonRead<Review[]>("reviews.json");
 
-  console.log(`  Found ${reviewsData.length} reviews — bulk inserting...`);
+  let i = 0;
+  const timer = setInterval(() => {
+    process.stdout.write(
+      `\r  Reviews    ${SPINNER[i++ % SPINNER.length]} bulk inserting ${reviewsData.length} rows...`,
+    );
+  }, 80);
+
   const result = await bulkMigrateReviews(reviewsData);
-  console.log(`  Inserted ${result.count} reviews (duplicates skipped)`);
+
+  clearInterval(timer);
+  process.stdout.write(
+    `\r  Reviews    ✔ ${result.count} inserted (duplicates skipped)\n`,
+  );
 }

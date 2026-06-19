@@ -1,16 +1,16 @@
 import z from "zod";
 
-import { genEdType } from "./constants.js";
+import { genEdType, semester, studyProgram, visible } from "./constants.js";
 import { Section } from "./types.js";
 
 export const CartSchema = z.object({
   id: z.string(),
   userId: z.string(),
-  studyProgram: z.string(),
+  studyProgram: studyProgram,
   academicYear: z.number(),
-  semester: z.string(),
+  semester: semester,
   name: z.string(),
-  visible: z.string(),
+  visible: visible,
   isDefault: z.boolean(),
   cartOrder: z.string(),
   createdAt: z.date().or(z.string()),

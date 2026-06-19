@@ -13,11 +13,11 @@ export function semesterMapper(semester: string) {
 }
 export function studyProgramMapper(studyProgram: string) {
   switch (studyProgram) {
-    case 'S':
+    case 'T':
       return 'ตรีภาค';
     case 'I':
       return 'นานาชาติ';
-    case 'T':
+    case 'S':
       return 'ทวิภาค';
   }
 }

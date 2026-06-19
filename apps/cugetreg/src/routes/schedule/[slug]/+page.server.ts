@@ -8,8 +8,6 @@ import { PublicCartDetailResponseSchema } from '@cugetreg/zod-schemas/public-car
 
 import type { PageServerLoad } from './$types';
 
-const API_URL = `${env.API_URL ?? 'http://localhost:3000'}/api/v1/public/carts/`;
-
 const toSemesterType = (studyProgram: string): SemesterType => {
   switch (studyProgram) {
     case 'S':
@@ -24,6 +22,7 @@ const toSemesterType = (studyProgram: string): SemesterType => {
 };
 
 export const load: PageServerLoad = async ({ params, fetch }) => {
+  const API_URL = `${env.API_URL ?? 'http://localhost:3000'}/api/v1/public/carts/`;
   const cartId = params.slug;
 
   const [response, error] = await tryCatch(fetch(API_URL + cartId));

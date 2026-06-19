@@ -14,7 +14,27 @@ import {
 
 import type { LayoutServerLoad } from './$types';
 
-export const load: LayoutServerLoad = ({ fetch }) => {
+const EMPTY_CART: UserCartInterface = {
+  currentCart: {
+    id: '',
+    name: '',
+    studyProgram: 'S',
+    academicYear: 2566,
+    semester: '',
+    visible: '',
+    isDefault: false,
+    cartOrder: '',
+    items: [],
+  },
+  currentCartId: '',
+  cartList: [],
+  exams: [],
+};
+
+export const load: LayoutServerLoad = ({ locals, fetch }) => {
+  if (!locals.session) {
+    return { cart: Promise.resolve(EMPTY_CART) };
+  }
   return { cart: loadCart(fetch) };
 };
 

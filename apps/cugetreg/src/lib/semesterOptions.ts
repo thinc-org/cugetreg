@@ -1,7 +1,8 @@
+import type { Semester } from '@cugetreg/zod-schemas/constants';
+
 export const ALLOWED_ACADEMIC_YEAR = [2564, 2565, 2566, 2567, 2568] as const;
 export const ALLOWED_SEMESTER = ['FIRST', 'SECOND', 'SUMMER'] as const;
 
-export type Semester = (typeof ALLOWED_SEMESTER)[number];
 export type AcademicYear = (typeof ALLOWED_ACADEMIC_YEAR)[number];
 
 export const SEMESTER_LABEL_SHORT: Record<Semester, string> = {

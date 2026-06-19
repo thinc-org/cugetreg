@@ -8,7 +8,7 @@
   "scripts": {
     "lint": "eslint .",
     "build": "tsc",
-    "dev": "tsc -w"
+    "dev": "tsc -w --preserveWatchOutput"
   },
   "devDependencies": {
     "@cugetreg/configs": "workspace:*",

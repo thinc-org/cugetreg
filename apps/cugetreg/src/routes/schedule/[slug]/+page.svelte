@@ -1,4 +1,9 @@
 <script lang="ts">
+  import {
+    getSemesterShortOptions,
+    getYearOptions,
+  } from '$lib/semesterOptions';
+
   import html2canvas from 'html2canvas-pro';
   import { ChevronLeft, ChevronRight, Copy, Share2 } from 'lucide-svelte';
   import { untrack } from 'svelte';
@@ -336,6 +341,8 @@
     bind:show={showCreateScheduleModal}
   >
     <CreateTimetable
+      yearOptions={getYearOptions()}
+      semesterOptions={getSemesterShortOptions()}
       onConfirm={(schedule: ScheduleListItem) => {
         scheduleList.push(schedule);
         selectedSchedule = schedule;

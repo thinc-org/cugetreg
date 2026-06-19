@@ -7,6 +7,11 @@
   import ScheduleMismatchPopup from '$lib/components/schedule-mismatch-popup.svelte';
   import SelectedCourse from '$lib/components/selected-course.svelte';
   import { faculties } from '$lib/constants';
+  import {
+    ALLOWED_ACADEMIC_YEAR,
+    ALLOWED_SEMESTER,
+    SEMESTER_LABEL_LONG,
+  } from '$lib/semesterOptions';
   import { getUserCartStore, useCartActions } from '$lib/stores/user-cart';
 
   import {
@@ -70,8 +75,8 @@
   const userCart = getUserCartStore();
   const { addCourse, removeCourse, updateCourse } = useCartActions();
 
-  const years = ['2566', '2565', '2564'];
-  const terms = ['ภาคต้น', 'ภาคปลาย'];
+  const years = [...ALLOWED_ACADEMIC_YEAR].reverse().map(String);
+  const terms = ALLOWED_SEMESTER.map((s) => SEMESTER_LABEL_LONG[s]);
 
   let selectedYear = $state(years[0]);
   let selectedTerm = $state(terms[0]);
@@ -262,38 +267,6 @@
     return [reviewTermPlaceholder, ...Array.from(new Set(terms))];
   });
 
-  function mapSemester(semester: string): '1' | '2' | '3' {
-    switch (semester) {
-      case '1':
-      case 'FIRST':
-        return '1';
-      case '2':
-      case 'SECOND':
-        return '2';
-      case '3':
-      case 'SUMMER':
-        return '3';
-      default:
-        return '1';
-    }
-  }
-
-  function mapSemesterInverse(semester: string): 'FIRST' | 'SECOND' | 'SUMMER' {
-    switch (semester) {
-      case '1':
-      case 'FIRST':
-        return 'FIRST';
-      case '2':
-      case 'SECOND':
-        return 'SECOND';
-      case '3':
-      case 'SUMMER':
-        return 'SUMMER';
-      default:
-        return 'FIRST';
-    }
-  }
-
   async function handleReactReview(reviewId: string, interaction: 'L' | 'D') {
     const payload: VoteReviewBodySchema = {
       interaction,
@@ -338,7 +311,7 @@
       courseNo: course.courseNo,
       studyProgram: course.studyProgram,
       academicYear: course.academicYear,
-      semester: mapSemester(course.semester),
+      semester: course.semester,
       rating: reviewRating * 2,
       content: reviewContent,
     };
@@ -355,7 +328,7 @@
         status: review.status,
         studyProgram: review.studyProgram,
         academicYear: review.academicYear,
-        semester: mapSemesterInverse(review.semester), // CAN WE HAVE SINGLE () => data.reviewsSEMESTER TYPE PLEASE????
+        semester: review.semester,
         content: review.content,
         stats: {
           likeCount: review.likeCount,
@@ -1094,7 +1067,10 @@
                     {#each pagedReviews as review, index (index)}
                       <Comment
                         rating={review.rating / 2}
-                        semester={mapSemester(review.semester)}
+                        semester={review.semester as
+                          | 'FIRST'
+                          | 'SECOND'
+                          | 'SUMMER'}
                         content={review.content}
                         likesCount={review.stats.likeCount}
                         dislikesCount={review.stats.dislikeCount}

@@ -1,6 +1,10 @@
 <script lang="ts">
   import SelectedCourse from '$lib/components/selected-course.svelte';
   import {
+    getSemesterShortOptions,
+    getYearOptions,
+  } from '$lib/semesterOptions';
+  import {
     CART_PROMISE_KEY,
     type CartPromise,
     getUserCartStore,
@@ -344,6 +348,8 @@
     bind:show={showCreateScheduleModal}
   >
     <CreateTimetable
+      yearOptions={getYearOptions()}
+      semesterOptions={getSemesterShortOptions()}
       onConfirm={(schedule: TimetableMetaData) => {
         createCart(
           schedule.name,

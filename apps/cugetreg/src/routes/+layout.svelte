@@ -83,6 +83,7 @@
   cartPromise.then(
     (cart) => {
       if (cart) userCart.set(cart);
+      return cart;
     },
     (err) => console.error('[layout] failed to load cart:', err),
   );

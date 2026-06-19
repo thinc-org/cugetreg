@@ -7,21 +7,7 @@ import { CourseNoResponseSchema } from '@cugetreg/zod-schemas/courses-response';
 
 import type { PageServerLoad } from './$types';
 
-function mapSemester(semester: string) {
-  switch (semester) {
-    case '1':
-    case 'FIRST':
-      return '1';
-    case '2':
-    case 'SECOND':
-      return '2';
-    case '3':
-    case 'SUMMER':
-      return '3';
-    default:
-      return '1';
-  }
-}
+const API_URL = 'http://localhost:3000/api/v1/courses/';
 
 export const load: PageServerLoad = async ({ params, url, parent, fetch }) => {
   const API_URL = `${env.API_URL ?? 'http://localhost:3000'}/api/v1/courses/`;
@@ -52,7 +38,7 @@ export const load: PageServerLoad = async ({ params, url, parent, fetch }) => {
   const queryParams = new URLSearchParams({
     studyProgram: String(studyProgram),
     academicYear: String(academicYear),
-    semester: mapSemester(String(semester)),
+    semester,
   });
 
   const [response, error] = await tryCatch(

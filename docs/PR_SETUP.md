@@ -1,32 +1,31 @@
 # PR setup — `mvp1-dev-scrapper`
 
-Branch adds **`apps/reg-scraper-py`** and wires scraped course data into the mvp1 stack (`apps/core` API + `apps/cugetreg` frontend).
+Adds **`apps/reg-scraper-py`** and dev wiring (status page, root `pnpm scraper:run`).
 
-API spec: [`GettingRekt.pdf`](../../GettingRekt.pdf)  
-Integration notes: [`SCRAPER_AND_API_NEXT_STEPS.md`](./SCRAPER_AND_API_NEXT_STEPS.md)
+**Data format for integrators:** [`apps/reg-scraper-py/DATA_FORMAT.md`](../apps/reg-scraper-py/DATA_FORMAT.md)
 
 ---
 
 ## What this PR includes
 
 - Python scraper (Reg Chula → JSON / PostgreSQL)
-- Discovery-first pipeline + status file
-- Frontend `/scraper` status page + `/api/scraper/status`
-- Vite SSR fix for workspace packages (`@cugetreg/utils`, etc.)
-- API alignment: `fitCartId`, `REMAINING_SUM` sort enum, PDF error codes for fit-cart flow
+- Discovery-first pipeline + `scraper-status.json`
+- Frontend `/scraper` status page (reads local status file)
+- Root script: `pnpm scraper:run`
+
+Does **not** change `apps/core` API handlers or `apps/cugetreg` course pages — only delivers data they can consume.
 
 ---
 
-## Reviewer setup (copy-paste)
+## Reviewer setup
 
-### 0. Prerequisites
+### Prerequisites
 
-- **Node ≥ 24.11** (for `apps/core` Prisma)
-- **Python ≥ 3.11**
-- **pnpm 10+**
-- **Docker Desktop** (PostgreSQL)
+- Python ≥ 3.11
+- pnpm 10+
+- Docker Desktop (only if testing postgres export)
 
-### 1. Install monorepo
+### 1. Install
 
 ```powershell
 cd cugetreg
@@ -34,71 +33,73 @@ pnpm install --ignore-scripts
 pnpm --filter @cugetreg/ui prepack
 ```
 
-### 2. Environment files
-
-```powershell
-copy apps\core\.env.example apps\core\.env
-copy apps\cugetreg\.env.example apps\cugetreg\.env
-copy apps\reg-scraper-py\.env.example apps\reg-scraper-py\.env
-copy apps\core\bin\overrides.example.json apps\core\bin\overrides.json
-```
-
-Edit `apps/core/.env` if you use custom Google OAuth credentials (optional for course list without login).
-
-### 3. Database + API
-
-```powershell
-cd apps\core
-docker compose up -d
-pnpm prisma migrate dev
-pnpm codegen
-pnpm dev
-```
-
-Verify: http://localhost:3000/api/v1/docs
-
-### 4. Scraper (safe test — no DB)
+### 2. Scraper env
 
 ```powershell
 cd apps\reg-scraper-py
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 pip install -e .
+copy .env.example .env
+```
+
+Default `.env` is safe: JSON-only, max 20 courses, no DB.
+
+### 3. Run scraper (JSON test)
+
+```powershell
+# from repo root
 pnpm scraper:run
 ```
 
-Check:
+Verify:
 
 - `apps/reg-scraper-py/data/scraper-status.json` → `"status": "completed"`
-- `apps/core/bin/courses.json` → array of courses
+- `apps/core/bin/courses.json` → non-empty array
 
-### 5. Scraper → Postgres (optional integration test)
+### 4. Optional — postgres + API smoke test
+
+```powershell
+cd apps\core
+copy .env.example .env
+docker compose up -d
+pnpm prisma migrate dev
+pnpm codegen
+pnpm dev
+```
 
 In `apps/reg-scraper-py/.env`:
 
 ```env
 SCRAPER_EXPORTERS=json,postgres
-SCRAPER_MAX_COURSES=20
+DATABASE_URL=postgresql://admin:cugetreg@localhost:5432/cugetreg?schema=public
 ```
 
-Ensure `DATABASE_URL` matches `apps/core/.env`, then:
+Run `pnpm scraper:run` again, then:
 
 ```powershell
-pnpm scraper:run
 curl "http://localhost:3000/api/v1/courses?studyProgram=S&academicYear=2568&semester=SECOND&limit=5"
 ```
 
-### 6. Frontend
+### 5. Frontend status page
 
 ```powershell
 cd apps\cugetreg
+copy .env.example .env
 pnpm dev
 ```
 
-| URL | Expected |
-|-----|----------|
-| http://localhost:5173/scraper | Scraper status |
-| http://localhost:5173/ | Course search (needs DB data + matching semester filter) |
+Open http://localhost:5173/scraper — should show last run status (no 500).
+
+---
+
+## PR test plan
+
+- [ ] `pnpm scraper:run` completes with default `.env`
+- [ ] `apps/core/bin/courses.json` populated
+- [ ] `scraper-status.json` shows `completed`
+- [ ] `/scraper` page loads
+- [ ] (Optional) Postgres export + API returns courses
 
 ---
 
@@ -106,28 +107,7 @@ pnpm dev
 
 | App | File | Key vars |
 |-----|------|----------|
-| `apps/core` | `.env` | `DATABASE_URL`, `POSTGRES_*`, `BETTER_AUTH_*`, `GOOGLE_*` |
-| `apps/cugetreg` | `.env` | `PUBLIC_API_URL`, `API_URL`, `SCRAPER_STATUS_PATH` |
-| `apps/reg-scraper-py` | `.env` | `SCRAPER_*`, `DATABASE_URL`, export paths |
+| `apps/reg-scraper-py` | `.env` | `SCRAPER_*`, `SCRAPER_JSON_OUTPUT`, `SCRAPER_STATUS_OUTPUT`, `DATABASE_URL` |
+| `apps/cugetreg` | `.env` | `SCRAPER_STATUS_PATH` (for `/scraper` page) |
 
-**Never commit `.env` files** — only `.env.example` is tracked.
-
----
-
-## PR test plan
-
-- [ ] `pnpm --filter @cugetreg/ui prepack` succeeds
-- [ ] `apps/core` starts; `/api/v1/docs` loads
-- [ ] `pnpm scraper:run` completes (JSON-only default)
-- [ ] `/scraper` page shows status without 500
-- [ ] With postgres export: `GET /api/v1/courses` returns scraped courses
-- [ ] Home page shows courses for selected year/semester/program
-
----
-
-## Out of scope (follow-up PRs)
-
-- Full API 1.1 `meta` wrapper + `fitMySchedule` response fields
-- 1.2 response shape match to PDF
-- Admin Group 6 routes
-- Public cart import (4.2 — explicitly skipped in spec)
+Never commit `.env` — only `.env.example`.

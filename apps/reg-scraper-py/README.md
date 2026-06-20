@@ -1,9 +1,25 @@
 # CU Get Reg — Course Scraper (`reg-scraper-py`) on `mvp1-dev-scrapper`
 
-> **PR reviewers:** see [`docs/PR_SETUP.md`](../../docs/PR_SETUP.md) for env setup and test plan.
+> **PR reviewers:** [`docs/PR_SETUP.md`](../../docs/PR_SETUP.md)  
+> **Backend / frontend devs:** [`DATA_FORMAT.md`](./DATA_FORMAT.md) — output files, JSON fields, DB mapping
 
 Python scraper for **Chulalongkorn University Reg Chula** course schedules.  
-Pulls live schedule data from `cas.reg.chula.ac.th`, processes it, and writes to **JSON** (`apps/core/bin/courses.json`) and/or **PostgreSQL** (same DB as `apps/core`) for the mvp1 frontend.
+Pulls live schedule data from `cas.reg.chula.ac.th`, processes it, and writes to **JSON** (`apps/core/bin/courses.json`) and/or **PostgreSQL** (same DB as `apps/core`).
+
+---
+
+## For other devs (read this first)
+
+You **do not** need to change scraper code to use the data.
+
+| Need | File / action |
+|------|----------------|
+| Sample + field reference | [`DATA_FORMAT.md`](./DATA_FORMAT.md) |
+| All courses as JSON | `apps/core/bin/courses.json` (after `pnpm scraper:run`) |
+| Data in DB for API | `SCRAPER_EXPORTERS=postgres` + same `DATABASE_URL` as `apps/core` |
+| Is scrape done? | `apps/reg-scraper-py/data/scraper-status.json` |
+
+Scraper JSON uses `semester: "1"|"2"|"3"`. Postgres exporter maps to `FIRST`/`SECOND`/`SUMMER` automatically.
 
 ---
 
@@ -90,9 +106,9 @@ flowchart TB
 
 ## Outputs
 
-### 1. `packages/database/data/courses.json`
+### 1. `apps/core/bin/courses.json`
 
-Path controlled by `SCRAPER_JSON_OUTPUT`. Array of course objects compatible with `@repo/database` seed.
+Path controlled by `SCRAPER_JSON_OUTPUT`. Array of course objects — see [`DATA_FORMAT.md`](./DATA_FORMAT.md) for every field.
 
 **Example (abbreviated):**
 
@@ -139,11 +155,11 @@ Path controlled by `SCRAPER_JSON_OUTPUT`. Array of course objects compatible wit
 }
 ```
 
-**Use:** `pnpm --filter @repo/database seed` (alternative to direct Postgres export).
+**Use:** Inspect locally, write import scripts, or pair with postgres export. Backend serves DB data via existing `apps/core` API.
 
 ---
 
-### 2. `packages/database/data/scraper-status.json`
+### 2. `apps/reg-scraper-py/data/scraper-status.json`
 
 Path controlled by `SCRAPER_STATUS_OUTPUT`. Updated during and after each run.
 
@@ -152,6 +168,7 @@ Path controlled by `SCRAPER_STATUS_OUTPUT`. Updated during and after each run.
   "status": "completed",
   "started_at": "2026-06-06T01:41:51.469635Z",
   "finished_at": "2026-06-06T01:42:07.503066Z",
+  "courses_total": 20,
   "courses_scraped": 20,
   "courses_failed": 0,
   "message": "Exported 20 courses via ['json', 'postgres']"
@@ -180,7 +197,9 @@ When `SCRAPER_EXPORTERS` includes `postgres`. Uses `DATABASE_URL`.
 | `course_section` | Sections with capacity, closed, note |
 | `course_class` | Class times (day, period, room, professors) |
 
-**Use:** `apps/web` reads via Drizzle → `/api/courses`, `/dbdemo`.
+**Use:** `apps/core` Prisma API reads these tables — no scraper changes needed on the API side.
+
+See [`DATA_FORMAT.md`](./DATA_FORMAT.md) for JSON → column mapping.
 
 ---
 
@@ -276,11 +295,13 @@ Reg Chula (cas.reg.chula.ac.th)
         └──► PostgreSQL            (course_info, course, course_section, course_class)
                     │
                     ▼
-              apps/cugetreg (SvelteKit :5173)
+              apps/core API (:3000)  ← existing backend, unchanged by scraper
                     │
-                    ├── /api/courses
-                    ├── /api/scraper/status
-                    └── /scraper
+                    ▼
+              apps/cugetreg (:5173)
+                    │
+                    ├── /  (course search via API)
+                    └── /scraper (status file)
 ```
 
 ---
@@ -311,6 +332,7 @@ apps/reg-scraper-py/
 ├── .env.example
 ├── pyproject.toml
 ├── README.md            # this file
+├── DATA_FORMAT.md       # output contract for backend/frontend
 └── src/reg_scraper/
     ├── __main__.py      # CLI entry: python -m reg_scraper scrape
     ├── config.py        # loads .env

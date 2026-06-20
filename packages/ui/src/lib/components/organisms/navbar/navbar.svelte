@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
 
 	import { Menu, Moon, Search, Settings2 } from '@lucide/svelte';
@@ -12,7 +13,6 @@
 	import { Input } from '../../atoms/input';
 	import { CUGetRegDarkFull as CUGetRegLogo } from '../../logo/cugetreg';
 	import { UserDialog } from '../../molecules/user-dialog';
-	import { goto } from '$app/navigation';
 
 	interface Props {
 		isLoggedIn?: boolean;

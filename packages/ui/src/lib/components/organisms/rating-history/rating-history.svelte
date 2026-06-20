@@ -1,10 +1,10 @@
 <script lang="ts">
-	import { ChevronRight, Clock, Star, NotebookPen, LoaderCircle } from '@lucide/svelte';
-	import { ScrollArea } from 'bits-ui';
+	import { Status } from '$lib/utils';
+
+	import { ChevronRight, Clock, LoaderCircle, NotebookPen, Star, StarHalf } from '@lucide/svelte';
+	import { tick } from 'svelte';
 
 	import { RatingStar } from '../../atoms/rating-star';
-
-	import { Status } from '$lib/utils';
 
 	interface ReviewItem {
 		code: string;
@@ -19,19 +19,16 @@
 		overviewTitle?: string;
 		latestTitle?: string;
 		histogram?: number[];
-		overallRating?: number;
 		reviews?: ReviewItem[];
 		hasMore?: boolean;
 		loading?: boolean;
 		onLoadMore?: () => void;
 	}
 
-
 	let {
 		overviewTitle = 'ภาพรวมรีวิว',
 		latestTitle = 'รีวิวล่าสุด',
 		histogram = undefined,
-		overallRating = undefined,
 		reviews = [],
 		hasMore = false,
 		loading = false,
@@ -42,46 +39,44 @@
 	let scrollBox: HTMLDivElement | undefined = $state();
 
 	const LOAD_MORE_THRESHOLD = 120;
- 
-	// เช็คตอน scroll ภายในกล่องโดยตรง ไม่ต้องพึ่ง IntersectionObserver
-	// (กันปัญหา bind:this/effect ที่อาจรันไม่ทันตอน element เพิ่งถูก mount ครั้งแรก)
+
+
 	function handleScroll(event: Event) {
 		if (!hasMore || loading) return;
- 
+
 		const target = event.currentTarget as HTMLDivElement;
 		const distanceFromBottom = target.scrollHeight - target.scrollTop - target.clientHeight;
- 
+
 		if (distanceFromBottom <= LOAD_MORE_THRESHOLD) {
 			onLoadMore?.();
 		}
 	}
 
-	function toggleShowAll() {
+	async function toggleShowAll() {
 		showAll = !showAll;
- 
+
+		await tick();
 		if (showAll && scrollBox) {
 			scrollBox.scrollTop = 0;
 		}
 	}
 
- 
 	$effect(() => {
 		reviews.length;
- 
+
 		if (!showAll || !hasMore || loading || !scrollBox) return;
- 
+
 		if (scrollBox.scrollHeight <= scrollBox.clientHeight) {
 			onLoadMore?.();
 		}
 	});
-
 
 	const histogramData = $derived.by(() => {
 		if (histogram && histogram.length > 0) {
 			return histogram;
 		}
 
-		const counts = new Array(11).fill(0);
+		const counts = new Array(10).fill(0);
 		for (const review of reviews) {
 			const ratingValue = Number(review.rating);
 			if (Number.isNaN(ratingValue)) {
@@ -89,20 +84,9 @@
 			}
 			const clamped = Math.min(5, Math.max(0, ratingValue));
 			const index = Math.round(clamped * 2);
-			counts[index] += 1;
+			counts[index - 1] += 1;
 		}
 		return counts;
-	});
-
-	const averageRating = $derived.by(() => {
-		if (typeof overallRating === 'number') {
-			return overallRating;
-		}
-		if (!reviews.length) {
-			return 0;
-		}
-		const sum = reviews.reduce((total, review) => total + review.rating, 0);
-		return Math.round((sum / reviews.length) * 2) / 2;
 	});
 
 	const normalizeRating = (value: number) => Math.min(5, Math.max(0, Math.round(value * 2) / 2));
@@ -111,7 +95,13 @@
 		if (tag === 'หมวดวิทย์') {
 			return 'border-orange-500 text-orange-700';
 		}
-		return 'border-pink-500 text-pink-700';
+		if (tag === 'หมวดมนุษย์') {
+			return 'border-pink-500 text-pink-700';
+		}
+		if (tag === 'หมวดสังคม') {
+			return 'border-green-500 text-green-700';
+		}
+		return 'border-purple-500 text-purple-700';
 	};
 
 	const maxValue = $derived(Math.max(...histogramData, 1));
@@ -127,20 +117,26 @@
 		<p>{overviewTitle}</p>
 	</div>
 
-	<div class="mt-4 flex items-end">
+	<div class="mt-4 flex items-end justify-start gap-1">
 		<div class="text-primary flex h-16 shrink-0 items-end">
-			<Star size="18" strokeWidth="1.5" fill="currentColor" class="translate-y-[2px]" />
+			<Star size={16} strokeWidth={1.5} class="transition-y-[2px] absolute" />
+			<StarHalf
+				size={16}
+				fill="currentColor"
+				strokeWidth={1.5}
+				class="transition-y-[2px] absolute"
+			/>
 		</div>
 		<div class="flex h-16 flex-1 items-end justify-center gap-1">
 			{#each histogramData as value, i (i)}
 				<div
-					class="bg-surface-container-high w-5"
+					class="bg-surface-container-high w-5.5"
 					style={`height: ${Math.max(8, (value / maxValue) * 64)}px`}
 				></div>
 			{/each}
 		</div>
 		<div class="text-primary flex h-16 shrink-0 items-end">
-			<RatingStar rating={5} size={14} gap={4} />
+			<RatingStar rating={5} size={16} gap={4} />
 		</div>
 	</div>
 
@@ -184,7 +180,7 @@
 			<div
 				bind:this={scrollBox}
 				onscroll={handleScroll}
-				class={`mt-4 flex flex-col gap-4 ${ showAll && "h-80 overflow-y-auto"}`}
+				class={`mt-4 flex flex-col gap-4 ${showAll ? 'h-80 overflow-y-auto' : ''}`}
 			>
 				{#each visibleReviews as review, i (i)}
 					<div class="flex flex-col gap-2">
@@ -200,7 +196,7 @@
 									)}`}
 								>
 									{review.tag}
-							</span>
+								</span>
 							{/if}
 						</div>
 						<div class="flex items-center gap-3">
@@ -227,9 +223,6 @@
 			</div>
 
 			{#if showAll}
-				{#if hasMore}
-					<div bind:this={sentinel} class="h-px w-full"></div>
-				{/if}
 				{#if loading && hasMore}
 					<div class="flex items-center justify-center py-3">
 						<LoaderCircle class="animate-spin" size={40} />

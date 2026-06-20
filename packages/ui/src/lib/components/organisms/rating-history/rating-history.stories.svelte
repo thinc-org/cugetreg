@@ -75,6 +75,6 @@
 			}
 		],
 		hasMore: false,
-		loading: false,
+		loading: false
 	}}
 />

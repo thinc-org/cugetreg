@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Status } from '$lib/utils';
+	import type { ReviewStatus } from '@cugetreg/zod-schemas/constants';
 
 	import { ChevronRight, Clock, LoaderCircle, NotebookPen, Star, StarHalf } from '@lucide/svelte';
 	import { tick } from 'svelte';
@@ -10,7 +10,7 @@
 		code: string;
 		name: string;
 		tag: string | null;
-		status: Status;
+		status: ReviewStatus;
 		rating: number;
 		term: string;
 	}
@@ -199,13 +199,13 @@
 							{/if}
 						</div>
 						<div class="flex items-center gap-3">
-							{#if review.status === Status.PENDING}
+							{#if review.status === 'PENDING'}
 								<span
 									class="text-caption rounded-full border border-amber-600 bg-amber-100 px-3 py-1 font-normal text-amber-600"
 								>
 									กำลังรออนุมัติ
 								</span>
-							{:else if review.status === Status.REJECTED}
+							{:else if review.status === 'REJECTED'}
 								<span
 									class="text-caption rounded-full border border-red-600 bg-red-100 px-3 py-1 font-normal text-red-600"
 								>

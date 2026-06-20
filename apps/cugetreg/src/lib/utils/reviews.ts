@@ -1,17 +1,24 @@
-import { genEdTypeMapper, reviewStatusMapper, semesterMapper } from './mapper';
+import { genEdTypeMapper } from '../mapper';
+import { SEMESTER_LABEL_LONG } from '$lib/semesterOptions';
+import type { 
+  Semester,
+  ReviewStatus,
+  StudyProgram,
+  GenEdType
+} from '@cugetreg/zod-schemas';
 
 type Review = {
   id: string;
   courseNo: string;
   courseAbbrName: string;
-  genEdType: 'NO' | 'SC' | 'SO' | 'HU' | 'IN';
-  studyProgram: 'T' | 'I' | 'S';
+  genEdType: GenEdType;
+  studyProgram: StudyProgram;
   academicYear: number;
-  semester: 'FIRST' | 'SECOND' | 'SUMMER';
+  semester: Semester;
   rejectionReason: string | null;
   rating: number;
   content: string;
-  status: 'PENDING' | 'APPROVED' | 'REJECTED';
+  status: ReviewStatus;
   createdAt: string;
 };
 
@@ -20,8 +27,8 @@ export function convertReviewInfos(reviews: Review[]) {
     code: review.courseNo,
     name: review.courseAbbrName,
     tag: genEdTypeMapper(review.genEdType),
-    status: reviewStatusMapper(review.status),
+    status: review.status,
     rating: Number((review.rating / 2).toFixed(1)),
-    term: `${review.academicYear.toString()} ${semesterMapper(review.semester)}`,
+    term: `${review.academicYear.toString()} ${SEMESTER_LABEL_LONG[review.semester]}`,
   }));
 }

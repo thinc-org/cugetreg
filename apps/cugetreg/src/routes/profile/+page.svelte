@@ -21,7 +21,7 @@
 
   import type { PageProps } from './$types';
 
-  import type { Status } from '../../../../../packages/ui/dist/utils';
+  import type { ReviewStatus } from '@cugetreg/zod-schemas';
 
   interface ScheduleItem {
     id: string;
@@ -34,7 +34,7 @@
     code: string;
     name: string;
     tag: string | null;
-    status: Status;
+    status: ReviewStatus;
     rating: number;
     term: string;
   }

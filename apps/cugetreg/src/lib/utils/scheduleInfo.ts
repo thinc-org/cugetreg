@@ -1,11 +1,13 @@
-import { semesterMapper, studyProgramMapper } from './mapper';
+import { studyProgramMapper } from '../mapper';
+import { SEMESTER_LABEL_LONG } from '$lib/semesterOptions';
+import type { Semester, StudyProgram } from '@cugetreg/zod-schemas';
 
 type Schedule = {
   id: string;
   userId: string;
-  studyProgram: string;
+  studyProgram: StudyProgram;
   academicYear: number;
-  semester: string;
+  semester: Semester;
   name: string;
   visible: string;
   isDefault: boolean;
@@ -22,7 +24,7 @@ export function convertSchedulesInfo(schedules: Schedule[]) {
         studyProgramMapper(schedule.studyProgram),
         schedule.academicYear.toString(),
         '/',
-        semesterMapper(schedule.semester),
+        SEMESTER_LABEL_LONG[schedule.semester],
       ].join(' ');
 
       return {

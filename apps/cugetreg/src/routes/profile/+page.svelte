@@ -2,10 +2,12 @@
   import { PUBLIC_API_URL } from '$env/static/public';
   import { api } from '$lib/api';
   import { tryCatch } from '$lib/async-handler';
+  import { convertReviewInfos } from '$lib/utils/reviews';
   import { convertSchedulesInfo } from '$lib/utils/scheduleInfo';
   import { convertUserInfo } from '$lib/utils/user';
 
   import { TriangleAlert } from '@lucide/svelte';
+  import { onMount } from 'svelte';
 
   import { ConfirmDeleteSchedule } from '@cugetreg/ui/molecules/confirm-delete-schedule';
   import { EditPersonalInfo } from '@cugetreg/ui/organisms/edit-personal-info';
@@ -19,9 +21,8 @@
   } from '@cugetreg/zod-schemas';
 
   import type { PageProps } from './$types';
-    import type { Status } from '../../../../../packages/ui/dist/utils';
-    import { convertReviewInfos } from '$lib/utils/reviews';
-    import { onMount } from 'svelte';
+
+  import type { Status } from '../../../../../packages/ui/dist/utils';
 
   interface ScheduleItem {
     id: string;
@@ -31,12 +32,12 @@
   }
 
   interface Review {
-    code: string,
-    name: string,
-    tag: string | null,
-    status: Status,
-    rating: number,
-    term: string,
+    code: string;
+    name: string;
+    tag: string | null;
+    status: Status;
+    rating: number;
+    term: string;
   }
 
   const { data }: PageProps = $props();
@@ -58,7 +59,6 @@
     '2566 ภาคฤดูร้อน',
     '2566 ภาคปลาย',
     '2566 ภาคต้น',
-    '2565 ภาคปลาย',
   ];
 
   let selectedTerm = $state('2569 ภาคต้น');
@@ -169,7 +169,9 @@
       limit: limit.toString(),
     });
     const [res, error] = await tryCatch(
-      api.get(`${PUBLIC_API_URL}/api/v1/user/reviews?${queryParams.toString()}`),
+      api.get(
+        `${PUBLIC_API_URL}/api/v1/user/reviews?${queryParams.toString()}`,
+      ),
     );
 
     if (error || !res) {
@@ -178,14 +180,13 @@
       return;
     }
 
-    const { totalReviews,reviews: data } = UserReviewResponseSchema.parse(res.data);
+    const { totalReviews, reviews: data } = UserReviewResponseSchema.parse(
+      res.data,
+    );
     const newReviews = convertReviewInfos(data);
 
-    if(replace)
-      reviews = newReviews;
-    else
-      reviews.push(...newReviews);
-
+    if (replace) reviews = newReviews;
+    else reviews.push(...newReviews);
 
     hasMoreReviews = totalReviews === limit;
     page = pageToFetch;
@@ -237,7 +238,7 @@
 
   onMount(() => {
     fetchReviews(1, true);
-  })
+  });
 </script>
 
 <div class="relative flex min-h-screen flex-col bg-white">

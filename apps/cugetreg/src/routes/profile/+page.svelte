@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { PUBLIC_API_URL } from '$env/static/public';
   import { api } from '$lib/api';
   import { tryCatch } from '$lib/async-handler';
   import { convertReviewInfos } from '$lib/utils/reviews';

@@ -1,4 +1,5 @@
 <script module lang="ts">
+
 	import { defineMeta } from '@storybook/addon-svelte-csf';
 
 	import { ScheduleList } from './index.js';
@@ -20,12 +21,18 @@
 			items: {
 				control: false
 			},
+			loading: {
+				control: 'boolean'
+			},
 			onSelectTerm: {
 				action: 'onSelectTerm'
 			},
 			onDelete: {
 				action: 'onDelete'
-			}
+			},
+			onChangeVisibility: {
+				action: 'onChangeVisibility'
+			},
 		}
 	});
 </script>
@@ -55,6 +62,7 @@
 				subtitle: 'ทวิภาค 2566 / ภาคต้น',
 				isPublic: false
 			}
-		]
+		],
+		loading: false
 	}}
 />

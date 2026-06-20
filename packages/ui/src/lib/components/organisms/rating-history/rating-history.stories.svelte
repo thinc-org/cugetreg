@@ -19,11 +19,17 @@
 			histogram: {
 				control: false
 			},
-			overallRating: {
-				control: false
-			},
 			reviews: {
 				control: false
+			},
+			hasMore: {
+				control: 'boolean'
+			},
+			loading: {
+				control: 'boolean'
+			},
+			onLoadMore: {
+				action: 'onLoadMore'
 			}
 		}
 	});
@@ -67,6 +73,8 @@
 				rating: 2.5,
 				term: 'ภาคปลาย 2566'
 			}
-		]
+		],
+		hasMore: false,
+		loading: false,
 	}}
 />

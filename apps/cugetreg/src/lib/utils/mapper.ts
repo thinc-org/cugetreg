@@ -10,6 +10,8 @@ export function semesterMapper(semester: string) {
     case 'SUMMER':
     case '3':
       return 'ภาคฤดูร้อน';
+    default:
+      throw new Error(`semester ${semester} is invalid`);
   }
 }
 export function studyProgramMapper(studyProgram: string) {
@@ -20,6 +22,8 @@ export function studyProgramMapper(studyProgram: string) {
       return 'นานาชาติ';
     case 'S':
       return 'ทวิภาค';
+    default:
+      throw new Error(`study program ${studyProgram} is invalid`);
   }
 }
 export function genEdTypeMapper(genEdType: string) {
@@ -30,7 +34,7 @@ export function genEdTypeMapper(genEdType: string) {
       return 'หมวดสังคม';
     case 'HU':
       return 'หมวดมนุษย์';
-    case 'SC':
+    case 'IN':
       return 'หมวดสหฯ';
     default:
       return null;

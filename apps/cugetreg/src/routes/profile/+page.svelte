@@ -257,7 +257,7 @@
   </div>
   {#if editInfoPopupVisible}
     <div
-      class="absolute inset-0 z-10 flex items-center justify-center bg-black/50"
+      class="fixed inset-0 z-10 flex items-center justify-center overflow-y-auto bg-black/50"
     >
       <EditPersonalInfo
         bind:department={newDepartment}

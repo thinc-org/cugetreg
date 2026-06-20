@@ -30,13 +30,13 @@
 
 	const id = username;
 
-	const infoItems = [
+	const infoItems = $derived([
 		{ label: 'username', value: username },
 		{ label: 'ชื่อจริง', value: firstName },
 		{ label: 'นามสกุล', value: lastName },
 		{ label: 'คณะ', value: faculty },
 		{ label: 'ภาควิชา', value: department }
-	];
+	]);
 </script>
 
 <div class="bg-surface-container-lowest text-on-surface w-full max-w-md rounded-2xl p-7">

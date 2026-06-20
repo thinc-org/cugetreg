@@ -79,9 +79,7 @@
       department: newDepartment,
     };
 
-    const [res, error] = await tryCatch(
-      api.patch(`${PUBLIC_API_URL}/api/v1/user`, updatedUser),
-    );
+    const [res, error] = await tryCatch(api.patch('/user', updatedUser));
 
     if (error || res.status !== 200) {
       console.error(error?.message);
@@ -109,9 +107,7 @@
 
     loadingSchedules = true;
 
-    const [res, error] = await tryCatch(
-      api.get(`${PUBLIC_API_URL}/api/v1/carts?${query.toString()}`),
-    );
+    const [res, error] = await tryCatch(api.get(`/carts?${query.toString()}`));
 
     if (error || res.status !== 200) {
       console.error(error?.message);
@@ -132,7 +128,7 @@
     console.log(id, isPublic);
 
     const [res, error] = await tryCatch(
-      api.patch(`${PUBLIC_API_URL}/api/v1/carts/${id}`, {
+      api.patch(`/carts/${id}`, {
         visible: isPublic ? 'PUB' : 'PVT',
       }),
     );
@@ -144,9 +140,7 @@
   }
 
   async function deleteSchedule(id: string) {
-    const [res, error] = await tryCatch(
-      api.delete(`${PUBLIC_API_URL}/api/v1/carts/${id}`),
-    );
+    const [res, error] = await tryCatch(api.delete(`/carts/${id}`));
 
     if (error || !res) {
       console.error(error.message);
@@ -169,9 +163,7 @@
       limit: limit.toString(),
     });
     const [res, error] = await tryCatch(
-      api.get(
-        `${PUBLIC_API_URL}/api/v1/user/reviews?${queryParams.toString()}`,
-      ),
+      api.get(`/user/reviews?${queryParams.toString()}`),
     );
 
     if (error || !res) {

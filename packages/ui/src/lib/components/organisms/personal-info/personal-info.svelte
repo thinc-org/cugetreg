@@ -61,6 +61,9 @@
 					<p class="text-caption text-on-surface/50 tracking-wide uppercase">{infoItem.label}</p>
 					<p class="text-body2 font-medium">{infoItem.value || '-'}</p>
 				</div>
+				{#if idx === 0}
+					<div></div>
+				{/if}
 			{/each}
 		</div>
 	</div>

@@ -1,9 +1,11 @@
 import { tryCatch } from '$lib/async-handler';
 import { convertUserInfo } from '$lib/utils/user';
+
 import { error as SvelteError } from '@sveltejs/kit';
-import type { PageServerLoad } from './$types';
 
 import { UserResponseSchema } from '@cugetreg/zod-schemas';
+
+import type { PageServerLoad } from './$types';
 
 const USER_API_URL = 'http://localhost:3000/api/v1/user';
 

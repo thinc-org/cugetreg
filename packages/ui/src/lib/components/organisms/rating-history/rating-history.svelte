@@ -40,7 +40,6 @@
 
 	const LOAD_MORE_THRESHOLD = 120;
 
-
 	function handleScroll(event: Event) {
 		if (!hasMore || loading) return;
 

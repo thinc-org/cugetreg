@@ -1,8 +1,9 @@
 <script module lang="ts">
+	import { Status } from '$lib/utils.js';
+
 	import { defineMeta } from '@storybook/addon-svelte-csf';
 
 	import { RatingHistory } from './index.js';
-	import { Status } from '$lib/utils.js';
 
 	const { Story } = defineMeta({
 		title: 'Organism/Rating History',

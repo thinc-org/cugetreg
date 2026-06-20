@@ -6,7 +6,6 @@
 
 	interface Props {
 		name?: string;
-		id?: string;
 		username?: string;
 		firstName?: string;
 		lastName?: string;
@@ -57,27 +56,12 @@
 			</IconButton>
 		</div>
 		<div class="mt-4 grid grid-cols-2 gap-x-8 gap-y-4">
-			<div class="flex flex-col gap-1">
-				<p class="text-caption text-on-surface/50 tracking-wide uppercase">username</p>
-				<p class="text-body2 font-medium">{username}</p>
-			</div>
-			<div></div>
-			<div class="flex flex-col gap-1">
-				<p class="text-caption text-on-surface/50 tracking-wide uppercase">ชื่อจริง</p>
-				<p class="text-body2 font-medium">{firstName}</p>
-			</div>
-			<div class="flex flex-col gap-1">
-				<p class="text-caption text-on-surface/50 tracking-wide uppercase">นามสกุล</p>
-				<p class="text-body2 font-medium">{lastName}</p>
-			</div>
-			<div class="flex flex-col gap-1">
-				<p class="text-caption text-on-surface/50 tracking-wide uppercase">คณะ</p>
-				<p class="text-body2 font-medium">{faculty}</p>
-			</div>
-			<div class="flex flex-col gap-1">
-				<p class="text-caption text-on-surface/50 tracking-wide uppercase">ภาควิชา</p>
-				<p class="text-body2 font-medium">{department || '-'}</p>
-			</div>
+			{#each infoItems as infoItem, idx (idx)}
+				<div class="flex flex-col gap-1">
+					<p class="text-caption text-on-surface/50 tracking-wide uppercase">{infoItem.label}</p>
+					<p class="text-body2 font-medium">{infoItem.value || '-'}</p>
+				</div>
+			{/each}
 		</div>
 	</div>
 

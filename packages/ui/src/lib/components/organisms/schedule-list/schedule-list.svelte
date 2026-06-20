@@ -107,7 +107,7 @@
 							}}
 							aria-label="Delete schedule"
 						>
-							<Trash2 size="18" strokeWidth="2.5" />
+							<Trash2 size="30" strokeWidth="2.5" />
 						</button>
 					</a>
 					<div class="mt-5 flex items-center gap-3">

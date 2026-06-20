@@ -1,5 +1,7 @@
 # CU Get Reg — Course Scraper (`reg-scraper-py`) on `mvp1-dev-scrapper`
 
+> **PR reviewers:** see [`docs/PR_SETUP.md`](../../docs/PR_SETUP.md) for env setup and test plan.
+
 Python scraper for **Chulalongkorn University Reg Chula** course schedules.  
 Pulls live schedule data from `cas.reg.chula.ac.th`, processes it, and writes to **JSON** (`apps/core/bin/courses.json`) and/or **PostgreSQL** (same DB as `apps/core`) for the mvp1 frontend.
 
@@ -196,8 +198,8 @@ Config file: `apps/reg-scraper-py/.env` (loaded automatically from any working d
 | `SCRAPER_DELAY_MS` | `300` | Delay between each course fetch (ms) |
 | `SCRAPER_EXPORTERS` | `json,postgres` | `json`, `postgres`, or both |
 | `COURSE_DESC_PATH` | `../../data/course_chula_full.csv` | Optional V1 description CSV |
-| `OVERRIDES_PATH` | `../../packages/database/data/overrides.json` | Optional GenEd overrides |
-| `DATABASE_URL` | `postgresql://cugetreg:cugetreg@localhost:5432/cugetreg` | Postgres connection |
+| `OVERRIDES_PATH` | `../../apps/core/bin/overrides.example.json` | GenEd overrides (copy to `overrides.json` for migrate) |
+| `DATABASE_URL` | `postgresql://admin:cugetreg@localhost:5432/cugetreg` | Postgres (same as `apps/core/.env`) |
 
 **Common mistake:** `SCRAPER_MAX_COURSES=20` limits how many courses to fetch.  
 `SCRAPER_COURSE_NOS=20` would try to scrape course number `"20"` — wrong variable.
@@ -274,7 +276,7 @@ Reg Chula (cas.reg.chula.ac.th)
         └──► PostgreSQL            (course_info, course, course_section, course_class)
                     │
                     ▼
-              apps/web (SvelteKit :5343)
+              apps/cugetreg (SvelteKit :5173)
                     │
                     ├── /api/courses
                     ├── /api/scraper/status

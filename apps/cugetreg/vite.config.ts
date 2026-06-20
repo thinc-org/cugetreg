@@ -5,4 +5,7 @@ import { defineConfig } from 'vite';
 export default defineConfig({
   plugins: [sveltekit(), tailwindcss()],
   assetsInclude: ['**/*.md'],
+  ssr: {
+    noExternal: ['@cugetreg/utils', '@cugetreg/zod-schemas', '@cugetreg/ui'],
+  },
 });

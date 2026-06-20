@@ -39,7 +39,7 @@ courses
         timeStart,
         timeEnd,
         noPrereq,
-        fitCardId,
+        fitCartId,
       } = c.req.valid("query");
 
       const sqlStudyProgram = mapStudyProgram(studyProgram);
@@ -50,7 +50,7 @@ courses
       const searchPattern = q ? `%${q}%` : undefined;
 
       let occupiedSql = Prisma.empty;
-      if (fitCardId) {
+      if (fitCartId) {
         const userId = c.get("user").id;
 
         if (!userId) {
@@ -59,17 +59,17 @@ courses
 
         const cart = await prisma.cart.findFirst({
           where: {
-            id: fitCardId,
+            id: fitCartId,
             userId,
           },
         });
 
         if (!cart) {
-          return c.json({ error: "NOT_CART_OWNER" }, 403);
+          return c.json({ error: "CART_NOT_FOUND_OR_NOT_OWNED" }, 404);
         }
 
         const cartItems = await prisma.cartItem.findMany({
-          where: { cartId: fitCardId },
+          where: { cartId: fitCartId },
         });
         if (cartItems.length > 0) {
           const occupiedSlots = await prisma.sectionClass.findMany({

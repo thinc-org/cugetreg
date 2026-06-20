@@ -25,7 +25,7 @@ class Settings(BaseSettings):
     scraper_max_courses: int = 0
 
     course_desc_path: str = ""
-    overrides_path: str = "../../apps/core/bin/overrides.json"
+    overrides_path: str = "../../apps/core/bin/overrides.example.json"
 
     scraper_json_output: str = "../../apps/core/bin/courses.json"
     scraper_status_output: str = "../../apps/reg-scraper-py/data/scraper-status.json"

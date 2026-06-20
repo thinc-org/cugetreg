@@ -32,6 +32,7 @@ lerna-debug.log*
 volumes
 
 bin/*.json
-!bin/README.md
+!bin/overrides.example.json
+!bin/readme.md
 /src/routes/auth-old.ts
 /src/generated/*

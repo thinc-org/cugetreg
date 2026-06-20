@@ -7,7 +7,7 @@
 
   let { data }: Props = $props()
 
-  const status = data.scraperStatus
+  const status = $derived(data.scraperStatus)
 </script>
 
 <div class="mx-auto max-w-3xl p-6">

@@ -70,6 +70,7 @@
   const limit = 10;
   let hasMoreReviews = $state(true);
   let loadingReviews = $state(false);
+  let loadingSchedules = $state(false);
 
   async function updateUser() {
     const updatedUser = {
@@ -105,18 +106,24 @@
       academicYear,
       semester: semesters[semester],
     });
+
+    loadingSchedules = true;
+
     const [res, error] = await tryCatch(
       api.get(`${PUBLIC_API_URL}/api/v1/carts?${query.toString()}`),
     );
 
     if (error || res.status !== 200) {
       console.error(error?.message);
+      loadingSchedules = false;
       return;
     }
 
     const { data } = ListCartsResponseSchema.parse(res.data);
     const fetchedItems = convertSchedulesInfo(data);
     items = fetchedItems;
+
+    loadingSchedules = false;
   }
 
   async function changeVisibility(item: ScheduleItem) {
@@ -225,7 +232,6 @@
 
   $effect(() => {
     selectedTerm;
-    items;
     fetchScheduleItems();
   });
 
@@ -250,6 +256,7 @@
       {items}
       {terms}
       bind:selectedTerm
+      loading={loadingSchedules}
       {onSelectTerm}
       onDelete={onDeleteItem}
       onChangeVisibility={changeVisibility}

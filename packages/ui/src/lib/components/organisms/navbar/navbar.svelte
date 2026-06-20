@@ -12,6 +12,7 @@
 	import { Input } from '../../atoms/input';
 	import { CUGetRegDarkFull as CUGetRegLogo } from '../../logo/cugetreg';
 	import { UserDialog } from '../../molecules/user-dialog';
+	import { goto } from '$app/navigation';
 
 	interface Props {
 		isLoggedIn?: boolean;
@@ -115,7 +116,7 @@
 		</IconButton>
 		{#if isLoggedIn}
 			<Collapsible name={shortenedName}>
-				<UserDialog {name} {id} {imageUrl} {onSignOut} />
+				<UserDialog {name} {id} {imageUrl} {onSignOut} onSettings={() => goto('/profile')} />
 			</Collapsible>
 		{:else}
 			<!-- To be implemented: add real href in Button -->

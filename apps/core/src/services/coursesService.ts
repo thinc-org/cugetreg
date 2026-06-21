@@ -1,4 +1,5 @@
 import type { GetCourseQuerySchema } from "@cugetreg/zod-schemas/courses";
+
 import { prisma } from "../db/clients.js";
 import { getCourseList } from "../generated/prisma/sql.js";
 import { mapDayOfWeek } from "../utils/enumMapper.js";

@@ -2,6 +2,7 @@
   import { env } from '$env/dynamic/public';
 
   const PUBLIC_API_URL = env.PUBLIC_API_URL ?? 'http://localhost:3000/api/v1';
+  import { api } from '$lib/api';
   import { useSession } from '$lib/auth-client';
   import ScheduleMismatchPopup from '$lib/components/schedule-mismatch-popup.svelte';
   import SelectedCourse from '$lib/components/selected-course.svelte';
@@ -39,7 +40,6 @@
   import { Filter as FilterBar } from '@cugetreg/ui/organisms/filter-bar';
   import { Footer } from '@cugetreg/ui/organisms/footer';
   import * as Sidebar from '@cugetreg/ui/organisms/sidebar';
-  import { api } from '$lib/api';
 
   let courses = $state.raw<any[]>([]);
   let isLoading = $state(false);

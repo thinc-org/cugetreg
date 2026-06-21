@@ -9,9 +9,8 @@ import {
   getCourseByNoRoute,
   getCoursesRoute,
 } from "../routes_define/courses.routes.js";
-import { mapSemester, mapStudyProgram } from "../utils/enumMapper.js";
-
 import { queryCourse } from "../services/coursesService.js";
+import { mapSemester, mapStudyProgram } from "../utils/enumMapper.js";
 
 const courses = new OpenAPIHono<{ Variables: Variables }>();
 

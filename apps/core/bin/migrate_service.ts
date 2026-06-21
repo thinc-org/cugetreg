@@ -54,8 +54,12 @@ export function safeFsJsonRead<T>(path: string): T {
  * Keeps sentinel values IA (Irregular Arrangement) and AR (To Be Arranged) as-is.
  */
 function sanitizePeriod(value: string): string {
-  if (value === "80:00") return "08:00";
-  if (value === "90:00") return "09:00";
+  if (value === "80:00") {
+    return "08:00";
+  }
+  if (value === "90:00") {
+    return "09:00";
+  }
   return value;
 }
 

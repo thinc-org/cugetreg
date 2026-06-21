@@ -277,10 +277,13 @@
       scheduleName={itemToDelete?.title}
     />
   {/if}
-  <div
-    class="fixed right-6 bottom-6 z-50 inline-flex cursor-default items-center gap-2 rounded-full border-2 border-blue-700 px-6 py-1"
+  <a
+    class="fixed right-6 bottom-6 z-50 inline-flex cursor-pointer items-center gap-2 rounded-full border-2 border-blue-700 px-4 py-1"
+    href="https://docs.google.com/forms/d/e/1FAIpQLScH2AZyifTnBVXiJBtyzM73MReGX2vpM1_I9IWQfABMduVgsg/viewform?usp=dialog"
+    target="_blank"
+    rel="noopener noreferrer"
   >
     <TriangleAlert width={16} height={16} color="#172554" />
     <span class="text-xs">แจ้งปัญหาการใช้งาน</span>
-  </div>
+  </a>
 </div>

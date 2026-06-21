@@ -1,4 +1,4 @@
-import type { GenEdType, StudyProgram } from "@cugetreg/zod-schemas";
+import type { GenEdType, StudyProgram } from '@cugetreg/zod-schemas';
 
 export function studyProgramMapper(studyProgram: StudyProgram) {
   switch (studyProgram) {

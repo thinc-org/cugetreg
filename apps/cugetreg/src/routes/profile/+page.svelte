@@ -13,6 +13,7 @@
   import { PersonalInfo } from '@cugetreg/ui/organisms/personal-info';
   import { RatingHistory } from '@cugetreg/ui/organisms/rating-history';
   import { ScheduleList } from '@cugetreg/ui/organisms/schedule-list';
+  import type { ReviewStatus } from '@cugetreg/zod-schemas';
   import {
     ListCartsResponseSchema,
     UpdateUserInfoResponseSchema,
@@ -20,8 +21,6 @@
   } from '@cugetreg/zod-schemas';
 
   import type { PageProps } from './$types';
-
-  import type { ReviewStatus } from '@cugetreg/zod-schemas';
 
   interface ScheduleItem {
     id: string;

@@ -1,8 +1,8 @@
 <script lang="ts">
-	import type { ReviewStatus } from '@cugetreg/zod-schemas/constants';
-
 	import { ChevronRight, Clock, LoaderCircle, NotebookPen, Star, StarHalf } from '@lucide/svelte';
 	import { tick } from 'svelte';
+
+	import type { ReviewStatus } from '@cugetreg/zod-schemas/constants';
 
 	import { RatingStar } from '../../atoms/rating-star';
 

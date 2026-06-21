@@ -1,6 +1,4 @@
 <script module lang="ts">
-	import type { ReviewStatus } from '@cugetreg/zod-schemas/constants';
-
 	import { defineMeta } from '@storybook/addon-svelte-csf';
 
 	import { RatingHistory } from './index.js';

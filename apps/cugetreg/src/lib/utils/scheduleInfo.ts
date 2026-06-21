@@ -1,6 +1,8 @@
-import { studyProgramMapper } from '../mapper';
 import { SEMESTER_LABEL_LONG } from '$lib/semesterOptions';
+
 import type { Semester, StudyProgram } from '@cugetreg/zod-schemas';
+
+import { studyProgramMapper } from '../mapper';
 
 type Schedule = {
   id: string;

@@ -1,11 +1,13 @@
-import { genEdTypeMapper } from '../mapper';
 import { SEMESTER_LABEL_LONG } from '$lib/semesterOptions';
-import type { 
-  Semester,
+
+import type {
+  GenEdType,
   ReviewStatus,
+  Semester,
   StudyProgram,
-  GenEdType
 } from '@cugetreg/zod-schemas';
+
+import { genEdTypeMapper } from '../mapper';
 
 type Review = {
   id: string;

@@ -1,6 +1,6 @@
 import z from "zod";
 
-export const TIME_REGEX = /^(IA)|([01]\d|2[0-3]):([0-5]\d)$/;
+export const TIME_REGEX = /^(IA|AR)|([01]\d|2[0-3]):([0-5]\d)$/;
 
 export const days = z.enum([
   "MO",

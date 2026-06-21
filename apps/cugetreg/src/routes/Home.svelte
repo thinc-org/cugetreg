@@ -275,7 +275,7 @@
           (s) => (currentCartId = s.currentCartId),
         );
 
-        if (currentCartId) params.append('fitCardId', currentCartId);
+        if (currentCartId) params.append('fitCartId', currentCartId);
 
         unsub();
       }

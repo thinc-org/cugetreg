@@ -16,7 +16,7 @@
 -- @param {Int} $13:offset? Page offset (default 0)
 -- @param {String} $14:sortBy? Sort column ('NAME', 'CAPACITY_SUM', 'REMAINING_SUM'; default 'REMAINING_SUM')
 -- @param {String} $15:sortOrder? Sort direction ('ASC', 'DESC'; default 'ASC')
--- @param {String} $16:fitCardId? Optional cart ID — when set, excludes sections whose classes overlap with the cart's sections
+-- @param {String} $16:fitCartId? Optional cart ID — when set, excludes sections whose classes overlap with the cart's sections
 
 -- Step 0: Precompute cart's occupied class slots once (avoids a correlated
 --         subquery in matching_sections when $16 is provided).

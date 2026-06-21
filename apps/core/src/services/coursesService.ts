@@ -23,16 +23,16 @@ export async function queryCourse(
     timeStart,
     timeEnd,
     noPrereq,
-    fitCardId,
+    fitCartId,
   } = query;
 
-  if (fitCardId) {
+  if (fitCartId) {
     if (!userId) {
       throw new Error("UNAUTHORIZED");
     }
 
     const cart = await prisma.cart.findFirst({
-      where: { id: fitCardId },
+      where: { id: fitCartId },
     });
 
     if (!cart) {
@@ -61,7 +61,7 @@ export async function queryCourse(
       offset ?? 0,
       sortBy ?? "REMAINING_SUM",
       sortOrder ?? "asc",
-      fitCardId ?? null,
+      fitCartId ?? null,
     ),
   );
 

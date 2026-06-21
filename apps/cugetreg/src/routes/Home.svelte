@@ -39,6 +39,7 @@
   import { Filter as FilterBar } from '@cugetreg/ui/organisms/filter-bar';
   import { Footer } from '@cugetreg/ui/organisms/footer';
   import * as Sidebar from '@cugetreg/ui/organisms/sidebar';
+  import { api } from '$lib/api';
 
   let courses = $state.raw<any[]>([]);
   let isLoading = $state(false);
@@ -264,32 +265,25 @@
         }
         if (startTime) params.append('timeStart', startTime);
         if (endTime) params.append('timeEnd', endTime);
-        if (fitSchedule) {
-          const userCart = getUserCartStore();
-
-          let currentCartId = null;
-          const unsub = userCart.subscribe(
-            (s) => (currentCartId = s.currentCartId),
-          );
-
-          if (currentCartId) params.append('fitCartId', currentCartId);
-
-          unsub();
-        }
       }
 
-      const res = await fetch(
-        `${PUBLIC_API_URL}/courses?${params.toString()}`,
-        {
-          method: 'GET',
-          headers: { 'Content-Type': 'application/json' },
-        },
-      );
+      if (fitSchedule) {
+        const userCart = getUserCartStore();
 
-      if (!res.ok) throw new Error(`Server error (${res.status})`);
-      const json = await res.json();
-      const data = json.data || [];
-      totalResults = json.total || 0;
+        let currentCartId = null;
+        const unsub = userCart.subscribe(
+          (s) => (currentCartId = s.currentCartId),
+        );
+
+        if (currentCartId) params.append('fitCardId', currentCartId);
+
+        unsub();
+      }
+
+      const response = await api.get(`/courses?${params.toString()}`);
+
+      const data = response.data.data || [];
+      totalResults = response.data.total || 0;
 
       const mapped = data.map(mapCourse);
 
@@ -336,6 +330,9 @@
     currentSort;
     sortDirection;
     fitSchedule;
+    if (fitSchedule) {
+      $userCart.currentCart;
+    }
     untrack(() => fetchCourses(true));
   });
 

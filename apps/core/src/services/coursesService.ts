@@ -45,7 +45,6 @@ export async function queryCourse(
     }
   }
 
-  console.log("querying...");
   const rawResults = await prisma.$queryRawTyped(
     getCourseList(
       studyProgram,
@@ -67,7 +66,6 @@ export async function queryCourse(
     ),
   );
 
-  console.log("finished query");
   if (rawResults.length === 0) {
     return { data: [], total: 0 };
   }

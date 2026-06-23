@@ -18,6 +18,7 @@ import type { Semester, StudyProgram } from '@cugetreg/zod-schemas/constants';
 
 import { loginPopupState } from './login-popup.svelte';
 import { useContextStore } from './stores';
+import { get, type Writable } from 'svelte/store';
 
 export interface UserCartInterface {
   currentCart: CartData;
@@ -25,6 +26,9 @@ export interface UserCartInterface {
   cartList: CartSchema[];
   exams: ExamScheduleItem[];
 }
+
+const showError = (message: string) =>
+  toast.error(message, { position: 'bottom-right' });
 
 /**
  * Context key for the cart data promise streamed from the root layout load.
@@ -87,11 +91,11 @@ let pendingCartUpdate: UpdateCartFields = {};
 const pendingItemUpdates = new Map<string, UpdateCourseFields>();
 
 /**
- * Cached cart id set whenever useCartActions() is called (i.e. during
- * component initialisation, where getContext is valid).  Lets flushUpdates
- * read the id without touching the Svelte context API.
+ * Cached reference to the userCart writable, set in useCartActions().
+ * Lets flushUpdates read the store from an async context where getContext()
+ * is unavailable, and lets us use get() instead of a leaky subscription.
  */
-let cachedCartId: string | undefined;
+let cachedStore: Writable<UserCartInterface> | undefined;
 
 // ---------------------------------------------------------------------------
 // Flush logic
@@ -103,19 +107,27 @@ let debounceHandle: ReturnType<typeof setTimeout> | null = null;
 let isFlushing = false;
 
 /**
+ * Tracks the in-flight flush promise so that flushCartImmediately callers
+ * can await the currently-running flush before proceeding.
+ */
+let flushPromise: Promise<void> | null = null;
+
+/**
  * Flush all accumulated pending updates to the API.
  * - Cart-level fields → PATCH /carts/:cartId
  * - Per-item fields   → PATCH /carts/items/:itemId  (one request per item)
  *
- * Uses a guard flag so that a slow in-flight flush cannot overlap with the
- * next debounce window. Any changes that arrive while flushing will simply
- * accumulate and be sent in the next flush cycle.
+ * Uses a promise-based queue so that:
+ *  1. Callers can await the in-flight flush and have their changes picked
+ *     up in a subsequent fresh cycle (fixes #5).
+ *  2. On API failure the store is reconciled from the server (fixes #3).
  */
 async function flushUpdates(): Promise<void> {
   if (isFlushing) {
-    // A flush is already running; reschedule so the new deltas are not lost.
-    scheduleFlush();
-    return;
+    // A flush is already running — wait for it, then run a fresh cycle so
+    // any changes that accumulated during the await are sent afterwards.
+    await flushPromise;
+    return flushUpdates();
   }
 
   isFlushing = true;
@@ -129,18 +141,14 @@ async function flushUpdates(): Promise<void> {
   const itemPayloads = new Map(pendingItemUpdates);
   pendingItemUpdates.clear();
 
-  // Use the id that was cached during component initialisation.
-  // (getUserCartStore calls getContext, which is only valid during init.)
-  const currentCartId = cachedCartId;
+  const currentCartId = cachedStore
+    ? get(cachedStore)?.currentCartId
+    : undefined;
 
-  console.log('Requesting', { cartPayload, itemPayloads, currentCartId });
-
-  try {
+  const execute = async (): Promise<void> => {
     // 1. Cart-level update
     if (currentCartId && Object.keys(cartPayload).length > 0) {
-      console.log('Requesting patch');
-      const res = await api.patch(`/carts/${currentCartId}`, cartPayload);
-      console.log(res.data);
+      await api.patch(`/carts/${currentCartId}`, cartPayload);
     }
 
     // 2. Per-item updates (parallel to keep things fast)
@@ -148,12 +156,33 @@ async function flushUpdates(): Promise<void> {
       ([itemId, payload]) => api.patch(`/carts/items/${itemId}`, payload),
     );
     await Promise.all(itemRequests);
+  };
+
+  flushPromise = execute();
+
+  try {
+    await flushPromise;
   } catch (err) {
     console.error('[user-cart] Failed to sync cart to API:', err);
-    // On failure we do NOT re-queue the failed payloads to avoid infinite
-    // retry loops.  A future implementation could add exponential back-off.
+
+    // On failure, reconcile the store from the server so the UI doesn't
+    // hang on stale optimistic updates.
+    if (currentCartId && cachedStore) {
+      try {
+        const detailRes = await api.get(`/carts/${currentCartId}`);
+        const detail = CartDetailResponseSchema.parse(detailRes.data).data;
+        cachedStore.update((state) => ({
+          ...state,
+          currentCart: detail.cart,
+          exams: detail.schedule.exams,
+        }));
+      } catch {
+        // Reload failed — give up, the UI will be stale until next refresh
+      }
+    }
   } finally {
     isFlushing = false;
+    flushPromise = null;
   }
 }
 
@@ -176,7 +205,8 @@ function scheduleFlush(): void {
 
 /**
  * Cancel any pending debounce and immediately flush all accumulated updates.
- * Useful before navigating away or on page unload.
+ * Useful before navigating away, or before async cart mutations that need
+ * a clean server-state baseline.
  */
 export async function flushCartImmediately(): Promise<void> {
   if (debounceHandle !== null) {
@@ -193,11 +223,9 @@ export async function flushCartImmediately(): Promise<void> {
 export function useCartActions() {
   const userCart = getUserCartStore();
 
-  // Keep the module-level cachedCartId in sync so flushUpdates can read it
-  // from an async context where getContext() is unavailable.
-  userCart.subscribe((s) => {
-    cachedCartId = s?.currentCartId;
-  });
+  // Cache the store reference so flushUpdates can read it from async
+  // contexts where Svelte's getContext() is unavailable.
+  cachedStore = userCart;
 
   const pinCart = async () => {
     const snapshot = (() => {
@@ -258,10 +286,31 @@ export function useCartActions() {
    * an API sync.  Useful for toggling visibility, changing order, etc.
    */
   const updateCartMeta = (fields: UpdateCartFields) => {
-    userCart.update((state) => ({
-      ...state,
-      currentCart: { ...state.currentCart, ...fields },
-    }));
+    userCart.update((state) => {
+      let result = {
+        ...state,
+        currentCart: { ...state.currentCart, ...fields },
+      };
+
+      // Optimistically reorder cartList when prevId/nextId is present,
+      // so the list reflects the new order immediately.
+      if ('prevId' in fields || 'nextId' in fields) {
+        const currentIdx = state.cartList.findIndex(
+          (c) => c.id === state.currentCartId,
+        );
+        if (currentIdx !== -1) {
+          const cartList = [...state.cartList];
+          const [moved] = cartList.splice(currentIdx, 1);
+          const newIndex = !fields.prevId
+            ? 0
+            : cartList.findIndex((c) => c.id === fields.prevId) + 1;
+          cartList.splice(newIndex, 0, moved);
+          result = { ...result, cartList };
+        }
+      }
+
+      return result;
+    });
 
     pendingCartUpdate = { ...pendingCartUpdate, ...fields };
     scheduleFlush();
@@ -274,16 +323,13 @@ export function useCartActions() {
    * @param sectionNo - The section number
    */
   const addCourse = async (courseNo: string, sectionNo: number) => {
-    const snapshot = (() => {
-      let s: UserCartInterface | undefined;
-      const unsub = userCart.subscribe((v) => {
-        s = v;
-      });
-      unsub();
-      return s!;
-    })();
+    // Flush any pending optimistic mutations (rename, color change, etc.)
+    // so the server state matches local state before the destructive GET.
+    await flushCartImmediately();
 
-    const { currentCartId } = snapshot;
+    const snapshot = get(userCart);
+    const { currentCartId } = snapshot ?? {};
+    if (!currentCartId) return;
 
     try {
       const res = await api.post(`/carts/${currentCartId}/items`, {
@@ -294,13 +340,17 @@ export function useCartActions() {
       const newItem = SingleCartItemResponseSchema.parse(res.data).data;
 
       // Fetch the full detail to get the new exam schedule and complete course data
-
       const detailRes = await api.get(`/carts/${currentCartId}`);
       const detail = CartDetailResponseSchema.parse(detailRes.data).data;
 
+      // Surgical merge: only update items and exams, preserving any fields
+      // on currentCart that may have changed optimistically.
       userCart.update((state) => ({
         ...state,
-        currentCart: detail.cart,
+        currentCart: {
+          ...state.currentCart,
+          items: detail.cart.items,
+        },
         exams: detail.schedule.exams,
       }));
 
@@ -318,37 +368,28 @@ export function useCartActions() {
    * @param itemId - The cart item's database id
    */
   const removeCourse = async (itemId: string) => {
-    const snapshot = (() => {
-      let s: UserCartInterface | undefined;
-      const unsub = userCart.subscribe((v) => {
-        s = v;
-      });
-      unsub();
-      return s!;
-    })();
+    // Flush any pending optimistic mutations first.
+    await flushCartImmediately();
 
-    const { currentCartId } = snapshot;
+    const snapshot = get(userCart);
+    const { currentCartId } = snapshot ?? {};
     if (!currentCartId) return;
 
     try {
       await api.delete(`/carts/${currentCartId}/items/${itemId}`);
 
-      // Update local state immediately
-      userCart.update((state) => ({
-        ...state,
-        currentCart: {
-          ...state.currentCart,
-          items: state.currentCart.items.filter((item) => item.id !== itemId),
-        },
-      }));
-
       // Fetch the full detail to refresh exams and other derived data
       const detailRes = await api.get(`/carts/${currentCartId}`);
       const detail = CartDetailResponseSchema.parse(detailRes.data).data;
 
+      // Surgical merge: only update items and exams, preserving any
+      // fields on currentCart that may have changed optimistically.
       userCart.update((state) => ({
         ...state,
-        currentCart: detail.cart,
+        currentCart: {
+          ...state.currentCart,
+          items: detail.cart.items,
+        },
         exams: detail.schedule.exams,
       }));
 
@@ -369,28 +410,11 @@ export function useCartActions() {
    */
   const updateCourse = (itemId: string, fields: UpdateCourseFields) => {
     userCart.update((state) => {
-      const items = [...state.currentCart.items];
-      const index = items.findIndex((item) => item.id === itemId);
-
-      if (index !== -1) {
-        // 1. Update fields
-        items[index] = { ...items[index], ...fields } as (typeof items)[0];
-
-        // 2. Handle optimistic reordering if prevId/nextId are present
-        if ('prevId' in fields || 'nextId' in fields) {
-          const [movedItem] = items.splice(index, 1);
-          let newIndex: number;
-
-          if (!fields.prevId) {
-            newIndex = 0;
-          } else {
-            const prevIdx = items.findIndex((i) => i.id === fields.prevId);
-            newIndex = prevIdx + 1;
-          }
-
-          items.splice(newIndex, 0, movedItem);
-        }
-      }
+      const items: CartData['items'] = state.currentCart.items.map((item) =>
+        item.id === itemId
+          ? ({ ...item, ...fields } as CartData['items'][0])
+          : item,
+      );
 
       return {
         ...state,
@@ -502,92 +526,134 @@ export function useCartActions() {
     const newCart = SingleCartResponseSchema.parse(response.data).data;
     const newCartId = newCart.id;
 
-    const detailRes = await api.get(`/carts/${newCartId}`);
-    const detail = CartDetailResponseSchema.parse(detailRes.data).data;
+    // Try to fetch the full detail — degrade gracefully if it fails so the
+    // cart isn't orphaned from the store.
+    let cartData: CartData | undefined;
+    let examsData: ExamScheduleItem[] | undefined;
+    try {
+      const detailRes = await api.get(`/carts/${newCartId}`);
+      const detail = CartDetailResponseSchema.parse(detailRes.data).data;
+      cartData = detail.cart;
+      examsData = detail.schedule.exams;
+    } catch {
+      toast.error('Created cart but failed to load details', {
+        position: 'bottom-right',
+      });
+    }
 
     userCart.update((state) => ({
       ...state,
-      currentCart: detail.cart,
+      currentCart:
+        cartData ??
+        ({
+          ...newCart,
+          items: [],
+        } as unknown as CartData),
       currentCartId: newCartId,
-      exams: detail.schedule.exams,
-      cartList: [
-        ...state.cartList,
-        {
-          id: newCart.id,
-          userId: newCart.userId,
-          studyProgram: newCart.studyProgram,
-          academicYear: newCart.academicYear,
-          semester: newCart.semester,
-          name: newCart.name,
-          visible: newCart.visible,
-          isDefault: newCart.isDefault,
-          cartOrder: newCart.cartOrder,
-          createdAt: newCart.createdAt,
-          updatedAt: newCart.updatedAt,
-        },
-      ],
+      exams: examsData ?? [],
+      cartList: [...state.cartList, newCart],
     }));
   };
 
   const deleteCart = async (): Promise<void> => {
-    // Snapshot current state synchronously before any async work
-    let snapshot: UserCartInterface | undefined;
-    const unsub = userCart.subscribe((v) => {
-      snapshot = v;
-    });
-    unsub();
-    const { currentCartId, currentCart, cartList } = snapshot!;
+    await flushCartImmediately();
+    const snapshot = get(userCart);
+    if (!snapshot) return;
+    const { currentCartId, currentCart } = snapshot;
 
     try {
       // 1. Call the API — will 204 on success
       await api.delete(`/carts/${currentCartId}`);
 
-      // 2. Build the remaining list without the deleted cart
-      const remaining = cartList.filter((c) => c.id !== currentCartId);
+      // 2. Clear pending updates for the now-deleted cart — any in-flight
+      //    flush targeting this cart will fail harmlessly.
+      pendingCartUpdate = {};
+      pendingItemUpdates.clear();
+      if (debounceHandle !== null) {
+        clearTimeout(debounceHandle);
+        debounceHandle = null;
+      }
+
+      // 3. Compute substitute candidate from the LIVE store state, so
+      //    concurrent createCart/copyCart calls are not dropped.
+      const currentState = get(userCart);
+      if (!currentState) return;
+
+      const remaining = currentState.cartList.filter(
+        (c) => c.id !== currentCartId,
+      );
 
       if (remaining.length === 0) {
-        // No carts left — clear the store to an empty state
         userCart.update((state) => ({
           ...state,
           cartList: [],
-          // Keep currentCart/currentCartId as-is; the UI should redirect away
         }));
         return;
       }
 
       let substituteId: string;
-      let updatedList = remaining;
+      let substituteIsDefault = false;
 
       if (currentCart.isDefault) {
-        // Mirror server logic: sort ascending by cartOrder (lexicographic —
-        // LexoRank strings sort correctly as plain strings)
+        // Mirror server logic: sort ascending by cartOrder (LexoRank
+        // strings sort correctly as plain strings)
         const sorted = [...remaining].sort((a, b) =>
           a.cartOrder < b.cartOrder ? -1 : a.cartOrder > b.cartOrder ? 1 : 0,
         );
         substituteId = sorted[0].id;
-
-        // Mark the substitute as default in the list (the server already did
-        // this on its side; we reflect it here so the UI stays consistent)
-        updatedList = remaining.map((c) =>
-          c.id === substituteId ? { ...c, isDefault: true } : c,
-        );
+        substituteIsDefault = true;
       } else {
         substituteId =
           remaining.find((c) => c.isDefault)?.id ?? remaining[0].id;
       }
 
-      // 4. Fetch the full detail of the substitute so the store has all data
-      const detailRes = await api.get(`/carts/${substituteId}`);
-      const detail = CartDetailResponseSchema.parse(detailRes.data).data;
+      // 4. Fetch the full detail of the substitute
+      let detail;
+      try {
+        const detailRes = await api.get(`/carts/${substituteId}`);
+        detail = CartDetailResponseSchema.parse(detailRes.data).data;
+      } catch {
+        // If the fetch fails, still remove the cart from the list but don't
+        // overwrite currentCart — the next data refresh will fill it in.
+        userCart.update((state) => ({
+          ...state,
+          cartList: state.cartList.filter((c) => c.id !== currentCartId),
+        }));
+        return;
+      }
 
-      // 5. Update the store in one shot
-      userCart.update((state) => ({
-        ...state,
-        cartList: updatedList,
-        currentCart: detail.cart,
-        currentCartId: substituteId,
-        exams: detail.schedule.exams,
-      }));
+      // 5. Update the store — compute remaining from the current state in
+      //    the callback so concurrently-added carts are not lost.
+      userCart.update((state) => {
+        // Freshly compute remaining from the latest state
+        const freshRemaining = state.cartList.filter(
+          (c) => c.id !== currentCartId,
+        );
+
+        if (freshRemaining.length === 0) {
+          return { ...state, cartList: [] };
+        }
+
+        // If the substitute we fetched was concurrently deleted too,
+        // just remove our cart and leave state otherwise intact.
+        if (!freshRemaining.some((c) => c.id === substituteId)) {
+          return { ...state, cartList: freshRemaining };
+        }
+
+        const updatedList = freshRemaining.map((c) =>
+          c.id === substituteId && substituteIsDefault
+            ? { ...c, isDefault: true }
+            : c,
+        );
+
+        return {
+          ...state,
+          cartList: updatedList,
+          currentCart: detail.cart,
+          currentCartId: substituteId,
+          exams: detail.schedule.exams,
+        };
+      });
     } catch (error) {
       handleError(error);
     }

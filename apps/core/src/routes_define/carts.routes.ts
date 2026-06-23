@@ -183,3 +183,45 @@ export const deleteCourseRoute = createRoute({
   },
   security: [{ Bearer: [] }],
 });
+
+export const pinCartRoute = createRoute({
+  method: "patch",
+  path: "/{cartId}/pin",
+  summary: "3.9 Pin cart for user",
+  request: {
+    params: z.object({ cartId: z.string() }),
+  },
+  responses: {
+    200: { description: "Pinned" },
+    403: errorRes("NOT_CART_OWNER"),
+    404: errorRes("CART_NOT_FOUND"),
+    500: InternalError,
+  },
+  security: [{ Bearer: [] }],
+});
+
+export const duplicateCart = createRoute({
+  method: "post",
+  path: "/{cartId}/duplicate",
+  summary: "3.10 Duplicate user's cart",
+  request: {
+    params: z.object({ cartId: z.string() }),
+    body: {
+      content: {
+        "application/json": {
+          schema: z.object({ name: z.string().nonempty() }),
+        },
+      },
+    },
+  },
+  responses: {
+    201: {
+      content: { "application/json": { schema: SingleCartResponseSchema } },
+      description: "Created",
+    },
+    403: errorRes("NOT_CART_OWNER"),
+    404: errorRes("CART_NOT_FOUND"),
+    500: InternalError,
+  },
+  security: [{ Bearer: [] }],
+});

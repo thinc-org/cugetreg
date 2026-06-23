@@ -19,16 +19,18 @@ import {
 import { LexoRankService } from "./lexorank.service.js";
 
 import { prisma } from "../db/clients.js";
-import type {
-  Course,
-  Section,
-  SectionClass,
+import {
+  Visible,
+  type Course,
+  type Section,
+  type SectionClass,
 } from "../generated/prisma/client.js";
 
 export const cartService = {
   getAllCartItems: async (userId: string, query: ListCartsQuerySchema) => {
     return prisma.cart.findMany({
       where: { userId, ...query },
+      orderBy: { cartOrder: "asc" },
     });
   },
 
@@ -139,6 +141,7 @@ export const cartService = {
       where: { id: cartId },
       include: {
         items: {
+          orderBy: { cartOrder: "asc" },
           include: {
             courseInfo: {
               include: {
@@ -417,6 +420,89 @@ export const cartService = {
       }
 
       await tx.cartItem.delete({ where: { id: itemId } });
+    });
+  },
+
+  pinCart: async (userId: string, cartId: string) => {
+    await prisma.$transaction(async (tx) => {
+      const cart = await tx.cart.findFirst({
+        where: { id: cartId },
+      });
+
+      if (!cart) {
+        throw new Error("CART_NOT_FOUND");
+      }
+
+      if (cart.userId !== userId) {
+        throw new Error("NOT_CART_OWNER");
+      }
+
+      // There might exist user with multiple default cart (spooky)
+      await tx.cart.updateMany({
+        where: { userId, isDefault: true },
+        data: {
+          isDefault: false,
+        },
+      });
+
+      await tx.cart.update({
+        where: { id: cartId },
+        data: { isDefault: true },
+      });
+    });
+  },
+
+  duplicateCart: async (
+    userId: string,
+    cartId: string,
+    newCartName: string,
+  ) => {
+    return await prisma.$transaction(async (tx) => {
+      const cart = await tx.cart.findFirst({
+        where: { id: cartId },
+        include: { items: true },
+      });
+
+      if (!cart) {
+        throw new Error("CART_NOT_FOUND");
+      }
+
+      if (cart.userId !== userId) {
+        throw new Error("NOT_CART_OWNER");
+      }
+
+      const lastCart = await tx.cart.findFirst({
+        where: { userId },
+        orderBy: { cartOrder: "desc" },
+      });
+
+      const nextOrder = LexoRankService.getNextRank(lastCart?.cartOrder);
+
+      const newCart = await tx.cart.create({
+        data: {
+          userId,
+          name: newCartName,
+          studyProgram: cart.studyProgram,
+          academicYear: cart.academicYear,
+          semester: cart.semester,
+          visible: Visible.PVT,
+          isDefault: false,
+          cartOrder: nextOrder,
+          items: {
+            create: cart.items.map((item) => ({
+              courseNo: item.courseNo,
+              sectionNo: item.sectionNo,
+              color: item.color,
+              hidden: item.hidden,
+              cartOrder: item.cartOrder,
+              isGraded: false,
+              expectedGrade: 0,
+            })),
+          },
+        },
+      });
+
+      return newCart;
     });
   },
 };

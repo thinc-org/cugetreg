@@ -10,6 +10,8 @@ import {
   listCartsRoute,
   updateCartRoute,
   updateCourseRoute,
+  pinCartRoute,
+  duplicateCart,
 } from "../routes_define/carts.routes.js";
 import { cartService } from "../services/cartsService.js";
 
@@ -174,6 +176,51 @@ const carts = new OpenAPIHono<{ Variables: Variables }>()
       if (err instanceof Error) {
         if (err.message === "ITEM_NOT_FOUND") {
           return c.json({ error: "ITEM_NOT_FOUND" }, 404);
+        }
+        if (err.message === "NOT_CART_OWNER") {
+          return c.json({ error: "NOT_CART_OWNER" }, 403);
+        }
+      }
+      return c.json({ error: "INTERNAL_SERVER_ERROR" }, 500);
+    }
+  })
+
+  // 3.9. Pin cart
+  .openapi(pinCartRoute, async (c) => {
+    try {
+      const userId = c.get("user").id;
+      const cartId = c.req.param("cartId");
+
+      await cartService.pinCart(userId, cartId);
+
+      return c.json({ description: "Pinned" }, 200);
+    } catch (err) {
+      if (err instanceof Error) {
+        if (err.message === "CART_NOT_FOUND") {
+          return c.json({ error: "CART_NOT_FOUND" }, 404);
+        }
+        if (err.message === "NOT_CART_OWNER") {
+          return c.json({ error: "NOT_CART_OWNER" }, 403);
+        }
+      }
+      return c.json({ error: "INTERNAL_SERVER_ERROR" }, 500);
+    }
+  })
+
+  // 3.10. Duplicate cart
+  .openapi(duplicateCart, async (c) => {
+    try {
+      const userId = c.get("user").id;
+      const cartId = c.req.param("cartId");
+      const { name } = c.req.valid("json");
+
+      const newCart = await cartService.duplicateCart(userId, cartId, name);
+
+      return c.json({ data: newCart }, 201);
+    } catch (err) {
+      if (err instanceof Error) {
+        if (err.message === "CART_NOT_FOUND") {
+          return c.json({ error: "CART_NOT_FOUND" }, 404);
         }
         if (err.message === "NOT_CART_OWNER") {
           return c.json({ error: "NOT_CART_OWNER" }, 403);

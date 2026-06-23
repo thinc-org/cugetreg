@@ -15,7 +15,7 @@ on:
 jobs:
   run:
     env:
-      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/cugetreg?schema=public
       PUBLIC_API_URL: http://localhost:3000
     runs-on: ${{ inputs.runs-on }}
     steps:
@@ -50,6 +50,30 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --prefer-offline
+
+      - name: Start PostgreSQL
+        if: ${{ inputs.target == 'build' || inputs.target == 'test' }}
+        run: |
+          docker compose -f apps/core/docker-compose.yaml up -d db
+          for i in $(seq 1 30); do
+            if pg_isready -h localhost -U postgres > /dev/null 2>&1; then
+              echo "PostgreSQL is ready"
+              exit 0
+            fi
+            echo "Waiting for PostgreSQL... ($i/30)"
+            sleep 2
+          done
+          echo "PostgreSQL failed to start"
+          exit 1
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: cugetreg
+          POSTGRES_PORT: 5432
+
+      - name: Apply database migrations
+        if: ${{ inputs.target == 'build' || inputs.target == 'test' }}
+        run: pnpm --filter @cugetreg/core exec prisma migrate deploy
 
       - name: Get branch name
         id: branch-name

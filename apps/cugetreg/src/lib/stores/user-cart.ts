@@ -228,35 +228,20 @@ export function useCartActions() {
   cachedStore = userCart;
 
   const pinCart = async () => {
-    const snapshot = (() => {
-      let s: UserCartInterface | undefined;
-      const unsub = userCart.subscribe((v) => {
-        s = v;
-      });
-      unsub();
-      return s!;
-    })();
-
-    const oldDefault = snapshot.cartList.find((item) => item.isDefault)?.id;
-    const newDefault = snapshot.currentCartId;
+    const snapshot = get(userCart);
+    if (!snapshot) return;
 
     try {
-      await api.patch(`/carts/${oldDefault}`, {
-        isDefault: false,
-      });
-
-      await api.patch(`/carts/${newDefault}`, {
-        isDefault: true,
-      });
+      await api.patch(`/carts/${snapshot.currentCartId}/pin`);
 
       userCart.update((state) => ({
         ...state,
         currentCart: { ...state.currentCart, isDefault: true },
-        cartList: state.cartList.map((item) => {
-          if (state.currentCartId === item.id)
-            return { ...item, isDefault: true };
-          else return { ...item, isDefault: false };
-        }),
+        cartList: state.cartList.map((item) =>
+          state.currentCartId === item.id
+            ? { ...item, isDefault: true }
+            : { ...item, isDefault: false },
+        ),
       }));
     } catch (error) {
       handleError(error);
@@ -410,11 +395,23 @@ export function useCartActions() {
    */
   const updateCourse = (itemId: string, fields: UpdateCourseFields) => {
     userCart.update((state) => {
+      // 1. Apply field updates
       const items: CartData['items'] = state.currentCart.items.map((item) =>
         item.id === itemId
           ? ({ ...item, ...fields } as CartData['items'][0])
           : item,
       );
+
+      if ('prevId' in fields || 'nextId' in fields) {
+        const index = items.findIndex((i) => i.id === itemId);
+        if (index !== -1) {
+          const [moved] = items.splice(index, 1);
+          const newIndex = !fields.prevId
+            ? 0
+            : items.findIndex((i) => i.id === fields.prevId) + 1;
+          items.splice(newIndex, 0, moved);
+        }
+      }
 
       return {
         ...state,
@@ -432,72 +429,38 @@ export function useCartActions() {
   };
 
   const copyCart = async (): Promise<string> => {
-    const snapshot = (() => {
-      let s: UserCartInterface | undefined;
-      const unsub = userCart.subscribe((v) => {
-        s = v;
+    const snapshot = get(userCart);
+    if (!snapshot) return '';
+    const { currentCartId, currentCart } = snapshot;
+
+    try {
+      // Flush pending optimistic mutations so the server-side snapshot
+      // matches the latest local state before duplicating.
+      await flushCartImmediately();
+
+      const dupRes = await api.post(`/carts/${currentCartId}/duplicate`, {
+        name: `Copy of ${currentCart.name}`,
       });
-      unsub();
-      return s!;
-    })();
+      const newCart = SingleCartResponseSchema.parse(dupRes.data).data;
+      const newCartId = newCart.id;
 
-    const { currentCart } = snapshot;
+      // Fetch the full detail so the store has exams and schedule data
+      const detailRes = await api.get(`/carts/${newCartId}`);
+      const detail = CartDetailResponseSchema.parse(detailRes.data).data;
 
-    // 1. Create the new cart shell
-    const createRes = await api.post('/carts', {
-      academicYear: currentCart.academicYear,
-      semester: currentCart.semester,
-      studyProgram: currentCart.studyProgram,
-      name: `Copy of ${currentCart.name}`,
-      isDefault: false,
-    });
+      userCart.update((state) => ({
+        ...state,
+        currentCart: detail.cart,
+        currentCartId: newCartId,
+        exams: detail.schedule.exams,
+        cartList: [...state.cartList, newCart],
+      }));
 
-    const newCart = SingleCartResponseSchema.parse(createRes.data).data;
-    const newCartId = newCart.id;
-
-    // 2. Copy all items in parallel
-    await Promise.all(
-      currentCart.items.map((item) =>
-        api.post(`/carts/${newCartId}/items`, {
-          courseNo: item.courseNo,
-          sectionNo: item.sectionNo,
-          color: item.color ?? undefined,
-          isGraded: item.isGraded,
-          expectedGrade: Number(item.expectedGrade),
-          hidden: item.hidden,
-        }),
-      ),
-    );
-
-    // 3. Fetch the full detail of the new cart so the store has complete data
-    const detailRes = await api.get(`/carts/${newCartId}`);
-    const detail = CartDetailResponseSchema.parse(detailRes.data).data;
-
-    // 4. Update the store: push new cart into the list and activate it
-    userCart.update((state) => ({
-      ...state,
-      currentCart: detail.cart,
-      currentCartId: newCartId,
-      exams: detail.schedule.exams,
-      cartList: [
-        ...state.cartList,
-        {
-          id: newCart.id,
-          userId: newCart.userId,
-          studyProgram: newCart.studyProgram,
-          academicYear: newCart.academicYear,
-          semester: newCart.semester,
-          name: newCart.name,
-          visible: newCart.visible,
-          isDefault: newCart.isDefault,
-          cartOrder: newCart.cartOrder,
-          createdAt: newCart.createdAt,
-          updatedAt: newCart.updatedAt,
-        },
-      ],
-    }));
-
-    return newCartId;
+      return newCartId;
+    } catch (error) {
+      handleError(error);
+      return '';
+    }
   };
 
   const createCart = async (

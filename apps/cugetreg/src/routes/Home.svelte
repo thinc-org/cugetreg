@@ -268,16 +268,9 @@
       }
 
       if (fitSchedule) {
-        const userCart = getUserCartStore();
-
-        let currentCartId = null;
-        const unsub = userCart.subscribe(
-          (s) => (currentCartId = s.currentCartId),
-        );
-
-        if (currentCartId) params.append('fitCartId', currentCartId);
-
-        unsub();
+        if ($userCart.currentCartId) {
+          params.append('fitCartId', $userCart.currentCartId);
+        }
       }
 
       const response = await api.get(`/courses?${params.toString()}`);

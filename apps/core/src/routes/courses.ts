@@ -25,7 +25,6 @@ courses
     } catch (err) {
       if (err instanceof Error) {
         if (err.message === "UNAUTHORIZED") {
-          console.log("bad");
           return c.json({ error: "UNAUTHORIZED" }, 401);
         }
         if (

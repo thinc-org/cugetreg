@@ -20,8 +20,12 @@
 
 -- Step 0: Precompute cart's occupied class slots once (avoids a correlated
 --         subquery in matching_sections when $16 is provided).
+--         period_start_minutes/period_end_minutes are generated columns on
+--         course_class; NULL for IA/AR/bad times.
 WITH occupied_slots AS (
-    SELECT cl_occ.day_of_week, cp_occ.period_range
+    SELECT cl_occ.day_of_week,
+           cl_occ.period_start_minutes,
+           cl_occ.period_end_minutes
     FROM cart_item ci
     JOIN course c_occ
         ON c_occ.course_no = ci.course_no
@@ -33,10 +37,10 @@ WITH occupied_slots AS (
         AND cs_occ.section_no = ci.section_no
     JOIN course_class cl_occ
         ON cl_occ.section_id = cs_occ.id
-    JOIN course_class_period cp_occ
-        ON cp_occ.section_class_id = cl_occ.id
     WHERE ci.cart_id = $16::text
       AND $16::text IS NOT NULL
+      AND cl_occ.period_start_minutes IS NOT NULL
+      AND cl_occ.period_end_minutes IS NOT NULL
 ),
 
 -- Step 1: Find sections that pass ALL filters (course-level + section-level).
@@ -57,7 +61,6 @@ matching_sections AS (
     JOIN course c             ON c.id = s.course_id
     JOIN course_info ci       ON ci.course_no = c.course_no
     LEFT JOIN course_class cl ON cl.section_id = s.id
-    LEFT JOIN course_class_period cp ON cp.section_class_id = cl.id
     WHERE
         -- Course-level filters
         c.study_program = $1::study_program
@@ -97,25 +100,33 @@ matching_sections AS (
             OR (
                 cl.id IS NOT NULL
                 AND ($6::day_of_week IS NULL OR cl.day_of_week = $6::day_of_week)
-                AND ($10::text IS NULL OR cp.period_range IS NOT NULL AND CAST(lower(cp.period_range) AS time) >= $10::time)
-                AND ($11::text IS NULL OR cp.period_range IS NOT NULL AND CAST(upper(cp.period_range) AS time) <= $11::time)
+                AND ($10::text IS NULL OR cl.period_start IS NOT NULL AND cl.period_start::time >= $10::time)
+                AND ($11::text IS NULL OR cl.period_end IS NOT NULL AND cl.period_end::time <= $11::time)
             )
         )
 
         -- Cart-fit filter: exclude sections whose classes overlap with any
-        -- precomputed occupied_slots from the cart.  $16 is the cart ID;
+        -- precomputed occupied_slots from the cart, or whose classes have no
+        -- fixed period (IA/AR/zero-duration).  $16 is the cart ID;
         -- pass null to skip the filter entirely.
+        --
+        -- Uses a GiST expression index on int4range(period_start_minutes, period_end_minutes)
+        -- for efficient overlap (&&) lookups.  int4range returns NULL when either argument
+        -- is NULL, so classes with IA/AR/bad times naturally fail the overlap check and
+        -- are caught by the IS NULL clause below.
         AND (
             $16::text IS NULL
             OR NOT EXISTS (
                 SELECT 1 FROM course_class cl_self
-                JOIN course_class_period cp_self
-                    ON cp_self.section_class_id = cl_self.id
                 WHERE cl_self.section_id = s.id
-                  AND EXISTS (
-                      SELECT 1 FROM occupied_slots occ
-                      WHERE occ.day_of_week = cl_self.day_of_week
-                        AND occ.period_range && cp_self.period_range
+                  AND (
+                      cl_self.period_start_minutes IS NULL
+                      OR EXISTS (
+                          SELECT 1 FROM occupied_slots occ
+                          WHERE occ.day_of_week = cl_self.day_of_week
+                            AND int4range(cl_self.period_start_minutes, cl_self.period_end_minutes, '[)') &&
+                                int4range(occ.period_start_minutes, occ.period_end_minutes, '[)')
+                      )
                   )
             )
         )

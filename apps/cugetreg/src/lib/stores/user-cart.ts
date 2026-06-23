@@ -19,6 +19,7 @@ import type { Semester, StudyProgram } from '@cugetreg/zod-schemas/constants';
 import { loginPopupState } from './login-popup.svelte';
 import { useContextStore } from './stores';
 import { get, type Writable } from 'svelte/store';
+import { courseColorVariants } from '@cugetreg/utils/constants';
 
 export interface UserCartInterface {
   currentCart: CartData;
@@ -317,9 +318,12 @@ export function useCartActions() {
     if (!currentCartId) return;
 
     try {
+      const colors = Object.keys(courseColorVariants).slice(1, -1);
+      const color = colors[Number(courseNo) % colors.length];
       const res = await api.post(`/carts/${currentCartId}/items`, {
         courseNo,
         sectionNo,
+        color,
       });
 
       const newItem = SingleCartItemResponseSchema.parse(res.data).data;

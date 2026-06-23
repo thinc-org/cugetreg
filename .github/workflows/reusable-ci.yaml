@@ -44,7 +44,7 @@ jobs:
         name: Setup pnpm cache
         with:
           path: ${{ steps.pnpm-cache.outputs.pnpm_cache_dir }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
 
@@ -56,7 +56,7 @@ jobs:
         run: |
           docker compose -f apps/core/docker-compose.yaml up -d db
           for i in $(seq 1 30); do
-            if pg_isready -h localhost -U postgres > /dev/null 2>&1; then
+            if docker exec cugetreg-db pg_isready -U postgres > /dev/null 2>&1; then
               echo "PostgreSQL is ready"
               exit 0
             fi
@@ -64,6 +64,7 @@ jobs:
             sleep 2
           done
           echo "PostgreSQL failed to start"
+          docker logs cugetreg-db --tail 20
           exit 1
         env:
           POSTGRES_USER: postgres

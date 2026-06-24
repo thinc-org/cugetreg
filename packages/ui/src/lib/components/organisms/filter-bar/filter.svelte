@@ -336,7 +336,7 @@
 			<div class="time-col">
 				<label>เวลาเริ่ม</label>
 				<div class="input-wrapper">
-					<input type="text" bind:value={startTime} placeholder="08:00" />
+					<input type="time" bind:value={startTime} placeholder="08:00" />
 					<svg
 						class="clock-icon"
 						xmlns="http://www.w3.org/2000/svg"
@@ -353,7 +353,7 @@
 			<div class="time-col">
 				<label>เวลาจบ</label>
 				<div class="input-wrapper">
-					<input type="text" bind:value={endTime} placeholder="16:00" />
+					<input type="time" bind:value={endTime} placeholder="16:00" />
 					<svg
 						class="clock-icon"
 						xmlns="http://www.w3.org/2000/svg"

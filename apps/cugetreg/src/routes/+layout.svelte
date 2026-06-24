@@ -31,6 +31,8 @@
   import { Navbar } from '@cugetreg/ui/organisms/navbar';
   import { CartDetailResponseSchema } from '@cugetreg/zod-schemas/carts-response';
 
+  import LoadingScreen from '$lib/components/loading-screen.svelte';
+
   import type { LayoutData } from './$types';
 
   const session = useSession();
@@ -84,13 +86,18 @@
 
   const cartPromise = (() => data.cart)();
 
-  cartPromise.then(
-    (cart) => {
-      if (cart) userCart.set(cart);
-      return cart;
-    },
-    (err) => console.error('[layout] failed to load cart:', err),
-  );
+  // Full-screen loading shown on initial app load until the cart settles.
+  let appLoading = $state(true);
+
+  cartPromise
+    .then(
+      (cart) => {
+        if (cart) userCart.set(cart);
+        return cart;
+      },
+      (err) => console.error('[layout] failed to load cart:', err),
+    )
+    .finally(() => (appLoading = false));
 
   setContext(CART_PROMISE_KEY, cartPromise);
 
@@ -180,6 +187,10 @@
     onLogin={handleGoogleLogin}
   />
 </Modal>
+
+{#if appLoading}
+  <LoadingScreen />
+{/if}
 
 <Toaster />
 

@@ -12,7 +12,7 @@
   <div class="w-[80%] min-w-[60vw]">
     <div class="text-3xl font-bold">เกี่ยวกับเรา</div>
 
-    <div class="my-5 flex">
+    <div class="my-5 flex flex-col gap-2 md:flex-row md:gap-6">
       <div class="flex-1 text-lg font-bold">
         <div>ชมรม Thinc.</div>
         <div>จุฬาลงกรณ์มหาวิทยาลัย</div>
@@ -48,6 +48,20 @@
       เป็นเว็บไซต์ศูนย์กลางที่รวบรวมข้อมูลรายวิชาไว้ได้อย่างครบถ้วน
       และมุ่งที่จะสร้างเว็บไวต์นี้ให้เป็นพื้นที่สำหรับการแบ่งปันข้อมูลรายวิชาระหว่างนิสิตในอนาคต
     </QuestionAnswer>
+
+    <div
+      class="font-sarabun my-6 rounded-[2rem] border-2 border-blue-700 px-8 py-8 text-center text-blue-700"
+    >
+      ทั้งนี้ CU Get Reg เป็นเพียงเครื่องมือที่ช่วยให้การวางแผนลงทะเบียนเรียนง่ายขึ้น
+      แต่ไม่ใช่การลงทะเบียนเรียนจริง
+      <span class="font-bold">
+        คุณสามารถลงทะเบียนเรียนได้ที่
+        <a href="https://www2.reg.chula.ac.th/" class="underline"
+          >https://www2.reg.chula.ac.th/</a
+        > เพียงช่องทางเดียวเท่านั้น
+      </span>
+    </div>
+
     <QuestionAnswer question="CU Get Reg นำข้อมูลมาจากไหน?">
       <ul class="list-disc">
         <li>

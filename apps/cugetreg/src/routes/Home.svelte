@@ -80,7 +80,7 @@
 
   let currentProgram = $state('ทวิภาค');
   let currentSemester = $state('2566 / 1');
-  let currentSort = $state('รหัสวิชา');
+  let currentSort = $state('NAME');
   let sortDirection = $state<'asc' | 'desc'>('asc');
 
   // Mobile-only sort options (per design): seat-based + name, each encodes a

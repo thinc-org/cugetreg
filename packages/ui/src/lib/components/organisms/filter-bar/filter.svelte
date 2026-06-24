@@ -115,16 +115,14 @@
 
 <svelte:window onclick={handleWindowClick} />
 
-<div
-	class="flex h-full w-full flex-col gap-4 bg-surface font-['IBM_Plex_Sans_Thai',_sans-serif]"
->
+<div class="bg-surface flex h-full w-full flex-col gap-4 font-['IBM_Plex_Sans_Thai',_sans-serif]">
 	<div
-		class="flex-1 overflow-y-auto overflow-x-hidden px-1 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+		class="flex-1 overflow-x-hidden overflow-y-auto px-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
 	>
 		<div class="mb-4">
 			<label class="mb-1.5 block text-[13px] text-neutral-400">ประเภท GenEd</label>
 			<div
-				class="relative flex min-h-10 cursor-pointer flex-wrap gap-2 rounded-xl border border-transparent bg-surface-container-lowest p-2 pr-[30px] hover:bg-surface-container-low"
+				class="bg-surface-container-lowest hover:bg-surface-container-low relative flex min-h-10 cursor-pointer flex-wrap gap-2 rounded-xl border border-transparent p-2 pr-[30px]"
 				onclick={(e) => toggleDropdown('gened', e)}
 				role="button"
 				tabindex="0"
@@ -132,7 +130,7 @@
 			>
 				{#each activeGenEds as item (item.label)}
 					<div
-						class="inline-flex items-center gap-1.5 rounded-full bg-surface px-2.5 py-1 text-[13px] font-semibold"
+						class="bg-surface inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[13px] font-semibold"
 						style="color: {item.color}; border: 1px solid {item.color};"
 					>
 						{item.label}
@@ -151,11 +149,13 @@
 				{#if activeGenEds.length === 0}
 					<span class="self-center text-sm text-neutral-400">Select GenEd...</span>
 				{/if}
-				<div class="absolute right-2.5 top-1/2 -translate-y-1/2 text-[10px] text-neutral-400">▼</div>
+				<div class="absolute top-1/2 right-2.5 -translate-y-1/2 text-[10px] text-neutral-400">
+					▼
+				</div>
 
 				{#if openDropdown === 'gened'}
 					<div
-						class="absolute left-0 right-0 top-[105%] z-50 max-h-[200px] overflow-y-auto rounded-lg border border-surface-container bg-surface shadow-[0_4px_15px_rgba(0,0,0,0.1)]"
+						class="border-surface-container bg-surface absolute top-[105%] right-0 left-0 z-50 max-h-[200px] overflow-y-auto rounded-lg border shadow-[0_4px_15px_rgba(0,0,0,0.1)]"
 						onclick={(e) => e.stopPropagation()}
 						role="listbox"
 						tabindex="0"
@@ -163,7 +163,7 @@
 					>
 						{#each availableGenEds as opt (opt.label)}
 							<div
-								class="cursor-pointer px-3.5 py-2.5 text-sm hover:bg-surface-container-low"
+								class="hover:bg-surface-container-low cursor-pointer px-3.5 py-2.5 text-sm"
 								style="color: {opt.color}"
 								onclick={() => addOption('gened', opt.id)}
 								role="option"
@@ -184,7 +184,7 @@
 		<div class="mb-4">
 			<label class="mb-1.5 block text-[13px] text-neutral-400">ประเภทพิเศษ</label>
 			<div
-				class="relative flex min-h-10 cursor-pointer flex-wrap gap-2 rounded-xl border border-transparent bg-surface-container-low p-2 pr-[30px] hover:bg-surface-container-lowest"
+				class="bg-surface-container-low hover:bg-surface-container-lowest relative flex min-h-10 cursor-pointer flex-wrap gap-2 rounded-xl border border-transparent p-2 pr-[30px]"
 				onclick={(e) => toggleDropdown('special', e)}
 				role="button"
 				tabindex="0"
@@ -210,11 +210,13 @@
 				{#if activeSpecial.length === 0}
 					<span class="self-center text-sm text-neutral-400">Select...</span>
 				{/if}
-				<div class="absolute right-2.5 top-1/2 -translate-y-1/2 text-[10px] text-neutral-400">▼</div>
+				<div class="absolute top-1/2 right-2.5 -translate-y-1/2 text-[10px] text-neutral-400">
+					▼
+				</div>
 
 				{#if openDropdown === 'special'}
 					<div
-						class="absolute left-0 right-0 top-[105%] z-50 max-h-[200px] overflow-y-auto rounded-lg border border-surface-container bg-surface shadow-[0_4px_15px_rgba(0,0,0,0.1)]"
+						class="border-surface-container bg-surface absolute top-[105%] right-0 left-0 z-50 max-h-[200px] overflow-y-auto rounded-lg border shadow-[0_4px_15px_rgba(0,0,0,0.1)]"
 						onclick={(e) => e.stopPropagation()}
 						role="listbox"
 						tabindex="0"
@@ -222,7 +224,7 @@
 					>
 						{#each availableSpecial as opt (opt.id)}
 							<div
-								class="cursor-pointer px-3.5 py-2.5 text-sm hover:bg-surface-container-low"
+								class="hover:bg-surface-container-low cursor-pointer px-3.5 py-2.5 text-sm"
 								onclick={() => addOption('special', opt.id)}
 								role="option"
 								tabindex="0"
@@ -239,7 +241,7 @@
 		<div class="mb-4">
 			<label class="mb-1.5 block text-[13px] text-neutral-400">คณะ</label>
 			<div
-				class="relative flex min-h-10 cursor-pointer flex-wrap gap-2 rounded-xl border border-transparent bg-surface-container-low p-2 pr-[30px] hover:bg-surface-container-lowest"
+				class="bg-surface-container-low hover:bg-surface-container-lowest relative flex min-h-10 cursor-pointer flex-wrap gap-2 rounded-xl border border-transparent p-2 pr-[30px]"
 				onclick={(e) => toggleDropdown('faculty', e)}
 				role="button"
 				tabindex="0"
@@ -265,10 +267,12 @@
 				{#if activeFaculties.length === 0}
 					<span class="self-center text-sm text-neutral-400">Select Faculty...</span>
 				{/if}
-				<div class="absolute right-2.5 top-1/2 -translate-y-1/2 text-[10px] text-neutral-400">▼</div>
+				<div class="absolute top-1/2 right-2.5 -translate-y-1/2 text-[10px] text-neutral-400">
+					▼
+				</div>
 				{#if openDropdown === 'faculty'}
 					<div
-						class="absolute left-0 right-0 top-[105%] z-50 max-h-[200px] overflow-y-auto rounded-lg border border-surface-container bg-surface shadow-[0_4px_15px_rgba(0,0,0,0.1)]"
+						class="border-surface-container bg-surface absolute top-[105%] right-0 left-0 z-50 max-h-[200px] overflow-y-auto rounded-lg border shadow-[0_4px_15px_rgba(0,0,0,0.1)]"
 						onclick={(e) => e.stopPropagation()}
 						role="listbox"
 						tabindex="0"
@@ -276,7 +280,7 @@
 					>
 						{#each availableFaculties as opt (opt.id)}
 							<div
-								class="cursor-pointer px-3.5 py-2.5 text-sm hover:bg-surface-container-low"
+								class="hover:bg-surface-container-low cursor-pointer px-3.5 py-2.5 text-sm"
 								onclick={() => addOption('faculty', opt.id)}
 								role="option"
 								tabindex="0"
@@ -293,7 +297,7 @@
 		<div class="mb-4">
 			<label class="mb-1.5 block text-[13px] text-neutral-400">วันในสัปดาห์</label>
 			<div
-				class="relative flex min-h-10 cursor-pointer flex-wrap gap-2 rounded-xl border border-transparent bg-surface-container-lowest p-2 pr-[30px] hover:bg-surface-container-low"
+				class="bg-surface-container-lowest hover:bg-surface-container-low relative flex min-h-10 cursor-pointer flex-wrap gap-2 rounded-xl border border-transparent p-2 pr-[30px]"
 				onclick={(e) => toggleDropdown('day', e)}
 				role="button"
 				tabindex="0"
@@ -320,10 +324,12 @@
 				{#if activeDays.length === 0}
 					<span class="self-center text-sm text-neutral-400">Select Days...</span>
 				{/if}
-				<div class="absolute right-2.5 top-1/2 -translate-y-1/2 text-[10px] text-neutral-400">▼</div>
+				<div class="absolute top-1/2 right-2.5 -translate-y-1/2 text-[10px] text-neutral-400">
+					▼
+				</div>
 				{#if openDropdown === 'day'}
 					<div
-						class="absolute left-0 right-0 top-[105%] z-50 max-h-[200px] overflow-y-auto rounded-lg border border-surface-container bg-surface shadow-[0_4px_15px_rgba(0,0,0,0.1)]"
+						class="border-surface-container bg-surface absolute top-[105%] right-0 left-0 z-50 max-h-[200px] overflow-y-auto rounded-lg border shadow-[0_4px_15px_rgba(0,0,0,0.1)]"
 						onclick={(e) => e.stopPropagation()}
 						role="listbox"
 						tabindex="0"
@@ -331,7 +337,7 @@
 					>
 						{#each availableDays as opt (opt.id)}
 							<div
-								class="cursor-pointer px-3.5 py-2.5 text-sm hover:bg-surface-container-low"
+								class="hover:bg-surface-container-low cursor-pointer px-3.5 py-2.5 text-sm"
 								style="color: {opt.color}"
 								onclick={() => addOption('day', opt.id)}
 								role="option"
@@ -354,10 +360,10 @@
 						type="time"
 						bind:value={startTime}
 						placeholder="08:00"
-						class="box-border w-full rounded-xl border-none bg-surface-container-lowest p-2.5 text-sm text-on-surface"
+						class="bg-surface-container-lowest text-on-surface box-border w-full rounded-xl border-none p-2.5 text-sm"
 					/>
 					<svg
-						class="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2"
+						class="pointer-events-none absolute top-1/2 right-2.5 -translate-y-1/2"
 						xmlns="http://www.w3.org/2000/svg"
 						width="16"
 						height="16"
@@ -376,10 +382,10 @@
 						type="time"
 						bind:value={endTime}
 						placeholder="16:00"
-						class="box-border w-full rounded-xl border-none bg-surface-container-lowest p-2.5 text-sm text-on-surface"
+						class="bg-surface-container-lowest text-on-surface box-border w-full rounded-xl border-none p-2.5 text-sm"
 					/>
 					<svg
-						class="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2"
+						class="pointer-events-none absolute top-1/2 right-2.5 -translate-y-1/2"
 						xmlns="http://www.w3.org/2000/svg"
 						width="16"
 						height="16"
@@ -395,7 +401,7 @@
 
 		<div class="-mt-1.5 mb-4 flex items-center gap-1.5">
 			<label
-				class="flex cursor-pointer select-none items-center text-sm font-medium text-neutral-700"
+				class="flex cursor-pointer items-center text-sm font-medium text-neutral-700 select-none"
 			>
 				<input
 					type="checkbox"
@@ -404,7 +410,7 @@
 					class="peer absolute size-0 cursor-pointer opacity-0"
 				/>
 				<span
-					class="relative mr-2.5 h-[18px] w-[18px] rounded bg-neutral-200 transition-colors duration-200 after:absolute after:left-[6px] after:top-[2px] after:hidden after:h-[9px] after:w-[4px] after:rotate-45 after:border-b-2 after:border-r-2 after:border-solid after:border-white after:content-[''] peer-checked:bg-[#4f46e5] peer-checked:after:block peer-hover:bg-neutral-300"
+					class="relative mr-2.5 h-[18px] w-[18px] rounded bg-neutral-200 transition-colors duration-200 peer-checked:bg-[#4f46e5] peer-hover:bg-neutral-300 after:absolute after:top-[2px] after:left-[6px] after:hidden after:h-[9px] after:w-[4px] after:rotate-45 after:border-r-2 after:border-b-2 after:border-solid after:border-white after:content-[''] peer-checked:after:block"
 				></span>
 				<span>ไม่กำหนดเงื่อนไขรายวิชา</span>
 			</label>
@@ -424,7 +430,7 @@
 						class="peer size-0 opacity-0"
 					/>
 					<span
-						class="absolute inset-0 cursor-pointer rounded-[34px] bg-neutral-300 transition-colors duration-[0.4s] before:absolute before:bottom-[3px] before:left-[3px] before:h-[18px] before:w-[18px] before:rounded-[50%] before:bg-white before:transition-transform before:duration-[0.4s] before:content-[''] peer-checked:bg-neutral-400 peer-checked:before:translate-x-5"
+						class="absolute inset-0 cursor-pointer rounded-[34px] bg-neutral-300 transition-colors duration-[0.4s] peer-checked:bg-neutral-400 before:absolute before:bottom-[3px] before:left-[3px] before:h-[18px] before:w-[18px] before:rounded-[50%] before:bg-white before:transition-transform before:duration-[0.4s] before:content-[''] peer-checked:before:translate-x-5"
 					></span>
 				</label>
 				<span class="flex items-center gap-1.5 text-sm font-medium text-neutral-700">
@@ -439,7 +445,7 @@
 		<div class="mb-4">
 			<label class="mb-1.5 block text-[13px] text-neutral-400">วิธีการวัดผล</label>
 			<div
-				class="relative flex min-h-10 cursor-pointer flex-wrap gap-2 rounded-xl border border-transparent bg-surface-container-low p-2 pr-[30px] hover:bg-surface-container-lowest"
+				class="bg-surface-container-low hover:bg-surface-container-lowest relative flex min-h-10 cursor-pointer flex-wrap gap-2 rounded-xl border border-transparent p-2 pr-[30px]"
 				onclick={(e) => toggleDropdown('eval', e)}
 				role="button"
 				tabindex="0"
@@ -465,10 +471,12 @@
 				{#if activeEval.length === 0}
 					<span class="self-center text-sm text-neutral-400">Select...</span>
 				{/if}
-				<div class="absolute right-2.5 top-1/2 -translate-y-1/2 text-[10px] text-neutral-400">▼</div>
+				<div class="absolute top-1/2 right-2.5 -translate-y-1/2 text-[10px] text-neutral-400">
+					▼
+				</div>
 				{#if openDropdown === 'eval'}
 					<div
-						class="absolute bottom-[105%] left-0 right-0 z-50 max-h-[200px] overflow-y-auto rounded-lg border border-surface-container bg-surface shadow-[0_4px_15px_rgba(0,0,0,0.1)]"
+						class="border-surface-container bg-surface absolute right-0 bottom-[105%] left-0 z-50 max-h-[200px] overflow-y-auto rounded-lg border shadow-[0_4px_15px_rgba(0,0,0,0.1)]"
 						onclick={(e) => e.stopPropagation()}
 						role="listbox"
 						tabindex="0"
@@ -476,7 +484,7 @@
 					>
 						{#each availableEval as option (option.label)}
 							<div
-								class="cursor-pointer px-3.5 py-2.5 text-sm hover:bg-surface-container-low"
+								class="hover:bg-surface-container-low cursor-pointer px-3.5 py-2.5 text-sm"
 								onclick={() => addOption('eval', option.id)}
 								role="option"
 								tabindex="0"
@@ -492,7 +500,7 @@
 	</div>
 	<div>
 		<button
-			class="mt-2.5 w-full cursor-pointer rounded-xl border-none bg-primary-low p-3 text-base font-bold text-on-primary-low hover:bg-primary-low"
+			class="bg-primary-low text-on-primary-low hover:bg-primary-low mt-2.5 w-full cursor-pointer rounded-xl border-none p-3 text-base font-bold"
 			onclick={onsearch}
 		>
 			ค้นหา
@@ -502,7 +510,7 @@
 
 <Modal bind:show={showNoPrereqModal} dim centered exitOnBackgroundClick exitOnEsc>
 	<div
-		class="w-[420px] max-w-[90vw] rounded-3xl bg-surface p-8 text-center shadow-[0_20px_60px_rgba(0,0,0,0.18)]"
+		class="bg-surface w-[420px] max-w-[90vw] rounded-3xl p-8 text-center shadow-[0_20px_60px_rgba(0,0,0,0.18)]"
 	>
 		<h3 class="m-0 mb-4 text-2xl font-bold text-blue-700">ไม่กำหนดเงื่อนไขรายวิชา</h3>
 		<p class="m-0 mb-6 text-[15px] leading-relaxed text-neutral-500">
@@ -512,7 +520,7 @@
 			ที่ต้องผ่านก่อนการลงทะเบียน
 		</p>
 		<button
-			class="w-full cursor-pointer rounded-xl border-none bg-primary-low p-3 text-base font-bold text-blue-700 transition-colors hover:bg-primary-low"
+			class="bg-primary-low hover:bg-primary-low w-full cursor-pointer rounded-xl border-none p-3 text-base font-bold text-blue-700 transition-colors"
 			onclick={() => (showNoPrereqModal = false)}
 		>
 			ตกลง
@@ -522,7 +530,7 @@
 
 <Modal bind:show={showFitModal} dim centered exitOnBackgroundClick exitOnEsc>
 	<div
-		class="w-[420px] max-w-[90vw] rounded-3xl bg-surface p-8 text-center shadow-[0_20px_60px_rgba(0,0,0,0.18)]"
+		class="bg-surface w-[420px] max-w-[90vw] rounded-3xl p-8 text-center shadow-[0_20px_60px_rgba(0,0,0,0.18)]"
 	>
 		<h3 class="m-0 mb-4 text-2xl font-bold text-blue-700">Fit my schedule</h3>
 		<p class="m-0 mb-6 text-[15px] leading-relaxed text-neutral-500">
@@ -532,7 +540,7 @@
 			กับตารางเรียนของคุณที่ได้เลือกและจัดไว้
 		</p>
 		<button
-			class="w-full cursor-pointer rounded-xl border-none bg-primary-low p-3 text-base font-bold text-blue-700 transition-colors hover:bg-primary-low"
+			class="bg-primary-low hover:bg-primary-low w-full cursor-pointer rounded-xl border-none p-3 text-base font-bold text-blue-700 transition-colors"
 			onclick={() => (showFitModal = false)}
 		>
 			ตกลง

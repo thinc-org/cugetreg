@@ -39,6 +39,7 @@
   import { Filter as FilterBar } from '@cugetreg/ui/organisms/filter-bar';
   import { Footer } from '@cugetreg/ui/organisms/footer';
   import * as Sidebar from '@cugetreg/ui/organisms/sidebar';
+  import AppSidebar from '$lib/components/app-sidebar.svelte';
 
   let courses = $state.raw<any[]>([]);
   let isLoading = $state(false);
@@ -47,13 +48,9 @@
   let offset = $state(0);
   const limit = 20;
 
-  let openPanel = $state<'sidebar' | 'filter_only' | 'selected_only' | null>(
-    null,
-  );
-  let activePanel = $state<'sidebar' | 'filter_only' | 'selected_only' | null>(
-    null,
-  );
   let sidebarExpanded = $state(true);
+  let openPanel = $state<string | null>(null);
+  let activePanel = $state<string | null>(null);
 
   let timetableSection = $state<HTMLElement>();
   let filterSection = $state<HTMLElement>();
@@ -364,22 +361,6 @@
     ทวิภาค: 'S',
   };
 
-  function togglePanel(type: typeof openPanel) {
-    if (sidebarExpanded) {
-      if (type === 'sidebar') scrollToSection(timetableSection);
-      if (type === 'filter_only') scrollToSection(filterSection);
-      if (type === 'selected_only') scrollToSection(selectedSection);
-      activePanel = type;
-    } else {
-      if (openPanel === type) {
-        openPanel = null;
-      } else {
-        openPanel = type;
-        activePanel = type;
-      }
-    }
-  }
-
   function scrollToSection(el: HTMLElement | undefined) {
     if (!el) return;
     el.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -524,18 +505,98 @@
 
 <div class="relative flex h-screen flex-col overflow-hidden bg-white">
   <div class="relative flex flex-1 overflow-hidden">
-    <Sidebar.Provider
-      bind:open={sidebarExpanded}
-      class="relative h-full min-h-0"
-      style="--sidebar-width-icon: 4rem; --sidebar-width: 450px;"
+    <AppSidebar
+      bind:expanded={sidebarExpanded}
+      bind:openPanel
+      bind:activePanel
     >
-      {@render SidebarComponent()}
-      <Sidebar.Inset>
-        <main
-          class="h-full min-w-0 flex-1 overflow-y-auto scroll-smooth bg-white"
-        >
-          <div class="flex min-h-full flex-col">
-            <div class="mx-auto w-full max-w-[1200px] flex-1 p-8 lg:p-12">
+      {#snippet iconItems({ toggleExpanded, togglePanel, expanded, openPanel, activePanel })}
+        <Sidebar.MenuItem>
+          <Sidebar.MenuButton
+            onclick={toggleExpanded}
+            isActive={expanded && activePanel === 'sidebar'}
+            size="lg"
+            tooltipContent="เมนู"
+            class="mx-auto size-12! justify-center rounded-xl p-0! ring-0 transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-6!"
+          >
+            <Menu size="24" strokeWidth={2.5} />
+          </Sidebar.MenuButton>
+        </Sidebar.MenuItem>
+        <Sidebar.MenuItem>
+          <Sidebar.MenuButton
+            onclick={() => togglePanel('filter_only', () => scrollToSection(filterSection))}
+            isActive={activePanel === 'filter_only'}
+            size="lg"
+            tooltipContent="ตัวกรอง"
+            class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-6!"
+          >
+            <Filter size="24" strokeWidth={2.5} />
+          </Sidebar.MenuButton>
+        </Sidebar.MenuItem>
+        {#if $session.data}
+          <Sidebar.MenuItem>
+            <Sidebar.MenuButton
+              onclick={() => togglePanel('selected_only', () => scrollToSection(selectedSection))}
+              isActive={activePanel === 'selected_only'}
+              size="lg"
+              tooltipContent="วิชาที่เลือก"
+              class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-6!"
+            >
+              <BookMarked size="24" strokeWidth={2.5} />
+            </Sidebar.MenuButton>
+          </Sidebar.MenuItem>
+        {/if}
+      {/snippet}
+      {#snippet panelContent({ openPanel, expanded })}
+        {#if (expanded || openPanel === 'sidebar') && $session.data}
+          <div
+            bind:this={timetableSection}
+            class="relative mb-6 flex flex-col gap-2"
+          >
+            {#await cartPromise}
+              <div
+                class="flex items-center justify-center gap-2 border-b border-neutral-200 px-2 py-8 text-gray-400"
+              >
+                <Loader2 class="animate-spin" size={24} />
+                <span class="text-sm">กำลังโหลดตารางเรียน...</span>
+              </div>
+            {:then}
+              <SelectTimetable
+                class="border-b border-neutral-200 px-2 py-5"
+                options={$userCart.cartList?.map((item) => ({
+                  name: item.name,
+                  id: item.id,
+                })) ?? []}
+                bind:value={$userCart.currentCartId}
+                semester={$userCart.currentCart.semester}
+                semesterType={$userCart.currentCart.studyProgram}
+                academicYear={$userCart.currentCart.academicYear}
+              />
+            {:catch}
+              <div
+                class="flex items-center justify-center gap-2 border-b border-neutral-200 px-2 py-8 text-sm text-red-400"
+              >
+                โหลดตารางเรียนไม่สำเร็จ
+              </div>
+            {/await}
+          </div>
+          <hr class="mb-6 opacity-50" />
+        {/if}
+
+        {#if expanded || openPanel === 'filter_only'}
+          {@render FilterContent()}
+        {/if}
+
+        {#if (expanded || openPanel === 'selected_only') && $session.data}
+          {@render SelectedContent()}
+        {/if}
+
+        {#if expanded || openPanel === 'sidebar'}
+          {@render WarningContent()}
+        {/if}
+      {/snippet}
+      <div class="flex min-h-full flex-col">
+        <div class="mx-auto w-full max-w-[1200px] flex-1 p-8 lg:p-12">
               <div
                 class="mb-2 flex flex-col justify-between gap-4 md:flex-row md:items-center"
               >
@@ -762,9 +823,7 @@
               <Footer />
             </div>
           </div>
-        </main>
-      </Sidebar.Inset>
-    </Sidebar.Provider>
+    </AppSidebar>
   </div>
   <div class="lg:hidden">
     {#if !activeModal}
@@ -800,124 +859,6 @@
     </div>
   {/if}
 </div>
-
-{#snippet SidebarComponent()}
-  <Sidebar.Sidebar
-    variant="sidebar"
-    collapsible="icon"
-    class="!absolute z-30 !h-full border-none"
-  >
-    <Sidebar.Content class="flex-row overflow-visible!">
-      <Sidebar.Group
-        class="w-(--sidebar-width-icon) shrink-0 items-center border-r-surface-container bg-white p-0 pt-[1rem] pb-6 group-data-[variant=floating]:rounded-l-lg md:pt-[1.5rem]"
-      >
-        <Sidebar.GroupContent>
-          <Sidebar.Menu class="gap-6">
-            <Sidebar.MenuItem>
-              <Sidebar.MenuButton
-                onclick={() => (sidebarExpanded = !sidebarExpanded)}
-                isActive={sidebarExpanded && activePanel === 'sidebar'}
-                size="lg"
-                tooltipContent="เมนู"
-                class="mx-auto size-12! justify-center rounded-xl p-0! ring-0 transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-6!"
-              >
-                <Menu size="24" strokeWidth={2.5} />
-              </Sidebar.MenuButton>
-            </Sidebar.MenuItem>
-            <Sidebar.MenuItem>
-              <Sidebar.MenuButton
-                onclick={() => togglePanel('filter_only')}
-                isActive={activePanel === 'filter_only'}
-                size="lg"
-                tooltipContent="ตัวกรอง"
-                class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-6!"
-              >
-                <Filter size="24" strokeWidth={2.5} />
-              </Sidebar.MenuButton>
-            </Sidebar.MenuItem>
-            {#if $session.data}
-              <Sidebar.MenuItem>
-                <Sidebar.MenuButton
-                  onclick={() => togglePanel('selected_only')}
-                  isActive={activePanel === 'selected_only'}
-                  size="lg"
-                  tooltipContent="วิชาที่เลือก"
-                  class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-6!"
-                >
-                  <BookMarked size="24" strokeWidth={2.5} />
-                </Sidebar.MenuButton>
-              </Sidebar.MenuItem>
-            {/if}
-          </Sidebar.Menu>
-        </Sidebar.GroupContent>
-      </Sidebar.Group>
-
-      {#if openPanel || sidebarExpanded}
-        {#if !sidebarExpanded}
-          <div
-            class="fixed inset-0 z-40 bg-black/5"
-            onclick={() => (openPanel = null)}
-            role="button"
-            tabindex="0"
-            onkeydown={() => {}}
-          ></div>
-        {/if}
-        <div
-          class="bg-surface flex flex-1 flex-col overflow-hidden border border-surface-container group-data-[state=collapsed]:absolute group-data-[state=collapsed]:top-4 group-data-[state=collapsed]:left-[calc(var(--sidebar-width-icon)+1rem)] group-data-[state=collapsed]:z-50 group-data-[state=collapsed]:max-h-[min(800px,calc(100%-2rem))] group-data-[state=collapsed]:w-[400px] group-data-[state=collapsed]:rounded-3xl group-data-[state=collapsed]:shadow-2xl md:px-8 md:pt-0 md:pb-8"
-        >
-          <div class="flex-1 overflow-y-auto pr-6 pb-10 md:pr-8">
-            {#if (sidebarExpanded || openPanel === 'sidebar') && $session.data}
-              <div
-                bind:this={timetableSection}
-                class="relative mb-6 flex flex-col gap-2"
-              >
-                {#await cartPromise}
-                  <div
-                    class="flex items-center justify-center gap-2 border-b border-neutral-200 px-2 py-8 text-gray-400"
-                  >
-                    <Loader2 class="animate-spin" size={24} />
-                    <span class="text-sm">กำลังโหลดตารางเรียน...</span>
-                  </div>
-                {:then}
-                  <SelectTimetable
-                    class="border-b border-neutral-200 px-2 py-5"
-                    options={$userCart.cartList?.map((item) => ({
-                      name: item.name,
-                      id: item.id,
-                    })) ?? []}
-                    bind:value={$userCart.currentCartId}
-                    semester={$userCart.currentCart.semester}
-                    semesterType={$userCart.currentCart.studyProgram}
-                    academicYear={$userCart.currentCart.academicYear}
-                  />
-                {:catch}
-                  <div
-                    class="flex items-center justify-center gap-2 border-b border-neutral-200 px-2 py-8 text-sm text-red-400"
-                  >
-                    โหลดตารางเรียนไม่สำเร็จ
-                  </div>
-                {/await}
-              </div>
-              <hr class="mb-6 opacity-50" />
-            {/if}
-
-            {#if sidebarExpanded || openPanel === 'filter_only'}
-              {@render FilterContent()}
-            {/if}
-
-            {#if (sidebarExpanded || openPanel === 'selected_only') && $session.data}
-              {@render SelectedContent()}
-            {/if}
-
-            {#if sidebarExpanded || openPanel === 'sidebar'}
-              {@render WarningContent()}
-            {/if}
-          </div>
-        </div>
-      {/if}
-    </Sidebar.Content>
-  </Sidebar.Sidebar>
-{/snippet}
 
 {#snippet FilterContent()}
   <div bind:this={filterSection}>

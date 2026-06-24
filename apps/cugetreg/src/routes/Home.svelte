@@ -27,6 +27,7 @@
   import { Input } from '@cugetreg/ui/atoms/input';
   import { CourseCard } from '@cugetreg/ui/molecules/course-card';
   import { Modal } from '@cugetreg/ui/atoms/modal';
+  import * as Select from '@cugetreg/ui/molecules/select';
   import { SelectTimetable } from '@cugetreg/ui/molecules/select-timetable';
   import { Filter as FilterBar } from '@cugetreg/ui/organisms/filter-bar';
   import { Footer } from '@cugetreg/ui/organisms/footer';
@@ -681,32 +682,38 @@
                       class="h-12 w-full rounded-xl border-none bg-[#F1F3F7] px-6 text-lg font-medium focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
-                  <!-- Mobile sort: "เรียงตาม" + dropdown -->
-                  <div
-                    class="relative flex h-12 items-center gap-1.5 self-end md:hidden"
-                  >
-                    <button
-                      onclick={() => toggleDropdown('sort')}
-                      class="text-primary flex items-center gap-1.5 text-base font-bold whitespace-nowrap transition-opacity hover:opacity-80"
+                  <!-- Mobile sort: "เรียงตาม" + dropdown (Select) -->
+                  <div class="flex h-12 items-center self-end md:hidden">
+                    <Select.Root
+                      type="single"
+                      value={`${currentSort}:${sortDirection}`}
+                      onValueChange={(v) => {
+                        const [field, dir] = v.split(':');
+                        selectMobileSort(field, dir as 'asc' | 'desc');
+                      }}
                     >
-                      เรียงตาม
-                      <ArrowUpDown size={20} strokeWidth={2.5} />
-                    </button>
-                    {#if activeDropdown === 'sort'}
-                      <div
-                        class="absolute top-full right-0 z-[70] mt-2 w-48 overflow-hidden rounded-xl border border-gray-100 bg-white py-1 shadow-xl"
+                      <Select.Trigger
+                        showArrow={false}
+                        class="text-primary h-auto w-auto gap-1.5 rounded-none border-0 bg-transparent p-0 text-base font-bold whitespace-nowrap shadow-none hover:opacity-80 focus:ring-0 focus:ring-offset-0"
                       >
-                        {#each mobileSortOptions as opt (opt.label)}
-                          <button
-                            onclick={() => selectMobileSort(opt.field, opt.dir)}
-                            class="block w-full px-5 py-2.5 text-left text-sm hover:bg-gray-50 {currentSort ===
-                              opt.field && sortDirection === opt.dir
-                              ? 'text-primary bg-gray-50 font-bold'
-                              : ''}">{opt.label}</button
-                          >
-                        {/each}
-                      </div>
-                    {/if}
+                        <span class="flex items-center gap-1.5">
+                          เรียงตาม
+                          <ArrowUpDown size={20} strokeWidth={2.5} />
+                        </span>
+                      </Select.Trigger>
+                      <Select.Content align="end" class="w-48">
+                        <Select.Group>
+                          {#each mobileSortOptions as opt (opt.label)}
+                            <Select.Item
+                              value={`${opt.field}:${opt.dir}`}
+                              label={opt.label}
+                            >
+                              {opt.label}
+                            </Select.Item>
+                          {/each}
+                        </Select.Group>
+                      </Select.Content>
+                    </Select.Root>
                   </div>
 
                   <!-- Desktop sort: original "จัดลำดับตาม" layout -->

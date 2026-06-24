@@ -37,9 +37,9 @@
 </script>
 
 <div
-	class={cn('grid border-t border-l border-neutral-200', className)}
+	class={cn('inline-grid border-t border-l border-neutral-200', className)}
 	style="
-        grid-template-columns: repeat({periodPerDay + 1}, minmax(60px, 1fr));
+        grid-template-columns: repeat({periodPerDay + 1}, minmax(60px, 80px));
         grid-template-rows: auto repeat({amountOfDays + 1});
     "
 >
@@ -50,7 +50,7 @@
 		class="grid divide-x divide-neutral-200"
 		style="
             grid-column: span {periodPerDay} / span {periodPerDay};
-            grid-template-columns: repeat({periodPerDay}, minmax(60px, 1fr));
+            grid-template-columns: repeat({periodPerDay}, minmax(60px, 80px));
         "
 	>
 		{#each Array.from({ length: periodPerDay }) as _, i (i)}
@@ -90,7 +90,7 @@
 		<div
 			class="grid grid-cols-5"
 			style="
-                grid-template-columns: repeat({periodPerDay}, minmax(60px, 1fr));
+                grid-template-columns: repeat({periodPerDay}, minmax(60px, 80px));
                 grid-template-rows: repeat({amountOfDays}, minmax(0, 1fr));
             "
 		>

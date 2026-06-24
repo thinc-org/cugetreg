@@ -86,19 +86,19 @@
   // Mobile-only sort options (per design): seat-based + name, each encodes a
   // field + direction. Desktop keeps its own รหัสวิชา/ชื่อวิชา + direction toggle.
   const mobileSortOptions = [
-    { label: 'จำนวนที่นั่งมาก', field: 'จำนวนที่นั่ง', dir: 'desc' as const },
-    { label: 'จำนวนที่นั่งน้อย', field: 'จำนวนที่นั่ง', dir: 'asc' as const },
-    { label: 'เหลือที่นั่งมาก', field: 'เหลือที่นั่ง', dir: 'desc' as const },
-    { label: 'เหลือที่นั่งน้อย', field: 'เหลือที่นั่ง', dir: 'asc' as const },
-    { label: 'ชื่อวิชา A-Z', field: 'ชื่อวิชา', dir: 'asc' as const },
-    { label: 'ชื่อวิชา Z-A', field: 'ชื่อวิชา', dir: 'desc' as const },
+    { label: 'จำนวนที่นั่งมาก', field: 'CAPACITY', dir: 'desc' as const },
+    { label: 'จำนวนที่นั่งน้อย', field: 'CAPACITY', dir: 'asc' as const },
+    { label: 'เหลือที่นั่งมาก', field: 'REMAINING', dir: 'desc' as const },
+    { label: 'เหลือที่นั่งน้อย', field: 'REMAINING', dir: 'asc' as const },
+    { label: 'ชื่อวิชา A-Z', field: 'NAME', dir: 'asc' as const },
+    { label: 'ชื่อวิชา Z-A', field: 'NAME', dir: 'desc' as const },
   ];
   // Maps the active sort field to the API's sortBy value.
   // NOTE: CAPACITY/REMAINING require backend support; NAME works today.
-  const SORT_BY_PARAM: Record<string, string> = {
-    ชื่อวิชา: 'NAME',
-    จำนวนที่นั่ง: 'CAPACITY',
-    เหลือที่นั่ง: 'REMAINING',
+  const SORT_BY_LABEL: Record<string, string> = {
+    NAME: 'ชื่อวิชา',
+    CAPACITY: 'จำนวนที่นั่ง',
+    REMAINING: 'เหลือที่นั่ง'
   };
   function selectMobileSort(field: string, dir: 'asc' | 'desc') {
     currentSort = field;

@@ -28,7 +28,7 @@
     TriangleAlert,
     X,
   } from '@lucide/svelte';
-  import { getContext, untrack } from 'svelte';
+  import { getContext, onMount, untrack } from 'svelte';
   import { SvelteURLSearchParams } from 'svelte/reactivity';
   import { fade } from 'svelte/transition';
 
@@ -622,7 +622,7 @@
                         if (e.key === 'Enter') e.preventDefault();
                       }}
                       placeholder="พิมพ์ชื่อวิชา รหัสวิชา หรือคำค้นหาอื่นๆ..."
-                      class="h-12 w-full rounded-xl border-none bg-[#F1F3F7] px-6 text-lg font-medium focus:ring-2 focus:ring-blue-500"
+                      class="h-12 w-full rounded-xl border-none bg-[#F1F3F7] px-6 text-lg font-medium placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
                   <div class="flex w-full flex-col gap-1 md:w-64">
@@ -809,7 +809,7 @@
   >
     <Sidebar.Content class="flex-row overflow-visible!">
       <Sidebar.Group
-        class="w-(--sidebar-width-icon) shrink-0 items-center border-r bg-white p-0 pt-[1rem] pb-6 group-data-[variant=floating]:rounded-l-lg md:pt-[1.5rem]"
+        class="w-(--sidebar-width-icon) shrink-0 items-center border-r-surface-container bg-white p-0 pt-[1rem] pb-6 group-data-[variant=floating]:rounded-l-lg md:pt-[1.5rem]"
       >
         <Sidebar.GroupContent>
           <Sidebar.Menu class="gap-6">
@@ -863,7 +863,7 @@
           ></div>
         {/if}
         <div
-          class="bg-surface flex flex-1 flex-col overflow-hidden group-data-[state=collapsed]:absolute group-data-[state=collapsed]:top-4 group-data-[state=collapsed]:left-[calc(var(--sidebar-width-icon)+1rem)] group-data-[state=collapsed]:z-50 group-data-[state=collapsed]:max-h-[min(800px,calc(100%-2rem))] group-data-[state=collapsed]:w-[400px] group-data-[state=collapsed]:rounded-3xl group-data-[state=collapsed]:border group-data-[state=collapsed]:shadow-2xl md:px-8 md:pt-0 md:pb-8"
+          class="bg-surface flex flex-1 flex-col overflow-hidden border border-surface-container group-data-[state=collapsed]:absolute group-data-[state=collapsed]:top-4 group-data-[state=collapsed]:left-[calc(var(--sidebar-width-icon)+1rem)] group-data-[state=collapsed]:z-50 group-data-[state=collapsed]:max-h-[min(800px,calc(100%-2rem))] group-data-[state=collapsed]:w-[400px] group-data-[state=collapsed]:rounded-3xl group-data-[state=collapsed]:shadow-2xl md:px-8 md:pt-0 md:pb-8"
         >
           <div class="flex-1 overflow-y-auto pr-6 pb-10 md:pr-8">
             {#if (sidebarExpanded || openPanel === 'sidebar') && $session.data}

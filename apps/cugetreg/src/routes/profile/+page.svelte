@@ -74,7 +74,6 @@
   }
 
   async function fetchScheduleItems() {
-
     loadingSchedules = true;
 
     const [res, error] = await tryCatch(api.get('/carts'));

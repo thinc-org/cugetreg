@@ -1,6 +1,7 @@
 <script lang="ts">
-  import * as Sidebar from '@cugetreg/ui/organisms/sidebar';
   import type { Snippet } from 'svelte';
+
+  import * as Sidebar from '@cugetreg/ui/organisms/sidebar';
 
   interface IconItemsArgs {
     expanded: boolean;

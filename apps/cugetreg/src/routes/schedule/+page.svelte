@@ -1,4 +1,5 @@
 <script lang="ts">
+  import AppSidebar from '$lib/components/app-sidebar.svelte';
   import SelectedCourse from '$lib/components/selected-course.svelte';
   import {
     getSemesterShortOptions,
@@ -48,7 +49,6 @@
   import { RenameSchedule } from '@cugetreg/ui/organisms/rename-schedule';
   import * as Sidebar from '@cugetreg/ui/organisms/sidebar';
   import { ViewCourse } from '@cugetreg/ui/organisms/view-course';
-  import AppSidebar from '$lib/components/app-sidebar.svelte';
   import {
     discardTime,
     formatDate,
@@ -442,7 +442,13 @@
       bind:openPanel
       bind:activePanel
     >
-      {#snippet iconItems({ toggleExpanded, togglePanel, expanded, openPanel, activePanel })}
+      {#snippet iconItems({
+        toggleExpanded,
+        togglePanel,
+        expanded,
+        openPanel,
+        activePanel,
+      })}
         <Sidebar.MenuItem>
           <Sidebar.MenuButton
             onclick={toggleExpanded}
@@ -456,9 +462,12 @@
         </Sidebar.MenuItem>
         <Sidebar.MenuItem>
           <Sidebar.MenuButton
-            onclick={() => togglePanel('selected_only', () => {
-              document.querySelector('[data-selected-section]')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            })}
+            onclick={() =>
+              togglePanel('selected_only', () => {
+                document
+                  .querySelector('[data-selected-section]')
+                  ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              })}
             isActive={activePanel === 'selected_only'}
             size="lg"
             tooltipContent="วิชาที่เลือก"
@@ -510,16 +519,14 @@
           <div
             class="rounded-2xl border border-orange-300 px-5 py-4 text-center text-[15px] leading-relaxed text-orange-500"
           >
-            <span class="font-bold"
-              >CU Get Reg ไม่ใช่การลงทะเบียนเรียนจริง</span
+            <span class="font-bold">CU Get Reg ไม่ใช่การลงทะเบียนเรียนจริง</span
             ><br />
             สามารถลงทะเบียนเรียนได้ที่
             <a
               href="https://www2.reg.chula.ac.th/"
               target="_blank"
               rel="noreferrer"
-              class="underline"
-              >https://www2.reg.chula.ac.th/</a
+              class="underline">https://www2.reg.chula.ac.th/</a
             ><br />
             เพียงช่องทางเดียวเท่านั้น
           </div>
@@ -535,16 +542,14 @@
           <div
             class="mt-8 rounded-2xl border border-orange-300 px-5 py-4 text-center text-[15px] leading-relaxed text-orange-500"
           >
-            <span class="font-bold"
-              >CU Get Reg ไม่ใช่การลงทะเบียนเรียนจริง</span
+            <span class="font-bold">CU Get Reg ไม่ใช่การลงทะเบียนเรียนจริง</span
             ><br />
             สามารถลงทะเบียนเรียนได้ที่
             <a
               href="https://www2.reg.chula.ac.th/"
               target="_blank"
               rel="noreferrer"
-              class="underline"
-              >https://www2.reg.chula.ac.th/</a
+              class="underline">https://www2.reg.chula.ac.th/</a
             ><br />
             เพียงช่องทางเดียวเท่านั้น
           </div>
@@ -552,171 +557,171 @@
       {/snippet}
       <div class="flex min-h-full flex-col">
         <div class="mx-auto w-full max-w-[1200px] flex-1 p-6 lg:p-10">
-            <div
-              class="flex w-full flex-col gap-4 lg:flex-row lg:items-center lg:justify-between"
-            >
-              <div class="flex w-full items-center justify-between lg:w-auto">
-                <span class="text-[20px] font-bold md:text-[30px] lg:text-4xl"
-                  >ตารางเรียน</span
-                >
-                <div class="lg:hidden">
-                  <Switch
-                    bind:checked={selectedSchedule.isPublic}
-                    label="เปิดเป็นสาธารณะ"
-                  />
-                </div>
-              </div>
-
-              <div class="flex w-full items-center lg:w-auto">
-                <EditSchedule
-                  class="gap-2 lg:gap-0"
-                  bind:currentScheduleId={$userCart.currentCartId}
-                  schedules={$userCart.cartList?.map((item) => ({
-                    name: item.name,
-                    id: item.id,
-                  })) ?? []}
-                  onRename={() => (showRenameScheduleModal = true)}
-                  onDuplicate={() => copyCart()}
-                  onAddSchedule={() => (showCreateScheduleModal = true)}
-                  onDelete={() => (showDeleteScheduleModal = true)}
-                  onPin={() => pinCart()}
-                />
-              </div>
-            </div>
-            <div
-              class="bg-surface overflow-x-auto pt-4 pb-0 [scrollbar-width:none] lg:px-8 lg:py-8 [&::-webkit-scrollbar]:hidden"
-              bind:this={timetableDiv}
-              bind:this={scheduleTableRef}
-            >
-              <div class="min-w-150">
-                <Timetable startTime={7}>
-                  {#each $userCart.currentCart?.items as item (item.id)}
-                    {@render timetableCourseCard(item)}
-                  {/each}
-                </Timetable>
-              </div>
-            </div>
-            <CustomizeScrollbar target={scheduleTableRef} />
-            <div
-              class="hidden lg:mx-5 lg:mb-5 lg:flex lg:justify-end lg:text-lg lg:font-bold"
-            >
-              หน่วยกิตรวม {totalCredit} / 22
-            </div>
-
-            <div
-              class="mt-4 flex w-full flex-col gap-2 lg:mt-0 lg:flex-row lg:items-center"
-            >
-              <div class="flex w-full items-center justify-between lg:w-auto">
+          <div
+            class="flex w-full flex-col gap-4 lg:flex-row lg:items-center lg:justify-between"
+          >
+            <div class="flex w-full items-center justify-between lg:w-auto">
+              <span class="text-[20px] font-bold md:text-[30px] lg:text-4xl"
+                >ตารางเรียน</span
+              >
+              <div class="lg:hidden">
                 <Switch
                   bind:checked={selectedSchedule.isPublic}
                   label="เปิดเป็นสาธารณะ"
                 />
-                {#if innerWidth < 1024}
-                  <Button
-                    class="m-0 flex items-center gap-1 border border-gray-200 bg-white"
-                    onclick={screenshotTimetable}
-                  >
-                    <Download
-                      size={20}
-                      strokeWidth={2.5}
-                      class="text-[#353745]"
-                    />
-                    <span class="font-medium text-[#353745]">บันทึกภาพ</span>
-                  </Button>
-                {/if}
               </div>
-              <div class="flex w-full items-center gap-2 lg:flex-1">
-                <div class="relative flex flex-1">
-                  <Input
-                    value="cugetreg.com/1232141413"
-                    disabled={!selectedSchedule.isPublic}
-                    readonly
-                    class="w-full pr-10"
+            </div>
+
+            <div class="flex w-full items-center lg:w-auto">
+              <EditSchedule
+                class="gap-2 lg:gap-0"
+                bind:currentScheduleId={$userCart.currentCartId}
+                schedules={$userCart.cartList?.map((item) => ({
+                  name: item.name,
+                  id: item.id,
+                })) ?? []}
+                onRename={() => (showRenameScheduleModal = true)}
+                onDuplicate={() => copyCart()}
+                onAddSchedule={() => (showCreateScheduleModal = true)}
+                onDelete={() => (showDeleteScheduleModal = true)}
+                onPin={() => pinCart()}
+              />
+            </div>
+          </div>
+          <div
+            class="bg-surface overflow-x-auto pt-4 pb-0 [scrollbar-width:none] lg:px-8 lg:py-8 [&::-webkit-scrollbar]:hidden"
+            bind:this={timetableDiv}
+            bind:this={scheduleTableRef}
+          >
+            <div class="min-w-150">
+              <Timetable startTime={7}>
+                {#each $userCart.currentCart?.items as item (item.id)}
+                  {@render timetableCourseCard(item)}
+                {/each}
+              </Timetable>
+            </div>
+          </div>
+          <CustomizeScrollbar target={scheduleTableRef} />
+          <div
+            class="hidden lg:mx-5 lg:mb-5 lg:flex lg:justify-end lg:text-lg lg:font-bold"
+          >
+            หน่วยกิตรวม {totalCredit} / 22
+          </div>
+
+          <div
+            class="mt-4 flex w-full flex-col gap-2 lg:mt-0 lg:flex-row lg:items-center"
+          >
+            <div class="flex w-full items-center justify-between lg:w-auto">
+              <Switch
+                bind:checked={selectedSchedule.isPublic}
+                label="เปิดเป็นสาธารณะ"
+              />
+              {#if innerWidth < 1024}
+                <Button
+                  class="m-0 flex items-center gap-1 border border-gray-200 bg-white"
+                  onclick={screenshotTimetable}
+                >
+                  <Download
+                    size={20}
+                    strokeWidth={2.5}
+                    class="text-[#353745]"
                   />
-                  <IconButton
-                    variant="ghost"
-                    disabled={!selectedSchedule.isPublic}
-                    class="absolute right-0 z-10 hover:cursor-pointer hover:bg-transparent"
-                  >
-                    <Copy />
-                  </IconButton>
-                </div>
-                <IconButton class="aspect-square">
-                  <Share2 />
+                  <span class="font-medium text-[#353745]">บันทึกภาพ</span>
+                </Button>
+              {/if}
+            </div>
+            <div class="flex w-full items-center gap-2 lg:flex-1">
+              <div class="relative flex flex-1">
+                <Input
+                  value="cugetreg.com/1232141413"
+                  disabled={!selectedSchedule.isPublic}
+                  readonly
+                  class="w-full pr-10"
+                />
+                <IconButton
+                  variant="ghost"
+                  disabled={!selectedSchedule.isPublic}
+                  class="absolute right-0 z-10 hover:cursor-pointer hover:bg-transparent"
+                >
+                  <Copy />
                 </IconButton>
-                {#if innerWidth >= 1024}
-                  <Button class="m-0" onclick={screenshotTimetable}>
-                    บันทึกเป็นภาพ
-                  </Button>
-                {/if}
               </div>
+              <IconButton class="aspect-square">
+                <Share2 />
+              </IconButton>
+              {#if innerWidth >= 1024}
+                <Button class="m-0" onclick={screenshotTimetable}>
+                  บันทึกเป็นภาพ
+                </Button>
+              {/if}
             </div>
+          </div>
 
-            <div
-              class="flex flex-row items-center justify-between lg:justify-center"
-            >
-              <span class="mt-5 text-2xl font-bold lg:hidden">ตารางสอบ</span>
-              <div class="hidden lg:mt-5 lg:flex lg:justify-center lg:gap-4">
-                <ChevronLeft
+          <div
+            class="flex flex-row items-center justify-between lg:justify-center"
+          >
+            <span class="mt-5 text-2xl font-bold lg:hidden">ตารางสอบ</span>
+            <div class="hidden lg:mt-5 lg:flex lg:justify-center lg:gap-4">
+              <ChevronLeft
+                onclick={() => (showExamSchedule = 'Schedule')}
+                strokeWidth={3}
+                class={showExamSchedule === 'Schedule'
+                  ? 'cursor-pointer text-[#4A70C6] transition-colors hover:text-[#3B5EAB]'
+                  : 'cursor-pointer text-[#D6D7E1] transition-colors hover:text-[#B0B2C5]'}
+              />
+              <ChevronRight
+                onclick={() => (showExamSchedule = 'List')}
+                strokeWidth={3}
+                class={showExamSchedule === 'List'
+                  ? 'cursor-pointer text-[#4A70C6] transition-colors hover:text-[#3B5EAB]'
+                  : 'cursor-pointer text-[#D6D7E1] transition-colors hover:text-[#B0B2C5]'}
+              />
+            </div>
+            <div class="mt-5 flex justify-center lg:hidden lg:gap-4">
+              <div
+                class="rounded-l-lg px-4 py-3 {showExamSchedule === 'Schedule'
+                  ? 'bg-[#4A70C6]'
+                  : 'bg-gray-200'}"
+              >
+                <ListOrdered
+                  size={18}
                   onclick={() => (showExamSchedule = 'Schedule')}
-                  strokeWidth={3}
+                  strokeWidth={1.5}
                   class={showExamSchedule === 'Schedule'
-                    ? 'cursor-pointer text-[#4A70C6] transition-colors hover:text-[#3B5EAB]'
-                    : 'cursor-pointer text-[#D6D7E1] transition-colors hover:text-[#B0B2C5]'}
-                />
-                <ChevronRight
-                  onclick={() => (showExamSchedule = 'List')}
-                  strokeWidth={3}
-                  class={showExamSchedule === 'List'
-                    ? 'cursor-pointer text-[#4A70C6] transition-colors hover:text-[#3B5EAB]'
-                    : 'cursor-pointer text-[#D6D7E1] transition-colors hover:text-[#B0B2C5]'}
+                    ? 'cursor-pointer text-[#FFFFFF]'
+                    : 'cursor-pointer text-[#353745] transition-colors hover:text-black'}
                 />
               </div>
-              <div class="mt-5 flex justify-center lg:hidden lg:gap-4">
-                <div
-                  class="rounded-l-lg px-4 py-3 {showExamSchedule === 'Schedule'
-                    ? 'bg-[#4A70C6]'
-                    : 'bg-gray-200'}"
-                >
-                  <ListOrdered
-                    size={18}
-                    onclick={() => (showExamSchedule = 'Schedule')}
-                    strokeWidth={1.5}
-                    class={showExamSchedule === 'Schedule'
-                      ? 'cursor-pointer text-[#FFFFFF]'
-                      : 'cursor-pointer text-[#353745] transition-colors hover:text-black'}
-                  />
-                </div>
-                <div
-                  class="rounded-r-lg px-4 py-3 {showExamSchedule === 'List'
-                    ? 'bg-[#4A70C6]'
-                    : 'bg-gray-200'}"
-                >
-                  <Grid3X3
-                    size={18}
-                    onclick={() => (showExamSchedule = 'List')}
-                    strokeWidth={1.5}
-                    class={showExamSchedule === 'List'
-                      ? 'cursor-pointer text-[#FFFFFF]'
-                      : 'cursor-pointer text-[#353745] transition-colors hover:text-black'}
-                  />
-                </div>
+              <div
+                class="rounded-r-lg px-4 py-3 {showExamSchedule === 'List'
+                  ? 'bg-[#4A70C6]'
+                  : 'bg-gray-200'}"
+              >
+                <Grid3X3
+                  size={18}
+                  onclick={() => (showExamSchedule = 'List')}
+                  strokeWidth={1.5}
+                  class={showExamSchedule === 'List'
+                    ? 'cursor-pointer text-[#FFFFFF]'
+                    : 'cursor-pointer text-[#353745] transition-colors hover:text-black'}
+                />
               </div>
             </div>
+          </div>
 
-            {#if showExamSchedule === 'List'}
-              {@render examList()}
-            {:else}
-              {@render examSchedule()}
-            {/if}
-          </div>
-          <div class="mt-auto w-full border-t bg-white">
-            <Footer />
-          </div>
+          {#if showExamSchedule === 'List'}
+            {@render examList()}
+          {:else}
+            {@render examSchedule()}
+          {/if}
         </div>
-      </AppSidebar>
-    </div>
+        <div class="mt-auto w-full border-t bg-white">
+          <Footer />
+        </div>
+      </div>
+    </AppSidebar>
   </div>
+</div>
 
 {#snippet examSchedule()}
   <div class="my-5 text-xl font-bold">Midterm</div>
@@ -888,5 +893,3 @@
     {/each}
   {/if}
 {/snippet}
-
-

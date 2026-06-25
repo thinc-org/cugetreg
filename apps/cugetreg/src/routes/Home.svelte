@@ -3,6 +3,7 @@
 
   const PUBLIC_API_URL = env.PUBLIC_API_URL ?? 'http://localhost:3000/api/v1';
   import { useSession } from '$lib/auth-client';
+  import AppSidebar from '$lib/components/app-sidebar.svelte';
   import ScheduleMismatchPopup from '$lib/components/schedule-mismatch-popup.svelte';
   import SelectedCourse from '$lib/components/selected-course.svelte';
   import {
@@ -28,7 +29,7 @@
     TriangleAlert,
     X,
   } from '@lucide/svelte';
-  import { getContext, onMount, untrack } from 'svelte';
+  import { getContext, untrack } from 'svelte';
   import { SvelteURLSearchParams } from 'svelte/reactivity';
   import { fade } from 'svelte/transition';
 
@@ -39,7 +40,6 @@
   import { Filter as FilterBar } from '@cugetreg/ui/organisms/filter-bar';
   import { Footer } from '@cugetreg/ui/organisms/footer';
   import * as Sidebar from '@cugetreg/ui/organisms/sidebar';
-  import AppSidebar from '$lib/components/app-sidebar.svelte';
 
   let courses = $state.raw<any[]>([]);
   let isLoading = $state(false);
@@ -505,12 +505,14 @@
 
 <div class="relative flex h-screen flex-col overflow-hidden bg-white">
   <div class="relative flex flex-1 overflow-hidden">
-    <AppSidebar
-      bind:expanded={sidebarExpanded}
-      bind:openPanel
-      bind:activePanel
-    >
-      {#snippet iconItems({ toggleExpanded, togglePanel, expanded, openPanel, activePanel })}
+    <AppSidebar bind:expanded={sidebarExpanded} bind:openPanel bind:activePanel>
+      {#snippet iconItems({
+        toggleExpanded,
+        togglePanel,
+        expanded,
+        openPanel,
+        activePanel,
+      })}
         <Sidebar.MenuItem>
           <Sidebar.MenuButton
             onclick={toggleExpanded}
@@ -524,7 +526,8 @@
         </Sidebar.MenuItem>
         <Sidebar.MenuItem>
           <Sidebar.MenuButton
-            onclick={() => togglePanel('filter_only', () => scrollToSection(filterSection))}
+            onclick={() =>
+              togglePanel('filter_only', () => scrollToSection(filterSection))}
             isActive={activePanel === 'filter_only'}
             size="lg"
             tooltipContent="ตัวกรอง"
@@ -536,7 +539,10 @@
         {#if $session.data}
           <Sidebar.MenuItem>
             <Sidebar.MenuButton
-              onclick={() => togglePanel('selected_only', () => scrollToSection(selectedSection))}
+              onclick={() =>
+                togglePanel('selected_only', () =>
+                  scrollToSection(selectedSection),
+                )}
               isActive={activePanel === 'selected_only'}
               size="lg"
               tooltipContent="วิชาที่เลือก"
@@ -597,232 +603,228 @@
       {/snippet}
       <div class="flex min-h-full flex-col">
         <div class="mx-auto w-full max-w-[1200px] flex-1 p-8 lg:p-12">
-              <div
-                class="mb-2 flex flex-col justify-between gap-4 md:flex-row md:items-center"
+          <div
+            class="mb-2 flex flex-col justify-between gap-4 md:flex-row md:items-center"
+          >
+            <div class="flex items-baseline gap-3">
+              <h1 class="text-4xl font-bold text-[#1C1B1F]">วิชาเรียน</h1>
+              <span class="text-sm font-medium text-gray-400"
+                >({totalResults} ผลลัพธ์)</span
               >
-                <div class="flex items-baseline gap-3">
-                  <h1 class="text-4xl font-bold text-[#1C1B1F]">วิชาเรียน</h1>
-                  <span class="text-sm font-medium text-gray-400"
-                    >({totalResults} ผลลัพธ์)</span
-                  >
-                </div>
-
-                <div class="relative flex gap-2">
-                  <div class="relative">
-                    <button
-                      onclick={() => toggleDropdown('program')}
-                      class="flex items-center gap-2 rounded-full border border-neutral-800 px-5 py-2 text-sm font-bold transition-colors hover:bg-gray-50"
-                    >
-                      {currentProgram}
-                      <ChevronDown size={16} />
-                    </button>
-                    {#if activeDropdown === 'program'}
-                      <div
-                        class="absolute top-full right-0 z-[70] mt-2 w-32 overflow-hidden rounded-xl border border-gray-100 bg-white shadow-xl"
-                      >
-                        {#each programOptions as opt (opt)}
-                          <button
-                            onclick={() => selectOption('program', opt)}
-                            class="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 {currentProgram ===
-                            opt
-                              ? 'bg-gray-50 font-bold'
-                              : ''}">{opt}</button
-                          >
-                        {/each}
-                      </div>
-                    {/if}
-                  </div>
-
-                  <div class="relative">
-                    <button
-                      onclick={() => toggleDropdown('semester')}
-                      class="flex items-center gap-2 rounded-full border border-neutral-800 px-5 py-2 text-sm font-bold whitespace-nowrap transition-colors hover:bg-gray-50"
-                    >
-                      {currentSemester}
-                      <ChevronDown size={16} />
-                    </button>
-                    {#if activeDropdown === 'semester'}
-                      <div
-                        class="absolute top-full right-0 z-[70] mt-2 w-48 overflow-hidden rounded-xl border border-gray-100 bg-white shadow-xl"
-                      >
-                        <div
-                          class="custom-scrollbar flex max-h-[250px] flex-col overflow-y-auto py-1"
-                        >
-                          {#each semesterOptions as opt (opt)}
-                            <button
-                              onclick={() => selectOption('semester', opt)}
-                              class="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 {currentSemester ===
-                              opt
-                                ? 'bg-gray-50 font-bold'
-                                : ''}">{opt}</button
-                            >
-                          {/each}
-                        </div>
-                      </div>
-                    {/if}
-                  </div>
-                  {#if activeDropdown}
-                    <div
-                      class="fixed inset-0 z-[65]"
-                      onclick={() => (activeDropdown = null)}
-                      role="button"
-                      tabindex="0"
-                      onkeydown={() => {}}
-                    ></div>
-                  {/if}
-                </div>
-              </div>
-
-              <div class="mb-10 flex flex-col gap-1">
-                <div class="flex flex-col gap-6 md:flex-row md:items-end">
-                  <div class="flex flex-1 flex-col gap-1">
-                    <span class="ml-1 text-xs text-gray-400">ค้นหา...</span>
-                    <Input
-                      bind:value={searchState.query}
-                      onkeydown={(e: KeyboardEvent) => {
-                        if (e.key === 'Enter') e.preventDefault();
-                      }}
-                      placeholder="พิมพ์ชื่อวิชา รหัสวิชา หรือคำค้นหาอื่นๆ..."
-                      class="h-12 w-full rounded-xl border-none bg-[#F1F3F7] px-6 text-lg font-medium placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500"
-                    />
-                  </div>
-                  <div class="flex w-full flex-col gap-1 md:w-64">
-                    <span
-                      class="ml-1 text-[10px] font-bold text-gray-400 uppercase"
-                      >จัดลำดับตาม</span
-                    >
-                    <div class="relative flex items-center gap-3">
-                      <button
-                        onclick={() => toggleDropdown('sort')}
-                        class="flex h-12 flex-1 items-center justify-between rounded-xl bg-[#F1F3F7] px-5 text-sm font-bold text-gray-700 transition-all hover:bg-gray-200"
-                      >
-                        <span>{currentSort}</span>
-                        <ChevronDown size={18} class="text-gray-400" />
-                      </button>
-                      {#if activeDropdown === 'sort'}
-                        <div
-                          class="absolute top-full left-0 z-[70] mt-2 w-full overflow-hidden rounded-xl border border-gray-100 bg-white shadow-xl"
-                        >
-                          {#each sortOptions as opt (opt)}
-                            <button
-                              onclick={() => selectOption('sort', opt)}
-                              class="w-full px-5 py-3 text-left text-sm hover:bg-gray-50 {currentSort ===
-                              opt
-                                ? 'bg-gray-50 font-bold'
-                                : ''}">{opt}</button
-                            >
-                          {/each}
-                        </div>
-                      {/if}
-                      <button
-                        onclick={toggleSortDirection}
-                        class="flex h-12 w-12 cursor-pointer items-center justify-center rounded-xl text-[#004494] transition-all hover:bg-blue-50"
-                      >
-                        <div
-                          class="transition-transform duration-300 {sortDirection ===
-                          'asc'
-                            ? 'rotate-180'
-                            : 'rotate-0'}"
-                        >
-                          <svg
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2.5"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            ><path d="M12 5v14M19 12l-7 7-7-7" /></svg
-                          >
-                        </div>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div
-                class="grid grid-cols-1 gap-x-5 gap-y-6 pb-10 md:grid-cols-2"
-              >
-                {#if filteredCourses.length === 0 && !isLoading}
-                  <div
-                    class="col-span-full flex flex-col items-center justify-center gap-2 py-24 text-center"
-                  >
-                    <TriangleAlert
-                      size={72}
-                      strokeWidth={1.5}
-                      class="mb-2 text-[#4A6CF7]"
-                    />
-                    <p class="text-lg font-medium text-[#1C1B1F]">
-                      ไม่พบรายวิชา{searchState.debounced.trim()
-                        ? ` ${searchState.debounced.trim()}`
-                        : ''}
-                    </p>
-                    <p class="text-base text-gray-500">{contextLabel}</p>
-                    <p class="mt-3 text-sm leading-relaxed text-gray-400">
-                      ลองเปลี่ยนตัวเลือกภาคเรียน ปีการศึกษา หรือหลักสูตร<br />
-                      ในตารางเรียน แล้วลองใหม่อีกครั้งนะ!
-                    </p>
-                  </div>
-                {:else}
-                  {@const params = new URLSearchParams({
-                    studyProgram: PROGRAM_MAP[currentProgram],
-                    academicYear: String(getParams().academicYear),
-                    semester: getParams().semester,
-                  })}
-                  {#each displayedCourses as item (item.course.code)}
-                    <CourseCard
-                      course={item.course}
-                      recommended={item.recommended}
-                      selected={$userCart.currentCart?.items.some(
-                        (v) => v.courseNo === item.course.code,
-                      ) ?? false}
-                      onSelect={() => handleToggleCourse(item)}
-                      sections={getSectionOptions(item)}
-                      selectedSection={getSelectedSection(item.course.code)}
-                      onSelectSection={(v: string) =>
-                        handleSelectSection(item, v)}
-                      class="w-full max-w-full md:w-full"
-                      courseUrl={`/course-page/${item.course.code}?${params.toString()}`}
-                    />
-                  {/each}
-
-                  {#if hasMore}
-                    <div
-                      bind:this={bottomSentinel}
-                      class="col-span-full flex h-24 items-center justify-center opacity-50"
-                    >
-                      <Loader2 class="animate-spin text-gray-400" size={24} />
-                    </div>
-                  {/if}
-                {/if}
-
-                {#if isLoading}
-                  <div
-                    class="col-span-full flex h-64 flex-col items-center justify-center gap-3 text-gray-400"
-                  >
-                    <Loader2 class="animate-spin" size={40} />
-                    <p>กำลังโหลดข้อมูลวิชา...</p>
-                  </div>
-                {/if}
-              </div>
             </div>
-            {#if showMismatchPopup}
-              <ScheduleMismatchPopup
-                schedules={$userCart.cartList ?? []}
-                expectedYear={expectedParams.academicYear}
-                expectedProgram={expectedParams.studyProgram}
-                bind:currentScheduleId={$userCart.currentCartId}
-                expectedSemester={expectedParams.semester}
-                onConfirm={handleScheduleChange}
-                onClose={() => (showMismatchPopup = false)}
-              />
-            {/if}
-            <div class="mt-auto w-full border-t bg-white">
-              <Footer />
+
+            <div class="relative flex gap-2">
+              <div class="relative">
+                <button
+                  onclick={() => toggleDropdown('program')}
+                  class="flex items-center gap-2 rounded-full border border-neutral-800 px-5 py-2 text-sm font-bold transition-colors hover:bg-gray-50"
+                >
+                  {currentProgram}
+                  <ChevronDown size={16} />
+                </button>
+                {#if activeDropdown === 'program'}
+                  <div
+                    class="absolute top-full right-0 z-[70] mt-2 w-32 overflow-hidden rounded-xl border border-gray-100 bg-white shadow-xl"
+                  >
+                    {#each programOptions as opt (opt)}
+                      <button
+                        onclick={() => selectOption('program', opt)}
+                        class="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 {currentProgram ===
+                        opt
+                          ? 'bg-gray-50 font-bold'
+                          : ''}">{opt}</button
+                      >
+                    {/each}
+                  </div>
+                {/if}
+              </div>
+
+              <div class="relative">
+                <button
+                  onclick={() => toggleDropdown('semester')}
+                  class="flex items-center gap-2 rounded-full border border-neutral-800 px-5 py-2 text-sm font-bold whitespace-nowrap transition-colors hover:bg-gray-50"
+                >
+                  {currentSemester}
+                  <ChevronDown size={16} />
+                </button>
+                {#if activeDropdown === 'semester'}
+                  <div
+                    class="absolute top-full right-0 z-[70] mt-2 w-48 overflow-hidden rounded-xl border border-gray-100 bg-white shadow-xl"
+                  >
+                    <div
+                      class="custom-scrollbar flex max-h-[250px] flex-col overflow-y-auto py-1"
+                    >
+                      {#each semesterOptions as opt (opt)}
+                        <button
+                          onclick={() => selectOption('semester', opt)}
+                          class="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 {currentSemester ===
+                          opt
+                            ? 'bg-gray-50 font-bold'
+                            : ''}">{opt}</button
+                        >
+                      {/each}
+                    </div>
+                  </div>
+                {/if}
+              </div>
+              {#if activeDropdown}
+                <div
+                  class="fixed inset-0 z-[65]"
+                  onclick={() => (activeDropdown = null)}
+                  role="button"
+                  tabindex="0"
+                  onkeydown={() => {}}
+                ></div>
+              {/if}
             </div>
           </div>
+
+          <div class="mb-10 flex flex-col gap-1">
+            <div class="flex flex-col gap-6 md:flex-row md:items-end">
+              <div class="flex flex-1 flex-col gap-1">
+                <span class="ml-1 text-xs text-gray-400">ค้นหา...</span>
+                <Input
+                  bind:value={searchState.query}
+                  onkeydown={(e: KeyboardEvent) => {
+                    if (e.key === 'Enter') e.preventDefault();
+                  }}
+                  placeholder="พิมพ์ชื่อวิชา รหัสวิชา หรือคำค้นหาอื่นๆ..."
+                  class="h-12 w-full rounded-xl border-none bg-[#F1F3F7] px-6 text-lg font-medium placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+              <div class="flex w-full flex-col gap-1 md:w-64">
+                <span class="ml-1 text-[10px] font-bold text-gray-400 uppercase"
+                  >จัดลำดับตาม</span
+                >
+                <div class="relative flex items-center gap-3">
+                  <button
+                    onclick={() => toggleDropdown('sort')}
+                    class="flex h-12 flex-1 items-center justify-between rounded-xl bg-[#F1F3F7] px-5 text-sm font-bold text-gray-700 transition-all hover:bg-gray-200"
+                  >
+                    <span>{currentSort}</span>
+                    <ChevronDown size={18} class="text-gray-400" />
+                  </button>
+                  {#if activeDropdown === 'sort'}
+                    <div
+                      class="absolute top-full left-0 z-[70] mt-2 w-full overflow-hidden rounded-xl border border-gray-100 bg-white shadow-xl"
+                    >
+                      {#each sortOptions as opt (opt)}
+                        <button
+                          onclick={() => selectOption('sort', opt)}
+                          class="w-full px-5 py-3 text-left text-sm hover:bg-gray-50 {currentSort ===
+                          opt
+                            ? 'bg-gray-50 font-bold'
+                            : ''}">{opt}</button
+                        >
+                      {/each}
+                    </div>
+                  {/if}
+                  <button
+                    onclick={toggleSortDirection}
+                    class="flex h-12 w-12 cursor-pointer items-center justify-center rounded-xl text-[#004494] transition-all hover:bg-blue-50"
+                  >
+                    <div
+                      class="transition-transform duration-300 {sortDirection ===
+                      'asc'
+                        ? 'rotate-180'
+                        : 'rotate-0'}"
+                    >
+                      <svg
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        ><path d="M12 5v14M19 12l-7 7-7-7" /></svg
+                      >
+                    </div>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 gap-x-5 gap-y-6 pb-10 md:grid-cols-2">
+            {#if filteredCourses.length === 0 && !isLoading}
+              <div
+                class="col-span-full flex flex-col items-center justify-center gap-2 py-24 text-center"
+              >
+                <TriangleAlert
+                  size={72}
+                  strokeWidth={1.5}
+                  class="mb-2 text-[#4A6CF7]"
+                />
+                <p class="text-lg font-medium text-[#1C1B1F]">
+                  ไม่พบรายวิชา{searchState.debounced.trim()
+                    ? ` ${searchState.debounced.trim()}`
+                    : ''}
+                </p>
+                <p class="text-base text-gray-500">{contextLabel}</p>
+                <p class="mt-3 text-sm leading-relaxed text-gray-400">
+                  ลองเปลี่ยนตัวเลือกภาคเรียน ปีการศึกษา หรือหลักสูตร<br />
+                  ในตารางเรียน แล้วลองใหม่อีกครั้งนะ!
+                </p>
+              </div>
+            {:else}
+              {@const params = new URLSearchParams({
+                studyProgram: PROGRAM_MAP[currentProgram],
+                academicYear: String(getParams().academicYear),
+                semester: getParams().semester,
+              })}
+              {#each displayedCourses as item (item.course.code)}
+                <CourseCard
+                  course={item.course}
+                  recommended={item.recommended}
+                  selected={$userCart.currentCart?.items.some(
+                    (v) => v.courseNo === item.course.code,
+                  ) ?? false}
+                  onSelect={() => handleToggleCourse(item)}
+                  sections={getSectionOptions(item)}
+                  selectedSection={getSelectedSection(item.course.code)}
+                  onSelectSection={(v: string) => handleSelectSection(item, v)}
+                  class="w-full max-w-full md:w-full"
+                  courseUrl={`/course-page/${item.course.code}?${params.toString()}`}
+                />
+              {/each}
+
+              {#if hasMore}
+                <div
+                  bind:this={bottomSentinel}
+                  class="col-span-full flex h-24 items-center justify-center opacity-50"
+                >
+                  <Loader2 class="animate-spin text-gray-400" size={24} />
+                </div>
+              {/if}
+            {/if}
+
+            {#if isLoading}
+              <div
+                class="col-span-full flex h-64 flex-col items-center justify-center gap-3 text-gray-400"
+              >
+                <Loader2 class="animate-spin" size={40} />
+                <p>กำลังโหลดข้อมูลวิชา...</p>
+              </div>
+            {/if}
+          </div>
+        </div>
+        {#if showMismatchPopup}
+          <ScheduleMismatchPopup
+            schedules={$userCart.cartList ?? []}
+            expectedYear={expectedParams.academicYear}
+            expectedProgram={expectedParams.studyProgram}
+            bind:currentScheduleId={$userCart.currentCartId}
+            expectedSemester={expectedParams.semester}
+            onConfirm={handleScheduleChange}
+            onClose={() => (showMismatchPopup = false)}
+          />
+        {/if}
+        <div class="mt-auto w-full border-t bg-white">
+          <Footer />
+        </div>
+      </div>
     </AppSidebar>
   </div>
   <div class="lg:hidden">

@@ -4,6 +4,7 @@
   import { page } from '$app/state';
   import { api } from '$lib/api';
   import { useSession } from '$lib/auth-client';
+  import AppSidebar from '$lib/components/app-sidebar.svelte';
   import ScheduleMismatchPopup from '$lib/components/schedule-mismatch-popup.svelte';
   import SelectedCourse from '$lib/components/selected-course.svelte';
   import { faculties } from '$lib/constants';
@@ -57,7 +58,6 @@
   import { SelectTimetable } from '@cugetreg/ui/molecules/select-timetable';
   import { Footer } from '@cugetreg/ui/organisms/footer';
   import * as Sidebar from '@cugetreg/ui/organisms/sidebar';
-  import AppSidebar from '$lib/components/app-sidebar.svelte';
   import type { GenEdType } from '@cugetreg/utils/types';
   import {
     type SubmitReviewBodySchema,

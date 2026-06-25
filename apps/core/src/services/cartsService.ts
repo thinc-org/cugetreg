@@ -20,10 +20,10 @@ import { LexoRankService } from "./lexorank.service.js";
 
 import { prisma } from "../db/clients.js";
 import {
-  Visible,
   type Course,
   type Section,
   type SectionClass,
+  Visible,
 } from "../generated/prisma/client.js";
 
 export const cartService = {

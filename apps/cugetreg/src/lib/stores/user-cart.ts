@@ -2,8 +2,10 @@ import { api } from '$lib/api';
 import { tryCatch } from '$lib/async-handler';
 
 import { isAxiosError } from 'axios';
+import { get, type Writable } from 'svelte/store';
 import toast from 'svelte-french-toast';
 
+import { courseColorVariants } from '@cugetreg/utils/constants';
 import type {
   CartData,
   CartSchema,
@@ -18,8 +20,6 @@ import type { Semester, StudyProgram } from '@cugetreg/zod-schemas/constants';
 
 import { loginPopupState } from './login-popup.svelte';
 import { useContextStore } from './stores';
-import { get, type Writable } from 'svelte/store';
-import { courseColorVariants } from '@cugetreg/utils/constants';
 
 export interface UserCartInterface {
   currentCart: CartData;

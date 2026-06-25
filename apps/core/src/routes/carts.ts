@@ -6,12 +6,12 @@ import {
   createCartRoute,
   deleteCartRoute,
   deleteCourseRoute,
+  duplicateCart,
   getCartDetailRoute,
   listCartsRoute,
+  pinCartRoute,
   updateCartRoute,
   updateCourseRoute,
-  pinCartRoute,
-  duplicateCart,
 } from "../routes_define/carts.routes.js";
 import { cartService } from "../services/cartsService.js";
 

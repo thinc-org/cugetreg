@@ -1,14 +1,15 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
+	import { page } from '$app/stores';
+	import { Button } from '$lib/components/atoms/button';
+	import { Chip } from '$lib/components/atoms/chip';
+	import { Collapsible } from '$lib/components/atoms/collapsible';
+	import { IconButton } from '$lib/components/atoms/icon-button';
+	import { Input } from '$lib/components/atoms/input';
 
 	import { Menu, Moon, Search } from '@lucide/svelte';
 
 	import { cn, getShortenName } from '@cugetreg/utils';
-
-	import { Button } from '../../atoms/button';
-	import { Collapsible } from '../../atoms/collapsible';
-	import { IconButton } from '../../atoms/icon-button';
-	import { Input } from '../../atoms/input';
 	import { CUGetRegDarkFull as CUGetRegLogo } from '../../logo/cugetreg';
 	import { UserDialog } from '../../molecules/user-dialog';
 	import { MobileSidebar } from '../mobile-sidebar';
@@ -71,7 +72,6 @@
 		}
 	];
 
-	let selected = $state('ค้นหาวิชา');
 	let openSideBar = $state(false);
 
 	const toggleSideBar = () => {
@@ -114,9 +114,8 @@
 			<a
 				class={cn(
 					'text-button1 cursor-pointer text-center font-medium text-nowrap text-neutral-500 hover:text-neutral-800 xl:w-32',
-					selected === name && 'text-primary'
+					$page.url.pathname === resolve(route as any) && 'text-primary'
 				)}
-				onclick={() => (selected = name)}
 				href={resolve(route as any)}
 			>
 				{name}
@@ -146,7 +145,6 @@
 			</Button>
 		{/if}
 	</div>
-
 	<MobileSidebar
 		bind:open={openSideBar}
 		bind:selected

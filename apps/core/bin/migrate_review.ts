@@ -1,27 +1,22 @@
-import cliProgress from "cli-progress";
-
 import type { Review } from "./migrate_interface.js";
-import {
-  migrateReview,
-  runConcurrent,
-  safeFsJsonRead,
-} from "./migrate_service.js";
+import { bulkMigrateReviews, safeFsJsonRead } from "./migrate_service.js";
 
-const CONCURRENCY = 50;
+const SPINNER = ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"];
 
 export async function runReviewMigration() {
   const reviewsData = safeFsJsonRead<Review[]>("reviews.json");
 
-  const bar = new cliProgress.SingleBar(
-    { format: "  Reviews  [{bar}] {value}/{total} ({percentage}%)" },
-    cliProgress.Presets.shades_classic,
+  let i = 0;
+  const timer = setInterval(() => {
+    process.stdout.write(
+      `\r  Reviews    ${SPINNER[i++ % SPINNER.length]} bulk inserting ${reviewsData.length} rows...`,
+    );
+  }, 80);
+
+  const result = await bulkMigrateReviews(reviewsData);
+
+  clearInterval(timer);
+  process.stdout.write(
+    `\r  Reviews    ✔ ${result.count} inserted (duplicates skipped)\n`,
   );
-  bar.start(reviewsData.length, 0);
-
-  await runConcurrent(reviewsData, CONCURRENCY, async (item) => {
-    await migrateReview(item);
-    bar.increment();
-  });
-
-  bar.stop();
 }

@@ -10,6 +10,7 @@
     handleGoogleLogout,
     useSession,
   } from '$lib/auth-client';
+  import { loginPopupState } from '$lib/stores/login-popup.svelte';
   import { searchState } from '$lib/stores/search.svelte';
   import {
     CART_PROMISE_KEY,
@@ -26,6 +27,7 @@
     CreateTimetable,
     type TimetableMetaData,
   } from '@cugetreg/ui/organisms/create-timetable';
+  import { LoginPopup } from '@cugetreg/ui/organisms/login-popup';
   import { Navbar } from '@cugetreg/ui/organisms/navbar';
   import { CartDetailResponseSchema } from '@cugetreg/zod-schemas/carts-response';
 
@@ -35,26 +37,22 @@
 
   $effect(() => {
     const errorMsg = page.url.searchParams.get('error');
+    if (!errorMsg) return;
 
-    if (errorMsg) {
-      let message = 'Something went wrong.';
-      if (errorMsg === 'non_chula_email') {
-        message = 'Please login with Chula email.';
-      }
-
-      if (errorMsg === 'no_session') {
-        message = 'Please login before viewing this page.';
-      }
-
-      toast.error(message, {
+    if (errorMsg === 'no_session') {
+      loginPopupState.show = true;
+    } else {
+      const messages: Record<string, string> = {
+        non_chula_email: 'Please login with Chula email.',
+      };
+      toast.error(messages[errorMsg] ?? 'Something went wrong.', {
         position: 'bottom-right',
       });
-
-      const cleanUrl = new URL(page.url);
-      cleanUrl.searchParams.delete('error');
-
-      goto(cleanUrl, { replaceState: true, keepFocus: true });
     }
+
+    const cleanUrl = new URL(page.url);
+    cleanUrl.searchParams.delete('error');
+    goto(cleanUrl, { replaceState: true, keepFocus: true });
   });
 
   let {
@@ -87,7 +85,10 @@
   const cartPromise = (() => data.cart)();
 
   cartPromise.then(
-    (cart) => userCart.set(cart),
+    (cart) => {
+      if (cart) userCart.set(cart);
+      return cart;
+    },
     (err) => console.error('[layout] failed to load cart:', err),
   );
 
@@ -101,7 +102,6 @@
     if (!currentId || currentId === lastFetchedId) return;
 
     const fetchCurrentSchedule = async (id: string) => {
-      // TODO: Move this
       const [response, error] = await tryCatch(
         api.get(`/carts/${id}`, {
           headers: {
@@ -168,7 +168,21 @@
   let showCreateScheduleModal = $state(false);
 </script>
 
+<Modal
+  exitOnEsc
+  exitOnBackgroundClick
+  centered
+  dim
+  bind:show={loginPopupState.show}
+>
+  <LoginPopup
+    onCancel={() => (loginPopupState.show = false)}
+    onLogin={handleGoogleLogin}
+  />
+</Modal>
+
 <Toaster />
+
 <div class="relative flex h-dvh flex-col overflow-hidden">
   <Navbar
     onLogin={handleGoogleLogin}
@@ -187,7 +201,13 @@
     onAddSchedule={() => (showCreateScheduleModal = true)}
   />
 
-  <Modal exitOnEsc exitOnBackgroundClick centered dim bind:show={showCreateScheduleModal}>
+  <Modal
+    exitOnEsc
+    exitOnBackgroundClick
+    centered
+    dim
+    bind:show={showCreateScheduleModal}
+  >
     <CreateTimetable
       onConfirm={(schedule: TimetableMetaData) => {
         createCart(

@@ -1,7 +1,16 @@
 <script lang="ts">
+  import { env } from '$env/dynamic/public';
+
+  const PUBLIC_API_URL = env.PUBLIC_API_URL ?? 'http://localhost:3000/api/v1';
   import { useSession } from '$lib/auth-client';
   import ScheduleMismatchPopup from '$lib/components/schedule-mismatch-popup.svelte';
   import SelectedCourse from '$lib/components/selected-course.svelte';
+  import {
+    getSemesterDisplayOptions,
+    parseSemesterDisplay,
+    SEMESTER_LABEL_LONG,
+  } from '$lib/semesterOptions';
+  import { loginPopupState } from '$lib/stores/login-popup.svelte';
   import { searchState } from '$lib/stores/search.svelte';
   import {
     CART_PROMISE_KEY,
@@ -20,14 +29,17 @@
     Loader2,
     Menu,
     TriangleAlert,
+    X,
   } from '@lucide/svelte';
   import { getContext, untrack } from 'svelte';
   import { SvelteURLSearchParams } from 'svelte/reactivity';
+  import { fade } from 'svelte/transition';
 
   import { Input } from '@cugetreg/ui/atoms/input';
   import { CourseCard } from '@cugetreg/ui/molecules/course-card';
   import { Modal } from '@cugetreg/ui/atoms/modal';
   import * as Select from '@cugetreg/ui/molecules/select';
+  import { FloatingButton } from '@cugetreg/ui/molecules/floating-button';
   import { SelectTimetable } from '@cugetreg/ui/molecules/select-timetable';
   import { Filter as FilterBar } from '@cugetreg/ui/organisms/filter-bar';
   import { Footer } from '@cugetreg/ui/organisms/footer';
@@ -68,6 +80,7 @@
   let isScheduleDropdownOpen = $state(false);
   let isFilterOpen = $state(true);
   let activeDropdown = $state<'program' | 'semester' | 'sort' | null>(null);
+  let activeModal = $state<'filter' | 'selected' | null>(null);
 
   let selectedGenEds = $state<string[]>([]);
   let selectedSpecial = $state<string[]>([]);
@@ -119,16 +132,7 @@
   const session = useSession();
 
   const programOptions = ['ทวิภาค', 'ตรีภาค', 'นานาชาติ'];
-  const semesterOptions = [
-    '2568 / ฤดูร้อน',
-    '2568 / 2',
-    '2568 / 1',
-    '2567 / ฤดูร้อน',
-    '2567 / 2',
-    '2567 / 1',
-    '2566 / 2',
-    '2566 / 1',
-  ];
+  const semesterOptions = getSemesterDisplayOptions();
   const sortOptions = ['รหัสวิชา', 'ชื่อวิชา'];
 
   const genEdMap: Record<string, string> = {
@@ -152,21 +156,22 @@
   };
   const KNOWN_DAYS = new Set(['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU']);
 
-  function mapSemester(semester: string) {
-    switch (semester) {
-      case '1':
-      case 'FIRST':
-        return '1';
-      case '2':
-      case 'SECOND':
-        return '2';
-      case '3':
-      case 'SUMMER':
-        return '3';
-      default:
-        return '1';
-    }
-  }
+  const floatingOptions = [
+    {
+      label: 'ตัวกรอง',
+      icon: Filter,
+      onClick: () => {
+        activeModal = 'filter';
+      },
+    },
+    {
+      label: 'วิชาที่เลือก',
+      icon: BookMarked,
+      onClick: () => {
+        activeModal = 'selected';
+      },
+    },
+  ];
 
   function parseTime(t: string): number | null {
     if (!t) return null;
@@ -179,15 +184,10 @@
   }
 
   function getParams() {
-    const parts = currentSemester.split(' / ');
+    const parsed = parseSemesterDisplay(currentSemester);
     return {
-      academicYear: parts[0],
-      semester:
-        parts[1] === 'ฤดูร้อน'
-          ? '3'
-          : parts[1] === '2' || parts[1] === 'ภาคปลาย'
-            ? '2'
-            : '1',
+      academicYear: parsed?.academicYear ?? '2566',
+      semester: parsed?.semester ?? 'FIRST',
       studyProgram:
         currentProgram === 'นานาชาติ'
           ? 'I'
@@ -316,7 +316,7 @@
       }
 
       const res = await fetch(
-        `http://localhost:3000/api/v1/courses?${params.toString()}`,
+        `${PUBLIC_API_URL}/courses?${params.toString()}`,
         {
           method: 'GET',
           headers: { 'Content-Type': 'application/json' },
@@ -395,12 +395,6 @@
   const cartPromise = getContext<CartPromise>(CART_PROMISE_KEY);
   const { addCourse, removeCourse, updateCourse } = useCartActions();
 
-  const SEMESTER_MAP: Record<string, string> = {
-    '1': 'FIRST',
-    '2': 'SECOND',
-    '3': 'SUMMER',
-  };
-
   const PROGRAM_MAP: Record<string, string> = {
     นานาชาติ: 'I',
     ตรีภาค: 'T',
@@ -442,17 +436,21 @@
 
   function isMismatch(): boolean {
     const currentCart = $userCart.currentCart;
-    if (!currentCart) return false;
+    if (!currentCart || !$session.data) return false;
     const isYearMismatch =
       String(currentCart.academicYear) !== String(expectedParams.academicYear);
     const isProgramMismatch =
       currentCart.studyProgram !== expectedParams.studyProgram;
-    const isSemesterMismatch =
-      currentCart.semester !== SEMESTER_MAP[expectedParams.semester];
+    const isSemesterMismatch = currentCart.semester !== expectedParams.semester;
     return isYearMismatch || isSemesterMismatch || isProgramMismatch;
   }
 
   function handleToggleCourse(courseItem: any) {
+    if (!$session.data) {
+      loginPopupState.show = true;
+      return;
+    }
+
     const { code, sections } = courseItem.course;
     const courseInSchedule = $userCart.currentCart?.items.find(
       (cls) => cls.courseNo === code,
@@ -500,6 +498,11 @@
     const { code } = courseItem.course;
     localSelectedSections[code] = Number(sectionNo);
 
+    if (!$session.data) {
+      loginPopupState.show = true;
+      return;
+    }
+
     if (isMismatch()) {
       pendingCourse = { courseNo: code, sectionNo: Number(sectionNo) };
       showMismatchPopup = true;
@@ -541,23 +544,6 @@
     return entry ? String(entry.sectionNo) : '';
   }
 
-  let sortedCourses = $derived.by(() => {
-    const result = [...courses];
-    result.sort((a, b) => {
-      if (a.recommended !== b.recommended) return a.recommended ? -1 : 1;
-      if (currentSort === 'ชื่อวิชา') {
-        const r = collatorTh.compare(a.course.name || '', b.course.name || '');
-        return sortDirection === 'asc' ? r : -r;
-      }
-      const r = collatorDefault.compare(
-        a.course.code || '',
-        b.course.code || '',
-      );
-      return sortDirection === 'asc' ? r : -r;
-    });
-    return result;
-  });
-
   let filteredCourses = $derived(courses);
   let displayedCourses = $derived(courses);
 
@@ -566,10 +552,10 @@
   }
 
   let contextLabel = $derived.by(() => {
-    const [year, sem] = currentSemester.split(' / ');
-    const semTh =
-      sem === 'ฤดูร้อน' ? 'ภาคฤดูร้อน' : sem === '2' ? 'ภาคปลาย' : 'ภาคต้น';
-    return `ในปีการศึกษา ${year} ${semTh} หลักสูตร${currentProgram}`;
+    const parsed = parseSemesterDisplay(currentSemester);
+    const year = parsed?.academicYear ?? '2566';
+    const sem = parsed?.semester ?? 'FIRST';
+    return `ในปีการศึกษา ${year} ${SEMESTER_LABEL_LONG[sem]} หลักสูตร${currentProgram}`;
   });
 </script>
 
@@ -821,7 +807,7 @@
                   {@const params = new URLSearchParams({
                     studyProgram: PROGRAM_MAP[currentProgram],
                     academicYear: String(getParams().academicYear),
-                    semester: SEMESTER_MAP[getParams().semester],
+                    semester: getParams().semester,
                   })}
                   {#each displayedCourses as item (item.course.code)}
                     <CourseCard
@@ -866,7 +852,7 @@
                 expectedYear={expectedParams.academicYear}
                 expectedProgram={expectedParams.studyProgram}
                 bind:currentScheduleId={$userCart.currentCartId}
-                expectedSemester={SEMESTER_MAP[expectedParams.semester]}
+                expectedSemester={expectedParams.semester}
                 onConfirm={handleScheduleChange}
                 onClose={() => (showMismatchPopup = false)}
               />
@@ -879,6 +865,39 @@
       </Sidebar.Inset>
     </Sidebar.Provider>
   </div>
+  <div class="lg:hidden">
+    {#if !activeModal}
+      <div transition:fade={{ duration: 200 }}>
+        <FloatingButton options={floatingOptions} />
+      </div>
+    {/if}
+  </div>
+
+  {#if activeModal}
+    <div
+      class="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm"
+      transition:fade={{ duration: 200 }}
+    >
+      <div
+        class="custom-scrollbar relative flex max-h-[85vh] w-full max-w-[400px] flex-col overflow-y-auto rounded-3xl bg-white p-6 shadow-2xl"
+      >
+        <button
+          class="absolute top-7 right-5 bg-white"
+          onclick={() => (activeModal = null)}
+        >
+          <X size={20} strokeWidth={2.5} />
+        </button>
+        {#if activeModal === 'filter'}
+          {@render FilterContent()}
+        {:else if activeModal === 'selected'}
+          <div class="flex flex-col gap-6">
+            {@render SelectedContent()}
+            {@render WarningContent()}
+          </div>
+        {/if}
+      </div>
+    </div>
+  {/if}
 </div>
 
 {#snippet SidebarComponent()}
@@ -982,76 +1001,85 @@
             {/if}
 
             {#if sidebarExpanded || openPanel === 'filter_only'}
-              <div bind:this={filterSection}>
-                <button
-                  onclick={() => (isFilterOpen = !isFilterOpen)}
-                  aria-expanded={isFilterOpen}
-                  class="mb-6 flex w-full items-center justify-between"
-                >
-                  <span class="flex items-center gap-2">
-                    <Filter size={20} />
-                    <h2 class="text-xl font-bold">ตัวกรอง</h2>
-                  </span>
-                  <ChevronDown
-                    size={20}
-                    class="text-gray-500 transition-transform duration-200 {isFilterOpen
-                      ? ''
-                      : '-rotate-90'}"
-                  />
-                </button>
-                {#if isFilterOpen}
-                  <div class="mb-8 min-h-[650px]">
-                    <FilterBar
-                      bind:selectedGenEds
-                      bind:selectedSpecial
-                      bind:selectedFaculties
-                      bind:selectedDays
-                      bind:selectedEval
-                      bind:startTime
-                      bind:endTime
-                      bind:fitSchedule
-                      bind:noConditions
-                      onsearch={onSearchFilter}
-                    />
-                  </div>
-                {/if}
-                <hr class="mb-6 opacity-50" />
-              </div>
+              {@render FilterContent()}
             {/if}
 
             {#if (sidebarExpanded || openPanel === 'selected_only') && $session.data}
-              <div bind:this={selectedSection}>
-                {#if $userCart.currentCart}
-                  <SelectedCourse
-                    variant="grouped"
-                    class="border-b border-neutral-200"
-                  />
-                {:else}
-                  <SelectedCourse class="border-b border-neutral-200" />
-                {/if}
-              </div>
+              {@render SelectedContent()}
             {/if}
 
             {#if sidebarExpanded || openPanel === 'sidebar'}
-              <div
-                class="mt-8 rounded-2xl border border-orange-300 px-5 py-4 text-center text-[15px] leading-relaxed text-orange-500"
-              >
-                <span class="font-bold"
-                  >CU Get Reg ไม่ใช่การลงทะเบียนเรียนจริง</span
-                ><br />
-                สามารถลงทะเบียนเรียนได้ที่
-                <a
-                  href="https://www2.reg.chula.ac.th/"
-                  target="_blank"
-                  rel="noreferrer"
-                  class="underline">https://www2.reg.chula.ac.th/</a
-                ><br />
-                เพียงช่องทางเดียวเท่านั้น
-              </div>
+              {@render WarningContent()}
             {/if}
           </div>
         </div>
       {/if}
     </Sidebar.Content>
   </Sidebar.Sidebar>
+{/snippet}
+
+{#snippet FilterContent()}
+  <div bind:this={filterSection}>
+    <button
+      onclick={() => (isFilterOpen = !isFilterOpen)}
+      aria-expanded={isFilterOpen}
+      class="mb-6 flex w-full items-center justify-between"
+    >
+      <span class="flex items-center gap-2">
+        <Filter size={20} />
+        <h2 class="text-xl font-bold">ตัวกรอง</h2>
+      </span>
+      <ChevronDown
+        size={20}
+        class="text-gray-500 transition-transform duration-200 {isFilterOpen
+          ? ''
+          : '-rotate-90'}"
+      />
+    </button>
+    {#if isFilterOpen}
+      <div class="mb-8 min-h-[650px]">
+        <FilterBar
+          bind:selectedGenEds
+          bind:selectedSpecial
+          bind:selectedFaculties
+          bind:selectedDays
+          bind:selectedEval
+          bind:startTime
+          bind:endTime
+          bind:fitSchedule
+          bind:noConditions
+          onsearch={onSearchFilter}
+        />
+      </div>
+    {/if}
+    <hr class="mb-6 opacity-50" />
+  </div>
+{/snippet}
+
+{#snippet SelectedContent()}
+  <div bind:this={selectedSection}>
+    {#if $userCart.currentCart}
+      <SelectedCourse variant="grouped" class="border-b border-neutral-200" />
+    {:else}
+      <SelectedCourse class="border-b border-neutral-200" />
+    {/if}
+  </div>
+{/snippet}
+
+{#snippet WarningContent()}
+  <div
+    class="mt-8 rounded-2xl border border-orange-300 px-5 py-4 text-center text-[15px] leading-relaxed text-orange-500"
+  >
+    <span class="font-bold">CU Get Reg ไม่ใช่การลงทะเบียนเรียนจริง</span><br />
+    สามารถลงทะเบียนเรียนได้ที่
+    <a
+      href="https://www2.reg.chula.ac.th/"
+      target="_blank"
+      rel="noreferrer"
+      class="underline"
+    >
+      https://www2.reg.chula.ac.th/
+    </a><br />
+    เพียงช่องทางเดียวเท่านั้น
+  </div>
 {/snippet}

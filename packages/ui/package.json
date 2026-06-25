@@ -25,12 +25,14 @@
 	"type": "module",
 	"exports": {
 		"./*": {
+			"svelte": "./dist/components/*/index.js",
 			"types": "./dist/components/*/index.d.ts",
 			"default": "./dist/components/*/index.js"
 		},
 		"./css": "./dist/app.css"
 	},
 	"peerDependencies": {
+		"@sveltejs/kit": "^2.0.0",
 		"svelte": "^5.0.0"
 	},
 	"devDependencies": {

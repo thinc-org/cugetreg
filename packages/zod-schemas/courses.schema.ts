@@ -4,6 +4,7 @@ import {
   assessment,
   days,
   genEdType,
+  semester,
   sortBy,
   sortOrder,
   studyProgram,
@@ -12,22 +13,20 @@ import {
 
 //1.1 get courses
 export const GetCourseQuerySchema = z.object({
-  studyProgram: z.enum(studyProgram),
+  studyProgram: studyProgram,
   academicYear: z.coerce.number().int().min(2564),
-  semester: z.coerce
-    .number()
-    .pipe(z.union([z.literal(1), z.literal(2), z.literal(3)])),
+  semester: semester,
   q: z.string().optional(),
-  genEdType: z.enum(genEdType).optional(),
+  genEdType: genEdType.optional(),
   faculty: z.string().optional(),
-  day: z.enum(days).optional(),
+  day: days.optional(),
   timeStart: z.string().regex(TIME_REGEX).optional(),
   timeEnd: z.string().regex(TIME_REGEX).optional(),
   noPrereq: z.coerce.boolean().optional(),
   fitCardId: z.string().optional(),
-  assessment: z.enum(assessment).optional(),
-  sortBy: z.enum(sortBy).optional(),
-  sortOrder: z.enum(sortOrder).optional(),
+  assessment: assessment.optional(),
+  sortBy: sortBy.optional(),
+  sortOrder: sortOrder.optional(),
   offset: z.coerce.number().int().optional(),
   limit: z.coerce.number().int().optional(),
 });

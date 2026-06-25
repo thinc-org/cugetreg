@@ -1,6 +1,10 @@
 <script lang="ts">
   import SelectedCourse from '$lib/components/selected-course.svelte';
   import {
+    getSemesterShortOptions,
+    getYearOptions,
+  } from '$lib/semesterOptions';
+  import {
     CART_PROMISE_KEY,
     type CartPromise,
     getUserCartStore,
@@ -9,10 +13,19 @@
 
   import { Loader2 } from '@lucide/svelte';
   import html2canvas from 'html2canvas-pro';
-  import { ChevronLeft, ChevronRight, Copy, Share2 } from 'lucide-svelte';
+  import {
+    ChevronLeft,
+    ChevronRight,
+    Copy,
+    Download,
+    Grid3X3,
+    ListOrdered,
+    Share2,
+  } from 'lucide-svelte';
   import { getContext } from 'svelte';
 
   import { Button } from '@cugetreg/ui/atoms/button';
+  import { CustomizeScrollbar } from '@cugetreg/ui/atoms/customize-scrollbar';
   import { IconButton } from '@cugetreg/ui/atoms/icon-button';
   import { Input } from '@cugetreg/ui/atoms/input';
   import { Modal } from '@cugetreg/ui/atoms/modal';
@@ -31,6 +44,7 @@
     CreateTimetable,
     type TimetableMetaData,
   } from '@cugetreg/ui/organisms/create-timetable';
+  import { Footer } from '@cugetreg/ui/organisms/footer';
   import { RenameSchedule } from '@cugetreg/ui/organisms/rename-schedule';
   import { ViewCourse } from '@cugetreg/ui/organisms/view-course';
   import {
@@ -127,6 +141,7 @@
   let showExamSchedule = $state<'List' | 'Schedule'>('Schedule');
 
   let timetableDiv = $state<HTMLElement | null>(null);
+  let innerWidth = $state(1024);
 
   let showRenameScheduleModal = $state(false);
   let showCreateScheduleModal = $state(false);
@@ -134,6 +149,10 @@
   let showViewCourseModal = $state(false);
 
   let selectedCartItemId = $state<string | null>(null);
+
+  let scheduleTableRef = $state<HTMLElement | null>(null);
+  let midtermTableRef = $state<HTMLElement | null>(null);
+  let finalTableRef = $state<HTMLElement | null>(null);
 
   const viewCourseData = $derived.by(() => {
     if (!selectedCartItemId) return null;
@@ -195,6 +214,7 @@
     pinCart,
     updateCourse,
     removeCourse,
+    switchCart,
   } = useCartActions();
 
   type LocalExamData = {
@@ -317,7 +337,18 @@
   // let currentScheduleId = $state($userCart.currentCart?.id ?? '');
 
   const cartPromise = getContext<CartPromise>(CART_PROMISE_KEY);
+
+  let previousCartId = $state($userCart.currentCartId);
+
+  $effect(() => {
+    if ($userCart.currentCartId && $userCart.currentCartId !== previousCartId) {
+      previousCartId = $userCart.currentCartId;
+      switchCart($userCart.currentCartId);
+    }
+  });
 </script>
+
+<svelte:window bind:innerWidth />
 
 <div class="flex h-screen flex-col">
   <Modal
@@ -344,6 +375,8 @@
     bind:show={showCreateScheduleModal}
   >
     <CreateTimetable
+      yearOptions={getYearOptions()}
+      semesterOptions={getSemesterShortOptions()}
       onConfirm={(schedule: TimetableMetaData) => {
         createCart(
           schedule.name,
@@ -397,213 +430,258 @@
   </Modal>
 
   <div class="flex w-full flex-1 overflow-hidden">
-    <div
-      class="
-            flex min-w-90 flex-1 flex-col overflow-hidden
-            border-r border-neutral-200
-            [scrollbar-width:none] [&::-webkit-scrollbar]:hidden
-        "
-    >
-      {#await cartPromise}
+    {#if innerWidth >= 1024}
+      {@render sideSection()}
+    {/if}
+    <div class="flex w-full flex-3 flex-col overflow-y-auto">
+      <div class="flex-3 p-6 lg:p-10">
         <div
-          class="flex items-center justify-center gap-2 border-b border-neutral-200 px-2 py-8 text-gray-400"
+          class="flex w-full flex-col gap-4 lg:flex-row lg:items-center lg:justify-between"
         >
-          <Loader2 class="animate-spin" size={24} />
-          <span class="text-sm">กำลังโหลดตารางเรียน...</span>
+          <div class="flex w-full items-center justify-between lg:w-auto">
+            <span class="text-[20px] font-bold md:text-[30px] lg:text-4xl"
+              >ตารางเรียน</span
+            >
+            <div class="lg:hidden">
+              <Switch
+                bind:checked={selectedSchedule.isPublic}
+                label="เปิดเป็นสาธารณะ"
+              />
+            </div>
+          </div>
+
+          <div class="flex w-full items-center lg:w-auto">
+            <EditSchedule
+              class="gap-2 lg:gap-0"
+              bind:currentScheduleId={$userCart.currentCartId}
+              schedules={$userCart.cartList?.map((item) => ({
+                name: item.name,
+                id: item.id,
+              })) ?? []}
+              onRename={() => (showRenameScheduleModal = true)}
+              onDuplicate={() => copyCart()}
+              onAddSchedule={() => (showCreateScheduleModal = true)}
+              onDelete={() => (showDeleteScheduleModal = true)}
+              onPin={() => pinCart()}
+            />
+          </div>
         </div>
-      {:then}
-        <SelectTimetable
-          class="border-b border-neutral-200 px-2 py-5"
-          options={$userCart.cartList?.map((item) => ({
-            name: item.name,
-            id: item.id,
-          })) ?? []}
-          bind:value={$userCart.currentCartId}
-          semester={$userCart.currentCart.semester}
-          semesterType={$userCart.currentCart.studyProgram}
-          academicYear={$userCart.currentCart.academicYear}
-        />
-      {:catch}
         <div
-          class="flex items-center justify-center gap-2 border-b border-neutral-200 px-2 py-8 text-sm text-red-400"
+          class="bg-surface overflow-x-auto pt-4 pb-0 [scrollbar-width:none] lg:px-8 lg:py-8 [&::-webkit-scrollbar]:hidden"
+          bind:this={timetableDiv}
+          bind:this={scheduleTableRef}
         >
-          โหลดตารางเรียนไม่สำเร็จ
+          <div class="min-w-150">
+            <Timetable startTime={7}>
+              {#each $userCart.currentCart?.items as item (item.id)}
+                {@render timetableCourseCard(item)}
+              {/each}
+            </Timetable>
+          </div>
         </div>
-      {/await}
-
-      {#if $userCart.currentCart}
-        <SelectedCourse class="border-b border-neutral-200" />
-      {/if}
-
-      <div
-        class="border-tangerine-500 text-tangerine-700 m-5 items-center rounded-2xl border-2 p-5"
-      >
-        <div class="text-center font-bold">
-          CU Get Reg ไม่ใช่การลงทะเบียนเรียนจริง
+        <CustomizeScrollbar target={scheduleTableRef} />
+        <div
+          class="hidden lg:mx-5 lg:mb-5 lg:flex lg:justify-end lg:text-lg lg:font-bold"
+        >
+          หน่วยกิตรวม {totalCredit} / 22
         </div>
-        <div class="text-center">
-          สามารถลงทะเบียนเรียนได้ที่ <a href="https://www2.reg.chula.ac.th/"
-            >https://www2.reg.chula.ac.th/</a
-          >
-          เพียงช่องทางเดียวเท่านั้น
+
+        <div
+          class="mt-4 flex w-full flex-col gap-2 lg:mt-0 lg:flex-row lg:items-center"
+        >
+          <div class="flex w-full items-center justify-between lg:w-auto">
+            <Switch
+              bind:checked={selectedSchedule.isPublic}
+              label="เปิดเป็นสาธารณะ"
+            />
+            {#if innerWidth < 1024}
+              <Button
+                class="m-0 flex items-center gap-1 border border-gray-200 bg-white"
+                onclick={screenshotTimetable}
+              >
+                <Download size={20} strokeWidth={2.5} class="text-[#353745]" />
+                <span class="font-medium text-[#353745]">บันทึกภาพ</span>
+              </Button>
+            {/if}
+          </div>
+          <div class="flex w-full items-center gap-2 lg:flex-1">
+            <div class="relative flex flex-1">
+              <Input
+                value="cugetreg.com/1232141413"
+                disabled={!selectedSchedule.isPublic}
+                readonly
+                class="w-full pr-10"
+              />
+              <IconButton
+                variant="ghost"
+                disabled={!selectedSchedule.isPublic}
+                class="absolute right-0 z-10 hover:cursor-pointer hover:bg-transparent"
+              >
+                <Copy />
+              </IconButton>
+            </div>
+            <IconButton class="aspect-square">
+              <Share2 />
+            </IconButton>
+            {#if innerWidth >= 1024}
+              <Button class="m-0" onclick={screenshotTimetable}>
+                บันทึกเป็นภาพ
+              </Button>
+            {/if}
+          </div>
         </div>
-      </div>
-    </div>
 
-    <div class="flex-3 overflow-y-auto p-10">
-      <div class="flex justify-between">
-        <span class="text-4xl font-bold">ตารางเรียน</span>
-
-        <EditSchedule
-          bind:currentScheduleId={$userCart.currentCartId}
-          schedules={$userCart.cartList?.map((item) => ({
-            name: item.name,
-            id: item.id,
-          })) ?? []}
-          onRename={() => (showRenameScheduleModal = true)}
-          onDuplicate={() => copyCart()}
-          onAddSchedule={() => (showCreateScheduleModal = true)}
-          onDelete={() => (showDeleteScheduleModal = true)}
-          onPin={() => pinCart()}
-        ></EditSchedule>
-      </div>
-      <div class="bg-surface overflow-x-scroll p-8" bind:this={timetableDiv}>
-        <div class="min-w-150">
-          <Timetable startTime={7}>
-            {#each $userCart.currentCart?.items as item (item.id)}
-              {@render timetableCourseCard(item)}
-            {/each}
-          </Timetable>
+        <div
+          class="flex flex-row items-center justify-between lg:justify-center"
+        >
+          <span class="mt-5 text-2xl font-bold lg:hidden">ตารางสอบ</span>
+          <div class="hidden lg:mt-5 lg:flex lg:justify-center lg:gap-4">
+            <ChevronLeft
+              onclick={() => (showExamSchedule = 'Schedule')}
+              strokeWidth={3}
+              class={showExamSchedule === 'Schedule'
+                ? 'cursor-pointer text-[#4A70C6] transition-colors hover:text-[#3B5EAB]'
+                : 'cursor-pointer text-[#D6D7E1] transition-colors hover:text-[#B0B2C5]'}
+            />
+            <ChevronRight
+              onclick={() => (showExamSchedule = 'List')}
+              strokeWidth={3}
+              class={showExamSchedule === 'List'
+                ? 'cursor-pointer text-[#4A70C6] transition-colors hover:text-[#3B5EAB]'
+                : 'cursor-pointer text-[#D6D7E1] transition-colors hover:text-[#B0B2C5]'}
+            />
+          </div>
+          <div class="mt-5 flex justify-center lg:hidden lg:gap-4">
+            <div
+              class="rounded-l-lg px-4 py-3 {showExamSchedule === 'Schedule'
+                ? 'bg-[#4A70C6]'
+                : 'bg-gray-200'}"
+            >
+              <ListOrdered
+                size={18}
+                onclick={() => (showExamSchedule = 'Schedule')}
+                strokeWidth={1.5}
+                class={showExamSchedule === 'Schedule'
+                  ? 'cursor-pointer text-[#FFFFFF]'
+                  : 'cursor-pointer text-[#353745] transition-colors hover:text-black'}
+              />
+            </div>
+            <div
+              class="rounded-r-lg px-4 py-3 {showExamSchedule === 'List'
+                ? 'bg-[#4A70C6]'
+                : 'bg-gray-200'}"
+            >
+              <Grid3X3
+                size={18}
+                onclick={() => (showExamSchedule = 'List')}
+                strokeWidth={1.5}
+                class={showExamSchedule === 'List'
+                  ? 'cursor-pointer text-[#FFFFFF]'
+                  : 'cursor-pointer text-[#353745] transition-colors hover:text-black'}
+              />
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="mx-5 mb-5 flex justify-end text-lg font-bold">
-        หน่วยกิตรวม {totalCredit} / 22
-      </div>
 
-      <div class="flex">
-        <Switch
-          bind:checked={selectedSchedule.isPublic}
-          label="เปิดเป็นสาธารณะ"
-        />
-        <div class="relative flex flex-1">
-          <Input
-            value="cugetreg.com/1232141413"
-            disabled={!selectedSchedule.isPublic}
-            readonly
-          />
-
-          <IconButton
-            variant="ghost"
-            disabled={!selectedSchedule.isPublic}
-            class="absolute right-0 z-10 hover:cursor-pointer hover:bg-transparent"
-          >
-            <Copy />
-          </IconButton>
-        </div>
-        <div>
-          <IconButton class="aspect-square">
-            <Share2 />
-          </IconButton>
-          <Button class="m-0 h-full" onclick={screenshotTimetable}
-            >บันทึกเป็นภาพ</Button
-          >
-        </div>
+        {#if showExamSchedule === 'List'}
+          {@render examList()}
+        {:else}
+          {@render examSchedule()}
+        {/if}
       </div>
-
-      <div class="mt-5 flex justify-center gap-4">
-        <ChevronLeft
-          onclick={() => (showExamSchedule = 'Schedule')}
-          strokeWidth={3}
-          class={showExamSchedule === 'Schedule'
-            ? 'cursor-pointer text-[#4A70C6] transition-colors hover:text-[#3B5EAB]'
-            : 'cursor-pointer text-[#D6D7E1] transition-colors hover:text-[#B0B2C5]'}
-        />
-        <ChevronRight
-          onclick={() => (showExamSchedule = 'List')}
-          strokeWidth={3}
-          class={showExamSchedule === 'List'
-            ? 'cursor-pointer text-[#4A70C6] transition-colors hover:text-[#3B5EAB]'
-            : 'cursor-pointer text-[#D6D7E1] transition-colors hover:text-[#B0B2C5]'}
-        />
+      <div class="mt-auto w-full border-t bg-white lg:hidden">
+        <Footer />
       </div>
-
-      {#if showExamSchedule === 'List'}
-        {@render examList()}
-      {:else}
-        {@render examSchedule()}
-      {/if}
     </div>
   </div>
 </div>
 
 {#snippet examSchedule()}
   <div class="my-5 text-xl font-bold">Midterm</div>
-  <Timetable
-    startTime={7}
-    days={examDateOrder.midterms
-      .filter((time) => time !== 0)
-      .map((time) => formatDate(new Date(time)))}
+  <div
+    class="overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+    bind:this={midtermTableRef}
   >
-    {#each examDateOrder.midterms.filter((time) => time !== 0) as key, index (key)}
-      {#each examsData.midterms[key] as exam (exam.cartItemId)}
-        {#if exam.start && exam.end}
-          <TimetableCourseCard
-            course={{
-              name: exam.name,
-              abbrName: exam.abbrName,
-              code: exam.courseNo,
-              bldg: '',
-              room: '',
-              section: 0,
-            }}
-            col={formatExamColumn(exam.start ?? undefined) - 7}
-            row={index}
-            length={exam.duration}
-            color={exam.colorVariant}
-          />
-        {/if}
-      {/each}
-    {/each}
-  </Timetable>
+    <div class="min-w-150">
+      <Timetable
+        startTime={7}
+        days={examDateOrder.midterms
+          .filter((time) => time !== 0)
+          .map((time) => formatDate(new Date(time)))}
+      >
+        {#each examDateOrder.midterms.filter((time) => time !== 0) as key, index (key)}
+          {#each examsData.midterms[key] as exam (exam.cartItemId)}
+            {#if exam.start && exam.end}
+              <TimetableCourseCard
+                course={{
+                  name: exam.name,
+                  abbrName: exam.abbrName,
+                  code: exam.courseNo,
+                  bldg: '',
+                  room: '',
+                  section: 0,
+                }}
+                col={formatExamColumn(exam.start ?? undefined) - 7}
+                row={index}
+                length={exam.duration}
+                color={exam.colorVariant}
+              />
+            {/if}
+          {/each}
+        {/each}
+      </Timetable>
+    </div>
+  </div>
+
+  <CustomizeScrollbar target={midtermTableRef} />
 
   <div class="my-5 text-xl font-bold">Finals</div>
-  <Timetable
-    startTime={7}
-    days={examDateOrder.finals
-      .filter((time) => time !== 0)
-      .map((time) => formatDate(new Date(time)))}
+  <div
+    class="overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+    bind:this={finalTableRef}
   >
-    {#each examDateOrder.finals.filter((time) => time !== 0) as key, index (key)}
-      {#each examsData.finals[key] as examCourse (examCourse.cartItemId)}
-        {#if examCourse.start && examCourse.end}
-          <TimetableCourseCard
-            course={{
-              abbrName: examCourse.abbrName,
-              name: examCourse.name,
-              code: examCourse.courseNo,
-              bldg: '',
-              room: '',
-              section: 0,
-            }}
-            col={formatExamColumn(examCourse.start ?? undefined) - 7}
-            row={index}
-            length={examCourse.duration}
-            color={examCourse.colorVariant}
-          />
-        {/if}
-      {/each}
-    {/each}
-  </Timetable>
+    <div class="min-w-150">
+      <Timetable
+        startTime={7}
+        days={examDateOrder.finals
+          .filter((time) => time !== 0)
+          .map((time) => formatDate(new Date(time)))}
+      >
+        {#each examDateOrder.finals.filter((time) => time !== 0) as key, index (key)}
+          {#each examsData.finals[key] as examCourse (examCourse.cartItemId)}
+            {#if examCourse.start && examCourse.end}
+              <TimetableCourseCard
+                course={{
+                  abbrName: examCourse.abbrName,
+                  name: examCourse.name,
+                  code: examCourse.courseNo,
+                  bldg: '',
+                  room: '',
+                  section: 0,
+                }}
+                col={formatExamColumn(examCourse.start ?? undefined) - 7}
+                row={index}
+                length={examCourse.duration}
+                color={examCourse.colorVariant}
+              />
+            {/if}
+          {/each}
+        {/each}
+      </Timetable>
+    </div>
+  </div>
+
+  <CustomizeScrollbar target={finalTableRef} />
 {/snippet}
 
 {#snippet examList()}
   <div class="flex items-center justify-center">
-    <div class="my-5 inline-flex space-x-5">
+    <div class="my-5 w-full space-x-5 lg:inline-flex lg:w-auto">
       <div class="flex-1">
         <span class="text-2xl font-bold">Midterm</span>
 
         {#each examDateOrder.midterms as key (key)}
-          <div class="my-5">
+          <div class="my-5 w-full min-w-0">
             <ExamCard
               date={key === 0 ? 'ยังไม่ประกาศ' : formatDate(new Date(key))}
               data={examsData.midterms[key].map((course) => {
@@ -627,7 +705,7 @@
         <span class="text-2xl font-bold">Finals</span>
 
         {#each examDateOrder.finals as key (key)}
-          <div class="my-5">
+          <div class="my-5 w-full min-w-0">
             <ExamCard
               date={key === 0 ? 'ยังไม่ประกาศ' : formatDate(new Date(key))}
               data={examsData.finals[key].map((course) => {
@@ -687,4 +765,59 @@
       {/if}
     {/each}
   {/if}
+{/snippet}
+
+{#snippet sideSection()}
+  <div
+    class="
+          flex min-w-90 flex-1 flex-col overflow-hidden
+          border-r border-neutral-200
+          [scrollbar-width:none] [&::-webkit-scrollbar]:hidden
+      "
+  >
+    {#await cartPromise}
+      <div
+        class="flex items-center justify-center gap-2 border-b border-neutral-200 px-2 py-8 text-gray-400"
+      >
+        <Loader2 class="animate-spin" size={24} />
+        <span class="text-sm">กำลังโหลดตารางเรียน...</span>
+      </div>
+    {:then}
+      <SelectTimetable
+        class="border-b border-neutral-200 px-2 py-5"
+        options={$userCart.cartList?.map((item) => ({
+          name: item.name,
+          id: item.id,
+        })) ?? []}
+        bind:value={$userCart.currentCartId}
+        semester={$userCart.currentCart.semester}
+        semesterType={$userCart.currentCart.studyProgram}
+        academicYear={$userCart.currentCart.academicYear}
+      />
+    {:catch}
+      <div
+        class="flex items-center justify-center gap-2 border-b border-neutral-200 px-2 py-8 text-sm text-red-400"
+      >
+        โหลดตารางเรียนไม่สำเร็จ
+      </div>
+    {/await}
+
+    {#if $userCart.currentCart}
+      <SelectedCourse class="border-b border-neutral-200" />
+    {/if}
+
+    <div
+      class="border-tangerine-500 text-tangerine-700 m-5 items-center rounded-2xl border-2 p-5"
+    >
+      <div class="text-center font-bold">
+        CU Get Reg ไม่ใช่การลงทะเบียนเรียนจริง
+      </div>
+      <div class="text-center">
+        สามารถลงทะเบียนเรียนได้ที่ <a href="https://www2.reg.chula.ac.th/"
+          >https://www2.reg.chula.ac.th/</a
+        >
+        เพียงช่องทางเดียวเท่านั้น
+      </div>
+    </div>
+  </div>
 {/snippet}

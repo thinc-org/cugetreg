@@ -1,3 +1,4 @@
+import { env } from '$env/dynamic/private';
 import { tryCatch } from '$lib/async-handler';
 
 import { error as svelteError } from '@sveltejs/kit';
@@ -6,9 +7,8 @@ import { ListCartsResponseSchema } from '@cugetreg/zod-schemas/carts-response';
 
 import type { PageServerLoad } from './$types';
 
-const API_URL = 'http://localhost:3000/api/v1/carts';
-
 export const load: PageServerLoad = async ({ fetch }) => {
+  const API_URL = `${env.API_URL ?? 'http://localhost:3000'}/api/v1/carts`;
   const [response, error] = await tryCatch(fetch(API_URL));
 
   if (error || !response || !response.ok) {

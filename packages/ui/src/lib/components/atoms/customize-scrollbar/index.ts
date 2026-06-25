@@ -1,0 +1,1 @@
+export { default as CustomizeScrollbar } from './customize-scrollbar.svelte';

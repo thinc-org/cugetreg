@@ -12,6 +12,7 @@ export const env = createEnv({
     APP_MODE: z.enum(["dev", "prod", "beta"]),
     BETTER_AUTH_SECRET: z.string().min(1),
     BETTER_AUTH_URL: z.string().min(1),
+    BETTER_AUTH_TRUSTED_ORIGINS: z.string().optional(),
   },
   runtimeEnv: process.env,
 });

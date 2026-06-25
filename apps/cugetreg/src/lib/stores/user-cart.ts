@@ -14,7 +14,9 @@ import {
   SingleCartItemResponseSchema,
   SingleCartResponseSchema,
 } from '@cugetreg/zod-schemas/carts-response';
+import type { Semester, StudyProgram } from '@cugetreg/zod-schemas/constants';
 
+import { loginPopupState } from './login-popup.svelte';
 import { useContextStore } from './stores';
 
 export interface UserCartInterface {
@@ -58,9 +60,7 @@ export const { initStore: initUserCartStore, getStore: getUserCartStore } =
 function handleError(error: any) {
   if (isAxiosError(error)) {
     if (error.status === 401) {
-      toast.error('Please login before doing this action.', {
-        position: 'bottom-right',
-      });
+      loginPopupState.show = true;
       return;
     }
 
@@ -92,17 +92,6 @@ const pendingItemUpdates = new Map<string, UpdateCourseFields>();
  * read the id without touching the Svelte context API.
  */
 let cachedCartId: string | undefined;
-
-function mapSemester(dbValue: '1' | '2' | '3'): 'FIRST' | 'SECOND' | 'SUMMER' {
-  switch (dbValue) {
-    case '1':
-      return 'FIRST';
-    case '2':
-      return 'SECOND';
-    case '3':
-      return 'SUMMER';
-  }
-}
 
 // ---------------------------------------------------------------------------
 // Flush logic
@@ -207,7 +196,7 @@ export function useCartActions() {
   // Keep the module-level cachedCartId in sync so flushUpdates can read it
   // from an async context where getContext() is unavailable.
   userCart.subscribe((s) => {
-    cachedCartId = s.currentCartId;
+    cachedCartId = s?.currentCartId;
   });
 
   const pinCart = async () => {
@@ -491,14 +480,14 @@ export function useCartActions() {
     name: string,
     // TODO:
     isPublic: boolean,
-    studyProgram: 'S' | 'I' | 'T',
-    semester: '1' | '2' | '3',
+    studyProgram: StudyProgram,
+    semester: Semester,
     academicYear: number,
   ) => {
     const [response, error] = await tryCatch(
       api.post('/carts', {
         academicYear,
-        semester: mapSemester(semester),
+        semester,
         studyProgram,
         name,
         isDefault: false,
@@ -604,6 +593,22 @@ export function useCartActions() {
     }
   };
 
+  const switchCart = async (cartId: string) => {
+    try {
+      const detailRes = await api.get(`/carts/${cartId}`);
+      const detail = CartDetailResponseSchema.parse(detailRes.data).data;
+
+      userCart.update((state) => ({
+        ...state,
+        currentCartId: cartId,
+        currentCart: detail.cart,
+        exams: detail.schedule.exams,
+      }));
+    } catch (error) {
+      handleError(error);
+    }
+  };
+
   return {
     renameCart,
     updateCartMeta,
@@ -614,5 +619,6 @@ export function useCartActions() {
     deleteCart,
     createCart,
     pinCart,
+    switchCart,
   };
 }

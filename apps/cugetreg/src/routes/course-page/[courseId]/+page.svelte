@@ -7,6 +7,12 @@
   import ScheduleMismatchPopup from '$lib/components/schedule-mismatch-popup.svelte';
   import SelectedCourse from '$lib/components/selected-course.svelte';
   import { faculties } from '$lib/constants';
+  import {
+    ALLOWED_ACADEMIC_YEAR,
+    ALLOWED_SEMESTER,
+    SEMESTER_LABEL_LONG,
+  } from '$lib/semesterOptions';
+  import { loginPopupState } from '$lib/stores/login-popup.svelte';
   import { getUserCartStore, useCartActions } from '$lib/stores/user-cart';
 
   import {
@@ -28,9 +34,11 @@
     StickyNote,
     Strikethrough,
     Underline,
+    X,
   } from '@lucide/svelte';
   import { isAxiosError } from 'axios';
   import { untrack } from 'svelte';
+  import { fade } from 'svelte/transition';
   import toast from 'svelte-french-toast';
 
   import * as Accordion from '@cugetreg/ui/atoms/accordion';
@@ -39,6 +47,7 @@
   import { StudyProgramChip } from '@cugetreg/ui/atoms/studyprogram-chip';
   import { YearSemesterChip } from '@cugetreg/ui/atoms/yearsemester-chip';
   import { Comment } from '@cugetreg/ui/molecules/comment';
+  import { FloatingButton } from '@cugetreg/ui/molecules/floating-button';
   import {
     type ClassInfo,
     SectionTable,
@@ -67,8 +76,8 @@
   const userCart = getUserCartStore();
   const { addCourse, removeCourse, updateCourse } = useCartActions();
 
-  const years = ['2566', '2565', '2564'];
-  const terms = ['ภาคต้น', 'ภาคปลาย'];
+  const years = [...ALLOWED_ACADEMIC_YEAR].reverse().map(String);
+  const terms = ALLOWED_SEMESTER.map((s) => SEMESTER_LABEL_LONG[s]);
 
   let selectedYear = $state(years[0]);
   let selectedTerm = $state(terms[0]);
@@ -130,8 +139,40 @@
     selectedReviewTerm === reviewTermPlaceholder,
   );
 
-  let textareaRef: HTMLTextAreaElement;
+  let activeModal = $state<'selected' | null>(null);
+  let textareaRef: HTMLTextAreaElement | undefined = $state();
   let screenWidth = $state(0);
+
+  const floatingOptions = [
+    {
+      label: 'คำอธิบายรายวิชา',
+      icon: Book,
+      onClick: () => {
+        scrollToSection(descriptionSection);
+      },
+    },
+    {
+      label: 'รายละเอียดเซ็คชัน',
+      icon: StickyNote,
+      onClick: () => {
+        scrollToSection(detailSection);
+      },
+    },
+    {
+      label: 'รีวิวรายวิชา',
+      icon: MessageCircleQuestionIcon,
+      onClick: () => {
+        scrollToSection(reviewSection);
+      },
+    },
+    {
+      label: 'วิชาที่เลือก',
+      icon: BookMarked,
+      onClick: () => {
+        activeModal = 'selected';
+      },
+    },
+  ];
 
   function togglePanel(type: typeof openPanel) {
     if (type === 'sidebar' || type === 'selected_only') {
@@ -227,38 +268,6 @@
     return [reviewTermPlaceholder, ...Array.from(new Set(terms))];
   });
 
-  function mapSemester(semester: string): '1' | '2' | '3' {
-    switch (semester) {
-      case '1':
-      case 'FIRST':
-        return '1';
-      case '2':
-      case 'SECOND':
-        return '2';
-      case '3':
-      case 'SUMMER':
-        return '3';
-      default:
-        return '1';
-    }
-  }
-
-  function mapSemesterInverse(semester: string): 'FIRST' | 'SECOND' | 'SUMMER' {
-    switch (semester) {
-      case '1':
-      case 'FIRST':
-        return 'FIRST';
-      case '2':
-      case 'SECOND':
-        return 'SECOND';
-      case '3':
-      case 'SUMMER':
-        return 'SUMMER';
-      default:
-        return 'FIRST';
-    }
-  }
-
   async function handleReactReview(reviewId: string, interaction: 'L' | 'D') {
     const payload: VoteReviewBodySchema = {
       interaction,
@@ -303,7 +312,7 @@
       courseNo: course.courseNo,
       studyProgram: course.studyProgram,
       academicYear: course.academicYear,
-      semester: mapSemester(course.semester),
+      semester: course.semester,
       rating: reviewRating * 2,
       content: reviewContent,
     };
@@ -320,7 +329,7 @@
         status: review.status,
         studyProgram: review.studyProgram,
         academicYear: review.academicYear,
-        semester: mapSemesterInverse(review.semester), // CAN WE HAVE SINGLE () => data.reviewsSEMESTER TYPE PLEASE????
+        semester: review.semester,
         content: review.content,
         stats: {
           likeCount: review.likeCount,
@@ -434,7 +443,7 @@
   });
 
   function isMismatch() {
-    if (!$userCart.currentCart) return false;
+    if (!$userCart.currentCart || !$session.data) return false;
     return (
       String($userCart.currentCart.academicYear) !==
         String(course.academicYear) ||
@@ -444,6 +453,11 @@
   }
 
   function handleSelectSection(section: any) {
+    if (!$session.data) {
+      loginPopupState.show = true;
+      return;
+    }
+
     if (isMismatch()) {
       pendingSection = section;
       showMismatchPopup = true;
@@ -824,12 +838,7 @@
                             boxed={true}
                             class="w-full"
                             selectedSection={globalSelectedSection}
-                            onSelectSection={(section) => {
-                              globalSelectedSection =
-                                globalSelectedSection === section
-                                  ? null
-                                  : section;
-                            }}
+                            onSelectSection={handleSelectSection}
                           />
                         </div>
 
@@ -1059,7 +1068,10 @@
                     {#each pagedReviews as review, index (index)}
                       <Comment
                         rating={review.rating / 2}
-                        semester={mapSemester(review.semester)}
+                        semester={review.semester as
+                          | 'FIRST'
+                          | 'SECOND'
+                          | 'SUMMER'}
                         content={review.content}
                         likesCount={review.stats.likeCount}
                         dislikesCount={review.stats.dislikeCount}
@@ -1136,6 +1148,32 @@
       </Sidebar.Inset>
     </Sidebar.Provider>
   </div>
+  <div class="lg:hidden">
+    {#if !activeModal}
+      <div transition:fade={{ duration: 200 }}>
+        <FloatingButton options={floatingOptions} />
+      </div>
+    {/if}
+  </div>
+  {#if activeModal}
+    <div
+      class="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm"
+      transition:fade={{ duration: 200 }}
+    >
+      <div
+        class="custom-scrollbar relative flex max-h-[85vh] w-full max-w-[400px] flex-col overflow-y-auto rounded-3xl bg-white p-6 shadow-2xl"
+      >
+        <button
+          class="absolute top-7 right-5 bg-white"
+          onclick={() => (activeModal = null)}
+        >
+          <X size={20} strokeWidth={2.5} />
+        </button>
+        {@render SelectedContent()}
+        {@render WarningContent()}
+      </div>
+    </div>
+  {/if}
 </div>
 
 {#snippet SidebarComponent()}
@@ -1294,38 +1332,43 @@
             {/if}
 
             {#if (sidebarExpanded || openPanel === 'selected_only') && isLoggedIn}
-              <div bind:this={selectedSection}>
-                {#if $userCart.currentCart}
-                  <SelectedCourse
-                    variant="grouped"
-                    class="border-b border-neutral-200"
-                  />
-                {:else}
-                  <SelectedCourse class="border-b border-neutral-200" />
-                {/if}
-              </div>
+              {@render SelectedContent()}
             {/if}
 
             {#if sidebarExpanded || openPanel === 'sidebar'}
-              <div
-                class="mt-8 rounded-2xl border border-orange-300 px-5 py-4 text-center text-[15px] leading-relaxed text-orange-500"
-              >
-                <span class="font-bold"
-                  >CU Get Reg ไม่ใช่การลงทะเบียนเรียนจริง</span
-                ><br />
-                สามารถลงทะเบียนเรียนได้ที่
-                <a
-                  href="https://www2.reg.chula.ac.th/"
-                  target="_blank"
-                  rel="noreferrer"
-                  class="underline">https://www2.reg.chula.ac.th/</a
-                ><br />
-                เพียงช่องทางเดียวเท่านั้น
-              </div>
+              {@render WarningContent()}
             {/if}
           </div>
         </div>
       {/if}
     </Sidebar.Content>
   </Sidebar.Sidebar>
+{/snippet}
+
+{#snippet SelectedContent()}
+  <div bind:this={selectedSection}>
+    {#if $userCart.currentCart}
+      <SelectedCourse variant="grouped" class="border-b border-neutral-200" />
+    {:else}
+      <SelectedCourse class="border-b border-neutral-200" />
+    {/if}
+  </div>
+{/snippet}
+
+{#snippet WarningContent()}
+  <div
+    class="mt-8 rounded-2xl border border-orange-300 px-5 py-4 text-center text-[15px] leading-relaxed text-orange-500"
+  >
+    <span class="font-bold">CU Get Reg ไม่ใช่การลงทะเบียนเรียนจริง</span><br />
+    สามารถลงทะเบียนเรียนได้ที่
+    <a
+      href="https://www2.reg.chula.ac.th/"
+      target="_blank"
+      rel="noreferrer"
+      class="underline"
+    >
+      https://www2.reg.chula.ac.th/
+    </a><br />
+    เพียงช่องทางเดียวเท่านั้น
+  </div>
 {/snippet}

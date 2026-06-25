@@ -1,7 +1,7 @@
 <script lang="ts">
 	import StatusChip from '$lib/components/atoms/status-chip/status-chip.svelte';
 
-	import { ThumbsDown, ThumbsUp } from '@lucide/svelte';
+	import { ThumbsDown, ThumbsUp, Trash2, Pencil } from '@lucide/svelte';
 
 	import { RatingStar } from '../../atoms/rating-star';
 
@@ -17,6 +17,8 @@
 
 		onLike: () => void;
 		onDislike: () => void;
+		onEdit?: () => void;
+        onDelete?: () => void;
 	}
 
 	let {
@@ -31,7 +33,9 @@
 		reaction,
 
 		onLike,
-		onDislike
+		onDislike,
+		onEdit,
+        onDelete
 	}: CommentProps = $props();
 	let hasHalfStar: boolean = $derived(rating % 1 !== 0); // Determine if there's a half star
 	let isExpanded: boolean = $state(false);
@@ -98,24 +102,44 @@
 			</button>
 		</div>
 	</div>
-	<div class="text-subtitle flex flex-row gap-6 font-sans">
-		<div class="flex flex-row gap-x-2 font-medium">
-			<button class="hover:cursor-pointer" onclick={onLike}>
-				<ThumbsUp
-					data-fill={reaction === 'L'}
-					class="text-neutral-400 data-[fill=true]:fill-neutral-400"
-				/>
-			</button>
-			{likesCount}
+	<div class="text-subtitle flex flex-row items-center justify-between font-sans w-full">
+		<div class="flex flex-row gap-6">
+			<div class="flex flex-row gap-x-2 font-medium">
+				<button class="hover:cursor-pointer" onclick={onLike}>
+					<ThumbsUp
+						data-fill={reaction === 'L'}
+						class="text-neutral-400 data-[fill=true]:fill-neutral-400"
+					/>
+				</button>
+				{likesCount}
+			</div>
+			<div class="flex flex-row gap-x-2 font-medium">
+				<button class="hover:cursor-pointer" onclick={onDislike}>
+					<ThumbsDown
+						data-fill={reaction === 'D'}
+						class="text-neutral-400 data-[fill=true]:fill-neutral-400"
+					/>
+				</button>
+				{dislikesCount}
+			</div>
 		</div>
-		<div class="flex flex-row gap-x-2 font-medium">
-			<button class="hover:cursor-pointer" onclick={onDislike}>
-				<ThumbsDown
-					data-fill={reaction === 'D'}
-					class="text-neutral-400 data-[fill=true]:fill-neutral-400"
-				/>
-			</button>
-			{dislikesCount}
-		</div>
+		{#if status === 'REJECTED'}
+            <div class="flex flex-row gap-3 items-center">
+                <button 
+                    class="hover:cursor-pointer hover:bg-red-50 p-1 rounded-md transition-colors" 
+                    aria-label="Delete review" 
+                    onclick={onDelete}
+                >
+                    <Trash2 size={20} class="text-[#FF4D4F]" />
+                </button>
+                <button 
+                    class="hover:cursor-pointer hover:bg-blue-50 p-1 rounded-md transition-colors" 
+                    aria-label="Edit review" 
+                    onclick={onEdit}
+                >
+                    <Pencil size={20} class="text-[#4A70C6]" />
+                </button>
+            </div>
+        {/if}
 	</div>
 </div>

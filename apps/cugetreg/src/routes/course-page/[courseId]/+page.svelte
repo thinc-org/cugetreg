@@ -308,6 +308,34 @@
   }
 
   async function handleSubmitReview() {
+    if (editingReviewId) {
+      const patchPayload = {
+        academicYear: Number(selectedYear),
+        semester: ALLOWED_SEMESTER.find((s) => SEMESTER_LABEL_LONG[s] === selectedTerm) || 'FIRST',
+        rating: reviewRating * 2,
+        content: reviewContent,
+      };
+
+      try {
+        const response = await api.patch(`/reviews/${editingReviewId}`, patchPayload);
+        const index = reviews.findIndex((r) => r.id === editingReviewId);
+        if (index !== -1) {
+          reviews[index].academicYear = patchPayload.academicYear;
+          reviews[index].semester = patchPayload.semester;
+          reviews[index].rating = patchPayload.rating;
+          reviews[index].content = patchPayload.content;
+          reviews[index].status = 'PENDING'; 
+        }
+        editingReviewId = null; 
+        reviewContent = '';
+        reviewRating = 1;
+
+      } catch (error) {
+        console.error(error);
+      }
+      return; 
+    }
+
     const payload: SubmitReviewBodySchema = {
       courseNo: course.courseNo,
       studyProgram: course.studyProgram,
@@ -350,6 +378,29 @@
         position: 'bottom-right',
       });
     }
+  }
+
+  async function handleDeleteReview(reviewId: string) {
+    const isConfirm = confirm('Confirm Delete?');
+    if (!isConfirm) return;
+    try {
+      await api.delete(`/reviews/${reviewId}`);
+      toast.success('ลบรีวิวสำเร็จ', { position: 'bottom-right' });
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  let editingReviewId = $state<string | null>(null); 
+
+  function handleEditReview(review: any) {
+    reviewRating = review.rating / 2;
+    reviewContent = review.content;
+    selectedYear = String(review.academicYear);
+    selectedTerm = SEMESTER_LABEL_LONG[review.semester as keyof typeof SEMESTER_LABEL_LONG] || terms[0];
+    editingReviewId = review.id;
+    scrollToSection(reviewSection);
+    textareaRef?.focus();
   }
 
   $effect(() => {
@@ -1079,6 +1130,8 @@
                         onLike={() => handleReactReview(review.id, 'L')}
                         onDislike={() => handleReactReview(review.id, 'D')}
                         reaction={review.reaction}
+                        onEdit={() => handleEditReview(review)}
+                        onDelete={() => handleDeleteReview(review.id)}
                       />
                     {/each}
                   </div>

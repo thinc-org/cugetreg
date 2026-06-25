@@ -20,6 +20,7 @@
   } from '$lib/stores/user-cart';
 
   import {
+    ArrowUpDown,
     BookMarked,
     ChevronDown,
     Filter,
@@ -35,6 +36,7 @@
   import { Input } from '@cugetreg/ui/atoms/input';
   import { CourseCard } from '@cugetreg/ui/molecules/course-card';
   import { FloatingButton } from '@cugetreg/ui/molecules/floating-button';
+  import * as Select from '@cugetreg/ui/molecules/select';
   import { SelectTimetable } from '@cugetreg/ui/molecules/select-timetable';
   import { Filter as FilterBar } from '@cugetreg/ui/organisms/filter-bar';
   import { Footer } from '@cugetreg/ui/organisms/footer';
@@ -54,6 +56,15 @@
     null,
   );
   let sidebarExpanded = $state(true);
+  let isMobile = $state(false);
+
+  $effect(() => {
+    const mq = window.matchMedia('(max-width: 767px)');
+    isMobile = mq.matches;
+    const handler = (e: MediaQueryListEvent) => (isMobile = e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  });
 
   let timetableSection = $state<HTMLElement>();
   let filterSection = $state<HTMLElement>();
@@ -80,8 +91,31 @@
 
   let currentProgram = $state('ทวิภาค');
   let currentSemester = $state('2566 / 1');
-  let currentSort = $state('รหัสวิชา');
+  let currentSort = $state('NAME');
   let sortDirection = $state<'asc' | 'desc'>('asc');
+
+  // Mobile-only sort options (per design): seat-based + name, each encodes a
+  // field + direction. Desktop keeps its own รหัสวิชา/ชื่อวิชา + direction toggle.
+  const mobileSortOptions = [
+    { label: 'จำนวนที่นั่งมาก', field: 'CAPACITY', dir: 'desc' as const },
+    { label: 'จำนวนที่นั่งน้อย', field: 'CAPACITY', dir: 'asc' as const },
+    { label: 'เหลือที่นั่งมาก', field: 'REMAINING', dir: 'desc' as const },
+    { label: 'เหลือที่นั่งน้อย', field: 'REMAINING', dir: 'asc' as const },
+    { label: 'ชื่อวิชา A-Z', field: 'NAME', dir: 'asc' as const },
+    { label: 'ชื่อวิชา Z-A', field: 'NAME', dir: 'desc' as const },
+  ];
+  // Maps the active sort field to the API's sortBy value.
+  // NOTE: CAPACITY/REMAINING require backend support; NAME works today.
+  const SORT_BY_LABEL: Record<string, string> = {
+    NAME: 'ชื่อวิชา',
+    CAPACITY: 'จำนวนที่นั่ง',
+    REMAINING: 'เหลือที่นั่ง',
+  };
+  function selectMobileSort(field: string, dir: 'asc' | 'desc') {
+    currentSort = field;
+    sortDirection = dir;
+    activeDropdown = null;
+  }
 
   let bottomSentinel = $state<HTMLElement | null>(null);
 
@@ -245,8 +279,8 @@
         params.append('q', searchState.debounced.trim());
       }
 
-      if (currentSort === 'ชื่อวิชา') {
-        params.append('sortBy', 'NAME');
+      if (currentSort) {
+        params.append('sortBy', currentSort);
       }
 
       if (!noConditions) {
@@ -529,28 +563,35 @@
       class="relative h-full min-h-0"
       style="--sidebar-width-icon: 4rem; --sidebar-width: 450px;"
     >
-      {@render SidebarComponent()}
+      {#if !isMobile}
+        {@render SidebarComponent()}
+      {/if}
       <Sidebar.Inset>
         <main
           class="h-full min-w-0 flex-1 overflow-y-auto scroll-smooth bg-white"
         >
           <div class="flex min-h-full flex-col">
-            <div class="mx-auto w-full max-w-[1200px] flex-1 p-8 lg:p-12">
+            <div
+              class="mx-auto w-full max-w-[1200px] flex-1 p-4 md:p-8 lg:p-12"
+            >
               <div
-                class="mb-2 flex flex-col justify-between gap-4 md:flex-row md:items-center"
+                class="mb-2 flex flex-row items-center justify-between gap-2 md:gap-4"
               >
-                <div class="flex items-baseline gap-3">
-                  <h1 class="text-4xl font-bold text-[#1C1B1F]">วิชาเรียน</h1>
-                  <span class="text-sm font-medium text-gray-400"
+                <div class="flex items-baseline gap-2 md:gap-3">
+                  <h1 class="text-2xl font-bold text-[#1C1B1F] md:text-4xl">
+                    วิชาเรียน
+                  </h1>
+                  <span
+                    class="text-xs font-medium whitespace-nowrap text-gray-400 md:text-sm"
                     >({totalResults} ผลลัพธ์)</span
                   >
                 </div>
 
-                <div class="relative flex gap-2">
+                <div class="relative flex shrink-0 gap-2">
                   <div class="relative">
                     <button
                       onclick={() => toggleDropdown('program')}
-                      class="flex items-center gap-2 rounded-full border border-neutral-800 px-5 py-2 text-sm font-bold transition-colors hover:bg-gray-50"
+                      class="flex items-center gap-2 rounded-full border border-neutral-800 px-3 py-1.5 text-xs font-bold transition-colors hover:bg-gray-50 md:px-5 md:py-2 md:text-sm"
                     >
                       {currentProgram}
                       <ChevronDown size={16} />
@@ -575,7 +616,7 @@
                   <div class="relative">
                     <button
                       onclick={() => toggleDropdown('semester')}
-                      class="flex items-center gap-2 rounded-full border border-neutral-800 px-5 py-2 text-sm font-bold whitespace-nowrap transition-colors hover:bg-gray-50"
+                      class="flex items-center gap-2 rounded-full border border-neutral-800 px-3 py-1.5 text-xs font-bold whitespace-nowrap transition-colors hover:bg-gray-50 md:px-5 md:py-2 md:text-sm"
                     >
                       {currentSemester}
                       <ChevronDown size={16} />
@@ -613,7 +654,7 @@
               </div>
 
               <div class="mb-10 flex flex-col gap-1">
-                <div class="flex flex-col gap-6 md:flex-row md:items-end">
+                <div class="flex flex-row items-end gap-3 md:gap-6">
                   <div class="flex flex-1 flex-col gap-1">
                     <span class="ml-1 text-xs text-gray-400">ค้นหา...</span>
                     <Input
@@ -625,7 +666,42 @@
                       class="h-12 w-full rounded-xl border-none bg-[#F1F3F7] px-6 text-lg font-medium focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
-                  <div class="flex w-full flex-col gap-1 md:w-64">
+                  <!-- Mobile sort: "เรียงตาม" + dropdown (Select) -->
+                  <div class="flex h-12 items-center self-end md:hidden">
+                    <Select.Root
+                      type="single"
+                      value={`${currentSort}:${sortDirection}`}
+                      onValueChange={(v) => {
+                        const [field, dir] = v.split(':');
+                        selectMobileSort(field, dir as 'asc' | 'desc');
+                      }}
+                    >
+                      <Select.Trigger
+                        showArrow={false}
+                        class="text-primary h-auto w-auto gap-1.5 rounded-none border-0 bg-transparent p-0 text-base font-bold whitespace-nowrap shadow-none hover:opacity-80 focus:ring-0 focus:ring-offset-0"
+                      >
+                        <span class="flex items-center gap-1.5">
+                          เรียงตาม
+                          <ArrowUpDown size={20} strokeWidth={2.5} />
+                        </span>
+                      </Select.Trigger>
+                      <Select.Content align="end" class="w-48">
+                        <Select.Group>
+                          {#each mobileSortOptions as opt (opt.label)}
+                            <Select.Item
+                              value={`${opt.field}:${opt.dir}`}
+                              label={opt.label}
+                            >
+                              {opt.label}
+                            </Select.Item>
+                          {/each}
+                        </Select.Group>
+                      </Select.Content>
+                    </Select.Root>
+                  </div>
+
+                  <!-- Desktop sort: original "จัดลำดับตาม" layout -->
+                  <div class="hidden w-full flex-col gap-1 md:flex md:w-64">
                     <span
                       class="ml-1 text-[10px] font-bold text-gray-400 uppercase"
                       >จัดลำดับตาม</span
@@ -678,6 +754,26 @@
                       </button>
                     </div>
                   </div>
+                </div>
+              </div>
+
+              <div
+                class="bg-warning-container/60 mb-6 flex items-center gap-4 rounded-2xl px-5 py-4 text-sm leading-relaxed text-neutral-600 md:hidden"
+              >
+                <TriangleAlert
+                  size={28}
+                  strokeWidth={2}
+                  class="text-warning-hover shrink-0"
+                />
+                <div>
+                  <p>ข้อมูลอาจมีการเปลี่ยนแปลง</p>
+                  <p>
+                    โปรดตรวจสอบข้อมูลกับสำนักทะเบียนทุกครั้งก่อนลงทะเบียนเรียน
+                  </p>
+                  <p>
+                    Update ข้อมูลล่าสุด&nbsp;&nbsp;วันที่
+                    20/07/68&nbsp;&nbsp;เวลา 12.00 น.
+                  </p>
                 </div>
               </div>
 

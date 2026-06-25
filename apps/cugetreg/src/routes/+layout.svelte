@@ -15,6 +15,7 @@
   import {
     CART_PROMISE_KEY,
     initUserCartStore,
+    useCartActions,
     type UserCartInterface,
   } from '$lib/stores/user-cart';
 
@@ -22,6 +23,10 @@
   import toast, { Toaster } from 'svelte-french-toast';
 
   import { Modal } from '@cugetreg/ui/atoms/modal';
+  import {
+    CreateTimetable,
+    type TimetableMetaData,
+  } from '@cugetreg/ui/organisms/create-timetable';
   import { LoginPopup } from '@cugetreg/ui/organisms/login-popup';
   import { Navbar } from '@cugetreg/ui/organisms/navbar';
   import { CartDetailResponseSchema } from '@cugetreg/zod-schemas/carts-response';
@@ -130,6 +135,37 @@
     }, 250);
     return () => clearTimeout(timeout);
   });
+
+  const PROGRAM_LABEL: Record<string, string> = {
+    S: 'ทวิภาค',
+    I: 'นานาชาติ',
+    T: 'ตรีภาค',
+  };
+  const SEMESTER_LABEL: Record<string, string> = {
+    FIRST: 'ภาคต้น',
+    SECOND: 'ภาคปลาย',
+    SUMMER: 'ภาคฤดูร้อน',
+  };
+
+  const programLabel = $derived.by(() => {
+    const cart = $userCart.currentCart;
+    if (!cart?.academicYear) return '';
+    const program = PROGRAM_LABEL[cart.studyProgram] ?? cart.studyProgram;
+    const semester = SEMESTER_LABEL[cart.semester] ?? cart.semester;
+    return `${program} ${cart.academicYear} / ${semester}`;
+  });
+
+  const scheduleOptions = $derived(
+    $userCart.cartList?.map((item) => ({ name: item.name, id: item.id })) ?? [],
+  );
+
+  function toggleTheme() {
+    if (typeof document === 'undefined') return;
+    document.documentElement.classList.toggle('dark');
+  }
+
+  const { createCart } = useCartActions();
+  let showCreateScheduleModal = $state(false);
 </script>
 
 <Modal
@@ -158,7 +194,34 @@
     }}
     name={$session.data?.user.name}
     imageUrl={$session.data?.user.image ?? 'https://...'}
+    {scheduleOptions}
+    {programLabel}
+    bind:currentScheduleId={$userCart.currentCartId}
+    onToggleTheme={toggleTheme}
+    onAddSchedule={() => (showCreateScheduleModal = true)}
   />
+
+  <Modal
+    exitOnEsc
+    exitOnBackgroundClick
+    centered
+    dim
+    bind:show={showCreateScheduleModal}
+  >
+    <CreateTimetable
+      onConfirm={(schedule: TimetableMetaData) => {
+        createCart(
+          schedule.name,
+          schedule.isPublic,
+          schedule.semesterType,
+          schedule.semester,
+          schedule.academicYear,
+        );
+        showCreateScheduleModal = false;
+      }}
+      onCancel={() => (showCreateScheduleModal = false)}
+    />
+  </Modal>
 
   {#if page.url.pathname === '/'}
     {@render children?.()}

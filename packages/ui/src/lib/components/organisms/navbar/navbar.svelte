@@ -147,7 +147,6 @@
 	</div>
 	<MobileSidebar
 		bind:open={openSideBar}
-		bind:selected
 		bind:currentScheduleId
 		{isLoggedIn}
 		{name}

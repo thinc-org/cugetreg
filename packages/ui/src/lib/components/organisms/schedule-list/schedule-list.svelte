@@ -20,8 +20,6 @@
 
 	let { heading = '', items = [], loading = false, onDelete, onChangeVisibility }: Props = $props();
 
-	const resolve = (href: string) => href;
-
 	let filters = $derived([...new Set(items.map((item) => item.title))]);
 
 	let selected = $state(filters[0] ?? '');
@@ -105,7 +103,7 @@
 		{:else}
 			{#each filteredItems as item (item.id)}
 				<div class="border-surface-container-low bg-surface rounded-3xl border px-6 py-6">
-					<a href={resolve(`/schedule/${item.id}`)} class="flex items-start justify-between gap-3">
+					<a href={`/schedule/${item.id}`} class="flex items-start justify-between gap-3">
 						<div class="flex flex-col gap-1">
 							<p class="text-body2 font-semibold underline underline-offset-4">
 								{item.title}
@@ -139,7 +137,7 @@
 			{/each}
 		{/if}
 		<a
-			href={resolve('/schedule')}
+			href="/schedule"
 			class="text-md inline-flex w-full justify-center rounded-2xl bg-blue-100 px-8 py-2 text-center font-medium text-blue-900"
 		>
 			เพิ่มตารางเรียน

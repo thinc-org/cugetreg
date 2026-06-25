@@ -44,22 +44,6 @@
   let items = $state<ScheduleItem[]>([]);
   let reviews = $state<Review[]>([]);
 
-  let terms = [
-    '2569 ภาคฤดูร้อน',
-    '2569 ภาคปลาย',
-    '2569 ภาคต้น',
-    '2568 ภาคฤดูร้อน',
-    '2568 ภาคปลาย',
-    '2568 ภาคต้น',
-    '2567 ภาคฤดูร้อน',
-    '2567 ภาคปลาย',
-    '2567 ภาคต้น',
-    '2566 ภาคฤดูร้อน',
-    '2566 ภาคปลาย',
-    '2566 ภาคต้น',
-  ];
-
-  let selectedTerm = $state('2569 ภาคต้น');
   let editInfoPopupVisible = $state(false);
   let itemToDelete = $state<ScheduleItem | null>(null);
   let deleteItemPopupVisible = $state(false);
@@ -90,22 +74,10 @@
   }
 
   async function fetchScheduleItems() {
-    const [academicYear, semester] = selectedTerm.split(' ');
-
-    const semesters: Record<string, string> = {
-      ภาคต้น: 'FIRST',
-      ภาคปลาย: 'SECOND',
-      ภาคฤดูร้อน: 'SUMMER',
-    };
-
-    const query = new URLSearchParams({
-      academicYear,
-      semester: semesters[semester],
-    });
 
     loadingSchedules = true;
 
-    const [res, error] = await tryCatch(api.get(`/carts?${query.toString()}`));
+    const [res, error] = await tryCatch(api.get('/carts'));
 
     if (error || res.status !== 200) {
       console.error(error?.message);
@@ -202,10 +174,6 @@
     await updateUser();
   };
 
-  const onSelectTerm = (term: string) => {
-    selectedTerm = term;
-  };
-
   let onDeleteItem = (item: ScheduleItem) => {
     deleteItemPopupVisible = true;
     itemToDelete = item;
@@ -222,7 +190,6 @@
   };
 
   $effect(() => {
-    selectedTerm;
     fetchScheduleItems();
   });
 
@@ -245,10 +212,7 @@
     <ScheduleList
       heading="ตารางเรียน"
       {items}
-      {terms}
-      bind:selectedTerm
       loading={loadingSchedules}
-      {onSelectTerm}
       onDelete={onDeleteItem}
       onChangeVisibility={changeVisibility}
     />

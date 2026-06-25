@@ -12,33 +12,49 @@
 
 	interface Props {
 		heading?: string;
-		selectedTerm?: string;
-		terms?: string[];
 		items?: ScheduleItem[];
 		loading?: boolean;
-		onSelectTerm?: (term: string) => void;
 		onDelete?: (item: ScheduleItem) => void;
 		onChangeVisibility: (item: ScheduleItem) => void;
 	}
 
-	let {
-		heading = '',
-		selectedTerm = $bindable('2567 ภาคต้น'),
-		terms = [],
-		items = [],
-		loading = false,
-		onSelectTerm,
-		onDelete,
-		onChangeVisibility
-	}: Props = $props();
+	let { heading = '', items = [], loading = false, onDelete, onChangeVisibility }: Props = $props();
 
 	const resolve = (href: string) => href;
 
-	const onChangeTerm = (event: Event) => {
-		const selectElement = event.target as HTMLSelectElement;
-		selectedTerm = selectElement.value;
-		onSelectTerm?.(selectedTerm);
-	};
+	let filters = $derived([...new Set(items.map((item) => item.title))]);
+
+	let selected = $state(filters[0] ?? '');
+
+	let filteredItems = $derived(items.filter((item) => item.title === selected));
+
+	let switchingFilter = $state(false);
+	let showSpinner = $derived(loading || switchingFilter);
+
+	const FILTER_SWITCH_DELAY_MS = 100;
+
+	$effect(() => {
+		if (!filters.length) {
+			if (selected !== '') selected = '';
+			switchingFilter = false;
+			return;
+		}
+
+		if (filters.includes(selected)) {
+			switchingFilter = false;
+			return;
+		}
+
+		// The previously selected title has no items left - briefly show a
+		// loading state before falling back to the first available option.
+		switchingFilter = true;
+		const timeout = setTimeout(() => {
+			selected = filters[0] ?? '';
+			switchingFilter = false;
+		}, FILTER_SWITCH_DELAY_MS);
+
+		return () => clearTimeout(timeout);
+	});
 </script>
 
 <div class="text-on-surface w-full max-w-xl">
@@ -48,22 +64,23 @@
 			<p>{heading}</p>
 		</div>
 	{/if}
-	<div class="border-surface-container-low bg-surface relative mt-4 rounded-2xl border px-4 py-4">
-		<select
-			class="text-body2 text-on-surface w-full appearance-none bg-transparent font-semibold underline underline-offset-4 focus:outline-none"
-			bind:value={selectedTerm}
-			onchange={onChangeTerm}
-		>
-			{#each terms as term (term)}
-				<option value={term}>{term}</option>
-			{/each}
-		</select>
-		<ChevronDown
-			size="18"
-			strokeWidth="2.5"
-			class="text-on-surface/70 pointer-events-none absolute top-1/2 right-4 -translate-y-1/2"
-		/>
-	</div>
+	{#if !loading && items.length}
+		<div class="border-surface-container-low bg-surface relative mt-4 rounded-2xl border px-4 py-4">
+			<select
+				class="text-body2 text-on-surface w-full appearance-none bg-transparent font-semibold underline underline-offset-4 focus:outline-none"
+				bind:value={selected}
+			>
+				{#each filters as name (name)}
+					<option value={name}>{name}</option>
+				{/each}
+			</select>
+			<ChevronDown
+				size="18"
+				strokeWidth="2.5"
+				class="text-on-surface/70 pointer-events-none absolute top-1/2 right-4 -translate-y-1/2"
+			/>
+		</div>
+	{/if}
 	{#if !loading && !items.length}
 		<div class="flex items-center justify-center rounded-xl p-4">
 			<BookPlus size={52} strokeWidth={1.5} class="text-blue-500" />
@@ -81,12 +98,12 @@
 		</div>
 	{/if}
 	<div class="mt-4 flex flex-col gap-4">
-		{#if loading}
+		{#if showSpinner}
 			<div class="flex flex-col items-center justify-center gap-3 py-10">
 				<LoaderCircle size={80} class="animate-spin text-blue-500" />
 			</div>
 		{:else}
-			{#each items as item (item.id)}
+			{#each filteredItems as item (item.id)}
 				<div class="border-surface-container-low bg-surface rounded-3xl border px-6 py-6">
 					<a href={resolve(`/schedule/${item.id}`)} class="flex items-start justify-between gap-3">
 						<div class="flex flex-col gap-1">

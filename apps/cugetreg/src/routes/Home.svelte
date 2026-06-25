@@ -99,7 +99,7 @@
   const SORT_BY_LABEL: Record<string, string> = {
     NAME: 'ชื่อวิชา',
     CAPACITY: 'จำนวนที่นั่ง',
-    REMAINING: 'เหลือที่นั่ง'
+    REMAINING: 'เหลือที่นั่ง',
   };
   function selectMobileSort(field: string, dir: 'asc' | 'desc') {
     currentSort = field;
@@ -282,9 +282,8 @@
         params.append('q', searchState.debounced.trim());
       }
 
-      const sortByParam = SORT_BY_PARAM[currentSort];
-      if (sortByParam) {
-        params.append('sortBy', sortByParam);
+      if (currentSort) {
+        params.append('sortBy', currentSort);
       }
 
       if (!noConditions) {
@@ -589,7 +588,9 @@
           class="h-full min-w-0 flex-1 overflow-y-auto scroll-smooth bg-white"
         >
           <div class="flex min-h-full flex-col">
-            <div class="mx-auto w-full max-w-[1200px] flex-1 p-4 md:p-8 lg:p-12">
+            <div
+              class="mx-auto w-full max-w-[1200px] flex-1 p-4 md:p-8 lg:p-12"
+            >
               <div
                 class="mb-2 flex flex-row items-center justify-between gap-2 md:gap-4"
               >
@@ -607,7 +608,7 @@
                   <div class="relative">
                     <button
                       onclick={() => toggleDropdown('program')}
-                      class="flex items-center gap-2 rounded-full border border-neutral-800 px-3 py-1.5 text-xs font-bold md:px-5 md:py-2 md:text-sm transition-colors hover:bg-gray-50"
+                      class="flex items-center gap-2 rounded-full border border-neutral-800 px-3 py-1.5 text-xs font-bold transition-colors hover:bg-gray-50 md:px-5 md:py-2 md:text-sm"
                     >
                       {currentProgram}
                       <ChevronDown size={16} />
@@ -632,7 +633,7 @@
                   <div class="relative">
                     <button
                       onclick={() => toggleDropdown('semester')}
-                      class="flex items-center gap-2 rounded-full border border-neutral-800 px-3 py-1.5 text-xs font-bold md:px-5 md:py-2 md:text-sm whitespace-nowrap transition-colors hover:bg-gray-50"
+                      class="flex items-center gap-2 rounded-full border border-neutral-800 px-3 py-1.5 text-xs font-bold whitespace-nowrap transition-colors hover:bg-gray-50 md:px-5 md:py-2 md:text-sm"
                     >
                       {currentSemester}
                       <ChevronDown size={16} />
@@ -783,10 +784,12 @@
                 />
                 <div>
                   <p>ข้อมูลอาจมีการเปลี่ยนแปลง</p>
-                  <p>โปรดตรวจสอบข้อมูลกับสำนักทะเบียนทุกครั้งก่อนลงทะเบียนเรียน</p>
                   <p>
-                    Update ข้อมูลล่าสุด&nbsp;&nbsp;วันที่ 20/07/68&nbsp;&nbsp;เวลา
-                    12.00 น.
+                    โปรดตรวจสอบข้อมูลกับสำนักทะเบียนทุกครั้งก่อนลงทะเบียนเรียน
+                  </p>
+                  <p>
+                    Update ข้อมูลล่าสุด&nbsp;&nbsp;วันที่
+                    20/07/68&nbsp;&nbsp;เวลา 12.00 น.
                   </p>
                 </div>
               </div>

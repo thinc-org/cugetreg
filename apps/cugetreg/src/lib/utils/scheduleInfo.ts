@@ -1,24 +1,10 @@
 import { SEMESTER_LABEL_LONG } from '$lib/semesterOptions';
 
-import type { Semester, StudyProgram } from '@cugetreg/zod-schemas';
+import type { CartSchema } from '@cugetreg/zod-schemas';
 
 import { studyProgramMapper } from '../mapper';
 
-type Schedule = {
-  id: string;
-  userId: string;
-  studyProgram: StudyProgram;
-  academicYear: number;
-  semester: Semester;
-  name: string;
-  visible: string;
-  isDefault: boolean;
-  cartOrder: string;
-  createdAt: string | Date;
-  updatedAt: string | Date;
-};
-
-export function convertSchedulesInfo(schedules: Schedule[]) {
+export function convertSchedulesInfo(schedules: CartSchema[]) {
   const result = schedules
     .sort((a, b) => b.studyProgram.localeCompare(a.studyProgram))
     .map((schedule) => {

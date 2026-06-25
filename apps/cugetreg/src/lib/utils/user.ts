@@ -1,20 +1,11 @@
-type UserInput = {
-  id: string;
-  email: string;
-  name: string;
-  googleId?: string;
-  faculty: string | null;
-  department: string | null;
-  createdAt?: string;
-  updatedAt?: string;
-};
+import type { UserInputSchema } from '@cugetreg/zod-schemas';
 
 export function getFirstNameAndLastName(name: string) {
   const splitName = name.split(' ');
   return [splitName[0], splitName[splitName.length - 1]];
 }
 
-export function convertUserInfo(user: UserInput) {
+export function convertUserInfo(user: UserInputSchema) {
   const [firstName, lastName] = getFirstNameAndLastName(user.name);
 
   return {

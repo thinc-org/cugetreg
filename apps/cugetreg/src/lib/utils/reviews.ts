@@ -1,30 +1,10 @@
 import { SEMESTER_LABEL_LONG } from '$lib/semesterOptions';
 
-import type {
-  GenEdType,
-  ReviewStatus,
-  Semester,
-  StudyProgram,
-} from '@cugetreg/zod-schemas';
+import type { ReviewSchema } from '@cugetreg/zod-schemas';
 
 import { genEdTypeMapper } from '../mapper';
 
-type Review = {
-  id: string;
-  courseNo: string;
-  courseAbbrName: string;
-  genEdType: GenEdType;
-  studyProgram: StudyProgram;
-  academicYear: number;
-  semester: Semester;
-  rejectionReason: string | null;
-  rating: number;
-  content: string;
-  status: ReviewStatus;
-  createdAt: string;
-};
-
-export function convertReviewInfos(reviews: Review[]) {
+export function convertReviewInfos(reviews: ReviewSchema[]) {
   return reviews.map((review) => ({
     code: review.courseNo,
     name: review.courseAbbrName,

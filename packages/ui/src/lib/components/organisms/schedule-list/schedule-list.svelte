@@ -20,7 +20,11 @@
 
 	let { heading = '', items = [], loading = false, onDelete, onChangeVisibility }: Props = $props();
 
-	let filters = $derived([...new Set(items.map((item) => item.title))]);
+	let filters = $derived(
+		[...new Set(items.map((item) => item.title))].sort((option1, option2) => {
+			return option1.localeCompare(option2);
+		})
+	);
 
 	let selected = $state(filters[0] ?? '');
 
@@ -63,9 +67,9 @@
 		</div>
 	{/if}
 	{#if !loading && items.length}
-		<div class="border-surface-container-low bg-surface relative mt-4 rounded-2xl border px-4 py-4">
+		<div class="border-surface-container-low bg-surface relative mt-4 rounded-2xl border px-6 py-4">
 			<select
-				class="text-body2 text-on-surface w-full appearance-none bg-transparent font-semibold underline underline-offset-4 focus:outline-none"
+				class="text-body1 text-on-surface w-full appearance-none bg-transparent font-semibold underline underline-offset-4 focus:outline-none"
 				bind:value={selected}
 			>
 				{#each filters as name (name)}
@@ -105,7 +109,7 @@
 				<div class="border-surface-container-low bg-surface rounded-3xl border px-6 py-6">
 					<a href={`/schedule/${item.id}`} class="flex items-start justify-between gap-3">
 						<div class="flex flex-col gap-1">
-							<p class="text-body2 font-semibold underline underline-offset-4">
+							<p class="text-body1 font-semibold underline underline-offset-4">
 								{item.title}
 							</p>
 							<p class="text-body2 text-on-surface/50">

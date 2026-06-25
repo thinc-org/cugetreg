@@ -2,7 +2,6 @@
 	import { resolve } from '$app/paths';
 	import { page } from '$app/stores';
 	import { Button } from '$lib/components/atoms/button';
-	import { Chip } from '$lib/components/atoms/chip';
 	import { Collapsible } from '$lib/components/atoms/collapsible';
 	import { IconButton } from '$lib/components/atoms/icon-button';
 	import { Input } from '$lib/components/atoms/input';
@@ -10,6 +9,7 @@
 	import { Menu, Moon, Search } from '@lucide/svelte';
 
 	import { cn, getShortenName } from '@cugetreg/utils';
+
 	import { CUGetRegDarkFull as CUGetRegLogo } from '../../logo/cugetreg';
 	import { UserDialog } from '../../molecules/user-dialog';
 	import { MobileSidebar } from '../mobile-sidebar';

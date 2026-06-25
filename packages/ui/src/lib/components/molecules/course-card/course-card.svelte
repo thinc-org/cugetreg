@@ -96,7 +96,7 @@
 	<div class="flex w-full flex-row items-center gap-2">
 		{#if sections && sections.length === 1}
 			<div
-				class="text-sm md:text-body2 rounded-button flex h-9 min-w-0 flex-1 items-center justify-center border border-neutral-200 text-neutral-700 md:h-9"
+				class="md:text-body2 rounded-button flex h-9 min-w-0 flex-1 items-center justify-center border border-neutral-200 text-sm text-neutral-700 md:h-9"
 			>
 				{sections[0].label}
 			</div>
@@ -111,7 +111,7 @@
 					}
 				}
 			>
-				<Select.Trigger class="text-sm md:text-body2 rounded-button h-9 min-w-0 flex-1 md:h-9">
+				<Select.Trigger class="md:text-body2 rounded-button h-9 min-w-0 flex-1 text-sm md:h-9">
 					{selectedSection
 						? (sections.find((s) => s.value === selectedSection)?.label ?? 'เลือกเซคชัน')
 						: 'เลือกเซคชัน'}
@@ -130,7 +130,7 @@
 			<Button
 				variant="outlined"
 				color="neutral"
-				class="text-sm md:text-body2 h-9 min-w-0 flex-1 md:h-9"
+				class="md:text-body2 h-9 min-w-0 flex-1 text-sm md:h-9"
 				disabled
 			>
 				ไม่มีเซคชัน
@@ -141,7 +141,7 @@
 				variant="outlined"
 				color="primary"
 				onclick={onButtonClick}
-				class="text-sm md:text-body2 h-9 min-w-0 flex-1 md:h-9"
+				class="md:text-body2 h-9 min-w-0 flex-1 text-sm md:h-9"
 				size="sm"
 			>
 				เลือก <Plus size="16" strokeWidth="3" />
@@ -150,7 +150,7 @@
 			<Button
 				color="primary"
 				onclick={onButtonClick}
-				class="text-sm md:text-body2 h-9 min-w-0 flex-1 md:h-9"
+				class="md:text-body2 h-9 min-w-0 flex-1 text-sm md:h-9"
 			>
 				เลือกแล้ว <Check size="16" strokeWidth="3" />
 			</Button>

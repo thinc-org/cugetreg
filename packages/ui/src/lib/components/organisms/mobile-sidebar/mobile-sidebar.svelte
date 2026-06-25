@@ -161,9 +161,7 @@
 								</button>
 							{/each}
 							{#if programLabel}
-								<div
-									class="text-caption border-t border-neutral-100 px-4 py-2 text-neutral-400"
-								>
+								<div class="text-caption border-t border-neutral-100 px-4 py-2 text-neutral-400">
 									{programLabel}
 								</div>
 							{/if}

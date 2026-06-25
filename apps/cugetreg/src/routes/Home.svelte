@@ -19,8 +19,6 @@
     useCartActions,
   } from '$lib/stores/user-cart';
 
-  import { goto } from '$app/navigation';
-
   import {
     ArrowUpDown,
     BookMarked,
@@ -37,9 +35,8 @@
 
   import { Input } from '@cugetreg/ui/atoms/input';
   import { CourseCard } from '@cugetreg/ui/molecules/course-card';
-  import { Modal } from '@cugetreg/ui/atoms/modal';
-  import * as Select from '@cugetreg/ui/molecules/select';
   import { FloatingButton } from '@cugetreg/ui/molecules/floating-button';
+  import * as Select from '@cugetreg/ui/molecules/select';
   import { SelectTimetable } from '@cugetreg/ui/molecules/select-timetable';
   import { Filter as FilterBar } from '@cugetreg/ui/organisms/filter-bar';
   import { Footer } from '@cugetreg/ui/organisms/footer';

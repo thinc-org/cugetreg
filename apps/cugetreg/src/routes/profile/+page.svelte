@@ -96,6 +96,7 @@
 
     console.log(id, isPublic);
 
+    // TODO: Implement and use user-cart updateCartListMeta()
     const [res, error] = await tryCatch(
       api.patch(`/carts/${id}`, {
         visible: isPublic ? 'PUB' : 'PVT',
@@ -109,6 +110,7 @@
   }
 
   async function deleteSchedule(id: string) {
+    // TODO: Implement and use user-cart deleteCart(id)
     const [res, error] = await tryCatch(api.delete(`/carts/${id}`));
 
     if (error || !res) {

@@ -160,6 +160,7 @@ export const reviewService = {
       data: {
         ...body,
         semester,
+        status: mapReviewStatus("PENDING"),
       },
     });
 

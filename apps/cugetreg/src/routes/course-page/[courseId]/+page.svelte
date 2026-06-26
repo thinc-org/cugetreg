@@ -339,8 +339,8 @@
     const payload: SubmitReviewBodySchema = {
       courseNo: course.courseNo,
       studyProgram: course.studyProgram,
-      academicYear: course.academicYear,
-      semester: course.semester,
+      academicYear: Number(selectedYear),
+      semester: ALLOWED_SEMESTER.find((s) => SEMESTER_LABEL_LONG[s] === selectedTerm) || 'FIRST',
       rating: reviewRating * 2,
       content: reviewContent,
     };
@@ -364,6 +364,7 @@
           dislikeCount: review.dislikeCount,
         },
       });
+      reviewContent = '';
     } catch (error) {
       if (isAxiosError(error)) {
         if (error.status === 401) {
@@ -385,6 +386,10 @@
     if (!isConfirm) return;
     try {
       await api.delete(`/reviews/${reviewId}`);
+      const index = reviews.findIndex((r) => r.id === reviewId);
+      if (index !== -1) {
+        reviews.splice(index, 1);
+      }
       toast.success('ลบรีวิวสำเร็จ', { position: 'bottom-right' });
     } catch (error) {
       console.error(error);
@@ -397,7 +402,7 @@
     reviewRating = review.rating / 2;
     reviewContent = review.content;
     selectedYear = String(review.academicYear);
-    selectedTerm = SEMESTER_LABEL_LONG[review.semester as keyof typeof SEMESTER_LABEL_LONG] || terms[0];
+    selectedTerm = SEMESTER_LABEL_LONG[review.semester as keyof typeof SEMESTER_LABEL_LONG];
     editingReviewId = review.id;
     scrollToSection(reviewSection);
     textareaRef?.focus();

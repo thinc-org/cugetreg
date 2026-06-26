@@ -241,19 +241,21 @@ GROUP BY
     ss.remaining_sum, ss.closed_sections_count
 ORDER BY
     -- NAME sort
-    CASE WHEN COALESCE(NULLIF($14::text, ''), 'REMAINING_SUM') = 'NAME'    AND COALESCE(NULLIF($15::text, ''), 'ASC') = 'ASC'  THEN ci.abbr_name       END ASC  NULLS LAST,
-    CASE WHEN COALESCE(NULLIF($14::text, ''), 'REMAINING_SUM') = 'NAME'    AND COALESCE(NULLIF($15::text, ''), 'ASC') = 'DESC' THEN ci.abbr_name       END DESC NULLS LAST,
-    CASE WHEN COALESCE(NULLIF($14::text, ''), 'REMAINING_SUM') = 'NAME'    AND COALESCE(NULLIF($15::text, ''), 'ASC') = 'ASC'  THEN ci.course_name_en  END ASC  NULLS LAST,
-    CASE WHEN COALESCE(NULLIF($14::text, ''), 'REMAINING_SUM') = 'NAME'    AND COALESCE(NULLIF($15::text, ''), 'ASC') = 'DESC' THEN ci.course_name_en  END DESC NULLS LAST,
+    CASE WHEN COALESCE(NULLIF($14::text, ''), 'REMAINING_SUM') = 'NAME'    AND COALESCE(NULLIF($15::text, ''), 'asc') = 'asc'  THEN ci.abbr_name       END ASC  NULLS LAST,
+    CASE WHEN COALESCE(NULLIF($14::text, ''), 'REMAINING_SUM') = 'NAME'    AND COALESCE(NULLIF($15::text, ''), 'asc') = 'desc' THEN ci.abbr_name       END DESC NULLS LAST,
+    CASE WHEN COALESCE(NULLIF($14::text, ''), 'REMAINING_SUM') = 'NAME'    AND COALESCE(NULLIF($15::text, ''), 'asc') = 'asc'  THEN ci.course_name_en  END ASC  NULLS LAST,
+    CASE WHEN COALESCE(NULLIF($14::text, ''), 'REMAINING_SUM') = 'NAME'    AND COALESCE(NULLIF($15::text, ''), 'asc') = 'desc' THEN ci.course_name_en  END DESC NULLS LAST,
 
     -- CAPACITY_SUM sort
-    CASE WHEN COALESCE(NULLIF($14::text, ''), 'REMAINING_SUM') = 'CAPACITY_SUM'  AND COALESCE(NULLIF($15::text, ''), 'ASC') = 'ASC'  THEN ss.capacity_sum  END ASC  NULLS LAST,
-    CASE WHEN COALESCE(NULLIF($14::text, ''), 'REMAINING_SUM') = 'CAPACITY_SUM'  AND COALESCE(NULLIF($15::text, ''), 'ASC') = 'DESC' THEN ss.capacity_sum  END DESC NULLS LAST,
+    CASE WHEN COALESCE(NULLIF($14::text, ''), 'REMAINING_SUM') = 'CAPACITY_SUM'  AND COALESCE(NULLIF($15::text, ''), 'asc') = 'asc'  THEN ss.capacity_sum  END ASC  NULLS LAST,
+    CASE WHEN COALESCE(NULLIF($14::text, ''), 'REMAINING_SUM') = 'CAPACITY_SUM'  AND COALESCE(NULLIF($15::text, ''), 'asc') = 'desc' THEN ss.capacity_sum  END DESC NULLS LAST,
 
     -- REMAINING_SUM sort (also the default when sort_by is unset/null)
-    CASE WHEN COALESCE(NULLIF($14::text, ''), 'REMAINING_SUM') = 'REMAINING_SUM' AND COALESCE(NULLIF($15::text, ''), 'ASC') = 'ASC'  THEN ss.remaining_sum END ASC  NULLS LAST,
-    CASE WHEN COALESCE(NULLIF($14::text, ''), 'REMAINING_SUM') = 'REMAINING_SUM' AND COALESCE(NULLIF($15::text, ''), 'ASC') = 'DESC' THEN ss.remaining_sum END DESC NULLS LAST,
+    CASE WHEN COALESCE(NULLIF($14::text, ''), 'REMAINING_SUM') = 'REMAINING_SUM' AND COALESCE(NULLIF($15::text, ''), 'asc') = 'asc'  THEN ss.remaining_sum END ASC  NULLS LAST,
+    CASE WHEN COALESCE(NULLIF($14::text, ''), 'REMAINING_SUM') = 'REMAINING_SUM' AND COALESCE(NULLIF($15::text, ''), 'asc') = 'desc' THEN ss.remaining_sum END DESC NULLS LAST,
 
+    CASE WHEN COALESCE(NULLIF($14::text, ''), 'REMAINING_SUM') = 'COURSE_NO' AND COALESCE(NULLIF($15::text, ''), 'asc') = 'asc'  THEN c.course_no END ASC  NULLS LAST,
+    CASE WHEN COALESCE(NULLIF($14::text, ''), 'REMAINING_SUM') = 'COURSE_NO' AND COALESCE(NULLIF($15::text, ''), 'asc') = 'desc' THEN c.course_no END DESC NULLS LAST,
     -- Tiebreaker (always applied)
     c.course_no ASC
 LIMIT COALESCE(NULLIF($12::int, 0), 100)

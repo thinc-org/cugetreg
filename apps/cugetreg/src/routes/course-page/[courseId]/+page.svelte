@@ -35,6 +35,7 @@
     Strikethrough,
     Underline,
     X,
+    ChevronLeft
   } from '@lucide/svelte';
   import { isAxiosError } from 'axios';
   import { untrack } from 'svelte';
@@ -551,6 +552,16 @@
           <div class="flex min-h-full flex-col">
             <div class="px-6 py-6">
               <section class="text-on-surface mx-auto w-full max-w-5xl">
+                <button 
+                  type="button"
+                  class="flex items-center justify-center gap-1 mb-4 lg:mb-1" 
+                  onclick={() => history.back()}
+                >
+                  <ChevronLeft size={18} strokeWidth={2.5}/>
+                  <span class="text-[#353745] text-[12px] font-regular translate-y-[-1px]">
+                    กลับ
+                  </span>
+                </button>
                 <div class="flex flex-wrap items-center gap-3">
                   <div class="flex flex-col items-start gap-3">
                     {#if ['SC', 'SO', 'HU', 'IN'].includes(course.genEdType)}

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import StatusChip from '$lib/components/atoms/status-chip/status-chip.svelte';
 
-	import { ThumbsDown, ThumbsUp, Trash2, Pencil } from '@lucide/svelte';
+	import { Pencil, ThumbsDown, ThumbsUp, Trash2 } from '@lucide/svelte';
 
 	import { RatingStar } from '../../atoms/rating-star';
 
@@ -18,7 +18,7 @@
 		onLike: () => void;
 		onDislike: () => void;
 		onEdit?: () => void;
-        onDelete?: () => void;
+		onDelete?: () => void;
 	}
 
 	let {
@@ -35,7 +35,7 @@
 		onLike,
 		onDislike,
 		onEdit,
-        onDelete
+		onDelete
 	}: CommentProps = $props();
 	let hasHalfStar: boolean = $derived(rating % 1 !== 0); // Determine if there's a half star
 	let isExpanded: boolean = $state(false);
@@ -102,7 +102,7 @@
 			</button>
 		</div>
 	</div>
-	<div class="text-subtitle flex flex-row items-center justify-between font-sans w-full">
+	<div class="text-subtitle flex w-full flex-row items-center justify-between font-sans">
 		<div class="flex flex-row gap-6">
 			<div class="flex flex-row gap-x-2 font-medium">
 				<button class="hover:cursor-pointer" onclick={onLike}>
@@ -124,22 +124,22 @@
 			</div>
 		</div>
 		{#if status === 'REJECTED'}
-            <div class="flex flex-row gap-3 items-center">
-                <button 
-                    class="hover:cursor-pointer hover:bg-red-50 p-1 rounded-md transition-colors" 
-                    aria-label="Delete review" 
-                    onclick={onDelete}
-                >
-                    <Trash2 size={20} class="text-[#FF4D4F]" />
-                </button>
-                <button 
-                    class="hover:cursor-pointer hover:bg-blue-50 p-1 rounded-md transition-colors" 
-                    aria-label="Edit review" 
-                    onclick={onEdit}
-                >
-                    <Pencil size={20} class="text-[#4A70C6]" />
-                </button>
-            </div>
-        {/if}
+			<div class="flex flex-row items-center gap-3">
+				<button
+					class="rounded-md p-1 transition-colors hover:cursor-pointer hover:bg-red-50"
+					aria-label="Delete review"
+					onclick={onDelete}
+				>
+					<Trash2 size={20} class="text-[#FF4D4F]" />
+				</button>
+				<button
+					class="rounded-md p-1 transition-colors hover:cursor-pointer hover:bg-blue-50"
+					aria-label="Edit review"
+					onclick={onEdit}
+				>
+					<Pencil size={20} class="text-[#4A70C6]" />
+				</button>
+			</div>
+		{/if}
 	</div>
 </div>

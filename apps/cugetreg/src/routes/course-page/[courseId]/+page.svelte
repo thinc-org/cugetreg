@@ -21,6 +21,7 @@
     Book,
     BookMarked,
     Check,
+    ChevronLeft,
     Code,
     Heading,
     Italic,
@@ -35,7 +36,6 @@
     Strikethrough,
     Underline,
     X,
-    ChevronLeft
   } from '@lucide/svelte';
   import { isAxiosError } from 'axios';
   import { untrack } from 'svelte';
@@ -312,36 +312,43 @@
     if (editingReviewId) {
       const patchPayload = {
         academicYear: Number(selectedYear),
-        semester: ALLOWED_SEMESTER.find((s) => SEMESTER_LABEL_LONG[s] === selectedTerm) || 'FIRST',
+        semester:
+          ALLOWED_SEMESTER.find(
+            (s) => SEMESTER_LABEL_LONG[s] === selectedTerm,
+          ) || 'FIRST',
         rating: reviewRating * 2,
         content: reviewContent,
       };
 
       try {
-        const response = await api.patch(`/reviews/${editingReviewId}`, patchPayload);
+        const response = await api.patch(
+          `/reviews/${editingReviewId}`,
+          patchPayload,
+        );
         const index = reviews.findIndex((r) => r.id === editingReviewId);
         if (index !== -1) {
           reviews[index].academicYear = patchPayload.academicYear;
           reviews[index].semester = patchPayload.semester;
           reviews[index].rating = patchPayload.rating;
           reviews[index].content = patchPayload.content;
-          reviews[index].status = 'PENDING'; 
+          reviews[index].status = 'PENDING';
         }
-        editingReviewId = null; 
+        editingReviewId = null;
         reviewContent = '';
         reviewRating = 1;
-
       } catch (error) {
         console.error(error);
       }
-      return; 
+      return;
     }
 
     const payload: SubmitReviewBodySchema = {
       courseNo: course.courseNo,
       studyProgram: course.studyProgram,
       academicYear: Number(selectedYear),
-      semester: ALLOWED_SEMESTER.find((s) => SEMESTER_LABEL_LONG[s] === selectedTerm) || 'FIRST',
+      semester:
+        ALLOWED_SEMESTER.find((s) => SEMESTER_LABEL_LONG[s] === selectedTerm) ||
+        'FIRST',
       rating: reviewRating * 2,
       content: reviewContent,
     };
@@ -397,13 +404,14 @@
     }
   }
 
-  let editingReviewId = $state<string | null>(null); 
+  let editingReviewId = $state<string | null>(null);
 
   function handleEditReview(review: any) {
     reviewRating = review.rating / 2;
     reviewContent = review.content;
     selectedYear = String(review.academicYear);
-    selectedTerm = SEMESTER_LABEL_LONG[review.semester as keyof typeof SEMESTER_LABEL_LONG];
+    selectedTerm =
+      SEMESTER_LABEL_LONG[review.semester as keyof typeof SEMESTER_LABEL_LONG];
     editingReviewId = review.id;
     scrollToSection(reviewSection);
     textareaRef?.focus();
@@ -552,13 +560,15 @@
           <div class="flex min-h-full flex-col">
             <div class="px-6 py-6">
               <section class="text-on-surface mx-auto w-full max-w-5xl">
-                <button 
+                <button
                   type="button"
-                  class="flex items-center justify-center gap-1 mb-4 lg:mb-1 hover:bg-gray-100 active:bg-gray-200 p-1 rounded-lg" 
+                  class="mb-4 flex items-center justify-center gap-1 rounded-lg p-1 hover:bg-gray-100 active:bg-gray-200 lg:mb-1"
                   onclick={() => history.back()}
                 >
-                  <ChevronLeft size={18} strokeWidth={2.5}/>
-                  <span class="text-[#353745] text-[12px] font-regular translate-y-[-1px]">
+                  <ChevronLeft size={18} strokeWidth={2.5} />
+                  <span
+                    class="font-regular translate-y-[-1px] text-[12px] text-[#353745]"
+                  >
                     กลับ
                   </span>
                 </button>

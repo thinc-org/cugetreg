@@ -2,6 +2,7 @@
   import { env } from '$env/dynamic/public';
 
   const PUBLIC_API_URL = env.PUBLIC_API_URL ?? 'http://localhost:3000/api/v1';
+  import { api } from '$lib/api';
   import { useSession } from '$lib/auth-client';
   import ScheduleMismatchPopup from '$lib/components/schedule-mismatch-popup.svelte';
   import SelectedCourse from '$lib/components/selected-course.svelte';
@@ -298,32 +299,18 @@
         }
         if (startTime) params.append('timeStart', startTime);
         if (endTime) params.append('timeEnd', endTime);
-        if (fitSchedule) {
-          const userCart = getUserCartStore();
+      }
 
-          let currentCartId = null;
-          const unsub = userCart.subscribe(
-            (s) => (currentCartId = s.currentCartId),
-          );
-
-          if (currentCartId) params.append('fitCartId', currentCartId);
-
-          unsub();
+      if (fitSchedule) {
+        if ($userCart.currentCartId) {
+          params.append('fitCartId', $userCart.currentCartId);
         }
       }
 
-      const res = await fetch(
-        `${PUBLIC_API_URL}/courses?${params.toString()}`,
-        {
-          method: 'GET',
-          headers: { 'Content-Type': 'application/json' },
-        },
-      );
+      const response = await api.get(`/courses?${params.toString()}`);
 
-      if (!res.ok) throw new Error(`Server error (${res.status})`);
-      const json = await res.json();
-      const data = json.data || [];
-      totalResults = json.total || 0;
+      const data = response.data.data || [];
+      totalResults = response.data.total || 0;
 
       const mapped = data.map(mapCourse);
 
@@ -370,6 +357,9 @@
     currentSort;
     sortDirection;
     fitSchedule;
+    if (fitSchedule) {
+      $userCart.currentCart;
+    }
     untrack(() => fetchCourses(true));
   });
 

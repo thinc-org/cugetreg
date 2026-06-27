@@ -23,7 +23,7 @@ export const GetCourseQuerySchema = z.object({
   timeStart: z.string().regex(TIME_REGEX).optional(),
   timeEnd: z.string().regex(TIME_REGEX).optional(),
   noPrereq: z.coerce.boolean().optional(),
-  fitCardId: z.string().optional(),
+  fitCartId: z.string().optional(),
   assessment: assessment.optional(),
   sortBy: sortBy.optional(),
   sortOrder: sortOrder.optional(),
@@ -79,3 +79,5 @@ export const CourseDetailsSchema = z.object({
 export const CourseNoParamSchema = z.object({
   courseNo: z.string().describe("The registration number of the course"),
 });
+
+export type GetCourseQuerySchema = z.infer<typeof GetCourseQuerySchema>;

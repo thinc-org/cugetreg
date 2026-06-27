@@ -61,7 +61,7 @@ export async function queryCourse(
       limit ?? 10,
       offset ?? 0,
       sortBy ?? null,
-      sortOrder ?? "asc",
+      sortOrder ?? "desc",
       fitCartId ?? null,
     ),
   );

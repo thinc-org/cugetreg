@@ -22,6 +22,7 @@
     Book,
     BookMarked,
     Check,
+    ChevronLeft,
     Code,
     Heading,
     Italic,
@@ -276,11 +277,46 @@
   }
 
   async function handleSubmitReview() {
+    if (editingReviewId) {
+      const patchPayload = {
+        academicYear: Number(selectedYear),
+        semester:
+          ALLOWED_SEMESTER.find(
+            (s) => SEMESTER_LABEL_LONG[s] === selectedTerm,
+          ) || 'FIRST',
+        rating: reviewRating * 2,
+        content: reviewContent,
+      };
+
+      try {
+        const response = await api.patch(
+          `/reviews/${editingReviewId}`,
+          patchPayload,
+        );
+        const index = reviews.findIndex((r) => r.id === editingReviewId);
+        if (index !== -1) {
+          reviews[index].academicYear = patchPayload.academicYear;
+          reviews[index].semester = patchPayload.semester;
+          reviews[index].rating = patchPayload.rating;
+          reviews[index].content = patchPayload.content;
+          reviews[index].status = 'PENDING';
+        }
+        editingReviewId = null;
+        reviewContent = '';
+        reviewRating = 1;
+      } catch (error) {
+        console.error(error);
+      }
+      return;
+    }
+
     const payload: SubmitReviewBodySchema = {
       courseNo: course.courseNo,
       studyProgram: course.studyProgram,
-      academicYear: course.academicYear,
-      semester: course.semester,
+      academicYear: Number(selectedYear),
+      semester:
+        ALLOWED_SEMESTER.find((s) => SEMESTER_LABEL_LONG[s] === selectedTerm) ||
+        'FIRST',
       rating: reviewRating * 2,
       content: reviewContent,
     };
@@ -304,6 +340,7 @@
           dislikeCount: review.dislikeCount,
         },
       });
+      reviewContent = '';
     } catch (error) {
       if (isAxiosError(error)) {
         if (error.status === 401) {
@@ -318,6 +355,34 @@
         position: 'bottom-right',
       });
     }
+  }
+
+  async function handleDeleteReview(reviewId: string) {
+    const isConfirm = confirm('Confirm Delete?');
+    if (!isConfirm) return;
+    try {
+      await api.delete(`/reviews/${reviewId}`);
+      const index = reviews.findIndex((r) => r.id === reviewId);
+      if (index !== -1) {
+        reviews.splice(index, 1);
+      }
+      toast.success('ลบรีวิวสำเร็จ', { position: 'bottom-right' });
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  let editingReviewId = $state<string | null>(null);
+
+  function handleEditReview(review: any) {
+    reviewRating = review.rating / 2;
+    reviewContent = review.content;
+    selectedYear = String(review.academicYear);
+    selectedTerm =
+      SEMESTER_LABEL_LONG[review.semester as keyof typeof SEMESTER_LABEL_LONG];
+    editingReviewId = review.id;
+    scrollToSection(reviewSection);
+    textareaRef?.focus();
   }
 
   $effect(() => {
@@ -624,6 +689,18 @@
       <div class="flex min-h-full flex-col">
         <div class="px-6 py-6">
           <section class="text-on-surface mx-auto w-full max-w-5xl">
+            <button
+              type="button"
+              class="mb-4 flex items-center justify-center gap-1 rounded-lg p-1 hover:bg-gray-100 active:bg-gray-200 lg:mb-1"
+              onclick={() => history.back()}
+            >
+              <ChevronLeft size={18} strokeWidth={2.5} />
+              <span
+                class="font-regular translate-y-[-1px] text-[12px] text-[#353745]"
+              >
+                กลับ
+              </span>
+            </button>
             <div class="flex flex-wrap items-center gap-3">
               <div class="flex flex-col items-start gap-3">
                 {#if ['SC', 'SO', 'HU', 'IN'].includes(course.genEdType)}
@@ -1197,6 +1274,8 @@
                     onLike={() => handleReactReview(review.id, 'L')}
                     onDislike={() => handleReactReview(review.id, 'D')}
                     reaction={review.reaction}
+                    onEdit={() => handleEditReview(review)}
+                    onDelete={() => handleDeleteReview(review.id)}
                   />
                 {/each}
               </div>

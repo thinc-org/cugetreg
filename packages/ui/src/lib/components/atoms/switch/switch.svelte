@@ -6,6 +6,7 @@
 	interface Props {
 		class?: SwitchRootProps['class'];
 		checked?: SwitchRootProps['checked'];
+		onCheckedChange?: SwitchRootProps['onCheckedChange'];
 		id?: SwitchRootProps['id'];
 		label?: string | undefined | null;
 		[key: string]: unknown;
@@ -14,6 +15,7 @@
 	let {
 		class: className = undefined,
 		checked = $bindable(undefined),
+		onCheckedChange = undefined,
 		id = undefined,
 		label = 'label',
 		...rest
@@ -23,6 +25,7 @@
 <div class="flex items-center space-x-2">
 	<SwitchPrimitive.Root
 		bind:checked
+		{onCheckedChange}
 		class={cn(
 			'focus-visible:ring-ring focus-visible:ring-offset-background data-[state=checked]:border-primary data-[state=checked]:bg-primary-low data-[state=unchecked]:bg-surface-container-lowest peer border-surface-container-high inline-flex h-4.5 w-8 shrink-0 cursor-pointer items-center rounded-full border  transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50',
 			className

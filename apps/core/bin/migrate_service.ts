@@ -48,6 +48,39 @@ export function safeFsJsonRead<T>(path: string): T {
   }
 }
 
+/**
+ * Normalize period time strings before inserting into the database.
+ * Fixes common typos (80:00 → 08:00, 90:00 → 09:00).
+ * Keeps sentinel values IA (Irregular Arrangement) and AR (To Be Arranged) as-is.
+ */
+function sanitizePeriod(value: string): string {
+  if (value === "80:00") {
+    return "08:00";
+  }
+  if (value === "90:00") {
+    return "09:00";
+  }
+  return value;
+}
+
+/**
+ * Optionally swap reversed period pairs when FIX_PERIOD_SWAPS=true.
+ * Catches data-entry errors like 17:00-12:00 → 12:00-17:00.
+ */
+function sanitizePeriodPair(
+  start: string,
+  end: string,
+): { start: string; end: string } {
+  if (process.env.FIX_PERIOD_SWAPS !== "true") {
+    return { start, end };
+  }
+  const HHMM_RE = /^([01]\d|2[0-3]):[0-5]\d$/;
+  if (HHMM_RE.test(start) && HHMM_RE.test(end) && start > end) {
+    return { start: end, end: start };
+  }
+  return { start, end };
+}
+
 function courseKey(c: {
   studyProgram: string;
   academicYear: string | number;
@@ -216,16 +249,22 @@ export async function bulkMigrateCoursesWithSections(
           note: sec.note,
           genEdType: currentGenEd,
         },
-        classRecords: sec.classes.map((cls) => ({
-          sectionId: "", // filled in after section insert
-          type: cls.type,
-          dayOfWeek: mapDayOfWeek(cls.dayOfWeek),
-          periodStart: cls.period.start,
-          periodEnd: cls.period.end,
-          building: cls.building,
-          room: cls.room,
-          professors: cls.teachers,
-        })),
+        classRecords: sec.classes.map((cls) => {
+          const pair = sanitizePeriodPair(
+            sanitizePeriod(cls.period.start),
+            sanitizePeriod(cls.period.end),
+          );
+          return {
+            sectionId: "", // filled in after section insert
+            type: cls.type,
+            dayOfWeek: mapDayOfWeek(cls.dayOfWeek),
+            periodStart: pair.start,
+            periodEnd: pair.end,
+            building: cls.building,
+            room: cls.room,
+            professors: cls.teachers,
+          };
+        }),
       });
     }
   }

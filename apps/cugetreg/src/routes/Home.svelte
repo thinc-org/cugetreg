@@ -2,6 +2,7 @@
   import { env } from '$env/dynamic/public';
 
   const PUBLIC_API_URL = env.PUBLIC_API_URL ?? 'http://localhost:3000/api/v1';
+  import { api } from '$lib/api';
   import { useSession } from '$lib/auth-client';
   import AppSidebar from '$lib/components/app-sidebar.svelte';
   import ScheduleMismatchPopup from '$lib/components/schedule-mismatch-popup.svelte';
@@ -21,6 +22,7 @@
   } from '$lib/stores/user-cart';
 
   import {
+    ArrowUpDown,
     BookMarked,
     ChevronDown,
     Filter,
@@ -36,6 +38,7 @@
   import { Input } from '@cugetreg/ui/atoms/input';
   import { CourseCard } from '@cugetreg/ui/molecules/course-card';
   import { FloatingButton } from '@cugetreg/ui/molecules/floating-button';
+  import * as Select from '@cugetreg/ui/molecules/select';
   import { SelectTimetable } from '@cugetreg/ui/molecules/select-timetable';
   import { Filter as FilterBar } from '@cugetreg/ui/organisms/filter-bar';
   import { Footer } from '@cugetreg/ui/organisms/footer';
@@ -51,6 +54,15 @@
   let sidebarExpanded = $state(true);
   let openPanel = $state<string | null>(null);
   let activePanel = $state<string | null>(null);
+  let isMobile = $state(false);
+
+  $effect(() => {
+    const mq = window.matchMedia('(max-width: 767px)');
+    isMobile = mq.matches;
+    const handler = (e: MediaQueryListEvent) => (isMobile = e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  });
 
   let timetableSection = $state<HTMLElement>();
   let filterSection = $state<HTMLElement>();
@@ -77,8 +89,31 @@
 
   let currentProgram = $state('ทวิภาค');
   let currentSemester = $state('2566 / 1');
-  let currentSort = $state('รหัสวิชา');
+  let currentSort = $state('NAME');
   let sortDirection = $state<'asc' | 'desc'>('asc');
+
+  // Mobile-only sort options (per design): seat-based + name, each encodes a
+  // field + direction. Desktop keeps its own รหัสวิชา/ชื่อวิชา + direction toggle.
+  const mobileSortOptions = [
+    { label: 'จำนวนที่นั่งมาก', field: 'CAPACITY', dir: 'desc' as const },
+    { label: 'จำนวนที่นั่งน้อย', field: 'CAPACITY', dir: 'asc' as const },
+    { label: 'เหลือที่นั่งมาก', field: 'REMAINING', dir: 'desc' as const },
+    { label: 'เหลือที่นั่งน้อย', field: 'REMAINING', dir: 'asc' as const },
+    { label: 'ชื่อวิชา A-Z', field: 'NAME', dir: 'asc' as const },
+    { label: 'ชื่อวิชา Z-A', field: 'NAME', dir: 'desc' as const },
+  ];
+  // Maps the active sort field to the API's sortBy value.
+  // NOTE: CAPACITY/REMAINING require backend support; NAME works today.
+  const SORT_BY_LABEL: Record<string, string> = {
+    NAME: 'ชื่อวิชา',
+    CAPACITY: 'จำนวนที่นั่ง',
+    REMAINING: 'เหลือที่นั่ง',
+  };
+  function selectMobileSort(field: string, dir: 'asc' | 'desc') {
+    currentSort = field;
+    sortDirection = dir;
+    activeDropdown = null;
+  }
 
   let bottomSentinel = $state<HTMLElement | null>(null);
 
@@ -242,8 +277,8 @@
         params.append('q', searchState.debounced.trim());
       }
 
-      if (currentSort === 'ชื่อวิชา') {
-        params.append('sortBy', 'NAME');
+      if (currentSort) {
+        params.append('sortBy', currentSort);
       }
 
       if (!noConditions) {
@@ -261,32 +296,18 @@
         }
         if (startTime) params.append('timeStart', startTime);
         if (endTime) params.append('timeEnd', endTime);
-        if (fitSchedule) {
-          const userCart = getUserCartStore();
+      }
 
-          let currentCartId = null;
-          const unsub = userCart.subscribe(
-            (s) => (currentCartId = s.currentCartId),
-          );
-
-          if (currentCartId) params.append('fitCartId', currentCartId);
-
-          unsub();
+      if (fitSchedule) {
+        if ($userCart.currentCartId) {
+          params.append('fitCartId', $userCart.currentCartId);
         }
       }
 
-      const res = await fetch(
-        `${PUBLIC_API_URL}/courses?${params.toString()}`,
-        {
-          method: 'GET',
-          headers: { 'Content-Type': 'application/json' },
-        },
-      );
+      const response = await api.get(`/courses?${params.toString()}`);
 
-      if (!res.ok) throw new Error(`Server error (${res.status})`);
-      const json = await res.json();
-      const data = json.data || [];
-      totalResults = json.total || 0;
+      const data = response.data.data || [];
+      totalResults = response.data.total || 0;
 
       const mapped = data.map(mapCourse);
 
@@ -333,6 +354,9 @@
     currentSort;
     sortDirection;
     fitSchedule;
+    if (fitSchedule) {
+      $userCart.currentCart;
+    }
     untrack(() => fetchCourses(true));
   });
 
@@ -505,7 +529,7 @@
 
 <div class="relative flex h-screen flex-col overflow-hidden bg-white">
   <div class="relative flex flex-1 overflow-hidden">
-    <AppSidebar bind:expanded={sidebarExpanded} bind:openPanel bind:activePanel>
+    <AppSidebar showSidebar={!isMobile} bind:expanded={sidebarExpanded} bind:openPanel bind:activePanel>
       {#snippet iconItems({
         toggleExpanded,
         togglePanel,
@@ -602,22 +626,25 @@
         {/if}
       {/snippet}
       <div class="flex min-h-full flex-col">
-        <div class="mx-auto w-full max-w-[1200px] flex-1 p-8 lg:p-12">
+        <div class="mx-auto w-full max-w-[1200px] flex-1 p-4 md:p-8 lg:p-12">
           <div
-            class="mb-2 flex flex-col justify-between gap-4 md:flex-row md:items-center"
+            class="mb-2 flex flex-row items-center justify-between gap-2 md:gap-4"
           >
-            <div class="flex items-baseline gap-3">
-              <h1 class="text-4xl font-bold text-[#1C1B1F]">วิชาเรียน</h1>
-              <span class="text-sm font-medium text-gray-400"
+            <div class="flex items-baseline gap-2 md:gap-3">
+              <h1 class="text-2xl font-bold text-[#1C1B1F] md:text-4xl">
+                วิชาเรียน
+              </h1>
+              <span
+                class="text-xs font-medium whitespace-nowrap text-gray-400 md:text-sm"
                 >({totalResults} ผลลัพธ์)</span
               >
             </div>
 
-            <div class="relative flex gap-2">
+            <div class="relative flex shrink-0 gap-2">
               <div class="relative">
                 <button
                   onclick={() => toggleDropdown('program')}
-                  class="flex items-center gap-2 rounded-full border border-neutral-800 px-5 py-2 text-sm font-bold transition-colors hover:bg-gray-50"
+                  class="flex items-center gap-2 rounded-full border border-neutral-800 px-3 py-1.5 text-xs font-bold transition-colors hover:bg-gray-50 md:px-5 md:py-2 md:text-sm"
                 >
                   {currentProgram}
                   <ChevronDown size={16} />
@@ -642,7 +669,7 @@
               <div class="relative">
                 <button
                   onclick={() => toggleDropdown('semester')}
-                  class="flex items-center gap-2 rounded-full border border-neutral-800 px-5 py-2 text-sm font-bold whitespace-nowrap transition-colors hover:bg-gray-50"
+                  class="flex items-center gap-2 rounded-full border border-neutral-800 px-3 py-1.5 text-xs font-bold whitespace-nowrap transition-colors hover:bg-gray-50 md:px-5 md:py-2 md:text-sm"
                 >
                   {currentSemester}
                   <ChevronDown size={16} />
@@ -680,7 +707,7 @@
           </div>
 
           <div class="mb-10 flex flex-col gap-1">
-            <div class="flex flex-col gap-6 md:flex-row md:items-end">
+            <div class="flex flex-row items-end gap-3 md:gap-6">
               <div class="flex flex-1 flex-col gap-1">
                 <span class="ml-1 text-xs text-gray-400">ค้นหา...</span>
                 <Input
@@ -689,11 +716,47 @@
                     if (e.key === 'Enter') e.preventDefault();
                   }}
                   placeholder="พิมพ์ชื่อวิชา รหัสวิชา หรือคำค้นหาอื่นๆ..."
-                  class="h-12 w-full rounded-xl border-none bg-[#F1F3F7] px-6 text-lg font-medium placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500"
+                  class="h-12 w-full rounded-xl border-none bg-[#F1F3F7] px-6 text-lg font-medium focus:ring-2 focus:ring-blue-500"
                 />
               </div>
-              <div class="flex w-full flex-col gap-1 md:w-64">
-                <span class="ml-1 text-[10px] font-bold text-gray-400 uppercase"
+              <!-- Mobile sort: "เรียงตาม" + dropdown (Select) -->
+              <div class="flex h-12 items-center self-end md:hidden">
+                <Select.Root
+                  type="single"
+                  value={`${currentSort}:${sortDirection}`}
+                  onValueChange={(v) => {
+                    const [field, dir] = v.split(':');
+                    selectMobileSort(field, dir as 'asc' | 'desc');
+                  }}
+                >
+                  <Select.Trigger
+                    showArrow={false}
+                    class="text-primary h-auto w-auto gap-1.5 rounded-none border-0 bg-transparent p-0 text-base font-bold whitespace-nowrap shadow-none hover:opacity-80 focus:ring-0 focus:ring-offset-0"
+                  >
+                    <span class="flex items-center gap-1.5">
+                      เรียงตาม
+                      <ArrowUpDown size={20} strokeWidth={2.5} />
+                    </span>
+                  </Select.Trigger>
+                  <Select.Content align="end" class="w-48">
+                    <Select.Group>
+                      {#each mobileSortOptions as opt (opt.label)}
+                        <Select.Item
+                          value={`${opt.field}:${opt.dir}`}
+                          label={opt.label}
+                        >
+                          {opt.label}
+                        </Select.Item>
+                      {/each}
+                    </Select.Group>
+                  </Select.Content>
+                </Select.Root>
+              </div>
+
+              <!-- Desktop sort: original "จัดลำดับตาม" layout -->
+              <div class="hidden w-full flex-col gap-1 md:flex md:w-64">
+                <span
+                  class="ml-1 text-[10px] font-bold text-gray-400 uppercase"
                   >จัดลำดับตาม</span
                 >
                 <div class="relative flex items-center gap-3">
@@ -744,6 +807,26 @@
                   </button>
                 </div>
               </div>
+            </div>
+          </div>
+
+          <div
+            class="bg-warning-container/60 mb-6 flex items-center gap-4 rounded-2xl px-5 py-4 text-sm leading-relaxed text-neutral-600 md:hidden"
+          >
+            <TriangleAlert
+              size={28}
+              strokeWidth={2}
+              class="text-warning-hover shrink-0"
+            />
+            <div>
+              <p>ข้อมูลอาจมีการเปลี่ยนแปลง</p>
+              <p>
+                โปรดตรวจสอบข้อมูลกับสำนักทะเบียนทุกครั้งก่อนลงทะเบียนเรียน
+              </p>
+              <p>
+                Update ข้อมูลล่าสุด&nbsp;&nbsp;วันที่
+                20/07/68&nbsp;&nbsp;เวลา 12.00 น.
+              </p>
             </div>
           </div>
 

@@ -1,6 +1,6 @@
 import z from "zod";
 
-export const TIME_REGEX = /^(IA)|([01]\d|2[0-3]):([0-5]\d)$/;
+export const TIME_REGEX = /^(IA|AR)|([01]\d|2[0-3]):([0-5]\d)$/;
 
 export const days = z.enum([
   "MO",
@@ -17,7 +17,12 @@ export const days = z.enum([
 export const studyProgram = z.enum(["T", "I", "S"]);
 export const genEdType = z.enum(["NO", "SC", "SO", "HU", "IN"]);
 export const assessment = z.enum(["LETTER", "SU"]);
-export const sortBy = z.enum(["NAME", "CAPACITY_SUM", "REMAING_SUM"]);
+export const sortBy = z.enum([
+  "NAME",
+  "CAPACITY_SUM",
+  "REMAINING_SUM",
+  "COURSE_NO",
+]);
 export const sortOrder = z.enum(["asc", "desc"]);
 export const semester = z.enum(["FIRST", "SECOND", "SUMMER"]);
 export const visible = z.enum(["PUB", "PVT"]);

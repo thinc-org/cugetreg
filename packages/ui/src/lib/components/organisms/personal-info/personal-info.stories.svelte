@@ -11,9 +11,6 @@
 			name: {
 				control: 'text'
 			},
-			id: {
-				control: 'text'
-			},
 			username: {
 				control: 'text'
 			},
@@ -46,7 +43,6 @@
 	name="Default"
 	args={{
 		name: 'Wanrudee Kittichaiyakorn',
-		id: '6534344444',
 		username: '6534344444',
 		firstName: 'Wanrudee',
 		lastName: 'Kittichaiyakorn',

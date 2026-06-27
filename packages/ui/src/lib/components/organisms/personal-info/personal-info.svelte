@@ -6,7 +6,6 @@
 
 	interface Props {
 		name?: string;
-		id?: string;
 		username?: string;
 		firstName?: string;
 		lastName?: string;
@@ -19,24 +18,25 @@
 
 	let {
 		name = 'Wanrudee Kittichaiyakorn',
-		id = '6534344444',
 		username = '6534344444',
 		firstName = 'Wanrudee',
 		lastName = 'Kittichaiyakorn',
 		faculty = 'วิศวกรรมศาสตร์',
-		department = '-',
+		department = '',
 		accountProvider = 'Google',
 		accountEmail = '6534344444@student.chula.ac.th',
 		onEdit
 	}: Props = $props();
 
-	const infoItems = [
+	const id = username;
+
+	const infoItems = $derived([
 		{ label: 'username', value: username },
 		{ label: 'ชื่อจริง', value: firstName },
 		{ label: 'นามสกุล', value: lastName },
 		{ label: 'คณะ', value: faculty },
 		{ label: 'ภาควิชา', value: department }
-	];
+	]);
 </script>
 
 <div class="bg-surface-container-lowest text-on-surface w-full max-w-md rounded-2xl p-7">
@@ -56,27 +56,15 @@
 			</IconButton>
 		</div>
 		<div class="mt-4 grid grid-cols-2 gap-x-8 gap-y-4">
-			<div class="flex flex-col gap-1">
-				<p class="text-caption text-on-surface/50 tracking-wide uppercase">username</p>
-				<p class="text-body2 font-medium">{username}</p>
-			</div>
-			<div></div>
-			<div class="flex flex-col gap-1">
-				<p class="text-caption text-on-surface/50 tracking-wide uppercase">ชื่อจริง</p>
-				<p class="text-body2 font-medium">{firstName}</p>
-			</div>
-			<div class="flex flex-col gap-1">
-				<p class="text-caption text-on-surface/50 tracking-wide uppercase">นามสกุล</p>
-				<p class="text-body2 font-medium">{lastName}</p>
-			</div>
-			<div class="flex flex-col gap-1">
-				<p class="text-caption text-on-surface/50 tracking-wide uppercase">คณะ</p>
-				<p class="text-body2 font-medium">{faculty}</p>
-			</div>
-			<div class="flex flex-col gap-1">
-				<p class="text-caption text-on-surface/50 tracking-wide uppercase">ภาควิชา</p>
-				<p class="text-body2 font-medium">{department}</p>
-			</div>
+			{#each infoItems as infoItem, idx (idx)}
+				<div class="flex flex-col gap-1">
+					<p class="text-caption text-on-surface/50 tracking-wide uppercase">{infoItem.label}</p>
+					<p class="text-body2 font-medium">{infoItem.value || '-'}</p>
+				</div>
+				{#if idx === 0}
+					<div></div>
+				{/if}
+			{/each}
 		</div>
 	</div>
 

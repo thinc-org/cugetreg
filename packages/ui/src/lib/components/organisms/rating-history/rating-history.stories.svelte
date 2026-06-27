@@ -17,11 +17,17 @@
 			histogram: {
 				control: false
 			},
-			overallRating: {
-				control: false
-			},
 			reviews: {
 				control: false
+			},
+			hasMore: {
+				control: 'boolean'
+			},
+			loading: {
+				control: 'boolean'
+			},
+			onLoadMore: {
+				action: 'onLoadMore'
 			}
 		}
 	});
@@ -37,6 +43,7 @@
 				code: '0123104',
 				name: 'CON PDG PEACE CONFWV',
 				tag: 'หมวดมนุษย์',
+				status: 'APPROVED',
 				rating: 4,
 				term: 'ภาคต้น 2566'
 			},
@@ -44,6 +51,7 @@
 				code: '0123101',
 				name: 'PARAGRAPH WRITING',
 				tag: 'หมวดมนุษย์',
+				status: 'APPROVED',
 				rating: 3,
 				term: 'ภาคปลาย 2565'
 			},
@@ -51,6 +59,7 @@
 				code: '0123101',
 				name: 'PARAGRAPH WRITING',
 				tag: 'หมวดมนุษย์',
+				status: 'APPROVED',
 				rating: 3,
 				term: 'ภาคปลาย 2566'
 			},
@@ -58,9 +67,12 @@
 				code: '2190201',
 				name: 'COM PROG',
 				tag: 'หมวดวิทย์',
+				status: 'PENDING',
 				rating: 2.5,
 				term: 'ภาคปลาย 2566'
 			}
-		]
+		],
+		hasMore: false,
+		loading: false
 	}}
 />

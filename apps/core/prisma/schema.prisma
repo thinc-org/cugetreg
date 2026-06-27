@@ -4,8 +4,10 @@
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
+
 generator client {
   provider = "prisma-client"
+  previewFeatures = ["typedSql"]
   output   = "../src/generated/prisma"
 }
 
@@ -57,6 +59,8 @@ model CourseInfo {
   courses   Course[]
   // New!!!
   cartItems CartItem[]
+  //New!!!
+  reviews Review[]
 
   @@map("course_info")
 }
@@ -328,6 +332,9 @@ model Review {
   semester     Semester
 
   courseNo String @map("course_no")
+  //to get course name and description
+  courseInfo CourseInfo @relation(fields: [courseNo], references: [courseNo])
+
   content  String
   rating   Int
 

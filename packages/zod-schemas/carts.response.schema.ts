@@ -17,6 +17,8 @@ export const CartSchema = z.object({
   updatedAt: z.date().or(z.string()),
 });
 
+export type CartSchema = z.infer<typeof CartSchema>;
+
 export const CartList = z.array(CartSchema);
 
 export const ListCartsResponseSchema = z.object({

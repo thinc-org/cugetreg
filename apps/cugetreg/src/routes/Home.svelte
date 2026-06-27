@@ -529,7 +529,12 @@
 
 <div class="relative flex h-screen flex-col overflow-hidden bg-white">
   <div class="relative flex flex-1 overflow-hidden">
-    <AppSidebar showSidebar={!isMobile} bind:expanded={sidebarExpanded} bind:openPanel bind:activePanel>
+    <AppSidebar
+      showSidebar={!isMobile}
+      bind:expanded={sidebarExpanded}
+      bind:openPanel
+      bind:activePanel
+    >
       {#snippet iconItems({
         toggleExpanded,
         togglePanel,
@@ -755,8 +760,7 @@
 
               <!-- Desktop sort: original "จัดลำดับตาม" layout -->
               <div class="hidden w-full flex-col gap-1 md:flex md:w-64">
-                <span
-                  class="ml-1 text-[10px] font-bold text-gray-400 uppercase"
+                <span class="ml-1 text-[10px] font-bold text-gray-400 uppercase"
                   >จัดลำดับตาม</span
                 >
                 <div class="relative flex items-center gap-3">
@@ -820,12 +824,10 @@
             />
             <div>
               <p>ข้อมูลอาจมีการเปลี่ยนแปลง</p>
+              <p>โปรดตรวจสอบข้อมูลกับสำนักทะเบียนทุกครั้งก่อนลงทะเบียนเรียน</p>
               <p>
-                โปรดตรวจสอบข้อมูลกับสำนักทะเบียนทุกครั้งก่อนลงทะเบียนเรียน
-              </p>
-              <p>
-                Update ข้อมูลล่าสุด&nbsp;&nbsp;วันที่
-                20/07/68&nbsp;&nbsp;เวลา 12.00 น.
+                Update ข้อมูลล่าสุด&nbsp;&nbsp;วันที่ 20/07/68&nbsp;&nbsp;เวลา
+                12.00 น.
               </p>
             </div>
           </div>

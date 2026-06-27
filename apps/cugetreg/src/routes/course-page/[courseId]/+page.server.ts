@@ -1,4 +1,4 @@
-import { env } from '$env/dynamic/private';
+import { env } from '$env/dynamic/public';
 import { tryCatch } from '$lib/async-handler';
 
 import { error as svelteError, redirect } from '@sveltejs/kit';
@@ -8,7 +8,7 @@ import { CourseNoResponseSchema } from '@cugetreg/zod-schemas/courses-response';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ params, url, parent, fetch }) => {
-  const API_URL = `${env.API_URL ?? 'http://localhost:3000'}/api/v1/courses/`;
+  const API_URL = `${env.PUBLIC_API_URL ?? 'http://localhost:3000'}/courses/`;
   const courseId = params.courseId;
 
   const academicYear = url.searchParams.get('academicYear');

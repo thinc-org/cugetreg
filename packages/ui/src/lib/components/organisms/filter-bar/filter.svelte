@@ -115,22 +115,27 @@
 
 <svelte:window onclick={handleWindowClick} />
 
-<div class="filter-container">
-	<div class="scroll-content">
-		<div class="form-group">
-			<label>ประเภท GenEd</label>
+<div class="bg-surface flex h-full w-full flex-col gap-4 font-['IBM_Plex_Sans_Thai',_sans-serif]">
+	<div
+		class="flex-1 overflow-x-hidden overflow-y-auto px-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+	>
+		<div class="mb-4">
+			<label class="mb-1.5 block text-[13px] text-neutral-400">ประเภท GenEd</label>
 			<div
-				class="multi-select-box"
+				class="bg-surface-container-lowest hover:bg-surface-container-low relative flex min-h-10 cursor-pointer flex-wrap gap-2 rounded-xl border border-transparent p-2 pr-[30px]"
 				onclick={(e) => toggleDropdown('gened', e)}
 				role="button"
 				tabindex="0"
 				onkeypress={() => {}}
 			>
 				{#each activeGenEds as item (item.label)}
-					<div class="chip outlined" style="color: {item.color}; border-color: {item.color};">
+					<div
+						class="bg-surface inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[13px] font-semibold"
+						style="color: {item.color}; border: 1px solid {item.color};"
+					>
 						{item.label}
 						<span
-							class="close-btn"
+							class="cursor-pointer leading-none opacity-60 hover:opacity-100"
 							onclick={(e) => {
 								e.stopPropagation();
 								removeOption('gened', item.id);
@@ -142,13 +147,15 @@
 					</div>
 				{/each}
 				{#if activeGenEds.length === 0}
-					<span class="placeholder">Select GenEd...</span>
+					<span class="self-center text-sm text-neutral-400">Select GenEd...</span>
 				{/if}
-				<div class="dropdown-arrow">▼</div>
+				<div class="absolute top-1/2 right-2.5 -translate-y-1/2 text-[10px] text-neutral-400">
+					▼
+				</div>
 
 				{#if openDropdown === 'gened'}
 					<div
-						class="dropdown-list"
+						class="border-surface-container bg-surface absolute top-[105%] right-0 left-0 z-50 max-h-[200px] overflow-y-auto rounded-lg border shadow-[0_4px_15px_rgba(0,0,0,0.1)]"
 						onclick={(e) => e.stopPropagation()}
 						role="listbox"
 						tabindex="0"
@@ -156,7 +163,7 @@
 					>
 						{#each availableGenEds as opt (opt.label)}
 							<div
-								class="option-item"
+								class="hover:bg-surface-container-low cursor-pointer px-3.5 py-2.5 text-sm"
 								style="color: {opt.color}"
 								onclick={() => addOption('gened', opt.id)}
 								role="option"
@@ -167,27 +174,29 @@
 							</div>
 						{/each}
 						{#if availableGenEds.length === 0}
-							<div class="option-item disabled">All selected</div>
+							<div class="cursor-default px-3.5 py-2.5 text-sm text-neutral-300">All selected</div>
 						{/if}
 					</div>
 				{/if}
 			</div>
 		</div>
 
-		<div class="form-group">
-			<label>ประเภทพิเศษ</label>
+		<div class="mb-4">
+			<label class="mb-1.5 block text-[13px] text-neutral-400">ประเภทพิเศษ</label>
 			<div
-				class="multi-select-box gray-bg"
+				class="bg-surface-container-low hover:bg-surface-container-lowest relative flex min-h-10 cursor-pointer flex-wrap gap-2 rounded-xl border border-transparent p-2 pr-[30px]"
 				onclick={(e) => toggleDropdown('special', e)}
 				role="button"
 				tabindex="0"
 				onkeypress={() => {}}
 			>
 				{#each activeSpecial as item (item.label)}
-					<div class="chip gray-pill">
+					<div
+						class="inline-flex items-center gap-1.5 rounded-full bg-neutral-300 px-2.5 py-1 text-[13px] font-semibold text-neutral-700"
+					>
 						{item.label}
 						<span
-							class="close-btn"
+							class="cursor-pointer leading-none opacity-60 hover:opacity-100"
 							onclick={(e) => {
 								e.stopPropagation();
 								removeOption('special', item.id);
@@ -199,13 +208,15 @@
 					</div>
 				{/each}
 				{#if activeSpecial.length === 0}
-					<span class="placeholder">Select...</span>
+					<span class="self-center text-sm text-neutral-400">Select...</span>
 				{/if}
-				<div class="dropdown-arrow">▼</div>
+				<div class="absolute top-1/2 right-2.5 -translate-y-1/2 text-[10px] text-neutral-400">
+					▼
+				</div>
 
 				{#if openDropdown === 'special'}
 					<div
-						class="dropdown-list"
+						class="border-surface-container bg-surface absolute top-[105%] right-0 left-0 z-50 max-h-[200px] overflow-y-auto rounded-lg border shadow-[0_4px_15px_rgba(0,0,0,0.1)]"
 						onclick={(e) => e.stopPropagation()}
 						role="listbox"
 						tabindex="0"
@@ -213,7 +224,7 @@
 					>
 						{#each availableSpecial as opt (opt.id)}
 							<div
-								class="option-item"
+								class="hover:bg-surface-container-low cursor-pointer px-3.5 py-2.5 text-sm"
 								onclick={() => addOption('special', opt.id)}
 								role="option"
 								tabindex="0"
@@ -227,20 +238,22 @@
 			</div>
 		</div>
 
-		<div class="form-group">
-			<label>คณะ</label>
+		<div class="mb-4">
+			<label class="mb-1.5 block text-[13px] text-neutral-400">คณะ</label>
 			<div
-				class="multi-select-box gray-bg"
+				class="bg-surface-container-low hover:bg-surface-container-lowest relative flex min-h-10 cursor-pointer flex-wrap gap-2 rounded-xl border border-transparent p-2 pr-[30px]"
 				onclick={(e) => toggleDropdown('faculty', e)}
 				role="button"
 				tabindex="0"
 				onkeypress={() => {}}
 			>
 				{#each activeFaculties as item (item.id)}
-					<div class="chip gray-pill">
+					<div
+						class="inline-flex items-center gap-1.5 rounded-full bg-neutral-300 px-2.5 py-1 text-[13px] font-semibold text-neutral-700"
+					>
 						{item.label}
 						<span
-							class="close-btn"
+							class="cursor-pointer leading-none opacity-60 hover:opacity-100"
 							onclick={(e) => {
 								e.stopPropagation();
 								removeOption('faculty', item.id);
@@ -252,12 +265,14 @@
 					</div>
 				{/each}
 				{#if activeFaculties.length === 0}
-					<span class="placeholder">Select Faculty...</span>
+					<span class="self-center text-sm text-neutral-400">Select Faculty...</span>
 				{/if}
-				<div class="dropdown-arrow">▼</div>
+				<div class="absolute top-1/2 right-2.5 -translate-y-1/2 text-[10px] text-neutral-400">
+					▼
+				</div>
 				{#if openDropdown === 'faculty'}
 					<div
-						class="dropdown-list"
+						class="border-surface-container bg-surface absolute top-[105%] right-0 left-0 z-50 max-h-[200px] overflow-y-auto rounded-lg border shadow-[0_4px_15px_rgba(0,0,0,0.1)]"
 						onclick={(e) => e.stopPropagation()}
 						role="listbox"
 						tabindex="0"
@@ -265,7 +280,7 @@
 					>
 						{#each availableFaculties as opt (opt.id)}
 							<div
-								class="option-item"
+								class="hover:bg-surface-container-low cursor-pointer px-3.5 py-2.5 text-sm"
 								onclick={() => addOption('faculty', opt.id)}
 								role="option"
 								tabindex="0"
@@ -279,20 +294,23 @@
 			</div>
 		</div>
 
-		<div class="form-group">
-			<label>วันในสัปดาห์</label>
+		<div class="mb-4">
+			<label class="mb-1.5 block text-[13px] text-neutral-400">วันในสัปดาห์</label>
 			<div
-				class="multi-select-box"
+				class="bg-surface-container-lowest hover:bg-surface-container-low relative flex min-h-10 cursor-pointer flex-wrap gap-2 rounded-xl border border-transparent p-2 pr-[30px]"
 				onclick={(e) => toggleDropdown('day', e)}
 				role="button"
 				tabindex="0"
 				onkeypress={() => {}}
 			>
 				{#each activeDays as item (item.id)}
-					<div class="chip pastel" style="background-color: {item.bg}; color: {item.color};">
+					<div
+						class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[13px] font-semibold"
+						style="background-color: {item.bg}; color: {item.color};"
+					>
 						{item.label}
 						<span
-							class="close-btn"
+							class="cursor-pointer leading-none opacity-60 hover:opacity-100"
 							onclick={(e) => {
 								e.stopPropagation();
 								removeOption('day', item.id);
@@ -304,12 +322,14 @@
 					</div>
 				{/each}
 				{#if activeDays.length === 0}
-					<span class="placeholder">Select Days...</span>
+					<span class="self-center text-sm text-neutral-400">Select Days...</span>
 				{/if}
-				<div class="dropdown-arrow">▼</div>
+				<div class="absolute top-1/2 right-2.5 -translate-y-1/2 text-[10px] text-neutral-400">
+					▼
+				</div>
 				{#if openDropdown === 'day'}
 					<div
-						class="dropdown-list"
+						class="border-surface-container bg-surface absolute top-[105%] right-0 left-0 z-50 max-h-[200px] overflow-y-auto rounded-lg border shadow-[0_4px_15px_rgba(0,0,0,0.1)]"
 						onclick={(e) => e.stopPropagation()}
 						role="listbox"
 						tabindex="0"
@@ -317,7 +337,7 @@
 					>
 						{#each availableDays as opt (opt.id)}
 							<div
-								class="option-item"
+								class="hover:bg-surface-container-low cursor-pointer px-3.5 py-2.5 text-sm"
 								style="color: {opt.color}"
 								onclick={() => addOption('day', opt.id)}
 								role="option"
@@ -332,13 +352,18 @@
 			</div>
 		</div>
 
-		<div class="time-row">
-			<div class="time-col">
-				<label>เวลาเริ่ม</label>
-				<div class="input-wrapper">
-					<input type="text" bind:value={startTime} placeholder="08:00" />
+		<div class="mb-4 flex gap-3">
+			<div class="flex-1">
+				<label class="mb-1.5 block text-[13px] text-neutral-400">เวลาเริ่ม</label>
+				<div class="relative">
+					<input
+						type="time"
+						bind:value={startTime}
+						placeholder="08:00"
+						class="bg-surface-container-lowest text-on-surface box-border w-full rounded-xl border-none p-2.5 text-sm"
+					/>
 					<svg
-						class="clock-icon"
+						class="pointer-events-none absolute top-1/2 right-2.5 -translate-y-1/2"
 						xmlns="http://www.w3.org/2000/svg"
 						width="16"
 						height="16"
@@ -350,12 +375,17 @@
 					>
 				</div>
 			</div>
-			<div class="time-col">
-				<label>เวลาจบ</label>
-				<div class="input-wrapper">
-					<input type="text" bind:value={endTime} placeholder="16:00" />
+			<div class="flex-1">
+				<label class="mb-1.5 block text-[13px] text-neutral-400">เวลาจบ</label>
+				<div class="relative">
+					<input
+						type="time"
+						bind:value={endTime}
+						placeholder="16:00"
+						class="bg-surface-container-lowest text-on-surface box-border w-full rounded-xl border-none p-2.5 text-sm"
+					/>
 					<svg
-						class="clock-icon"
+						class="pointer-events-none absolute top-1/2 right-2.5 -translate-y-1/2"
 						xmlns="http://www.w3.org/2000/svg"
 						width="16"
 						height="16"
@@ -369,47 +399,65 @@
 			</div>
 		</div>
 
-		<div class="form-group checkbox-row">
-			<label class="custom-checkbox">
-				<input type="checkbox" bind:checked={noConditions} onchange={onNoConditionsChange} />
-				<span class="checkmark"></span>
-				<span class="label-text">ไม่กำหนดเงื่อนไขรายวิชา</span>
+		<div class="-mt-1.5 mb-4 flex items-center gap-1.5">
+			<label
+				class="flex cursor-pointer items-center text-sm font-medium text-neutral-700 select-none"
+			>
+				<input
+					type="checkbox"
+					bind:checked={noConditions}
+					onchange={onNoConditionsChange}
+					class="peer absolute size-0 cursor-pointer opacity-0"
+				/>
+				<span
+					class="relative mr-2.5 h-[18px] w-[18px] rounded bg-neutral-200 transition-colors duration-200 peer-checked:bg-[#4f46e5] peer-hover:bg-neutral-300 after:absolute after:top-[2px] after:left-[6px] after:hidden after:h-[9px] after:w-[4px] after:rotate-45 after:border-r-2 after:border-b-2 after:border-solid after:border-white after:content-[''] peer-checked:after:block"
+				></span>
+				<span>ไม่กำหนดเงื่อนไขรายวิชา</span>
 			</label>
-			<span class="info-slot">
+			<span class="inline-flex items-center">
 				<InfoCircle tooltipText="แสดงเฉพาะรายวิชาที่ไม่กำหนดเงื่อนไขในการลงทะเบียน" />
 			</span>
 		</div>
 
-		<div class="form-group">
-			<label style="margin-bottom: 8px; display:block">Fit my schedule</label>
-			<div class="toggle-row">
-				<label class="switch">
-					<input type="checkbox" bind:checked={fitSchedule} onchange={onFitScheduleChange} />
-					<span class="slider round"></span>
+		<div class="mb-4">
+			<label class="mb-2 block text-[13px] text-neutral-400">Fit my schedule</label>
+			<div class="flex items-center gap-2.5">
+				<label class="relative inline-block h-6 w-11">
+					<input
+						type="checkbox"
+						bind:checked={fitSchedule}
+						onchange={onFitScheduleChange}
+						class="peer size-0 opacity-0"
+					/>
+					<span
+						class="absolute inset-0 cursor-pointer rounded-[34px] bg-neutral-300 transition-colors duration-[0.4s] peer-checked:bg-neutral-400 before:absolute before:bottom-[3px] before:left-[3px] before:h-[18px] before:w-[18px] before:rounded-[50%] before:bg-white before:transition-transform before:duration-[0.4s] before:content-[''] peer-checked:before:translate-x-5"
+					></span>
 				</label>
-				<span class="toggle-label">
+				<span class="flex items-center gap-1.5 text-sm font-medium text-neutral-700">
 					Fit my schedule
-					<span class="info-slot">
+					<span class="inline-flex items-center">
 						<InfoCircle tooltipText="แสดงเฉพาะรายวิชาที่ไม่ชนกับตารางเรียนของคุณ" />
 					</span>
 				</span>
 			</div>
 		</div>
 
-		<div class="form-group">
-			<label>วิธีการวัดผล</label>
+		<div class="mb-4">
+			<label class="mb-1.5 block text-[13px] text-neutral-400">วิธีการวัดผล</label>
 			<div
-				class="multi-select-box gray-bg"
+				class="bg-surface-container-low hover:bg-surface-container-lowest relative flex min-h-10 cursor-pointer flex-wrap gap-2 rounded-xl border border-transparent p-2 pr-[30px]"
 				onclick={(e) => toggleDropdown('eval', e)}
 				role="button"
 				tabindex="0"
 				onkeypress={() => {}}
 			>
 				{#each activeEval as item (item.label)}
-					<div class="chip gray-pill">
+					<div
+						class="inline-flex items-center gap-1.5 rounded-full bg-neutral-300 px-2.5 py-1 text-[13px] font-semibold text-neutral-700"
+					>
 						{item.label}
 						<span
-							class="close-btn"
+							class="cursor-pointer leading-none opacity-60 hover:opacity-100"
 							onclick={(e) => {
 								e.stopPropagation();
 								removeOption('eval', item.id);
@@ -421,12 +469,14 @@
 					</div>
 				{/each}
 				{#if activeEval.length === 0}
-					<span class="placeholder">Select...</span>
+					<span class="self-center text-sm text-neutral-400">Select...</span>
 				{/if}
-				<div class="dropdown-arrow">▼</div>
+				<div class="absolute top-1/2 right-2.5 -translate-y-1/2 text-[10px] text-neutral-400">
+					▼
+				</div>
 				{#if openDropdown === 'eval'}
 					<div
-						class="dropdown-list dropdown-list--up"
+						class="border-surface-container bg-surface absolute right-0 bottom-[105%] left-0 z-50 max-h-[200px] overflow-y-auto rounded-lg border shadow-[0_4px_15px_rgba(0,0,0,0.1)]"
 						onclick={(e) => e.stopPropagation()}
 						role="listbox"
 						tabindex="0"
@@ -434,7 +484,7 @@
 					>
 						{#each availableEval as option (option.label)}
 							<div
-								class="option-item"
+								class="hover:bg-surface-container-low cursor-pointer px-3.5 py-2.5 text-sm"
 								onclick={() => addOption('eval', option.id)}
 								role="option"
 								tabindex="0"
@@ -448,375 +498,52 @@
 			</div>
 		</div>
 	</div>
-	<div class="footer">
-		<button class="search-btn" onclick={onsearch}>ค้นหา</button>
+	<div>
+		<button
+			class="bg-primary-low text-on-primary-low hover:bg-primary-low mt-2.5 w-full cursor-pointer rounded-xl border-none p-3 text-base font-bold"
+			onclick={onsearch}
+		>
+			ค้นหา
+		</button>
 	</div>
 </div>
 
 <Modal bind:show={showNoPrereqModal} dim centered exitOnBackgroundClick exitOnEsc>
-	<div class="info-modal">
-		<h3 class="info-modal-title">ไม่กำหนดเงื่อนไขรายวิชา</h3>
-		<p class="info-modal-body">
+	<div
+		class="bg-surface w-[420px] max-w-[90vw] rounded-3xl p-8 text-center shadow-[0_20px_60px_rgba(0,0,0,0.18)]"
+	>
+		<h3 class="m-0 mb-4 text-2xl font-bold text-blue-700">ไม่กำหนดเงื่อนไขรายวิชา</h3>
+		<p class="m-0 mb-6 text-[15px] leading-relaxed text-neutral-500">
 			เมื่อเปิด ไม่กำหนดเงื่อนไขรายวิชา<br />
 			หน้าแสดงผลวิชาเรียน<br />
 			จะแสดงเฉพาะรายวิชาที่ไม่กำหนดเงื่อนไข<br />
 			ที่ต้องผ่านก่อนการลงทะเบียน
 		</p>
-		<button class="info-modal-btn" onclick={() => (showNoPrereqModal = false)}>ตกลง</button>
+		<button
+			class="bg-primary-low hover:bg-primary-low w-full cursor-pointer rounded-xl border-none p-3 text-base font-bold text-blue-700 transition-colors"
+			onclick={() => (showNoPrereqModal = false)}
+		>
+			ตกลง
+		</button>
 	</div>
 </Modal>
 
 <Modal bind:show={showFitModal} dim centered exitOnBackgroundClick exitOnEsc>
-	<div class="info-modal">
-		<h3 class="info-modal-title">Fit my schedule</h3>
-		<p class="info-modal-body">
+	<div
+		class="bg-surface w-[420px] max-w-[90vw] rounded-3xl p-8 text-center shadow-[0_20px_60px_rgba(0,0,0,0.18)]"
+	>
+		<h3 class="m-0 mb-4 text-2xl font-bold text-blue-700">Fit my schedule</h3>
+		<p class="m-0 mb-6 text-[15px] leading-relaxed text-neutral-500">
 			เมื่อเปิด Fit my schedule<br />
 			หน้าแสดงผลวิชาเรียน<br />
 			จะแสดงเฉพาะรายวิชาที่ไม่ซ้ำวัน เวลา<br />
 			กับตารางเรียนของคุณที่ได้เลือกและจัดไว้
 		</p>
-		<button class="info-modal-btn" onclick={() => (showFitModal = false)}>ตกลง</button>
+		<button
+			class="bg-primary-low hover:bg-primary-low w-full cursor-pointer rounded-xl border-none p-3 text-base font-bold text-blue-700 transition-colors"
+			onclick={() => (showFitModal = false)}
+		>
+			ตกลง
+		</button>
 	</div>
 </Modal>
-
-<style>
-	.filter-container {
-		width: 100%;
-		background: white;
-		padding: 0;
-		font-family: 'IBM Plex Sans Thai', sans-serif;
-		display: flex;
-		flex-direction: column;
-		gap: 16px;
-		height: 100%;
-	}
-
-	.scroll-content {
-		flex: 1;
-		overflow-y: auto;
-		overflow-x: hidden;
-		scrollbar-width: none; /* Firefox */
-		-ms-overflow-style: none; /* legacy Edge/IE */
-		padding-right: 4px;
-		padding-left: 4px;
-	}
-	.scroll-content::-webkit-scrollbar {
-		width: 0;
-		height: 0;
-		display: none; /* Chrome / Safari */
-	}
-
-	.form-group {
-		margin-bottom: 16px;
-	}
-	label {
-		display: block;
-		color: #999;
-		font-size: 13px;
-		margin-bottom: 6px;
-	}
-
-	/* --- MULTI SELECT --- */
-	.multi-select-box {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 8px;
-		padding: 8px 30px 8px 8px;
-		border-radius: 12px;
-		min-height: 40px;
-		position: relative;
-		background-color: #fafafa;
-		cursor: pointer;
-		border: 1px solid transparent;
-	}
-	.multi-select-box:hover {
-		background-color: #f0f0f0;
-	}
-	.multi-select-box.gray-bg {
-		background-color: #f3f4f6;
-	}
-
-	.dropdown-list {
-		position: absolute;
-		top: 105%;
-		left: 0;
-		right: 0;
-		background: white;
-		border: 1px solid #eee;
-		border-radius: 8px;
-		box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-		z-index: 50;
-		max-height: 200px;
-		overflow-y: auto;
-	}
-	/* For the last field (วิธีการวัดผล): open upward so it isn't covered by the ค้นหา button. */
-	.dropdown-list--up {
-		top: auto;
-		bottom: 105%;
-	}
-	.option-item {
-		padding: 10px 15px;
-		font-size: 14px;
-		cursor: pointer;
-	}
-	.option-item:hover {
-		background-color: #f5f5f5;
-	}
-	.option-item.disabled {
-		color: #ccc;
-		cursor: default;
-	}
-
-	.chip {
-		display: inline-flex;
-		align-items: center;
-		gap: 5px;
-		padding: 4px 10px;
-		border-radius: 20px;
-		font-size: 13px;
-		font-weight: 600;
-	}
-	.chip.outlined {
-		background: white;
-		border: 1px solid;
-	}
-	.chip.gray-pill {
-		background: #d1d5db;
-		color: #374151;
-	}
-
-	.close-btn {
-		cursor: pointer;
-		opacity: 0.6;
-		line-height: 1;
-	}
-	.close-btn:hover {
-		opacity: 1;
-	}
-
-	.dropdown-arrow {
-		position: absolute;
-		right: 10px;
-		top: 50%;
-		transform: translateY(-50%);
-		font-size: 10px;
-		color: #999;
-	}
-	.placeholder {
-		color: #aaa;
-		font-size: 14px;
-		align-self: center;
-	}
-
-	/* --- TIME INPUTS --- */
-	.time-row {
-		display: flex;
-		gap: 12px;
-		margin-bottom: 16px;
-	}
-	.time-col {
-		flex: 1;
-	}
-	.input-wrapper {
-		position: relative;
-	}
-	.input-wrapper input {
-		width: 100%;
-		padding: 10px 12px;
-		border: none;
-		background-color: #f9fafb;
-		border-radius: 12px;
-		color: #333;
-		font-size: 14px;
-		box-sizing: border-box;
-	}
-	.clock-icon {
-		position: absolute;
-		right: 10px;
-		top: 50%;
-		transform: translateY(-50%);
-		pointer-events: none;
-	}
-
-	/* --- CHECKBOX --- */
-	.checkbox-row {
-		margin-top: -5px;
-		display: flex;
-		align-items: center;
-		gap: 6px;
-	}
-	.info-slot {
-		display: inline-flex;
-		align-items: center;
-	}
-	.custom-checkbox {
-		display: flex;
-		align-items: center;
-		cursor: pointer;
-		user-select: none;
-		font-size: 14px;
-		color: #374151;
-		font-weight: 500;
-	}
-	.custom-checkbox input {
-		position: absolute;
-		opacity: 0;
-		cursor: pointer;
-		height: 0;
-		width: 0;
-	}
-	.checkmark {
-		height: 18px;
-		width: 18px;
-		background-color: #eee;
-		border-radius: 4px;
-		margin-right: 10px;
-		position: relative;
-		transition: background-color 0.2s;
-	}
-	.custom-checkbox:hover input ~ .checkmark {
-		background-color: #ddd;
-	}
-	.custom-checkbox input:checked ~ .checkmark {
-		background-color: #4f46e5;
-	}
-
-	.checkmark:after {
-		content: '';
-		position: absolute;
-		display: none;
-		left: 6px;
-		top: 2px;
-		width: 4px;
-		height: 9px;
-		border: solid white;
-		border-width: 0 2px 2px 0;
-		transform: rotate(45deg);
-	}
-	.custom-checkbox input:checked ~ .checkmark:after {
-		display: block;
-	}
-	.info-icon {
-		margin-left: 6px;
-		color: #666;
-	}
-
-	/* --- TOGGLE --- */
-	.toggle-row {
-		display: flex;
-		align-items: center;
-		gap: 10px;
-	}
-	.switch {
-		position: relative;
-		display: inline-block;
-		width: 44px;
-		height: 24px;
-	}
-	.switch input {
-		opacity: 0;
-		width: 0;
-		height: 0;
-	}
-	.slider {
-		position: absolute;
-		cursor: pointer;
-		top: 0;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		background-color: #ccc;
-		transition: 0.4s;
-	}
-	.slider:before {
-		position: absolute;
-		content: '';
-		height: 18px;
-		width: 18px;
-		left: 3px;
-		bottom: 3px;
-		background-color: white;
-		transition: 0.4s;
-	}
-	input:checked + .slider {
-		background-color: #9ca3af;
-	}
-	input:checked + .slider:before {
-		transform: translateX(20px);
-	}
-	.slider.round {
-		border-radius: 34px;
-	}
-	.slider.round:before {
-		border-radius: 50%;
-	}
-
-	.toggle-label {
-		font-size: 14px;
-		color: #374151;
-		font-weight: 500;
-		display: flex;
-		align-items: center;
-		gap: 5px;
-	}
-	.info-icon-circle {
-		color: #666;
-		font-size: 16px;
-		cursor: help;
-	}
-
-	/* --- BUTTON --- */
-	.search-btn {
-		width: 100%;
-		background-color: #e0e7ff;
-		color: #3730a3;
-		border: none;
-		padding: 12px;
-		border-radius: 12px;
-		font-weight: bold;
-		cursor: pointer;
-		font-size: 16px;
-		margin-top: 10px;
-	}
-	.search-btn:hover {
-		background-color: #c7d2fe;
-	}
-
-	/* --- INFO MODAL --- */
-	.info-modal {
-		width: 420px;
-		max-width: 90vw;
-		background: #fff;
-		border-radius: 24px;
-		padding: 32px 28px;
-		text-align: center;
-		box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
-	}
-	.info-modal-title {
-		margin: 0 0 16px;
-		font-size: 24px;
-		font-weight: 700;
-		color: #004494;
-	}
-	.info-modal-body {
-		margin: 0 0 24px;
-		font-size: 15px;
-		line-height: 1.7;
-		color: #6b7280;
-	}
-	.info-modal-btn {
-		width: 100%;
-		background-color: #e8f0fe;
-		color: #004494;
-		border: none;
-		padding: 12px;
-		border-radius: 12px;
-		font-weight: 700;
-		font-size: 16px;
-		cursor: pointer;
-		transition: background-color 0.2s;
-	}
-	.info-modal-btn:hover {
-		background-color: #d6e4fd;
-	}
-</style>

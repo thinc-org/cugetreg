@@ -1,13 +1,9 @@
-import { env as privateEnv } from '$env/dynamic/private';
 import { env as publicEnv } from '$env/dynamic/public';
 
 import { type Handle, type HandleFetch, redirect } from '@sveltejs/kit';
 
 export const handle: Handle = async ({ event, resolve }) => {
-  const API_BASE =
-    privateEnv.API_URL != null
-      ? `${privateEnv.API_URL}/api/v1`
-      : (publicEnv.PUBLIC_API_URL ?? 'http://localhost:3000/api/v1');
+  const API_BASE = publicEnv.PUBLIC_API_URL ?? 'http://localhost:3000/api/v1';
   try {
     const res = await event.fetch(`${API_BASE}/auth/get-session`, {
       headers: event.request.headers, // forwards the session cookie

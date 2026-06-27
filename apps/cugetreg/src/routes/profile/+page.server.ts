@@ -1,4 +1,4 @@
-import { env as privateEnv } from '$env/dynamic/private';
+import { env } from '$env/dynamic/public';
 import { tryCatch } from '$lib/async-handler';
 import { convertUserInfo } from '$lib/utils/user';
 
@@ -8,7 +8,7 @@ import { UserResponseSchema } from '@cugetreg/zod-schemas';
 
 import type { PageServerLoad } from './$types';
 
-const USER_API_URL = `${privateEnv.API_URL}/api/v1/user`;
+const USER_API_URL = `${env.PUBLIC_API_URL}/user`;
 
 export const load: PageServerLoad = async ({ fetch }) => {
   const [response, error] = await tryCatch(fetch(USER_API_URL));

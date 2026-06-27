@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
 	import { page } from '$app/stores';
 	import { Button } from '$lib/components/atoms/button';
@@ -136,7 +137,7 @@
 		</IconButton>
 		{#if isLoggedIn}
 			<Collapsible name={shortenedName}>
-				<UserDialog {name} {id} {imageUrl} {onSignOut} />
+				<UserDialog {name} {id} {imageUrl} {onSignOut} onSettings={() => goto('/profile')} />
 			</Collapsible>
 		{:else}
 			<!-- To be implemented: add real href in Button -->

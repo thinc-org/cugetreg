@@ -115,6 +115,7 @@ export const cartService = {
         throw new Error("NOT_CART_OWNER");
       }
 
+      await tx.cartItem.deleteMany({ where: { cartId } });
       await tx.cart.delete({ where: { id: cartId } });
 
       // Promote the next cart to default so the user always has one active timetable

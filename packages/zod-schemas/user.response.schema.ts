@@ -1,6 +1,11 @@
 import { z } from "zod";
 
-import { reviewStatus, semester, studyProgram } from "./constants.js";
+import {
+  genEdType,
+  reviewStatus,
+  semester,
+  studyProgram,
+} from "./constants.js";
 
 export const UserResponseSchema = z.object({
   id: z.string().regex(/^\d{10}$/),
@@ -13,6 +18,14 @@ export const UserResponseSchema = z.object({
   updatedAt: z.iso.datetime(),
 });
 
+const UserInputSchema = UserResponseSchema.partial({
+  googleId: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type UserInputSchema = z.infer<typeof UserInputSchema>;
+
 export const UserReviewResponseSchema = z.object({
   totalReviews: z.int().min(0),
   page: z.int().min(1),
@@ -21,6 +34,8 @@ export const UserReviewResponseSchema = z.object({
     z.object({
       id: z.string(),
       courseNo: z.string().regex(/^\d{7}$/),
+      courseAbbrName: z.string().nonempty(),
+      genEdType: genEdType,
       studyProgram: studyProgram,
       academicYear: z.int().min(2564),
       semester: semester,
@@ -32,6 +47,10 @@ export const UserReviewResponseSchema = z.object({
     }),
   ),
 });
+
+export type ReviewSchema = z.infer<
+  typeof UserReviewResponseSchema.shape.reviews.element
+>;
 
 export const UpdateUserInfoResponseSchema = z.object({
   message: z.string().nonempty(),

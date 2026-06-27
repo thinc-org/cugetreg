@@ -22,7 +22,12 @@ export const handle: Handle = async ({ event, resolve }) => {
     event.locals.session = null;
   }
 
-  if (!event.locals.user && event.url.pathname.startsWith('/schedule')) {
+  const protectedRoutes = ['/schedule', '/profile'];
+
+  if (
+    !event.locals.user &&
+    protectedRoutes.find((route) => event.url.pathname.startsWith(route))
+  ) {
     throw redirect(302, '/?error=no_session');
   }
 

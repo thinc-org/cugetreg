@@ -57,6 +57,8 @@ model CourseInfo {
   courses   Course[]
   // New!!!
   cartItems CartItem[]
+  //New!!!
+  reviews Review[]
 
   @@map("course_info")
 }
@@ -328,6 +330,9 @@ model Review {
   semester     Semester
 
   courseNo String @map("course_no")
+  //to get course name and description
+  courseInfo CourseInfo @relation(fields: [courseNo], references: [courseNo])
+
   content  String
   rating   Int
 

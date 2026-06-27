@@ -554,7 +554,7 @@
               <section class="text-on-surface mx-auto w-full max-w-5xl">
                 <button 
                   type="button"
-                  class="flex items-center justify-center gap-1 mb-4 lg:mb-1" 
+                  class="flex items-center justify-center gap-1 mb-4 lg:mb-1 hover:bg-gray-100 active:bg-gray-200 p-1 rounded-lg" 
                   onclick={() => history.back()}
                 >
                   <ChevronLeft size={18} strokeWidth={2.5}/>

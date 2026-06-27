@@ -100,8 +100,8 @@ matching_sections AS (
             OR (
                 cl.id IS NOT NULL
                 AND ($6::day_of_week IS NULL OR cl.day_of_week = $6::day_of_week)
-                AND ($10::text IS NULL OR cl.period_start IS NOT NULL AND cl.period_start::time >= $10::time)
-                AND ($11::text IS NULL OR cl.period_end IS NOT NULL AND cl.period_end::time <= $11::time)
+                AND ($10::text IS NULL OR cl.period_start_minutes IS NOT NULL AND cl.period_start_minutes >= (CAST(substring($10::text, 1, 2) AS INTEGER) * 60 + CAST(substring($10::text, 4, 2) AS INTEGER)))
+                AND ($11::text IS NULL OR cl.period_end_minutes IS NOT NULL AND cl.period_end_minutes <= (CAST(substring($11::text, 1, 2) AS INTEGER) * 60 + CAST(substring($11::text, 4, 2) AS INTEGER)))
             )
         )
 

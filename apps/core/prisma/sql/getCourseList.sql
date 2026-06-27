@@ -12,7 +12,7 @@
 -- @param {Boolean} $9:noPrereq? Optional — when true, only courses with no prerequisites
 -- @param {String} $10:timeStart? Optional start time filter (HH:MM)
 -- @param {String} $11:timeEnd? Optional end time filter (HH:MM)
--- @param {Int} $12:limit? Results per page (default 100)
+-- @param {Int} $12:limit? Results per page (default 10)
 -- @param {Int} $13:offset? Page offset (default 0)
 -- @param {String} $14:sortBy? Sort column ('NAME', 'CAPACITY_SUM', 'REMAINING_SUM'; default 'REMAINING_SUM')
 -- @param {String} $15:sortOrder? Sort direction ('ASC', 'DESC'; default 'ASC')
@@ -258,5 +258,5 @@ ORDER BY
     CASE WHEN COALESCE(NULLIF($14::text, ''), 'REMAINING_SUM') = 'COURSE_NO' AND COALESCE(NULLIF($15::text, ''), 'asc') = 'desc' THEN c.course_no END DESC NULLS LAST,
     -- Tiebreaker (always applied)
     c.course_no ASC
-LIMIT COALESCE(NULLIF($12::int, 0), 100)
+LIMIT COALESCE(NULLIF($12::int, 0), 10)
 OFFSET COALESCE($13::int, 0);

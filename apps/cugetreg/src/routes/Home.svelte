@@ -849,8 +849,8 @@
               >
             </div>
             <span class="shrink-0 whitespace-nowrap">
-              Update ข้อมูลล่าสุด&nbsp;&nbsp;วันที่ 20/07/68&nbsp;&nbsp;เวลา 12.00
-              น.
+              Update ข้อมูลล่าสุด&nbsp;&nbsp;วันที่ 20/07/68&nbsp;&nbsp;เวลา
+              12.00 น.
             </span>
           </div>
 

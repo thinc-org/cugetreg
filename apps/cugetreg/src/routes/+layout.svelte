@@ -10,6 +10,7 @@
     handleGoogleLogout,
     useSession,
   } from '$lib/auth-client';
+  import LoadingScreen from '$lib/components/loading-screen.svelte';
   import { loginPopupState } from '$lib/stores/login-popup.svelte';
   import { searchState } from '$lib/stores/search.svelte';
   import {
@@ -30,8 +31,6 @@
   import { LoginPopup } from '@cugetreg/ui/organisms/login-popup';
   import { Navbar } from '@cugetreg/ui/organisms/navbar';
   import { CartDetailResponseSchema } from '@cugetreg/zod-schemas/carts-response';
-
-  import LoadingScreen from '$lib/components/loading-screen.svelte';
 
   import type { LayoutData } from './$types';
 

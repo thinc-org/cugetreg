@@ -37,6 +37,7 @@ export const CourseSchema = z.object({
   academicYear: z.number().int(),
   semester: z.string(),
   courseNo: z.string(),
+  courseCondition: z.string().nullish().default('-'),
   genEdType: z.string(),
   midtermStart: z.string().datetime().nullable(),
   midtermEnd: z.string().datetime().nullable(),

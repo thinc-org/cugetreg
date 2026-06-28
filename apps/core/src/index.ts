@@ -70,6 +70,8 @@ app.route("/carts", carts);
 app.route("/reviews", reviews);
 app.route("/user", user);
 
+app.get("/health", (c) => c.json({ status: "ok" }));
+
 app
   .doc("/specification", {
     openapi: "3.0.0",

@@ -1,3 +1,4 @@
+import { env as privateEnv } from '$env/dynamic/private';
 import { env } from '$env/dynamic/public';
 import { tryCatch } from '$lib/async-handler';
 
@@ -8,7 +9,8 @@ import { CourseNoResponseSchema } from '@cugetreg/zod-schemas/courses-response';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ params, url, parent, fetch }) => {
-  const API_URL = `${env.PUBLIC_API_URL ?? 'http://localhost:3000'}/courses/`;
+  const API_BASE = privateEnv.API_URL ? `${privateEnv.API_URL}/api/v1` : env.PUBLIC_API_URL;
+  const API_URL = `${API_BASE}/courses/`;
   const courseId = params.courseId;
 
   const academicYear = url.searchParams.get('academicYear');

@@ -51,7 +51,7 @@
   let offset = $state(0);
   const limit = 20;
 
-  let sidebarExpanded = $state(true);
+  let sidebarExpanded = $state(false);
   let openPanel = $state<string | null>(null);
   let activePanel = $state<string | null>(null);
   let isMobile = $state(false);
@@ -85,10 +85,10 @@
   let startTime = $state('');
   let endTime = $state('');
   let fitSchedule = $state(false);
-  let noConditions = $state(true);
+  let noConditions = $state(false);
 
   let currentProgram = $state('ทวิภาค');
-  let currentSemester = $state('2566 / 1');
+  let currentSemester = $state('2568 / 1');
   let currentSort = $state('NAME');
   let sortDirection = $state<'asc' | 'desc'>('asc');
 
@@ -814,6 +814,7 @@
             </div>
           </div>
 
+          <!-- Mobile: stacked warning card -->
           <div
             class="bg-warning-container/60 mb-6 flex items-center gap-4 rounded-2xl px-5 py-4 text-sm leading-relaxed text-neutral-600 md:hidden"
           >
@@ -830,6 +831,27 @@
                 12.00 น.
               </p>
             </div>
+          </div>
+
+          <!-- Desktop: single-row warning bar -->
+          <div
+            class="bg-warning-container/60 mb-6 hidden items-center justify-between gap-4 rounded-2xl px-5 py-3 text-sm leading-relaxed text-neutral-600 md:flex"
+          >
+            <div class="flex items-center gap-3">
+              <TriangleAlert
+                size={24}
+                strokeWidth={2}
+                class="text-warning-hover shrink-0"
+              />
+              <span
+                >ข้อมูลอาจมีการเปลี่ยนแปลง
+                โปรดตรวจสอบข้อมูลกับสำนักทะเบียนทุกครั้งก่อนลงทะเบียนเรียน</span
+              >
+            </div>
+            <span class="shrink-0 whitespace-nowrap">
+              Update ข้อมูลล่าสุด&nbsp;&nbsp;วันที่ 20/07/68&nbsp;&nbsp;เวลา
+              12.00 น.
+            </span>
           </div>
 
           <div class="grid grid-cols-1 gap-x-5 gap-y-6 pb-10 md:grid-cols-2">

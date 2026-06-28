@@ -1,3 +1,4 @@
+import { env as privateEnv } from '$env/dynamic/private';
 import { env } from '$env/dynamic/public';
 import { tryCatch } from '$lib/async-handler';
 import type { UserCartInterface } from '$lib/stores/user-cart';
@@ -39,7 +40,8 @@ export const load: LayoutServerLoad = ({ locals, fetch }) => {
 };
 
 async function loadCart(fetch: typeof globalThis.fetch) {
-  const API_URL = `${env.PUBLIC_API_URL ?? 'http://localhost:3000'}/api/v1/carts`;
+  const API_BASE = privateEnv.API_URL ? `${privateEnv.API_URL}/api/v1` : env.PUBLIC_API_URL;
+  const API_URL = `${API_BASE}/carts`;
   const response = await fetch(`${API_URL}`);
 
   // 401/403 means the user is not logged in — return null so the layout renders without cart data

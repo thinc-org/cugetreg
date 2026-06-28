@@ -64,16 +64,15 @@ function sanitizePeriod(value: string): string {
 }
 
 /**
- * Optionally swap reversed period pairs when FIX_PERIOD_SWAPS=true.
- * Catches data-entry errors like 17:00-12:00 → 12:00-17:00.
+ * Swap reversed period pairs — data-entry errors in the source JSON where
+ * start > end (e.g. 17:00-12:00 → 12:00-17:00).
+ * Always applied: the GiST index on int4range(period_start_minutes,
+ * period_end_minutes) makes inverted pairs a hard PostgreSQL error anyway.
  */
 function sanitizePeriodPair(
   start: string,
   end: string,
 ): { start: string; end: string } {
-  if (process.env.FIX_PERIOD_SWAPS !== "true") {
-    return { start, end };
-  }
   const HHMM_RE = /^([01]\d|2[0-3]):[0-5]\d$/;
   if (HHMM_RE.test(start) && HHMM_RE.test(end) && start > end) {
     return { start: end, end: start };

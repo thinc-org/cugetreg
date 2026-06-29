@@ -95,10 +95,14 @@ export const CourseReview = z.object({
   reaction: vote.optional(),
 });
 
+export const CourseNoDetailSchema = CourseSchema.extend({
+  courseInfo: CourseInfoSchema,
+  createdAt: z.iso.datetime(),
+  updtaedAt: z.iso.datetime(),
+});
+
 export const CourseNoResponseSchema = z.object({
-  course: CourseSchema.extend({
-    courseInfo: CourseInfoSchema,
-  }),
+  course: CourseNoDetailSchema,
   reviews: z.array(CourseReview),
 });
 

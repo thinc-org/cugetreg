@@ -341,6 +341,15 @@
   });
 
   $effect(() => {
+    $userCart.currentCart;
+    untrack(() => {
+      currentProgram = $userCart.currentCart.studyProgram as StudyProgram;
+      currentAY = $userCart.currentCart.academicYear;
+      currentSemester = $userCart.currentCart.semester as Semester;
+    });
+  });
+
+  $effect(() => {
     if (!bottomSentinel) return;
     const observer = new IntersectionObserver(
       (entries) => {

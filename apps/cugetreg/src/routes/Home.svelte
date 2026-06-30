@@ -10,7 +10,6 @@
   import { sortByMapper, studyProgramMapper } from '$lib/mapper';
   import {
     getSemesterDisplayOptions,
-    parseSemesterDisplay,
     SEMESTER_LABEL_LONG,
     SEMESTER_LABEL_SHORT,
   } from '$lib/semesterOptions';
@@ -52,6 +51,8 @@
     studyProgram,
   } from '@cugetreg/zod-schemas';
 
+  const semesterOptions = getSemesterDisplayOptions();
+
   let courses = $state.raw<any[]>([]);
   let isLoading = $state(false);
   let hasMore = $state(true);
@@ -76,13 +77,12 @@
   let filterSection = $state<HTMLElement>();
   let selectedSection = $state<HTMLElement>();
 
-  let searchQuery = $state('');
-  let debouncedSearchQuery = $state('');
-  let searchTimeout: ReturnType<typeof setTimeout> | undefined;
-
-  let isScheduleDropdownOpen = $state(false);
+  // let searchQuery = $state('');
+  // let debouncedSearchQuery = $state('');
+  // let searchTimeout: ReturnType<typeof setTimeout> | undefined;
+  //
+  // let isScheduleDropdownOpen = $state(false);
   let isFilterOpen = $state(true);
-  let activeDropdown = $state<'program' | 'semester' | 'sort' | null>(null);
   let activeModal = $state<'filter' | 'selected' | null>(null);
 
   let selectedGenEds = $state<string[]>([]);
@@ -97,7 +97,7 @@
 
   let currentProgram = $state<StudyProgram>('S');
   let currentSemester = $state<Semester>('FIRST');
-  let currentAY = $state<number>(2566);
+  let currentAY = $state<number>(2568);
   let currentSort = $state<SortBy>('NAME');
   let sortDirection = $state<'asc' | 'desc'>('asc');
 
@@ -119,7 +119,6 @@
   function selectMobileSort(field: SortBy, dir: 'asc' | 'desc') {
     currentSort = field;
     sortDirection = dir;
-    activeDropdown = null;
   }
 
   let bottomSentinel = $state<HTMLElement | null>(null);
@@ -312,14 +311,9 @@
   }
 
   $effect(() => {
-    // Term changes (Reset offset and clear list)
+    // Search & Filter changes (Reset offset and clear list)
     currentSemester;
     currentProgram;
-    untrack(() => fetchCourses(true));
-  });
-
-  $effect(() => {
-    // Search & Filter changes (Reset offset and clear list)
     searchState.debounced;
     selectedGenEds;
     selectedFaculties;
@@ -331,7 +325,7 @@
     currentSort;
     sortDirection;
     fitSchedule;
-    if (fitSchedule) {
+    if (fitSchedule && untrack(() => $userCart.currentCartId)) {
       $userCart.currentCart;
     }
     untrack(() => fetchCourses(true));
@@ -367,12 +361,6 @@
   const userCart = getUserCartStore();
   const cartPromise = getContext<CartPromise>(CART_PROMISE_KEY);
   const { addCourse, removeCourse, updateCourse } = useCartActions();
-
-  const PROGRAM_MAP: Record<string, string> = {
-    นานาชาติ: 'I',
-    ตรีภาค: 'T',
-    ทวิภาค: 'S',
-  };
 
   function scrollToSection(el: HTMLElement | undefined) {
     if (!el) return;
@@ -498,12 +486,9 @@
     if (openPanel === 'filter_only') openPanel = null;
   }
 
-  let contextLabel = $derived.by(() => {
-    const parsed = parseSemesterDisplay(currentSemester);
-    const year = parsed?.academicYear ?? '2566';
-    const sem = parsed?.semester ?? 'FIRST';
-    return `ในปีการศึกษา ${year} ${SEMESTER_LABEL_LONG[sem]} หลักสูตร${currentProgram}`;
-  });
+  let contextLabel = $derived(
+    `ในปีการศึกษา ${currentAY} ${SEMESTER_LABEL_LONG[currentSemester]} หลักสูตร${studyProgramLabel}`,
+  );
 </script>
 
 <div class="relative flex h-screen flex-col overflow-hidden bg-white">
@@ -666,7 +651,7 @@
                 </Select.Trigger>
                 <Select.Content>
                   <Select.Group>
-                    {#each getSemesterDisplayOptions() as option (option.value)}
+                    {#each semesterOptions as option (`${option.value.ay}/${option.value.semester}`)}
                       <Select.Item
                         value={`${option.value.ay}/${option.value.semester}`}
                         label={option.label}
@@ -744,7 +729,7 @@
                     </Select.Trigger>
                     <Select.Content>
                       <Select.Group>
-                        {#each sortOptions as option (option)}
+                        {#each sortOptions as option (option.field)}
                           <Select.Item
                             value={option.field}
                             label={option.label}
@@ -846,7 +831,7 @@
               </div>
             {:else}
               {@const params = new URLSearchParams({
-                studyProgram: PROGRAM_MAP[currentProgram],
+                studyProgram: currentProgram,
                 academicYear: String(currentAY),
                 semester: currentSemester,
               })}

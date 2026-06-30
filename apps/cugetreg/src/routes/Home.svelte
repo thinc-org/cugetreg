@@ -7,7 +7,7 @@
   import AppSidebar from '$lib/components/app-sidebar.svelte';
   import ScheduleMismatchPopup from '$lib/components/schedule-mismatch-popup.svelte';
   import SelectedCourse from '$lib/components/selected-course.svelte';
-  import { studyProgramMapper } from '$lib/mapper';
+  import { sortByMapper, studyProgramMapper } from '$lib/mapper';
   import {
     getSemesterDisplayOptions,
     parseSemesterDisplay,
@@ -47,6 +47,7 @@
   import * as Sidebar from '@cugetreg/ui/organisms/sidebar';
   import {
     type Semester,
+    type SortBy,
     type StudyProgram,
     studyProgram,
   } from '@cugetreg/zod-schemas';
@@ -97,27 +98,25 @@
   let currentProgram = $state<StudyProgram>('S');
   let currentSemester = $state<Semester>('FIRST');
   let currentAY = $state<number>(2566);
-  let currentSort = $state('NAME');
+  let currentSort = $state<SortBy>('NAME');
   let sortDirection = $state<'asc' | 'desc'>('asc');
 
-  // Mobile-only sort options (per design): seat-based + name, each encodes a
-  // field + direction. Desktop keeps its own รหัสวิชา/ชื่อวิชา + direction toggle.
   const mobileSortOptions = [
-    { label: 'จำนวนที่นั่งมาก', field: 'CAPACITY', dir: 'desc' as const },
-    { label: 'จำนวนที่นั่งน้อย', field: 'CAPACITY', dir: 'asc' as const },
-    { label: 'เหลือที่นั่งมาก', field: 'REMAINING', dir: 'desc' as const },
-    { label: 'เหลือที่นั่งน้อย', field: 'REMAINING', dir: 'asc' as const },
+    { label: 'จำนวนที่นั่งมาก', field: 'CAPACITY_SUM', dir: 'desc' as const },
+    { label: 'จำนวนที่นั่งน้อย', field: 'CAPACITY_SUM', dir: 'asc' as const },
+    { label: 'เหลือที่นั่งมาก', field: 'REMAINING_SUM', dir: 'desc' as const },
+    { label: 'เหลือที่นั่งน้อย', field: 'REMAINING_SUM', dir: 'asc' as const },
     { label: 'ชื่อวิชา A-Z', field: 'NAME', dir: 'asc' as const },
     { label: 'ชื่อวิชา Z-A', field: 'NAME', dir: 'desc' as const },
   ];
-  // Maps the active sort field to the API's sortBy value.
-  // NOTE: CAPACITY/REMAINING require backend support; NAME works today.
-  const SORT_BY_LABEL: Record<string, string> = {
-    NAME: 'ชื่อวิชา',
-    CAPACITY: 'จำนวนที่นั่ง',
-    REMAINING: 'เหลือที่นั่ง',
-  };
-  function selectMobileSort(field: string, dir: 'asc' | 'desc') {
+
+  const sortOptions = [
+    { label: 'ชื่อวิชา', field: 'NAME' },
+    { label: 'จำนวนที่นั่ง', field: 'CAPACITY_SUM' },
+    { label: 'เหลือที่นั่ง', field: 'REMAINING_SUM' },
+  ];
+
+  function selectMobileSort(field: SortBy, dir: 'asc' | 'desc') {
     currentSort = field;
     sortDirection = dir;
     activeDropdown = null;
@@ -132,8 +131,6 @@
   let localSelectedSections: Record<string, number> = {};
 
   const session = useSession();
-
-  const sortOptions = ['รหัสวิชา', 'ชื่อวิชา'];
 
   const genEdMap: Record<string, string> = {
     sci: 'SC',
@@ -380,13 +377,6 @@
   function scrollToSection(el: HTMLElement | undefined) {
     if (!el) return;
     el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
-  function toggleDropdown(type: typeof activeDropdown) {
-    activeDropdown = activeDropdown === type ? null : type;
-  }
-  function selectOption(type: 'program' | 'semester' | 'sort', value: string) {
-    if (type === 'sort') currentSort = value;
-    activeDropdown = null;
   }
   function toggleSortDirection() {
     sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
@@ -713,7 +703,7 @@
                   value={`${currentSort}:${sortDirection}`}
                   onValueChange={(v) => {
                     const [field, dir] = v.split(':');
-                    selectMobileSort(field, dir as 'asc' | 'desc');
+                    selectMobileSort(field as SortBy, dir as 'asc' | 'desc');
                   }}
                 >
                   <Select.Trigger
@@ -746,29 +736,26 @@
                   >จัดลำดับตาม</span
                 >
                 <div class="relative flex items-center gap-3">
-                  <button
-                    onclick={() => toggleDropdown('sort')}
-                    class="flex h-12 flex-1 items-center justify-between rounded-xl bg-[#F1F3F7] px-5 text-sm font-bold text-gray-700 transition-all hover:bg-gray-200"
-                  >
-                    <span>{currentSort}</span>
-                    <ChevronDown size={18} class="text-gray-400" />
-                  </button>
-                  {#if activeDropdown === 'sort'}
-                    <div
-                      class="absolute top-full left-0 z-[70] mt-2 w-full overflow-hidden rounded-xl border border-gray-100 bg-white shadow-xl"
+                  <Select.Root bind:value={currentSort} type="single">
+                    <Select.Trigger
+                      class="flex h-12 flex-1 items-center justify-between rounded-xl bg-[#F1F3F7] px-5 text-sm font-bold text-gray-700 transition-all hover:bg-gray-200"
                     >
-                      {#each sortOptions as opt (opt)}
-                        <button
-                          onclick={() => selectOption('sort', opt)}
-                          class="w-full px-5 py-3 text-left text-sm hover:bg-gray-50 {currentSort ===
-                          opt
-                            ? 'bg-gray-50 font-bold'
-                            : ''}">{opt}</button
-                        >
-                      {/each}
-                    </div>
-                  {/if}
+                      {sortByMapper(currentSort)}
+                    </Select.Trigger>
+                    <Select.Content>
+                      <Select.Group>
+                        {#each sortOptions as option (option)}
+                          <Select.Item
+                            value={option.field}
+                            label={option.label}
+                            role="option"
+                          />
+                        {/each}
+                      </Select.Group>
+                    </Select.Content>
+                  </Select.Root>
                   <button
+                    aria-label="sort direction"
                     onclick={toggleSortDirection}
                     class="flex h-12 w-12 cursor-pointer items-center justify-center rounded-xl text-[#004494] transition-all hover:bg-blue-50"
                   >

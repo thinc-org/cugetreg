@@ -7,10 +7,12 @@
   import AppSidebar from '$lib/components/app-sidebar.svelte';
   import ScheduleMismatchPopup from '$lib/components/schedule-mismatch-popup.svelte';
   import SelectedCourse from '$lib/components/selected-course.svelte';
+  import { studyProgramMapper } from '$lib/mapper';
   import {
     getSemesterDisplayOptions,
     parseSemesterDisplay,
     SEMESTER_LABEL_LONG,
+    SEMESTER_LABEL_SHORT,
   } from '$lib/semesterOptions';
   import { loginPopupState } from '$lib/stores/login-popup.svelte';
   import { searchState } from '$lib/stores/search.svelte';
@@ -43,6 +45,11 @@
   import { Filter as FilterBar } from '@cugetreg/ui/organisms/filter-bar';
   import { Footer } from '@cugetreg/ui/organisms/footer';
   import * as Sidebar from '@cugetreg/ui/organisms/sidebar';
+  import {
+    type Semester,
+    type StudyProgram,
+    studyProgram,
+  } from '@cugetreg/zod-schemas';
 
   let courses = $state.raw<any[]>([]);
   let isLoading = $state(false);
@@ -87,8 +94,9 @@
   let fitSchedule = $state(false);
   let noConditions = $state(false);
 
-  let currentProgram = $state('ทวิภาค');
-  let currentSemester = $state('2568 / 1');
+  let currentProgram = $state<StudyProgram>('S');
+  let currentSemester = $state<Semester>('FIRST');
+  let currentAY = $state<number>(2566);
   let currentSort = $state('NAME');
   let sortDirection = $state<'asc' | 'desc'>('asc');
 
@@ -118,7 +126,6 @@
   let bottomSentinel = $state<HTMLElement | null>(null);
 
   let showMismatchPopup = $state(false);
-  let expectedParams = $derived(getParams());
   let pendingCourse = $state<{ courseNo: string; sectionNo: number } | null>(
     null,
   );
@@ -126,8 +133,6 @@
 
   const session = useSession();
 
-  const programOptions = ['ทวิภาค', 'ตรีภาค', 'นานาชาติ'];
-  const semesterOptions = getSemesterDisplayOptions();
   const sortOptions = ['รหัสวิชา', 'ชื่อวิชา'];
 
   const genEdMap: Record<string, string> = {
@@ -167,30 +172,6 @@
       },
     },
   ];
-
-  function parseTime(t: string): number | null {
-    if (!t) return null;
-    const m = t.trim().match(/^(\d{1,2}):(\d{2})$/);
-    if (!m) return null;
-    const h = Number(m[1]);
-    const mm = Number(m[2]);
-    if (h > 23 || mm > 59) return null;
-    return h * 60 + mm;
-  }
-
-  function getParams() {
-    const parsed = parseSemesterDisplay(currentSemester);
-    return {
-      academicYear: parsed?.academicYear ?? '2566',
-      semester: parsed?.semester ?? 'FIRST',
-      studyProgram:
-        currentProgram === 'นานาชาติ'
-          ? 'I'
-          : currentProgram === 'ตรีภาค'
-            ? 'T'
-            : 'S',
-    };
-  }
 
   function mapCourse(item: any) {
     const { course: c, courseInfo: ci, reviewCount } = item;
@@ -263,11 +244,10 @@
 
     isLoading = true;
     try {
-      const { academicYear, semester, studyProgram } = getParams();
       const params = new SvelteURLSearchParams({
-        academicYear,
-        semester,
-        studyProgram,
+        academicYear: String(currentAY),
+        semester: currentSemester as string,
+        studyProgram: currentProgram,
         limit: limit.toString(),
         offset: offset.toString(),
         sortOrder: sortDirection,
@@ -375,6 +355,8 @@
     return () => observer.disconnect();
   });
 
+  const studyProgramLabel = $derived(studyProgramMapper(currentProgram));
+
   const userCart = getUserCartStore();
   const cartPromise = getContext<CartPromise>(CART_PROMISE_KEY);
   const { addCourse, removeCourse, updateCourse } = useCartActions();
@@ -393,8 +375,6 @@
     activeDropdown = activeDropdown === type ? null : type;
   }
   function selectOption(type: 'program' | 'semester' | 'sort', value: string) {
-    if (type === 'program') currentProgram = value;
-    if (type === 'semester') currentSemester = value;
     if (type === 'sort') currentSort = value;
     activeDropdown = null;
   }
@@ -406,10 +386,9 @@
     const currentCart = $userCart.currentCart;
     if (!currentCart || !$session.data) return false;
     const isYearMismatch =
-      String(currentCart.academicYear) !== String(expectedParams.academicYear);
-    const isProgramMismatch =
-      currentCart.studyProgram !== expectedParams.studyProgram;
-    const isSemesterMismatch = currentCart.semester !== expectedParams.semester;
+      String(currentCart.academicYear) !== String(currentAY);
+    const isProgramMismatch = currentCart.studyProgram !== currentProgram;
+    const isSemesterMismatch = currentCart.semester !== currentSemester;
     return isYearMismatch || isSemesterMismatch || isProgramMismatch;
   }
 
@@ -646,68 +625,61 @@
             </div>
 
             <div class="relative flex shrink-0 gap-2">
-              <div class="relative">
-                <button
-                  onclick={() => toggleDropdown('program')}
-                  class="flex items-center gap-2 rounded-full border border-neutral-800 px-3 py-1.5 text-xs font-bold transition-colors hover:bg-gray-50 md:px-5 md:py-2 md:text-sm"
+              <Select.Root type="single" bind:value={currentProgram}>
+                <Select.Trigger
+                  class="flex items-center gap-2 rounded-full border border-neutral-800 px-3 py-1.5 text-xs font-bold transition-colors hover:bg-gray-50 focus:ring-offset-0 md:px-5 md:py-2 md:text-sm"
                 >
-                  {currentProgram}
-                  <ChevronDown size={16} />
-                </button>
-                {#if activeDropdown === 'program'}
-                  <div
-                    class="absolute top-full right-0 z-[70] mt-2 w-32 overflow-hidden rounded-xl border border-gray-100 bg-white shadow-xl"
-                  >
-                    {#each programOptions as opt (opt)}
-                      <button
-                        onclick={() => selectOption('program', opt)}
-                        class="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 {currentProgram ===
-                        opt
-                          ? 'bg-gray-50 font-bold'
-                          : ''}">{opt}</button
+                  {studyProgramLabel}
+                </Select.Trigger>
+                <Select.Content>
+                  <Select.Group>
+                    {#each studyProgram.options as option (option)}
+                      <Select.Item
+                        value={option}
+                        label={option}
+                        aria-label={option}
+                        role="option"
+                        check={true}
                       >
+                        {studyProgramMapper(option)}
+                      </Select.Item>
                     {/each}
-                  </div>
-                {/if}
-              </div>
+                  </Select.Group>
+                </Select.Content>
+              </Select.Root>
 
-              <div class="relative">
-                <button
-                  onclick={() => toggleDropdown('semester')}
-                  class="flex items-center gap-2 rounded-full border border-neutral-800 px-3 py-1.5 text-xs font-bold whitespace-nowrap transition-colors hover:bg-gray-50 md:px-5 md:py-2 md:text-sm"
+              <Select.Root
+                type="single"
+                bind:value={
+                  () => `${currentAY}/${currentSemester}`,
+                  (v) => {
+                    const [ay, sem] = v.split('/');
+                    currentAY = Number(ay);
+                    currentSemester = sem as Semester;
+                  }
+                }
+              >
+                <Select.Trigger
+                  class="flex items-center gap-2 rounded-full border border-neutral-800 px-3 py-1.5 text-xs font-bold transition-colors hover:bg-gray-50 focus:ring-offset-0 md:px-5 md:py-2 md:text-sm"
                 >
-                  {currentSemester}
-                  <ChevronDown size={16} />
-                </button>
-                {#if activeDropdown === 'semester'}
-                  <div
-                    class="absolute top-full right-0 z-[70] mt-2 w-48 overflow-hidden rounded-xl border border-gray-100 bg-white shadow-xl"
-                  >
-                    <div
-                      class="custom-scrollbar flex max-h-[250px] flex-col overflow-y-auto py-1"
-                    >
-                      {#each semesterOptions as opt (opt)}
-                        <button
-                          onclick={() => selectOption('semester', opt)}
-                          class="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 {currentSemester ===
-                          opt
-                            ? 'bg-gray-50 font-bold'
-                            : ''}">{opt}</button
-                        >
-                      {/each}
-                    </div>
-                  </div>
-                {/if}
-              </div>
-              {#if activeDropdown}
-                <div
-                  class="fixed inset-0 z-[65]"
-                  onclick={() => (activeDropdown = null)}
-                  role="button"
-                  tabindex="0"
-                  onkeydown={() => {}}
-                ></div>
-              {/if}
+                  {`${currentAY} / ${SEMESTER_LABEL_SHORT[currentSemester]}`}
+                </Select.Trigger>
+                <Select.Content>
+                  <Select.Group>
+                    {#each getSemesterDisplayOptions() as option (option.value)}
+                      <Select.Item
+                        value={`${option.value.ay}/${option.value.semester}`}
+                        label={option.label}
+                        aria-label={option.label}
+                        role="option"
+                        check={true}
+                      >
+                        {option.label}
+                      </Select.Item>
+                    {/each}
+                  </Select.Group>
+                </Select.Content>
+              </Select.Root>
             </div>
           </div>
 
@@ -721,7 +693,7 @@
                     if (e.key === 'Enter') e.preventDefault();
                   }}
                   placeholder="พิมพ์ชื่อวิชา รหัสวิชา หรือคำค้นหาอื่นๆ..."
-                  class="h-12 w-full rounded-xl border-none bg-[#F1F3F7] px-6 text-lg font-medium focus:ring-2 focus:ring-blue-500"
+                  class="h-12 w-full rounded-xl border-none bg-[#F1F3F7] px-6 text-lg font-medium placeholder:text-neutral-300 focus:ring-2 focus:ring-blue-500"
                 />
               </div>
               <!-- Mobile sort: "เรียงตาม" + dropdown (Select) -->
@@ -878,8 +850,8 @@
             {:else}
               {@const params = new URLSearchParams({
                 studyProgram: PROGRAM_MAP[currentProgram],
-                academicYear: String(getParams().academicYear),
-                semester: getParams().semester,
+                academicYear: String(currentAY),
+                semester: currentSemester,
               })}
               {#each displayedCourses as item (item.course.code)}
                 <CourseCard
@@ -920,10 +892,10 @@
         {#if showMismatchPopup}
           <ScheduleMismatchPopup
             schedules={$userCart.cartList ?? []}
-            expectedYear={expectedParams.academicYear}
-            expectedProgram={expectedParams.studyProgram}
+            expectedYear={currentAY}
+            expectedProgram={currentProgram}
             bind:currentScheduleId={$userCart.currentCartId}
-            expectedSemester={expectedParams.semester}
+            expectedSemester={currentSemester}
             onConfirm={handleScheduleChange}
             onClose={() => (showMismatchPopup = false)}
           />

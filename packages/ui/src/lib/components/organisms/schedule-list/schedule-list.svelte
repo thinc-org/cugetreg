@@ -18,7 +18,7 @@
 		onClickItem?: (item: ScheduleItem) => void;
 		onClickButton?: () => void;
 		onDelete?: (item: ScheduleItem) => void;
-		onChangeVisibility: (item: ScheduleItem) => void;
+		onChangeVisibility: (item: ScheduleItem, newChecked: boolean) => void;
 	}
 
 	let {
@@ -165,7 +165,7 @@
 					<div class="mt-5 flex items-center gap-3">
 						<Switch
 							bind:checked={item.isPublic}
-							onCheckedChange={() => onChangeVisibility(item)}
+							onCheckedChange={(newChecked) => onChangeVisibility(item, newChecked)}
 							label={null}
 						/>
 						<p class="text-body2 text-on-surface/70 font-medium">เป็นสาธารณะ</p>

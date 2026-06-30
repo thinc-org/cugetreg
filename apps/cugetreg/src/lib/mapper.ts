@@ -35,6 +35,8 @@ export function sortByMapper(sortBy: SortBy) {
       return 'จำนวนที่นั่ง';
     case 'REMAINING_SUM':
       return 'เหลือที่นั่ง';
+    case 'COURSE_NO':
+      return 'รหัสวิชา';
     default:
       throw new Error(`SortBy ${sortBy} is invalid`);
   }

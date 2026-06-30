@@ -21,6 +21,7 @@
   } from '@cugetreg/zod-schemas';
 
   import type { PageProps } from './$types';
+  import { useCartActions } from '$lib/stores/user-cart';
 
   interface ScheduleItem {
     id: string;
@@ -37,6 +38,8 @@
     rating: number;
     term: string;
   }
+
+  const { changeCartVisibility, deleteCart } = useCartActions();
 
   const { data }: PageProps = $props();
   let personalInfo = $state(data.user);
@@ -91,32 +94,13 @@
     loadingSchedules = false;
   }
 
-  async function changeVisibility(item: ScheduleItem) {
-    const { id, isPublic } = item;
-
-    console.log(id, isPublic);
-
-    // TODO: Implement and use user-cart updateCartListMeta()
-    const [res, error] = await tryCatch(
-      api.patch(`/carts/${id}`, {
-        visible: isPublic ? 'PUB' : 'PVT',
-      }),
-    );
-
-    if (error || !res) {
-      console.error(error.message);
-      return;
-    }
+  async function changeVisibility(item: ScheduleItem, newChecked: boolean) {
+    await changeCartVisibility(item.id, newChecked ? 'PUB' : 'PVT');
   }
 
   async function deleteSchedule(id: string) {
-    // TODO: Implement and use user-cart deleteCart(id)
-    const [res, error] = await tryCatch(api.delete(`/carts/${id}`));
-
-    if (error || !res) {
-      console.error(error.message);
-      return;
-    }
+    const ok = await deleteCart(id);
+    if (!ok) return;
 
     items = items.filter((item) => item.id !== id);
     deleteItemPopupVisible = false;

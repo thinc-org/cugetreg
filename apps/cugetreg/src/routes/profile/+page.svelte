@@ -1,6 +1,7 @@
 <script lang="ts">
   import { api } from '$lib/api';
   import { tryCatch } from '$lib/async-handler';
+  import { useCartActions } from '$lib/stores/user-cart';
   import { convertReviewInfos } from '$lib/utils/reviews';
   import { convertSchedulesInfo } from '$lib/utils/scheduleInfo';
   import { convertUserInfo } from '$lib/utils/user';
@@ -21,7 +22,6 @@
   } from '@cugetreg/zod-schemas';
 
   import type { PageProps } from './$types';
-  import { useCartActions } from '$lib/stores/user-cart';
 
   interface ScheduleItem {
     id: string;

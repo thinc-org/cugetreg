@@ -9,7 +9,9 @@ import { ListCartsResponseSchema } from '@cugetreg/zod-schemas/carts-response';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ fetch }) => {
-  const API_BASE = privateEnv.API_URL ? `${privateEnv.API_URL}/api/v1` : env.PUBLIC_API_URL;
+  const API_BASE = privateEnv.API_URL
+    ? `${privateEnv.API_URL}/api/v1`
+    : env.PUBLIC_API_URL;
   const API_URL = `${API_BASE}/carts`;
   const [response, error] = await tryCatch(fetch(API_URL));
 

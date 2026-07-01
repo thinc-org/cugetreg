@@ -14,6 +14,10 @@
   import { PersonalInfo } from '@cugetreg/ui/organisms/personal-info';
   import { RatingHistory } from '@cugetreg/ui/organisms/rating-history';
   import { ScheduleList } from '@cugetreg/ui/organisms/schedule-list';
+  import {
+    CreateTimetable,
+    type TimetableMetaData,
+  } from '@cugetreg/ui/organisms/create-timetable';
   import type { ReviewStatus } from '@cugetreg/zod-schemas';
   import {
     ListCartsResponseSchema,
@@ -23,6 +27,11 @@
 
   import type { PageProps } from './$types';
   import { goto } from '$app/navigation';
+  import { Modal } from '@cugetreg/ui/atoms/modal';
+  import {
+    getSemesterShortOptions,
+    getYearOptions,
+  } from '$lib/semesterOptions';
 
   interface ScheduleItem {
     id: string;
@@ -56,7 +65,9 @@
   let loadingReviews = $state(false);
   let loadingSchedules = $state(false);
 
-  const { switchCart } = useCartActions();
+  let showCreateScheduleModal = $state(false);
+
+  const { switchCart, createCart } = useCartActions();
 
   async function updateUser() {
     const updatedUser = {
@@ -171,6 +182,10 @@
     goto('/schedule');
   };
 
+  const onClickAddSchedule = () => {
+    showCreateScheduleModal = true;
+  };
+
   const toggleEditInfo = () => {
     editInfoPopupVisible = true;
   };
@@ -224,6 +239,7 @@
       {items}
       loading={loadingSchedules}
       {onClickItem}
+      onClickButton={onClickAddSchedule}
       onDelete={onDeleteItem}
       onChangeVisibility={changeVisibility}
     />
@@ -252,6 +268,24 @@
       scheduleName={itemToDelete?.title}
     />
   {/if}
+  <Modal centered dim bind:show={showCreateScheduleModal}>
+    <CreateTimetable
+      yearOptions={getYearOptions()}
+      semesterOptions={getSemesterShortOptions()}
+      onConfirm={(schedule: TimetableMetaData) => {
+        goto('/schedule');
+        createCart(
+          schedule.name,
+          schedule.isPublic,
+          schedule.semesterType,
+          schedule.semester,
+          schedule.academicYear,
+        );
+        showCreateScheduleModal = false;
+      }}
+      onCancel={() => (showCreateScheduleModal = false)}
+    />
+  </Modal>
   <a
     class="fixed right-6 bottom-6 z-50 inline-flex cursor-pointer items-center gap-2 rounded-full border-2 border-blue-700 px-4 py-1"
     href="https://docs.google.com/forms/d/e/1FAIpQLScH2AZyifTnBVXiJBtyzM73MReGX2vpM1_I9IWQfABMduVgsg/viewform?usp=dialog"

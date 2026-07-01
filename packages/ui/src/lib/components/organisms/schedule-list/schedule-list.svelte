@@ -15,6 +15,7 @@
 		items?: ScheduleItem[];
 		loading?: boolean;
 		onClickItem?: (item: ScheduleItem) => void;
+		onClickButton?: () => void;
 		onDelete?: (item: ScheduleItem) => void;
 		onChangeVisibility: (item: ScheduleItem) => void;
 	}
@@ -24,6 +25,7 @@
 		items = [],
 		loading = false,
 		onClickItem,
+		onClickButton,
 		onDelete,
 		onChangeVisibility
 	}: Props = $props();
@@ -151,11 +153,12 @@
 				</div>
 			{/each}
 		{/if}
-		<a
-			href="/schedule"
-			class="text-md inline-flex w-full justify-center rounded-2xl bg-blue-100 px-8 py-2 text-center font-medium text-blue-900"
+		<button
+			type="button"
+			class="text-md inline-flex w-full cursor-pointer justify-center rounded-2xl bg-blue-100 px-8 py-2 text-center font-medium text-blue-900 hover:bg-blue-200"
+			onclick={() => onClickButton?.()}
 		>
 			เพิ่มตารางเรียน
-		</a>
+		</button>
 	</div>
 </div>

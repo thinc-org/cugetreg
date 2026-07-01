@@ -110,6 +110,7 @@
     loadingSchedules = false;
   }
 
+
   async function changeVisibility(item: ScheduleItem, newChecked: boolean) {
     const ok = await changeCartVisibility(item.id, newChecked ? 'PUB' : 'PVT');
     if (!ok) item.isPublic = !newChecked;

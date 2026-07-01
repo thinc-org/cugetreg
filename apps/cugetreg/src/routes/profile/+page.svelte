@@ -244,30 +244,26 @@
       onChangeVisibility={changeVisibility}
     />
   </div>
-  {#if editInfoPopupVisible}
-    <div
-      class="fixed inset-0 z-10 flex items-center justify-center overflow-y-auto bg-black/50"
-    >
-      <EditPersonalInfo
-        bind:department={newDepartment}
-        accountEmail={personalInfo.accountEmail}
-        accountProvider={personalInfo.accountProvider}
-        faculty={personalInfo.faculty}
-        firstName={personalInfo.firstName}
-        lastName={personalInfo.lastName}
-        username={personalInfo.username}
-        onCancel={onCancelChange}
-        onConfirm={onConfirmChange}
-      />
-    </div>
-  {/if}
-  {#if deleteItemPopupVisible}
+  <Modal centered dim bind:show={editInfoPopupVisible}>
+    <EditPersonalInfo
+      bind:department={newDepartment}
+      accountEmail={personalInfo.accountEmail}
+      accountProvider={personalInfo.accountProvider}
+      faculty={personalInfo.faculty}
+      firstName={personalInfo.firstName}
+      lastName={personalInfo.lastName}
+      username={personalInfo.username}
+      onCancel={onCancelChange}
+      onConfirm={onConfirmChange}
+    />
+  </Modal>
+  <Modal centered dim bind:show={deleteItemPopupVisible}>
     <ConfirmDeleteSchedule
       onCancel={onCancelDelete}
       onConfirm={onConfirmDelete}
       scheduleName={itemToDelete?.title}
     />
-  {/if}
+  </Modal>
   <Modal centered dim bind:show={showCreateScheduleModal}>
     <CreateTimetable
       yearOptions={getYearOptions()}

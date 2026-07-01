@@ -114,8 +114,11 @@
 			</div>
 		{:else}
 			{#each filteredItems as item (item.id)}
-				<div class="border-surface-container-low bg-surface rounded-3xl border px-6 py-6">
-					<div class="flex items-start justify-between gap-3" onclick={() => onClickItem?.(item)}>
+				<div
+					class="border-surface-container-low bg-surface rounded-3xl border px-6 py-6"
+					onclick={() => onClickItem?.(item)}
+				>
+					<div class="flex items-start justify-between gap-3">
 						<div class="flex flex-col gap-1">
 							<p class="text-body1 font-semibold underline underline-offset-4">
 								{item.title}
@@ -134,10 +137,10 @@
 							}}
 							aria-label="Delete schedule"
 						>
-							<Trash2 size="30" strokeWidth="2.5" />
+							<Trash2 size="24" cursor="pointer" strokeWidth="2.5" />
 						</button>
 					</div>
-					<div class="mt-5 flex items-center gap-3">
+					<div class="mt-5 flex items-center gap-3" onclick={(e) => e.stopPropagation()}>
 						<Switch
 							bind:checked={item.isPublic}
 							onCheckedChange={() => onChangeVisibility(item)}

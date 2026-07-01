@@ -14,11 +14,19 @@
 		heading?: string;
 		items?: ScheduleItem[];
 		loading?: boolean;
+		onClickItem?: (item: ScheduleItem) => void;
 		onDelete?: (item: ScheduleItem) => void;
 		onChangeVisibility: (item: ScheduleItem) => void;
 	}
 
-	let { heading = '', items = [], loading = false, onDelete, onChangeVisibility }: Props = $props();
+	let {
+		heading = '',
+		items = [],
+		loading = false,
+		onClickItem,
+		onDelete,
+		onChangeVisibility
+	}: Props = $props();
 
 	let filters = $derived(
 		[...new Set(items.map((item) => item.title))].sort((option1, option2) => {
@@ -107,7 +115,7 @@
 		{:else}
 			{#each filteredItems as item (item.id)}
 				<div class="border-surface-container-low bg-surface rounded-3xl border px-6 py-6">
-					<a href={`/schedule/${item.id}`} class="flex items-start justify-between gap-3">
+					<div class="flex items-start justify-between gap-3" onclick={() => onClickItem?.(item)}>
 						<div class="flex flex-col gap-1">
 							<p class="text-body1 font-semibold underline underline-offset-4">
 								{item.title}
@@ -128,7 +136,7 @@
 						>
 							<Trash2 size="30" strokeWidth="2.5" />
 						</button>
-					</a>
+					</div>
 					<div class="mt-5 flex items-center gap-3">
 						<Switch
 							bind:checked={item.isPublic}

@@ -1,6 +1,7 @@
 <script lang="ts">
   import { api } from '$lib/api';
   import { tryCatch } from '$lib/async-handler';
+  import { useCartActions } from '$lib/stores/user-cart';
   import { convertReviewInfos } from '$lib/utils/reviews';
   import { convertSchedulesInfo } from '$lib/utils/scheduleInfo';
   import { convertUserInfo } from '$lib/utils/user';
@@ -21,6 +22,7 @@
   } from '@cugetreg/zod-schemas';
 
   import type { PageProps } from './$types';
+  import { goto } from '$app/navigation';
 
   interface ScheduleItem {
     id: string;
@@ -53,6 +55,8 @@
   let hasMoreReviews = $state(true);
   let loadingReviews = $state(false);
   let loadingSchedules = $state(false);
+
+  const { switchCart } = useCartActions();
 
   async function updateUser() {
     const updatedUser = {
@@ -162,6 +166,11 @@
     fetchReviews(page + 1);
   }
 
+  const onClickItem = (item: ScheduleItem) => {
+    switchCart(item.id);
+    goto('/schedule');
+  };
+
   const toggleEditInfo = () => {
     editInfoPopupVisible = true;
   };
@@ -214,6 +223,7 @@
       heading="ตารางเรียน"
       {items}
       loading={loadingSchedules}
+      {onClickItem}
       onDelete={onDeleteItem}
       onChangeVisibility={changeVisibility}
     />

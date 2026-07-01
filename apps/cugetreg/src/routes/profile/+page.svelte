@@ -50,7 +50,7 @@
     term: string;
   }
 
-  const { changeCartVisibility, deleteCart } = useCartActions();
+  const { changeCartVisibility, deleteCart, switchCart, createCart } = useCartActions();
 
   const { data }: PageProps = $props();
   let personalInfo = $state(data.user);
@@ -71,8 +71,6 @@
   let showCreateScheduleModal = $state(false);
 
   let isMobile = $state(false);
-
-  const { switchCart, createCart } = useCartActions();
 
 
   async function updateUser() {

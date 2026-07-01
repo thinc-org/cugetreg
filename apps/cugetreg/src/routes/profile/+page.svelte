@@ -74,6 +74,7 @@
 
   const { switchCart, createCart } = useCartActions();
 
+
   async function updateUser() {
     const updatedUser = {
       name: personalInfo.name,

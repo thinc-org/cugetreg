@@ -63,7 +63,7 @@
   const limit = 10;
   let hasMoreReviews = $state(true);
   let loadingReviews = $state(false);
-  let loadingSchedules = $state(false);
+  let loadingSchedules = $state(true);
 
   let showCreateScheduleModal = $state(false);
 
@@ -108,8 +108,6 @@
 
   async function changeVisibility(item: ScheduleItem) {
     const { id, isPublic } = item;
-
-    console.log(id, isPublic);
 
     // TODO: Implement and use user-cart updateCartListMeta()
     const [res, error] = await tryCatch(

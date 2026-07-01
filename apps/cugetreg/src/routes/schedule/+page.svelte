@@ -61,6 +61,19 @@
     Period,
   } from '@cugetreg/zod-schemas/carts-response';
 
+  const userCart = getUserCartStore();
+  const {
+    renameCart,
+    copyCart,
+    deleteCart,
+    createCart,
+    pinCart,
+    updateCourse,
+    removeCourse,
+    switchCart,
+    updateCartMeta,
+  } = useCartActions();
+
   // TODO: Move this somewhere else
   function parsePeriodTime(periodTime: string): number {
     const parts = periodTime.split(':');
@@ -134,10 +147,16 @@
 
     const link = document.createElement('a');
     link.href = screenshot;
-    link.download = `${selectedSchedule.name}_timetable.jpg`;
+    link.download = `${$userCart.currentCart.name}_timetable.jpg`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  }
+
+  function handlePublicToggle(isPublic: boolean) {
+    updateCartMeta({
+      visible: isPublic ? 'PUB' : 'PVT',
+    });
   }
 
   let showExamSchedule = $state<'List' | 'Schedule'>('Schedule');
@@ -210,18 +229,6 @@
 
     return data;
   });
-
-  const userCart = getUserCartStore();
-  const {
-    renameCart,
-    copyCart,
-    deleteCart,
-    createCart,
-    pinCart,
-    updateCourse,
-    removeCourse,
-    switchCart,
-  } = useCartActions();
 
   type LocalExamData = {
     abbrName: string;
@@ -331,16 +338,9 @@
     ) ?? 0,
   );
 
-  let selectedSchedule = $state({
-    name: 'ปี 2 เทอม 1',
-    scheduleId: '1',
-    schedule: [],
-    semesterType: 'Semester',
-    semester: '2566/1',
-    isPublic: false,
-  });
-
-  // let currentScheduleId = $state($userCart.currentCart?.id ?? '');
+  const publicCartURL = $derived(
+    `${window.location.host}/schedule/${$userCart.currentCart.id}`,
+  );
 
   const cartPromise = getContext<CartPromise>(CART_PROMISE_KEY);
 
@@ -426,7 +426,7 @@
     bind:show={showDeleteScheduleModal}
   >
     <ConfirmDeleteSchedule
-      scheduleName={selectedSchedule.name}
+      scheduleName={$userCart.currentCart.name}
       onCancel={() => (showDeleteScheduleModal = false)}
       onConfirm={() => {
         showDeleteScheduleModal = false;
@@ -566,7 +566,8 @@
               >
               <div class="lg:hidden">
                 <Switch
-                  bind:checked={selectedSchedule.isPublic}
+                  checked={$userCart.currentCart.visible === 'PUB'}
+                  onCheckedChange={handlePublicToggle}
                   label="เปิดเป็นสาธารณะ"
                 />
               </div>
@@ -613,7 +614,8 @@
           >
             <div class="flex w-full items-center justify-between lg:w-auto">
               <Switch
-                bind:checked={selectedSchedule.isPublic}
+                checked={$userCart.currentCart.visible === 'PUB'}
+                onCheckedChange={handlePublicToggle}
                 label="เปิดเป็นสาธารณะ"
               />
               {#if innerWidth < 1024}
@@ -633,15 +635,22 @@
             <div class="flex w-full items-center gap-2 lg:flex-1">
               <div class="relative flex flex-1">
                 <Input
-                  value="cugetreg.com/1232141413"
-                  disabled={!selectedSchedule.isPublic}
+                  value={publicCartURL}
+                  disabled={$userCart.currentCart.visible === 'PVT'}
                   readonly
                   class="w-full pr-10"
+                  onfocus={(e: FocusEvent) =>
+                    (e.target as HTMLInputElement).select()}
                 />
                 <IconButton
                   variant="ghost"
-                  disabled={!selectedSchedule.isPublic}
+                  disabled={$userCart.currentCart.visible === 'PVT'}
                   class="absolute right-0 z-10 hover:cursor-pointer hover:bg-transparent"
+                  onclick={() => {
+                    if (publicCartURL) {
+                      navigator.clipboard.writeText(publicCartURL);
+                    }
+                  }}
                 >
                   <Copy />
                 </IconButton>

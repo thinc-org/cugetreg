@@ -565,9 +565,7 @@ export function useCartActions() {
       const currentState = get(userCart);
       if (!currentState) return true;
 
-      const remaining = currentState.cartList.filter(
-        (c) => c.id !== targetId,
-      );
+      const remaining = currentState.cartList.filter((c) => c.id !== targetId);
 
       if (remaining.length === 0) {
         userCart.update((state) => ({
@@ -612,9 +610,7 @@ export function useCartActions() {
       // the callback so concurrently-added carts are not lost.
       userCart.update((state) => {
         // Freshly compute remaining from the latest state
-        const freshRemaining = state.cartList.filter(
-          (c) => c.id !== targetId,
-        );
+        const freshRemaining = state.cartList.filter((c) => c.id !== targetId);
 
         if (freshRemaining.length === 0) {
           return { ...state, cartList: [] };

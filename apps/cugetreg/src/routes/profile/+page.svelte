@@ -33,7 +33,6 @@
   } from '@cugetreg/zod-schemas';
 
   import type { PageProps } from './$types';
-  import { useCartActions } from '$lib/stores/user-cart';
 
   interface ScheduleItem {
     id: string;

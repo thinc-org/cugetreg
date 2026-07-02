@@ -9,7 +9,9 @@ import { CourseNoResponseSchema } from '@cugetreg/zod-schemas/courses-response';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ params, url, parent, fetch }) => {
-  const API_BASE = privateEnv.API_URL ? `${privateEnv.API_URL}/api/v1` : env.PUBLIC_API_URL;
+  const API_BASE = privateEnv.API_URL
+    ? `${privateEnv.API_URL}/api/v1`
+    : env.PUBLIC_API_URL;
   const API_URL = `${API_BASE}/courses/`;
   const courseId = params.courseId;
 

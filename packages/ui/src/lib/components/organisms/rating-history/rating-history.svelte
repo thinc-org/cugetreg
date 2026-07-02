@@ -125,7 +125,7 @@
 </script>
 
 <div
-	class="border-surface-container-low bg-surface-container-lowest text-on-surface w-full max-w-md rounded-3xl border p-6 md:max-w-xl lg:max-w-md"
+	class="border-surface-container-low bg-surface-container-lowest text-on-surface w-full max-w-md rounded-3xl border p-6 md:max-w-xl lg:max-w-lg"
 >
 	<div class="text-body2 flex items-center gap-2 font-semibold">
 		<Star size="18" strokeWidth="2.5" />
@@ -145,7 +145,7 @@
 		<div class="ml-2 flex h-16 flex-1 items-end justify-center gap-x-1">
 			{#each histogramData as value, i (i)}
 				<div
-					class="bg-surface-container-high w-1/14 md:w-1/12 lg:w-1/14"
+					class="bg-surface-container-high w-1/14 md:w-1/12 lg:w-1/14 xl:w-1/12"
 					style={`height: ${Math.max(8, (value / maxValue) * 64)}px`}
 				></div>
 			{/each}

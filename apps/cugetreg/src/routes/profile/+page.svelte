@@ -306,12 +306,12 @@
     />
   </Modal>
   <a
-    class="fixed right-6 bottom-6 z-50 inline-flex cursor-pointer items-center gap-1 rounded-full border-2 border-blue-700 px-2 py-1 md:gap-2 md:px-4"
+    class="fixed right-6 bottom-6 z-50 inline-flex cursor-pointer items-center gap-1 rounded-full border-2 border-black px-2 py-1 md:gap-2 md:px-4"
     href="https://docs.google.com/forms/d/e/1FAIpQLScH2AZyifTnBVXiJBtyzM73MReGX2vpM1_I9IWQfABMduVgsg/viewform?usp=dialog"
     target="_blank"
     rel="noopener noreferrer"
   >
-    <TriangleAlert size={isMobile ? 16 : 20} strokeWidth={1.5} />
-    <span class="text-[10px] md:text-xs">แจ้งปัญหาการใช้งาน</span>
+    <TriangleAlert size={isMobile ? 16 : 20} strokeWidth={1.5} color="black" />
+    <span class="text-[10px] text-black md:text-xs">แจ้งปัญหาการใช้งาน</span>
   </a>
 </div>

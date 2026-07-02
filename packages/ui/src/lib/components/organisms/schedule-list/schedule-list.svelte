@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { BookOpen, BookPlus, ChevronDown, LoaderCircle, Trash2 } from '@lucide/svelte';
+	import { onMount } from 'svelte';
 
 	import { Switch } from '../../atoms/switch';
 
@@ -43,6 +44,8 @@
 	let switchingFilter = $state(false);
 	let showSpinner = $derived(loading || switchingFilter);
 
+	let isMobile = $state(false);
+
 	const FILTER_SWITCH_DELAY_MS = 100;
 
 	$effect(() => {
@@ -66,6 +69,21 @@
 		}, FILTER_SWITCH_DELAY_MS);
 
 		return () => clearTimeout(timeout);
+	});
+
+	onMount(() => {
+		let isMobileQuery = window.matchMedia('(max-width: 768px)');
+		isMobile = isMobileQuery.matches;
+
+		const handleMediaQueryChange = (event: MediaQueryListEvent) => {
+			isMobile = event.matches;
+		};
+
+		isMobileQuery.addEventListener('change', handleMediaQueryChange);
+
+		return () => {
+			isMobileQuery.removeEventListener('change', handleMediaQueryChange);
+		};
 	});
 </script>
 
@@ -139,7 +157,7 @@
 							}}
 							aria-label="Delete schedule"
 						>
-							<Trash2 size="24" cursor="pointer" strokeWidth="2.5" />
+							<Trash2 size={isMobile ? 18 : 24} cursor="pointer" strokeWidth="2.5" />
 						</button>
 					</div>
 					<div class="mt-5 flex items-center gap-3" onclick={(e) => e.stopPropagation()}>
@@ -155,7 +173,7 @@
 		{/if}
 		<button
 			type="button"
-			class="text-md inline-flex w-full cursor-pointer justify-center rounded-2xl bg-blue-100 px-8 py-2 text-center font-medium text-blue-900 hover:bg-blue-200"
+			class="md:text-md inline-flex w-full cursor-pointer justify-center rounded-2xl bg-blue-100 px-8 py-2 text-center text-sm font-medium text-blue-900 hover:bg-blue-200"
 			onclick={() => onClickButton?.()}
 		>
 			เพิ่มตารางเรียน

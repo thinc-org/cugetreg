@@ -1,6 +1,11 @@
 <script lang="ts">
+  import { goto } from '$app/navigation';
   import { api } from '$lib/api';
   import { tryCatch } from '$lib/async-handler';
+  import {
+    getSemesterShortOptions,
+    getYearOptions,
+  } from '$lib/semesterOptions';
   import { useCartActions } from '$lib/stores/user-cart';
   import { convertReviewInfos } from '$lib/utils/reviews';
   import { convertSchedulesInfo } from '$lib/utils/scheduleInfo';
@@ -9,15 +14,17 @@
   import { TriangleAlert } from '@lucide/svelte';
   import { onMount } from 'svelte';
 
+  import { Modal } from '@cugetreg/ui/atoms/modal';
   import { ConfirmDeleteSchedule } from '@cugetreg/ui/molecules/confirm-delete-schedule';
-  import { EditPersonalInfo } from '@cugetreg/ui/organisms/edit-personal-info';
-  import { PersonalInfo } from '@cugetreg/ui/organisms/personal-info';
-  import { RatingHistory } from '@cugetreg/ui/organisms/rating-history';
-  import { ScheduleList } from '@cugetreg/ui/organisms/schedule-list';
   import {
     CreateTimetable,
     type TimetableMetaData,
   } from '@cugetreg/ui/organisms/create-timetable';
+  import { EditPersonalInfo } from '@cugetreg/ui/organisms/edit-personal-info';
+  import { Footer } from '@cugetreg/ui/organisms/footer';
+  import { PersonalInfo } from '@cugetreg/ui/organisms/personal-info';
+  import { RatingHistory } from '@cugetreg/ui/organisms/rating-history';
+  import { ScheduleList } from '@cugetreg/ui/organisms/schedule-list';
   import type { ReviewStatus } from '@cugetreg/zod-schemas';
   import {
     ListCartsResponseSchema,
@@ -26,12 +33,6 @@
   } from '@cugetreg/zod-schemas';
 
   import type { PageProps } from './$types';
-  import { goto } from '$app/navigation';
-  import { Modal } from '@cugetreg/ui/atoms/modal';
-  import {
-    getSemesterShortOptions,
-    getYearOptions,
-  } from '$lib/semesterOptions';
 
   interface ScheduleItem {
     id: string;
@@ -66,6 +67,8 @@
   let loadingSchedules = $state(true);
 
   let showCreateScheduleModal = $state(false);
+
+  let isMobile = $state(false);
 
   const { switchCart, createCart } = useCartActions();
 
@@ -217,13 +220,32 @@
   });
 
   onMount(() => {
+    let isMobileQuery = window.matchMedia('(max-width: 768px)');
+    isMobile = isMobileQuery.matches;
+
+    const handleMediaQueryChange = (event: MediaQueryListEvent) => {
+      isMobile = event.matches;
+    };
+
+    isMobileQuery.addEventListener('change', handleMediaQueryChange);
+
+    return () => {
+      isMobileQuery.removeEventListener('change', handleMediaQueryChange);
+    };
+  });
+
+  onMount(() => {
     fetchReviews(1, true);
   });
 </script>
 
 <div class="relative flex min-h-screen flex-col bg-white">
-  <div class="container mx-auto flex justify-center gap-20 p-8">
-    <div class="flex w-3/4 max-w-lg flex-col gap-10 px-6 py-8">
+  <div
+    class="container mx-auto flex flex-col items-center justify-center gap-4 p-5 pb-16 sm:p-8 sm:pb-8 md:flex-row md:items-start md:gap-8 lg:gap-20"
+  >
+    <div
+      class="flex w-full flex-col items-center gap-10 py-8 md:w-3/4 md:max-w-lg md:items-start md:px-6"
+    >
       <PersonalInfo onEdit={toggleEditInfo} {...personalInfo} />
       <RatingHistory
         {reviews}
@@ -241,6 +263,9 @@
       onDelete={onDeleteItem}
       onChangeVisibility={changeVisibility}
     />
+  </div>
+  <div class="mt-auto w-full border-t bg-white">
+    <Footer />
   </div>
   <Modal centered dim bind:show={editInfoPopupVisible}>
     <EditPersonalInfo
@@ -281,12 +306,12 @@
     />
   </Modal>
   <a
-    class="fixed right-6 bottom-6 z-50 inline-flex cursor-pointer items-center gap-2 rounded-full border-2 border-blue-700 px-4 py-1"
+    class="fixed right-6 bottom-6 z-50 inline-flex cursor-pointer items-center gap-1 rounded-full border-2 border-blue-700 px-2 py-1 md:gap-2 md:px-4"
     href="https://docs.google.com/forms/d/e/1FAIpQLScH2AZyifTnBVXiJBtyzM73MReGX2vpM1_I9IWQfABMduVgsg/viewform?usp=dialog"
     target="_blank"
     rel="noopener noreferrer"
   >
-    <TriangleAlert width={16} height={16} color="#172554" />
-    <span class="text-xs">แจ้งปัญหาการใช้งาน</span>
+    <TriangleAlert size={isMobile ? 16 : 20} strokeWidth={1.5} />
+    <span class="text-[10px] md:text-xs">แจ้งปัญหาการใช้งาน</span>
   </a>
 </div>

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { ChevronRight, Clock, LoaderCircle, NotebookPen, Star, StarHalf } from '@lucide/svelte';
-	import { tick } from 'svelte';
+	import { onMount, tick } from 'svelte';
 
 	import type { ReviewStatus } from '@cugetreg/zod-schemas/constants';
 
@@ -37,6 +37,7 @@
 
 	let showAll = $state(false);
 	let scrollBox: HTMLDivElement | undefined = $state();
+	let isMobile = $state(false);
 
 	const LOAD_MORE_THRESHOLD = 120;
 
@@ -68,6 +69,21 @@
 		if (scrollBox.scrollHeight <= scrollBox.clientHeight) {
 			onLoadMore?.();
 		}
+	});
+
+	onMount(() => {
+		let isMobileQuery = window.matchMedia('(max-width: 768px)');
+		isMobile = isMobileQuery.matches;
+
+		const handleMediaQueryChange = (event: MediaQueryListEvent) => {
+			isMobile = event.matches;
+		};
+
+		isMobileQuery.addEventListener('change', handleMediaQueryChange);
+
+		return () => {
+			isMobileQuery.removeEventListener('change', handleMediaQueryChange);
+		};
 	});
 
 	const histogramData = $derived.by(() => {
@@ -116,26 +132,26 @@
 		<p>{overviewTitle}</p>
 	</div>
 
-	<div class="mt-4 flex items-end justify-start gap-1">
+	<div class="mt-4 flex items-end justify-start gap-x-1.5">
 		<div class="text-primary flex h-16 shrink-0 items-end">
-			<Star size={16} strokeWidth={1.5} class="transition-y-[2px] absolute" />
+			<Star size={isMobile ? 14 : 16} strokeWidth={1.5} class="transition-y-[2px] absolute" />
 			<StarHalf
-				size={16}
+				size={isMobile ? 14 : 16}
 				fill="currentColor"
 				strokeWidth={1.5}
 				class="transition-y-[2px] absolute"
 			/>
 		</div>
-		<div class="flex h-16 flex-1 items-end justify-center gap-1">
+		<div class="ml-2 flex h-16 flex-1 items-end justify-center gap-x-1">
 			{#each histogramData as value, i (i)}
 				<div
-					class="bg-surface-container-high w-5.5"
+					class="bg-surface-container-high w-1/14"
 					style={`height: ${Math.max(8, (value / maxValue) * 64)}px`}
 				></div>
 			{/each}
 		</div>
 		<div class="text-primary flex h-16 shrink-0 items-end">
-			<RatingStar rating={5} size={16} gap={4} />
+			<RatingStar rating={5} size={isMobile ? 14 : 16} gap={4} />
 		</div>
 	</div>
 

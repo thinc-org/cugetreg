@@ -56,8 +56,8 @@
 		{#each Array.from({ length: periodPerDay }) as _, i (i)}
 			<div
 				class="
-                    cell @container-[size] items-end! justify-end! bg-indigo-50! px-2 py-3.5
-                    text-right!
+                    cell @container-[size] items-end! justify-start! bg-indigo-50! px-2 py-3.5
+                    text-left!
                 "
 			>
 				<span class="text-sm">

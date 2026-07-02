@@ -39,7 +39,7 @@ export const load: LayoutServerLoad = ({ locals, fetch }) => {
 };
 
 async function loadCart(fetch: typeof globalThis.fetch) {
-  const API_URL = `${env.PUBLIC_API_URL ?? 'http://localhost:3000'}/api/v1/carts`;
+  const API_URL = `${env.PUBLIC_API_URL ?? 'http://localhost:3000/api/v1'}/carts`;
   const response = await fetch(`${API_URL}`);
 
   // 401/403 means the user is not logged in — return null so the layout renders without cart data

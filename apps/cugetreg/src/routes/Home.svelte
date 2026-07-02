@@ -51,7 +51,7 @@
   let offset = $state(0);
   const limit = 20;
 
-  let sidebarExpanded = $state(false);
+  let sidebarExpanded = $state(true);
   let openPanel = $state<string | null>(null);
   let activePanel = $state<string | null>(null);
   let isMobile = $state(false);
@@ -897,7 +897,7 @@
                 />
               {/each}
 
-              {#if hasMore}
+              {#if hasMore && !isLoading}
                 <div
                   bind:this={bottomSentinel}
                   class="col-span-full flex h-24 items-center justify-center opacity-50"

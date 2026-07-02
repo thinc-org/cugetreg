@@ -1,3 +1,4 @@
+import type { Day } from '@cugetreg/utils/types';
 import type { GenEdType, StudyProgram } from '@cugetreg/zod-schemas';
 
 export function studyProgramMapper(studyProgram: StudyProgram) {
@@ -24,5 +25,24 @@ export function genEdTypeMapper(genEdType: GenEdType) {
       return 'หมวดสหฯ';
     default:
       return null;
+  }
+}
+
+export function getColumnFromDay(day: Day): number {
+  switch (day) {
+    case 'MO':
+      return 0;
+    case 'TU':
+      return 1;
+    case 'WE':
+      return 2;
+    case 'TH':
+      return 3;
+    case 'FR':
+      return 4;
+    case 'SA':
+      return 5;
+    case 'SU':
+      return 6;
   }
 }

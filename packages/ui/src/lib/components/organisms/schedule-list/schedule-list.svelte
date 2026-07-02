@@ -128,7 +128,7 @@
 		</div>
 	{/if}
 	<div
-		class={`mt-4 flex flex-col gap-4 ${filteredItems.length > 4 ? 'lg:max-h-[calc(100vh-100px)] max-h-144 overflow-y-auto sm:max-h-[calc(100vh-530px)]' : ''}`}
+		class={`mt-4 flex flex-col gap-4 ${filteredItems.length > 4 ? 'max-h-144 overflow-y-auto sm:max-h-[calc(100vh-530px)] lg:max-h-[calc(100vh-100px)]' : ''}`}
 	>
 		{#if showSpinner}
 			<div class="flex flex-col items-center justify-center gap-3 py-10">
@@ -176,7 +176,7 @@
 	</div>
 	<button
 		type="button"
-		class="md:text-md mt-4 inline-flex w-full cursor-pointer justify-center rounded-2xl bg-blue-100 px-8 py-2 text-center text-sm font-medium text-blue-900 hover:bg-blue-200"
+		class="mt-4 inline-flex w-full cursor-pointer justify-center rounded-2xl bg-blue-100 px-8 py-2 text-center font-medium text-blue-900 hover:bg-blue-200"
 		onclick={() => onClickButton?.()}
 	>
 		เพิ่มตารางเรียน

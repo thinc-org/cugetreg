@@ -39,7 +39,9 @@
 	]);
 </script>
 
-<div class="bg-surface-container-lowest text-on-surface w-full max-w-md rounded-2xl p-6">
+<div
+	class="bg-surface-container-lowest text-on-surface w-full max-w-md rounded-2xl p-6 md:max-w-xl lg:max-w-lg"
+>
 	<div class="flex flex-col gap-2 pb-6">
 		<p class="text-h2 font-bold">{name}</p>
 		<p class="text-body2 text-on-surface/60">ID: {id}</p>

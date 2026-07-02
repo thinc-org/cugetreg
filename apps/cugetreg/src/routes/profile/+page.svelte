@@ -241,10 +241,10 @@
 
 <div class="relative flex min-h-screen flex-col bg-white">
   <div
-    class="container mx-auto flex flex-col items-center justify-center gap-4 p-5 pb-16 sm:p-8 sm:pb-8 md:flex-row md:items-start md:gap-8 lg:gap-20"
+    class="container mx-auto flex flex-col items-center justify-center gap-4 p-5 pb-16 sm:p-8 sm:pb-8 lg:flex-row lg:items-start lg:gap-8 lg:gap-20"
   >
     <div
-      class="flex w-full flex-col items-center gap-10 py-8 md:w-3/4 md:max-w-lg md:items-start md:px-6"
+      class="flex w-full flex-col items-center gap-10 py-8 md:max-w-2xl lg:w-3/4 lg:max-w-lg lg:items-start lg:px-6"
     >
       <PersonalInfo onEdit={toggleEditInfo} {...personalInfo} />
       <RatingHistory

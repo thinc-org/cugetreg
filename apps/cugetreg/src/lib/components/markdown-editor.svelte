@@ -14,6 +14,8 @@
   import { onDestroy, onMount } from 'svelte';
   import { Markdown } from 'tiptap-markdown';
 
+  import { IconButton } from '@cugetreg/ui/atoms/icon-button';
+
   let {
     value = $bindable(''),
     placeholder = '',
@@ -81,72 +83,86 @@
     return editor?.isActive(name, attrs) ?? false;
   }
 
-  const btn =
-    'rounded p-1 transition-colors hover:cursor-pointer hover:text-on-surface';
-  const activeCls = 'text-primary bg-primary-container/40';
+  // Highlight applied to a toolbar button when its mark/node is active.
+  const activeCls = (on: boolean) =>
+    on ? 'bg-primary-container/40 text-primary' : '';
 </script>
 
 <div class="border-surface-container-high bg-surface rounded-xl border">
   <div
-    class="border-surface-container-high text-on-surface/60 flex items-center gap-4 border-b px-4 py-2"
+    class="border-surface-container-high text-on-surface/60 flex items-center gap-1 border-b px-3 py-1.5"
   >
-    <button
-      type="button"
+    <IconButton
+      variant="ghost"
+      color="neutral"
+      size="sm"
       aria-label="ตัวหนา"
-      class={[btn, active('bold') && activeCls]}
+      class={activeCls(active('bold'))}
       onclick={() => editor?.chain().focus().toggleBold().run()}
     >
-      <Bold size={18} />
-    </button>
-    <button
-      type="button"
+      <Bold />
+    </IconButton>
+    <IconButton
+      variant="ghost"
+      color="neutral"
+      size="sm"
       aria-label="ตัวเอียง"
-      class={[btn, active('italic') && activeCls]}
+      class={activeCls(active('italic'))}
       onclick={() => editor?.chain().focus().toggleItalic().run()}
     >
-      <Italic size={18} />
-    </button>
-    <button
-      type="button"
+      <Italic />
+    </IconButton>
+    <IconButton
+      variant="ghost"
+      color="neutral"
+      size="sm"
       aria-label="ขีดเส้นใต้"
-      class={[btn, active('underline') && activeCls]}
+      class={activeCls(active('underline'))}
       onclick={() => editor?.chain().focus().toggleUnderline().run()}
     >
-      <Underline size={18} />
-    </button>
-    <button
-      type="button"
+      <Underline />
+    </IconButton>
+    <IconButton
+      variant="ghost"
+      color="neutral"
+      size="sm"
       aria-label="ขีดฆ่า"
-      class={[btn, active('strike') && activeCls]}
+      class={activeCls(active('strike'))}
       onclick={() => editor?.chain().focus().toggleStrike().run()}
     >
-      <Strikethrough size={18} />
-    </button>
-    <button
-      type="button"
+      <Strikethrough />
+    </IconButton>
+    <IconButton
+      variant="ghost"
+      color="neutral"
+      size="sm"
       aria-label="โค้ด"
-      class={[btn, active('code') && activeCls]}
+      class={activeCls(active('code'))}
       onclick={() => editor?.chain().focus().toggleCode().run()}
     >
-      <Code size={18} />
-    </button>
-    <div class="bg-surface-container-high h-6 w-px"></div>
-    <button
-      type="button"
+      <Code />
+    </IconButton>
+    <div class="bg-surface-container-high mx-1 h-6 w-px"></div>
+    <IconButton
+      variant="ghost"
+      color="neutral"
+      size="sm"
       aria-label="หัวข้อ"
-      class={[btn, active('heading', { level: 2 }) && activeCls]}
+      class={activeCls(active('heading', { level: 2 }))}
       onclick={() => editor?.chain().focus().toggleHeading({ level: 2 }).run()}
     >
-      <Heading size={18} />
-    </button>
-    <button
-      type="button"
+      <Heading />
+    </IconButton>
+    <IconButton
+      variant="ghost"
+      color="neutral"
+      size="sm"
       aria-label="ข้อความอ้างอิง"
-      class={[btn, active('blockquote') && activeCls]}
+      class={activeCls(active('blockquote'))}
       onclick={() => editor?.chain().focus().toggleBlockquote().run()}
     >
-      <Quote size={18} fill="currentColor" strokeWidth={0} />
-    </button>
+      <Quote fill="currentColor" strokeWidth={0} />
+    </IconButton>
   </div>
 
   <div bind:this={element}></div>

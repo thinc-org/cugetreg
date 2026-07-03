@@ -162,7 +162,7 @@
 							<Trash2 size={isMobile ? 18 : 24} cursor="pointer" strokeWidth="2.5" />
 						</button>
 					</div>
-					<div class="mt-5 flex items-center gap-3" onclick={(e) => e.stopPropagation()}>
+					<div class="mt-5 flex items-center gap-3">
 						<Switch
 							bind:checked={item.isPublic}
 							onCheckedChange={(newChecked) => onChangeVisibility(item, newChecked)}

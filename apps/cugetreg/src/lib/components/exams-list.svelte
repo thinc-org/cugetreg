@@ -24,10 +24,10 @@
     formatExamColumn,
     formatExamTime,
   } from '@cugetreg/utils';
-  import type { CartData, ExamScheduleItem } from '@cugetreg/zod-schemas';
+  import type { CartWithItemsBase, ExamScheduleItem } from '@cugetreg/zod-schemas';
 
   interface ExamsListProps {
-    cart: CartData;
+    cart: CartWithItemsBase;
     exams: ExamScheduleItem[];
   }
 

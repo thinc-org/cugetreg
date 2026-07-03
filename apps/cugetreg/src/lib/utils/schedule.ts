@@ -4,8 +4,8 @@ import { type ViewCourseData } from '@cugetreg/ui/organisms/view-course';
 import { discardTime, formatDate, formatExamTime } from '@cugetreg/utils';
 import type { ColorVariant } from '@cugetreg/utils/types';
 import type {
-  CartData,
-  CartItemDetail,
+  CartItemDetailBase,
+  CartWithItemsBase,
   ExamScheduleItem,
   Period,
 } from '@cugetreg/zod-schemas';
@@ -55,7 +55,7 @@ export async function screenshotTimetable(
 export function isConflicted(
   courseNo: string,
   period: Period,
-  cartItems: CartItemDetail[],
+  cartItems: CartItemDetailBase[],
 ): boolean {
   for (const other of cartItems) {
     if (other.hidden || other.courseNo === courseNo) continue;
@@ -89,7 +89,7 @@ export function isConflicted(
 
 export function getViewCourseData(
   selectedCartItemId?: string,
-  cart?: CartData,
+  cart?: CartWithItemsBase,
   exams?: ExamScheduleItem[],
 ): ViewCourseData | null {
   if (!selectedCartItemId || !cart) return null;
@@ -151,7 +151,7 @@ export function examSort(a: string, b: string): number {
   else return numA - numB;
 }
 
-export function getExamData(cart: CartData, exams: ExamScheduleItem[]) {
+export function getExamData(cart: CartWithItemsBase, exams: ExamScheduleItem[]) {
   const midterms: Record<number, ExamData[]> = {};
   const finals: Record<number, ExamData[]> = {};
 
@@ -231,7 +231,7 @@ export function isExamConflicted(exam: ExamData, others?: ExamData[]) {
   return false;
 }
 
-export function calculateCredit(courses?: CartItemDetail[]): number {
+export function calculateCredit(courses?: CartItemDetailBase[]): number {
   if (!courses) return 0;
   return courses.reduce(
     (acc, item) => acc + (item.hidden ? 0 : Number(item.course.credit)),

@@ -22,7 +22,7 @@ publicCarts
     } catch (err) {
       if (
         err instanceof Error &&
-        err.message === "PUBLIC_CART_NOT_FOUND_OR_PRIVATE"
+        (err.message === "CART_NOT_FOUND" || err.message === "CART_PRIVATE")
       ) {
         return c.json({ error: "PUBLIC_CART_NOT_FOUND_OR_PRIVATE" }, 404);
       }

@@ -136,15 +136,13 @@
 			</div>
 		{:else}
 			{#each filteredItems as item (item.id)}
-				<div
-					class="border-surface-container-low bg-surface rounded-3xl border px-6 py-6"
-					onclick={() => onClickItem?.(item)}
-				>
-					<div
-						class="hover:bg-surface-variant/50 flex items-start justify-between gap-3 hover:cursor-pointer"
-					>
+				<div class="border-surface-container-low bg-surface rounded-3xl border px-6 py-6">
+					<div class="hover:bg-surface-variant/50 flex items-start justify-between gap-3">
 						<div class="flex flex-col gap-1">
-							<p class="text-body1 font-semibold underline underline-offset-4">
+							<p
+								class="text-body1 font-semibold hover:cursor-pointer hover:underline hover:underline-offset-4"
+								onclick={() => onClickItem?.(item)}
+							>
 								{item.title}
 							</p>
 							<p class="text-body2 text-on-surface/50">

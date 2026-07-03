@@ -72,7 +72,7 @@
 	});
 
 	onMount(() => {
-		let isMobileQuery = window.matchMedia('(max-width: 768px)');
+		const isMobileQuery = window.matchMedia('(max-width: 768px)');
 		isMobile = isMobileQuery.matches;
 
 		const handleMediaQueryChange = (event: MediaQueryListEvent) => {

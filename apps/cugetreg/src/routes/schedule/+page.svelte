@@ -1,8 +1,8 @@
 <script lang="ts">
   import { browser } from '$app/environment';
   import AppSidebar from '$lib/components/app-sidebar.svelte';
+  import ExamsList from '$lib/components/exams-list.svelte';
   import SelectedCourse from '$lib/components/selected-course.svelte';
-  import { getColumnFromDay } from '$lib/mapper';
   import {
     getSemesterShortOptions,
     getYearOptions,
@@ -16,24 +16,11 @@
   import {
     calculateCredit,
     createElementScreenshot,
-    getExamData,
-    getExamDateOrder,
     getViewCourseData,
-    isConflicted,
-    isExamConflicted,
-    parsePeriodTime,
   } from '$lib/utils/schedule';
 
   import { BookMarked, Loader2, Menu } from '@lucide/svelte';
-  import {
-    ChevronLeft,
-    ChevronRight,
-    Copy,
-    Download,
-    Grid3X3,
-    ListOrdered,
-    Share2,
-  } from 'lucide-svelte';
+  import { Copy, Download, Share2 } from 'lucide-svelte';
   import { getContext } from 'svelte';
 
   import { Button } from '@cugetreg/ui/atoms/button';
@@ -42,15 +29,9 @@
   import { Input } from '@cugetreg/ui/atoms/input';
   import { Modal } from '@cugetreg/ui/atoms/modal';
   import { Switch } from '@cugetreg/ui/atoms/switch';
-  import { TimetableCourseCard } from '@cugetreg/ui/atoms/timetable';
   import { TimeTable as Timetable } from '@cugetreg/ui/atoms/timetable';
   import { ConfirmDeleteSchedule } from '@cugetreg/ui/molecules/confirm-delete-schedule';
   import { EditSchedule } from '@cugetreg/ui/molecules/edit-schedule';
-  import {
-    type Exam,
-    ExamCard,
-    type StatusColour,
-  } from '@cugetreg/ui/molecules/exam-card';
   import { SelectTimetable } from '@cugetreg/ui/molecules/select-timetable';
   import {
     CreateTimetable,
@@ -60,13 +41,7 @@
   import { RenameSchedule } from '@cugetreg/ui/organisms/rename-schedule';
   import * as Sidebar from '@cugetreg/ui/organisms/sidebar';
   import { ViewCourse } from '@cugetreg/ui/organisms/view-course';
-  import {
-    formatDate,
-    formatExamColumn,
-    formatExamTime,
-  } from '@cugetreg/utils';
-  import type { ColorVariant, Day } from '@cugetreg/utils/types';
-  import type { CartItemDetail } from '@cugetreg/zod-schemas/carts-response';
+  import TimetableBlockGroup from '$lib/components/timetable-block-group.svelte';
 
   // ================ HOOKS ================
 
@@ -87,8 +62,6 @@
 
   // ================ STATES ================
 
-  let showExamSchedule = $state<'List' | 'Schedule'>('Schedule');
-
   let timetableDiv = $state<HTMLElement | undefined>();
   let innerWidth = $state(1024);
 
@@ -100,8 +73,6 @@
   let selectedCartItemId = $state<string | undefined>(undefined);
 
   let scheduleTableRef = $state<HTMLElement | null>(null);
-  let midtermTableRef = $state<HTMLElement | null>(null);
-  let finalTableRef = $state<HTMLElement | null>(null);
 
   let sidebarExpanded = $state(true);
   let openPanel = $state<'sidebar' | 'selected_only' | null>(null);
@@ -119,15 +90,12 @@
     ),
   );
 
-  const examsData = $derived(
-    getExamData($userCart.currentCart, $userCart.exams),
-  );
-  const examDateOrder = $derived(getExamDateOrder(examsData));
   const totalCredit = $derived(calculateCredit($userCart.currentCart.items));
-  const publicCartURL = $derived.by(() => {
-    if (!browser) return '';
-    return `${window.location.host}/schedule/${$userCart.currentCart.id}`;
-  });
+  const publicCartURL = $derived(
+    browser
+      ? `${window.location.host}/schedule/${$userCart.currentCart.id}`
+      : '',
+  );
 
   $effect(() => {
     if ($userCart.currentCartId && $userCart.currentCartId !== previousCartId) {
@@ -392,8 +360,15 @@
           >
             <div class="min-w-150">
               <Timetable startTime={7}>
-                {#each $userCart.currentCart?.items as item (item.id)}
-                  {@render timetableCourseCard(item)}
+                {#each $userCart.currentCart?.items as course (course.id)}
+                  <TimetableBlockGroup
+                    {course}
+                    cartItems={$userCart.currentCart.items}
+                    onclick={(id) => {
+                      selectedCartItemId = id;
+                      showViewCourseModal = true;
+                    }}
+                  />
                 {/each}
               </Timetable>
             </div>
@@ -451,9 +426,9 @@
                   <Copy />
                 </IconButton>
               </div>
-              <IconButton class="aspect-square">
-                <Share2 />
-              </IconButton>
+              <!-- <IconButton class="aspect-square"> -->
+              <!--   <Share2 /> -->
+              <!-- </IconButton> -->
               {#if innerWidth >= 1024}
                 <Button class="m-0" onclick={handleTimetableScreenshot}>
                   บันทึกเป็นภาพ
@@ -461,64 +436,7 @@
               {/if}
             </div>
           </div>
-
-          <div
-            class="flex flex-row items-center justify-between lg:justify-center"
-          >
-            <span class="mt-5 text-2xl font-bold lg:hidden">ตารางสอบ</span>
-            <div class="hidden lg:mt-5 lg:flex lg:justify-center lg:gap-4">
-              <ChevronLeft
-                onclick={() => (showExamSchedule = 'Schedule')}
-                strokeWidth={3}
-                class={showExamSchedule === 'Schedule'
-                  ? 'cursor-pointer text-[#4A70C6] transition-colors hover:text-[#3B5EAB]'
-                  : 'cursor-pointer text-[#D6D7E1] transition-colors hover:text-[#B0B2C5]'}
-              />
-              <ChevronRight
-                onclick={() => (showExamSchedule = 'List')}
-                strokeWidth={3}
-                class={showExamSchedule === 'List'
-                  ? 'cursor-pointer text-[#4A70C6] transition-colors hover:text-[#3B5EAB]'
-                  : 'cursor-pointer text-[#D6D7E1] transition-colors hover:text-[#B0B2C5]'}
-              />
-            </div>
-            <div class="mt-5 flex justify-center lg:hidden lg:gap-4">
-              <div
-                class="rounded-l-lg px-4 py-3 {showExamSchedule === 'Schedule'
-                  ? 'bg-[#4A70C6]'
-                  : 'bg-gray-200'}"
-              >
-                <ListOrdered
-                  size={18}
-                  onclick={() => (showExamSchedule = 'Schedule')}
-                  strokeWidth={1.5}
-                  class={showExamSchedule === 'Schedule'
-                    ? 'cursor-pointer text-[#FFFFFF]'
-                    : 'cursor-pointer text-[#353745] transition-colors hover:text-black'}
-                />
-              </div>
-              <div
-                class="rounded-r-lg px-4 py-3 {showExamSchedule === 'List'
-                  ? 'bg-[#4A70C6]'
-                  : 'bg-gray-200'}"
-              >
-                <Grid3X3
-                  size={18}
-                  onclick={() => (showExamSchedule = 'List')}
-                  strokeWidth={1.5}
-                  class={showExamSchedule === 'List'
-                    ? 'cursor-pointer text-[#FFFFFF]'
-                    : 'cursor-pointer text-[#353745] transition-colors hover:text-black'}
-                />
-              </div>
-            </div>
-          </div>
-
-          {#if showExamSchedule === 'List'}
-            {@render examList()}
-          {:else}
-            {@render examSchedule()}
-          {/if}
+          <ExamsList cart={$userCart.currentCart} exams={$userCart.exams} />
         </div>
         <div class="mt-auto w-full border-t bg-white">
           <Footer />
@@ -527,178 +445,3 @@
     </AppSidebar>
   </div>
 </div>
-
-{#snippet examSchedule()}
-  <div class="my-5 text-xl font-bold">Midterm</div>
-  <div
-    class="overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-    bind:this={midtermTableRef}
-  >
-    <div class="min-w-150">
-      <Timetable
-        startTime={7}
-        days={examDateOrder.midterms
-          .filter((time) => time !== 0)
-          .map((time) => formatDate(new Date(time)))}
-      >
-        {#each examDateOrder.midterms.filter((time) => time !== 0) as key, index (key)}
-          {#each examsData.midterms[key] as exam (exam.cartItemId)}
-            {#if exam.start && exam.end}
-              <TimetableCourseCard
-                course={{
-                  name: exam.name,
-                  abbrName: exam.abbrName,
-                  code: exam.courseNo,
-                  bldg: '',
-                  room: '',
-                  section: 0,
-                }}
-                col={formatExamColumn(exam.start ?? undefined) - 7}
-                row={index}
-                length={exam.duration}
-                color={exam.colorVariant}
-              />
-            {/if}
-          {/each}
-        {/each}
-      </Timetable>
-    </div>
-  </div>
-
-  <CustomizeScrollbar target={midtermTableRef} />
-
-  <div class="my-5 text-xl font-bold">Finals</div>
-  <div
-    class="overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-    bind:this={finalTableRef}
-  >
-    <div class="min-w-150">
-      <Timetable
-        startTime={7}
-        days={examDateOrder.finals
-          .filter((time) => time !== 0)
-          .map((time) => formatDate(new Date(time)))}
-      >
-        {#each examDateOrder.finals.filter((time) => time !== 0) as key, index (key)}
-          {#each examsData.finals[key] as examCourse (examCourse.cartItemId)}
-            {#if examCourse.start && examCourse.end}
-              <TimetableCourseCard
-                course={{
-                  abbrName: examCourse.abbrName,
-                  name: examCourse.name,
-                  code: examCourse.courseNo,
-                  bldg: '',
-                  room: '',
-                  section: 0,
-                }}
-                col={formatExamColumn(examCourse.start ?? undefined) - 7}
-                row={index}
-                length={examCourse.duration}
-                color={examCourse.colorVariant}
-              />
-            {/if}
-          {/each}
-        {/each}
-      </Timetable>
-    </div>
-  </div>
-
-  <CustomizeScrollbar target={finalTableRef} />
-{/snippet}
-
-{#snippet examList()}
-  <div class="flex items-center justify-center">
-    <div class="my-5 w-full space-x-5 lg:inline-flex lg:w-auto">
-      <div class="flex-1">
-        <span class="text-2xl font-bold">Midterm</span>
-
-        {#each examDateOrder.midterms as key (key)}
-          <div class="my-5 w-full min-w-0">
-            <ExamCard
-              date={key === 0 ? 'ยังไม่ประกาศ' : formatDate(new Date(key))}
-              data={examsData.midterms[key].map((course) => {
-                return {
-                  id: course.cartItemId,
-                  colour: isExamConflicted(course, examsData.midterms[key])
-                    ? 'error'
-                    : (course.colorVariant as StatusColour),
-                  time: formatExamTime(
-                    course.start ?? undefined,
-                    course.duration,
-                  ),
-                  subject: course.name,
-                } as Exam;
-              })}
-            />
-          </div>
-        {/each}
-      </div>
-      <div class="flex-1">
-        <span class="text-2xl font-bold">Finals</span>
-
-        {#each examDateOrder.finals as key (key)}
-          <div class="my-5 w-full min-w-0">
-            <ExamCard
-              date={key === 0 ? 'ยังไม่ประกาศ' : formatDate(new Date(key))}
-              data={examsData.finals[key].map((course) => {
-                return {
-                  id: course.cartItemId,
-                  colour: isExamConflicted(course, examsData.finals[key])
-                    ? 'error'
-                    : (course.colorVariant as StatusColour),
-                  time: formatExamTime(
-                    course.start ?? undefined,
-                    course.duration,
-                  ),
-                  subject: course.name,
-                } as Exam;
-              })}
-            />
-          </div>
-        {/each}
-      </div>
-    </div>
-  </div>
-{/snippet}
-
-{#snippet timetableCourseCard(course: CartItemDetail)}
-  {#if !course.hidden}
-    {@const courseNo = course.courseNo}
-    {@const section = course.sections.find(
-      (sec) => sec.sectionNo === course.sectionNo,
-    )}
-    {#each section?.classes ?? [] as period, i (i)}
-      {@const startTime = parsePeriodTime(period.periodStart)}
-      {@const endTime = parsePeriodTime(period.periodEnd)}
-      {@const color = isConflicted(
-        courseNo,
-        period,
-        $userCart.currentCart.items,
-      )
-        ? 'conflict'
-        : ((course.color as ColorVariant) ?? 'primary')}
-
-      {#if !isNaN(startTime) && !isNaN(endTime)}
-        <TimetableCourseCard
-          onclick={() => {
-            selectedCartItemId = course.id;
-            showViewCourseModal = true;
-          }}
-          course={{
-            abbrName: course.course.abbrName,
-            name: course.course.courseNameEn,
-            code: course.courseNo,
-            bldg: period.building ?? '',
-            room: period.room ?? '',
-            section: course.sectionNo,
-          }}
-          {color}
-          length={parsePeriodTime(period.periodEnd) -
-            parsePeriodTime(period.periodStart)}
-          row={getColumnFromDay(period.dayOfWeek as Day)}
-          col={parsePeriodTime(period.periodStart) - 7}
-        />
-      {/if}
-    {/each}
-  {/if}
-{/snippet}

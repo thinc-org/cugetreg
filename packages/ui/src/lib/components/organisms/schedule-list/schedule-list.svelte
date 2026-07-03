@@ -140,7 +140,9 @@
 					class="border-surface-container-low bg-surface rounded-3xl border px-6 py-6"
 					onclick={() => onClickItem?.(item)}
 				>
-					<div class="flex items-start justify-between gap-3">
+					<div
+						class="hover:bg-surface-variant/50 flex items-start justify-between gap-3 hover:cursor-pointer"
+					>
 						<div class="flex flex-col gap-1">
 							<p class="text-body1 font-semibold underline underline-offset-4">
 								{item.title}

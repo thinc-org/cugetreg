@@ -23,7 +23,9 @@ const toSemesterType = (studyProgram: string): SemesterType => {
 };
 
 export const load: PageServerLoad = async ({ params, fetch }) => {
-  const API_BASE = privateEnv.API_URL ? `${privateEnv.API_URL}/api/v1` : env.PUBLIC_API_URL;
+  const API_BASE = privateEnv.API_URL
+    ? `${privateEnv.API_URL}/api/v1`
+    : env.PUBLIC_API_URL;
   const API_URL = `${API_BASE}/public/carts/`;
   const cartId = params.slug;
 

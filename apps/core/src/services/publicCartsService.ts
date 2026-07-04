@@ -171,8 +171,8 @@ export const publicCartsService = {
 
     const nextOrder = LexoRankService.getNextRank(lastCart?.cartOrder);
 
-    return prisma.$transaction(async (tx) => {
-      return tx.cart.create({
+    const newCart = await prisma.$transaction(async (tx) => {
+      const created = await tx.cart.create({
         data: {
           userId,
           name: name || "Copy Timetable",
@@ -194,8 +194,52 @@ export const publicCartsService = {
             })),
           },
         },
-        include: { items: true },
+        include: {
+          items: {
+            include: {
+              courseInfo: {
+                include: {
+                  courses: {
+                    include: {
+                      sections: { include: { classes: true } },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
       });
+
+      return {
+        ...created,
+        items: created.items.map((item) => {
+          const matchingCourse = item.courseInfo.courses.find(
+            (course) =>
+              course.academicYear === created.academicYear &&
+              course.semester === created.semester &&
+              course.studyProgram === created.studyProgram,
+          );
+          return {
+            id: item.id,
+            courseNo: item.courseNo,
+            sectionNo: item.sectionNo,
+            color: item.color,
+            hidden: item.hidden,
+            cartOrder: item.cartOrder,
+            genEdType: (matchingCourse?.genEdType ?? "NO") as GenEdType,
+            course: {
+              abbrName: item.courseInfo.abbrName,
+              courseNameTh: item.courseInfo.courseNameTh,
+              courseNameEn: item.courseInfo.courseNameEn,
+              credit: item.courseInfo.credit.toString(),
+            },
+            sections: matchingCourse?.sections ?? [],
+          };
+        }),
+      };
     });
+
+    return newCart;
   },
 };

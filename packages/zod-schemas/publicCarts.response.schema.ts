@@ -11,6 +11,7 @@ import {
 } from "./carts.response.schema.js";
 
 export const PublicCartDetailResponseSchema = z.object({
+  owner: z.string().optional(),
   data: z.object({
     cart: CartWithItemsBaseSchema,
     summary: z.object({

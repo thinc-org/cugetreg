@@ -10,6 +10,10 @@ on:
     tags:
       - "v*"
 
+permissions:
+  contents: read
+  packages: write
+
 # Serialize prod releases so two tags can't race the gitops write-back.
 concurrency:
   group: deploy-prod

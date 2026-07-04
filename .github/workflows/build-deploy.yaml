@@ -10,7 +10,7 @@
 # Supply-chain note: third-party + first-party actions are pinned to a commit SHA
 # (the trailing `# vX.Y.Z` is the human-readable tag the SHA corresponds to).
 # Pin, don't float on tags — a moved tag can ship new code into our build.
-name: _build-deploy
+name: build-deploy
 
 on:
   workflow_call:
@@ -32,9 +32,9 @@ on:
         description: token with write access to the gitops repo
         required: true
 
-permissions:
-  contents: read
-  packages: write
+# Permissions are inherited from the calling workflow (build.yaml / release-prod.yaml)
+# because the repo default is "read" and reusable workflows cannot escalate beyond
+# the caller's granted permissions.
 
 env:
   REGISTRY: ghcr.io

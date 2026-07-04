@@ -1,0 +1,53 @@
+# Beta auto-deploy: every push to the `beta` branch runs lint + test, and only
+# if both pass builds web + api with an immutable tag (beta-<sha>) and commits
+# the new tag into the gitops beta overlay. ArgoCD picks up the commit and syncs.
+#
+# NOTE: temporarily also triggers on mvp1-dev for trial runs.
+# TODO: remove mvp1-dev from triggers once the pipeline is validated.
+name: Build & deploy beta
+
+on:
+  push:
+    branches: [beta, mvp1-dev]
+
+# Serialize beta deploys: rapid pushes to `beta` must not race each other into
+# the shared gitops main branch. cancel-in-progress:false → let an in-flight
+# deploy finish (don't leave a half-written gitops commit) before the next runs.
+concurrency:
+  group: deploy-beta
+  cancel-in-progress: false
+
+jobs:
+  # ── gate: lint + test must pass before we build/push/deploy ──────────────────
+  lint:
+    uses: ./.github/workflows/reusable-ci.yaml
+    secrets: inherit
+    with:
+      target: lint
+  test:
+    uses: ./.github/workflows/reusable-ci.yaml
+    secrets: inherit
+    with:
+      target: test
+
+  deploy:
+    needs: [lint, test]
+    uses: ./.github/workflows/_build-deploy.yaml
+    with:
+      env: beta
+      tag: beta-${{ github.sha }}
+      update-mode: commit
+    secrets:
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}
+
+  # Also deploy to prod from the same build (trial phase — both beta & prod
+  # follow mvp1-dev). Remove this once prod has its own branch.
+  deploy-prod:
+    needs: [lint, test]
+    uses: ./.github/workflows/_build-deploy.yaml
+    with:
+      env: prod
+      tag: v2.0.0
+      update-mode: commit
+    secrets:
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}

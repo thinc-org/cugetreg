@@ -22,9 +22,12 @@ export const load: PageServerLoad = async ({ params, fetch }) => {
   }
 
   const resData = await response.json();
-  const data = PublicCartDetailResponseSchema.parse(resData).data;
+  const { data, owner } = PublicCartDetailResponseSchema.parse(resData);
 
   return {
-    data,
+    data: {
+      owner,
+      cartData: data,
+    },
   };
 };

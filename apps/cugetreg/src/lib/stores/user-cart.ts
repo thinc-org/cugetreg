@@ -6,6 +6,10 @@ import { get, type Writable } from 'svelte/store';
 import toast from 'svelte-french-toast';
 
 import { courseColorVariants } from '@cugetreg/utils/constants';
+import {
+  ImportPublicCartResponseSchema,
+  type PublicCartDetail,
+} from '@cugetreg/zod-schemas';
 import type {
   CartData,
   CartSchema,
@@ -642,6 +646,41 @@ export function useCartActions() {
     }
   };
 
+  const importCart = async (cartDetail: PublicCartDetail) => {
+    const cart = cartDetail.cart;
+    const exams = cartDetail.schedule.exams;
+    const res = await api.post(`/public/carts/${cart.id}/import`, {
+      name: cart.name,
+    });
+    const { cart: importedCart } = ImportPublicCartResponseSchema.parse(
+      res.data,
+    ).data;
+
+    const newCartData: CartData = {
+      id: importedCart.id,
+      name: importedCart.name,
+      studyProgram: importedCart.studyProgram,
+      academicYear: importedCart.academicYear,
+      semester: importedCart.semester,
+      visible: importedCart.visible,
+      isDefault: importedCart.isDefault,
+      cartOrder: importedCart.cartOrder,
+      items: cart.items.map((item) => ({
+        ...item,
+        isGraded: false,
+        expectedGrade: '0',
+      })),
+    };
+
+    userCart.update((state) => ({
+      ...state,
+      currentCartId: importedCart.id,
+      currentCart: newCartData,
+      exams,
+      cartList: [...state.cartList, importedCart],
+    }));
+  };
+
   return {
     renameCart,
     updateCartMeta,
@@ -653,5 +692,6 @@ export function useCartActions() {
     createCart,
     pinCart,
     switchCart,
+    importCart,
   };
 }

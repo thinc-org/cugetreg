@@ -1,60 +1,45 @@
 <script lang="ts">
-  import { Chip } from '@cugetreg/ui/atoms/chip';
-  import { browser } from '$app/environment';
-  import AppSidebar from '$lib/components/app-sidebar.svelte';
   import ExamsList from '$lib/components/exams-list.svelte';
   import {
     calculateCredit,
     createElementScreenshot,
-    getViewCourseData,
   } from '$lib/utils/schedule';
 
   import { Eye, Info } from '@lucide/svelte';
-  import { Copy, Download, Share2 } from 'lucide-svelte';
-  import { getContext } from 'svelte';
+  import { Download } from 'lucide-svelte';
 
   import { Button } from '@cugetreg/ui/atoms/button';
   import { CustomizeScrollbar } from '@cugetreg/ui/atoms/customize-scrollbar';
-  import { IconButton } from '@cugetreg/ui/atoms/icon-button';
-  import { Input } from '@cugetreg/ui/atoms/input';
-  import { Modal } from '@cugetreg/ui/atoms/modal';
-  import { Switch } from '@cugetreg/ui/atoms/switch';
   import { TimeTable as Timetable } from '@cugetreg/ui/atoms/timetable';
-  import { ConfirmDeleteSchedule } from '@cugetreg/ui/molecules/confirm-delete-schedule';
-  import { EditSchedule } from '@cugetreg/ui/molecules/edit-schedule';
-  import { SelectTimetable } from '@cugetreg/ui/molecules/select-timetable';
   import { Footer } from '@cugetreg/ui/organisms/footer';
-  import { ViewCourse } from '@cugetreg/ui/organisms/view-course';
   import TimetableBlockGroup from '$lib/components/timetable-block-group.svelte';
   import type { PageProps } from './$types';
   import { YearSemesterChip } from '@cugetreg/ui/atoms/yearsemester-chip';
+  import { useSession } from '$lib/auth-client';
+  import { isAxiosError } from 'axios';
+  import { useCartActions } from '$lib/stores/user-cart';
+  import { goto } from '$app/navigation';
+  import { resolve } from '$app/paths';
+  import toast from 'svelte-french-toast';
 
   let { data }: PageProps = $props();
 
-  const cart = $derived(data.data.cart);
-  const exams = $derived(data.data.schedule.exams);
+  // TODO: Fix jank
+  const owner = $derived(data.data.owner);
+  const cart = $derived(data.data.cartData.cart);
+  const exams = $derived(data.data.cartData.schedule.exams);
 
   // ================ HOOKS ================
 
-  // const userCart = getUserCartStore();
-  // const {
-  //   renameCart,
-  //   copyCart,
-  //   deleteCart,
-  //   createCart,
-  //   pinCart,
-  //   updateCourse,
-  //   removeCourse,
-  //   switchCart,
-  //   updateCartMeta,
-  // } = useCartActions();
+  const session = useSession();
+  const { importCart } = useCartActions();
 
   // ================ STATES ================
 
   let timetableDiv = $state<HTMLElement | undefined>();
   let innerWidth = $state(1024);
 
-  let selectedCartItemId = $state<string | undefined>(undefined);
+  let _selectedCartItemId = $state<string | undefined>(undefined);
 
   let scheduleTableRef = $state<HTMLElement | null>(null);
 
@@ -64,6 +49,20 @@
 
   function handleTimetableScreenshot() {
     createElementScreenshot(`${cart.name}_timetable`, timetableDiv);
+  }
+
+  async function handleImportTimetable() {
+    try {
+      await importCart(data.data.cartData);
+      goto(resolve('/schedule'));
+    } catch (error) {
+      console.error(error);
+      if (isAxiosError(error)) {
+        toast.error('Something went wrong importing timetable.', {
+          position: 'bottom-right',
+        });
+      }
+    }
   }
 </script>
 
@@ -91,7 +90,7 @@
 
             <div class="flex items-end gap-4">
               <!-- TODO: Add student ID, currently not in API -->
-              <span class="text-button2 shrink-0">โดย 6738087921</span>
+              <span class="text-button2 shrink-0">โดย {owner}</span>
 
               <YearSemesterChip
                 studyProgram={cart.studyProgram}
@@ -155,11 +154,13 @@
   <Footer />
 </div>
 
-<div
-  class="fixed inset-x-0 bottom-8 z-50 mx-auto flex w-fit items-center justify-center"
->
-  <Button
-    class="bg-primary w-[calc(100vw-2rem)] max-w-[400px] text-white shadow-lg"
-    >เพิ่มเข้าตารางของฉัน</Button
+{#if $session.data}
+  <div
+    class="fixed inset-x-0 bottom-8 z-50 mx-auto flex w-fit items-center justify-center"
   >
-</div>
+    <Button
+      class="bg-primary w-[calc(100vw-2rem)] max-w-100 text-white shadow-lg"
+      onclick={handleImportTimetable}>เพิ่มเข้าตารางของฉัน</Button
+    >
+  </div>
+{/if}

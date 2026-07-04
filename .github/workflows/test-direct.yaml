@@ -1,0 +1,15 @@
+name: Test direct deploy call
+
+on:
+  push:
+    branches: [mvp1-dev]
+
+jobs:
+  deploy:
+    uses: ./.github/workflows/build-deploy.yaml
+    with:
+      env: beta
+      tag: test-${{ github.sha }}
+      update-mode: commit
+    secrets:
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}

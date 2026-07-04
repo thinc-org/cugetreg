@@ -1,0 +1,21 @@
+name: Trivial with permissions
+
+on:
+  workflow_call:
+    inputs:
+      greeting:
+        required: true
+        type: string
+    secrets:
+      GH_TOKEN:
+        required: true
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  echo:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "${{ inputs.greeting }}"

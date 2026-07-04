@@ -1,0 +1,13 @@
+name: Test permissions only
+
+on:
+  push:
+    branches: [mvp1-dev]
+
+jobs:
+  caller:
+    uses: ./.github/workflows/trivial-with-perms.yaml
+    with:
+      greeting: hello
+    secrets:
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}

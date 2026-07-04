@@ -151,7 +151,10 @@ export function examSort(a: string, b: string): number {
   else return numA - numB;
 }
 
-export function getExamData(cart: CartWithItemsBase, exams: ExamScheduleItem[]) {
+export function getExamData(
+  cart: CartWithItemsBase,
+  exams: ExamScheduleItem[],
+) {
   const midterms: Record<number, ExamData[]> = {};
   const finals: Record<number, ExamData[]> = {};
 

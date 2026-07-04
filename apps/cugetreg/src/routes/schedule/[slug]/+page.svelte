@@ -1,26 +1,27 @@
 <script lang="ts">
+  import { goto } from '$app/navigation';
+  import { resolve } from '$app/paths';
+  import { useSession } from '$lib/auth-client';
   import ExamsList from '$lib/components/exams-list.svelte';
+  import TimetableBlockGroup from '$lib/components/timetable-block-group.svelte';
+  import { useCartActions } from '$lib/stores/user-cart';
   import {
     calculateCredit,
     createElementScreenshot,
   } from '$lib/utils/schedule';
 
   import { Eye, Info } from '@lucide/svelte';
+  import { isAxiosError } from 'axios';
   import { Download } from 'lucide-svelte';
+  import toast from 'svelte-french-toast';
 
   import { Button } from '@cugetreg/ui/atoms/button';
   import { CustomizeScrollbar } from '@cugetreg/ui/atoms/customize-scrollbar';
   import { TimeTable as Timetable } from '@cugetreg/ui/atoms/timetable';
-  import { Footer } from '@cugetreg/ui/organisms/footer';
-  import TimetableBlockGroup from '$lib/components/timetable-block-group.svelte';
-  import type { PageProps } from './$types';
   import { YearSemesterChip } from '@cugetreg/ui/atoms/yearsemester-chip';
-  import { useSession } from '$lib/auth-client';
-  import { isAxiosError } from 'axios';
-  import { useCartActions } from '$lib/stores/user-cart';
-  import { goto } from '$app/navigation';
-  import { resolve } from '$app/paths';
-  import toast from 'svelte-french-toast';
+  import { Footer } from '@cugetreg/ui/organisms/footer';
+
+  import type { PageProps } from './$types';
 
   let { data }: PageProps = $props();
 

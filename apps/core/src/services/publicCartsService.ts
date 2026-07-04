@@ -5,7 +5,6 @@ import type {
   ExamScheduleItem,
 } from "@cugetreg/zod-schemas/carts-response";
 import type { GenEdType } from "@cugetreg/zod-schemas/constants";
-import type { PublicCartDetail } from "@cugetreg/zod-schemas/public-carts-response";
 
 import {
   detectClassConflicts,

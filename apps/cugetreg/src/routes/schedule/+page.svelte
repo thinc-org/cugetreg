@@ -3,6 +3,7 @@
   import AppSidebar from '$lib/components/app-sidebar.svelte';
   import ExamsList from '$lib/components/exams-list.svelte';
   import SelectedCourse from '$lib/components/selected-course.svelte';
+  import TimetableBlockGroup from '$lib/components/timetable-block-group.svelte';
   import {
     getSemesterShortOptions,
     getYearOptions,
@@ -20,7 +21,7 @@
   } from '$lib/utils/schedule';
 
   import { BookMarked, Loader2, Menu } from '@lucide/svelte';
-  import { Copy, Download, Share2 } from 'lucide-svelte';
+  import { Copy, Download } from 'lucide-svelte';
   import { getContext } from 'svelte';
 
   import { Button } from '@cugetreg/ui/atoms/button';
@@ -41,7 +42,6 @@
   import { RenameSchedule } from '@cugetreg/ui/organisms/rename-schedule';
   import * as Sidebar from '@cugetreg/ui/organisms/sidebar';
   import { ViewCourse } from '@cugetreg/ui/organisms/view-course';
-  import TimetableBlockGroup from '$lib/components/timetable-block-group.svelte';
 
   // ================ HOOKS ================
 

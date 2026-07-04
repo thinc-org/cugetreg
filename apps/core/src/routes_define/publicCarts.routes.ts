@@ -1,7 +1,6 @@
 import { createRoute, z } from "@hono/zod-openapi";
 
 import { ImportTimetableBodySchema } from "@cugetreg/zod-schemas/public-carts";
-
 import {
   ImportPublicCartResponseSchema,
   PublicCartDetailResponseSchema,

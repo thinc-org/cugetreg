@@ -24,7 +24,10 @@
     formatExamColumn,
     formatExamTime,
   } from '@cugetreg/utils';
-  import type { CartWithItemsBase, ExamScheduleItem } from '@cugetreg/zod-schemas';
+  import type {
+    CartWithItemsBase,
+    ExamScheduleItem,
+  } from '@cugetreg/zod-schemas';
 
   interface ExamsListProps {
     cart: CartWithItemsBase;

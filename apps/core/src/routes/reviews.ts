@@ -1,5 +1,6 @@
 import { OpenAPIHono } from "@hono/zod-openapi";
 
+import { Prisma } from "../generated/prisma/client.js";
 import type { Variables } from "../lib/auth.js";
 import {
   deleteReviewRoute,
@@ -21,6 +22,12 @@ reviews
     } catch (e) {
       if (e instanceof Error && e.message === "COURSE_NOT_FOUND") {
         return c.json({ error: "COURSE_NOT_FOUND" }, 404);
+      }
+      if (
+        e instanceof Prisma.PrismaClientKnownRequestError &&
+        e.code === "P2002"
+      ) {
+        return c.json({ error: "DUPLICATE_REVIEW" }, 409);
       }
       return c.json({ error: "INTERNAL_SERVER_ERROR" }, 500);
     }

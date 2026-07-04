@@ -29,6 +29,7 @@ export const submitReviewRoute = createRoute({
       description: "Created",
     },
     404: errorRes("COURSE_NOT_FOUND"),
+    409: errorRes("DUPLICATE_REVIEW"),
     500: InternalError,
   },
   security: [{ Bearer: [] }],

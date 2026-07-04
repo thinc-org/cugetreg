@@ -2,6 +2,7 @@
   import { goto } from '$app/navigation';
   import { page } from '$app/state';
   import { env } from '$env/dynamic/public';
+  import { homeStore } from '$lib/homeStore.svelte';
 
   import { SvelteURL } from 'svelte/reactivity';
 
@@ -458,6 +459,12 @@
   const { addCourse, removeCourse, updateCourse } = useCartActions();
 
   $effect(() => {
+    if (page.url.search === '' && homeStore.currentUrl) {
+      goto(homeStore.currentUrl, { replaceState: true, noScroll: true });
+    }
+  });
+
+  $effect(() => {
     const prog = currentProgram;
     const sem = currentSemester;
     const gEds = selectedGenEds;
@@ -539,6 +546,7 @@
         });
       }
     });
+    homeStore.currentUrl = page.url.toString();
   });
 
   function scrollToSection(el: HTMLElement | undefined) {

@@ -1,0 +1,13 @@
+name: Test no perms call
+
+on:
+  push:
+    branches: [mvp1-dev]
+
+jobs:
+  caller:
+    uses: ./.github/workflows/test-no-perms.yaml
+    with:
+      greeting: hello
+    secrets:
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}

@@ -1,0 +1,14 @@
+name: Test simplified build-deploy
+
+on:
+  push:
+    branches: [mvp1-dev]
+
+jobs:
+  deploy:
+    uses: ./.github/workflows/test-bd-perms.yaml
+    with:
+      env: beta
+      tag: test-${{ github.sha }}
+    secrets:
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}

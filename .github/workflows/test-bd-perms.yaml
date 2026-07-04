@@ -1,0 +1,32 @@
+name: Build-deploy simplified
+
+on:
+  workflow_call:
+    inputs:
+      env:
+        required: true
+        type: string
+      tag:
+        required: true
+        type: string
+      update-mode:
+        default: commit
+        type: string
+    secrets:
+      GH_TOKEN:
+        required: true
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NS: narumedsr-p
+
+jobs:
+  web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364f9af683
+      - run: echo "building ${{ inputs.tag }} for ${{ inputs.env }}"

@@ -32,7 +32,7 @@ jobs:
 
   deploy:
     needs: [lint, test]
-    uses: ./.github/workflows/_build-deploy.yaml
+    uses: ./.github/workflows/build-deploy.yaml
     with:
       env: beta
       tag: beta-${{ github.sha }}
@@ -44,7 +44,7 @@ jobs:
   # follow mvp1-dev). Remove this once prod has its own branch.
   deploy-prod:
     needs: [lint, test]
-    uses: ./.github/workflows/_build-deploy.yaml
+    uses: ./.github/workflows/build-deploy.yaml
     with:
       env: prod
       tag: v2.0.0

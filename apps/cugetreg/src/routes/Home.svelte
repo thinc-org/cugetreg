@@ -1,5 +1,7 @@
 <script lang="ts">
   import { env } from '$env/dynamic/public';
+  import { goto } from '$app/navigation';
+  import { page } from '$app/state';
 
   const PUBLIC_API_URL = env.PUBLIC_API_URL ?? 'http://localhost:3000/api/v1';
   import { api } from '$lib/api';
@@ -14,6 +16,7 @@
   } from '$lib/semesterOptions';
   import { loginPopupState } from '$lib/stores/login-popup.svelte';
   import { searchState } from '$lib/stores/search.svelte';
+  import type { StudyProgram } from '@cugetreg/zod-schemas';
   import {
     CART_PROMISE_KEY,
     type CartPromise,
@@ -43,6 +46,7 @@
   import { Filter as FilterBar } from '@cugetreg/ui/organisms/filter-bar';
   import { Footer } from '@cugetreg/ui/organisms/footer';
   import * as Sidebar from '@cugetreg/ui/organisms/sidebar';
+    import { studyProgramMapper } from '$lib/mapper';
 
   let courses = $state.raw<any[]>([]);
   let isLoading = $state(false);
@@ -77,19 +81,52 @@
   let activeDropdown = $state<'program' | 'semester' | 'sort' | null>(null);
   let activeModal = $state<'filter' | 'selected' | null>(null);
 
-  let selectedGenEds = $state<string[]>([]);
-  let selectedSpecial = $state<string[]>([]);
-  let selectedFaculties = $state<string[]>([]);
-  let selectedDays = $state<string[]>([]);
-  let selectedEval = $state<string[]>([]);
-  let startTime = $state('');
-  let endTime = $state('');
-  let fitSchedule = $state(false);
-  let noConditions = $state(false);
+  let startTime = $state(page.url.searchParams.get('timeStart') ?? '');
+  let endTime = $state(page.url.searchParams.get('timeEnd') ?? '');
+  let fitSchedule = $state(page.url.searchParams.get('fitSchedule') === 'true' ? true : false);
+  let noConditions = $state(page.url.searchParams.get('noConditions') === 'true' ? true : false);
 
-  let currentProgram = $state('ทวิภาค');
-  let currentSemester = $state('2568 / 1');
+  const PROGRAM_MAP: Record<string, string> = {
+    นานาชาติ: 'I',
+    ตรีภาค: 'T',
+    ทวิภาค: 'S',
+  };
+
+  const GENED_CODE_TO_ID : Record<string, string> = { SC: 'sci', SO: 'soc', HU: 'hum', IN: 'int' };
+  const DAY_CODE_TO_ID : Record<string, string> = { MO: 'mon', TU: 'tue', WE: 'wed', TH: 'thu', FR: 'fri', SA: 'sat', SU: 'sun' };
+  const EVAL_CODE_TO_ID : Record<string, string> = { SU: 'su', LETTER: 'grade' };
+
+  let currentProgram = $state(studyProgramMapper(page.params.program as StudyProgram) ?? 'ทวิภาค');
+  let currentSemester = $state((() => {
+    const termParam = page.url.searchParams.get('term');
+    if (termParam) {
+        const [year, semesterCode] = termParam.split('/');
+        if (semesterCode === '3') {
+            return `${year} / ฤดูร้อน`;
+        }
+        return `${year} / ${semesterCode}`;
+    }
+    return '2568 / 1';
+  })());
   let currentSort = $state('NAME');
+  let initialGenEd = page.url.searchParams.get('genEdType');
+  let selectedGenEds = $state<string[]>(
+    initialGenEd 
+      ? initialGenEd.split(',').map(code => GENED_CODE_TO_ID[code]).filter(Boolean) 
+      : []
+  );
+  let initialSpecial = page.url.searchParams.get('special');
+  let selectedSpecial = $state<string[]>(initialSpecial ? initialSpecial.split(',') : []);
+  let initialFaculty = page.url.searchParams.get('faculty');
+  let selectedFaculties = $state<string[]>(initialFaculty ? initialFaculty.split(',') : []);
+  let initialDay = page.url.searchParams.get('day');
+  let selectedDays = $state<string[]>(
+    initialDay 
+      ? initialDay.split(',').map(code => DAY_CODE_TO_ID[code]).filter(Boolean)
+      : []
+  );
+  let initialEval = page.url.searchParams.get('gradingType');
+  let selectedEval = $state<string[]>(initialEval ? initialEval.split(',').map(code => EVAL_CODE_TO_ID[code]).filter(Boolean) : []);
   let sortDirection = $state<'asc' | 'desc'>('asc');
 
   // Mobile-only sort options (per design): seat-based + name, each encodes a
@@ -145,6 +182,7 @@
     sat: 'SA',
     sun: 'SU',
   };
+
   const evalMap: Record<string, string> = {
     su: 'SU',
     grade: 'LETTER',
@@ -379,11 +417,56 @@
   const cartPromise = getContext<CartPromise>(CART_PROMISE_KEY);
   const { addCourse, removeCourse, updateCourse } = useCartActions();
 
-  const PROGRAM_MAP: Record<string, string> = {
-    นานาชาติ: 'I',
-    ตรีภาค: 'T',
-    ทวิภาค: 'S',
-  };
+  $effect(() => {
+    const prog = currentProgram;
+    const sem = currentSemester;
+    const gEds = selectedGenEds
+    const specials = selectedSpecial;
+    const facs = selectedFaculties;
+    const days = selectedDays;
+    const start = startTime;
+    const end = endTime;
+    const evals = selectedEval;
+    const fit = fitSchedule;
+    const noCond = noConditions;
+    untrack(() => {
+        const currentUrl = new URL(page.url);
+    
+        const programCode = PROGRAM_MAP[prog] || 'S';
+        const newPath = `/${programCode}/courses`;
+    
+        const parsed = parseSemesterDisplay(sem);
+        const semesterCodeMap: Record<string, string> = { FIRST: '1', SECOND: '2', SUMMER: '3' };
+        const termQuery = parsed ? `${parsed.academicYear}/${semesterCodeMap[parsed.semester] || '1'}` : '2568/1';
+
+        const gEdQuery = gEds.length > 0 ? gEds.map(id => genEdMap[id]).filter(Boolean).join(',') : null;
+        const specialQuery = specials.length > 0 ? specials.join(',') : null;
+        const facQuery = facs.length > 0 ? facs.join(',') : null;
+        const dayQuery = days.length > 0 ? days.map(id => dayMap[id]).filter(Boolean).join(',') : null;
+        const evalQuery = evals.length > 0 ? evals.map(id => evalMap[id]).filter(Boolean).join(',') : null;
+
+        currentUrl.pathname = newPath;
+        currentUrl.searchParams.set('term', termQuery);
+
+        if (specialQuery) currentUrl.searchParams.set('special', specialQuery); else currentUrl.searchParams.delete('special');
+        if (gEdQuery) currentUrl.searchParams.set('genEdType', gEdQuery); else currentUrl.searchParams.delete('genEdType');
+        if (facQuery) currentUrl.searchParams.set('faculty', facQuery); else currentUrl.searchParams.delete('faculty');
+        if (dayQuery) currentUrl.searchParams.set('day', dayQuery); else currentUrl.searchParams.delete('day');
+        if (start) currentUrl.searchParams.set('timeStart', start); else currentUrl.searchParams.delete('timeStart');
+        if (end) currentUrl.searchParams.set('timeEnd', end); else currentUrl.searchParams.delete('timeEnd');
+        if (evalQuery) currentUrl.searchParams.set('gradingType', evalQuery); else currentUrl.searchParams.delete('gradingType');
+        if (fit) currentUrl.searchParams.set('fitSchedule', 'true'); else currentUrl.searchParams.delete('fitSchedule');
+        if (noCond) currentUrl.searchParams.set('noConditions', 'true'); else currentUrl.searchParams.delete('noConditions');
+
+        if (page.url.toString() !== currentUrl.toString()) {
+          goto(currentUrl.toString(), {
+            replaceState: true,
+            keepFocus: true,
+            noScroll: true
+          });
+        }
+      });
+  });
 
   function scrollToSection(el: HTMLElement | undefined) {
     if (!el) return;

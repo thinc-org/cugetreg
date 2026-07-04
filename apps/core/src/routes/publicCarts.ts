@@ -17,8 +17,9 @@ publicCarts
   .openapi(getPublicCartDetailRoute, async (c) => {
     try {
       const cartId = c.req.param("cartId");
-      const result = await publicCartsService.getPublicCartDetail(cartId);
-      return c.json({ data: result }, 200);
+      const { cartDetail, owner } =
+        await publicCartsService.getPublicCartDetail(cartId);
+      return c.json({ data: cartDetail, owner }, 200);
     } catch (err) {
       if (
         err instanceof Error &&

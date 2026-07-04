@@ -22,7 +22,7 @@ import {
 } from "../generated/prisma/client.js";
 
 export const publicCartsService = {
-  getPublicCartDetail: async (cartId: string): Promise<PublicCartDetail> => {
+  getPublicCartDetail: async (cartId: string) => {
     const cart = await prisma.cart.findUnique({
       where: { id: cartId },
       include: {
@@ -46,6 +46,10 @@ export const publicCartsService = {
     if (!cart || cart.visible === Visible.PVT) {
       throw new Error("CART_NOT_FOUND");
     }
+
+    const owner = await prisma.user.findFirst({
+      where: { id: cart.userId },
+    });
 
     const enrichedItems = R.map(cart.items, (item) => {
       const info = item.courseInfo;
@@ -138,7 +142,7 @@ export const publicCartsService = {
       Number(item.info.credit),
     );
 
-    return {
+    const cartDetail = {
       cart: {
         id: cart.id,
         name: cart.name,
@@ -150,6 +154,11 @@ export const publicCartsService = {
       summary: { totalCredits: totalCredits.toFixed(1) },
       conflicts: { classConflicts, examConflicts },
       schedule: { classes: classesSchedule, exams: examsSchedule },
+    };
+
+    return {
+      cartDetail,
+      owner: owner?.name,
     };
   },
 

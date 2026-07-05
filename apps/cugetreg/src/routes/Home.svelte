@@ -314,6 +314,12 @@
     // Search & Filter changes (Reset offset and clear list)
     currentSemester;
     currentProgram;
+    currentAY;
+    untrack(() => fetchCourses(true));
+  });
+
+  $effect(() => {
+    // Search & Filter changes (Reset offset and clear list)
     searchState.debounced;
     selectedGenEds;
     selectedFaculties;

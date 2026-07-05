@@ -1,4 +1,4 @@
-import type { GenEdType, StudyProgram } from '@cugetreg/zod-schemas';
+import type { GenEdType, SortBy, StudyProgram } from '@cugetreg/zod-schemas';
 
 export function studyProgramMapper(studyProgram: StudyProgram) {
   switch (studyProgram) {
@@ -24,5 +24,20 @@ export function genEdTypeMapper(genEdType: GenEdType) {
       return 'หมวดสหฯ';
     default:
       return null;
+  }
+}
+
+export function sortByMapper(sortBy: SortBy) {
+  switch (sortBy) {
+    case 'NAME':
+      return 'ชื่อวิชา';
+    case 'CAPACITY_SUM':
+      return 'จำนวนที่นั่ง';
+    case 'REMAINING_SUM':
+      return 'เหลือที่นั่ง';
+    case 'COURSE_NO':
+      return 'รหัสวิชา';
+    default:
+      throw new Error(`SortBy ${sortBy} is invalid`);
   }
 }

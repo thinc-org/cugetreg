@@ -698,7 +698,7 @@ export function useCartActions() {
       cartList: [...state.cartList, importedCart],
     }));
   };
-    
+
   const changeCartVisibility = async (
     cartId: string,
     visible: Visible,

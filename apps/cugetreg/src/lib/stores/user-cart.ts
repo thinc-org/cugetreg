@@ -660,7 +660,10 @@ export function useCartActions() {
     }
   };
 
-  const changeCartVisibility = async (cartId: string, visible: Visible) => {
+  const changeCartVisibility = async (
+    cartId: string,
+    visible: Visible,
+  ): Promise<boolean> => {
     try {
       await api.patch(`/carts/${cartId}`, { visible });
 
@@ -674,8 +677,10 @@ export function useCartActions() {
             ? { ...state.currentCart, visible }
             : state.currentCart,
       }));
+      return true;
     } catch (error) {
       handleError(error);
+      return false;
     }
   };
 

@@ -95,7 +95,8 @@
   }
 
   async function changeVisibility(item: ScheduleItem, newChecked: boolean) {
-    await changeCartVisibility(item.id, newChecked ? 'PUB' : 'PVT');
+    const ok = await changeCartVisibility(item.id, newChecked ? 'PUB' : 'PVT');
+    if (!ok) item.isPublic = !newChecked;
   }
 
   async function deleteSchedule(id: string) {

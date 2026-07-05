@@ -6,7 +6,6 @@
     getSemesterShortOptions,
     getYearOptions,
   } from '$lib/semesterOptions';
-
   import { useCartActions } from '$lib/stores/user-cart';
   import { convertReviewInfos } from '$lib/utils/reviews';
   import { convertSchedulesInfo } from '$lib/utils/scheduleInfo';
@@ -51,8 +50,8 @@
     term: string;
   }
 
-  const { changeCartVisibility, deleteCart, switchCart, createCart } = useCartActions();
-
+  const { changeCartVisibility, deleteCart, switchCart, createCart } =
+    useCartActions();
 
   const { data }: PageProps = $props();
   let personalInfo = $state(data.user);
@@ -73,7 +72,6 @@
   let showCreateScheduleModal = $state(false);
 
   let isMobile = $state(false);
-
 
   async function updateUser() {
     const updatedUser = {
@@ -111,7 +109,6 @@
 
     loadingSchedules = false;
   }
-
 
   async function changeVisibility(item: ScheduleItem, newChecked: boolean) {
     const ok = await changeCartVisibility(item.id, newChecked ? 'PUB' : 'PVT');

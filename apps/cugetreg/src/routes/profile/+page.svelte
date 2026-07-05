@@ -6,6 +6,7 @@
     getSemesterShortOptions,
     getYearOptions,
   } from '$lib/semesterOptions';
+
   import { useCartActions } from '$lib/stores/user-cart';
   import { convertReviewInfos } from '$lib/utils/reviews';
   import { convertSchedulesInfo } from '$lib/utils/scheduleInfo';
@@ -51,6 +52,7 @@
   }
 
   const { changeCartVisibility, deleteCart, switchCart, createCart } = useCartActions();
+
 
   const { data }: PageProps = $props();
   let personalInfo = $state(data.user);

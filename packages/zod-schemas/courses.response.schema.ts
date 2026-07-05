@@ -98,7 +98,7 @@ export const CourseReview = z.object({
 export const CourseNoDetailSchema = CourseSchema.extend({
   courseInfo: CourseInfoSchema,
   createdAt: z.iso.datetime(),
-  updtaedAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
 });
 
 export const CourseNoResponseSchema = z.object({

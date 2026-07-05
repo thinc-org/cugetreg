@@ -43,15 +43,3 @@ jobs:
       update-mode: commit
     secrets:
       GH_TOKEN: ${{ secrets.GH_TOKEN }}
-
-  # Also deploy to prod from the same build (trial phase — both beta & prod
-  # follow mvp1-dev). Remove this once prod has its own branch.
-  deploy-prod:
-    needs: [lint, test]
-    uses: ./.github/workflows/build-deploy.yaml
-    with:
-      env: prod
-      tag: v2.0.0
-      update-mode: commit
-    secrets:
-      GH_TOKEN: ${{ secrets.GH_TOKEN }}

@@ -194,7 +194,7 @@
       onCancel={() => (showDeleteScheduleModal = false)}
       onConfirm={() => {
         showDeleteScheduleModal = false;
-        deleteCart();
+        deleteCart($userCart.currentCartId);
       }}
     />
   </Modal>

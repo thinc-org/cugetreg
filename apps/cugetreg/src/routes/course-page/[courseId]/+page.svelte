@@ -5,6 +5,7 @@
   import { api } from '$lib/api';
   import { useSession } from '$lib/auth-client';
   import AppSidebar from '$lib/components/app-sidebar.svelte';
+  import MarkdownEditor from '$lib/components/markdown-editor.svelte';
   import ScheduleMismatchPopup from '$lib/components/schedule-mismatch-popup.svelte';
   import SelectedCourse from '$lib/components/selected-course.svelte';
   import { faculties } from '$lib/constants';
@@ -18,24 +19,17 @@
 
   import {
     AlertTriangle,
-    Bold,
     Book,
     BookMarked,
     Check,
     ChevronLeft,
-    Code,
-    Heading,
-    Italic,
     Menu,
     MessageCircleQuestionIcon,
     NotebookPen,
     Pencil,
-    Quote,
     Send,
     Star,
     StickyNote,
-    Strikethrough,
-    Underline,
     X,
   } from '@lucide/svelte';
   import { isAxiosError } from 'axios';
@@ -128,7 +122,7 @@
   );
 
   let activeModal = $state<'selected' | null>(null);
-  let textareaRef: HTMLTextAreaElement | undefined = $state();
+  let reviewEditor = $state<MarkdownEditor>();
   let screenWidth = $state(0);
 
   const floatingOptions = [
@@ -382,7 +376,7 @@
       SEMESTER_LABEL_LONG[review.semester as keyof typeof SEMESTER_LABEL_LONG];
     editingReviewId = review.id;
     scrollToSection(reviewSection);
-    textareaRef?.focus();
+    reviewEditor?.focus();
   }
 
   $effect(() => {
@@ -646,7 +640,7 @@
                 class="flex items-center gap-1.5 rounded-xl bg-[#E9EEF6] px-3.5 py-1.5 text-sm font-medium text-[#004494] transition-all hover:bg-[#D2E0F5] data-[hidden=true]:hidden"
                 onclick={() => {
                   scrollToSection(reviewSection);
-                  setTimeout(() => textareaRef?.focus(), 300);
+                  setTimeout(() => reviewEditor?.focus(), 300);
                 }}
               >
                 เขียนรีวิว
@@ -1160,27 +1154,12 @@
                   </div>
                 </div>
               </div>
-              <div
-                class="border-surface-container-high bg-surface mt-4 rounded-xl border"
-              >
-                <div
-                  class="border-surface-container-high text-on-surface/60 flex items-center gap-6 border-b px-4 py-2"
-                >
-                  <Bold size={18} />
-                  <Italic size={18} />
-                  <Underline size={18} />
-                  <Strikethrough size={18} />
-                  <Code size={18} />
-                  <div class="bg-surface-container-high h-6 w-px"></div>
-                  <Heading size={18} />
-                  <Quote size={18} fill="currentColor" strokeWidth={0} />
-                </div>
-                <textarea
-                  bind:this={textareaRef}
+              <div class="mt-4">
+                <MarkdownEditor
+                  bind:this={reviewEditor}
                   bind:value={reviewContent}
-                  class="text-on-surface h-36 w-full resize-none bg-transparent px-4 py-3 text-sm outline-none"
                   placeholder="คุณคิดว่าวิชานี้เป็นอย่างไรบ้าง?"
-                ></textarea>
+                />
               </div>
               <div class="mt-4 flex justify-end">
                 <Button

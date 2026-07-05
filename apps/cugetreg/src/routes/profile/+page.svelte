@@ -1,6 +1,7 @@
 <script lang="ts">
   import { api } from '$lib/api';
   import { tryCatch } from '$lib/async-handler';
+  import { useCartActions } from '$lib/stores/user-cart';
   import { convertReviewInfos } from '$lib/utils/reviews';
   import { convertSchedulesInfo } from '$lib/utils/scheduleInfo';
   import { convertUserInfo } from '$lib/utils/user';
@@ -37,6 +38,8 @@
     rating: number;
     term: string;
   }
+
+  const { changeCartVisibility, deleteCart } = useCartActions();
 
   const { data }: PageProps = $props();
   let personalInfo = $state(data.user);
@@ -91,32 +94,14 @@
     loadingSchedules = false;
   }
 
-  async function changeVisibility(item: ScheduleItem) {
-    const { id, isPublic } = item;
-
-    console.log(id, isPublic);
-
-    // TODO: Implement and use user-cart updateCartListMeta()
-    const [res, error] = await tryCatch(
-      api.patch(`/carts/${id}`, {
-        visible: isPublic ? 'PUB' : 'PVT',
-      }),
-    );
-
-    if (error || !res) {
-      console.error(error.message);
-      return;
-    }
+  async function changeVisibility(item: ScheduleItem, newChecked: boolean) {
+    const ok = await changeCartVisibility(item.id, newChecked ? 'PUB' : 'PVT');
+    if (!ok) item.isPublic = !newChecked;
   }
 
   async function deleteSchedule(id: string) {
-    // TODO: Implement and use user-cart deleteCart(id)
-    const [res, error] = await tryCatch(api.delete(`/carts/${id}`));
-
-    if (error || !res) {
-      console.error(error.message);
-      return;
-    }
+    const ok = await deleteCart(id);
+    if (!ok) return;
 
     items = items.filter((item) => item.id !== id);
     deleteItemPopupVisible = false;

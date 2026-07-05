@@ -25,8 +25,9 @@
 		</div>
 	</div>
 
-	<div class="flex items-center gap-6 underline">
-		<a href="/">Privacy Policy</a>
+	<div class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 underline">
+		<a href="/privacy-policy">Privacy Policy</a>
+		<a href="/terms-and-conditions">Terms &amp; Conditions</a>
 		<a href="/">Privacy Preferences</a>
 	</div>
 </footer>

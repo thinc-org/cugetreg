@@ -14,7 +14,9 @@ export const getCoursesRoute = createRoute({
   responses: {
     200: {
       content: {
-        "application/json": { schema: CourseSchema.CourseDetailsSchema },
+        "application/json": {
+          schema: CourseResponseSchema.CourseDetailsSchema,
+        },
       },
       description: "OK",
     },

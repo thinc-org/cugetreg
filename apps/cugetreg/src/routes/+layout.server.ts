@@ -40,7 +40,9 @@ export const load: LayoutServerLoad = ({ locals, fetch }) => {
 };
 
 async function loadCart(fetch: typeof globalThis.fetch) {
-  const API_BASE = privateEnv.API_URL ? `${privateEnv.API_URL}/api/v1` : env.PUBLIC_API_URL;
+  const API_BASE = privateEnv.API_URL
+    ? `${privateEnv.API_URL}/api/v1`
+    : env.PUBLIC_API_URL;
   const API_URL = `${API_BASE}/carts`;
   const response = await fetch(`${API_URL}`);
 

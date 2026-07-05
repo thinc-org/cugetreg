@@ -3,6 +3,9 @@
 # Build context must be the monorepo root (./cugetreg), since this app
 # depends on workspace packages (@cugetreg/zod-schemas):
 #   docker build -f apps/core/Dockerfile -t my-registry/api:v2.0.0-beta .
+#
+# Requires deploy.sh (./main.sh --skip-seed) to have been run first so that
+# prisma generate --sql has produced src/generated/prisma/sql.ts on disk.
 
 ARG NODE_VERSION=24.11.1
 
@@ -15,9 +18,12 @@ FROM base AS build
 COPY . .
 RUN --mount=type=cache,id=pnpm-store,target=/root/.local/share/pnpm/store \
     pnpm install --frozen-lockfile
-# prisma.config.ts requires DATABASE_URL to be resolvable; codegen never connects to it
-ENV DATABASE_URL="postgresql://user:password@localhost:5432/db"
-RUN pnpm turbo run codegen build --filter=@cugetreg/core
+# Generated Prisma client files (including sql.ts from TypedSQL) are already
+# present in the build context: deploy.sh runs prisma generate and
+# prisma generate --sql against the live DB before docker build is called.
+# Re-running prisma generate here would wipe sql.ts, so we skip it.
+RUN cd packages/zod-schemas && pnpm run build
+RUN cd apps/core && pnpm run build
 # Patch @cugetreg/zod-schemas exports to point to compiled dist/ files so that
 # pnpm deploy includes .js outputs rather than raw .ts source that Node can't load.
 RUN node -e "\

@@ -1,3 +1,4 @@
+import { env as privateEnv } from '$env/dynamic/private';
 import { env } from '$env/dynamic/public';
 import { tryCatch } from '$lib/async-handler';
 
@@ -22,7 +23,10 @@ const toSemesterType = (studyProgram: string): SemesterType => {
 };
 
 export const load: PageServerLoad = async ({ params, fetch }) => {
-  const API_URL = `${env.PUBLIC_API_URL ?? 'http://localhost:3000'}/public/carts/`;
+  const API_BASE = privateEnv.API_URL
+    ? `${privateEnv.API_URL}/api/v1`
+    : env.PUBLIC_API_URL;
+  const API_URL = `${API_BASE}/public/carts/`;
   const cartId = params.slug;
 
   const [response, error] = await tryCatch(fetch(API_URL + cartId));

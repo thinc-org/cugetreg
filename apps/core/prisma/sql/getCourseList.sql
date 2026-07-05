@@ -20,8 +20,8 @@
 
 -- Step 0: Precompute cart's occupied class slots once (avoids a correlated
 --         subquery in matching_sections when $16 is provided).
---         period_start_minutes/period_end_minutes are generated columns on
---         course_class; NULL for IA/AR/bad times.
+--         period_start_minutes/period_end_minutes are trigger-maintained columns
+--         on course_class; NULL for IA/AR/bad times.
 WITH occupied_slots AS (
     SELECT cl_occ.day_of_week,
            cl_occ.period_start_minutes,

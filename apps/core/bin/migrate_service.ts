@@ -64,16 +64,15 @@ function sanitizePeriod(value: string): string {
 }
 
 /**
- * Optionally swap reversed period pairs when FIX_PERIOD_SWAPS=true.
- * Catches data-entry errors like 17:00-12:00 → 12:00-17:00.
+ * Swap reversed period pairs — data-entry errors in the source JSON where
+ * start > end (e.g. 17:00-12:00 → 12:00-17:00).
+ * Always applied: the GiST index on int4range(period_start_minutes,
+ * period_end_minutes) makes inverted pairs a hard PostgreSQL error anyway.
  */
 function sanitizePeriodPair(
   start: string,
   end: string,
 ): { start: string; end: string } {
-  if (process.env.FIX_PERIOD_SWAPS !== "true") {
-    return { start, end };
-  }
   const HHMM_RE = /^([01]\d|2[0-3]):[0-5]\d$/;
   if (HHMM_RE.test(start) && HHMM_RE.test(end) && start > end) {
     return { start: end, end: start };
@@ -127,7 +126,7 @@ export async function bulkMigrateCourseInfo(coursesData: Course[]) {
 
 const COURSE_BATCH = 5_000;
 const SECTION_BATCH = 20_000;
-const CLASS_BATCH = 50_000;
+const CLASS_BATCH = 5_000;
 
 export async function bulkMigrateCoursesWithSections(
   coursesData: Course[],
@@ -269,30 +268,29 @@ export async function bulkMigrateCoursesWithSections(
     }
   }
 
-  const allClassRecords: Parameters<
-    typeof prisma.sectionClass.createMany
-  >[0]["data"] = [];
-
+  // 4. Insert sections in batches and flush their class records immediately —
+  //    never accumulate all class records in memory at once.
   for (let i = 0; i < sectionMetas.length; i += SECTION_BATCH) {
     const batch = sectionMetas.slice(i, i + SECTION_BATCH);
     const createdSections = await prisma.section.createManyAndReturn({
       data: batch.map((s) => s.record),
     });
-    // createManyAndReturn preserves insertion order — match by index
+
+    // Build class records for this batch only, then flush
+    const batchClasses: Parameters<
+      typeof prisma.sectionClass.createMany
+    >[0]["data"] = [];
     createdSections.forEach((sec, j) => {
       for (const cls of batch[j]!.classRecords) {
-        allClassRecords.push({ ...cls, sectionId: sec.id });
+        batchClasses.push({ ...cls, sectionId: sec.id });
       }
     });
+    for (let j = 0; j < batchClasses.length; j += CLASS_BATCH) {
+      await prisma.sectionClass.createMany({
+        data: batchClasses.slice(j, j + CLASS_BATCH),
+      });
+    }
     onProgress("sections", i + batch.length, sectionMetas.length);
-  }
-
-  // 4. Bulk-insert all classes
-  for (let i = 0; i < allClassRecords.length; i += CLASS_BATCH) {
-    await prisma.sectionClass.createMany({
-      data: allClassRecords.slice(i, i + CLASS_BATCH),
-    });
-    onProgress("classes", i + CLASS_BATCH, allClassRecords.length);
   }
 
   return { created: newCourses.length, skipped: existing.length };

@@ -10,7 +10,7 @@
 	interface CommentProps {
 		content: string;
 		semester: string;
-		year: number;
+        year: number;
 		rating: number;
 		likesCount: number;
 		dislikesCount: number;
@@ -27,7 +27,7 @@
 	let {
 		content,
 		semester,
-		year,
+        year,
 		rating,
 		likesCount,
 		dislikesCount,
@@ -75,11 +75,6 @@
 			ALLOWED_ATTR: ['href']
 		})
 	);
-	const SEMESTER_TO_TEXT: Record<string, string> = {
-		FIRST: 'ภาคต้น',
-		SECOND: 'ภาคปลาย',
-		SUMMER: 'ภาคฤดูร้อน'
-	};
 </script>
 
 <div
@@ -100,8 +95,7 @@
 			<RatingStar {rating} />
 
 			<div class="text-subtitle font-sans font-medium">
-				{SEMESTER_TO_TEXT[semester]}
-				{year}
+				{semester} {year}
 			</div>
 		</div>
 

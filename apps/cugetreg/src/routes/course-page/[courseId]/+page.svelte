@@ -1245,7 +1245,7 @@
                 {#each pagedReviews as review, index (index)}
                   <Comment
                     rating={review.rating / 2}
-                    semester={review.semester as 'FIRST' | 'SECOND' | 'SUMMER'}
+                    semester={SEMESTER_LABEL_LONG[review.semester]}
                     year={review.academicYear}
                     content={review.content}
                     likesCount={review.stats.likeCount}

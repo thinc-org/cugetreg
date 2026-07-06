@@ -4,10 +4,10 @@
 
 	// --- 1. CONFIGURATION DATA ---
 	const genEdOptions = [
-		{ id: 'sci', label: 'วิทย์', color: '#F59E0B', bg: '#FFFBEB' },
-		{ id: 'hum', label: 'มนุษย์', color: '#EC4899', bg: '#FCE7F3' },
-		{ id: 'soc', label: 'สังคม', color: '#10B981', bg: '#D1FAE5' },
-		{ id: 'int', label: 'สหฯ', color: '#8B5CF6', bg: '#EDE9FE' }
+		{ id: 'SC', label: 'วิทย์', color: '#F59E0B', bg: '#FFFBEB' },
+		{ id: 'HU', label: 'มนุษย์', color: '#EC4899', bg: '#FCE7F3' },
+		{ id: 'SO', label: 'สังคม', color: '#10B981', bg: '#D1FAE5' },
+		{ id: 'IN', label: 'สหฯ', color: '#8B5CF6', bg: '#EDE9FE' }
 	];
 
 	const specialOptions = [
@@ -23,18 +23,18 @@
 	];
 
 	const dayOptions = [
-		{ id: 'mon', label: 'จันทร์', color: '#D97706', bg: '#FFF7ED' },
-		{ id: 'tue', label: 'อังคาร', color: '#DB2777', bg: '#FDF2F8' },
-		{ id: 'wed', label: 'พุธ', color: '#059669', bg: '#ECFDF5' },
-		{ id: 'thu', label: 'พฤหัส', color: '#EA580C', bg: '#FFF7ED' },
-		{ id: 'fri', label: 'ศุกร์', color: '#2563EB', bg: '#EFF6FF' },
-		{ id: 'sat', label: 'เสาร์', color: '#7C3AED', bg: '#F3E8FF' },
-		{ id: 'sun', label: 'อาทิตย์', color: '#DC2626', bg: '#FEF2F2' }
+		{ id: 'MO', label: 'จันทร์', color: '#D97706', bg: '#FFF7ED' },
+		{ id: 'TU', label: 'อังคาร', color: '#DB2777', bg: '#FDF2F8' },
+		{ id: 'WE', label: 'พุธ', color: '#059669', bg: '#ECFDF5' },
+		{ id: 'TH', label: 'พฤหัส', color: '#EA580C', bg: '#FFF7ED' },
+		{ id: 'FR', label: 'ศุกร์', color: '#2563EB', bg: '#EFF6FF' },
+		{ id: 'SA', label: 'เสาร์', color: '#7C3AED', bg: '#F3E8FF' },
+		{ id: 'SU', label: 'อาทิตย์', color: '#DC2626', bg: '#FEF2F2' }
 	];
 
 	const evalOptions = [
-		{ id: 'su', label: 'S/U' },
-		{ id: 'grade', label: 'Letter Grade' }
+		{ id: 'SU', label: 'S/U' },
+		{ id: 'LETTER', label: 'Letter Grade' }
 	];
 
 	// --- 2. PROPS (Svelte 5) ---

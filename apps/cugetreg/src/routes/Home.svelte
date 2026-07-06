@@ -3,7 +3,6 @@
   import { page } from '$app/state';
   import { env } from '$env/dynamic/public';
   import { homeStore } from '$lib/homeStore.svelte';
-
   import { SvelteURL } from 'svelte/reactivity';
 
   const PUBLIC_API_URL = env.PUBLIC_API_URL ?? 'http://localhost:3000/api/v1';
@@ -99,23 +98,6 @@
     ทวิภาค: 'S',
   };
 
-  const GENED_CODE_TO_ID: Record<string, string> = {
-    SC: 'sci',
-    SO: 'soc',
-    HU: 'hum',
-    IN: 'int',
-  };
-  const DAY_CODE_TO_ID: Record<string, string> = {
-    MO: 'mon',
-    TU: 'tue',
-    WE: 'wed',
-    TH: 'thu',
-    FR: 'fri',
-    SA: 'sat',
-    SU: 'sun',
-  };
-  const EVAL_CODE_TO_ID: Record<string, string> = { SU: 'su', LETTER: 'grade' };
-
   let currentProgram = $state(
     studyProgramMapper(page.params.program as StudyProgram) ?? 'ทวิภาค',
   );
@@ -138,7 +120,6 @@
     initialGenEd
       ? initialGenEd
           .split(',')
-          .map((code) => GENED_CODE_TO_ID[code])
           .filter(Boolean)
       : [],
   );
@@ -155,7 +136,6 @@
     initialDay
       ? initialDay
           .split(',')
-          .map((code) => DAY_CODE_TO_ID[code])
           .filter(Boolean)
       : [],
   );
@@ -164,7 +144,6 @@
     initialEval
       ? initialEval
           .split(',')
-          .map((code) => EVAL_CODE_TO_ID[code])
           .filter(Boolean)
       : [],
   );
@@ -208,26 +187,6 @@
   const semesterOptions = getSemesterDisplayOptions();
   const sortOptions = ['รหัสวิชา', 'ชื่อวิชา'];
 
-  const genEdMap: Record<string, string> = {
-    sci: 'SC',
-    hum: 'HU',
-    soc: 'SO',
-    int: 'IN',
-  };
-  const dayMap: Record<string, string> = {
-    mon: 'MO',
-    tue: 'TU',
-    wed: 'WE',
-    thu: 'TH',
-    fri: 'FR',
-    sat: 'SA',
-    sun: 'SU',
-  };
-
-  const evalMap: Record<string, string> = {
-    su: 'SU',
-    grade: 'LETTER',
-  };
   const KNOWN_DAYS = new Set(['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU']);
 
   const floatingOptions = [
@@ -362,16 +321,16 @@
 
       if (!noConditions) {
         if (selectedGenEds.length > 0) {
-          params.append('genEdType', genEdMap[selectedGenEds[0]]);
+          params.append('genEdType', selectedGenEds[0]);
         }
         if (selectedFaculties.length > 0) {
           params.append('faculty', selectedFaculties[0]);
         }
         if (selectedDays.length > 0) {
-          params.append('day', dayMap[selectedDays[0]]);
+          params.append('day', selectedDays[0]);
         }
         if (selectedEval.length > 0) {
-          params.append('assessment', evalMap[selectedEval[0]]);
+          params.append('assessment', selectedEval[0]);
         }
         if (startTime) params.append('timeStart', startTime);
         if (endTime) params.append('timeEnd', endTime);
@@ -495,8 +454,6 @@
       const gEdQuery =
         gEds.length > 0
           ? gEds
-              .map((id) => genEdMap[id])
-              .filter(Boolean)
               .join(',')
           : null;
       const specialQuery = specials.length > 0 ? specials.join(',') : null;
@@ -504,15 +461,11 @@
       const dayQuery =
         days.length > 0
           ? days
-              .map((id) => dayMap[id])
-              .filter(Boolean)
               .join(',')
           : null;
       const evalQuery =
         evals.length > 0
           ? evals
-              .map((id) => evalMap[id])
-              .filter(Boolean)
               .join(',')
           : null;
 

@@ -23,8 +23,12 @@ export const handle: Handle = async ({ event, resolve }) => {
 
   const protectedRoutes = ['/schedule', '/profile'];
 
+  // Allow unauthenticated access to public schedule views (schedule/[slug])
+  const isPublicScheduleView = /^\/schedule\/[^/]+$/.test(event.url.pathname);
+
   if (
     !event.locals.user &&
+    !isPublicScheduleView &&
     protectedRoutes.find((route) => event.url.pathname.startsWith(route))
   ) {
     throw redirect(302, '/?error=no_session');

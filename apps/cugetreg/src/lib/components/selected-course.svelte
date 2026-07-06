@@ -18,7 +18,7 @@
   import { cn } from '@cugetreg/utils';
   import { courseColorVariants } from '@cugetreg/utils/constants';
   import type { ColorVariant } from '@cugetreg/utils/types';
-  import type { CartItemDetail } from '@cugetreg/zod-schemas/cart-response';
+  import type { CartItemDetail } from '@cugetreg/zod-schemas/carts-response';
 
   const userCart = getUserCartStore();
   const { removeCourse, updateCourse } = useCartActions();

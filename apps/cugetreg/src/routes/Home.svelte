@@ -451,45 +451,23 @@
         ? `${parsed.academicYear}/${semesterCodeMap[parsed.semester] || '1'}`
         : '2568/1';
 
-      const gEdQuery =
-        gEds.length > 0
-          ? gEds
-              .join(',')
-          : null;
-      const specialQuery = specials.length > 0 ? specials.join(',') : null;
-      const facQuery = facs.length > 0 ? facs.join(',') : null;
-      const dayQuery =
-        days.length > 0
-          ? days
-              .join(',')
-          : null;
-      const evalQuery =
-        evals.length > 0
-          ? evals
-              .join(',')
-          : null;
-
-      currentUrl.pathname = newPath;
-      currentUrl.searchParams.set('term', termQuery);
-
-      if (specialQuery) currentUrl.searchParams.set('special', specialQuery);
-      else currentUrl.searchParams.delete('special');
-      if (gEdQuery) currentUrl.searchParams.set('genEdType', gEdQuery);
-      else currentUrl.searchParams.delete('genEdType');
-      if (facQuery) currentUrl.searchParams.set('faculty', facQuery);
-      else currentUrl.searchParams.delete('faculty');
-      if (dayQuery) currentUrl.searchParams.set('day', dayQuery);
-      else currentUrl.searchParams.delete('day');
-      if (start) currentUrl.searchParams.set('timeStart', start);
-      else currentUrl.searchParams.delete('timeStart');
-      if (end) currentUrl.searchParams.set('timeEnd', end);
-      else currentUrl.searchParams.delete('timeEnd');
-      if (evalQuery) currentUrl.searchParams.set('gradingType', evalQuery);
-      else currentUrl.searchParams.delete('gradingType');
-      if (fit) currentUrl.searchParams.set('fitSchedule', 'true');
-      else currentUrl.searchParams.delete('fitSchedule');
-      if (noCond) currentUrl.searchParams.set('noConditions', 'true');
-      else currentUrl.searchParams.delete('noConditions');
+      const queryParams = {
+        term: termQuery,
+        genEdType: gEds.length ? gEds.join(',') : null,
+        special: specials.length ? specials.join(',') : null,
+        faculty: facs.length ? facs.join(',') : null,
+        day: days.length ? days.join(',') : null,
+        timeStart: start || null,
+        timeEnd: end || null,
+        gradingType: evals.length ? evals.join(',') : null,
+        fitSchedule: fit ? 'true' : null,
+        noConditions: noCond ? 'true' : null,
+      };
+      
+      for (const [key, value] of Object.entries(queryParams)) {
+        if (value) currentUrl.searchParams.set(key, value);
+        else currentUrl.searchParams.delete(key);
+      }
 
       if (page.url.toString() !== currentUrl.toString()) {
         goto(currentUrl.toString(), {

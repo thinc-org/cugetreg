@@ -11,11 +11,11 @@
   import AppSidebar from '$lib/components/app-sidebar.svelte';
   import ScheduleMismatchPopup from '$lib/components/schedule-mismatch-popup.svelte';
   import SelectedCourse from '$lib/components/selected-course.svelte';
-  import { studyProgramMapper } from '$lib/mapper';
+  import { sortByMapper, studyProgramMapper } from '$lib/mapper';
   import {
     getSemesterDisplayOptions,
-    parseSemesterDisplay,
     SEMESTER_LABEL_LONG,
+    SEMESTER_LABEL_SHORT,
   } from '$lib/semesterOptions';
   import { loginPopupState } from '$lib/stores/login-popup.svelte';
   import { searchState } from '$lib/stores/search.svelte';
@@ -48,7 +48,14 @@
   import { Filter as FilterBar } from '@cugetreg/ui/organisms/filter-bar';
   import { Footer } from '@cugetreg/ui/organisms/footer';
   import * as Sidebar from '@cugetreg/ui/organisms/sidebar';
-  import type { StudyProgram } from '@cugetreg/zod-schemas';
+  import {
+    type Semester,
+    type SortBy,
+    type StudyProgram,
+    studyProgram,
+  } from '@cugetreg/zod-schemas';
+
+  const semesterOptions = getSemesterDisplayOptions();
 
   let courses = $state.raw<any[]>([]);
   let isLoading = $state(false);
@@ -57,7 +64,7 @@
   let offset = $state(0);
   const limit = 20;
 
-  let sidebarExpanded = $state(false);
+  let sidebarExpanded = $state(true);
   let openPanel = $state<string | null>(null);
   let activePanel = $state<string | null>(null);
   let isMobile = $state(false);
@@ -74,118 +81,59 @@
   let filterSection = $state<HTMLElement>();
   let selectedSection = $state<HTMLElement>();
 
-  let searchQuery = $state('');
-  let debouncedSearchQuery = $state('');
-  let searchTimeout: ReturnType<typeof setTimeout> | undefined;
-
-  let isScheduleDropdownOpen = $state(false);
+  // let searchQuery = $state('');
+  // let debouncedSearchQuery = $state('');
+  // let searchTimeout: ReturnType<typeof setTimeout> | undefined;
+  //
+  // let isScheduleDropdownOpen = $state(false);
   let isFilterOpen = $state(true);
-  let activeDropdown = $state<'program' | 'semester' | 'sort' | null>(null);
   let activeModal = $state<'filter' | 'selected' | null>(null);
 
-  let startTime = $state(page.url.searchParams.get('timeStart') ?? '');
-  let endTime = $state(page.url.searchParams.get('timeEnd') ?? '');
-  let fitSchedule = $state(
-    page.url.searchParams.get('fitSchedule') === 'true' ? true : false,
-  );
-  let noConditions = $state(
-    page.url.searchParams.get('noConditions') === 'true' ? true : false,
-  );
+  let selectedGenEds = $state<string[]>([]);
+  let selectedSpecial = $state<string[]>([]);
+  let selectedFaculties = $state<string[]>([]);
+  let selectedDays = $state<string[]>([]);
+  let selectedEval = $state<string[]>([]);
+  let startTime = $state('');
+  let endTime = $state('');
+  let fitSchedule = $state(false);
+  let noConditions = $state(false);
 
-  const PROGRAM_MAP: Record<string, string> = {
-    นานาชาติ: 'I',
-    ตรีภาค: 'T',
-    ทวิภาค: 'S',
-  };
-
-  let currentProgram = $state(
-    studyProgramMapper(page.params.program as StudyProgram) ?? 'ทวิภาค',
-  );
-  let currentSemester = $state(
-    (() => {
-      const termParam = page.url.searchParams.get('term');
-      if (termParam) {
-        const [year, semesterCode] = termParam.split('/');
-        if (semesterCode === '3') {
-          return `${year} / ฤดูร้อน`;
-        }
-        return `${year} / ${semesterCode}`;
-      }
-      return '2568 / 1';
-    })(),
-  );
-  let currentSort = $state('NAME');
-  let initialGenEd = page.url.searchParams.get('genEdType');
-  let selectedGenEds = $state<string[]>(
-    initialGenEd
-      ? initialGenEd
-          .split(',')
-          .filter(Boolean)
-      : [],
-  );
-  let initialSpecial = page.url.searchParams.get('special');
-  let selectedSpecial = $state<string[]>(
-    initialSpecial ? initialSpecial.split(',') : [],
-  );
-  let initialFaculty = page.url.searchParams.get('faculty');
-  let selectedFaculties = $state<string[]>(
-    initialFaculty ? initialFaculty.split(',') : [],
-  );
-  let initialDay = page.url.searchParams.get('day');
-  let selectedDays = $state<string[]>(
-    initialDay
-      ? initialDay
-          .split(',')
-          .filter(Boolean)
-      : [],
-  );
-  let initialEval = page.url.searchParams.get('gradingType');
-  let selectedEval = $state<string[]>(
-    initialEval
-      ? initialEval
-          .split(',')
-          .filter(Boolean)
-      : [],
-  );
+  let currentProgram = $state<StudyProgram>('S');
+  let currentSemester = $state<Semester>('FIRST');
+  let currentAY = $state<number>(2568);
+  let currentSort = $state<SortBy>('NAME');
   let sortDirection = $state<'asc' | 'desc'>('asc');
 
-  // Mobile-only sort options (per design): seat-based + name, each encodes a
-  // field + direction. Desktop keeps its own รหัสวิชา/ชื่อวิชา + direction toggle.
   const mobileSortOptions = [
-    { label: 'จำนวนที่นั่งมาก', field: 'CAPACITY', dir: 'desc' as const },
-    { label: 'จำนวนที่นั่งน้อย', field: 'CAPACITY', dir: 'asc' as const },
-    { label: 'เหลือที่นั่งมาก', field: 'REMAINING', dir: 'desc' as const },
-    { label: 'เหลือที่นั่งน้อย', field: 'REMAINING', dir: 'asc' as const },
+    { label: 'จำนวนที่นั่งมาก', field: 'CAPACITY_SUM', dir: 'desc' as const },
+    { label: 'จำนวนที่นั่งน้อย', field: 'CAPACITY_SUM', dir: 'asc' as const },
+    { label: 'เหลือที่นั่งมาก', field: 'REMAINING_SUM', dir: 'desc' as const },
+    { label: 'เหลือที่นั่งน้อย', field: 'REMAINING_SUM', dir: 'asc' as const },
     { label: 'ชื่อวิชา A-Z', field: 'NAME', dir: 'asc' as const },
     { label: 'ชื่อวิชา Z-A', field: 'NAME', dir: 'desc' as const },
   ];
-  // Maps the active sort field to the API's sortBy value.
-  // NOTE: CAPACITY/REMAINING require backend support; NAME works today.
-  const SORT_BY_LABEL: Record<string, string> = {
-    NAME: 'ชื่อวิชา',
-    CAPACITY: 'จำนวนที่นั่ง',
-    REMAINING: 'เหลือที่นั่ง',
-  };
-  function selectMobileSort(field: string, dir: 'asc' | 'desc') {
+
+  const sortOptions = [
+    { label: 'ชื่อวิชา', field: 'NAME' },
+    { label: 'จำนวนที่นั่ง', field: 'CAPACITY_SUM' },
+    { label: 'เหลือที่นั่ง', field: 'REMAINING_SUM' },
+  ];
+
+  function selectMobileSort(field: SortBy, dir: 'asc' | 'desc') {
     currentSort = field;
     sortDirection = dir;
-    activeDropdown = null;
   }
 
   let bottomSentinel = $state<HTMLElement | null>(null);
 
   let showMismatchPopup = $state(false);
-  let expectedParams = $derived(getParams());
   let pendingCourse = $state<{ courseNo: string; sectionNo: number } | null>(
     null,
   );
   let localSelectedSections: Record<string, number> = {};
 
   const session = useSession();
-
-  const programOptions = ['ทวิภาค', 'ตรีภาค', 'นานาชาติ'];
-  const semesterOptions = getSemesterDisplayOptions();
-  const sortOptions = ['รหัสวิชา', 'ชื่อวิชา'];
 
   const KNOWN_DAYS = new Set(['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU']);
 
@@ -205,30 +153,6 @@
       },
     },
   ];
-
-  function parseTime(t: string): number | null {
-    if (!t) return null;
-    const m = t.trim().match(/^(\d{1,2}):(\d{2})$/);
-    if (!m) return null;
-    const h = Number(m[1]);
-    const mm = Number(m[2]);
-    if (h > 23 || mm > 59) return null;
-    return h * 60 + mm;
-  }
-
-  function getParams() {
-    const parsed = parseSemesterDisplay(currentSemester);
-    return {
-      academicYear: parsed?.academicYear ?? '2566',
-      semester: parsed?.semester ?? 'FIRST',
-      studyProgram:
-        currentProgram === 'นานาชาติ'
-          ? 'I'
-          : currentProgram === 'ตรีภาค'
-            ? 'T'
-            : 'S',
-    };
-  }
 
   function mapCourse(item: any) {
     const { course: c, courseInfo: ci, reviewCount } = item;
@@ -301,11 +225,10 @@
 
     isLoading = true;
     try {
-      const { academicYear, semester, studyProgram } = getParams();
       const params = new SvelteURLSearchParams({
-        academicYear,
-        semester,
-        studyProgram,
+        academicYear: String(currentAY),
+        semester: currentSemester as string,
+        studyProgram: currentProgram,
         limit: limit.toString(),
         offset: offset.toString(),
         sortOrder: sortDirection,
@@ -373,9 +296,10 @@
   }
 
   $effect(() => {
-    // Term changes (Reset offset and clear list)
+    // Search & Filter changes (Reset offset and clear list)
     currentSemester;
     currentProgram;
+    currentAY;
     untrack(() => fetchCourses(true));
   });
 
@@ -392,10 +316,20 @@
     currentSort;
     sortDirection;
     fitSchedule;
-    if (fitSchedule) {
+    if (fitSchedule && untrack(() => $userCart.currentCartId)) {
       $userCart.currentCart;
     }
     untrack(() => fetchCourses(true));
+  });
+
+  $effect(() => {
+    $userCart.currentCart;
+    untrack(() => {
+      if (!$userCart.currentCartId) return;
+      currentProgram = $userCart.currentCart.studyProgram as StudyProgram;
+      currentAY = $userCart.currentCart.academicYear;
+      currentSemester = $userCart.currentCart.semester as Semester;
+    });
   });
 
   $effect(() => {
@@ -413,6 +347,8 @@
     return () => observer.disconnect();
   });
 
+  const studyProgramLabel = $derived(studyProgramMapper(currentProgram));
+
   const userCart = getUserCartStore();
   const cartPromise = getContext<CartPromise>(CART_PROMISE_KEY);
   const { addCourse, removeCourse, updateCourse } = useCartActions();
@@ -425,6 +361,7 @@
 
   $effect(() => {
     const prog = currentProgram;
+    const ay = currentAY;
     const sem = currentSemester;
     const gEds = selectedGenEds;
     const specials = selectedSpecial;
@@ -435,22 +372,16 @@
     const evals = selectedEval;
     const fit = fitSchedule;
     const noCond = noConditions;
+    
     untrack(() => {
       const currentUrl = new SvelteURL(page.url);
-
-      const programCode = PROGRAM_MAP[prog] || 'S';
-      const newPath = `/${programCode}/courses`;
-
-      const parsed = parseSemesterDisplay(sem);
+      currentUrl.pathname = `/${prog}/courses`;
       const semesterCodeMap: Record<string, string> = {
         FIRST: '1',
         SECOND: '2',
         SUMMER: '3',
       };
-      const termQuery = parsed
-        ? `${parsed.academicYear}/${semesterCodeMap[parsed.semester] || '1'}`
-        : '2568/1';
-
+      const termQuery = `${ay}/${semesterCodeMap[sem] || '1'}`;
       const queryParams = {
         term: termQuery,
         genEdType: gEds.length ? gEds.join(',') : null,
@@ -484,15 +415,6 @@
     if (!el) return;
     el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
-  function toggleDropdown(type: typeof activeDropdown) {
-    activeDropdown = activeDropdown === type ? null : type;
-  }
-  function selectOption(type: 'program' | 'semester' | 'sort', value: string) {
-    if (type === 'program') currentProgram = value;
-    if (type === 'semester') currentSemester = value;
-    if (type === 'sort') currentSort = value;
-    activeDropdown = null;
-  }
   function toggleSortDirection() {
     sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
   }
@@ -501,10 +423,9 @@
     const currentCart = $userCart.currentCart;
     if (!currentCart || !$session.data) return false;
     const isYearMismatch =
-      String(currentCart.academicYear) !== String(expectedParams.academicYear);
-    const isProgramMismatch =
-      currentCart.studyProgram !== expectedParams.studyProgram;
-    const isSemesterMismatch = currentCart.semester !== expectedParams.semester;
+      String(currentCart.academicYear) !== String(currentAY);
+    const isProgramMismatch = currentCart.studyProgram !== currentProgram;
+    const isSemesterMismatch = currentCart.semester !== currentSemester;
     return isYearMismatch || isSemesterMismatch || isProgramMismatch;
   }
 
@@ -614,12 +535,9 @@
     if (openPanel === 'filter_only') openPanel = null;
   }
 
-  let contextLabel = $derived.by(() => {
-    const parsed = parseSemesterDisplay(currentSemester);
-    const year = parsed?.academicYear ?? '2566';
-    const sem = parsed?.semester ?? 'FIRST';
-    return `ในปีการศึกษา ${year} ${SEMESTER_LABEL_LONG[sem]} หลักสูตร${currentProgram}`;
-  });
+  let contextLabel = $derived(
+    `ในปีการศึกษา ${currentAY} ${SEMESTER_LABEL_LONG[currentSemester]} หลักสูตร${studyProgramLabel}`,
+  );
 </script>
 
 <div class="relative flex h-screen flex-col overflow-hidden bg-white">
@@ -741,68 +659,61 @@
             </div>
 
             <div class="relative flex shrink-0 gap-2">
-              <div class="relative">
-                <button
-                  onclick={() => toggleDropdown('program')}
-                  class="flex items-center gap-2 rounded-full border border-neutral-800 px-3 py-1.5 text-xs font-bold transition-colors hover:bg-gray-50 md:px-5 md:py-2 md:text-sm"
+              <Select.Root type="single" bind:value={currentProgram}>
+                <Select.Trigger
+                  class="flex items-center gap-2 rounded-full border border-neutral-800 px-3 py-1.5 text-xs font-bold transition-colors hover:bg-gray-50 focus:ring-offset-0 md:px-5 md:py-2 md:text-sm"
                 >
-                  {currentProgram}
-                  <ChevronDown size={16} />
-                </button>
-                {#if activeDropdown === 'program'}
-                  <div
-                    class="absolute top-full right-0 z-[70] mt-2 w-32 overflow-hidden rounded-xl border border-gray-100 bg-white shadow-xl"
-                  >
-                    {#each programOptions as opt (opt)}
-                      <button
-                        onclick={() => selectOption('program', opt)}
-                        class="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 {currentProgram ===
-                        opt
-                          ? 'bg-gray-50 font-bold'
-                          : ''}">{opt}</button
+                  {studyProgramLabel}
+                </Select.Trigger>
+                <Select.Content>
+                  <Select.Group>
+                    {#each studyProgram.options as option (option)}
+                      <Select.Item
+                        value={option}
+                        label={option}
+                        aria-label={option}
+                        role="option"
+                        check={true}
                       >
+                        {studyProgramMapper(option)}
+                      </Select.Item>
                     {/each}
-                  </div>
-                {/if}
-              </div>
+                  </Select.Group>
+                </Select.Content>
+              </Select.Root>
 
-              <div class="relative">
-                <button
-                  onclick={() => toggleDropdown('semester')}
-                  class="flex items-center gap-2 rounded-full border border-neutral-800 px-3 py-1.5 text-xs font-bold whitespace-nowrap transition-colors hover:bg-gray-50 md:px-5 md:py-2 md:text-sm"
+              <Select.Root
+                type="single"
+                bind:value={
+                  () => `${currentAY}/${currentSemester}`,
+                  (v) => {
+                    const [ay, sem] = v.split('/');
+                    currentAY = Number(ay);
+                    currentSemester = sem as Semester;
+                  }
+                }
+              >
+                <Select.Trigger
+                  class="flex items-center gap-2 rounded-full border border-neutral-800 px-3 py-1.5 text-xs font-bold transition-colors hover:bg-gray-50 focus:ring-offset-0 md:px-5 md:py-2 md:text-sm"
                 >
-                  {currentSemester}
-                  <ChevronDown size={16} />
-                </button>
-                {#if activeDropdown === 'semester'}
-                  <div
-                    class="absolute top-full right-0 z-[70] mt-2 w-48 overflow-hidden rounded-xl border border-gray-100 bg-white shadow-xl"
-                  >
-                    <div
-                      class="custom-scrollbar flex max-h-[250px] flex-col overflow-y-auto py-1"
-                    >
-                      {#each semesterOptions as opt (opt)}
-                        <button
-                          onclick={() => selectOption('semester', opt)}
-                          class="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 {currentSemester ===
-                          opt
-                            ? 'bg-gray-50 font-bold'
-                            : ''}">{opt}</button
-                        >
-                      {/each}
-                    </div>
-                  </div>
-                {/if}
-              </div>
-              {#if activeDropdown}
-                <div
-                  class="fixed inset-0 z-[65]"
-                  onclick={() => (activeDropdown = null)}
-                  role="button"
-                  tabindex="0"
-                  onkeydown={() => {}}
-                ></div>
-              {/if}
+                  {`${currentAY} / ${SEMESTER_LABEL_SHORT[currentSemester]}`}
+                </Select.Trigger>
+                <Select.Content>
+                  <Select.Group>
+                    {#each semesterOptions as option (`${option.value.ay}/${option.value.semester}`)}
+                      <Select.Item
+                        value={`${option.value.ay}/${option.value.semester}`}
+                        label={option.label}
+                        aria-label={option.label}
+                        role="option"
+                        check={true}
+                      >
+                        {option.label}
+                      </Select.Item>
+                    {/each}
+                  </Select.Group>
+                </Select.Content>
+              </Select.Root>
             </div>
           </div>
 
@@ -816,7 +727,7 @@
                     if (e.key === 'Enter') e.preventDefault();
                   }}
                   placeholder="พิมพ์ชื่อวิชา รหัสวิชา หรือคำค้นหาอื่นๆ..."
-                  class="h-12 w-full rounded-xl border-none bg-[#F1F3F7] px-6 text-lg font-medium focus:ring-2 focus:ring-blue-500"
+                  class="h-12 w-full rounded-xl border-none bg-[#F1F3F7] px-6 text-lg font-medium placeholder:text-neutral-300 focus:ring-2 focus:ring-blue-500"
                 />
               </div>
               <!-- Mobile sort: "เรียงตาม" + dropdown (Select) -->
@@ -826,7 +737,7 @@
                   value={`${currentSort}:${sortDirection}`}
                   onValueChange={(v) => {
                     const [field, dir] = v.split(':');
-                    selectMobileSort(field, dir as 'asc' | 'desc');
+                    selectMobileSort(field as SortBy, dir as 'asc' | 'desc');
                   }}
                 >
                   <Select.Trigger
@@ -859,29 +770,26 @@
                   >จัดลำดับตาม</span
                 >
                 <div class="relative flex items-center gap-3">
-                  <button
-                    onclick={() => toggleDropdown('sort')}
-                    class="flex h-12 flex-1 items-center justify-between rounded-xl bg-[#F1F3F7] px-5 text-sm font-bold text-gray-700 transition-all hover:bg-gray-200"
-                  >
-                    <span>{currentSort}</span>
-                    <ChevronDown size={18} class="text-gray-400" />
-                  </button>
-                  {#if activeDropdown === 'sort'}
-                    <div
-                      class="absolute top-full left-0 z-[70] mt-2 w-full overflow-hidden rounded-xl border border-gray-100 bg-white shadow-xl"
+                  <Select.Root bind:value={currentSort} type="single">
+                    <Select.Trigger
+                      class="flex h-12 flex-1 items-center justify-between rounded-xl bg-[#F1F3F7] px-5 text-sm font-bold text-gray-700 transition-all hover:bg-gray-200"
                     >
-                      {#each sortOptions as opt (opt)}
-                        <button
-                          onclick={() => selectOption('sort', opt)}
-                          class="w-full px-5 py-3 text-left text-sm hover:bg-gray-50 {currentSort ===
-                          opt
-                            ? 'bg-gray-50 font-bold'
-                            : ''}">{opt}</button
-                        >
-                      {/each}
-                    </div>
-                  {/if}
+                      {sortByMapper(currentSort)}
+                    </Select.Trigger>
+                    <Select.Content>
+                      <Select.Group>
+                        {#each sortOptions as option (option.field)}
+                          <Select.Item
+                            value={option.field}
+                            label={option.label}
+                            role="option"
+                          />
+                        {/each}
+                      </Select.Group>
+                    </Select.Content>
+                  </Select.Root>
                   <button
+                    aria-label="sort direction"
                     onclick={toggleSortDirection}
                     class="flex h-12 w-12 cursor-pointer items-center justify-center rounded-xl text-[#004494] transition-all hover:bg-blue-50"
                   >
@@ -972,9 +880,9 @@
               </div>
             {:else}
               {@const params = new URLSearchParams({
-                studyProgram: PROGRAM_MAP[currentProgram],
-                academicYear: String(getParams().academicYear),
-                semester: getParams().semester,
+                studyProgram: currentProgram,
+                academicYear: String(currentAY),
+                semester: currentSemester,
               })}
               {#each displayedCourses as item (item.course.code)}
                 <CourseCard
@@ -992,7 +900,7 @@
                 />
               {/each}
 
-              {#if hasMore}
+              {#if hasMore && !isLoading}
                 <div
                   bind:this={bottomSentinel}
                   class="col-span-full flex h-24 items-center justify-center opacity-50"
@@ -1015,10 +923,10 @@
         {#if showMismatchPopup}
           <ScheduleMismatchPopup
             schedules={$userCart.cartList ?? []}
-            expectedYear={expectedParams.academicYear}
-            expectedProgram={expectedParams.studyProgram}
+            expectedYear={currentAY}
+            expectedProgram={currentProgram}
             bind:currentScheduleId={$userCart.currentCartId}
-            expectedSemester={expectedParams.semester}
+            expectedSemester={currentSemester}
             onConfirm={handleScheduleChange}
             onClose={() => (showMismatchPopup = false)}
           />

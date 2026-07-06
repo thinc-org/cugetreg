@@ -5,7 +5,7 @@
 </script>
 
 <div class="flex justify-center pt-5">
-  <div class="prose w-min-[800px] w-[60vw]">
+  <div class="prose w-[90vw] md:w-[60vw]">
     <SvelteMarkdown source={termsConditions} />
   </div>
 </div>

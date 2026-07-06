@@ -3,6 +3,7 @@
   import { page } from '$app/state';
   import { env } from '$env/dynamic/public';
   import { homeStore } from '$lib/homeStore.svelte';
+
   import { SvelteURL } from 'svelte/reactivity';
 
   const PUBLIC_API_URL = env.PUBLIC_API_URL ?? 'http://localhost:3000/api/v1';
@@ -372,7 +373,7 @@
     const evals = selectedEval;
     const fit = fitSchedule;
     const noCond = noConditions;
-    
+
     untrack(() => {
       const currentUrl = new SvelteURL(page.url);
       currentUrl.pathname = `/${prog}/courses`;
@@ -394,7 +395,7 @@
         fitSchedule: fit ? 'true' : null,
         noConditions: noCond ? 'true' : null,
       };
-      
+
       for (const [key, value] of Object.entries(queryParams)) {
         if (value) currentUrl.searchParams.set(key, value);
         else currentUrl.searchParams.delete(key);

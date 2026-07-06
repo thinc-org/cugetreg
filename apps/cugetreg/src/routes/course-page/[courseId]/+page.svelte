@@ -1246,6 +1246,7 @@
                   <Comment
                     rating={review.rating / 2}
                     semester={review.semester as 'FIRST' | 'SECOND' | 'SUMMER'}
+                    year={review.academicYear}
                     content={review.content}
                     likesCount={review.stats.likeCount}
                     dislikesCount={review.stats.dislikeCount}

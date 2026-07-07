@@ -490,6 +490,7 @@
 
   function onSearchFilter() {
     if (openPanel === 'filter_only') openPanel = null;
+    if (activeModal === 'filter') activeModal = null;
   }
 
   let contextLabel = $derived(
@@ -963,7 +964,7 @@
         />
       </div>
     {/if}
-    <hr class="mb-6 opacity-50" />
+    <hr class="hidden md:block mb-6 opacity-50" />
   </div>
 {/snippet}
 

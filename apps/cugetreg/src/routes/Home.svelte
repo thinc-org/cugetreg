@@ -606,11 +606,11 @@
             class="mb-2 flex flex-row items-center justify-between gap-2 md:gap-4"
           >
             <div class="flex items-baseline gap-2 md:gap-3">
-              <h1 class="text-2xl font-bold text-[#1C1B1F] md:text-4xl">
+              <h1 class="text-xl font-bold text-[#4A70C6] md:text-black md:text-4xl">
                 วิชาเรียน
               </h1>
               <span
-                class="text-xs font-medium whitespace-nowrap text-gray-400 md:text-sm"
+                class="text-[10px] font-medium whitespace-nowrap text-gray-400 md:text-sm"
                 >({totalResults} ผลลัพธ์)</span
               >
             </div>
@@ -618,7 +618,7 @@
             <div class="relative flex shrink-0 gap-2">
               <Select.Root type="single" bind:value={currentProgram}>
                 <Select.Trigger
-                  class="flex items-center gap-2 rounded-full border border-neutral-800 px-3 py-1.5 text-xs font-bold transition-colors hover:bg-gray-50 focus:ring-offset-0 md:px-5 md:py-2 md:text-sm"
+                  class="h-6 md:h-auto flex items-center gap-2 rounded-full border border-neutral-800 px-2 md:px-3 py-0.5 md:py-1.5 text-[10px] md:text-xs font-bold transition-colors hover:bg-gray-50 focus:ring-offset-0 md:py-2 md:text-sm"
                 >
                   {studyProgramLabel}
                 </Select.Trigger>
@@ -651,7 +651,7 @@
                 }
               >
                 <Select.Trigger
-                  class="flex items-center gap-2 rounded-full border border-neutral-800 px-3 py-1.5 text-xs font-bold transition-colors hover:bg-gray-50 focus:ring-offset-0 md:px-5 md:py-2 md:text-sm"
+                  class="h-6 md:h-auto flex items-center gap-2 rounded-full border border-neutral-800 px-2 md:px-3 py-1.5 text-[10px] md:text-xs font-bold transition-colors hover:bg-gray-50 focus:ring-offset-0 md:py-2 md:text-sm"
                 >
                   {`${currentAY} / ${SEMESTER_LABEL_SHORT[currentSemester]}`}
                 </Select.Trigger>
@@ -677,14 +677,14 @@
           <div class="mb-10 flex flex-col gap-1">
             <div class="flex flex-row items-end gap-3 md:gap-6">
               <div class="flex flex-1 flex-col gap-1">
-                <span class="ml-1 text-xs text-gray-400">ค้นหา...</span>
+                <span class="hidden md:flex ml-1 text-xs text-gray-400">ค้นหา...</span>
                 <Input
                   bind:value={searchState.query}
                   onkeydown={(e: KeyboardEvent) => {
                     if (e.key === 'Enter') e.preventDefault();
                   }}
-                  placeholder="พิมพ์ชื่อวิชา รหัสวิชา หรือคำค้นหาอื่นๆ..."
-                  class="h-12 w-full rounded-xl border-none bg-[#F1F3F7] px-6 text-lg font-medium placeholder:text-neutral-300 focus:ring-2 focus:ring-blue-500"
+                  placeholder={isMobile ? "ค้นหา..." : "พิมพ์ชื่อวิชา รหัสวิชา หรือคำค้นหาอื่นๆ..."}
+                  class="h-10 md:h-12 w-full rounded-xl border-none bg-[#F1F3F7] px-4 md:px-6 text-sm md:text-lg font-medium placeholder:text-neutral-300 focus:ring-2 focus:ring-blue-500"
                 />
               </div>
               <!-- Mobile sort: "เรียงตาม" + dropdown (Select) -->
@@ -701,9 +701,9 @@
                     showArrow={false}
                     class="text-primary h-auto w-auto gap-1.5 rounded-none border-0 bg-transparent p-0 text-base font-bold whitespace-nowrap shadow-none hover:opacity-80 focus:ring-0 focus:ring-offset-0"
                   >
-                    <span class="flex items-center gap-1.5">
+                    <span class="flex items-center gap-1 md:gap-1.5 text-xs md:text-base">
                       เรียงตาม
-                      <ArrowUpDown size={20} strokeWidth={2.5} />
+                      <ArrowUpDown size={isMobile ? 16 : 20} strokeWidth={2.5} />
                     </span>
                   </Select.Trigger>
                   <Select.Content align="end" class="w-48">
@@ -776,17 +776,17 @@
 
           <!-- Mobile: stacked warning card -->
           <div
-            class="bg-warning-container/60 mb-6 flex items-center gap-4 rounded-2xl px-5 py-4 text-sm leading-relaxed text-neutral-600 md:hidden"
+            class="bg-warning-container/60 mb-6 flex items-center gap-2 rounded-2xl px-5 py-4 text-sm leading-relaxed text-neutral-600 md:hidden"
           >
             <TriangleAlert
-              size={28}
+              size={16}
               strokeWidth={2}
               class="text-warning-hover shrink-0"
             />
             <div>
-              <p>ข้อมูลอาจมีการเปลี่ยนแปลง</p>
-              <p>โปรดตรวจสอบข้อมูลกับสำนักทะเบียนทุกครั้งก่อนลงทะเบียนเรียน</p>
-              <p>
+              <p class="text-[10px] font-sarabun text-[#353745]">ข้อมูลอาจมีการเปลี่ยนแปลง</p>
+              <p class="text-[10px] font-sarabun text-[#353745]">โปรดตรวจสอบข้อมูลกับสำนักทะเบียนทุกครั้งก่อนลงทะเบียนเรียน</p>
+              <p class="text-[10px] font-sarabun text-[#353745]">
                 Update ข้อมูลล่าสุด&nbsp;&nbsp;วันที่ 20/07/68&nbsp;&nbsp;เวลา
                 12.00 น.
               </p>

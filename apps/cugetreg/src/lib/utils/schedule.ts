@@ -4,13 +4,14 @@ import { type ViewCourseData } from '@cugetreg/ui/organisms/view-course';
 import { discardTime, formatDate, formatExamTime } from '@cugetreg/utils';
 import type { ColorVariant } from '@cugetreg/utils/types';
 import type {
-  CartData,
-  CartItemDetail,
   CartItemDetailBase,
   CartWithItemsBase,
   ExamScheduleItem,
   Period,
 } from '@cugetreg/zod-schemas';
+
+export const TIMETABLE_DEFAULT_START = 7;
+export const TIMETABLE_DEFAULT_END = 19;
 
 export type ExamData = {
   abbrName: string;
@@ -271,6 +272,8 @@ export function getDays(cart: CartItemDetailBase[]) {
   const WEEKENDS = ['SAT', 'SUN'];
 
   const hasWeekend = cart.some((item) => {
+    if (item.hidden) return false;
+
     const section = item.sections.find(
       (sec) => sec.sectionNo === item.sectionNo,
     );
@@ -282,8 +285,12 @@ export function getDays(cart: CartItemDetailBase[]) {
   return [...WEEKDAYS, ...(hasWeekend ? WEEKENDS : [])];
 }
 
-export function getLatestTime(cart: CartItemDetailBase[], min: number): number {
-  return cart.reduce((acc, item) => {
+export function getLatestTime(
+  cart: CartItemDetailBase[],
+  fallbackTime: number,
+): number {
+  const latest = cart.reduce((acc, item) => {
+    if (item.hidden) return acc;
     const section = item.sections.find(
       (sec) => sec.sectionNo === item.sectionNo,
     );
@@ -295,5 +302,7 @@ export function getLatestTime(cart: CartItemDetailBase[], min: number): number {
       }, acc) ?? 0;
 
     return localMax > acc ? localMax : acc;
-  }, min);
+  }, fallbackTime);
+
+  return Math.ceil(latest);
 }

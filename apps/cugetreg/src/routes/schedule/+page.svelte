@@ -17,6 +17,8 @@
   import {
     calculateCredit,
     createElementScreenshot,
+    getDays,
+    getLatestTime,
     getViewCourseData,
   } from '$lib/utils/schedule';
 
@@ -95,6 +97,11 @@
     browser
       ? `${window.location.host}/schedule/${$userCart.currentCart.id}`
       : '',
+  );
+
+  const scheduleDays = $derived(getDays($userCart.currentCart.items));
+  const scheduleEndTime = $derived(
+    getLatestTime($userCart.currentCart.items, 19),
   );
 
   $effect(() => {
@@ -359,7 +366,11 @@
             bind:this={scheduleTableRef}
           >
             <div class="min-w-150">
-              <Timetable startTime={7}>
+              <Timetable
+                startTime={7}
+                periodPerDay={scheduleEndTime - 7}
+                days={scheduleDays}
+              >
                 {#each $userCart.currentCart?.items as course (course.id)}
                   <TimetableBlockGroup
                     {course}

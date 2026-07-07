@@ -4,6 +4,8 @@ import { type ViewCourseData } from '@cugetreg/ui/organisms/view-course';
 import { discardTime, formatDate, formatExamTime } from '@cugetreg/utils';
 import type { ColorVariant } from '@cugetreg/utils/types';
 import type {
+  CartData,
+  CartItemDetail,
   CartItemDetailBase,
   CartWithItemsBase,
   ExamScheduleItem,
@@ -262,4 +264,36 @@ export async function createElementScreenshot(
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
+}
+
+export function getDays(cart: CartItemDetailBase[]) {
+  const WEEKDAYS = ['MON', 'TUE', 'WED', 'THU', 'FRI'];
+  const WEEKENDS = ['SAT', 'SUN'];
+
+  const hasWeekend = cart.some((item) => {
+    const section = item.sections.find(
+      (sec) => sec.sectionNo === item.sectionNo,
+    );
+    return section?.classes.some(
+      (cls) => cls.dayOfWeek === 'SA' || cls.dayOfWeek === 'SU',
+    );
+  });
+
+  return [...WEEKDAYS, ...(hasWeekend ? WEEKENDS : [])];
+}
+
+export function getLatestTime(cart: CartItemDetailBase[], min: number): number {
+  return cart.reduce((acc, item) => {
+    const section = item.sections.find(
+      (sec) => sec.sectionNo === item.sectionNo,
+    );
+
+    const localMax =
+      section?.classes.reduce((accMin, period) => {
+        const periodTime = parsePeriodTime(period.periodEnd);
+        return periodTime > accMin ? periodTime : accMin;
+      }, acc) ?? 0;
+
+    return localMax > acc ? localMax : acc;
+  }, min);
 }

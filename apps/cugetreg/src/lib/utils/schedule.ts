@@ -306,3 +306,16 @@ export function getLatestTime(
 
   return Math.ceil(latest);
 }
+
+export function getLatestExamTime(
+  exams: ExamData[],
+  fallbackTime: number,
+): number {
+  const latest = exams.reduce((acc, exam) => {
+    if (!exam.end) return acc;
+    const endTime = exam.end.getHours() + exam.end.getMinutes() / 60;
+    return endTime > acc ? endTime : acc;
+  }, fallbackTime);
+
+  return Math.ceil(latest);
+}

@@ -1,11 +1,12 @@
 <script lang="ts">
   import termsConditions from '$lib/markdowns/terms-and-conditions.md?raw';
-
+  import { Footer } from '@cugetreg/ui/organisms/footer';
   import SvelteMarkdown from 'svelte-markdown';
 </script>
 
-<div class="flex justify-center pt-5">
-  <div class="prose w-[90vw] md:w-[60vw]">
+<div class="flex flex-col items-center justify-center pt-5">
+  <div class="prose w-[90vw] md:w-[60vw] pb-10">
     <SvelteMarkdown source={termsConditions} />
   </div>
+  <Footer />
 </div>

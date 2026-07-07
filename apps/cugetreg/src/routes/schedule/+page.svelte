@@ -20,6 +20,8 @@
     getDays,
     getLatestTime,
     getViewCourseData,
+    TIMETABLE_DEFAULT_END,
+    TIMETABLE_DEFAULT_START,
   } from '$lib/utils/schedule';
 
   import { BookMarked, Loader2, Menu } from '@lucide/svelte';
@@ -101,7 +103,7 @@
 
   const scheduleDays = $derived(getDays($userCart.currentCart.items));
   const scheduleEndTime = $derived(
-    getLatestTime($userCart.currentCart.items, 19),
+    getLatestTime($userCart.currentCart.items, TIMETABLE_DEFAULT_END),
   );
 
   $effect(() => {
@@ -367,8 +369,8 @@
           >
             <div class="min-w-150">
               <Timetable
-                startTime={7}
-                periodPerDay={scheduleEndTime - 7}
+                startTime={TIMETABLE_DEFAULT_START}
+                periodPerDay={scheduleEndTime - TIMETABLE_DEFAULT_START}
                 days={scheduleDays}
               >
                 {#each $userCart.currentCart?.items as course (course.id)}

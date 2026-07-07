@@ -8,6 +8,10 @@
   import {
     calculateCredit,
     createElementScreenshot,
+    getDays,
+    getLatestTime,
+    TIMETABLE_DEFAULT_END,
+    TIMETABLE_DEFAULT_START,
   } from '$lib/utils/schedule';
 
   import { Eye, Info } from '@lucide/svelte';
@@ -40,11 +44,17 @@
   let timetableDiv = $state<HTMLElement | undefined>();
   let innerWidth = $state(1024);
 
+  // TODO: Add this
   let _selectedCartItemId = $state<string | undefined>(undefined);
 
   let scheduleTableRef = $state<HTMLElement | null>(null);
 
   // ================ DERIVED ================
+
+  const scheduleDays = $derived(getDays(cart.items));
+  const scheduleEndTime = $derived(
+    getLatestTime(cart.items, TIMETABLE_DEFAULT_END),
+  );
 
   const totalCredit = $derived(calculateCredit(cart.items));
 
@@ -90,7 +100,6 @@
             </div>
 
             <div class="flex items-end gap-4">
-              <!-- TODO: Add student ID, currently not in API -->
               <span class="text-button2 shrink-0">โดย {owner}</span>
 
               <YearSemesterChip
@@ -131,7 +140,11 @@
           bind:this={scheduleTableRef}
         >
           <div class="min-w-150">
-            <Timetable startTime={7}>
+            <Timetable
+              startTime={TIMETABLE_DEFAULT_START}
+              periodPerDay={scheduleEndTime - TIMETABLE_DEFAULT_START}
+              days={scheduleDays}
+            >
               {#each cart.items as course (course.id)}
                 <TimetableBlockGroup {course} cartItems={cart.items} />
               {/each}

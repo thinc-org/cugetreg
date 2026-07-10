@@ -360,7 +360,7 @@
 						type="time"
 						bind:value={startTime}
 						placeholder="08:00"
-						class="bg-surface-container-lowest text-on-surface box-border w-full rounded-xl border-none p-2.5 text-sm"
+						class="bg-surface-container-lowest text-on-surface box-border w-full rounded-xl border-none p-2.5 text-sm [&::-webkit-calendar-picker-indicator]:opacity-0"
 					/>
 					<svg
 						class="pointer-events-none absolute top-1/2 right-2.5 -translate-y-1/2"
@@ -382,7 +382,7 @@
 						type="time"
 						bind:value={endTime}
 						placeholder="16:00"
-						class="bg-surface-container-lowest text-on-surface box-border w-full rounded-xl border-none p-2.5 text-sm"
+						class="bg-surface-container-lowest text-on-surface box-border w-full rounded-xl border-none p-2.5 text-sm [&::-webkit-calendar-picker-indicator]:opacity-0"
 					/>
 					<svg
 						class="pointer-events-none absolute top-1/2 right-2.5 -translate-y-1/2"

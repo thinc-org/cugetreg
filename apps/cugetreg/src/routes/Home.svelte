@@ -123,6 +123,7 @@
       endTime = params.get('timeEnd') ?? '';
       fitSchedule = params.get('fitSchedule') === 'true';
       noConditions = params.get('noConditions') === 'true';
+      currentProgram = (page.params.program ?? 'S') as StudyProgram;
 
       const termParam = params.get('term');
       if (termParam) {

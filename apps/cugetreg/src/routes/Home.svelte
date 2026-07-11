@@ -109,13 +109,16 @@
   $effect(() => {
     untrack(() => {
       const params = page.url.searchParams;
-      
-      selectedGenEds = params.get('genEdType')?.split(',').filter(Boolean) ?? [];
+
+      selectedGenEds =
+        params.get('genEdType')?.split(',').filter(Boolean) ?? [];
       selectedSpecial = params.get('special')?.split(',').filter(Boolean) ?? [];
-      selectedFaculties = params.get('faculty')?.split(',').filter(Boolean) ?? [];
+      selectedFaculties =
+        params.get('faculty')?.split(',').filter(Boolean) ?? [];
       selectedDays = params.get('day')?.split(',').filter(Boolean) ?? [];
-      selectedEval = params.get('gradingType')?.split(',').filter(Boolean) ?? [];
-      
+      selectedEval =
+        params.get('gradingType')?.split(',').filter(Boolean) ?? [];
+
       startTime = params.get('timeStart') ?? '';
       endTime = params.get('timeEnd') ?? '';
       fitSchedule = params.get('fitSchedule') === 'true';

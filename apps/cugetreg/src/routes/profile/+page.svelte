@@ -1,5 +1,6 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
+  import { resolve } from '$app/paths';
   import { api } from '$lib/api';
   import { tryCatch } from '$lib/async-handler';
   import {
@@ -12,7 +13,6 @@
   import { convertUserInfo } from '$lib/utils/user';
 
   import { TriangleAlert } from '@lucide/svelte';
-  import { resolve } from '$app/paths';
   import { onMount } from 'svelte';
 
   import { Modal } from '@cugetreg/ui/atoms/modal';

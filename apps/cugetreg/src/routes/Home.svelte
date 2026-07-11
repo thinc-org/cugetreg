@@ -106,6 +106,32 @@
   let currentSort = $state<SortBy>('NAME');
   let sortDirection = $state<'asc' | 'desc'>('asc');
 
+  $effect(() => {
+    untrack(() => {
+      const params = page.url.searchParams;
+      
+      selectedGenEds = params.get('genEdType')?.split(',').filter(Boolean) ?? [];
+      selectedSpecial = params.get('special')?.split(',').filter(Boolean) ?? [];
+      selectedFaculties = params.get('faculty')?.split(',').filter(Boolean) ?? [];
+      selectedDays = params.get('day')?.split(',').filter(Boolean) ?? [];
+      selectedEval = params.get('gradingType')?.split(',').filter(Boolean) ?? [];
+      
+      startTime = params.get('timeStart') ?? '';
+      endTime = params.get('timeEnd') ?? '';
+      fitSchedule = params.get('fitSchedule') === 'true';
+      noConditions = params.get('noConditions') === 'true';
+
+      const termParam = params.get('term');
+      if (termParam) {
+        const [year, sem] = termParam.split('/');
+        currentAY = Number(year) || 2568;
+        if (sem === '3') currentSemester = 'SUMMER';
+        else if (sem === '2') currentSemester = 'SECOND';
+        else currentSemester = 'FIRST';
+      }
+    });
+  });
+
   const mobileSortOptions = [
     { label: 'จำนวนที่นั่งมาก', field: 'CAPACITY_SUM', dir: 'desc' as const },
     { label: 'จำนวนที่นั่งน้อย', field: 'CAPACITY_SUM', dir: 'asc' as const },

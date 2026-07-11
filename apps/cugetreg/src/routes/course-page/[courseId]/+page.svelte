@@ -606,7 +606,7 @@
           <div class="text-on-surface mb-6 flex flex-col">
             <button
               type="button"
-              class="hover:text-primary w-full border-b border-gray-400 py-4 text-left text-[20px] font-semibold transition-colors"
+              class="hover:text-primary w-full border-b border-gray-400 py-4 text-left text-xl font-semibold transition-colors"
               onclick={() => scrollToSection(descriptionSection)}
             >
               คำอธิบายรายวิชา
@@ -614,7 +614,7 @@
 
             <button
               type="button"
-              class="hover:text-primary w-full border-b border-gray-400 py-4 text-left text-[20px] font-semibold transition-colors"
+              class="hover:text-primary w-full border-b border-gray-400 py-4 text-left text-xl font-semibold transition-colors"
               onclick={() => scrollToSection(detailSection)}
             >
               รายละเอียดเซคชัน
@@ -625,7 +625,7 @@
             >
               <button
                 type="button"
-                class="hover:text-primary text-left text-[20px] font-semibold transition-colors"
+                class="hover:text-primary text-left text-xl font-semibold transition-colors"
                 onclick={() => scrollToSection(reviewSection)}
               >
                 รีวิวรายวิชา
@@ -690,7 +690,7 @@
             >
               <ChevronLeft size={18} strokeWidth={2.5} />
               <span
-                class="font-regular translate-y-[-1px] text-[12px] text-[#353745]"
+                class="translate-y-[-1px] text-sm font-normal text-[#353745]"
               >
                 กลับ
               </span>
@@ -703,7 +703,7 @@
                     class="px-3 py-1 text-xs md:hidden"
                   />
                 {/if}
-                <h1 class="text-primary text-xl font-semibold">
+                <h1 class="text-primary text-h1 font-semibold">
                   {course.courseNo}
                   {course.courseInfo.abbrName}
                 </h1>
@@ -726,14 +726,14 @@
                 class="px-3 py-1 text-xs"
               />
             </div>
-            <p class="text-on-surface mt-2 text-sm font-semibold">
+            <p class="text-on-surface mt-2 text-sm font-semibold sm:text-lg">
               {course.courseInfo.courseNameTh}
             </p>
-            <p class="text-on-surface text-sm font-semibold">
+            <p class="text-on-surface text-sm font-semibold sm:text-lg">
               {course.courseInfo.courseNameEn}
             </p>
             <div
-              class="mt-5 flex items-start gap-2 bg-amber-50 px-3 py-2 text-xs"
+              class="mt-5 flex items-start gap-2 bg-amber-50 px-3 py-2 text-sm"
             >
               <AlertTriangle size={16} class="mt-0.5 text-amber-900" />
               <span class="font-sarabun text-neutral-900">
@@ -749,21 +749,25 @@
             <div class="grid gap-6 md:hidden">
               <div>
                 <div class="bg-surface-container-lowest rounded-full">
-                  <p class="text-primary px-4 py-1 text-sm font-medium">
+                  <p
+                    class="text-primary px-4 py-1 text-xs font-medium sm:text-base"
+                  >
                     คำอธิบายรายวิชา (ภาษาไทย)
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun mt-3 px-4 text-sm">
+                <p class="text-on-surface font-sarabun text-body1 mt-3 px-4">
                   {course.courseInfo.courseDescTh}
                 </p>
               </div>
               <div>
                 <div class="bg-surface-container-lowest rounded-full">
-                  <p class="text-primary px-4 py-1 text-sm font-medium">
+                  <p
+                    class="text-primary px-4 py-1 text-xs font-medium sm:text-base"
+                  >
                     คำอธิบายรายวิชา (ภาษาอังกฤษ)
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun mt-3 px-4 text-sm">
+                <p class="text-on-surface font-sarabun text-body1 mt-3 px-4">
                   {course.courseInfo.courseDescEn}
                 </p>
               </div>
@@ -775,24 +779,24 @@
                   class="bg-surface-container-lowest grid rounded-full md:grid-cols-2"
                 >
                   <p
-                    class="text-primary px-4 py-1 text-left text-sm font-medium"
+                    class="text-primary px-4 py-1 text-left text-xs font-medium sm:text-base"
                   >
                     คำอธิบายรายวิชา (ภาษาไทย)
                   </p>
                   <p
-                    class="text-primary px-4 py-1 text-left text-sm font-medium"
+                    class="text-primary px-4 py-1 text-left text-xs font-medium sm:text-base"
                   >
                     คำอธิบายรายวิชา (ภาษาอังกฤษ)
                   </p>
                 </div>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun mt-3 px-4 text-sm">
+                <p class="text-on-surface font-sarabun text-body1 mt-3 px-4">
                   {course.courseInfo.courseDescTh}
                 </p>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun mt-3 px-4 text-sm">
+                <p class="text-on-surface font-sarabun text-body1 mt-3 px-4">
                   {course.courseInfo.courseDescEn}
                 </p>
               </div>
@@ -801,19 +805,25 @@
             <div class="mt-6 grid gap-6 md:hidden">
               <div>
                 <div class="bg-surface-container-lowest rounded-full">
-                  <p class="text-primary px-4 py-1 text-sm font-medium">คณะ</p>
+                  <p
+                    class="text-primary px-4 py-1 text-xs font-medium sm:text-base"
+                  >
+                    คณะ
+                  </p>
                 </div>
-                <p class="text-on-surface font-sarabun mt-3 px-4 text-sm">
+                <p class="text-on-surface font-sarabun text-body1 mt-3 px-4">
                   {faculties[course.courseInfo.faculty].th}
                 </p>
               </div>
               <div>
                 <div class="bg-surface-container-lowest rounded-full">
-                  <p class="text-primary px-4 py-1 text-sm font-medium">
+                  <p
+                    class="text-primary px-4 py-1 text-xs font-medium sm:text-base"
+                  >
                     ภาควิชา/กลุ่มวิชา/สาขาวิชา
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun mt-3 px-4 text-sm">
+                <p class="text-on-surface font-sarabun text-body1 mt-3 px-4">
                   {course.courseInfo.department}
                 </p>
               </div>
@@ -825,24 +835,24 @@
                   class="bg-surface-container-lowest grid rounded-full md:grid-cols-2"
                 >
                   <p
-                    class="text-primary px-4 py-1 text-left text-sm font-medium"
+                    class="text-primary px-4 py-1 text-left text-xs font-medium sm:text-base"
                   >
                     คณะ
                   </p>
                   <p
-                    class="text-primary px-4 py-1 text-left text-sm font-medium"
+                    class="text-primary px-4 py-1 text-left text-xs font-medium sm:text-base"
                   >
                     ภาควิชา/กลุ่มวิชา/สาขาวิชา
                   </p>
                 </div>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun mt-3 px-4 text-sm">
+                <p class="text-on-surface font-sarabun text-body1 mt-3 px-4">
                   {faculties[course.courseInfo.faculty].th}
                 </p>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun mt-3 px-4 text-sm">
+                <p class="text-on-surface font-sarabun text-body1 mt-3 px-4">
                   {course.courseInfo.department}
                 </p>
               </div>
@@ -851,21 +861,25 @@
             <div class="mt-6 grid gap-6 md:hidden">
               <div>
                 <div class="bg-surface-container-lowest rounded-full">
-                  <p class="text-primary px-4 py-1 text-sm font-medium">
+                  <p
+                    class="text-primary px-4 py-1 text-xs font-medium sm:text-base"
+                  >
                     รูปแบบรายวิชา
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun mt-3 px-4 text-sm">
+                <p class="text-on-surface font-sarabun text-body1 mt-3 px-4">
                   {course.courseInfo.creditHours.split(' ')}
                 </p>
               </div>
               <div>
                 <div class="bg-surface-container-lowest rounded-full">
-                  <p class="text-primary px-4 py-1 text-sm font-medium">
+                  <p
+                    class="text-primary px-4 py-1 text-xs font-medium sm:text-base"
+                  >
                     หน่วยกิต
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun mt-3 px-4 text-sm">
+                <p class="text-on-surface font-sarabun text-body1 mt-3 px-4">
                   {course.courseInfo.credit}
                 </p>
               </div>
@@ -877,24 +891,24 @@
                   class="bg-surface-container-lowest grid rounded-full md:grid-cols-2"
                 >
                   <p
-                    class="text-primary px-4 py-1 text-left text-sm font-medium"
+                    class="text-primary px-4 py-1 text-left text-xs font-medium sm:text-base"
                   >
                     รูปแบบรายวิชา
                   </p>
                   <p
-                    class="text-primary px-4 py-1 text-left text-sm font-medium"
+                    class="text-primary px-4 py-1 text-left text-xs font-medium sm:text-base"
                   >
                     หน่วยกิต
                   </p>
                 </div>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun mt-3 px-4 text-sm">
+                <p class="text-on-surface font-sarabun text-body1 mt-3 px-4">
                   {course.courseInfo.creditHours.split(' ')}
                 </p>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun mt-3 px-4 text-sm">
+                <p class="text-on-surface font-sarabun text-body1 mt-3 px-4">
                   {course.courseInfo.credit}
                 </p>
               </div>
@@ -903,19 +917,25 @@
             <div class="mt-6 grid gap-6 md:hidden">
               <div>
                 <div class="bg-surface-container-lowest rounded-full">
-                  <p class="text-primary px-4 py-1 text-sm font-medium">
+                  <p
+                    class="text-primary px-4 py-1 text-xs font-medium sm:text-base"
+                  >
                     เงื่อนไขรายวิชา
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun mt-3 px-4 text-sm">-</p>
+                <p class="text-on-surface font-sarabun text-body1 mt-3 px-4">
+                  -
+                </p>
               </div>
               <div>
                 <div class="bg-surface-container-lowest rounded-full">
-                  <p class="text-primary px-4 py-1 text-sm font-medium">
+                  <p
+                    class="text-primary px-4 py-1 text-xs font-medium sm:text-base"
+                  >
                     วิธีการวัดผล
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun mt-3 px-4 text-sm">
+                <p class="text-on-surface font-sarabun text-body1 mt-3 px-4">
                   Letter Grade
                 </p>
               </div>
@@ -927,22 +947,24 @@
                   class="bg-surface-container-lowest grid rounded-full md:grid-cols-2"
                 >
                   <p
-                    class="text-primary px-4 py-1 text-left text-sm font-medium"
+                    class="text-primary px-4 py-1 text-left text-xs font-medium sm:text-base"
                   >
                     เงื่อนไขรายวิชา
                   </p>
                   <p
-                    class="text-primary px-4 py-1 text-left text-sm font-medium"
+                    class="text-primary px-4 py-1 text-left text-xs font-medium sm:text-base"
                   >
                     วิธีการวัดผล
                   </p>
                 </div>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun mt-3 px-4 text-sm">-</p>
+                <p class="text-on-surface font-sarabun text-body1 mt-3 px-4">
+                  -
+                </p>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun mt-3 px-4 text-sm">
+                <p class="text-on-surface font-sarabun text-body1 mt-3 px-4">
                   Letter Grade
                 </p>
               </div>
@@ -951,21 +973,25 @@
             <div class="mt-6 grid gap-6 md:hidden">
               <div>
                 <div class="bg-surface-container-lowest rounded-full">
-                  <p class="text-primary px-4 py-1 text-sm font-medium">
+                  <p
+                    class="text-primary px-4 py-1 text-xs font-medium sm:text-base"
+                  >
                     สอบกลางภาค
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun mt-3 px-4 text-sm">
+                <p class="text-on-surface font-sarabun text-body1 mt-3 px-4">
                   06 มี.ค. 2567 16:00 - 19:00
                 </p>
               </div>
               <div>
                 <div class="bg-surface-container-lowest rounded-full">
-                  <p class="text-primary px-4 py-1 text-sm font-medium">
+                  <p
+                    class="text-primary px-4 py-1 text-xs font-medium sm:text-base"
+                  >
                     สอบปลายภาค
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun mt-3 px-4 text-sm">
+                <p class="text-on-surface font-sarabun text-body1 mt-3 px-4">
                   01 พ.ค. 2567 16:00 - 19:00
                 </p>
               </div>
@@ -977,24 +1003,24 @@
                   class="bg-surface-container-lowest grid rounded-full md:grid-cols-2"
                 >
                   <p
-                    class="text-primary px-4 py-1 text-left text-sm font-medium"
+                    class="text-primary px-4 py-1 text-left text-xs font-medium sm:text-base"
                   >
                     สอบกลางภาค
                   </p>
                   <p
-                    class="text-primary px-4 py-1 text-left text-sm font-medium"
+                    class="text-primary px-4 py-1 text-left text-xs font-medium sm:text-base"
                   >
                     สอบปลายภาค
                   </p>
                 </div>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun mt-3 px-4 text-sm">
+                <p class="text-on-surface font-sarabun text-body1 mt-3 px-4">
                   06 มี.ค. 2567 16:00 - 19:00
                 </p>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun mt-3 px-4 text-sm">
+                <p class="text-on-surface font-sarabun text-body1 mt-3 px-4">
                   01 พ.ค. 2567 16:00 - 19:00
                 </p>
               </div>
@@ -1004,7 +1030,7 @@
             class="text-on-surface mx-auto mt-8 w-full max-w-5xl"
             bind:this={detailSection}
           >
-            <h2 class="text-on-surface text-lg font-semibold">
+            <h2 class="text-on-surface text-base font-semibold sm:text-2xl">
               รายละเอียดเซคชัน
             </h2>
             <Accordion.Root
@@ -1069,7 +1095,7 @@
               bind:this={reviewSection}
             >
               <div class="flex items-center justify-between">
-                <h2 class="text-on-surface text-lg font-semibold">
+                <h2 class="text-on-surface text-base font-semibold sm:text-2xl">
                   เขียนรีวิวรายวิชา
                 </h2>
               </div>
@@ -1079,14 +1105,12 @@
                 <div
                   class="flex w-full flex-row items-center justify-between gap-5 md:w-fit md:justify-start"
                 >
-                  <p class="shrink-0 text-[14px] font-normal md:hidden">
-                    ภาคเรียน
-                  </p>
+                  <p class="shrink-0 text-sm font-normal md:hidden">ภาคเรียน</p>
                   <div class="flex flex-row gap-2 md:gap-5">
                     <div>
                       <Select.Root type="single" bind:value={selectedYear}>
                         <Select.Trigger
-                          class="text-on-surface text:sm h-9 w-[120px] rounded-lg border border-[#D6D7E1] bg-white px-4 font-medium md:h-12 md:w-[180px] md:text-base"
+                          class="text-on-surface h-9 w-[120px] rounded-lg border border-[#D6D7E1] bg-white px-4 text-sm font-medium md:h-12 md:w-[180px] md:text-base"
                         >
                           {selectedYear}
                         </Select.Trigger>
@@ -1102,7 +1126,7 @@
                     <div>
                       <Select.Root type="single" bind:value={selectedTerm}>
                         <Select.Trigger
-                          class="text-on-surface text:sm h-9 w-[120px] rounded-lg border border-[#D6D7E1] bg-white px-4 font-medium md:h-12 md:w-[180px] md:text-base"
+                          class="text-on-surface h-9 w-[120px] rounded-lg border border-[#D6D7E1] bg-white px-4 text-sm font-medium md:h-12 md:w-[180px] md:text-base"
                         >
                           {selectedTerm}
                         </Select.Trigger>
@@ -1118,9 +1142,7 @@
                   </div>
                 </div>
                 <div class="flex items-center justify-between gap-8">
-                  <p class="text-[14px] font-normal md:hidden">
-                    ให้คะแนนรายวิชา
-                  </p>
+                  <p class="text-sm font-normal md:hidden">ให้คะแนนรายวิชา</p>
                   <div class="flex gap-2 md:gap-0">
                     {#each [1, 2, 3, 4, 5] as value (value)}
                       <button
@@ -1180,7 +1202,7 @@
             <div
               class="flex flex-col justify-between gap-4 md:flex-row md:items-center"
             >
-              <div class="text-lg font-semibold">
+              <div class="text-base font-semibold sm:text-2xl">
                 <span class="text-on-surface/60">ทั้งหมด </span>
                 <span class="text-primary">{filteredReviews.length} รีวิว</span>
               </div>
@@ -1232,7 +1254,9 @@
                   strokeWidth={2.2}
                   class="text-[#4A70C6]"
                 />
-                <div class="text-on-surface text-lg font-semibold">
+                <div
+                  class="text-on-surface text-base font-semibold sm:text-2xl"
+                >
                   เริ่มแบ่งปันเป็นคนแรก
                 </div>
                 <p class="text-on-surface/70 max-w-lg text-sm">

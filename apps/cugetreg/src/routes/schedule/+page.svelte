@@ -17,7 +17,11 @@
   import {
     calculateCredit,
     createElementScreenshot,
+    getDays,
+    getLatestTime,
     getViewCourseData,
+    TIMETABLE_DEFAULT_END,
+    TIMETABLE_DEFAULT_START,
   } from '$lib/utils/schedule';
 
   import { BookMarked, Loader2, Menu } from '@lucide/svelte';
@@ -95,6 +99,11 @@
     browser
       ? `${window.location.host}/schedule/${$userCart.currentCart.id}`
       : '',
+  );
+
+  const scheduleDays = $derived(getDays($userCart.currentCart.items));
+  const scheduleEndTime = $derived(
+    getLatestTime($userCart.currentCart.items, TIMETABLE_DEFAULT_END),
   );
 
   $effect(() => {
@@ -359,7 +368,11 @@
             bind:this={scheduleTableRef}
           >
             <div class="min-w-150">
-              <Timetable startTime={7}>
+              <Timetable
+                startTime={TIMETABLE_DEFAULT_START}
+                periodPerDay={scheduleEndTime - TIMETABLE_DEFAULT_START}
+                days={scheduleDays}
+              >
                 {#each $userCart.currentCart?.items as course (course.id)}
                   <TimetableBlockGroup
                     {course}

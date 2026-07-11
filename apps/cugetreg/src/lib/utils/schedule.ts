@@ -10,6 +10,9 @@ import type {
   Period,
 } from '@cugetreg/zod-schemas';
 
+export const TIMETABLE_DEFAULT_START = 7;
+export const TIMETABLE_DEFAULT_END = 19;
+
 export type ExamData = {
   abbrName: string;
   cartItemId: string;
@@ -262,4 +265,57 @@ export async function createElementScreenshot(
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
+}
+
+export function getDays(cart: CartItemDetailBase[]) {
+  const WEEKDAYS = ['MON', 'TUE', 'WED', 'THU', 'FRI'];
+  const WEEKENDS = ['SAT', 'SUN'];
+
+  const hasWeekend = cart.some((item) => {
+    if (item.hidden) return false;
+
+    const section = item.sections.find(
+      (sec) => sec.sectionNo === item.sectionNo,
+    );
+    return section?.classes.some(
+      (cls) => cls.dayOfWeek === 'SA' || cls.dayOfWeek === 'SU',
+    );
+  });
+
+  return [...WEEKDAYS, ...(hasWeekend ? WEEKENDS : [])];
+}
+
+export function getLatestTime(
+  cart: CartItemDetailBase[],
+  fallbackTime: number,
+): number {
+  const latest = cart.reduce((acc, item) => {
+    if (item.hidden) return acc;
+    const section = item.sections.find(
+      (sec) => sec.sectionNo === item.sectionNo,
+    );
+
+    const localMax =
+      section?.classes.reduce((accMin, period) => {
+        const periodTime = parsePeriodTime(period.periodEnd);
+        return periodTime > accMin ? periodTime : accMin;
+      }, acc) ?? 0;
+
+    return localMax > acc ? localMax : acc;
+  }, fallbackTime);
+
+  return Math.ceil(latest);
+}
+
+export function getLatestExamTime(
+  exams: ExamData[],
+  fallbackTime: number,
+): number {
+  const latest = exams.reduce((acc, exam) => {
+    if (!exam.end) return acc;
+    const endTime = exam.end.getHours() + exam.end.getMinutes() / 60;
+    return endTime > acc ? endTime : acc;
+  }, fallbackTime);
+
+  return Math.ceil(latest);
 }

@@ -1,6 +1,10 @@
 <script lang="ts">
   import { getColumnFromDay } from '$lib/mapper';
-  import { isConflicted, parsePeriodTime } from '$lib/utils/schedule';
+  import {
+    isConflicted,
+    parsePeriodTime,
+    TIMETABLE_DEFAULT_START,
+  } from '$lib/utils/schedule';
 
   import { TimetableCourseCard } from '@cugetreg/ui/atoms/timetable';
   import type { ColorVariant, Day } from '@cugetreg/utils/types';
@@ -42,7 +46,7 @@
         length={parsePeriodTime(period.periodEnd) -
           parsePeriodTime(period.periodStart)}
         row={getColumnFromDay(period.dayOfWeek as Day)}
-        col={parsePeriodTime(period.periodStart) - 7}
+        col={parsePeriodTime(period.periodStart) - TIMETABLE_DEFAULT_START}
       />
     {/if}
   {/each}

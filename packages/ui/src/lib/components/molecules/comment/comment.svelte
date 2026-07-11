@@ -10,6 +10,7 @@
 	interface CommentProps {
 		content: string;
 		semester: string;
+		year: number;
 		rating: number;
 		likesCount: number;
 		dislikesCount: number;
@@ -26,6 +27,7 @@
 	let {
 		content,
 		semester,
+		year,
 		rating,
 		likesCount,
 		dislikesCount,
@@ -94,6 +96,7 @@
 
 			<div class="text-subtitle font-sans font-medium">
 				{semester}
+				{year}
 			</div>
 		</div>
 

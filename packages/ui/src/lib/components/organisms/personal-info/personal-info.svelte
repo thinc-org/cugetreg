@@ -39,7 +39,9 @@
 	]);
 </script>
 
-<div class="bg-surface-container-lowest text-on-surface w-full max-w-md rounded-2xl p-7">
+<div
+	class="bg-surface-container-lowest text-on-surface w-full max-w-md rounded-2xl p-6 md:max-w-xl lg:max-w-lg"
+>
 	<div class="flex flex-col gap-2 pb-6">
 		<p class="text-h2 font-bold">{name}</p>
 		<p class="text-body2 text-on-surface/60">ID: {id}</p>
@@ -55,7 +57,7 @@
 				<Pencil size="18" strokeWidth="2.5" />
 			</IconButton>
 		</div>
-		<div class="mt-4 grid grid-cols-2 gap-x-8 gap-y-4">
+		<div class="mt-4 grid grid-cols-2 gap-x-8 gap-y-4 sm:grid-cols-2">
 			{#each infoItems as infoItem, idx (idx)}
 				<div class="flex flex-col gap-1">
 					<p class="text-caption text-on-surface/50 tracking-wide uppercase">{infoItem.label}</p>
@@ -74,7 +76,7 @@
 			<p class="text-h3 font-bold">เชื่อมต่อบัญชี</p>
 		</div>
 		<div
-			class="border-surface-container-low bg-surface-container-low mt-4 flex items-center gap-3 rounded-xl border px-4 py-3"
+			class="border-surface-container-low bg-surface-container-low mt-4 flex w-full items-center gap-1 rounded-xl border px-4 py-3"
 		>
 			<div class="flex h-8 w-8 items-center justify-center">
 				<GoogleMark aria-label={accountProvider} />

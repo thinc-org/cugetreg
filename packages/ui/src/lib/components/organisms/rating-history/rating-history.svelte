@@ -134,12 +134,11 @@
 
 	<div class="mt-4 flex items-end justify-start gap-x-1.5">
 		<div class="text-primary flex h-16 shrink-0 items-end">
-			<Star size={isMobile ? 14 : 16} strokeWidth={1.5} class="transition-y-[2px] absolute" />
+			<Star strokeWidth={1.5} class="transition-y-[2px] absolute size-3.5 md:size-4" />
 			<StarHalf
-				size={isMobile ? 14 : 16}
 				fill="currentColor"
 				strokeWidth={1.5}
-				class="transition-y-[2px] absolute"
+				class="transition-y-[2px] absolute size-3.5 md:size-4"
 			/>
 		</div>
 		<div class="ml-2 flex h-16 flex-1 items-end justify-center gap-x-1">

@@ -12,6 +12,7 @@
   import { convertUserInfo } from '$lib/utils/user';
 
   import { TriangleAlert } from '@lucide/svelte';
+  import { resolve } from 'path';
   import { onMount } from 'svelte';
 
   import { Modal } from '@cugetreg/ui/atoms/modal';
@@ -163,9 +164,13 @@
     fetchReviews(page + 1);
   }
 
-  const onClickItem = (item: ScheduleItem) => {
-    switchCart(item.id);
-    goto('/schedule');
+  const onClickItem = async (item: ScheduleItem) => {
+    try {
+      await switchCart(item.id);
+      goto(resolve('/schedule'));
+    } catch (e) {
+      console.error('redirect and switch cart failed');
+    }
   };
 
   const onClickAddSchedule = () => {
@@ -276,16 +281,20 @@
     <CreateTimetable
       yearOptions={getYearOptions()}
       semesterOptions={getSemesterShortOptions()}
-      onConfirm={(schedule: TimetableMetaData) => {
-        goto('/schedule');
-        createCart(
-          schedule.name,
-          schedule.isPublic,
-          schedule.semesterType,
-          schedule.semester,
-          schedule.academicYear,
-        );
-        showCreateScheduleModal = false;
+      onConfirm={async (schedule: TimetableMetaData) => {
+        try {
+          goto(resolve('/schedule'));
+          await createCart(
+            schedule.name,
+            schedule.isPublic,
+            schedule.semesterType,
+            schedule.semester,
+            schedule.academicYear,
+          );
+          showCreateScheduleModal = false;
+        } catch (e) {
+          console.error('create new timetable failed', e);
+        }
       }}
       onCancel={() => (showCreateScheduleModal = false)}
     />

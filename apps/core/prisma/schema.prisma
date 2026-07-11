@@ -353,6 +353,7 @@ model Review {
   votes ReviewVote[]
 
   @@map("review")
+  @@unique([courseNo,userId])
 }
 
 model ReviewVote {

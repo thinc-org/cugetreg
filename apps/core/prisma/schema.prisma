@@ -297,6 +297,7 @@ model Cart {
 
   // Relations
   items CartItem[]
+  activities Activity[]
 
   @@map("cart")
 }
@@ -324,6 +325,29 @@ model CartItem {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("cart_item")
+}
+
+model Activity {
+  id String @id @default(cuid())
+
+  cartId String @map("cart_id")
+  cart Cart @relation(fields: [cartId], references: [id])
+
+  title String @map("title")
+  description String @map("description")
+
+  dayOfWeek   DayOfWeek @map("day_of_week")
+  periodStart String    @map("period_start")
+  periodEnd   String    @map("period_end")
+
+  color     String?
+  hidden    Boolean @default(false)
+  cartOrder String @default("0|hzzzzz:") @map("cart_order")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("activity")
 }
 
 model Review {
@@ -369,6 +393,18 @@ model ReviewVote {
 
   @@map("review_votes")
   @@unique([userId,reviewId])
+}
+
+model Announcement {
+  id String @id @default(cuid())
+
+  title String @map("title")
+  content String @map("content")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("announcement")
 }
 
 model Session {

@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import { cors } from "hono/cors";
 
 import admin from "./routes/admin.js";
+import announcement from "./routes/announcement.js";
 import authRoute, { includeAuth, middlewareAuth } from "./routes/auth.js";
 import carts from "./routes/carts.js";
 import courses from "./routes/courses.js";
@@ -53,6 +54,7 @@ app.openAPIRegistry.registerComponent("securitySchemes", "CookieAuth", {
 // Public routes — no auth required
 app.route("/public/carts", publicCarts);
 app.route("/auth", authRoute);
+app.route("/announcement", announcement);
 
 app.use("/courses/*", includeAuth);
 

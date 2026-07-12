@@ -4,6 +4,7 @@ import { OpenAPIHono } from "@hono/zod-openapi";
 import dotenv from "dotenv";
 import { cors } from "hono/cors";
 
+import activity from "./routes/activity.js";
 import admin from "./routes/admin.js";
 import announcement from "./routes/announcement.js";
 import authRoute, { includeAuth, middlewareAuth } from "./routes/auth.js";
@@ -61,12 +62,14 @@ app.use("/courses/*", includeAuth);
 app.route("/courses", courses);
 
 // Middleware List
-app.use("/admin/*", middlewareAuth); // Middleware from Bearer Token
+app.use("/activity/*", middlewareAuth); // Middleware from Bearer Token
+app.use("/admin/*", middlewareAuth);
 app.use("/carts/*", middlewareAuth);
 app.use("/reviews/*", middlewareAuth);
 app.use("/user/*", middlewareAuth);
 
 // Protected routes (session injected by middlewareAuth above)
+app.route("/activity", activity);
 app.route("/admin", admin);
 app.route("/carts", carts);
 app.route("/reviews", reviews);

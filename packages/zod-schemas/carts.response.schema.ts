@@ -1,5 +1,6 @@
 import z from "zod";
 
+import { ActivityItemSchema } from "./activity.response.schema.js";
 import { genEdType, semester, studyProgram, visible } from "./constants.js";
 import { Section } from "./types.js";
 
@@ -69,6 +70,7 @@ export const CartData = CartWithItemsBaseSchema.extend({
   isDefault: z.boolean(),
   cartOrder: z.string(),
   items: z.array(CartItemDetailSchema),
+  activityItems: z.array(ActivityItemSchema),
 });
 
 export const ClassScheduleItemSchema = z.object({

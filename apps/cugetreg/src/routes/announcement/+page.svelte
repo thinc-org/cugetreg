@@ -1,7 +1,8 @@
 <script lang="ts">
     import { api } from '$lib/api';
     import { Loader2 } from 'lucide-svelte';
-
+    import { goto } from '$app/navigation';
+    import { Footer } from '@cugetreg/ui/organisms/footer';
     interface Announcement {
         id: string;
         title: string;
@@ -27,17 +28,19 @@
     })
     
     function formatDate(dateString: string): string {
+        if (!dateString) return '';
         const date = new Date(dateString);
-        return date.toLocaleDateString('en-GB', {
+        const formatted = date.toLocaleDateString('en-GB', {
             year: 'numeric',
             month: 'short',
             day: 'numeric',
-        }).replace(/ /g, ' ') + '.';
+        });
+        return formatted.replace(/([a-zA-Z]+)/, '$1.');
     }
 </script>
 
 <div class="flex flex-col items-center justify-center pt-10">
-    <div class="w-[90vw] pb-10 md:w-[60vw]">
+    <div class="w-[90vw] pb-16 md:w-[60vw]">
         <h1 class="mb-8 text-2xl font-bold text-[#1C1B1F]">การแจ้งเตือน</h1>
         {#if isLoading}
             <div class="flex h-40 flex-col items-center justify-center gap-3 text-gray-400">
@@ -53,6 +56,7 @@
                 {#each announcements as item (item.id)}
                     <button
                         class="flex flex-col items-start gap-1 rounded-2xl border-2 border-gray-200 bg-white px-10 py-8 transition-all hover:border-[#4A6CF7] focus:outline-none"
+                        onclick={() => goto(`/announcement/${item.id}`)}
                     >
                         <span class="text-xs font-regular text-gray-600">CU GetReg</span>
                         <h2 class="text-left text-[17px] font-bold text-[#4A70C6] md:text-lg">
@@ -66,4 +70,5 @@
             </div>
         {/if}
     </div>
+    <Footer />
 </div>

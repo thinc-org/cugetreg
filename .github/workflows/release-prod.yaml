@@ -1,14 +1,14 @@
-# Prod release (manual semver): cut a release by tagging main with vX.Y.Z and
-# pushing the tag. CI builds web + api with that version tag and opens a PR
-# against the gitops prod overlay (so a human approves the prod rollout).
+# Prod release: publish a GitHub Release (creating its tag, e.g. vX.Y.Z, if it
+# doesn't already exist). CI builds web + api with that version tag and opens
+# a PR against the gitops prod overlay (so a human approves the prod rollout).
 #
-#   git tag v2.0.1 && git push origin v2.0.1
+# A bare `git tag vX.Y.Z && git push origin vX.Y.Z` no longer triggers this —
+# publish a Release from that tag in the GitHub UI (or `gh release create`).
 name: Build & deploy prod
 
 on:
-  push:
-    tags:
-      - "v*"
+  release:
+    types: [published]
 
 permissions:
   contents: read
@@ -24,7 +24,7 @@ jobs:
     uses: ./.github/workflows/build-deploy.yaml
     with:
       env: prod
-      tag: ${{ github.ref_name }}     # the git tag, e.g. v2.0.1
+      tag: ${{ github.event.release.tag_name }}     # e.g. v2.0.1
       update-mode: pr
     secrets:
       GH_TOKEN: ${{ secrets.GH_TOKEN }}

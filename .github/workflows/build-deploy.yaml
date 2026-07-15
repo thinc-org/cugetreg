@@ -142,9 +142,24 @@ jobs:
           repository: ${{ env.GITOPS_REPO }}
           ref: ${{ env.GITOPS_REF }}
           token: ${{ secrets.GH_TOKEN }}
-      # Pin tag@digest: the tag stays human-readable in the values file, the
+      # Standalone kustomize CLI — `kustomize edit set image` isn't in `kubectl
+      # kustomize`. Downloaded directly + checksum-verified (not a Marketplace
+      # action) per this file's pin-to-SHA supply-chain stance.
+      - name: Install kustomize
+        env:
+          KUSTOMIZE_VERSION: v5.8.1
+          KUSTOMIZE_SHA256: 029a7f0f4e1932c52a0476cf02a0fd855c0bb85694b82c338fc648dcb53a819d
+        run: |
+          curl -sLo kustomize.tar.gz "https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2F${KUSTOMIZE_VERSION}/kustomize_${KUSTOMIZE_VERSION}_linux_amd64.tar.gz"
+          echo "${KUSTOMIZE_SHA256}  kustomize.tar.gz" | sha256sum -c -
+          tar -xzf kustomize.tar.gz
+          sudo mv kustomize /usr/local/bin/kustomize
+      # Pin tag@digest: the tag stays human-readable in the overlay, the
       # @sha256 digest makes the deploy reproducible and immune to a moved tag.
-      - name: Bump image tags in Helm values for ${{ inputs.env }}
+      # Matches the "my-registry/<comp>" base image name the gitops overlays
+      # currently use (see naming map comment at the top of this file) — the
+      # image transformer rewrites both name and tag in one shot.
+      - name: Bump image tags in ${{ inputs.env }} kustomization
         run: |
           declare -A DIGEST=(
             [web]="${{ needs.web.outputs.digest }}"
@@ -152,12 +167,12 @@ jobs:
           )
           for comp in web api; do
             ref="${REGISTRY}/${IMAGE_NS}/$comp:${{ inputs.tag }}@${DIGEST[$comp]}"
-            file="apps/$comp/values-${{ inputs.env }}.yaml"
-            if [ ! -f "$file" ]; then
-              echo "::error::$file not found — skipping $comp"
+            dir="$comp/overlays/${{ inputs.env }}"
+            if [ ! -d "$dir" ]; then
+              echo "::error::$dir not found — skipping $comp"
               continue
             fi
-            sed -i "s|^image: ${REGISTRY}/${IMAGE_NS}/$comp:.*|image: $ref|" "$file"
+            (cd "$dir" && kustomize edit set image "my-registry/$comp=$ref")
             echo "bumped $comp → $ref"
           done
       - name: Write back (commit or PR)

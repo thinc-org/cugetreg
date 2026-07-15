@@ -40,7 +40,8 @@ env:
   REGISTRY: ghcr.io
   IMAGE_NS: narumedsr-p
   GITOPS_REPO: narumedsr-p/cugetregv2-gitops
-  GITOPS_REF: main
+  # No single GITOPS_REF here — beta and prod write to different gitops
+  # branches (see "Determine gitops branch" step in update-gitops below).
 
 jobs:
   # ── web: self-contained build ───────────────────────────────────────────────
@@ -137,10 +138,20 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
+      # Beta and prod write to different gitops branches so a beta commit can
+      # never land on the same history prod's ArgoCD Applications sync from.
+      - name: Determine gitops branch
+        id: gitops-ref
+        run: |
+          if [ "${{ inputs.env }}" = "beta" ]; then
+            echo "ref=beta" >> "$GITHUB_OUTPUT"
+          else
+            echo "ref=main" >> "$GITHUB_OUTPUT"
+          fi
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
         with:
           repository: ${{ env.GITOPS_REPO }}
-          ref: ${{ env.GITOPS_REF }}
+          ref: ${{ steps.gitops-ref.outputs.ref }}
           token: ${{ secrets.GH_TOKEN }}
       # Standalone kustomize CLI — `kustomize edit set image` isn't in `kubectl
       # kustomize`. Downloaded directly + checksum-verified (not a Marketplace
@@ -178,6 +189,7 @@ jobs:
       - name: Write back (commit or PR)
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITOPS_REF: ${{ steps.gitops-ref.outputs.ref }}
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -192,9 +204,9 @@ jobs:
               --body "Automated image bump: web, api → \`${{ inputs.tag }}\`"
           else
             git commit -am "$MSG"
-            # gitops main is shared: this repo AND the admin repo push image bumps
-            # here, so concurrent runs race. Rebase-retry on non-fast-forward
-            # rejection instead of failing the deploy.
+            # gitops beta branch is dedicated to this trigger, but rapid
+            # concurrent runs could still race each other. Rebase-retry on
+            # non-fast-forward rejection instead of failing the deploy.
             for attempt in 1 2 3 4 5; do
               if git push origin "HEAD:${GITOPS_REF}"; then
                 echo "pushed on attempt $attempt"; exit 0

@@ -1,21 +1,19 @@
-# Beta auto-deploy: every push to the `beta` branch runs lint + test, and only
-# if both pass builds web + api with an immutable tag (beta-<sha>) and commits
-# the new tag into the gitops beta overlay. ArgoCD picks up the commit and syncs.
-#
-# NOTE: temporarily also triggers on mvp1-dev for trial runs.
-# TODO: remove mvp1-dev from triggers once the pipeline is validated.
+# Beta auto-deploy: every push to the `v2-beta` branch runs lint + test, and
+# only if both pass builds web + api with an immutable tag (beta-<sha>) and
+# commits the new tag into the gitops beta overlay (gitops `beta` branch).
+# ArgoCD picks up the commit and syncs.
 name: Build & deploy beta
 
 on:
   push:
-    branches: [beta, mvp1-dev]
+    branches: [v2-beta]
 
 permissions:
   contents: read
   packages: write
 
-# Serialize beta deploys: rapid pushes to `beta` must not race each other into
-# the shared gitops main branch. cancel-in-progress:false → let an in-flight
+# Serialize beta deploys: rapid pushes to `v2-beta` must not race each other
+# into the gitops `beta` branch. cancel-in-progress:false → let an in-flight
 # deploy finish (don't leave a half-written gitops commit) before the next runs.
 concurrency:
   group: deploy-beta

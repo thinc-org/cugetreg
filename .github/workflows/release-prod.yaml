@@ -1,9 +1,12 @@
-# Prod release: publish a GitHub Release (creating its tag, e.g. vX.Y.Z, if it
-# doesn't already exist). CI builds web + api with that version tag and opens
-# a PR against the gitops prod overlay (so a human approves the prod rollout).
+# Prod release: publish a GitHub Release targeting the `v2-prod` branch
+# (creating its tag, e.g. vX.Y.Z, if it doesn't already exist). CI builds
+# web + api with that version tag and opens a PR against the gitops prod
+# overlay (so a human approves the prod rollout).
 #
 # A bare `git tag vX.Y.Z && git push origin vX.Y.Z` no longer triggers this —
-# publish a Release from that tag in the GitHub UI (or `gh release create`).
+# publish a Release from that tag in the GitHub UI (or `gh release create
+# vX.Y.Z --target v2-prod`), with v2-prod selected as the target branch.
+# A Release published against any other branch is skipped, not deployed.
 name: Build & deploy prod
 
 on:
@@ -21,6 +24,9 @@ concurrency:
 
 jobs:
   deploy:
+    # target_commitish is the branch (or commit) the release's tag was cut
+    # against — only a release cut from v2-prod is allowed to deploy prod.
+    if: github.event.release.target_commitish == 'v2-prod'
     uses: ./.github/workflows/build-deploy.yaml
     with:
       env: prod

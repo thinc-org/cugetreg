@@ -3,6 +3,7 @@
     import { Loader2 } from 'lucide-svelte';
     import { goto } from '$app/navigation';
     import { Footer } from '@cugetreg/ui/organisms/footer';
+    import { TriangleAlert } from '@lucide/svelte';
     interface Announcement {
         id: string;
         title: string;
@@ -11,9 +12,18 @@
     }
 
     let announcements = $state<Announcement[]>([]);
-    let isLoading = $state(true);
+    let isLoading = $state(true)
+    let isMobile = $state(false);
 
     $effect(() => {
+        const mq = window.matchMedia('(max-width: 768px)');
+        isMobile = mq.matches;
+
+        const handler = (e: MediaQueryListEvent) => {
+            isMobile = e.matches;
+        };
+        mq.addEventListener('change', handler);
+
         const fetchAnnouncements = async () => {
             try {
                 const response = await api.get('/announcement');
@@ -25,6 +35,9 @@
             }
         };
         fetchAnnouncements();
+        return () => {
+            mq.removeEventListener('change', handler);
+        };
     })
     
     function formatDate(dateString: string): string {
@@ -70,5 +83,14 @@
             </div>
         {/if}
     </div>
-    <Footer />
+    <a
+        class="sticky right-6 bottom-6 mb-6 z-50 ml-auto mt-8 flex w-max cursor-pointer items-center gap-1 rounded-full border-2 border-black bg-white px-2 py-1 md:gap-2 md:px-4"
+        href="https://docs.google.com/forms/d/e/1FAIpQLScH2AZyifTnBVXiJBtyzM73MReGX2vpM1_I9IWQfABMduVgsg/viewform?usp=dialog"
+        target="_blank"
+        rel="noopener noreferrer"
+    >   
+        <TriangleAlert size={isMobile ? 16 : 20} strokeWidth={1.5} color="black" />
+        <span class="text-[10px] text-black md:text-xs">แจ้งปัญหาการใช้งาน</span>
+    </a> 
 </div>
+<Footer />

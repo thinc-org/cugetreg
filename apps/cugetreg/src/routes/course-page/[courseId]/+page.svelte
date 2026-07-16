@@ -14,6 +14,7 @@
     ALLOWED_SEMESTER,
     SEMESTER_LABEL_LONG,
   } from '$lib/semesterOptions';
+  import { thaiLabelToSemesterMapper } from '$lib/mapper';
   import { loginPopupState } from '$lib/stores/login-popup.svelte';
   import { getUserCartStore, useCartActions } from '$lib/stores/user-cart';
 
@@ -274,10 +275,7 @@
     if (editingReviewId) {
       const patchPayload = {
         academicYear: Number(selectedYear),
-        semester:
-          ALLOWED_SEMESTER.find(
-            (s) => SEMESTER_LABEL_LONG[s] === selectedTerm,
-          ) || 'FIRST',
+        semester: thaiLabelToSemesterMapper(selectedTerm),
         rating: reviewRating * 2,
         content: reviewContent,
       };
@@ -308,9 +306,7 @@
       courseNo: course.courseNo,
       studyProgram: course.studyProgram,
       academicYear: Number(selectedYear),
-      semester:
-        ALLOWED_SEMESTER.find((s) => SEMESTER_LABEL_LONG[s] === selectedTerm) ||
-        'FIRST',
+      semester: thaiLabelToSemesterMapper(selectedTerm),
       rating: reviewRating * 2,
       content: reviewContent,
     };

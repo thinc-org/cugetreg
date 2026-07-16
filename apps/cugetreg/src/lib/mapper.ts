@@ -1,5 +1,6 @@
 import type { Day } from '@cugetreg/utils/types';
 import type { GenEdType, SortBy, StudyProgram } from '@cugetreg/zod-schemas';
+import { ALLOWED_SEMESTER, SEMESTER_LABEL_LONG } from '$lib/semesterOptions';
 import type { Semester } from '@cugetreg/zod-schemas';
 
 export function studyProgramMapper(studyProgram: StudyProgram) {
@@ -104,4 +105,17 @@ export function semesterToTermMapper(semester: Semester | string): string {
     default:
       return '1';
   }
+}
+
+export function reviewStatusPriorityMapper(status: string): number {
+  const priority: Record<string, number> = {
+    REJECTED: 0,
+    PENDING: 1,
+    APPROVED: 2,
+  }
+  return priority[status] ?? 3; 
+}
+
+export function thaiLabelToSemesterMapper(label: string): Semester {
+  return ALLOWED_SEMESTER.find((s) => SEMESTER_LABEL_LONG[s] === label) || 'FIRST';
 }

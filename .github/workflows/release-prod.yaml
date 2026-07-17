@@ -1,12 +1,14 @@
-# Prod release: publish a GitHub Release targeting the `v2-prod` branch
-# (creating its tag, e.g. vX.Y.Z, if it doesn't already exist). CI builds
-# web + api with that version tag and opens a PR against the gitops prod
-# overlay (so a human approves the prod rollout).
+# Prod release: publish a GitHub Release targeting the `v2-prod` branch,
+# tagged <component>@<version> (e.g. web@1.13.1, api@1.15.1) — each
+# component releases and deploys completely independently, only the tagged
+# one is built and bumped. CI builds it and opens a PR against the gitops
+# prod overlay (so a human approves the prod rollout).
 #
-# A bare `git tag vX.Y.Z && git push origin vX.Y.Z` no longer triggers this —
-# publish a Release from that tag in the GitHub UI (or `gh release create
-# vX.Y.Z --target v2-prod`), with v2-prod selected as the target branch.
-# A Release published against any other branch is skipped, not deployed.
+# publish a Release from a v2-prod tag in the GitHub UI (or `gh release
+# create web@1.13.1 --target v2-prod`), with v2-prod selected as the target
+# branch. A Release published against any other branch is skipped, not
+# deployed; a Release on v2-prod whose tag isn't <component>@<version>
+# fails loudly instead.
 name: Build & deploy prod
 
 on:
@@ -23,14 +25,32 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  deploy:
-    # target_commitish is the branch (or commit) the release's tag was cut
-    # against — only a release cut from v2-prod is allowed to deploy prod.
+  parse-tag:
+    runs-on: ubuntu-latest
     if: github.event.release.target_commitish == 'v2-prod'
+    outputs:
+      component: ${{ steps.parse.outputs.component }}
+      version: ${{ steps.parse.outputs.version }}
+    steps:
+      - name: Parse component@version from tag
+        id: parse
+        env:
+          TAG: ${{ github.event.release.tag_name }}
+        run: |
+          if [[ ! "$TAG" =~ ^(web|api)@[0-9] ]]; then
+            echo "::error::tag '$TAG' doesn't match <component>@<version> (expected web@X.Y.Z or api@X.Y.Z)"
+            exit 1
+          fi
+          echo "component=${TAG%%@*}" >> "$GITHUB_OUTPUT"
+          echo "version=${TAG#*@}" >> "$GITHUB_OUTPUT"
+
+  deploy:
+    needs: parse-tag
     uses: ./.github/workflows/build-deploy.yaml
     with:
       env: prod
-      tag: ${{ github.event.release.tag_name }}     # e.g. v2.0.1
+      component: ${{ needs.parse-tag.outputs.component }}
+      tag: ${{ needs.parse-tag.outputs.version }}     # e.g. 1.13.1
       update-mode: pr
     secrets:
       GH_TOKEN: ${{ secrets.GH_TOKEN }}

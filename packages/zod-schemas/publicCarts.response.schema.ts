@@ -1,57 +1,19 @@
 import { z } from "zod";
 
 import {
+  CartItemDetailBaseSchema,
+  CartWithItemsBaseSchema,
   ClassConflictSchema,
   ClassScheduleItemSchema,
   ExamConflictSchema,
   ExamScheduleItemSchema,
 } from "./carts.response.schema.js";
-
-const SectionSchema = z.object({
-  id: z.string(),
-  sectionNo: z.number().int(),
-  closed: z.boolean(),
-  regis: z.number(),
-  max: z.number(),
-  note: z.string().nullable(),
-  classes: z.array(
-    z.object({
-      type: z.string(),
-      dayOfWeek: z.string(),
-      periodStart: z.string(),
-      periodEnd: z.string(),
-      building: z.string().nullable(),
-      room: z.string().nullable(),
-      professors: z.array(z.string()),
-    }),
-  ),
-});
-
-const PublicCartItemDetailSchema = z.object({
-  id: z.string(),
-  courseNo: z.string(),
-  sectionNo: z.number(),
-  color: z.string().nullable(),
-  hidden: z.boolean(),
-  cartOrder: z.string(),
-  course: z.object({
-    courseNameTh: z.string(),
-    courseNameEn: z.string(),
-    credit: z.string(),
-  }),
-  sections: z.array(SectionSchema),
-});
+import { semester, studyProgram, visible } from "./constants.js";
 
 export const PublicCartDetailResponseSchema = z.object({
+  owner: z.string().optional(),
   data: z.object({
-    cart: z.object({
-      id: z.string(),
-      name: z.string(),
-      studyProgram: z.string(),
-      academicYear: z.number(),
-      semester: z.string(),
-      items: z.array(PublicCartItemDetailSchema),
-    }),
+    cart: CartWithItemsBaseSchema,
     summary: z.object({
       totalCredits: z.string(),
     }),
@@ -69,47 +31,27 @@ export const PublicCartDetailResponseSchema = z.object({
 export const PublicCartSchema = z.object({
   id: z.string(),
   userId: z.string(),
-  studyProgram: z.string(),
+  studyProgram: studyProgram,
   academicYear: z.number(),
-  semester: z.string(),
+  semester: semester,
   name: z.string(),
-  visible: z.string(),
+  visible: visible,
   isDefault: z.boolean(),
   cartOrder: z.string(),
-  createdAt: z.union([z.date(), z.string()]),
-  updatedAt: z.union([z.date(), z.string()]),
+  createdAt: z.date().or(z.string()),
+  updatedAt: z.date().or(z.string()),
 });
 
 export const ImportPublicCartResponseSchema = z.object({
   data: z.object({
     cart: PublicCartSchema.extend({
-      items: z.array(z.any()).optional(),
+      items: z.array(CartItemDetailBaseSchema).optional(),
     }),
   }),
 });
 
-const _CartItemDetailSchema = z.object({
-  id: z.string(),
-  courseNo: z.string(),
-  sectionNo: z.number(),
-  color: z.string().nullable(),
-  hidden: z.boolean(),
-  cartOrder: z.string(),
-  isGraded: z.boolean(),
-  expectedGrade: z.string(),
-  course: z.object({
-    courseNameTh: z.string(),
-    courseNameEn: z.string(),
-    credit: z.string(),
-  }),
-  section: z
-    .object({
-      closed: z.boolean(),
-      regis: z.number(),
-      max: z.number(),
-      note: z.string().nullable(),
-    })
-    .nullable(),
-});
+export type PublicCartDetail = z.infer<
+  typeof PublicCartDetailResponseSchema
+>["data"];
 
-export type PublicCartItemDetail = z.infer<typeof PublicCartItemDetailSchema>;
+export type PublicCartItemDetail = z.infer<typeof CartItemDetailBaseSchema>;

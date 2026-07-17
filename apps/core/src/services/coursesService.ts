@@ -89,6 +89,7 @@ export async function queryCourse(
       academicYear: row.academic_year,
       semester: row.semester,
       courseNo: row.course_no,
+      courseCondition: row.course_condition,
       genEdType: row.gen_ed_type,
       midtermStart: row.midterm_start?.toISOString() ?? null,
       midtermEnd: row.midterm_end?.toISOString() ?? null,

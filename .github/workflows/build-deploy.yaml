@@ -141,6 +141,11 @@ jobs:
   # ── write the new tag into the gitops repo ────────────────────────────────────
   update-gitops:
     needs: [web, api]
+    # A skipped job counts as neither success nor failure for `needs`, so
+    # the default (implicit success()) condition would skip this too when
+    # only one of web/api ran (single-component prod release). Run as long
+    # as at least one of them actually succeeded.
+    if: always() && (needs.web.result == 'success' || needs.api.result == 'success')
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:

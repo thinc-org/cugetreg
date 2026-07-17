@@ -27,6 +27,11 @@ on:
         description: how to write back to gitops (commit | pr)
         default: commit
         type: string
+      component:
+        description: single component to build (web|api) — empty builds both (beta)
+        required: false
+        default: ""
+        type: string
     secrets:
       GH_TOKEN:
         description: token with write access to the gitops repo
@@ -40,11 +45,13 @@ env:
   REGISTRY: ghcr.io
   IMAGE_NS: narumedsr-p
   GITOPS_REPO: narumedsr-p/cugetregv2-gitops
-  GITOPS_REF: main
+  # No single GITOPS_REF here — beta and prod write to different gitops
+  # branches (see "Determine gitops branch" step in update-gitops below).
 
 jobs:
   # ── web: self-contained build ───────────────────────────────────────────────
   web:
+    if: inputs.component == '' || inputs.component == 'web'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     # Expose the pushed image's content digest so update-gitops can pin by digest
@@ -79,6 +86,7 @@ jobs:
   # The api Dockerfile COPYs a pre-generated src/generated/prisma/sql.ts and does
   # NOT regenerate it, so we must produce it here before docker build.
   api:
+    if: inputs.component == '' || inputs.component == 'api'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     outputs:
@@ -134,13 +142,28 @@ jobs:
   # ── write the new tag into the gitops repo ────────────────────────────────────
   update-gitops:
     needs: [web, api]
+    # A skipped job counts as neither success nor failure for `needs`, so
+    # the default (implicit success()) condition would skip this too when
+    # only one of web/api ran (single-component prod release). Run as long
+    # as at least one of them actually succeeded.
+    if: always() && (needs.web.result == 'success' || needs.api.result == 'success')
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
+      # Beta and prod write to different gitops branches so a beta commit can
+      # never land on the same history prod's ArgoCD Applications sync from.
+      - name: Determine gitops branch
+        id: gitops-ref
+        run: |
+          if [ "${{ inputs.env }}" = "beta" ]; then
+            echo "ref=beta" >> "$GITHUB_OUTPUT"
+          else
+            echo "ref=main" >> "$GITHUB_OUTPUT"
+          fi
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
         with:
           repository: ${{ env.GITOPS_REPO }}
-          ref: ${{ env.GITOPS_REF }}
+          ref: ${{ steps.gitops-ref.outputs.ref }}
           token: ${{ secrets.GH_TOKEN }}
       # Standalone kustomize CLI — `kustomize edit set image` isn't in `kubectl
       # kustomize`. Downloaded directly + checksum-verified (not a Marketplace
@@ -160,41 +183,59 @@ jobs:
       # currently use (see naming map comment at the top of this file) — the
       # image transformer rewrites both name and tag in one shot.
       - name: Bump image tags in ${{ inputs.env }} kustomization
+        id: bump
         run: |
           declare -A DIGEST=(
             [web]="${{ needs.web.outputs.digest }}"
             [api]="${{ needs.api.outputs.digest }}"
           )
-          for comp in web api; do
+          comps="web api"
+          [ -n "${{ inputs.component }}" ] && comps="${{ inputs.component }}"
+          for comp in $comps; do
             ref="${REGISTRY}/${IMAGE_NS}/$comp:${{ inputs.tag }}@${DIGEST[$comp]}"
             dir="$comp/overlays/${{ inputs.env }}"
             if [ ! -d "$dir" ]; then
               echo "::error::$dir not found — skipping $comp"
               continue
             fi
+            # Only meaningful for single-component (prod/PR) releases, to show
+            # old → new in the PR title. Beta bumps both components and never
+            # opens a PR, so being overwritten each loop iteration is harmless.
+            old_tag=$(grep 'newTag:' "$dir/kustomization.yaml" | awk '{print $2}')
+            echo "old_tag=${old_tag}" >> "$GITHUB_OUTPUT"
             (cd "$dir" && kustomize edit set image "my-registry/$comp=$ref")
             echo "bumped $comp → $ref"
           done
       - name: Write back (commit or PR)
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITOPS_REF: ${{ steps.gitops-ref.outputs.ref }}
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          MSG="deploy(${{ inputs.env }}): web,api → ${{ inputs.tag }}"
+          # Component-scoped label so branch names/messages never collide
+          # between independent web/api releases that happen to share a
+          # version number (e.g. web@2.0.0 and api@2.0.0 both bumping the
+          # same overlay path would otherwise fight over one branch name).
+          COMPONENT_LABEL="${{ inputs.component }}"
+          [ -z "$COMPONENT_LABEL" ] && COMPONENT_LABEL="web-api"
+          MSG="deploy(${{ inputs.env }}): $COMPONENT_LABEL → ${{ inputs.tag }}"
           if [ "${{ inputs.update-mode }}" = "pr" ]; then
-            BR="deploy/${{ inputs.env }}-${{ inputs.tag }}"
+            BR="deploy/${{ inputs.env }}-$COMPONENT_LABEL-${{ inputs.tag }}"
             git switch -c "$BR"
             git commit -am "$MSG"
             git push origin "$BR"
+            OLD_TAG="${{ steps.bump.outputs.old_tag }}"
+            PR_BODY=$(printf 'Update GitOps\nDate %s\n\nThis PR is automatically generated\n\nUpdated Packages\n%s: %s\n' \
+              "$(date +%d/%m/%Y)" "$COMPONENT_LABEL" "${{ inputs.tag }}")
             gh pr create --base "${GITOPS_REF}" --head "$BR" \
-              --title "deploy(${{ inputs.env }}): ${{ inputs.tag }}" \
-              --body "Automated image bump: web, api → \`${{ inputs.tag }}\`"
+              --title "gitops: update $COMPONENT_LABEL $OLD_TAG → ${{ inputs.tag }}" \
+              --body "$PR_BODY"
           else
             git commit -am "$MSG"
-            # gitops main is shared: this repo AND the admin repo push image bumps
-            # here, so concurrent runs race. Rebase-retry on non-fast-forward
-            # rejection instead of failing the deploy.
+            # gitops beta branch is dedicated to this trigger, but rapid
+            # concurrent runs could still race each other. Rebase-retry on
+            # non-fast-forward rejection instead of failing the deploy.
             for attempt in 1 2 3 4 5; do
               if git push origin "HEAD:${GITOPS_REF}"; then
                 echo "pushed on attempt $attempt"; exit 0

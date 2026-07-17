@@ -207,15 +207,21 @@ jobs:
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          MSG="deploy(${{ inputs.env }}): web,api → ${{ inputs.tag }}"
+          # Component-scoped label so branch names/messages never collide
+          # between independent web/api releases that happen to share a
+          # version number (e.g. web@2.0.0 and api@2.0.0 both bumping the
+          # same overlay path would otherwise fight over one branch name).
+          COMPONENT_LABEL="${{ inputs.component }}"
+          [ -z "$COMPONENT_LABEL" ] && COMPONENT_LABEL="web-api"
+          MSG="deploy(${{ inputs.env }}): $COMPONENT_LABEL → ${{ inputs.tag }}"
           if [ "${{ inputs.update-mode }}" = "pr" ]; then
-            BR="deploy/${{ inputs.env }}-${{ inputs.tag }}"
+            BR="deploy/${{ inputs.env }}-$COMPONENT_LABEL-${{ inputs.tag }}"
             git switch -c "$BR"
             git commit -am "$MSG"
             git push origin "$BR"
             gh pr create --base "${GITOPS_REF}" --head "$BR" \
-              --title "deploy(${{ inputs.env }}): ${{ inputs.tag }}" \
-              --body "Automated image bump: web, api → \`${{ inputs.tag }}\`"
+              --title "deploy(${{ inputs.env }}): $COMPONENT_LABEL → ${{ inputs.tag }}" \
+              --body "Automated image bump: $COMPONENT_LABEL → \`${{ inputs.tag }}\`"
           else
             git commit -am "$MSG"
             # gitops beta branch is dedicated to this trigger, but rapid

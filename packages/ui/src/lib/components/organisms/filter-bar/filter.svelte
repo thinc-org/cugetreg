@@ -3,17 +3,12 @@
 	import { Modal } from '../../atoms/modal';
 
 	// --- 1. CONFIGURATION DATA ---
+	// Colours come from the Figma semantic tokens (Semantic/gened/*).
 	const genEdOptions = [
-		{ id: 'sci', label: 'วิทย์', color: '#F59E0B', bg: '#FFFBEB' },
-		{ id: 'hum', label: 'มนุษย์', color: '#EC4899', bg: '#FCE7F3' },
-		{ id: 'soc', label: 'สังคม', color: '#10B981', bg: '#D1FAE5' },
-		{ id: 'int', label: 'สหฯ', color: '#8B5CF6', bg: '#EDE9FE' }
-	];
-
-	const specialOptions = [
-		{ id: 'ng1', label: 'Next-Gen 1' },
-		{ id: 'ng2', label: 'Next-Gen 2' },
-		{ id: '21st', label: '21st' }
+		{ id: 'sci', label: 'วิทย์', color: '#E39600', bg: '#FFFFFF' },
+		{ id: 'hum', label: 'มนุษย์', color: '#C7117F', bg: '#FFFFFF' },
+		{ id: 'soc', label: 'สังคม', color: '#4B991C', bg: '#FFFFFF' },
+		{ id: 'int', label: 'สหฯ', color: '#681A83', bg: '#FFFFFF' }
 	];
 
 	const facultyOptions = [
@@ -22,12 +17,14 @@
 		{ id: '23', label: '23-วิทยา' }
 	];
 
+	// Mon–Fri come from the Figma semantic tokens (Semantic/dow/*).
+	// Sat/Sun are not defined in Figma, so they keep their existing colours.
 	const dayOptions = [
-		{ id: 'mon', label: 'จันทร์', color: '#D97706', bg: '#FFF7ED' },
-		{ id: 'tue', label: 'อังคาร', color: '#DB2777', bg: '#FDF2F8' },
-		{ id: 'wed', label: 'พุธ', color: '#059669', bg: '#ECFDF5' },
-		{ id: 'thu', label: 'พฤหัส', color: '#EA580C', bg: '#FFF7ED' },
-		{ id: 'fri', label: 'ศุกร์', color: '#2563EB', bg: '#EFF6FF' },
+		{ id: 'mon', label: 'จันทร์', color: '#E39600', bg: '#FFF3D2' },
+		{ id: 'tue', label: 'อังคาร', color: '#C7117F', bg: '#FDD8EE' },
+		{ id: 'wed', label: 'พุธ', color: '#4B991C', bg: '#D1FEB6' },
+		{ id: 'thu', label: 'พฤหัส', color: '#E87D00', bg: '#FFE2BF' },
+		{ id: 'fri', label: 'ศุกร์', color: '#0C5A93', bg: '#DAEFFE' },
 		{ id: 'sat', label: 'เสาร์', color: '#7C3AED', bg: '#F3E8FF' },
 		{ id: 'sun', label: 'อาทิตย์', color: '#DC2626', bg: '#FEF2F2' }
 	];
@@ -40,7 +37,6 @@
 	// --- 2. PROPS (Svelte 5) ---
 	let {
 		selectedGenEds = $bindable([]),
-		selectedSpecial = $bindable([]),
 		selectedFaculties = $bindable([]),
 		selectedDays = $bindable([]),
 		selectedEval = $bindable([]),
@@ -67,9 +63,6 @@
 	let activeGenEds = $derived(genEdOptions.filter((o) => selectedGenEds.includes(o.id)));
 	let availableGenEds = $derived(genEdOptions.filter((o) => !selectedGenEds.includes(o.id)));
 
-	let activeSpecial = $derived(specialOptions.filter((o) => selectedSpecial.includes(o.id)));
-	let availableSpecial = $derived(specialOptions.filter((o) => !selectedSpecial.includes(o.id)));
-
 	let activeFaculties = $derived(facultyOptions.filter((o) => selectedFaculties.includes(o.id)));
 	let availableFaculties = $derived(
 		facultyOptions.filter((o) => !selectedFaculties.includes(o.id))
@@ -92,7 +85,6 @@
 
 		// Svelte 5: Reassign array to trigger update
 		if (listName === 'gened') selectedGenEds = [...selectedGenEds, id];
-		if (listName === 'special') selectedSpecial = [...selectedSpecial, id];
 		if (listName === 'faculty') selectedFaculties = [...selectedFaculties, id];
 		if (listName === 'day') selectedDays = [...selectedDays, id];
 		if (listName === 'eval') selectedEval = [...selectedEval, id];
@@ -101,7 +93,6 @@
 
 	function removeOption(listName: string, id: string) {
 		if (listName === 'gened') selectedGenEds = selectedGenEds.filter((i: string) => i !== id);
-		if (listName === 'special') selectedSpecial = selectedSpecial.filter((i: string) => i !== id);
 		if (listName === 'faculty')
 			selectedFaculties = selectedFaculties.filter((i: string) => i !== id);
 		if (listName === 'day') selectedDays = selectedDays.filter((i: string) => i !== id);
@@ -115,12 +106,12 @@
 
 <svelte:window onclick={handleWindowClick} />
 
-<div class="bg-surface flex h-full w-full flex-col gap-4 font-['IBM_Plex_Sans_Thai',_sans-serif]">
+<div class="bg-surface flex h-full w-full flex-col">
 	<div
 		class="flex-1 overflow-x-hidden overflow-y-auto px-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
 	>
 		<div class="mb-4">
-			<label class="mb-1.5 block text-[13px] text-neutral-400">ประเภท GenEd</label>
+			<label class="mb-1.5 block text-xs text-neutral-400">ประเภท GenEd</label>
 			<div
 				class="bg-surface-container-lowest hover:bg-surface-container-low relative flex min-h-10 cursor-pointer flex-wrap gap-2 rounded-xl border border-transparent p-2 pr-[30px]"
 				onclick={(e) => toggleDropdown('gened', e)}
@@ -130,7 +121,7 @@
 			>
 				{#each activeGenEds as item (item.label)}
 					<div
-						class="bg-surface inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[13px] font-semibold"
+						class="bg-surface inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-normal"
 						style="color: {item.color}; border: 1px solid {item.color};"
 					>
 						{item.label}
@@ -182,66 +173,9 @@
 		</div>
 
 		<div class="mb-4">
-			<label class="mb-1.5 block text-[13px] text-neutral-400">ประเภทพิเศษ</label>
+			<label class="mb-1.5 block text-xs text-neutral-400">คณะ</label>
 			<div
-				class="bg-surface-container-low hover:bg-surface-container-lowest relative flex min-h-10 cursor-pointer flex-wrap gap-2 rounded-xl border border-transparent p-2 pr-[30px]"
-				onclick={(e) => toggleDropdown('special', e)}
-				role="button"
-				tabindex="0"
-				onkeypress={() => {}}
-			>
-				{#each activeSpecial as item (item.label)}
-					<div
-						class="inline-flex items-center gap-1.5 rounded-full bg-neutral-300 px-2.5 py-1 text-[13px] font-semibold text-neutral-700"
-					>
-						{item.label}
-						<span
-							class="cursor-pointer leading-none opacity-60 hover:opacity-100"
-							onclick={(e) => {
-								e.stopPropagation();
-								removeOption('special', item.id);
-							}}
-							role="button"
-							tabindex="0"
-							onkeypress={() => {}}>×</span
-						>
-					</div>
-				{/each}
-				{#if activeSpecial.length === 0}
-					<span class="self-center text-sm text-neutral-400">Select...</span>
-				{/if}
-				<div class="absolute top-1/2 right-2.5 -translate-y-1/2 text-[10px] text-neutral-400">
-					▼
-				</div>
-
-				{#if openDropdown === 'special'}
-					<div
-						class="border-surface-container bg-surface absolute top-[105%] right-0 left-0 z-50 max-h-[200px] overflow-y-auto rounded-lg border shadow-[0_4px_15px_rgba(0,0,0,0.1)]"
-						onclick={(e) => e.stopPropagation()}
-						role="listbox"
-						tabindex="0"
-						onkeypress={() => {}}
-					>
-						{#each availableSpecial as opt (opt.id)}
-							<div
-								class="hover:bg-surface-container-low cursor-pointer px-3.5 py-2.5 text-sm"
-								onclick={() => addOption('special', opt.id)}
-								role="option"
-								tabindex="0"
-								onkeypress={() => {}}
-							>
-								{opt.label}
-							</div>
-						{/each}
-					</div>
-				{/if}
-			</div>
-		</div>
-
-		<div class="mb-4">
-			<label class="mb-1.5 block text-[13px] text-neutral-400">คณะ</label>
-			<div
-				class="bg-surface-container-low hover:bg-surface-container-lowest relative flex min-h-10 cursor-pointer flex-wrap gap-2 rounded-xl border border-transparent p-2 pr-[30px]"
+				class="bg-surface-container-lowest hover:bg-surface-container-low relative flex min-h-10 cursor-pointer flex-wrap gap-2 rounded-xl border border-transparent p-2 pr-[30px]"
 				onclick={(e) => toggleDropdown('faculty', e)}
 				role="button"
 				tabindex="0"
@@ -249,7 +183,7 @@
 			>
 				{#each activeFaculties as item (item.id)}
 					<div
-						class="inline-flex items-center gap-1.5 rounded-full bg-neutral-300 px-2.5 py-1 text-[13px] font-semibold text-neutral-700"
+						class="bg-surface-container text-on-surface inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-normal"
 					>
 						{item.label}
 						<span
@@ -295,7 +229,7 @@
 		</div>
 
 		<div class="mb-4">
-			<label class="mb-1.5 block text-[13px] text-neutral-400">วันในสัปดาห์</label>
+			<label class="mb-1.5 block text-xs text-neutral-400">วันในสัปดาห์</label>
 			<div
 				class="bg-surface-container-lowest hover:bg-surface-container-low relative flex min-h-10 cursor-pointer flex-wrap gap-2 rounded-xl border border-transparent p-2 pr-[30px]"
 				onclick={(e) => toggleDropdown('day', e)}
@@ -305,7 +239,7 @@
 			>
 				{#each activeDays as item (item.id)}
 					<div
-						class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[13px] font-semibold"
+						class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-normal"
 						style="background-color: {item.bg}; color: {item.color};"
 					>
 						{item.label}
@@ -354,13 +288,13 @@
 
 		<div class="mb-4 flex gap-3">
 			<div class="flex-1">
-				<label class="mb-1.5 block text-[13px] text-neutral-400">เวลาเริ่ม</label>
+				<label class="mb-1.5 block text-xs text-neutral-400">เวลาเริ่ม</label>
 				<div class="relative">
 					<input
 						type="time"
 						bind:value={startTime}
 						placeholder="08:00"
-						class="bg-surface-container-lowest text-on-surface box-border w-full rounded-xl border-none p-2.5 text-sm"
+						class="bg-surface-container-lowest text-on-surface box-border w-full rounded-xl border-none p-2.5 text-base [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:inset-0 [&::-webkit-calendar-picker-indicator]:h-full [&::-webkit-calendar-picker-indicator]:w-full [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-0"
 					/>
 					<svg
 						class="pointer-events-none absolute top-1/2 right-2.5 -translate-y-1/2"
@@ -376,13 +310,13 @@
 				</div>
 			</div>
 			<div class="flex-1">
-				<label class="mb-1.5 block text-[13px] text-neutral-400">เวลาจบ</label>
+				<label class="mb-1.5 block text-xs text-neutral-400">เวลาจบ</label>
 				<div class="relative">
 					<input
 						type="time"
 						bind:value={endTime}
 						placeholder="16:00"
-						class="bg-surface-container-lowest text-on-surface box-border w-full rounded-xl border-none p-2.5 text-sm"
+						class="bg-surface-container-lowest text-on-surface box-border w-full rounded-xl border-none p-2.5 text-base [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:inset-0 [&::-webkit-calendar-picker-indicator]:h-full [&::-webkit-calendar-picker-indicator]:w-full [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-0"
 					/>
 					<svg
 						class="pointer-events-none absolute top-1/2 right-2.5 -translate-y-1/2"
@@ -401,7 +335,7 @@
 
 		<div class="-mt-1.5 mb-4 flex items-center gap-1.5">
 			<label
-				class="flex cursor-pointer items-center text-sm font-medium text-neutral-700 select-none"
+				class="flex cursor-pointer items-center text-base font-normal text-neutral-700 select-none"
 			>
 				<input
 					type="checkbox"
@@ -420,7 +354,7 @@
 		</div>
 
 		<div class="mb-4">
-			<label class="mb-2 block text-[13px] text-neutral-400">Fit my schedule</label>
+			<label class="mb-2 block text-xs text-neutral-400">Fit my schedule</label>
 			<div class="flex items-center gap-2.5">
 				<label class="relative inline-block h-6 w-11">
 					<input
@@ -433,7 +367,7 @@
 						class="absolute inset-0 cursor-pointer rounded-[34px] bg-neutral-300 transition-colors duration-[0.4s] peer-checked:bg-neutral-400 before:absolute before:bottom-[3px] before:left-[3px] before:h-[18px] before:w-[18px] before:rounded-[50%] before:bg-white before:transition-transform before:duration-[0.4s] before:content-[''] peer-checked:before:translate-x-5"
 					></span>
 				</label>
-				<span class="flex items-center gap-1.5 text-sm font-medium text-neutral-700">
+				<span class="flex items-center gap-1.5 text-base font-normal text-neutral-700">
 					Fit my schedule
 					<span class="inline-flex items-center">
 						<InfoCircle tooltipText="แสดงเฉพาะรายวิชาที่ไม่ชนกับตารางเรียนของคุณ" />
@@ -443,9 +377,9 @@
 		</div>
 
 		<div class="mb-4">
-			<label class="mb-1.5 block text-[13px] text-neutral-400">วิธีการวัดผล</label>
+			<label class="mb-1.5 block text-xs text-neutral-400">วิธีการวัดผล</label>
 			<div
-				class="bg-surface-container-low hover:bg-surface-container-lowest relative flex min-h-10 cursor-pointer flex-wrap gap-2 rounded-xl border border-transparent p-2 pr-[30px]"
+				class="bg-surface-container-lowest hover:bg-surface-container-low relative flex min-h-10 cursor-pointer flex-wrap gap-2 rounded-xl border border-transparent p-2 pr-[30px]"
 				onclick={(e) => toggleDropdown('eval', e)}
 				role="button"
 				tabindex="0"
@@ -453,7 +387,7 @@
 			>
 				{#each activeEval as item (item.label)}
 					<div
-						class="inline-flex items-center gap-1.5 rounded-full bg-neutral-300 px-2.5 py-1 text-[13px] font-semibold text-neutral-700"
+						class="bg-surface-container text-on-surface inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-normal"
 					>
 						{item.label}
 						<span
@@ -500,7 +434,7 @@
 	</div>
 	<div>
 		<button
-			class="bg-primary-low text-on-primary-low hover:bg-primary-low mt-2.5 w-full cursor-pointer rounded-xl border-none p-3 text-base font-bold"
+			class="bg-primary-low text-on-primary-low hover:bg-primary-low w-full cursor-pointer rounded-xl border-none p-3 text-base font-medium"
 			onclick={onsearch}
 		>
 			ค้นหา

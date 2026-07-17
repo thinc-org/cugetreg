@@ -2,12 +2,21 @@
   import { resolve } from '$app/paths';
   import { getUserCartStore, useCartActions } from '$lib/stores/user-cart';
 
-  import { BookMarked, Equal, Eye, EyeOff, Trash2 } from '@lucide/svelte';
+  import {
+    BookMarked,
+    ChevronDown,
+    Equal,
+    Eye,
+    EyeOff,
+    Trash2,
+  } from '@lucide/svelte';
   import {
     SortableList,
     sortItems,
   } from '@rodrigodagostino/svelte-sortable-list';
   import type { ClassValue } from 'clsx';
+  import { cubicOut } from 'svelte/easing';
+  import { slide } from 'svelte/transition';
 
   import * as Accordion from '@cugetreg/ui/atoms/accordion';
   import { Button } from '@cugetreg/ui/atoms/button';
@@ -15,6 +24,7 @@
   import { IconButton } from '@cugetreg/ui/atoms/icon-button';
   import { ColorPicker } from '@cugetreg/ui/molecules/colorpicker';
   import * as Select from '@cugetreg/ui/molecules/select';
+
   import { cn } from '@cugetreg/utils';
   import { courseColorVariants } from '@cugetreg/utils/constants';
   import type { ColorVariant } from '@cugetreg/utils/types';
@@ -54,12 +64,17 @@
     class?: ClassValue;
     variant?: 'simple' | 'detailed' | 'grouped';
     onArrange?: () => void;
+    open?: boolean;
+    /** Show a divider between the header and the body while expanded. */
+    headerDivider?: boolean;
   }
 
   let {
     class: className = undefined,
     variant = 'detailed',
     onArrange,
+    open = $bindable(true),
+    headerDivider = false,
   }: SelectedCourseProp = $props();
 
   const totalCredit = $derived(
@@ -93,30 +108,50 @@
 <div class={cn(className)}>
   {#if variant === 'grouped'}
     <div class="flex flex-col">
-      <div class="mb-4 flex items-baseline gap-2">
-        <h2 class="text-xl font-bold text-[#1C1B1F]">วิชาที่เลือก</h2>
-        <span class="text-sm font-normal text-gray-400"
-          >{totalCredit} หน่วยกิต</span
-        >
-      </div>
-
-      {#if genedCourses.length > 0}
-        <p class="mb-1 text-sm font-medium text-[#6F7593]">วิชา GenEd</p>
-        {#each genedCourses as course (course.id)}
-          {@render groupedRow(course)}
-        {/each}
-      {/if}
-
-      {#if otherCourses.length > 0}
-        <p class="mt-4 mb-1 text-sm font-medium text-[#6F7593]">วิชาอื่นๆ</p>
-        {#each otherCourses as course (course.id)}
-          {@render groupedRow(course)}
-        {/each}
-      {/if}
-
-      <Button class="mt-6 w-full" color="neutral" onclick={onArrange}
-        >จัดตารางเรียน</Button
+      <button
+        type="button"
+        onclick={() => (open = !open)}
+        aria-expanded={open}
+        class="mb-4 flex w-full items-center justify-between"
       >
+        <span class="flex items-baseline gap-2">
+          <h2 class="text-on-surface text-lg/[20px] font-medium">วิชาที่เลือก</h2>
+          <span class="text-xs font-normal text-neutral-400"
+            >{totalCredit} หน่วยกิต</span
+          >
+        </span>
+        <ChevronDown
+          size={20}
+          class="text-gray-400 transition-transform duration-200 {open
+            ? 'rotate-180'
+            : ''}"
+        />
+      </button>
+
+      {#if open}
+        <div transition:slide={{ duration: 250, easing: cubicOut }}>
+          {#if headerDivider}
+            <hr class="mb-4 border-t border-neutral-100" />
+          {/if}
+          {#if genedCourses.length > 0}
+            <p class="mb-1 text-sm font-medium text-[#6F7593]">วิชา GenEd</p>
+            {#each genedCourses as course (course.id)}
+              {@render groupedRow(course)}
+            {/each}
+          {/if}
+
+          {#if otherCourses.length > 0}
+            <p class="mt-4 mb-1 text-sm font-medium text-[#6F7593]">วิชาอื่นๆ</p>
+            {#each otherCourses as course (course.id)}
+              {@render groupedRow(course)}
+            {/each}
+          {/if}
+
+          <Button class="mt-6 w-full" color="neutral" onclick={onArrange}
+            >จัดตารางเรียน</Button
+          >
+        </div>
+      {/if}
     </div>
   {:else}
     <Accordion.Root class="w-full" type="single" value="selected-course">
@@ -167,8 +202,8 @@
 {#snippet groupedRow(course: CartItemDetail)}
   <div class="flex items-center gap-3 py-3">
     <div class="flex min-w-0 flex-1 flex-col">
-      <span class="text-xs text-neutral-400">{course.courseNo}</span>
-      <span class="truncate text-[15px] text-[#1C1B1F]"
+      <span class="text-[10px]/[15px] text-neutral-400">{course.courseNo}</span>
+      <span class="text-on-surface truncate text-xs"
         >{course.course.courseNameEn}</span
       >
     </div>
@@ -178,7 +213,7 @@
         <GenedChip type={course.genEdType} />
       </div>
     {/if}
-    <span class="w-12 shrink-0 text-right text-sm text-[#1C1B1F]"
+    <span class="text-on-surface w-12 shrink-0 text-right text-xs"
       >{course.course.credit} นก.</span
     >
 

@@ -1,0 +1,30 @@
+# Prod release: publish a GitHub Release (creating its tag, e.g. vX.Y.Z, if it
+# doesn't already exist). CI builds web + api with that version tag and opens
+# a PR against the gitops prod overlay (so a human approves the prod rollout).
+#
+# A bare `git tag vX.Y.Z && git push origin vX.Y.Z` no longer triggers this —
+# publish a Release from that tag in the GitHub UI (or `gh release create`).
+name: Build & deploy prod
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+  packages: write
+
+# Serialize prod releases so two tags can't race the gitops write-back.
+concurrency:
+  group: deploy-prod
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    uses: ./.github/workflows/build-deploy.yaml
+    with:
+      env: prod
+      tag: ${{ github.event.release.tag_name }}     # e.g. v2.0.1
+      update-mode: pr
+    secrets:
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}

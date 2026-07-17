@@ -155,6 +155,7 @@ export const cartService = {
             },
           },
         },
+        activities: { orderBy: { cartOrder: "asc" } },
       },
     });
 
@@ -212,6 +213,20 @@ export const cartService = {
           }
         : null,
       sections: item.sections,
+    }));
+
+    // 2b. Format Activity Items Response
+    const activityItemsResponse = R.map(cart.activities, (act) => ({
+      id: act.id,
+      cartId: act.cartId,
+      title: act.title,
+      description: act.description,
+      dayOfWeek: act.dayOfWeek,
+      periodStart: act.periodStart,
+      periodEnd: act.periodEnd,
+      color: act.color,
+      hidden: act.hidden,
+      cartOrder: act.cartOrder,
     }));
 
     // 3. Extract Schedules
@@ -288,6 +303,7 @@ export const cartService = {
         cartOrder: cart.cartOrder,
         visible: cart.visible,
         items: itemsResponse,
+        activityItems: activityItemsResponse,
       },
       summary: {
         totalCredits: R.sumBy(enrichedItems, (x: any) =>

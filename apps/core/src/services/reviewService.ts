@@ -16,36 +16,38 @@ import {
 
 export const reviewService = {
   submitReview: async (userId: string, newReview: SubmitReviewBodySchema) => {
-    const course = await prisma.course.findFirst({
-      where: {
-        courseNo: newReview.courseNo,
-      },
-    });
+    return prisma.$transaction(async (tx) => {
+      const course = await tx.course.findFirst({
+        where: {
+          courseNo: newReview.courseNo,
+        },
+      });
 
-    if (!course) {
-      throw new Error("COURSE_NOT_FOUND");
-    }
+      if (!course) {
+        throw new Error("COURSE_NOT_FOUND");
+      }
 
-    const createdReview = await prisma.review.create({
-      data: {
+      const createdReview = await tx.review.create({
+        data: {
+          ...newReview,
+          userId,
+          studyProgram: mapStudyProgram(newReview.studyProgram),
+          semester: mapSemester(newReview.semester),
+          status: mapReviewStatus("PENDING"),
+        },
+      });
+
+      return {
         ...newReview,
-        userId,
-        studyProgram: mapStudyProgram(newReview.studyProgram),
-        semester: mapSemester(newReview.semester),
-        status: mapReviewStatus("PENDING"),
-      },
+        id: createdReview.id,
+        semester: createdReview.semester,
+        status: createdReview.status,
+        likeCount: 0,
+        dislikeCount: 0,
+        isOwner: true,
+        createdAt: createdReview.createdAt,
+      };
     });
-
-    return {
-      ...newReview,
-      id: createdReview.id,
-      semester: createdReview.semester,
-      status: createdReview.status,
-      likeCount: 0,
-      dislikeCount: 0,
-      isOwner: true,
-      createdAt: createdReview.createdAt,
-    };
   },
   voteReview: async (
     userId: string,

@@ -1,5 +1,6 @@
 import z from "zod";
 
+import { ActivityItemSchema } from "./activity.response.schema.js";
 import { genEdType, semester, studyProgram, visible } from "./constants.js";
 import { Section } from "./types.js";
 
@@ -29,15 +30,13 @@ export const SingleCartResponseSchema = z.object({
   data: CartSchema,
 });
 
-const CartItemDetailSchema = z.object({
+export const CartItemDetailBaseSchema = z.object({
   id: z.string(),
   courseNo: z.string(),
   sectionNo: z.number(),
   color: z.string().nullable(),
   hidden: z.boolean(),
   cartOrder: z.string(),
-  isGraded: z.boolean(),
-  expectedGrade: z.string(),
   genEdType: genEdType.default("NO"),
   course: z.object({
     abbrName: z.string(),
@@ -48,16 +47,30 @@ const CartItemDetailSchema = z.object({
   sections: z.array(Section).default([]),
 });
 
-export const CartData = z.object({
+export type CartItemDetailBase = z.infer<typeof CartItemDetailBaseSchema>;
+
+export const CartWithItemsBaseSchema = z.object({
   id: z.string(),
   name: z.string(),
-  studyProgram: z.string(),
+  studyProgram: studyProgram,
   academicYear: z.number(),
-  semester: z.string(),
+  semester: semester,
+  items: z.array(CartItemDetailBaseSchema),
+});
+
+export type CartWithItemsBase = z.infer<typeof CartWithItemsBaseSchema>;
+
+const CartItemDetailSchema = CartItemDetailBaseSchema.extend({
+  isGraded: z.boolean(),
+  expectedGrade: z.string(),
+});
+
+export const CartData = CartWithItemsBaseSchema.extend({
   visible: z.string(),
   isDefault: z.boolean(),
   cartOrder: z.string(),
   items: z.array(CartItemDetailSchema),
+  activityItems: z.array(ActivityItemSchema),
 });
 
 export const ClassScheduleItemSchema = z.object({

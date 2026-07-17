@@ -27,6 +27,11 @@ on:
         description: how to write back to gitops (commit | pr)
         default: commit
         type: string
+      component:
+        description: single component to build (web|api) — empty builds both (beta)
+        required: false
+        default: ""
+        type: string
     secrets:
       GH_TOKEN:
         description: token with write access to the gitops repo
@@ -45,6 +50,7 @@ env:
 jobs:
   # ── web: self-contained build ───────────────────────────────────────────────
   web:
+    if: inputs.component == '' || inputs.component == 'web'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     # Expose the pushed image's content digest so update-gitops can pin by digest
@@ -79,6 +85,7 @@ jobs:
   # The api Dockerfile COPYs a pre-generated src/generated/prisma/sql.ts and does
   # NOT regenerate it, so we must produce it here before docker build.
   api:
+    if: inputs.component == '' || inputs.component == 'api'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     outputs:
@@ -165,7 +172,9 @@ jobs:
             [web]="${{ needs.web.outputs.digest }}"
             [api]="${{ needs.api.outputs.digest }}"
           )
-          for comp in web api; do
+          comps="web api"
+          [ -n "${{ inputs.component }}" ] && comps="${{ inputs.component }}"
+          for comp in $comps; do
             ref="${REGISTRY}/${IMAGE_NS}/$comp:${{ inputs.tag }}@${DIGEST[$comp]}"
             dir="$comp/overlays/${{ inputs.env }}"
             if [ ! -d "$dir" ]; then

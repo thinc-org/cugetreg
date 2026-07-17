@@ -183,6 +183,7 @@ jobs:
       # currently use (see naming map comment at the top of this file) — the
       # image transformer rewrites both name and tag in one shot.
       - name: Bump image tags in ${{ inputs.env }} kustomization
+        id: bump
         run: |
           declare -A DIGEST=(
             [web]="${{ needs.web.outputs.digest }}"
@@ -197,6 +198,11 @@ jobs:
               echo "::error::$dir not found — skipping $comp"
               continue
             fi
+            # Only meaningful for single-component (prod/PR) releases, to show
+            # old → new in the PR title. Beta bumps both components and never
+            # opens a PR, so being overwritten each loop iteration is harmless.
+            old_tag=$(grep 'newTag:' "$dir/kustomization.yaml" | awk '{print $2}')
+            echo "old_tag=${old_tag}" >> "$GITHUB_OUTPUT"
             (cd "$dir" && kustomize edit set image "my-registry/$comp=$ref")
             echo "bumped $comp → $ref"
           done
@@ -219,9 +225,12 @@ jobs:
             git switch -c "$BR"
             git commit -am "$MSG"
             git push origin "$BR"
+            OLD_TAG="${{ steps.bump.outputs.old_tag }}"
+            PR_BODY=$(printf 'Update GitOps\nDate %s\n\nThis PR is automatically generated\n\nUpdated Packages\n%s: %s\n' \
+              "$(date +%d/%m/%Y)" "$COMPONENT_LABEL" "${{ inputs.tag }}")
             gh pr create --base "${GITOPS_REF}" --head "$BR" \
-              --title "deploy(${{ inputs.env }}): $COMPONENT_LABEL → ${{ inputs.tag }}" \
-              --body "Automated image bump: $COMPONENT_LABEL → \`${{ inputs.tag }}\`"
+              --title "gitops: update $COMPONENT_LABEL $OLD_TAG → ${{ inputs.tag }}" \
+              --body "$PR_BODY"
           else
             git commit -am "$MSG"
             # gitops beta branch is dedicated to this trigger, but rapid

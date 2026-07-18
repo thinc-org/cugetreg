@@ -107,6 +107,10 @@ export function semesterToTermMapper(semester: Semester | string): string {
   }
 }
 
+export function semesterToThaiMapper(semester: Semester) {
+  return SEMESTER_LABEL_LONG[semester];
+}
+
 export function reviewStatusPriorityMapper(status: string): number {
   const priority: Record<string, number> = {
     REJECTED: 0,

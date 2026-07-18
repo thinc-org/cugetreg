@@ -3,6 +3,7 @@
   import { api } from '$lib/api';
 
   import { ChevronLeft, Loader2 } from 'lucide-svelte';
+  import SvelteMarkdown from 'svelte-markdown';
 
   interface AnnouncementDetail {
     id: string;
@@ -68,8 +69,8 @@
         {announcement.title}
       </h1>
 
-      <div class="text-base leading-relaxed whitespace-pre-wrap text-gray-700">
-        {announcement.content}
+      <div class="prose max-w-none text-gray-700">
+        <SvelteMarkdown source={announcement.content} />
       </div>
     </article>
   {/if}

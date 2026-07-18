@@ -9,12 +9,12 @@
   import ScheduleMismatchPopup from '$lib/components/schedule-mismatch-popup.svelte';
   import SelectedCourse from '$lib/components/selected-course.svelte';
   import { faculties } from '$lib/constants';
+  import { thaiLabelToSemesterMapper } from '$lib/mapper';
   import {
     ALLOWED_ACADEMIC_YEAR,
     ALLOWED_SEMESTER,
     SEMESTER_LABEL_LONG,
   } from '$lib/semesterOptions';
-  import { thaiLabelToSemesterMapper } from '$lib/mapper';
   import { loginPopupState } from '$lib/stores/login-popup.svelte';
   import { getUserCartStore, useCartActions } from '$lib/stores/user-cart';
 

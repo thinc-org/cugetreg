@@ -12,12 +12,12 @@
   import AppSidebar from '$lib/components/app-sidebar.svelte';
   import ScheduleMismatchPopup from '$lib/components/schedule-mismatch-popup.svelte';
   import SelectedCourse from '$lib/components/selected-course.svelte';
-  import { 
-    studyProgramMapper, 
-    sortByMapper, 
-    normalizeDayMapper, 
+  import {
+    normalizeDayMapper,
     normalizeGenedMapper,
-    semesterToTermMapper
+    semesterToTermMapper,
+    sortByMapper,
+    studyProgramMapper,
   } from '$lib/mapper';
   import {
     getSemesterDisplayOptions,
@@ -55,13 +55,13 @@
   import { Filter as FilterBar } from '@cugetreg/ui/organisms/filter-bar';
   import { Footer } from '@cugetreg/ui/organisms/footer';
   import * as Sidebar from '@cugetreg/ui/organisms/sidebar';
+  import type { Day } from '@cugetreg/utils/types';
   import {
     type Semester,
     type SortBy,
     type StudyProgram,
     studyProgram,
   } from '@cugetreg/zod-schemas';
-  import type { Day } from '@cugetreg/utils/types';
 
   const semesterOptions = getSemesterDisplayOptions();
 

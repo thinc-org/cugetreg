@@ -240,14 +240,6 @@ GROUP BY
     ss.sections_count, ss.capacity_sum,
     ss.remaining_sum, ss.closed_sections_count
 ORDER BY
-    CASE 
-        WHEN $4::gen_ed_type[] IS NULL THEN 1
-        WHEN c.gen_ed_type::text = 'SC' THEN 2
-        WHEN c.gen_ed_type::text = 'SO' THEN 3
-        WHEN c.gen_ed_type::text = 'HU' THEN 4
-        WHEN c.gen_ed_type::text = 'IN' THEN 5
-        ELSE 1
-    END ASC,
     -- NAME sort
     CASE WHEN COALESCE(NULLIF($14::text, ''), 'REMAINING_SUM') = 'NAME'    AND COALESCE(NULLIF($15::text, ''), 'asc') = 'asc'  THEN ci.abbr_name       END ASC  NULLS LAST,
     CASE WHEN COALESCE(NULLIF($14::text, ''), 'REMAINING_SUM') = 'NAME'    AND COALESCE(NULLIF($15::text, ''), 'asc') = 'desc' THEN ci.abbr_name       END DESC NULLS LAST,

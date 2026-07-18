@@ -19,6 +19,7 @@ courses
   .openapi(getCoursesRoute, async (c) => {
     try {
       const query = c.req.valid("query");
+      console.log("how");
       const user = c.get("user");
       const result = await queryCourse(query, user?.id);
       return c.json(result, 200);

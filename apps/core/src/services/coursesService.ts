@@ -12,11 +12,11 @@ export async function queryCourse(
     studyProgram,
     academicYear,
     semester,
-    genEdType,
-    faculty,
+    genEdTypes,
+    faculties,
     sortBy,
     sortOrder,
-    day,
+    days,
     assessment,
     limit,
     offset,
@@ -26,6 +26,12 @@ export async function queryCourse(
     noPrereq,
     fitCartId,
   } = query;
+
+  const selectedGenEdTypes =
+    !genEdTypes || Array.isArray(genEdTypes) ? genEdTypes : [genEdTypes];
+  const selectedDays = !days || Array.isArray(days) ? days : [days];
+  const selectedFaculties =
+    !faculties || Array.isArray(faculties) ? faculties : [faculties];
 
   if (fitCartId) {
     if (!userId) {
@@ -50,9 +56,11 @@ export async function queryCourse(
       studyProgram,
       academicYear,
       semester,
-      genEdType ?? null,
-      faculty ?? null,
-      day ? mapDayOfWeek(day) : null,
+      (selectedGenEdTypes as any) ?? null,
+      (selectedFaculties as any) ?? null,
+      selectedDays
+        ? (selectedDays.map((day) => mapDayOfWeek(day)) as any)
+        : null,
       assessment ?? null,
       q ? `%${q}%` : null,
       noPrereq ?? null,

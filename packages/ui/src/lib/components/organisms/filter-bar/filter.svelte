@@ -5,10 +5,10 @@
 	// --- 1. CONFIGURATION DATA ---
 	// Colours come from the Figma semantic tokens (Semantic/gened/*).
 	const genEdOptions = [
-		{ id: 'sci', label: 'วิทย์', color: '#E39600', bg: '#FFFFFF' },
-		{ id: 'hum', label: 'มนุษย์', color: '#C7117F', bg: '#FFFFFF' },
-		{ id: 'soc', label: 'สังคม', color: '#4B991C', bg: '#FFFFFF' },
-		{ id: 'int', label: 'สหฯ', color: '#681A83', bg: '#FFFFFF' }
+		{ id: 'SC', label: 'วิทย์', color: '#E39600', bg: '#FFFFFF' },
+		{ id: 'HU', label: 'มนุษย์', color: '#C7117F', bg: '#FFFFFF' },
+		{ id: 'SO', label: 'สังคม', color: '#4B991C', bg: '#FFFFFF' },
+		{ id: 'IN', label: 'สหฯ', color: '#681A83', bg: '#FFFFFF' }
 	];
 
 	const facultyOptions = [
@@ -20,18 +20,18 @@
 	// Mon–Fri come from the Figma semantic tokens (Semantic/dow/*).
 	// Sat/Sun are not defined in Figma, so they keep their existing colours.
 	const dayOptions = [
-		{ id: 'mon', label: 'จันทร์', color: '#E39600', bg: '#FFF3D2' },
-		{ id: 'tue', label: 'อังคาร', color: '#C7117F', bg: '#FDD8EE' },
-		{ id: 'wed', label: 'พุธ', color: '#4B991C', bg: '#D1FEB6' },
-		{ id: 'thu', label: 'พฤหัส', color: '#E87D00', bg: '#FFE2BF' },
-		{ id: 'fri', label: 'ศุกร์', color: '#0C5A93', bg: '#DAEFFE' },
-		{ id: 'sat', label: 'เสาร์', color: '#7C3AED', bg: '#F3E8FF' },
-		{ id: 'sun', label: 'อาทิตย์', color: '#DC2626', bg: '#FEF2F2' }
+		{ id: 'MO', label: 'จันทร์', color: '#E39600', bg: '#FFF3D2' },
+		{ id: 'TU', label: 'อังคาร', color: '#C7117F', bg: '#FDD8EE' },
+		{ id: 'WE', label: 'พุธ', color: '#4B991C', bg: '#D1FEB6' },
+		{ id: 'TH', label: 'พฤหัส', color: '#E87D00', bg: '#FFE2BF' },
+		{ id: 'FR', label: 'ศุกร์', color: '#0C5A93', bg: '#DAEFFE' },
+		{ id: 'SA', label: 'เสาร์', color: '#7C3AED', bg: '#F3E8FF' },
+		{ id: 'SU', label: 'อาทิตย์', color: '#DC2626', bg: '#FEF2F2' }
 	];
 
 	const evalOptions = [
-		{ id: 'su', label: 'S/U' },
-		{ id: 'grade', label: 'Letter Grade' }
+		{ id: 'SU', label: 'S/U' },
+		{ id: 'LETTER', label: 'Letter Grade' }
 	];
 
 	// --- 2. PROPS (Svelte 5) ---

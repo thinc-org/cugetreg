@@ -2,7 +2,10 @@
   import {
     getExamData,
     getExamDateOrder,
+    getLatestExamTime,
     isExamConflicted,
+    TIMETABLE_DEFAULT_END,
+    TIMETABLE_DEFAULT_START,
   } from '$lib/utils/schedule';
 
   import {
@@ -42,6 +45,19 @@
 
   const examsData = $derived(getExamData(cart, exams));
   const examDateOrder = $derived(getExamDateOrder(examsData));
+
+  const midtermExams = $derived(
+    examDateOrder.midterms.flatMap((key) => examsData.midterms[key] ?? []),
+  );
+  const finalExams = $derived(
+    examDateOrder.finals.flatMap((key) => examsData.finals[key] ?? []),
+  );
+  const midtermEndTime = $derived(
+    getLatestExamTime(midtermExams, TIMETABLE_DEFAULT_END),
+  );
+  const finalEndTime = $derived(
+    getLatestExamTime(finalExams, TIMETABLE_DEFAULT_END),
+  );
 </script>
 
 <div class="flex flex-row items-center justify-between lg:justify-center">
@@ -108,7 +124,8 @@
   >
     <div class="min-w-150">
       <TimeTable
-        startTime={7}
+        startTime={TIMETABLE_DEFAULT_START}
+        periodPerDay={midtermEndTime - TIMETABLE_DEFAULT_START}
         days={examDateOrder.midterms
           .filter((time) => time !== 0)
           .map((time) => formatDate(new Date(time)))}
@@ -125,7 +142,8 @@
                   room: '',
                   section: 0,
                 }}
-                col={formatExamColumn(exam.start ?? undefined) - 7}
+                col={formatExamColumn(exam.start ?? undefined) -
+                  TIMETABLE_DEFAULT_START}
                 row={index}
                 length={exam.duration}
                 color={exam.colorVariant}
@@ -146,7 +164,8 @@
   >
     <div class="min-w-150">
       <TimeTable
-        startTime={7}
+        startTime={TIMETABLE_DEFAULT_START}
+        periodPerDay={finalEndTime - TIMETABLE_DEFAULT_START}
         days={examDateOrder.finals
           .filter((time) => time !== 0)
           .map((time) => formatDate(new Date(time)))}
@@ -163,7 +182,8 @@
                   room: '',
                   section: 0,
                 }}
-                col={formatExamColumn(examCourse.start ?? undefined) - 7}
+                col={formatExamColumn(examCourse.start ?? undefined) -
+                  TIMETABLE_DEFAULT_START}
                 row={index}
                 length={examCourse.duration}
                 color={examCourse.colorVariant}

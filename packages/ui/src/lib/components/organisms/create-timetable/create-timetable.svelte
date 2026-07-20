@@ -91,7 +91,7 @@
 	// });
 </script>
 
-<div class="bg-surface flex w-104 flex-col gap-6 rounded-xl border border-[#d6d7e1] p-12">
+<div class="bg-surface flex flex-col gap-6 rounded-xl border border-[#d6d7e1] p-12 sm:w-104">
 	<!-- Title -->
 	<h1 class="text-h2 leading-h2 text-center font-medium tracking-[0.15px] text-[#353745]">
 		เพิ่มตารางเรียน

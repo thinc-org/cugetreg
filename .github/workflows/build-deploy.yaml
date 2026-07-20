@@ -1,0 +1,248 @@
+# Reusable: build the api + web images, push to GHCR, then write the new tag
+# back into the gitops repo (which ArgoCD then syncs).
+#
+# Called by build-beta.yaml (env=beta, commit) and release-prod.yaml (env=prod, PR).
+#
+# Naming map (app dir → image → gitops component):
+#   apps/cugetreg → ghcr.io/narumedsr-p/web → gitops "web"  (match-name my-registry/web)
+#   apps/core     → ghcr.io/narumedsr-p/api → gitops "api"  (match-name my-registry/api)
+#
+# Supply-chain note: third-party + first-party actions are pinned to a commit SHA
+# (the trailing `# vX.Y.Z` is the human-readable tag the SHA corresponds to).
+# Pin, don't float on tags — a moved tag can ship new code into our build.
+name: build-deploy
+
+on:
+  workflow_call:
+    inputs:
+      env:
+        description: target environment / overlay (beta | prod)
+        required: true
+        type: string
+      tag:
+        description: image tag to build & deploy (e.g. beta-<sha> or v2.0.1)
+        required: true
+        type: string
+      update-mode:
+        description: how to write back to gitops (commit | pr)
+        default: commit
+        type: string
+      component:
+        description: single component to build (web|api) — empty builds both (beta)
+        required: false
+        default: ""
+        type: string
+    secrets:
+      GH_TOKEN:
+        description: token with write access to the gitops repo
+        required: true
+
+# Permissions are inherited from the calling workflow (build.yaml / release-prod.yaml)
+# because the repo default is "read" and reusable workflows cannot escalate beyond
+# the caller's granted permissions.
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NS: narumedsr-p
+  GITOPS_REPO: narumedsr-p/cugetregv2-gitops
+  # No single GITOPS_REF here — beta and prod write to different gitops
+  # branches (see "Determine gitops branch" step in update-gitops below).
+
+jobs:
+  # ── web: self-contained build ───────────────────────────────────────────────
+  web:
+    if: inputs.component == '' || inputs.component == 'web'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    # Expose the pushed image's content digest so update-gitops can pin by digest
+    # (immutable) instead of by tag (which a registry push could later move).
+    outputs:
+      digest: ${{ steps.build.outputs.digest }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
+      - uses: docker/setup-buildx-action@c47758b77c9736f4b2ef4073d4d51994fabfe349  # v3.7.1
+      - uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567  # v3.3.0
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
+      - uses: docker/build-push-action@48aba3b46d1b1fec4febb7c5d0c644b249a11355  # v6.10.0
+        id: build
+        with:
+          context: .
+          file: apps/cugetreg/Dockerfile
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NS }}/web:${{ inputs.tag }}
+          push: true
+          # OCI source label → GHCR auto-links the package to this repo, so the
+          # package inherits the repo's visibility/permissions (read access for
+          # the ghcr-pull token) and links back to the commit that built it.
+          labels: |
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}
+            org.opencontainers.image.revision=${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  # ── api: needs TypedSQL codegen (prisma generate --sql) against a live DB ─────
+  # The api Dockerfile COPYs a pre-generated src/generated/prisma/sql.ts and does
+  # NOT regenerate it, so we must produce it here before docker build.
+  api:
+    if: inputs.component == '' || inputs.component == 'api'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    outputs:
+      digest: ${{ steps.build.outputs.digest }}
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: cugetreg
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s --health-timeout 5s --health-retries 5
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/cugetreg?schema=public
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
+      - uses: pnpm/action-setup@a7487c7e89a18df4991f7f222e4898a00d66ddda  # v4.1.0
+      - uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af  # v4.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      # TypedSQL introspects the DB, so the schema must exist first.
+      - name: Apply migrations
+        working-directory: apps/core
+        run: pnpm exec prisma migrate deploy
+      - name: Generate Prisma client + TypedSQL (writes src/generated/prisma/sql.ts)
+        working-directory: apps/core
+        run: pnpm run codegen
+      - uses: docker/setup-buildx-action@c47758b77c9736f4b2ef4073d4d51994fabfe349  # v3.7.1
+      - uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567  # v3.3.0
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
+      - uses: docker/build-push-action@48aba3b46d1b1fec4febb7c5d0c644b249a11355  # v6.10.0
+        id: build
+        with:
+          context: .
+          file: apps/core/Dockerfile
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NS }}/api:${{ inputs.tag }}
+          push: true
+          labels: |
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}
+            org.opencontainers.image.revision=${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  # ── write the new tag into the gitops repo ────────────────────────────────────
+  update-gitops:
+    needs: [web, api]
+    # A skipped job counts as neither success nor failure for `needs`, so
+    # the default (implicit success()) condition would skip this too when
+    # only one of web/api ran (single-component prod release). Run as long
+    # as at least one of them actually succeeded.
+    if: always() && (needs.web.result == 'success' || needs.api.result == 'success')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      # Beta and prod write to different gitops branches so a beta commit can
+      # never land on the same history prod's ArgoCD Applications sync from.
+      - name: Determine gitops branch
+        id: gitops-ref
+        run: |
+          if [ "${{ inputs.env }}" = "beta" ]; then
+            echo "ref=beta" >> "$GITHUB_OUTPUT"
+          else
+            echo "ref=main" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
+        with:
+          repository: ${{ env.GITOPS_REPO }}
+          ref: ${{ steps.gitops-ref.outputs.ref }}
+          token: ${{ secrets.GH_TOKEN }}
+      # Standalone kustomize CLI — `kustomize edit set image` isn't in `kubectl
+      # kustomize`. Downloaded directly + checksum-verified (not a Marketplace
+      # action) per this file's pin-to-SHA supply-chain stance.
+      - name: Install kustomize
+        env:
+          KUSTOMIZE_VERSION: v5.8.1
+          KUSTOMIZE_SHA256: 029a7f0f4e1932c52a0476cf02a0fd855c0bb85694b82c338fc648dcb53a819d
+        run: |
+          curl -sLo kustomize.tar.gz "https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2F${KUSTOMIZE_VERSION}/kustomize_${KUSTOMIZE_VERSION}_linux_amd64.tar.gz"
+          echo "${KUSTOMIZE_SHA256}  kustomize.tar.gz" | sha256sum -c -
+          tar -xzf kustomize.tar.gz
+          sudo mv kustomize /usr/local/bin/kustomize
+      # Pin tag@digest: the tag stays human-readable in the overlay, the
+      # @sha256 digest makes the deploy reproducible and immune to a moved tag.
+      # Matches the "my-registry/<comp>" base image name the gitops overlays
+      # currently use (see naming map comment at the top of this file) — the
+      # image transformer rewrites both name and tag in one shot.
+      - name: Bump image tags in ${{ inputs.env }} kustomization
+        id: bump
+        run: |
+          declare -A DIGEST=(
+            [web]="${{ needs.web.outputs.digest }}"
+            [api]="${{ needs.api.outputs.digest }}"
+          )
+          comps="web api"
+          [ -n "${{ inputs.component }}" ] && comps="${{ inputs.component }}"
+          for comp in $comps; do
+            ref="${REGISTRY}/${IMAGE_NS}/$comp:${{ inputs.tag }}@${DIGEST[$comp]}"
+            dir="$comp/overlays/${{ inputs.env }}"
+            if [ ! -d "$dir" ]; then
+              echo "::error::$dir not found — skipping $comp"
+              continue
+            fi
+            # Only meaningful for single-component (prod/PR) releases, to show
+            # old → new in the PR title. Beta bumps both components and never
+            # opens a PR, so being overwritten each loop iteration is harmless.
+            old_tag=$(grep 'newTag:' "$dir/kustomization.yaml" | awk '{print $2}')
+            echo "old_tag=${old_tag}" >> "$GITHUB_OUTPUT"
+            (cd "$dir" && kustomize edit set image "my-registry/$comp=$ref")
+            echo "bumped $comp → $ref"
+          done
+      - name: Write back (commit or PR)
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITOPS_REF: ${{ steps.gitops-ref.outputs.ref }}
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          # Component-scoped label so branch names/messages never collide
+          # between independent web/api releases that happen to share a
+          # version number (e.g. web@2.0.0 and api@2.0.0 both bumping the
+          # same overlay path would otherwise fight over one branch name).
+          COMPONENT_LABEL="${{ inputs.component }}"
+          [ -z "$COMPONENT_LABEL" ] && COMPONENT_LABEL="web-api"
+          MSG="deploy(${{ inputs.env }}): $COMPONENT_LABEL → ${{ inputs.tag }}"
+          if [ "${{ inputs.update-mode }}" = "pr" ]; then
+            BR="deploy/${{ inputs.env }}-$COMPONENT_LABEL-${{ inputs.tag }}"
+            git switch -c "$BR"
+            git commit -am "$MSG"
+            git push origin "$BR"
+            OLD_TAG="${{ steps.bump.outputs.old_tag }}"
+            PR_BODY=$(printf 'Update GitOps\nDate %s\n\nThis PR is automatically generated\n\nUpdated Packages\n%s: %s\n' \
+              "$(date +%d/%m/%Y)" "$COMPONENT_LABEL" "${{ inputs.tag }}")
+            gh pr create --base "${GITOPS_REF}" --head "$BR" \
+              --title "gitops: update $COMPONENT_LABEL $OLD_TAG → ${{ inputs.tag }}" \
+              --body "$PR_BODY"
+          else
+            git commit -am "$MSG"
+            # gitops beta branch is dedicated to this trigger, but rapid
+            # concurrent runs could still race each other. Rebase-retry on
+            # non-fast-forward rejection instead of failing the deploy.
+            for attempt in 1 2 3 4 5; do
+              if git push origin "HEAD:${GITOPS_REF}"; then
+                echo "pushed on attempt $attempt"; exit 0
+              fi
+              echo "push rejected (attempt $attempt/5) — rebasing onto origin/${GITOPS_REF}"
+              git fetch origin "${GITOPS_REF}"
+              git rebase "origin/${GITOPS_REF}"
+            done
+            echo "::error::failed to push image bump after 5 attempts"; exit 1
+          fi

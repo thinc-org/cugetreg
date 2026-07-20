@@ -47,7 +47,7 @@
 
 <div class="flex">
 	<div class="flex-1">
-		<span class="text-xs text-neutral-400"> คุณกำลังเปลี่ยนตารางเรียน... </span>
+		<span class="text-xs text-neutral-400"> คุณกำลังจัดตารางเรียน... </span>
 		<div class="flex gap-2.5">
 			<select
 				class="border-primary text-primary flex-3 rounded-lg border p-1 focus:outline-none"

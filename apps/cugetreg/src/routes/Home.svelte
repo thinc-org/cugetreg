@@ -7,6 +7,7 @@
   import { SvelteURL } from 'svelte/reactivity';
 
   const PUBLIC_API_URL = env.PUBLIC_API_URL ?? 'http://localhost:3000/api/v1';
+  import { resolve } from '$app/paths';
   import { api } from '$lib/api';
   import { useSession } from '$lib/auth-client';
   import AppSidebar from '$lib/components/app-sidebar.svelte';
@@ -38,8 +39,9 @@
     X,
   } from '@lucide/svelte';
   import { getContext, untrack } from 'svelte';
+  import { cubicOut } from 'svelte/easing';
   import { SvelteURLSearchParams } from 'svelte/reactivity';
-  import { fade } from 'svelte/transition';
+  import { fade, slide } from 'svelte/transition';
 
   import { Input } from '@cugetreg/ui/atoms/input';
   import { CourseCard } from '@cugetreg/ui/molecules/course-card';
@@ -78,20 +80,16 @@
     return () => mq.removeEventListener('change', handler);
   });
 
-  let timetableSection = $state<HTMLElement>();
-  let filterSection = $state<HTMLElement>();
-  let selectedSection = $state<HTMLElement>();
-
   // let searchQuery = $state('');
   // let debouncedSearchQuery = $state('');
   // let searchTimeout: ReturnType<typeof setTimeout> | undefined;
   //
   // let isScheduleDropdownOpen = $state(false);
   let isFilterOpen = $state(true);
+  let isSelectedOpen = $state(true);
   let activeModal = $state<'filter' | 'selected' | null>(null);
 
   let selectedGenEds = $state<string[]>([]);
-  let selectedSpecial = $state<string[]>([]);
   let selectedFaculties = $state<string[]>([]);
   let selectedDays = $state<string[]>([]);
   let selectedEval = $state<string[]>([]);
@@ -112,7 +110,7 @@
 
       selectedGenEds =
         params.get('genEdType')?.split(',').filter(Boolean) ?? [];
-      selectedSpecial = params.get('special')?.split(',').filter(Boolean) ?? [];
+      // selectedSpecial = params.get('special')?.split(',').filter(Boolean) ?? [];
       selectedFaculties =
         params.get('faculty')?.split(',').filter(Boolean) ?? [];
       selectedDays = params.get('day')?.split(',').filter(Boolean) ?? [];
@@ -384,6 +382,14 @@
   const cartPromise = getContext<CartPromise>(CART_PROMISE_KEY);
   const { addCourse, removeCourse, updateCourse } = useCartActions();
 
+  // --- Left-rail icon interaction model ---
+  function openFull() {
+    sidebarExpanded = true;
+    isFilterOpen = true;
+    isSelectedOpen = true;
+    activePanel = 'sidebar';
+  }
+
   $effect(() => {
     if (page.url.search === '' && homeStore.currentUrl) {
       goto(homeStore.currentUrl, { replaceState: true, noScroll: true });
@@ -395,7 +401,7 @@
     const ay = currentAY;
     const sem = currentSemester;
     const gEds = selectedGenEds;
-    const specials = selectedSpecial;
+    // const specials = selectedSpecial;
     const facs = selectedFaculties;
     const days = selectedDays;
     const start = startTime;
@@ -416,7 +422,7 @@
       const queryParams = {
         term: termQuery,
         genEdType: gEds.length ? gEds.join(',') : null,
-        special: specials.length ? specials.join(',') : null,
+        // special: specials.length ? specials.join(',') : null,
         faculty: facs.length ? facs.join(',') : null,
         day: days.length ? days.join(',') : null,
         timeStart: start || null,
@@ -446,6 +452,44 @@
     if (!el) return;
     el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
+  function toggleSidebar() {
+    if (sidebarExpanded) {
+      sidebarExpanded = false;
+    } else {
+      openFull();
+    }
+  }
+  // The rail icons close their section only when it is already the sole open
+  // one. In every other state (collapsed, both sections open, or focused on the
+  // other section) the press acts as a fresh focus.
+  function focusFilter() {
+    if (sidebarExpanded && isFilterOpen && !isSelectedOpen) {
+      isFilterOpen = false;
+      activePanel = null;
+      return;
+    }
+    sidebarExpanded = true;
+    isFilterOpen = true;
+    isSelectedOpen = false;
+    activePanel = 'filter_only';
+  }
+  function focusSelected() {
+    if (sidebarExpanded && isSelectedOpen && !isFilterOpen) {
+      isSelectedOpen = false;
+      activePanel = null;
+      return;
+    }
+    sidebarExpanded = true;
+    isFilterOpen = false;
+    isSelectedOpen = true;
+    activePanel = 'selected_only';
+  }
+
+  function goToSchedule() {
+    activeModal = null;
+    goto(resolve('/schedule'));
+  }
+
   function toggleSortDirection() {
     sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
   }
@@ -576,73 +620,73 @@
   <div class="relative flex flex-1 overflow-hidden">
     <AppSidebar
       showSidebar={!isMobile}
+      panelWidth="490px"
       bind:expanded={sidebarExpanded}
       bind:openPanel
       bind:activePanel
     >
-      {#snippet iconItems({
-        toggleExpanded,
-        togglePanel,
-        expanded,
-        openPanel,
-        activePanel,
-      })}
+      {#snippet iconItems()}
+        <!--
+          Each icon is nudged with a fixed margin so it lines up with its
+          section header in the collapsed panel. These are pure layout offsets:
+          nothing recomputes them, so the icons never shift when a section is
+          opened or closed. Tune the three values if the headers change height.
+        -->
         <Sidebar.MenuItem>
-          <Sidebar.MenuButton
-            onclick={toggleExpanded}
-            isActive={expanded && activePanel === 'sidebar'}
-            size="lg"
-            tooltipContent="เมนู"
-            class="mx-auto size-12! justify-center rounded-xl p-0! ring-0 transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-6!"
-          >
-            <Menu size="24" strokeWidth={2.5} />
-          </Sidebar.MenuButton>
+          <div class="-mt-[5px]">
+            <Sidebar.MenuButton
+              onclick={toggleSidebar}
+              isActive={sidebarExpanded && activePanel === 'sidebar'}
+              size="lg"
+              tooltipContent="เมนู"
+              class="mx-auto size-12! justify-center rounded-xl p-0! ring-0 transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-5!"
+            >
+              <Menu size="20" strokeWidth={2.5} />
+            </Sidebar.MenuButton>
+          </div>
         </Sidebar.MenuItem>
         <Sidebar.MenuItem>
-          <Sidebar.MenuButton
-            onclick={() =>
-              togglePanel('filter_only', () => scrollToSection(filterSection))}
-            isActive={activePanel === 'filter_only'}
-            size="lg"
-            tooltipContent="ตัวกรอง"
-            class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-6!"
-          >
-            <Filter size="24" strokeWidth={2.5} />
-          </Sidebar.MenuButton>
+          <div class="mt-[5px]">
+            <Sidebar.MenuButton
+              onclick={focusFilter}
+              isActive={activePanel === 'filter_only'}
+              size="lg"
+              tooltipContent="ตัวกรอง"
+              class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-5!"
+            >
+              <Filter size="20" strokeWidth={2.5} />
+            </Sidebar.MenuButton>
+          </div>
         </Sidebar.MenuItem>
         {#if $session.data}
           <Sidebar.MenuItem>
-            <Sidebar.MenuButton
-              onclick={() =>
-                togglePanel('selected_only', () =>
-                  scrollToSection(selectedSection),
-                )}
-              isActive={activePanel === 'selected_only'}
-              size="lg"
-              tooltipContent="วิชาที่เลือก"
-              class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-6!"
-            >
-              <BookMarked size="24" strokeWidth={2.5} />
-            </Sidebar.MenuButton>
+            <div class="mt-[-10px]">
+              <Sidebar.MenuButton
+                onclick={focusSelected}
+                isActive={activePanel === 'selected_only'}
+                size="lg"
+                tooltipContent="วิชาที่เลือก"
+                class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-5!"
+              >
+                <BookMarked size="20" strokeWidth={2.5} />
+              </Sidebar.MenuButton>
+            </div>
           </Sidebar.MenuItem>
         {/if}
       {/snippet}
-      {#snippet panelContent({ openPanel, expanded })}
-        {#if (expanded || openPanel === 'sidebar') && $session.data}
-          <div
-            bind:this={timetableSection}
-            class="relative mb-6 flex flex-col gap-2"
-          >
+      {#snippet panelContent({ expanded })}
+        {#if expanded && $session.data}
+          <div class="relative mb-6 flex flex-col gap-2">
             {#await cartPromise}
               <div
-                class="flex items-center justify-center gap-2 border-b border-neutral-200 px-2 py-8 text-gray-400"
+                class="flex items-center justify-center gap-2 border-b border-neutral-100 px-2 py-8 text-gray-400"
               >
                 <Loader2 class="animate-spin" size={24} />
                 <span class="text-sm">กำลังโหลดตารางเรียน...</span>
               </div>
             {:then}
               <SelectTimetable
-                class="border-b border-neutral-200 px-2 py-5"
+                class="border-b border-neutral-100 px-2 py-5"
                 options={$userCart.cartList?.map((item) => ({
                   name: item.name,
                   id: item.id,
@@ -654,24 +698,24 @@
               />
             {:catch}
               <div
-                class="flex items-center justify-center gap-2 border-b border-neutral-200 px-2 py-8 text-sm text-red-400"
+                class="flex items-center justify-center gap-2 border-b border-neutral-100 px-2 py-8 text-sm text-red-400"
               >
                 โหลดตารางเรียนไม่สำเร็จ
               </div>
             {/await}
           </div>
-          <hr class="mb-6 opacity-50" />
+          <hr class="mb-6 border-t border-neutral-100" />
         {/if}
 
-        {#if expanded || openPanel === 'filter_only'}
+        {#if expanded}
           {@render FilterContent()}
         {/if}
 
-        {#if (expanded || openPanel === 'selected_only') && $session.data}
+        {#if expanded && $session.data}
           {@render SelectedContent()}
         {/if}
 
-        {#if expanded || openPanel === 'sidebar'}
+        {#if expanded}
           {@render WarningContent()}
         {/if}
       {/snippet}
@@ -1016,56 +1060,61 @@
 </div>
 
 {#snippet FilterContent()}
-  <div bind:this={filterSection}>
+  <div>
     <button
       onclick={() => (isFilterOpen = !isFilterOpen)}
       aria-expanded={isFilterOpen}
-      class="mb-6 flex w-full items-center justify-between"
+      class="mb-4 flex w-full items-center justify-between"
     >
-      <span class="flex items-center gap-2">
-        <Filter size={20} />
-        <h2 class="text-xl font-bold">ตัวกรอง</h2>
-      </span>
+      <h2 class="text-on-surface text-lg/[20px] font-medium">ตัวกรอง</h2>
       <ChevronDown
         size={20}
-        class="text-gray-500 transition-transform duration-200 {isFilterOpen
-          ? ''
-          : '-rotate-90'}"
+        class="text-gray-400 transition-transform duration-200 {isFilterOpen
+          ? 'rotate-180'
+          : ''}"
       />
     </button>
     {#if isFilterOpen}
-      <div class="mb-8 min-h-[650px]">
-        <FilterBar
-          bind:selectedGenEds
-          bind:selectedSpecial
-          bind:selectedFaculties
-          bind:selectedDays
-          bind:selectedEval
-          bind:startTime
-          bind:endTime
-          bind:fitSchedule
-          bind:noConditions
-          onsearch={onSearchFilter}
-        />
+      <div transition:slide={{ duration: 250, easing: cubicOut }}>
+        <hr class="mb-4 border-t border-neutral-100" />
+        <div class="mb-6">
+          <FilterBar
+            bind:selectedGenEds
+            bind:selectedFaculties
+            bind:selectedDays
+            bind:selectedEval
+            bind:startTime
+            bind:endTime
+            bind:fitSchedule
+            bind:noConditions
+            onsearch={onSearchFilter}
+          />
+        </div>
       </div>
     {/if}
-    <hr class="mb-6 hidden opacity-50 md:block" />
+    <hr class="mb-6 border-t border-neutral-100" />
   </div>
 {/snippet}
 
 {#snippet SelectedContent()}
-  <div bind:this={selectedSection}>
+  <div>
     {#if $userCart.currentCart}
-      <SelectedCourse variant="grouped" class="border-b border-neutral-200" />
+      <SelectedCourse
+        variant="grouped"
+        bind:open={isSelectedOpen}
+        onArrange={goToSchedule}
+        headerDivider
+        class="border-b border-neutral-100"
+      />
     {:else}
-      <SelectedCourse class="border-b border-neutral-200" />
+      <SelectedCourse class="border-b border-neutral-100" />
     {/if}
   </div>
 {/snippet}
 
 {#snippet WarningContent()}
   <div
-    class="mt-8 rounded-2xl border border-orange-300 px-5 py-4 text-center text-[15px] leading-relaxed text-orange-500"
+    class="border-secondary text-on-secondary-container mt-8 rounded-2xl border px-5 py-4 text-center text-xs/[18px]"
   >
     <span class="font-bold">CU Get Reg ไม่ใช่การลงทะเบียนเรียนจริง</span><br />
     สามารถลงทะเบียนเรียนได้ที่

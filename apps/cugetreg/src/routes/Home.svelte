@@ -401,7 +401,7 @@
     const ay = currentAY;
     const sem = currentSemester;
     const gEds = selectedGenEds;
-    const specials = selectedSpecial;
+    // const specials = selectedSpecial;
     const facs = selectedFaculties;
     const days = selectedDays;
     const start = startTime;
@@ -422,7 +422,7 @@
       const queryParams = {
         term: termQuery,
         genEdType: gEds.length ? gEds.join(',') : null,
-        special: specials.length ? specials.join(',') : null,
+        // special: specials.length ? specials.join(',') : null,
         faculty: facs.length ? facs.join(',') : null,
         day: days.length ? days.join(',') : null,
         timeStart: start || null,

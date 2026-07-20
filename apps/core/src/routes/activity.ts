@@ -1,12 +1,12 @@
-import { OpenAPIHono } from "@hono/zod-openapi";
-
-import type { Variables } from "../lib/auth.js";
+import type { Variables } from "@/lib/auth.js";
 import {
   createActivityRoute,
   deleteActivityRoute,
   updateActivityRoute,
-} from "../routes_define/activity.routes.js";
-import { activityService } from "../services/activityService.js";
+} from "@/routes_define/activity.routes.js";
+import { activityService } from "@/services/activityService.js";
+
+import { OpenAPIHono } from "@hono/zod-openapi";
 
 const activity = new OpenAPIHono<{ Variables: Variables }>()
 

@@ -9,7 +9,7 @@ import {
   StudyProgram,
   Visible,
   VoteType,
-} from "../generated/prisma/client.js";
+} from "@/generated/prisma/client.js";
 
 export function mapSemester(raw: string): Semester {
   switch (raw) {

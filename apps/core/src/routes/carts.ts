@@ -1,6 +1,4 @@
-import { OpenAPIHono } from "@hono/zod-openapi";
-
-import type { Variables } from "../lib/auth.js";
+import type { Variables } from "@/lib/auth.js";
 import {
   addCourseRoute,
   createCartRoute,
@@ -12,8 +10,10 @@ import {
   pinCartRoute,
   updateCartRoute,
   updateCourseRoute,
-} from "../routes_define/carts.routes.js";
-import { cartService } from "../services/cartsService.js";
+} from "@/routes_define/carts.routes.js";
+import { cartService } from "@/services/cartsService.js";
+
+import { OpenAPIHono } from "@hono/zod-openapi";
 
 const carts = new OpenAPIHono<{ Variables: Variables }>()
 

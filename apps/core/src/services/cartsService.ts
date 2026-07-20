@@ -1,3 +1,5 @@
+import { prisma } from "@/db/clients.js";
+
 import * as R from "remeda";
 
 import type {
@@ -18,7 +20,6 @@ import {
 } from "./conflictDetection.js";
 import { LexoRankService } from "./lexorank.service.js";
 
-import { prisma } from "../db/clients.js";
 import {
   type Course,
   type Section,

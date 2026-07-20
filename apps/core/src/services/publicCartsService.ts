@@ -1,3 +1,11 @@
+import { prisma } from "@/db/clients.js";
+import {
+  type Course,
+  type Section,
+  type SectionClass,
+  Visible,
+} from "@/generated/prisma/client.js";
+
 import * as R from "remeda";
 
 import type {
@@ -11,14 +19,6 @@ import {
   detectExamConflicts,
 } from "./conflictDetection.js";
 import { LexoRankService } from "./lexorank.service.js";
-
-import { prisma } from "../db/clients.js";
-import {
-  type Course,
-  type Section,
-  type SectionClass,
-  Visible,
-} from "../generated/prisma/client.js";
 
 export const publicCartsService = {
   getPublicCartDetail: async (cartId: string) => {

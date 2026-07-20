@@ -1,18 +1,18 @@
-import type {
-  EditReviewBodySchema,
-  SubmitReviewBodySchema,
-  VoteReviewBodySchema,
-} from "@cugetreg/zod-schemas/reviews";
-
-import { prisma } from "../db/clients.js";
-import { Prisma } from "../generated/prisma/client.js";
-import type { VoteType } from "../generated/prisma/enums.js";
+import { prisma } from "@/db/clients.js";
+import { Prisma } from "@/generated/prisma/client.js";
+import type { VoteType } from "@/generated/prisma/enums.js";
 import {
   mapReviewStatus,
   mapSemester,
   mapStudyProgram,
   mapVoteType,
-} from "../utils/enumMapper.js";
+} from "@/utils/enumMapper.js";
+
+import type {
+  EditReviewBodySchema,
+  SubmitReviewBodySchema,
+  VoteReviewBodySchema,
+} from "@cugetreg/zod-schemas/reviews";
 
 export const reviewService = {
   submitReview: async (userId: string, newReview: SubmitReviewBodySchema) => {

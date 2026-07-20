@@ -7,7 +7,6 @@
   import { SvelteURL } from 'svelte/reactivity';
 
   const PUBLIC_API_URL = env.PUBLIC_API_URL ?? 'http://localhost:3000/api/v1';
-  import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
   import { api } from '$lib/api';
   import { useSession } from '$lib/auth-client';
@@ -81,7 +80,6 @@
     return () => mq.removeEventListener('change', handler);
   });
 
-
   // let searchQuery = $state('');
   // let debouncedSearchQuery = $state('');
   // let searchTimeout: ReturnType<typeof setTimeout> | undefined;
@@ -112,7 +110,7 @@
 
       selectedGenEds =
         params.get('genEdType')?.split(',').filter(Boolean) ?? [];
-      selectedSpecial = params.get('special')?.split(',').filter(Boolean) ?? [];
+      // selectedSpecial = params.get('special')?.split(',').filter(Boolean) ?? [];
       selectedFaculties =
         params.get('faculty')?.split(',').filter(Boolean) ?? [];
       selectedDays = params.get('day')?.split(',').filter(Boolean) ?? [];
@@ -391,7 +389,7 @@
     isSelectedOpen = true;
     activePanel = 'sidebar';
   }
-  
+
   $effect(() => {
     if (page.url.search === '' && homeStore.currentUrl) {
       goto(homeStore.currentUrl, { replaceState: true, noScroll: true });
@@ -678,9 +676,7 @@
       {/snippet}
       {#snippet panelContent({ expanded })}
         {#if expanded && $session.data}
-          <div
-            class="relative mb-6 flex flex-col gap-2"
-          >
+          <div class="relative mb-6 flex flex-col gap-2">
             {#await cartPromise}
               <div
                 class="flex items-center justify-center gap-2 border-b border-neutral-100 px-2 py-8 text-gray-400"

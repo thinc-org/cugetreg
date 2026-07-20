@@ -24,7 +24,6 @@
   import { IconButton } from '@cugetreg/ui/atoms/icon-button';
   import { ColorPicker } from '@cugetreg/ui/molecules/colorpicker';
   import * as Select from '@cugetreg/ui/molecules/select';
-
   import { cn } from '@cugetreg/utils';
   import { courseColorVariants } from '@cugetreg/utils/constants';
   import type { ColorVariant } from '@cugetreg/utils/types';
@@ -115,7 +114,9 @@
         class="mb-4 flex w-full items-center justify-between"
       >
         <span class="flex items-baseline gap-2">
-          <h2 class="text-on-surface text-lg/[20px] font-medium">วิชาที่เลือก</h2>
+          <h2 class="text-on-surface text-lg/[20px] font-medium">
+            วิชาที่เลือก
+          </h2>
           <span class="text-xs font-normal text-neutral-400"
             >{totalCredit} หน่วยกิต</span
           >
@@ -141,7 +142,9 @@
           {/if}
 
           {#if otherCourses.length > 0}
-            <p class="mt-4 mb-1 text-sm font-medium text-[#6F7593]">วิชาอื่นๆ</p>
+            <p class="mt-4 mb-1 text-sm font-medium text-[#6F7593]">
+              วิชาอื่นๆ
+            </p>
             {#each otherCourses as course (course.id)}
               {@render groupedRow(course)}
             {/each}

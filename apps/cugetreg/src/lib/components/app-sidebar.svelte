@@ -45,7 +45,7 @@
     >
       <Sidebar.Content class="flex-row overflow-visible!">
         <Sidebar.Group
-          class="border-r-neutral-100 w-(--sidebar-width-icon) shrink-0 items-center bg-white p-0 pt-[1rem] pb-6 group-data-[variant=floating]:rounded-l-lg md:pt-[1.5rem]"
+          class="w-(--sidebar-width-icon) shrink-0 items-center border-r-neutral-100 bg-white p-0 pt-[1rem] pb-6 group-data-[variant=floating]:rounded-l-lg md:pt-[1.5rem]"
         >
           <Sidebar.GroupContent>
             <Sidebar.Menu class="gap-6">
@@ -81,7 +81,7 @@
             ></div>
           {/if}
           <div
-            class="bg-surface border-neutral-100 flex flex-1 flex-col overflow-hidden border group-data-[state=collapsed]:absolute group-data-[state=collapsed]:top-4 group-data-[state=collapsed]:left-[calc(var(--sidebar-width-icon)+1rem)] group-data-[state=collapsed]:z-50 group-data-[state=collapsed]:max-h-[min(800px,calc(100%-2rem))] group-data-[state=collapsed]:w-[400px] group-data-[state=collapsed]:rounded-3xl group-data-[state=collapsed]:shadow-2xl md:px-2 md:pt-0 md:pb-8"
+            class="bg-surface flex flex-1 flex-col overflow-hidden border border-neutral-100 group-data-[state=collapsed]:absolute group-data-[state=collapsed]:top-4 group-data-[state=collapsed]:left-[calc(var(--sidebar-width-icon)+1rem)] group-data-[state=collapsed]:z-50 group-data-[state=collapsed]:max-h-[min(800px,calc(100%-2rem))] group-data-[state=collapsed]:w-[400px] group-data-[state=collapsed]:rounded-3xl group-data-[state=collapsed]:shadow-2xl md:px-2 md:pt-0 md:pb-8"
           >
             <div
               class="flex-1 overflow-y-auto pr-6 pb-10 [-ms-overflow-style:none] [scrollbar-width:none] md:pr-8 [&::-webkit-scrollbar]:hidden"

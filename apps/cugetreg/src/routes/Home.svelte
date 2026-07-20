@@ -13,7 +13,13 @@
   import AppSidebar from '$lib/components/app-sidebar.svelte';
   import ScheduleMismatchPopup from '$lib/components/schedule-mismatch-popup.svelte';
   import SelectedCourse from '$lib/components/selected-course.svelte';
-  import { sortByMapper, studyProgramMapper } from '$lib/mapper';
+  import {
+    normalizeDayMapper,
+    normalizeGenedMapper,
+    semesterToTermMapper,
+    sortByMapper,
+    studyProgramMapper,
+  } from '$lib/mapper';
   import {
     getSemesterDisplayOptions,
     SEMESTER_LABEL_LONG,
@@ -51,6 +57,7 @@
   import { Filter as FilterBar } from '@cugetreg/ui/organisms/filter-bar';
   import { Footer } from '@cugetreg/ui/organisms/footer';
   import * as Sidebar from '@cugetreg/ui/organisms/sidebar';
+  import type { Day } from '@cugetreg/utils/types';
   import {
     type Semester,
     type SortBy,
@@ -194,33 +201,11 @@
       (s.classes ?? []).map((cl: any) => cl.dayOfWeek),
     );
 
-    const normalizeDay = (d: string) => {
-      const up = String(d).toUpperCase();
-      if (up.startsWith('MO') || up === '1') return 'MO';
-      if (up.startsWith('TU') || up === '2') return 'TU';
-      if (up.startsWith('WE') || up === '3') return 'WE';
-      if (up.startsWith('TH') || up === '4') return 'TH';
-      if (up.startsWith('FR') || up === '5') return 'FR';
-      if (up.startsWith('SA') || up === '6') return 'SA';
-      if (up.startsWith('SU') || up === '7' || up === '0') return 'SU';
-      return KNOWN_DAYS.has(up.slice(0, 2)) ? up.slice(0, 2) : undefined;
-    };
-
-    const normalizeGened = (g: string) => {
-      if (!g || g === 'NO') return [];
-      const up = String(g).toUpperCase();
-      if (up.startsWith('SC')) return ['SC'];
-      if (up.startsWith('SO')) return ['SO'];
-      if (up.startsWith('HU')) return ['HU'];
-      if (up.startsWith('IN')) return ['IN'];
-      return [up];
-    };
-
     const validDays = Array.from(
       new Set(
         allDays
-          .map((d: any) => normalizeDay(d))
-          .filter((d: string | undefined): d is string => Boolean(d)),
+          .map(normalizeDayMapper)
+          .filter((d: Day | undefined): d is Day => Boolean(d)),
       ),
     );
 
@@ -234,7 +219,7 @@
         credit: Number(ci.credit) || 0,
         maxseat: totalMaxSeat,
         seat: totalCurrentSeat,
-        gened: normalizeGened(c.genEdType),
+        gened: normalizeGenedMapper(c.genEdType),
         review: reviewCount || 0,
         rating: item.rating || 0,
         days: validDays,
@@ -413,12 +398,7 @@
     untrack(() => {
       const currentUrl = new SvelteURL(page.url);
       currentUrl.pathname = `/${prog}/courses`;
-      const semesterCodeMap: Record<string, string> = {
-        FIRST: '1',
-        SECOND: '2',
-        SUMMER: '3',
-      };
-      const termQuery = `${ay}/${semesterCodeMap[sem] || '1'}`;
+      const termQuery = `${ay}/${semesterToTermMapper(sem)}`;
       const queryParams = {
         term: termQuery,
         genEdType: gEds.length ? gEds.join(',') : null,

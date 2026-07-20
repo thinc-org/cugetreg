@@ -9,6 +9,7 @@
   import ScheduleMismatchPopup from '$lib/components/schedule-mismatch-popup.svelte';
   import SelectedCourse from '$lib/components/selected-course.svelte';
   import { faculties } from '$lib/constants';
+  import { thaiLabelToSemesterMapper } from '$lib/mapper';
   import {
     ALLOWED_ACADEMIC_YEAR,
     ALLOWED_SEMESTER,
@@ -274,10 +275,7 @@
     if (editingReviewId) {
       const patchPayload = {
         academicYear: Number(selectedYear),
-        semester:
-          ALLOWED_SEMESTER.find(
-            (s) => SEMESTER_LABEL_LONG[s] === selectedTerm,
-          ) || 'FIRST',
+        semester: thaiLabelToSemesterMapper(selectedTerm),
         rating: reviewRating * 2,
         content: reviewContent,
       };
@@ -308,9 +306,7 @@
       courseNo: course.courseNo,
       studyProgram: course.studyProgram,
       academicYear: Number(selectedYear),
-      semester:
-        ALLOWED_SEMESTER.find((s) => SEMESTER_LABEL_LONG[s] === selectedTerm) ||
-        'FIRST',
+      semester: thaiLabelToSemesterMapper(selectedTerm),
       rating: reviewRating * 2,
       content: reviewContent,
     };

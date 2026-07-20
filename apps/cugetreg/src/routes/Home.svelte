@@ -258,13 +258,19 @@
 
       if (!noConditions) {
         if (selectedGenEds.length > 0) {
-          params.append('genEdType', selectedGenEds[0]);
+          selectedGenEds.forEach((genEd) => {
+            params.append('genEdTypes', genEd);
+          });
         }
         if (selectedFaculties.length > 0) {
-          params.append('faculty', selectedFaculties[0]);
+          selectedFaculties.forEach((faculty) => {
+            params.append('faculties', faculty);
+          });
         }
         if (selectedDays.length > 0) {
-          params.append('day', selectedDays[0]);
+          selectedDays.forEach((day) => {
+            params.append('days', day);
+          });
         }
         if (selectedEval.length > 0) {
           params.append('assessment', selectedEval[0]);
@@ -278,6 +284,9 @@
           params.append('fitCartId', $userCart.currentCartId);
         }
       }
+
+      console.log(params.getAll('days'));
+      console.log(params.getAll('genEdTypes'));
 
       const response = await api.get(`/courses?${params.toString()}`);
 

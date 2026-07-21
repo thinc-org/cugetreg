@@ -43,6 +43,7 @@ COPY --from=build /tmp/deploy/node_modules ./node_modules
 COPY --from=build /tmp/deploy/dist ./dist
 COPY --from=build /tmp/deploy/package.json ./package.json
 COPY --from=build /tmp/deploy/prisma ./prisma
+COPY --from=build /tmp/deploy/prisma.config.ts ./prisma.config.ts
 
 EXPOSE 3000
 CMD ["node", "dist/index.js"]

@@ -1,16 +1,16 @@
-import { OpenAPIHono } from "@hono/zod-openapi";
-
-import type { CourseReview } from "@cugetreg/zod-schemas/courses-response";
-
-import { prisma } from "../db/clients.js";
-import { ReviewStatus, VoteType } from "../generated/prisma/client.js";
-import type { Variables } from "../lib/auth.js";
+import { prisma } from "@/db/clients.js";
+import { ReviewStatus, VoteType } from "@/generated/prisma/client.js";
+import type { Variables } from "@/lib/auth.js";
 import {
   getCourseByNoRoute,
   getCoursesRoute,
-} from "../routes_define/courses.routes.js";
-import { queryCourse } from "../services/coursesService.js";
-import { mapSemester, mapStudyProgram } from "../utils/enumMapper.js";
+} from "@/routes_define/courses.routes.js";
+import { queryCourse } from "@/services/coursesService.js";
+import { mapSemester, mapStudyProgram } from "@/utils/enumMapper.js";
+
+import { OpenAPIHono } from "@hono/zod-openapi";
+
+import type { CourseReview } from "@cugetreg/zod-schemas/courses-response";
 
 const courses = new OpenAPIHono<{ Variables: Variables }>();
 

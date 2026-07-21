@@ -1,14 +1,14 @@
-import { OpenAPIHono } from "@hono/zod-openapi";
-
-import { Prisma } from "../generated/prisma/client.js";
-import type { Variables } from "../lib/auth.js";
+import { Prisma } from "@/generated/prisma/client.js";
+import type { Variables } from "@/lib/auth.js";
 import {
   deleteReviewRoute,
   editReviewRoute,
   submitReviewRoute,
   voteReviewRoute,
-} from "../routes_define/review.routes.js";
-import { reviewService } from "../services/reviewService.js";
+} from "@/routes_define/review.routes.js";
+import { reviewService } from "@/services/reviewService.js";
+
+import { OpenAPIHono } from "@hono/zod-openapi";
 
 const reviews = new OpenAPIHono<{ Variables: Variables }>();
 

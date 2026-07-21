@@ -1,8 +1,8 @@
+import { env } from "@/env.js";
+import { auth } from "@/lib/auth.js";
+
 import { OpenAPIHono } from "@hono/zod-openapi";
 import { type MiddlewareHandler } from "hono";
-
-import { env } from "../env.js";
-import { auth } from "../lib/auth.js";
 
 // Proxy all /auth/* requests directly to better-auth (login, callback, session, signout)
 const authRoute = new OpenAPIHono();

@@ -1,10 +1,10 @@
-import { OpenAPIHono } from "@hono/zod-openapi";
-
 import {
   getAnnouncementByIdRoute,
   listAnnouncementsRoute,
-} from "../routes_define/announcement.routes.js";
-import { announcementService } from "../services/announcementService.js";
+} from "@/routes_define/announcement.routes.js";
+import { announcementService } from "@/services/announcementService.js";
+
+import { OpenAPIHono } from "@hono/zod-openapi";
 
 const announcement = new OpenAPIHono();
 

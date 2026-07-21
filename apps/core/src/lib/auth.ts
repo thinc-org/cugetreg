@@ -1,9 +1,9 @@
+import { prisma } from "@/db/clients.js";
+import { env } from "@/env.js";
+
 import { APIError, betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { openAPI } from "better-auth/plugins";
-
-import { prisma } from "../db/clients.js";
-import { env } from "../env.js";
 
 const ALLOW_NON_CHULA = false;
 

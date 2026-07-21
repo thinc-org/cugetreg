@@ -1,12 +1,12 @@
-import { OpenAPIHono } from "@hono/zod-openapi";
-
-import type { Variables } from "../lib/auth.js";
+import type { Variables } from "@/lib/auth.js";
 import {
   getUserReviewsRoute,
   getUserRoute,
   updateUserInfoRoute,
-} from "../routes_define/users.routes.js";
-import { usersService } from "../services/usersService.js";
+} from "@/routes_define/users.routes.js";
+import { usersService } from "@/services/usersService.js";
+
+import { OpenAPIHono } from "@hono/zod-openapi";
 
 const user = new OpenAPIHono<{ Variables: Variables }>();
 

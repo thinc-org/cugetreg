@@ -1,12 +1,12 @@
+import { prisma } from "@/db/clients.js";
+import { mapDayOfWeek } from "@/utils/enumMapper.js";
+
 import type {
   CreateActivityBodySchema,
   UpdateActivityBodySchema,
 } from "@cugetreg/zod-schemas/activity";
 
 import { LexoRankService } from "./lexorank.service.js";
-
-import { prisma } from "../db/clients.js";
-import { mapDayOfWeek } from "../utils/enumMapper.js";
 
 export const activityService = {
   createActivity: async (userId: string, data: CreateActivityBodySchema) => {

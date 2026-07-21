@@ -1,4 +1,4 @@
-import { prisma } from "../db/clients.js";
+import { prisma } from "@/db/clients.js";
 
 export const announcementService = {
   listAnnouncements: async () => {

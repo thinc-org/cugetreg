@@ -25,6 +25,8 @@ export async function queryCourse(
     timeEnd,
     noPrereq,
     fitCartId,
+    creditMin,
+    creditMax,
   } = query;
 
   const selectedGenEdTypes =
@@ -71,6 +73,8 @@ export async function queryCourse(
       sortBy ?? null,
       sortOrder ?? "desc",
       fitCartId ?? null,
+      creditMin ?? null,
+      creditMax ?? null,
     ),
   );
 

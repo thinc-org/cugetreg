@@ -140,7 +140,7 @@
                   code: exam.courseNo,
                   bldg: '',
                   room: '',
-                  section: 0,
+                  section: exam.sectionNo,
                 }}
                 col={formatExamColumn(exam.start ?? undefined) -
                   TIMETABLE_DEFAULT_START}
@@ -180,7 +180,7 @@
                   code: examCourse.courseNo,
                   bldg: '',
                   room: '',
-                  section: 0,
+                  section: examCourse.sectionNo,
                 }}
                 col={formatExamColumn(examCourse.start ?? undefined) -
                   TIMETABLE_DEFAULT_START}

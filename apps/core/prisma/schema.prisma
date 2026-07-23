@@ -4,13 +4,11 @@
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
-
 generator client {
-  provider = "prisma-client"
+  provider        = "prisma-client"
   previewFeatures = ["typedSql"]
-  output   = "../src/generated/prisma"
+  output          = "../src/generated/prisma"
 }
-
 
 datasource db {
   provider = "postgresql"
@@ -49,18 +47,19 @@ model CourseInfo {
   department String?
 
   // 24 TOTALCREDIT
-  credit      Decimal 
+  credit      Decimal
   // 17 lcredit 18 nlcredit 19 lhour 20 nlhour 21 shour
-  creditHours String?  @map("credit_hours")
+  creditHours String? @map("credit_hours")
 
   gradingType GradingType @map("grading_type")
 
   // Relation to Course
-  courses   Course[]
+  courses         Course[]
   // New!!!
-  cartItems CartItem[]
+  cartItems       CartItem[]
   //New!!!
-  reviews Review[]
+  reviews         Review[]
+  courseFavorites CourseFavorite[]
 
   @@map("course_info")
 }
@@ -100,6 +99,19 @@ model Course {
 
   @@unique([studyProgram, academicYear, semester, courseNo], name: "course_unique")
   @@map("course")
+}
+
+model CourseFavorite {
+  id String @id @default(cuid())
+
+  courseNo   String     @map("course_no")
+  courseInfo CourseInfo @relation(fields: [courseNo], references: [courseNo], onDelete: Cascade)
+
+  userId String @map("user_id")
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([courseNo, userId], name: "course_favorite_unique")
+  @@map("course_favorite")
 }
 
 // course_section
@@ -184,6 +196,7 @@ enum StudyProgram {
   S // ทวิภาค
   I // ทวิภาค-นานาชาต
   T // ตรีภาค
+
   @@map("study_program")
 }
 
@@ -201,12 +214,12 @@ enum GenEdType {
 
 /// Day of the Week for Class Scheduling 
 enum DayOfWeek {
-  MO 
-  TU 
-  WE 
+  MO
+  TU
+  WE
   TH
-  FR 
-  SA 
+  FR
+  SA
   SU
   AR // To Be Arranged
   IR // Individually Arranged
@@ -254,8 +267,8 @@ model User {
   id    String @id @default(cuid())
   email String @unique
 
-  name     String
-  image    String?
+  name  String
+  image String?
 
   // New!!!
   faculty    String?
@@ -268,9 +281,10 @@ model User {
   reviews   Review[]
   votes     ReviewVote[]
 
-  emailVerified Boolean   @default(false)
-  sessions      Session[]
-  accounts      Account[]
+  emailVerified   Boolean          @default(false)
+  sessions        Session[]
+  accounts        Account[]
+  courseFavorites CourseFavorite[]
 
   @@map("user")
 }
@@ -290,13 +304,13 @@ model Cart {
   // New!!!
   visible   Visible @default(PVT)
   isDefault Boolean @default(false) @map("is_default")
-  cartOrder String @default("0|hzzzzz:") @map("cart_order")
+  cartOrder String  @default("0|hzzzzz:") @map("cart_order")
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
   // Relations
-  items CartItem[]
+  items      CartItem[]
   activities Activity[]
 
   @@map("cart")
@@ -315,7 +329,7 @@ model CartItem {
   sectionNo Int     @map("section_no")
   color     String?
   hidden    Boolean @default(false)
-  cartOrder String @default("0|hzzzzz:") @map("cart_order")
+  cartOrder String  @default("0|hzzzzz:") @map("cart_order")
 
   // New!!!
   isGraded      Boolean @default(false) @map("is_graded")
@@ -331,9 +345,9 @@ model Activity {
   id String @id @default(cuid())
 
   cartId String @map("cart_id")
-  cart Cart @relation(fields: [cartId], references: [id])
+  cart   Cart   @relation(fields: [cartId], references: [id])
 
-  title String @map("title")
+  title       String @map("title")
   description String @map("description")
 
   dayOfWeek   DayOfWeek @map("day_of_week")
@@ -342,7 +356,7 @@ model Activity {
 
   color     String?
   hidden    Boolean @default(false)
-  cartOrder String @default("0|hzzzzz:") @map("cart_order")
+  cartOrder String  @default("0|hzzzzz:") @map("cart_order")
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -360,12 +374,12 @@ model Review {
   academicYear Int          @map("academic_year")
   semester     Semester
 
-  courseNo String @map("course_no")
+  courseNo   String     @map("course_no")
   //to get course name and description
   courseInfo CourseInfo @relation(fields: [courseNo], references: [courseNo])
 
-  content  String
-  rating   Int
+  content String
+  rating  Int
 
   status          ReviewStatus @default(PENDING)
   rejectionReason String?      @map("rejection_reason")
@@ -376,8 +390,8 @@ model Review {
   // Relations
   votes ReviewVote[]
 
+  @@unique([courseNo, userId])
   @@map("review")
-  @@unique([courseNo,userId])
 }
 
 model ReviewVote {
@@ -391,14 +405,14 @@ model ReviewVote {
 
   voteType VoteType @map("vote_type")
 
+  @@unique([userId, reviewId])
   @@map("review_votes")
-  @@unique([userId,reviewId])
 }
 
 model Announcement {
   id String @id @default(cuid())
 
-  title String @map("title")
+  title   String @map("title")
   content String @map("content")
 
   createdAt DateTime @default(now()) @map("created_at")

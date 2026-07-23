@@ -41,3 +41,13 @@ export const CourseNoParamSchema = z.object({
 });
 
 export type GetCourseQuerySchema = z.infer<typeof GetCourseQuerySchema>;
+
+export const GetCourseDetailQuerySchema = GetCourseQuerySchema.pick({
+  studyProgram: true,
+  academicYear: true,
+  semester: true,
+});
+
+export type GetCourseDetailQuerySchema = z.infer<
+  typeof GetCourseDetailQuerySchema
+>;

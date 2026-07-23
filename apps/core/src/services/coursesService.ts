@@ -1,13 +1,16 @@
 import { prisma } from "@/db/clients.js";
+import { ReviewStatus, VoteType } from "@/generated/prisma/client.js";
 import { getCourseList } from "@/generated/prisma/sql.js";
 import { mapDayOfWeek } from "@/utils/enumMapper.js";
+import { mapSemester, mapStudyProgram } from "@/utils/enumMapper.js";
 
-import type { GetCourseQuerySchema } from "@cugetreg/zod-schemas/courses";
+import type {
+  GetCourseDetailQuerySchema,
+  GetCourseQuerySchema,
+} from "@cugetreg/zod-schemas/courses";
+import type { CourseReview } from "@cugetreg/zod-schemas/courses-response";
 
-export async function queryCourse(
-  query: GetCourseQuerySchema,
-  userId?: string,
-) {
+async function queryCourse(query: GetCourseQuerySchema, userId?: string) {
   const {
     studyProgram,
     academicYear,
@@ -132,7 +135,89 @@ export async function queryCourse(
 }
 
 export const courseServices = {
+  //1.1 Query Course
   queryCourse,
+
+  //1.2 Get Course Detail
+  getCourseDetail: async (
+    query: GetCourseDetailQuerySchema,
+    courseNo: string,
+    userId?: string,
+  ) => {
+    const { studyProgram, academicYear, semester } = query;
+
+    const course = await prisma.course.findFirst({
+      where: {
+        courseNo,
+        studyProgram: mapStudyProgram(studyProgram),
+        academicYear,
+        semester: mapSemester(semester),
+      },
+      include: {
+        courseInfo: true,
+        sections: { include: { classes: true } },
+      },
+    });
+
+    if (!course) {
+      throw new Error("Course not found");
+    }
+
+    const allReviews = await prisma.review.findMany({
+      where: {
+        courseNo,
+        ...(userId && {
+          OR: [
+            { userId },
+            { status: ReviewStatus.APPROVED, userId: { not: userId } },
+          ],
+        }),
+        ...(!userId && { status: ReviewStatus.APPROVED }),
+      },
+      include: {
+        votes: true,
+      },
+    });
+
+    const reviews = allReviews.map((review) => {
+      let reaction: VoteType | undefined = undefined;
+      const [likeCount, dislikeCount] = review.votes.reduce(
+        ([like, dislike], vote) => {
+          if (vote.userId === userId) {
+            reaction = vote.voteType;
+          }
+
+          return [
+            like + (vote.voteType === VoteType.L ? 1 : 0),
+            dislike + (vote.voteType === VoteType.D ? 1 : 0),
+          ];
+        },
+        [0, 0],
+      );
+
+      return {
+        id: review.id,
+        rating: review.rating,
+        status: review.status,
+        studyProgram: review.studyProgram,
+        academicYear: review.academicYear,
+        semester: review.semester,
+        content: review.content,
+        stats: {
+          likeCount,
+          dislikeCount,
+        },
+        reaction,
+      } as CourseReview;
+    });
+
+    return {
+      course,
+      reviews,
+    };
+  },
+
+  //1.3 Add Favorite Course
   addFavoriteCourse: async (courseNo: string, userId: string) => {
     const courseInfo = await prisma.courseInfo.findUnique({
       where: {
@@ -161,6 +246,8 @@ export const courseServices = {
       creditHours: courseInfo.creditHours,
     };
   },
+
+  //1.4 Remove Favorite Course
   removeFavoriteCourse: async (courseNo: string, userId: string) => {
     const courseInfo = await prisma.courseInfo.findUnique({
       where: {

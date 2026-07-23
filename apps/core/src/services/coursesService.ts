@@ -130,3 +130,53 @@ export async function queryCourse(
 
   return { data, total };
 }
+
+export const courseServices = {
+  queryCourse,
+  addFavoriteCourse: async (courseNo: string, userId: string) => {
+    const courseInfo = await prisma.courseInfo.findUnique({
+      where: {
+        courseNo,
+      },
+    });
+
+    if (!courseInfo) {
+      throw new Error("COURSE_NOT_FOUND");
+    }
+
+    await prisma.courseFavorite.create({
+      data: {
+        courseNo,
+        userId,
+      },
+    });
+
+    return {
+      abbrName: courseInfo.abbrName,
+      courseNameEn: courseInfo.courseNameEn,
+      courseNameTh: courseInfo.courseNameTh,
+      faculty: courseInfo.faculty,
+      department: courseInfo.department,
+      credit: courseInfo.credit,
+      creditHours: courseInfo.creditHours,
+    };
+  },
+  removeFavoriteCourse: async (courseNo: string, userId: string) => {
+    const courseInfo = await prisma.courseInfo.findUnique({
+      where: {
+        courseNo,
+      },
+    });
+
+    if (!courseInfo) {
+      throw new Error("COURSE_NOT_FOUND");
+    }
+
+    await prisma.courseFavorite.deleteMany({
+      where: {
+        userId,
+        courseNo,
+      },
+    });
+  },
+};

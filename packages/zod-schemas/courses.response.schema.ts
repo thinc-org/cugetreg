@@ -108,3 +108,8 @@ export const CourseNoResponseSchema = z.object({
 
 export type CourseNoResponse = z.infer<typeof CourseNoResponseSchema>;
 export type CourseReview = z.infer<typeof CourseReview>;
+
+export const AddFavoriteCourseResponseSchema = CourseInfoSchema.omit({
+  courseDescEn: true,
+  courseDescTh: true,
+});

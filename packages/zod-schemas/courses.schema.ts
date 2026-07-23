@@ -34,7 +34,10 @@ export const GetCourseQuerySchema = z.object({
 //1.2 get course detail by id
 // In your schema file
 export const CourseNoParamSchema = z.object({
-  courseNo: z.string().describe("The registration number of the course"),
+  courseNo: z
+    .string()
+    .regex(/^\d{7}$/)
+    .describe("The registration number of the course"),
 });
 
 export type GetCourseQuerySchema = z.infer<typeof GetCourseQuerySchema>;

@@ -1,18 +1,24 @@
 import { prisma } from "@/db/clients.js";
-import { ReviewStatus, VoteType } from "@/generated/prisma/client.js";
+import { Prisma, ReviewStatus, VoteType } from "@/generated/prisma/client.js";
 import type { Variables } from "@/lib/auth.js";
 import {
+  addFavoriteCourse,
   getCourseByNoRoute,
   getCoursesRoute,
+  removeFavoriteCourse,
 } from "@/routes_define/courses.routes.js";
-import { queryCourse } from "@/services/coursesService.js";
+import { courseServices, queryCourse } from "@/services/coursesService.js";
 import { mapSemester, mapStudyProgram } from "@/utils/enumMapper.js";
 
 import { OpenAPIHono } from "@hono/zod-openapi";
 
 import type { CourseReview } from "@cugetreg/zod-schemas/courses-response";
 
+import { middlewareAuth } from "./auth.js";
+
 const courses = new OpenAPIHono<{ Variables: Variables }>();
+
+courses.use("/*/favorite", middlewareAuth);
 
 courses
   // 1.1. Get Courses
@@ -121,6 +127,49 @@ courses
       );
     } catch (error) {
       console.error(error);
+      return c.json({ error: "INTERNAL_SERVER_ERROR" }, 500);
+    }
+  })
+
+  //1.3 Add favorite course
+  .openapi(addFavoriteCourse, async (c) => {
+    try {
+      const { courseNo } = c.req.valid("param");
+      const userId = c.get("user")?.id;
+
+      const data = await courseServices.addFavoriteCourse(courseNo, userId);
+
+      return c.json(data, 201);
+    } catch (e) {
+      if (e instanceof Error) {
+        if (e.message === "COURSE_NOT_FOUND") {
+          return c.json({ error: e.message }, 404);
+        }
+        if (
+          e instanceof Prisma.PrismaClientKnownRequestError &&
+          e.code === "P2002"
+        ) {
+          return c.json({ error: "THIS_COURSE_IS_ALREADY_YOUR_FAVORITE" }, 409);
+        }
+      }
+
+      return c.json({ error: "INTERNAL_SERVER_ERROR" }, 500);
+    }
+  })
+
+  //1.4 Remove favorite course
+  .openapi(removeFavoriteCourse, async (c) => {
+    try {
+      const { courseNo } = c.req.valid("param");
+      const userId = c.get("user")?.id;
+      await courseServices.removeFavoriteCourse(courseNo, userId);
+      return c.body(null, 204);
+    } catch (e) {
+      if (e instanceof Error) {
+        if (e.message === "COURSE_NOT_FOUND") {
+          return c.json({ error: e.message }, 404);
+        }
+      }
       return c.json({ error: "INTERNAL_SERVER_ERROR" }, 500);
     }
   });

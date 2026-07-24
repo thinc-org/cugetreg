@@ -52,3 +52,27 @@ export const getCourseByNoRoute = createRoute({
   },
   security: [{ Bearer: [] }],
 });
+
+export const getCourseReviews = createRoute({
+  method: "get",
+  path: "/reviews/{courseNo}",
+  summary: "1.3 Get Course reviews",
+  request: {
+    params: CourseSchema.GetCourseReviewParamSchema,
+    query: CourseSchema.GetCourseReviewQuerySchema,
+  },
+  responses: {
+    200: {
+      content: {
+        "application/json": {
+          schema: CourseResponseSchema.CourseReviewResponseSchema,
+        },
+      },
+      description: "Successfully retrieved course details",
+    },
+    400: { description: "Invalid course number format" },
+    404: { description: "Course not found" },
+    500: InternalError,
+  },
+  security: [{ Bearer: [] }],
+});

@@ -1,8 +1,11 @@
 import { prisma } from "@/db/clients.js";
+import type { Prisma } from "@/generated/prisma/client.js";
+import { ReviewStatus, VoteType } from "@/generated/prisma/enums.js";
 import { getCourseList } from "@/generated/prisma/sql.js";
 import { mapDayOfWeek } from "@/utils/enumMapper.js";
 
 import type { GetCourseQuerySchema } from "@cugetreg/zod-schemas/courses";
+import type { CourseReview } from "@cugetreg/zod-schemas/courses-response";
 
 export async function queryCourse(
   query: GetCourseQuerySchema,
@@ -129,4 +132,101 @@ export async function queryCourse(
   }));
 
   return { data, total };
+}
+
+export async function getCourseReviewByCourseNo(
+  courseNo: string,
+  limit: number,
+  page: number,
+  userId?: string,
+) {
+  const courseInfo = await prisma.courseInfo.findUnique({
+    where: { courseNo },
+    select: { courseNo: true },
+  });
+
+  if (!courseInfo) {
+    throw new Error("COURSE_NOT_FOUND");
+  }
+
+  const where: Prisma.ReviewWhereInput = userId
+    ? {
+        courseNo,
+        OR: [
+          { userId },
+          { status: ReviewStatus.APPROVED, userId: { not: userId } },
+        ],
+      }
+    : { courseNo, status: ReviewStatus.APPROVED };
+
+  const [reviews, count] = await prisma.$transaction([
+    prisma.review.findMany({
+      where,
+      skip: (page - 1) * limit,
+      take: limit,
+      orderBy: [{ createdAt: "desc" }, { id: "desc" }],
+      select: {
+        id: true,
+        rating: true,
+        status: true,
+        studyProgram: true,
+        academicYear: true,
+        semester: true,
+        content: true,
+      },
+    }),
+    prisma.review.count({ where }),
+  ]);
+
+  const reviewIds = reviews.map((review) => review.id);
+  const voteCounts =
+    reviewIds.length === 0
+      ? []
+      : await prisma.reviewVote.groupBy({
+          by: ["reviewId", "voteType"],
+          where: {
+            reviewId: { in: reviewIds },
+          },
+          _count: {
+            _all: true,
+          },
+        });
+
+  const userVotes =
+    userId && reviewIds.length > 0
+      ? await prisma.reviewVote.findMany({
+          where: {
+            userId,
+            reviewId: { in: reviewIds },
+          },
+          select: {
+            reviewId: true,
+            voteType: true,
+          },
+        })
+      : [];
+
+  const reactions = new Map(
+    userVotes.map((vote) => [vote.reviewId, vote.voteType]),
+  );
+
+  const resultReviews = reviews.map((review) => {
+    const reviewVotes = voteCounts.filter((v) => v.reviewId === review.id);
+    const likeCount =
+      reviewVotes.find((v) => v.voteType === VoteType.L)?._count._all ?? 0;
+    const dislikeCount =
+      reviewVotes.find((v) => v.voteType === VoteType.D)?._count._all ?? 0;
+    const reaction = reactions.get(review.id);
+
+    return {
+      ...review,
+      stats: {
+        likeCount,
+        dislikeCount,
+      },
+      ...(reaction && { reaction }),
+    } as CourseReview;
+  });
+
+  return { reviews: resultReviews, count };
 }

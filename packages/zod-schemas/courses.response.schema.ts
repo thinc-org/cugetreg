@@ -103,8 +103,15 @@ export const CourseNoDetailSchema = CourseSchema.extend({
 
 export const CourseNoResponseSchema = z.object({
   course: CourseNoDetailSchema,
+});
+
+export const CourseReviewResponseSchema = z.object({
   reviews: z.array(CourseReview),
+  limit: z.int().min(1),
+  page: z.int().min(1),
+  count: z.int().min(0),
 });
 
 export type CourseNoResponse = z.infer<typeof CourseNoResponseSchema>;
 export type CourseReview = z.infer<typeof CourseReview>;
+export type CourseReviewResponse = z.infer<typeof CourseReviewResponseSchema>;

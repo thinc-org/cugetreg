@@ -15,7 +15,8 @@ import { middlewareAuth } from "./auth.js";
 
 const courses = new OpenAPIHono<{ Variables: Variables }>();
 
-courses.use("**/favorite", middlewareAuth);
+courses.use("/*/favorite", middlewareAuth);
+courses.use("/favorite", middlewareAuth);
 
 courses
   // 1.1. Get Courses

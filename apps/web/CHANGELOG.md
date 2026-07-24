@@ -1,5 +1,11 @@
 # web
 
+## 1.15.2
+
+### Patch Changes
+
+- 69aaecf: chore: set default term to 2569/1
+
 ## 1.15.2-beta.0
 
 ### Patch Changes

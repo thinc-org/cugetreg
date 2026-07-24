@@ -4,9 +4,46 @@ import { tryCatch } from '$lib/async-handler';
 
 import { error as svelteError, redirect } from '@sveltejs/kit';
 
-import { CourseNoResponseSchema } from '@cugetreg/zod-schemas/courses-response';
+import {
+  CourseNoResponseSchema,
+  CourseReviewResponseSchema,
+} from '@cugetreg/zod-schemas/courses-response';
 
-import type { PageServerLoad } from './$types';
+import type { PageServerLoad, PageServerLoadEvent } from './$types';
+
+const REVIEW_PAGE_SIZE = 100;
+
+async function fetchAllReviews(
+  fetch: PageServerLoadEvent['fetch'],
+  reviewsUrl: string,
+) {
+  const fetchPage = async (page: number) => {
+    const params = new URLSearchParams({
+      limit: String(REVIEW_PAGE_SIZE),
+      page: String(page),
+    });
+    const response = await fetch(`${reviewsUrl}?${params.toString()}`);
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch reviews: ${response.status}`);
+    }
+
+    return CourseReviewResponseSchema.parse(await response.json());
+  };
+
+  const firstPage = await fetchPage(1);
+  const totalPages = Math.ceil(firstPage.count / firstPage.limit);
+  const remainingPages = await Promise.all(
+    Array.from({ length: Math.max(0, totalPages - 1) }, (_, index) =>
+      fetchPage(index + 2),
+    ),
+  );
+
+  return [
+    ...firstPage.reviews,
+    ...remainingPages.flatMap((result) => result.reviews),
+  ];
+}
 
 export const load: PageServerLoad = async ({ params, url, parent, fetch }) => {
   const API_BASE = privateEnv.API_URL
@@ -43,19 +80,41 @@ export const load: PageServerLoad = async ({ params, url, parent, fetch }) => {
     semester,
   });
 
-  const [response, error] = await tryCatch(
-    fetch(`${API_URL}${courseId}?${queryParams.toString()}`),
-  );
+  const [[response, responseError], [reviews, reviewsError]] =
+    await Promise.all([
+      tryCatch(fetch(`${API_URL}${courseId}?${queryParams.toString()}`)),
+      tryCatch(fetchAllReviews(fetch, `${API_URL}reviews/${courseId}`)),
+    ]);
 
-  if (error || !response || !response.ok) {
-    if (error) console.error(error);
+  if (responseError || !response) {
+    if (responseError) console.error(responseError);
+    throw svelteError(502, 'Unable to fetch course');
+  }
+
+  if (response.status === 404) {
     throw svelteError(404, 'Course not found');
   }
 
-  const resData = await response.json();
-  const { course, reviews } = CourseNoResponseSchema.parse(resData);
+  if (!response.ok) {
+    throw svelteError(502, 'Unable to fetch course');
+  }
+
+  const [courseData, courseDataError] = await tryCatch(
+    response
+      .json()
+      .then((responseData) => CourseNoResponseSchema.parse(responseData)),
+  );
+
+  if (courseDataError || !courseData) {
+    if (courseDataError) console.error(courseDataError);
+    throw svelteError(502, 'Invalid course response');
+  }
+
+  if (reviewsError) console.error(reviewsError);
+
   return {
-    course,
-    reviews,
+    course: courseData.course,
+    reviews: reviews ?? [],
+    reviewsError: Boolean(reviewsError),
   };
 };

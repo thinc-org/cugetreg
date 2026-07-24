@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { goto } from '$app/navigation';
+  import { afterNavigate, goto } from '$app/navigation';
   import { resolve } from '$app/paths';
   import { page } from '$app/state';
   import { api } from '$lib/api';
@@ -24,6 +24,7 @@
     BookMarked,
     Check,
     ChevronLeft,
+    Loader2,
     Menu,
     MessageCircleQuestionIcon,
     NotebookPen,
@@ -56,6 +57,8 @@
   import * as Sidebar from '@cugetreg/ui/organisms/sidebar';
   import type { GenEdType } from '@cugetreg/utils/types';
   import {
+    type CourseReview,
+    CourseReviewResponseSchema,
     type SubmitReviewBodySchema,
     SubmitReviewResponseSchema,
     VoteReviewBodySchema,
@@ -66,9 +69,22 @@
 
   const { data }: PageProps = $props();
   const course = $derived(data.course);
-  const reviews = $state(untrack(() => data.reviews));
+  let reviews = $state<CourseReview[]>(untrack(() => data.reviews));
+  let reviewsLoading = $state(false);
+  let reviewsError = $state(
+    untrack(
+      () =>
+        (data as typeof data & { reviewsError?: boolean }).reviewsError ??
+        false,
+    ),
+  );
+  let reviewsRequestId = 0;
+  let reviewsCourseNo = untrack(() => data.course.courseNo);
 
   const session = useSession();
+  let reviewSessionUserId = $state<string | null>(
+    untrack(() => $session.data?.user.id ?? null),
+  );
 
   const userCart = getUserCartStore();
   const { addCourse, removeCourse, updateCourse } = useCartActions();
@@ -112,7 +128,10 @@
   let selectedReviewYear = $state(reviewYearPlaceholder);
   let selectedReviewTerm = $state(reviewTermPlaceholder);
   const reviewsPerPage = 4;
+  const reviewApiPageSize = 100;
   let reviewsPage = $state(1);
+  let reviewSubmitting = $state(false);
+  let pendingReviewVotes = $state<string[]>([]);
 
   const isReviewYearPlaceholder = $derived(
     selectedReviewYear === reviewYearPlaceholder,
@@ -210,12 +229,12 @@
     return items;
   });
 
-  const reviewYearOptions = [
+  const reviewYearOptions = $derived.by(() => [
     reviewYearPlaceholder,
-    ...Array.from(new Set(reviews.map((item) => item.academicYear)))
+    ...Array.from(new Set(reviews.map((item) => String(item.academicYear))))
       .sort()
       .reverse(),
-  ];
+  ]);
 
   const reviewTermOptions = $derived.by(() => {
     const terms = reviews
@@ -232,7 +251,59 @@
     return [reviewTermPlaceholder, ...Array.from(new Set(terms))];
   });
 
+  function setSelectedReviewYear(value: string) {
+    selectedReviewYear = value;
+    reviewsPage = 1;
+  }
+
+  function setSelectedReviewTerm(value: string) {
+    selectedReviewTerm = value;
+    reviewsPage = 1;
+  }
+
+  async function refreshReviews() {
+    const requestId = ++reviewsRequestId;
+    reviewsLoading = true;
+    reviewsError = false;
+
+    const fetchPage = async (reviewPage: number) => {
+      const response = await api.get(`/courses/reviews/${course.courseNo}`, {
+        params: {
+          limit: reviewApiPageSize,
+          page: reviewPage,
+        },
+      });
+      return CourseReviewResponseSchema.parse(response.data);
+    };
+
+    try {
+      const firstPage = await fetchPage(1);
+      const totalPages = Math.ceil(firstPage.count / firstPage.limit);
+      const remainingPages = await Promise.all(
+        Array.from({ length: Math.max(0, totalPages - 1) }, (_, index) =>
+          fetchPage(index + 2),
+        ),
+      );
+
+      if (requestId !== reviewsRequestId) return;
+
+      reviews = [
+        ...firstPage.reviews,
+        ...remainingPages.flatMap((result) => result.reviews),
+      ];
+    } catch (error) {
+      if (requestId !== reviewsRequestId) return;
+      console.error(error);
+      reviewsError = true;
+    } finally {
+      if (requestId === reviewsRequestId) reviewsLoading = false;
+    }
+  }
+
   async function handleReactReview(reviewId: string, interaction: 'L' | 'D') {
+    if (pendingReviewVotes.includes(reviewId)) return;
+    pendingReviewVotes = [...pendingReviewVotes, reviewId];
+
     const payload: VoteReviewBodySchema = {
       interaction,
     };
@@ -268,10 +339,15 @@
       toast.error('Something went wrong', {
         position: 'bottom-right',
       });
+    } finally {
+      pendingReviewVotes = pendingReviewVotes.filter((id) => id !== reviewId);
     }
   }
 
   async function handleSubmitReview() {
+    if (reviewSubmitting) return;
+    reviewSubmitting = true;
+
     if (editingReviewId) {
       const patchPayload = {
         academicYear: Number(selectedYear),
@@ -281,23 +357,18 @@
       };
 
       try {
-        const response = await api.patch(
-          `/reviews/${editingReviewId}`,
-          patchPayload,
-        );
-        const index = reviews.findIndex((r) => r.id === editingReviewId);
-        if (index !== -1) {
-          reviews[index].academicYear = patchPayload.academicYear;
-          reviews[index].semester = patchPayload.semester;
-          reviews[index].rating = patchPayload.rating;
-          reviews[index].content = patchPayload.content;
-          reviews[index].status = 'PENDING';
-        }
+        await api.patch(`/reviews/${editingReviewId}`, patchPayload);
+        await refreshReviews();
         editingReviewId = null;
         reviewContent = '';
         reviewRating = 1;
       } catch (error) {
         console.error(error);
+        toast.error('Something went wrong', {
+          position: 'bottom-right',
+        });
+      } finally {
+        reviewSubmitting = false;
       }
       return;
     }
@@ -313,23 +384,8 @@
 
     try {
       const response = await api.post('/reviews', payload);
-      const review = SubmitReviewResponseSchema.parse(response.data).data;
-
-      console.log(review);
-
-      reviews.push({
-        id: review.id,
-        rating: review.rating,
-        status: review.status,
-        studyProgram: review.studyProgram,
-        academicYear: review.academicYear,
-        semester: review.semester,
-        content: review.content,
-        stats: {
-          likeCount: review.likeCount,
-          dislikeCount: review.dislikeCount,
-        },
-      });
+      SubmitReviewResponseSchema.parse(response.data);
+      await refreshReviews();
       reviewContent = '';
     } catch (error) {
       if (isAxiosError(error)) {
@@ -344,6 +400,8 @@
       toast.error('Something went wrong', {
         position: 'bottom-right',
       });
+    } finally {
+      reviewSubmitting = false;
     }
   }
 
@@ -352,10 +410,7 @@
     if (!isConfirm) return;
     try {
       await api.delete(`/reviews/${reviewId}`);
-      const index = reviews.findIndex((r) => r.id === reviewId);
-      if (index !== -1) {
-        reviews.splice(index, 1);
-      }
+      await refreshReviews();
       toast.success('ลบรีวิวสำเร็จ', { position: 'bottom-right' });
     } catch (error) {
       console.error(error);
@@ -392,6 +447,31 @@
     goto(resolve(`/course-page/${page.params.courseId}?${params.toString()}`), {
       replaceState: true,
     });
+  });
+
+  afterNavigate(() => {
+    const loadedCourseNo = data.course.courseNo;
+
+    if (loadedCourseNo === reviewsCourseNo) return;
+
+    reviewsRequestId += 1;
+    reviewsCourseNo = loadedCourseNo;
+    reviews = data.reviews;
+    reviewsError =
+      (data as typeof data & { reviewsError?: boolean }).reviewsError ?? false;
+    reviewsLoading = false;
+    selectedReviewYear = reviewYearPlaceholder;
+    selectedReviewTerm = reviewTermPlaceholder;
+    reviewsPage = 1;
+  });
+
+  $effect(() => {
+    const userId = $session.data?.user.id ?? null;
+
+    if (userId === reviewSessionUserId) return;
+
+    reviewSessionUserId = userId;
+    void refreshReviews();
   });
 
   $effect(() => {
@@ -626,7 +706,7 @@
               >
                 รีวิวรายวิชา
                 <span class="text-on-surface/50 ml-1 text-sm font-normal">
-                  ({filteredReviews.length} รีวิว)
+                  ({reviews.length} รีวิว)
                 </span>
               </button>
 
@@ -1186,8 +1266,9 @@
                   color="secondary"
                   class="bg-primary-container text-primary hover:ring-primary-container w-full gap-2 md:w-auto"
                   onclick={handleSubmitReview}
+                  disabled={reviewSubmitting}
                 >
-                  ส่งรีวิว
+                  {reviewSubmitting ? 'กำลังส่ง...' : 'ส่งรีวิว'}
                   <Send size={14} />
                 </Button>
               </div>
@@ -1203,7 +1284,10 @@
                 <span class="text-primary">{filteredReviews.length} รีวิว</span>
               </div>
               <div class="flex flex-nowrap items-center gap-3">
-                <Select.Root type="single" bind:value={selectedReviewYear}>
+                <Select.Root
+                  type="single"
+                  bind:value={() => selectedReviewYear, setSelectedReviewYear}
+                >
                   <Select.Trigger
                     class={`h-9 w-[140px] rounded-xl px-4 text-sm ${
                       isReviewYearPlaceholder
@@ -1221,7 +1305,10 @@
                     </Select.Group>
                   </Select.Content>
                 </Select.Root>
-                <Select.Root type="single" bind:value={selectedReviewTerm}>
+                <Select.Root
+                  type="single"
+                  bind:value={() => selectedReviewTerm, setSelectedReviewTerm}
+                >
                   <Select.Trigger
                     class={`h-9 w-[120px] rounded-xl px-4 text-sm ${
                       isReviewTermPlaceholder
@@ -1241,7 +1328,26 @@
                 </Select.Root>
               </div>
             </div>
-            {#if filteredReviews.length === 0}
+            {#if reviewsLoading}
+              <div
+                class="text-on-surface/70 mt-12 flex items-center justify-center gap-3 py-12"
+                aria-live="polite"
+              >
+                <Loader2 class="animate-spin" size={24} />
+                กำลังโหลดรีวิว...
+              </div>
+            {:else if reviewsError}
+              <div
+                class="mt-12 flex flex-col items-center justify-center gap-4 py-12 text-center"
+                role="alert"
+              >
+                <AlertTriangle size={48} class="text-orange-500" />
+                <p class="text-on-surface/70">ไม่สามารถโหลดรีวิวได้</p>
+                <Button size="sm" variant="outlined" onclick={refreshReviews}>
+                  ลองใหม่
+                </Button>
+              </div>
+            {:else if filteredReviews.length === 0}
               <div
                 class="mt-12 flex flex-col items-center justify-center gap-4 py-12 text-center"
               >
@@ -1262,7 +1368,7 @@
               </div>
             {:else}
               <div class="mt-6 flex flex-col gap-6">
-                {#each pagedReviews as review, index (index)}
+                {#each pagedReviews as review (review.id)}
                   <Comment
                     rating={review.rating / 2}
                     semester={SEMESTER_LABEL_LONG[review.semester]}
@@ -1279,12 +1385,16 @@
                   />
                 {/each}
               </div>
-              <div class="mt-6 flex justify-end">
+              <div
+                class="mt-6 flex justify-end"
+                class:hidden={totalReviewPages <= 1}
+              >
                 <nav class="flex items-center gap-2" aria-label="Pagination">
                   <button
-                    class="border-surface-container-high bg-surface text-on-surface flex h-9 w-9 items-center justify-center rounded-lg border"
+                    class="border-surface-container-high bg-surface text-on-surface flex h-9 w-9 items-center justify-center rounded-lg border disabled:cursor-not-allowed disabled:opacity-50"
                     type="button"
                     aria-label="Previous page"
+                    disabled={reviewsPage === 1}
                     onclick={() => (reviewsPage = Math.max(1, reviewsPage - 1))}
                   >
                     ‹
@@ -1315,9 +1425,10 @@
                     {/if}
                   {/each}
                   <button
-                    class="border-surface-container-high bg-surface text-on-surface flex h-9 w-9 items-center justify-center rounded-lg border"
+                    class="border-surface-container-high bg-surface text-on-surface flex h-9 w-9 items-center justify-center rounded-lg border disabled:cursor-not-allowed disabled:opacity-50"
                     type="button"
                     aria-label="Next page"
+                    disabled={reviewsPage === totalReviewPages}
                     onclick={() =>
                       (reviewsPage = Math.min(
                         totalReviewPages,

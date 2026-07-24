@@ -92,6 +92,10 @@ export const CourseReview = z.object({
     likeCount: z.number(),
     dislikeCount: z.number(),
   }),
+  user: z.object({
+    faculty: z.string().nullable(),
+    department: z.string().nullable(),
+  }),
   reaction: vote.optional(),
 });
 

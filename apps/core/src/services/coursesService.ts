@@ -173,6 +173,12 @@ export async function getCourseReviewByCourseNo(
         academicYear: true,
         semester: true,
         content: true,
+        user: {
+          select: {
+            faculty: true,
+            department: true,
+          },
+        },
       },
     }),
     prisma.review.count({ where }),

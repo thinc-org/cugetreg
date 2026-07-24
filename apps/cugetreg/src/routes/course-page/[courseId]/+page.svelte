@@ -1369,6 +1369,8 @@
             {:else}
               <div class="mt-6 flex flex-col gap-6">
                 {#each pagedReviews as review (review.id)}
+                  {@const faculty = review.user.faculty ?? ''}
+                  {@const department = review.user.department ?? ''}
                   <Comment
                     rating={review.rating / 2}
                     semester={SEMESTER_LABEL_LONG[review.semester]}
@@ -1377,6 +1379,7 @@
                     likesCount={review.stats.likeCount}
                     dislikesCount={review.stats.dislikeCount}
                     status={review.status}
+                    facultyMajor={`${faculty} ${department}`}
                     onLike={() => handleReactReview(review.id, 'L')}
                     onDislike={() => handleReactReview(review.id, 'D')}
                     reaction={review.reaction}

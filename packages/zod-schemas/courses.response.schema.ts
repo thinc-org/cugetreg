@@ -110,6 +110,25 @@ export const CourseNoResponseSchema = z.object({
 export type CourseNoResponse = z.infer<typeof CourseNoResponseSchema>;
 export type CourseReview = z.infer<typeof CourseReview>;
 
+export const CourseFavoritesResponseSchema = z.object({
+  total: z.number().min(0),
+  courses: z.array(
+    z.object({
+      courseNo: z.string(),
+      abbrName: z.string(),
+      courseCondition: z.string().nullish().default("-"),
+      genEdType: genEdType,
+      faculty: z.string().nullable(),
+      department: z.string().nullable(),
+      credit: z.string(),
+      creditHours: z.string().nullable(),
+      studyProgram: studyProgram,
+      academicYear: z.number().min(2564),
+      semester: semester,
+    }),
+  ),
+});
+
 export const AddFavoriteCourseResponseSchema = CourseInfoSchema.omit({
   courseDescEn: true,
   courseDescTh: true,

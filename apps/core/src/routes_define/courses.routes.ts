@@ -27,11 +27,34 @@ export const getCoursesRoute = createRoute({
   },
   security: [{ Bearer: [] }],
 });
-//1.2 get course detail by id
+
+//1.2 Get favorite courses
+export const getFavoriteCourses = createRoute({
+  method: "get",
+  path: "/favorite",
+  summary: "1.2 Get User's Favorite Courses",
+  request: {
+    query: CourseSchema.GetCourseDetailQuerySchema,
+  },
+  responses: {
+    200: {
+      content: {
+        "application/json": {
+          schema: CourseResponseSchema.CourseFavoritesResponseSchema,
+        },
+      },
+      description: "OK",
+    },
+    500: InternalError,
+  },
+  security: [{ Bearer: [] }],
+});
+
+//1.3 get course detail by id
 export const getCourseByNoRoute = createRoute({
   method: "get",
   path: "/{courseNo}", // Use curly braces for OpenAPI / Hono path params
-  summary: "1.2 Get Course by Course Number",
+  summary: "1.3 Get Course by Course Number",
   request: {
     params: CourseSchema.CourseNoParamSchema,
     query: CourseSchema.GetCourseQuerySchema,
@@ -53,11 +76,11 @@ export const getCourseByNoRoute = createRoute({
   security: [{ Bearer: [] }],
 });
 
-//1.3 add favorite course
+//1.4 add favorite course
 export const addFavoriteCourse = createRoute({
   method: "post",
   path: "/{courseNo}/favorite",
-  summary: "1.3 Add New Favorite Course By Course Number",
+  summary: "1.4 Add New Favorite Course By Course Number",
   request: {
     params: CourseSchema.CourseNoParamSchema,
   },
@@ -77,11 +100,11 @@ export const addFavoriteCourse = createRoute({
   security: [{ Bearer: [] }],
 });
 
-//1.4 remove favorite course
+//1.5 remove favorite course
 export const removeFavoriteCourse = createRoute({
   method: "delete",
   path: "/{courseNo}/favorite",
-  summary: "1.4 Remove Favorite Course By Course Number",
+  summary: "1.5 Remove Favorite Course By Course Number",
   request: {
     params: CourseSchema.CourseNoParamSchema,
   },

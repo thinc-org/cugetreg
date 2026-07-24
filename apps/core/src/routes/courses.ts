@@ -4,6 +4,7 @@ import {
   addFavoriteCourse,
   getCourseByNoRoute,
   getCoursesRoute,
+  getFavoriteCourses,
   removeFavoriteCourse,
 } from "@/routes_define/courses.routes.js";
 import { courseServices } from "@/services/coursesService.js";
@@ -14,7 +15,7 @@ import { middlewareAuth } from "./auth.js";
 
 const courses = new OpenAPIHono<{ Variables: Variables }>();
 
-courses.use("/*/favorite", middlewareAuth);
+courses.use("**/favorite", middlewareAuth);
 
 courses
   // 1.1. Get Courses
@@ -41,7 +42,19 @@ courses
     }
   })
 
-  // 1.2. Get Course Detail
+  //1.2 Get favorite courses
+  .openapi(getFavoriteCourses, async (c) => {
+    try {
+      const userId = c.get("user")?.id;
+      const query = c.req.valid("query");
+      const data = await courseServices.getFavoriteCourses(query, userId);
+      return c.json(data, 200);
+    } catch {
+      return c.json({ error: "INTERNAL_SERVER_ERROR" }, 500);
+    }
+  })
+
+  // 1.3. Get Course Detail
   .openapi(getCourseByNoRoute, async (c) => {
     try {
       const { courseNo } = c.req.valid("param");
@@ -67,7 +80,7 @@ courses
     }
   })
 
-  //1.3 Add favorite course
+  //1.4 Add favorite course
   .openapi(addFavoriteCourse, async (c) => {
     try {
       const { courseNo } = c.req.valid("param");
@@ -93,7 +106,7 @@ courses
     }
   })
 
-  //1.4 Remove favorite course
+  //1.5 Remove favorite course
   .openapi(removeFavoriteCourse, async (c) => {
     try {
       const { courseNo } = c.req.valid("param");

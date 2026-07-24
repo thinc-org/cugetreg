@@ -32,7 +32,7 @@ export const GetCourseQuerySchema = z.object({
   limit: z.coerce.number().int().optional(),
 });
 
-//1.2 get course detail by id
+//1.3 get course detail by id
 // In your schema file
 export const CourseNoParamSchema = z.object({
   courseNo: z

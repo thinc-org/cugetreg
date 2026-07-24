@@ -148,7 +148,74 @@ export const courseServices = {
   //1.1 Query Course
   queryCourse,
 
-  //1.2 Get Course Detail
+  //1.2 get user's favorite courses
+  getFavoriteCourses: async (
+    query: GetCourseDetailQuerySchema,
+    userId: string,
+  ) => {
+    const { studyProgram, academicYear, semester } = query;
+    const courses = await prisma.courseInfo.findMany({
+      where: {
+        courseFavorites: {
+          some: {
+            userId,
+          },
+        },
+        courses: {
+          some: {
+            academicYear,
+            semester,
+            studyProgram,
+          },
+        },
+      },
+      select: {
+        courseNo: true,
+        abbrName: true,
+        faculty: true,
+        department: true,
+        credit: true,
+        creditHours: true,
+        courses: {
+          select: {
+            genEdType: true,
+            courseCondition: true,
+            academicYear: true,
+            semester: true,
+            studyProgram: true,
+          },
+          where: {
+            academicYear,
+            semester,
+            studyProgram,
+          },
+        },
+      },
+    });
+
+    const favoriteCourses = courses.map((course) => {
+      return {
+        courseNo: course.courseNo,
+        abbrName: course.abbrName,
+        faculty: course.faculty,
+        department: course.department,
+        credit: course.credit.toString(),
+        creditHours: course.creditHours,
+        genEdType: course.courses[0].genEdType,
+        courseCondition: course.courses[0].courseCondition,
+        academicYear: course.courses[0].academicYear,
+        studyProgram: course.courses[0].studyProgram,
+        semester: course.courses[0].semester,
+      };
+    });
+
+    return {
+      total: favoriteCourses.length,
+      courses: favoriteCourses,
+    };
+  },
+
+  //1.3 Get Course Detail
   getCourseDetail: async (
     query: GetCourseDetailQuerySchema,
     courseNo: string,
@@ -227,7 +294,7 @@ export const courseServices = {
     };
   },
 
-  //1.3 Add Favorite Course
+  //1.4 Add Favorite Course
   addFavoriteCourse: async (courseNo: string, userId: string) => {
     const courseInfo = await prisma.courseInfo.findUnique({
       where: {
@@ -257,7 +324,7 @@ export const courseServices = {
     };
   },
 
-  //1.4 Remove Favorite Course
+  //1.5 Remove Favorite Course
   removeFavoriteCourse: async (courseNo: string, userId: string) => {
     const courseInfo = await prisma.courseInfo.findUnique({
       where: {

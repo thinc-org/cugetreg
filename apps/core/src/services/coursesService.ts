@@ -27,6 +27,7 @@ async function queryCourse(query: GetCourseQuerySchema, userId?: string) {
     timeStart,
     timeEnd,
     noPrereq,
+    favorite,
     fitCartId,
   } = query;
 
@@ -35,6 +36,12 @@ async function queryCourse(query: GetCourseQuerySchema, userId?: string) {
   const selectedDays = !days || Array.isArray(days) ? days : [days];
   const selectedFaculties =
     !faculties || Array.isArray(faculties) ? faculties : [faculties];
+
+  if (favorite) {
+    if (!userId) {
+      throw new Error("UNAUTHORIZED");
+    }
+  }
 
   if (fitCartId) {
     if (!userId) {
@@ -74,6 +81,8 @@ async function queryCourse(query: GetCourseQuerySchema, userId?: string) {
       sortBy ?? null,
       sortOrder ?? "desc",
       fitCartId ?? null,
+      favorite ?? null,
+      userId ?? null,
     ),
   );
 
@@ -106,6 +115,7 @@ async function queryCourse(query: GetCourseQuerySchema, userId?: string) {
       midtermEnd: row.midterm_end?.toISOString() ?? null,
       finalStart: row.final_start?.toISOString() ?? null,
       finalEnd: row.final_end?.toISOString() ?? null,
+      isFavorite: row.is_favorite ?? false,
       sections: (row.sections as any[]) ?? [],
     },
     courseInfo: {

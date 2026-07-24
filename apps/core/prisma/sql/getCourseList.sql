@@ -17,6 +17,8 @@
 -- @param {String} $14:sortBy? Sort column ('NAME', 'CAPACITY_SUM', 'REMAINING_SUM'; default 'REMAINING_SUM')
 -- @param {String} $15:sortOrder? Sort direction ('ASC', 'DESC'; default 'ASC')
 -- @param {String} $16:fitCartId? Optional cart ID — when set, excludes sections whose classes overlap with the cart's sections
+-- @param {Boolean} $17:favorite? Optional when true, select user's favorite courses
+-- @param {String} $18:userId? Optional , required when get user's favorite courses
 
 -- Step 0: Precompute cart's occupied class slots once (avoids a correlated
 --         subquery in matching_sections when $16 is provided).
@@ -43,6 +45,13 @@ WITH occupied_slots AS (
       AND cl_occ.period_end_minutes IS NOT NULL
 ),
 
+user_favorites AS (
+    SELECT DISTINCT cf.course_no
+    FROM course_favorite cf
+    WHERE cf.user_id = $18::text
+    AND $18::text IS NOT NULL
+),
+
 -- Step 1: Find sections that pass ALL filters (course-level + section-level).
 --         Uses LEFT JOIN on classes so day/time/professor conditions apply
 --         per class row; DISTINCT deduplicates sections that have at least
@@ -56,11 +65,13 @@ matching_sections AS (
         s.max,
         s.regis,
         s.note,
-        s.gen_ed_type
+        s.gen_ed_type,
+        (uf.course_no IS NOT NULL) AS is_favorite
     FROM course_section s
     JOIN course c             ON c.id = s.course_id
     JOIN course_info ci       ON ci.course_no = c.course_no
     LEFT JOIN course_class cl ON cl.section_id = s.id
+    LEFT JOIN user_favorites uf ON uf.course_no = ci.course_no
     WHERE
         -- Course-level filters
         c.study_program = $1::study_program
@@ -130,6 +141,11 @@ matching_sections AS (
                   )
             )
         )
+
+        AND (
+          $17::boolean IS NOT TRUE
+          OR uf.course_no IS NOT NULL
+        )
 ),
 
 -- Step 2: Distinct list of matching course IDs (used for total count)
@@ -144,7 +160,8 @@ section_stats AS (
         COUNT(*)::int                          AS sections_count,
         COALESCE(SUM(max), 0)::int             AS capacity_sum,
         COALESCE(SUM(max - regis), 0)::int     AS remaining_sum,
-        COUNT(*) FILTER (WHERE closed)::int    AS closed_sections_count
+        COUNT(*) FILTER (WHERE closed)::int    AS closed_sections_count,
+        bool_or(is_favorite)                   AS is_favorite
     FROM matching_sections
     GROUP BY course_id
 ),
@@ -211,6 +228,7 @@ SELECT
     COALESCE(ss.capacity_sum, 0)::int              AS capacity_sum,
     COALESCE(ss.remaining_sum, 0)::int             AS remaining_sum,
     COALESCE(ss.closed_sections_count, 0)::int     AS closed_sections_count,
+    COALESCE(ss.is_favorite, FALSE)                AS is_favorite,
     COALESCE(
         json_agg(
             json_build_object(
@@ -238,7 +256,7 @@ LEFT JOIN section_json sj     ON sj.course_id = c.id
 GROUP BY
     c.id, ci.course_no,
     ss.sections_count, ss.capacity_sum,
-    ss.remaining_sum, ss.closed_sections_count
+    ss.remaining_sum, ss.closed_sections_count, ss.is_favorite
 ORDER BY
     -- NAME sort
     CASE WHEN COALESCE(NULLIF($14::text, ''), 'REMAINING_SUM') = 'NAME'    AND COALESCE(NULLIF($15::text, ''), 'asc') = 'asc'  THEN ci.abbr_name       END ASC  NULLS LAST,

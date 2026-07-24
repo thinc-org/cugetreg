@@ -47,6 +47,7 @@ export const CourseSchema = z.object({
   midtermEnd: z.string().datetime().nullable(),
   finalStart: z.string().datetime().nullable(),
   finalEnd: z.string().datetime().nullable(),
+  isFavorite: z.boolean().nullable().default(false),
   sections: z.array(SectionSchema),
 });
 

@@ -25,4 +25,4 @@ export const termOptions: TermOption[] = [
   { academicYear: '2564', semester: '1', label: '2564/1' },
 ]
 
-export const tempHardCodedCurrentTerm = termOptions[3] // 2568/ฤดูร้อน
+export const tempHardCodedCurrentTerm = termOptions[2] // 2569/1

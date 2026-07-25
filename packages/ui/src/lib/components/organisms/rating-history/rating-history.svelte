@@ -194,7 +194,7 @@
 			<div
 				bind:this={scrollBox}
 				onscroll={handleScroll}
-				class={`mt-4 flex flex-col gap-4 ${showAll ? 'h-80 overflow-y-auto' : ''}`}
+				class={`mt-4 flex flex-col gap-4 ${showAll ? 'max-h-64 overflow-y-auto sm:max-h-72' : ''}`}
 			>
 				{#each visibleReviews as review, i (i)}
 					<div class="flex flex-col gap-2">

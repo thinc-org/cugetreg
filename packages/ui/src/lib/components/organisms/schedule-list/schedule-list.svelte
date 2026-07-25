@@ -8,6 +8,8 @@
 		id: string;
 		title: string;
 		subtitle: string;
+		year: number;
+		semester: number;
 		isPublic: boolean;
 	}
 
@@ -31,15 +33,32 @@
 		onChangeVisibility
 	}: Props = $props();
 
-	let filters = $derived(
-		[...new Set(items.map((item) => item.title))].sort((option1, option2) => {
-			return option1.localeCompare(option2);
-		})
-	);
+	let filters = $derived([
+		...new Set(
+			items
+				.toSorted((item1, item2) => {
+					return item1.year !== item2.year
+						? item2.year - item1.year
+						: item2.semester - item1.semester;
+				})
+				.map((item) => {
+					const [yearLabel, semesterLabel] = [
+						item.subtitle.split(' ')[1],
+						item.subtitle.split(' ')[3]
+					];
+					return `${yearLabel} ${semesterLabel}`;
+				})
+		)
+	]);
 
 	let selected = $state(filters[0] ?? '');
 
-	let filteredItems = $derived(items.filter((item) => item.title === selected));
+	let filteredItems = $derived(
+		items.filter((item) => {
+			const [yearLabel, semesterLabel] = [item.subtitle.split(' ')[1], item.subtitle.split(' ')[3]];
+			return `${yearLabel} ${semesterLabel}` === selected;
+		})
+	);
 
 	let switchingFilter = $state(false);
 	let showSpinner = $derived(loading || switchingFilter);

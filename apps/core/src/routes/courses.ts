@@ -77,15 +77,20 @@ courses
   .openapi(getCourseReviews, async (c) => {
     try {
       const { courseNo } = c.req.valid("param");
-      const { limit, page } = c.req.valid("query");
+      const query = c.req.valid("query");
       const userId = c.get("user")?.id;
-      const { reviews, count } = await getCourseReviewByCourseNo(
+      const { reviews, count, facets } = await getCourseReviewByCourseNo(
         courseNo,
-        limit,
-        page,
+        query,
         userId,
       );
-      return c.json({ reviews, page, limit, count });
+      return c.json({
+        reviews,
+        page: query.page,
+        limit: query.limit,
+        count,
+        ...(facets && { facets }),
+      });
     } catch (err) {
       if (err instanceof Error) {
         if (err.message === "COURSE_NOT_FOUND") {

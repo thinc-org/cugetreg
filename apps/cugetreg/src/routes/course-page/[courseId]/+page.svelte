@@ -58,6 +58,7 @@
   import type { GenEdType } from '@cugetreg/utils/types';
   import {
     type CourseReview,
+    type CourseReviewFacet,
     CourseReviewResponseSchema,
     type SubmitReviewBodySchema,
     SubmitReviewResponseSchema,
@@ -68,15 +69,22 @@
   import type { PageProps } from './$types';
 
   const { data }: PageProps = $props();
+  type ReviewPageData = typeof data & {
+    reviewCount?: number;
+    reviewFacets?: CourseReviewFacet[];
+    reviewsError?: boolean;
+  };
   const course = $derived(data.course);
   let reviews = $state<CourseReview[]>(untrack(() => data.reviews));
+  let reviewCount = $state(
+    untrack(() => (data as ReviewPageData).reviewCount ?? data.reviews.length),
+  );
+  let reviewFacets = $state<CourseReviewFacet[]>(
+    untrack(() => (data as ReviewPageData).reviewFacets ?? []),
+  );
   let reviewsLoading = $state(false);
   let reviewsError = $state(
-    untrack(
-      () =>
-        (data as typeof data & { reviewsError?: boolean }).reviewsError ??
-        false,
-    ),
+    untrack(() => (data as ReviewPageData).reviewsError ?? false),
   );
   let reviewsRequestId = 0;
   let reviewsCourseNo = untrack(() => data.course.courseNo);
@@ -128,7 +136,6 @@
   let selectedReviewYear = $state(reviewYearPlaceholder);
   let selectedReviewTerm = $state(reviewTermPlaceholder);
   const reviewsPerPage = 4;
-  const reviewApiPageSize = 100;
   let reviewsPage = $state(1);
   let reviewSubmitting = $state(false);
   let pendingReviewVotes = $state<string[]>([]);
@@ -181,37 +188,8 @@
     el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
-  const filteredReviews = $derived.by(() =>
-    reviews
-      .filter((review) => {
-        if (
-          !isReviewYearPlaceholder &&
-          review.academicYear !== Number(selectedReviewYear)
-        )
-          return false;
-        if (!isReviewTermPlaceholder && review.semester !== selectedReviewTerm)
-          return false;
-        return true;
-      })
-      .sort((a, b) => {
-        const priority: Record<string, number> = {
-          REJECTED: 0,
-          PENDING: 1,
-          APPROVED: 2,
-        };
-        return (priority[a.status] ?? 3) - (priority[b.status] ?? 3);
-      }),
-  );
-
   const totalReviewPages = $derived(
-    Math.max(1, Math.ceil(filteredReviews.length / reviewsPerPage)),
-  );
-
-  const pagedReviews = $derived(
-    filteredReviews.slice(
-      (reviewsPage - 1) * reviewsPerPage,
-      reviewsPage * reviewsPerPage,
-    ),
+    Math.max(1, Math.ceil(reviewCount / reviewsPerPage)),
   );
 
   const reviewPageItems = $derived.by(() => {
@@ -231,66 +209,121 @@
 
   const reviewYearOptions = $derived.by(() => [
     reviewYearPlaceholder,
-    ...Array.from(new Set(reviews.map((item) => String(item.academicYear))))
+    ...Array.from(
+      new Set(reviewFacets.map((facet) => String(facet.academicYear))),
+    )
       .sort()
       .reverse(),
   ]);
 
-  const reviewTermOptions = $derived.by(() => {
-    const terms = reviews
-      .map((review) => {
-        const [term, year] = [review.semester, review.academicYear];
-        return { term, year };
-      })
-      .filter((item) =>
-        isReviewYearPlaceholder
-          ? true
-          : item.year === Number(selectedReviewYear),
-      )
-      .map((item) => item.term);
-    return [reviewTermPlaceholder, ...Array.from(new Set(terms))];
-  });
+  function getReviewTerms(reviewYear: string) {
+    return Array.from(
+      new Set(
+        reviewFacets
+          .filter((facet) =>
+            reviewYear === reviewYearPlaceholder
+              ? true
+              : facet.academicYear === Number(reviewYear),
+          )
+          .map((facet) => facet.semester),
+      ),
+    );
+  }
+
+  const reviewTermOptions = $derived([
+    reviewTermPlaceholder,
+    ...getReviewTerms(selectedReviewYear),
+  ]);
 
   function setSelectedReviewYear(value: string) {
     selectedReviewYear = value;
+    if (
+      selectedReviewTerm !== reviewTermPlaceholder &&
+      !getReviewTerms(value).includes(
+        selectedReviewTerm as CourseReview['semester'],
+      )
+    ) {
+      selectedReviewTerm = reviewTermPlaceholder;
+    }
     reviewsPage = 1;
+    void refreshReviews({ targetPage: 1 });
   }
 
   function setSelectedReviewTerm(value: string) {
     selectedReviewTerm = value;
     reviewsPage = 1;
+    void refreshReviews({ targetPage: 1 });
   }
 
-  async function refreshReviews() {
+  async function refreshReviews(
+    options: { includeFacets?: boolean; targetPage?: number } = {},
+  ) {
+    const { includeFacets = false, targetPage = reviewsPage } = options;
     const requestId = ++reviewsRequestId;
     reviewsLoading = true;
     reviewsError = false;
 
-    const fetchPage = async (reviewPage: number) => {
+    try {
       const response = await api.get(`/courses/reviews/${course.courseNo}`, {
         params: {
-          limit: reviewApiPageSize,
-          page: reviewPage,
+          limit: reviewsPerPage,
+          page: targetPage,
+          ...(includeFacets && { includeFacets: true }),
+          ...(!isReviewYearPlaceholder && {
+            academicYear: Number(selectedReviewYear),
+          }),
+          ...(!isReviewTermPlaceholder && {
+            semester: selectedReviewTerm,
+          }),
         },
       });
-      return CourseReviewResponseSchema.parse(response.data);
-    };
-
-    try {
-      const firstPage = await fetchPage(1);
-      const totalPages = Math.ceil(firstPage.count / firstPage.limit);
-      const remainingPages = await Promise.all(
-        Array.from({ length: Math.max(0, totalPages - 1) }, (_, index) =>
-          fetchPage(index + 2),
-        ),
-      );
+      const result = CourseReviewResponseSchema.parse(response.data);
 
       if (requestId !== reviewsRequestId) return;
 
-      reviews = [
-        ...firstPage.reviews,
-        ...remainingPages.flatMap((result) => result.reviews),
-      ];
+      if (result.facets) {
+        reviewFacets = result.facets;
+
+        const nextYearOptions = new Set(
+          result.facets.map((facet) => String(facet.academicYear)),
+        );
+        let filtersChanged = false;
+
+        if (
+          selectedReviewYear !== reviewYearPlaceholder &&
+          !nextYearOptions.has(selectedReviewYear)
+        ) {
+          selectedReviewYear = reviewYearPlaceholder;
+          selectedReviewTerm = reviewTermPlaceholder;
+          filtersChanged = true;
+        } else if (
+          selectedReviewTerm !== reviewTermPlaceholder &&
+          !getReviewTerms(selectedReviewYear).includes(
+            selectedReviewTerm as CourseReview['semester'],
+          )
+        ) {
+          selectedReviewTerm = reviewTermPlaceholder;
+          filtersChanged = true;
+        }
+
+        if (filtersChanged) {
+          await refreshReviews({ targetPage: 1 });
+          return;
+        }
+      }
+
+      const lastPage = Math.max(1, Math.ceil(result.count / reviewsPerPage));
+      if (targetPage > lastPage) {
+        await refreshReviews({
+          includeFacets,
+          targetPage: lastPage,
+        });
+        return;
+      }
+
+      reviews = result.reviews;
+      reviewCount = result.count;
+      reviewsPage = result.page;
     } catch (error) {
       if (requestId !== reviewsRequestId) return;
       console.error(error);
@@ -298,6 +331,11 @@
     } finally {
       if (requestId === reviewsRequestId) reviewsLoading = false;
     }
+  }
+
+  function setReviewsPage(targetPage: number) {
+    if (targetPage === reviewsPage || reviewsLoading) return;
+    void refreshReviews({ targetPage });
   }
 
   async function handleReactReview(reviewId: string, interaction: 'L' | 'D') {
@@ -358,7 +396,7 @@
 
       try {
         await api.patch(`/reviews/${editingReviewId}`, patchPayload);
-        await refreshReviews();
+        await refreshReviews({ includeFacets: true });
         editingReviewId = null;
         reviewContent = '';
         reviewRating = 1;
@@ -385,7 +423,7 @@
     try {
       const response = await api.post('/reviews', payload);
       SubmitReviewResponseSchema.parse(response.data);
-      await refreshReviews();
+      await refreshReviews({ includeFacets: true, targetPage: 1 });
       reviewContent = '';
     } catch (error) {
       if (isAxiosError(error)) {
@@ -410,7 +448,7 @@
     if (!isConfirm) return;
     try {
       await api.delete(`/reviews/${reviewId}`);
-      await refreshReviews();
+      await refreshReviews({ includeFacets: true });
       toast.success('ลบรีวิวสำเร็จ', { position: 'bottom-right' });
     } catch (error) {
       console.error(error);
@@ -457,8 +495,9 @@
     reviewsRequestId += 1;
     reviewsCourseNo = loadedCourseNo;
     reviews = data.reviews;
-    reviewsError =
-      (data as typeof data & { reviewsError?: boolean }).reviewsError ?? false;
+    reviewCount = (data as ReviewPageData).reviewCount ?? data.reviews.length;
+    reviewFacets = (data as ReviewPageData).reviewFacets ?? [];
+    reviewsError = (data as ReviewPageData).reviewsError ?? false;
     reviewsLoading = false;
     selectedReviewYear = reviewYearPlaceholder;
     selectedReviewTerm = reviewTermPlaceholder;
@@ -471,22 +510,7 @@
     if (userId === reviewSessionUserId) return;
 
     reviewSessionUserId = userId;
-    void refreshReviews();
-  });
-
-  $effect(() => {
-    if (!reviewYearOptions.includes(selectedReviewYear)) {
-      selectedReviewYear = reviewYearPlaceholder;
-    }
-    if (!reviewTermOptions.includes(selectedReviewTerm)) {
-      selectedReviewTerm = reviewTermPlaceholder;
-    }
-    if (reviewsPage > totalReviewPages) {
-      reviewsPage = totalReviewPages;
-    }
-    if (reviewsPage < 1) {
-      reviewsPage = 1;
-    }
+    void refreshReviews({ includeFacets: true, targetPage: 1 });
   });
 
   let globalSelectedSection = $state<string | null>(
@@ -706,7 +730,7 @@
               >
                 รีวิวรายวิชา
                 <span class="text-on-surface/50 ml-1 text-sm font-normal">
-                  ({reviews.length} รีวิว)
+                  ({reviewCount} รีวิว)
                 </span>
               </button>
 
@@ -1281,7 +1305,7 @@
             >
               <div class="text-base font-semibold sm:text-2xl">
                 <span class="text-on-surface/60">ทั้งหมด </span>
-                <span class="text-primary">{filteredReviews.length} รีวิว</span>
+                <span class="text-primary">{reviewCount} รีวิว</span>
               </div>
               <div class="flex flex-nowrap items-center gap-3">
                 <Select.Root
@@ -1343,11 +1367,16 @@
               >
                 <AlertTriangle size={48} class="text-orange-500" />
                 <p class="text-on-surface/70">ไม่สามารถโหลดรีวิวได้</p>
-                <Button size="sm" variant="outlined" onclick={refreshReviews}>
+                <Button
+                  size="sm"
+                  variant="outlined"
+                  onclick={() =>
+                    refreshReviews({ includeFacets: true, targetPage: 1 })}
+                >
                   ลองใหม่
                 </Button>
               </div>
-            {:else if filteredReviews.length === 0}
+            {:else if reviews.length === 0}
               <div
                 class="mt-12 flex flex-col items-center justify-center gap-4 py-12 text-center"
               >
@@ -1368,9 +1397,10 @@
               </div>
             {:else}
               <div class="mt-6 flex flex-col gap-6">
-                {#each pagedReviews as review (review.id)}
+                {#each reviews as review (review.id)}
                   {@const faculty = review.user.faculty ?? ''}
                   {@const department = review.user.department ?? ''}
+                  {@const affiliation = `${faculty} ${department}`.trim()}
                   <Comment
                     rating={review.rating / 2}
                     semester={SEMESTER_LABEL_LONG[review.semester]}
@@ -1379,7 +1409,7 @@
                     likesCount={review.stats.likeCount}
                     dislikesCount={review.stats.dislikeCount}
                     status={review.status}
-                    facultyMajor={`${faculty} ${department}`}
+                    facultyMajor={affiliation || undefined}
                     onLike={() => handleReactReview(review.id, 'L')}
                     onDislike={() => handleReactReview(review.id, 'D')}
                     reaction={review.reaction}
@@ -1398,7 +1428,7 @@
                     type="button"
                     aria-label="Previous page"
                     disabled={reviewsPage === 1}
-                    onclick={() => (reviewsPage = Math.max(1, reviewsPage - 1))}
+                    onclick={() => setReviewsPage(Math.max(1, reviewsPage - 1))}
                   >
                     ‹
                   </button>
@@ -1421,7 +1451,7 @@
                         }`}
                         type="button"
                         aria-current={reviewsPage === item ? 'page' : undefined}
-                        onclick={() => (reviewsPage = item)}
+                        onclick={() => setReviewsPage(item)}
                       >
                         {item}
                       </button>
@@ -1433,10 +1463,9 @@
                     aria-label="Next page"
                     disabled={reviewsPage === totalReviewPages}
                     onclick={() =>
-                      (reviewsPage = Math.min(
-                        totalReviewPages,
-                        reviewsPage + 1,
-                      ))}
+                      setReviewsPage(
+                        Math.min(totalReviewPages, reviewsPage + 1),
+                      )}
                   >
                     ›
                   </button>

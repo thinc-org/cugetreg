@@ -109,13 +109,21 @@ export const CourseNoResponseSchema = z.object({
   course: CourseNoDetailSchema,
 });
 
+export const CourseReviewFacetSchema = z.object({
+  academicYear: z.number().min(2564),
+  semester: semester,
+  count: z.int().min(1),
+});
+
 export const CourseReviewResponseSchema = z.object({
   reviews: z.array(CourseReview),
   limit: z.int().min(1),
   page: z.int().min(1),
   count: z.int().min(0),
+  facets: z.array(CourseReviewFacetSchema).optional(),
 });
 
 export type CourseNoResponse = z.infer<typeof CourseNoResponseSchema>;
 export type CourseReview = z.infer<typeof CourseReview>;
+export type CourseReviewFacet = z.infer<typeof CourseReviewFacetSchema>;
 export type CourseReviewResponse = z.infer<typeof CourseReviewResponseSchema>;

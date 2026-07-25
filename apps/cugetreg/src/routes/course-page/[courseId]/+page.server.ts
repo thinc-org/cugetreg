@@ -11,38 +11,24 @@ import {
 
 import type { PageServerLoad, PageServerLoadEvent } from './$types';
 
-const REVIEW_PAGE_SIZE = 100;
+const REVIEW_PAGE_SIZE = 4;
 
-async function fetchAllReviews(
+async function fetchInitialReviews(
   fetch: PageServerLoadEvent['fetch'],
   reviewsUrl: string,
 ) {
-  const fetchPage = async (page: number) => {
-    const params = new URLSearchParams({
-      limit: String(REVIEW_PAGE_SIZE),
-      page: String(page),
-    });
-    const response = await fetch(`${reviewsUrl}?${params.toString()}`);
+  const params = new URLSearchParams({
+    includeFacets: 'true',
+    limit: String(REVIEW_PAGE_SIZE),
+    page: '1',
+  });
+  const response = await fetch(`${reviewsUrl}?${params.toString()}`);
 
-    if (!response.ok) {
-      throw new Error(`Failed to fetch reviews: ${response.status}`);
-    }
+  if (!response.ok) {
+    throw new Error(`Failed to fetch reviews: ${response.status}`);
+  }
 
-    return CourseReviewResponseSchema.parse(await response.json());
-  };
-
-  const firstPage = await fetchPage(1);
-  const totalPages = Math.ceil(firstPage.count / firstPage.limit);
-  const remainingPages = await Promise.all(
-    Array.from({ length: Math.max(0, totalPages - 1) }, (_, index) =>
-      fetchPage(index + 2),
-    ),
-  );
-
-  return [
-    ...firstPage.reviews,
-    ...remainingPages.flatMap((result) => result.reviews),
-  ];
+  return CourseReviewResponseSchema.parse(await response.json());
 }
 
 export const load: PageServerLoad = async ({ params, url, parent, fetch }) => {
@@ -80,10 +66,10 @@ export const load: PageServerLoad = async ({ params, url, parent, fetch }) => {
     semester,
   });
 
-  const [[response, responseError], [reviews, reviewsError]] =
+  const [[response, responseError], [reviewData, reviewsError]] =
     await Promise.all([
       tryCatch(fetch(`${API_URL}${courseId}?${queryParams.toString()}`)),
-      tryCatch(fetchAllReviews(fetch, `${API_URL}reviews/${courseId}`)),
+      tryCatch(fetchInitialReviews(fetch, `${API_URL}reviews/${courseId}`)),
     ]);
 
   if (responseError || !response) {
@@ -114,7 +100,9 @@ export const load: PageServerLoad = async ({ params, url, parent, fetch }) => {
 
   return {
     course: courseData.course,
-    reviews: reviews ?? [],
+    reviews: reviewData?.reviews ?? [],
+    reviewCount: reviewData?.count ?? 0,
+    reviewFacets: reviewData?.facets ?? [],
     reviewsError: Boolean(reviewsError),
   };
 };

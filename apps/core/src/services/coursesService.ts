@@ -1,10 +1,13 @@
 import { prisma } from "@/db/clients.js";
-import type { Prisma } from "@/generated/prisma/client.js";
+import { Prisma } from "@/generated/prisma/client.js";
 import { ReviewStatus, VoteType } from "@/generated/prisma/enums.js";
 import { getCourseList } from "@/generated/prisma/sql.js";
 import { mapDayOfWeek } from "@/utils/enumMapper.js";
 
-import type { GetCourseQuerySchema } from "@cugetreg/zod-schemas/courses";
+import type {
+  GetCourseQuerySchema,
+  GetCourseReviewQuerySchema,
+} from "@cugetreg/zod-schemas/courses";
 import type { CourseReview } from "@cugetreg/zod-schemas/courses-response";
 
 export async function queryCourse(
@@ -136,10 +139,10 @@ export async function queryCourse(
 
 export async function getCourseReviewByCourseNo(
   courseNo: string,
-  limit: number,
-  page: number,
+  query: GetCourseReviewQuerySchema,
   userId?: string,
 ) {
+  const { academicYear, includeFacets, limit, page, semester } = query;
   const courseInfo = await prisma.courseInfo.findUnique({
     where: { courseNo },
     select: { courseNo: true },
@@ -149,40 +152,91 @@ export async function getCourseReviewByCourseNo(
     throw new Error("COURSE_NOT_FOUND");
   }
 
-  const where: Prisma.ReviewWhereInput = userId
-    ? {
-        courseNo,
-        OR: [
-          { userId },
-          { status: ReviewStatus.APPROVED, userId: { not: userId } },
-        ],
-      }
-    : { courseNo, status: ReviewStatus.APPROVED };
-
-  const [reviews, count] = await prisma.$transaction([
-    prisma.review.findMany({
-      where,
-      skip: (page - 1) * limit,
-      take: limit,
-      orderBy: [{ createdAt: "desc" }, { id: "desc" }],
+  const filters: Prisma.ReviewWhereInput = {
+    ...(academicYear && { academicYear }),
+    ...(semester && { semester }),
+  };
+  const reviewSelect = {
+    id: true,
+    rating: true,
+    status: true,
+    studyProgram: true,
+    academicYear: true,
+    semester: true,
+    content: true,
+    user: {
       select: {
-        id: true,
-        rating: true,
-        status: true,
-        studyProgram: true,
-        academicYear: true,
-        semester: true,
-        content: true,
-        user: {
-          select: {
-            faculty: true,
-            department: true,
-          },
-        },
+        faculty: true,
+        department: true,
       },
-    }),
-    prisma.review.count({ where }),
-  ]);
+    },
+  } satisfies Prisma.ReviewSelect;
+
+  const approvedWhere: Prisma.ReviewWhereInput = {
+    courseNo,
+    status: ReviewStatus.APPROVED,
+    ...filters,
+  };
+  const { count, facetGroups, reviews } = await prisma.$transaction(
+    async (tx) => {
+      const ownUnapprovedReview = userId
+        ? await tx.review.findFirst({
+            where: {
+              courseNo,
+              userId,
+              status: { not: ReviewStatus.APPROVED },
+              ...filters,
+            },
+            select: reviewSelect,
+          })
+        : null;
+      const approvedSkip = ownUnapprovedReview
+        ? page === 1
+          ? 0
+          : limit - 1 + (page - 2) * limit
+        : (page - 1) * limit;
+      const approvedTake =
+        ownUnapprovedReview && page === 1 ? limit - 1 : limit;
+      const approvedReviews = await tx.review.findMany({
+        where: approvedWhere,
+        skip: approvedSkip,
+        take: approvedTake,
+        orderBy: [{ createdAt: "desc" }, { id: "desc" }],
+        select: reviewSelect,
+      });
+      const approvedCount = await tx.review.count({ where: approvedWhere });
+      const facetGroups = includeFacets
+        ? await tx.review.groupBy({
+            by: ["academicYear", "semester"],
+            where: userId
+              ? {
+                  courseNo,
+                  OR: [
+                    { userId },
+                    {
+                      status: ReviewStatus.APPROVED,
+                      userId: { not: userId },
+                    },
+                  ],
+                }
+              : { courseNo, status: ReviewStatus.APPROVED },
+            _count: { _all: true },
+          })
+        : undefined;
+
+      return {
+        reviews:
+          ownUnapprovedReview && page === 1
+            ? [ownUnapprovedReview, ...approvedReviews]
+            : approvedReviews,
+        count: approvedCount + (ownUnapprovedReview ? 1 : 0),
+        facetGroups,
+      };
+    },
+    {
+      isolationLevel: Prisma.TransactionIsolationLevel.RepeatableRead,
+    },
+  );
 
   const reviewIds = reviews.map((review) => review.id);
   const voteCounts =
@@ -234,5 +288,11 @@ export async function getCourseReviewByCourseNo(
     } as CourseReview;
   });
 
-  return { reviews: resultReviews, count };
+  const facets = facetGroups?.map((facet) => ({
+    academicYear: facet.academicYear,
+    semester: facet.semester,
+    count: facet._count._all,
+  }));
+
+  return { reviews: resultReviews, count, facets };
 }

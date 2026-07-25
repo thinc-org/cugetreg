@@ -161,7 +161,7 @@
 						<li>
 							<button
 								type="button"
-								class={`text-body1 hover:bg-surface-variant/50 w-full px-6 py-2 text-left ${name === selected ? 'text-on-surface font-semibold' : 'text-on-surface/70'}`}
+								class={`text-body1 w-full px-6 py-2 text-left hover:cursor-pointer hover:bg-blue-100/50 ${name === selected ? 'text-on-surface font-semibold' : 'text-on-surface/70'}`}
 								role="option"
 								aria-selected={name === selected}
 								onclick={() => selectFilter(name)}

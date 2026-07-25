@@ -99,7 +99,7 @@ courses
           e instanceof Prisma.PrismaClientKnownRequestError &&
           e.code === "P2002"
         ) {
-          return c.json({ error: "THIS_COURSE_IS_ALREADY_YOUR_FAVORITE" }, 409);
+          return c.body(null, 204);
         }
       }
 

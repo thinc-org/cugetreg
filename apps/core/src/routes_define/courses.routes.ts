@@ -78,7 +78,7 @@ export const getCourseByNoRoute = createRoute({
 
 //1.4 add favorite course
 export const addFavoriteCourse = createRoute({
-  method: "post",
+  method: "put",
   path: "/{courseNo}/favorite",
   summary: "1.4 Add New Favorite Course By Course Number",
   request: {
@@ -93,8 +93,8 @@ export const addFavoriteCourse = createRoute({
       },
       description: "Created",
     },
+    204: { description: "No content, this course is already your favorite" },
     404: errorRes("COURSE_NOT_FOUND"),
-    409: errorRes("THIS_COURSE_IS_ALREADY_YOUR_FAVORITE"),
     500: InternalError,
   },
   security: [{ Bearer: [] }],

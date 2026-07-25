@@ -60,6 +60,7 @@
     type CourseReview,
     type CourseReviewFacet,
     CourseReviewResponseSchema,
+    type Semester,
     type SubmitReviewBodySchema,
     SubmitReviewResponseSchema,
     VoteReviewBodySchema,
@@ -132,9 +133,9 @@
   };
 
   const reviewYearPlaceholder = 'ปีการศึกษา';
-  const reviewTermPlaceholder = 'ภาคเรียน';
+  const reviewSemesterPlaceholder = 'ภาคเรียน';
   let selectedReviewYear = $state(reviewYearPlaceholder);
-  let selectedReviewTerm = $state(reviewTermPlaceholder);
+  let selectedReviewSemester = $state<Semester | null>(null);
   const reviewsPerPage = 4;
   let reviewsPage = $state(1);
   let reviewSubmitting = $state(false);
@@ -144,9 +145,7 @@
     selectedReviewYear === reviewYearPlaceholder,
   );
 
-  const isReviewTermPlaceholder = $derived(
-    selectedReviewTerm === reviewTermPlaceholder,
-  );
+  const isReviewSemesterPlaceholder = $derived(selectedReviewSemester === null);
 
   let activeModal = $state<'selected' | null>(null);
   let reviewEditor = $state<MarkdownEditor>();
@@ -216,7 +215,7 @@
       .reverse(),
   ]);
 
-  function getReviewTerms(reviewYear: string) {
+  function getReviewSemesters(reviewYear: string) {
     return Array.from(
       new Set(
         reviewFacets
@@ -230,27 +229,25 @@
     );
   }
 
-  const reviewTermOptions = $derived([
-    reviewTermPlaceholder,
-    ...getReviewTerms(selectedReviewYear),
-  ]);
+  const reviewSemesterOptions = $derived(
+    getReviewSemesters(selectedReviewYear),
+  );
 
   function setSelectedReviewYear(value: string) {
     selectedReviewYear = value;
     if (
-      selectedReviewTerm !== reviewTermPlaceholder &&
-      !getReviewTerms(value).includes(
-        selectedReviewTerm as CourseReview['semester'],
-      )
+      selectedReviewSemester !== null &&
+      !getReviewSemesters(value).includes(selectedReviewSemester)
     ) {
-      selectedReviewTerm = reviewTermPlaceholder;
+      selectedReviewSemester = null;
     }
     reviewsPage = 1;
     void refreshReviews({ targetPage: 1 });
   }
 
-  function setSelectedReviewTerm(value: string) {
-    selectedReviewTerm = value;
+  function setSelectedReviewSemester(value: string) {
+    selectedReviewSemester =
+      value === reviewSemesterPlaceholder ? null : (value as Semester);
     reviewsPage = 1;
     void refreshReviews({ targetPage: 1 });
   }
@@ -272,8 +269,8 @@
           ...(!isReviewYearPlaceholder && {
             academicYear: Number(selectedReviewYear),
           }),
-          ...(!isReviewTermPlaceholder && {
-            semester: selectedReviewTerm,
+          ...(selectedReviewSemester && {
+            semester: selectedReviewSemester,
           }),
         },
       });
@@ -294,15 +291,15 @@
           !nextYearOptions.has(selectedReviewYear)
         ) {
           selectedReviewYear = reviewYearPlaceholder;
-          selectedReviewTerm = reviewTermPlaceholder;
+          selectedReviewSemester = null;
           filtersChanged = true;
         } else if (
-          selectedReviewTerm !== reviewTermPlaceholder &&
-          !getReviewTerms(selectedReviewYear).includes(
-            selectedReviewTerm as CourseReview['semester'],
+          selectedReviewSemester !== null &&
+          !getReviewSemesters(selectedReviewYear).includes(
+            selectedReviewSemester,
           )
         ) {
-          selectedReviewTerm = reviewTermPlaceholder;
+          selectedReviewSemester = null;
           filtersChanged = true;
         }
 
@@ -500,7 +497,7 @@
     reviewsError = (data as ReviewPageData).reviewsError ?? false;
     reviewsLoading = false;
     selectedReviewYear = reviewYearPlaceholder;
-    selectedReviewTerm = reviewTermPlaceholder;
+    selectedReviewSemester = null;
     reviewsPage = 1;
   });
 
@@ -1331,21 +1328,33 @@
                 </Select.Root>
                 <Select.Root
                   type="single"
-                  bind:value={() => selectedReviewTerm, setSelectedReviewTerm}
+                  bind:value={
+                    () => selectedReviewSemester ?? reviewSemesterPlaceholder,
+                    setSelectedReviewSemester
+                  }
                 >
                   <Select.Trigger
                     class={`h-9 w-[120px] rounded-xl px-4 text-sm ${
-                      isReviewTermPlaceholder
+                      isReviewSemesterPlaceholder
                         ? 'text-on-surface/60'
                         : 'text-on-surface'
                     }`}
                   >
-                    {selectedReviewTerm}
+                    {selectedReviewSemester
+                      ? SEMESTER_LABEL_LONG[selectedReviewSemester]
+                      : reviewSemesterPlaceholder}
                   </Select.Trigger>
                   <Select.Content role="listbox">
                     <Select.Group>
-                      {#each reviewTermOptions as term (term)}
-                        <Select.Item value={term} label={term} />
+                      <Select.Item
+                        value={reviewSemesterPlaceholder}
+                        label={reviewSemesterPlaceholder}
+                      />
+                      {#each reviewSemesterOptions as semester (semester)}
+                        <Select.Item
+                          value={semester}
+                          label={SEMESTER_LABEL_LONG[semester]}
+                        />
                       {/each}
                     </Select.Group>
                   </Select.Content>

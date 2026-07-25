@@ -2,9 +2,14 @@ import type { Variables } from "@/lib/auth.js";
 import activity from "@/routes/activity.js";
 import admin from "@/routes/admin.js";
 import announcement from "@/routes/announcement.js";
-import authRoute, { includeAuth, middlewareAuth } from "@/routes/auth.js";
+import authRoute, {
+  includeAuth,
+  middlewareAuth,
+  middlewareInternalToken,
+} from "@/routes/auth.js";
 import carts from "@/routes/carts.js";
 import courses from "@/routes/courses.js";
+import internalAnnouncement from "@/routes/internalAnnouncement.js";
 import publicCarts from "@/routes/publicCarts.js";
 import reviews from "@/routes/reviews.js";
 import user from "@/routes/user.js";
@@ -51,10 +56,20 @@ app.openAPIRegistry.registerComponent("securitySchemes", "CookieAuth", {
   name: "better-auth.session_token",
 });
 
+// Shared-secret scheme for service-to-service routes (e.g. CI creating an announcement)
+app.openAPIRegistry.registerComponent("securitySchemes", "InternalToken", {
+  type: "apiKey",
+  in: "header",
+  name: "X-Internal-Token",
+});
+
 // Public routes — no auth required
 app.route("/public/carts", publicCarts);
 app.route("/auth", authRoute);
 app.route("/announcement", announcement);
+
+app.use("/internal/*", middlewareInternalToken);
+app.route("/internal/announcement", internalAnnouncement);
 
 app.use("/courses/*", includeAuth);
 

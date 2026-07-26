@@ -1,6 +1,9 @@
 import { createRoute } from "@hono/zod-openapi";
 
-import { AnnouncementIdParamSchema } from "@cugetreg/zod-schemas/announcement";
+import {
+  AnnouncementIdParamSchema,
+  CreateAnnouncementBodySchema,
+} from "@cugetreg/zod-schemas/announcement";
 import {
   AnnouncementDetailResponseSchema,
   ListAnnouncementsResponseSchema,
@@ -38,4 +41,26 @@ export const getAnnouncementByIdRoute = createRoute({
     404: errorRes("ANNOUNCEMENT_NOT_FOUND"),
     500: InternalError,
   },
+});
+
+export const createAnnouncementRoute = createRoute({
+  method: "post",
+  path: "/",
+  summary: "Create announcement (internal/service use only)",
+  request: {
+    body: {
+      content: { "application/json": { schema: CreateAnnouncementBodySchema } },
+    },
+  },
+  responses: {
+    201: {
+      content: {
+        "application/json": { schema: AnnouncementDetailResponseSchema },
+      },
+      description: "Created",
+    },
+    401: errorRes("UNAUTHORIZED"),
+    500: InternalError,
+  },
+  security: [{ InternalToken: [] }],
 });

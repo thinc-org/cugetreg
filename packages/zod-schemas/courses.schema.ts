@@ -22,6 +22,8 @@ export const GetCourseQuerySchema = z.object({
   days: z.union([z.array(days), days]).optional(),
   timeStart: z.string().regex(TIME_REGEX).optional(),
   timeEnd: z.string().regex(TIME_REGEX).optional(),
+  creditMin: z.coerce.number().optional(),
+  creditMax: z.coerce.number().optional(),
   noPrereq: z.coerce.boolean().optional(),
   fitCartId: z.string().optional(),
   assessment: assessment.optional(),

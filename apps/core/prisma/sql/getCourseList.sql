@@ -17,6 +17,8 @@
 -- @param {String} $14:sortBy? Sort column ('NAME', 'CAPACITY_SUM', 'REMAINING_SUM'; default 'REMAINING_SUM')
 -- @param {String} $15:sortOrder? Sort direction ('ASC', 'DESC'; default 'ASC')
 -- @param {String} $16:fitCartId? Optional cart ID — when set, excludes sections whose classes overlap with the cart's sections
+-- @param {Decimal} $17:creditMin? Optional minimum credit
+-- @param {Decimal} $18:creditMax? Optional maximum credit
 
 -- Step 0: Precompute cart's occupied class slots once (avoids a correlated
 --         subquery in matching_sections when $16 is provided).
@@ -75,6 +77,10 @@ matching_sections AS (
 
         -- Grading type (optional)
         AND ($7::grading_type IS NULL OR ci.grading_type = $7::grading_type)
+
+        -- Credit range (optional)
+        AND ($17::numeric IS NULL OR ci.credit >= $17::numeric)
+        AND ($18::numeric IS NULL OR ci.credit <= $18::numeric)
 
         -- No prereq (optional boolean)
         AND ($9::boolean IS NOT TRUE

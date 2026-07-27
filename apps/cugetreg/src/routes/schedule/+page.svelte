@@ -152,7 +152,6 @@
     selectedOpen = true;
     activePanel = 'selected_only';
   }
-
 </script>
 
 <svelte:window bind:innerWidth />

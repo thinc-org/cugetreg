@@ -2,13 +2,7 @@
   import { resolve } from '$app/paths';
   import { getUserCartStore, useCartActions } from '$lib/stores/user-cart';
 
-  import {
-    ChevronDown,
-    Equal,
-    Eye,
-    EyeOff,
-    Trash2,
-  } from '@lucide/svelte';
+  import { ChevronDown, Equal, Eye, EyeOff, Trash2 } from '@lucide/svelte';
   import {
     SortableList,
     sortItems,

@@ -273,26 +273,38 @@
     {
       section: '1',
       seats: '28 / 28',
-      teacher: 'SSS',
-      schedule: 'THU 16:00 - 17:00',
-      room: 'MAHIT 202',
-      type: 'LECT',
+      classes: [
+        {
+          teacher: 'SSS',
+          schedule: 'THU 16:00 - 17:00',
+          room: 'MAHIT 202',
+          type: 'LECT',
+        },
+      ],
     },
     {
       section: '2',
       seats: '20 / 28',
-      teacher: 'SSS',
-      schedule: 'THU 16:00 - 17:00',
-      room: 'MAHIT 202',
-      type: 'LECT',
+      classes: [
+        {
+          teacher: 'SSS',
+          schedule: 'THU 16:00 - 17:00',
+          room: 'MAHIT 202',
+          type: 'LECT',
+        },
+      ],
     },
     {
       section: '3',
       seats: 'ปิด',
-      teacher: 'SSS',
-      schedule: 'THU 16:00 - 17:00',
-      room: 'MAHIT 202',
-      type: 'LECT',
+      classes: [
+        {
+          teacher: 'SSS',
+          schedule: 'THU 16:00 - 17:00',
+          room: 'MAHIT 202',
+          type: 'LECT',
+        },
+      ],
     },
   ];
 </script>
@@ -983,10 +995,14 @@
                       <Comment
                         rating={review.rating}
                         semester={review.semester}
+                        year={Number(review.semester.split(' ')[1])}
+                        status="APPROVED"
                         facultyMajor={review.facultyMajor}
                         content={review.content}
                         likesCount={review.likesCount}
                         dislikesCount={review.dislikesCount}
+                        onLike={() => {}}
+                        onDislike={() => {}}
                       />
                     {/each}
                   </div>

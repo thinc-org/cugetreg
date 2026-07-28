@@ -21,7 +21,7 @@ export const load: PageServerLoad = async ({ params, url, parent, fetch }) => {
 
   if (!academicYear || !semester || !studyProgram) {
     const parentData = await parent();
-    const currentCart = parentData.data?.currentCart;
+    const currentCart = (await parentData.cart)?.currentCart;
     const fallbackYear = String(currentCart?.academicYear ?? 2566);
     const fallbackSemester = currentCart?.semester ?? 'FIRST';
     const fallbackStudyProgram = currentCart?.studyProgram ?? 'S';

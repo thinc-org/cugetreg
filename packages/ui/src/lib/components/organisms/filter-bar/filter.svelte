@@ -1,4 +1,7 @@
 <script lang="ts">
+	import { Chip } from '$lib/components/atoms/chip';
+	import * as Select from '$lib/components/molecules/select';
+
 	import { InfoCircle } from '../../atoms/info-circle';
 	import { Modal } from '../../atoms/modal';
 
@@ -73,7 +76,6 @@
 
 	// --- 3. HELPER LOGIC ($derived) ---
 	let activeGenEds = $derived(genEdOptions.filter((o) => selectedGenEds.includes(o.id)));
-	let availableGenEds = $derived(genEdOptions.filter((o) => !selectedGenEds.includes(o.id)));
 
 	let activeFaculties = $derived(facultyOptions.filter((o) => selectedFaculties.includes(o.id)));
 	let availableFaculties = $derived(
@@ -123,179 +125,173 @@
 		class="flex-1 overflow-x-hidden overflow-y-auto px-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
 	>
 		<div class="mb-4">
-			<label class="mb-1.5 block text-xs text-neutral-400">ประเภท GenEd</label>
-			<div
-				class="bg-surface-container-lowest hover:bg-surface-container-low relative flex min-h-10 cursor-pointer flex-wrap gap-2 rounded-xl border border-transparent p-2 pr-[30px]"
-				onclick={(e) => toggleDropdown('gened', e)}
-				role="button"
-				tabindex="0"
-				onkeypress={() => {}}
-			>
-				{#each activeGenEds as item (item.label)}
-					<div
-						class="bg-surface inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-normal"
-						style="color: {item.color}; border: 1px solid {item.color};"
-					>
-						{item.label}
-						<span
-							class="cursor-pointer leading-none opacity-60 hover:opacity-100"
-							onclick={(e) => {
-								e.stopPropagation();
-								removeOption('gened', item.id);
-							}}
-							role="button"
-							tabindex="0"
-							onkeypress={() => {}}>×</span
+			<label for="gened-select" class="mb-1.5 block text-xs text-neutral-400">ประเภท GenEd</label>
+			<Select.Root type="multiple" bind:value={selectedGenEds}>
+				<div class="relative">
+					{#if activeGenEds.length}
+						<div
+							class="absolute top-1/2 left-0 z-10 flex max-w-[calc(100%-2.5rem)] -translate-y-1/2 items-center gap-2 overflow-hidden pl-2"
 						>
-					</div>
-				{/each}
-				{#if activeGenEds.length === 0}
-					<span class="self-center text-sm text-neutral-400">Select GenEd...</span>
-				{/if}
-				<div class="absolute top-1/2 right-2.5 -translate-y-1/2 text-[10px] text-neutral-400">
-					▼
-				</div>
-
-				{#if openDropdown === 'gened'}
-					<div
-						class="border-surface-container bg-surface absolute top-[105%] right-0 left-0 z-50 max-h-[200px] overflow-y-auto rounded-lg border shadow-[0_4px_15px_rgba(0,0,0,0.1)]"
-						onclick={(e) => e.stopPropagation()}
-						role="listbox"
-						tabindex="0"
-						onkeypress={() => {}}
+							{#each activeGenEds as item (item.id)}
+								<Chip
+									class="bg-surface border px-2.5 py-1 text-xs font-normal"
+									style="color: {item.color}; border-color: {item.color};"
+									closable
+									onClose={(event: MouseEvent) => {
+										event.stopPropagation();
+										removeOption('gened', item.id);
+									}}
+									aria-label={`Remove ${item.label}`}
+								>
+									{item.label}
+								</Chip>
+							{/each}
+						</div>
+					{/if}
+					<Select.Trigger
+						id="gened-select"
+						aria-label="ประเภท GenEd"
+						class="bg-surface-container-lowest hover:bg-surface-container-low h-10 min-h-10 cursor-pointer rounded-xl border-transparent p-2 text-sm text-neutral-400 focus:ring-0 focus:ring-offset-0"
 					>
-						{#each availableGenEds as opt (opt.label)}
-							<div
-								class="hover:bg-surface-container-low cursor-pointer px-3.5 py-2.5 text-sm"
-								style="color: {opt.color}"
-								onclick={() => addOption('gened', opt.id)}
-								role="option"
-								tabindex="0"
-								onkeypress={() => {}}
-							>
-								{opt.label}
-							</div>
-						{/each}
-						{#if availableGenEds.length === 0}
-							<div class="cursor-default px-3.5 py-2.5 text-sm text-neutral-300">All selected</div>
+						{#if !activeGenEds.length}
+							Select GenEd...
 						{/if}
-					</div>
-				{/if}
-			</div>
+					</Select.Trigger>
+				</div>
+				<Select.Content
+					class="border-surface-container bg-surface max-h-[200px] rounded-lg border shadow-[0_4px_15px_rgba(0,0,0,0.1)]"
+					role="listbox"
+				>
+					<Select.Group>
+						{#each genEdOptions as genEd (genEd.id)}
+							<Select.Item
+								value={genEd.id}
+								label={genEd.label}
+								aria-label={genEd.label}
+								class="hover:bg-surface-container-low cursor-pointer px-3.5 py-2.5 text-sm"
+								style="color: {genEd.color}"
+								role="option"
+								check={true}
+							>
+								{genEd.label}
+							</Select.Item>
+						{/each}
+					</Select.Group>
+				</Select.Content>
+			</Select.Root>
 		</div>
 
 		<div class="mb-4">
-			<label class="mb-1.5 block text-xs text-neutral-400">คณะ</label>
-			<div
-				class="bg-surface-container-lowest hover:bg-surface-container-low relative flex min-h-10 cursor-pointer flex-wrap gap-2 rounded-xl border border-transparent p-2 pr-[30px]"
-				onclick={(e) => toggleDropdown('faculty', e)}
-				role="button"
-				tabindex="0"
-				onkeypress={() => {}}
-			>
-				{#each activeFaculties as item (item.id)}
-					<div
-						class="bg-surface-container text-on-surface inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-normal"
-					>
-						{item.label}
-						<span
-							class="cursor-pointer leading-none opacity-60 hover:opacity-100"
-							onclick={(e) => {
-								e.stopPropagation();
-								removeOption('faculty', item.id);
-							}}
-							role="button"
-							tabindex="0"
-							onkeypress={() => {}}>×</span
+			<label for="gened-select" class="mb-1.5 block text-xs text-neutral-400">คณะ</label>
+			<Select.Root type="multiple" bind:value={selectedFaculties}>
+				<div class="relative">
+					{#if activeFaculties.length}
+						<div
+							class="absolute top-1/2 left-0 z-10 flex max-w-[calc(100%-2.5rem)] -translate-y-1/2 items-center gap-2 overflow-hidden pl-2"
 						>
-					</div>
-				{/each}
-				{#if activeFaculties.length === 0}
-					<span class="self-center text-sm text-neutral-400">Select Faculty...</span>
-				{/if}
-				<div class="absolute top-1/2 right-2.5 -translate-y-1/2 text-[10px] text-neutral-400">
-					▼
-				</div>
-				{#if openDropdown === 'faculty'}
-					<div
-						class="border-surface-container bg-surface absolute top-[105%] right-0 left-0 z-50 max-h-[200px] overflow-y-auto rounded-lg border shadow-[0_4px_15px_rgba(0,0,0,0.1)]"
-						onclick={(e) => e.stopPropagation()}
-						role="listbox"
-						tabindex="0"
-						onkeypress={() => {}}
+							{#each activeFaculties as item (item.id)}
+								<Chip
+									class="bg-surface border px-2.5 py-1 text-xs font-normal"
+									closable
+									onClose={(event: MouseEvent) => {
+										event.stopPropagation();
+										removeOption('gened', item.id);
+									}}
+									aria-label={`Remove ${item.label}`}
+								>
+									{item.label}
+								</Chip>
+							{/each}
+						</div>
+					{/if}
+					<Select.Trigger
+						id="gened-select"
+						aria-label="ประเภท GenEd"
+						class="bg-surface-container-lowest hover:bg-surface-container-low h-10 min-h-10 cursor-pointer rounded-xl border-transparent p-2 text-sm text-neutral-400 focus:ring-0 focus:ring-offset-0"
 					>
-						{#each availableFaculties as opt (opt.id)}
-							<div
+						{#if !activeFaculties.length}
+							Select faculty...
+						{/if}
+					</Select.Trigger>
+				</div>
+				<Select.Content
+					class="border-surface-container bg-surface max-h-[200px] rounded-lg border shadow-[0_4px_15px_rgba(0,0,0,0.1)]"
+					role="listbox"
+				>
+					<Select.Group>
+						{#each facultyOptions as faculty (faculty.id)}
+							<Select.Item
+								value={faculty.id}
+								label={faculty.label}
+								aria-label={faculty.label}
 								class="hover:bg-surface-container-low cursor-pointer px-3.5 py-2.5 text-sm"
-								onclick={() => addOption('faculty', opt.id)}
+								style="color: black"
 								role="option"
-								tabindex="0"
-								onkeypress={() => {}}
+								check={true}
 							>
-								{opt.label}
-							</div>
+								{faculty.label}
+							</Select.Item>
 						{/each}
-					</div>
-				{/if}
-			</div>
+					</Select.Group>
+				</Select.Content>
+			</Select.Root>
 		</div>
 
 		<div class="mb-4">
-			<label class="mb-1.5 block text-xs text-neutral-400">วันในสัปดาห์</label>
-			<div
-				class="bg-surface-container-lowest hover:bg-surface-container-low relative flex min-h-10 cursor-pointer flex-wrap gap-2 rounded-xl border border-transparent p-2 pr-[30px]"
-				onclick={(e) => toggleDropdown('day', e)}
-				role="button"
-				tabindex="0"
-				onkeypress={() => {}}
-			>
-				{#each activeDays as item (item.id)}
-					<div
-						class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-normal"
-						style="background-color: {item.bg}; color: {item.color};"
-					>
-						{item.label}
-						<span
-							class="cursor-pointer leading-none opacity-60 hover:opacity-100"
-							onclick={(e) => {
-								e.stopPropagation();
-								removeOption('day', item.id);
-							}}
-							role="button"
-							tabindex="0"
-							onkeypress={() => {}}>×</span
+			<label for="gened-select" class="mb-1.5 block text-xs text-neutral-400">วันในสัปดาห์ะ</label>
+			<Select.Root type="multiple" bind:value={selectedDays}>
+				<div class="relative">
+					{#if activeDays.length}
+						<div
+							class="absolute top-1/2 left-0 z-10 flex max-w-[calc(100%-2.5rem)] -translate-y-1/2 items-center gap-2 overflow-hidden pl-2"
 						>
-					</div>
-				{/each}
-				{#if activeDays.length === 0}
-					<span class="self-center text-sm text-neutral-400">Select Days...</span>
-				{/if}
-				<div class="absolute top-1/2 right-2.5 -translate-y-1/2 text-[10px] text-neutral-400">
-					▼
-				</div>
-				{#if openDropdown === 'day'}
-					<div
-						class="border-surface-container bg-surface absolute top-[105%] right-0 left-0 z-50 max-h-[200px] overflow-y-auto rounded-lg border shadow-[0_4px_15px_rgba(0,0,0,0.1)]"
-						onclick={(e) => e.stopPropagation()}
-						role="listbox"
-						tabindex="0"
-						onkeypress={() => {}}
+							{#each activeDays as item (item.id)}
+								<Chip
+									class="bg-surface px-2.5 py-1 text-xs font-normal"
+									closable
+									onClose={(event: MouseEvent) => {
+										event.stopPropagation();
+										removeOption('gened', item.id);
+									}}
+									style="background-color: {item.bg}; color: {item.color};"
+									aria-label={`Remove ${item.label}`}
+								>
+									{item.label}
+								</Chip>
+							{/each}
+						</div>
+					{/if}
+					<Select.Trigger
+						id="gened-select"
+						aria-label="ประเภท GenEd"
+						class="bg-surface-container-lowest hover:bg-surface-container-low h-10 min-h-10 cursor-pointer rounded-xl border-transparent p-2 text-sm text-neutral-400 focus:ring-0 focus:ring-offset-0"
 					>
-						{#each availableDays as opt (opt.id)}
-							<div
+						{#if !activeDays.length}
+							Select day...
+						{/if}
+					</Select.Trigger>
+				</div>
+				<Select.Content
+					class="border-surface-container bg-surface max-h-[200px] rounded-lg border shadow-[0_4px_15px_rgba(0,0,0,0.1)]"
+					role="listbox"
+				>
+					<Select.Group>
+						{#each dayOptions as day (day.id)}
+							<Select.Item
+								value={day.id}
+								label={day.label}
+								aria-label={day.label}
 								class="hover:bg-surface-container-low cursor-pointer px-3.5 py-2.5 text-sm"
-								style="color: {opt.color}"
-								onclick={() => addOption('day', opt.id)}
+								style="color: {day.color}"
 								role="option"
-								tabindex="0"
-								onkeypress={() => {}}
+								check={true}
 							>
-								{opt.label}
-							</div>
+								{day.label}
+							</Select.Item>
 						{/each}
-					</div>
-				{/if}
-			</div>
+					</Select.Group>
+				</Select.Content>
+			</Select.Root>
 		</div>
 
 		<div class="mb-4 flex gap-3">

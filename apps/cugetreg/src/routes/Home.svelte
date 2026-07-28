@@ -301,7 +301,7 @@
         // Deduplicate by course code to prevent key collisions
         const existingCodes = new Set(courses.map((c) => c.course.code));
         const newUniqueItems = mapped.filter(
-          (item) => !existingCodes.has(item.course.code),
+          (item: any) => !existingCodes.has(item.course.code),
         );
         courses = [...courses, ...newUniqueItems];
       }

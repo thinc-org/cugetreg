@@ -34,6 +34,11 @@
   } from '@cugetreg/zod-schemas';
 
   import type { PageProps } from './$types';
+  import {
+    FACULTIES,
+    UNKOWN_FACULTY,
+    type FacultyId,
+  } from '@cugetreg/utils/faculty';
 
   interface ScheduleItem {
     id: string;
@@ -73,6 +78,12 @@
   let showCreateScheduleModal = $state(false);
 
   let isMobile = $state(false);
+
+  const parsedPersonalInfo = $derived({
+    ...personalInfo,
+    faculty:
+      FACULTIES[personalInfo.faculty as FacultyId].th ?? UNKOWN_FACULTY.th,
+  });
 
   async function updateUser() {
     const updatedUser = {
@@ -236,7 +247,7 @@
     <div
       class="flex w-full flex-col items-center gap-10 py-8 md:max-w-2xl lg:w-3/4 lg:max-w-lg lg:items-start lg:px-6"
     >
-      <PersonalInfo onEdit={toggleEditInfo} {...personalInfo} />
+      <PersonalInfo onEdit={toggleEditInfo} {...parsedPersonalInfo} />
       <RatingHistory
         {reviews}
         hasMore={hasMoreReviews}
@@ -262,7 +273,8 @@
       bind:department={newDepartment}
       accountEmail={personalInfo.accountEmail}
       accountProvider={personalInfo.accountProvider}
-      faculty={personalInfo.faculty}
+      faculty={FACULTIES[personalInfo.faculty as FacultyId].th ??
+        UNKOWN_FACULTY}
       firstName={personalInfo.firstName}
       lastName={personalInfo.lastName}
       username={personalInfo.username}

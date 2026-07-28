@@ -24,9 +24,10 @@
     TIMETABLE_DEFAULT_START,
   } from '$lib/utils/schedule';
 
-  import { BookMarked, Loader2, Menu } from '@lucide/svelte';
+  import { BookMarked, Loader2, Menu, X } from '@lucide/svelte';
   import { Copy, Download } from 'lucide-svelte';
   import { getContext } from 'svelte';
+  import { fade } from 'svelte/transition';
 
   import { Button } from '@cugetreg/ui/atoms/button';
   import { CustomizeScrollbar } from '@cugetreg/ui/atoms/customize-scrollbar';
@@ -81,6 +82,8 @@
   let sidebarExpanded = $state(true);
   let openPanel = $state<'sidebar' | 'selected_only' | null>(null);
   let activePanel = $state<'sidebar' | 'selected_only' | null>(null);
+  let selectedOpen = $state(true);
+  let activeModal = $state<'selected' | null>(null);
 
   let previousCartId = $state($userCart.currentCartId);
 
@@ -124,6 +127,30 @@
     updateCartMeta({
       visible: isPublic ? 'PUB' : 'PVT',
     });
+  }
+
+  function toggleSidebar() {
+    if (sidebarExpanded) {
+      sidebarExpanded = false;
+      activePanel = null;
+    } else {
+      sidebarExpanded = true;
+      activePanel = 'sidebar';
+      openPanel = null;
+      selectedOpen = true;
+    }
+  }
+
+  function focusSelected() {
+    if (sidebarExpanded && selectedOpen) {
+      selectedOpen = false;
+      activePanel = null;
+      return;
+    }
+    sidebarExpanded = true;
+    openPanel = null;
+    selectedOpen = true;
+    activePanel = 'selected_only';
   }
 </script>
 
@@ -211,47 +238,37 @@
   <div class="relative flex flex-1 overflow-hidden">
     <AppSidebar
       showSidebar={innerWidth >= 1024}
+      panelWidth="490px"
       bind:expanded={sidebarExpanded}
       bind:openPanel
       bind:activePanel
     >
-      {#snippet iconItems({
-        toggleExpanded,
-        togglePanel,
-        expanded,
-        openPanel,
-        activePanel,
-      })}
+      {#snippet iconItems()}
         <Sidebar.MenuItem>
           <Sidebar.MenuButton
-            onclick={toggleExpanded}
-            isActive={expanded && activePanel === 'sidebar'}
+            onclick={toggleSidebar}
+            isActive={sidebarExpanded && activePanel === 'sidebar'}
             size="lg"
             tooltipContent="ตารางเรียน"
-            class="mx-auto size-12! justify-center rounded-xl p-0! ring-0 transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-6!"
+            class="mx-auto size-12! justify-center rounded-xl p-0! ring-0 transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-5!"
           >
-            <Menu size="24" strokeWidth={2.5} />
+            <Menu size="20" strokeWidth={2.5} />
           </Sidebar.MenuButton>
         </Sidebar.MenuItem>
         <Sidebar.MenuItem>
           <Sidebar.MenuButton
-            onclick={() =>
-              togglePanel('selected_only', () => {
-                document
-                  .querySelector('[data-selected-section]')
-                  ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-              })}
+            onclick={focusSelected}
             isActive={activePanel === 'selected_only'}
             size="lg"
             tooltipContent="วิชาที่เลือก"
-            class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-6!"
+            class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-5!"
           >
-            <BookMarked size="24" strokeWidth={2.5} />
+            <BookMarked size="20" strokeWidth={2.5} />
           </Sidebar.MenuButton>
         </Sidebar.MenuItem>
       {/snippet}
-      {#snippet panelContent({ openPanel, expanded })}
-        {#if expanded || openPanel === 'sidebar'}
+      {#snippet panelContent({ expanded })}
+        {#if expanded}
           <div class="relative mb-6 flex flex-col gap-2">
             {#await cartPromise}
               <div
@@ -262,7 +279,7 @@
               </div>
             {:then}
               <SelectTimetable
-                class="border-b border-neutral-200 px-2 py-5"
+                class="border-b border-neutral-100 px-2 py-5"
                 options={$userCart.cartList?.map((item) => ({
                   name: item.name,
                   id: item.id,
@@ -280,40 +297,20 @@
               </div>
             {/await}
           </div>
-          <hr class="mb-6 opacity-50" />
+          <hr class="mb-6 border-t border-neutral-100" />
 
           {#if $userCart.currentCart}
             <div data-selected-section>
-              <SelectedCourse class="border-b border-neutral-200" />
+              <SelectedCourse
+                headerDivider
+                bind:open={selectedOpen}
+                class="border-b border-neutral-100"
+              />
             </div>
           {/if}
-          <hr class="mb-6 opacity-50" />
 
           <div
-            class="rounded-2xl border border-orange-300 px-5 py-4 text-center text-[15px] leading-relaxed text-orange-500"
-          >
-            <span class="font-bold">CU Get Reg ไม่ใช่การลงทะเบียนเรียนจริง</span
-            ><br />
-            สามารถลงทะเบียนเรียนได้ที่
-            <a
-              href="https://www2.reg.chula.ac.th/"
-              target="_blank"
-              rel="noreferrer"
-              class="underline">https://www2.reg.chula.ac.th/</a
-            ><br />
-            เพียงช่องทางเดียวเท่านั้น
-          </div>
-        {:else if openPanel === 'selected_only'}
-          {#if $userCart.currentCart}
-            <SelectedCourse
-              variant="grouped"
-              class="border-b border-neutral-200"
-            />
-          {:else}
-            <SelectedCourse class="border-b border-neutral-200" />
-          {/if}
-          <div
-            class="mt-8 rounded-2xl border border-orange-300 px-5 py-4 text-center text-[15px] leading-relaxed text-orange-500"
+            class="border-secondary text-on-secondary-container mt-8 rounded-2xl border px-5 py-4 text-center text-xs/[18px]"
           >
             <span class="font-bold">CU Get Reg ไม่ใช่การลงทะเบียนเรียนจริง</span
             ><br />
@@ -329,14 +326,16 @@
         {/if}
       {/snippet}
       <div class="flex min-h-full flex-col">
-        <div class="mx-auto w-full max-w-[1200px] flex-1 p-6 lg:p-10">
+        <div class="mx-auto w-full max-w-[1200px] flex-1 p-4 md:p-8 lg:p-12">
           <div
             class="flex w-full flex-col gap-4 lg:flex-row lg:items-center lg:justify-between"
           >
             <div class="flex w-full items-center justify-between lg:w-auto">
-              <span class="text-[20px] font-bold md:text-[30px] lg:text-4xl"
-                >ตารางเรียน</span
+              <h1
+                class="text-xl font-bold text-[#4A70C6] md:text-4xl md:text-black"
               >
+                ตารางเรียน
+              </h1>
               <div class="lg:hidden">
                 <Switch
                   checked={$userCart.currentCart.visible === 'PUB'}
@@ -457,4 +456,39 @@
       </div>
     </AppSidebar>
   </div>
+  <div class="lg:hidden">
+    {#if !activeModal}
+      <div transition:fade={{ duration: 200 }}>
+        <button
+          type="button"
+          aria-label="วิชาที่เลือก"
+          class="fixed right-6 bottom-6 z-50 flex h-16 w-16 items-center justify-center rounded-full bg-[#4A70C6] text-white shadow-lg transition-colors hover:bg-[#3f61ab]"
+          onclick={() => (activeModal = 'selected')}
+        >
+          <BookMarked size={28} strokeWidth={2} />
+        </button>
+      </div>
+    {/if}
+  </div>
+  {#if activeModal}
+    <div
+      class="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm"
+      transition:fade={{ duration: 200 }}
+    >
+      <div
+        class="custom-scrollbar relative flex max-h-[85vh] w-full max-w-[400px] flex-col overflow-y-auto rounded-3xl bg-white p-6 shadow-2xl"
+      >
+        <button
+          class="absolute top-7 right-5 bg-white"
+          onclick={() => (activeModal = null)}
+        >
+          <X size={20} strokeWidth={2.5} />
+        </button>
+        <SelectedCourse
+          collapsible={false}
+          class="border-b border-neutral-100"
+        />
+      </div>
+    </div>
+  {/if}
 </div>

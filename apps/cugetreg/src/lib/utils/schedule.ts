@@ -22,6 +22,7 @@ export type ExamData = {
   start: Date | null;
   end: Date | null;
   duration: number; // calculated here
+  sectionNo: number;
 };
 
 export function parsePeriodTime(periodTime: string): number {
@@ -181,6 +182,7 @@ export function getExamData(
       const data: ExamData = {
         cartItemId: exam.cartItemId,
         courseNo: exam.courseNo,
+        sectionNo: course.sectionNo,
         name:
           course.course.courseNameEn ||
           course.course.courseNameTh ||

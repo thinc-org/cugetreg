@@ -63,7 +63,7 @@ export const getCourseByNoRoute = createRoute({
     200: {
       content: {
         "application/json": {
-          schema: CourseResponseSchema.CourseNoDetailSchema,
+          schema: CourseResponseSchema.CourseNoResponseSchema,
         },
       },
       description: "Successfully retrieved course details",
@@ -111,6 +111,30 @@ export const removeFavoriteCourse = createRoute({
   responses: {
     204: { description: "Deleted" },
     404: errorRes("COURSE_NOT_FOUND"),
+    500: InternalError,
+  },
+  security: [{ Bearer: [] }],
+});
+
+export const getCourseReviews = createRoute({
+  method: "get",
+  path: "/reviews/{courseNo}",
+  summary: "1.6 Get Course reviews",
+  request: {
+    params: CourseSchema.GetCourseReviewParamSchema,
+    query: CourseSchema.GetCourseReviewQuerySchema,
+  },
+  responses: {
+    200: {
+      content: {
+        "application/json": {
+          schema: CourseResponseSchema.CourseReviewResponseSchema,
+        },
+      },
+      description: "Successfully retrieved course details",
+    },
+    400: { description: "Invalid course number format" },
+    404: { description: "Course not found" },
     500: InternalError,
   },
   security: [{ Bearer: [] }],

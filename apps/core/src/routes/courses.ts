@@ -3,11 +3,15 @@ import type { Variables } from "@/lib/auth.js";
 import {
   addFavoriteCourse,
   getCourseByNoRoute,
+  getCourseReviews,
   getCoursesRoute,
   getFavoriteCourses,
   removeFavoriteCourse,
 } from "@/routes_define/courses.routes.js";
-import { courseServices } from "@/services/coursesService.js";
+import {
+  courseServices,
+  getCourseReviewByCourseNo,
+} from "@/services/coursesService.js";
 
 import { OpenAPIHono } from "@hono/zod-openapi";
 
@@ -64,11 +68,7 @@ courses
 
       const query = { studyProgram, academicYear, semester };
 
-      const data = await courseServices.getCourseDetail(
-        query,
-        courseNo,
-        userId,
-      );
+      const data = await courseServices.getCourseDetail(query, courseNo);
       return c.json(data, 200);
     } catch (error) {
       console.error(error);
@@ -120,6 +120,33 @@ courses
           return c.json({ error: e.message }, 404);
         }
       }
+      return c.json({ error: "INTERNAL_SERVER_ERROR" }, 500);
+    }
+  })
+  .openapi(getCourseReviews, async (c) => {
+    try {
+      const { courseNo } = c.req.valid("param");
+      const query = c.req.valid("query");
+      const userId = c.get("user")?.id;
+      const { reviews, count, facets } = await getCourseReviewByCourseNo(
+        courseNo,
+        query,
+        userId,
+      );
+      return c.json({
+        reviews,
+        page: query.page,
+        limit: query.limit,
+        count,
+        ...(facets && { facets }),
+      });
+    } catch (err) {
+      if (err instanceof Error) {
+        if (err.message === "COURSE_NOT_FOUND") {
+          return c.json({ error: "COURSE_NOT_FOUND" }, 404);
+        }
+      }
+      console.error("Fetch Courses Error:", err);
       return c.json({ error: "INTERNAL_SERVER_ERROR" }, 500);
     }
   });

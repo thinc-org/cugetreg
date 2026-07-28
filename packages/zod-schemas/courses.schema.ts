@@ -22,6 +22,8 @@ export const GetCourseQuerySchema = z.object({
   days: z.union([z.array(days), days]).optional(),
   timeStart: z.string().regex(TIME_REGEX).optional(),
   timeEnd: z.string().regex(TIME_REGEX).optional(),
+  creditMin: z.coerce.number().optional(),
+  creditMax: z.coerce.number().optional(),
   noPrereq: z.coerce.boolean().optional(),
   favorite: z.coerce.boolean().optional(),
   fitCartId: z.string().optional(),
@@ -41,6 +43,18 @@ export const CourseNoParamSchema = z.object({
     .describe("The registration number of the course"),
 });
 
+export const GetCourseReviewParamSchema = z.object({
+  courseNo: z.string().length(7),
+});
+
+export const GetCourseReviewQuerySchema = z.object({
+  limit: z.coerce.number().int().min(1).max(100).default(20),
+  page: z.coerce.number().int().min(1).default(1),
+  academicYear: z.coerce.number().int().min(2564).optional(),
+  semester: semester.optional(),
+  includeFacets: z.stringbool().default(false),
+});
+
 export type GetCourseQuerySchema = z.infer<typeof GetCourseQuerySchema>;
 
 export const GetCourseDetailQuerySchema = GetCourseQuerySchema.pick({
@@ -51,4 +65,7 @@ export const GetCourseDetailQuerySchema = GetCourseQuerySchema.pick({
 
 export type GetCourseDetailQuerySchema = z.infer<
   typeof GetCourseDetailQuerySchema
+>;
+export type GetCourseReviewQuerySchema = z.infer<
+  typeof GetCourseReviewQuerySchema
 >;

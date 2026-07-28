@@ -39,11 +39,16 @@ RUN pnpm --filter ./apps/core deploy --prod --legacy /tmp/deploy
 FROM base AS final
 ENV NODE_ENV=production
 USER node
-COPY --from=build /tmp/deploy/node_modules ./node_modules
-COPY --from=build /tmp/deploy/dist ./dist
-COPY --from=build /tmp/deploy/package.json ./package.json
-COPY --from=build /tmp/deploy/prisma ./prisma
-COPY --from=build /tmp/deploy/prisma.config.ts ./prisma.config.ts
+# --chown=node:node: without it these land root-owned (COPY preserves the
+# build stage's ownership, which never switches off root) while the process
+# runs as `node` — fine for read-only serving, but `prisma migrate deploy`
+# writes into node_modules/.pnpm/@prisma+engines*/node_modules/@prisma/engines
+# at runtime and gets a permission error without this.
+COPY --from=build --chown=node:node /tmp/deploy/node_modules ./node_modules
+COPY --from=build --chown=node:node /tmp/deploy/dist ./dist
+COPY --from=build --chown=node:node /tmp/deploy/package.json ./package.json
+COPY --from=build --chown=node:node /tmp/deploy/prisma ./prisma
+COPY --from=build --chown=node:node /tmp/deploy/prisma.config.ts ./prisma.config.ts
 
 EXPOSE 3000
 CMD ["node", "dist/index.js"]

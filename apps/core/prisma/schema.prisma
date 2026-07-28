@@ -390,7 +390,9 @@ model Review {
   // Relations
   votes ReviewVote[]
 
-  @@unique([courseNo, userId])
+  @@index([courseNo, status, academicYear, semester])
+  @@index([courseNo, status, createdAt(sort: Desc), id(sort: Desc)])
+  @@unique([courseNo,userId])
   @@map("review")
 }
 

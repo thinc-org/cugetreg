@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { goto } from '$app/navigation';
+  import { afterNavigate, goto } from '$app/navigation';
   import { resolve } from '$app/paths';
   import { page } from '$app/state';
   import { api } from '$lib/api';
@@ -24,6 +24,7 @@
     BookMarked,
     Check,
     ChevronLeft,
+    Loader2,
     Menu,
     MessageCircleQuestionIcon,
     NotebookPen,
@@ -56,6 +57,10 @@
   import * as Sidebar from '@cugetreg/ui/organisms/sidebar';
   import type { GenEdType } from '@cugetreg/utils/types';
   import {
+    type CourseReview,
+    type CourseReviewFacet,
+    CourseReviewResponseSchema,
+    type Semester,
     type SubmitReviewBodySchema,
     SubmitReviewResponseSchema,
     VoteReviewBodySchema,
@@ -65,10 +70,30 @@
   import type { PageProps } from './$types';
 
   const { data }: PageProps = $props();
+  type ReviewPageData = typeof data & {
+    reviewCount?: number;
+    reviewFacets?: CourseReviewFacet[];
+    reviewsError?: boolean;
+  };
   const course = $derived(data.course);
-  const reviews = $state(untrack(() => data.reviews));
+  let reviews = $state<CourseReview[]>(untrack(() => data.reviews));
+  let reviewCount = $state(
+    untrack(() => (data as ReviewPageData).reviewCount ?? data.reviews.length),
+  );
+  let reviewFacets = $state<CourseReviewFacet[]>(
+    untrack(() => (data as ReviewPageData).reviewFacets ?? []),
+  );
+  let reviewsLoading = $state(false);
+  let reviewsError = $state(
+    untrack(() => (data as ReviewPageData).reviewsError ?? false),
+  );
+  let reviewsRequestId = 0;
+  let reviewsCourseNo = untrack(() => data.course.courseNo);
 
   const session = useSession();
+  let reviewSessionUserId = $state<string | null>(
+    untrack(() => $session.data?.user.id ?? null),
+  );
 
   const userCart = getUserCartStore();
   const { addCourse, removeCourse, updateCourse } = useCartActions();
@@ -80,11 +105,12 @@
   let selectedTerm = $state(terms[0]);
   let reviewRating = $state(1);
   let reviewContent = $state('');
-  let selectedSection = $state();
+  let selectedSection = $state<HTMLElement>();
 
   let sidebarExpanded = $state(true);
   let openPanel = $state<string | null>(null);
   let activePanel = $state<string | null>(null);
+  let selectedOpen = $state(true);
 
   let timetableSection = $state<HTMLElement>();
   let descriptionSection = $state<HTMLElement>();
@@ -108,19 +134,19 @@
   };
 
   const reviewYearPlaceholder = 'ปีการศึกษา';
-  const reviewTermPlaceholder = 'ภาคเรียน';
+  const reviewSemesterPlaceholder = 'ภาคเรียน';
   let selectedReviewYear = $state(reviewYearPlaceholder);
-  let selectedReviewTerm = $state(reviewTermPlaceholder);
+  let selectedReviewSemester = $state<Semester | null>(null);
   const reviewsPerPage = 4;
   let reviewsPage = $state(1);
+  let reviewSubmitting = $state(false);
+  let pendingReviewVotes = $state<string[]>([]);
 
   const isReviewYearPlaceholder = $derived(
     selectedReviewYear === reviewYearPlaceholder,
   );
 
-  const isReviewTermPlaceholder = $derived(
-    selectedReviewTerm === reviewTermPlaceholder,
-  );
+  const isReviewSemesterPlaceholder = $derived(selectedReviewSemester === null);
 
   let activeModal = $state<'selected' | null>(null);
   let reviewEditor = $state<MarkdownEditor>();
@@ -162,37 +188,32 @@
     el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
-  const filteredReviews = $derived.by(() =>
-    reviews
-      .filter((review) => {
-        if (
-          !isReviewYearPlaceholder &&
-          review.academicYear !== Number(selectedReviewYear)
-        )
-          return false;
-        if (!isReviewTermPlaceholder && review.semester !== selectedReviewTerm)
-          return false;
-        return true;
-      })
-      .sort((a, b) => {
-        const priority: Record<string, number> = {
-          REJECTED: 0,
-          PENDING: 1,
-          APPROVED: 2,
-        };
-        return (priority[a.status] ?? 3) - (priority[b.status] ?? 3);
-      }),
-  );
+  function focusSelected() {
+    if (sidebarExpanded && selectedOpen) {
+      selectedOpen = false;
+      activePanel = null;
+      return;
+    }
+    sidebarExpanded = true;
+    openPanel = null;
+    selectedOpen = true;
+    activePanel = 'selected_only';
+  }
+
+  function toggleSidebar() {
+    if (sidebarExpanded) {
+      sidebarExpanded = false;
+      activePanel = null;
+    } else {
+      sidebarExpanded = true;
+      activePanel = 'sidebar';
+      openPanel = null;
+      selectedOpen = true;
+    }
+  }
 
   const totalReviewPages = $derived(
-    Math.max(1, Math.ceil(filteredReviews.length / reviewsPerPage)),
-  );
-
-  const pagedReviews = $derived(
-    filteredReviews.slice(
-      (reviewsPage - 1) * reviewsPerPage,
-      reviewsPage * reviewsPerPage,
-    ),
+    Math.max(1, Math.ceil(reviewCount / reviewsPerPage)),
   );
 
   const reviewPageItems = $derived.by(() => {
@@ -210,29 +231,139 @@
     return items;
   });
 
-  const reviewYearOptions = [
+  const reviewYearOptions = $derived.by(() => [
     reviewYearPlaceholder,
-    ...Array.from(new Set(reviews.map((item) => item.academicYear)))
+    ...Array.from(
+      new Set(reviewFacets.map((facet) => String(facet.academicYear))),
+    )
       .sort()
       .reverse(),
-  ];
+  ]);
 
-  const reviewTermOptions = $derived.by(() => {
-    const terms = reviews
-      .map((review) => {
-        const [term, year] = [review.semester, review.academicYear];
-        return { term, year };
-      })
-      .filter((item) =>
-        isReviewYearPlaceholder
-          ? true
-          : item.year === Number(selectedReviewYear),
-      )
-      .map((item) => item.term);
-    return [reviewTermPlaceholder, ...Array.from(new Set(terms))];
-  });
+  function getReviewSemesters(reviewYear: string) {
+    return Array.from(
+      new Set(
+        reviewFacets
+          .filter((facet) =>
+            reviewYear === reviewYearPlaceholder
+              ? true
+              : facet.academicYear === Number(reviewYear),
+          )
+          .map((facet) => facet.semester),
+      ),
+    );
+  }
+
+  const reviewSemesterOptions = $derived(
+    getReviewSemesters(selectedReviewYear),
+  );
+
+  function setSelectedReviewYear(value: string) {
+    selectedReviewYear = value;
+    if (
+      selectedReviewSemester !== null &&
+      !getReviewSemesters(value).includes(selectedReviewSemester)
+    ) {
+      selectedReviewSemester = null;
+    }
+    reviewsPage = 1;
+    void refreshReviews({ targetPage: 1 });
+  }
+
+  function setSelectedReviewSemester(value: string) {
+    selectedReviewSemester =
+      value === reviewSemesterPlaceholder ? null : (value as Semester);
+    reviewsPage = 1;
+    void refreshReviews({ targetPage: 1 });
+  }
+
+  async function refreshReviews(
+    options: { includeFacets?: boolean; targetPage?: number } = {},
+  ) {
+    const { includeFacets = false, targetPage = reviewsPage } = options;
+    const requestId = ++reviewsRequestId;
+    reviewsLoading = true;
+    reviewsError = false;
+
+    try {
+      const response = await api.get(`/courses/reviews/${course.courseNo}`, {
+        params: {
+          limit: reviewsPerPage,
+          page: targetPage,
+          ...(includeFacets && { includeFacets: true }),
+          ...(!isReviewYearPlaceholder && {
+            academicYear: Number(selectedReviewYear),
+          }),
+          ...(selectedReviewSemester && {
+            semester: selectedReviewSemester,
+          }),
+        },
+      });
+      const result = CourseReviewResponseSchema.parse(response.data);
+
+      if (requestId !== reviewsRequestId) return;
+
+      if (result.facets) {
+        reviewFacets = result.facets;
+
+        const nextYearOptions = new Set(
+          result.facets.map((facet) => String(facet.academicYear)),
+        );
+        let filtersChanged = false;
+
+        if (
+          selectedReviewYear !== reviewYearPlaceholder &&
+          !nextYearOptions.has(selectedReviewYear)
+        ) {
+          selectedReviewYear = reviewYearPlaceholder;
+          selectedReviewSemester = null;
+          filtersChanged = true;
+        } else if (
+          selectedReviewSemester !== null &&
+          !getReviewSemesters(selectedReviewYear).includes(
+            selectedReviewSemester,
+          )
+        ) {
+          selectedReviewSemester = null;
+          filtersChanged = true;
+        }
+
+        if (filtersChanged) {
+          await refreshReviews({ targetPage: 1 });
+          return;
+        }
+      }
+
+      const lastPage = Math.max(1, Math.ceil(result.count / reviewsPerPage));
+      if (targetPage > lastPage) {
+        await refreshReviews({
+          includeFacets,
+          targetPage: lastPage,
+        });
+        return;
+      }
+
+      reviews = result.reviews;
+      reviewCount = result.count;
+      reviewsPage = result.page;
+    } catch (error) {
+      if (requestId !== reviewsRequestId) return;
+      console.error(error);
+      reviewsError = true;
+    } finally {
+      if (requestId === reviewsRequestId) reviewsLoading = false;
+    }
+  }
+
+  function setReviewsPage(targetPage: number) {
+    if (targetPage === reviewsPage || reviewsLoading) return;
+    void refreshReviews({ targetPage });
+  }
 
   async function handleReactReview(reviewId: string, interaction: 'L' | 'D') {
+    if (pendingReviewVotes.includes(reviewId)) return;
+    pendingReviewVotes = [...pendingReviewVotes, reviewId];
+
     const payload: VoteReviewBodySchema = {
       interaction,
     };
@@ -268,10 +399,15 @@
       toast.error('Something went wrong', {
         position: 'bottom-right',
       });
+    } finally {
+      pendingReviewVotes = pendingReviewVotes.filter((id) => id !== reviewId);
     }
   }
 
   async function handleSubmitReview() {
+    if (reviewSubmitting) return;
+    reviewSubmitting = true;
+
     if (editingReviewId) {
       const patchPayload = {
         academicYear: Number(selectedYear),
@@ -281,23 +417,18 @@
       };
 
       try {
-        const response = await api.patch(
-          `/reviews/${editingReviewId}`,
-          patchPayload,
-        );
-        const index = reviews.findIndex((r) => r.id === editingReviewId);
-        if (index !== -1) {
-          reviews[index].academicYear = patchPayload.academicYear;
-          reviews[index].semester = patchPayload.semester;
-          reviews[index].rating = patchPayload.rating;
-          reviews[index].content = patchPayload.content;
-          reviews[index].status = 'PENDING';
-        }
+        await api.patch(`/reviews/${editingReviewId}`, patchPayload);
+        await refreshReviews({ includeFacets: true });
         editingReviewId = null;
         reviewContent = '';
         reviewRating = 1;
       } catch (error) {
         console.error(error);
+        toast.error('Something went wrong', {
+          position: 'bottom-right',
+        });
+      } finally {
+        reviewSubmitting = false;
       }
       return;
     }
@@ -313,23 +444,8 @@
 
     try {
       const response = await api.post('/reviews', payload);
-      const review = SubmitReviewResponseSchema.parse(response.data).data;
-
-      console.log(review);
-
-      reviews.push({
-        id: review.id,
-        rating: review.rating,
-        status: review.status,
-        studyProgram: review.studyProgram,
-        academicYear: review.academicYear,
-        semester: review.semester,
-        content: review.content,
-        stats: {
-          likeCount: review.likeCount,
-          dislikeCount: review.dislikeCount,
-        },
-      });
+      SubmitReviewResponseSchema.parse(response.data);
+      await refreshReviews({ includeFacets: true, targetPage: 1 });
       reviewContent = '';
     } catch (error) {
       if (isAxiosError(error)) {
@@ -344,6 +460,8 @@
       toast.error('Something went wrong', {
         position: 'bottom-right',
       });
+    } finally {
+      reviewSubmitting = false;
     }
   }
 
@@ -352,10 +470,7 @@
     if (!isConfirm) return;
     try {
       await api.delete(`/reviews/${reviewId}`);
-      const index = reviews.findIndex((r) => r.id === reviewId);
-      if (index !== -1) {
-        reviews.splice(index, 1);
-      }
+      await refreshReviews({ includeFacets: true });
       toast.success('ลบรีวิวสำเร็จ', { position: 'bottom-right' });
     } catch (error) {
       console.error(error);
@@ -394,19 +509,30 @@
     });
   });
 
+  afterNavigate(() => {
+    const loadedCourseNo = data.course.courseNo;
+
+    if (loadedCourseNo === reviewsCourseNo) return;
+
+    reviewsRequestId += 1;
+    reviewsCourseNo = loadedCourseNo;
+    reviews = data.reviews;
+    reviewCount = (data as ReviewPageData).reviewCount ?? data.reviews.length;
+    reviewFacets = (data as ReviewPageData).reviewFacets ?? [];
+    reviewsError = (data as ReviewPageData).reviewsError ?? false;
+    reviewsLoading = false;
+    selectedReviewYear = reviewYearPlaceholder;
+    selectedReviewSemester = null;
+    reviewsPage = 1;
+  });
+
   $effect(() => {
-    if (!reviewYearOptions.includes(selectedReviewYear)) {
-      selectedReviewYear = reviewYearPlaceholder;
-    }
-    if (!reviewTermOptions.includes(selectedReviewTerm)) {
-      selectedReviewTerm = reviewTermPlaceholder;
-    }
-    if (reviewsPage > totalReviewPages) {
-      reviewsPage = totalReviewPages;
-    }
-    if (reviewsPage < 1) {
-      reviewsPage = 1;
-    }
+    const userId = $session.data?.user.id ?? null;
+
+    if (userId === reviewSessionUserId) return;
+
+    reviewSessionUserId = userId;
+    void refreshReviews({ includeFacets: true, targetPage: 1 });
   });
 
   let globalSelectedSection = $state<string | null>(
@@ -505,75 +631,86 @@
   <div class="relative flex flex-1 overflow-hidden">
     <AppSidebar
       showSidebar={screenWidth >= 1024}
+      panelWidth="490px"
       bind:expanded={sidebarExpanded}
       bind:openPanel
       bind:activePanel
     >
-      {#snippet iconItems({ toggleExpanded, expanded, togglePanel })}
+      {#snippet iconItems({ expanded })}
         <Sidebar.MenuItem>
-          <Sidebar.MenuButton
-            onclick={toggleExpanded}
-            isActive={expanded && activePanel === 'sidebar'}
-            size="lg"
-            tooltipContent="เมนู"
-            class="mx-auto size-12! justify-center rounded-xl p-0! ring-0 transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-6!"
-          >
-            <Menu size="24" strokeWidth={2.5} />
-          </Sidebar.MenuButton>
+          <div class="mt-[0px]">
+            <Sidebar.MenuButton
+              onclick={toggleSidebar}
+              isActive={expanded && activePanel === 'sidebar'}
+              size="lg"
+              tooltipContent="เมนู"
+              class="mx-auto size-12! justify-center rounded-xl p-0! ring-0 transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-5!"
+            >
+              <Menu size="20" strokeWidth={2.5} />
+            </Sidebar.MenuButton>
+          </div>
         </Sidebar.MenuItem>
         <Sidebar.MenuItem>
-          <Sidebar.MenuButton
-            onclick={() => {
-              activePanel = 'description_only';
-              scrollToSection(descriptionSection);
-            }}
-            isActive={activePanel === 'description_only'}
-            size="lg"
-            tooltipContent="คำอธิบายรายวิชา"
-            class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-6!"
-          >
-            <Book size="24" strokeWidth={2.5} />
-          </Sidebar.MenuButton>
+          <div class="mt-[0px]">
+            <Sidebar.MenuButton
+              onclick={() => {
+                activePanel = 'description_only';
+                scrollToSection(descriptionSection);
+              }}
+              isActive={activePanel === 'description_only'}
+              size="lg"
+              tooltipContent="คำอธิบายรายวิชา"
+              class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-5!"
+            >
+              <Book size="20" strokeWidth={2.5} />
+            </Sidebar.MenuButton>
+          </div>
         </Sidebar.MenuItem>
         <Sidebar.MenuItem>
-          <Sidebar.MenuButton
-            onclick={() => {
-              activePanel = 'detail_only';
-              scrollToSection(detailSection);
-            }}
-            isActive={activePanel === 'detail_only'}
-            size="lg"
-            tooltipContent="รายละเอียดเซคชัน"
-            class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-6!"
-          >
-            <StickyNote size="24" strokeWidth={2.5} />
-          </Sidebar.MenuButton>
+          <div class="mt-[-12px]">
+            <Sidebar.MenuButton
+              onclick={() => {
+                activePanel = 'detail_only';
+                scrollToSection(detailSection);
+              }}
+              isActive={activePanel === 'detail_only'}
+              size="lg"
+              tooltipContent="รายละเอียดเซคชัน"
+              class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-5!"
+            >
+              <StickyNote size="20" strokeWidth={2.5} />
+            </Sidebar.MenuButton>
+          </div>
         </Sidebar.MenuItem>
         <Sidebar.MenuItem>
-          <Sidebar.MenuButton
-            onclick={() => {
-              activePanel = 'review_only';
-              scrollToSection(reviewSection);
-            }}
-            isActive={activePanel === 'review_only'}
-            size="lg"
-            tooltipContent="รีวิวรายวิชา"
-            class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-6!"
-          >
-            <MessageCircleQuestionIcon size="24" strokeWidth={2.5} />
-          </Sidebar.MenuButton>
+          <div class="mt-[-12px]">
+            <Sidebar.MenuButton
+              onclick={() => {
+                activePanel = 'review_only';
+                scrollToSection(reviewSection);
+              }}
+              isActive={activePanel === 'review_only'}
+              size="lg"
+              tooltipContent="รีวิวรายวิชา"
+              class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-5!"
+            >
+              <MessageCircleQuestionIcon size="20" strokeWidth={2.5} />
+            </Sidebar.MenuButton>
+          </div>
         </Sidebar.MenuItem>
         {#if $session.data}
           <Sidebar.MenuItem>
-            <Sidebar.MenuButton
-              onclick={() => togglePanel('selected_only')}
-              isActive={activePanel === 'selected_only'}
-              size="lg"
-              tooltipContent="วิชาที่เลือก"
-              class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-6!"
-            >
-              <BookMarked size="24" strokeWidth={2.5} />
-            </Sidebar.MenuButton>
+            <div class="mt-[-10px]">
+              <Sidebar.MenuButton
+                onclick={focusSelected}
+                isActive={activePanel === 'selected_only'}
+                size="lg"
+                tooltipContent="วิชาที่เลือก"
+                class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-5!"
+              >
+                <BookMarked size="20" strokeWidth={2.5} />
+              </Sidebar.MenuButton>
+            </div>
           </Sidebar.MenuItem>
         {/if}
       {/snippet}
@@ -595,38 +732,47 @@
               academicYear={$userCart.currentCart.academicYear}
             />
           </div>
-          <hr class="mb-0 opacity-50" />
+          <hr class="mb-0 border-t border-neutral-100" />
         {/if}
 
         {#if expanded}
           <div class="text-on-surface mb-6 flex flex-col">
             <button
               type="button"
-              class="hover:text-primary w-full border-b border-gray-400 py-4 text-left text-xl font-semibold transition-colors"
-              onclick={() => scrollToSection(descriptionSection)}
+              class="hover:text-primary w-full border-b border-neutral-200 py-4 text-left text-xl font-semibold transition-colors"
+              onclick={() => {
+                activePanel = 'description_only';
+                scrollToSection(descriptionSection);
+              }}
             >
               คำอธิบายรายวิชา
             </button>
 
             <button
               type="button"
-              class="hover:text-primary w-full border-b border-gray-400 py-4 text-left text-xl font-semibold transition-colors"
-              onclick={() => scrollToSection(detailSection)}
+              class="hover:text-primary w-full border-b border-neutral-200 py-4 text-left text-xl font-semibold transition-colors"
+              onclick={() => {
+                activePanel = 'detail_only';
+                scrollToSection(detailSection);
+              }}
             >
               รายละเอียดเซคชัน
             </button>
 
             <div
-              class="flex w-full items-center justify-between border-b border-gray-400 py-3.5"
+              class="flex w-full items-center justify-between border-b border-neutral-200 py-3.5"
             >
               <button
                 type="button"
                 class="hover:text-primary text-left text-xl font-semibold transition-colors"
-                onclick={() => scrollToSection(reviewSection)}
+                onclick={() => {
+                  activePanel = 'review_only';
+                  scrollToSection(reviewSection);
+                }}
               >
                 รีวิวรายวิชา
                 <span class="text-on-surface/50 ml-1 text-sm font-normal">
-                  ({filteredReviews.length} รีวิว)
+                  ({reviewCount} รีวิว)
                 </span>
               </button>
 
@@ -651,17 +797,18 @@
             {#if $userCart.currentCart}
               <SelectedCourse
                 variant="grouped"
-                class="border-b border-neutral-200"
+                bind:open={selectedOpen}
+                class="border-b border-neutral-100"
               />
             {:else}
-              <SelectedCourse class="border-b border-neutral-200" />
+              <SelectedCourse class="border-b border-neutral-100" />
             {/if}
           </div>
         {/if}
 
         {#if expanded || openPanel === 'sidebar'}
           <div
-            class="mt-8 rounded-2xl border border-orange-300 px-5 py-4 text-center text-[15px] leading-relaxed text-orange-500"
+            class="border-secondary text-on-secondary-container mt-8 rounded-2xl border px-5 py-4 text-center text-xs/[18px]"
           >
             <span class="font-bold">CU Get Reg ไม่ใช่การลงทะเบียนเรียนจริง</span
             ><br />
@@ -1186,8 +1333,9 @@
                   color="secondary"
                   class="bg-primary-container text-primary hover:ring-primary-container w-full gap-2 md:w-auto"
                   onclick={handleSubmitReview}
+                  disabled={reviewSubmitting}
                 >
-                  ส่งรีวิว
+                  {reviewSubmitting ? 'กำลังส่ง...' : 'ส่งรีวิว'}
                   <Send size={14} />
                 </Button>
               </div>
@@ -1200,10 +1348,13 @@
             >
               <div class="text-base font-semibold sm:text-2xl">
                 <span class="text-on-surface/60">ทั้งหมด </span>
-                <span class="text-primary">{filteredReviews.length} รีวิว</span>
+                <span class="text-primary">{reviewCount} รีวิว</span>
               </div>
               <div class="flex flex-nowrap items-center gap-3">
-                <Select.Root type="single" bind:value={selectedReviewYear}>
+                <Select.Root
+                  type="single"
+                  bind:value={() => selectedReviewYear, setSelectedReviewYear}
+                >
                   <Select.Trigger
                     class={`h-9 w-[140px] rounded-xl px-4 text-sm ${
                       isReviewYearPlaceholder
@@ -1221,27 +1372,66 @@
                     </Select.Group>
                   </Select.Content>
                 </Select.Root>
-                <Select.Root type="single" bind:value={selectedReviewTerm}>
+                <Select.Root
+                  type="single"
+                  bind:value={
+                    () => selectedReviewSemester ?? reviewSemesterPlaceholder,
+                    setSelectedReviewSemester
+                  }
+                >
                   <Select.Trigger
                     class={`h-9 w-[120px] rounded-xl px-4 text-sm ${
-                      isReviewTermPlaceholder
+                      isReviewSemesterPlaceholder
                         ? 'text-on-surface/60'
                         : 'text-on-surface'
                     }`}
                   >
-                    {selectedReviewTerm}
+                    {selectedReviewSemester
+                      ? SEMESTER_LABEL_LONG[selectedReviewSemester]
+                      : reviewSemesterPlaceholder}
                   </Select.Trigger>
                   <Select.Content role="listbox">
                     <Select.Group>
-                      {#each reviewTermOptions as term (term)}
-                        <Select.Item value={term} label={term} />
+                      <Select.Item
+                        value={reviewSemesterPlaceholder}
+                        label={reviewSemesterPlaceholder}
+                      />
+                      {#each reviewSemesterOptions as semester (semester)}
+                        <Select.Item
+                          value={semester}
+                          label={SEMESTER_LABEL_LONG[semester]}
+                        />
                       {/each}
                     </Select.Group>
                   </Select.Content>
                 </Select.Root>
               </div>
             </div>
-            {#if filteredReviews.length === 0}
+            {#if reviewsLoading}
+              <div
+                class="text-on-surface/70 mt-12 flex items-center justify-center gap-3 py-12"
+                aria-live="polite"
+              >
+                <Loader2 class="animate-spin" size={24} />
+                กำลังโหลดรีวิว...
+              </div>
+            {:else if reviewsError}
+              <div
+                class="mt-12 flex flex-col items-center justify-center gap-4 py-12 text-center"
+                role="alert"
+              >
+                <AlertTriangle size={48} class="text-orange-500" />
+                <p class="text-on-surface/70">ไม่สามารถโหลดรีวิวได้</p>
+                <Button
+                  size="sm"
+                  variant="outlined"
+                  onclick={() =>
+                    refreshReviews({ includeFacets: true, targetPage: 1 })}
+                >
+                  ลองใหม่
+                </Button>
+              </div>
+            {:else if reviews.length === 0}
               <div
                 class="mt-12 flex flex-col items-center justify-center gap-4 py-12 text-center"
               >
@@ -1262,7 +1452,10 @@
               </div>
             {:else}
               <div class="mt-6 flex flex-col gap-6">
-                {#each pagedReviews as review, index (index)}
+                {#each reviews as review (review.id)}
+                  {@const faculty = review.user.faculty ?? ''}
+                  {@const department = review.user.department ?? ''}
+                  {@const affiliation = `${faculty} ${department}`.trim()}
                   <Comment
                     rating={review.rating / 2}
                     semester={SEMESTER_LABEL_LONG[review.semester]}
@@ -1271,6 +1464,7 @@
                     likesCount={review.stats.likeCount}
                     dislikesCount={review.stats.dislikeCount}
                     status={review.status}
+                    facultyMajor={affiliation || undefined}
                     onLike={() => handleReactReview(review.id, 'L')}
                     onDislike={() => handleReactReview(review.id, 'D')}
                     reaction={review.reaction}
@@ -1279,13 +1473,17 @@
                   />
                 {/each}
               </div>
-              <div class="mt-6 flex justify-end">
+              <div
+                class="mt-6 flex justify-end"
+                class:hidden={totalReviewPages <= 1}
+              >
                 <nav class="flex items-center gap-2" aria-label="Pagination">
                   <button
-                    class="border-surface-container-high bg-surface text-on-surface flex h-9 w-9 items-center justify-center rounded-lg border"
+                    class="border-surface-container-high bg-surface text-on-surface flex h-9 w-9 items-center justify-center rounded-lg border disabled:cursor-not-allowed disabled:opacity-50"
                     type="button"
                     aria-label="Previous page"
-                    onclick={() => (reviewsPage = Math.max(1, reviewsPage - 1))}
+                    disabled={reviewsPage === 1}
+                    onclick={() => setReviewsPage(Math.max(1, reviewsPage - 1))}
                   >
                     ‹
                   </button>
@@ -1308,21 +1506,21 @@
                         }`}
                         type="button"
                         aria-current={reviewsPage === item ? 'page' : undefined}
-                        onclick={() => (reviewsPage = item)}
+                        onclick={() => setReviewsPage(item)}
                       >
                         {item}
                       </button>
                     {/if}
                   {/each}
                   <button
-                    class="border-surface-container-high bg-surface text-on-surface flex h-9 w-9 items-center justify-center rounded-lg border"
+                    class="border-surface-container-high bg-surface text-on-surface flex h-9 w-9 items-center justify-center rounded-lg border disabled:cursor-not-allowed disabled:opacity-50"
                     type="button"
                     aria-label="Next page"
+                    disabled={reviewsPage === totalReviewPages}
                     onclick={() =>
-                      (reviewsPage = Math.min(
-                        totalReviewPages,
-                        reviewsPage + 1,
-                      ))}
+                      setReviewsPage(
+                        Math.min(totalReviewPages, reviewsPage + 1),
+                      )}
                   >
                     ›
                   </button>
@@ -1368,16 +1566,20 @@
 {#snippet SelectedContent()}
   <div bind:this={selectedSection}>
     {#if $userCart.currentCart}
-      <SelectedCourse variant="grouped" class="border-b border-neutral-200" />
+      <SelectedCourse
+        variant="grouped"
+        collapsible={false}
+        class="border-b border-neutral-100"
+      />
     {:else}
-      <SelectedCourse class="border-b border-neutral-200" />
+      <SelectedCourse collapsible={false} class="border-b border-neutral-100" />
     {/if}
   </div>
 {/snippet}
 
 {#snippet WarningContent()}
   <div
-    class="mt-8 rounded-2xl border border-orange-300 px-5 py-4 text-center text-[15px] leading-relaxed text-orange-500"
+    class="border-secondary text-on-secondary-container mt-8 rounded-2xl border px-5 py-4 text-center text-xs/[18px]"
   >
     <span class="font-bold">CU Get Reg ไม่ใช่การลงทะเบียนเรียนจริง</span><br />
     สามารถลงทะเบียนเรียนได้ที่

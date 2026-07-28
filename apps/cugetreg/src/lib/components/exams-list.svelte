@@ -58,6 +58,25 @@
   const finalEndTime = $derived(
     getLatestExamTime(finalExams, TIMETABLE_DEFAULT_END),
   );
+
+  function formatTableDate(date: Date) {
+    const months = [
+      'ม.ค.',
+      'ก.พ.',
+      'มี.ค.',
+      'เม.ย.',
+      'พ.ค.',
+      'มิ.ย.',
+      'ก.ค.',
+      'ส.ค.',
+      'ก.ย.',
+      'ต.ค.',
+      'พ.ย.',
+      'ธ.ค.',
+    ];
+
+    return `${date.getDate()} ${months[date.getMonth()]} ${String(date.getFullYear() + 543).slice(-2)}`;
+  }
 </script>
 
 <div class="flex flex-row items-center justify-between lg:justify-center">
@@ -128,7 +147,7 @@
         periodPerDay={midtermEndTime - TIMETABLE_DEFAULT_START}
         days={examDateOrder.midterms
           .filter((time) => time !== 0)
-          .map((time) => formatDate(new Date(time)))}
+          .map((time) => formatTableDate(new Date(time)))}
       >
         {#each examDateOrder.midterms.filter((time) => time !== 0) as key, index (key)}
           {#each examsData.midterms[key] as exam (exam.cartItemId)}
@@ -140,7 +159,7 @@
                   code: exam.courseNo,
                   bldg: '',
                   room: '',
-                  section: 0,
+                  section: exam.sectionNo,
                 }}
                 col={formatExamColumn(exam.start ?? undefined) -
                   TIMETABLE_DEFAULT_START}
@@ -168,7 +187,7 @@
         periodPerDay={finalEndTime - TIMETABLE_DEFAULT_START}
         days={examDateOrder.finals
           .filter((time) => time !== 0)
-          .map((time) => formatDate(new Date(time)))}
+          .map((time) => formatTableDate(new Date(time)))}
       >
         {#each examDateOrder.finals.filter((time) => time !== 0) as key, index (key)}
           {#each examsData.finals[key] as examCourse (examCourse.cartItemId)}
@@ -180,7 +199,7 @@
                   code: examCourse.courseNo,
                   bldg: '',
                   room: '',
-                  section: 0,
+                  section: examCourse.sectionNo,
                 }}
                 col={formatExamColumn(examCourse.start ?? undefined) -
                   TIMETABLE_DEFAULT_START}

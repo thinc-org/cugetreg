@@ -201,6 +201,9 @@ importers:
       html2canvas-pro:
         specifier: ^1.6.4
         version: 1.6.4
+      jsdom:
+        specifier: ^29.1.1
+        version: 29.1.1(@noble/hashes@2.0.1)
       lucide-svelte:
         specifier: ^0.560.0
         version: 0.560.0(svelte@5.46.4)

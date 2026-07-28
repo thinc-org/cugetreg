@@ -39,4 +39,19 @@ export const CourseNoParamSchema = z.object({
   courseNo: z.string().describe("The registration number of the course"),
 });
 
+export const GetCourseReviewParamSchema = z.object({
+  courseNo: z.string().length(7),
+});
+
+export const GetCourseReviewQuerySchema = z.object({
+  limit: z.coerce.number().int().min(1).max(100).default(20),
+  page: z.coerce.number().int().min(1).default(1),
+  academicYear: z.coerce.number().int().min(2564).optional(),
+  semester: semester.optional(),
+  includeFacets: z.stringbool().default(false),
+});
+
 export type GetCourseQuerySchema = z.infer<typeof GetCourseQuerySchema>;
+export type GetCourseReviewQuerySchema = z.infer<
+  typeof GetCourseReviewQuerySchema
+>;

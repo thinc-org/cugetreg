@@ -1,6 +1,9 @@
 <script lang="ts">
 	import { Chip } from '$lib/components/atoms/chip';
+	import { FacultyChip } from '$lib/components/atoms/faculty-chip';
 	import * as Select from '$lib/components/molecules/select';
+
+	import { FACULTIES, type FacultyId } from '@cugetreg/utils/faculty';
 
 	import { InfoCircle } from '../../atoms/info-circle';
 	import { Modal } from '../../atoms/modal';
@@ -14,11 +17,15 @@
 		{ id: 'IN', label: 'สหฯ', color: '#681A83', bg: '#FFFFFF' }
 	];
 
-	const facultyOptions = [
-		{ id: '21', label: '21-วิศวะ' },
-		{ id: '22', label: '22-อักษร' },
-		{ id: '23', label: '23-วิทยา' }
-	];
+	const facultyOptions = Object.keys(FACULTIES).map((faculty) => {
+		const facultyData = FACULTIES[faculty as FacultyId];
+		const name = facultyData.th_short;
+
+		return {
+			id: faculty,
+			label: name
+		};
+	});
 
 	// Mon–Fri come from the Figma semantic tokens (Semantic/dow/*).
 	// Sat/Sun are not defined in Figma, so they keep their existing colours.
@@ -78,12 +85,8 @@
 	let activeGenEds = $derived(genEdOptions.filter((o) => selectedGenEds.includes(o.id)));
 
 	let activeFaculties = $derived(facultyOptions.filter((o) => selectedFaculties.includes(o.id)));
-	let availableFaculties = $derived(
-		facultyOptions.filter((o) => !selectedFaculties.includes(o.id))
-	);
 
 	let activeDays = $derived(dayOptions.filter((o) => selectedDays.includes(o.id)));
-	let availableDays = $derived(dayOptions.filter((o) => !selectedDays.includes(o.id)));
 
 	let activeEval = $derived(evalOptions.filter((o) => selectedEval.includes(o.id)));
 	let availableEval = $derived(evalOptions.filter((o) => !selectedEval.includes(o.id)));
@@ -127,14 +130,14 @@
 		<div class="mb-4">
 			<label for="gened-select" class="mb-1.5 block text-xs text-neutral-400">ประเภท GenEd</label>
 			<Select.Root type="multiple" bind:value={selectedGenEds}>
-				<div class="relative">
+				<div class="relative min-h-10">
 					{#if activeGenEds.length}
 						<div
-							class="absolute top-1/2 left-0 z-10 flex max-w-[calc(100%-2.5rem)] -translate-y-1/2 items-center gap-2 overflow-hidden pl-2"
+							class="pointer-events-none relative z-10 flex min-h-10 w-full flex-wrap items-center gap-2 py-2 pr-10 pl-2"
 						>
 							{#each activeGenEds as item (item.id)}
 								<Chip
-									class="bg-surface border px-2.5 py-1 text-xs font-normal"
+									class="bg-surface max-w-full border px-2.5 py-1 text-xs font-normal [&>button]:pointer-events-auto"
 									style="color: {item.color}; border-color: {item.color};"
 									closable
 									onClose={(event: MouseEvent) => {
@@ -151,7 +154,7 @@
 					<Select.Trigger
 						id="gened-select"
 						aria-label="ประเภท GenEd"
-						class="bg-surface-container-lowest hover:bg-surface-container-low h-10 min-h-10 cursor-pointer rounded-xl border-transparent p-2 text-sm text-neutral-400 focus:ring-0 focus:ring-offset-0"
+						class="bg-surface-container-lowest hover:bg-surface-container-low absolute inset-0 h-full min-h-10 cursor-pointer rounded-xl border-transparent p-2 text-sm text-neutral-400 focus:ring-0 focus:ring-offset-0"
 					>
 						{#if !activeGenEds.length}
 							Select GenEd...
@@ -184,30 +187,30 @@
 		<div class="mb-4">
 			<label for="gened-select" class="mb-1.5 block text-xs text-neutral-400">คณะ</label>
 			<Select.Root type="multiple" bind:value={selectedFaculties}>
-				<div class="relative">
+				<div class="relative min-h-10">
 					{#if activeFaculties.length}
 						<div
-							class="absolute top-1/2 left-0 z-10 flex max-w-[calc(100%-2.5rem)] -translate-y-1/2 items-center gap-2 overflow-hidden pl-2"
+							class="pointer-events-none relative z-10 flex min-h-10 w-full flex-wrap items-center gap-2 py-2 pr-10 pl-2"
 						>
 							{#each activeFaculties as item (item.id)}
-								<Chip
-									class="bg-surface border px-2.5 py-1 text-xs font-normal"
+								<FacultyChip
+									faculty={item.id as FacultyId}
+									class="max-w-full px-2.5 py-1 text-xs font-normal [&>button]:pointer-events-auto"
 									closable
-									onClose={(event: MouseEvent) => {
-										event.stopPropagation();
-										removeOption('gened', item.id);
+									onClose={() => {
+										removeOption('faculty', item.id);
 									}}
 									aria-label={`Remove ${item.label}`}
 								>
 									{item.label}
-								</Chip>
+								</FacultyChip>
 							{/each}
 						</div>
 					{/if}
 					<Select.Trigger
 						id="gened-select"
 						aria-label="ประเภท GenEd"
-						class="bg-surface-container-lowest hover:bg-surface-container-low h-10 min-h-10 cursor-pointer rounded-xl border-transparent p-2 text-sm text-neutral-400 focus:ring-0 focus:ring-offset-0"
+						class="bg-surface-container-lowest hover:bg-surface-container-low absolute inset-0 h-full min-h-10 cursor-pointer rounded-xl border-transparent p-2 text-sm text-neutral-400 focus:ring-0 focus:ring-offset-0"
 					>
 						{#if !activeFaculties.length}
 							Select faculty...
@@ -240,18 +243,18 @@
 		<div class="mb-4">
 			<label for="gened-select" class="mb-1.5 block text-xs text-neutral-400">วันในสัปดาห์ะ</label>
 			<Select.Root type="multiple" bind:value={selectedDays}>
-				<div class="relative">
+				<div class="relative min-h-10">
 					{#if activeDays.length}
 						<div
-							class="absolute top-1/2 left-0 z-10 flex max-w-[calc(100%-2.5rem)] -translate-y-1/2 items-center gap-2 overflow-hidden pl-2"
+							class="pointer-events-none relative z-10 flex min-h-10 w-full flex-wrap items-center gap-2 py-2 pr-10 pl-2"
 						>
 							{#each activeDays as item (item.id)}
 								<Chip
-									class="bg-surface px-2.5 py-1 text-xs font-normal"
+									class="bg-surface max-w-full px-2.5 py-1 text-xs font-normal [&>button]:pointer-events-auto"
 									closable
 									onClose={(event: MouseEvent) => {
 										event.stopPropagation();
-										removeOption('gened', item.id);
+										removeOption('day', item.id);
 									}}
 									style="background-color: {item.bg}; color: {item.color};"
 									aria-label={`Remove ${item.label}`}
@@ -264,7 +267,7 @@
 					<Select.Trigger
 						id="gened-select"
 						aria-label="ประเภท GenEd"
-						class="bg-surface-container-lowest hover:bg-surface-container-low h-10 min-h-10 cursor-pointer rounded-xl border-transparent p-2 text-sm text-neutral-400 focus:ring-0 focus:ring-offset-0"
+						class="bg-surface-container-lowest hover:bg-surface-container-low absolute inset-0 h-full min-h-10 cursor-pointer rounded-xl border-transparent p-2 text-sm text-neutral-400 focus:ring-0 focus:ring-offset-0"
 					>
 						{#if !activeDays.length}
 							Select day...

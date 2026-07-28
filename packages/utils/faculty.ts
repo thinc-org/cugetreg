@@ -193,7 +193,12 @@ export const FACULTIES = {
   },
 } satisfies Record<
   string,
-  { en: string; en_short: string; th: string; th_short: string }
+  {
+    en: string;
+    en_short: string;
+    th: string;
+    th_short: string;
+  }
 >;
 
 export const UNKOWN_FACULTY = {

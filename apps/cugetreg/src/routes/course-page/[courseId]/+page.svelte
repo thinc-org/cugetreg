@@ -187,7 +187,7 @@
     if (!el) return;
     el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
-  
+
   function focusSelected() {
     if (sidebarExpanded && selectedOpen) {
       selectedOpen = false;
@@ -211,7 +211,7 @@
       selectedOpen = true;
     }
   }
-  
+
   const totalReviewPages = $derived(
     Math.max(1, Math.ceil(reviewCount / reviewsPerPage)),
   );

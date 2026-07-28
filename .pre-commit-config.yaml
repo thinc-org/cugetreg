@@ -1,0 +1,29 @@
+# Runs automatically via `pnpm install` (see package.json's "prepare"
+# script) if pre-commit is already on PATH. If you ever need to run it by
+# hand: pre-commit install && pre-commit install --hook-type commit-msg
+# (the second command is required separately — conventional-pre-commit
+# below runs at the commit-msg stage, not the default pre-commit stage)
+repos:
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.30.1
+    hooks:
+      - id: gitleaks
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: check-yaml
+      - id: end-of-file-fixer
+        exclude: ^apps/core/prisma/migrations/
+      - id: trailing-whitespace
+        exclude: ^apps/core/prisma/migrations/
+      - id: check-added-large-files
+      - id: check-merge-conflict
+      - id: no-commit-to-branch
+        args: [--branch, mvp1-dev, --branch, v2-beta, --branch, v2-prod]
+
+  - repo: https://github.com/compilerla/conventional-pre-commit
+    rev: v4.4.0
+    hooks:
+      - id: conventional-pre-commit
+        stages: [commit-msg]

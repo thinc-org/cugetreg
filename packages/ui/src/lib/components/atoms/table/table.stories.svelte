@@ -18,7 +18,7 @@ This example demonstrates the use of each sub-component:
 - **Table.Row**: Represents a row within either the header or the body.
 - **Table.Head**: Column headers, typically styled differently from body cells.
 - **Table.Body**: Contains the main content rows.
-- **Table.Cell**: Represents an individual data cell, with support for styling and spans. 
+- **Table.Cell**: Represents an individual data cell, with support for styling and spans.
 **(don't forget to use data-rowspan='true' or 'false' to apply correct style)**
           `
 				}

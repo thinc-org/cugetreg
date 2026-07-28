@@ -17,7 +17,7 @@
       "outputs": ["dist/**", "storybook-static/**"]
     },
     "check": {
-      "dependsOn": ["^check", "codegen"]
+      "dependsOn": ["^check", "codegen", "^prepack"]
     },
     "dev": {
       "dependsOn": ["prepack"],

@@ -688,6 +688,7 @@ export function useCartActions() {
         isGraded: false,
         expectedGrade: '0',
       })),
+      activityItems: [],
     };
 
     userCart.update((state) => ({

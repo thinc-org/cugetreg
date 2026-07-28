@@ -1,4 +1,6 @@
 <!-- Shown on initial app load, mobile only (md:hidden) -->
+<script lang="ts"></script>
+
 <div
   class="fixed inset-0 z-[100] flex items-center justify-center bg-[#4A72B9] p-3 md:hidden"
 >

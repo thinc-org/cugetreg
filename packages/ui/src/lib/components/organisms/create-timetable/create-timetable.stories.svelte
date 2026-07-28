@@ -31,8 +31,8 @@
 <Story
 	name="Default"
 	args={{
-		handleCancel: defaultHandleCancel,
-		handleConfirm: defaultHandleConfirm,
+		onCancel: defaultHandleCancel,
+		onConfirm: defaultHandleConfirm,
 		shareLink: 'https://example.com/my-timetable'
 	}}
 />
@@ -40,8 +40,8 @@
 <Story
 	name="Custom Share Link"
 	args={{
-		handleCancel: defaultHandleCancel,
-		handleConfirm: defaultHandleConfirm,
+		onCancel: defaultHandleCancel,
+		onConfirm: defaultHandleConfirm,
 		shareLink: 'https://cugetreg.com/shared/timetable-123'
 	}}
 />
@@ -49,8 +49,8 @@
 <Story
 	name="With Custom Handlers"
 	args={{
-		handleCancel: customHandleCancel,
-		handleConfirm: customHandleConfirm,
+		onCancel: customHandleCancel,
+		onConfirm: customHandleConfirm,
 		shareLink: 'https://example.com/my-timetable'
 	}}
 />

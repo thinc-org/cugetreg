@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { cn } from '@cugetreg/utils';
+
 	function formatSemesterType(semesterType: string): string {
 		switch (semesterType) {
 			default:
@@ -26,6 +28,7 @@
 	}
 
 	interface SelectTimetableProp {
+		class?: string;
 		options?: {
 			name: string;
 			id: string;
@@ -33,10 +36,11 @@
 		value?: string;
 		semesterType: 'S' | 'I' | 'T';
 		academicYear: number;
-		semester: string;
+		semester: 'FIRST' | 'SECOND' | 'SUMMER';
 	}
 
 	let {
+		class: className = undefined,
 		options,
 		value = $bindable(),
 		semesterType = 'S',
@@ -45,7 +49,7 @@
 	}: SelectTimetableProp = $props();
 </script>
 
-<div class="flex">
+<div class={cn('flex', className)}>
 	<div class="flex-1">
 		<span class="text-xs text-neutral-400"> คุณกำลังจัดตารางเรียน... </span>
 		<div class="flex gap-2.5">

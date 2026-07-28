@@ -21,7 +21,13 @@
 			<ChevronDown color="#4A70C6" class="hidden min-[900px]:block" />
 		</Collapsible.Trigger>
 	</div>
-	<Collapsible.Content class="absolute top-10 -left-20" transition={slide}>
-		{@render children?.()}
+	<Collapsible.Content forceMount class="absolute top-10 -left-20">
+		{#snippet child({ props, open })}
+			{#if open}
+				<div {...props} transition:slide>
+					{@render children?.()}
+				</div>
+			{/if}
+		{/snippet}
 	</Collapsible.Content>
 </Collapsible.Root>

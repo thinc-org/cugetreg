@@ -35,6 +35,18 @@
 	];
 
 	// --- 2. PROPS (Svelte 5) ---
+	interface Props {
+		selectedGenEds?: string[];
+		selectedFaculties?: string[];
+		selectedDays?: string[];
+		selectedEval?: string[];
+		startTime?: string;
+		endTime?: string;
+		fitSchedule?: boolean;
+		noConditions?: boolean;
+		onsearch?: (event: MouseEvent) => void;
+	}
+
 	let {
 		selectedGenEds = $bindable([]),
 		selectedFaculties = $bindable([]),
@@ -45,7 +57,7 @@
 		fitSchedule = $bindable(false),
 		noConditions = $bindable(true),
 		onsearch = () => {} // Callback function
-	} = $props();
+	}: Props = $props();
 
 	// --- STATE ---
 	let openDropdown = $state<string | null>(null);

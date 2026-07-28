@@ -12,6 +12,6 @@ export const courseColorVariants = {
   purple: "bg-purple-300 border-purple-500 text-purple-700",
 };
 
-export type CourseColor = keyof courseColorVariants;
+export type CourseColor = keyof typeof courseColorVariants;
 
 export const conflict = "bg-red-300 border-red-800 text-red-800";

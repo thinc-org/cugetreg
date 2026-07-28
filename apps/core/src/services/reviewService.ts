@@ -76,7 +76,7 @@ export const reviewService = {
           throw new Error("REVIEW_NOT_FOUND");
         }
 
-        let myInteraction: string | VoteType | null = null;
+        let myInteraction: VoteType | null = null;
 
         if (!vote) {
           await tx.reviewVote.create({

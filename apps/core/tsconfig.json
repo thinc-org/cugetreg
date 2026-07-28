@@ -6,6 +6,8 @@
     "strict": true,
     "verbatimModuleSyntax": true,
     "skipLibCheck": true,
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
     "types": ["node"],
     "paths": {
       "@/*": ["./src/*"]

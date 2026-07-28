@@ -49,7 +49,7 @@ model CourseInfo {
   department String?
 
   // 24 TOTALCREDIT
-  credit      Decimal 
+  credit      Decimal
   // 17 lcredit 18 nlcredit 19 lhour 20 nlhour 21 shour
   creditHours String?  @map("credit_hours")
 
@@ -187,26 +187,26 @@ enum StudyProgram {
   @@map("study_program")
 }
 
-/// General Education (GenEd) Course Type 
+/// General Education (GenEd) Course Type
 
 enum GenEdType {
-  NO // NOT_GENED 
-  SC // SCIENCE 
-  SO // SOCIAL 
-  HU // HUMAN 
+  NO // NOT_GENED
+  SC // SCIENCE
+  SO // SOCIAL
+  HU // HUMAN
   IN // INTERDISCIPLINARY
 
   @@map("gen_ed_type")
 }
 
-/// Day of the Week for Class Scheduling 
+/// Day of the Week for Class Scheduling
 enum DayOfWeek {
-  MO 
-  TU 
-  WE 
+  MO
+  TU
+  WE
   TH
-  FR 
-  SA 
+  FR
+  SA
   SU
   AR // To Be Arranged
   IR // Individually Arranged
@@ -214,7 +214,7 @@ enum DayOfWeek {
   @@map("day_of_week")
 }
 
-/// Review Status 
+/// Review Status
 
 enum ReviewStatus {
   PENDING
@@ -224,7 +224,7 @@ enum ReviewStatus {
   @@map("review_status")
 }
 
-/// Vote Type 
+/// Vote Type
 
 enum VoteType {
   L // LIKE
@@ -233,7 +233,7 @@ enum VoteType {
   @@map("vote_type")
 }
 
-/// Visible 
+/// Visible
 
 enum Visible {
   PUB // PUBLIC

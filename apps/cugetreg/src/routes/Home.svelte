@@ -1036,10 +1036,10 @@
           <X size={20} strokeWidth={2.5} />
         </button>
         {#if activeModal === 'filter'}
-          {@render FilterContent()}
+          {@render FilterContent(false)}
         {:else if activeModal === 'selected'}
           <div class="flex flex-col gap-6">
-            {@render SelectedContent()}
+            {@render SelectedContent(false)}
             {@render WarningContent()}
           </div>
         {/if}
@@ -1048,22 +1048,28 @@
   {/if}
 </div>
 
-{#snippet FilterContent()}
+{#snippet FilterContent(collapsible = true)}
   <div>
-    <button
-      onclick={() => (isFilterOpen = !isFilterOpen)}
-      aria-expanded={isFilterOpen}
-      class="mb-4 flex w-full items-center justify-between"
-    >
-      <h2 class="text-on-surface text-lg/[20px] font-medium">ตัวกรอง</h2>
-      <ChevronDown
-        size={20}
-        class="text-gray-400 transition-transform duration-200 {isFilterOpen
-          ? 'rotate-180'
-          : ''}"
-      />
-    </button>
-    {#if isFilterOpen}
+    {#if collapsible}
+      <button
+        onclick={() => (isFilterOpen = !isFilterOpen)}
+        aria-expanded={isFilterOpen}
+        class="mb-4 flex w-full items-center justify-between"
+      >
+        <h2 class="text-on-surface text-lg/[20px] font-medium">ตัวกรอง</h2>
+        <ChevronDown
+          size={20}
+          class="text-gray-400 transition-transform duration-200 {isFilterOpen
+            ? 'rotate-180'
+            : ''}"
+        />
+      </button>
+    {:else}
+      <div class="mb-4 flex w-full items-center justify-between">
+        <h2 class="text-on-surface text-lg/[20px] font-medium">ตัวกรอง</h2>
+      </div>
+    {/if}
+    {#if !collapsible || isFilterOpen}
       <div transition:slide={{ duration: 250, easing: cubicOut }}>
         <hr class="mb-4 border-t border-neutral-100" />
         <div class="mb-6">
@@ -1085,18 +1091,19 @@
   </div>
 {/snippet}
 
-{#snippet SelectedContent()}
+{#snippet SelectedContent(collapsible = true)}
   <div>
     {#if $userCart.currentCart}
       <SelectedCourse
         variant="grouped"
         bind:open={isSelectedOpen}
+        {collapsible}
         onArrange={goToSchedule}
         headerDivider
         class="border-b border-neutral-100"
       />
     {:else}
-      <SelectedCourse class="border-b border-neutral-100" />
+      <SelectedCourse {collapsible} class="border-b border-neutral-100" />
     {/if}
   </div>
 {/snippet}

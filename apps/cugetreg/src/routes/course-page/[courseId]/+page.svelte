@@ -105,11 +105,12 @@
   let selectedTerm = $state(terms[0]);
   let reviewRating = $state(1);
   let reviewContent = $state('');
-  let selectedSection = $state();
+  let selectedSection = $state<HTMLElement>();
 
   let sidebarExpanded = $state(true);
   let openPanel = $state<string | null>(null);
   let activePanel = $state<string | null>(null);
+  let selectedOpen = $state(true);
 
   let timetableSection = $state<HTMLElement>();
   let descriptionSection = $state<HTMLElement>();
@@ -185,6 +186,30 @@
   function scrollToSection(el: HTMLElement | undefined) {
     if (!el) return;
     el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function focusSelected() {
+    if (sidebarExpanded && selectedOpen) {
+      selectedOpen = false;
+      activePanel = null;
+      return;
+    }
+    sidebarExpanded = true;
+    openPanel = null;
+    selectedOpen = true;
+    activePanel = 'selected_only';
+  }
+
+  function toggleSidebar() {
+    if (sidebarExpanded) {
+      sidebarExpanded = false;
+      activePanel = null;
+    } else {
+      sidebarExpanded = true;
+      activePanel = 'sidebar';
+      openPanel = null;
+      selectedOpen = true;
+    }
   }
 
   const totalReviewPages = $derived(
@@ -606,75 +631,86 @@
   <div class="relative flex flex-1 overflow-hidden">
     <AppSidebar
       showSidebar={screenWidth >= 1024}
+      panelWidth="490px"
       bind:expanded={sidebarExpanded}
       bind:openPanel
       bind:activePanel
     >
-      {#snippet iconItems({ toggleExpanded, expanded, togglePanel })}
+      {#snippet iconItems({ expanded })}
         <Sidebar.MenuItem>
-          <Sidebar.MenuButton
-            onclick={toggleExpanded}
-            isActive={expanded && activePanel === 'sidebar'}
-            size="lg"
-            tooltipContent="เมนู"
-            class="mx-auto size-12! justify-center rounded-xl p-0! ring-0 transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-6!"
-          >
-            <Menu size="24" strokeWidth={2.5} />
-          </Sidebar.MenuButton>
+          <div class="mt-[0px]">
+            <Sidebar.MenuButton
+              onclick={toggleSidebar}
+              isActive={expanded && activePanel === 'sidebar'}
+              size="lg"
+              tooltipContent="เมนู"
+              class="mx-auto size-12! justify-center rounded-xl p-0! ring-0 transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-5!"
+            >
+              <Menu size="20" strokeWidth={2.5} />
+            </Sidebar.MenuButton>
+          </div>
         </Sidebar.MenuItem>
         <Sidebar.MenuItem>
-          <Sidebar.MenuButton
-            onclick={() => {
-              activePanel = 'description_only';
-              scrollToSection(descriptionSection);
-            }}
-            isActive={activePanel === 'description_only'}
-            size="lg"
-            tooltipContent="คำอธิบายรายวิชา"
-            class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-6!"
-          >
-            <Book size="24" strokeWidth={2.5} />
-          </Sidebar.MenuButton>
+          <div class="mt-[0px]">
+            <Sidebar.MenuButton
+              onclick={() => {
+                activePanel = 'description_only';
+                scrollToSection(descriptionSection);
+              }}
+              isActive={activePanel === 'description_only'}
+              size="lg"
+              tooltipContent="คำอธิบายรายวิชา"
+              class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-5!"
+            >
+              <Book size="20" strokeWidth={2.5} />
+            </Sidebar.MenuButton>
+          </div>
         </Sidebar.MenuItem>
         <Sidebar.MenuItem>
-          <Sidebar.MenuButton
-            onclick={() => {
-              activePanel = 'detail_only';
-              scrollToSection(detailSection);
-            }}
-            isActive={activePanel === 'detail_only'}
-            size="lg"
-            tooltipContent="รายละเอียดเซคชัน"
-            class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-6!"
-          >
-            <StickyNote size="24" strokeWidth={2.5} />
-          </Sidebar.MenuButton>
+          <div class="mt-[-12px]">
+            <Sidebar.MenuButton
+              onclick={() => {
+                activePanel = 'detail_only';
+                scrollToSection(detailSection);
+              }}
+              isActive={activePanel === 'detail_only'}
+              size="lg"
+              tooltipContent="รายละเอียดเซคชัน"
+              class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-5!"
+            >
+              <StickyNote size="20" strokeWidth={2.5} />
+            </Sidebar.MenuButton>
+          </div>
         </Sidebar.MenuItem>
         <Sidebar.MenuItem>
-          <Sidebar.MenuButton
-            onclick={() => {
-              activePanel = 'review_only';
-              scrollToSection(reviewSection);
-            }}
-            isActive={activePanel === 'review_only'}
-            size="lg"
-            tooltipContent="รีวิวรายวิชา"
-            class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-6!"
-          >
-            <MessageCircleQuestionIcon size="24" strokeWidth={2.5} />
-          </Sidebar.MenuButton>
+          <div class="mt-[-12px]">
+            <Sidebar.MenuButton
+              onclick={() => {
+                activePanel = 'review_only';
+                scrollToSection(reviewSection);
+              }}
+              isActive={activePanel === 'review_only'}
+              size="lg"
+              tooltipContent="รีวิวรายวิชา"
+              class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-5!"
+            >
+              <MessageCircleQuestionIcon size="20" strokeWidth={2.5} />
+            </Sidebar.MenuButton>
+          </div>
         </Sidebar.MenuItem>
         {#if $session.data}
           <Sidebar.MenuItem>
-            <Sidebar.MenuButton
-              onclick={() => togglePanel('selected_only')}
-              isActive={activePanel === 'selected_only'}
-              size="lg"
-              tooltipContent="วิชาที่เลือก"
-              class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-6!"
-            >
-              <BookMarked size="24" strokeWidth={2.5} />
-            </Sidebar.MenuButton>
+            <div class="mt-[-10px]">
+              <Sidebar.MenuButton
+                onclick={focusSelected}
+                isActive={activePanel === 'selected_only'}
+                size="lg"
+                tooltipContent="วิชาที่เลือก"
+                class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-5!"
+              >
+                <BookMarked size="20" strokeWidth={2.5} />
+              </Sidebar.MenuButton>
+            </div>
           </Sidebar.MenuItem>
         {/if}
       {/snippet}
@@ -696,34 +732,43 @@
               academicYear={$userCart.currentCart.academicYear}
             />
           </div>
-          <hr class="mb-0 opacity-50" />
+          <hr class="mb-0 border-t border-neutral-100" />
         {/if}
 
         {#if expanded}
           <div class="text-on-surface mb-6 flex flex-col">
             <button
               type="button"
-              class="hover:text-primary w-full border-b border-gray-400 py-4 text-left text-xl font-semibold transition-colors"
-              onclick={() => scrollToSection(descriptionSection)}
+              class="hover:text-primary w-full border-b border-neutral-200 py-4 text-left text-xl font-semibold transition-colors"
+              onclick={() => {
+                activePanel = 'description_only';
+                scrollToSection(descriptionSection);
+              }}
             >
               คำอธิบายรายวิชา
             </button>
 
             <button
               type="button"
-              class="hover:text-primary w-full border-b border-gray-400 py-4 text-left text-xl font-semibold transition-colors"
-              onclick={() => scrollToSection(detailSection)}
+              class="hover:text-primary w-full border-b border-neutral-200 py-4 text-left text-xl font-semibold transition-colors"
+              onclick={() => {
+                activePanel = 'detail_only';
+                scrollToSection(detailSection);
+              }}
             >
               รายละเอียดเซคชัน
             </button>
 
             <div
-              class="flex w-full items-center justify-between border-b border-gray-400 py-3.5"
+              class="flex w-full items-center justify-between border-b border-neutral-200 py-3.5"
             >
               <button
                 type="button"
                 class="hover:text-primary text-left text-xl font-semibold transition-colors"
-                onclick={() => scrollToSection(reviewSection)}
+                onclick={() => {
+                  activePanel = 'review_only';
+                  scrollToSection(reviewSection);
+                }}
               >
                 รีวิวรายวิชา
                 <span class="text-on-surface/50 ml-1 text-sm font-normal">
@@ -752,17 +797,18 @@
             {#if $userCart.currentCart}
               <SelectedCourse
                 variant="grouped"
-                class="border-b border-neutral-200"
+                bind:open={selectedOpen}
+                class="border-b border-neutral-100"
               />
             {:else}
-              <SelectedCourse class="border-b border-neutral-200" />
+              <SelectedCourse class="border-b border-neutral-100" />
             {/if}
           </div>
         {/if}
 
         {#if expanded || openPanel === 'sidebar'}
           <div
-            class="mt-8 rounded-2xl border border-orange-300 px-5 py-4 text-center text-[15px] leading-relaxed text-orange-500"
+            class="border-secondary text-on-secondary-container mt-8 rounded-2xl border px-5 py-4 text-center text-xs/[18px]"
           >
             <span class="font-bold">CU Get Reg ไม่ใช่การลงทะเบียนเรียนจริง</span
             ><br />
@@ -1520,16 +1566,20 @@
 {#snippet SelectedContent()}
   <div bind:this={selectedSection}>
     {#if $userCart.currentCart}
-      <SelectedCourse variant="grouped" class="border-b border-neutral-200" />
+      <SelectedCourse
+        variant="grouped"
+        collapsible={false}
+        class="border-b border-neutral-100"
+      />
     {:else}
-      <SelectedCourse class="border-b border-neutral-200" />
+      <SelectedCourse collapsible={false} class="border-b border-neutral-100" />
     {/if}
   </div>
 {/snippet}
 
 {#snippet WarningContent()}
   <div
-    class="mt-8 rounded-2xl border border-orange-300 px-5 py-4 text-center text-[15px] leading-relaxed text-orange-500"
+    class="border-secondary text-on-secondary-container mt-8 rounded-2xl border px-5 py-4 text-center text-xs/[18px]"
   >
     <span class="font-bold">CU Get Reg ไม่ใช่การลงทะเบียนเรียนจริง</span><br />
     สามารถลงทะเบียนเรียนได้ที่

@@ -22,4 +22,10 @@
 	}: InputProps = $props();
 </script>
 
-<input bind:this={ref} class={cn(inputVariants({ state }), className)} bind:value {readonly} {...rest} />
+<input
+	bind:this={ref}
+	class={cn(inputVariants({ state }), className)}
+	bind:value
+	{readonly}
+	{...rest}
+/>

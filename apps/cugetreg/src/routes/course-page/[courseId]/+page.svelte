@@ -214,7 +214,8 @@
     reviewYearPlaceholder,
     ...Array.from(new Set(reviews.map((item) => item.academicYear)))
       .sort()
-      .reverse(),
+      .reverse()
+      .map(String),
   ];
 
   const reviewTermOptions = $derived.by(() => {
@@ -808,7 +809,7 @@
                   </p>
                 </div>
                 <p class="text-on-surface font-sarabun text-body1 mt-3 px-4">
-                  {faculties[course.courseInfo.faculty].th}
+                  {faculties[course.courseInfo.faculty ?? '']?.th ?? '-'}
                 </p>
               </div>
               <div>
@@ -844,7 +845,7 @@
               </div>
               <div>
                 <p class="text-on-surface font-sarabun text-body1 mt-3 px-4">
-                  {faculties[course.courseInfo.faculty].th}
+                  {faculties[course.courseInfo.faculty ?? '']?.th ?? '-'}
                 </p>
               </div>
               <div>
@@ -864,7 +865,7 @@
                   </p>
                 </div>
                 <p class="text-on-surface font-sarabun text-body1 mt-3 px-4">
-                  {course.courseInfo.creditHours.split(' ')}
+                  {course.courseInfo.creditHours?.split(' ') ?? '-'}
                 </p>
               </div>
               <div>
@@ -900,7 +901,7 @@
               </div>
               <div>
                 <p class="text-on-surface font-sarabun text-body1 mt-3 px-4">
-                  {course.courseInfo.creditHours.split(' ')}
+                  {course.courseInfo.creditHours?.split(' ') ?? '-'}
                 </p>
               </div>
               <div>

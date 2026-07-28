@@ -47,8 +47,8 @@
 	);
 
 	let showChangeColorModal = $state(false);
-	let currentColorVariant = $state<ColorVariant>('neutral');
-	let initialColorVariant = $state<ColorVariant>('neutral');
+	let currentColorVariant = $state<ColorVariant>('primary');
+	let initialColorVariant = $state<ColorVariant>('primary');
 	let changeColorFor = $state<number | undefined>();
 	let modalPosition = $state({
 		x: 0,

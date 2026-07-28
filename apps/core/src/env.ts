@@ -13,6 +13,7 @@ export const env = createEnv({
     BETTER_AUTH_SECRET: z.string().min(1),
     BETTER_AUTH_URL: z.string().min(1),
     BETTER_AUTH_TRUSTED_ORIGINS: z.string().optional(),
+    INTERNAL_API_TOKEN: z.string().min(16),
   },
   runtimeEnv: process.env,
 });

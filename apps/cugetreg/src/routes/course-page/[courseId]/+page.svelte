@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { goto } from '$app/navigation';
+  import { afterNavigate, goto } from '$app/navigation';
   import { resolve } from '$app/paths';
   import { page } from '$app/state';
   import { api } from '$lib/api';
@@ -24,6 +24,7 @@
     BookMarked,
     Check,
     ChevronLeft,
+    Loader2,
     Menu,
     MessageCircleQuestionIcon,
     NotebookPen,
@@ -56,6 +57,10 @@
   import * as Sidebar from '@cugetreg/ui/organisms/sidebar';
   import type { GenEdType } from '@cugetreg/utils/types';
   import {
+    type CourseReview,
+    type CourseReviewFacet,
+    CourseReviewResponseSchema,
+    type Semester,
     type SubmitReviewBodySchema,
     SubmitReviewResponseSchema,
     VoteReviewBodySchema,
@@ -65,10 +70,30 @@
   import type { PageProps } from './$types';
 
   const { data }: PageProps = $props();
+  type ReviewPageData = typeof data & {
+    reviewCount?: number;
+    reviewFacets?: CourseReviewFacet[];
+    reviewsError?: boolean;
+  };
   const course = $derived(data.course);
-  const reviews = $state(untrack(() => data.reviews));
+  let reviews = $state<CourseReview[]>(untrack(() => data.reviews));
+  let reviewCount = $state(
+    untrack(() => (data as ReviewPageData).reviewCount ?? data.reviews.length),
+  );
+  let reviewFacets = $state<CourseReviewFacet[]>(
+    untrack(() => (data as ReviewPageData).reviewFacets ?? []),
+  );
+  let reviewsLoading = $state(false);
+  let reviewsError = $state(
+    untrack(() => (data as ReviewPageData).reviewsError ?? false),
+  );
+  let reviewsRequestId = 0;
+  let reviewsCourseNo = untrack(() => data.course.courseNo);
 
   const session = useSession();
+  let reviewSessionUserId = $state<string | null>(
+    untrack(() => $session.data?.user.id ?? null),
+  );
 
   const userCart = getUserCartStore();
   const { addCourse, removeCourse, updateCourse } = useCartActions();
@@ -109,19 +134,19 @@
   };
 
   const reviewYearPlaceholder = 'ปีการศึกษา';
-  const reviewTermPlaceholder = 'ภาคเรียน';
+  const reviewSemesterPlaceholder = 'ภาคเรียน';
   let selectedReviewYear = $state(reviewYearPlaceholder);
-  let selectedReviewTerm = $state(reviewTermPlaceholder);
+  let selectedReviewSemester = $state<Semester | null>(null);
   const reviewsPerPage = 4;
   let reviewsPage = $state(1);
+  let reviewSubmitting = $state(false);
+  let pendingReviewVotes = $state<string[]>([]);
 
   const isReviewYearPlaceholder = $derived(
     selectedReviewYear === reviewYearPlaceholder,
   );
 
-  const isReviewTermPlaceholder = $derived(
-    selectedReviewTerm === reviewTermPlaceholder,
-  );
+  const isReviewSemesterPlaceholder = $derived(selectedReviewSemester === null);
 
   let activeModal = $state<'selected' | null>(null);
   let reviewEditor = $state<MarkdownEditor>();
@@ -162,7 +187,7 @@
     if (!el) return;
     el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
-
+  
   function focusSelected() {
     if (sidebarExpanded && selectedOpen) {
       selectedOpen = false;
@@ -186,38 +211,9 @@
       selectedOpen = true;
     }
   }
-
-  const filteredReviews = $derived.by(() =>
-    reviews
-      .filter((review) => {
-        if (
-          !isReviewYearPlaceholder &&
-          review.academicYear !== Number(selectedReviewYear)
-        )
-          return false;
-        if (!isReviewTermPlaceholder && review.semester !== selectedReviewTerm)
-          return false;
-        return true;
-      })
-      .sort((a, b) => {
-        const priority: Record<string, number> = {
-          REJECTED: 0,
-          PENDING: 1,
-          APPROVED: 2,
-        };
-        return (priority[a.status] ?? 3) - (priority[b.status] ?? 3);
-      }),
-  );
-
+  
   const totalReviewPages = $derived(
-    Math.max(1, Math.ceil(filteredReviews.length / reviewsPerPage)),
-  );
-
-  const pagedReviews = $derived(
-    filteredReviews.slice(
-      (reviewsPage - 1) * reviewsPerPage,
-      reviewsPage * reviewsPerPage,
-    ),
+    Math.max(1, Math.ceil(reviewCount / reviewsPerPage)),
   );
 
   const reviewPageItems = $derived.by(() => {
@@ -235,29 +231,139 @@
     return items;
   });
 
-  const reviewYearOptions = [
+  const reviewYearOptions = $derived.by(() => [
     reviewYearPlaceholder,
-    ...Array.from(new Set(reviews.map((item) => item.academicYear)))
+    ...Array.from(
+      new Set(reviewFacets.map((facet) => String(facet.academicYear))),
+    )
       .sort()
       .reverse(),
-  ];
+  ]);
 
-  const reviewTermOptions = $derived.by(() => {
-    const terms = reviews
-      .map((review) => {
-        const [term, year] = [review.semester, review.academicYear];
-        return { term, year };
-      })
-      .filter((item) =>
-        isReviewYearPlaceholder
-          ? true
-          : item.year === Number(selectedReviewYear),
-      )
-      .map((item) => item.term);
-    return [reviewTermPlaceholder, ...Array.from(new Set(terms))];
-  });
+  function getReviewSemesters(reviewYear: string) {
+    return Array.from(
+      new Set(
+        reviewFacets
+          .filter((facet) =>
+            reviewYear === reviewYearPlaceholder
+              ? true
+              : facet.academicYear === Number(reviewYear),
+          )
+          .map((facet) => facet.semester),
+      ),
+    );
+  }
+
+  const reviewSemesterOptions = $derived(
+    getReviewSemesters(selectedReviewYear),
+  );
+
+  function setSelectedReviewYear(value: string) {
+    selectedReviewYear = value;
+    if (
+      selectedReviewSemester !== null &&
+      !getReviewSemesters(value).includes(selectedReviewSemester)
+    ) {
+      selectedReviewSemester = null;
+    }
+    reviewsPage = 1;
+    void refreshReviews({ targetPage: 1 });
+  }
+
+  function setSelectedReviewSemester(value: string) {
+    selectedReviewSemester =
+      value === reviewSemesterPlaceholder ? null : (value as Semester);
+    reviewsPage = 1;
+    void refreshReviews({ targetPage: 1 });
+  }
+
+  async function refreshReviews(
+    options: { includeFacets?: boolean; targetPage?: number } = {},
+  ) {
+    const { includeFacets = false, targetPage = reviewsPage } = options;
+    const requestId = ++reviewsRequestId;
+    reviewsLoading = true;
+    reviewsError = false;
+
+    try {
+      const response = await api.get(`/courses/reviews/${course.courseNo}`, {
+        params: {
+          limit: reviewsPerPage,
+          page: targetPage,
+          ...(includeFacets && { includeFacets: true }),
+          ...(!isReviewYearPlaceholder && {
+            academicYear: Number(selectedReviewYear),
+          }),
+          ...(selectedReviewSemester && {
+            semester: selectedReviewSemester,
+          }),
+        },
+      });
+      const result = CourseReviewResponseSchema.parse(response.data);
+
+      if (requestId !== reviewsRequestId) return;
+
+      if (result.facets) {
+        reviewFacets = result.facets;
+
+        const nextYearOptions = new Set(
+          result.facets.map((facet) => String(facet.academicYear)),
+        );
+        let filtersChanged = false;
+
+        if (
+          selectedReviewYear !== reviewYearPlaceholder &&
+          !nextYearOptions.has(selectedReviewYear)
+        ) {
+          selectedReviewYear = reviewYearPlaceholder;
+          selectedReviewSemester = null;
+          filtersChanged = true;
+        } else if (
+          selectedReviewSemester !== null &&
+          !getReviewSemesters(selectedReviewYear).includes(
+            selectedReviewSemester,
+          )
+        ) {
+          selectedReviewSemester = null;
+          filtersChanged = true;
+        }
+
+        if (filtersChanged) {
+          await refreshReviews({ targetPage: 1 });
+          return;
+        }
+      }
+
+      const lastPage = Math.max(1, Math.ceil(result.count / reviewsPerPage));
+      if (targetPage > lastPage) {
+        await refreshReviews({
+          includeFacets,
+          targetPage: lastPage,
+        });
+        return;
+      }
+
+      reviews = result.reviews;
+      reviewCount = result.count;
+      reviewsPage = result.page;
+    } catch (error) {
+      if (requestId !== reviewsRequestId) return;
+      console.error(error);
+      reviewsError = true;
+    } finally {
+      if (requestId === reviewsRequestId) reviewsLoading = false;
+    }
+  }
+
+  function setReviewsPage(targetPage: number) {
+    if (targetPage === reviewsPage || reviewsLoading) return;
+    void refreshReviews({ targetPage });
+  }
 
   async function handleReactReview(reviewId: string, interaction: 'L' | 'D') {
+    if (pendingReviewVotes.includes(reviewId)) return;
+    pendingReviewVotes = [...pendingReviewVotes, reviewId];
+
     const payload: VoteReviewBodySchema = {
       interaction,
     };
@@ -293,10 +399,15 @@
       toast.error('Something went wrong', {
         position: 'bottom-right',
       });
+    } finally {
+      pendingReviewVotes = pendingReviewVotes.filter((id) => id !== reviewId);
     }
   }
 
   async function handleSubmitReview() {
+    if (reviewSubmitting) return;
+    reviewSubmitting = true;
+
     if (editingReviewId) {
       const patchPayload = {
         academicYear: Number(selectedYear),
@@ -306,23 +417,18 @@
       };
 
       try {
-        const response = await api.patch(
-          `/reviews/${editingReviewId}`,
-          patchPayload,
-        );
-        const index = reviews.findIndex((r) => r.id === editingReviewId);
-        if (index !== -1) {
-          reviews[index].academicYear = patchPayload.academicYear;
-          reviews[index].semester = patchPayload.semester;
-          reviews[index].rating = patchPayload.rating;
-          reviews[index].content = patchPayload.content;
-          reviews[index].status = 'PENDING';
-        }
+        await api.patch(`/reviews/${editingReviewId}`, patchPayload);
+        await refreshReviews({ includeFacets: true });
         editingReviewId = null;
         reviewContent = '';
         reviewRating = 1;
       } catch (error) {
         console.error(error);
+        toast.error('Something went wrong', {
+          position: 'bottom-right',
+        });
+      } finally {
+        reviewSubmitting = false;
       }
       return;
     }
@@ -338,23 +444,8 @@
 
     try {
       const response = await api.post('/reviews', payload);
-      const review = SubmitReviewResponseSchema.parse(response.data).data;
-
-      console.log(review);
-
-      reviews.push({
-        id: review.id,
-        rating: review.rating,
-        status: review.status,
-        studyProgram: review.studyProgram,
-        academicYear: review.academicYear,
-        semester: review.semester,
-        content: review.content,
-        stats: {
-          likeCount: review.likeCount,
-          dislikeCount: review.dislikeCount,
-        },
-      });
+      SubmitReviewResponseSchema.parse(response.data);
+      await refreshReviews({ includeFacets: true, targetPage: 1 });
       reviewContent = '';
     } catch (error) {
       if (isAxiosError(error)) {
@@ -369,6 +460,8 @@
       toast.error('Something went wrong', {
         position: 'bottom-right',
       });
+    } finally {
+      reviewSubmitting = false;
     }
   }
 
@@ -377,10 +470,7 @@
     if (!isConfirm) return;
     try {
       await api.delete(`/reviews/${reviewId}`);
-      const index = reviews.findIndex((r) => r.id === reviewId);
-      if (index !== -1) {
-        reviews.splice(index, 1);
-      }
+      await refreshReviews({ includeFacets: true });
       toast.success('ลบรีวิวสำเร็จ', { position: 'bottom-right' });
     } catch (error) {
       console.error(error);
@@ -419,19 +509,30 @@
     });
   });
 
+  afterNavigate(() => {
+    const loadedCourseNo = data.course.courseNo;
+
+    if (loadedCourseNo === reviewsCourseNo) return;
+
+    reviewsRequestId += 1;
+    reviewsCourseNo = loadedCourseNo;
+    reviews = data.reviews;
+    reviewCount = (data as ReviewPageData).reviewCount ?? data.reviews.length;
+    reviewFacets = (data as ReviewPageData).reviewFacets ?? [];
+    reviewsError = (data as ReviewPageData).reviewsError ?? false;
+    reviewsLoading = false;
+    selectedReviewYear = reviewYearPlaceholder;
+    selectedReviewSemester = null;
+    reviewsPage = 1;
+  });
+
   $effect(() => {
-    if (!reviewYearOptions.includes(selectedReviewYear)) {
-      selectedReviewYear = reviewYearPlaceholder;
-    }
-    if (!reviewTermOptions.includes(selectedReviewTerm)) {
-      selectedReviewTerm = reviewTermPlaceholder;
-    }
-    if (reviewsPage > totalReviewPages) {
-      reviewsPage = totalReviewPages;
-    }
-    if (reviewsPage < 1) {
-      reviewsPage = 1;
-    }
+    const userId = $session.data?.user.id ?? null;
+
+    if (userId === reviewSessionUserId) return;
+
+    reviewSessionUserId = userId;
+    void refreshReviews({ includeFacets: true, targetPage: 1 });
   });
 
   let globalSelectedSection = $state<string | null>(
@@ -671,7 +772,7 @@
               >
                 รีวิวรายวิชา
                 <span class="text-on-surface/50 ml-1 text-sm font-normal">
-                  ({filteredReviews.length} รีวิว)
+                  ({reviewCount} รีวิว)
                 </span>
               </button>
 
@@ -1232,8 +1333,9 @@
                   color="secondary"
                   class="bg-primary-container text-primary hover:ring-primary-container w-full gap-2 md:w-auto"
                   onclick={handleSubmitReview}
+                  disabled={reviewSubmitting}
                 >
-                  ส่งรีวิว
+                  {reviewSubmitting ? 'กำลังส่ง...' : 'ส่งรีวิว'}
                   <Send size={14} />
                 </Button>
               </div>
@@ -1246,10 +1348,13 @@
             >
               <div class="text-base font-semibold sm:text-2xl">
                 <span class="text-on-surface/60">ทั้งหมด </span>
-                <span class="text-primary">{filteredReviews.length} รีวิว</span>
+                <span class="text-primary">{reviewCount} รีวิว</span>
               </div>
               <div class="flex flex-nowrap items-center gap-3">
-                <Select.Root type="single" bind:value={selectedReviewYear}>
+                <Select.Root
+                  type="single"
+                  bind:value={() => selectedReviewYear, setSelectedReviewYear}
+                >
                   <Select.Trigger
                     class={`h-9 w-[140px] rounded-xl px-4 text-sm ${
                       isReviewYearPlaceholder
@@ -1267,27 +1372,66 @@
                     </Select.Group>
                   </Select.Content>
                 </Select.Root>
-                <Select.Root type="single" bind:value={selectedReviewTerm}>
+                <Select.Root
+                  type="single"
+                  bind:value={
+                    () => selectedReviewSemester ?? reviewSemesterPlaceholder,
+                    setSelectedReviewSemester
+                  }
+                >
                   <Select.Trigger
                     class={`h-9 w-[120px] rounded-xl px-4 text-sm ${
-                      isReviewTermPlaceholder
+                      isReviewSemesterPlaceholder
                         ? 'text-on-surface/60'
                         : 'text-on-surface'
                     }`}
                   >
-                    {selectedReviewTerm}
+                    {selectedReviewSemester
+                      ? SEMESTER_LABEL_LONG[selectedReviewSemester]
+                      : reviewSemesterPlaceholder}
                   </Select.Trigger>
                   <Select.Content role="listbox">
                     <Select.Group>
-                      {#each reviewTermOptions as term (term)}
-                        <Select.Item value={term} label={term} />
+                      <Select.Item
+                        value={reviewSemesterPlaceholder}
+                        label={reviewSemesterPlaceholder}
+                      />
+                      {#each reviewSemesterOptions as semester (semester)}
+                        <Select.Item
+                          value={semester}
+                          label={SEMESTER_LABEL_LONG[semester]}
+                        />
                       {/each}
                     </Select.Group>
                   </Select.Content>
                 </Select.Root>
               </div>
             </div>
-            {#if filteredReviews.length === 0}
+            {#if reviewsLoading}
+              <div
+                class="text-on-surface/70 mt-12 flex items-center justify-center gap-3 py-12"
+                aria-live="polite"
+              >
+                <Loader2 class="animate-spin" size={24} />
+                กำลังโหลดรีวิว...
+              </div>
+            {:else if reviewsError}
+              <div
+                class="mt-12 flex flex-col items-center justify-center gap-4 py-12 text-center"
+                role="alert"
+              >
+                <AlertTriangle size={48} class="text-orange-500" />
+                <p class="text-on-surface/70">ไม่สามารถโหลดรีวิวได้</p>
+                <Button
+                  size="sm"
+                  variant="outlined"
+                  onclick={() =>
+                    refreshReviews({ includeFacets: true, targetPage: 1 })}
+                >
+                  ลองใหม่
+                </Button>
+              </div>
+            {:else if reviews.length === 0}
               <div
                 class="mt-12 flex flex-col items-center justify-center gap-4 py-12 text-center"
               >
@@ -1308,7 +1452,10 @@
               </div>
             {:else}
               <div class="mt-6 flex flex-col gap-6">
-                {#each pagedReviews as review, index (index)}
+                {#each reviews as review (review.id)}
+                  {@const faculty = review.user.faculty ?? ''}
+                  {@const department = review.user.department ?? ''}
+                  {@const affiliation = `${faculty} ${department}`.trim()}
                   <Comment
                     rating={review.rating / 2}
                     semester={SEMESTER_LABEL_LONG[review.semester]}
@@ -1317,6 +1464,7 @@
                     likesCount={review.stats.likeCount}
                     dislikesCount={review.stats.dislikeCount}
                     status={review.status}
+                    facultyMajor={affiliation || undefined}
                     onLike={() => handleReactReview(review.id, 'L')}
                     onDislike={() => handleReactReview(review.id, 'D')}
                     reaction={review.reaction}
@@ -1325,13 +1473,17 @@
                   />
                 {/each}
               </div>
-              <div class="mt-6 flex justify-end">
+              <div
+                class="mt-6 flex justify-end"
+                class:hidden={totalReviewPages <= 1}
+              >
                 <nav class="flex items-center gap-2" aria-label="Pagination">
                   <button
-                    class="border-surface-container-high bg-surface text-on-surface flex h-9 w-9 items-center justify-center rounded-lg border"
+                    class="border-surface-container-high bg-surface text-on-surface flex h-9 w-9 items-center justify-center rounded-lg border disabled:cursor-not-allowed disabled:opacity-50"
                     type="button"
                     aria-label="Previous page"
-                    onclick={() => (reviewsPage = Math.max(1, reviewsPage - 1))}
+                    disabled={reviewsPage === 1}
+                    onclick={() => setReviewsPage(Math.max(1, reviewsPage - 1))}
                   >
                     ‹
                   </button>
@@ -1354,21 +1506,21 @@
                         }`}
                         type="button"
                         aria-current={reviewsPage === item ? 'page' : undefined}
-                        onclick={() => (reviewsPage = item)}
+                        onclick={() => setReviewsPage(item)}
                       >
                         {item}
                       </button>
                     {/if}
                   {/each}
                   <button
-                    class="border-surface-container-high bg-surface text-on-surface flex h-9 w-9 items-center justify-center rounded-lg border"
+                    class="border-surface-container-high bg-surface text-on-surface flex h-9 w-9 items-center justify-center rounded-lg border disabled:cursor-not-allowed disabled:opacity-50"
                     type="button"
                     aria-label="Next page"
+                    disabled={reviewsPage === totalReviewPages}
                     onclick={() =>
-                      (reviewsPage = Math.min(
-                        totalReviewPages,
-                        reviewsPage + 1,
-                      ))}
+                      setReviewsPage(
+                        Math.min(totalReviewPages, reviewsPage + 1),
+                      )}
                   >
                     ›
                   </button>

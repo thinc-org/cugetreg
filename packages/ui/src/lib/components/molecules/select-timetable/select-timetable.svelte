@@ -33,7 +33,7 @@
 		value?: string;
 		semesterType: 'S' | 'I' | 'T';
 		academicYear: number;
-		semester: string;
+		semester: 'FIRST' | 'SECOND' | 'SUMMER';
 	}
 
 	let {

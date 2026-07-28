@@ -42,6 +42,18 @@ jobs:
       target: lint
       runs-on: ${{ matrix.platform }}
 
+  check:
+    strategy:
+      matrix:
+        platform: [ubuntu-latest]
+    needs: install-deps
+
+    uses: ./.github/workflows/reusable-ci.yaml
+    secrets: inherit
+    with:
+      target: check
+      runs-on: ${{ matrix.platform }}
+
   test:
     strategy:
       matrix:

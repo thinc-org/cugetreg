@@ -8,6 +8,7 @@
   },
   "scripts": {
     "lint": "eslint .",
+    "check": "tsc --noEmit",
     "dev": "dotenv -- tsx watch src/index.ts",
     "build": "tsup",
     "start": "node dist/index.js",

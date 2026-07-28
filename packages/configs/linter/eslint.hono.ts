@@ -1,8 +1,9 @@
+import { defineConfig } from "eslint/config";
 import tseslint from "typescript-eslint";
 
 import baseConfig from "./eslint.base.ts";
 
-const config = [
+const config = defineConfig(
   ...baseConfig,
   {
     plugins: {
@@ -88,6 +89,6 @@ const config = [
       curly: ["error", "all"],
     },
   },
-];
+);
 
 export default config;

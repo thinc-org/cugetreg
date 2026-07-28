@@ -605,7 +605,7 @@
   );
 </script>
 
-<div class="relative flex h-screen flex-col overflow-hidden bg-white">
+<div class="relative flex h-full flex-col overflow-hidden bg-white">
   <div class="relative flex flex-1 overflow-hidden">
     <AppSidebar
       showSidebar={!isMobile}

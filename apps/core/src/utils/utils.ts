@@ -1,7 +1,7 @@
 import {
   FACULTIES,
-  UNKOWN_FACULTY,
   type FacultyId,
+  UNKOWN_FACULTY,
 } from "@cugetreg/utils/faculty";
 
 export function mapFaculty(facultyId: string) {

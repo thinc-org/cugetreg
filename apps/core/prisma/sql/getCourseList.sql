@@ -73,7 +73,7 @@ matching_sections AS (
         AND ($4::gen_ed_type[] IS NULL OR c.gen_ed_type = ANY($4::gen_ed_type[]))
 
         -- Faculty (optional)
-        AND ($5::text[] IS NULL OR ci.faculty = ANY($5::text[]))
+        AND ($5::text[] IS NULL OR ci.faculty::text = ANY($5::text[]))
 
         -- Grading type (optional)
         AND ($7::grading_type IS NULL OR ci.grading_type = $7::grading_type)

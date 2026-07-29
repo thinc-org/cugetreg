@@ -9,7 +9,11 @@ import {
   getCourseReviewByCourseNo,
   queryCourse,
 } from "@/services/coursesService.js";
-import { mapSemester, mapStudyProgram } from "@/utils/enumMapper.js";
+import {
+  mapSemester,
+  mapStudyProgram,
+  unmapFacultyCode,
+} from "@/utils/enumMapper.js";
 
 import { OpenAPIHono } from "@hono/zod-openapi";
 
@@ -65,7 +69,13 @@ courses
 
       return c.json(
         {
-          course,
+          course: {
+            ...course,
+            courseInfo: {
+              ...course.courseInfo,
+              faculty: unmapFacultyCode(course.courseInfo.faculty),
+            },
+          },
         },
         200,
       );

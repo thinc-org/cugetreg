@@ -2,7 +2,7 @@ import { prisma } from "@/db/clients.js";
 import { Prisma } from "@/generated/prisma/client.js";
 import { ReviewStatus, VoteType } from "@/generated/prisma/enums.js";
 import { getCourseList } from "@/generated/prisma/sql.js";
-import { mapDayOfWeek } from "@/utils/enumMapper.js";
+import { mapDayOfWeek, unmapFacultyCode } from "@/utils/enumMapper.js";
 
 import type {
   GetCourseQuerySchema,
@@ -284,6 +284,10 @@ export async function getCourseReviewByCourseNo(
 
     return {
       ...review,
+      user: {
+        ...review.user,
+        faculty: unmapFacultyCode(review.user.faculty),
+      },
       stats: {
         likeCount,
         dislikeCount,

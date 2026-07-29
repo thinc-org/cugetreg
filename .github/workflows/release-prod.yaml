@@ -1,9 +1,14 @@
-# Prod release: publish a GitHub Release (creating its tag, e.g. vX.Y.Z, if it
-# doesn't already exist). CI builds web + api with that version tag and opens
-# a PR against the gitops prod overlay (so a human approves the prod rollout).
+# Prod release: publish a GitHub Release targeting the `v2-prod` branch,
+# tagged <component>@<version> (e.g. web@1.13.1, api@1.15.1) — each
+# component releases and deploys completely independently, only the tagged
+# one is built and bumped. CI builds it and opens a PR against the gitops
+# prod overlay (so a human approves the prod rollout).
 #
-# A bare `git tag vX.Y.Z && git push origin vX.Y.Z` no longer triggers this —
-# publish a Release from that tag in the GitHub UI (or `gh release create`).
+# publish a Release from a v2-prod tag in the GitHub UI (or `gh release
+# create web@1.13.1 --target v2-prod`), with v2-prod selected as the target
+# branch. A Release published against any other branch is skipped, not
+# deployed; a Release on v2-prod whose tag isn't <component>@<version>
+# fails loudly instead.
 name: Build & deploy prod
 
 on:

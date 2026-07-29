@@ -71,7 +71,12 @@
 						class=""
 						variant="outlined"
 						onclick={() => {
-							goto(`/course-page/${data.courseNo}`);
+							const params = new URLSearchParams({
+								studyProgram: data.studyProgram,
+								academicYear: String(data.academicYear),
+								semester: data.semester
+							});
+							goto(`/course-page/${data.courseNo}?${params.toString()}`);
 						}}
 					>
 						ข้อมูลรายวิชา

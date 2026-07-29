@@ -277,6 +277,8 @@
         }
         if (startTime) params.append('timeStart', startTime);
         if (endTime) params.append('timeEnd', endTime);
+      } else {
+        params.append('noPrereq', 'true');
       }
 
       if (fitSchedule) {

@@ -256,28 +256,30 @@
         params.append('sortBy', currentSort);
       }
 
-      if (!noConditions) {
-        if (selectedGenEds.length > 0) {
-          selectedGenEds.forEach((genEd) => {
-            params.append('genEdTypes', genEd);
-          });
-        }
-        if (selectedFaculties.length > 0) {
-          selectedFaculties.forEach((faculty) => {
-            params.append('faculties', faculty);
-          });
-        }
-        if (selectedDays.length > 0) {
-          selectedDays.forEach((day) => {
-            params.append('days', day);
-          });
-        }
-        if (selectedEval.length > 0) {
-          params.append('assessment', selectedEval[0]);
-        }
-        if (startTime) params.append('timeStart', startTime);
-        if (endTime) params.append('timeEnd', endTime);
+      if (noConditions) {
+        params.append('noPrereq', String(noConditions));
       }
+
+      if (selectedGenEds.length > 0) {
+        selectedGenEds.forEach((genEd) => {
+          params.append('genEdTypes', genEd);
+        });
+      }
+      if (selectedFaculties.length > 0) {
+        selectedFaculties.forEach((faculty) => {
+          params.append('faculties', faculty);
+        });
+      }
+      if (selectedDays.length > 0) {
+        selectedDays.forEach((day) => {
+          params.append('days', day);
+        });
+      }
+      if (selectedEval.length > 0) {
+        params.append('assessment', selectedEval[0]);
+      }
+      if (startTime) params.append('timeStart', startTime);
+      if (endTime) params.append('timeEnd', endTime);
 
       if (fitSchedule) {
         if ($userCart.currentCartId) {

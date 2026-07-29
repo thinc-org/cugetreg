@@ -25,32 +25,29 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  parse-tag:
+  # cugetregv2 releases must stay on major version 2 — reject anything else
+  # (e.g. a stray v1.x.x tag) before it ever reaches build-deploy.
+  guard-major-version:
     runs-on: ubuntu-latest
-    if: github.event.release.target_commitish == 'v2-prod'
-    outputs:
-      component: ${{ steps.parse.outputs.component }}
-      version: ${{ steps.parse.outputs.version }}
     steps:
-      - name: Parse component@version from tag
-        id: parse
-        env:
-          TAG: ${{ github.event.release.tag_name }}
+      - name: Enforce major version 2
         run: |
-          if [[ ! "$TAG" =~ ^(web|api)@[0-9] ]]; then
-            echo "::error::tag '$TAG' doesn't match <component>@<version> (expected web@X.Y.Z or api@X.Y.Z)"
+          TAG="${{ github.event.release.tag_name }}"
+          VERSION="${TAG##*@}"    # strip "web@" / "api@" prefix, if present
+          VERSION="${VERSION#v}"  # strip leading "v", if present (e.g. v2.0.1)
+          MAJOR="${VERSION%%.*}"
+          if [ "$MAJOR" != "2" ]; then
+            echo "::error::Release tag '$TAG' has major version '$MAJOR' — only major version 2 is allowed for cugetregv2 releases."
             exit 1
           fi
-          echo "component=${TAG%%@*}" >> "$GITHUB_OUTPUT"
-          echo "version=${TAG#*@}" >> "$GITHUB_OUTPUT"
+          echo "Major version check passed: $TAG (major=$MAJOR)"
 
   deploy:
-    needs: parse-tag
+    needs: guard-major-version
     uses: ./.github/workflows/build-deploy.yaml
     with:
       env: prod
-      component: ${{ needs.parse-tag.outputs.component }}
-      tag: ${{ needs.parse-tag.outputs.version }}     # e.g. 1.13.1
+      tag: ${{ github.event.release.tag_name }}     # e.g. web@2.0.4
       update-mode: pr
     secrets:
       GH_TOKEN: ${{ secrets.GH_TOKEN }}

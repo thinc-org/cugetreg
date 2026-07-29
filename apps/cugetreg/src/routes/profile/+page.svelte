@@ -79,10 +79,13 @@
 
   let isMobile = $state(false);
 
+  const faculty = $derived(
+    FACULTIES[personalInfo.faculty as FacultyId] ?? UNKOWN_FACULTY,
+  );
+
   const parsedPersonalInfo = $derived({
     ...personalInfo,
-    faculty:
-      FACULTIES[personalInfo.faculty as FacultyId].th ?? UNKOWN_FACULTY.th,
+    faculty: faculty.th,
   });
 
   async function updateUser() {

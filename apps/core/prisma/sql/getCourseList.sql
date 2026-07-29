@@ -35,7 +35,7 @@
 --         subquery in matching_sections when $16 is provided).
 --         period_start_minutes/period_end_minutes are trigger-maintained columns
 --         on course_class; NULL for IA/AR/bad times.
-WITH occupied_slots AS (
+WITH occupied_slots AS MATERIALIZED (
     SELECT cl_occ.day_of_week,
            cl_occ.period_start_minutes,
            cl_occ.period_end_minutes

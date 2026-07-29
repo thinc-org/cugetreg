@@ -1,5 +1,6 @@
 import { prisma } from "@/db/clients.js";
 import { env } from "@/env.js";
+import { mapFacultyCode } from "@/utils/enumMapper.js";
 import { mapFaculty } from "@/utils/utils.js";
 
 import { APIError, betterAuth } from "better-auth";
@@ -29,6 +30,7 @@ export const auth = betterAuth({
       faculty: {
         type: "string",
         required: false,
+        input: false,
       },
       department: {
         type: "string",
@@ -40,10 +42,9 @@ export const auth = betterAuth({
     user: {
       create: {
         before: async (user, _context) => {
-          const allowUser =
-            user.email.endsWith("chula.ac.th") || ALLOW_NON_CHULA;
+          const match = /^\d{10}@(student\.)?chula\.ac\.th$/i.exec(user.email);
 
-          if (!allowUser) {
+          if (!match && !ALLOW_NON_CHULA) {
             throw new APIError("UNAUTHORIZED", {
               message: "non chula email",
             });
@@ -58,7 +59,10 @@ export const auth = betterAuth({
           return {
             data: {
               ...user,
-              faculty: mapFaculty(facultyId).en === "UNKOWN" ? null : facultyId,
+              faculty:
+                mapFaculty(facultyId).en === "UNKOWN"
+                  ? null
+                  : mapFacultyCode(facultyId),
             },
           };
         },

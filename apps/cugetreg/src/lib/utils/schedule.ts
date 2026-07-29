@@ -141,6 +141,9 @@ export function getViewCourseData(
       ? `${formatDate(new Date(final.start))} ${formatExamTime(new Date(final.start), (new Date(final.end).getTime() - new Date(final.start).getTime()) / (1000 * 60 * 60))}`
       : undefined,
     isHidden: selectedCartItem.hidden,
+    studyProgram: cart.studyProgram,
+    academicYear: cart.academicYear,
+    semester: cart.semester,
   };
 
   return data;

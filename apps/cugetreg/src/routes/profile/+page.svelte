@@ -26,6 +26,11 @@
   import { PersonalInfo } from '@cugetreg/ui/organisms/personal-info';
   import { RatingHistory } from '@cugetreg/ui/organisms/rating-history';
   import { ScheduleList } from '@cugetreg/ui/organisms/schedule-list';
+  import {
+    FACULTIES,
+    type FacultyId,
+    UNKOWN_FACULTY,
+  } from '@cugetreg/utils/faculty';
   import type { ReviewStatus } from '@cugetreg/zod-schemas';
   import {
     ListCartsResponseSchema,
@@ -34,11 +39,6 @@
   } from '@cugetreg/zod-schemas';
 
   import type { PageProps } from './$types';
-  import {
-    FACULTIES,
-    UNKOWN_FACULTY,
-    type FacultyId,
-  } from '@cugetreg/utils/faculty';
 
   interface ScheduleItem {
     id: string;

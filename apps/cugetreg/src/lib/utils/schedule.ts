@@ -8,6 +8,7 @@ import type {
   CartWithItemsBase,
   ExamScheduleItem,
   Period,
+  Semester,
 } from '@cugetreg/zod-schemas';
 
 export const TIMETABLE_DEFAULT_START = 7;
@@ -248,6 +249,15 @@ export function calculateCredit(courses?: CartItemDetailBase[]): number {
     (acc, item) => acc + (item.hidden ? 0 : Number(item.course.credit)),
     0,
   );
+}
+
+// Chula rule: 3rd digit ('7' or '8') of the student ID marks a graduate (ป.โท/ป.เอก) student.
+export function getMaxCredit(semester: Semester, username?: string): number {
+  const isGraduate = username?.[2] === '7' || username?.[2] === '8';
+  if (semester === 'SUMMER') {
+    return isGraduate ? 6 : 9;
+  }
+  return isGraduate ? 15 : 22;
 }
 
 export async function createElementScreenshot(

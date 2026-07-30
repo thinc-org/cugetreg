@@ -900,7 +900,7 @@
               class="mt-5 flex items-start gap-2 bg-amber-50 px-3 py-2 text-sm"
             >
               <AlertTriangle size={16} class="mt-0.5 text-amber-900" />
-              <span class="font-sarabun text-neutral-900">
+              <span class="font-sans text-neutral-900">
                 ข้อมูลคำอธิบายรายวิชาที่แสดงไม่ได้เป็นข้อมูลล่าสุด
                 อาจมีการเปลี่ยนแปลงได้ โปรดตรวจสอบกับรายวิชาที่จัดอีกครั้ง
               </span>
@@ -919,7 +919,7 @@
                     คำอธิบายรายวิชา (ภาษาไทย)
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body1 mt-3 px-4">
+                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
                   {course.courseInfo.courseDescTh}
                 </p>
               </div>
@@ -931,7 +931,7 @@
                     คำอธิบายรายวิชา (ภาษาอังกฤษ)
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body1 mt-3 px-4">
+                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
                   {course.courseInfo.courseDescEn}
                 </p>
               </div>
@@ -955,12 +955,12 @@
                 </div>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body1 mt-3 px-4">
+                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
                   {course.courseInfo.courseDescTh}
                 </p>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body1 mt-3 px-4">
+                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
                   {course.courseInfo.courseDescEn}
                 </p>
               </div>
@@ -975,7 +975,7 @@
                     คณะ
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body1 mt-3 px-4">
+                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
                   {faculties[course.courseInfo.faculty ?? '']?.th ?? '-'}
                 </p>
               </div>
@@ -987,7 +987,7 @@
                     ภาควิชา/กลุ่มวิชา/สาขาวิชา
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body1 mt-3 px-4">
+                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
                   {course.courseInfo.department}
                 </p>
               </div>
@@ -1011,12 +1011,12 @@
                 </div>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body1 mt-3 px-4">
+                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
                   {faculties[course.courseInfo.faculty ?? '']?.th ?? '-'}
                 </p>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body1 mt-3 px-4">
+                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
                   {course.courseInfo.department}
                 </p>
               </div>
@@ -1031,7 +1031,7 @@
                     รูปแบบรายวิชา
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body1 mt-3 px-4">
+                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
                   {course.courseInfo.creditHours?.split(' ') ?? '-'}
                 </p>
               </div>
@@ -1043,7 +1043,7 @@
                     หน่วยกิต
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body1 mt-3 px-4">
+                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
                   {course.courseInfo.credit}
                 </p>
               </div>
@@ -1067,12 +1067,12 @@
                 </div>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body1 mt-3 px-4">
+                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
                   {course.courseInfo.creditHours?.split(' ') ?? '-'}
                 </p>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body1 mt-3 px-4">
+                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
                   {course.courseInfo.credit}
                 </p>
               </div>
@@ -1087,7 +1087,7 @@
                     เงื่อนไขรายวิชา
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body1 mt-3 px-4">
+                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
                   -
                 </p>
               </div>
@@ -1099,7 +1099,7 @@
                     วิธีการวัดผล
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body1 mt-3 px-4">
+                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
                   Letter Grade
                 </p>
               </div>
@@ -1123,12 +1123,12 @@
                 </div>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body1 mt-3 px-4">
+                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
                   -
                 </p>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body1 mt-3 px-4">
+                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
                   Letter Grade
                 </p>
               </div>
@@ -1143,7 +1143,7 @@
                     สอบกลางภาค
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body1 mt-3 px-4">
+                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
                   {midtermExam}
                 </p>
               </div>
@@ -1155,7 +1155,7 @@
                     สอบปลายภาค
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body1 mt-3 px-4">
+                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
                   {finalExam}
                 </p>
               </div>
@@ -1179,12 +1179,12 @@
                 </div>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body1 mt-3 px-4">
+                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
                   {midtermExam}
                 </p>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body1 mt-3 px-4">
+                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
                   {finalExam}
                 </p>
               </div>
@@ -1209,7 +1209,7 @@
                 >
                   <Accordion.Trigger class="hover:no-underline">
                     <div
-                      class="flex items-center gap-2 text-sm font-medium text-[#4A70C6]"
+                      class="flex items-center gap-2 text-xs font-medium text-[#4A70C6] sm:text-base"
                     >
                       <Check size={16} />
                       <span>กลุ่ม : {groupName}</span>

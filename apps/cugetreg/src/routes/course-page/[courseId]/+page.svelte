@@ -55,6 +55,7 @@
   import { SelectTimetable } from '@cugetreg/ui/molecules/select-timetable';
   import { Footer } from '@cugetreg/ui/organisms/footer';
   import * as Sidebar from '@cugetreg/ui/organisms/sidebar';
+  import { formatDate, formatExamTime } from '@cugetreg/utils';
   import type { GenEdType } from '@cugetreg/utils/types';
   import {
     type CourseReview,
@@ -76,6 +77,26 @@
     reviewsError?: boolean;
   };
   const course = $derived(data.course);
+  const midtermExam = $derived(
+    course.midtermStart && course.midtermEnd
+      ? `${formatDate(new Date(course.midtermStart))} ${formatExamTime(
+          new Date(course.midtermStart),
+          (new Date(course.midtermEnd).getTime() -
+            new Date(course.midtermStart).getTime()) /
+            (1000 * 60 * 60),
+        )}`
+      : 'ยังไม่ประกาศ',
+  );
+  const finalExam = $derived(
+    course.finalStart && course.finalEnd
+      ? `${formatDate(new Date(course.finalStart))} ${formatExamTime(
+          new Date(course.finalStart),
+          (new Date(course.finalEnd).getTime() -
+            new Date(course.finalStart).getTime()) /
+            (1000 * 60 * 60),
+        )}`
+      : 'ยังไม่ประกาศ',
+  );
   let reviews = $state<CourseReview[]>(untrack(() => data.reviews));
   let reviewCount = $state(
     untrack(() => (data as ReviewPageData).reviewCount ?? data.reviews.length),
@@ -1123,7 +1144,7 @@
                   </p>
                 </div>
                 <p class="text-on-surface font-sarabun text-body1 mt-3 px-4">
-                  06 มี.ค. 2567 16:00 - 19:00
+                  {midtermExam}
                 </p>
               </div>
               <div>
@@ -1135,7 +1156,7 @@
                   </p>
                 </div>
                 <p class="text-on-surface font-sarabun text-body1 mt-3 px-4">
-                  01 พ.ค. 2567 16:00 - 19:00
+                  {finalExam}
                 </p>
               </div>
             </div>
@@ -1159,12 +1180,12 @@
               </div>
               <div>
                 <p class="text-on-surface font-sarabun text-body1 mt-3 px-4">
-                  06 มี.ค. 2567 16:00 - 19:00
+                  {midtermExam}
                 </p>
               </div>
               <div>
                 <p class="text-on-surface font-sarabun text-body1 mt-3 px-4">
-                  01 พ.ค. 2567 16:00 - 19:00
+                  {finalExam}
                 </p>
               </div>
             </div>

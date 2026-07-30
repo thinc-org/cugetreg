@@ -10,6 +10,7 @@
     createElementScreenshot,
     getDays,
     getLatestTime,
+    getMaxCredit,
     TIMETABLE_DEFAULT_END,
     TIMETABLE_DEFAULT_START,
   } from '$lib/utils/schedule';
@@ -57,6 +58,7 @@
   );
 
   const totalCredit = $derived(calculateCredit(cart.items));
+  const maxCredit = $derived(getMaxCredit(cart.semester));
 
   function handleTimetableScreenshot() {
     createElementScreenshot(`${cart.name}_timetable`, timetableDiv);
@@ -158,7 +160,7 @@
             <span class="text-error">เพิ่มเข้าตารางของคุณเพื่อแก้ไข</span>
           </div>
           <div class="hidden items-center lg:mx-5 lg:flex lg:justify-end">
-            หน่วยกิตรวม {totalCredit} / 22
+            หน่วยกิตรวม {totalCredit} / {maxCredit}
           </div>
         </div>
         <ExamsList {cart} {exams} />

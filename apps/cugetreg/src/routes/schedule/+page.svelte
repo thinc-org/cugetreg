@@ -190,7 +190,6 @@
     bind:show={showCreateScheduleModal}
   >
     <CreateTimetable
-      shareLink={publicCartURL}
       yearOptions={getYearOptions()}
       semesterOptions={getSemesterShortOptions()}
       onConfirm={(schedule: TimetableMetaData) => {

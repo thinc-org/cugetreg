@@ -1,5 +1,7 @@
 <script lang="ts">
   import {
+    downloadICS,
+    generateExamICS,
     getExamData,
     getExamDateOrder,
     getLatestExamTime,
@@ -11,6 +13,7 @@
   import {
     ChevronLeft,
     ChevronRight,
+    Download,
     Grid3X3,
     ListOrdered,
   } from 'lucide-svelte';
@@ -77,6 +80,11 @@
 
     return `${date.getDate()} ${months[date.getMonth()]} ${String(date.getFullYear() + 543).slice(-2)}`;
   }
+
+  function handleDownloadICS() {
+    const icsContent = generateExamICS(cart, exams);
+    downloadICS(`${cart.name}_exam-schedule`, icsContent);
+  }
 </script>
 
 <div class="flex flex-row items-center justify-between lg:justify-center">
@@ -127,6 +135,16 @@
       />
     </div>
   </div>
+</div>
+
+<div class="mt-2 flex justify-end">
+  <button
+    onclick={handleDownloadICS}
+    class="flex cursor-pointer items-center gap-1 text-sm text-[#4A70C6] transition-colors hover:text-[#3B5EAB] active:text-[#2E4A85]"
+  >
+    <Download size={16} strokeWidth={2} />
+    ตารางสอบ (.ics)
+  </button>
 </div>
 
 {#if showExamSchedule === 'List'}

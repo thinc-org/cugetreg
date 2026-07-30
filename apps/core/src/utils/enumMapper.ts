@@ -12,6 +12,8 @@ import {
   VoteType,
 } from "@/generated/prisma/client.js";
 
+import type { Faculty as ZodFaculty } from "@cugetreg/zod-schemas/constants";
+
 export function mapFacultyCode(raw: string): Faculty {
   const faculty = Faculty[`F${raw}` as keyof typeof Faculty];
 
@@ -22,8 +24,8 @@ export function mapFacultyCode(raw: string): Faculty {
   return faculty;
 }
 
-export function unmapFacultyCode(faculty: Faculty | null): string | null {
-  return faculty?.slice(1) ?? null;
+export function unmapFacultyCode(faculty: Faculty | null): ZodFaculty | null {
+  return (faculty?.slice(1) ?? null) as ZodFaculty;
 }
 
 export function mapSemester(raw: string): Semester {

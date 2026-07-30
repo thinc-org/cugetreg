@@ -18,6 +18,7 @@
     ListOrdered,
   } from 'lucide-svelte';
 
+  import { Button } from '@cugetreg/ui/atoms/button';
   import { CustomizeScrollbar } from '@cugetreg/ui/atoms/customize-scrollbar';
   import { TimeTable, TimetableCourseCard } from '@cugetreg/ui/atoms/timetable';
   import {
@@ -137,21 +138,18 @@
   </div>
 </div>
 
-<div class="mt-2 flex justify-end">
-  <button
-    onclick={handleDownloadICS}
-    class="flex cursor-pointer items-center gap-1 text-sm text-[#4A70C6] transition-colors hover:text-[#3B5EAB] active:text-[#2E4A85]"
-  >
-    <Download size={16} strokeWidth={2} />
-    ตารางสอบ (.ics)
-  </button>
-</div>
-
 {#if showExamSchedule === 'List'}
   {@render examList()}
 {:else}
   {@render examSchedule()}
 {/if}
+
+<div class="mt-4 flex justify-end">
+  <Button class="m-0 flex items-center gap-1" onclick={handleDownloadICS}>
+    <Download size={18} strokeWidth={2} />
+    ตารางสอบ (.ics)
+  </Button>
+</div>
 
 {#snippet examSchedule()}
   <div class="my-5 text-xl font-bold">Midterm</div>

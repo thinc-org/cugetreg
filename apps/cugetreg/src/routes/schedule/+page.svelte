@@ -211,6 +211,7 @@
     exitOnBackgroundClick
     centered
     dim
+    class="pt-16 md:pt-20"
     bind:show={showViewCourseModal}
   >
     <ViewCourse

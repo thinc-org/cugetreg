@@ -44,6 +44,7 @@
 		endTime = $bindable(''),
 		fitSchedule = $bindable(false),
 		noConditions = $bindable(true),
+		favoriteOnly = $bindable(false),
 		onsearch = () => {} // Callback function
 	} = $props();
 
@@ -352,7 +353,24 @@
 				<InfoCircle tooltipText="แสดงเฉพาะรายวิชาที่ไม่กำหนดเงื่อนไขในการลงทะเบียน" />
 			</span>
 		</div>
-
+		<div class="-mt-1.5 mb-4 flex items-center gap-1.5">
+			<label
+				class="flex cursor-pointer items-center text-base font-normal text-neutral-700 select-none"
+			>
+				<input
+					type="checkbox"
+					bind:checked={favoriteOnly}
+					class="peer absolute size-0 cursor-pointer opacity-0"
+				/>
+				<span
+					class="relative mr-2.5 h-[18px] w-[18px] rounded bg-neutral-200 transition-colors duration-200 peer-checked:bg-[#4f46e5] peer-hover:bg-neutral-300 after:absolute after:top-[2px] after:left-[6px] after:hidden after:h-[9px] after:w-[4px] after:rotate-45 after:border-r-2 after:border-b-2 after:border-solid after:border-white after:content-[''] peer-checked:after:block"
+				></span>
+				<span>วิชาที่ถูกใจ</span>
+			</label>
+			<span class="inline-flex items-center">
+				<InfoCircle tooltipText="แสดงเฉพาะรายวิชาที่คุณกดถูกใจไว้" />
+			</span>
+		</div>
 		<div class="mb-4">
 			<label class="mb-2 block text-xs text-neutral-400">Fit my schedule</label>
 			<div class="flex items-center gap-2.5">

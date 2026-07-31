@@ -200,19 +200,19 @@ enum StudyProgram {
   @@map("study_program")
 }
 
-/// General Education (GenEd) Course Type 
+/// General Education (GenEd) Course Type
 
 enum GenEdType {
-  NO // NOT_GENED 
-  SC // SCIENCE 
-  SO // SOCIAL 
-  HU // HUMAN 
+  NO // NOT_GENED
+  SC // SCIENCE
+  SO // SOCIAL
+  HU // HUMAN
   IN // INTERDISCIPLINARY
 
   @@map("gen_ed_type")
 }
 
-/// Day of the Week for Class Scheduling 
+/// Day of the Week for Class Scheduling
 enum DayOfWeek {
   MO
   TU
@@ -227,7 +227,7 @@ enum DayOfWeek {
   @@map("day_of_week")
 }
 
-/// Review Status 
+/// Review Status
 
 enum ReviewStatus {
   PENDING
@@ -237,7 +237,7 @@ enum ReviewStatus {
   @@map("review_status")
 }
 
-/// Vote Type 
+/// Vote Type
 
 enum VoteType {
   L // LIKE
@@ -246,7 +246,7 @@ enum VoteType {
   @@map("vote_type")
 }
 
-/// Visible 
+/// Visible
 
 enum Visible {
   PUB // PUBLIC

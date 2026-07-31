@@ -16,8 +16,8 @@
       "dependsOn": ["^build", "codegen", "prepack"],
       "outputs": ["dist/**", "storybook-static/**"]
     },
-    "check-types": {
-      "dependsOn": ["^check-types"]
+    "check": {
+      "dependsOn": ["^check", "codegen", "^prepack"]
     },
     "dev": {
       "dependsOn": ["prepack"],

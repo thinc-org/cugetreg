@@ -1,10 +1,5 @@
 name: Continuous Integration
 on:
-  push:
-    branches:
-      - main
-      - beta
-      - mvp1-dev
   pull_request:
 
 env:
@@ -40,6 +35,18 @@ jobs:
     secrets: inherit
     with:
       target: lint
+      runs-on: ${{ matrix.platform }}
+
+  check:
+    strategy:
+      matrix:
+        platform: [ubuntu-latest]
+    needs: install-deps
+
+    uses: ./.github/workflows/reusable-ci.yaml
+    secrets: inherit
+    with:
+      target: check
       runs-on: ${{ matrix.platform }}
 
   test:

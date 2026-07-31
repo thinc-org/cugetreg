@@ -218,8 +218,8 @@ export async function bulkMigrateCoursesWithSections(
 
   // 3. Build section records (with courseId) then bulk-insert, get IDs back
   type SectionMeta = {
-    record: Parameters<typeof prisma.section.create>[0]["data"];
-    classRecords: Parameters<typeof prisma.sectionClass.create>[0]["data"][];
+    record: Prisma.SectionCreateManyInput;
+    classRecords: Prisma.SectionClassCreateManyInput[];
   };
 
   const sectionMetas: SectionMeta[] = [];
@@ -277,9 +277,7 @@ export async function bulkMigrateCoursesWithSections(
     });
 
     // Build class records for this batch only, then flush
-    const batchClasses: Parameters<
-      typeof prisma.sectionClass.createMany
-    >[0]["data"] = [];
+    const batchClasses: Prisma.SectionClassCreateManyInput[] = [];
     createdSections.forEach((sec, j) => {
       for (const cls of batch[j]!.classRecords) {
         batchClasses.push({ ...cls, sectionId: sec.id });

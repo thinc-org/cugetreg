@@ -56,7 +56,7 @@ You can use this component to improve content accessibility and maintain a clean
 </Story>
 
 <Story name="Root Example">
-	<Accordion.Root class="rounded-lg border border-gray-200 bg-gray-50 p-6">
+	<Accordion.Root type="single" class="rounded-lg border border-gray-200 bg-gray-50 p-6">
 		<Accordion.Item value="item-1">
 			<Accordion.Trigger>What is the purpose of Root?</Accordion.Trigger>
 			<Accordion.Content>
@@ -68,7 +68,7 @@ You can use this component to improve content accessibility and maintain a clean
 </Story>
 
 <Story name="Item Example">
-	<Accordion.Root>
+	<Accordion.Root type="single">
 		<Accordion.Item value="item-1">
 			<Accordion.Trigger>What is an Item?</Accordion.Trigger>
 			<Accordion.Content>
@@ -87,7 +87,7 @@ You can use this component to improve content accessibility and maintain a clean
 </Story>
 
 <Story name="Trigger Example">
-	<Accordion.Root>
+	<Accordion.Root type="single">
 		<Accordion.Item value="item-1">
 			<Accordion.Trigger>What is a Trigger?</Accordion.Trigger>
 			<Accordion.Content>
@@ -99,7 +99,7 @@ You can use this component to improve content accessibility and maintain a clean
 </Story>
 
 <Story name="Content Example">
-	<Accordion.Root>
+	<Accordion.Root type="single">
 		<Accordion.Item value="item-1">
 			<Accordion.Trigger>What is Content?</Accordion.Trigger>
 			<Accordion.Content>

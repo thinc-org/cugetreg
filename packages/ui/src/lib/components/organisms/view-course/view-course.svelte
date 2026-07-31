@@ -51,8 +51,8 @@
 		<div class="">
 			<div class="mb-2 flex justify-between">
 				<div>
-					<span class="font-bold">{data.courseNo} {data.abbrName}</span>
-					<span class="text-xs font-extralight text-neutral-400">{data.credit} Credit</span>
+					<span class="text-xl font-bold">{data.courseNo} {data.abbrName}</span>
+					<span class="text-sm font-extralight text-neutral-400">{data.credit} Credit</span>
 				</div>
 				<IconButton
 					class="bg-transparent ring-0! outline-none! hover:cursor-pointer"
@@ -63,8 +63,8 @@
 			</div>
 			<div class="flex justify-between">
 				<div>
-					<div class="text-xs font-bold">{data.courseNameTh}</div>
-					<div class="text-sm font-bold">{data.courseNameEn}</div>
+					<div class="text-lg font-bold">{data.courseNameTh}</div>
+					<div class="text-lg font-bold">{data.courseNameEn}</div>
 				</div>
 				<div class="flex h-[90%] items-center justify-center">
 					<Button
@@ -136,20 +136,24 @@
 			<Table.Root>
 				<Table.Header>
 					<Table.Row>
-						<Table.Head>ผู้สอน</Table.Head>
-						<Table.Head>วันเวลาเรียน</Table.Head>
-						<Table.Head>ห้องเรียน</Table.Head>
-						<Table.Head>รูปแบบ</Table.Head>
+						<Table.Head class="text-body1">ผู้สอน</Table.Head>
+						<Table.Head class="text-body1">วันเวลาเรียน</Table.Head>
+						<Table.Head class="text-body1">ห้องเรียน</Table.Head>
+						<Table.Head class="text-body1">รูปแบบ</Table.Head>
 					</Table.Row>
 				</Table.Header>
 				<Table.Body>
 					{#if currentSection}
 						{#each currentSection.classes as cls, i (i)}
 							<Table.Row class="border-b-0">
-								<Table.Cell>{cls.professors.join(', ')}</Table.Cell>
-								<Table.Cell>{cls.dayOfWeek} {cls.periodStart} - {cls.periodEnd}</Table.Cell>
-								<Table.Cell>{cls.building ?? ''} {cls.room ?? ''}</Table.Cell>
-								<Table.Cell>{cls.type}</Table.Cell>
+								<Table.Cell class="text-body1 py-2">{cls.professors.join(', ')}</Table.Cell>
+								<Table.Cell class="text-body1 py-2"
+									>{cls.dayOfWeek} {cls.periodStart} - {cls.periodEnd}</Table.Cell
+								>
+								<Table.Cell class="text-body1 py-2"
+									>{cls.building ?? ''} {cls.room ?? ''}</Table.Cell
+								>
+								<Table.Cell class="text-body1 py-2">{cls.type}</Table.Cell>
 							</Table.Row>
 						{/each}
 					{/if}
@@ -157,17 +161,17 @@
 			</Table.Root>
 		</div>
 		<div>
-			<Table.Root>
+			<Table.Root class="table-fixed">
 				<Table.Header>
 					<Table.Row>
-						<Table.Head>สอบกางภาค</Table.Head>
-						<Table.Head>สอบปลายภาค</Table.Head>
+						<Table.Head class="text-body1 w-1/2">สอบกางภาค</Table.Head>
+						<Table.Head class="text-body1 w-1/2">สอบปลายภาค</Table.Head>
 					</Table.Row>
 				</Table.Header>
 				<Table.Body>
 					<Table.Row class="border-b-0">
-						<Table.Cell>{data.midterm ?? 'ยังไม่ประกาศ'}</Table.Cell>
-						<Table.Cell>{data.final ?? 'ยังไม่ประกาศ'}</Table.Cell>
+						<Table.Cell class="text-body1">{data.midterm ?? 'ยังไม่ประกาศ'}</Table.Cell>
+						<Table.Cell class="text-body1">{data.final ?? 'ยังไม่ประกาศ'}</Table.Cell>
 					</Table.Row>
 				</Table.Body>
 			</Table.Root>

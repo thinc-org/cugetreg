@@ -53,6 +53,31 @@ export const getCourseByNoRoute = createRoute({
   security: [{ Bearer: [] }],
 });
 
+// 1.4 get course sections (lightweight — for the review form's Section picker)
+export const getCourseSectionsRoute = createRoute({
+  method: "get",
+  path: "/{courseNo}/sections",
+  summary: "1.4 Get Course Sections",
+  request: {
+    params: CourseSchema.CourseNoParamSchema,
+    query: CourseSchema.GetCourseSectionsQuerySchema,
+  },
+  responses: {
+    200: {
+      content: {
+        "application/json": {
+          schema: CourseResponseSchema.CourseSectionsResponseSchema,
+        },
+      },
+      description: "Successfully retrieved course section numbers",
+    },
+    400: { description: "Invalid course number format" },
+    404: { description: "Course not found" },
+    500: InternalError,
+  },
+  security: [{ Bearer: [] }],
+});
+
 export const getCourseReviews = createRoute({
   method: "get",
   path: "/reviews/{courseNo}",

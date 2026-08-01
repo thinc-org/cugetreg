@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { GOOGLE_FORM_URL } from '$lib/constants';
   import { goto } from '$app/navigation';
   import { api } from '$lib/api';
 
@@ -6,6 +7,7 @@
   import { Loader2 } from 'lucide-svelte';
 
   import { Footer } from '@cugetreg/ui/organisms/footer';
+  import { resolve } from '$app/paths';
   interface Announcement {
     id: string;
     title: string;
@@ -93,9 +95,9 @@
   </div>
   <a
     class="sticky right-6 bottom-6 z-50 mt-8 mb-6 ml-auto flex w-max cursor-pointer items-center gap-1 rounded-full border-2 border-black bg-white px-2 py-1 md:gap-2 md:px-4"
-    href="https://docs.google.com/forms/d/e/1FAIpQLScH2AZyifTnBVXiJBtyzM73MReGX2vpM1_I9IWQfABMduVgsg/viewform?usp=dialog"
+    href={GOOGLE_FORM_URL}
     target="_blank"
-    rel="noopener noreferrer"
+    rel="external noopener noreferrer"
   >
     <TriangleAlert size={isMobile ? 16 : 20} strokeWidth={1.5} color="black" />
     <span class="text-[10px] text-black md:text-xs">แจ้งปัญหาการใช้งาน</span>

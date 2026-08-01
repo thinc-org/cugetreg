@@ -13,7 +13,7 @@
   import { convertUserInfo } from '$lib/utils/user';
 
   import { TriangleAlert } from '@lucide/svelte';
-  import { onMount } from 'svelte';
+  import { onMount, untrack } from 'svelte';
 
   import { Modal } from '@cugetreg/ui/atoms/modal';
   import { ConfirmDeleteSchedule } from '@cugetreg/ui/molecules/confirm-delete-schedule';
@@ -34,6 +34,7 @@
   } from '@cugetreg/zod-schemas';
 
   import type { PageProps } from './$types';
+  import { GOOGLE_FORM_URL } from '$lib/constants';
 
   interface ScheduleItem {
     id: string;
@@ -55,7 +56,7 @@
     useCartActions();
 
   const { data }: PageProps = $props();
-  let personalInfo = $state(data.user);
+  let personalInfo = $state(untrack(() => data.user));
 
   let items = $state<ScheduleItem[]>([]);
   let reviews = $state<Review[]>([]);
@@ -63,7 +64,7 @@
   let editInfoPopupVisible = $state(false);
   let itemToDelete = $state<ScheduleItem | null>(null);
   let deleteItemPopupVisible = $state(false);
-  let newDepartment = $state(personalInfo.department);
+  let newDepartment = $state(untrack(() => personalInfo.department));
   let page = $state(1);
   const limit = 10;
   let hasMoreReviews = $state(true);
@@ -301,9 +302,9 @@
   </Modal>
   <a
     class="fixed right-6 bottom-6 z-50 inline-flex cursor-pointer items-center gap-1 rounded-full border-2 border-black px-2 py-1 md:gap-2 md:px-4"
-    href="https://docs.google.com/forms/d/e/1FAIpQLScH2AZyifTnBVXiJBtyzM73MReGX2vpM1_I9IWQfABMduVgsg/viewform?usp=dialog"
+    href={GOOGLE_FORM_URL}
     target="_blank"
-    rel="noopener noreferrer"
+    rel="external noopener noreferrer"
   >
     <TriangleAlert size={isMobile ? 16 : 20} strokeWidth={1.5} color="black" />
     <span class="text-[10px] text-black md:text-xs">แจ้งปัญหาการใช้งาน</span>

@@ -6,6 +6,7 @@
   import { Instagram } from '@cugetreg/ui/logo/instagram';
   import { GitHubMark } from '@cugetreg/ui/logo/vendor';
   import { Footer } from '@cugetreg/ui/organisms/footer';
+  import { GOOGLE_FORM_URL } from '$lib/constants';
 </script>
 
 <div class="flex justify-center py-12">
@@ -139,7 +140,11 @@
 
     <QuestionAnswer question="ติดต่อทีมงาน">
       สามารถแจ้งปัญหาขัดข้องเกี่ยวกับการใช้งานเว็บไซต์ ข้อมูลที่ไม่ถูกต้อง
-      หรือข้อเสนอแนะต่าง ๆ ได้ทาง <a class="link">ฟอร์มแจ้งปัญหา</a>
+      หรือข้อเสนอแนะต่าง ๆ ได้ทาง <a
+        class="link"
+        href={GOOGLE_FORM_URL}
+        rel="external">ฟอร์มแจ้งปัญหา</a
+      >
       ที่มุมบนขวาของหน้าเว็บ หากต้องการติดต่อสอบถามเกี่ยวกับเว็บไซต์ CU Get Reg หรือติดต่อชมรม
       Thinc. สามารถสอบถามทาง
       <a href="https://www.facebook.com/ThailandIncubator" class="link"
@@ -175,7 +180,7 @@
 
 <Footer />
 
-<style>
+<style lang="postcss">
   @reference "$lib/styles/app.css";
 
   .link {

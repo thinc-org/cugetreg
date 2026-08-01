@@ -1,7 +1,8 @@
 <script lang="ts">
-	import { BookOpen, BookPlus, ChevronDown, LoaderCircle, Trash2 } from '@lucide/svelte';
-	import * as Select from '@cugetreg/ui/molecules/select';
+	import { BookOpen, BookPlus, LoaderCircle, Trash2 } from '@lucide/svelte';
 	import { onMount } from 'svelte';
+
+	import * as Select from '../../molecules/select/index.js';
 
 	import { Switch } from '../../atoms/switch';
 
@@ -115,20 +116,22 @@
 		</div>
 	{/if}
 	{#if !loading && items.length}
-			<Select.Root type="single" bind:value={selected} onValueChange={() => (switchingFilter = true)}>
-				<Select.Trigger class="mt-4 rounded-2xl px-6 py-4 relative border text-body1 text-on-surface w-full min-h-14 sm:min-h-16 appearance-none bg-transparent font-semibold underline underline-offset-4 focus:outline-none">
-					{selected}
-				</Select.Trigger>
-				<Select.Content role="listbox" sideOffset={4}>
-					<Select.Group class="max-h-44">
-						{#each filters as name (name)}
-							<Select.Item value={name}>
-								<Select.Item value={name} label={name} />
-							</Select.Item>
-						{/each}
-					</Select.Group>
-				</Select.Content>
-			</Select.Root>
+		<Select.Root type="single" bind:value={selected} onValueChange={() => (switchingFilter = true)}>
+			<Select.Trigger
+				class="text-body1 text-on-surface relative mt-4 min-h-14 w-full appearance-none rounded-2xl border bg-transparent px-6 py-4 font-semibold underline underline-offset-4 focus:outline-none sm:min-h-16"
+			>
+				{selected}
+			</Select.Trigger>
+			<Select.Content role="listbox" sideOffset={4}>
+				<Select.Group class="max-h-44">
+					{#each filters as name (name)}
+						<Select.Item value={name}>
+							<Select.Item value={name} label={name} />
+						</Select.Item>
+					{/each}
+				</Select.Group>
+			</Select.Content>
+		</Select.Root>
 	{/if}
 	{#if !loading && !items.length}
 		<div class="flex items-center justify-center rounded-xl p-4">

@@ -277,6 +277,8 @@
         }
         if (startTime) params.append('timeStart', startTime);
         if (endTime) params.append('timeEnd', endTime);
+      } else {
+        params.append('noPrereq', 'true');
       }
 
       if (fitSchedule) {
@@ -903,7 +905,7 @@
               class="text-warning-hover shrink-0"
             />
             <div>
-              <p class="font-sarabun text-[10px] text-[#353745]">
+              <p class="font-sans text-[10px] text-[#353745]">
                 ข้อมูลอาจมีการเปลี่ยนแปลง<br />
                 โปรดตรวจสอบข้อมูลกับสำนักทะเบียนทุกครั้งก่อนลงทะเบียนเรียน<br />
                 Update ข้อมูลล่าสุด&nbsp;&nbsp;วันที่ 20/07/68&nbsp;&nbsp;เวลา 12.00

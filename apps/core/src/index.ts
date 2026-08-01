@@ -1,3 +1,4 @@
+import { env } from "@/env.js";
 import type { Variables } from "@/lib/auth.js";
 import activity from "@/routes/activity.js";
 import admin from "@/routes/admin.js";
@@ -27,7 +28,7 @@ const app = new OpenAPIHono<{ Variables: Variables }>().basePath("/api/v1");
 
 const ALLOWED_ORIGINS = [
   "http://localhost:5173",
-  ...(process.env.BETTER_AUTH_TRUSTED_ORIGINS?.split(",")
+  ...(env.BETTER_AUTH_TRUSTED_ORIGINS?.split(",")
     .map((o) => o.trim())
     .filter(Boolean) ?? []),
 ];

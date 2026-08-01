@@ -15,7 +15,7 @@
 
 <div class={cn('my-5 flex flex-1 flex-col gap-2 md:flex-row md:gap-6', className)}>
 	<div class="flex-1 text-lg font-bold">{question}</div>
-	<div class="font-sarabun flex-1 wrap-break-word">
+	<div class="flex-1 font-sans wrap-break-word">
 		{@render children?.()}
 	</div>
 </div>

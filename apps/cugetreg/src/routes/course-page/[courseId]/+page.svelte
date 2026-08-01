@@ -55,11 +55,13 @@
   import { SelectTimetable } from '@cugetreg/ui/molecules/select-timetable';
   import { Footer } from '@cugetreg/ui/organisms/footer';
   import * as Sidebar from '@cugetreg/ui/organisms/sidebar';
+  import { formatDate, formatExamTime } from '@cugetreg/utils';
   import type { GenEdType } from '@cugetreg/utils/types';
   import {
     type CourseReview,
     type CourseReviewFacet,
     CourseReviewResponseSchema,
+    CourseSectionsResponseSchema,
     type Semester,
     type SubmitReviewBodySchema,
     SubmitReviewResponseSchema,
@@ -76,6 +78,26 @@
     reviewsError?: boolean;
   };
   const course = $derived(data.course);
+  const midtermExam = $derived(
+    course.midtermStart && course.midtermEnd
+      ? `${formatDate(new Date(course.midtermStart))} ${formatExamTime(
+          new Date(course.midtermStart),
+          (new Date(course.midtermEnd).getTime() -
+            new Date(course.midtermStart).getTime()) /
+            (1000 * 60 * 60),
+        )}`
+      : 'ยังไม่ประกาศ',
+  );
+  const finalExam = $derived(
+    course.finalStart && course.finalEnd
+      ? `${formatDate(new Date(course.finalStart))} ${formatExamTime(
+          new Date(course.finalStart),
+          (new Date(course.finalEnd).getTime() -
+            new Date(course.finalStart).getTime()) /
+            (1000 * 60 * 60),
+        )}`
+      : 'ยังไม่ประกาศ',
+  );
   let reviews = $state<CourseReview[]>(untrack(() => data.reviews));
   let reviewCount = $state(
     untrack(() => (data as ReviewPageData).reviewCount ?? data.reviews.length),
@@ -103,6 +125,8 @@
 
   let selectedYear = $state(years[0]);
   let selectedTerm = $state(terms[0]);
+  let writeReviewSectionOptions = $state<number[]>([]);
+  let writeReviewSectionNo = $state<string | null>(null);
   let reviewRating = $state(1);
   let reviewContent = $state('');
   let selectedSection = $state<HTMLElement>();
@@ -133,10 +157,43 @@
     reviewRating = isHalf ? value - 0.5 : value;
   };
 
+  // The write-review form lets you pick a year/semester independently of
+  // the page's currently-loaded course data (which is bound to the URL's
+  // academicYear/semester), so the Section picker needs its own fetch
+  // whenever the form's year/term changes.
+  $effect(() => {
+    const academicYear = Number(selectedYear);
+    const semester = thaiLabelToSemesterMapper(selectedTerm);
+    const studyProgram = course.studyProgram;
+
+    void api
+      .get(`/courses/${course.courseNo}/sections`, {
+        params: { studyProgram, academicYear, semester },
+      })
+      .then((response) => {
+        const { sections } = CourseSectionsResponseSchema.parse(response.data);
+        writeReviewSectionOptions = sections;
+        if (
+          writeReviewSectionNo === null ||
+          !sections.includes(Number(writeReviewSectionNo))
+        ) {
+          writeReviewSectionNo =
+            sections.length > 0 ? String(sections[0]) : null;
+        }
+        return;
+      })
+      .catch(() => {
+        writeReviewSectionOptions = [];
+        writeReviewSectionNo = null;
+      });
+  });
+
   const reviewYearPlaceholder = 'ปีการศึกษา';
   const reviewSemesterPlaceholder = 'ภาคเรียน';
+  const reviewSectionPlaceholder = 'เซค';
   let selectedReviewYear = $state(reviewYearPlaceholder);
   let selectedReviewSemester = $state<Semester | null>(null);
+  let selectedReviewSection = $state<number | null>(null);
   const reviewsPerPage = 4;
   let reviewsPage = $state(1);
   let reviewSubmitting = $state(false);
@@ -147,6 +204,8 @@
   );
 
   const isReviewSemesterPlaceholder = $derived(selectedReviewSemester === null);
+
+  const isReviewSectionPlaceholder = $derived(selectedReviewSection === null);
 
   let activeModal = $state<'selected' | null>(null);
   let reviewEditor = $state<MarkdownEditor>();
@@ -258,6 +317,32 @@
     getReviewSemesters(selectedReviewYear),
   );
 
+  function getReviewSections(
+    reviewYear: string,
+    reviewSemester: Semester | null,
+  ) {
+    return Array.from(
+      new Set(
+        reviewFacets
+          .filter((facet) => {
+            if (
+              reviewYear !== reviewYearPlaceholder &&
+              facet.academicYear !== Number(reviewYear)
+            )
+              return false;
+            if (reviewSemester !== null && facet.semester !== reviewSemester)
+              return false;
+            return facet.sectionNo !== null;
+          })
+          .map((facet) => facet.sectionNo as number),
+      ),
+    ).sort((a, b) => a - b);
+  }
+
+  const reviewSectionOptions = $derived(
+    getReviewSections(selectedReviewYear, selectedReviewSemester),
+  );
+
   function setSelectedReviewYear(value: string) {
     selectedReviewYear = value;
     if (
@@ -266,6 +351,14 @@
     ) {
       selectedReviewSemester = null;
     }
+    if (
+      selectedReviewSection !== null &&
+      !getReviewSections(value, selectedReviewSemester).includes(
+        selectedReviewSection,
+      )
+    ) {
+      selectedReviewSection = null;
+    }
     reviewsPage = 1;
     void refreshReviews({ targetPage: 1 });
   }
@@ -273,6 +366,21 @@
   function setSelectedReviewSemester(value: string) {
     selectedReviewSemester =
       value === reviewSemesterPlaceholder ? null : (value as Semester);
+    if (
+      selectedReviewSection !== null &&
+      !getReviewSections(selectedReviewYear, selectedReviewSemester).includes(
+        selectedReviewSection,
+      )
+    ) {
+      selectedReviewSection = null;
+    }
+    reviewsPage = 1;
+    void refreshReviews({ targetPage: 1 });
+  }
+
+  function setSelectedReviewSection(value: string) {
+    selectedReviewSection =
+      value === reviewSectionPlaceholder ? null : Number(value);
     reviewsPage = 1;
     void refreshReviews({ targetPage: 1 });
   }
@@ -297,6 +405,9 @@
           ...(selectedReviewSemester && {
             semester: selectedReviewSemester,
           }),
+          ...(selectedReviewSection !== null && {
+            sectionNo: selectedReviewSection,
+          }),
         },
       });
       const result = CourseReviewResponseSchema.parse(response.data);
@@ -317,6 +428,7 @@
         ) {
           selectedReviewYear = reviewYearPlaceholder;
           selectedReviewSemester = null;
+          selectedReviewSection = null;
           filtersChanged = true;
         } else if (
           selectedReviewSemester !== null &&
@@ -325,6 +437,16 @@
           )
         ) {
           selectedReviewSemester = null;
+          selectedReviewSection = null;
+          filtersChanged = true;
+        } else if (
+          selectedReviewSection !== null &&
+          !getReviewSections(
+            selectedReviewYear,
+            selectedReviewSemester,
+          ).includes(selectedReviewSection)
+        ) {
+          selectedReviewSection = null;
           filtersChanged = true;
         }
 
@@ -412,6 +534,9 @@
       const patchPayload = {
         academicYear: Number(selectedYear),
         semester: thaiLabelToSemesterMapper(selectedTerm),
+        ...(writeReviewSectionNo !== null && {
+          sectionNo: Number(writeReviewSectionNo),
+        }),
         rating: reviewRating * 2,
         content: reviewContent,
       };
@@ -438,6 +563,9 @@
       studyProgram: course.studyProgram,
       academicYear: Number(selectedYear),
       semester: thaiLabelToSemesterMapper(selectedTerm),
+      ...(writeReviewSectionNo !== null && {
+        sectionNo: Number(writeReviewSectionNo),
+      }),
       rating: reviewRating * 2,
       content: reviewContent,
     };
@@ -485,6 +613,8 @@
     selectedYear = String(review.academicYear);
     selectedTerm =
       SEMESTER_LABEL_LONG[review.semester as keyof typeof SEMESTER_LABEL_LONG];
+    writeReviewSectionNo =
+      review.sectionNo != null ? String(review.sectionNo) : null;
     editingReviewId = review.id;
     scrollToSection(reviewSection);
     reviewEditor?.focus();
@@ -523,6 +653,7 @@
     reviewsLoading = false;
     selectedReviewYear = reviewYearPlaceholder;
     selectedReviewSemester = null;
+    selectedReviewSection = null;
     reviewsPage = 1;
   });
 
@@ -879,7 +1010,7 @@
               class="mt-5 flex items-start gap-2 bg-amber-50 px-3 py-2 text-sm"
             >
               <AlertTriangle size={16} class="mt-0.5 text-amber-900" />
-              <span class="font-sarabun text-neutral-900">
+              <span class="font-sans text-neutral-900">
                 ข้อมูลคำอธิบายรายวิชาที่แสดงไม่ได้เป็นข้อมูลล่าสุด
                 อาจมีการเปลี่ยนแปลงได้ โปรดตรวจสอบกับรายวิชาที่จัดอีกครั้ง
               </span>
@@ -898,7 +1029,7 @@
                     คำอธิบายรายวิชา (ภาษาไทย)
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body1 mt-3 px-4">
+                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
                   {course.courseInfo.courseDescTh}
                 </p>
               </div>
@@ -910,7 +1041,7 @@
                     คำอธิบายรายวิชา (ภาษาอังกฤษ)
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body1 mt-3 px-4">
+                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
                   {course.courseInfo.courseDescEn}
                 </p>
               </div>
@@ -934,12 +1065,12 @@
                 </div>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body1 mt-3 px-4">
+                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
                   {course.courseInfo.courseDescTh}
                 </p>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body1 mt-3 px-4">
+                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
                   {course.courseInfo.courseDescEn}
                 </p>
               </div>
@@ -954,7 +1085,7 @@
                     คณะ
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body1 mt-3 px-4">
+                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
                   {faculties[course.courseInfo.faculty ?? '']?.th ?? '-'}
                 </p>
               </div>
@@ -966,7 +1097,7 @@
                     ภาควิชา/กลุ่มวิชา/สาขาวิชา
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body1 mt-3 px-4">
+                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
                   {course.courseInfo.department}
                 </p>
               </div>
@@ -990,12 +1121,12 @@
                 </div>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body1 mt-3 px-4">
+                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
                   {faculties[course.courseInfo.faculty ?? '']?.th ?? '-'}
                 </p>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body1 mt-3 px-4">
+                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
                   {course.courseInfo.department}
                 </p>
               </div>
@@ -1010,7 +1141,7 @@
                     รูปแบบรายวิชา
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body1 mt-3 px-4">
+                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
                   {course.courseInfo.creditHours?.split(' ') ?? '-'}
                 </p>
               </div>
@@ -1022,7 +1153,7 @@
                     หน่วยกิต
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body1 mt-3 px-4">
+                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
                   {course.courseInfo.credit}
                 </p>
               </div>
@@ -1046,12 +1177,12 @@
                 </div>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body1 mt-3 px-4">
+                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
                   {course.courseInfo.creditHours?.split(' ') ?? '-'}
                 </p>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body1 mt-3 px-4">
+                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
                   {course.courseInfo.credit}
                 </p>
               </div>
@@ -1066,7 +1197,7 @@
                     เงื่อนไขรายวิชา
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body1 mt-3 px-4">
+                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
                   -
                 </p>
               </div>
@@ -1078,7 +1209,7 @@
                     วิธีการวัดผล
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body1 mt-3 px-4">
+                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
                   Letter Grade
                 </p>
               </div>
@@ -1102,12 +1233,12 @@
                 </div>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body1 mt-3 px-4">
+                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
                   -
                 </p>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body1 mt-3 px-4">
+                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
                   Letter Grade
                 </p>
               </div>
@@ -1122,8 +1253,8 @@
                     สอบกลางภาค
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body1 mt-3 px-4">
-                  06 มี.ค. 2567 16:00 - 19:00
+                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                  {midtermExam}
                 </p>
               </div>
               <div>
@@ -1134,8 +1265,8 @@
                     สอบปลายภาค
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body1 mt-3 px-4">
-                  01 พ.ค. 2567 16:00 - 19:00
+                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                  {finalExam}
                 </p>
               </div>
             </div>
@@ -1158,13 +1289,13 @@
                 </div>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body1 mt-3 px-4">
-                  06 มี.ค. 2567 16:00 - 19:00
+                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                  {midtermExam}
                 </p>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body1 mt-3 px-4">
-                  01 พ.ค. 2567 16:00 - 19:00
+                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                  {finalExam}
                 </p>
               </div>
             </div>
@@ -1188,7 +1319,7 @@
                 >
                   <Accordion.Trigger class="hover:no-underline">
                     <div
-                      class="flex items-center gap-2 text-sm font-medium text-[#4A70C6]"
+                      class="flex items-center gap-2 text-xs font-medium text-[#4A70C6] sm:text-base"
                     >
                       <Check size={16} />
                       <span>กลุ่ม : {groupName}</span>
@@ -1277,6 +1408,32 @@
                           <Select.Group>
                             {#each terms as term (term)}
                               <Select.Item value={term} label={term} />
+                            {/each}
+                          </Select.Group>
+                        </Select.Content>
+                      </Select.Root>
+                    </div>
+                    <div>
+                      <Select.Root
+                        type="single"
+                        value={writeReviewSectionNo ?? ''}
+                        onValueChange={(v) => (writeReviewSectionNo = v)}
+                        disabled={writeReviewSectionOptions.length === 0}
+                      >
+                        <Select.Trigger
+                          class="text-on-surface h-9 w-[120px] rounded-lg border border-[#D6D7E1] bg-white px-4 text-sm font-medium md:h-12 md:w-[180px] md:text-base"
+                        >
+                          {writeReviewSectionNo
+                            ? `เซค ${writeReviewSectionNo}`
+                            : 'ไม่มีเซค'}
+                        </Select.Trigger>
+                        <Select.Content role="listbox">
+                          <Select.Group>
+                            {#each writeReviewSectionOptions as sectionNo (sectionNo)}
+                              <Select.Item
+                                value={String(sectionNo)}
+                                label={`เซค ${sectionNo}`}
+                              />
                             {/each}
                           </Select.Group>
                         </Select.Content>
@@ -1405,6 +1562,42 @@
                     </Select.Group>
                   </Select.Content>
                 </Select.Root>
+                <Select.Root
+                  type="single"
+                  bind:value={
+                    () =>
+                      selectedReviewSection !== null
+                        ? String(selectedReviewSection)
+                        : reviewSectionPlaceholder,
+                    setSelectedReviewSection
+                  }
+                >
+                  <Select.Trigger
+                    class={`h-9 w-[120px] rounded-xl px-4 text-sm ${
+                      isReviewSectionPlaceholder
+                        ? 'text-on-surface/60'
+                        : 'text-on-surface'
+                    }`}
+                  >
+                    {selectedReviewSection !== null
+                      ? `เซค ${selectedReviewSection}`
+                      : reviewSectionPlaceholder}
+                  </Select.Trigger>
+                  <Select.Content role="listbox">
+                    <Select.Group>
+                      <Select.Item
+                        value={reviewSectionPlaceholder}
+                        label={reviewSectionPlaceholder}
+                      />
+                      {#each reviewSectionOptions as sectionNo (sectionNo)}
+                        <Select.Item
+                          value={String(sectionNo)}
+                          label={`เซค ${sectionNo}`}
+                        />
+                      {/each}
+                    </Select.Group>
+                  </Select.Content>
+                </Select.Root>
               </div>
             </div>
             {#if reviewsLoading}
@@ -1460,6 +1653,7 @@
                     rating={review.rating / 2}
                     semester={SEMESTER_LABEL_LONG[review.semester]}
                     year={review.academicYear}
+                    section={review.sectionNo}
                     content={review.content}
                     likesCount={review.stats.likeCount}
                     dislikesCount={review.stats.dislikeCount}

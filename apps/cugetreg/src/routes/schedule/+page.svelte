@@ -1,5 +1,6 @@
 <script lang="ts">
   import { browser } from '$app/environment';
+  import { useSession } from '$lib/auth-client';
   import AppSidebar from '$lib/components/app-sidebar.svelte';
   import ExamsList from '$lib/components/exams-list.svelte';
   import SelectedCourse from '$lib/components/selected-course.svelte';
@@ -19,6 +20,7 @@
     createElementScreenshot,
     getDays,
     getLatestTime,
+    getMaxCredit,
     getViewCourseData,
     TIMETABLE_DEFAULT_END,
     TIMETABLE_DEFAULT_START,
@@ -64,6 +66,7 @@
   } = useCartActions();
 
   const cartPromise = getContext<CartPromise>(CART_PROMISE_KEY);
+  const session = useSession();
 
   // ================ STATES ================
 
@@ -98,6 +101,12 @@
   );
 
   const totalCredit = $derived(calculateCredit($userCart.currentCart.items));
+  const maxCredit = $derived(
+    getMaxCredit(
+      $userCart.currentCart.semester,
+      $session.data?.user.email.split('@')[0],
+    ),
+  );
   const publicCartURL = $derived(
     browser
       ? `${window.location.host}/schedule/${$userCart.currentCart.id}`
@@ -202,6 +211,7 @@
     exitOnBackgroundClick
     centered
     dim
+    class="pt-16 md:pt-20"
     bind:show={showViewCourseModal}
   >
     <ViewCourse
@@ -389,7 +399,7 @@
           <div
             class="hidden lg:mx-5 lg:mb-5 lg:flex lg:justify-end lg:text-lg lg:font-bold"
           >
-            หน่วยกิตรวม {totalCredit} / 22
+            หน่วยกิตรวม {totalCredit} / {maxCredit}
           </div>
 
           <div

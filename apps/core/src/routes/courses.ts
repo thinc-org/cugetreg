@@ -4,14 +4,12 @@ import {
   addFavoriteCourse,
   getCourseByNoRoute,
   getCourseReviews,
+  getCourseSectionsRoute,
   getCoursesRoute,
   getFavoriteCourses,
   removeFavoriteCourse,
 } from "@/routes_define/courses.routes.js";
-import {
-  courseServices,
-  getCourseReviewByCourseNo,
-} from "@/services/coursesService.js";
+import { courseServices } from "@/services/coursesService.js";
 
 import { OpenAPIHono } from "@hono/zod-openapi";
 
@@ -123,16 +121,37 @@ courses
       return c.json({ error: "INTERNAL_SERVER_ERROR" }, 500);
     }
   })
+  // 1.6. Get Course Sections (lightweight — Section picker on the review form)
+  .openapi(getCourseSectionsRoute, async (c) => {
+    try {
+      const { courseNo } = c.req.valid("param");
+      const { studyProgram, academicYear, semester } = c.req.valid("query");
+
+      const courseSections = await courseServices.getCourseSections(courseNo, {
+        studyProgram,
+        academicYear,
+        semester,
+      });
+
+      return c.json(courseSections, 200);
+    } catch (error) {
+      console.error(error);
+      if (error instanceof Error) {
+        if (error.message === "Course not found") {
+          return c.json({ message: "Course not found" }, 404);
+        }
+      }
+      return c.json({ error: "INTERNAL_SERVER_ERROR" }, 500);
+    }
+  })
+  // 1.7. Get Course Reviews
   .openapi(getCourseReviews, async (c) => {
     try {
       const { courseNo } = c.req.valid("param");
       const query = c.req.valid("query");
       const userId = c.get("user")?.id;
-      const { reviews, count, facets } = await getCourseReviewByCourseNo(
-        courseNo,
-        query,
-        userId,
-      );
+      const { reviews, count, facets } =
+        await courseServices.getCourseReviewByCourseNo(courseNo, query, userId);
       return c.json({
         reviews,
         page: query.page,

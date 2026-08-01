@@ -12,6 +12,7 @@ import type {
 } from "@cugetreg/zod-schemas/courses";
 import type { CourseReview } from "@cugetreg/zod-schemas/courses-response";
 
+//1.1 Query Course
 async function queryCourse(query: GetCourseQuerySchema, userId?: string) {
   const {
     studyProgram,
@@ -29,10 +30,10 @@ async function queryCourse(query: GetCourseQuerySchema, userId?: string) {
     timeStart,
     timeEnd,
     noPrereq,
-    favorite,
-    fitCartId,
     creditMin,
     creditMax,
+    favorite,
+    fitCartId,
   } = query;
 
   const selectedGenEdTypes =
@@ -150,163 +151,183 @@ async function queryCourse(query: GetCourseQuerySchema, userId?: string) {
   return { data, total };
 }
 
-export const courseServices = {
-  //1.1 Query Course
-  queryCourse,
-
-  //1.2 get user's favorite courses
-  getFavoriteCourses: async (
-    query: GetCourseDetailQuerySchema,
-    userId: string,
-  ) => {
-    const { studyProgram, academicYear, semester } = query;
-    const courses = await prisma.courseInfo.findMany({
-      where: {
-        courseFavorites: {
-          some: {
-            userId,
-          },
-        },
-        courses: {
-          some: {
-            academicYear,
-            semester,
-            studyProgram,
-          },
+//1.2 get user's favorite courses
+async function getFavoriteCourses(
+  query: GetCourseDetailQuerySchema,
+  userId: string,
+) {
+  const { studyProgram, academicYear, semester } = query;
+  const courses = await prisma.courseInfo.findMany({
+    where: {
+      courseFavorites: {
+        some: {
+          userId,
         },
       },
-      select: {
-        courseNo: true,
-        abbrName: true,
-        faculty: true,
-        department: true,
-        credit: true,
-        creditHours: true,
-        courses: {
-          select: {
-            genEdType: true,
-            courseCondition: true,
-            academicYear: true,
-            semester: true,
-            studyProgram: true,
-          },
-          where: {
-            academicYear,
-            semester,
-            studyProgram,
-          },
+      courses: {
+        some: {
+          academicYear,
+          semester,
+          studyProgram,
         },
       },
-    });
+    },
+    select: {
+      courseNo: true,
+      abbrName: true,
+      faculty: true,
+      department: true,
+      credit: true,
+      creditHours: true,
+      courses: {
+        select: {
+          genEdType: true,
+          courseCondition: true,
+          academicYear: true,
+          semester: true,
+          studyProgram: true,
+        },
+        where: {
+          academicYear,
+          semester,
+          studyProgram,
+        },
+      },
+    },
+  });
 
-    const favoriteCourses = courses.map((course) => {
-      return {
-        courseNo: course.courseNo,
-        abbrName: course.abbrName,
-        faculty: course.faculty,
-        department: course.department,
-        credit: course.credit.toString(),
-        creditHours: course.creditHours,
-        genEdType: course.courses[0].genEdType,
-        courseCondition: course.courses[0].courseCondition,
-        academicYear: course.courses[0].academicYear,
-        studyProgram: course.courses[0].studyProgram,
-        semester: course.courses[0].semester,
-      };
-    });
-
+  const favoriteCourses = courses.map((course) => {
     return {
-      total: favoriteCourses.length,
-      courses: favoriteCourses,
+      courseNo: course.courseNo,
+      abbrName: course.abbrName,
+      faculty: course.faculty,
+      department: course.department,
+      credit: course.credit.toString(),
+      creditHours: course.creditHours,
+      genEdType: course.courses[0].genEdType,
+      courseCondition: course.courses[0].courseCondition,
+      academicYear: course.courses[0].academicYear,
+      studyProgram: course.courses[0].studyProgram,
+      semester: course.courses[0].semester,
     };
-  },
+  });
 
-  //1.3 Get Course Detail
-  getCourseDetail: async (
-    query: GetCourseDetailQuerySchema,
-    courseNo: string,
-  ) => {
-    const { studyProgram, academicYear, semester } = query;
+  return {
+    total: favoriteCourses.length,
+    courses: favoriteCourses,
+  };
+}
 
-    const course = await prisma.course.findFirst({
-      where: {
-        courseNo,
-        studyProgram: mapStudyProgram(studyProgram),
-        academicYear,
-        semester: mapSemester(semester),
-      },
-      include: {
-        courseInfo: true,
-        sections: { include: { classes: true } },
-      },
-    });
+//1.3 Get Course Detail
+async function getCourseDetail(
+  query: GetCourseDetailQuerySchema,
+  courseNo: string,
+) {
+  const { studyProgram, academicYear, semester } = query;
 
-    if (!course) {
-      throw new Error("Course not found");
-    }
+  const course = await prisma.course.findFirst({
+    where: {
+      courseNo,
+      studyProgram: mapStudyProgram(studyProgram),
+      academicYear,
+      semester: mapSemester(semester),
+    },
+    include: {
+      courseInfo: true,
+      sections: { include: { classes: true } },
+    },
+  });
 
-    return {
-      course,
-    };
-  },
+  if (!course) {
+    throw new Error("Course not found");
+  }
 
-  //1.4 Add Favorite Course
-  addFavoriteCourse: async (courseNo: string, userId: string) => {
-    const courseInfo = await prisma.courseInfo.findUnique({
-      where: {
-        courseNo,
-      },
-    });
+  return {
+    course,
+  };
+}
 
-    if (!courseInfo) {
-      throw new Error("COURSE_NOT_FOUND");
-    }
+//1.4 Add Favorite Course
+async function addFavoriteCourse(courseNo: string, userId: string) {
+  const courseInfo = await prisma.courseInfo.findUnique({
+    where: {
+      courseNo,
+    },
+  });
 
-    await prisma.courseFavorite.create({
-      data: {
-        courseNo,
-        userId,
-      },
-    });
+  if (!courseInfo) {
+    throw new Error("COURSE_NOT_FOUND");
+  }
 
-    return {
-      abbrName: courseInfo.abbrName,
-      courseNameEn: courseInfo.courseNameEn,
-      courseNameTh: courseInfo.courseNameTh,
-      faculty: courseInfo.faculty,
-      department: courseInfo.department,
-      credit: courseInfo.credit,
-      creditHours: courseInfo.creditHours,
-    };
-  },
+  await prisma.courseFavorite.create({
+    data: {
+      courseNo,
+      userId,
+    },
+  });
 
-  //1.5 Remove Favorite Course
-  removeFavoriteCourse: async (courseNo: string, userId: string) => {
-    const courseInfo = await prisma.courseInfo.findUnique({
-      where: {
-        courseNo,
-      },
-    });
+  return {
+    abbrName: courseInfo.abbrName,
+    courseNameEn: courseInfo.courseNameEn,
+    courseNameTh: courseInfo.courseNameTh,
+    faculty: courseInfo.faculty,
+    department: courseInfo.department,
+    credit: courseInfo.credit,
+    creditHours: courseInfo.creditHours,
+  };
+}
 
-    if (!courseInfo) {
-      throw new Error("COURSE_NOT_FOUND");
-    }
+//1.5 Remove Favorite Course
+async function removeFavoriteCourse(courseNo: string, userId: string) {
+  const courseInfo = await prisma.courseInfo.findUnique({
+    where: {
+      courseNo,
+    },
+  });
 
-    await prisma.courseFavorite.deleteMany({
-      where: {
-        userId,
-        courseNo,
-      },
-    });
-  },
-};
+  if (!courseInfo) {
+    throw new Error("COURSE_NOT_FOUND");
+  }
 
-export async function getCourseReviewByCourseNo(
+  await prisma.courseFavorite.deleteMany({
+    where: {
+      userId,
+      courseNo,
+    },
+  });
+}
+
+//1.6 Get Course Sections
+async function getCourseSections(
+  courseNo: string,
+  query: GetCourseDetailQuerySchema,
+) {
+  const { studyProgram, academicYear, semester } = query;
+
+  const course = await prisma.course.findFirst({
+    where: {
+      courseNo,
+      studyProgram: mapStudyProgram(studyProgram),
+      academicYear,
+      semester: mapSemester(semester),
+    },
+    select: {
+      sections: { select: { sectionNo: true } },
+    },
+  });
+  if (!course) {
+    throw new Error("Course not found");
+  }
+  return { sections: course.sections.map((s) => s.sectionNo) };
+}
+
+async function getCourseReviewByCourseNo(
   courseNo: string,
   query: GetCourseReviewQuerySchema,
   userId?: string,
 ) {
-  const { academicYear, includeFacets, limit, page, semester } = query;
+  const { academicYear, includeFacets, limit, page, semester, sectionNo } =
+    query;
   const courseInfo = await prisma.courseInfo.findUnique({
     where: { courseNo },
     select: { courseNo: true },
@@ -319,6 +340,7 @@ export async function getCourseReviewByCourseNo(
   const filters: Prisma.ReviewWhereInput = {
     ...(academicYear && { academicYear }),
     ...(semester && { semester }),
+    ...(sectionNo !== undefined && { sectionNo }),
   };
   const reviewSelect = {
     id: true,
@@ -327,6 +349,7 @@ export async function getCourseReviewByCourseNo(
     studyProgram: true,
     academicYear: true,
     semester: true,
+    sectionNo: true,
     content: true,
     user: {
       select: {
@@ -371,7 +394,7 @@ export async function getCourseReviewByCourseNo(
       const approvedCount = await tx.review.count({ where: approvedWhere });
       const facetGroups = includeFacets
         ? await tx.review.groupBy({
-            by: ["academicYear", "semester"],
+            by: ["academicYear", "semester", "sectionNo"],
             where: userId
               ? {
                   courseNo,
@@ -455,8 +478,19 @@ export async function getCourseReviewByCourseNo(
   const facets = facetGroups?.map((facet) => ({
     academicYear: facet.academicYear,
     semester: facet.semester,
+    sectionNo: facet.sectionNo,
     count: facet._count._all,
   }));
 
   return { reviews: resultReviews, count, facets };
 }
+
+export const courseServices = {
+  queryCourse,
+  getFavoriteCourses,
+  getCourseDetail,
+  addFavoriteCourse,
+  removeFavoriteCourse,
+  getCourseSections,
+  getCourseReviewByCourseNo,
+};

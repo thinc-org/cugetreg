@@ -27,6 +27,24 @@ export const reviewService = {
         throw new Error("COURSE_NOT_FOUND");
       }
 
+      if (newReview.sectionNo !== undefined) {
+        const section = await tx.section.findFirst({
+          where: {
+            sectionNo: newReview.sectionNo,
+            course: {
+              courseNo: newReview.courseNo,
+              studyProgram: mapStudyProgram(newReview.studyProgram),
+              academicYear: newReview.academicYear,
+              semester: mapSemester(newReview.semester),
+            },
+          },
+        });
+
+        if (!section) {
+          throw new Error("SECTION_NOT_FOUND");
+        }
+      }
+
       const createdReview = await tx.review.create({
         data: {
           ...newReview,
@@ -152,6 +170,24 @@ export const reviewService = {
       throw new Error("NOT_REVIEW_OWNER");
     }
 
+    if (body.sectionNo !== undefined) {
+      const section = await prisma.section.findFirst({
+        where: {
+          sectionNo: body.sectionNo,
+          course: {
+            courseNo: review.courseNo,
+            studyProgram: review.studyProgram,
+            academicYear: body.academicYear,
+            semester: mapSemester(body.semester),
+          },
+        },
+      });
+
+      if (!section) {
+        throw new Error("SECTION_NOT_FOUND");
+      }
+    }
+
     const semester = mapSemester(body.semester);
 
     const updatedReview = await prisma.review.update({
@@ -170,6 +206,7 @@ export const reviewService = {
       id: reviewId,
       academicYear: updatedReview.academicYear,
       semester: updatedReview.semester,
+      sectionNo: updatedReview.sectionNo,
       rating: updatedReview.rating,
       content: updatedReview.content,
       isOwner: true,

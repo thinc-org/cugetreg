@@ -22,6 +22,8 @@ export const GetCourseQuerySchema = z.object({
   days: z.union([z.array(days), days]).optional(),
   timeStart: z.string().regex(TIME_REGEX).optional(),
   timeEnd: z.string().regex(TIME_REGEX).optional(),
+  creditMin: z.coerce.number().optional(),
+  creditMax: z.coerce.number().optional(),
   noPrereq: z.coerce.boolean().optional(),
   fitCartId: z.string().optional(),
   assessment: assessment.optional(),
@@ -37,4 +39,31 @@ export const CourseNoParamSchema = z.object({
   courseNo: z.string().describe("The registration number of the course"),
 });
 
+export const GetCourseReviewParamSchema = z.object({
+  courseNo: z.string().length(7),
+});
+
+export const GetCourseReviewQuerySchema = z.object({
+  limit: z.coerce.number().int().min(1).max(100).default(20),
+  page: z.coerce.number().int().min(1).default(1),
+  academicYear: z.coerce.number().int().min(2564).optional(),
+  semester: semester.optional(),
+  sectionNo: z.coerce.number().int().optional(),
+  includeFacets: z.stringbool().default(false),
+});
+
+//1.4 get course sections (lightweight — section numbers only, used to
+// populate the Section picker on the review form for a given year/semester)
+export const GetCourseSectionsQuerySchema = z.object({
+  studyProgram: studyProgram,
+  academicYear: z.coerce.number().int().min(2564),
+  semester: semester,
+});
+
 export type GetCourseQuerySchema = z.infer<typeof GetCourseQuerySchema>;
+export type GetCourseReviewQuerySchema = z.infer<
+  typeof GetCourseReviewQuerySchema
+>;
+export type GetCourseSectionsQuerySchema = z.infer<
+  typeof GetCourseSectionsQuerySchema
+>;

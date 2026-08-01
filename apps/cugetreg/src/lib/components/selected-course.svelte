@@ -2,14 +2,7 @@
   import { resolve } from '$app/paths';
   import { getUserCartStore, useCartActions } from '$lib/stores/user-cart';
 
-  import {
-    BookMarked,
-    ChevronDown,
-    Equal,
-    Eye,
-    EyeOff,
-    Trash2,
-  } from '@lucide/svelte';
+  import { ChevronDown, Equal, Eye, EyeOff, Trash2 } from '@lucide/svelte';
   import {
     SortableList,
     sortItems,
@@ -18,7 +11,6 @@
   import { cubicOut } from 'svelte/easing';
   import { slide } from 'svelte/transition';
 
-  import * as Accordion from '@cugetreg/ui/atoms/accordion';
   import { Button } from '@cugetreg/ui/atoms/button';
   import { GenedChip } from '@cugetreg/ui/atoms/gened-chip';
   import { IconButton } from '@cugetreg/ui/atoms/icon-button';
@@ -66,6 +58,8 @@
     open?: boolean;
     /** Show a divider between the header and the body while expanded. */
     headerDivider?: boolean;
+    /** When false, the section can't collapse (no chevron) and stays open. */
+    collapsible?: boolean;
   }
 
   let {
@@ -74,6 +68,7 @@
     onArrange,
     open = $bindable(true),
     headerDivider = false,
+    collapsible = true,
   }: SelectedCourseProp = $props();
 
   const totalCredit = $derived(
@@ -82,6 +77,8 @@
       0,
     ),
   );
+
+  const bodyOpen = $derived(collapsible ? open : true);
 
   let showChangeColorModal = $state(false);
   let currentColorVariant = $state<ColorVariant>('primary');
@@ -107,29 +104,9 @@
 <div class={cn(className)}>
   {#if variant === 'grouped'}
     <div class="flex flex-col">
-      <button
-        type="button"
-        onclick={() => (open = !open)}
-        aria-expanded={open}
-        class="mb-4 flex w-full items-center justify-between"
-      >
-        <span class="flex items-baseline gap-2">
-          <h2 class="text-on-surface text-lg/[20px] font-medium">
-            วิชาที่เลือก
-          </h2>
-          <span class="text-xs font-normal text-neutral-400"
-            >{totalCredit} หน่วยกิต</span
-          >
-        </span>
-        <ChevronDown
-          size={20}
-          class="text-gray-400 transition-transform duration-200 {open
-            ? 'rotate-180'
-            : ''}"
-        />
-      </button>
+      {@render sectionHeader()}
 
-      {#if open}
+      {#if bodyOpen}
         <div transition:slide={{ duration: 250, easing: cubicOut }}>
           {#if headerDivider}
             <hr class="mb-4 border-t border-neutral-100" />
@@ -157,19 +134,14 @@
       {/if}
     </div>
   {:else}
-    <Accordion.Root class="w-full" type="single" value="selected-course">
-      <Accordion.Item value="selected-course">
-        <Accordion.Trigger class="border-b border-neutral-200">
-          <div class="flex">
-            <BookMarked class="mr-2" />
-            <span class="">วิชาที่เลือก</span>
-            <span
-              class="ml-2 flex items-baseline-last text-xs font-light text-neutral-400"
-              >{totalCredit} หน่วยกิต</span
-            >
-          </div>
-        </Accordion.Trigger>
-        <Accordion.Content>
+    <div class="flex flex-col">
+      {@render sectionHeader()}
+
+      {#if bodyOpen}
+        <div transition:slide={{ duration: 250, easing: cubicOut }}>
+          {#if headerDivider}
+            <hr class="mb-4 border-t border-neutral-100" />
+          {/if}
           <SortableList.Root
             ondragend={handleDragEnd}
             hasLockedAxis
@@ -178,7 +150,7 @@
               easing: 'cubic-bezier(0.2, 1, 0.1, 1)',
             }}
             gap={0}
-            class="max-h-[40vh] grow overflow-y-scroll"
+            class="max-h-[40vh] grow overflow-y-scroll [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           >
             {#each schedule as course, index (course.id)}
               <SortableList.Item id={course.id.toString()} {index} class="my-0">
@@ -193,14 +165,47 @@
               >ค้นหาวิชาเรียน</Button
             >
           </div>
-        </Accordion.Content>
-      </Accordion.Item>
-    </Accordion.Root>
+        </div>
+      {/if}
+    </div>
   {/if}
   {#if showChangeColorModal}
     {@render changeColorModal()}
   {/if}
 </div>
+
+{#snippet sectionHeader()}
+  {#if collapsible}
+    <button
+      type="button"
+      onclick={() => (open = !open)}
+      aria-expanded={open}
+      class="mb-4 flex w-full items-center justify-between"
+    >
+      <span class="flex items-baseline gap-2">
+        <h2 class="text-on-surface text-lg/[20px] font-medium">วิชาที่เลือก</h2>
+        <span class="text-xs font-normal text-neutral-400"
+          >{totalCredit} หน่วยกิต</span
+        >
+      </span>
+      <ChevronDown
+        size={20}
+        class="text-gray-400 transition-transform duration-200 {open
+          ? 'rotate-180'
+          : ''}"
+      />
+    </button>
+  {:else}
+    <div class="mb-4 flex w-full items-center justify-between">
+      <span class="flex items-baseline gap-2">
+        <h2 class="text-on-surface text-lg/[20px] font-medium">วิชาที่เลือก</h2>
+        <span class="text-xs font-normal text-neutral-400"
+          >{totalCredit} หน่วยกิต</span
+        >
+      </span>
+    </div>
+  {/if}
+{/snippet}
 
 {#snippet groupedRow(course: CartItemDetail)}
   <div class="flex items-center gap-3 py-3">

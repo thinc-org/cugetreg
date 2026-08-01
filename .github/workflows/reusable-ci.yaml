@@ -52,7 +52,7 @@ jobs:
         run: pnpm install --frozen-lockfile --prefer-offline
 
       - name: Start PostgreSQL
-        if: ${{ inputs.target == 'build' || inputs.target == 'test' }}
+        if: ${{ inputs.target == 'build' || inputs.target == 'test' || inputs.target == 'check' }}
         run: |
           docker compose -f apps/core/docker-compose.yaml up -d db
           for i in $(seq 1 30); do
@@ -67,13 +67,13 @@ jobs:
           docker logs cugetreg-db --tail 20
           exit 1
         env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: cugetreg
-          POSTGRES_PORT: 5432
+          DB_USER: postgres
+          DB_PASS: postgres
+          DB_NAME: cugetreg
+          DB_PORT: 5432
 
       - name: Apply database migrations
-        if: ${{ inputs.target == 'build' || inputs.target == 'test' }}
+        if: ${{ inputs.target == 'build' || inputs.target == 'test' || inputs.target == 'check' }}
         run: pnpm --filter @cugetreg/core exec prisma migrate deploy
 
       - name: Get branch name

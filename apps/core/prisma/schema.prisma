@@ -7,13 +7,14 @@
 
 generator client {
   provider = "prisma-client"
-  previewFeatures = ["typedSql"]
+  previewFeatures = ["typedSql", "postgresqlExtensions"]
   output   = "../src/generated/prisma"
 }
 
 
 datasource db {
-  provider = "postgresql"
+  provider   = "postgresql"
+  extensions = [pgTrgm(map: "pg_trgm")]
 }
 
 //datagateway.chula.ac.th (Connect to Chula Wi-Fi)
@@ -49,7 +50,7 @@ model CourseInfo {
   department String?
 
   // 24 TOTALCREDIT
-  credit      Decimal 
+  credit      Decimal
   // 17 lcredit 18 nlcredit 19 lhour 20 nlhour 21 shour
   creditHours String?  @map("credit_hours")
 
@@ -61,6 +62,18 @@ model CourseInfo {
   cartItems CartItem[]
   //New!!!
   reviews Review[]
+
+  // Facet filter on the course list/search endpoint (getCourseList.sql
+  // `WHERE ci.faculty = ANY(...)`) — plain btree, equality/ANY lookup.
+  @@index([faculty])
+
+  // Course search (getCourseList.sql `... ILIKE $8`) uses leading-wildcard
+  // '%query%' patterns, which a plain btree index cannot use at all — these
+  // GIN trigram indexes let Postgres use an index scan for ILIKE instead of
+  // a sequential scan.
+  @@index([abbrName(ops: raw("gin_trgm_ops"))], type: Gin)
+  @@index([courseNameEn(ops: raw("gin_trgm_ops"))], type: Gin)
+  @@index([courseNameTh(ops: raw("gin_trgm_ops"))], type: Gin)
 
   @@map("course_info")
 }
@@ -99,6 +112,12 @@ model Course {
   sections Section[]
 
   @@unique([studyProgram, academicYear, semester, courseNo], name: "course_unique")
+
+  // Course search (getCourseList.sql `c.course_no ILIKE $8`) — leading-wildcard,
+  // not covered by the composite unique index above (course_no isn't the
+  // leading column there).
+  @@index([courseNo(ops: raw("gin_trgm_ops"))], type: Gin)
+
   @@map("course")
 }
 
@@ -187,26 +206,26 @@ enum StudyProgram {
   @@map("study_program")
 }
 
-/// General Education (GenEd) Course Type 
+/// General Education (GenEd) Course Type
 
 enum GenEdType {
-  NO // NOT_GENED 
-  SC // SCIENCE 
-  SO // SOCIAL 
-  HU // HUMAN 
+  NO // NOT_GENED
+  SC // SCIENCE
+  SO // SOCIAL
+  HU // HUMAN
   IN // INTERDISCIPLINARY
 
   @@map("gen_ed_type")
 }
 
-/// Day of the Week for Class Scheduling 
+/// Day of the Week for Class Scheduling
 enum DayOfWeek {
-  MO 
-  TU 
-  WE 
+  MO
+  TU
+  WE
   TH
-  FR 
-  SA 
+  FR
+  SA
   SU
   AR // To Be Arranged
   IR // Individually Arranged
@@ -214,7 +233,7 @@ enum DayOfWeek {
   @@map("day_of_week")
 }
 
-/// Review Status 
+/// Review Status
 
 enum ReviewStatus {
   PENDING
@@ -224,7 +243,7 @@ enum ReviewStatus {
   @@map("review_status")
 }
 
-/// Vote Type 
+/// Vote Type
 
 enum VoteType {
   L // LIKE
@@ -233,7 +252,7 @@ enum VoteType {
   @@map("vote_type")
 }
 
-/// Visible 
+/// Visible
 
 enum Visible {
   PUB // PUBLIC
@@ -364,6 +383,8 @@ model Review {
   //to get course name and description
   courseInfo CourseInfo @relation(fields: [courseNo], references: [courseNo])
 
+  sectionNo Int? @map("section_no")
+
   content  String
   rating   Int
 
@@ -377,6 +398,8 @@ model Review {
   votes ReviewVote[]
 
   @@map("review")
+  @@index([courseNo, status, academicYear, semester])
+  @@index([courseNo, status, createdAt(sort: Desc), id(sort: Desc)])
   @@unique([courseNo,userId])
 }
 

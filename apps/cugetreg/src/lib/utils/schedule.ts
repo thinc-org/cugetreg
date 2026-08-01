@@ -8,6 +8,7 @@ import type {
   CartWithItemsBase,
   ExamScheduleItem,
   Period,
+  Semester,
 } from '@cugetreg/zod-schemas';
 
 export const TIMETABLE_DEFAULT_START = 7;
@@ -22,6 +23,7 @@ export type ExamData = {
   start: Date | null;
   end: Date | null;
   duration: number; // calculated here
+  sectionNo: number;
 };
 
 export function parsePeriodTime(periodTime: string): number {
@@ -140,6 +142,9 @@ export function getViewCourseData(
       ? `${formatDate(new Date(final.start))} ${formatExamTime(new Date(final.start), (new Date(final.end).getTime() - new Date(final.start).getTime()) / (1000 * 60 * 60))}`
       : undefined,
     isHidden: selectedCartItem.hidden,
+    studyProgram: cart.studyProgram,
+    academicYear: cart.academicYear,
+    semester: cart.semester,
   };
 
   return data;
@@ -181,6 +186,7 @@ export function getExamData(
       const data: ExamData = {
         cartItemId: exam.cartItemId,
         courseNo: exam.courseNo,
+        sectionNo: course.sectionNo,
         name:
           course.course.courseNameEn ||
           course.course.courseNameTh ||
@@ -203,6 +209,102 @@ export function getExamData(
   }
 
   return { midterms, finals };
+}
+
+function escapeICSText(text: string): string {
+  return text
+    .replace(/\\/g, '\\\\')
+    .replace(/;/g, '\\;')
+    .replace(/,/g, '\\,')
+    .replace(/\n/g, '\\n');
+}
+
+function formatICSDate(date: Date): string {
+  return `${date.toISOString().replace(/[-:]/g, '').split('.')[0]}Z`;
+}
+
+// RFC 5545 §3.1: content lines must not exceed 75 octets (not characters —
+// Thai text is 3 bytes/char in UTF-8, so this triggers constantly here).
+// Longer lines get "folded" into multiple physical lines, each continuation
+// prefixed with a single space, split on UTF-8 byte boundaries so no
+// multi-byte character is ever cut in half.
+function foldICSLine(line: string): string {
+  const MAX_OCTETS = 75;
+  const encoder = new TextEncoder();
+  const decoder = new TextDecoder();
+  const bytes = encoder.encode(line);
+  if (bytes.length <= MAX_OCTETS) return line;
+
+  const chunks: string[] = [];
+  let start = 0;
+  let limit = MAX_OCTETS;
+  while (start < bytes.length) {
+    let end = Math.min(start + limit, bytes.length);
+    while (end < bytes.length && (bytes[end] & 0xc0) === 0x80) end--;
+    chunks.push(decoder.decode(bytes.slice(start, end)));
+    start = end;
+    limit = MAX_OCTETS - 1; // continuation lines start with a space
+  }
+  return chunks.join('\r\n ');
+}
+
+// Builds an RFC 5545 .ics calendar from the cart's exam schedule (one
+// VEVENT per midterm/final that has an announced date) for the user to
+// import into Google Calendar, Outlook, etc.
+export function generateExamICS(
+  cart: CartWithItemsBase,
+  exams: ExamScheduleItem[],
+): string {
+  const { midterms, finals } = getExamData(cart, exams);
+
+  const events = [
+    ...Object.values(midterms)
+      .flat()
+      .map((exam) => ({ ...exam, type: 'MIDTERM', label: 'Midterm' })),
+    ...Object.values(finals)
+      .flat()
+      .map((exam) => ({ ...exam, type: 'FINAL', label: 'Final' })),
+  ].filter(
+    (exam): exam is typeof exam & { start: Date; end: Date } =>
+      exam.start !== null && exam.end !== null,
+  );
+
+  const dtstamp = formatICSDate(new Date());
+
+  const eventLines = events.flatMap((exam) => [
+    'BEGIN:VEVENT',
+    `UID:${exam.cartItemId}-${exam.type}@cugetreg`,
+    `DTSTAMP:${dtstamp}`,
+    `DTSTART:${formatICSDate(exam.start)}`,
+    `DTEND:${formatICSDate(exam.end)}`,
+    `SUMMARY:${escapeICSText(`${exam.label} - ${exam.abbrName}`)}`,
+    `DESCRIPTION:${escapeICSText(exam.name)}`,
+    'END:VEVENT',
+  ]);
+
+  const lines = [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//CU Get Reg//Exam Schedule//TH',
+    'CALSCALE:GREGORIAN',
+    ...eventLines,
+    'END:VCALENDAR',
+  ];
+
+  return lines.map(foldICSLine).join('\r\n');
+}
+
+export function downloadICS(filename: string, icsContent: string) {
+  const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `${filename}.ics`;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
 }
 
 // TODO: remove any
@@ -243,6 +345,15 @@ export function calculateCredit(courses?: CartItemDetailBase[]): number {
     (acc, item) => acc + (item.hidden ? 0 : Number(item.course.credit)),
     0,
   );
+}
+
+// Chula rule: 3rd digit ('7' or '8') of the student ID marks a graduate (ป.โท/ป.เอก) student.
+export function getMaxCredit(semester: Semester, username?: string): number {
+  const isGraduate = username?.[2] === '7' || username?.[2] === '8';
+  if (semester === 'SUMMER') {
+    return isGraduate ? 6 : 9;
+  }
+  return isGraduate ? 15 : 22;
 }
 
 export async function createElementScreenshot(

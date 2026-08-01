@@ -87,10 +87,15 @@ export const CourseReview = z.object({
   studyProgram: studyProgram,
   academicYear: z.number().min(2564),
   semester: semester,
+  sectionNo: z.number().int().nullable().optional(),
   content: z.string(),
   stats: z.object({
     likeCount: z.number(),
     dislikeCount: z.number(),
+  }),
+  user: z.object({
+    faculty: z.string().nullable(),
+    department: z.string().nullable(),
   }),
   reaction: vote.optional(),
 });
@@ -103,8 +108,28 @@ export const CourseNoDetailSchema = CourseSchema.extend({
 
 export const CourseNoResponseSchema = z.object({
   course: CourseNoDetailSchema,
+});
+
+export const CourseReviewFacetSchema = z.object({
+  academicYear: z.number().min(2564),
+  semester: semester,
+  sectionNo: z.number().int().nullable(),
+  count: z.int().min(1),
+});
+
+export const CourseSectionsResponseSchema = z.object({
+  sections: z.array(z.number().int()),
+});
+
+export const CourseReviewResponseSchema = z.object({
   reviews: z.array(CourseReview),
+  limit: z.int().min(1),
+  page: z.int().min(1),
+  count: z.int().min(0),
+  facets: z.array(CourseReviewFacetSchema).optional(),
 });
 
 export type CourseNoResponse = z.infer<typeof CourseNoResponseSchema>;
 export type CourseReview = z.infer<typeof CourseReview>;
+export type CourseReviewFacet = z.infer<typeof CourseReviewFacetSchema>;
+export type CourseReviewResponse = z.infer<typeof CourseReviewResponseSchema>;

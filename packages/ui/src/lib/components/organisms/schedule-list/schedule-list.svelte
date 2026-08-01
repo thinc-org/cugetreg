@@ -2,9 +2,8 @@
 	import { BookOpen, BookPlus, LoaderCircle, Trash2 } from '@lucide/svelte';
 	import { onMount } from 'svelte';
 
-	import * as Select from '../../molecules/select/index.js';
-
 	import { Switch } from '../../atoms/switch';
+	import * as Select from '../../molecules/select/index.js';
 
 	interface ScheduleItem {
 		id: string;

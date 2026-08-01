@@ -17,7 +17,7 @@
         <div>ชมรม Thinc.</div>
         <div>จุฬาลงกรณ์มหาวิทยาลัย</div>
       </div>
-      <div lang="th" class="font-sarabun flex-1 wrap-break-word">
+      <div lang="th" class="flex-1 font-sans wrap-break-word">
         ชมรม Thinc. เป็นชมรมที่จัดตั้งและดำเนินการโดยนิสิต
         โดยสังกัดกรรมการนิสิตคณะวิศวกรรมศาสตร์ (กวศ.)
         มีวัตถุประสงค์เพื่อฝึกฝนและฟูมฟักผู้มีความสนใจในการออกแบบและพัฒนาซอฟต์แวร์
@@ -50,7 +50,7 @@
     </QuestionAnswer>
 
     <div
-      class="font-sarabun my-6 rounded-[2rem] border-2 border-blue-700 px-8 py-8 text-center text-blue-700"
+      class="my-6 rounded-[2rem] border-2 border-blue-700 px-8 py-8 text-center font-sans text-blue-700"
     >
       ทั้งนี้ CU Get Reg
       เป็นเพียงเครื่องมือที่ช่วยให้การวางแผนลงทะเบียนเรียนง่ายขึ้น

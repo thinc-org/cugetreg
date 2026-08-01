@@ -1,5 +1,7 @@
 <script lang="ts">
   import {
+    downloadICS,
+    generateExamICS,
     getExamData,
     getExamDateOrder,
     getLatestExamTime,
@@ -11,10 +13,12 @@
   import {
     ChevronLeft,
     ChevronRight,
+    Download,
     Grid3X3,
     ListOrdered,
   } from 'lucide-svelte';
 
+  import { Button } from '@cugetreg/ui/atoms/button';
   import { CustomizeScrollbar } from '@cugetreg/ui/atoms/customize-scrollbar';
   import { TimeTable, TimetableCourseCard } from '@cugetreg/ui/atoms/timetable';
   import {
@@ -58,6 +62,30 @@
   const finalEndTime = $derived(
     getLatestExamTime(finalExams, TIMETABLE_DEFAULT_END),
   );
+
+  function formatTableDate(date: Date) {
+    const months = [
+      'ม.ค.',
+      'ก.พ.',
+      'มี.ค.',
+      'เม.ย.',
+      'พ.ค.',
+      'มิ.ย.',
+      'ก.ค.',
+      'ส.ค.',
+      'ก.ย.',
+      'ต.ค.',
+      'พ.ย.',
+      'ธ.ค.',
+    ];
+
+    return `${date.getDate()} ${months[date.getMonth()]} ${String(date.getFullYear() + 543).slice(-2)}`;
+  }
+
+  function handleDownloadICS() {
+    const icsContent = generateExamICS(cart, exams);
+    downloadICS(`${cart.name}_exam-schedule`, icsContent);
+  }
 </script>
 
 <div class="flex flex-row items-center justify-between lg:justify-center">
@@ -116,6 +144,13 @@
   {@render examSchedule()}
 {/if}
 
+<div class="mt-4 flex justify-end">
+  <Button class="m-0 flex items-center gap-1" onclick={handleDownloadICS}>
+    <Download size={18} strokeWidth={2} />
+    ตารางสอบ (.ics)
+  </Button>
+</div>
+
 {#snippet examSchedule()}
   <div class="my-5 text-xl font-bold">Midterm</div>
   <div
@@ -128,7 +163,7 @@
         periodPerDay={midtermEndTime - TIMETABLE_DEFAULT_START}
         days={examDateOrder.midterms
           .filter((time) => time !== 0)
-          .map((time) => formatDate(new Date(time)))}
+          .map((time) => formatTableDate(new Date(time)))}
       >
         {#each examDateOrder.midterms.filter((time) => time !== 0) as key, index (key)}
           {#each examsData.midterms[key] as exam (exam.cartItemId)}
@@ -140,7 +175,7 @@
                   code: exam.courseNo,
                   bldg: '',
                   room: '',
-                  section: 0,
+                  section: exam.sectionNo,
                 }}
                 col={formatExamColumn(exam.start ?? undefined) -
                   TIMETABLE_DEFAULT_START}
@@ -168,7 +203,7 @@
         periodPerDay={finalEndTime - TIMETABLE_DEFAULT_START}
         days={examDateOrder.finals
           .filter((time) => time !== 0)
-          .map((time) => formatDate(new Date(time)))}
+          .map((time) => formatTableDate(new Date(time)))}
       >
         {#each examDateOrder.finals.filter((time) => time !== 0) as key, index (key)}
           {#each examsData.finals[key] as examCourse (examCourse.cartItemId)}
@@ -180,7 +215,7 @@
                   code: examCourse.courseNo,
                   bldg: '',
                   room: '',
-                  section: 0,
+                  section: examCourse.sectionNo,
                 }}
                 col={formatExamColumn(examCourse.start ?? undefined) -
                   TIMETABLE_DEFAULT_START}

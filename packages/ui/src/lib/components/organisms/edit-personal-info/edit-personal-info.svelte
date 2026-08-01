@@ -61,7 +61,7 @@
 				placeholder="ใส่รายชื่อภาควิชา..."
 				class="bg-surface-container-low h-12"
 				value={department}
-				oninput={(e) => (department = (e.currentTarget as HTMLInputElement).value)}
+				oninput={(e: Event) => (department = (e.currentTarget as HTMLInputElement).value)}
 			/>
 		</div>
 	</div>

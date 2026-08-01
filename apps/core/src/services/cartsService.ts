@@ -183,7 +183,7 @@ export const cartService = {
           info,
           courseData,
           sectionData,
-          sections: courseData?.sections,
+          sections: courseData?.sections ?? [],
         };
       }),
     );
@@ -197,7 +197,7 @@ export const cartService = {
       hidden: item.hidden,
       cartOrder: item.cartOrder,
       isGraded: item.isGraded,
-      genEdType: item.courseData?.genEdType,
+      genEdType: item.courseData?.genEdType ?? "NO",
       expectedGrade: item.expectedGrade.toString(),
       course: {
         courseNameTh: item.info.courseNameTh,

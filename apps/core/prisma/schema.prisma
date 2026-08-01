@@ -383,6 +383,8 @@ model Review {
   //to get course name and description
   courseInfo CourseInfo @relation(fields: [courseNo], references: [courseNo])
 
+  sectionNo Int? @map("section_no")
+
   content  String
   rating   Int
 

@@ -61,6 +61,7 @@
     type CourseReview,
     type CourseReviewFacet,
     CourseReviewResponseSchema,
+    CourseSectionsResponseSchema,
     type Semester,
     type SubmitReviewBodySchema,
     SubmitReviewResponseSchema,
@@ -124,6 +125,8 @@
 
   let selectedYear = $state(years[0]);
   let selectedTerm = $state(terms[0]);
+  let writeReviewSectionOptions = $state<number[]>([]);
+  let writeReviewSectionNo = $state<string | null>(null);
   let reviewRating = $state(1);
   let reviewContent = $state('');
   let selectedSection = $state<HTMLElement>();
@@ -154,10 +157,43 @@
     reviewRating = isHalf ? value - 0.5 : value;
   };
 
+  // The write-review form lets you pick a year/semester independently of
+  // the page's currently-loaded course data (which is bound to the URL's
+  // academicYear/semester), so the Section picker needs its own fetch
+  // whenever the form's year/term changes.
+  $effect(() => {
+    const academicYear = Number(selectedYear);
+    const semester = thaiLabelToSemesterMapper(selectedTerm);
+    const studyProgram = course.studyProgram;
+
+    void api
+      .get(`/courses/${course.courseNo}/sections`, {
+        params: { studyProgram, academicYear, semester },
+      })
+      .then((response) => {
+        const { sections } = CourseSectionsResponseSchema.parse(response.data);
+        writeReviewSectionOptions = sections;
+        if (
+          writeReviewSectionNo === null ||
+          !sections.includes(Number(writeReviewSectionNo))
+        ) {
+          writeReviewSectionNo =
+            sections.length > 0 ? String(sections[0]) : null;
+        }
+        return;
+      })
+      .catch(() => {
+        writeReviewSectionOptions = [];
+        writeReviewSectionNo = null;
+      });
+  });
+
   const reviewYearPlaceholder = 'ปีการศึกษา';
   const reviewSemesterPlaceholder = 'ภาคเรียน';
+  const reviewSectionPlaceholder = 'เซค';
   let selectedReviewYear = $state(reviewYearPlaceholder);
   let selectedReviewSemester = $state<Semester | null>(null);
+  let selectedReviewSection = $state<number | null>(null);
   const reviewsPerPage = 4;
   let reviewsPage = $state(1);
   let reviewSubmitting = $state(false);
@@ -168,6 +204,8 @@
   );
 
   const isReviewSemesterPlaceholder = $derived(selectedReviewSemester === null);
+
+  const isReviewSectionPlaceholder = $derived(selectedReviewSection === null);
 
   let activeModal = $state<'selected' | null>(null);
   let reviewEditor = $state<MarkdownEditor>();
@@ -279,6 +317,32 @@
     getReviewSemesters(selectedReviewYear),
   );
 
+  function getReviewSections(
+    reviewYear: string,
+    reviewSemester: Semester | null,
+  ) {
+    return Array.from(
+      new Set(
+        reviewFacets
+          .filter((facet) => {
+            if (
+              reviewYear !== reviewYearPlaceholder &&
+              facet.academicYear !== Number(reviewYear)
+            )
+              return false;
+            if (reviewSemester !== null && facet.semester !== reviewSemester)
+              return false;
+            return facet.sectionNo !== null;
+          })
+          .map((facet) => facet.sectionNo as number),
+      ),
+    ).sort((a, b) => a - b);
+  }
+
+  const reviewSectionOptions = $derived(
+    getReviewSections(selectedReviewYear, selectedReviewSemester),
+  );
+
   function setSelectedReviewYear(value: string) {
     selectedReviewYear = value;
     if (
@@ -287,6 +351,14 @@
     ) {
       selectedReviewSemester = null;
     }
+    if (
+      selectedReviewSection !== null &&
+      !getReviewSections(value, selectedReviewSemester).includes(
+        selectedReviewSection,
+      )
+    ) {
+      selectedReviewSection = null;
+    }
     reviewsPage = 1;
     void refreshReviews({ targetPage: 1 });
   }
@@ -294,6 +366,21 @@
   function setSelectedReviewSemester(value: string) {
     selectedReviewSemester =
       value === reviewSemesterPlaceholder ? null : (value as Semester);
+    if (
+      selectedReviewSection !== null &&
+      !getReviewSections(selectedReviewYear, selectedReviewSemester).includes(
+        selectedReviewSection,
+      )
+    ) {
+      selectedReviewSection = null;
+    }
+    reviewsPage = 1;
+    void refreshReviews({ targetPage: 1 });
+  }
+
+  function setSelectedReviewSection(value: string) {
+    selectedReviewSection =
+      value === reviewSectionPlaceholder ? null : Number(value);
     reviewsPage = 1;
     void refreshReviews({ targetPage: 1 });
   }
@@ -318,6 +405,9 @@
           ...(selectedReviewSemester && {
             semester: selectedReviewSemester,
           }),
+          ...(selectedReviewSection !== null && {
+            sectionNo: selectedReviewSection,
+          }),
         },
       });
       const result = CourseReviewResponseSchema.parse(response.data);
@@ -338,6 +428,7 @@
         ) {
           selectedReviewYear = reviewYearPlaceholder;
           selectedReviewSemester = null;
+          selectedReviewSection = null;
           filtersChanged = true;
         } else if (
           selectedReviewSemester !== null &&
@@ -346,6 +437,16 @@
           )
         ) {
           selectedReviewSemester = null;
+          selectedReviewSection = null;
+          filtersChanged = true;
+        } else if (
+          selectedReviewSection !== null &&
+          !getReviewSections(
+            selectedReviewYear,
+            selectedReviewSemester,
+          ).includes(selectedReviewSection)
+        ) {
+          selectedReviewSection = null;
           filtersChanged = true;
         }
 
@@ -433,6 +534,9 @@
       const patchPayload = {
         academicYear: Number(selectedYear),
         semester: thaiLabelToSemesterMapper(selectedTerm),
+        ...(writeReviewSectionNo !== null && {
+          sectionNo: Number(writeReviewSectionNo),
+        }),
         rating: reviewRating * 2,
         content: reviewContent,
       };
@@ -459,6 +563,9 @@
       studyProgram: course.studyProgram,
       academicYear: Number(selectedYear),
       semester: thaiLabelToSemesterMapper(selectedTerm),
+      ...(writeReviewSectionNo !== null && {
+        sectionNo: Number(writeReviewSectionNo),
+      }),
       rating: reviewRating * 2,
       content: reviewContent,
     };
@@ -506,6 +613,8 @@
     selectedYear = String(review.academicYear);
     selectedTerm =
       SEMESTER_LABEL_LONG[review.semester as keyof typeof SEMESTER_LABEL_LONG];
+    writeReviewSectionNo =
+      review.sectionNo != null ? String(review.sectionNo) : null;
     editingReviewId = review.id;
     scrollToSection(reviewSection);
     reviewEditor?.focus();
@@ -544,6 +653,7 @@
     reviewsLoading = false;
     selectedReviewYear = reviewYearPlaceholder;
     selectedReviewSemester = null;
+    selectedReviewSection = null;
     reviewsPage = 1;
   });
 
@@ -1303,6 +1413,32 @@
                         </Select.Content>
                       </Select.Root>
                     </div>
+                    <div>
+                      <Select.Root
+                        type="single"
+                        value={writeReviewSectionNo ?? ''}
+                        onValueChange={(v) => (writeReviewSectionNo = v)}
+                        disabled={writeReviewSectionOptions.length === 0}
+                      >
+                        <Select.Trigger
+                          class="text-on-surface h-9 w-[120px] rounded-lg border border-[#D6D7E1] bg-white px-4 text-sm font-medium md:h-12 md:w-[180px] md:text-base"
+                        >
+                          {writeReviewSectionNo
+                            ? `เซค ${writeReviewSectionNo}`
+                            : 'ไม่มีเซค'}
+                        </Select.Trigger>
+                        <Select.Content role="listbox">
+                          <Select.Group>
+                            {#each writeReviewSectionOptions as sectionNo (sectionNo)}
+                              <Select.Item
+                                value={String(sectionNo)}
+                                label={`เซค ${sectionNo}`}
+                              />
+                            {/each}
+                          </Select.Group>
+                        </Select.Content>
+                      </Select.Root>
+                    </div>
                   </div>
                 </div>
                 <div class="flex items-center justify-between gap-8">
@@ -1426,6 +1562,42 @@
                     </Select.Group>
                   </Select.Content>
                 </Select.Root>
+                <Select.Root
+                  type="single"
+                  bind:value={
+                    () =>
+                      selectedReviewSection !== null
+                        ? String(selectedReviewSection)
+                        : reviewSectionPlaceholder,
+                    setSelectedReviewSection
+                  }
+                >
+                  <Select.Trigger
+                    class={`h-9 w-[120px] rounded-xl px-4 text-sm ${
+                      isReviewSectionPlaceholder
+                        ? 'text-on-surface/60'
+                        : 'text-on-surface'
+                    }`}
+                  >
+                    {selectedReviewSection !== null
+                      ? `เซค ${selectedReviewSection}`
+                      : reviewSectionPlaceholder}
+                  </Select.Trigger>
+                  <Select.Content role="listbox">
+                    <Select.Group>
+                      <Select.Item
+                        value={reviewSectionPlaceholder}
+                        label={reviewSectionPlaceholder}
+                      />
+                      {#each reviewSectionOptions as sectionNo (sectionNo)}
+                        <Select.Item
+                          value={String(sectionNo)}
+                          label={`เซค ${sectionNo}`}
+                        />
+                      {/each}
+                    </Select.Group>
+                  </Select.Content>
+                </Select.Root>
               </div>
             </div>
             {#if reviewsLoading}
@@ -1481,6 +1653,7 @@
                     rating={review.rating / 2}
                     semester={SEMESTER_LABEL_LONG[review.semester]}
                     year={review.academicYear}
+                    section={review.sectionNo}
                     content={review.content}
                     likesCount={review.stats.likeCount}
                     dislikesCount={review.stats.dislikeCount}

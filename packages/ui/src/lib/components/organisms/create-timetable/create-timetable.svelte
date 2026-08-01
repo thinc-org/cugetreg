@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { untrack } from 'svelte';
+
 	import type { TimetableMetaData } from '.';
 
 	import { Button } from '../../atoms/button';

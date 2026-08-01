@@ -1,13 +1,14 @@
 <script lang="ts">
-  import { GOOGLE_FORM_URL } from '$lib/constants';
   import { goto } from '$app/navigation';
+  import { resolve } from '$app/paths';
   import { api } from '$lib/api';
+  import { GOOGLE_FORM_URL } from '$lib/constants';
 
   import { TriangleAlert } from '@lucide/svelte';
   import { Loader2 } from 'lucide-svelte';
 
   import { Footer } from '@cugetreg/ui/organisms/footer';
-  import { resolve } from '$app/paths';
+
   interface Announcement {
     id: string;
     title: string;
@@ -77,7 +78,7 @@
         {#each announcements as item (item.id)}
           <button
             class="flex flex-col items-start gap-1 rounded-2xl border-2 border-gray-200 bg-white px-10 py-8 transition-all hover:border-[#4A6CF7] focus:outline-none"
-            onclick={() => goto(`/announcement/${item.id}`)}
+            onclick={() => goto(resolve(`/announcement/${item.id}`))}
           >
             <span class="font-regular text-xs text-gray-600">CU GetReg</span>
             <h2

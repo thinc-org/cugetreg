@@ -8,13 +8,13 @@
 	import * as Select from '$lib/components/molecules/select/index.js';
 
 	import { ArrowRight, EyeOff, Trash, X } from '@lucide/svelte';
+	import { untrack } from 'svelte';
 
 	import { cn } from '@cugetreg/utils';
 	import { courseColorVariants } from '@cugetreg/utils/constants';
 	import { type ColorVariant } from '@cugetreg/utils/types';
 
 	import type { ViewCourseData } from '.';
-	import { untrack } from 'svelte';
 
 	interface ViewCourseProps {
 		data: ViewCourseData | null;

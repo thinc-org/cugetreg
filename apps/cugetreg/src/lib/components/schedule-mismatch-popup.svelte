@@ -6,6 +6,7 @@
   import { useCartActions } from '$lib/stores/user-cart';
 
   import { Plus } from '@lucide/svelte';
+  import { untrack } from 'svelte';
 
   import { Modal } from '@cugetreg/ui/atoms/modal';
   import {
@@ -19,7 +20,6 @@
     CreateTimetable,
     type TimetableMetaData,
   } from '@cugetreg/ui/organisms/create-timetable';
-  import { untrack } from 'svelte';
 
   type Schedule = {
     id: string;

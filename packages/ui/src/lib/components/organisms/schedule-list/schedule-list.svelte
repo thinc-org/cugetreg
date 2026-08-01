@@ -140,7 +140,8 @@
 					<div class="hover:bg-surface-variant/50 flex items-start justify-between gap-3">
 						<div class="flex flex-col gap-1">
 							<button
-								class="text-body1 font-semibold hover:cursor-pointer hover:underline hover:underline-offset-4"
+								type="button"
+								class="text-body1 text-left font-semibold hover:cursor-pointer hover:underline hover:underline-offset-4"
 								onclick={() => onClickItem?.(item)}
 							>
 								{item.title}

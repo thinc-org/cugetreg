@@ -3,7 +3,7 @@
 </script>
 
 {#if down}
-	<button onclick={() => (down = !down)} class="b" aria-label="Sort direction arrow">
+	<button type="button" onclick={() => (down = !down)} class="b" aria-label="Sort descending">
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
 			width="24"
@@ -19,7 +19,7 @@
 		>
 	</button>
 {:else}
-	<button onclick={() => (down = !down)} class="b" aria-label="Sort direction arrow">
+	<button type="button" onclick={() => (down = !down)} class="b" aria-label="Sort ascending">
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
 			width="24"

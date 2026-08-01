@@ -3,6 +3,7 @@
   import { resolve } from '$app/paths';
   import { api } from '$lib/api';
   import { tryCatch } from '$lib/async-handler';
+  import { GOOGLE_FORM_URL } from '$lib/constants';
   import {
     getSemesterShortOptions,
     getYearOptions,
@@ -34,7 +35,6 @@
   } from '@cugetreg/zod-schemas';
 
   import type { PageProps } from './$types';
-  import { GOOGLE_FORM_URL } from '$lib/constants';
 
   interface ScheduleItem {
     id: string;

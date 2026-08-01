@@ -1,17 +1,16 @@
 <script lang="ts">
-	import { setContext, untrack, type Snippet } from 'svelte';
+	import { setContext, type Snippet } from 'svelte';
+
+	type Variant = 'left' | 'center' | 'right' | 'mobile';
 
 	interface Props {
-		variant?: 'left' | 'center' | 'right' | 'mobile';
+		variant?: Variant;
 		className?: string; // Additional classes can be passed
 		children?: Snippet;
 	}
 
 	let { variant = 'center', className = '', children }: Props = $props();
-	setContext(
-		'subject-details-variant',
-		untrack(() => variant)
-	);
+	setContext<() => Variant>('subject-details-variant', () => variant);
 </script>
 
 <div class="subject-details {className}">

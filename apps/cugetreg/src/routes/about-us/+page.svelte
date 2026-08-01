@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { GOOGLE_FORM_URL } from '$lib/constants';
+
   import { Globe } from 'lucide-svelte';
 
   import { QuestionAnswer } from '@cugetreg/ui/atoms/faqs';
@@ -6,7 +8,6 @@
   import { Instagram } from '@cugetreg/ui/logo/instagram';
   import { GitHubMark } from '@cugetreg/ui/logo/vendor';
   import { Footer } from '@cugetreg/ui/organisms/footer';
-  import { GOOGLE_FORM_URL } from '$lib/constants';
 </script>
 
 <div class="flex justify-center py-12">

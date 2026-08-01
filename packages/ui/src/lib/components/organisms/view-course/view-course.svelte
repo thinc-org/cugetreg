@@ -14,6 +14,7 @@
 	import { type ColorVariant } from '@cugetreg/utils/types';
 
 	import type { ViewCourseData } from '.';
+	import { untrack } from 'svelte';
 
 	interface ViewCourseProps {
 		data: ViewCourseData | null;
@@ -33,7 +34,7 @@
 		onChangeSection = () => {}
 	}: ViewCourseProps = $props();
 
-	let selectedSectionNo = $state(data?.selectedSectionNo ?? 0);
+	let selectedSectionNo = $state(untrack(() => data?.selectedSectionNo ?? 0));
 
 	$effect(() => {
 		if (data) {

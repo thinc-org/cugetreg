@@ -19,6 +19,7 @@
     CreateTimetable,
     type TimetableMetaData,
   } from '@cugetreg/ui/organisms/create-timetable';
+  import { untrack } from 'svelte';
 
   type Schedule = {
     id: string;
@@ -58,7 +59,9 @@
   );
 
   let selectedId = $state<string>(
-    matchingSchedules.length > 0 ? matchingSchedules[0].id : '',
+    untrack(() =>
+      matchingSchedules.length > 0 ? matchingSchedules[0].id : '',
+    ),
   );
 
   let selectedLabel = $derived.by(() => {

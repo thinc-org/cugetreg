@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { BookOpen, BookPlus, ChevronDown, LoaderCircle, Trash2 } from '@lucide/svelte';
-	import { onMount } from 'svelte';
+	import { onMount, untrack } from 'svelte';
 
 	import { Switch } from '../../atoms/switch';
 
@@ -37,7 +37,7 @@
 		})
 	);
 
-	let selected = $state(filters[0] ?? '');
+	let selected = $state(untrack(() => filters[0] ?? ''));
 
 	let filteredItems = $derived(items.filter((item) => item.title === selected));
 
@@ -139,12 +139,12 @@
 				<div class="border-surface-container-low bg-surface rounded-3xl border px-6 py-6">
 					<div class="hover:bg-surface-variant/50 flex items-start justify-between gap-3">
 						<div class="flex flex-col gap-1">
-							<p
+							<button
 								class="text-body1 font-semibold hover:cursor-pointer hover:underline hover:underline-offset-4"
 								onclick={() => onClickItem?.(item)}
 							>
 								{item.title}
-							</p>
+							</button>
 							<p class="text-body2 text-on-surface/50">
 								{item.subtitle}
 							</p>

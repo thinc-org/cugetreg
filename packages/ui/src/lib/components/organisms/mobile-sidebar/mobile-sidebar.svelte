@@ -119,14 +119,14 @@
 			<div class="flex items-center gap-2">
 				<button
 					type="button"
-					class="flex size-10 items-center justify-center rounded-button text-black hover:text-primary-container"
+					class="flex size-8 items-center justify-center rounded-button text-black hover:text-primary-container"
 					onclick={() => {
 						onClose();
 						goto('/announcement');
 					}}
 					aria-label="ประกาศ"
 				>
-					<Bell size="16" strokeWidth="2.5" />
+					<Bell size="16" strokeWidth="2" />
 				</button>
 				<IconButton color="neutral" onclick={onToggleTheme} aria-label="สลับธีม">
 					<Moon size="16" strokeWidth="2.5" />

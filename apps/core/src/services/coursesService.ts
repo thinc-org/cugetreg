@@ -146,7 +146,8 @@ export async function getCourseReviewByCourseNo(
   query: GetCourseReviewQuerySchema,
   userId?: string,
 ) {
-  const { academicYear, includeFacets, limit, page, semester } = query;
+  const { academicYear, includeFacets, limit, page, semester, sectionNo } =
+    query;
   const courseInfo = await prisma.courseInfo.findUnique({
     where: { courseNo },
     select: { courseNo: true },
@@ -159,6 +160,7 @@ export async function getCourseReviewByCourseNo(
   const filters: Prisma.ReviewWhereInput = {
     ...(academicYear && { academicYear }),
     ...(semester && { semester }),
+    ...(sectionNo !== undefined && { sectionNo }),
   };
   const reviewSelect = {
     id: true,
@@ -167,6 +169,7 @@ export async function getCourseReviewByCourseNo(
     studyProgram: true,
     academicYear: true,
     semester: true,
+    sectionNo: true,
     content: true,
     user: {
       select: {
@@ -211,7 +214,7 @@ export async function getCourseReviewByCourseNo(
       const approvedCount = await tx.review.count({ where: approvedWhere });
       const facetGroups = includeFacets
         ? await tx.review.groupBy({
-            by: ["academicYear", "semester"],
+            by: ["academicYear", "semester", "sectionNo"],
             where: userId
               ? {
                   courseNo,
@@ -295,6 +298,7 @@ export async function getCourseReviewByCourseNo(
   const facets = facetGroups?.map((facet) => ({
     academicYear: facet.academicYear,
     semester: facet.semester,
+    sectionNo: facet.sectionNo,
     count: facet._count._all,
   }));
 

@@ -24,6 +24,9 @@ reviews
       if (e instanceof Error && e.message === "COURSE_NOT_FOUND") {
         return c.json({ error: "COURSE_NOT_FOUND" }, 404);
       }
+      if (e instanceof Error && e.message === "SECTION_NOT_FOUND") {
+        return c.json({ error: "SECTION_NOT_FOUND" }, 422);
+      }
       if (
         e instanceof Prisma.PrismaClientKnownRequestError &&
         e.code === "P2002" //Error code for unique constraint violation (have 2 [userId, courseNo])
@@ -65,6 +68,9 @@ reviews
         }
         if (e.message === "REVIEW_NOT_FOUND") {
           return c.json({ error: "REVIEW_NOT_FOUND" }, 404);
+        }
+        if (e.message === "SECTION_NOT_FOUND") {
+          return c.json({ error: "SECTION_NOT_FOUND" }, 422);
         }
       }
       return c.json({ error: "INTERNAL_SERVER_ERROR" }, 500);

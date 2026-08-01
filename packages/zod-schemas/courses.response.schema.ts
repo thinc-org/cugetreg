@@ -87,6 +87,7 @@ export const CourseReview = z.object({
   studyProgram: studyProgram,
   academicYear: z.number().min(2564),
   semester: semester,
+  sectionNo: z.number().int().nullable().optional(),
   content: z.string(),
   stats: z.object({
     likeCount: z.number(),
@@ -112,7 +113,12 @@ export const CourseNoResponseSchema = z.object({
 export const CourseReviewFacetSchema = z.object({
   academicYear: z.number().min(2564),
   semester: semester,
+  sectionNo: z.number().int().nullable(),
   count: z.int().min(1),
+});
+
+export const CourseSectionsResponseSchema = z.object({
+  sections: z.array(z.number().int()),
 });
 
 export const CourseReviewResponseSchema = z.object({

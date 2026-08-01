@@ -53,25 +53,6 @@
 
 	let selected = $state(filters[0] ?? '');
 
-	let dropdownOpen = $state(false);
-
-	function selectFilter(name: string) {
-		selected = name;
-		dropdownOpen = false;
-	}
-
-	function clickOutside(node: HTMLElement, onOutside: () => void) {
-		const handle = (event: MouseEvent) => {
-			if (!node.contains(event.target as Node)) onOutside();
-		};
-		document.addEventListener('click', handle, true);
-		return {
-			destroy() {
-				document.removeEventListener('click', handle, true);
-			}
-		};
-	}
-
 	let filteredItems = $derived(
 		items.filter((item) => {
 			const [yearLabel, semesterLabel] = [item.subtitle.split(' ')[1], item.subtitle.split(' ')[3]];
@@ -133,45 +114,20 @@
 		</div>
 	{/if}
 	{#if !loading && items.length}
-		<div
-			class="border-surface-container-low bg-surface relative mt-4 rounded-2xl border px-6 py-4"
-			use:clickOutside={() => (dropdownOpen = false)}
-		>
-			<button
-				type="button"
-				class="text-body1 text-on-surface flex w-full items-center justify-between bg-transparent font-semibold underline underline-offset-4 focus:outline-none"
-				onclick={() => (dropdownOpen = !dropdownOpen)}
-				aria-haspopup="listbox"
-				aria-expanded={dropdownOpen}
+		<div class="border-surface-container-low bg-surface relative mt-4 rounded-2xl border px-6 py-4">
+			<select
+				class="text-body1 text-on-surface w-full appearance-none bg-transparent font-semibold underline underline-offset-4 focus:outline-none"
+				bind:value={selected}
 			>
-				<span>{selected}</span>
-				<ChevronDown
-					size="18"
-					strokeWidth="2.5"
-					class={`text-on-surface/70 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`}
-				/>
-			</button>
-
-			{#if dropdownOpen}
-				<ul
-					class="border-surface-container-low bg-surface absolute top-full right-0 left-0 z-20 mt-2 max-h-40 overflow-y-auto rounded-2xl border py-2 shadow-lg sm:max-h-48"
-					role="listbox"
-				>
-					{#each filters as name (name)}
-						<li>
-							<button
-								type="button"
-								class={`text-body1 w-full px-6 py-2 text-left hover:cursor-pointer hover:bg-blue-100/50 ${name === selected ? 'text-on-surface font-semibold' : 'text-on-surface/70'}`}
-								role="option"
-								aria-selected={name === selected}
-								onclick={() => selectFilter(name)}
-							>
-								{name}
-							</button>
-						</li>
-					{/each}
-				</ul>
-			{/if}
+				{#each filters as name (name)}
+					<option value={name}>{name}</option>
+				{/each}
+			</select>
+			<ChevronDown
+				size="18"
+				strokeWidth="2.5"
+				class="text-on-surface/70 pointer-events-none absolute top-1/2 right-4 -translate-y-1/2"
+			/>
 		</div>
 	{/if}
 	{#if !loading && !items.length}

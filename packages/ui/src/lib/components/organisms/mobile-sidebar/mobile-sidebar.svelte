@@ -119,7 +119,7 @@
 			<div class="flex items-center gap-2">
 				<button
 					type="button"
-					class="flex size-8 items-center justify-center rounded-button text-black hover:text-primary-container"
+					class="rounded-button hover:text-primary-container flex size-8 items-center justify-center text-black"
 					onclick={() => {
 						onClose();
 						goto('/announcement');

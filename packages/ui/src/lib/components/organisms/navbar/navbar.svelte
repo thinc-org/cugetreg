@@ -134,7 +134,7 @@
 		<!-- </a> -->
 		<button
 			type="button"
-			class="hidden size-10 items-center justify-center rounded-button text-black hover:text-primary-container md:flex"
+			class="rounded-button hover:text-primary-container hidden size-10 items-center justify-center text-black md:flex"
 			onclick={() => goto('/announcement')}
 			aria-label="ประกาศ"
 		>

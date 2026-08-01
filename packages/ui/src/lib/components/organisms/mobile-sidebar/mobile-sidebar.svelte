@@ -1,5 +1,7 @@
 <script lang="ts">
-	import { ChevronDown, LogOut, Menu, Moon, Plus } from '@lucide/svelte';
+	import { goto } from '$app/navigation';
+
+	import { Bell, ChevronDown, LogOut, Menu, Moon, Plus } from '@lucide/svelte';
 
 	import { cn } from '@cugetreg/utils';
 
@@ -114,9 +116,22 @@
 					<CUGetRegLogo class="h-7 w-24" />
 				</a>
 			</div>
-			<IconButton color="neutral" onclick={onToggleTheme} aria-label="สลับธีม">
-				<Moon size="16" strokeWidth="2.5" />
-			</IconButton>
+			<div class="flex items-center gap-2">
+				<button
+					type="button"
+					class="flex size-10 items-center justify-center rounded-button text-black hover:text-primary-container"
+					onclick={() => {
+						onClose();
+						goto('/announcement');
+					}}
+					aria-label="ประกาศ"
+				>
+					<Bell size="16" strokeWidth="2.5" />
+				</button>
+				<IconButton color="neutral" onclick={onToggleTheme} aria-label="สลับธีม">
+					<Moon size="16" strokeWidth="2.5" />
+				</IconButton>
+			</div>
 		</div>
 
 		<!-- Timetable selector -->

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { setContext, type Snippet } from 'svelte';
+	import { setContext, untrack, type Snippet } from 'svelte';
 
 	interface Props {
 		variant?: 'left' | 'center' | 'right' | 'mobile';
@@ -8,7 +8,10 @@
 	}
 
 	let { variant = 'center', className = '', children }: Props = $props();
-	setContext('subject-details-variant', variant);
+	setContext(
+		'subject-details-variant',
+		untrack(() => variant)
+	);
 </script>
 
 <div class="subject-details {className}">

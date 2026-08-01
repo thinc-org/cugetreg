@@ -19,7 +19,7 @@
 </script>
 
 <div
-	class="{`bg-surface-container-lowest text-primary text-table-header px-4 py-[7px] font-medium ${roundedStyle[variant]} ${className}`} "
+	class="{`bg-surface-container-lowest text-primary text-table-header px-4 py-1.75 font-medium ${roundedStyle[variant]} ${className}`} "
 >
 	{#if children}
 		{@render children()}

@@ -107,7 +107,7 @@
 	</div>
 </div>
 
-<style>
+<style lang="postcss">
 	@reference "@cugetreg/ui/css";
 
 	.cell {

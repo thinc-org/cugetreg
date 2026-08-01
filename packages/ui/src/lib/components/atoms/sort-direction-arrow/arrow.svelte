@@ -1,9 +1,9 @@
-<script>
-	let down = true;
+<script lang="ts">
+	let down = $state(true);
 </script>
 
 {#if down}
-	<button on:click={() => (down = !down)} class="b">
+	<button onclick={() => (down = !down)} class="b" aria-label="Sort direction arrow">
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
 			width="24"
@@ -19,7 +19,7 @@
 		>
 	</button>
 {:else}
-	<button on:click={() => (down = !down)} class="b">
+	<button onclick={() => (down = !down)} class="b" aria-label="Sort direction arrow">
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
 			width="24"

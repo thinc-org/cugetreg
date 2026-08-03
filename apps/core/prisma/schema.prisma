@@ -43,7 +43,7 @@ model CourseInfo {
 
   // TODO separate this into other table
   // indirect -> 30 FACCODE or From CourseNo (Transitive Dependency)
-  faculty    String?
+  faculty    Faculty?
   // indirect -> From CourseNo (Transitive Dependency)
   department String?
 
@@ -199,6 +199,41 @@ model SectionClass {
   @@map("course_class")
 }
 
+enum Faculty {
+  F01 @map("01")
+  F02 @map("02")
+  F20 @map("20")
+  F21 @map("21")
+  F22 @map("22")
+  F23 @map("23")
+  F24 @map("24")
+  F25 @map("25")
+  F26 @map("26")
+  F27 @map("27")
+  F28 @map("28")
+  F29 @map("29")
+  F30 @map("30")
+  F31 @map("31")
+  F32 @map("32")
+  F33 @map("33")
+  F34 @map("34")
+  F35 @map("35")
+  F36 @map("36")
+  F37 @map("37")
+  F38 @map("38")
+  F39 @map("39")
+  F40 @map("40")
+  F49 @map("49")
+  F51 @map("51")
+  F53 @map("53")
+  F55 @map("55")
+  F56 @map("56")
+  F58 @map("58")
+  F63 @map("63")
+  F92 @map("92")
+  F99 @map("99")
+}
+
 /// Academic Semester
 
 enum Semester {
@@ -290,7 +325,7 @@ model User {
   image String?
 
   // New!!!
-  faculty    String?
+  faculty    Faculty?
   department String?
 
   createdAt DateTime     @default(now()) @map("created_at")

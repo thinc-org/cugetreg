@@ -21,6 +21,7 @@ import type { GenEdType } from "../src/generated/prisma/enums.js";
 import { LexoRankService } from "../src/services/lexorank.service.js";
 import {
   mapDayOfWeek,
+  mapFacultyCode,
   mapSemester,
   mapStudyProgram,
 } from "../src/utils/enumMapper.js";
@@ -101,7 +102,7 @@ export async function bulkMigrateCourseInfo(coursesData: Course[]) {
       courseNameTh: data.courseNameTh,
       courseDescEn: data.courseDescEn ?? null,
       courseDescTh: data.courseDescTh ?? null,
-      faculty: data.faculty ?? null,
+      faculty: data.faculty ? mapFacultyCode(data.faculty) : null,
       department: data.department ?? null,
       credit: new Prisma.Decimal(data.credit),
       creditHours: data.creditHours ?? null,

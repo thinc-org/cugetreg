@@ -10,6 +10,15 @@ import {
   removeFavoriteCourse,
 } from "@/routes_define/courses.routes.js";
 import { courseServices } from "@/services/coursesService.js";
+import {
+  getCourseReviewByCourseNo,
+  queryCourse,
+} from "@/services/coursesService.js";
+import {
+  mapSemester,
+  mapStudyProgram,
+  unmapFacultyCode,
+} from "@/utils/enumMapper.js";
 
 import { OpenAPIHono } from "@hono/zod-openapi";
 
@@ -66,8 +75,20 @@ courses
 
       const query = { studyProgram, academicYear, semester };
 
-      const data = await courseServices.getCourseDetail(query, courseNo);
-      return c.json(data, 200);
+      const { course } = await courseServices.getCourseDetail(query, courseNo);
+
+      return c.json(
+        {
+          course: {
+            ...course,
+            courseInfo: {
+              ...course.courseInfo,
+              faculty: unmapFacultyCode(course.courseInfo.faculty),
+            },
+          },
+        },
+        200,
+      );
     } catch (error) {
       console.error(error);
       if (error instanceof Error) {

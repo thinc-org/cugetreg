@@ -3,6 +3,7 @@ import { z } from "zod";
 import {
   assessment,
   days,
+  faculty,
   genEdType,
   semester,
   sortBy,
@@ -18,7 +19,7 @@ export const GetCourseQuerySchema = z.object({
   semester: semester,
   q: z.string().optional(),
   genEdTypes: z.union([z.array(genEdType), genEdType]).optional(),
-  faculties: z.union([z.string(), z.array(z.string())]).optional(),
+  faculties: z.union([faculty, z.array(faculty)]).optional(),
   days: z.union([z.array(days), days]).optional(),
   timeStart: z.string().regex(TIME_REGEX).optional(),
   timeEnd: z.string().regex(TIME_REGEX).optional(),

@@ -32,6 +32,9 @@ export type ViewCourseData = {
 	midterm?: string;
 	final?: string;
 	isHidden: boolean;
+	studyProgram: string;
+	academicYear: number;
+	semester: string;
 };
 
 export { default as ViewCourse } from './view-course.svelte';

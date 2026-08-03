@@ -3,6 +3,7 @@ import type { Variables } from "@/lib/auth.js";
 import {
   getCourseByNoRoute,
   getCourseReviews,
+  getCourseSectionsRoute,
   getCoursesRoute,
 } from "@/routes_define/courses.routes.js";
 import {
@@ -79,6 +80,34 @@ courses
         },
         200,
       );
+    } catch (error) {
+      console.error(error);
+      return c.json({ error: "INTERNAL_SERVER_ERROR" }, 500);
+    }
+  })
+  // 1.4. Get Course Sections (lightweight — Section picker on the review form)
+  .openapi(getCourseSectionsRoute, async (c) => {
+    try {
+      const { courseNo } = c.req.valid("param");
+      const { studyProgram, academicYear, semester } = c.req.valid("query");
+
+      const course = await prisma.course.findFirst({
+        where: {
+          courseNo,
+          studyProgram: mapStudyProgram(studyProgram),
+          academicYear,
+          semester: mapSemester(semester),
+        },
+        select: {
+          sections: { select: { sectionNo: true } },
+        },
+      });
+
+      if (!course) {
+        return c.json({ message: "Course not found" }, 404);
+      }
+
+      return c.json({ sections: course.sections.map((s) => s.sectionNo) }, 200);
     } catch (error) {
       console.error(error);
       return c.json({ error: "INTERNAL_SERVER_ERROR" }, 500);

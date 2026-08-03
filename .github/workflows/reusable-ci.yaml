@@ -67,10 +67,10 @@ jobs:
           docker logs cugetreg-db --tail 20
           exit 1
         env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: cugetreg
-          POSTGRES_PORT: 5432
+          DB_USER: postgres
+          DB_PASS: postgres
+          DB_NAME: cugetreg
+          DB_PORT: 5432
 
       - name: Apply database migrations
         if: ${{ inputs.target == 'build' || inputs.target == 'test' || inputs.target == 'check' }}

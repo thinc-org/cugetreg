@@ -1,5 +1,7 @@
 <script lang="ts">
   import {
+    downloadICS,
+    generateExamICS,
     getExamData,
     getExamDateOrder,
     getLatestExamTime,
@@ -11,10 +13,12 @@
   import {
     ChevronLeft,
     ChevronRight,
+    Download,
     Grid3X3,
     ListOrdered,
   } from 'lucide-svelte';
 
+  import { Button } from '@cugetreg/ui/atoms/button';
   import { CustomizeScrollbar } from '@cugetreg/ui/atoms/customize-scrollbar';
   import { TimeTable, TimetableCourseCard } from '@cugetreg/ui/atoms/timetable';
   import {
@@ -77,6 +81,11 @@
 
     return `${date.getDate()} ${months[date.getMonth()]} ${String(date.getFullYear() + 543).slice(-2)}`;
   }
+
+  function handleDownloadICS() {
+    const icsContent = generateExamICS(cart, exams);
+    downloadICS(`${cart.name}_exam-schedule`, icsContent);
+  }
 </script>
 
 <div class="flex flex-row items-center justify-between lg:justify-center">
@@ -134,6 +143,13 @@
 {:else}
   {@render examSchedule()}
 {/if}
+
+<div class="mt-4 flex justify-end">
+  <Button class="m-0 flex items-center gap-1" onclick={handleDownloadICS}>
+    <Download size={18} strokeWidth={2} />
+    ตารางสอบ (.ics)
+  </Button>
+</div>
 
 {#snippet examSchedule()}
   <div class="my-5 text-xl font-bold">Midterm</div>

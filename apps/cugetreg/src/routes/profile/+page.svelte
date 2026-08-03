@@ -44,6 +44,8 @@
     id: string;
     title: string;
     subtitle: string;
+    year: number;
+    semester: number;
     isPublic: boolean;
   }
 

@@ -49,10 +49,22 @@ export const GetCourseReviewQuerySchema = z.object({
   page: z.coerce.number().int().min(1).default(1),
   academicYear: z.coerce.number().int().min(2564).optional(),
   semester: semester.optional(),
+  sectionNo: z.coerce.number().int().optional(),
   includeFacets: z.stringbool().default(false),
+});
+
+//1.4 get course sections (lightweight — section numbers only, used to
+// populate the Section picker on the review form for a given year/semester)
+export const GetCourseSectionsQuerySchema = z.object({
+  studyProgram: studyProgram,
+  academicYear: z.coerce.number().int().min(2564),
+  semester: semester,
 });
 
 export type GetCourseQuerySchema = z.infer<typeof GetCourseQuerySchema>;
 export type GetCourseReviewQuerySchema = z.infer<
   typeof GetCourseReviewQuerySchema
+>;
+export type GetCourseSectionsQuerySchema = z.infer<
+  typeof GetCourseSectionsQuerySchema
 >;

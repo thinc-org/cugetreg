@@ -2,18 +2,22 @@ import { prisma } from "@/db/clients.js";
 import { Prisma } from "@/generated/prisma/client.js";
 import { ReviewStatus, VoteType } from "@/generated/prisma/enums.js";
 import { getCourseList } from "@/generated/prisma/sql.js";
-import { mapDayOfWeek, unmapFacultyCode } from "@/utils/enumMapper.js";
+import {
+  mapDayOfWeek,
+  mapSemester,
+  mapStudyProgram,
+  unmapFacultyCode,
+} from "@/utils/enumMapper.js";
 
 import type {
+  GetCourseDetailQuerySchema,
   GetCourseQuerySchema,
   GetCourseReviewQuerySchema,
 } from "@cugetreg/zod-schemas/courses";
 import type { CourseReview } from "@cugetreg/zod-schemas/courses-response";
 
-export async function queryCourse(
-  query: GetCourseQuerySchema,
-  userId?: string,
-) {
+//1.1 Query Course
+async function queryCourse(query: GetCourseQuerySchema, userId?: string) {
   const {
     studyProgram,
     academicYear,
@@ -30,9 +34,10 @@ export async function queryCourse(
     timeStart,
     timeEnd,
     noPrereq,
-    fitCartId,
     creditMin,
     creditMax,
+    favorite,
+    fitCartId,
   } = query;
 
   const selectedGenEdTypes =
@@ -40,6 +45,12 @@ export async function queryCourse(
   const selectedDays = !days || Array.isArray(days) ? days : [days];
   const selectedFaculties =
     !faculties || Array.isArray(faculties) ? faculties : [faculties];
+
+  if (favorite) {
+    if (!userId) {
+      throw new Error("UNAUTHORIZED");
+    }
+  }
 
   if (fitCartId) {
     if (!userId) {
@@ -81,6 +92,8 @@ export async function queryCourse(
       fitCartId ?? null,
       creditMin ?? null,
       creditMax ?? null,
+      favorite ?? null,
+      userId ?? null,
     ),
   );
 
@@ -113,6 +126,7 @@ export async function queryCourse(
       midtermEnd: row.midterm_end?.toISOString() ?? null,
       finalStart: row.final_start?.toISOString() ?? null,
       finalEnd: row.final_end?.toISOString() ?? null,
+      isFavorite: row.is_favorite ?? false,
       sections: (row.sections as any[]) ?? [],
     },
     courseInfo: {
@@ -141,7 +155,177 @@ export async function queryCourse(
   return { data, total };
 }
 
-export async function getCourseReviewByCourseNo(
+//1.2 get user's favorite courses
+async function getFavoriteCourses(
+  query: GetCourseDetailQuerySchema,
+  userId: string,
+) {
+  const { studyProgram, academicYear, semester } = query;
+  const courses = await prisma.courseInfo.findMany({
+    where: {
+      courseFavorites: {
+        some: {
+          userId,
+        },
+      },
+      courses: {
+        some: {
+          academicYear,
+          semester,
+          studyProgram,
+        },
+      },
+    },
+    select: {
+      courseNo: true,
+      abbrName: true,
+      faculty: true,
+      department: true,
+      credit: true,
+      creditHours: true,
+      courses: {
+        select: {
+          genEdType: true,
+          courseCondition: true,
+          academicYear: true,
+          semester: true,
+          studyProgram: true,
+        },
+        where: {
+          academicYear,
+          semester,
+          studyProgram,
+        },
+      },
+    },
+  });
+
+  const favoriteCourses = courses.map((course) => {
+    return {
+      courseNo: course.courseNo,
+      abbrName: course.abbrName,
+      faculty: course.faculty,
+      department: course.department,
+      credit: course.credit.toString(),
+      creditHours: course.creditHours,
+      genEdType: course.courses[0].genEdType,
+      courseCondition: course.courses[0].courseCondition,
+      academicYear: course.courses[0].academicYear,
+      studyProgram: course.courses[0].studyProgram,
+      semester: course.courses[0].semester,
+    };
+  });
+
+  return {
+    total: favoriteCourses.length,
+    courses: favoriteCourses,
+  };
+}
+
+//1.3 Get Course Detail
+async function getCourseDetail(
+  query: GetCourseDetailQuerySchema,
+  courseNo: string,
+) {
+  const { studyProgram, academicYear, semester } = query;
+
+  const course = await prisma.course.findFirst({
+    where: {
+      courseNo,
+      studyProgram: mapStudyProgram(studyProgram),
+      academicYear,
+      semester: mapSemester(semester),
+    },
+    include: {
+      courseInfo: true,
+      sections: { include: { classes: true } },
+    },
+  });
+
+  if (!course) {
+    throw new Error("Course not found");
+  }
+
+  return {
+    course,
+  };
+}
+
+//1.4 Add Favorite Course
+async function addFavoriteCourse(courseNo: string, userId: string) {
+  const courseInfo = await prisma.courseInfo.findUnique({
+    where: {
+      courseNo,
+    },
+  });
+
+  if (!courseInfo) {
+    throw new Error("COURSE_NOT_FOUND");
+  }
+
+  await prisma.courseFavorite.create({
+    data: {
+      courseNo,
+      userId,
+    },
+  });
+
+  return {
+    abbrName: courseInfo.abbrName,
+    courseNameEn: courseInfo.courseNameEn,
+    courseNameTh: courseInfo.courseNameTh,
+    faculty: courseInfo.faculty,
+    department: courseInfo.department,
+    credit: courseInfo.credit,
+    creditHours: courseInfo.creditHours,
+  };
+}
+
+//1.5 Remove Favorite Course
+async function removeFavoriteCourse(courseNo: string, userId: string) {
+  const courseInfo = await prisma.courseInfo.findUnique({
+    where: {
+      courseNo,
+    },
+  });
+
+  if (!courseInfo) {
+    throw new Error("COURSE_NOT_FOUND");
+  }
+
+  await prisma.courseFavorite.deleteMany({
+    where: {
+      userId,
+      courseNo,
+    },
+  });
+}
+
+//1.6 Get Course Sections
+async function getCourseSections(
+  courseNo: string,
+  query: GetCourseDetailQuerySchema,
+) {
+  const { studyProgram, academicYear, semester } = query;
+
+  const course = await prisma.course.findFirst({
+    where: {
+      courseNo,
+      studyProgram: mapStudyProgram(studyProgram),
+      academicYear,
+      semester: mapSemester(semester),
+    },
+    select: {
+      sections: { select: { sectionNo: true } },
+    },
+  });
+  if (!course) {
+    throw new Error("Course not found");
+  }
+  return { sections: course.sections.map((s) => s.sectionNo) };
+}
+
+async function getCourseReviewByCourseNo(
   courseNo: string,
   query: GetCourseReviewQuerySchema,
   userId?: string,
@@ -308,3 +492,13 @@ export async function getCourseReviewByCourseNo(
 
   return { reviews: resultReviews, count, facets };
 }
+
+export const courseServices = {
+  queryCourse,
+  getFavoriteCourses,
+  getCourseDetail,
+  addFavoriteCourse,
+  removeFavoriteCourse,
+  getCourseSections,
+  getCourseReviewByCourseNo,
+};

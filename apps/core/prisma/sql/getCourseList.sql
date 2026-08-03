@@ -19,6 +19,8 @@
 -- @param {String} $16:fitCartId? Optional cart ID — when set, excludes sections whose classes overlap with the cart's sections
 -- @param {Decimal} $17:creditMin? Optional minimum credit
 -- @param {Decimal} $18:creditMax? Optional maximum credit
+-- @param {Boolean} $19:favorite? Optional when true, select user's favorite courses
+-- @param {String} $20:userId? Optional , required when get user's favorite courses
 
 -- Perf note: LIMIT/OFFSET are applied in `paginated_courses` (Stage A), before
 -- the expensive per-class JSON aggregation in `section_json` (Stage B). Stage B
@@ -56,6 +58,13 @@ WITH occupied_slots AS MATERIALIZED (
       AND cl_occ.period_end_minutes IS NOT NULL
 ),
 
+user_favorites AS (
+    SELECT DISTINCT cf.course_no
+    FROM course_favorite cf
+    WHERE cf.user_id = $20::text
+    AND $20::text IS NOT NULL
+),
+
 -- Step 1: Find sections that pass ALL filters (course-level + section-level).
 --         Uses LEFT JOIN on classes so day/time/professor conditions apply
 --         per class row; DISTINCT deduplicates sections that have at least
@@ -69,11 +78,13 @@ matching_sections AS (
         s.max,
         s.regis,
         s.note,
-        s.gen_ed_type
+        s.gen_ed_type,
+        (uf.course_no IS NOT NULL) AS is_favorite
     FROM course_section s
     JOIN course c             ON c.id = s.course_id
     JOIN course_info ci       ON ci.course_no = c.course_no
     LEFT JOIN course_class cl ON cl.section_id = s.id
+    LEFT JOIN user_favorites uf ON uf.course_no = ci.course_no
     WHERE
         -- Course-level filters
         c.study_program = $1::study_program
@@ -147,6 +158,11 @@ matching_sections AS (
                   )
             )
         )
+
+        AND (
+          $19::boolean IS NOT TRUE
+          OR uf.course_no IS NOT NULL
+        )
 ),
 
 -- Step 2: Distinct list of matching course IDs (used for total count)
@@ -161,7 +177,8 @@ section_stats AS (
         COUNT(*)::int                          AS sections_count,
         COALESCE(SUM(max), 0)::int             AS capacity_sum,
         COALESCE(SUM(max - regis), 0)::int     AS remaining_sum,
-        COUNT(*) FILTER (WHERE closed)::int    AS closed_sections_count
+        COUNT(*) FILTER (WHERE closed)::int    AS closed_sections_count,
+        bool_or(is_favorite)                   AS is_favorite
     FROM matching_sections
     GROUP BY course_id
 ),
@@ -199,6 +216,7 @@ paginated_courses AS (
         COALESCE(ss.capacity_sum, 0)::int           AS capacity_sum,
         COALESCE(ss.remaining_sum, 0)::int          AS remaining_sum,
         COALESCE(ss.closed_sections_count, 0)::int  AS closed_sections_count,
+        COALESCE(ss.is_favorite, FALSE)             AS is_favorite,
         COUNT(*) OVER ()::int                       AS total_count,
         ROW_NUMBER() OVER (
             ORDER BY
@@ -313,6 +331,7 @@ SELECT
     pc.capacity_sum,
     pc.remaining_sum,
     pc.closed_sections_count,
+    pc.is_favorite,
     COALESCE(
         json_agg(
             json_build_object(
@@ -339,6 +358,6 @@ GROUP BY
     pc.course_condition, pc.midterm_start, pc.midterm_end, pc.final_start, pc.final_end,
     pc.abbr_name, pc.course_name_en, pc.course_name_th, pc.course_desc_en, pc.course_desc_th,
     pc.faculty, pc.department, pc.credit, pc.credit_hours, pc.grading_type,
-    pc.sections_count, pc.capacity_sum, pc.remaining_sum, pc.closed_sections_count,
+    pc.sections_count, pc.capacity_sum, pc.remaining_sum, pc.closed_sections_count, pc.is_favorite,
     pc.total_count, pc.__rank
 ORDER BY pc.__rank;

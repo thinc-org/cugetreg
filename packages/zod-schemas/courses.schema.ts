@@ -26,7 +26,7 @@ export const GetCourseQuerySchema = z.object({
   creditMax: z.coerce.number().optional(),
   noPrereq: z.coerce.boolean().optional(),
   fitCartId: z.string().optional(),
-  assessment: assessment.optional(),
+  assessment: z.union([z.array(assessment), assessment]).optional(),
   sortBy: sortBy.optional(),
   sortOrder: sortOrder.optional(),
   offset: z.coerce.number().int().optional(),

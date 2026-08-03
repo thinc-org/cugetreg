@@ -40,6 +40,8 @@ export async function queryCourse(
   const selectedDays = !days || Array.isArray(days) ? days : [days];
   const selectedFaculties =
     !faculties || Array.isArray(faculties) ? faculties : [faculties];
+  const selectedEvals =
+    !assessment || Array.isArray(assessment) ? assessment : [assessment];
 
   if (fitCartId) {
     if (!userId) {
@@ -69,7 +71,7 @@ export async function queryCourse(
       selectedDays
         ? (selectedDays.map((day) => mapDayOfWeek(day)) as any)
         : null,
-      assessment ?? null,
+      (selectedEvals as any) ?? null,
       q ? `%${q}%` : null,
       noPrereq ?? null,
       timeStart ?? null,

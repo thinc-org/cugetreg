@@ -2,7 +2,12 @@ import { prisma } from "@/db/clients.js";
 import { Prisma } from "@/generated/prisma/client.js";
 import { ReviewStatus, VoteType } from "@/generated/prisma/enums.js";
 import { getCourseList } from "@/generated/prisma/sql.js";
-import { mapDayOfWeek, mapSemester, mapStudyProgram, unmapFacultyCode } from "@/utils/enumMapper.js";
+import {
+  mapDayOfWeek,
+  mapSemester,
+  mapStudyProgram,
+  unmapFacultyCode,
+} from "@/utils/enumMapper.js";
 
 import type {
   GetCourseDetailQuerySchema,

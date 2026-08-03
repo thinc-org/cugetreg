@@ -16,6 +16,7 @@ const ignores = [
   ".next/",
   "out/",
   "build",
+  "storybook-static",
   ".DS_Store",
   "*.pem",
   "npm-debug.log*",

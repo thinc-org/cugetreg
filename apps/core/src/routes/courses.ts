@@ -10,15 +10,7 @@ import {
   removeFavoriteCourse,
 } from "@/routes_define/courses.routes.js";
 import { courseServices } from "@/services/coursesService.js";
-import {
-  getCourseReviewByCourseNo,
-  queryCourse,
-} from "@/services/coursesService.js";
-import {
-  mapSemester,
-  mapStudyProgram,
-  unmapFacultyCode,
-} from "@/utils/enumMapper.js";
+import { unmapFacultyCode } from "@/utils/enumMapper.js";
 
 import { OpenAPIHono } from "@hono/zod-openapi";
 

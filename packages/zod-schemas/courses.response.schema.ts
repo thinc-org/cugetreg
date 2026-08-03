@@ -2,6 +2,7 @@ import { z } from "zod";
 
 import {
   days,
+  faculty,
   genEdType,
   reviewStatus,
   semester,
@@ -57,7 +58,7 @@ export const CourseInfoSchema = z.object({
   courseNameTh: z.string(),
   courseDescEn: z.string().nullable(),
   courseDescTh: z.string().nullable(),
-  faculty: z.string().nullable(),
+  faculty: faculty.nullable(),
   department: z.string().nullable(),
   credit: z.string(),
   creditHours: z.string().nullable(),
@@ -94,7 +95,7 @@ export const CourseReview = z.object({
     dislikeCount: z.number(),
   }),
   user: z.object({
-    faculty: z.string().nullable(),
+    faculty: faculty.nullable(),
     department: z.string().nullable(),
   }),
   reaction: vote.optional(),

@@ -32,6 +32,9 @@ importers:
 
   apps/core:
     dependencies:
+      '@cugetreg/utils':
+        specifier: workspace:*
+        version: link:../../packages/utils
       '@cugetreg/zod-schemas':
         specifier: workspace:*
         version: link:../../packages/zod-schemas

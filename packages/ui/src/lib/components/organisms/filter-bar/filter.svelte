@@ -243,7 +243,7 @@
 		</div>
 
 		<div class="mb-4">
-			<label for="gened-select" class="mb-1.5 block text-xs text-neutral-400">วันในสัปดาห์ะ</label>
+			<label for="gened-select" class="mb-1.5 block text-xs text-neutral-400">วันในสัปดาห์</label>
 			<Select.Root type="multiple" bind:value={selectedDays}>
 				<div class="relative min-h-10">
 					{#if activeDays.length}

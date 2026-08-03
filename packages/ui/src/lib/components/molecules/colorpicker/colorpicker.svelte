@@ -59,7 +59,7 @@
 				onConfirmSelected(options[value]);
 			}}
 		>
-			เลืิอก
+			เลือก
 		</Button>
 	</div>
 </div>

@@ -29,7 +29,7 @@
   import {
     FACULTIES,
     type FacultyId,
-    UNKOWN_FACULTY,
+    UNKNOWN_FACULTY,
   } from '@cugetreg/utils/faculty';
   import type { ReviewStatus } from '@cugetreg/zod-schemas';
   import {
@@ -82,7 +82,7 @@
   let isMobile = $state(false);
 
   const faculty = $derived(
-    FACULTIES[personalInfo.faculty as FacultyId] ?? UNKOWN_FACULTY,
+    FACULTIES[personalInfo.faculty as FacultyId] ?? UNKNOWN_FACULTY,
   );
 
   const parsedPersonalInfo = $derived({
@@ -279,7 +279,7 @@
       accountEmail={personalInfo.accountEmail}
       accountProvider={personalInfo.accountProvider}
       faculty={FACULTIES[personalInfo.faculty as FacultyId].th ??
-        UNKOWN_FACULTY}
+        UNKNOWN_FACULTY}
       firstName={personalInfo.firstName}
       lastName={personalInfo.lastName}
       username={personalInfo.username}

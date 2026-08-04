@@ -11,7 +11,7 @@
 			case 'I':
 				return 'นานาชาติ';
 			case 'T':
-				return 'ไตรภาค';
+				return 'ตรีภาค';
 		}
 	}
 

@@ -14,6 +14,9 @@
 			recommended: {
 				control: 'boolean'
 			},
+			favorite: {
+				control: 'boolean'
+			},
 			onButtonClick: {
 				action: 'onButtonClick'
 			},
@@ -69,5 +72,22 @@
 			days: ['MO', 'TU', 'WE']
 		},
 		recommended: true
+	}}
+/>
+
+<Story
+	name="Favorite"
+	args={{
+		course: {
+			code: '0123101',
+			name: 'PARAGRAPH WRITING',
+			credit: 3,
+			gened: ['HU'],
+			seat: 24,
+			maxseat: 305,
+			review: 14,
+			days: ['MO', 'TU', 'WE']
+		},
+		favorite: true
 	}}
 />

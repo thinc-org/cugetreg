@@ -9,6 +9,7 @@
   const PUBLIC_API_URL = env.PUBLIC_API_URL ?? 'http://localhost:3000/api/v1';
   import { resolve } from '$app/paths';
   import { api } from '$lib/api';
+  import { tryCatch } from '$lib/async-handler';
   import { useSession } from '$lib/auth-client';
   import AppSidebar from '$lib/components/app-sidebar.svelte';
   import ScheduleMismatchPopup from '$lib/components/schedule-mismatch-popup.svelte';
@@ -44,10 +45,12 @@
     TriangleAlert,
     X,
   } from '@lucide/svelte';
+  import { isAxiosError } from 'axios';
   import { getContext, untrack } from 'svelte';
   import { cubicOut } from 'svelte/easing';
   import { SvelteURLSearchParams } from 'svelte/reactivity';
   import { fade, slide } from 'svelte/transition';
+  import toast from 'svelte-french-toast';
 
   import { Input } from '@cugetreg/ui/atoms/input';
   import { CourseCard } from '@cugetreg/ui/molecules/course-card';
@@ -104,7 +107,7 @@
   let endTime = $state('');
   let fitSchedule = $state(false);
   let noConditions = $state(false);
-
+  let favoriteOnly = $state(false);
   let currentProgram = $state<StudyProgram>('S');
   let currentSemester = $state<Semester>('FIRST');
   let currentAY = $state<number>(2568);
@@ -128,6 +131,7 @@
       endTime = params.get('timeEnd') ?? '';
       fitSchedule = params.get('fitSchedule') === 'true';
       noConditions = params.get('noConditions') === 'true';
+      favoriteOnly = params.get('favorite') === 'true';
       currentProgram = (page.params.program ?? 'S') as StudyProgram;
 
       const termParam = params.get('term');
@@ -170,6 +174,7 @@
   let localSelectedSections: Record<string, number> = {};
 
   const session = useSession();
+  const isLoggedIn = $derived(Boolean($session.data));
 
   const KNOWN_DAYS = new Set(['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU']);
 
@@ -224,6 +229,7 @@
         rating: item.rating || 0,
         days: validDays,
         gradingType: ci.gradingType,
+        isFavorite: c.isFavorite ?? false,
       },
     };
   }
@@ -256,32 +262,34 @@
         params.append('sortBy', currentSort);
       }
 
-      if (!noConditions) {
-        if (selectedGenEds.length > 0) {
-          selectedGenEds.forEach((genEd) => {
-            params.append('genEdTypes', genEd);
-          });
-        }
-        if (selectedFaculties.length > 0) {
-          selectedFaculties.forEach((faculty) => {
-            params.append('faculties', faculty);
-          });
-        }
-        if (selectedDays.length > 0) {
-          selectedDays.forEach((day) => {
-            params.append('days', day);
-          });
-        }
-        if (selectedEval.length > 0) {
-          selectedEval.forEach((evaluation) => {
-            params.append('assessment', evaluation);
-          });
-        }
-        if (startTime) params.append('timeStart', startTime);
-        if (endTime) params.append('timeEnd', endTime);
-      } else {
-        params.append('noPrereq', 'true');
+      if (noConditions) {
+        params.append('noPrereq', String(noConditions));
       }
+
+      if (selectedGenEds.length > 0) {
+        selectedGenEds.forEach((genEd) => {
+          params.append('genEdTypes', genEd);
+        });
+      }
+      if (selectedFaculties.length > 0) {
+        selectedFaculties.forEach((faculty) => {
+          params.append('faculties', faculty);
+        });
+      }
+      if (selectedDays.length > 0) {
+        selectedDays.forEach((day) => {
+          params.append('days', day);
+        });
+      }
+
+      if (selectedEval.length > 0) {
+        selectedEval.forEach((evaluation) => {
+          params.append('assessment', evaluation);
+        });
+      }
+
+      if (startTime) params.append('timeStart', startTime);
+      if (endTime) params.append('timeEnd', endTime);
 
       if (fitSchedule) {
         if ($userCart.currentCartId) {
@@ -289,8 +297,9 @@
         }
       }
 
-      console.log(params.getAll('days'));
-      console.log(params.getAll('genEdTypes'));
+      if (favoriteOnly && $session.data) {
+        params.append('favorite', 'true');
+      }
 
       const response = await api.get(`/courses?${params.toString()}`);
 
@@ -340,6 +349,8 @@
     startTime;
     endTime;
     noConditions;
+    favoriteOnly;
+    isLoggedIn;
     currentSort;
     sortDirection;
     fitSchedule;
@@ -407,6 +418,7 @@
     const evals = selectedEval;
     const fit = fitSchedule;
     const noCond = noConditions;
+    const fav = favoriteOnly;
 
     untrack(() => {
       const currentUrl = new SvelteURL(page.url);
@@ -423,6 +435,7 @@
         gradingType: evals.length ? evals.join(',') : null,
         fitSchedule: fit ? 'true' : null,
         noConditions: noCond ? 'true' : null,
+        favorite: fav ? 'true' : null,
       };
 
       for (const [key, value] of Object.entries(queryParams)) {
@@ -440,6 +453,49 @@
     });
     homeStore.currentUrl = page.url.toString();
   });
+
+  $effect(() => {
+    if (!favoriteOnly || $session.isPending || $session.data) return;
+    favoriteOnly = false;
+    loginPopupState.show = true;
+  });
+
+  function setFavorite(courseCode: string, isFavorite: boolean) {
+    courses = courses.map((item) =>
+      item.course.code === courseCode
+        ? { ...item, course: { ...item.course, isFavorite } }
+        : item,
+    );
+  }
+
+  async function handleToggleFavorite(courseItem: any) {
+    if (!$session.data) {
+      loginPopupState.show = true;
+      return;
+    }
+
+    const code = courseItem.course.code;
+    const nextFavorite = !courseItem.course.isFavorite;
+
+    setFavorite(code, nextFavorite);
+
+    const [, error] = await tryCatch(
+      nextFavorite
+        ? api.put(`/courses/${code}/favorite`)
+        : api.delete(`/courses/${code}/favorite`),
+    );
+
+    if (!error) return;
+
+    setFavorite(code, !nextFavorite);
+    if (isAxiosError(error) && error.response?.status === 401) {
+      loginPopupState.show = true;
+      return;
+    }
+    toast.error('Failed to remove favorite course, please try again', {
+      position: 'bottom-right',
+    });
+  }
 
   function scrollToSection(el: HTMLElement | undefined) {
     if (!el) return;
@@ -975,6 +1031,8 @@
                   sections={getSectionOptions(item)}
                   selectedSection={getSelectedSection(item.course.code)}
                   onSelectSection={(v: string) => handleSelectSection(item, v)}
+                  favorite={item.course.isFavorite ?? false}
+                  onToggleFavorite={() => handleToggleFavorite(item)}
                   class="w-full max-w-full md:w-full"
                   courseUrl={`/course-page/${item.course.code}?${params.toString()}`}
                 />
@@ -1086,6 +1144,7 @@
             bind:endTime
             bind:fitSchedule
             bind:noConditions
+            bind:favoriteOnly
             onsearch={onSearchFilter}
           />
         </div>

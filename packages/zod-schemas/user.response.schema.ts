@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import {
+  faculty,
   genEdType,
   reviewStatus,
   semester,
@@ -12,7 +13,7 @@ export const UserResponseSchema = z.object({
   email: z.string().email(),
   name: z.string().nonempty(),
   googleId: z.string().regex(/^\d+$/),
-  faculty: z.string().nullable(),
+  faculty: faculty.nullable(),
   department: z.string().nullable(),
   createdAt: z.iso.datetime(),
   updatedAt: z.iso.datetime(),
@@ -59,7 +60,7 @@ export const UpdateUserInfoResponseSchema = z.object({
     email: z.string().email(),
     name: z.string().nonempty(),
     image: z.string().url().nullable(),
-    faculty: z.string().nullable(),
+    faculty: faculty.nullable(),
     department: z.string().nullable(),
     updatedAt: z.iso.datetime(),
   }),

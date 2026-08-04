@@ -54,6 +54,12 @@ async function queryCourse(query: GetCourseQuerySchema, userId?: string) {
     }
   }
 
+  if (favorite) {
+    if (!userId) {
+      throw new Error("UNAUTHORIZED");
+    }
+  }
+
   if (fitCartId) {
     if (!userId) {
       throw new Error("UNAUTHORIZED");

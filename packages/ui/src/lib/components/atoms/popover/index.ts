@@ -1,3 +1,3 @@
-import Root from './collapsible.svelte';
+import Root from './popover.svelte';
 
 export { Root as Collapsible, Root };

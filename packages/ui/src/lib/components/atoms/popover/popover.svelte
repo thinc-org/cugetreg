@@ -14,12 +14,12 @@
 </script>
 
 <Popover.Root bind:open>
-	<div class="flex flex-row md:gap-1">
-		<p class="text-primary text-button1 font-medium">{name}</p>
-		<Popover.Trigger>
+	<Popover.Trigger>
+		<div class="flex flex-row hover:cursor-pointer md:gap-1">
+			<p class="text-primary text-button1 font-medium">{name}</p>
 			<ChevronDown color="#4A70C6" class="hidden min-[900px]:block" />
-		</Popover.Trigger>
-	</div>
+		</div>
+	</Popover.Trigger>
 	<Popover.Portal>
 		<Popover.Content forceMount side="bottom" align="end" sideOffset={24} class="z-100">
 			{#snippet child({ wrapperProps, props, open })}

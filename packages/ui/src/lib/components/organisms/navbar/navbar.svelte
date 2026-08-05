@@ -14,6 +14,7 @@
 	import { CUGetRegDarkFull as CUGetRegLogo } from '../../logo/cugetreg';
 	import { UserDialog } from '../../molecules/user-dialog';
 	import { MobileSidebar } from '../mobile-sidebar';
+	import Popover from '$lib/components/atoms/popover/popover.svelte';
 
 	interface ScheduleOption {
 		name: string;
@@ -136,9 +137,9 @@
 			<Moon strokeWidth="3" size="16" />
 		</IconButton>
 		{#if isLoggedIn}
-			<Collapsible name={shortenedName}>
+			<Popover name={shortenedName}>
 				<UserDialog {name} {id} {imageUrl} {onSignOut} onSettings={() => goto('/profile')} />
-			</Collapsible>
+			</Popover>
 		{:else}
 			<!-- To be implemented: add real href in Button -->
 			<Button class="w-24 md:w-28" onclick={onLogin}>

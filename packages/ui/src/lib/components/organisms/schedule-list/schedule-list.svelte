@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { BookOpen, BookPlus, ChevronDown, LoaderCircle, Trash2 } from '@lucide/svelte';
+	import { BookOpen, BookPlus, LoaderCircle, Trash2 } from '@lucide/svelte';
 	import { onMount, untrack } from 'svelte';
 
 	import { Switch } from '../../atoms/switch';

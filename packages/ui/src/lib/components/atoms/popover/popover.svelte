@@ -5,14 +5,15 @@
 	import { slide } from 'svelte/transition';
 
 	interface Props {
+		open: boolean;
 		name: string;
 		children?: Snippet;
 	}
 
-	let { name = '', children }: Props = $props();
+	let { name = '', children, open = $bindable() }: Props = $props();
 </script>
 
-<Popover.Root>
+<Popover.Root bind:open>
 	<div class="flex flex-row md:gap-1">
 		<p class="text-primary text-button1 font-medium">{name}</p>
 		<Popover.Trigger>

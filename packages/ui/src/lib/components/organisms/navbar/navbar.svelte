@@ -78,6 +78,16 @@
 	const toggleSideBar = () => {
 		openSideBar = !openSideBar;
 	};
+
+	let openPopover = $state(false);
+
+	function getOpen() {
+		return openPopover;
+	}
+
+	function setOpen(newOpen: boolean) {
+		openPopover = newOpen;
+	}
 </script>
 
 <div
@@ -136,8 +146,17 @@
 			<Moon strokeWidth="3" size="16" />
 		</IconButton>
 		{#if isLoggedIn}
-			<Popover name={shortenedName}>
-				<UserDialog {name} {id} {imageUrl} {onSignOut} onSettings={() => goto('/profile')} />
+			<Popover name={shortenedName} bind:open={openPopover}>
+				<UserDialog
+					{name}
+					{id}
+					{imageUrl}
+					{onSignOut}
+					onSettings={() => {
+						openPopover = false;
+						goto('/profile');
+					}}
+				/>
 			</Popover>
 		{:else}
 			<!-- To be implemented: add real href in Button -->

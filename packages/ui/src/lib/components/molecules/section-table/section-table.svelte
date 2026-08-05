@@ -87,7 +87,7 @@
 	<Table class={`w-full border-separate border-spacing-0 text-left ${className ?? ''}`}>
 		<TableHeader class="bg-[#F6F6F9]">
 			<TableRow class="text-xs font-semibold tracking-[0.15px] sm:text-base">
-				<TableHead class="border-[#ECEEF4] text-[#4A70C6]">เซคชั่น</TableHead>
+				<TableHead class="border-[#ECEEF4] text-[#4A70C6]">เซคชัน</TableHead>
 				<TableHead class="border-[#ECEEF4] text-[#4A70C6]">จำนวนที่รับ</TableHead>
 				<TableHead class="border-[#ECEEF4] text-[#4A70C6]">ผู้สอน</TableHead>
 				<TableHead class="border-[#ECEEF4] text-[#4A70C6]">วันเวลาเรียน</TableHead>

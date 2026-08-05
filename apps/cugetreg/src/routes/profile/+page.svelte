@@ -27,6 +27,11 @@
   import { PersonalInfo } from '@cugetreg/ui/organisms/personal-info';
   import { RatingHistory } from '@cugetreg/ui/organisms/rating-history';
   import { ScheduleList } from '@cugetreg/ui/organisms/schedule-list';
+  import {
+    FACULTIES,
+    type FacultyId,
+    UNKNOWN_FACULTY,
+  } from '@cugetreg/utils/faculty';
   import type { ReviewStatus } from '@cugetreg/zod-schemas';
   import {
     ListCartsResponseSchema,
@@ -40,6 +45,8 @@
     id: string;
     title: string;
     subtitle: string;
+    year: number;
+    semester: number;
     isPublic: boolean;
   }
 
@@ -74,6 +81,15 @@
   let showCreateScheduleModal = $state(false);
 
   let isMobile = $state(false);
+
+  const faculty = $derived(
+    FACULTIES[personalInfo.faculty as FacultyId] ?? UNKNOWN_FACULTY,
+  );
+
+  const parsedPersonalInfo = $derived({
+    ...personalInfo,
+    faculty: faculty.th,
+  });
 
   async function updateUser() {
     const updatedUser = {
@@ -237,7 +253,7 @@
     <div
       class="flex w-full flex-col items-center gap-10 py-8 md:max-w-2xl lg:w-3/4 lg:max-w-lg lg:items-start lg:px-6"
     >
-      <PersonalInfo onEdit={toggleEditInfo} {...personalInfo} />
+      <PersonalInfo onEdit={toggleEditInfo} {...parsedPersonalInfo} />
       <RatingHistory
         {reviews}
         hasMore={hasMoreReviews}
@@ -263,7 +279,8 @@
       bind:department={newDepartment}
       accountEmail={personalInfo.accountEmail}
       accountProvider={personalInfo.accountProvider}
-      faculty={personalInfo.faculty}
+      faculty={FACULTIES[personalInfo.faculty as FacultyId].th ??
+        UNKNOWN_FACULTY}
       firstName={personalInfo.firstName}
       lastName={personalInfo.lastName}
       username={personalInfo.username}

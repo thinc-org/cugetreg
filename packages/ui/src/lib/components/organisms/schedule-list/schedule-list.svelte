@@ -3,11 +3,14 @@
 	import { onMount, untrack } from 'svelte';
 
 	import { Switch } from '../../atoms/switch';
+	import * as Select from '../../molecules/select/index.js';
 
 	interface ScheduleItem {
 		id: string;
 		title: string;
 		subtitle: string;
+		year: number;
+		semester: number;
 		isPublic: boolean;
 	}
 
@@ -31,15 +34,32 @@
 		onChangeVisibility
 	}: Props = $props();
 
-	let filters = $derived(
-		[...new Set(items.map((item) => item.title))].sort((option1, option2) => {
-			return option1.localeCompare(option2);
-		})
-	);
+	let filters = $derived([
+		...new Set(
+			items
+				.toSorted((item1, item2) => {
+					return item1.year !== item2.year
+						? item2.year - item1.year
+						: item2.semester - item1.semester;
+				})
+				.map((item) => {
+					const [yearLabel, semesterLabel] = [
+						item.subtitle.split(' ')[1],
+						item.subtitle.split(' ')[3]
+					];
+					return `${yearLabel} ${semesterLabel}`;
+				})
+		)
+	]);
 
 	let selected = $state(untrack(() => filters[0] ?? ''));
 
-	let filteredItems = $derived(items.filter((item) => item.title === selected));
+	let filteredItems = $derived(
+		items.filter((item) => {
+			const [yearLabel, semesterLabel] = [item.subtitle.split(' ')[1], item.subtitle.split(' ')[3]];
+			return `${yearLabel} ${semesterLabel}` === selected;
+		})
+	);
 
 	let switchingFilter = $state(false);
 	let showSpinner = $derived(loading || switchingFilter);
@@ -95,21 +115,22 @@
 		</div>
 	{/if}
 	{#if !loading && items.length}
-		<div class="border-surface-container-low bg-surface relative mt-4 rounded-2xl border px-6 py-4">
-			<select
-				class="text-body1 text-on-surface w-full appearance-none bg-transparent font-semibold underline underline-offset-4 focus:outline-none"
-				bind:value={selected}
+		<Select.Root type="single" bind:value={selected} onValueChange={() => (switchingFilter = true)}>
+			<Select.Trigger
+				class="text-body1 text-on-surface relative mt-4 min-h-14 w-full appearance-none rounded-2xl border bg-transparent px-6 py-4 font-semibold underline underline-offset-4 focus:outline-none sm:min-h-16"
 			>
-				{#each filters as name (name)}
-					<option value={name}>{name}</option>
-				{/each}
-			</select>
-			<ChevronDown
-				size="18"
-				strokeWidth="2.5"
-				class="text-on-surface/70 pointer-events-none absolute top-1/2 right-4 -translate-y-1/2"
-			/>
-		</div>
+				{selected}
+			</Select.Trigger>
+			<Select.Content role="listbox" sideOffset={4}>
+				<Select.Group class="max-h-44">
+					{#each filters as name (name)}
+						<Select.Item value={name}>
+							<Select.Item value={name} label={name} />
+						</Select.Item>
+					{/each}
+				</Select.Group>
+			</Select.Content>
+		</Select.Root>
 	{/if}
 	{#if !loading && !items.length}
 		<div class="flex items-center justify-center rounded-xl p-4">

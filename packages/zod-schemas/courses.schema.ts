@@ -3,6 +3,7 @@ import { z } from "zod";
 import {
   assessment,
   days,
+  faculty,
   genEdType,
   semester,
   sortBy,
@@ -18,13 +19,14 @@ export const GetCourseQuerySchema = z.object({
   semester: semester,
   q: z.string().optional(),
   genEdTypes: z.union([z.array(genEdType), genEdType]).optional(),
-  faculties: z.union([z.string(), z.array(z.string())]).optional(),
+  faculties: z.union([faculty, z.array(faculty)]).optional(),
   days: z.union([z.array(days), days]).optional(),
   timeStart: z.string().regex(TIME_REGEX).optional(),
   timeEnd: z.string().regex(TIME_REGEX).optional(),
   creditMin: z.coerce.number().optional(),
   creditMax: z.coerce.number().optional(),
   noPrereq: z.coerce.boolean().optional(),
+  favorite: z.coerce.boolean().optional(),
   fitCartId: z.string().optional(),
   assessment: assessment.optional(),
   sortBy: sortBy.optional(),
@@ -33,10 +35,13 @@ export const GetCourseQuerySchema = z.object({
   limit: z.coerce.number().int().optional(),
 });
 
-//1.2 get course detail by id
+//1.3 get course detail by id
 // In your schema file
 export const CourseNoParamSchema = z.object({
-  courseNo: z.string().describe("The registration number of the course"),
+  courseNo: z
+    .string()
+    .regex(/^\d{7}$/)
+    .describe("The registration number of the course"),
 });
 
 export const GetCourseReviewParamSchema = z.object({
@@ -52,7 +57,7 @@ export const GetCourseReviewQuerySchema = z.object({
   includeFacets: z.stringbool().default(false),
 });
 
-//1.4 get course sections (lightweight — section numbers only, used to
+//1.6 get course sections (lightweight — section numbers only, used to
 // populate the Section picker on the review form for a given year/semester)
 export const GetCourseSectionsQuerySchema = z.object({
   studyProgram: studyProgram,
@@ -61,6 +66,16 @@ export const GetCourseSectionsQuerySchema = z.object({
 });
 
 export type GetCourseQuerySchema = z.infer<typeof GetCourseQuerySchema>;
+
+export const GetCourseDetailQuerySchema = GetCourseQuerySchema.pick({
+  studyProgram: true,
+  academicYear: true,
+  semester: true,
+});
+
+export type GetCourseDetailQuerySchema = z.infer<
+  typeof GetCourseDetailQuerySchema
+>;
 export type GetCourseReviewQuerySchema = z.infer<
   typeof GetCourseReviewQuerySchema
 >;

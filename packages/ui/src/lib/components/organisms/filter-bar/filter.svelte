@@ -187,7 +187,7 @@
 		</div>
 
 		<div class="mb-4">
-			<label for="gened-select" class="mb-1.5 block text-xs text-neutral-400">คณะ</label>
+			<label for="faculty-select" class="mb-1.5 block text-xs text-neutral-400">คณะ</label>
 			<Select.Root type="multiple" bind:value={selectedFaculties}>
 				<div class="relative min-h-10">
 					{#if activeFaculties.length}
@@ -210,8 +210,8 @@
 						</div>
 					{/if}
 					<Select.Trigger
-						id="gened-select"
-						aria-label="ประเภท GenEd"
+						id="faculty-select"
+						aria-label="คณะ"
 						class="bg-surface-container-lowest hover:bg-surface-container-low absolute inset-0 h-full min-h-10 cursor-pointer rounded-xl border-transparent p-2 text-sm text-neutral-400 focus:ring-0 focus:ring-offset-0"
 					>
 						{#if !activeFaculties.length}
@@ -243,7 +243,7 @@
 		</div>
 
 		<div class="mb-4">
-			<label for="gened-select" class="mb-1.5 block text-xs text-neutral-400">วันในสัปดาห์ะ</label>
+			<label for="day-select" class="mb-1.5 block text-xs text-neutral-400">วันในสัปดาห์</label>
 			<Select.Root type="multiple" bind:value={selectedDays}>
 				<div class="relative min-h-10">
 					{#if activeDays.length}
@@ -267,8 +267,8 @@
 						</div>
 					{/if}
 					<Select.Trigger
-						id="gened-select"
-						aria-label="ประเภท GenEd"
+						id="day-select"
+						aria-label="วันในสัปดาห์"
 						class="bg-surface-container-lowest hover:bg-surface-container-low absolute inset-0 h-full min-h-10 cursor-pointer rounded-xl border-transparent p-2 text-sm text-neutral-400 focus:ring-0 focus:ring-offset-0"
 					>
 						{#if !activeDays.length}

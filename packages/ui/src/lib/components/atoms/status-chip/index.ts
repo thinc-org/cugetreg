@@ -15,5 +15,5 @@ export const styles: Record<Variant, string> = {
 export const text: Record<Variant, string> = {
 	APPROVED: 'อนุมัติแล้ว',
 	PENDING: 'กำลังรออนุมัติ',
-	REJECTED: 'ถูกปฎิเสธ'
+	REJECTED: 'ถูกปฏิเสธ'
 };

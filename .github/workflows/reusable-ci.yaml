@@ -1,4 +1,4 @@
-# Reusable CI workflow, install dependencies and run Nx target provied by projecy.json for each app
+# Reusable CI workflow, install dependencies and run Nx target provied by project.json for each app
 name: Reusable CI
 
 on:

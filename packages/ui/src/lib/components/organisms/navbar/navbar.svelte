@@ -3,9 +3,9 @@
 	import { resolve } from '$app/paths';
 	import { page } from '$app/stores';
 	import { Button } from '$lib/components/atoms/button';
-	import { Collapsible } from '$lib/components/atoms/collapsible';
 	import { IconButton } from '$lib/components/atoms/icon-button';
 	import { Input } from '$lib/components/atoms/input';
+	import Popover from '$lib/components/atoms/popover/popover.svelte';
 
 	import { Menu, Moon, Search } from '@lucide/svelte';
 
@@ -14,7 +14,6 @@
 	import { CUGetRegDarkFull as CUGetRegLogo } from '../../logo/cugetreg';
 	import { UserDialog } from '../../molecules/user-dialog';
 	import { MobileSidebar } from '../mobile-sidebar';
-	import Popover from '$lib/components/atoms/popover/popover.svelte';
 
 	interface ScheduleOption {
 		name: string;

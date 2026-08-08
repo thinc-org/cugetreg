@@ -165,6 +165,18 @@
 
 <svelte:window bind:innerWidth />
 
+{#snippet screenshotButton(visibility: string)}
+  <Button
+    variant="outlined"
+    color="neutral"
+    class="m-0 gap-2 {visibility}"
+    onclick={handleTimetableScreenshot}
+  >
+    <Download size={18} strokeWidth={2.5} />
+    บันทึกภาพ
+  </Button>
+{/snippet}
+
 <div class="relative flex h-full flex-col overflow-hidden bg-white">
   <Modal
     exitOnEsc
@@ -411,19 +423,7 @@
                 onCheckedChange={handlePublicToggle}
                 label="เปิดเป็นสาธารณะ"
               />
-              {#if innerWidth < 1024}
-                <Button
-                  class="m-0 flex items-center gap-1 border border-gray-200 bg-white"
-                  onclick={handleTimetableScreenshot}
-                >
-                  <Download
-                    size={20}
-                    strokeWidth={2.5}
-                    class="text-[#353745]"
-                  />
-                  <span class="font-medium text-[#353745]">บันทึกภาพ</span>
-                </Button>
-              {/if}
+              {@render screenshotButton('lg:hidden')}
             </div>
             <div class="flex w-full items-center gap-2 lg:flex-1">
               <div class="relative flex flex-1">
@@ -451,11 +451,7 @@
               <!-- <IconButton class="aspect-square"> -->
               <!--   <Share2 /> -->
               <!-- </IconButton> -->
-              {#if innerWidth >= 1024}
-                <Button class="m-0" onclick={handleTimetableScreenshot}>
-                  บันทึกเป็นภาพ
-                </Button>
-              {/if}
+              {@render screenshotButton('hidden lg:inline-flex')}
             </div>
           </div>
           <ExamsList cart={$userCart.currentCart} exams={$userCart.exams} />

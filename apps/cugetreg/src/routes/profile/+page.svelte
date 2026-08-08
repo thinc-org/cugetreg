@@ -7,6 +7,7 @@
     getSemesterShortOptions,
     getYearOptions,
   } from '$lib/semesterOptions';
+  import { getCartSelectionController } from '$lib/stores/cart-selection.svelte';
   import { useCartActions } from '$lib/stores/user-cart';
   import { convertReviewInfos } from '$lib/utils/reviews';
   import { convertSchedulesInfo } from '$lib/utils/scheduleInfo';
@@ -58,8 +59,8 @@
     term: string;
   }
 
-  const { changeCartVisibility, deleteCart, switchCart, createCart } =
-    useCartActions();
+  const { changeCartVisibility, deleteCart, createCart } = useCartActions();
+  const cartSelection = getCartSelectionController();
 
   const { data }: PageProps = $props();
   let personalInfo = $state(data.user);
@@ -182,9 +183,10 @@
 
   const onClickItem = async (item: ScheduleItem) => {
     try {
-      await switchCart(item.id);
+      const cart = await cartSelection.select(item.id);
+      if (!cart) return;
       goto(resolve('/schedule'));
-    } catch (e) {
+    } catch {
       console.error('redirect and switch cart failed');
     }
   };

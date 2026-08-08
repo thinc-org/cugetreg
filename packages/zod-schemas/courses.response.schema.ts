@@ -2,6 +2,7 @@ import { z } from "zod";
 
 import {
   days,
+  faculty,
   genEdType,
   reviewStatus,
   semester,
@@ -47,6 +48,7 @@ export const CourseSchema = z.object({
   midtermEnd: z.string().datetime().nullable(),
   finalStart: z.string().datetime().nullable(),
   finalEnd: z.string().datetime().nullable(),
+  isFavorite: z.boolean().nullable().default(false),
   sections: z.array(SectionSchema),
 });
 
@@ -57,7 +59,7 @@ export const CourseInfoSchema = z.object({
   courseNameTh: z.string(),
   courseDescEn: z.string().nullable(),
   courseDescTh: z.string().nullable(),
-  faculty: z.string().nullable(),
+  faculty: faculty.nullable(),
   department: z.string().nullable(),
   credit: z.string(),
   creditHours: z.string().nullable(),
@@ -94,7 +96,7 @@ export const CourseReview = z.object({
     dislikeCount: z.number(),
   }),
   user: z.object({
-    faculty: z.string().nullable(),
+    faculty: faculty.nullable(),
     department: z.string().nullable(),
   }),
   reaction: vote.optional(),
@@ -131,5 +133,30 @@ export const CourseReviewResponseSchema = z.object({
 
 export type CourseNoResponse = z.infer<typeof CourseNoResponseSchema>;
 export type CourseReview = z.infer<typeof CourseReview>;
+
+export const CourseFavoritesResponseSchema = z.object({
+  total: z.number().min(0),
+  courses: z.array(
+    z.object({
+      courseNo: z.string(),
+      abbrName: z.string(),
+      courseCondition: z.string().nullish().default("-"),
+      genEdType: genEdType,
+      faculty: z.string().nullable(),
+      department: z.string().nullable(),
+      credit: z.string(),
+      creditHours: z.string().nullable(),
+      studyProgram: studyProgram,
+      academicYear: z.number().min(2564),
+      semester: semester,
+    }),
+  ),
+});
+
+export const AddFavoriteCourseResponseSchema = CourseInfoSchema.omit({
+  courseDescEn: true,
+  courseDescTh: true,
+});
+
 export type CourseReviewFacet = z.infer<typeof CourseReviewFacetSchema>;
 export type CourseReviewResponse = z.infer<typeof CourseReviewResponseSchema>;

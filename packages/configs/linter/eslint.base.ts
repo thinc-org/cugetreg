@@ -16,6 +16,7 @@ const ignores = [
   ".next/",
   "out/",
   "build",
+  "storybook-static",
   ".DS_Store",
   "*.pem",
   "npm-debug.log*",
@@ -90,7 +91,7 @@ const config = defineConfig(
             ["^node:"],
             // Absolute imports and other imports such as Vue-style `@app/foo`.  Anything not matched in another group.
             ["^"],
-            // Asolute aliases. Anything that starts with `@`.
+            // Absolute aliases. Anything that starts with `@`.
             ["^@?\\w"],
             // Absolute app import.
             // ["^@app?\\w"], Doesn't exist (yet)

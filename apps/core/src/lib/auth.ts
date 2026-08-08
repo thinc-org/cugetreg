@@ -1,5 +1,7 @@
 import { prisma } from "@/db/clients.js";
 import { env } from "@/env.js";
+import { mapFacultyCode } from "@/utils/enumMapper.js";
+import { mapFaculty } from "@/utils/utils.js";
 
 import { APIError, betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
@@ -23,18 +25,46 @@ export const auth = betterAuth({
     "http://localhost:5173",
     ...(env.BETTER_AUTH_TRUSTED_ORIGINS?.split(",").map((o) => o.trim()) ?? []),
   ],
+  user: {
+    additionalFields: {
+      faculty: {
+        type: "string",
+        required: false,
+        input: false,
+      },
+      department: {
+        type: "string",
+        required: false,
+      },
+    },
+  },
   databaseHooks: {
     user: {
       create: {
         before: async (user, _context) => {
-          const allowUser =
-            user.email.endsWith("chula.ac.th") || ALLOW_NON_CHULA;
+          const match = /^\d{10}@(student\.)?chula\.ac\.th$/i.exec(user.email);
 
-          if (!allowUser) {
+          if (!match && !ALLOW_NON_CHULA) {
             throw new APIError("UNAUTHORIZED", {
               message: "non chula email",
             });
           }
+
+          const studentId = user.email.split("@")[0];
+          const facultyId = studentId.slice(
+            studentId.length - 2,
+            studentId.length,
+          );
+
+          return {
+            data: {
+              ...user,
+              faculty:
+                mapFaculty(facultyId).en === "UNKNOWN"
+                  ? null
+                  : mapFacultyCode(facultyId),
+            },
+          };
         },
       },
     },

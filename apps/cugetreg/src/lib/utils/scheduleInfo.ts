@@ -1,8 +1,8 @@
 import { SEMESTER_LABEL_LONG } from '$lib/semesterOptions';
 
-import type { CartSchema } from '@cugetreg/zod-schemas';
+import { type CartSchema } from '@cugetreg/zod-schemas';
 
-import { studyProgramMapper } from '../mapper';
+import { semesterToTermMapper, studyProgramMapper } from '../mapper';
 
 export function convertSchedulesInfo(schedules: CartSchema[]) {
   const result = schedules
@@ -19,6 +19,8 @@ export function convertSchedulesInfo(schedules: CartSchema[]) {
         id: schedule.id,
         title: schedule.name,
         subtitle: scheduleTerm,
+        year: schedule.academicYear,
+        semester: Number(semesterToTermMapper(schedule.semester)),
         isPublic: schedule.visible === 'PUB',
       };
     });

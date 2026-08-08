@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { reviewStatus } from "./constants.js";
+import { faculty, reviewStatus } from "./constants.js";
 
 export const GetUserReviewsQuerySchema = z
   .object({
@@ -14,7 +14,7 @@ export type GetUserReviewsQuery = z.infer<typeof GetUserReviewsQuerySchema>;
 
 export const UpdateUserInfoBodySchema = z.object({
   name: z.string().nonempty(),
-  faculty: z.string().optional(),
+  faculty: faculty.optional(),
   department: z.string().optional(),
 });
 

@@ -220,7 +220,7 @@
       },
     },
     {
-      label: 'รายละเอียดเซ็คชัน',
+      label: 'รายละเอียดเซคชัน',
       icon: StickyNote,
       onClick: () => {
         scrollToSection(detailSection);

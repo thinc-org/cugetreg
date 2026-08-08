@@ -27,6 +27,8 @@ courses
     try {
       const query = c.req.valid("query");
       const user = c.get("user");
+      const latency = 650 + Math.random() * 100;
+      await new Promise((resolve) => setTimeout(resolve, latency));
       const result = await courseServices.queryCourse(query, user?.id);
       return c.json(result, 200);
     } catch (err) {

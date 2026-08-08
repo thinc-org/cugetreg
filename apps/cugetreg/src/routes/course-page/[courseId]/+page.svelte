@@ -176,11 +176,9 @@
 
         const match = /^\d+$/;
         if (
-          writeReviewSectionNo !== null && 
-          ( 
-            !match.test(writeReviewSectionNo) || 
-            !sections.includes(Number(writeReviewSectionNo))
-          )
+          writeReviewSectionNo !== null &&
+          (!match.test(writeReviewSectionNo) ||
+            !sections.includes(Number(writeReviewSectionNo)))
         ) {
           writeReviewSectionNo = null;
         }
@@ -1421,7 +1419,8 @@
                       <Select.Root
                         type="single"
                         value={writeReviewSectionNo ?? ''}
-                        onValueChange={(v) => (writeReviewSectionNo = v || null)}
+                        onValueChange={(v) =>
+                          (writeReviewSectionNo = v || null)}
                         disabled={writeReviewSectionOptions.length === 0}
                       >
                         <Select.Trigger
@@ -1433,10 +1432,7 @@
                         </Select.Trigger>
                         <Select.Content role="listbox">
                           <Select.Group>
-                              <Select.Item
-                                value=""
-                                label="ไม่ระบุ"
-                              />
+                            <Select.Item value="" label="ไม่ระบุ" />
                             {#each writeReviewSectionOptions as sectionNo (sectionNo)}
                               <Select.Item
                                 value={String(sectionNo)}

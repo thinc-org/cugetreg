@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 
-	import { Bell, ChevronDown, LogOut, Menu, Moon, Plus } from '@lucide/svelte';
+	import { Bell, ChevronDown, LogOut, Menu, Plus } from '@lucide/svelte';
 
 	import { cn } from '@cugetreg/utils';
 
@@ -106,7 +106,7 @@
 	aria-hidden={!open}
 >
 	<div class="flex flex-col gap-5 p-4">
-		<!-- Top row: menu toggle, logo, theme switch -->
+		<!-- Top row: menu toggle, logo, announcements -->
 		<div class="flex items-center justify-between">
 			<div class="flex items-center gap-2">
 				<IconButton variant="ghost" onclick={onClose} aria-label="ปิดเมนู">
@@ -128,9 +128,6 @@
 				>
 					<Bell size="16" strokeWidth="2" />
 				</button>
-				<IconButton color="neutral" onclick={onToggleTheme} aria-label="สลับธีม">
-					<Moon size="16" strokeWidth="2.5" />
-				</IconButton>
 			</div>
 		</div>
 

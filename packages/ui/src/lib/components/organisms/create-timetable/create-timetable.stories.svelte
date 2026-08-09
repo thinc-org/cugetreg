@@ -31,15 +31,26 @@
 <Story
 	name="Default"
 	args={{
-		onCancel: defaultHandleCancel,
-		onConfirm: defaultHandleConfirm
+		handleCancel: defaultHandleCancel,
+		handleConfirm: defaultHandleConfirm,
+		shareLink: 'https://example.com/my-timetable'
+	}}
+/>
+
+<Story
+	name="Custom Share Link"
+	args={{
+		handleCancel: defaultHandleCancel,
+		handleConfirm: defaultHandleConfirm,
+		shareLink: 'https://cugetreg.com/shared/timetable-123'
 	}}
 />
 
 <Story
 	name="With Custom Handlers"
 	args={{
-		onCancel: customHandleCancel,
-		onConfirm: customHandleConfirm
+		handleCancel: customHandleCancel,
+		handleConfirm: customHandleConfirm,
+		shareLink: 'https://example.com/my-timetable'
 	}}
 />

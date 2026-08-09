@@ -4,15 +4,16 @@
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
+
 generator client {
   provider = "prisma-client"
-  previewFeatures = ["typedSql", "postgresqlExtensions"]
+  previewFeatures = ["typedSql"]
   output   = "../src/generated/prisma"
 }
 
+
 datasource db {
-  provider   = "postgresql"
-  extensions = [pgTrgm(map: "pg_trgm")]
+  provider = "postgresql"
 }
 
 //datagateway.chula.ac.th (Connect to Chula Wi-Fi)
@@ -43,36 +44,23 @@ model CourseInfo {
 
   // TODO separate this into other table
   // indirect -> 30 FACCODE or From CourseNo (Transitive Dependency)
-  faculty    Faculty?
+  faculty    String?
   // indirect -> From CourseNo (Transitive Dependency)
   department String?
 
   // 24 TOTALCREDIT
-  credit      Decimal
+  credit      Decimal 
   // 17 lcredit 18 nlcredit 19 lhour 20 nlhour 21 shour
-  creditHours String? @map("credit_hours")
+  creditHours String?  @map("credit_hours")
 
   gradingType GradingType @map("grading_type")
 
   // Relation to Course
-  courses         Course[]
+  courses   Course[]
   // New!!!
-  cartItems       CartItem[]
+  cartItems CartItem[]
   //New!!!
-  reviews         Review[]
-  courseFavorites CourseFavorite[]
-
-  // Facet filter on the course list/search endpoint (getCourseList.sql
-  // `WHERE ci.faculty = ANY(...)`) — plain btree, equality/ANY lookup.
-  @@index([faculty])
-
-  // Course search (getCourseList.sql `... ILIKE $8`) uses leading-wildcard
-  // '%query%' patterns, which a plain btree index cannot use at all — these
-  // GIN trigram indexes let Postgres use an index scan for ILIKE instead of
-  // a sequential scan.
-  @@index([abbrName(ops: raw("gin_trgm_ops"))], type: Gin)
-  @@index([courseNameEn(ops: raw("gin_trgm_ops"))], type: Gin)
-  @@index([courseNameTh(ops: raw("gin_trgm_ops"))], type: Gin)
+  reviews Review[]
 
   @@map("course_info")
 }
@@ -111,26 +99,7 @@ model Course {
   sections Section[]
 
   @@unique([studyProgram, academicYear, semester, courseNo], name: "course_unique")
-
-  // Course search (getCourseList.sql `c.course_no ILIKE $8`) — leading-wildcard,
-  // not covered by the composite unique index above (course_no isn't the
-  // leading column there).
-  @@index([courseNo(ops: raw("gin_trgm_ops"))], type: Gin)
-
   @@map("course")
-}
-
-model CourseFavorite {
-  id String @id @default(cuid())
-
-  courseNo   String     @map("course_no")
-  courseInfo CourseInfo @relation(fields: [courseNo], references: [courseNo], onDelete: Cascade)
-
-  userId String @map("user_id")
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([courseNo, userId], name: "course_favorite_unique")
-  @@map("course_favorite")
 }
 
 // course_section
@@ -188,50 +157,10 @@ model SectionClass {
   // DG0216 -> FK(???) 16 NAME_ABBR (PostgreSQL array type)
   professors  String[]  @map("professors")
 
-  // Computed by BEFORE INSERT/UPDATE trigger from period_start/period_end.
-  periodStartMinutes Int? @map("period_start_minutes")
-  periodEndMinutes   Int? @map("period_end_minutes")
-
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  @@index([sectionId], name: "idx_course_class_section")
   @@map("course_class")
-}
-
-enum Faculty {
-  F01 @map("01")
-  F02 @map("02")
-  F20 @map("20")
-  F21 @map("21")
-  F22 @map("22")
-  F23 @map("23")
-  F24 @map("24")
-  F25 @map("25")
-  F26 @map("26")
-  F27 @map("27")
-  F28 @map("28")
-  F29 @map("29")
-  F30 @map("30")
-  F31 @map("31")
-  F32 @map("32")
-  F33 @map("33")
-  F34 @map("34")
-  F35 @map("35")
-  F36 @map("36")
-  F37 @map("37")
-  F38 @map("38")
-  F39 @map("39")
-  F40 @map("40")
-  F49 @map("49")
-  F51 @map("51")
-  F53 @map("53")
-  F55 @map("55")
-  F56 @map("56")
-  F58 @map("58")
-  F63 @map("63")
-  F92 @map("92")
-  F99 @map("99")
 }
 
 /// Academic Semester
@@ -250,30 +179,29 @@ enum StudyProgram {
   S // ทวิภาค
   I // ทวิภาค-นานาชาต
   T // ตรีภาค
-
   @@map("study_program")
 }
 
-/// General Education (GenEd) Course Type
+/// General Education (GenEd) Course Type 
 
 enum GenEdType {
-  NO // NOT_GENED
-  SC // SCIENCE
-  SO // SOCIAL
-  HU // HUMAN
+  NO // NOT_GENED 
+  SC // SCIENCE 
+  SO // SOCIAL 
+  HU // HUMAN 
   IN // INTERDISCIPLINARY
 
   @@map("gen_ed_type")
 }
 
-/// Day of the Week for Class Scheduling
+/// Day of the Week for Class Scheduling 
 enum DayOfWeek {
-  MO
-  TU
-  WE
+  MO 
+  TU 
+  WE 
   TH
-  FR
-  SA
+  FR 
+  SA 
   SU
   AR // To Be Arranged
   IR // Individually Arranged
@@ -281,7 +209,7 @@ enum DayOfWeek {
   @@map("day_of_week")
 }
 
-/// Review Status
+/// Review Status 
 
 enum ReviewStatus {
   PENDING
@@ -291,7 +219,7 @@ enum ReviewStatus {
   @@map("review_status")
 }
 
-/// Vote Type
+/// Vote Type 
 
 enum VoteType {
   L // LIKE
@@ -300,7 +228,7 @@ enum VoteType {
   @@map("vote_type")
 }
 
-/// Visible
+/// Visible 
 
 enum Visible {
   PUB // PUBLIC
@@ -321,11 +249,11 @@ model User {
   id    String @id @default(cuid())
   email String @unique
 
-  name  String
-  image String?
+  name     String
+  image    String?
 
   // New!!!
-  faculty    Faculty?
+  faculty    String?
   department String?
 
   createdAt DateTime     @default(now()) @map("created_at")
@@ -335,10 +263,9 @@ model User {
   reviews   Review[]
   votes     ReviewVote[]
 
-  emailVerified   Boolean          @default(false)
-  sessions        Session[]
-  accounts        Account[]
-  courseFavorites CourseFavorite[]
+  emailVerified Boolean   @default(false)
+  sessions      Session[]
+  accounts      Account[]
 
   @@map("user")
 }
@@ -358,14 +285,13 @@ model Cart {
   // New!!!
   visible   Visible @default(PVT)
   isDefault Boolean @default(false) @map("is_default")
-  cartOrder String  @default("0|hzzzzz:") @map("cart_order")
+  cartOrder String @default("0|hzzzzz:") @map("cart_order")
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
   // Relations
-  items      CartItem[]
-  activities Activity[]
+  items CartItem[]
 
   @@map("cart")
 }
@@ -383,7 +309,7 @@ model CartItem {
   sectionNo Int     @map("section_no")
   color     String?
   hidden    Boolean @default(false)
-  cartOrder String  @default("0|hzzzzz:") @map("cart_order")
+  cartOrder String @default("0|hzzzzz:") @map("cart_order")
 
   // New!!!
   isGraded      Boolean @default(false) @map("is_graded")
@@ -393,29 +319,6 @@ model CartItem {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("cart_item")
-}
-
-model Activity {
-  id String @id @default(cuid())
-
-  cartId String @map("cart_id")
-  cart   Cart   @relation(fields: [cartId], references: [id])
-
-  title       String @map("title")
-  description String @map("description")
-
-  dayOfWeek   DayOfWeek @map("day_of_week")
-  periodStart String    @map("period_start")
-  periodEnd   String    @map("period_end")
-
-  color     String?
-  hidden    Boolean @default(false)
-  cartOrder String  @default("0|hzzzzz:") @map("cart_order")
-
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  @@map("activity")
 }
 
 model Review {
@@ -428,11 +331,9 @@ model Review {
   academicYear Int          @map("academic_year")
   semester     Semester
 
-  courseNo   String     @map("course_no")
+  courseNo String @map("course_no")
   //to get course name and description
   courseInfo CourseInfo @relation(fields: [courseNo], references: [courseNo])
-
-  sectionNo Int? @map("section_no")
 
   content  String
   rating   Int
@@ -446,9 +347,6 @@ model Review {
   // Relations
   votes ReviewVote[]
 
-  @@index([courseNo, status, academicYear, semester])
-  @@index([courseNo, status, createdAt(sort: Desc), id(sort: Desc)])
-  @@unique([courseNo,userId])
   @@map("review")
 }
 
@@ -463,20 +361,8 @@ model ReviewVote {
 
   voteType VoteType @map("vote_type")
 
-  @@unique([userId, reviewId])
   @@map("review_votes")
-}
-
-model Announcement {
-  id String @id @default(cuid())
-
-  title   String @map("title")
-  content String @map("content")
-
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  @@map("announcement")
+  @@unique([userId,reviewId])
 }
 
 model Session {

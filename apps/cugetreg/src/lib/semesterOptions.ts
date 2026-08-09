@@ -17,23 +17,13 @@ export const SEMESTER_LABEL_LONG: Record<Semester, string> = {
   SUMMER: 'ภาคฤดูร้อน',
 };
 
-export function getSemesterDisplayOptions(): {
-  value: {
-    ay: number;
-    semester: Semester;
-  };
-  label: string;
-}[] {
-  const result: { value: { ay: number; semester: Semester }; label: string }[] =
-    [];
+export function getSemesterDisplayOptions(): string[] {
+  const result: string[] = [];
   const years = [...ALLOWED_ACADEMIC_YEAR].reverse();
   for (const year of years) {
-    const summer = `${year} / ${SEMESTER_LABEL_SHORT.SUMMER}`;
-    const second = `${year} / ${SEMESTER_LABEL_SHORT.SECOND}`;
-    const first = `${year} / ${SEMESTER_LABEL_SHORT.FIRST}`;
-    result.push({ value: { ay: year, semester: 'SUMMER' }, label: summer });
-    result.push({ value: { ay: year, semester: 'SECOND' }, label: second });
-    result.push({ value: { ay: year, semester: 'FIRST' }, label: first });
+    result.push(`${year} / ${SEMESTER_LABEL_SHORT.SUMMER}`);
+    result.push(`${year} / ${SEMESTER_LABEL_SHORT.SECOND}`);
+    result.push(`${year} / ${SEMESTER_LABEL_SHORT.FIRST}`);
   }
   return result;
 }

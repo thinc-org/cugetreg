@@ -1,7 +1,6 @@
 {
   "extends": "./.svelte-kit/tsconfig.json",
   "compilerOptions": {
-    "strict": true,
-    "skipLibCheck": true
+    "strict": true
   }
 }

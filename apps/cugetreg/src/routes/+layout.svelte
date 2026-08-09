@@ -10,8 +10,6 @@
     handleGoogleLogout,
     useSession,
   } from '$lib/auth-client';
-  import LoadingScreen from '$lib/components/loading-screen.svelte';
-  import { semesterToThaiMapper, studyProgramMapper } from '$lib/mapper';
   import { loginPopupState } from '$lib/stores/login-popup.svelte';
   import { searchState } from '$lib/stores/search.svelte';
   import {
@@ -69,14 +67,13 @@
     currentCart: {
       id: '',
       name: '',
-      studyProgram: 'S',
+      studyProgram: '',
       academicYear: 0,
-      semester: 'FIRST',
+      semester: '',
       visible: '',
       isDefault: false,
       cartOrder: '',
       items: [],
-      activityItems: [],
     },
     currentCartId: '',
     cartList: [],
@@ -87,18 +84,13 @@
 
   const cartPromise = (() => data.cart)();
 
-  // Full-screen loading shown on initial app load until the cart settles.
-  let appLoading = $state(true);
-
-  cartPromise
-    .then(
-      (cart) => {
-        if (cart) userCart.set(cart);
-        return cart;
-      },
-      (err) => console.error('[layout] failed to load cart:', err),
-    )
-    .finally(() => (appLoading = false));
+  cartPromise.then(
+    (cart) => {
+      if (cart) userCart.set(cart);
+      return cart;
+    },
+    (err) => console.error('[layout] failed to load cart:', err),
+  );
 
   setContext(CART_PROMISE_KEY, cartPromise);
 
@@ -144,11 +136,22 @@
     return () => clearTimeout(timeout);
   });
 
+  const PROGRAM_LABEL: Record<string, string> = {
+    S: 'ทวิภาค',
+    I: 'นานาชาติ',
+    T: 'ตรีภาค',
+  };
+  const SEMESTER_LABEL: Record<string, string> = {
+    FIRST: 'ภาคต้น',
+    SECOND: 'ภาคปลาย',
+    SUMMER: 'ภาคฤดูร้อน',
+  };
+
   const programLabel = $derived.by(() => {
     const cart = $userCart.currentCart;
     if (!cart?.academicYear) return '';
-    const program = studyProgramMapper(cart.studyProgram);
-    const semester = semesterToThaiMapper(cart.semester);
+    const program = PROGRAM_LABEL[cart.studyProgram] ?? cart.studyProgram;
+    const semester = SEMESTER_LABEL[cart.semester] ?? cart.semester;
     return `${program} ${cart.academicYear} / ${semester}`;
   });
 
@@ -177,10 +180,6 @@
     onLogin={handleGoogleLogin}
   />
 </Modal>
-
-{#if appLoading}
-  <LoadingScreen />
-{/if}
 
 <Toaster />
 

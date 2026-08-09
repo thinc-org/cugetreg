@@ -4,7 +4,6 @@
 	import { inputVariants, type Props } from './index.ts';
 
 	interface InputProps {
-		ref?: HTMLInputElement | null;
 		class?: Props['class'];
 		value?: Props['value'];
 		state?: Props['state'];
@@ -13,7 +12,6 @@
 	}
 
 	let {
-		ref = $bindable(null),
 		class: className = undefined,
 		value = $bindable(undefined),
 		state = 'default',
@@ -22,10 +20,4 @@
 	}: InputProps = $props();
 </script>
 
-<input
-	bind:this={ref}
-	class={cn(inputVariants({ state }), className)}
-	bind:value
-	{readonly}
-	{...rest}
-/>
+<input class={cn(inputVariants({ state }), className)} bind:value {readonly} {...rest} />

@@ -7,7 +7,6 @@ export const SubmitReviewBodySchema = z.object({
   studyProgram: studyProgram,
   academicYear: z.coerce.number().int().min(2564),
   semester: semester,
-  sectionNo: z.coerce.number().int().optional(),
   rating: z.coerce.number().int().min(1).max(10),
   content: z.string().nonempty(),
 });
@@ -23,7 +22,6 @@ export type VoteReviewBodySchema = z.output<typeof VoteReviewBodySchema>;
 export const EditReviewBodySchema = z.object({
   academicYear: z.coerce.number().int().min(2564),
   semester: semester,
-  sectionNo: z.coerce.number().int().optional(),
   rating: z.coerce.number().int().min(1).max(10),
   content: z.string().nonempty(),
 });

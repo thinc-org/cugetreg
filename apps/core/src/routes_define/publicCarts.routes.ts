@@ -1,6 +1,5 @@
 import { createRoute, z } from "@hono/zod-openapi";
 
-import { ImportTimetableBodySchema } from "@cugetreg/zod-schemas/public-carts";
 import {
   ImportPublicCartResponseSchema,
   PublicCartDetailResponseSchema,
@@ -34,7 +33,7 @@ export const importPublicCartRoute = createRoute({
   path: "/{cartId}/import",
   summary: "4.2 Import public timetable to user's carts",
   request: {
-    params: ImportTimetableBodySchema,
+    params: z.object({ cartId: z.string() }),
   },
   responses: {
     201: {

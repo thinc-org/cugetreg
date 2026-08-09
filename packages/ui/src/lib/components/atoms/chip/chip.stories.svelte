@@ -24,9 +24,13 @@
 <!-- 👇 Each story then reuses that template -->
 
 <Story name="Default" args={{ closable: false }}>
-	<Chip closable={false}>Chip</Chip>
+	{#snippet children(args)}
+		<Chip {...args}>Chip</Chip>
+	{/snippet}
 </Story>
 
 <Story name="Default Closable" args={{ closable: true }}>
-	<Chip closable={true}>Chip</Chip>
+	{#snippet children(args)}
+		<Chip {...args}>Chip</Chip>
+	{/snippet}
 </Story>

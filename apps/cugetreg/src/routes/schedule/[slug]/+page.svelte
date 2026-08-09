@@ -1,182 +1,618 @@
 <script lang="ts">
-  import { goto } from '$app/navigation';
-  import { resolve } from '$app/paths';
-  import { useSession } from '$lib/auth-client';
-  import ExamsList from '$lib/components/exams-list.svelte';
-  import TimetableBlockGroup from '$lib/components/timetable-block-group.svelte';
-  import { useCartActions } from '$lib/stores/user-cart';
   import {
-    calculateCredit,
-    createElementScreenshot,
-    getDays,
-    getLatestTime,
-    getMaxCredit,
-    TIMETABLE_DEFAULT_END,
-    TIMETABLE_DEFAULT_START,
-  } from '$lib/utils/schedule';
+    getSemesterShortOptions,
+    getYearOptions,
+  } from '$lib/semesterOptions';
 
-  import { Eye, Info } from '@lucide/svelte';
-  import { isAxiosError } from 'axios';
-  import { Download } from 'lucide-svelte';
-  import toast from 'svelte-french-toast';
+  import html2canvas from 'html2canvas-pro';
+  import { ChevronLeft, ChevronRight, Copy, Share2 } from 'lucide-svelte';
+  import { untrack } from 'svelte';
 
   import { Button } from '@cugetreg/ui/atoms/button';
-  import { CustomizeScrollbar } from '@cugetreg/ui/atoms/customize-scrollbar';
+  import { IconButton } from '@cugetreg/ui/atoms/icon-button';
+  import { Input } from '@cugetreg/ui/atoms/input';
+  import { Modal } from '@cugetreg/ui/atoms/modal';
+  import { Switch } from '@cugetreg/ui/atoms/switch';
+  import { TimetableCourseCard } from '@cugetreg/ui/atoms/timetable';
   import { TimeTable as Timetable } from '@cugetreg/ui/atoms/timetable';
-  import { YearSemesterChip } from '@cugetreg/ui/atoms/yearsemester-chip';
-  import { Footer } from '@cugetreg/ui/organisms/footer';
+  import { ConfirmDeleteSchedule } from '@cugetreg/ui/molecules/confirm-delete-schedule';
+  import { EditSchedule } from '@cugetreg/ui/molecules/edit-schedule';
+  import {
+    type Exam,
+    ExamCard,
+    type StatusColour,
+  } from '@cugetreg/ui/molecules/exam-card';
+  import { CreateTimetable } from '@cugetreg/ui/organisms/create-timetable';
+  import { RenameSchedule } from '@cugetreg/ui/organisms/rename-schedule';
+  import {
+    ViewCourse,
+    type ViewCourseData,
+  } from '@cugetreg/ui/organisms/view-course';
+  import {
+    discardTime,
+    formatDate,
+    formatExamColumn,
+    formatExamTime,
+    formatScheduleTime,
+    isFinalsConflict,
+    isMidtermConflict,
+  } from '@cugetreg/utils';
+  import type {
+    ColorVariant,
+    CourseSchedule,
+    Day,
+    Period,
+    ScheduleList,
+    ScheduleListItem,
+  } from '@cugetreg/utils/types';
 
   import type { PageProps } from './$types';
 
-  let { data }: PageProps = $props();
-
-  // TODO: Fix jank
-  const owner = $derived(data.data.owner);
-  const cart = $derived(data.data.cartData.cart);
-  const exams = $derived(data.data.cartData.schedule.exams);
-
-  // ================ HOOKS ================
-
-  const session = useSession();
-  const { importCart } = useCartActions();
-
-  // ================ STATES ================
-
-  let timetableDiv = $state<HTMLElement | undefined>();
-  let innerWidth = $state(1024);
-
-  // TODO: Add this
-  let _selectedCartItemId = $state<string | undefined>(undefined);
-
-  let scheduleTableRef = $state<HTMLElement | null>(null);
-
-  // ================ DERIVED ================
-
-  const scheduleDays = $derived(getDays(cart.items));
-  const scheduleEndTime = $derived(
-    getLatestTime(cart.items, TIMETABLE_DEFAULT_END),
-  );
-
-  const totalCredit = $derived(calculateCredit(cart.items));
-  const maxCredit = $derived(getMaxCredit(cart.semester));
-
-  function handleTimetableScreenshot() {
-    createElementScreenshot(`${cart.name}_timetable`, timetableDiv);
-  }
-
-  async function handleImportTimetable() {
-    try {
-      await importCart(data.data.cartData);
-      goto(resolve('/schedule'));
-    } catch (error) {
-      console.error(error);
-      if (isAxiosError(error)) {
-        toast.error('Something went wrong importing timetable.', {
-          position: 'bottom-right',
-        });
-      }
+  function getColumnFromDay(day: Day): number {
+    switch (day) {
+      case 'MO':
+        return 0;
+      case 'TU':
+        return 1;
+      case 'WE':
+        return 2;
+      case 'TH':
+        return 3;
+      case 'FR':
+        return 4;
+      case 'SA':
+        return 5;
+      case 'SU':
+        return 6;
     }
   }
+
+  function isConflicted(course: CourseSchedule): boolean {
+    const courseSection = course.course.sections[course.selectedSection] || [];
+
+    for (const other of selectedSchedule.schedule) {
+      if (other === course || other.hidden) continue;
+
+      const otherSection = other.course.sections[other.selectedSection] || [];
+
+      for (const period of courseSection) {
+        for (const otherPeriod of otherSection) {
+          if (period.day !== otherPeriod.day) continue;
+
+          const periodStart = period.startTime;
+          const periodEnd = period.startTime + period.duration;
+          const otherPeriodStart = otherPeriod.startTime;
+          const otherPeriodEnd = otherPeriod.startTime + otherPeriod.duration;
+
+          if (periodStart < otherPeriodEnd && otherPeriodStart < periodEnd) {
+            return true;
+          }
+        }
+      }
+    }
+    return false;
+  }
+
+  function duplicateCurrentSchedule() {
+    const snapshot = $state.snapshot(selectedSchedule);
+    const current = structuredClone(snapshot);
+
+    scheduleList.push({
+      ...current,
+      name: `${selectedSchedule.name} Copy`,
+      scheduleId: crypto.randomUUID(),
+    });
+  }
+
+  async function screenshotTimetable() {
+    if (!timetableDiv) return;
+
+    const canvas = await html2canvas(timetableDiv, {
+      backgroundColor: null,
+      logging: false,
+      useCORS: true,
+      scale: 3,
+    });
+
+    const screenshot = canvas.toDataURL('image/jpeg');
+
+    const link = document.createElement('a');
+    link.href = screenshot;
+    link.download = `${selectedSchedule.name}_timetable.jpg`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  const { data }: PageProps = $props();
+
+  const cartInfo = data.data.cart;
+
+  const initialScheduleList: ScheduleList = [
+    {
+      name: cartInfo.name,
+      scheduleId: cartInfo.id,
+      semesterType: data.semesterType,
+      semester: `${cartInfo.academicYear}/${cartInfo.semester}`,
+      // isPublic: cartInfo.visible === 'PUBLIC',
+      isPublic: true,
+      schedule: cartInfo.items.map((item, index) => {
+        const sectionsObj: Record<number, Period[]> = {};
+        item.sections.forEach((sec) => {
+          sectionsObj[sec.sectionNo] = sec.classes.map((cls) => {
+            const [startH, startM] = cls.periodStart.split(':').map(Number);
+            const [endH, endM] = cls.periodEnd.split(':').map(Number);
+            const startTime = startH + startM / 60;
+            const endTime = endH + endM / 60;
+
+            return {
+              day: cls.dayOfWeek.substring(0, 2).toUpperCase() as Day,
+              startTime: startTime,
+              duration: endTime - startTime,
+              building: cls.building || '',
+              room: cls.room || '',
+            };
+          });
+        });
+
+        const midtermExam = data.data.schedule.exams.find(
+          (e) => e.cartItemId === item.id && e.type === 'MIDTERM',
+        );
+        const finalExam = data.data.schedule.exams.find(
+          (e) => e.cartItemId === item.id && e.type === 'FINAL',
+        );
+
+        const parseExam = (examObj?: typeof midtermExam) => {
+          if (!examObj) return undefined;
+          const startDate = new Date(examObj.start);
+          const endDate = new Date(examObj.end);
+          return {
+            date: startDate,
+            duration:
+              (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60),
+          };
+        };
+
+        return {
+          id: index + 1,
+          course: {
+            name: item.course.courseNameEn || item.course.courseNameTh,
+            code: item.courseNo,
+            credit: Number(item.course.credit),
+            gened: [],
+            sections: sectionsObj as any,
+            midterm: parseExam(midtermExam),
+            final: parseExam(finalExam),
+          },
+          selectedSection: item.sectionNo,
+          hidden: item.hidden,
+          colorVariant: (item.color as ColorVariant) || 'pink',
+          conflicted: false,
+        };
+      }),
+    },
+  ];
+
+  let scheduleList = $state(structuredClone(initialScheduleList));
+  let selectedSchedule = $state(untrack(() => scheduleList[0]));
+  let showExamSchedule = $state<'List' | 'Schedule'>('Schedule');
+
+  let timetableDiv = $state<HTMLElement | null>(null);
+
+  let showRenameScheduleModal = $state(false);
+  let showCreateScheduleModal = $state(false);
+  let showDeleteScheduleModal = $state(false);
+  let showViewCourseModal = $state(false);
+
+  let selectedCourseScheduleId = $state<number | null>(null);
+
+  const viewCourseData = $derived.by(() => {
+    if (selectedCourseScheduleId === null) return null;
+
+    const courseSchedule = selectedSchedule.schedule.find(
+      (s) => s.id === selectedCourseScheduleId,
+    );
+    if (!courseSchedule) return null;
+
+    const data: ViewCourseData = {
+      itemId: String(courseSchedule.id),
+      courseNo: courseSchedule.course.code,
+      abbrName: courseSchedule.course.name, // In this view, name might be abbrName or full name
+      courseNameTh: courseSchedule.course.name,
+      courseNameEn: courseSchedule.course.name,
+      credit: courseSchedule.course.credit,
+      genEdType: courseSchedule.course.gened[0],
+      sections: Object.entries(courseSchedule.course.sections).map(
+        ([secNo, classes]) => ({
+          sectionNo: Number(secNo),
+          closed: false, // Not available in this view's data
+          regis: 0,
+          max: 0,
+          classes: (classes as any[]).map((cls) => ({
+            type: 'LECT', // Not available in this view's data
+            dayOfWeek: cls.day,
+            periodStart: formatScheduleTime(cls.startTime),
+            periodEnd: formatScheduleTime(cls.startTime + cls.duration),
+            building: cls.building,
+            room: cls.room,
+            professors: [], // Not available in this view's data
+          })),
+        }),
+      ),
+      selectedSectionNo: courseSchedule.selectedSection,
+      color: (courseSchedule.colorVariant as ColorVariant) ?? 'primary',
+      midterm: courseSchedule.course.midterm
+        ? `${formatDate(courseSchedule.course.midterm.date)} ${formatExamTime(courseSchedule.course.midterm.date, courseSchedule.course.midterm.duration)}`
+        : undefined,
+      final: courseSchedule.course.final
+        ? `${formatDate(courseSchedule.course.final.date)} ${formatExamTime(courseSchedule.course.final.date, courseSchedule.course.final.duration)}`
+        : undefined,
+      isHidden: courseSchedule.hidden,
+    };
+
+    return data;
+  });
+
+  const examSort = (a: string, b: string) => {
+    const numA = Number(a);
+    const numB = Number(b);
+
+    if (numA === 0) return 1;
+    else if (numB === 0) return -1;
+    else return numA - numB;
+  };
+
+  const examsData = $derived.by(() => {
+    let midterms: Record<number, CourseSchedule[]> = {};
+    let finals: Record<number, CourseSchedule[]> = {};
+
+    selectedSchedule.schedule.forEach((course) => {
+      if (course.hidden) return;
+
+      const { midterm, final } = course.course;
+
+      if (midterm) {
+        const formattedDate = discardTime(midterm.date.getTime());
+        if (formattedDate in midterms) midterms[formattedDate].push(course);
+        else midterms[formattedDate] = [course];
+      } else {
+        if (!(0 in midterms)) midterms[0] = [];
+        midterms[0].push(course);
+      }
+
+      if (final) {
+        const formattedDate = discardTime(final.date.getTime());
+        if (formattedDate in finals) finals[formattedDate].push(course);
+        else finals[formattedDate] = [course];
+      } else {
+        if (!(0 in finals)) finals[0] = [];
+        finals[0].push(course);
+      }
+    });
+
+    return { midterms, finals };
+  });
+
+  const examDateOrder = $derived.by(() => {
+    let midterms: number[] = Object.keys(examsData.midterms)
+      .sort(examSort)
+      .map((x) => Number(x));
+    let finals: number[] = Object.keys(examsData.finals)
+      .sort(examSort)
+      .map((x) => Number(x));
+
+    return { midterms, finals };
+  });
+
+  const totalCredit = $derived(
+    selectedSchedule.schedule.reduce(
+      (acc, course) => acc + (course.hidden ? 0 : course.course.credit),
+      0,
+    ),
+  );
+
+  $effect(() => {
+    selectedSchedule.schedule.forEach(
+      (course, index) =>
+        (selectedSchedule.schedule[index].conflicted = isConflicted(course)),
+    );
+  });
 </script>
 
-<svelte:window bind:innerWidth />
+<div class="flex h-screen flex-col">
+  <Modal
+    exitOnEsc
+    exitOnBackgroundClick
+    centered
+    dim
+    bind:show={showRenameScheduleModal}
+  >
+    <RenameSchedule
+      bind:name={selectedSchedule.name}
+      onCancel={() => (showRenameScheduleModal = false)}
+      onConfirm={() => (showRenameScheduleModal = false)}
+    />
+  </Modal>
+  <Modal
+    exitOnEsc
+    exitOnBackgroundClick
+    centered
+    dim
+    bind:show={showCreateScheduleModal}
+  >
+    <CreateTimetable
+      yearOptions={getYearOptions()}
+      semesterOptions={getSemesterShortOptions()}
+      onConfirm={(schedule: ScheduleListItem) => {
+        scheduleList.push(schedule);
+        selectedSchedule = schedule;
+        showCreateScheduleModal = false;
+      }}
+      onCancel={() => (showCreateScheduleModal = false)}
+    />
+  </Modal>
 
-<div class="relative flex h-full flex-col bg-white">
-  <div class="relative flex flex-1 justify-center">
-    <div class="flex min-h-full flex-col">
-      <div class="mx-auto w-full max-w-[1200px] flex-1 p-6 lg:p-10">
-        <div
-          class="flex w-full flex-col gap-4 lg:flex-row lg:items-center lg:justify-between"
-        >
-          <div
-            class="flex w-full flex-col gap-2 lg:w-auto lg:flex-row lg:items-end lg:gap-4"
+  <Modal
+    exitOnEsc
+    exitOnBackgroundClick
+    centered
+    dim
+    bind:show={showViewCourseModal}
+  >
+    <ViewCourse
+      data={viewCourseData}
+      onExit={() => (showViewCourseModal = false)}
+    />
+  </Modal>
+
+  <Modal
+    exitOnEsc
+    exitOnBackgroundClick
+    centered
+    dim
+    bind:show={showDeleteScheduleModal}
+  >
+    <ConfirmDeleteSchedule
+      scheduleName={selectedSchedule.name}
+      onCancel={() => (showDeleteScheduleModal = false)}
+      onConfirm={() => {
+        scheduleList = scheduleList.filter(
+          (schedule) => schedule !== selectedSchedule,
+        );
+        selectedSchedule = scheduleList[0];
+        showDeleteScheduleModal = false;
+      }}
+    />
+  </Modal>
+
+  <div class="flex w-full flex-1 overflow-hidden">
+    <div class="flex-3 overflow-y-auto p-10">
+      <div class="flex justify-between">
+        <span class="text-4xl font-bold">ตารางเรียน</span>
+
+        <div class="hidden">
+          <EditSchedule
+            bind:selectedSchedule
+            {scheduleList}
+            onRename={() => (showRenameScheduleModal = true)}
+            onDuplicate={duplicateCurrentSchedule}
+            onAddSchedule={() => (showCreateScheduleModal = true)}
+            onDelete={() => (showDeleteScheduleModal = true)}
+          />
+        </div>
+      </div>
+      <div class="bg-surface overflow-x-scroll p-8" bind:this={timetableDiv}>
+        <div class="min-w-[600px]">
+          <Timetable startTime={7}>
+            {#each selectedSchedule.schedule as courseSchedule (courseSchedule.course.code)}
+              {@render timeTableCourse(courseSchedule)}
+            {/each}
+          </Timetable>
+        </div>
+      </div>
+      <div class="mx-5 mb-5 flex justify-end text-lg font-bold">
+        หน่วยกิตรวม {totalCredit} / 22
+      </div>
+
+      <div class="flex hidden">
+        <Switch
+          bind:checked={selectedSchedule.isPublic}
+          label="เปิดเป็นสาธารณะ"
+        />
+        <div class="relative flex flex-1">
+          <Input
+            value="cugetreg.com/1232141413"
+            disabled={!selectedSchedule.isPublic}
+            readonly
+          />
+
+          <IconButton
+            variant="ghost"
+            disabled={!selectedSchedule.isPublic}
+            class="absolute right-0 z-10 hover:cursor-pointer hover:bg-transparent"
           >
-            <div class="flex items-end gap-2">
-              <Eye size={32} class="inline shrink-0" />
-
-              <span
-                class="text-[20px] font-bold break-words md:text-[30px] lg:text-4xl"
-              >
-                {cart.name}
-              </span>
-            </div>
-
-            <div class="flex items-end gap-4">
-              <span class="text-button2 shrink-0">โดย {owner}</span>
-
-              <YearSemesterChip
-                studyProgram={cart.studyProgram}
-                year={cart.academicYear}
-                semester={cart.semester}
-                class="shrink-0 text-[12px]"
-              />
-            </div>
-          </div>
-
-          <!-- Mobile: compact download button -->
-          <div class="lg:hidden">
-            <Button
-              class="m-0 flex items-center gap-1 border border-gray-200 bg-white"
-              onclick={handleTimetableScreenshot}
-            >
-              <Download size={20} strokeWidth={2.5} class="text-[#353745]" />
-              <span class="font-medium text-[#353745]">บันทึกภาพ</span>
-            </Button>
-          </div>
-
-          <!-- Desktop: full download button -->
-          <div class="hidden items-end lg:flex">
-            <Button
-              variant="outlined"
-              color="neutral"
-              onclick={handleTimetableScreenshot}
-            >
-              <Download />
-              บันทึกภาพ
-            </Button>
-          </div>
+            <Copy />
+          </IconButton>
         </div>
-        <div
-          class="bg-surface overflow-x-auto pt-4 pb-0 [scrollbar-width:none] lg:px-8 lg:py-8 [&::-webkit-scrollbar]:hidden"
-          bind:this={timetableDiv}
-          bind:this={scheduleTableRef}
+        <div>
+          <IconButton class="aspect-square">
+            <Share2 />
+          </IconButton>
+          <Button class="m-0 h-full" onclick={screenshotTimetable}
+            >บันทึกเป็นภาพ</Button
+          >
+        </div>
+      </div>
+
+      <div class="mt-5 flex justify-center">
+        <Button
+          class="ring-0 outline-0 hover:bg-transparent!"
+          onclick={() => {
+            if (showExamSchedule === 'List') showExamSchedule = 'Schedule';
+            else showExamSchedule = 'List';
+          }}
+          variant="outlined"
         >
-          <div class="min-w-150">
-            <Timetable
-              startTime={TIMETABLE_DEFAULT_START}
-              periodPerDay={scheduleEndTime - TIMETABLE_DEFAULT_START}
-              days={scheduleDays}
-            >
-              {#each cart.items as course (course.id)}
-                <TimetableBlockGroup {course} cartItems={cart.items} />
-              {/each}
-            </Timetable>
+          <ChevronLeft />
+          {showExamSchedule}
+          <ChevronRight />
+        </Button>
+      </div>
+
+      {#if showExamSchedule === 'List'}
+        {@render examList()}
+      {:else}
+        {@render examSchedule()}
+      {/if}
+    </div>
+  </div>
+</div>
+
+{#snippet examSchedule()}
+  <div class="my-5 text-xl font-bold">Midterm</div>
+  <Timetable
+    startTime={7}
+    days={examDateOrder.midterms.map((time) => formatDate(new Date(time)))}
+  >
+    {#each examDateOrder.midterms as key, index (key)}
+      {#each examsData.midterms[key] as exam (exam.course.code)}
+        <TimetableCourseCard
+          course={{
+            name: exam.course.name,
+            code: exam.course.code,
+            bldg: '',
+            room: '',
+            section: exam.selectedSection,
+          }}
+          col={formatExamColumn(exam.course.midterm?.date) - 7}
+          row={index}
+          length={exam.course.midterm?.duration ?? 3}
+          color={exam.colorVariant}
+        />
+      {/each}
+    {/each}
+  </Timetable>
+
+  <div class="my-5 text-xl font-bold">Finals</div>
+  <Timetable
+    startTime={7}
+    days={examDateOrder.finals.map((time) => formatDate(new Date(time)))}
+  >
+    {#each examDateOrder.finals as key, index (key)}
+      {#each examsData.finals[key] as examCourse (examCourse.course.code)}
+        <TimetableCourseCard
+          course={{
+            name: examCourse.course.name,
+            code: examCourse.course.code,
+            bldg: '',
+            room: '',
+            section: examCourse.selectedSection,
+          }}
+          col={formatExamColumn(examCourse.course.final?.date) - 7}
+          row={index}
+          length={examCourse.course.final?.duration ?? 3}
+          color={examCourse.colorVariant}
+        />
+      {/each}
+    {/each}
+  </Timetable>
+{/snippet}
+
+{#snippet examList()}
+  <div class="flex items-center justify-center">
+    <div class="my-5 inline-flex space-x-5">
+      <div class="flex-1">
+        <span class="text-2xl font-bold">Midterm</span>
+
+        {#each Object.keys(examsData.midterms).sort(examSort) as key (key)}
+          <div class="my-5">
+            <ExamCard
+              date={key == '0'
+                ? 'ยังไม่ประกาศ'
+                : formatDate(new Date(Number(key)))}
+              data={examsData.midterms[Number(key)].map((course) => {
+                const { id, course: courseData, colorVariant } = course;
+
+                return {
+                  id: String(id),
+                  colour: isMidtermConflict(
+                    course,
+                    examsData.midterms[Number(key)],
+                  )
+                    ? 'error'
+                    : (colorVariant as StatusColour),
+                  time: formatExamTime(
+                    courseData.midterm?.date,
+                    courseData.midterm?.duration,
+                  ),
+                  subject: courseData.name,
+                } as Exam;
+              })}
+            />
           </div>
-        </div>
-        <CustomizeScrollbar target={scheduleTableRef} />
-        <div class="flex flex-wrap items-center justify-between gap-2">
-          <div class="flex items-center gap-2">
-            <Info class="stroke-error" size={16} />
-            <span class="text-error">เพิ่มเข้าตารางของคุณเพื่อแก้ไข</span>
+        {/each}
+      </div>
+      <div class="flex-1">
+        <span class="text-2xl font-bold">Finals</span>
+
+        {#each Object.keys(examsData.finals).sort(examSort) as key (key)}
+          <div class="my-5">
+            <ExamCard
+              date={key == '0'
+                ? 'ยังไม่ประกาศ'
+                : formatDate(new Date(Number(key)))}
+              data={examsData.finals[Number(key)].map((course) => {
+                const { id, course: courseData, colorVariant } = course;
+
+                return {
+                  id: String(id),
+                  colour: isFinalsConflict(
+                    course,
+                    examsData.finals[Number(key)],
+                  )
+                    ? 'error'
+                    : (colorVariant as StatusColour),
+                  time: formatExamTime(
+                    courseData.final?.date,
+                    courseData.final?.duration,
+                  ),
+                  subject: courseData.name,
+                } as Exam;
+              })}
+            />
           </div>
-          <div class="hidden items-center lg:mx-5 lg:flex lg:justify-end">
-            หน่วยกิตรวม {totalCredit} / {maxCredit}
-          </div>
-        </div>
-        <ExamsList {cart} {exams} />
+        {/each}
       </div>
     </div>
   </div>
-  <Footer />
-</div>
+{/snippet}
 
-{#if $session.data}
-  <div
-    class="fixed inset-x-0 bottom-8 z-50 mx-auto flex w-fit items-center justify-center"
-  >
-    <Button
-      class="bg-primary w-[calc(100vw-2rem)] max-w-100 text-white shadow-lg"
-      onclick={handleImportTimetable}>เพิ่มเข้าตารางของฉัน</Button
-    >
-  </div>
-{/if}
+{#snippet timeTableCourse({
+  course,
+  selectedSection,
+  hidden,
+  colorVariant,
+  conflicted,
+}: CourseSchedule)}
+  {#if !hidden}
+    {#each course.sections[selectedSection] || [] as period (period.day + period.startTime)}
+      <TimetableCourseCard
+        onclick={() => {
+          selectedCourseScheduleId = course.id;
+          showViewCourseModal = true;
+        }}
+        course={{
+          name: course.name,
+          code: course.code,
+          bldg: period.building,
+          room: period.room,
+          section: selectedSection,
+        }}
+        length={period.duration}
+        color={conflicted ? 'conflict' : (colorVariant ?? 'primary')}
+        row={getColumnFromDay(period.day)}
+        col={period.startTime - 7}
+      />
+    {/each}
+  {/if}
+{/snippet}

@@ -1,15 +1,13 @@
 <script lang="ts">
-  import { afterNavigate, goto } from '$app/navigation';
+  import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
   import { page } from '$app/state';
   import { api } from '$lib/api';
   import { useSession } from '$lib/auth-client';
   import AppSidebar from '$lib/components/app-sidebar.svelte';
-  import MarkdownEditor from '$lib/components/markdown-editor.svelte';
   import ScheduleMismatchPopup from '$lib/components/schedule-mismatch-popup.svelte';
   import SelectedCourse from '$lib/components/selected-course.svelte';
   import { faculties } from '$lib/constants';
-  import { thaiLabelToSemesterMapper } from '$lib/mapper';
   import {
     ALLOWED_ACADEMIC_YEAR,
     ALLOWED_SEMESTER,
@@ -20,18 +18,24 @@
 
   import {
     AlertTriangle,
+    Bold,
     Book,
     BookMarked,
     Check,
     ChevronLeft,
-    Loader2,
+    Code,
+    Heading,
+    Italic,
     Menu,
     MessageCircleQuestionIcon,
     NotebookPen,
     Pencil,
+    Quote,
     Send,
     Star,
     StickyNote,
+    Strikethrough,
+    Underline,
     X,
   } from '@lucide/svelte';
   import { isAxiosError } from 'axios';
@@ -55,14 +59,8 @@
   import { SelectTimetable } from '@cugetreg/ui/molecules/select-timetable';
   import { Footer } from '@cugetreg/ui/organisms/footer';
   import * as Sidebar from '@cugetreg/ui/organisms/sidebar';
-  import { formatDate, formatExamTime } from '@cugetreg/utils';
   import type { GenEdType } from '@cugetreg/utils/types';
   import {
-    type CourseReview,
-    type CourseReviewFacet,
-    CourseReviewResponseSchema,
-    CourseSectionsResponseSchema,
-    type Semester,
     type SubmitReviewBodySchema,
     SubmitReviewResponseSchema,
     VoteReviewBodySchema,
@@ -72,50 +70,10 @@
   import type { PageProps } from './$types';
 
   const { data }: PageProps = $props();
-  type ReviewPageData = typeof data & {
-    reviewCount?: number;
-    reviewFacets?: CourseReviewFacet[];
-    reviewsError?: boolean;
-  };
   const course = $derived(data.course);
-  const midtermExam = $derived(
-    course.midtermStart && course.midtermEnd
-      ? `${formatDate(new Date(course.midtermStart))} ${formatExamTime(
-          new Date(course.midtermStart),
-          (new Date(course.midtermEnd).getTime() -
-            new Date(course.midtermStart).getTime()) /
-            (1000 * 60 * 60),
-        )}`
-      : 'ยังไม่ประกาศ',
-  );
-  const finalExam = $derived(
-    course.finalStart && course.finalEnd
-      ? `${formatDate(new Date(course.finalStart))} ${formatExamTime(
-          new Date(course.finalStart),
-          (new Date(course.finalEnd).getTime() -
-            new Date(course.finalStart).getTime()) /
-            (1000 * 60 * 60),
-        )}`
-      : 'ยังไม่ประกาศ',
-  );
-  let reviews = $state<CourseReview[]>(untrack(() => data.reviews));
-  let reviewCount = $state(
-    untrack(() => (data as ReviewPageData).reviewCount ?? data.reviews.length),
-  );
-  let reviewFacets = $state<CourseReviewFacet[]>(
-    untrack(() => (data as ReviewPageData).reviewFacets ?? []),
-  );
-  let reviewsLoading = $state(false);
-  let reviewsError = $state(
-    untrack(() => (data as ReviewPageData).reviewsError ?? false),
-  );
-  let reviewsRequestId = 0;
-  let reviewsCourseNo = untrack(() => data.course.courseNo);
+  const reviews = $state(untrack(() => data.reviews));
 
   const session = useSession();
-  let reviewSessionUserId = $state<string | null>(
-    untrack(() => $session.data?.user.id ?? null),
-  );
 
   const userCart = getUserCartStore();
   const { addCourse, removeCourse, updateCourse } = useCartActions();
@@ -125,16 +83,13 @@
 
   let selectedYear = $state(years[0]);
   let selectedTerm = $state(terms[0]);
-  let writeReviewSectionOptions = $state<number[]>([]);
-  let writeReviewSectionNo = $state<string | null>(null);
   let reviewRating = $state(1);
   let reviewContent = $state('');
-  let selectedSection = $state<HTMLElement>();
+  let selectedSection = $state();
 
   let sidebarExpanded = $state(true);
   let openPanel = $state<string | null>(null);
   let activePanel = $state<string | null>(null);
-  let selectedOpen = $state(true);
 
   let timetableSection = $state<HTMLElement>();
   let descriptionSection = $state<HTMLElement>();
@@ -157,58 +112,23 @@
     reviewRating = isHalf ? value - 0.5 : value;
   };
 
-  // The write-review form lets you pick a year/semester independently of
-  // the page's currently-loaded course data (which is bound to the URL's
-  // academicYear/semester), so the Section picker needs its own fetch
-  // whenever the form's year/term changes.
-  $effect(() => {
-    const academicYear = Number(selectedYear);
-    const semester = thaiLabelToSemesterMapper(selectedTerm);
-    const studyProgram = course.studyProgram;
-
-    void api
-      .get(`/courses/${course.courseNo}/sections`, {
-        params: { studyProgram, academicYear, semester },
-      })
-      .then((response) => {
-        const { sections } = CourseSectionsResponseSchema.parse(response.data);
-        writeReviewSectionOptions = sections;
-        if (
-          writeReviewSectionNo === null ||
-          !sections.includes(Number(writeReviewSectionNo))
-        ) {
-          writeReviewSectionNo =
-            sections.length > 0 ? String(sections[0]) : null;
-        }
-        return;
-      })
-      .catch(() => {
-        writeReviewSectionOptions = [];
-        writeReviewSectionNo = null;
-      });
-  });
-
   const reviewYearPlaceholder = 'ปีการศึกษา';
-  const reviewSemesterPlaceholder = 'ภาคเรียน';
-  const reviewSectionPlaceholder = 'เซค';
+  const reviewTermPlaceholder = 'ภาคเรียน';
   let selectedReviewYear = $state(reviewYearPlaceholder);
-  let selectedReviewSemester = $state<Semester | null>(null);
-  let selectedReviewSection = $state<number | null>(null);
+  let selectedReviewTerm = $state(reviewTermPlaceholder);
   const reviewsPerPage = 4;
   let reviewsPage = $state(1);
-  let reviewSubmitting = $state(false);
-  let pendingReviewVotes = $state<string[]>([]);
 
   const isReviewYearPlaceholder = $derived(
     selectedReviewYear === reviewYearPlaceholder,
   );
 
-  const isReviewSemesterPlaceholder = $derived(selectedReviewSemester === null);
-
-  const isReviewSectionPlaceholder = $derived(selectedReviewSection === null);
+  const isReviewTermPlaceholder = $derived(
+    selectedReviewTerm === reviewTermPlaceholder,
+  );
 
   let activeModal = $state<'selected' | null>(null);
-  let reviewEditor = $state<MarkdownEditor>();
+  let textareaRef: HTMLTextAreaElement | undefined = $state();
   let screenWidth = $state(0);
 
   const floatingOptions = [
@@ -220,7 +140,7 @@
       },
     },
     {
-      label: 'รายละเอียดเซคชัน',
+      label: 'รายละเอียดเซ็คชัน',
       icon: StickyNote,
       onClick: () => {
         scrollToSection(detailSection);
@@ -247,32 +167,37 @@
     el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
-  function focusSelected() {
-    if (sidebarExpanded && selectedOpen) {
-      selectedOpen = false;
-      activePanel = null;
-      return;
-    }
-    sidebarExpanded = true;
-    openPanel = null;
-    selectedOpen = true;
-    activePanel = 'selected_only';
-  }
-
-  function toggleSidebar() {
-    if (sidebarExpanded) {
-      sidebarExpanded = false;
-      activePanel = null;
-    } else {
-      sidebarExpanded = true;
-      activePanel = 'sidebar';
-      openPanel = null;
-      selectedOpen = true;
-    }
-  }
+  const filteredReviews = $derived.by(() =>
+    reviews
+      .filter((review) => {
+        if (
+          !isReviewYearPlaceholder &&
+          review.academicYear !== Number(selectedReviewYear)
+        )
+          return false;
+        if (!isReviewTermPlaceholder && review.semester !== selectedReviewTerm)
+          return false;
+        return true;
+      })
+      .sort((a, b) => {
+        const priority: Record<string, number> = {
+          REJECTED: 0,
+          PENDING: 1,
+          APPROVED: 2,
+        };
+        return (priority[a.status] ?? 3) - (priority[b.status] ?? 3);
+      }),
+  );
 
   const totalReviewPages = $derived(
-    Math.max(1, Math.ceil(reviewCount / reviewsPerPage)),
+    Math.max(1, Math.ceil(filteredReviews.length / reviewsPerPage)),
+  );
+
+  const pagedReviews = $derived(
+    filteredReviews.slice(
+      (reviewsPage - 1) * reviewsPerPage,
+      reviewsPage * reviewsPerPage,
+    ),
   );
 
   const reviewPageItems = $derived.by(() => {
@@ -290,202 +215,29 @@
     return items;
   });
 
-  const reviewYearOptions = $derived.by(() => [
+  const reviewYearOptions = [
     reviewYearPlaceholder,
-    ...Array.from(
-      new Set(reviewFacets.map((facet) => String(facet.academicYear))),
-    )
+    ...Array.from(new Set(reviews.map((item) => item.academicYear)))
       .sort()
       .reverse(),
-  ]);
+  ];
 
-  function getReviewSemesters(reviewYear: string) {
-    return Array.from(
-      new Set(
-        reviewFacets
-          .filter((facet) =>
-            reviewYear === reviewYearPlaceholder
-              ? true
-              : facet.academicYear === Number(reviewYear),
-          )
-          .map((facet) => facet.semester),
-      ),
-    );
-  }
-
-  const reviewSemesterOptions = $derived(
-    getReviewSemesters(selectedReviewYear),
-  );
-
-  function getReviewSections(
-    reviewYear: string,
-    reviewSemester: Semester | null,
-  ) {
-    return Array.from(
-      new Set(
-        reviewFacets
-          .filter((facet) => {
-            if (
-              reviewYear !== reviewYearPlaceholder &&
-              facet.academicYear !== Number(reviewYear)
-            )
-              return false;
-            if (reviewSemester !== null && facet.semester !== reviewSemester)
-              return false;
-            return facet.sectionNo !== null;
-          })
-          .map((facet) => facet.sectionNo as number),
-      ),
-    ).sort((a, b) => a - b);
-  }
-
-  const reviewSectionOptions = $derived(
-    getReviewSections(selectedReviewYear, selectedReviewSemester),
-  );
-
-  function setSelectedReviewYear(value: string) {
-    selectedReviewYear = value;
-    if (
-      selectedReviewSemester !== null &&
-      !getReviewSemesters(value).includes(selectedReviewSemester)
-    ) {
-      selectedReviewSemester = null;
-    }
-    if (
-      selectedReviewSection !== null &&
-      !getReviewSections(value, selectedReviewSemester).includes(
-        selectedReviewSection,
+  const reviewTermOptions = $derived.by(() => {
+    const terms = reviews
+      .map((review) => {
+        const [term, year] = [review.semester, review.academicYear];
+        return { term, year };
+      })
+      .filter((item) =>
+        isReviewYearPlaceholder
+          ? true
+          : item.year === Number(selectedReviewYear),
       )
-    ) {
-      selectedReviewSection = null;
-    }
-    reviewsPage = 1;
-    void refreshReviews({ targetPage: 1 });
-  }
-
-  function setSelectedReviewSemester(value: string) {
-    selectedReviewSemester =
-      value === reviewSemesterPlaceholder ? null : (value as Semester);
-    if (
-      selectedReviewSection !== null &&
-      !getReviewSections(selectedReviewYear, selectedReviewSemester).includes(
-        selectedReviewSection,
-      )
-    ) {
-      selectedReviewSection = null;
-    }
-    reviewsPage = 1;
-    void refreshReviews({ targetPage: 1 });
-  }
-
-  function setSelectedReviewSection(value: string) {
-    selectedReviewSection =
-      value === reviewSectionPlaceholder ? null : Number(value);
-    reviewsPage = 1;
-    void refreshReviews({ targetPage: 1 });
-  }
-
-  async function refreshReviews(
-    options: { includeFacets?: boolean; targetPage?: number } = {},
-  ) {
-    const { includeFacets = false, targetPage = reviewsPage } = options;
-    const requestId = ++reviewsRequestId;
-    reviewsLoading = true;
-    reviewsError = false;
-
-    try {
-      const response = await api.get(`/courses/reviews/${course.courseNo}`, {
-        params: {
-          limit: reviewsPerPage,
-          page: targetPage,
-          ...(includeFacets && { includeFacets: true }),
-          ...(!isReviewYearPlaceholder && {
-            academicYear: Number(selectedReviewYear),
-          }),
-          ...(selectedReviewSemester && {
-            semester: selectedReviewSemester,
-          }),
-          ...(selectedReviewSection !== null && {
-            sectionNo: selectedReviewSection,
-          }),
-        },
-      });
-      const result = CourseReviewResponseSchema.parse(response.data);
-
-      if (requestId !== reviewsRequestId) return;
-
-      if (result.facets) {
-        reviewFacets = result.facets;
-
-        const nextYearOptions = new Set(
-          result.facets.map((facet) => String(facet.academicYear)),
-        );
-        let filtersChanged = false;
-
-        if (
-          selectedReviewYear !== reviewYearPlaceholder &&
-          !nextYearOptions.has(selectedReviewYear)
-        ) {
-          selectedReviewYear = reviewYearPlaceholder;
-          selectedReviewSemester = null;
-          selectedReviewSection = null;
-          filtersChanged = true;
-        } else if (
-          selectedReviewSemester !== null &&
-          !getReviewSemesters(selectedReviewYear).includes(
-            selectedReviewSemester,
-          )
-        ) {
-          selectedReviewSemester = null;
-          selectedReviewSection = null;
-          filtersChanged = true;
-        } else if (
-          selectedReviewSection !== null &&
-          !getReviewSections(
-            selectedReviewYear,
-            selectedReviewSemester,
-          ).includes(selectedReviewSection)
-        ) {
-          selectedReviewSection = null;
-          filtersChanged = true;
-        }
-
-        if (filtersChanged) {
-          await refreshReviews({ targetPage: 1 });
-          return;
-        }
-      }
-
-      const lastPage = Math.max(1, Math.ceil(result.count / reviewsPerPage));
-      if (targetPage > lastPage) {
-        await refreshReviews({
-          includeFacets,
-          targetPage: lastPage,
-        });
-        return;
-      }
-
-      reviews = result.reviews;
-      reviewCount = result.count;
-      reviewsPage = result.page;
-    } catch (error) {
-      if (requestId !== reviewsRequestId) return;
-      console.error(error);
-      reviewsError = true;
-    } finally {
-      if (requestId === reviewsRequestId) reviewsLoading = false;
-    }
-  }
-
-  function setReviewsPage(targetPage: number) {
-    if (targetPage === reviewsPage || reviewsLoading) return;
-    void refreshReviews({ targetPage });
-  }
+      .map((item) => item.term);
+    return [reviewTermPlaceholder, ...Array.from(new Set(terms))];
+  });
 
   async function handleReactReview(reviewId: string, interaction: 'L' | 'D') {
-    if (pendingReviewVotes.includes(reviewId)) return;
-    pendingReviewVotes = [...pendingReviewVotes, reviewId];
-
     const payload: VoteReviewBodySchema = {
       interaction,
     };
@@ -521,39 +273,39 @@
       toast.error('Something went wrong', {
         position: 'bottom-right',
       });
-    } finally {
-      pendingReviewVotes = pendingReviewVotes.filter((id) => id !== reviewId);
     }
   }
 
   async function handleSubmitReview() {
-    if (reviewSubmitting) return;
-    reviewSubmitting = true;
-
     if (editingReviewId) {
       const patchPayload = {
         academicYear: Number(selectedYear),
-        semester: thaiLabelToSemesterMapper(selectedTerm),
-        ...(writeReviewSectionNo !== null && {
-          sectionNo: Number(writeReviewSectionNo),
-        }),
+        semester:
+          ALLOWED_SEMESTER.find(
+            (s) => SEMESTER_LABEL_LONG[s] === selectedTerm,
+          ) || 'FIRST',
         rating: reviewRating * 2,
         content: reviewContent,
       };
 
       try {
-        await api.patch(`/reviews/${editingReviewId}`, patchPayload);
-        await refreshReviews({ includeFacets: true });
+        const response = await api.patch(
+          `/reviews/${editingReviewId}`,
+          patchPayload,
+        );
+        const index = reviews.findIndex((r) => r.id === editingReviewId);
+        if (index !== -1) {
+          reviews[index].academicYear = patchPayload.academicYear;
+          reviews[index].semester = patchPayload.semester;
+          reviews[index].rating = patchPayload.rating;
+          reviews[index].content = patchPayload.content;
+          reviews[index].status = 'PENDING';
+        }
         editingReviewId = null;
         reviewContent = '';
         reviewRating = 1;
       } catch (error) {
         console.error(error);
-        toast.error('Something went wrong', {
-          position: 'bottom-right',
-        });
-      } finally {
-        reviewSubmitting = false;
       }
       return;
     }
@@ -562,18 +314,32 @@
       courseNo: course.courseNo,
       studyProgram: course.studyProgram,
       academicYear: Number(selectedYear),
-      semester: thaiLabelToSemesterMapper(selectedTerm),
-      ...(writeReviewSectionNo !== null && {
-        sectionNo: Number(writeReviewSectionNo),
-      }),
+      semester:
+        ALLOWED_SEMESTER.find((s) => SEMESTER_LABEL_LONG[s] === selectedTerm) ||
+        'FIRST',
       rating: reviewRating * 2,
       content: reviewContent,
     };
 
     try {
       const response = await api.post('/reviews', payload);
-      SubmitReviewResponseSchema.parse(response.data);
-      await refreshReviews({ includeFacets: true, targetPage: 1 });
+      const review = SubmitReviewResponseSchema.parse(response.data).data;
+
+      console.log(review);
+
+      reviews.push({
+        id: review.id,
+        rating: review.rating,
+        status: review.status,
+        studyProgram: review.studyProgram,
+        academicYear: review.academicYear,
+        semester: review.semester,
+        content: review.content,
+        stats: {
+          likeCount: review.likeCount,
+          dislikeCount: review.dislikeCount,
+        },
+      });
       reviewContent = '';
     } catch (error) {
       if (isAxiosError(error)) {
@@ -588,8 +354,6 @@
       toast.error('Something went wrong', {
         position: 'bottom-right',
       });
-    } finally {
-      reviewSubmitting = false;
     }
   }
 
@@ -598,7 +362,10 @@
     if (!isConfirm) return;
     try {
       await api.delete(`/reviews/${reviewId}`);
-      await refreshReviews({ includeFacets: true });
+      const index = reviews.findIndex((r) => r.id === reviewId);
+      if (index !== -1) {
+        reviews.splice(index, 1);
+      }
       toast.success('ลบรีวิวสำเร็จ', { position: 'bottom-right' });
     } catch (error) {
       console.error(error);
@@ -613,11 +380,9 @@
     selectedYear = String(review.academicYear);
     selectedTerm =
       SEMESTER_LABEL_LONG[review.semester as keyof typeof SEMESTER_LABEL_LONG];
-    writeReviewSectionNo =
-      review.sectionNo != null ? String(review.sectionNo) : null;
     editingReviewId = review.id;
     scrollToSection(reviewSection);
-    reviewEditor?.focus();
+    textareaRef?.focus();
   }
 
   $effect(() => {
@@ -639,31 +404,19 @@
     });
   });
 
-  afterNavigate(() => {
-    const loadedCourseNo = data.course.courseNo;
-
-    if (loadedCourseNo === reviewsCourseNo) return;
-
-    reviewsRequestId += 1;
-    reviewsCourseNo = loadedCourseNo;
-    reviews = data.reviews;
-    reviewCount = (data as ReviewPageData).reviewCount ?? data.reviews.length;
-    reviewFacets = (data as ReviewPageData).reviewFacets ?? [];
-    reviewsError = (data as ReviewPageData).reviewsError ?? false;
-    reviewsLoading = false;
-    selectedReviewYear = reviewYearPlaceholder;
-    selectedReviewSemester = null;
-    selectedReviewSection = null;
-    reviewsPage = 1;
-  });
-
   $effect(() => {
-    const userId = $session.data?.user.id ?? null;
-
-    if (userId === reviewSessionUserId) return;
-
-    reviewSessionUserId = userId;
-    void refreshReviews({ includeFacets: true, targetPage: 1 });
+    if (!reviewYearOptions.includes(selectedReviewYear)) {
+      selectedReviewYear = reviewYearPlaceholder;
+    }
+    if (!reviewTermOptions.includes(selectedReviewTerm)) {
+      selectedReviewTerm = reviewTermPlaceholder;
+    }
+    if (reviewsPage > totalReviewPages) {
+      reviewsPage = totalReviewPages;
+    }
+    if (reviewsPage < 1) {
+      reviewsPage = 1;
+    }
   });
 
   let globalSelectedSection = $state<string | null>(
@@ -762,86 +515,75 @@
   <div class="relative flex flex-1 overflow-hidden">
     <AppSidebar
       showSidebar={screenWidth >= 1024}
-      panelWidth="490px"
       bind:expanded={sidebarExpanded}
       bind:openPanel
       bind:activePanel
     >
-      {#snippet iconItems({ expanded })}
+      {#snippet iconItems({ toggleExpanded, expanded, togglePanel })}
         <Sidebar.MenuItem>
-          <div class="mt-[0px]">
-            <Sidebar.MenuButton
-              onclick={toggleSidebar}
-              isActive={expanded && activePanel === 'sidebar'}
-              size="lg"
-              tooltipContent="เมนู"
-              class="mx-auto size-12! justify-center rounded-xl p-0! ring-0 transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-5!"
-            >
-              <Menu size="20" strokeWidth={2.5} />
-            </Sidebar.MenuButton>
-          </div>
+          <Sidebar.MenuButton
+            onclick={toggleExpanded}
+            isActive={expanded && activePanel === 'sidebar'}
+            size="lg"
+            tooltipContent="เมนู"
+            class="mx-auto size-12! justify-center rounded-xl p-0! ring-0 transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-6!"
+          >
+            <Menu size="24" strokeWidth={2.5} />
+          </Sidebar.MenuButton>
         </Sidebar.MenuItem>
         <Sidebar.MenuItem>
-          <div class="mt-[0px]">
-            <Sidebar.MenuButton
-              onclick={() => {
-                activePanel = 'description_only';
-                scrollToSection(descriptionSection);
-              }}
-              isActive={activePanel === 'description_only'}
-              size="lg"
-              tooltipContent="คำอธิบายรายวิชา"
-              class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-5!"
-            >
-              <Book size="20" strokeWidth={2.5} />
-            </Sidebar.MenuButton>
-          </div>
+          <Sidebar.MenuButton
+            onclick={() => {
+              activePanel = 'description_only';
+              scrollToSection(descriptionSection);
+            }}
+            isActive={activePanel === 'description_only'}
+            size="lg"
+            tooltipContent="คำอธิบายรายวิชา"
+            class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-6!"
+          >
+            <Book size="24" strokeWidth={2.5} />
+          </Sidebar.MenuButton>
         </Sidebar.MenuItem>
         <Sidebar.MenuItem>
-          <div class="mt-[-12px]">
-            <Sidebar.MenuButton
-              onclick={() => {
-                activePanel = 'detail_only';
-                scrollToSection(detailSection);
-              }}
-              isActive={activePanel === 'detail_only'}
-              size="lg"
-              tooltipContent="รายละเอียดเซคชัน"
-              class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-5!"
-            >
-              <StickyNote size="20" strokeWidth={2.5} />
-            </Sidebar.MenuButton>
-          </div>
+          <Sidebar.MenuButton
+            onclick={() => {
+              activePanel = 'detail_only';
+              scrollToSection(detailSection);
+            }}
+            isActive={activePanel === 'detail_only'}
+            size="lg"
+            tooltipContent="รายละเอียดเซคชัน"
+            class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-6!"
+          >
+            <StickyNote size="24" strokeWidth={2.5} />
+          </Sidebar.MenuButton>
         </Sidebar.MenuItem>
         <Sidebar.MenuItem>
-          <div class="mt-[-12px]">
-            <Sidebar.MenuButton
-              onclick={() => {
-                activePanel = 'review_only';
-                scrollToSection(reviewSection);
-              }}
-              isActive={activePanel === 'review_only'}
-              size="lg"
-              tooltipContent="รีวิวรายวิชา"
-              class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-5!"
-            >
-              <MessageCircleQuestionIcon size="20" strokeWidth={2.5} />
-            </Sidebar.MenuButton>
-          </div>
+          <Sidebar.MenuButton
+            onclick={() => {
+              activePanel = 'review_only';
+              scrollToSection(reviewSection);
+            }}
+            isActive={activePanel === 'review_only'}
+            size="lg"
+            tooltipContent="รีวิวรายวิชา"
+            class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-6!"
+          >
+            <MessageCircleQuestionIcon size="24" strokeWidth={2.5} />
+          </Sidebar.MenuButton>
         </Sidebar.MenuItem>
         {#if $session.data}
           <Sidebar.MenuItem>
-            <div class="mt-[-10px]">
-              <Sidebar.MenuButton
-                onclick={focusSelected}
-                isActive={activePanel === 'selected_only'}
-                size="lg"
-                tooltipContent="วิชาที่เลือก"
-                class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-5!"
-              >
-                <BookMarked size="20" strokeWidth={2.5} />
-              </Sidebar.MenuButton>
-            </div>
+            <Sidebar.MenuButton
+              onclick={() => togglePanel('selected_only')}
+              isActive={activePanel === 'selected_only'}
+              size="lg"
+              tooltipContent="วิชาที่เลือก"
+              class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-6!"
+            >
+              <BookMarked size="24" strokeWidth={2.5} />
+            </Sidebar.MenuButton>
           </Sidebar.MenuItem>
         {/if}
       {/snippet}
@@ -863,47 +605,38 @@
               academicYear={$userCart.currentCart.academicYear}
             />
           </div>
-          <hr class="mb-0 border-t border-neutral-100" />
+          <hr class="mb-0 opacity-50" />
         {/if}
 
         {#if expanded}
           <div class="text-on-surface mb-6 flex flex-col">
             <button
               type="button"
-              class="hover:text-primary w-full border-b border-neutral-200 py-4 text-left text-xl font-semibold transition-colors"
-              onclick={() => {
-                activePanel = 'description_only';
-                scrollToSection(descriptionSection);
-              }}
+              class="hover:text-primary w-full border-b border-gray-400 py-4 text-left text-[20px] font-semibold transition-colors"
+              onclick={() => scrollToSection(descriptionSection)}
             >
               คำอธิบายรายวิชา
             </button>
 
             <button
               type="button"
-              class="hover:text-primary w-full border-b border-neutral-200 py-4 text-left text-xl font-semibold transition-colors"
-              onclick={() => {
-                activePanel = 'detail_only';
-                scrollToSection(detailSection);
-              }}
+              class="hover:text-primary w-full border-b border-gray-400 py-4 text-left text-[20px] font-semibold transition-colors"
+              onclick={() => scrollToSection(detailSection)}
             >
               รายละเอียดเซคชัน
             </button>
 
             <div
-              class="flex w-full items-center justify-between border-b border-neutral-200 py-3.5"
+              class="flex w-full items-center justify-between border-b border-gray-400 py-3.5"
             >
               <button
                 type="button"
-                class="hover:text-primary text-left text-xl font-semibold transition-colors"
-                onclick={() => {
-                  activePanel = 'review_only';
-                  scrollToSection(reviewSection);
-                }}
+                class="hover:text-primary text-left text-[20px] font-semibold transition-colors"
+                onclick={() => scrollToSection(reviewSection)}
               >
                 รีวิวรายวิชา
                 <span class="text-on-surface/50 ml-1 text-sm font-normal">
-                  ({reviewCount} รีวิว)
+                  ({filteredReviews.length} รีวิว)
                 </span>
               </button>
 
@@ -913,7 +646,7 @@
                 class="flex items-center gap-1.5 rounded-xl bg-[#E9EEF6] px-3.5 py-1.5 text-sm font-medium text-[#004494] transition-all hover:bg-[#D2E0F5] data-[hidden=true]:hidden"
                 onclick={() => {
                   scrollToSection(reviewSection);
-                  setTimeout(() => reviewEditor?.focus(), 300);
+                  setTimeout(() => textareaRef?.focus(), 300);
                 }}
               >
                 เขียนรีวิว
@@ -928,18 +661,17 @@
             {#if $userCart.currentCart}
               <SelectedCourse
                 variant="grouped"
-                bind:open={selectedOpen}
-                class="border-b border-neutral-100"
+                class="border-b border-neutral-200"
               />
             {:else}
-              <SelectedCourse class="border-b border-neutral-100" />
+              <SelectedCourse class="border-b border-neutral-200" />
             {/if}
           </div>
         {/if}
 
         {#if expanded || openPanel === 'sidebar'}
           <div
-            class="border-secondary text-on-secondary-container mt-8 rounded-2xl border px-5 py-4 text-center text-xs/[18px]"
+            class="mt-8 rounded-2xl border border-orange-300 px-5 py-4 text-center text-[15px] leading-relaxed text-orange-500"
           >
             <span class="font-bold">CU Get Reg ไม่ใช่การลงทะเบียนเรียนจริง</span
             ><br />
@@ -964,7 +696,7 @@
             >
               <ChevronLeft size={18} strokeWidth={2.5} />
               <span
-                class="translate-y-[-1px] text-sm font-normal text-[#353745]"
+                class="font-regular translate-y-[-1px] text-[12px] text-[#353745]"
               >
                 กลับ
               </span>
@@ -977,7 +709,7 @@
                     class="px-3 py-1 text-xs md:hidden"
                   />
                 {/if}
-                <h1 class="text-primary text-h1 font-semibold">
+                <h1 class="text-primary text-xl font-semibold">
                   {course.courseNo}
                   {course.courseInfo.abbrName}
                 </h1>
@@ -1000,17 +732,17 @@
                 class="px-3 py-1 text-xs"
               />
             </div>
-            <p class="text-on-surface mt-2 text-sm font-semibold sm:text-lg">
+            <p class="text-on-surface mt-2 text-sm font-semibold">
               {course.courseInfo.courseNameTh}
             </p>
-            <p class="text-on-surface text-sm font-semibold sm:text-lg">
+            <p class="text-on-surface text-sm font-semibold">
               {course.courseInfo.courseNameEn}
             </p>
             <div
-              class="mt-5 flex items-start gap-2 bg-amber-50 px-3 py-2 text-sm"
+              class="mt-5 flex items-start gap-2 bg-amber-50 px-3 py-2 text-xs"
             >
               <AlertTriangle size={16} class="mt-0.5 text-amber-900" />
-              <span class="font-sans text-neutral-900">
+              <span class="font-sarabun text-neutral-900">
                 ข้อมูลคำอธิบายรายวิชาที่แสดงไม่ได้เป็นข้อมูลล่าสุด
                 อาจมีการเปลี่ยนแปลงได้ โปรดตรวจสอบกับรายวิชาที่จัดอีกครั้ง
               </span>
@@ -1023,25 +755,21 @@
             <div class="grid gap-6 md:hidden">
               <div>
                 <div class="bg-surface-container-lowest rounded-full">
-                  <p
-                    class="text-primary px-4 py-1 text-xs font-medium sm:text-base"
-                  >
+                  <p class="text-primary px-4 py-1 text-sm font-medium">
                     คำอธิบายรายวิชา (ภาษาไทย)
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p class="text-on-surface font-sarabun mt-3 px-4 text-sm">
                   {course.courseInfo.courseDescTh}
                 </p>
               </div>
               <div>
                 <div class="bg-surface-container-lowest rounded-full">
-                  <p
-                    class="text-primary px-4 py-1 text-xs font-medium sm:text-base"
-                  >
+                  <p class="text-primary px-4 py-1 text-sm font-medium">
                     คำอธิบายรายวิชา (ภาษาอังกฤษ)
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p class="text-on-surface font-sarabun mt-3 px-4 text-sm">
                   {course.courseInfo.courseDescEn}
                 </p>
               </div>
@@ -1053,24 +781,24 @@
                   class="bg-surface-container-lowest grid rounded-full md:grid-cols-2"
                 >
                   <p
-                    class="text-primary px-4 py-1 text-left text-xs font-medium sm:text-base"
+                    class="text-primary px-4 py-1 text-left text-sm font-medium"
                   >
                     คำอธิบายรายวิชา (ภาษาไทย)
                   </p>
                   <p
-                    class="text-primary px-4 py-1 text-left text-xs font-medium sm:text-base"
+                    class="text-primary px-4 py-1 text-left text-sm font-medium"
                   >
                     คำอธิบายรายวิชา (ภาษาอังกฤษ)
                   </p>
                 </div>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p class="text-on-surface font-sarabun mt-3 px-4 text-sm">
                   {course.courseInfo.courseDescTh}
                 </p>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p class="text-on-surface font-sarabun mt-3 px-4 text-sm">
                   {course.courseInfo.courseDescEn}
                 </p>
               </div>
@@ -1079,25 +807,19 @@
             <div class="mt-6 grid gap-6 md:hidden">
               <div>
                 <div class="bg-surface-container-lowest rounded-full">
-                  <p
-                    class="text-primary px-4 py-1 text-xs font-medium sm:text-base"
-                  >
-                    คณะ
-                  </p>
+                  <p class="text-primary px-4 py-1 text-sm font-medium">คณะ</p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
-                  {faculties[course.courseInfo.faculty ?? '']?.th ?? '-'}
+                <p class="text-on-surface font-sarabun mt-3 px-4 text-sm">
+                  {faculties[course.courseInfo.faculty].th}
                 </p>
               </div>
               <div>
                 <div class="bg-surface-container-lowest rounded-full">
-                  <p
-                    class="text-primary px-4 py-1 text-xs font-medium sm:text-base"
-                  >
+                  <p class="text-primary px-4 py-1 text-sm font-medium">
                     ภาควิชา/กลุ่มวิชา/สาขาวิชา
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p class="text-on-surface font-sarabun mt-3 px-4 text-sm">
                   {course.courseInfo.department}
                 </p>
               </div>
@@ -1109,24 +831,24 @@
                   class="bg-surface-container-lowest grid rounded-full md:grid-cols-2"
                 >
                   <p
-                    class="text-primary px-4 py-1 text-left text-xs font-medium sm:text-base"
+                    class="text-primary px-4 py-1 text-left text-sm font-medium"
                   >
                     คณะ
                   </p>
                   <p
-                    class="text-primary px-4 py-1 text-left text-xs font-medium sm:text-base"
+                    class="text-primary px-4 py-1 text-left text-sm font-medium"
                   >
                     ภาควิชา/กลุ่มวิชา/สาขาวิชา
                   </p>
                 </div>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
-                  {faculties[course.courseInfo.faculty ?? '']?.th ?? '-'}
+                <p class="text-on-surface font-sarabun mt-3 px-4 text-sm">
+                  {faculties[course.courseInfo.faculty].th}
                 </p>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p class="text-on-surface font-sarabun mt-3 px-4 text-sm">
                   {course.courseInfo.department}
                 </p>
               </div>
@@ -1135,25 +857,21 @@
             <div class="mt-6 grid gap-6 md:hidden">
               <div>
                 <div class="bg-surface-container-lowest rounded-full">
-                  <p
-                    class="text-primary px-4 py-1 text-xs font-medium sm:text-base"
-                  >
+                  <p class="text-primary px-4 py-1 text-sm font-medium">
                     รูปแบบรายวิชา
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
-                  {course.courseInfo.creditHours?.split(' ') ?? '-'}
+                <p class="text-on-surface font-sarabun mt-3 px-4 text-sm">
+                  {course.courseInfo.creditHours.split(' ')}
                 </p>
               </div>
               <div>
                 <div class="bg-surface-container-lowest rounded-full">
-                  <p
-                    class="text-primary px-4 py-1 text-xs font-medium sm:text-base"
-                  >
+                  <p class="text-primary px-4 py-1 text-sm font-medium">
                     หน่วยกิต
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p class="text-on-surface font-sarabun mt-3 px-4 text-sm">
                   {course.courseInfo.credit}
                 </p>
               </div>
@@ -1165,24 +883,24 @@
                   class="bg-surface-container-lowest grid rounded-full md:grid-cols-2"
                 >
                   <p
-                    class="text-primary px-4 py-1 text-left text-xs font-medium sm:text-base"
+                    class="text-primary px-4 py-1 text-left text-sm font-medium"
                   >
                     รูปแบบรายวิชา
                   </p>
                   <p
-                    class="text-primary px-4 py-1 text-left text-xs font-medium sm:text-base"
+                    class="text-primary px-4 py-1 text-left text-sm font-medium"
                   >
                     หน่วยกิต
                   </p>
                 </div>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
-                  {course.courseInfo.creditHours?.split(' ') ?? '-'}
+                <p class="text-on-surface font-sarabun mt-3 px-4 text-sm">
+                  {course.courseInfo.creditHours.split(' ')}
                 </p>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p class="text-on-surface font-sarabun mt-3 px-4 text-sm">
                   {course.courseInfo.credit}
                 </p>
               </div>
@@ -1191,25 +909,19 @@
             <div class="mt-6 grid gap-6 md:hidden">
               <div>
                 <div class="bg-surface-container-lowest rounded-full">
-                  <p
-                    class="text-primary px-4 py-1 text-xs font-medium sm:text-base"
-                  >
+                  <p class="text-primary px-4 py-1 text-sm font-medium">
                     เงื่อนไขรายวิชา
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
-                  -
-                </p>
+                <p class="text-on-surface font-sarabun mt-3 px-4 text-sm">-</p>
               </div>
               <div>
                 <div class="bg-surface-container-lowest rounded-full">
-                  <p
-                    class="text-primary px-4 py-1 text-xs font-medium sm:text-base"
-                  >
+                  <p class="text-primary px-4 py-1 text-sm font-medium">
                     วิธีการวัดผล
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p class="text-on-surface font-sarabun mt-3 px-4 text-sm">
                   Letter Grade
                 </p>
               </div>
@@ -1221,24 +933,22 @@
                   class="bg-surface-container-lowest grid rounded-full md:grid-cols-2"
                 >
                   <p
-                    class="text-primary px-4 py-1 text-left text-xs font-medium sm:text-base"
+                    class="text-primary px-4 py-1 text-left text-sm font-medium"
                   >
                     เงื่อนไขรายวิชา
                   </p>
                   <p
-                    class="text-primary px-4 py-1 text-left text-xs font-medium sm:text-base"
+                    class="text-primary px-4 py-1 text-left text-sm font-medium"
                   >
                     วิธีการวัดผล
                   </p>
                 </div>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
-                  -
-                </p>
+                <p class="text-on-surface font-sarabun mt-3 px-4 text-sm">-</p>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p class="text-on-surface font-sarabun mt-3 px-4 text-sm">
                   Letter Grade
                 </p>
               </div>
@@ -1247,26 +957,22 @@
             <div class="mt-6 grid gap-6 md:hidden">
               <div>
                 <div class="bg-surface-container-lowest rounded-full">
-                  <p
-                    class="text-primary px-4 py-1 text-xs font-medium sm:text-base"
-                  >
+                  <p class="text-primary px-4 py-1 text-sm font-medium">
                     สอบกลางภาค
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
-                  {midtermExam}
+                <p class="text-on-surface font-sarabun mt-3 px-4 text-sm">
+                  06 มี.ค. 2567 16:00 - 19:00
                 </p>
               </div>
               <div>
                 <div class="bg-surface-container-lowest rounded-full">
-                  <p
-                    class="text-primary px-4 py-1 text-xs font-medium sm:text-base"
-                  >
+                  <p class="text-primary px-4 py-1 text-sm font-medium">
                     สอบปลายภาค
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
-                  {finalExam}
+                <p class="text-on-surface font-sarabun mt-3 px-4 text-sm">
+                  01 พ.ค. 2567 16:00 - 19:00
                 </p>
               </div>
             </div>
@@ -1277,25 +983,25 @@
                   class="bg-surface-container-lowest grid rounded-full md:grid-cols-2"
                 >
                   <p
-                    class="text-primary px-4 py-1 text-left text-xs font-medium sm:text-base"
+                    class="text-primary px-4 py-1 text-left text-sm font-medium"
                   >
                     สอบกลางภาค
                   </p>
                   <p
-                    class="text-primary px-4 py-1 text-left text-xs font-medium sm:text-base"
+                    class="text-primary px-4 py-1 text-left text-sm font-medium"
                   >
                     สอบปลายภาค
                   </p>
                 </div>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
-                  {midtermExam}
+                <p class="text-on-surface font-sarabun mt-3 px-4 text-sm">
+                  06 มี.ค. 2567 16:00 - 19:00
                 </p>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
-                  {finalExam}
+                <p class="text-on-surface font-sarabun mt-3 px-4 text-sm">
+                  01 พ.ค. 2567 16:00 - 19:00
                 </p>
               </div>
             </div>
@@ -1304,7 +1010,7 @@
             class="text-on-surface mx-auto mt-8 w-full max-w-5xl"
             bind:this={detailSection}
           >
-            <h2 class="text-on-surface text-base font-semibold sm:text-2xl">
+            <h2 class="text-on-surface text-lg font-semibold">
               รายละเอียดเซคชัน
             </h2>
             <Accordion.Root
@@ -1319,7 +1025,7 @@
                 >
                   <Accordion.Trigger class="hover:no-underline">
                     <div
-                      class="flex items-center gap-2 text-xs font-medium text-[#4A70C6] sm:text-base"
+                      class="flex items-center gap-2 text-sm font-medium text-[#4A70C6]"
                     >
                       <Check size={16} />
                       <span>กลุ่ม : {groupName}</span>
@@ -1369,7 +1075,7 @@
               bind:this={reviewSection}
             >
               <div class="flex items-center justify-between">
-                <h2 class="text-on-surface text-base font-semibold sm:text-2xl">
+                <h2 class="text-on-surface text-lg font-semibold">
                   เขียนรีวิวรายวิชา
                 </h2>
               </div>
@@ -1379,12 +1085,14 @@
                 <div
                   class="flex w-full flex-row items-center justify-between gap-5 md:w-fit md:justify-start"
                 >
-                  <p class="shrink-0 text-sm font-normal md:hidden">ภาคเรียน</p>
+                  <p class="shrink-0 text-[14px] font-normal md:hidden">
+                    ภาคเรียน
+                  </p>
                   <div class="flex flex-row gap-2 md:gap-5">
                     <div>
                       <Select.Root type="single" bind:value={selectedYear}>
                         <Select.Trigger
-                          class="text-on-surface h-9 w-[120px] rounded-lg border border-[#D6D7E1] bg-white px-4 text-sm font-medium md:h-12 md:w-[180px] md:text-base"
+                          class="text-on-surface text:sm h-9 w-[120px] rounded-lg border border-[#D6D7E1] bg-white px-4 font-medium md:h-12 md:w-[180px] md:text-base"
                         >
                           {selectedYear}
                         </Select.Trigger>
@@ -1400,7 +1108,7 @@
                     <div>
                       <Select.Root type="single" bind:value={selectedTerm}>
                         <Select.Trigger
-                          class="text-on-surface h-9 w-[120px] rounded-lg border border-[#D6D7E1] bg-white px-4 text-sm font-medium md:h-12 md:w-[180px] md:text-base"
+                          class="text-on-surface text:sm h-9 w-[120px] rounded-lg border border-[#D6D7E1] bg-white px-4 font-medium md:h-12 md:w-[180px] md:text-base"
                         >
                           {selectedTerm}
                         </Select.Trigger>
@@ -1413,36 +1121,12 @@
                         </Select.Content>
                       </Select.Root>
                     </div>
-                    <div>
-                      <Select.Root
-                        type="single"
-                        value={writeReviewSectionNo ?? ''}
-                        onValueChange={(v) => (writeReviewSectionNo = v)}
-                        disabled={writeReviewSectionOptions.length === 0}
-                      >
-                        <Select.Trigger
-                          class="text-on-surface h-9 w-[120px] rounded-lg border border-[#D6D7E1] bg-white px-4 text-sm font-medium md:h-12 md:w-[180px] md:text-base"
-                        >
-                          {writeReviewSectionNo
-                            ? `เซค ${writeReviewSectionNo}`
-                            : 'ไม่มีเซค'}
-                        </Select.Trigger>
-                        <Select.Content role="listbox">
-                          <Select.Group>
-                            {#each writeReviewSectionOptions as sectionNo (sectionNo)}
-                              <Select.Item
-                                value={String(sectionNo)}
-                                label={`เซค ${sectionNo}`}
-                              />
-                            {/each}
-                          </Select.Group>
-                        </Select.Content>
-                      </Select.Root>
-                    </div>
                   </div>
                 </div>
                 <div class="flex items-center justify-between gap-8">
-                  <p class="text-sm font-normal md:hidden">ให้คะแนนรายวิชา</p>
+                  <p class="text-[14px] font-normal md:hidden">
+                    ให้คะแนนรายวิชา
+                  </p>
                   <div class="flex gap-2 md:gap-0">
                     {#each [1, 2, 3, 4, 5] as value (value)}
                       <button
@@ -1476,12 +1160,27 @@
                   </div>
                 </div>
               </div>
-              <div class="mt-4">
-                <MarkdownEditor
-                  bind:this={reviewEditor}
+              <div
+                class="border-surface-container-high bg-surface mt-4 rounded-xl border"
+              >
+                <div
+                  class="border-surface-container-high text-on-surface/60 flex items-center gap-6 border-b px-4 py-2"
+                >
+                  <Bold size={18} />
+                  <Italic size={18} />
+                  <Underline size={18} />
+                  <Strikethrough size={18} />
+                  <Code size={18} />
+                  <div class="bg-surface-container-high h-6 w-px"></div>
+                  <Heading size={18} />
+                  <Quote size={18} fill="currentColor" strokeWidth={0} />
+                </div>
+                <textarea
+                  bind:this={textareaRef}
                   bind:value={reviewContent}
+                  class="text-on-surface h-36 w-full resize-none bg-transparent px-4 py-3 text-sm outline-none"
                   placeholder="คุณคิดว่าวิชานี้เป็นอย่างไรบ้าง?"
-                />
+                ></textarea>
               </div>
               <div class="mt-4 flex justify-end">
                 <Button
@@ -1490,9 +1189,8 @@
                   color="secondary"
                   class="bg-primary-container text-primary hover:ring-primary-container w-full gap-2 md:w-auto"
                   onclick={handleSubmitReview}
-                  disabled={reviewSubmitting}
                 >
-                  {reviewSubmitting ? 'กำลังส่ง...' : 'ส่งรีวิว'}
+                  ส่งรีวิว
                   <Send size={14} />
                 </Button>
               </div>
@@ -1503,15 +1201,12 @@
             <div
               class="flex flex-col justify-between gap-4 md:flex-row md:items-center"
             >
-              <div class="text-base font-semibold sm:text-2xl">
+              <div class="text-lg font-semibold">
                 <span class="text-on-surface/60">ทั้งหมด </span>
-                <span class="text-primary">{reviewCount} รีวิว</span>
+                <span class="text-primary">{filteredReviews.length} รีวิว</span>
               </div>
               <div class="flex flex-nowrap items-center gap-3">
-                <Select.Root
-                  type="single"
-                  bind:value={() => selectedReviewYear, setSelectedReviewYear}
-                >
+                <Select.Root type="single" bind:value={selectedReviewYear}>
                   <Select.Trigger
                     class={`h-9 w-[140px] rounded-xl px-4 text-sm ${
                       isReviewYearPlaceholder
@@ -1529,102 +1224,27 @@
                     </Select.Group>
                   </Select.Content>
                 </Select.Root>
-                <Select.Root
-                  type="single"
-                  bind:value={
-                    () => selectedReviewSemester ?? reviewSemesterPlaceholder,
-                    setSelectedReviewSemester
-                  }
-                >
+                <Select.Root type="single" bind:value={selectedReviewTerm}>
                   <Select.Trigger
                     class={`h-9 w-[120px] rounded-xl px-4 text-sm ${
-                      isReviewSemesterPlaceholder
+                      isReviewTermPlaceholder
                         ? 'text-on-surface/60'
                         : 'text-on-surface'
                     }`}
                   >
-                    {selectedReviewSemester
-                      ? SEMESTER_LABEL_LONG[selectedReviewSemester]
-                      : reviewSemesterPlaceholder}
+                    {selectedReviewTerm}
                   </Select.Trigger>
                   <Select.Content role="listbox">
                     <Select.Group>
-                      <Select.Item
-                        value={reviewSemesterPlaceholder}
-                        label={reviewSemesterPlaceholder}
-                      />
-                      {#each reviewSemesterOptions as semester (semester)}
-                        <Select.Item
-                          value={semester}
-                          label={SEMESTER_LABEL_LONG[semester]}
-                        />
-                      {/each}
-                    </Select.Group>
-                  </Select.Content>
-                </Select.Root>
-                <Select.Root
-                  type="single"
-                  bind:value={
-                    () =>
-                      selectedReviewSection !== null
-                        ? String(selectedReviewSection)
-                        : reviewSectionPlaceholder,
-                    setSelectedReviewSection
-                  }
-                >
-                  <Select.Trigger
-                    class={`h-9 w-[120px] rounded-xl px-4 text-sm ${
-                      isReviewSectionPlaceholder
-                        ? 'text-on-surface/60'
-                        : 'text-on-surface'
-                    }`}
-                  >
-                    {selectedReviewSection !== null
-                      ? `เซค ${selectedReviewSection}`
-                      : reviewSectionPlaceholder}
-                  </Select.Trigger>
-                  <Select.Content role="listbox">
-                    <Select.Group>
-                      <Select.Item
-                        value={reviewSectionPlaceholder}
-                        label={reviewSectionPlaceholder}
-                      />
-                      {#each reviewSectionOptions as sectionNo (sectionNo)}
-                        <Select.Item
-                          value={String(sectionNo)}
-                          label={`เซค ${sectionNo}`}
-                        />
+                      {#each reviewTermOptions as term (term)}
+                        <Select.Item value={term} label={term} />
                       {/each}
                     </Select.Group>
                   </Select.Content>
                 </Select.Root>
               </div>
             </div>
-            {#if reviewsLoading}
-              <div
-                class="text-on-surface/70 mt-12 flex items-center justify-center gap-3 py-12"
-                aria-live="polite"
-              >
-                <Loader2 class="animate-spin" size={24} />
-                กำลังโหลดรีวิว...
-              </div>
-            {:else if reviewsError}
-              <div
-                class="mt-12 flex flex-col items-center justify-center gap-4 py-12 text-center"
-                role="alert"
-              >
-                <AlertTriangle size={48} class="text-orange-500" />
-                <p class="text-on-surface/70">ไม่สามารถโหลดรีวิวได้</p>
-                <Button
-                  size="sm"
-                  variant="outlined"
-                  onclick={() =>
-                    refreshReviews({ includeFacets: true, targetPage: 1 })}
-                >
-                  ลองใหม่
-                </Button>
-              </div>
-            {:else if reviews.length === 0}
+            {#if filteredReviews.length === 0}
               <div
                 class="mt-12 flex flex-col items-center justify-center gap-4 py-12 text-center"
               >
@@ -1633,9 +1253,7 @@
                   strokeWidth={2.2}
                   class="text-[#4A70C6]"
                 />
-                <div
-                  class="text-on-surface text-base font-semibold sm:text-2xl"
-                >
+                <div class="text-on-surface text-lg font-semibold">
                   เริ่มแบ่งปันเป็นคนแรก
                 </div>
                 <p class="text-on-surface/70 max-w-lg text-sm">
@@ -1645,20 +1263,14 @@
               </div>
             {:else}
               <div class="mt-6 flex flex-col gap-6">
-                {#each reviews as review (review.id)}
-                  {@const faculty = review.user.faculty ?? ''}
-                  {@const department = review.user.department ?? ''}
-                  {@const affiliation = `${faculty} ${department}`.trim()}
+                {#each pagedReviews as review, index (index)}
                   <Comment
                     rating={review.rating / 2}
-                    semester={SEMESTER_LABEL_LONG[review.semester]}
-                    year={review.academicYear}
-                    section={review.sectionNo}
+                    semester={review.semester as 'FIRST' | 'SECOND' | 'SUMMER'}
                     content={review.content}
                     likesCount={review.stats.likeCount}
                     dislikesCount={review.stats.dislikeCount}
                     status={review.status}
-                    facultyMajor={affiliation || undefined}
                     onLike={() => handleReactReview(review.id, 'L')}
                     onDislike={() => handleReactReview(review.id, 'D')}
                     reaction={review.reaction}
@@ -1667,17 +1279,13 @@
                   />
                 {/each}
               </div>
-              <div
-                class="mt-6 flex justify-end"
-                class:hidden={totalReviewPages <= 1}
-              >
+              <div class="mt-6 flex justify-end">
                 <nav class="flex items-center gap-2" aria-label="Pagination">
                   <button
-                    class="border-surface-container-high bg-surface text-on-surface flex h-9 w-9 items-center justify-center rounded-lg border disabled:cursor-not-allowed disabled:opacity-50"
+                    class="border-surface-container-high bg-surface text-on-surface flex h-9 w-9 items-center justify-center rounded-lg border"
                     type="button"
                     aria-label="Previous page"
-                    disabled={reviewsPage === 1}
-                    onclick={() => setReviewsPage(Math.max(1, reviewsPage - 1))}
+                    onclick={() => (reviewsPage = Math.max(1, reviewsPage - 1))}
                   >
                     ‹
                   </button>
@@ -1700,21 +1308,21 @@
                         }`}
                         type="button"
                         aria-current={reviewsPage === item ? 'page' : undefined}
-                        onclick={() => setReviewsPage(item)}
+                        onclick={() => (reviewsPage = item)}
                       >
                         {item}
                       </button>
                     {/if}
                   {/each}
                   <button
-                    class="border-surface-container-high bg-surface text-on-surface flex h-9 w-9 items-center justify-center rounded-lg border disabled:cursor-not-allowed disabled:opacity-50"
+                    class="border-surface-container-high bg-surface text-on-surface flex h-9 w-9 items-center justify-center rounded-lg border"
                     type="button"
                     aria-label="Next page"
-                    disabled={reviewsPage === totalReviewPages}
                     onclick={() =>
-                      setReviewsPage(
-                        Math.min(totalReviewPages, reviewsPage + 1),
-                      )}
+                      (reviewsPage = Math.min(
+                        totalReviewPages,
+                        reviewsPage + 1,
+                      ))}
                   >
                     ›
                   </button>
@@ -1760,20 +1368,16 @@
 {#snippet SelectedContent()}
   <div bind:this={selectedSection}>
     {#if $userCart.currentCart}
-      <SelectedCourse
-        variant="grouped"
-        collapsible={false}
-        class="border-b border-neutral-100"
-      />
+      <SelectedCourse variant="grouped" class="border-b border-neutral-200" />
     {:else}
-      <SelectedCourse collapsible={false} class="border-b border-neutral-100" />
+      <SelectedCourse class="border-b border-neutral-200" />
     {/if}
   </div>
 {/snippet}
 
 {#snippet WarningContent()}
   <div
-    class="border-secondary text-on-secondary-container mt-8 rounded-2xl border px-5 py-4 text-center text-xs/[18px]"
+    class="mt-8 rounded-2xl border border-orange-300 px-5 py-4 text-center text-[15px] leading-relaxed text-orange-500"
   >
     <span class="font-bold">CU Get Reg ไม่ใช่การลงทะเบียนเรียนจริง</span><br />
     สามารถลงทะเบียนเรียนได้ที่

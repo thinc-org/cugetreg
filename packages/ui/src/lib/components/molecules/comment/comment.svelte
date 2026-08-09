@@ -2,16 +2,12 @@
 	import StatusChip from '$lib/components/atoms/status-chip/status-chip.svelte';
 
 	import { Pencil, ThumbsDown, ThumbsUp, Trash2 } from '@lucide/svelte';
-	import DOMPurify from 'isomorphic-dompurify';
-	import { marked } from 'marked';
 
 	import { RatingStar } from '../../atoms/rating-star';
 
 	interface CommentProps {
 		content: string;
 		semester: string;
-		year: number;
-		section?: number | null;
 		rating: number;
 		likesCount: number;
 		dislikesCount: number;
@@ -28,8 +24,6 @@
 	let {
 		content,
 		semester,
-		year,
-		section,
 		rating,
 		likesCount,
 		dislikesCount,
@@ -45,42 +39,10 @@
 	}: CommentProps = $props();
 	let hasHalfStar: boolean = $derived(rating % 1 !== 0); // Determine if there's a half star
 	let isExpanded: boolean = $state(false);
-
-	// Reviews are stored as markdown. Render to HTML with marked, then sanitize
-	// with DOMPurify (allowlist of formatting tags only) so user-authored content
-	// — including the underline <u> that tiptap-markdown emits — is shown safely.
-	const renderedContent = $derived(
-		DOMPurify.sanitize(marked.parse(content, { async: false, gfm: true, breaks: true }) as string, {
-			ALLOWED_TAGS: [
-				'p',
-				'br',
-				'strong',
-				'em',
-				'del',
-				's',
-				'u',
-				'code',
-				'pre',
-				'blockquote',
-				'ul',
-				'ol',
-				'li',
-				'h1',
-				'h2',
-				'h3',
-				'h4',
-				'h5',
-				'h6',
-				'a',
-				'hr'
-			],
-			ALLOWED_ATTR: ['href']
-		})
-	);
 </script>
 
 <div
-	class="border-surface-container box-border flex h-[320px] w-full flex-col gap-y-2 rounded-xl border px-6 py-5 lg:h-auto lg:gap-y-4
+	class="border-surface-container box-border flex h-[320px] w-full flex-col gap-y-4 rounded-xl border px-6 py-5 lg:h-auto lg:gap-y-8
   lg:px-12 lg:py-10"
 	class:h-auto={isExpanded}
 >
@@ -98,10 +60,6 @@
 
 			<div class="text-subtitle font-sans font-medium">
 				{semester}
-				{year}
-				{#if section}
-					Section {section}
-				{/if}
 			</div>
 		</div>
 
@@ -125,12 +83,9 @@
 			class="h-full w-full flex-1 lg:h-auto lg:overflow-visible"
 			class:overflow-hidden={!isExpanded}
 		>
-			<div
-				class="prose prose-sm text-body2 font-sarabun text-on-surface prose-headings:font-sarabun prose-headings:text-on-surface prose-headings:mt-2 prose-headings:mb-1 prose-headings:text-base prose-p:my-1 prose-strong:text-on-surface w-full max-w-none"
-			>
-				<!-- eslint-disable-next-line svelte/no-at-html-tags -- content is sanitized with DOMPurify above -->
-				{@html renderedContent}
-			</div>
+			<p class="text-body1 font-sarabun font-regular text-on-surface w-full">
+				{content}
+			</p>
 		</div>
 
 		<div class="mt-auto flex flex-col gap-4">
@@ -142,7 +97,7 @@
 				{#if isExpanded}
 					ดูน้อยลง
 				{:else}
-					ดูเพิ่มเติม
+					ดูเพ่ิมเติม
 				{/if}
 			</button>
 		</div>

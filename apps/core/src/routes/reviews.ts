@@ -1,19 +1,17 @@
-import { Prisma } from "@/generated/prisma/client.js";
-import type { Variables } from "@/lib/auth.js";
+import { OpenAPIHono } from "@hono/zod-openapi";
+
+import type { Variables } from "../lib/auth.js";
 import {
   deleteReviewRoute,
   editReviewRoute,
   submitReviewRoute,
   voteReviewRoute,
-} from "@/routes_define/review.routes.js";
-import { reviewService } from "@/services/reviewService.js";
-
-import { OpenAPIHono } from "@hono/zod-openapi";
+} from "../routes_define/review.routes.js";
+import { reviewService } from "../services/reviewService.js";
 
 const reviews = new OpenAPIHono<{ Variables: Variables }>();
 
 reviews
-  // 2.1. Submit a review for a course
   .openapi(submitReviewRoute, async (c) => {
     try {
       const { id: userId } = c.get("user");
@@ -24,19 +22,9 @@ reviews
       if (e instanceof Error && e.message === "COURSE_NOT_FOUND") {
         return c.json({ error: "COURSE_NOT_FOUND" }, 404);
       }
-      if (e instanceof Error && e.message === "SECTION_NOT_FOUND") {
-        return c.json({ error: "SECTION_NOT_FOUND" }, 422);
-      }
-      if (
-        e instanceof Prisma.PrismaClientKnownRequestError &&
-        e.code === "P2002" //Error code for unique constraint violation (have 2 [userId, courseNo])
-      ) {
-        return c.json({ error: "DUPLICATE_REVIEW" }, 409);
-      }
       return c.json({ error: "INTERNAL_SERVER_ERROR" }, 500);
     }
   })
-  // 2.2. Vote a review (upvote/downvote) and remove vote
   .openapi(voteReviewRoute, async (c) => {
     try {
       const { id: userId } = c.get("user");
@@ -53,7 +41,6 @@ reviews
       return c.json({ error: "INTERNAL_SERVER_ERROR" }, 500);
     }
   })
-  // 2.3. Edit a review
   .openapi(editReviewRoute, async (c) => {
     try {
       const { id: userId } = c.get("user");
@@ -69,14 +56,10 @@ reviews
         if (e.message === "REVIEW_NOT_FOUND") {
           return c.json({ error: "REVIEW_NOT_FOUND" }, 404);
         }
-        if (e.message === "SECTION_NOT_FOUND") {
-          return c.json({ error: "SECTION_NOT_FOUND" }, 422);
-        }
       }
       return c.json({ error: "INTERNAL_SERVER_ERROR" }, 500);
     }
   })
-  // 2.4. Delete a review
   .openapi(deleteReviewRoute, async (c) => {
     try {
       const { id: userId } = c.get("user");

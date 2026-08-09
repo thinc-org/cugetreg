@@ -1,4 +1,4 @@
-import type { ColorVariant } from '@cugetreg/utils/types';
+import type { ColorVariant } from '../../../../types';
 
 // export type StatusColour =
 //   | 'pink'

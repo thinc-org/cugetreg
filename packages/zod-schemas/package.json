@@ -23,11 +23,7 @@
   "exports": {
     ".": "./index.ts",
     "./constants": "./constants.ts",
-    "./activity": "./activity.schema.ts",
-    "./activity-response": "./activity.response.schema.ts",
     "./admin": "./admin.schema.ts",
-    "./announcement": "./announcement.schema.ts",
-    "./announcement-response": "./announcement.response.schema.ts",
     "./carts": "./carts.schema.ts",
     "./carts-response": "./carts.response.schema.ts",
     "./courses": "./courses.schema.ts",

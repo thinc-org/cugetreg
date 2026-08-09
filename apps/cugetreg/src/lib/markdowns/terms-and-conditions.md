@@ -12,7 +12,7 @@ CU Get Reg is an independent project and is not an official system of Chulalongk
 
 ## 3. Eligibility
 
-The Service is primarily intended for current and prospective Chulalongkorn University students.
+The Service is primarily intended for current and prospective Chulalongkorn University students.  
 Certain features require login using a valid student email address.
 
 ## 4. User Responsibilities
@@ -20,21 +20,21 @@ Certain features require login using a valid student email address.
 By using the Service, you agree that you will not:
 
 - Use the Service for unlawful purposes
-
+    
 - Attempt to disrupt, overload, or damage the system
-
+    
 - Scrape or automatically collect data from the live Service in a manner that may harm system performance or violate fair use
-
+    
 - Attempt to access accounts or data that do not belong to you
-
+    
 - Misrepresent your identity or student status
-
+    
 
 ## 5. Accuracy of Information
 
 Course information, schedules, and related data are provided for informational and planning purposes only.
 
-We do not guarantee that the information displayed is complete, accurate, or up to date.
+We do not guarantee that the information displayed is complete, accurate, or up to date.  
 Users must verify all course registration details through official university channels.
 
 ## 6. Intellectual Property
@@ -62,11 +62,11 @@ CU Get Reg is provided on an “as is” and “as available” basis without wa
 To the maximum extent permitted by law, CU Get Reg and its developers shall not be liable for any damages arising from:
 
 - Use or inability to use the Service
-
+    
 - Errors or omissions in course information
-
+    
 - Decisions made based on information provided by the Service
-
+    
 
 We do not guarantee that the Service will be uninterrupted, secure, or error-free. We may modify or discontinue any part of the Service at any time without notice.
 

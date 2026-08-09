@@ -21,7 +21,6 @@
 		dim?: boolean;
 		exitOnBackgroundClick?: boolean;
 		exitOnEsc?: boolean;
-		class?: string;
 	}
 
 	let {
@@ -30,8 +29,7 @@
 		dim = false,
 		show = $bindable(true),
 		exitOnBackgroundClick = false,
-		exitOnEsc = false,
-		class: className = undefined
+		exitOnEsc = false
 	}: ModalProp = $props();
 </script>
 
@@ -40,8 +38,7 @@
 		class={cn(
 			'fixed top-0 left-0 z-50 m-0 h-screen w-screen p-0',
 			dim && 'bg-black/40',
-			centered && 'flex items-center justify-center',
-			className
+			centered && 'flex items-center justify-center'
 		)}
 		onclick={handleClick}
 		onkeydown={handleKeydown}

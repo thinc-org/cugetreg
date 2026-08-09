@@ -3,10 +3,15 @@
 
 	import { Filter } from './index';
 
-	const { Story } = defineMeta({
+	const { Story } = defineMeta<typeof Filter>({
 		title: 'Organism/Filter',
 		component: Filter,
-		tags: ['autodocs']
+		tags: ['autodocs'],
+		argTypes: {
+			class: {
+				control: false
+			}
+		}
 	});
 </script>
 

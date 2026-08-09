@@ -1,4 +1,3 @@
-import { env as privateEnv } from '$env/dynamic/private';
 import { env } from '$env/dynamic/public';
 import { tryCatch } from '$lib/async-handler';
 
@@ -9,10 +8,7 @@ import { ListCartsResponseSchema } from '@cugetreg/zod-schemas/carts-response';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ fetch }) => {
-  const API_BASE = privateEnv.API_URL
-    ? `${privateEnv.API_URL}/api/v1`
-    : env.PUBLIC_API_URL;
-  const API_URL = `${API_BASE}/carts`;
+  const API_URL = `${env.PUBLIC_API_URL ?? 'http://localhost:3000'}/carts`;
   const [response, error] = await tryCatch(fetch(API_URL));
 
   if (error || !response || !response.ok) {

@@ -16,7 +16,6 @@
     iconItems,
     panelContent,
     showSidebar = true,
-    panelWidth = '450px',
     expanded = $bindable(true),
     openPanel = $bindable<string | null>(null),
     activePanel = $bindable<string | null>(null),
@@ -25,7 +24,6 @@
     iconItems: Snippet<[IconItemsArgs]>;
     panelContent: Snippet<[{ openPanel: string | null; expanded: boolean }]>;
     showSidebar?: boolean;
-    panelWidth?: string;
     expanded?: boolean;
     openPanel?: string | null;
     activePanel?: string | null;
@@ -35,7 +33,7 @@
 <Sidebar.Provider
   bind:open={expanded}
   class="relative h-full min-h-0"
-  style="--sidebar-width-icon: 4rem; --sidebar-width: {panelWidth};"
+  style="--sidebar-width-icon: 4rem; --sidebar-width: 450px;"
 >
   {#if showSidebar}
     <Sidebar.Sidebar
@@ -45,7 +43,7 @@
     >
       <Sidebar.Content class="flex-row overflow-visible!">
         <Sidebar.Group
-          class="w-(--sidebar-width-icon) shrink-0 items-center border-r-neutral-100 bg-white p-0 pt-[1rem] pb-6 group-data-[variant=floating]:rounded-l-lg md:pt-[1.5rem]"
+          class="border-r-surface-container w-(--sidebar-width-icon) shrink-0 items-center bg-white p-0 pt-[1rem] pb-6 group-data-[variant=floating]:rounded-l-lg md:pt-[1.5rem]"
         >
           <Sidebar.GroupContent>
             <Sidebar.Menu class="gap-6">
@@ -81,10 +79,10 @@
             ></div>
           {/if}
           <div
-            class="bg-surface flex flex-1 flex-col overflow-hidden border border-neutral-100 group-data-[state=collapsed]:absolute group-data-[state=collapsed]:top-4 group-data-[state=collapsed]:left-[calc(var(--sidebar-width-icon)+1rem)] group-data-[state=collapsed]:z-50 group-data-[state=collapsed]:max-h-[min(800px,calc(100%-2rem))] group-data-[state=collapsed]:w-[400px] group-data-[state=collapsed]:rounded-3xl group-data-[state=collapsed]:shadow-2xl md:px-2 md:pt-0 md:pb-8"
+            class="bg-surface border-surface-container flex flex-1 flex-col overflow-hidden border group-data-[state=collapsed]:absolute group-data-[state=collapsed]:top-4 group-data-[state=collapsed]:left-[calc(var(--sidebar-width-icon)+1rem)] group-data-[state=collapsed]:z-50 group-data-[state=collapsed]:max-h-[min(800px,calc(100%-2rem))] group-data-[state=collapsed]:w-[400px] group-data-[state=collapsed]:rounded-3xl group-data-[state=collapsed]:shadow-2xl md:px-2 md:pt-0 md:pb-8"
           >
             <div
-              class="flex-1 overflow-y-auto pb-10 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+              class="flex-1 overflow-y-scroll pr-6 pb-10 md:pr-8"
               style="overscroll-behavior: contain"
             >
               {@render panelContent({ openPanel, expanded })}

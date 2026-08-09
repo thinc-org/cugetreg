@@ -81,8 +81,6 @@
 		"@tailwindcss/cli": "^4.1.18",
 		"bits-ui": "^2.14.4",
 		"clsx": "^2.1.1",
-		"isomorphic-dompurify": "^3.18.0",
-		"marked": "^18.0.5",
 		"tailwind-merge": "^3.4.0",
 		"tailwind-variants": "^3.2.2"
 	}

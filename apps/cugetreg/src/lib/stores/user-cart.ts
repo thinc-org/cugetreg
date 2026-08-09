@@ -6,10 +6,6 @@ import { get, type Writable } from 'svelte/store';
 import toast from 'svelte-french-toast';
 
 import { courseColorVariants } from '@cugetreg/utils/constants';
-import {
-  ImportPublicCartResponseSchema,
-  type PublicCartDetail,
-} from '@cugetreg/zod-schemas';
 import type {
   CartData,
   CartSchema,
@@ -20,11 +16,7 @@ import {
   SingleCartItemResponseSchema,
   SingleCartResponseSchema,
 } from '@cugetreg/zod-schemas/carts-response';
-import type {
-  Semester,
-  StudyProgram,
-  Visible,
-} from '@cugetreg/zod-schemas/constants';
+import type { Semester, StudyProgram } from '@cugetreg/zod-schemas/constants';
 
 import { loginPopupState } from './login-popup.svelte';
 import { useContextStore } from './stores';
@@ -530,53 +522,40 @@ export function useCartActions() {
     }));
   };
 
-  const deleteCart = async (cartId?: string): Promise<boolean> => {
+  const deleteCart = async (): Promise<void> => {
+    await flushCartImmediately();
     const snapshot = get(userCart);
-    if (!snapshot) return false;
+    if (!snapshot) return;
     const { currentCartId, currentCart } = snapshot;
-    const targetId = cartId ?? currentCartId;
-    const isCurrentCart = targetId === currentCartId;
-
-    // Only flush pending changes when deleting the active cart — the
-    // pending buckets reference the current cart by definition.
-    if (isCurrentCart) {
-      await flushCartImmediately();
-    }
 
     try {
-      await api.delete(`/carts/${targetId}`);
+      // 1. Call the API — will 204 on success
+      await api.delete(`/carts/${currentCartId}`);
 
-      // Clear pending state only if this was the current cart
-      if (isCurrentCart) {
-        pendingCartUpdate = {};
-        pendingItemUpdates.clear();
-        if (debounceHandle !== null) {
-          clearTimeout(debounceHandle);
-          debounceHandle = null;
-        }
+      // 2. Clear pending updates for the now-deleted cart — any in-flight
+      //    flush targeting this cart will fail harmlessly.
+      pendingCartUpdate = {};
+      pendingItemUpdates.clear();
+      if (debounceHandle !== null) {
+        clearTimeout(debounceHandle);
+        debounceHandle = null;
       }
 
-      // --- Non-current cart: simple list removal, no substitute ---
-      if (!isCurrentCart) {
-        userCart.update((state) => ({
-          ...state,
-          cartList: state.cartList.filter((c) => c.id !== targetId),
-        }));
-        return true;
-      }
-
-      // --- Current cart: pick a substitute ---
+      // 3. Compute substitute candidate from the LIVE store state, so
+      //    concurrent createCart/copyCart calls are not dropped.
       const currentState = get(userCart);
-      if (!currentState) return true;
+      if (!currentState) return;
 
-      const remaining = currentState.cartList.filter((c) => c.id !== targetId);
+      const remaining = currentState.cartList.filter(
+        (c) => c.id !== currentCartId,
+      );
 
       if (remaining.length === 0) {
         userCart.update((state) => ({
           ...state,
           cartList: [],
         }));
-        return true;
+        return;
       }
 
       let substituteId: string;
@@ -595,7 +574,7 @@ export function useCartActions() {
           remaining.find((c) => c.isDefault)?.id ?? remaining[0].id;
       }
 
-      // Fetch the full detail of the substitute
+      // 4. Fetch the full detail of the substitute
       let detail;
       try {
         const detailRes = await api.get(`/carts/${substituteId}`);
@@ -605,16 +584,18 @@ export function useCartActions() {
         // overwrite currentCart — the next data refresh will fill it in.
         userCart.update((state) => ({
           ...state,
-          cartList: state.cartList.filter((c) => c.id !== targetId),
+          cartList: state.cartList.filter((c) => c.id !== currentCartId),
         }));
-        return true;
+        return;
       }
 
-      // Update the store — compute remaining from the current state in
-      // the callback so concurrently-added carts are not lost.
+      // 5. Update the store — compute remaining from the current state in
+      //    the callback so concurrently-added carts are not lost.
       userCart.update((state) => {
         // Freshly compute remaining from the latest state
-        const freshRemaining = state.cartList.filter((c) => c.id !== targetId);
+        const freshRemaining = state.cartList.filter(
+          (c) => c.id !== currentCartId,
+        );
 
         if (freshRemaining.length === 0) {
           return { ...state, cartList: [] };
@@ -640,11 +621,8 @@ export function useCartActions() {
           exams: detail.schedule.exams,
         };
       });
-
-      return true;
     } catch (error) {
       handleError(error);
-      return false;
     }
   };
 
@@ -664,66 +642,6 @@ export function useCartActions() {
     }
   };
 
-  const importCart = async (cartDetail: PublicCartDetail) => {
-    const cart = cartDetail.cart;
-    const exams = cartDetail.schedule.exams;
-    const res = await api.post(`/public/carts/${cart.id}/import`, {
-      name: cart.name,
-    });
-    const { cart: importedCart } = ImportPublicCartResponseSchema.parse(
-      res.data,
-    ).data;
-
-    const newCartData: CartData = {
-      id: importedCart.id,
-      name: importedCart.name,
-      studyProgram: importedCart.studyProgram,
-      academicYear: importedCart.academicYear,
-      semester: importedCart.semester,
-      visible: importedCart.visible,
-      isDefault: importedCart.isDefault,
-      cartOrder: importedCart.cartOrder,
-      items: cart.items.map((item) => ({
-        ...item,
-        isGraded: false,
-        expectedGrade: '0',
-      })),
-      activityItems: [],
-    };
-
-    userCart.update((state) => ({
-      ...state,
-      currentCartId: importedCart.id,
-      currentCart: newCartData,
-      exams,
-      cartList: [...state.cartList, importedCart],
-    }));
-  };
-
-  const changeCartVisibility = async (
-    cartId: string,
-    visible: Visible,
-  ): Promise<boolean> => {
-    try {
-      await api.patch(`/carts/${cartId}`, { visible });
-
-      userCart.update((state) => ({
-        ...state,
-        cartList: state.cartList.map((item) =>
-          item.id === cartId ? { ...item, visible } : item,
-        ),
-        currentCart:
-          state.currentCartId === cartId
-            ? { ...state.currentCart, visible }
-            : state.currentCart,
-      }));
-      return true;
-    } catch (error) {
-      handleError(error);
-      return false;
-    }
-  };
-
   return {
     renameCart,
     updateCartMeta,
@@ -735,7 +653,5 @@ export function useCartActions() {
     createCart,
     pinCart,
     switchCart,
-    importCart,
-    changeCartVisibility,
   };
 }

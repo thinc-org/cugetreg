@@ -69,7 +69,7 @@
 						<div class="flex flex-col">
 							{#each row.classes as cls, j (j)}
 								<div
-									class={`font-sarabun text-body2 grid w-full grid-cols-[32fr_98fr_60fr_38fr] gap-2 py-2 ${row.seats === 'ปิด' ? 'text-[#6F7593]' : 'text-[#353745]'}`}
+									class={`font-sarabun grid w-full grid-cols-[32fr_98fr_60fr_38fr] gap-2 py-2 text-[12px] ${row.seats === 'ปิด' ? 'text-[#6F7593]' : 'text-[#353745]'}`}
 								>
 									<div class="pr-0">{cls.teacher}</div>
 									<div class="pr-0">{cls.schedule}</div>
@@ -86,8 +86,8 @@
 {:else}
 	<Table class={`w-full border-separate border-spacing-0 text-left ${className ?? ''}`}>
 		<TableHeader class="bg-[#F6F6F9]">
-			<TableRow class="text-xs font-semibold tracking-[0.15px] sm:text-base">
-				<TableHead class="border-[#ECEEF4] text-[#4A70C6]">เซคชัน</TableHead>
+			<TableRow class="text-sm font-semibold tracking-[0.15px]">
+				<TableHead class="border-[#ECEEF4] text-[#4A70C6]">เซคชั่น</TableHead>
 				<TableHead class="border-[#ECEEF4] text-[#4A70C6]">จำนวนที่รับ</TableHead>
 				<TableHead class="border-[#ECEEF4] text-[#4A70C6]">ผู้สอน</TableHead>
 				<TableHead class="border-[#ECEEF4] text-[#4A70C6]">วันเวลาเรียน</TableHead>
@@ -105,7 +105,7 @@
 						{#if j === 0}
 							<TableCell
 								rowspan={row.classes.length}
-								class={`text-body2 py-5 ${row.seats === 'ปิด' ? 'text-[#6F7593]' : 'text-black'}`}
+								class={`py-5 ${row.seats === 'ปิด' ? 'text-[#6F7593]' : 'text-black'}`}
 							>
 								{row.section}
 							</TableCell>
@@ -117,27 +117,19 @@
 							</TableCell>
 						{/if}
 
-						<TableCell
-							class={`text-body2 py-5 ${row.seats === 'ปิด' ? 'text-[#6F7593]' : 'text-black'}`}
-						>
+						<TableCell class={`py-5 ${row.seats === 'ปิด' ? 'text-[#6F7593]' : 'text-black'}`}>
 							{cls.teacher}
 						</TableCell>
 
-						<TableCell
-							class={`text-body2 py-5 ${row.seats === 'ปิด' ? 'text-[#6F7593]' : 'text-black'}`}
-						>
+						<TableCell class={`py-5 ${row.seats === 'ปิด' ? 'text-[#6F7593]' : 'text-black'}`}>
 							{cls.schedule}
 						</TableCell>
 
-						<TableCell
-							class={`text-body2 py-5 ${row.seats === 'ปิด' ? 'text-[#6F7593]' : 'text-black'}`}
-						>
+						<TableCell class={`py-5 ${row.seats === 'ปิด' ? 'text-[#6F7593]' : 'text-black'}`}>
 							{cls.room}
 						</TableCell>
 
-						<TableCell
-							class={`text-body2 py-5 ${row.seats === 'ปิด' ? 'text-[#6F7593]' : 'text-black'}`}
-						>
+						<TableCell class={`py-5 ${row.seats === 'ปิด' ? 'text-[#6F7593]' : 'text-black'}`}>
 							{cls.type}
 						</TableCell>
 

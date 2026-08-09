@@ -1,5 +1,3 @@
-import { prisma } from "@/db/clients.js";
-
 import * as R from "remeda";
 
 import type {
@@ -20,6 +18,7 @@ import {
 } from "./conflictDetection.js";
 import { LexoRankService } from "./lexorank.service.js";
 
+import { prisma } from "../db/clients.js";
 import {
   type Course,
   type Section,
@@ -156,7 +155,6 @@ export const cartService = {
             },
           },
         },
-        activities: { orderBy: { cartOrder: "asc" } },
       },
     });
 
@@ -183,7 +181,7 @@ export const cartService = {
           info,
           courseData,
           sectionData,
-          sections: courseData?.sections ?? [],
+          sections: courseData?.sections,
         };
       }),
     );
@@ -197,7 +195,7 @@ export const cartService = {
       hidden: item.hidden,
       cartOrder: item.cartOrder,
       isGraded: item.isGraded,
-      genEdType: item.courseData?.genEdType ?? "NO",
+      genEdType: item.courseData?.genEdType,
       expectedGrade: item.expectedGrade.toString(),
       course: {
         courseNameTh: item.info.courseNameTh,
@@ -214,20 +212,6 @@ export const cartService = {
           }
         : null,
       sections: item.sections,
-    }));
-
-    // 2b. Format Activity Items Response
-    const activityItemsResponse = R.map(cart.activities, (act) => ({
-      id: act.id,
-      cartId: act.cartId,
-      title: act.title,
-      description: act.description,
-      dayOfWeek: act.dayOfWeek,
-      periodStart: act.periodStart,
-      periodEnd: act.periodEnd,
-      color: act.color,
-      hidden: act.hidden,
-      cartOrder: act.cartOrder,
     }));
 
     // 3. Extract Schedules
@@ -304,7 +288,6 @@ export const cartService = {
         cartOrder: cart.cartOrder,
         visible: cart.visible,
         items: itemsResponse,
-        activityItems: activityItemsResponse,
       },
       summary: {
         totalCredits: R.sumBy(enrichedItems, (x: any) =>

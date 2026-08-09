@@ -2,41 +2,6 @@ import z from "zod";
 
 export const TIME_REGEX = /^(IA|AR)|([01]\d|2[0-3]):([0-5]\d)$/;
 
-export const faculty = z.enum([
-  "01",
-  "02",
-  "20",
-  "21",
-  "22",
-  "23",
-  "24",
-  "25",
-  "26",
-  "27",
-  "28",
-  "29",
-  "30",
-  "31",
-  "32",
-  "33",
-  "34",
-  "35",
-  "36",
-  "37",
-  "38",
-  "39",
-  "40",
-  "49",
-  "51",
-  "53",
-  "55",
-  "56",
-  "58",
-  "63",
-  "92",
-  "99",
-]);
-
 export const days = z.enum([
   "MO",
   "TU",
@@ -74,4 +39,3 @@ export type Semester = z.infer<typeof semester>;
 export type Visible = z.infer<typeof visible>;
 export type ReviewStatus = z.infer<typeof reviewStatus>;
 export type Vote = z.infer<typeof vote>;
-export type Faculty = z.infer<typeof faculty>;

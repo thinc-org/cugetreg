@@ -1,30 +1,16 @@
 <script lang="ts">
-  import { goto } from '$app/navigation';
-  import { page } from '$app/state';
   import { env } from '$env/dynamic/public';
-  import { homeStore } from '$lib/homeStore.svelte';
-
-  import { SvelteURL } from 'svelte/reactivity';
 
   const PUBLIC_API_URL = env.PUBLIC_API_URL ?? 'http://localhost:3000/api/v1';
-  import { resolve } from '$app/paths';
   import { api } from '$lib/api';
-  import { tryCatch } from '$lib/async-handler';
   import { useSession } from '$lib/auth-client';
   import AppSidebar from '$lib/components/app-sidebar.svelte';
   import ScheduleMismatchPopup from '$lib/components/schedule-mismatch-popup.svelte';
   import SelectedCourse from '$lib/components/selected-course.svelte';
   import {
-    normalizeDayMapper,
-    normalizeGenedMapper,
-    semesterToTermMapper,
-    sortByMapper,
-    studyProgramMapper,
-  } from '$lib/mapper';
-  import {
     getSemesterDisplayOptions,
+    parseSemesterDisplay,
     SEMESTER_LABEL_LONG,
-    SEMESTER_LABEL_SHORT,
   } from '$lib/semesterOptions';
   import { loginPopupState } from '$lib/stores/login-popup.svelte';
   import { searchState } from '$lib/stores/search.svelte';
@@ -45,12 +31,9 @@
     TriangleAlert,
     X,
   } from '@lucide/svelte';
-  import { isAxiosError } from 'axios';
   import { getContext, untrack } from 'svelte';
-  import { cubicOut } from 'svelte/easing';
   import { SvelteURLSearchParams } from 'svelte/reactivity';
-  import { fade, slide } from 'svelte/transition';
-  import toast from 'svelte-french-toast';
+  import { fade } from 'svelte/transition';
 
   import { Input } from '@cugetreg/ui/atoms/input';
   import { CourseCard } from '@cugetreg/ui/molecules/course-card';
@@ -60,15 +43,6 @@
   import { Filter as FilterBar } from '@cugetreg/ui/organisms/filter-bar';
   import { Footer } from '@cugetreg/ui/organisms/footer';
   import * as Sidebar from '@cugetreg/ui/organisms/sidebar';
-  import type { Day } from '@cugetreg/utils/types';
-  import {
-    type Semester,
-    type SortBy,
-    type StudyProgram,
-    studyProgram,
-  } from '@cugetreg/zod-schemas';
-
-  const semesterOptions = getSemesterDisplayOptions();
 
   let courses = $state.raw<any[]>([]);
   let isLoading = $state(false);
@@ -90,92 +64,91 @@
     return () => mq.removeEventListener('change', handler);
   });
 
-  // let searchQuery = $state('');
-  // let debouncedSearchQuery = $state('');
-  // let searchTimeout: ReturnType<typeof setTimeout> | undefined;
-  //
-  // let isScheduleDropdownOpen = $state(false);
+  let timetableSection = $state<HTMLElement>();
+  let filterSection = $state<HTMLElement>();
+  let selectedSection = $state<HTMLElement>();
+
+  let searchQuery = $state('');
+  let debouncedSearchQuery = $state('');
+  let searchTimeout: ReturnType<typeof setTimeout> | undefined;
+
+  let isScheduleDropdownOpen = $state(false);
   let isFilterOpen = $state(true);
-  let isSelectedOpen = $state(true);
+  let activeDropdown = $state<'program' | 'semester' | 'sort' | null>(null);
   let activeModal = $state<'filter' | 'selected' | null>(null);
 
   let selectedGenEds = $state<string[]>([]);
+  let selectedSpecial = $state<string[]>([]);
   let selectedFaculties = $state<string[]>([]);
   let selectedDays = $state<string[]>([]);
   let selectedEval = $state<string[]>([]);
   let startTime = $state('');
   let endTime = $state('');
   let fitSchedule = $state(false);
-  let noConditions = $state(false);
-  let favoriteOnly = $state(false);
-  let currentProgram = $state<StudyProgram>('S');
-  let currentSemester = $state<Semester>('FIRST');
-  let currentAY = $state<number>(2568);
-  let currentSort = $state<SortBy>('NAME');
+  let noConditions = $state(true);
+
+  let currentProgram = $state('ทวิภาค');
+  let currentSemester = $state('2566 / 1');
+  let currentSort = $state('NAME');
   let sortDirection = $state<'asc' | 'desc'>('asc');
 
-  $effect(() => {
-    untrack(() => {
-      const params = page.url.searchParams;
-
-      selectedGenEds =
-        params.get('genEdType')?.split(',').filter(Boolean) ?? [];
-      // selectedSpecial = params.get('special')?.split(',').filter(Boolean) ?? [];
-      selectedFaculties =
-        params.get('faculty')?.split(',').filter(Boolean) ?? [];
-      selectedDays = params.get('day')?.split(',').filter(Boolean) ?? [];
-      selectedEval =
-        params.get('gradingType')?.split(',').filter(Boolean) ?? [];
-
-      startTime = params.get('timeStart') ?? '';
-      endTime = params.get('timeEnd') ?? '';
-      fitSchedule = params.get('fitSchedule') === 'true';
-      noConditions = params.get('noConditions') === 'true';
-      favoriteOnly = params.get('favorite') === 'true';
-      currentProgram = (page.params.program ?? 'S') as StudyProgram;
-
-      const termParam = params.get('term');
-      if (termParam) {
-        const [year, sem] = termParam.split('/');
-        currentAY = Number(year) || 2568;
-        if (sem === '3') currentSemester = 'SUMMER';
-        else if (sem === '2') currentSemester = 'SECOND';
-        else currentSemester = 'FIRST';
-      }
-    });
-  });
-
+  // Mobile-only sort options (per design): seat-based + name, each encodes a
+  // field + direction. Desktop keeps its own รหัสวิชา/ชื่อวิชา + direction toggle.
   const mobileSortOptions = [
-    { label: 'จำนวนที่นั่งมาก', field: 'CAPACITY_SUM', dir: 'desc' as const },
-    { label: 'จำนวนที่นั่งน้อย', field: 'CAPACITY_SUM', dir: 'asc' as const },
-    { label: 'เหลือที่นั่งมาก', field: 'REMAINING_SUM', dir: 'desc' as const },
-    { label: 'เหลือที่นั่งน้อย', field: 'REMAINING_SUM', dir: 'asc' as const },
+    { label: 'จำนวนที่นั่งมาก', field: 'CAPACITY', dir: 'desc' as const },
+    { label: 'จำนวนที่นั่งน้อย', field: 'CAPACITY', dir: 'asc' as const },
+    { label: 'เหลือที่นั่งมาก', field: 'REMAINING', dir: 'desc' as const },
+    { label: 'เหลือที่นั่งน้อย', field: 'REMAINING', dir: 'asc' as const },
     { label: 'ชื่อวิชา A-Z', field: 'NAME', dir: 'asc' as const },
     { label: 'ชื่อวิชา Z-A', field: 'NAME', dir: 'desc' as const },
   ];
-
-  const sortOptions = [
-    { label: 'ชื่อวิชา', field: 'NAME' },
-    { label: 'จำนวนที่นั่ง', field: 'CAPACITY_SUM' },
-    { label: 'เหลือที่นั่ง', field: 'REMAINING_SUM' },
-  ];
-
-  function selectMobileSort(field: SortBy, dir: 'asc' | 'desc') {
+  // Maps the active sort field to the API's sortBy value.
+  // NOTE: CAPACITY/REMAINING require backend support; NAME works today.
+  const SORT_BY_LABEL: Record<string, string> = {
+    NAME: 'ชื่อวิชา',
+    CAPACITY: 'จำนวนที่นั่ง',
+    REMAINING: 'เหลือที่นั่ง',
+  };
+  function selectMobileSort(field: string, dir: 'asc' | 'desc') {
     currentSort = field;
     sortDirection = dir;
+    activeDropdown = null;
   }
 
   let bottomSentinel = $state<HTMLElement | null>(null);
 
   let showMismatchPopup = $state(false);
+  let expectedParams = $derived(getParams());
   let pendingCourse = $state<{ courseNo: string; sectionNo: number } | null>(
     null,
   );
   let localSelectedSections: Record<string, number> = {};
 
   const session = useSession();
-  const isLoggedIn = $derived(Boolean($session.data));
 
+  const programOptions = ['ทวิภาค', 'ตรีภาค', 'นานาชาติ'];
+  const semesterOptions = getSemesterDisplayOptions();
+  const sortOptions = ['รหัสวิชา', 'ชื่อวิชา'];
+
+  const genEdMap: Record<string, string> = {
+    sci: 'SC',
+    hum: 'HU',
+    soc: 'SO',
+    int: 'IN',
+  };
+  const dayMap: Record<string, string> = {
+    mon: 'MO',
+    tue: 'TU',
+    wed: 'WE',
+    thu: 'TH',
+    fri: 'FR',
+    sat: 'SA',
+    sun: 'SU',
+  };
+  const evalMap: Record<string, string> = {
+    su: 'SU',
+    grade: 'LETTER',
+  };
   const KNOWN_DAYS = new Set(['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU']);
 
   const floatingOptions = [
@@ -195,6 +168,30 @@
     },
   ];
 
+  function parseTime(t: string): number | null {
+    if (!t) return null;
+    const m = t.trim().match(/^(\d{1,2}):(\d{2})$/);
+    if (!m) return null;
+    const h = Number(m[1]);
+    const mm = Number(m[2]);
+    if (h > 23 || mm > 59) return null;
+    return h * 60 + mm;
+  }
+
+  function getParams() {
+    const parsed = parseSemesterDisplay(currentSemester);
+    return {
+      academicYear: parsed?.academicYear ?? '2566',
+      semester: parsed?.semester ?? 'FIRST',
+      studyProgram:
+        currentProgram === 'นานาชาติ'
+          ? 'I'
+          : currentProgram === 'ตรีภาค'
+            ? 'T'
+            : 'S',
+    };
+  }
+
   function mapCourse(item: any) {
     const { course: c, courseInfo: ci, reviewCount } = item;
 
@@ -206,11 +203,33 @@
       (s.classes ?? []).map((cl: any) => cl.dayOfWeek),
     );
 
+    const normalizeDay = (d: string) => {
+      const up = String(d).toUpperCase();
+      if (up.startsWith('MO') || up === '1') return 'MO';
+      if (up.startsWith('TU') || up === '2') return 'TU';
+      if (up.startsWith('WE') || up === '3') return 'WE';
+      if (up.startsWith('TH') || up === '4') return 'TH';
+      if (up.startsWith('FR') || up === '5') return 'FR';
+      if (up.startsWith('SA') || up === '6') return 'SA';
+      if (up.startsWith('SU') || up === '7' || up === '0') return 'SU';
+      return KNOWN_DAYS.has(up.slice(0, 2)) ? up.slice(0, 2) : undefined;
+    };
+
+    const normalizeGened = (g: string) => {
+      if (!g || g === 'NO') return [];
+      const up = String(g).toUpperCase();
+      if (up.startsWith('SC')) return ['SC'];
+      if (up.startsWith('SO')) return ['SO'];
+      if (up.startsWith('HU')) return ['HU'];
+      if (up.startsWith('IN')) return ['IN'];
+      return [up];
+    };
+
     const validDays = Array.from(
       new Set(
         allDays
-          .map(normalizeDayMapper)
-          .filter((d: Day | undefined): d is Day => Boolean(d)),
+          .map((d: any) => normalizeDay(d))
+          .filter((d: string | undefined): d is string => Boolean(d)),
       ),
     );
 
@@ -224,12 +243,11 @@
         credit: Number(ci.credit) || 0,
         maxseat: totalMaxSeat,
         seat: totalCurrentSeat,
-        gened: normalizeGenedMapper(c.genEdType),
+        gened: normalizeGened(c.genEdType),
         review: reviewCount || 0,
         rating: item.rating || 0,
         days: validDays,
         gradingType: ci.gradingType,
-        isFavorite: c.isFavorite ?? false,
       },
     };
   }
@@ -245,10 +263,11 @@
 
     isLoading = true;
     try {
+      const { academicYear, semester, studyProgram } = getParams();
       const params = new SvelteURLSearchParams({
-        academicYear: String(currentAY),
-        semester: currentSemester as string,
-        studyProgram: currentProgram,
+        academicYear,
+        semester,
+        studyProgram,
         limit: limit.toString(),
         offset: offset.toString(),
         sortOrder: sortDirection,
@@ -262,39 +281,27 @@
         params.append('sortBy', currentSort);
       }
 
-      if (noConditions) {
-        params.append('noPrereq', String(noConditions));
+      if (!noConditions) {
+        if (selectedGenEds.length > 0) {
+          params.append('genEdType', genEdMap[selectedGenEds[0]]);
+        }
+        if (selectedFaculties.length > 0) {
+          params.append('faculty', selectedFaculties[0]);
+        }
+        if (selectedDays.length > 0) {
+          params.append('day', dayMap[selectedDays[0]]);
+        }
+        if (selectedEval.length > 0) {
+          params.append('assessment', evalMap[selectedEval[0]]);
+        }
+        if (startTime) params.append('timeStart', startTime);
+        if (endTime) params.append('timeEnd', endTime);
       }
-
-      if (selectedGenEds.length > 0) {
-        selectedGenEds.forEach((genEd) => {
-          params.append('genEdTypes', genEd);
-        });
-      }
-      if (selectedFaculties.length > 0) {
-        selectedFaculties.forEach((faculty) => {
-          params.append('faculties', faculty);
-        });
-      }
-      if (selectedDays.length > 0) {
-        selectedDays.forEach((day) => {
-          params.append('days', day);
-        });
-      }
-      if (selectedEval.length > 0) {
-        params.append('assessment', selectedEval[0]);
-      }
-      if (startTime) params.append('timeStart', startTime);
-      if (endTime) params.append('timeEnd', endTime);
 
       if (fitSchedule) {
         if ($userCart.currentCartId) {
           params.append('fitCartId', $userCart.currentCartId);
         }
-      }
-
-      if (favoriteOnly && $session.data) {
-        params.append('favorite', 'true');
       }
 
       const response = await api.get(`/courses?${params.toString()}`);
@@ -310,7 +317,7 @@
         // Deduplicate by course code to prevent key collisions
         const existingCodes = new Set(courses.map((c) => c.course.code));
         const newUniqueItems = mapped.filter(
-          (item: any) => !existingCodes.has(item.course.code),
+          (item) => !existingCodes.has(item.course.code),
         );
         courses = [...courses, ...newUniqueItems];
       }
@@ -328,10 +335,9 @@
   }
 
   $effect(() => {
-    // Search & Filter changes (Reset offset and clear list)
+    // Term changes (Reset offset and clear list)
     currentSemester;
     currentProgram;
-    currentAY;
     untrack(() => fetchCourses(true));
   });
 
@@ -345,25 +351,13 @@
     startTime;
     endTime;
     noConditions;
-    favoriteOnly;
-    isLoggedIn;
     currentSort;
     sortDirection;
     fitSchedule;
-    if (fitSchedule && untrack(() => $userCart.currentCartId)) {
+    if (fitSchedule) {
       $userCart.currentCart;
     }
     untrack(() => fetchCourses(true));
-  });
-
-  $effect(() => {
-    $userCart.currentCart;
-    untrack(() => {
-      if (!$userCart.currentCartId) return;
-      currentProgram = $userCart.currentCart.studyProgram as StudyProgram;
-      currentAY = $userCart.currentCart.academicYear;
-      currentSemester = $userCart.currentCart.semester as Semester;
-    });
   });
 
   $effect(() => {
@@ -381,160 +375,29 @@
     return () => observer.disconnect();
   });
 
-  const studyProgramLabel = $derived(studyProgramMapper(currentProgram));
-
   const userCart = getUserCartStore();
   const cartPromise = getContext<CartPromise>(CART_PROMISE_KEY);
   const { addCourse, removeCourse, updateCourse } = useCartActions();
 
-  // --- Left-rail icon interaction model ---
-  function openFull() {
-    sidebarExpanded = true;
-    isFilterOpen = true;
-    isSelectedOpen = true;
-    activePanel = 'sidebar';
-  }
-
-  $effect(() => {
-    if (page.url.search === '' && homeStore.currentUrl) {
-      goto(homeStore.currentUrl, { replaceState: true, noScroll: true });
-    }
-  });
-
-  $effect(() => {
-    const prog = currentProgram;
-    const ay = currentAY;
-    const sem = currentSemester;
-    const gEds = selectedGenEds;
-    // const specials = selectedSpecial;
-    const facs = selectedFaculties;
-    const days = selectedDays;
-    const start = startTime;
-    const end = endTime;
-    const evals = selectedEval;
-    const fit = fitSchedule;
-    const noCond = noConditions;
-    const fav = favoriteOnly;
-
-    untrack(() => {
-      const currentUrl = new SvelteURL(page.url);
-      currentUrl.pathname = `/${prog}/courses`;
-      const termQuery = `${ay}/${semesterToTermMapper(sem)}`;
-      const queryParams = {
-        term: termQuery,
-        genEdType: gEds.length ? gEds.join(',') : null,
-        // special: specials.length ? specials.join(',') : null,
-        faculty: facs.length ? facs.join(',') : null,
-        day: days.length ? days.join(',') : null,
-        timeStart: start || null,
-        timeEnd: end || null,
-        gradingType: evals.length ? evals.join(',') : null,
-        fitSchedule: fit ? 'true' : null,
-        noConditions: noCond ? 'true' : null,
-        favorite: fav ? 'true' : null,
-      };
-
-      for (const [key, value] of Object.entries(queryParams)) {
-        if (value) currentUrl.searchParams.set(key, value);
-        else currentUrl.searchParams.delete(key);
-      }
-
-      if (page.url.toString() !== currentUrl.toString()) {
-        goto(currentUrl.toString(), {
-          replaceState: true,
-          keepFocus: true,
-          noScroll: true,
-        });
-      }
-    });
-    homeStore.currentUrl = page.url.toString();
-  });
-
-  $effect(() => {
-    if (!favoriteOnly || $session.isPending || $session.data) return;
-    favoriteOnly = false;
-    loginPopupState.show = true;
-  });
-
-  function setFavorite(courseCode: string, isFavorite: boolean) {
-    courses = courses.map((item) =>
-      item.course.code === courseCode
-        ? { ...item, course: { ...item.course, isFavorite } }
-        : item,
-    );
-  }
-
-  async function handleToggleFavorite(courseItem: any) {
-    if (!$session.data) {
-      loginPopupState.show = true;
-      return;
-    }
-
-    const code = courseItem.course.code;
-    const nextFavorite = !courseItem.course.isFavorite;
-
-    setFavorite(code, nextFavorite);
-
-    const [, error] = await tryCatch(
-      nextFavorite
-        ? api.put(`/courses/${code}/favorite`)
-        : api.delete(`/courses/${code}/favorite`),
-    );
-
-    if (!error) return;
-
-    setFavorite(code, !nextFavorite);
-    if (isAxiosError(error) && error.response?.status === 401) {
-      loginPopupState.show = true;
-      return;
-    }
-    toast.error('Failed to remove favorite course, please try again', {
-      position: 'bottom-right',
-    });
-  }
+  const PROGRAM_MAP: Record<string, string> = {
+    นานาชาติ: 'I',
+    ตรีภาค: 'T',
+    ทวิภาค: 'S',
+  };
 
   function scrollToSection(el: HTMLElement | undefined) {
     if (!el) return;
     el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
-  function toggleSidebar() {
-    if (sidebarExpanded) {
-      sidebarExpanded = false;
-    } else {
-      openFull();
-    }
+  function toggleDropdown(type: typeof activeDropdown) {
+    activeDropdown = activeDropdown === type ? null : type;
   }
-  // The rail icons close their section only when it is already the sole open
-  // one. In every other state (collapsed, both sections open, or focused on the
-  // other section) the press acts as a fresh focus.
-  function focusFilter() {
-    if (sidebarExpanded && isFilterOpen && !isSelectedOpen) {
-      isFilterOpen = false;
-      activePanel = null;
-      return;
-    }
-    sidebarExpanded = true;
-    isFilterOpen = true;
-    isSelectedOpen = false;
-    activePanel = 'filter_only';
+  function selectOption(type: 'program' | 'semester' | 'sort', value: string) {
+    if (type === 'program') currentProgram = value;
+    if (type === 'semester') currentSemester = value;
+    if (type === 'sort') currentSort = value;
+    activeDropdown = null;
   }
-  function focusSelected() {
-    if (sidebarExpanded && isSelectedOpen && !isFilterOpen) {
-      isSelectedOpen = false;
-      activePanel = null;
-      return;
-    }
-    sidebarExpanded = true;
-    isFilterOpen = false;
-    isSelectedOpen = true;
-    activePanel = 'selected_only';
-  }
-
-  function goToSchedule() {
-    activeModal = null;
-    goto(resolve('/schedule'));
-  }
-
   function toggleSortDirection() {
     sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
   }
@@ -543,9 +406,10 @@
     const currentCart = $userCart.currentCart;
     if (!currentCart || !$session.data) return false;
     const isYearMismatch =
-      String(currentCart.academicYear) !== String(currentAY);
-    const isProgramMismatch = currentCart.studyProgram !== currentProgram;
-    const isSemesterMismatch = currentCart.semester !== currentSemester;
+      String(currentCart.academicYear) !== String(expectedParams.academicYear);
+    const isProgramMismatch =
+      currentCart.studyProgram !== expectedParams.studyProgram;
+    const isSemesterMismatch = currentCart.semester !== expectedParams.semester;
     return isYearMismatch || isSemesterMismatch || isProgramMismatch;
   }
 
@@ -653,85 +517,87 @@
 
   function onSearchFilter() {
     if (openPanel === 'filter_only') openPanel = null;
-    if (activeModal === 'filter') activeModal = null;
   }
 
-  let contextLabel = $derived(
-    `ในปีการศึกษา ${currentAY} ${SEMESTER_LABEL_LONG[currentSemester]} หลักสูตร${studyProgramLabel}`,
-  );
+  let contextLabel = $derived.by(() => {
+    const parsed = parseSemesterDisplay(currentSemester);
+    const year = parsed?.academicYear ?? '2566';
+    const sem = parsed?.semester ?? 'FIRST';
+    return `ในปีการศึกษา ${year} ${SEMESTER_LABEL_LONG[sem]} หลักสูตร${currentProgram}`;
+  });
 </script>
 
-<div class="relative flex h-full flex-col overflow-hidden bg-white">
+<div class="relative flex h-screen flex-col overflow-hidden bg-white">
   <div class="relative flex flex-1 overflow-hidden">
     <AppSidebar
       showSidebar={!isMobile}
-      panelWidth="490px"
       bind:expanded={sidebarExpanded}
       bind:openPanel
       bind:activePanel
     >
-      {#snippet iconItems()}
-        <!--
-          Each icon is nudged with a fixed margin so it lines up with its
-          section header in the collapsed panel. These are pure layout offsets:
-          nothing recomputes them, so the icons never shift when a section is
-          opened or closed. Tune the three values if the headers change height.
-        -->
+      {#snippet iconItems({
+        toggleExpanded,
+        togglePanel,
+        expanded,
+        openPanel,
+        activePanel,
+      })}
         <Sidebar.MenuItem>
-          <div class="-mt-[5px]">
-            <Sidebar.MenuButton
-              onclick={toggleSidebar}
-              isActive={sidebarExpanded && activePanel === 'sidebar'}
-              size="lg"
-              tooltipContent="เมนู"
-              class="mx-auto size-12! justify-center rounded-xl p-0! ring-0 transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-5!"
-            >
-              <Menu size="20" strokeWidth={2.5} />
-            </Sidebar.MenuButton>
-          </div>
+          <Sidebar.MenuButton
+            onclick={toggleExpanded}
+            isActive={expanded && activePanel === 'sidebar'}
+            size="lg"
+            tooltipContent="เมนู"
+            class="mx-auto size-12! justify-center rounded-xl p-0! ring-0 transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-6!"
+          >
+            <Menu size="24" strokeWidth={2.5} />
+          </Sidebar.MenuButton>
         </Sidebar.MenuItem>
         <Sidebar.MenuItem>
-          <div class="mt-[5px]">
-            <Sidebar.MenuButton
-              onclick={focusFilter}
-              isActive={activePanel === 'filter_only'}
-              size="lg"
-              tooltipContent="ตัวกรอง"
-              class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-5!"
-            >
-              <Filter size="20" strokeWidth={2.5} />
-            </Sidebar.MenuButton>
-          </div>
+          <Sidebar.MenuButton
+            onclick={() =>
+              togglePanel('filter_only', () => scrollToSection(filterSection))}
+            isActive={activePanel === 'filter_only'}
+            size="lg"
+            tooltipContent="ตัวกรอง"
+            class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-6!"
+          >
+            <Filter size="24" strokeWidth={2.5} />
+          </Sidebar.MenuButton>
         </Sidebar.MenuItem>
         {#if $session.data}
           <Sidebar.MenuItem>
-            <div class="mt-[-10px]">
-              <Sidebar.MenuButton
-                onclick={focusSelected}
-                isActive={activePanel === 'selected_only'}
-                size="lg"
-                tooltipContent="วิชาที่เลือก"
-                class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-5!"
-              >
-                <BookMarked size="20" strokeWidth={2.5} />
-              </Sidebar.MenuButton>
-            </div>
+            <Sidebar.MenuButton
+              onclick={() =>
+                togglePanel('selected_only', () =>
+                  scrollToSection(selectedSection),
+                )}
+              isActive={activePanel === 'selected_only'}
+              size="lg"
+              tooltipContent="วิชาที่เลือก"
+              class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-6!"
+            >
+              <BookMarked size="24" strokeWidth={2.5} />
+            </Sidebar.MenuButton>
           </Sidebar.MenuItem>
         {/if}
       {/snippet}
-      {#snippet panelContent({ expanded })}
-        {#if expanded && $session.data}
-          <div class="relative mb-6 flex flex-col gap-2">
+      {#snippet panelContent({ openPanel, expanded })}
+        {#if (expanded || openPanel === 'sidebar') && $session.data}
+          <div
+            bind:this={timetableSection}
+            class="relative mb-6 flex flex-col gap-2"
+          >
             {#await cartPromise}
               <div
-                class="flex items-center justify-center gap-2 border-b border-neutral-100 px-2 py-8 text-gray-400"
+                class="flex items-center justify-center gap-2 border-b border-neutral-200 px-2 py-8 text-gray-400"
               >
                 <Loader2 class="animate-spin" size={24} />
                 <span class="text-sm">กำลังโหลดตารางเรียน...</span>
               </div>
             {:then}
               <SelectTimetable
-                class="border-b border-neutral-100 px-2 py-5"
+                class="border-b border-neutral-200 px-2 py-5"
                 options={$userCart.cartList?.map((item) => ({
                   name: item.name,
                   id: item.id,
@@ -743,24 +609,24 @@
               />
             {:catch}
               <div
-                class="flex items-center justify-center gap-2 border-b border-neutral-100 px-2 py-8 text-sm text-red-400"
+                class="flex items-center justify-center gap-2 border-b border-neutral-200 px-2 py-8 text-sm text-red-400"
               >
                 โหลดตารางเรียนไม่สำเร็จ
               </div>
             {/await}
           </div>
-          <hr class="mb-6 border-t border-neutral-100" />
+          <hr class="mb-6 opacity-50" />
         {/if}
 
-        {#if expanded}
+        {#if expanded || openPanel === 'filter_only'}
           {@render FilterContent()}
         {/if}
 
-        {#if expanded && $session.data}
+        {#if (expanded || openPanel === 'selected_only') && $session.data}
           {@render SelectedContent()}
         {/if}
 
-        {#if expanded}
+        {#if expanded || openPanel === 'sidebar'}
           {@render WarningContent()}
         {/if}
       {/snippet}
@@ -770,91 +636,92 @@
             class="mb-2 flex flex-row items-center justify-between gap-2 md:gap-4"
           >
             <div class="flex items-baseline gap-2 md:gap-3">
-              <h1
-                class="text-xl font-bold text-[#4A70C6] md:text-4xl md:text-black"
-              >
+              <h1 class="text-2xl font-bold text-[#1C1B1F] md:text-4xl">
                 วิชาเรียน
               </h1>
               <span
-                class="text-[10px] font-medium whitespace-nowrap text-gray-400 md:text-sm"
+                class="text-xs font-medium whitespace-nowrap text-gray-400 md:text-sm"
                 >({totalResults} ผลลัพธ์)</span
               >
             </div>
 
             <div class="relative flex shrink-0 gap-2">
-              <Select.Root type="single" bind:value={currentProgram}>
-                <Select.Trigger
-                  class="flex h-6 items-center gap-2 rounded-full border border-neutral-800 px-2 py-0.5 text-[10px] font-bold transition-colors hover:bg-gray-50 focus:ring-offset-0 md:h-auto md:px-3 md:py-1.5 md:py-2 md:text-sm md:text-xs"
+              <div class="relative">
+                <button
+                  onclick={() => toggleDropdown('program')}
+                  class="flex items-center gap-2 rounded-full border border-neutral-800 px-3 py-1.5 text-xs font-bold transition-colors hover:bg-gray-50 md:px-5 md:py-2 md:text-sm"
                 >
-                  {studyProgramLabel}
-                </Select.Trigger>
-                <Select.Content>
-                  <Select.Group>
-                    {#each studyProgram.options as option (option)}
-                      <Select.Item
-                        value={option}
-                        label={option}
-                        aria-label={option}
-                        role="option"
-                        check={true}
+                  {currentProgram}
+                  <ChevronDown size={16} />
+                </button>
+                {#if activeDropdown === 'program'}
+                  <div
+                    class="absolute top-full right-0 z-[70] mt-2 w-32 overflow-hidden rounded-xl border border-gray-100 bg-white shadow-xl"
+                  >
+                    {#each programOptions as opt (opt)}
+                      <button
+                        onclick={() => selectOption('program', opt)}
+                        class="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 {currentProgram ===
+                        opt
+                          ? 'bg-gray-50 font-bold'
+                          : ''}">{opt}</button
                       >
-                        {studyProgramMapper(option)}
-                      </Select.Item>
                     {/each}
-                  </Select.Group>
-                </Select.Content>
-              </Select.Root>
+                  </div>
+                {/if}
+              </div>
 
-              <Select.Root
-                type="single"
-                bind:value={
-                  () => `${currentAY}/${currentSemester}`,
-                  (v) => {
-                    const [ay, sem] = v.split('/');
-                    currentAY = Number(ay);
-                    currentSemester = sem as Semester;
-                  }
-                }
-              >
-                <Select.Trigger
-                  class="flex h-6 items-center gap-2 rounded-full border border-neutral-800 px-2 py-1.5 text-[10px] font-bold transition-colors hover:bg-gray-50 focus:ring-offset-0 md:h-auto md:px-3 md:py-2 md:text-sm md:text-xs"
+              <div class="relative">
+                <button
+                  onclick={() => toggleDropdown('semester')}
+                  class="flex items-center gap-2 rounded-full border border-neutral-800 px-3 py-1.5 text-xs font-bold whitespace-nowrap transition-colors hover:bg-gray-50 md:px-5 md:py-2 md:text-sm"
                 >
-                  {`${currentAY} / ${SEMESTER_LABEL_SHORT[currentSemester]}`}
-                </Select.Trigger>
-                <Select.Content>
-                  <Select.Group>
-                    {#each semesterOptions as option (`${option.value.ay}/${option.value.semester}`)}
-                      <Select.Item
-                        value={`${option.value.ay}/${option.value.semester}`}
-                        label={option.label}
-                        aria-label={option.label}
-                        role="option"
-                        check={true}
-                      >
-                        {option.label}
-                      </Select.Item>
-                    {/each}
-                  </Select.Group>
-                </Select.Content>
-              </Select.Root>
+                  {currentSemester}
+                  <ChevronDown size={16} />
+                </button>
+                {#if activeDropdown === 'semester'}
+                  <div
+                    class="absolute top-full right-0 z-[70] mt-2 w-48 overflow-hidden rounded-xl border border-gray-100 bg-white shadow-xl"
+                  >
+                    <div
+                      class="custom-scrollbar flex max-h-[250px] flex-col overflow-y-auto py-1"
+                    >
+                      {#each semesterOptions as opt (opt)}
+                        <button
+                          onclick={() => selectOption('semester', opt)}
+                          class="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 {currentSemester ===
+                          opt
+                            ? 'bg-gray-50 font-bold'
+                            : ''}">{opt}</button
+                        >
+                      {/each}
+                    </div>
+                  </div>
+                {/if}
+              </div>
+              {#if activeDropdown}
+                <div
+                  class="fixed inset-0 z-[65]"
+                  onclick={() => (activeDropdown = null)}
+                  role="button"
+                  tabindex="0"
+                  onkeydown={() => {}}
+                ></div>
+              {/if}
             </div>
           </div>
 
           <div class="mb-10 flex flex-col gap-1">
             <div class="flex flex-row items-end gap-3 md:gap-6">
               <div class="flex flex-1 flex-col gap-1">
-                <span class="ml-1 hidden text-xs text-gray-400 md:flex"
-                  >ค้นหา...</span
-                >
+                <span class="ml-1 text-xs text-gray-400">ค้นหา...</span>
                 <Input
                   bind:value={searchState.query}
                   onkeydown={(e: KeyboardEvent) => {
                     if (e.key === 'Enter') e.preventDefault();
                   }}
-                  placeholder={isMobile
-                    ? 'ค้นหา...'
-                    : 'พิมพ์ชื่อวิชา รหัสวิชา หรือคำค้นหาอื่นๆ...'}
-                  class="h-10 w-full rounded-xl border-none bg-[#F1F3F7] px-4 text-sm font-medium placeholder:text-neutral-300 focus:ring-2 focus:ring-blue-500 md:h-12 md:px-6 md:text-lg"
+                  placeholder="พิมพ์ชื่อวิชา รหัสวิชา หรือคำค้นหาอื่นๆ..."
+                  class="h-12 w-full rounded-xl border-none bg-[#F1F3F7] px-6 text-lg font-medium focus:ring-2 focus:ring-blue-500"
                 />
               </div>
               <!-- Mobile sort: "เรียงตาม" + dropdown (Select) -->
@@ -864,21 +731,16 @@
                   value={`${currentSort}:${sortDirection}`}
                   onValueChange={(v) => {
                     const [field, dir] = v.split(':');
-                    selectMobileSort(field as SortBy, dir as 'asc' | 'desc');
+                    selectMobileSort(field, dir as 'asc' | 'desc');
                   }}
                 >
                   <Select.Trigger
                     showArrow={false}
                     class="text-primary h-auto w-auto gap-1.5 rounded-none border-0 bg-transparent p-0 text-base font-bold whitespace-nowrap shadow-none hover:opacity-80 focus:ring-0 focus:ring-offset-0"
                   >
-                    <span
-                      class="flex items-center gap-1 text-xs md:gap-1.5 md:text-base"
-                    >
+                    <span class="flex items-center gap-1.5">
                       เรียงตาม
-                      <ArrowUpDown
-                        size={isMobile ? 16 : 20}
-                        strokeWidth={2.5}
-                      />
+                      <ArrowUpDown size={20} strokeWidth={2.5} />
                     </span>
                   </Select.Trigger>
                   <Select.Content align="end" class="w-48">
@@ -902,26 +764,29 @@
                   >จัดลำดับตาม</span
                 >
                 <div class="relative flex items-center gap-3">
-                  <Select.Root bind:value={currentSort} type="single">
-                    <Select.Trigger
-                      class="flex h-12 flex-1 items-center justify-between rounded-xl bg-[#F1F3F7] px-5 text-sm font-bold text-gray-700 transition-all hover:bg-gray-200"
-                    >
-                      {sortByMapper(currentSort)}
-                    </Select.Trigger>
-                    <Select.Content>
-                      <Select.Group>
-                        {#each sortOptions as option (option.field)}
-                          <Select.Item
-                            value={option.field}
-                            label={option.label}
-                            role="option"
-                          />
-                        {/each}
-                      </Select.Group>
-                    </Select.Content>
-                  </Select.Root>
                   <button
-                    aria-label="sort direction"
+                    onclick={() => toggleDropdown('sort')}
+                    class="flex h-12 flex-1 items-center justify-between rounded-xl bg-[#F1F3F7] px-5 text-sm font-bold text-gray-700 transition-all hover:bg-gray-200"
+                  >
+                    <span>{currentSort}</span>
+                    <ChevronDown size={18} class="text-gray-400" />
+                  </button>
+                  {#if activeDropdown === 'sort'}
+                    <div
+                      class="absolute top-full left-0 z-[70] mt-2 w-full overflow-hidden rounded-xl border border-gray-100 bg-white shadow-xl"
+                    >
+                      {#each sortOptions as opt (opt)}
+                        <button
+                          onclick={() => selectOption('sort', opt)}
+                          class="w-full px-5 py-3 text-left text-sm hover:bg-gray-50 {currentSort ===
+                          opt
+                            ? 'bg-gray-50 font-bold'
+                            : ''}">{opt}</button
+                        >
+                      {/each}
+                    </div>
+                  {/if}
+                  <button
                     onclick={toggleSortDirection}
                     class="flex h-12 w-12 cursor-pointer items-center justify-center rounded-xl text-[#004494] transition-all hover:bg-blue-50"
                   >
@@ -949,44 +814,22 @@
             </div>
           </div>
 
-          <!-- Mobile: stacked warning card -->
           <div
-            class="bg-warning-container/60 mb-6 flex items-center gap-2 rounded-2xl px-5 py-4 text-sm leading-relaxed text-neutral-600 md:hidden"
+            class="bg-warning-container/60 mb-6 flex items-center gap-4 rounded-2xl px-5 py-4 text-sm leading-relaxed text-neutral-600 md:hidden"
           >
             <TriangleAlert
-              size={16}
+              size={28}
               strokeWidth={2}
               class="text-warning-hover shrink-0"
             />
             <div>
-              <p class="font-sans text-[10px] text-[#353745]">
-                ข้อมูลอาจมีการเปลี่ยนแปลง<br />
-                โปรดตรวจสอบข้อมูลกับสำนักทะเบียนทุกครั้งก่อนลงทะเบียนเรียน<br />
-                Update ข้อมูลล่าสุด&nbsp;&nbsp;วันที่ 20/07/68&nbsp;&nbsp;เวลา 12.00
-                น.
+              <p>ข้อมูลอาจมีการเปลี่ยนแปลง</p>
+              <p>โปรดตรวจสอบข้อมูลกับสำนักทะเบียนทุกครั้งก่อนลงทะเบียนเรียน</p>
+              <p>
+                Update ข้อมูลล่าสุด&nbsp;&nbsp;วันที่ 20/07/68&nbsp;&nbsp;เวลา
+                12.00 น.
               </p>
             </div>
-          </div>
-
-          <!-- Desktop: single-row warning bar -->
-          <div
-            class="bg-warning-container/60 mb-6 hidden items-center justify-between gap-4 rounded-2xl px-5 py-3 text-sm leading-relaxed text-neutral-600 md:flex"
-          >
-            <div class="flex items-center gap-3">
-              <TriangleAlert
-                size={24}
-                strokeWidth={2}
-                class="text-warning-hover shrink-0"
-              />
-              <span
-                >ข้อมูลอาจมีการเปลี่ยนแปลง
-                โปรดตรวจสอบข้อมูลกับสำนักทะเบียนทุกครั้งก่อนลงทะเบียนเรียน</span
-              >
-            </div>
-            <span class="shrink-0 whitespace-nowrap">
-              Update ข้อมูลล่าสุด&nbsp;&nbsp;วันที่ 20/07/68&nbsp;&nbsp;เวลา
-              12.00 น.
-            </span>
           </div>
 
           <div class="grid grid-cols-1 gap-x-5 gap-y-6 pb-10 md:grid-cols-2">
@@ -1012,9 +855,9 @@
               </div>
             {:else}
               {@const params = new URLSearchParams({
-                studyProgram: currentProgram,
-                academicYear: String(currentAY),
-                semester: currentSemester,
+                studyProgram: PROGRAM_MAP[currentProgram],
+                academicYear: String(getParams().academicYear),
+                semester: getParams().semester,
               })}
               {#each displayedCourses as item (item.course.code)}
                 <CourseCard
@@ -1027,14 +870,12 @@
                   sections={getSectionOptions(item)}
                   selectedSection={getSelectedSection(item.course.code)}
                   onSelectSection={(v: string) => handleSelectSection(item, v)}
-                  favorite={item.course.isFavorite ?? false}
-                  onToggleFavorite={() => handleToggleFavorite(item)}
                   class="w-full max-w-full md:w-full"
                   courseUrl={`/course-page/${item.course.code}?${params.toString()}`}
                 />
               {/each}
 
-              {#if hasMore && !isLoading}
+              {#if hasMore}
                 <div
                   bind:this={bottomSentinel}
                   class="col-span-full flex h-24 items-center justify-center opacity-50"
@@ -1057,10 +898,10 @@
         {#if showMismatchPopup}
           <ScheduleMismatchPopup
             schedules={$userCart.cartList ?? []}
-            expectedYear={currentAY}
-            expectedProgram={currentProgram}
+            expectedYear={expectedParams.academicYear}
+            expectedProgram={expectedParams.studyProgram}
             bind:currentScheduleId={$userCart.currentCartId}
-            expectedSemester={currentSemester}
+            expectedSemester={expectedParams.semester}
             onConfirm={handleScheduleChange}
             onClose={() => (showMismatchPopup = false)}
           />
@@ -1094,10 +935,10 @@
           <X size={20} strokeWidth={2.5} />
         </button>
         {#if activeModal === 'filter'}
-          {@render FilterContent(false)}
+          {@render FilterContent()}
         {:else if activeModal === 'selected'}
           <div class="flex flex-col gap-6">
-            {@render SelectedContent(false)}
+            {@render SelectedContent()}
             {@render WarningContent()}
           </div>
         {/if}
@@ -1106,70 +947,57 @@
   {/if}
 </div>
 
-{#snippet FilterContent(collapsible = true)}
-  <div>
-    {#if collapsible}
-      <button
-        onclick={() => (isFilterOpen = !isFilterOpen)}
-        aria-expanded={isFilterOpen}
-        class="mb-4 flex w-full items-center justify-between"
-      >
-        <h2 class="text-on-surface text-lg/[20px] font-medium">ตัวกรอง</h2>
-        <ChevronDown
-          size={20}
-          class="text-gray-400 transition-transform duration-200 {isFilterOpen
-            ? 'rotate-180'
-            : ''}"
+{#snippet FilterContent()}
+  <div bind:this={filterSection}>
+    <button
+      onclick={() => (isFilterOpen = !isFilterOpen)}
+      aria-expanded={isFilterOpen}
+      class="mb-6 flex w-full items-center justify-between"
+    >
+      <span class="flex items-center gap-2">
+        <Filter size={20} />
+        <h2 class="text-xl font-bold">ตัวกรอง</h2>
+      </span>
+      <ChevronDown
+        size={20}
+        class="text-gray-500 transition-transform duration-200 {isFilterOpen
+          ? ''
+          : '-rotate-90'}"
+      />
+    </button>
+    {#if isFilterOpen}
+      <div class="mb-8 min-h-[650px]">
+        <FilterBar
+          bind:selectedGenEds
+          bind:selectedSpecial
+          bind:selectedFaculties
+          bind:selectedDays
+          bind:selectedEval
+          bind:startTime
+          bind:endTime
+          bind:fitSchedule
+          bind:noConditions
+          onsearch={onSearchFilter}
         />
-      </button>
-    {:else}
-      <div class="mb-4 flex w-full items-center justify-between">
-        <h2 class="text-on-surface text-lg/[20px] font-medium">ตัวกรอง</h2>
       </div>
     {/if}
-    {#if !collapsible || isFilterOpen}
-      <div transition:slide={{ duration: 250, easing: cubicOut }}>
-        <hr class="mb-4 border-t border-neutral-100" />
-        <div class="mb-6">
-          <FilterBar
-            bind:selectedGenEds
-            bind:selectedFaculties
-            bind:selectedDays
-            bind:selectedEval
-            bind:startTime
-            bind:endTime
-            bind:fitSchedule
-            bind:noConditions
-            bind:favoriteOnly
-            onsearch={onSearchFilter}
-          />
-        </div>
-      </div>
-    {/if}
-    <hr class="mb-6 border-t border-neutral-100" />
+    <hr class="mb-6 opacity-50" />
   </div>
 {/snippet}
 
-{#snippet SelectedContent(collapsible = true)}
-  <div>
+{#snippet SelectedContent()}
+  <div bind:this={selectedSection}>
     {#if $userCart.currentCart}
-      <SelectedCourse
-        variant="grouped"
-        bind:open={isSelectedOpen}
-        {collapsible}
-        onArrange={goToSchedule}
-        headerDivider
-        class="border-b border-neutral-100"
-      />
+      <SelectedCourse variant="grouped" class="border-b border-neutral-200" />
     {:else}
-      <SelectedCourse {collapsible} class="border-b border-neutral-100" />
+      <SelectedCourse class="border-b border-neutral-200" />
     {/if}
   </div>
 {/snippet}
 
 {#snippet WarningContent()}
   <div
-    class="border-secondary text-on-secondary-container mt-8 rounded-2xl border px-5 py-4 text-center text-xs/[18px]"
+    class="mt-8 rounded-2xl border border-orange-300 px-5 py-4 text-center text-[15px] leading-relaxed text-orange-500"
   >
     <span class="font-bold">CU Get Reg ไม่ใช่การลงทะเบียนเรียนจริง</span><br />
     สามารถลงทะเบียนเรียนได้ที่

@@ -1,12 +1,13 @@
-import type { Variables } from "@/lib/auth.js";
-import { middlewareAuth } from "@/routes/auth.js";
+import { OpenAPIHono } from "@hono/zod-openapi";
+
+import { middlewareAuth } from "./auth.js";
+
+import type { Variables } from "../lib/auth.js";
 import {
   getPublicCartDetailRoute,
   importPublicCartRoute,
-} from "@/routes_define/publicCarts.routes.js";
-import { publicCartsService } from "@/services/publicCartsService.js";
-
-import { OpenAPIHono } from "@hono/zod-openapi";
+} from "../routes_define/publicCarts.routes.js";
+import { publicCartsService } from "../services/publicCartsService.js";
 
 const publicCarts = new OpenAPIHono<{ Variables: Variables }>();
 publicCarts.use("/:cartId/import", middlewareAuth);
@@ -16,13 +17,12 @@ publicCarts
   .openapi(getPublicCartDetailRoute, async (c) => {
     try {
       const cartId = c.req.param("cartId");
-      const { cartDetail, owner } =
-        await publicCartsService.getPublicCartDetail(cartId);
-      return c.json({ data: cartDetail, owner }, 200);
+      const result = await publicCartsService.getPublicCartDetail(cartId);
+      return c.json({ data: result }, 200);
     } catch (err) {
       if (
         err instanceof Error &&
-        (err.message === "CART_NOT_FOUND" || err.message === "CART_PRIVATE")
+        err.message === "PUBLIC_CART_NOT_FOUND_OR_PRIVATE"
       ) {
         return c.json({ error: "PUBLIC_CART_NOT_FOUND_OR_PRIVATE" }, 404);
       }

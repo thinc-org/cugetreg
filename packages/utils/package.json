@@ -4,7 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "build": "tsc"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.2",

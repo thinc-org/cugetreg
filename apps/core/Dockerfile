@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 #
 # Build context must be the monorepo root (./cugetreg), since this app
-# depends on workspace packages (@cugetreg/zod-schemas):
+# depends on workspace packages (@cugetreg/zod-schemas, @cugetreg/utils):
 #   docker build -f apps/core/Dockerfile -t my-registry/api:v2.0.0-beta .
 #
 # Requires deploy.sh (./main.sh --skip-seed) to have been run first so that
@@ -23,15 +23,28 @@ RUN --mount=type=cache,id=pnpm-store,target=/root/.local/share/pnpm/store \
 # prisma generate --sql against the live DB before docker build is called.
 # Re-running prisma generate here would wipe sql.ts, so we skip it.
 RUN cd packages/zod-schemas && pnpm run build
+RUN cd packages/utils && pnpm run build
 RUN cd apps/core && pnpm run build
-# Patch @cugetreg/zod-schemas exports to point to compiled dist/ files so that
-# pnpm deploy includes .js outputs rather than raw .ts source that Node can't load.
+# Patch workspace packages' exports to point to compiled dist/ files so that
+# pnpm deploy includes .js outputs rather than raw .ts source that Node can't
+# load (Node refuses to type-strip .ts files under node_modules). Any
+# workspace package apps/core depends on at runtime needs a tsc build +
+# an entry here, or it'll crash-loop the same way zod-schemas once did.
+# Only rewrites entries with a matching dist/ file (packages/utils only
+# builds the faculty.ts subpath apps/core actually imports — its other
+# exports stay pointed at raw .ts, which is fine since nothing loads them
+# in this image).
 RUN node -e "\
   const fs=require('fs');\
-  const path='packages/zod-schemas/package.json';\
-  const p=JSON.parse(fs.readFileSync(path,'utf8'));\
-  for(const k in p.exports)p.exports[k]=p.exports[k].replace(/^\\.\\/(.*)\\.ts\$/,'./dist/\$1.js');\
-  fs.writeFileSync(path,JSON.stringify(p,null,2));\
+  for(const path of ['packages/zod-schemas/package.json','packages/utils/package.json']){\
+    const dir=path.slice(0,path.lastIndexOf('/')+1);\
+    const p=JSON.parse(fs.readFileSync(path,'utf8'));\
+    for(const k in p.exports){\
+      const m=p.exports[k].match(/^\\.\\/(.*)\\.ts\$/);\
+      if(m && fs.existsSync(dir+'dist/'+m[1]+'.js'))p.exports[k]='./dist/'+m[1]+'.js';\
+    }\
+    fs.writeFileSync(path,JSON.stringify(p,null,2));\
+  }\
 "
 RUN pnpm --filter ./apps/core deploy --prod --legacy /tmp/deploy
 

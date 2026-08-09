@@ -1,16 +1,17 @@
-import { OpenAPIHono } from "@hono/zod-openapi";
-
-import type { Variables } from "../lib/auth.js";
+import type { Variables } from "@/lib/auth.js";
 import {
   getUserReviewsRoute,
   getUserRoute,
   updateUserInfoRoute,
-} from "../routes_define/users.routes.js";
-import { usersService } from "../services/usersService.js";
+} from "@/routes_define/users.routes.js";
+import { usersService } from "@/services/usersService.js";
+
+import { OpenAPIHono } from "@hono/zod-openapi";
 
 const user = new OpenAPIHono<{ Variables: Variables }>();
 
 user
+  // 5.1. Get user information
   .openapi(getUserRoute, async (c) => {
     try {
       const { id: userId } = c.get("user");
@@ -20,6 +21,7 @@ user
       return c.json({ error: "INTERNAL_SERVER_ERROR" }, 500);
     }
   })
+  // 5.2. Get user reviews
   .openapi(getUserReviewsRoute, async (c) => {
     try {
       const { id: userId } = c.get("user");
@@ -38,6 +40,7 @@ user
       return c.json({ error: "INTERNAL_SERVER_ERROR" }, 500);
     }
   })
+  // 5.3. Update user information
   .openapi(updateUserInfoRoute, async (c) => {
     try {
       const { id: userId } = c.get("user");

@@ -2,6 +2,7 @@
 // Both forms are accepted: e.g. "S" or "ทวิภาค" for StudyProgram, "1" or "FIRST" for Semester.
 import {
   DayOfWeek,
+  Faculty,
   GenEdType,
   GradingType,
   ReviewStatus,
@@ -9,7 +10,23 @@ import {
   StudyProgram,
   Visible,
   VoteType,
-} from "../generated/prisma/client.js";
+} from "@/generated/prisma/client.js";
+
+import type { Faculty as ZodFaculty } from "@cugetreg/zod-schemas/constants";
+
+export function mapFacultyCode(raw: string): Faculty {
+  const faculty = Faculty[`F${raw}` as keyof typeof Faculty];
+
+  if (!faculty) {
+    throw new Error(`Invalid Faculty: ${raw}`);
+  }
+
+  return faculty;
+}
+
+export function unmapFacultyCode(faculty: Faculty | null): ZodFaculty | null {
+  return (faculty?.slice(1) ?? null) as ZodFaculty;
+}
 
 export function mapSemester(raw: string): Semester {
   switch (raw) {

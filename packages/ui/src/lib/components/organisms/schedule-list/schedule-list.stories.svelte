@@ -11,20 +11,17 @@
 			heading: {
 				control: 'text'
 			},
-			selectedTerm: {
-				control: 'text'
-			},
-			terms: {
-				control: false
-			},
 			items: {
 				control: false
 			},
 			loading: {
 				control: 'boolean'
 			},
-			onSelectTerm: {
-				action: 'onSelectTerm'
+			onClickItem: {
+				action: 'onClickItem'
+			},
+			onClickButton: {
+				action: 'onClickButton'
 			},
 			onDelete: {
 				action: 'onDelete'
@@ -40,25 +37,29 @@
 	name="Default"
 	args={{
 		heading: 'ตารางเรียน',
-		selectedTerm: 'ทวิภาค 2567 ภาคต้น',
-		terms: ['ทวิภาค 2567 ภาคต้น', 'ทวิภาค 2566 ภาคต้น'],
 		items: [
 			{
 				id: '1',
 				title: 'ทวิภาค 2567 ภาคต้น',
 				subtitle: 'ทวิภาค 2567 / ภาคต้น',
+				year: 2567,
+				semester: 1,
 				isPublic: true
 			},
 			{
 				id: '2',
 				title: 'ทวิภาค 2566 ภาคต้น',
 				subtitle: 'ทวิภาค 2566 / ภาคต้น',
+				year: 2566,
+				semester: 1,
 				isPublic: false
 			},
 			{
 				id: '3',
 				title: 'ทวิภาค 2566 ภาคต้น',
 				subtitle: 'ทวิภาค 2566 / ภาคต้น',
+				year: 2566,
+				semester: 1,
 				isPublic: false
 			}
 		],

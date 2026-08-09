@@ -62,17 +62,23 @@
     "@sveltejs/kit": "^2.49.5",
     "@tailwindcss/typography": "^0.5.19",
     "@tailwindcss/vite": "^4.1.18",
+    "@tiptap/core": "^3.27.1",
+    "@tiptap/extension-placeholder": "^3.27.1",
+    "@tiptap/pm": "^3.27.1",
+    "@tiptap/starter-kit": "^3.27.1",
     "axios": "^1.13.6",
     "better-auth": "^1.4.11",
     "bits-ui": "^2.14.4",
     "clsx": "^2.1.1",
     "html2canvas": "^1.4.1",
     "html2canvas-pro": "^1.6.4",
+    "jsdom": "^29.1.1",
     "lucide-svelte": "^0.560.0",
     "svelte-french-toast": "^1.2.0",
     "svelte-markdown": "^0.4.1",
     "tailwind-merge": "^3.4.0",
     "tailwind-variants": "^3.2.2",
+    "tiptap-markdown": "^0.9.0",
     "vite": "^7.3.0"
   }
 }

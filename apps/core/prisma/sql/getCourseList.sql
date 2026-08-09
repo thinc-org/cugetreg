@@ -17,12 +17,27 @@
 -- @param {String} $14:sortBy? Sort column ('NAME', 'CAPACITY_SUM', 'REMAINING_SUM'; default 'REMAINING_SUM')
 -- @param {String} $15:sortOrder? Sort direction ('ASC', 'DESC'; default 'ASC')
 -- @param {String} $16:fitCartId? Optional cart ID — when set, excludes sections whose classes overlap with the cart's sections
+-- @param {Decimal} $17:creditMin? Optional minimum credit
+-- @param {Decimal} $18:creditMax? Optional maximum credit
+-- @param {Boolean} $19:favorite? Optional when true, select user's favorite courses
+-- @param {String} $20:userId? Optional , required when get user's favorite courses
+
+-- Perf note: LIMIT/OFFSET are applied in `paginated_courses` (Stage A), before
+-- the expensive per-class JSON aggregation in `section_json` (Stage B). Stage B
+-- only builds nested class JSON for the courses on the requested page, instead
+-- of for every course matching the filters — the previous version aggregated
+-- classes for the *entire* filtered term on every request regardless of page
+-- size. `matching_sections`/`section_stats` still scan the whole filtered term
+-- (sorting by capacity/remaining and computing total_count require knowing
+-- every matching course first), but that's course+section-level work, far
+-- cheaper than building nested class JSON for courses that get discarded by
+-- pagination anyway.
 
 -- Step 0: Precompute cart's occupied class slots once (avoids a correlated
 --         subquery in matching_sections when $16 is provided).
---         period_start_minutes/period_end_minutes are generated columns on
---         course_class; NULL for IA/AR/bad times.
-WITH occupied_slots AS (
+--         period_start_minutes/period_end_minutes are trigger-maintained columns
+--         on course_class; NULL for IA/AR/bad times.
+WITH occupied_slots AS MATERIALIZED (
     SELECT cl_occ.day_of_week,
            cl_occ.period_start_minutes,
            cl_occ.period_end_minutes
@@ -43,6 +58,13 @@ WITH occupied_slots AS (
       AND cl_occ.period_end_minutes IS NOT NULL
 ),
 
+user_favorites AS (
+    SELECT DISTINCT cf.course_no
+    FROM course_favorite cf
+    WHERE cf.user_id = $20::text
+    AND $20::text IS NOT NULL
+),
+
 -- Step 1: Find sections that pass ALL filters (course-level + section-level).
 --         Uses LEFT JOIN on classes so day/time/professor conditions apply
 --         per class row; DISTINCT deduplicates sections that have at least
@@ -56,11 +78,13 @@ matching_sections AS (
         s.max,
         s.regis,
         s.note,
-        s.gen_ed_type
+        s.gen_ed_type,
+        (uf.course_no IS NOT NULL) AS is_favorite
     FROM course_section s
     JOIN course c             ON c.id = s.course_id
     JOIN course_info ci       ON ci.course_no = c.course_no
     LEFT JOIN course_class cl ON cl.section_id = s.id
+    LEFT JOIN user_favorites uf ON uf.course_no = ci.course_no
     WHERE
         -- Course-level filters
         c.study_program = $1::study_program
@@ -68,13 +92,17 @@ matching_sections AS (
         AND c.semester = $3::semester
 
         -- GenEd type (optional)
-        AND ($4::gen_ed_type IS NULL OR c.gen_ed_type = $4::gen_ed_type)
+        AND ($4::gen_ed_type[] IS NULL OR c.gen_ed_type = ANY($4::gen_ed_type[]))
 
         -- Faculty (optional)
-        AND ($5::text IS NULL OR ci.faculty = $5::text)
+        AND ($5::text[] IS NULL OR ci.faculty::text = ANY($5::text[]))
 
         -- Grading type (optional)
         AND ($7::grading_type IS NULL OR ci.grading_type = $7::grading_type)
+
+        -- Credit range (optional)
+        AND ($17::numeric IS NULL OR ci.credit >= $17::numeric)
+        AND ($18::numeric IS NULL OR ci.credit <= $18::numeric)
 
         -- No prereq (optional boolean)
         AND ($9::boolean IS NOT TRUE
@@ -96,10 +124,10 @@ matching_sections AS (
         -- Day/time filter: at least one class in the section matches
         -- (when no filter is set, ALL sections pass)
         AND (
-            ($6::day_of_week IS NULL AND $10::text IS NULL AND $11::text IS NULL)
+            ($6::day_of_week[] IS NULL AND $10::text IS NULL AND $11::text IS NULL)
             OR (
                 cl.id IS NOT NULL
-                AND ($6::day_of_week IS NULL OR cl.day_of_week = $6::day_of_week)
+                AND ($6::day_of_week[] IS NULL OR cl.day_of_week = ANY($6::day_of_week[]))
                 AND ($10::text IS NULL OR cl.period_start_minutes IS NOT NULL AND cl.period_start_minutes >= (CAST(substring($10::text, 1, 2) AS INTEGER) * 60 + CAST(substring($10::text, 4, 2) AS INTEGER)))
                 AND ($11::text IS NULL OR cl.period_end_minutes IS NOT NULL AND cl.period_end_minutes <= (CAST(substring($11::text, 1, 2) AS INTEGER) * 60 + CAST(substring($11::text, 4, 2) AS INTEGER)))
             )
@@ -130,6 +158,11 @@ matching_sections AS (
                   )
             )
         )
+
+        AND (
+          $19::boolean IS NOT TRUE
+          OR uf.course_no IS NOT NULL
+        )
 ),
 
 -- Step 2: Distinct list of matching course IDs (used for total count)
@@ -144,13 +177,99 @@ section_stats AS (
         COUNT(*)::int                          AS sections_count,
         COALESCE(SUM(max), 0)::int             AS capacity_sum,
         COALESCE(SUM(max - regis), 0)::int     AS remaining_sum,
-        COUNT(*) FILTER (WHERE closed)::int    AS closed_sections_count
+        COUNT(*) FILTER (WHERE closed)::int    AS closed_sections_count,
+        bool_or(is_favorite)                   AS is_favorite
     FROM matching_sections
     GROUP BY course_id
 ),
 
--- Step 4: Per-section JSON with all classes (LEFT JOIN so ALL classes
---         appear, not just those that matched the day/time filter)
+-- Step 4 (Stage A): Sort + paginate at the COURSE level, before touching any
+--         class-level data. This is the key perf fix — LIMIT/OFFSET happen
+--         here, so Stage B (below) only ever aggregates classes for the
+--         courses that actually made it onto this page.
+--         `__rank` preserves this exact order through the GROUP BY in the
+--         final SELECT (GROUP BY does not guarantee output order).
+paginated_courses AS (
+    SELECT
+        c.id,
+        c.course_no,
+        c.study_program,
+        c.academic_year,
+        c.semester,
+        c.gen_ed_type,
+        c.course_condition,
+        c.midterm_start,
+        c.midterm_end,
+        c.final_start,
+        c.final_end,
+        ci.abbr_name,
+        ci.course_name_en,
+        ci.course_name_th,
+        ci.course_desc_en,
+        ci.course_desc_th,
+        ci.faculty,
+        ci.department,
+        ci.credit::text                            AS credit,
+        ci.credit_hours,
+        ci.grading_type,
+        COALESCE(ss.sections_count, 0)::int         AS sections_count,
+        COALESCE(ss.capacity_sum, 0)::int           AS capacity_sum,
+        COALESCE(ss.remaining_sum, 0)::int          AS remaining_sum,
+        COALESCE(ss.closed_sections_count, 0)::int  AS closed_sections_count,
+        COALESCE(ss.is_favorite, FALSE)             AS is_favorite,
+        COUNT(*) OVER ()::int                       AS total_count,
+        ROW_NUMBER() OVER (
+            ORDER BY
+                -- NAME sort
+                CASE WHEN COALESCE(NULLIF($14::text, ''), 'REMAINING_SUM') = 'NAME'    AND COALESCE(NULLIF($15::text, ''), 'asc') = 'asc'  THEN ci.abbr_name       END ASC  NULLS LAST,
+                CASE WHEN COALESCE(NULLIF($14::text, ''), 'REMAINING_SUM') = 'NAME'    AND COALESCE(NULLIF($15::text, ''), 'asc') = 'desc' THEN ci.abbr_name       END DESC NULLS LAST,
+                CASE WHEN COALESCE(NULLIF($14::text, ''), 'REMAINING_SUM') = 'NAME'    AND COALESCE(NULLIF($15::text, ''), 'asc') = 'asc'  THEN ci.course_name_en  END ASC  NULLS LAST,
+                CASE WHEN COALESCE(NULLIF($14::text, ''), 'REMAINING_SUM') = 'NAME'    AND COALESCE(NULLIF($15::text, ''), 'asc') = 'desc' THEN ci.course_name_en  END DESC NULLS LAST,
+
+                -- CAPACITY_SUM sort
+                CASE WHEN COALESCE(NULLIF($14::text, ''), 'REMAINING_SUM') = 'CAPACITY_SUM'  AND COALESCE(NULLIF($15::text, ''), 'asc') = 'asc'  THEN COALESCE(ss.capacity_sum, 0)  END ASC  NULLS LAST,
+                CASE WHEN COALESCE(NULLIF($14::text, ''), 'REMAINING_SUM') = 'CAPACITY_SUM'  AND COALESCE(NULLIF($15::text, ''), 'asc') = 'desc' THEN COALESCE(ss.capacity_sum, 0)  END DESC NULLS LAST,
+
+                -- REMAINING_SUM sort (also the default when sort_by is unset/null)
+                CASE WHEN COALESCE(NULLIF($14::text, ''), 'REMAINING_SUM') = 'REMAINING_SUM' AND COALESCE(NULLIF($15::text, ''), 'asc') = 'asc'  THEN COALESCE(ss.remaining_sum, 0) END ASC  NULLS LAST,
+                CASE WHEN COALESCE(NULLIF($14::text, ''), 'REMAINING_SUM') = 'REMAINING_SUM' AND COALESCE(NULLIF($15::text, ''), 'asc') = 'desc' THEN COALESCE(ss.remaining_sum, 0) END DESC NULLS LAST,
+
+                CASE WHEN COALESCE(NULLIF($14::text, ''), 'REMAINING_SUM') = 'COURSE_NO' AND COALESCE(NULLIF($15::text, ''), 'asc') = 'asc'  THEN c.course_no END ASC  NULLS LAST,
+                CASE WHEN COALESCE(NULLIF($14::text, ''), 'REMAINING_SUM') = 'COURSE_NO' AND COALESCE(NULLIF($15::text, ''), 'asc') = 'desc' THEN c.course_no END DESC NULLS LAST,
+                -- Tiebreaker (always applied)
+                c.course_no ASC
+        ) AS __rank
+    FROM course c
+    JOIN course_info ci           ON ci.course_no = c.course_no
+    JOIN matching_courses mc      ON mc.course_id = c.id
+    LEFT JOIN section_stats ss    ON ss.course_id = c.id
+    ORDER BY
+        -- Same ordering as the window function above — this is what LIMIT/OFFSET
+        -- actually act on (window ORDER BY only affects ROW_NUMBER's values, not
+        -- physical row order for LIMIT purposes).
+        CASE WHEN COALESCE(NULLIF($14::text, ''), 'REMAINING_SUM') = 'NAME'    AND COALESCE(NULLIF($15::text, ''), 'asc') = 'asc'  THEN ci.abbr_name       END ASC  NULLS LAST,
+        CASE WHEN COALESCE(NULLIF($14::text, ''), 'REMAINING_SUM') = 'NAME'    AND COALESCE(NULLIF($15::text, ''), 'asc') = 'desc' THEN ci.abbr_name       END DESC NULLS LAST,
+        CASE WHEN COALESCE(NULLIF($14::text, ''), 'REMAINING_SUM') = 'NAME'    AND COALESCE(NULLIF($15::text, ''), 'asc') = 'asc'  THEN ci.course_name_en  END ASC  NULLS LAST,
+        CASE WHEN COALESCE(NULLIF($14::text, ''), 'REMAINING_SUM') = 'NAME'    AND COALESCE(NULLIF($15::text, ''), 'asc') = 'desc' THEN ci.course_name_en  END DESC NULLS LAST,
+
+        CASE WHEN COALESCE(NULLIF($14::text, ''), 'REMAINING_SUM') = 'CAPACITY_SUM'  AND COALESCE(NULLIF($15::text, ''), 'asc') = 'asc'  THEN COALESCE(ss.capacity_sum, 0)  END ASC  NULLS LAST,
+        CASE WHEN COALESCE(NULLIF($14::text, ''), 'REMAINING_SUM') = 'CAPACITY_SUM'  AND COALESCE(NULLIF($15::text, ''), 'asc') = 'desc' THEN COALESCE(ss.capacity_sum, 0)  END DESC NULLS LAST,
+
+        CASE WHEN COALESCE(NULLIF($14::text, ''), 'REMAINING_SUM') = 'REMAINING_SUM' AND COALESCE(NULLIF($15::text, ''), 'asc') = 'asc'  THEN COALESCE(ss.remaining_sum, 0) END ASC  NULLS LAST,
+        CASE WHEN COALESCE(NULLIF($14::text, ''), 'REMAINING_SUM') = 'REMAINING_SUM' AND COALESCE(NULLIF($15::text, ''), 'asc') = 'desc' THEN COALESCE(ss.remaining_sum, 0) END DESC NULLS LAST,
+
+        CASE WHEN COALESCE(NULLIF($14::text, ''), 'REMAINING_SUM') = 'COURSE_NO' AND COALESCE(NULLIF($15::text, ''), 'asc') = 'asc'  THEN c.course_no END ASC  NULLS LAST,
+        CASE WHEN COALESCE(NULLIF($14::text, ''), 'REMAINING_SUM') = 'COURSE_NO' AND COALESCE(NULLIF($15::text, ''), 'asc') = 'desc' THEN c.course_no END DESC NULLS LAST,
+        c.course_no ASC
+    LIMIT COALESCE(NULLIF($12::int, 0), 10)
+    OFFSET COALESCE($13::int, 0)
+),
+
+-- Step 5 (Stage B): Per-section JSON with all classes — restricted to only
+--         the courses in `paginated_courses` (the join to `pc` below is what
+--         bounds this to page size instead of the whole filtered term).
+--         LEFT JOIN so ALL classes appear, not just those that matched the
+--         day/time filter.
 section_json AS (
     SELECT
         ms.course_id,
@@ -178,6 +297,7 @@ section_json AS (
             '[]'::json
         ) AS classes
     FROM matching_sections ms
+    JOIN paginated_courses pc ON pc.id = ms.course_id
     LEFT JOIN course_class cl ON cl.section_id = ms.section_id
     GROUP BY
         ms.course_id, ms.section_id, ms.section_no, ms.closed,
@@ -186,31 +306,32 @@ section_json AS (
 
 -- Final result: one row per course with nested sections JSON
 SELECT
-    c.id,
-    c.course_no,
-    c.study_program,
-    c.academic_year,
-    c.semester,
-    c.gen_ed_type,
-    c.course_condition,
-    c.midterm_start,
-    c.midterm_end,
-    c.final_start,
-    c.final_end,
-    ci.abbr_name,
-    ci.course_name_en,
-    ci.course_name_th,
-    ci.course_desc_en,
-    ci.course_desc_th,
-    ci.faculty,
-    ci.department,
-    ci.credit::text,
-    ci.credit_hours,
-    ci.grading_type,
-    COALESCE(ss.sections_count, 0)::int            AS sections_count,
-    COALESCE(ss.capacity_sum, 0)::int              AS capacity_sum,
-    COALESCE(ss.remaining_sum, 0)::int             AS remaining_sum,
-    COALESCE(ss.closed_sections_count, 0)::int     AS closed_sections_count,
+    pc.id,
+    pc.course_no,
+    pc.study_program,
+    pc.academic_year,
+    pc.semester,
+    pc.gen_ed_type,
+    pc.course_condition,
+    pc.midterm_start,
+    pc.midterm_end,
+    pc.final_start,
+    pc.final_end,
+    pc.abbr_name,
+    pc.course_name_en,
+    pc.course_name_th,
+    pc.course_desc_en,
+    pc.course_desc_th,
+    pc.faculty,
+    pc.department,
+    pc.credit,
+    pc.credit_hours,
+    pc.grading_type,
+    pc.sections_count,
+    pc.capacity_sum,
+    pc.remaining_sum,
+    pc.closed_sections_count,
+    pc.is_favorite,
     COALESCE(
         json_agg(
             json_build_object(
@@ -229,34 +350,14 @@ SELECT
         ) FILTER (WHERE sj.section_id IS NOT NULL),
         '[]'::json
     ) AS sections,
-    (SELECT COUNT(*)::int FROM matching_courses) AS total_count
-FROM course c
-JOIN course_info ci           ON ci.course_no = c.course_no
-JOIN matching_courses mc      ON mc.course_id = c.id
-LEFT JOIN section_stats ss    ON ss.course_id = c.id
-LEFT JOIN section_json sj     ON sj.course_id = c.id
+    pc.total_count
+FROM paginated_courses pc
+LEFT JOIN section_json sj ON sj.course_id = pc.id
 GROUP BY
-    c.id, ci.course_no,
-    ss.sections_count, ss.capacity_sum,
-    ss.remaining_sum, ss.closed_sections_count
-ORDER BY
-    -- NAME sort
-    CASE WHEN COALESCE(NULLIF($14::text, ''), 'REMAINING_SUM') = 'NAME'    AND COALESCE(NULLIF($15::text, ''), 'asc') = 'asc'  THEN ci.abbr_name       END ASC  NULLS LAST,
-    CASE WHEN COALESCE(NULLIF($14::text, ''), 'REMAINING_SUM') = 'NAME'    AND COALESCE(NULLIF($15::text, ''), 'asc') = 'desc' THEN ci.abbr_name       END DESC NULLS LAST,
-    CASE WHEN COALESCE(NULLIF($14::text, ''), 'REMAINING_SUM') = 'NAME'    AND COALESCE(NULLIF($15::text, ''), 'asc') = 'asc'  THEN ci.course_name_en  END ASC  NULLS LAST,
-    CASE WHEN COALESCE(NULLIF($14::text, ''), 'REMAINING_SUM') = 'NAME'    AND COALESCE(NULLIF($15::text, ''), 'asc') = 'desc' THEN ci.course_name_en  END DESC NULLS LAST,
-
-    -- CAPACITY_SUM sort
-    CASE WHEN COALESCE(NULLIF($14::text, ''), 'REMAINING_SUM') = 'CAPACITY_SUM'  AND COALESCE(NULLIF($15::text, ''), 'asc') = 'asc'  THEN ss.capacity_sum  END ASC  NULLS LAST,
-    CASE WHEN COALESCE(NULLIF($14::text, ''), 'REMAINING_SUM') = 'CAPACITY_SUM'  AND COALESCE(NULLIF($15::text, ''), 'asc') = 'desc' THEN ss.capacity_sum  END DESC NULLS LAST,
-
-    -- REMAINING_SUM sort (also the default when sort_by is unset/null)
-    CASE WHEN COALESCE(NULLIF($14::text, ''), 'REMAINING_SUM') = 'REMAINING_SUM' AND COALESCE(NULLIF($15::text, ''), 'asc') = 'asc'  THEN ss.remaining_sum END ASC  NULLS LAST,
-    CASE WHEN COALESCE(NULLIF($14::text, ''), 'REMAINING_SUM') = 'REMAINING_SUM' AND COALESCE(NULLIF($15::text, ''), 'asc') = 'desc' THEN ss.remaining_sum END DESC NULLS LAST,
-
-    CASE WHEN COALESCE(NULLIF($14::text, ''), 'REMAINING_SUM') = 'COURSE_NO' AND COALESCE(NULLIF($15::text, ''), 'asc') = 'asc'  THEN c.course_no END ASC  NULLS LAST,
-    CASE WHEN COALESCE(NULLIF($14::text, ''), 'REMAINING_SUM') = 'COURSE_NO' AND COALESCE(NULLIF($15::text, ''), 'asc') = 'desc' THEN c.course_no END DESC NULLS LAST,
-    -- Tiebreaker (always applied)
-    c.course_no ASC
-LIMIT COALESCE(NULLIF($12::int, 0), 10)
-OFFSET COALESCE($13::int, 0);
+    pc.id, pc.course_no, pc.study_program, pc.academic_year, pc.semester, pc.gen_ed_type,
+    pc.course_condition, pc.midterm_start, pc.midterm_end, pc.final_start, pc.final_end,
+    pc.abbr_name, pc.course_name_en, pc.course_name_th, pc.course_desc_en, pc.course_desc_th,
+    pc.faculty, pc.department, pc.credit, pc.credit_hours, pc.grading_type,
+    pc.sections_count, pc.capacity_sum, pc.remaining_sum, pc.closed_sections_count, pc.is_favorite,
+    pc.total_count, pc.__rank
+ORDER BY pc.__rank;

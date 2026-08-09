@@ -1,28 +1,18 @@
+import { env as privateEnv } from '$env/dynamic/private';
 import { env } from '$env/dynamic/public';
 import { tryCatch } from '$lib/async-handler';
 
 import { error as svelteError } from '@sveltejs/kit';
 
-import type { SemesterType } from '@cugetreg/utils/types';
 import { PublicCartDetailResponseSchema } from '@cugetreg/zod-schemas/public-carts-response';
 
 import type { PageServerLoad } from './$types';
 
-const toSemesterType = (studyProgram: string): SemesterType => {
-  switch (studyProgram) {
-    case 'S':
-      return 'Semester';
-    case 'I':
-      return 'Inter';
-    case 'T':
-      return 'Trimester';
-    default:
-      return 'Semester';
-  }
-};
-
 export const load: PageServerLoad = async ({ params, fetch }) => {
-  const API_URL = `${env.PUBLIC_API_URL ?? 'http://localhost:3000'}/public/carts/`;
+  const API_BASE = privateEnv.API_URL
+    ? `${privateEnv.API_URL}/api/v1`
+    : env.PUBLIC_API_URL;
+  const API_URL = `${API_BASE}/public/carts/`;
   const cartId = params.slug;
 
   const [response, error] = await tryCatch(fetch(API_URL + cartId));
@@ -32,9 +22,12 @@ export const load: PageServerLoad = async ({ params, fetch }) => {
   }
 
   const resData = await response.json();
-  const data = PublicCartDetailResponseSchema.parse(resData).data;
+  const { data, owner } = PublicCartDetailResponseSchema.parse(resData);
+
   return {
-    data: data,
-    semesterType: toSemesterType(data.cart.studyProgram),
+    data: {
+      owner,
+      cartData: data,
+    },
   };
 };

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Check, Dot, Plus } from '@lucide/svelte';
+	import { Check, Dot, Heart, Plus } from '@lucide/svelte';
 
 	import { cn } from '@cugetreg/utils';
 
@@ -23,6 +23,9 @@
 		selectedSection?: string;
 		onSelectSection?: (value: string) => void;
 		courseUrl?: string;
+		favorite?: boolean;
+		showFavorite?: boolean;
+		onToggleFavorite?: () => void;
 		[key: string]: unknown;
 	}
 
@@ -37,6 +40,9 @@
 		selectedSection = $bindable(''),
 		onSelectSection,
 		courseUrl = '',
+		favorite = $bindable(false),
+		showFavorite = true,
+		onToggleFavorite,
 		...rest
 	}: Props = $props();
 
@@ -47,6 +53,15 @@
 			return;
 		}
 		selected = !selected;
+	};
+
+	const onFavoriteClick = (event?: MouseEvent) => {
+		event?.stopPropagation();
+		if (onToggleFavorite) {
+			onToggleFavorite();
+			return;
+		}
+		favorite = !favorite;
 	};
 </script>
 
@@ -154,6 +169,21 @@
 			>
 				เลือกแล้ว <Check size="16" strokeWidth="3" />
 			</Button>
+		{/if}
+		{#if showFavorite}
+			<button
+				type="button"
+				aria-label={favorite ? 'นำออกจากวิชาที่ถูกใจ' : 'เพิ่มเป็นวิชาที่ถูกใจ'}
+				aria-pressed={favorite}
+				onclick={onFavoriteClick}
+				class="flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-full transition-colors hover:bg-blue-300/40"
+			>
+				<Heart
+					size="22"
+					strokeWidth="2"
+					class={favorite ? 'fill-blue-700 text-blue-700' : 'fill-white text-blue-500'}
+				/>
+			</button>
 		{/if}
 	</div>
 </div>

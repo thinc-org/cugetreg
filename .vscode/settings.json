@@ -4,6 +4,7 @@
     "source.organizeImports": "never"
   },
   "npm.packageManager": "pnpm",
+  "eslint.workingDirectories": [{ "mode": "auto" }],
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "[typescript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",

@@ -1,8 +1,18 @@
+import { prisma } from "@/db/clients.js";
+import {
+  type Course,
+  type Section,
+  type SectionClass,
+  Visible,
+} from "@/generated/prisma/client.js";
+
+import * as R from "remeda";
+
 import type {
   ClassScheduleItem,
   ExamScheduleItem,
 } from "@cugetreg/zod-schemas/carts-response";
-import type { PublicCartItemDetail } from "@cugetreg/zod-schemas/public-carts-response";
+import type { GenEdType } from "@cugetreg/zod-schemas/constants";
 
 import {
   detectClassConflicts,
@@ -10,17 +20,13 @@ import {
 } from "./conflictDetection.js";
 import { LexoRankService } from "./lexorank.service.js";
 
-import { prisma } from "../db/clients.js";
-import { Visible } from "../generated/prisma/client.js";
-
 export const publicCartsService = {
-  // Read-only view of a shared timetable — visible to anyone with the link
-  /* eslint-disable @typescript-eslint/no-explicit-any */
   getPublicCartDetail: async (cartId: string) => {
-    const cart = (await prisma.cart.findUnique({
+    const cart = await prisma.cart.findUnique({
       where: { id: cartId },
       include: {
         items: {
+          orderBy: { cartOrder: "asc" },
           include: {
             courseInfo: {
               include: {
@@ -34,88 +40,108 @@ export const publicCartsService = {
           },
         },
       },
-    })) as any;
+    });
 
-    if (!cart || cart.visible === "PRIVATE") {
-      throw new Error("PUBLIC_CART_NOT_FOUND_OR_PRIVATE");
+    if (!cart || cart.visible === Visible.PVT) {
+      throw new Error("CART_NOT_FOUND");
     }
 
-    const itemsResponse: PublicCartItemDetail[] = [];
-    const classesSchedule: ClassScheduleItem[] = [];
-    const examsSchedule: ExamScheduleItem[] = [];
-    let totalCredits = 0;
+    const owner = await prisma.user.findFirst({
+      where: { id: cart.userId },
+    });
 
-    for (const item of cart.items) {
+    const enrichedItems = R.map(cart.items, (item) => {
       const info = item.courseInfo;
-      const creditValue = Number(info.credit);
-
       const courseData = info.courses.find(
-        (course: any) =>
+        (course: Course) =>
           course.academicYear === cart.academicYear &&
           course.semester === cart.semester &&
           course.studyProgram === cart.studyProgram,
       );
-
       const sectionData = courseData?.sections.find(
-        (sec: any) => sec.sectionNo === item.sectionNo,
+        (sec: Section) => sec.sectionNo === item.sectionNo,
       );
+      return {
+        ...item,
+        info,
+        courseData,
+        sectionData,
+        sections: courseData?.sections ?? [],
+      };
+    });
 
-      totalCredits += creditValue;
+    // 2. Format Items Response
+    const itemsResponse = R.map(enrichedItems, (item) => ({
+      id: item.id,
+      courseNo: item.courseNo,
+      sectionNo: item.sectionNo,
+      color: item.color,
+      hidden: item.hidden,
+      cartOrder: item.cartOrder,
+      genEdType: (item.courseData?.genEdType ?? "NO") as GenEdType,
+      course: {
+        abbrName: item.info.abbrName,
+        courseNameTh: item.info.courseNameTh,
+        courseNameEn: item.info.courseNameEn,
+        credit: item.info.credit.toString(),
+      },
+      sections: item.sections,
+    }));
 
-      itemsResponse.push({
-        id: item.id,
-        courseNo: item.courseNo,
-        sectionNo: item.sectionNo,
-        color: item.color,
-        hidden: item.hidden,
-        cartOrder: item.cartOrder,
-        course: {
-          courseNameTh: info.courseNameTh,
-          courseNameEn: info.courseNameEn,
-          credit: info.credit.toString(),
-        },
-        sections: courseData?.sections || [],
-      });
-
-      for (const cls of sectionData?.classes ?? []) {
-        classesSchedule.push({
+    // 3. Extract Schedules
+    const classesSchedule: ClassScheduleItem[] = R.flatMap(
+      enrichedItems,
+      (item) =>
+        (item.sectionData?.classes ?? []).map((cls: SectionClass) => ({
           cartItemId: item.id,
           courseNo: item.courseNo,
           sectionNo: item.sectionNo,
-          type: cls.type,
-          dayOfWeek: cls.dayOfWeek,
-          periodStart: cls.periodStart,
-          periodEnd: cls.periodEnd,
-          building: cls.building,
-          room: cls.room,
-          professors: cls.professors,
-        });
-      }
+          ...R.pick(cls, [
+            "type",
+            "dayOfWeek",
+            "periodStart",
+            "periodEnd",
+            "building",
+            "room",
+            "professors",
+          ]),
+        })),
+    );
 
-      if (courseData?.midtermStart && courseData.midtermEnd) {
-        examsSchedule.push({
-          cartItemId: item.id,
-          courseNo: item.courseNo,
-          type: "MIDTERM",
-          start: courseData.midtermStart.toISOString(),
-          end: courseData.midtermEnd.toISOString(),
-        });
-      }
-      if (courseData?.finalStart && courseData.finalEnd) {
-        examsSchedule.push({
-          cartItemId: item.id,
-          courseNo: item.courseNo,
-          type: "FINAL",
-          start: courseData.finalStart.toISOString(),
-          end: courseData.finalEnd.toISOString(),
-        });
-      }
-    }
+    const examsSchedule: ExamScheduleItem[] = R.flatMap(
+      enrichedItems,
+      (item) => {
+        const exams: ExamScheduleItem[] = [];
+        if (item.courseData?.midtermStart && item.courseData.midtermEnd) {
+          exams.push({
+            cartItemId: item.id,
+            courseNo: item.courseNo,
+            type: "MIDTERM",
+            start: item.courseData.midtermStart.toISOString(),
+            end: item.courseData.midtermEnd.toISOString(),
+          });
+        }
+        if (item.courseData?.finalStart && item.courseData.finalEnd) {
+          exams.push({
+            cartItemId: item.id,
+            courseNo: item.courseNo,
+            type: "FINAL",
+            start: item.courseData.finalStart.toISOString(),
+            end: item.courseData.finalEnd.toISOString(),
+          });
+        }
+        return exams;
+      },
+    );
 
     const classConflicts = detectClassConflicts(classesSchedule);
     const examConflicts = detectExamConflicts(examsSchedule);
 
-    return {
+    const totalCredits = R.sumBy(enrichedItems, (item) =>
+      Number(item.info.credit),
+    );
+
+    const cartDetail = {
       cart: {
         id: cart.id,
         name: cart.name,
@@ -128,8 +154,12 @@ export const publicCartsService = {
       conflicts: { classConflicts, examConflicts },
       schedule: { classes: classesSchedule, exams: examsSchedule },
     };
+
+    return {
+      cartDetail,
+      owner: owner?.name,
+    };
   },
-  /* eslint-enable @typescript-eslint/no-explicit-any */
 
   // Clone a public cart into the user's own carts — always created as private, isGraded/grade reset
   importPublicCart: async (userId: string, cartId: string, name?: string) => {
@@ -149,8 +179,8 @@ export const publicCartsService = {
 
     const nextOrder = LexoRankService.getNextRank(lastCart?.cartOrder);
 
-    return prisma.$transaction(async (tx) => {
-      return tx.cart.create({
+    const newCart = await prisma.$transaction(async (tx) => {
+      const created = await tx.cart.create({
         data: {
           userId,
           name: name || "Copy Timetable",
@@ -172,8 +202,52 @@ export const publicCartsService = {
             })),
           },
         },
-        include: { items: true },
+        include: {
+          items: {
+            include: {
+              courseInfo: {
+                include: {
+                  courses: {
+                    include: {
+                      sections: { include: { classes: true } },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
       });
+
+      return {
+        ...created,
+        items: created.items.map((item) => {
+          const matchingCourse = item.courseInfo.courses.find(
+            (course) =>
+              course.academicYear === created.academicYear &&
+              course.semester === created.semester &&
+              course.studyProgram === created.studyProgram,
+          );
+          return {
+            id: item.id,
+            courseNo: item.courseNo,
+            sectionNo: item.sectionNo,
+            color: item.color,
+            hidden: item.hidden,
+            cartOrder: item.cartOrder,
+            genEdType: (matchingCourse?.genEdType ?? "NO") as GenEdType,
+            course: {
+              abbrName: item.courseInfo.abbrName,
+              courseNameTh: item.courseInfo.courseNameTh,
+              courseNameEn: item.courseInfo.courseNameEn,
+              credit: item.courseInfo.credit.toString(),
+            },
+            sections: matchingCourse?.sections ?? [],
+          };
+        }),
+      };
     });
+
+    return newCart;
   },
 };

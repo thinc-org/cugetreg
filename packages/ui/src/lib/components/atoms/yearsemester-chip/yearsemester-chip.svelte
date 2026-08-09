@@ -9,6 +9,7 @@
 
 	interface Props {
 		class?: string | undefined | null;
+		studyProgram?: 'S' | 'I' | 'T';
 		year: number;
 		semester: Semester;
 		closable?: boolean;
@@ -18,12 +19,19 @@
 
 	let {
 		class: className = undefined,
+		studyProgram,
 		year,
 		semester,
 		closable = false,
 		onClose = () => {},
 		...rest
 	}: Props = $props();
+
+	const studyProgramLabel = {
+		S: 'ทวิภาค',
+		I: 'นานาชาติ',
+		T: 'ตรีภาค'
+	};
 
 	const semesterLabel = {
 		FIRST: 'ภาคต้น',
@@ -34,6 +42,6 @@
 
 <Chip class={cn(chipVariants({ className }))} {closable} {onClose} {...rest}>
 	{#if year && semester}
-		{year} / {semesterLabel[semester]}
+		{studyProgram ? studyProgramLabel[studyProgram] + ' ' : ''}{year} / {semesterLabel[semester]}
 	{/if}
 </Chip>

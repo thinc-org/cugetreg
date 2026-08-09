@@ -23,7 +23,7 @@
 
 // model Cart {
 //   id String @id @default(cuid())
-  
+
 //   userId String @map("user_id")
 //   user User @relation(fields: [userId], references: [id])
 
@@ -49,7 +49,7 @@
 
 // model CartItem {
 //   id String @id @default(cuid())
-  
+
 //   cartId String @map("cart_id")
 //   cart Cart @relation(fields: [cartId], references: [id])
 
@@ -74,7 +74,7 @@
 
 // model Review {
 //   id String @id @default(cuid())
-  
+
 //   userId String @map("user_id")
 //   user User @relation(fields: [userId], references: [id])
 
@@ -103,7 +103,7 @@
 
 //   reviewId String @map("review_id")
 //   review Review @relation(fields: [reviewId], references: [id])
-  
+
 //   userId String @map("user_id")
 //   user User @relation(fields: [userId], references: [id])
 

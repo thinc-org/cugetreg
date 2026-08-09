@@ -1,0 +1,76 @@
+# Prod release: publish a GitHub Release targeting the `v2-prod` branch,
+# tagged <component>@<version> (e.g. web@1.13.1, api@1.15.1) — each
+# component releases and deploys completely independently, only the tagged
+# one is built and bumped. CI builds it and opens a PR against the gitops
+# prod overlay (so a human approves the prod rollout).
+#
+# publish a Release from a v2-prod tag in the GitHub UI (or `gh release
+# create web@1.13.1 --target v2-prod`), with v2-prod selected as the target
+# branch. A Release published against any other branch is skipped, not
+# deployed; a Release on v2-prod whose tag isn't <component>@<version>
+# fails loudly instead.
+name: Build & deploy prod
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+  packages: write
+
+# Serialize prod releases so two tags can't race the gitops write-back.
+concurrency:
+  group: deploy-prod
+  cancel-in-progress: false
+
+jobs:
+  # Parses the release tag ("web@X.Y.Z" / "api@X.Y.Z") into the component to
+  # build and the plain version string, and enforces that cugetregv2 stays
+  # on major version 2 (rejects a stray v1.x.x tag) — all before anything
+  # reaches build-deploy.
+  parse-release-tag:
+    runs-on: ubuntu-latest
+    outputs:
+      component: ${{ steps.parse.outputs.component }}
+      version: ${{ steps.parse.outputs.version }}
+    steps:
+      - name: Parse tag and enforce major version 2
+        id: parse
+        run: |
+          TAG="${{ github.event.release.tag_name }}"
+
+          if [[ "$TAG" == *"@"* ]]; then
+            COMPONENT="${TAG%%@*}"
+            VERSION="${TAG##*@}"
+          else
+            COMPONENT=""
+            VERSION="$TAG"
+          fi
+          VERSION="${VERSION#v}"  # strip leading "v", if present (e.g. v2.0.1)
+
+          if [ -n "$COMPONENT" ] && [ "$COMPONENT" != "web" ] && [ "$COMPONENT" != "api" ]; then
+            echo "::error::Release tag '$TAG' has an unrecognized component '$COMPONENT' — expected 'web' or 'api'."
+            exit 1
+          fi
+
+          MAJOR="${VERSION%%.*}"
+          if [ "$MAJOR" != "2" ]; then
+            echo "::error::Release tag '$TAG' has major version '$MAJOR' — only major version 2 is allowed for cugetregv2 releases."
+            exit 1
+          fi
+
+          echo "component=$COMPONENT" >> "$GITHUB_OUTPUT"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "Parsed '$TAG' -> component='$COMPONENT' version='$VERSION' (major=$MAJOR)"
+
+  deploy:
+    needs: parse-release-tag
+    uses: ./.github/workflows/build-deploy.yaml
+    with:
+      env: prod
+      tag: ${{ needs.parse-release-tag.outputs.version }}       # e.g. 2.0.4 (no component prefix — used as the literal docker tag)
+      component: ${{ needs.parse-release-tag.outputs.component }} # e.g. web (empty builds both)
+      update-mode: pr
+    secrets:
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}

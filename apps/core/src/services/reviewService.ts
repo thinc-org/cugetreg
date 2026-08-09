@@ -1,51 +1,71 @@
+import { prisma } from "@/db/clients.js";
+import { Prisma } from "@/generated/prisma/client.js";
+import type { VoteType } from "@/generated/prisma/enums.js";
+import {
+  mapReviewStatus,
+  mapSemester,
+  mapStudyProgram,
+  mapVoteType,
+} from "@/utils/enumMapper.js";
+
 import type {
   EditReviewBodySchema,
   SubmitReviewBodySchema,
   VoteReviewBodySchema,
 } from "@cugetreg/zod-schemas/reviews";
 
-import { prisma } from "../db/clients.js";
-import { Prisma } from "../generated/prisma/client.js";
-import type { VoteType } from "../generated/prisma/enums.js";
-import {
-  mapReviewStatus,
-  mapSemester,
-  mapStudyProgram,
-  mapVoteType,
-} from "../utils/enumMapper.js";
-
 export const reviewService = {
   submitReview: async (userId: string, newReview: SubmitReviewBodySchema) => {
-    const course = await prisma.course.findFirst({
-      where: {
-        courseNo: newReview.courseNo,
-      },
-    });
+    return prisma.$transaction(async (tx) => {
+      const course = await tx.course.findFirst({
+        where: {
+          courseNo: newReview.courseNo,
+        },
+      });
 
-    if (!course) {
-      throw new Error("COURSE_NOT_FOUND");
-    }
+      if (!course) {
+        throw new Error("COURSE_NOT_FOUND");
+      }
 
-    const createdReview = await prisma.review.create({
-      data: {
+      if (newReview.sectionNo !== undefined) {
+        const section = await tx.section.findFirst({
+          where: {
+            sectionNo: newReview.sectionNo,
+            course: {
+              courseNo: newReview.courseNo,
+              studyProgram: mapStudyProgram(newReview.studyProgram),
+              academicYear: newReview.academicYear,
+              semester: mapSemester(newReview.semester),
+            },
+          },
+        });
+
+        if (!section) {
+          throw new Error("SECTION_NOT_FOUND");
+        }
+      }
+
+      const createdReview = await tx.review.create({
+        data: {
+          ...newReview,
+          userId,
+          studyProgram: mapStudyProgram(newReview.studyProgram),
+          semester: mapSemester(newReview.semester),
+          status: mapReviewStatus("PENDING"),
+        },
+      });
+
+      return {
         ...newReview,
-        userId,
-        studyProgram: mapStudyProgram(newReview.studyProgram),
-        semester: mapSemester(newReview.semester),
-        status: mapReviewStatus("PENDING"),
-      },
+        id: createdReview.id,
+        semester: createdReview.semester,
+        status: createdReview.status,
+        likeCount: 0,
+        dislikeCount: 0,
+        isOwner: true,
+        createdAt: createdReview.createdAt,
+      };
     });
-
-    return {
-      ...newReview,
-      id: createdReview.id,
-      semester: createdReview.semester,
-      status: createdReview.status,
-      likeCount: 0,
-      dislikeCount: 0,
-      isOwner: true,
-      createdAt: createdReview.createdAt,
-    };
   },
   voteReview: async (
     userId: string,
@@ -74,7 +94,7 @@ export const reviewService = {
           throw new Error("REVIEW_NOT_FOUND");
         }
 
-        let myInteraction: string | VoteType | null = null;
+        let myInteraction: VoteType | null = null;
 
         if (!vote) {
           await tx.reviewVote.create({
@@ -150,6 +170,24 @@ export const reviewService = {
       throw new Error("NOT_REVIEW_OWNER");
     }
 
+    if (body.sectionNo !== undefined) {
+      const section = await prisma.section.findFirst({
+        where: {
+          sectionNo: body.sectionNo,
+          course: {
+            courseNo: review.courseNo,
+            studyProgram: review.studyProgram,
+            academicYear: body.academicYear,
+            semester: mapSemester(body.semester),
+          },
+        },
+      });
+
+      if (!section) {
+        throw new Error("SECTION_NOT_FOUND");
+      }
+    }
+
     const semester = mapSemester(body.semester);
 
     const updatedReview = await prisma.review.update({
@@ -168,6 +206,7 @@ export const reviewService = {
       id: reviewId,
       academicYear: updatedReview.academicYear,
       semester: updatedReview.semester,
+      sectionNo: updatedReview.sectionNo,
       rating: updatedReview.rating,
       content: updatedReview.content,
       isOwner: true,

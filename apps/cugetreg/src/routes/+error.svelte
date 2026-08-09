@@ -6,7 +6,7 @@
 </script>
 
 <div
-  class="fixed inset-0 z-[100] flex items-center justify-center bg-[#4A72B9] p-1 md:p-3"
+  class="fixed inset-0 z-[100] flex items-center justify-center bg-[#4A72B9] p-3 md:p-4"
 >
   <div
     class="relative flex h-full w-full flex-col items-center justify-center rounded-[2.5rem] bg-white p-8 text-center shadow-2xl md:rounded-[2rem]"

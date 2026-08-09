@@ -21,6 +21,7 @@
 
 	const course1: TimeTableCourse = {
 		name: 'COM PROG',
+		abbrName: 'COM PROG',
 		code: '2190101',
 		bldg: 'ENG2',
 		room: '303/1',
@@ -29,6 +30,7 @@
 
 	const course2: TimeTableCourse = {
 		name: 'ADV MATH METH',
+		abbrName: 'ADV MATH METH',
 		code: '2190101',
 		bldg: 'ENG2',
 		room: '303/1',
@@ -37,6 +39,7 @@
 
 	const course3: TimeTableCourse = {
 		name: 'Calculus II',
+		abbrName: 'Calculus II',
 		code: '2190101',
 		bldg: 'ENG100',
 		room: 'M07/1',

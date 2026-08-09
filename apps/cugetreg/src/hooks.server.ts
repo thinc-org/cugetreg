@@ -1,9 +1,12 @@
+import { env as privateEnv } from '$env/dynamic/private';
 import { env as publicEnv } from '$env/dynamic/public';
 
 import { type Handle, type HandleFetch, redirect } from '@sveltejs/kit';
 
 export const handle: Handle = async ({ event, resolve }) => {
-  const API_BASE = publicEnv.PUBLIC_API_URL ?? 'http://localhost:3000/api/v1';
+  const API_BASE = privateEnv.API_URL
+    ? `${privateEnv.API_URL}/api/v1`
+    : publicEnv.PUBLIC_API_URL;
   try {
     const res = await event.fetch(`${API_BASE}/auth/get-session`, {
       headers: event.request.headers, // forwards the session cookie
@@ -20,8 +23,12 @@ export const handle: Handle = async ({ event, resolve }) => {
 
   const protectedRoutes = ['/schedule', '/profile'];
 
+  // Allow unauthenticated access to public schedule views (schedule/[slug])
+  const isPublicScheduleView = /^\/schedule\/[^/]+$/.test(event.url.pathname);
+
   if (
     !event.locals.user &&
+    !isPublicScheduleView &&
     protectedRoutes.find((route) => event.url.pathname.startsWith(route))
   ) {
     throw redirect(302, '/?error=no_session');

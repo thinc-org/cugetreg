@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { ChevronRight, Clock, LoaderCircle, NotebookPen, Star, StarHalf } from '@lucide/svelte';
-	import { tick } from 'svelte';
+	import { onMount, tick } from 'svelte';
 
 	import type { ReviewStatus } from '@cugetreg/zod-schemas/constants';
 
@@ -37,6 +37,7 @@
 
 	let showAll = $state(false);
 	let scrollBox: HTMLDivElement | undefined = $state();
+	let isMobile = $state(false);
 
 	const LOAD_MORE_THRESHOLD = 120;
 
@@ -68,6 +69,21 @@
 		if (scrollBox.scrollHeight <= scrollBox.clientHeight) {
 			onLoadMore?.();
 		}
+	});
+
+	onMount(() => {
+		const isMobileQuery = window.matchMedia('(max-width: 768px)');
+		isMobile = isMobileQuery.matches;
+
+		const handleMediaQueryChange = (event: MediaQueryListEvent) => {
+			isMobile = event.matches;
+		};
+
+		isMobileQuery.addEventListener('change', handleMediaQueryChange);
+
+		return () => {
+			isMobileQuery.removeEventListener('change', handleMediaQueryChange);
+		};
 	});
 
 	const histogramData = $derived.by(() => {
@@ -109,33 +125,32 @@
 </script>
 
 <div
-	class="border-surface-container-low bg-surface-container-lowest text-on-surface w-full max-w-md rounded-3xl border p-6"
+	class="border-surface-container-low bg-surface-container-lowest text-on-surface w-full max-w-md rounded-3xl border p-6 md:max-w-xl lg:max-w-lg"
 >
 	<div class="text-body2 flex items-center gap-2 font-semibold">
 		<Star size="18" strokeWidth="2.5" />
 		<p>{overviewTitle}</p>
 	</div>
 
-	<div class="mt-4 flex items-end justify-start gap-1">
+	<div class="mt-4 flex items-end justify-start gap-x-1.5">
 		<div class="text-primary flex h-16 shrink-0 items-end">
-			<Star size={16} strokeWidth={1.5} class="transition-y-[2px] absolute" />
+			<Star strokeWidth={1.5} class="transition-y-[2px] absolute size-3.5 md:size-4" />
 			<StarHalf
-				size={16}
 				fill="currentColor"
 				strokeWidth={1.5}
-				class="transition-y-[2px] absolute"
+				class="transition-y-[2px] absolute size-3.5 md:size-4"
 			/>
 		</div>
-		<div class="flex h-16 flex-1 items-end justify-center gap-1">
+		<div class="ml-2 flex h-16 flex-1 items-end justify-center gap-x-1">
 			{#each histogramData as value, i (i)}
 				<div
-					class="bg-surface-container-high w-5.5"
+					class="bg-surface-container-high w-1/14 md:w-1/12 lg:w-1/14 xl:w-1/12"
 					style={`height: ${Math.max(8, (value / maxValue) * 64)}px`}
 				></div>
 			{/each}
 		</div>
 		<div class="text-primary flex h-16 shrink-0 items-end">
-			<RatingStar rating={5} size={16} gap={4} />
+			<RatingStar rating={5} size={isMobile ? 14 : 16} gap={4} />
 		</div>
 	</div>
 
@@ -179,7 +194,7 @@
 			<div
 				bind:this={scrollBox}
 				onscroll={handleScroll}
-				class={`mt-4 flex flex-col gap-4 ${showAll ? 'h-80 overflow-y-auto' : ''}`}
+				class={`mt-4 flex flex-col gap-4 ${showAll ? 'max-h-64 overflow-y-auto sm:max-h-72' : ''}`}
 			>
 				{#each visibleReviews as review, i (i)}
 					<div class="flex flex-col gap-2">

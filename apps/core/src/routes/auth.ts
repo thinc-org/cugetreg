@@ -1,8 +1,8 @@
+import { env } from "@/env.js";
+import { auth } from "@/lib/auth.js";
+
 import { OpenAPIHono } from "@hono/zod-openapi";
 import { type MiddlewareHandler } from "hono";
-
-import { env } from "../env.js";
-import { auth } from "../lib/auth.js";
 
 // Proxy all /auth/* requests directly to better-auth (login, callback, session, signout)
 const authRoute = new OpenAPIHono();
@@ -29,6 +29,18 @@ export const middlewareAuth: MiddlewareHandler = async (c, next) => {
 
     c.set("user", session.user);
     c.set("session", session.session);
+  }
+
+  await next();
+};
+
+// Guards service-to-service routes (e.g. CI creating an announcement) with a
+// shared-secret header instead of a user session — there's no session to check.
+export const middlewareInternalToken: MiddlewareHandler = async (c, next) => {
+  const token = c.req.header("X-Internal-Token");
+
+  if (!token || token !== env.INTERNAL_API_TOKEN) {
+    return c.json({ message: "Unauthorized" }, 401);
   }
 
   await next();

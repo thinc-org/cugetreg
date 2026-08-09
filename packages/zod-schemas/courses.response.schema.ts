@@ -2,6 +2,7 @@ import { z } from "zod";
 
 import {
   days,
+  faculty,
   genEdType,
   reviewStatus,
   semester,
@@ -9,7 +10,6 @@ import {
   TIME_REGEX,
   vote,
 } from "./constants.js";
-import { CourseInfoSchema } from "./courses.schema.js";
 
 export const ClassSchema = z.object({
   id: z.string(),
@@ -35,22 +35,51 @@ export const SectionSchema = z.object({
   classes: z.array(ClassSchema),
 });
 
-export const CourseDetailSchema = z.object({
+// 1. Sub-schema for the 'course' object
+export const CourseSchema = z.object({
   id: z.string(),
   studyProgram: studyProgram,
   academicYear: z.number().int(),
   semester: semester,
   courseNo: z.string(),
-  courseCondition: z.string().nullable(),
+  courseCondition: z.string().nullish().default("-"),
+  genEdType: genEdType,
   midtermStart: z.string().datetime().nullable(),
   midtermEnd: z.string().datetime().nullable(),
   finalStart: z.string().datetime().nullable(),
   finalEnd: z.string().datetime().nullable(),
-  genEdType: genEdType,
-  createdAt: z.string().datetime().optional(),
-  updatedAt: z.string().datetime().optional(),
-  courseInfo: CourseInfoSchema,
+  isFavorite: z.boolean().nullable().default(false),
   sections: z.array(SectionSchema),
+});
+
+// 2. Sub-schema for the 'courseInfo' object
+export const CourseInfoSchema = z.object({
+  abbrName: z.string(),
+  courseNameEn: z.string(),
+  courseNameTh: z.string(),
+  courseDescEn: z.string().nullable(),
+  courseDescTh: z.string().nullable(),
+  faculty: faculty.nullable(),
+  department: z.string().nullable(),
+  credit: z.string(),
+  creditHours: z.string().nullable(),
+});
+
+// 3. Sub-schema for the 'stats' object
+const StatsSchema = z.object({
+  sectionsCount: z.number().int(),
+  capacitySum: z.number().int(),
+  remainingSum: z.number().int(),
+  hasSeats: z.boolean(),
+  isClosedAll: z.boolean(),
+});
+
+// 4. The Main Schema combining everything
+export const CourseDetailsSchema = z.object({
+  course: CourseSchema,
+  courseInfo: CourseInfoSchema,
+  stats: StatsSchema,
+  fitMySchedule: z.boolean(),
 });
 
 export const CourseReview = z.object({
@@ -60,18 +89,74 @@ export const CourseReview = z.object({
   studyProgram: studyProgram,
   academicYear: z.number().min(2564),
   semester: semester,
+  sectionNo: z.number().int().nullable().optional(),
   content: z.string(),
   stats: z.object({
     likeCount: z.number(),
     dislikeCount: z.number(),
   }),
+  user: z.object({
+    faculty: faculty.nullable(),
+    department: z.string().nullable(),
+  }),
   reaction: vote.optional(),
 });
 
+export const CourseNoDetailSchema = CourseSchema.extend({
+  courseInfo: CourseInfoSchema,
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
+});
+
 export const CourseNoResponseSchema = z.object({
-  course: CourseDetailSchema,
+  course: CourseNoDetailSchema,
+});
+
+export const CourseReviewFacetSchema = z.object({
+  academicYear: z.number().min(2564),
+  semester: semester,
+  sectionNo: z.number().int().nullable(),
+  count: z.int().min(1),
+});
+
+export const CourseSectionsResponseSchema = z.object({
+  sections: z.array(z.number().int()),
+});
+
+export const CourseReviewResponseSchema = z.object({
   reviews: z.array(CourseReview),
+  limit: z.int().min(1),
+  page: z.int().min(1),
+  count: z.int().min(0),
+  facets: z.array(CourseReviewFacetSchema).optional(),
 });
 
 export type CourseNoResponse = z.infer<typeof CourseNoResponseSchema>;
 export type CourseReview = z.infer<typeof CourseReview>;
+
+export const CourseFavoritesResponseSchema = z.object({
+  total: z.number().min(0),
+  courses: z.array(
+    z.object({
+      courseNo: z.string(),
+      abbrName: z.string(),
+      courseCondition: z.string().nullish().default("-"),
+      genEdType: genEdType,
+      faculty: z.string().nullable(),
+      department: z.string().nullable(),
+      credit: z.string(),
+      creditHours: z.string().nullable(),
+      studyProgram: studyProgram,
+      academicYear: z.number().min(2564),
+      semester: semester,
+    }),
+  ),
+});
+
+export const AddFavoriteCourseResponseSchema = CourseInfoSchema.omit({
+  courseDescEn: true,
+  courseDescTh: true,
+});
+
+export type CourseReviewFacet = z.infer<typeof CourseReviewFacetSchema>;
+export type CourseReviewResponse = z.infer<typeof CourseReviewResponseSchema>;

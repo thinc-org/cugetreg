@@ -1,10 +1,14 @@
+import { prisma } from "@/db/clients.js";
+import {
+  mapFacultyCode,
+  mapReviewStatus,
+  unmapFacultyCode,
+} from "@/utils/enumMapper.js";
+
 import type {
   GetUserReviewsQuery,
   UpdateUserInfoBody,
 } from "@cugetreg/zod-schemas/user";
-
-import { prisma } from "../db/clients.js";
-import { mapReviewStatus } from "../utils/enumMapper.js";
 
 export const usersService = {
   getUserInfo: async (userId: string) => {
@@ -31,7 +35,7 @@ export const usersService = {
       name: user!.name,
       email: user!.email,
       googleId,
-      faculty: user!.faculty,
+      faculty: unmapFacultyCode(user!.faculty),
       department: user!.department,
       createdAt: user!.createdAt,
       updatedAt: user!.updatedAt,
@@ -92,7 +96,7 @@ export const usersService = {
       },
       data: {
         name,
-        faculty: faculty || null,
+        faculty: faculty ? mapFacultyCode(faculty) : null,
         department: department || null,
       },
       omit: {
@@ -106,6 +110,7 @@ export const usersService = {
     return {
       ...updatedUser,
       id: studentId,
+      faculty: unmapFacultyCode(updatedUser.faculty),
     };
   },
 };

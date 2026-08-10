@@ -6,6 +6,7 @@
   import { useCartActions } from '$lib/stores/user-cart';
 
   import { Plus } from '@lucide/svelte';
+  import { untrack } from 'svelte';
 
   import { Modal } from '@cugetreg/ui/atoms/modal';
   import {
@@ -58,7 +59,9 @@
   );
 
   let selectedId = $state<string>(
-    matchingSchedules.length > 0 ? matchingSchedules[0].id : '',
+    untrack(() =>
+      matchingSchedules.length > 0 ? matchingSchedules[0].id : '',
+    ),
   );
 
   let selectedLabel = $derived.by(() => {

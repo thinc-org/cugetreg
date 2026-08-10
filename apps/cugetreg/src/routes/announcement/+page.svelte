@@ -1,11 +1,14 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
+  import { resolve } from '$app/paths';
   import { api } from '$lib/api';
+  import { GOOGLE_FORM_URL } from '$lib/constants';
 
   import { TriangleAlert } from '@lucide/svelte';
   import { Loader2 } from 'lucide-svelte';
 
   import { Footer } from '@cugetreg/ui/organisms/footer';
+
   interface Announcement {
     id: string;
     title: string;
@@ -75,7 +78,7 @@
         {#each announcements as item (item.id)}
           <button
             class="flex flex-col items-start gap-1 rounded-2xl border-2 border-gray-200 bg-white px-10 py-8 transition-all hover:border-[#4A6CF7] focus:outline-none"
-            onclick={() => goto(`/announcement/${item.id}`)}
+            onclick={() => goto(resolve(`/announcement/${item.id}`))}
           >
             <span class="font-regular text-xs text-gray-600">CU GetReg</span>
             <h2
@@ -93,9 +96,9 @@
   </div>
   <a
     class="sticky right-6 bottom-6 z-50 mt-8 mb-6 ml-auto flex w-max cursor-pointer items-center gap-1 rounded-full border-2 border-black bg-white px-2 py-1 md:gap-2 md:px-4"
-    href="https://docs.google.com/forms/d/e/1FAIpQLScH2AZyifTnBVXiJBtyzM73MReGX2vpM1_I9IWQfABMduVgsg/viewform?usp=dialog"
+    href={GOOGLE_FORM_URL}
     target="_blank"
-    rel="noopener noreferrer"
+    rel="external noopener noreferrer"
   >
     <TriangleAlert size={isMobile ? 16 : 20} strokeWidth={1.5} color="black" />
     <span class="text-[10px] text-black md:text-xs">แจ้งปัญหาการใช้งาน</span>

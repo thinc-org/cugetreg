@@ -8,6 +8,7 @@
 	import * as Select from '$lib/components/molecules/select/index.js';
 
 	import { ArrowRight, EyeOff, Trash, X } from '@lucide/svelte';
+	import { untrack } from 'svelte';
 
 	import { cn } from '@cugetreg/utils';
 	import { courseColorVariants } from '@cugetreg/utils/constants';
@@ -33,7 +34,7 @@
 		onChangeSection = () => {}
 	}: ViewCourseProps = $props();
 
-	let selectedSectionNo = $state(data?.selectedSectionNo ?? 0);
+	let selectedSectionNo = $state(untrack(() => data?.selectedSectionNo ?? 0));
 
 	$effect(() => {
 		if (data) {

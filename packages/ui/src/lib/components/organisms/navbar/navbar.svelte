@@ -7,7 +7,7 @@
 	import { IconButton } from '$lib/components/atoms/icon-button';
 	import { Input } from '$lib/components/atoms/input';
 
-	import { Menu, Moon, Search } from '@lucide/svelte';
+	import { Bell, Menu, Search } from '@lucide/svelte';
 
 	import { cn, getShortenName } from '@cugetreg/utils';
 
@@ -132,9 +132,14 @@
 		<!-- > -->
 		<!-- 	<GitHubMark class="h-8 w-8 text-neutral-500 " /> -->
 		<!-- </a> -->
-		<IconButton color="neutral" class="hidden md:flex">
-			<Moon strokeWidth="3" size="16" />
-		</IconButton>
+		<button
+			type="button"
+			class="rounded-button hover:text-primary-container hidden size-10 items-center justify-center text-black md:flex"
+			onclick={() => goto('/announcement')}
+			aria-label="ประกาศ"
+		>
+			<Bell strokeWidth="2.5" size="16" />
+		</button>
 		{#if isLoggedIn}
 			<Collapsible name={shortenedName}>
 				<UserDialog {name} {id} {imageUrl} {onSignOut} onSettings={() => goto('/profile')} />

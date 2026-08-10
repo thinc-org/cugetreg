@@ -173,12 +173,14 @@
       .then((response) => {
         const { sections } = CourseSectionsResponseSchema.parse(response.data);
         writeReviewSectionOptions = sections;
+
+        const match = /^\d+$/;
         if (
-          writeReviewSectionNo === null ||
-          !sections.includes(Number(writeReviewSectionNo))
+          writeReviewSectionNo !== null &&
+          (!match.test(writeReviewSectionNo) ||
+            !sections.includes(Number(writeReviewSectionNo)))
         ) {
-          writeReviewSectionNo =
-            sections.length > 0 ? String(sections[0]) : null;
+          writeReviewSectionNo = null;
         }
         return;
       })
@@ -1457,7 +1459,8 @@
                       <Select.Root
                         type="single"
                         value={writeReviewSectionNo ?? ''}
-                        onValueChange={(v) => (writeReviewSectionNo = v)}
+                        onValueChange={(v) =>
+                          (writeReviewSectionNo = v || null)}
                         disabled={writeReviewSectionOptions.length === 0}
                       >
                         <Select.Trigger
@@ -1465,10 +1468,11 @@
                         >
                           {writeReviewSectionNo
                             ? `เซค ${writeReviewSectionNo}`
-                            : 'ไม่มีเซค'}
+                            : 'ไม่ระบุ'}
                         </Select.Trigger>
                         <Select.Content role="listbox">
                           <Select.Group>
+                            <Select.Item value="" label="ไม่ระบุ" />
                             {#each writeReviewSectionOptions as sectionNo (sectionNo)}
                               <Select.Item
                                 value={String(sectionNo)}

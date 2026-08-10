@@ -50,7 +50,9 @@
 	{...rest}
 >
 	<!-- NOTE: Scaling on some resolution is kinda wonky -->
-	<span class="truncate text-[15cqh]">{course.code}</span>
+	<span class="max-w-full truncate text-left text-[15cqh]">{course.code}</span>
 	<span class="max-w-full truncate text-left text-[16cqh] font-medium">{courseName}</span>
-	<span class="truncate text-[15cqh]">{course.bldg} {course.room} | Sec {course.section}</span>
+	<span class="max-w-full truncate text-left text-[15cqh]"
+		>{course.bldg} {course.room} | Sec {course.section}</span
+	>
 </div>

@@ -98,7 +98,7 @@ matching_sections AS (
         AND ($5::text[] IS NULL OR ci.faculty::text = ANY($5::text[]))
 
         -- Grading type (optional)
-        AND ($7::grading_type IS NULL OR ci.grading_type = $7::grading_type)
+        AND ($7::grading_type[] IS NULL OR ci.grading_type = ANY($7::grading_type[]))
 
         -- Credit range (optional)
         AND ($17::numeric IS NULL OR ci.credit >= $17::numeric)

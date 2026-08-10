@@ -3,11 +3,11 @@
 	import { resolve } from '$app/paths';
 	import { page } from '$app/stores';
 	import { Button } from '$lib/components/atoms/button';
-	import { Collapsible } from '$lib/components/atoms/collapsible';
 	import { IconButton } from '$lib/components/atoms/icon-button';
 	import { Input } from '$lib/components/atoms/input';
+	import Popover from '$lib/components/atoms/popover/popover.svelte';
 
-	import { Menu, Moon, Search } from '@lucide/svelte';
+	import { Bell, Menu, Search } from '@lucide/svelte';
 
 	import { cn, getShortenName } from '@cugetreg/utils';
 
@@ -78,6 +78,16 @@
 	const toggleSideBar = () => {
 		openSideBar = !openSideBar;
 	};
+
+	let openPopover = $state(false);
+
+	function getOpen() {
+		return openPopover;
+	}
+
+	function setOpen(newOpen: boolean) {
+		openPopover = newOpen;
+	}
 </script>
 
 <div
@@ -132,13 +142,27 @@
 		<!-- > -->
 		<!-- 	<GitHubMark class="h-8 w-8 text-neutral-500 " /> -->
 		<!-- </a> -->
-		<IconButton color="neutral" class="hidden md:flex">
-			<Moon strokeWidth="3" size="16" />
-		</IconButton>
+		<button
+			type="button"
+			class="rounded-button hover:text-primary-container hidden size-10 items-center justify-center text-black md:flex"
+			onclick={() => goto('/announcement')}
+			aria-label="ประกาศ"
+		>
+			<Bell strokeWidth="2.5" size="16" />
+		</button>
 		{#if isLoggedIn}
-			<Collapsible name={shortenedName}>
-				<UserDialog {name} {id} {imageUrl} {onSignOut} onSettings={() => goto('/profile')} />
-			</Collapsible>
+			<Popover name={shortenedName} bind:open={openPopover}>
+				<UserDialog
+					{name}
+					{id}
+					{imageUrl}
+					{onSignOut}
+					onSettings={() => {
+						openPopover = false;
+						goto('/profile');
+					}}
+				/>
+			</Popover>
 		{:else}
 			<!-- To be implemented: add real href in Button -->
 			<Button class="w-24 md:w-28" onclick={onLogin}>

@@ -6,6 +6,7 @@
   import { useCartActions } from '$lib/stores/user-cart';
 
   import { Plus } from '@lucide/svelte';
+  import { untrack } from 'svelte';
 
   import { Modal } from '@cugetreg/ui/atoms/modal';
   import {
@@ -57,7 +58,7 @@
     ),
   );
 
-  let selectedId = $derived(matchingSchedules[0]?.id ?? '');
+  let selectedId = $derived(matchingSchedules.length > 0 ? matchingSchedules[0].id : '');
 
   let selectedLabel = $derived.by(() => {
     if (selectedId === '') return 'สร้างตารางเรียนใหม่...';

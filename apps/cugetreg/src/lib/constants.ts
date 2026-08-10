@@ -65,3 +65,6 @@ export const faculties: Record<string, { th: string; en: string }> = {
     en: 'FACULTY OF ENGINEERING AND FACULTY OF COMMERCE AND ACCOUNTANCY',
   },
 };
+
+export const GOOGLE_FORM_URL =
+  'https://docs.google.com/forms/d/e/1FAIpQLScH2AZyifTnBVXiJBtyzM73MReGX2vpM1_I9IWQfABMduVgsg/viewform?usp=dialog';

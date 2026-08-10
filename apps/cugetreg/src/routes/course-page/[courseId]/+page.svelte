@@ -176,12 +176,14 @@
       .then((response) => {
         const { sections } = CourseSectionsResponseSchema.parse(response.data);
         writeReviewSectionOptions = sections;
+
+        const match = /^\d+$/;
         if (
-          writeReviewSectionNo === null ||
-          !sections.includes(Number(writeReviewSectionNo))
+          writeReviewSectionNo !== null &&
+          (!match.test(writeReviewSectionNo) ||
+            !sections.includes(Number(writeReviewSectionNo)))
         ) {
-          writeReviewSectionNo =
-            sections.length > 0 ? String(sections[0]) : null;
+          writeReviewSectionNo = null;
         }
         return;
       })
@@ -1052,7 +1054,9 @@
                     คำอธิบายรายวิชา (ภาษาไทย)
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   {course.courseInfo.courseDescTh}
                 </p>
               </div>
@@ -1064,7 +1068,9 @@
                     คำอธิบายรายวิชา (ภาษาอังกฤษ)
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   {course.courseInfo.courseDescEn}
                 </p>
               </div>
@@ -1088,12 +1094,16 @@
                 </div>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   {course.courseInfo.courseDescTh}
                 </p>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   {course.courseInfo.courseDescEn}
                 </p>
               </div>
@@ -1108,7 +1118,9 @@
                     คณะ
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   {faculties[course.courseInfo.faculty ?? '']?.th ?? '-'}
                 </p>
               </div>
@@ -1120,7 +1132,9 @@
                     ภาควิชา/กลุ่มวิชา/สาขาวิชา
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   {course.courseInfo.department}
                 </p>
               </div>
@@ -1144,12 +1158,16 @@
                 </div>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   {faculties[course.courseInfo.faculty ?? '']?.th ?? '-'}
                 </p>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   {course.courseInfo.department}
                 </p>
               </div>
@@ -1164,7 +1182,9 @@
                     รูปแบบรายวิชา
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   {course.courseInfo.creditHours?.split(' ') ?? '-'}
                 </p>
               </div>
@@ -1176,7 +1196,9 @@
                     หน่วยกิต
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   {course.courseInfo.credit}
                 </p>
               </div>
@@ -1200,12 +1222,16 @@
                 </div>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   {course.courseInfo.creditHours?.split(' ') ?? '-'}
                 </p>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   {course.courseInfo.credit}
                 </p>
               </div>
@@ -1220,7 +1246,9 @@
                     เงื่อนไขรายวิชา
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   -
                 </p>
               </div>
@@ -1232,7 +1260,9 @@
                     วิธีการวัดผล
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   Letter Grade
                 </p>
               </div>
@@ -1256,12 +1286,16 @@
                 </div>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   -
                 </p>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   Letter Grade
                 </p>
               </div>
@@ -1276,7 +1310,9 @@
                     สอบกลางภาค
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   {midtermExam}
                 </p>
               </div>
@@ -1288,7 +1324,9 @@
                     สอบปลายภาค
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   {finalExam}
                 </p>
               </div>
@@ -1312,12 +1350,16 @@
                 </div>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   {midtermExam}
                 </p>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   {finalExam}
                 </p>
               </div>
@@ -1440,7 +1482,8 @@
                       <Select.Root
                         type="single"
                         value={writeReviewSectionNo ?? ''}
-                        onValueChange={(v) => (writeReviewSectionNo = v)}
+                        onValueChange={(v) =>
+                          (writeReviewSectionNo = v || null)}
                         disabled={writeReviewSectionOptions.length === 0}
                       >
                         <Select.Trigger
@@ -1448,10 +1491,11 @@
                         >
                           {writeReviewSectionNo
                             ? `เซค ${writeReviewSectionNo}`
-                            : 'ไม่มีเซค'}
+                            : 'ไม่ระบุ'}
                         </Select.Trigger>
                         <Select.Content role="listbox">
                           <Select.Group>
+                            <Select.Item value="" label="ไม่ระบุ" />
                             {#each writeReviewSectionOptions as sectionNo (sectionNo)}
                               <Select.Item
                                 value={String(sectionNo)}

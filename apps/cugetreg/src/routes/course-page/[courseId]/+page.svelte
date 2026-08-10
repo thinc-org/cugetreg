@@ -15,6 +15,7 @@
     ALLOWED_SEMESTER,
     SEMESTER_LABEL_LONG,
   } from '$lib/semesterOptions';
+  import { getCartSelectionController } from '$lib/stores/cart-selection.svelte';
   import { loginPopupState } from '$lib/stores/login-popup.svelte';
   import { getUserCartStore, useCartActions } from '$lib/stores/user-cart';
 
@@ -118,7 +119,9 @@
   );
 
   const userCart = getUserCartStore();
-  const { addCourse, removeCourse, updateCourse } = useCartActions();
+  const cartSelection = getCartSelectionController();
+  const { addCourse, removeCourse, updateCourse, updateCourseImmediately } =
+    useCartActions();
 
   const years = [...ALLOWED_ACADEMIC_YEAR].reverse().map(String);
   const terms = ALLOWED_SEMESTER.map((s) => SEMESTER_LABEL_LONG[s]);
@@ -748,13 +751,30 @@
     globalSelectedSection = globalSelectedSection === section ? null : section;
   }
 
-  function handlePopupConfirm(scheduleId: string) {
-    $userCart.currentCartId = scheduleId;
-    if (pendingSection) {
-      globalSelectedSection = pendingSection;
+  async function handlePopupConfirm(scheduleId: string): Promise<boolean> {
+    const cart = await cartSelection.select(scheduleId);
+    if (!cart) return false;
+
+    if (!pendingSection) return false;
+
+    const sectionNo = Number(pendingSection);
+    const currentItem = cart.items.find(
+      (item) => item.courseNo === course.courseNo,
+    );
+
+    if (currentItem) {
+      const updated = await updateCourseImmediately(currentItem.id, {
+        sectionNo,
+      });
+      if (!updated) return false;
+    } else {
+      const itemId = await addCourse(course.courseNo, sectionNo);
+      if (!itemId) return false;
     }
-    showMismatchPopup = false;
+
+    globalSelectedSection = pendingSection;
     pendingSection = null;
+    return true;
   }
 </script>
 
@@ -859,7 +879,10 @@
                 name: item.name,
                 id: item.id,
               })) ?? []}
-              bind:value={$userCart.currentCartId}
+              bind:value={
+                () => cartSelection.selectedId,
+                (id) => void cartSelection.select(id)
+              }
               semester={$userCart.currentCart.semester}
               semesterType={$userCart.currentCart.studyProgram}
               academicYear={$userCart.currentCart.academicYear}
@@ -1398,7 +1421,7 @@
               schedules={$userCart.cartList ?? []}
               expectedYear={String(course.academicYear)}
               expectedProgram={course.studyProgram}
-              bind:currentScheduleId={$userCart.currentCartId}
+              currentScheduleId={cartSelection.selectedId}
               expectedSemester={course.semester}
               onConfirm={handlePopupConfirm}
               onClose={() => (showMismatchPopup = false)}

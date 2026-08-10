@@ -114,12 +114,64 @@ const DEBOUNCE_TIME_MS = 1000;
 
 let debounceHandle: ReturnType<typeof setTimeout> | null = null;
 let isFlushing = false;
+let activeCartSelection: Promise<void> | null = null;
+let activeCartMutations = 0;
+let cartMutationsIdle: Promise<void> = Promise.resolve();
+let resolveCartMutationsIdle: (() => void) | null = null;
 
 /**
  * Tracks the in-flight flush promise so that flushCartImmediately callers
  * can await the currently-running flush before proceeding.
  */
 let flushPromise: Promise<void> | null = null;
+
+export async function beginCartSelection(): Promise<() => void> {
+  while (activeCartMutations > 0) {
+    await cartMutationsIdle;
+  }
+
+  let resolveSelection: () => void;
+  const selection = new Promise<void>((resolve) => {
+    resolveSelection = resolve;
+  });
+  activeCartSelection = selection;
+
+  return () => {
+    resolveSelection();
+    if (activeCartSelection === selection) activeCartSelection = null;
+  };
+}
+
+async function waitForCartSelection(): Promise<void> {
+  while (activeCartSelection) {
+    await activeCartSelection;
+  }
+}
+
+async function runCartMutation<T>(mutation: () => T | Promise<T>) {
+  while (true) {
+    await waitForCartSelection();
+    if (activeCartSelection) continue;
+
+    if (activeCartMutations === 0) {
+      cartMutationsIdle = new Promise<void>((resolve) => {
+        resolveCartMutationsIdle = resolve;
+      });
+    }
+    activeCartMutations += 1;
+    break;
+  }
+
+  try {
+    return await mutation();
+  } finally {
+    activeCartMutations -= 1;
+    if (activeCartMutations === 0) {
+      resolveCartMutationsIdle?.();
+      resolveCartMutationsIdle = null;
+    }
+  }
+}
 
 /**
  * Flush all accumulated pending updates to the API.
@@ -237,6 +289,7 @@ export function useCartActions() {
   cachedStore = userCart;
 
   const pinCart = async () => {
+    await waitForCartSelection();
     const snapshot = get(userCart);
     if (!snapshot) return;
 
@@ -260,7 +313,8 @@ export function useCartActions() {
   /**
    * Rename the current timetable optimistically and schedule an API sync.
    */
-  const renameCart = (name: string) => {
+  const renameCart = async (name: string) => {
+    await waitForCartSelection();
     console.log(`renaming to ${name}`);
     userCart.update((state) => ({
       ...state,
@@ -279,7 +333,8 @@ export function useCartActions() {
    * Update arbitrary cart-level metadata fields optimistically and schedule
    * an API sync.  Useful for toggling visibility, changing order, etc.
    */
-  const updateCartMeta = (fields: UpdateCartFields) => {
+  const updateCartMeta = async (fields: UpdateCartFields) => {
+    await waitForCartSelection();
     userCart.update((state) => {
       let result = {
         ...state,
@@ -317,6 +372,7 @@ export function useCartActions() {
    * @param sectionNo - The section number
    */
   const addCourse = async (courseNo: string, sectionNo: number) => {
+    await waitForCartSelection();
     // Flush any pending optimistic mutations (rename, color change, etc.)
     // so the server state matches local state before the destructive GET.
     await flushCartImmediately();
@@ -365,6 +421,7 @@ export function useCartActions() {
    * @param itemId - The cart item's database id
    */
   const removeCourse = async (itemId: string) => {
+    await waitForCartSelection();
     // Flush any pending optimistic mutations first.
     await flushCartImmediately();
 
@@ -405,7 +462,8 @@ export function useCartActions() {
    * @param itemId - The cart item's database id (CartData.items[n].id)
    * @param fields - Partial set of fields to update
    */
-  const updateCourse = (itemId: string, fields: UpdateCourseFields) => {
+  const updateCourse = async (itemId: string, fields: UpdateCourseFields) => {
+    await waitForCartSelection();
     userCart.update((state) => {
       // 1. Apply field updates
       const items: CartData['items'] = state.currentCart.items.map((item) =>
@@ -440,7 +498,35 @@ export function useCartActions() {
     scheduleFlush();
   };
 
+  const updateCourseImmediately = async (
+    itemId: string,
+    fields: UpdateCourseFields,
+  ): Promise<boolean> => {
+    await waitForCartSelection();
+    await flushCartImmediately();
+
+    try {
+      await api.patch(`/carts/items/${itemId}`, fields);
+      userCart.update((state) => ({
+        ...state,
+        currentCart: {
+          ...state.currentCart,
+          items: state.currentCart.items.map((item) =>
+            item.id === itemId
+              ? ({ ...item, ...fields } as CartData['items'][0])
+              : item,
+          ),
+        },
+      }));
+      return true;
+    } catch (error) {
+      handleError(error);
+      return false;
+    }
+  };
+
   const copyCart = async (): Promise<string> => {
+    await waitForCartSelection();
     const snapshot = get(userCart);
     if (!snapshot) return '';
     const { currentCartId, currentCart } = snapshot;
@@ -483,6 +569,7 @@ export function useCartActions() {
     semester: Semester,
     academicYear: number,
   ) => {
+    await waitForCartSelection();
     const [response, error] = await tryCatch(
       api.post('/carts', {
         academicYear,
@@ -531,6 +618,7 @@ export function useCartActions() {
   };
 
   const deleteCart = async (cartId?: string): Promise<boolean> => {
+    await waitForCartSelection();
     const snapshot = get(userCart);
     if (!snapshot) return false;
     const { currentCartId, currentCart } = snapshot;
@@ -648,23 +736,8 @@ export function useCartActions() {
     }
   };
 
-  const switchCart = async (cartId: string) => {
-    try {
-      const detailRes = await api.get(`/carts/${cartId}`);
-      const detail = CartDetailResponseSchema.parse(detailRes.data).data;
-
-      userCart.update((state) => ({
-        ...state,
-        currentCartId: cartId,
-        currentCart: detail.cart,
-        exams: detail.schedule.exams,
-      }));
-    } catch (error) {
-      handleError(error);
-    }
-  };
-
   const importCart = async (cartDetail: PublicCartDetail) => {
+    await waitForCartSelection();
     const cart = cartDetail.cart;
     const exams = cartDetail.schedule.exams;
     const res = await api.post(`/public/carts/${cart.id}/import`, {
@@ -704,6 +777,7 @@ export function useCartActions() {
     cartId: string,
     visible: Visible,
   ): Promise<boolean> => {
+    await waitForCartSelection();
     try {
       await api.patch(`/carts/${cartId}`, { visible });
 
@@ -725,17 +799,33 @@ export function useCartActions() {
   };
 
   return {
-    renameCart,
-    updateCartMeta,
-    updateCourse,
-    addCourse,
-    removeCourse,
-    copyCart,
-    deleteCart,
-    createCart,
-    pinCart,
-    switchCart,
-    importCart,
-    changeCartVisibility,
+    renameCart: (name: string) => runCartMutation(() => renameCart(name)),
+    updateCartMeta: (fields: UpdateCartFields) =>
+      runCartMutation(() => updateCartMeta(fields)),
+    updateCourse: (itemId: string, fields: UpdateCourseFields) =>
+      runCartMutation(() => updateCourse(itemId, fields)),
+    updateCourseImmediately: (itemId: string, fields: UpdateCourseFields) =>
+      runCartMutation(() => updateCourseImmediately(itemId, fields)),
+    addCourse: (courseNo: string, sectionNo: number) =>
+      runCartMutation(() => addCourse(courseNo, sectionNo)),
+    removeCourse: (itemId: string) =>
+      runCartMutation(() => removeCourse(itemId)),
+    copyCart: () => runCartMutation(copyCart),
+    deleteCart: (cartId?: string) => runCartMutation(() => deleteCart(cartId)),
+    createCart: (
+      name: string,
+      isPublic: boolean,
+      studyProgram: StudyProgram,
+      semester: Semester,
+      academicYear: number,
+    ) =>
+      runCartMutation(() =>
+        createCart(name, isPublic, studyProgram, semester, academicYear),
+      ),
+    pinCart: () => runCartMutation(pinCart),
+    importCart: (cartDetail: PublicCartDetail) =>
+      runCartMutation(() => importCart(cartDetail)),
+    changeCartVisibility: (cartId: string, visible: Visible) =>
+      runCartMutation(() => changeCartVisibility(cartId, visible)),
   };
 }

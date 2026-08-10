@@ -1,12 +1,5 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
-  import { page } from '$app/state';
-  import { env } from '$env/dynamic/public';
-  import { homeStore } from '$lib/homeStore.svelte';
-
-  import { SvelteURL } from 'svelte/reactivity';
-
-  const PUBLIC_API_URL = env.PUBLIC_API_URL ?? 'http://localhost:3000/api/v1';
   import { resolve } from '$app/paths';
   import { api } from '$lib/api';
   import { tryCatch } from '$lib/async-handler';
@@ -14,10 +7,12 @@
   import AppSidebar from '$lib/components/app-sidebar.svelte';
   import ScheduleMismatchPopup from '$lib/components/schedule-mismatch-popup.svelte';
   import SelectedCourse from '$lib/components/selected-course.svelte';
+  import { CourseResults } from '$lib/home/course-results.svelte';
+  import { createHomeUrlSync } from '$lib/home/home-url-sync.svelte';
+  import { infiniteScroll } from '$lib/home/infinite-scroll';
   import {
     normalizeDayMapper,
     normalizeGenedMapper,
-    semesterToTermMapper,
     sortByMapper,
     studyProgramMapper,
   } from '$lib/mapper';
@@ -26,6 +21,7 @@
     SEMESTER_LABEL_LONG,
     SEMESTER_LABEL_SHORT,
   } from '$lib/semesterOptions';
+  import { getCartSelectionController } from '$lib/stores/cart-selection.svelte';
   import { loginPopupState } from '$lib/stores/login-popup.svelte';
   import { searchState } from '$lib/stores/search.svelte';
   import {
@@ -46,9 +42,9 @@
     X,
   } from '@lucide/svelte';
   import { isAxiosError } from 'axios';
-  import { getContext, untrack } from 'svelte';
+  import { getContext, onDestroy } from 'svelte';
   import { cubicOut } from 'svelte/easing';
-  import { SvelteURLSearchParams } from 'svelte/reactivity';
+  import { MediaQuery } from 'svelte/reactivity';
   import { fade, slide } from 'svelte/transition';
   import toast from 'svelte-french-toast';
 
@@ -70,31 +66,12 @@
 
   const semesterOptions = getSemesterDisplayOptions();
 
-  let courses = $state.raw<any[]>([]);
-  let isLoading = $state(false);
-  let hasMore = $state(true);
-  let totalResults = $state(0);
-  let offset = $state(0);
-  const limit = 20;
-
   let sidebarExpanded = $state(true);
   let openPanel = $state<string | null>(null);
   let activePanel = $state<string | null>(null);
-  let isMobile = $state(false);
+  const mobileMedia = new MediaQuery('max-width: 767px', false);
+  const isMobile = $derived(mobileMedia.current);
 
-  $effect(() => {
-    const mq = window.matchMedia('(max-width: 767px)');
-    isMobile = mq.matches;
-    const handler = (e: MediaQueryListEvent) => (isMobile = e.matches);
-    mq.addEventListener('change', handler);
-    return () => mq.removeEventListener('change', handler);
-  });
-
-  // let searchQuery = $state('');
-  // let debouncedSearchQuery = $state('');
-  // let searchTimeout: ReturnType<typeof setTimeout> | undefined;
-  //
-  // let isScheduleDropdownOpen = $state(false);
   let isFilterOpen = $state(true);
   let isSelectedOpen = $state(true);
   let activeModal = $state<'filter' | 'selected' | null>(null);
@@ -114,35 +91,35 @@
   let currentSort = $state<SortBy>('NAME');
   let sortDirection = $state<'asc' | 'desc'>('asc');
 
-  $effect(() => {
-    untrack(() => {
-      const params = page.url.searchParams;
-
-      selectedGenEds =
-        params.get('genEdType')?.split(',').filter(Boolean) ?? [];
-      // selectedSpecial = params.get('special')?.split(',').filter(Boolean) ?? [];
-      selectedFaculties =
-        params.get('faculty')?.split(',').filter(Boolean) ?? [];
-      selectedDays = params.get('day')?.split(',').filter(Boolean) ?? [];
-      selectedEval =
-        params.get('gradingType')?.split(',').filter(Boolean) ?? [];
-
-      startTime = params.get('timeStart') ?? '';
-      endTime = params.get('timeEnd') ?? '';
-      fitSchedule = params.get('fitSchedule') === 'true';
-      noConditions = params.get('noConditions') === 'true';
-      favoriteOnly = params.get('favorite') === 'true';
-      currentProgram = (page.params.program ?? 'S') as StudyProgram;
-
-      const termParam = params.get('term');
-      if (termParam) {
-        const [year, sem] = termParam.split('/');
-        currentAY = Number(year) || 2568;
-        if (sem === '3') currentSemester = 'SUMMER';
-        else if (sem === '2') currentSemester = 'SECOND';
-        else currentSemester = 'FIRST';
-      }
-    });
+  createHomeUrlSync({
+    read: () => ({
+      selectedGenEds,
+      selectedFaculties,
+      selectedDays,
+      selectedEval,
+      startTime,
+      endTime,
+      fitSchedule,
+      noConditions,
+      favoriteOnly,
+      currentProgram,
+      currentSemester,
+      currentAY,
+    }),
+    apply: (state) => {
+      selectedGenEds = state.selectedGenEds;
+      selectedFaculties = state.selectedFaculties;
+      selectedDays = state.selectedDays;
+      selectedEval = state.selectedEval;
+      startTime = state.startTime;
+      endTime = state.endTime;
+      fitSchedule = state.fitSchedule;
+      noConditions = state.noConditions;
+      favoriteOnly = state.favoriteOnly;
+      currentProgram = state.currentProgram;
+      currentSemester = state.currentSemester;
+      currentAY = state.currentAY;
+    },
   });
 
   const mobileSortOptions = [
@@ -165,8 +142,6 @@
     sortDirection = dir;
   }
 
-  let bottomSentinel = $state<HTMLElement | null>(null);
-
   let showMismatchPopup = $state(false);
   let pendingCourse = $state<{ courseNo: string; sectionNo: number } | null>(
     null,
@@ -175,8 +150,16 @@
 
   const session = useSession();
   const isLoggedIn = $derived(Boolean($session.data));
-
-  const KNOWN_DAYS = new Set(['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU']);
+  const userCart = getUserCartStore();
+  const cartSelection = getCartSelectionController();
+  const cartPromise = getContext<CartPromise>(CART_PROMISE_KEY);
+  const { addCourse, removeCourse, updateCourse } = useCartActions();
+  const stopCartSelectionSync = cartSelection.onSelected((cart) => {
+    currentProgram = cart.studyProgram as StudyProgram;
+    currentAY = cart.academicYear;
+    currentSemester = cart.semester as Semester;
+  });
+  onDestroy(stopCartSelectionSync);
 
   const floatingOptions = [
     {
@@ -234,162 +217,44 @@
     };
   }
 
-  async function fetchCourses(reset = true) {
-    if (reset) {
-      offset = 0;
-      courses = [];
-      hasMore = true;
-    }
-
-    if (!hasMore || isLoading) return;
-
-    isLoading = true;
-    try {
-      const params = new SvelteURLSearchParams({
-        academicYear: String(currentAY),
-        semester: currentSemester as string,
-        studyProgram: currentProgram,
-        limit: limit.toString(),
-        offset: offset.toString(),
-        sortOrder: sortDirection,
-      });
-
-      if (searchState.debounced.trim()) {
-        params.append('q', searchState.debounced.trim());
-      }
-
-      if (currentSort) {
-        params.append('sortBy', currentSort);
-      }
-
-      if (noConditions) {
-        params.append('noPrereq', String(noConditions));
-      }
-
-      if (selectedGenEds.length > 0) {
-        selectedGenEds.forEach((genEd) => {
-          params.append('genEdTypes', genEd);
-        });
-      }
-      if (selectedFaculties.length > 0) {
-        selectedFaculties.forEach((faculty) => {
-          params.append('faculties', faculty);
-        });
-      }
-      if (selectedDays.length > 0) {
-        selectedDays.forEach((day) => {
-          params.append('days', day);
-        });
-      }
-
-      if (selectedEval.length > 0) {
-        selectedEval.forEach((evaluation) => {
-          params.append('assessment', evaluation);
-        });
-      }
-
-      if (startTime) params.append('timeStart', startTime);
-      if (endTime) params.append('timeEnd', endTime);
-
-      if (fitSchedule) {
-        if ($userCart.currentCartId) {
-          params.append('fitCartId', $userCart.currentCartId);
-        }
-      }
-
-      if (favoriteOnly && $session.data) {
-        params.append('favorite', 'true');
-      }
-
-      const response = await api.get(`/courses?${params.toString()}`);
-
-      const data = response.data.data || [];
-      totalResults = response.data.total || 0;
-
-      const mapped = data.map(mapCourse);
-
-      if (reset) {
-        courses = mapped;
-      } else {
-        // Deduplicate by course code to prevent key collisions
-        const existingCodes = new Set(courses.map((c) => c.course.code));
-        const newUniqueItems = mapped.filter(
-          (item: any) => !existingCodes.has(item.course.code),
-        );
-        courses = [...courses, ...newUniqueItems];
-      }
-
-      offset += limit;
-      if (data.length < limit) {
-        hasMore = false;
-      }
-    } catch (err) {
-      console.error('Error fetching courses:', err);
-      if (reset) courses = [];
-    } finally {
-      isLoading = false;
-    }
-  }
-
-  $effect(() => {
-    // Search & Filter changes (Reset offset and clear list)
-    currentSemester;
-    currentProgram;
-    currentAY;
-    untrack(() => fetchCourses(true));
+  const courseResults = new CourseResults({
+    mapCourse,
+    getKey: (item) => item.course.code,
   });
+  const courses = $derived(courseResults.courses);
+  const isLoading = $derived(courseResults.isLoading);
+  const hasMore = $derived(courseResults.hasMore);
+  const totalResults = $derived(courseResults.totalResults);
+  const infiniteScrollOptions = {
+    onIntersect: () => courseResults.loadMore(),
+  };
 
   $effect(() => {
-    // Search & Filter changes (Reset offset and clear list)
-    searchState.debounced;
-    selectedGenEds;
-    selectedFaculties;
-    selectedDays;
-    selectedEval;
-    startTime;
-    endTime;
-    noConditions;
-    favoriteOnly;
-    isLoggedIn;
-    currentSort;
-    sortDirection;
-    fitSchedule;
-    if (fitSchedule && untrack(() => $userCart.currentCartId)) {
-      $userCart.currentCart;
-    }
-    untrack(() => fetchCourses(true));
-  });
+    const fitCartId = fitSchedule ? $userCart.currentCartId : undefined;
+    if (fitCartId) $userCart.currentCart;
 
-  $effect(() => {
-    $userCart.currentCart;
-    untrack(() => {
-      if (!$userCart.currentCartId) return;
-      currentProgram = $userCart.currentCart.studyProgram as StudyProgram;
-      currentAY = $userCart.currentCart.academicYear;
-      currentSemester = $userCart.currentCart.semester as Semester;
+    courseResults.reset({
+      academicYear: currentAY,
+      semester: currentSemester,
+      studyProgram: currentProgram,
+      search: searchState.debounced.trim(),
+      sortBy: currentSort,
+      sortOrder: sortDirection,
+      noPrereq: noConditions,
+      genEdTypes: [...selectedGenEds],
+      faculties: [...selectedFaculties],
+      days: [...selectedDays],
+      assessment: selectedEval[0],
+      timeStart: startTime || undefined,
+      timeEnd: endTime || undefined,
+      fitCartId,
+      favorite: favoriteOnly && isLoggedIn,
     });
   });
 
-  $effect(() => {
-    if (!bottomSentinel) return;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && hasMore && !isLoading) {
-          untrack(() => fetchCourses(false));
-        }
-      },
-      { rootMargin: '400px' },
-    );
-
-    observer.observe(bottomSentinel);
-    return () => observer.disconnect();
-  });
+  onDestroy(() => courseResults.destroy());
 
   const studyProgramLabel = $derived(studyProgramMapper(currentProgram));
-
-  const userCart = getUserCartStore();
-  const cartPromise = getContext<CartPromise>(CART_PROMISE_KEY);
-  const { addCourse, removeCourse, updateCourse } = useCartActions();
 
   // --- Left-rail icon interaction model ---
   function openFull() {
@@ -400,68 +265,13 @@
   }
 
   $effect(() => {
-    if (page.url.search === '' && homeStore.currentUrl) {
-      goto(homeStore.currentUrl, { replaceState: true, noScroll: true });
-    }
-  });
-
-  $effect(() => {
-    const prog = currentProgram;
-    const ay = currentAY;
-    const sem = currentSemester;
-    const gEds = selectedGenEds;
-    // const specials = selectedSpecial;
-    const facs = selectedFaculties;
-    const days = selectedDays;
-    const start = startTime;
-    const end = endTime;
-    const evals = selectedEval;
-    const fit = fitSchedule;
-    const noCond = noConditions;
-    const fav = favoriteOnly;
-
-    untrack(() => {
-      const currentUrl = new SvelteURL(page.url);
-      currentUrl.pathname = `/${prog}/courses`;
-      const termQuery = `${ay}/${semesterToTermMapper(sem)}`;
-      const queryParams = {
-        term: termQuery,
-        genEdType: gEds.length ? gEds.join(',') : null,
-        // special: specials.length ? specials.join(',') : null,
-        faculty: facs.length ? facs.join(',') : null,
-        day: days.length ? days.join(',') : null,
-        timeStart: start || null,
-        timeEnd: end || null,
-        gradingType: evals.length ? evals.join(',') : null,
-        fitSchedule: fit ? 'true' : null,
-        noConditions: noCond ? 'true' : null,
-        favorite: fav ? 'true' : null,
-      };
-
-      for (const [key, value] of Object.entries(queryParams)) {
-        if (value) currentUrl.searchParams.set(key, value);
-        else currentUrl.searchParams.delete(key);
-      }
-
-      if (page.url.toString() !== currentUrl.toString()) {
-        goto(currentUrl.toString(), {
-          replaceState: true,
-          keepFocus: true,
-          noScroll: true,
-        });
-      }
-    });
-    homeStore.currentUrl = page.url.toString();
-  });
-
-  $effect(() => {
     if (!favoriteOnly || $session.isPending || $session.data) return;
     favoriteOnly = false;
     loginPopupState.show = true;
   });
 
   function setFavorite(courseCode: string, isFavorite: boolean) {
-    courses = courses.map((item) =>
+    courseResults.courses = courseResults.courses.map((item) =>
       item.course.code === courseCode
         ? { ...item, course: { ...item.course, isFavorite } }
         : item,
@@ -497,10 +307,6 @@
     });
   }
 
-  function scrollToSection(el: HTMLElement | undefined) {
-    if (!el) return;
-    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
   function toggleSidebar() {
     if (sidebarExpanded) {
       sidebarExpanded = false;
@@ -628,13 +434,26 @@
     }
   }
 
-  function handleScheduleChange(scheduleId: string) {
+  async function handleCartSelection(scheduleId: string) {
+    await cartSelection.select(scheduleId);
+  }
+
+  async function handleScheduleChange(scheduleId: string): Promise<boolean> {
+    const course = pendingCourse;
+    if (!course) return false;
+
     try {
-      $userCart.currentCartId = scheduleId;
-      addCourse(pendingCourse!.courseNo, pendingCourse!.sectionNo);
-      showMismatchPopup = false;
+      const cart = await cartSelection.select(scheduleId);
+      if (!cart) return false;
+
+      const itemId = await addCourse(course.courseNo, course.sectionNo);
+      if (!itemId) return false;
+
+      pendingCourse = null;
+      return true;
     } catch (error) {
       console.error('Failed to change schedule and add course:', error);
+      return false;
     }
   }
 
@@ -651,9 +470,6 @@
     );
     return entry ? String(entry.sectionNo) : '';
   }
-
-  let filteredCourses = $derived(courses);
-  let displayedCourses = $derived(courses);
 
   function onSearchFilter() {
     if (openPanel === 'filter_only') openPanel = null;
@@ -740,7 +556,10 @@
                   name: item.name,
                   id: item.id,
                 })) ?? []}
-                bind:value={$userCart.currentCartId}
+                bind:value={
+                  () => cartSelection.selectedId,
+                  (id) => void handleCartSelection(id)
+                }
                 semester={$userCart.currentCart.semester}
                 semesterType={$userCart.currentCart.studyProgram}
                 academicYear={$userCart.currentCart.academicYear}
@@ -994,7 +813,7 @@
           </div>
 
           <div class="grid grid-cols-1 gap-x-5 gap-y-6 pb-10 md:grid-cols-2">
-            {#if filteredCourses.length === 0 && !isLoading}
+            {#if courses.length === 0 && !isLoading}
               <div
                 class="col-span-full flex flex-col items-center justify-center gap-2 py-24 text-center"
               >
@@ -1020,7 +839,7 @@
                 academicYear: String(currentAY),
                 semester: currentSemester,
               })}
-              {#each displayedCourses as item (item.course.code)}
+              {#each courses as item (item.course.code)}
                 <CourseCard
                   course={item.course}
                   recommended={item.recommended}
@@ -1040,7 +859,7 @@
 
               {#if hasMore && !isLoading}
                 <div
-                  bind:this={bottomSentinel}
+                  use:infiniteScroll={infiniteScrollOptions}
                   class="col-span-full flex h-24 items-center justify-center opacity-50"
                 >
                   <Loader2 class="animate-spin text-gray-400" size={24} />
@@ -1063,7 +882,7 @@
             schedules={$userCart.cartList ?? []}
             expectedYear={currentAY}
             expectedProgram={currentProgram}
-            bind:currentScheduleId={$userCart.currentCartId}
+            currentScheduleId={cartSelection.selectedId}
             expectedSemester={currentSemester}
             onConfirm={handleScheduleChange}
             onClose={() => (showMismatchPopup = false)}

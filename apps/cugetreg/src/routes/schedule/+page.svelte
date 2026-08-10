@@ -9,6 +9,7 @@
     getSemesterShortOptions,
     getYearOptions,
   } from '$lib/semesterOptions';
+  import { getCartSelectionController } from '$lib/stores/cart-selection.svelte';
   import {
     CART_PROMISE_KEY,
     type CartPromise,
@@ -61,11 +62,11 @@
     pinCart,
     updateCourse,
     removeCourse,
-    switchCart,
     updateCartMeta,
   } = useCartActions();
 
   const cartPromise = getContext<CartPromise>(CART_PROMISE_KEY);
+  const cartSelection = getCartSelectionController();
   const session = useSession();
 
   // ================ STATES ================
@@ -87,8 +88,6 @@
   let activePanel = $state<'sidebar' | 'selected_only' | null>(null);
   let selectedOpen = $state(true);
   let activeModal = $state<'selected' | null>(null);
-
-  let previousCartId = $state($userCart.currentCartId);
 
   // ================ DERIVED ================
 
@@ -117,13 +116,6 @@
   const scheduleEndTime = $derived(
     getLatestTime($userCart.currentCart.items, TIMETABLE_DEFAULT_END),
   );
-
-  $effect(() => {
-    if ($userCart.currentCartId && $userCart.currentCartId !== previousCartId) {
-      previousCartId = $userCart.currentCartId;
-      switchCart($userCart.currentCartId);
-    }
-  });
 
   function handleTimetableScreenshot() {
     createElementScreenshot(
@@ -306,7 +298,10 @@
                   name: item.name,
                   id: item.id,
                 })) ?? []}
-                bind:value={$userCart.currentCartId}
+                bind:value={
+                  () => cartSelection.selectedId,
+                  (id) => void cartSelection.select(id)
+                }
                 semester={$userCart.currentCart.semester}
                 semesterType={$userCart.currentCart.studyProgram}
                 academicYear={$userCart.currentCart.academicYear}
@@ -370,7 +365,10 @@
             <div class="flex w-full items-center lg:w-auto">
               <EditSchedule
                 class="gap-2 lg:gap-0"
-                bind:currentScheduleId={$userCart.currentCartId}
+                bind:currentScheduleId={
+                  () => cartSelection.selectedId,
+                  (id) => void cartSelection.select(id)
+                }
                 schedules={$userCart.cartList?.map((item) => ({
                   name: item.name,
                   id: item.id,

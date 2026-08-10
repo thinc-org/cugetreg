@@ -3,9 +3,9 @@
 	import { resolve } from '$app/paths';
 	import { page } from '$app/stores';
 	import { Button } from '$lib/components/atoms/button';
-	import { Collapsible } from '$lib/components/atoms/collapsible';
 	import { IconButton } from '$lib/components/atoms/icon-button';
 	import { Input } from '$lib/components/atoms/input';
+	import Popover from '$lib/components/atoms/popover/popover.svelte';
 
 	import { Bell, Menu, Search } from '@lucide/svelte';
 
@@ -78,6 +78,16 @@
 	const toggleSideBar = () => {
 		openSideBar = !openSideBar;
 	};
+
+	let openPopover = $state(false);
+
+	function getOpen() {
+		return openPopover;
+	}
+
+	function setOpen(newOpen: boolean) {
+		openPopover = newOpen;
+	}
 </script>
 
 <div
@@ -141,9 +151,18 @@
 			<Bell strokeWidth="2.5" size="16" />
 		</button>
 		{#if isLoggedIn}
-			<Collapsible name={shortenedName}>
-				<UserDialog {name} {id} {imageUrl} {onSignOut} onSettings={() => goto('/profile')} />
-			</Collapsible>
+			<Popover name={shortenedName} bind:open={openPopover}>
+				<UserDialog
+					{name}
+					{id}
+					{imageUrl}
+					{onSignOut}
+					onSettings={() => {
+						openPopover = false;
+						goto('/profile');
+					}}
+				/>
+			</Popover>
 		{:else}
 			<!-- To be implemented: add real href in Button -->
 			<Button class="w-24 md:w-28" onclick={onLogin}>

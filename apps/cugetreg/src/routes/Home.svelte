@@ -281,9 +281,13 @@
           params.append('days', day);
         });
       }
+
       if (selectedEval.length > 0) {
-        params.append('assessment', selectedEval[0]);
+        selectedEval.forEach((evaluation) => {
+          params.append('assessment', evaluation);
+        });
       }
+
       if (startTime) params.append('timeStart', startTime);
       if (endTime) params.append('timeEnd', endTime);
 

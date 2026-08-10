@@ -1029,7 +1029,9 @@
                     คำอธิบายรายวิชา (ภาษาไทย)
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   {course.courseInfo.courseDescTh}
                 </p>
               </div>
@@ -1041,7 +1043,9 @@
                     คำอธิบายรายวิชา (ภาษาอังกฤษ)
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   {course.courseInfo.courseDescEn}
                 </p>
               </div>
@@ -1065,12 +1069,16 @@
                 </div>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   {course.courseInfo.courseDescTh}
                 </p>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   {course.courseInfo.courseDescEn}
                 </p>
               </div>
@@ -1085,7 +1093,9 @@
                     คณะ
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   {faculties[course.courseInfo.faculty ?? '']?.th ?? '-'}
                 </p>
               </div>
@@ -1097,7 +1107,9 @@
                     ภาควิชา/กลุ่มวิชา/สาขาวิชา
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   {course.courseInfo.department}
                 </p>
               </div>
@@ -1121,12 +1133,16 @@
                 </div>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   {faculties[course.courseInfo.faculty ?? '']?.th ?? '-'}
                 </p>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   {course.courseInfo.department}
                 </p>
               </div>
@@ -1141,7 +1157,9 @@
                     รูปแบบรายวิชา
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   {course.courseInfo.creditHours?.split(' ') ?? '-'}
                 </p>
               </div>
@@ -1153,7 +1171,9 @@
                     หน่วยกิต
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   {course.courseInfo.credit}
                 </p>
               </div>
@@ -1177,12 +1197,16 @@
                 </div>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   {course.courseInfo.creditHours?.split(' ') ?? '-'}
                 </p>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   {course.courseInfo.credit}
                 </p>
               </div>
@@ -1197,7 +1221,9 @@
                     เงื่อนไขรายวิชา
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   -
                 </p>
               </div>
@@ -1209,7 +1235,9 @@
                     วิธีการวัดผล
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   Letter Grade
                 </p>
               </div>
@@ -1233,12 +1261,16 @@
                 </div>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   -
                 </p>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   Letter Grade
                 </p>
               </div>
@@ -1253,7 +1285,9 @@
                     สอบกลางภาค
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   {midtermExam}
                 </p>
               </div>
@@ -1265,7 +1299,9 @@
                     สอบปลายภาค
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   {finalExam}
                 </p>
               </div>
@@ -1289,12 +1325,16 @@
                 </div>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   {midtermExam}
                 </p>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   {finalExam}
                 </p>
               </div>

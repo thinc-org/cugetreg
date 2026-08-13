@@ -71,6 +71,7 @@
   } from '@cugetreg/zod-schemas';
 
   import type { PageProps } from './$types';
+  import { UNKNOWN_FACULTY } from '@cugetreg/utils/faculty';
 
   const { data }: PageProps = $props();
   type ReviewPageData = typeof data & {
@@ -1713,9 +1714,11 @@
             {:else}
               <div class="mt-6 flex flex-col gap-6">
                 {#each reviews as review (review.id)}
-                  {@const faculty = review.user.faculty ?? ''}
+                  {@const faculty = review.user.faculty
+                    ? faculties[review.user.faculty]
+                    : UNKNOWN_FACULTY}
                   {@const department = review.user.department ?? ''}
-                  {@const affiliation = `${faculty} ${department}`.trim()}
+                  {@const affiliation = `${faculty.th} ${department}`.trim()}
                   <Comment
                     rating={review.rating / 2}
                     semester={SEMESTER_LABEL_LONG[review.semester]}

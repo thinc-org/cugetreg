@@ -57,6 +57,7 @@
   import { Footer } from '@cugetreg/ui/organisms/footer';
   import * as Sidebar from '@cugetreg/ui/organisms/sidebar';
   import { formatDate, formatExamTime } from '@cugetreg/utils';
+  import { UNKNOWN_FACULTY } from '@cugetreg/utils/faculty';
   import type { GenEdType } from '@cugetreg/utils/types';
   import {
     type CourseReview,
@@ -71,7 +72,6 @@
   } from '@cugetreg/zod-schemas';
 
   import type { PageProps } from './$types';
-  import { UNKNOWN_FACULTY } from '@cugetreg/utils/faculty';
 
   const { data }: PageProps = $props();
   type ReviewPageData = typeof data & {

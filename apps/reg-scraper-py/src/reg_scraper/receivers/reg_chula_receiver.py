@@ -68,7 +68,6 @@ def faculty_list_params(
 def course_list_params(
     course_no: str, study_program: str, semester: str, academic_year: str
 ) -> dict[str, str]:
-    """Same as chula_final.py get_course_list params."""
     faculty = course_no[:2] if len(course_no) >= 2 else ""
     return {
         "studyProgram": study_program,
@@ -92,7 +91,6 @@ def course_list_params(
 
 
 def detail_params(course_no: str, study_program: str) -> dict[str, str]:
-    """Detail link from Reg Chula only uses courseNo + studyProgram."""
     return {
         "courseNo": course_no,
         "studyProgram": study_program,
@@ -105,12 +103,7 @@ def is_error_page(html: str) -> bool:
 
 @dataclass
 class RegChulaReceiver(Receiver[list[RawCoursePage]]):
-    """
-    Fetches Reg Chula HTML via requests Session (same flow as chula_final.py):
-    1. Open form page (cookies)
-    2. List search for course/semester (required before detail!)
-    3. Detail fetch with courseNo + studyProgram only
-    """
+    """Open the form page for cookies, run a list search, then fetch details."""
 
     study_program: StudyProgram
     academic_year: str
@@ -125,7 +118,7 @@ class RegChulaReceiver(Receiver[list[RawCoursePage]]):
         session.get(f"{self._base()}{FORM_PATH}", timeout=30)
 
     def _search_course_list(self, session: requests.Session, course_no: str) -> bool:
-        """Run list search for one course — sets session context for detail page."""
+        """The list search sets the session context the detail page needs."""
         response = session.get(
             f"{self._base()}{COURSE_LIST_PATH}",
             params=course_list_params(

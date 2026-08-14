@@ -15,7 +15,7 @@ export const days = z.enum([
   "IR",
 ]);
 export const studyProgram = z.enum(["T", "I", "S"]);
-export const genEdType = z.enum(["NO", "SC", "SO", "HU", "IN"]);
+export const genEdType = z.enum(["NO", "SC", "SO", "HU", "IN", "GENED"]);
 export const assessment = z.enum(["LETTER", "SU"]);
 export const sortBy = z.enum(["NAME", "CAPACITY_SUM", "REMAINING_SUM"]);
 export const sortOrder = z.enum(["asc", "desc"]);

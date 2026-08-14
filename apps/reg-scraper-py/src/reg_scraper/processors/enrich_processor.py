@@ -13,10 +13,7 @@ logger = logging.getLogger(__name__)
 
 
 class EnrichProcessor(Processor[list[Course], list[Course]]):
-    """
-    Applies optional CSV descriptions and overrides.json genEd metadata.
-    Mirrors V1 OverrideService behaviour.
-    """
+    """Applies CSV descriptions and overrides.json genEd types."""
 
     def __init__(self) -> None:
         self.descriptions: dict[str, dict[str, str]] = {}
@@ -43,10 +40,6 @@ class EnrichProcessor(Processor[list[Course], list[Course]]):
                     self.overrides[course_no] = gen_ed
 
     def _load_csv(self, path: Path) -> None:
-        """
-        V1 CSV format (course_chula_full.csv):
-          course_no, description_thai, description
-        """
         with path.open(encoding="utf-8-sig", newline="") as handle:
             reader = csv.DictReader(handle)
             for row in reader:

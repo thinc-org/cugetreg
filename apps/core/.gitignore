@@ -7,7 +7,6 @@
 .idea/workspace.xml
 .idea/usage.statistics.xml
 .idea/shelf
-.claude/
 
 # deps
 node_modules/

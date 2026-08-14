@@ -205,20 +205,52 @@ See [`DATA_FORMAT.md`](./DATA_FORMAT.md) for JSON → column mapping.
 
 ## Configuration (`.env`)
 
-Config file: `apps/reg-scraper-py/.env` (loaded automatically from any working directory).
+Config file: `apps/reg-scraper-py/.env` (loaded automatically from any working directory). Copy `.env.example` and edit — the example ships with the small JSON-only run below.
+
+### Scrape scope
+
+`SCRAPER_ACADEMIC_YEAR` and `SCRAPER_SEMESTER` are the whole deployed configuration. Every run covers ทวิภาค + ตรีภาค + นานาชาติ (`S`, `T`, `I`) together.
 
 | Variable | Example | Description |
 |----------|---------|-------------|
-| `SCRAPER_ACADEMIC_YEARS` | `2568` | Buddhist era year(s), comma-separated |
-| `SCRAPER_STUDY_PROGRAMS` | `I` | `S` = ทวิภาค, `T` = ตรีภาค, `I` = นานาชาติ |
-| `SCRAPER_SEMESTERS` | `2` | `1`, `2`, or `3` |
-| `SCRAPER_COURSE_NOS` | *(empty)* | Specific course IDs (`2301108,2301107`). Empty = discover all |
+| `SCRAPER_ACADEMIC_YEAR` | `2568` | One Buddhist era year |
+| `SCRAPER_SEMESTER` | `SECOND` | `FIRST` / `SECOND` / `SUMMER` (`1`/`2`/`3` also accepted) |
+| `SCRAPER_STUDY_PROGRAMS` | `S,T,I` | **Local testing only.** Omit in deployment — every sync covers all three |
+| `SCRAPER_COURSE_NOS` | *(empty)* | Specific course IDs (`2301108,2301107`). Empty = discover all courses from 28 faculties |
 | `SCRAPER_MAX_COURSES` | `20` | Limit after discovery. `0` = no limit (~8000+ for I/sem2) |
-| `SCRAPER_DELAY_MS` | `300` | Delay between each course fetch (ms) |
 | `SCRAPER_EXPORTERS` | `json,postgres` | `json`, `postgres`, or both |
-| `COURSE_DESC_PATH` | `../../data/course_chula_full.csv` | Optional V1 description CSV |
-| `OVERRIDES_PATH` | `../../apps/core/bin/overrides.example.json` | GenEd overrides (copy to `overrides.json` for migrate) |
-| `DATABASE_URL` | `postgresql://admin:cugetreg@localhost:5432/cugetreg` | Postgres (same as `apps/core/.env`) |
+
+`.env.example` defaults to `SCRAPER_MAX_COURSES=20` + `SCRAPER_EXPORTERS=json` — a small JSON-only run with no DB writes. For a full scrape into Postgres, set `SCRAPER_MAX_COURSES=0` and `SCRAPER_EXPORTERS=json,postgres`.
+
+### Rate limiting
+
+| Variable | Example | Description |
+|----------|---------|-------------|
+| `SCRAPER_BATCH_SIZE` | `25` | Courses per discovery batch |
+| `SCRAPER_DELAY_MS` | `300` | Delay between each course fetch (ms) |
+| `SCRAPER_MAX_RETRIES` | `10` | Retries per course detail page before giving up |
+| `CUCIS_DELAY_MS` | `300` | Delay between description catalogue pages (ms) |
+| `GENED_DELAY_MS` | `200` | Delay between GenEd API calls (ms) |
+
+### Side inputs
+
+| Variable | Example | Description |
+|----------|---------|-------------|
+| `SCRAPER_DESCRIPTIONS_MODE` | `auto` | `auto` / `always` / `never` — whether to scrape descriptions |
+| `SCRAPER_GENED_MODE` | `auto` | `auto` / `always` / `never` — whether to scrape GenEd types |
+| `COURSE_DESC_PATH` | `data/course_desc.csv` | Description CSV from `cucis.academic.chula.ac.th` (~29.7k courses, 1490 pages) — written by `descriptions`, read by enrich |
+| `CUCIS_TOTAL_PAGES` | `1490` | Description catalogue page count |
+| `OVERRIDES_PATH` | `../../apps/core/bin/overrides.json` | GenEd types from `gened.chula.ac.th`. Read by the scraper **and** by `apps/core/bin/migrate_course.ts`, which is what actually sets `gen_ed_type` |
+| `GENED_FALLBACK_TYPE` | `GENED` | The GenEd site lists some courses with no area. `GENED` keeps that as-is (it is a real `GenEdType`); `NO`/`SC`/`SO`/`HU`/`IN` folds them into an area, `SKIP` omits them |
+| `SCRAPER_CHECKPOINT_DIR` | `data/checkpoints` | Resume files for both side scrapers |
+
+### Outputs
+
+| Variable | Example | Description |
+|----------|---------|-------------|
+| `SCRAPER_JSON_OUTPUT` | `../../apps/core/bin/courses.json` | Course JSON destination |
+| `SCRAPER_STATUS_OUTPUT` | `../../apps/reg-scraper-py/data/scraper-status.json` | Progress / result file |
+| `DATABASE_URL` | `postgresql://admin:cugetreg@localhost:5432/cugetreg` | Same as `apps/core/.env` — only needed when `SCRAPER_EXPORTERS` includes `postgres` |
 
 **Common mistake:** `SCRAPER_MAX_COURSES=20` limits how many courses to fetch.  
 `SCRAPER_COURSE_NOS=20` would try to scrape course number `"20"` — wrong variable.
@@ -306,21 +338,49 @@ Reg Chula (cas.reg.chula.ac.th)
 
 ---
 
-## Course descriptions (V1 parity)
+## Side inputs: descriptions and GenEd
 
-Reg Chula HTML **does not** include description text. V1 uses:
+Reg Chula HTML has neither course descriptions nor GenEd classification, so two
+extra scrapers fill those in. Both are built in and both resume from a
+checkpoint, so an interrupted run never starts over.
 
-| File | Columns |
-|------|---------|
-| `course_chula_full.csv` | `course_no`, `description_thai`, `description` |
+| Command | Source | Writes | Consumed by |
+|---------|--------|--------|-------------|
+| `python -m reg_scraper descriptions` | `cucis.academic.chula.ac.th` (~29.7k courses, 1490 pages) | `COURSE_DESC_PATH` CSV | `EnrichProcessor` → `courseDescTh/En` |
+| `python -m reg_scraper gened` | `gened.chula.ac.th` API (520 courses) | `OVERRIDES_PATH` JSON | `EnrichProcessor` **and** `apps/core/bin/migrate_course.ts` |
 
-Get the file from your team (same as v1 `apps/reg-scraper/data/`). Then:
+`python -m reg_scraper scrape` runs both first, according to their mode:
 
-```env
-COURSE_DESC_PATH=../../data/course_chula_full.csv
+| Mode | Behaviour |
+|------|-----------|
+| `auto` *(default)* | Scrape only if the output file is missing or empty |
+| `always` | Scrape every run — resumes from the checkpoint |
+| `never` | Skip; use whatever file is on disk |
+
+Flags (`descriptions` / `gened` only):
+
+```powershell
+python -m reg_scraper gened --fresh     # delete the checkpoint, refetch everything
+python -m reg_scraper gened --rebuild   # rewrite the output from the checkpoint, no network
 ```
 
-Re-run scrape to populate `courseDescTh` / `courseDescEn`.
+> `always` **resumes from the checkpoint**: courses added since the last run are
+> fetched, but courses already in the checkpoint are never re-checked. If a
+> course changed its GenEd area, or a description was edited, only `--fresh`
+> will pick that up.
+
+**GenEd areas:** 87 of the 520 courses are listed as GenEd without an area.
+`GENED` is a real `GenEdType` (Postgres enum, zod, Prisma), so those are written
+through as-is by default. `GENED_FALLBACK_TYPE` can fold them into a concrete
+area (`SC`/`SO`/`HU`/`IN`) or drop them with `SKIP`.
+
+> Requires the `20260815000000_add_gened_type` migration. Run
+> `pnpm prisma migrate dev` **before** `bin/migrate.sh`, or the insert fails on
+> an invalid enum value.
+
+**Descriptions:** the CSV is written with the column names `EnrichProcessor`
+expects — `course_no`, `description_thai`, `description`. ~785 of the 29,783
+catalogue rows have no description text at all and are skipped on load.
 
 ---
 

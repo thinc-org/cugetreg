@@ -124,7 +124,17 @@ Schema source of truth: `src/reg_scraper/models.py` (`Course`, `Section`, `Class
 
 ## PostgreSQL mapping (postgres exporter)
 
-When `SCRAPER_EXPORTERS` includes `postgres`, the exporter upserts into the **mvp1 Prisma schema** (`apps/core`).
+> ⚠️ **The built-in postgres exporter does not currently work.** `course`,
+> `course_section` and `course_class` all declare `updated_at TIMESTAMP(3) NOT
+> NULL` with no database default (Prisma fills `@updatedAt` client-side), and
+> the exporter omits the column on every INSERT — so it fails on a not-null
+> violation. Use the JSON output until this is fixed.
+>
+> If you are writing your own loader with raw SQL rather than Prisma, you hit
+> the same thing: **set `created_at` / `updated_at` explicitly.**
+
+The table below is still the intended mapping, and is accurate as a reference
+for any loader reading `courses.json`.
 
 | JSON / scraper | DB table.column | Transform |
 |----------------|-----------------|-----------|
@@ -169,6 +179,19 @@ After export, `apps/core` serves courses via its existing API — **no scraper c
 | `SO` | Social |
 | `HU` | Humanities |
 | `IN` | Interdisciplinary |
+| `GENED` | GenEd, area not published by gened.chula.ac.th (~87 courses) |
+
+> ⚠️ **`GENED` needs migration `20260815000000_add_gened_type`.** It was added to
+> the `gen_ed_type` Postgres enum, `schema.prisma`, `mapGenEdType()` and
+> `packages/zod-schemas`. Writing it to a database that has not applied that
+> migration fails with an invalid enum value.
+>
+> To avoid it entirely, set `GENED_FALLBACK_TYPE` to a concrete area
+> (`SC`/`SO`/`HU`/`IN`) or `SKIP`, then re-run `python -m reg_scraper gened
+> --rebuild` — no re-scrape needed.
+
+GenEd type comes from `overrides.json`, keyed by `courseNo`. It is applied to
+both the course and every one of its sections.
 
 ---
 
@@ -215,10 +238,25 @@ See `apps/core/bin/courses.json` after a run, or this abbreviated shape:
 
 Controlled by `.env`:
 
+A run is scoped by **two** variables. Study program is not one of them — every
+run scrapes ทวิภาค + ตรีภาค + นานาชาติ (`S`, `T`, `I`) together.
+
 | Variable | Example | Effect |
 |----------|---------|--------|
-| `SCRAPER_ACADEMIC_YEARS` | `2568` | Year(s) to scrape |
-| `SCRAPER_STUDY_PROGRAMS` | `S,T,I` | Program(s) |
-| `SCRAPER_SEMESTERS` | `1,2,3` | Semester(s) |
+| `SCRAPER_ACADEMIC_YEAR` | `2568` | One Buddhist era year |
+| `SCRAPER_SEMESTER` | `FIRST` | `FIRST` / `SECOND` / `SUMMER` (`1`/`2`/`3` also accepted) |
+
+So `SCRAPER_ACADEMIC_YEAR=2568` + `SCRAPER_SEMESTER=FIRST` produces every course
+offered in all three programs for 2568 semester 1, as one `courses.json` array.
+Distinguish them by each course's own `studyProgram` field.
+
+Testing / advanced (omit in deployment):
+
+| Variable | Example | Effect |
+|----------|---------|--------|
+| `SCRAPER_STUDY_PROGRAMS` | `I` | Narrow to some programs. Default `S,T,I` |
 | `SCRAPER_COURSE_NOS` | `2301108,2301107` | Only these courses (skips faculty discovery) |
-| `SCRAPER_MAX_COURSES` | `20` | Cap after discovery (`0` = no limit) |
+| `SCRAPER_MAX_COURSES` | `20` | Cap per program (`0` = no limit) |
+
+> `SCRAPER_MAX_COURSES` applies **per study program**, not per run — with the
+> default three programs, `20` yields up to 60 courses.

@@ -5,7 +5,8 @@ from typing import Literal
 
 from pydantic import BaseModel, Field
 
-GenEdType = Literal["NO", "SC", "SO", "HU", "IN"]
+# "GENED" = listed as GenEd but with no published area
+GenEdType = Literal["NO", "SC", "SO", "HU", "IN", "GENED"]
 StudyProgram = Literal["S", "T", "I"]
 Semester = Literal["1", "2", "3"]
 DayOfWeek = Literal["MO", "TU", "WE", "TH", "FR", "SA", "SU", "AR", "IA"]

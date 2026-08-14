@@ -181,11 +181,12 @@ enum StudyProgram {
 /// General Education (GenEd) Course Type 
 
 enum GenEdType {
-  NO // NOT_GENED 
-  SC // SCIENCE 
-  SO // SOCIAL 
-  HU // HUMAN 
+  NO // NOT_GENED
+  SC // SCIENCE
+  SO // SOCIAL
+  HU // HUMAN
   IN // INTERDISCIPLINARY
+  GENED // GenEd course with no area published by gened.chula.ac.th
 
   @@map("gen_ed_type")
 }

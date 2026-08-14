@@ -256,6 +256,8 @@
     --color-on-in: var(--purple-700);
     --color-hu: var(--neutral-white);
     --color-on-hu: var(--pink-700);
+    --color-gened: var(--neutral-white);
+    --color-on-gened: var(--neutral-700);
 }
 
 @media screen and (max-width: 640px) {

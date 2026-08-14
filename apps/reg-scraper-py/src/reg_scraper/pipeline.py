@@ -5,28 +5,79 @@ from datetime import UTC, datetime
 from itertools import groupby
 
 from reg_scraper.config import settings
+from reg_scraper.exporters.csv_desc_exporter import CsvDescExporter
 from reg_scraper.exporters.json_exporter import JsonExporter
+from reg_scraper.exporters.overrides_exporter import OverridesExporter
 from reg_scraper.exporters.postgres_exporter import PostgresExporter
 from reg_scraper.models import Course, ScrapeTarget, ScraperStatus
 from reg_scraper.processors.course_html_processor import CourseHtmlProcessor
 from reg_scraper.processors.enrich_processor import EnrichProcessor
+from reg_scraper.receivers.cucis_receiver import CucisReceiver
+from reg_scraper.receivers.gened_receiver import GenEdReceiver
 from reg_scraper.receivers.reg_chula_receiver import RegChulaReceiver
 
 logger = logging.getLogger(__name__)
 
 
 class ScraperPipeline:
-    """
-    Orchestrates Receivers -> Processors -> Exporters.
-
-    Receiver:  requests Session fetches Reg Chula HTML
-    Processor: Parse HTML + enrich with overrides/descriptions
-    Exporter:  JSON file and/or PostgreSQL upsert
-    """
+    """Orchestrates Receivers -> Processors -> Exporters."""
 
     def __init__(self) -> None:
         self.html_processor = CourseHtmlProcessor()
-        self.enrich_processor = EnrichProcessor()
+
+    def _should_run_side_input(self, mode: str, output: str, label: str) -> bool:
+        if mode == "never":
+            return False
+        if mode == "always":
+            return True
+
+        path = settings.resolve_path(output)
+        if not path.exists() or path.stat().st_size == 0:
+            logger.info("%s: %s missing or empty -> scraping (mode=auto)", label, path)
+            return True
+        logger.info(
+            "%s: reusing %s (mode=auto; set mode=always or delete the file to refresh)",
+            label,
+            path,
+        )
+        return False
+
+    def run_descriptions(self, fresh: bool = False) -> int:
+        logger.info("=== Course description phase (CUCIS) ===")
+        rows = CucisReceiver().scrape(fresh=fresh)
+        CsvDescExporter().export(rows)
+        return len(rows)
+
+    def run_gened(self, fresh: bool = False) -> int:
+        logger.info("=== GenEd override phase (gened.chula.ac.th) ===")
+        rows = GenEdReceiver().scrape(fresh=fresh)
+        OverridesExporter().export(rows)
+        return len(rows)
+
+    def _run_side_inputs(self, started: datetime) -> None:
+        if self._should_run_side_input(
+            settings.scraper_descriptions_mode, settings.course_desc_path, "Descriptions"
+        ):
+            self._write_status(
+                ScraperStatus(
+                    status="running",
+                    started_at=started,
+                    message="Scraping course descriptions (CUCIS)",
+                )
+            )
+            self.run_descriptions()
+
+        if self._should_run_side_input(
+            settings.scraper_gened_mode, settings.overrides_path, "GenEd overrides"
+        ):
+            self._write_status(
+                ScraperStatus(
+                    status="running",
+                    started_at=started,
+                    message="Scraping GenEd overrides (gened.chula.ac.th)",
+                )
+            )
+            self.run_gened()
 
     def _write_status(self, status: ScraperStatus) -> None:
         path = settings.resolve_path(settings.scraper_status_output)
@@ -112,6 +163,10 @@ class ScraperPipeline:
         failed = 0
 
         try:
+            self._run_side_inputs(started)
+            # after the side inputs, so it picks up the files they just wrote
+            enrich_processor = EnrichProcessor()
+
             targets = self._discover_targets(started)
             total_targets = len(targets)
 
@@ -171,7 +226,7 @@ class ScraperPipeline:
                         failed += 1
                         logger.exception("Failed parsing course %s", page.course_no)
 
-                all_courses.extend(self.enrich_processor.process(parsed))
+                all_courses.extend(enrich_processor.process(parsed))
 
             exporters = self._build_exporters()
             for exporter in exporters:

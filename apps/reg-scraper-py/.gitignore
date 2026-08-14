@@ -5,3 +5,7 @@ dist/
 .env
 log/
 data/courses.json
+
+# Scraped side inputs — regenerate with `python -m reg_scraper descriptions|gened`
+data/*.csv
+data/checkpoints/

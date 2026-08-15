@@ -147,8 +147,9 @@ class PostgresExporter(Exporter[list[Course]]):
                 """
                 INSERT INTO course (
                   id, study_program, academic_year, semester, course_no,
-                  course_condition, midterm_start, midterm_end, final_start, final_end, gen_ed_type
-                ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                  course_condition, midterm_start, midterm_end, final_start, final_end, gen_ed_type,
+                  created_at, updated_at
+                ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, NOW(), NOW())
                 """,
                 (
                     course_id,
@@ -171,8 +172,9 @@ class PostgresExporter(Exporter[list[Course]]):
             cur.execute(
                 """
                 INSERT INTO course_section (
-                  id, course_id, section_no, closed, regis, max, note, gen_ed_type
-                ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                  id, course_id, section_no, closed, regis, max, note, gen_ed_type,
+                  created_at, updated_at
+                ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, NOW(), NOW())
                 """,
                 (
                     section_id,
@@ -193,8 +195,8 @@ class PostgresExporter(Exporter[list[Course]]):
                     """
                     INSERT INTO course_class (
                       id, section_id, type, day_of_week, period_start, period_end,
-                      building, room, professors
-                    ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+                      building, room, professors, created_at, updated_at
+                    ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, NOW(), NOW())
                     """,
                     (
                         generate_cuid(),

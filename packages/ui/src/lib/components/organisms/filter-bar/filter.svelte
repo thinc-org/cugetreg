@@ -50,6 +50,7 @@
 		selectedFaculties?: string[];
 		selectedDays?: string[];
 		selectedEval?: string[];
+		credit?: string;
 		startTime?: string;
 		endTime?: string;
 		fitSchedule?: boolean;
@@ -63,6 +64,7 @@
 		selectedFaculties = $bindable([]),
 		selectedDays = $bindable([]),
 		selectedEval = $bindable([]),
+		credit = $bindable(''),
 		startTime = $bindable(''),
 		endTime = $bindable(''),
 		fitSchedule = $bindable(false),
@@ -81,6 +83,9 @@
 	}
 	function onFitScheduleChange() {
 		if (fitSchedule) showFitModal = true;
+	}
+	function onCreditInput() {
+		if (credit) noConditions = false;
 	}
 
 	// --- 3. HELPER LOGIC ($derived) ---
@@ -459,6 +464,22 @@
 						{/each}
 					</div>
 				{/if}
+			</div>
+		</div>
+
+		<div class="mb-4">
+			<label for="credit-filter" class="mb-1.5 block text-xs text-neutral-400">หน่วยกิต</label>
+			<div class="flex items-center gap-3">
+				<input
+					id="credit-filter"
+					type="text"
+					inputmode="decimal"
+					bind:value={credit}
+					oninput={onCreditInput}
+					placeholder="ทั้งหมด"
+					class="bg-surface-container-lowest text-on-surface text-[14px] box-border h-10 w-20 rounded-xl border-none p-2.5 text-base placeholder:text-neutral-400"
+				/>
+				<span class="text-base font-normal text-neutral-700">หน่วยกิต</span>
 			</div>
 		</div>
 	</div>

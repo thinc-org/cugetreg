@@ -48,7 +48,9 @@
 </script>
 
 {#if data}
-	<div class="bg-surface w-[90vw] rounded-lg border border-neutral-200 p-5 md:w-[50vw] md:min-w-[500px]">
+	<div
+		class="bg-surface w-[90vw] rounded-lg border border-neutral-200 p-4 md:w-[50vw] md:min-w-[500px] md:p-5"
+	>
 		<div class="">
 			<div class="flex items-start justify-between gap-2">
 				<div class="flex min-w-0 items-baseline gap-2">
@@ -62,7 +64,7 @@
 					<X />
 				</IconButton>
 			</div>
-			<div class="flex flex-col justify-between gap-3 md:flex-row md:items-start">
+			<div class="flex flex-col justify-between gap-2 md:flex-row md:items-start md:gap-3">
 				<div class="min-w-0">
 					<div class="text-[12px] md:text-lg font-bold">{data.courseNameTh}</div>
 					<div class="text-[12px] md:text-lg font-bold">{data.courseNameEn}</div>
@@ -86,7 +88,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="my-3 flex justify-between">
+		<div class="my-2 flex justify-between md:my-3">
 			<div class="flex space-x-2">
 				<Select.Root
 					type="single"
@@ -163,16 +165,16 @@
 			<Table.Root class="table-fixed md:hidden">
 				<Table.Header>
 					<Table.Row>
-						<Table.Head class="text-body1 w-5/12">ผู้สอน</Table.Head>
-						<Table.Head class="text-body1 w-7/12">วันเวลาเรียน</Table.Head>
+						<Table.Head class="text-body1 w-5/12 px-3">ผู้สอน</Table.Head>
+						<Table.Head class="text-body1 w-7/12 px-3">วันเวลาเรียน</Table.Head>
 					</Table.Row>
 				</Table.Header>
 				<Table.Body>
 					{#if currentSection}
 						{#each currentSection.classes as cls, i (i)}
 							<Table.Row class="border-b-0">
-								<Table.Cell class="text-body1 py-2">{cls.professors.join(', ')}</Table.Cell>
-								<Table.Cell class="text-body1 py-2"
+								<Table.Cell class="text-body1 px-3 py-1.5">{cls.professors.join(', ')}</Table.Cell>
+								<Table.Cell class="text-body1 px-3 py-1.5"
 									>{cls.dayOfWeek} {cls.periodStart} - {cls.periodEnd}</Table.Cell
 								>
 							</Table.Row>
@@ -183,18 +185,18 @@
 			<Table.Root class="table-fixed md:hidden">
 				<Table.Header>
 					<Table.Row>
-						<Table.Head class="text-body1 w-5/12">ห้องเรียน</Table.Head>
-						<Table.Head class="text-body1 w-7/12">รูปแบบ</Table.Head>
+						<Table.Head class="text-body1 w-5/12 px-3">ห้องเรียน</Table.Head>
+						<Table.Head class="text-body1 w-7/12 px-3">รูปแบบ</Table.Head>
 					</Table.Row>
 				</Table.Header>
 				<Table.Body>
 					{#if currentSection}
 						{#each currentSection.classes as cls, i (i)}
 							<Table.Row class="border-b-0">
-								<Table.Cell class="text-body1 py-2"
+								<Table.Cell class="text-body1 px-3 py-1.5"
 									>{cls.building ?? ''} {cls.room ?? ''}</Table.Cell
 								>
-								<Table.Cell class="text-body1 py-2">{cls.type}</Table.Cell>
+								<Table.Cell class="text-body1 px-3 py-1.5">{cls.type}</Table.Cell>
 							</Table.Row>
 						{/each}
 					{/if}
@@ -205,24 +207,24 @@
 			<Table.Root class="table-fixed md:hidden">
 				<Table.Header>
 					<Table.Row>
-						<Table.Head class="text-body1">สอบกลางภาค</Table.Head>
+						<Table.Head class="text-body1 px-3">สอบกลางภาค</Table.Head>
 					</Table.Row>
 				</Table.Header>
 				<Table.Body>
 					<Table.Row>
-						<Table.Cell class="text-body1">{data.midterm ?? 'ยังไม่ประกาศ'}</Table.Cell>
+						<Table.Cell class="text-body1 px-3 py-1.5">{data.midterm ?? 'ยังไม่ประกาศ'}</Table.Cell>
 					</Table.Row>
 				</Table.Body>
 			</Table.Root>
 			<Table.Root class="table-fixed md:hidden">
 				<Table.Header>
 					<Table.Row>
-						<Table.Head class="text-body1">สอบปลายภาค</Table.Head>
+						<Table.Head class="text-body1 px-3">สอบปลายภาค</Table.Head>
 					</Table.Row>
 				</Table.Header>
 				<Table.Body>
 					<Table.Row class="border-b-0">
-						<Table.Cell class="text-body1">{data.final ?? 'ยังไม่ประกาศ'}</Table.Cell>
+						<Table.Cell class="text-body1 px-3 py-1.5">{data.final ?? 'ยังไม่ประกาศ'}</Table.Cell>
 					</Table.Row>
 				</Table.Body>
 			</Table.Root>
@@ -242,10 +244,10 @@
 			</Table.Root>
 		</div>
 		<div class="">
-			<div class="my-3">
+			<div class="my-2 md:my-3">
 				<span class="font-bold">เลือกสีในตาราง</span>
 			</div>
-			<div class="flex flex-wrap justify-center gap-3 md:flex-nowrap md:justify-between">
+			<div class="flex flex-wrap justify-center gap-2 md:flex-nowrap md:justify-between md:gap-3">
 				{#each Object.keys(courseColorVariants) as option (option)}
 					<Button
 						variant="solid"
@@ -261,7 +263,7 @@
 				{/each}
 			</div>
 		</div>
-		<div class="mt-5 flex flex-col gap-3 md:flex-row md:justify-between">
+		<div class="mt-3 flex flex-col gap-2 md:mt-5 md:flex-row md:justify-between md:gap-3">
 			<Button class="w-full md:flex-1" variant="outlined" onclick={() => onHide(data.itemId, !data.isHidden)}>
 				<EyeOff />
 				{data.isHidden ? 'แสดงในตาราง' : 'ซ่อนจากตาราง'}

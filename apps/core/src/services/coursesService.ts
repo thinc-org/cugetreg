@@ -356,6 +356,7 @@ async function getCourseReviewByCourseNo(
   };
   const reviewSelect = {
     id: true,
+    userId: true,
     rating: true,
     status: true,
     studyProgram: true,
@@ -476,9 +477,11 @@ async function getCourseReviewByCourseNo(
     const dislikeCount =
       reviewVotes.find((v) => v.voteType === VoteType.D)?._count._all ?? 0;
     const reaction = reactions.get(review.id);
+    // Never expose the author's userId — only whether it is the caller's own.
+    const { userId: reviewUserId, ...publicReview } = review;
 
     return {
-      ...review,
+      ...publicReview,
       user: {
         ...review.user,
         faculty: unmapFacultyCode(review.user.faculty),
@@ -487,6 +490,7 @@ async function getCourseReviewByCourseNo(
         likeCount,
         dislikeCount,
       },
+      isOwner: userId !== undefined && reviewUserId === userId,
       ...(reaction && { reaction }),
     } as CourseReview;
   });

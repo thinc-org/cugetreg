@@ -100,6 +100,9 @@ export const CourseReview = z.object({
     department: z.string().nullable(),
   }),
   reaction: vote.optional(),
+  // True when the review belongs to the caller, so the client can offer
+  // edit/delete on it regardless of the review's moderation status.
+  isOwner: z.boolean().default(false),
 });
 
 export const CourseNoDetailSchema = CourseSchema.extend({

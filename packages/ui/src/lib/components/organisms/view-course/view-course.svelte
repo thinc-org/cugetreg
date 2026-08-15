@@ -54,8 +54,11 @@
 		<div class="">
 			<div class="flex items-start justify-between gap-2">
 				<div class="flex min-w-0 items-baseline gap-2">
-					<span class="min-w-0 truncate text-[16px] md:text-xl font-bold">{data.courseNo} {data.abbrName}</span>
-					<span class="shrink-0 text-sm font-extralight text-neutral-400">{data.credit} Credit</span>
+					<span class="min-w-0 truncate text-[16px] font-bold md:text-xl"
+						>{data.courseNo} {data.abbrName}</span
+					>
+					<span class="shrink-0 text-sm font-extralight text-neutral-400">{data.credit} Credit</span
+					>
 				</div>
 				<IconButton
 					class="shrink-0 bg-transparent ring-0! outline-none! hover:cursor-pointer"
@@ -66,8 +69,8 @@
 			</div>
 			<div class="flex flex-col justify-between gap-2 md:flex-row md:items-start md:gap-3">
 				<div class="min-w-0">
-					<div class="text-[12px] md:text-lg font-bold">{data.courseNameTh}</div>
-					<div class="text-[12px] md:text-lg font-bold">{data.courseNameEn}</div>
+					<div class="text-[12px] font-bold md:text-lg">{data.courseNameTh}</div>
+					<div class="text-[12px] font-bold md:text-lg">{data.courseNameEn}</div>
 				</div>
 				<div class="flex h-[90%] w-full shrink-0 items-center justify-center md:w-auto">
 					<Button
@@ -264,11 +267,20 @@
 			</div>
 		</div>
 		<div class="mt-3 flex flex-col gap-2 md:mt-5 md:flex-row md:justify-between md:gap-3">
-			<Button class="w-full md:flex-1" variant="outlined" onclick={() => onHide(data.itemId, !data.isHidden)}>
+			<Button
+				class="w-full md:flex-1"
+				variant="outlined"
+				onclick={() => onHide(data.itemId, !data.isHidden)}
+			>
 				<EyeOff />
 				{data.isHidden ? 'แสดงในตาราง' : 'ซ่อนจากตาราง'}
 			</Button>
-			<Button class="w-full md:flex-1" variant="outlined" color="error" onclick={() => onRemove(data.itemId)}>
+			<Button
+				class="w-full md:flex-1"
+				variant="outlined"
+				color="error"
+				onclick={() => onRemove(data.itemId)}
+			>
 				<Trash />
 				นำออกจากตารางที่เลือก
 			</Button>

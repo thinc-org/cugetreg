@@ -477,7 +477,7 @@
 					bind:value={credit}
 					oninput={onCreditInput}
 					placeholder="ทั้งหมด"
-					class="bg-surface-container-lowest text-on-surface text-[14px] box-border h-10 w-20 rounded-xl border-none p-2.5 text-base placeholder:text-neutral-400"
+					class="bg-surface-container-lowest text-on-surface box-border h-10 w-20 rounded-xl border-none p-2.5 text-base text-[14px] placeholder:text-neutral-400"
 				/>
 				<span class="text-base font-normal text-neutral-700">หน่วยกิต</span>
 			</div>

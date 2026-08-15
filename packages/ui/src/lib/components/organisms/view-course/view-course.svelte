@@ -48,7 +48,7 @@
 </script>
 
 {#if data}
-	<div class="bg-surface w-[50vw] min-w-[500px] rounded-lg border border-neutral-200 p-5">
+	<div class="bg-surface w-[90vw] rounded-lg border border-neutral-200 p-5 md:w-[50vw] md:min-w-[500px]">
 		<div class="">
 			<div class="mb-2 flex justify-between">
 				<div>
@@ -181,29 +181,28 @@
 			<div class="my-3">
 				<span class="font-bold">เลือกสีในตาราง</span>
 			</div>
-			<div class="flex justify-between">
+			<div class="flex flex-wrap justify-center gap-3 md:flex-nowrap md:justify-between">
 				{#each Object.keys(courseColorVariants) as option (option)}
 					<Button
 						variant="solid"
 						color="primary"
 						class={cn(
-							'm-2 aspect-square border hover:ring-0',
+							'aspect-square border hover:ring-0',
 							courseColorVariants[option as ColorVariant],
 							data.color === option && 'outline-primary outline-[1.5px]! outline-offset-4',
-							data.color === option && 'hover:outline-[1.5px]! hover:outline-solid!',
-							'm-0'
+							data.color === option && 'hover:outline-[1.5px]! hover:outline-solid!'
 						)}
 						onclick={() => onChangeColor(data.itemId, option as ColorVariant)}
 					/>
 				{/each}
 			</div>
 		</div>
-		<div class="mt-5 flex justify-between space-x-5">
-			<Button class="flex-1" variant="outlined" onclick={() => onHide(data.itemId, !data.isHidden)}>
+		<div class="mt-5 flex flex-col gap-3 md:flex-row md:justify-between">
+			<Button class="w-full md:flex-1" variant="outlined" onclick={() => onHide(data.itemId, !data.isHidden)}>
 				<EyeOff />
 				{data.isHidden ? 'แสดงในตาราง' : 'ซ่อนจากตาราง'}
 			</Button>
-			<Button class="flex-1" variant="outlined" color="error" onclick={() => onRemove(data.itemId)}>
+			<Button class="w-full md:flex-1" variant="outlined" color="error" onclick={() => onRemove(data.itemId)}>
 				<Trash />
 				นำออกจากตารางที่เลือก
 			</Button>

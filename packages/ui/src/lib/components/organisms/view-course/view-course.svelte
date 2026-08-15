@@ -49,7 +49,7 @@
 
 {#if data}
 	<div
-		class="bg-surface w-[90vw] rounded-lg border border-neutral-200 p-4 md:w-[50vw] md:min-w-[500px] md:p-5"
+		class="bg-surface max-h-[90vh] w-[90vw] overflow-y-auto rounded-lg border border-neutral-200 p-4 md:w-[50vw] md:min-w-[500px] md:p-5"
 	>
 		<div class="">
 			<div class="flex items-start justify-between gap-2">

@@ -17,7 +17,7 @@ export interface HomeUrlState {
   currentAY: number;
 }
 
-const DEFAULT_ACADEMIC_YEAR = 2568;
+const DEFAULT_ACADEMIC_YEAR = 2569;
 const STUDY_PROGRAMS = new Set<StudyProgram>(['S', 'I', 'T']);
 
 function parseList(value: string | null): string[] {

@@ -357,7 +357,7 @@
               เซค {course.sectionNo}
             </div>
           </Select.Trigger>
-          <Select.Content role="listbox">
+          <Select.Content role="listbox" class="z-100">
             <Select.Group>
               {#each course.sections as section (section.sectionNo)}
                 <Select.Item

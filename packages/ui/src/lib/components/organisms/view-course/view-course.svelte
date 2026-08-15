@@ -134,7 +134,7 @@
 			{/if}
 		</div>
 		<div>
-			<Table.Root>
+			<Table.Root class="hidden md:table">
 				<Table.Header>
 					<Table.Row>
 						<Table.Head class="text-body1">ผู้สอน</Table.Head>
@@ -160,9 +160,73 @@
 					{/if}
 				</Table.Body>
 			</Table.Root>
+			<Table.Root class="table-fixed md:hidden">
+				<Table.Header>
+					<Table.Row>
+						<Table.Head class="text-body1 w-5/12">ผู้สอน</Table.Head>
+						<Table.Head class="text-body1 w-7/12">วันเวลาเรียน</Table.Head>
+					</Table.Row>
+				</Table.Header>
+				<Table.Body>
+					{#if currentSection}
+						{#each currentSection.classes as cls, i (i)}
+							<Table.Row class="border-b-0">
+								<Table.Cell class="text-body1 py-2">{cls.professors.join(', ')}</Table.Cell>
+								<Table.Cell class="text-body1 py-2"
+									>{cls.dayOfWeek} {cls.periodStart} - {cls.periodEnd}</Table.Cell
+								>
+							</Table.Row>
+						{/each}
+					{/if}
+				</Table.Body>
+			</Table.Root>
+			<Table.Root class="table-fixed md:hidden">
+				<Table.Header>
+					<Table.Row>
+						<Table.Head class="text-body1 w-5/12">ห้องเรียน</Table.Head>
+						<Table.Head class="text-body1 w-7/12">รูปแบบ</Table.Head>
+					</Table.Row>
+				</Table.Header>
+				<Table.Body>
+					{#if currentSection}
+						{#each currentSection.classes as cls, i (i)}
+							<Table.Row class="border-b-0">
+								<Table.Cell class="text-body1 py-2"
+									>{cls.building ?? ''} {cls.room ?? ''}</Table.Cell
+								>
+								<Table.Cell class="text-body1 py-2">{cls.type}</Table.Cell>
+							</Table.Row>
+						{/each}
+					{/if}
+				</Table.Body>
+			</Table.Root>
 		</div>
 		<div>
-			<Table.Root class="table-fixed">
+			<Table.Root class="table-fixed md:hidden">
+				<Table.Header>
+					<Table.Row>
+						<Table.Head class="text-body1">สอบกลางภาค</Table.Head>
+					</Table.Row>
+				</Table.Header>
+				<Table.Body>
+					<Table.Row>
+						<Table.Cell class="text-body1">{data.midterm ?? 'ยังไม่ประกาศ'}</Table.Cell>
+					</Table.Row>
+				</Table.Body>
+			</Table.Root>
+			<Table.Root class="table-fixed md:hidden">
+				<Table.Header>
+					<Table.Row>
+						<Table.Head class="text-body1">สอบปลายภาค</Table.Head>
+					</Table.Row>
+				</Table.Header>
+				<Table.Body>
+					<Table.Row class="border-b-0">
+						<Table.Cell class="text-body1">{data.final ?? 'ยังไม่ประกาศ'}</Table.Cell>
+					</Table.Row>
+				</Table.Body>
+			</Table.Root>
+			<Table.Root class="hidden table-fixed md:table">
 				<Table.Header>
 					<Table.Row>
 						<Table.Head class="text-body1 w-1/2">สอบกลางภาค</Table.Head>

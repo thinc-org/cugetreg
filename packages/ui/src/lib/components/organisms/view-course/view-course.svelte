@@ -89,7 +89,7 @@
 			</div>
 		</div>
 		<div class="my-2 flex justify-between md:my-3">
-			<div class="flex space-x-2">
+			<div class="flex items-center gap-2">
 				<Select.Root
 					type="single"
 					value={String(selectedSectionNo)}

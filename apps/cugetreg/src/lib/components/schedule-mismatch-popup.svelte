@@ -34,7 +34,7 @@
     expectedSemester: string;
     expectedProgram: string;
     currentScheduleId: string;
-    onConfirm: (scheduleId: string) => void;
+    onConfirm: (scheduleId: string) => boolean | Promise<boolean>;
     onClose: () => void;
   }
 
@@ -57,7 +57,7 @@
     ),
   );
 
-  let selectedId = $state<string>(
+  let selectedId = $derived(
     matchingSchedules.length > 0 ? matchingSchedules[0].id : '',
   );
 
@@ -68,8 +68,14 @@
   });
 
   let showCreateScheduleModal = $state(false);
+  let isConfirming = $state(false);
 
-  function handleConfirm() {
+  function setSelectedId(value: string) {
+    selectedId = value;
+    if (value === 'NEW') showCreateScheduleModal = true;
+  }
+
+  async function handleConfirm() {
     if (selectedId === 'NEW' || selectedId === '') {
       return;
     }
@@ -77,22 +83,19 @@
     if (!found) {
       return;
     }
-    if (selectedId !== 'NEW') {
-      onConfirm(selectedId);
+    isConfirming = true;
+    try {
+      const confirmed = await onConfirm(selectedId);
+      if (confirmed) onClose();
+    } finally {
+      isConfirming = false;
     }
-    onClose();
   }
 
   const { createCart } = useCartActions();
 
   const yearOptions = getYearOptions();
   const semesterOptions = getSemesterShortOptions();
-
-  $effect(() => {
-    if (selectedId === 'NEW') {
-      showCreateScheduleModal = true;
-    }
-  });
 </script>
 
 <div class="fixed inset-0 z-50 flex items-center justify-center">
@@ -102,6 +105,7 @@
         type="button"
         class="absolute inset-0 h-full w-full cursor-default bg-transparent"
         onclick={onClose}
+        disabled={isConfirming}
         aria-label="Close modal"
       ></button>
 
@@ -114,7 +118,7 @@
         </p>
 
         <div class="relative mb-8">
-          <Select type="single" bind:value={selectedId}>
+          <Select type="single" bind:value={() => selectedId, setSelectedId}>
             <SelectTrigger
               class="w-full rounded-xl border border-[#b8c9e6] bg-white px-4 py-3 text-left text-[15px] text-[#2b4c8a]"
               aria-label="Select table"
@@ -156,13 +160,17 @@
 
         <div class="flex gap-4">
           <button
+            type="button"
             onclick={onClose}
+            disabled={isConfirming}
             class="flex-1 rounded-xl bg-[#f0f2f5] py-2 text-[15px] font-bold text-gray-700 transition-colors hover:bg-gray-200"
           >
             ยกเลิก
           </button>
           <button
+            type="button"
             onclick={handleConfirm}
+            disabled={isConfirming}
             class="flex-1 rounded-xl bg-[#e3f0ff] py-2 text-[15px] font-bold text-[#2b4c8a] transition-colors hover:bg-[#d0e6ff]"
           >
             ตกลง

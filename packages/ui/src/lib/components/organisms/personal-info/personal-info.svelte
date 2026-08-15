@@ -28,7 +28,7 @@
 		onEdit
 	}: Props = $props();
 
-	const id = username;
+	const id = $derived(username);
 
 	const infoItems = $derived([
 		{ label: 'username', value: username },

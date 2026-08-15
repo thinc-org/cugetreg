@@ -15,6 +15,7 @@
     ALLOWED_SEMESTER,
     SEMESTER_LABEL_LONG,
   } from '$lib/semesterOptions';
+  import { getCartSelectionController } from '$lib/stores/cart-selection.svelte';
   import { loginPopupState } from '$lib/stores/login-popup.svelte';
   import { getUserCartStore, useCartActions } from '$lib/stores/user-cart';
 
@@ -56,6 +57,7 @@
   import { Footer } from '@cugetreg/ui/organisms/footer';
   import * as Sidebar from '@cugetreg/ui/organisms/sidebar';
   import { formatDate, formatExamTime } from '@cugetreg/utils';
+  import { UNKNOWN_FACULTY } from '@cugetreg/utils/faculty';
   import type { GenEdType } from '@cugetreg/utils/types';
   import {
     type CourseReview,
@@ -118,7 +120,9 @@
   );
 
   const userCart = getUserCartStore();
-  const { addCourse, removeCourse, updateCourse } = useCartActions();
+  const cartSelection = getCartSelectionController();
+  const { addCourse, removeCourse, updateCourse, updateCourseImmediately } =
+    useCartActions();
 
   const years = [...ALLOWED_ACADEMIC_YEAR].reverse().map(String);
   const terms = ALLOWED_SEMESTER.map((s) => SEMESTER_LABEL_LONG[s]);
@@ -173,12 +177,14 @@
       .then((response) => {
         const { sections } = CourseSectionsResponseSchema.parse(response.data);
         writeReviewSectionOptions = sections;
+
+        const match = /^\d+$/;
         if (
-          writeReviewSectionNo === null ||
-          !sections.includes(Number(writeReviewSectionNo))
+          writeReviewSectionNo !== null &&
+          (!match.test(writeReviewSectionNo) ||
+            !sections.includes(Number(writeReviewSectionNo)))
         ) {
-          writeReviewSectionNo =
-            sections.length > 0 ? String(sections[0]) : null;
+          writeReviewSectionNo = null;
         }
         return;
       })
@@ -746,13 +752,30 @@
     globalSelectedSection = globalSelectedSection === section ? null : section;
   }
 
-  function handlePopupConfirm(scheduleId: string) {
-    $userCart.currentCartId = scheduleId;
-    if (pendingSection) {
-      globalSelectedSection = pendingSection;
+  async function handlePopupConfirm(scheduleId: string): Promise<boolean> {
+    const cart = await cartSelection.select(scheduleId);
+    if (!cart) return false;
+
+    if (!pendingSection) return false;
+
+    const sectionNo = Number(pendingSection);
+    const currentItem = cart.items.find(
+      (item) => item.courseNo === course.courseNo,
+    );
+
+    if (currentItem) {
+      const updated = await updateCourseImmediately(currentItem.id, {
+        sectionNo,
+      });
+      if (!updated) return false;
+    } else {
+      const itemId = await addCourse(course.courseNo, sectionNo);
+      if (!itemId) return false;
     }
-    showMismatchPopup = false;
+
+    globalSelectedSection = pendingSection;
     pendingSection = null;
+    return true;
   }
 </script>
 
@@ -857,7 +880,10 @@
                 name: item.name,
                 id: item.id,
               })) ?? []}
-              bind:value={$userCart.currentCartId}
+              bind:value={
+                () => cartSelection.selectedId,
+                (id) => void cartSelection.select(id)
+              }
               semester={$userCart.currentCart.semester}
               semesterType={$userCart.currentCart.studyProgram}
               academicYear={$userCart.currentCart.academicYear}
@@ -1029,7 +1055,9 @@
                     คำอธิบายรายวิชา (ภาษาไทย)
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   {course.courseInfo.courseDescTh}
                 </p>
               </div>
@@ -1041,7 +1069,9 @@
                     คำอธิบายรายวิชา (ภาษาอังกฤษ)
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   {course.courseInfo.courseDescEn}
                 </p>
               </div>
@@ -1065,12 +1095,16 @@
                 </div>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   {course.courseInfo.courseDescTh}
                 </p>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   {course.courseInfo.courseDescEn}
                 </p>
               </div>
@@ -1085,7 +1119,9 @@
                     คณะ
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   {faculties[course.courseInfo.faculty ?? '']?.th ?? '-'}
                 </p>
               </div>
@@ -1097,7 +1133,9 @@
                     ภาควิชา/กลุ่มวิชา/สาขาวิชา
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   {course.courseInfo.department}
                 </p>
               </div>
@@ -1121,12 +1159,16 @@
                 </div>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   {faculties[course.courseInfo.faculty ?? '']?.th ?? '-'}
                 </p>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   {course.courseInfo.department}
                 </p>
               </div>
@@ -1141,7 +1183,9 @@
                     รูปแบบรายวิชา
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   {course.courseInfo.creditHours?.split(' ') ?? '-'}
                 </p>
               </div>
@@ -1153,7 +1197,9 @@
                     หน่วยกิต
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   {course.courseInfo.credit}
                 </p>
               </div>
@@ -1177,12 +1223,16 @@
                 </div>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   {course.courseInfo.creditHours?.split(' ') ?? '-'}
                 </p>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   {course.courseInfo.credit}
                 </p>
               </div>
@@ -1197,7 +1247,9 @@
                     เงื่อนไขรายวิชา
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   -
                 </p>
               </div>
@@ -1209,7 +1261,9 @@
                     วิธีการวัดผล
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   Letter Grade
                 </p>
               </div>
@@ -1233,12 +1287,16 @@
                 </div>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   -
                 </p>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   Letter Grade
                 </p>
               </div>
@@ -1253,7 +1311,9 @@
                     สอบกลางภาค
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   {midtermExam}
                 </p>
               </div>
@@ -1265,7 +1325,9 @@
                     สอบปลายภาค
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   {finalExam}
                 </p>
               </div>
@@ -1289,12 +1351,16 @@
                 </div>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   {midtermExam}
                 </p>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   {finalExam}
                 </p>
               </div>
@@ -1356,7 +1422,7 @@
               schedules={$userCart.cartList ?? []}
               expectedYear={String(course.academicYear)}
               expectedProgram={course.studyProgram}
-              bind:currentScheduleId={$userCart.currentCartId}
+              currentScheduleId={cartSelection.selectedId}
               expectedSemester={course.semester}
               onConfirm={handlePopupConfirm}
               onClose={() => (showMismatchPopup = false)}
@@ -1417,7 +1483,8 @@
                       <Select.Root
                         type="single"
                         value={writeReviewSectionNo ?? ''}
-                        onValueChange={(v) => (writeReviewSectionNo = v)}
+                        onValueChange={(v) =>
+                          (writeReviewSectionNo = v || null)}
                         disabled={writeReviewSectionOptions.length === 0}
                       >
                         <Select.Trigger
@@ -1425,10 +1492,11 @@
                         >
                           {writeReviewSectionNo
                             ? `เซค ${writeReviewSectionNo}`
-                            : 'ไม่มีเซค'}
+                            : 'ไม่ระบุ'}
                         </Select.Trigger>
                         <Select.Content role="listbox">
                           <Select.Group>
+                            <Select.Item value="" label="ไม่ระบุ" />
                             {#each writeReviewSectionOptions as sectionNo (sectionNo)}
                               <Select.Item
                                 value={String(sectionNo)}
@@ -1646,9 +1714,11 @@
             {:else}
               <div class="mt-6 flex flex-col gap-6">
                 {#each reviews as review (review.id)}
-                  {@const faculty = review.user.faculty ?? ''}
+                  {@const faculty = review.user.faculty
+                    ? faculties[review.user.faculty]
+                    : UNKNOWN_FACULTY}
                   {@const department = review.user.department ?? ''}
-                  {@const affiliation = `${faculty} ${department}`.trim()}
+                  {@const affiliation = `${faculty.th} ${department}`.trim()}
                   <Comment
                     rating={review.rating / 2}
                     semester={SEMESTER_LABEL_LONG[review.semester]}

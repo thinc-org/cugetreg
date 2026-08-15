@@ -1,9 +1,10 @@
 <script lang="ts">
 	import { getContext, type Snippet } from 'svelte';
 
-	const variant = getContext<'left' | 'center' | 'right' | 'mobile'>('subject-details-variant');
+	type Variant = 'left' | 'center' | 'right' | 'mobile';
 
-	const textStyle = variant === 'mobile' ? 'p-2' : 'p-4';
+	const getVariant = getContext<() => Variant>('subject-details-variant');
+	const textStyle = $derived(getVariant() === 'mobile' ? 'p-2' : 'p-4');
 	interface Props {
 		className?: string; // Additional classes
 		text?: string; // Optional text prop, can be overridden by slot

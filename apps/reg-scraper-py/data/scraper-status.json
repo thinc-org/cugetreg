@@ -1,0 +1,9 @@
+{
+  "status": "completed",
+  "started_at": "2026-08-14T20:55:31.573857Z",
+  "finished_at": "2026-08-14T20:55:52.629172Z",
+  "courses_total": 6,
+  "courses_scraped": 6,
+  "courses_failed": 0,
+  "message": "Exported 6 courses via ['json']"
+}

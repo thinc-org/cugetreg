@@ -123,6 +123,10 @@ export const CourseSectionsResponseSchema = z.object({
   sections: z.array(z.number().int()),
 });
 
+export const LastUpdatedResponseSchema = z.object({
+  lastUpdated: z.iso.datetime().nullable(),
+});
+
 export const CourseReviewResponseSchema = z.object({
   reviews: z.array(CourseReview),
   limit: z.int().min(1),

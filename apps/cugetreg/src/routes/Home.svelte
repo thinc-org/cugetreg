@@ -42,7 +42,7 @@
     X,
   } from '@lucide/svelte';
   import { isAxiosError } from 'axios';
-  import { getContext, onDestroy } from 'svelte';
+  import { getContext, onDestroy, untrack } from 'svelte';
   import { cubicOut } from 'svelte/easing';
   import { MediaQuery } from 'svelte/reactivity';
   import { fade, slide } from 'svelte/transition';
@@ -66,12 +66,23 @@
 
   const semesterOptions = getSemesterDisplayOptions();
 
+  let lastUpdatedLabel = $state('');
+
   let sidebarExpanded = $state(true);
   let openPanel = $state<string | null>(null);
   let activePanel = $state<string | null>(null);
   const mobileMedia = new MediaQuery('max-width: 767px', false);
   const isMobile = $derived(mobileMedia.current);
 
+  $effect(() => {
+    untrack(() => fetchLastUpdated());
+  });
+
+  // let searchQuery = $state('');
+  // let debouncedSearchQuery = $state('');
+  // let searchTimeout: ReturnType<typeof setTimeout> | undefined;
+  //
+  // let isScheduleDropdownOpen = $state(false);
   let isFilterOpen = $state(true);
   let isSelectedOpen = $state(true);
   let activeModal = $state<'filter' | 'selected' | null>(null);
@@ -215,6 +226,20 @@
         isFavorite: c.isFavorite ?? false,
       },
     };
+  }
+
+  async function fetchLastUpdated() {
+    const [response, err] = await tryCatch(api.get('/courses/last-updated'));
+    if (err || !response.data.lastUpdated) return;
+
+    const date = new Date(response.data.lastUpdated);
+    const buddhistYear = String(date.getFullYear() + 543).slice(-2);
+    const dd = String(date.getDate()).padStart(2, '0');
+    const mm = String(date.getMonth() + 1).padStart(2, '0');
+    const hh = String(date.getHours()).padStart(2, '0');
+    const min = String(date.getMinutes()).padStart(2, '0');
+
+    lastUpdatedLabel = `วันที่ ${dd}/${mm}/${buddhistYear}  เวลา ${hh}.${min} น.`;
   }
 
   const courseResults = new CourseResults({
@@ -785,8 +810,9 @@
               <p class="font-sans text-[10px] text-[#353745]">
                 ข้อมูลอาจมีการเปลี่ยนแปลง<br />
                 โปรดตรวจสอบข้อมูลกับสำนักทะเบียนทุกครั้งก่อนลงทะเบียนเรียน<br />
-                Update ข้อมูลล่าสุด&nbsp;&nbsp;วันที่ 20/07/68&nbsp;&nbsp;เวลา 12.00
-                น.
+                {#if lastUpdatedLabel}
+                  Update ข้อมูลล่าสุด&nbsp;&nbsp;{lastUpdatedLabel}
+                {/if}
               </p>
             </div>
           </div>
@@ -806,10 +832,11 @@
                 โปรดตรวจสอบข้อมูลกับสำนักทะเบียนทุกครั้งก่อนลงทะเบียนเรียน</span
               >
             </div>
-            <span class="shrink-0 whitespace-nowrap">
-              Update ข้อมูลล่าสุด&nbsp;&nbsp;วันที่ 20/07/68&nbsp;&nbsp;เวลา
-              12.00 น.
-            </span>
+            {#if lastUpdatedLabel}
+              <span class="shrink-0 whitespace-nowrap">
+                Update ข้อมูลล่าสุด&nbsp;&nbsp;{lastUpdatedLabel}
+              </span>
+            {/if}
           </div>
 
           <div class="grid grid-cols-1 gap-x-5 gap-y-6 pb-10 md:grid-cols-2">

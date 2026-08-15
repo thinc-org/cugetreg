@@ -27,6 +27,8 @@ export function genEdTypeMapper(genEdType: GenEdType) {
       return 'หมวดมนุษย์';
     case 'IN':
       return 'หมวดสหฯ';
+    case 'GENED':
+      return 'ศึกษาทั่วไป';
     default:
       return null;
   }

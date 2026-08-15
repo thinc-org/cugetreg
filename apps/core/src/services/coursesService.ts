@@ -325,6 +325,15 @@ async function getCourseSections(
   return { sections: course.sections.map((s) => s.sectionNo) };
 }
 
+//1.5b Get last course data sync timestamp
+async function getLastUpdated() {
+  const result = await prisma.course.aggregate({
+    _max: { updatedAt: true },
+  });
+
+  return { lastUpdated: result._max.updatedAt?.toISOString() ?? null };
+}
+
 async function getCourseReviewByCourseNo(
   courseNo: string,
   query: GetCourseReviewQuerySchema,
@@ -501,4 +510,5 @@ export const courseServices = {
   removeFavoriteCourse,
   getCourseSections,
   getCourseReviewByCourseNo,
+  getLastUpdated,
 };

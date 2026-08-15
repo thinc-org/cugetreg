@@ -50,16 +50,9 @@
 	{...rest}
 >
 	<!-- NOTE: Scaling on some resolution is kinda wonky -->
-	{#if length <= 1}
-		<span class="truncate text-[13cqh]">{course.code}</span>
-		<span class="w-full truncate text-left text-[15cqh] font-medium">{course.abbrName}</span>
-		<span class="w-full truncate text-center text-[13cqh]">
-			{course.bldg}
-			{course.room}
-		</span>
-	{:else}
-		<span class="truncate text-[15cqh]">{course.code}</span>
-		<span class="truncate text-[16cqh] font-medium">{courseName}</span>
-		<span class="truncate text-[15cqh]">{course.bldg} {course.room} | Sec {course.section}</span>
-	{/if}
+	<span class="max-w-full truncate text-left text-[15cqh]">{course.code}</span>
+	<span class="max-w-full truncate text-left text-[16cqh] font-medium">{courseName}</span>
+	<span class="max-w-full truncate text-left text-[15cqh]"
+		>{course.bldg} {course.room} | Sec {course.section}</span
+	>
 </div>

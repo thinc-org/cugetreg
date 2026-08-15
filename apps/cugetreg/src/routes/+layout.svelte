@@ -3,8 +3,6 @@
 
   import { goto } from '$app/navigation';
   import { page } from '$app/state';
-  import { api } from '$lib/api';
-  import { tryCatch } from '$lib/async-handler';
   import {
     handleGoogleLogin,
     handleGoogleLogout,
@@ -12,6 +10,7 @@
   } from '$lib/auth-client';
   import LoadingScreen from '$lib/components/loading-screen.svelte';
   import { semesterToThaiMapper, studyProgramMapper } from '$lib/mapper';
+  import { initCartSelectionController } from '$lib/stores/cart-selection.svelte';
   import { loginPopupState } from '$lib/stores/login-popup.svelte';
   import { searchState } from '$lib/stores/search.svelte';
   import {
@@ -21,7 +20,7 @@
     type UserCartInterface,
   } from '$lib/stores/user-cart';
 
-  import { setContext, type Snippet } from 'svelte';
+  import { onDestroy, setContext, type Snippet } from 'svelte';
   import toast, { Toaster } from 'svelte-french-toast';
 
   import { Modal } from '@cugetreg/ui/atoms/modal';
@@ -31,7 +30,6 @@
   } from '@cugetreg/ui/organisms/create-timetable';
   import { LoginPopup } from '@cugetreg/ui/organisms/login-popup';
   import { Navbar } from '@cugetreg/ui/organisms/navbar';
-  import { CartDetailResponseSchema } from '@cugetreg/zod-schemas/carts-response';
 
   import type { LayoutData } from './$types';
 
@@ -84,6 +82,8 @@
   };
 
   const userCart = initUserCartStore(EMPTY_CART);
+  const cartSelection = initCartSelectionController(userCart);
+  onDestroy(() => cartSelection.destroy());
 
   const cartPromise = (() => data.cart)();
 
@@ -101,40 +101,6 @@
     .finally(() => (appLoading = false));
 
   setContext(CART_PROMISE_KEY, cartPromise);
-
-  let lastFetchedId = '';
-
-  $effect(() => {
-    const currentId = $userCart.currentCartId;
-
-    if (!currentId || currentId === lastFetchedId) return;
-
-    const fetchCurrentSchedule = async (id: string) => {
-      const [response, error] = await tryCatch(
-        api.get(`/carts/${id}`, {
-          headers: {
-            Authorization: 'Bearer your-token',
-            'Content-Type': 'application/json',
-          },
-        }),
-      );
-
-      if (error || !response) {
-        // console.error('Something went wrong: ' + error.message);
-        return;
-      }
-
-      const currentScheduleResponse = CartDetailResponseSchema.parse(
-        response.data,
-      ).data;
-
-      lastFetchedId = currentId;
-      $userCart.currentCart = currentScheduleResponse.cart;
-      console.log($userCart.currentCart);
-    };
-
-    fetchCurrentSchedule(currentId);
-  });
 
   $effect(() => {
     const currentQuery = searchState.query;
@@ -197,7 +163,9 @@
     imageUrl={$session.data?.user.image ?? 'https://...'}
     {scheduleOptions}
     {programLabel}
-    bind:currentScheduleId={$userCart.currentCartId}
+    bind:currentScheduleId={
+      () => cartSelection.selectedId, (id) => void cartSelection.select(id)
+    }
     onToggleTheme={toggleTheme}
     onAddSchedule={() => (showCreateScheduleModal = true)}
   />

@@ -45,6 +45,14 @@ async function queryCourse(query: GetCourseQuerySchema, userId?: string) {
   const selectedDays = !days || Array.isArray(days) ? days : [days];
   const selectedFaculties =
     !faculties || Array.isArray(faculties) ? faculties : [faculties];
+  const selectedEvals =
+    !assessment || Array.isArray(assessment) ? assessment : [assessment];
+
+  if (favorite) {
+    if (!userId) {
+      throw new Error("UNAUTHORIZED");
+    }
+  }
 
   if (favorite) {
     if (!userId) {
@@ -80,7 +88,7 @@ async function queryCourse(query: GetCourseQuerySchema, userId?: string) {
       selectedDays
         ? (selectedDays.map((day) => mapDayOfWeek(day)) as any)
         : null,
-      assessment ?? null,
+      (selectedEvals as any) ?? null,
       q ? `%${q}%` : null,
       noPrereq ?? null,
       timeStart ?? null,

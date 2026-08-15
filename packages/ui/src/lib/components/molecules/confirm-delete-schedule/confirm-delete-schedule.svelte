@@ -23,10 +23,11 @@
 		onConfirm?.();
 	};
 
-	const wrapperClass =
+	const wrapperClass = $derived(
 		variant === 'overlay'
 			? 'fixed inset-0 flex items-center justify-center bg-surface-container-highest/60 p-4'
-			: 'w-full flex items-center justify-center p-4';
+			: 'w-full flex items-center justify-center p-4'
+	);
 </script>
 
 <div class={wrapperClass} role="presentation">

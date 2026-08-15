@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { untrack } from 'svelte';
+
 	import type { TimetableMetaData } from '.';
 
 	import { Button } from '../../atoms/button';
@@ -49,11 +51,9 @@
 		{ value: 'I', label: 'นานาชาติ' }
 	];
 
-	// TODO: Add formatter
-	// TODO: Connect it to somewhere
-	let selected_year = $state(yearOptions[0]?.value ?? '2568');
+	let selected_year = $state(untrack(() => yearOptions[0]?.value ?? '2568'));
 	let selected_semester: 'FIRST' | 'SECOND' | 'SUMMER' = $state(
-		(semesterOptions[0]?.value as 'FIRST' | 'SECOND' | 'SUMMER') ?? 'FIRST'
+		untrack(() => (semesterOptions[0]?.value as 'FIRST' | 'SECOND' | 'SUMMER') ?? 'FIRST')
 	);
 
 	let tableName = $state('ตารางเรียนแสนสนุก');

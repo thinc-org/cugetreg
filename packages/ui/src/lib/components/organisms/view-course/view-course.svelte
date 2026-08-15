@@ -50,26 +50,26 @@
 {#if data}
 	<div class="bg-surface w-[90vw] rounded-lg border border-neutral-200 p-5 md:w-[50vw] md:min-w-[500px]">
 		<div class="">
-			<div class="mb-2 flex justify-between">
-				<div>
-					<span class="text-xl font-bold">{data.courseNo} {data.abbrName}</span>
-					<span class="text-sm font-extralight text-neutral-400">{data.credit} Credit</span>
+			<div class="flex items-start justify-between gap-2">
+				<div class="flex min-w-0 items-baseline gap-2">
+					<span class="min-w-0 truncate text-[16px] md:text-xl font-bold">{data.courseNo} {data.abbrName}</span>
+					<span class="shrink-0 text-sm font-extralight text-neutral-400">{data.credit} Credit</span>
 				</div>
 				<IconButton
-					class="bg-transparent ring-0! outline-none! hover:cursor-pointer"
+					class="shrink-0 bg-transparent ring-0! outline-none! hover:cursor-pointer"
 					onclick={onExit}
 				>
 					<X />
 				</IconButton>
 			</div>
-			<div class="flex justify-between">
-				<div>
-					<div class="text-lg font-bold">{data.courseNameTh}</div>
-					<div class="text-lg font-bold">{data.courseNameEn}</div>
+			<div class="flex flex-col justify-between gap-3 md:flex-row md:items-start">
+				<div class="min-w-0">
+					<div class="text-[12px] md:text-lg font-bold">{data.courseNameTh}</div>
+					<div class="text-[12px] md:text-lg font-bold">{data.courseNameEn}</div>
 				</div>
-				<div class="flex h-[90%] items-center justify-center">
+				<div class="flex h-[90%] w-full shrink-0 items-center justify-center md:w-auto">
 					<Button
-						class=""
+						class="w-full md:w-auto"
 						variant="outlined"
 						onclick={() => {
 							const params = new URLSearchParams({

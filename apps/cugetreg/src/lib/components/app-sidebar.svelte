@@ -81,7 +81,7 @@
             ></div>
           {/if}
           <div
-            class="bg-surface flex flex-1 flex-col overflow-hidden border-r border-neutral-100 group-data-[state=collapsed]:absolute group-data-[state=collapsed]:border group-data-[state=collapsed]:top-4 group-data-[state=collapsed]:left-[calc(var(--sidebar-width-icon)+1rem)] group-data-[state=collapsed]:z-50 group-data-[state=collapsed]:max-h-[min(800px,calc(100%-2rem))] group-data-[state=collapsed]:w-[400px] group-data-[state=collapsed]:rounded-3xl group-data-[state=collapsed]:shadow-2xl md:px-2 md:pt-0 md:pb-8"
+            class="bg-surface flex flex-1 flex-col overflow-hidden border-r border-neutral-100 group-data-[state=collapsed]:absolute group-data-[state=collapsed]:top-4 group-data-[state=collapsed]:left-[calc(var(--sidebar-width-icon)+1rem)] group-data-[state=collapsed]:z-50 group-data-[state=collapsed]:max-h-[min(800px,calc(100%-2rem))] group-data-[state=collapsed]:w-[400px] group-data-[state=collapsed]:rounded-3xl group-data-[state=collapsed]:border group-data-[state=collapsed]:shadow-2xl md:px-2 md:pt-0 md:pb-8"
           >
             <div
               class="flex-1 overflow-y-auto pb-10 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"

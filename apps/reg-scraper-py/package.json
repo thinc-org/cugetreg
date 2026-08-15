@@ -1,0 +1,8 @@
+{
+  "name": "@app/reg-scraper-py",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "scrape": "python -m reg_scraper scrape"
+  }
+}

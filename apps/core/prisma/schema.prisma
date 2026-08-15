@@ -262,6 +262,7 @@ enum GenEdType {
   SO // SOCIAL
   HU // HUMAN
   IN // INTERDISCIPLINARY
+  GENED // GenEd course with no area published by gened.chula.ac.th
 
   @@map("gen_ed_type")
 }

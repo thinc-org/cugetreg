@@ -971,7 +971,7 @@
             </button>
             <div class="flex flex-wrap items-center gap-3">
               <div class="flex flex-col items-start gap-3">
-                {#if ['SC', 'SO', 'HU', 'IN'].includes(course.genEdType)}
+                {#if ['SC', 'SO', 'HU', 'IN', 'GENED'].includes(course.genEdType)}
                   <GenedChip
                     type={course.genEdType as GenEdType}
                     class="px-3 py-1 text-xs md:hidden"
@@ -982,7 +982,7 @@
                   {course.courseInfo.abbrName}
                 </h1>
               </div>
-              {#if ['SC', 'SO', 'HU', 'IN'].includes(course.genEdType)}
+              {#if ['SC', 'SO', 'HU', 'IN', 'GENED'].includes(course.genEdType)}
                 <GenedChip
                   type={course.genEdType as GenEdType}
                   class="hidden px-3 py-1 text-xs md:block"

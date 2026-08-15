@@ -12,5 +12,6 @@ export default defineConfig({
   // (present at runtime — see apps/cugetreg/Dockerfile's pruned prod deploy).
   ssr: {
     external: ['jsdom'],
+    noExternal: ['@cugetreg/utils', '@cugetreg/zod-schemas', '@cugetreg/ui'],
   },
 });

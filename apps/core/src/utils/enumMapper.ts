@@ -87,6 +87,8 @@ export function mapGenEdType(raw: string): GenEdType {
     case "IN":
     case "INTERDISCIPLINARY":
       return GenEdType.IN;
+    case "GENED":
+      return GenEdType.GENED;
     default:
       throw new Error(`Invalid GenEdType: ${raw}`);
   }

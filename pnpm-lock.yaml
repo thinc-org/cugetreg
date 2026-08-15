@@ -311,6 +311,8 @@ importers:
         specifier: ^4.0.15
         version: 4.0.16(@types/node@24.10.4)(@vitest/browser-playwright@4.0.16)(jiti@2.6.1)(jsdom@29.1.1(@noble/hashes@2.0.1))(lightningcss@1.30.2)(terser@5.46.1)(tsx@4.21.0)(yaml@2.8.2)
 
+  apps/reg-scraper-py: {}
+
   packages/configs:
     devDependencies:
       '@eslint/js':

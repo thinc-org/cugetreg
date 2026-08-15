@@ -256,6 +256,8 @@
 	--color-on-in: var(--purple-700);
 	--color-hu: var(--neutral-white);
 	--color-on-hu: var(--pink-700);
+	--color-gened: var(--neutral-white);
+	--color-on-gened: var(--neutral-700);
 
 	--color-on-education: #e84f1d;
 	--color-education: color-mix(in srgb, var(--color-on-education) 20%, white);

@@ -98,7 +98,7 @@
   let favoriteOnly = $state(false);
   let currentProgram = $state<StudyProgram>('S');
   let currentSemester = $state<Semester>('FIRST');
-  let currentAY = $state<number>(2568);
+  let currentAY = $state<number>(2569);
   let currentSort = $state<SortBy>('NAME');
   let sortDirection = $state<'asc' | 'desc'>('asc');
 

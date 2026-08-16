@@ -1,9 +1,9 @@
 # CU Get Reg — Course Scraper (`reg-scraper-py`) on `mvp1-dev-scrapper`
 
-> **PR reviewers:** [`docs/PR_SETUP.md`](../../docs/PR_SETUP.md)  
+> **PR reviewers:** [`docs/PR_SETUP.md`](../../docs/PR_SETUP.md)
 > **Backend / frontend devs:** [`DATA_FORMAT.md`](./DATA_FORMAT.md) — output files, JSON fields, DB mapping
 
-Python scraper for **Chulalongkorn University Reg Chula** course schedules.  
+Python scraper for **Chulalongkorn University Reg Chula** course schedules.
 Pulls live schedule data from `cas.reg.chula.ac.th`, processes it, and writes to **JSON** (`apps/core/bin/courses.json`) and/or **PostgreSQL** (same DB as `apps/core`).
 
 ---
@@ -29,9 +29,11 @@ Scraper JSON uses `semester: "1"|"2"|"3"`. Postgres exporter maps to `FIRST`/`SE
 |------|----------|
 | Course list discovery (28 faculties) | Scrape course descriptions (needs separate CSV — see below) |
 | Section / class schedule, room, time | User reviews or ratings |
-| Seat capacity (regis/max) | Run automatically on a schedule (manual CLI for now) |
+| Seat capacity (regis/max) | Guarantee concurrent runs never overlap unless deployed via the CronJob below (local CLI runs have no lock) |
 | Exam dates (midterm/final) when present | Replace v1 NestJS scraper in production yet |
 | Upsert into v2 PostgreSQL schema | |
+
+Runs on a schedule (daily) as a Kubernetes `CronJob` when deployed via `cugetregv2-gitops` — see [Deployment](#deployment). Locally it's still manual CLI (`pnpm scraper:run`).
 
 **Data source:** [Reg Chula](https://cas.reg.chula.ac.th) — same HTML pages students use to search courses.
 
@@ -205,7 +207,7 @@ See [`DATA_FORMAT.md`](./DATA_FORMAT.md) for JSON → column mapping.
 
 ## Configuration (`.env`)
 
-Config file: `apps/reg-scraper-py/.env` (loaded automatically from any working directory). Copy `.env.example` and edit — the example ships with the small JSON-only run below.
+Config file: `apps/reg-scraper-py/.env` (loaded automatically from any working directory). Copy `.env.example` and edit — the example ships with `SCRAPER_MAX_COURSES=20` + `SCRAPER_EXPORTERS=postgres`, a small test run against a real Postgres DB rather than a full scrape.
 
 ### Scrape scope
 
@@ -220,7 +222,7 @@ Config file: `apps/reg-scraper-py/.env` (loaded automatically from any working d
 | `SCRAPER_MAX_COURSES` | `20` | Limit after discovery. `0` = no limit (~8000+ for I/sem2) |
 | `SCRAPER_EXPORTERS` | `json,postgres` | `json`, `postgres`, or both |
 
-`.env.example` defaults to `SCRAPER_MAX_COURSES=20` + `SCRAPER_EXPORTERS=json` — a small JSON-only run with no DB writes. For a full scrape into Postgres, set `SCRAPER_MAX_COURSES=0` and `SCRAPER_EXPORTERS=json,postgres`.
+`.env.example` defaults to `SCRAPER_MAX_COURSES=20` + `SCRAPER_EXPORTERS=postgres` — a small test scrape into a real Postgres DB. For a full scrape (every course, all three study programs), set `SCRAPER_MAX_COURSES=0`. This is also what the gitops-deployed CronJob uses in production — see [Deployment](#deployment) below.
 
 ### Rate limiting
 
@@ -252,7 +254,7 @@ Config file: `apps/reg-scraper-py/.env` (loaded automatically from any working d
 | `SCRAPER_STATUS_OUTPUT` | `../../apps/reg-scraper-py/data/scraper-status.json` | Progress / result file |
 | `DATABASE_URL` | `postgresql://admin:cugetreg@localhost:5432/cugetreg` | Same as `apps/core/.env` — only needed when `SCRAPER_EXPORTERS` includes `postgres` |
 
-**Common mistake:** `SCRAPER_MAX_COURSES=20` limits how many courses to fetch.  
+**Common mistake:** `SCRAPER_MAX_COURSES=20` limits how many courses to fetch.
 `SCRAPER_COURSE_NOS=20` would try to scrape course number `"20"` — wrong variable.
 
 ---
@@ -311,6 +313,22 @@ pnpm dev
 | http://localhost:5173/ | Course search (reads from `GET /api/v1/courses`) |
 | http://localhost:5173/scraper | Scraper status |
 | http://localhost:3000/api/v1/courses?studyProgram=S&academicYear=2568&semester=SECOND&limit=5 | Raw API |
+
+---
+
+## Deployment
+
+Ships as a Docker image (`apps/reg-scraper-py/Dockerfile`, `python:3.12-slim`) built by the `reg-scraper` job in `.github/workflows/build-deploy.yaml`. Unlike `web`/`api`, its build context is this directory, not the monorepo root — it has no dependency on the pnpm workspace.
+
+A `v2-beta` push builds it, pushes its image, and bumps its tag in the gitops `beta` overlay automatically, same as `web`/`api` — no separate trigger needed. A tagged GitHub Release (`gh release create reg-scraper@1.0.0 --target v2-prod`, see `cugetregv2-gitops`'s README, "Cutting a prod release") is the equivalent path for `v2-prod`.
+
+In `cugetregv2-gitops`, `reg-scraper/` deploys it as a Kubernetes **`CronJob`** (`0 2 * * *`, daily), not a long-running server — the container runs one full scrape and exits `0` on success. A `PersistentVolumeClaim` mounted at `/data` keeps `overrides.json`, `course_desc.csv`, and the CUCIS checkpoint across runs, so `SCRAPER_GENED_MODE=auto`/`SCRAPER_DESCRIPTIONS_MODE=auto` only pay their one-time scrape cost on the very first run — every scheduled run after that reuses the persisted files.
+
+**Concurrency:** `kubectl create job --from=cronjob/reg-scraper ...` (a manual/on-demand trigger) bypasses the CronJob controller entirely, so the CronJob's `concurrencyPolicy: Forbid` has no effect on it — a manual trigger fired mid-scheduled-run would otherwise race the same Postgres `DELETE`+`INSERT` cycle and the same PVC files. `entrypoint.sh` guards against this directly with a `flock` on `/data/.lock` (fd 9 — this image's `/bin/sh` is `dash`, which rejects the more common fd "200" convention): a second run skips immediately (exit `0`, logged, not treated as a failure) if the lock is already held, rather than queuing or racing.
+
+**Production run scope:** the deployed secret sets `SCRAPER_MAX_COURSES=0` (every course, unlike the `20` used for local testing) and `SCRAPER_EXPORTERS=postgres` only (no `courses.json` — nothing reads it once data's in Postgres).
+
+The `/scraper` status page above only works locally — it reads `scraper-status.json` off the local filesystem, which isn't reachable from the deployed `web` pod (different pod, no shared volume with the CronJob's PVC). Not yet wired up for the deployed CronJob.
 
 ---
 

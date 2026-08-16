@@ -239,7 +239,7 @@
     const hh = String(date.getHours()).padStart(2, '0');
     const min = String(date.getMinutes()).padStart(2, '0');
 
-    lastUpdatedLabel = `วันที่ ${dd}/${mm}/${buddhistYear}  เวลา ${hh}.${min} น.`;
+    lastUpdatedLabel = `วันที่ ${dd}/${mm}/${buddhistYear}  เวลา ${hh}.${min} น.`;
   }
 
   const courseResults = new CourseResults({

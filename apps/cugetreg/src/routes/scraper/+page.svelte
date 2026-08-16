@@ -1,21 +1,21 @@
 <script lang="ts">
-  import type { PageData } from './$types'
+  import type { PageData } from './$types';
 
   interface Props {
-    data: PageData
+    data: PageData;
   }
 
-  let { data }: Props = $props()
+  let { data }: Props = $props();
 
-  const status = $derived(data.scraperStatus)
+  const status = $derived(data.scraperStatus);
 </script>
 
 <div class="mx-auto max-w-3xl p-6">
   <h1 class="mb-2 text-2xl font-bold">Scraper Status</h1>
   <p class="mb-6 text-sm text-gray-600">
     Python scraper writes to PostgreSQL (same DB as <code>apps/core</code>) and
-    <code>apps/core/bin/courses.json</code>. Courses appear on the home page once
-    scraping completes.
+    <code>apps/core/bin/courses.json</code>. Courses appear on the home page
+    once scraping completes.
   </p>
 
   <dl class="grid gap-3 rounded-lg border border-gray-200 p-4">

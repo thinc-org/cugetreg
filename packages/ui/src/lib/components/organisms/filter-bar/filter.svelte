@@ -15,7 +15,7 @@
 		{ id: 'HU', label: 'มนุษย์', color: '#C7117F', bg: '#FFFFFF' },
 		{ id: 'SO', label: 'สังคม', color: '#4B991C', bg: '#FFFFFF' },
 		{ id: 'IN', label: 'สหฯ', color: '#681A83', bg: '#FFFFFF' },
-		{ id: 'GENED', label: 'ศึกษาทั่วไป', color: '#45485F', bg: '#FFFFFF' }
+		{ id: 'GENED', label: 'ศึกษาทั่วไป', color: '#45485F', bg: '#FFFFFF' },
 		{ id: 'NO', label: 'ไม่ใช่ GenEd', color: '#000000', bg: '#FFFFFF' }
 	];
 

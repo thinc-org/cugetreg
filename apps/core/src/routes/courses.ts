@@ -64,7 +64,12 @@ courses
   // dynamic param route matches "/last-updated" first and shadows this one.
   .openapi(getLastUpdatedRoute, async (c) => {
     try {
-      const data = await courseServices.getLastUpdated();
+      const { studyProgram, academicYear, semester } = c.req.valid("query");
+      const data = await courseServices.getLastUpdated({
+        studyProgram,
+        academicYear,
+        semester,
+      });
       return c.json(data, 200);
     } catch {
       return c.json({ error: "INTERNAL_SERVER_ERROR" }, 500);

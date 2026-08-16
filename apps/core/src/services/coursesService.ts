@@ -334,8 +334,15 @@ async function getCourseSections(
 }
 
 //1.5b Get last course data sync timestamp
-async function getLastUpdated() {
+async function getLastUpdated(query: GetCourseDetailQuerySchema) {
+  const { studyProgram, academicYear, semester } = query;
+
   const result = await prisma.course.aggregate({
+    where: {
+      studyProgram: mapStudyProgram(studyProgram),
+      academicYear,
+      semester: mapSemester(semester),
+    },
     _max: { updatedAt: true },
   });
 

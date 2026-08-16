@@ -42,7 +42,7 @@
     X,
   } from '@lucide/svelte';
   import { isAxiosError } from 'axios';
-  import { getContext, onDestroy, untrack } from 'svelte';
+  import { getContext, onDestroy } from 'svelte';
   import { cubicOut } from 'svelte/easing';
   import { MediaQuery } from 'svelte/reactivity';
   import { fade, slide } from 'svelte/transition';
@@ -75,7 +75,7 @@
   const isMobile = $derived(mobileMedia.current);
 
   $effect(() => {
-    untrack(() => fetchLastUpdated());
+    fetchLastUpdated(currentProgram, currentAY, currentSemester);
   });
 
   // let searchQuery = $state('');
@@ -228,8 +228,20 @@
     };
   }
 
-  async function fetchLastUpdated() {
-    const [response, err] = await tryCatch(api.get('/courses/last-updated'));
+  async function fetchLastUpdated(
+    studyProgramParam: StudyProgram,
+    academicYear: number,
+    semester: Semester,
+  ) {
+    const [response, err] = await tryCatch(
+      api.get('/courses/last-updated', {
+        params: {
+          studyProgram: studyProgramParam,
+          academicYear: String(academicYear),
+          semester,
+        },
+      }),
+    );
     if (err || !response.data.lastUpdated) return;
 
     const date = new Date(response.data.lastUpdated);

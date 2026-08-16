@@ -121,6 +121,9 @@ export const getLastUpdatedRoute = createRoute({
   method: "get",
   path: "/last-updated",
   summary: "1.5b Get Last Course Data Sync Timestamp",
+  request: {
+    query: CourseSchema.GetCourseDetailQuerySchema,
+  },
   responses: {
     200: {
       content: {

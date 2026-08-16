@@ -4,8 +4,9 @@
 # Called by build-beta.yaml (env=beta, commit) and release-prod.yaml (env=prod, PR).
 #
 # Naming map (app dir → image → gitops component):
-#   apps/cugetreg → ghcr.io/narumedsr-p/web → gitops "web"  (match-name my-registry/web)
-#   apps/core     → ghcr.io/narumedsr-p/api → gitops "api"  (match-name my-registry/api)
+#   apps/cugetreg      → ghcr.io/narumedsr-p/web         → gitops "web"         (match-name my-registry/web)
+#   apps/core          → ghcr.io/narumedsr-p/api          → gitops "api"          (match-name my-registry/api)
+#   apps/reg-scraper-py → ghcr.io/narumedsr-p/reg-scraper → gitops "reg-scraper" (match-name my-registry/reg-scraper)
 #
 # Supply-chain note: third-party + first-party actions are pinned to a commit SHA
 # (the trailing `# vX.Y.Z` is the human-readable tag the SHA corresponds to).
@@ -28,7 +29,7 @@ on:
         default: commit
         type: string
       component:
-        description: single component to build (web|api) — empty builds both (beta)
+        description: single component to build (web|api|reg-scraper) — empty builds all (beta)
         required: false
         default: ""
         type: string
@@ -139,14 +140,44 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
+  # ── reg-scraper: self-contained build, no monorepo/pnpm dependency ─────────────
+  # Unlike web/api, this component's build context is its own app dir, not the
+  # monorepo root — apps/reg-scraper-py has no dependency on the pnpm workspace.
+  reg-scraper:
+    if: inputs.component == '' || inputs.component == 'reg-scraper'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    outputs:
+      digest: ${{ steps.build.outputs.digest }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
+      - uses: docker/setup-buildx-action@c47758b77c9736f4b2ef4073d4d51994fabfe349  # v3.7.1
+      - uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567  # v3.3.0
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
+      - uses: docker/build-push-action@48aba3b46d1b1fec4febb7c5d0c644b249a11355  # v6.10.0
+        id: build
+        with:
+          context: apps/reg-scraper-py
+          file: apps/reg-scraper-py/Dockerfile
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NS }}/reg-scraper:${{ inputs.tag }}
+          push: true
+          labels: |
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}
+            org.opencontainers.image.revision=${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
   # ── write the new tag into the gitops repo ────────────────────────────────────
   update-gitops:
-    needs: [web, api]
+    needs: [web, api, reg-scraper]
     # A skipped job counts as neither success nor failure for `needs`, so
     # the default (implicit success()) condition would skip this too when
-    # only one of web/api ran (single-component prod release). Run as long
+    # only one component ran (single-component prod release). Run as long
     # as at least one of them actually succeeded.
-    if: always() && (needs.web.result == 'success' || needs.api.result == 'success')
+    if: always() && (needs.web.result == 'success' || needs.api.result == 'success' || needs['reg-scraper'].result == 'success')
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -188,7 +219,19 @@ jobs:
           declare -A DIGEST=(
             [web]="${{ needs.web.outputs.digest }}"
             [api]="${{ needs.api.outputs.digest }}"
+            [reg-scraper]="${{ needs['reg-scraper'].outputs.digest }}"
           )
+          # TODO(reg-scraper-cronjob): reg-scraper deliberately excluded from
+          # the default beta set below. The gitops overlay it points at is
+          # still the stale placeholder Deployment (long-running, 2 replicas),
+          # not yet the CronJob this image is built for (one-shot, exits 0 on
+          # success) — bumping its tag automatically would crash-loop that
+          # Deployment in production (repeatedly re-hitting reg.chula.ac.th +
+          # the DB). Build it explicitly via `component: reg-scraper` only.
+          # >>> ONCE THE GITOPS reg-scraper/ Deployment→CronJob SWITCH HAS
+          # >>> LANDED (separate follow-up), COME BACK HERE AND ADD
+          # >>> reg-scraper TO THE DEFAULT comps LIST BELOW. Do not forget —
+          # >>> until this line changes, reg-scraper never auto-deploys.
           comps="web api"
           [ -n "${{ inputs.component }}" ] && comps="${{ inputs.component }}"
           for comp in $comps; do

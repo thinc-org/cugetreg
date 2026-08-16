@@ -8,7 +8,8 @@ export const chipVariants = tv({
 			SC: 'border-on-sc text-on-sc bg-sc',
 			SO: 'border-on-so text-on-so bg-so',
 			HU: 'border-on-hu text-on-hu bg-hu',
-			IN: 'border-on-in text-on-in bg-in'
+			IN: 'border-on-in text-on-in bg-in',
+			GENED: 'border-on-gened text-on-gened bg-gened'
 		}
 	}
 });

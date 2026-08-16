@@ -262,6 +262,7 @@ enum GenEdType {
   SO // SOCIAL
   HU // HUMAN
   IN // INTERDISCIPLINARY
+  GENED // GenEd course with no area published by gened.chula.ac.th
 
   @@map("gen_ed_type")
 }
@@ -525,4 +526,43 @@ model Verification {
 
   @@index([identifier])
   @@map("verification")
+}
+
+model SchedulePreset {
+  id        String    @id @default(cuid())
+  name      String
+  enabled   Boolean   @default(false)
+  startDate DateTime? @map("start_date")
+  endDate   DateTime? @map("end_date")
+
+  entries ScheduleEntry[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("schedule_preset")
+}
+
+model ScheduleEntry {
+  id       String         @id @default(cuid())
+  presetId String         @map("preset_id")
+  preset   SchedulePreset @relation(fields: [presetId], references: [id], onDelete: Cascade)
+
+  type          EntryType
+  daysOfWeek    Int[]   @map("days_of_week")
+  time          String?
+  intervalHours Int?    @map("interval_hours")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([presetId])
+  @@map("schedule_entry")
+}
+
+enum EntryType {
+  FIXED
+  INTERVAL
+
+  @@map("entry_type")
 }

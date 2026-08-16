@@ -116,6 +116,27 @@ export const removeFavoriteCourse = createRoute({
   security: [{ Bearer: [] }],
 });
 
+// 1.5b get last-synced timestamp (public — no auth required)
+export const getLastUpdatedRoute = createRoute({
+  method: "get",
+  path: "/last-updated",
+  summary: "1.5b Get Last Course Data Sync Timestamp",
+  request: {
+    query: CourseSchema.GetCourseDetailQuerySchema,
+  },
+  responses: {
+    200: {
+      content: {
+        "application/json": {
+          schema: CourseResponseSchema.LastUpdatedResponseSchema,
+        },
+      },
+      description: "OK",
+    },
+    500: InternalError,
+  },
+});
+
 // 1.6 get course sections (lightweight — for the review form's Section picker)
 export const getCourseSectionsRoute = createRoute({
   method: "get",

@@ -4,7 +4,7 @@ import { courseColorVariants } from "./constants";
 
 export type ColorVariant = keyof typeof courseColorVariants;
 export type Day = "MO" | "TU" | "WE" | "TH" | "FR" | "SA" | "SU";
-export type GenEdType = "SC" | "SO" | "HU" | "IN";
+export type GenEdType = "SC" | "SO" | "HU" | "IN" | "GENED";
 
 export type Period = {
   day: Day;

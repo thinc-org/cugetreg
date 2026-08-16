@@ -1,8 +1,13 @@
 # Prod release: publish a GitHub Release targeting the `v2-prod` branch,
-# tagged <component>@<version> (e.g. web@1.13.1, api@1.15.1) — each
-# component releases and deploys completely independently, only the tagged
-# one is built and bumped. CI builds it and opens a PR against the gitops
-# prod overlay (so a human approves the prod rollout).
+# tagged <component>@<version> (e.g. web@1.13.1, api@1.15.1, reg-scraper@1.0.0)
+# — each component releases and deploys completely independently, only the
+# tagged one is built and bumped. CI builds it and opens a PR against the
+# gitops prod overlay (so a human approves the prod rollout).
+#
+# reg-scraper caveat: don't cut a reg-scraper release until the gitops
+# reg-scraper/ secrets have actually been re-sealed against the target
+# cluster — see cugetregv2-gitops's README "Regenerating / re-sealing
+# secrets" section.
 #
 # publish a Release from a v2-prod tag in the GitHub UI (or `gh release
 # create web@1.13.1 --target v2-prod`), with v2-prod selected as the target
@@ -49,8 +54,8 @@ jobs:
           fi
           VERSION="${VERSION#v}"  # strip leading "v", if present (e.g. v2.0.1)
 
-          if [ -n "$COMPONENT" ] && [ "$COMPONENT" != "web" ] && [ "$COMPONENT" != "api" ]; then
-            echo "::error::Release tag '$TAG' has an unrecognized component '$COMPONENT' — expected 'web' or 'api'."
+          if [ -n "$COMPONENT" ] && [ "$COMPONENT" != "web" ] && [ "$COMPONENT" != "api" ] && [ "$COMPONENT" != "reg-scraper" ]; then
+            echo "::error::Release tag '$TAG' has an unrecognized component '$COMPONENT' — expected 'web', 'api', or 'reg-scraper'."
             exit 1
           fi
 

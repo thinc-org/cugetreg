@@ -80,6 +80,7 @@
   let selectedFaculties = $state<string[]>([]);
   let selectedDays = $state<string[]>([]);
   let selectedEval = $state<string[]>([]);
+  let credit = $state('');
   let startTime = $state('');
   let endTime = $state('');
   let fitSchedule = $state(false);
@@ -97,6 +98,7 @@
       selectedFaculties,
       selectedDays,
       selectedEval,
+      credit,
       startTime,
       endTime,
       fitSchedule,
@@ -111,6 +113,7 @@
       selectedFaculties = state.selectedFaculties;
       selectedDays = state.selectedDays;
       selectedEval = state.selectedEval;
+      credit = state.credit;
       startTime = state.startTime;
       endTime = state.endTime;
       fitSchedule = state.fitSchedule;
@@ -245,6 +248,7 @@
       faculties: [...selectedFaculties],
       days: [...selectedDays],
       assessment: selectedEval[0],
+      credit: credit || undefined,
       timeStart: startTime || undefined,
       timeEnd: endTime || undefined,
       fitCartId,
@@ -959,6 +963,7 @@
             bind:selectedFaculties
             bind:selectedDays
             bind:selectedEval
+            bind:credit
             bind:startTime
             bind:endTime
             bind:fitSchedule

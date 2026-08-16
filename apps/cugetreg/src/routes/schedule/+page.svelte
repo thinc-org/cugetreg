@@ -258,27 +258,37 @@
       bind:activePanel
     >
       {#snippet iconItems()}
+        <!--
+          Each icon is nudged with a fixed margin so it lines up with its
+          section header in the panel. These are pure layout offsets: nothing
+          recomputes them, so the icons never shift when a section is opened or
+          closed. Tune the two values if the headers change height.
+        -->
         <Sidebar.MenuItem>
-          <Sidebar.MenuButton
-            onclick={toggleSidebar}
-            isActive={sidebarExpanded && activePanel === 'sidebar'}
-            size="lg"
-            tooltipContent="ตารางเรียน"
-            class="mx-auto size-12! justify-center rounded-xl p-0! ring-0 transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-5!"
-          >
-            <Menu size="20" strokeWidth={2.5} />
-          </Sidebar.MenuButton>
+          <div class="mt-[0px]">
+            <Sidebar.MenuButton
+              onclick={toggleSidebar}
+              isActive={sidebarExpanded && activePanel === 'sidebar'}
+              size="lg"
+              tooltipContent="ตารางเรียน"
+              class="mx-auto size-12! justify-center rounded-xl p-0! ring-0 transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-5!"
+            >
+              <Menu size="20" strokeWidth={2.5} />
+            </Sidebar.MenuButton>
+          </div>
         </Sidebar.MenuItem>
         <Sidebar.MenuItem>
-          <Sidebar.MenuButton
-            onclick={focusSelected}
-            isActive={activePanel === 'selected_only'}
-            size="lg"
-            tooltipContent="วิชาที่เลือก"
-            class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-5!"
-          >
-            <BookMarked size="20" strokeWidth={2.5} />
-          </Sidebar.MenuButton>
+          <div class="mt-[18px]">
+            <Sidebar.MenuButton
+              onclick={focusSelected}
+              isActive={activePanel === 'selected_only'}
+              size="lg"
+              tooltipContent="วิชาที่เลือก"
+              class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-5!"
+            >
+              <BookMarked size="20" strokeWidth={2.5} />
+            </Sidebar.MenuButton>
+          </div>
         </Sidebar.MenuItem>
       {/snippet}
       {#snippet panelContent({ expanded })}
@@ -293,7 +303,7 @@
               </div>
             {:then}
               <SelectTimetable
-                class="border-b border-neutral-100 px-2 py-5"
+                class="px-2 pt-5"
                 options={$userCart.cartList?.map((item) => ({
                   name: item.name,
                   id: item.id,

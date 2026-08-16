@@ -805,7 +805,7 @@
           </div>
         </Sidebar.MenuItem>
         <Sidebar.MenuItem>
-          <div class="mt-[0px]">
+          <div class="mt-[-8px]">
             <Sidebar.MenuButton
               onclick={() => {
                 activePanel = 'description_only';
@@ -821,7 +821,7 @@
           </div>
         </Sidebar.MenuItem>
         <Sidebar.MenuItem>
-          <div class="mt-[-12px]">
+          <div class="mt-[-20px]">
             <Sidebar.MenuButton
               onclick={() => {
                 activePanel = 'detail_only';
@@ -837,7 +837,7 @@
           </div>
         </Sidebar.MenuItem>
         <Sidebar.MenuItem>
-          <div class="mt-[-12px]">
+          <div class="mt-[-15px]">
             <Sidebar.MenuButton
               onclick={() => {
                 activePanel = 'review_only';
@@ -896,7 +896,7 @@
           <div class="text-on-surface mb-6 flex flex-col">
             <button
               type="button"
-              class="hover:text-primary w-full border-b border-neutral-200 py-4 text-left text-xl font-semibold transition-colors"
+              class="hover:text-primary w-full border-b border-neutral-200 py-4 text-left text-lg/[20px] font-medium transition-colors"
               onclick={() => {
                 activePanel = 'description_only';
                 scrollToSection(descriptionSection);
@@ -907,7 +907,7 @@
 
             <button
               type="button"
-              class="hover:text-primary w-full border-b border-neutral-200 py-4 text-left text-xl font-semibold transition-colors"
+              class="hover:text-primary w-full border-b border-neutral-200 py-4 text-left text-lg/[20px] font-medium transition-colors"
               onclick={() => {
                 activePanel = 'detail_only';
                 scrollToSection(detailSection);
@@ -921,7 +921,7 @@
             >
               <button
                 type="button"
-                class="hover:text-primary text-left text-xl font-semibold transition-colors"
+                class="hover:text-primary text-left text-lg/[20px] font-medium transition-colors"
                 onclick={() => {
                   activePanel = 'review_only';
                   scrollToSection(reviewSection);

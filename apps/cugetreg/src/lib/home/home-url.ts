@@ -7,6 +7,7 @@ export interface HomeUrlState {
   selectedFaculties: string[];
   selectedDays: string[];
   selectedEval: string[];
+  credit: string;
   startTime: string;
   endTime: string;
   fitSchedule: boolean;
@@ -50,6 +51,7 @@ export function parseHomeUrl(url: URL): HomeUrlState {
     selectedFaculties: parseList(params.get('faculty')),
     selectedDays: parseList(params.get('day')),
     selectedEval: parseList(params.get('gradingType')),
+    credit: params.get('credit') ?? '',
     startTime: params.get('timeStart') ?? '',
     endTime: params.get('timeEnd') ?? '',
     fitSchedule: params.get('fitSchedule') === 'true',
@@ -73,6 +75,7 @@ export function buildHomeUrl(baseUrl: URL, state: HomeUrlState): URL {
     timeStart: state.startTime || null,
     timeEnd: state.endTime || null,
     gradingType: state.selectedEval.join(',') || null,
+    credit: state.credit || null,
     fitSchedule: state.fitSchedule ? 'true' : null,
     noConditions: state.noConditions ? 'true' : null,
     favorite: state.favoriteOnly ? 'true' : null,

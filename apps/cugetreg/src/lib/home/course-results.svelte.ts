@@ -17,6 +17,7 @@ export interface CourseQuery {
   faculties: string[];
   days: string[];
   assessment?: string;
+  credit?: string;
   timeStart?: string;
   timeEnd?: string;
   fitCartId?: string;
@@ -150,6 +151,7 @@ export class CourseResults<T> {
     if (query.search) params.set('q', query.search);
     if (query.noPrereq) params.set('noPrereq', 'true');
     if (query.assessment) params.set('assessment', query.assessment);
+    if (query.credit) params.set('credit', query.credit);
     if (query.timeStart) params.set('timeStart', query.timeStart);
     if (query.timeEnd) params.set('timeEnd', query.timeEnd);
     if (query.fitCartId) params.set('fitCartId', query.fitCartId);

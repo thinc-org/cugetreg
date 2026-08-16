@@ -17,10 +17,9 @@
 -- @param {String} $14:sortBy? Sort column ('NAME', 'CAPACITY_SUM', 'REMAINING_SUM'; default 'REMAINING_SUM')
 -- @param {String} $15:sortOrder? Sort direction ('ASC', 'DESC'; default 'ASC')
 -- @param {String} $16:fitCartId? Optional cart ID — when set, excludes sections whose classes overlap with the cart's sections
--- @param {Decimal} $17:creditMin? Optional minimum credit
--- @param {Decimal} $18:creditMax? Optional maximum credit
--- @param {Boolean} $19:favorite? Optional when true, select user's favorite courses
--- @param {String} $20:userId? Optional , required when get user's favorite courses
+-- @param {Decimal} $17:credit? Optional exact credit
+-- @param {Boolean} $18:favorite? Optional when true, select user's favorite courses
+-- @param {String} $19:userId? Optional , required when get user's favorite courses
 
 -- Perf note: LIMIT/OFFSET are applied in `paginated_courses` (Stage A), before
 -- the expensive per-class JSON aggregation in `section_json` (Stage B). Stage B
@@ -61,8 +60,8 @@ WITH occupied_slots AS MATERIALIZED (
 user_favorites AS (
     SELECT DISTINCT cf.course_no
     FROM course_favorite cf
-    WHERE cf.user_id = $20::text
-    AND $20::text IS NOT NULL
+    WHERE cf.user_id = $19::text
+    AND $19::text IS NOT NULL
 ),
 
 -- Step 1: Find sections that pass ALL filters (course-level + section-level).
@@ -100,9 +99,8 @@ matching_sections AS (
         -- Grading type (optional)
         AND ($7::grading_type[] IS NULL OR ci.grading_type = ANY($7::grading_type[]))
 
-        -- Credit range (optional)
-        AND ($17::numeric IS NULL OR ci.credit >= $17::numeric)
-        AND ($18::numeric IS NULL OR ci.credit <= $18::numeric)
+        -- Credit (optional)
+        AND ($17::numeric IS NULL OR ci.credit = $17::numeric)
 
         -- No prereq (optional boolean)
         AND ($9::boolean IS NOT TRUE
@@ -160,7 +158,7 @@ matching_sections AS (
         )
 
         AND (
-          $19::boolean IS NOT TRUE
+          $18::boolean IS NOT TRUE
           OR uf.course_no IS NOT NULL
         )
 ),

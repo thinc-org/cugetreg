@@ -91,6 +91,7 @@
   let selectedFaculties = $state<string[]>([]);
   let selectedDays = $state<string[]>([]);
   let selectedEval = $state<string[]>([]);
+  let credit = $state('');
   let startTime = $state('');
   let endTime = $state('');
   let fitSchedule = $state(false);
@@ -108,6 +109,7 @@
       selectedFaculties,
       selectedDays,
       selectedEval,
+      credit,
       startTime,
       endTime,
       fitSchedule,
@@ -122,6 +124,7 @@
       selectedFaculties = state.selectedFaculties;
       selectedDays = state.selectedDays;
       selectedEval = state.selectedEval;
+      credit = state.credit;
       startTime = state.startTime;
       endTime = state.endTime;
       fitSchedule = state.fitSchedule;
@@ -282,6 +285,7 @@
       faculties: [...selectedFaculties],
       days: [...selectedDays],
       assessment: selectedEval[0],
+      credit: credit || undefined,
       timeStart: startTime || undefined,
       timeEnd: endTime || undefined,
       fitCartId,
@@ -535,7 +539,7 @@
           opened or closed. Tune the three values if the headers change height.
         -->
         <Sidebar.MenuItem>
-          <div class="-mt-[5px]">
+          <div class="-mt-[0px]">
             <Sidebar.MenuButton
               onclick={toggleSidebar}
               isActive={sidebarExpanded && activePanel === 'sidebar'}
@@ -548,7 +552,7 @@
           </div>
         </Sidebar.MenuItem>
         <Sidebar.MenuItem>
-          <div class="mt-[5px]">
+          <div class="mt-[18px]">
             <Sidebar.MenuButton
               onclick={focusFilter}
               isActive={activePanel === 'filter_only'}
@@ -581,14 +585,14 @@
           <div class="relative mb-6 flex flex-col gap-2">
             {#await cartPromise}
               <div
-                class="flex items-center justify-center gap-2 border-b border-neutral-100 px-2 py-8 text-gray-400"
+                class="flex items-center justify-center gap-2 px-2 py-8 text-gray-400"
               >
                 <Loader2 class="animate-spin" size={24} />
                 <span class="text-sm">กำลังโหลดตารางเรียน...</span>
               </div>
             {:then}
               <SelectTimetable
-                class="border-b border-neutral-100 px-2 py-5"
+                class="px-2 pt-5"
                 options={$userCart.cartList?.map((item) => ({
                   name: item.name,
                   id: item.id,
@@ -603,7 +607,7 @@
               />
             {:catch}
               <div
-                class="flex items-center justify-center gap-2 border-b border-neutral-100 px-2 py-8 text-sm text-red-400"
+                class="flex items-center justify-center gap-2 px-2 py-8 text-sm text-red-400"
               >
                 โหลดตารางเรียนไม่สำเร็จ
               </div>
@@ -998,6 +1002,7 @@
             bind:selectedFaculties
             bind:selectedDays
             bind:selectedEval
+            bind:credit
             bind:startTime
             bind:endTime
             bind:fitSchedule

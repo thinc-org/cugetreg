@@ -16,6 +16,7 @@
 		{ id: 'SO', label: 'สังคม', color: '#4B991C', bg: '#FFFFFF' },
 		{ id: 'IN', label: 'สหฯ', color: '#681A83', bg: '#FFFFFF' },
 		{ id: 'GENED', label: 'ศึกษาทั่วไป', color: '#45485F', bg: '#FFFFFF' }
+		{ id: 'NO', label: 'ไม่ใช่ GenEd', color: '#000000', bg: '#FFFFFF' }
 	];
 
 	const facultyOptions = Object.keys(FACULTIES).map((faculty) => {
@@ -51,6 +52,7 @@
 		selectedFaculties?: string[];
 		selectedDays?: string[];
 		selectedEval?: string[];
+		credit?: string;
 		startTime?: string;
 		endTime?: string;
 		fitSchedule?: boolean;
@@ -64,6 +66,7 @@
 		selectedFaculties = $bindable([]),
 		selectedDays = $bindable([]),
 		selectedEval = $bindable([]),
+		credit = $bindable(''),
 		startTime = $bindable(''),
 		endTime = $bindable(''),
 		fitSchedule = $bindable(false),
@@ -82,6 +85,9 @@
 	}
 	function onFitScheduleChange() {
 		if (fitSchedule) showFitModal = true;
+	}
+	function onCreditInput() {
+		if (credit) noConditions = false;
 	}
 
 	// --- 3. HELPER LOGIC ($derived) ---
@@ -460,6 +466,22 @@
 						{/each}
 					</div>
 				{/if}
+			</div>
+		</div>
+
+		<div class="mb-4">
+			<label for="credit-filter" class="mb-1.5 block text-xs text-neutral-400">หน่วยกิต</label>
+			<div class="flex items-center gap-3">
+				<input
+					id="credit-filter"
+					type="text"
+					inputmode="decimal"
+					bind:value={credit}
+					oninput={onCreditInput}
+					placeholder="ทั้งหมด"
+					class="bg-surface-container-lowest text-on-surface box-border h-10 w-20 rounded-xl border-none p-2.5 text-base text-[14px] placeholder:text-neutral-400"
+				/>
+				<span class="text-base font-normal text-neutral-700">หน่วยกิต</span>
 			</div>
 		</div>
 	</div>

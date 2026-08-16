@@ -8,7 +8,9 @@
     sortItems,
   } from '@rodrigodagostino/svelte-sortable-list';
   import type { ClassValue } from 'clsx';
+  import { tick } from 'svelte';
   import { cubicOut } from 'svelte/easing';
+  import { MediaQuery } from 'svelte/reactivity';
   import { slide } from 'svelte/transition';
 
   import { Button } from '@cugetreg/ui/atoms/button';
@@ -20,6 +22,10 @@
   import { courseColorVariants } from '@cugetreg/utils/constants';
   import type { ColorVariant } from '@cugetreg/utils/types';
   import type { CartItemDetail } from '@cugetreg/zod-schemas/carts-response';
+
+  const isMobile = new MediaQuery('max-width: 767px', false);
+  const modalGap = 8;
+  const viewportMargin = 16;
 
   const userCart = getUserCartStore();
   const { removeCourse, updateCourse } = useCartActions();
@@ -84,16 +90,66 @@
   let currentColorVariant = $state<ColorVariant>('primary');
   let initialColorVariant = $state<ColorVariant>('primary');
   let changeColorFor = $state<string | undefined>();
+  let colorPickerAnchor = $state<HTMLElement>();
+  let colorPickerElement = $state<HTMLDivElement>();
   let modalPosition = $state({
     x: 0,
     y: 0,
   });
+
+  function updateModalPosition() {
+    if (isMobile.current || !colorPickerAnchor || !colorPickerElement) return;
+
+    const anchorRect = colorPickerAnchor.getBoundingClientRect();
+    const modalRect = colorPickerElement.getBoundingClientRect();
+    const maxX = Math.max(
+      viewportMargin,
+      window.innerWidth - modalRect.width - viewportMargin,
+    );
+    const maxY = Math.max(
+      viewportMargin,
+      window.innerHeight - modalRect.height - viewportMargin,
+    );
+
+    let x = anchorRect.right + modalGap;
+    let y = anchorRect.top;
+
+    if (x + modalRect.width > window.innerWidth - viewportMargin) {
+      x = anchorRect.left - modalRect.width - modalGap;
+    }
+    if (y + modalRect.height > window.innerHeight - viewportMargin) {
+      y = anchorRect.bottom - modalRect.height;
+    }
+
+    modalPosition.x = Math.min(Math.max(x, viewportMargin), maxX);
+    modalPosition.y = Math.min(Math.max(y, viewportMargin), maxY);
+  }
+
+  async function handleColorPickerClick(e: MouseEvent, course: CartItemDetail) {
+    colorPickerAnchor = e.currentTarget as HTMLElement;
+
+    const anchorRect = colorPickerAnchor.getBoundingClientRect();
+    modalPosition.x = anchorRect.right + modalGap;
+    modalPosition.y = anchorRect.top;
+    changeColorFor = course.id;
+    initialColorVariant = (course.color as ColorVariant) ?? 'neutral';
+    currentColorVariant = initialColorVariant;
+    showChangeColorModal = true;
+
+    await tick();
+    updateModalPosition();
+  }
 
   const genedCourses = $derived(schedule.filter((c) => c.genEdType !== 'NO'));
   const otherCourses = $derived(schedule.filter((c) => c.genEdType === 'NO'));
 </script>
 
 <svelte:window
+  onresize={() => {
+    if (showChangeColorModal) {
+      requestAnimationFrame(updateModalPosition);
+    }
+  }}
   onkeydown={(e) => {
     if (e.key === 'Escape' && showChangeColorModal) {
       showChangeColorModal = false;
@@ -301,7 +357,7 @@
               เซค {course.sectionNo}
             </div>
           </Select.Trigger>
-          <Select.Content role="listbox">
+          <Select.Content role="listbox" class="z-100">
             <Select.Group>
               {#each course.sections as section (section.sectionNo)}
                 <Select.Item
@@ -324,14 +380,7 @@
             'm-2 aspect-square rounded-lg border hover:ring-0',
             courseColorVariants[(course.color as ColorVariant) ?? 'neutral'],
           )}
-          onclick={(e: MouseEvent) => {
-            modalPosition.x = e.clientX;
-            modalPosition.y = e.clientY;
-            changeColorFor = course.id;
-            showChangeColorModal = true;
-            initialColorVariant = (course.color as ColorVariant) ?? 'neutral';
-            currentColorVariant = (course.color as ColorVariant) ?? 'neutral';
-          }}
+          onclick={(e: MouseEvent) => handleColorPickerClick(e, course)}
         />
       </div>
       <div class="flex">
@@ -355,7 +404,7 @@
 
 {#snippet changeColorModal()}
   <div
-    class="fixed top-0 left-0 z-50 h-screen w-screen"
+    class="fixed inset-0 z-50"
     role="button"
     tabindex="0"
     onclick={() => {
@@ -368,8 +417,10 @@
     }}
   >
     <div
-      class="fixed z-60"
-      style="top: {modalPosition.y}px; left: {modalPosition.x}px;"
+      bind:this={colorPickerElement}
+      class="fixed inset-x-4 bottom-[calc(1rem+env(safe-area-inset-bottom))] z-60 max-h-[calc(100dvh-2rem-env(safe-area-inset-bottom))] overflow-y-auto md:inset-x-auto md:bottom-auto md:max-h-[calc(100dvh-2rem)]"
+      style:top={isMobile.current ? undefined : `${modalPosition.y}px`}
+      style:left={isMobile.current ? undefined : `${modalPosition.x}px`}
       onclick={(e) => e.stopPropagation()}
       onkeydown={(e) => {
         if (e.key === 'Enter' || e.key === ' ' || e.key === 'Escape') {
@@ -380,7 +431,7 @@
       tabindex="0"
     >
       <ColorPicker
-        class="bg-surface"
+        class="bg-surface w-full md:w-[350px]"
         options={courseColorVariants}
         bind:value={currentColorVariant}
         onCancel={() => {

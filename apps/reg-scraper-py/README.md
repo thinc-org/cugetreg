@@ -320,7 +320,7 @@ pnpm dev
 
 Ships as a Docker image (`apps/reg-scraper-py/Dockerfile`, `python:3.12-slim`) built by the `reg-scraper` job in `.github/workflows/build-deploy.yaml`. Unlike `web`/`api`, its build context is this directory, not the monorepo root — it has no dependency on the pnpm workspace.
 
-**Currently the only way to actually deploy it:** a tagged GitHub Release, `gh release create reg-scraper@1.0.0 --target v2-prod` (see `cugetregv2-gitops`'s README, "Cutting a prod release"). `v2-beta` pushes build and push its image on every push (so an image always exists to release), but deliberately *don't* bump its tag in gitops yet — see the `TODO(reg-scraper-cronjob)` comment in `build-deploy.yaml`. There's currently no way to trigger a beta-only deploy of just this component.
+A `v2-beta` push builds it, pushes its image, and bumps its tag in the gitops `beta` overlay automatically, same as `web`/`api` — no separate trigger needed. A tagged GitHub Release (`gh release create reg-scraper@1.0.0 --target v2-prod`, see `cugetregv2-gitops`'s README, "Cutting a prod release") is the equivalent path for `v2-prod`.
 
 In `cugetregv2-gitops`, `reg-scraper/` deploys it as a Kubernetes **`CronJob`** (`0 2 * * *`, daily), not a long-running server — the container runs one full scrape and exits `0` on success. A `PersistentVolumeClaim` mounted at `/data` keeps `overrides.json`, `course_desc.csv`, and the CUCIS checkpoint across runs, so `SCRAPER_GENED_MODE=auto`/`SCRAPER_DESCRIPTIONS_MODE=auto` only pay their one-time scrape cost on the very first run — every scheduled run after that reuses the persisted files.
 

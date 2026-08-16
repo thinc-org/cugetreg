@@ -4,10 +4,7 @@
 # tagged one is built and bumped. CI builds it and opens a PR against the
 # gitops prod overlay (so a human approves the prod rollout).
 #
-# reg-scraper caveat: this is currently the only CI-driven path that can
-# deploy it at all (build.yaml's beta push deliberately excludes it from
-# auto-deploy — see the TODO(reg-scraper-cronjob) comment in
-# build-deploy.yaml). Don't cut a reg-scraper release until the gitops
+# reg-scraper caveat: don't cut a reg-scraper release until the gitops
 # reg-scraper/ secrets have actually been re-sealed against the target
 # cluster — see cugetregv2-gitops's README "Regenerating / re-sealing
 # secrets" section.

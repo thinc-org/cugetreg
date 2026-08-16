@@ -221,18 +221,10 @@ jobs:
             [api]="${{ needs.api.outputs.digest }}"
             [reg-scraper]="${{ needs['reg-scraper'].outputs.digest }}"
           )
-          # TODO(reg-scraper-cronjob): reg-scraper deliberately excluded from
-          # the default beta set below. The gitops overlay it points at is
-          # still the stale placeholder Deployment (long-running, 2 replicas),
-          # not yet the CronJob this image is built for (one-shot, exits 0 on
-          # success) — bumping its tag automatically would crash-loop that
-          # Deployment in production (repeatedly re-hitting reg.chula.ac.th +
-          # the DB). Build it explicitly via `component: reg-scraper` only.
-          # >>> ONCE THE GITOPS reg-scraper/ Deployment→CronJob SWITCH HAS
-          # >>> LANDED (separate follow-up), COME BACK HERE AND ADD
-          # >>> reg-scraper TO THE DEFAULT comps LIST BELOW. Do not forget —
-          # >>> until this line changes, reg-scraper never auto-deploys.
-          comps="web api"
+          # reg-scraper deploys as a CronJob (gitops reg-scraper/base/cronjob.yaml),
+          # not a long-lived Deployment, so bumping its tag on every beta push
+          # is safe — the next scheduled run just picks up the new image.
+          comps="web api reg-scraper"
           [ -n "${{ inputs.component }}" ] && comps="${{ inputs.component }}"
           for comp in $comps; do
             ref="${REGISTRY}/${IMAGE_NS}/$comp:${{ inputs.tag }}@${DIGEST[$comp]}"

@@ -110,6 +110,7 @@
       ></button>
 
       <div class="relative w-full max-w-[420px] rounded-3xl bg-white p-8">
+        <!-- TODO: Remove hard-coded color -->
         <h2 class="mb-4 text-center text-xl font-semibold text-[#4a70c6]">
           ตารางเรียนไม่ตรงกับภาค/ปีที่คุณเลือก
         </h2>
@@ -119,6 +120,7 @@
 
         <div class="relative mb-8">
           <Select type="single" bind:value={() => selectedId, setSelectedId}>
+            <!-- TODO: Remove hard-coded color -->
             <SelectTrigger
               class="w-full rounded-xl border border-[#b8c9e6] bg-white px-4 py-3 text-left text-[15px] text-[#2b4c8a]"
               aria-label="Select table"
@@ -159,6 +161,7 @@
         </div>
 
         <div class="flex gap-4">
+          <!-- TODO: Remove hard-coded color -->
           <button
             type="button"
             onclick={onClose}
@@ -167,6 +170,7 @@
           >
             ยกเลิก
           </button>
+          <!-- TODO: Remove hard-coded color -->
           <button
             type="button"
             onclick={handleConfirm}

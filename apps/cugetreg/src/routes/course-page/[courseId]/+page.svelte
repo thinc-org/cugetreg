@@ -814,6 +814,7 @@
       {#snippet iconItems({ expanded })}
         <Sidebar.MenuItem>
           <div class="mt-[0px]">
+            <!-- TODO: Remove hard-coded color -->
             <Sidebar.MenuButton
               onclick={toggleSidebar}
               isActive={expanded && activePanel === 'sidebar'}
@@ -827,6 +828,7 @@
         </Sidebar.MenuItem>
         <Sidebar.MenuItem>
           <div class="mt-[-8px]">
+            <!-- TODO: Remove hard-coded color -->
             <Sidebar.MenuButton
               onclick={() => {
                 activePanel = 'description_only';
@@ -843,6 +845,7 @@
         </Sidebar.MenuItem>
         <Sidebar.MenuItem>
           <div class="mt-[-20px]">
+            <!-- TODO: Remove hard-coded color -->
             <Sidebar.MenuButton
               onclick={() => {
                 activePanel = 'detail_only';
@@ -859,6 +862,7 @@
         </Sidebar.MenuItem>
         <Sidebar.MenuItem>
           <div class="mt-[-15px]">
+            <!-- TODO: Remove hard-coded color -->
             <Sidebar.MenuButton
               onclick={() => {
                 activePanel = 'review_only';
@@ -876,6 +880,7 @@
         {#if $session.data}
           <Sidebar.MenuItem>
             <div class="mt-[-10px]">
+              <!-- TODO: Remove hard-coded color -->
               <Sidebar.MenuButton
                 onclick={focusSelected}
                 isActive={activePanel === 'selected_only'}
@@ -954,6 +959,7 @@
                 </span>
               </button>
 
+              <!-- TODO: Remove hard-coded color -->
               <button
                 type="button"
                 data-hidden={!isLoggedIn}
@@ -1010,6 +1016,7 @@
               onclick={() => history.back()}
             >
               <ChevronLeft size={18} strokeWidth={2.5} />
+              <!-- TODO: Remove hard-coded color -->
               <span
                 class="translate-y-[-1px] text-sm font-normal text-[#353745]"
               >
@@ -1400,11 +1407,13 @@
               class="mt-4 flex flex-col gap-4"
             >
               {#each Object.keys(sectionGroups) as groupName (groupName)}
+                <!-- TODO: Remove hard-coded color -->
                 <Accordion.Item
                   value={groupName}
                   class="rounded-2xl border border-[#D6D7E1] bg-white px-4 py-2 md:px-6"
                 >
                   <Accordion.Trigger class="hover:no-underline">
+                    <!-- TODO: Remove hard-coded color -->
                     <div
                       class="flex items-center gap-2 text-xs font-medium text-[#4A70C6] sm:text-base"
                     >
@@ -1491,6 +1500,7 @@
                   <div class="flex flex-row gap-2 md:gap-5">
                     <div>
                       <Select.Root type="single" bind:value={selectedYear}>
+                        <!-- TODO: Remove hard-coded color -->
                         <Select.Trigger
                           class="text-on-surface h-9 w-[120px] rounded-lg border border-[#D6D7E1] bg-white px-4 text-sm font-medium md:h-12 md:w-[180px] md:text-base"
                         >
@@ -1507,6 +1517,7 @@
                     </div>
                     <div>
                       <Select.Root type="single" bind:value={selectedTerm}>
+                        <!-- TODO: Remove hard-coded color -->
                         <Select.Trigger
                           class="text-on-surface h-9 w-[120px] rounded-lg border border-[#D6D7E1] bg-white px-4 text-sm font-medium md:h-12 md:w-[180px] md:text-base"
                         >
@@ -1529,6 +1540,7 @@
                           (writeReviewSectionNo = v || null)}
                         disabled={writeReviewSectionOptions.length === 0}
                       >
+                        <!-- TODO: Remove hard-coded color -->
                         <Select.Trigger
                           class="text-on-surface h-9 w-[120px] rounded-lg border border-[#D6D7E1] bg-white px-4 text-sm font-medium md:h-12 md:w-[180px] md:text-base"
                         >
@@ -1563,6 +1575,7 @@
                       >
                         {#if getStarState(value) === 'half'}
                           <span class="relative inline-flex">
+                            <!-- TODO: Remove hard-coded color -->
                             <Star size={26} class="text-[#D6D7E1]" />
                             <span
                               class="absolute inset-0 w-1/2 overflow-hidden"
@@ -1574,6 +1587,7 @@
                             </span>
                           </span>
                         {:else}
+                          <!-- TODO: Remove hard-coded color -->
                           <Star
                             size={26}
                             class={getStarState(value) === 'full'
@@ -1738,6 +1752,7 @@
               <div
                 class="mt-12 flex flex-col items-center justify-center gap-4 py-12 text-center"
               >
+                <!-- TODO: Remove hard-coded color -->
                 <NotebookPen
                   size={140}
                   strokeWidth={2.2}

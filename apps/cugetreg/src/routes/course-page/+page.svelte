@@ -714,6 +714,7 @@
                 </h2>
                 <div class="mt-4">
                   <Select.Root type="single" bind:value={selectedGroup}>
+                    <!-- TODO: Remove hard-coded color -->
                     <Select.Trigger
                       class="text-on-surface h-14 w-full rounded-2xl border border-[#D6D7E1] bg-white px-5 text-base font-medium focus:ring-0 focus:ring-offset-0"
                     >
@@ -731,6 +732,7 @@
                     </Select.Content>
                   </Select.Root>
                 </div>
+                <!-- TODO: Remove hard-coded color -->
                 <div
                   class="mt-4 rounded-2xl border border-[#D6D7E1] bg-white p-6"
                 >
@@ -740,6 +742,7 @@
                     onclick={() => (isSectionOpen = !isSectionOpen)}
                     aria-expanded={isSectionOpen}
                   >
+                    <!-- TODO: Remove hard-coded color -->
                     <div
                       class="flex items-center gap-2 text-sm font-medium text-[#4A70C6]"
                     >
@@ -782,6 +785,7 @@
                 </div>
                 <div class="mt-4">
                   <Select.Root type="single" bind:value={selectedGroup}>
+                    <!-- TODO: Remove hard-coded color -->
                     <Select.Trigger
                       class="text-on-surface h-14 w-full rounded-2xl border border-[#D6D7E1] bg-white px-5 text-base font-medium focus:ring-0 focus:ring-offset-0"
                     >
@@ -823,6 +827,7 @@
                     <div class="flex flex-row gap-2 md:gap-5">
                       <div>
                         <Select.Root type="single" bind:value={selectedYear}>
+                          <!-- TODO: Remove hard-coded color -->
                           <Select.Trigger
                             class="text-on-surface h-9 w-[120px] rounded-lg border border-[#D6D7E1] bg-white px-4 text-sm font-medium md:h-12 md:w-[180px] md:text-base"
                           >
@@ -839,6 +844,7 @@
                       </div>
                       <div>
                         <Select.Root type="single" bind:value={selectedTerm}>
+                          <!-- TODO: Remove hard-coded color -->
                           <Select.Trigger
                             class="text-on-surface h-9 w-[120px] rounded-lg border border-[#D6D7E1] bg-white px-4 text-sm font-medium md:h-12 md:w-[180px] md:text-base"
                           >
@@ -867,6 +873,7 @@
                         >
                           {#if getStarState(value) === 'half'}
                             <span class="relative inline-flex">
+                              <!-- TODO: Remove hard-coded color -->
                               <Star size={26} class="text-[#D6D7E1]" />
                               <span
                                 class="absolute inset-0 w-1/2 overflow-hidden"
@@ -878,6 +885,7 @@
                               </span>
                             </span>
                           {:else}
+                            <!-- TODO: Remove hard-coded color -->
                             <Star
                               size={26}
                               class={getStarState(value) === 'full'
@@ -976,6 +984,7 @@
                   <div
                     class="mt-12 flex flex-col items-center justify-center gap-4 py-12 text-center"
                   >
+                    <!-- TODO: Remove hard-coded color -->
                     <NotebookPen
                       size={140}
                       strokeWidth={2.2}
@@ -1116,6 +1125,7 @@
         <Sidebar.GroupContent>
           <Sidebar.Menu class="gap-6">
             <Sidebar.MenuItem>
+              <!-- TODO: Remove hard-coded color -->
               <Sidebar.MenuButton
                 onclick={() => (sidebarExpanded = !sidebarExpanded)}
                 isActive={sidebarExpanded && activePanel === 'sidebar'}
@@ -1127,6 +1137,7 @@
               </Sidebar.MenuButton>
             </Sidebar.MenuItem>
             <Sidebar.MenuItem>
+              <!-- TODO: Remove hard-coded color -->
               <Sidebar.MenuButton
                 onclick={() => togglePanel('description_only')}
                 isActive={activePanel === 'description_only'}
@@ -1138,6 +1149,7 @@
               </Sidebar.MenuButton>
             </Sidebar.MenuItem>
             <Sidebar.MenuItem>
+              <!-- TODO: Remove hard-coded color -->
               <Sidebar.MenuButton
                 onclick={() => togglePanel('detail_only')}
                 isActive={activePanel === 'detail_only'}
@@ -1149,6 +1161,7 @@
               </Sidebar.MenuButton>
             </Sidebar.MenuItem>
             <Sidebar.MenuItem>
+              <!-- TODO: Remove hard-coded color -->
               <Sidebar.MenuButton
                 onclick={() => togglePanel('review_only')}
                 isActive={activePanel === 'review_only'}
@@ -1160,6 +1173,7 @@
               </Sidebar.MenuButton>
             </Sidebar.MenuItem>
             <Sidebar.MenuItem>
+              <!-- TODO: Remove hard-coded color -->
               <Sidebar.MenuButton
                 onclick={() => togglePanel('selected_only')}
                 isActive={activePanel === 'selected_only'}
@@ -1243,6 +1257,7 @@
                     </span>
                   </button>
 
+                  <!-- TODO: Remove hard-coded color -->
                   <button
                     type="button"
                     class="flex items-center gap-1.5 rounded-xl bg-[#E9EEF6] px-3.5 py-1.5 text-sm font-medium text-[#004494] transition-all hover:bg-[#D2E0F5]"

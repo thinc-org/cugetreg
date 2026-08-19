@@ -59,6 +59,7 @@
 
 <div class="flex flex-col items-center justify-center pt-10">
   <div class="w-[90vw] pb-16 md:w-[60vw]">
+    <!-- TODO: Remove hard-coded color -->
     <h1 class="mb-8 text-2xl font-bold text-[#1C1B1F]">การแจ้งเตือน</h1>
     {#if isLoading}
       <div
@@ -76,11 +77,13 @@
     {:else}
       <div class="flex flex-col gap-4">
         {#each announcements as item (item.id)}
+          <!-- TODO: Remove hard-coded color -->
           <button
             class="flex flex-col items-start gap-1 rounded-2xl border-2 border-gray-200 bg-white px-10 py-8 transition-all hover:border-[#4A6CF7] focus:outline-none"
             onclick={() => goto(resolve(`/announcement/${item.id}`))}
           >
             <span class="font-regular text-xs text-gray-600">CU GetReg</span>
+            <!-- TODO: Remove hard-coded color -->
             <h2
               class="text-left text-[17px] font-bold text-[#4A70C6] md:text-lg"
             >

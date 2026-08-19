@@ -5,22 +5,26 @@
     'ขออภัยในความไม่สะดวก ขณะนี้ระบบของเรากำลังดำเนินการปรับปรุงและบำรุงรักษา';
 </script>
 
+<!-- TODO: Remove hard-coded color -->
 <div
   class="fixed inset-0 z-[100] flex items-center justify-center bg-[#4A72B9] p-3 md:p-4"
 >
   <div
     class="relative flex h-full w-full flex-col items-center justify-center rounded-[2.5rem] bg-white p-8 text-center shadow-2xl md:rounded-[2rem]"
   >
+    <!-- TODO: Remove hard-coded color -->
     <div class="mb-12 text-[#4A72B9]">
       <AlertTriangle size={120} strokeWidth={1.2} />
     </div>
 
+    <!-- TODO: Remove hard-coded color -->
     <h1
       class="mb-8 text-4xl font-bold tracking-tight text-[#1C1B1F] md:text-5xl"
     >
       {title}
     </h1>
 
+    <!-- TODO: Remove hard-coded color -->
     <div class="flex max-w-2xl flex-col gap-2 leading-relaxed text-[#4F4F4F]">
       <p class="text-base font-medium md:text-lg">
         {message}

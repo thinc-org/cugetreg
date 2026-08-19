@@ -119,7 +119,9 @@
               class="m-0 flex items-center gap-1 border border-gray-200 bg-white"
               onclick={handleTimetableScreenshot}
             >
+              <!-- TODO: Remove hard-coded color -->
               <Download size={20} strokeWidth={2.5} class="text-[#353745]" />
+              <!-- TODO: Remove hard-coded color -->
               <span class="font-medium text-[#353745]">บันทึกภาพ</span>
             </Button>
           </div>

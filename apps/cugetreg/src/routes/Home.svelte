@@ -540,6 +540,7 @@
         -->
         <Sidebar.MenuItem>
           <div class="-mt-[0px]">
+            <!-- TODO: Remove hard-coded color -->
             <Sidebar.MenuButton
               onclick={toggleSidebar}
               isActive={sidebarExpanded && activePanel === 'sidebar'}
@@ -553,6 +554,7 @@
         </Sidebar.MenuItem>
         <Sidebar.MenuItem>
           <div class="mt-[18px]">
+            <!-- TODO: Remove hard-coded color -->
             <Sidebar.MenuButton
               onclick={focusFilter}
               isActive={activePanel === 'filter_only'}
@@ -567,6 +569,7 @@
         {#if $session.data}
           <Sidebar.MenuItem>
             <div class="mt-[-10px]">
+              <!-- TODO: Remove hard-coded color -->
               <Sidebar.MenuButton
                 onclick={focusSelected}
                 isActive={activePanel === 'selected_only'}
@@ -634,6 +637,7 @@
             class="mb-2 flex flex-row items-center justify-between gap-2 md:gap-4"
           >
             <div class="flex items-baseline gap-2 md:gap-3">
+              <!-- TODO: Remove hard-coded color -->
               <h1
                 class="text-xl font-bold text-[#4A70C6] md:text-4xl md:text-black"
               >
@@ -710,6 +714,7 @@
                 <span class="ml-1 hidden text-xs text-gray-400 md:flex"
                   >ค้นหา...</span
                 >
+                <!-- TODO: Remove hard-coded color -->
                 <Input
                   bind:value={searchState.query}
                   onkeydown={(e: KeyboardEvent) => {
@@ -767,6 +772,7 @@
                 >
                 <div class="relative flex items-center gap-3">
                   <Select.Root bind:value={currentSort} type="single">
+                    <!-- TODO: Remove hard-coded color -->
                     <Select.Trigger
                       class="flex h-12 flex-1 items-center justify-between rounded-xl bg-[#F1F3F7] px-5 text-sm font-bold text-gray-700 transition-all hover:bg-gray-200"
                     >
@@ -784,6 +790,7 @@
                       </Select.Group>
                     </Select.Content>
                   </Select.Root>
+                  <!-- TODO: Remove hard-coded color -->
                   <button
                     aria-label="sort direction"
                     onclick={toggleSortDirection}
@@ -823,6 +830,7 @@
               class="text-warning-hover shrink-0"
             />
             <div>
+              <!-- TODO: Remove hard-coded color -->
               <p class="font-sans text-[10px] text-[#353745]">
                 ข้อมูลอาจมีการเปลี่ยนแปลง<br />
                 โปรดตรวจสอบข้อมูลกับสำนักทะเบียนทุกครั้งก่อนลงทะเบียนเรียน<br />
@@ -860,11 +868,13 @@
               <div
                 class="col-span-full flex flex-col items-center justify-center gap-2 py-24 text-center"
               >
+                <!-- TODO: Remove hard-coded color -->
                 <TriangleAlert
                   size={72}
                   strokeWidth={1.5}
                   class="mb-2 text-[#4A6CF7]"
                 />
+                <!-- TODO: Remove hard-coded color -->
                 <p class="text-lg font-medium text-[#1C1B1F]">
                   ไม่พบรายวิชา{searchState.debounced.trim()
                     ? ` ${searchState.debounced.trim()}`

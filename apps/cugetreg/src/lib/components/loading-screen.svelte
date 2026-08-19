@@ -1,6 +1,7 @@
 <!-- Shown on initial app load, mobile only (md:hidden) -->
 <script lang="ts"></script>
 
+<!-- TODO: Remove hard-coded color -->
 <div
   class="fixed inset-0 z-[100] flex items-center justify-center bg-[#4A72B9] p-3 md:hidden"
 >
@@ -14,6 +15,7 @@
       aria-label="กำลังโหลด"
     >
       {#each Array.from({ length: 12 }) as _, i (i)}
+        <!-- TODO: Remove hard-coded color -->
         <rect
           x="11"
           y="2"
@@ -27,6 +29,7 @@
       {/each}
     </svg>
 
+    <!-- TODO: Remove hard-coded color -->
     <p class="text-xl font-medium text-[#1C1B1F] md:text-2xl">กำลังโหลด...</p>
   </div>
 </div>

@@ -266,6 +266,7 @@
         -->
         <Sidebar.MenuItem>
           <div class="mt-[0px]">
+            <!-- TODO: Remove hard-coded color -->
             <Sidebar.MenuButton
               onclick={toggleSidebar}
               isActive={sidebarExpanded && activePanel === 'sidebar'}
@@ -279,6 +280,7 @@
         </Sidebar.MenuItem>
         <Sidebar.MenuItem>
           <div class="mt-[18px]">
+            <!-- TODO: Remove hard-coded color -->
             <Sidebar.MenuButton
               onclick={focusSelected}
               isActive={activePanel === 'selected_only'}
@@ -358,6 +360,7 @@
             class="flex w-full flex-col gap-4 lg:flex-row lg:items-center lg:justify-between"
           >
             <div class="flex w-full items-center justify-between lg:w-auto">
+              <!-- TODO: Remove hard-coded color -->
               <h1
                 class="text-xl font-bold text-[#4A70C6] md:text-4xl md:text-black"
               >
@@ -473,6 +476,7 @@
   <div class="lg:hidden">
     {#if !activeModal}
       <div transition:fade={{ duration: 200 }}>
+        <!-- TODO: Remove hard-coded color -->
         <button
           type="button"
           aria-label="วิชาที่เลือก"

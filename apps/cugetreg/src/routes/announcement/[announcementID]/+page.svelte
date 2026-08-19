@@ -44,6 +44,7 @@
       onclick={() => history.back()}
     >
       <ChevronLeft size={18} strokeWidth={2.5} />
+      <!-- TODO: Remove hard-coded color -->
       <span class="translate-y-[-1px] text-sm font-normal text-[#353745]">
         กลับ
       </span>

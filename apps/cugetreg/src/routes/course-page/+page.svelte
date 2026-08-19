@@ -714,9 +714,8 @@
                 </h2>
                 <div class="mt-4">
                   <Select.Root type="single" bind:value={selectedGroup}>
-                    <!-- TODO: Remove hard-coded color -->
                     <Select.Trigger
-                      class="text-on-surface h-14 w-full rounded-2xl border border-[#D6D7E1] bg-white px-5 text-base font-medium focus:ring-0 focus:ring-offset-0"
+                      class="text-on-surface border-surface-container h-14 w-full rounded-2xl border bg-white px-5 text-base font-medium focus:ring-0 focus:ring-offset-0"
                     >
                       กลุ่ม : {selectedGroup}
                     </Select.Trigger>
@@ -732,9 +731,8 @@
                     </Select.Content>
                   </Select.Root>
                 </div>
-                <!-- TODO: Remove hard-coded color -->
                 <div
-                  class="mt-4 rounded-2xl border border-[#D6D7E1] bg-white p-6"
+                  class="border-surface-container mt-4 rounded-2xl border bg-white p-6"
                 >
                   <button
                     type="button"
@@ -785,9 +783,8 @@
                 </div>
                 <div class="mt-4">
                   <Select.Root type="single" bind:value={selectedGroup}>
-                    <!-- TODO: Remove hard-coded color -->
                     <Select.Trigger
-                      class="text-on-surface h-14 w-full rounded-2xl border border-[#D6D7E1] bg-white px-5 text-base font-medium focus:ring-0 focus:ring-offset-0"
+                      class="text-on-surface border-surface-container h-14 w-full rounded-2xl border bg-white px-5 text-base font-medium focus:ring-0 focus:ring-offset-0"
                     >
                       กลุ่ม : {selectedGroup}
                     </Select.Trigger>
@@ -827,9 +824,8 @@
                     <div class="flex flex-row gap-2 md:gap-5">
                       <div>
                         <Select.Root type="single" bind:value={selectedYear}>
-                          <!-- TODO: Remove hard-coded color -->
                           <Select.Trigger
-                            class="text-on-surface h-9 w-[120px] rounded-lg border border-[#D6D7E1] bg-white px-4 text-sm font-medium md:h-12 md:w-[180px] md:text-base"
+                            class="text-on-surface border-surface-container h-9 w-[120px] rounded-lg border bg-white px-4 text-sm font-medium md:h-12 md:w-[180px] md:text-base"
                           >
                             {selectedYear}
                           </Select.Trigger>
@@ -844,9 +840,8 @@
                       </div>
                       <div>
                         <Select.Root type="single" bind:value={selectedTerm}>
-                          <!-- TODO: Remove hard-coded color -->
                           <Select.Trigger
-                            class="text-on-surface h-9 w-[120px] rounded-lg border border-[#D6D7E1] bg-white px-4 text-sm font-medium md:h-12 md:w-[180px] md:text-base"
+                            class="text-on-surface border-surface-container h-9 w-[120px] rounded-lg border bg-white px-4 text-sm font-medium md:h-12 md:w-[180px] md:text-base"
                           >
                             {selectedTerm}
                           </Select.Trigger>
@@ -873,8 +868,10 @@
                         >
                           {#if getStarState(value) === 'half'}
                             <span class="relative inline-flex">
-                              <!-- TODO: Remove hard-coded color -->
-                              <Star size={26} class="text-[#D6D7E1]" />
+                              <Star
+                                size={26}
+                                class="text-on-surface-disabled"
+                              />
                               <span
                                 class="absolute inset-0 w-1/2 overflow-hidden"
                               >
@@ -885,12 +882,11 @@
                               </span>
                             </span>
                           {:else}
-                            <!-- TODO: Remove hard-coded color -->
                             <Star
                               size={26}
                               class={getStarState(value) === 'full'
                                 ? 'text-primary fill-current'
-                                : 'text-[#D6D7E1]'}
+                                : 'text-on-surface-disabled'}
                             />
                           {/if}
                         </button>

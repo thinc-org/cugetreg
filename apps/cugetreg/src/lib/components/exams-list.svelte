@@ -97,7 +97,7 @@
       strokeWidth={3}
       class={showExamSchedule === 'Schedule'
         ? 'cursor-pointer text-[#4A70C6] transition-colors hover:text-[#3B5EAB]'
-        : 'cursor-pointer text-[#D6D7E1] transition-colors hover:text-[#B0B2C5]'}
+        : 'text-on-surface-disabled cursor-pointer transition-colors hover:text-[#B0B2C5]'}
     />
     <!-- TODO: Remove hard-coded color -->
     <ChevronRight
@@ -105,7 +105,7 @@
       strokeWidth={3}
       class={showExamSchedule === 'List'
         ? 'cursor-pointer text-[#4A70C6] transition-colors hover:text-[#3B5EAB]'
-        : 'cursor-pointer text-[#D6D7E1] transition-colors hover:text-[#B0B2C5]'}
+        : 'text-on-surface-disabled cursor-pointer transition-colors hover:text-[#B0B2C5]'}
     />
   </div>
   <div class="mt-5 flex justify-center lg:hidden lg:gap-4">
@@ -115,14 +115,13 @@
         ? 'bg-[#4A70C6]'
         : 'bg-gray-200'}"
     >
-      <!-- TODO: Remove hard-coded color -->
       <ListOrdered
         size={18}
         onclick={() => (showExamSchedule = 'Schedule')}
         strokeWidth={1.5}
         class={showExamSchedule === 'Schedule'
-          ? 'cursor-pointer text-[#FFFFFF]'
-          : 'cursor-pointer text-[#353745] transition-colors hover:text-black'}
+          ? 'cursor-pointer text-white'
+          : 'text-on-surface cursor-pointer transition-colors hover:text-black'}
       />
     </div>
     <!-- TODO: Remove hard-coded color -->
@@ -131,14 +130,13 @@
         ? 'bg-[#4A70C6]'
         : 'bg-gray-200'}"
     >
-      <!-- TODO: Remove hard-coded color -->
       <Grid3X3
         size={18}
         onclick={() => (showExamSchedule = 'List')}
         strokeWidth={1.5}
         class={showExamSchedule === 'List'
-          ? 'cursor-pointer text-[#FFFFFF]'
-          : 'cursor-pointer text-[#353745] transition-colors hover:text-black'}
+          ? 'cursor-pointer text-white'
+          : 'text-on-surface cursor-pointer transition-colors hover:text-black'}
       />
     </div>
   </div>

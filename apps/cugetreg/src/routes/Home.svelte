@@ -830,8 +830,7 @@
               class="text-warning-hover shrink-0"
             />
             <div>
-              <!-- TODO: Remove hard-coded color -->
-              <p class="font-sans text-[10px] text-[#353745]">
+              <p class="text-on-surface font-sans text-[10px]">
                 ข้อมูลอาจมีการเปลี่ยนแปลง<br />
                 โปรดตรวจสอบข้อมูลกับสำนักทะเบียนทุกครั้งก่อนลงทะเบียนเรียน<br />
                 {#if lastUpdatedLabel}

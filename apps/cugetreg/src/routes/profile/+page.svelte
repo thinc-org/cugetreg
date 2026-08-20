@@ -14,11 +14,11 @@
   import { convertSchedulesInfo } from '$lib/utils/scheduleInfo';
   import { convertUserInfo } from '$lib/utils/user';
 
-  import { TriangleAlert } from '@lucide/svelte';
   import { onMount, untrack } from 'svelte';
 
   import { Modal } from '@cugetreg/ui/atoms/modal';
   import { ConfirmDeleteSchedule } from '@cugetreg/ui/molecules/confirm-delete-schedule';
+  import { ReportProblem } from '@cugetreg/ui/molecules/report-problem';
   import {
     CreateTimetable,
     type TimetableMetaData,
@@ -80,8 +80,6 @@
   let loadingSchedules = $state(true);
 
   let showCreateScheduleModal = $state(false);
-
-  let isMobile = $state(false);
 
   const faculty = $derived(
     FACULTIES[personalInfo.faculty as FacultyId] ?? UNKNOWN_FACULTY,
@@ -229,21 +227,6 @@
   });
 
   onMount(() => {
-    const isMobileQuery = window.matchMedia('(max-width: 768px)');
-    isMobile = isMobileQuery.matches;
-
-    const handleMediaQueryChange = (event: MediaQueryListEvent) => {
-      isMobile = event.matches;
-    };
-
-    isMobileQuery.addEventListener('change', handleMediaQueryChange);
-
-    return () => {
-      isMobileQuery.removeEventListener('change', handleMediaQueryChange);
-    };
-  });
-
-  onMount(() => {
     fetchReviews(1, true);
   });
 </script>
@@ -319,13 +302,5 @@
       onCancel={() => (showCreateScheduleModal = false)}
     />
   </Modal>
-  <a
-    class="fixed right-6 bottom-6 z-50 inline-flex cursor-pointer items-center gap-1 rounded-full border-2 border-black px-2 py-1 md:gap-2 md:px-4"
-    href={GOOGLE_FORM_URL}
-    target="_blank"
-    rel="external noopener noreferrer"
-  >
-    <TriangleAlert size={isMobile ? 16 : 20} strokeWidth={1.5} color="black" />
-    <span class="text-[10px] text-black md:text-xs">แจ้งปัญหาการใช้งาน</span>
-  </a>
+  <ReportProblem href={GOOGLE_FORM_URL} />
 </div>

@@ -49,7 +49,7 @@ export const UserReviewResponseSchema = z.object({
       stats: z.object({
         likeCount: z.number(),
         dislikeCount: z.number(),
-      }),
+      }).optional(),
       reaction: vote.optional(),
       createdAt: z.iso.datetime(),
     }),

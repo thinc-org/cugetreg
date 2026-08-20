@@ -43,7 +43,7 @@ export const usersService = {
     };
   },
   getUserReviews: async (userId: string, query: GetUserReviewsQuery) => {
-    const { page, limit, status } = query;
+    const { page, limit, status, includeVote } = query;
     const offset = (page - 1) * limit;
     const where = {
       userId,
@@ -81,14 +81,14 @@ export const usersService = {
 
     const reviewIds = reviews.map((review) => review.id);
     const [voteCounts, myVotes] = await Promise.all([
-      reviewIds.length === 0
+      (reviewIds.length === 0 || !includeVote)
         ? []
         : prisma.reviewVote.groupBy({
             by: ["reviewId", "voteType"],
             where: { reviewId: { in: reviewIds } },
             _count: { _all: true },
           }),
-      reviewIds.length === 0
+      (reviewIds.length === 0 || !includeVote)
         ? []
         : prisma.reviewVote.findMany({
             where: { userId, reviewId: { in: reviewIds } },
@@ -120,8 +120,10 @@ export const usersService = {
         ...r,
         courseAbbrName: abbrName,
         genEdType,
-        stats: { likeCount, dislikeCount },
-        ...(reaction && { reaction }),
+        ...(includeVote && {
+          stats: { likeCount, dislikeCount },
+          ...(reaction && { reaction }),
+        })
       };
     });
 

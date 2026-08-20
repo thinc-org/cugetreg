@@ -4,7 +4,12 @@
   import { api } from '$lib/api';
   import { SEMESTER_LABEL_LONG } from '$lib/semesterOptions';
 
-  import { AlertTriangle, Loader2, NotebookPen } from '@lucide/svelte';
+  import {
+    AlertTriangle,
+    ChevronLeft,
+    Loader2,
+    NotebookPen,
+  } from '@lucide/svelte';
   import { isAxiosError } from 'axios';
   import { onMount } from 'svelte';
   import toast from 'svelte-french-toast';
@@ -158,7 +163,18 @@
 
 <div class="relative flex min-h-screen flex-col bg-white">
   <div class="container mx-auto w-full max-w-5xl flex-1 px-5 py-8 sm:px-8">
-    <h1 class="text-on-surface text-base font-semibold sm:text-2xl">
+    <button
+      type="button"
+      class="mb-2 flex items-center justify-center gap-1 rounded-lg p-1 transition-colors hover:bg-gray-100 active:bg-gray-200 lg:mb-4"
+      onclick={() => history.back()}
+    >
+      <ChevronLeft size={18} strokeWidth={2.5} />
+      <span class="translate-y-[-1px] text-sm font-normal text-[#353745]">
+        กลับ
+      </span>
+    </button>
+
+    <h1 class="text-on-surface text-base font-semibold sm:text-3xl">
       กิจกรรมทั้งหมด
     </h1>
 

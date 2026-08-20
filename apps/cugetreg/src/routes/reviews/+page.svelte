@@ -2,6 +2,7 @@
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
   import { api } from '$lib/api';
+  import { GOOGLE_FORM_URL } from '$lib/constants';
   import { SEMESTER_LABEL_LONG } from '$lib/semesterOptions';
 
   import {
@@ -19,6 +20,7 @@
   import { Modal } from '@cugetreg/ui/atoms/modal';
   import { Comment } from '@cugetreg/ui/molecules/comment';
   import { ConfirmDeleteReview } from '@cugetreg/ui/molecules/confirm-delete-review';
+  import { ReportProblem } from '@cugetreg/ui/molecules/report-problem';
   import { Footer } from '@cugetreg/ui/organisms/footer';
   import type { GenEdType } from '@cugetreg/utils/types';
   import {
@@ -321,4 +323,6 @@
       onConfirm={confirmDeleteReview}
     />
   </Modal>
+
+  <ReportProblem href={GOOGLE_FORM_URL} />
 </div>

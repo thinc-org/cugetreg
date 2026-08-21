@@ -1,9 +1,13 @@
 from __future__ import annotations
 
+import base64
+import gzip
+import json
 import logging
 import time
 from dataclasses import dataclass, field
-from typing import Callable
+from pathlib import Path
+from typing import Callable, Iterator, TextIO
 
 import requests
 import urllib3
@@ -26,6 +30,9 @@ COURSE_LIST_PATH = (
 COURSE_DETAIL_PATH = (
     "/servlet/com.dtm.chula.cs.servlet.QueryCourseScheduleNew.CourseScheduleDtlNewServlet"
 )
+
+DISCOVERY_CHECKPOINT_NAME = "regchula_discovery_checkpoint.jsonl"
+PAGES_CHECKPOINT_NAME = "regchula_pages_checkpoint.jsonl"
 
 FACULTIES = [
     "01", "02", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29",
@@ -101,6 +108,171 @@ def is_error_page(html: str) -> bool:
     return "#660000" not in html or "Table3" not in html
 
 
+def _pack_html(html: str) -> str:
+    return base64.b64encode(gzip.compress(html.encode("utf-8"), 6)).decode("ascii")
+
+
+def _unpack_html(packed: str) -> str:
+    return gzip.decompress(base64.b64decode(packed)).decode("utf-8")
+
+
+@dataclass
+class RegChulaCheckpoint:
+    """Resume files for the Reg Chula phase — see README, "Resuming an interrupted scrape"."""
+
+    academic_year: str
+    semester: str
+    _pages_handle: TextIO | None = field(default=None, init=False, repr=False)
+
+    @property
+    def discovery_path(self) -> Path:
+        return settings.checkpoint_path(DISCOVERY_CHECKPOINT_NAME)
+
+    @property
+    def pages_path(self) -> Path:
+        return settings.checkpoint_path(PAGES_CHECKPOINT_NAME)
+
+    def prepare(self, fresh: bool = False) -> None:
+        self.discovery_path.parent.mkdir(parents=True, exist_ok=True)
+
+        if fresh:
+            if self._exists():
+                logger.info("--fresh: discarding the Reg Chula checkpoint")
+            self.clear()
+            return
+
+        if not self._exists():
+            return
+
+        age_hours = (time.time() - self._modified_at()) / 3600
+        ttl = settings.scraper_regchula_checkpoint_ttl_hours
+        if ttl > 0 and age_hours > ttl:
+            logger.info(
+                "Reg Chula checkpoint is %.1f h old (TTL %d h) — discarding it and "
+                "scraping fresh. Raise SCRAPER_REGCHULA_CHECKPOINT_TTL_HOURS to keep "
+                "older checkpoints.",
+                age_hours,
+                ttl,
+            )
+            self.clear()
+            return
+
+        pages = self.page_count()
+        logger.info(
+            "Resuming the Reg Chula checkpoint (last written %s, %.1f h ago, "
+            "%d course pages already fetched). Re-run with --fresh to discard it.",
+            time.strftime("%Y-%m-%d %H:%M", time.localtime(self._modified_at())),
+            age_hours,
+            pages,
+        )
+
+    def clear(self) -> None:
+        self.close()
+        for path in (self.discovery_path, self.pages_path):
+            path.unlink(missing_ok=True)
+
+    def close(self) -> None:
+        if self._pages_handle is not None:
+            self._pages_handle.close()
+            self._pages_handle = None
+
+    def _exists(self) -> bool:
+        return self.discovery_path.exists() or self.pages_path.exists()
+
+    def _modified_at(self) -> float:
+        return max(
+            path.stat().st_mtime
+            for path in (self.discovery_path, self.pages_path)
+            if path.exists()
+        )
+
+    def _in_scope(self, record: dict) -> bool:
+        return (
+            record.get("academic_year") == self.academic_year
+            and record.get("semester") == self.semester
+        )
+
+    def _read(self, path: Path) -> Iterator[dict]:
+        if not path.exists():
+            return
+        with path.open(encoding="utf-8") as handle:
+            for line in handle:
+                try:
+                    record = json.loads(line)
+                except Exception:  # noqa: BLE001 - truncated final line after a kill
+                    continue
+                if self._in_scope(record):
+                    yield record
+
+    def discovered_course_nos(self, study_program: str) -> list[str] | None:
+        for record in self._read(self.discovery_path):
+            if record.get("study_program") == study_program:
+                return list(record.get("course_nos") or [])
+        return None
+
+    def record_discovery(self, study_program: str, course_nos: list[str]) -> None:
+        self.discovery_path.parent.mkdir(parents=True, exist_ok=True)
+        with self.discovery_path.open("a", encoding="utf-8") as handle:
+            handle.write(
+                json.dumps(
+                    {
+                        "study_program": study_program,
+                        "academic_year": self.academic_year,
+                        "semester": self.semester,
+                        "course_nos": course_nos,
+                    },
+                    ensure_ascii=False,
+                )
+                + "\n"
+            )
+            handle.flush()
+
+    def completed_course_nos(self, study_program: str) -> set[str]:
+        return {
+            record["course_no"]
+            for record in self._read(self.pages_path)
+            if record.get("study_program") == study_program and record.get("course_no")
+        }
+
+    def page_count(self) -> int:
+        return sum(1 for _ in self._read(self.pages_path))
+
+    def record_page(self, page: RawCoursePage) -> None:
+        if self._pages_handle is None:
+            self.pages_path.parent.mkdir(parents=True, exist_ok=True)
+            self._pages_handle = self.pages_path.open("a", encoding="utf-8")
+        self._pages_handle.write(
+            json.dumps(
+                {
+                    "course_no": page.course_no,
+                    "study_program": page.study_program,
+                    "academic_year": page.academic_year,
+                    "semester": page.semester,
+                    "html_gz": _pack_html(page.html),
+                },
+                ensure_ascii=False,
+            )
+            + "\n"
+        )
+        self._pages_handle.flush()
+
+    def iter_pages(self) -> Iterator[RawCoursePage]:
+        seen: set[tuple[str, str]] = set()
+        for record in self._read(self.pages_path):
+            key = (record.get("study_program", ""), record.get("course_no", ""))
+            if not key[1] or key in seen:
+                continue
+            seen.add(key)
+            html = record.get("html_gz")
+            yield RawCoursePage(
+                course_no=record["course_no"],
+                study_program=record["study_program"],
+                academic_year=record["academic_year"],
+                semester=record["semester"],
+                html=_unpack_html(html) if html else record.get("html", ""),
+            )
+
+
 @dataclass
 class RegChulaReceiver(Receiver[list[RawCoursePage]]):
     """Open the form page for cookies, run a list search, then fetch details."""
@@ -110,6 +282,7 @@ class RegChulaReceiver(Receiver[list[RawCoursePage]]):
     semester: Semester
     course_nos: list[str] = field(default_factory=list)
     on_progress: Callable[[int, int, str], None] | None = None
+    checkpoint: RegChulaCheckpoint | None = None
 
     def _base(self) -> str:
         return settings.reg_chula_base_url.rstrip("/")
@@ -200,6 +373,17 @@ class RegChulaReceiver(Receiver[list[RawCoursePage]]):
         )
 
     def discover(self) -> list[str]:
+        if self.checkpoint is not None:
+            cached = self.checkpoint.discovered_course_nos(self.study_program)
+            if cached is not None:
+                logger.info(
+                    "Discovery for %s reused from checkpoint (%d courses)",
+                    self.study_program,
+                    len(cached),
+                )
+                self.course_nos = cached
+                return cached
+
         session = create_session()
         try:
             self._init_session(session)
@@ -219,43 +403,76 @@ class RegChulaReceiver(Receiver[list[RawCoursePage]]):
                 )
 
             self.course_nos = course_nos
+            if self.checkpoint is not None:
+                self.checkpoint.record_discovery(self.study_program, course_nos)
             return course_nos
         finally:
             session.close()
 
-    def fetch(self, course_nos: list[str] | None = None) -> list[RawCoursePage]:
+    def iter_fetch(self, course_nos: list[str] | None = None) -> Iterator[RawCoursePage]:
+        """Yield one page at a time, checkpointing each before handing it on."""
         course_nos = course_nos if course_nos is not None else self.course_nos
-        session = create_session()
-        pages: list[RawCoursePage] = []
+        done = (
+            self.checkpoint.completed_course_nos(self.study_program)
+            if self.checkpoint is not None
+            else set()
+        )
+        pending = [course_no for course_no in course_nos if course_no not in done]
 
+        total = len(course_nos)
+        index = total - len(pending)
+        if index:
+            logger.info(
+                "%d/%d courses for %s already in the checkpoint — fetching the remaining %d",
+                index,
+                total,
+                self.study_program,
+                len(pending),
+            )
+
+        session = create_session()
+        consecutive_failures = 0
+        limit = settings.scraper_max_consecutive_failures
         try:
             self._init_session(session)
 
-            total = len(course_nos)
-            for index, course_no in enumerate(course_nos, start=1):
+            for course_no in pending:
+                index += 1
                 logger.info("[%d/%d] Fetching %s", index, total, course_no)
                 try:
                     html = self.fetch_course_html(session, course_no)
                 except RuntimeError as exc:
                     logger.error("%s", exc)
+                    consecutive_failures += 1
+                    if 0 < limit <= consecutive_failures:
+                        raise RuntimeError(
+                            f"Aborting: {consecutive_failures} courses in a row failed "
+                            f"to fetch — Reg Chula looks unreachable. "
+                            f"{index - consecutive_failures}/{total} courses are saved "
+                            f"in the checkpoint; re-run to resume from there."
+                        ) from exc
                     continue
+                consecutive_failures = 0
 
-                pages.append(
-                    RawCoursePage(
-                        course_no=course_no,
-                        study_program=self.study_program,
-                        academic_year=self.academic_year,
-                        semester=self.semester,
-                        html=html,
-                    )
+                page = RawCoursePage(
+                    course_no=course_no,
+                    study_program=self.study_program,
+                    academic_year=self.academic_year,
+                    semester=self.semester,
+                    html=html,
                 )
+                if self.checkpoint is not None:
+                    self.checkpoint.record_page(page)
+                yield page
+
                 if self.on_progress:
                     self.on_progress(index, total, course_no)
                 time.sleep(settings.scraper_delay_ms / 1000)
         finally:
             session.close()
 
-        return pages
+    def fetch(self, course_nos: list[str] | None = None) -> list[RawCoursePage]:
+        return list(self.iter_fetch(course_nos))
 
     def receive(self) -> list[RawCoursePage]:
         return self.fetch(self.discover())

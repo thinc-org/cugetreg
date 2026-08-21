@@ -14,7 +14,7 @@ from reg_scraper.processors.course_html_processor import CourseHtmlProcessor
 from reg_scraper.processors.enrich_processor import EnrichProcessor
 from reg_scraper.receivers.cucis_receiver import CucisReceiver
 from reg_scraper.receivers.gened_receiver import GenEdReceiver
-from reg_scraper.receivers.reg_chula_receiver import RegChulaReceiver
+from reg_scraper.receivers.reg_chula_receiver import RegChulaCheckpoint, RegChulaReceiver
 
 logger = logging.getLogger(__name__)
 
@@ -95,7 +95,9 @@ class ScraperPipeline:
                 logger.warning("Unknown exporter: %s", name)
         return exporters
 
-    def _discover_targets(self, started: datetime) -> list[ScrapeTarget]:
+    def _discover_targets(
+        self, started: datetime, checkpoint: RegChulaCheckpoint
+    ) -> list[ScrapeTarget]:
         combos = [
             (academic_year, study_program, semester)
             for academic_year in settings.academic_years
@@ -127,6 +129,7 @@ class ScraperPipeline:
                 study_program=study_program,  # type: ignore[arg-type]
                 academic_year=academic_year,
                 semester=semester,  # type: ignore[arg-type]
+                checkpoint=checkpoint,
             )
             course_nos = receiver.discover()
             for course_no in course_nos:
@@ -154,10 +157,93 @@ class ScraperPipeline:
         logger.info("Discovery complete: %d courses to scrape", len(targets))
         return targets
 
-    def run(self) -> ScraperStatus:
+    def _fetch_pages(
+        self,
+        targets: list[ScrapeTarget],
+        started: datetime,
+        checkpoint: RegChulaCheckpoint,
+    ) -> None:
+        """Fetch every detail page into the checkpoint."""
+        total_targets = len(targets)
+        scraped = checkpoint.page_count()
+
+        def on_progress(_done: int, _total: int, course_no: str) -> None:
+            nonlocal scraped
+            scraped += 1
+            self._write_status(
+                ScraperStatus(
+                    status="running",
+                    started_at=started,
+                    courses_total=total_targets,
+                    courses_scraped=scraped,
+                    message=f"Fetching {course_no} ({scraped}/{total_targets})",
+                )
+            )
+
+        def combo_key(target: ScrapeTarget) -> tuple[str, str, str]:
+            return (target.study_program, target.academic_year, target.semester)
+
+        for (study_program, academic_year, semester), group in groupby(
+            sorted(targets, key=combo_key), key=combo_key
+        ):
+            group_targets = list(group)
+            logger.info(
+                "Scraping %s / semester %s / year %s (%d courses)",
+                study_program,
+                semester,
+                academic_year,
+                len(group_targets),
+            )
+            receiver = RegChulaReceiver(
+                study_program=study_program,  # type: ignore[arg-type]
+                academic_year=academic_year,
+                semester=semester,  # type: ignore[arg-type]
+                on_progress=on_progress,
+                checkpoint=checkpoint,
+            )
+            for _page in receiver.iter_fetch(
+                [target.course_no for target in group_targets]
+            ):
+                pass
+
+    def _parse_pages(
+        self,
+        started: datetime,
+        checkpoint: RegChulaCheckpoint,
+        enrich_processor: EnrichProcessor,
+        courses_total: int,
+    ) -> tuple[list[Course], int]:
+        logger.info("=== Parsing phase ===")
+        self._write_status(
+            ScraperStatus(
+                status="running",
+                started_at=started,
+                courses_total=courses_total,
+                message="Parsing scraped pages",
+            )
+        )
+
+        parsed: list[Course] = []
+        failed = 0
+        for page in checkpoint.iter_pages():
+            try:
+                parsed.append(self.html_processor.process(page))
+            except Exception:  # noqa: BLE001
+                failed += 1
+                logger.exception("Failed parsing course %s", page.course_no)
+
+        logger.info("Parsed %d courses (%d failed)", len(parsed), failed)
+        return enrich_processor.process(parsed), failed
+
+    def run(self, fresh: bool = False, rebuild: bool = False) -> ScraperStatus:
         started = datetime.now(tz=UTC)
         status = ScraperStatus(status="running", started_at=started)
         self._write_status(status)
+
+        checkpoint = RegChulaCheckpoint(
+            academic_year=settings.academic_years[0],
+            semester=settings.semesters[0],
+        )
 
         all_courses: list[Course] = []
         failed = 0
@@ -167,70 +253,39 @@ class ScraperPipeline:
             # after the side inputs, so it picks up the files they just wrote
             enrich_processor = EnrichProcessor()
 
-            targets = self._discover_targets(started)
-            total_targets = len(targets)
+            if rebuild:
+                logger.info("--rebuild: exporting from the checkpoint, no network calls")
+                total_targets = checkpoint.page_count()
+                if total_targets == 0:
+                    raise RuntimeError(
+                        f"--rebuild needs a checkpoint, but {checkpoint.pages_path} "
+                        f"is empty or missing. Run a normal scrape first."
+                    )
+            else:
+                checkpoint.prepare(fresh=fresh)
+                targets = self._discover_targets(started, checkpoint)
+                total_targets = len(targets)
 
-            self._write_status(
-                ScraperStatus(
-                    status="running",
-                    started_at=started,
-                    courses_total=total_targets,
-                    message=f"Found {total_targets} courses. Starting scrape...",
-                )
-            )
-            logger.info("=== Scraping phase (%d courses) ===", total_targets)
-
-            scraped = 0
-
-            def on_progress(_done: int, _total: int, course_no: str) -> None:
-                nonlocal scraped
-                scraped += 1
                 self._write_status(
                     ScraperStatus(
                         status="running",
                         started_at=started,
                         courses_total=total_targets,
-                        courses_scraped=scraped,
-                        courses_failed=failed,
-                        message=f"Fetching {course_no} ({scraped}/{total_targets})",
+                        message=f"Found {total_targets} courses. Starting scrape...",
                     )
                 )
+                logger.info("=== Scraping phase (%d courses) ===", total_targets)
+                self._fetch_pages(targets, started, checkpoint)
 
-            def combo_key(target: ScrapeTarget) -> tuple[str, str, str]:
-                return (target.study_program, target.academic_year, target.semester)
+            all_courses, failed = self._parse_pages(
+                started, checkpoint, enrich_processor, total_targets
+            )
 
-            for (study_program, academic_year, semester), group in groupby(
-                sorted(targets, key=combo_key), key=combo_key
-            ):
-                group_targets = list(group)
-                logger.info(
-                    "Scraping %s / semester %s / year %s (%d courses)",
-                    study_program,
-                    semester,
-                    academic_year,
-                    len(group_targets),
-                )
-                receiver = RegChulaReceiver(
-                    study_program=study_program,  # type: ignore[arg-type]
-                    academic_year=academic_year,
-                    semester=semester,  # type: ignore[arg-type]
-                    on_progress=on_progress,
-                )
-                raw_pages = receiver.fetch([target.course_no for target in group_targets])
-
-                parsed: list[Course] = []
-                for page in raw_pages:
-                    try:
-                        parsed.append(self.html_processor.process(page))
-                    except Exception:  # noqa: BLE001
-                        failed += 1
-                        logger.exception("Failed parsing course %s", page.course_no)
-
-                all_courses.extend(enrich_processor.process(parsed))
-
-            exporters = self._build_exporters()
-            for exporter in exporters:
+            for exporter in self._build_exporters():
                 exporter.export(all_courses)
+
+            if not rebuild:
+                checkpoint.clear()
 
             finished = datetime.now(tz=UTC)
             status = ScraperStatus(
@@ -255,3 +310,5 @@ class ScraperPipeline:
             )
             self._write_status(status)
             raise
+        finally:
+            checkpoint.close()

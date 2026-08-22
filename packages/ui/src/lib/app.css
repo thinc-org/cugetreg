@@ -2,6 +2,8 @@
 
 @source '@cugetreg/utils/constants';
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @font-face {
 	font-family: 'FC Orbit';
 	src: url('./assets/fonts/FCOrbit-Bold.woff2') format('woff2');
@@ -208,6 +210,7 @@
 	--color-gened: var(--neutral-50);
 	--color-on-gened: var(--neutral-700);
 
+	--color-on-surface: var(--color-neutral-600);
 	--color-surface-bright: var(--neutral-100);
 	--color-surface-container-lowest: var(--neutral-100);
 	--color-surface-container-low: var(--neutral-200);

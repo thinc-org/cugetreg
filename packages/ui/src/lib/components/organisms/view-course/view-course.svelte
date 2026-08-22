@@ -250,13 +250,13 @@
 			<div class="my-2 md:my-3">
 				<span class="font-bold">เลือกสีในตาราง</span>
 			</div>
-			<div class="flex flex-wrap justify-center gap-2 md:flex-nowrap md:justify-between md:gap-3">
+			<div class="mx-auto grid w-fit grid-cols-4 gap-x-6 gap-y-4 md:grid-cols-6 md:gap-4">
 				{#each Object.keys(courseColorVariants) as option (option)}
 					<Button
 						variant="solid"
 						color="primary"
 						class={cn(
-							'aspect-square border hover:ring-0',
+							'size-8 border hover:ring-0 md:size-10',
 							courseColorVariants[option as ColorVariant],
 							data.color === option && 'outline-primary outline-[1.5px]! outline-offset-4',
 							data.color === option && 'hover:outline-[1.5px]! hover:outline-solid!'

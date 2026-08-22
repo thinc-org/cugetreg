@@ -12,6 +12,7 @@
   import { cubicOut } from 'svelte/easing';
   import { MediaQuery } from 'svelte/reactivity';
   import { fade, slide } from 'svelte/transition';
+  import toast from 'svelte-french-toast';
 
   import { Button } from '@cugetreg/ui/atoms/button';
   import { GenedChip } from '@cugetreg/ui/atoms/gened-chip';
@@ -60,6 +61,7 @@
   async function copyCourseCode(courseCode: string) {
     try {
       await navigator.clipboard.writeText(courseCode);
+      toast.success('Copied to clipboard', { position: 'bottom-right' });
       copiedCourseCode = courseCode;
       hoveredCourseCode = courseCode;
       if (courseCodeTooltipTimeout) clearTimeout(courseCodeTooltipTimeout);

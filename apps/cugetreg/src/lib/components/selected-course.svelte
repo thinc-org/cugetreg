@@ -11,7 +11,7 @@
   import { tick } from 'svelte';
   import { cubicOut } from 'svelte/easing';
   import { MediaQuery } from 'svelte/reactivity';
-  import { slide } from 'svelte/transition';
+  import { fade, slide } from 'svelte/transition';
 
   import { Button } from '@cugetreg/ui/atoms/button';
   import { GenedChip } from '@cugetreg/ui/atoms/gened-chip';
@@ -259,6 +259,7 @@
     class="pointer-events-none fixed z-100 rounded bg-neutral-800 px-2 py-1 text-xs text-white"
     style:left={`${tooltipPosition.x}px`}
     style:top={`${tooltipPosition.y}px`}
+    transition:fade={{ duration: 150 }}
   >
     {copiedCourseCode === hoveredCourseCode ? 'copied!' : 'copy'}
   </div>

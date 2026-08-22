@@ -1,16 +1,16 @@
 <script lang="ts">
-	import { CUGetRegWhiteFull } from '../../logo/cugetreg/index.js';
-	import ThincOnDark from '../../logo/thinc/OnDark.svelte';
+	import { CUGetRegWhiteFull, CUGetRegDarkFull } from '../../logo/cugetreg/index.js';
+	import { ThincOnLight, ThincOnDark } from '$lib/components/logo/thinc/index.js';
 	import { GitHubMark } from '../../logo/vendor/index.js';
 </script>
 
 <footer
-	class="bg-on-primary-container text-on-primary text-subtitle flex w-full flex-col items-center gap-6 px-10 py-14 font-sans sm:p-20"
+	class="dark:bg-primary-container not-dark:bg-on-primary-container text-on-primary text-subtitle flex w-full flex-col items-center gap-6 px-10 py-14 font-sans sm:p-20"
 >
 	<CUGetRegWhiteFull class="h-8 w-fit sm:h-16" />
 
 	<div class="flex flex-col items-center gap-2 sm:flex-row sm:gap-6">
-		<div class="flex items-center gap-2 sm:gap-6">
+		<div class="dark:text-surface flex items-center gap-2 sm:gap-6">
 			<ThincOnDark class="h-8 w-fit sm:h-10" />
 			<p>จุฬาลงกรณ์มหาวิทยาลัย</p>
 		</div>

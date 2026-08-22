@@ -43,14 +43,14 @@ export const usersService = {
     };
   },
   getUserReviews: async (userId: string, query: GetUserReviewsQuery) => {
-    const { page, limit, status, includeVote } = query;
+    const { page, limit, status, includeVote, includeRatings } = query;
     const offset = (page - 1) * limit;
     const where = {
       userId,
       status: status ? mapReviewStatus(status) : undefined,
     };
 
-    const [reviews, totalReviews] = await Promise.all([
+    const [reviews, totalReviews, ratings] = await Promise.all([
       prisma.review.findMany({
         omit: {
           userId: true,
@@ -77,7 +77,27 @@ export const usersService = {
         },
       }),
       prisma.review.count({ where }),
+      ( includeRatings && prisma.review.groupBy({
+        by: ['rating'],
+        _count: {
+          rating: true
+        },
+        where: {
+          userId
+        },
+        orderBy: {
+          rating: "asc",
+        }
+      }))
     ]);
+
+    const ratingHistories = includeRatings ? Array(10).fill(0) : undefined;
+
+    if(ratings && includeRatings && ratingHistories){
+      ratings.forEach((rating) => {
+        ratingHistories[rating.rating - 1] = rating._count.rating;
+      })
+    }
 
     const reviewIds = reviews.map((review) => review.id);
     const [voteCounts, myVotes] = await Promise.all([
@@ -127,7 +147,7 @@ export const usersService = {
       };
     });
 
-    return { reviews: resultReviews, totalReviews };
+    return { reviews: resultReviews, ratingHistories ,totalReviews };
   },
   updateUserInfo: async (userId: string, body: UpdateUserInfoBody) => {
     const { name, faculty, department } = body;

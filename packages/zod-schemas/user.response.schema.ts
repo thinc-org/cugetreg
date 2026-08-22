@@ -32,6 +32,7 @@ export const UserReviewResponseSchema = z.object({
   totalReviews: z.int().min(0),
   page: z.int().min(1),
   limit: z.int().min(1),
+  ratingHistories: z.array(z.int()).length(10).optional(),
   reviews: z.array(
     z.object({
       id: z.string(),

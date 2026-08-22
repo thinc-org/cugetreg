@@ -8,6 +8,7 @@ export const GetUserReviewsQuerySchema = z
     limit: z.coerce.number().int().min(1),
     status: reviewStatus.optional(),
     includeVote: z.stringbool().optional().default(false),
+    includeRatings: z.stringbool().optional().default(false),
   })
   .strict();
 

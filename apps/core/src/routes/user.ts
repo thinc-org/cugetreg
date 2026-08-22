@@ -26,13 +26,14 @@ user
     try {
       const { id: userId } = c.get("user");
       const query = c.req.valid("query");
-      const { reviews, totalReviews } = await usersService.getUserReviews(
+      const { reviews, ratingHistories ,totalReviews } = await usersService.getUserReviews(
         userId,
         query,
       );
       return c.json(
         {
           totalReviews,
+          ratingHistories,
           page: query.page,
           limit: query.limit,
           reviews,

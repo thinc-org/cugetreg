@@ -77,9 +77,11 @@
 	// });
 </script>
 
-<div class="bg-surface flex flex-col gap-6 rounded-xl border border-[#d6d7e1] p-12 sm:w-104">
+<div
+	class="border-surface-container-low bg-surface-bright flex flex-col gap-6 rounded-xl border p-12 sm:w-104"
+>
 	<!-- Title -->
-	<h1 class="text-h2 leading-h2 text-center font-medium tracking-[0.15px] text-[#353745]">
+	<h1 class="text-h2 leading-h2 text-on-surface text-center font-medium tracking-[0.15px]">
 		เพิ่มตารางเรียน
 	</h1>
 

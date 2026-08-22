@@ -48,7 +48,7 @@
 			class="flex w-full flex-row items-center gap-3 overflow-hidden border-t border-[#EDEDF1] p-4 hover:cursor-pointer hover:bg-blue-200"
 			{onclick}
 		>
-			<Icon size="16" color="#353745" strokeWidth="2.5" />
+			<Icon class="text-on-surface" size="16" strokeWidth="2.5" />
 			<p class="text-on-surface text-button2 font-medium">{name}</p>
 		</button>
 	{/each}

@@ -91,7 +91,8 @@
 		</div>
 		<div class="flex gap-1">
 			{#if specialType}
-				<Chip class="border border-indigo-500 bg-white text-indigo-700">{specialType}</Chip>
+				<Chip class="bg-surface-bright text-on-surface border border-indigo-500">{specialType}</Chip
+				>
 			{/if}
 			{#each course?.gened ?? [] as gened (gened)}
 				<GenedChip type={gened} />
@@ -102,7 +103,7 @@
 		<div class="text-caption flex flex-row items-center font-normal text-neutral-400">
 			<span>{course?.credit} หน่วยกิต</span>
 			<Dot color="#EDEDF1" size="16" />
-			<span class={isSeatFull ? 'text-red-500' : undefined}
+			<span class={isSeatFull ? 'text-red-500 dark:text-red-400' : undefined}
 				>ที่นั่ง {course?.seat} / {course?.maxseat}</span
 			>
 			<Dot color="#EDEDF1" size="16" />

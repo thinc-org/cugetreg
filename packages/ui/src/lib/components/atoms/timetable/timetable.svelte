@@ -111,8 +111,8 @@
 	@reference "@cugetreg/ui/css";
 
 	.cell {
-		@apply flex items-center justify-center bg-white text-center;
-		@apply border-r border-b border-neutral-200;
+		@apply bg-surface-bright flex items-center justify-center text-center;
+		@apply border-surface-container-low border-r border-b;
 		@apply text-sm;
 	}
 </style>

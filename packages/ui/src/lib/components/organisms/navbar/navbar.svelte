@@ -11,7 +11,7 @@
 
 	import { cn, getShortenName } from '@cugetreg/utils';
 
-	import { CUGetRegDarkFull as CUGetRegLogo } from '../../logo/cugetreg';
+	import { CUGetRegDarkFull, CUGetRegWhiteFull } from '../../logo/cugetreg';
 	import { UserDialog } from '../../molecules/user-dialog';
 	import { MobileSidebar } from '../mobile-sidebar';
 
@@ -95,16 +95,16 @@
 >
 	<div class="flex flex-1 flex-row items-center gap-3 lg:gap-6">
 		<IconButton variant="ghost" class="min-[900px]:hidden" onclick={toggleSideBar}>
-			<Menu size="16" strokeWidth="3" color="#353745" />
+			<Menu class="text-on-surface" size="16" strokeWidth="3" />
 		</IconButton>
 		<a href="/">
-			<CUGetRegLogo class="h-8 w-24 lg:h-10 lg:w-32" />
+			<CUGetRegDarkFull class="h-8 w-24 lg:h-10 lg:w-32 dark:hidden" />
+			<CUGetRegWhiteFull class="h-8 w-24 not-dark:hidden lg:h-10 lg:w-32" />
 		</a>
 		<div class="relative hidden items-center md:flex">
 			<Search
-				class="absolute right-[15%] my-auto lg:right-8"
+				class="text-on-surface-placeholder absolute right-[15%] my-auto lg:right-8"
 				size="16"
-				color="#898EA7"
 				strokeWidth="3"
 			/>
 			<Input
@@ -144,7 +144,7 @@
 		<!-- </a> -->
 		<button
 			type="button"
-			class="rounded-button hover:text-primary-container hidden size-10 items-center justify-center text-black md:flex"
+			class="rounded-button text-on-surface hover:text-primary-container hidden size-10 items-center justify-center md:flex"
 			onclick={() => goto('/announcement')}
 			aria-label="ประกาศ"
 		>

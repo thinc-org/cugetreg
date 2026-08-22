@@ -19,7 +19,7 @@
 	<div class="flex items-center gap-1">
 		<p
 			class={`text-button2 align-middle font-[FC_Orbit] font-medium tracking-[0.15px] ${
-				selected ? 'text-[#4A70C6]' : 'text-[#353745]'
+				selected ? 'text-[#4A70C6]' : 'text-on-surface'
 			}`}
 		>
 			เลือก

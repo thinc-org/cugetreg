@@ -21,6 +21,6 @@
 <style lang="postcss">
 	/* Base styles for the component */
 	.subject-details {
-		@layer p-4 rounded-lg shadow-lg bg-white dark:bg-gray-800;
+		@layer bg-surface-bright p-4 rounded-lg shadow-lg;
 	}
 </style>

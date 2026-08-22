@@ -182,10 +182,10 @@
 			</div>
 
 			<div class="flex w-full flex-col items-center gap-1.5 px-4">
-				<h2 class="text-center text-lg font-bold tracking-wide text-gray-800">
+				<h2 class="text-on-surface text-center text-lg font-bold tracking-wide">
 					เริ่มเขียนรีวิวแรก
 				</h2>
-				<p class="w-full text-center text-xs leading-relaxed text-gray-500">
+				<p class="text-on-surface-var w-full text-center text-xs leading-relaxed">
 					เริ่มเขียนรีวิวแรกของคุณเพื่อแบ่งปันประสบการณ์ที่น่าจดจำกับวิชานั้น ๆ
 					และดูภาพรวมตารางเรียนทั้งหมดที่คุณสร้างไว้ในหน้าโปรไฟล์นี้
 				</p>

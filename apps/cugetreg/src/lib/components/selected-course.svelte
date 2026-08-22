@@ -61,7 +61,11 @@
     try {
       await navigator.clipboard.writeText(courseCode);
       copiedCourseCode = courseCode;
-
+      hoveredCourseCode = courseCode;
+      if (courseCodeTooltipTimeout) clearTimeout(courseCodeTooltipTimeout);
+      courseCodeTooltipTimeout = setTimeout(() => {
+        if (hoveredCourseCode === courseCode) hoveredCourseCode = null;
+      }, 2000);
       setTimeout(() => {
         if (copiedCourseCode === courseCode) copiedCourseCode = null;
       }, 2000);
@@ -76,6 +80,11 @@
       x: e.clientX + 12,
       y: e.clientY + 12,
     };
+  }
+
+  function hideCourseCodeTooltip(courseCode: string) {
+    if (hoveredCourseCode === courseCode) hoveredCourseCode = null;
+    if (courseCodeTooltipTimeout) clearTimeout(courseCodeTooltipTimeout);
   }
 
   interface SelectedCourseProp {
@@ -109,6 +118,7 @@
 
   let copiedCourseCode = $state<string | null>(null);
   let hoveredCourseCode = $state<string | null>(null);
+  let courseCodeTooltipTimeout: ReturnType<typeof setTimeout> | undefined;
   let tooltipPosition = $state({ x: 0, y: 0 });
   let showChangeColorModal = $state(false);
   let currentColorVariant = $state<ColorVariant>('primary');
@@ -358,11 +368,15 @@
       class="flex min-w-0 flex-1 cursor-pointer flex-col justify-center overflow-hidden text-left"
       aria-label={`คัดลอกรหัสวิชา ${course.courseNo}`}
       onclick={() => copyCourseCode(course.courseNo)}
-      onmouseenter={(e) => moveCourseCodeTooltip(e, course.courseNo)}
-      onmousemove={(e) => moveCourseCodeTooltip(e, course.courseNo)}
-      onmouseleave={() => {
-        if (hoveredCourseCode === course.courseNo) hoveredCourseCode = null;
+      onmouseenter={(e) => {
+        moveCourseCodeTooltip(e, course.courseNo);
+        if (courseCodeTooltipTimeout) clearTimeout(courseCodeTooltipTimeout);
+        courseCodeTooltipTimeout = setTimeout(() => {
+          if (hoveredCourseCode === course.courseNo) hoveredCourseCode = null;
+        }, 2000);
       }}
+      onmousemove={(e) => moveCourseCodeTooltip(e, course.courseNo)}
+      onmouseleave={() => hideCourseCodeTooltip(course.courseNo)}
     >
       <div class="flex flex-nowrap text-[0.6rem]">
         {course.courseNo}

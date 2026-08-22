@@ -70,6 +70,14 @@
     }
   }
 
+  function moveCourseCodeTooltip(e: MouseEvent, courseCode: string) {
+    hoveredCourseCode = courseCode;
+    tooltipPosition = {
+      x: e.clientX + 12,
+      y: e.clientY + 12,
+    };
+  }
+
   interface SelectedCourseProp {
     class?: ClassValue;
     variant?: 'simple' | 'detailed' | 'grouped';
@@ -100,6 +108,8 @@
   const bodyOpen = $derived(collapsible ? open : true);
 
   let copiedCourseCode = $state<string | null>(null);
+  let hoveredCourseCode = $state<string | null>(null);
+  let tooltipPosition = $state({ x: 0, y: 0 });
   let showChangeColorModal = $state(false);
   let currentColorVariant = $state<ColorVariant>('primary');
   let initialColorVariant = $state<ColorVariant>('primary');
@@ -244,6 +254,16 @@
   {/if}
 </div>
 
+{#if hoveredCourseCode}
+  <div
+    class="pointer-events-none fixed z-100 rounded bg-neutral-800 px-2 py-1 text-xs text-white"
+    style:left={`${tooltipPosition.x}px`}
+    style:top={`${tooltipPosition.y}px`}
+  >
+    {copiedCourseCode === hoveredCourseCode ? 'copied!' : 'copy'}
+  </div>
+{/if}
+
 {#snippet sectionHeader()}
   {#if collapsible}
     <button
@@ -332,14 +352,24 @@
       </IconButton>
     </div>
 
-    <div class="flex flex-1 flex-col justify-center overflow-hidden">
+    <button
+      type="button"
+      class="flex min-w-0 flex-1 cursor-pointer flex-col justify-center overflow-hidden text-left"
+      aria-label={`คัดลอกรหัสวิชา ${course.courseNo}`}
+      onclick={() => copyCourseCode(course.courseNo)}
+      onmouseenter={(e) => moveCourseCodeTooltip(e, course.courseNo)}
+      onmousemove={(e) => moveCourseCodeTooltip(e, course.courseNo)}
+      onmouseleave={() => {
+        if (hoveredCourseCode === course.courseNo) hoveredCourseCode = null;
+      }}
+    >
       <div class="flex flex-nowrap text-[0.6rem]">
         {course.courseNo}
       </div>
       <div class="truncate text-sm">
         {course.course.courseNameEn}
       </div>
-    </div>
+    </button>
 
     <div
       data-variant={variant}

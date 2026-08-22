@@ -57,6 +57,19 @@
     removeCourse(schedule[itemIndex].id);
   }
 
+  async function copyCourseCode(courseCode: string) {
+    try {
+      await navigator.clipboard.writeText(courseCode);
+      copiedCourseCode = courseCode;
+
+      setTimeout(() => {
+        if (copiedCourseCode === courseCode) copiedCourseCode = null;
+      }, 2000);
+    } catch (err) {
+      console.error('Failed to copy course code: ', err);
+    }
+  }
+
   interface SelectedCourseProp {
     class?: ClassValue;
     variant?: 'simple' | 'detailed' | 'grouped';
@@ -86,6 +99,7 @@
 
   const bodyOpen = $derived(collapsible ? open : true);
 
+  let copiedCourseCode = $state<string | null>(null);
   let showChangeColorModal = $state(false);
   let currentColorVariant = $state<ColorVariant>('primary');
   let initialColorVariant = $state<ColorVariant>('primary');

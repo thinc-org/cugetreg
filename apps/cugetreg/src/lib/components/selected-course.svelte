@@ -58,35 +58,35 @@
     removeCourse(schedule[itemIndex].id);
   }
 
-  async function copyCourseCode(courseCode: string) {
+  async function copyCourseID(courseID: string) {
     try {
-      await navigator.clipboard.writeText(courseCode);
+      await navigator.clipboard.writeText(courseID);
       toast.success('Copied to clipboard', { position: 'bottom-right' });
-      copiedCourseCode = courseCode;
-      hoveredCourseCode = courseCode;
-      if (courseCodeTooltipTimeout) clearTimeout(courseCodeTooltipTimeout);
-      courseCodeTooltipTimeout = setTimeout(() => {
-        if (hoveredCourseCode === courseCode) hoveredCourseCode = null;
+      copiedCourseID = courseID;
+      hoveredCourseID = courseID;
+      if (courseIDTooltipTimeout) clearTimeout(courseIDTooltipTimeout);
+      courseIDTooltipTimeout = setTimeout(() => {
+        if (hoveredCourseID === courseID) hoveredCourseID = null;
       }, 2000);
       setTimeout(() => {
-        if (copiedCourseCode === courseCode) copiedCourseCode = null;
+        if (copiedCourseID === courseID) copiedCourseID = null;
       }, 2000);
     } catch (err) {
-      console.error('Failed to copy course code: ', err);
+      console.error('Failed to copy course ID: ', err);
     }
   }
 
-  function moveCourseCodeTooltip(e: MouseEvent, courseCode: string) {
-    hoveredCourseCode = courseCode;
+  function moveCourseIDTooltip(e: MouseEvent, courseID: string) {
+    hoveredCourseID = courseID;
     tooltipPosition = {
       x: e.clientX + 12,
       y: e.clientY + 12,
     };
   }
 
-  function hideCourseCodeTooltip(courseCode: string) {
-    if (hoveredCourseCode === courseCode) hoveredCourseCode = null;
-    if (courseCodeTooltipTimeout) clearTimeout(courseCodeTooltipTimeout);
+  function hideCourseIDTooltip(courseID: string) {
+    if (hoveredCourseID === courseID) hoveredCourseID = null;
+    if (courseIDTooltipTimeout) clearTimeout(courseIDTooltipTimeout);
   }
 
   interface SelectedCourseProp {
@@ -118,9 +118,9 @@
 
   const bodyOpen = $derived(collapsible ? open : true);
 
-  let copiedCourseCode = $state<string | null>(null);
-  let hoveredCourseCode = $state<string | null>(null);
-  let courseCodeTooltipTimeout: ReturnType<typeof setTimeout> | undefined;
+  let copiedCourseID = $state<string | null>(null);
+  let hoveredCourseID = $state<string | null>(null);
+  let courseIDTooltipTimeout: ReturnType<typeof setTimeout> | undefined;
   let tooltipPosition = $state({ x: 0, y: 0 });
   let showChangeColorModal = $state(false);
   let currentColorVariant = $state<ColorVariant>('primary');
@@ -266,14 +266,14 @@
   {/if}
 </div>
 
-{#if hoveredCourseCode}
+{#if hoveredCourseID}
   <div
     class="pointer-events-none fixed z-100 rounded bg-neutral-800 px-2 py-1 text-xs text-white"
     style:left={`${tooltipPosition.x}px`}
     style:top={`${tooltipPosition.y}px`}
     transition:fade={{ duration: 150 }}
   >
-    {copiedCourseCode === hoveredCourseCode ? 'copied!' : 'copy'}
+    {copiedCourseID === hoveredCourseID ? 'copied!' : 'copy'}
   </div>
 {/if}
 
@@ -369,16 +369,16 @@
       type="button"
       class="flex min-w-0 flex-1 cursor-pointer flex-col justify-center overflow-hidden text-left"
       aria-label={`คัดลอกรหัสวิชา ${course.courseNo}`}
-      onclick={() => copyCourseCode(course.courseNo)}
+      onclick={() => copyCourseID(course.courseNo)}
       onmouseenter={(e) => {
-        moveCourseCodeTooltip(e, course.courseNo);
-        if (courseCodeTooltipTimeout) clearTimeout(courseCodeTooltipTimeout);
-        courseCodeTooltipTimeout = setTimeout(() => {
-          if (hoveredCourseCode === course.courseNo) hoveredCourseCode = null;
+        moveCourseIDTooltip(e, course.courseNo);
+        if (courseIDTooltipTimeout) clearTimeout(courseIDTooltipTimeout);
+        courseIDTooltipTimeout = setTimeout(() => {
+          if (hoveredCourseID === course.courseNo) hoveredCourseID = null;
         }, 2000);
       }}
-      onmousemove={(e) => moveCourseCodeTooltip(e, course.courseNo)}
-      onmouseleave={() => hideCourseCodeTooltip(course.courseNo)}
+      onmousemove={(e) => moveCourseIDTooltip(e, course.courseNo)}
+      onmouseleave={() => hideCourseIDTooltip(course.courseNo)}
     >
       <div class="flex flex-nowrap text-[0.6rem]">
         {course.courseNo}

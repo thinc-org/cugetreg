@@ -248,7 +248,7 @@
       </span>
       <ChevronDown
         size={20}
-        class="text-gray-400 transition-transform duration-200 {open
+        class="text-on-surface-var transition-transform duration-200 {open
           ? 'rotate-180'
           : ''}"
       />

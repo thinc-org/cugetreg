@@ -45,7 +45,7 @@
     >
       <Sidebar.Content class="flex-row overflow-visible!">
         <Sidebar.Group
-          class="w-(--sidebar-width-icon) shrink-0 items-center border-r border-r-neutral-100 bg-white p-0 pt-[1rem] pb-6 group-data-[variant=floating]:rounded-l-lg md:pt-[1.5rem]"
+          class="bg-surface-container-lowest border-r-surface-container-low w-(--sidebar-width-icon) shrink-0 items-center border-r p-0 pt-[1rem] pb-6 group-data-[variant=floating]:rounded-l-lg md:pt-[1.5rem]"
         >
           <Sidebar.GroupContent>
             <Sidebar.Menu class="gap-6">
@@ -96,7 +96,7 @@
   {/if}
   <Sidebar.Inset>
     <main
-      class="h-full min-w-0 flex-1 overflow-y-auto scroll-smooth bg-white"
+      class="bg-surface h-full min-w-0 flex-1 overflow-y-auto scroll-smooth"
       style="overscroll-behavior: contain"
     >
       {@render children()}

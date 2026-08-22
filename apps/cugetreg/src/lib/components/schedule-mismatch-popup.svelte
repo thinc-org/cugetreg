@@ -109,20 +109,20 @@
         aria-label="Close modal"
       ></button>
 
-      <div class="relative w-full max-w-[420px] rounded-3xl bg-white p-8">
-        <!-- TODO: Remove hard-coded color -->
-        <h2 class="mb-4 text-center text-xl font-semibold text-[#4a70c6]">
+      <div
+        class="bg-surface-bright relative w-full max-w-[420px] rounded-3xl p-8"
+      >
+        <h2 class="text-primary mb-4 text-center text-xl font-semibold">
           ตารางเรียนไม่ตรงกับภาค/ปีที่คุณเลือก
         </h2>
-        <p class="mb-2 text-center text-sm text-gray-600">
+        <p class="text-on-surface mb-2 text-center text-sm">
           กรุณาเลือกตารางที่สอดคล้องกับภาค/ปีที่คุณเลือกใหม่
         </p>
 
         <div class="relative mb-8">
           <Select type="single" bind:value={() => selectedId, setSelectedId}>
-            <!-- TODO: Remove hard-coded color -->
             <SelectTrigger
-              class="w-full rounded-xl border border-[#b8c9e6] bg-white px-4 py-3 text-left text-[15px] text-[#2b4c8a]"
+              class="border-surface-container text-primary bg-surface-bright w-full rounded-xl border px-4 py-3 text-left text-[15px]"
               aria-label="Select table"
             >
               {selectedLabel}
@@ -141,14 +141,16 @@
                   {/each}
                 </div>
 
-                <div class="border-t border-gray-100 bg-white p-1">
+                <div
+                  class="border-surface-container-low bg-surface-bright border-t p-1"
+                >
                   <SelectItem
                     value="NEW"
                     label="เพิ่มตาราง"
                     aria-label="เพิ่มตาราง"
                   >
                     <div
-                      class="flex items-center gap-2 font-bold text-gray-600"
+                      class="text-on-surface flex items-center gap-2 font-bold"
                     >
                       <Plus size={16} />
                       เพิ่มตาราง
@@ -166,7 +168,7 @@
             type="button"
             onclick={onClose}
             disabled={isConfirming}
-            class="flex-1 rounded-xl bg-[#f0f2f5] py-2 text-[15px] font-bold text-gray-700 transition-colors hover:bg-gray-200"
+            class="bg-surface-container-low text-on-surface hover:bg-surface-container flex-1 rounded-xl py-2 text-[15px] font-bold transition-colors"
           >
             ยกเลิก
           </button>
@@ -175,7 +177,7 @@
             type="button"
             onclick={handleConfirm}
             disabled={isConfirming}
-            class="flex-1 rounded-xl bg-[#e3f0ff] py-2 text-[15px] font-bold text-[#2b4c8a] transition-colors hover:bg-[#d0e6ff]"
+            class="bg-primary text-on-primary hover:bg-primary-hover flex-1 rounded-xl py-2 text-[15px] font-bold transition-colors"
           >
             ตกลง
           </button>

@@ -6,7 +6,7 @@
   class="fixed inset-0 z-[100] flex items-center justify-center bg-[#4A72B9] p-3 md:hidden"
 >
   <div
-    class="flex h-full w-full flex-col items-center justify-center gap-8 rounded-[2.5rem] bg-white p-8 text-center shadow-2xl md:rounded-[2rem]"
+    class="bg-surface-bright flex h-full w-full flex-col items-center justify-center gap-8 rounded-[2.5rem] p-8 text-center shadow-2xl md:rounded-[2rem]"
   >
     <svg
       viewBox="0 0 24 24"
@@ -29,8 +29,7 @@
       {/each}
     </svg>
 
-    <!-- TODO: Remove hard-coded color -->
-    <p class="text-xl font-medium text-[#1C1B1F] md:text-2xl">กำลังโหลด...</p>
+    <p class="text-on-surface text-xl font-medium md:text-2xl">กำลังโหลด...</p>
   </div>
 </div>
 

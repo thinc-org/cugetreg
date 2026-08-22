@@ -522,7 +522,7 @@
   );
 </script>
 
-<div class="relative flex h-full flex-col overflow-hidden bg-white">
+<div class="bg-surface relative flex h-full flex-col overflow-hidden">
   <div class="relative flex flex-1 overflow-hidden">
     <AppSidebar
       showSidebar={!isMobile}
@@ -546,7 +546,7 @@
               isActive={sidebarExpanded && activePanel === 'sidebar'}
               size="lg"
               tooltipContent="เมนู"
-              class="mx-auto size-12! justify-center rounded-xl p-0! ring-0 transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-5!"
+              class="data-[active=true]:bg-primary-low data-[active=true]:text-on-primary-low mx-auto size-12! justify-center rounded-xl p-0! ring-0 transition-all [&>svg]:size-5!"
             >
               <Menu size="20" strokeWidth={2.5} />
             </Sidebar.MenuButton>
@@ -560,7 +560,7 @@
               isActive={activePanel === 'filter_only'}
               size="lg"
               tooltipContent="ตัวกรอง"
-              class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-5!"
+              class="data-[active=true]:bg-primary-low data-[active=true]:text-on-primary-low mx-auto size-12! justify-center rounded-xl p-0! transition-all [&>svg]:size-5!"
             >
               <Filter size="20" strokeWidth={2.5} />
             </Sidebar.MenuButton>
@@ -575,7 +575,7 @@
                 isActive={activePanel === 'selected_only'}
                 size="lg"
                 tooltipContent="วิชาที่เลือก"
-                class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-5!"
+                class="data-[active=true]:bg-primary-low data-[active=true]:text-on-primary-low mx-auto size-12! justify-center rounded-xl p-0! transition-all [&>svg]:size-5!"
               >
                 <BookMarked size="20" strokeWidth={2.5} />
               </Sidebar.MenuButton>
@@ -588,7 +588,7 @@
           <div class="relative mb-6 flex flex-col gap-2">
             {#await cartPromise}
               <div
-                class="flex items-center justify-center gap-2 px-2 py-8 text-gray-400"
+                class="text-on-surface-var flex items-center justify-center gap-2 px-2 py-8"
               >
                 <Loader2 class="animate-spin" size={24} />
                 <span class="text-sm">กำลังโหลดตารางเรียน...</span>
@@ -639,12 +639,12 @@
             <div class="flex items-baseline gap-2 md:gap-3">
               <!-- TODO: Remove hard-coded color -->
               <h1
-                class="text-xl font-bold text-[#4A70C6] md:text-4xl md:text-black"
+                class="md:text-on-surface text-xl font-bold text-[#4A70C6] md:text-4xl"
               >
                 วิชาเรียน
               </h1>
               <span
-                class="text-[10px] font-medium whitespace-nowrap text-gray-400 md:text-sm"
+                class="text-on-surface-var text-[10px] font-medium whitespace-nowrap md:text-sm"
                 >({totalResults} ผลลัพธ์)</span
               >
             </div>
@@ -652,7 +652,7 @@
             <div class="relative flex shrink-0 gap-2">
               <Select.Root type="single" bind:value={currentProgram}>
                 <Select.Trigger
-                  class="flex h-6 items-center gap-2 rounded-full border border-neutral-800 px-2 py-0.5 text-[10px] font-bold transition-colors hover:bg-gray-50 focus:ring-offset-0 md:h-auto md:px-3 md:py-1.5 md:py-2 md:text-sm md:text-xs"
+                  class="hover:bg-surface-container-low flex h-6 items-center gap-2 rounded-full border border-neutral-800 px-2 py-0.5 text-[10px] font-bold transition-colors focus:ring-offset-0 md:h-auto md:px-3 md:py-1.5 md:py-2 md:text-sm md:text-xs"
                 >
                   {studyProgramLabel}
                 </Select.Trigger>
@@ -685,7 +685,7 @@
                 }
               >
                 <Select.Trigger
-                  class="flex h-6 items-center gap-2 rounded-full border border-neutral-800 px-2 py-1.5 text-[10px] font-bold transition-colors hover:bg-gray-50 focus:ring-offset-0 md:h-auto md:px-3 md:py-2 md:text-sm md:text-xs"
+                  class="hover:bg-surface-container-low flex h-6 items-center gap-2 rounded-full border border-neutral-800 px-2 py-1.5 text-[10px] font-bold transition-colors focus:ring-offset-0 md:h-auto md:px-3 md:py-2 md:text-sm md:text-xs"
                 >
                   {`${currentAY} / ${SEMESTER_LABEL_SHORT[currentSemester]}`}
                 </Select.Trigger>
@@ -711,7 +711,7 @@
           <div class="mb-10 flex flex-col gap-1">
             <div class="flex flex-row items-end gap-3 md:gap-6">
               <div class="flex flex-1 flex-col gap-1">
-                <span class="ml-1 hidden text-xs text-gray-400 md:flex"
+                <span class="text-on-surface-var ml-1 hidden text-xs md:flex"
                   >ค้นหา...</span
                 >
                 <!-- TODO: Remove hard-coded color -->
@@ -723,7 +723,7 @@
                   placeholder={isMobile
                     ? 'ค้นหา...'
                     : 'พิมพ์ชื่อวิชา รหัสวิชา หรือคำค้นหาอื่นๆ...'}
-                  class="h-10 w-full rounded-xl border-none bg-[#F1F3F7] px-4 text-sm font-medium placeholder:text-neutral-300 focus:ring-2 focus:ring-blue-500 md:h-12 md:px-6 md:text-lg"
+                  class="bg-surface-container-lowest h-10 w-full rounded-xl border-none px-4 text-sm font-medium placeholder:text-neutral-300 focus:ring-2 focus:ring-blue-500 md:h-12 md:px-6 md:text-lg"
                 />
               </div>
               <!-- Mobile sort: "เรียงตาม" + dropdown (Select) -->
@@ -767,14 +767,15 @@
 
               <!-- Desktop sort: original "จัดลำดับตาม" layout -->
               <div class="hidden w-full flex-col gap-1 md:flex md:w-64">
-                <span class="ml-1 text-[10px] font-bold text-gray-400 uppercase"
+                <span
+                  class="text-on-surface-var ml-1 text-[10px] font-bold uppercase"
                   >จัดลำดับตาม</span
                 >
                 <div class="relative flex items-center gap-3">
                   <Select.Root bind:value={currentSort} type="single">
                     <!-- TODO: Remove hard-coded color -->
                     <Select.Trigger
-                      class="flex h-12 flex-1 items-center justify-between rounded-xl bg-[#F1F3F7] px-5 text-sm font-bold text-gray-700 transition-all hover:bg-gray-200"
+                      class="bg-surface-container-lowest text-on-surface hover:bg-surface-container-low flex h-12 flex-1 items-center justify-between rounded-xl px-5 text-sm font-bold transition-all"
                     >
                       {sortByMapper(currentSort)}
                     </Select.Trigger>
@@ -873,14 +874,13 @@
                   strokeWidth={1.5}
                   class="mb-2 text-[#4A6CF7]"
                 />
-                <!-- TODO: Remove hard-coded color -->
-                <p class="text-lg font-medium text-[#1C1B1F]">
+                <p class="text-on-surface text-lg font-medium">
                   ไม่พบรายวิชา{searchState.debounced.trim()
                     ? ` ${searchState.debounced.trim()}`
                     : ''}
                 </p>
-                <p class="text-base text-gray-500">{contextLabel}</p>
-                <p class="mt-3 text-sm leading-relaxed text-gray-400">
+                <p class="text-on-surface-var text-base">{contextLabel}</p>
+                <p class="text-on-surface-var mt-3 text-sm leading-relaxed">
                   ลองเปลี่ยนตัวเลือกภาคเรียน ปีการศึกษา หรือหลักสูตร<br />
                   ในตารางเรียน แล้วลองใหม่อีกครั้งนะ!
                 </p>
@@ -914,14 +914,14 @@
                   use:infiniteScroll={infiniteScrollOptions}
                   class="col-span-full flex h-24 items-center justify-center opacity-50"
                 >
-                  <Loader2 class="animate-spin text-gray-400" size={24} />
+                  <Loader2 class="text-on-surface-var animate-spin" size={24} />
                 </div>
               {/if}
             {/if}
 
             {#if isLoading}
               <div
-                class="col-span-full flex h-64 flex-col items-center justify-center gap-3 text-gray-400"
+                class="text-on-surface-var col-span-full flex h-64 flex-col items-center justify-center gap-3"
               >
                 <Loader2 class="animate-spin" size={40} />
                 <p>กำลังโหลดข้อมูลวิชา...</p>
@@ -940,7 +940,7 @@
             onClose={() => (showMismatchPopup = false)}
           />
         {/if}
-        <div class="mt-auto w-full border-t bg-white">
+        <div class="mt-auto w-full border-t">
           <Footer />
         </div>
       </div>
@@ -960,10 +960,10 @@
       transition:fade={{ duration: 200 }}
     >
       <div
-        class="custom-scrollbar relative flex max-h-[85vh] w-full max-w-[400px] flex-col overflow-y-auto rounded-3xl bg-white p-6 shadow-2xl"
+        class="custom-scrollbar bg-surface-bright relative flex max-h-[85vh] w-full max-w-[400px] flex-col overflow-y-auto rounded-3xl p-6 shadow-2xl"
       >
         <button
-          class="absolute top-7 right-5 bg-white"
+          class="absolute top-7 right-5"
           onclick={() => (activeModal = null)}
         >
           <X size={20} strokeWidth={2.5} />
@@ -992,7 +992,7 @@
         <h2 class="text-on-surface text-lg/[20px] font-medium">ตัวกรอง</h2>
         <ChevronDown
           size={20}
-          class="text-gray-400 transition-transform duration-200 {isFilterOpen
+          class="text-on-surface-var transition-transform duration-200 {isFilterOpen
             ? 'rotate-180'
             : ''}"
         />

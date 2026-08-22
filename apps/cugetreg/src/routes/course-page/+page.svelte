@@ -313,7 +313,7 @@
 
 <svelte:window bind:innerWidth={screenWidth} />
 
-<div class="relative flex h-full flex-col overflow-hidden bg-white">
+<div class="bg-surface relative flex h-full flex-col overflow-hidden">
   <div class="relative flex flex-1 overflow-hidden">
     <Sidebar.Provider
       bind:open={sidebarExpanded}
@@ -325,7 +325,7 @@
       {/if}
       <Sidebar.Inset class="min-w-0">
         <main
-          class="h-full min-w-0 flex-1 overflow-y-auto scroll-smooth bg-white"
+          class="bg-surface h-full min-w-0 flex-1 overflow-y-auto scroll-smooth"
         >
           <div class="flex min-h-full flex-col">
             <div class="px-6 py-6">
@@ -715,7 +715,7 @@
                 <div class="mt-4">
                   <Select.Root type="single" bind:value={selectedGroup}>
                     <Select.Trigger
-                      class="text-on-surface border-surface-container h-14 w-full rounded-2xl border bg-white px-5 text-base font-medium focus:ring-0 focus:ring-offset-0"
+                      class="text-on-surface border-surface-container bg-surface-bright h-14 w-full rounded-2xl border px-5 text-base font-medium focus:ring-0 focus:ring-offset-0"
                     >
                       กลุ่ม : {selectedGroup}
                     </Select.Trigger>
@@ -732,7 +732,7 @@
                   </Select.Root>
                 </div>
                 <div
-                  class="border-surface-container mt-4 rounded-2xl border bg-white p-6"
+                  class="border-surface-container bg-surface-bright mt-4 rounded-2xl border p-6"
                 >
                   <button
                     type="button"
@@ -784,7 +784,7 @@
                 <div class="mt-4">
                   <Select.Root type="single" bind:value={selectedGroup}>
                     <Select.Trigger
-                      class="text-on-surface border-surface-container h-14 w-full rounded-2xl border bg-white px-5 text-base font-medium focus:ring-0 focus:ring-offset-0"
+                      class="text-on-surface border-surface-container bg-surface-bright h-14 w-full rounded-2xl border px-5 text-base font-medium focus:ring-0 focus:ring-offset-0"
                     >
                       กลุ่ม : {selectedGroup}
                     </Select.Trigger>
@@ -825,7 +825,7 @@
                       <div>
                         <Select.Root type="single" bind:value={selectedYear}>
                           <Select.Trigger
-                            class="text-on-surface border-surface-container h-9 w-[120px] rounded-lg border bg-white px-4 text-sm font-medium md:h-12 md:w-[180px] md:text-base"
+                            class="text-on-surface border-surface-container bg-surface-bright h-9 w-[120px] rounded-lg border px-4 text-sm font-medium md:h-12 md:w-[180px] md:text-base"
                           >
                             {selectedYear}
                           </Select.Trigger>
@@ -841,7 +841,7 @@
                       <div>
                         <Select.Root type="single" bind:value={selectedTerm}>
                           <Select.Trigger
-                            class="text-on-surface border-surface-container h-9 w-[120px] rounded-lg border bg-white px-4 text-sm font-medium md:h-12 md:w-[180px] md:text-base"
+                            class="text-on-surface border-surface-container bg-surface-bright h-9 w-[120px] rounded-lg border px-4 text-sm font-medium md:h-12 md:w-[180px] md:text-base"
                           >
                             {selectedTerm}
                           </Select.Trigger>
@@ -1072,7 +1072,7 @@
               </section>
             </div>
           </div>
-          <div class="mt-auto w-full border-t bg-white">
+          <div class="bg-surface mt-auto w-full border-t">
             <Footer />
           </div>
         </main>
@@ -1092,10 +1092,10 @@
       transition:fade={{ duration: 200 }}
     >
       <div
-        class="custom-scrollbar relative flex max-h-[85vh] w-full max-w-[400px] flex-col overflow-y-auto rounded-3xl bg-white p-6 shadow-2xl"
+        class="custom-scrollbar bg-surface-bright relative flex max-h-[85vh] w-full max-w-[400px] flex-col overflow-y-auto rounded-3xl p-6 shadow-2xl"
       >
         <button
-          class="absolute top-7 right-5 bg-white"
+          class="bg-surface-bright absolute top-7 right-5"
           onclick={() => (activeModal = null)}
         >
           <X size={20} strokeWidth={2.5} />
@@ -1116,7 +1116,7 @@
   >
     <Sidebar.Content class="flex-row overflow-visible!">
       <Sidebar.Group
-        class="w-(--sidebar-width-icon) shrink-0 items-center border-r border-r-neutral-100 bg-white p-0 pt-[1rem] pb-6 group-data-[variant=floating]:rounded-l-lg md:pt-[1.5rem]"
+        class="bg-surface-container-lowest border-r-surface-container-low w-(--sidebar-width-icon) shrink-0 items-center border-r p-0 pt-[1rem] pb-6 group-data-[variant=floating]:rounded-l-lg md:pt-[1.5rem]"
       >
         <Sidebar.GroupContent>
           <Sidebar.Menu class="gap-6">
@@ -1127,7 +1127,7 @@
                 isActive={sidebarExpanded && activePanel === 'sidebar'}
                 size="lg"
                 tooltipContent="เมนู"
-                class="mx-auto size-12! justify-center rounded-xl p-0! ring-0 transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-6!"
+                class="data-[active=true]:bg-primary-low data-[active=true]:text-on-primary-low mx-auto size-12! justify-center rounded-xl p-0! ring-0 transition-all [&>svg]:size-6!"
               >
                 <Menu size="24" strokeWidth={2.5} />
               </Sidebar.MenuButton>
@@ -1139,7 +1139,7 @@
                 isActive={activePanel === 'description_only'}
                 size="lg"
                 tooltipContent="คำอธิบายรายวิชา"
-                class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-6!"
+                class="data-[active=true]:bg-primary-low data-[active=true]:text-on-primary-low mx-auto size-12! justify-center rounded-xl p-0! transition-all [&>svg]:size-6!"
               >
                 <Book size="24" strokeWidth={2.5} />
               </Sidebar.MenuButton>
@@ -1151,7 +1151,7 @@
                 isActive={activePanel === 'detail_only'}
                 size="lg"
                 tooltipContent="รายละเอียดเซคชัน"
-                class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-6!"
+                class="data-[active=true]:bg-primary-low data-[active=true]:text-on-primary-low mx-auto size-12! justify-center rounded-xl p-0! transition-all [&>svg]:size-6!"
               >
                 <StickyNote size="24" strokeWidth={2.5} />
               </Sidebar.MenuButton>
@@ -1163,7 +1163,7 @@
                 isActive={activePanel === 'review_only'}
                 size="lg"
                 tooltipContent="รีวิวรายวิชา"
-                class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-6!"
+                class="data-[active=true]:bg-primary-low data-[active=true]:text-on-primary-low mx-auto size-12! justify-center rounded-xl p-0! transition-all [&>svg]:size-6!"
               >
                 <MessageCircleQuestionIcon size="24" strokeWidth={2.5} />
               </Sidebar.MenuButton>
@@ -1175,7 +1175,7 @@
                 isActive={activePanel === 'selected_only'}
                 size="lg"
                 tooltipContent="วิชาที่เลือก"
-                class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-6!"
+                class="data-[active=true]:bg-primary-low data-[active=true]:text-on-primary-low mx-auto size-12! justify-center rounded-xl p-0! transition-all [&>svg]:size-6!"
               >
                 <BookMarked size="24" strokeWidth={2.5} />
               </Sidebar.MenuButton>
@@ -1225,7 +1225,7 @@
               <div class="text-on-surface mb-6 flex flex-col">
                 <button
                   type="button"
-                  class="hover:text-primary w-full border-b border-gray-400 py-4 text-left text-xl font-semibold transition-colors"
+                  class="border-surface-container-high hover:text-primary w-full border-b py-4 text-left text-xl font-semibold transition-colors"
                   onclick={() => scrollToSection(descriptionSection)}
                 >
                   คำอธิบายรายวิชา
@@ -1233,14 +1233,14 @@
 
                 <button
                   type="button"
-                  class="hover:text-primary w-full border-b border-gray-400 py-4 text-left text-xl font-semibold transition-colors"
+                  class="border-surface-container-high hover:text-primary w-full border-b py-4 text-left text-xl font-semibold transition-colors"
                   onclick={() => scrollToSection(detailSection)}
                 >
                   รายละเอียดเซคชัน
                 </button>
 
                 <div
-                  class="flex w-full items-center justify-between border-b border-gray-400 py-3.5"
+                  class="border-surface-container-high flex w-full items-center justify-between border-b py-3.5"
                 >
                   <button
                     type="button"
@@ -1256,7 +1256,7 @@
                   <!-- TODO: Remove hard-coded color -->
                   <button
                     type="button"
-                    class="flex items-center gap-1.5 rounded-xl bg-[#E9EEF6] px-3.5 py-1.5 text-sm font-medium text-[#004494] transition-all hover:bg-[#D2E0F5]"
+                    class="bg-primary-low text-on-primary-low hover:bg-primary-low-hover flex items-center gap-1.5 rounded-xl px-3.5 py-1.5 text-sm font-medium transition-all"
                     onclick={() => {
                       scrollToSection(reviewSection);
                       setTimeout(() => textareaRef?.focus(), 300);

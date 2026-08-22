@@ -12,13 +12,13 @@
 
 <div class="mx-auto max-w-3xl p-6">
   <h1 class="mb-2 text-2xl font-bold">Scraper Status</h1>
-  <p class="mb-6 text-sm text-gray-600">
+  <p class="text-on-surface-var mb-6 text-sm">
     Python scraper writes to PostgreSQL (same DB as <code>apps/core</code>) and
     <code>apps/core/bin/courses.json</code>. Courses appear on the home page
     once scraping completes.
   </p>
 
-  <dl class="grid gap-3 rounded-lg border border-gray-200 p-4">
+  <dl class="border-surface-container grid gap-3 rounded-lg border p-4">
     <div class="flex justify-between gap-4">
       <dt class="font-medium">Status</dt>
       <dd>{status.status}</dd>
@@ -50,7 +50,7 @@
     </div>
     <div class="flex flex-col gap-1">
       <dt class="font-medium">Message</dt>
-      <dd class="text-sm text-gray-600">{status.message ?? '-'}</dd>
+      <dd class="text-on-surface-var text-sm">{status.message ?? '-'}</dd>
     </div>
   </dl>
 

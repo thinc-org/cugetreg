@@ -248,7 +248,7 @@
   });
 </script>
 
-<div class="relative flex min-h-screen flex-col bg-white">
+<div class="bg-surface relative flex min-h-screen flex-col">
   <div
     class="container mx-auto flex flex-col items-center justify-center gap-4 p-5 pb-16 sm:p-8 sm:pb-8 lg:flex-row lg:items-start lg:gap-8 lg:gap-20"
   >
@@ -273,7 +273,7 @@
       onChangeVisibility={changeVisibility}
     />
   </div>
-  <div class="mt-auto w-full border-t bg-white">
+  <div class="bg-surface mt-auto w-full border-t">
     <Footer />
   </div>
   <Modal centered dim bind:show={editInfoPopupVisible}>
@@ -320,12 +320,18 @@
     />
   </Modal>
   <a
-    class="fixed right-6 bottom-6 z-50 inline-flex cursor-pointer items-center gap-1 rounded-full border-2 border-black px-2 py-1 md:gap-2 md:px-4"
+    class="border-on-surface bg-surface-bright fixed right-6 bottom-6 z-50 inline-flex cursor-pointer items-center gap-1 rounded-full border-2 px-2 py-1 md:gap-2 md:px-4"
     href={GOOGLE_FORM_URL}
     target="_blank"
     rel="external noopener noreferrer"
   >
-    <TriangleAlert size={isMobile ? 16 : 20} strokeWidth={1.5} color="black" />
-    <span class="text-[10px] text-black md:text-xs">แจ้งปัญหาการใช้งาน</span>
+    <TriangleAlert
+      class="text-on-surface"
+      size={isMobile ? 16 : 20}
+      strokeWidth={1.5}
+    />
+    <span class="text-on-surface text-[10px] md:text-xs"
+      >แจ้งปัญหาการใช้งาน</span
+    >
   </a>
 </div>

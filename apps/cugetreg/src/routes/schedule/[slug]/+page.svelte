@@ -81,7 +81,7 @@
 
 <svelte:window bind:innerWidth />
 
-<div class="relative flex h-full flex-col bg-white">
+<div class="bg-surface relative flex h-full flex-col">
   <div class="relative flex flex-1 justify-center">
     <div class="flex min-h-full flex-col">
       <div class="mx-auto w-full max-w-[1200px] flex-1 p-6 lg:p-10">
@@ -116,7 +116,7 @@
           <!-- Mobile: compact download button -->
           <div class="lg:hidden">
             <Button
-              class="m-0 flex items-center gap-1 border border-gray-200 bg-white"
+              class="border-surface-container bg-surface-bright m-0 flex items-center gap-1 border"
               onclick={handleTimetableScreenshot}
             >
               <Download size={20} strokeWidth={2.5} class="text-on-surface" />

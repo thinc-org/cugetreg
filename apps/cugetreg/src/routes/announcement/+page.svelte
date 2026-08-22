@@ -59,37 +59,34 @@
 
 <div class="flex flex-col items-center justify-center pt-10">
   <div class="w-[90vw] pb-16 md:w-[60vw]">
-    <!-- TODO: Remove hard-coded color -->
-    <h1 class="mb-8 text-2xl font-bold text-[#1C1B1F]">การแจ้งเตือน</h1>
+    <h1 class="text-on-surface mb-8 text-2xl font-bold">การแจ้งเตือน</h1>
     {#if isLoading}
       <div
-        class="flex h-40 flex-col items-center justify-center gap-3 text-gray-400"
+        class="text-on-surface-var flex h-40 flex-col items-center justify-center gap-3"
       >
         <Loader2 class="animate-spin" size={32} />
         <span class="text-sm">กำลังโหลด...</span>
       </div>
     {:else if announcements.length === 0}
       <div
-        class="flex h-40 items-center justify-center rounded-2xl border border-dashed border-gray-300 text-gray-500"
+        class="border-surface-container-high text-on-surface-var flex h-40 items-center justify-center rounded-2xl border border-dashed"
       >
         ไม่มีการแจ้งเตือนในขณะนี้
       </div>
     {:else}
       <div class="flex flex-col gap-4">
         {#each announcements as item (item.id)}
-          <!-- TODO: Remove hard-coded color -->
           <button
-            class="flex flex-col items-start gap-1 rounded-2xl border-2 border-gray-200 bg-white px-10 py-8 transition-all hover:border-[#4A6CF7] focus:outline-none"
+            class="border-surface-container bg-surface-bright flex flex-col items-start gap-1 rounded-2xl border-2 px-10 py-8 transition-all hover:border-[#4A6CF7] focus:outline-none"
             onclick={() => goto(resolve(`/announcement/${item.id}`))}
           >
-            <span class="font-regular text-xs text-gray-600">CU GetReg</span>
-            <!-- TODO: Remove hard-coded color -->
-            <h2
-              class="text-left text-[17px] font-bold text-[#4A70C6] md:text-lg"
+            <span class="font-regular text-on-surface-var text-xs"
+              >CU GetReg</span
             >
+            <h2 class="text-primary text-left text-[17px] font-bold md:text-lg">
               {item.title}
             </h2>
-            <span class="text-xs text-gray-600">
+            <span class="text-on-surface-var text-xs">
               {formatDate(item.createdAt)}
             </span>
           </button>
@@ -98,13 +95,19 @@
     {/if}
   </div>
   <a
-    class="sticky right-6 bottom-6 z-50 mt-8 mb-6 ml-auto flex w-max cursor-pointer items-center gap-1 rounded-full border-2 border-black bg-white px-2 py-1 md:gap-2 md:px-4"
+    class="border-on-surface bg-surface-bright sticky right-6 bottom-6 z-50 mt-8 mb-6 ml-auto flex w-max cursor-pointer items-center gap-1 rounded-full border-2 px-2 py-1 md:gap-2 md:px-4"
     href={GOOGLE_FORM_URL}
     target="_blank"
     rel="external noopener noreferrer"
   >
-    <TriangleAlert size={isMobile ? 16 : 20} strokeWidth={1.5} color="black" />
-    <span class="text-[10px] text-black md:text-xs">แจ้งปัญหาการใช้งาน</span>
+    <TriangleAlert
+      class="text-on-surface"
+      size={isMobile ? 16 : 20}
+      strokeWidth={1.5}
+    />
+    <span class="text-on-surface text-[10px] md:text-xs"
+      >แจ้งปัญหาการใช้งาน</span
+    >
   </a>
 </div>
 <Footer />

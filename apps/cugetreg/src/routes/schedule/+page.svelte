@@ -169,7 +169,7 @@
   </Button>
 {/snippet}
 
-<div class="relative flex h-full flex-col overflow-hidden bg-white">
+<div class="bg-surface relative flex h-full flex-col overflow-hidden">
   <Modal
     exitOnEsc
     exitOnBackgroundClick
@@ -272,7 +272,7 @@
               isActive={sidebarExpanded && activePanel === 'sidebar'}
               size="lg"
               tooltipContent="ตารางเรียน"
-              class="mx-auto size-12! justify-center rounded-xl p-0! ring-0 transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-5!"
+              class="data-[active=true]:bg-primary-low data-[active=true]:text-on-primary-low mx-auto size-12! justify-center rounded-xl p-0! ring-0 transition-all [&>svg]:size-5!"
             >
               <Menu size="20" strokeWidth={2.5} />
             </Sidebar.MenuButton>
@@ -286,7 +286,7 @@
               isActive={activePanel === 'selected_only'}
               size="lg"
               tooltipContent="วิชาที่เลือก"
-              class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-5!"
+              class="data-[active=true]:bg-primary-low data-[active=true]:text-on-primary-low mx-auto size-12! justify-center rounded-xl p-0! transition-all [&>svg]:size-5!"
             >
               <BookMarked size="20" strokeWidth={2.5} />
             </Sidebar.MenuButton>
@@ -298,7 +298,7 @@
           <div class="relative mb-6 flex flex-col gap-2">
             {#await cartPromise}
               <div
-                class="flex items-center justify-center gap-2 px-2 py-8 text-gray-400"
+                class="text-on-surface-var flex items-center justify-center gap-2 px-2 py-8"
               >
                 <Loader2 class="animate-spin" size={24} />
                 <span class="text-sm">กำลังโหลดตารางเรียน...</span>
@@ -362,7 +362,7 @@
             <div class="flex w-full items-center justify-between lg:w-auto">
               <!-- TODO: Remove hard-coded color -->
               <h1
-                class="text-xl font-bold text-[#4A70C6] md:text-4xl md:text-black"
+                class="md:text-on-surface text-xl font-bold text-[#4A70C6] md:text-4xl"
               >
                 ตารางเรียน
               </h1>
@@ -467,7 +467,7 @@
           </div>
           <ExamsList cart={$userCart.currentCart} exams={$userCart.exams} />
         </div>
-        <div class="mt-auto w-full border-t bg-white">
+        <div class="bg-surface mt-auto w-full border-t">
           <Footer />
         </div>
       </div>
@@ -494,10 +494,10 @@
       transition:fade={{ duration: 200 }}
     >
       <div
-        class="custom-scrollbar relative flex max-h-[85vh] w-full max-w-[400px] flex-col overflow-y-auto rounded-3xl bg-white p-6 shadow-2xl"
+        class="custom-scrollbar bg-surface-bright relative flex max-h-[85vh] w-full max-w-[400px] flex-col overflow-y-auto rounded-3xl p-6 shadow-2xl"
       >
         <button
-          class="absolute top-7 right-5 bg-white"
+          class="bg-surface-bright absolute top-7 right-5"
           onclick={() => (activeModal = null)}
         >
           <X size={20} strokeWidth={2.5} />

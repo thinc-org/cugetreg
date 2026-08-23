@@ -11,7 +11,8 @@
   import { tick } from 'svelte';
   import { cubicOut } from 'svelte/easing';
   import { MediaQuery } from 'svelte/reactivity';
-  import { slide } from 'svelte/transition';
+  import { fade, slide } from 'svelte/transition';
+  import toast from 'svelte-french-toast';
 
   import { Button } from '@cugetreg/ui/atoms/button';
   import { GenedChip } from '@cugetreg/ui/atoms/gened-chip';
@@ -57,6 +58,37 @@
     removeCourse(schedule[itemIndex].id);
   }
 
+  async function copyCourseID(courseID: string) {
+    try {
+      await navigator.clipboard.writeText(courseID);
+      toast.success('Copied to clipboard', { position: 'bottom-right' });
+      copiedCourseID = courseID;
+      hoveredCourseID = courseID;
+      if (courseIDTooltipTimeout) clearTimeout(courseIDTooltipTimeout);
+      courseIDTooltipTimeout = setTimeout(() => {
+        if (hoveredCourseID === courseID) hoveredCourseID = null;
+      }, 2000);
+      setTimeout(() => {
+        if (copiedCourseID === courseID) copiedCourseID = null;
+      }, 2000);
+    } catch (err) {
+      console.error('Failed to copy course ID: ', err);
+    }
+  }
+
+  function moveCourseIDTooltip(e: MouseEvent, courseID: string) {
+    hoveredCourseID = courseID;
+    tooltipPosition = {
+      x: e.clientX + 12,
+      y: e.clientY + 12,
+    };
+  }
+
+  function hideCourseIDTooltip(courseID: string) {
+    if (hoveredCourseID === courseID) hoveredCourseID = null;
+    if (courseIDTooltipTimeout) clearTimeout(courseIDTooltipTimeout);
+  }
+
   interface SelectedCourseProp {
     class?: ClassValue;
     variant?: 'simple' | 'detailed' | 'grouped';
@@ -86,6 +118,10 @@
 
   const bodyOpen = $derived(collapsible ? open : true);
 
+  let copiedCourseID = $state<string | null>(null);
+  let hoveredCourseID = $state<string | null>(null);
+  let courseIDTooltipTimeout: ReturnType<typeof setTimeout> | undefined;
+  let tooltipPosition = $state({ x: 0, y: 0 });
   let showChangeColorModal = $state(false);
   let currentColorVariant = $state<ColorVariant>('primary');
   let initialColorVariant = $state<ColorVariant>('primary');
@@ -230,6 +266,17 @@
   {/if}
 </div>
 
+{#if hoveredCourseID}
+  <div
+    class="pointer-events-none fixed z-100 rounded bg-neutral-800 px-2 py-1 text-xs text-white"
+    style:left={`${tooltipPosition.x}px`}
+    style:top={`${tooltipPosition.y}px`}
+    transition:fade={{ duration: 150 }}
+  >
+    {copiedCourseID === hoveredCourseID ? 'copied!' : 'copy'}
+  </div>
+{/if}
+
 {#snippet sectionHeader()}
   {#if collapsible}
     <button
@@ -318,14 +365,28 @@
       </IconButton>
     </div>
 
-    <div class="flex flex-1 flex-col justify-center overflow-hidden">
+    <button
+      type="button"
+      class="flex min-w-0 flex-1 cursor-pointer flex-col justify-center overflow-hidden text-left"
+      aria-label={`คัดลอกรหัสวิชา ${course.courseNo}`}
+      onclick={() => copyCourseID(course.courseNo)}
+      onmouseenter={(e) => {
+        moveCourseIDTooltip(e, course.courseNo);
+        if (courseIDTooltipTimeout) clearTimeout(courseIDTooltipTimeout);
+        courseIDTooltipTimeout = setTimeout(() => {
+          if (hoveredCourseID === course.courseNo) hoveredCourseID = null;
+        }, 2000);
+      }}
+      onmousemove={(e) => moveCourseIDTooltip(e, course.courseNo)}
+      onmouseleave={() => hideCourseIDTooltip(course.courseNo)}
+    >
       <div class="flex flex-nowrap text-[0.6rem]">
         {course.courseNo}
       </div>
       <div class="truncate text-sm">
         {course.course.courseNameEn}
       </div>
-    </div>
+    </button>
 
     <div
       data-variant={variant}

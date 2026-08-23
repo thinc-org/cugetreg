@@ -31,7 +31,7 @@
 <div class={cn(className, 'rounded-lg border border-neutral-200 p-5')}>
 	<div class="text-lg font-bold">เลือกสีในตาราง</div>
 
-	<div class="my-5 grid grid-cols-4 md:grid-cols-5">
+	<div class="my-5 grid grid-cols-4">
 		{#each Object.keys(options) as Key[] as option (option)}
 			<Button
 				variant="solid"

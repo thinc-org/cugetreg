@@ -1,5 +1,5 @@
 export const courseColorVariants = {
-  primary: "bg-neutral-300 border-neutral-500 text-neutral-700",
+  primary: "bg-neutral-50 border-[#B2B5C7] text-neutral-700",
   pink: "bg-pink-300 border-pink-500 text-pink-700",
   darkPink: "bg-dark-pink-300 border-dark-pink-700 text-dark-pink-700",
   tangerine: "bg-tangerine-300 border-tangerine-500 text-tangerine-700",

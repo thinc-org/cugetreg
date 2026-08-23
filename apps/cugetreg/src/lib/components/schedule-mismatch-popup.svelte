@@ -190,6 +190,11 @@
     <CreateTimetable
       {yearOptions}
       {semesterOptions}
+      fixedTerm={{
+        academicYear: expectedYear,
+        semester: expectedSemester as 'FIRST' | 'SECOND' | 'SUMMER',
+        studyProgram: expectedProgram as 'S' | 'I' | 'T',
+      }}
       onConfirm={async (schedule: TimetableMetaData) => {
         if (
           String(schedule.academicYear) !== String(expectedYear) ||

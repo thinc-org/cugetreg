@@ -60,7 +60,7 @@ export const auth = betterAuth({
             data: {
               ...user,
               faculty:
-                mapFaculty(facultyId).en === "UNKOWN"
+                mapFaculty(facultyId).en === "UNKNOWN"
                   ? null
                   : mapFacultyCode(facultyId),
             },

@@ -91,3 +91,20 @@
 		favorite: true
 	}}
 />
+
+<!--👇 Enrolled >= capacity turns the seat count red-->
+<Story
+	name="Seats Full"
+	args={{
+		course: {
+			code: '2109101',
+			name: 'ENG MATERIALS',
+			credit: 3,
+			gened: [],
+			seat: 132,
+			maxseat: 130,
+			review: 0,
+			days: ['MO', 'WE']
+		}
+	}}
+/>

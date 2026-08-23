@@ -7,6 +7,7 @@ import {
   getCourseSectionsRoute,
   getCoursesRoute,
   getFavoriteCourses,
+  getLastUpdatedRoute,
   removeFavoriteCourse,
 } from "@/routes_define/courses.routes.js";
 import { courseServices } from "@/services/coursesService.js";
@@ -52,6 +53,23 @@ courses
       const userId = c.get("user")?.id;
       const query = c.req.valid("query");
       const data = await courseServices.getFavoriteCourses(query, userId);
+      return c.json(data, 200);
+    } catch {
+      return c.json({ error: "INTERNAL_SERVER_ERROR" }, 500);
+    }
+  })
+
+  //1.2b Get last course data sync timestamp
+  // Must be registered before 1.3 (path "/{courseNo}") — otherwise the
+  // dynamic param route matches "/last-updated" first and shadows this one.
+  .openapi(getLastUpdatedRoute, async (c) => {
+    try {
+      const { studyProgram, academicYear, semester } = c.req.valid("query");
+      const data = await courseServices.getLastUpdated({
+        studyProgram,
+        academicYear,
+        semester,
+      });
       return c.json(data, 200);
     } catch {
       return c.json({ error: "INTERNAL_SERVER_ERROR" }, 500);

@@ -15,6 +15,7 @@
     ALLOWED_SEMESTER,
     SEMESTER_LABEL_LONG,
   } from '$lib/semesterOptions';
+  import { getCartSelectionController } from '$lib/stores/cart-selection.svelte';
   import { loginPopupState } from '$lib/stores/login-popup.svelte';
   import { getUserCartStore, useCartActions } from '$lib/stores/user-cart';
 
@@ -42,9 +43,11 @@
   import * as Accordion from '@cugetreg/ui/atoms/accordion';
   import { Button } from '@cugetreg/ui/atoms/button';
   import { GenedChip } from '@cugetreg/ui/atoms/gened-chip';
+  import { Modal } from '@cugetreg/ui/atoms/modal';
   import { StudyProgramChip } from '@cugetreg/ui/atoms/studyprogram-chip';
   import { YearSemesterChip } from '@cugetreg/ui/atoms/yearsemester-chip';
   import { Comment } from '@cugetreg/ui/molecules/comment';
+  import { ConfirmDeleteReview } from '@cugetreg/ui/molecules/confirm-delete-review';
   import { FloatingButton } from '@cugetreg/ui/molecules/floating-button';
   import {
     type ClassInfo,
@@ -56,6 +59,7 @@
   import { Footer } from '@cugetreg/ui/organisms/footer';
   import * as Sidebar from '@cugetreg/ui/organisms/sidebar';
   import { formatDate, formatExamTime } from '@cugetreg/utils';
+  import { UNKNOWN_FACULTY } from '@cugetreg/utils/faculty';
   import type { GenEdType } from '@cugetreg/utils/types';
   import {
     type CourseReview,
@@ -118,7 +122,9 @@
   );
 
   const userCart = getUserCartStore();
-  const { addCourse, removeCourse, updateCourse } = useCartActions();
+  const cartSelection = getCartSelectionController();
+  const { addCourse, removeCourse, updateCourse, updateCourseImmediately } =
+    useCartActions();
 
   const years = [...ALLOWED_ACADEMIC_YEAR].reverse().map(String);
   const terms = ALLOWED_SEMESTER.map((s) => SEMESTER_LABEL_LONG[s]);
@@ -173,12 +179,14 @@
       .then((response) => {
         const { sections } = CourseSectionsResponseSchema.parse(response.data);
         writeReviewSectionOptions = sections;
+
+        const match = /^\d+$/;
         if (
-          writeReviewSectionNo === null ||
-          !sections.includes(Number(writeReviewSectionNo))
+          writeReviewSectionNo !== null &&
+          (!match.test(writeReviewSectionNo) ||
+            !sections.includes(Number(writeReviewSectionNo)))
         ) {
-          writeReviewSectionNo =
-            sections.length > 0 ? String(sections[0]) : null;
+          writeReviewSectionNo = null;
         }
         return;
       })
@@ -220,7 +228,7 @@
       },
     },
     {
-      label: 'รายละเอียดเซ็คชัน',
+      label: 'รายละเอียดเซคชัน',
       icon: StickyNote,
       onClick: () => {
         scrollToSection(detailSection);
@@ -593,19 +601,38 @@
     }
   }
 
-  async function handleDeleteReview(reviewId: string) {
-    const isConfirm = confirm('Confirm Delete?');
-    if (!isConfirm) return;
+  let editingReviewId = $state<string | null>(null);
+  let deletingReviewId = $state<string | null>(null);
+  let reviewDeleting = $state(false);
+
+  function requestDeleteReview(reviewId: string) {
+    deletingReviewId = reviewId;
+  }
+
+  async function confirmDeleteReview() {
+    const reviewId = deletingReviewId;
+    if (!reviewId || reviewDeleting) return;
+    reviewDeleting = true;
+
     try {
       await api.delete(`/reviews/${reviewId}`);
+      // The deleted review may have been the one loaded into the write-review
+      // form, so drop the edit target along with it.
+      if (editingReviewId === reviewId) {
+        editingReviewId = null;
+        reviewContent = '';
+        reviewRating = 1;
+      }
+      deletingReviewId = null;
       await refreshReviews({ includeFacets: true });
       toast.success('ลบรีวิวสำเร็จ', { position: 'bottom-right' });
     } catch (error) {
       console.error(error);
+      toast.error('ไม่สามารถลบรีวิวได้', { position: 'bottom-right' });
+    } finally {
+      reviewDeleting = false;
     }
   }
-
-  let editingReviewId = $state<string | null>(null);
 
   function handleEditReview(review: any) {
     reviewRating = review.rating / 2;
@@ -746,13 +773,30 @@
     globalSelectedSection = globalSelectedSection === section ? null : section;
   }
 
-  function handlePopupConfirm(scheduleId: string) {
-    $userCart.currentCartId = scheduleId;
-    if (pendingSection) {
-      globalSelectedSection = pendingSection;
+  async function handlePopupConfirm(scheduleId: string): Promise<boolean> {
+    const cart = await cartSelection.select(scheduleId);
+    if (!cart) return false;
+
+    if (!pendingSection) return false;
+
+    const sectionNo = Number(pendingSection);
+    const currentItem = cart.items.find(
+      (item) => item.courseNo === course.courseNo,
+    );
+
+    if (currentItem) {
+      const updated = await updateCourseImmediately(currentItem.id, {
+        sectionNo,
+      });
+      if (!updated) return false;
+    } else {
+      const itemId = await addCourse(course.courseNo, sectionNo);
+      if (!itemId) return false;
     }
-    showMismatchPopup = false;
+
+    globalSelectedSection = pendingSection;
     pendingSection = null;
+    return true;
   }
 </script>
 
@@ -782,7 +826,7 @@
           </div>
         </Sidebar.MenuItem>
         <Sidebar.MenuItem>
-          <div class="mt-[0px]">
+          <div class="mt-[-8px]">
             <Sidebar.MenuButton
               onclick={() => {
                 activePanel = 'description_only';
@@ -798,7 +842,7 @@
           </div>
         </Sidebar.MenuItem>
         <Sidebar.MenuItem>
-          <div class="mt-[-12px]">
+          <div class="mt-[-20px]">
             <Sidebar.MenuButton
               onclick={() => {
                 activePanel = 'detail_only';
@@ -814,7 +858,7 @@
           </div>
         </Sidebar.MenuItem>
         <Sidebar.MenuItem>
-          <div class="mt-[-12px]">
+          <div class="mt-[-15px]">
             <Sidebar.MenuButton
               onclick={() => {
                 activePanel = 'review_only';
@@ -857,7 +901,10 @@
                 name: item.name,
                 id: item.id,
               })) ?? []}
-              bind:value={$userCart.currentCartId}
+              bind:value={
+                () => cartSelection.selectedId,
+                (id) => void cartSelection.select(id)
+              }
               semester={$userCart.currentCart.semester}
               semesterType={$userCart.currentCart.studyProgram}
               academicYear={$userCart.currentCart.academicYear}
@@ -870,7 +917,7 @@
           <div class="text-on-surface mb-6 flex flex-col">
             <button
               type="button"
-              class="hover:text-primary w-full border-b border-neutral-200 py-4 text-left text-xl font-semibold transition-colors"
+              class="hover:text-primary w-full border-b border-neutral-200 py-4 text-left text-lg/[20px] font-medium transition-colors"
               onclick={() => {
                 activePanel = 'description_only';
                 scrollToSection(descriptionSection);
@@ -881,7 +928,7 @@
 
             <button
               type="button"
-              class="hover:text-primary w-full border-b border-neutral-200 py-4 text-left text-xl font-semibold transition-colors"
+              class="hover:text-primary w-full border-b border-neutral-200 py-4 text-left text-lg/[20px] font-medium transition-colors"
               onclick={() => {
                 activePanel = 'detail_only';
                 scrollToSection(detailSection);
@@ -895,7 +942,7 @@
             >
               <button
                 type="button"
-                class="hover:text-primary text-left text-xl font-semibold transition-colors"
+                class="hover:text-primary text-left text-lg/[20px] font-medium transition-colors"
                 onclick={() => {
                   activePanel = 'review_only';
                   scrollToSection(reviewSection);
@@ -971,7 +1018,7 @@
             </button>
             <div class="flex flex-wrap items-center gap-3">
               <div class="flex flex-col items-start gap-3">
-                {#if ['SC', 'SO', 'HU', 'IN'].includes(course.genEdType)}
+                {#if ['SC', 'SO', 'HU', 'IN', 'GENED'].includes(course.genEdType)}
                   <GenedChip
                     type={course.genEdType as GenEdType}
                     class="px-3 py-1 text-xs md:hidden"
@@ -982,7 +1029,7 @@
                   {course.courseInfo.abbrName}
                 </h1>
               </div>
-              {#if ['SC', 'SO', 'HU', 'IN'].includes(course.genEdType)}
+              {#if ['SC', 'SO', 'HU', 'IN', 'GENED'].includes(course.genEdType)}
                 <GenedChip
                   type={course.genEdType as GenEdType}
                   class="hidden px-3 py-1 text-xs md:block"
@@ -1029,7 +1076,9 @@
                     คำอธิบายรายวิชา (ภาษาไทย)
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   {course.courseInfo.courseDescTh}
                 </p>
               </div>
@@ -1041,7 +1090,9 @@
                     คำอธิบายรายวิชา (ภาษาอังกฤษ)
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   {course.courseInfo.courseDescEn}
                 </p>
               </div>
@@ -1065,12 +1116,16 @@
                 </div>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   {course.courseInfo.courseDescTh}
                 </p>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   {course.courseInfo.courseDescEn}
                 </p>
               </div>
@@ -1085,7 +1140,9 @@
                     คณะ
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   {faculties[course.courseInfo.faculty ?? '']?.th ?? '-'}
                 </p>
               </div>
@@ -1097,7 +1154,9 @@
                     ภาควิชา/กลุ่มวิชา/สาขาวิชา
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   {course.courseInfo.department}
                 </p>
               </div>
@@ -1121,12 +1180,16 @@
                 </div>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   {faculties[course.courseInfo.faculty ?? '']?.th ?? '-'}
                 </p>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   {course.courseInfo.department}
                 </p>
               </div>
@@ -1141,7 +1204,9 @@
                     รูปแบบรายวิชา
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   {course.courseInfo.creditHours?.split(' ') ?? '-'}
                 </p>
               </div>
@@ -1153,7 +1218,9 @@
                     หน่วยกิต
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   {course.courseInfo.credit}
                 </p>
               </div>
@@ -1177,12 +1244,16 @@
                 </div>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   {course.courseInfo.creditHours?.split(' ') ?? '-'}
                 </p>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   {course.courseInfo.credit}
                 </p>
               </div>
@@ -1197,7 +1268,9 @@
                     เงื่อนไขรายวิชา
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   -
                 </p>
               </div>
@@ -1209,7 +1282,9 @@
                     วิธีการวัดผล
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   Letter Grade
                 </p>
               </div>
@@ -1233,12 +1308,16 @@
                 </div>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   -
                 </p>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   Letter Grade
                 </p>
               </div>
@@ -1253,7 +1332,9 @@
                     สอบกลางภาค
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   {midtermExam}
                 </p>
               </div>
@@ -1265,7 +1346,9 @@
                     สอบปลายภาค
                   </p>
                 </div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   {finalExam}
                 </p>
               </div>
@@ -1289,12 +1372,16 @@
                 </div>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   {midtermExam}
                 </p>
               </div>
               <div>
-                <p class="text-on-surface font-sarabun text-body2 mt-3 px-4">
+                <p
+                  class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
+                >
                   {finalExam}
                 </p>
               </div>
@@ -1351,12 +1438,33 @@
             </Accordion.Root>
           </section>
 
+          <Modal
+            exitOnEsc
+            exitOnBackgroundClick
+            centered
+            dim
+            bind:show={
+              () => deletingReviewId !== null,
+              (show) => {
+                if (!show && !reviewDeleting) deletingReviewId = null;
+              }
+            }
+          >
+            <ConfirmDeleteReview
+              loading={reviewDeleting}
+              onCancel={() => {
+                if (!reviewDeleting) deletingReviewId = null;
+              }}
+              onConfirm={confirmDeleteReview}
+            />
+          </Modal>
+
           {#if showMismatchPopup}
             <ScheduleMismatchPopup
               schedules={$userCart.cartList ?? []}
               expectedYear={String(course.academicYear)}
               expectedProgram={course.studyProgram}
-              bind:currentScheduleId={$userCart.currentCartId}
+              currentScheduleId={cartSelection.selectedId}
               expectedSemester={course.semester}
               onConfirm={handlePopupConfirm}
               onClose={() => (showMismatchPopup = false)}
@@ -1417,7 +1525,8 @@
                       <Select.Root
                         type="single"
                         value={writeReviewSectionNo ?? ''}
-                        onValueChange={(v) => (writeReviewSectionNo = v)}
+                        onValueChange={(v) =>
+                          (writeReviewSectionNo = v || null)}
                         disabled={writeReviewSectionOptions.length === 0}
                       >
                         <Select.Trigger
@@ -1425,10 +1534,11 @@
                         >
                           {writeReviewSectionNo
                             ? `เซค ${writeReviewSectionNo}`
-                            : 'ไม่มีเซค'}
+                            : 'ไม่ระบุ'}
                         </Select.Trigger>
                         <Select.Content role="listbox">
                           <Select.Group>
+                            <Select.Item value="" label="ไม่ระบุ" />
                             {#each writeReviewSectionOptions as sectionNo (sectionNo)}
                               <Select.Item
                                 value={String(sectionNo)}
@@ -1646,9 +1756,11 @@
             {:else}
               <div class="mt-6 flex flex-col gap-6">
                 {#each reviews as review (review.id)}
-                  {@const faculty = review.user.faculty ?? ''}
+                  {@const faculty = review.user.faculty
+                    ? faculties[review.user.faculty]
+                    : UNKNOWN_FACULTY}
                   {@const department = review.user.department ?? ''}
-                  {@const affiliation = `${faculty} ${department}`.trim()}
+                  {@const affiliation = `${faculty.th} ${department}`.trim()}
                   <Comment
                     rating={review.rating / 2}
                     semester={SEMESTER_LABEL_LONG[review.semester]}
@@ -1658,12 +1770,13 @@
                     likesCount={review.stats.likeCount}
                     dislikesCount={review.stats.dislikeCount}
                     status={review.status}
+                    isOwner={review.isOwner}
                     facultyMajor={affiliation || undefined}
                     onLike={() => handleReactReview(review.id, 'L')}
                     onDislike={() => handleReactReview(review.id, 'D')}
                     reaction={review.reaction}
                     onEdit={() => handleEditReview(review)}
-                    onDelete={() => handleDeleteReview(review.id)}
+                    onDelete={() => requestDeleteReview(review.id)}
                   />
                 {/each}
               </div>

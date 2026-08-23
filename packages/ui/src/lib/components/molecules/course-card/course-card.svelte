@@ -55,6 +55,10 @@
 		selected = !selected;
 	};
 
+	const isSeatFull = $derived(
+		course?.seat !== undefined && course?.maxseat !== undefined && course.seat >= course.maxseat
+	);
+
 	const onFavoriteClick = (event?: MouseEvent) => {
 		event?.stopPropagation();
 		if (onToggleFavorite) {
@@ -98,7 +102,9 @@
 		<div class="text-caption flex flex-row items-center font-normal text-neutral-400">
 			<span>{course?.credit} หน่วยกิต</span>
 			<Dot color="#EDEDF1" size="16" />
-			<span>ที่นั่ง {course?.seat} / {course?.maxseat}</span>
+			<span class={isSeatFull ? 'text-red-500' : undefined}
+				>ที่นั่ง {course?.seat} / {course?.maxseat}</span
+			>
 			<Dot color="#EDEDF1" size="16" />
 			<span>{course?.review} รีวิว</span>
 		</div>

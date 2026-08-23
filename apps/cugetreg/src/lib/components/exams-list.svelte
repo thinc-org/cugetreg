@@ -145,9 +145,14 @@
 {/if}
 
 <div class="mt-4 flex justify-end">
-  <Button class="m-0 flex items-center gap-1" onclick={handleDownloadICS}>
-    <Download size={18} strokeWidth={2} />
-    ตารางสอบ (.ics)
+  <Button
+    variant="outlined"
+    color="neutral"
+    class="m-0 gap-2"
+    onclick={handleDownloadICS}
+  >
+    <Download size={18} strokeWidth={2.5} />
+    ตารางสอบ (.ICS)
   </Button>
 </div>
 

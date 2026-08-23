@@ -1,5 +1,7 @@
 <script lang="ts">
-	import { ChevronDown, LogOut, Menu, Moon, Plus } from '@lucide/svelte';
+	import { goto } from '$app/navigation';
+
+	import { Bell, ChevronDown, LogOut, Menu, Plus } from '@lucide/svelte';
 
 	import { cn } from '@cugetreg/utils';
 
@@ -104,7 +106,7 @@
 	aria-hidden={!open}
 >
 	<div class="flex flex-col gap-5 p-4">
-		<!-- Top row: menu toggle, logo, theme switch -->
+		<!-- Top row: menu toggle, logo, announcements -->
 		<div class="flex items-center justify-between">
 			<div class="flex items-center gap-2">
 				<IconButton variant="ghost" onclick={onClose} aria-label="ปิดเมนู">
@@ -114,9 +116,19 @@
 					<CUGetRegLogo class="h-7 w-24" />
 				</a>
 			</div>
-			<IconButton color="neutral" onclick={onToggleTheme} aria-label="สลับธีม">
-				<Moon size="16" strokeWidth="2.5" />
-			</IconButton>
+			<div class="flex items-center gap-2">
+				<button
+					type="button"
+					class="rounded-button hover:text-primary-container flex size-8 items-center justify-center text-black"
+					onclick={() => {
+						onClose();
+						goto('/announcement');
+					}}
+					aria-label="ประกาศ"
+				>
+					<Bell size="16" strokeWidth="2" />
+				</button>
+			</div>
 		</div>
 
 		<!-- Timetable selector -->

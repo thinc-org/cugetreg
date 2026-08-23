@@ -86,7 +86,7 @@ const carts = new OpenAPIHono<{ Variables: Variables }>()
     }
   })
 
-  // 3.5. Get timetable details (courses, credits, ect.)
+  // 3.5. Get timetable details (courses, credits, etc.)
   .openapi(getCartDetailRoute, async (c) => {
     try {
       const userId = c.get("user").id;

@@ -7,7 +7,7 @@
     if (homeStore.currentUrl) {
       goto(homeStore.currentUrl, { replaceState: true });
     } else {
-      goto('/S/courses?term=2568%2F1', { replaceState: true });
+      goto('/S/courses?term=2569%2F1', { replaceState: true });
     }
   });
 </script>

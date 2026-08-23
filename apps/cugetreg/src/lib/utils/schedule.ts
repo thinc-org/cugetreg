@@ -118,6 +118,10 @@ export function getViewCourseData(
     courseNameTh: selectedCartItem.course.courseNameTh,
     courseNameEn: selectedCartItem.course.courseNameEn,
     credit: selectedCartItem.course.credit,
+    genEdType:
+      selectedCartItem.genEdType !== 'NO'
+        ? selectedCartItem.genEdType
+        : undefined,
     sections: selectedCartItem.sections.map((sec) => ({
       sectionNo: sec.sectionNo,
       closed: sec.closed,

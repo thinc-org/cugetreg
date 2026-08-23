@@ -12,7 +12,7 @@
 				control: {
 					type: 'select'
 				},
-				options: ['SC', 'SO', 'HU', 'IN'],
+				options: ['SC', 'SO', 'HU', 'IN', 'GENED'],
 				defaultValue: 'SC'
 			},
 			closable: {

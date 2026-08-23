@@ -22,9 +22,21 @@
 			},
 			dislikesCount: {
 				control: 'number'
+			},
+			isOwner: {
+				control: 'boolean'
+			},
+			status: {
+				control: {
+					type: 'select'
+				},
+				options: ['PENDING', 'APPROVED', 'REJECTED']
 			}
 		}
 	});
+
+	const sampleContent = `ส่วนตัวคิดว่าค่อนข้างสบาย
+มีงานสัปดาห์ละครั้ง ปกติจะมีวิดีโอให้ดู ไม่ยาวมาก แต่จะไม่ดูก็ได้ เพราะปกติเราแค่อ่านตัวอย่างที่ให้มาแล้วก็ลองเขียนเลย`;
 </script>
 
 <Story
@@ -41,5 +53,52 @@ Topic กว้างๆมา ถ้าอาจารย์ประจำ sec
 		rating: 3.5,
 		likesCount: 100,
 		dislikesCount: 0
+	}}
+/>
+
+<!-- Owners get the delete button on every moderation status; edit stays
+	 rejected-only, so this approved review shows the trash icon alone. -->
+<Story
+	name="Owned - Approved"
+	args={{
+		content: sampleContent,
+		semester: `ภาคต้น 2565`,
+		year: 2565,
+		section: 1,
+		rating: 4,
+		likesCount: 0,
+		dislikesCount: 0,
+		status: 'APPROVED',
+		isOwner: true
+	}}
+/>
+
+<Story
+	name="Owned - Pending"
+	args={{
+		content: sampleContent,
+		semester: `ภาคต้น 2565`,
+		year: 2565,
+		section: 1,
+		rating: 4,
+		likesCount: 0,
+		dislikesCount: 0,
+		status: 'PENDING',
+		isOwner: true
+	}}
+/>
+
+<Story
+	name="Owned - Rejected"
+	args={{
+		content: sampleContent,
+		semester: `ภาคต้น 2565`,
+		year: 2565,
+		section: 1,
+		rating: 4,
+		likesCount: 0,
+		dislikesCount: 0,
+		status: 'REJECTED',
+		isOwner: true
 	}}
 />

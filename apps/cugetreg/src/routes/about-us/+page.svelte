@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { GOOGLE_FORM_URL } from '$lib/constants';
+
   import { Globe } from 'lucide-svelte';
 
   import { QuestionAnswer } from '@cugetreg/ui/atoms/faqs';
@@ -99,7 +101,7 @@
       ในการเข้าสู่ระบบ สามารถใช้บัญชีอีเมลนิสิต (รหัสนิสิต@student.chula.ac.th)
       เท่านั้น เพื่อให้สามารถยืนยันตัวตนได้ว่าเป็นนิสิตจุฬาฯ
       หากต้องการทราบว่าเราเก็บข้อมูลใดและนำไปใช้อย่างไรบ้าง
-      สามารถอ่านเพิ่มเติมได้ที่ <a href="/privacy" class="link"
+      สามารถอ่านเพิ่มเติมได้ที่ <a href="/privacy-policy" class="link"
         >Privacy Policy</a
       > ของเรา
     </QuestionAnswer>
@@ -139,7 +141,11 @@
 
     <QuestionAnswer question="ติดต่อทีมงาน">
       สามารถแจ้งปัญหาขัดข้องเกี่ยวกับการใช้งานเว็บไซต์ ข้อมูลที่ไม่ถูกต้อง
-      หรือข้อเสนอแนะต่าง ๆ ได้ทาง <a class="link">ฟอร์มแจ้งปัญหา</a>
+      หรือข้อเสนอแนะต่าง ๆ ได้ทาง <a
+        class="link"
+        href={GOOGLE_FORM_URL}
+        rel="external">ฟอร์มแจ้งปัญหา</a
+      >
       ที่มุมบนขวาของหน้าเว็บ หากต้องการติดต่อสอบถามเกี่ยวกับเว็บไซต์ CU Get Reg หรือติดต่อชมรม
       Thinc. สามารถสอบถามทาง
       <a href="https://www.facebook.com/ThailandIncubator" class="link"
@@ -175,7 +181,7 @@
 
 <Footer />
 
-<style>
+<style lang="postcss">
   @reference "$lib/styles/app.css";
 
   .link {

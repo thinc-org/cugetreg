@@ -168,7 +168,7 @@ export const FACULTIES = {
     th_short: "นวัตกรรมบูรณาการ",
   },
   "58": {
-    en: "SASIN GRADUATE INSTITUTE OF BUSINESS ADMINISTION",
+    en: "SASIN GRADUATE INSTITUTE OF BUSINESS ADMINISTRATION",
     en_short: "Sasin",
     th: "สถาบันบัณฑิตบริหารธุรกิจ ศศินทร์ฯ",
     th_short: "ศศินทร์",
@@ -201,9 +201,9 @@ export const FACULTIES = {
   }
 >;
 
-export const UNKOWN_FACULTY = {
-  en: "UNKOWN",
-  en_short: "UNKOWN",
+export const UNKNOWN_FACULTY = {
+  en: "UNKNOWN",
+  en_short: "UNKNOWN",
   th: "ไม่ทราบ",
   th_short: "ไม่ทราบ",
 };

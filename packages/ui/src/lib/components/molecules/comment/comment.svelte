@@ -18,6 +18,8 @@
 		facultyMajor?: string;
 		reaction?: 'L' | 'D';
 		status: 'REJECTED' | 'PENDING' | 'APPROVED';
+		/** Whether the review belongs to the current user. */
+		isOwner?: boolean;
 
 		onLike: () => void;
 		onDislike: () => void;
@@ -35,6 +37,7 @@
 		dislikesCount,
 		facultyMajor,
 		status,
+		isOwner = false,
 
 		reaction,
 
@@ -43,6 +46,11 @@
 		onEdit,
 		onDelete
 	}: CommentProps = $props();
+
+	// Owners can remove their review whatever its moderation status; editing
+	// only makes sense once it has been rejected.
+	const canDelete = $derived(isOwner && Boolean(onDelete));
+	const canEdit = $derived(isOwner && status === 'REJECTED' && Boolean(onEdit));
 	let hasHalfStar: boolean = $derived(rating % 1 !== 0); // Determine if there's a half star
 	let isExpanded: boolean = $state(false);
 
@@ -142,7 +150,7 @@
 				{#if isExpanded}
 					ดูน้อยลง
 				{:else}
-					ดูเพ่ิมเติม
+					ดูเพิ่มเติม
 				{/if}
 			</button>
 		</div>
@@ -168,22 +176,26 @@
 				{dislikesCount}
 			</div>
 		</div>
-		{#if status === 'REJECTED'}
+		{#if canDelete || canEdit}
 			<div class="flex flex-row items-center gap-3">
-				<button
-					class="rounded-md p-1 transition-colors hover:cursor-pointer hover:bg-red-50"
-					aria-label="Delete review"
-					onclick={onDelete}
-				>
-					<Trash2 size={20} class="text-[#FF4D4F]" />
-				</button>
-				<button
-					class="rounded-md p-1 transition-colors hover:cursor-pointer hover:bg-blue-50"
-					aria-label="Edit review"
-					onclick={onEdit}
-				>
-					<Pencil size={20} class="text-[#4A70C6]" />
-				</button>
+				{#if canDelete}
+					<button
+						class="rounded-md p-1 transition-colors hover:cursor-pointer hover:bg-red-50"
+						aria-label="Delete review"
+						onclick={onDelete}
+					>
+						<Trash2 size={20} class="text-[#FF4D4F]" />
+					</button>
+				{/if}
+				{#if canEdit}
+					<button
+						class="rounded-md p-1 transition-colors hover:cursor-pointer hover:bg-blue-50"
+						aria-label="Edit review"
+						onclick={onEdit}
+					>
+						<Pencil size={20} class="text-[#4A70C6]" />
+					</button>
+				{/if}
 			</div>
 		{/if}
 	</div>

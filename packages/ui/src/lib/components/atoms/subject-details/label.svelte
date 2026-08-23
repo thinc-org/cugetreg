@@ -1,13 +1,16 @@
 <script lang="ts">
 	import { getContext, type Snippet } from 'svelte';
 
-	const variant = getContext<'left' | 'center' | 'right' | 'mobile'>('subject-details-variant');
+	type Variant = 'left' | 'center' | 'right' | 'mobile';
+
+	const getVariant = getContext<() => Variant>('subject-details-variant');
 	const roundedStyle = {
 		left: 'rounded-l-full',
 		right: 'rounded-r-full',
 		center: '',
 		mobile: 'rounded-full'
 	};
+	const roundedClass = $derived(roundedStyle[getVariant()]);
 
 	interface Props {
 		className?: string; // Additional classes
@@ -19,7 +22,7 @@
 </script>
 
 <div
-	class="{`bg-surface-container-lowest text-primary text-table-header px-4 py-[7px] font-medium ${roundedStyle[variant]} ${className}`} "
+	class="{`bg-surface-container-lowest text-primary text-table-header px-4 py-1.75 font-medium ${roundedClass} ${className}`} "
 >
 	{#if children}
 		{@render children()}

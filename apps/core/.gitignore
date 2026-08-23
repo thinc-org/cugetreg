@@ -7,7 +7,6 @@
 .idea/workspace.xml
 .idea/usage.statistics.xml
 .idea/shelf
-.claude/
 
 # deps
 node_modules/
@@ -32,6 +31,7 @@ lerna-debug.log*
 volumes
 
 bin/*.json
-!bin/README.md
+!bin/overrides.example.json
+!bin/readme.md
 /src/routes/auth-old.ts
 /src/generated/*

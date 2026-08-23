@@ -17,21 +17,27 @@
 -- @param {String} $14:sortBy? Sort column ('NAME', 'CAPACITY_SUM', 'REMAINING_SUM'; default 'REMAINING_SUM')
 -- @param {String} $15:sortOrder? Sort direction ('ASC', 'DESC'; default 'ASC')
 -- @param {String} $16:fitCartId? Optional cart ID — when set, excludes sections whose classes overlap with the cart's sections
--- @param {Decimal} $17:creditMin? Optional minimum credit
--- @param {Decimal} $18:creditMax? Optional maximum credit
--- @param {Boolean} $19:favorite? Optional when true, select user's favorite courses
--- @param {String} $20:userId? Optional , required when get user's favorite courses
+-- @param {Decimal} $17:credit? Optional exact credit
+-- @param {Boolean} $18:favorite? Optional when true, select user's favorite courses
+-- @param {String} $19:userId? Optional , required when get user's favorite courses
 
--- Perf note: LIMIT/OFFSET are applied in `paginated_courses` (Stage A), before
--- the expensive per-class JSON aggregation in `section_json` (Stage B). Stage B
--- only builds nested class JSON for the courses on the requested page, instead
--- of for every course matching the filters — the previous version aggregated
--- classes for the *entire* filtered term on every request regardless of page
--- size. `matching_sections`/`section_stats` still scan the whole filtered term
--- (sorting by capacity/remaining and computing total_count require knowing
--- every matching course first), but that's course+section-level work, far
--- cheaper than building nested class JSON for courses that get discarded by
--- pagination anyway.
+-- Perf note: LIMIT/OFFSET are applied in `ranked_courses` (Stage A, narrow),
+-- before the expensive per-class JSON aggregation in `section_json` (Stage B).
+-- Stage B only builds nested class JSON for the courses on the requested
+-- page, instead of for every course matching the filters — the previous
+-- version aggregated classes for the *entire* filtered term on every request
+-- regardless of page size. `matching_sections`/`section_stats` still scan the
+-- whole filtered term (sorting by capacity/remaining and computing
+-- total_count require knowing every matching course first), but that's
+-- course+section-level work, far cheaper than building nested class JSON for
+-- courses that get discarded by pagination anyway.
+--
+-- `ranked_courses` sorts/paginates using only `id` + the sort keys, not the
+-- full course_info payload (long free-text descriptions, etc). Sorting wide
+-- rows across thousands of matching courses reliably blew past `work_mem`
+-- into a disk-spilled sort; `paginated_courses` (Stage A, wide) then re-joins
+-- full course/course_info/section_stats columns for just the `limit` rows
+-- that made the page.
 
 -- Step 0: Precompute cart's occupied class slots once (avoids a correlated
 --         subquery in matching_sections when $16 is provided).
@@ -61,8 +67,8 @@ WITH occupied_slots AS MATERIALIZED (
 user_favorites AS (
     SELECT DISTINCT cf.course_no
     FROM course_favorite cf
-    WHERE cf.user_id = $20::text
-    AND $20::text IS NOT NULL
+    WHERE cf.user_id = $19::text
+    AND $19::text IS NOT NULL
 ),
 
 -- Step 1: Find sections that pass ALL filters (course-level + section-level).
@@ -98,11 +104,10 @@ matching_sections AS (
         AND ($5::text[] IS NULL OR ci.faculty::text = ANY($5::text[]))
 
         -- Grading type (optional)
-        AND ($7::grading_type IS NULL OR ci.grading_type = $7::grading_type)
+        AND ($7::grading_type[] IS NULL OR ci.grading_type = ANY($7::grading_type[]))
 
-        -- Credit range (optional)
-        AND ($17::numeric IS NULL OR ci.credit >= $17::numeric)
-        AND ($18::numeric IS NULL OR ci.credit <= $18::numeric)
+        -- Credit (optional)
+        AND ($17::numeric IS NULL OR ci.credit = $17::numeric)
 
         -- No prereq (optional boolean)
         AND ($9::boolean IS NOT TRUE
@@ -160,7 +165,7 @@ matching_sections AS (
         )
 
         AND (
-          $19::boolean IS NOT TRUE
+          $18::boolean IS NOT TRUE
           OR uf.course_no IS NOT NULL
         )
 ),
@@ -183,41 +188,19 @@ section_stats AS (
     GROUP BY course_id
 ),
 
--- Step 4 (Stage A): Sort + paginate at the COURSE level, before touching any
---         class-level data. This is the key perf fix — LIMIT/OFFSET happen
---         here, so Stage B (below) only ever aggregates classes for the
---         courses that actually made it onto this page.
+-- Step 4a (Stage A, narrow): Sort + paginate at the COURSE level using only
+--         the columns the ORDER BY needs, before touching any class-level
+--         data or wide course_info columns (course_desc_en/th, etc). Sorting
+--         narrow rows keeps this well under work_mem for large result sets —
+--         the previous version sorted the full course+course_info row here,
+--         which regularly spilled to a disk-based sort once a term had a few
+--         thousand matching courses.
 --         `__rank` preserves this exact order through the GROUP BY in the
 --         final SELECT (GROUP BY does not guarantee output order).
-paginated_courses AS (
+ranked_courses AS (
     SELECT
         c.id,
-        c.course_no,
-        c.study_program,
-        c.academic_year,
-        c.semester,
-        c.gen_ed_type,
-        c.course_condition,
-        c.midterm_start,
-        c.midterm_end,
-        c.final_start,
-        c.final_end,
-        ci.abbr_name,
-        ci.course_name_en,
-        ci.course_name_th,
-        ci.course_desc_en,
-        ci.course_desc_th,
-        ci.faculty,
-        ci.department,
-        ci.credit::text                            AS credit,
-        ci.credit_hours,
-        ci.grading_type,
-        COALESCE(ss.sections_count, 0)::int         AS sections_count,
-        COALESCE(ss.capacity_sum, 0)::int           AS capacity_sum,
-        COALESCE(ss.remaining_sum, 0)::int          AS remaining_sum,
-        COALESCE(ss.closed_sections_count, 0)::int  AS closed_sections_count,
-        COALESCE(ss.is_favorite, FALSE)             AS is_favorite,
-        COUNT(*) OVER ()::int                       AS total_count,
+        COUNT(*) OVER ()::int AS total_count,
         ROW_NUMBER() OVER (
             ORDER BY
                 -- NAME sort
@@ -263,6 +246,46 @@ paginated_courses AS (
         c.course_no ASC
     LIMIT COALESCE(NULLIF($12::int, 0), 10)
     OFFSET COALESCE($13::int, 0)
+),
+
+-- Step 4b (Stage A, wide): Fetch full course/course_info/section_stats
+--         columns, but only for the page of course IDs ranked above — bounded
+--         to `limit` rows, so this join is cheap regardless of how many
+--         courses matched the filters.
+paginated_courses AS (
+    SELECT
+        c.id,
+        c.course_no,
+        c.study_program,
+        c.academic_year,
+        c.semester,
+        c.gen_ed_type,
+        c.course_condition,
+        c.midterm_start,
+        c.midterm_end,
+        c.final_start,
+        c.final_end,
+        ci.abbr_name,
+        ci.course_name_en,
+        ci.course_name_th,
+        ci.course_desc_en,
+        ci.course_desc_th,
+        ci.faculty,
+        ci.department,
+        ci.credit::text                            AS credit,
+        ci.credit_hours,
+        ci.grading_type,
+        COALESCE(ss.sections_count, 0)::int         AS sections_count,
+        COALESCE(ss.capacity_sum, 0)::int           AS capacity_sum,
+        COALESCE(ss.remaining_sum, 0)::int          AS remaining_sum,
+        COALESCE(ss.closed_sections_count, 0)::int  AS closed_sections_count,
+        COALESCE(ss.is_favorite, FALSE)             AS is_favorite,
+        rc.total_count,
+        rc.__rank
+    FROM ranked_courses rc
+    JOIN course c                 ON c.id = rc.id
+    JOIN course_info ci           ON ci.course_no = c.course_no
+    LEFT JOIN section_stats ss    ON ss.course_id = c.id
 ),
 
 -- Step 5 (Stage B): Per-section JSON with all classes — restricted to only

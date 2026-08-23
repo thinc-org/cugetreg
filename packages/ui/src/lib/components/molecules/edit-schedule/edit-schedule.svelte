@@ -42,7 +42,7 @@
 	const options: Option[] = [
 		{
 			icon: PenLine,
-			label: 'แก้ไขชื่้อ',
+			label: 'แก้ไขชื่อ',
 			onclick: () => onRename()
 		},
 		{

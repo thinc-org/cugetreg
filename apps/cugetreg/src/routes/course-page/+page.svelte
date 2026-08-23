@@ -1,5 +1,6 @@
 <script lang="ts">
   import SelectedCourse from '$lib/components/selected-course.svelte';
+  import { getCartSelectionController } from '$lib/stores/cart-selection.svelte';
   import { getUserCartStore } from '$lib/stores/user-cart';
 
   import {
@@ -109,7 +110,7 @@
       },
     },
     {
-      label: 'รายละเอียดเซ็คชัน',
+      label: 'รายละเอียดเซคชัน',
       icon: StickyNote,
       onClick: () => {
         scrollToSection(detailSection);
@@ -156,6 +157,7 @@
   }
 
   const userCart = getUserCartStore();
+  const cartSelection = getCartSelectionController();
 
   const reviewSamples = [
     {
@@ -1109,7 +1111,7 @@
   >
     <Sidebar.Content class="flex-row overflow-visible!">
       <Sidebar.Group
-        class="w-(--sidebar-width-icon) shrink-0 items-center border-r bg-white p-0 pt-[1rem] pb-6 group-data-[variant=floating]:rounded-l-lg md:pt-[1.5rem]"
+        class="w-(--sidebar-width-icon) shrink-0 items-center border-r border-r-neutral-100 bg-white p-0 pt-[1rem] pb-6 group-data-[variant=floating]:rounded-l-lg md:pt-[1.5rem]"
       >
         <Sidebar.GroupContent>
           <Sidebar.Menu class="gap-6">
@@ -1183,7 +1185,7 @@
           ></div>
         {/if}
         <div
-          class="bg-surface flex flex-1 flex-col overflow-hidden group-data-[state=collapsed]:absolute group-data-[state=collapsed]:top-4 group-data-[state=collapsed]:left-[calc(var(--sidebar-width-icon)+1rem)] group-data-[state=collapsed]:z-50 group-data-[state=collapsed]:max-h-[min(800px,calc(100%-2rem))] group-data-[state=collapsed]:w-[400px] group-data-[state=collapsed]:rounded-3xl group-data-[state=collapsed]:border group-data-[state=collapsed]:shadow-2xl md:px-8 md:pt-0 md:pb-8"
+          class="bg-surface flex flex-1 flex-col overflow-hidden border-r border-neutral-100 group-data-[state=collapsed]:absolute group-data-[state=collapsed]:top-4 group-data-[state=collapsed]:left-[calc(var(--sidebar-width-icon)+1rem)] group-data-[state=collapsed]:z-50 group-data-[state=collapsed]:max-h-[min(800px,calc(100%-2rem))] group-data-[state=collapsed]:w-[400px] group-data-[state=collapsed]:rounded-3xl group-data-[state=collapsed]:border group-data-[state=collapsed]:border-neutral-100 group-data-[state=collapsed]:shadow-2xl md:px-8 md:pt-0 md:pb-8"
         >
           <div class="flex-1 overflow-y-auto pr-6 pb-10 md:pr-8">
             {#if sidebarExpanded || openPanel === 'sidebar'}
@@ -1192,18 +1194,21 @@
                 class="relative mb-6 flex flex-col gap-2"
               >
                 <SelectTimetable
-                  class="border-b border-neutral-200 px-2 py-5"
+                  class="px-2 pt-5"
                   options={$userCart.cartList?.map((item) => ({
                     name: item.name,
                     id: item.id,
                   })) ?? []}
-                  bind:value={$userCart.currentCartId}
+                  bind:value={
+                    () => cartSelection.selectedId,
+                    (id) => void cartSelection.select(id)
+                  }
                   semester={$userCart.currentCart.semester}
                   semesterType={$userCart.currentCart.studyProgram}
                   academicYear={$userCart.currentCart.academicYear}
                 />
               </div>
-              <hr class="mb-0 opacity-50" />
+              <hr class="mb-0 border-t border-neutral-100" />
             {/if}
 
             {#if sidebarExpanded}

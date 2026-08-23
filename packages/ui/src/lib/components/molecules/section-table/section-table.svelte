@@ -1,9 +1,14 @@
 <script lang="ts">
+	import { MediaQuery } from 'svelte/reactivity';
+
+	import { getBuildingFullName } from '@cugetreg/utils/buildings';
+
 	import type { SectionTableData } from '.';
 
 	import { Chip } from '../../atoms/chip';
 	import { SelectorButton } from '../../atoms/selector-button';
 	import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../atoms/table';
+	import * as Tooltip from '../tooltip';
 
 	interface Props {
 		class?: string;
@@ -30,6 +35,9 @@
 		}
 		return 'bg-[#EDEDF1] text-[#6F7593]';
 	};
+
+	const isMobile = new MediaQuery('max-width: 767px', false);
+	let openLocationId = $state<string | null>(null);
 </script>
 
 {#if boxed}
@@ -73,7 +81,7 @@
 								>
 									<div class="pr-0">{cls.teacher}</div>
 									<div class="pr-0">{cls.schedule}</div>
-									<div class="pr-0">{cls.room}</div>
+									<div class="pr-0">{@render classLocation(cls.room, `boxed-${i}-${j}`)}</div>
 									<div>{cls.type}</div>
 								</div>
 							{/each}
@@ -87,7 +95,7 @@
 	<Table class={`w-full border-separate border-spacing-0 text-left ${className ?? ''}`}>
 		<TableHeader class="bg-[#F6F6F9]">
 			<TableRow class="text-xs font-semibold tracking-[0.15px] sm:text-base">
-				<TableHead class="border-[#ECEEF4] text-[#4A70C6]">เซคชั่น</TableHead>
+				<TableHead class="border-[#ECEEF4] text-[#4A70C6]">เซคชัน</TableHead>
 				<TableHead class="border-[#ECEEF4] text-[#4A70C6]">จำนวนที่รับ</TableHead>
 				<TableHead class="border-[#ECEEF4] text-[#4A70C6]">ผู้สอน</TableHead>
 				<TableHead class="border-[#ECEEF4] text-[#4A70C6]">วันเวลาเรียน</TableHead>
@@ -132,7 +140,7 @@
 						<TableCell
 							class={`text-body2 py-5 ${row.seats === 'ปิด' ? 'text-[#6F7593]' : 'text-black'}`}
 						>
-							{cls.room}
+							{@render classLocation(cls.room, `table-${i}-${j}`)}
 						</TableCell>
 
 						<TableCell
@@ -155,3 +163,40 @@
 		</TableBody>
 	</Table>
 {/if}
+
+{#snippet classLocation(location: string, locationId: string)}
+	{@const locations = location.trim().split(' ')}
+	{@const building = locations[0]}
+	{@const roomNumber = locations[1]}
+
+	{@const fullBuildingName = getBuildingFullName(building).name_th}
+	{@const hoverTitle = `${fullBuildingName} ห้อง ${roomNumber}`}
+
+	<Tooltip.Root
+		open={openLocationId === locationId}
+		disableCloseOnTriggerClick={isMobile.current}
+		onOpenChange={(open) => {
+			if (open) openLocationId = locationId;
+			else if (openLocationId === locationId) openLocationId = null;
+		}}
+	>
+		<Tooltip.Trigger
+			class={`cursor-pointer p-0 text-left ${isMobile.current ? 'underline decoration-dotted underline-offset-2' : 'hover:underline'}`}
+			onclick={() => {
+				if (isMobile.current) {
+					openLocationId = openLocationId === locationId ? null : locationId;
+				}
+			}}
+		>
+			{building}
+			{roomNumber}
+		</Tooltip.Trigger>
+		<Tooltip.Content
+			sideOffset={6}
+			class="bg-surface-container-lowest text-on-surface max-w-64 shadow-lg"
+			arrowClasses="bg-surface-container-lowest"
+		>
+			{hoverTitle}
+		</Tooltip.Content>
+	</Tooltip.Root>
+{/snippet}

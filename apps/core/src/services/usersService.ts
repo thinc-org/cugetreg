@@ -43,12 +43,44 @@ export const usersService = {
     };
   },
   getUserReviews: async (userId: string, query: GetUserReviewsQuery) => {
-    const { page, limit, status, includeVote, includeRatings } = query;
+    const {
+      page,
+      limit,
+      status,
+      includeVote,
+      includeRatings,
+      sortBy,
+      sortOrder,
+    } = query;
     const offset = (page - 1) * limit;
     const where = {
       userId,
       status: status ? mapReviewStatus(status) : undefined,
     };
+
+    let orderBy = {}
+
+
+
+    switch (sortBy) {
+      case "RATING":
+        orderBy = {
+          rating: sortOrder,
+        }
+        break;
+      case "NAME":
+        orderBy = {
+          courseInfo: {
+            abbrName: sortOrder
+          }
+        }
+        break;
+      default:
+        orderBy = {
+          createdAt: sortOrder,
+        }
+        break;
+    }
 
     const [reviews, totalReviews, ratings] = await Promise.all([
       prisma.review.findMany({
@@ -72,43 +104,42 @@ export const usersService = {
         where,
         skip: offset,
         take: limit,
-        orderBy: {
-          createdAt: "desc",
-        },
+        orderBy: orderBy
       }),
       prisma.review.count({ where }),
-      ( includeRatings && prisma.review.groupBy({
-        by: ['rating'],
-        _count: {
-          rating: true
-        },
-        where: {
-          userId
-        },
-        orderBy: {
-          rating: "asc",
-        }
-      }))
+      includeRatings &&
+        prisma.review.groupBy({
+          by: ["rating"],
+          _count: {
+            rating: true,
+          },
+          where: {
+            userId,
+          },
+          orderBy: {
+            rating: "asc",
+          },
+        }),
     ]);
 
     const ratingHistories = includeRatings ? Array(10).fill(0) : undefined;
 
-    if(ratings && includeRatings && ratingHistories){
+    if (ratings && includeRatings && ratingHistories) {
       ratings.forEach((rating) => {
         ratingHistories[rating.rating - 1] = rating._count.rating;
-      })
+      });
     }
 
     const reviewIds = reviews.map((review) => review.id);
     const [voteCounts, myVotes] = await Promise.all([
-      (reviewIds.length === 0 || !includeVote)
+      reviewIds.length === 0 || !includeVote
         ? []
         : prisma.reviewVote.groupBy({
             by: ["reviewId", "voteType"],
             where: { reviewId: { in: reviewIds } },
             _count: { _all: true },
           }),
-      (reviewIds.length === 0 || !includeVote)
+      reviewIds.length === 0 || !includeVote
         ? []
         : prisma.reviewVote.findMany({
             where: { userId, reviewId: { in: reviewIds } },
@@ -143,11 +174,11 @@ export const usersService = {
         ...(includeVote && {
           stats: { likeCount, dislikeCount },
           ...(reaction && { reaction }),
-        })
+        }),
       };
     });
 
-    return { reviews: resultReviews, ratingHistories ,totalReviews };
+    return { reviews: resultReviews, ratingHistories, totalReviews };
   },
   updateUserInfo: async (userId: string, body: UpdateUserInfoBody) => {
     const { name, faculty, department } = body;

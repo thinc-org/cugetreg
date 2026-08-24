@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { faculty, reviewStatus } from "./constants.js";
+import { faculty, reviewSortBy, reviewStatus, sortOrder } from "./constants.js";
 
 export const GetUserReviewsQuerySchema = z
   .object({
@@ -9,6 +9,8 @@ export const GetUserReviewsQuerySchema = z
     status: reviewStatus.optional(),
     includeVote: z.stringbool().optional().default(false),
     includeRatings: z.stringbool().optional().default(false),
+    sortBy: reviewSortBy.optional().default("DATE_CREATE"),
+    sortOrder: sortOrder.optional().default("desc"),
   })
   .strict();
 

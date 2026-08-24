@@ -5,6 +5,7 @@
 	import type { ReviewStatus } from '@cugetreg/zod-schemas/constants';
 
 	import { RatingStar } from '../../atoms/rating-star';
+	import { goto } from '$app/navigation';
 
 	interface ReviewItem {
 		code: string;
@@ -20,9 +21,6 @@
 		latestTitle?: string;
 		histogram?: number[];
 		reviews?: ReviewItem[];
-		hasMore?: boolean;
-		loading?: boolean;
-		onLoadMore?: () => void;
 	}
 
 	let {
@@ -30,46 +28,11 @@
 		latestTitle = 'รีวิวล่าสุด',
 		histogram = undefined,
 		reviews = [],
-		hasMore = false,
-		loading = false,
-		onLoadMore
 	}: Props = $props();
 
-	let showAll = $state(false);
-	let scrollBox: HTMLDivElement | undefined = $state();
 	let isMobile = $state(false);
 
-	const LOAD_MORE_THRESHOLD = 120;
 
-	function handleScroll(event: Event) {
-		if (!hasMore || loading) return;
-
-		const target = event.currentTarget as HTMLDivElement;
-		const distanceFromBottom = target.scrollHeight - target.scrollTop - target.clientHeight;
-
-		if (distanceFromBottom <= LOAD_MORE_THRESHOLD) {
-			onLoadMore?.();
-		}
-	}
-
-	async function toggleShowAll() {
-		showAll = !showAll;
-
-		await tick();
-		if (showAll && scrollBox) {
-			scrollBox.scrollTop = 0;
-		}
-	}
-
-	$effect(() => {
-		reviews.length;
-
-		if (!showAll || !hasMore || loading || !scrollBox) return;
-
-		if (scrollBox.scrollHeight <= scrollBox.clientHeight) {
-			onLoadMore?.();
-		}
-	});
 
 	onMount(() => {
 		const isMobileQuery = window.matchMedia('(max-width: 768px)');
@@ -121,7 +84,7 @@
 
 	const maxValue = $derived(Math.max(...histogramData, 1));
 
-	const visibleReviews = $derived(showAll ? reviews : reviews.slice(0, 3));
+	const visibleReviews = $derived(reviews.slice(0, 3));
 </script>
 
 <div
@@ -164,13 +127,13 @@
 				<button
 					type="button"
 					class="text-on-surface"
-					onclick={toggleShowAll}
+					onclick={() => goto('/reviews')}
 					aria-label="Toggle all reviews"
 				>
 					<ChevronRight
 						size="18"
 						strokeWidth="2.5"
-						class={showAll ? 'rotate-90 transition-transform' : 'transition-transform'}
+						class="transition-transform"
 					/>
 				</button>
 			{/if}
@@ -192,9 +155,7 @@
 			</div>
 		{:else}
 			<div
-				bind:this={scrollBox}
-				onscroll={handleScroll}
-				class={`mt-4 flex flex-col gap-4 ${showAll ? 'max-h-64 overflow-y-auto sm:max-h-72' : ''}`}
+				class="mt-4 flex flex-col gap-4 "
 			>
 				{#each visibleReviews as review, i (i)}
 					<div class="flex flex-col gap-2">
@@ -235,14 +196,6 @@
 					</div>
 				{/each}
 			</div>
-
-			{#if showAll}
-				{#if loading && hasMore}
-					<div class="flex items-center justify-center py-3">
-						<LoaderCircle class="animate-spin" size={40} />
-					</div>
-				{/if}
-			{/if}
 		{/if}
 	</div>
 </div>

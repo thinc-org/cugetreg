@@ -68,16 +68,12 @@
 
   let items = $state<ScheduleItem[]>([]);
   let reviews = $state<Review[]>([]);
+  let ratingStats = $state< number[] | undefined>(undefined);
 
   let editInfoPopupVisible = $state(false);
   let itemToDelete = $state<ScheduleItem | null>(null);
   let deleteItemPopupVisible = $state(false);
   let newDepartment = $state(untrack(() => personalInfo.department));
-  let page = $state(1);
-  const limit = 10;
-  let hasMoreReviews = $state(true);
-  let loadingReviews = $state(false);
-  let loadingSchedules = $state(true);
 
   let showCreateScheduleModal = $state(false);
 
@@ -110,13 +106,11 @@
   }
 
   async function fetchScheduleItems() {
-    loadingSchedules = true;
 
     const [res, error] = await tryCatch(api.get('/carts'));
 
     if (error || res.status !== 200) {
       console.error(error?.message);
-      loadingSchedules = false;
       return;
     }
 
@@ -124,7 +118,6 @@
     const fetchedItems = convertSchedulesInfo(data);
     items = fetchedItems;
 
-    loadingSchedules = false;
   }
 
   async function changeVisibility(item: ScheduleItem, newChecked: boolean) {
@@ -141,44 +134,32 @@
     itemToDelete = null;
   }
 
-  async function fetchReviews(pageToFetch: number, replace = false) {
-    if (loadingReviews) return;
-    if (!replace && !hasMoreReviews) return;
-
-    loadingReviews = true;
-
+  async function fetchReviews() {
     const queryParams = new URLSearchParams({
-      page: pageToFetch.toString(),
-      limit: limit.toString(),
+      page: "1",
+      limit: "3",
     });
+    queryParams.set('includeRatings', "true");
     const [res, error] = await tryCatch(
       api.get(`/user/reviews?${queryParams.toString()}`),
     );
 
     if (error || !res) {
       console.error(error?.message);
-      loadingReviews = false;
       return;
     }
 
-    const { totalReviews, reviews: data } = UserReviewResponseSchema.parse(
+    const { ratingHistories: ratings, reviews: data } = UserReviewResponseSchema.parse(
       res.data,
     );
     const newReviews = convertReviewInfos(data);
+    console.log(ratings)
+    ratingStats = ratings;
 
-    if (replace) reviews = newReviews;
-    else reviews.push(...newReviews);
+    reviews.push(...newReviews);
 
-    hasMoreReviews = totalReviews === limit;
-    page = pageToFetch;
-
-    loadingReviews = false;
   }
 
-  function loadMoreReviews() {
-    if (loadingReviews || !hasMoreReviews) return;
-    fetchReviews(page + 1);
-  }
 
   const onClickItem = async (item: ScheduleItem) => {
     try {
@@ -227,8 +208,9 @@
   });
 
   onMount(() => {
-    fetchReviews(1, true);
+    fetchReviews();
   });
+
 </script>
 
 <div class="relative flex min-h-screen flex-col bg-white">
@@ -241,15 +223,12 @@
       <PersonalInfo onEdit={toggleEditInfo} {...parsedPersonalInfo} />
       <RatingHistory
         {reviews}
-        hasMore={hasMoreReviews}
-        loading={loadingReviews}
-        onLoadMore={loadMoreReviews}
+        histogram={ratingStats}
       />
     </div>
     <ScheduleList
       heading="ตารางเรียน"
       {items}
-      loading={loadingSchedules}
       {onClickItem}
       onClickButton={onClickAddSchedule}
       onDelete={onDeleteItem}

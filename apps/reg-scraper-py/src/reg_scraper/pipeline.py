@@ -12,7 +12,7 @@ from reg_scraper.exporters.postgres_exporter import PostgresExporter
 from reg_scraper.models import Course, ScrapeTarget, ScraperStatus
 from reg_scraper.processors.course_html_processor import CourseHtmlProcessor
 from reg_scraper.processors.enrich_processor import EnrichProcessor
-from reg_scraper.receivers.cucis_receiver import CucisReceiver
+from reg_scraper.receivers.cucis_receiver import LOOKUP_SECONDS, CucisReceiver
 from reg_scraper.receivers.gened_receiver import GenEdReceiver
 from reg_scraper.receivers.reg_chula_receiver import RegChulaCheckpoint, RegChulaReceiver
 
@@ -36,7 +36,8 @@ class ScraperPipeline:
             logger.info("%s: %s missing or empty -> scraping (mode=auto)", label, path)
             return True
         logger.info(
-            "%s: reusing %s (mode=auto; set mode=always or delete the file to refresh)",
+            "%s: reusing %s (mode=auto — courses added since are topped up per run; "
+            "set mode=always or delete the file to refetch the lot)",
             label,
             path,
         )
@@ -44,8 +45,11 @@ class ScraperPipeline:
 
     def run_descriptions(self, fresh: bool = False) -> int:
         logger.info("=== Course description phase (CUCIS) ===")
-        rows = CucisReceiver().scrape(fresh=fresh)
-        CsvDescExporter().export(rows)
+        receiver = CucisReceiver()
+        rows = receiver.scrape(fresh=fresh)
+        # Gap-filled courses are on no catalogue page, so rewriting the CSV from
+        # the crawl alone would drop them.
+        CsvDescExporter().export(rows + receiver.gapfill_rows())
         return len(rows)
 
     def run_gened(self, fresh: bool = False) -> int:
@@ -67,17 +71,41 @@ class ScraperPipeline:
             )
             self.run_descriptions()
 
-        if self._should_run_side_input(
-            settings.scraper_gened_mode, settings.overrides_path, "GenEd overrides"
-        ):
-            self._write_status(
-                ScraperStatus(
-                    status="running",
-                    started_at=started,
-                    message="Scraping GenEd overrides (gened.chula.ac.th)",
-                )
+        self._sync_gened(started)
+
+    def _sync_gened(self, started: datetime) -> None:
+        """Refresh overrides.json with the courses GenEd has listed since last run.
+
+        This is one list call plus one call per new course — seconds, against the
+        ~25 min a description crawl costs — so `auto` tops the file up every run
+        rather than skipping once it exists. It has to: a course missing from
+        overrides.json is indistinguishable from a course that simply is not
+        GenEd, so unlike descriptions there is nothing to fill in later.
+        """
+        path = settings.resolve_path(settings.overrides_path)
+        if settings.scraper_gened_mode == "never":
+            logger.info("GenEd overrides: mode=never, using %s as it is", path)
+            return
+
+        on_disk = path.exists() and path.stat().st_size > 0
+        logger.info(
+            "GenEd overrides: %s",
+            "syncing courses added since the last run" if on_disk else f"{path} missing -> full scrape",
+        )
+        self._write_status(
+            ScraperStatus(
+                status="running",
+                started_at=started,
+                message="Syncing GenEd overrides (gened.chula.ac.th)",
             )
+        )
+        try:
             self.run_gened()
+        except Exception:  # noqa: BLE001
+            if not on_disk:
+                # Nothing to fall back to: every course would export as genEdType NO.
+                raise
+            logger.exception("GenEd sync failed — keeping the existing %s", path)
 
     def _write_status(self, status: ScraperStatus) -> None:
         path = settings.resolve_path(settings.scraper_status_output)
@@ -210,7 +238,6 @@ class ScraperPipeline:
         self,
         started: datetime,
         checkpoint: RegChulaCheckpoint,
-        enrich_processor: EnrichProcessor,
         courses_total: int,
     ) -> tuple[list[Course], int]:
         logger.info("=== Parsing phase ===")
@@ -233,7 +260,87 @@ class ScraperPipeline:
                 logger.exception("Failed parsing course %s", page.course_no)
 
         logger.info("Parsed %d courses (%d failed)", len(parsed), failed)
-        return enrich_processor.process(parsed), failed
+        return parsed, failed
+
+    def _fill_description_gaps(self, courses: list[Course], started: datetime) -> None:
+        """Fetch descriptions for courses the catalogue crawl has never seen.
+
+        Courses keep appearing in Reg Chula through the add-drop period, and the
+        crawl that fills the CSV is keyed by catalogue page, so it cannot notice
+        them without redoing all 1490 pages. CUCIS answers a search for a single
+        course code, so each new course costs one lookup instead.
+        """
+        if not settings.scraper_descriptions_gapfill:
+            return
+        if settings.scraper_descriptions_mode == "never":
+            logger.info("Description gap fill: skipped (SCRAPER_DESCRIPTIONS_MODE=never)")
+            return
+
+        exporter = CsvDescExporter()
+        known = exporter.existing_course_nos()
+        if not known:
+            logger.info(
+                "Description gap fill: %s has no courses yet — run "
+                "`python -m reg_scraper descriptions` for the full catalogue first",
+                exporter.path(),
+            )
+            return
+
+        receiver = CucisReceiver()
+        missing = sorted({course.courseNo for course in courses} - known)
+        if not missing:
+            logger.info("Description gap fill: every scraped course is already in the CSV")
+            return
+
+        pending = receiver.pending_gaps(missing)
+        if not pending:
+            logger.info(
+                "Description gap fill: %d course(s) missing from the CSV, all of them "
+                "already looked up and not in CUCIS",
+                len(missing),
+            )
+            return
+
+        cap = settings.scraper_descriptions_gapfill_max
+        probing = pending[:cap] if cap > 0 else pending
+        deferred = len(pending) - len(probing)
+        logger.info(
+            "=== Description gap fill (%d course(s), ~%.0f s) ===",
+            len(probing),
+            len(probing) * (LOOKUP_SECONDS + 2 * settings.cucis_delay_ms / 1000),
+        )
+        if deferred:
+            logger.info(
+                "%d more deferred to the next run (SCRAPER_DESCRIPTIONS_GAPFILL_MAX=%d)",
+                deferred,
+                cap,
+            )
+
+        def on_progress(done: int, total: int) -> None:
+            self._write_status(
+                ScraperStatus(
+                    status="running",
+                    started_at=started,
+                    courses_total=len(courses),
+                    courses_scraped=len(courses),
+                    message=f"Filling in course descriptions ({done}/{total})",
+                )
+            )
+
+        receiver.on_progress = on_progress
+        try:
+            rows = receiver.fill_gaps(probing)
+        except Exception:  # noqa: BLE001
+            logger.exception(
+                "Description gap fill failed — exporting with the descriptions on disk"
+            )
+            return
+
+        if rows:
+            exporter.append(rows)
+        logger.info(
+            "Description gap fill: %d/%d found in CUCIS", len(rows), len(probing)
+        )
 
     def run(self, fresh: bool = False, rebuild: bool = False) -> ScraperStatus:
         started = datetime.now(tz=UTC)
@@ -250,8 +357,6 @@ class ScraperPipeline:
 
         try:
             self._run_side_inputs(started)
-            # after the side inputs, so it picks up the files they just wrote
-            enrich_processor = EnrichProcessor()
 
             if rebuild:
                 logger.info("--rebuild: exporting from the checkpoint, no network calls")
@@ -277,9 +382,15 @@ class ScraperPipeline:
                 logger.info("=== Scraping phase (%d courses) ===", total_targets)
                 self._fetch_pages(targets, started, checkpoint)
 
-            all_courses, failed = self._parse_pages(
-                started, checkpoint, enrich_processor, total_targets
-            )
+            all_courses, failed = self._parse_pages(started, checkpoint, total_targets)
+
+            if rebuild:
+                logger.info("--rebuild: skipping the description gap fill (no network calls)")
+            else:
+                self._fill_description_gaps(all_courses, started)
+
+            # built here so it reads the description/GenEd files as they are now
+            all_courses = EnrichProcessor().process(all_courses)
 
             for exporter in self._build_exporters():
                 exporter.export(all_courses)

@@ -27,8 +27,10 @@ def run_scrape(fresh: bool, rebuild: bool) -> int:
 
 def run_descriptions(fresh: bool, rebuild: bool) -> int:
     if rebuild:
-        rows = CucisReceiver().rows_from_checkpoint()
-        CsvDescExporter().export(rows)
+        receiver = CucisReceiver()
+        CsvDescExporter().export(
+            receiver.rows_from_checkpoint() + receiver.gapfill_rows()
+        )
         return 0
     ScraperPipeline().run_descriptions(fresh=fresh)
     return 0

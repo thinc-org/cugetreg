@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import UTC, datetime, timedelta
 
 import psycopg
 from cuid2 import cuid_wrapper
@@ -26,20 +26,30 @@ def grading_type(credit_hours: str) -> str:
     return "SU" if "S/U" in (credit_hours or "") else "LETTER"
 
 
+def _clock(value: str) -> timedelta:
+    hour, minute = (int(part) for part in value.split(":"))
+    return timedelta(hours=hour, minutes=minute)
+
+
 def parse_exam_period(period: dict | None) -> tuple[datetime | None, datetime | None]:
+    """Exam start/end as naive UTC — what the TIMESTAMP(3) columns hold.
+
+    `date` is already the UTC instant the exam starts, so the end is its length
+    away from that; `period` is still on the Thai clock and is only used here for
+    that difference.
+    """
     if not period:
         return None, None
     start_raw = period["period"]["start"]
     end_raw = period["period"]["end"]
     if start_raw in {"IA", "AR"} or end_raw in {"IA", "AR"}:
         return None, None
-    date_str = period["date"].split("T")[0]
-    year, month, day = map(int, date_str.split("-"))
-    start_h, start_m = map(int, start_raw.split(":"))
-    end_h, end_m = map(int, end_raw.split(":"))
-    start = datetime(year, month, day, start_h, start_m)
-    end = datetime(year, month, day, end_h, end_m)
-    return start, end
+
+    start = datetime.fromisoformat(period["date"]).astimezone(UTC)
+    # Naive on purpose: an aware value goes to Postgres as timestamptz and gets
+    # shifted again by the session TimeZone on its way into a `timestamp`.
+    start = start.replace(tzinfo=None)
+    return start, start + (_clock(end_raw) - _clock(start_raw))
 
 
 class PostgresExporter(Exporter[list[Course]]):

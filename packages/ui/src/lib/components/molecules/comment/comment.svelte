@@ -11,6 +11,7 @@
 
 	interface CommentProps {
 		course?: string;
+		redirectTo: string;
 		genEdType?: GenEdType;
 		content: string;
 		semester: string;
@@ -33,6 +34,7 @@
 
 	let {
 		course,
+		redirectTo,
 		genEdType,
 		content,
 		semester,
@@ -102,9 +104,9 @@
 	    {@const showGenedChip = ['SC', 'SO', 'HU', 'IN', 'GENED'].includes(genEdType ?? "NO")}
 		<div class="flex flex-row items-center justify-between">
 			<div class="flex flex-wrap items-center justify-start gap-4">
-			<p class="text-primary text-lg font-bold sm:text-h3 flex flex-row justify-center">
+			<a href={course ? redirectTo : undefined } class="text-primary text-lg font-bold sm:text-h3 flex flex-row justify-center hover:underline">
 				{course}
-            </p>
+            </a>
             {#if showGenedChip}
 				<GenedChip
 					type={genEdType}

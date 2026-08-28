@@ -313,9 +313,15 @@
           {@const showGenedChip = ['SC', 'SO', 'HU', 'IN', 'GENED'].includes(
             review.genEdType,
           )}
+          {@const courseSearchParams = new URLSearchParams({
+            "studyProgram" : review.studyProgram as string,
+            "academicYear" : review.academicYear.toString(),
+            "semester" : review.semester as string,
+          })}
           <div class="flex flex-col gap-3">
             <Comment
               course={`${review.courseNo} ${review.courseAbbrName}`}
+              redirectTo={`/course-page/${review.courseNo}?${courseSearchParams.toString()}`}
               genEdType={review.genEdType as GenEdType}
               rating={review.rating / 2}
               semester={SEMESTER_LABEL_LONG[review.semester]}

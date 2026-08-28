@@ -310,9 +310,6 @@
     {:else}
       <div class="mt-6 flex flex-col gap-6">
         {#each reviews as review (review.id)}
-          {@const showGenedChip = ['SC', 'SO', 'HU', 'IN', 'GENED'].includes(
-            review.genEdType,
-          )}
           {@const courseSearchParams = new URLSearchParams({
             "studyProgram" : review.studyProgram as string,
             "academicYear" : review.academicYear.toString(),

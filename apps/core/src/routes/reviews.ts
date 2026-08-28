@@ -49,6 +49,9 @@ reviews
         if (e.message === "REVIEW_NOT_FOUND") {
           return c.json({ error: "REVIEW_NOT_FOUND" }, 404);
         }
+        if (e.message === "REVIEW_IS_PENDING_OR_REJECTED") {
+          return c.json({ error: "REVIEW_IS_PENDING_OR_REJECTED" }, 409);
+        }
       }
       return c.json({ error: "INTERNAL_SERVER_ERROR" }, 500);
     }

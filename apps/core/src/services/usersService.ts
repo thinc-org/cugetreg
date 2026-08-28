@@ -5,6 +5,7 @@ import {
   mapReviewStatus,
   unmapFacultyCode,
 } from "@/utils/enumMapper.js";
+import { reviewOrderByMapping } from "@/utils/utils.js";
 
 import type {
   GetUserReviewsQuery,
@@ -58,29 +59,7 @@ export const usersService = {
       status: status ? mapReviewStatus(status) : undefined,
     };
 
-    let orderBy = {}
-
-
-
-    switch (sortBy) {
-      case "RATING":
-        orderBy = {
-          rating: sortOrder,
-        }
-        break;
-      case "NAME":
-        orderBy = {
-          courseInfo: {
-            abbrName: sortOrder
-          }
-        }
-        break;
-      default:
-        orderBy = {
-          createdAt: sortOrder,
-        }
-        break;
-    }
+    const orderBy = reviewOrderByMapping[sortBy](sortOrder);
 
     const [reviews, totalReviews, ratings] = await Promise.all([
       prisma.review.findMany({
@@ -104,7 +83,7 @@ export const usersService = {
         where,
         skip: offset,
         take: limit,
-        orderBy: orderBy
+        orderBy: orderBy,
       }),
       prisma.review.count({ where }),
       includeRatings &&

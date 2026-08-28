@@ -76,7 +76,7 @@ export const reviewService = {
     const { interaction } = body;
     return prisma.$transaction(
       async (tx) => {
-        const review = await tx.review.findFirst({
+        const review = await tx.review.findUnique({
           where: {
             id: reviewId,
           },
@@ -90,10 +90,12 @@ export const reviewService = {
           throw new Error("REVIEW_IS_PENDING_OR_REJECTED");
         }
 
-        const vote = await tx.reviewVote.findFirst({
+        const vote = await tx.reviewVote.findUnique({
           where: {
-            userId,
-            reviewId,
+            userId_reviewId: {
+              userId,
+              reviewId,
+            },
           },
         });
 

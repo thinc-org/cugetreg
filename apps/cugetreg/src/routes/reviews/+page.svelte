@@ -21,15 +21,24 @@
   import { Comment } from '@cugetreg/ui/molecules/comment';
   import { ConfirmDeleteReview } from '@cugetreg/ui/molecules/confirm-delete-review';
   import { ReportProblem } from '@cugetreg/ui/molecules/report-problem';
+  import * as Select from '@cugetreg/ui/molecules/select';
   import { Footer } from '@cugetreg/ui/organisms/footer';
   import type { GenEdType } from '@cugetreg/utils/types';
   import {
     type ReviewSchema,
+    type ReviewSortBy,
+    type SortOrder,
     UserReviewResponseSchema,
     VoteReviewResponseSchema,
   } from '@cugetreg/zod-schemas';
 
   const reviewsPerPage = 5;
+
+  const reviewSortOptions: { field: ReviewSortBy; label: string }[] = [
+    { field: 'DATE_CREATE', label: 'วันที่แสดงความคิดเห็น' },
+    { field: 'RATING', label: 'คะแนน' },
+    { field: 'NAME', label: 'ชื่อวิชา' },
+  ];
 
   let reviews = $state<ReviewSchema[]>([]);
   let totalReviews = $state(0);
@@ -40,6 +49,13 @@
   let pendingReviewVotes = $state<string[]>([]);
   let deletingReviewId = $state<string | null>(null);
   let reviewDeleting = $state(false);
+  let reviewSortBy = $state<ReviewSortBy>('DATE_CREATE');
+  let reviewSortOrder = $state<SortOrder>('desc');
+
+  const reviewSortByLabel = $derived(
+    reviewSortOptions.find((option) => option.field === reviewSortBy)
+      ?.label ?? '',
+  );
 
   const totalReviewPages = $derived(
     Math.max(1, Math.ceil(totalReviews / reviewsPerPage)),
@@ -67,7 +83,13 @@
 
     try {
       const response = await api.get('/user/reviews', {
-        params: { page: targetPage, limit: reviewsPerPage, includeVote : true },
+        params: {
+          page: targetPage,
+          limit: reviewsPerPage,
+          includeVote: true,
+          sortBy: reviewSortBy,
+          sortOrder: reviewSortOrder,
+        },
       });
       const result = UserReviewResponseSchema.parse(response.data);
 
@@ -88,6 +110,18 @@
   function setReviewsPage(targetPage: number) {
     if (targetPage === reviewsPage || reviewsLoading) return;
     void fetchReviews(targetPage);
+  }
+
+  function setReviewSortBy(sortBy: ReviewSortBy) {
+    if (sortBy === reviewSortBy || reviewsLoading) return;
+    reviewSortBy = sortBy;
+    void fetchReviews(1);
+  }
+
+  function toggleReviewSortOrder() {
+    if (reviewsLoading) return;
+    reviewSortOrder = reviewSortOrder === 'asc' ? 'desc' : 'asc';
+    void fetchReviews(1);
   }
 
   async function handleReactReview(reviewId: string, interaction: 'L' | 'D') {
@@ -176,9 +210,66 @@
       </span>
     </button>
 
-    <h1 class="text-on-surface text-base font-semibold sm:text-3xl">
-      กิจกรรมทั้งหมด
-    </h1>
+    <div class="flex flex-wrap items-center justify-between gap-3">
+      <h1 class="text-on-surface text-base font-semibold sm:text-3xl">
+        กิจกรรมทั้งหมด
+      </h1>
+
+      <div class="flex shrink-0 items-center gap-4 text-gray-400">
+        <h2 class="font-semibold text-sm whitespace-nowrap">
+          จัดลำดับตาม
+        </h2>
+        <Select.Root
+          type="single"
+          value={reviewSortBy}
+          onValueChange={(v) => setReviewSortBy(v as ReviewSortBy)}
+        >
+          <Select.Trigger
+            class="h-10 min-w-42.5 justify-between rounded-xl border-0 bg-[#F1F3F7] px-4 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-200"
+          >
+            {reviewSortByLabel}
+          </Select.Trigger>
+          <Select.Content align="end">
+            <Select.Group>
+              {#each reviewSortOptions as option (option.field)}
+                <Select.Item
+                  value={option.field}
+                  label={option.label}
+                  role="option"
+                />
+              {/each}
+            </Select.Group>
+          </Select.Content>
+        </Select.Root>
+        <button
+          type="button"
+          aria-label={reviewSortOrder === 'asc'
+            ? 'เรียงจากน้อยไปมาก'
+            : 'เรียงจากมากไปน้อย'}
+          onclick={toggleReviewSortOrder}
+          class="border-surface-container-high bg-surface text-on-surface flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-xl border transition-colors hover:bg-gray-50"
+        >
+          <div
+            class="text-primary transition-transform duration-300 {reviewSortOrder ===
+            'asc'
+              ? 'rotate-180'
+              : 'rotate-0'}"
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              ><path d="M12 5v14M19 12l-7 7-7-7" /></svg
+            >
+          </div>
+        </button>
+      </div>
+    </div>
 
     {#if reviewsLoading && reviews.length === 0}
       <div

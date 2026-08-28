@@ -73,7 +73,7 @@ Schema source of truth: `src/reg_scraper/models.py` (`Course`, `Section`, `Class
 | `abbrName` | string | `"UNIV THAI READING"` | Short English name |
 | `courseNameEn` | string | | Full English name |
 | `courseNameTh` | string | | Full Thai name |
-| `courseDescEn` | string | | From optional CSV, not Reg HTML |
+| `courseDescEn` | string | | From optional CSV, not Reg HTML. Courses added mid-semester are looked up individually — see README, "Courses that appear mid-semester" |
 | `courseDescTh` | string | | From optional CSV |
 | `faculty` | string | `"01"` | Faculty code |
 | `department` | string | | Department name (Thai) |
@@ -84,7 +84,7 @@ Schema source of truth: `src/reg_scraper/models.py` (`Course`, `Section`, `Class
 | `academicYear` | string | `"2568"` | Buddhist era year |
 | `semester` | `"1"` \| `"2"` \| `"3"` | `"2"` | 1=ภาคต้น, 2=ภาคปลาย, 3=ฤดูร้อน |
 | `genEdType` | `"NO"` \| `"SC"` \| `"SO"` \| `"HU"` \| `"IN"` | | GenEd category |
-| `midterm` | object \| null | | See exam object below |
+| `midterm` | object \| null | | See exam object below — `date` is UTC |
 | `final` | object \| null | | See exam object below |
 | `sections` | array | | Section list |
 | `createdAt` | `{ "$date": "…" }` | | Export timestamp (JSON only) |
@@ -95,13 +95,27 @@ Schema source of truth: `src/reg_scraper/models.py` (`Course`, `Section`, `Class
 ```json
 {
   "period": { "start": "13:00", "end": "15:00" },
-  "date": "2026-03-15T00:00:00.000Z"
+  "date": "2026-03-15T06:00:00.000Z"
 }
 ```
 
-`date` is the Reg Chula Buddhist-era date converted to Gregorian
-(`25 ก.ย. 2568` → `2025-09-25`), at midnight; the time of day lives in `period`,
-zero-padded (`8:30` → `"08:30"`).
+The two fields are in **different time zones, deliberately**:
+
+| Field | Zone | Use it for |
+|-------|------|-----------|
+| `date` | **UTC** — the instant the exam starts | Anything you compute with: sorting, conflicts, calendar exports, DB columns |
+| `period.start` / `period.end` | Thai local time, as Reg Chula printed it, zero-padded (`8:30` → `"08:30"`) | Showing the time to a student |
+
+So `วันสอบกลางภาค : 25 ก.ย. 2568 เวลา 8:30-11:30 น.` gives
+`date: "2025-09-25T01:30:00.000Z"` with `period: {"start": "08:30", "end": "11:30"}`.
+Take the exam's length from `period` (`end - start`) and add it to `date` for the
+end instant — do **not** rebuild the start from `date`'s day plus `period.start`,
+that is the Thai clock and lands 7 hours late.
+
+> **Changed:** `date` used to be that day at midnight UTC, with the time only in
+> `period`. Anything that read `date.split("T")[0]` for the day is unaffected
+> (exams start well after 07:00 Thai, so the UTC day is the same); anything that
+> combined `date` with `period` must now use `date` alone.
 
 `midterm` / `final` are `null` when Reg Chula has not published that exam yet —
 it shows `TDF (รอประกาศ)`, which is the majority of courses until the exam
@@ -160,6 +174,7 @@ for any loader reading `courses.json`.
 | `classes[].period` | `course_class.period_start` / `period_end` | |
 | `classes[].teachers` | `course_class.professors` | text array |
 | `creditHours` contains `S/U` | `course_info.grading_type` | → `SU`, else `LETTER` |
+| `midterm` / `final` | `course.midterm_start` / `_end`, `final_start` / `_end` | UTC, written naive — the columns are `TIMESTAMP(3)`, which Prisma reads back as UTC |
 
 After export, `apps/core` serves courses via its existing API — **no scraper changes needed on the API side**.
 

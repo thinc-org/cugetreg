@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import re
-from datetime import datetime
+from datetime import UTC, datetime, timedelta, timezone
 
 from bs4 import BeautifulSoup
 
@@ -43,6 +43,11 @@ THAI_MONTHS = {
     "พ.ย.": 11,
     "ธ.ค.": 12,
 }
+
+# Reg Chula prints exam times in Thai local time. Thailand has been a flat
+# UTC+7 with no DST since 1940, so a fixed offset is exact here and needs no
+# tzdata on the image.
+BANGKOK_TZ = timezone(timedelta(hours=7))
 
 MIDTERM_LABEL = "วันสอบกลางภาค"
 FINAL_LABEL = "วันสอบปลายภาค"
@@ -121,7 +126,12 @@ def note_parser(value: str) -> str | None:
 
 
 def exam_date_parser(value: str) -> ExamPeriod | None:
-    """Parse one exam cell, e.g. "25 ก.ย. 2568 เวลา 8:30-11:30 น."."""
+    """Parse one exam cell, e.g. "25 ก.ย. 2568 เวลา 8:30-11:30 น.".
+
+    `date` is the instant the exam starts, in UTC: that Thai 8:30 is
+    2025-09-25T01:30:00.000Z. `period` keeps the local clock times the page
+    shows, so the two are in different zones on purpose.
+    """
     value = re.sub(r"\s+", " ", value or "").strip()
     if not value or any(marker in value for marker in _NO_EXAM):
         return None
@@ -135,10 +145,12 @@ def exam_date_parser(value: str) -> ExamPeriod | None:
     if month is None:
         return None
 
-    date = datetime(int(year_be) - 543, month, int(day))
+    period = period_parser(f"{start}-{end}")
+    hour, minute = (int(part) for part in period.start.split(":"))
+    local = datetime(int(year_be) - 543, month, int(day), hour, minute, tzinfo=BANGKOK_TZ)
     return ExamPeriod(
-        period=period_parser(f"{start}-{end}"),
-        date=date.strftime("%Y-%m-%dT00:00:00.000Z"),
+        period=period,
+        date=local.astimezone(UTC).strftime("%Y-%m-%dT%H:%M:%S.000Z"),
     )
 
 

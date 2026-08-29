@@ -150,7 +150,7 @@ async function queryCourse(
           courseNameTh: row.course_name_th,
           courseDescEn: row.course_desc_en,
           courseDescTh: row.course_desc_th,
-          faculty: row.faculty ?? "",
+          faculty: row.faculty,
           department: row.department ?? "",
           credit: row.credit ?? "",
           creditHours: row.credit_hours ?? "",

@@ -307,6 +307,7 @@ section_json AS (
             json_agg(
                 json_build_object(
                     'id',          cl.id,
+                    'sectionId',   cl.section_id,
                     'type',        cl.type,
                     'dayOfWeek',   cl.day_of_week,
                     'professors',  cl.professors,
@@ -359,12 +360,11 @@ SELECT
         json_agg(
             json_build_object(
                 'id',         sj.section_id,
+                'courseId',   sj.course_id,
                 'sectionNo',  sj.section_no,
                 'closed',     sj.closed,
-                'capacity',   json_build_object(
-                    'current', sj.capacity_current,
-                    'max',     sj.capacity_max
-                ),
+                'regis',      sj.capacity_current,
+                'max',        sj.capacity_max,
                 'note',       sj.note,
                 'genEdType',  sj.gen_ed_type,
                 'classes',    sj.classes

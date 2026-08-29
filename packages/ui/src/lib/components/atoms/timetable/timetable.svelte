@@ -43,7 +43,9 @@
         grid-template-rows: auto repeat({amountOfDays + 1});
     "
 >
-	<div class="cell truncate border-r border-b border-neutral-200 bg-indigo-50! py-3.5">
+	<div
+		class="cell dark:bg-surface-dim! truncate border-r border-b border-neutral-200 py-3.5 not-dark:bg-indigo-50!"
+	>
 		วัน/เวลา
 	</div>
 	<div
@@ -56,8 +58,8 @@
 		{#each Array.from({ length: periodPerDay }) as _, i (i)}
 			<div
 				class="
-                    cell @container-[size] items-end! justify-start! bg-indigo-50! px-2 py-3.5
-                    text-left!
+                    cell dark:bg-surface-dim! @container-[size] items-end! justify-start! px-2 py-3.5
+                    text-left! not-dark:bg-indigo-50!
                 "
 			>
 				<span class="text-sm">
@@ -72,7 +74,7 @@
 		style="grid-row: span {amountOfDays} / span {amountOfDays}"
 	>
 		{#each days as day (day)}
-			<div class="cell @container-[size] aspect-square bg-indigo-50!">
+			<div class="cell dark:bg-surface-dim! @container-[size] aspect-square not-dark:bg-indigo-50!">
 				<span class="text-[20cqh]">
 					{day}
 				</span>
@@ -111,7 +113,7 @@
 	@reference "@cugetreg/ui/css";
 
 	.cell {
-		@apply bg-surface-bright flex items-center justify-center text-center;
+		@apply dark:bg-surface bg-surface-bright flex items-center justify-center text-center;
 		@apply border-surface-container-low border-r border-b;
 		@apply text-sm;
 	}

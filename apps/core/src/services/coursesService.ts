@@ -120,7 +120,10 @@ async function queryCourse(
   const reviewCounts = await prisma.review.groupBy({
     by: ["courseNo"],
     _count: { _all: true },
-    where: { courseNo: { in: courseNos } },
+    where: {
+      courseNo: { in: courseNos },
+      status: ReviewStatus.APPROVED,
+    },
   });
   const reviewCountMap = new Map(
     reviewCounts.map((r) => [r.courseNo, r._count._all]),

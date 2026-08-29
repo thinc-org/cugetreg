@@ -51,9 +51,9 @@
     </button>
   {/if}
 
-  <p class="text-[16px] leading-6 font-medium">{CourseCode}</p>
-  <p class="text-[16px] leading-6 font-medium">{CourseName}</p>
-  <p class="mt-1 text-[16px] leading-6 font-medium">
+  <p class="text-[16px] leading-6 font-regular">{CourseCode}</p>
+  <p class="text-[16px] leading-6 font-regular">{CourseName}</p>
+  <p class="mt-1 text-[16px] leading-6 font-regular">
     {CourseCredit} หน่วยกิต
   </p>
 </article>

@@ -10,13 +10,13 @@ import {
 } from "@/utils/enumMapper.js";
 
 import type {
+  GetCourseDetailQuerySchema,
   GetCourseQuerySchema,
   GetCourseReviewQuerySchema,
-  GetCourseDetailQuerySchema,
 } from "@cugetreg/zod-schemas/courses";
 import type {
-  CourseReview,
   CourseDetails,
+  CourseReview,
   GetCourseResponse,
 } from "@cugetreg/zod-schemas/courses-response";
 

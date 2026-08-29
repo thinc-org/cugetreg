@@ -116,7 +116,7 @@
 			<Dot color="#EDEDF1" size="16" />
 			<span>{course?.review} รีวิว</span>
 		</div>
-		<div class="flex gap-2">
+		<div class="flex min-h-6.5 gap-2">
 			{#each course?.days ?? [] as day (day)}
 				<DayChip {day} />
 			{/each}

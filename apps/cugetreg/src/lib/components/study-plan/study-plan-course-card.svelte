@@ -35,7 +35,7 @@
 
 <article
   class={cn(
-    'relative flex min-h-[120px] w-[220px] flex-col justify-center rounded-[16px] border-2 px-5 py-4 text-[#353745]',
+    'relative flex min-h-[100px] w-[170px] flex-col justify-center rounded-[16px] border-2 px-5 py-4 text-[#353745]',
     colorClass,
     className,
   )}

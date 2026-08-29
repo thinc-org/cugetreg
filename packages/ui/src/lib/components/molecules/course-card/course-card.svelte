@@ -71,7 +71,7 @@
 
 <div
 	class={cn(
-		'relative flex w-[334px] flex-col gap-3 rounded-xl px-4 py-5 ring-2 ring-neutral-100 md:w-[440px] md:p-6',
+		'dark:bg-surface-bright relative flex w-[334px] flex-col gap-3 rounded-xl px-4 py-5 ring-2 ring-neutral-100 md:w-[440px] md:p-6',
 		className
 	)}
 	{...rest}

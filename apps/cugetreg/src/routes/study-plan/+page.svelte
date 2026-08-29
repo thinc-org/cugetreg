@@ -16,9 +16,9 @@
 </script>
 
 <div class="flex h-full flex-row justify-between gap-6 bg-white px-6 py-8 md:px-12">
-  <div class="flex flex-col gap-2">
-    <h1 class="text-3xl font-bold text-black">จัดตาางเรียน</h1>
-    <div class="flex flex-row gap-6 text-black">
+  <div class="flex flex-col gap-4">
+    <h1 class="text-3xl font-bold text-black">จัดตารางเรียน</h1>
+    <div class="flex flex-row gap-6 text-black text-[16px]">
       <p>คณะ{faculty.th}</p>
       <p>สาขา{data.user.department || '-'}</p>
     </div>

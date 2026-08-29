@@ -26,6 +26,7 @@
 		favorite?: boolean;
 		showFavorite?: boolean;
 		onToggleFavorite?: () => void;
+		closed?: boolean;
 		[key: string]: unknown;
 	}
 
@@ -42,6 +43,7 @@
 		courseUrl = '',
 		favorite = $bindable(false),
 		showFavorite = true,
+		closed = false,
 		onToggleFavorite,
 		...rest
 	}: Props = $props();
@@ -102,9 +104,15 @@
 		<div class="text-caption flex flex-row items-center font-normal text-neutral-400">
 			<span>{course?.credit} หน่วยกิต</span>
 			<Dot color="#EDEDF1" size="16" />
-			<span class={isSeatFull ? 'text-red-500' : undefined}
-				>ที่นั่ง {course?.seat} / {course?.maxseat}</span
-			>
+
+			{#if closed}
+				<span class="text-red-500">ปิด</span>
+			{:else}
+				<span class={isSeatFull ? 'text-red-500' : undefined}
+					>ที่นั่ง {course?.seat} / {course?.maxseat}</span
+				>
+			{/if}
+
 			<Dot color="#EDEDF1" size="16" />
 			<span>{course?.review} รีวิว</span>
 		</div>
@@ -179,7 +187,7 @@
 		{#if showFavorite}
 			<button
 				type="button"
-				aria-label={favorite ? 'นำออกจากวิชาที่ถูกใจ' : 'เพิ่มเป็นวิชาที่ถูกใจ'}
+				aria-label={favorite ? 'นำออกจากวิชถูกใจ' : 'เพิ่มเป็นวิชาที่ถูกใจ'}
 				aria-pressed={favorite}
 				onclick={onFavoriteClick}
 				class="flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-full transition-colors hover:bg-blue-300/40"

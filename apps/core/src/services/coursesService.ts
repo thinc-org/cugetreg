@@ -10,14 +10,21 @@ import {
 } from "@/utils/enumMapper.js";
 
 import type {
-  GetCourseDetailQuerySchema,
   GetCourseQuerySchema,
   GetCourseReviewQuerySchema,
+  GetCourseDetailQuerySchema,
 } from "@cugetreg/zod-schemas/courses";
-import type { CourseReview } from "@cugetreg/zod-schemas/courses-response";
+import type {
+  CourseReview,
+  CourseDetails,
+  GetCourseResponse,
+} from "@cugetreg/zod-schemas/courses-response";
 
 //1.1 Query Course
-async function queryCourse(query: GetCourseQuerySchema, userId?: string) {
+async function queryCourse(
+  query: GetCourseQuerySchema,
+  userId?: string,
+): Promise<GetCourseResponse> {
   const {
     studyProgram,
     academicYear,
@@ -119,46 +126,49 @@ async function queryCourse(query: GetCourseQuerySchema, userId?: string) {
     reviewCounts.map((r) => [r.courseNo, r._count._all]),
   );
 
-  const data = rawResults.map((row) => ({
-    course: {
-      id: row.id,
-      studyProgram: row.study_program,
-      academicYear: row.academic_year,
-      semester: row.semester,
-      courseNo: row.course_no,
-      courseCondition: row.course_condition,
-      genEdType: row.gen_ed_type,
-      midtermStart: row.midterm_start?.toISOString() ?? null,
-      midtermEnd: row.midterm_end?.toISOString() ?? null,
-      finalStart: row.final_start?.toISOString() ?? null,
-      finalEnd: row.final_end?.toISOString() ?? null,
-      isFavorite: row.is_favorite ?? false,
-      sections: (row.sections as any[]) ?? [],
-    },
-    courseInfo: {
-      abbrName: row.abbr_name,
-      courseNameEn: row.course_name_en,
-      courseNameTh: row.course_name_th,
-      courseDescEn: row.course_desc_en,
-      courseDescTh: row.course_desc_th,
-      faculty: row.faculty ?? "",
-      department: row.department ?? "",
-      credit: row.credit ?? "",
-      creditHours: row.credit_hours ?? "",
-    },
-    stats: {
-      sectionsCount: row.sections_count ?? 0,
-      capacitySum: row.capacity_sum ?? 0,
-      remainingSum: row.remaining_sum ?? 0,
-      hasSeats: (row.remaining_sum ?? 0) > 0,
-      isClosedAll:
-        (row.sections_count ?? 0) > 0 &&
-        (row.closed_sections_count ?? 0) === (row.sections_count ?? 0),
-    },
-    reviewCount: reviewCountMap.get(row.course_no) ?? 0,
-  }));
+  const data = rawResults.map(
+    (row) =>
+      ({
+        course: {
+          id: row.id,
+          studyProgram: row.study_program,
+          academicYear: row.academic_year,
+          semester: row.semester,
+          courseNo: row.course_no,
+          courseCondition: row.course_condition,
+          genEdType: row.gen_ed_type,
+          midtermStart: row.midterm_start?.toISOString() ?? null,
+          midtermEnd: row.midterm_end?.toISOString() ?? null,
+          finalStart: row.final_start?.toISOString() ?? null,
+          finalEnd: row.final_end?.toISOString() ?? null,
+          isFavorite: row.is_favorite ?? false,
+          sections: (row.sections as any[]) ?? [],
+        },
+        courseInfo: {
+          abbrName: row.abbr_name,
+          courseNameEn: row.course_name_en,
+          courseNameTh: row.course_name_th,
+          courseDescEn: row.course_desc_en,
+          courseDescTh: row.course_desc_th,
+          faculty: row.faculty ?? "",
+          department: row.department ?? "",
+          credit: row.credit ?? "",
+          creditHours: row.credit_hours ?? "",
+        },
+        stats: {
+          sectionsCount: row.sections_count ?? 0,
+          capacitySum: row.capacity_sum ?? 0,
+          remainingSum: row.remaining_sum ?? 0,
+          hasSeats: (row.remaining_sum ?? 0) > 0,
+          isClosedAll:
+            (row.sections_count ?? 0) > 0 &&
+            (row.closed_sections_count ?? 0) === (row.sections_count ?? 0),
+        },
+        reviewCount: reviewCountMap.get(row.course_no) ?? 0,
+      }) as CourseDetails,
+  );
 
-  return { data, total };
+  return { data, total } as GetCourseResponse;
 }
 
 //1.2 get user's favorite courses

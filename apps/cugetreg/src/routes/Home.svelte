@@ -12,7 +12,6 @@
   import { infiniteScroll } from '$lib/home/infinite-scroll';
   import {
     normalizeDayMapper,
-    normalizeGenedMapper,
     sortByMapper,
     studyProgramMapper,
   } from '$lib/mapper';
@@ -58,6 +57,7 @@
   import * as Sidebar from '@cugetreg/ui/organisms/sidebar';
   import type { Day } from '@cugetreg/utils/types';
   import {
+    type CourseDetails,
     type Semester,
     type SortBy,
     type StudyProgram,
@@ -192,15 +192,15 @@
     },
   ];
 
-  function mapCourse(item: any) {
+  function mapCourse(item: CourseDetails) {
     const { course: c, courseInfo: ci, reviewCount } = item;
 
     const totalMaxSeat = item.stats?.capacitySum || 0;
     const totalCurrentSeat =
       (item.stats?.capacitySum || 0) - (item.stats?.remainingSum || 0);
 
-    const allDays = (c.sections ?? []).flatMap((s: any) =>
-      (s.classes ?? []).map((cl: any) => cl.dayOfWeek),
+    const allDays = c.sections.flatMap((section) =>
+      section.classes.map((courseClass) => courseClass.dayOfWeek),
     );
 
     const validDays = Array.from(
@@ -221,12 +221,11 @@
         credit: Number(ci.credit) || 0,
         maxseat: totalMaxSeat,
         seat: totalCurrentSeat,
-        gened: normalizeGenedMapper(c.genEdType),
+        gened: c.genEdType === 'NO' ? [] : [c.genEdType],
         review: reviewCount || 0,
-        rating: item.rating || 0,
         days: validDays,
-        gradingType: ci.gradingType,
         isFavorite: c.isFavorite ?? false,
+        closed: item.stats.isClosedAll,
       },
     };
   }
@@ -257,11 +256,8 @@
     lastUpdatedLabel = `วันที่ ${dd}/${mm}/${buddhistYear}  เวลา ${hh}.${min} น.`;
   }
 
-  const courseResults = new CourseResults({
-    mapCourse,
-    getKey: (item) => item.course.code,
-  });
-  const courses = $derived(courseResults.courses);
+  const courseResults = new CourseResults();
+  const courses = $derived(courseResults.courses.map(mapCourse));
   const isLoading = $derived(courseResults.isLoading);
   const hasMore = $derived(courseResults.hasMore);
   const totalResults = $derived(courseResults.totalResults);
@@ -313,7 +309,7 @@
 
   function setFavorite(courseCode: string, isFavorite: boolean) {
     courseResults.courses = courseResults.courses.map((item) =>
-      item.course.code === courseCode
+      item.course.courseNo === courseCode
         ? { ...item, course: { ...item.course, isFavorite } }
         : item,
     );
@@ -897,6 +893,7 @@
                   onToggleFavorite={() => handleToggleFavorite(item)}
                   class="w-full max-w-full md:w-full"
                   courseUrl={`/course-page/${item.course.code}?${params.toString()}`}
+                  closed={item.course.closed}
                 />
               {/each}
 

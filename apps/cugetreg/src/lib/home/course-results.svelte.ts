@@ -4,12 +4,13 @@ import { isCancel } from 'axios';
 import { SvelteSet, SvelteURLSearchParams } from 'svelte/reactivity';
 
 import type {
-  CourseDetails,
   GetCourseResponse,
   Semester,
   SortBy,
   StudyProgram,
 } from '@cugetreg/zod-schemas';
+
+import { type HomeCourse, mapCourse } from './home-course';
 
 export interface CourseQuery {
   academicYear: number;
@@ -35,7 +36,7 @@ interface CourseResultsOptions {
 }
 
 export class CourseResults {
-  courses = $state.raw<CourseDetails[]>([]);
+  courses = $state.raw<HomeCourse[]>([]);
   isLoading = $state(false);
   hasMore = $state(true);
   totalResults = $state(0);
@@ -101,13 +102,14 @@ export class CourseResults {
       }
 
       const data = response.data.data ?? [];
+      const mapped = data.map(mapCourse);
 
       this.totalResults = response.data.total ?? 0;
       this.#offset = requestedOffset + data.length;
       this.hasMore = data.length === this.#limit;
 
       if (reset) {
-        this.courses = data;
+        this.courses = mapped;
         return;
       }
 
@@ -116,7 +118,7 @@ export class CourseResults {
       );
       this.courses = [
         ...this.courses,
-        ...data.filter((course) => !existingKeys.has(course.course.id)),
+        ...mapped.filter((course) => !existingKeys.has(course.course.id)),
       ];
     } catch (error) {
       if (isCancel(error)) return;

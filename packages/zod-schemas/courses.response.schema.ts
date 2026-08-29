@@ -79,8 +79,16 @@ export const CourseDetailsSchema = z.object({
   course: CourseSchema,
   courseInfo: CourseInfoSchema,
   stats: StatsSchema,
-  fitMySchedule: z.boolean(),
+  reviewCount: z.number().int().nonnegative(),
 });
+
+export const GetCourseResponseSchema = z.object({
+  data: z.array(CourseDetailsSchema),
+  total: z.number().int().nonnegative(),
+});
+
+export type CourseDetails = z.infer<typeof CourseDetailsSchema>;
+export type GetCourseResponse = z.infer<typeof GetCourseResponseSchema>;
 
 export const CourseReview = z.object({
   id: z.string(),

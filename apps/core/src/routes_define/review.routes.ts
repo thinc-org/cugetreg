@@ -52,6 +52,7 @@ export const voteReviewRoute = createRoute({
       description: "Vote Successful",
     },
     404: errorRes("REVIEW_NOT_FOUND"),
+    409: errorRes("REVIEW_IS_PENDING_OR_REJECTED"),
     500: InternalError,
   },
   security: [{ Bearer: [] }],

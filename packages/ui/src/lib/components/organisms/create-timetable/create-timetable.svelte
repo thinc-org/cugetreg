@@ -20,6 +20,12 @@
 		onConfirm?: (schedule: TimetableMetaData) => void;
 		yearOptions?: { value: string; label: string }[];
 		semesterOptions?: { value: string; label: string }[];
+		/** ล็อกระบบ/ปี/ภาคไว้ตามที่กำหนด แก้ไม่ได้ */
+		fixedTerm?: {
+			academicYear: number | string;
+			semester: 'FIRST' | 'SECOND' | 'SUMMER';
+			studyProgram: 'S' | 'I' | 'T';
+		};
 	}
 
 	let {
@@ -36,7 +42,8 @@
 			{ value: 'FIRST', label: '1' },
 			{ value: 'SECOND', label: '2' },
 			{ value: 'SUMMER', label: 'ฤดูร้อน' }
-		]
+		],
+		fixedTerm
 	}: CreateTimetableProp = $props();
 
 	interface SystemInterface {
@@ -44,16 +51,23 @@
 		label: string;
 	}
 
-	let selected_system: 'S' | 'I' | 'T' = $state('S');
+	let selected_system: 'S' | 'I' | 'T' = $state(untrack(() => fixedTerm?.studyProgram ?? 'S'));
 	const options_system: SystemInterface[] = [
 		{ value: 'S', label: 'ทวิภาค' },
 		{ value: 'T', label: 'ตรีภาค' },
 		{ value: 'I', label: 'นานาชาติ' }
 	];
 
-	let selected_year = $state(untrack(() => yearOptions[0]?.value ?? '2568'));
+	let selected_year = $state(
+		untrack(() => (fixedTerm ? String(fixedTerm.academicYear) : (yearOptions[0]?.value ?? '2568')))
+	);
 	let selected_semester: 'FIRST' | 'SECOND' | 'SUMMER' = $state(
-		untrack(() => (semesterOptions[0]?.value as 'FIRST' | 'SECOND' | 'SUMMER') ?? 'FIRST')
+		untrack(
+			() =>
+				fixedTerm?.semester ??
+				(semesterOptions[0]?.value as 'FIRST' | 'SECOND' | 'SUMMER') ??
+				'FIRST'
+		)
 	);
 
 	let tableName = $state('ตารางเรียนแสนสนุก');
@@ -88,7 +102,7 @@
 		<p class="font-orbit text-caption leading-caption text-[#898EA7]">ตั้งค่า</p>
 
 		<Select type="single" bind:value={selected_system}>
-			<SelectTrigger class="my-1 w-full" aria-label="Select system">
+			<SelectTrigger class="my-1 w-full" aria-label="Select system" disabled={!!fixedTerm}>
 				{options_system.find((x) => x.value == selected_system)?.label}
 			</SelectTrigger>
 
@@ -105,7 +119,7 @@
 
 		<div class="flex gap-2">
 			<Select type="single" bind:value={selected_year}>
-				<SelectTrigger class="my-1 flex-1" aria-label="Select year">
+				<SelectTrigger class="my-1 flex-1" aria-label="Select year" disabled={!!fixedTerm}>
 					{selected_year}
 				</SelectTrigger>
 
@@ -121,7 +135,7 @@
 			</Select>
 
 			<Select type="single" bind:value={selected_semester}>
-				<SelectTrigger class="my-1 flex-1" aria-label="Select semester">
+				<SelectTrigger class="my-1 flex-1" aria-label="Select semester" disabled={!!fixedTerm}>
 					{semesterOptions.find((x) => x.value === selected_semester)?.label}
 				</SelectTrigger>
 

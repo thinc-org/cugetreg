@@ -723,6 +723,8 @@ export const buildings = [
     code: "MAHIT",
     name_th: "อาคารมหิตลาธิเบศร",
     name_en: "MAHITALADHIBESRA",
+    map_url:
+      "https://www.google.com/maps/place/Mahittalathibet+Building,+Khwaeng+Pathum+Wan,+Pathum+Wan,+Krung+Thep+Maha+Nakhon+10330/@13.7339886,100.5305941,18z/data=!3m1!4b1!4m6!3m5!1s0x30e29f2a9a5b645d:0xb169bdab1f9f54d",
   },
   {
     code: "MAHIT",
@@ -1195,6 +1197,7 @@ export function getBuildingFullName(code: string): {
   code: string;
   name_th: string;
   name_en: string;
+  map_url?: string;
 } {
   const result = buildings.find((building) => building.code === code);
   if (!result) {

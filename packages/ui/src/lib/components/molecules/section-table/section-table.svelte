@@ -169,8 +169,8 @@
 	{@const building = locations[0]}
 	{@const roomNumber = locations[1]}
 
-	{@const fullBuildingName = getBuildingFullName(building).name_th}
-	{@const hoverTitle = `${fullBuildingName} ห้อง ${roomNumber}`}
+	{@const buildingInfo = getBuildingFullName(building)}
+	{@const hoverTitle = `${buildingInfo.name_th} ห้อง ${roomNumber}`}
 
 	<Tooltip.Root
 		open={openLocationId === locationId}
@@ -181,7 +181,13 @@
 		}}
 	>
 		<Tooltip.Trigger
-			class={`cursor-pointer p-0 text-left ${isMobile.current ? 'underline decoration-dotted underline-offset-2' : 'hover:underline'}`}
+			class={`cursor-pointer p-0 text-left ${
+				buildingInfo.map_url
+					? 'text-blue-500 underline'
+					: isMobile.current
+						? 'underline decoration-dotted underline-offset-2'
+						: 'hover:underline'
+			}`}
 			onclick={() => {
 				if (isMobile.current) {
 					openLocationId = openLocationId === locationId ? null : locationId;
@@ -197,6 +203,16 @@
 			arrowClasses="bg-surface-container-lowest"
 		>
 			{hoverTitle}
+			{#if buildingInfo.map_url}
+				<a
+					href={buildingInfo.map_url}
+					target="_blank"
+					rel="noopener noreferrer"
+					class="block text-blue-500 underline"
+				>
+					ดูใน Google Maps
+				</a>
+			{/if}
 		</Tooltip.Content>
 	</Tooltip.Root>
 {/snippet}

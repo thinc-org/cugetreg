@@ -27,7 +27,7 @@
 	}: Props = $props();
 
 	const getSeatColor = (value: string) => {
-		if (value === 'ปิด') return 'bg-[#EDEDF1] text-[#6F7593]';
+		if (value === 'ปิด') return 'bg-surface-container-highest text-white';
 		if (value.includes('/')) {
 			const [taken, total] = value.split('/').map((n) => parseInt(n.trim()));
 			if (taken < total) return 'bg-[#D1FEB6] text-[#4B991C]';

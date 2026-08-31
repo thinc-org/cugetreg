@@ -8,14 +8,10 @@
   import ScheduleMismatchPopup from '$lib/components/schedule-mismatch-popup.svelte';
   import SelectedCourse from '$lib/components/selected-course.svelte';
   import { CourseResults } from '$lib/home/course-results.svelte';
+  import type { HomeCourse } from '$lib/home/home-course';
   import { createHomeUrlSync } from '$lib/home/home-url-sync.svelte';
   import { infiniteScroll } from '$lib/home/infinite-scroll';
-  import {
-    normalizeDayMapper,
-    normalizeGenedMapper,
-    sortByMapper,
-    studyProgramMapper,
-  } from '$lib/mapper';
+  import { sortByMapper, studyProgramMapper } from '$lib/mapper';
   import {
     getSemesterDisplayOptions,
     SEMESTER_LABEL_LONG,
@@ -56,7 +52,6 @@
   import { Filter as FilterBar } from '@cugetreg/ui/organisms/filter-bar';
   import { Footer } from '@cugetreg/ui/organisms/footer';
   import * as Sidebar from '@cugetreg/ui/organisms/sidebar';
-  import type { Day } from '@cugetreg/utils/types';
   import {
     type Semester,
     type SortBy,
@@ -192,45 +187,6 @@
     },
   ];
 
-  function mapCourse(item: any) {
-    const { course: c, courseInfo: ci, reviewCount } = item;
-
-    const totalMaxSeat = item.stats?.capacitySum || 0;
-    const totalCurrentSeat =
-      (item.stats?.capacitySum || 0) - (item.stats?.remainingSum || 0);
-
-    const allDays = (c.sections ?? []).flatMap((s: any) =>
-      (s.classes ?? []).map((cl: any) => cl.dayOfWeek),
-    );
-
-    const validDays = Array.from(
-      new Set(
-        allDays
-          .map(normalizeDayMapper)
-          .filter((d: Day | undefined): d is Day => Boolean(d)),
-      ),
-    );
-
-    return {
-      recommended: false,
-      course: {
-        ...c,
-        courseInfo: ci,
-        code: c.courseNo,
-        name: ci.abbrName || ci.courseNameEn || ci.courseNameTh || '-',
-        credit: Number(ci.credit) || 0,
-        maxseat: totalMaxSeat,
-        seat: totalCurrentSeat,
-        gened: normalizeGenedMapper(c.genEdType),
-        review: reviewCount || 0,
-        rating: item.rating || 0,
-        days: validDays,
-        gradingType: ci.gradingType,
-        isFavorite: c.isFavorite ?? false,
-      },
-    };
-  }
-
   async function fetchLastUpdated(
     studyProgramParam: StudyProgram,
     academicYear: number,
@@ -257,10 +213,7 @@
     lastUpdatedLabel = `วันที่ ${dd}/${mm}/${buddhistYear}  เวลา ${hh}.${min} น.`;
   }
 
-  const courseResults = new CourseResults({
-    mapCourse,
-    getKey: (item) => item.course.code,
-  });
+  const courseResults = new CourseResults();
   const courses = $derived(courseResults.courses);
   const isLoading = $derived(courseResults.isLoading);
   const hasMore = $derived(courseResults.hasMore);
@@ -319,7 +272,7 @@
     );
   }
 
-  async function handleToggleFavorite(courseItem: any) {
+  async function handleToggleFavorite(courseItem: HomeCourse) {
     if (!$session.data) {
       loginPopupState.show = true;
       return;
@@ -400,7 +353,7 @@
     return isYearMismatch || isSemesterMismatch || isProgramMismatch;
   }
 
-  function handleToggleCourse(courseItem: any) {
+  function handleToggleCourse(courseItem: HomeCourse) {
     if (!$session.data) {
       loginPopupState.show = true;
       return;
@@ -421,7 +374,7 @@
         };
       } else {
         const firstAvailableSection =
-          sections.find((sec: any) => !sec.closed) || sections[0];
+          sections.find((section) => !section.closed) || sections[0];
         if (firstAvailableSection) {
           pendingCourse = {
             courseNo: code,
@@ -439,7 +392,7 @@
         return;
       }
       const firstAvailableSection =
-        sections.find((sec: any) => !sec.closed) || sections[0];
+        sections.find((section) => !section.closed) || sections[0];
       if (firstAvailableSection) {
         addCourse(code, firstAvailableSection.sectionNo);
       }
@@ -449,7 +402,7 @@
     }
   }
 
-  function handleSelectSection(courseItem: any, sectionNo: string) {
+  function handleSelectSection(courseItem: HomeCourse, sectionNo: string) {
     const { code } = courseItem.course;
     localSelectedSections[code] = Number(sectionNo);
 
@@ -498,10 +451,10 @@
     }
   }
 
-  function getSectionOptions(courseItem: any) {
-    return (courseItem.course.sections ?? []).map((sec: any) => ({
-      value: String(sec.sectionNo),
-      label: `เซค ${sec.sectionNo}`,
+  function getSectionOptions(courseItem: HomeCourse) {
+    return courseItem.course.sections.map((section) => ({
+      value: String(section.sectionNo),
+      label: `เซค ${section.sectionNo}`,
     }));
   }
 
@@ -897,6 +850,7 @@
                   onToggleFavorite={() => handleToggleFavorite(item)}
                   class="w-full max-w-full md:w-full"
                   courseUrl={`/course-page/${item.course.code}?${params.toString()}`}
+                  closed={item.course.closed}
                 />
               {/each}
 

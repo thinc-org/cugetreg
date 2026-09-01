@@ -100,6 +100,7 @@ async function queryCourse(query: GetCourseQuerySchema, userId?: string) {
       credit ?? null,
       favorite ?? null,
       userId ?? null,
+      q ? `${q}%` : null,
     ),
   );
 

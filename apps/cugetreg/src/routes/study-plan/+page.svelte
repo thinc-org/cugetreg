@@ -1,5 +1,6 @@
 <script lang="ts">
   import AppSidebar from '$lib/components/app-sidebar.svelte';
+  import StudyPlanCreditProgress from '$lib/components/study-plan/study-plan-credit-progress.svelte';
   import StudyPlanFavoriteCourseList from '$lib/components/study-plan/study-plan-favorite-course-list.svelte';
   import StudyPlanTerm from '$lib/components/study-plan/study-plan-term.svelte';
   import { getCartSelectionController } from '$lib/stores/cart-selection.svelte';
@@ -105,6 +106,33 @@
       courseCode: '0000000',
       courseName: 'ART HAP FIND SCI',
       genEdType: 'SO',
+    },
+  ] as const;
+
+  const mockCreditProgress = [
+    {
+      label: 'Credit',
+      current: 125,
+      target: 180,
+      color: '#4A70C6',
+    },
+    {
+      label: 'วิชาเลือกคณะ',
+      current: 51,
+      target: 99,
+      color: '#29CDB0',
+    },
+    {
+      label: 'Gen ed',
+      current: 30,
+      target: 99,
+      color: '#FACC3D',
+    },
+    {
+      label: 'วิชาเสรี',
+      current: 40,
+      target: 99,
+      color: '#7D68F5',
     },
   ] as const;
 
@@ -359,7 +387,34 @@
       </div>
     {/if}
     {#if !collapsible || isCreditOpen}
-      <div transition:slide={{ duration: 250, easing: cubicOut }}></div>
+      <div
+        class="flex flex-col gap-8 px-1 pb-6"
+        transition:slide={{ duration: 250, easing: cubicOut }}
+      >
+        <div class="flex flex-col gap-7">
+          {#each mockCreditProgress as item (item.label)}
+            <StudyPlanCreditProgress
+              label={item.label}
+              current={item.current}
+              target={item.target}
+              color={item.color}
+            />
+          {/each}
+        </div>
+
+        <div class="flex gap-7">
+          <Button class="h-12 flex-[2] bg-[#4A70C6] text-white hover:ring-[#4A70C6]">
+            คำนวณเกรด
+          </Button>
+          <Button
+            variant="outlined"
+            color="neutral"
+            class="h-12 flex-1 text-[#4A70C6] ring-[#4A70C6] hover:bg-[#4A70C6] hover:text-white"
+          >
+            คืนค่าเดิม
+          </Button>
+        </div>
+      </div>
     {/if}
     <hr class="mb-6 border-t border-neutral-100" />
   </div>

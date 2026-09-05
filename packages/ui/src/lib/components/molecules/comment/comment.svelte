@@ -92,8 +92,8 @@
   lg:px-12 lg:py-10"
 	class:h-auto={isExpanded}
 >
-	<div class="flex flex-row items-center justify-between">
-		<div class="flex flex-row items-center gap-x-6">
+	<div class="flex flex-row items-center justify-between gap-2">
+		<div class="flex min-w-0 flex-1 flex-row items-center gap-x-3 md:gap-x-6">
 			<div class="text-h3 text-primary font-bold">
 				{#if !hasHalfStar}
 					<span>{rating}.0</span>
@@ -102,9 +102,9 @@
 				{/if}
 			</div>
 
-			<RatingStar {rating} />
+			<RatingStar {rating} class="shrink-0" />
 
-			<div class="text-subtitle font-sans font-medium">
+			<div class="font-sans text-xs font-medium md:text-subtitle">
 				{semester}
 				{year}
 				{#if section}
@@ -114,7 +114,10 @@
 		</div>
 
 		<div class={status === 'APPROVED' ? 'hidden' : ''}>
-			<StatusChip variant={status} />
+			<StatusChip
+				variant={status}
+				class="max-w-14 justify-center px-2 py-1 text-center leading-4 whitespace-normal md:max-w-none md:whitespace-nowrap"
+			/>
 		</div>
 	</div>
 

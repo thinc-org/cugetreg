@@ -19,7 +19,7 @@
 			},
 			reviews: {
 				control: false
-			},
+			}
 		}
 	});
 </script>
@@ -62,6 +62,6 @@
 				rating: 2.5,
 				term: 'ภาคปลาย 2566'
 			}
-		],
+		]
 	}}
 />

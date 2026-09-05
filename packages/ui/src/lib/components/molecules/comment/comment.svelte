@@ -12,7 +12,7 @@
 
 	interface CommentProps {
 		course?: string;
-		redirectTo: string;
+		redirectTo?: string;
 		genEdType?: GenEdType;
 		content: string;
 		semester: string;

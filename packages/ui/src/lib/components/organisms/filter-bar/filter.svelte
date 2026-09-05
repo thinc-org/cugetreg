@@ -171,7 +171,7 @@
 					</Select.Trigger>
 				</div>
 				<Select.Content
-					class="border-surface-container bg-surface max-h-[200px] rounded-lg border shadow-[0_4px_15px_rgba(0,0,0,0.1)]"
+					class="border-surface-container bg-surface z-[110] max-h-[200px] rounded-lg border shadow-[0_4px_15px_rgba(0,0,0,0.1)]"
 					role="listbox"
 				>
 					<Select.Group>
@@ -227,7 +227,7 @@
 					</Select.Trigger>
 				</div>
 				<Select.Content
-					class="border-surface-container bg-surface max-h-[200px] rounded-lg border shadow-[0_4px_15px_rgba(0,0,0,0.1)]"
+					class="border-surface-container bg-surface z-[110] max-h-[200px] rounded-lg border shadow-[0_4px_15px_rgba(0,0,0,0.1)]"
 					role="listbox"
 				>
 					<Select.Group>
@@ -284,7 +284,7 @@
 					</Select.Trigger>
 				</div>
 				<Select.Content
-					class="border-surface-container bg-surface max-h-[200px] rounded-lg border shadow-[0_4px_15px_rgba(0,0,0,0.1)]"
+					class="border-surface-container bg-surface z-[110] max-h-[200px] rounded-lg border shadow-[0_4px_15px_rgba(0,0,0,0.1)]"
 					role="listbox"
 				>
 					<Select.Group>

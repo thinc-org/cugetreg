@@ -68,7 +68,7 @@
 
   let items = $state<ScheduleItem[]>([]);
   let reviews = $state<Review[]>([]);
-  let ratingStats = $state< number[] | undefined>(undefined);
+  let ratingStats = $state<number[] | undefined>(undefined);
 
   let editInfoPopupVisible = $state(false);
   let itemToDelete = $state<ScheduleItem | null>(null);
@@ -106,7 +106,6 @@
   }
 
   async function fetchScheduleItems() {
-
     const [res, error] = await tryCatch(api.get('/carts'));
 
     if (error || res.status !== 200) {
@@ -117,7 +116,6 @@
     const { data } = ListCartsResponseSchema.parse(res.data);
     const fetchedItems = convertSchedulesInfo(data);
     items = fetchedItems;
-
   }
 
   async function changeVisibility(item: ScheduleItem, newChecked: boolean) {
@@ -136,10 +134,10 @@
 
   async function fetchReviews() {
     const queryParams = new URLSearchParams({
-      page: "1",
-      limit: "3",
+      page: '1',
+      limit: '3',
+      includeRatings: 'true',
     });
-    queryParams.set('includeRatings', "true");
     const [res, error] = await tryCatch(
       api.get(`/user/reviews?${queryParams.toString()}`),
     );
@@ -149,17 +147,14 @@
       return;
     }
 
-    const { ratingHistories: ratings, reviews: data } = UserReviewResponseSchema.parse(
-      res.data,
-    );
+    const { ratingHistories: ratings, reviews: data } =
+      UserReviewResponseSchema.parse(res.data);
     const newReviews = convertReviewInfos(data);
-    console.log(ratings)
+    console.log(ratings);
     ratingStats = ratings;
 
     reviews.push(...newReviews);
-
   }
-
 
   const onClickItem = async (item: ScheduleItem) => {
     try {
@@ -210,7 +205,6 @@
   onMount(() => {
     fetchReviews();
   });
-
 </script>
 
 <div class="relative flex min-h-screen flex-col bg-white">
@@ -221,10 +215,7 @@
       class="flex w-full flex-col items-center gap-10 py-8 md:max-w-2xl lg:w-3/4 lg:max-w-lg lg:items-start lg:px-6"
     >
       <PersonalInfo onEdit={toggleEditInfo} {...parsedPersonalInfo} />
-      <RatingHistory
-        {reviews}
-        histogram={ratingStats}
-      />
+      <RatingHistory {reviews} histogram={ratingStats} />
     </div>
     <ScheduleList
       heading="ตารางเรียน"

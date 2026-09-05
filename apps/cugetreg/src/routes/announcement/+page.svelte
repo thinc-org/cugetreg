@@ -6,8 +6,8 @@
 
   import { Loader2 } from 'lucide-svelte';
 
-  import { Footer } from '@cugetreg/ui/organisms/footer';
   import { ReportProblem } from '@cugetreg/ui/molecules/report-problem';
+  import { Footer } from '@cugetreg/ui/organisms/footer';
 
   interface Announcement {
     id: string;

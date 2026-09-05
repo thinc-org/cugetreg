@@ -1,4 +1,5 @@
 import type { Prisma } from "@/generated/prisma/client.ts";
+
 import {
   FACULTIES,
   type FacultyId,

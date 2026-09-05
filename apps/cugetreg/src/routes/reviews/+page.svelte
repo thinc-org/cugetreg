@@ -16,7 +16,6 @@
   import toast from 'svelte-french-toast';
 
   import { Button } from '@cugetreg/ui/atoms/button';
-  import { GenedChip } from '@cugetreg/ui/atoms/gened-chip';
   import { Modal } from '@cugetreg/ui/atoms/modal';
   import { Comment } from '@cugetreg/ui/molecules/comment';
   import { ConfirmDeleteReview } from '@cugetreg/ui/molecules/confirm-delete-review';
@@ -53,8 +52,8 @@
   let reviewSortOrder = $state<SortOrder>('desc');
 
   const reviewSortByLabel = $derived(
-    reviewSortOptions.find((option) => option.field === reviewSortBy)
-      ?.label ?? '',
+    reviewSortOptions.find((option) => option.field === reviewSortBy)?.label ??
+      '',
   );
 
   const totalReviewPages = $derived(
@@ -225,9 +224,7 @@
       </h1>
 
       <div class="flex shrink-0 items-center gap-4 text-gray-400">
-        <h2 class="font-semibold text-sm whitespace-nowrap">
-          จัดลำดับตาม
-        </h2>
+        <h2 class="text-sm font-semibold whitespace-nowrap">จัดลำดับตาม</h2>
         <Select.Root
           type="single"
           value={reviewSortBy}
@@ -272,8 +269,7 @@
               stroke="currentColor"
               stroke-width="2.5"
               stroke-linecap="round"
-              stroke-linejoin="round"
-              ><path d="M12 5v14M19 12l-7 7-7-7" /></svg
+              stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7" /></svg
             >
           </div>
         </button>
@@ -312,17 +308,17 @@
           คุณยังไม่มีรีวิว
         </div>
         <p class="text-on-surface/70 max-w-lg text-sm">
-          เริ่มเขียนรีวิวแรกของคุณเพื่อแบ่งปันประสบการณ์ที่น่าสนใจกับวิชานั้น
-          ๆ ให้กับเพื่อน ๆ
+          เริ่มเขียนรีวิวแรกของคุณเพื่อแบ่งปันประสบการณ์ที่น่าสนใจกับวิชานั้น ๆ
+          ให้กับเพื่อน ๆ
         </p>
       </div>
     {:else}
       <div class="mt-6 flex flex-col gap-6">
         {#each reviews as review (review.id)}
           {@const courseSearchParams = new URLSearchParams({
-            "studyProgram" : review.studyProgram as string,
-            "academicYear" : review.academicYear.toString(),
-            "semester" : review.semester as string,
+            studyProgram: review.studyProgram as string,
+            academicYear: review.academicYear.toString(),
+            semester: review.semester as string,
           })}
           <div class="flex flex-col gap-3">
             <Comment
@@ -348,10 +344,7 @@
         {/each}
       </div>
 
-      <div
-        class="mt-6 flex justify-end"
-        class:hidden={totalReviewPages <= 1}
-      >
+      <div class="mt-6 flex justify-end" class:hidden={totalReviewPages <= 1}>
         <nav class="flex items-center gap-2" aria-label="Pagination">
           <button
             class="border-surface-container-high bg-surface text-on-surface flex h-9 w-9 items-center justify-center rounded-lg border disabled:cursor-not-allowed disabled:opacity-50"

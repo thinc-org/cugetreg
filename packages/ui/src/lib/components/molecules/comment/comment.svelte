@@ -4,8 +4,9 @@
 	import { Pencil, ThumbsDown, ThumbsUp, Trash2 } from '@lucide/svelte';
 	import DOMPurify from 'isomorphic-dompurify';
 	import { marked } from 'marked';
+
+	import { GenedChip } from '@cugetreg/ui/atoms/gened-chip';
 	import type { GenEdType } from '@cugetreg/utils/types';
-  	import { GenedChip } from '@cugetreg/ui/atoms/gened-chip';
 
 	import { RatingStar } from '../../atoms/rating-star';
 
@@ -101,18 +102,18 @@
 	class:h-auto={isExpanded}
 >
 	{#if course}
-	    {@const showGenedChip = ['SC', 'SO', 'HU', 'IN', 'GENED'].includes(genEdType ?? "NO")}
+		{@const showGenedChip = ['SC', 'SO', 'HU', 'IN', 'GENED'].includes(genEdType ?? 'NO')}
 		<div class="flex flex-row items-center justify-between">
 			<div class="flex flex-wrap items-center justify-start gap-4">
-			<a href={course ? redirectTo : undefined } class="text-primary text-lg font-bold sm:text-h3 flex flex-row justify-center hover:underline">
-				{course}
-            </a>
-            {#if showGenedChip}
-				<GenedChip
-					type={genEdType}
-					class="px-3 py-1 text-xs"
-				/>
-            {/if}
+				<a
+					href={course ? redirectTo : undefined}
+					class="text-primary sm:text-h3 flex flex-row justify-center text-lg font-bold hover:underline"
+				>
+					{course}
+				</a>
+				{#if showGenedChip}
+					<GenedChip type={genEdType} class="px-3 py-1 text-xs" />
+				{/if}
 			</div>
 			<div class={status === 'APPROVED' ? 'hidden' : ''}>
 				<StatusChip variant={status} class="px-3 py-1 text-xs" />

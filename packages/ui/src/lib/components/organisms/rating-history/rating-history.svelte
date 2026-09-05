@@ -1,11 +1,12 @@
 <script lang="ts">
-	import { ChevronRight, Clock, LoaderCircle, NotebookPen, Star, StarHalf } from '@lucide/svelte';
-	import { onMount, tick } from 'svelte';
+	import { goto } from '$app/navigation';
+
+	import { ChevronRight, Clock, NotebookPen, Star, StarHalf } from '@lucide/svelte';
+	import { onMount } from 'svelte';
 
 	import type { ReviewStatus } from '@cugetreg/zod-schemas/constants';
 
 	import { RatingStar } from '../../atoms/rating-star';
-	import { goto } from '$app/navigation';
 
 	interface ReviewItem {
 		code: string;
@@ -27,12 +28,10 @@
 		overviewTitle = 'ภาพรวมรีวิว',
 		latestTitle = 'รีวิวล่าสุด',
 		histogram = undefined,
-		reviews = [],
+		reviews = []
 	}: Props = $props();
 
 	let isMobile = $state(false);
-
-
 
 	onMount(() => {
 		const isMobileQuery = window.matchMedia('(max-width: 768px)');
@@ -130,11 +129,7 @@
 					onclick={() => goto('/reviews')}
 					aria-label="Toggle all reviews"
 				>
-					<ChevronRight
-						size="18"
-						strokeWidth="2.5"
-						class="transition-transform"
-					/>
+					<ChevronRight size="18" strokeWidth="2.5" class="transition-transform" />
 				</button>
 			{/if}
 		</div>
@@ -154,9 +149,7 @@
 				</p>
 			</div>
 		{:else}
-			<div
-				class="mt-4 flex flex-col gap-4 "
-			>
+			<div class="mt-4 flex flex-col gap-4">
 				{#each visibleReviews as review, i (i)}
 					<div class="flex flex-col gap-2">
 						<div class="flex items-center justify-between gap-3">

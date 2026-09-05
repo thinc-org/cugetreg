@@ -5,9 +5,9 @@
 	import DOMPurify from 'isomorphic-dompurify';
 	import { marked } from 'marked';
 
-	import { GenedChip } from '@cugetreg/ui/atoms/gened-chip';
 	import type { GenEdType } from '@cugetreg/utils/types';
 
+	import { GenedChip } from '../../atoms/gened-chip';
 	import { RatingStar } from '../../atoms/rating-star';
 
 	interface CommentProps {

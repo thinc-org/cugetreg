@@ -15,6 +15,7 @@
   import { slide } from 'svelte/transition';
 
   import { Button } from '@cugetreg/ui/atoms/button';
+  import { EditSchedule } from '@cugetreg/ui/molecules/edit-schedule';
   import { SelectTimetable } from '@cugetreg/ui/molecules/select-timetable';
   import * as Sidebar from '@cugetreg/ui/organisms/sidebar';
   import {
@@ -40,6 +41,7 @@
   let activePanel = $state<string | null>('sidebar');
   let isCreditOpen = $state(true);
   let isFavoriteOpen = $state(true);
+  let currentStudyPlanId = $state('study-plan-1');
   const mobileMedia = new MediaQuery('max-width: 767px', false);
   const isMobile = $derived(mobileMedia.current);
 
@@ -71,6 +73,13 @@
     isFavoriteOpen = true;
     activePanel = 'favorite_only';
   }
+
+  const mockStudyPlans = [
+    {
+      id: 'study-plan-1',
+      name: 'แผนการเรียน 1',
+    },
+  ];
 
   const mockTerms = [
     {
@@ -249,26 +258,36 @@
       {/snippet}
 
       <div class="flex min-h-full flex-col gap-8 bg-white px-6 py-8 md:px-12">
-        <div class="flex flex-row justify-between gap-6">
-          <div class="flex flex-col gap-4">
-            <h1 class="text-3xl font-bold text-black">จัดตารางเรียน</h1>
-            <div class="flex flex-row gap-6 text-[16px] text-black">
-              <p>คณะ{faculty.th}</p>
-              <p>สาขา{data.user.department || '-'}</p>
+        <div class="flex flex-col gap-4">
+          <div class="flex flex-row justify-between gap-6">
+            <h1 class="text-3xl font-bold text-black">จัดแผนการเรียน</h1>
+
+            <div class="flex flex-wrap gap-3">
+              <Button
+                variant="outlined"
+                color="neutral"
+                class="text-[#4A70C6] ring-[#4A70C6] hover:bg-[#4A70C6] hover:text-white"
+              >
+                คืนค่าเดิม
+              </Button>
+              <Button class="bg-[#4A70C6] text-white hover:ring-[#4A70C6]">
+                คำนวนเกรด
+              </Button>
             </div>
           </div>
 
-          <div class="flex flex-wrap gap-3">
-            <Button
-              variant="outlined"
-              color="neutral"
-              class="text-[#4A70C6] ring-[#4A70C6] hover:bg-[#4A70C6] hover:text-white"
-            >
-              คืนค่าเดิม
-            </Button>
-            <Button class="bg-[#4A70C6] text-white hover:ring-[#4A70C6]">
-              คำนวนเกรด
-            </Button>
+          <div class="flex w-full flex-row items-center justify-between gap-6">
+            <div class="flex flex-row items-center gap-6 text-[16px] text-black">
+              <p>คณะ{faculty.th}</p>
+              <p>สาขา{data.user.department || '-'}</p>
+            </div>
+            <div class="flex shrink-0 items-center">
+              <EditSchedule
+                class="gap-2 lg:gap-0"
+                bind:currentScheduleId={currentStudyPlanId}
+                schedules={mockStudyPlans}
+              />
+            </div>
           </div>
         </div>
 

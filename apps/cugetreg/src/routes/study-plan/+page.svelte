@@ -8,9 +8,11 @@
     getUserCartStore,
   } from '$lib/stores/user-cart';
 
-  import { Loader2, Menu } from '@lucide/svelte';
+  import { BookMarked, Calculator, ChevronDown, Loader2, Menu } from '@lucide/svelte';
+  import { cubicOut } from 'svelte/easing';
   import { getContext } from 'svelte';
   import { MediaQuery } from 'svelte/reactivity';
+  import { slide } from 'svelte/transition';
 
   import { Button } from '@cugetreg/ui/atoms/button';
   import { SelectTimetable } from '@cugetreg/ui/molecules/select-timetable';
@@ -36,12 +38,38 @@
   let sidebarExpanded = $state(true);
   let openPanel = $state<string | null>(null);
   let activePanel = $state<string | null>('sidebar');
+  let isCreditOpen = $state(true);
+  let isFavoriteOpen = $state(true);
   const mobileMedia = new MediaQuery('max-width: 767px', false);
   const isMobile = $derived(mobileMedia.current);
 
   function toggleSidebar() {
     sidebarExpanded = !sidebarExpanded;
     if (sidebarExpanded) openPanel = null;
+  }
+
+  function focusCredit() {
+    if (sidebarExpanded && isCreditOpen && !isFavoriteOpen) {
+      isCreditOpen = false;
+      activePanel = null;
+      return;
+    }
+    sidebarExpanded = true;
+    isCreditOpen = true;
+    isFavoriteOpen = false;
+    activePanel = 'credit_only';
+  }
+
+  function focusFavorite() {
+    if (sidebarExpanded && isFavoriteOpen && !isCreditOpen) {
+      isFavoriteOpen = false;
+      activePanel = null;
+      return;
+    }
+    sidebarExpanded = true;
+    isCreditOpen = false;
+    isFavoriteOpen = true;
+    activePanel = 'favorite_only';
   }
 
   const mockTerms = [
@@ -152,6 +180,32 @@
             </Sidebar.MenuButton>
           </div>
         </Sidebar.MenuItem>
+        <Sidebar.MenuItem>
+          <div class="mt-[18px]">
+            <Sidebar.MenuButton
+              onclick={focusCredit}
+              isActive={activePanel === 'credit_only'}
+              size="lg"
+              tooltipContent="หน่วยกิต"
+              class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-5!"
+            >
+              <Calculator size="20" strokeWidth={2.5} />
+            </Sidebar.MenuButton>
+          </div>
+        </Sidebar.MenuItem>
+        <Sidebar.MenuItem>
+          <div class="mt-[-10px]">
+            <Sidebar.MenuButton
+              onclick={focusFavorite}
+              isActive={activePanel === 'favorite_only'}
+              size="lg"
+              tooltipContent="วิชาที่ถูกใจ"
+              class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-5!"
+            >
+              <BookMarked size="20" strokeWidth={2.5} />
+            </Sidebar.MenuButton>
+          </div>
+        </Sidebar.MenuItem>
       {/snippet}
 
       {#snippet panelContent({ expanded })}
@@ -187,6 +241,10 @@
               </div>
             {/await}
           </div>
+          <hr class="mb-6 border-t border-neutral-100" />
+
+          {@render CreditContent()}
+          {@render FavoriteContent()}
         {/if}
       {/snippet}
 
@@ -232,3 +290,59 @@
     </AppSidebar>
   </div>
 </div>
+
+{#snippet CreditContent(collapsible = true)}
+  <div>
+    {#if collapsible}
+      <button
+        onclick={() => (isCreditOpen = !isCreditOpen)}
+        aria-expanded={isCreditOpen}
+        class="mb-4 flex w-full items-center justify-between"
+      >
+        <h2 class="text-on-surface text-lg/[20px] font-medium">หน่วยกิต</h2>
+        <ChevronDown
+          size={20}
+          class="text-gray-400 transition-transform duration-200 {isCreditOpen
+            ? 'rotate-180'
+            : ''}"
+        />
+      </button>
+    {:else}
+      <div class="mb-4 flex w-full items-center justify-between">
+        <h2 class="text-on-surface text-lg/[20px] font-medium">หน่วยกิต</h2>
+      </div>
+    {/if}
+    {#if !collapsible || isCreditOpen}
+      <div transition:slide={{ duration: 250, easing: cubicOut }}></div>
+    {/if}
+    <hr class="mb-6 border-t border-neutral-100" />
+  </div>
+{/snippet}
+
+{#snippet FavoriteContent(collapsible = true)}
+  <div>
+    {#if collapsible}
+      <button
+        onclick={() => (isFavoriteOpen = !isFavoriteOpen)}
+        aria-expanded={isFavoriteOpen}
+        class="mb-4 flex w-full items-center justify-between"
+      >
+        <h2 class="text-on-surface text-lg/[20px] font-medium">วิชาที่ถูกใจ</h2>
+        <ChevronDown
+          size={20}
+          class="text-gray-400 transition-transform duration-200 {isFavoriteOpen
+            ? 'rotate-180'
+            : ''}"
+        />
+      </button>
+    {:else}
+      <div class="mb-4 flex w-full items-center justify-between">
+        <h2 class="text-on-surface text-lg/[20px] font-medium">วิชาที่ถูกใจ</h2>
+      </div>
+    {/if}
+    {#if !collapsible || isFavoriteOpen}
+      <div transition:slide={{ duration: 250, easing: cubicOut }}></div>
+    {/if}
+    <hr class="mb-6 border-t border-neutral-100" />
+  </div>
+{/snippet}

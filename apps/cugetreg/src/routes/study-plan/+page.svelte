@@ -1,5 +1,6 @@
 <script lang="ts">
   import AppSidebar from '$lib/components/app-sidebar.svelte';
+  import StudyPlanFavoriteCourseList from '$lib/components/study-plan/study-plan-favorite-course-list.svelte';
   import StudyPlanTerm from '$lib/components/study-plan/study-plan-term.svelte';
   import { getCartSelectionController } from '$lib/stores/cart-selection.svelte';
   import {
@@ -80,6 +81,32 @@
       name: 'แผนการเรียน 1',
     },
   ];
+
+  const mockFavoriteCourses = [
+    {
+      id: 'favorite-1',
+      courseCode: '0000000',
+      courseName: 'PARAGRAP WRITING',
+      genEdType: 'HU',
+    },
+    {
+      id: 'favorite-2',
+      courseCode: '0000000',
+      courseName: 'A VERY LONG SUB...',
+    },
+    {
+      id: 'favorite-3',
+      courseCode: '0000000',
+      courseName: 'ART SCI FIND HAP',
+      genEdType: 'SC',
+    },
+    {
+      id: 'favorite-4',
+      courseCode: '0000000',
+      courseName: 'ART HAP FIND SCI',
+      genEdType: 'SO',
+    },
+  ] as const;
 
   const mockTerms = [
     {
@@ -360,7 +387,9 @@
       </div>
     {/if}
     {#if !collapsible || isFavoriteOpen}
-      <div transition:slide={{ duration: 250, easing: cubicOut }}></div>
+      <div transition:slide={{ duration: 250, easing: cubicOut }}>
+        <StudyPlanFavoriteCourseList courses={[...mockFavoriteCourses]} />
+      </div>
     {/if}
     <hr class="mb-6 border-t border-neutral-100" />
   </div>

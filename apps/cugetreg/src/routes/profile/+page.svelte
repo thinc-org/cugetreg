@@ -14,11 +14,11 @@
   import { convertSchedulesInfo } from '$lib/utils/scheduleInfo';
   import { convertUserInfo } from '$lib/utils/user';
 
-  import { TriangleAlert } from '@lucide/svelte';
   import { onMount, untrack } from 'svelte';
 
   import { Modal } from '@cugetreg/ui/atoms/modal';
   import { ConfirmDeleteSchedule } from '@cugetreg/ui/molecules/confirm-delete-schedule';
+  import { ReportProblem } from '@cugetreg/ui/molecules/report-problem';
   import {
     CreateTimetable,
     type TimetableMetaData,
@@ -68,20 +68,14 @@
 
   let items = $state<ScheduleItem[]>([]);
   let reviews = $state<Review[]>([]);
+  let ratingStats = $state<number[] | undefined>(undefined);
 
   let editInfoPopupVisible = $state(false);
   let itemToDelete = $state<ScheduleItem | null>(null);
   let deleteItemPopupVisible = $state(false);
   let newDepartment = $state(untrack(() => personalInfo.department));
-  let page = $state(1);
-  const limit = 10;
-  let hasMoreReviews = $state(true);
-  let loadingReviews = $state(false);
-  let loadingSchedules = $state(true);
 
   let showCreateScheduleModal = $state(false);
-
-  let isMobile = $state(false);
 
   const faculty = $derived(
     FACULTIES[personalInfo.faculty as FacultyId] ?? UNKNOWN_FACULTY,
@@ -112,21 +106,16 @@
   }
 
   async function fetchScheduleItems() {
-    loadingSchedules = true;
-
     const [res, error] = await tryCatch(api.get('/carts'));
 
     if (error || res.status !== 200) {
       console.error(error?.message);
-      loadingSchedules = false;
       return;
     }
 
     const { data } = ListCartsResponseSchema.parse(res.data);
     const fetchedItems = convertSchedulesInfo(data);
     items = fetchedItems;
-
-    loadingSchedules = false;
   }
 
   async function changeVisibility(item: ScheduleItem, newChecked: boolean) {
@@ -143,15 +132,11 @@
     itemToDelete = null;
   }
 
-  async function fetchReviews(pageToFetch: number, replace = false) {
-    if (loadingReviews) return;
-    if (!replace && !hasMoreReviews) return;
-
-    loadingReviews = true;
-
+  async function fetchReviews() {
     const queryParams = new URLSearchParams({
-      page: pageToFetch.toString(),
-      limit: limit.toString(),
+      page: '1',
+      limit: '3',
+      includeRatings: 'true',
     });
     const [res, error] = await tryCatch(
       api.get(`/user/reviews?${queryParams.toString()}`),
@@ -159,27 +144,16 @@
 
     if (error || !res) {
       console.error(error?.message);
-      loadingReviews = false;
       return;
     }
 
-    const { totalReviews, reviews: data } = UserReviewResponseSchema.parse(
-      res.data,
-    );
+    const { ratingHistories: ratings, reviews: data } =
+      UserReviewResponseSchema.parse(res.data);
     const newReviews = convertReviewInfos(data);
+    console.log(ratings);
+    ratingStats = ratings;
 
-    if (replace) reviews = newReviews;
-    else reviews.push(...newReviews);
-
-    hasMoreReviews = totalReviews === limit;
-    page = pageToFetch;
-
-    loadingReviews = false;
-  }
-
-  function loadMoreReviews() {
-    if (loadingReviews || !hasMoreReviews) return;
-    fetchReviews(page + 1);
+    reviews.push(...newReviews);
   }
 
   const onClickItem = async (item: ScheduleItem) => {
@@ -229,22 +203,7 @@
   });
 
   onMount(() => {
-    const isMobileQuery = window.matchMedia('(max-width: 768px)');
-    isMobile = isMobileQuery.matches;
-
-    const handleMediaQueryChange = (event: MediaQueryListEvent) => {
-      isMobile = event.matches;
-    };
-
-    isMobileQuery.addEventListener('change', handleMediaQueryChange);
-
-    return () => {
-      isMobileQuery.removeEventListener('change', handleMediaQueryChange);
-    };
-  });
-
-  onMount(() => {
-    fetchReviews(1, true);
+    fetchReviews();
   });
 </script>
 
@@ -256,17 +215,11 @@
       class="flex w-full flex-col items-center gap-10 py-8 md:max-w-2xl lg:w-3/4 lg:max-w-lg lg:items-start lg:px-6"
     >
       <PersonalInfo onEdit={toggleEditInfo} {...parsedPersonalInfo} />
-      <RatingHistory
-        {reviews}
-        hasMore={hasMoreReviews}
-        loading={loadingReviews}
-        onLoadMore={loadMoreReviews}
-      />
+      <RatingHistory {reviews} histogram={ratingStats} />
     </div>
     <ScheduleList
       heading="ตารางเรียน"
       {items}
-      loading={loadingSchedules}
       {onClickItem}
       onClickButton={onClickAddSchedule}
       onDelete={onDeleteItem}
@@ -319,13 +272,5 @@
       onCancel={() => (showCreateScheduleModal = false)}
     />
   </Modal>
-  <a
-    class="fixed right-6 bottom-6 z-50 inline-flex cursor-pointer items-center gap-1 rounded-full border-2 border-black px-2 py-1 md:gap-2 md:px-4"
-    href={GOOGLE_FORM_URL}
-    target="_blank"
-    rel="external noopener noreferrer"
-  >
-    <TriangleAlert size={isMobile ? 16 : 20} strokeWidth={1.5} color="black" />
-    <span class="text-[10px] text-black md:text-xs">แจ้งปัญหาการใช้งาน</span>
-  </a>
+  <ReportProblem href={GOOGLE_FORM_URL} />
 </div>

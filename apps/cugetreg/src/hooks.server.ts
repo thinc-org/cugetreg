@@ -21,7 +21,7 @@ export const handle: Handle = async ({ event, resolve }) => {
     event.locals.session = null;
   }
 
-  const protectedRoutes = ['/schedule', '/profile'];
+  const protectedRoutes = ['/schedule', '/profile', '/reviews'];
 
   // Allow unauthenticated access to public schedule views (schedule/[slug])
   const isPublicScheduleView = /^\/schedule\/[^/]+$/.test(event.url.pathname);

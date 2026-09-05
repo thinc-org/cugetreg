@@ -148,10 +148,19 @@
       }
     } catch (error) {
       if (isAxiosError(error)) {
-        if (error.status === 401)
+        if (error.status === 401) {
           toast.error('Please login before doing this action', {
             position: 'bottom-right',
           });
+        } else if (error.status === 409) {
+          toast.error('ไม่สามารถ Like/Dislike รีวิวที่ยังไม่ถูกอนุมัติ', {
+            position: 'bottom-right',
+          });
+        } else {
+          toast.error('Something went wrong', {
+            position: 'bottom-right',
+          });
+        }
         return;
       }
       console.error(error);

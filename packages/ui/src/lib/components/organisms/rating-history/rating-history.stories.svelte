@@ -20,15 +20,6 @@
 			reviews: {
 				control: false
 			},
-			hasMore: {
-				control: 'boolean'
-			},
-			loading: {
-				control: 'boolean'
-			},
-			onLoadMore: {
-				action: 'onLoadMore'
-			}
 		}
 	});
 </script>
@@ -72,7 +63,5 @@
 				term: 'ภาคปลาย 2566'
 			}
 		],
-		hasMore: false,
-		loading: false
 	}}
 />

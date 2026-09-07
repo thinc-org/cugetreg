@@ -393,19 +393,20 @@
 		<div class="mb-4">
 			<label class="mb-2 block text-xs text-neutral-400">Fit my schedule</label>
 			<div class="flex items-center gap-2.5">
-				<label class="relative inline-block h-6 w-11">
+				<label
+					class="flex cursor-pointer items-center text-base font-normal text-neutral-700 select-none"
+				>
 					<input
 						type="checkbox"
 						bind:checked={fitSchedule}
-						onchange={onFitScheduleChange}
-						class="peer size-0 opacity-0"
+						class="peer absolute size-0 cursor-pointer opacity-0"
 					/>
 					<span
-						class="absolute inset-0 cursor-pointer rounded-[34px] bg-neutral-300 transition-colors duration-[0.4s] peer-checked:bg-neutral-400 before:absolute before:bottom-[3px] before:left-[3px] before:h-[18px] before:w-[18px] before:rounded-[50%] before:bg-white before:transition-transform before:duration-[0.4s] before:content-[''] peer-checked:before:translate-x-5"
+						class="relative mr-2.5 h-[18px] w-[18px] rounded bg-neutral-200 transition-colors duration-200 peer-checked:bg-[#4f46e5] peer-hover:bg-neutral-300 after:absolute after:top-[2px] after:left-[6px] after:hidden after:h-[9px] after:w-[4px] after:rotate-45 after:border-r-2 after:border-b-2 after:border-solid after:border-white after:content-[''] peer-checked:after:block"
 					></span>
+					<span>วิชาที่ไม่ชนตาราง</span>
 				</label>
 				<span class="flex items-center gap-1.5 text-base font-normal text-neutral-700">
-					Fit my schedule
 					<span class="inline-flex items-center">
 						<InfoCircle tooltipText="แสดงเฉพาะรายวิชาที่ไม่ชนกับตารางเรียนของคุณ" />
 					</span>

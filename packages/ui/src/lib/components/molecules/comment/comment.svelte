@@ -104,7 +104,7 @@
 
 			<RatingStar {rating} class="shrink-0" />
 
-			<div class="font-sans text-xs font-medium md:text-subtitle">
+			<div class="md:text-subtitle font-sans text-xs font-medium">
 				{semester}
 				{year}
 				{#if section}
@@ -121,9 +121,7 @@
 		</div>
 	</div>
 
-	<div
-		class="flex flex-col gap-2 lg:flex-none lg:overflow-visible"
-	>
+	<div class="flex flex-col gap-2 lg:flex-none lg:overflow-visible">
 		{#if facultyMajor}
 			<div class="text-on-surface/60 text-body2 font-sans">
 				{facultyMajor}
@@ -145,7 +143,7 @@
 
 		{#if hasOverflow}
 			<div class="mt-auto flex flex-col gap-4">
-			<!-- Button to toggle view -->
+				<!-- Button to toggle view -->
 				<button
 					class="text-button1 text-primary self-start underline lg:hidden"
 					onclick={() => (isExpanded = !isExpanded)}

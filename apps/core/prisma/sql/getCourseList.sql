@@ -120,7 +120,7 @@ matching_sections AS (
         -- (professor search is per-class; sections without classes won't match via this path)
         AND (
             $8::text IS NULL
-            OR c.course_no ILIKE $20
+            OR c.course_no ILIKE $20 || '%'
             OR ci.abbr_name ILIKE $8
             OR ci.course_name_en ILIKE $8
             OR ci.course_name_th ILIKE $8

@@ -5,9 +5,15 @@
 	import DOMPurify from 'isomorphic-dompurify';
 	import { marked } from 'marked';
 
+	import type { GenEdType } from '@cugetreg/utils/types';
+
+	import { GenedChip } from '../../atoms/gened-chip';
 	import { RatingStar } from '../../atoms/rating-star';
 
 	interface CommentProps {
+		course?: string;
+		redirectTo?: string;
+		genEdType?: GenEdType;
 		content: string;
 		semester: string;
 		year: number;
@@ -28,6 +34,9 @@
 	}
 
 	let {
+		course,
+		redirectTo,
+		genEdType,
 		content,
 		semester,
 		year,
@@ -92,6 +101,25 @@
   lg:px-12 lg:py-10"
 	class:h-auto={isExpanded}
 >
+	{#if course}
+		{@const showGenedChip = ['SC', 'SO', 'HU', 'IN', 'GENED'].includes(genEdType ?? 'NO')}
+		<div class="flex flex-row items-center justify-between">
+			<div class="flex flex-wrap items-center justify-start gap-4">
+				<a
+					href={course ? redirectTo : undefined}
+					class="text-primary sm:text-h3 flex flex-row justify-center text-lg font-bold hover:underline"
+				>
+					{course}
+				</a>
+				{#if showGenedChip}
+					<GenedChip type={genEdType} class="px-3 py-1 text-xs" />
+				{/if}
+			</div>
+			<div class={status === 'APPROVED' ? 'hidden' : ''}>
+				<StatusChip variant={status} class="px-3 py-1 text-xs" />
+			</div>
+		</div>
+	{/if}
 	<div class="flex flex-row items-center justify-between">
 		<div class="flex flex-row items-center gap-x-6">
 			<div class="text-h3 text-primary font-bold">
@@ -113,9 +141,11 @@
 			</div>
 		</div>
 
-		<div class={status === 'APPROVED' ? 'hidden' : ''}>
-			<StatusChip variant={status} />
-		</div>
+		{#if !course}
+			<div class={status === 'APPROVED' ? 'hidden' : ''}>
+				<StatusChip variant={status} />
+			</div>
+		{/if}
 	</div>
 
 	<div

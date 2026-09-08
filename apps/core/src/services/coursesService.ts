@@ -107,6 +107,7 @@ async function queryCourse(
       credit ?? null,
       favorite ?? null,
       userId ?? null,
+      q ?? null,
     ),
   );
 

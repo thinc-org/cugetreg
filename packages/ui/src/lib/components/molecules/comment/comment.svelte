@@ -5,9 +5,15 @@
 	import DOMPurify from 'isomorphic-dompurify';
 	import { marked } from 'marked';
 
+	import type { GenEdType } from '@cugetreg/utils/types';
+
+	import { GenedChip } from '../../atoms/gened-chip';
 	import { RatingStar } from '../../atoms/rating-star';
 
 	interface CommentProps {
+		course?: string;
+		redirectTo?: string;
+		genEdType?: GenEdType;
 		content: string;
 		semester: string;
 		year: number;
@@ -28,6 +34,9 @@
 	}
 
 	let {
+		course,
+		redirectTo,
+		genEdType,
 		content,
 		semester,
 		year,
@@ -92,7 +101,26 @@
 	class="border-surface-container box-border flex w-full flex-col gap-y-2 rounded-xl border px-6 py-5 lg:gap-y-4
   lg:px-12 lg:py-10"
 >
-	<div class="flex flex-row items-center justify-between gap-2">
+	{#if course}
+		{@const showGenedChip = ['SC', 'SO', 'HU', 'IN', 'GENED'].includes(genEdType ?? 'NO')}
+		<div class="flex flex-row items-center justify-between">
+			<div class="flex flex-wrap items-center justify-start gap-4">
+				<a
+					href={course ? redirectTo : undefined}
+					class="text-primary sm:text-h3 flex flex-row justify-center text-lg font-bold hover:underline"
+				>
+					{course}
+				</a>
+				{#if showGenedChip}
+					<GenedChip type={genEdType} class="px-3 py-1 text-xs" />
+				{/if}
+			</div>
+			<div class={status === 'APPROVED' ? 'hidden' : ''}>
+				<StatusChip variant={status} class="px-3 py-1 text-xs" />
+			</div>
+		</div>
+	{/if}
+  <div class="flex flex-row items-center justify-between gap-2">
 		<div class="flex min-w-0 flex-1 flex-row items-center gap-x-3 md:gap-x-6">
 			<div class="text-h3 text-primary font-bold">
 				{#if !hasHalfStar}
@@ -113,12 +141,14 @@
 			</div>
 		</div>
 
-		<div class={status === 'APPROVED' ? 'hidden' : ''}>
-			<StatusChip
-				variant={status}
-				class="max-w-14 justify-center px-2 py-1 text-center leading-4 whitespace-normal md:max-w-none md:whitespace-nowrap"
-			/>
-		</div>
+		{#if !course}
+			<div class={status === 'APPROVED' ? 'hidden' : ''}>
+        <StatusChip
+          variant={status}
+          class="max-w-14 justify-center px-2 py-1 text-center leading-4 whitespace-normal md:max-w-none md:whitespace-nowrap"
+        />
+			</div>
+		{/if}
 	</div>
 
 	<div class="flex flex-col gap-2 lg:flex-none lg:overflow-visible">

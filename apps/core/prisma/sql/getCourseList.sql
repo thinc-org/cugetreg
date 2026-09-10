@@ -20,6 +20,7 @@
 -- @param {Decimal} $17:credit? Optional exact credit
 -- @param {Boolean} $18:favorite? Optional when true, select user's favorite courses
 -- @param {String} $19:userId? Optional , required when get user's favorite courses
+-- @param {String} $20:qPrefix? Optional course_no prefix search (caller wraps with trailing %, e.g. 'query%')
 
 -- Perf note: LIMIT/OFFSET are applied in `ranked_courses` (Stage A, narrow),
 -- before the expensive per-class JSON aggregation in `section_json` (Stage B).
@@ -115,11 +116,11 @@ matching_sections AS (
              OR c.course_condition = ''
              OR c.course_condition = '-')
 
-        -- Text search: course_no, abbr_name, names, OR professor name
+        -- Text search: course_no (prefix match), abbr_name, names, OR professor name (substring match)
         -- (professor search is per-class; sections without classes won't match via this path)
         AND (
             $8::text IS NULL
-            OR c.course_no ILIKE $8
+            OR c.course_no ILIKE $20 || '%'
             OR ci.abbr_name ILIKE $8
             OR ci.course_name_en ILIKE $8
             OR ci.course_name_th ILIKE $8
@@ -307,6 +308,7 @@ section_json AS (
             json_agg(
                 json_build_object(
                     'id',          cl.id,
+                    'sectionId',   cl.section_id,
                     'type',        cl.type,
                     'dayOfWeek',   cl.day_of_week,
                     'professors',  cl.professors,
@@ -359,12 +361,11 @@ SELECT
         json_agg(
             json_build_object(
                 'id',         sj.section_id,
+                'courseId',   sj.course_id,
                 'sectionNo',  sj.section_no,
                 'closed',     sj.closed,
-                'capacity',   json_build_object(
-                    'current', sj.capacity_current,
-                    'max',     sj.capacity_max
-                ),
+                'regis',      sj.capacity_current,
+                'max',        sj.capacity_max,
                 'note',       sj.note,
                 'genEdType',  sj.gen_ed_type,
                 'classes',    sj.classes

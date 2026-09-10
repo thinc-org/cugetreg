@@ -120,7 +120,7 @@
 			</div>
 		</div>
 	{/if}
-  <div class="flex flex-row items-center justify-between gap-2">
+	<div class="flex flex-row items-center justify-between gap-2">
 		<div class="flex min-w-0 flex-1 flex-row items-center gap-x-3 md:gap-x-6">
 			<div class="text-h3 text-primary font-bold">
 				{#if !hasHalfStar}
@@ -143,10 +143,10 @@
 
 		{#if !course}
 			<div class={status === 'APPROVED' ? 'hidden' : ''}>
-        <StatusChip
-          variant={status}
-          class="max-w-14 justify-center px-2 py-1 text-center leading-4 whitespace-normal md:max-w-none md:whitespace-nowrap"
-        />
+				<StatusChip
+					variant={status}
+					class="max-w-14 justify-center px-2 py-1 text-center leading-4 whitespace-normal md:max-w-none md:whitespace-nowrap"
+				/>
 			</div>
 		{/if}
 	</div>

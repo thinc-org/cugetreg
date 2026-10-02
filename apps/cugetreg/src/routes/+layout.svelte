@@ -139,7 +139,10 @@
   bind:show={loginPopupState.show}
 >
   <LoginPopup
-    onCancel={() => (loginPopupState.show = false)}
+    onCancel={() => {
+      loginPopupState.show = false;
+      history.back();
+    }}
     onLogin={handleGoogleLogin}
   />
 </Modal>

@@ -10,9 +10,15 @@
     getUserCartStore,
   } from '$lib/stores/user-cart';
 
-  import { BookMarked, Calculator, ChevronDown, Loader2, Menu } from '@lucide/svelte';
-  import { cubicOut } from 'svelte/easing';
+  import {
+    BookMarked,
+    Calculator,
+    ChevronDown,
+    Loader2,
+    Menu,
+  } from '@lucide/svelte';
   import { getContext } from 'svelte';
+  import { cubicOut } from 'svelte/easing';
   import { MediaQuery } from 'svelte/reactivity';
   import { slide } from 'svelte/transition';
 
@@ -332,7 +338,9 @@
           </div>
 
           <div class="flex w-full flex-row items-center justify-between gap-6">
-            <div class="flex flex-row items-center gap-6 text-[16px] text-black">
+            <div
+              class="flex flex-row items-center gap-6 text-[16px] text-black"
+            >
               <p>คณะ{faculty.th}</p>
               <p>สาขา{data.user.department || '-'}</p>
             </div>
@@ -403,7 +411,9 @@
         </div>
 
         <div class="flex gap-7">
-          <Button class="h-12 flex-[2] bg-[#4A70C6] text-white hover:ring-[#4A70C6]">
+          <Button
+            class="h-12 flex-[2] bg-[#4A70C6] text-white hover:ring-[#4A70C6]"
+          >
             คำนวณเกรด
           </Button>
           <Button

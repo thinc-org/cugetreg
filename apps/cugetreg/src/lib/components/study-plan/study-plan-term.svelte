@@ -1,6 +1,8 @@
 <script lang="ts">
   import { ChevronUp, Plus } from '@lucide/svelte';
+
   import { cn } from '@cugetreg/utils';
+
   import StudyPlanCourseCard from './study-plan-course-card.svelte';
 
   type CardColor = 'pink' | 'purple' | 'mint' | 'yellow';
@@ -58,8 +60,12 @@
     onclick={() => (open = !open)}
   >
     <h2 class="text-[24px] font-bold text-[#4A70C6]">{TermName}</h2>
-    <div class="flex flex-1 items-center justify-end gap-14 text-[18px] font-medium text-[#253A70]">
-      <p>วิชาบังคับคณะ {RequiredFacultyCredits}/{RequiredFacultyCreditsTarget}</p>
+    <div
+      class="flex flex-1 items-center justify-end gap-14 text-[18px] font-medium text-[#253A70]"
+    >
+      <p>
+        วิชาบังคับคณะ {RequiredFacultyCredits}/{RequiredFacultyCreditsTarget}
+      </p>
       <p>Gen-Ed {getEdCredit}/{getEdCreditTarget}</p>
       <p class="rounded-full bg-white px-6 py-2">
         หน่วยกิตรวม {totalCredits}/{totalCreditsTarget}

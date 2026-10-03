@@ -1,5 +1,6 @@
 <script lang="ts">
   import { X } from '@lucide/svelte';
+
   import { cn } from '@cugetreg/utils';
   type CardColor = 'pink' | 'purple' | 'mint' | 'yellow';
 
@@ -51,9 +52,9 @@
     </button>
   {/if}
 
-  <p class="text-[16px] leading-6 font-regular">{CourseCode}</p>
-  <p class="text-[16px] leading-6 font-regular">{CourseName}</p>
-  <p class="mt-1 text-[16px] leading-6 font-regular">
+  <p class="font-regular text-[16px] leading-6">{CourseCode}</p>
+  <p class="font-regular text-[16px] leading-6">{CourseName}</p>
+  <p class="font-regular mt-1 text-[16px] leading-6">
     {CourseCredit} หน่วยกิต
   </p>
 </article>

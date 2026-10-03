@@ -1,7 +1,8 @@
 <script lang="ts">
   import { Plus, Trash2 } from '@lucide/svelte';
-  import { GenedChip } from '@cugetreg/ui/atoms/gened-chip';
+
   import type { Type as GenedType } from '@cugetreg/ui/atoms/gened-chip';
+  import { GenedChip } from '@cugetreg/ui/atoms/gened-chip';
   import { cn } from '@cugetreg/utils';
 
   interface FavoriteCourse {

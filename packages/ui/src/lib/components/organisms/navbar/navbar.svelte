@@ -68,6 +68,10 @@
 			route: '/schedule'
 		},
 		{
+			name: 'จัดการแผนการเรียน',
+			route: '/study-plan'
+		},
+		{
 			name: 'เกี่ยวกับเรา',
 			route: '/about-us'
 		}

@@ -534,6 +534,12 @@
     }
   }
 
+  function isCourseNotOpenError(error: unknown) {
+    return (
+      isAxiosError(error) && error.response?.data?.error === 'COURSE_NOT_FOUND'
+    );
+  }
+
   async function handleSubmitReview() {
     if (reviewSubmitting) return;
     reviewSubmitting = true;
@@ -556,6 +562,12 @@
         reviewContent = '';
         reviewRating = 1;
       } catch (error) {
+        if (isCourseNotOpenError(error)) {
+          toast.error('โปรดเลือกเทอมที่เปิดสอน', {
+            position: 'bottom-right',
+          });
+          return;
+        }
         console.error(error);
         toast.error('Something went wrong', {
           position: 'bottom-right',
@@ -583,6 +595,7 @@
       SubmitReviewResponseSchema.parse(response.data);
       await refreshReviews({ includeFacets: true, targetPage: 1 });
       reviewContent = '';
+      toast.success('ส่งรีวิวสำเร็จ', { position: 'bottom-right' });
     } catch (error) {
       if (isAxiosError(error)) {
         if (error.status === 401) {
@@ -591,6 +604,18 @@
           });
           return;
         }
+        if (error.status === 409) {
+          toast.error('คุณรีวิววิชานี้ไปแล้ว', {
+            position: 'bottom-right',
+          });
+          return;
+        }
+      }
+      if (isCourseNotOpenError(error)) {
+        toast.error('โปรดเลือกเทอมที่เปิดสอน', {
+          position: 'bottom-right',
+        });
+        return;
       }
 
       toast.error('Something went wrong', {

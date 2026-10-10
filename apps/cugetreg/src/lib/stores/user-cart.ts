@@ -6,10 +6,15 @@ import { get, type Writable } from 'svelte/store';
 import toast from 'svelte-french-toast';
 
 import { courseColorVariants } from '@cugetreg/utils/constants';
+import type { Day } from '@cugetreg/utils/types';
 import {
   ImportPublicCartResponseSchema,
   type PublicCartDetail,
 } from '@cugetreg/zod-schemas';
+import {
+  type ActivityItem,
+  SingleActivityResponseSchema,
+} from '@cugetreg/zod-schemas/activity-response';
 import type {
   CartData,
   CartSchema,
@@ -61,6 +66,21 @@ export interface UpdateCourseFields {
   hidden?: boolean;
   isGraded?: boolean;
   expectedGrade?: number;
+  prevId?: string;
+  nextId?: string;
+}
+
+export interface CreateActivityFields {
+  title: string;
+  description: string;
+  dayOfWeek: Day;
+  periodStart: string;
+  periodEnd: string;
+  color?: string;
+  hidden?: boolean;
+}
+
+export interface UpdateActivityFields extends Partial<CreateActivityFields> {
   prevId?: string;
   nextId?: string;
 }
@@ -798,6 +818,155 @@ export function useCartActions() {
     }
   };
 
+  /**
+   * Re-sync activityItems from the server after a failed optimistic update.
+   */
+  const reloadActivities = async (cartId: string) => {
+    try {
+      const detailRes = await api.get(`/carts/${cartId}`);
+      const detail = CartDetailResponseSchema.parse(detailRes.data).data;
+      userCart.update((state) =>
+        state.currentCartId === cartId
+          ? {
+              ...state,
+              currentCart: {
+                ...state.currentCart,
+                activityItems: detail.cart.activityItems,
+              },
+            }
+          : state,
+      );
+    } catch {
+      // Reload failed — the UI stays stale until the next refresh
+    }
+  };
+
+  /**
+   * Add a custom activity to the current timetable, once per selected day
+   * (the API stores a single day per activity).
+   *
+   * @returns true when every activity was created
+   */
+  const createActivity = async (
+    fields: Omit<CreateActivityFields, 'dayOfWeek'>,
+    daysOfWeek: Day[],
+  ): Promise<boolean> => {
+    await waitForCartSelection();
+    const { currentCartId } = get(userCart) ?? {};
+    if (!currentCartId) {
+      loginPopupState.show = true;
+      return false;
+    }
+
+    try {
+      // Sequential so the server assigns cartOrder in day order.
+      for (const dayOfWeek of daysOfWeek) {
+        const res = await api.post('/activity', {
+          cartId: currentCartId,
+          ...fields,
+          dayOfWeek,
+        });
+        const newActivity = SingleActivityResponseSchema.parse(res.data).data;
+
+        userCart.update((state) =>
+          state.currentCartId === currentCartId
+            ? {
+                ...state,
+                currentCart: {
+                  ...state.currentCart,
+                  activityItems: [
+                    ...state.currentCart.activityItems,
+                    newActivity,
+                  ],
+                },
+              }
+            : state,
+        );
+      }
+
+      toast.success('เพิ่มกิจกรรมแล้ว', { position: 'bottom-right' });
+      return true;
+    } catch (error) {
+      handleError(error);
+      return false;
+    }
+  };
+
+  /**
+   * Update an activity optimistically, then sync it to the API.
+   *
+   * @param activityId - The activity's database id
+   * @param fields - Partial set of fields to update (prevId/nextId reorder)
+   */
+  const updateActivity = async (
+    activityId: string,
+    fields: UpdateActivityFields,
+  ) => {
+    await waitForCartSelection();
+    const { currentCartId } = get(userCart) ?? {};
+    if (!currentCartId) return;
+
+    userCart.update((state) => {
+      const { prevId, nextId, ...rest } = fields;
+      const activityItems: ActivityItem[] = state.currentCart.activityItems.map(
+        (activity) =>
+          activity.id === activityId ? { ...activity, ...rest } : activity,
+      );
+
+      if (prevId !== undefined || nextId !== undefined) {
+        const index = activityItems.findIndex((a) => a.id === activityId);
+        if (index !== -1) {
+          const [moved] = activityItems.splice(index, 1);
+          const newIndex = !prevId
+            ? 0
+            : activityItems.findIndex((a) => a.id === prevId) + 1;
+          activityItems.splice(newIndex, 0, moved);
+        }
+      }
+
+      return {
+        ...state,
+        currentCart: { ...state.currentCart, activityItems },
+      };
+    });
+
+    try {
+      await api.patch(`/activity/${activityId}`, fields);
+    } catch (error) {
+      handleError(error);
+      await reloadActivities(currentCartId);
+    }
+  };
+
+  /**
+   * Remove an activity from the current timetable.
+   *
+   * @param activityId - The activity's database id
+   */
+  const removeActivity = async (activityId: string) => {
+    await waitForCartSelection();
+    const { currentCartId } = get(userCart) ?? {};
+    if (!currentCartId) return;
+
+    try {
+      await api.delete(`/activity/${activityId}`);
+
+      userCart.update((state) => ({
+        ...state,
+        currentCart: {
+          ...state.currentCart,
+          activityItems: state.currentCart.activityItems.filter(
+            (activity) => activity.id !== activityId,
+          ),
+        },
+      }));
+
+      toast.success('นำกิจกรรมออกแล้ว', { position: 'bottom-right' });
+    } catch (error) {
+      handleError(error);
+    }
+  };
+
   return {
     renameCart: (name: string) => runCartMutation(() => renameCart(name)),
     updateCartMeta: (fields: UpdateCartFields) =>
@@ -827,5 +996,13 @@ export function useCartActions() {
       runCartMutation(() => importCart(cartDetail)),
     changeCartVisibility: (cartId: string, visible: Visible) =>
       runCartMutation(() => changeCartVisibility(cartId, visible)),
+    createActivity: (
+      fields: Omit<CreateActivityFields, 'dayOfWeek'>,
+      daysOfWeek: Day[],
+    ) => runCartMutation(() => createActivity(fields, daysOfWeek)),
+    updateActivity: (activityId: string, fields: UpdateActivityFields) =>
+      runCartMutation(() => updateActivity(activityId, fields)),
+    removeActivity: (activityId: string) =>
+      runCartMutation(() => removeActivity(activityId)),
   };
 }

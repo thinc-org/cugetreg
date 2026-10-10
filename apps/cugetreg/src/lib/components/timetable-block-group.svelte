@@ -14,9 +14,16 @@
     course: CartItemDetailBase;
     cartItems: CartItemDetailBase[];
     onclick?: (id: string) => void;
+    /** First hour shown on the timetable; blocks are offset from it. */
+    startTime?: number;
   }
 
-  let { course, cartItems, onclick = () => {} }: TimetableBlock = $props();
+  let {
+    course,
+    cartItems,
+    onclick = () => {},
+    startTime: timetableStart = TIMETABLE_DEFAULT_START,
+  }: TimetableBlock = $props();
 </script>
 
 {#if !course.hidden}
@@ -46,7 +53,7 @@
         length={parsePeriodTime(period.periodEnd) -
           parsePeriodTime(period.periodStart)}
         row={getColumnFromDay(period.dayOfWeek as Day)}
-        col={parsePeriodTime(period.periodStart) - TIMETABLE_DEFAULT_START}
+        col={parsePeriodTime(period.periodStart) - timetableStart}
       />
     {/if}
   {/each}

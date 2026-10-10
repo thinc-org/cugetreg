@@ -382,20 +382,35 @@ export async function createElementScreenshot(
   document.body.removeChild(link);
 }
 
-export function getDays(cart: CartItemDetailBase[]) {
+/** The subset of an activity the timetable layout helpers need. */
+export type TimetableActivity = {
+  dayOfWeek: string;
+  periodStart: string;
+  periodEnd: string;
+  hidden: boolean;
+};
+
+export function getDays(
+  cart: CartItemDetailBase[],
+  activities: TimetableActivity[] = [],
+) {
   const WEEKDAYS = ['MON', 'TUE', 'WED', 'THU', 'FRI'];
   const WEEKENDS = ['SAT', 'SUN'];
 
-  const hasWeekend = cart.some((item) => {
-    if (item.hidden) return false;
+  const isWeekend = (day: string) => day === 'SA' || day === 'SU';
 
-    const section = item.sections.find(
-      (sec) => sec.sectionNo === item.sectionNo,
+  const hasWeekend =
+    cart.some((item) => {
+      if (item.hidden) return false;
+
+      const section = item.sections.find(
+        (sec) => sec.sectionNo === item.sectionNo,
+      );
+      return section?.classes.some((cls) => isWeekend(cls.dayOfWeek));
+    }) ||
+    activities.some(
+      (activity) => !activity.hidden && isWeekend(activity.dayOfWeek),
     );
-    return section?.classes.some(
-      (cls) => cls.dayOfWeek === 'SA' || cls.dayOfWeek === 'SU',
-    );
-  });
 
   return [...WEEKDAYS, ...(hasWeekend ? WEEKENDS : [])];
 }
@@ -403,7 +418,14 @@ export function getDays(cart: CartItemDetailBase[]) {
 export function getLatestTime(
   cart: CartItemDetailBase[],
   fallbackTime: number,
+  activities: TimetableActivity[] = [],
 ): number {
+  const latestActivity = activities.reduce((acc, activity) => {
+    if (activity.hidden) return acc;
+    const end = parsePeriodTime(activity.periodEnd);
+    return end > acc ? end : acc;
+  }, fallbackTime);
+
   const latest = cart.reduce((acc, item) => {
     if (item.hidden) return acc;
     const section = item.sections.find(
@@ -417,9 +439,27 @@ export function getLatestTime(
       }, acc) ?? 0;
 
     return localMax > acc ? localMax : acc;
-  }, fallbackTime);
+  }, latestActivity);
 
   return Math.ceil(latest);
+}
+
+/**
+ * Courses always start within the default range, but activities can be
+ * scheduled earlier (e.g. a 06:00 run), so the timetable may need to start
+ * before {@link TIMETABLE_DEFAULT_START}.
+ */
+export function getEarliestTime(
+  activities: TimetableActivity[],
+  fallbackTime: number,
+): number {
+  const earliest = activities.reduce((acc, activity) => {
+    if (activity.hidden) return acc;
+    const start = parsePeriodTime(activity.periodStart);
+    return start < acc ? start : acc;
+  }, fallbackTime);
+
+  return Math.floor(earliest);
 }
 
 export function getLatestExamTime(

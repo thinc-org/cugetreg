@@ -37,13 +37,17 @@ export const timeTableCourseCardVariant = tv({
 	}
 });
 
+/**
+ * Only `name`/`abbrName` are required so the card can also render a
+ * title-only block (e.g. a custom activity).
+ */
 export type TimeTableCourse = {
 	name: string;
 	abbrName: string;
-	code: string;
-	bldg: string;
-	room: string;
-	section: number;
+	code?: string;
+	bldg?: string;
+	room?: string;
+	section?: number;
 };
 
 export type TimeTableCardColor = VariantProps<typeof timeTableCourseCardVariant>['color'];

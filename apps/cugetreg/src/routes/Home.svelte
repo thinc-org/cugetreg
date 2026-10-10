@@ -353,6 +353,12 @@
     return isYearMismatch || isSemesterMismatch || isProgramMismatch;
   }
 
+  const isTermMismatch = $derived(
+    !!$userCart.currentCart &&
+      (String($userCart.currentCart.academicYear) !== String(currentAY) ||
+        $userCart.currentCart.semester !== currentSemester),
+  );
+
   function handleToggleCourse(courseItem: HomeCourse) {
     if (!$session.data) {
       loginPopupState.show = true;
@@ -844,9 +850,11 @@
                 <CourseCard
                   course={item.course}
                   recommended={item.recommended}
-                  selected={$userCart.currentCart?.items.some(
-                    (v) => v.courseNo === item.course.code,
-                  ) ?? false}
+                  selected={!isTermMismatch &&
+                    ($userCart.currentCart?.items.some(
+                      (v) => v.courseNo === item.course.code,
+                    ) ??
+                      false)}
                   onSelect={() => handleToggleCourse(item)}
                   sections={getSectionOptions(item)}
                   selectedSection={getSelectedSection(item.course.code)}

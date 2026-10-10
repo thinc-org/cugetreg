@@ -72,6 +72,9 @@ reviews
         if (e.message === "REVIEW_NOT_FOUND") {
           return c.json({ error: "REVIEW_NOT_FOUND" }, 404);
         }
+        if (e.message === "COURSE_NOT_FOUND") {
+          return c.json({ error: "COURSE_NOT_FOUND" }, 404);
+        }
         if (e.message === "SECTION_NOT_FOUND") {
           return c.json({ error: "SECTION_NOT_FOUND" }, 422);
         }

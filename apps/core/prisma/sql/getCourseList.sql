@@ -140,27 +140,26 @@ matching_sections AS (
         )
 
         -- Cart-fit filter: exclude sections whose classes overlap with any
-        -- precomputed occupied_slots from the cart, or whose classes have no
-        -- fixed period (IA/AR/zero-duration).  $16 is the cart ID;
-        -- pass null to skip the filter entirely.
+        -- precomputed occupied_slots from the cart.  Classes with no fixed
+        -- period (IA/AR) can't conflict, so they never exclude a
+        -- section.  $16 is the cart ID; pass null to skip the filter entirely.
         --
         -- Uses a GiST expression index on int4range(period_start_minutes, period_end_minutes)
-        -- for efficient overlap (&&) lookups.  int4range returns NULL when either argument
-        -- is NULL, so classes with IA/AR/bad times naturally fail the overlap check and
-        -- are caught by the IS NULL clause below.
+        -- for efficient overlap (&&) lookups.  int4range treats a NULL bound as
+        -- unbounded (int4range(NULL, NULL) = '(,)' overlaps everything), so the
+        -- NOT NULL guards below are required.
         AND (
             $16::text IS NULL
             OR NOT EXISTS (
                 SELECT 1 FROM course_class cl_self
                 WHERE cl_self.section_id = s.id
-                  AND (
-                      cl_self.period_start_minutes IS NULL
-                      OR EXISTS (
-                          SELECT 1 FROM occupied_slots occ
-                          WHERE occ.day_of_week = cl_self.day_of_week
-                            AND int4range(cl_self.period_start_minutes, cl_self.period_end_minutes, '[)') &&
-                                int4range(occ.period_start_minutes, occ.period_end_minutes, '[)')
-                      )
+                  AND cl_self.period_start_minutes IS NOT NULL
+                  AND cl_self.period_end_minutes IS NOT NULL
+                  AND EXISTS (
+                      SELECT 1 FROM occupied_slots occ
+                      WHERE occ.day_of_week = cl_self.day_of_week
+                        AND int4range(cl_self.period_start_minutes, cl_self.period_end_minutes, '[)') &&
+                            int4range(occ.period_start_minutes, occ.period_end_minutes, '[)')
                   )
             )
         )

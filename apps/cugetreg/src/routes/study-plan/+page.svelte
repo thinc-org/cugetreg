@@ -142,7 +142,7 @@
     },
   ] as const;
 
-  const mockTerms = [
+  const mockTermTemplates = [
     {
       TermName: 'เทอม 1',
       RequiredFacultyCredits: 12,
@@ -224,7 +224,64 @@
         },
       ],
     },
+    {
+      TermName: 'ภาคฤดูร้อน',
+      RequiredFacultyCredits: 12,
+      RequiredFacultyCreditsTarget: 19,
+      getEdCredit: 0,
+      getEdCreditTarget: 3,
+      totalCredits: 15,
+      totalCreditsTarget: 22,
+      courses: [
+        {
+          id: 'summer-2110103',
+          CourseCode: '0000000',
+          CourseName: 'Course name',
+          CourseCredit: 3,
+          color: 'pink',
+        },
+        {
+          id: 'summer-2110203',
+          CourseCode: '0000000',
+          CourseName: 'Course name',
+          CourseCredit: 3,
+          color: 'pink',
+        },
+        {
+          id: 'summer-2110303',
+          CourseCode: '0000000',
+          CourseName: 'Course name',
+          CourseCredit: 6,
+          color: 'pink',
+        },
+        {
+          id: 'summer-2301108',
+          CourseCode: '0000000',
+          CourseName: 'Course name',
+          CourseCredit: 3,
+          color: 'purple',
+          removable: true,
+        },
+      ],
+    },
   ] as const;
+
+  const mockYears = [
+    { year: 1, academicYear: 2567 },
+    { year: 2, academicYear: 2568 },
+    { year: 3, academicYear: 2569 },
+    { year: 4, academicYear: 2570 },
+  ].map(({ year, academicYear }) => ({
+    year,
+    academicYear,
+    terms: mockTermTemplates.map((term) => ({
+      ...term,
+      courses: term.courses.map((course) => ({
+        ...course,
+        id: `year-${year}-${course.id}`,
+      })),
+    })),
+  }));
 </script>
 
 <div class="relative flex h-full flex-col overflow-hidden bg-white">
@@ -354,18 +411,27 @@
           </div>
         </div>
 
-        <div class="flex flex-col gap-6">
-          {#each mockTerms as term (term.TermName)}
-            <StudyPlanTerm
-              TermName={term.TermName}
-              RequiredFacultyCredits={term.RequiredFacultyCredits}
-              RequiredFacultyCreditsTarget={term.RequiredFacultyCreditsTarget}
-              getEdCredit={term.getEdCredit}
-              getEdCreditTarget={term.getEdCreditTarget}
-              totalCredits={term.totalCredits}
-              totalCreditsTarget={term.totalCreditsTarget}
-              courses={[...term.courses]}
-            />
+        <div class="flex flex-col gap-10">
+          {#each mockYears as studyYear (studyYear.year)}
+            <section class="flex flex-col gap-4">
+              <h2 class="text-2xl font-bold text-black">
+                ปี {studyYear.year} ปีการศึกษา {studyYear.academicYear}
+              </h2>
+              <div class="flex flex-col gap-6">
+                {#each studyYear.terms as term (term.TermName)}
+                  <StudyPlanTerm
+                    TermName={term.TermName}
+                    RequiredFacultyCredits={term.RequiredFacultyCredits}
+                    RequiredFacultyCreditsTarget={term.RequiredFacultyCreditsTarget}
+                    getEdCredit={term.getEdCredit}
+                    getEdCreditTarget={term.getEdCreditTarget}
+                    totalCredits={term.totalCredits}
+                    totalCreditsTarget={term.totalCreditsTarget}
+                    courses={term.courses}
+                  />
+                {/each}
+              </div>
+            </section>
           {/each}
         </div>
       </div>

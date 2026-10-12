@@ -34,8 +34,11 @@
   import type { LayoutData } from './$types';
   import { ReportProblem } from '@cugetreg/ui/molecules/report-problem';
   import { GOOGLE_FORM_URL } from '$lib/constants';
+  import { MediaQuery } from 'svelte/reactivity';
 
   const session = useSession();
+  const mobileMedia = new MediaQuery('max-width: 767px', false);
+  const isMobile = $derived(mobileMedia.current);
 
   $effect(() => {
     const errorMsg = page.url.searchParams.get('error');
@@ -173,6 +176,7 @@
     }
     onToggleTheme={toggleTheme}
     onAddSchedule={() => (showCreateScheduleModal = true)}
+    reportURL={GOOGLE_FORM_URL}
   />
 
   <Modal
@@ -205,5 +209,7 @@
     </div>
   {/if}
 
-  <ReportProblem href={GOOGLE_FORM_URL} />
+  {#if !isMobile}
+    <ReportProblem href={GOOGLE_FORM_URL} />
+  {/if}
 </div>

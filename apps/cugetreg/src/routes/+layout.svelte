@@ -9,6 +9,7 @@
     useSession,
   } from '$lib/auth-client';
   import LoadingScreen from '$lib/components/loading-screen.svelte';
+  import { GOOGLE_FORM_URL } from '$lib/constants';
   import { semesterToThaiMapper, studyProgramMapper } from '$lib/mapper';
   import { initCartSelectionController } from '$lib/stores/cart-selection.svelte';
   import { loginPopupState } from '$lib/stores/login-popup.svelte';
@@ -21,9 +22,11 @@
   } from '$lib/stores/user-cart';
 
   import { onDestroy, setContext, type Snippet } from 'svelte';
+  import { MediaQuery } from 'svelte/reactivity';
   import toast, { Toaster } from 'svelte-french-toast';
 
   import { Modal } from '@cugetreg/ui/atoms/modal';
+  import { ReportProblem } from '@cugetreg/ui/molecules/report-problem';
   import {
     CreateTimetable,
     type TimetableMetaData,
@@ -32,9 +35,6 @@
   import { Navbar } from '@cugetreg/ui/organisms/navbar';
 
   import type { LayoutData } from './$types';
-  import { ReportProblem } from '@cugetreg/ui/molecules/report-problem';
-  import { GOOGLE_FORM_URL } from '$lib/constants';
-  import { MediaQuery } from 'svelte/reactivity';
 
   const session = useSession();
   const mobileMedia = new MediaQuery('max-width: 767px', false);

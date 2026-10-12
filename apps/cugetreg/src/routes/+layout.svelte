@@ -32,6 +32,8 @@
   import { Navbar } from '@cugetreg/ui/organisms/navbar';
 
   import type { LayoutData } from './$types';
+  import { ReportProblem } from '@cugetreg/ui/molecules/report-problem';
+  import { GOOGLE_FORM_URL } from '$lib/constants';
 
   const session = useSession();
 
@@ -202,4 +204,6 @@
       {@render children?.()}
     </div>
   {/if}
+
+  <ReportProblem href={GOOGLE_FORM_URL} />
 </div>

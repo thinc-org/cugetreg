@@ -42,6 +42,7 @@
 		onToggleTheme?: () => void;
 		/** Called when the user taps "เพิ่มตาราง" to create a new timetable. */
 		onAddSchedule?: () => void;
+		reportURL?: string;
 	}
 
 	let {
@@ -59,11 +60,18 @@
 		onLogin = () => {},
 		onSignOut = () => {},
 		onToggleTheme = () => {},
-		onAddSchedule = () => {}
+		onAddSchedule = () => {},
+		reportURL = ''
 	}: Props = $props();
 
 	let scheduleDropdownOpen = $state(false);
 	let scheduleSelectorEl = $state<HTMLDivElement>();
+
+	const navItemsWithReport = $derived([
+		...navItems,
+		{ name: 'แจ้งปัญหาการใช้งาน', route: reportURL }
+	]);
+
 	const currentScheduleName = $derived(
 		scheduleOptions.find((o) => o.id === currentScheduleId)?.name ?? 'เลือกตาราง'
 	);
@@ -197,7 +205,7 @@
 
 		<!-- Navigation links -->
 		<nav class="flex flex-col">
-			{#each navItems as { name: itemName, route } (route)}
+			{#each navItemsWithReport as { name: itemName, route } (route)}
 				<a
 					href={route}
 					class={cn(

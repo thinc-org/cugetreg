@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ChevronLeft, ChevronRight, Dot } from 'lucide-svelte';
+  import { ChevronLeft, ChevronRight, Dot, X } from 'lucide-svelte';
   import { prefersReducedMotion } from 'svelte/motion';
   import { fly } from 'svelte/transition';
 
@@ -18,30 +18,28 @@
       video: '/videos/Tutorial1.mp4',
     },
     {
-      head: 'ค้นหาวิชาที่ต้องการ',
-      subtitle:
-        'CU Get Reg ศูนย์รวมรายวิชาและรายละเอียดรายวิชาในรั้วจุฬาลงกรณ์มหาวิทยาลัย',
+      head: 'ค้นหาวิชาที่ใช่',
+      subtitle: 'ค้นหารายวิชาด้วยตัวกรอง พร้อมเลือกปีการศึกษาและภาคเรียน',
       video: '/videos/Tutorial2.mp4',
     },
     {
-      head: 'รวมวิชาของจุฬาฯ ไว้ที่นี้!',
-      subtitle:
-        'CU Get Reg ศูนย์รวมรายวิชาและรายละเอียดรายวิชาในรั้วจุฬาลงกรณ์มหาวิทยาลัย',
+      head: 'อ่านรีวิวก่อนเลือกเรียน',
+      subtitle: 'ดูรีวิวรายวิชา แล้วเพิ่มวิชาที่สนใจลงในรายการ',
       video: '/videos/Tutorial3.mp4',
     },
     {
-      head: 'รวมวิชาของจุฬาฯ ไว้ที่นี้!',
-      subtitle:
-        'CU Get Reg ศูนย์รวมรายวิชาและรายละเอียดรายวิชาในรั้วจุฬาลงกรณ์มหาวิทยาลัย',
+      head: 'ตารางเรียนและสอบในที่เดียว',
+      subtitle: 'ตรวจสอบเวลาเรียนและวันสอบ เพื่อวางแผนล่วงหน้า',
       video: '/videos/Tutorial4.mp4',
     },
     {
-      head: 'รวมวิชาของจุฬาฯ ไว้ที่นี้!',
-      subtitle:
-        'CU Get Reg ศูนย์รวมรายวิชาและรายละเอียดรายวิชาในรั้วจุฬาลงกรณ์มหาวิทยาลัย',
+      head: 'วางแผนเรียนครบ 4 ปี',
+      subtitle: 'จัดแผนการเรียนตลอด 4 ปี พร้อมคำนวณเกรดเฉลี่ย',
       video: '/videos/Tutorial5.mp4',
     },
   ];
+
+  const { onCancel = () => {} }: OnboardingProps = $props();
 
   const nextVideo = $derived(texts[progress + 1]?.video);
 </script>
@@ -53,8 +51,16 @@
 {/if}
 
 <div
-  class="bg-surface flex max-h-[calc(100dvh-2rem)] w-[calc(100vw-2rem)] max-w-[1000px] flex-col overflow-y-auto rounded-2xl"
+  class="bg-surface relative flex max-h-[calc(100dvh-2rem)] w-[calc(100vw-2rem)] max-w-[1000px] flex-col overflow-y-auto rounded-2xl"
 >
+  <button
+    type="button"
+    class="bg-surface focus-visible:outline-primary absolute top-3 right-3 z-10 flex size-11 items-center justify-center rounded-full shadow-sm hover:cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 sm:top-4 sm:right-4"
+    aria-label="ปิดหน้าต่างแนะนำการใช้งาน"
+    onclick={onCancel}
+  >
+    <X size={20} />
+  </button>
   <div class="shrink-0 p-3 sm:p-4">
     <div class="relative aspect-[1542/720] overflow-hidden">
       {#key progress}
@@ -120,10 +126,7 @@
         <button
           class="focus-visible:outline-primary flex size-11 items-center justify-center rounded-lg hover:cursor-pointer focus-visible:outline-offset-2"
           aria-label="Exit onboarding"
-          onclick={() => {
-            direction = 1;
-            progress++;
-          }}
+          onclick={onCancel}
         >
           ไปเลย
         </button>

@@ -32,6 +32,7 @@
   import { Navbar } from '@cugetreg/ui/organisms/navbar';
 
   import type { LayoutData } from './$types';
+  import Onboarding from '$lib/components/onboarding.svelte';
 
   const session = useSession();
 
@@ -172,6 +173,10 @@
     onToggleTheme={toggleTheme}
     onAddSchedule={() => (showCreateScheduleModal = true)}
   />
+
+  <Modal dim centered class="h-dvh">
+    <Onboarding />
+  </Modal>
 
   <Modal
     exitOnEsc

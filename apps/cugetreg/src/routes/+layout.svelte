@@ -9,6 +9,7 @@
     useSession,
   } from '$lib/auth-client';
   import LoadingScreen from '$lib/components/loading-screen.svelte';
+  import Onboarding from '$lib/components/onboarding.svelte';
   import { semesterToThaiMapper, studyProgramMapper } from '$lib/mapper';
   import { initCartSelectionController } from '$lib/stores/cart-selection.svelte';
   import { loginPopupState } from '$lib/stores/login-popup.svelte';
@@ -20,7 +21,7 @@
     type UserCartInterface,
   } from '$lib/stores/user-cart';
 
-  import { onDestroy, setContext, type Snippet } from 'svelte';
+  import { onDestroy, onMount, setContext, type Snippet } from 'svelte';
   import toast, { Toaster } from 'svelte-french-toast';
 
   import { Modal } from '@cugetreg/ui/atoms/modal';
@@ -32,7 +33,6 @@
   import { Navbar } from '@cugetreg/ui/organisms/navbar';
 
   import type { LayoutData } from './$types';
-  import Onboarding from '$lib/components/onboarding.svelte';
 
   const session = useSession();
 
@@ -130,6 +130,25 @@
 
   const { createCart } = useCartActions();
   let showCreateScheduleModal = $state(false);
+  const ONBOARDING_SEEN_KEY = 'cugetreg:onboarding-seen';
+  let showOnboarding = $state(false);
+
+  onMount(() => {
+    try {
+      showOnboarding = localStorage.getItem(ONBOARDING_SEEN_KEY) !== 'true';
+    } catch {
+      showOnboarding = true;
+    }
+  });
+
+  function dismissOnboarding() {
+    showOnboarding = false;
+    try {
+      localStorage.setItem(ONBOARDING_SEEN_KEY, 'true');
+    } catch (error) {
+      console.warn('Unable to save onboarding state', error);
+    }
+  }
 </script>
 
 <Modal
@@ -175,8 +194,15 @@
     onShowOnboarding={() => (showOnboarding = true)}
   />
 
-  <Modal dim centered class="h-dvh">
-    <Onboarding />
+  <Modal
+    exitOnEsc
+    exitOnBackgroundClick
+    centered
+    dim
+    class="h-dvh"
+    bind:show={showOnboarding}
+  >
+    <Onboarding onCancel={dismissOnboarding} />
   </Modal>
 
   <Modal

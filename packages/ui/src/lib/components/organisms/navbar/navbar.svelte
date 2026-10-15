@@ -7,7 +7,7 @@
 	import { Input } from '$lib/components/atoms/input';
 	import Popover from '$lib/components/atoms/popover/popover.svelte';
 
-	import { Bell, Menu, Search } from '@lucide/svelte';
+	import { Bell, CircleQuestionMark, Menu, Search } from '@lucide/svelte';
 
 	import { cn, getShortenName } from '@cugetreg/utils';
 
@@ -37,6 +37,7 @@
 		onToggleTheme?: () => void;
 		/** Called when the user taps "เพิ่มตาราง" in the mobile drawer. */
 		onAddSchedule?: () => void;
+		onShowOnboarding?: () => void;
 	}
 
 	let {
@@ -51,7 +52,8 @@
 		currentScheduleId = $bindable(''),
 		programLabel = '',
 		onToggleTheme = () => {},
-		onAddSchedule = () => {}
+		onAddSchedule = () => {},
+		onShowOnboarding = () => {}
 	}: Props = $props();
 
 	let localSearch = $state('');
@@ -117,6 +119,9 @@
 				placeholder="ค้นหาวิชา"
 				class="bg-surface-container-lowest h-8 w-full placeholder:text-neutral-400"
 			/>
+			<button class="hover:cursor-pointer" onclick={onShowOnboarding}>
+				<CircleQuestionMark class="stroke-neutral-400 hover:stroke-neutral-500" />
+			</button>
 		</div>
 	</div>
 	<div class="hidden flex-1 flex-row items-center justify-center gap-3 min-[900px]:flex lg:gap-4">

@@ -172,6 +172,7 @@
     }
     onToggleTheme={toggleTheme}
     onAddSchedule={() => (showCreateScheduleModal = true)}
+    onShowOnboarding={() => (showOnboarding = true)}
   />
 
   <Modal dim centered class="h-dvh">

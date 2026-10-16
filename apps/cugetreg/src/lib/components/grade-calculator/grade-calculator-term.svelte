@@ -27,21 +27,25 @@
 </script>
 
 <div class={cn('flex flex-1 flex-col', className)}>
-  <div class="bg-primary-container flex items-center justify-between px-8 py-6">
-    <h3 class="text-primary text-2xl font-semibold">{title}</h3>
+  <div
+    class="bg-primary-container flex items-center justify-between px-5 py-4 md:px-8 md:py-6"
+  >
+    <h3 class="text-primary text-lg font-semibold md:text-2xl">{title}</h3>
     <span
-      class="text-on-primary-container rounded-full bg-white px-2.5 py-1.5 text-sm"
+      class="text-on-primary-container rounded-full bg-white px-2 py-1 text-xs md:px-2.5 md:py-1.5 md:text-sm"
     >
       หน่วยกิตรวม {sumCredits(term.courses)}
     </span>
   </div>
-  <table class="w-full text-base">
+  <table class="w-full text-sm md:text-base">
     <thead>
       <tr class="text-on-surface text-left">
-        <th class="w-44 pt-4 pb-2 pl-10 font-normal">รหัสวิชา</th>
-        <th class="pt-4 pb-2 font-normal">รายชื่อวิชา</th>
-        <th class="w-43 pt-4 pb-2 text-center font-normal">หน่วยกิต</th>
-        <th class="w-25 pt-4 pr-10 pb-2 text-right font-normal">
+        <th class="hidden w-1/4 pt-4 pb-2 pl-10 font-normal md:table-cell">
+          รหัสวิชา
+        </th>
+        <th class="pt-4 pb-2 pl-6 font-normal md:pl-0">รายชื่อวิชา</th>
+        <th class="w-[24%] pt-4 pb-2 text-center font-normal">หน่วยกิต</th>
+        <th class="w-[14%] pt-4 pr-5 pb-2 text-right font-normal md:pr-10">
           <span class="inline-block w-10 text-center">เกรด</span>
         </th>
       </tr>
@@ -49,10 +53,10 @@
     <tbody>
       {#each term.courses as course (course.id)}
         <tr class="text-on-surface">
-          <td class="py-3 pl-10">{course.courseNo}</td>
-          <td class="py-3">{course.courseName}</td>
+          <td class="hidden py-3 pl-10 md:table-cell">{course.courseNo}</td>
+          <td class="py-3 pl-6 md:pl-0">{course.courseName}</td>
           <td class="py-3 text-center">{course.credit}</td>
-          <td class="py-3 pr-10">
+          <td class="py-3 pr-5 md:pr-10">
             <GradeSelect
               gradingType={course.gradingType}
               value={grades[course.id]}
@@ -68,7 +72,7 @@
     </tbody>
   </table>
   <div
-    class="text-on-surface mt-auto flex items-center justify-between px-10 pt-5 pb-8 text-xl font-semibold"
+    class="text-on-surface mt-auto flex items-center justify-between px-6 pt-4 pb-6 text-base font-semibold md:px-10 md:pt-5 md:pb-8 md:text-xl"
   >
     <span>GPA</span>
     <span>{calculateGpa(term.courses, grades).toFixed(2)}</span>

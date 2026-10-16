@@ -26,15 +26,17 @@
   });
 </script>
 
-<div class="mt-12 mb-16 flex flex-col items-center gap-1.5">
+<div class="mt-8 mb-10 flex flex-col items-center gap-1.5 md:mt-12 md:mb-16">
   {#if status}
-    <p class="text-primary text-[28px]/9 font-semibold">{status}</p>
+    <p class="text-primary text-xl/8 font-semibold md:text-[28px]/9">
+      {status}
+    </p>
   {/if}
-  <p class="text-on-surface text-[28px]/9 font-medium">
+  <p class="text-on-surface text-xl/8 font-medium md:text-[28px]/9">
     GPAX
     <span class="text-primary ml-2 font-semibold">{gpax.toFixed(2)}</span>
   </p>
-  <p class="text-on-surface text-xl">
+  <p class="text-on-surface text-base md:text-xl">
     หน่วยกิตรวม <span class="ml-1 font-semibold">{sumCredits(courses)}</span>
   </p>
 </div>

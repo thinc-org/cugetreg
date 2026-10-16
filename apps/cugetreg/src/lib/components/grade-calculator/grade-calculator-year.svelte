@@ -1,5 +1,6 @@
 <script lang="ts">
   import { ChevronLeft, ChevronRight } from '@lucide/svelte';
+  import { MediaQuery } from 'svelte/reactivity';
 
   import GradeCalculatorTerm from './grade-calculator-term.svelte';
   import type { PlanYear } from './mock-data';
@@ -16,15 +17,20 @@
     grades = $bindable(),
   }: GradeCalculatorYearProps = $props();
 
+  const desktopMedia = new MediaQuery('min-width: 1280px', false);
+  const termsPerView = $derived(desktopMedia.current ? 2 : 1);
+
   let selectedOffset = $state(0);
-  const maxOffset = $derived(Math.max(0, year.terms.length - 2));
+  const maxOffset = $derived(Math.max(0, year.terms.length - termsPerView));
   const offset = $derived(Math.min(selectedOffset, maxOffset));
-  const visibleTerms = $derived(year.terms.slice(offset, offset + 2));
+  const visibleTerms = $derived(
+    year.terms.slice(offset, offset + termsPerView),
+  );
 </script>
 
-<section class="mt-10">
-  <div class="mb-5 flex items-center justify-between">
-    <h2 class="text-on-surface text-2xl font-semibold">
+<section class="mt-8 md:mt-10">
+  <div class="mb-3 flex items-center justify-between md:mb-5">
+    <h2 class="text-on-surface text-base font-semibold md:text-2xl">
       ปี {yearNumber} ปีการศึกษา {year.academicYear}
     </h2>
     {#if maxOffset > 0}
@@ -51,13 +57,13 @@
     {/if}
   </div>
   <div
-    class="border-primary grid grid-cols-2 overflow-hidden rounded-2xl border"
+    class="border-primary grid overflow-hidden rounded-2xl border xl:grid-cols-2"
   >
     {#each visibleTerms as term, i (term.semester)}
       <GradeCalculatorTerm
         {term}
         bind:grades
-        class={i === 0 ? 'border-primary border-r' : ''}
+        class={i === 0 ? 'border-primary xl:border-r' : ''}
       />
     {/each}
   </div>

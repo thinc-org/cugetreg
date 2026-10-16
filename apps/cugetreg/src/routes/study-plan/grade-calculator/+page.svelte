@@ -6,7 +6,7 @@
   import { mockStudyPlans } from '$lib/components/grade-calculator/mock-data';
   import { GOOGLE_FORM_URL } from '$lib/constants';
 
-  import { ChevronLeft, Ellipsis } from '@lucide/svelte';
+  import { ChevronLeft, Ellipsis, Grid2x2 } from '@lucide/svelte';
 
   import { Button } from '@cugetreg/ui/atoms/button';
   import { ReportProblem } from '@cugetreg/ui/molecules/report-problem';
@@ -28,18 +28,18 @@
 </script>
 
 <div class="relative flex min-h-screen flex-col bg-white">
-  <div class="w-full flex-1 px-5 pt-14 pb-8 sm:px-8 lg:px-12">
+  <div class="w-full flex-1 px-5 pt-8 pb-8 sm:px-8 md:pt-14 lg:px-12">
     <div class="flex flex-wrap items-center justify-between gap-3">
       <div class="flex items-center gap-4">
         <button
           type="button"
           aria-label="กลับ"
-          class="flex items-center justify-center rounded-lg p-1 transition-colors hover:bg-gray-100 active:bg-gray-200"
+          class="hidden items-center justify-center rounded-lg p-1 transition-colors hover:bg-gray-100 active:bg-gray-200 md:flex"
           onclick={() => history.back()}
         >
           <ChevronLeft size={20} strokeWidth={2.5} />
         </button>
-        <h1 class="text-on-surface text-base font-bold sm:text-[28px]">
+        <h1 class="text-on-surface text-xl font-bold md:text-[28px]">
           คำนวณเกรด
         </h1>
       </div>
@@ -50,11 +50,13 @@
         >
           คืนค่าเดิม
         </Button>
-        <Button href={resolve('/study-plan')}>จัดแผนการเรียน</Button>
+        <Button href={resolve('/study-plan')} class="hidden md:inline-flex">
+          จัดแผนการเรียน
+        </Button>
       </div>
     </div>
 
-    <div class="mt-8 flex flex-wrap items-center justify-between gap-3">
+    <div class="mt-4 flex flex-wrap items-center justify-between gap-3 md:mt-8">
       <p class="text-on-surface flex gap-6 text-base">
         <span>{studyPlan.faculty}</span>
         <span>{studyPlan.major}</span>
@@ -103,6 +105,14 @@
   <div class="mt-auto w-full border-t bg-white">
     <Footer />
   </div>
+
+  <a
+    href={resolve('/study-plan')}
+    aria-label="จัดแผนการเรียน"
+    class="bg-primary fixed right-6 bottom-20 z-40 flex size-16 items-center justify-center rounded-full text-white shadow-sm md:hidden"
+  >
+    <Grid2x2 size={28} />
+  </a>
 
   <ReportProblem href={GOOGLE_FORM_URL} />
 </div>

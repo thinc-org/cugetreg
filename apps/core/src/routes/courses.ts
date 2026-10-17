@@ -3,6 +3,7 @@ import type { Variables } from "@/lib/auth.js";
 import {
   addFavoriteCourse,
   getCourseByNoRoute,
+  getCourseOfferingHistoryRoute,
   getCourseReviews,
   getCourseSectionsRoute,
   getCoursesRoute,
@@ -175,6 +176,22 @@ courses
       return c.json({ error: "INTERNAL_SERVER_ERROR" }, 500);
     }
   })
+  // 1.8. Get Course Offering History
+  .openapi(getCourseOfferingHistoryRoute, async (c) => {
+    try {
+      const { courseNo } = c.req.valid("param");
+      const data = await courseServices.getCourseOfferingHistory(courseNo);
+      return c.json({ data }, 200);
+    } catch (err) {
+      if (err instanceof Error) {
+        if (err.message === "COURSE_NOT_FOUND") {
+          return c.json({ error: "COURSE_NOT_FOUND" }, 404);
+        }
+      }
+      return c.json({ error: "INTERNAL_SERVER_ERROR" }, 500);
+    }
+  })
+
   // 1.7. Get Course Reviews
   .openapi(getCourseReviews, async (c) => {
     try {

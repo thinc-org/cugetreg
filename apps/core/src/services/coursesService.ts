@@ -533,6 +533,38 @@ async function getCourseReviewByCourseNo(
   return { reviews: resultReviews, count, facets };
 }
 
+//1.8 Get course offering history (has this course's semester been stable over the last 3 years?)
+async function getCourseOfferingHistory(courseNo: string) {
+  const courseInfo = await prisma.courseInfo.findUnique({
+    where: { courseNo },
+    select: { courseNo: true },
+  });
+  if (!courseInfo) {
+    throw new Error("COURSE_NOT_FOUND");
+  }
+
+  // Thai academic years in this schema are Buddhist Era (e.g. 2567), not Gregorian.
+  const currentAcademicYear = new Date().getFullYear() + 543;
+
+  const offerings = await prisma.course.groupBy({
+    by: ["semester"],
+    where: { courseNo, academicYear: { gte: currentAcademicYear - 3 } },
+    _count: { _all: true },
+  });
+
+  const bySemester = offerings.map((o) => ({
+    semester: o.semester,
+    count: o._count._all,
+  }));
+  const distinctSemestersOffered = bySemester.filter((o) => o.count > 0).length;
+
+  return {
+    courseNo,
+    consistent: distinctSemestersOffered <= 1,
+    bySemester,
+  };
+}
+
 export const courseServices = {
   queryCourse,
   getFavoriteCourses,
@@ -542,4 +574,5 @@ export const courseServices = {
   getCourseSections,
   getCourseReviewByCourseNo,
   getLastUpdated,
+  getCourseOfferingHistory,
 };

@@ -175,3 +175,13 @@ export const AddFavoriteCourseResponseSchema = CourseInfoSchema.omit({
 
 export type CourseReviewFacet = z.infer<typeof CourseReviewFacetSchema>;
 export type CourseReviewResponse = z.infer<typeof CourseReviewResponseSchema>;
+
+// 1.8 course offering history (used by 4YearPlan when adding a course to a future term —
+// shows whether the course has consistently opened in the same semester historically)
+export const CourseOfferingHistoryResponseSchema = z.object({
+  data: z.object({
+    courseNo: z.string(),
+    consistent: z.boolean(),
+    bySemester: z.array(z.object({ semester: semester, count: z.number() })),
+  }),
+});

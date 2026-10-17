@@ -162,6 +162,30 @@ export const getCourseSectionsRoute = createRoute({
   security: [{ Bearer: [] }],
 });
 
+// 1.8 get course offering history (used by 4YearPlan's "add course by number" picker)
+export const getCourseOfferingHistoryRoute = createRoute({
+  method: "get",
+  path: "/{courseNo}/offering-history",
+  summary:
+    "1.8 Get Course Offering History (semester consistency over last 3 years)",
+  request: {
+    params: CourseSchema.CourseNoParamSchema,
+  },
+  responses: {
+    200: {
+      content: {
+        "application/json": {
+          schema: CourseResponseSchema.CourseOfferingHistoryResponseSchema,
+        },
+      },
+      description: "OK",
+    },
+    404: errorRes("COURSE_NOT_FOUND"),
+    500: InternalError,
+  },
+  security: [{ Bearer: [] }],
+});
+
 export const getCourseReviews = createRoute({
   method: "get",
   path: "/reviews/{courseNo}",

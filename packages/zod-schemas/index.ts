@@ -12,5 +12,7 @@ export * from "./publicCarts.response.schema.js";
 export * from "./publicCarts.schema.js";
 export * from "./reviews.response.schema.js";
 export * from "./reviews.schema.js";
+export * from "./studyPlans.response.schema.js";
+export * from "./studyPlans.schema.js";
 export * from "./user.response.schema.js";
 export * from "./user.schema.js";

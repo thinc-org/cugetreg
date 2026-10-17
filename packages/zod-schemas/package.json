@@ -36,6 +36,8 @@
     "./public-carts-response": "./publicCarts.response.schema.ts",
     "./reviews": "./reviews.schema.ts",
     "./reviews-response": "./reviews.response.schema.ts",
+    "./study-plans": "./studyPlans.schema.ts",
+    "./study-plans-response": "./studyPlans.response.schema.ts",
     "./user": "./user.schema.ts",
     "./user-response": "./user.response.schema.ts"
   }

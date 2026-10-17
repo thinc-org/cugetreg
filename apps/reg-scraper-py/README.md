@@ -178,6 +178,10 @@ python -m reg_scraper scrape --rebuild   # re-parse + re-export the checkpoint, 
 already paid two hours to fetch; it leaves the checkpoint in place so you can run
 it repeatedly.
 
+"Zero network calls" includes the side inputs: `--rebuild` skips the description
+and GenEd phases entirely and enriches from `COURSE_DESC_PATH` and
+`OVERRIDES_PATH` exactly as they are on disk.
+
 ---
 
 ## Parsing the detail page
@@ -376,7 +380,7 @@ Config file: `apps/reg-scraper-py/.env` (loaded automatically from any working d
 | `COURSE_DESC_PATH` | `data/course_desc.csv` | Description CSV from `cucis.academic.chula.ac.th` (~29.7k courses, 1490 pages) — written by `descriptions`, read by enrich |
 | `CUCIS_TOTAL_PAGES` | `1490` | Description catalogue page count |
 | `OVERRIDES_PATH` | `../../apps/core/bin/overrides.json` | GenEd types from `gened.chula.ac.th`. Read by the scraper **and** by `apps/core/bin/migrate_course.ts`, which is what actually sets `gen_ed_type` |
-| `GENED_FALLBACK_TYPE` | `GENED` | The GenEd site lists some courses with no area. `GENED` keeps that as-is (it is a real `GenEdType`); `NO`/`SC`/`SO`/`HU`/`IN` folds them into an area, `SKIP` omits them |
+| `GENED_FALLBACK_TYPE` | `GENED` | The GenEd site lists some courses with no area. `GENED` keeps that as-is (it is a real `GenEdType`); `NO`/`SC`/`SO`/`HU`/`IN` folds them into an area, `SKIP` omits them — and with them their description text, since that now travels in the same entry |
 | `SCRAPER_CHECKPOINT_DIR` | `data/checkpoints` | Resume files for the Reg Chula scrape **and** both side scrapers |
 | `SCRAPER_REGCHULA_CHECKPOINT_TTL_HOURS` | `6` | How long a Reg Chula checkpoint stays resumable. Keep it under half the gap between runs — see [Resuming an interrupted scrape](#resuming-an-interrupted-scrape). `0` = never expire |
 | `SCRAPER_DESCRIPTIONS_GAPFILL` | `true` | Look up descriptions for courses that appeared after the last catalogue crawl — see [Courses that appear mid-semester](#courses-that-appear-mid-semester) |
@@ -507,7 +511,7 @@ checkpoint, so an interrupted run never starts over.
 | Command | Source | Writes | Consumed by |
 |---------|--------|--------|-------------|
 | `python -m reg_scraper descriptions` | `cucis.academic.chula.ac.th` (~29.7k courses, 1490 pages) | `COURSE_DESC_PATH` CSV | `EnrichProcessor` → `courseDescTh/En` |
-| `python -m reg_scraper gened` | `gened.chula.ac.th` API (520 courses) | `OVERRIDES_PATH` JSON | `EnrichProcessor` **and** `apps/core/bin/migrate_course.ts` |
+| `python -m reg_scraper gened` | `gened.chula.ac.th` API (~520 courses) | `OVERRIDES_PATH` JSON — `genEdType` **and** `descriptionEn`/`descriptionTh` | `EnrichProcessor` **and** `apps/core/bin/migrate_course.ts` (which reads only `genEdType`) |
 
 `python -m reg_scraper scrape` runs both first, according to their mode:
 
@@ -580,7 +584,52 @@ One record per line, hit or miss:
 {"code": "2604101", "found": false, "checked_at": "2026-08-29T05:13:48Z"}
 ```
 
-GenEd needs no equivalent: a course missing from `overrides.json` is
+### Where a description comes from
+
+Two sources, merged **per language** in `EnrichProcessor`: CUCIS first, then the
+GenEd site for whichever language CUCIS left blank.
+
+CUCIS prints `-` for a course it has no text for, and for GenEd courses it does
+that more often than you would expect — in one language or in both — while
+gened.chula.ac.th has both. Real examples:
+
+| Course | CUCIS en | CUCIS th | GenEd site | Result |
+|--------|----------|----------|------------|--------|
+| 2604362 Personal Finance | `-` | `-` | both | both from GenEd |
+| 2307206 Earth Sciences | `-` | 361 ch | both | en from GenEd, th from CUCIS |
+| 3404117 Introduction to Law | 425 ch | `-` | both | en from CUCIS, th from GenEd |
+| 3402103 Intro Criminal Law | 721 ch | 605 ch | both | CUCIS wins, GenEd unused |
+| 3402101 Criminal Law (not GenEd) | `-` | 231 ch | not listed | th from CUCIS, en stays empty |
+
+Before this, the first three exported empty or half-empty — the GenEd site's
+`descriptionEn`/`descriptionTh` were fetched and thrown away, because the GenEd
+phase only kept `genEdType`.
+
+Two things make this free:
+
+- **The text comes with the course list.** `search-courses?limit=<all>` returns
+  `descriptionEn`/`descriptionTh` for every course in one response, so the
+  descriptions are re-read every run at no request cost. Only the GenEd *area*
+  needs the per-course call — `categoryTypes` is the one field the listing lacks.
+- **Descriptions are refreshed in place.** A course already in
+  `gened_checkpoint.jsonl` from before this change has no description fields;
+  rather than re-fetching all ~520 (which `auto` would never do, since they are
+  already "done"), the run appends an updated record from the listing and
+  `rows_from_checkpoint()` takes the last line per course. Measured: 2 HTTP calls,
+  0.5 s to backfill 517 courses on an existing checkpoint.
+
+`-` is CUCIS's own "no text" placeholder, not a parse failure, and the CSV loader
+has always treated `-` and `''` alike.
+
+**How often this bites:** over a random 120-course sample of the 519 GenEd
+courses, CUCIS has both languages for 107 (89%), Thai only for 4, English only
+for 2, and neither for 7 — so **13 courses (11%) are missing text in at least one
+language**, and the GenEd site covers 12 of those 13. Extrapolated to the full
+list that is roughly 57 courses affected and 52 fixed. The remainder (2210301 in
+that sample) has no description published in either source, which is not
+something the scraper can fix.
+
+GenEd needs no equivalent of the description gap fill: a course missing from `overrides.json` is
 indistinguishable from a course that is simply not GenEd, so there is nothing to
 detect afterwards. Instead the list endpoint (one call, every GenEd course) is
 re-read every run and only genuinely new courses are fetched — about a second in

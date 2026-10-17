@@ -73,7 +73,7 @@ Schema source of truth: `src/reg_scraper/models.py` (`Course`, `Section`, `Class
 | `abbrName` | string | `"UNIV THAI READING"` | Short English name |
 | `courseNameEn` | string | | Full English name |
 | `courseNameTh` | string | | Full Thai name |
-| `courseDescEn` | string | | From optional CSV, not Reg HTML. Courses added mid-semester are looked up individually — see README, "Courses that appear mid-semester" |
+| `courseDescEn` | string | | Not in Reg HTML. CUCIS CSV first, then gened.chula.ac.th for whichever language CUCIS left blank — see README, "Where a description comes from". Courses added mid-semester are looked up individually — see "Courses that appear mid-semester" |
 | `courseDescTh` | string | | From optional CSV |
 | `faculty` | string | `"01"` | Faculty code |
 | `department` | string | | Department name (Thai) |
@@ -220,6 +220,22 @@ After export, `apps/core` serves courses via its existing API — **no scraper c
 
 GenEd type comes from `overrides.json`, keyed by `courseNo`. It is applied to
 both the course and every one of its sections.
+
+Each entry also carries the GenEd site's own description text when it has any,
+used to fill in what CUCIS leaves blank:
+
+```json
+[
+  { "courseNo": "2604362", "genEdType": "SO",
+    "descriptionEn": "Meaning and importance of personal finance…",
+    "descriptionTh": "ความหมายและความสำคัญของการเงินส่วนบุคคล…" },
+  { "courseNo": "2000004", "genEdType": "HU" }
+]
+```
+
+`courseNo` and `genEdType` are the only required fields — the description keys
+are absent when the GenEd site has no text, and `migrate_course.ts` ignores
+them. The file is ~590 KB for ~520 courses once descriptions are in it.
 
 ---
 

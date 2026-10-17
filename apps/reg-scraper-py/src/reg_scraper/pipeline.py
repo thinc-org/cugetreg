@@ -356,7 +356,12 @@ class ScraperPipeline:
         failed = 0
 
         try:
-            self._run_side_inputs(started)
+            if rebuild:
+                # Side inputs reach CUCIS and the GenEd API, which --rebuild
+                # promises not to do; whatever is on disk is used as it is.
+                logger.info("--rebuild: skipping the side inputs (no network calls)")
+            else:
+                self._run_side_inputs(started)
 
             if rebuild:
                 logger.info("--rebuild: exporting from the checkpoint, no network calls")

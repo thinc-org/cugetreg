@@ -3,6 +3,10 @@ apps/core/bin/migrate_course.ts.
 
 Courses listed as GenEd with no area are recorded as "GENED"; GENED_FALLBACK_TYPE
 can fold them into a concrete area or drop them with SKIP.
+
+Each entry also carries descriptionEn/descriptionTh when the GenEd site has them,
+which EnrichProcessor uses to fill in what CUCIS leaves blank. Only courseNo and
+genEdType are required reading — migrate_course.ts ignores the rest.
 """
 
 from __future__ import annotations
@@ -14,7 +18,7 @@ from typing import Any
 
 from reg_scraper.config import settings
 from reg_scraper.exporters.base import Exporter
-from reg_scraper.receivers.gened_receiver import UNKNOWN_AREA
+from reg_scraper.receivers.gened_receiver import DESC_FIELDS, UNKNOWN_AREA
 
 logger = logging.getLogger(__name__)
 
@@ -53,7 +57,12 @@ class OverridesExporter(Exporter[list[dict[str, Any]]]):
                 dropped += 1
                 continue
 
-            payload.append({"courseNo": course_no, "genEdType": gen_ed})
+            entry: dict[str, str] = {"courseNo": course_no, "genEdType": gen_ed}
+            for field in DESC_FIELDS:
+                text = str(row.get(field) or "").strip()
+                if text:  # left out entirely when the GenEd site has no text
+                    entry[field] = text
+            payload.append(entry)
             counts[gen_ed] += 1
 
         payload.sort(key=lambda item: item["courseNo"])
@@ -73,9 +82,13 @@ class OverridesExporter(Exporter[list[dict[str, Any]]]):
             logger.info("%d courses had no GenEd area -> %s", unknown, action)
         if dropped:
             logger.info("%d courses left out of overrides.json", dropped)
+        described = sum(
+            1 for entry in payload if any(entry.get(field) for field in DESC_FIELDS)
+        )
         logger.info(
-            "Wrote %d GenEd overrides -> %s (%s)",
+            "Wrote %d GenEd overrides (%d with description text) -> %s (%s)",
             len(payload),
+            described,
             output_path,
             ", ".join(f"{key}={value}" for key, value in sorted(counts.items())) or "empty",
         )

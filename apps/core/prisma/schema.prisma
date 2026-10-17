@@ -62,6 +62,10 @@ model CourseInfo {
   reviews         Review[]
   courseFavorites CourseFavorite[]
 
+  // 4YearPlan
+  curriculumRequirements CurriculumRequirement[]
+  studyPlanItems         StudyPlanItem[]
+
   // Facet filter on the course list/search endpoint (getCourseList.sql
   // `WHERE ci.faculty = ANY(...)`) — plain btree, equality/ANY lookup.
   @@index([faculty])
@@ -131,6 +135,166 @@ model CourseFavorite {
 
   @@unique([courseNo, userId], name: "course_favorite_unique")
   @@map("course_favorite")
+}
+
+// 4YearPlan
+
+model Curriculum {
+  id         String  @id @default(cuid())
+  faculty    Faculty
+  department String?
+  name       String
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  categories    CurriculumCategory[]
+  requirements  CurriculumRequirement[]
+  creditTargets OfficialCreditTarget[]
+  plans         StudyPlan[]
+
+  @@map("curriculum")
+}
+
+model CurriculumCategory {
+  id           String     @id @default(cuid())
+  curriculumId String     @map("curriculum_id")
+  curriculum   Curriculum @relation(fields: [curriculumId], references: [id], onDelete: Cascade)
+
+  name String
+
+  requirements   CurriculumRequirement[]
+  creditTargets  OfficialCreditTarget[]
+  planCategories PlanCategory[]
+
+  @@unique([curriculumId, name])
+  @@map("curriculum_category")
+}
+
+model CurriculumRequirement {
+  id           String     @id @default(cuid())
+  curriculumId String     @map("curriculum_id")
+  curriculum   Curriculum @relation(fields: [curriculumId], references: [id], onDelete: Cascade)
+
+  yearOfStudy Int      @map("year_of_study")
+  semester    Semester
+
+  courseNo   String     @map("course_no")
+  courseInfo CourseInfo @relation(fields: [courseNo], references: [courseNo])
+
+  categoryId String             @map("category_id")
+  category   CurriculumCategory @relation(fields: [categoryId], references: [id])
+
+  planItems StudyPlanItem[]
+
+  @@unique([curriculumId, yearOfStudy, semester, courseNo])
+  @@map("curriculum_requirement")
+}
+
+model OfficialCreditTarget {
+  id           String     @id @default(cuid())
+  curriculumId String     @map("curriculum_id")
+  curriculum   Curriculum @relation(fields: [curriculumId], references: [id], onDelete: Cascade)
+
+  yearOfStudy Int?      @map("year_of_study")
+  semester    Semester?
+
+  categoryId String             @map("category_id")
+  category   CurriculumCategory @relation(fields: [categoryId], references: [id])
+
+  targetCredit Int @map("target_credit")
+
+  @@unique([curriculumId, yearOfStudy, semester, categoryId])
+  @@map("official_credit_target")
+}
+
+model CustomCreditTarget {
+  id     String    @id @default(cuid())
+  planId String    @map("plan_id")
+  plan   StudyPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
+
+  yearOfStudy Int?      @map("year_of_study")
+  semester    Semester?
+
+  categoryId String       @map("category_id")
+  category   PlanCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  targetCredit Int @map("target_credit")
+
+  @@unique([planId, yearOfStudy, semester, categoryId])
+  @@map("custom_credit_target")
+}
+
+model StudyPlan {
+  id     String @id @default(cuid())
+  userId String @map("user_id")
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  name String @default("แผนการเรียนของฉัน")
+
+  curriculumId String?     @map("curriculum_id")
+  curriculum   Curriculum? @relation(fields: [curriculumId], references: [id])
+
+  isDefault Boolean @default(false) @map("is_default")
+
+  // Regular terms (FIRST/SECOND) visible beyond the base 4 years / 8 terms. Starts at 0;
+  // incremented one at a time via the "add term" action for students who run past 4 years.
+  extraTerms Int @default(0) @map("extra_terms")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  categories          PlanCategory[]
+  items               StudyPlanItem[]
+  customCreditTargets CustomCreditTarget[]
+
+  @@map("study_plan")
+}
+
+model PlanCategory {
+  id     String    @id @default(cuid())
+  planId String    @map("plan_id")
+  plan   StudyPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
+
+  name String
+
+  curriculumCategoryId String?             @map("curriculum_category_id")
+  curriculumCategory   CurriculumCategory? @relation(fields: [curriculumCategoryId], references: [id], onDelete: SetNull)
+
+  items         StudyPlanItem[]
+  creditTargets CustomCreditTarget[]
+
+  @@unique([planId, name])
+  @@map("plan_category")
+}
+
+model StudyPlanItem {
+  id     String    @id @default(cuid())
+  planId String    @map("plan_id")
+  plan   StudyPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
+
+  yearOfStudy Int      @map("year_of_study")
+  semester    Semester
+
+  courseNo   String     @map("course_no")
+  courseInfo CourseInfo @relation(fields: [courseNo], references: [courseNo])
+
+  categoryId String       @map("category_id")
+  category   PlanCategory @relation(fields: [categoryId], references: [id])
+
+  requirementId String?               @map("requirement_id")
+  requirement   CurriculumRequirement? @relation(fields: [requirementId], references: [id], onDelete: SetNull)
+
+  isGraded      Boolean @default(false) @map("is_graded")
+  expectedGrade Decimal @default(0) @map("expected_grade")
+
+  itemOrder String @default("0|hzzzzz:") @map("item_order")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@unique([planId, courseNo])
+  @@map("study_plan_item")
 }
 
 // course_section
@@ -340,6 +504,9 @@ model User {
   sessions        Session[]
   accounts        Account[]
   courseFavorites CourseFavorite[]
+
+  // 4YearPlan
+  studyPlans StudyPlan[]
 
   @@map("user")
 }

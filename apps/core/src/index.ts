@@ -13,6 +13,7 @@ import courses from "@/routes/courses.js";
 import internalAnnouncement from "@/routes/internalAnnouncement.js";
 import publicCarts from "@/routes/publicCarts.js";
 import reviews from "@/routes/reviews.js";
+import studyPlans from "@/routes/studyPlans.js";
 import user from "@/routes/user.js";
 
 import { serve } from "@hono/node-server";
@@ -81,6 +82,7 @@ app.use("/activity/*", middlewareAuth); // Middleware from Bearer Token
 app.use("/admin/*", middlewareAuth);
 app.use("/carts/*", middlewareAuth);
 app.use("/reviews/*", middlewareAuth);
+app.use("/study-plans/*", middlewareAuth);
 app.use("/user/*", middlewareAuth);
 
 // Protected routes (session injected by middlewareAuth above)
@@ -88,6 +90,7 @@ app.route("/activity", activity);
 app.route("/admin", admin);
 app.route("/carts", carts);
 app.route("/reviews", reviews);
+app.route("/study-plans", studyPlans);
 app.route("/user", user);
 
 app.get("/health", (c) => c.json({ status: "ok" }));

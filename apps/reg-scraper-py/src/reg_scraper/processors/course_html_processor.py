@@ -30,7 +30,28 @@ THAI_MONTHS = {
     "ตุลาคม": 10,
     "พฤศจิกายน": 11,
     "ธันวาคม": 12,
+    "ม.ค.": 1,
+    "ก.พ.": 2,
+    "มี.ค.": 3,
+    "เม.ย.": 4,
+    "พ.ค.": 5,
+    "มิ.ย.": 6,
+    "ก.ค.": 7,
+    "ส.ค.": 8,
+    "ก.ย.": 9,
+    "ต.ค.": 10,
+    "พ.ย.": 11,
+    "ธ.ค.": 12,
 }
+
+MIDTERM_LABEL = "วันสอบกลางภาค"
+FINAL_LABEL = "วันสอบปลายภาค"
+CONDITION_LABEL = "เงื่อนไขรายวิชา"
+
+_EXAM_RE = re.compile(
+    r"(\d{1,2})\s+([^\s]+)\s+(\d{4})\s+เวลา\s*(\d{1,2}:\d{2})\s*-\s*(\d{1,2}:\d{2})"
+)
+_NO_EXAM = ("TDF", "รอประกาศ", "TBA")
 
 
 VALID_DAYS: set[str] = {"MO", "TU", "WE", "TH", "FR", "SA", "SU", "IA", "AR"}
@@ -100,24 +121,59 @@ def note_parser(value: str) -> str | None:
 
 
 def exam_date_parser(value: str) -> ExamPeriod | None:
-    if not value or value.startswith("T"):
+    """Parse one exam cell, e.g. "25 ก.ย. 2568 เวลา 8:30-11:30 น."."""
+    value = re.sub(r"\s+", " ", value or "").strip()
+    if not value or any(marker in value for marker in _NO_EXAM):
         return None
-    parts = value.split()
-    if len(parts) < 5:
+
+    match = _EXAM_RE.search(value)
+    if match is None:
         return None
-    day = parts[0].zfill(2)
-    month_name = parts[1]
-    year_be = int(parts[2])
-    month = THAI_MONTHS.get(month_name)
+
+    day, month_name, year_be, start, end = match.groups()
+    month = THAI_MONTHS.get(month_name.strip())
     if month is None:
         return None
-    gregorian_year = year_be - 543
-    date = datetime(gregorian_year, month, int(day))
-    period = period_parser(parts[4])
+
+    date = datetime(int(year_be) - 543, month, int(day))
     return ExamPeriod(
-        period=period,
+        period=period_parser(f"{start}-{end}"),
         date=date.strftime("%Y-%m-%dT00:00:00.000Z"),
     )
+
+
+def exam_dates_parser(soup: BeautifulSoup) -> tuple[ExamPeriod | None, ExamPeriod | None]:
+    """Read midterm/final from the exam table by their labels, not by position."""
+    table = soup.select_one("#Table4")
+    text = (table or soup).get_text(" ", strip=True)
+
+    midterm_at = text.find(MIDTERM_LABEL)
+    final_at = text.find(FINAL_LABEL)
+    if midterm_at < 0 and final_at < 0:
+        return None, None
+
+    def value_after(label_at: int, label: str, stop: int) -> str:
+        if label_at < 0:
+            return ""
+        chunk = text[label_at:stop] if stop > label_at else text[label_at:]
+        return chunk[len(label):].lstrip(" :")
+
+    midterm_text = value_after(midterm_at, MIDTERM_LABEL, final_at)
+    final_text = value_after(final_at, FINAL_LABEL, -1)
+    return exam_date_parser(midterm_text), exam_date_parser(final_text)
+
+
+def course_condition_parser(soup: BeautifulSoup, fallback: str = "") -> str:
+    """Read "เงื่อนไขรายวิชา :" from its label; "-" means the course has none."""
+    for font in soup.find_all("font"):
+        if CONDITION_LABEL not in font.get_text():
+            continue
+        value = font.find_next_sibling("font", attrs={"color": "#660000"})
+        if value is None and font.parent is not None:
+            value = font.parent.find("font", attrs={"color": "#660000"})
+        if value is not None:
+            return re.sub(r"\s+", " ", value.get_text(strip=True)).strip()
+    return fallback
 
 
 class CourseHtmlProcessor(Processor[RawCoursePage, Course]):
@@ -138,7 +194,9 @@ class CourseHtmlProcessor(Processor[RawCoursePage, Course]):
         course_name_en = list1[2]
         credit = float(list1[3]) if list1[3].replace(".", "", 1).isdigit() else 0.0
         credit_hours = list1[4] + (list1[5] if len(list1) > 5 else "")
-        course_condition = list1[6] if len(list1) > 6 else ""
+        course_condition = course_condition_parser(
+            soup, fallback=list1[6] if len(list1) > 6 else ""
+        )
         faculty = course_no[:2]
 
         list2 = [
@@ -148,8 +206,7 @@ class CourseHtmlProcessor(Processor[RawCoursePage, Course]):
         study_program = study_program_parser(list2[0]) if list2 else page.study_program
         course_name_th = list2[1] if len(list2) > 1 else ""
         department = department_parser(list2[2]) if len(list2) > 2 else ""
-        midterm = exam_date_parser(list2[3]) if len(list2) > 3 else None
-        final = exam_date_parser(list2[4]) if len(list2) > 4 else None
+        midterm, final = exam_dates_parser(soup)
 
         sections: list[Section] = []
         current = Section(

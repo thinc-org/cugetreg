@@ -3,7 +3,14 @@ import { api } from '$lib/api';
 import { isCancel } from 'axios';
 import { SvelteSet, SvelteURLSearchParams } from 'svelte/reactivity';
 
-import type { Semester, SortBy, StudyProgram } from '@cugetreg/zod-schemas';
+import type {
+  GetCourseResponse,
+  Semester,
+  SortBy,
+  StudyProgram,
+} from '@cugetreg/zod-schemas';
+
+import { type HomeCourse, mapCourse } from './home-course';
 
 export interface CourseQuery {
   academicYear: number;
@@ -24,37 +31,26 @@ export interface CourseQuery {
   favorite: boolean;
 }
 
-interface CourseResponse {
-  data?: unknown[];
-  total?: number;
-}
-
-interface CourseResultsOptions<T> {
+interface CourseResultsOptions {
   limit?: number;
-  mapCourse: (course: unknown) => T;
-  getKey: (course: T) => string;
 }
 
-export class CourseResults<T> {
-  courses = $state.raw<T[]>([]);
+export class CourseResults {
+  courses = $state.raw<HomeCourse[]>([]);
   isLoading = $state(false);
   hasMore = $state(true);
   totalResults = $state(0);
   error = $state<unknown>();
 
   readonly #limit: number;
-  readonly #mapCourse: (course: unknown) => T;
-  readonly #getKey: (course: T) => string;
 
   #query?: CourseQuery;
   #offset = 0;
   #generation = 0;
   #controller?: AbortController;
 
-  constructor({ limit = 20, mapCourse, getKey }: CourseResultsOptions<T>) {
+  constructor({ limit = 20 }: CourseResultsOptions = {}) {
     this.#limit = limit;
-    this.#mapCourse = mapCourse;
-    this.#getKey = getKey;
   }
 
   reset(query: CourseQuery) {
@@ -96,7 +92,7 @@ export class CourseResults<T> {
 
     try {
       const params = this.#createParams(query, requestedOffset);
-      const response = await api.get<CourseResponse>('/courses', {
+      const response = await api.get<GetCourseResponse>('/courses', {
         params,
         signal: controller.signal,
       });
@@ -106,7 +102,7 @@ export class CourseResults<T> {
       }
 
       const data = response.data.data ?? [];
-      const mapped = data.map(this.#mapCourse);
+      const mapped = data.map(mapCourse);
 
       this.totalResults = response.data.total ?? 0;
       this.#offset = requestedOffset + data.length;
@@ -117,10 +113,12 @@ export class CourseResults<T> {
         return;
       }
 
-      const existingKeys = new SvelteSet(this.courses.map(this.#getKey));
+      const existingKeys = new SvelteSet(
+        this.courses.map((course) => course.course.id),
+      );
       this.courses = [
         ...this.courses,
-        ...mapped.filter((course) => !existingKeys.has(this.#getKey(course))),
+        ...mapped.filter((course) => !existingKeys.has(course.course.id)),
       ];
     } catch (error) {
       if (isCancel(error)) return;

@@ -27,7 +27,10 @@ Run from repo root: `pnpm scraper:run`
 
 Both paths are configurable in `apps/reg-scraper-py/.env`.
 
-**Important:** JSON and Postgres are written **only when the full run completes**. Stopping mid-run (Ctrl+C) does not save partial export.
+**Important:** JSON and Postgres are written **only when the full run completes**.
+Stopping mid-run (Ctrl+C) does not save partial export — but the pages already
+fetched are kept in a checkpoint, so re-running resumes rather than restarting.
+See "Resuming an interrupted scrape" in [`README.md`](./README.md).
 
 ---
 
@@ -76,7 +79,7 @@ Schema source of truth: `src/reg_scraper/models.py` (`Course`, `Section`, `Class
 | `department` | string | | Department name (Thai) |
 | `credit` | number | `3.0` | Credit units |
 | `creditHours` | string | `"LECT 1.0 CR + …"` | Used to infer grading type in DB |
-| `courseCondition` | string | `"-"` | Prerequisite text |
+| `courseCondition` | string | `"-"` | Prerequisite text, e.g. `"PRER 2110215 AND 2110335 OR C.F."`. `"-"` is Reg Chula's own "no condition" placeholder, not a parse failure |
 | `studyProgram` | `"S"` \| `"T"` \| `"I"` | `"S"` | S=ทวิภาค, T=ตรีภาค, I=นานาชาติ |
 | `academicYear` | string | `"2568"` | Buddhist era year |
 | `semester` | `"1"` \| `"2"` \| `"3"` | `"2"` | 1=ภาคต้น, 2=ภาคปลาย, 3=ฤดูร้อน |
@@ -95,6 +98,16 @@ Schema source of truth: `src/reg_scraper/models.py` (`Course`, `Section`, `Class
   "date": "2026-03-15T00:00:00.000Z"
 }
 ```
+
+`date` is the Reg Chula Buddhist-era date converted to Gregorian
+(`25 ก.ย. 2568` → `2025-09-25`), at midnight; the time of day lives in `period`,
+zero-padded (`8:30` → `"08:30"`).
+
+`midterm` / `final` are `null` when Reg Chula has not published that exam yet —
+it shows `TDF (รอประกาศ)`, which is the majority of courses until the exam
+timetable is out. `null` for **every** course in a run is not expected; that was
+a parser bug (only full month names like `กันยายน` were recognised, never the
+abbreviated `ก.ย.` the site actually prints) and is fixed.
 
 ### Section fields
 

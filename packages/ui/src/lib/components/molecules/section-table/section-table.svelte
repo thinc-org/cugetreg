@@ -1,9 +1,14 @@
 <script lang="ts">
+	import { MediaQuery } from 'svelte/reactivity';
+
+	import { getBuildingFullName } from '@cugetreg/utils/buildings';
+
 	import type { SectionTableData } from '.';
 
 	import { Chip } from '../../atoms/chip';
 	import { SelectorButton } from '../../atoms/selector-button';
 	import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../atoms/table';
+	import * as Tooltip from '../tooltip';
 
 	interface Props {
 		class?: string;
@@ -22,7 +27,7 @@
 	}: Props = $props();
 
 	const getSeatColor = (value: string) => {
-		if (value === 'ปิด') return 'bg-surface-container-high text-on-surface-var';
+		if (value === 'ปิด') return 'bg-surface-container-highest text-white';
 		if (value.includes('/')) {
 			const [taken, total] = value.split('/').map((n) => parseInt(n.trim()));
 			if (taken < total) return 'bg-[#D1FEB6] text-[#4B991C]';
@@ -30,6 +35,9 @@
 		}
 		return 'bg-surface-container-high text-on-surface-var';
 	};
+
+	const isMobile = new MediaQuery('max-width: 767px', false);
+	let openLocationId = $state<string | null>(null);
 </script>
 
 {#if boxed}
@@ -73,7 +81,7 @@
 								>
 									<div class="pr-0">{cls.teacher}</div>
 									<div class="pr-0">{cls.schedule}</div>
-									<div class="pr-0">{cls.room}</div>
+									<div class="pr-0">{@render classLocation(cls.room, `boxed-${i}-${j}`)}</div>
 									<div>{cls.type}</div>
 								</div>
 							{/each}
@@ -135,7 +143,7 @@
 						<TableCell
 							class={`text-body2 py-5 ${row.seats === 'ปิด' ? 'text-on-surface-var' : 'text-on-surface'}`}
 						>
-							{cls.room}
+							{@render classLocation(cls.room, `table-${i}-${j}`)}
 						</TableCell>
 
 						<TableCell
@@ -158,3 +166,56 @@
 		</TableBody>
 	</Table>
 {/if}
+
+{#snippet classLocation(location: string, locationId: string)}
+	{@const locations = location.trim().split(' ')}
+	{@const building = locations[0]}
+	{@const roomNumber = locations[1]}
+
+	{@const buildingInfo = getBuildingFullName(building)}
+	{@const hoverTitle = `${buildingInfo.name_th} ห้อง ${roomNumber}`}
+
+	<Tooltip.Root
+		open={openLocationId === locationId}
+		disableCloseOnTriggerClick={isMobile.current}
+		onOpenChange={(open) => {
+			if (open) openLocationId = locationId;
+			else if (openLocationId === locationId) openLocationId = null;
+		}}
+	>
+		<Tooltip.Trigger
+			class={`cursor-pointer p-0 text-left ${
+				buildingInfo.map_url
+					? 'text-blue-500 underline'
+					: isMobile.current
+						? 'underline decoration-dotted underline-offset-2'
+						: 'hover:underline'
+			}`}
+			onclick={() => {
+				if (isMobile.current) {
+					openLocationId = openLocationId === locationId ? null : locationId;
+				}
+			}}
+		>
+			{building}
+			{roomNumber}
+		</Tooltip.Trigger>
+		<Tooltip.Content
+			sideOffset={6}
+			class="bg-surface-container-lowest text-on-surface max-w-64 shadow-lg"
+			arrowClasses="bg-surface-container-lowest"
+		>
+			{hoverTitle}
+			{#if buildingInfo.map_url}
+				<a
+					href={buildingInfo.map_url}
+					target="_blank"
+					rel="noopener noreferrer"
+					class="block text-blue-500 underline"
+				>
+					ดูใน Google Maps
+				</a>
+			{/if}
+		</Tooltip.Content>
+	</Tooltip.Root>
+{/snippet}

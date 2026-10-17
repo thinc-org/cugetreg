@@ -6,6 +6,7 @@ import {
   reviewStatus,
   semester,
   studyProgram,
+  vote,
 } from "./constants.js";
 
 export const UserResponseSchema = z.object({
@@ -31,6 +32,7 @@ export const UserReviewResponseSchema = z.object({
   totalReviews: z.int().min(0),
   page: z.int().min(1),
   limit: z.int().min(1),
+  ratingHistories: z.array(z.int()).length(10).optional(),
   reviews: z.array(
     z.object({
       id: z.string(),
@@ -40,10 +42,18 @@ export const UserReviewResponseSchema = z.object({
       studyProgram: studyProgram,
       academicYear: z.int().min(2564),
       semester: semester,
+      sectionNo: z.int().nullable().optional(),
       rejectionReason: z.string().nullable(),
       rating: z.int().min(1).max(10),
       content: z.string().nonempty(),
       status: reviewStatus,
+      stats: z
+        .object({
+          likeCount: z.number(),
+          dislikeCount: z.number(),
+        })
+        .optional(),
+      reaction: vote.optional(),
       createdAt: z.iso.datetime(),
     }),
   ),

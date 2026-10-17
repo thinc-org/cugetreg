@@ -74,6 +74,8 @@ class Settings(BaseSettings):
     scraper_gened_mode: SideInputMode = "auto"
 
     scraper_checkpoint_dir: str = "data/checkpoints"
+    scraper_regchula_checkpoint_ttl_hours: int = 12
+    scraper_max_consecutive_failures: int = 20
 
     cucis_base_url: str = "http://cucis.academic.chula.ac.th/search/"
     cucis_total_pages: int = 1490

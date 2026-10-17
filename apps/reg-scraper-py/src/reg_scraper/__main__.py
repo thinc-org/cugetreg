@@ -18,9 +18,9 @@ def configure_logging() -> None:
     )
 
 
-def run_scrape() -> int:
+def run_scrape(fresh: bool, rebuild: bool) -> int:
     pipeline = ScraperPipeline()
-    status = pipeline.run()
+    status = pipeline.run(fresh=fresh, rebuild=rebuild)
     print(status.model_dump_json(indent=2))
     return 0 if status.status == "completed" else 1
 
@@ -59,20 +59,20 @@ def main(argv: list[str] | None = None) -> None:
     parser.add_argument(
         "--fresh",
         action="store_true",
-        help="Discard the checkpoint and refetch from scratch (descriptions/gened only)",
+        help="Discard the checkpoint and refetch from scratch",
     )
     parser.add_argument(
         "--rebuild",
         action="store_true",
-        help="Rebuild the output file from the existing checkpoint without any network calls",
+        help="Rebuild the output from the existing checkpoint without any network calls",
     )
     args = parser.parse_args(argv)
     configure_logging()
 
     if args.command == "scrape":
-        if args.fresh or args.rebuild:
-            parser.error("--fresh/--rebuild apply to 'descriptions' and 'gened' only")
-        raise SystemExit(run_scrape())
+        if args.fresh and args.rebuild:
+            parser.error("--fresh and --rebuild cannot be combined")
+        raise SystemExit(run_scrape(args.fresh, args.rebuild))
     if args.command == "descriptions":
         raise SystemExit(run_descriptions(args.fresh, args.rebuild))
     if args.command == "gened":

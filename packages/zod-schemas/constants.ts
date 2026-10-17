@@ -58,6 +58,7 @@ export const sortBy = z.enum([
   "REMAINING_SUM",
   "COURSE_NO",
 ]);
+export const reviewSortBy = z.enum(["DATE_CREATE", "NAME", "RATING"]);
 export const sortOrder = z.enum(["asc", "desc"]);
 export const semester = z.enum(["FIRST", "SECOND", "SUMMER"]);
 export const visible = z.enum(["PUB", "PVT"]);
@@ -69,6 +70,7 @@ export type StudyProgram = z.infer<typeof studyProgram>;
 export type GenEdType = z.infer<typeof genEdType>;
 export type Assessment = z.infer<typeof assessment>;
 export type SortBy = z.infer<typeof sortBy>;
+export type ReviewSortBy = z.infer<typeof reviewSortBy>;
 export type SortOrder = z.infer<typeof sortOrder>;
 export type Semester = z.infer<typeof semester>;
 export type Visible = z.infer<typeof visible>;

@@ -3,7 +3,9 @@
   import { useSession } from '$lib/auth-client';
   import AppSidebar from '$lib/components/app-sidebar.svelte';
   import ExamsList from '$lib/components/exams-list.svelte';
+  import MyActivities from '$lib/components/my-activities.svelte';
   import SelectedCourse from '$lib/components/selected-course.svelte';
+  import TimetableActivityBlock from '$lib/components/timetable-activity-block.svelte';
   import TimetableBlockGroup from '$lib/components/timetable-block-group.svelte';
   import {
     getSemesterShortOptions,
@@ -20,6 +22,7 @@
     calculateCredit,
     createElementScreenshot,
     getDays,
+    getEarliestTime,
     getLatestTime,
     getMaxCredit,
     getViewCourseData,
@@ -27,9 +30,9 @@
     TIMETABLE_DEFAULT_START,
   } from '$lib/utils/schedule';
 
-  import { BookMarked, Loader2, Menu, X } from '@lucide/svelte';
+  import { BookMarked, Loader2, Menu, Plus, TreePine, X } from '@lucide/svelte';
   import { Copy, Download } from 'lucide-svelte';
-  import { getContext } from 'svelte';
+  import { getContext, tick } from 'svelte';
   import { fade } from 'svelte/transition';
 
   import { Button } from '@cugetreg/ui/atoms/button';
@@ -43,13 +46,22 @@
   import { EditSchedule } from '@cugetreg/ui/molecules/edit-schedule';
   import { SelectTimetable } from '@cugetreg/ui/molecules/select-timetable';
   import {
+    type ActivityFormData,
+    CreateActivity,
+  } from '@cugetreg/ui/organisms/create-activity';
+  import {
     CreateTimetable,
     type TimetableMetaData,
   } from '@cugetreg/ui/organisms/create-timetable';
   import { Footer } from '@cugetreg/ui/organisms/footer';
   import { RenameSchedule } from '@cugetreg/ui/organisms/rename-schedule';
   import * as Sidebar from '@cugetreg/ui/organisms/sidebar';
+  import {
+    ViewActivity,
+    type ViewActivityData,
+  } from '@cugetreg/ui/organisms/view-activity';
   import { ViewCourse } from '@cugetreg/ui/organisms/view-course';
+  import type { ColorVariant, Day } from '@cugetreg/utils/types';
 
   // ================ HOOKS ================
 
@@ -63,6 +75,9 @@
     updateCourse,
     removeCourse,
     updateCartMeta,
+    createActivity,
+    updateActivity,
+    removeActivity,
   } = useCartActions();
 
   const cartPromise = getContext<CartPromise>(CART_PROMISE_KEY);
@@ -78,15 +93,28 @@
   let showCreateScheduleModal = $state(false);
   let showDeleteScheduleModal = $state(false);
   let showViewCourseModal = $state(false);
+  let showCreateActivityModal = $state(false);
+  let showViewActivityModal = $state(false);
+  let creatingActivity = $state(false);
 
   let selectedCartItemId = $state<string | undefined>(undefined);
+  let selectedActivityId = $state<string | undefined>(undefined);
 
   let scheduleTableRef = $state<HTMLElement | null>(null);
 
   let sidebarExpanded = $state(true);
-  let openPanel = $state<'sidebar' | 'selected_only' | null>(null);
-  let activePanel = $state<'sidebar' | 'selected_only' | null>(null);
+  type SidebarPanel = 'sidebar' | 'selected_only' | 'activities_only';
+  let openPanel = $state<SidebarPanel | null>(null);
+  let activePanel = $state<SidebarPanel | null>(null);
   let selectedOpen = $state(true);
+  let activitiesOpen = $state(true);
+
+  // The activities header moves with the height of the course list above it,
+  // so unlike the other rail icons its offset is measured, not fixed.
+  const ACTIVITIES_ICON_DEFAULT_MARGIN = 18;
+  let activitiesHeaderEl = $state<HTMLElement>();
+  let activitiesIconEl = $state<HTMLElement>();
+  let activitiesIconMargin = $state(ACTIVITIES_ICON_DEFAULT_MARGIN);
   let activeModal = $state<'selected' | null>(null);
 
   // ================ DERIVED ================
@@ -112,10 +140,49 @@
       : '',
   );
 
-  const scheduleDays = $derived(getDays($userCart.currentCart.items));
-  const scheduleEndTime = $derived(
-    getLatestTime($userCart.currentCart.items, TIMETABLE_DEFAULT_END),
+  const activityItems = $derived($userCart.currentCart.activityItems ?? []);
+
+  const viewActivityData = $derived.by((): ViewActivityData | null => {
+    const activity = activityItems.find((a) => a.id === selectedActivityId);
+    if (!activity) return null;
+    return {
+      id: activity.id,
+      title: activity.title,
+      description: activity.description,
+      dayOfWeek: activity.dayOfWeek as Day,
+      periodStart: activity.periodStart,
+      periodEnd: activity.periodEnd,
+      color: (activity.color as ColorVariant | null) ?? 'primary',
+      hidden: activity.hidden,
+    };
+  });
+
+  const scheduleDays = $derived(
+    getDays($userCart.currentCart.items, activityItems),
   );
+  const scheduleStartTime = $derived(
+    getEarliestTime(activityItems, TIMETABLE_DEFAULT_START),
+  );
+  const scheduleEndTime = $derived(
+    getLatestTime(
+      $userCart.currentCart.items,
+      TIMETABLE_DEFAULT_END,
+      activityItems,
+    ),
+  );
+
+  function openActivity(activityId: string) {
+    selectedActivityId = activityId;
+    showViewActivityModal = true;
+  }
+
+  async function handleCreateActivity(activity: ActivityFormData) {
+    creatingActivity = true;
+    const { daysOfWeek, ...fields } = activity;
+    const created = await createActivity(fields, daysOfWeek);
+    creatingActivity = false;
+    if (created) showCreateActivityModal = false;
+  }
 
   function handleTimetableScreenshot() {
     createElementScreenshot(
@@ -153,6 +220,57 @@
     selectedOpen = true;
     activePanel = 'selected_only';
   }
+
+  function focusActivities() {
+    if (sidebarExpanded && activitiesOpen) {
+      activitiesOpen = false;
+      activePanel = null;
+      return;
+    }
+    sidebarExpanded = true;
+    openPanel = null;
+    activitiesOpen = true;
+    activePanel = 'activities_only';
+  }
+
+  /** Line the rail icon up with the vertical centre of the section title. */
+  function alignActivitiesIcon() {
+    if (!activitiesIconEl) return;
+    if (!activitiesHeaderEl) {
+      activitiesIconMargin = ACTIVITIES_ICON_DEFAULT_MARGIN;
+      return;
+    }
+    const TITLE_LINE_HEIGHT = 20;
+    const headerCenter =
+      activitiesHeaderEl.getBoundingClientRect().top + TITLE_LINE_HEIGHT / 2;
+    const icon = activitiesIconEl.getBoundingClientRect();
+    const iconCenter = icon.top + icon.height / 2;
+    const next = Math.max(
+      0,
+      Math.round(activitiesIconMargin + headerCenter - iconCenter),
+    );
+    if (next !== activitiesIconMargin) activitiesIconMargin = next;
+  }
+
+  // Re-align whenever the panel content above the header changes size
+  // (courses added, a section opened/closed, the slide transition running).
+  $effect(() => {
+    const header = activitiesHeaderEl;
+    if (!header?.parentElement) {
+      alignActivitiesIcon();
+      return;
+    }
+    // Only watch what sits above the header; nothing here depends on the
+    // rail, so moving the icon can't feed back into another resize.
+    tick().then(alignActivitiesIcon);
+    const observer = new ResizeObserver(() => alignActivitiesIcon());
+    let el = header.previousElementSibling;
+    while (el) {
+      observer.observe(el);
+      el = el.previousElementSibling;
+    }
+    return () => observer.disconnect();
+  });
 </script>
 
 <svelte:window bind:innerWidth />
@@ -237,6 +355,40 @@
     exitOnBackgroundClick
     centered
     dim
+    class="pt-16 md:pt-20"
+    bind:show={showCreateActivityModal}
+  >
+    <CreateActivity
+      submitting={creatingActivity}
+      onCancel={() => (showCreateActivityModal = false)}
+      onConfirm={handleCreateActivity}
+    />
+  </Modal>
+
+  <Modal
+    exitOnEsc
+    exitOnBackgroundClick
+    centered
+    dim
+    class="pt-16 md:pt-20"
+    bind:show={showViewActivityModal}
+  >
+    <ViewActivity
+      data={viewActivityData}
+      onExit={() => (showViewActivityModal = false)}
+      onUpdate={(id, fields) => updateActivity(id, fields)}
+      onRemove={(id) => {
+        removeActivity(id);
+        showViewActivityModal = false;
+      }}
+    />
+  </Modal>
+
+  <Modal
+    exitOnEsc
+    exitOnBackgroundClick
+    centered
+    dim
     bind:show={showDeleteScheduleModal}
   >
     <ConfirmDeleteSchedule
@@ -292,6 +444,24 @@
             </Sidebar.MenuButton>
           </div>
         </Sidebar.MenuItem>
+        {#if activityItems.length > 0}
+          <Sidebar.MenuItem>
+            <div
+              bind:this={activitiesIconEl}
+              style:margin-top="{activitiesIconMargin}px"
+            >
+              <Sidebar.MenuButton
+                onclick={focusActivities}
+                isActive={activePanel === 'activities_only'}
+                size="lg"
+                tooltipContent="กิจกรรมของฉัน"
+                class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-5!"
+              >
+                <TreePine size="20" strokeWidth={2.5} />
+              </Sidebar.MenuButton>
+            </div>
+          </Sidebar.MenuItem>
+        {/if}
       {/snippet}
       {#snippet panelContent({ expanded })}
         {#if expanded}
@@ -333,9 +503,22 @@
               <SelectedCourse
                 headerDivider
                 bind:open={selectedOpen}
-                class="border-b border-neutral-100"
+                class={[
+                  'border-b border-neutral-100',
+                  activityItems.length > 0 && 'pb-6',
+                ]}
               />
             </div>
+            {#if activityItems.length > 0}
+              <div bind:this={activitiesHeaderEl} class="mt-6">
+                <MyActivities
+                  headerDivider
+                  bind:open={activitiesOpen}
+                  class="border-b border-neutral-100 pb-4"
+                  onSelect={openActivity}
+                />
+              </div>
+            {/if}
           {/if}
 
           <div
@@ -401,18 +584,26 @@
           >
             <div class="min-w-150">
               <Timetable
-                startTime={TIMETABLE_DEFAULT_START}
-                periodPerDay={scheduleEndTime - TIMETABLE_DEFAULT_START}
+                startTime={scheduleStartTime}
+                periodPerDay={scheduleEndTime - scheduleStartTime}
                 days={scheduleDays}
               >
                 {#each $userCart.currentCart?.items as course (course.id)}
                   <TimetableBlockGroup
                     {course}
                     cartItems={$userCart.currentCart.items}
+                    startTime={scheduleStartTime}
                     onclick={(id) => {
                       selectedCartItemId = id;
                       showViewCourseModal = true;
                     }}
+                  />
+                {/each}
+                {#each activityItems as activity (activity.id)}
+                  <TimetableActivityBlock
+                    {activity}
+                    startTime={scheduleStartTime}
+                    onclick={openActivity}
                   />
                 {/each}
               </Timetable>
@@ -420,9 +611,20 @@
           </div>
           <CustomizeScrollbar target={scheduleTableRef} />
           <div
-            class="hidden lg:mx-5 lg:mb-5 lg:flex lg:justify-end lg:text-lg lg:font-bold"
+            class="my-4 flex items-center justify-between lg:mx-5 lg:mt-0 lg:mb-5"
           >
-            หน่วยกิตรวม {totalCredit} / {maxCredit}
+            <Button
+              variant="outlined"
+              color="primary"
+              class="m-0 gap-1"
+              onclick={() => (showCreateActivityModal = true)}
+            >
+              <Plus size={18} strokeWidth={2.5} />
+              กิจกรรม
+            </Button>
+            <span class="hidden lg:inline lg:text-lg lg:font-bold">
+              หน่วยกิตรวม {totalCredit} / {maxCredit}
+            </span>
           </div>
 
           <div
@@ -474,7 +676,9 @@
     </AppSidebar>
   </div>
   <div class="lg:hidden">
-    {#if !activeModal}
+    <!-- Hide the floating button while an activity modal is open so it
+         doesn't cover the modal's action buttons. -->
+    {#if !activeModal && !showCreateActivityModal && !showViewActivityModal}
       <div transition:fade={{ duration: 200 }}>
         <!-- TODO: Remove hard-coded color -->
         <button
@@ -504,7 +708,18 @@
         </button>
         <SelectedCourse
           collapsible={false}
-          class="border-b border-neutral-100"
+          class={[
+            'border-b border-neutral-100',
+            activityItems.length > 0 && 'pb-6',
+          ]}
+        />
+        <MyActivities
+          collapsible={false}
+          class="mt-6 border-b border-neutral-100"
+          onSelect={(id) => {
+            activeModal = null;
+            openActivity(id);
+          }}
         />
       </div>
     </div>

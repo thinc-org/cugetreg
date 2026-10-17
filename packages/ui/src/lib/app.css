@@ -1,6 +1,7 @@
 @import 'tailwindcss';
 
 @source '@cugetreg/utils/constants';
+@source '../../../utils/**/*.{js,ts}';
 
 @custom-variant dark (&:where(.dark, .dark *));
 
@@ -70,6 +71,8 @@
 	--pink-300: hsl(324 90% 92%);
 	--pink-500: hsl(324 86% 73%);
 	--pink-700: hsl(324 84% 42%);
+	--dark-pink-300: #f2c6d9;
+	--dark-pink-700: #bd216f;
 	--red-300: hsl(0 89% 93%);
 	--red-500: hsl(0 92% 69%);
 	--red-700: hsl(0 87% 37%);
@@ -79,6 +82,8 @@
 	--green-300: hsl(98 97% 85%);
 	--green-500: hsl(97 68% 50%);
 	--green-700: hsl(97 69% 35%);
+	--dark-green-300: #c9ffd3;
+	--dark-green-700: #21a02b;
 	--teal-300: hsl(166 100% 93%);
 	--teal-500: hsl(166 68% 50%);
 	--teal-700: hsl(166 50% 40%);

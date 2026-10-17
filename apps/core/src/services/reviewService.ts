@@ -17,9 +17,14 @@ import type {
 export const reviewService = {
   submitReview: async (userId: string, newReview: SubmitReviewBodySchema) => {
     return prisma.$transaction(async (tx) => {
-      const course = await tx.course.findFirst({
+      const course = await tx.course.findUnique({
         where: {
-          courseNo: newReview.courseNo,
+          course_unique: {
+            studyProgram: mapStudyProgram(newReview.studyProgram),
+            academicYear: newReview.academicYear,
+            semester: mapSemester(newReview.semester),
+            courseNo: newReview.courseNo,
+          },
         },
       });
 
@@ -76,23 +81,28 @@ export const reviewService = {
     const { interaction } = body;
     return prisma.$transaction(
       async (tx) => {
-        const [review, vote] = await Promise.all([
-          tx.review.findFirst({
-            where: {
-              id: reviewId,
-            },
-          }),
-          tx.reviewVote.findFirst({
-            where: {
-              userId,
-              reviewId,
-            },
-          }),
-        ]);
+        const review = await tx.review.findUnique({
+          where: {
+            id: reviewId,
+          },
+        });
 
         if (!review) {
           throw new Error("REVIEW_NOT_FOUND");
         }
+
+        if (review.status !== "APPROVED") {
+          throw new Error("REVIEW_IS_PENDING_OR_REJECTED");
+        }
+
+        const vote = await tx.reviewVote.findUnique({
+          where: {
+            userId_reviewId: {
+              userId,
+              reviewId,
+            },
+          },
+        });
 
         let myInteraction: VoteType | null = null;
 
@@ -168,6 +178,21 @@ export const reviewService = {
 
     if (review.userId !== userId) {
       throw new Error("NOT_REVIEW_OWNER");
+    }
+
+    const course = await prisma.course.findUnique({
+      where: {
+        course_unique: {
+          studyProgram: review.studyProgram,
+          academicYear: body.academicYear,
+          semester: mapSemester(body.semester),
+          courseNo: review.courseNo,
+        },
+      },
+    });
+
+    if (!course) {
+      throw new Error("COURSE_NOT_FOUND");
     }
 
     if (body.sectionNo !== undefined) {

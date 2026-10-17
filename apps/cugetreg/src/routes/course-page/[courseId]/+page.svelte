@@ -519,10 +519,19 @@
       }
     } catch (error) {
       if (isAxiosError(error)) {
-        if (error.status === 401)
+        if (error.status === 401) {
           toast.error('Please login before doing this action', {
             position: 'bottom-right',
           });
+        } else if (error.status === 409) {
+          toast.error('ไม่สามารถ Like/Dislike รีวิวที่ยังไม่ถูกอนุมัติ', {
+            position: 'bottom-right',
+          });
+        } else {
+          toast.error('Something went wrong', {
+            position: 'bottom-right',
+          });
+        }
         return;
       }
       console.error(error);
@@ -532,6 +541,12 @@
     } finally {
       pendingReviewVotes = pendingReviewVotes.filter((id) => id !== reviewId);
     }
+  }
+
+  function isCourseNotOpenError(error: unknown) {
+    return (
+      isAxiosError(error) && error.response?.data?.error === 'COURSE_NOT_FOUND'
+    );
   }
 
   async function handleSubmitReview() {
@@ -556,6 +571,12 @@
         reviewContent = '';
         reviewRating = 1;
       } catch (error) {
+        if (isCourseNotOpenError(error)) {
+          toast.error('โปรดเลือกเทอมที่เปิดสอน', {
+            position: 'bottom-right',
+          });
+          return;
+        }
         console.error(error);
         toast.error('Something went wrong', {
           position: 'bottom-right',
@@ -583,6 +604,7 @@
       SubmitReviewResponseSchema.parse(response.data);
       await refreshReviews({ includeFacets: true, targetPage: 1 });
       reviewContent = '';
+      toast.success('ส่งรีวิวสำเร็จ', { position: 'bottom-right' });
     } catch (error) {
       if (isAxiosError(error)) {
         if (error.status === 401) {
@@ -591,6 +613,18 @@
           });
           return;
         }
+        if (error.status === 409) {
+          toast.error('คุณรีวิววิชานี้ไปแล้ว', {
+            position: 'bottom-right',
+          });
+          return;
+        }
+      }
+      if (isCourseNotOpenError(error)) {
+        toast.error('โปรดเลือกเทอมที่เปิดสอน', {
+          position: 'bottom-right',
+        });
+        return;
       }
 
       toast.error('Something went wrong', {
@@ -1064,8 +1098,9 @@
             >
               <AlertTriangle size={16} class="mt-0.5 text-amber-900" />
               <span class="font-sans text-neutral-900">
-                ข้อมูลคำอธิบายรายวิชาที่แสดงไม่ได้เป็นข้อมูลล่าสุด
-                อาจมีการเปลี่ยนแปลงได้ โปรดตรวจสอบกับรายวิชาที่จัดอีกครั้ง
+                ข้อมูลอาจมีการเปลี่ยนแปลง และยังไม่เชื่อมต่อกับ CU Get Reg
+                เวอร์ชั่นก่อนหน้า
+                โปรดตรวจสอบข้อมูลกับสำนักทะเบียนทุกครั้งก่อนลงทะเบียนเรียน
               </span>
             </div>
           </section>

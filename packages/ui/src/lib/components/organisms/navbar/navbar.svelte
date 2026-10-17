@@ -7,11 +7,12 @@
 	import { Input } from '$lib/components/atoms/input';
 	import Popover from '$lib/components/atoms/popover/popover.svelte';
 
-	import { Bell, Menu, Search } from '@lucide/svelte';
+	import { Bell, Menu, Moon, Search, Sun } from '@lucide/svelte';
+	import { onMount } from 'svelte';
 
 	import { cn, getShortenName } from '@cugetreg/utils';
 
-	import { CUGetRegDarkFull as CUGetRegLogo } from '../../logo/cugetreg';
+	import { CUGetRegDarkFull, CUGetRegWhiteFull } from '../../logo/cugetreg';
 	import { UserDialog } from '../../molecules/user-dialog';
 	import { MobileSidebar } from '../mobile-sidebar';
 
@@ -55,8 +56,20 @@
 	}: Props = $props();
 
 	let localSearch = $state('');
+	let isDark = $state(false);
+
+	onMount(() => {
+		const theme = localStorage.getItem('cugetreg:themeOverride') ?? 'light';
+
+		isDark = theme === 'dark';
+	});
 
 	let shortenedName = $derived(getShortenName(name));
+
+	const handleToggleTheme = () => {
+		isDark = !isDark;
+		onToggleTheme();
+	};
 
 	const navItems = [
 		{
@@ -95,16 +108,16 @@
 >
 	<div class="flex flex-1 flex-row items-center gap-3 lg:gap-6">
 		<IconButton variant="ghost" class="min-[900px]:hidden" onclick={toggleSideBar}>
-			<Menu size="16" strokeWidth="3" color="#353745" />
+			<Menu class="text-on-surface" size="16" strokeWidth="3" />
 		</IconButton>
 		<a href="/">
-			<CUGetRegLogo class="h-8 w-24 lg:h-10 lg:w-32" />
+			<CUGetRegDarkFull class="h-8 w-24 lg:h-10 lg:w-32 dark:hidden" />
+			<CUGetRegWhiteFull class="h-8 w-24 not-dark:hidden lg:h-10 lg:w-32" />
 		</a>
 		<div class="relative hidden items-center md:flex">
 			<Search
-				class="absolute right-[15%] my-auto lg:right-8"
+				class="text-on-surface-placeholder absolute right-[15%] my-auto lg:right-8"
 				size="16"
-				color="#898EA7"
 				strokeWidth="3"
 			/>
 			<Input
@@ -144,11 +157,23 @@
 		<!-- </a> -->
 		<button
 			type="button"
-			class="rounded-button hover:text-primary-container hidden size-10 items-center justify-center text-black md:flex"
+			class="rounded-button text-on-surface hover:text-primary-container hidden size-10 items-center justify-center md:flex"
 			onclick={() => goto('/announcement')}
 			aria-label="ประกาศ"
 		>
 			<Bell strokeWidth="2.5" size="16" />
+		</button>
+		<button
+			type="button"
+			class="rounded-button text-on-surface hover:text-primary-container hidden size-10 items-center justify-center md:flex"
+			onclick={() => handleToggleTheme()}
+			aria-label="เปลี่ยนโหมด"
+		>
+			{#if isDark}
+				<Moon strokeWidth="2.5" size="16" />
+			{:else}
+				<Sun strokeWidth="2.5" size="16" />
+			{/if}
 		</button>
 		{#if isLoggedIn}
 			<Popover name={shortenedName} bind:open={openPopover}>
@@ -181,8 +206,8 @@
 		{programLabel}
 		{onLogin}
 		{onSignOut}
-		{onToggleTheme}
 		{onAddSchedule}
 		onClose={toggleSideBar}
+		onToggleTheme={handleToggleTheme}
 	/>
 </div>

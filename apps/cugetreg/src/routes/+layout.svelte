@@ -1,6 +1,7 @@
 <script lang="ts">
   import '$lib/styles/app.css';
 
+  import { browser } from '$app/environment';
   import { goto } from '$app/navigation';
   import { page } from '$app/state';
   import {
@@ -123,8 +124,16 @@
   );
 
   function toggleTheme() {
+    if (!browser) return;
+
     if (typeof document === 'undefined') return;
-    document.documentElement.classList.toggle('dark');
+    const isDark = document.documentElement.classList.toggle('dark');
+
+    try {
+      localStorage.setItem('cugetreg:themeOverride', isDark ? 'dark' : 'light');
+    } catch {
+      // Keep the toggle working when storage is blocked.
+    }
   }
 
   const { createCart } = useCartActions();

@@ -27,7 +27,7 @@
 </script>
 
 {#if thumbWidth < 100}
-	<div class="relative mt-2 h-1 w-full rounded-full bg-gray-200">
+	<div class="bg-surface-container relative mt-2 h-1 w-full rounded-full">
 		<div
 			class="absolute top-0 h-full rounded-full bg-blue-500"
 			style="width: {thumbWidth}%; left: {thumbLeft}%;"

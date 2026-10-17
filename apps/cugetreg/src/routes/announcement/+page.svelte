@@ -47,17 +47,17 @@
 
 <div class="flex flex-col items-center justify-center pt-10">
   <div class="w-[90vw] pb-16 md:w-[60vw]">
-    <h1 class="mb-8 text-2xl font-bold text-[#1C1B1F]">การแจ้งเตือน</h1>
+    <h1 class="text-on-surface mb-8 text-2xl font-bold">การแจ้งเตือน</h1>
     {#if isLoading}
       <div
-        class="flex h-40 flex-col items-center justify-center gap-3 text-gray-400"
+        class="text-on-surface-var flex h-40 flex-col items-center justify-center gap-3"
       >
         <Loader2 class="animate-spin" size={32} />
         <span class="text-sm">กำลังโหลด...</span>
       </div>
     {:else if announcements.length === 0}
       <div
-        class="flex h-40 items-center justify-center rounded-2xl border border-dashed border-gray-300 text-gray-500"
+        class="border-surface-container-high text-on-surface-var flex h-40 items-center justify-center rounded-2xl border border-dashed"
       >
         ไม่มีการแจ้งเตือนในขณะนี้
       </div>
@@ -65,16 +65,16 @@
       <div class="flex flex-col gap-4">
         {#each announcements as item (item.id)}
           <button
-            class="flex flex-col items-start gap-1 rounded-2xl border-2 border-gray-200 bg-white px-10 py-8 transition-all hover:border-[#4A6CF7] focus:outline-none"
+            class="border-surface-container bg-surface-bright flex flex-col items-start gap-1 rounded-2xl border-2 px-10 py-8 transition-all hover:border-[#4A6CF7] focus:outline-none"
             onclick={() => goto(resolve(`/announcement/${item.id}`))}
           >
-            <span class="font-regular text-xs text-gray-600">CU GetReg</span>
-            <h2
-              class="text-left text-[17px] font-bold text-[#4A70C6] md:text-lg"
+            <span class="font-regular text-on-surface-var text-xs"
+              >CU GetReg</span
             >
+            <h2 class="text-primary text-left text-[17px] font-bold md:text-lg">
               {item.title}
             </h2>
-            <span class="text-xs text-gray-600">
+            <span class="text-on-surface-var text-xs">
               {formatDate(item.createdAt)}
             </span>
           </button>

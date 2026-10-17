@@ -836,7 +836,7 @@
 
 <svelte:window bind:innerWidth={screenWidth} />
 
-<div class="relative flex h-full flex-col overflow-hidden bg-white">
+<div class="bg-surface relative flex h-full flex-col overflow-hidden">
   <div class="relative flex flex-1 overflow-hidden">
     <AppSidebar
       showSidebar={screenWidth >= 1024}
@@ -848,12 +848,13 @@
       {#snippet iconItems({ expanded })}
         <Sidebar.MenuItem>
           <div class="mt-[0px]">
+            <!-- TODO: Remove hard-coded color -->
             <Sidebar.MenuButton
               onclick={toggleSidebar}
               isActive={expanded && activePanel === 'sidebar'}
               size="lg"
               tooltipContent="เมนู"
-              class="mx-auto size-12! justify-center rounded-xl p-0! ring-0 transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-5!"
+              class="data-[active=true]:bg-primary-low data-[active=true]:text-on-primary-low mx-auto size-12! justify-center rounded-xl p-0! ring-0 transition-all [&>svg]:size-5!"
             >
               <Menu size="20" strokeWidth={2.5} />
             </Sidebar.MenuButton>
@@ -861,6 +862,7 @@
         </Sidebar.MenuItem>
         <Sidebar.MenuItem>
           <div class="mt-[-8px]">
+            <!-- TODO: Remove hard-coded color -->
             <Sidebar.MenuButton
               onclick={() => {
                 activePanel = 'description_only';
@@ -869,7 +871,7 @@
               isActive={activePanel === 'description_only'}
               size="lg"
               tooltipContent="คำอธิบายรายวิชา"
-              class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-5!"
+              class="data-[active=true]:bg-primary-low data-[active=true]:text-on-primary-low mx-auto size-12! justify-center rounded-xl p-0! transition-all [&>svg]:size-5!"
             >
               <Book size="20" strokeWidth={2.5} />
             </Sidebar.MenuButton>
@@ -877,6 +879,7 @@
         </Sidebar.MenuItem>
         <Sidebar.MenuItem>
           <div class="mt-[-20px]">
+            <!-- TODO: Remove hard-coded color -->
             <Sidebar.MenuButton
               onclick={() => {
                 activePanel = 'detail_only';
@@ -885,7 +888,7 @@
               isActive={activePanel === 'detail_only'}
               size="lg"
               tooltipContent="รายละเอียดเซคชัน"
-              class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-5!"
+              class="data-[active=true]:bg-primary-low data-[active=true]:text-on-primary-low mx-auto size-12! justify-center rounded-xl p-0! transition-all [&>svg]:size-5!"
             >
               <StickyNote size="20" strokeWidth={2.5} />
             </Sidebar.MenuButton>
@@ -893,6 +896,7 @@
         </Sidebar.MenuItem>
         <Sidebar.MenuItem>
           <div class="mt-[-15px]">
+            <!-- TODO: Remove hard-coded color -->
             <Sidebar.MenuButton
               onclick={() => {
                 activePanel = 'review_only';
@@ -901,7 +905,7 @@
               isActive={activePanel === 'review_only'}
               size="lg"
               tooltipContent="รีวิวรายวิชา"
-              class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-5!"
+              class="data-[active=true]:bg-primary-low data-[active=true]:text-on-primary-low mx-auto size-12! justify-center rounded-xl p-0! transition-all [&>svg]:size-5!"
             >
               <MessageCircleQuestionIcon size="20" strokeWidth={2.5} />
             </Sidebar.MenuButton>
@@ -910,12 +914,13 @@
         {#if $session.data}
           <Sidebar.MenuItem>
             <div class="mt-[-10px]">
+              <!-- TODO: Remove hard-coded color -->
               <Sidebar.MenuButton
                 onclick={focusSelected}
                 isActive={activePanel === 'selected_only'}
                 size="lg"
                 tooltipContent="วิชาที่เลือก"
-                class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-5!"
+                class="data-[active=true]:bg-primary-low data-[active=true]:text-on-primary-low mx-auto size-12! justify-center rounded-xl p-0! transition-all [&>svg]:size-5!"
               >
                 <BookMarked size="20" strokeWidth={2.5} />
               </Sidebar.MenuButton>
@@ -988,10 +993,11 @@
                 </span>
               </button>
 
+              <!-- TODO: Remove hard-coded color -->
               <button
                 type="button"
                 data-hidden={!isLoggedIn}
-                class="flex items-center gap-1.5 rounded-xl bg-[#E9EEF6] px-3.5 py-1.5 text-sm font-medium text-[#004494] transition-all hover:bg-[#D2E0F5] data-[hidden=true]:hidden"
+                class="bg-primary-low text-on-primary-low hover:bg-primary-low-hover flex items-center gap-1.5 rounded-xl px-3.5 py-1.5 text-sm font-medium transition-all data-[hidden=true]:hidden"
                 onclick={() => {
                   scrollToSection(reviewSection);
                   setTimeout(() => reviewEditor?.focus(), 300);
@@ -1040,12 +1046,12 @@
           <section class="text-on-surface mx-auto w-full max-w-5xl">
             <button
               type="button"
-              class="mb-4 flex items-center justify-center gap-1 rounded-lg p-1 hover:bg-gray-100 active:bg-gray-200 lg:mb-1"
+              class="hover:bg-surface-container-low active:bg-surface-container mb-4 flex items-center justify-center gap-1 rounded-lg p-1 lg:mb-1"
               onclick={() => history.back()}
             >
               <ChevronLeft size={18} strokeWidth={2.5} />
               <span
-                class="translate-y-[-1px] text-sm font-normal text-[#353745]"
+                class="text-on-surface translate-y-[-1px] text-sm font-normal"
               >
                 กลับ
               </span>
@@ -1437,9 +1443,10 @@
               {#each Object.keys(sectionGroups) as groupName (groupName)}
                 <Accordion.Item
                   value={groupName}
-                  class="rounded-2xl border border-[#D6D7E1] bg-white px-4 py-2 md:px-6"
+                  class="border-surface-container bg-surface-bright rounded-2xl border px-4 py-2 md:px-6"
                 >
                   <Accordion.Trigger class="hover:no-underline">
+                    <!-- TODO: Remove hard-coded color -->
                     <div
                       class="flex items-center gap-2 text-xs font-medium text-[#4A70C6] sm:text-base"
                     >
@@ -1527,7 +1534,7 @@
                     <div>
                       <Select.Root type="single" bind:value={selectedYear}>
                         <Select.Trigger
-                          class="text-on-surface h-9 w-[120px] rounded-lg border border-[#D6D7E1] bg-white px-4 text-sm font-medium md:h-12 md:w-[180px] md:text-base"
+                          class="text-on-surface border-surface-container bg-surface-bright h-9 w-[120px] rounded-lg border px-4 text-sm font-medium md:h-12 md:w-[180px] md:text-base"
                         >
                           {selectedYear}
                         </Select.Trigger>
@@ -1543,7 +1550,7 @@
                     <div>
                       <Select.Root type="single" bind:value={selectedTerm}>
                         <Select.Trigger
-                          class="text-on-surface h-9 w-[120px] rounded-lg border border-[#D6D7E1] bg-white px-4 text-sm font-medium md:h-12 md:w-[180px] md:text-base"
+                          class="text-on-surface border-surface-container bg-surface-bright h-9 w-[120px] rounded-lg border px-4 text-sm font-medium md:h-12 md:w-[180px] md:text-base"
                         >
                           {selectedTerm}
                         </Select.Trigger>
@@ -1565,7 +1572,7 @@
                         disabled={writeReviewSectionOptions.length === 0}
                       >
                         <Select.Trigger
-                          class="text-on-surface h-9 w-[120px] rounded-lg border border-[#D6D7E1] bg-white px-4 text-sm font-medium md:h-12 md:w-[180px] md:text-base"
+                          class="text-on-surface border-surface-container bg-surface-bright h-9 w-[120px] rounded-lg border px-4 text-sm font-medium md:h-12 md:w-[180px] md:text-base"
                         >
                           {writeReviewSectionNo
                             ? `เซค ${writeReviewSectionNo}`
@@ -1598,7 +1605,7 @@
                       >
                         {#if getStarState(value) === 'half'}
                           <span class="relative inline-flex">
-                            <Star size={26} class="text-[#D6D7E1]" />
+                            <Star size={26} class="text-on-surface-disabled" />
                             <span
                               class="absolute inset-0 w-1/2 overflow-hidden"
                             >
@@ -1613,7 +1620,7 @@
                             size={26}
                             class={getStarState(value) === 'full'
                               ? 'text-primary fill-current'
-                              : 'text-[#D6D7E1]'}
+                              : 'text-on-surface-disabled'}
                           />
                         {/if}
                       </button>
@@ -1773,6 +1780,7 @@
               <div
                 class="mt-12 flex flex-col items-center justify-center gap-4 py-12 text-center"
               >
+                <!-- TODO: Remove hard-coded color -->
                 <NotebookPen
                   size={140}
                   strokeWidth={2.2}
@@ -1872,7 +1880,7 @@
           </section>
         </div>
       </div>
-      <div class="mt-auto w-full border-t bg-white">
+      <div class="bg-surface mt-auto w-full border-t">
         <Footer />
       </div>
     </AppSidebar>
@@ -1890,10 +1898,10 @@
       transition:fade={{ duration: 200 }}
     >
       <div
-        class="custom-scrollbar relative flex max-h-[85vh] w-full max-w-[400px] flex-col overflow-y-auto rounded-3xl bg-white p-6 shadow-2xl"
+        class="custom-scrollbar bg-surface-bright relative flex max-h-[85vh] w-full max-w-[400px] flex-col overflow-y-auto rounded-3xl p-6 shadow-2xl"
       >
         <button
-          class="absolute top-7 right-5 bg-white"
+          class="bg-surface-bright absolute top-7 right-5"
           onclick={() => (activeModal = null)}
         >
           <X size={20} strokeWidth={2.5} />

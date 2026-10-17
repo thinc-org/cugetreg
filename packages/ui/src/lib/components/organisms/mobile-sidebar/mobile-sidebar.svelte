@@ -110,7 +110,7 @@
 		<div class="flex items-center justify-between">
 			<div class="flex items-center gap-2">
 				<IconButton variant="ghost" onclick={onClose} aria-label="ปิดเมนู">
-					<Menu size="20" strokeWidth="2.5" color="#353745" />
+					<Menu class="text-on-surface" size="20" strokeWidth="2.5" />
 				</IconButton>
 				<a href="/" onclick={onClose}>
 					<CUGetRegLogo class="h-7 w-24" />
@@ -119,7 +119,7 @@
 			<div class="flex items-center gap-2">
 				<button
 					type="button"
-					class="rounded-button hover:text-primary-container flex size-8 items-center justify-center text-black"
+					class="rounded-button text-on-surface hover:text-primary-container flex size-8 items-center justify-center"
 					onclick={() => {
 						onClose();
 						goto('/announcement');

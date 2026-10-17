@@ -73,7 +73,7 @@
 
 <div
 	class={cn(
-		'relative flex w-[334px] flex-col gap-3 rounded-xl px-4 py-5 ring-2 ring-neutral-100 md:w-[440px] md:p-6',
+		'dark:bg-surface-bright relative flex w-[334px] flex-col gap-3 rounded-xl px-4 py-5 ring-2 ring-neutral-100 md:w-[440px] md:p-6',
 		className
 	)}
 	{...rest}
@@ -93,7 +93,8 @@
 		</div>
 		<div class="flex gap-1">
 			{#if specialType}
-				<Chip class="border border-indigo-500 bg-white text-indigo-700">{specialType}</Chip>
+				<Chip class="bg-surface-bright text-on-surface border border-indigo-500">{specialType}</Chip
+				>
 			{/if}
 			{#each course?.gened ?? [] as gened (gened)}
 				<GenedChip type={gened} />

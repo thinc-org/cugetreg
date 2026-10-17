@@ -91,48 +91,52 @@
 <div class="flex flex-row items-center justify-between lg:justify-center">
   <span class="mt-5 text-2xl font-bold lg:hidden">ตารางสอบ</span>
   <div class="hidden lg:mt-5 lg:flex lg:justify-center lg:gap-4">
+    <!-- TODO: Remove hard-coded color -->
     <ChevronLeft
       onclick={() => (showExamSchedule = 'Schedule')}
       strokeWidth={3}
       class={showExamSchedule === 'Schedule'
         ? 'cursor-pointer text-[#4A70C6] transition-colors hover:text-[#3B5EAB]'
-        : 'cursor-pointer text-[#D6D7E1] transition-colors hover:text-[#B0B2C5]'}
+        : 'text-on-surface-disabled cursor-pointer transition-colors hover:text-[#B0B2C5]'}
     />
+    <!-- TODO: Remove hard-coded color -->
     <ChevronRight
       onclick={() => (showExamSchedule = 'List')}
       strokeWidth={3}
       class={showExamSchedule === 'List'
         ? 'cursor-pointer text-[#4A70C6] transition-colors hover:text-[#3B5EAB]'
-        : 'cursor-pointer text-[#D6D7E1] transition-colors hover:text-[#B0B2C5]'}
+        : 'text-on-surface-disabled cursor-pointer transition-colors hover:text-[#B0B2C5]'}
     />
   </div>
   <div class="mt-5 flex justify-center lg:hidden lg:gap-4">
+    <!-- TODO: Remove hard-coded color -->
     <div
       class="rounded-l-lg px-4 py-3 {showExamSchedule === 'Schedule'
         ? 'bg-[#4A70C6]'
-        : 'bg-gray-200'}"
+        : 'bg-surface-container'}"
     >
       <ListOrdered
         size={18}
         onclick={() => (showExamSchedule = 'Schedule')}
         strokeWidth={1.5}
         class={showExamSchedule === 'Schedule'
-          ? 'cursor-pointer text-[#FFFFFF]'
-          : 'cursor-pointer text-[#353745] transition-colors hover:text-black'}
+          ? 'cursor-pointer text-white'
+          : 'text-on-surface hover:text-on-surface cursor-pointer transition-colors'}
       />
     </div>
+    <!-- TODO: Remove hard-coded color -->
     <div
       class="rounded-r-lg px-4 py-3 {showExamSchedule === 'List'
         ? 'bg-[#4A70C6]'
-        : 'bg-gray-200'}"
+        : 'bg-surface-container'}"
     >
       <Grid3X3
         size={18}
         onclick={() => (showExamSchedule = 'List')}
         strokeWidth={1.5}
         class={showExamSchedule === 'List'
-          ? 'cursor-pointer text-[#FFFFFF]'
-          : 'cursor-pointer text-[#353745] transition-colors hover:text-black'}
+          ? 'cursor-pointer text-white'
+          : 'text-on-surface hover:text-on-surface cursor-pointer transition-colors'}
       />
     </div>
   </div>

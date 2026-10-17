@@ -139,10 +139,10 @@
 
 		<!-- Text content -->
 		<div class="flex w-full flex-col items-center gap-1.5 px-24">
-			<h2 class="text-center text-3xl font-bold tracking-wide text-gray-800">
+			<h2 class="text-on-surface text-center text-3xl font-bold tracking-wide">
 				เริ่มเพิ่มตารางเรียน
 			</h2>
-			<p class="w-full text-center text-sm leading-relaxed text-gray-500">
+			<p class="text-on-surface-var w-full text-center text-sm leading-relaxed">
 				เริ่มสร้างตารางเรียนของคุณเพื่อวางแผนการลงทะเบียนเรียน
 				และดูภาพรวมตารางเรียนทั้งหมดที่คุณสร้างไว้ในหน้าโปรไฟล์นี้
 			</p>

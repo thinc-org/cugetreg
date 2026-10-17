@@ -204,6 +204,7 @@
             <hr class="mb-4 border-t border-neutral-100" />
           {/if}
           {#if genedCourses.length > 0}
+            <!-- TODO: Remove hard-coded color -->
             <p class="mb-1 text-sm font-medium text-[#6F7593]">วิชา GenEd</p>
             {#each genedCourses as course (course.id)}
               {@render groupedRow(course)}
@@ -211,6 +212,7 @@
           {/if}
 
           {#if otherCourses.length > 0}
+            <!-- TODO: Remove hard-coded color -->
             <p class="mt-4 mb-1 text-sm font-medium text-[#6F7593]">
               วิชาอื่นๆ
             </p>
@@ -293,7 +295,7 @@
       </span>
       <ChevronDown
         size={20}
-        class="text-gray-400 transition-transform duration-200 {open
+        class="text-on-surface-var transition-transform duration-200 {open
           ? 'rotate-180'
           : ''}"
       />

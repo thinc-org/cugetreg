@@ -8,14 +8,13 @@
 	import Popover from '$lib/components/atoms/popover/popover.svelte';
 
 	import { Bell, Menu, Moon, Search, Sun } from '@lucide/svelte';
+	import { onMount } from 'svelte';
 
 	import { cn, getShortenName } from '@cugetreg/utils';
 
 	import { CUGetRegDarkFull, CUGetRegWhiteFull } from '../../logo/cugetreg';
 	import { UserDialog } from '../../molecules/user-dialog';
 	import { MobileSidebar } from '../mobile-sidebar';
-	import { browser } from '$app/environment';
-	import { onMount } from 'svelte';
 
 	interface ScheduleOption {
 		name: string;

@@ -1,6 +1,7 @@
 <script lang="ts">
-	import { CUGetRegWhiteFull, CUGetRegDarkFull } from '../../logo/cugetreg/index.js';
-	import { ThincOnLight, ThincOnDark } from '$lib/components/logo/thinc/index.js';
+	import { ThincOnDark } from '$lib/components/logo/thinc/index.js';
+
+	import { CUGetRegWhiteFull } from '../../logo/cugetreg/index.js';
 	import { GitHubMark } from '../../logo/vendor/index.js';
 </script>
 

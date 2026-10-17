@@ -7,13 +7,15 @@
 	import { Input } from '$lib/components/atoms/input';
 	import Popover from '$lib/components/atoms/popover/popover.svelte';
 
-	import { Bell, Menu, Search } from '@lucide/svelte';
+	import { Bell, Menu, Moon, Search, Sun } from '@lucide/svelte';
 
 	import { cn, getShortenName } from '@cugetreg/utils';
 
 	import { CUGetRegDarkFull, CUGetRegWhiteFull } from '../../logo/cugetreg';
 	import { UserDialog } from '../../molecules/user-dialog';
 	import { MobileSidebar } from '../mobile-sidebar';
+	import { browser } from '$app/environment';
+	import { onMount } from 'svelte';
 
 	interface ScheduleOption {
 		name: string;
@@ -55,8 +57,20 @@
 	}: Props = $props();
 
 	let localSearch = $state('');
+	let isDark = $state(false);
+
+	onMount(() => {
+		const theme = localStorage.getItem('cugetreg:themeOverride') ?? 'light';
+
+		isDark = theme === 'dark';
+	});
 
 	let shortenedName = $derived(getShortenName(name));
+
+	const handleToggleTheme = () => {
+		isDark = !isDark;
+		onToggleTheme();
+	};
 
 	const navItems = [
 		{
@@ -150,6 +164,18 @@
 		>
 			<Bell strokeWidth="2.5" size="16" />
 		</button>
+		<button
+			type="button"
+			class="rounded-button text-on-surface hover:text-primary-container hidden size-10 items-center justify-center md:flex"
+			onclick={() => handleToggleTheme()}
+			aria-label="เปลี่ยนโหมด"
+		>
+			{#if isDark}
+				<Moon strokeWidth="2.5" size="16" />
+			{:else}
+				<Sun strokeWidth="2.5" size="16" />
+			{/if}
+		</button>
 		{#if isLoggedIn}
 			<Popover name={shortenedName} bind:open={openPopover}>
 				<UserDialog
@@ -181,8 +207,8 @@
 		{programLabel}
 		{onLogin}
 		{onSignOut}
-		{onToggleTheme}
 		{onAddSchedule}
 		onClose={toggleSideBar}
+		onToggleTheme={handleToggleTheme}
 	/>
 </div>

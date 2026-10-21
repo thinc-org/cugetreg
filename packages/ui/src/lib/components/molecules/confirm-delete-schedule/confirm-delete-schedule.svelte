@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { defineMessages, useTranslations } from '$lib/i18n';
+
 	import { Button } from '../../atoms/button';
 
 	interface Props {
@@ -8,12 +10,30 @@
 		variant?: 'overlay' | 'card';
 	}
 
-	let {
-		scheduleName = 'ตารางเรียนแสนสนุก',
-		onCancel,
-		onConfirm,
-		variant = 'overlay'
-	}: Props = $props();
+	let { scheduleName, onCancel, onConfirm, variant = 'overlay' }: Props = $props();
+
+	const t = useTranslations(
+		defineMessages({
+			th: {
+				defaultScheduleName: 'ตารางเรียนแสนสนุก',
+				title: 'ลบตารางเรียน',
+				question: 'คุณต้องการลบ',
+				confirmSuffix: 'ใช่หรือไม่',
+				cancel: 'ยกเลิก',
+				delete: 'ลบตาราง'
+			},
+			en: {
+				defaultScheduleName: 'My fun schedule',
+				title: 'Delete schedule',
+				question: 'Do you want to delete',
+				confirmSuffix: 'this schedule?',
+				cancel: 'Cancel',
+				delete: 'Delete'
+			}
+		})
+	);
+
+	const displayName = $derived(scheduleName ?? t('defaultScheduleName'));
 
 	const handleCancel = () => {
 		onCancel?.();
@@ -38,15 +58,15 @@
 		aria-labelledby="delete-title"
 		aria-describedby="delete-description"
 	>
-		<h2 id="delete-title" class="text-h2 text-on-surface font-bold">ลบตารางเรียน</h2>
+		<h2 id="delete-title" class="text-h2 text-on-surface font-bold">{t('title')}</h2>
 		<p id="delete-description" class="text-body2 text-on-surface/70 mt-4 font-medium">
-			คุณต้องการลบ<br />
-			'{scheduleName}'<br />
-			ใช่หรือไม่
+			{t('question')}<br />
+			'{displayName}'<br />
+			{t('confirmSuffix')}
 		</p>
 		<div class="mt-8 flex items-center justify-center gap-4">
-			<Button color="neutral" class="h-9 w-32" onclick={handleCancel}>ยกเลิก</Button>
-			<Button color="error" class="h-9 w-32" onclick={handleConfirm}>ลบตาราง</Button>
+			<Button color="neutral" class="h-9 w-32" onclick={handleCancel}>{t('cancel')}</Button>
+			<Button color="error" class="h-9 w-32" onclick={handleConfirm}>{t('delete')}</Button>
 		</div>
 	</div>
 </div>

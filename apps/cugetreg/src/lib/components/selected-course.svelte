@@ -17,6 +17,7 @@
   import { Button } from '@cugetreg/ui/atoms/button';
   import { GenedChip } from '@cugetreg/ui/atoms/gened-chip';
   import { IconButton } from '@cugetreg/ui/atoms/icon-button';
+  import { defineMessages, useTranslations } from '@cugetreg/ui/i18n';
   import { ColorPicker } from '@cugetreg/ui/molecules/colorpicker';
   import * as Select from '@cugetreg/ui/molecules/select';
   import { cn } from '@cugetreg/utils';
@@ -27,6 +28,41 @@
   const isMobile = new MediaQuery('max-width: 767px', false);
   const modalGap = 8;
   const viewportMargin = 16;
+
+  const t = useTranslations(
+    defineMessages({
+      th: {
+        copied: 'คัดลอกแล้ว',
+        copiedTooltip: 'คัดลอกแล้ว!',
+        copyTooltip: 'คัดลอก',
+        genEdCourses: 'วิชา GenEd',
+        otherCourses: 'วิชาอื่นๆ',
+        arrangeSchedule: 'จัดตารางเรียน',
+        searchCourses: 'ค้นหาวิชาเรียน',
+        selectedCourses: 'วิชาที่เลือก',
+        totalCredits: '{credit} หน่วยกิต',
+        creditsShort: '{credit} นก.',
+        removeCourse: 'ลบวิชา',
+        copyCourseNo: 'คัดลอกรหัสวิชา {courseNo}',
+        section: 'เซค {sectionNo}',
+      },
+      en: {
+        copied: 'Copied to clipboard',
+        copiedTooltip: 'copied!',
+        copyTooltip: 'copy',
+        genEdCourses: 'GenEd courses',
+        otherCourses: 'Other courses',
+        arrangeSchedule: 'Arrange schedule',
+        searchCourses: 'Search courses',
+        selectedCourses: 'Selected courses',
+        totalCredits: '{credit} credits',
+        creditsShort: '{credit} cr.',
+        removeCourse: 'Remove course',
+        copyCourseNo: 'Copy course code {courseNo}',
+        section: 'Sec {sectionNo}',
+      },
+    }),
+  );
 
   const userCart = getUserCartStore();
   const { removeCourse, updateCourse } = useCartActions();
@@ -61,7 +97,7 @@
   async function copyCourseID(courseID: string) {
     try {
       await navigator.clipboard.writeText(courseID);
-      toast.success('Copied to clipboard', { position: 'bottom-right' });
+      toast.success(t('copied'), { position: 'bottom-right' });
       copiedCourseID = courseID;
       hoveredCourseID = courseID;
       if (courseIDTooltipTimeout) clearTimeout(courseIDTooltipTimeout);
@@ -204,7 +240,9 @@
             <hr class="mb-4 border-t border-neutral-100" />
           {/if}
           {#if genedCourses.length > 0}
-            <p class="mb-1 text-sm font-medium text-[#6F7593]">วิชา GenEd</p>
+            <p class="mb-1 text-sm font-medium text-[#6F7593]">
+              {t('genEdCourses')}
+            </p>
             {#each genedCourses as course (course.id)}
               {@render groupedRow(course)}
             {/each}
@@ -212,7 +250,7 @@
 
           {#if otherCourses.length > 0}
             <p class="mt-4 mb-1 text-sm font-medium text-[#6F7593]">
-              วิชาอื่นๆ
+              {t('otherCourses')}
             </p>
             {#each otherCourses as course (course.id)}
               {@render groupedRow(course)}
@@ -220,7 +258,7 @@
           {/if}
 
           <Button class="mt-6 w-full" color="neutral" onclick={onArrange}
-            >จัดตารางเรียน</Button
+            >{t('arrangeSchedule')}</Button
           >
         </div>
       {/if}
@@ -254,7 +292,7 @@
           </SortableList.Root>
           <div class="px-2">
             <Button class="w-full" color="neutral" href={resolve('/' as any)}
-              >ค้นหาวิชาเรียน</Button
+              >{t('searchCourses')}</Button
             >
           </div>
         </div>
@@ -273,7 +311,7 @@
     style:top={`${tooltipPosition.y}px`}
     transition:fade={{ duration: 150 }}
   >
-    {copiedCourseID === hoveredCourseID ? 'copied!' : 'copy'}
+    {copiedCourseID === hoveredCourseID ? t('copiedTooltip') : t('copyTooltip')}
   </div>
 {/if}
 
@@ -286,9 +324,11 @@
       class="mb-4 flex w-full items-center justify-between"
     >
       <span class="flex items-baseline gap-2">
-        <h2 class="text-on-surface text-lg/[20px] font-medium">วิชาที่เลือก</h2>
+        <h2 class="text-on-surface text-lg/[20px] font-medium">
+          {t('selectedCourses')}
+        </h2>
         <span class="text-xs font-normal text-neutral-400"
-          >{totalCredit} หน่วยกิต</span
+          >{t('totalCredits', { credit: totalCredit })}</span
         >
       </span>
       <ChevronDown
@@ -301,9 +341,11 @@
   {:else}
     <div class="mb-4 flex w-full items-center justify-between">
       <span class="flex items-baseline gap-2">
-        <h2 class="text-on-surface text-lg/[20px] font-medium">วิชาที่เลือก</h2>
+        <h2 class="text-on-surface text-lg/[20px] font-medium">
+          {t('selectedCourses')}
+        </h2>
         <span class="text-xs font-normal text-neutral-400"
-          >{totalCredit} หน่วยกิต</span
+          >{t('totalCredits', { credit: totalCredit })}</span
         >
       </span>
     </div>
@@ -325,12 +367,12 @@
       </div>
     {/if}
     <span class="text-on-surface w-12 shrink-0 text-right text-xs"
-      >{course.course.credit} นก.</span
+      >{t('creditsShort', { credit: course.course.credit })}</span
     >
 
     <button
       class="shrink-0 rounded-md p-1 text-neutral-500 transition-colors hover:bg-neutral-100"
-      aria-label="ลบวิชา"
+      aria-label={t('removeCourse')}
       onclick={() => removeCourse(course.id)}
     >
       <Trash2 size={18} />
@@ -368,7 +410,7 @@
     <button
       type="button"
       class="flex min-w-0 flex-1 cursor-pointer flex-col justify-center overflow-hidden text-left"
-      aria-label={`คัดลอกรหัสวิชา ${course.courseNo}`}
+      aria-label={t('copyCourseNo', { courseNo: course.courseNo })}
       onclick={() => copyCourseID(course.courseNo)}
       onmouseenter={(e) => {
         moveCourseIDTooltip(e, course.courseNo);
@@ -395,7 +437,7 @@
       <div class="flex-1 justify-center"></div>
 
       <div class="flex-1 justify-center">
-        {course.course.credit} นก.
+        {t('creditsShort', { credit: course.course.credit })}
       </div>
     </div>
 
@@ -415,7 +457,7 @@
         >
           <Select.Trigger showArrow={false} class={cn('rounded-sm p-0')}>
             <div class="flex h-full w-full items-center justify-center text-xs">
-              เซค {course.sectionNo}
+              {t('section', { sectionNo: course.sectionNo })}
             </div>
           </Select.Trigger>
           <Select.Content role="listbox" class="z-100">
@@ -423,8 +465,8 @@
               {#each course.sections as section (section.sectionNo)}
                 <Select.Item
                   value={String(section.sectionNo)}
-                  label={`เซค ${section.sectionNo}`}
-                  aria-label={`Sec ${section.sectionNo}`}
+                  label={t('section', { sectionNo: section.sectionNo })}
+                  aria-label={t('section', { sectionNo: section.sectionNo })}
                   role="option"
                 />
               {/each}

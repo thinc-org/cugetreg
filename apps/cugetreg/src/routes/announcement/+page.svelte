@@ -6,6 +6,7 @@
 
   import { Loader2 } from 'lucide-svelte';
 
+  import { defineMessages, useTranslations } from '@cugetreg/ui/i18n';
   import { ReportProblem } from '@cugetreg/ui/molecules/report-problem';
   import { Footer } from '@cugetreg/ui/organisms/footer';
 
@@ -15,6 +16,21 @@
     createdAt: string;
     updatedAt: string;
   }
+
+  const t = useTranslations(
+    defineMessages({
+      th: {
+        title: 'การแจ้งเตือน',
+        loading: 'กำลังโหลด...',
+        empty: 'ไม่มีการแจ้งเตือนในขณะนี้',
+      },
+      en: {
+        title: 'Announcements',
+        loading: 'Loading...',
+        empty: 'No announcements at the moment',
+      },
+    }),
+  );
 
   let announcements = $state<Announcement[]>([]);
   let isLoading = $state(true);
@@ -47,19 +63,19 @@
 
 <div class="flex flex-col items-center justify-center pt-10">
   <div class="w-[90vw] pb-16 md:w-[60vw]">
-    <h1 class="mb-8 text-2xl font-bold text-[#1C1B1F]">การแจ้งเตือน</h1>
+    <h1 class="mb-8 text-2xl font-bold text-[#1C1B1F]">{t('title')}</h1>
     {#if isLoading}
       <div
         class="flex h-40 flex-col items-center justify-center gap-3 text-gray-400"
       >
         <Loader2 class="animate-spin" size={32} />
-        <span class="text-sm">กำลังโหลด...</span>
+        <span class="text-sm">{t('loading')}</span>
       </div>
     {:else if announcements.length === 0}
       <div
         class="flex h-40 items-center justify-center rounded-2xl border border-dashed border-gray-300 text-gray-500"
       >
-        ไม่มีการแจ้งเตือนในขณะนี้
+        {t('empty')}
       </div>
     {:else}
       <div class="flex flex-col gap-4">

@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { defineMessages, useTranslations } from '$lib/i18n';
+
 	import { Sparkles } from '@lucide/svelte';
 
 	import { cn } from '@cugetreg/utils';
@@ -9,6 +11,13 @@
 	}
 
 	let { class: className = undefined, ...rest }: Props = $props();
+
+	const t = useTranslations(
+		defineMessages({
+			th: { recommended: 'แนะนำสำหรับคุณ' },
+			en: { recommended: 'Recommended for you' }
+		})
+	);
 </script>
 
 <div
@@ -19,7 +28,7 @@
 	{...rest}
 >
 	<Sparkles class="mr-2" size="16" />
-	แนะนำสำหรับคุณ
+	{t('recommended')}
 	<div
 		class="border-b-tangerine-700 border-r-surface absolute top-0 right-0 translate-x-full border-r-8 border-b-8"
 	></div>

@@ -1,5 +1,6 @@
 <script lang="ts">
   import SelectedCourse from '$lib/components/selected-course.svelte';
+  import { getSemesterLabel } from '$lib/semesterOptions';
   import { getCartSelectionController } from '$lib/stores/cart-selection.svelte';
   import { getUserCartStore } from '$lib/stores/user-cart';
 
@@ -31,6 +32,11 @@
   import { GenedChip } from '@cugetreg/ui/atoms/gened-chip';
   import { StudyProgramChip } from '@cugetreg/ui/atoms/studyprogram-chip';
   import { YearSemesterChip } from '@cugetreg/ui/atoms/yearsemester-chip';
+  import {
+    defineMessages,
+    useLocale,
+    useTranslations,
+  } from '@cugetreg/ui/i18n';
   import { Comment } from '@cugetreg/ui/molecules/comment';
   import { FloatingButton } from '@cugetreg/ui/molecules/floating-button';
   import { SectionTable } from '@cugetreg/ui/molecules/section-table';
@@ -38,16 +44,124 @@
   import { SelectTimetable } from '@cugetreg/ui/molecules/select-timetable';
   import { Footer } from '@cugetreg/ui/organisms/footer';
   import * as Sidebar from '@cugetreg/ui/organisms/sidebar';
+  import type { Semester } from '@cugetreg/zod-schemas';
   // TODO: To be removed
+
+  const locale = useLocale();
+  const t = useTranslations(
+    defineMessages({
+      th: {
+        menu: 'เมนู',
+        courseDescription: 'คำอธิบายรายวิชา',
+        sectionDetails: 'รายละเอียดเซคชัน',
+        courseReviews: 'รีวิวรายวิชา',
+        selectedCourses: 'วิชาที่เลือก',
+        reviewCount: '{count} รีวิว',
+        writeReview: 'เขียนรีวิว',
+        notOfficialTitle: 'CU Get Reg ไม่ใช่การลงทะเบียนเรียนจริง',
+        registerAt: 'สามารถลงทะเบียนเรียนได้ที่',
+        onlyChannel: 'เพียงช่องทางเดียวเท่านั้น',
+        dataWarning:
+          'ข้อมูลคำอธิบายรายวิชาที่แสดงไม่ได้เป็นข้อมูลล่าสุด อาจมีการเปลี่ยนแปลงได้ โปรดตรวจสอบกับรายวิชาที่จัดอีกครั้ง',
+        descriptionTh: 'คำอธิบายรายวิชา (ภาษาไทย)',
+        descriptionEn: 'คำอธิบายรายวิชา (ภาษาอังกฤษ)',
+        faculty: 'คณะ',
+        department: 'ภาควิชา/กลุ่มวิชา/สาขาวิชา',
+        courseFormat: 'รูปแบบรายวิชา',
+        credits: 'หน่วยกิต',
+        prerequisites: 'เงื่อนไขรายวิชา',
+        grading: 'วิธีการวัดผล',
+        letterGrade: 'Letter Grade',
+        midtermExam: 'สอบกลางภาค',
+        finalExam: 'สอบปลายภาค',
+        group: 'กลุ่ม : {name}',
+        closed: 'ปิด',
+        writeCourseReview: 'เขียนรีวิวรายวิชา',
+        semester: 'ภาคเรียน',
+        academicYear: 'ปีการศึกษา',
+        rateCourse: 'ให้คะแนนรายวิชา',
+        rateStars: 'ให้คะแนน {value} ดาว',
+        reviewPlaceholder: 'คุณคิดว่าวิชานี้เป็นอย่างไรบ้าง?',
+        submitReview: 'ส่งรีวิว',
+        total: 'ทั้งหมด',
+        emptyTitle: 'เริ่มแบ่งปันเป็นคนแรก',
+        emptyDescription:
+          'เริ่มเป็นคนแรกที่จะแบ่งปันประสบการณ์ที่น่าสนใจกับวิชานี้ให้กับเพื่อน ๆ',
+        pagination: 'การแบ่งหน้า',
+        previousPage: 'หน้าก่อนหน้า',
+        nextPage: 'หน้าถัดไป',
+        morePages: 'หน้าเพิ่มเติม',
+        // Sample data shown by this placeholder page
+        sampleCourseNameTh:
+          'การลดความขัดแย้ง การเปลี่ยนความขัดแย้งและกระบวนการสันติภาพ',
+        sampleDescriptionTh:
+          'หลักการอ่าน ระดับของการอ่าน การจับใจความ การตีความบทอ่านประเภทต่างๆ ทั้งบทอ่านทั่วไป บทอ่านเชิงวิชาการ ตาราง แผนภูมิ หรือรูปภาพ',
+        sampleFaculty: 'สถาบันภาษาไทยสิรินธร',
+        sampleMidterm: '06 มี.ค. 2567 16:00 - 19:00',
+        sampleFinal: '01 พ.ค. 2567 16:00 - 19:00',
+        sampleFacultyMajor: 'คณะวิศวกรรมศาสตร์ ภาคเครื่องใน',
+      },
+      en: {
+        menu: 'Menu',
+        courseDescription: 'Course description',
+        sectionDetails: 'Section details',
+        courseReviews: 'Course reviews',
+        selectedCourses: 'Selected courses',
+        reviewCount: '{count} reviews',
+        writeReview: 'Write a review',
+        notOfficialTitle: 'CU Get Reg is not the official registration system',
+        registerAt: 'Please register at',
+        onlyChannel: 'which is the only official channel',
+        dataWarning:
+          'The course description shown may be outdated and subject to change. Please double-check with the official course offering.',
+        descriptionTh: 'Course description (Thai)',
+        descriptionEn: 'Course description (English)',
+        faculty: 'Faculty',
+        department: 'Department',
+        courseFormat: 'Course format',
+        credits: 'Credits',
+        prerequisites: 'Prerequisites',
+        grading: 'Grading',
+        letterGrade: 'Letter Grade',
+        midtermExam: 'Midterm exam',
+        finalExam: 'Final exam',
+        group: 'Group: {name}',
+        closed: 'Closed',
+        writeCourseReview: 'Write a course review',
+        semester: 'Semester',
+        academicYear: 'Academic year',
+        rateCourse: 'Rate this course',
+        rateStars: 'Rate {value} stars',
+        reviewPlaceholder: 'What do you think about this course?',
+        submitReview: 'Submit review',
+        total: 'Total',
+        emptyTitle: 'Be the first to share',
+        emptyDescription:
+          'Be the first to share your experience with this course with your friends.',
+        pagination: 'Pagination',
+        previousPage: 'Previous page',
+        nextPage: 'Next page',
+        morePages: 'More pages',
+        sampleCourseNameTh:
+          'การลดความขัดแย้ง การเปลี่ยนความขัดแย้งและกระบวนการสันติภาพ',
+        sampleDescriptionTh:
+          'หลักการอ่าน ระดับของการอ่าน การจับใจความ การตีความบทอ่านประเภทต่างๆ ทั้งบทอ่านทั่วไป บทอ่านเชิงวิชาการ ตาราง แผนภูมิ หรือรูปภาพ',
+        sampleFaculty: 'The Sirindhorn Thai Language Institute',
+        sampleMidterm: '06 Mar 2024 16:00 - 19:00',
+        sampleFinal: '01 May 2024 16:00 - 19:00',
+        sampleFacultyMajor: 'Faculty of Engineering',
+      },
+    }),
+  );
 
   const sectionGroups = ['4EE ONLY', 'OPEN'];
   let selectedGroup = $state(sectionGroups[0]);
   let selectedSectionNumber = $state<string | null>(null);
   let isSectionOpen = $state(true);
   const years = ['2566', '2565', '2564'];
-  const terms = ['ภาคต้น', 'ภาคปลาย'];
+  const terms: Semester[] = ['FIRST', 'SECOND'];
   let selectedYear = $state(years[0]);
-  let selectedTerm = $state(terms[0]);
+  let selectedTerm = $state<Semester>(terms[0]);
   let reviewRating = $state(1);
   let activeModal = $state<'selected' | null>(null);
   let textareaRef: HTMLTextAreaElement;
@@ -88,8 +202,9 @@
     const isHalf = event.clientX - rect.left < rect.width / 2;
     reviewRating = isHalf ? value - 0.5 : value;
   };
-  const reviewYearPlaceholder = 'ปีการศึกษา';
-  const reviewTermPlaceholder = 'ภาคเรียน';
+  // Sentinel select values for "no filter"; labels are rendered via t().
+  const reviewYearPlaceholder = '__all_years__';
+  const reviewTermPlaceholder = '__all_terms__';
   let selectedReviewYear = $state(reviewYearPlaceholder);
   let selectedReviewTerm = $state(reviewTermPlaceholder);
   const reviewsPerPage = 2;
@@ -101,36 +216,36 @@
     selectedReviewTerm === reviewTermPlaceholder,
   );
 
-  const floatingOptions = [
+  const floatingOptions = $derived([
     {
-      label: 'คำอธิบายรายวิชา',
+      label: t('courseDescription'),
       icon: Book,
       onClick: () => {
         scrollToSection(descriptionSection);
       },
     },
     {
-      label: 'รายละเอียดเซคชัน',
+      label: t('sectionDetails'),
       icon: StickyNote,
       onClick: () => {
         scrollToSection(detailSection);
       },
     },
     {
-      label: 'รีวิวรายวิชา',
+      label: t('courseReviews'),
       icon: MessageCircleQuestionIcon,
       onClick: () => {
         scrollToSection(reviewSection);
       },
     },
     {
-      label: 'วิชาที่เลือก',
+      label: t('selectedCourses'),
       icon: BookMarked,
       onClick: () => {
         activeModal = 'selected';
       },
     },
-  ];
+  ]);
 
   function togglePanel(type: typeof openPanel) {
     if (type === 'sidebar' || type === 'selected_only') {
@@ -162,8 +277,8 @@
   const reviewSamples = [
     {
       rating: 4,
-      semester: 'ภาคต้น 2566',
-      facultyMajor: 'คณะวิศวกรรมศาสตร์ ภาคเครื่องใน',
+      semester: 'FIRST' as Semester,
+      year: '2566',
       content:
         'ส่วนตัวคิดว่าง่ายมาก มีงานสัปดาห์ละครั้ง ปกติจะมีวิดีโอให้ดู ไม่ยาวมาก แต่จะไม่ดูไม่ได้ เพราะปกติโฮมอ่านตัวอย่างที่ให้มาแล้วก็ลองเขียนเลย งานส่วนใหญ่จะให้ Topic กว้างๆมา ถ้าอาจารย์ประจำ sec ไม่ strict มาก ก็เขียนตามใจไปเลย แต่อาจารย์ที่สอนในสัปดาห์นั้นมาปรับบ้างหน่อย ปกติจะมีเวลาไม่มาก ก็เขียนครั้งเดียวแล้วส่งไปเลย เลยเสียเวลาแค่ 1-2 ชม. ต่อสัปดาห์ แต่ถ้าใครจะส่งชิงงานเขียนหน่อยก็อาจใช้เวลาเพิ่มขึ้น สอบเหมือนกับงานที่ทำ จะไม่อ่านไปสอบก็ได้ถ้าจำพวกงานที่ทำส่งได้ แต่ก่อนสอบมีคลิปรีวิวให้ดูก่อน ฟังตัวนี้เอาก็ได้ อันนี้ขึ้นอยู่กับ sec ของเราว่าอาจารย์ให้คะแนนค่อนข้างง่าย แต่ถ้าให้คะแนนมากหน่อย เฉลี่ยก็รวมๆกันได้ A เพราะจะเขียนตามใจตัวเองเป็นหลัก ไม่ค่อยยึดกับเรื่องที่เรียนมาเลยรู้สึกไม่ค่อยได้อะไรใหม่ ที่ช่วยนำจะเป็นการจัดระเบียบความคิดและสรุปให้อยู่ในย่อหน้า',
       likesCount: 2,
@@ -171,8 +286,8 @@
     },
     {
       rating: 3.5,
-      semester: 'ภาคปลาย 2566',
-      facultyMajor: 'คณะวิศวกรรมศาสตร์ ภาคเครื่องใน',
+      semester: 'SECOND' as Semester,
+      year: '2566',
       content:
         'ส่วนตัวคิดว่าง่ายมาก มีงานสัปดาห์ละครั้ง ปกติจะมีวิดีโอให้ดู ไม่ยาวมาก แต่จะไม่ดูไม่ได้ เพราะปกติโฮมอ่านตัวอย่างที่ให้มาแล้วก็ลองเขียนเลย งานส่วนใหญ่จะให้ Topic กว้างๆมา ถ้าอาจารย์ประจำ sec ไม่ strict มาก ก็เขียนตามใจไปเลย แต่อาจารย์ที่สอนในสัปดาห์นั้นมาปรับบ้างหน่อย ปกติจะมีเวลาไม่มาก ก็เขียนครั้งเดียวแล้วส่งไปเลย เลยเสียเวลาแค่ 1-2 ชม. ต่อสัปดาห์ แต่ถ้าใครจะส่งชิงงานเขียนหน่อยก็อาจใช้เวลาเพิ่มขึ้น สอบเหมือนกับงานที่ทำ จะไม่อ่านไปสอบก็ได้ถ้าจำพวกงานที่ทำส่งได้ แต่ก่อนสอบมีคลิปรีวิวให้ดูก่อน ฟังตัวนี้เอาก็ได้ อันนี้ขึ้นอยู่กับ sec ของเราว่าอาจารย์ให้คะแนนค่อนข้างง่าย แต่ถ้าให้คะแนนมากหน่อย เฉลี่ยก็รวมๆกันได้ A เพราะจะเขียนตามใจตัวเองเป็นหลัก ไม่ค่อยยึดกับเรื่องที่เรียนมาเลยรู้สึกไม่ค่อยได้อะไรใหม่ ที่ช่วยนำจะเป็นการจัดระเบียบความคิดและสรุปให้อยู่ในย่อหน้า',
       likesCount: 1,
@@ -180,8 +295,8 @@
     },
     {
       rating: 4,
-      semester: 'ภาคต้น 2565',
-      facultyMajor: 'คณะวิศวกรรมศาสตร์ ภาคเครื่องใน',
+      semester: 'FIRST' as Semester,
+      year: '2565',
       content:
         'ส่วนตัวคิดว่าง่ายมาก มีงานสัปดาห์ละครั้ง ปกติจะมีวิดีโอให้ดู ไม่ยาวมาก แต่จะไม่ดูไม่ได้ เพราะปกติโฮมอ่านตัวอย่างที่ให้มาแล้วก็ลองเขียนเลย งานส่วนใหญ่จะให้ Topic กว้างๆมา ถ้าอาจารย์ประจำ sec ไม่ strict มาก ก็เขียนตามใจไปเลย แต่อาจารย์ที่สอนในสัปดาห์นั้นมาปรับบ้างหน่อย ปกติจะมีเวลาไม่มาก ก็เขียนครั้งเดียวแล้วส่งไปเลย เลยเสียเวลาแค่ 1-2 ชม. ต่อสัปดาห์ แต่ถ้าใครจะส่งชิงงานเขียนหน่อยก็อาจใช้เวลาเพิ่มขึ้น สอบเหมือนกับงานที่ทำ จะไม่อ่านไปสอบก็ได้ถ้าจำพวกงานที่ทำส่งได้ แต่ก่อนสอบมีคลิปรีวิวให้ดูก่อน ฟังตัวนี้เอาก็ได้ อันนี้ขึ้นอยู่กับ sec ของเราว่าอาจารย์ให้คะแนนค่อนข้างง่าย แต่ถ้าให้คะแนนมากหน่อย เฉลี่ยก็รวมๆกันได้ A เพราะจะเขียนตามใจตัวเองเป็นหลัก ไม่ค่อยยึดกับเรื่องที่เรียนมาเลยรู้สึกไม่ค่อยได้อะไรใหม่ ที่ช่วยนำจะเป็นการจัดระเบียบความคิดและสรุปให้อยู่ในย่อหน้า',
       likesCount: 2,
@@ -189,8 +304,8 @@
     },
     {
       rating: 4.5,
-      semester: 'ภาคปลาย 2565',
-      facultyMajor: 'คณะวิศวกรรมศาสตร์ ภาคเครื่องใน',
+      semester: 'SECOND' as Semester,
+      year: '2565',
       content:
         'ส่วนตัวคิดว่าง่ายมาก มีงานสัปดาห์ละครั้ง ปกติจะมีวิดีโอให้ดู ไม่ยาวมาก แต่จะไม่ดูไม่ได้ เพราะปกติโฮมอ่านตัวอย่างที่ให้มาแล้วก็ลองเขียนเลย งานส่วนใหญ่จะให้ Topic กว้างๆมา ถ้าอาจารย์ประจำ sec ไม่ strict มาก ก็เขียนตามใจไปเลย แต่อาจารย์ที่สอนในสัปดาห์นั้นมาปรับบ้างหน่อย ปกติจะมีเวลาไม่มาก ก็เขียนครั้งเดียวแล้วส่งไปเลย เลยเสียเวลาแค่ 1-2 ชม. ต่อสัปดาห์ แต่ถ้าใครจะส่งชิงงานเขียนหน่อยก็อาจใช้เวลาเพิ่มขึ้น สอบเหมือนกับงานที่ทำ จะไม่อ่านไปสอบก็ได้ถ้าจำพวกงานที่ทำส่งได้ แต่ก่อนสอบมีคลิปรีวิวให้ดูก่อน ฟังตัวนี้เอาก็ได้ อันนี้ขึ้นอยู่กับ sec ของเราว่าอาจารย์ให้คะแนนค่อนข้างง่าย แต่ถ้าให้คะแนนมากหน่อย เฉลี่ยก็รวมๆกันได้ A เพราะจะเขียนตามใจตัวเองเป็นหลัก ไม่ค่อยยึดกับเรื่องที่เรียนมาเลยรู้สึกไม่ค่อยได้อะไรใหม่ ที่ช่วยนำจะเป็นการจัดระเบียบความคิดและสรุปให้อยู่ในย่อหน้า',
       likesCount: 3,
@@ -203,7 +318,7 @@
   });
   const filteredReviews = $derived.by(() =>
     reviews.filter((review) => {
-      const [term, year] = review.semester.split(' ');
+      const { semester: term, year } = review;
       if (!isReviewYearPlaceholder && year !== selectedReviewYear) return false;
       if (!isReviewTermPlaceholder && term !== selectedReviewTerm) return false;
       return true;
@@ -232,12 +347,10 @@
     if (last > 1) items.push(last);
     return items;
   });
-  const reviewMeta = reviews
-    .map((review) => {
-      const [term, year] = review.semester.split(' ');
-      return { term, year };
-    })
-    .filter((item) => item.term && item.year);
+  const reviewMeta = reviews.map((review) => ({
+    term: review.semester,
+    year: review.year,
+  }));
   const reviewYearOptions = [
     reviewYearPlaceholder,
     ...Array.from(new Set(reviewMeta.map((item) => item.year)))
@@ -246,15 +359,15 @@
   ];
   const reviewTermOptions = $derived.by(() => {
     const terms = reviews
-      .map((review) => {
-        const [term, year] = review.semester.split(' ');
-        return { term, year };
-      })
+      .map((review) => ({ term: review.semester, year: review.year }))
       .filter((item) =>
         isReviewYearPlaceholder ? true : item.year === selectedReviewYear,
       )
       .map((item) => item.term);
-    return [reviewTermPlaceholder, ...Array.from(new Set(terms))];
+    return [
+      reviewTermPlaceholder,
+      ...Array.from(new Set<string>(terms)),
+    ] as string[];
   });
 
   $effect(() => {
@@ -271,7 +384,7 @@
       reviewsPage = 1;
     }
   });
-  const sectionTableData = [
+  const sectionTableData = $derived([
     {
       section: '1',
       seats: '28 / 28',
@@ -298,7 +411,7 @@
     },
     {
       section: '3',
-      seats: 'ปิด',
+      seats: t('closed'),
       classes: [
         {
           teacher: 'SSS',
@@ -308,7 +421,7 @@
         },
       ],
     },
-  ];
+  ]);
 </script>
 
 <svelte:window bind:innerWidth={screenWidth} />
@@ -353,7 +466,7 @@
                 <p
                   class="text-on-surface mt-2 text-sm font-semibold sm:text-lg"
                 >
-                  การลดความขัดแย้ง การเปลี่ยนความขัดแย้งและกระบวนการสันติภาพ
+                  {t('sampleCourseNameTh')}
                 </p>
                 <p class="text-on-surface text-sm font-semibold sm:text-lg">
                   CONFLICT RESOLUTION,CONFLICT TRANSFORMATION,AND PEACE PROCESS
@@ -363,8 +476,7 @@
                 >
                   <AlertTriangle size={16} class="mt-0.5 text-amber-900" />
                   <span class="font-sarabun text-neutral-900">
-                    ข้อมูลคำอธิบายรายวิชาที่แสดงไม่ได้เป็นข้อมูลล่าสุด
-                    อาจมีการเปลี่ยนแปลงได้ โปรดตรวจสอบกับรายวิชาที่จัดอีกครั้ง
+                    {t('dataWarning')}
                   </span>
                 </div>
               </section>
@@ -378,15 +490,13 @@
                       <p
                         class="text-primary px-4 py-1 text-xs font-medium sm:text-base"
                       >
-                        คำอธิบายรายวิชา (ภาษาไทย)
+                        {t('descriptionTh')}
                       </p>
                     </div>
                     <p
                       class="text-on-surface font-sarabun text-body1 mt-3 px-4"
                     >
-                      หลักการอ่าน ระดับของการอ่าน การจับใจความ
-                      การตีความบทอ่านประเภทต่างๆ ทั้งบทอ่านทั่วไป
-                      บทอ่านเชิงวิชาการ ตาราง แผนภูมิ หรือรูปภาพ
+                      {t('sampleDescriptionTh')}
                     </p>
                   </div>
 
@@ -395,7 +505,7 @@
                       <p
                         class="text-primary px-4 py-1 text-xs font-medium sm:text-base"
                       >
-                        คำอธิบายรายวิชา (ภาษาอังกฤษ)
+                        {t('descriptionEn')}
                       </p>
                     </div>
                     <p
@@ -416,12 +526,12 @@
                       <p
                         class="text-primary px-4 py-1 text-left text-xs font-medium sm:text-base"
                       >
-                        คำอธิบายรายวิชา (ภาษาไทย)
+                        {t('descriptionTh')}
                       </p>
                       <p
                         class="text-primary px-4 py-1 text-left text-xs font-medium sm:text-base"
                       >
-                        คำอธิบายรายวิชา (ภาษาอังกฤษ)
+                        {t('descriptionEn')}
                       </p>
                     </div>
                   </div>
@@ -429,9 +539,7 @@
                     <p
                       class="text-on-surface font-sarabun text-body1 mt-3 px-4"
                     >
-                      หลักการอ่าน ระดับของการอ่าน การจับใจความ
-                      การตีความบทอ่านประเภทต่างๆ ทั้งบทอ่านทั่วไป
-                      บทอ่านเชิงวิชาการ ตาราง แผนภูมิ หรือรูปภาพ
+                      {t('sampleDescriptionTh')}
                     </p>
                   </div>
                   <div>
@@ -451,13 +559,13 @@
                       <p
                         class="text-primary px-4 py-1 text-xs font-medium sm:text-base"
                       >
-                        คณะ
+                        {t('faculty')}
                       </p>
                     </div>
                     <p
                       class="text-on-surface font-sarabun text-body1 mt-3 px-4"
                     >
-                      สถาบันภาษาไทยสิรินธร
+                      {t('sampleFaculty')}
                     </p>
                   </div>
 
@@ -466,13 +574,13 @@
                       <p
                         class="text-primary px-4 py-1 text-xs font-medium sm:text-base"
                       >
-                        ภาควิชา/กลุ่มวิชา/สาขาวิชา
+                        {t('department')}
                       </p>
                     </div>
                     <p
                       class="text-on-surface font-sarabun text-body1 mt-3 px-4"
                     >
-                      สถาบันภาษาไทยสิรินธร
+                      {t('sampleFaculty')}
                     </p>
                   </div>
                 </div>
@@ -485,12 +593,12 @@
                       <p
                         class="text-primary px-4 py-1 text-left text-xs font-medium sm:text-base"
                       >
-                        คณะ
+                        {t('faculty')}
                       </p>
                       <p
                         class="text-primary px-4 py-1 text-left text-xs font-medium sm:text-base"
                       >
-                        ภาควิชา/กลุ่มวิชา/สาขาวิชา
+                        {t('department')}
                       </p>
                     </div>
                   </div>
@@ -498,14 +606,14 @@
                     <p
                       class="text-on-surface font-sarabun text-body1 mt-3 px-4"
                     >
-                      สถาบันภาษาไทยสิรินธร
+                      {t('sampleFaculty')}
                     </p>
                   </div>
                   <div>
                     <p
                       class="text-on-surface font-sarabun text-body1 mt-3 px-4"
                     >
-                      สถาบันภาษาไทยสิรินธร
+                      {t('sampleFaculty')}
                     </p>
                   </div>
                 </div>
@@ -516,7 +624,7 @@
                       <p
                         class="text-primary px-4 py-1 text-xs font-medium sm:text-base"
                       >
-                        รูปแบบรายวิชา
+                        {t('courseFormat')}
                       </p>
                     </div>
                     <p
@@ -531,7 +639,7 @@
                       <p
                         class="text-primary px-4 py-1 text-xs font-medium sm:text-base"
                       >
-                        หน่วยกิต
+                        {t('credits')}
                       </p>
                     </div>
                     <p
@@ -550,12 +658,12 @@
                       <p
                         class="text-primary px-4 py-1 text-left text-xs font-medium sm:text-base"
                       >
-                        รูปแบบรายวิชา
+                        {t('courseFormat')}
                       </p>
                       <p
                         class="text-primary px-4 py-1 text-left text-xs font-medium sm:text-base"
                       >
-                        หน่วยกิต
+                        {t('credits')}
                       </p>
                     </div>
                   </div>
@@ -581,7 +689,7 @@
                       <p
                         class="text-primary px-4 py-1 text-xs font-medium sm:text-base"
                       >
-                        เงื่อนไขรายวิชา
+                        {t('prerequisites')}
                       </p>
                     </div>
                     <p
@@ -596,13 +704,13 @@
                       <p
                         class="text-primary px-4 py-1 text-xs font-medium sm:text-base"
                       >
-                        วิธีการวัดผล
+                        {t('grading')}
                       </p>
                     </div>
                     <p
                       class="text-on-surface font-sarabun text-body1 mt-3 px-4"
                     >
-                      Letter Grade
+                      {t('letterGrade')}
                     </p>
                   </div>
                 </div>
@@ -615,12 +723,12 @@
                       <p
                         class="text-primary px-4 py-1 text-left text-xs font-medium sm:text-base"
                       >
-                        เงื่อนไขรายวิชา
+                        {t('prerequisites')}
                       </p>
                       <p
                         class="text-primary px-4 py-1 text-left text-xs font-medium sm:text-base"
                       >
-                        วิธีการวัดผล
+                        {t('grading')}
                       </p>
                     </div>
                   </div>
@@ -635,7 +743,7 @@
                     <p
                       class="text-on-surface font-sarabun text-body1 mt-3 px-4"
                     >
-                      Letter Grade
+                      {t('letterGrade')}
                     </p>
                   </div>
                 </div>
@@ -646,13 +754,13 @@
                       <p
                         class="text-primary px-4 py-1 text-xs font-medium sm:text-base"
                       >
-                        สอบกลางภาค
+                        {t('midtermExam')}
                       </p>
                     </div>
                     <p
                       class="text-on-surface font-sarabun text-body1 mt-3 px-4"
                     >
-                      06 มี.ค. 2567 16:00 - 19:00
+                      {t('sampleMidterm')}
                     </p>
                   </div>
 
@@ -661,13 +769,13 @@
                       <p
                         class="text-primary px-4 py-1 text-xs font-medium sm:text-base"
                       >
-                        สอบปลายภาค
+                        {t('finalExam')}
                       </p>
                     </div>
                     <p
                       class="text-on-surface font-sarabun text-body1 mt-3 px-4"
                     >
-                      01 พ.ค. 2567 16:00 - 19:00
+                      {t('sampleFinal')}
                     </p>
                   </div>
                 </div>
@@ -680,12 +788,12 @@
                       <p
                         class="text-primary px-4 py-1 text-left text-xs font-medium sm:text-base"
                       >
-                        สอบกลางภาค
+                        {t('midtermExam')}
                       </p>
                       <p
                         class="text-primary px-4 py-1 text-left text-xs font-medium sm:text-base"
                       >
-                        สอบปลายภาค
+                        {t('finalExam')}
                       </p>
                     </div>
                   </div>
@@ -693,14 +801,14 @@
                     <p
                       class="text-on-surface font-sarabun text-body1 mt-3 px-4"
                     >
-                      06 มี.ค. 2567 16:00 - 19:00
+                      {t('sampleMidterm')}
                     </p>
                   </div>
                   <div>
                     <p
                       class="text-on-surface font-sarabun text-body1 mt-3 px-4"
                     >
-                      01 พ.ค. 2567 16:00 - 19:00
+                      {t('sampleFinal')}
                     </p>
                   </div>
                 </div>
@@ -710,21 +818,21 @@
                 bind:this={detailSection}
               >
                 <h2 class="text-on-surface text-base font-semibold sm:text-2xl">
-                  รายละเอียดเซคชัน
+                  {t('sectionDetails')}
                 </h2>
                 <div class="mt-4">
                   <Select.Root type="single" bind:value={selectedGroup}>
                     <Select.Trigger
                       class="text-on-surface h-14 w-full rounded-2xl border border-[#D6D7E1] bg-white px-5 text-base font-medium focus:ring-0 focus:ring-offset-0"
                     >
-                      กลุ่ม : {selectedGroup}
+                      {t('group', { name: selectedGroup })}
                     </Select.Trigger>
                     <Select.Content role="listbox">
                       <Select.Group>
                         {#each sectionGroups as group (group)}
                           <Select.Item
                             value={group}
-                            label={`กลุ่ม : ${group}`}
+                            label={t('group', { name: group })}
                           />
                         {/each}
                       </Select.Group>
@@ -744,7 +852,7 @@
                       class="flex items-center gap-2 text-sm font-medium text-[#4A70C6]"
                     >
                       <Check size={16} />
-                      <span>กลุ่ม : {selectedGroup}</span>
+                      <span>{t('group', { name: selectedGroup })}</span>
                     </div>
                     <ChevronUp
                       size={18}
@@ -785,14 +893,14 @@
                     <Select.Trigger
                       class="text-on-surface h-14 w-full rounded-2xl border border-[#D6D7E1] bg-white px-5 text-base font-medium focus:ring-0 focus:ring-offset-0"
                     >
-                      กลุ่ม : {selectedGroup}
+                      {t('group', { name: selectedGroup })}
                     </Select.Trigger>
                     <Select.Content role="listbox">
                       <Select.Group>
                         {#each sectionGroups as group (group)}
                           <Select.Item
                             value={group}
-                            label={`กลุ่ม : ${group}`}
+                            label={t('group', { name: group })}
                           />
                         {/each}
                       </Select.Group>
@@ -808,7 +916,7 @@
                   <h2
                     class="text-on-surface text-base font-semibold sm:text-2xl"
                   >
-                    เขียนรีวิวรายวิชา
+                    {t('writeCourseReview')}
                   </h2>
                 </div>
                 <div
@@ -818,7 +926,7 @@
                     class="flex w-full flex-row items-center justify-between gap-5 md:w-fit md:justify-start"
                   >
                     <p class="shrink-0 text-sm font-normal md:hidden">
-                      ภาคเรียน
+                      {t('semester')}
                     </p>
                     <div class="flex flex-row gap-2 md:gap-5">
                       <div>
@@ -842,12 +950,15 @@
                           <Select.Trigger
                             class="text-on-surface h-9 w-[120px] rounded-lg border border-[#D6D7E1] bg-white px-4 text-sm font-medium md:h-12 md:w-[180px] md:text-base"
                           >
-                            {selectedTerm}
+                            {getSemesterLabel(selectedTerm, locale.current)}
                           </Select.Trigger>
                           <Select.Content role="listbox">
                             <Select.Group>
                               {#each terms as term (term)}
-                                <Select.Item value={term} label={term} />
+                                <Select.Item
+                                  value={term}
+                                  label={getSemesterLabel(term, locale.current)}
+                                />
                               {/each}
                             </Select.Group>
                           </Select.Content>
@@ -856,14 +967,16 @@
                     </div>
                   </div>
                   <div class="flex items-center justify-between gap-8">
-                    <p class="text-sm font-normal md:hidden">ให้คะแนนรายวิชา</p>
+                    <p class="text-sm font-normal md:hidden">
+                      {t('rateCourse')}
+                    </p>
                     <div class="flex gap-2 md:gap-0">
                       {#each [1, 2, 3, 4, 5] as value (value)}
                         <button
                           class="flex h-10 w-6 items-center justify-center md:w-10"
                           type="button"
                           onclick={(event) => onStarClick(value, event)}
-                          aria-label={`Rate ${value} stars`}
+                          aria-label={t('rateStars', { value })}
                         >
                           {#if getStarState(value) === 'half'}
                             <span class="relative inline-flex">
@@ -908,7 +1021,7 @@
                   <textarea
                     bind:this={textareaRef}
                     class="text-on-surface h-36 w-full resize-none bg-transparent px-4 py-3 text-sm outline-none"
-                    placeholder="คุณคิดว่าวิชานี้เป็นอย่างไรบ้าง?"
+                    placeholder={t('reviewPlaceholder')}
                   ></textarea>
                 </div>
                 <div class="mt-4 flex w-full md:justify-end">
@@ -918,7 +1031,7 @@
                     color="secondary"
                     class="bg-primary-container text-primary hover:ring-primary-container w-full gap-2 md:w-auto"
                   >
-                    ส่งรีวิว
+                    {t('submitReview')}
                     <Send size={14} />
                   </Button>
                 </div>
@@ -928,9 +1041,11 @@
                   class="flex flex-col justify-between gap-4 md:flex-row md:items-center"
                 >
                   <div class="text-base font-semibold sm:text-2xl">
-                    <span class="text-on-surface/60">ทั้งหมด </span>
+                    <span class="text-on-surface/60">{t('total')} </span>
                     <span class="text-primary"
-                      >{filteredReviews.length} รีวิว</span
+                      >{t('reviewCount', {
+                        count: filteredReviews.length,
+                      })}</span
                     >
                   </div>
                   <div class="flex flex-nowrap items-center gap-3">
@@ -942,12 +1057,19 @@
                             : 'text-on-surface'
                         }`}
                       >
-                        {selectedReviewYear}
+                        {isReviewYearPlaceholder
+                          ? t('academicYear')
+                          : selectedReviewYear}
                       </Select.Trigger>
                       <Select.Content role="listbox">
                         <Select.Group>
                           {#each reviewYearOptions as year (year)}
-                            <Select.Item value={year} label={year} />
+                            <Select.Item
+                              value={year}
+                              label={year === reviewYearPlaceholder
+                                ? t('academicYear')
+                                : year}
+                            />
                           {/each}
                         </Select.Group>
                       </Select.Content>
@@ -960,12 +1082,25 @@
                             : 'text-on-surface'
                         }`}
                       >
-                        {selectedReviewTerm}
+                        {isReviewTermPlaceholder
+                          ? t('semester')
+                          : getSemesterLabel(
+                              selectedReviewTerm as Semester,
+                              locale.current,
+                            )}
                       </Select.Trigger>
                       <Select.Content role="listbox">
                         <Select.Group>
                           {#each reviewTermOptions as term (term)}
-                            <Select.Item value={term} label={term} />
+                            <Select.Item
+                              value={term}
+                              label={term === reviewTermPlaceholder
+                                ? t('semester')
+                                : getSemesterLabel(
+                                    term as Semester,
+                                    locale.current,
+                                  )}
+                            />
                           {/each}
                         </Select.Group>
                       </Select.Content>
@@ -984,11 +1119,10 @@
                     <div
                       class="text-on-surface text-base font-semibold sm:text-2xl"
                     >
-                      เริ่มแบ่งปันเป็นคนแรก
+                      {t('emptyTitle')}
                     </div>
                     <p class="text-on-surface/70 max-w-lg text-sm">
-                      เริ่มเป็นคนแรกที่จะแบ่งปันประสบการณ์ที่น่าสนใจกับวิชานี้ให้กับเพื่อน
-                      ๆ
+                      {t('emptyDescription')}
                     </p>
                   </div>
                 {:else}
@@ -996,10 +1130,13 @@
                     {#each pagedReviews as review, index (index)}
                       <Comment
                         rating={review.rating}
-                        semester={review.semester}
-                        year={Number(review.semester.split(' ')[1])}
+                        semester={getSemesterLabel(
+                          review.semester,
+                          locale.current,
+                        )}
+                        year={Number(review.year)}
                         status="APPROVED"
-                        facultyMajor={review.facultyMajor}
+                        facultyMajor={t('sampleFacultyMajor')}
                         content={review.content}
                         likesCount={review.likesCount}
                         dislikesCount={review.dislikesCount}
@@ -1011,12 +1148,12 @@
                   <div class="mt-6 flex justify-end">
                     <nav
                       class="flex items-center gap-2"
-                      aria-label="Pagination"
+                      aria-label={t('pagination')}
                     >
                       <button
                         class="border-surface-container-high bg-surface text-on-surface flex h-9 w-9 items-center justify-center rounded-lg border"
                         type="button"
-                        aria-label="Previous page"
+                        aria-label={t('previousPage')}
                         onclick={() =>
                           (reviewsPage = Math.max(1, reviewsPage - 1))}
                       >
@@ -1027,7 +1164,7 @@
                           <button
                             class="border-surface-container-high bg-surface text-on-surface flex h-9 w-9 items-center justify-center rounded-lg border"
                             type="button"
-                            aria-label="More pages"
+                            aria-label={t('morePages')}
                             disabled
                           >
                             …
@@ -1052,7 +1189,7 @@
                       <button
                         class="border-surface-container-high bg-surface text-on-surface flex h-9 w-9 items-center justify-center rounded-lg border"
                         type="button"
-                        aria-label="Next page"
+                        aria-label={t('nextPage')}
                         onclick={() =>
                           (reviewsPage = Math.min(
                             totalReviewPages,
@@ -1120,7 +1257,7 @@
                 onclick={() => (sidebarExpanded = !sidebarExpanded)}
                 isActive={sidebarExpanded && activePanel === 'sidebar'}
                 size="lg"
-                tooltipContent="เมนู"
+                tooltipContent={t('menu')}
                 class="mx-auto size-12! justify-center rounded-xl p-0! ring-0 transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-6!"
               >
                 <Menu size="24" strokeWidth={2.5} />
@@ -1131,7 +1268,7 @@
                 onclick={() => togglePanel('description_only')}
                 isActive={activePanel === 'description_only'}
                 size="lg"
-                tooltipContent="คำอธิบายรายวิชา"
+                tooltipContent={t('courseDescription')}
                 class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-6!"
               >
                 <Book size="24" strokeWidth={2.5} />
@@ -1142,7 +1279,7 @@
                 onclick={() => togglePanel('detail_only')}
                 isActive={activePanel === 'detail_only'}
                 size="lg"
-                tooltipContent="รายละเอียดเซคชัน"
+                tooltipContent={t('sectionDetails')}
                 class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-6!"
               >
                 <StickyNote size="24" strokeWidth={2.5} />
@@ -1153,7 +1290,7 @@
                 onclick={() => togglePanel('review_only')}
                 isActive={activePanel === 'review_only'}
                 size="lg"
-                tooltipContent="รีวิวรายวิชา"
+                tooltipContent={t('courseReviews')}
                 class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-6!"
               >
                 <MessageCircleQuestionIcon size="24" strokeWidth={2.5} />
@@ -1164,7 +1301,7 @@
                 onclick={() => togglePanel('selected_only')}
                 isActive={activePanel === 'selected_only'}
                 size="lg"
-                tooltipContent="วิชาที่เลือก"
+                tooltipContent={t('selectedCourses')}
                 class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-6!"
               >
                 <BookMarked size="24" strokeWidth={2.5} />
@@ -1218,7 +1355,7 @@
                   class="hover:text-primary w-full border-b border-gray-400 py-4 text-left text-xl font-semibold transition-colors"
                   onclick={() => scrollToSection(descriptionSection)}
                 >
-                  คำอธิบายรายวิชา
+                  {t('courseDescription')}
                 </button>
 
                 <button
@@ -1226,7 +1363,7 @@
                   class="hover:text-primary w-full border-b border-gray-400 py-4 text-left text-xl font-semibold transition-colors"
                   onclick={() => scrollToSection(detailSection)}
                 >
-                  รายละเอียดเซคชัน
+                  {t('sectionDetails')}
                 </button>
 
                 <div
@@ -1237,9 +1374,9 @@
                     class="hover:text-primary text-left text-xl font-semibold transition-colors"
                     onclick={() => scrollToSection(reviewSection)}
                   >
-                    รีวิวรายวิชา
+                    {t('courseReviews')}
                     <span class="text-on-surface/50 ml-1 text-sm font-normal">
-                      ({filteredReviews.length} รีวิว)
+                      ({t('reviewCount', { count: filteredReviews.length })})
                     </span>
                   </button>
 
@@ -1251,7 +1388,7 @@
                       setTimeout(() => textareaRef?.focus(), 300);
                     }}
                   >
-                    เขียนรีวิว
+                    {t('writeReview')}
                     <Pencil size={14} strokeWidth={2.5} />
                   </button>
                 </div>
@@ -1286,8 +1423,8 @@
   <div
     class="mt-8 rounded-2xl border border-orange-300 px-5 py-4 text-center text-[15px] leading-relaxed text-orange-500"
   >
-    <span class="font-bold">CU Get Reg ไม่ใช่การลงทะเบียนเรียนจริง</span><br />
-    สามารถลงทะเบียนเรียนได้ที่
+    <span class="font-bold">{t('notOfficialTitle')}</span><br />
+    {t('registerAt')}
     <a
       href="https://www2.reg.chula.ac.th/"
       target="_blank"
@@ -1296,6 +1433,6 @@
     >
       https://www2.reg.chula.ac.th/
     </a><br />
-    เพียงช่องทางเดียวเท่านั้น
+    {t('onlyChannel')}
   </div>
 {/snippet}

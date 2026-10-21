@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import { defineMessages, genEdMessages, useTranslations } from '$lib/i18n';
 
 	import { ChevronRight, Clock, NotebookPen, Star, StarHalf } from '@lucide/svelte';
 	import { onMount } from 'svelte';
@@ -25,11 +26,39 @@
 	}
 
 	let {
-		overviewTitle = 'ภาพรวมรีวิว',
-		latestTitle = 'รีวิวล่าสุด',
+		overviewTitle: overviewTitleProp,
+		latestTitle: latestTitleProp,
 		histogram = undefined,
 		reviews = []
 	}: Props = $props();
+
+	const t = useTranslations(
+		defineMessages({
+			th: {
+				overview: 'ภาพรวมรีวิว',
+				latest: 'รีวิวล่าสุด',
+				allReviews: 'ดูรีวิวทั้งหมด',
+				emptyTitle: 'เริ่มเขียนรีวิวแรก',
+				emptyBody:
+					'เริ่มเขียนรีวิวแรกของคุณเพื่อแบ่งปันประสบการณ์ที่น่าจดจำกับวิชานั้น ๆ และดูภาพรวมตารางเรียนทั้งหมดที่คุณสร้างไว้ในหน้าโปรไฟล์นี้',
+				pending: 'กำลังรออนุมัติ',
+				rejected: 'ไม่อนุมัติ'
+			},
+			en: {
+				overview: 'Review overview',
+				latest: 'Latest reviews',
+				allReviews: 'View all reviews',
+				emptyTitle: 'Write your first review',
+				emptyBody:
+					'Write your first review to share your experience with a course, and see an overview of all the timetables you have created on this profile page',
+				pending: 'Pending approval',
+				rejected: 'Not approved'
+			}
+		})
+	);
+
+	const overviewTitle = $derived(overviewTitleProp ?? t('overview'));
+	const latestTitle = $derived(latestTitleProp ?? t('latest'));
 
 	let isMobile = $state(false);
 
@@ -69,13 +98,16 @@
 	const normalizeRating = (value: number) => Math.min(5, Math.max(0, Math.round(value * 2) / 2));
 
 	const tagClass = (tag: string) => {
-		if (tag === 'หมวดวิทย์') {
+		// Tags may arrive in either language.
+		const isGenEd = (key: 'SC' | 'HU' | 'SO') =>
+			tag === genEdMessages.th[key] || tag === genEdMessages.en[key];
+		if (isGenEd('SC')) {
 			return 'border-orange-500 text-orange-700';
 		}
-		if (tag === 'หมวดมนุษย์') {
+		if (isGenEd('HU')) {
 			return 'border-pink-500 text-pink-700';
 		}
-		if (tag === 'หมวดสังคม') {
+		if (isGenEd('SO')) {
 			return 'border-green-500 text-green-700';
 		}
 		return 'border-purple-500 text-purple-700';
@@ -127,7 +159,7 @@
 					type="button"
 					class="text-on-surface"
 					onclick={() => goto('/reviews')}
-					aria-label="Toggle all reviews"
+					aria-label={t('allReviews')}
 				>
 					<ChevronRight size="18" strokeWidth="2.5" class="transition-transform" />
 				</button>
@@ -141,11 +173,10 @@
 
 			<div class="flex w-full flex-col items-center gap-1.5 px-4">
 				<h2 class="text-center text-lg font-bold tracking-wide text-gray-800">
-					เริ่มเขียนรีวิวแรก
+					{t('emptyTitle')}
 				</h2>
 				<p class="w-full text-center text-xs leading-relaxed text-gray-500">
-					เริ่มเขียนรีวิวแรกของคุณเพื่อแบ่งปันประสบการณ์ที่น่าจดจำกับวิชานั้น ๆ
-					และดูภาพรวมตารางเรียนทั้งหมดที่คุณสร้างไว้ในหน้าโปรไฟล์นี้
+					{t('emptyBody')}
 				</p>
 			</div>
 		{:else}
@@ -172,13 +203,13 @@
 								<span
 									class="text-caption rounded-full border border-amber-600 bg-amber-100 px-3 py-1 font-normal text-amber-600"
 								>
-									กำลังรออนุมัติ
+									{t('pending')}
 								</span>
 							{:else if review.status === 'REJECTED'}
 								<span
 									class="text-caption rounded-full border border-red-600 bg-red-100 px-3 py-1 font-normal text-red-600"
 								>
-									ไม่อนุมัติ
+									{t('rejected')}
 								</span>
 							{/if}
 							<RatingStar rating={normalizeRating(review.rating)} size={16} gap={4} />

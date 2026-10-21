@@ -1,5 +1,6 @@
 import html2canvas from 'html2canvas-pro';
 
+import { defineMessages, type Locale, translate } from '@cugetreg/ui/i18n';
 import { type ViewCourseData } from '@cugetreg/ui/organisms/view-course';
 import { discardTime, formatDate, formatExamTime } from '@cugetreg/utils';
 import type { ColorVariant } from '@cugetreg/utils/types';
@@ -96,6 +97,7 @@ export function getViewCourseData(
   selectedCartItemId?: string,
   cart?: CartWithItemsBase,
   exams?: ExamScheduleItem[],
+  locale: Locale = 'th',
 ): ViewCourseData | null {
   if (!selectedCartItemId || !cart) return null;
 
@@ -140,10 +142,10 @@ export function getViewCourseData(
     selectedSectionNo: selectedCartItem.sectionNo,
     color: (selectedCartItem.color as ColorVariant) ?? 'primary',
     midterm: midterm
-      ? `${formatDate(new Date(midterm.start))} ${formatExamTime(new Date(midterm.start), (new Date(midterm.end).getTime() - new Date(midterm.start).getTime()) / (1000 * 60 * 60))}`
+      ? `${formatDate(new Date(midterm.start), locale)} ${formatExamTime(new Date(midterm.start), (new Date(midterm.end).getTime() - new Date(midterm.start).getTime()) / (1000 * 60 * 60), locale)}`
       : undefined,
     final: final
-      ? `${formatDate(new Date(final.start))} ${formatExamTime(new Date(final.start), (new Date(final.end).getTime() - new Date(final.start).getTime()) / (1000 * 60 * 60))}`
+      ? `${formatDate(new Date(final.start), locale)} ${formatExamTime(new Date(final.start), (new Date(final.end).getTime() - new Date(final.start).getTime()) / (1000 * 60 * 60), locale)}`
       : undefined,
     isHidden: selectedCartItem.hidden,
     studyProgram: cart.studyProgram,
@@ -252,22 +254,36 @@ function foldICSLine(line: string): string {
   return chunks.join('\r\n ');
 }
 
+const examLabelMessages = defineMessages({
+  th: { MIDTERM: 'สอบกลางภาค', FINAL: 'สอบปลายภาค' },
+  en: { MIDTERM: 'Midterm', FINAL: 'Final' },
+});
+
 // Builds an RFC 5545 .ics calendar from the cart's exam schedule (one
 // VEVENT per midterm/final that has an announced date) for the user to
 // import into Google Calendar, Outlook, etc.
 export function generateExamICS(
   cart: CartWithItemsBase,
   exams: ExamScheduleItem[],
+  locale: Locale = 'th',
 ): string {
   const { midterms, finals } = getExamData(cart, exams);
 
   const events = [
     ...Object.values(midterms)
       .flat()
-      .map((exam) => ({ ...exam, type: 'MIDTERM', label: 'Midterm' })),
+      .map((exam) => ({
+        ...exam,
+        type: 'MIDTERM',
+        label: translate(examLabelMessages, locale, 'MIDTERM'),
+      })),
     ...Object.values(finals)
       .flat()
-      .map((exam) => ({ ...exam, type: 'FINAL', label: 'Final' })),
+      .map((exam) => ({
+        ...exam,
+        type: 'FINAL',
+        label: translate(examLabelMessages, locale, 'FINAL'),
+      })),
   ].filter(
     (exam): exam is typeof exam & { start: Date; end: Date } =>
       exam.start !== null && exam.end !== null,

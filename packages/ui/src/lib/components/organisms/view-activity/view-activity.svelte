@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { defineMessages, useLocale, useTranslations } from '$lib/i18n';
+
 	import { EyeOff, Trash, X } from '@lucide/svelte';
 	import { untrack } from 'svelte';
 
@@ -20,7 +22,7 @@
 	} from '../../molecules/select';
 	import {
 		ACTIVITY_COLOR_OPTIONS,
-		ACTIVITY_DAY_OPTIONS,
+		getActivityDayOptions,
 		validateActivityTime
 	} from '../create-activity';
 
@@ -37,6 +39,38 @@
 		onUpdate = () => {},
 		onRemove = () => {}
 	}: ViewActivityProps = $props();
+
+	const locale = useLocale();
+	const t = useTranslations(
+		defineMessages({
+			th: {
+				close: 'ปิด',
+				dayOfWeek: 'วันในสัปดาห์',
+				selectDay: 'เลือกวันในสัปดาห์',
+				startTime: 'เวลาเริ่ม',
+				endTime: 'เวลาจบ',
+				color: 'เลือกสีในตาราง',
+				colorOption: 'สี {color}',
+				show: 'แสดงในตาราง',
+				hide: 'ซ่อนจากตาราง',
+				remove: 'นำออกจากกิจกรรมของฉัน'
+			},
+			en: {
+				close: 'Close',
+				dayOfWeek: 'Day of week',
+				selectDay: 'Select day of week',
+				startTime: 'Start time',
+				endTime: 'End time',
+				color: 'Timetable color',
+				colorOption: 'Color {color}',
+				show: 'Show in timetable',
+				hide: 'Hide from timetable',
+				remove: 'Remove from my activities'
+			}
+		})
+	);
+
+	const dayOptions = $derived(getActivityDayOptions(locale.current));
 
 	// Local copies of the time inputs so a half-typed value isn't sent until it
 	// forms a valid range.
@@ -58,7 +92,7 @@
 			timeError = null;
 			return;
 		}
-		timeError = validateActivityTime(periodStart, periodEnd);
+		timeError = validateActivityTime(periodStart, periodEnd, locale.current);
 		if (timeError) return;
 		onUpdate(data.id, { periodStart, periodEnd });
 	}
@@ -72,7 +106,7 @@
 			<h2 class="min-w-0 text-xl font-bold break-words text-[#353745] md:text-2xl">{data.title}</h2>
 			<IconButton
 				class="shrink-0 bg-transparent ring-0! outline-none! hover:cursor-pointer"
-				aria-label="ปิด"
+				aria-label={t('close')}
 				onclick={onExit}
 			>
 				<X />
@@ -85,7 +119,7 @@
 		{/if}
 
 		<div class="mt-4 space-y-1">
-			<p class="text-caption leading-caption text-[#898EA7]">วันในสัปดาห์</p>
+			<p class="text-caption leading-caption text-[#898EA7]">{t('dayOfWeek')}</p>
 			<Select
 				type="single"
 				value={data.dayOfWeek}
@@ -95,13 +129,13 @@
 			>
 				<SelectTrigger
 					class="bg-surface-container-lowest h-10 w-full border-none px-4"
-					aria-label="เลือกวันในสัปดาห์"
+					aria-label={t('selectDay')}
 				>
-					{ACTIVITY_DAY_OPTIONS.find((d) => d.value === data.dayOfWeek)?.label}
+					{dayOptions.find((d) => d.value === data.dayOfWeek)?.label}
 				</SelectTrigger>
 				<SelectContent class="z-100">
 					<SelectGroup>
-						{#each ACTIVITY_DAY_OPTIONS as option (option.value)}
+						{#each dayOptions as option (option.value)}
 							<SelectItem value={option.value} label={option.label} aria-label={option.label} />
 						{/each}
 					</SelectGroup>
@@ -112,7 +146,7 @@
 		<div class="mt-3 flex gap-3">
 			<div class="flex-1 space-y-1">
 				<label for="view-activity-start" class="text-caption leading-caption text-[#898EA7]"
-					>เวลาเริ่ม</label
+					>{t('startTime')}</label
 				>
 				<Input
 					id="view-activity-start"
@@ -125,7 +159,7 @@
 			</div>
 			<div class="flex-1 space-y-1">
 				<label for="view-activity-end" class="text-caption leading-caption text-[#898EA7]"
-					>เวลาจบ</label
+					>{t('endTime')}</label
 				>
 				<Input
 					id="view-activity-end"
@@ -141,13 +175,13 @@
 			<p class="text-error mt-1 text-sm">{timeError}</p>
 		{/if}
 
-		<p class="mt-5 mb-3 text-lg font-medium text-[#353745]">เลือกสีในตาราง</p>
+		<p class="mt-5 mb-3 text-lg font-medium text-[#353745]">{t('color')}</p>
 		<div class="grid w-fit grid-cols-5 gap-3 md:grid-cols-10 md:gap-4">
 			{#each ACTIVITY_COLOR_OPTIONS as option (option)}
 				<Button
 					variant="solid"
 					color="primary"
-					aria-label={`สี ${option}`}
+					aria-label={t('colorOption', { color: option })}
 					class={cn(
 						'size-9 border p-0 hover:ring-0',
 						courseColorVariants[option],
@@ -167,7 +201,7 @@
 				onclick={() => onUpdate(data.id, { hidden: !data.hidden })}
 			>
 				<EyeOff />
-				{data.hidden ? 'แสดงในตาราง' : 'ซ่อนจากตาราง'}
+				{data.hidden ? t('show') : t('hide')}
 			</Button>
 			<Button
 				class="w-full gap-2 md:flex-1"
@@ -177,7 +211,7 @@
 				onclick={() => onRemove(data.id)}
 			>
 				<Trash />
-				นำออกจากกิจกรรมของฉัน
+				{t('remove')}
 			</Button>
 		</div>
 	</div>

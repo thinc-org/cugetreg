@@ -9,7 +9,7 @@
     useSession,
   } from '$lib/auth-client';
   import LoadingScreen from '$lib/components/loading-screen.svelte';
-  import { semesterToThaiMapper, studyProgramMapper } from '$lib/mapper';
+  import { semesterLabelMapper, studyProgramMapper } from '$lib/mapper';
   import { initCartSelectionController } from '$lib/stores/cart-selection.svelte';
   import { loginPopupState } from '$lib/stores/login-popup.svelte';
   import { searchState } from '$lib/stores/search.svelte';
@@ -25,6 +25,11 @@
 
   import { Modal } from '@cugetreg/ui/atoms/modal';
   import {
+    defineMessages,
+    initLocale,
+    useTranslations,
+  } from '@cugetreg/ui/i18n';
+  import {
     CreateTimetable,
     type TimetableMetaData,
   } from '@cugetreg/ui/organisms/create-timetable';
@@ -32,6 +37,29 @@
   import { Navbar } from '@cugetreg/ui/organisms/navbar';
 
   import type { LayoutData } from './$types';
+
+  let {
+    data,
+    children,
+  }: {
+    data: LayoutData;
+    children?: Snippet;
+  } = $props();
+
+  const locale = initLocale((() => data.locale)());
+
+  const t = useTranslations(
+    defineMessages({
+      th: {
+        nonChulaEmail: 'กรุณาเข้าสู่ระบบด้วยอีเมลจุฬาฯ',
+        somethingWentWrong: 'เกิดข้อผิดพลาดบางอย่าง',
+      },
+      en: {
+        nonChulaEmail: 'Please login with Chula email.',
+        somethingWentWrong: 'Something went wrong.',
+      },
+    }),
+  );
 
   const session = useSession();
 
@@ -43,9 +71,9 @@
       loginPopupState.show = true;
     } else {
       const messages: Record<string, string> = {
-        non_chula_email: 'Please login with Chula email.',
+        non_chula_email: t('nonChulaEmail'),
       };
-      toast.error(messages[errorMsg] ?? 'Something went wrong.', {
+      toast.error(messages[errorMsg] ?? t('somethingWentWrong'), {
         position: 'bottom-right',
       });
     }
@@ -54,14 +82,6 @@
     cleanUrl.searchParams.delete('error');
     goto(cleanUrl, { replaceState: true, keepFocus: true });
   });
-
-  let {
-    data,
-    children,
-  }: {
-    data: LayoutData;
-    children?: Snippet;
-  } = $props();
 
   const EMPTY_CART: UserCartInterface = {
     currentCart: {
@@ -113,8 +133,8 @@
   const programLabel = $derived.by(() => {
     const cart = $userCart.currentCart;
     if (!cart?.academicYear) return '';
-    const program = studyProgramMapper(cart.studyProgram);
-    const semester = semesterToThaiMapper(cart.semester);
+    const program = studyProgramMapper(cart.studyProgram, locale.current);
+    const semester = semesterLabelMapper(cart.semester, locale.current);
     return `${program} ${cart.academicYear} / ${semester}`;
   });
 

@@ -15,6 +15,30 @@
   import { Markdown } from 'tiptap-markdown';
 
   import { IconButton } from '@cugetreg/ui/atoms/icon-button';
+  import { defineMessages, useTranslations } from '@cugetreg/ui/i18n';
+
+  const t = useTranslations(
+    defineMessages({
+      th: {
+        bold: 'ตัวหนา',
+        italic: 'ตัวเอียง',
+        underline: 'ขีดเส้นใต้',
+        strike: 'ขีดฆ่า',
+        code: 'โค้ด',
+        heading: 'หัวข้อ',
+        quote: 'ข้อความอ้างอิง',
+      },
+      en: {
+        bold: 'Bold',
+        italic: 'Italic',
+        underline: 'Underline',
+        strike: 'Strikethrough',
+        code: 'Code',
+        heading: 'Heading',
+        quote: 'Quote',
+      },
+    }),
+  );
 
   let {
     value = $bindable(''),
@@ -96,7 +120,7 @@
       variant="ghost"
       color="neutral"
       size="sm"
-      aria-label="ตัวหนา"
+      aria-label={t('bold')}
       class={activeCls(active('bold'))}
       onclick={() => editor?.chain().focus().toggleBold().run()}
     >
@@ -106,7 +130,7 @@
       variant="ghost"
       color="neutral"
       size="sm"
-      aria-label="ตัวเอียง"
+      aria-label={t('italic')}
       class={activeCls(active('italic'))}
       onclick={() => editor?.chain().focus().toggleItalic().run()}
     >
@@ -116,7 +140,7 @@
       variant="ghost"
       color="neutral"
       size="sm"
-      aria-label="ขีดเส้นใต้"
+      aria-label={t('underline')}
       class={activeCls(active('underline'))}
       onclick={() => editor?.chain().focus().toggleUnderline().run()}
     >
@@ -126,7 +150,7 @@
       variant="ghost"
       color="neutral"
       size="sm"
-      aria-label="ขีดฆ่า"
+      aria-label={t('strike')}
       class={activeCls(active('strike'))}
       onclick={() => editor?.chain().focus().toggleStrike().run()}
     >
@@ -136,7 +160,7 @@
       variant="ghost"
       color="neutral"
       size="sm"
-      aria-label="โค้ด"
+      aria-label={t('code')}
       class={activeCls(active('code'))}
       onclick={() => editor?.chain().focus().toggleCode().run()}
     >
@@ -147,7 +171,7 @@
       variant="ghost"
       color="neutral"
       size="sm"
-      aria-label="หัวข้อ"
+      aria-label={t('heading')}
       class={activeCls(active('heading', { level: 2 }))}
       onclick={() => editor?.chain().focus().toggleHeading({ level: 2 }).run()}
     >
@@ -157,7 +181,7 @@
       variant="ghost"
       color="neutral"
       size="sm"
-      aria-label="ข้อความอ้างอิง"
+      aria-label={t('quote')}
       class={activeCls(active('blockquote'))}
       onclick={() => editor?.chain().focus().toggleBlockquote().run()}
     >

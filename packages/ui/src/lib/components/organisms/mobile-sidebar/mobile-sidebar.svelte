@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import { defineMessages, useTranslations } from '$lib/i18n';
 
 	import { Bell, ChevronDown, LogOut, Menu, Plus } from '@lucide/svelte';
 
@@ -62,10 +63,35 @@
 		onAddSchedule = () => {}
 	}: Props = $props();
 
+	const t = useTranslations(
+		defineMessages({
+			th: {
+				selectSchedule: 'เลือกตาราง',
+				closeMenu: 'ปิดเมนู',
+				announcements: 'ประกาศ',
+				planning: 'คุณกำลังจัดตารางเรียน...',
+				selectTimetable: 'เลือกตารางเรียน',
+				addSchedule: 'เพิ่มตาราง',
+				signOut: 'ออกจากระบบ',
+				login: 'เข้าสู่ระบบ'
+			},
+			en: {
+				selectSchedule: 'Select timetable',
+				closeMenu: 'Close menu',
+				announcements: 'Announcements',
+				planning: 'You are planning...',
+				selectTimetable: 'Select timetable',
+				addSchedule: 'Add timetable',
+				signOut: 'Sign out',
+				login: 'Log in'
+			}
+		})
+	);
+
 	let scheduleDropdownOpen = $state(false);
 	let scheduleSelectorEl = $state<HTMLDivElement>();
 	const currentScheduleName = $derived(
-		scheduleOptions.find((o) => o.id === currentScheduleId)?.name ?? 'เลือกตาราง'
+		scheduleOptions.find((o) => o.id === currentScheduleId)?.name ?? t('selectSchedule')
 	);
 
 	$effect(() => {
@@ -91,7 +117,7 @@
 		class="fixed inset-0 z-[70] bg-[#353745]/80 backdrop-blur-[3px]"
 		role="button"
 		tabindex="0"
-		aria-label="ปิดเมนู"
+		aria-label={t('closeMenu')}
 		onclick={onClose}
 		onkeydown={(e: KeyboardEvent) => e.key === 'Enter' && onClose()}
 	></div>
@@ -109,7 +135,7 @@
 		<!-- Top row: menu toggle, logo, announcements -->
 		<div class="flex items-center justify-between">
 			<div class="flex items-center gap-2">
-				<IconButton variant="ghost" onclick={onClose} aria-label="ปิดเมนู">
+				<IconButton variant="ghost" onclick={onClose} aria-label={t('closeMenu')}>
 					<Menu size="20" strokeWidth="2.5" color="#353745" />
 				</IconButton>
 				<a href="/" onclick={onClose}>
@@ -124,7 +150,7 @@
 						onClose();
 						goto('/announcement');
 					}}
-					aria-label="ประกาศ"
+					aria-label={t('announcements')}
 				>
 					<Bell size="16" strokeWidth="2" />
 				</button>
@@ -133,14 +159,14 @@
 
 		<!-- Timetable selector -->
 		<div class="flex flex-col gap-2">
-			<span class="text-caption text-neutral-400">คุณกำลังจัดตารางเรียน...</span>
+			<span class="text-caption text-neutral-400">{t('planning')}</span>
 			{#if scheduleOptions.length > 0}
 				<div class="relative" bind:this={scheduleSelectorEl}>
 					<button
 						type="button"
 						onclick={() => (scheduleDropdownOpen = !scheduleDropdownOpen)}
 						class="border-primary text-primary text-subtitle flex w-full items-center justify-between gap-2 rounded-xl border bg-transparent py-2.5 pr-3 pl-4 font-medium focus:outline-none"
-						aria-label="เลือกตารางเรียน"
+						aria-label={t('selectTimetable')}
 						aria-expanded={scheduleDropdownOpen}
 					>
 						<span class="truncate">{currentScheduleName}</span>
@@ -187,7 +213,7 @@
 								class="text-primary text-body2 flex w-full items-center justify-center gap-2 border-t border-neutral-100 px-4 py-2.5 font-medium hover:bg-neutral-100"
 							>
 								<Plus size="18" strokeWidth="2.5" />
-								เพิ่มตาราง
+								{t('addSchedule')}
 							</button>
 						</div>
 					{/if}
@@ -222,13 +248,13 @@
 						<span class="text-body2 text-neutral-400">ID: {id}</span>
 					{/if}
 				</div>
-				<IconButton variant="ghost" onclick={onSignOut} aria-label="ออกจากระบบ">
+				<IconButton variant="ghost" onclick={onSignOut} aria-label={t('signOut')}>
 					<LogOut size="20" strokeWidth="2.5" class="text-primary" />
 				</IconButton>
 			</div>
 		{:else}
 			<Button class="w-full" color="primary" onclick={onLogin}>
-				<span class="text-button2 font-medium">เข้าสู่ระบบ</span>
+				<span class="text-button2 font-medium">{t('login')}</span>
 			</Button>
 		{/if}
 	</div>

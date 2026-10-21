@@ -5,7 +5,9 @@
 	import { Button } from '$lib/components/atoms/button';
 	import { IconButton } from '$lib/components/atoms/icon-button';
 	import { Input } from '$lib/components/atoms/input';
+	import { LanguageToggle } from '$lib/components/atoms/language-toggle';
 	import Popover from '$lib/components/atoms/popover/popover.svelte';
+	import { defineMessages, useTranslations } from '$lib/i18n';
 
 	import { Bell, Menu, Search } from '@lucide/svelte';
 
@@ -35,7 +37,7 @@
 		/** Study-program chip label for the mobile drawer. */
 		programLabel?: string;
 		onToggleTheme?: () => void;
-		/** Called when the user taps "เพิ่มตาราง" in the mobile drawer. */
+		/** Called when the user taps "add timetable" in the mobile drawer. */
 		onAddSchedule?: () => void;
 	}
 
@@ -58,20 +60,39 @@
 
 	let shortenedName = $derived(getShortenName(name));
 
-	const navItems = [
+	const t = useTranslations(
+		defineMessages({
+			th: {
+				searchCourses: 'ค้นหาวิชา',
+				schedule: 'จัดตารางเรียน',
+				aboutUs: 'เกี่ยวกับเรา',
+				announcements: 'ประกาศ',
+				login: 'เข้าสู่ระบบ'
+			},
+			en: {
+				searchCourses: 'Search courses',
+				schedule: 'Schedule',
+				aboutUs: 'About us',
+				announcements: 'Announcements',
+				login: 'Log in'
+			}
+		})
+	);
+
+	const navItems = $derived([
 		{
-			name: 'ค้นหาวิชา',
+			name: t('searchCourses'),
 			route: '/'
 		},
 		{
-			name: 'จัดตารางเรียน',
+			name: t('schedule'),
 			route: '/schedule'
 		},
 		{
-			name: 'เกี่ยวกับเรา',
+			name: t('aboutUs'),
 			route: '/about-us'
 		}
-	];
+	]);
 
 	let openSideBar = $state(false);
 
@@ -114,7 +135,7 @@
 						onSearchEnter(localSearch);
 					}
 				}}
-				placeholder="ค้นหาวิชา"
+				placeholder={t('searchCourses')}
 				class="bg-surface-container-lowest h-8 w-full placeholder:text-neutral-400"
 			/>
 		</div>
@@ -142,11 +163,12 @@
 		<!-- > -->
 		<!-- 	<GitHubMark class="h-8 w-8 text-neutral-500 " /> -->
 		<!-- </a> -->
+		<LanguageToggle />
 		<button
 			type="button"
 			class="rounded-button hover:text-primary-container hidden size-10 items-center justify-center text-black md:flex"
 			onclick={() => goto('/announcement')}
-			aria-label="ประกาศ"
+			aria-label={t('announcements')}
 		>
 			<Bell strokeWidth="2.5" size="16" />
 		</button>
@@ -166,7 +188,7 @@
 		{:else}
 			<!-- To be implemented: add real href in Button -->
 			<Button class="w-24 md:w-28" onclick={onLogin}>
-				<p class="text-button2 font-medium">เข้าสู่ระบบ</p>
+				<p class="text-button2 font-medium">{t('login')}</p>
 			</Button>
 		{/if}
 	</div>

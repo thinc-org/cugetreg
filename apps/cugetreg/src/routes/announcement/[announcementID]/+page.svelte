@@ -5,6 +5,8 @@
   import { ChevronLeft, Loader2 } from 'lucide-svelte';
   import SvelteMarkdown from 'svelte-markdown';
 
+  import { defineMessages, useTranslations } from '@cugetreg/ui/i18n';
+
   interface AnnouncementDetail {
     id: string;
     title: string;
@@ -12,6 +14,19 @@
     updatedAt: string;
     content: string;
   }
+
+  const t = useTranslations(
+    defineMessages({
+      th: {
+        back: 'กลับ',
+        loading: 'กำลังโหลดเนื้อหา...',
+      },
+      en: {
+        back: 'Back',
+        loading: 'Loading content...',
+      },
+    }),
+  );
 
   let announcement = $state<AnnouncementDetail | null>(null);
   let isLoading = $state(true);
@@ -45,7 +60,7 @@
     >
       <ChevronLeft size={18} strokeWidth={2.5} />
       <span class="translate-y-[-1px] text-sm font-normal text-[#353745]">
-        กลับ
+        {t('back')}
       </span>
     </button>
   </div>
@@ -55,7 +70,7 @@
       class="flex h-64 flex-col items-center justify-center gap-3 text-gray-400"
     >
       <Loader2 class="animate-spin" size={32} />
-      <span class="text-sm">กำลังโหลดเนื้อหา...</span>
+      <span class="text-sm">{t('loading')}</span>
     </div>
   {:else if errorMessage || !announcement}
     <div

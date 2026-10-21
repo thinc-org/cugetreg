@@ -42,6 +42,11 @@
   import { Modal } from '@cugetreg/ui/atoms/modal';
   import { Switch } from '@cugetreg/ui/atoms/switch';
   import { TimeTable as Timetable } from '@cugetreg/ui/atoms/timetable';
+  import {
+    defineMessages,
+    useLocale,
+    useTranslations,
+  } from '@cugetreg/ui/i18n';
   import { ConfirmDeleteSchedule } from '@cugetreg/ui/molecules/confirm-delete-schedule';
   import { EditSchedule } from '@cugetreg/ui/molecules/edit-schedule';
   import { SelectTimetable } from '@cugetreg/ui/molecules/select-timetable';
@@ -64,6 +69,44 @@
   import type { ColorVariant, Day } from '@cugetreg/utils/types';
 
   // ================ HOOKS ================
+
+  const locale = useLocale();
+  const t = useTranslations(
+    defineMessages({
+      th: {
+        saveImage: 'บันทึกภาพ',
+        schedule: 'ตารางเรียน',
+        selectedCourses: 'วิชาที่เลือก',
+        myActivities: 'กิจกรรมของฉัน',
+        loadingSchedule: 'กำลังโหลดตารางเรียน...',
+        loadScheduleFailed: 'โหลดตารางเรียนไม่สำเร็จ',
+        disclaimerTitle: 'CU Get Reg ไม่ใช่การลงทะเบียนเรียนจริง',
+        disclaimerRegisterAt: 'สามารถลงทะเบียนเรียนได้ที่',
+        disclaimerOnlyChannel: 'เพียงช่องทางเดียวเท่านั้น',
+        makePublic: 'เปิดเป็นสาธารณะ',
+        activity: 'กิจกรรม',
+        totalCredits: 'หน่วยกิตรวม {total} / {max}',
+        copyLink: 'คัดลอกลิงก์',
+        close: 'ปิด',
+      },
+      en: {
+        saveImage: 'Save image',
+        schedule: 'Schedule',
+        selectedCourses: 'Selected courses',
+        myActivities: 'My activities',
+        loadingSchedule: 'Loading schedule...',
+        loadScheduleFailed: 'Failed to load schedule',
+        disclaimerTitle: 'CU Get Reg is not the official registration system',
+        disclaimerRegisterAt: 'Course registration can only be done at',
+        disclaimerOnlyChannel: '',
+        makePublic: 'Make public',
+        activity: 'Activity',
+        totalCredits: 'Total credits {total} / {max}',
+        copyLink: 'Copy link',
+        close: 'Close',
+      },
+    }),
+  );
 
   const userCart = getUserCartStore();
   const {
@@ -124,6 +167,7 @@
       selectedCartItemId,
       $userCart.currentCart,
       $userCart.exams,
+      locale.current,
     ),
   );
 
@@ -283,7 +327,7 @@
     onclick={handleTimetableScreenshot}
   >
     <Download size={18} strokeWidth={2.5} />
-    บันทึกภาพ
+    {t('saveImage')}
   </Button>
 {/snippet}
 
@@ -313,7 +357,7 @@
   >
     <CreateTimetable
       yearOptions={getYearOptions()}
-      semesterOptions={getSemesterShortOptions()}
+      semesterOptions={getSemesterShortOptions(locale.current)}
       onConfirm={(schedule: TimetableMetaData) => {
         createCart(
           schedule.name,
@@ -422,7 +466,7 @@
               onclick={toggleSidebar}
               isActive={sidebarExpanded && activePanel === 'sidebar'}
               size="lg"
-              tooltipContent="ตารางเรียน"
+              tooltipContent={t('schedule')}
               class="mx-auto size-12! justify-center rounded-xl p-0! ring-0 transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-5!"
             >
               <Menu size="20" strokeWidth={2.5} />
@@ -435,7 +479,7 @@
               onclick={focusSelected}
               isActive={activePanel === 'selected_only'}
               size="lg"
-              tooltipContent="วิชาที่เลือก"
+              tooltipContent={t('selectedCourses')}
               class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-5!"
             >
               <BookMarked size="20" strokeWidth={2.5} />
@@ -452,7 +496,7 @@
                 onclick={focusActivities}
                 isActive={activePanel === 'activities_only'}
                 size="lg"
-                tooltipContent="กิจกรรมของฉัน"
+                tooltipContent={t('myActivities')}
                 class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-5!"
               >
                 <TreePine size="20" strokeWidth={2.5} />
@@ -469,7 +513,7 @@
                 class="flex items-center justify-center gap-2 px-2 py-8 text-gray-400"
               >
                 <Loader2 class="animate-spin" size={24} />
-                <span class="text-sm">กำลังโหลดตารางเรียน...</span>
+                <span class="text-sm">{t('loadingSchedule')}</span>
               </div>
             {:then}
               <SelectTimetable
@@ -490,7 +534,7 @@
               <div
                 class="flex items-center justify-center gap-2 px-2 py-8 text-sm text-red-400"
               >
-                โหลดตารางเรียนไม่สำเร็จ
+                {t('loadScheduleFailed')}
               </div>
             {/await}
           </div>
@@ -522,16 +566,18 @@
           <div
             class="border-secondary text-on-secondary-container mt-8 rounded-2xl border px-5 py-4 text-center text-xs/[18px]"
           >
-            <span class="font-bold">CU Get Reg ไม่ใช่การลงทะเบียนเรียนจริง</span
-            ><br />
-            สามารถลงทะเบียนเรียนได้ที่
+            <span class="font-bold">{t('disclaimerTitle')}</span><br />
+            {t('disclaimerRegisterAt')}
             <a
               href="https://www2.reg.chula.ac.th/"
               target="_blank"
               rel="noreferrer"
               class="underline">https://www2.reg.chula.ac.th/</a
-            ><br />
-            เพียงช่องทางเดียวเท่านั้น
+            >
+            {#if t('disclaimerOnlyChannel')}
+              <br />
+              {t('disclaimerOnlyChannel')}
+            {/if}
           </div>
         {/if}
       {/snippet}
@@ -544,13 +590,13 @@
               <h1
                 class="text-xl font-bold text-[#4A70C6] md:text-4xl md:text-black"
               >
-                ตารางเรียน
+                {t('schedule')}
               </h1>
               <div class="lg:hidden">
                 <Switch
                   checked={$userCart.currentCart.visible === 'PUB'}
                   onCheckedChange={handlePublicToggle}
-                  label="เปิดเป็นสาธารณะ"
+                  label={t('makePublic')}
                 />
               </div>
             </div>
@@ -617,10 +663,10 @@
               onclick={() => (showCreateActivityModal = true)}
             >
               <Plus size={18} strokeWidth={2.5} />
-              กิจกรรม
+              {t('activity')}
             </Button>
             <span class="hidden lg:inline lg:text-lg lg:font-bold">
-              หน่วยกิตรวม {totalCredit} / {maxCredit}
+              {t('totalCredits', { total: totalCredit, max: maxCredit })}
             </span>
           </div>
 
@@ -631,7 +677,7 @@
               <Switch
                 checked={$userCart.currentCart.visible === 'PUB'}
                 onCheckedChange={handlePublicToggle}
-                label="เปิดเป็นสาธารณะ"
+                label={t('makePublic')}
               />
               {@render screenshotButton('lg:hidden')}
             </div>
@@ -649,6 +695,7 @@
                   variant="ghost"
                   disabled={$userCart.currentCart.visible === 'PVT'}
                   class="absolute right-0 z-10 hover:cursor-pointer hover:bg-transparent"
+                  aria-label={t('copyLink')}
                   onclick={() => {
                     if (publicCartURL) {
                       navigator.clipboard.writeText(publicCartURL);
@@ -679,7 +726,7 @@
       <div transition:fade={{ duration: 200 }}>
         <button
           type="button"
-          aria-label="วิชาที่เลือก"
+          aria-label={t('selectedCourses')}
           class="fixed right-6 bottom-6 z-50 flex h-16 w-16 items-center justify-center rounded-full bg-[#4A70C6] text-white shadow-lg transition-colors hover:bg-[#3f61ab]"
           onclick={() => (activeModal = 'selected')}
         >
@@ -698,6 +745,7 @@
       >
         <button
           class="absolute top-7 right-5 bg-white"
+          aria-label={t('close')}
           onclick={() => (activeModal = null)}
         >
           <X size={20} strokeWidth={2.5} />

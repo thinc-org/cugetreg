@@ -6,6 +6,12 @@ import { get, type Writable } from 'svelte/store';
 import toast from 'svelte-french-toast';
 
 import {
+  defineMessages,
+  type LocaleState,
+  translate,
+  useLocale,
+} from '@cugetreg/ui/i18n';
+import {
   type CartData,
   CartDetailResponseSchema,
 } from '@cugetreg/zod-schemas/carts-response';
@@ -18,6 +24,11 @@ import {
 
 const CART_SELECTION_KEY = Symbol('cart-selection');
 
+const messages = defineMessages({
+  th: { switchFailed: 'เปลี่ยนตารางเรียนไม่สำเร็จ' },
+  en: { switchFailed: 'Failed to switch timetable' },
+});
+
 export class CartSelectionController {
   selectedId = $state('');
   isLoading = $state(false);
@@ -25,13 +36,15 @@ export class CartSelectionController {
 
   readonly #store: Writable<UserCartInterface>;
   readonly #unsubscribe: () => void;
+  readonly #locale?: LocaleState;
 
   #generation = 0;
   #controller?: AbortController;
   #listeners: Array<(cart: CartData) => void> = [];
 
-  constructor(store: Writable<UserCartInterface>) {
+  constructor(store: Writable<UserCartInterface>, locale?: LocaleState) {
     this.#store = store;
+    this.#locale = locale;
     this.#unsubscribe = store.subscribe((state) => {
       if (!this.isLoading) this.selectedId = state.currentCartId;
     });
@@ -89,7 +102,10 @@ export class CartSelectionController {
 
       this.error = error;
       this.selectedId = get(this.#store).currentCartId;
-      toast.error('Failed to switch timetable', { position: 'bottom-right' });
+      toast.error(
+        translate(messages, this.#locale?.current ?? 'th', 'switchFailed'),
+        { position: 'bottom-right' },
+      );
       return;
     } finally {
       if (generation === this.#generation) {
@@ -118,7 +134,7 @@ export class CartSelectionController {
 export function initCartSelectionController(
   store: Writable<UserCartInterface>,
 ) {
-  const controller = new CartSelectionController(store);
+  const controller = new CartSelectionController(store, useLocale());
   setContext(CART_SELECTION_KEY, controller);
   return controller;
 }

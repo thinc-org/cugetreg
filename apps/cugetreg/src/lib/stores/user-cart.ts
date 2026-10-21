@@ -5,6 +5,12 @@ import { isAxiosError } from 'axios';
 import { get, type Writable } from 'svelte/store';
 import toast from 'svelte-french-toast';
 
+import {
+  defineMessages,
+  type LocaleState,
+  translate,
+  useLocale,
+} from '@cugetreg/ui/i18n';
 import { courseColorVariants } from '@cugetreg/utils/constants';
 import type { Day } from '@cugetreg/utils/types';
 import {
@@ -43,6 +49,34 @@ export interface UserCartInterface {
 
 const showError = (message: string) =>
   toast.error(message, { position: 'bottom-right' });
+
+const toastMessages = defineMessages({
+  th: {
+    somethingWentWrong: 'เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง',
+    courseAdded: 'เพิ่มวิชาแล้ว',
+    courseRemoved: 'นำวิชาออกแล้ว',
+    cartDetailsFailed: 'สร้างตารางเรียนแล้ว แต่โหลดรายละเอียดไม่สำเร็จ',
+    activityAdded: 'เพิ่มกิจกรรมแล้ว',
+    activityRemoved: 'นำกิจกรรมออกแล้ว',
+  },
+  en: {
+    somethingWentWrong: 'Something went wrong',
+    courseAdded: 'Course added successfully',
+    courseRemoved: 'Course removed successfully.',
+    cartDetailsFailed: 'Created cart but failed to load details',
+    activityAdded: 'Activity added',
+    activityRemoved: 'Activity removed',
+  },
+});
+
+/**
+ * Cached locale state, set in useCartActions(), so toasts fired from async
+ * contexts pick the language that is active at the time they fire.
+ */
+let cachedLocale: LocaleState | undefined;
+
+const toastMessage = (key: keyof typeof toastMessages.th) =>
+  translate(toastMessages, cachedLocale?.current ?? 'th', key);
 
 /**
  * Context key for the cart data promise streamed from the root layout load.
@@ -97,11 +131,15 @@ function handleError(error: any) {
       return;
     }
 
-    toast.error('Something went wrong', { position: 'bottom-right' });
+    toast.error(toastMessage('somethingWentWrong'), {
+      position: 'bottom-right',
+    });
     return;
   }
 
-  toast.error('Something went wrong', { position: 'bottom-right' });
+  toast.error(toastMessage('somethingWentWrong'), {
+    position: 'bottom-right',
+  });
 }
 
 // ---------------------------------------------------------------------------
@@ -307,6 +345,7 @@ export function useCartActions() {
   // Cache the store reference so flushUpdates can read it from async
   // contexts where Svelte's getContext() is unavailable.
   cachedStore = userCart;
+  cachedLocale = useLocale();
 
   const pinCart = async () => {
     await waitForCartSelection();
@@ -427,7 +466,9 @@ export function useCartActions() {
         exams: detail.schedule.exams,
       }));
 
-      toast.success('Course added successfully', { position: 'bottom-right' });
+      toast.success(toastMessage('courseAdded'), {
+        position: 'bottom-right',
+      });
 
       return newItem.id;
     } catch (error) {
@@ -467,7 +508,7 @@ export function useCartActions() {
         exams: detail.schedule.exams,
       }));
 
-      toast.success('Course removed successfully.', {
+      toast.success(toastMessage('courseRemoved'), {
         position: 'bottom-right',
       });
     } catch (error) {
@@ -618,7 +659,7 @@ export function useCartActions() {
       cartData = detail.cart;
       examsData = detail.schedule.exams;
     } catch {
-      toast.error('Created cart but failed to load details', {
+      toast.error(toastMessage('cartDetailsFailed'), {
         position: 'bottom-right',
       });
     }
@@ -884,7 +925,9 @@ export function useCartActions() {
         );
       }
 
-      toast.success('เพิ่มกิจกรรมแล้ว', { position: 'bottom-right' });
+      toast.success(toastMessage('activityAdded'), {
+        position: 'bottom-right',
+      });
       return true;
     } catch (error) {
       handleError(error);
@@ -961,7 +1004,9 @@ export function useCartActions() {
         },
       }));
 
-      toast.success('นำกิจกรรมออกแล้ว', { position: 'bottom-right' });
+      toast.success(toastMessage('activityRemoved'), {
+        position: 'bottom-right',
+      });
     } catch (error) {
       handleError(error);
     }

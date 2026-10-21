@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { defineMessages, useTranslations } from '$lib/i18n';
+
 	import { Copy, Ellipsis, type Icon, PenLine, Pin, Plus, Trash } from '@lucide/svelte';
 	import { DropdownMenu } from 'bits-ui';
 	import type { ClassValue } from 'clsx';
@@ -39,34 +41,55 @@
 		onDelete = () => {}
 	}: EditScheduleProps = $props();
 
-	const options: Option[] = [
+	const t = useTranslations(
+		defineMessages({
+			th: {
+				rename: 'แก้ไขชื่อ',
+				duplicate: 'ทำสำเนา',
+				addSchedule: 'เพิ่มตาราง',
+				setAsMain: 'ตั้งเป็นตารางหลัก',
+				delete: 'ลบตาราง',
+				moreOptions: 'ตัวเลือก'
+			},
+			en: {
+				rename: 'Rename',
+				duplicate: 'Duplicate',
+				addSchedule: 'Add schedule',
+				setAsMain: 'Set as main schedule',
+				delete: 'Delete schedule',
+				moreOptions: 'Option'
+			}
+		})
+	);
+
+	const options: Option[] = $derived([
 		{
 			icon: PenLine,
-			label: 'แก้ไขชื่อ',
+			label: t('rename'),
 			onclick: () => onRename()
 		},
 		{
 			icon: Copy,
-			label: 'ทำสำเนา',
+			label: t('duplicate'),
 			onclick: () => onDuplicate()
 		},
 		{
 			icon: Plus,
-			label: 'เพิ่มตาราง',
+			label: t('addSchedule'),
 			onclick: () => onAddSchedule()
 		},
 		{
 			icon: Pin,
-			label: 'ตั้งเป็นตารางหลัก',
+			label: t('setAsMain'),
 			onclick: () => onPin()
 		},
 		{
 			icon: Trash,
-			label: 'ลบตาราง',
+			label: t('delete'),
 			onclick: () => onDelete(),
 			danger: true
 		}
-	];
+	]);
 </script>
 
 <div class={cn('flex space-x-2', className)}>
@@ -92,7 +115,7 @@
 					{#each options as option (option.label)}
 						{@const OptionIcon = option.icon}
 						{@const danger = option.danger ?? false}
-						<DropdownMenu.Item aria-label="dropdown">
+						<DropdownMenu.Item aria-label={t('moreOptions')}>
 							<div
 								class="flex rounded-sm p-1 hover:cursor-pointer hover:bg-neutral-200"
 								onclick={option.onclick}

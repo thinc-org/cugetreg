@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { defineMessages, useTranslations } from '$lib/i18n';
+
 	import type { ClassValue } from 'clsx';
 	import { setContext, type Snippet } from 'svelte';
 
@@ -26,6 +28,13 @@
 
 	let amountOfDays = $derived(days.length);
 
+	const t = useTranslations(
+		defineMessages({
+			th: { dayTime: 'วัน/เวลา' },
+			en: { dayTime: 'Day/Time' }
+		})
+	);
+
 	setContext<TimeTableContext>('timetable-context', {
 		get periodPerDay() {
 			return periodPerDay;
@@ -44,7 +53,7 @@
     "
 >
 	<div class="cell truncate border-r border-b border-neutral-200 bg-indigo-50! py-3.5">
-		วัน/เวลา
+		{t('dayTime')}
 	</div>
 	<div
 		class="grid divide-x divide-neutral-200"

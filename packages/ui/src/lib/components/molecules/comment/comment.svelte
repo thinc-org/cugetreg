@@ -1,5 +1,6 @@
 <script lang="ts">
 	import StatusChip from '$lib/components/atoms/status-chip/status-chip.svelte';
+	import { defineMessages, useTranslations } from '$lib/i18n';
 
 	import { Pencil, ThumbsDown, ThumbsUp, Trash2 } from '@lucide/svelte';
 	import DOMPurify from 'isomorphic-dompurify';
@@ -55,6 +56,25 @@
 		onEdit,
 		onDelete
 	}: CommentProps = $props();
+
+	const t = useTranslations(
+		defineMessages({
+			th: {
+				section: 'Section {section}',
+				showLess: 'ดูน้อยลง',
+				showMore: 'ดูเพิ่มเติม',
+				deleteReview: 'ลบรีวิว',
+				editReview: 'แก้ไขรีวิว'
+			},
+			en: {
+				section: 'Section {section}',
+				showLess: 'Show less',
+				showMore: 'Show more',
+				deleteReview: 'Delete review',
+				editReview: 'Edit review'
+			}
+		})
+	);
 
 	// Owners can remove their review whatever its moderation status; editing
 	// only makes sense once it has been rejected.
@@ -136,7 +156,7 @@
 				{semester}
 				{year}
 				{#if section}
-					Section {section}
+					{t('section', { section })}
 				{/if}
 			</div>
 		</div>
@@ -179,9 +199,9 @@
 					onclick={() => (isExpanded = !isExpanded)}
 				>
 					{#if isExpanded}
-						ดูน้อยลง
+						{t('showLess')}
 					{:else}
-						ดูเพิ่มเติม
+						{t('showMore')}
 					{/if}
 				</button>
 			</div>
@@ -213,7 +233,7 @@
 				{#if canDelete}
 					<button
 						class="rounded-md p-1 transition-colors hover:cursor-pointer hover:bg-red-50"
-						aria-label="Delete review"
+						aria-label={t('deleteReview')}
 						onclick={onDelete}
 					>
 						<Trash2 size={20} class="text-[#FF4D4F]" />
@@ -222,7 +242,7 @@
 				{#if canEdit}
 					<button
 						class="rounded-md p-1 transition-colors hover:cursor-pointer hover:bg-blue-50"
-						aria-label="Edit review"
+						aria-label={t('editReview')}
 						onclick={onEdit}
 					>
 						<Pencil size={20} class="text-[#4A70C6]" />

@@ -3,7 +3,12 @@ import { env as publicEnv } from '$env/dynamic/public';
 
 import { type Handle, type HandleFetch, redirect } from '@sveltejs/kit';
 
+import { DEFAULT_LOCALE, isLocale, LOCALE_COOKIE } from '@cugetreg/ui/i18n';
+
 export const handle: Handle = async ({ event, resolve }) => {
+  const localeCookie = event.cookies.get(LOCALE_COOKIE);
+  event.locals.locale = isLocale(localeCookie) ? localeCookie : DEFAULT_LOCALE;
+
   const API_BASE = privateEnv.API_URL
     ? `${privateEnv.API_URL}/api/v1`
     : publicEnv.PUBLIC_API_URL;
@@ -34,7 +39,10 @@ export const handle: Handle = async ({ event, resolve }) => {
     throw redirect(302, '/?error=no_session');
   }
 
-  return resolve(event);
+  return resolve(event, {
+    transformPageChunk: ({ html }) =>
+      html.replace('%lang%', event.locals.locale),
+  });
 };
 
 export const handleFetch: HandleFetch = async ({ event, request, fetch }) => {

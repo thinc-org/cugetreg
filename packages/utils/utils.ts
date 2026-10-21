@@ -124,19 +124,13 @@ export function isFinalsConflict(
 
 const USE_CHRISTIAN_YEAR = false;
 
-export function formatDate(date: Date): string {
-  if (!date || date.getTime() === 0) return "TBA";
+const DAYS = {
+  th: ["อาทิตย์", "จันทร์", "อังคาร", "พุธ", "พฤหัสบดี", "ศุกร์", "เสาร์"],
+  en: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+};
 
-  const DAYS_TH = [
-    "จันทร์",
-    "อังคาร",
-    "พุธ",
-    "พฤหัสบดี",
-    "ศุกร์",
-    "เสาร์",
-    "อาทิตย์",
-  ];
-  const MONTH_TH = [
+const MONTHS = {
+  th: [
     "ม.ค.",
     "ก.พ.",
     "มี.ค.",
@@ -149,19 +143,45 @@ export function formatDate(date: Date): string {
     "ต.ค.",
     "พ.ย.",
     "ธ.ค.",
-  ];
+  ],
+  en: [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ],
+};
+
+export function formatDate(date: Date, locale: "th" | "en" = "th"): string {
+  if (!date || date.getTime() === 0) return "TBA";
 
   const day = date.getDay();
   const cdate = date.getDate();
   const month = date.getMonth();
   const year = date.getFullYear();
 
+  if (locale === "en") {
+    return `${DAYS.en[day]}, ${cdate} ${MONTHS.en[month]} ${year}`;
+  }
+
   const offset = USE_CHRISTIAN_YEAR ? 0 : 543;
 
-  return `${DAYS_TH[day]} ${cdate} ${MONTH_TH[month]} ${year + offset}`;
+  return `${DAYS.th[day]} ${cdate} ${MONTHS.th[month]} ${year + offset}`;
 }
 
-export function formatExamTime(date?: Date, duration?: number): string {
+export function formatExamTime(
+  date?: Date,
+  duration?: number,
+  locale: "th" | "en" = "th",
+): string {
   if (!date || !duration) return "TBA";
 
   const end = new Date(date.getTime() + duration * 60 * 60 * 1000);
@@ -171,7 +191,8 @@ export function formatExamTime(date?: Date, duration?: number): string {
   const endH = String(end.getHours()).padStart(2, "0");
   const endM = String(end.getMinutes()).padStart(2, "0");
 
-  return `${startH}:${startM} - ${endH}:${endM} น.`;
+  const range = `${startH}:${startM} - ${endH}:${endM}`;
+  return locale === "en" ? range : `${range} น.`;
 }
 
 export function formatExamColumn(date?: Date): number {

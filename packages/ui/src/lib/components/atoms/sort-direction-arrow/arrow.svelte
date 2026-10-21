@@ -1,9 +1,18 @@
 <script lang="ts">
+	import { defineMessages, useTranslations } from '$lib/i18n';
+
 	let down = $state(true);
+
+	const t = useTranslations(
+		defineMessages({
+			th: { sortDescending: 'เรียงจากมากไปน้อย', sortAscending: 'เรียงจากน้อยไปมาก' },
+			en: { sortDescending: 'Sort descending', sortAscending: 'Sort ascending' }
+		})
+	);
 </script>
 
 {#if down}
-	<button type="button" onclick={() => (down = !down)} class="b" aria-label="Sort descending">
+	<button type="button" onclick={() => (down = !down)} class="b" aria-label={t('sortDescending')}>
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
 			width="24"
@@ -19,7 +28,7 @@
 		>
 	</button>
 {:else}
-	<button type="button" onclick={() => (down = !down)} class="b" aria-label="Sort ascending">
+	<button type="button" onclick={() => (down = !down)} class="b" aria-label={t('sortAscending')}>
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
 			width="24"

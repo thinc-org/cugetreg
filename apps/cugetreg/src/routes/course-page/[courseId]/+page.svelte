@@ -82,6 +82,13 @@
     reviewsError?: boolean;
   };
   const course = $derived(data.course);
+  const gradingTypeLabel = $derived(
+    {
+      LETTER: 'Letter Grade',
+      SU: 'S/U',
+      TBA: 'TBA',
+    }[course.courseInfo.gradingType],
+  );
   const midtermExam = $derived(
     course.midtermStart && course.midtermEnd
       ? `${formatDate(new Date(course.midtermStart))} ${formatExamTime(
@@ -1320,7 +1327,7 @@
                 <p
                   class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
                 >
-                  Letter Grade
+                  {gradingTypeLabel}
                 </p>
               </div>
             </div>
@@ -1353,7 +1360,7 @@
                 <p
                   class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
                 >
-                  Letter Grade
+                  {gradingTypeLabel}
                 </p>
               </div>
             </div>

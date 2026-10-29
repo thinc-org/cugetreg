@@ -86,9 +86,6 @@
 	function onFitScheduleChange() {
 		if (fitSchedule) showFitModal = true;
 	}
-	function onCreditInput() {
-		if (credit) noConditions = false;
-	}
 
 	// --- 3. HELPER LOGIC ($derived) ---
 	let activeGenEds = $derived(genEdOptions.filter((o) => selectedGenEds.includes(o.id)));
@@ -107,8 +104,6 @@
 	}
 
 	function addOption(listName: string, id: string) {
-		if (noConditions) noConditions = false;
-
 		// Svelte 5: Reassign array to trigger update
 		if (listName === 'gened') selectedGenEds = [...selectedGenEds, id];
 		if (listName === 'faculty') selectedFaculties = [...selectedFaculties, id];
@@ -478,7 +473,6 @@
 					type="text"
 					inputmode="decimal"
 					bind:value={credit}
-					oninput={onCreditInput}
 					placeholder="ทั้งหมด"
 					class="bg-surface-container-lowest text-on-surface box-border h-10 w-20 rounded-xl border-none p-2.5 text-base text-[14px] placeholder:text-neutral-400"
 				/>

@@ -83,9 +83,6 @@
 	function onNoConditionsChange() {
 		if (noConditions) showNoPrereqModal = true;
 	}
-	function onFitScheduleChange() {
-		if (fitSchedule) showFitModal = true;
-	}
 
 	// --- 3. HELPER LOGIC ($derived) ---
 	let activeGenEds = $derived(genEdOptions.filter((o) => selectedGenEds.includes(o.id)));

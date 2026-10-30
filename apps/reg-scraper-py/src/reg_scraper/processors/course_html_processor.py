@@ -84,8 +84,19 @@ def parse_section_no(cell: str) -> str | None:
 
 
 def department_parser(value: str) -> str:
-    match = re.search(r"\(([^)]+)\)", value)
-    return match.group(1).strip() if match else value.strip()
+    """Extract the department's outer group while preserving nested parentheses."""
+    start = value.find("(")
+    if start != -1:
+        depth = 0
+        for index in range(start, len(value)):
+            if value[index] == "(":
+                depth += 1
+            elif value[index] == ")":
+                depth -= 1
+                if depth == 0:
+                    return value[start + 1:index].strip()
+    # Keep the original text when no complete outer group can be extracted.
+    return value.strip()
 
 
 def period_parser(value: str) -> Period:

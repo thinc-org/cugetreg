@@ -135,7 +135,8 @@
 
   onMount(() => {
     try {
-      showOnboarding = localStorage.getItem(ONBOARDING_SEEN_KEY) !== 'true';
+      // showOnboarding = localStorage.getItem(ONBOARDING_SEEN_KEY) !== 'true';
+      showOnboarding = true;
     } catch {
       showOnboarding = true;
     }
@@ -199,7 +200,7 @@
     exitOnBackgroundClick
     centered
     dim
-    class="h-dvh"
+    class="h-dvh items-end sm:items-center"
     bind:show={showOnboarding}
   >
     <Onboarding onCancel={dismissOnboarding} />

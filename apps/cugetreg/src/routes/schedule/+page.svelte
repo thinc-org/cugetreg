@@ -669,7 +669,7 @@
           </div>
           <ExamsList cart={$userCart.currentCart} exams={$userCart.exams} />
         </div>
-        <div class="bg-surface mt-auto w-full border-t">
+        <div class="bg-surface mt-auto w-full">
           <Footer />
         </div>
       </div>

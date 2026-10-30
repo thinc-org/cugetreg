@@ -226,7 +226,7 @@
       onChangeVisibility={changeVisibility}
     />
   </div>
-  <div class="bg-surface mt-auto w-full border-t">
+  <div class="bg-surface mt-auto w-full">
     <Footer />
   </div>
   <Modal centered dim bind:show={editInfoPopupVisible}>

@@ -278,6 +278,16 @@ class ScraperPipeline:
 
         exporter = CsvDescExporter()
         known = exporter.existing_course_nos()
+        receiver = CucisReceiver()
+        # A lookup is checkpointed before its row reaches the CSV. Replay hits
+        # first so an interruption between those writes cannot strand them.
+        cached_rows = receiver.gapfill_rows()
+        if cached_rows:
+            restored = exporter.append(cached_rows)
+            if restored:
+                logger.info("Restored %d checkpointed course descriptions", restored)
+                known = exporter.existing_course_nos()
+
         if not known:
             logger.info(
                 "Description gap fill: %s has no courses yet — run "
@@ -286,7 +296,6 @@ class ScraperPipeline:
             )
             return
 
-        receiver = CucisReceiver()
         missing = sorted({course.courseNo for course in courses} - known)
         if not missing:
             logger.info("Description gap fill: every scraped course is already in the CSV")

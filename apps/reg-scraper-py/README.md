@@ -561,6 +561,13 @@ hits to the CSV — so a course discovered in run *n* has its description in run
 *n*, not *n+1*. `SCRAPER_DESCRIPTIONS_GAPFILL_MAX` (default `200`) caps how many
 run at once; anything over the cap is picked up next run.
 
+Gap fill requires the scraper-generated CSV header, including its exact column
+order. An incompatible header raises an error before any rows are appended,
+preventing descriptions from being written under the wrong columns. Cached hits
+are replayed into the CSV before new lookups, so stopping after a checkpoint
+write but before the CSV append does not leave a description permanently missing.
+Rows already in the CSV are skipped during replay.
+
 Three details worth knowing before touching `fill_gaps()`:
 
 - **`Keys` is a substring match and lies about misses.** `Keys=0000000` answers

@@ -269,7 +269,7 @@ class CucisReceiver:
                 pending.append(course_no)
                 continue
             if record.get("found"):
-                continue  # its row is already in the CSV
+                continue  # the pipeline replays cached hits into the CSV first
             if retry_days <= 0:
                 continue
             checked_at = _parse_timestamp(record.get("checked_at"))

@@ -54,6 +54,15 @@ class CsvDescExporter(Exporter[list[dict[str, Any]]]):
             return set()
         with path.open(encoding="utf-8-sig", newline="") as handle:
             reader = csv.DictReader(handle)
+            if path.stat().st_size == 0:
+                return set()
+            if reader.fieldnames != FIELDNAMES:
+                raise ValueError(
+                    f"Unexpected description CSV header in {path}: "
+                    f"expected {FIELDNAMES!r}, got {reader.fieldnames!r}. "
+                    "Use the scraper-generated CSV with the exact column order "
+                    "before appending descriptions."
+                )
             return {
                 (row.get("course_no") or "").strip()
                 for row in reader

@@ -59,9 +59,7 @@
 	let isDark = $state(false);
 
 	onMount(() => {
-		const theme = localStorage.getItem('cugetreg:themeOverride') ?? 'light';
-
-		isDark = theme === 'dark';
+		isDark = document.documentElement.classList.contains('dark');
 	});
 
 	let shortenedName = $derived(getShortenName(name));

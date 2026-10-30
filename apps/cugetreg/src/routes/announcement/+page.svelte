@@ -2,11 +2,9 @@
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
   import { api } from '$lib/api';
-  import { GOOGLE_FORM_URL } from '$lib/constants';
 
   import { Loader2 } from 'lucide-svelte';
 
-  import { ReportProblem } from '@cugetreg/ui/molecules/report-problem';
   import { Footer } from '@cugetreg/ui/organisms/footer';
 
   interface Announcement {
@@ -82,6 +80,5 @@
       </div>
     {/if}
   </div>
-  <ReportProblem href={GOOGLE_FORM_URL} variant="sticky" />
 </div>
 <Footer />

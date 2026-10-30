@@ -54,7 +54,7 @@
 		programLabel = '',
 		onToggleTheme = () => {},
 		onAddSchedule = () => {},
-		onShowOnboarding = () => {}
+		onShowOnboarding = () => {},
 		reportURL = ''
 	}: Props = $props();
 

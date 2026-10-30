@@ -37,7 +37,7 @@
 
 <a
 	class={cn(
-		'z-50 flex w-max cursor-pointer items-center gap-1 rounded-full border-2 border-black px-2 py-1 md:gap-2 md:px-4',
+		'bg-surface z-50 flex w-max cursor-pointer items-center gap-1 rounded-full border-2 border-black px-2 py-1 md:gap-2 md:px-4',
 		positionClass,
 		className
 	)}

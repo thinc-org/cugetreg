@@ -37,6 +37,7 @@
 		onToggleTheme?: () => void;
 		/** Called when the user taps "เพิ่มตาราง" in the mobile drawer. */
 		onAddSchedule?: () => void;
+		reportURL?: string;
 	}
 
 	let {
@@ -51,7 +52,8 @@
 		currentScheduleId = $bindable(''),
 		programLabel = '',
 		onToggleTheme = () => {},
-		onAddSchedule = () => {}
+		onAddSchedule = () => {},
+		reportURL = ''
 	}: Props = $props();
 
 	let localSearch = $state('');
@@ -184,5 +186,6 @@
 		{onToggleTheme}
 		{onAddSchedule}
 		onClose={toggleSideBar}
+		{reportURL}
 	/>
 </div>

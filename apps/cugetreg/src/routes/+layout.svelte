@@ -10,6 +10,7 @@
   } from '$lib/auth-client';
   import LoadingScreen from '$lib/components/loading-screen.svelte';
   import Onboarding from '$lib/components/onboarding.svelte';
+  import { GOOGLE_FORM_URL } from '$lib/constants';
   import { semesterToThaiMapper, studyProgramMapper } from '$lib/mapper';
   import { initCartSelectionController } from '$lib/stores/cart-selection.svelte';
   import { loginPopupState } from '$lib/stores/login-popup.svelte';
@@ -22,9 +23,11 @@
   } from '$lib/stores/user-cart';
 
   import { onDestroy, onMount, setContext, type Snippet } from 'svelte';
+  import { MediaQuery } from 'svelte/reactivity';
   import toast, { Toaster } from 'svelte-french-toast';
 
   import { Modal } from '@cugetreg/ui/atoms/modal';
+  import { ReportProblem } from '@cugetreg/ui/molecules/report-problem';
   import {
     CreateTimetable,
     type TimetableMetaData,
@@ -35,6 +38,8 @@
   import type { LayoutData } from './$types';
 
   const session = useSession();
+  const mobileMedia = new MediaQuery('max-width: 767px', false);
+  const isMobile = $derived(mobileMedia.current);
 
   $effect(() => {
     const errorMsg = page.url.searchParams.get('error');
@@ -193,6 +198,7 @@
     onToggleTheme={toggleTheme}
     onAddSchedule={() => (showCreateScheduleModal = true)}
     onShowOnboarding={() => (showOnboarding = true)}
+    reportURL={GOOGLE_FORM_URL}
   />
 
   <Modal
@@ -234,5 +240,9 @@
     <div class="relative flex-1 overflow-auto">
       {@render children?.()}
     </div>
+  {/if}
+
+  {#if !isMobile}
+    <ReportProblem href={GOOGLE_FORM_URL} />
   {/if}
 </div>

@@ -38,6 +38,7 @@
 		/** Called when the user taps "เพิ่มตาราง" in the mobile drawer. */
 		onAddSchedule?: () => void;
 		onShowOnboarding?: () => void;
+		reportURL?: string;
 	}
 
 	let {
@@ -54,6 +55,7 @@
 		onToggleTheme = () => {},
 		onAddSchedule = () => {},
 		onShowOnboarding = () => {}
+		reportURL = ''
 	}: Props = $props();
 
 	let localSearch = $state('');
@@ -192,5 +194,6 @@
 		{onAddSchedule}
 		{onShowOnboarding}
 		onClose={toggleSideBar}
+		{reportURL}
 	/>
 </div>

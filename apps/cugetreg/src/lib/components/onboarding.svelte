@@ -87,12 +87,16 @@
       {/key}
     </div>
   </div>
-  <div class="flex shrink-0 grow flex-col p-3 text-center break-words sm:grow-0 sm:p-4">
+  <div
+    class="flex shrink-0 grow flex-col p-3 text-center break-words sm:grow-0 sm:p-4"
+  >
     <div class="text-xl font-bold sm:text-2xl">{texts[progress].head}</div>
     <div class="text-sm leading-relaxed sm:text-base">
       {texts[progress].subtitle}
     </div>
-    <div class="mt-auto flex items-center justify-between gap-2 pt-3 sm:mt-0 sm:p-4">
+    <div
+      class="mt-auto flex items-center justify-between gap-2 pt-3 sm:mt-0 sm:p-4"
+    >
       <button
         class="focus-visible:outline-primary flex size-11 shrink-0 items-center justify-center rounded-lg hover:cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-default disabled:opacity-40"
         aria-label="Previous video"

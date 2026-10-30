@@ -50,7 +50,7 @@
 	<div>
 		<div class="flex items-center justify-between">
 			<div class="flex items-center gap-3">
-				<User size="18" strokeWidth="2.5" color="#1F2430" />
+				<User class="text-on-surface" size="18" strokeWidth="2.5" />
 				<p class="text-h3 font-bold">ข้อมูลส่วนตัว</p>
 			</div>
 			<IconButton variant="ghost" onclick={() => onEdit?.()}>
@@ -72,7 +72,7 @@
 
 	<div class="mt-4 pt-6">
 		<div class="flex items-center gap-3">
-			<User size="18" strokeWidth="2.5" color="#1F2430" />
+			<User class="text-on-surface" size="18" strokeWidth="2.5" />
 			<p class="text-h3 font-bold">เชื่อมต่อบัญชี</p>
 		</div>
 		<div

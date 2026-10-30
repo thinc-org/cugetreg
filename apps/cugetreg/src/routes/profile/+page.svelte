@@ -205,7 +205,7 @@
   });
 </script>
 
-<div class="relative flex min-h-screen flex-col bg-white">
+<div class="bg-surface relative flex min-h-screen flex-col">
   <div
     class="container mx-auto flex flex-col items-center justify-center gap-4 p-5 pb-16 sm:p-8 sm:pb-8 lg:flex-row lg:items-start lg:gap-8 lg:gap-20"
   >
@@ -224,7 +224,7 @@
       onChangeVisibility={changeVisibility}
     />
   </div>
-  <div class="mt-auto w-full border-t bg-white">
+  <div class="bg-surface mt-auto w-full">
     <Footer />
   </div>
   <Modal centered dim bind:show={editInfoPopupVisible}>

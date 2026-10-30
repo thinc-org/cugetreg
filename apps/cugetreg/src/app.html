@@ -1,14 +1,27 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+      let theme;
+      try {
+        theme = localStorage.getItem('cugetreg:themeOverride');
+      } catch {
+        // Storage may be blocked; fall back to the system preference.
+      }
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      document.documentElement.classList.toggle(
+        'dark',
+        theme === 'dark' ||
+          (theme !== 'light' &&
+            window.matchMedia('(prefers-color-scheme: dark)').matches),
+      );
+    </script>
     %sveltekit.head%
-</head>
+  </head>
 
-<body data-sveltekit-preload-data="hover">
+  <body data-sveltekit-preload-data="hover">
     <div style="display: contents">%sveltekit.body%</div>
-</body>
-
+  </body>
 </html>

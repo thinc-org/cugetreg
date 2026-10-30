@@ -1,11 +1,12 @@
 <script lang="ts">
+	import { ThincOnDark } from '$lib/components/logo/thinc/index.js';
+
 	import { CUGetRegWhiteFull } from '../../logo/cugetreg/index.js';
-	import ThincOnDark from '../../logo/thinc/OnDark.svelte';
 	import { GitHubMark } from '../../logo/vendor/index.js';
 </script>
 
 <footer
-	class="bg-on-primary-container text-on-primary text-subtitle flex w-full flex-col items-center gap-6 px-10 py-14 font-sans sm:p-20"
+	class="not-dark:bg-on-primary-container dark:text-primary text-subtitle dark:bg-on-primary text-on-primary flex w-full flex-col items-center gap-6 px-10 py-14 font-sans sm:p-20"
 >
 	<CUGetRegWhiteFull class="h-8 w-auto max-w-full sm:h-16" />
 

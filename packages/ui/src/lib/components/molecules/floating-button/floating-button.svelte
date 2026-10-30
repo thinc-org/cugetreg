@@ -43,7 +43,7 @@
 					</span>
 
 					<div
-						class="flex h-[34px] w-[37px] items-center justify-center rounded-lg bg-white text-[#353745] shadow-sm transition-transform"
+						class="bg-surface-bright text-on-surface flex h-[34px] w-[37px] items-center justify-center rounded-lg shadow-sm transition-transform"
 					>
 						<option.icon size={24} strokeWidth={3} />
 					</div>

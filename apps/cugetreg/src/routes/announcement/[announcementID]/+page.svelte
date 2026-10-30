@@ -40,11 +40,11 @@
   <div class="flex items-start">
     <button
       type="button"
-      class="mb-4 flex items-center justify-center gap-1 rounded-lg p-1 transition-colors hover:bg-gray-100 active:bg-gray-200 lg:mb-6"
+      class="hover:bg-surface-container-low active:bg-surface-container mb-4 flex items-center justify-center gap-1 rounded-lg p-1 transition-colors lg:mb-6"
       onclick={() => history.back()}
     >
       <ChevronLeft size={18} strokeWidth={2.5} />
-      <span class="translate-y-[-1px] text-sm font-normal text-[#353745]">
+      <span class="text-on-surface translate-y-[-1px] text-sm font-normal">
         กลับ
       </span>
     </button>
@@ -52,7 +52,7 @@
 
   {#if isLoading}
     <div
-      class="flex h-64 flex-col items-center justify-center gap-3 text-gray-400"
+      class="text-on-surface-var flex h-64 flex-col items-center justify-center gap-3"
     >
       <Loader2 class="animate-spin" size={32} />
       <span class="text-sm">กำลังโหลดเนื้อหา...</span>
@@ -65,11 +65,11 @@
     </div>
   {:else}
     <article class="flex flex-col gap-8">
-      <h1 class="text-2xl leading-tight font-bold text-gray-700 md:text-3xl">
+      <h1 class="text-on-surface text-2xl leading-tight font-bold md:text-3xl">
         {announcement.title}
       </h1>
 
-      <div class="prose max-w-none text-gray-700">
+      <div class="prose text-on-surface max-w-none">
         <SvelteMarkdown source={announcement.content} />
       </div>
     </article>

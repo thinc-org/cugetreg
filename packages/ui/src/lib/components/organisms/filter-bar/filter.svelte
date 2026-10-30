@@ -236,8 +236,7 @@
 								value={faculty.id}
 								label={faculty.label}
 								aria-label={faculty.label}
-								class="hover:bg-surface-container-low cursor-pointer px-3.5 py-2.5 text-sm"
-								style="color: black"
+								class="hover:bg-surface-container-low text-on-surface cursor-pointer px-3.5 py-2.5 text-sm"
 								role="option"
 								check={true}
 							>

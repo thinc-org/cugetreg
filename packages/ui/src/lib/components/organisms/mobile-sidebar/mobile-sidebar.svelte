@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 
-	import { Bell, ChevronDown, LogOut, Menu, Plus } from '@lucide/svelte';
+	import { Bell, ChevronDown, CircleQuestionMark, LogOut, Menu, Plus } from '@lucide/svelte';
 
 	import { cn } from '@cugetreg/utils';
 
@@ -40,6 +40,7 @@
 		onLogin?: () => void;
 		onSignOut?: () => void;
 		onToggleTheme?: () => void;
+		onShowOnboarding?: () => void;
 		/** Called when the user taps "เพิ่มตาราง" to create a new timetable. */
 		onAddSchedule?: () => void;
 		reportURL?: string;
@@ -60,6 +61,7 @@
 		onLogin = () => {},
 		onSignOut = () => {},
 		onToggleTheme = () => {},
+		onShowOnboarding = () => {},
 		onAddSchedule = () => {},
 		reportURL = ''
 	}: Props = $props();
@@ -221,23 +223,35 @@
 	</div>
 
 	<!-- Bottom: profile / login -->
-	<div class="border-surface-container-low border-t p-4">
+	<div class="border-surface-container-low flex items-center gap-2 border-t p-4">
 		{#if isLoggedIn}
-			<div class="flex items-center justify-between">
+			<div class="flex min-w-0 flex-1 items-center justify-between">
 				<div class="flex min-w-0 flex-col">
 					<span class="text-primary text-subtitle truncate font-medium underline">{name}</span>
 					{#if id}
 						<span class="text-body2 text-neutral-400">ID: {id}</span>
 					{/if}
 				</div>
-				<IconButton variant="ghost" onclick={onSignOut} aria-label="ออกจากระบบ">
-					<LogOut size="20" strokeWidth="2.5" class="text-primary" />
-				</IconButton>
 			</div>
 		{:else}
-			<Button class="w-full" color="primary" onclick={onLogin}>
+			<Button class="flex-1" color="primary" onclick={onLogin}>
 				<span class="text-button2 font-medium">เข้าสู่ระบบ</span>
 			</Button>
+		{/if}
+		<IconButton
+			variant="ghost"
+			onclick={() => {
+				onClose();
+				onShowOnboarding();
+			}}
+			aria-label="แนะนำการใช้งาน"
+		>
+			<CircleQuestionMark size="20" strokeWidth="2.5" class="text-primary" />
+		</IconButton>
+		{#if isLoggedIn}
+			<IconButton variant="ghost" onclick={onSignOut} aria-label="ออกจากระบบ">
+				<LogOut size="20" strokeWidth="2.5" class="text-primary" />
+			</IconButton>
 		{/if}
 	</div>
 </div>

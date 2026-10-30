@@ -496,22 +496,26 @@
           section header in the collapsed panel. These are pure layout offsets:
           nothing recomputes them, so the icons never shift when a section is
           opened or closed. Tune the three values if the headers change height.
+          Logged out there is no timetable selector, so the menu icon is hidden,
+          the filter icon takes the top slot and the panel is padded to match.
         -->
+        {#if $session.data}
+          <Sidebar.MenuItem>
+            <div class="-mt-[0px]">
+              <Sidebar.MenuButton
+                onclick={toggleSidebar}
+                isActive={sidebarExpanded && activePanel === 'sidebar'}
+                size="lg"
+                tooltipContent="เมนู"
+                class="mx-auto size-12! justify-center rounded-xl p-0! ring-0 transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-5!"
+              >
+                <Menu size="20" strokeWidth={2.5} />
+              </Sidebar.MenuButton>
+            </div>
+          </Sidebar.MenuItem>
+        {/if}
         <Sidebar.MenuItem>
-          <div class="-mt-[0px]">
-            <Sidebar.MenuButton
-              onclick={toggleSidebar}
-              isActive={sidebarExpanded && activePanel === 'sidebar'}
-              size="lg"
-              tooltipContent="เมนู"
-              class="mx-auto size-12! justify-center rounded-xl p-0! ring-0 transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-5!"
-            >
-              <Menu size="20" strokeWidth={2.5} />
-            </Sidebar.MenuButton>
-          </div>
-        </Sidebar.MenuItem>
-        <Sidebar.MenuItem>
-          <div class="mt-[18px]">
+          <div class={$session.data ? 'mt-[18px]' : 'mt-0'}>
             <Sidebar.MenuButton
               onclick={focusFilter}
               isActive={activePanel === 'filter_only'}
@@ -573,6 +577,10 @@
             {/await}
           </div>
           <hr class="mb-6 border-t border-neutral-100" />
+        {/if}
+
+        {#if expanded && !$session.data}
+          <div class="h-[38px]"></div>
         {/if}
 
         {#if expanded}

@@ -114,7 +114,9 @@ export const CourseReview = z.object({
 });
 
 export const CourseNoDetailSchema = CourseSchema.extend({
-  courseInfo: CourseInfoSchema,
+  courseInfo: CourseInfoSchema.extend({
+    gradingType: z.enum(["LETTER", "SU", "TBA"]),
+  }),
   createdAt: z.iso.datetime(),
   updatedAt: z.iso.datetime(),
 });

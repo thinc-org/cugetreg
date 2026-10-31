@@ -14,8 +14,8 @@
   import { sortByMapper, studyProgramMapper } from '$lib/mapper';
   import {
     getSemesterDisplayOptions,
-    SEMESTER_LABEL_LONG,
-    SEMESTER_LABEL_SHORT,
+    getSemesterLabel,
+    getSemesterShortLabel,
   } from '$lib/semesterOptions';
   import { getCartSelectionController } from '$lib/stores/cart-selection.svelte';
   import { loginPopupState } from '$lib/stores/login-popup.svelte';
@@ -45,6 +45,11 @@
   import toast from 'svelte-french-toast';
 
   import { Input } from '@cugetreg/ui/atoms/input';
+  import {
+    defineMessages,
+    useLocale,
+    useTranslations,
+  } from '@cugetreg/ui/i18n';
   import { CourseCard } from '@cugetreg/ui/molecules/course-card';
   import { FloatingButton } from '@cugetreg/ui/molecules/floating-button';
   import * as Select from '@cugetreg/ui/molecules/select';
@@ -59,9 +64,105 @@
     studyProgram,
   } from '@cugetreg/zod-schemas';
 
-  const semesterOptions = getSemesterDisplayOptions();
+  const locale = useLocale();
+  const t = useTranslations(
+    defineMessages({
+      th: {
+        sortCapacityDesc: 'จำนวนที่นั่งมาก',
+        sortCapacityAsc: 'จำนวนที่นั่งน้อย',
+        sortRemainingDesc: 'เหลือที่นั่งมาก',
+        sortRemainingAsc: 'เหลือที่นั่งน้อย',
+        sortNameAsc: 'ชื่อวิชา A-Z',
+        sortNameDesc: 'ชื่อวิชา Z-A',
+        filter: 'ตัวกรอง',
+        selectedCourses: 'วิชาที่เลือก',
+        menu: 'เมนู',
+        lastUpdatedAt: 'วันที่ {date}  เวลา {time} น.',
+        favoriteFailed: 'ลบวิชาที่ชอบไม่สำเร็จ กรุณาลองใหม่อีกครั้ง',
+        sectionOption: 'เซค {section}',
+        contextLabel: 'ในปีการศึกษา {year} {semester} หลักสูตร{program}',
+        loadingTimetable: 'กำลังโหลดตารางเรียน...',
+        loadTimetableFailed: 'โหลดตารางเรียนไม่สำเร็จ',
+        courses: 'วิชาเรียน',
+        resultCount: '({count} ผลลัพธ์)',
+        search: 'ค้นหา...',
+        searchPlaceholder: 'พิมพ์ชื่อวิชา รหัสวิชา หรือคำค้นหาอื่นๆ...',
+        sortBy: 'เรียงตาม',
+        orderBy: 'จัดลำดับตาม',
+        sortDirection: 'ทิศทางการเรียงลำดับ',
+        disclaimerLine1:
+          'ข้อมูลอาจมีการเปลี่ยนแปลง และยังไม่เชื่อมต่อกับ CU Get Reg เวอร์ชั่นก่อนหน้า',
+        disclaimerLine2:
+          'โปรดตรวจสอบข้อมูลกับสำนักทะเบียนทุกครั้งก่อนลงทะเบียนเรียน',
+        lastUpdated: 'Update ข้อมูลล่าสุด',
+        noCourses: 'ไม่พบรายวิชา',
+        noCoursesHint1: 'ลองเปลี่ยนตัวเลือกภาคเรียน ปีการศึกษา หรือหลักสูตร',
+        noCoursesHint2: 'ในตารางเรียน แล้วลองใหม่อีกครั้งนะ!',
+        loadingCourses: 'กำลังโหลดข้อมูลวิชา...',
+        close: 'ปิด',
+        notRealRegistration: 'CU Get Reg ไม่ใช่การลงทะเบียนเรียนจริง',
+        registerAt: 'สามารถลงทะเบียนเรียนได้ที่',
+        onlyChannel: 'เพียงช่องทางเดียวเท่านั้น',
+      },
+      en: {
+        sortCapacityDesc: 'Most seats',
+        sortCapacityAsc: 'Fewest seats',
+        sortRemainingDesc: 'Most seats left',
+        sortRemainingAsc: 'Fewest seats left',
+        sortNameAsc: 'Course name A-Z',
+        sortNameDesc: 'Course name Z-A',
+        filter: 'Filters',
+        selectedCourses: 'Selected courses',
+        menu: 'Menu',
+        lastUpdatedAt: '{date} at {time}',
+        favoriteFailed: 'Failed to remove favorite course, please try again',
+        sectionOption: 'Sec {section}',
+        contextLabel: 'in academic year {year}, {semester}, {program} program',
+        loadingTimetable: 'Loading timetables...',
+        loadTimetableFailed: 'Failed to load timetables',
+        courses: 'Courses',
+        resultCount: '({count} results)',
+        search: 'Search...',
+        searchPlaceholder: 'Search by course name, code, or other keywords...',
+        sortBy: 'Sort by',
+        orderBy: 'Sort by',
+        sortDirection: 'Sort direction',
+        disclaimerLine1:
+          'Data may change and is not yet linked to the previous version of CU Get Reg.',
+        disclaimerLine2:
+          'Always verify information with the Office of the Registrar before registering.',
+        lastUpdated: 'Last updated',
+        noCourses: 'No courses found',
+        noCoursesHint1: 'Try changing the semester, academic year, or program',
+        noCoursesHint2: 'in your timetable, then try again!',
+        loadingCourses: 'Loading courses...',
+        close: 'Close',
+        notRealRegistration: 'CU Get Reg is not the actual course registration',
+        registerAt: 'Register for courses at',
+        onlyChannel: 'This is the only official channel.',
+      },
+    }),
+  );
 
-  let lastUpdatedLabel = $state('');
+  const semesterOptions = $derived(getSemesterDisplayOptions(locale.current));
+
+  let lastUpdated = $state<Date | null>(null);
+  const lastUpdatedLabel = $derived.by(() => {
+    if (!lastUpdated) return '';
+    const isThai = locale.current === 'th';
+    const date = lastUpdated;
+    const year = isThai
+      ? String(date.getFullYear() + 543).slice(-2)
+      : String(date.getFullYear());
+    const dd = String(date.getDate()).padStart(2, '0');
+    const mm = String(date.getMonth() + 1).padStart(2, '0');
+    const hh = String(date.getHours()).padStart(2, '0');
+    const min = String(date.getMinutes()).padStart(2, '0');
+    return t('lastUpdatedAt', {
+      date: `${dd}/${mm}/${year}`,
+      time: isThai ? `${hh}.${min}` : `${hh}:${min}`,
+    });
+  });
 
   let sidebarExpanded = $state(true);
   let openPanel = $state<string | null>(null);
@@ -131,20 +232,33 @@
     },
   });
 
-  const mobileSortOptions = [
-    { label: 'จำนวนที่นั่งมาก', field: 'CAPACITY_SUM', dir: 'desc' as const },
-    { label: 'จำนวนที่นั่งน้อย', field: 'CAPACITY_SUM', dir: 'asc' as const },
-    { label: 'เหลือที่นั่งมาก', field: 'REMAINING_SUM', dir: 'desc' as const },
-    { label: 'เหลือที่นั่งน้อย', field: 'REMAINING_SUM', dir: 'asc' as const },
-    { label: 'ชื่อวิชา A-Z', field: 'NAME', dir: 'asc' as const },
-    { label: 'ชื่อวิชา Z-A', field: 'NAME', dir: 'desc' as const },
-  ];
+  const mobileSortOptions = $derived([
+    {
+      label: t('sortCapacityDesc'),
+      field: 'CAPACITY_SUM',
+      dir: 'desc' as const,
+    },
+    { label: t('sortCapacityAsc'), field: 'CAPACITY_SUM', dir: 'asc' as const },
+    {
+      label: t('sortRemainingDesc'),
+      field: 'REMAINING_SUM',
+      dir: 'desc' as const,
+    },
+    {
+      label: t('sortRemainingAsc'),
+      field: 'REMAINING_SUM',
+      dir: 'asc' as const,
+    },
+    { label: t('sortNameAsc'), field: 'NAME', dir: 'asc' as const },
+    { label: t('sortNameDesc'), field: 'NAME', dir: 'desc' as const },
+  ]);
 
-  const sortOptions = [
-    { label: 'ชื่อวิชา', field: 'NAME' },
-    { label: 'จำนวนที่นั่ง', field: 'CAPACITY_SUM' },
-    { label: 'เหลือที่นั่ง', field: 'REMAINING_SUM' },
-  ];
+  const sortOptions = $derived(
+    (['NAME', 'CAPACITY_SUM', 'REMAINING_SUM'] as const).map((field) => ({
+      label: sortByMapper(field, locale.current),
+      field,
+    })),
+  );
 
   function selectMobileSort(field: SortBy, dir: 'asc' | 'desc') {
     currentSort = field;
@@ -170,22 +284,22 @@
   });
   onDestroy(stopCartSelectionSync);
 
-  const floatingOptions = [
+  const floatingOptions = $derived([
     {
-      label: 'ตัวกรอง',
+      label: t('filter'),
       icon: Filter,
       onClick: () => {
         activeModal = 'filter';
       },
     },
     {
-      label: 'วิชาที่เลือก',
+      label: t('selectedCourses'),
       icon: BookMarked,
       onClick: () => {
         activeModal = 'selected';
       },
     },
-  ];
+  ]);
 
   async function fetchLastUpdated(
     studyProgramParam: StudyProgram,
@@ -203,14 +317,7 @@
     );
     if (err || !response.data.lastUpdated) return;
 
-    const date = new Date(response.data.lastUpdated);
-    const buddhistYear = String(date.getFullYear() + 543).slice(-2);
-    const dd = String(date.getDate()).padStart(2, '0');
-    const mm = String(date.getMonth() + 1).padStart(2, '0');
-    const hh = String(date.getHours()).padStart(2, '0');
-    const min = String(date.getMinutes()).padStart(2, '0');
-
-    lastUpdatedLabel = `วันที่ ${dd}/${mm}/${buddhistYear}  เวลา ${hh}.${min} น.`;
+    lastUpdated = new Date(response.data.lastUpdated);
   }
 
   const courseResults = new CourseResults();
@@ -237,7 +344,7 @@
       genEdTypes: [...selectedGenEds],
       faculties: [...selectedFaculties],
       days: [...selectedDays],
-      assessment: selectedEval[0],
+      assessment: [...selectedEval],
       credit: credit || undefined,
       timeStart: startTime || undefined,
       timeEnd: endTime || undefined,
@@ -248,7 +355,9 @@
 
   onDestroy(() => courseResults.destroy());
 
-  const studyProgramLabel = $derived(studyProgramMapper(currentProgram));
+  const studyProgramLabel = $derived(
+    studyProgramMapper(currentProgram, locale.current),
+  );
 
   // --- Left-rail icon interaction model ---
   function openFull() {
@@ -296,7 +405,7 @@
       loginPopupState.show = true;
       return;
     }
-    toast.error('Failed to remove favorite course, please try again', {
+    toast.error(t('favoriteFailed'), {
       position: 'bottom-right',
     });
   }
@@ -460,7 +569,7 @@
   function getSectionOptions(courseItem: HomeCourse) {
     return courseItem.course.sections.map((section) => ({
       value: String(section.sectionNo),
-      label: `เซค ${section.sectionNo}`,
+      label: t('sectionOption', { section: section.sectionNo }),
     }));
   }
 
@@ -477,7 +586,11 @@
   }
 
   let contextLabel = $derived(
-    `ในปีการศึกษา ${currentAY} ${SEMESTER_LABEL_LONG[currentSemester]} หลักสูตร${studyProgramLabel}`,
+    t('contextLabel', {
+      year: currentAY,
+      semester: getSemesterLabel(currentSemester, locale.current),
+      program: studyProgramLabel,
+    }),
   );
 </script>
 
@@ -506,7 +619,7 @@
                 onclick={toggleSidebar}
                 isActive={sidebarExpanded && activePanel === 'sidebar'}
                 size="lg"
-                tooltipContent="เมนู"
+                tooltipContent={t('menu')}
                 class="mx-auto size-12! justify-center rounded-xl p-0! ring-0 transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-5!"
               >
                 <Menu size="20" strokeWidth={2.5} />
@@ -520,7 +633,7 @@
               onclick={focusFilter}
               isActive={activePanel === 'filter_only'}
               size="lg"
-              tooltipContent="ตัวกรอง"
+              tooltipContent={t('filter')}
               class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-5!"
             >
               <Filter size="20" strokeWidth={2.5} />
@@ -534,7 +647,7 @@
                 onclick={focusSelected}
                 isActive={activePanel === 'selected_only'}
                 size="lg"
-                tooltipContent="วิชาที่เลือก"
+                tooltipContent={t('selectedCourses')}
                 class="mx-auto size-12! justify-center rounded-xl p-0! transition-all data-[active=true]:bg-[#E9EEF6] data-[active=true]:text-[#004494] [&>svg]:size-5!"
               >
                 <BookMarked size="20" strokeWidth={2.5} />
@@ -551,7 +664,7 @@
                 class="flex items-center justify-center gap-2 px-2 py-8 text-gray-400"
               >
                 <Loader2 class="animate-spin" size={24} />
-                <span class="text-sm">กำลังโหลดตารางเรียน...</span>
+                <span class="text-sm">{t('loadingTimetable')}</span>
               </div>
             {:then}
               <SelectTimetable
@@ -572,7 +685,7 @@
               <div
                 class="flex items-center justify-center gap-2 px-2 py-8 text-sm text-red-400"
               >
-                โหลดตารางเรียนไม่สำเร็จ
+                {t('loadTimetableFailed')}
               </div>
             {/await}
           </div>
@@ -604,11 +717,11 @@
               <h1
                 class="text-xl font-bold text-[#4A70C6] md:text-4xl md:text-black"
               >
-                วิชาเรียน
+                {t('courses')}
               </h1>
               <span
                 class="text-[10px] font-medium whitespace-nowrap text-gray-400 md:text-sm"
-                >({totalResults} ผลลัพธ์)</span
+                >{t('resultCount', { count: totalResults })}</span
               >
             </div>
 
@@ -629,7 +742,7 @@
                         role="option"
                         check={true}
                       >
-                        {studyProgramMapper(option)}
+                        {studyProgramMapper(option, locale.current)}
                       </Select.Item>
                     {/each}
                   </Select.Group>
@@ -650,7 +763,7 @@
                 <Select.Trigger
                   class="flex h-6 items-center gap-2 rounded-full border border-neutral-800 px-2 py-1.5 text-[10px] font-bold transition-colors hover:bg-gray-50 focus:ring-offset-0 md:h-auto md:px-3 md:py-2 md:text-sm md:text-xs"
                 >
-                  {`${currentAY} / ${SEMESTER_LABEL_SHORT[currentSemester]}`}
+                  {`${currentAY} / ${getSemesterShortLabel(currentSemester, locale.current)}`}
                 </Select.Trigger>
                 <Select.Content>
                   <Select.Group>
@@ -675,16 +788,14 @@
             <div class="flex flex-row items-end gap-3 md:gap-6">
               <div class="flex flex-1 flex-col gap-1">
                 <span class="ml-1 hidden text-xs text-gray-400 md:flex"
-                  >ค้นหา...</span
+                  >{t('search')}</span
                 >
                 <Input
                   bind:value={searchState.query}
                   onkeydown={(e: KeyboardEvent) => {
                     if (e.key === 'Enter') e.preventDefault();
                   }}
-                  placeholder={isMobile
-                    ? 'ค้นหา...'
-                    : 'พิมพ์ชื่อวิชา รหัสวิชา หรือคำค้นหาอื่นๆ...'}
+                  placeholder={isMobile ? t('search') : t('searchPlaceholder')}
                   class="h-10 w-full rounded-xl border-none bg-[#F1F3F7] px-4 text-sm font-medium placeholder:text-neutral-300 focus:ring-2 focus:ring-blue-500 md:h-12 md:px-6 md:text-lg"
                 />
               </div>
@@ -705,7 +816,7 @@
                     <span
                       class="flex items-center gap-1 text-xs md:gap-1.5 md:text-base"
                     >
-                      เรียงตาม
+                      {t('sortBy')}
                       <ArrowUpDown
                         size={isMobile ? 16 : 20}
                         strokeWidth={2.5}
@@ -730,14 +841,14 @@
               <!-- Desktop sort: original "จัดลำดับตาม" layout -->
               <div class="hidden w-full flex-col gap-1 md:flex md:w-64">
                 <span class="ml-1 text-[10px] font-bold text-gray-400 uppercase"
-                  >จัดลำดับตาม</span
+                  >{t('orderBy')}</span
                 >
                 <div class="relative flex items-center gap-3">
                   <Select.Root bind:value={currentSort} type="single">
                     <Select.Trigger
                       class="flex h-12 flex-1 items-center justify-between rounded-xl bg-[#F1F3F7] px-5 text-sm font-bold text-gray-700 transition-all hover:bg-gray-200"
                     >
-                      {sortByMapper(currentSort)}
+                      {sortByMapper(currentSort, locale.current)}
                     </Select.Trigger>
                     <Select.Content>
                       <Select.Group>
@@ -752,7 +863,7 @@
                     </Select.Content>
                   </Select.Root>
                   <button
-                    aria-label="sort direction"
+                    aria-label={t('sortDirection')}
                     onclick={toggleSortDirection}
                     class="flex h-12 w-12 cursor-pointer items-center justify-center rounded-xl text-[#004494] transition-all hover:bg-blue-50"
                   >
@@ -791,13 +902,12 @@
             />
             <div>
               <p class="font-sans text-[10px] text-[#353745]">
-                ข้อมูลอาจมีการเปลี่ยนแปลง และยังไม่เชื่อมต่อกับ CU Get Reg
-                เวอร์ชั่นก่อนหน้า<br />
-                โปรดตรวจสอบข้อมูลกับสำนักทะเบียนทุกครั้งก่อนลงทะเบียนเรียน
+                {t('disclaimerLine1')}<br />
+                {t('disclaimerLine2')}
                 <br />
 
                 {#if lastUpdatedLabel}
-                  Update ข้อมูลล่าสุด&nbsp;&nbsp;{lastUpdatedLabel}
+                  {t('lastUpdated')}&nbsp;&nbsp;{lastUpdatedLabel}
                 {/if}
               </p>
             </div>
@@ -814,15 +924,14 @@
                 class="text-warning-hover shrink-0"
               />
               <span>
-                ข้อมูลอาจมีการเปลี่ยนแปลง และยังไม่เชื่อมต่อกับ CU Get Reg
-                เวอร์ชั่นก่อนหน้า<br />
-                โปรดตรวจสอบข้อมูลกับสำนักทะเบียนทุกครั้งก่อนลงทะเบียนเรียน
+                {t('disclaimerLine1')}<br />
+                {t('disclaimerLine2')}
                 <br />
               </span>
             </div>
             {#if lastUpdatedLabel}
               <span class="shrink-0 whitespace-nowrap">
-                Update ข้อมูลล่าสุด&nbsp;&nbsp;{lastUpdatedLabel}
+                {t('lastUpdated')}&nbsp;&nbsp;{lastUpdatedLabel}
               </span>
             {/if}
           </div>
@@ -838,14 +947,14 @@
                   class="mb-2 text-[#4A6CF7]"
                 />
                 <p class="text-lg font-medium text-[#1C1B1F]">
-                  ไม่พบรายวิชา{searchState.debounced.trim()
+                  {t('noCourses')}{searchState.debounced.trim()
                     ? ` ${searchState.debounced.trim()}`
                     : ''}
                 </p>
                 <p class="text-base text-gray-500">{contextLabel}</p>
                 <p class="mt-3 text-sm leading-relaxed text-gray-400">
-                  ลองเปลี่ยนตัวเลือกภาคเรียน ปีการศึกษา หรือหลักสูตร<br />
-                  ในตารางเรียน แล้วลองใหม่อีกครั้งนะ!
+                  {t('noCoursesHint1')}<br />
+                  {t('noCoursesHint2')}
                 </p>
               </div>
             {:else}
@@ -890,7 +999,7 @@
                 class="col-span-full flex h-64 flex-col items-center justify-center gap-3 text-gray-400"
               >
                 <Loader2 class="animate-spin" size={40} />
-                <p>กำลังโหลดข้อมูลวิชา...</p>
+                <p>{t('loadingCourses')}</p>
               </div>
             {/if}
           </div>
@@ -930,6 +1039,7 @@
       >
         <button
           class="absolute top-7 right-5 bg-white"
+          aria-label={t('close')}
           onclick={() => (activeModal = null)}
         >
           <X size={20} strokeWidth={2.5} />
@@ -955,7 +1065,9 @@
         aria-expanded={isFilterOpen}
         class="mb-4 flex w-full items-center justify-between"
       >
-        <h2 class="text-on-surface text-lg/[20px] font-medium">ตัวกรอง</h2>
+        <h2 class="text-on-surface text-lg/[20px] font-medium">
+          {t('filter')}
+        </h2>
         <ChevronDown
           size={20}
           class="text-gray-400 transition-transform duration-200 {isFilterOpen
@@ -965,7 +1077,9 @@
       </button>
     {:else}
       <div class="mb-4 flex w-full items-center justify-between">
-        <h2 class="text-on-surface text-lg/[20px] font-medium">ตัวกรอง</h2>
+        <h2 class="text-on-surface text-lg/[20px] font-medium">
+          {t('filter')}
+        </h2>
       </div>
     {/if}
     {#if !collapsible || isFilterOpen}
@@ -1013,8 +1127,8 @@
   <div
     class="border-secondary text-on-secondary-container mt-8 rounded-2xl border px-5 py-4 text-center text-xs/[18px]"
   >
-    <span class="font-bold">CU Get Reg ไม่ใช่การลงทะเบียนเรียนจริง</span><br />
-    สามารถลงทะเบียนเรียนได้ที่
+    <span class="font-bold">{t('notRealRegistration')}</span><br />
+    {t('registerAt')}
     <a
       href="https://www2.reg.chula.ac.th/"
       target="_blank"
@@ -1023,6 +1137,6 @@
     >
       https://www2.reg.chula.ac.th/
     </a><br />
-    เพียงช่องทางเดียวเท่านั้น
+    {t('onlyChannel')}
   </div>
 {/snippet}

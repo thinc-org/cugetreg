@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { studyProgramMessages, useTranslations } from '$lib/i18n';
+
 	import { cn } from '@cugetreg/utils';
 
 	import { chipVariants } from './index.js';
@@ -23,15 +25,11 @@
 		...rest
 	}: Props = $props();
 
-	const label = {
-		S: 'ทวิภาค',
-		I: 'นานาชาติ',
-		T: 'ตรีภาค'
-	};
+	const t = useTranslations(studyProgramMessages);
 </script>
 
 <Chip class={cn(chipVariants({ className }))} {closable} {onClose} {...rest}>
 	{#if type}
-		{label[type]}
+		{t(type)}
 	{/if}
 </Chip>

@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { defineMessages, useTranslations } from '$lib/i18n';
+
 	import { Pencil, User } from '@lucide/svelte';
 
 	import { IconButton } from '../../atoms/icon-button';
@@ -28,14 +30,39 @@
 		onEdit
 	}: Props = $props();
 
+	const t = useTranslations(
+		defineMessages({
+			th: {
+				username: 'username',
+				firstName: 'ชื่อจริง',
+				lastName: 'นามสกุล',
+				faculty: 'คณะ',
+				department: 'ภาควิชา',
+				personalInfo: 'ข้อมูลส่วนตัว',
+				edit: 'แก้ไขข้อมูลส่วนตัว',
+				linkedAccount: 'เชื่อมต่อบัญชี'
+			},
+			en: {
+				username: 'Username',
+				firstName: 'First name',
+				lastName: 'Last name',
+				faculty: 'Faculty',
+				department: 'Department',
+				personalInfo: 'Personal info',
+				edit: 'Edit personal info',
+				linkedAccount: 'Linked account'
+			}
+		})
+	);
+
 	const id = $derived(username);
 
 	const infoItems = $derived([
-		{ label: 'username', value: username },
-		{ label: 'ชื่อจริง', value: firstName },
-		{ label: 'นามสกุล', value: lastName },
-		{ label: 'คณะ', value: faculty },
-		{ label: 'ภาควิชา', value: department }
+		{ label: t('username'), value: username },
+		{ label: t('firstName'), value: firstName },
+		{ label: t('lastName'), value: lastName },
+		{ label: t('faculty'), value: faculty },
+		{ label: t('department'), value: department }
 	]);
 </script>
 
@@ -51,9 +78,9 @@
 		<div class="flex items-center justify-between">
 			<div class="flex items-center gap-3">
 				<User size="18" strokeWidth="2.5" color="#1F2430" />
-				<p class="text-h3 font-bold">ข้อมูลส่วนตัว</p>
+				<p class="text-h3 font-bold">{t('personalInfo')}</p>
 			</div>
-			<IconButton variant="ghost" onclick={() => onEdit?.()}>
+			<IconButton variant="ghost" aria-label={t('edit')} onclick={() => onEdit?.()}>
 				<Pencil size="18" strokeWidth="2.5" />
 			</IconButton>
 		</div>
@@ -73,7 +100,7 @@
 	<div class="mt-4 pt-6">
 		<div class="flex items-center gap-3">
 			<User size="18" strokeWidth="2.5" color="#1F2430" />
-			<p class="text-h3 font-bold">เชื่อมต่อบัญชี</p>
+			<p class="text-h3 font-bold">{t('linkedAccount')}</p>
 		</div>
 		<div
 			class="border-surface-container-low bg-surface-container-low mt-4 flex w-full items-center gap-1 rounded-xl border px-4 py-3"

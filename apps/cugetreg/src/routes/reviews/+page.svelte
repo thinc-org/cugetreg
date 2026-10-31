@@ -2,8 +2,7 @@
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
   import { api } from '$lib/api';
-  import { GOOGLE_FORM_URL } from '$lib/constants';
-  import { SEMESTER_LABEL_LONG } from '$lib/semesterOptions';
+  import { getSemesterLabel } from '$lib/semesterOptions';
 
   import {
     AlertTriangle,
@@ -17,9 +16,13 @@
 
   import { Button } from '@cugetreg/ui/atoms/button';
   import { Modal } from '@cugetreg/ui/atoms/modal';
+  import {
+    defineMessages,
+    useLocale,
+    useTranslations,
+  } from '@cugetreg/ui/i18n';
   import { Comment } from '@cugetreg/ui/molecules/comment';
   import { ConfirmDeleteReview } from '@cugetreg/ui/molecules/confirm-delete-review';
-  import { ReportProblem } from '@cugetreg/ui/molecules/report-problem';
   import * as Select from '@cugetreg/ui/molecules/select';
   import { Footer } from '@cugetreg/ui/organisms/footer';
   import type { GenEdType } from '@cugetreg/utils/types';
@@ -33,11 +36,68 @@
 
   const reviewsPerPage = 5;
 
-  const reviewSortOptions: { field: ReviewSortBy; label: string }[] = [
-    { field: 'DATE_CREATE', label: 'วันที่แสดงความคิดเห็น' },
-    { field: 'RATING', label: 'คะแนน' },
-    { field: 'NAME', label: 'ชื่อวิชา' },
-  ];
+  const locale = useLocale();
+  const t = useTranslations(
+    defineMessages({
+      th: {
+        sortDateCreate: 'วันที่แสดงความคิดเห็น',
+        sortRating: 'คะแนน',
+        sortName: 'ชื่อวิชา',
+        loginRequired: 'กรุณาเข้าสู่ระบบก่อนทำรายการนี้',
+        cannotVotePending: 'ไม่สามารถ Like/Dislike รีวิวที่ยังไม่ถูกอนุมัติ',
+        somethingWentWrong: 'เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง',
+        deleteSuccess: 'ลบรีวิวสำเร็จ',
+        deleteFailed: 'ไม่สามารถลบรีวิวได้',
+        back: 'กลับ',
+        title: 'กิจกรรมทั้งหมด',
+        sortBy: 'จัดลำดับตาม',
+        sortAsc: 'เรียงจากน้อยไปมาก',
+        sortDesc: 'เรียงจากมากไปน้อย',
+        loading: 'กำลังโหลดรีวิว...',
+        loadFailed: 'ไม่สามารถโหลดรีวิวได้',
+        retry: 'ลองใหม่',
+        emptyTitle: 'คุณยังไม่มีรีวิว',
+        emptyDescription:
+          'เริ่มเขียนรีวิวแรกของคุณเพื่อแบ่งปันประสบการณ์ที่น่าสนใจกับวิชานั้น ๆ ให้กับเพื่อน ๆ',
+        pagination: 'การแบ่งหน้า',
+        previousPage: 'หน้าก่อนหน้า',
+        morePages: 'หน้าอื่น ๆ',
+        nextPage: 'หน้าถัดไป',
+      },
+      en: {
+        sortDateCreate: 'Review date',
+        sortRating: 'Rating',
+        sortName: 'Course name',
+        loginRequired: 'Please login before doing this action',
+        cannotVotePending:
+          "You can't like/dislike a review that isn't approved yet",
+        somethingWentWrong: 'Something went wrong',
+        deleteSuccess: 'Review deleted',
+        deleteFailed: 'Failed to delete review',
+        back: 'Back',
+        title: 'All reviews',
+        sortBy: 'Sort by',
+        sortAsc: 'Sort ascending',
+        sortDesc: 'Sort descending',
+        loading: 'Loading reviews...',
+        loadFailed: 'Failed to load reviews',
+        retry: 'Retry',
+        emptyTitle: "You haven't written any reviews yet",
+        emptyDescription:
+          'Write your first review to share your experience of a course with your friends',
+        pagination: 'Pagination',
+        previousPage: 'Previous page',
+        morePages: 'More pages',
+        nextPage: 'Next page',
+      },
+    }),
+  );
+
+  const reviewSortOptions: { field: ReviewSortBy; label: string }[] = $derived([
+    { field: 'DATE_CREATE', label: t('sortDateCreate') },
+    { field: 'RATING', label: t('sortRating') },
+    { field: 'NAME', label: t('sortName') },
+  ]);
 
   let reviews = $state<ReviewSchema[]>([]);
   let totalReviews = $state(0);
@@ -148,22 +208,22 @@
     } catch (error) {
       if (isAxiosError(error)) {
         if (error.status === 401) {
-          toast.error('Please login before doing this action', {
+          toast.error(t('loginRequired'), {
             position: 'bottom-right',
           });
         } else if (error.status === 409) {
-          toast.error('ไม่สามารถ Like/Dislike รีวิวที่ยังไม่ถูกอนุมัติ', {
+          toast.error(t('cannotVotePending'), {
             position: 'bottom-right',
           });
         } else {
-          toast.error('Something went wrong', {
+          toast.error(t('somethingWentWrong'), {
             position: 'bottom-right',
           });
         }
         return;
       }
       console.error(error);
-      toast.error('Something went wrong', { position: 'bottom-right' });
+      toast.error(t('somethingWentWrong'), { position: 'bottom-right' });
     } finally {
       pendingReviewVotes = pendingReviewVotes.filter((id) => id !== reviewId);
     }
@@ -191,10 +251,10 @@
       await api.delete(`/reviews/${reviewId}`);
       deletingReviewId = null;
       await fetchReviews(reviewsPage);
-      toast.success('ลบรีวิวสำเร็จ', { position: 'bottom-right' });
+      toast.success(t('deleteSuccess'), { position: 'bottom-right' });
     } catch (error) {
       console.error(error);
-      toast.error('ไม่สามารถลบรีวิวได้', { position: 'bottom-right' });
+      toast.error(t('deleteFailed'), { position: 'bottom-right' });
     } finally {
       reviewDeleting = false;
     }
@@ -214,17 +274,17 @@
     >
       <ChevronLeft size={18} strokeWidth={2.5} />
       <span class="translate-y-[-1px] text-sm font-normal text-[#353745]">
-        กลับ
+        {t('back')}
       </span>
     </button>
 
     <div class="flex flex-wrap items-center justify-between gap-3">
       <h1 class="text-on-surface text-base font-semibold sm:text-3xl">
-        กิจกรรมทั้งหมด
+        {t('title')}
       </h1>
 
       <div class="flex shrink-0 items-center gap-4 text-gray-400">
-        <h2 class="text-sm font-semibold whitespace-nowrap">จัดลำดับตาม</h2>
+        <h2 class="text-sm font-semibold whitespace-nowrap">{t('sortBy')}</h2>
         <Select.Root
           type="single"
           value={reviewSortBy}
@@ -249,9 +309,7 @@
         </Select.Root>
         <button
           type="button"
-          aria-label={reviewSortOrder === 'asc'
-            ? 'เรียงจากน้อยไปมาก'
-            : 'เรียงจากมากไปน้อย'}
+          aria-label={reviewSortOrder === 'asc' ? t('sortAsc') : t('sortDesc')}
           onclick={toggleReviewSortOrder}
           class="border-surface-container-high bg-surface text-on-surface flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-xl border transition-colors hover:bg-gray-50"
         >
@@ -282,7 +340,7 @@
         aria-live="polite"
       >
         <Loader2 class="animate-spin" size={24} />
-        กำลังโหลดรีวิว...
+        {t('loading')}
       </div>
     {:else if reviewsError}
       <div
@@ -290,13 +348,13 @@
         role="alert"
       >
         <AlertTriangle size={48} class="text-orange-500" />
-        <p class="text-on-surface/70">ไม่สามารถโหลดรีวิวได้</p>
+        <p class="text-on-surface/70">{t('loadFailed')}</p>
         <Button
           size="sm"
           variant="outlined"
           onclick={() => fetchReviews(reviewsPage)}
         >
-          ลองใหม่
+          {t('retry')}
         </Button>
       </div>
     {:else if reviews.length === 0}
@@ -305,11 +363,10 @@
       >
         <NotebookPen size={140} strokeWidth={2.2} class="text-[#4A70C6]" />
         <div class="text-on-surface text-base font-semibold sm:text-2xl">
-          คุณยังไม่มีรีวิว
+          {t('emptyTitle')}
         </div>
         <p class="text-on-surface/70 max-w-lg text-sm">
-          เริ่มเขียนรีวิวแรกของคุณเพื่อแบ่งปันประสบการณ์ที่น่าสนใจกับวิชานั้น ๆ
-          ให้กับเพื่อน ๆ
+          {t('emptyDescription')}
         </p>
       </div>
     {:else}
@@ -326,7 +383,7 @@
               redirectTo={`/course-page/${review.courseNo}?${courseSearchParams.toString()}`}
               genEdType={review.genEdType as GenEdType}
               rating={review.rating / 2}
-              semester={SEMESTER_LABEL_LONG[review.semester]}
+              semester={getSemesterLabel(review.semester, locale.current)}
               year={review.academicYear}
               section={review.sectionNo}
               content={review.content}
@@ -345,11 +402,11 @@
       </div>
 
       <div class="mt-6 flex justify-end" class:hidden={totalReviewPages <= 1}>
-        <nav class="flex items-center gap-2" aria-label="Pagination">
+        <nav class="flex items-center gap-2" aria-label={t('pagination')}>
           <button
             class="border-surface-container-high bg-surface text-on-surface flex h-9 w-9 items-center justify-center rounded-lg border disabled:cursor-not-allowed disabled:opacity-50"
             type="button"
-            aria-label="Previous page"
+            aria-label={t('previousPage')}
             disabled={reviewsPage === 1}
             onclick={() => setReviewsPage(Math.max(1, reviewsPage - 1))}
           >
@@ -360,7 +417,7 @@
               <button
                 class="border-surface-container-high bg-surface text-on-surface flex h-9 w-9 items-center justify-center rounded-lg border"
                 type="button"
-                aria-label="More pages"
+                aria-label={t('morePages')}
                 disabled
               >
                 …
@@ -383,7 +440,7 @@
           <button
             class="border-surface-container-high bg-surface text-on-surface flex h-9 w-9 items-center justify-center rounded-lg border disabled:cursor-not-allowed disabled:opacity-50"
             type="button"
-            aria-label="Next page"
+            aria-label={t('nextPage')}
             disabled={reviewsPage === totalReviewPages}
             onclick={() =>
               setReviewsPage(Math.min(totalReviewPages, reviewsPage + 1))}
@@ -419,6 +476,4 @@
       onConfirm={confirmDeleteReview}
     />
   </Modal>
-
-  <ReportProblem href={GOOGLE_FORM_URL} />
 </div>

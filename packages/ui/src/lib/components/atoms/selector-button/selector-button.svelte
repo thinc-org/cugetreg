@@ -1,9 +1,18 @@
 <script lang="ts">
+	import { defineMessages, useTranslations } from '$lib/i18n';
+
 	interface Props {
 		selected?: boolean;
 		onClick?: () => void;
 	}
 	let { selected = false, onClick = () => {} }: Props = $props();
+
+	const t = useTranslations(
+		defineMessages({
+			th: { select: 'เลือก' },
+			en: { select: 'Select' }
+		})
+	);
 
 	const handleClick = () => {
 		onClick();
@@ -22,7 +31,7 @@
 				selected ? 'text-[#4A70C6]' : 'text-[#353745]'
 			}`}
 		>
-			เลือก
+			{t('select')}
 		</p>
 
 		{#if selected}

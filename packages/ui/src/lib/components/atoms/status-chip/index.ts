@@ -1,3 +1,5 @@
+import { reviewStatusMessages } from '$lib/i18n';
+
 import { tv } from 'tailwind-variants';
 export { default as StatusChip } from './status-chip.svelte';
 
@@ -12,8 +14,5 @@ export const styles: Record<Variant, string> = {
 	REJECTED: 'border-on-error-container bg-error-container text-on-error-container'
 };
 
-export const text: Record<Variant, string> = {
-	APPROVED: 'อนุมัติแล้ว',
-	PENDING: 'กำลังรออนุมัติ',
-	REJECTED: 'ถูกปฏิเสธ'
-};
+/** @deprecated Thai-only labels; use `reviewStatusMessages` from `$lib/i18n` instead. */
+export const text: Record<Variant, string> = reviewStatusMessages.th;

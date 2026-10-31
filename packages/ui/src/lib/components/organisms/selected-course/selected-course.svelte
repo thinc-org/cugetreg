@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { defineMessages, useTranslations } from '$lib/i18n';
+
 	import { BookMarked, Equal, Eye, EyeOff, Trash2 } from '@lucide/svelte';
 	import { removeItem, SortableList, sortItems } from '@rodrigodagostino/svelte-sortable-list';
 	import type { ClassValue } from 'clsx';
@@ -42,6 +44,33 @@
 		remove
 	}: SelectedCourseProp = $props();
 
+	const t = useTranslations(
+		defineMessages({
+			th: {
+				selectedCourses: 'วิชาที่เลือก',
+				credits: '{credit} หน่วยกิต',
+				creditsShort: '{credit} นก.',
+				searchCourses: 'ค้นหาวิชาเรียน',
+				section: 'เซค {no}',
+				toggleVisibility: 'ซ่อน/แสดงในตาราง',
+				changeColor: 'เปลี่ยนสี',
+				remove: 'นำออก',
+				reorder: 'ลากเพื่อจัดลำดับ'
+			},
+			en: {
+				selectedCourses: 'Selected courses',
+				credits: '{credit} credits',
+				creditsShort: '{credit} cr.',
+				searchCourses: 'Search courses',
+				section: 'Sec {no}',
+				toggleVisibility: 'Show/hide in timetable',
+				changeColor: 'Change color',
+				remove: 'Remove',
+				reorder: 'Drag to reorder'
+			}
+		})
+	);
+
 	const totalCredit = $derived(
 		schedule.reduce((acc, course) => acc + (course.hidden ? 0 : course.course.credit), 0)
 	);
@@ -77,9 +106,9 @@
 			<Accordion.Trigger class="border-b border-neutral-200">
 				<div class="flex">
 					<BookMarked class="mr-2" />
-					<span class="">วิชาที่เลือก</span>
+					<span class="">{t('selectedCourses')}</span>
 					<span class="ml-2 flex items-baseline-last text-xs font-light text-neutral-400"
-						>{totalCredit} หน่วยกิต</span
+						>{t('credits', { credit: totalCredit })}</span
 					>
 				</div>
 			</Accordion.Trigger>
@@ -103,7 +132,7 @@
 					{/each}
 				</SortableList.Root>
 				<div class="px-2">
-					<Button class="w-full" color="primary">ค้นหาวิชาเรียน</Button>
+					<Button class="w-full" color="primary">{t('searchCourses')}</Button>
 				</div>
 			</Accordion.Content>
 		</Accordion.Item>
@@ -128,6 +157,7 @@
 		>
 			<IconButton
 				class="bg-transparent hover:cursor-pointer"
+				aria-label={t('toggleVisibility')}
 				onclick={() => (course.hidden = !course.hidden)}
 			>
 				{#if course.hidden}
@@ -164,7 +194,7 @@
 			</div>
 
 			<div class="flex-1 justify-center">
-				{course.course.credit} นก.
+				{t('creditsShort', { credit: course.course.credit })}
 			</div>
 		</div>
 
@@ -184,7 +214,7 @@
 						)}
 					>
 						<div class="flex h-full w-full items-center justify-center text-xs">
-							เซค {course.selectedSection}
+							{t('section', { no: course.selectedSection })}
 						</div>
 					</Select.Trigger>
 					<Select.Content role="listbox">
@@ -192,8 +222,8 @@
 							{#each Object.keys(course.course.sections) as section (section)}
 								<Select.Item
 									value={`${section}`}
-									label={`เซค ${section}`}
-									aria-label={`Sec ${section}`}
+									label={t('section', { no: section })}
+									aria-label={t('section', { no: section })}
 									role="option"
 								/>
 							{/each}
@@ -210,6 +240,7 @@
 						'm-2 aspect-square rounded-lg border hover:ring-0',
 						courseColorVariants[course.colorVariant ?? 'primary']
 					)}
+					aria-label={t('changeColor')}
 					onclick={(e: MouseEvent) => {
 						modalPosition.x = e.clientX;
 						modalPosition.y = e.clientY;

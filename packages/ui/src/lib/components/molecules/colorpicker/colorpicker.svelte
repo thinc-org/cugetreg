@@ -1,4 +1,6 @@
 <script lang="ts" generics="Key extends string">
+	import { defineMessages, useTranslations } from '$lib/i18n';
+
 	import type { ClassValue } from 'clsx';
 
 	import { cn } from '@cugetreg/utils';
@@ -23,13 +25,20 @@
 		value = $bindable()
 	}: ColorPickerProps = $props();
 
+	const t = useTranslations(
+		defineMessages({
+			th: { title: 'เลือกสีในตาราง', cancel: 'ยกเลิก', select: 'เลือก' },
+			en: { title: 'Choose a color', cancel: 'Cancel', select: 'Select' }
+		})
+	);
+
 	function handleCancel() {
 		onCancel();
 	}
 </script>
 
 <div class={cn(className, 'rounded-lg border border-neutral-200 p-5')}>
-	<div class="text-lg font-bold">เลือกสีในตาราง</div>
+	<div class="text-lg font-bold">{t('title')}</div>
 
 	<div class="my-5 grid grid-cols-4">
 		{#each Object.keys(options) as Key[] as option (option)}
@@ -51,7 +60,7 @@
 	</div>
 
 	<div class="flex justify-between space-x-5">
-		<Button class="flex-1" onclick={handleCancel}>ยกเลิก</Button>
+		<Button class="flex-1" onclick={handleCancel}>{t('cancel')}</Button>
 		<Button
 			class="flex-1"
 			variant="outlined"
@@ -59,7 +68,7 @@
 				onConfirmSelected(options[value]);
 			}}
 		>
-			เลือก
+			{t('select')}
 		</Button>
 	</div>
 </div>

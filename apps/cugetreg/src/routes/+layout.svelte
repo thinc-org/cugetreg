@@ -9,7 +9,9 @@
     useSession,
   } from '$lib/auth-client';
   import LoadingScreen from '$lib/components/loading-screen.svelte';
-  import { semesterToThaiMapper, studyProgramMapper } from '$lib/mapper';
+  import Onboarding from '$lib/components/onboarding.svelte';
+  import { GOOGLE_FORM_URL } from '$lib/constants';
+  import { semesterLabelMapper, studyProgramMapper } from '$lib/mapper';
   import { initCartSelectionController } from '$lib/stores/cart-selection.svelte';
   import { loginPopupState } from '$lib/stores/login-popup.svelte';
   import { searchState } from '$lib/stores/search.svelte';
@@ -20,10 +22,17 @@
     type UserCartInterface,
   } from '$lib/stores/user-cart';
 
-  import { onDestroy, setContext, type Snippet } from 'svelte';
+  import { onDestroy, onMount, setContext, type Snippet } from 'svelte';
+  import { MediaQuery } from 'svelte/reactivity';
   import toast, { Toaster } from 'svelte-french-toast';
 
   import { Modal } from '@cugetreg/ui/atoms/modal';
+  import {
+    defineMessages,
+    initLocale,
+    useTranslations,
+  } from '@cugetreg/ui/i18n';
+  import { ReportProblem } from '@cugetreg/ui/molecules/report-problem';
   import {
     CreateTimetable,
     type TimetableMetaData,
@@ -33,7 +42,32 @@
 
   import type { LayoutData } from './$types';
 
+  let {
+    data,
+    children,
+  }: {
+    data: LayoutData;
+    children?: Snippet;
+  } = $props();
+
+  const locale = initLocale((() => data.locale)());
+
+  const t = useTranslations(
+    defineMessages({
+      th: {
+        nonChulaEmail: 'กรุณาเข้าสู่ระบบด้วยอีเมลจุฬาฯ',
+        somethingWentWrong: 'เกิดข้อผิดพลาดบางอย่าง',
+      },
+      en: {
+        nonChulaEmail: 'Please login with Chula email.',
+        somethingWentWrong: 'Something went wrong.',
+      },
+    }),
+  );
+
   const session = useSession();
+  const mobileMedia = new MediaQuery('max-width: 767px', false);
+  const isMobile = $derived(mobileMedia.current);
 
   $effect(() => {
     const errorMsg = page.url.searchParams.get('error');
@@ -43,9 +77,9 @@
       loginPopupState.show = true;
     } else {
       const messages: Record<string, string> = {
-        non_chula_email: 'Please login with Chula email.',
+        non_chula_email: t('nonChulaEmail'),
       };
-      toast.error(messages[errorMsg] ?? 'Something went wrong.', {
+      toast.error(messages[errorMsg] ?? t('somethingWentWrong'), {
         position: 'bottom-right',
       });
     }
@@ -54,14 +88,6 @@
     cleanUrl.searchParams.delete('error');
     goto(cleanUrl, { replaceState: true, keepFocus: true });
   });
-
-  let {
-    data,
-    children,
-  }: {
-    data: LayoutData;
-    children?: Snippet;
-  } = $props();
 
   const EMPTY_CART: UserCartInterface = {
     currentCart: {
@@ -113,8 +139,8 @@
   const programLabel = $derived.by(() => {
     const cart = $userCart.currentCart;
     if (!cart?.academicYear) return '';
-    const program = studyProgramMapper(cart.studyProgram);
-    const semester = semesterToThaiMapper(cart.semester);
+    const program = studyProgramMapper(cart.studyProgram, locale.current);
+    const semester = semesterLabelMapper(cart.semester, locale.current);
     return `${program} ${cart.academicYear} / ${semester}`;
   });
 
@@ -129,6 +155,25 @@
 
   const { createCart } = useCartActions();
   let showCreateScheduleModal = $state(false);
+  const ONBOARDING_SEEN_KEY = 'cugetreg:onboarding-seen';
+  let showOnboarding = $state(false);
+
+  onMount(() => {
+    try {
+      showOnboarding = localStorage.getItem(ONBOARDING_SEEN_KEY) !== 'true';
+    } catch {
+      showOnboarding = true;
+    }
+  });
+
+  function dismissOnboarding() {
+    showOnboarding = false;
+    try {
+      localStorage.setItem(ONBOARDING_SEEN_KEY, 'true');
+    } catch (error) {
+      console.warn('Unable to save onboarding state', error);
+    }
+  }
 </script>
 
 <Modal
@@ -171,7 +216,20 @@
     }
     onToggleTheme={toggleTheme}
     onAddSchedule={() => (showCreateScheduleModal = true)}
+    onShowOnboarding={() => (showOnboarding = true)}
+    reportURL={GOOGLE_FORM_URL}
   />
+
+  <Modal
+    exitOnEsc
+    exitOnBackgroundClick
+    centered
+    dim
+    class="h-dvh items-end sm:items-center"
+    bind:show={showOnboarding}
+  >
+    <Onboarding onCancel={dismissOnboarding} />
+  </Modal>
 
   <Modal
     exitOnEsc
@@ -201,5 +259,9 @@
     <div class="relative flex-1 overflow-auto">
       {@render children?.()}
     </div>
+  {/if}
+
+  {#if !isMobile}
+    <ReportProblem href={GOOGLE_FORM_URL} />
   {/if}
 </div>

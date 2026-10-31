@@ -1,37 +1,33 @@
-import { ALLOWED_SEMESTER, SEMESTER_LABEL_LONG } from '$lib/semesterOptions';
+import { ALLOWED_SEMESTER, getSemesterLabel } from '$lib/semesterOptions';
 
+import {
+  defineMessages,
+  genEdMessages,
+  type Locale,
+  studyProgramMessages,
+  translate,
+} from '@cugetreg/ui/i18n';
 import type { Day } from '@cugetreg/utils/types';
 import type { GenEdType, SortBy, StudyProgram } from '@cugetreg/zod-schemas';
 import type { Semester } from '@cugetreg/zod-schemas';
 
-export function studyProgramMapper(studyProgram: StudyProgram) {
-  switch (studyProgram) {
-    case 'T':
-      return 'ตรีภาค';
-    case 'I':
-      return 'นานาชาติ';
-    case 'S':
-      return 'ทวิภาค';
-    default:
-      throw new Error(`study program ${studyProgram} is invalid`);
+export function studyProgramMapper(
+  studyProgram: StudyProgram,
+  locale: Locale = 'th',
+) {
+  if (!(studyProgram in studyProgramMessages.th)) {
+    throw new Error(`study program ${studyProgram} is invalid`);
   }
+  return translate(studyProgramMessages, locale, studyProgram);
 }
 
-export function genEdTypeMapper(genEdType: GenEdType) {
-  switch (genEdType) {
-    case 'SC':
-      return 'หมวดวิทย์';
-    case 'SO':
-      return 'หมวดสังคม';
-    case 'HU':
-      return 'หมวดมนุษย์';
-    case 'IN':
-      return 'หมวดสหฯ';
-    case 'GENED':
-      return 'ศึกษาทั่วไป';
-    default:
-      return null;
-  }
+export function genEdTypeMapper(genEdType: GenEdType, locale: Locale = 'th') {
+  if (!(genEdType in genEdMessages.th)) return null;
+  return translate(
+    genEdMessages,
+    locale,
+    genEdType as keyof typeof genEdMessages.th,
+  );
 }
 
 export function getColumnFromDay(day: Day): number {
@@ -53,19 +49,26 @@ export function getColumnFromDay(day: Day): number {
   }
 }
 
-export function sortByMapper(sortBy: SortBy) {
-  switch (sortBy) {
-    case 'NAME':
-      return 'ชื่อวิชา';
-    case 'CAPACITY_SUM':
-      return 'จำนวนที่นั่ง';
-    case 'REMAINING_SUM':
-      return 'เหลือที่นั่ง';
-    case 'COURSE_NO':
-      return 'รหัสวิชา';
-    default:
-      throw new Error(`SortBy ${sortBy} is invalid`);
+const sortByMessages = defineMessages({
+  th: {
+    NAME: 'ชื่อวิชา',
+    CAPACITY_SUM: 'จำนวนที่นั่ง',
+    REMAINING_SUM: 'เหลือที่นั่ง',
+    COURSE_NO: 'รหัสวิชา',
+  },
+  en: {
+    NAME: 'Course name',
+    CAPACITY_SUM: 'Total seats',
+    REMAINING_SUM: 'Seats left',
+    COURSE_NO: 'Course code',
+  },
+});
+
+export function sortByMapper(sortBy: SortBy, locale: Locale = 'th') {
+  if (!(sortBy in sortByMessages.th)) {
+    throw new Error(`SortBy ${sortBy} is invalid`);
   }
+  return translate(sortByMessages, locale, sortBy);
 }
 
 export function normalizeDayMapper(
@@ -112,8 +115,8 @@ export function semesterToTermMapper(semester: Semester | string): string {
   }
 }
 
-export function semesterToThaiMapper(semester: Semester) {
-  return SEMESTER_LABEL_LONG[semester];
+export function semesterLabelMapper(semester: Semester, locale: Locale = 'th') {
+  return getSemesterLabel(semester, locale);
 }
 
 export function reviewStatusPriorityMapper(status: string): number {
@@ -125,8 +128,13 @@ export function reviewStatusPriorityMapper(status: string): number {
   return priority[status] ?? 3;
 }
 
-export function thaiLabelToSemesterMapper(label: string): Semester {
+/** Maps a long semester label in either language back to its enum value. */
+export function labelToSemesterMapper(label: string): Semester {
   return (
-    ALLOWED_SEMESTER.find((s) => SEMESTER_LABEL_LONG[s] === label) || 'FIRST'
+    ALLOWED_SEMESTER.find(
+      (s) =>
+        getSemesterLabel(s, 'th') === label ||
+        getSemesterLabel(s, 'en') === label,
+    ) || 'FIRST'
   );
 }

@@ -34,10 +34,11 @@ const EMPTY_CART: UserCartInterface = {
 };
 
 export const load: LayoutServerLoad = ({ locals, fetch }) => {
+  const locale = locals.locale;
   if (!locals.session) {
-    return { cart: Promise.resolve(EMPTY_CART) };
+    return { locale, cart: Promise.resolve(EMPTY_CART) };
   }
-  return { cart: loadCart(fetch) };
+  return { locale, cart: loadCart(fetch) };
 };
 
 async function loadCart(fetch: typeof globalThis.fetch) {

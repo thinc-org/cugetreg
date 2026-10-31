@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { defineMessages, useTranslations } from '$lib/i18n';
+
 	import { BookOpen, BookPlus, LoaderCircle, Trash2 } from '@lucide/svelte';
 	import { onMount, untrack } from 'svelte';
 
@@ -33,6 +35,27 @@
 		onDelete,
 		onChangeVisibility
 	}: Props = $props();
+
+	const t = useTranslations(
+		defineMessages({
+			th: {
+				emptyTitle: 'เริ่มเพิ่มตารางเรียน',
+				emptyBody:
+					'เริ่มสร้างตารางเรียนของคุณเพื่อวางแผนการลงทะเบียนเรียน และดูภาพรวมตารางเรียนทั้งหมดที่คุณสร้างไว้ในหน้าโปรไฟล์นี้',
+				deleteSchedule: 'ลบตารางเรียน',
+				public: 'เป็นสาธารณะ',
+				addSchedule: 'เพิ่มตารางเรียน'
+			},
+			en: {
+				emptyTitle: 'Add your first timetable',
+				emptyBody:
+					'Create a timetable to plan your registration, and see an overview of all the timetables you have created on this profile page',
+				deleteSchedule: 'Delete timetable',
+				public: 'Public',
+				addSchedule: 'Add timetable'
+			}
+		})
+	);
 
 	let filters = $derived([
 		...new Set(
@@ -140,11 +163,10 @@
 		<!-- Text content -->
 		<div class="flex w-full flex-col items-center gap-1.5 px-24">
 			<h2 class="text-center text-3xl font-bold tracking-wide text-gray-800">
-				เริ่มเพิ่มตารางเรียน
+				{t('emptyTitle')}
 			</h2>
 			<p class="w-full text-center text-sm leading-relaxed text-gray-500">
-				เริ่มสร้างตารางเรียนของคุณเพื่อวางแผนการลงทะเบียนเรียน
-				และดูภาพรวมตารางเรียนทั้งหมดที่คุณสร้างไว้ในหน้าโปรไฟล์นี้
+				{t('emptyBody')}
 			</p>
 		</div>
 	{/if}
@@ -179,7 +201,7 @@
 								e.preventDefault();
 								onDelete?.(item);
 							}}
-							aria-label="Delete schedule"
+							aria-label={t('deleteSchedule')}
 						>
 							<Trash2 size={isMobile ? 18 : 24} cursor="pointer" strokeWidth="2.5" />
 						</button>
@@ -190,7 +212,7 @@
 							onCheckedChange={(newChecked) => onChangeVisibility(item, newChecked)}
 							label={null}
 						/>
-						<p class="text-body2 text-on-surface/70 font-medium">เป็นสาธารณะ</p>
+						<p class="text-body2 text-on-surface/70 font-medium">{t('public')}</p>
 					</div>
 				</div>
 			{/each}
@@ -201,6 +223,6 @@
 		class="mt-4 inline-flex w-full cursor-pointer justify-center rounded-2xl bg-blue-100 px-8 py-2 text-center font-medium text-blue-900 hover:bg-blue-200"
 		onclick={() => onClickButton?.()}
 	>
-		เพิ่มตารางเรียน
+		{t('addSchedule')}
 	</button>
 </div>

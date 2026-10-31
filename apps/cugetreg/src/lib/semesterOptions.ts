@@ -1,3 +1,10 @@
+import {
+  type Locale,
+  LOCALES,
+  semesterMessages,
+  semesterShortMessages,
+  translate,
+} from '@cugetreg/ui/i18n';
 import type { Semester } from '@cugetreg/zod-schemas/constants';
 
 export const ALLOWED_ACADEMIC_YEAR = [
@@ -7,19 +14,18 @@ export const ALLOWED_SEMESTER = ['FIRST', 'SECOND', 'SUMMER'] as const;
 
 export type AcademicYear = (typeof ALLOWED_ACADEMIC_YEAR)[number];
 
-export const SEMESTER_LABEL_SHORT: Record<Semester, string> = {
-  FIRST: '1',
-  SECOND: '2',
-  SUMMER: 'ฤดูร้อน',
-};
+export function getSemesterLabel(semester: Semester, locale: Locale = 'th') {
+  return translate(semesterMessages, locale, semester);
+}
 
-export const SEMESTER_LABEL_LONG: Record<Semester, string> = {
-  FIRST: 'ภาคต้น',
-  SECOND: 'ภาคปลาย',
-  SUMMER: 'ภาคฤดูร้อน',
-};
+export function getSemesterShortLabel(
+  semester: Semester,
+  locale: Locale = 'th',
+) {
+  return translate(semesterShortMessages, locale, semester);
+}
 
-export function getSemesterDisplayOptions(): {
+export function getSemesterDisplayOptions(locale: Locale = 'th'): {
   value: {
     ay: number;
     semester: Semester;
@@ -29,30 +35,33 @@ export function getSemesterDisplayOptions(): {
   const result: { value: { ay: number; semester: Semester }; label: string }[] =
     [];
   const years = [...ALLOWED_ACADEMIC_YEAR].reverse();
+  const order: Semester[] = ['SUMMER', 'SECOND', 'FIRST'];
   for (const year of years) {
-    const summer = `${year} / ${SEMESTER_LABEL_SHORT.SUMMER}`;
-    const second = `${year} / ${SEMESTER_LABEL_SHORT.SECOND}`;
-    const first = `${year} / ${SEMESTER_LABEL_SHORT.FIRST}`;
-    result.push({ value: { ay: year, semester: 'SUMMER' }, label: summer });
-    result.push({ value: { ay: year, semester: 'SECOND' }, label: second });
-    result.push({ value: { ay: year, semester: 'FIRST' }, label: first });
+    for (const semester of order) {
+      result.push({
+        value: { ay: year, semester },
+        label: `${year} / ${getSemesterShortLabel(semester, locale)}`,
+      });
+    }
   }
   return result;
 }
 
+/** Parses "2568 / 1" or "2568 / ภาคต้น" style labels in either language. */
 export function parseSemesterDisplay(
   display: string,
 ): { academicYear: string; semester: Semester } | null {
   const parts = display.split(' / ');
   if (parts.length !== 2) return null;
   const [year, label] = parts;
-  for (const [sem, semLabel] of Object.entries(SEMESTER_LABEL_SHORT)) {
-    if (semLabel === label)
-      return { academicYear: year, semester: sem as Semester };
-  }
-  for (const [sem, semLabel] of Object.entries(SEMESTER_LABEL_LONG)) {
-    if (semLabel === label)
-      return { academicYear: year, semester: sem as Semester };
+  for (const locale of LOCALES) {
+    for (const sem of ALLOWED_SEMESTER) {
+      if (
+        getSemesterShortLabel(sem, locale) === label ||
+        getSemesterLabel(sem, locale) === label
+      )
+        return { academicYear: year, semester: sem };
+    }
   }
   return null;
 }
@@ -64,12 +73,12 @@ export function getYearOptions(): { value: string; label: string }[] {
     .map((y) => ({ value: String(y), label: String(y) }));
 }
 
-export function getSemesterShortOptions(): {
+export function getSemesterShortOptions(locale: Locale = 'th'): {
   value: Semester;
   label: string;
 }[] {
   return ALLOWED_SEMESTER.map((s) => ({
     value: s,
-    label: SEMESTER_LABEL_SHORT[s],
+    label: getSemesterShortLabel(s, locale),
   }));
 }

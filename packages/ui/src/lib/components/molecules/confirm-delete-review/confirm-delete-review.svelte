@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { defineMessages, useTranslations } from '$lib/i18n';
+
 	import { Button } from '../../atoms/button';
 
 	interface Props {
@@ -9,6 +11,27 @@
 	}
 
 	let { onCancel, onConfirm, variant = 'overlay', loading = false }: Props = $props();
+
+	const t = useTranslations(
+		defineMessages({
+			th: {
+				title: 'ลบรีวิวนี้',
+				question: 'คุณต้องการลบรีวิวนี้',
+				confirmSuffix: 'ใช่หรือไม่',
+				cancel: 'ยกเลิก',
+				deleting: 'กำลังลบ...',
+				delete: 'ลบรีวิว'
+			},
+			en: {
+				title: 'Delete this review',
+				question: 'Are you sure you want',
+				confirmSuffix: 'to delete this review?',
+				cancel: 'Cancel',
+				deleting: 'Deleting...',
+				delete: 'Delete review'
+			}
+		})
+	);
 
 	const handleCancel = () => {
 		onCancel?.();
@@ -33,17 +56,17 @@
 		aria-labelledby="delete-review-title"
 		aria-describedby="delete-review-description"
 	>
-		<h2 id="delete-review-title" class="text-h2 text-on-surface font-bold">ลบรีวิวนี้</h2>
+		<h2 id="delete-review-title" class="text-h2 text-on-surface font-bold">{t('title')}</h2>
 		<p id="delete-review-description" class="text-body2 text-on-surface/70 mt-4 font-medium">
-			คุณต้องการลบรีวิวนี้<br />
-			ใช่หรือไม่
+			{t('question')}<br />
+			{t('confirmSuffix')}
 		</p>
 		<div class="mt-8 flex items-center justify-center gap-4">
 			<Button color="neutral" class="h-9 w-32" onclick={handleCancel} disabled={loading}>
-				ยกเลิก
+				{t('cancel')}
 			</Button>
 			<Button color="error" class="h-9 w-32" onclick={handleConfirm} disabled={loading}>
-				{loading ? 'กำลังลบ...' : 'ลบรีวิว'}
+				{loading ? t('deleting') : t('delete')}
 			</Button>
 		</div>
 	</div>

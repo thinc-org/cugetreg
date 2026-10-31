@@ -9,6 +9,11 @@
 
   import { Modal } from '@cugetreg/ui/atoms/modal';
   import {
+    defineMessages,
+    useLocale,
+    useTranslations,
+  } from '@cugetreg/ui/i18n';
+  import {
     Select,
     SelectContent,
     SelectGroup,
@@ -48,6 +53,33 @@
     onClose,
   }: ScheduleMismatchPopupProps = $props();
 
+  const locale = useLocale();
+  const t = useTranslations(
+    defineMessages({
+      th: {
+        createNew: 'สร้างตารางเรียนใหม่...',
+        closeModal: 'ปิดหน้าต่าง',
+        title: 'ตารางเรียนไม่ตรงกับภาค/ปีที่คุณเลือก',
+        description: 'กรุณาเลือกตารางที่สอดคล้องกับภาค/ปีที่คุณเลือกใหม่',
+        selectTable: 'เลือกตารางเรียน',
+        addTable: 'เพิ่มตาราง',
+        cancel: 'ยกเลิก',
+        confirm: 'ตกลง',
+      },
+      en: {
+        createNew: 'Create new schedule...',
+        closeModal: 'Close modal',
+        title: "This schedule doesn't match the selected semester/year",
+        description:
+          'Please choose a schedule that matches the semester/year you selected',
+        selectTable: 'Select schedule',
+        addTable: 'Add schedule',
+        cancel: 'Cancel',
+        confirm: 'OK',
+      },
+    }),
+  );
+
   let matchingSchedules = $derived(
     schedules.filter(
       (c) =>
@@ -62,9 +94,9 @@
   );
 
   let selectedLabel = $derived.by(() => {
-    if (selectedId === '') return 'สร้างตารางเรียนใหม่...';
+    if (selectedId === '') return t('createNew');
     const found = matchingSchedules.find((s) => s.id === selectedId);
-    return found ? found.name : 'สร้างตารางเรียนใหม่...';
+    return found ? found.name : t('createNew');
   });
 
   let showCreateScheduleModal = $state(false);
@@ -95,7 +127,7 @@
   const { createCart } = useCartActions();
 
   const yearOptions = getYearOptions();
-  const semesterOptions = getSemesterShortOptions();
+  const semesterOptions = $derived(getSemesterShortOptions(locale.current));
 </script>
 
 <div class="fixed inset-0 z-50 flex items-center justify-center">
@@ -106,22 +138,22 @@
         class="absolute inset-0 h-full w-full cursor-default bg-transparent"
         onclick={onClose}
         disabled={isConfirming}
-        aria-label="Close modal"
+        aria-label={t('closeModal')}
       ></button>
 
       <div class="relative w-full max-w-[420px] rounded-3xl bg-white p-8">
         <h2 class="mb-4 text-center text-xl font-semibold text-[#4a70c6]">
-          ตารางเรียนไม่ตรงกับภาค/ปีที่คุณเลือก
+          {t('title')}
         </h2>
         <p class="mb-2 text-center text-sm text-gray-600">
-          กรุณาเลือกตารางที่สอดคล้องกับภาค/ปีที่คุณเลือกใหม่
+          {t('description')}
         </p>
 
         <div class="relative mb-8">
           <Select type="single" bind:value={() => selectedId, setSelectedId}>
             <SelectTrigger
               class="w-full rounded-xl border border-[#b8c9e6] bg-white px-4 py-3 text-left text-[15px] text-[#2b4c8a]"
-              aria-label="Select table"
+              aria-label={t('selectTable')}
             >
               {selectedLabel}
             </SelectTrigger>
@@ -142,14 +174,14 @@
                 <div class="border-t border-gray-100 bg-white p-1">
                   <SelectItem
                     value="NEW"
-                    label="เพิ่มตาราง"
-                    aria-label="เพิ่มตาราง"
+                    label={t('addTable')}
+                    aria-label={t('addTable')}
                   >
                     <div
                       class="flex items-center gap-2 font-bold text-gray-600"
                     >
                       <Plus size={16} />
-                      เพิ่มตาราง
+                      {t('addTable')}
                     </div>
                   </SelectItem>
                 </div>
@@ -165,7 +197,7 @@
             disabled={isConfirming}
             class="flex-1 rounded-xl bg-[#f0f2f5] py-2 text-[15px] font-bold text-gray-700 transition-colors hover:bg-gray-200"
           >
-            ยกเลิก
+            {t('cancel')}
           </button>
           <button
             type="button"
@@ -173,7 +205,7 @@
             disabled={isConfirming}
             class="flex-1 rounded-xl bg-[#e3f0ff] py-2 text-[15px] font-bold text-[#2b4c8a] transition-colors hover:bg-[#d0e6ff]"
           >
-            ตกลง
+            {t('confirm')}
           </button>
         </div>
       </div>

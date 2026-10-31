@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { defineMessages, useTranslations } from '$lib/i18n';
 	import { cn } from '$lib/utils';
 
 	import { TriangleAlert } from '@lucide/svelte';
@@ -13,6 +14,13 @@
 	let { href, variant = 'fixed', class: className = '' }: Props = $props();
 
 	let isMobile = $state(false);
+
+	const t = useTranslations(
+		defineMessages({
+			th: { reportProblem: 'แจ้งปัญหาการใช้งาน' },
+			en: { reportProblem: 'Report a problem' }
+		})
+	);
 
 	onMount(() => {
 		const mq = window.matchMedia('(max-width: 768px)');
@@ -46,5 +54,5 @@
 	rel="external noopener noreferrer"
 >
 	<TriangleAlert size={isMobile ? 16 : 20} strokeWidth={1.5} color="black" />
-	<span class="text-[10px] text-black md:text-xs">แจ้งปัญหาการใช้งาน</span>
+	<span class="text-[10px] text-black md:text-xs">{t('reportProblem')}</span>
 </a>

@@ -16,6 +16,11 @@
   import { onMount, untrack } from 'svelte';
 
   import { Modal } from '@cugetreg/ui/atoms/modal';
+  import {
+    defineMessages,
+    useLocale,
+    useTranslations,
+  } from '@cugetreg/ui/i18n';
   import { ConfirmDeleteSchedule } from '@cugetreg/ui/molecules/confirm-delete-schedule';
   import {
     CreateTimetable,
@@ -31,7 +36,11 @@
     type FacultyId,
     UNKNOWN_FACULTY,
   } from '@cugetreg/utils/faculty';
-  import type { ReviewStatus } from '@cugetreg/zod-schemas';
+  import type {
+    CartSchema,
+    ReviewSchema,
+    ReviewStatus,
+  } from '@cugetreg/zod-schemas';
   import {
     ListCartsResponseSchema,
     UpdateUserInfoResponseSchema,
@@ -58,6 +67,14 @@
     term: string;
   }
 
+  const locale = useLocale();
+  const t = useTranslations(
+    defineMessages({
+      th: { schedules: 'ตารางเรียน' },
+      en: { schedules: 'Schedules' },
+    }),
+  );
+
   const { changeCartVisibility, deleteCart, createCart } = useCartActions();
   const cartSelection = getCartSelectionController();
 
@@ -65,7 +82,12 @@
   let personalInfo = $state(untrack(() => data.user));
 
   let items = $state<ScheduleItem[]>([]);
-  let reviews = $state<Review[]>([]);
+  // Raw API data, kept so localized labels can be rebuilt when the locale changes.
+  let rawCarts: CartSchema[] = [];
+  let rawReviews = $state<ReviewSchema[]>([]);
+  const reviews: Review[] = $derived(
+    convertReviewInfos(rawReviews, locale.current),
+  );
   let ratingStats = $state<number[] | undefined>(undefined);
 
   let editInfoPopupVisible = $state(false);
@@ -79,9 +101,13 @@
     FACULTIES[personalInfo.faculty as FacultyId] ?? UNKNOWN_FACULTY,
   );
 
+  const facultyName = $derived(
+    locale.current === 'en' ? faculty.en : faculty.th,
+  );
+
   const parsedPersonalInfo = $derived({
     ...personalInfo,
-    faculty: faculty.th,
+    faculty: facultyName,
   });
 
   async function updateUser() {
@@ -112,7 +138,11 @@
     }
 
     const { data } = ListCartsResponseSchema.parse(res.data);
-    const fetchedItems = convertSchedulesInfo(data);
+    rawCarts = data;
+    const fetchedItems = convertSchedulesInfo(
+      data,
+      untrack(() => locale.current),
+    );
     items = fetchedItems;
   }
 
@@ -147,11 +177,10 @@
 
     const { ratingHistories: ratings, reviews: data } =
       UserReviewResponseSchema.parse(res.data);
-    const newReviews = convertReviewInfos(data);
     console.log(ratings);
     ratingStats = ratings;
 
-    reviews.push(...newReviews);
+    rawReviews.push(...data);
   }
 
   const onClickItem = async (item: ScheduleItem) => {
@@ -200,6 +229,23 @@
     fetchScheduleItems();
   });
 
+  // Rebuild the localized schedule subtitles in place when the locale changes,
+  // keeping any local edits (e.g. visibility) on the existing items.
+  $effect(() => {
+    const current = locale.current;
+    untrack(() => {
+      const subtitles = new Map(
+        convertSchedulesInfo(rawCarts, current).map((item) => [
+          item.id,
+          item.subtitle,
+        ]),
+      );
+      for (const item of items) {
+        item.subtitle = subtitles.get(item.id) ?? item.subtitle;
+      }
+    });
+  });
+
   onMount(() => {
     fetchReviews();
   });
@@ -216,7 +262,7 @@
       <RatingHistory {reviews} histogram={ratingStats} />
     </div>
     <ScheduleList
-      heading="ตารางเรียน"
+      heading={t('schedules')}
       {items}
       {onClickItem}
       onClickButton={onClickAddSchedule}
@@ -232,8 +278,7 @@
       bind:department={newDepartment}
       accountEmail={personalInfo.accountEmail}
       accountProvider={personalInfo.accountProvider}
-      faculty={FACULTIES[personalInfo.faculty as FacultyId].th ??
-        UNKNOWN_FACULTY}
+      faculty={facultyName}
       firstName={personalInfo.firstName}
       lastName={personalInfo.lastName}
       username={personalInfo.username}
@@ -251,7 +296,7 @@
   <Modal centered dim bind:show={showCreateScheduleModal}>
     <CreateTimetable
       yearOptions={getYearOptions()}
-      semesterOptions={getSemesterShortOptions()}
+      semesterOptions={getSemesterShortOptions(locale.current)}
       onConfirm={async (schedule: TimetableMetaData) => {
         try {
           goto(resolve('/schedule'));

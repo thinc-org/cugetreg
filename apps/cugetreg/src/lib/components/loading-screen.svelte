@@ -1,5 +1,20 @@
 <!-- Shown on initial app load, mobile only (md:hidden) -->
-<script lang="ts"></script>
+<script lang="ts">
+  import { defineMessages, useTranslations } from '@cugetreg/ui/i18n';
+
+  const t = useTranslations(
+    defineMessages({
+      th: {
+        loadingLabel: 'กำลังโหลด',
+        loading: 'กำลังโหลด...',
+      },
+      en: {
+        loadingLabel: 'Loading',
+        loading: 'Loading...',
+      },
+    }),
+  );
+</script>
 
 <div
   class="fixed inset-0 z-[100] flex items-center justify-center bg-[#4A72B9] p-3 md:hidden"
@@ -11,7 +26,7 @@
       viewBox="0 0 24 24"
       class="spinner size-16 md:size-20"
       role="status"
-      aria-label="กำลังโหลด"
+      aria-label={t('loadingLabel')}
     >
       {#each Array.from({ length: 12 }) as _, i (i)}
         <rect
@@ -27,7 +42,9 @@
       {/each}
     </svg>
 
-    <p class="text-xl font-medium text-[#1C1B1F] md:text-2xl">กำลังโหลด...</p>
+    <p class="text-xl font-medium text-[#1C1B1F] md:text-2xl">
+      {t('loading')}
+    </p>
   </div>
 </div>
 

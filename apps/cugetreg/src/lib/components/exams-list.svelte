@@ -22,6 +22,11 @@
   import { CustomizeScrollbar } from '@cugetreg/ui/atoms/customize-scrollbar';
   import { TimeTable, TimetableCourseCard } from '@cugetreg/ui/atoms/timetable';
   import {
+    defineMessages,
+    useLocale,
+    useTranslations,
+  } from '@cugetreg/ui/i18n';
+  import {
     type Exam,
     ExamCard,
     type StatusColour,
@@ -42,6 +47,26 @@
   }
 
   let { cart, exams }: ExamsListProps = $props();
+
+  const locale = useLocale();
+  const t = useTranslations(
+    defineMessages({
+      th: {
+        examSchedule: 'ตารางสอบ',
+        downloadICS: 'ตารางสอบ (.ICS)',
+        midterm: 'สอบกลางภาค',
+        final: 'สอบปลายภาค',
+        notAnnounced: 'ยังไม่ประกาศ',
+      },
+      en: {
+        examSchedule: 'Exam schedule',
+        downloadICS: 'Exam schedule (.ICS)',
+        midterm: 'Midterm exam',
+        final: 'Final exam',
+        notAnnounced: 'TBA',
+      },
+    }),
+  );
 
   let midtermTableRef = $state<HTMLElement | null>(null);
   let finalTableRef = $state<HTMLElement | null>(null);
@@ -64,6 +89,24 @@
   );
 
   function formatTableDate(date: Date) {
+    if (locale.current === 'en') {
+      const monthsEn = [
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Aug',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dec',
+      ];
+      return `${date.getDate()} ${monthsEn[date.getMonth()]} ${String(date.getFullYear()).slice(-2)}`;
+    }
+
     const months = [
       'ม.ค.',
       'ก.พ.',
@@ -83,13 +126,13 @@
   }
 
   function handleDownloadICS() {
-    const icsContent = generateExamICS(cart, exams);
+    const icsContent = generateExamICS(cart, exams, locale.current);
     downloadICS(`${cart.name}_exam-schedule`, icsContent);
   }
 </script>
 
 <div class="flex flex-row items-center justify-between lg:justify-center">
-  <span class="mt-5 text-2xl font-bold lg:hidden">ตารางสอบ</span>
+  <span class="mt-5 text-2xl font-bold lg:hidden">{t('examSchedule')}</span>
   <div class="hidden lg:mt-5 lg:flex lg:justify-center lg:gap-4">
     <ChevronLeft
       onclick={() => (showExamSchedule = 'Schedule')}
@@ -152,12 +195,12 @@
     onclick={handleDownloadICS}
   >
     <Download size={18} strokeWidth={2.5} />
-    ตารางสอบ (.ICS)
+    {t('downloadICS')}
   </Button>
 </div>
 
 {#snippet examSchedule()}
-  <div class="my-5 text-xl font-bold">Midterm</div>
+  <div class="my-5 text-xl font-bold">{t('midterm')}</div>
   <div
     class="overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
     bind:this={midtermTableRef}
@@ -197,7 +240,7 @@
 
   <CustomizeScrollbar target={midtermTableRef} />
 
-  <div class="my-5 text-xl font-bold">Finals</div>
+  <div class="my-5 text-xl font-bold">{t('final')}</div>
   <div
     class="overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
     bind:this={finalTableRef}
@@ -242,12 +285,14 @@
   <div class="flex items-center justify-center">
     <div class="my-5 w-full space-x-5 lg:inline-flex lg:w-auto">
       <div class="flex-1">
-        <span class="text-2xl font-bold">Midterm</span>
+        <span class="text-2xl font-bold">{t('midterm')}</span>
 
         {#each examDateOrder.midterms as key (key)}
           <div class="my-5 w-full min-w-0">
             <ExamCard
-              date={key === 0 ? 'ยังไม่ประกาศ' : formatDate(new Date(key))}
+              date={key === 0
+                ? t('notAnnounced')
+                : formatDate(new Date(key), locale.current)}
               data={examsData.midterms[key].map((course) => {
                 return {
                   id: course.cartItemId,
@@ -257,6 +302,7 @@
                   time: formatExamTime(
                     course.start ?? undefined,
                     course.duration,
+                    locale.current,
                   ),
                   subject: course.name,
                 } as Exam;
@@ -266,12 +312,14 @@
         {/each}
       </div>
       <div class="flex-1">
-        <span class="text-2xl font-bold">Finals</span>
+        <span class="text-2xl font-bold">{t('final')}</span>
 
         {#each examDateOrder.finals as key (key)}
           <div class="my-5 w-full min-w-0">
             <ExamCard
-              date={key === 0 ? 'ยังไม่ประกาศ' : formatDate(new Date(key))}
+              date={key === 0
+                ? t('notAnnounced')
+                : formatDate(new Date(key), locale.current)}
               data={examsData.finals[key].map((course) => {
                 return {
                   id: course.cartItemId,
@@ -281,6 +329,7 @@
                   time: formatExamTime(
                     course.start ?? undefined,
                     course.duration,
+                    locale.current,
                   ),
                   subject: course.name,
                 } as Exam;

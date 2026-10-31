@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { defineMessages, useTranslations } from '$lib/i18n';
+
 	import { DoorOpen, Settings } from '@lucide/svelte';
 
 	import { getShortenName } from '@cugetreg/utils';
@@ -21,23 +23,30 @@
 
 	let shortenedName = $derived(getShortenName(name));
 
-	const items = [
+	const t = useTranslations(
+		defineMessages({
+			th: { profile: 'รูปโปรไฟล์', settings: 'ตั้งค่า', signOut: 'ออกจากระบบ' },
+			en: { profile: 'Profile picture', settings: 'Settings', signOut: 'Log out' }
+		})
+	);
+
+	const items = $derived([
 		{
 			icon: Settings,
-			name: 'ตั้งค่า',
+			name: t('settings'),
 			onclick: () => onSettings()
 		},
 		{
 			icon: DoorOpen,
-			name: 'ออกจากระบบ',
+			name: t('signOut'),
 			onclick: () => onSignOut()
 		}
-	];
+	]);
 </script>
 
 <div class="bg-surface w-60 overflow-hidden rounded-xl border-2 border-[#EDEDF1]">
 	<div class="flex flex-col items-center justify-center gap-4 p-4">
-		<img src={imageUrl} alt="Profile" class="h-20 w-20 rounded-full object-cover" />
+		<img src={imageUrl} alt={t('profile')} class="h-20 w-20 rounded-full object-cover" />
 		<div class="flex flex-col items-center gap-2">
 			<p class="text-on-surface text-h3 font-bold">{shortenedName}</p>
 			<p class="text-on-surface text-body2 font-medium">ID: {id}</p>

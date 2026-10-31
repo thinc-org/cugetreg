@@ -1,17 +1,31 @@
 <script lang="ts">
+	import {
+		defineMessages,
+		semesterMessages,
+		studyProgramMessages,
+		useTranslations
+	} from '$lib/i18n';
+
 	import { cn } from '@cugetreg/utils';
+
+	const t = useTranslations(
+		defineMessages({
+			th: { scheduling: 'คุณกำลังจัดตารางเรียน...' },
+			en: { scheduling: 'You are planning...' }
+		})
+	);
+	const tStudyProgram = useTranslations(studyProgramMessages);
+	const tSemester = useTranslations(semesterMessages);
 
 	function formatSemesterType(semesterType: string): string {
 		switch (semesterType) {
 			default:
 				console.warn(`Invalid semesterType ${semesterType}`);
-				return 'ทวิภาค';
+				return tStudyProgram('S');
 			case 'S':
-				return 'ทวิภาค';
 			case 'I':
-				return 'นานาชาติ';
 			case 'T':
-				return 'ตรีภาค';
+				return tStudyProgram(semesterType);
 		}
 	}
 
@@ -19,11 +33,10 @@
 		switch (semester) {
 			default:
 			case 'FIRST':
-				return 'ภาคต้น';
+				return tSemester('FIRST');
 			case 'SECOND':
-				return 'ภาคปลาย';
 			case 'SUMMER':
-				return 'ภาคฤดูร้อน';
+				return tSemester(semester);
 		}
 	}
 
@@ -51,7 +64,7 @@
 
 <div class={cn('flex', className)}>
 	<div class="flex-1">
-		<span class="text-xs text-neutral-400"> คุณกำลังจัดตารางเรียน... </span>
+		<span class="text-xs text-neutral-400"> {t('scheduling')} </span>
 		<div class="flex gap-2.5">
 			<select
 				class="border-primary text-primary flex-3 rounded-lg border p-1 focus:outline-none"

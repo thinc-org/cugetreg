@@ -6,6 +6,7 @@
 	import { IconButton } from '$lib/components/atoms/icon-button/index.js';
 	import * as Table from '$lib/components/atoms/table/index.js';
 	import * as Select from '$lib/components/molecules/select/index.js';
+	import { defineMessages, useTranslations } from '$lib/i18n';
 
 	import { ArrowRight, EyeOff, Trash, X } from '@lucide/svelte';
 	import { untrack } from 'svelte';
@@ -42,6 +43,45 @@
 		}
 	});
 
+	const t = useTranslations(
+		defineMessages({
+			th: {
+				credits: 'หน่วยกิต',
+				courseInfo: 'ข้อมูลรายวิชา',
+				section: 'เซค {no}',
+				instructor: 'ผู้สอน',
+				schedule: 'วันเวลาเรียน',
+				room: 'ห้องเรียน',
+				type: 'รูปแบบ',
+				midterm: 'สอบกลางภาค',
+				final: 'สอบปลายภาค',
+				notAnnounced: 'ยังไม่ประกาศ',
+				chooseColor: 'เลือกสีในตาราง',
+				show: 'แสดงในตาราง',
+				hide: 'ซ่อนจากตาราง',
+				remove: 'นำออกจากตารางที่เลือก',
+				close: 'ปิด'
+			},
+			en: {
+				credits: 'Credits',
+				courseInfo: 'Course details',
+				section: 'Sec {no}',
+				instructor: 'Instructor',
+				schedule: 'Day & time',
+				room: 'Room',
+				type: 'Type',
+				midterm: 'Midterm exam',
+				final: 'Final exam',
+				notAnnounced: 'Not announced',
+				chooseColor: 'Timetable color',
+				show: 'Show in timetable',
+				hide: 'Hide from timetable',
+				remove: 'Remove from selected timetable',
+				close: 'Close'
+			}
+		})
+	);
+
 	const currentSection = $derived(
 		data?.sections.find((s) => s.sectionNo === selectedSectionNo) ?? data?.sections[0]
 	);
@@ -57,11 +97,13 @@
 					<span class="min-w-0 truncate text-[16px] font-bold md:text-xl"
 						>{data.courseNo} {data.abbrName}</span
 					>
-					<span class="shrink-0 text-sm font-extralight text-neutral-400">{data.credit} Credit</span
+					<span class="shrink-0 text-sm font-extralight text-neutral-400"
+						>{data.credit} {t('credits')}</span
 					>
 				</div>
 				<IconButton
 					class="shrink-0 bg-transparent ring-0! outline-none! hover:cursor-pointer"
+					aria-label={t('close')}
 					onclick={onExit}
 				>
 					<X />
@@ -85,7 +127,7 @@
 							goto(`/course-page/${data.courseNo}?${params.toString()}`);
 						}}
 					>
-						ข้อมูลรายวิชา
+						{t('courseInfo')}
 						<ArrowRight />
 					</Button>
 				</div>
@@ -102,15 +144,15 @@
 					}}
 				>
 					<Select.Trigger>
-						เซค {selectedSectionNo}
+						{t('section', { no: selectedSectionNo })}
 					</Select.Trigger>
 					<Select.Content>
 						<Select.Group>
 							{#each data.sections as section (section.sectionNo)}
 								<Select.Item
 									value={`${section.sectionNo}`}
-									label={`เซค ${section.sectionNo}`}
-									aria-label={`Sec ${section.sectionNo}`}
+									label={t('section', { no: section.sectionNo })}
+									aria-label={t('section', { no: section.sectionNo })}
 									role="option"
 								/>
 							{/each}
@@ -142,10 +184,10 @@
 			<Table.Root class="hidden md:table">
 				<Table.Header>
 					<Table.Row>
-						<Table.Head class="text-body1">ผู้สอน</Table.Head>
-						<Table.Head class="text-body1">วันเวลาเรียน</Table.Head>
-						<Table.Head class="text-body1">ห้องเรียน</Table.Head>
-						<Table.Head class="text-body1">รูปแบบ</Table.Head>
+						<Table.Head class="text-body1">{t('instructor')}</Table.Head>
+						<Table.Head class="text-body1">{t('schedule')}</Table.Head>
+						<Table.Head class="text-body1">{t('room')}</Table.Head>
+						<Table.Head class="text-body1">{t('type')}</Table.Head>
 					</Table.Row>
 				</Table.Header>
 				<Table.Body>
@@ -168,8 +210,8 @@
 			<Table.Root class="table-fixed md:hidden">
 				<Table.Header>
 					<Table.Row>
-						<Table.Head class="text-body1 w-5/12 px-3">ผู้สอน</Table.Head>
-						<Table.Head class="text-body1 w-7/12 px-3">วันเวลาเรียน</Table.Head>
+						<Table.Head class="text-body1 w-5/12 px-3">{t('instructor')}</Table.Head>
+						<Table.Head class="text-body1 w-7/12 px-3">{t('schedule')}</Table.Head>
 					</Table.Row>
 				</Table.Header>
 				<Table.Body>
@@ -188,8 +230,8 @@
 			<Table.Root class="table-fixed md:hidden">
 				<Table.Header>
 					<Table.Row>
-						<Table.Head class="text-body1 w-5/12 px-3">ห้องเรียน</Table.Head>
-						<Table.Head class="text-body1 w-7/12 px-3">รูปแบบ</Table.Head>
+						<Table.Head class="text-body1 w-5/12 px-3">{t('room')}</Table.Head>
+						<Table.Head class="text-body1 w-7/12 px-3">{t('type')}</Table.Head>
 					</Table.Row>
 				</Table.Header>
 				<Table.Body>
@@ -210,45 +252,48 @@
 			<Table.Root class="table-fixed md:hidden">
 				<Table.Header>
 					<Table.Row>
-						<Table.Head class="text-body1 px-3">สอบกลางภาค</Table.Head>
+						<Table.Head class="text-body1 px-3">{t('midterm')}</Table.Head>
 					</Table.Row>
 				</Table.Header>
 				<Table.Body>
 					<Table.Row>
-						<Table.Cell class="text-body1 px-3 py-1.5">{data.midterm ?? 'ยังไม่ประกาศ'}</Table.Cell>
+						<Table.Cell class="text-body1 px-3 py-1.5"
+							>{data.midterm ?? t('notAnnounced')}</Table.Cell
+						>
 					</Table.Row>
 				</Table.Body>
 			</Table.Root>
 			<Table.Root class="table-fixed md:hidden">
 				<Table.Header>
 					<Table.Row>
-						<Table.Head class="text-body1 px-3">สอบปลายภาค</Table.Head>
+						<Table.Head class="text-body1 px-3">{t('final')}</Table.Head>
 					</Table.Row>
 				</Table.Header>
 				<Table.Body>
 					<Table.Row class="border-b-0">
-						<Table.Cell class="text-body1 px-3 py-1.5">{data.final ?? 'ยังไม่ประกาศ'}</Table.Cell>
+						<Table.Cell class="text-body1 px-3 py-1.5">{data.final ?? t('notAnnounced')}</Table.Cell
+						>
 					</Table.Row>
 				</Table.Body>
 			</Table.Root>
 			<Table.Root class="hidden table-fixed md:table">
 				<Table.Header>
 					<Table.Row>
-						<Table.Head class="text-body1 w-1/2">สอบกลางภาค</Table.Head>
-						<Table.Head class="text-body1 w-1/2">สอบปลายภาค</Table.Head>
+						<Table.Head class="text-body1 w-1/2">{t('midterm')}</Table.Head>
+						<Table.Head class="text-body1 w-1/2">{t('final')}</Table.Head>
 					</Table.Row>
 				</Table.Header>
 				<Table.Body>
 					<Table.Row class="border-b-0">
-						<Table.Cell class="text-body1">{data.midterm ?? 'ยังไม่ประกาศ'}</Table.Cell>
-						<Table.Cell class="text-body1">{data.final ?? 'ยังไม่ประกาศ'}</Table.Cell>
+						<Table.Cell class="text-body1">{data.midterm ?? t('notAnnounced')}</Table.Cell>
+						<Table.Cell class="text-body1">{data.final ?? t('notAnnounced')}</Table.Cell>
 					</Table.Row>
 				</Table.Body>
 			</Table.Root>
 		</div>
 		<div class="">
 			<div class="my-2 md:my-3">
-				<span class="font-bold">เลือกสีในตาราง</span>
+				<span class="font-bold">{t('chooseColor')}</span>
 			</div>
 			<div class="mx-auto grid w-fit grid-cols-4 gap-x-6 gap-y-4 md:grid-cols-6 md:gap-4">
 				{#each Object.keys(courseColorVariants) as option (option)}
@@ -273,7 +318,7 @@
 				onclick={() => onHide(data.itemId, !data.isHidden)}
 			>
 				<EyeOff />
-				{data.isHidden ? 'แสดงในตาราง' : 'ซ่อนจากตาราง'}
+				{data.isHidden ? t('show') : t('hide')}
 			</Button>
 			<Button
 				class="w-full md:flex-1"
@@ -282,7 +327,7 @@
 				onclick={() => onRemove(data.itemId)}
 			>
 				<Trash />
-				นำออกจากตารางที่เลือก
+				{t('remove')}
 			</Button>
 		</div>
 	</div>

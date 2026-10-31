@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { defineMessages, useTranslations } from '$lib/i18n';
+
 	import { getContext } from 'svelte';
 
 	import { cn } from '@cugetreg/utils';
@@ -30,6 +32,13 @@
 		...rest
 	}: TimeTableCourseCardProp = $props();
 
+	const t = useTranslations(
+		defineMessages({
+			th: { section: 'Sec {section}' },
+			en: { section: 'Sec {section}' }
+		})
+	);
+
 	let courseName: string = $derived.by(() => {
 		if (course.name.length > 20) {
 			return course.abbrName ?? course.name;
@@ -56,7 +65,7 @@
 	<span class="max-w-full truncate text-left text-[16cqh] font-medium">{courseName}</span>
 	{#if course.section !== undefined}
 		<span class="max-w-full truncate text-left text-[15cqh]"
-			>{course.bldg} {course.room} | Sec {course.section}</span
+			>{course.bldg} {course.room} | {t('section', { section: course.section })}</span
 		>
 	{/if}
 </div>

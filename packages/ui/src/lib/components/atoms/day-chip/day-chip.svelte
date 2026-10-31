@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { dayMessages, useTranslations } from '$lib/i18n';
+
 	import { cn } from '@cugetreg/utils';
 
 	import { chipVariants, type Day } from './index.ts';
@@ -21,19 +23,11 @@
 		...rest
 	}: Props = $props();
 
-	const label = {
-		MO: 'จันทร์',
-		TU: 'อังคาร',
-		WE: 'พุธ',
-		TH: 'พฤหัส',
-		FR: 'ศุกร์',
-		SA: 'เสาร์',
-		SU: 'อาทิตย์'
-	};
+	const t = useTranslations(dayMessages);
 </script>
 
 <Chip class={cn(chipVariants({ day, className }))} {closable} {onClose} {...rest}>
 	{#if day}
-		{label[day]}
+		{t(day)}
 	{/if}
 </Chip>

@@ -1,9 +1,10 @@
 <script lang="ts">
-  import { ChevronUp, Plus } from '@lucide/svelte';
+  import { ChevronUp } from '@lucide/svelte';
 
   import { cn } from '@cugetreg/utils';
 
   import StudyPlanCourseCard from './study-plan-course-card.svelte';
+  import StudyPlanSelectCoursePopover from './study-plan-select-course-popover.svelte';
 
   type CardColor = 'pink' | 'purple' | 'mint' | 'yellow';
 
@@ -91,14 +92,7 @@
         />
       {/each}
 
-      <button
-        type="button"
-        class="flex min-h-[100px] w-[170px] flex-col items-center justify-center gap-3 rounded-[16px] border-2 border-[#4A70C6] bg-white text-[#353745] transition-colors hover:bg-blue-50"
-        onclick={onAddCourse}
-      >
-        <Plus size={40} strokeWidth={2.5} class="text-[#4A70C6]" />
-        <span class="text-[16px] font-medium">เพิ่มรายวิชา</span>
-      </button>
+      <StudyPlanSelectCoursePopover onTriggerClick={onAddCourse} />
     </div>
   {/if}
 </section>

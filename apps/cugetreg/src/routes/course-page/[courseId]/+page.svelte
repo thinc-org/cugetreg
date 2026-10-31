@@ -212,6 +212,14 @@
   );
 
   const course = $derived(data.course);
+  const gradingTypeLabel = $derived(
+    {
+      LETTER: 'Letter Grade',
+      SU: 'S/U',
+      TBA: 'TBA',
+    }[course.courseInfo.gradingType],
+  );
+
   const courseNames = $derived.by(() => {
     const { courseNameTh, courseNameEn } = course.courseInfo;
     const [preferred, other] =
@@ -1456,7 +1464,7 @@
                 <p
                   class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
                 >
-                  {t('letterGrade')}
+                  {gradingTypeLabel}
                 </p>
               </div>
             </div>
@@ -1489,7 +1497,7 @@
                 <p
                   class="text-on-surface font-sarabun text-body2 mt-3 px-4 max-md:text-sm"
                 >
-                  {t('letterGrade')}
+                  {gradingTypeLabel}
                 </p>
               </div>
             </div>

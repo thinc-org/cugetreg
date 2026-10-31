@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { useLocale } from '$lib/i18n';
+
 	import { cn } from '@cugetreg/utils';
 	import { FACULTIES, type FacultyId } from '@cugetreg/utils/faculty';
 
@@ -21,8 +23,10 @@
 		onClose = () => {},
 		...rest
 	}: Props = $props();
+
+	const locale = useLocale();
 </script>
 
 <Chip class={cn(chipVariants({ faculty, className }))} {closable} {onClose} {...rest}>
-	{FACULTIES[faculty].th_short}
+	{locale.current === 'en' ? FACULTIES[faculty].en_short : FACULTIES[faculty].th_short}
 </Chip>

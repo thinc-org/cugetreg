@@ -1,8 +1,30 @@
 <script lang="ts">
   import { AlertTriangle } from 'lucide-svelte';
-  const title = 'เกิดข้อผิดพลาดบางอย่าง!';
-  const message =
-    'ขออภัยในความไม่สะดวก ขณะนี้ระบบของเรากำลังดำเนินการปรับปรุงและบำรุงรักษา';
+
+  import { defineMessages, useTranslations } from '@cugetreg/ui/i18n';
+
+  const t = useTranslations(
+    defineMessages({
+      th: {
+        title: 'เกิดข้อผิดพลาดบางอย่าง!',
+        message:
+          'ขออภัยในความไม่สะดวก ขณะนี้ระบบของเรากำลังดำเนินการปรับปรุงและบำรุงรักษา',
+        working:
+          'ทีมงานของเรากำลังทำงานอย่างเต็มที่เพื่อให้เว็บไซต์กลับมาให้บริการตามปกติโดยเร็วที่สุด',
+        tryAgain:
+          'กรุณาลองเข้าใช้งานใหม่อีกครั้งในอีกสักครู่ ขอบคุณที่เข้าใจค่ะ',
+      },
+      en: {
+        title: 'Something went wrong!',
+        message:
+          'Sorry for the inconvenience. Our system is currently undergoing maintenance.',
+        working:
+          'Our team is working hard to get the website back up and running as soon as possible.',
+        tryAgain:
+          'Please try again in a moment. Thank you for your understanding.',
+      },
+    }),
+  );
 </script>
 
 <div
@@ -18,18 +40,18 @@
     <h1
       class="mb-8 text-4xl font-bold tracking-tight text-[#1C1B1F] md:text-5xl"
     >
-      {title}
+      {t('title')}
     </h1>
 
     <div class="flex max-w-2xl flex-col gap-2 leading-relaxed text-[#4F4F4F]">
       <p class="text-base font-medium md:text-lg">
-        {message}
+        {t('message')}
       </p>
       <p class="text-base font-medium md:text-lg">
-        ทีมงานของเรากำลังทำงานอย่างเต็มที่เพื่อให้เว็บไซต์กลับมาให้บริการตามปกติโดยเร็วที่สุด
+        {t('working')}
       </p>
       <p class="text-base font-medium md:text-lg">
-        กรุณาลองเข้าใช้งานใหม่อีกครั้งในอีกสักครู่ ขอบคุณที่เข้าใจค่ะ
+        {t('tryAgain')}
       </p>
     </div>
   </div>

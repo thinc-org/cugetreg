@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { defineMessages, useTranslations } from '$lib/i18n';
+
 	import { Check, Dot, Heart, Plus } from '@lucide/svelte';
 
 	import { cn } from '@cugetreg/utils';
@@ -47,6 +49,35 @@
 		onToggleFavorite,
 		...rest
 	}: Props = $props();
+
+	const t = useTranslations(
+		defineMessages({
+			th: {
+				credits: '{credit} หน่วยกิต',
+				closed: 'ปิด',
+				seats: 'ที่นั่ง {seat} / {maxseat}',
+				reviews: '{review} รีวิว',
+				selectSection: 'เลือกเซคชัน',
+				noSection: 'ไม่มีเซคชัน',
+				select: 'เลือก',
+				selected: 'เลือกแล้ว',
+				removeFavorite: 'นำออกจากวิชถูกใจ',
+				addFavorite: 'เพิ่มเป็นวิชาที่ถูกใจ'
+			},
+			en: {
+				credits: '{credit} credits',
+				closed: 'Closed',
+				seats: 'Seats {seat} / {maxseat}',
+				reviews: '{review} reviews',
+				selectSection: 'Select section',
+				noSection: 'No sections',
+				select: 'Select',
+				selected: 'Selected',
+				removeFavorite: 'Remove from favorites',
+				addFavorite: 'Add to favorites'
+			}
+		})
+	);
 
 	export const onButtonClick = (event?: MouseEvent) => {
 		event?.stopPropagation();
@@ -102,19 +133,19 @@
 	</div>
 	<div class="flex flex-col gap-2">
 		<div class="text-caption flex flex-row items-center font-normal text-neutral-400">
-			<span>{course?.credit} หน่วยกิต</span>
+			<span>{t('credits', { credit: course?.credit ?? '' })}</span>
 			<Dot color="#EDEDF1" size="16" />
 
 			{#if closed}
-				<span class="text-red-500">ปิด</span>
+				<span class="text-red-500">{t('closed')}</span>
 			{:else}
 				<span class={isSeatFull ? 'text-red-500' : undefined}
-					>ที่นั่ง {course?.seat} / {course?.maxseat}</span
+					>{t('seats', { seat: course?.seat ?? '', maxseat: course?.maxseat ?? '' })}</span
 				>
 			{/if}
 
 			<Dot color="#EDEDF1" size="16" />
-			<span>{course?.review} รีวิว</span>
+			<span>{t('reviews', { review: course?.review ?? '' })}</span>
 		</div>
 		<div class="flex min-h-6.5 gap-2">
 			{#each course?.days ?? [] as day (day)}
@@ -142,8 +173,8 @@
 			>
 				<Select.Trigger class="md:text-body2 rounded-button h-9 min-w-0 flex-1 text-sm md:h-9">
 					{selectedSection
-						? (sections.find((s) => s.value === selectedSection)?.label ?? 'เลือกเซคชัน')
-						: 'เลือกเซคชัน'}
+						? (sections.find((s) => s.value === selectedSection)?.label ?? t('selectSection'))
+						: t('selectSection')}
 				</Select.Trigger>
 				<Select.Content role="listbox">
 					<Select.Group>
@@ -162,7 +193,7 @@
 				class="md:text-body2 h-9 min-w-0 flex-1 text-sm md:h-9"
 				disabled
 			>
-				ไม่มีเซคชัน
+				{t('noSection')}
 			</Button>
 		{/if}
 		{#if !selected}
@@ -173,7 +204,8 @@
 				class="md:text-body2 h-9 min-w-0 flex-1 text-sm md:h-9"
 				size="sm"
 			>
-				เลือก <Plus size="16" strokeWidth="3" />
+				{t('select')}
+				<Plus size="16" strokeWidth="3" />
 			</Button>
 		{:else}
 			<Button
@@ -181,13 +213,14 @@
 				onclick={onButtonClick}
 				class="md:text-body2 h-9 min-w-0 flex-1 text-sm md:h-9"
 			>
-				เลือกแล้ว <Check size="16" strokeWidth="3" />
+				{t('selected')}
+				<Check size="16" strokeWidth="3" />
 			</Button>
 		{/if}
 		{#if showFavorite}
 			<button
 				type="button"
-				aria-label={favorite ? 'นำออกจากวิชถูกใจ' : 'เพิ่มเป็นวิชาที่ถูกใจ'}
+				aria-label={favorite ? t('removeFavorite') : t('addFavorite')}
 				aria-pressed={favorite}
 				onclick={onFavoriteClick}
 				class="flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-full transition-colors hover:bg-blue-300/40"

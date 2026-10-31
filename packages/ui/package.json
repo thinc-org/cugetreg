@@ -24,6 +24,11 @@
 	"types": "./dist/index.d.ts",
 	"type": "module",
 	"exports": {
+		"./i18n": {
+			"types": "./dist/i18n/index.d.ts",
+			"svelte": "./dist/i18n/index.js",
+			"default": "./dist/i18n/index.js"
+		},
 		"./*": {
 			"svelte": "./dist/components/*/index.js",
 			"types": "./dist/components/*/index.d.ts",

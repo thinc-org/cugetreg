@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { IconButton } from '$lib/components/atoms/icon-button';
+	import { defineMessages, useTranslations } from '$lib/i18n';
 	import { cn } from '$lib/utils.js';
 
 	import { PanelLeftIcon } from '@lucide/svelte';
@@ -17,6 +18,13 @@
 	} = $props();
 
 	const sidebar = useSidebar();
+
+	const t = useTranslations(
+		defineMessages({
+			th: { toggle: 'เปิด/ปิดแถบด้านข้าง' },
+			en: { toggle: 'Toggle sidebar' }
+		})
+	);
 </script>
 
 <IconButton
@@ -31,5 +39,5 @@
 	{...restProps}
 >
 	<PanelLeftIcon />
-	<span class="sr-only">Toggle Sidebar</span>
+	<span class="sr-only">{t('toggle')}</span>
 </IconButton>

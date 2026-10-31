@@ -2,6 +2,7 @@
 	import { Chip } from '$lib/components/atoms/chip';
 	import { FacultyChip } from '$lib/components/atoms/faculty-chip';
 	import * as Select from '$lib/components/molecules/select';
+	import { dayMessages, defineMessages, useLocale, useTranslations } from '$lib/i18n';
 
 	import { FACULTIES, type FacultyId } from '@cugetreg/utils/faculty';
 
@@ -9,42 +10,131 @@
 	import { Modal } from '../../atoms/modal';
 
 	// --- 1. CONFIGURATION DATA ---
+	const locale = useLocale();
+	const tDay = useTranslations(dayMessages);
+	const t = useTranslations(
+		defineMessages({
+			th: {
+				genEdSC: 'วิทย์',
+				genEdHU: 'มนุษย์',
+				genEdSO: 'สังคม',
+				genEdIN: 'สหฯ',
+				genEdGENED: 'ศึกษาทั่วไป',
+				genEdNO: 'ไม่ใช่ GenEd',
+				evalSU: 'S/U',
+				evalLetter: 'Letter Grade',
+				remove: 'ลบ {label}',
+				genEdType: 'ประเภท GenEd',
+				selectGenEd: 'เลือก GenEd...',
+				faculty: 'คณะ',
+				selectFaculty: 'เลือกคณะ...',
+				dayOfWeek: 'วันในสัปดาห์',
+				selectDay: 'เลือกวัน...',
+				startTime: 'เวลาเริ่ม',
+				endTime: 'เวลาจบ',
+				noConditions: 'ไม่กำหนดเงื่อนไขรายวิชา',
+				noConditionsTooltip: 'แสดงเฉพาะรายวิชาที่ไม่กำหนดเงื่อนไขในการลงทะเบียน',
+				favoriteOnly: 'วิชาที่ถูกใจ',
+				favoriteOnlyTooltip: 'แสดงเฉพาะรายวิชาที่คุณกดถูกใจไว้',
+				fitSchedule: 'Fit my schedule',
+				fitScheduleLabel: 'วิชาที่ไม่ชนตาราง',
+				fitScheduleTooltip: 'แสดงเฉพาะรายวิชาที่ไม่ชนกับตารางเรียนของคุณ',
+				evaluation: 'วิธีการวัดผล',
+				select: 'เลือก...',
+				credits: 'หน่วยกิต',
+				all: 'ทั้งหมด',
+				search: 'ค้นหา',
+				noConditionsLine1: 'เมื่อเปิด ไม่กำหนดเงื่อนไขรายวิชา',
+				noConditionsLine2: 'หน้าแสดงผลวิชาเรียน',
+				noConditionsLine3: 'จะแสดงเฉพาะรายวิชาที่ไม่กำหนดเงื่อนไข',
+				noConditionsLine4: 'ที่ต้องผ่านก่อนการลงทะเบียน',
+				fitLine1: 'เมื่อเปิด Fit my schedule',
+				fitLine2: 'หน้าแสดงผลวิชาเรียน',
+				fitLine3: 'จะแสดงเฉพาะรายวิชาที่ไม่ซ้ำวัน เวลา',
+				fitLine4: 'กับตารางเรียนของคุณที่ได้เลือกและจัดไว้',
+				ok: 'ตกลง'
+			},
+			en: {
+				genEdSC: 'Science',
+				genEdHU: 'Humanities',
+				genEdSO: 'Social Science',
+				genEdIN: 'Interdisciplinary',
+				genEdGENED: 'General Education',
+				genEdNO: 'Not GenEd',
+				evalSU: 'S/U',
+				evalLetter: 'Letter Grade',
+				remove: 'Remove {label}',
+				genEdType: 'GenEd type',
+				selectGenEd: 'Select GenEd...',
+				faculty: 'Faculty',
+				selectFaculty: 'Select faculty...',
+				dayOfWeek: 'Day of week',
+				selectDay: 'Select day...',
+				startTime: 'Start time',
+				endTime: 'End time',
+				noConditions: 'No prerequisites',
+				noConditionsTooltip: 'Show only courses with no registration prerequisites',
+				favoriteOnly: 'Liked courses',
+				favoriteOnlyTooltip: 'Show only courses you have liked',
+				fitSchedule: 'Fit my schedule',
+				fitScheduleLabel: 'No schedule conflicts',
+				fitScheduleTooltip: 'Show only courses that do not conflict with your timetable',
+				evaluation: 'Grading method',
+				select: 'Select...',
+				credits: 'Credits',
+				all: 'All',
+				search: 'Search',
+				noConditionsLine1: 'When No prerequisites is on,',
+				noConditionsLine2: 'the course results',
+				noConditionsLine3: 'will only show courses without',
+				noConditionsLine4: 'prerequisites required before registration',
+				fitLine1: 'When Fit my schedule is on,',
+				fitLine2: 'the course results',
+				fitLine3: 'will only show courses that do not overlap',
+				fitLine4: 'with the timetable you have planned',
+				ok: 'OK'
+			}
+		})
+	);
+
 	// Colours come from the Figma semantic tokens (Semantic/gened/*).
-	const genEdOptions = [
-		{ id: 'SC', label: 'วิทย์', color: '#E39600', bg: '#FFFFFF' },
-		{ id: 'HU', label: 'มนุษย์', color: '#C7117F', bg: '#FFFFFF' },
-		{ id: 'SO', label: 'สังคม', color: '#4B991C', bg: '#FFFFFF' },
-		{ id: 'IN', label: 'สหฯ', color: '#681A83', bg: '#FFFFFF' },
-		{ id: 'GENED', label: 'ศึกษาทั่วไป', color: '#45485F', bg: '#FFFFFF' },
-		{ id: 'NO', label: 'ไม่ใช่ GenEd', color: '#000000', bg: '#FFFFFF' }
-	];
+	const genEdOptions = $derived([
+		{ id: 'SC', label: t('genEdSC'), color: '#E39600', bg: '#FFFFFF' },
+		{ id: 'HU', label: t('genEdHU'), color: '#C7117F', bg: '#FFFFFF' },
+		{ id: 'SO', label: t('genEdSO'), color: '#4B991C', bg: '#FFFFFF' },
+		{ id: 'IN', label: t('genEdIN'), color: '#681A83', bg: '#FFFFFF' },
+		{ id: 'GENED', label: t('genEdGENED'), color: '#45485F', bg: '#FFFFFF' },
+		{ id: 'NO', label: t('genEdNO'), color: '#000000', bg: '#FFFFFF' }
+	]);
 
-	const facultyOptions = Object.keys(FACULTIES).map((faculty) => {
-		const facultyData = FACULTIES[faculty as FacultyId];
-		const name = facultyData.th_short;
+	const facultyOptions = $derived(
+		Object.keys(FACULTIES).map((faculty) => {
+			const facultyData = FACULTIES[faculty as FacultyId];
+			const name = locale.current === 'en' ? facultyData.en_short : facultyData.th_short;
 
-		return {
-			id: faculty,
-			label: name
-		};
-	});
+			return {
+				id: faculty,
+				label: name
+			};
+		})
+	);
 
 	// Mon–Fri come from the Figma semantic tokens (Semantic/dow/*).
 	// Sat/Sun are not defined in Figma, so they keep their existing colours.
-	const dayOptions = [
-		{ id: 'MO', label: 'จันทร์', color: '#E39600', bg: '#FFF3D2' },
-		{ id: 'TU', label: 'อังคาร', color: '#C7117F', bg: '#FDD8EE' },
-		{ id: 'WE', label: 'พุธ', color: '#4B991C', bg: '#D1FEB6' },
-		{ id: 'TH', label: 'พฤหัส', color: '#E87D00', bg: '#FFE2BF' },
-		{ id: 'FR', label: 'ศุกร์', color: '#0C5A93', bg: '#DAEFFE' },
-		{ id: 'SA', label: 'เสาร์', color: '#7C3AED', bg: '#F3E8FF' },
-		{ id: 'SU', label: 'อาทิตย์', color: '#DC2626', bg: '#FEF2F2' }
-	];
+	const dayOptions = $derived([
+		{ id: 'MO', label: tDay('MO'), color: '#E39600', bg: '#FFF3D2' },
+		{ id: 'TU', label: tDay('TU'), color: '#C7117F', bg: '#FDD8EE' },
+		{ id: 'WE', label: tDay('WE'), color: '#4B991C', bg: '#D1FEB6' },
+		{ id: 'TH', label: tDay('TH'), color: '#E87D00', bg: '#FFE2BF' },
+		{ id: 'FR', label: tDay('FR'), color: '#0C5A93', bg: '#DAEFFE' },
+		{ id: 'SA', label: tDay('SA'), color: '#7C3AED', bg: '#F3E8FF' },
+		{ id: 'SU', label: tDay('SU'), color: '#DC2626', bg: '#FEF2F2' }
+	]);
 
-	const evalOptions = [
-		{ id: 'SU', label: 'S/U' },
-		{ id: 'LETTER', label: 'Letter Grade' }
-	];
+	const evalOptions = $derived([
+		{ id: 'SU', label: t('evalSU') },
+		{ id: 'LETTER', label: t('evalLetter') }
+	]);
 
 	// --- 2. PROPS (Svelte 5) ---
 	interface Props {
@@ -129,7 +219,9 @@
 		class="flex-1 overflow-x-hidden overflow-y-auto px-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
 	>
 		<div class="mb-4">
-			<label for="gened-select" class="mb-1.5 block text-xs text-neutral-400">ประเภท GenEd</label>
+			<label for="gened-select" class="mb-1.5 block text-xs text-neutral-400"
+				>{t('genEdType')}</label
+			>
 			<Select.Root type="multiple" bind:value={selectedGenEds}>
 				<div class="relative min-h-10">
 					{#if activeGenEds.length}
@@ -145,7 +237,7 @@
 										event.stopPropagation();
 										removeOption('gened', item.id);
 									}}
-									aria-label={`Remove ${item.label}`}
+									aria-label={t('remove', { label: item.label })}
 								>
 									{item.label}
 								</Chip>
@@ -154,11 +246,11 @@
 					{/if}
 					<Select.Trigger
 						id="gened-select"
-						aria-label="ประเภท GenEd"
+						aria-label={t('genEdType')}
 						class="bg-surface-container-lowest hover:bg-surface-container-low absolute inset-0 h-full min-h-10 cursor-pointer rounded-xl border-transparent p-2 text-sm text-neutral-400 focus:ring-0 focus:ring-offset-0"
 					>
 						{#if !activeGenEds.length}
-							Select GenEd...
+							{t('selectGenEd')}
 						{/if}
 					</Select.Trigger>
 				</div>
@@ -186,7 +278,9 @@
 		</div>
 
 		<div class="mb-4">
-			<label for="faculty-select" class="mb-1.5 block text-xs text-neutral-400">คณะ</label>
+			<label for="faculty-select" class="mb-1.5 block text-xs text-neutral-400"
+				>{t('faculty')}</label
+			>
 			<Select.Root type="multiple" bind:value={selectedFaculties}>
 				<div class="relative min-h-10">
 					{#if activeFaculties.length}
@@ -201,7 +295,7 @@
 									onClose={() => {
 										removeOption('faculty', item.id);
 									}}
-									aria-label={`Remove ${item.label}`}
+									aria-label={t('remove', { label: item.label })}
 								>
 									{item.label}
 								</FacultyChip>
@@ -210,11 +304,11 @@
 					{/if}
 					<Select.Trigger
 						id="faculty-select"
-						aria-label="คณะ"
+						aria-label={t('faculty')}
 						class="bg-surface-container-lowest hover:bg-surface-container-low absolute inset-0 h-full min-h-10 cursor-pointer rounded-xl border-transparent p-2 text-sm text-neutral-400 focus:ring-0 focus:ring-offset-0"
 					>
 						{#if !activeFaculties.length}
-							Select faculty...
+							{t('selectFaculty')}
 						{/if}
 					</Select.Trigger>
 				</div>
@@ -242,7 +336,7 @@
 		</div>
 
 		<div class="mb-4">
-			<label for="day-select" class="mb-1.5 block text-xs text-neutral-400">วันในสัปดาห์</label>
+			<label for="day-select" class="mb-1.5 block text-xs text-neutral-400">{t('dayOfWeek')}</label>
 			<Select.Root type="multiple" bind:value={selectedDays}>
 				<div class="relative min-h-10">
 					{#if activeDays.length}
@@ -258,7 +352,7 @@
 										removeOption('day', item.id);
 									}}
 									style="background-color: {item.bg}; color: {item.color};"
-									aria-label={`Remove ${item.label}`}
+									aria-label={t('remove', { label: item.label })}
 								>
 									{item.label}
 								</Chip>
@@ -267,11 +361,11 @@
 					{/if}
 					<Select.Trigger
 						id="day-select"
-						aria-label="วันในสัปดาห์"
+						aria-label={t('dayOfWeek')}
 						class="bg-surface-container-lowest hover:bg-surface-container-low absolute inset-0 h-full min-h-10 cursor-pointer rounded-xl border-transparent p-2 text-sm text-neutral-400 focus:ring-0 focus:ring-offset-0"
 					>
 						{#if !activeDays.length}
-							Select day...
+							{t('selectDay')}
 						{/if}
 					</Select.Trigger>
 				</div>
@@ -300,7 +394,7 @@
 
 		<div class="mb-4 flex gap-3">
 			<div class="flex-1">
-				<label class="mb-1.5 block text-xs text-neutral-400">เวลาเริ่ม</label>
+				<label class="mb-1.5 block text-xs text-neutral-400">{t('startTime')}</label>
 				<div class="relative">
 					<input
 						type="time"
@@ -322,7 +416,7 @@
 				</div>
 			</div>
 			<div class="flex-1">
-				<label class="mb-1.5 block text-xs text-neutral-400">เวลาจบ</label>
+				<label class="mb-1.5 block text-xs text-neutral-400">{t('endTime')}</label>
 				<div class="relative">
 					<input
 						type="time"
@@ -358,10 +452,10 @@
 				<span
 					class="relative mr-2.5 h-[18px] w-[18px] rounded bg-neutral-200 transition-colors duration-200 peer-checked:bg-[#4f46e5] peer-hover:bg-neutral-300 after:absolute after:top-[2px] after:left-[6px] after:hidden after:h-[9px] after:w-[4px] after:rotate-45 after:border-r-2 after:border-b-2 after:border-solid after:border-white after:content-[''] peer-checked:after:block"
 				></span>
-				<span>ไม่กำหนดเงื่อนไขรายวิชา</span>
+				<span>{t('noConditions')}</span>
 			</label>
 			<span class="inline-flex items-center">
-				<InfoCircle tooltipText="แสดงเฉพาะรายวิชาที่ไม่กำหนดเงื่อนไขในการลงทะเบียน" />
+				<InfoCircle tooltipText={t('noConditionsTooltip')} />
 			</span>
 		</div>
 		<div class="-mt-1.5 mb-4 flex items-center gap-1.5">
@@ -376,14 +470,14 @@
 				<span
 					class="relative mr-2.5 h-[18px] w-[18px] rounded bg-neutral-200 transition-colors duration-200 peer-checked:bg-[#4f46e5] peer-hover:bg-neutral-300 after:absolute after:top-[2px] after:left-[6px] after:hidden after:h-[9px] after:w-[4px] after:rotate-45 after:border-r-2 after:border-b-2 after:border-solid after:border-white after:content-[''] peer-checked:after:block"
 				></span>
-				<span>วิชาที่ถูกใจ</span>
+				<span>{t('favoriteOnly')}</span>
 			</label>
 			<span class="inline-flex items-center">
-				<InfoCircle tooltipText="แสดงเฉพาะรายวิชาที่คุณกดถูกใจไว้" />
+				<InfoCircle tooltipText={t('favoriteOnlyTooltip')} />
 			</span>
 		</div>
 		<div class="mb-4">
-			<label class="mb-2 block text-xs text-neutral-400">Fit my schedule</label>
+			<label class="mb-2 block text-xs text-neutral-400">{t('fitSchedule')}</label>
 			<div class="flex items-center gap-2.5">
 				<label
 					class="flex cursor-pointer items-center text-base font-normal text-neutral-700 select-none"
@@ -396,18 +490,18 @@
 					<span
 						class="relative mr-2.5 h-[18px] w-[18px] rounded bg-neutral-200 transition-colors duration-200 peer-checked:bg-[#4f46e5] peer-hover:bg-neutral-300 after:absolute after:top-[2px] after:left-[6px] after:hidden after:h-[9px] after:w-[4px] after:rotate-45 after:border-r-2 after:border-b-2 after:border-solid after:border-white after:content-[''] peer-checked:after:block"
 					></span>
-					<span>วิชาที่ไม่ชนตาราง</span>
+					<span>{t('fitScheduleLabel')}</span>
 				</label>
 				<span class="flex items-center gap-1.5 text-base font-normal text-neutral-700">
 					<span class="inline-flex items-center">
-						<InfoCircle tooltipText="แสดงเฉพาะรายวิชาที่ไม่ชนกับตารางเรียนของคุณ" />
+						<InfoCircle tooltipText={t('fitScheduleTooltip')} />
 					</span>
 				</span>
 			</div>
 		</div>
 
 		<div class="mb-4">
-			<label class="mb-1.5 block text-xs text-neutral-400">วิธีการวัดผล</label>
+			<label class="mb-1.5 block text-xs text-neutral-400">{t('evaluation')}</label>
 			<div
 				class="bg-surface-container-lowest hover:bg-surface-container-low relative flex min-h-10 cursor-pointer flex-wrap gap-2 rounded-xl border border-transparent p-2 pr-[30px]"
 				onclick={(e) => toggleDropdown('eval', e)}
@@ -433,7 +527,7 @@
 					</div>
 				{/each}
 				{#if activeEval.length === 0}
-					<span class="self-center text-sm text-neutral-400">Select...</span>
+					<span class="self-center text-sm text-neutral-400">{t('select')}</span>
 				{/if}
 				<div class="absolute top-1/2 right-2.5 -translate-y-1/2 text-[10px] text-neutral-400">
 					▼
@@ -463,17 +557,18 @@
 		</div>
 
 		<div class="mb-4">
-			<label for="credit-filter" class="mb-1.5 block text-xs text-neutral-400">หน่วยกิต</label>
+			<label for="credit-filter" class="mb-1.5 block text-xs text-neutral-400">{t('credits')}</label
+			>
 			<div class="flex items-center gap-3">
 				<input
 					id="credit-filter"
 					type="text"
 					inputmode="decimal"
 					bind:value={credit}
-					placeholder="ทั้งหมด"
+					placeholder={t('all')}
 					class="bg-surface-container-lowest text-on-surface box-border h-10 w-20 rounded-xl border-none p-2.5 text-base text-[14px] placeholder:text-neutral-400"
 				/>
-				<span class="text-base font-normal text-neutral-700">หน่วยกิต</span>
+				<span class="text-base font-normal text-neutral-700">{t('credits')}</span>
 			</div>
 		</div>
 	</div>
@@ -482,7 +577,7 @@
 			class="bg-primary-low text-on-primary-low hover:bg-primary-low w-full cursor-pointer rounded-xl border-none p-3 text-base font-medium"
 			onclick={onsearch}
 		>
-			ค้นหา
+			{t('search')}
 		</button>
 	</div>
 </div>
@@ -491,18 +586,18 @@
 	<div
 		class="bg-surface w-[420px] max-w-[90vw] rounded-3xl p-8 text-center shadow-[0_20px_60px_rgba(0,0,0,0.18)]"
 	>
-		<h3 class="m-0 mb-4 text-2xl font-bold text-blue-700">ไม่กำหนดเงื่อนไขรายวิชา</h3>
+		<h3 class="m-0 mb-4 text-2xl font-bold text-blue-700">{t('noConditions')}</h3>
 		<p class="m-0 mb-6 text-[15px] leading-relaxed text-neutral-500">
-			เมื่อเปิด ไม่กำหนดเงื่อนไขรายวิชา<br />
-			หน้าแสดงผลวิชาเรียน<br />
-			จะแสดงเฉพาะรายวิชาที่ไม่กำหนดเงื่อนไข<br />
-			ที่ต้องผ่านก่อนการลงทะเบียน
+			{t('noConditionsLine1')}<br />
+			{t('noConditionsLine2')}<br />
+			{t('noConditionsLine3')}<br />
+			{t('noConditionsLine4')}
 		</p>
 		<button
 			class="bg-primary-low hover:bg-primary-low w-full cursor-pointer rounded-xl border-none p-3 text-base font-bold text-blue-700 transition-colors"
 			onclick={() => (showNoPrereqModal = false)}
 		>
-			ตกลง
+			{t('ok')}
 		</button>
 	</div>
 </Modal>
@@ -511,18 +606,18 @@
 	<div
 		class="bg-surface w-[420px] max-w-[90vw] rounded-3xl p-8 text-center shadow-[0_20px_60px_rgba(0,0,0,0.18)]"
 	>
-		<h3 class="m-0 mb-4 text-2xl font-bold text-blue-700">Fit my schedule</h3>
+		<h3 class="m-0 mb-4 text-2xl font-bold text-blue-700">{t('fitSchedule')}</h3>
 		<p class="m-0 mb-6 text-[15px] leading-relaxed text-neutral-500">
-			เมื่อเปิด Fit my schedule<br />
-			หน้าแสดงผลวิชาเรียน<br />
-			จะแสดงเฉพาะรายวิชาที่ไม่ซ้ำวัน เวลา<br />
-			กับตารางเรียนของคุณที่ได้เลือกและจัดไว้
+			{t('fitLine1')}<br />
+			{t('fitLine2')}<br />
+			{t('fitLine3')}<br />
+			{t('fitLine4')}
 		</p>
 		<button
 			class="bg-primary-low hover:bg-primary-low w-full cursor-pointer rounded-xl border-none p-3 text-base font-bold text-blue-700 transition-colors"
 			onclick={() => (showFitModal = false)}
 		>
-			ตกลง
+			{t('ok')}
 		</button>
 	</div>
 </Modal>

@@ -3,7 +3,7 @@
   import { resolve } from '$app/paths';
   import { api } from '$lib/api';
   import { GOOGLE_FORM_URL } from '$lib/constants';
-  import { getSemesterLabel } from '$lib/semesterOptions';
+  import { getSemesterLabel, SEMESTER_LABEL_LONG } from '$lib/semesterOptions';
 
   import {
     AlertTriangle,
@@ -24,7 +24,6 @@
   } from '@cugetreg/ui/i18n';
   import { Comment } from '@cugetreg/ui/molecules/comment';
   import { ConfirmDeleteReview } from '@cugetreg/ui/molecules/confirm-delete-review';
-  import { ReportProblem } from '@cugetreg/ui/molecules/report-problem';
   import * as Select from '@cugetreg/ui/molecules/select';
   import { Footer } from '@cugetreg/ui/organisms/footer';
   import type { GenEdType } from '@cugetreg/utils/types';
@@ -478,6 +477,4 @@
       onConfirm={confirmDeleteReview}
     />
   </Modal>
-
-  <ReportProblem href={GOOGLE_FORM_URL} />
 </div>

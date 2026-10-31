@@ -2,7 +2,7 @@
 	import { goto } from '$app/navigation';
 	import { defineMessages, useTranslations } from '$lib/i18n';
 
-	import { Bell, ChevronDown, LogOut, Menu, Plus } from '@lucide/svelte';
+	import { Bell, ChevronDown, CircleQuestionMark, LogOut, Menu, Plus } from '@lucide/svelte';
 
 	import { cn } from '@cugetreg/utils';
 
@@ -41,8 +41,10 @@
 		onLogin?: () => void;
 		onSignOut?: () => void;
 		onToggleTheme?: () => void;
+		onShowOnboarding?: () => void;
 		/** Called when the user taps "เพิ่มตาราง" to create a new timetable. */
 		onAddSchedule?: () => void;
+		reportURL?: string;
 	}
 
 	let {
@@ -60,7 +62,9 @@
 		onLogin = () => {},
 		onSignOut = () => {},
 		onToggleTheme = () => {},
-		onAddSchedule = () => {}
+		onShowOnboarding = () => {},
+		onAddSchedule = () => {},
+		reportURL = ''
 	}: Props = $props();
 
 	const t = useTranslations(
@@ -90,6 +94,12 @@
 
 	let scheduleDropdownOpen = $state(false);
 	let scheduleSelectorEl = $state<HTMLDivElement>();
+
+	const navItemsWithReport = $derived([
+		...navItems,
+		{ name: 'แจ้งปัญหาการใช้งาน', route: reportURL }
+	]);
+
 	const currentScheduleName = $derived(
 		scheduleOptions.find((o) => o.id === currentScheduleId)?.name ?? t('selectSchedule')
 	);
@@ -223,7 +233,7 @@
 
 		<!-- Navigation links -->
 		<nav class="flex flex-col">
-			{#each navItems as { name: itemName, route } (route)}
+			{#each navItemsWithReport as { name: itemName, route } (route)}
 				<a
 					href={route}
 					class={cn(
@@ -239,23 +249,35 @@
 	</div>
 
 	<!-- Bottom: profile / login -->
-	<div class="border-surface-container-low border-t p-4">
+	<div class="border-surface-container-low flex items-center gap-2 border-t p-4">
 		{#if isLoggedIn}
-			<div class="flex items-center justify-between">
+			<div class="flex min-w-0 flex-1 items-center justify-between">
 				<div class="flex min-w-0 flex-col">
 					<span class="text-primary text-subtitle truncate font-medium underline">{name}</span>
 					{#if id}
 						<span class="text-body2 text-neutral-400">ID: {id}</span>
 					{/if}
 				</div>
-				<IconButton variant="ghost" onclick={onSignOut} aria-label={t('signOut')}>
-					<LogOut size="20" strokeWidth="2.5" class="text-primary" />
-				</IconButton>
 			</div>
 		{:else}
-			<Button class="w-full" color="primary" onclick={onLogin}>
+			<Button class="flex-1" color="primary" onclick={onLogin}>
 				<span class="text-button2 font-medium">{t('login')}</span>
 			</Button>
+		{/if}
+		<IconButton
+			variant="ghost"
+			onclick={() => {
+				onClose();
+				onShowOnboarding();
+			}}
+			aria-label="แนะนำการใช้งาน"
+		>
+			<CircleQuestionMark size="20" strokeWidth="2.5" class="text-primary" />
+		</IconButton>
+		{#if isLoggedIn}
+			<IconButton variant="ghost" onclick={onSignOut} aria-label={t('signOut')}>
+				<LogOut size="20" strokeWidth="2.5" class="text-primary" />
+			</IconButton>
 		{/if}
 	</div>
 </div>

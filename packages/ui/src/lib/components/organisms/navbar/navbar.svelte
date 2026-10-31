@@ -9,7 +9,7 @@
 	import Popover from '$lib/components/atoms/popover/popover.svelte';
 	import { defineMessages, useTranslations } from '$lib/i18n';
 
-	import { Bell, Menu, Search } from '@lucide/svelte';
+	import { Bell, CircleQuestionMark, Menu, Search } from '@lucide/svelte';
 
 	import { cn, getShortenName } from '@cugetreg/utils';
 
@@ -39,6 +39,8 @@
 		onToggleTheme?: () => void;
 		/** Called when the user taps "add timetable" in the mobile drawer. */
 		onAddSchedule?: () => void;
+		onShowOnboarding?: () => void;
+		reportURL?: string;
 	}
 
 	let {
@@ -53,7 +55,9 @@
 		currentScheduleId = $bindable(''),
 		programLabel = '',
 		onToggleTheme = () => {},
-		onAddSchedule = () => {}
+		onAddSchedule = () => {},
+		onShowOnboarding = () => {},
+		reportURL = ''
 	}: Props = $props();
 
 	let localSearch = $state('');
@@ -112,7 +116,7 @@
 </script>
 
 <div
-	class="border-surface-container-low bg-surface sticky top-0 z-[60] flex h-16 w-full items-center justify-between gap-2 border-b-2 px-3 py-1 md:h-20 md:py-3 lg:px-10"
+	class="border-surface-container-low bg-surface sticky top-0 z-50 flex h-16 w-full items-center justify-between gap-2 border-b-2 px-3 py-1 md:h-20 md:py-3 lg:px-10"
 >
 	<div class="flex flex-1 flex-row items-center gap-3 lg:gap-6">
 		<IconButton variant="ghost" class="min-[900px]:hidden" onclick={toggleSideBar}>
@@ -121,23 +125,28 @@
 		<a href="/">
 			<CUGetRegLogo class="h-8 w-24 lg:h-10 lg:w-32" />
 		</a>
-		<div class="relative hidden items-center md:flex">
-			<Search
-				class="absolute right-[15%] my-auto lg:right-8"
-				size="16"
-				color="#898EA7"
-				strokeWidth="3"
-			/>
-			<Input
-				bind:value={localSearch}
-				onkeydown={(e: KeyboardEvent) => {
-					if (e.key === 'Enter') {
-						onSearchEnter(localSearch);
-					}
-				}}
-				placeholder={t('searchCourses')}
-				class="bg-surface-container-lowest h-8 w-full placeholder:text-neutral-400"
-			/>
+		<div class="hidden items-center gap-3 md:flex">
+			<div class="relative min-w-0 flex-1">
+				<Search
+					class="absolute top-1/2 right-3 -translate-y-1/2"
+					size="16"
+					color="#898EA7"
+					strokeWidth="3"
+				/>
+				<Input
+					bind:value={localSearch}
+					onkeydown={(e: KeyboardEvent) => {
+						if (e.key === 'Enter') {
+							onSearchEnter(localSearch);
+						}
+					}}
+          placeholder={t('searchCourses')}
+					class="bg-surface-container-lowest h-8 w-full pr-9 placeholder:text-neutral-400"
+				/>
+			</div>
+			<button class="shrink-0 hover:cursor-pointer" onclick={onShowOnboarding}>
+				<CircleQuestionMark class="stroke-neutral-400 hover:stroke-neutral-500" />
+			</button>\
 		</div>
 	</div>
 	<div class="hidden flex-1 flex-row items-center justify-center gap-3 min-[900px]:flex lg:gap-4">
@@ -205,6 +214,8 @@
 		{onSignOut}
 		{onToggleTheme}
 		{onAddSchedule}
+		{onShowOnboarding}
 		onClose={toggleSideBar}
+		{reportURL}
 	/>
 </div>

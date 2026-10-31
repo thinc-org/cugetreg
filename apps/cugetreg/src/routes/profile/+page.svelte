@@ -3,7 +3,6 @@
   import { resolve } from '$app/paths';
   import { api } from '$lib/api';
   import { tryCatch } from '$lib/async-handler';
-  import { GOOGLE_FORM_URL } from '$lib/constants';
   import {
     getSemesterShortOptions,
     getYearOptions,
@@ -23,7 +22,6 @@
     useTranslations,
   } from '@cugetreg/ui/i18n';
   import { ConfirmDeleteSchedule } from '@cugetreg/ui/molecules/confirm-delete-schedule';
-  import { ReportProblem } from '@cugetreg/ui/molecules/report-problem';
   import {
     CreateTimetable,
     type TimetableMetaData,
@@ -317,5 +315,4 @@
       onCancel={() => (showCreateScheduleModal = false)}
     />
   </Modal>
-  <ReportProblem href={GOOGLE_FORM_URL} />
 </div>

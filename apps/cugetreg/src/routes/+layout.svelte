@@ -10,6 +10,8 @@
   } from '$lib/auth-client';
   import LoadingScreen from '$lib/components/loading-screen.svelte';
   import { semesterLabelMapper, studyProgramMapper } from '$lib/mapper';
+  import Onboarding from '$lib/components/onboarding.svelte';
+  import { GOOGLE_FORM_URL } from '$lib/constants';
   import { initCartSelectionController } from '$lib/stores/cart-selection.svelte';
   import { loginPopupState } from '$lib/stores/login-popup.svelte';
   import { searchState } from '$lib/stores/search.svelte';
@@ -20,10 +22,12 @@
     type UserCartInterface,
   } from '$lib/stores/user-cart';
 
-  import { onDestroy, setContext, type Snippet } from 'svelte';
+  import { onDestroy, onMount, setContext, type Snippet } from 'svelte';
+  import { MediaQuery } from 'svelte/reactivity';
   import toast, { Toaster } from 'svelte-french-toast';
 
   import { Modal } from '@cugetreg/ui/atoms/modal';
+  import { ReportProblem } from '@cugetreg/ui/molecules/report-problem';
   import {
     defineMessages,
     initLocale,
@@ -62,6 +66,8 @@
   );
 
   const session = useSession();
+  const mobileMedia = new MediaQuery('max-width: 767px', false);
+  const isMobile = $derived(mobileMedia.current);
 
   $effect(() => {
     const errorMsg = page.url.searchParams.get('error');
@@ -149,6 +155,26 @@
 
   const { createCart } = useCartActions();
   let showCreateScheduleModal = $state(false);
+  const ONBOARDING_SEEN_KEY = 'cugetreg:onboarding-seen';
+  let showOnboarding = $state(false);
+
+  onMount(() => {
+    try {
+      // showOnboarding = localStorage.getItem(ONBOARDING_SEEN_KEY) !== 'true';
+      showOnboarding = true;
+    } catch {
+      showOnboarding = true;
+    }
+  });
+
+  function dismissOnboarding() {
+    showOnboarding = false;
+    try {
+      localStorage.setItem(ONBOARDING_SEEN_KEY, 'true');
+    } catch (error) {
+      console.warn('Unable to save onboarding state', error);
+    }
+  }
 </script>
 
 <Modal
@@ -191,7 +217,20 @@
     }
     onToggleTheme={toggleTheme}
     onAddSchedule={() => (showCreateScheduleModal = true)}
+    onShowOnboarding={() => (showOnboarding = true)}
+    reportURL={GOOGLE_FORM_URL}
   />
+
+  <Modal
+    exitOnEsc
+    exitOnBackgroundClick
+    centered
+    dim
+    class="h-dvh items-end sm:items-center"
+    bind:show={showOnboarding}
+  >
+    <Onboarding onCancel={dismissOnboarding} />
+  </Modal>
 
   <Modal
     exitOnEsc
@@ -221,5 +260,9 @@
     <div class="relative flex-1 overflow-auto">
       {@render children?.()}
     </div>
+  {/if}
+
+  {#if !isMobile}
+    <ReportProblem href={GOOGLE_FORM_URL} />
   {/if}
 </div>

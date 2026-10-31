@@ -140,7 +140,7 @@
 							onSearchEnter(localSearch);
 						}
 					}}
-          placeholder={t('searchCourses')}
+					placeholder={t('searchCourses')}
 					class="bg-surface-container-lowest h-8 w-full pr-9 placeholder:text-neutral-400"
 				/>
 			</div>

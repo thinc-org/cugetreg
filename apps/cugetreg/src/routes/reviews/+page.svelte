@@ -2,8 +2,7 @@
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
   import { api } from '$lib/api';
-  import { GOOGLE_FORM_URL } from '$lib/constants';
-  import { getSemesterLabel, SEMESTER_LABEL_LONG } from '$lib/semesterOptions';
+  import { getSemesterLabel } from '$lib/semesterOptions';
 
   import {
     AlertTriangle,

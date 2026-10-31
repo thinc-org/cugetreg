@@ -9,9 +9,9 @@
     useSession,
   } from '$lib/auth-client';
   import LoadingScreen from '$lib/components/loading-screen.svelte';
-  import { semesterLabelMapper, studyProgramMapper } from '$lib/mapper';
   import Onboarding from '$lib/components/onboarding.svelte';
   import { GOOGLE_FORM_URL } from '$lib/constants';
+  import { semesterLabelMapper, studyProgramMapper } from '$lib/mapper';
   import { initCartSelectionController } from '$lib/stores/cart-selection.svelte';
   import { loginPopupState } from '$lib/stores/login-popup.svelte';
   import { searchState } from '$lib/stores/search.svelte';
@@ -27,12 +27,12 @@
   import toast, { Toaster } from 'svelte-french-toast';
 
   import { Modal } from '@cugetreg/ui/atoms/modal';
-  import { ReportProblem } from '@cugetreg/ui/molecules/report-problem';
   import {
     defineMessages,
     initLocale,
     useTranslations,
   } from '@cugetreg/ui/i18n';
+  import { ReportProblem } from '@cugetreg/ui/molecules/report-problem';
   import {
     CreateTimetable,
     type TimetableMetaData,

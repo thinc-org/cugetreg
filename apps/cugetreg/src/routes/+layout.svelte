@@ -160,8 +160,7 @@
 
   onMount(() => {
     try {
-      // showOnboarding = localStorage.getItem(ONBOARDING_SEEN_KEY) !== 'true';
-      showOnboarding = true;
+      showOnboarding = localStorage.getItem(ONBOARDING_SEEN_KEY) !== 'true';
     } catch {
       showOnboarding = true;
     }

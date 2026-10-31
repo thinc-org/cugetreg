@@ -218,6 +218,8 @@
       SU: 'S/U',
       TBA: 'TBA',
     }[course.courseInfo.gradingType],
+  );
+
   const courseNames = $derived.by(() => {
     const { courseNameTh, courseNameEn } = course.courseInfo;
     const [preferred, other] =

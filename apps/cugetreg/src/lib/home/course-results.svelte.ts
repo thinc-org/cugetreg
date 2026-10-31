@@ -23,7 +23,7 @@ export interface CourseQuery {
   genEdTypes: string[];
   faculties: string[];
   days: string[];
-  assessment?: string;
+  assessment?: string[];
   credit?: string;
   timeStart?: string;
   timeEnd?: string;
@@ -61,6 +61,7 @@ export class CourseResults {
       genEdTypes: [...query.genEdTypes],
       faculties: [...query.faculties],
       days: [...query.days],
+      assessment: [...(query.assessment ?? [])],
     };
     this.#offset = 0;
     this.courses = [];
@@ -148,12 +149,15 @@ export class CourseResults {
 
     if (query.search) params.set('q', query.search);
     if (query.noPrereq) params.set('noPrereq', 'true');
-    if (query.assessment) params.set('assessment', query.assessment);
     if (query.credit) params.set('credit', query.credit);
     if (query.timeStart) params.set('timeStart', query.timeStart);
     if (query.timeEnd) params.set('timeEnd', query.timeEnd);
     if (query.fitCartId) params.set('fitCartId', query.fitCartId);
     if (query.favorite) params.set('favorite', 'true');
+
+    for (const assessment of query.assessment ?? []) {
+      params.append('assessment', assessment);
+    }
 
     for (const genEd of query.genEdTypes) {
       params.append('genEdTypes', genEd);

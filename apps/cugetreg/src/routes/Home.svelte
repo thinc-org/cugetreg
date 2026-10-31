@@ -344,7 +344,7 @@
       genEdTypes: [...selectedGenEds],
       faculties: [...selectedFaculties],
       days: [...selectedDays],
-      assessment: selectedEval[0],
+      assessment: [...selectedEval],
       credit: credit || undefined,
       timeStart: startTime || undefined,
       timeEnd: endTime || undefined,

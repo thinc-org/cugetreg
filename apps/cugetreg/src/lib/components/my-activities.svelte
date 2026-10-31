@@ -14,6 +14,7 @@
 
   import { Button } from '@cugetreg/ui/atoms/button';
   import { IconButton } from '@cugetreg/ui/atoms/icon-button';
+  import { defineMessages, useTranslations } from '@cugetreg/ui/i18n';
   import { ColorPicker } from '@cugetreg/ui/molecules/colorpicker';
   import { cn } from '@cugetreg/utils';
   import { courseColorVariants } from '@cugetreg/utils/constants';
@@ -38,6 +39,25 @@
     collapsible = true,
     onSelect = () => {},
   }: MyActivitiesProp = $props();
+
+  const t = useTranslations(
+    defineMessages({
+      th: {
+        title: 'กิจกรรมของฉัน',
+        show: 'แสดงในตาราง',
+        hide: 'ซ่อนจากตาราง',
+        pickColor: 'เลือกสีในตาราง',
+        remove: 'ลบกิจกรรม',
+      },
+      en: {
+        title: 'My activities',
+        show: 'Show in timetable',
+        hide: 'Hide from timetable',
+        pickColor: 'Choose timetable color',
+        remove: 'Remove activity',
+      },
+    }),
+  );
 
   const isMobile = new MediaQuery('max-width: 767px', false);
   const modalGap = 8;
@@ -200,7 +220,7 @@
 {/snippet}
 
 {#snippet sectionTitle()}
-  <h2 class="text-on-surface text-lg/[20px] font-medium">กิจกรรมของฉัน</h2>
+  <h2 class="text-on-surface text-lg/[20px] font-medium">{t('title')}</h2>
 {/snippet}
 
 {#snippet activityItem(activity: ActivityItem)}
@@ -211,7 +231,7 @@
     <div class="flex items-center justify-center">
       <IconButton
         class="bg-transparent hover:cursor-pointer"
-        aria-label={activity.hidden ? 'แสดงในตาราง' : 'ซ่อนจากตาราง'}
+        aria-label={activity.hidden ? t('show') : t('hide')}
         onclick={() => {
           updateActivity(activity.id, { hidden: !activity.hidden });
         }}
@@ -240,14 +260,14 @@
             (activity.color as ColorVariant | null) ?? 'primary'
           ],
         )}
-        aria-label="เลือกสีในตาราง"
+        aria-label={t('pickColor')}
         onclick={(e: MouseEvent) => handleColorPickerClick(e, activity)}
       />
       <div class="flex">
         <SortableList.ItemRemove onclick={handleRemoveClick}>
           <IconButton
             class="size-7 bg-transparent hover:cursor-pointer"
-            aria-label="ลบกิจกรรม"
+            aria-label={t('remove')}
           >
             <Trash2 class="mx-1" />
           </IconButton>

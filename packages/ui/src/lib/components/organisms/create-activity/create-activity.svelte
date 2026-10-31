@@ -1,13 +1,15 @@
 <script lang="ts">
+	import { defineMessages, useLocale, useTranslations } from '$lib/i18n';
+
 	import { cn } from '@cugetreg/utils';
 	import { courseColorVariants } from '@cugetreg/utils/constants';
 	import type { ColorVariant, Day } from '@cugetreg/utils/types';
 
 	import {
 		ACTIVITY_COLOR_OPTIONS,
-		ACTIVITY_DAY_OPTIONS,
 		ACTIVITY_TITLE_MAX_LENGTH,
 		type ActivityFormData,
+		getActivityDayOptions,
 		validateActivityTime
 	} from '.';
 
@@ -34,6 +36,50 @@
 		submitting = false
 	}: CreateActivityProp = $props();
 
+	const locale = useLocale();
+	const t = useTranslations(
+		defineMessages({
+			th: {
+				heading: 'เพิ่มกิจกรรม',
+				title: 'ชื่อกิจกรรม',
+				titlePlaceholder: 'ระบุชื่อกิจกรรม',
+				charCount: 'จำนวนตัวอักษร {count}/{max}',
+				days: 'วันในสัปดาห์ (เลือกได้หลายวัน)',
+				selectDays: 'เลือกวันในสัปดาห์',
+				startTime: 'เวลาเริ่ม',
+				endTime: 'เวลาจบ',
+				description: 'รายละเอียดกิจกรรม',
+				descriptionPlaceholder: 'ระบุรายละเอียดกิจกรรม',
+				color: 'เลือกสีในตาราง',
+				colorOption: 'สี {color}',
+				titleError: 'กรุณาระบุชื่อกิจกรรม',
+				dayError: 'กรุณาเลือกวันอย่างน้อย 1 วัน',
+				cancel: 'ยกเลิก',
+				create: 'สร้าง'
+			},
+			en: {
+				heading: 'Add activity',
+				title: 'Activity name',
+				titlePlaceholder: 'Enter activity name',
+				charCount: 'Characters {count}/{max}',
+				days: 'Days of week (select multiple)',
+				selectDays: 'Select days of week',
+				startTime: 'Start time',
+				endTime: 'End time',
+				description: 'Activity details',
+				descriptionPlaceholder: 'Enter activity details',
+				color: 'Timetable color',
+				colorOption: 'Color {color}',
+				titleError: 'Please enter an activity name',
+				dayError: 'Please select at least 1 day',
+				cancel: 'Cancel',
+				create: 'Create'
+			}
+		})
+	);
+
+	const dayOptions = $derived(getActivityDayOptions(locale.current));
+
 	let title = $state('');
 	let description = $state('');
 	let daysOfWeek = $state<Day[]>([]);
@@ -42,9 +88,9 @@
 	let color = $state<ColorVariant>('pink');
 	let submitted = $state(false);
 
-	const titleError = $derived(title.trim() ? null : 'กรุณาระบุชื่อกิจกรรม');
-	const dayError = $derived(daysOfWeek.length > 0 ? null : 'กรุณาเลือกวันอย่างน้อย 1 วัน');
-	const timeError = $derived(validateActivityTime(periodStart, periodEnd));
+	const titleError = $derived(title.trim() ? null : t('titleError'));
+	const dayError = $derived(daysOfWeek.length > 0 ? null : t('dayError'));
+	const timeError = $derived(validateActivityTime(periodStart, periodEnd, locale.current));
 	const isValid = $derived(!titleError && !dayError && !timeError);
 
 	function handleConfirm() {
@@ -55,7 +101,7 @@
 			title: title.trim(),
 			description: description.trim(),
 			// Keep Monday→Sunday order regardless of click order
-			daysOfWeek: ACTIVITY_DAY_OPTIONS.map((d) => d.value).filter((d) => daysOfWeek.includes(d)),
+			daysOfWeek: dayOptions.map((d) => d.value).filter((d) => daysOfWeek.includes(d)),
 			periodStart,
 			periodEnd,
 			color
@@ -67,48 +113,49 @@
 	class="bg-surface flex max-h-[calc(100dvh-7rem)] w-[90vw] flex-col gap-5 overflow-y-auto rounded-xl border border-[#d6d7e1] p-6 sm:w-104 sm:p-10"
 >
 	<h1 class="text-h2 leading-h2 text-center font-medium tracking-[0.15px] text-[#353745]">
-		เพิ่มกิจกรรม
+		{t('heading')}
 	</h1>
 
 	<div class="space-y-1">
 		<label for="activity-title" class="text-caption leading-caption text-[#898EA7]"
-			>ชื่อกิจกรรม</label
+			>{t('title')}</label
 		>
 		<Input
 			id="activity-title"
 			bind:value={title}
 			state={submitted && titleError ? 'error' : 'default'}
-			placeholder="ระบุชื่อกิจกรรม"
+			placeholder={t('titlePlaceholder')}
 			maxlength={ACTIVITY_TITLE_MAX_LENGTH}
 		/>
 		<p class="text-caption leading-caption text-[#898EA7]">
-			จำนวนตัวอักษร {title.length}/{ACTIVITY_TITLE_MAX_LENGTH}
+			{t('charCount', { count: title.length, max: ACTIVITY_TITLE_MAX_LENGTH })}
 		</p>
 	</div>
 
 	<div class="space-y-1">
-		<p class="text-caption leading-caption text-[#898EA7]">วันในสัปดาห์ (เลือกได้หลายวัน)</p>
+		<p class="text-caption leading-caption text-[#898EA7]">{t('days')}</p>
 		<Select type="multiple" bind:value={daysOfWeek}>
 			<SelectTrigger
 				class={cn(
 					'bg-surface-container-lowest w-full border-none px-4',
 					submitted && dayError && 'ring-error ring-[1.5px]'
 				)}
-				aria-label="เลือกวันในสัปดาห์"
+				aria-label={t('selectDays')}
 			>
 				{#if daysOfWeek.length > 0}
 					<span class="truncate">
-						{ACTIVITY_DAY_OPTIONS.filter((d) => daysOfWeek.includes(d.value))
+						{dayOptions
+							.filter((d) => daysOfWeek.includes(d.value))
 							.map((d) => d.label)
 							.join(', ')}
 					</span>
 				{:else}
-					<span class="text-neutral-400">เลือกวันในสัปดาห์</span>
+					<span class="text-neutral-400">{t('selectDays')}</span>
 				{/if}
 			</SelectTrigger>
 			<SelectContent class="z-100">
 				<SelectGroup>
-					{#each ACTIVITY_DAY_OPTIONS as option (option.value)}
+					{#each dayOptions as option (option.value)}
 						<SelectItem value={option.value} label={option.label} aria-label={option.label} check />
 					{/each}
 				</SelectGroup>
@@ -119,7 +166,7 @@
 	<div class="flex gap-3">
 		<div class="flex-1 space-y-1">
 			<label for="activity-start" class="text-caption leading-caption text-[#898EA7]"
-				>เวลาเริ่ม</label
+				>{t('startTime')}</label
 			>
 			<Input
 				id="activity-start"
@@ -130,7 +177,9 @@
 			/>
 		</div>
 		<div class="flex-1 space-y-1">
-			<label for="activity-end" class="text-caption leading-caption text-[#898EA7]">เวลาจบ</label>
+			<label for="activity-end" class="text-caption leading-caption text-[#898EA7]"
+				>{t('endTime')}</label
+			>
 			<Input
 				id="activity-end"
 				type="time"
@@ -143,25 +192,25 @@
 
 	<div class="space-y-1">
 		<label for="activity-description" class="text-caption leading-caption text-[#898EA7]"
-			>รายละเอียดกิจกรรม</label
+			>{t('description')}</label
 		>
 		<textarea
 			id="activity-description"
 			bind:value={description}
-			placeholder="ระบุรายละเอียดกิจกรรม"
+			placeholder={t('descriptionPlaceholder')}
 			rows="4"
 			class={cn(inputVariants({ state: 'default' }), 'h-auto resize-none py-3')}
 		></textarea>
 	</div>
 
 	<div class="space-y-3">
-		<p class="text-caption leading-caption text-[#898EA7]">เลือกสีในตาราง</p>
+		<p class="text-caption leading-caption text-[#898EA7]">{t('color')}</p>
 		<div class="mx-auto grid w-fit grid-cols-5 gap-3">
 			{#each ACTIVITY_COLOR_OPTIONS as option (option)}
 				<Button
 					variant="solid"
 					color="primary"
-					aria-label={`สี ${option}`}
+					aria-label={t('colorOption', { color: option })}
 					class={cn(
 						'size-8 border hover:ring-0',
 						courseColorVariants[option],
@@ -180,7 +229,7 @@
 
 	<div class="flex w-full gap-6">
 		<Button variant="solid" color="neutral" class="w-full" onclick={() => onCancel()}>
-			ยกเลิก
+			{t('cancel')}
 		</Button>
 		<Button
 			variant="solid"
@@ -189,7 +238,7 @@
 			disabled={submitting}
 			onclick={handleConfirm}
 		>
-			สร้าง
+			{t('create')}
 		</Button>
 	</div>
 </div>

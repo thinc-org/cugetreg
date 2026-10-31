@@ -24,6 +24,7 @@
   import { CustomizeScrollbar } from '@cugetreg/ui/atoms/customize-scrollbar';
   import { TimeTable as Timetable } from '@cugetreg/ui/atoms/timetable';
   import { YearSemesterChip } from '@cugetreg/ui/atoms/yearsemester-chip';
+  import { defineMessages, useTranslations } from '@cugetreg/ui/i18n';
   import { Footer } from '@cugetreg/ui/organisms/footer';
 
   import type { PageProps } from './$types';
@@ -36,6 +37,27 @@
   const exams = $derived(data.data.cartData.schedule.exams);
 
   // ================ HOOKS ================
+
+  const t = useTranslations(
+    defineMessages({
+      th: {
+        importFailed: 'เกิดข้อผิดพลาดในการเพิ่มตารางเรียน',
+        by: 'โดย {owner}',
+        saveImage: 'บันทึกภาพ',
+        addToEdit: 'เพิ่มเข้าตารางของคุณเพื่อแก้ไข',
+        totalCredits: 'หน่วยกิตรวม {total} / {max}',
+        addToMySchedule: 'เพิ่มเข้าตารางของฉัน',
+      },
+      en: {
+        importFailed: 'Something went wrong importing timetable.',
+        by: 'by {owner}',
+        saveImage: 'Save image',
+        addToEdit: 'Add it to your schedules to edit',
+        totalCredits: 'Total credits {total} / {max}',
+        addToMySchedule: 'Add to my schedules',
+      },
+    }),
+  );
 
   const session = useSession();
   const { importCart } = useCartActions();
@@ -71,7 +93,7 @@
     } catch (error) {
       console.error(error);
       if (isAxiosError(error)) {
-        toast.error('Something went wrong importing timetable.', {
+        toast.error(t('importFailed'), {
           position: 'bottom-right',
         });
       }
@@ -102,7 +124,9 @@
             </div>
 
             <div class="flex items-end gap-4">
-              <span class="text-button2 shrink-0">โดย {owner}</span>
+              <span class="text-button2 shrink-0"
+                >{t('by', { owner: owner ?? '' })}</span
+              >
 
               <YearSemesterChip
                 studyProgram={cart.studyProgram}
@@ -120,7 +144,7 @@
               onclick={handleTimetableScreenshot}
             >
               <Download size={20} strokeWidth={2.5} class="text-[#353745]" />
-              <span class="font-medium text-[#353745]">บันทึกภาพ</span>
+              <span class="font-medium text-[#353745]">{t('saveImage')}</span>
             </Button>
           </div>
 
@@ -132,7 +156,7 @@
               onclick={handleTimetableScreenshot}
             >
               <Download />
-              บันทึกภาพ
+              {t('saveImage')}
             </Button>
           </div>
         </div>
@@ -157,10 +181,10 @@
         <div class="flex flex-wrap items-center justify-between gap-2">
           <div class="flex items-center gap-2">
             <Info class="stroke-error" size={16} />
-            <span class="text-error">เพิ่มเข้าตารางของคุณเพื่อแก้ไข</span>
+            <span class="text-error">{t('addToEdit')}</span>
           </div>
           <div class="hidden items-center lg:mx-5 lg:flex lg:justify-end">
-            หน่วยกิตรวม {totalCredit} / {maxCredit}
+            {t('totalCredits', { total: totalCredit, max: maxCredit })}
           </div>
         </div>
         <ExamsList {cart} {exams} />
@@ -176,7 +200,7 @@
   >
     <Button
       class="bg-primary w-[calc(100vw-2rem)] max-w-100 text-white shadow-lg"
-      onclick={handleImportTimetable}>เพิ่มเข้าตารางของฉัน</Button
+      onclick={handleImportTimetable}>{t('addToMySchedule')}</Button
     >
   </div>
 {/if}

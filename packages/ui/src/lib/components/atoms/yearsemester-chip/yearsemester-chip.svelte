@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { semesterMessages, studyProgramMessages, useTranslations } from '$lib/i18n';
+
 	import { cn } from '@cugetreg/utils';
 
 	import { chipVariants } from './index.js';
@@ -27,21 +29,12 @@
 		...rest
 	}: Props = $props();
 
-	const studyProgramLabel = {
-		S: 'ทวิภาค',
-		I: 'นานาชาติ',
-		T: 'ตรีภาค'
-	};
-
-	const semesterLabel = {
-		FIRST: 'ภาคต้น',
-		SECOND: 'ภาคปลาย',
-		SUMMER: 'ภาคฤดูร้อน'
-	};
+	const tStudyProgram = useTranslations(studyProgramMessages);
+	const tSemester = useTranslations(semesterMessages);
 </script>
 
 <Chip class={cn(chipVariants({ className }))} {closable} {onClose} {...rest}>
 	{#if year && semester}
-		{studyProgram ? studyProgramLabel[studyProgram] + ' ' : ''}{year} / {semesterLabel[semester]}
+		{studyProgram ? tStudyProgram(studyProgram) + ' ' : ''}{year} / {tSemester(semester)}
 	{/if}
 </Chip>

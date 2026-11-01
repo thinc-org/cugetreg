@@ -6,7 +6,8 @@ import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
 import HighlightOffIcon from '@mui/icons-material/HighlightOff'
 import StarIcon from '@mui/icons-material/Star'
 import { Button, IconButton, Stack, TextField, Typography } from '@mui/material'
-import DOMPurify from 'isomorphic-dompurify'
+
+import { sanitizeReviewHtml } from '@admin-web/common/sanitizeReviewHtml'
 
 import {
   Exact,
@@ -106,7 +107,7 @@ export default function SinglePendingReview({ data, refetchReviews }: SinglePend
 
         <Stack sx={{ wordBreak: 'break-word' }}>
           <Typography
-            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(data.content ?? '') }}
+            dangerouslySetInnerHTML={{ __html: sanitizeReviewHtml(data.content ?? '') }}
           ></Typography>
         </Stack>
       </Stack>

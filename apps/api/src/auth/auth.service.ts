@@ -59,12 +59,12 @@ export class AuthService {
 
   async revokeRefreshTokenToken(token: string) {
     this.logger.log('Revoked refresh token', { token })
-    await this.refreshTokenModel.findOneAndDelete({ refreshToken: token })
+    await this.refreshTokenModel.findOneAndDelete({ refreshToken: { $eq: token } })
   }
 
   async issueAccessToken(refreshtoken: string): Promise<string> {
     const doc = await this.refreshTokenModel.findOne({
-      refreshToken: refreshtoken,
+      refreshToken: { $eq: refreshtoken },
     })
     if (!doc) {
       this.logger.warn('Invalid refresh token', { refreshtoken })

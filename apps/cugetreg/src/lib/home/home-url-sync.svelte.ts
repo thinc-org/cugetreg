@@ -1,8 +1,10 @@
 import { browser } from '$app/environment';
-import { afterNavigate, replaceState } from '$app/navigation';
+import { afterNavigate, goto } from '$app/navigation';
 import { resolve } from '$app/paths';
 import { page } from '$app/state';
 import { homeStore } from '$lib/homeStore.svelte';
+
+import { untrack } from 'svelte';
 
 import { buildHomeUrl, type HomeUrlState, parseHomeUrl } from './home-url';
 
@@ -12,12 +14,14 @@ interface HomeUrlSyncOptions {
 }
 
 export function createHomeUrlSync({ read, apply }: HomeUrlSyncOptions) {
-  let applyingUrl = false;
+  let syncedUrl: string | undefined;
 
   const applyCurrentUrl = () => {
-    applyingUrl = true;
-    apply(parseHomeUrl(page.url));
-    applyingUrl = false;
+    const currentUrl = `${page.url.pathname}${page.url.search}`;
+    if (currentUrl !== syncedUrl) {
+      syncedUrl = currentUrl;
+      apply(parseHomeUrl(page.url));
+    }
     if (browser) homeStore.currentUrl = page.url.toString();
   };
 
@@ -27,7 +31,7 @@ export function createHomeUrlSync({ read, apply }: HomeUrlSyncOptions) {
   $effect(() => {
     const state = read();
     const currentUrl = page.url;
-    if (applyingUrl) return;
+    if (`${currentUrl.pathname}${currentUrl.search}` !== syncedUrl) return;
 
     const nextUrl = buildHomeUrl(currentUrl, state);
     const pathname = resolve('/[program]/courses', {
@@ -36,9 +40,14 @@ export function createHomeUrlSync({ read, apply }: HomeUrlSyncOptions) {
     nextUrl.pathname = pathname;
     const targetUrl = `${pathname}${nextUrl.search}`;
     if (`${currentUrl.pathname}${currentUrl.search}` !== targetUrl) {
-      // targetUrl already contains the base-aware pathname returned by resolve.
-      // eslint-disable-next-line svelte/no-navigation-without-resolve
-      replaceState(targetUrl, page.state);
+      syncedUrl = targetUrl;
+      untrack(() => {
+        goto(targetUrl, {
+          replaceState: true,
+          keepFocus: true,
+          noScroll: true,
+        });
+      });
     }
     homeStore.currentUrl = targetUrl;
   });

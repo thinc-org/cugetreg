@@ -146,7 +146,7 @@
 			</div>
 			<button class="shrink-0 hover:cursor-pointer" onclick={onShowOnboarding}>
 				<CircleQuestionMark class="stroke-neutral-400 hover:stroke-neutral-500" />
-			</button>\
+			</button>
 		</div>
 	</div>
 	<div class="hidden flex-1 flex-row items-center justify-center gap-3 min-[900px]:flex lg:gap-4">

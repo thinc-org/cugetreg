@@ -83,7 +83,9 @@ export class AuthController {
     )
     this.setCookie(res, 'refreshtoken', refreshToken)
     return {
-      url: state.returnUrl,
+      // Redirect to the normalized URL that validateOauthState checked: Express encodes a raw
+      // `\` to `%5C`, turning `https://host\@evil.com` into a redirect to evil.com.
+      url: new URL(state.returnUrl).href,
     }
   }
 

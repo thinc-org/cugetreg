@@ -21,4 +21,17 @@ describe('sanitizeReviewHtml', () => {
       '<p>x</p>'
     )
   })
+
+  it('rejects a long whitespace-padded style without catastrophic backtracking', () => {
+    const html = `<p style="margin-left:1px${' '.repeat(100_000)}x">a</p>`
+    const start = performance.now()
+    expect(sanitizeReviewHtml(html)).toBe('<p>a</p>')
+    expect(performance.now() - start).toBeLessThan(1000)
+  })
+
+  it('keeps margin-left with trailing whitespace after the semicolon', () => {
+    expect(sanitizeReviewHtml('<p style="margin-left: 1.5em ;  ">x</p>')).toBe(
+      '<p style="margin-left: 1.5em ;">x</p>'
+    )
+  })
 })

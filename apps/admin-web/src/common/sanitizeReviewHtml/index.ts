@@ -24,10 +24,15 @@ const ALLOWED_TAGS = [
 ]
 const ALLOWED_ATTR = ['class', 'style']
 // The indent plugin's margin-left is the only inline style the editor produces.
-const ALLOWED_STYLE = /^\s*margin-left\s*:\s*\d+(\.\d+)?(px|em|rem)\s*;?\s*$/i
+// No two quantifiers may match the same characters: `\s*;?\s*` backtracked quadratically (ReDoS).
+const ALLOWED_STYLE = /^\s*margin-left\s*:\s*\d+(?:\.\d+)?(?:px|em|rem)\s*(?:;\s*)?$/i
+const MAX_STYLE_LENGTH = 64
 
 const filterStyle: Parameters<typeof DOMPurify.addHook>[1] = (_node, data) => {
-  if (data.attrName === 'style' && !ALLOWED_STYLE.test(data.attrValue)) {
+  if (
+    data.attrName === 'style' &&
+    (data.attrValue.length > MAX_STYLE_LENGTH || !ALLOWED_STYLE.test(data.attrValue))
+  ) {
     data.keepAttr = false
   }
 }

@@ -1,5 +1,13 @@
 # api
 
+## 1.13.2-beta.0
+
+### Patch Changes
+
+- 627427c: fix: OpenAI moderation no longer auto-approves reviews; unflagged reviews go to manual review since it misses inappropriate Thai content
+- 20e3532: fix: prevent open redirect via backslash in OAuth returnUrl
+- bb91be3: fix: security hardening — reject non-string refresh-token cookies (NoSQL operator injection), fail-closed constant-time admin token check, prototype-safe review rating aggregation in the scraper, and an editor-only allowlist for review HTML
+
 ## 1.13.1
 
 ### Patch Changes

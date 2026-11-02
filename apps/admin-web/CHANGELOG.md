@@ -1,5 +1,11 @@
 # admin-web
 
+## 1.4.3-beta.1
+
+### Patch Changes
+
+- ce20dfe: fix: review HTML sanitizer's margin-left style check no longer backtracks quadratically on long whitespace (ReDoS), and style values over 64 characters are dropped
+
 ## 1.4.3-beta.0
 
 ### Patch Changes

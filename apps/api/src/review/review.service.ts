@@ -100,13 +100,9 @@ export class ReviewService {
       throw new BadRequestError('User already created a review for this course.')
     }
 
+    // Moderation only auto-rejects: it misses Thai profanity, so unflagged reviews still need manual approval
     const moderationResult = await this.openaiService.moderateContent(content)
-    const reviewStatus =
-      moderationResult === 'NOT_FLAGGED'
-        ? 'APPROVED'
-        : moderationResult === 'FLAGGED'
-          ? 'REJECTED'
-          : 'PENDING'
+    const reviewStatus = moderationResult === 'FLAGGED' ? 'REJECTED' : 'PENDING'
 
     const newReview = new this.reviewModel({
       ownerId: new Types.ObjectId(userId),
@@ -190,12 +186,7 @@ export class ReviewService {
     }
 
     const moderationResult = await this.openaiService.moderateContent(reviewInput.content)
-    const reviewStatus =
-      moderationResult === 'NOT_FLAGGED'
-        ? 'APPROVED'
-        : moderationResult === 'FLAGGED'
-          ? 'REJECTED'
-          : 'PENDING'
+    const reviewStatus = moderationResult === 'FLAGGED' ? 'REJECTED' : 'PENDING'
 
     const newReview = await this.reviewModel.findByIdAndUpdate(
       reviewId,

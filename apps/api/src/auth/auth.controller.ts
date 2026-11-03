@@ -83,20 +83,22 @@ export class AuthController {
     )
     this.setCookie(res, 'refreshtoken', refreshToken)
     return {
-      url: state.returnUrl,
+      // Redirect to the normalized URL that validateOauthState checked: Express encodes a raw
+      // `\` to `%5C`, turning `https://host\@evil.com` into a redirect to evil.com.
+      url: new URL(state.returnUrl).href,
     }
   }
 
   @Post('/logout')
   async logout(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
-    const token = req.cookies['refreshtoken']
+    const token = getRefreshTokenCookie(req)
     if (token) await this.authService.revokeRefreshTokenToken(token)
     res.clearCookie('refreshtoken')
   }
 
   @Post('/refreshtoken')
   async getAccessToken(@Req() req: Request) {
-    const token = req.cookies['refreshtoken']
+    const token = getRefreshTokenCookie(req)
     if (!token) throw new BadRequestException('Not logged in')
     return {
       accessToken: await this.authService.issueAccessToken(token),
@@ -136,4 +138,11 @@ export class AuthController {
       throw new BadRequestException(`returnUrl must be the same origin as ${backendUrl}`)
     }
   }
+}
+
+// cookie-parser JSON-decodes `j:`-prefixed cookies, so the value may be an object such as
+// {"$gt": ""} that Mongo would run as a query operator.
+function getRefreshTokenCookie(req: Request): string | undefined {
+  const token: unknown = req.cookies['refreshtoken']
+  return typeof token === 'string' ? token : undefined
 }

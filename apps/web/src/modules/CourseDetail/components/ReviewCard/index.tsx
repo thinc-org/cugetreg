@@ -1,12 +1,12 @@
 import { MdDelete, MdEdit, MdOutlineStar } from 'react-icons/md'
 
 import { IconButton, Stack, useTheme } from '@mui/material'
-import DOMPurify from 'isomorphic-dompurify'
 
 import { GeneralChip } from '@web/common/components/Chips'
 import { OtherChipKey } from '@web/common/components/Chips/config'
 import { HighlightHTML } from '@web/common/components/HighlightHTML'
 import { getSemesterName } from '@web/common/utils/getSemesterName'
+import { sanitizeReviewHtml } from '@web/common/utils/sanitizeReviewHtml'
 import { scrollToReviewForm } from '@web/modules/CourseDetail/components/ReviewForm/functions'
 
 import { ReviewStatus } from '@cgr/codegen'
@@ -71,7 +71,7 @@ export const ReviewCard: React.FC<ReviewCardProps> = (data) => {
           <CardMaxRating>จาก 5</CardMaxRating>
         </Stack>
       </Stack>
-      <HighlightHTML dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(data.content ?? '') }} />
+      <HighlightHTML dangerouslySetInnerHTML={{ __html: sanitizeReviewHtml(data.content ?? '') }} />
       <Stack direction="row" justifyContent="space-between" alignItems="center">
         {/** Left side */}
         {data.status === ReviewStatus.Rejected ? (

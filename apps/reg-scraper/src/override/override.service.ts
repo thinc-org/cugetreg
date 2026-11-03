@@ -103,20 +103,23 @@ export class OverrideService {
 
   async loadRatings() {
     const reviewsList = await this.reviewModel.find().lean()
-    const reviewRatings: Record<StudyProgram, Record<string, number[]>> = {
-      S: {},
-      T: {},
-      I: {},
+    // Map, not a plain object: courseNo is user-supplied review text and names like
+    // "constructor" or "__proto__" would hit Object.prototype.
+    const reviewRatings: Record<StudyProgram, Map<string, number[]>> = {
+      S: new Map(),
+      T: new Map(),
+      I: new Map(),
     }
     for (const review of reviewsList) {
-      if (!(review.courseNo in reviewRatings[review.studyProgram])) {
-        reviewRatings[review.studyProgram][review.courseNo] = []
-      }
-      reviewRatings[review.studyProgram][review.courseNo].push(review.rating)
+      const programRatings = reviewRatings[review.studyProgram]
+      if (!programRatings) continue
+      const ratings = programRatings.get(review.courseNo) ?? []
+      ratings.push(review.rating)
+      programRatings.set(review.courseNo, ratings)
     }
     for (const studyProgram in reviewRatings) {
-      for (const courseNo in reviewRatings[studyProgram]) {
-        this.ratings[studyProgram][courseNo] = findAvgRating(reviewRatings[studyProgram][courseNo])
+      for (const [courseNo, ratings] of reviewRatings[studyProgram]) {
+        this.ratings[studyProgram][courseNo] = findAvgRating(ratings)
       }
     }
     this.logger.log(`Loaded review ratings from database`)

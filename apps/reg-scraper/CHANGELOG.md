@@ -1,5 +1,11 @@
 # reg-scraper
 
+## 1.8.2
+
+### Patch Changes
+
+- bb91be3: fix: security hardening — reject non-string refresh-token cookies (NoSQL operator injection), fail-closed constant-time admin token check, prototype-safe review rating aggregation in the scraper, and an editor-only allowlist for review HTML
+
 ## 1.8.2-beta.0
 
 ### Patch Changes

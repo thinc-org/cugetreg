@@ -1,12 +1,8 @@
 name: Add issue and pull request to Project
 
+# Disabled: only runs on manual dispatch. Restore the issues/pull_request triggers to re-enable.
 on:
-  issues:
-    types:
-      - opened
-  pull_request:
-    types:
-      - opened
+  workflow_dispatch:
 
 jobs:
   add-to-project:

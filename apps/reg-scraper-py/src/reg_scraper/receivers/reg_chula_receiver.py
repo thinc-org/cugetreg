@@ -4,6 +4,7 @@ import base64
 import gzip
 import json
 import logging
+import re
 import time
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -106,6 +107,30 @@ def detail_params(course_no: str, study_program: str) -> dict[str, str]:
 
 def is_error_page(html: str) -> bool:
     return "#660000" not in html or "Table3" not in html
+
+
+_DETAIL_TERM = re.compile(r"ปีการศึกษา\s*(\d{4})\s*/\s*([^\s<]+)")
+_DETAIL_COURSE = re.compile(
+    r'<font\b(?=[^>]*\bcolor="#660000")'
+    r'(?=[^>]*\bface="Tahoma,Verdana,Arial,Helvetica")[^>]*>\s*(\d+)\s*</font>',
+    re.IGNORECASE,
+)
+_DETAIL_PROGRAM = re.compile(
+    r'<font\b(?=[^>]*\bcolor="#660000")'
+    r'(?=[^>]*\bface="MS Sans Serif")[^>]*>\s*([^<]+)</font>',
+    re.IGNORECASE,
+)
+
+
+def _detail_header(html: str) -> tuple[str, str, str, str] | None:
+    # Read the scope printed by Reg Chula. RawCoursePage's scope comes from
+    # the requested target, so it cannot reveal a stale session on its own.
+    course = _DETAIL_COURSE.search(html)
+    term = _DETAIL_TERM.search(html)
+    program = _DETAIL_PROGRAM.search(html)
+    if course is None or term is None or program is None:
+        return None
+    return course[1], term[1], term[2], program[1].strip()
 
 
 def _pack_html(html: str) -> str:
@@ -275,7 +300,7 @@ class RegChulaCheckpoint:
 
 @dataclass
 class RegChulaReceiver(Receiver[list[RawCoursePage]]):
-    """Open the form page for cookies, run a list search, then fetch details."""
+    """Fetch course details in a session scoped to one year, semester and program."""
 
     study_program: StudyProgram
     academic_year: str
@@ -336,8 +361,24 @@ class RegChulaReceiver(Receiver[list[RawCoursePage]]):
         logger.info("Discovered %d unique courses", len(unique))
         return unique
 
+    def _request_course_detail(self, session: requests.Session, course_no: str) -> str:
+        response = session.get(
+            f"{self._base()}{COURSE_DETAIL_PATH}",
+            params=detail_params(course_no, self.study_program),
+            timeout=30,
+        )
+        response.raise_for_status()
+        response.encoding = "tis-620"
+        html = response.text
+        if is_error_page(html):
+            raise ValueError(
+                f"Reg Chula returned error page for {course_no} "
+                f"(semester {self.semester}, year {self.academic_year})"
+            )
+        return html
+
     def fetch_course_html(self, session: requests.Session, course_no: str) -> str:
-        base = self._base()
+        """Search for the course before fetching its detail page."""
         last_error: Exception | None = None
 
         if not self._search_course_list(session, course_no):
@@ -349,21 +390,7 @@ class RegChulaReceiver(Receiver[list[RawCoursePage]]):
 
         for attempt in range(settings.scraper_max_retries):
             try:
-                response = session.get(
-                    f"{base}{COURSE_DETAIL_PATH}",
-                    params=detail_params(course_no, self.study_program),
-                    timeout=30,
-                )
-                response.encoding = "tis-620"
-                html = response.text
-                if not html.strip():
-                    raise ValueError("empty response")
-                if is_error_page(html):
-                    raise ValueError(
-                        f"Reg Chula returned error page for {course_no} "
-                        f"(semester {self.semester}, year {self.academic_year})"
-                    )
-                return html
+                return self._request_course_detail(session, course_no)
             except Exception as exc:  # noqa: BLE001
                 last_error = exc
                 time.sleep(0.3 * (attempt + 1))
@@ -433,6 +460,7 @@ class RegChulaReceiver(Receiver[list[RawCoursePage]]):
         session = create_session()
         consecutive_failures = 0
         limit = settings.scraper_max_consecutive_failures
+        scope: tuple[str, str, str] | None = None
         try:
             self._init_session(session)
 
@@ -440,7 +468,25 @@ class RegChulaReceiver(Receiver[list[RawCoursePage]]):
                 index += 1
                 logger.info("[%d/%d] Fetching %s", index, total, course_no)
                 try:
-                    html = self.fetch_course_html(session, course_no)
+                    html = None
+                    if scope is not None:
+                        try:
+                            direct_html = self._request_course_detail(session, course_no)
+                            if _detail_header(direct_html) != (course_no, *scope):
+                                raise ValueError("detail page header did not match the course and session")
+                            html = direct_html
+                        except (requests.RequestException, ValueError) as exc:
+                            logger.info("Searching again for %s after direct fetch failed: %s", course_no, exc)
+
+                    if html is None:
+                        html = self.fetch_course_html(session, course_no)
+                        header = _detail_header(html)
+                        if header is not None:
+                            if header[:2] != (course_no, self.academic_year) or (
+                                scope is not None and header[1:] != scope
+                            ):
+                                raise RuntimeError(f"Unexpected detail page header for {course_no}: {header}")
+                            scope = header[1:]
                 except RuntimeError as exc:
                     logger.error("%s", exc)
                     consecutive_failures += 1

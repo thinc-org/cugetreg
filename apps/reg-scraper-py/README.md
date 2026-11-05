@@ -96,8 +96,10 @@ flowchart TB
 2. **Discovery** (unless `SCRAPER_COURSE_NOS` is set) — for each of **28 faculty codes**, call `CourseListNewServlet` and collect course numbers from detail links.
 3. **Limit** — if `SCRAPER_MAX_COURSES > 0`, keep only the first N course numbers.
 4. **Per course:**
-   - List search for that course (required — Reg Chula needs this before detail).
-   - Fetch detail page (`courseNo` + `studyProgram` only).
+   - Search for the first course to set the session's year, semester, and program.
+   - Open later detail pages directly (`courseNo` + `studyProgram` only). Check
+     the displayed course and scope. If the request fails or the page does not
+     match, search for that course and retry using the original method.
    - Append the page to the checkpoint (see [Resuming an interrupted scrape](#resuming-an-interrupted-scrape)).
 5. **Parse** — read the checkpoint back and turn each page into a `Course`
    (`#Table3` → sections/classes/capacity, `#Table4` → exam dates).

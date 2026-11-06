@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 from datetime import UTC, datetime, timedelta
 
 import psycopg
@@ -29,6 +30,20 @@ def grading_type(credit_hours: str) -> str:
 def _clock(value: str) -> timedelta:
     hour, minute = (int(part) for part in value.split(":"))
     return timedelta(hours=hour, minutes=minute)
+
+
+_CLASS_CLOCK = re.compile(r"(?:[01][0-9]|2[0-3]):[0-5][0-9]")
+_CLASS_TIME_TYPOS = {"80:00": "08:00", "90:00": "09:00"}
+
+
+def normalize_class_period(start: str, end: str) -> tuple[str, str]:
+    """Apply the same class time corrections as the historical data importer."""
+    start = _CLASS_TIME_TYPOS.get(start, start)
+    end = _CLASS_TIME_TYPOS.get(end, end)
+    # PostgreSQL's class range index requires an ordered pair of clock times.
+    if _CLASS_CLOCK.fullmatch(start) and _CLASS_CLOCK.fullmatch(end) and start > end:
+        return end, start
+    return start, end
 
 
 def parse_exam_period(period: dict | None) -> tuple[datetime | None, datetime | None]:
@@ -201,6 +216,7 @@ class PostgresExporter(Exporter[list[Course]]):
             for cls in section.classes:
                 if cls.dayOfWeek is None:
                     continue
+                start, end = normalize_class_period(cls.period.start, cls.period.end)
                 cur.execute(
                     """
                     INSERT INTO course_class (
@@ -213,8 +229,8 @@ class PostgresExporter(Exporter[list[Course]]):
                         section_id,
                         cls.type,
                         map_day_of_week(cls.dayOfWeek),
-                        cls.period.start,
-                        cls.period.end,
+                        start,
+                        end,
                         cls.building,
                         cls.room,
                         cls.teachers or [],

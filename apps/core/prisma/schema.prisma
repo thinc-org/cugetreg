@@ -293,7 +293,7 @@ model StudyPlanItem {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  @@unique([planId, courseNo])
+  @@unique([planId, yearOfStudy, semester, courseNo])
   @@map("study_plan_item")
 }
 

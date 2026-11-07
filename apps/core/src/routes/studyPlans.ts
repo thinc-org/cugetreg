@@ -288,8 +288,11 @@ const studyPlans = new OpenAPIHono<{ Variables: Variables }>()
       return c.json({ data }, 200);
     } catch (err) {
       if (err instanceof Error) {
-        if (err.message === "ITEM_NOT_FOUND") {
-          return c.json({ error: "ITEM_NOT_FOUND" }, 404);
+        if (
+          err.message === "PLAN_NOT_FOUND" ||
+          err.message === "ITEM_NOT_FOUND"
+        ) {
+          return c.json({ error: err.message }, 404);
         }
         if (err.message === "NOT_PLAN_OWNER") {
           return c.json({ error: "NOT_PLAN_OWNER" }, 403);

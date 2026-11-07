@@ -544,39 +544,54 @@ export const studyPlansService = {
     };
   },
 
-  // Called every ~10s from the grade page while the student is editing — upserts whichever
-  // rows changed since the last call in one round trip.
+  // Called every ~10s from the grade page while the student is editing — updates whichever
+  // rows changed since the last call in one round trip, all or nothing. If any id is not in
+  // this plan (e.g. the course was removed in another tab) it throws ITEM_NOT_FOUND and
+  // saves nothing. A repeated id: last one wins.
   updateGrades: async (
     userId: string,
     planId: string,
     data: UpdateGradesBodySchema,
   ) => {
+    // Keep this dedupe: UPDATE ... FROM with two rows for the same id applies an
+    // unpredictable one of them. The Map keeps the last row sent for each id.
+    const byId = new Map(data.items.map((i) => [i.itemId, i]));
+    const rows = [...byId.values()];
+
     return prisma
       .$transaction(async (tx) => {
         await assertPlanOwner(tx, userId, planId);
 
-        const itemIds = data.items.map((i) => i.itemId);
-        const existing = await tx.studyPlanItem.findMany({
-          where: { id: { in: itemIds }, planId },
-          select: { id: true },
-        });
-        if (existing.length !== itemIds.length) {
-          throw new Error("ITEM_NOT_FOUND");
-        }
+        // One UPDATE for the whole batch. Keep it a tagged template ($executeRaw`...`):
+        // every ${} is sent as a bound parameter. Never switch to $executeRawUnsafe or
+        // string concatenation, that opens SQL injection. updated_at is set by hand
+        // because @updatedAt only works through the Prisma client, not raw SQL.
+        // plan_id in the WHERE: an unknown id updates nothing instead of throwing, and an
+        // item of another plan can never be touched.
+        await tx.$executeRaw`
+          UPDATE study_plan_item AS s
+          SET is_graded = v.is_graded,
+              expected_grade = v.expected_grade,
+              updated_at = now()
+          FROM unnest(
+            ${rows.map((i) => i.itemId)}::text[],
+            ${rows.map((i) => i.isGraded)}::boolean[],
+            ${rows.map((i) => i.expectedGrade)}::numeric[]
+          ) AS v(id, is_graded, expected_grade)
+          WHERE s.id = v.id AND s.plan_id = ${planId}`;
 
-        await Promise.all(
-          data.items.map((i) =>
-            tx.studyPlanItem.update({
-              where: { id: i.itemId },
-              data: { isGraded: i.isGraded, expectedGrade: i.expectedGrade },
-            }),
-          ),
-        );
-
-        return tx.studyPlanItem.findMany({
-          where: { id: { in: itemIds } },
+        const items = await tx.studyPlanItem.findMany({
+          where: { id: { in: [...byId.keys()] }, planId },
           include: { courseInfo: true },
         });
+
+        // Compare with byId.size (deduped), not data.items.length: a repeated id is one row,
+        // so it must not look like a missing item. Throwing here rolls the UPDATE back too,
+        // so a batch with any unknown id saves nothing.
+        if (items.length !== byId.size) {
+          throw new Error("ITEM_NOT_FOUND");
+        }
+        return items;
       })
       .then((items) => items.map(toPlanItemResponse));
   },

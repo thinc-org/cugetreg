@@ -301,7 +301,7 @@ export const updateGradesRoute = createRoute({
       description: "Updated",
     },
     403: errorRes("NOT_PLAN_OWNER"),
-    404: errorRes("ITEM_NOT_FOUND"),
+    404: errorRes("PLAN_NOT_FOUND / ITEM_NOT_FOUND"),
     500: InternalError,
   },
   security: [{ Bearer: [] }],

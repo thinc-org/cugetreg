@@ -74,12 +74,18 @@ class Settings(BaseSettings):
     scraper_gened_mode: SideInputMode = "auto"
 
     scraper_checkpoint_dir: str = "data/checkpoints"
-    scraper_regchula_checkpoint_ttl_hours: int = 12
+    # Half the 12 h gap between the noon/midnight runs of the add-drop period, so
+    # a checkpoint can never outlive the run that wrote it.
+    scraper_regchula_checkpoint_ttl_hours: int = 6
     scraper_max_consecutive_failures: int = 20
 
     cucis_base_url: str = "http://cucis.academic.chula.ac.th/search/"
     cucis_total_pages: int = 1490
     cucis_delay_ms: int = 300
+
+    scraper_descriptions_gapfill: bool = True
+    scraper_descriptions_gapfill_max: int = 200
+    scraper_descriptions_gapfill_retry_days: int = 7
 
     gened_base_url: str = "https://gened.chula.ac.th/api"
     gened_delay_ms: int = 200

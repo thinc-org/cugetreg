@@ -1,7 +1,8 @@
 # Reusable: build the api + web images, push to GHCR, then write the new tag
 # back into the gitops repo (which ArgoCD then syncs).
 #
-# Called by build-beta.yaml (env=beta, commit) and release-prod.yaml (env=prod, PR).
+# Called by build.yaml (env=beta) and release-prod.yaml (env=prod) — both
+# write back to gitops with a direct commit, no PR.
 #
 # Naming map (app dir → image → gitops component):
 #   apps/cugetreg      → ghcr.io/narumedsr-p/web         → gitops "web"         (match-name my-registry/web)
@@ -23,10 +24,6 @@ on:
       tag:
         description: image tag to build & deploy (e.g. beta-<sha> or v2.0.1)
         required: true
-        type: string
-      update-mode:
-        description: how to write back to gitops (commit | pr)
-        default: commit
         type: string
       component:
         description: single component to build (web|api|reg-scraper) — empty builds all (beta)
@@ -233,15 +230,10 @@ jobs:
               echo "::error::$dir not found — skipping $comp"
               continue
             fi
-            # Only meaningful for single-component (prod/PR) releases, to show
-            # old → new in the PR title. Beta bumps both components and never
-            # opens a PR, so being overwritten each loop iteration is harmless.
-            old_tag=$(grep 'newTag:' "$dir/kustomization.yaml" | awk '{print $2}')
-            echo "old_tag=${old_tag}" >> "$GITHUB_OUTPUT"
             (cd "$dir" && kustomize edit set image "my-registry/$comp=$ref")
             echo "bumped $comp → $ref"
           done
-      - name: Write back (commit or PR)
+      - name: Write back (commit)
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           GITOPS_REF: ${{ steps.gitops-ref.outputs.ref }}
@@ -255,29 +247,16 @@ jobs:
           COMPONENT_LABEL="${{ inputs.component }}"
           [ -z "$COMPONENT_LABEL" ] && COMPONENT_LABEL="web-api"
           MSG="deploy(${{ inputs.env }}): $COMPONENT_LABEL → ${{ inputs.tag }}"
-          if [ "${{ inputs.update-mode }}" = "pr" ]; then
-            BR="deploy/${{ inputs.env }}-$COMPONENT_LABEL-${{ inputs.tag }}"
-            git switch -c "$BR"
-            git commit -am "$MSG"
-            git push origin "$BR"
-            OLD_TAG="${{ steps.bump.outputs.old_tag }}"
-            PR_BODY=$(printf 'Update GitOps\nDate %s\n\nThis PR is automatically generated\n\nUpdated Packages\n%s: %s\n' \
-              "$(date +%d/%m/%Y)" "$COMPONENT_LABEL" "${{ inputs.tag }}")
-            gh pr create --base "${GITOPS_REF}" --head "$BR" \
-              --title "gitops: update $COMPONENT_LABEL $OLD_TAG → ${{ inputs.tag }}" \
-              --body "$PR_BODY"
-          else
-            git commit -am "$MSG"
-            # gitops beta branch is dedicated to this trigger, but rapid
-            # concurrent runs could still race each other. Rebase-retry on
-            # non-fast-forward rejection instead of failing the deploy.
-            for attempt in 1 2 3 4 5; do
-              if git push origin "HEAD:${GITOPS_REF}"; then
-                echo "pushed on attempt $attempt"; exit 0
-              fi
-              echo "push rejected (attempt $attempt/5) — rebasing onto origin/${GITOPS_REF}"
-              git fetch origin "${GITOPS_REF}"
-              git rebase "origin/${GITOPS_REF}"
-            done
-            echo "::error::failed to push image bump after 5 attempts"; exit 1
-          fi
+          git commit -am "$MSG"
+          # gitops beta/main is shared across releases, so concurrent runs can
+          # race. Rebase-retry on non-fast-forward rejection instead of failing
+          # the deploy.
+          for attempt in 1 2 3 4 5; do
+            if git push origin "HEAD:${GITOPS_REF}"; then
+              echo "pushed on attempt $attempt"; exit 0
+            fi
+            echo "push rejected (attempt $attempt/5) — rebasing onto origin/${GITOPS_REF}"
+            git fetch origin "${GITOPS_REF}"
+            git rebase "origin/${GITOPS_REF}"
+          done
+          echo "::error::failed to push image bump after 5 attempts"; exit 1

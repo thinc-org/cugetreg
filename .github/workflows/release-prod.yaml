@@ -1,8 +1,8 @@
 # Prod release: publish a GitHub Release targeting the `v2-prod` branch,
 # tagged <component>@<version> (e.g. web@1.13.1, api@1.15.1, reg-scraper@1.0.0)
 # — each component releases and deploys completely independently, only the
-# tagged one is built and bumped. CI builds it and opens a PR against the
-# gitops prod overlay (so a human approves the prod rollout).
+# tagged one is built and bumped. CI builds it and commits the bump straight
+# to the gitops prod overlay — cutting the Release is the approval gate.
 #
 # reg-scraper caveat: don't cut a reg-scraper release until the gitops
 # reg-scraper/ secrets have actually been re-sealed against the target
@@ -76,6 +76,5 @@ jobs:
       env: prod
       tag: ${{ needs.parse-release-tag.outputs.version }}       # e.g. 2.0.4 (no component prefix — used as the literal docker tag)
       component: ${{ needs.parse-release-tag.outputs.component }} # e.g. web (empty builds both)
-      update-mode: pr
     secrets:
       GH_TOKEN: ${{ secrets.GH_TOKEN }}

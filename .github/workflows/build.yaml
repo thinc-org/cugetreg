@@ -38,6 +38,5 @@ jobs:
     with:
       env: beta
       tag: beta-${{ github.sha }}
-      update-mode: commit
     secrets:
       GH_TOKEN: ${{ secrets.GH_TOKEN }}

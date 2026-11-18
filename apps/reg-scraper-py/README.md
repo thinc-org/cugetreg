@@ -30,7 +30,7 @@ Scraper JSON uses `semester: "1"|"2"|"3"`. Postgres exporter maps to `FIRST`/`SE
 | Course list discovery (28 faculties) | Scrape course descriptions (needs separate CSV — see below) |
 | Section / class schedule, room, time | User reviews or ratings |
 | Seat capacity (regis/max) | Guarantee concurrent runs never overlap unless deployed via the CronJob below (local CLI runs have no lock) |
-| Exam dates (midterm/final) when present | Replace v1 NestJS scraper in production yet |
+| Exam dates (midterm/final) when present, in UTC | Replace v1 NestJS scraper in production yet |
 | Upsert into v2 PostgreSQL schema | |
 
 Runs on a schedule (daily) as a Kubernetes `CronJob` when deployed via `cugetregv2-gitops` — see [Deployment](#deployment). Locally it's still manual CLI (`pnpm scraper:run`).
@@ -96,13 +96,17 @@ flowchart TB
 2. **Discovery** (unless `SCRAPER_COURSE_NOS` is set) — for each of **28 faculty codes**, call `CourseListNewServlet` and collect course numbers from detail links.
 3. **Limit** — if `SCRAPER_MAX_COURSES > 0`, keep only the first N course numbers.
 4. **Per course:**
-   - List search for that course (required — Reg Chula needs this before detail).
-   - Fetch detail page (`courseNo` + `studyProgram` only).
+   - Search for the first course to set the session's year, semester, and program.
+   - Open later detail pages directly (`courseNo` + `studyProgram` only). Check
+     the displayed course and scope. If the request fails or the page does not
+     match, search for that course and retry using the original method.
    - Append the page to the checkpoint (see [Resuming an interrupted scrape](#resuming-an-interrupted-scrape)).
 5. **Parse** — read the checkpoint back and turn each page into a `Course`
    (`#Table3` → sections/classes/capacity, `#Table4` → exam dates).
-6. **Enrich** — merge CSV descriptions and `overrides.json` GenEd types.
-7. **Export** — write JSON and/or PostgreSQL **only when the full run completes** (not incrementally).
+6. **Gap fill** — look up descriptions for any course that was not in the CSV
+   (see [Courses that appear mid-semester](#courses-that-appear-mid-semester)).
+7. **Enrich** — merge CSV descriptions and `overrides.json` GenEd types.
+8. **Export** — write JSON and/or PostgreSQL **only when the full run completes** (not incrementally).
 
 > **Important:** Stopping mid-run (Ctrl+C) does **not** save partial results to
 > DB/JSON — but the pages already fetched *are* in the checkpoint, so re-running
@@ -123,6 +127,10 @@ CUCIS/GenEd checkpoints:
 |------|-------|
 | `regchula_discovery_checkpoint.jsonl` | The course numbers found per study program — skips re-running faculty discovery |
 | `regchula_pages_checkpoint.jsonl` | Every detail page already fetched, gzipped (~3.7 KB/course, so ~75 MB for a full scrape) |
+
+The side inputs keep their own, which do **not** expire: `cucis_checkpoint.jsonl`
+(catalogue pages), `gened_checkpoint.jsonl` (GenEd courses) and
+`cucis_gapfill_checkpoint.jsonl` (see [Courses that appear mid-semester](#courses-that-appear-mid-semester)).
 
 Both are flushed after every record, so a `kill -9` loses at most the line in
 flight, and a truncated final line is skipped on read. Every record carries the
@@ -147,8 +155,15 @@ in memory.
 | Trigger | Why |
 |---------|-----|
 | The run exports successfully | Its work is safely out; the next run starts clean |
-| It is older than `SCRAPER_REGCHULA_CHECKPOINT_TTL_HOURS` (default `12`) | Reg Chula seat counts change daily — yesterday's pages must not be served as today's data. Matters most for the deployed CronJob, whose `SCRAPER_CHECKPOINT_DIR` lives on a PersistentVolume |
+| It is older than `SCRAPER_REGCHULA_CHECKPOINT_TTL_HOURS` (default `6`) | Reg Chula seat counts change daily — yesterday's pages must not be served as today's data. Matters most for the deployed CronJob, whose `SCRAPER_CHECKPOINT_DIR` lives on a PersistentVolume |
 | `--fresh` | You asked for it |
+
+**Why 6 hours, not 12:** the TTL is measured from the checkpoint's last write,
+which is when its *newest* page was fetched — the oldest pages in it are up to a
+full scrape (~2 h) older than that. During add-drop the CronJob runs every 12 h
+(noon and midnight), so a 12 h TTL leaves a failed run's checkpoint alive at the
+next run, which would then serve seat counts up to 14 h stale. Half the interval
+guarantees a checkpoint never outlives the run that wrote it.
 
 **Outage detection:** one unreachable course is logged and skipped, but
 `SCRAPER_MAX_CONSECUTIVE_FAILURES` (default `20`) failures in a row is treated as
@@ -164,6 +179,10 @@ python -m reg_scraper scrape --rebuild   # re-parse + re-export the checkpoint, 
 `--rebuild` is the fast way to re-apply a parser or exporter change to pages you
 already paid two hours to fetch; it leaves the checkpoint in place so you can run
 it repeatedly.
+
+"Zero network calls" includes the side inputs: `--rebuild` skips the description
+and GenEd phases entirely and enriches from `COURSE_DESC_PATH` and
+`OVERRIDES_PATH` exactly as they are on disk.
 
 ---
 
@@ -193,7 +212,24 @@ Two things to know before touching `exam_dates_parser()`:
   slices `#Table4`'s text between `วันสอบกลางภาค` and `วันสอบปลายภาค` instead.
 
 `TDF` / `รอประกาศ` becomes `null`. Dates are Buddhist era and get converted
-(`2568` → `2025`); the time of day goes to `period`, zero-padded.
+(`2568` → `2025`).
+
+**The two halves are in different time zones, on purpose.** Reg Chula prints
+Thai local time; `date` is the instant the exam *starts*, converted to UTC, while
+`period` keeps the local clock the page showed:
+
+```
+วันสอบกลางภาค : 25 ก.ย. 2568 เวลา 8:30-11:30 น.
+  -> date   "2025-09-25T01:30:00.000Z"     (08:30 +07)
+     period { "start": "08:30", "end": "11:30" }   (for display, zero-padded)
+```
+
+`date` is what everything downstream should compute with — `midterm_start` /
+`final_start` and their `_end` counterparts are UTC, matching the rows
+`apps/core/bin/migrate_service.ts` wrote from v1, so a browser formatting them in
+Asia/Bangkok gets 08:30 back and an exported `.ics` lands on the right hour.
+Writing the Thai clock straight into the column (what this scraper did before)
+puts every exam 7 hours late.
 
 ### Course condition
 
@@ -346,9 +382,12 @@ Config file: `apps/reg-scraper-py/.env` (loaded automatically from any working d
 | `COURSE_DESC_PATH` | `data/course_desc.csv` | Description CSV from `cucis.academic.chula.ac.th` (~29.7k courses, 1490 pages) — written by `descriptions`, read by enrich |
 | `CUCIS_TOTAL_PAGES` | `1490` | Description catalogue page count |
 | `OVERRIDES_PATH` | `../../apps/core/bin/overrides.json` | GenEd types from `gened.chula.ac.th`. Read by the scraper **and** by `apps/core/bin/migrate_course.ts`, which is what actually sets `gen_ed_type` |
-| `GENED_FALLBACK_TYPE` | `GENED` | The GenEd site lists some courses with no area. `GENED` keeps that as-is (it is a real `GenEdType`); `NO`/`SC`/`SO`/`HU`/`IN` folds them into an area, `SKIP` omits them |
+| `GENED_FALLBACK_TYPE` | `GENED` | The GenEd site lists some courses with no area. `GENED` keeps that as-is (it is a real `GenEdType`); `NO`/`SC`/`SO`/`HU`/`IN` folds them into an area, `SKIP` omits them — and with them their description text, since that now travels in the same entry |
 | `SCRAPER_CHECKPOINT_DIR` | `data/checkpoints` | Resume files for the Reg Chula scrape **and** both side scrapers |
-| `SCRAPER_REGCHULA_CHECKPOINT_TTL_HOURS` | `12` | How long a Reg Chula checkpoint stays resumable — see [Resuming an interrupted scrape](#resuming-an-interrupted-scrape). `0` = never expire |
+| `SCRAPER_REGCHULA_CHECKPOINT_TTL_HOURS` | `6` | How long a Reg Chula checkpoint stays resumable. Keep it under half the gap between runs — see [Resuming an interrupted scrape](#resuming-an-interrupted-scrape). `0` = never expire |
+| `SCRAPER_DESCRIPTIONS_GAPFILL` | `true` | Look up descriptions for courses that appeared after the last catalogue crawl — see [Courses that appear mid-semester](#courses-that-appear-mid-semester) |
+| `SCRAPER_DESCRIPTIONS_GAPFILL_MAX` | `200` | Most courses to look up in one run (~5 s each). The rest go to the next run. `0` = no cap |
+| `SCRAPER_DESCRIPTIONS_GAPFILL_RETRY_DAYS` | `7` | How long a "not in CUCIS" answer is cached before that course is looked up again. `0` = never retry |
 
 ### Outputs
 
@@ -430,6 +469,11 @@ In `cugetregv2-gitops`, `reg-scraper/` deploys it as a Kubernetes **`CronJob`** 
 
 **Concurrency:** `kubectl create job --from=cronjob/reg-scraper ...` (a manual/on-demand trigger) bypasses the CronJob controller entirely, so the CronJob's `concurrencyPolicy: Forbid` has no effect on it — a manual trigger fired mid-scheduled-run would otherwise race the same Postgres `DELETE`+`INSERT` cycle and the same PVC files. `entrypoint.sh` guards against this directly with a `flock` on `/data/.lock` (fd 9 — this image's `/bin/sh` is `dash`, which rejects the more common fd "200" convention): a second run skips immediately (exit `0`, logged, not treated as a failure) if the lock is already held, rather than queuing or racing.
 
+> **The deployed secret wins over every default in this repo.** Changing a
+> default here (`SCRAPER_REGCHULA_CHECKPOINT_TTL_HOURS` went `12` → `6`, for
+> instance) does nothing in production if `cugetregv2-gitops` sets that variable
+> explicitly — check the overlay there too.
+
 **Production run scope:** the deployed secret sets `SCRAPER_MAX_COURSES=0` (every course, unlike the `20` used for local testing) and `SCRAPER_EXPORTERS=postgres` only (no `courses.json` — nothing reads it once data's in Postgres).
 
 The `/scraper` status page above only works locally — it reads `scraper-status.json` off the local filesystem, which isn't reachable from the deployed `web` pod (different pod, no shared volume with the CronJob's PVC). Not yet wired up for the deployed CronJob.
@@ -469,15 +513,20 @@ checkpoint, so an interrupted run never starts over.
 | Command | Source | Writes | Consumed by |
 |---------|--------|--------|-------------|
 | `python -m reg_scraper descriptions` | `cucis.academic.chula.ac.th` (~29.7k courses, 1490 pages) | `COURSE_DESC_PATH` CSV | `EnrichProcessor` → `courseDescTh/En` |
-| `python -m reg_scraper gened` | `gened.chula.ac.th` API (520 courses) | `OVERRIDES_PATH` JSON | `EnrichProcessor` **and** `apps/core/bin/migrate_course.ts` |
+| `python -m reg_scraper gened` | `gened.chula.ac.th` API (~520 courses) | `OVERRIDES_PATH` JSON — `genEdType` **and** `descriptionEn`/`descriptionTh` | `EnrichProcessor` **and** `apps/core/bin/migrate_course.ts` (which reads only `genEdType`) |
 
 `python -m reg_scraper scrape` runs both first, according to their mode:
 
-| Mode | Behaviour |
-|------|-----------|
-| `auto` *(default)* | Scrape only if the output file is missing or empty |
-| `always` | Scrape every run — resumes from the checkpoint |
-| `never` | Skip; use whatever file is on disk |
+| Mode | Descriptions (CUCIS, ~25 min) | GenEd (API, ~1 s) |
+|------|-------------------------------|-------------------|
+| `auto` *(default)* | Full crawl only if the CSV is missing or empty. New courses are filled in after the scrape instead | List every GenEd course and fetch the ones added since the last run |
+| `always` | Full crawl every run — resumes from the checkpoint | Same as `auto` (the phase is already incremental) |
+| `never` | Skip entirely, gap fill included; use whatever file is on disk | Skip; use whatever file is on disk |
+
+Neither phase can fail a run that has a usable file on disk — an outage at
+`cucis` or `gened` is logged and the existing CSV / `overrides.json` is used. If
+there is no `overrides.json` at all the run *does* stop, because exporting then
+would overwrite every course's `gen_ed_type` with `NO`.
 
 Flags — the same two work on all three commands, each against that command's own
 checkpoint:
@@ -487,10 +536,113 @@ python -m reg_scraper gened --fresh     # delete the checkpoint, refetch everyth
 python -m reg_scraper gened --rebuild   # rewrite the output from the checkpoint, no network
 ```
 
-> `always` **resumes from the checkpoint**: courses added since the last run are
+> Both modes **resume from the checkpoint**: courses added since the last run are
 > fetched, but courses already in the checkpoint are never re-checked. If a
 > course changed its GenEd area, or a description was edited, only `--fresh`
 > will pick that up.
+
+### Courses that appear mid-semester
+
+Reg Chula keeps adding courses through the add-drop period — a course scraped
+today may not have existed yesterday. The description CSV comes from a crawl
+keyed by *catalogue page*, so it cannot notice one new course without redoing all
+1490 pages (~25 min), and until the previous release those courses simply
+exported with an empty description.
+
+CUCIS also answers a search for a single course code, so each new course now
+costs one lookup instead:
+
+```
+search.asp?Keys=2110101&Fac=allfac&Se=Courses     -> that one course
+searchthai.asp?Keys=2110101&Fac=allfac&Se=Courses -> its Thai row
+```
+
+After parsing, the run collects every scraped `courseNo` that the CSV has no row
+for at all, looks each one up (~5 s per course, two searches), and appends the
+hits to the CSV — so a course discovered in run *n* has its description in run
+*n*, not *n+1*. `SCRAPER_DESCRIPTIONS_GAPFILL_MAX` (default `200`) caps how many
+run at once; anything over the cap is picked up next run.
+
+Gap fill requires the scraper-generated CSV header, including its exact column
+order. An incompatible header raises an error before any rows are appended,
+preventing descriptions from being written under the wrong columns. Cached hits
+are replayed into the CSV before new lookups, so stopping after a checkpoint
+write but before the CSV append does not leave a description permanently missing.
+Rows already in the CSV are skipped during replay.
+
+Three details worth knowing before touching `fill_gaps()`:
+
+- **`Keys` is a substring match and lies about misses.** `Keys=0000000` answers
+  with course `2746648`, not with nothing, so only a row whose code equals the
+  code asked for counts as a hit.
+- **Misses are cached, but not forever.** Reg Chula genuinely has courses CUCIS
+  does not (`2604101`, for one), and re-probing those every run would waste the
+  budget on them — so a miss is written to `cucis_gapfill_checkpoint.jsonl` with
+  a timestamp and skipped for `SCRAPER_DESCRIPTIONS_GAPFILL_RETRY_DAYS` (7).
+  Not forever, because a course can reach Reg Chula days before CUCIS catalogues
+  it; that retry is what eventually brings its description in.
+- **Gap-filled rows are on no catalogue page**, so `descriptions` and
+  `descriptions --rebuild` merge them back in rather than rewriting the CSV from
+  the crawl checkpoint alone. `descriptions --fresh` drops them along with
+  everything else, and the next scrape re-finds them.
+
+One record per line, hit or miss:
+
+```json
+{"code": "2110101", "found": true,  "checked_at": "2026-08-29T05:13:26Z", "row": {…}}
+{"code": "2604101", "found": false, "checked_at": "2026-08-29T05:13:48Z"}
+```
+
+### Where a description comes from
+
+Two sources, merged **per language** in `EnrichProcessor`: CUCIS first, then the
+GenEd site for whichever language CUCIS left blank.
+
+CUCIS prints `-` for a course it has no text for, and for GenEd courses it does
+that more often than you would expect — in one language or in both — while
+gened.chula.ac.th has both. Real examples:
+
+| Course | CUCIS en | CUCIS th | GenEd site | Result |
+|--------|----------|----------|------------|--------|
+| 2604362 Personal Finance | `-` | `-` | both | both from GenEd |
+| 2307206 Earth Sciences | `-` | 361 ch | both | en from GenEd, th from CUCIS |
+| 3404117 Introduction to Law | 425 ch | `-` | both | en from CUCIS, th from GenEd |
+| 3402103 Intro Criminal Law | 721 ch | 605 ch | both | CUCIS wins, GenEd unused |
+| 3402101 Criminal Law (not GenEd) | `-` | 231 ch | not listed | th from CUCIS, en stays empty |
+
+Before this, the first three exported empty or half-empty — the GenEd site's
+`descriptionEn`/`descriptionTh` were fetched and thrown away, because the GenEd
+phase only kept `genEdType`.
+
+Two things make this free:
+
+- **The text comes with the course list.** `search-courses?limit=<all>` returns
+  `descriptionEn`/`descriptionTh` for every course in one response, so the
+  descriptions are re-read every run at no request cost. Only the GenEd *area*
+  needs the per-course call — `categoryTypes` is the one field the listing lacks.
+- **Descriptions are refreshed in place.** A course already in
+  `gened_checkpoint.jsonl` from before this change has no description fields;
+  rather than re-fetching all ~520 (which `auto` would never do, since they are
+  already "done"), the run appends an updated record from the listing and
+  `rows_from_checkpoint()` takes the last line per course. Measured: 2 HTTP calls,
+  0.5 s to backfill 517 courses on an existing checkpoint.
+
+`-` is CUCIS's own "no text" placeholder, not a parse failure, and the CSV loader
+has always treated `-` and `''` alike.
+
+**How often this bites:** over a random 120-course sample of the 519 GenEd
+courses, CUCIS has both languages for 107 (89%), Thai only for 4, English only
+for 2, and neither for 7 — so **13 courses (11%) are missing text in at least one
+language**, and the GenEd site covers 12 of those 13. Extrapolated to the full
+list that is roughly 57 courses affected and 52 fixed. The remainder (2210301 in
+that sample) has no description published in either source, which is not
+something the scraper can fix.
+
+GenEd needs no equivalent of the description gap fill: a course missing from `overrides.json` is
+indistinguishable from a course that is simply not GenEd, so there is nothing to
+detect afterwards. Instead the list endpoint (one call, every GenEd course) is
+re-read every run and only genuinely new courses are fetched — about a second in
+total, so `auto` tops the file up rather than skipping it.
 
 **GenEd areas:** 87 of the 520 courses are listed as GenEd without an area.
 `GENED` is a real `GenEdType` (Postgres enum, zod, Prisma), so those are written
@@ -546,6 +698,8 @@ apps/reg-scraper-py/
 | Run aborted with "Reg Chula looks unreachable" | 20 courses failed back-to-back | Re-run once the server is back — it resumes from the checkpoint |
 | `ECONNREFUSED` on migrate | Postgres not running | Start Docker → `docker compose up -d postgres` |
 | Empty descriptions | No CSV configured | Set `COURSE_DESC_PATH` |
+| One new course has no description | It reached Reg Chula before CUCIS catalogued it | Nothing to do — the gap fill retries it after `SCRAPER_DESCRIPTIONS_GAPFILL_RETRY_DAYS`. `python -m reg_scraper descriptions --fresh` forces it sooner |
+| Exam times 7 h late in the UI | Data written before the GMT+0 fix (Thai clock stored as if UTC) | Re-run the scrape; `midterm_start` / `final_start` are UTC now |
 
 ---
 

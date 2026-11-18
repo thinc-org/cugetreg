@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from datetime import datetime
+import re
+from datetime import UTC, datetime, timedelta
 
 import psycopg
 from cuid2 import cuid_wrapper
@@ -26,20 +27,44 @@ def grading_type(credit_hours: str) -> str:
     return "SU" if "S/U" in (credit_hours or "") else "LETTER"
 
 
+def _clock(value: str) -> timedelta:
+    hour, minute = (int(part) for part in value.split(":"))
+    return timedelta(hours=hour, minutes=minute)
+
+
+_CLASS_CLOCK = re.compile(r"(?:[01][0-9]|2[0-3]):[0-5][0-9]")
+_CLASS_TIME_TYPOS = {"80:00": "08:00", "90:00": "09:00"}
+
+
+def normalize_class_period(start: str, end: str) -> tuple[str, str]:
+    """Apply the same class time corrections as the historical data importer."""
+    start = _CLASS_TIME_TYPOS.get(start, start)
+    end = _CLASS_TIME_TYPOS.get(end, end)
+    # PostgreSQL's class range index requires an ordered pair of clock times.
+    if _CLASS_CLOCK.fullmatch(start) and _CLASS_CLOCK.fullmatch(end) and start > end:
+        return end, start
+    return start, end
+
+
 def parse_exam_period(period: dict | None) -> tuple[datetime | None, datetime | None]:
+    """Exam start/end as naive UTC — what the TIMESTAMP(3) columns hold.
+
+    `date` is already the UTC instant the exam starts, so the end is its length
+    away from that; `period` is still on the Thai clock and is only used here for
+    that difference.
+    """
     if not period:
         return None, None
     start_raw = period["period"]["start"]
     end_raw = period["period"]["end"]
     if start_raw in {"IA", "AR"} or end_raw in {"IA", "AR"}:
         return None, None
-    date_str = period["date"].split("T")[0]
-    year, month, day = map(int, date_str.split("-"))
-    start_h, start_m = map(int, start_raw.split(":"))
-    end_h, end_m = map(int, end_raw.split(":"))
-    start = datetime(year, month, day, start_h, start_m)
-    end = datetime(year, month, day, end_h, end_m)
-    return start, end
+
+    start = datetime.fromisoformat(period["date"]).astimezone(UTC)
+    # Naive on purpose: an aware value goes to Postgres as timestamptz and gets
+    # shifted again by the session TimeZone on its way into a `timestamp`.
+    start = start.replace(tzinfo=None)
+    return start, start + (_clock(end_raw) - _clock(start_raw))
 
 
 class PostgresExporter(Exporter[list[Course]]):
@@ -191,6 +216,7 @@ class PostgresExporter(Exporter[list[Course]]):
             for cls in section.classes:
                 if cls.dayOfWeek is None:
                     continue
+                start, end = normalize_class_period(cls.period.start, cls.period.end)
                 cur.execute(
                     """
                     INSERT INTO course_class (
@@ -203,8 +229,8 @@ class PostgresExporter(Exporter[list[Course]]):
                         section_id,
                         cls.type,
                         map_day_of_week(cls.dayOfWeek),
-                        cls.period.start,
-                        cls.period.end,
+                        start,
+                        end,
                         cls.building,
                         cls.room,
                         cls.teachers or [],
